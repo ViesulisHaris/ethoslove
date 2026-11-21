@@ -24,6 +24,13 @@ import type { GiftLocale } from "@/lib/gift/schema";
  * tests/unit/text-budget.test.ts holds the lengths; tests/unit/template-guides.test.ts reads each
  * field's limit from the template's own schema, so a line that would not fit where the card says
  * to put it fails the build.
+ *
+ * Since the owner read The Letter's page (21 Nov 2026: "change the ways when to send the gifts, as
+ * its kinda weird for letter, they should be good for each gift") every gift has six cards, and a
+ * card is a moment someone would really send this gift for, in plain words, the commonest first:
+ * a birthday, an anniversary, a week apart. One may be playful. None is a riddle ("Ten years,
+ * pressed in wax" was one). A gift whose page searches have not asked questions of has `faq: []`
+ * and shows the questions every gift's page has.
  */
 
 /**
@@ -66,34 +73,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to hide in a digital scratch card",
         items: [
           {
-            heading: "A proposal they scratch to",
+            heading: "A proposal",
             how: "Photos of the two of you in order, the question on the last card.",
             borrow: { field: "fields.finalTitle", line: "Will you marry me?" },
           },
           {
             heading: "A pregnancy announcement",
-            how: "Two pairs of shoes, then three, then the scan. One link for everyone.",
+            how: "One link for everyone. The last card says it.",
             borrow: { field: "fields.finalTitle", line: "See you in June, Grandma." },
           },
           {
             heading: "Asking your bridesmaids",
-            how: "One card for each friend, with your photos from school to now.",
+            how: "One card for each friend, with your photos.",
             borrow: { field: "fields.finalTitle", line: "Will you be my bridesmaid?" },
           },
           {
-            heading: "A trip, one clue per card",
-            how: "A passport, a beach towel, a croissant. The last card names the place.",
+            heading: "A surprise trip",
+            how: "One clue per card. The last one names the place.",
             borrow: { field: "fields.finalTitle", line: "Lisbon. Friday. Pack tonight." },
           },
           {
-            heading: "The real present comes last",
-            how: "Caption the year’s photos like lottery prizes, then put the real one last.",
+            heading: "A birthday present",
+            how: "Put the real present on the last card.",
             borrow: { field: "fields.finalTitle", line: "Two tickets, row F, the 14th." },
           },
           {
-            heading: "News bigger than a text",
-            how: "Show the before on the first cards and the after on the last.",
-            borrow: { field: "fields.finalTitle", line: "We got the keys." },
+            heading: "Good news",
+            how: "The text on the foil takes 30 characters.",
+            borrow: { field: "fields.foilText", line: "scratch me first" },
           },
         ],
       },
@@ -121,34 +128,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué esconder en un rasca y gana digital",
         items: [
           {
-            heading: "Una pedida que se rasca",
+            heading: "Una pedida",
             how: "Fotos vuestras en orden y la pregunta en la última tarjeta.",
             borrow: { field: "fields.finalTitle", line: "¿Te casas conmigo?" },
           },
           {
             heading: "Un anuncio de embarazo",
-            how: "Dos pares de zapatos, luego tres, luego la ecografía. Un enlace para todos.",
+            how: "Un enlace para todo el mundo. La última tarjeta lo dice.",
             borrow: { field: "fields.finalTitle", line: "Nos vemos en junio, abuela" },
           },
           {
-            heading: "Pedírselo a tus damas de honor",
-            how: "Una tarjeta para cada amiga, con vuestras fotos desde el colegio.",
+            heading: "Para tus damas de honor",
+            how: "Una tarjeta para cada amiga, con vuestras fotos.",
             borrow: { field: "fields.finalTitle", line: "¿Quieres ser mi dama de honor?" },
           },
           {
-            heading: "Un viaje, pista a pista",
-            how: "Un pasaporte, una toalla, un cruasán. La última tarjeta dice el destino.",
-            borrow: { field: "fields.finalTitle", line: "Lisboa. Viernes. Haz la maleta esta noche" },
+            heading: "Un viaje sorpresa",
+            how: "Una pista por tarjeta. La última dice el destino.",
+            borrow: { field: "fields.finalTitle", line: "Lisboa. Viernes. Haz la maleta" },
           },
           {
-            heading: "El regalo de verdad, al final",
-            how: "Pies de premio de lotería en las fotos del año; el de verdad, al final.",
+            heading: "Un regalo de cumpleaños",
+            how: "Pon el regalo de verdad en la última tarjeta.",
             borrow: { field: "fields.finalTitle", line: "Dos entradas, fila F, el día 14" },
           },
           {
-            heading: "Una noticia que merece más",
-            how: "El antes en las primeras tarjetas y el después en la última.",
-            borrow: { field: "fields.finalTitle", line: "Ya tenemos las llaves." },
+            heading: "Una buena noticia",
+            how: "El texto del metalizado admite 30 caracteres.",
+            borrow: { field: "fields.foilText", line: "ráscame primero" },
           },
         ],
       },
@@ -179,34 +186,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to put in a digital bouquet",
         items: [
           {
-            heading: "Their flower, not the default",
-            how: "Start with the one they’d pick: ranunculus, poppies, lavender, sunflowers. There are 14.",
+            heading: "Mother’s Day",
+            how: "Her flowers in her colours. The little card holds 30 characters.",
+            borrow: { field: "fields.cardNote", line: "Still calling you first." },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Skip the red roses if they’d pick something else.",
             borrow: { field: "fields.cardNote", line: "Your favourites. I asked." },
           },
           {
-            heading: "Your wedding bouquet, again",
-            how: "The same flowers, ribbon and paper, rebuilt from the photos.",
+            heading: "A birthday",
+            how: "Up to 24 stems. Your full letter opens from the card.",
+            borrow: { field: "fields.cardNote", line: "Happy birthday, from all of us" },
+          },
+          {
+            heading: "An anniversary",
+            how: "Rebuild the bouquet from your wedding photos.",
             borrow: { field: "fields.cardNote", line: "Same flowers. Same answer." },
           },
           {
-            heading: "Sunflowers for a bad week",
-            how: "Sunflowers in kraft paper, for a friend who’s had an awful week.",
-            borrow: { field: "fields.cardNote", line: "Look at these, not the news." },
-          },
-          {
-            heading: "Flowers across a border",
-            how: "It arrives the second you send it and looks the same next spring.",
-            borrow: { field: "fields.cardNote", line: "No customs form needed." },
-          },
-          {
-            heading: "An apology that doesn’t shout",
-            how: "Whites and blush, no red. The real apology goes in the letter.",
+            heading: "Saying sorry",
+            how: "Whites and blush, no red. The apology itself goes in the letter.",
             borrow: { field: "fields.cardNote", line: "I was wrong. Sorry." },
           },
           {
-            heading: "For your mother, in her colours",
-            how: "Peonies or lilies in the colour she always wears, scheduled for that morning.",
-            borrow: { field: "fields.cardNote", line: "Still calling you first." },
+            heading: "Get well soon",
+            how: "Sunflowers in kraft paper, for a friend having a bad week.",
+            borrow: { field: "fields.cardNote", line: "Look at these, not the news." },
           },
         ],
       },
@@ -230,34 +237,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué poner en un ramo de flores virtual",
         items: [
           {
-            heading: "Su flor, no la de siempre",
-            how: "Empieza por la que elegiría: ranúnculos, amapolas, lavanda, girasoles. Hay 14.",
+            heading: "El Día de la Madre",
+            how: "Sus flores, en sus colores. La tarjeta admite 30 caracteres.",
+            borrow: { field: "fields.cardNote", line: "Siempre te llamo primero" },
+          },
+          {
+            heading: "San Valentín",
+            how: "Deja las rosas rojas si elegiría otra flor.",
             borrow: { field: "fields.cardNote", line: "Tus favoritas. Pregunté." },
           },
           {
-            heading: "Vuestro ramo de boda, otra vez",
-            how: "Las mismas flores, el mismo lazo y el mismo papel, a partir de las fotos.",
+            heading: "Un cumpleaños",
+            how: "Hasta 24 flores. Tu carta entera se abre desde la tarjeta.",
+            borrow: { field: "fields.cardNote", line: "Feliz cumpleaños de todos" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Rehaz el ramo a partir de las fotos de vuestra boda.",
             borrow: { field: "fields.cardNote", line: "Mismas flores, mismo sí." },
           },
           {
-            heading: "Girasoles para una semana mala",
-            how: "Girasoles en papel kraft para quien ha tenido una semana horrible.",
-            borrow: { field: "fields.cardNote", line: "Mira esto, no las noticias" },
-          },
-          {
-            heading: "Flores que cruzan una frontera",
-            how: "Llega en el segundo en que lo envías y sigue igual la próxima primavera.",
-            borrow: { field: "fields.cardNote", line: "Estas no pasan por aduana." },
-          },
-          {
-            heading: "Una disculpa sin gritos",
-            how: "Blancos y rosa palo, nada de rojo. La disculpa de verdad va en la carta.",
+            heading: "Para pedir perdón",
+            how: "Blancos y rosa palo, nada de rojo. La disculpa va en la carta.",
             borrow: { field: "fields.cardNote", line: "Me equivoqué. Perdón." },
           },
           {
-            heading: "Para tu madre, en sus colores",
-            how: "Peonías o lirios del color que siempre lleva, programado para esa mañana.",
-            borrow: { field: "fields.cardNote", line: "Siempre te llamo primero" },
+            heading: "Para una mala semana",
+            how: "Girasoles en papel kraft para quien pasa una mala semana.",
+            borrow: { field: "fields.cardNote", line: "Mira esto, no las noticias" },
           },
         ],
       },
@@ -284,34 +291,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to write in a digital fortune cookie",
         items: [
           {
-            heading: "Fortunes that are really in-jokes",
-            how: "Write them like a fortune-teller who has met them. Keep the punchline short.",
-            borrow: { field: "fields.fortunes", line: "You will lose your keys again on Thursday." },
+            heading: "Their birthday",
+            how: "One fortune per cookie, up to twenty. Make them oddly specific.",
+            borrow: { field: "fields.fortunes", line: "You will be sung to, badly, by people who love you." },
           },
           {
-            heading: "Lucky numbers that are dates",
-            how: "The day you met, their age, the table from your first date.",
-            borrow: { field: "fields.luckyNumbers", line: "14 · 06 · 21 · 7 · 42" },
+            heading: "Before an exam or interview",
+            how: "Write the outcomes you’re sure of. The last cookie holds your message.",
+            borrow: { field: "fields.fortunes", line: "You already know more than you think." },
           },
           {
-            heading: "Silly first, sweet last",
-            how: "Slips come out in your order. Make the last one the first that isn’t a joke.",
-            borrow: { field: "fields.fortunes", line: "You will be loved for a very long time. This one is not a joke." },
+            heading: "An anniversary",
+            how: "Make the lucky numbers your dates.",
+            borrow: { field: "fields.luckyNumbers", line: "14 · 06 · 21" },
           },
           {
-            heading: "Photos on the first slips",
-            how: "Up to ten photos, one per slip. Pair the worst with the most solemn fortune.",
-            borrow: { field: "fields.fortunes", line: "Great fortune awaits the person in this hat." },
+            heading: "A graduation",
+            how: "Fortunes about what comes next, silly first and true last.",
+            borrow: { field: "fields.fortunes", line: "A desk with your name on it is close." },
           },
           {
-            heading: "A fortune for every year",
-            how: "For a birthday, one for each year they’ve been in your life, up to twenty.",
-            borrow: { field: "fields.fortunes", line: "Year three: you will learn to love my cooking. You did not." },
+            heading: "Good news to share",
+            how: "Hide the news in the last fortune they open.",
+            borrow: { field: "fields.fortunes", line: "A very small person will arrive in June." },
           },
           {
-            heading: "Fortunes about what’s next",
-            how: "For a graduation or a new job. Say how proud you are in the letter.",
-            borrow: { field: "fields.fortunes", line: "You will finally be paid for being bossy." },
+            heading: "Just because",
+            how: "In-jokes work best. Some slips can carry a photo.",
+            borrow: { field: "fields.fortunes", line: "You will be tackled by a small dog before noon." },
           },
         ],
       },
@@ -335,34 +342,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué escribir en una galleta de la fortuna digital",
         items: [
           {
-            heading: "Fortunas que son bromas vuestras",
-            how: "Escríbelas como una adivina que os conoce de toda la vida, y remata corto.",
-            borrow: { field: "fields.fortunes", line: "El jueves volverás a perder las llaves" },
+            heading: "Su cumpleaños",
+            how: "Una fortuna por galleta, hasta veinte. Que sean muy concretas.",
+            borrow: { field: "fields.fortunes", line: "Te cantarán, y mal, personas que te quieren." },
           },
           {
-            heading: "Números que son vuestras fechas",
-            how: "El día que os conocisteis, su edad, la mesa de la primera cita.",
-            borrow: { field: "fields.luckyNumbers", line: "14 · 06 · 21 · 7 · 42" },
+            heading: "Antes de un examen",
+            how: "Escribe lo que das por hecho. La última galleta guarda tu mensaje.",
+            borrow: { field: "fields.fortunes", line: "Ya sabes más de lo que crees." },
           },
           {
-            heading: "Lo gracioso primero",
-            how: "Salen en tu orden. Que la última fortuna sea la primera que no es broma.",
-            borrow: { field: "fields.fortunes", line: "Te van a querer muchísimo tiempo. Esta no es broma." },
+            heading: "Un aniversario",
+            how: "Que los números de la suerte sean vuestras fechas.",
+            borrow: { field: "fields.luckyNumbers", line: "14 · 06 · 21" },
           },
           {
-            heading: "Fotos en los primeros papelitos",
-            how: "Hasta diez fotos, una por papelito. Junta la peor con la fortuna más solemne.",
-            borrow: { field: "fields.fortunes", line: "Una gran fortuna espera a quien lleva este gorro" },
+            heading: "Una graduación",
+            how: "Fortunas sobre lo que viene: primero las tontas, al final la de verdad.",
+            borrow: { field: "fields.fortunes", line: "Hay una mesa con tu nombre, y está cerca." },
           },
           {
-            heading: "Una fortuna por cada año",
-            how: "Para un cumpleaños, una por cada año que lleva en tu vida, hasta veinte.",
-            borrow: { field: "fields.fortunes", line: "Año tres: aprenderás a querer mi cocina. No lo hiciste" },
+            heading: "Una buena noticia",
+            how: "Esconde la noticia en la última fortuna que abran.",
+            borrow: { field: "fields.fortunes", line: "Alguien muy pequeño llegará en junio." },
           },
           {
-            heading: "Fortunas sobre lo que viene",
-            how: "Para una graduación o un trabajo nuevo. El orgullo, en la carta.",
-            borrow: { field: "fields.fortunes", line: "Por fin te pagarán por mandar" },
+            heading: "Porque sí",
+            how: "Las bromas vuestras son lo mejor. Algunas tiras pueden llevar foto.",
+            borrow: { field: "fields.fortunes", line: "Un perro pequeño te placará antes de mediodía." },
           },
         ],
       },
@@ -394,29 +401,29 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.greeting", line: "To the stranger who took my umbrella," },
           },
           {
-            heading: "An apology they’ll believe",
-            how: "Five sentences: what you did, what it cost them, what changes on Monday.",
-            borrow: { field: "note", line: "I was late, I joked about it, and you spent your birthday dinner watching the door." },
+            heading: "A birthday letter",
+            how: "The title is the line on the cover, before the seal breaks.",
+            borrow: { field: "title", line: "Open this before the cake" },
           },
           {
             heading: "A long-distance letter",
-            how: "Set the countdown to the minute you land, and write its label yourself.",
+            how: "Set the countdown to the minute you land and write its label.",
             borrow: { field: "countdown.label", line: "Until I’m the one ringing your doorbell" },
           },
           {
-            heading: "Ten years, pressed in wax",
-            how: "The seal takes two characters. For a round anniversary, make it the number.",
-            borrow: { field: "fields.sealInitial", line: "10" },
+            heading: "A letter to say sorry",
+            how: "Five sentences: what you did, what it cost them, what changes.",
+            borrow: { field: "note", line: "I was late, I joked about it, and you spent your birthday dinner watching the door." },
           },
           {
-            heading: "For the morning of an interview",
-            how: "The title is the line on the cover, so make it an instruction.",
-            borrow: { field: "title", line: "Open before you walk in" },
+            heading: "A thank-you letter",
+            how: "Name the one thing they did. The sign-off sits above your name.",
+            borrow: { field: "fields.signOff", line: "Still grateful, every day," },
           },
           {
-            heading: "A letter from the dog",
-            how: "For the first week someone is away, signed by whoever misses them loudest.",
-            borrow: { field: "fields.signOff", line: "Yours, mostly at dinner time," },
+            heading: "A letter for no reason",
+            how: "Add a hidden P.S. at the end.",
+            borrow: { field: "surprise.text", line: "P.S. Your favourite is in the fridge." },
           },
         ],
       },
@@ -458,29 +465,29 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.greeting", line: "A quien se llevó mi paraguas sin pedirlo:" },
           },
           {
-            heading: "Una disculpa que se crea",
-            how: "Cinco frases: qué hiciste, qué le costó, qué cambia el lunes.",
-            borrow: { field: "note", line: "Llegué tarde, encima hice una broma y te pasaste tu cena de cumpleaños mirando la puerta." },
+            heading: "Una carta de cumpleaños",
+            how: "El título es la frase de la portada, antes de romper el sello.",
+            borrow: { field: "title", line: "Ábrela antes de la tarta" },
           },
           {
             heading: "Una carta a distancia",
-            how: "Pon la cuenta atrás en el minuto en que aterrizas y escríbele tú el rótulo.",
+            how: "Pon la cuenta atrás en el minuto en que aterrizas y escríbele el rótulo.",
             borrow: { field: "countdown.label", line: "Hasta que sea yo quien llame a tu timbre" },
           },
           {
-            heading: "Diez años, en el lacre",
-            how: "El sello admite dos caracteres. En un aniversario redondo, estampa el número.",
-            borrow: { field: "fields.sealInitial", line: "10" },
+            heading: "Una carta para pedir perdón",
+            how: "Cinco frases: qué hiciste, qué le costó, qué cambia.",
+            borrow: { field: "note", line: "Llegué tarde, encima hice una broma y te pasaste tu cena de cumpleaños mirando la puerta." },
           },
           {
-            heading: "Para la mañana de una entrevista",
-            how: "El título es la frase de la portada: conviértelo en una instrucción.",
-            borrow: { field: "title", line: "Ábrela antes de entrar" },
+            heading: "Una carta de agradecimiento",
+            how: "Di lo único que hizo. La despedida va sobre tu nombre.",
+            borrow: { field: "fields.signOff", line: "Con las gracias de cada día," },
           },
           {
-            heading: "Una carta de parte del perro",
-            how: "Para la primera semana que alguien pasa fuera, firmada por quien más le echa de menos.",
-            borrow: { field: "fields.signOff", line: "Tuyo, sobre todo a la hora de cenar," },
+            heading: "Una carta porque sí",
+            how: "Añade una posdata escondida al final.",
+            borrow: { field: "surprise.text", line: "P. D.: Tu favorito está en la nevera." },
           },
         ],
       },
@@ -520,34 +527,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to put in a virtual birthday card",
         items: [
           {
-            heading: "A premiere for a big birthday",
-            how: "The sign over the curtain holds 40 characters of your own.",
-            borrow: { field: "fields.marquee", line: "30 years in the making: Ana" },
+            heading: "A big birthday",
+            how: "The marquee takes 40 characters. Bill it like a premiere.",
+            borrow: { field: "fields.marquee", line: "NOW SHOWING: ANA TURNS 30" },
           },
           {
-            heading: "One card from the group chat",
-            how: "Ask each friend for one photo and four words; the strip holds 20.",
-            borrow: { field: "caption", line: "Leo: owes you a dance" },
+            heading: "A child’s birthday",
+            how: "Set their age and the cake gets that many candles, up to twelve.",
+            borrow: { field: "fields.marquee", line: "SEVEN CANDLES, ONE BIG WISH" },
           },
           {
-            heading: "A seventh birthday, seven candles",
-            how: "Up to twelve, the cake carries one candle for every year.",
-            borrow: { field: "fields.marquee", line: "Now showing: Leo is SEVEN" },
+            heading: "From the whole group",
+            how: "Ask everyone for one photo. The film strip takes twenty.",
+            borrow: { field: "caption", line: "Marta, 2019, the karaoke" },
           },
           {
-            heading: "Midnight, to the minute",
-            how: "Schedule it for 00:00 and send the link the evening before.",
-            borrow: { field: "surprise.text", line: "Look under your pillow. No, the other pillow." },
+            heading: "A birthday you’ll miss",
+            how: "Add a countdown to the day you can celebrate in person.",
+            borrow: { field: "countdown.label", line: "Until I can sing it in person" },
           },
           {
-            heading: "A birthday you’re missing",
-            how: "They blow at the phone and the candles go out a few at a time.",
-            borrow: { field: "countdown.label", line: "Until I bring the real cake" },
+            heading: "With a present to find",
+            how: "Say where the present is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Check your coat pocket. Two tickets." },
           },
           {
-            heading: "The roast",
-            how: "Title it like a film, caption the frames by year, write the letter as a review.",
-            borrow: { field: "title", line: "A life in six questionable haircuts" },
+            heading: "For your mum or dad",
+            how: "Your message follows the film strip. Start with a memory of theirs.",
+            borrow: { field: "message", line: "You taught me to blow them all out at once." },
           },
         ],
       },
@@ -575,34 +582,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué poner en una tarjeta de cumpleaños virtual",
         items: [
           {
-            heading: "Un cumpleaños redondo, de estreno",
-            how: "La marquesina, el cartel sobre el telón, admite 40 caracteres tuyos.",
-            borrow: { field: "fields.marquee", line: "30 años de rodaje: Ana" },
+            heading: "Un cumpleaños redondo",
+            how: "La marquesina admite 40 caracteres. Anúncialo como un estreno.",
+            borrow: { field: "fields.marquee", line: "HOY SE ESTRENA: ANA CUMPLE 30" },
           },
           {
-            heading: "Una tarjeta de todo el grupo",
-            how: "Pedid a cada amigo una foto y cuatro palabras; la tira admite 20.",
-            borrow: { field: "caption", line: "Leo: te debe un baile" },
+            heading: "El cumple de un peque",
+            how: "Pon su edad y la tarta lleva esas velas, hasta doce.",
+            borrow: { field: "fields.marquee", line: "SIETE VELAS Y UN GRAN DESEO" },
           },
           {
-            heading: "Siete años, siete velas",
-            how: "Hasta los doce, la tarta lleva una vela por año.",
-            borrow: { field: "fields.marquee", line: "Hoy: Leo cumple SIETE" },
+            heading: "De parte de todo el grupo",
+            how: "Pide una foto a cada persona. El carrete admite veinte.",
+            borrow: { field: "caption", line: "Marta, 2019, el karaoke" },
           },
           {
-            heading: "A medianoche, en punto",
-            how: "Prográmala para las 00:00 y manda el enlace la noche anterior.",
-            borrow: { field: "surprise.text", line: "Mira debajo de la almohada. No, de la otra." },
+            heading: "Un cumple que te pierdes",
+            how: "Añade una cuenta atrás hasta el día en que lo celebréis en persona.",
+            borrow: { field: "countdown.label", line: "Hasta cantártelo en persona" },
           },
           {
-            heading: "Un cumpleaños al que no llegas",
-            how: "Sopla al móvil y las velas se apagan unas pocas cada vez.",
-            borrow: { field: "countdown.label", line: "Hasta que lleve la tarta de verdad" },
+            heading: "Con un regalo escondido",
+            how: "Di dónde está el regalo en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mira en el bolsillo del abrigo. Dos entradas." },
           },
           {
-            heading: "El homenaje con guasa",
-            how: "Título de película, el año en cada pie y la carta escrita como una crítica.",
-            borrow: { field: "title", line: "Una vida en seis cortes de pelo dudosos" },
+            heading: "Para tu madre o tu padre",
+            how: "Tu mensaje llega tras el carrete. Empieza por un recuerdo suyo.",
+            borrow: { field: "message", line: "Tú me enseñaste a apagarlas de una vez." },
           },
         ],
       },
@@ -633,34 +640,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to put in a night sky gift",
         items: [
           {
-            heading: "One star for every city",
-            how: "Each place you’ve been together, captioned with the place and the hour.",
-            borrow: { field: "fields.finalLine", line: "Six cities so far. You pick the seventh." },
+            heading: "An anniversary",
+            how: "Three to twelve photos, one star each. Caption the nights that mattered.",
+            borrow: { field: "caption", line: "The night you missed the last train" },
           },
           {
-            heading: "A question in the last line",
-            how: "The final line appears once every star is found. Be in the room.",
-            borrow: { field: "fields.finalLine", line: "Will you marry me? Look up from the phone." },
+            heading: "Long distance",
+            how: "Add a countdown to the next time you’re under the same sky.",
+            borrow: { field: "countdown.label", line: "Until I land" },
           },
           {
-            heading: "A birthday sky for your dad",
-            how: "One star for each thing he taught you, with a photo of you doing it.",
-            borrow: { field: "caption", line: "You let go of the saddle and didn’t tell me." },
+            heading: "Valentine’s Day",
+            how: "The line appears when the constellation completes.",
+            borrow: { field: "fields.finalLine", line: "Every star, a night with you." },
           },
           {
-            heading: "An anniversary sky",
-            how: "Any star can open first, so give every caption its own time.",
-            borrow: { field: "caption", line: "Day one. This is where it started." },
+            heading: "A birthday",
+            how: "One star for each year you’ve known them.",
+            borrow: { field: "caption", line: "2019, the tent that leaked" },
           },
           {
-            heading: "The same sky, two time zones",
-            how: "Pick the dawn sky if they’ll wake up to it, and count down under your letter.",
-            borrow: { field: "countdown.label", line: "Until we’re under the same one" },
+            heading: "A question to ask",
+            how: "Put the question in the line they see last.",
+            borrow: { field: "fields.finalLine", line: "Will you move in with me?" },
           },
           {
-            heading: "Three stars: then, now, next",
-            how: "An old photo, one from this month, and something that hasn’t happened yet.",
-            borrow: { field: "caption", line: "This one is in March. Pack a coat." },
+            heading: "For a parent",
+            how: "Heart, infinity or star: pick the shape, then the photos of home.",
+            borrow: { field: "caption", line: "The porch light you left on" },
           },
         ],
       },
@@ -689,34 +696,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué poner en un cielo estrellado de regalo",
         items: [
           {
-            heading: "Una estrella por cada ciudad",
-            how: "Cada sitio en el que habéis estado, con el lugar y la hora en el pie.",
-            borrow: { field: "fields.finalLine", line: "Seis ciudades por ahora. La séptima la eliges tú." },
+            heading: "Un aniversario",
+            how: "De tres a doce fotos, una estrella cada una. Pon pie a las noches importantes.",
+            borrow: { field: "caption", line: "La noche que perdiste el último tren" },
           },
           {
-            heading: "Una pregunta en la última frase",
-            how: "La frase final aparece al encontrar todas las estrellas. Procura estar delante.",
-            borrow: { field: "fields.finalLine", line: "¿Te casas conmigo? Levanta la vista del móvil." },
+            heading: "A distancia",
+            how: "Añade una cuenta atrás hasta veros bajo el mismo cielo.",
+            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
           },
           {
-            heading: "Un cielo para tu padre",
-            how: "Una estrella por cada cosa que te enseñó, con una foto tuya haciéndola.",
-            borrow: { field: "caption", line: "Soltaste el sillín y no me avisaste." },
+            heading: "San Valentín",
+            how: "La frase aparece al completarse la constelación.",
+            borrow: { field: "fields.finalLine", line: "Cada estrella, una noche contigo." },
           },
           {
-            heading: "Un cielo de aniversario",
-            how: "Se puede abrir primero cualquier estrella: pon en cada pie su momento.",
-            borrow: { field: "caption", line: "El primer día. Aquí empezó todo." },
+            heading: "Un cumpleaños",
+            how: "Una estrella por cada año desde que os conocéis.",
+            borrow: { field: "caption", line: "2019, la tienda con goteras" },
           },
           {
-            heading: "El mismo cielo, dos husos horarios",
-            how: "Elige el cielo de amanecer si lo va a abrir al despertarse.",
-            borrow: { field: "countdown.label", line: "Hasta que estemos bajo el mismo" },
+            heading: "Una pregunta importante",
+            how: "Pon la pregunta en la frase que ven al final.",
+            borrow: { field: "fields.finalLine", line: "¿Te vienes a vivir conmigo?" },
           },
           {
-            heading: "Tres estrellas: antes, ahora, después",
-            how: "Una foto antigua, una de este mes y algo que aún no ha pasado.",
-            borrow: { field: "caption", line: "Esta es en marzo. Llévate abrigo." },
+            heading: "Para tu madre o tu padre",
+            how: "Corazón, infinito o estrella: elige la forma y las fotos de casa.",
+            borrow: { field: "caption", line: "La luz del porche, siempre encendida" },
           },
         ],
       },
@@ -745,37 +752,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   xoxo: {
     en: {
       ideas: {
-        title: "What to write on an XOXO love card",
+        title: "What to put in an XOXO love card",
         items: [
           {
-            heading: "The name only you call them",
-            how: "Newspaper cut-out letters, one word to a row. Three words at most.",
-            borrow: { field: "fields.headline", line: "my plus one" },
+            heading: "Valentine’s Day",
+            how: "The newspaper letters spell what you call them, up to 16 characters.",
+            borrow: { field: "fields.headline", line: "my person" },
           },
           {
-            heading: "Lines written like your song",
-            how: "The card under the first photo is a lyric card. Write the missing verse.",
-            borrow: { field: "fields.lines", line: "you put your cold feet on me in January and I have never once moved away." },
+            heading: "An anniversary",
+            how: "The word on the second photo takes 10 characters.",
+            borrow: { field: "fields.word", line: "one year" },
           },
           {
-            heading: "One word for a first anniversary",
-            how: "The second polaroid carries a single word in script, up to 10 characters.",
-            borrow: { field: "fields.word", line: "Year one" },
+            heading: "Just because",
+            how: "The lines you’d underline come already underlined.",
+            borrow: { field: "fields.lines", line: "You hum when you cook. Don’t stop." },
           },
           {
-            heading: "A Valentine they send back",
-            how: "Every tap leaves a lipstick print. Ask for twelve and a screenshot.",
-            borrow: { field: "message", line: "Kiss this page twelve times, screenshot it and send it to me." },
+            heading: "A date night",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday. The table by the window." },
+          },
+          {
+            heading: "Long distance",
+            how: "Up to nine photos as polaroids on a lace doily.",
+            borrow: { field: "caption", line: "The airport, both crying" },
           },
           {
             heading: "For the group chat",
-            how: "Ten pages to choose from, lilac and noir among them, and nine photos.",
-            borrow: { field: "fields.headline", line: "my girls" },
-          },
-          {
-            heading: "The first kiss, with the time",
-            how: "The first caption is handwritten on the big polaroid. Use it for place and hour.",
-            borrow: { field: "caption", line: "outside the kebab shop, 1:40 a.m." },
+            how: "Your letter is typed at the bottom, with a kiss by your name.",
+            borrow: { field: "message", line: "Love you all. Mostly." },
           },
         ],
       },
@@ -796,37 +803,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué escribir en una tarjeta de amor XOXO",
+        title: "Qué poner en una tarjeta XOXO",
         items: [
           {
-            heading: "El nombre que solo usas tú",
-            how: "Letras recortadas de periódico, una palabra por fila. Tres palabras como mucho.",
-            borrow: { field: "fields.headline", line: "mi peor idea" },
+            heading: "San Valentín",
+            how: "Las letras de periódico escriben cómo le llamas, hasta 16 caracteres.",
+            borrow: { field: "fields.headline", line: "mi persona" },
           },
           {
-            heading: "Unas frases como vuestra canción",
-            how: "Va montada como la letra de una canción. Escribe la estrofa que le falta.",
-            borrow: { field: "fields.lines", line: "me pones los pies helados encima en enero y no me he apartado ni una sola vez." },
+            heading: "Un aniversario",
+            how: "La palabra de la segunda foto admite 10 caracteres.",
+            borrow: { field: "fields.word", line: "un año" },
           },
           {
-            heading: "Una palabra para el primer aniversario",
-            how: "La segunda polaroid lleva una sola palabra en cursiva, de hasta 10 caracteres.",
-            borrow: { field: "fields.word", line: "Año uno" },
+            heading: "Porque sí",
+            how: "Las frases que subrayarías llegan ya subrayadas.",
+            borrow: { field: "fields.lines", line: "Tarareas al cocinar. No pares." },
           },
           {
-            heading: "Un San Valentín con respuesta",
-            how: "Cada toque deja una marca de pintalabios. Pide doce y una captura.",
-            borrow: { field: "message", line: "Besa esta página doce veces, haz una captura y mándamela." },
+            heading: "Una noche de cita",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado. La mesa junto a la ventana." },
           },
           {
-            heading: "Para tu grupo, no tu pareja",
-            how: "Diez páginas para elegir, entre ellas lila y noir, y nueve fotos.",
-            borrow: { field: "fields.headline", line: "mi gente" },
+            heading: "A distancia",
+            how: "Hasta nueve fotos en polaroids sobre una blonda.",
+            borrow: { field: "caption", line: "El aeropuerto, llorando los dos" },
           },
           {
-            heading: "El primer beso, con la hora",
-            how: "El primer pie va escrito a mano en la polaroid: pon sitio y hora.",
-            borrow: { field: "caption", line: "en la puerta del kebab, 1:40 de la madrugada" },
+            heading: "Para el grupo",
+            how: "Tu carta va a máquina al final, con un beso junto a tu nombre.",
+            borrow: { field: "message", line: "Os quiero. Casi siempre." },
           },
         ],
       },
@@ -850,37 +857,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "the-council": {
     en: {
       ideas: {
-        title: "Cases to bring before the council of cats",
+        title: "What to charge them with before the council of cats",
         items: [
           {
-            heading: "An anniversary charge, counted",
-            how: "Write it as a crime and put a number in it. Three years, to the night.",
-            borrow: { field: "fields.charge", line: "stealing the duvet on 1,095 consecutive nights" },
+            heading: "Just because",
+            how: "The charge takes 60 characters.",
+            borrow: { field: "fields.charge", line: "stealing every hoodie I own" },
           },
           {
-            heading: "A birthday that gets Approved",
-            how: "Turn the findings into a performance review for a friend’s thirtieth.",
-            borrow: { field: "fields.findings", line: "has remembered every birthday except their own" },
+            heading: "Their birthday",
+            how: "Up to six findings. Stamp it “approved”.",
+            borrow: { field: "fields.findings", line: "has got better every year, annoyingly" },
           },
           {
-            heading: "A case against the cat",
-            how: "Put the cat on trial and send it to whoever feeds him.",
-            borrow: { field: "fields.charge", line: "knocking a full glass off the table, on purpose" },
+            heading: "An anniversary",
+            how: "Count the years in the charge.",
+            borrow: { field: "fields.charge", line: "three years of taking my side of the bed" },
           },
           {
-            heading: "Photos, entered as evidence",
-            how: "Up to six photos, tagged Exhibit A to F. Caption them like evidence bags.",
-            borrow: { field: "caption", line: "the hoodie in question, on the accused" },
+            heading: "For a flatmate",
+            how: "One finding for each cat.",
+            borrow: { field: "fields.findings", line: "left one sock in the hall since March" },
           },
           {
-            heading: "Five jokes, then the true one",
-            how: "The cats read six findings in order. Make the sixth a real thank-you.",
-            borrow: { field: "fields.findings", line: "drove four hours when I called and never brought it up again" },
+            heading: "With evidence",
+            how: "Up to six photos go in as exhibits.",
+            borrow: { field: "caption", line: "Exhibit B: the empty biscuit tin" },
           },
           {
-            heading: "A ruling that drops the act",
-            how: "Your letter is typed like a court document. Leave the voice in the last line.",
-            borrow: { field: "message", line: "Off the record: this household has never liked anyone more." },
+            heading: "Saying sorry",
+            how: "Put yourself on trial and choose “pardoned”.",
+            borrow: { field: "message", line: "The court finds I owe you dinner." },
           },
         ],
       },
@@ -901,37 +908,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué cargos presentar ante el consejo de gatos",
+        title: "De qué acusar ante el consejo de gatos",
         items: [
           {
-            heading: "Un cargo de aniversario, con cifra",
-            how: "Escríbelo como un delito y ponle número. Tres años, noche a noche.",
-            borrow: { field: "fields.charge", line: "robar el edredón 1.095 noches seguidas" },
+            heading: "Porque sí",
+            how: "El cargo admite 60 caracteres.",
+            borrow: { field: "fields.charge", line: "robarme todas las sudaderas" },
           },
           {
-            heading: "Un cumpleaños con el visto bueno",
-            how: "Convierte las conclusiones en una evaluación de desempeño para los treinta de alguien.",
-            borrow: { field: "fields.findings", line: "se acuerda de todos los cumpleaños menos del suyo" },
+            heading: "Su cumpleaños",
+            how: "Hasta seis conclusiones. Séllalo con «aprobado».",
+            borrow: { field: "fields.findings", line: "mejora cada año, y da rabia" },
           },
           {
-            heading: "Un juicio contra el gato",
-            how: "Sienta al gato en el banquillo y mándaselo a quien le da de comer.",
-            borrow: { field: "fields.charge", line: "tirar un vaso lleno de la mesa, a propósito" },
+            heading: "Un aniversario",
+            how: "Cuenta los años en el cargo.",
+            borrow: { field: "fields.charge", line: "tres años ocupando mi lado de la cama" },
           },
           {
-            heading: "Fotos presentadas como pruebas",
-            how: "Hasta seis fotos, de Prueba A a Prueba F, con pies de bolsa de pruebas.",
-            borrow: { field: "caption", line: "la sudadera en cuestión, puesta en quien la robó" },
+            heading: "Para quien vive contigo",
+            how: "Una conclusión por cada gato.",
+            borrow: { field: "fields.findings", line: "un calcetín en el pasillo desde marzo" },
           },
           {
-            heading: "Cinco bromas y la de verdad",
-            how: "Los gatos leen seis conclusiones en orden. Que la sexta sea un gracias de verdad.",
-            borrow: { field: "fields.findings", line: "condujo cuatro horas cuando llamé y nunca lo ha vuelto a mencionar" },
+            heading: "Con pruebas",
+            how: "Hasta seis fotos entran como pruebas.",
+            borrow: { field: "caption", line: "Prueba B: la lata de galletas vacía" },
           },
           {
-            heading: "Una sentencia que se sincera",
-            how: "Tu carta va a máquina, como un documento judicial. Suelta el tono en la última línea.",
-            borrow: { field: "message", line: "Fuera de acta: en esta casa nunca hemos querido tanto a nadie." },
+            heading: "Para pedir perdón",
+            how: "Ponte a juicio y elige «indulto».",
+            borrow: { field: "message", line: "El tribunal dice que te debo una cena." },
           },
         ],
       },
@@ -958,34 +965,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to send with a digital flower",
         items: [
           {
-            heading: "Mother’s Day, named on the pot",
-            how: "The tag reads “for” and the name you give: type what you call her.",
-            borrow: { field: "title", line: "For the woman who waters everyone else’s" },
+            heading: "Mother’s Day",
+            how: "A peony, tulip or daisy in her colour. The message waits inside.",
+            borrow: { field: "message", line: "You kept every plant alive, and me." },
           },
           {
-            heading: "An apology with nothing around it",
-            how: "Stickers and pot off, a white daisy. It opens only while they hold the screen.",
-            borrow: { field: "message", line: "I’m sorry. I was wrong about Saturday, and unkind about it." },
+            heading: "Saying sorry",
+            how: "One flower and a short message. Nothing else on the page.",
+            borrow: { field: "message", line: "I was wrong. I’d like to fix it." },
           },
           {
-            heading: "A Valentine from the next room",
-            how: "Send it from the kitchen. The last card tells them where to go.",
-            borrow: { field: "surprise.text", line: "Dinner’s on the table. Bring the phone, I want to see your face." },
+            heading: "Valentine’s Day",
+            how: "Hide the plan for the evening in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Dinner is at 8. I’m cooking." },
           },
           {
-            heading: "Flowers for a hospital ward",
-            how: "Some wards don’t allow fresh flowers. Up to eight photos float up around this one.",
-            borrow: { field: "caption", line: "Pepper, waiting by your chair" },
+            heading: "An anniversary",
+            how: "Up to eight photos float up round the open flower.",
+            borrow: { field: "caption", line: "The balcony, year one" },
           },
           {
-            heading: "A peony in November",
-            how: "Real peonies flower for a few weeks in spring. This one ignores the calendar.",
-            borrow: { field: "title", line: "The only peony open in November" },
+            heading: "Get well soon",
+            how: "It opens only while they hold the screen, so keep the message short.",
+            borrow: { field: "message", line: "One flower. No vase needed." },
           },
           {
-            heading: "A colour that means something",
-            how: "Match the petals to a thing you both know: the first flat’s front door.",
-            borrow: { field: "title", line: "The yellow of the kitchen on Albert Road" },
+            heading: "Just because",
+            how: "Pick the colour they wear most.",
+            borrow: { field: "message", line: "This one doesn’t wilt." },
           },
         ],
       },
@@ -1013,34 +1020,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué enviar con una flor digital",
         items: [
           {
-            heading: "Para mamá, con su nombre",
-            how: "La etiqueta pone «para» y el nombre que escribas: pon cómo la llamas tú.",
-            borrow: { field: "title", line: "Para quien riega las plantas de todo el mundo" },
+            heading: "El Día de la Madre",
+            how: "Una peonía, un tulipán o una margarita de su color. El mensaje espera dentro.",
+            borrow: { field: "message", line: "Mantuviste vivas todas las plantas, y a mí." },
           },
           {
-            heading: "Una disculpa sin nada alrededor",
-            how: "Sin pegatinas ni maceta, una margarita blanca. Solo se abre mientras mantienen pulsada la pantalla.",
-            borrow: { field: "message", line: "Perdóname. Me equivoqué con lo del sábado y encima lo dije de malas maneras." },
+            heading: "Para pedir perdón",
+            how: "Una flor y un mensaje corto. Nada más en la página.",
+            borrow: { field: "message", line: "Me equivoqué. Quiero arreglarlo." },
           },
           {
-            heading: "San Valentín desde la cocina",
-            how: "Mándalo desde la habitación de al lado. La última tarjeta dice adónde ir.",
-            borrow: { field: "surprise.text", line: "La cena está en la mesa. Tráete el móvil, que quiero verte la cara." },
+            heading: "San Valentín",
+            how: "Esconde el plan de la noche en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "La cena es a las 20:00. Cocino yo." },
           },
           {
-            heading: "Flores para una planta de hospital",
-            how: "En algunas no dejan entrar flores naturales. Hasta ocho fotos suben alrededor de esta.",
-            borrow: { field: "caption", line: "Canela, esperando junto a tu sillón" },
+            heading: "Un aniversario",
+            how: "Hasta ocho fotos suben alrededor de la flor abierta.",
+            borrow: { field: "caption", line: "El balcón, primer año" },
           },
           {
-            heading: "Una peonía en noviembre",
-            how: "Las de verdad florecen unas semanas en primavera. Esta no mira el calendario.",
-            borrow: { field: "title", line: "La única peonía abierta en noviembre" },
+            heading: "Para desear una pronta mejoría",
+            how: "Solo se abre mientras mantienen el dedo: que el mensaje sea corto.",
+            borrow: { field: "message", line: "Una flor. Sin jarrón." },
           },
           {
-            heading: "Un color que signifique algo",
-            how: "Copia en los pétalos algo que conozcáis los dos: la puerta del primer piso.",
-            borrow: { field: "title", line: "El amarillo de la cocina de la calle Olmo" },
+            heading: "Porque sí",
+            how: "Elige el color que más se pone.",
+            borrow: { field: "message", line: "Esta no se marchita." },
           },
         ],
       },
@@ -1068,37 +1075,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   halfway: {
     en: {
       ideas: {
-        title: "What to send across the miles between you",
+        title: "What to write on a halfway postcard",
         items: [
           {
-            heading: "The places you’ve met halfway",
-            how: "Add up to four stops. The bubble appears as the plane passes the middle.",
-            borrow: { field: "fields.halfwayNote", line: "Lyon. You missed the train and we got an extra day." },
+            heading: "Before the next visit",
+            how: "Add a countdown to the day you arrive.",
+            borrow: { field: "countdown.label", line: "Until I land" },
           },
           {
-            heading: "Your own number",
-            how: "Type in the distance the way you count it: 412 km, door to door.",
-            borrow: { field: "fields.halfwayNote", line: "This is where I pull over for the bad coffee." },
+            heading: "An anniversary apart",
+            how: "Add the places you’ve met in the middle, up to four.",
+            borrow: { field: "fields.halfwayNote", line: "Reykjavík. Neither of us flew further." },
           },
           {
-            heading: "The last postcard",
-            how: "For the week the distance ends. The title opens the back of the postcard.",
-            borrow: { field: "title", line: "Last postcard from this address," },
+            heading: "Their birthday",
+            how: "The postcard flips over to your letter.",
+            borrow: { field: "message", line: "I’d blow this plane all the way myself." },
           },
           {
             heading: "A parent to a student",
-            how: "Home on one island, the university town on the other, a balloon for the plane.",
-            borrow: { field: "fields.halfwayNote", line: "Halfway. Dad says check your tyre pressure." },
+            how: "The real distance shows in big numbers. Write what’s halfway.",
+            borrow: { field: "fields.halfwayNote", line: "The motorway café where we swap bags." },
           },
           {
-            heading: "The countdown to arrivals",
-            how: "Set it to the minute you land and give it a label of your own.",
-            borrow: { field: "countdown.label", line: "Until I’m at arrivals, holding the stupid sign" },
+            heading: "For a friend who moved",
+            how: "Up to eight photos are taped under your letter.",
+            borrow: { field: "caption", line: "Your old street, last week" },
           },
           {
-            heading: "Ask for one back",
-            how: "The end offers “Send one back”, and the first reply is free.",
-            borrow: { field: "message", line: "Your turn. Fly one back before Sunday." },
+            heading: "The last time apart",
+            how: "Put the news in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Check the date. I’m not flying back." },
           },
         ],
       },
@@ -1123,37 +1130,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué enviar cuando hay kilómetros de por medio",
+        title: "Qué escribir en una postal a medio camino",
         items: [
           {
-            heading: "Los sitios a medio camino",
-            how: "Añade hasta cuatro paradas. El bocadillo aparece cuando el avión pasa por el medio.",
-            borrow: { field: "fields.halfwayNote", line: "Bogotá. Perdiste el vuelo y ganamos un día." },
+            heading: "Antes de la próxima visita",
+            how: "Añade una cuenta atrás hasta el día en que llegas.",
+            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
           },
           {
-            heading: "Tu propio número",
-            how: "Escribe la distancia como la cuentas tú: 412 km, de puerta a puerta.",
-            borrow: { field: "fields.halfwayNote", line: "Esta es el área de servicio del café malo." },
+            heading: "Un aniversario a distancia",
+            how: "Añade los sitios donde os habéis visto a medio camino, hasta cuatro.",
+            borrow: { field: "fields.halfwayNote", line: "Reikiavik. Nadie voló más que nadie." },
           },
           {
-            heading: "La última postal",
-            how: "Para la semana en que se acaba la distancia. El título abre el reverso.",
-            borrow: { field: "title", line: "Última postal desde esta dirección:" },
+            heading: "Su cumpleaños",
+            how: "La postal se da la vuelta y aparece tu carta.",
+            borrow: { field: "message", line: "Soplaría este avión hasta allí." },
           },
           {
-            heading: "Para quien estudia fuera",
-            how: "La casa en una isla, la universidad en la otra, y un globo por avión.",
-            borrow: { field: "fields.halfwayNote", line: "Mitad de camino. Dice tu padre que mires las ruedas." },
+            heading: "De casa a quien estudia fuera",
+            how: "La distancia real sale en números grandes. Escribe qué hay a medio camino.",
+            borrow: { field: "fields.halfwayNote", line: "El bar de la autovía donde nos vemos." },
           },
           {
-            heading: "La cuenta atrás hasta llegadas",
-            how: "Ponla en el minuto en que aterrizas y rotúlala tú.",
-            borrow: { field: "countdown.label", line: "Hasta que esté en llegadas con el cartel ridículo" },
+            heading: "Para quien se mudó lejos",
+            how: "Hasta ocho fotos van pegadas bajo tu carta.",
+            borrow: { field: "caption", line: "Tu antigua calle, la semana pasada" },
           },
           {
-            heading: "Pide una de vuelta",
-            how: "Al final aparece «Hazle uno a» con tu nombre, y la primera respuesta es gratis.",
-            borrow: { field: "message", line: "Te toca. Mándame uno de vuelta antes del domingo." },
+            heading: "La última vez a distancia",
+            how: "Pon la noticia en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mira la fecha. Ya no hay vuelo de vuelta." },
           },
         ],
       },
@@ -1181,37 +1188,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "frosted-window": {
     en: {
       ideas: {
-        title: "What to write on the snowman’s sign",
+        title: "What to write on a frosted window card",
         items: [
           {
-            heading: "First Christmas at a new address",
-            how: "The snowman’s blackboard takes 36 characters. Say where you are this year.",
-            borrow: { field: "fields.sign", line: "first christmas at number 12" },
+            heading: "Christmas Eve",
+            how: "The snowman’s blackboard takes 36 characters.",
+            borrow: { field: "fields.sign", line: "merry christmas, Ava" },
           },
           {
-            heading: "A snowman who says you’re outside",
-            how: "Send it from their doorstep. They wipe the frost and the board comes clear.",
-            borrow: { field: "fields.sign", line: "open the front door. it’s cold." },
+            heading: "First Christmas together",
+            how: "Two stockings carry your names. Put the year on the sign.",
+            borrow: { field: "fields.sign", line: "our first one, 2026" },
           },
           {
-            heading: "Two stockings, two cities",
-            how: "Your names hang on two stockings. Count down to the day you share a fireplace.",
-            borrow: { field: "countdown.label", line: "Until both stockings hang in one room" },
+            heading: "Christmas apart",
+            how: "Add a countdown to the day you arrive.",
+            borrow: { field: "countdown.label", line: "Until I’m at your door" },
           },
           {
-            heading: "A private joke in the frost",
-            how: "The title is drawn in the frost. The snowman gets the rest of the insult.",
-            borrow: { field: "title", line: "made you look" },
+            heading: "With a present to find",
+            how: "Say what’s waiting in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Two tickets to the ice rink on the 27th." },
           },
           {
-            heading: "The present too big to wrap",
-            how: "Let the sign promise it and the hidden card at the end deliver it.",
-            borrow: { field: "surprise.text", line: "Two seats, the 28th, row C. Wear the green coat." },
+            heading: "For the family",
+            how: "Cream cottage, log cabin or midnight blue. Sign it from all of you.",
+            borrow: { field: "fields.sign", line: "love from all four of us" },
           },
           {
-            heading: "The year in eight prints",
-            how: "For grandparents on Christmas morning: eight photos, in the order the year happened.",
-            borrow: { field: "caption", line: "March. The flat with the mustard carpet." },
+            heading: "The year in photos",
+            how: "Up to eight photos follow your letter.",
+            borrow: { field: "caption", line: "March, the day we moved in" },
           },
         ],
       },
@@ -1232,37 +1239,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué escribir en el cartel del muñeco de nieve",
+        title: "Qué escribir en una ventana helada",
         items: [
           {
-            heading: "La primera Navidad en casa nueva",
-            how: "La pizarra del muñeco admite 36 caracteres. Este año, di dónde estáis.",
-            borrow: { field: "fields.sign", line: "primera navidad en el número 12" },
+            heading: "Nochebuena",
+            how: "La pizarra del muñeco de nieve admite 36 caracteres.",
+            borrow: { field: "fields.sign", line: "feliz navidad, Ava" },
           },
           {
-            heading: "Un muñeco que avisa: estás fuera",
-            how: "Mándalo desde su portal. Limpia la escarcha y la pizarra queda a la vista.",
-            borrow: { field: "fields.sign", line: "abre la puerta, que hace frío" },
+            heading: "La primera Navidad en pareja",
+            how: "Los dos calcetines llevan vuestros nombres. Pon el año en el cartel.",
+            borrow: { field: "fields.sign", line: "la primera, 2026" },
           },
           {
-            heading: "Dos calcetines, dos ciudades",
-            how: "Vuestros nombres cuelgan en dos calcetines. Cuenta atrás hasta el día en que compartáis chimenea.",
-            borrow: { field: "countdown.label", line: "Hasta que los dos cuelguen en la misma casa" },
+            heading: "Navidad a distancia",
+            how: "Añade una cuenta atrás hasta el día en que llegas.",
+            borrow: { field: "countdown.label", line: "Hasta llamar a tu puerta" },
           },
           {
-            heading: "Una broma privada en la escarcha",
-            how: "El título va dibujado en la escarcha. El muñeco remata la faena.",
-            borrow: { field: "title", line: "has picado" },
+            heading: "Con un regalo escondido",
+            how: "Di qué espera en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Dos entradas para la pista de hielo el 27." },
           },
           {
-            heading: "El regalo que no cabe",
-            how: "Que el cartel lo prometa y la tarjeta escondida del final lo entregue.",
-            borrow: { field: "surprise.text", line: "Dos butacas, el día 28, fila C. Ponte el abrigo verde." },
+            heading: "Para la familia",
+            how: "Casita crema, cabaña o azul medianoche. Firmad entre todos.",
+            borrow: { field: "fields.sign", line: "con cariño, los cuatro" },
           },
           {
-            heading: "El año en ocho copias",
-            how: "Para los abuelos, la mañana de Navidad: ocho fotos en el orden del año.",
-            borrow: { field: "caption", line: "Marzo. El piso de las cortinas mostaza." },
+            heading: "El año en fotos",
+            how: "Hasta ocho fotos siguen a tu carta.",
+            borrow: { field: "caption", line: "Marzo, el día de la mudanza" },
           },
         ],
       },
@@ -1286,37 +1293,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "light-the-candles": {
     en: {
       ideas: {
-        title: "Five things to be thankful for, and how to write them",
+        title: "What to be thankful for in a candlelit card",
         items: [
           {
-            heading: "Five lines that grow",
-            how: "Start with the smallest daily thing and make the fifth the whole of it.",
-            borrow: { field: "fields.thanks", line: "the heating you turn on before I’m up" },
+            heading: "Thanksgiving together",
+            how: "Five candles, five lines of up to 60 characters.",
+            borrow: { field: "fields.thanks", line: "the coffee you bring me before I ask" },
+          },
+          {
+            heading: "Thanksgiving apart",
+            how: "Thank them for things from this year.",
+            borrow: { field: "fields.thanks", line: "every call that ran past midnight" },
           },
           {
             heading: "For whoever is cooking",
-            how: "Send it at seven, while the turkey is still a problem.",
-            borrow: { field: "fields.thanks", line: "the gravy only you get right" },
+            how: "Five things about the table they set every year.",
+            borrow: { field: "fields.thanks", line: "the extra chair you always find" },
           },
           {
-            heading: "Friendsgiving, one candle each",
-            how: "Five candles, five friends. Put a name at the front of every line.",
-            borrow: { field: "fields.thanks", line: "Dani: for the sofa, all of March" },
-          },
-          {
-            heading: "The first Thanksgiving away",
-            how: "List what you’ll miss at that table, bad parts included.",
-            borrow: { field: "fields.thanks", line: "the argument about the stuffing" },
+            heading: "Friendsgiving",
+            how: "One candle for each friend at the table.",
+            borrow: { field: "fields.thanks", line: "Sam, for driving every time" },
           },
           {
             heading: "After a hard year",
-            how: "Thankful doesn’t have to mean cheerful. Name the days someone carried you.",
-            borrow: { field: "title", line: "It was a hard year. Thank you for being in it." },
+            how: "The title is written in light. Keep it plain.",
+            borrow: { field: "title", line: "we made it to the table" },
           },
           {
-            heading: "The toast you’d never give",
-            how: "Your letter is read a few sentences at a time. Write it in beats.",
-            borrow: { field: "message", line: "To Mum. Now sit down, all of you, it’s going cold." },
+            heading: "For your parents",
+            how: "Your letter follows once all five are lit.",
+            borrow: { field: "message", line: "Thank you for the house that was always warm." },
           },
         ],
       },
@@ -1341,37 +1348,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Cinco cosas por las que dar las gracias, y cómo escribirlas",
+        title: "Por qué dar las gracias con cinco velas",
         items: [
           {
-            heading: "Cinco frases que van a más",
-            how: "Empieza por lo más pequeño de cada día y que la quinta lo diga todo.",
-            borrow: { field: "fields.thanks", line: "la calefacción que pones antes de que me levante" },
+            heading: "Acción de Gracias en pareja",
+            how: "Cinco velas, cinco frases de hasta 60 caracteres.",
+            borrow: { field: "fields.thanks", line: "el café que me traes sin pedirlo" },
+          },
+          {
+            heading: "Acción de Gracias a distancia",
+            how: "Da las gracias por cosas de este año.",
+            borrow: { field: "fields.thanks", line: "cada llamada pasada la medianoche" },
           },
           {
             heading: "Para quien cocina",
-            how: "Mándaselo a las siete, cuando el pavo todavía es un problema.",
-            borrow: { field: "fields.thanks", line: "la salsa que solo te sale a ti" },
+            how: "Cinco cosas de la mesa que pone cada año.",
+            borrow: { field: "fields.thanks", line: "la silla de más que siempre encuentras" },
           },
           {
-            heading: "Una vela por cada amigo",
-            how: "Cinco velas, cinco amigos. Pon un nombre al principio de cada frase.",
-            borrow: { field: "fields.thanks", line: "Dani: por el sofá, todo marzo" },
+            heading: "Con las amistades",
+            how: "Una vela por cada persona de la mesa.",
+            borrow: { field: "fields.thanks", line: "Sam, por conducir siempre" },
           },
           {
-            heading: "El primer año lejos de casa",
-            how: "Lo que vas a echar de menos de esa mesa, lo malo incluido.",
-            borrow: { field: "fields.thanks", line: "la discusión por el relleno" },
+            heading: "Tras un año difícil",
+            how: "El título se escribe con luz. Que sea sencillo.",
+            borrow: { field: "title", line: "hemos llegado a la mesa" },
           },
           {
-            heading: "Después de un año difícil",
-            how: "Dar las gracias no obliga a estar alegre. Nombra los días en que cargaron contigo.",
-            borrow: { field: "title", line: "Ha sido un año difícil. Gracias por estar en él." },
-          },
-          {
-            heading: "El brindis que nunca darías",
-            how: "Tu carta se lee unas pocas frases cada vez. Escríbela con pausas.",
-            borrow: { field: "message", line: "Por mamá. Y ahora sentaos todos, que se enfría." },
+            heading: "Para tu madre y tu padre",
+            how: "Tu carta llega cuando las cinco están encendidas.",
+            borrow: { field: "message", line: "Gracias por una casa siempre caliente." },
           },
         ],
       },
@@ -1399,37 +1406,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "string-the-lights": {
     en: {
       ideas: {
-        title: "What to spell out in lights",
+        title: "What to write in a Christmas lights card",
         items: [
           {
-            heading: "Twelve letters or fewer",
-            how: "The board spells 28 characters in bulbs; twelve or fewer are drawn largest.",
-            borrow: { field: "fields.sign", line: "HOME, MIA" },
+            heading: "Christmas Eve",
+            how: "Your words come on in bulbs, up to 28 characters.",
+            borrow: { field: "fields.sign", line: "MERRY CHRISTMAS MIA" },
           },
           {
-            heading: "A question that waits",
-            how: "The words stay dark until every bulb is hung and the switch is thrown.",
+            heading: "A question to ask",
+            how: "Put the question on the board in the garden.",
             borrow: { field: "fields.sign", line: "MOVE IN WITH ME?" },
           },
           {
-            heading: "For whoever does the lights",
-            how: "Give them a roof they can string with one finger.",
-            borrow: { field: "title", line: "Your turn to stand in the garden and point" },
+            heading: "Christmas apart",
+            how: "Add a countdown to the day you’re home.",
+            borrow: { field: "countdown.label", line: "Until I’m home" },
           },
           {
-            heading: "December, one card at a time",
-            how: "Eight photos, a card apiece, with the caption handwritten underneath.",
-            borrow: { field: "caption", line: "The 1st: the tree that didn’t fit in the car." },
+            heading: "For the family",
+            how: "Barn red, navy blue or sage green for the house.",
+            borrow: { field: "fields.sign", line: "HOME BY THE 23RD" },
           },
           {
-            heading: "One house to the whole street",
-            how: "Send a single link to the neighbours’ group, signed from your door.",
-            borrow: { field: "fields.sign", line: "FROM NUMBER 14, WITH LOVE" },
+            heading: "The year in photos",
+            how: "Up to eight photos follow your letter.",
+            borrow: { field: "caption", line: "The roof, before the lights" },
           },
           {
-            heading: "Timed for the dark",
-            how: "Schedule it for five on Christmas Eve; until then the link shows a countdown.",
-            borrow: { field: "title", line: "It’s dark out. Fix that." },
+            heading: "With a present to find",
+            how: "Say what’s coming in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "The big star you circled in the catalogue." },
           },
         ],
       },
@@ -1450,37 +1457,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué escribir con luces",
+        title: "Qué escribir en una tarjeta de Navidad con luces",
         items: [
           {
-            heading: "Doce letras o menos",
-            how: "El cartel admite 28 caracteres en bombillas; con doce o menos salen más grandes.",
-            borrow: { field: "fields.sign", line: "EN CASA, MIA" },
+            heading: "Nochebuena",
+            how: "Tus palabras se encienden en bombillas, hasta 28 caracteres.",
+            borrow: { field: "fields.sign", line: "FELIZ NAVIDAD MIA" },
           },
           {
-            heading: "Una pregunta que espera",
-            how: "Las palabras siguen apagadas hasta colgar la última bombilla y dar al interruptor.",
-            borrow: { field: "fields.sign", line: "¿TE VIENES A VIVIR CONMIGO?" },
+            heading: "Una pregunta importante",
+            how: "Pon la pregunta en el cartel del jardín.",
+            borrow: { field: "fields.sign", line: "¿VIVIMOS EN LA MISMA?" },
           },
           {
-            heading: "Para quien siempre pone las luces",
-            how: "Regálale un tejado que se decora con un dedo.",
-            borrow: { field: "title", line: "Este año opinas tú desde el jardín" },
+            heading: "Navidad a distancia",
+            how: "Añade una cuenta atrás hasta volver a casa.",
+            borrow: { field: "countdown.label", line: "Hasta que vuelva a casa" },
           },
           {
-            heading: "Diciembre, tarjeta a tarjeta",
-            how: "Ocho fotos, una por tarjeta, con el pie escrito a mano debajo.",
-            borrow: { field: "caption", line: "Día 1: el árbol que no cabía en el coche." },
+            heading: "Para la familia",
+            how: "Rojo granero, azul marino o verde salvia para la casa.",
+            borrow: { field: "fields.sign", line: "LLEGO EL DÍA 23" },
           },
           {
-            heading: "Para toda la calle",
-            how: "Manda un solo enlace al grupo de vecinos, firmado desde tu puerta.",
-            borrow: { field: "fields.sign", line: "DESDE EL 14, CON CARIÑO" },
+            heading: "El año en fotos",
+            how: "Hasta ocho fotos siguen a tu carta.",
+            borrow: { field: "caption", line: "El tejado, antes de las luces" },
           },
           {
-            heading: "A la hora en que oscurece",
-            how: "Prográmalo para las cinco del 24; hasta entonces el enlace enseña una cuenta atrás.",
-            borrow: { field: "title", line: "Está oscuro. Arréglalo." },
+            heading: "Con un regalo escondido",
+            how: "Di lo que viene en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "La estrella grande que marcaste en el catálogo." },
           },
         ],
       },
@@ -1507,34 +1514,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to hide inside a virtual gingerbread house",
         items: [
           {
-            heading: "A house for a small decorator",
-            how: "Seven kinds of sweet, a tube of icing, and nobody saying that’s enough.",
-            borrow: { field: "message", line: "Once there was a house with no sweets on it. Somebody had to fix that." },
+            heading: "For a child",
+            how: "They stick on the sweets themselves. Keep the letter to a few lines.",
+            borrow: { field: "message", line: "You decorate. I’ll bring the icing." },
           },
           {
-            heading: "The tradition, at a distance",
-            how: "No two houses come out the same. Decorate one each and trade screenshots.",
-            borrow: { field: "message", line: "Send me a photo of yours first. Worst roof does the washing-up in January." },
+            heading: "Christmas apart",
+            how: "The letter is inside, behind the little door.",
+            borrow: { field: "message", line: "Same tradition, two kitchens this year." },
           },
           {
             heading: "First Christmas in a new home",
-            how: "The title is piped in icing on the book inside. Give the address its own.",
-            borrow: { field: "title", line: "Number 9, finally" },
+            how: "The title sits over the house.",
+            borrow: { field: "title", line: "home sweet home" },
           },
           {
-            heading: "Your grandmother’s recipe",
-            how: "The letter opens as a small book. Put her recipe in it, step by step.",
-            borrow: { field: "message", line: "Melt the butter with the syrup. Do not walk away from it." },
+            heading: "For the grandparents",
+            how: "Up to eight photos wait inside with your letter.",
+            borrow: { field: "caption", line: "The tree, before the cat found it" },
           },
           {
-            heading: "One house for the whole class",
-            how: "Every child sticks on one sweet. The door can open after the sixth.",
-            borrow: { field: "title", line: "Class 3B’s house" },
+            heading: "With a present to find",
+            how: "Say what’s coming in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "A real kit, the big one, and Saturday free." },
           },
           {
-            heading: "Christmas Eve, children asleep",
-            how: "One parent to the other, at midnight, from the far end of the sofa.",
-            borrow: { field: "title", line: "We survived the 24th" },
+            heading: "For a whole class",
+            how: "One link works for everyone. Each house comes out different.",
+            borrow: { field: "message", line: "Show me yours on Monday." },
           },
         ],
       },
@@ -1559,37 +1566,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué esconder dentro de una casita de jengibre virtual",
+        title: "Qué esconder en una casita de jengibre virtual",
         items: [
           {
-            heading: "Para alguien de seis años",
-            how: "Siete tipos de dulces, un tubo de glaseado y nadie diciendo que ya vale.",
-            borrow: { field: "message", line: "Había una vez una casita sin un solo dulce. Alguien tenía que arreglarlo." },
+            heading: "Para un peque",
+            how: "Pegan los dulces por su cuenta. Deja la carta en pocas líneas.",
+            borrow: { field: "message", line: "Tú decoras. Yo llevo el glaseado." },
           },
           {
-            heading: "La tradición, a distancia",
-            how: "No hay dos casitas iguales. Decorad una cada uno e intercambiad capturas.",
-            borrow: { field: "message", line: "Mándame antes una foto de la tuya. El peor tejado friega en enero." },
+            heading: "Navidad a distancia",
+            how: "La carta está dentro, tras la puertecita.",
+            borrow: { field: "message", line: "La misma tradición, este año en dos cocinas." },
           },
           {
             heading: "La primera Navidad en casa nueva",
-            how: "El título va trazado con glaseado en el librito de dentro. Ponle el suyo.",
-            borrow: { field: "title", line: "El número 9, por fin" },
+            how: "El título va sobre la casita.",
+            borrow: { field: "title", line: "hogar, dulce hogar" },
           },
           {
-            heading: "La receta de tu abuela",
-            how: "La carta se abre como un librito. Mete su receta, paso a paso.",
-            borrow: { field: "message", line: "Derrite la mantequilla con la miel. Y no te vayas de ahí." },
+            heading: "Para los abuelos",
+            how: "Hasta ocho fotos esperan dentro con tu carta.",
+            borrow: { field: "caption", line: "El árbol, antes de que lo viera el gato" },
           },
           {
-            heading: "Una casita para toda la clase",
-            how: "Cada niño pega un dulce. La puerta se puede abrir a partir del sexto.",
-            borrow: { field: "title", line: "La casita de 3.º B" },
+            heading: "Con un regalo escondido",
+            how: "Di lo que viene en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Un kit de verdad, el grande, y el sábado libre." },
           },
           {
-            heading: "Nochebuena, con los niños dormidos",
-            how: "De una mitad de la pareja a la otra, a medianoche, desde el sofá.",
-            borrow: { field: "title", line: "Hemos sobrevivido al 24" },
+            heading: "Para toda una clase",
+            how: "Un enlace vale para todo el mundo. Cada casita sale distinta.",
+            borrow: { field: "message", line: "El lunes me enseñáis la vuestra." },
           },
         ],
       },
@@ -1620,34 +1627,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to put inside a digital snow globe",
         items: [
           {
-            heading: "Two homes for a December apart",
-            how: "Choose “Your two homes” and the globe holds two houses with their lights on.",
-            borrow: { field: "fields.plaque", line: "two addresses, one december" },
+            heading: "Christmas",
+            how: "The brass plaque takes 44 characters.",
+            borrow: { field: "fields.plaque", line: "the winter we stopped counting trains" },
           },
           {
-            heading: "One memory in every flurry",
-            how: "Each time the snow settles, a line or a photo has appeared in it.",
-            borrow: { field: "fields.lines", line: "The year the tree fell on the cat, and the cat won." },
+            heading: "Christmas apart",
+            how: "Pick the two homes. A line appears each time the snow settles.",
+            borrow: { field: "fields.lines", line: "You hang the same crooked star every year." },
           },
           {
-            heading: "A first Christmas, engraved",
-            how: "For a baby’s first December: the tree and presents, and a plaque with a date.",
-            borrow: { field: "fields.plaque", line: "Noa’s first snow · December 2026" },
+            heading: "First Christmas together",
+            how: "Engrave the year on the plaque.",
+            borrow: { field: "fields.plaque", line: "our first winter, 2026" },
           },
           {
-            heading: "The cabin, not Christmas",
-            how: "For the anniversary of a trip, with a P.S. that opens on a shake.",
-            borrow: { field: "surprise.text", line: "I booked it again. Same cabin, the 14th of February." },
+            heading: "An anniversary in winter",
+            how: "Up to four lines, one for each shake.",
+            borrow: { field: "fields.lines", line: "The heating broke and we didn’t mind." },
           },
           {
-            heading: "For a friend who moved away",
-            how: "The little village, lamplit, and two lines about home that only work in order.",
-            borrow: { field: "fields.lines", line: "Your chair at the pub is still yours." },
+            heading: "Before you arrive",
+            how: "Add a countdown to the day you’re at their door.",
+            borrow: { field: "countdown.label", line: "Until I’m at your door" },
           },
           {
-            heading: "For a grandparent’s tablet",
-            how: "Nobody has to shake anything: two buttons under the globe do all of it.",
-            borrow: { field: "fields.plaque", line: "from all four of us, with snow" },
+            heading: "For a grandparent",
+            how: "Up to eight photos hang inside like ornaments.",
+            borrow: { field: "caption", line: "The sledge, last January" },
           },
         ],
       },
@@ -1675,34 +1682,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué meter en una bola de nieve digital",
         items: [
           {
-            heading: "Dos casas, un diciembre a distancia",
-            how: "Elige «Vuestras dos casas» y la bola guarda dos casitas con la luz encendida.",
-            borrow: { field: "fields.plaque", line: "dos direcciones, un solo diciembre" },
+            heading: "Navidad",
+            how: "La placa de latón admite 44 caracteres.",
+            borrow: { field: "fields.plaque", line: "el invierno de los trenes sin contar" },
           },
           {
-            heading: "Un recuerdo en cada nevada",
-            how: "Cada vez que la nieve se posa ha aparecido una frase o una foto.",
-            borrow: { field: "fields.lines", line: "El año que el árbol se le cayó encima al gato, y ganó el gato." },
+            heading: "Navidad a distancia",
+            how: "Elige las dos casas. Sale una frase cada vez que la nieve se posa.",
+            borrow: { field: "fields.lines", line: "Cuelgas la misma estrella torcida cada año." },
           },
           {
-            heading: "Una primera Navidad, grabada",
-            how: "Para el primer diciembre de un bebé: el árbol con regalos y una placa con fecha.",
-            borrow: { field: "fields.plaque", line: "La primera nieve de Noa · 2026" },
+            heading: "La primera Navidad en pareja",
+            how: "Graba el año en la placa.",
+            borrow: { field: "fields.plaque", line: "nuestro primer invierno, 2026" },
           },
           {
-            heading: "La cabaña, no la Navidad",
-            how: "Para el aniversario de aquel viaje, con una posdata que se abre agitando.",
-            borrow: { field: "surprise.text", line: "La he vuelto a reservar. La misma cabaña, el 14 de febrero." },
+            heading: "Un aniversario en invierno",
+            how: "Hasta cuatro frases, una por sacudida.",
+            borrow: { field: "fields.lines", line: "Se rompió la calefacción y nos dio igual." },
           },
           {
-            heading: "Para alguien que se fue lejos",
-            how: "El pueblecito, a la luz de la lámpara, y dos frases que solo funcionan en orden.",
-            borrow: { field: "fields.lines", line: "Tu silla del bar sigue siendo tuya." },
+            heading: "Antes de llegar",
+            how: "Añade una cuenta atrás hasta estar en su puerta.",
+            borrow: { field: "countdown.label", line: "Hasta llamar a tu puerta" },
           },
           {
-            heading: "Para la tableta de los abuelos",
-            how: "Nadie tiene que agitar nada: dos botones bajo la bola lo hacen todo.",
-            borrow: { field: "fields.plaque", line: "de los cuatro, con nieve" },
+            heading: "Para tu abuela o tu abuelo",
+            how: "Hasta ocho fotos cuelgan dentro como adornos.",
+            borrow: { field: "caption", line: "El trineo, el enero pasado" },
           },
         ],
       },
@@ -1730,37 +1737,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "nice-list": {
     en: {
       ideas: {
-        title: "What to put on a naughty or nice list",
+        title: "What to write on a naughty or nice list",
         items: [
           {
-            heading: "Crimes with numbers in them",
-            how: "A crime reads better counted. Pair each one with a good deed.",
-            borrow: { field: "fields.naughty", line: "left one sip of milk in the carton. nine times." },
+            heading: "For your partner",
+            how: "Up to four crimes, 50 characters each. Count them.",
+            borrow: { field: "fields.naughty", line: "stole the blanket, 41 nights of 41" },
           },
           {
-            heading: "A list for a child",
-            how: "It is signed “head elf”, so give yourself an elf’s name. Keep the crime small.",
-            borrow: { field: "fields.naughty", line: "hid the peas under the mash. twice." },
+            heading: "For a child",
+            how: "Keep the crimes small and the good deeds real.",
+            borrow: { field: "fields.nice", line: "shared the last biscuit, once" },
           },
           {
-            heading: "All crimes, for a sibling",
-            how: "Leave the good deeds empty and stamp it naughty. The presents are still approved.",
-            borrow: { field: "fields.naughty", line: "borrowed my charger in 2023. still has it." },
+            heading: "For a brother or sister",
+            how: "All crimes, then stamp it “naughty and nice”.",
+            borrow: { field: "fields.naughty", line: "ate my leftovers and denied it" },
           },
           {
             heading: "From the grandchildren",
-            how: "Turn it round: the children review the grandparent.",
-            borrow: { field: "fields.nice", line: "lets us win at cards (we noticed)" },
+            how: "One good deed from each of them.",
+            borrow: { field: "fields.nice", line: "always has sweets in the car" },
           },
           {
-            heading: "Photographic evidence",
-            how: "Up to eight photos, filed as “the evidence” and held with paper clips.",
-            borrow: { field: "caption", line: "seen here: the last roast potato, leaving" },
+            heading: "With evidence",
+            how: "Up to eight photos are filed as evidence.",
+            borrow: { field: "caption", line: "Exhibit A: the empty tin" },
           },
           {
-            heading: "Christmas Eve, or late",
-            how: "Through January the list still reads the year just gone. Own up in the title.",
-            borrow: { field: "title", line: "the results are late. so was the sleigh." },
+            heading: "With a present to find",
+            how: "Say what’s coming in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "The thing you hinted at since October." },
           },
         ],
       },
@@ -1785,37 +1792,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué poner en una lista de Papá Noel",
+        title: "Qué escribir en una lista de Papá Noel",
         items: [
           {
-            heading: "Fechorías con cifras",
-            how: "Una fechoría gana con un número. Emparéjala con una buena obra.",
-            borrow: { field: "fields.naughty", line: "deja un sorbo de leche en el brik. nueve veces." },
+            heading: "Para tu pareja",
+            how: "Hasta cuatro fechorías, de 50 caracteres. Ponles número.",
+            borrow: { field: "fields.naughty", line: "me quitó la manta 41 noches de 41" },
           },
           {
-            heading: "Una lista para un niño",
-            how: "Va firmada «de parte de los elfos»: ponte nombre de elfo. Que la fechoría sea pequeña.",
-            borrow: { field: "fields.naughty", line: "esconde los guisantes bajo el puré. dos veces." },
+            heading: "Para un peque",
+            how: "Fechorías pequeñas y buenas obras de verdad.",
+            borrow: { field: "fields.nice", line: "compartió la última galleta, una vez" },
           },
           {
-            heading: "Solo fechorías, entre hermanos",
-            how: "Deja vacías las buenas obras y séllala con «Carbón». Los regalos se aprueban igual.",
-            borrow: { field: "fields.naughty", line: "me cogió el cargador en 2023. sigue en su poder." },
+            heading: "Para tu hermana o tu hermano",
+            how: "Todo fechorías, y el sello de «traviesa y buena».",
+            borrow: { field: "fields.naughty", line: "se comió mis sobras y lo negó" },
           },
           {
             heading: "De parte de los nietos",
-            how: "Dale la vuelta: los niños evalúan a la abuela o al abuelo.",
-            borrow: { field: "fields.nice", line: "nos deja ganar a las cartas (lo sabemos)" },
+            how: "Una buena obra de parte de cada uno.",
+            borrow: { field: "fields.nice", line: "siempre lleva caramelos en el coche" },
           },
           {
-            heading: "Pruebas fotográficas",
-            how: "Hasta ocho fotos, archivadas como «las pruebas» y sujetas con clips.",
-            borrow: { field: "caption", line: "aquí, la última patata asada, dándose a la fuga" },
+            heading: "Con pruebas",
+            how: "Hasta ocho fotos se archivan como pruebas.",
+            borrow: { field: "caption", line: "Prueba A: la lata vacía" },
           },
           {
-            heading: "En Nochebuena, o para Reyes",
-            how: "En enero la lista sigue marcando el año que acaba de terminar. Avísalo en el título.",
-            borrow: { field: "title", line: "ya hay veredicto, y sus majestades lo saben" },
+            heading: "Con un regalo escondido",
+            how: "Di lo que viene en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Lo que llevas insinuando desde octubre." },
           },
         ],
       },
@@ -1846,34 +1853,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to write in a reasons why I love you jar",
         items: [
           {
-            heading: "A number that means something",
-            how: "30 for a thirtieth birthday, 52 for a first anniversary, 100 for the classic.",
-            borrow: { field: "fields.label", line: "52 reasons, one for every week of us" },
+            heading: "An anniversary",
+            how: "One reason for each month. Put the number on the jar’s label.",
+            borrow: { field: "fields.label", line: "12 reasons, one per month" },
           },
           {
-            heading: "Evidence, not adjectives",
-            how: "Begin each note with a verb. Short ones look best on the slip.",
-            borrow: { field: "fields.reasons", line: "You warm the car up before I’ve found my shoes." },
+            heading: "Valentine’s Day",
+            how: "Small true things beat big words. Each note takes 160 characters.",
+            borrow: { field: "fields.reasons", line: "You steal my sugar and deny it every time." },
           },
           {
-            heading: "A jar for your dad",
-            how: "The label is yours to change. Write what he thought nobody saw.",
-            borrow: { field: "fields.reasons", line: "You waited up, then pretended you’d fallen asleep." },
+            heading: "Mother’s Day",
+            how: "Write what she did, not what she is.",
+            borrow: { field: "fields.reasons", line: "You waited up, every single time." },
           },
           {
-            heading: "Photos on the first notes",
-            how: "Your first photo rides on your first reason. Captions don’t show, so say it there.",
-            borrow: { field: "fields.reasons", line: "This face. This exact face. Lisbon, 2023." },
+            heading: "Father’s Day",
+            how: "One note for each thing he taught you.",
+            borrow: { field: "fields.reasons", line: "You taught me to check the oil." },
           },
           {
-            heading: "One note from everyone",
-            how: "Collect one reason from each person and put their name inside the note.",
-            borrow: { field: "fields.reasons", line: "Because you taught me to shuffle cards. (Leo)" },
+            heading: "From the whole family",
+            how: "Ask everyone for one note. Some notes can carry a photo.",
+            borrow: { field: "fields.reasons", line: "From Leo: you make the best pancakes." },
           },
           {
-            heading: "The note that isn’t a reason",
-            how: "Hide one piece of news among the reasons. The jar decides when it comes out.",
-            borrow: { field: "fields.reasons", line: "Not a reason. I bought the tickets. We leave on the 9th." },
+            heading: "A hard week",
+            how: "Reasons they’re doing better than they think.",
+            borrow: { field: "fields.reasons", line: "You got up today. That counts." },
           },
         ],
       },
@@ -1901,34 +1908,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué escribir en un frasco de razones",
         items: [
           {
-            heading: "Un número que signifique algo",
-            how: "30 para quien cumple treinta, 52 para un primer aniversario, 100 para el clásico.",
-            borrow: { field: "fields.label", line: "52 razones, una por cada semana contigo" },
+            heading: "Un aniversario",
+            how: "Una razón por cada mes. Pon el número en la etiqueta.",
+            borrow: { field: "fields.label", line: "12 razones, una por mes" },
           },
           {
-            heading: "Pruebas, no adjetivos",
-            how: "Empieza cada nota por un verbo. Las cortas son las que mejor quedan.",
-            borrow: { field: "fields.reasons", line: "Calientas el coche antes de que yo haya encontrado los zapatos." },
+            heading: "San Valentín",
+            how: "Las cosas pequeñas y ciertas ganan. Cada nota admite 160 caracteres.",
+            borrow: { field: "fields.reasons", line: "Me robas el azúcar y siempre lo niegas." },
           },
           {
-            heading: "Un frasco para tu padre",
-            how: "La etiqueta se puede cambiar. Escribe lo que hizo creyendo que nadie miraba.",
-            borrow: { field: "fields.reasons", line: "Hiciste como que los ruedines seguían puestos." },
+            heading: "El Día de la Madre",
+            how: "Escribe lo que hizo, no cómo es.",
+            borrow: { field: "fields.reasons", line: "Me esperaste despierta todas las veces." },
           },
           {
-            heading: "Fotos en las primeras notas",
-            how: "Tu primera foto va con tu primera razón. Los pies no salen: dilo en la nota.",
-            borrow: { field: "fields.reasons", line: "Esta cara. Esta cara exacta. Lisboa, 2023." },
+            heading: "El Día del Padre",
+            how: "Una nota por cada cosa que te enseñó.",
+            borrow: { field: "fields.reasons", line: "Me enseñaste a mirar el aceite." },
           },
           {
-            heading: "Una nota de cada persona",
-            how: "Pide una razón a cada persona y pon su nombre dentro de la nota.",
-            borrow: { field: "fields.reasons", line: "Porque me enseñaste a barajar. (Leo)" },
+            heading: "De toda la familia",
+            how: "Pide una nota a cada persona. Algunas pueden llevar foto.",
+            borrow: { field: "fields.reasons", line: "De Leo: haces las mejores tortitas." },
           },
           {
-            heading: "La nota que no es razón",
-            how: "Esconde una noticia entre las razones. El frasco decide cuándo sale.",
-            borrow: { field: "fields.reasons", line: "Esto no es una razón. He comprado los billetes. Salimos el día 9." },
+            heading: "Una semana difícil",
+            how: "Razones por las que va mejor de lo que cree.",
+            borrow: { field: "fields.reasons", line: "Hoy te has levantado. Eso cuenta." },
           },
         ],
       },
@@ -1959,34 +1966,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "What to put on a relationship timeline",
         items: [
           {
-            heading: "A first year, month by month",
-            how: "Twelve photos, twelve labels, a screen each. The label can simply be the month.",
-            borrow: { field: "caption", line: "Month three: you met my mother and survived." },
+            heading: "An anniversary",
+            how: "Two to twenty photos, each with its date.",
+            borrow: { field: "fields.dates", line: "June 2024" },
           },
           {
-            heading: "The morning of the wedding",
-            how: "From your first photo to last night’s rehearsal, counting down to the ceremony.",
-            borrow: { field: "fields.ending", line: "…and at four o’clock, the next part." },
+            heading: "A wedding",
+            how: "The closing line takes 80 characters.",
+            borrow: { field: "fields.ending", line: "…and today we add the next one." },
           },
           {
-            heading: "Labels that aren’t dates",
-            how: "The label is free text, so name the eras the way the two of you do.",
-            borrow: { field: "fields.dates", line: "The flat with no oven" },
+            heading: "A graduation",
+            how: "Start at the first uniform and end at the gown.",
+            borrow: { field: "caption", line: "First day, 2009" },
           },
           {
-            heading: "From first uniform to the gown",
-            how: "A graduation timeline from a parent, captioned with what you never said.",
-            borrow: { field: "caption", line: "You were terrified. You went in anyway." },
+            heading: "Long distance",
+            how: "One stop for every visit. Airports count.",
+            borrow: { field: "fields.dates", line: "Gate 14, March" },
           },
           {
-            heading: "Every visit, airports included",
-            how: "For long distance, make each milestone a visit, labelled like a boarding card.",
-            borrow: { field: "fields.dates", line: "LIS → BOS, visit four" },
+            heading: "Before a big day",
+            how: "It ends on a countdown to what comes next.",
+            borrow: { field: "countdown.label", line: "Until four" },
           },
           {
-            heading: "News at the road’s end",
-            how: "The last milestone stays hidden until they scroll to it.",
-            borrow: { field: "fields.ending", line: "…and then there were three." },
+            heading: "A baby’s first year",
+            how: "Month by month, then a line at the road’s end.",
+            borrow: { field: "fields.ending", line: "…and you’ve only just started." },
           },
         ],
       },
@@ -2010,34 +2017,34 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué poner en una línea del tiempo de pareja",
         items: [
           {
-            heading: "El primer año, mes a mes",
-            how: "Doce fotos, doce rótulos, una pantalla cada una. El rótulo puede ser solo el mes.",
-            borrow: { field: "caption", line: "Mes tres: conociste a mi madre y sobreviviste." },
+            heading: "Un aniversario",
+            how: "De dos a veinte fotos, cada una con su fecha.",
+            borrow: { field: "fields.dates", line: "Junio de 2024" },
           },
           {
-            heading: "La mañana de la boda",
-            how: "De vuestra primera foto a la del ensayo de anoche, con cuenta atrás hasta la ceremonia.",
-            borrow: { field: "fields.ending", line: "…y a las cuatro, la parte que sigue." },
+            heading: "Una boda",
+            how: "La frase final admite 80 caracteres.",
+            borrow: { field: "fields.ending", line: "…y hoy añadimos la siguiente." },
           },
           {
-            heading: "Rótulos que no son fechas",
-            how: "El rótulo es texto libre: nombra las épocas como las nombráis vosotros.",
-            borrow: { field: "fields.dates", line: "El piso sin horno" },
+            heading: "Una graduación",
+            how: "Empieza por el primer uniforme y acaba en la toga.",
+            borrow: { field: "caption", line: "Primer día, 2009" },
           },
           {
-            heading: "Del primer uniforme a la toga",
-            how: "Una línea del tiempo de graduación, con lo que no dijisteis entonces en los pies.",
-            borrow: { field: "caption", line: "Te morías de miedo. Entraste igual." },
+            heading: "A distancia",
+            how: "Una parada por cada visita. Los aeropuertos cuentan.",
+            borrow: { field: "fields.dates", line: "Puerta 14, marzo" },
           },
           {
-            heading: "Cada visita, con sus aeropuertos",
-            how: "A distancia, haz de cada hito una visita y rotúlalo como una tarjeta de embarque.",
-            borrow: { field: "fields.dates", line: "LIS → BOG, cuarta visita" },
+            heading: "Antes de un gran día",
+            how: "Acaba en una cuenta atrás hacia lo que viene.",
+            borrow: { field: "countdown.label", line: "Hasta los cuatro" },
           },
           {
-            heading: "Una noticia al final del camino",
-            how: "El último hito no se ve hasta que bajan hasta él.",
-            borrow: { field: "fields.ending", line: "…y entonces fuimos tres." },
+            heading: "El primer año de un bebé",
+            how: "Mes a mes, y una frase al final del camino.",
+            borrow: { field: "fields.ending", line: "…y esto solo acaba de empezar." },
           },
         ],
       },
@@ -2061,37 +2068,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   scrapbook: {
     en: {
       ideas: {
-        title: "What to stick in a digital scrapbook",
+        title: "What to put in a digital scrapbook",
         items: [
           {
-            heading: "A year of you two",
-            how: "The title is spelled in letters cut from magazines, 28 characters at most.",
-            borrow: { field: "fields.headline", line: "one year of us" },
+            heading: "An anniversary",
+            how: "The cut-out title takes 28 characters.",
+            borrow: { field: "fields.headline", line: "a year of you two" },
           },
           {
-            heading: "A real photo-booth strip",
-            how: "Photos two, three and four print as one strip. Use three from the same minute.",
-            borrow: { field: "fields.tag", line: "the fair · four tries · worth it" },
+            heading: "Their birthday",
+            how: "The torn note is in handwriting, up to 90 characters.",
+            borrow: { field: "fields.quote", line: "Twenty-six looks good on you." },
           },
           {
-            heading: "A holiday with a friend",
-            how: "On the Seaside pages, the fifth photo is cut into a postage stamp.",
-            borrow: { field: "fields.headline", line: "greece, badly planned" },
+            heading: "A holiday",
+            how: "Choose the Seaside pages for this one.",
+            borrow: { field: "fields.headline", line: "that week by the sea" },
           },
           {
-            heading: "Long distance: what you kept",
-            how: "The torn note holds one handwritten line. Use it for the thing you kept.",
-            borrow: { field: "fields.quote", line: "I still have the boarding pass from the first time. It’s my bookmark." },
+            heading: "Long distance",
+            how: "Write what you kept from the last visit.",
+            borrow: { field: "fields.quote", line: "I kept the train ticket. Obviously." },
           },
           {
-            heading: "A page in your mother’s words",
-            how: "Give the pinned note her three most repeated lines. A middle dot starts a new line.",
-            borrow: { field: "fields.tag", line: "take a jacket · eat something · ring me" },
+            heading: "For a best friend",
+            how: "The pinned note takes 40 characters.",
+            borrow: { field: "fields.tag", line: "since the back row of maths" },
           },
           {
-            heading: "The year, January to December",
-            how: "On New Year’s Eve, twelve photos, one from each month, on the black film pages.",
-            borrow: { field: "message", line: "Same again next year, minus the food poisoning." },
+            heading: "Just because",
+            how: "A typewritten letter from you comes near the end.",
+            borrow: { field: "message", line: "No occasion. I just had the photos." },
           },
         ],
       },
@@ -2116,37 +2123,37 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué pegar en un álbum de recortes digital",
+        title: "Qué poner en un álbum de recortes digital",
         items: [
           {
-            heading: "Un año de vosotros dos",
-            how: "El título va en letras recortadas de revistas y admite 28 caracteres.",
-            borrow: { field: "fields.headline", line: "nuestro primer año" },
+            heading: "Un aniversario",
+            how: "El título recortado admite 28 caracteres.",
+            borrow: { field: "fields.headline", line: "un año de vosotros" },
           },
           {
-            heading: "Una tira de fotomatón de verdad",
-            how: "Las fotos dos, tres y cuatro salen como una tira. Usa tres del mismo minuto.",
-            borrow: { field: "fields.tag", line: "la cabina de la feria · 4 € · lo valió" },
+            heading: "Su cumpleaños",
+            how: "La nota rasgada va a mano, hasta 90 caracteres.",
+            borrow: { field: "fields.quote", line: "Los veintiséis te quedan bien." },
           },
           {
-            heading: "Unas vacaciones entre amigos",
-            how: "En las páginas de Playa, la quinta foto se recorta como un sello de correos.",
-            borrow: { field: "fields.headline", line: "grecia, mal planeado" },
+            heading: "Unas vacaciones",
+            how: "Elige las páginas de Playa.",
+            borrow: { field: "fields.headline", line: "aquella semana de mar" },
           },
           {
-            heading: "A distancia: lo que guardaste",
-            how: "La nota rasgada lleva una frase a mano. Úsala para ese objeto que guardaste.",
-            borrow: { field: "fields.quote", line: "Aún tengo la tarjeta de embarque de la primera vez. La uso de marcapáginas." },
+            heading: "A distancia",
+            how: "Escribe qué guardaste de la última visita.",
+            borrow: { field: "fields.quote", line: "Guardé el billete de tren. Claro." },
           },
           {
-            heading: "Las frases de tu madre",
-            how: "Dale la nota con chincheta a sus tres frases. Un punto medio abre línea nueva.",
-            borrow: { field: "fields.tag", line: "llévate chaqueta · come algo · llámame" },
+            heading: "Para tu mejor amistad",
+            how: "La nota con chincheta admite 40 caracteres.",
+            borrow: { field: "fields.tag", line: "desde la última fila de mates" },
           },
           {
-            heading: "El año, de enero a diciembre",
-            how: "En Nochevieja, doce fotos, una de cada mes, en las páginas de película en negro.",
-            borrow: { field: "message", line: "El año que viene, lo mismo, pero sin la intoxicación." },
+            heading: "Porque sí",
+            how: "Hacia el final llega tu carta, a máquina.",
+            borrow: { field: "message", line: "Sin ocasión. Tenía las fotos y ya." },
           },
         ],
       },
@@ -2168,6 +2175,3324 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "Escribe un punto medio (·) donde quieras el salto: «sal · sol · nosotros» sale en tres líneas cortas. La nota admite 40 caracteres en total.",
         },
       ],
+    },
+  },
+
+  arcade: {
+    en: {
+      ideas: {
+        title: "What to hide in a personalized arcade game",
+        items: [
+          {
+            heading: "Their birthday",
+            how: "Name the game after them and their age; each level clears a photo.",
+            borrow: { field: "fields.title", line: "ANA TURNS 30" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Set hearts to fall and keep your message for the last level.",
+            borrow: { field: "fields.title", line: "PLAYER TWO, FOR GOOD" },
+          },
+          {
+            heading: "An anniversary",
+            how: "One photo for each year, in order, each with its caption.",
+            borrow: { field: "caption", line: "Level 3: the flat with no heating" },
+          },
+          {
+            heading: "Before the real present",
+            how: "Hide where the present is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Cheat code: look under the bed." },
+          },
+          {
+            heading: "For someone who games",
+            how: "The message appears after the last level, so make them earn it.",
+            borrow: { field: "message", line: "You always let me win. I noticed." },
+          },
+          {
+            heading: "Counting down to a trip",
+            how: "Add a countdown to the day you leave.",
+            borrow: { field: "countdown.label", line: "Until we board" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué esconder en un videojuego personalizado",
+        items: [
+          {
+            heading: "Su cumpleaños",
+            how: "Ponle su nombre y su edad al juego; cada nivel descubre una foto.",
+            borrow: { field: "fields.title", line: "ANA CUMPLE 30" },
+          },
+          {
+            heading: "San Valentín",
+            how: "Que caigan corazones y guarda tu mensaje para el último nivel.",
+            borrow: { field: "fields.title", line: "JUGADOR DOS, YA FIJO" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Una foto por cada año, en orden, cada una con su pie.",
+            borrow: { field: "caption", line: "Nivel 3: el piso sin calefacción" },
+          },
+          {
+            heading: "Antes del regalo de verdad",
+            how: "Esconde dónde está el regalo en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Truco: mira debajo de la cama." },
+          },
+          {
+            heading: "Para alguien que juega",
+            how: "El mensaje sale tras el último nivel: que haya que ganárselo.",
+            borrow: { field: "message", line: "Siempre me dejas ganar. Me he dado cuenta." },
+          },
+          {
+            heading: "Cuenta atrás para un viaje",
+            how: "Añade una cuenta atrás hasta el día en que salís.",
+            borrow: { field: "countdown.label", line: "Hasta que embarquemos" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "autumn-reel": {
+    en: {
+      ideas: {
+        title: "What to put on an autumn reel",
+        items: [
+          {
+            heading: "An autumn anniversary",
+            how: "Put the date you met on the ticket for two.",
+            borrow: { field: "fields.ticket", line: "Admit two · 12 October" },
+          },
+          {
+            heading: "The first cold week",
+            how: "The cut-out words are one line. Make it an invitation.",
+            borrow: { field: "fields.wish", line: "come home, I made soup" },
+          },
+          {
+            heading: "A year in photos",
+            how: "Up to ten photos, each on a frame of film with its caption.",
+            borrow: { field: "caption", line: "The lake, before it rained" },
+          },
+          {
+            heading: "A quiet Halloween",
+            how: "Rust, espresso or olive: pick the one that looks like your October.",
+            borrow: { field: "fields.wish", line: "you, me and one pumpkin" },
+          },
+          {
+            heading: "Asking them out",
+            how: "Keep the plan for the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Sunday, the matinee, back row." },
+          },
+          {
+            heading: "Just because it’s autumn",
+            how: "Your letter comes at the end of the collage.",
+            borrow: { field: "message", line: "I like you most in a big coat." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un carrete de otoño",
+        items: [
+          {
+            heading: "Un aniversario en otoño",
+            how: "Pon en la entrada para dos la fecha en que os conocisteis.",
+            borrow: { field: "fields.ticket", line: "Vale por dos · 12 octubre" },
+          },
+          {
+            heading: "La primera semana de frío",
+            how: "Las palabras recortadas son una línea. Que sea una invitación.",
+            borrow: { field: "fields.wish", line: "ven a casa, he hecho sopa" },
+          },
+          {
+            heading: "Un año en fotos",
+            how: "Hasta diez fotos, cada una en un fotograma con su pie.",
+            borrow: { field: "caption", line: "El lago, antes de la lluvia" },
+          },
+          {
+            heading: "Un Halloween tranquilo",
+            how: "Óxido, café u oliva: elige el que se parezca a vuestro octubre.",
+            borrow: { field: "fields.wish", line: "tú, yo y una calabaza" },
+          },
+          {
+            heading: "Para proponer un plan",
+            how: "Guarda el plan para la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Domingo, sesión de tarde, última fila." },
+          },
+          {
+            heading: "Porque es otoño",
+            how: "Tu carta llega al final del collage.",
+            borrow: { field: "message", line: "Con abrigo me gustas todavía más." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  balloons: {
+    en: {
+      ideas: {
+        title: "What to hide in virtual balloons",
+        items: [
+          {
+            heading: "A big birthday",
+            how: "Add their age and it floats in as gold foil numbers.",
+            borrow: { field: "fields.banner", line: "THIRTY LOOKS GOOD ON YOU" },
+          },
+          {
+            heading: "A child’s birthday",
+            how: "Up to eight balloons, one photo in each. Pick the bright palette.",
+            borrow: { field: "fields.wall", line: "Seven today, taller tomorrow" },
+          },
+          {
+            heading: "A parent’s birthday",
+            how: "One photo per decade, with the year in the caption.",
+            borrow: { field: "caption", line: "1994, the yellow kitchen" },
+          },
+          {
+            heading: "A surprise party",
+            how: "The last thing they read can be where to be, and when.",
+            borrow: { field: "surprise.text", line: "Saturday, 8pm, the lemon tree place." },
+          },
+          {
+            heading: "A birthday you’ll miss",
+            how: "The biggest balloon holds your letter. Say when you’ll make it up.",
+            borrow: { field: "message", line: "I owe you a cake. In person." },
+          },
+          {
+            heading: "Good news, any day",
+            how: "The bunting spells whatever you write, up to 24 characters.",
+            borrow: { field: "fields.banner", line: "YOU GOT THE JOB" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué esconder en unos globos virtuales",
+        items: [
+          {
+            heading: "Un cumpleaños redondo",
+            how: "Pon su edad y aparece en números dorados.",
+            borrow: { field: "fields.banner", line: "LOS TREINTA TE SIENTAN" },
+          },
+          {
+            heading: "El cumple de un peque",
+            how: "Hasta ocho globos, una foto en cada uno. Elige colores vivos.",
+            borrow: { field: "fields.wall", line: "Hoy siete, mañana más alto" },
+          },
+          {
+            heading: "El cumple de mamá o papá",
+            how: "Una foto por década, con el año en el pie.",
+            borrow: { field: "caption", line: "1994, la cocina amarilla" },
+          },
+          {
+            heading: "Una fiesta sorpresa",
+            how: "Lo último que leen puede ser dónde y a qué hora.",
+            borrow: { field: "surprise.text", line: "Sábado a las 20:00, donde el limonero." },
+          },
+          {
+            heading: "Un cumple que te pierdes",
+            how: "El globo más grande guarda tu carta. Di cuándo lo compensarás.",
+            borrow: { field: "message", line: "Te debo una tarta. En persona." },
+          },
+          {
+            heading: "Una buena noticia",
+            how: "La guirnalda escribe lo que pongas, hasta 24 caracteres.",
+            borrow: { field: "fields.banner", line: "EL PUESTO ES TUYO" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "bat-swarm": {
+    en: {
+      ideas: {
+        title: "What to spell in a bat swarm",
+        items: [
+          {
+            heading: "Halloween night",
+            how: "The bats spell their name, then your line of up to 14 characters.",
+            borrow: { field: "fields.line", line: "be my boo" },
+          },
+          {
+            heading: "Asking them to a party",
+            how: "Put the question in the line and the details in the letter.",
+            borrow: { field: "fields.line", line: "come with me?" },
+          },
+          {
+            heading: "A Halloween date",
+            how: "Keep the plan for the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Friday, 8pm, the roof. Bring a blanket." },
+          },
+          {
+            heading: "Long distance in October",
+            how: "Your letter sits on dark glass under the moon. Say what you miss.",
+            borrow: { field: "message", line: "Same moon. I checked." },
+          },
+          {
+            heading: "Your Halloweens so far",
+            how: "Up to eight photos hang in the moonlight, one per year.",
+            borrow: { field: "caption", line: "2022, the bad vampire teeth" },
+          },
+          {
+            heading: "For a friend who loves bats",
+            how: "Choose the frost sky and keep the line to two words.",
+            borrow: { field: "fields.line", line: "night owl" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué escribir con una bandada de murciélagos",
+        items: [
+          {
+            heading: "La noche de Halloween",
+            how: "Los murciélagos escriben su nombre y luego tu frase, de hasta 14 caracteres.",
+            borrow: { field: "fields.line", line: "sé mi susto" },
+          },
+          {
+            heading: "Para invitar a una fiesta",
+            how: "Pon la pregunta en la frase y los detalles en la carta.",
+            borrow: { field: "fields.line", line: "¿vienes?" },
+          },
+          {
+            heading: "Una cita de Halloween",
+            how: "Guarda el plan para la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Viernes a las 20:00, la azotea. Trae manta." },
+          },
+          {
+            heading: "A distancia en octubre",
+            how: "Tu carta va sobre cristal oscuro, bajo la luna. Di qué echas de menos.",
+            borrow: { field: "message", line: "La misma luna. Lo he comprobado." },
+          },
+          {
+            heading: "Vuestros Halloween",
+            how: "Hasta ocho fotos cuelgan a la luz de la luna, una por año.",
+            borrow: { field: "caption", line: "2022, los colmillos de plástico" },
+          },
+          {
+            heading: "Para quien adora los murciélagos",
+            how: "Elige el cielo de escarcha y deja la frase en dos palabras.",
+            borrow: { field: "fields.line", line: "ave nocturna" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "be-my-boo": {
+    en: {
+      ideas: {
+        title: "What to put in a be my boo card",
+        items: [
+          {
+            heading: "Asking them to be yours",
+            how: "The ghost’s sign holds their name, and your words under it.",
+            borrow: { field: "fields.sign", line: "will you be my boo?" },
+          },
+          {
+            heading: "A first Halloween together",
+            how: "The note is in your handwriting. One line about this year.",
+            borrow: { field: "fields.note", line: "First October with you. I like it here." },
+          },
+          {
+            heading: "A pumpkin-carving date",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Friday at 7: pumpkins, then a scary film." },
+          },
+          {
+            heading: "Costumes through the years",
+            how: "One polaroid per costume, with the year in the caption.",
+            borrow: { field: "caption", line: "2023, two bad ghosts" },
+          },
+          {
+            heading: "Long distance at Halloween",
+            how: "Your letter waits at the end of the page.",
+            borrow: { field: "message", line: "Save me a sweet. I’m coming." },
+          },
+          {
+            heading: "For a best friend",
+            how: "Pink, pumpkin or midnight. The sign takes 24 characters.",
+            borrow: { field: "fields.sign", line: "partner in crime" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una tarjeta be my boo",
+        items: [
+          {
+            heading: "Para pedírselo",
+            how: "El cartel del fantasma lleva su nombre y, debajo, tus palabras.",
+            borrow: { field: "fields.sign", line: "¿quieres ser mi boo?" },
+          },
+          {
+            heading: "El primer Halloween en pareja",
+            how: "La nota va con tu letra. Una línea sobre este año.",
+            borrow: { field: "fields.note", line: "Primer octubre contigo. Aquí se está bien." },
+          },
+          {
+            heading: "Un plan de calabazas",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Viernes a las 19:00: calabazas y peli de miedo." },
+          },
+          {
+            heading: "Los disfraces de cada año",
+            how: "Una polaroid por disfraz, con el año en el pie.",
+            borrow: { field: "caption", line: "2023, dos fantasmas malos" },
+          },
+          {
+            heading: "Halloween a distancia",
+            how: "Tu carta espera al final de la página.",
+            borrow: { field: "message", line: "Guárdame un caramelo. Ya voy." },
+          },
+          {
+            heading: "Para tu mejor amistad",
+            how: "Rosa, calabaza o medianoche. El cartel admite 24 caracteres.",
+            borrow: { field: "fields.sign", line: "mi cómplice" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "cap-toss": {
+    en: {
+      ideas: {
+        title: "What to write in a digital graduation card",
+        items: [
+          {
+            heading: "A university graduation",
+            how: "The diploma says what it is awarded for, in your words.",
+            borrow: { field: "fields.awardedFor", line: "four years of going back, and one very good dissertation" },
+          },
+          {
+            heading: "Finishing school",
+            how: "Year, school, and a line about what it took.",
+            borrow: { field: "fields.awardedFor", line: "every early bus, and never once missing it" },
+          },
+          {
+            heading: "From a proud parent",
+            how: "Up to ten photos, taped on like a yearbook. Start with day one.",
+            borrow: { field: "caption", line: "First day, the bag bigger than you" },
+          },
+          {
+            heading: "A course or a certificate",
+            how: "The school line takes 60 characters: the course fits.",
+            borrow: { field: "fields.school", line: "Evening classes, Level 3 Accounting" },
+          },
+          {
+            heading: "Before a first job",
+            how: "Add a countdown to their first day.",
+            borrow: { field: "countdown.label", line: "Until your first day" },
+          },
+          {
+            heading: "With a present to find",
+            how: "Say where the present is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Look in the boot of the car." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué escribir en una tarjeta de graduación digital",
+        items: [
+          {
+            heading: "Una graduación universitaria",
+            how: "El diploma dice por qué se concede, con tus palabras.",
+            borrow: { field: "fields.awardedFor", line: "cuatro años de volver, y un trabajo final muy bueno" },
+          },
+          {
+            heading: "El final del instituto",
+            how: "Año, centro y una frase sobre lo que costó.",
+            borrow: { field: "fields.awardedFor", line: "cada autobús de madrugada, sin perder ninguno" },
+          },
+          {
+            heading: "De una madre o un padre",
+            how: "Hasta diez fotos, pegadas como en un anuario. Empieza por el primer día.",
+            borrow: { field: "caption", line: "Primer día, la mochila más grande que tú" },
+          },
+          {
+            heading: "Un curso o un título",
+            how: "La línea del centro admite 60 caracteres: cabe el curso.",
+            borrow: { field: "fields.school", line: "Clases nocturnas, Contabilidad nivel 3" },
+          },
+          {
+            heading: "Antes del primer trabajo",
+            how: "Añade una cuenta atrás hasta su primer día.",
+            borrow: { field: "countdown.label", line: "Hasta tu primer día" },
+          },
+          {
+            heading: "Con un regalo escondido",
+            how: "Di dónde está el regalo en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mira en el maletero del coche." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  cauldron: {
+    en: {
+      ideas: {
+        title: "What to brew in a Halloween love potion",
+        items: [
+          {
+            heading: "Halloween night",
+            how: "Three jars, each labelled in your words: three things you love.",
+            borrow: { field: "fields.ingredients", line: "a pinch of your laugh" },
+          },
+          {
+            heading: "An October anniversary",
+            how: "Put the number of years in the name on the bottle.",
+            borrow: { field: "fields.potion", line: "Love Potion No. 3" },
+          },
+          {
+            heading: "A Halloween date",
+            how: "Hide the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday night, my kitchen. Bring a spoon." },
+          },
+          {
+            heading: "For a friend",
+            how: "Make the ingredients in-jokes. Each one takes 34 characters.",
+            borrow: { field: "fields.ingredients", line: "every 3am “you awake?”" },
+          },
+          {
+            heading: "Long distance",
+            how: "Your letter unrolls from the bottle once the cork pops.",
+            borrow: { field: "message", line: "I’d drink this to be there tonight." },
+          },
+          {
+            heading: "Halloweens so far",
+            how: "Up to eight photos, kept in glass jars.",
+            borrow: { field: "caption", line: "2021, the witch hat you lost" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué echar en una poción de amor de Halloween",
+        items: [
+          {
+            heading: "La noche de Halloween",
+            how: "Tres tarros, cada uno con tus palabras: tres cosas que te gustan.",
+            borrow: { field: "fields.ingredients", line: "una pizca de tu risa" },
+          },
+          {
+            heading: "Un aniversario en octubre",
+            how: "Pon los años que lleváis en el nombre de la botella.",
+            borrow: { field: "fields.potion", line: "Poción de amor n.º 3" },
+          },
+          {
+            heading: "Una cita de Halloween",
+            how: "Esconde el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado noche, en mi cocina. Trae cuchara." },
+          },
+          {
+            heading: "Para una amistad",
+            how: "Que los ingredientes sean bromas vuestras. Cada uno admite 34 caracteres.",
+            borrow: { field: "fields.ingredients", line: "cada «¿estás despierta?»" },
+          },
+          {
+            heading: "A distancia",
+            how: "Tu carta sale de la botella al saltar el corcho.",
+            borrow: { field: "message", line: "Me la bebería por estar ahí esta noche." },
+          },
+          {
+            heading: "Vuestros Halloween",
+            how: "Hasta ocho fotos, guardadas en tarros de cristal.",
+            borrow: { field: "caption", line: "2021, el sombrero que perdiste" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  coquette: {
+    en: {
+      ideas: {
+        title: "What to put in a coquette gift",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "The postcard is in your handwriting and takes 90 characters.",
+            borrow: { field: "fields.note", line: "Two years and I still save you the window seat." },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "The ticket takes a date or a place.",
+            borrow: { field: "fields.ticket", line: "Admit one · 14 February" },
+          },
+          {
+            heading: "Her birthday",
+            how: "The torn-out words sit by the photos. Three or four are enough.",
+            borrow: { field: "fields.label", line: "birthday girl, all day" },
+          },
+          {
+            heading: "Asking them out",
+            how: "Keep the plan for the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Friday, 7pm. Wear the pink dress." },
+          },
+          {
+            heading: "For a best friend",
+            how: "Up to ten polaroids, all the way down the page.",
+            borrow: { field: "caption", line: "Us, before we could do eyeliner" },
+          },
+          {
+            heading: "Just because",
+            how: "Your letter waits at the bottom, and its words cover the paper behind.",
+            borrow: { field: "message", line: "No reason. I just like you a lot." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un regalo coquette",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "La postal va con tu letra y admite 90 caracteres.",
+            borrow: { field: "fields.note", line: "Dos años y te sigo guardando la ventanilla." },
+          },
+          {
+            heading: "San Valentín",
+            how: "El billete admite una fecha o un lugar.",
+            borrow: { field: "fields.ticket", line: "Vale por uno · 14 febrero" },
+          },
+          {
+            heading: "Su cumpleaños",
+            how: "Las palabras recortadas van junto a las fotos. Con tres o cuatro basta.",
+            borrow: { field: "fields.label", line: "hoy mandas tú, todo el día" },
+          },
+          {
+            heading: "Para proponer un plan",
+            how: "Guarda el plan para la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Viernes a las 19:00. Ponte algo rosa." },
+          },
+          {
+            heading: "Para tu mejor amistad",
+            how: "Hasta diez polaroids, a lo largo de toda la página.",
+            borrow: { field: "caption", line: "Cuando aún no sabíamos maquillarnos" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Tu carta espera al final, y sus palabras cubren el papel de fondo.",
+            borrow: { field: "message", line: "Sin motivo. Me gustas mucho y ya." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "dark-romance": {
+    en: {
+      ideas: {
+        title: "What to put in a dark romance collage",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "The cut-out letters take 18 characters: what you call them.",
+            borrow: { field: "fields.headline", line: "my worst habit" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Your second photo is printed on a tarot card. Name the card.",
+            borrow: { field: "fields.card", line: "The Lovers" },
+          },
+          {
+            heading: "Halloween",
+            how: "The torn-out words are the bet you’d make on the two of you.",
+            borrow: { field: "fields.bet", line: "all in, every time" },
+          },
+          {
+            heading: "A date night",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 9pm. Candles and red wine." },
+          },
+          {
+            heading: "Long distance",
+            how: "Your letter is at the bottom, under a wax seal.",
+            borrow: { field: "message", line: "I’d cross worse than this for you." },
+          },
+          {
+            heading: "For someone who hates pink",
+            how: "Bordeaux, noir or parchment. Up to ten photos.",
+            borrow: { field: "caption", line: "The night of the storm" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un collage dark romance",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "Las letras recortadas admiten 18 caracteres: cómo le llamas.",
+            borrow: { field: "fields.headline", line: "mi peor costumbre" },
+          },
+          {
+            heading: "San Valentín",
+            how: "Tu segunda foto sale en una carta del tarot. Ponle nombre.",
+            borrow: { field: "fields.card", line: "Los Enamorados" },
+          },
+          {
+            heading: "Halloween",
+            how: "Las palabras recortadas son la apuesta que harías por vosotros.",
+            borrow: { field: "fields.bet", line: "todo a ti, siempre" },
+          },
+          {
+            heading: "Una noche de cita",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 21:00. Velas y vino tinto." },
+          },
+          {
+            heading: "A distancia",
+            how: "Tu carta está al final, bajo un sello de lacre.",
+            borrow: { field: "message", line: "Por ti cruzaría cosas peores." },
+          },
+          {
+            heading: "Para quien odia el rosa",
+            how: "Burdeos, negro o pergamino. Hasta diez fotos.",
+            borrow: { field: "caption", line: "La noche de la tormenta" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  digicam: {
+    en: {
+      ideas: {
+        title: "What to put on a digicam gift",
+        items: [
+          {
+            heading: "Their birthday",
+            how: "Tick “it’s their birthday” and the magazine letters say so.",
+            borrow: { field: "fields.headline", line: "birthday behaviour only" },
+          },
+          {
+            heading: "A year of you two",
+            how: "Up to twelve photos, each with the orange date in the corner.",
+            borrow: { field: "caption", line: "we said one drink" },
+          },
+          {
+            heading: "A night out to remember",
+            how: "Load the camera roll in the order the night went.",
+            borrow: { field: "caption", line: "02:14, still dancing" },
+          },
+          {
+            heading: "A day out to plan",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 11am. Bring the camera." },
+          },
+          {
+            heading: "For a best friend",
+            how: "After the last photo the roll prints as a strip, then your letter.",
+            borrow: { field: "message", line: "Never delete the blurry ones." },
+          },
+          {
+            heading: "A holiday",
+            how: "Set the date on the photos to the week you were away.",
+            borrow: { field: "caption", line: "day 3, lost again" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un regalo digicam",
+        items: [
+          {
+            heading: "Su cumpleaños",
+            how: "Marca que es su cumpleaños y las letras de revista lo dicen.",
+            borrow: { field: "fields.headline", line: "hoy se permite todo" },
+          },
+          {
+            heading: "Un año de vosotros",
+            how: "Hasta doce fotos, cada una con la fecha naranja en la esquina.",
+            borrow: { field: "caption", line: "dijimos una caña" },
+          },
+          {
+            heading: "Una noche para recordar",
+            how: "Carga el carrete en el orden en que pasó la noche.",
+            borrow: { field: "caption", line: "02:14, seguíamos bailando" },
+          },
+          {
+            heading: "Para planear un día",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 11:00. Trae la cámara." },
+          },
+          {
+            heading: "Para tu mejor amistad",
+            how: "Tras la última foto el carrete se imprime en tira, y luego tu carta.",
+            borrow: { field: "message", line: "No borres nunca las movidas." },
+          },
+          {
+            heading: "Unas vacaciones",
+            how: "Pon en las fotos la fecha de la semana que estuvisteis fuera.",
+            borrow: { field: "caption", line: "día 3, otra vez sin rumbo" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  evergreen: {
+    en: {
+      ideas: {
+        title: "What to put in a vintage collage gift",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "The words across the top take 22 characters.",
+            borrow: { field: "fields.title", line: "four springs in" },
+          },
+          {
+            heading: "Just because",
+            how: "Your letter comes at the end of the collage.",
+            borrow: { field: "message", line: "Thinking of you, for no reason." },
+          },
+          {
+            heading: "For a parent",
+            how: "Up to ten photos on white polaroids. Caption the garden ones.",
+            borrow: { field: "caption", line: "Your roses, the good year" },
+          },
+          {
+            heading: "A day out",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Sunday: the botanical garden, then a picnic." },
+          },
+          {
+            heading: "A thank-you",
+            how: "Sage, olive or mint. Keep the title to two or three words.",
+            borrow: { field: "fields.title", line: "thank you, truly" },
+          },
+          {
+            heading: "Long distance",
+            how: "Send the places you’ll show them when they visit.",
+            borrow: { field: "caption", line: "The bench I told you about" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un collage vintage de regalo",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "Las palabras de arriba admiten 22 caracteres.",
+            borrow: { field: "fields.title", line: "cuatro primaveras" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Tu carta llega al final del collage.",
+            borrow: { field: "message", line: "Me acordé de ti, sin motivo." },
+          },
+          {
+            heading: "Para tu madre o tu padre",
+            how: "Hasta diez fotos en polaroids blancas. Pon pie a las del jardín.",
+            borrow: { field: "caption", line: "Tus rosales, el año bueno" },
+          },
+          {
+            heading: "Para planear un día",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Domingo: el jardín botánico y luego pícnic." },
+          },
+          {
+            heading: "Para dar las gracias",
+            how: "Salvia, oliva o menta. Deja el título en dos o tres palabras.",
+            borrow: { field: "fields.title", line: "gracias, de verdad" },
+          },
+          {
+            heading: "A distancia",
+            how: "Envía los sitios que le enseñarás cuando venga.",
+            borrow: { field: "caption", line: "El banco del que te hablé" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "fall-for-you": {
+    en: {
+      ideas: {
+        title: "What to put in a fall for you collage",
+        items: [
+          {
+            heading: "An autumn anniversary",
+            how: "The letter blocks spell up to 12 characters: a name or a date.",
+            borrow: { field: "fields.blocks", line: "OCT 12" },
+          },
+          {
+            heading: "A cosy night in",
+            how: "The recipe card is for the two of you. Write the evening on it.",
+            borrow: { field: "fields.note", line: "Soup, one blanket, the long film." },
+          },
+          {
+            heading: "An autumn day out",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday: the orchard, then cider." },
+          },
+          {
+            heading: "Halloween",
+            how: "Choose cranberry or gingham. The tag takes 24 characters.",
+            borrow: { field: "fields.tag", line: "my favourite pumpkin" },
+          },
+          {
+            heading: "Long distance",
+            how: "Your letter comes at the end of the collage.",
+            borrow: { field: "message", line: "Leaves are falling here. Come see." },
+          },
+          {
+            heading: "Just because",
+            how: "Up to ten photos on polaroids.",
+            borrow: { field: "caption", line: "The walk where we got lost" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un collage de otoño contigo",
+        items: [
+          {
+            heading: "Un aniversario en otoño",
+            how: "Los bloques de letras escriben hasta 12 caracteres: un nombre o una fecha.",
+            borrow: { field: "fields.blocks", line: "12 OCT" },
+          },
+          {
+            heading: "Una noche en casa",
+            how: "La ficha de receta es para vosotros. Escribe en ella la velada.",
+            borrow: { field: "fields.note", line: "Sopa, una manta y la peli larga." },
+          },
+          {
+            heading: "Un plan de otoño",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado: el huerto y luego sidra." },
+          },
+          {
+            heading: "Halloween",
+            how: "Elige arándano o vichy. La etiqueta admite 24 caracteres.",
+            borrow: { field: "fields.tag", line: "mi calabaza favorita" },
+          },
+          {
+            heading: "A distancia",
+            how: "Tu carta llega al final del collage.",
+            borrow: { field: "message", line: "Aquí ya caen las hojas. Ven a verlo." },
+          },
+          {
+            heading: "Porque sí",
+            how: "Hasta diez fotos en polaroids.",
+            borrow: { field: "caption", line: "El paseo en que nos perdimos" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "favorite-person": {
+    en: {
+      ideas: {
+        title: "What to put in a gift for your favorite person",
+        items: [
+          {
+            heading: "Just because",
+            how: "The torn note takes 22 characters. Say who they are to you.",
+            borrow: { field: "fields.title", line: "favorite person" },
+          },
+          {
+            heading: "An anniversary",
+            how: "The words under the flowers take 18 characters.",
+            borrow: { field: "fields.signoff", line: "love you, still" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday: the flower market, then lunch." },
+          },
+          {
+            heading: "For a best friend",
+            how: "Up to ten polaroids, held with gingham tape.",
+            borrow: { field: "caption", line: "The haircut we don’t mention" },
+          },
+          {
+            heading: "A thank-you",
+            how: "Your letter is at the bottom of the page.",
+            borrow: { field: "message", line: "You showed up. I won’t forget it." },
+          },
+          {
+            heading: "For your mum",
+            how: "Blush, lilac or peach. Start with the oldest photo you have.",
+            borrow: { field: "caption", line: "You, at my age" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un regalo para tu persona favorita",
+        items: [
+          {
+            heading: "Porque sí",
+            how: "La nota rasgada admite 22 caracteres. Di quién es para ti.",
+            borrow: { field: "fields.title", line: "mi persona favorita" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Las palabras bajo las flores admiten 18 caracteres.",
+            borrow: { field: "fields.signoff", line: "te quiero, aún" },
+          },
+          {
+            heading: "San Valentín",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado: el mercado de flores y a comer." },
+          },
+          {
+            heading: "Para tu mejor amistad",
+            how: "Hasta diez polaroids, sujetas con cinta de cuadros.",
+            borrow: { field: "caption", line: "El corte de pelo innombrable" },
+          },
+          {
+            heading: "Para dar las gracias",
+            how: "Tu carta está al final de la página.",
+            borrow: { field: "message", line: "Estuviste ahí. No se me olvida." },
+          },
+          {
+            heading: "Para tu madre",
+            how: "Rosa, lila o melocotón. Empieza por la foto más antigua.",
+            borrow: { field: "caption", line: "Tú, con mi edad" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  fireside: {
+    en: {
+      ideas: {
+        title: "What to write in a letter by the fire",
+        items: [
+          {
+            heading: "Christmas",
+            how: "Choose snow outside the window. Your letter unfolds from the blanket.",
+            borrow: { field: "message", line: "This year, I’m bringing the tree to you." },
+          },
+          {
+            heading: "An anniversary",
+            how: "The candle’s tag takes 24 characters: the date fits.",
+            borrow: { field: "fields.tag", line: "since 14 November" },
+          },
+          {
+            heading: "A weekend away",
+            how: "Put the booking in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Friday. The cabin with the wood burner." },
+          },
+          {
+            heading: "Long distance",
+            how: "Leaves or snow outside; cocoa, tea or coffee in the mug.",
+            borrow: { field: "message", line: "I made two cups out of habit." },
+          },
+          {
+            heading: "A thank-you",
+            how: "Up to eight photos hang from a string on wooden pegs.",
+            borrow: { field: "caption", line: "The week you looked after me" },
+          },
+          {
+            heading: "Just because",
+            how: "Amber, maple or moss, once the candle is lit.",
+            borrow: { field: "fields.tag", line: "more evenings like this" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué escribir en una carta junto al fuego",
+        items: [
+          {
+            heading: "Navidad",
+            how: "Elige nieve tras la ventana. Tu carta sale de la manta.",
+            borrow: { field: "message", line: "Este año te llevo yo el árbol." },
+          },
+          {
+            heading: "Un aniversario",
+            how: "La etiqueta de la vela admite 24 caracteres: cabe la fecha.",
+            borrow: { field: "fields.tag", line: "desde el 14 de noviembre" },
+          },
+          {
+            heading: "Una escapada",
+            how: "Pon la reserva en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Viernes. La cabaña con estufa de leña." },
+          },
+          {
+            heading: "A distancia",
+            how: "Hojas o nieve fuera; cacao, té o café en la taza.",
+            borrow: { field: "message", line: "He hecho dos tazas por costumbre." },
+          },
+          {
+            heading: "Para dar las gracias",
+            how: "Hasta ocho fotos cuelgan de una cuerda con pinzas.",
+            borrow: { field: "caption", line: "La semana que me cuidaste" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Ámbar, arce o musgo, cuando la vela se enciende.",
+            borrow: { field: "fields.tag", line: "más tardes así" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "front-page": {
+    en: {
+      ideas: {
+        title: "What to print on a personalized front page",
+        items: [
+          {
+            heading: "A big birthday",
+            how: "The headline takes 80 characters. Report it as news.",
+            borrow: { field: "fields.headline", line: "LOCAL WOMAN TURNS 30, NATION REACTS" },
+          },
+          {
+            heading: "A graduation",
+            how: "Name the paper after them and put the degree in the headline.",
+            borrow: { field: "fields.headline", line: "SHE DID IT: FOUR YEARS, ONE DEGREE" },
+          },
+          {
+            heading: "Father’s Day",
+            how: "The weather box takes 80 characters.",
+            borrow: { field: "fields.weather", line: "Clear skies, with a 100% chance of a nap." },
+          },
+          {
+            heading: "A wedding",
+            how: "Put the date and place in the sub-headline.",
+            borrow: { field: "fields.subhead", line: "Witnesses report dancing until the lights came on" },
+          },
+          {
+            heading: "A retirement",
+            how: "Write the classified ads: up to eight, 120 characters each.",
+            borrow: { field: "fields.ads", line: "FOR SALE: one alarm clock, no longer needed." },
+          },
+          {
+            heading: "Good news to share",
+            how: "The horoscope can carry the news.",
+            borrow: { field: "fields.horoscope", line: "A new address is in your stars. Keys on Friday." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué publicar en una portada personalizada",
+        items: [
+          {
+            heading: "Un cumpleaños redondo",
+            how: "El titular admite 80 caracteres. Cuéntalo como noticia.",
+            borrow: { field: "fields.headline", line: "VECINA CUMPLE 30; EL PAÍS REACCIONA" },
+          },
+          {
+            heading: "Una graduación",
+            how: "Ponle su nombre al periódico y la carrera en el titular.",
+            borrow: { field: "fields.headline", line: "LO HA HECHO: CUATRO AÑOS, UN TÍTULO" },
+          },
+          {
+            heading: "El Día del Padre",
+            how: "El recuadro del tiempo admite 80 caracteres.",
+            borrow: { field: "fields.weather", line: "Cielo despejado y siesta asegurada." },
+          },
+          {
+            heading: "Una boda",
+            how: "Pon la fecha y el lugar en el subtítulo.",
+            borrow: { field: "fields.subhead", line: "Testigos hablan de baile hasta que encendieron las luces" },
+          },
+          {
+            heading: "Una jubilación",
+            how: "Escribe los anuncios clasificados: hasta ocho, de 120 caracteres.",
+            borrow: { field: "fields.ads", line: "SE VENDE: despertador, ya no hace falta." },
+          },
+          {
+            heading: "Una buena noticia",
+            how: "El horóscopo puede dar la noticia.",
+            borrow: { field: "fields.horoscope", line: "Los astros anuncian casa nueva. Llaves el viernes." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  garden: {
+    en: {
+      ideas: {
+        title: "What to plant in a digital garden gift",
+        items: [
+          {
+            heading: "Mother’s Day",
+            how: "The bouquet at the end is tagged for her, in up to 60 characters.",
+            borrow: { field: "fields.tag", line: "For Mum, who grew all of us" },
+          },
+          {
+            heading: "An anniversary",
+            how: "The sign on the gate takes 24 characters.",
+            borrow: { field: "fields.sign", line: "five summers of us" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Roses, peonies, wildflowers or sunflowers: pick what’s growing.",
+            borrow: { field: "fields.tag", line: "Everything I planted is for you" },
+          },
+          {
+            heading: "A thank-you",
+            how: "Up to twelve photos are pinned to the trellis.",
+            borrow: { field: "caption", line: "The summer you taught me to swim" },
+          },
+          {
+            heading: "Just because",
+            how: "Your letter waits on the potting table in the greenhouse.",
+            borrow: { field: "message", line: "I saw tulips and thought of you." },
+          },
+          {
+            heading: "For a new home",
+            how: "A butterfly, a bee or a cat can come along.",
+            borrow: { field: "fields.sign", line: "welcome home" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué plantar en un jardín digital de regalo",
+        items: [
+          {
+            heading: "El Día de la Madre",
+            how: "El ramo del final lleva su etiqueta, de hasta 60 caracteres.",
+            borrow: { field: "fields.tag", line: "Para mamá, que nos hizo crecer" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "El cartel de la verja admite 24 caracteres.",
+            borrow: { field: "fields.sign", line: "cinco veranos de dos" },
+          },
+          {
+            heading: "San Valentín",
+            how: "Rosas, peonías, flores silvestres o girasoles: elige qué crece.",
+            borrow: { field: "fields.tag", line: "Todo lo que planté es para ti" },
+          },
+          {
+            heading: "Para dar las gracias",
+            how: "Hasta doce fotos van colgadas en la celosía.",
+            borrow: { field: "caption", line: "El verano en que me enseñaste a nadar" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Tu carta espera en la mesa del invernadero.",
+            borrow: { field: "message", line: "Vi tulipanes y me acordé de ti." },
+          },
+          {
+            heading: "Para una casa nueva",
+            how: "Puede acompañarles una mariposa, una abeja o un gato.",
+            borrow: { field: "fields.sign", line: "bienvenida a casa" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "haunted-house": {
+    en: {
+      ideas: {
+        title: "What to hide in a haunted house gift",
+        items: [
+          {
+            heading: "A Halloween party invite",
+            how: "The title shows over the house. Put the details in the letter.",
+            borrow: { field: "title", line: "you’re invited" },
+          },
+          {
+            heading: "Halloween night",
+            how: "The tag on the gate takes 18 characters.",
+            borrow: { field: "fields.tag", line: "enter if you dare" },
+          },
+          {
+            heading: "Halloweens so far",
+            how: "Up to six photos, one behind each lit window.",
+            borrow: { field: "caption", line: "2022, the cardboard coffin" },
+          },
+          {
+            heading: "A scary film night",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 8pm, my place. I picked the film." },
+          },
+          {
+            heading: "Long distance",
+            how: "They knock, the door opens and your letter is there.",
+            borrow: { field: "message", line: "Wish you were here to hide behind." },
+          },
+          {
+            heading: "For a friend who loves horror",
+            how: "Storm blue, blood moon, swamp green or midnight violet.",
+            borrow: { field: "fields.tag", line: "final girl" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué esconder en una casa encantada",
+        items: [
+          {
+            heading: "Una invitación de Halloween",
+            how: "El título sale sobre la casa. Pon los detalles en la carta.",
+            borrow: { field: "title", line: "tienes invitación" },
+          },
+          {
+            heading: "La noche de Halloween",
+            how: "La etiqueta de la verja admite 18 caracteres.",
+            borrow: { field: "fields.tag", line: "pasa si te atreves" },
+          },
+          {
+            heading: "Vuestros Halloween",
+            how: "Hasta seis fotos, una tras cada ventana encendida.",
+            borrow: { field: "caption", line: "2022, el ataúd de cartón" },
+          },
+          {
+            heading: "Una noche de pelis de miedo",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 20:00 en mi casa. Peli elegida." },
+          },
+          {
+            heading: "A distancia",
+            how: "Llaman, la puerta se abre y ahí está tu carta.",
+            borrow: { field: "message", line: "Ojalá estuvieras aquí para esconderme." },
+          },
+          {
+            heading: "Para quien adora el terror",
+            how: "Azul tormenta, luna de sangre, verde pantano o violeta medianoche.",
+            borrow: { field: "fields.tag", line: "la que sobrevive" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "jack-o-lantern": {
+    en: {
+      ideas: {
+        title: "What to carve on a pumpkin with their name",
+        items: [
+          {
+            heading: "Halloween night",
+            how: "Their name is carved across it, or 12 characters of your own.",
+            borrow: { field: "fields.carving", line: "MAYA" },
+          },
+          {
+            heading: "Asking them out",
+            how: "Carve the question. The details go in the letter.",
+            borrow: { field: "fields.carving", line: "BE MINE?" },
+          },
+          {
+            heading: "A first Halloween together",
+            how: "The title sits above the pumpkin.",
+            borrow: { field: "title", line: "carved just for you" },
+          },
+          {
+            heading: "A pumpkin patch date",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 7pm. Pumpkin patch first." },
+          },
+          {
+            heading: "For the kids",
+            how: "Pick the cat face. Up to eight photos glow as candlelit polaroids.",
+            borrow: { field: "caption", line: "The year you were a dinosaur" },
+          },
+          {
+            heading: "Long distance",
+            how: "Your letter is underneath, on old paper.",
+            borrow: { field: "message", line: "I lit one for you here too." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué tallar en una calabaza con su nombre",
+        items: [
+          {
+            heading: "La noche de Halloween",
+            how: "Lleva tallado su nombre, o 12 caracteres que elijas.",
+            borrow: { field: "fields.carving", line: "MAYA" },
+          },
+          {
+            heading: "Para pedírselo",
+            how: "Talla la pregunta. Los detalles van en la carta.",
+            borrow: { field: "fields.carving", line: "¿SALIMOS?" },
+          },
+          {
+            heading: "El primer Halloween en pareja",
+            how: "El título va sobre la calabaza.",
+            borrow: { field: "title", line: "tallada solo para ti" },
+          },
+          {
+            heading: "Un plan de calabazas",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 19:00. Primero, las calabazas." },
+          },
+          {
+            heading: "Para los peques",
+            how: "Elige la cara de gato. Hasta ocho fotos salen a la luz de la vela.",
+            borrow: { field: "caption", line: "El año que fuiste dinosaurio" },
+          },
+          {
+            heading: "A distancia",
+            how: "Tu carta está debajo, en papel antiguo.",
+            borrow: { field: "message", line: "Aquí también he encendido una por ti." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  kawaii: {
+    en: {
+      ideas: {
+        title: "What to put in a cute kawaii card",
+        items: [
+          {
+            heading: "Their birthday",
+            how: "The plushie says your line, up to 60 characters.",
+            borrow: { field: "fields.greeting", line: "I have something for you" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "The ribbon banner takes 24 characters.",
+            borrow: { field: "fields.banner", line: "be mine, please" },
+          },
+          {
+            heading: "Just because",
+            how: "Your message arrives in a speech bubble.",
+            borrow: { field: "message", line: "You looked sad, so here is a bunny." },
+          },
+          {
+            heading: "For a best friend",
+            how: "Up to eight photos, taped in like stickers.",
+            borrow: { field: "caption", line: "Us, matching by accident" },
+          },
+          {
+            heading: "Good luck",
+            how: "A bunny, a bear or a kitten can say it.",
+            borrow: { field: "fields.greeting", line: "you’ve got this" },
+          },
+          {
+            heading: "With a plan",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday. I’m picking you up at 6." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una tarjeta kawaii",
+        items: [
+          {
+            heading: "Su cumpleaños",
+            how: "El peluche dice tu frase, de hasta 60 caracteres.",
+            borrow: { field: "fields.greeting", line: "tengo algo para ti" },
+          },
+          {
+            heading: "San Valentín",
+            how: "La cinta admite 24 caracteres.",
+            borrow: { field: "fields.banner", line: "quédate conmigo" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Tu mensaje llega en un bocadillo.",
+            borrow: { field: "message", line: "Te vi triste, así que toma un conejito." },
+          },
+          {
+            heading: "Para tu mejor amistad",
+            how: "Hasta ocho fotos, pegadas como pegatinas.",
+            borrow: { field: "caption", line: "Vestidas igual, sin querer" },
+          },
+          {
+            heading: "Para desear suerte",
+            how: "Puede decirlo un conejo, un oso o un gatito.",
+            borrow: { field: "fields.greeting", line: "tú puedes con esto" },
+          },
+          {
+            heading: "Con un plan",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado. Te recojo a las 18:00." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  keepsake: {
+    en: {
+      ideas: {
+        title: "What to keep in a digital keepsake",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "The locket opens on a tap. The engraving takes 18 characters.",
+            borrow: { field: "fields.engraving", line: "since 2021" },
+          },
+          {
+            heading: "Long distance",
+            how: "Put a number on the ticket that only you two would know.",
+            borrow: { field: "fields.ticket", line: "Platform 9 · 23:40" },
+          },
+          {
+            heading: "Mother’s Day",
+            how: "Up to nine photos. The first sits under dried flowers.",
+            borrow: { field: "caption", line: "Your hands, my first steps" },
+          },
+          {
+            heading: "Just because",
+            how: "One word, torn out of a book.",
+            borrow: { field: "fields.word", line: "finally" },
+          },
+          {
+            heading: "A wedding day",
+            how: "The P.S. comes in its own envelope.",
+            borrow: { field: "surprise.text", line: "There’s a real one of these in the drawer." },
+          },
+          {
+            heading: "For a grandparent",
+            how: "Your letter is typed on aged paper, with the seal at the bottom.",
+            borrow: { field: "message", line: "I kept the recipe card. All of them." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué guardar en un recuerdo digital",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "El relicario se abre con un toque. El grabado admite 18 caracteres.",
+            borrow: { field: "fields.engraving", line: "desde 2021" },
+          },
+          {
+            heading: "A distancia",
+            how: "Pon en el billete un número que solo vosotros entendáis.",
+            borrow: { field: "fields.ticket", line: "Andén 9 · 23:40" },
+          },
+          {
+            heading: "El Día de la Madre",
+            how: "Hasta nueve fotos. La primera va bajo flores secas.",
+            borrow: { field: "caption", line: "Tus manos, mis primeros pasos" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Una palabra, arrancada de un libro.",
+            borrow: { field: "fields.word", line: "por fin" },
+          },
+          {
+            heading: "El día de la boda",
+            how: "La posdata llega en su propio sobre.",
+            borrow: { field: "surprise.text", line: "Hay uno de verdad en el cajón." },
+          },
+          {
+            heading: "Para tu abuela o tu abuelo",
+            how: "Tu carta va a máquina en papel envejecido, con el sello al final.",
+            borrow: { field: "message", line: "Guardé la receta. Todas." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "midnight-countdown": {
+    en: {
+      ideas: {
+        title: "What to put in a midnight countdown",
+        items: [
+          {
+            heading: "Midnight on their birthday",
+            how: "The headline sits above the timer and takes 60 characters.",
+            borrow: { field: "fields.headline", line: "Until you’re 30" },
+          },
+          {
+            heading: "An anniversary",
+            how: "The line at zero shows as the fireworks start.",
+            borrow: { field: "fields.zeroLine", line: "Three years, as of right now." },
+          },
+          {
+            heading: "Until you’re together again",
+            how: "Count down to the minute you land.",
+            borrow: { field: "fields.headline", line: "Until I land" },
+          },
+          {
+            heading: "New Year’s Eve",
+            how: "Set it to midnight. City, sea or mountains on the horizon.",
+            borrow: { field: "fields.zeroLine", line: "Happy new year, Ana." },
+          },
+          {
+            heading: "News on a set day",
+            how: "Nothing unlocks before zero, so the news keeps.",
+            borrow: { field: "fields.headline", line: "Until we can tell everyone" },
+          },
+          {
+            heading: "A surprise trip",
+            how: "Up to twenty photos unlock at zero.",
+            borrow: { field: "caption", line: "Where we’re going, day one" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una cuenta atrás de medianoche",
+        items: [
+          {
+            heading: "Su cumpleaños a medianoche",
+            how: "El titular va sobre el reloj y admite 60 caracteres.",
+            borrow: { field: "fields.headline", line: "Hasta que cumplas 30" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "La frase a cero aparece con los fuegos.",
+            borrow: { field: "fields.zeroLine", line: "Tres años, desde ahora mismo." },
+          },
+          {
+            heading: "Hasta volver a veros",
+            how: "Cuenta atrás hasta el minuto en que aterrizas.",
+            borrow: { field: "fields.headline", line: "Hasta que aterrice" },
+          },
+          {
+            heading: "Nochevieja",
+            how: "Ponla a medianoche. Ciudad, mar o montañas en el horizonte.",
+            borrow: { field: "fields.zeroLine", line: "Feliz año nuevo, Ana." },
+          },
+          {
+            heading: "Una noticia con fecha",
+            how: "Nada se abre antes de cero: la noticia aguanta.",
+            borrow: { field: "fields.headline", line: "Hasta poder contarlo" },
+          },
+          {
+            heading: "Un viaje sorpresa",
+            how: "Hasta veinte fotos se abren al llegar a cero.",
+            borrow: { field: "caption", line: "Adonde vamos, primer día" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  museum: {
+    en: {
+      ideas: {
+        title: "What to hang in a museum of us",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "Name the exhibition. It takes 60 characters.",
+            borrow: { field: "fields.exhibition", line: "Five Years: A Retrospective" },
+          },
+          {
+            heading: "Mother’s Day",
+            how: "Put her years on the plaques.",
+            borrow: { field: "fields.years", line: "1996 to 2026" },
+          },
+          {
+            heading: "Father’s Day",
+            how: "Each caption is a plaque. Title his works.",
+            borrow: { field: "caption", line: "Shed, mixed media, unfinished" },
+          },
+          {
+            heading: "A wedding",
+            how: "Two to twenty photos, room by room.",
+            borrow: { field: "fields.exhibition", line: "The Early Works of Ana and Marco" },
+          },
+          {
+            heading: "A retirement",
+            how: "The last room is a wall text with your message.",
+            borrow: { field: "message", line: "Forty years. The collection is complete." },
+          },
+          {
+            heading: "A birthday",
+            how: "One frame per year, with a line under each.",
+            borrow: { field: "caption", line: "Age 7, front teeth missing" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué colgar en un museo de nosotros",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "Ponle nombre a la exposición. Admite 60 caracteres.",
+            borrow: { field: "fields.exhibition", line: "Cinco años: una retrospectiva" },
+          },
+          {
+            heading: "El Día de la Madre",
+            how: "Pon sus años en las placas.",
+            borrow: { field: "fields.years", line: "1996 a 2026" },
+          },
+          {
+            heading: "El Día del Padre",
+            how: "Cada pie es una placa. Ponles título a sus obras.",
+            borrow: { field: "caption", line: "Cobertizo, técnica mixta, sin acabar" },
+          },
+          {
+            heading: "Una boda",
+            how: "De dos a veinte fotos, sala a sala.",
+            borrow: { field: "fields.exhibition", line: "Primeras obras de Ana y Marco" },
+          },
+          {
+            heading: "Una jubilación",
+            how: "La última sala es un texto de pared con tu mensaje.",
+            borrow: { field: "message", line: "Cuarenta años. La colección está completa." },
+          },
+          {
+            heading: "Un cumpleaños",
+            how: "Un marco por año, con una línea debajo.",
+            borrow: { field: "caption", line: "A los 7, sin paletas" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "music-box": {
+    en: {
+      ideas: {
+        title: "What to put in a virtual music box",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "Choose the two swans. Your letter lifts out as the tune slows.",
+            borrow: { field: "message", line: "Five years, and I’d wind it again." },
+          },
+          {
+            heading: "Mother’s Day",
+            how: "Up to eight photos come up in the mirror, one per turn.",
+            borrow: { field: "caption", line: "You, teaching me to dance" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Swan Lake, Brahms’ Lullaby or Für Elise.",
+            borrow: { field: "message", line: "I’d dance badly with you anywhere." },
+          },
+          {
+            heading: "A wedding",
+            how: "Start with the oldest photo and end on the day itself.",
+            borrow: { field: "caption", line: "The first dance, take two" },
+          },
+          {
+            heading: "For a daughter",
+            how: "Pick the ballerina and the lullaby.",
+            borrow: { field: "message", line: "This played while you slept." },
+          },
+          {
+            heading: "A night out",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 8pm. I booked the dance floor." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una caja de música virtual",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "Elige los dos cisnes para la figura.",
+            borrow: { field: "message", line: "Cinco años, y le daría cuerda otra vez." },
+          },
+          {
+            heading: "El Día de la Madre",
+            how: "Hasta ocho fotos, una por vuelta.",
+            borrow: { field: "caption", line: "Tú, enseñándome a bailar" },
+          },
+          {
+            heading: "San Valentín",
+            how: "El lago de los cisnes o Para Elisa.",
+            borrow: { field: "message", line: "Bailaría mal contigo donde fuera." },
+          },
+          {
+            heading: "Una boda",
+            how: "De la foto más antigua al día mismo.",
+            borrow: { field: "caption", line: "El primer baile, segundo intento" },
+          },
+          {
+            heading: "Para una hija",
+            how: "Elige la bailarina y la nana.",
+            borrow: { field: "message", line: "Esto sonaba mientras dormías." },
+          },
+          {
+            heading: "Una noche fuera",
+            how: "Pon el plan en la sorpresa final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 20:00. He reservado pista." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "on-repeat": {
+    en: {
+      ideas: {
+        title: "What to put in a playlist gift",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "The playlist’s name takes 24 characters.",
+            borrow: { field: "fields.playlist", line: "songs from year one" },
+          },
+          {
+            heading: "Just because",
+            how: "Your captions become the song titles.",
+            borrow: { field: "caption", line: "The one from the car" },
+          },
+          {
+            heading: "Their birthday",
+            how: "The note under the player is in your handwriting.",
+            borrow: { field: "fields.note", line: "Play this loud. It’s your day." },
+          },
+          {
+            heading: "Concert tickets",
+            how: "Put the tickets in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Friday night. I got us tickets." },
+          },
+          {
+            heading: "Long distance",
+            how: "Up to ten photos on the playlist, one per song.",
+            borrow: { field: "fields.playlist", line: "for the train to you" },
+          },
+          {
+            heading: "For a friend",
+            how: "Sunset, lilac or night for the sky.",
+            borrow: { field: "fields.note", line: "You’d hate track 4. It stays." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un regalo de playlist",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "El nombre de la playlist admite 24 caracteres.",
+            borrow: { field: "fields.playlist", line: "canciones del primer año" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Tus pies de foto son los títulos de las canciones.",
+            borrow: { field: "caption", line: "La que sonaba en el coche" },
+          },
+          {
+            heading: "Su cumpleaños",
+            how: "La nota bajo el reproductor va con tu letra.",
+            borrow: { field: "fields.note", line: "Ponla alta. Hoy es tu día." },
+          },
+          {
+            heading: "Entradas para un concierto",
+            how: "Pon las entradas en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Viernes noche. Tengo entradas." },
+          },
+          {
+            heading: "A distancia",
+            how: "Hasta diez fotos en la playlist, una por canción.",
+            borrow: { field: "fields.playlist", line: "para el tren hacia ti" },
+          },
+          {
+            heading: "Para una amistad",
+            how: "Atardecer, lila o noche para el cielo.",
+            borrow: { field: "fields.note", line: "La 4 no te va a gustar. Se queda." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "pack-your-bags": {
+    en: {
+      ideas: {
+        title: "What to pack in a surprise trip reveal",
+        items: [
+          {
+            heading: "An anniversary trip",
+            how: "Up to five clues, one luggage tag each.",
+            borrow: { field: "fields.clues", line: "the white linen shirt" },
+          },
+          {
+            heading: "A birthday trip",
+            how: "Start vague. The board gives it away at the end.",
+            borrow: { field: "fields.clues", line: "something warm for the evenings" },
+          },
+          {
+            heading: "A weekend away",
+            how: "Flight, train or road trip. The date goes on the ticket.",
+            borrow: { field: "fields.when", line: "Fri 16 Oct" },
+          },
+          {
+            heading: "A honeymoon",
+            how: "Add a countdown to the day you leave.",
+            borrow: { field: "countdown.label", line: "Until we fly" },
+          },
+          {
+            heading: "Coming to visit",
+            how: "Make your own city the destination.",
+            borrow: { field: "fields.clues", line: "nothing: I’m bringing it all" },
+          },
+          {
+            heading: "A family holiday",
+            how: "When they tear off the stub, your letter is underneath.",
+            borrow: { field: "message", line: "Passports are in the drawer. All four." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué meter en la maleta de un viaje sorpresa",
+        items: [
+          {
+            heading: "Un viaje de aniversario",
+            how: "Hasta cinco pistas, una etiqueta de maleta cada una.",
+            borrow: { field: "fields.clues", line: "la camisa blanca de lino" },
+          },
+          {
+            heading: "Un viaje de cumpleaños",
+            how: "Empieza sin concretar. El panel lo desvela al final.",
+            borrow: { field: "fields.clues", line: "algo de abrigo para la noche" },
+          },
+          {
+            heading: "Una escapada",
+            how: "Avión, tren o carretera. La fecha va en el billete.",
+            borrow: { field: "fields.when", line: "Vie 16 oct" },
+          },
+          {
+            heading: "Una luna de miel",
+            how: "Añade una cuenta atrás hasta el día de salida.",
+            borrow: { field: "countdown.label", line: "Hasta que volemos" },
+          },
+          {
+            heading: "Una visita",
+            how: "Que el destino seas tú.",
+            borrow: { field: "fields.clues", line: "nada: lo llevo todo yo" },
+          },
+          {
+            heading: "Unas vacaciones en familia",
+            how: "Al arrancar el resguardo, tu carta está debajo.",
+            borrow: { field: "message", line: "Los pasaportes están en el cajón. Los cuatro." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "paper-crane": {
+    en: {
+      ideas: {
+        title: "What to say in a paper crane message",
+        items: [
+          {
+            heading: "Saying sorry",
+            how: "Up to six folds, one line each. Say what you did first.",
+            borrow: { field: "fields.lines", line: "I was wrong about Thursday, and I knew it." },
+          },
+          {
+            heading: "Giving them time",
+            how: "The line left behind stays after the crane flies off.",
+            borrow: { field: "fields.closing", line: "Whenever you’re ready. Not a day before." },
+          },
+          {
+            heading: "Long distance",
+            how: "One fold for each thing you miss.",
+            borrow: { field: "fields.lines", line: "I miss the noise you make cooking." },
+          },
+          {
+            heading: "Something hard to say",
+            how: "It takes patience to fold, so each line gets read.",
+            borrow: { field: "fields.lines", line: "I should have told you in March." },
+          },
+          {
+            heading: "Get well soon",
+            how: "Short lines. They can tap to fold if holding is too much.",
+            borrow: { field: "fields.lines", line: "One fold a day. That’s all." },
+          },
+          {
+            heading: "Just because",
+            how: "Ivory, blush, sage or slate paper.",
+            borrow: { field: "fields.closing", line: "I folded this thinking of you." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué decir con una grulla de papel",
+        items: [
+          {
+            heading: "Para pedir perdón",
+            how: "Hasta seis pliegues, una frase cada uno. Di primero qué hiciste.",
+            borrow: { field: "fields.lines", line: "Me equivoqué el jueves, y lo sabía." },
+          },
+          {
+            heading: "Para dar tiempo",
+            how: "La frase que se queda sigue ahí cuando la grulla se va.",
+            borrow: { field: "fields.closing", line: "Cuando quieras. Ni un día antes." },
+          },
+          {
+            heading: "A distancia",
+            how: "Un pliegue por cada cosa que echas de menos.",
+            borrow: { field: "fields.lines", line: "Echo de menos tu ruido al cocinar." },
+          },
+          {
+            heading: "Algo difícil de decir",
+            how: "Doblarla pide paciencia: cada frase se lee.",
+            borrow: { field: "fields.lines", line: "Tenía que habértelo dicho en marzo." },
+          },
+          {
+            heading: "Para una pronta mejoría",
+            how: "Frases cortas. Pueden tocar para doblar si sujetar cuesta.",
+            borrow: { field: "fields.lines", line: "Un pliegue al día. Nada más." },
+          },
+          {
+            heading: "Porque sí",
+            how: "Papel marfil, rosa, salvia o pizarra.",
+            borrow: { field: "fields.closing", line: "La doblé pensando en ti." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "party-animals": {
+    en: {
+      ideas: {
+        title: "What to put in a funny birthday card",
+        items: [
+          {
+            heading: "A best friend’s birthday",
+            how: "Up to ten shouts, 40 characters each.",
+            borrow: { field: "fields.shouts", line: "i was told there’d be cake" },
+          },
+          {
+            heading: "A big birthday",
+            how: "Their age shows in foil balloons and in candles on the cake.",
+            borrow: { field: "fields.banner", line: "ANA IS 30" },
+          },
+          {
+            heading: "From the whole office",
+            how: "Give each animal a colleague’s line.",
+            borrow: { field: "fields.shouts", line: "who ate my yoghurt, ana" },
+          },
+          {
+            heading: "A sibling’s birthday",
+            how: "Use the things you’d never say nicely.",
+            borrow: { field: "fields.shouts", line: "older than the wifi" },
+          },
+          {
+            heading: "A birthday you’ll miss",
+            how: "The word on the second photo takes 18 characters.",
+            borrow: { field: "fields.word", line: "wish I was there" },
+          },
+          {
+            heading: "With a present to find",
+            how: "Say where it is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Look under your pillow. The other one." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una tarjeta de cumpleaños divertida",
+        items: [
+          {
+            heading: "El cumple de tu mejor amistad",
+            how: "Hasta diez gritos, de 40 caracteres.",
+            borrow: { field: "fields.shouts", line: "me dijeron que habría tarta" },
+          },
+          {
+            heading: "Un cumpleaños redondo",
+            how: "Su edad sale en globos y en las velas de la tarta.",
+            borrow: { field: "fields.banner", line: "ANA CUMPLE 30" },
+          },
+          {
+            heading: "De toda la oficina",
+            how: "Dale a cada animal la frase de alguien del equipo.",
+            borrow: { field: "fields.shouts", line: "quién se comió mi yogur, ana" },
+          },
+          {
+            heading: "Un cumple entre hermanos",
+            how: "Usa lo que jamás dirías con cariño.",
+            borrow: { field: "fields.shouts", line: "más mayor que el wifi" },
+          },
+          {
+            heading: "Un cumple que te pierdes",
+            how: "La palabra de la segunda foto admite 18 caracteres.",
+            borrow: { field: "fields.word", line: "ojalá estar ahí" },
+          },
+          {
+            heading: "Con un regalo escondido",
+            how: "Di dónde está en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mira bajo tu almohada. La otra." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  passport: {
+    en: {
+      ideas: {
+        title: "What to stamp in a long-distance passport",
+        items: [
+          {
+            heading: "Long distance",
+            how: "The nationality line takes 40 characters.",
+            borrow: { field: "fields.nationality", line: "Citizen of wherever you are" },
+          },
+          {
+            heading: "Before a visit",
+            how: "Add a countdown to the day you land.",
+            borrow: { field: "countdown.label", line: "Until I land" },
+          },
+          {
+            heading: "An anniversary",
+            how: "One stamp for each photo, up to ten.",
+            borrow: { field: "caption", line: "Lisbon, the wrong tram" },
+          },
+          {
+            heading: "Places you’ve met halfway",
+            how: "Add up to six stopovers on the route.",
+            borrow: { field: "fields.stops", line: "Lisbon" },
+          },
+          {
+            heading: "Moving to be together",
+            how: "Put the news in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "It’s a one-way ticket this time." },
+          },
+          {
+            heading: "For a friend abroad",
+            how: "The visa page reveals your message.",
+            borrow: { field: "message", line: "Valid for visits, any time, no notice." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué sellar en un pasaporte a distancia",
+        items: [
+          {
+            heading: "A distancia",
+            how: "La línea de nacionalidad admite 40 caracteres.",
+            borrow: { field: "fields.nationality", line: "Ciudadanía: donde estés tú" },
+          },
+          {
+            heading: "Antes de una visita",
+            how: "Añade una cuenta atrás hasta el día en que aterrizas.",
+            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Un sello por cada foto, hasta diez.",
+            borrow: { field: "caption", line: "Lisboa, el tranvía equivocado" },
+          },
+          {
+            heading: "Donde os habéis encontrado",
+            how: "Añade hasta seis escalas en la ruta.",
+            borrow: { field: "fields.stops", line: "Lisboa" },
+          },
+          {
+            heading: "Mudarse para estar cerca",
+            how: "Pon la noticia en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Esta vez el billete es solo de ida." },
+          },
+          {
+            heading: "Para una amistad lejos",
+            how: "La página del visado muestra tu mensaje.",
+            borrow: { field: "message", line: "Válido para visitas, sin avisar." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "photo-booth": {
+    en: {
+      ideas: {
+        title: "What to put in a photo booth strip",
+        items: [
+          {
+            heading: "Valentine’s Day",
+            how: "Your line is written in pen on the wall of love letters.",
+            borrow: { field: "fields.line", line: "my favourite blur" },
+          },
+          {
+            heading: "An anniversary",
+            how: "The sign on top of the booth takes 24 characters.",
+            borrow: { field: "fields.sign", line: "4 YEARS · 4 POSES" },
+          },
+          {
+            heading: "Just because",
+            how: "Colour, black and white, or sepia for the strip.",
+            borrow: { field: "caption", line: "The face you make at 2am" },
+          },
+          {
+            heading: "A night out",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 8pm. Bring the blur." },
+          },
+          {
+            heading: "For a best friend",
+            how: "Each flash freezes one photo in the booth’s mirror.",
+            borrow: { field: "fields.line", line: "worst photos, best night" },
+          },
+          {
+            heading: "Long distance",
+            how: "Your letter is on lined paper, in handwriting.",
+            borrow: { field: "message", line: "Next strip, we’re both in it." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una tira de fotomatón",
+        items: [
+          {
+            heading: "San Valentín",
+            how: "Tu frase va a boli en el muro de cartas de amor.",
+            borrow: { field: "fields.line", line: "mi borrón favorito" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "El letrero del fotomatón admite 24 caracteres.",
+            borrow: { field: "fields.sign", line: "4 AÑOS · 4 POSES" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Color, blanco y negro o sepia para la tira.",
+            borrow: { field: "caption", line: "La cara que pones a las 2" },
+          },
+          {
+            heading: "Una noche fuera",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 20:00. Trae el borrón." },
+          },
+          {
+            heading: "Para tu mejor amistad",
+            how: "Cada flash congela una foto en el espejo.",
+            borrow: { field: "fields.line", line: "peores fotos, mejor noche" },
+          },
+          {
+            heading: "A distancia",
+            how: "Tu carta va en papel rayado, con tu letra.",
+            borrow: { field: "message", line: "En la próxima tira salimos los dos." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  picnic: {
+    en: {
+      ideas: {
+        title: "What to pack in a picnic of love notes",
+        items: [
+          {
+            heading: "Just because",
+            how: "Up to eight tags, 48 characters each.",
+            borrow: { field: "fields.labels", line: "the way you eat the strawberries first" },
+          },
+          {
+            heading: "An anniversary",
+            how: "One tag for each year.",
+            borrow: { field: "fields.labels", line: "year two: you learned to cook" },
+          },
+          {
+            heading: "Their birthday",
+            how: "Tag the things they love.",
+            borrow: { field: "fields.labels", line: "the playlist only you defend" },
+          },
+          {
+            heading: "Asking them on a date",
+            how: "The last thing out is a folded note with your letter.",
+            borrow: { field: "message", line: "Saturday. I’m bringing the blanket." },
+          },
+          {
+            heading: "The first warm day",
+            how: "Up to six photos come out in gingham frames.",
+            borrow: { field: "caption", line: "Last summer, the same hill" },
+          },
+          {
+            heading: "For your mum",
+            how: "Pink, blue, red or lilac for the blanket.",
+            borrow: { field: "fields.labels", line: "you always packed too much" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué meter en un pícnic de notas de amor",
+        items: [
+          {
+            heading: "Porque sí",
+            how: "Hasta ocho etiquetas, de 48 caracteres.",
+            borrow: { field: "fields.labels", line: "cómo te comes las fresas primero" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Una etiqueta por cada año.",
+            borrow: { field: "fields.labels", line: "año dos: aprendiste a cocinar" },
+          },
+          {
+            heading: "Su cumpleaños",
+            how: "Etiqueta lo que le gusta.",
+            borrow: { field: "fields.labels", line: "la playlist que solo tú defiendes" },
+          },
+          {
+            heading: "Para proponer una cita",
+            how: "Lo último que sale es una nota doblada con tu carta.",
+            borrow: { field: "message", line: "Sábado. La manta la llevo yo." },
+          },
+          {
+            heading: "El primer día de calor",
+            how: "Hasta seis fotos salen en marcos de cuadros.",
+            borrow: { field: "caption", line: "El verano pasado, la misma colina" },
+          },
+          {
+            heading: "Para tu madre",
+            how: "Rosa, azul, roja o lila para la manta.",
+            borrow: { field: "fields.labels", line: "siempre llevabas de más" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "popup-card": {
+    en: {
+      ideas: {
+        title: "What to write in a digital pop-up card",
+        items: [
+          {
+            heading: "Their birthday",
+            how: "Their age goes on the cake’s topper. The pennants take 20 characters.",
+            borrow: { field: "fields.banner", line: "HAPPY 30TH ANA" },
+          },
+          {
+            heading: "Mother’s Day",
+            how: "Your letter is inside the lid, in handwriting.",
+            borrow: { field: "message", line: "You never once forgot the candles." },
+          },
+          {
+            heading: "A child’s birthday",
+            how: "They light the candles with a tap and blow them out.",
+            borrow: { field: "fields.banner", line: "SIX TODAY" },
+          },
+          {
+            heading: "From the whole family",
+            how: "Up to eight photos hang on pegs behind the letter.",
+            borrow: { field: "caption", line: "Dad, holding the cake badly" },
+          },
+          {
+            heading: "With a present to find",
+            how: "Say where it is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Look under the plant pot by the door." },
+          },
+          {
+            heading: "A belated birthday",
+            how: "Vanilla, midnight, kraft or cherry paper.",
+            borrow: { field: "message", line: "Late, but I lit every candle." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué escribir en una tarjeta pop-up digital",
+        items: [
+          {
+            heading: "Su cumpleaños",
+            how: "Su edad va en lo alto de la tarta. Los banderines admiten 20 caracteres.",
+            borrow: { field: "fields.banner", line: "FELICES 30, ANA" },
+          },
+          {
+            heading: "El Día de la Madre",
+            how: "Tu carta va dentro de la tapa, con tu letra.",
+            borrow: { field: "message", line: "Nunca te olvidaste de las velas." },
+          },
+          {
+            heading: "El cumple de un peque",
+            how: "Encienden las velas con un toque y las apagan soplando.",
+            borrow: { field: "fields.banner", line: "HOY SEIS" },
+          },
+          {
+            heading: "De toda la familia",
+            how: "Hasta ocho fotos cuelgan con pinzas tras la carta.",
+            borrow: { field: "caption", line: "Papá, sujetando mal la tarta" },
+          },
+          {
+            heading: "Con un regalo escondido",
+            how: "Di dónde está en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mira bajo la maceta de la puerta." },
+          },
+          {
+            heading: "Un cumpleaños con retraso",
+            how: "Papel vainilla, medianoche, kraft o cereza.",
+            borrow: { field: "message", line: "Tarde, pero encendí todas las velas." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "recipe-box": {
+    en: {
+      ideas: {
+        title: "What to write in a family recipe box",
+        items: [
+          {
+            heading: "Mother’s Day",
+            how: "Up to six ingredients, 64 characters each.",
+            borrow: { field: "fields.ingredients", line: "two cups of patience" },
+          },
+          {
+            heading: "Her birthday",
+            how: "Name the recipe after her.",
+            borrow: { field: "fields.recipeName", line: "Mum, from scratch" },
+          },
+          {
+            heading: "For a grandmother",
+            how: "The “makes one” line takes 90 characters.",
+            borrow: { field: "fields.makes", line: "Makes one house that always smelled of something." },
+          },
+          {
+            heading: "For your dad",
+            how: "Write his kitchen, not hers.",
+            borrow: { field: "fields.ingredients", line: "one burnt pan, every Sunday" },
+          },
+          {
+            heading: "Sunday lunch",
+            how: "Put the invitation in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Sunday, one o’clock. I’m cooking." },
+          },
+          {
+            heading: "A thank-you",
+            how: "The card turns over into your letter, photos clipped to it.",
+            borrow: { field: "caption", line: "The kitchen table, 1998" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué escribir en una caja de recetas familiar",
+        items: [
+          {
+            heading: "El Día de la Madre",
+            how: "Hasta seis ingredientes, de 64 caracteres.",
+            borrow: { field: "fields.ingredients", line: "dos tazas de paciencia" },
+          },
+          {
+            heading: "Su cumpleaños",
+            how: "Ponle su nombre a la receta.",
+            borrow: { field: "fields.recipeName", line: "Mamá, desde cero" },
+          },
+          {
+            heading: "Para tu abuela",
+            how: "La línea de «sale una» admite 90 caracteres.",
+            borrow: { field: "fields.makes", line: "Sale una casa que siempre olía a algo rico." },
+          },
+          {
+            heading: "Para tu padre",
+            how: "Escribe su cocina, no la de otra persona.",
+            borrow: { field: "fields.ingredients", line: "una sartén quemada cada domingo" },
+          },
+          {
+            heading: "La comida del domingo",
+            how: "Pon la invitación en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Domingo a la una. Cocino yo." },
+          },
+          {
+            heading: "Para dar las gracias",
+            how: "La ficha se da la vuelta y sale tu carta, con las fotos prendidas.",
+            borrow: { field: "caption", line: "La mesa de la cocina, 1998" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  seance: {
+    en: {
+      ideas: {
+        title: "What to spell out in a séance",
+        items: [
+          {
+            heading: "Halloween night",
+            how: "The spirit spells up to 22 characters, letter by letter.",
+            borrow: { field: "fields.spell", line: "stay with me" },
+          },
+          {
+            heading: "Asking them out",
+            how: "Let the board ask for you.",
+            borrow: { field: "fields.spell", line: "be my date" },
+          },
+          {
+            heading: "A Halloween party invite",
+            how: "The title shows before they touch the planchette.",
+            borrow: { field: "title", line: "someone is trying to reach you" },
+          },
+          {
+            heading: "A night in",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 9pm, mine. Candles are lit." },
+          },
+          {
+            heading: "Long distance",
+            how: "Candle, moonlight, blood moon or graveyard green.",
+            borrow: { field: "fields.spell", line: "i miss you" },
+          },
+          {
+            heading: "For a friend who loves ghosts",
+            how: "Up to eight photos develop out of the mist.",
+            borrow: { field: "caption", line: "Proof we were there" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué deletrear en una sesión espiritista",
+        items: [
+          {
+            heading: "La noche de Halloween",
+            how: "El espíritu deletrea hasta 22 caracteres, letra a letra.",
+            borrow: { field: "fields.spell", line: "quédate conmigo" },
+          },
+          {
+            heading: "Para pedírselo",
+            how: "Que lo pregunte el tablero.",
+            borrow: { field: "fields.spell", line: "sal conmigo" },
+          },
+          {
+            heading: "Una invitación de Halloween",
+            how: "El título sale antes de tocar la plancheta.",
+            borrow: { field: "title", line: "alguien intenta contactar contigo" },
+          },
+          {
+            heading: "Una noche en casa",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 21:00 en mi casa. Hay velas." },
+          },
+          {
+            heading: "A distancia",
+            how: "Vela, luz de luna, luna de sangre o verde cementerio.",
+            borrow: { field: "fields.spell", line: "te echo de menos" },
+          },
+          {
+            heading: "Para quien adora los fantasmas",
+            how: "Hasta ocho fotos se revelan entre la niebla.",
+            borrow: { field: "caption", line: "Prueba de que estuvimos" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  sketchbook: {
+    en: {
+      ideas: {
+        title: "What to draw in a sketchbook gift",
+        items: [
+          {
+            heading: "Their birthday",
+            how: "The line over the cake takes 24 characters. Their age gets circled twice.",
+            borrow: { field: "fields.title", line: "happy birthday, Ana" },
+          },
+          {
+            heading: "A year of you two",
+            how: "Up to twelve photos, taped in between the doodles.",
+            borrow: { field: "caption", line: "The day we bought the plant" },
+          },
+          {
+            heading: "For someone who draws",
+            how: "White paper, kraft, or black paper and a white pen.",
+            borrow: { field: "message", line: "I can’t draw. So I got help." },
+          },
+          {
+            heading: "A child’s birthday",
+            how: "A cake, a party hat and presents draw themselves.",
+            borrow: { field: "fields.title", line: "seven today" },
+          },
+          {
+            heading: "With a present to find",
+            how: "Say where it is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Last page of the notebook on your desk." },
+          },
+          {
+            heading: "An anniversary",
+            how: "The last page is your letter.",
+            borrow: { field: "message", line: "Page one was the day I met you." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué dibujar en un cuaderno de regalo",
+        items: [
+          {
+            heading: "Su cumpleaños",
+            how: "La línea sobre la tarta admite 24 caracteres. Su edad sale rodeada dos veces.",
+            borrow: { field: "fields.title", line: "feliz cumple, Ana" },
+          },
+          {
+            heading: "Un año de vosotros",
+            how: "Hasta doce fotos, pegadas entre los garabatos.",
+            borrow: { field: "caption", line: "El día que compramos la planta" },
+          },
+          {
+            heading: "Para alguien que dibuja",
+            how: "Papel blanco, kraft o papel negro con boli blanco.",
+            borrow: { field: "message", line: "No sé dibujar. Así que pedí ayuda." },
+          },
+          {
+            heading: "El cumple de un peque",
+            how: "Se dibujan una tarta, un gorrito y regalos.",
+            borrow: { field: "fields.title", line: "hoy siete" },
+          },
+          {
+            heading: "Con un regalo escondido",
+            how: "Di dónde está en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Última página del cuaderno de tu mesa." },
+          },
+          {
+            heading: "Un aniversario",
+            how: "La última página es tu carta.",
+            borrow: { field: "message", line: "La primera página fue el día que te conocí." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "spooky-season": {
+    en: {
+      ideas: {
+        title: "What to put in a spooky season collage",
+        items: [
+          {
+            heading: "A Halloween date",
+            how: "The ticket for two takes 26 characters.",
+            borrow: { field: "fields.ticket", line: "Haunted house · Fri 8pm" },
+          },
+          {
+            heading: "A first October together",
+            how: "The postcard is in your handwriting.",
+            borrow: { field: "fields.note", line: "First pumpkin with you. Many more." },
+          },
+          {
+            heading: "For a friend who loves autumn",
+            how: "The torn-out words take 28 characters.",
+            borrow: { field: "fields.label", line: "it’s finally our season" },
+          },
+          {
+            heading: "Costumes through the years",
+            how: "Up to ten photos, down the page as polaroids.",
+            borrow: { field: "caption", line: "2021, the cheap wigs" },
+          },
+          {
+            heading: "A film night",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Friday, 8pm. The scariest one we can find." },
+          },
+          {
+            heading: "Long distance",
+            how: "Your letter is at the end of the page.",
+            borrow: { field: "message", line: "Carve one for me. I’ll judge by photo." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en un collage spooky season",
+        items: [
+          {
+            heading: "Una cita de Halloween",
+            how: "La entrada para dos admite 26 caracteres.",
+            borrow: { field: "fields.ticket", line: "Casa del terror · vie 20 h" },
+          },
+          {
+            heading: "El primer octubre en pareja",
+            how: "La postal va con tu letra.",
+            borrow: { field: "fields.note", line: "Primera calabaza contigo. Vendrán más." },
+          },
+          {
+            heading: "Para quien adora el otoño",
+            how: "Las palabras recortadas admiten 28 caracteres.",
+            borrow: { field: "fields.label", line: "por fin es nuestra época" },
+          },
+          {
+            heading: "Los disfraces de cada año",
+            how: "Hasta diez fotos, página abajo, en polaroids.",
+            borrow: { field: "caption", line: "2021, las pelucas baratas" },
+          },
+          {
+            heading: "Una noche de pelis",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Viernes a las 20:00. La que más miedo dé." },
+          },
+          {
+            heading: "A distancia",
+            how: "Tu carta está al final de la página.",
+            borrow: { field: "message", line: "Talla una por mí. Juzgaré por foto." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "sticker-bomb": {
+    en: {
+      ideas: {
+        title: "What to put in a sticker bomb card",
+        items: [
+          {
+            heading: "Just because",
+            how: "Up to six label-maker strips, 28 characters each.",
+            borrow: { field: "fields.labels", line: "certified menace" },
+          },
+          {
+            heading: "Their birthday",
+            how: "Pick the party animals pack.",
+            borrow: { field: "fields.labels", line: "older, not wiser" },
+          },
+          {
+            heading: "Saying sorry",
+            how: "Go for the soft pack.",
+            borrow: { field: "fields.labels", line: "was wrong (this once)" },
+          },
+          {
+            heading: "Cheering someone up",
+            how: "The line on the empty page takes 40 characters.",
+            borrow: { field: "fields.prompt", line: "tap anywhere. it gets better." },
+          },
+          {
+            heading: "For the group chat",
+            how: "Up to six of your photos land as polaroids.",
+            borrow: { field: "caption", line: "This photo, again" },
+          },
+          {
+            heading: "With a small present",
+            how: "Say where it is in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Check your bag. Inside pocket." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué poner en una tarjeta de stickers",
+        items: [
+          {
+            heading: "Porque sí",
+            how: "Hasta seis tiras de rotuladora, de 28 caracteres.",
+            borrow: { field: "fields.labels", line: "peligro certificado" },
+          },
+          {
+            heading: "Su cumpleaños",
+            how: "Elige el paquete de animales de fiesta.",
+            borrow: { field: "fields.labels", line: "más años, mismo juicio" },
+          },
+          {
+            heading: "Para pedir perdón",
+            how: "Usa el paquete de los suaves.",
+            borrow: { field: "fields.labels", line: "me equivoqué (esta vez)" },
+          },
+          {
+            heading: "Para animar a alguien",
+            how: "La frase de la página vacía admite 40 caracteres.",
+            borrow: { field: "fields.prompt", line: "toca donde sea. mejora." },
+          },
+          {
+            heading: "Para el grupo",
+            how: "Hasta seis fotos tuyas caen como polaroids.",
+            borrow: { field: "caption", line: "Otra vez esta foto" },
+          },
+          {
+            heading: "Con un detalle escondido",
+            how: "Di dónde está en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mira en tu bolso. Bolsillo interior." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "text-thread": {
+    en: {
+      ideas: {
+        title: "What to write in a text message gift",
+        items: [
+          {
+            heading: "Long distance",
+            how: "Up to forty messages. Write it like the chat you really have.",
+            borrow: { field: "fields.lines", line: "I’m on the 23:40 again. the rain one" },
+          },
+          {
+            heading: "Saying sorry",
+            how: "End on the message you’d never send by text.",
+            borrow: { field: "fields.lines", line: "I was wrong and I knew it by the lift." },
+          },
+          {
+            heading: "Their birthday",
+            how: "Start at midnight and let the bubbles pile up.",
+            borrow: { field: "fields.lines", line: "it’s 00:00. you’re officially older" },
+          },
+          {
+            heading: "Just because",
+            how: "Photos drop in as attachments.",
+            borrow: { field: "fields.lines", line: "saw this and thought of you" },
+          },
+          {
+            heading: "Before they land",
+            how: "Add a countdown to arrivals.",
+            borrow: { field: "countdown.label", line: "Until I land" },
+          },
+          {
+            heading: "From an old friend",
+            how: "Your name in the chat header takes 40 characters.",
+            borrow: { field: "fields.contactName", line: "The one who still has your hoodie" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué escribir en un regalo en mensajes de chat",
+        items: [
+          {
+            heading: "A distancia",
+            how: "Hasta cuarenta mensajes. Escríbelo como vuestro chat de verdad.",
+            borrow: { field: "fields.lines", line: "otra vez en el de las 23:40. el de la lluvia" },
+          },
+          {
+            heading: "Para pedir perdón",
+            how: "Acaba con el mensaje que nunca mandarías por chat.",
+            borrow: { field: "fields.lines", line: "Me equivoqué y lo supe en el ascensor." },
+          },
+          {
+            heading: "Su cumpleaños",
+            how: "Empieza a medianoche y deja que se acumulen las burbujas.",
+            borrow: { field: "fields.lines", line: "son las 00:00. ya tienes un año más" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Las fotos entran como adjuntos.",
+            borrow: { field: "fields.lines", line: "vi esto y me acordé de ti" },
+          },
+          {
+            heading: "Antes de aterrizar",
+            how: "Añade una cuenta atrás hasta la llegada.",
+            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
+          },
+          {
+            heading: "De una vieja amistad",
+            how: "Tu nombre en la cabecera del chat admite 40 caracteres.",
+            borrow: { field: "fields.contactName", line: "Quien aún tiene tu sudadera" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "the-toast": {
+    en: {
+      ideas: {
+        title: "What to say in a digital toast",
+        items: [
+          {
+            heading: "A wedding",
+            how: "How the toast opens takes 70 characters.",
+            borrow: { field: "fields.opening", line: "To Ana and Marco" },
+          },
+          {
+            heading: "An anniversary",
+            how: "Put the day you married on the menu card.",
+            borrow: { field: "fields.dateLine", line: "14 June 2026" },
+          },
+          {
+            heading: "A toast from far away",
+            how: "The menu card opens into your speech.",
+            borrow: { field: "message", line: "I’d have cried by line two anyway." },
+          },
+          {
+            heading: "An engagement",
+            how: "Champagne, red, white or sparkling in the glasses.",
+            borrow: { field: "fields.opening", line: "To the two of you, at last" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "The “where” line takes 60 characters.",
+            borrow: { field: "fields.venue", line: "Our kitchen, the good glasses" },
+          },
+          {
+            heading: "A retirement",
+            how: "Up to eight photos rise past the glasses in the bubbles.",
+            borrow: { field: "caption", line: "Day one, 1989" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué decir en un brindis digital",
+        items: [
+          {
+            heading: "Una boda",
+            how: "El arranque del brindis admite 70 caracteres.",
+            borrow: { field: "fields.opening", line: "Por Ana y Marco" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Pon en la carta del menú el día de vuestra boda.",
+            borrow: { field: "fields.dateLine", line: "14 de junio de 2026" },
+          },
+          {
+            heading: "Un brindis a distancia",
+            how: "La carta del menú se abre y sale tu discurso.",
+            borrow: { field: "message", line: "Habría llorado en la segunda línea." },
+          },
+          {
+            heading: "Un compromiso",
+            how: "Champán, tinto, blanco o espumoso en las copas.",
+            borrow: { field: "fields.opening", line: "Por vosotros dos, por fin" },
+          },
+          {
+            heading: "San Valentín",
+            how: "La línea de «dónde» admite 60 caracteres.",
+            borrow: { field: "fields.venue", line: "Nuestra cocina, las copas buenas" },
+          },
+          {
+            heading: "Una jubilación",
+            how: "Hasta ocho fotos suben entre las burbujas.",
+            borrow: { field: "caption", line: "El primer día, 1989" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  "trick-or-treat": {
+    en: {
+      ideas: {
+        title: "What to hand over in a trick-or-treat gift",
+        items: [
+          {
+            heading: "Halloween night",
+            how: "The title shows on the porch.",
+            borrow: { field: "title", line: "you’re the treat" },
+          },
+          {
+            heading: "For the kids",
+            how: "A ghost, a cat or a pumpkin answers and says your line.",
+            borrow: { field: "fields.doorLine", line: "one each, no pushing" },
+          },
+          {
+            heading: "Asking them to a party",
+            how: "The sign on the door takes 24 characters.",
+            borrow: { field: "fields.sign", line: "party inside, 8pm" },
+          },
+          {
+            heading: "Matching costumes",
+            how: "Put the plan in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "Saturday, 7pm. I bought the fangs." },
+          },
+          {
+            heading: "Long distance",
+            how: "Your words come on a scroll.",
+            borrow: { field: "message", line: "I’d share my sweets with you. Some." },
+          },
+          {
+            heading: "Halloweens so far",
+            how: "Up to eight photos in haunted frames.",
+            borrow: { field: "caption", line: "2020, costumes on the sofa" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué entregar en un truco o trato",
+        items: [
+          {
+            heading: "La noche de Halloween",
+            how: "El título sale en el porche.",
+            borrow: { field: "title", line: "tú eres el trato" },
+          },
+          {
+            heading: "Para los peques",
+            how: "Abre un fantasma, un gato o una calabaza y dice tu frase.",
+            borrow: { field: "fields.doorLine", line: "uno por cabeza, sin empujar" },
+          },
+          {
+            heading: "Para invitar a una fiesta",
+            how: "El cartel de la puerta admite 24 caracteres.",
+            borrow: { field: "fields.sign", line: "fiesta dentro, 20:00" },
+          },
+          {
+            heading: "Disfraces a juego",
+            how: "Pon el plan en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 19:00. Tengo los colmillos." },
+          },
+          {
+            heading: "A distancia",
+            how: "Tus palabras llegan en un pergamino.",
+            borrow: { field: "message", line: "Compartiría mis caramelos contigo. Algunos." },
+          },
+          {
+            heading: "Vuestros Halloween",
+            how: "Hasta ocho fotos en marcos encantados.",
+            borrow: { field: "caption", line: "2020, disfraces en el sofá" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  unwrapped: {
+    en: {
+      ideas: {
+        title: "What to count in a year in review gift",
+        items: [
+          {
+            heading: "Christmas",
+            how: "Up to eight numbers, written by you. Each one counts up.",
+            borrow: { field: "fields.stats", line: "1,284 voice notes" },
+          },
+          {
+            heading: "An anniversary",
+            how: "Count the year since the last one.",
+            borrow: { field: "fields.stats", line: "41 nights you stole the blanket" },
+          },
+          {
+            heading: "New Year’s Eve",
+            how: "The gold present prints the year as a receipt.",
+            borrow: { field: "fields.stats", line: "3 cities we got lost in" },
+          },
+          {
+            heading: "A first year together",
+            how: "Start with the day count.",
+            borrow: { field: "fields.stats", line: "365 days, give or take a row" },
+          },
+          {
+            heading: "Long distance",
+            how: "Count the flights, the calls and the hours.",
+            borrow: { field: "fields.stats", line: "17 flights, 0 regrets" },
+          },
+          {
+            heading: "With one more present",
+            how: "Put the last number in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "One more number: 2 tickets." },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué contar en un resumen del año en pareja",
+        items: [
+          {
+            heading: "Navidad",
+            how: "Hasta ocho números, escritos por ti. Cada uno va subiendo.",
+            borrow: { field: "fields.stats", line: "1.284 notas de voz" },
+          },
+          {
+            heading: "Un aniversario",
+            how: "Cuenta el año desde el anterior.",
+            borrow: { field: "fields.stats", line: "41 noches quitándome la manta" },
+          },
+          {
+            heading: "Nochevieja",
+            how: "El regalo dorado imprime el año como un tique.",
+            borrow: { field: "fields.stats", line: "3 ciudades en las que nos perdimos" },
+          },
+          {
+            heading: "El primer año en pareja",
+            how: "Empieza por el número de días.",
+            borrow: { field: "fields.stats", line: "365 días, discusión arriba o abajo" },
+          },
+          {
+            heading: "A distancia",
+            how: "Cuenta los vuelos, las llamadas y las horas.",
+            borrow: { field: "fields.stats", line: "17 vuelos, 0 arrepentimientos" },
+          },
+          {
+            heading: "Con un regalo más",
+            how: "Pon el último número en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Un número más: 2 entradas." },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  vinyl: {
+    en: {
+      ideas: {
+        title: "What to press on a vinyl record for them",
+        items: [
+          {
+            heading: "An anniversary",
+            how: "The album title takes 40 characters.",
+            borrow: { field: "fields.album", line: "Songs for the 23:40" },
+          },
+          {
+            heading: "Valentine’s Day",
+            how: "Put your name where the artist goes.",
+            borrow: { field: "fields.artist", line: "Lucas, badly, in the shower" },
+          },
+          {
+            heading: "Long distance",
+            how: "Up to twelve photos sit in a crate as album covers.",
+            borrow: { field: "caption", line: "Track 3: the night bus" },
+          },
+          {
+            heading: "Just because",
+            how: "Your message is printed on the liner notes.",
+            borrow: { field: "message", line: "This came on and I thought of you." },
+          },
+          {
+            heading: "A wedding song",
+            how: "The side label takes 12 characters.",
+            borrow: { field: "fields.side", line: "First dance" },
+          },
+          {
+            heading: "For your dad",
+            how: "Name it after the songs he played in the car.",
+            borrow: { field: "fields.album", line: "Dad’s Driving Tape" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué grabar en un vinilo para dedicar",
+        items: [
+          {
+            heading: "Un aniversario",
+            how: "El título del disco admite 40 caracteres.",
+            borrow: { field: "fields.album", line: "Canciones para el de las 23:40" },
+          },
+          {
+            heading: "San Valentín",
+            how: "Pon tu nombre donde va el artista.",
+            borrow: { field: "fields.artist", line: "Lucas, mal, en la ducha" },
+          },
+          {
+            heading: "A distancia",
+            how: "Hasta doce fotos van en una caja, como portadas.",
+            borrow: { field: "caption", line: "Pista 3: el bus nocturno" },
+          },
+          {
+            heading: "Porque sí",
+            how: "Tu mensaje va impreso en el libreto.",
+            borrow: { field: "message", line: "Sonó esta y me acordé de ti." },
+          },
+          {
+            heading: "La canción de la boda",
+            how: "La etiqueta de la cara admite 12 caracteres.",
+            borrow: { field: "fields.side", line: "Primer baile" },
+          },
+          {
+            heading: "Para tu padre",
+            how: "Ponle el nombre de las canciones que ponía en el coche.",
+            borrow: { field: "fields.album", line: "La cinta del coche de papá" },
+          },
+        ],
+      },
+      faq: [],
+    },
+  },
+
+  wishbone: {
+    en: {
+      ideas: {
+        title: "What to wish for with a wishbone gift",
+        items: [
+          {
+            heading: "Thanksgiving together",
+            how: "Your wish takes 120 characters and comes out on a card.",
+            borrow: { field: "fields.wish", line: "another year at the same table" },
+          },
+          {
+            heading: "Thanksgiving apart",
+            how: "You decide who gets the big half. Give it to them.",
+            borrow: { field: "fields.wish", line: "next year, one table, one time zone" },
+          },
+          {
+            heading: "A first Thanksgiving together",
+            how: "The title sits above the plate.",
+            borrow: { field: "title", line: "make a wish" },
+          },
+          {
+            heading: "A dinner to book",
+            how: "Put the booking in the surprise at the end.",
+            borrow: { field: "surprise.text", line: "A table for two, Saturday at 7." },
+          },
+          {
+            heading: "For your family",
+            how: "Red gingham, harvest orange, sage linen or candlelit.",
+            borrow: { field: "fields.wish", line: "that we keep fighting over the crispy bits" },
+          },
+          {
+            heading: "The year in photos",
+            how: "Up to eight photos follow your letter.",
+            borrow: { field: "caption", line: "Last year, the burnt pie" },
+          },
+        ],
+      },
+      faq: [],
+    },
+    es: {
+      ideas: {
+        title: "Qué desear con una espoleta",
+        items: [
+          {
+            heading: "Acción de Gracias en pareja",
+            how: "Tu deseo admite 120 caracteres y sale en una tarjeta.",
+            borrow: { field: "fields.wish", line: "otro año en la misma mesa" },
+          },
+          {
+            heading: "Acción de Gracias a distancia",
+            how: "Decides quién se lleva la mitad grande. Dásela.",
+            borrow: { field: "fields.wish", line: "el año que viene, una mesa y una hora" },
+          },
+          {
+            heading: "El primer Acción de Gracias",
+            how: "El título va sobre el plato.",
+            borrow: { field: "title", line: "pide un deseo" },
+          },
+          {
+            heading: "Una cena reservada",
+            how: "Pon la reserva en la sorpresa del final.",
+            borrow: { field: "surprise.text", line: "Mesa para dos, sábado a las 19:00." },
+          },
+          {
+            heading: "Para tu familia",
+            how: "Cuadros rojos, naranja cosecha, lino salvia o velas.",
+            borrow: { field: "fields.wish", line: "seguir peleando por lo crujiente" },
+          },
+          {
+            heading: "El año en fotos",
+            how: "Hasta ocho fotos siguen a tu carta.",
+            borrow: { field: "caption", line: "El año pasado, la tarta quemada" },
+          },
+        ],
+      },
+      faq: [],
     },
   },
 };

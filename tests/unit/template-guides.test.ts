@@ -5,7 +5,7 @@ import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES, templateGuideFaq, type BorrowField } from "@/content/template-guides";
 import { FREE_NOTE_MAX_CHARS, noteLength } from "@/lib/gift/free-tier";
 import { giftCountdownSchema, giftDataBaseSchema, giftPhotoSchema, giftSurpriseSchema } from "@/lib/gift/schema";
-import { getManifest } from "@/templates/manifests";
+import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 import { loadFieldsSchema } from "@/templates/schemas";
 
 const LOCALES = ["en", "es"] as const;
@@ -126,7 +126,9 @@ describe("template guides: the lines to borrow", () => {
         expect(items.length, `${slug} ${l}`).toBeGreaterThanOrEqual(5);
         expect(items.length, `${slug} ${l}`).toBeLessThanOrEqual(6);
         for (const idea of items) expect(idea.borrow.line.length, `${slug} ${l}: ${idea.heading}`).toBeGreaterThan(0);
-        // Two to four questions on the page, whichever way the switches stand.
+        // A guide with questions of its own shows two to four, whichever way the switches stand;
+        // one without shows the questions every gift's page has.
+        if (guide[l].faq.length === 0) continue;
         for (const [freeNote, notePhotos] of STATES) {
           const shown = templateGuideFaq(slug, l, freeNote, notePhotos);
           expect(shown.length, `${slug} ${l} faq`).toBeGreaterThanOrEqual(2);
@@ -183,6 +185,30 @@ describe("template guides", () => {
     const sixteen = ["the-letter", "birthday-cinema", "constellations", "xoxo", "the-council", "bloom", "halfway", "frosted-window", "light-the-candles", "string-the-lights", "gingerbread-house", "snow-globe", "nice-list", "jar-of-reasons", "our-timeline", "scrapbook"];
     for (const slug of [...FIRST_THREE, ...sixteen]) expect(Object.hasOwn(TEMPLATE_GUIDES, slug), slug).toBe(true);
     for (const slug of Object.keys(TEMPLATE_GUIDES)) expect(getManifest(slug), `${slug} is not a template`).toBeTruthy();
+  });
+
+  it("give every gift six cards, each a different moment, in both languages", () => {
+    // Since 21 Nov 2026 "What to write" is on every gift's page: a template registered without its six cards fails here.
+    for (const m of TEMPLATE_MANIFESTS) {
+      expect(Object.hasOwn(TEMPLATE_GUIDES, m.slug), `${m.slug} has no cards`).toBe(true);
+      for (const l of LOCALES) {
+        const items = TEMPLATE_GUIDES[m.slug][l].ideas.items;
+        expect(items.length, `${m.slug} ${l}`).toBe(6);
+        expect(new Set(items.map((i) => i.heading.toLowerCase())).size, `${m.slug} ${l}: a moment twice`).toBe(6);
+        expect(new Set(items.map((i) => i.borrow.line.toLowerCase())).size, `${m.slug} ${l}: a line twice`).toBe(6);
+      }
+    }
+  });
+
+  it("name a moment plainly: no exclamation marks, no dash asides, no riddles the owner turned down", () => {
+    const riddles = /pressed in wax|morning of an interview|letter from the dog|lacrados|mañana de una entrevista|carta del perro/i;
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+      for (const l of LOCALES)
+        for (const idea of guide[l].ideas.items) {
+          for (const text of [idea.heading, idea.how, idea.borrow.line]) expect(text, `${slug} ${l}`).not.toMatch(/—| – /);
+          for (const text of [idea.heading, idea.how]) expect(text, `${slug} ${l}`).not.toMatch(/[!¡]|perfect for|perfecto para|perfecta para/i);
+          expect(idea.heading, `${slug} ${l}`).not.toMatch(riddles);
+        }
   });
 
   it("never mention Spain or its cities", () => {
