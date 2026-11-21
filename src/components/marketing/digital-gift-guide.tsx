@@ -6,6 +6,7 @@ import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { DIGITAL_GIFT_GUIDE } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
+import { CHIP } from "@/components/marketing/chip";
 import { templateSeo } from "@/content/template-seo";
 import { getManifest } from "@/templates/manifests";
 
@@ -76,7 +77,7 @@ export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }
             <li key={r}>
               <Link
                 href={`/gifts/${recipientSlug(r)}`}
-                className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                className={CHIP}
               >
                 {RECIPIENT_GUIDES[r][locale].label}
               </Link>
@@ -85,7 +86,7 @@ export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }
           <li>
             <Link
               href="/occasions"
-              className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+              className={CHIP}
             >
               {t("occasions")}
             </Link>
@@ -98,7 +99,7 @@ export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }
             <li key={slug}>
               <Link
                 href={`/gifts/${slug}`}
-                className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                className={CHIP}
               >
                 {GIFT_GUIDES[slug][locale].label}
               </Link>
@@ -107,7 +108,7 @@ export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }
           <li>
             <Link
               href={DIGITAL_CARDS_PATH}
-              className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+              className={CHIP}
             >
               {guide.cards}
             </Link>

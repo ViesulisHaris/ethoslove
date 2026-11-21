@@ -1,4 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import { PAGE_UPDATED } from "./page-dates";
 
 /**
  * /digital-cards: the page that says what a digital card is. The owner's category line is "Digital
@@ -6,7 +7,8 @@ import type { GiftLocale } from "@/lib/gift/schema";
  * aimed at "digital cards" and "digital greeting cards" ("tarjetas digitales", "tarjeta de
  * felicitación digital"); /gifts keeps "digital gift" and the two link to each other.
  *
- * The category line appears once, as the eyebrow over the heading, and nowhere else.
+ * The category line appears once, as the eyebrow over the heading, and nowhere else: the breadcrumb
+ * search engines read has a plain name of its own.
  *
  * Every price comes in from PRODUCTS for the page's currency and the template count from the
  * manifests: nothing here is typed that the code knows better. What is free matches
@@ -17,9 +19,25 @@ export const DIGITAL_CARDS_PATH = "/digital-cards";
 /** The page's `?ref=` on the way into the editor (lib/attribution/ref.ts). */
 export const DIGITAL_CARDS_REF = "digital-cards";
 
-/** What the page needs from the code: prices as the visitor's currency writes them, and two counts. */
-/** `count` is how many templates there are; `ideas` how many ideas /gifts lists. */
-export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; count: number; ideas: number };
+/** The gift finder's address. The finder is another part of the growth build, so a build may not have it. */
+export const FINDER_LINK = "/gifts/finder";
+
+/**
+ * Whether the finder's page is in this build. A new page arrives with a date of its own in
+ * content/page-dates.ts, so the link to the finder appears with the page and never before it: a
+ * build without the finder shows no dead link. tests/unit/gift-guides.test.ts holds this answer to
+ * the page's file being there, and tests/e2e/gift-pages.spec.ts opens every link in the list.
+ */
+export function finderIsBuilt(): boolean {
+  return Object.hasOwn(PAGE_UPDATED, FINDER_LINK);
+}
+
+/**
+ * What the page needs from the code: prices as the visitor's currency writes them, two counts
+ * (`count` is how many templates there are, `ideas` how many ideas /gifts lists), and whether the
+ * finder's page exists to be linked to.
+ */
+export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; count: number; ideas: number; finder: boolean };
 
 export type CardKind = {
   title: string;
@@ -35,6 +53,8 @@ export type DigitalCardsCopy = {
   description: string;
   /** The owner's category line, exactly. */
   eyebrow: string;
+  /** The page's name in the breadcrumb search engines read: the plain words, without the maker's mark. */
+  breadcrumb: string;
   h1: string;
   definition: string;
   browse: string;
@@ -66,9 +86,10 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       title: "Tarjetas digitales: felicitaciones que se abren en el móvil",
       description: "Una tarjeta digital es una felicitación que se abre en el móvil, con tus fotos, una canción y tus palabras. Los cinco tipos, cómo se envía y cuánto cuesta.",
       eyebrow: "Tarjetas digitales de Tryethos",
+      breadcrumb: "Tarjetas digitales",
       h1: "Una tarjeta que se abre en su móvil",
       definition:
-        "Una tarjeta digital es una tarjeta que se abre y se pone en marcha en el móvil. Tiene una portada que se toca, algo que ocurre al tocarla y, dentro, tus fotos, una canción y un mensaje con tus palabras. La mandas en un enlace, o imprimes su código QR y lo metes en un sobre. No se instala nada y no hay nada que llevar a correos.",
+        "Una tarjeta digital es una tarjeta que se abre y cobra vida en el móvil. Tiene una portada que se toca, algo que ocurre al tocarla y, dentro, tus fotos, una canción y un mensaje con tus palabras. La mandas en un enlace, o imprimes su código QR y lo metes en un sobre. No se instala nada y no hay nada que llevar a correos.",
       browse: `Ver las ${f.count} tarjetas`,
       compare: {
         heading: "Tres cosas con casi el mismo nombre",
@@ -91,11 +112,11 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           },
           {
             title: "Tarjetas hechas con tus fotos",
-            body: "Hablan las fotos, y la tarjeta les pone un orden. Álbum de recortes, la que ves, pega hasta doce en una página como polaroids, una tira de fotomatón y un carrete, con una nota rasgada para una frase a mano. Otras las cuelgan en una galería o las cargan en una cámara de 2006. Cada pie de foto puede tener 140 caracteres.",
+            body: "Estas tarjetas son maneras de colocar tus fotos. Álbum de recortes, la que ves, pega hasta doce en una página como polaroids, una tira de fotomatón y un carrete, con una nota rasgada para una frase a mano. Otras las cuelgan en una galería o las cargan en una cámara de 2006. Cada pie de foto puede tener 140 caracteres.",
           },
           {
             title: "Tarjetas con un juego dentro",
-            body: "Hay que hacer algo para llegar a tu mensaje. En Arcade, la que ves, atrapan corazones que caen y cada nivel superado descubre una de tus fotos. Otras esconden la noticia bajo una capa que se rasca, o dentro de una galleta de la fortuna que se parte. Es el tipo para quien se moriría de vergüenza con una página de sentimientos, pero juega encantado para llegar a ellos.",
+            body: "Hay que hacer algo para llegar a tu mensaje. En Arcade, la que ves, atrapan corazones que caen y cada nivel superado descubre una de tus fotos. Otras esconden la noticia bajo una capa que se rasca, o dentro de una galleta de la fortuna que se parte. Es el tipo para quien se moriría de vergüenza con una página de sentimientos, pero juega con gusto para llegar a ellos.",
           },
           {
             title: "Tarjetas para una fecha del calendario",
@@ -116,11 +137,11 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           },
           {
             title: "Mete dentro lo vuestro",
-            body: "Su nombre y el tuyo, y un mensaje de hasta 4.000 caracteres. Las fotos salen de tu carrete: hasta veinte, según la tarjeta. Para la música, elige de la biblioteca, sube un archivo o busca una canción de verdad, que espera al final con treinta segundos que suenan con un toque.",
+            body: "Su nombre y el tuyo, y un mensaje de hasta 4.000 caracteres. Las fotos salen de tu carrete: hasta veinte, según la tarjeta. Para la música, elige de la biblioteca, sube un archivo o busca una canción de verdad: al final esperan treinta segundos de ella, a un toque.",
           },
           {
             title: "Publica y entra con tu email",
-            body: "Para publicar se pide tu email, sin contraseña: te llega un enlace y un código de seis cifras. Una tarjeta de pago se paga aquí, una sola vez. Hasta este paso todo ha sido gratis, el editor entero incluido.",
+            body: "Para publicar entras con tu email, sin contraseña: te llega un enlace y un código de seis cifras. Si la tarjeta es de pago puedes pagar primero, una sola vez, y entras después. Hasta este paso todo ha sido gratis, el editor entero incluido.",
           },
           {
             title: "Manda el enlace, o imprímelo",
@@ -165,7 +186,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           },
           {
             q: "¿Puedo hacer una tarjeta digital desde el móvil?",
-            a: "Sí. El editor funciona en el navegador del móvil y las fotos salen directamente del carrete. Diez minutos es un cálculo justo, más si te da por reescribir el mensaje.",
+            a: "Sí. El editor funciona en el navegador del móvil y las fotos salen directamente del carrete. Cuenta unos diez minutos, más si te da por reescribir el mensaje.",
           },
           {
             q: "¿Las tarjetas digitales caducan?",
@@ -177,7 +198,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         heading: "Por dónde seguir",
         links: [
           { href: "/gifts", label: `Regalos digitales: qué son, y ${f.ideas} ideas` },
-          { href: "/gifts/finder", label: "El buscador: tres preguntas, tres regalos" },
+          ...(f.finder ? [{ href: FINDER_LINK, label: "El buscador: tres preguntas, tres regalos" }] : []),
           { href: "/occasions", label: "Tarjetas por ocasión" },
           { href: "/templates", label: `Las ${f.count} tarjetas, una al lado de otra` },
         ],
@@ -190,6 +211,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
     title: "Digital Cards: Greeting Cards That Open on a Phone",
     description: "A digital card is a greeting card that opens and plays on a phone, with your photos, a song and your words. The five kinds, how to send one and what it costs.",
     eyebrow: "Digital cards by Tryethos",
+    breadcrumb: "Digital cards",
     h1: "A card that opens on their phone",
     definition:
       "A digital card is a card that opens and plays on a phone. It has a front they tap, something that happens when they do, and inside it your photos, a song and a message in your own words. You send it as a link, or print its QR code and put it in an envelope. Nothing is installed and nothing goes in the post.",
@@ -215,7 +237,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         },
         {
           title: "Cards built from your photos",
-          body: "The photos do the talking and the card gives them an order. Scrapbook, shown here, tapes up to twelve onto a page as polaroids, a photo-booth strip and a roll of film, with a torn note for one handwritten line. Others hang them in a gallery or load them onto a camera from 2006. Each caption can be 140 characters.",
+          body: "These cards are layouts for your photos. Scrapbook, shown here, tapes up to twelve onto a page as polaroids, a photo-booth strip and a roll of film, with a torn note for one handwritten line. Others hang them in a gallery or load them onto a camera from 2006. Each caption can be 140 characters.",
         },
         {
           title: "Cards with a game in them",
@@ -244,7 +266,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         },
         {
           title: "Publish, and sign in with your email",
-          body: "Publishing asks for your email and no password: you are sent a link and a six-digit code. A paid card is paid for here, once. Up to this step everything has been free, the whole editor included.",
+          body: "To publish you sign in with your email and no password: you are sent a link and a six-digit code. For a paid card you can pay first, once, and are signed in afterwards. Up to this step everything has been free, the whole editor included.",
         },
         {
           title: "Send the link, or print it",
@@ -301,7 +323,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       heading: "Where to go from here",
       links: [
         { href: "/gifts", label: `Digital gifts: what they are, and ${f.ideas} ideas` },
-        { href: "/gifts/finder", label: "The finder: three questions, three gifts" },
+        ...(f.finder ? [{ href: FINDER_LINK, label: "The finder: three questions, three gifts" }] : []),
         { href: "/occasions", label: "Cards by occasion" },
         { href: "/templates", label: `All ${f.count} cards, side by side` },
       ],

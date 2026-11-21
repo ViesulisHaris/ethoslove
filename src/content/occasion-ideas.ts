@@ -83,7 +83,7 @@ export const SAMPLE_FIELDS: Record<ListedOccasion, Record<string, string[]>> = {
     "text-thread": ["lines", "lines"],
     constellations: ["finalLine"],
     vinyl: ["album"],
-    "pack-your-bags": ["clues", "clues", "clues", "when"],
+    "pack-your-bags": ["-", "-", "clues", "clues", "clues", "when"],
     "paper-crane": ["lines", "lines"],
     scrapbook: ["headline", "tag"],
     "the-letter": ["freeNote"],
@@ -136,7 +136,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "bouquet",
           heading: "Flowers that last past Sunday",
-          body: "Choose every stem yourself, up to 24: tulips, peonies, ranunculus, lilies, in the colours of the ones she grows or the ones she buys for herself. The card tucked inside holds 30 characters, enough for “From the one who picked yours”. Check the date before you schedule it: Mother's Day is the second Sunday of May in the US, and in the UK Mothering Sunday falls in March, three weeks before Easter.",
+          body: "Choose every stem yourself, up to 24: tulips, peonies, ranunculus, lilies, in the colours of the ones she grows or the ones she buys for herself. The card tucked inside holds 30 characters, enough for “From the one who picked yours”. Check the date before you schedule it: Mother's Day is the second Sunday of May in the US, and in the UK Mothering Sunday falls three weeks before Easter, in March or early April.",
         },
         {
           template: "jar-of-reasons",
@@ -151,7 +151,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "music-box",
           heading: "The lullaby, and her photos in the mirror",
-          body: "She winds a key three turns and the lid lifts on a ballerina or two swans, turning while the box plays Brahms' Lullaby, Swan Lake or Für Elise. Choose the lullaby if she sang to you. Up to eight photos surface one at a time in the mirror inside the lid, and when the spring runs down a folded letter rises out of the velvet.",
+          body: "A lacquered music box that she winds herself: three turns of the key and the lid lifts. Of its three tunes, choose Brahms' Lullaby if she sang to you. Put your photos in the order she would tell the story, eight at most, because they come up in the mirror inside the lid one at a time, with the caption of each on a paper slip. When the spring runs down, a folded letter rises out of the velvet.",
         },
         {
           template: "garden",
@@ -161,12 +161,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "popup-card",
           heading: "A card that stands itself up on the shelf",
-          body: "The card she would have propped on the shelf, except that this one unfolds by itself: a paper cake rises out of the crease with balloons behind it. Change the pennants from “happy birthday” to your own 20 characters, “to the best one” fits, and leave the age empty so the cake has five candles and no number. Your letter is inside the lid, in handwriting.",
+          body: "The card she would have propped on the shelf, except that this one unfolds by itself: a paper cake rises out of the crease with balloons behind it. Change the pennants from “happy birthday” to your own 20 characters, “to the best one” fits, and leave the age empty so the cake has five candles and no number. Inside the lid, in handwriting, is your letter.",
         },
         {
           template: "keepsake",
           heading: "A locket with the month you were born",
-          body: "A parcel sealed with wax that opens onto a box of saved things: your first photo under dried flowers, a ticket, one word torn from a book and a gold locket that opens on a tap to your second photo. Engrave the locket with the month you arrived, “since March 1994”, and make the torn-out word hers: “Home”. Nine photos fit.",
+          body: "She breaks a wax seal and finds a box of things somebody kept. Decide which two photos go first, because their places are fixed: the first lies under dried flowers at the top, and the second is inside a gold locket she opens with a tap. Engrave the locket with the month you arrived, “since March 1994”, and make the word torn from a book hers: “Home”. Seven more photos are pressed in below, like pages.",
         },
         {
           template: "bloom",
@@ -196,17 +196,17 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "jar-of-reasons",
           heading: "Una nota por cada año que lleva siendo tu madre",
-          body: "Un frasco de notas dobladas que salen de una en una al agitar el móvil. Escribe una por cada año que lleváis juntos, y que cada nota sea algo que hizo, no algo que es: “Fingiste que la tostada quemada te gustaba así.” Ponle al frasco su propia etiqueta, “34 cosas que hiciste y que vi”, y empieza por tu foto más antigua: las fotos van con las primeras notas, en orden.",
+          body: "Un frasco de notas dobladas que salen de una en una al agitar el móvil. Escribe una por cada uno de esos años, y que cada nota sea algo que hizo, no algo que es: “Fingiste que la tostada quemada te gustaba así.” Ponle al frasco su propia etiqueta, “34 cosas que hiciste y que vi”, y empieza por tu foto más antigua: las fotos van con las primeras notas, en orden.",
         },
         {
           template: "museum",
           heading: "Una galería con las fotos en las que sale ella",
-          body: "Las madres hacen las fotos, así que faltan en casi todas. Busca aquellas en las que sale y cuelga cada una en su propia sala, hasta veinte, con una placa escrita por ti: “Mujer con dos niños y la compra, 1996”. Llama a la exposición “Retrato de una madre, de 1989 a hoy”. La última pared es tu mensaje, compuesto como el texto de un comisario.",
+          body: "Las madres hacen las fotos, así que faltan en casi todas. Busca aquellas en las que sale y cuelga cada una en su propia sala, hasta veinte, con una placa escrita por ti: “Mujer con dos niños y la compra, 1996”. Llama a la exposición “Retrato de una madre, de 1989 a hoy”. Tu mensaje va en la última pared, como el texto de un comisario.",
         },
         {
           template: "music-box",
           heading: "La nana, y sus fotos en el espejo",
-          body: "Da tres vueltas a una llave y la tapa se abre sobre una bailarina o dos cisnes, que giran mientras la caja toca la Canción de cuna de Brahms, El lago de los cisnes o Para Elisa. Elige la nana si te cantaba. Hasta ocho fotos van apareciendo una a una en el espejo de la tapa y, cuando se acaba la cuerda, del terciopelo sale una carta doblada.",
+          body: "Una caja de música lacada a la que da cuerda ella misma: tres vueltas de llave y la tapa se levanta. De sus tres melodías, elige la Canción de cuna de Brahms si te cantaba. Pon las fotos en el orden en que ella contaría la historia, ocho como máximo, porque en el espejo de la tapa aparecen de una en una, con el pie de cada una en un papelito. Cuando se acaba la cuerda, del terciopelo sale una carta doblada.",
         },
         {
           template: "garden",
@@ -216,12 +216,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "popup-card",
           heading: "Una tarjeta que se pone de pie sola",
-          body: "La tarjeta que habría dejado en la estantería, solo que esta se despliega sola: una tarta de papel se levanta del pliegue, con globos detrás. Cambia los banderines de “feliz cumple” por tus propios 20 caracteres, “a la mejor del mundo” cabe justo, y deja la edad vacía para que la tarta lleve cinco velas y ningún número. Tu carta está dentro de la tapa, escrita a mano.",
+          body: "La tarjeta que habría dejado en la estantería, solo que esta se despliega sola: una tarta de papel se levanta del pliegue, con globos detrás. Cambia los banderines de “feliz cumple” por tus propios 20 caracteres, “a la mejor del mundo” cabe justo, y deja la edad vacía para que la tarta lleve cinco velas y ningún número. Dentro de la tapa, escrita a mano, va tu carta.",
         },
         {
           template: "keepsake",
           heading: "Un relicario con el mes en que naciste",
-          body: "Un paquete con sello de lacre que se abre sobre una caja de cosas guardadas: tu primera foto bajo flores secas, un billete, una palabra arrancada de un libro y un relicario de oro que se abre con un toque y enseña tu segunda foto. Graba dentro el mes en que llegaste, “desde marzo, 1994”, y que la palabra arrancada sea suya: “Casa”. Caben nueve fotos.",
+          body: "Rompe un sello de lacre y encuentra una caja de cosas que alguien guardó. Decide qué dos fotos van primero, porque tienen sitio fijo: la primera queda bajo flores secas, arriba del todo, y la segunda va dentro de un relicario de oro que se abre con un toque. Graba dentro el mes en que llegaste, “desde marzo, 1994”, y que la palabra arrancada de un libro sea suya: “Casa”. Debajo van otras siete fotos, prensadas como páginas.",
         },
         {
           template: "bloom",
@@ -244,12 +244,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "front-page",
           heading: "He is the headline, for once",
-          body: "A newspaper with his name on the masthead and him on the front. Headline: “LOCAL MAN FIXES TAP, REFUSES TO CALL IT LUCK”. Weather box: “Dry, with a strong chance of the same three stories”. Then eight classified ads, which is where the family jokes go: “WANTED: the good scissors. Last seen 2009. No questions asked.” Father's Day is the third Sunday of June in the US and the UK.",
+          body: "A newspaper with his name on the masthead and him on the front. Headline: “LOCAL MAN FIXES TAP, REFUSES TO CALL IT LUCK”. Weather box: “Dry, with a strong chance of the same three stories”. Then eight classified ads for the family jokes: “WANTED: the good scissors. Last seen 2009. No questions asked.” Father's Day is the third Sunday of June in the US and the UK.",
         },
         {
           template: "museum",
           heading: "The Museum of Things He Fixed",
-          body: "Walk round your home and photograph six things he built, mended or assembled: the shelf, the bike, the wobbly chair that no longer wobbles. Hang each in a room of its own with a plaque: “Shelf, 2011. Still level.” Put the years on every plaque, keep one photo of the man himself for the last room, and let the wall text say thank you.",
+          body: "Walk round your home and photograph six things he built, mended or assembled: the shelf, the bike, the wobbly chair that no longer wobbles. Hang each in a room of its own with a plaque: “Shelf, 2011. Still level.” Put the years on every plaque, keep one photo of the man himself for the last frame, and let the wall text after it say thank you.",
         },
         {
           template: "jar-of-reasons",
@@ -279,7 +279,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "The line you have never said out loud",
-          body: "Fathers get the shortest messages of anyone, so the free version suits him: a note of up to 500 characters under a wax seal, with a song. One thing he did and what it meant: “I check the oil because you taught me to, and I think of you every time.” Press your own initial into the wax, and don't add a joke at the end.",
+          body: "Fathers get the shortest messages of anyone. The free version suits him: a note of up to 500 characters under a wax seal, with a song. One thing he did and what it meant: “I check the oil because you taught me to, and I think of you every time.” Press your own initial into the wax, and don't add a joke at the end.",
         },
         {
           template: "text-thread",
@@ -299,17 +299,17 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "front-page",
           heading: "Por una vez, el titular es él",
-          body: "Un periódico con su nombre en la cabecera y él en portada. Titular: “VECINO ARREGLA EL GRIFO Y DICE QUE NO FUE SUERTE”. El tiempo: “Seco, con riesgo alto de las tres historias de siempre”. Y ocho anuncios clasificados, que es donde van las bromas de familia: “SE BUSCAN las tijeras buenas. Vistas por última vez en 2009.” El Día del Padre es el tercer domingo de junio en México, Argentina y Estados Unidos, y el 19 de marzo en otros países.",
+          body: "Un periódico con su nombre en la cabecera y él en portada. Titular: “VECINO ARREGLA EL GRIFO Y DICE QUE NO FUE SUERTE”. El tiempo: “Seco, con riesgo alto de las tres historias de siempre”. Y ocho anuncios clasificados para las bromas de familia: “SE BUSCAN las tijeras buenas. Vistas por última vez en 2009.” El Día del Padre es el tercer domingo de junio en México, Argentina y Estados Unidos, y el 19 de marzo en otros países.",
         },
         {
           template: "museum",
           heading: "El Museo de las Cosas que Arregló",
-          body: "Date una vuelta por casa y haz fotos a seis cosas que montó, arregló o construyó: la estantería, la bici, la silla que cojeaba y ya no cojea. Cuelga cada una en su sala, con su placa: “Estantería, 2011. Sigue recta.” Pon los años en todas las placas, deja para la última sala una foto suya y que el texto de la pared dé las gracias.",
+          body: "Date una vuelta por casa y haz fotos a seis cosas que montó, arregló o construyó: la estantería, la bici, la silla que cojeaba y ya no cojea. Cuelga cada una en su sala, con su placa: “Estantería, 2011. Sigue recta.” Pon los años en todas las placas, deja para el último marco una foto suya y que el texto de la pared, que viene después, dé las gracias.",
         },
         {
           template: "jar-of-reasons",
           heading: "Todo lo que te enseñó, nota a nota",
-          body: "Un frasco de notas dobladas que salen de una en una, hasta cien. Llénalo con lo que te enseñó, lo grande y lo pequeño: “A dar marcha atrás con remolque. Más o menos.” “Que se mira el aceite antes de un viaje largo.” “Que hay que aparecer.” Cambia la etiqueta, o el frasco prometerá razones por las que te quiero: “Cosas que me enseñaste (tardé lo mío)” cabe en sus 40 caracteres.",
+          body: "Un frasco con hasta cien notas dobladas, que va sacando una por una. Llénalo con lo que te enseñó, lo grande y lo pequeño: “A dar marcha atrás con remolque. Más o menos.” “Que se mira el aceite antes de un viaje largo.” “Que hay que aparecer.” Cambia la etiqueta, o el frasco prometerá razones por las que te quiero: “Cosas que me enseñaste (tardé lo mío)” cabe en sus 40 caracteres.",
         },
         {
           template: "vinyl",
@@ -334,7 +334,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "La frase que nunca has dicho en voz alta",
-          body: "A los padres les llegan los mensajes más cortos de todos, así que la versión gratis le va bien: una nota de hasta 500 caracteres bajo un sello de lacre, con una canción. Una cosa que hizo y lo que significó: “Miro el aceite porque me enseñaste tú, y me acuerdo de ti cada vez.” Pon tu inicial en el lacre, y no remates con un chiste.",
+          body: "A los padres les llegan los mensajes más cortos de todos. La versión gratis le va bien: una nota de hasta 500 caracteres bajo un sello de lacre, con una canción. Una cosa que hizo y lo que significó: “Miro el aceite porque me enseñaste tú, y me acuerdo de ti cada vez.” Pon tu inicial en el lacre, y no remates con un chiste.",
         },
         {
           template: "text-thread",
@@ -362,12 +362,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "our-timeline",
           heading: "From the first day to the last, on one road",
-          body: "The photo outside the building on day one, the awkward middle, the library at 2 a.m., the gown. A road draws itself down the page and pins each one with a label: “Sept 2022: the wrong lecture hall”, “Year two: the flat with the mould”. It ends on a countdown, so aim it at the first day of whatever comes next.",
+          body: "The photo outside the building on day one, the awkward middle, the library at 2 a.m., the gown. Each gets a stop on a road that draws itself as they scroll, under a label you write: “Sept 2023: the wrong lecture hall”, “Year two: the flat with the mould”. Add a countdown and it sits under the closing line: aim it at the first day of whatever comes next.",
         },
         {
           template: "front-page",
           heading: "The front page they have earned",
-          body: "A newspaper with their name on the masthead. Headline: “GRADUATE CONFIRMED: FAMILY MAY STOP ASKING ABOUT THE THESIS”. The price on the masthead takes 20 characters, so charge “Four years of fees”. Spend the classified ads on what is left over: “FOR SALE: 400 highlighters, lightly used. Collection only.” Your message runs in columns underneath.",
+          body: "A newspaper with their name on the masthead. Headline: “GRADUATE CONFIRMED: FAMILY MAY STOP ASKING ABOUT THE THESIS”. The price on the masthead takes 20 characters: charge “Four years of fees”. Spend the classified ads on what is left over: “FOR SALE: 400 highlighters, lightly used. Collection only.” Your message runs in columns underneath.",
         },
         {
           template: "fortune-cookie",
@@ -377,12 +377,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "scratch-card",
           heading: "The real present, under foil",
-          body: "For when the gift is something they can't unwrap in a car park: a trip, a watch waiting at home, help with a deposit. Each card hides a photo and a caption, and the last one says it in big letters: “Your first month's rent is on us.” Print “Class of 2026” on the foil, so the cover gives nothing away.",
+          body: "For when the gift is something they can't unwrap in a car park: a trip, a watch waiting at home, help with a deposit. Put a photo with its caption under the foil of each card, and the news on the last one, where it prints as a headline: “Your first month's rent is on us.” Print “Class of 2027” on the foil, and the outside tells them nothing.",
         },
         {
           template: "pack-your-bags",
           heading: "The trip after the ceremony, on a departures board",
-          body: "They pack a suitcase with your clues, one luggage tag at a time, five at most: “no textbooks”, “something to swim in”, “the shoes from the ceremony”. The lid shuts, a departures board clatters letter by letter to the city, and a boarding pass slides up with the date and the number of nights. Your letter is under the stub they tear off.",
+          body: "The present is the trip, and this is how they find out where. Choose plane, train or road trip; a road trip can list its stops in order, five at most. Write the packing list as clues: “no textbooks”, “something to swim in”, “the shoes from the ceremony”. They pack the case one luggage tag at a time, the departures board clatters letter by letter to the place, and your letter is under the ticket stub they tear off.",
         },
         {
           template: "museum",
@@ -392,7 +392,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "jar-of-reasons",
           heading: "A note from everyone who watched",
-          body: "Ask the family for one line each and put them all in the jar, with the name at the end of the note: “You rang me from the bus after every exam. I kept every voicemail. Gran.” It holds up to a hundred, so nobody is left out. Give it a label that isn't about love: “Signed, everyone who watched you do it”.",
+          body: "Ask the family for one line each and put them all in the jar, with the name at the end of the note: “You rang me from the bus after every exam. I kept every voicemail. Gran.” It holds up to a hundred: nobody has to be left out. Give it a label that isn't about love: “Signed, everyone who watched you do it”.",
         },
         {
           template: "the-letter",
@@ -402,7 +402,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "digicam",
           heading: "Four years on one camera roll",
-          body: "A pocket camera from 2006 with their photos on the roll, up to twelve, each with an orange date stamp and your caption in pixel type. Switch off “It's their birthday”, write “class of 2026” in the cut-out title and set the stamp to graduation day. After the last photo the shutter prints the whole roll as a strip.",
+          body: "A pocket camera from 2006 with their photos on the roll, up to twelve, each with an orange date stamp and your caption in pixel type. Switch off “It's their birthday”, write “class of 2027” in the cut-out title and set the stamp to graduation day. After the last photo the shutter prints the whole roll as a strip.",
         },
       ],
     },
@@ -417,12 +417,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "our-timeline",
           heading: "Del primer día al último, en un solo camino",
-          body: "La foto en la puerta el primer día, los cursos torpes del medio, la biblioteca a las dos de la madrugada, la toga. Un camino se dibuja página abajo y clava cada una con su etiqueta: “Sept. 2022: el aula equivocada”, “Segundo: el piso con humedades”. Termina en una cuenta atrás, así que apúntala al primer día de lo que venga después.",
+          body: "La foto en la puerta el primer día, los cursos torpes del medio, la biblioteca a las dos de la madrugada, la toga. Cada una tiene su parada en un camino que se dibuja al deslizar, bajo una etiqueta escrita por ti: “Sept. 2023: el aula equivocada”, “Segundo: el piso con humedades”. Ponle una cuenta atrás y sale bajo la frase final: apúntala al primer día de lo que venga después.",
         },
         {
           template: "front-page",
           heading: "La portada que se ha ganado",
-          body: "Un periódico con su nombre en la cabecera. Titular: “CONFIRMADO: LA FAMILIA YA PUEDE DEJAR DE PREGUNTAR POR EL TFG”. El precio de la cabecera admite 20 caracteres, así que cobra “Cuatro matrículas”. Y gasta los anuncios clasificados en lo que sobra: “SE VENDEN 400 subrayadores, poco uso. Recogida en mano.” Tu mensaje va debajo, en columnas.",
+          body: "Un periódico con su nombre en la cabecera. Titular: “CONFIRMADO: LA FAMILIA YA PUEDE DEJAR DE PREGUNTAR POR EL TFG”. El precio de la cabecera admite 20 caracteres: cobra “Cuatro matrículas”. Y gasta los anuncios clasificados en lo que sobra: “SE VENDEN 400 subrayadores, poco uso. Recogida en mano.” Tu mensaje va debajo, en columnas.",
         },
         {
           template: "fortune-cookie",
@@ -432,12 +432,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "scratch-card",
           heading: "El regalo de verdad, bajo el metalizado",
-          body: "Para cuando el regalo es algo que no se puede desenvolver en un aparcamiento: un viaje, un reloj que espera en casa, una ayuda para la fianza. Cada tarjeta esconde una foto y su pie, y la última lo dice en letras grandes: “El primer mes de alquiler lo ponemos nosotros.” Imprime “Promoción 2026” sobre el metalizado, para que la portada no cuente nada.",
+          body: "Para cuando el regalo es algo que no se puede desenvolver en un aparcamiento: un viaje, un reloj que espera en casa, una ayuda para la fianza. Pon una foto con su pie bajo el metalizado de cada tarjeta, y la noticia en la última, donde sale como un titular: “El primer mes de alquiler lo ponemos nosotros.” Imprime “Promoción 2027” sobre el metalizado, y lo de fuera no adelanta nada.",
         },
         {
           template: "pack-your-bags",
           heading: "El viaje de después, en un panel de salidas",
-          body: "Mete tus pistas en una maleta, una etiqueta cada vez, cinco como máximo: “ni un apunte”, “algo para bañarse”, “los zapatos de la ceremonia”. La tapa se cierra, un panel de salidas va girando letra a letra hasta la ciudad y sube una tarjeta de embarque con la fecha y las noches. Tu carta está debajo del resguardo que arranca.",
+          body: "El regalo es el viaje, y así se entera de adónde. Elige avión, tren o coche; un viaje en coche puede llevar sus paradas en orden, cinco como máximo. Escribe la lista de la maleta como pistas: “ni un apunte”, “algo para bañarse”, “los zapatos de la ceremonia”. Hace la maleta etiqueta a etiqueta, el panel de salidas gira letra a letra hasta el destino, y tu carta está debajo del resguardo que arranca.",
         },
         {
           template: "museum",
@@ -447,7 +447,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "jar-of-reasons",
           heading: "Una nota de cada persona que lo vio",
-          body: "Pide una frase a cada persona de la familia y mételas todas en el frasco, con el nombre al final de la nota: “Me llamabas desde el autobús después de cada examen. Guardo todos los audios. La abuela.” Caben hasta cien, así que no se queda nadie fuera. Ponle una etiqueta que no hable de amor: “Firmado: quienes te vimos hacerlo”.",
+          body: "Pide una frase a cada persona de la familia y mételas todas en el frasco, con el nombre al final de la nota: “Me llamabas desde el autobús después de cada examen. Guardo todos los audios. La abuela.” Caben hasta cien: no tiene por qué quedarse nadie fuera. Ponle una etiqueta que no hable de amor: “Firmado: quienes te vimos hacerlo”.",
         },
         {
           template: "the-letter",
@@ -457,7 +457,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "digicam",
           heading: "Cuatro años en un solo carrete",
-          body: "Una cámara de bolsillo de 2006 con sus fotos en el carrete, hasta doce, cada una con la fecha naranja y tu pie de foto en letra de píxeles. Desactiva “Es su cumpleaños”, escribe “promoción 2026” en el título recortado y pon en el sello el día de la graduación. Tras la última foto, el disparador imprime todo el carrete en una tira.",
+          body: "Una cámara de bolsillo de 2006 con sus fotos en el carrete, hasta doce, cada una con la fecha naranja y tu pie de foto en letra de píxeles. Desactiva “Es su cumpleaños”, escribe “promoción 2027” en el título recortado y pon en el sello el día de la graduación. Tras la última foto, el disparador imprime todo el carrete en una tira.",
         },
       ],
     },
@@ -480,12 +480,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "scratch-card",
           heading: "Will you stand next to me? Asked under foil",
-          body: "For asking a bridesmaid, a best man or a witness. They scratch through a few cards of the two of you, each with a photo and a caption, and the last one asks the question in big letters: “Will you stand next to me on the 14th?” The foil can carry a line of its own too, up to 30 characters: “Scratch. It's important.”",
+          body: "For asking a bridesmaid, a best man or a witness. They scratch through a few cards of the two of you, one photo and one caption apiece, until the last card asks in big letters: “Will you stand next to me on the 14th?” The foil can carry a line of its own too, up to 30 characters: “Scratch. It's important.”",
         },
         {
           template: "our-timeline",
           heading: "How they got here, seen from the outside",
-          body: "The couple know their story. They don't know it the way their friends watched it. Pin your photos of them along a road, with labels in your words: “2017: the wrong table at Sam's birthday”, “2019: ‘we're just friends’, part four”. Two to twenty stops. Aim the closing countdown at their first anniversary and it will still be counting when they open it again.",
+          body: "The couple know their story. They don't know it the way their friends watched it. Pin your photos of them along a road, with labels in your words: “2017: the wrong table at Sam's birthday”, “2019: ‘we're just friends’, part four”. Two to twenty stops. Add a countdown to their first anniversary and it will still be counting when they open it again.",
         },
         {
           template: "museum",
@@ -495,22 +495,22 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "music-box",
           heading: "From a parent, for the morning of",
-          body: "They wind a key three turns and a ballerina or two swans turn to Swan Lake, Brahms' Lullaby or Für Elise, while your photos surface in the mirror inside the lid, eight at most. Start with the oldest one you have and end on last week. When the tune slows, a folded letter lifts out of the velvet. Send it before the hairdresser arrives.",
+          body: "For the morning itself, before the hairdresser arrives. Load the mirror with eight photos in order, the oldest one you have first and last week's last: a new one comes up as the ballerina turns, or the two swans, if you choose them. When the tune slows, a folded letter lifts out of the velvet. Say there what you won't manage to say at the reception.",
         },
         {
           template: "the-letter",
           heading: "To the person you are marrying, an hour before",
-          body: "Written the night before and read alone, with a seal to break. The free note holds 500 characters, which is room for a promise and a joke. Sign off with “See you at the front. I'll be the one crying,”. A free note goes when you send it, so give the link to someone you trust and name the minute; timing it yourself comes with “Make it special”.",
+          body: "Written the night before and read alone, with a seal to break. The free note holds 500 characters: room for a promise and a joke. Sign off with “See you at the front. I'll be the one crying,”. A free note goes when you send it, so give the link to someone you trust and name the minute; timing it yourself comes with “Make it special”.",
         },
         {
           template: "keepsake",
           heading: "Something old: a locket with the date inside",
-          body: "A parcel under a wax seal, and in it a box of kept things: their first photo together under dried flowers, a ticket, one word torn from a book and a gold locket that opens onto a second photo. Engrave the date, “14 · 06 · 2026”, change the ticket to “admit two, for good” and make the torn-out word “Yes”.",
+          body: "Something old doesn't have to be an object. Three things in this box are yours to word: engrave the wedding date inside the gold locket, “14 · 06 · 2027”, change what the ticket admits them to, “admit two, for good”, and make the word torn from a book “Yes”. Put the earliest photo you have of the two of them first, where it lies under dried flowers, and the proposal second. The second photo is the one inside the locket.",
         },
         {
           template: "pack-your-bags",
           heading: "The honeymoon they don't know about yet",
-          body: "For the one who planned the honeymoon in secret. The other packs a suitcase with your clues, “nothing white”, “the good sunglasses”, “a book you won't open”, and a departures board clatters to the answer. The boarding pass has both your names on it, the date and the nights. Hand over the phone at the reception, after the cake.",
+          body: "For the one who planned the honeymoon in secret. Hand over your phone at the reception, after the cake, and let them pack: “nothing white”, “the good sunglasses”, “a book you won't open”. The lid shuts, a tag with the date swings from the handle and the departures board clatters to the answer. The ticket that slides up has both your names on it and the number of nights, thirty at most.",
         },
         {
           template: "jar-of-reasons",
@@ -524,7 +524,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       items: [
         {
           template: "the-toast",
-          heading: "El brindis, lo dieras o no",
+          heading: "El brindis, lo hicieras o no",
           body: "Dos copas y un menú de pie. Inclinan el móvil para servir, le dan un golpecito para brindar y el menú se abre con tu discurso. Escribe la primera frase, esa con la que todo el mundo se calla: “Por Ana y Marco, que tardaron nueve años en darse cuenta.” El lugar y la fecha salen impresos en el menú, y en las copas puede haber champán, vino o algo sin alcohol.",
         },
         {
@@ -535,12 +535,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "scratch-card",
           heading: "¿Te pones a mi lado? Preguntado bajo el metalizado",
-          body: "Para pedírselo a una dama de honor, a un padrino o a un testigo. Rascan unas cuantas tarjetas vuestras, cada una con su foto y su pie, y la última hace la pregunta en letras grandes: “¿Te pones a mi lado el día 14?” El metalizado también puede llevar su propia frase, de hasta 30 caracteres: “Rasca. Es importante.”",
+          body: "Para pedírselo a una dama de honor, a un padrino o a un testigo. Rascan unas cuantas tarjetas vuestras, con una foto y un pie en cada una, hasta que la última pregunta en letras grandes: “¿Te pones a mi lado el día 14?” El metalizado también puede llevar su propia frase, de hasta 30 caracteres: “Rasca. Es importante.”",
         },
         {
           template: "our-timeline",
           heading: "Cómo llegaron hasta aquí, visto desde fuera",
-          body: "La pareja se sabe su historia. No se la sabe como la vieron sus amigos. Clava tus fotos de los dos a lo largo de un camino, con etiquetas en tus palabras: “2017: la mesa equivocada del cumple”, “2019: ‘solo somos amigos’, parte 4”. De dos a veinte paradas. Apunta la cuenta atrás final a su primer aniversario y seguirá contando cuando lo vuelvan a abrir.",
+          body: "La pareja se sabe su historia. No se la sabe como la vieron sus amigos. Clava tus fotos de los dos a lo largo de un camino, con etiquetas en tus palabras: “2017: la mesa equivocada del cumple”, “2019: ‘solo somos amigos’, parte 4”. De dos a veinte paradas. Añade una cuenta atrás hasta su primer aniversario y seguirá contando cuando lo vuelvan a abrir.",
         },
         {
           template: "museum",
@@ -550,7 +550,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "music-box",
           heading: "De una madre o un padre, para esa mañana",
-          body: "Da tres vueltas a una llave y una bailarina o dos cisnes giran con El lago de los cisnes, la Canción de cuna de Brahms o Para Elisa, mientras tus fotos van saliendo en el espejo de la tapa, ocho como máximo. Empieza por la más antigua que tengas y acaba en la de la semana pasada. Cuando la melodía se frena, del terciopelo sale una carta doblada. Mándala antes de que empiece la peluquería.",
+          body: "Para esa misma mañana, antes de que empiece la peluquería. Carga el espejo con ocho fotos en orden, la más antigua que tengas primero y la de la semana pasada al final: sale una nueva mientras gira la bailarina, o los dos cisnes, si los eliges. Cuando la melodía se frena, del terciopelo sale una carta doblada. Di ahí lo que no vas a conseguir decir en el banquete.",
         },
         {
           template: "the-letter",
@@ -560,12 +560,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "keepsake",
           heading: "Algo viejo: un relicario con la fecha dentro",
-          body: "Un paquete con sello de lacre y, dentro, una caja de cosas guardadas: su primera foto juntos bajo flores secas, un billete, una palabra arrancada de un libro y un relicario de oro que se abre y enseña otra foto. Graba la fecha, “14 · 06 · 2026”, cambia el billete por “vale para dos, sin vuelta” y que la palabra arrancada sea “Sí”.",
+          body: "Para lo de llevar algo viejo no hace falta un objeto. En esta caja hay tres cosas que escribes tú: graba la fecha de la boda dentro del relicario de oro, “14 · 06 · 2027”, cambia a qué da entrada el billete, “vale para dos, sin vuelta”, y que la palabra arrancada de un libro sea “Sí”. Pon primero la foto más antigua que tengas de los dos, que queda bajo flores secas, y la de la pedida en segundo lugar. La segunda es la que va dentro del relicario.",
         },
         {
           template: "pack-your-bags",
           heading: "La luna de miel que aún no conoce",
-          body: "Para quien ha organizado la luna de miel en secreto. La otra persona mete tus pistas en una maleta, “nada blanco”, “las gafas de sol buenas”, “un libro que no vas a abrir”, y un panel de salidas gira hasta la respuesta. La tarjeta de embarque lleva vuestros dos nombres, la fecha y las noches. Pásale el móvil en el banquete, después de la tarta.",
+          body: "Para quien ha organizado la luna de miel en secreto. Pásale tu móvil en el banquete, después de la tarta, y que haga la maleta: “nada blanco”, “las gafas de sol buenas”, “un libro que no vas a abrir”. La tapa se cierra, una etiqueta con la fecha se balancea en el asa y el panel de salidas gira hasta la respuesta. El billete que sube lleva vuestros dos nombres y el número de noches, treinta como máximo.",
         },
         {
           template: "jar-of-reasons",
@@ -588,7 +588,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "passport",
           heading: "A passport with a stamp for every visit",
-          body: "Their name on the cover, a globe that turns, and a route drawn from your city to theirs with up to six stopovers. Every photo becomes a stamp on a page, up to ten, so use one from each visit. The nationality line is yours to write: “Dual citizen: here, and wherever you are”. The visa page holds your message.",
+          body: "Their name on the cover, a globe that turns, and a route drawn from your city to theirs with up to six stopovers. Every photo becomes a stamp on a page, up to ten: use one from each visit. The nationality line is yours to write: “Dual citizen: here, and wherever you are”. The visa page holds your message.",
         },
         {
           template: "midnight-countdown",
@@ -603,22 +603,22 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "text-thread",
           heading: "The good morning they wake up to",
-          body: "When you are hours apart, your evening is their morning. Write tonight what they will read at breakfast: messages that arrive one bubble at a time with the typing dots, up to forty. “You're asleep.” “I walked past the place with the bad coffee and missed you anyway.” Then the paragraph. A line that says only [photo] drops in the next picture.",
+          body: "When you are hours apart, your evening is their morning. Write tonight what they will read at breakfast, up to forty messages that come in one after another behind the typing dots: “You're asleep.” “I walked past the place with the bad coffee and missed you anyway.” Then the paragraph. To put a photo between two messages, write [photo] on a line by itself.",
         },
         {
           template: "constellations",
           heading: "The same sky, with your photos for stars",
-          body: "You can't share a room, and you do share a sky. Each photo is a star they tap to fly to, three to twelve of them; when the last one is found, lines join them into a heart, an infinity sign or a star and your closing line appears: “Same sky. Go to the window, I'm at mine.” Send it when it is dark where they are.",
+          body: "You can't share a room, and you do share a sky. Each photo is a star they tap to fly to, three to twelve of them. Once the last is found, the stars link up into the shape you chose, a heart, a star or an infinity sign, with your closing line under it: “Same sky. Go to the window, I'm at mine.” Send it when it is dark where they are.",
         },
         {
           template: "vinyl",
           heading: "The song you send each other, on a record",
-          body: "Every long-distance couple has one song that gets sent back and forth. Put it on a turntable: they drop the needle, the record spins, and your photos flip past as album covers, twelve at most. Name the album “Songs for a Six-Hour Difference” and let the liner notes carry your message. A voice message at the end is worth adding here.",
+          body: "Every long-distance couple has one song that gets sent back and forth. Put it on a turntable: they drop the needle, the record spins, and your photos flip past as album covers, twelve at most. Name the album “Songs for a Six-Hour Difference” and let the liner notes carry your message. Add a voice message for the last screen and say when you first sent it to them.",
         },
         {
           template: "pack-your-bags",
           heading: "The next visit, sprung as a surprise",
-          body: "Book the trip to them, then tell them like this. They pack a suitcase with your clues, “my worst jumper, by request”, “an appetite”, “the key you gave me”, and a departures board clatters letter by letter to their own city. The ticket shows the date you wrote, “Fri 12 Dec, 19:40”, and the number of nights.",
+          body: "Book the trip to them, then tell them like this. Set “Going to” as their own city and “Leaving from” as yours. They pack your clues, “my worst jumper, by request”, “an appetite”, “the key you gave me”, with no idea where the case is headed, until the departures board spells out the town they are standing in. Put the real arrival on the ticket: “Fri 12 Dec, 19:40”.",
         },
         {
           template: "paper-crane",
@@ -648,12 +648,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "passport",
           heading: "Un pasaporte con un sello por cada visita",
-          body: "Su nombre en la portada, un globo que gira y una ruta dibujada de tu ciudad a la suya, con hasta seis escalas. Cada foto se convierte en un sello en una página, hasta diez, así que usa una de cada visita. La línea de la nacionalidad la escribes tú: “Doble nacionalidad: aquí y contigo”. La página del visado guarda tu mensaje.",
+          body: "Su nombre en la portada, un globo que gira y una ruta dibujada de tu ciudad a la suya, con hasta seis escalas. Cada foto se convierte en un sello en una página, hasta diez: usa una de cada visita. La línea de la nacionalidad la escribes tú: “Doble nacionalidad: aquí y contigo”. La página del visado guarda tu mensaje.",
         },
         {
           template: "midnight-countdown",
           heading: "Una cuenta atrás hasta la puerta de llegadas",
-          body: "Pon el reloj en el minuto en que aterriza tu vuelo, en su zona horaria, y manda el enlace semanas antes. Hasta entonces muestra el tiempo que falta bajo un cielo que oscurece, con el título “Hasta que salga por llegadas con demasiadas maletas”. A cero estallan los fuegos artificiales y se abre, con una última frase tuya: “Levanta la vista. Soy quien saluda como un idiota.”",
+          body: "Pon el reloj en el minuto en que aterriza tu vuelo, en su zona horaria, y manda el enlace semanas antes. Hasta entonces muestra el tiempo que falta bajo un cielo que oscurece, con el título “Hasta que salga por llegadas con demasiadas maletas”. A cero estallan los fuegos artificiales y se abre, con una última frase tuya: “Levanta la vista. Soy quien saluda sin vergüenza.”",
         },
         {
           template: "snow-globe",
@@ -663,22 +663,22 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "text-thread",
           heading: "Los buenos días que le esperan al despertar",
-          body: "Con horas de diferencia, tu noche es su mañana. Escribe hoy lo que leerá en el desayuno: mensajes que llegan burbuja a burbuja con los puntitos de escribiendo, hasta cuarenta. “Estás durmiendo.” “He pasado por el sitio del café malo y te he echado de menos igual.” Y luego, el párrafo. Una línea que solo diga [photo] coloca la siguiente foto.",
+          body: "Con horas de diferencia, tu noche es su mañana. Escribe hoy lo que leerá en el desayuno, hasta cuarenta mensajes que van entrando uno tras otro después de los puntitos: “Estás durmiendo.” “He pasado por el sitio del café malo y te he echado de menos igual.” Y luego, el párrafo. Para meter una foto entre dos mensajes, escribe [photo] en una línea aparte.",
         },
         {
           template: "constellations",
           heading: "El mismo cielo, con tus fotos por estrellas",
-          body: "No compartís habitación, pero sí cielo. Cada foto es una estrella que toca para volar hasta ella, de tres a doce; cuando encuentra la última, unas líneas las unen en un corazón, un infinito o una estrella y aparece tu frase final: “El mismo cielo. Asómate a la ventana, yo estoy en la mía.” Mándalo cuando allí sea de noche.",
+          body: "No compartís habitación, pero sí cielo. Cada foto es una estrella que toca para volar hasta ella, de tres a doce. Al encontrar la última, las estrellas se enlazan en la figura que elegiste, un corazón, una estrella o un infinito, con tu frase final debajo: “El mismo cielo. Asómate a la ventana, yo estoy en la mía.” Mándalo cuando allí sea de noche.",
         },
         {
           template: "vinyl",
           heading: "La canción que os mandáis, en un disco",
-          body: "Toda pareja a distancia tiene una canción que va y viene. Ponla en un tocadiscos: baja la aguja, el disco gira y tus fotos pasan como portadas, doce como máximo. Llama al disco “Canciones con seis horas de diferencia” y deja tu mensaje en las notas del libreto. Aquí merece la pena añadir un mensaje de voz al final.",
+          body: "Toda pareja a distancia tiene una canción que va y viene. Ponla en un tocadiscos: baja la aguja, el disco gira y tus fotos pasan como portadas, doce como máximo. Llama al disco “Canciones con seis horas de diferencia” y deja tu mensaje en las notas del libreto. Añade un mensaje de voz para la última pantalla y cuenta cuándo se la mandaste por primera vez.",
         },
         {
           template: "pack-your-bags",
-          heading: "La próxima visita, soltada como sorpresa",
-          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Mete tus pistas en una maleta, “mi peor jersey, a petición tuya”, “hambre”, “la llave que me diste”, y un panel de salidas gira letra a letra hasta su propia ciudad. El billete enseña la fecha que escribiste, “vie. 12 dic., 19:40”, y el número de noches.",
+          heading: "La próxima visita, anunciada por sorpresa",
+          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en “Destino” y la tuya en “Salida”. Mete tus pistas en la maleta, “mi peor jersey, a petición tuya”, “hambre”, “la llave que me diste”, sin saber adónde va, hasta que el panel de salidas deletrea la ciudad en la que está. Pon en el billete la llegada de verdad: “vie. 12 dic., 19:40”.",
         },
         {
           template: "paper-crane",
@@ -711,7 +711,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "paper-crane",
           heading: "Six folds for six things you should have said",
-          body: "They fold a sheet of paper by pressing and holding each crease. Let go early and it springs back, so it can't be rushed, which is the right speed for an apology. Each fold shows one line, three to six of them: “I interrupted you, and you were right.” The line left on the table when the crane has flown is your last word: “I'll listen first next time.”",
+          body: "They fold a sheet of paper by pressing and holding each crease. Let go early and it springs back. It can't be rushed, and an apology shouldn't be. Each fold shows one line, three to six of them: “I interrupted you, and you were right.” The line left on the table when the crane has flown is your last word: “I'll listen first next time.”",
         },
         {
           template: "text-thread",
@@ -721,7 +721,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "bloom",
           heading: "One flower, and nothing to answer",
-          body: "A single flower on a windowsill that opens only while they keep a finger on the screen. If they are not ready, it stays shut, and that is the point: nothing here asks for a reply. When it is open, your message is inside. Keep it to three sentences, choose a daisy or a tulip, and turn the stickers off so it stays quiet.",
+          body: "A single flower on a windowsill that opens only while they keep a finger on the screen. If they are not ready, it stays shut. Nothing here asks for a reply. When it is open, your message is inside. Keep it to three sentences, choose a daisy or a tulip, and turn the stickers off so it stays quiet.",
         },
         {
           template: "bouquet",
@@ -756,7 +756,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "paper-crane",
           heading: "Seis pliegues para seis cosas que debiste decir",
-          body: "Dobla una hoja de papel manteniendo pulsado cada pliegue. Si suelta antes de tiempo se abre otra vez, así que no se puede hacer con prisa, que es la velocidad adecuada para una disculpa. Cada pliegue enseña una frase, de tres a seis: “Te interrumpí, y tenías razón.” La que queda en la mesa cuando la grulla se va es tu última palabra: “La próxima vez escucho primero.”",
+          body: "Dobla una hoja de papel manteniendo pulsado cada pliegue. Si suelta antes de tiempo, se abre otra vez. No se puede hacer con prisa, y una disculpa tampoco. Cada pliegue enseña una frase, de tres a seis: “Te interrumpí, y tenías razón.” La que queda en la mesa cuando la grulla se va es tu última palabra: “La próxima vez escucho primero.”",
         },
         {
           template: "text-thread",
@@ -766,7 +766,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "bloom",
           heading: "Una sola flor, y nada que contestar",
-          body: "Una flor en un alféizar que solo se abre mientras mantiene el dedo en la pantalla. Si todavía no quiere, se queda cerrada, y de eso se trata: aquí nada pide respuesta. Cuando se abre, tu mensaje está dentro. Que sean tres frases, elige una margarita o un tulipán y desactiva las pegatinas para que no haga ruido.",
+          body: "Una flor en un alféizar que solo se abre mientras mantiene el dedo en la pantalla. Si todavía no quiere, se queda cerrada. Aquí nada pide respuesta. Cuando se abre, tu mensaje está dentro. Que sean tres frases, elige una margarita o un tulipán y desactiva las pegatinas para que no haga ruido.",
         },
         {
           template: "bouquet",
@@ -804,7 +804,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "sticker-bomb",
           heading: "Twelve taps for the middle of their workday",
-          body: "A blank page and one instruction. Every tap slaps down a sticker, cats, hamsters, your own photos as polaroids, and under some of them a label strip you wrote: “best thing in my week”, “has never once been boring”. It is quick to make and quicker to open, which is the right size for a Wednesday.",
+          body: "A blank page and one instruction. Every tap slaps down a sticker, cats, hamsters, your own photos as polaroids, and under some of them a label strip you wrote: “best thing in my week”, “has never once been boring”. Quick to make and quicker to open: about right for a Wednesday.",
         },
         {
           template: "kawaii",
@@ -864,7 +864,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "sticker-bomb",
           heading: "Doce toques en mitad de su jornada",
-          body: "Una página vacía y una instrucción. Cada toque pega un sticker, gatos, hámsteres, tus propias fotos como polaroids, y bajo algunos una tira de rotuladora escrita por ti: “lo mejor de mi semana”, “no ha aburrido nunca a nadie”. Se hace rápido y se abre más rápido, que es el tamaño justo para un miércoles.",
+          body: "Una página vacía y una instrucción. Cada toque pega un sticker, gatos, hámsteres, tus propias fotos como polaroids, y bajo algunos una tira de rotuladora escrita por ti: “lo mejor de mi semana”, “no ha aburrido nunca a nadie”. Se hace rápido y se abre más rápido: lo justo para un miércoles.",
         },
         {
           template: "kawaii",
@@ -894,7 +894,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "favorite-person",
           heading: "Una página que dice quién es para ti",
-          body: "Levanta una hoja de papel de seda con su nombre y debajo hay una página de álbum en acuarela: tus fotos en polaroids, perlas, flor de cerezo, un lazo de raso y, en el centro, una nota rasgada con 22 caracteres tuyos. “mi humano favorito” cabe. “lo mejor de mi día” también. Cada toque en la página dibuja un corazón.",
+          body: "Levanta una hoja de papel de seda con su nombre y debajo hay una página de álbum en acuarela: tus fotos en polaroids, perlas, flor de cerezo, un lazo de raso y, en el centro, una nota rasgada con 22 caracteres tuyos. “mi persona favorita” cabe. “lo mejor de mi día” también. Cada toque en la página dibuja un corazón.",
         },
         {
           template: "the-council",
@@ -942,7 +942,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "jar-of-reasons",
           heading: "A jar of thank-yous for the host",
-          body: "The person who cooks for twelve gets a “thanks, that was great” at the door. Give them a jar instead, to shake out the morning after: “For pretending the gravy was meant to be like that.” “For the chair you found for my new boyfriend.” Three notes is the minimum. Change the label, so it doesn't promise reasons I love you: “Thank you for the following”.",
+          body: "The person who cooks for twelve gets a “thanks, that was great” at the door. Give them a jar instead, to shake out the morning after: “For pretending the gravy was meant to be like that.” “For the chair you found for my new boyfriend.” Three notes is the minimum. Give the jar a label of its own, or it promises reasons I love you: “Thank you for the following”.",
         },
         {
           template: "fall-for-you",
@@ -982,7 +982,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-toast",
           heading: "Un brindis para quien no pudo coger el avión",
-          body: "Dos copas sobre lino y un menú entre ellas. Inclina el móvil para servir y le da un golpecito para brindar, y el menú se abre con lo que habrías dicho de pie. Primera frase: “Por quienes estáis en la mesa, y por quien está en la pantalla.” Pon la casa en el menú, “En casa de la tía Jo, mesa de los niños”, y llena las copas con algo sin alcohol si es la norma.",
+          body: "Dos copas sobre lino y un menú entre ellas. Inclina el móvil para servir, lo toca una vez para chocar las copas, y del menú sale lo que habrías dicho de pie. Primera frase: “Por quienes estáis en la mesa, y por quien está en la pantalla.” Pon la casa en el menú, “En casa de la tía Jo, mesa de los niños”, y llena las copas con algo sin alcohol si es la norma.",
         },
         {
           template: "jar-of-reasons",

@@ -14,15 +14,23 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * /x that has none of its own. A page without a date sends none, which is honest too. Blog posts
  * carry their own dates (content/blog).
  */
+/**
+ * The day the growth build's "pages" area last changed what its pages say: the six gift pages by
+ * kind, /digital-cards, the eight new idea lists, and the links /gifts, the /gifts/for-* pages,
+ * birthday and anniversary gained. None of it is live yet, so this is a date on a branch (21 Nov:
+ * the corrections after review). The day it ships, set this one line to that day.
+ */
+const GROWTH_PAGES_DAY = "2026-11-21";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
   "/": "2026-11-15",
-  // 20 Nov: the gift pages by kind (content/gift-guides.ts) and /digital-cards arrived, and /gifts and
-  // every /gifts/for-* page gained their links.
-  "/gifts": "2026-11-20",
-  "/gifts/*": "2026-11-20",
-  "/digital-cards": "2026-11-20",
+  // The gift pages by kind (content/gift-guides.ts) and /digital-cards are new, and /gifts and every
+  // /gifts/for-* page gained their links.
+  "/gifts": GROWTH_PAGES_DAY,
+  "/gifts/*": GROWTH_PAGES_DAY,
+  "/digital-cards": GROWTH_PAGES_DAY,
   // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
   "/templates": "2026-11-11",
   "/templates/*": "2026-10-25",
@@ -42,20 +50,20 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/templates/light-the-candles": "2026-11-15",
   "/templates/string-the-lights": "2026-11-15",
   "/occasions/*": "2026-10-25",
-  // 20 Nov: eight occasions gained their idea lists (content/occasion-ideas.ts), and birthday and
+  // Eight occasions gained their idea lists (content/occasion-ideas.ts), and birthday and
   // anniversary a row of links to the gift pages by kind.
-  "/occasions/birthday": "2026-11-20",
-  "/occasions/anniversary": "2026-11-20",
+  "/occasions/birthday": GROWTH_PAGES_DAY,
+  "/occasions/anniversary": GROWTH_PAGES_DAY,
   "/occasions/valentines": "2026-11-13",
   "/occasions/christmas": "2026-11-13",
-  "/occasions/long-distance": "2026-11-20",
-  "/occasions/thanksgiving": "2026-11-20",
-  "/occasions/wedding": "2026-11-20",
-  "/occasions/graduation": "2026-11-20",
-  "/occasions/mothers-day": "2026-11-20",
-  "/occasions/fathers-day": "2026-11-20",
-  "/occasions/apology": "2026-11-20",
-  "/occasions/just-because": "2026-11-20",
+  "/occasions/long-distance": GROWTH_PAGES_DAY,
+  "/occasions/thanksgiving": GROWTH_PAGES_DAY,
+  "/occasions/wedding": GROWTH_PAGES_DAY,
+  "/occasions/graduation": GROWTH_PAGES_DAY,
+  "/occasions/mothers-day": GROWTH_PAGES_DAY,
+  "/occasions/fathers-day": GROWTH_PAGES_DAY,
+  "/occasions/apology": GROWTH_PAGES_DAY,
+  "/occasions/just-because": GROWTH_PAGES_DAY,
   "/games": "2026-11-13",
   "/games/rather": "2026-10-24",
   "/games/deck": "2026-11-13",

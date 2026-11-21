@@ -4,6 +4,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { GIFT_GUIDES, GUIDES_FOR_OCCASION } from "@/content/gift-guides";
 import { Link } from "@/i18n/navigation";
+import { CHIP } from "@/components/marketing/chip";
 import { FaqList } from "@/components/shared/faq-list";
 
 /**
@@ -43,7 +44,7 @@ export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; 
               <li key={slug}>
                 <Link
                   href={`/gifts/${slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors outline-none hover:border-ink/40 focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-paper-deep"
+                  className={CHIP}
                 >
                   {GIFT_GUIDES[slug][locale].label}
                 </Link>

@@ -11,8 +11,9 @@ import { fieldLimit } from "@/lib/gift/field-limit";
 
 /**
  * A line to borrow: something to type into one of the template's own fields, short enough to fit
- * it. `field` is that field's key in the template's schema (or one every gift has: "message",
- * "caption", "title"), which is how tests/unit/gift-guides.test.ts proves the line fits.
+ * it. `field` is that field's key in the template's schema, or one of the three lib/gift/field-limit.ts
+ * knows for every gift ("message", "caption", and "freeNote" for a free Letter's short note), which is
+ * how tests/unit/gift-guides.test.ts proves the line fits.
  */
 export type BorrowedLine = { field: string; where: string; text: string };
 

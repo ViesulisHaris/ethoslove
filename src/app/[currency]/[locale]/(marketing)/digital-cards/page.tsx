@@ -8,22 +8,22 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { PRODUCTS, chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
 import { sendsFree } from "@/lib/gift/free-tier";
-import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
+import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { getManifest, listManifests } from "@/templates/manifests";
 import { Button } from "@/components/ui/button";
+import { CHIP } from "@/components/marketing/chip";
 import { FaqList } from "@/components/shared/faq-list";
 import { JsonLd } from "@/components/shared/json-ld";
 
-const CHIP = "inline-flex min-h-11 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors outline-none hover:border-ink/40 focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-paper-deep";
 const TEXT_LINK = "inline-flex min-h-11 items-center gap-1.5 rounded-sm text-sm underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50";
 
-/** What the copy reads from the code: the prices in this page's currency, written the locale's way, and the counts. */
+/** What the copy reads from the code: the prices in this page's currency, written the locale's way, the counts, and whether the finder is there to link to. */
 function facts(currency: Currency, locale: string): DigitalCardsFacts {
   const price = (id: "single" | "pick3" | "everything" | "extras") => formatAmount(PRODUCTS[id].amounts[currency], currency, locale);
-  return { single: price("single"), pick3: price("pick3"), everything: price("everything"), extras: price("extras"), count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length };
+  return { single: price("single"), pick3: price("pick3"), everything: price("everything"), extras: price("extras"), count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
 }
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/digital-cards">, "searchParams">): Promise<Metadata> {
@@ -65,7 +65,7 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
           },
           breadcrumbNode([
             { name: SITE.name, url: localizedUrl(locale) },
-            { name: copy.eyebrow, url },
+            { name: copy.breadcrumb, url },
           ]),
           faqNode(copy.faq.items),
         ]}
@@ -139,8 +139,8 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
                     </Link>
                   </div>
                 </div>
-                {/* The rest of the kind, small: beside the text on a wide screen, under it on a phone. */}
-                <div className="col-span-2 sm:col-span-1 sm:col-start-2 lg:col-start-3 lg:row-span-2 lg:row-start-1 lg:justify-self-end">
+                {/* The rest of the kind, small: beside the text on a wide screen, under it on a phone. Left-aligned, so the label starts at the same place on every row however many cards follow. */}
+                <div className="col-span-2 sm:col-span-1 sm:col-start-2 lg:col-start-3 lg:row-span-2 lg:row-start-1">
                   <p className="text-mono-meta text-muted-foreground">{copy.kinds.also}</p>
                   <ul className="mt-3 flex gap-3">
                     {kind.also.map((m) => (

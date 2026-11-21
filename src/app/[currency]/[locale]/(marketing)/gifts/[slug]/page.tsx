@@ -8,12 +8,11 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
+import { CHIP } from "@/components/marketing/chip";
 import { GiftIdeaList, withManifests } from "@/components/marketing/gift-idea-list";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FaqList } from "@/components/shared/faq-list";
 import { PageHeader } from "@/components/shared/page-header";
-
-const CHIP = "inline-flex min-h-11 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors outline-none hover:border-ink/40 focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-paper-deep";
 
 /** One address, two kinds of page: /gifts/for-<who> (content/recipients.ts) and /gifts/<kind> (content/gift-guides.ts). */
 function pageFor(slug: string): { recipient: Recipient } | { kind: GiftGuideSlug } | null {

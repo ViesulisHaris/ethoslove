@@ -11,6 +11,12 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
  * the screen.
  */
 
+/**
+ * The gift finder's page. Another part of the growth build adds it, so it is in this checkout only
+ * once that part is merged; /digital-cards links to it exactly then.
+ */
+const FINDER_BUILT = existsSync(join(process.cwd(), "src/app/[currency]/[locale]/(marketing)/gifts/finder/page.tsx"));
+
 /** Every template there is: a folder in src/templates with a manifest. */
 const TEMPLATES = new Set(readdirSync(join(process.cwd(), "src/templates")).filter((dir) => existsSync(join(process.cwd(), "src/templates", dir, "manifest.ts"))));
 
@@ -166,10 +172,26 @@ for (const lang of LANGS) {
       expect(prices[0]).toBe(lang.lang === "en" ? "Free" : "Gratis");
       for (const price of prices.slice(1)) expect(price).toMatch(/[€$£]\s?\d+[.,]\d{2}|\d+[.,]\d{2}\s?[€$£]/);
 
-      // It links to /gifts, which owns "digital gift", and on to the finder, the occasions and the people.
-      for (const href of ["/gifts", "/gifts/finder", "/occasions", "/templates", "/pricing", "/gifts/for-mom", "/gifts/photo-album"]) await expect(page.locator(`a[href="${lang.prefix}${href}"]`).first()).toBeAttached();
+      // It links to /gifts, which owns "digital gift", and on to the occasions and the people.
+      for (const href of ["/gifts", "/occasions", "/templates", "/pricing", "/gifts/for-mom", "/gifts/photo-album"]) await expect(page.locator(`a[href="${lang.prefix}${href}"]`).first()).toBeAttached();
+      // The way on: every row opens a page that is there. The finder's row shows exactly when the finder is built.
+      const onward = await page.locator('nav[aria-labelledby="onward"] a').evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
+      expect(onward.length).toBeGreaterThanOrEqual(3);
+      expect(onward.includes(`${lang.prefix}/gifts/finder`), "the finder's row").toBe(FINDER_BUILT);
+      for (const href of onward) expect((await page.request.get(href)).status(), href).toBe(200);
       await readsClean(page);
       noErrors();
+    });
+
+    test("/digital-cards: the breadcrumb search engines read has the page's plain name", async ({ request }) => {
+      // The category line is on the page once, as its eyebrow; the breadcrumb is not a second place for it.
+      const html = await (await request.get(`${lang.prefix}/digital-cards`)).text();
+      const blocks = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]) as { "@graph"?: { "@type": string; itemListElement?: { name: string }[] }[] });
+      const crumbs = blocks.flatMap((b) => b["@graph"] ?? []).find((node) => node["@type"] === "BreadcrumbList");
+      expect(crumbs, "no BreadcrumbList").toBeTruthy();
+      const names = (crumbs!.itemListElement ?? []).map((item) => item.name);
+      expect(names.at(-1)).toBe(lang.lang === "en" ? "Digital cards" : "Tarjetas digitales");
+      for (const name of names) expect(name).not.toContain("Tryethos");
     });
 
     test("/digital-cards: the answers are in the HTML", async ({ request }) => {
@@ -180,6 +202,14 @@ for (const lang of LANGS) {
       await page.goto(`${lang.prefix}/gifts`);
       await expect(page.locator(`main a[href="${lang.prefix}/digital-cards"]`).first()).toBeAttached();
       for (const kind of KINDS) await expect(page.locator(`main a[href="${lang.prefix}/gifts/${kind.slug}"]`).first()).toBeAttached();
+      // The two rows of pills, by person and by kind: each 44px to a thumb, with a ring when reached by keyboard.
+      const chips = page.locator(`main ul a.rounded-full[href^="${lang.prefix}/gifts/"], main ul a.rounded-full[href="${lang.prefix}/occasions"], main ul a.rounded-full[href="${lang.prefix}/digital-cards"]`);
+      expect(await chips.count()).toBeGreaterThanOrEqual(KINDS.length + 7);
+      const heights = await chips.evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+      for (const h of heights) expect(h).toBeGreaterThanOrEqual(44);
+      const chip = page.locator(`main ul a.rounded-full[href="${lang.prefix}/gifts/last-minute"]`).first();
+      await chip.focus();
+      expect(await chip.evaluate((a) => a.matches(":focus-visible") && getComputedStyle(a).boxShadow !== "none")).toBe(true);
     });
 
     for (const [occasion, count] of OCCASIONS) {

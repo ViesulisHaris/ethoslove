@@ -1,11 +1,14 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
 import { isOccasion } from "@/config/occasions";
 import { LIMITS } from "@/config/site";
 import { getPost, postLocales } from "@/content/blog";
-import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
+import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, FINDER_LINK, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { OCCASION_IDEAS } from "@/content/occasion-ideas";
 import { pageUpdated } from "@/content/page-dates";
 import { recipientFromSlug } from "@/content/recipients";
 import { REF_PATTERN } from "@/lib/attribution/ref";
@@ -14,6 +17,8 @@ import { FREE_NOTE_MAX_CHARS } from "@/lib/gift/free-tier";
 import { GIFT_LOCALES } from "@/lib/gift/schema";
 import { pageMetadata } from "@/lib/seo";
 import { getManifest, listManifests } from "@/templates/manifests";
+import { loadFieldsSchema } from "@/templates/schemas";
+import type { TemplateManifest } from "@/templates/types";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 
@@ -33,7 +38,13 @@ const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|
 /** A price written by hand: a currency sign beside a number. Prices come from PRODUCTS, never from copy. */
 const TYPED_PRICE = /[€$£]\s?\d|\d\s?[€$£]/;
 
-/** Whether a site path is a page that exists, in this language. /gifts/finder is another branch's page. */
+/**
+ * The gift finder's page. Another part of the growth build adds it, so it is in this checkout only
+ * once that part is merged, and /digital-cards links to it only then.
+ */
+const FINDER_BUILT = existsSync(join(process.cwd(), "src/app/[currency]/[locale]/(marketing)/gifts/finder/page.tsx"));
+
+/** Whether a site path is a page that exists, in this language. */
 function resolves(href: string, locale: "en" | "es"): boolean {
   const [, section, slug, ...rest] = href.split("/");
   if (rest.length > 0) return false;
@@ -44,9 +55,57 @@ function resolves(href: string, locale: "en" | "es"): boolean {
   }
   if (section === "occasions") return isOccasion(slug);
   if (section === "templates") return getManifest(slug) !== null;
-  if (section === "gifts") return slug === "finder" || isGiftGuide(slug) || recipientFromSlug(slug) !== null;
+  if (section === "gifts") return (slug === "finder" && FINDER_BUILT) || isGiftGuide(slug) || recipientFromSlug(slug) !== null;
   return false;
 }
+
+/** A text cut into sentences, so a claim and the exception made in the same breath are read together. */
+const sentences = (s: string) => s.split(/(?<=[.?!])\s+/);
+
+/**
+ * Whether a sentence about a whole list is true of it. It is when it names the gift it means and
+ * that gift has the thing (the free Letter "with a song"), or when it names every listed gift that
+ * lacks it ("all but Arcade take a song").
+ */
+function claimHolds(sentence: string, locale: "en" | "es", lacking: TemplateManifest[], has: (m: TemplateManifest) => boolean): boolean {
+  const named = listManifests().filter((m) => sentence.includes(m.name[locale]));
+  return (named.length > 0 && named.every(has)) || lacking.every((m) => sentence.includes(m.name[locale]));
+}
+
+/** The templates whose own fields ask for an age (a cake's candles, the foil numbers). */
+async function templatesWithAnAge(): Promise<Set<string>> {
+  const slugs = new Set<string>();
+  for (const m of listManifests()) {
+    const schema = (await loadFieldsSchema(m.slug)) as { shape?: Record<string, unknown> } | null;
+    if (schema?.shape && Object.hasOwn(schema.shape, "age")) slugs.add(m.slug);
+  }
+  return slugs;
+}
+
+const SONG = { en: /\bsongs?\b/i, es: /\bcanci(ón|ones)\b/i } as const;
+const AGE = { en: /\b(their|her|his) age\b/i, es: /\bsu edad\b/i } as const;
+
+/** The longest run of words two texts share, in words: how much of one paragraph was reused in another. */
+function sharedRun(a: string, b: string): number {
+  const tokens = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
+  const [x, y] = [tokens(a), tokens(b)];
+  let best = 0;
+  let row = new Array<number>(y.length + 1).fill(0);
+  for (let i = 1; i <= x.length; i++) {
+    const next = new Array<number>(y.length + 1).fill(0);
+    for (let j = 1; j <= y.length; j++) {
+      if (x[i - 1] === y[j - 1]) {
+        next[j] = row[j - 1] + 1;
+        if (next[j] > best) best = next[j];
+      }
+    }
+    row = next;
+  }
+  return best;
+}
+
+/** Short facts repeat honestly ("one bubble at a time with the typing dots"); a reused paragraph runs longer. */
+const SHARED_RUN_MAX = 9;
 
 /**
  * The facts the copy states in words, held to the code that decides them. If one of these changes,
@@ -139,8 +198,101 @@ describe("gift pages by kind", () => {
           expect(s.toLowerCase(), s).not.toContain("digital gift card");
         }
       });
+
+      // The review of 21 Nov found two pages saying every listed card takes a song, and one saying
+      // every one takes their age. Arcade, on both lists, takes neither.
+      it(`${slug} (${locale}) promises a song or an age only on the gifts that take one`, async () => {
+        const manifests = guide.ideas.map((i) => getManifest(i.template)!);
+        const withAge = await templatesWithAnAge();
+        const checks = [
+          { says: SONG[locale], has: (m: TemplateManifest) => m.features.music },
+          { says: AGE[locale], has: (m: TemplateManifest) => withAge.has(m.slug) },
+        ];
+        for (const { says, has } of checks) {
+          const lacking = manifests.filter((m) => !has(m));
+          // An idea's own words are about its own template.
+          for (const idea of guide.ideas) {
+            if (!has(getManifest(idea.template)!)) expect(`${idea.heading} ${idea.body}`, idea.template).not.toMatch(says);
+          }
+          // The opening, the sections and the answers are about the whole list.
+          for (const sentence of [...guide.lead, ...guide.sections.map((s) => s.body), ...guide.faq.map((f) => f.a)].flatMap(sentences)) {
+            if (says.test(sentence)) expect(claimHolds(sentence, locale, lacking, has), sentence).toBe(true);
+          }
+        }
+      });
+
+      it(`${slug} (${locale}) sends people to the editor's Extras for a schedule or a password`, () => {
+        // Both are set in the editor (components/editor/sections/extras.tsx), before the publish sheet.
+        const messages = locale === "en" ? en : es;
+        const extras = messages.editor.sections.extras.title;
+        const schedule = messages.editor.extras.schedule;
+        const timeZone = locale === "en" ? /time zone/i : /zona horaria/i;
+        const password = locale === "en" ? /password/i : /contraseña/i;
+        const atPublish = locale === "en" ? /when you publish/i : /al publicar/i;
+        for (const f of guide.faq) {
+          const setsATime = timeZone.test(f.a);
+          const setsAPassword = password.test(f.q);
+          if (!setsATime && !setsAPassword) continue;
+          expect(f.a, f.q).toContain(extras);
+          if (setsATime) expect(f.a, f.q).toContain(schedule);
+          for (const sentence of sentences(f.a)) {
+            if (timeZone.test(sentence) || password.test(sentence)) expect(sentence, f.q).not.toMatch(atPublish);
+          }
+        }
+      });
     }
   }
+
+  it("vary how the ideas are headed, except where the list is sorted by what the person does", () => {
+    for (const slug of GIFT_GUIDE_SLUGS) {
+      // The interactive cards are listed by the verb ("They blow: …"), and the opening says so.
+      if (slug === "interactive-birthday-card") continue;
+      for (const locale of GIFT_LOCALES) {
+        const headings = GIFT_GUIDES[slug][locale].ideas.map((i) => i.heading);
+        const openers = new Map<string, number>();
+        for (const h of headings) {
+          const opener = h.toLowerCase().split(/\s+/).slice(0, 2).join(" ");
+          openers.set(opener, (openers.get(opener) ?? 0) + 1);
+        }
+        const [opener, count] = [...openers.entries()].sort((a, b) => b[1] - a[1])[0];
+        expect(count, `${slug} (${locale}): ${count} headings open with “${opener}”`).toBeLessThanOrEqual(Math.floor(headings.length / 2));
+        const labelled = headings.filter((h) => h.includes(": ")).length;
+        expect(labelled, `${slug} (${locale}): ${labelled} headings are “label: rest”`).toBeLessThanOrEqual(headings.length / 2);
+      }
+    }
+  });
+
+  it("describe a template afresh on each page that lists it", () => {
+    // Keepsake, Music Box and Pack Your Bags had one paragraph each, reused on three pages.
+    const reused: string[] = [];
+    for (const locale of GIFT_LOCALES) {
+      const bodies = new Map<string, { where: string; body: string }[]>();
+      const add = (where: string, template: string, body: string) => bodies.set(template, [...(bodies.get(template) ?? []), { where, body }]);
+      for (const slug of GIFT_GUIDE_SLUGS) for (const idea of GIFT_GUIDES[slug][locale].ideas) add(`/gifts/${slug}`, idea.template, idea.body);
+      for (const [occasion, lists] of Object.entries(OCCASION_IDEAS)) for (const idea of lists[locale].items) add(`/occasions/${occasion}`, idea.template, idea.body);
+      for (const [template, uses] of bodies) {
+        for (let i = 0; i < uses.length; i++) {
+          for (let j = i + 1; j < uses.length; j++) {
+            const run = sharedRun(uses[i].body, uses[j].body);
+            if (run > SHARED_RUN_MAX) reused.push(`${template} (${locale}): ${uses[i].where} and ${uses[j].where} share ${run} words in a row`);
+          }
+        }
+      }
+    }
+    expect(reused).toEqual([]);
+  });
+
+  it("say where Our Timeline's countdown and Museum's clip really are", () => {
+    // Our Timeline: the closing line, the clip if any, a countdown only when one is set, then the
+    // letter (its EndingSection). Museum: the clip's room is after the photos and before the wall
+    // text, which is the last room.
+    const all = GIFT_LOCALES.flatMap((locale) => [
+      ...GIFT_GUIDE_SLUGS.flatMap((slug) => GIFT_GUIDES[slug][locale].ideas),
+      ...Object.values(OCCASION_IDEAS).flatMap((lists) => lists[locale].items),
+    ]);
+    for (const idea of all.filter((i) => i.template === "our-timeline")) expect(idea.body, idea.heading).not.toMatch(/ends? (on|with|in) [^.]*countdown|termina (con|en) [^.]*cuenta atrás/i);
+    for (const idea of all.filter((i) => i.template === "museum")) expect(idea.body, idea.heading).not.toMatch(/\blast room\b|\búltima sala\b|la última para él/i);
+  });
 
   it("don't share a title or an h1 with each other", () => {
     for (const locale of GIFT_LOCALES) {
@@ -157,6 +309,39 @@ describe("gift pages by kind", () => {
         expect(isGiftGuide(kind), kind).toBe(true);
         expect(GIFT_GUIDES[kind].en.related.map((r) => r.href), `${kind} → ${occasion}`).toContain(`/occasions/${occasion}`);
       }
+    }
+  });
+
+  it("the Mother's Day list names every month Mothering Sunday can fall in", () => {
+    // Three weeks before Easter: usually March, and early April when Easter is late.
+    const easter = (year: number) => {
+      const [a, b, c] = [year % 19, Math.floor(year / 100), year % 100];
+      const [d, e] = [Math.floor(b / 4), b % 4];
+      const g = Math.floor((b - Math.floor((b + 8) / 25) + 1) / 3);
+      const h = (19 * a + b - d - g + 15) % 30;
+      const l = (32 + 2 * e + 2 * Math.floor(c / 4) - h - (c % 4)) % 7;
+      const m = Math.floor((a + 11 * h + 22 * l) / 451);
+      const n = h + l - 7 * m + 114;
+      return new Date(Date.UTC(year, Math.floor(n / 31) - 1, (n % 31) + 1));
+    };
+    expect(easter(2027).toISOString().slice(0, 10)).toBe("2027-03-28");
+    const months = new Set<string>();
+    for (let year = 2027; year <= 2060; year++) months.add(new Date(easter(year).getTime() - 21 * 86_400_000).toLocaleString("en", { month: "long", timeZone: "UTC" }));
+    expect([...months].sort()).toEqual(["April", "March"]);
+    const bouquet = OCCASION_IDEAS["mothers-day"].en.items.find((i) => i.template === "bouquet")!.body;
+    expect(bouquet).toContain("Mothering Sunday");
+    for (const month of months) expect(bouquet, month).toContain(month);
+  });
+
+  it("the graduation list's sample class is one still to graduate", () => {
+    // The class named on the foil is the next one after the day the page's words were last set.
+    const [year, month] = pageUpdated("/occasions/graduation")!.split("-").map(Number);
+    const next = month >= 7 ? year + 1 : year;
+    for (const locale of GIFT_LOCALES) {
+      const text = OCCASION_IDEAS.graduation[locale].items.map((i) => i.body).join(" ");
+      const classes = [...text.matchAll(/(?:class of|promoción) (\d{4})/gi)].map((m) => Number(m[1]));
+      expect(classes.length, locale).toBeGreaterThanOrEqual(2);
+      for (const y of classes) expect(y, locale).toBeGreaterThanOrEqual(next);
     }
   });
 
@@ -214,7 +399,7 @@ describe("gift pages by kind", () => {
 
 describe("/digital-cards", () => {
   // Markers instead of prices: any price left in the copy would then be one typed by hand.
-  const facts: DigitalCardsFacts = { single: "<single>", pick3: "<pick3>", everything: "<everything>", extras: "<extras>", count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length };
+  const facts: DigitalCardsFacts = { single: "<single>", pick3: "<pick3>", everything: "<everything>", extras: "<extras>", count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
 
   it("carries the owner's line exactly, once, as its eyebrow", () => {
     expect(digitalCardsCopy("en", facts).eyebrow).toBe("Digital cards by Tryethos");
@@ -224,6 +409,21 @@ describe("/digital-cards", () => {
       const all = strings(copy).join("\n");
       expect(all.split(copy.eyebrow).length - 1, locale).toBe(1);
       expect(all.split("Tryethos").length - 1, locale).toBe(1);
+    }
+    // The breadcrumb search engines read is the page's plain name: the line stays a maker's mark.
+    expect(digitalCardsCopy("en", facts).breadcrumb).toBe("Digital cards");
+    expect(digitalCardsCopy("es", facts).breadcrumb).toBe("Tarjetas digitales");
+  });
+
+  it("links to the gift finder exactly when the finder's page is in the build", () => {
+    // What the page asks (does the finder have a date of its own?) against what is true (is its file here?).
+    expect(finderIsBuilt(), "content/page-dates.ts and the finder's page disagree").toBe(FINDER_BUILT);
+    for (const locale of GIFT_LOCALES) {
+      const withIt = digitalCardsCopy(locale, { ...facts, finder: true });
+      const without = digitalCardsCopy(locale, { ...facts, finder: false });
+      expect(withIt.onward.links.map((l) => l.href)).toEqual(["/gifts", FINDER_LINK, "/occasions", "/templates"]);
+      expect(without.onward.links.map((l) => l.href)).toEqual(["/gifts", "/occasions", "/templates"]);
+      expect(strings(without).join(" ")).not.toMatch(/finder|buscador/i);
     }
   });
 
