@@ -350,7 +350,6 @@ export async function Questions({
   /** What of the template's description the hero had no room for. */
   about: string;
 }) {
-  const t = await getTranslations({ locale });
   const g = await getTranslations({ locale, namespace: "templates.guide" });
   const { photos, music, countdown, surprise } = manifest.features;
   // Without a guide the block holds the three steps in full, as far as its 180 words allow after the

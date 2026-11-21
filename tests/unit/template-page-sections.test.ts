@@ -145,7 +145,7 @@ describe("the checklist under the hero", () => {
     // The test of 21 Nov 2026: music, a countdown and the hidden surprise stood under that heading,
     // and the free note has all three. A visitor read them as costing the unlock's price.
     const keys = includedRows(letter, true).map((r) => r.key);
-    expect(keys).toEqual(["featurePhotos", "featureCaptions", "featureVideo", "featureFullLetter", "featureVoice"]);
+    expect(keys).toEqual(["featurePhotos", "featureCaptions", "featureFullLetter", "featureVideo", "featureVoice"]);
     for (const free of ["featureMusic", "featureCountdown", "featureSurprise"]) expect(keys).not.toContain(free);
     // Each row is something the publish rules ask an unlock for on a note, and what they let through free is not listed.
     const base = { music: undefined, video: undefined, voiceNote: undefined, photos: [], unwrap: undefined, message: "" };

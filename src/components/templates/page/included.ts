@@ -18,6 +18,7 @@ export type IncludedRow = { key: IncludedKey; values?: Record<string, number> };
 export function includedRows(manifest: Pick<TemplateManifest, "features">, note: boolean): IncludedRow[] {
   const { photos, music, captions, countdown, surprise, video } = manifest.features;
   const row = (key: IncludedKey, has: boolean = true, values?: Record<string, number>): IncludedRow[] => (has ? [{ key, values }] : []);
-  if (note) return [...row("featurePhotos", true, { max: photos.max }), ...row("featureCaptions", captions), ...row("featureVideo", video), ...row("featureFullLetter"), ...row("featureVoice")];
+  // Two columns on the page, filled row by row: the long row (the letter) is third, so it lands in the first column, clear of the stem at the page's edge.
+  if (note) return [...row("featurePhotos", true, { max: photos.max }), ...row("featureCaptions", captions), ...row("featureFullLetter"), ...row("featureVideo", video), ...row("featureVoice")];
   return [...row("featurePhotos", true, { max: photos.max }), ...row("featureMusic", music), ...row("featureCaptions", captions), ...row("featureCountdown", countdown), ...row("featureSurprise", surprise), ...row("featureVideo", video)];
 }

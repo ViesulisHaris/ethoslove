@@ -28,6 +28,8 @@ page.on("console", (m) => m.type() === "error" && issues.push(`console: ${m.text
 /** Open a page at a size, scroll it through so everything lazy has arrived, and wait for the film in the hero. */
 async function open(path, width, height) {
   await page.setViewportSize({ width, height });
+  // A visit to a Spanish page is remembered, and the next English address would come back in Spanish: the top of The Letter's desk was shot in Spanish that way.
+  if (!path.startsWith("/es/")) await context.clearCookies();
   await page.goto(base + path, { waitUntil: "networkidle" });
   await page.addStyleTag({ content: "nextjs-portal{display:none!important}" });
   const total = await page.evaluate(() => document.documentElement.scrollHeight);
