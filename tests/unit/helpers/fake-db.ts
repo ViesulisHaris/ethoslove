@@ -8,6 +8,8 @@ import type { Db } from "@/lib/commerce/db";
  * duplicate fails with Postgres's 23505 the way the real one does, and a failing statement changes
  * nothing. Given `missingColumns` (COLUMNS_0014: the live database before migration 0014), a
  * statement that names one of them fails with PostgREST's 42703 or PGRST204, and rows have none.
+ * Given `missingTables` (the live database before a migration that adds whole tables, such as
+ * 0023), any statement on one of them fails with PostgREST's PGRST205.
  */
 type Row = Record<string, unknown>;
 type Result = { data: unknown; error: { code?: string; message: string } | null; count?: number | null };
@@ -25,6 +27,8 @@ const UNIQUE: Record<string, string[][]> = {
   gift_keeps: [["id"], ["gift_id", "email_sha256"]],
   keep_reminders: [["id"], ["keep_id", "occasion", "month", "day"]],
   etsy_connection: [["id"]],
+  gift_groups: [["id"], ["gift_id"], ["token_sha256"]],
+  gift_contributions: [["id"], ["group_id", "item_key"]],
 };
 
 const DEFAULTS: Record<string, Row> = {
@@ -50,6 +54,26 @@ const DEFAULTS: Record<string, Row> = {
     ended_notified_at: null,
   },
   gift_cards: { purchase_id: null, buyer_user_id: null, recipient_name: null, note: null, redeemed_by: null, redeemed_at: null, expires_at: null },
+  gift_groups: { locale: "en", prompt: null, token_version: 1, max_entries: 25, note_max: 140, takes_photos: true, closed_at: null, sent_at: null, nudged_at: null },
+  gift_contributions: {
+    status: "pending",
+    name: null,
+    note: null,
+    photo_path: null,
+    photo_width: null,
+    photo_height: null,
+    item_key: null,
+    email: null,
+    email_sha256: null,
+    email_consent: null,
+    email_consent_at: null,
+    confirm_sent_at: null,
+    email_confirmed_at: null,
+    emailed_at: null,
+    withdraw_sha256: null,
+    decided_at: null,
+    scrubbed_at: null,
+  },
 };
 
 let counter = 0;
@@ -265,6 +289,7 @@ class Query implements PromiseLike<Result> {
       this.store.failures.splice(this.store.failures.indexOf(failure), 1);
       return { data: null, error: { message: failure.message } };
     }
+    if (this.store.missingTables.includes(this.table)) return { data: null, error: { code: "PGRST205", message: `Could not find the table 'public.${this.table}' in the schema cache` } };
     const schema = this.schemaError();
     if (schema) return { data: null, error: schema };
     this.store.calls.push({ table: this.table, op: this.op });
@@ -348,10 +373,13 @@ export class FakeDb {
   clock: number;
   /** Columns the database doesn't have yet, per table: a statement naming one fails as PostgREST's would. */
   missingColumns: Record<string, string[]>;
+  /** Tables the database doesn't have yet: any statement on one fails as PostgREST's would. */
+  missingTables: string[];
 
-  constructor(seed: Record<string, Row[]> = {}, now = Date.parse("2026-09-23T12:00:00.000Z"), options: { missingColumns?: Record<string, string[]> } = {}) {
+  constructor(seed: Record<string, Row[]> = {}, now = Date.parse("2026-09-23T12:00:00.000Z"), options: { missingColumns?: Record<string, string[]>; missingTables?: string[] } = {}) {
     this.tables = structuredClone(seed);
     this.missingColumns = options.missingColumns ?? {};
+    this.missingTables = options.missingTables ?? [];
     const missing = this.missingColumns.couple_passes ?? [];
     // A membership row always has its 0014 columns in the database (they have defaults), so a seeded
     // pass reads the way a real one does: a one-time year, active, not cancelling. Before 0014, it
