@@ -276,6 +276,88 @@ test("the cover lies in the phone's screen, and a tap picks the phone up to play
   await expect(hero.getByText(/dear ana/i)).toBeVisible({ timeout: 10000 });
 });
 
+/** What the film in the lying phone is doing. */
+async function film(page: Page) {
+  return page.locator("[data-flatlay=hero] video").evaluate((v: HTMLVideoElement) => {
+    const still = v.parentElement!.querySelector<HTMLImageElement>("img:last-of-type")!;
+    const a = v.getBoundingClientRect();
+    const b = still.getBoundingClientRect();
+    return { src: v.getAttribute("src") ?? "", on: v.hasAttribute("data-on"), paused: v.paused, at: v.currentTime, opacity: Number(getComputedStyle(v).opacity), sameBox: Math.abs(a.x - b.x) < 1 && Math.abs(a.y - b.y) < 1 && Math.abs(a.width - b.width) < 1 && Math.abs(a.height - b.height) < 1, stillShown: still.complete && still.naturalWidth > 0 };
+  });
+}
+
+test("the gift's film plays in the lying phone while it is on screen, and moves nothing", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const films: string[] = [];
+  page.on("request", (request) => void (request.url().endsWith("preview.webm") && films.push(request.url())));
+  await page.goto(PAGE);
+  await settle(page);
+  const hero = page.locator("[data-flatlay=hero]");
+  const box = async () => JSON.stringify(await page.evaluate(() => [...document.querySelectorAll("[data-flatlay=hero], [data-flatlay=hero] video, h1, section[aria-labelledby=template-how]")].map((el) => { const r = el.getBoundingClientRect(); return [Math.round(r.x), Math.round(r.y + scrollY), Math.round(r.width), Math.round(r.height)]; })));
+  const before = await box();
+  // It is this gift's own film, laid where the cover is, turned with the phone, and shown once it is really playing.
+  await expect(hero.locator("video[data-on]")).toHaveCount(1, { timeout: 20000 });
+  const f = await film(page);
+  expect(f.src).toBe("/templates/the-letter/preview.webm");
+  expect(f.paused).toBe(false);
+  expect(f.sameBox).toBe(true);
+  expect(f.stillShown).toBe(true);
+  await expect.poll(async () => (await film(page)).opacity).toBe(1);
+  const t0 = f.at;
+  await expect.poll(async () => (await film(page)).at).toBeGreaterThan(t0);
+  expect(await hero.locator("video").evaluate((v: HTMLVideoElement) => [v.muted, v.loop, v.playsInline, v.controls])).toEqual([true, true, true, false]);
+  // Nothing on the page moved when it arrived.
+  expect(await box()).toBe(before);
+  // It stops when the phone has scrolled away, and picks up again when it is back.
+  await page.locator("section[aria-labelledby=template-questions]").scrollIntoViewIfNeeded();
+  await expect.poll(async () => (await film(page)).paused).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect.poll(async () => (await film(page)).paused).toBe(false);
+  // One film, asked for once; and a tap still goes through it to the button under it.
+  expect(new Set(films).size).toBe(1);
+  await hero.getByRole("button", { name: /try the live demo/i }).click();
+  await expect(hero.locator("[data-upright]")).toBeVisible();
+  await expect.poll(async () => (await film(page)).paused).toBe(true);
+});
+
+test("no film for someone who asked for less motion or less data: the still cover is the whole of it", async ({ browser, baseURL }) => {
+  const origin = new URL(baseURL!).origin;
+  const storageState = { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] };
+  for (const kind of ["motion", "data"] as const) {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, baseURL, storageState, reducedMotion: kind === "motion" ? "reduce" : "no-preference" });
+    if (kind === "data") await context.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true } }));
+    const page = await context.newPage();
+    const films: string[] = [];
+    page.on("request", (request) => void (/\.(webm|mp4)$/.test(new URL(request.url()).pathname) && films.push(request.url())));
+    await page.goto(PAGE);
+    await settle(page);
+    await page.waitForTimeout(1500);
+    const f = await film(page);
+    expect(f.src, kind).toBe("");
+    expect(f.on, kind).toBe(false);
+    expect(f.opacity, kind).toBe(0);
+    expect(f.stillShown, kind).toBe(true);
+    expect(films, kind).toEqual([]);
+    await context.close();
+  }
+});
+
+test("a gift whose title sat at the cover's edge keeps it in the lying phone", async ({ page }) => {
+  // content/template-page-themes.ts, `cover`: held to one side, or drawn smaller over a soft copy of itself.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/templates/coquette");
+  const held = page.locator("[data-flatlay=hero] video");
+  expect(await held.evaluate((v) => getComputedStyle(v).objectPosition)).toBe("22% 50%");
+  await page.goto("/templates/evergreen");
+  const small = await page.locator("[data-flatlay=hero] video").evaluate((v: HTMLVideoElement) => {
+    const screen = v.parentElement!;
+    return { share: v.offsetHeight / screen.offsetHeight, stills: screen.querySelectorAll("img").length, position: getComputedStyle(v).objectPosition };
+  });
+  expect(small.share).toBeCloseTo(0.8, 2);
+  expect(small.stills).toBe(2);
+  expect(small.position).toBe("0% 50%");
+});
+
 test("a gift played by dragging works from the hero: a scratch card scratches where the pointer is", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/templates/scratch-card");
@@ -363,7 +445,10 @@ test("a phone's first screen is light: the lying phone, its rim and the gift's c
   const context = await browser.newContext({ ...devices["Pixel 7"], baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
   const page = await context.newPage();
   const fetched = new Map<string, number>();
+  const films = new Map<string, number>();
   page.on("response", async (response) => {
+    // The film in the lying phone comes in pieces; the last piece's Content-Range says how long the whole is.
+    if (new URL(response.url()).pathname.endsWith(".webm")) films.set(response.url(), Number((response.headers()["content-range"] ?? "").split("/")[1] ?? response.headers()["content-length"] ?? 0));
     if (!(response.headers()["content-type"] ?? "").startsWith("image/")) return;
     fetched.set(response.url(), await response.body().then((b) => b.length, () => 0));
   });
@@ -375,11 +460,18 @@ test("a phone's first screen is light: the lying phone, its rim and the gift's c
   const allKb = Math.round([...fetched.values()].reduce((n, b) => n + b, 0) / 1024);
   console.log(`a phone's first screen: ${firstKb} KB in ${first.length} pictures (${first.map((p) => `${p.name} ${Math.round(p.bytes / 1024)} KB`).join(", ")}); ${allKb} KB of pictures fetched before any scroll, the browser's own look-ahead for lazy ones included`);
   expect(first.map((p) => p.name).sort()).toEqual(["hero-flatlay-ivory-bezel.webp", "hero-flatlay-ivory.webp", "poster.jpg"]);
+  // The film is not part of a phone's first screen: under two fifths of the lying phone is on it, so the film has not been asked for.
+  expect([...films.keys()]).toEqual([]);
   expect(firstKb).toBeLessThan(360);
   // Lower down, a phone is given the half-size files where they are enough: the band's picture and the loose pieces.
   const names = [...fetched.keys()].map((url) => new URL(url).pathname.split("/").pop()!);
   expect(names).not.toContain("experience-flatlay-ivory.webp");
   expect(allKb).toBeLessThan(620);
+  // One flick down and the phone is on screen: the film is asked for then, one file, this gift's own.
+  await page.locator("[data-flatlay=hero] video").evaluate((v) => v.scrollIntoView({ block: "center" }));
+  await expect(page.locator("[data-flatlay=hero] video[data-on]")).toHaveCount(1, { timeout: 20000 });
+  console.log(`the film in the lying phone, asked for once the phone is on screen: ${[...films].map(([url, bytes]) => `${new URL(url).pathname} ${Math.round(bytes / 1024)} KB`).join(", ")}`);
+  expect([...films.keys()].map((url) => new URL(url).pathname)).toEqual(["/templates/the-letter/preview.webm"]);
   await context.close();
 });
 
@@ -389,12 +481,25 @@ test("WebKit as an iPhone 13: no sideways scroll, no flower under words, the gif
     const origin = new URL(baseURL!).origin;
     const context = await browser.newContext({ ...devices["iPhone 13"], baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
     const page = await context.newPage();
+    const thrown: string[] = [];
+    page.on("pageerror", (error) => thrown.push(error.message));
     await page.goto(PAGE);
     await settle(page);
     const m = await measure(page);
     expect(m.overflow).toBeLessThanOrEqual(0);
     expect(m.overlaps).toEqual([]);
     expect(m.small).toEqual([]);
+    // The film: this WebKit either plays it or cannot, and where it cannot the still cover is what shows. Never a black screen, never an error.
+    await page.locator("[data-flatlay=hero]").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    const f = await film(page);
+    const can = await page.evaluate(() => document.createElement("video").canPlayType("video/webm"));
+    console.log(`WebKit as an iPhone 13: canPlayType("video/webm") = "${can}", film ${f.on ? "playing" : "not shown"}, still cover ${f.stillShown ? "shown" : "MISSING"}`);
+    expect(f.stillShown).toBe(true);
+    expect(f.on ? f.opacity : 0).toBe(f.on ? 1 : 0);
+    if (!f.on) expect(await page.locator("[data-flatlay=hero] video").evaluate((v) => Number(getComputedStyle(v).opacity))).toBe(0);
+    if (can === "") expect(f.src).toBe("");
+    expect(thrown).toEqual([]);
     await page.locator("[data-flatlay=hero]").getByRole("button", { name: /try the live demo/i }).tap();
     await expect(page.locator("[data-flatlay=hero] [data-upright] [data-template=the-letter]")).toBeVisible({ timeout: 30000 });
   } finally {
