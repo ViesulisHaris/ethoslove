@@ -21,7 +21,9 @@ import { Art } from "./art";
  *   upright box.
  *
  * `width` is the phone's own width as CSS; everything else follows from it, so the layout is the
- * same whichever of the two is drawn.
+ * same whichever of the two is drawn. A render's picture is wider than its phone and is never let
+ * past its column: if it would be, make `width` smaller where the page sets it, because the gift's
+ * clearance under the island (`--gift-safe-top`) is worked out from `width` as given.
  */
 export function HeroFlatlay({ slug, locale, flowers, width, className }: { slug: string; locale: GiftLocale; flowers: Flowers; width: string; className?: string }) {
   const [live, setLive] = useState(false);

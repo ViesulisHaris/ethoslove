@@ -449,6 +449,12 @@
      edge between two sections. */
   overflow-x: clip;
 }
+/* Safari before 16 has no `clip`: there the page hides its sideways overflow the older way. */
+@supports not (overflow-x: clip) {
+  [data-page-theme] {
+    overflow-x: hidden;
+  }
+}
 [data-page-theme] ::selection {
   background: color-mix(in oklab, var(--page-accent) 26%, transparent);
 }
