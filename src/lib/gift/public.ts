@@ -121,6 +121,10 @@ async function signAssets(stored: GiftData, watermark: boolean): Promise<GiftDat
     music: data.music ? { ...data.music, url: map[data.music.url] ?? data.music.url } : undefined,
     video: data.video ? { url: map[data.video.url] ?? data.video.url, poster: data.video.poster ? (map[data.video.poster] ?? data.video.poster) : undefined } : undefined,
     voiceNote: data.voiceNote ? { ...data.voiceNote, url: map[data.voiceNote.url] ?? data.voiceNote.url } : undefined,
+    // A group card's notes: each photo was copied into this gift's own folder when the sender added it.
+    ...(data.contributions
+      ? { contributions: data.contributions.map((item) => (item.photo ? { ...item, photo: { ...item.photo, url: map[item.photo.url] ?? item.photo.url } } : item)) }
+      : {}),
   };
 }
 

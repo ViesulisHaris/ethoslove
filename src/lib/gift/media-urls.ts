@@ -30,6 +30,9 @@ function isSiteFile(url: string): boolean {
 
 export type MediaKind = "image" | "video" | "voice" | "music";
 
+/** The parts of a gift that hold media; a group card's notes may each carry a photo. */
+type WithMedia = Pick<GiftData, "photos" | "video" | "voiceNote" | "music"> & { contributions?: GiftData["contributions"] };
+
 /** May a gift store this URL for this kind of media? `local`: also an upload still on the device. */
 export function isAllowedMediaUrl(url: unknown, kind: MediaKind, { local = false }: { local?: boolean } = {}): boolean {
   if (typeof url !== "string" || url.length === 0 || url.length > 2000) return false;
@@ -40,7 +43,7 @@ export function isAllowedMediaUrl(url: unknown, kind: MediaKind, { local = false
 }
 
 /** Every media URL in a gift and the kind it is, as recipients would load them. */
-function mediaUrls(data: Pick<GiftData, "photos" | "video" | "voiceNote" | "music">): { url: unknown; kind: MediaKind }[] {
+function mediaUrls(data: WithMedia): { url: unknown; kind: MediaKind }[] {
   const out: { url: unknown; kind: MediaKind }[] = [];
   for (const photo of data.photos ?? []) out.push({ url: photo?.url, kind: "image" });
   if (data.video) {
@@ -49,11 +52,12 @@ function mediaUrls(data: Pick<GiftData, "photos" | "video" | "voiceNote" | "musi
   }
   if (data.voiceNote) out.push({ url: data.voiceNote.url, kind: "voice" });
   if (data.music) out.push({ url: data.music.url, kind: "music" });
+  for (const item of data.contributions ?? []) if (item?.photo) out.push({ url: item.photo.url, kind: "image" });
   return out;
 }
 
 /** True when every photo, video, poster, voice note and music URL is one the gift may hold. */
-export function mediaUrlsAllowed(data: Pick<GiftData, "photos" | "video" | "voiceNote" | "music">, options?: { local?: boolean }): boolean {
+export function mediaUrlsAllowed(data: WithMedia, options?: { local?: boolean }): boolean {
   return mediaUrls(data).every(({ url, kind }) => isAllowedMediaUrl(url, kind, options));
 }
 
@@ -63,9 +67,10 @@ export const BLANK_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BA
 /**
  * The recipient's copy with every refused URL taken out, for gifts saved before the rule above. A
  * local upload that never finished stays as it was (it was already broken, and is the sender's to
- * fix); anything else that isn't allowed becomes a blank photo or no video, voice note or music.
+ * fix); anything else that isn't allowed becomes a blank photo or no video, voice note or music. A
+ * group card's note whose photo is refused keeps its words and loses the photo.
  */
-export function withoutForeignMedia<T extends Pick<GiftData, "photos" | "video" | "voiceNote" | "music">>(data: T): T {
+export function withoutForeignMedia<T extends WithMedia>(data: T): T {
   const ok = (url: unknown, kind: MediaKind) => isAllowedMediaUrl(url, kind, { local: true });
   return {
     ...data,
@@ -73,5 +78,15 @@ export function withoutForeignMedia<T extends Pick<GiftData, "photos" | "video" 
     video: data.video && ok(data.video.url, "video") ? { ...data.video, poster: data.video.poster && ok(data.video.poster, "image") ? data.video.poster : undefined } : undefined,
     voiceNote: data.voiceNote && ok(data.voiceNote.url, "voice") ? data.voiceNote : undefined,
     music: data.music && ok(data.music.url, "music") ? data.music : undefined,
+    ...(data.contributions
+      ? {
+          contributions: data.contributions.map((item) => {
+            if (!item.photo || ok(item.photo.url, "image")) return item;
+            const words = { ...item };
+            delete words.photo;
+            return words;
+          }),
+        }
+      : {}),
   };
 }

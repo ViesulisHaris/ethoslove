@@ -24,6 +24,13 @@ export interface TemplateManifest {
     captions: boolean;
     photos: { min: number; max: number };
     needs?: TemplateNeed[];
+    /**
+     * A template made for a group card: it draws `data.contributions` (src/lib/group). `min` is the
+     * fewest notes it can be sent with (0 when it stands without any), `max` the most it lays out
+     * (25 at most), `noteMax` the longest note it has room for (280 at most), and `photos` whether
+     * the people invited are offered a photo.
+     */
+    group?: { min: number; max: number; noteMax: number; photos: boolean };
   };
   thumbnail: { poster: string; webm?: string };
   defaultAccent: string;

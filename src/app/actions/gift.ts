@@ -71,6 +71,17 @@ async function ownsAssets(ctx: SignedIn, data: unknown): Promise<boolean> {
   return !error && (owned?.length ?? 0) === giftIds.size;
 }
 
+/**
+ * A group card's notes stay only on a template made for them (`features.group`, src/lib/group): on
+ * any other, whatever the request carried under `contributions` is taken off before it is stored.
+ */
+function onlyGroupTemplates<T extends { contributions?: unknown }>(templateSlug: string, data: T): T {
+  if (data.contributions === undefined || getManifest(templateSlug)?.features.group) return data;
+  const rest = { ...data };
+  delete rest.contributions;
+  return rest;
+}
+
 /** Creates the draft row a gift needs before assets can be uploaded to Storage. */
 export async function ensureDraft(input: { templateSlug: string; locale: GiftLocale }): Promise<ActionResult<{ giftId: string; shortId: string }>> {
   const ctx = await requireContext();
@@ -116,7 +127,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
   // So does the free version a gift that is already out is held to (lib/gift/free-tier.ts): an edit
   // can't move a note back to the roomier rules. A draft still says it for itself.
-  const data = { ...loose.data, templateSlug: row.template_slug, ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }) };
+  const data = onlyGroupTemplates(row.template_slug, { ...loose.data, templateSlug: row.template_slug, ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }) });
   const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
 
   if (row.status === "draft") {
@@ -148,7 +159,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
         return { ok: false, error: "payment_required" };
     }
   }
-  if (!mediaUrlsAllowed({ photos: data.photos ?? [], video: data.video, voiceNote: data.voiceNote, music: data.music }, { local: true })) return { ok: false, error: "invalid_assets" };
+  if (!mediaUrlsAllowed({ photos: data.photos ?? [], video: data.video, voiceNote: data.voiceNote, music: data.music, contributions: data.contributions }, { local: true })) return { ok: false, error: "invalid_assets" };
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const writer = recipientFacingWriter();
@@ -203,11 +214,11 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   // and the free version it is held to is the server's to say too (freeTierAtPublish): a gift already
   // out keeps its own, and a first publish takes the draft's word only while the test is running.
   const live = gift.status !== "draft";
-  const data: GiftData = {
+  const data: GiftData = onlyGroupTemplates(gift.template_slug, {
     ...(parsed.data as GiftData),
     templateSlug: gift.template_slug,
     freeTier: NOTE_TEMPLATES.includes(gift.template_slug) ? freeTierAtPublish((parsed.data as GiftData).freeTier, { live, stored: gift.free_tier }) : undefined,
-  };
+  });
 
   const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: gift.template_slug });
   const writer = recipientFacingWriter();

@@ -130,6 +130,14 @@ export function readinessProblems(manifest: TemplateManifest, data: GiftData, fi
   if (data.music?.source === "upload" && !isStoragePath(data.music.url) && !data.music.url.startsWith("http")) problems.push("uploadsPending");
   if (data.video && !isStoragePath(data.video.url) && !data.video.url.startsWith("http")) problems.push("uploadsPending");
   if (data.voiceNote && !isStoragePath(data.voiceNote.url) && !data.voiceNote.url.startsWith("http")) problems.push("uploadsPending");
+  // A group card's template says how many notes it can be sent with and how long one may be.
+  const group = manifest.features.group;
+  if (group) {
+    const notes = data.contributions ?? [];
+    if (notes.length < group.min) problems.push("contributionsMin");
+    if (notes.length > group.max) problems.push("contributionsMax");
+    if (notes.some((item) => Array.from(item.note).length > group.noteMax)) problems.push("contributionNote");
+  }
   return Array.from(new Set(problems));
 }
 

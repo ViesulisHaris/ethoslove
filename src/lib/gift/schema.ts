@@ -113,6 +113,21 @@ export const giftUnwrapSchema = z.object({
   trip: giftUnwrapTripSchema.optional(),
 });
 
+/**
+ * A group card: what the people the sender invited added through its link, once the sender has said
+ * yes to each (src/lib/group). These are the ceilings for any template; a template that takes
+ * contributions narrows them in its manifest (features.group).
+ */
+export const CONTRIBUTION_LIMITS = { max: 25, name: 24, note: 280 } as const;
+
+export const giftContributionSchema = z.object({
+  /** Made when the sender adds it to the gift: random, never a database id. What the gift calls this entry. */
+  key: z.string().regex(/^[a-z0-9]{10}$/),
+  name: z.string().trim().min(1).max(CONTRIBUTION_LIMITS.name),
+  note: z.string().trim().min(1).max(CONTRIBUTION_LIMITS.note),
+  photo: z.object({ url: z.string().min(1), width: z.number().int().positive(), height: z.number().int().positive() }).optional(),
+});
+
 export const FONT_PAIRINGS = ["editorial", "modern", "handwritten"] as const;
 
 /** The screen a recipient taps to open the gift. "classic" is the plain name-and-hairline intro. */
@@ -158,6 +173,15 @@ export const giftDataBaseSchema = z.object({
    * kept by the server once the gift is live.
    */
   freeTier: z.literal("note").optional(),
+  /**
+   * A group card's notes, in the order they are shown. Absent: not a group card. Only a template
+   * that declares `features.group` draws them, and the server takes them off any other.
+   */
+  contributions: z
+    .array(giftContributionSchema)
+    .max(CONTRIBUTION_LIMITS.max)
+    .refine((items) => new Set(items.map((item) => item.key)).size === items.length, "duplicate_key")
+    .optional(),
   fields: z.record(z.string(), z.unknown()).default({}),
 });
 
@@ -169,6 +193,7 @@ export type GiftSurprise = z.infer<typeof giftSurpriseSchema>;
 export type GiftDedication = z.infer<typeof giftDedicationSchema>;
 export type GiftUnwrap = z.infer<typeof giftUnwrapSchema>;
 export type GiftUnwrapStop = z.infer<typeof giftUnwrapStopSchema>;
+export type GiftContribution = z.infer<typeof giftContributionSchema>;
 export type GiftDataBase = z.infer<typeof giftDataBaseSchema>;
 
 export type GiftData<TFields = Record<string, unknown>> = Omit<GiftDataBase, "fields"> & {
