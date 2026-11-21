@@ -1,3 +1,4 @@
+import { keepShare } from "@/lib/editor/keep-split";
 import { noteForEveryone } from "@/lib/gift/free-tier";
 import type { GiftLocale } from "@/lib/gift/schema";
 
@@ -37,6 +38,12 @@ export type TemplateGuideFaq = {
   a: string;
   /** True only while the free version is the short note: asked and answered while it is, left out when it isn't. */
   whileFreeNote?: true;
+  /**
+   * For an answer that names “a note with photos”, which is sold under a switch of its own
+   * (lib/editor/keep-split.ts). `true`: the answer while every visitor is offered it. `false`: the
+   * answer to the same question while some or none are. The page shows the one that is true.
+   */
+  notePhotos?: boolean;
 };
 
 export type TemplateGuideContent = {
@@ -400,6 +407,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           q: "Can I add photos to a free love letter?",
           a: "Not to the free note itself, which is your words, a song, a countdown and a hidden P.S. “A note with your photos” adds up to five photos to it and keeps it a note. “Make it special” lifts both limits, to 20 photos and a letter of 4,000 characters, and adds a video and a voice message.",
           whileFreeNote: true,
+          notePhotos: true,
+        },
+        {
+          q: "Can I add photos to a free love letter?",
+          a: "Not to the free note itself, which is your words, a song, a countdown and a hidden P.S. Photos come with “Make it special”: up to 20 of them, a letter of 4,000 characters, a video and a voice message.",
+          whileFreeNote: true,
+          notePhotos: false,
         },
         {
           q: "How long is 500 characters?",
@@ -455,8 +469,15 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       faq: [
         {
           q: "¿Se pueden añadir fotos a una carta de amor gratis?",
-          a: "A la nota gratis, no: esa son tus palabras, una canción, una cuenta atrás y una posdata escondida. «Una nota con tus fotos» le añade hasta cinco fotos y sigue siendo una nota. «Hazlo especial» levanta los dos límites, hasta 20 fotos y una carta de 4.000 caracteres, y suma un vídeo y un mensaje de voz.",
+          a: "A la nota gratis, no: esa lleva tus palabras, una canción, una cuenta atrás y una posdata escondida. «Una nota con tus fotos» le añade hasta cinco fotos y sigue siendo una nota. «Hazlo especial» levanta los dos límites, hasta 20 fotos y una carta de 4.000 caracteres, y suma un vídeo y un mensaje de voz.",
           whileFreeNote: true,
+          notePhotos: true,
+        },
+        {
+          q: "¿Se pueden añadir fotos a una carta de amor gratis?",
+          a: "A la nota gratis, no: esa lleva tus palabras, una canción, una cuenta atrás y una posdata escondida. Las fotos vienen con «Hazlo especial»: hasta 20, una carta de 4.000 caracteres, un vídeo y un mensaje de voz.",
+          whileFreeNote: true,
+          notePhotos: false,
         },
         {
           q: "¿Cuánto son 500 caracteres?",
@@ -633,7 +654,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "How many photos does a night sky gift need?",
-          a: "Between 3 and 12. Each photo becomes one star. The order you put them in decides which stars the lines join, each to the one before it and the one after. It is not the order they are read in: any star can be opened first.",
+          a: "Between 3 and 12. Each photo becomes one star. The order you put them in only decides which stars the lines join: each to the one before it and the one after, with the last joined back to the first. They can be opened in any order.",
         },
         {
           q: "Do they have to find the stars in order?",
@@ -689,7 +710,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "¿Cuántas fotos necesita un cielo estrellado de regalo?",
-          a: "Entre 3 y 12. Cada foto se convierte en una estrella. El orden en que las pones decide qué estrellas unen las líneas, cada una con la anterior y con la siguiente. No es el orden en que se leen: se puede abrir primero cualquiera.",
+          a: "Entre 3 y 12. Cada foto se convierte en una estrella. El orden en que las pones solo decide qué estrellas unen las líneas: cada una con la anterior y con la siguiente, y la última con la primera. Se pueden abrir en cualquier orden.",
         },
         {
           q: "¿Hay que encontrar las estrellas en orden?",
@@ -771,7 +792,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una palabra para el primer aniversario",
-            body: "La segunda polaroid lleva una sola palabra en cursiva donde iría su pie, de hasta 10 caracteres: «Amor», si no la cambias. Para un primer aniversario, prueba «Año uno»; para estrenar casa juntos, «Hogar». El pie de esa foto solo se ve al tocarla para abrirla, así que pon en primer y tercer lugar las fotos cuyos pies importan.",
+            body: "La segunda polaroid lleva una sola palabra en cursiva donde iría su pie, de hasta 10 caracteres: «Amor», si no la cambias. Para un primer aniversario, prueba «Año uno»; para estrenar casa, «Hogar». El pie de esa foto solo se ve al tocarla para abrirla, así que pon en primer y tercer lugar las fotos cuyos pies importan.",
             borrow: [{ field: "fields.word", line: "Año uno" }, { field: "fields.word", line: "Hogar" }],
           },
           {
@@ -1207,7 +1228,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Dos calcetines, dos ciudades",
-            body: "Debajo de la ventana cuelgan dos calcetines con vuestros nombres en el puño: el tuyo a la izquierda y el suyo a la derecha. Los nombres de más de diez letras salen cortados, así que usa el corto. Para un diciembre separados, pon la cuenta atrás de debajo de la carta en el día en que compartáis chimenea y rotúlala «Hasta que los dos cuelguen en la misma casa».",
+            body: "Debajo de la ventana cuelgan dos calcetines con vuestros nombres en el puño: el tuyo a la izquierda y el suyo a la derecha. Los nombres de más de diez letras salen cortados, así que usa el corto. Para un diciembre a distancia, pon la cuenta atrás de debajo de la carta en el día en que compartáis chimenea y rotúlala «Hasta que los dos cuelguen en la misma casa».",
             borrow: [{ field: "countdown.label", line: "Hasta que los dos cuelguen en la misma casa" }],
           },
           {
@@ -1256,7 +1277,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For whoever is cooking",
-            body: "Send it to your mother at seven in the morning, while the turkey is still a problem. Five lines about her table and nobody else’s: “the gravy only you get right”. The title appears in light when the fifth candle catches, on three lines at most; keep it under about 55 characters and all of it shows: “Before the house fills up, thank you”.",
+            body: "Send it to your mother at seven in the morning, while the turkey is still a problem. Five lines about her table and nobody else’s: “the gravy only you get right”. The title appears in light when the fifth candle catches, on three lines at most; keep it under about 70 characters and all of it shows: “Before the house fills up, thank you”.",
             borrow: [{ field: "fields.thanks", line: "the gravy only you get right" }, { field: "title", line: "Before the house fills up, thank you" }],
           },
           {
@@ -1283,7 +1304,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "Does a Thanksgiving message here need all five lines?",
+          q: "Does a Thanksgiving message have to fill all five lines?",
           a: "No, but each of the five candles shows the next line as it lights, so with fewer than five the last candles catch without words. Every line takes up to 60 characters.",
         },
         {
@@ -1311,7 +1332,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para quien cocina",
-            body: "Mándaselo a tu madre a las siete de la mañana, cuando el pavo todavía es un problema. Cinco frases sobre su mesa y la de nadie más: «la salsa que solo te sale a ti». El título aparece hecho de luz cuando prende la quinta vela, en tres líneas como mucho; con menos de unos 55 caracteres sale entero: «Antes de que se llene la casa, gracias».",
+            body: "Mándaselo a tu madre a las siete de la mañana, cuando el pavo todavía es un problema. Cinco frases sobre su mesa y la de nadie más: «la salsa que solo te sale a ti». El título aparece hecho de luz cuando prende la quinta vela, en tres líneas como mucho; con menos de unos 70 caracteres sale entero: «Antes de que se llene la casa, gracias».",
             borrow: [{ field: "fields.thanks", line: "la salsa que solo te sale a ti" }, { field: "title", line: "Antes de que se llene la casa, gracias" }],
           },
           {
@@ -1374,7 +1395,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For the one who always does the lights",
-            body: "Some people are on the ladder every December while the rest of the family points. Give them a roof they can string with one finger, and a title over the house. It is set on two lines at most, so keep it under about 45 characters: “Your turn to stand in the garden and point”. In the letter, admit they were right about the crooked ones.",
+            body: "Some people are on the ladder every December while the rest of the family points. Give them a roof they can string with one finger, and a title over the house. It is set on two lines at most, so keep it under about 55 characters: “Your turn to stand in the garden and point”. In the letter, admit they were right about the crooked ones.",
             borrow: [{ field: "title", line: "Your turn to stand in the garden and point" }],
           },
           {
@@ -1425,7 +1446,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para quien siempre pone las luces",
-            body: "Hay quien pasa cada diciembre subido a la escalera mientras el resto de la familia opina desde abajo. Regálale un tejado que se decora con un dedo y un título sobre la casa. Va en dos líneas como mucho, así que no pases de unos 45 caracteres: «Este año opinas tú desde el jardín». En la carta, reconoce que tenía razón con las que estaban torcidas.",
+            body: "Hay quien pasa cada diciembre subido a la escalera mientras el resto de la familia opina desde abajo. Regálale un tejado que se decora con un dedo y un título sobre la casa. Va en dos líneas como mucho, así que no pases de unos 55 caracteres: «Este año opinas tú desde el jardín». En la carta, reconoce que tenía razón con las que estaban torcidas.",
             borrow: [{ field: "title", line: "Este año opinas tú desde el jardín" }],
           },
           {
@@ -1529,7 +1550,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La tradición, jugada a distancia",
-            body: "Si cada diciembre montáis una juntos y este año no se puede, convertidlo en un concurso. No hay dos casitas iguales, así que pide pruebas antes de que abra la puerta: «Mándame antes una foto de la tuya. El peor tejado friega en enero.» Abre tú también tu enlace, decora la tuya e intercambiad capturas.",
+            body: "Si montáis una cada diciembre y este año no se puede, convertidlo en un concurso. No hay dos casitas iguales, así que pide pruebas antes de que abra la puerta: «Mándame antes una foto de la tuya. El peor tejado friega en enero.» Abre tú también tu enlace, decora la tuya e intercambiad capturas.",
             borrow: [{ field: "message", line: "Mándame antes una foto de la tuya. El peor tejado friega en enero." }],
           },
           {
@@ -1636,7 +1657,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué meter en una bola de nieve digital",
         items: [
           {
-            heading: "Dos casas para un diciembre separados",
+            heading: "Dos casas para un diciembre a distancia",
             body: "Elige «Vuestras dos casas» y la bola guarda dos casitas con la luz encendida, que es la pinta que tiene la distancia en invierno. La placa de latón se graba después de la última sacudida y admite 44 caracteres: «dos direcciones, un solo diciembre». Debajo de tu carta, pon la cuenta atrás hasta la puerta a la que vas a llamar.",
             borrow: [{ field: "fields.plaque", line: "dos direcciones, un solo diciembre" }],
           },
@@ -1941,7 +1962,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Every visit, with the airports on it",
-            body: "For long distance, make each milestone a visit and label it like a boarding card: “LIS → BOS, visit four”. Caption who cried at arrivals. A video sits after the closing line, before your letter, so finish on the clip of the last airport hug, and let the countdown say how long until the next.",
+            body: "For long distance, make each milestone a visit and label it like a boarding card: “LIS → BOS, visit four”. Caption who cried at arrivals. A video sits after the closing line, before your letter, so finish on the clip of the last airport hug, and set the countdown to the next landing.",
             borrow: [{ field: "fields.dates", line: "LIS → BOS, visit four" }],
           },
           {
@@ -1982,7 +2003,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Rótulos que no son fechas",
-            body: "Después de veinte años ya nadie se acuerda de los meses. El rótulo es texto libre, así que para un vigésimo aniversario nombra las épocas como las nombráis vosotros: «El piso sin horno», «Antes del perro», «El invierno sin caldera». Un rótulo vacío pone «Capítulo 4», que también es verdad.",
+            body: "Después de veinte años ya nadie se acuerda de los meses. El rótulo es texto libre, así que para ese aniversario nombra las épocas como las nombráis vosotros: «El piso sin horno», «Antes del perro», «El invierno sin caldera». Un rótulo vacío pone «Capítulo 4», que también es verdad.",
             borrow: [{ field: "fields.dates", line: "El piso sin horno" }, { field: "fields.dates", line: "Antes del perro" }, { field: "fields.dates", line: "El invierno sin caldera" }],
           },
           {
@@ -2026,12 +2047,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A year of the two of you",
-            body: "The title is spelled in letters cut from magazines, and takes 28 characters. Each set of pages brings one of its own (Blossom’s is “little things”); for an anniversary, write yours: “one year of us”. The first photo is the big polaroid under it, and a sliver of it shows above the cover before the book is opened.",
+            body: "The title is spelled in letters cut from magazines, 28 characters at most. Each set of pages brings one of its own (Blossom’s is “little things”); for an anniversary, write yours: “one year of us”. The first photo is the big polaroid under it, and a sliver of it shows above the cover before the book is opened.",
             borrow: [{ field: "fields.headline", line: "one year of us" }],
           },
           {
             heading: "A real photo-booth strip",
-            body: "Make this one for whoever went to the fair with you, a year on from that night. Photos two, three and four are printed as one strip, top to bottom, labelled “photo booth”. Use three frames from the same minute: an actual booth strip cut apart, or three selfies in a row where somebody blinks. The strip shows no captions, so let the pinned note say where it was: “the fair · four tries · worth it”. Each dot starts a new line.",
+            body: "Make this one for whoever went to the fair with you, a year on from that night. Photos two, three and four are printed as one strip, top to bottom, labelled “photo booth”. Use three frames from the same minute: an actual booth strip cut apart, or three selfies in a row where somebody blinks. The strip shows no captions, so say where it was on the pinned note: “the fair · four tries · worth it”. Each dot starts a new line.",
             borrow: [{ field: "fields.tag", line: "the fair · four tries · worth it" }],
           },
           {
@@ -2081,8 +2102,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un año de vosotros dos",
-            body: "El título va en letras recortadas de revistas y admite 28 caracteres. Cada juego de páginas trae el suyo (el de Flores es «pequeñas cosas»); para un aniversario, escribe el tuyo: «un año de nosotros». La primera foto es la polaroid grande de debajo, y un trocito asoma por encima de la tapa antes de abrir el álbum.",
-            borrow: [{ field: "fields.headline", line: "un año de nosotros" }],
+            body: "El título va en letras recortadas de revistas y admite 28 caracteres. Cada juego de páginas trae el suyo (el de Flores es «pequeñas cosas»); para un aniversario, escribe el tuyo: «nuestro primer año». La primera foto es la polaroid grande de debajo, y un trocito asoma por encima de la tapa antes de abrir el álbum.",
+            borrow: [{ field: "fields.headline", line: "nuestro primer año" }],
           },
           {
             heading: "Una tira de fotomatón de verdad",
@@ -2142,8 +2163,13 @@ export function templateGuide(slug: string, locale: GiftLocale): TemplateGuideCo
 /**
  * The questions a template's guide adds to its page, as the page shows them. One about the free
  * note is asked only while the note is the free version (lib/gift/free-tier.ts), so the answer
- * never stands beside the page's own "Is it free?" saying something else.
+ * never stands beside the page's own "Is it free?" saying something else. An answer that names “a
+ * note with photos” is given only while every visitor is offered it (lib/editor/keep-split.ts): a
+ * page is one text for everyone, so with the share under 1 it would promise some readers a thing
+ * their send screen never shows, and the answer without it is given in its place.
  */
-export function templateGuideFaq(slug: string, locale: GiftLocale, freeNote: boolean = noteForEveryone()): { q: string; a: string }[] {
-  return (templateGuide(slug, locale)?.faq ?? []).filter((f) => !f.whileFreeNote || freeNote).map(({ q, a }) => ({ q, a }));
+export function templateGuideFaq(slug: string, locale: GiftLocale, freeNote: boolean = noteForEveryone(), notePhotos: boolean = keepShare() >= 1): { q: string; a: string }[] {
+  return (templateGuide(slug, locale)?.faq ?? [])
+    .filter((f) => (!f.whileFreeNote || freeNote) && (f.notePhotos === undefined || f.notePhotos === notePhotos))
+    .map(({ q, a }) => ({ q, a }));
 }
