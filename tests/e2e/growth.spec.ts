@@ -62,13 +62,18 @@ test.describe("gifts come first in the rooms", () => {
 });
 
 test.describe("the category line, set like a maker's mark", () => {
-  test("heads the front page's headline, in both languages", async ({ page }) => {
+  test("leaves the front page's headline alone: its first line is still the phrase the page is found by", async ({ page }) => {
+    for (const [path, found, line] of [["/", "Digital gifts, made by you", "Digital cards by Tryethos"], ["/es", "Regalos digitales hechos por ti", "Tarjetas digitales de Tryethos"]] as const) {
+      await page.goto(path);
+      const h1 = page.getByRole("heading", { level: 1 });
+      await expect(h1, path).toContainText(found);
+      await expect(h1, path).not.toContainText(line);
+      // On the front page too, the line is the footer's and nobody else's.
+      await expect(page.getByText(line), path).toHaveCount(1);
+      await expect(page.locator("footer").getByText(line), path).toBeVisible();
+    }
     await page.goto("/");
-    const h1 = page.getByRole("heading", { level: 1 });
-    await expect(h1).toContainText("Digital cards by Tryethos");
-    await expect(h1).toContainText("Make them a gift");
-    await page.goto("/es");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Tarjetas digitales de Tryethos");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Make them a gift");
   });
 
   test("is one small line under the footer's wordmark on an ordinary page, and nowhere else on it", async ({ page }) => {

@@ -4,10 +4,12 @@ import { describe, expect, it } from "vitest";
 import { OCCASIONS, type Occasion } from "@/config/occasions";
 import { FINDER_COPY, FINDER_FITS, finderGifts, finderPicks, suitedRecipients } from "@/content/finder";
 import { RECIPIENTS, RECIPIENT_GUIDES } from "@/content/recipients";
+import { sendsFree } from "@/lib/gift/free-tier";
 import {
   ANY,
   BEST_SELLERS,
   FINDER_FEELS,
+  FINDER_PARTNERS,
   FINDER_MORE_OCCASIONS,
   FINDER_OCCASIONS,
   FINDER_RECIPIENTS,
@@ -55,7 +57,7 @@ const ONE_DAY: Record<string, Occasion[]> = {
 };
 /** Lipstick kisses, two figures holding hands, "recipe for us": for a partner and nobody else. */
 const COUPLES_ONLY = ["xoxo", "coquette", "dark-romance", "evergreen", "snow-globe", "be-my-boo", "fall-for-you", "autumn-reel"];
-const PARTNERS: FinderRecipient[] = ["girlfriend", "boyfriend", "wife", "husband"];
+const PARTNERS: readonly FinderRecipient[] = FINDER_PARTNERS;
 
 describe("the fit table", () => {
   it("has an entry for every template, and for nothing else", () => {
@@ -86,6 +88,17 @@ describe("the fit table", () => {
   it("offers a couples' template to partners only", () => {
     for (const slug of COUPLES_ONLY) {
       expect(FINDER_FITS[slug].for.every((who) => PARTNERS.includes(who)), slug).toBe(true);
+    }
+  });
+
+  it("keeps nobody from flowers, a music box, a locket or a recipe card for being a man", () => {
+    // Only a template drawn for a couple, or for a girlfriend or a wife (a satin bow, a pastel plush), leaves anyone out by who they are.
+    for (const slug of ["bouquet", "bloom", "garden", "music-box", "favorite-person", "recipe-box"]) expect([...FINDER_FITS[slug].for].sort(), slug).toEqual([...FINDER_RECIPIENTS].sort());
+    for (const who of ["boyfriend", "husband", "dad"] as const) expect(FINDER_FITS.keepsake.for, who).toContain(who);
+    for (const [slug, fit] of Object.entries(FINDER_FITS)) {
+      const women = fit.for.includes("girlfriend") && fit.for.includes("wife");
+      const men = fit.for.includes("boyfriend") && fit.for.includes("husband");
+      if (women !== men) expect(["coquette", "kawaii"], slug).toContain(slug);
     }
   });
 
@@ -139,16 +152,32 @@ describe("the reasons", () => {
     }
   });
 
-  it("quote a character limit only when the template's own schema has it", () => {
-    const schema = (slug: string) => {
-      const dir = path.join(__dirname, "../../src/templates", slug);
-      return ["schema.ts", "pour.ts"].map((f) => (fs.existsSync(path.join(dir, f)) ? fs.readFileSync(path.join(dir, f), "utf8") : "")).join("\n");
-    };
+  it("quote a character limit only when it is the length of a text field in the template's own schema", () => {
+    const schema = (slug: string) => fs.readFileSync(path.join(__dirname, "../../src/templates", slug, "schema.ts"), "utf8");
+    let quoted = 0;
     for (const { where, slug, text } of reasons) {
       for (const match of text.matchAll(/(\d+) (?:characters|caracteres|letters|letras)/g)) {
-        expect(schema(slug), `${where} says ${match[0]}`).toMatch(new RegExp(`\\b${match[1]}\\b`));
+        quoted += 1;
+        // A string's own `.max(60)`, or a named length it is held to (`LABEL_MAX = 48`): not a photo count, a colour or a year that happens to be the same number.
+        const asLength = new RegExp(`string\\(\\)[^;\\n]*\\.max\\(${match[1]}\\)|_MAX = ${match[1]};`);
+        expect(schema(slug), `${where} says ${match[0]}`).toMatch(asLength);
       }
     }
+    expect(quoted).toBeGreaterThan(80);
+  });
+
+  it("promise for The Letter only what its free version sends: words and a song, never photos", () => {
+    // Live, a free Letter is a 500-character note with a song; photos are paid (lib/gift/free-tier.ts).
+    // The pick shows "Free" beside these sentences, so none of them may count on a photo.
+    const letter = getManifest("the-letter")!;
+    expect(sendsFree(letter, 1)).toBe(true);
+    for (const { where, slug, text } of reasons) {
+      if (slug === "the-letter") expect(text, where).not.toMatch(/photo|picture|polaroid|foto|imagen/i);
+    }
+    // And the mark beside each pick follows the same rule the gallery does: Constellations is not free once the note is for everyone.
+    expect(sendsFree(getManifest("constellations")!, 1)).toBe(false);
+    expect(sendsFree(getManifest("constellations")!, 0)).toBe(true);
+    for (const pick of finderPicks("en")) expect(pick.free, pick.slug).toBe(sendsFree(getManifest(pick.slug)!));
   });
 
   it("go to the browser in one language, with the person's sentence ahead of the feeling's", () => {
@@ -160,6 +189,57 @@ describe("the reasons", () => {
     expect(pickReason(letter.why, { for: "girlfriend", occasion: "birthday", feel: "romantic" })).toBe(FINDER_FITS["the-letter"].why.romantic!.es);
     expect(pickReason(letter.why, { for: "girlfriend", occasion: "birthday", feel: "funny" })).toBe(letter.why.base);
     expect(pickReason(letter.why, { for: ANY, occasion: ANY, feel: ANY })).toBe(letter.why.base);
+  });
+
+  it("keep the romantic sentence for a partner: nobody else is told about the two of you", () => {
+    // What "romantic" may say and a mother must never read. "Will you marry me?" reached one in the first draft.
+    const COUPLE = {
+      en: /marry|two of you|day you met|both your names|your (?:wedding|anniversary)/i,
+      es: /cas(?:as|arte|aros) conmigo|os conocisteis|vuestros dos nombres|solo habéis estado vosotros|para los dos|vuestr[oa] (?:boda|aniversario)/i,
+    };
+    const scratch = FINDER_FITS["scratch-card"].why;
+    expect(scratch.romantic!.en).toMatch(COUPLE.en);
+    expect(scratch.romantic!.es).toMatch(COUPLE.es);
+    expect(pickReason(scratch, { for: "wife", occasion: "wedding", feel: "romantic" })).toBe(scratch.romantic);
+    for (const who of ["mom", "dad", "best-friend", "someone", ANY] as const) {
+      expect(pickReason(scratch, { for: who, occasion: "wedding", feel: "romantic" }), who).toBe(scratch.base);
+    }
+
+    let shown = 0;
+    for (const locale of ["en", "es"] as const) {
+      const picks = finderPicks(locale);
+      for (const answers of COMBINATIONS) {
+        if ((PARTNERS as readonly unknown[]).includes(answers.for)) continue;
+        for (const pick of rankGifts(picks, answers)) {
+          const where = `${pick.slug} for ${said(answers)} (${locale})`;
+          const sentence = pickReason(pick.why, answers);
+          shown += 1;
+          const own = answers.for !== ANY && answers.for !== null && sentence === pick.why[answers.for];
+          // The feeling's sentence is used only when it is not the romantic one.
+          if (!own) expect([pick.why.base, pick.why.funny, pick.why.sentimental, pick.why.unusual], where).toContain(sentence);
+          // "Not sure" about the person still shows the couples' templates, whose own words are a couple's; a named person never gets one.
+          if (answers.for === ANY && COUPLES_ONLY.includes(pick.slug)) continue;
+          // Two friends are "the two of you" too, in the sentences written for a best friend.
+          if (own && answers.for === "best-friend" && !/marry|day you met|both your names/i.test(sentence)) continue;
+          expect(sentence, where).not.toMatch(COUPLE[locale]);
+        }
+      }
+    }
+    expect(shown).toBeGreaterThan(10_000);
+  });
+
+  it("open three ways in every first three, in both languages", () => {
+    // A result whose three sentences all start "They …" reads as a list from one mould.
+    for (const locale of ["en", "es"] as const) {
+      const picks = finderPicks(locale);
+      for (const answers of COMBINATIONS) {
+        const firsts = rankGifts(picks, answers).slice(0, PICKS_PER_PAGE).map((pick) => pickReason(pick.why, answers).split(" ")[0]);
+        expect(new Set(firsts).size, `${said(answers)} (${locale}): ${firsts.join(", ")}`).toBeGreaterThan(1);
+      }
+      // And no opener carries more than a quarter of the general sentences.
+      const general = picks.map((pick) => pick.why.base.split(" ")[0]);
+      for (const word of new Set(general)) expect(general.filter((w) => w === word).length, `“${word} …” (${locale})`).toBeLessThanOrEqual(Math.floor(picks.length / 4));
+    }
   });
 });
 
@@ -292,6 +372,28 @@ describe("the picks", () => {
     expect(rankGifts(GIFTS, { for: ANY, occasion: ANY, feel: ANY }).slice(0, 3).map((g) => g.slug)).toEqual(["the-letter", "bouquet", "constellations"]);
   });
 
+  it("never leads with a gift that needs something nobody was asked about", () => {
+    // Pack Your Bags reveals a trip. The finder never asks whether the present is one, so it may be offered, never first.
+    expect(GIFTS.filter((g) => g.conditional).map((g) => g.slug)).toEqual(["pack-your-bags"]);
+    let offered = 0;
+    for (const answers of COMBINATIONS) {
+      const ranked = rankGifts(GIFTS, answers);
+      expect(ranked[0].conditional, said(answers)).toBeFalsy();
+      if (ranked.some((g) => g.slug === "pack-your-bags")) offered += 1;
+    }
+    expect(offered).toBeGreaterThan(0);
+    // Whoever reads its sentence is told the condition first, in both languages.
+    for (const words of Object.values(FINDER_FITS["pack-your-bags"].why)) {
+      expect(words!.en).toMatch(/^For when the gift is a trip/);
+      expect(words!.es).toMatch(/^Para cuando el regalo es un viaje/);
+    }
+    // The rule itself: the best template that needs nothing steps ahead, and the rest keep their order.
+    const gift = (slug: string, feels: FinderFeel[], conditional?: boolean): FinderGift => ({ slug, occasions: [], sortOrder: 1, for: ["someone"], feels, conditional });
+    const answers: FinderAnswers = { for: "someone", occasion: ANY, feel: "funny" };
+    expect(rankGifts([gift("trip", ["funny"], true), gift("b", ["romantic", "funny"]), gift("c", ["romantic"])], answers).map((g) => g.slug)).toEqual(["b", "trip", "c"]);
+    expect(rankGifts([gift("trip", ["funny"], true)], answers).map((g) => g.slug)).toEqual(["trip"]);
+  });
+
   it("gives the same answers the same list every time", () => {
     const answers: FinderAnswers = { for: "girlfriend", occasion: "anniversary", feel: "romantic" };
     const once = rankGifts(GIFTS, answers).map((g) => g.slug);
@@ -313,7 +415,9 @@ describe("the picks", () => {
 describe("who it suits, on a template's page", () => {
   it("lists the people with a gift-ideas page, in the site's order, and never the catch-all", () => {
     expect(suitedRecipients("xoxo")).toEqual(["boyfriend", "girlfriend", "husband", "wife"]);
-    expect(suitedRecipients("recipe-box")).toEqual(["girlfriend", "wife", "mom"]);
+    // A locket of kept things: for a partner or a parent, and not on the best friend's page.
+    expect(suitedRecipients("keepsake")).toEqual(["boyfriend", "girlfriend", "husband", "wife", "mom", "dad"]);
+    expect(suitedRecipients("coquette")).toEqual(["girlfriend", "wife"]);
     expect(suitedRecipients("the-letter")).toEqual([...RECIPIENTS]);
     expect(suitedRecipients("no-such-template")).toEqual([]);
     for (const slug of TEMPLATE_SLUGS) expect(suitedRecipients(slug).length, slug).toBeGreaterThan(0);

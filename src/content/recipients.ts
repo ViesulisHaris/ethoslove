@@ -290,7 +290,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ],
       faq: [
         { q: "What's a good digital gift for a best friend?", a: "Something only you could make: your photos, your in-jokes and a line you mean. Party Animals and Sticker Bomb are for laughing; Favorite Person is for the soft version." },
-        { q: "Is it only for couples?", a: "No. Every template works for a friend, a sister or your mum: the words and photos are yours, and nothing in it says it's romantic unless you write it." },
+        { q: "Is it only for couples?", a: "No. Most templates work for a friend, a sister or your mum: the words and photos are yours, and nothing in them says romance unless you write it. A few are drawn for couples, a collage of lipstick kisses for one, and each template's page says who it suits." },
         freeEn,
       ],
     },
@@ -316,7 +316,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ],
       faq: [
         { q: "¿Qué regalo digital le hago a mi mejor amiga?", a: "Algo que solo tú podrías hacer: vuestras fotos, vuestras bromas y una frase que sientas. Fiesta Animal y Bomba de Stickers son para reír; Mi persona favorita, para la versión tierna." },
-        { q: "¿Es solo para parejas?", a: "No. Todas las plantillas sirven para una amiga, una hermana o tu madre: las palabras y las fotos son tuyas, y nada dice que sea romántico salvo que lo escribas." },
+        { q: "¿Es solo para parejas?", a: "No. La mayoría de las plantillas sirven para una amiga, una hermana o tu madre: las palabras y las fotos son tuyas, y nada dice que sea romántico salvo que lo escribas. Unas pocas están dibujadas para parejas, como un collage de besos de pintalabios, y la página de cada plantilla dice a quién le va." },
         freeEs,
       ],
     },

@@ -23,7 +23,8 @@ export async function generateMetadata({ params }: Omit<Props, "searchParams">):
   return pageMetadata({ locale, path: FINDER_PATH, title: copy.title, description: copy.description });
 }
 
-const CHIP = "inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40";
+/** 44px tall: a thumb's target, like every link the tool itself draws. */
+const CHIP = "inline-flex min-h-11 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40";
 
 /**
  * The gift finder: three questions that end on three templates to watch and make
@@ -62,7 +63,7 @@ export default async function GiftFinderPage({ params }: Props) {
        */}
       <section className="group/finder container-x pb-20" aria-label={copy.eyebrow} suppressHydrationWarning>
         <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: finderWaitScript() }} />
-        <div className="max-w-5xl rounded-[28px] bg-white/70 p-4 shadow-soft ring-1 ring-forest/5 group-data-finder-wait/finder:invisible sm:p-8 lg:p-10">
+        <div className="rounded-[28px] bg-white/70 p-4 shadow-soft ring-1 ring-forest/5 group-data-finder-wait/finder:invisible sm:p-8 lg:p-10">
           <GiftFinder picks={finderPicks(l)} ui={copy.ui} marks={{ free: t("common.free"), premium: t("common.premium") }} locale={l} />
         </div>
       </section>

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { LEGAL_UPDATED } from "@/content/legal";
-import { PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
+import { FINDER_LIVE, PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 
 type Rules = { allow: string[]; disallow: string[] };
@@ -129,10 +129,10 @@ describe("sitemap dates", () => {
   });
 
   it("give a template launched after the templates' shared date one of its own", () => {
-    // Every template without a date of its own takes "/templates/*": 20 Nov, when each template page
-    // gained "Who it suits". The holiday three launched on 11 Nov once inherited an older shared date
-    // and told Google they were older than they were; a template added since has to carry its own
-    // date (or, if its words haven't changed, join this list).
+    // Every template without a date of its own takes "/templates/*": the day each template page gains
+    // "Who it suits" (FINDER_LIVE, set when it ships). The holiday three launched on 11 Nov once
+    // inherited an older shared date and told Google they were older than they were; a template
+    // added since has to carry its own date (or, if its words haven't changed, join this list).
     const LIVE_ON_SECTION_DATE = [
       "arcade", "autumn-reel", "balloons", "bat-swarm", "be-my-boo", "birthday-cinema", "bloom", "cap-toss", "cauldron",
       "coquette", "dark-romance", "digicam", "evergreen", "fall-for-you", "favorite-person", "fireside", "front-page",
@@ -142,7 +142,9 @@ describe("sitemap dates", () => {
       "sketchbook", "snow-globe", "spooky-season", "sticker-bomb", "text-thread", "the-council", "the-toast",
       "trick-or-treat", "vinyl", "xoxo",
     ];
-    expect(PAGE_UPDATED["/templates/*"]).toBe("2026-11-20");
+    expect(PAGE_UPDATED["/templates/*"]).toBe(FINDER_LIVE);
+    // And one that has a date of its own is never left older than the change every template page shares.
+    for (const m of TEMPLATE_MANIFESTS) expect(pageUpdated(`/templates/${m.slug}`)! >= FINDER_LIVE, m.slug).toBe(true);
     for (const m of TEMPLATE_MANIFESTS)
       if (!LIVE_ON_SECTION_DATE.includes(m.slug)) expect(PAGE_UPDATED[`/templates/${m.slug}`], m.slug).toBeDefined();
   });

@@ -1,6 +1,6 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { FINDER_RECIPIENTS, type FinderFeel, type FinderGift, type FinderReasons, type FinderRecipient, type FinderStep } from "@/lib/gift/finder";
+import { FINDER_PARTNERS, FINDER_RECIPIENTS, type FinderFeel, type FinderGift, type FinderReasons, type FinderRecipient, type FinderStep } from "@/lib/gift/finder";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { RECIPIENTS, RECIPIENT_GUIDES, type Recipient } from "./recipients";
@@ -17,15 +17,25 @@ import { RECIPIENTS, RECIPIENT_GUIDES, type Recipient } from "./recipients";
  * around a single day, names the only occasions it is offered for. tests/unit/gift-finder.test.ts
  * holds the table to all of this, and to having every template in it.
  *
+ * Who reads which sentence (pickReason, lib/gift/finder.ts): a person's own when the template has
+ * one; "romantic" only a partner, so it may say "the two of you"; "base" and the other feelings
+ * anyone the template is offered to, a mother and a father included, so they never assume a couple.
+ * A free template's sentences promise only what its free version sends: a free Letter is 500
+ * characters and a song, and photos are paid (lib/gift/free-tier.ts).
+ *
  * The scoring is src/lib/gift/finder.ts. The template pages read `suitedRecipients` for their
  * "Who it suits" row.
  */
 type Words = Record<GiftLocale, string>;
 
-export type FinderFit = Pick<FinderGift, "for" | "feels" | "only"> & { why: FinderReasons<Words> };
+export type FinderFit = Pick<FinderGift, "for" | "feels" | "only" | "conditional"> & { why: FinderReasons<Words> };
 
-const PARTNER = ["girlfriend", "boyfriend", "wife", "husband"] as const satisfies readonly FinderRecipient[];
-/** Flowers, pearls and bows: drawn for her, for a mother, for a friend. */
+const PARTNER = FINDER_PARTNERS;
+/**
+ * A satin bow on pink gingham, a pastel plush bunny: the two templates drawn for a girlfriend or a
+ * wife. Nothing else here is kept from anyone for being a man or a woman: flowers, a music box, a
+ * locket and a recipe card are offered for a husband and a father as they are for a wife and a mother.
+ */
 const HER = ["girlfriend", "wife"] as const satisfies readonly FinderRecipient[];
 const EVERYONE = FINDER_RECIPIENTS;
 
@@ -44,12 +54,12 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["sentimental", "romantic"],
     why: {
       base: {
-        en: "They break a wax seal with a tap and your words write themselves out by hand on a candle-lit desk. It is the plainest gift here, so the words carry all of it.",
+        en: "It opens on a wax seal they break with a tap, then your words write themselves out by hand on a candle-lit desk. It is the plainest gift here, so the words carry all of it.",
         es: "Rompe un sello de lacre con un toque y tus palabras se escriben a mano sobre un escritorio a la luz de una vela. Es el regalo más sencillo de todos: el peso lo llevan las palabras.",
       },
       romantic: {
-        en: "Write the paragraph you would never say across a table. It arrives under a wax seal and unfolds in handwriting, with your photos dropping in as polaroids.",
-        es: "Escribe el párrafo que nunca dirías en voz alta. Llega bajo un sello de lacre y se despliega escrito a mano, con vuestras fotos cayendo como polaroids.",
+        en: "Write the paragraph you would never say across a table. It arrives under a wax seal and unfolds in handwriting while your song plays.",
+        es: "Escribe el párrafo que nunca dirías en voz alta. Llega bajo un sello de lacre y se despliega escrito a mano mientras suena vuestra canción.",
       },
       sentimental: {
         en: "Name one thing they did that you never thanked them for. Sealed in wax and written out by hand, it reads like a letter someone kept in a drawer.",
@@ -60,8 +70,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Dale las gracias por una cosa concreta: ir a buscarte a las dos de la madrugada, la nota en la fiambrera. Rompe el sello y la lee escrita a mano, las veces que quiera.",
       },
       dad: {
-        en: "Say the one thing you would want him to know, plainly. It arrives sealed, he opens it with a tap, and it stays where he can find it again.",
-        es: "Dile sin rodeos lo que querrías que supiera. Llega sellada, la abre con un toque y se queda donde pueda volver a encontrarla.",
+        en: "Say the one thing you would want him to know, plainly. It arrives sealed, he opens it with a tap, and the link stays in his messages for the next time.",
+        es: "Dile sin rodeos lo que querrías que supiera. Llega sellada, la abre con un toque y el enlace se queda en sus mensajes para la próxima vez.",
       },
     },
   },
@@ -74,7 +84,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Cada foto es una estrella a la que vuela, de tres a doce. Al encontrar la última, las estrellas se unen en una figura y tu mensaje aparece debajo.",
       },
       romantic: {
-        en: "A night sky made of your photos. They tap from star to star, and the last one draws a heart across all of them, with a closing line you write.",
+        en: "Your photos become a night sky. They tap from star to star, and the last one draws a heart across all of them, with a closing line you write.",
         es: "Un cielo nocturno hecho con vuestras fotos. Va de estrella en estrella y la última dibuja un corazón entre todas, con una frase final escrita por ti.",
       },
       sentimental: {
@@ -119,7 +129,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["sentimental", "romantic", "funny"],
     why: {
       base: {
-        en: "They shake the phone and one folded note falls out at a time. Write from three reasons to a hundred, 160 characters each, with your letter under the last.",
+        en: "One folded note falls out each time they shake the phone. Write from three reasons to a hundred, 160 characters each, with your letter under the last.",
         es: "Agita el móvil y cae una nota doblada cada vez. Escribe de tres a cien motivos, de 160 caracteres cada uno, con tu carta debajo del último.",
       },
       romantic: {
@@ -145,7 +155,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["unusual", "romantic"],
     why: {
       base: {
-        en: "They rub the foil off each card with a finger to find a photo and a line. Keep the news for the last card: its headline takes 60 characters.",
+        en: "Each card hides a photo and a line under foil they rub off with a finger. Keep the news for the last card: its headline takes 60 characters.",
         es: "Rasca la lámina de cada tarjeta con el dedo y aparece una foto con una frase. Guarda la noticia para la última: su titular admite 60 caracteres.",
       },
       romantic: {
@@ -195,7 +205,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["romantic", "sentimental"],
     why: {
       base: {
-        en: "They drop the needle and the record spins while the song plays. Your photos are album covers to flip through, and your message is the liner notes.",
+        en: "The record spins and the song starts when they drop the needle. Your photos are album covers to flip through, and your message is the liner notes.",
         es: "Baja la aguja y el disco gira mientras suena la canción. Tus fotos son portadas de álbum que va pasando, y tu mensaje son las notas del disco.",
       },
       romantic: {
@@ -257,7 +267,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["funny", "unusual"],
     why: {
       base: {
-        en: "They crack the cookies one at a time for fortunes you wrote, from three to twenty. Specific beats wise: \"you will be asked to pick the film, and refuse\".",
+        en: "Fortunes you wrote, three to twenty of them, one inside each cookie they crack. Specific beats wise: \"you will be asked to pick the film, and refuse\".",
         es: "Abre las galletas una a una y salen las fortunas que escribiste, de tres a veinte. Mejor concretas que sabias: «te pedirán que elijas la peli y te negarás».",
       },
       unusual: {
@@ -289,7 +299,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["funny", "unusual"],
     why: {
       base: {
-        en: "A small retro game: they drag a basket to catch falling hearts, stars or cakes. Each level clears one of your photos, and the last shows your message.",
+        en: "They drag a basket to catch falling hearts, stars or cakes in a small retro game. Each level clears one of your photos, and the last shows your message.",
         es: "Un juego retro pequeñito: arrastra una cesta para atrapar corazones, estrellas o tartas que caen. Cada nivel destapa una foto tuya, y el último, tu mensaje.",
       },
       funny: {
@@ -314,11 +324,11 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   bloom: {
-    for: [...HER, "mom", "best-friend", "someone"],
+    for: EVERYONE,
     feels: ["romantic", "unusual"],
     why: {
       base: {
-        en: "A single flower in 3D that opens only while they keep a finger on the screen, petal by petal. Your photos float up once it is fully open.",
+        en: "Petal by petal, a single flower in 3D opens only while they keep a finger on the screen. Your photos float up once it is fully open.",
         es: "Una sola flor en 3D que se abre únicamente mientras mantiene el dedo en la pantalla, pétalo a pétalo. Tus fotos suben flotando cuando está abierta del todo.",
       },
       romantic: {
@@ -332,7 +342,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   bouquet: {
-    for: [...HER, "mom", "best-friend", "someone"],
+    for: EVERYONE,
     feels: ["romantic", "sentimental"],
     why: {
       base: {
@@ -340,8 +350,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Eliges cada flor, hasta 24, además del papel y el lazo. Lo ve formarse flor a flor y después abre la tarjeta escondida dentro.",
       },
       sentimental: {
-        en: "Build it from flowers that mean something: the ones from the wedding, or from the garden at home. The card inside takes 30 characters and opens to your message.",
-        es: "Hazlo con flores que signifiquen algo: las de la boda, o las del jardín de casa. La tarjeta de dentro admite 30 caracteres y se abre a tu mensaje.",
+        en: "Build it from flowers that mean something: the ones that grew by the front door, or the ones they buy for themselves. The card inside takes 30 characters and opens to your message.",
+        es: "Hazlo con flores que signifiquen algo: las que crecían junto a la puerta de casa, o las que se compra siempre. La tarjeta de dentro admite 30 caracteres y se abre a tu mensaje.",
       },
       mom: {
         en: "Her favourite flowers, stem by stem, in her colours, for the day you cannot bring real ones. The card inside opens to your message.",
@@ -368,7 +378,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["sentimental", "romantic"],
     why: {
       base: {
-        en: "They light a candle and a cabin turns gold, then your letter unfolds from the blanket. Choose snow outside the window in winter, falling leaves the rest of the year.",
+        en: "Lighting the candle turns a cabin gold, then your letter unfolds from the blanket. Choose snow outside the window in winter, falling leaves the rest of the year.",
         es: "Enciende una vela y una cabaña se vuelve dorada; después tu carta se despliega desde la manta. Elige nieve tras la ventana en invierno y hojas el resto del año.",
       },
       romantic: {
@@ -405,8 +415,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Se abre como un álbum de recortes de verdad: letras recortadas en el título, vuestras fotos pegadas entre flores, su canción sonando y un ramo en la última página.",
       },
       "best-friend": {
-        en: "For the photos nobody else gets to see. They develop as polaroids on the page, and the torn note takes one line of in-joke, 90 characters.",
-        es: "Para las fotos que nadie más puede ver. Se revelan como polaroids en la página, y la nota rasgada admite una línea de broma privada, 90 caracteres.",
+        en: "The photos nobody else gets to see develop as polaroids on the page, and the torn note takes one line of in-joke, 90 characters.",
+        es: "Las fotos que nadie más puede ver se revelan como polaroids en la página, y la nota rasgada admite una línea de broma privada, 90 caracteres.",
       },
     },
   },
@@ -426,11 +436,11 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   garden: {
-    for: [...HER, "mom", "best-friend", "someone"],
+    for: EVERYONE,
     feels: ["romantic", "sentimental"],
     why: {
       base: {
-        en: "They push open a gate with their name on it and the page grows as they scroll, down to a greenhouse where your letter waits on the potting table.",
+        en: "Past a gate with their name on it, the page grows as they scroll, down to a greenhouse where your letter waits on the potting table.",
         es: "Empuja una verja con su nombre y la página va creciendo al bajar, hasta un invernadero donde tu carta espera en la mesa de las macetas.",
       },
       sentimental: {
@@ -458,7 +468,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   "recipe-box": {
-    for: [...HER, "mom", "someone"],
+    for: EVERYONE,
     feels: ["sentimental", "funny", "unusual"],
     why: {
       base: {
@@ -495,7 +505,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["sentimental", "unusual"],
     why: {
       base: {
-        en: "They press and hold each crease, and every fold says one more line: three to six of them, 72 characters each. It takes patience, so nothing gets skimmed.",
+        en: "Every fold says one more line, and it folds only while they hold the crease: three to six lines, 72 characters each. It takes patience, so nothing gets skimmed.",
         es: "Mantiene pulsado cada pliegue, y cada doblez dice una línea más: de tres a seis, de 72 caracteres cada una. Pide paciencia, así que nada se lee por encima.",
       },
       unusual: {
@@ -509,7 +519,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["unusual", "sentimental", "romantic"],
     why: {
       base: {
-        en: "They tilt the phone to pour both glasses and knock it once to clink. The menu card standing between the glasses opens into your speech.",
+        en: "Tilting the phone pours both glasses, and one knock clinks them. The menu card standing between the glasses opens into your speech.",
         es: "Inclina el móvil para llenar las dos copas y le da un golpecito para brindar. La carta del menú que hay entre las copas se abre y es tu discurso.",
       },
       sentimental: {
@@ -528,7 +538,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     only: BIRTHDAY,
     why: {
       base: {
-        en: "They pop a ceiling of balloons one at a time, and each drops a polaroid of yours onto the floor. The last and biggest balloon is holding your letter.",
+        en: "Balloons cover the ceiling, and each one they pop drops a polaroid of yours onto the floor. The last and biggest balloon is holding your letter.",
         es: "Explota un techo lleno de globos, uno a uno, y cada globo deja caer al suelo una polaroid tuya. El último, el más grande, guarda tu carta.",
       },
       sentimental: {
@@ -581,8 +591,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Diez animales con gorro de fiesta se cuelan en su collage de cumpleaños, y cada uno grita al tocarlo una frase tuya. Cuarenta caracteres por frase: solo bromas privadas.",
       },
       "best-friend": {
-        en: "Write the ten things only the two of you say. A hamster in a party hat yells each one when tapped, between up to seven of your photos.",
-        es: "Escribe las diez cosas que solo decís vosotros. Un hámster con gorro de fiesta grita cada una al tocarlo, entre siete fotos vuestras como mucho.",
+        en: "Write the ten things only the two of you say. Each of the ten animals in party hats yells one when tapped, between up to seven of your photos.",
+        es: "Escribe las diez cosas que solo decís vosotros. Cada uno de los diez animales con gorro de fiesta grita una al tocarlo, entre siete fotos vuestras como mucho.",
       },
     },
   },
@@ -596,7 +606,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
       },
       "best-friend": {
         en: "Charge them with something true and let the cats read out your evidence, one finding each. The stamp at the end is your call: guilty, approved, certified or pardoned.",
-        es: "Acusa de algo que sea verdad y deja que los gatos lean tus pruebas, una conclusión cada uno. El sello final lo eliges tú entre cuatro veredictos.",
+        es: "Elige una acusación que sea verdad y deja que los gatos lean tus pruebas, una conclusión cada uno. El sello final lo decides tú entre cuatro veredictos.",
       },
     },
   },
@@ -635,11 +645,11 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   keepsake: {
-    for: [...HER, "mom", "someone"],
+    for: [...PARTNER, "mom", "dad", "someone"],
     feels: ["sentimental", "romantic"],
     why: {
       base: {
-        en: "They break a wax seal on a parcel of kept things: your first photo under dried flowers, and a gold locket that opens on a tap to your second.",
+        en: "Inside a wax-sealed parcel of kept things: your first photo under dried flowers, and a gold locket that opens on a tap to your second.",
         es: "Rompe el sello de lacre de un paquete de cosas guardadas: tu primera foto bajo flores secas y un relicario dorado que se abre con un toque a la segunda.",
       },
       romantic: {
@@ -656,14 +666,16 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     for: EVERYONE,
     feels: ["unusual", "romantic"],
     only: ["anniversary", "birthday", "valentines", "christmas", "long-distance"],
+    // Nobody is asked whether the present is a trip: never the first pick, and every sentence opens with that.
+    conditional: true,
     why: {
       base: {
         en: "For when the gift is a trip. They pack a suitcase with your clues, up to five, then a departures board clatters out where you are going.",
         es: "Para cuando el regalo es un viaje. Hace la maleta con tus pistas, hasta cinco, y después un panel de salidas va cantando letra a letra el destino.",
       },
       romantic: {
-        en: "They guess from the packing list first. Then the board spells the city, and a boarding pass with both your names slides up, your letter under the stub.",
-        es: "Primero intenta adivinar por la lista de la maleta. Después el panel deletrea la ciudad y sube una tarjeta de embarque con vuestros dos nombres; tu carta está bajo el resguardo.",
+        en: "For when the gift is a trip for the two of you. A departures board spells the city, then a boarding pass or train ticket slides up with both your names on it.",
+        es: "Para cuando el regalo es un viaje para los dos. Un panel de salidas deletrea la ciudad y sube una tarjeta de embarque o un billete de tren con vuestros dos nombres.",
       },
     },
   },
@@ -680,8 +692,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Pon en la fecha de las fotos el día en que pasó y escribe un pie para cada una; salen con la letra pixelada de la pantalla. Tu carta se imprime después de la tira.",
       },
       "best-friend": {
-        en: "For the friend who was there in the flip-phone years: your worst photos on a 2006 camera roll, date-stamped, with captions in pixel type.",
-        es: "Para quien ya estaba ahí en los años del móvil con tapa: vuestras peores fotos en el carrete de una cámara de 2006, con fecha y pies de foto pixelados.",
+        en: "Your worst photos on a 2006 camera roll, date-stamped, with captions in pixel type: for the friend who was there in the flip-phone years.",
+        es: "Vuestras peores fotos en el carrete de una cámara de 2006, con fecha y pies de foto pixelados: para quien ya estaba ahí en los años del móvil con tapa.",
       },
     },
   },
@@ -690,7 +702,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     feels: ["romantic", "funny", "unusual"],
     why: {
       base: {
-        en: "They pull the curtain and press the red button. Four flashes later, a strip of your photos slides out grey and comes up in colour as they watch.",
+        en: "Behind the curtain is a red button. Four flashes after they press it, a strip of your photos slides out grey and comes up in colour as they watch.",
         es: "Aparta la cortina y pulsa el botón rojo. Cuatro flashes después sale una tira con vuestras fotos, primero gris, que va cogiendo color mientras la mira.",
       },
       romantic: {
@@ -722,11 +734,11 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   "music-box": {
-    for: [...HER, "mom", "best-friend", "someone"],
+    for: EVERYONE,
     feels: ["sentimental", "romantic", "unusual"],
     why: {
       base: {
-        en: "They wind the key three turns and the lid opens on a ballerina turning to the tune. Your photos come up one at a time in the mirror inside the lid.",
+        en: "Three turns of the key and the lid opens on a ballerina turning to the tune. Your photos come up one at a time in the mirror inside the lid.",
         es: "Da tres vueltas a la llave y la tapa se abre con una bailarina que gira al compás. Tus fotos van apareciendo una a una en el espejo de la tapa.",
       },
       romantic: {
@@ -774,11 +786,11 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     },
   },
   "favorite-person": {
-    for: [...HER, "mom", "best-friend", "someone"],
+    for: EVERYONE,
     feels: ["sentimental", "romantic"],
     why: {
       base: {
-        en: "They lift a sheet of tissue paper with their name on it. Underneath: your photos on polaroids in soft watercolour, pearls and pressed flowers, down to your letter.",
+        en: "Under a sheet of tissue paper with their name on it: your photos on polaroids in soft watercolour, pearls and pressed flowers, down to your letter.",
         es: "Levanta un papel de seda con su nombre escrito. Debajo: tus fotos en polaroids sobre acuarela suave, perlas y flores prensadas, hasta llegar a tu carta.",
       },
       romantic: {
@@ -841,7 +853,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     why: {
       base: {
         en: "One tap lights a jar candle with their name on the label, and the room warms up over a gingham collage: your photos, maple leaves, their name in wooden letter blocks.",
-        es: "Un toque enciende una vela en tarro con su nombre en la etiqueta, y la habitación se templa sobre un collage de vichy: vuestras fotos, hojas de arce y su nombre en cubos de madera.",
+        es: "Con un toque se enciende una vela en tarro con su nombre en la etiqueta, y la habitación se templa sobre un collage de vichy: vuestras fotos, hojas de arce y su nombre en cubos de madera.",
       },
       sentimental: {
         en: "Fill in the recipe card, 90 characters under \"recipe for us\", with what your autumns are made of. Each tap on the page lets a leaf fall.",
@@ -956,8 +968,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     only: ["christmas", "anniversary"],
     why: {
       base: {
-        en: "The year in numbers, up to eight, each inside a present they tear open: \"41 nights they stole the blanket\" counts up from zero.",
-        es: "El año en cifras, hasta ocho, cada una dentro de un regalo que desenvuelve: «41 noches robándome la manta» va subiendo desde cero.",
+        en: "The year in numbers, up to eight, each inside a present they tear open: \"212 photos of the dog\" counts up from zero.",
+        es: "El año en cifras, hasta ocho, cada una dentro de un regalo que desenvuelve: «212 fotos del perro» va subiendo desde cero.",
       },
       sentimental: {
         en: "Count the year: the voice notes, the flights, the Sunday calls. Each number is a present to unwrap, and the gold one prints them all as a receipt.",
@@ -1001,7 +1013,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     only: THANKSGIVING,
     why: {
       base: {
-        en: "They carry a match from wick to wick, and each candle that catches writes one thing you are thankful for in light. Five of them, 60 characters each.",
+        en: "Each candle that catches writes one thing you are thankful for in light, as they carry a match from wick to wick. Five of them, 60 characters each.",
         es: "Lleva una cerilla de mecha en mecha, y cada vela que prende escribe con luz una cosa por la que das las gracias. Son cinco, de 60 caracteres cada una.",
       },
       romantic: {
@@ -1058,7 +1070,7 @@ export function finderGifts(): (FinderGift & { why: FinderReasons<Words> })[] {
   return TEMPLATE_MANIFESTS.flatMap((m) => {
     const fit = FINDER_FITS[m.slug];
     if (!fit) return [];
-    return [{ slug: m.slug, occasions: m.occasions, sortOrder: m.sortOrder, for: fit.for, feels: fit.feels, only: fit.only, listedFor: listedFor(m.slug), why: fit.why }];
+    return [{ slug: m.slug, occasions: m.occasions, sortOrder: m.sortOrder, for: fit.for, feels: fit.feels, only: fit.only, conditional: fit.conditional, listedFor: listedFor(m.slug), why: fit.why }];
   });
 }
 
@@ -1187,8 +1199,8 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       title: "How the finder picks",
       paragraphs: [
         "Each of the {count} templates is tagged by hand with the people it suits and the feeling it carries, read off its own design. A collage of lipstick kisses is offered for a partner and never for your mom.",
-        "The occasion counts most, then the feeling, then who it's for. A template made for the day you chose comes before one that merely suits it, and when two tie, the one more people have bought goes first.",
-        "Seasonal gifts stay in their season: a Halloween porch or a Christmas window shows up only when you ask for that day. \"Not sure\" on any question widens the match. Your answers sit in the page's address, so a result can be sent to someone or reopened later.",
+        "The occasion counts most, then the feeling, then who it's for. A template made for the day you chose comes before one that merely suits it, and when two tie, the one more people make goes first.",
+        "Seasonal gifts stay in their season: a Halloween porch or a Christmas window shows up only when you ask for that day. \"Not sure\" about the person or the feeling widens the match; about the occasion, it leaves out the gifts made for one day, such as a birthday cake or a graduation cap. Your answers sit in the page's address, so a result can be sent to someone or reopened later.",
       ],
     },
     byWho: { title: "Start from the person", lead: "Each of these pages lists the gifts that work for one person, with what to write in them." },
@@ -1199,7 +1211,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
     description: "¿No sabes qué regalo digital enviar? Responde tres preguntas (para quién es, la ocasión y el tono) y verás tres regalos que puedes probar y crear.",
     eyebrow: "Buscador de regalos",
     h1: "¿Qué regalo digital deberías enviar?",
-    intro: "Responde tres preguntas y verás tres regalos que puedes ver abrirse y empezar a crear. Sin cuenta y sin correo.",
+    intro: "Responde tres preguntas y te proponemos tres regalos: mira cómo se abren y empieza el tuyo. Sin cuenta y sin correo.",
     ui: {
       steps: {
         for: { label: "Para quién", question: "¿Para quién es?" },
@@ -1239,7 +1251,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         unusual: { label: "Original", hint: "Algo que se sopla, se inclina o se agita" },
       },
       notSure: "No lo sé",
-      moreOccasions: "Otra cosa",
+      moreOccasions: "Otra ocasión",
       answers: "Tus respuestas",
       change: "Cambiar: {question}",
       resultTitle: "Tres regalos que encajan",
@@ -1260,8 +1272,8 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       title: "Cómo elige el buscador",
       paragraphs: [
         "Cada una de las {count} plantillas está etiquetada a mano con las personas a las que les va y el tono que tiene, según su propio diseño. Un collage de besos de pintalabios se propone para tu pareja y nunca para tu madre.",
-        "Lo que más cuenta es la ocasión, después el tono y después para quién es. Una plantilla hecha para el día que elegiste va antes que otra a la que simplemente le va bien, y si dos empatan, gana la que más gente ha comprado.",
-        "Los regalos de temporada se quedan en su temporada: un porche de Halloween o una ventana de Navidad solo aparecen si pides ese día. «No lo sé» en cualquier pregunta amplía la búsqueda. Tus respuestas van en la dirección de la página, así que el resultado se puede enviar a alguien o abrir más tarde.",
+        "Lo que más cuenta es la ocasión, después el tono y después para quién es. Una plantilla hecha para el día que elegiste va antes que otra a la que simplemente le va bien, y si dos empatan, va primero la que más gente hace.",
+        "Los regalos de temporada se quedan en su temporada: un porche de Halloween o una ventana de Navidad solo aparecen si pides ese día. «No lo sé» en la persona o en el tono amplía la búsqueda; en la ocasión, deja fuera los regalos hechos para un solo día, como una tarta de cumpleaños o un birrete de graduación. Tus respuestas van en la dirección de la página, así que el resultado se puede enviar a alguien o abrir más tarde.",
       ],
     },
     byWho: { title: "Empieza por la persona", lead: "Cada una de estas páginas reúne los regalos que funcionan para una persona, con ideas de qué escribir en ellos." },

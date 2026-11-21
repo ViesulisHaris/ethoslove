@@ -11,6 +11,9 @@ import { OCCASIONS, isOccasion, type Occasion } from "@/config/occasions";
 export const FINDER_RECIPIENTS = ["girlfriend", "boyfriend", "wife", "husband", "mom", "dad", "best-friend", "someone"] as const;
 export type FinderRecipient = (typeof FINDER_RECIPIENTS)[number];
 
+/** The four a "romantic" sentence is written to: it may say "the two of you", "the day you met", "both your names". */
+export const FINDER_PARTNERS = ["girlfriend", "boyfriend", "wife", "husband"] as const satisfies readonly FinderRecipient[];
+
 export const FINDER_FEELS = ["romantic", "funny", "sentimental", "unusual"] as const;
 export type FinderFeel = (typeof FINDER_FEELS)[number];
 
@@ -89,6 +92,12 @@ export type FinderGift = {
   only?: readonly Occasion[];
   /** The people whose gift-ideas page (/gifts/for-…) already recommends it. */
   listedFor?: readonly FinderRecipient[];
+  /**
+   * It only makes sense when something the finder never asks is true (Pack Your Bags: the present
+   * is a trip). It is still offered, and its sentence opens with the condition, but it is never the
+   * first pick: the best template that needs nothing of the kind goes ahead of it.
+   */
+  conditional?: boolean;
 };
 
 /** Ties go to what people buy most, in this order (the owner's list, Nov 2026). */
@@ -132,10 +141,11 @@ const sellerRank = (slug: string) => {
 
 /**
  * Every template that fits the answers, best first. Ties go to the best sellers, then to the
- * gallery's own order, then to the name, so the same answers always give the same list.
+ * gallery's own order, then to the name, so the same answers always give the same list. A
+ * conditional template never leads it (see FinderGift.conditional).
  */
 export function rankGifts<T extends FinderGift>(gifts: readonly T[], answers: FinderAnswers): T[] {
-  return gifts
+  const ranked = gifts
     .filter((gift) => fits(gift, answers))
     .map((gift) => ({ gift, points: score(gift, answers) }))
     .sort(
@@ -146,6 +156,9 @@ export function rankGifts<T extends FinderGift>(gifts: readonly T[], answers: Fi
         a.gift.slug.localeCompare(b.gift.slug),
     )
     .map(({ gift }) => gift);
+  const lead = ranked.findIndex((gift) => !gift.conditional);
+  if (lead > 0) ranked.unshift(...ranked.splice(lead, 1));
+  return ranked;
 }
 
 /** How many picks a result opens with, and how many "Show three more" adds. */
@@ -167,11 +180,18 @@ export const finderWaitScript = (): string =>
  * Why a template fits, in the words written for the answer: the person's own sentence when it has
  * one (a gift reads differently for a mother than for a girlfriend), else the feeling's, else the
  * template's general one.
+ *
+ * The "romantic" sentence is written to a partner and read by nobody else. A mother, a father, a
+ * friend, "someone else" and "Not sure" get the general one: the first draft showed a mother that
+ * "Will you marry me?" fits the last scratch card. Every other sentence is written for anyone.
  */
 export type FinderReasons<T> = { base: T } & Partial<Record<FinderRecipient | FinderFeel, T>>;
 
 export function pickReason<T>(why: FinderReasons<T>, answers: FinderAnswers): T {
-  if (answers.for && answers.for !== ANY && why[answers.for] !== undefined) return why[answers.for] as T;
-  if (answers.feel && answers.feel !== ANY && why[answers.feel] !== undefined) return why[answers.feel] as T;
+  const who = answers.for && answers.for !== ANY ? answers.for : null;
+  if (who && why[who] !== undefined) return why[who] as T;
+  const feel = answers.feel && answers.feel !== ANY ? answers.feel : null;
+  const written = feel !== "romantic" || (who !== null && (FINDER_PARTNERS as readonly string[]).includes(who));
+  if (feel && written && why[feel] !== undefined) return why[feel] as T;
   return why.base;
 }

@@ -30,6 +30,9 @@ export function generateStaticParams() {
   return TEMPLATE_SLUGS.map((slug) => ({ slug }));
 }
 
+/** "Perfect for" and "Who it suits": one chip for both rows, 44px tall for a thumb. */
+const CHIP = "inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40";
+
 export async function generateMetadata({
   params,
 }: Omit<PageProps<"/[currency]/[locale]/templates/[slug]">, "searchParams">): Promise<Metadata> {
@@ -184,7 +187,7 @@ export default async function TemplateDetailPage({
                 <li key={o}>
                   <Link
                     href={`/occasions/${o}`}
-                    className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                    className={CHIP}
                   >
                     {t(`occasions.${o}`)}
                   </Link>
@@ -202,7 +205,7 @@ export default async function TemplateDetailPage({
                     <li key={r}>
                       <Link
                         href={`/gifts/${recipientSlug(r)}`}
-                        className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                        className={CHIP}
                       >
                         {RECIPIENT_GUIDES[r][l].label}
                       </Link>

@@ -9,16 +9,6 @@ export const BRAND = {
     en: "Gifts that open like a story.",
     es: "Regalos que se abren como una historia.",
   },
-  /**
-   * What Ethos makes, set like a maker's mark: under the footer's wordmark, over the front page's
-   * headline, and for machines (the Organization's slogan, the first words of /llms.txt). A quiet
-   * signature in a few chosen places, never a banner and never in a page title (the owner, 20 Nov
-   * 2026: "sleek, so it doesn't ruin it"). Read it from here and nowhere else.
-   */
-  categoryLine: {
-    en: "Digital cards by Tryethos",
-    es: "Tarjetas digitales de Tryethos",
-  },
   domain: "tryethos.io",
   supportEmail: "support@secuora.xyz",
   /**
@@ -34,6 +24,17 @@ export const BRAND = {
     // every new page (since 28 Oct 2026); both checked live on 20 Nov 2026.
     etsy: "https://www.etsy.com/shop/TryEthos",
     pinterest: "https://www.pinterest.com/tryethosgifts/",
+  },
+  /**
+   * What Ethos makes, in the owner's words (20 Nov 2026), set like a maker's mark: one small line
+   * under the footer's wordmark, and for machines (the Organization's slogan, the first words of
+   * /llms.txt). Never a banner, never in a page title, and not in the front page's headline, whose
+   * first line is the phrase the page is found by ("Digital gifts, made by you"). English never
+   * says "digital gift card", which means a voucher. Read it from here and nowhere else.
+   */
+  categoryLine: {
+    en: "Digital cards by Tryethos",
+    es: "Tarjetas digitales de Tryethos",
   },
   /** Shown on free-tier gifts. Keep it short; it is the viral hook. */
   watermark: {

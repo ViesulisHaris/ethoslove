@@ -55,10 +55,21 @@ test.describe("who a template suits", () => {
     expect(who!.y).toBeGreaterThan(perfect!.y);
   });
 
-  test("one made for a mother says so, and one for anyone lists everyone, in the server's HTML", async ({ page }) => {
+  test("one for a partner or a parent says so, and one for anyone lists everyone, in the server's HTML", async ({ page, isMobile }) => {
     await page.route("**/*.js", (route) => route.abort());
-    await page.goto("/templates/recipe-box");
-    await expect(suits(page)).toHaveText(["For your girlfriend", "For your wife", "For your mom"]);
+    await page.goto("/templates/keepsake");
+    await expect(suits(page)).toHaveText(["For your boyfriend", "For your girlfriend", "For your husband", "For your wife", "For your mom", "For your dad"]);
+    // Both rows of chips are a thumb's height.
+    if (isMobile) {
+      const heights = await page.locator('ul[aria-labelledby="who-it-suits"] a, a[href^="/occasions/"].rounded-full').evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+      expect(heights.length).toBeGreaterThan(6);
+      for (const height of heights) expect(height).toBeGreaterThanOrEqual(43.5);
+    }
+    // Flowers and a recipe card are kept from nobody.
+    for (const slug of ["recipe-box", "bouquet"]) {
+      await page.goto(`/templates/${slug}`);
+      await expect(suits(page), slug).toHaveCount(7);
+    }
     await page.goto("/templates/the-letter");
     await expect(suits(page)).toHaveCount(7);
     await page.goto("/es/templates/front-page");

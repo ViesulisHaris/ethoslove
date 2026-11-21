@@ -295,8 +295,8 @@ test.describe("the gift finder", () => {
         await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
         expect(overflow, `${locale}/gifts/finder${query}`).toBeLessThanOrEqual(0);
-        // Everything that can be tapped is at least 44px tall.
-        const small = await page.locator("section[aria-label] button:visible, section[aria-label] a:visible").evaluateAll((els) => els.filter((el) => el.getAttribute("aria-hidden") !== "true" && el.getBoundingClientRect().height < 43.5).map((el) => el.textContent));
+        // Everything that can be tapped is at least 44px tall: the tool, and the links to people and days under it.
+        const small = await page.locator("main button:visible, main a:visible").evaluateAll((els) => els.filter((el) => el.getAttribute("aria-hidden") !== "true" && el.getBoundingClientRect().height < 43.5).map((el) => el.textContent));
         expect(small, `${locale}/gifts/finder${query}`).toEqual([]);
       }
     }

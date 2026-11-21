@@ -304,7 +304,7 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
                   className="group relative block w-full rounded-[13%/6%] transition-[translate,scale] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 active:scale-[0.98] lg:w-[min(13.5rem,100%)]"
                 >
                   <PhoneFrame width="100%">
-                    <Image src={pick.poster} alt="" fill sizes="(min-width: 1024px) 216px, 112px" quality={75} priority={i < PICKS_PER_PAGE} className="object-cover" />
+                    <Image src={pick.poster} alt="" fill sizes={POSTER_SIZES} quality={75} loading={i < PICKS_PER_PAGE ? "eager" : "lazy"} className="object-cover" />
                     <span className="absolute inset-0 grid place-items-center bg-black/10 transition-colors group-hover:bg-black/0">
                       <span className="grid size-9 place-items-center rounded-full bg-cream text-forest shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)] transition-transform duration-300 ease-(--ease-out-quint) group-hover:scale-110 lg:size-12">
                         <Play className="ml-0.5 size-3.5 fill-current lg:size-4" />
@@ -315,9 +315,11 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
                 {/* Grows on a wide screen, so the three "Make this gift" buttons sit on one line whatever the sentences' lengths. */}
                 <div className="min-w-0 lg:mt-6 lg:flex-1">
                   <p className="flex items-center gap-2.5">
-                    <span className="text-mono-meta text-muted-foreground" aria-label={fill(ui.pick, { n: i + 1 })}>
+                    {/* A label on a plain span is not read out: the number is for the eye, the words for a screen reader. */}
+                    <span aria-hidden="true" className="text-mono-meta text-muted-foreground">
                       {String(i + 1).padStart(2, "0")}
                     </span>
+                    <span className="sr-only">{fill(ui.pick, { n: i + 1 })}</span>
                     <span className={cn("rounded-full px-2.5 py-1 text-[11px] leading-none font-semibold tracking-wide", pick.free ? "bg-cream text-forest ring-1 ring-forest/15" : "bg-forest/80 text-cream")}>
                       {pick.free ? marks.free : marks.premium}
                     </span>
@@ -389,12 +391,20 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
               event.preventDefault();
               opener.current?.focus();
             }}
-            className="fixed top-1/2 left-1/2 z-[80] flex max-h-[calc(100dvh-1.5rem)] w-[min(26rem,calc(100vw-1.5rem))] -translate-x-1/2 -translate-y-1/2 flex-col rounded-[28px] bg-blush-paper text-forest shadow-[0_40px_90px_-30px_rgba(60,15,35,0.6)] outline-none duration-200 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+            className={cn(
+              "fixed z-[80] flex flex-col bg-blush-paper text-forest outline-none data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+              // A phone: a sheet the height of the screen, so the demo is as large as the phone allows (as components/gifts/template-chooser.tsx).
+              "inset-x-0 top-[max(0.75rem,env(safe-area-inset-top))] bottom-0 rounded-t-[28px] shadow-[0_-20px_60px_-20px_rgba(60,15,35,0.45)] duration-300 data-open:slide-in-from-bottom data-closed:slide-out-to-bottom",
+              // Wider: a dialog in the middle.
+              "sm:inset-auto sm:top-1/2 sm:left-1/2 sm:max-h-[calc(100dvh-1.5rem)] sm:w-[26rem] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[28px] sm:shadow-[0_40px_90px_-30px_rgba(60,15,35,0.6)] sm:duration-200 sm:data-open:slide-in-from-bottom-0 sm:data-open:zoom-in-95 sm:data-closed:slide-out-to-bottom-0 sm:data-closed:zoom-out-95",
+              DEMO_ROOM,
+            )}
           >
             {watching ? (
               <>
-                <div className="flex shrink-0 items-center justify-between gap-3 pt-3 pr-3 pl-6">
-                  <Dialog.Title className="min-w-0 truncate font-display text-[1.35rem] leading-tight">{fill(ui.demoTitle, { name: watching.name })}</Dialog.Title>
+                <div className="flex shrink-0 items-start justify-between gap-3 pt-3 pr-3 pl-6">
+                  {/* Two lines for a long name on a narrow phone ("Constellations: live demo"), never cut short. */}
+                  <Dialog.Title className="min-w-0 self-center font-display text-[1.25rem] leading-[1.15] text-balance sm:text-[1.35rem]">{fill(ui.demoTitle, { name: watching.name })}</Dialog.Title>
                   <Dialog.Close
                     aria-label={ui.close}
                     className="grid size-11 shrink-0 place-items-center rounded-full text-forest/80 transition-[background-color,color,scale] duration-200 hover:bg-rose-mist hover:text-forest active:scale-95"
@@ -402,12 +412,17 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
                     <X aria-hidden="true" className="size-5" strokeWidth={1.9} />
                   </Dialog.Close>
                 </div>
-                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pt-2 pb-6">
-                  {/* As tall as the screen allows: the frame is 390:844, and the title, the note and the button need about 13rem. */}
-                  <PhoneFrame width="min(300px, 100%, (100dvh - 14.5rem) * 0.462)" className="mx-auto">
+                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pt-2 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+                  {/* As tall as the screen allows: the frame is 390:844, and DEMO_ROOM is what the title, the note and the button need. */}
+                  <PhoneFrame width="min(300px, 100%, (100dvh - var(--demo-room)) * 0.462)" className="mx-auto">
+                    {/*
+                     * Until the template's code arrives the screen would be black: the pick's poster waits under it,
+                     * at the size the list already loaded, so it is there at once. The template paints over it.
+                     */}
+                    <Image src={watching.poster} alt="" fill sizes={POSTER_SIZES} quality={75} loading="eager" className="object-cover" />
                     <GiftRenderer slug={watching.slug} mode="demo" demoLocale={locale} />
                   </PhoneFrame>
-                  <p className="mx-auto mt-4 max-w-[19rem] text-center text-[13px] leading-snug text-forest/65">{ui.demoHint}</p>
+                  <p className={cn("mx-auto mt-4 max-w-[19rem] text-center text-[13px] leading-snug text-forest/65", DEMO_HINT)}>{ui.demoHint}</p>
                   <Link
                     href={`/create/${watching.slug}?ref=${REF}`}
                     onClick={() => track("finder_pick", { template: watching.slug, action: "make" })}
@@ -425,6 +440,18 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
     </div>
   );
 }
+
+/** A pick's poster in the list; the demo borrows the same file while its template loads. */
+const POSTER_SIZES = "(min-width: 1024px) 216px, 112px";
+
+/**
+ * What the demo's window needs around its phone, which takes the rest of the height: the title (two
+ * lines at most), the note and the button. On a phone the window is a sheet the height of the
+ * screen, and a short one (an iPhone SE is 568 or 667 tall) drops the note, which only says what the
+ * demo shows, so the demo is not the size of a stamp.
+ */
+const DEMO_ROOM = "[--demo-room:10.75rem] [@media(min-height:700px)]:[--demo-room:14.25rem] sm:[--demo-room:14.5rem] sm:[@media(min-height:700px)]:[--demo-room:14.5rem]";
+const DEMO_HINT = "[@media(max-height:699.98px)]:max-sm:hidden";
 
 /** 56px tall at least: a thumb's target, and room for a second line under the feelings. */
 const OPTION =

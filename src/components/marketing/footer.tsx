@@ -24,8 +24,8 @@ export async function MarketingFooter() {
       <div className="container-x relative grid grid-cols-2 gap-x-6 gap-y-10 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="col-span-2 max-w-xs md:col-span-1">
           <Logo />
-          {/* The maker's mark: the one place the category line shows on an ordinary page, in the footer's own small type. */}
-          <p className="mt-3 text-[11px] font-medium tracking-[0.2em] text-cream/45 uppercase">{BRAND.categoryLine[locale]}</p>
+          {/* The maker's mark: the one place the category line shows on a page, in the footer's own small type (cream at 55% is 5.7:1 on the wine; 45% fell just short of 4.5). */}
+          <p className="mt-3 text-[11px] font-medium tracking-[0.2em] text-cream/55 uppercase">{BRAND.categoryLine[locale]}</p>
           <p className="font-display mt-4 text-xl leading-snug text-cream/70 italic">{t("footer.blurb")}</p>
         </div>
         <FooterColumn title={t("footer.explore")}>
@@ -64,7 +64,7 @@ export async function MarketingFooter() {
       </div>
       {/* Who it's for: the gift-idea pages, linked from every page so search engines find them. */}
       <nav aria-labelledby="footer-recipients" className="container-x relative border-t border-white/10 pt-6 pb-4">
-        <p id="footer-recipients" className="mb-2 text-[11px] font-medium tracking-[0.2em] text-cream/45 uppercase">
+        <p id="footer-recipients" className="mb-2 text-[11px] font-medium tracking-[0.2em] text-cream/55 uppercase">
           {t("recipients.footerTitle")}
         </p>
         <ul className="flex flex-wrap gap-x-6">
@@ -91,7 +91,7 @@ export async function MarketingFooter() {
 function FooterColumn({ title, className, children }: { title: string; className?: string; children: React.ReactNode }) {
   return (
     <div className={className}>
-      <p className="mb-4 text-[11px] font-medium tracking-[0.2em] text-cream/45 uppercase">{title}</p>
+      <p className="mb-4 text-[11px] font-medium tracking-[0.2em] text-cream/55 uppercase">{title}</p>
       {/* On a phone or a tablet each link is a 44px row for a thumb, with no dead gap between; a mouse needs less. */}
       <ul className="flex flex-col lg:gap-1.5">{children}</ul>
     </div>

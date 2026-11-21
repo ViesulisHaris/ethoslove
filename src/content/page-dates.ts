@@ -14,35 +14,44 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * /x that has none of its own. A page without a date sends none, which is honest too. Blog posts
  * carry their own dates (content/blog).
  */
+
+/**
+ * The day the gift finder goes live, and with it "Who it suits" on every template page, Gifts first
+ * in the rooms and the links to the finder. NOT LIVE YET: this is the day the work was finished.
+ * Set it to the day it ships; every page it changed reads its date from here, and so does
+ * tests/unit/crawl.test.ts.
+ */
+export const FINDER_LIVE = "2026-11-21";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
-  // 20 Nov: Gifts lead the rooms, the category line heads the front page, and the gift finder is linked
-  // from the front page, /gifts and the gallery.
-  "/": "2026-11-20",
-  "/gifts": "2026-11-20",
+  // With the finder: Gifts lead the rooms, and the front page, /gifts and the gallery link to it.
+  "/": FINDER_LIVE,
+  "/gifts": FINDER_LIVE,
   "/gifts/*": "2026-10-24",
-  // The gift finder: new on 20 Nov 2026.
-  "/gifts/finder": "2026-11-20",
-  // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
-  // 20 Nov: every template page gained "Who it suits", with links to the gift-idea pages.
-  "/templates": "2026-11-20",
-  "/templates/*": "2026-11-20",
-  // Templates that had a date of their own before then (their search phrases, their launch) carry the new one too.
-  "/templates/the-letter": "2026-11-20",
-  "/templates/constellations": "2026-11-20",
-  "/templates/scratch-card": "2026-11-20",
-  "/templates/bouquet": "2026-11-20",
-  "/templates/fortune-cookie": "2026-11-20",
-  // A template launched after "/templates/*" was set needs its own date (crawl.test.ts checks).
-  "/templates/nice-list": "2026-11-20",
-  "/templates/unwrapped": "2026-11-20",
-  "/templates/wishbone": "2026-11-20",
-  // The second holiday batch, live on the night of 15 Nov (UTC).
-  "/templates/frosted-window": "2026-11-20",
-  "/templates/gingerbread-house": "2026-11-20",
-  "/templates/light-the-candles": "2026-11-20",
-  "/templates/string-the-lights": "2026-11-20",
+  "/gifts/finder": FINDER_LIVE,
+  // Its "Is it only for couples?" answer now says a few templates are drawn for couples.
+  "/gifts/for-best-friend": FINDER_LIVE,
+  // With the finder: the gallery links to it, and every template page gained "Who it suits", with
+  // links to the gift-idea pages.
+  "/templates": FINDER_LIVE,
+  "/templates/*": FINDER_LIVE,
+  // A template with a date of its own would otherwise keep the older one: the five given theirs for
+  // their search phrases, the holiday three (live 11 Nov) and the second holiday four (live 15 Nov).
+  // A template launched after "/templates/*" was set needs its own date too (crawl.test.ts checks).
+  "/templates/the-letter": FINDER_LIVE,
+  "/templates/constellations": FINDER_LIVE,
+  "/templates/scratch-card": FINDER_LIVE,
+  "/templates/bouquet": FINDER_LIVE,
+  "/templates/fortune-cookie": FINDER_LIVE,
+  "/templates/nice-list": FINDER_LIVE,
+  "/templates/unwrapped": FINDER_LIVE,
+  "/templates/wishbone": FINDER_LIVE,
+  "/templates/frosted-window": FINDER_LIVE,
+  "/templates/gingerbread-house": FINDER_LIVE,
+  "/templates/light-the-candles": FINDER_LIVE,
+  "/templates/string-the-lights": FINDER_LIVE,
   "/occasions/*": "2026-10-25",
   "/occasions/birthday": "2026-11-13",
   "/occasions/anniversary": "2026-11-13",
