@@ -14,6 +14,15 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * /x that has none of its own. A page without a date sends none, which is honest too. Blog posts
  * carry their own dates (content/blog).
  */
+
+/**
+ * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
+ * template pages gain what people make with them, lines to borrow and their own questions, and the
+ * bouquet page's Mother's Day line changes. They are not live yet, and a date that runs ahead of
+ * the page is the kind search engines stop believing: whoever ships them sets this to that day.
+ */
+const GUIDES_LIVE = "2026-11-21";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
@@ -23,32 +32,31 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
   "/templates": "2026-11-11",
   "/templates/*": "2026-10-25",
-  // Free templates show no price, so their last change was the search phrases of 24 Oct.
-  "/templates/the-letter": "2026-11-20",
-  "/templates/constellations": "2026-11-20",
+  // The two free templates, then the three pages that had a guide before the growth build (13 Nov).
+  "/templates/the-letter": GUIDES_LIVE,
+  "/templates/constellations": GUIDES_LIVE,
   "/templates/scratch-card": "2026-11-13",
-  "/templates/bouquet": "2026-11-20",
+  "/templates/bouquet": GUIDES_LIVE,
   "/templates/fortune-cookie": "2026-11-13",
   // A template launched after "/templates/*" was set needs its own date (crawl.test.ts checks).
-  "/templates/nice-list": "2026-11-20",
+  "/templates/nice-list": GUIDES_LIVE,
   "/templates/unwrapped": "2026-11-11",
   "/templates/wishbone": "2026-11-11",
-  // The second holiday batch, live on the night of 15 Nov (UTC).
-  "/templates/frosted-window": "2026-11-20",
-  "/templates/gingerbread-house": "2026-11-20",
-  "/templates/light-the-candles": "2026-11-20",
-  "/templates/string-the-lights": "2026-11-20",
-  // 20 Nov: sixteen template pages gained what people make with them, lines to borrow and their own
-  // questions (content/template-guides.ts). The seven above that already had a date moved to it too.
-  "/templates/birthday-cinema": "2026-11-20",
-  "/templates/xoxo": "2026-11-20",
-  "/templates/the-council": "2026-11-20",
-  "/templates/bloom": "2026-11-20",
-  "/templates/halfway": "2026-11-20",
-  "/templates/snow-globe": "2026-11-20",
-  "/templates/jar-of-reasons": "2026-11-20",
-  "/templates/our-timeline": "2026-11-20",
-  "/templates/scrapbook": "2026-11-20",
+  // The second holiday batch went live on the night of 15 Nov (UTC); their words last changed with their guides.
+  "/templates/frosted-window": GUIDES_LIVE,
+  "/templates/gingerbread-house": GUIDES_LIVE,
+  "/templates/light-the-candles": GUIDES_LIVE,
+  "/templates/string-the-lights": GUIDES_LIVE,
+  // The other nine templates with a guide. The eight above that already had a date moved to GUIDES_LIVE too.
+  "/templates/birthday-cinema": GUIDES_LIVE,
+  "/templates/xoxo": GUIDES_LIVE,
+  "/templates/the-council": GUIDES_LIVE,
+  "/templates/bloom": GUIDES_LIVE,
+  "/templates/halfway": GUIDES_LIVE,
+  "/templates/snow-globe": GUIDES_LIVE,
+  "/templates/jar-of-reasons": GUIDES_LIVE,
+  "/templates/our-timeline": GUIDES_LIVE,
+  "/templates/scrapbook": GUIDES_LIVE,
   "/occasions/*": "2026-10-25",
   "/occasions/birthday": "2026-11-13",
   "/occasions/anniversary": "2026-11-13",
