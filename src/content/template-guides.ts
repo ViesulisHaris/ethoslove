@@ -19,11 +19,18 @@ import type { GiftLocale } from "@/lib/gift/schema";
  *
  * Since 21 Nov 2026 an idea is a card, not a paragraph (the owner, on the first screenshots: "it's
  * SOOO MUCH TEXT… no one's reading all that"): a title of at most six words, one line of at most
- * sixteen on what to do, and one line to borrow, which the page draws the way the template shows
- * it (content/template-guide-looks.ts) under the name of the field it goes in.
+ * sixteen on what to do, and one line to borrow, which the page draws in its handwriting face
+ * under the name the editor gives the field it goes in (components/templates/page/sections.tsx).
  * tests/unit/text-budget.test.ts holds the lengths; tests/unit/template-guides.test.ts reads each
  * field's limit from the template's own schema, so a line that would not fit where the card says
  * to put it fails the build.
+ *
+ * Since the second review of 21 Nov 2026 no instruction is on two gifts: a card about the P.S.
+ * says what to keep for it in that moment (every gift's surprise is the same hidden line, on a
+ * card headed P.S., revealed by a tap, a press or a shake as the sender chooses), a card about a
+ * limit says what to write there before it gives the number, and a choice is named as the editor
+ * names it. docs/marketing/growth-build/reports/guides-claims.md lists, for every card, the lines
+ * of the template that make it true (tests/unit/guides-claims.test.ts checks them on every run and writes the file when asked).
  *
  * Since the owner read The Letter's page (21 Nov 2026: "change the ways when to send the gifts, as
  * its kinda weird for letter, they should be good for each gift") every gift has six cards, and a
@@ -99,7 +106,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Good news",
-            how: "The text on the foil takes 30 characters.",
+            how: "Tell them where to start on the foil itself, in 30 characters.",
             borrow: { field: "fields.foilText", line: "scratch me first" },
           },
         ],
@@ -154,7 +161,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una buena noticia",
-            how: "El texto del metalizado admite 30 caracteres.",
+            how: "Diles por dónde empezar en el propio metalizado, en 30 caracteres.",
             borrow: { field: "fields.foilText", line: "ráscame primero" },
           },
         ],
@@ -397,7 +404,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary letter",
-            how: "Begin where the two of you began, then a year to a paragraph.",
+            how: "Begin where the two of you began. One memory, then what it meant.",
             borrow: { field: "fields.greeting", line: "To the stranger who took my umbrella," },
           },
           {
@@ -422,7 +429,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A letter for no reason",
-            how: "Add a hidden P.S. at the end.",
+            how: "The P.S. arrives as a postcard with a present to tap. One line is enough.",
             borrow: { field: "surprise.text", line: "P.S. Your favourite is in the fridge." },
           },
         ],
@@ -461,7 +468,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Una carta de aniversario",
-            how: "Empieza por donde empezó lo vuestro, y después un párrafo por año.",
+            how: "Empieza por donde empezó lo vuestro. Un recuerdo y lo que significó.",
             borrow: { field: "fields.greeting", line: "A quien se llevó mi paraguas sin pedirlo:" },
           },
           {
@@ -486,7 +493,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una carta porque sí",
-            how: "Añade una posdata escondida al final.",
+            how: "La posdata llega en una postal con un regalo que se toca. Basta una línea.",
             borrow: { field: "surprise.text", line: "P. D.: Tu favorito está en la nevera." },
           },
         ],
@@ -543,12 +550,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A birthday you’ll miss",
-            how: "Add a countdown to the day you can celebrate in person.",
+            how: "Set the countdown to the evening you arrive with a cake.",
             borrow: { field: "countdown.label", line: "Until I can sing it in person" },
           },
           {
             heading: "With a present to find",
-            how: "Say where the present is in the surprise at the end.",
+            how: "The P.S. shows once your message has played. Send them to the hiding place.",
             borrow: { field: "surprise.text", line: "Check your coat pocket. Two tickets." },
           },
           {
@@ -598,12 +605,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un cumple que te pierdes",
-            how: "Añade una cuenta atrás hasta el día en que lo celebréis en persona.",
+            how: "Pon la cuenta atrás en la tarde en que llegas con una tarta.",
             borrow: { field: "countdown.label", line: "Hasta cantártelo en persona" },
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di dónde está el regalo en la sorpresa del final.",
+            how: "La posdata sale cuando tu mensaje ha terminado. Mándale al escondite.",
             borrow: { field: "surprise.text", line: "Mira en el bolsillo del abrigo. Dos entradas." },
           },
           {
@@ -646,8 +653,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Long distance",
-            how: "Add a countdown to the next time you’re under the same sky.",
-            borrow: { field: "countdown.label", line: "Until I land" },
+            how: "Count down to your landing, set in their time zone.",
+            borrow: { field: "countdown.label", line: "Until we share a sky again" },
           },
           {
             heading: "Valentine’s Day",
@@ -702,8 +709,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A distancia",
-            how: "Añade una cuenta atrás hasta veros bajo el mismo cielo.",
-            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
+            how: "Cuenta atrás hasta tu aterrizaje, en su zona horaria.",
+            borrow: { field: "countdown.label", line: "Hasta volver a compartir cielo" },
           },
           {
             heading: "San Valentín",
@@ -761,7 +768,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An anniversary",
-            how: "The word on the second photo takes 10 characters.",
+            how: "Write the count under the second photo. It takes 10 characters.",
             borrow: { field: "fields.word", line: "one year" },
           },
           {
@@ -771,7 +778,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A date night",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. keeps the plan until they tap. Give the day and the place.",
             borrow: { field: "surprise.text", line: "Saturday. The table by the window." },
           },
           {
@@ -812,7 +819,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un aniversario",
-            how: "La palabra de la segunda foto admite 10 caracteres.",
+            how: "Escribe la cuenta bajo la segunda foto. Admite 10 caracteres.",
             borrow: { field: "fields.word", line: "un año" },
           },
           {
@@ -822,7 +829,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una noche de cita",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata guarda el plan hasta que toquen. Di el día y el sitio.",
             borrow: { field: "surprise.text", line: "Sábado. La mesa junto a la ventana." },
           },
           {
@@ -861,7 +868,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Just because",
-            how: "The charge takes 60 characters.",
+            how: "Charge them with the thing they do every day, in 60 characters.",
             borrow: { field: "fields.charge", line: "stealing every hoodie I own" },
           },
           {
@@ -912,12 +919,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Porque sí",
-            how: "El cargo admite 60 caracteres.",
+            how: "Acúsale de eso que hace a diario, en 60 caracteres.",
             borrow: { field: "fields.charge", line: "robarme todas las sudaderas" },
           },
           {
             heading: "Su cumpleaños",
-            how: "Hasta seis conclusiones. Séllalo con «aprobado».",
+            how: "Hasta seis conclusiones. Séllalo con «Visto bueno».",
             borrow: { field: "fields.findings", line: "mejora cada año, y da rabia" },
           },
           {
@@ -976,7 +983,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Valentine’s Day",
-            how: "Hide the plan for the evening in the surprise at the end.",
+            how: "Once your message has typed out, a P.S. holds the evening’s plan.",
             borrow: { field: "surprise.text", line: "Dinner is at 8. I’m cooking." },
           },
           {
@@ -1031,7 +1038,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "San Valentín",
-            how: "Esconde el plan de la noche en la sorpresa del final.",
+            how: "Cuando tu mensaje termina de escribirse, una posdata guarda el plan de la noche.",
             borrow: { field: "surprise.text", line: "La cena es a las 20:00. Cocino yo." },
           },
           {
@@ -1079,8 +1086,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Before the next visit",
-            how: "Add a countdown to the day you arrive.",
-            borrow: { field: "countdown.label", line: "Until I land" },
+            how: "The timer runs to the second you arrive. Label it with the day.",
+            borrow: { field: "countdown.label", line: "Until Friday at arrivals" },
           },
           {
             heading: "An anniversary apart",
@@ -1104,7 +1111,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The last time apart",
-            how: "Put the news in the surprise at the end.",
+            how: "Keep the news for the P.S. Nothing before it should give it away.",
             borrow: { field: "surprise.text", line: "Check the date. I’m not flying back." },
           },
         ],
@@ -1134,8 +1141,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Antes de la próxima visita",
-            how: "Añade una cuenta atrás hasta el día en que llegas.",
-            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
+            how: "El reloj cuenta hasta el segundo en que llegas. Ponle el día.",
+            borrow: { field: "countdown.label", line: "Hasta el viernes en llegadas" },
           },
           {
             heading: "Un aniversario a distancia",
@@ -1159,7 +1166,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La última vez a distancia",
-            how: "Pon la noticia en la sorpresa del final.",
+            how: "Guarda la noticia para la posdata. Que nada antes la delate.",
             borrow: { field: "surprise.text", line: "Mira la fecha. Ya no hay vuelo de vuelta." },
           },
         ],
@@ -1192,7 +1199,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Christmas Eve",
-            how: "The snowman’s blackboard takes 36 characters.",
+            how: "Chalk their name on the snowman’s board. It holds 36 characters.",
             borrow: { field: "fields.sign", line: "merry christmas, Ava" },
           },
           {
@@ -1202,12 +1209,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Christmas apart",
-            how: "Add a countdown to the day you arrive.",
-            borrow: { field: "countdown.label", line: "Until I’m at your door" },
+            how: "Count down to the train home. It ticks in days, hours, minutes and seconds.",
+            borrow: { field: "countdown.label", line: "Until I knock on your window" },
           },
           {
             heading: "With a present to find",
-            how: "Say what’s waiting in the surprise at the end.",
+            how: "The P.S. comes after the photos, behind a present they tap.",
             borrow: { field: "surprise.text", line: "Two tickets to the ice rink on the 27th." },
           },
           {
@@ -1217,7 +1224,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The year in photos",
-            how: "Up to eight photos follow your letter.",
+            how: "Go month by month: up to eight photos come after your letter.",
             borrow: { field: "caption", line: "March, the day we moved in" },
           },
         ],
@@ -1243,7 +1250,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Nochebuena",
-            how: "La pizarra del muñeco de nieve admite 36 caracteres.",
+            how: "Escribe su nombre con tiza en la pizarra del muñeco. Caben 36 caracteres.",
             borrow: { field: "fields.sign", line: "feliz navidad, Ava" },
           },
           {
@@ -1253,22 +1260,22 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Navidad a distancia",
-            how: "Añade una cuenta atrás hasta el día en que llegas.",
-            borrow: { field: "countdown.label", line: "Hasta llamar a tu puerta" },
+            how: "Cuenta atrás hasta el tren de vuelta, en días, horas, minutos y segundos.",
+            borrow: { field: "countdown.label", line: "Hasta llamar a tu ventana" },
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di qué espera en la sorpresa del final.",
+            how: "La posdata llega tras las fotos, detrás de un regalo que se toca.",
             borrow: { field: "surprise.text", line: "Dos entradas para la pista de hielo el 27." },
           },
           {
             heading: "Para la familia",
-            how: "Casita crema, cabaña o azul medianoche. Firmad entre todos.",
+            how: "Casita crema, cabaña de troncos o azul medianoche. Firmad entre todos.",
             borrow: { field: "fields.sign", line: "con cariño, los cuatro" },
           },
           {
             heading: "El año en fotos",
-            how: "Hasta ocho fotos siguen a tu carta.",
+            how: "Ve mes a mes: hasta ocho fotos llegan tras tu carta.",
             borrow: { field: "caption", line: "Marzo, el día de la mudanza" },
           },
         ],
@@ -1366,7 +1373,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.thanks", line: "la silla de más que siempre encuentras" },
           },
           {
-            heading: "Con las amistades",
+            heading: "Con amigas y amigos",
             how: "Una vela por cada persona de la mesa.",
             borrow: { field: "fields.thanks", line: "Sam, por conducir siempre" },
           },
@@ -1420,7 +1427,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Christmas apart",
-            how: "Add a countdown to the day you’re home.",
+            how: "Set the countdown to the hour you pull into the drive.",
             borrow: { field: "countdown.label", line: "Until I’m home" },
           },
           {
@@ -1430,12 +1437,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The year in photos",
-            how: "Up to eight photos follow your letter.",
+            how: "Up to eight photos follow your letter. Start with the house unlit.",
             borrow: { field: "caption", line: "The roof, before the lights" },
           },
           {
             heading: "With a present to find",
-            how: "Say what’s coming in the surprise at the end.",
+            how: "Hint at the present in the P.S. and keep the box for the day.",
             borrow: { field: "surprise.text", line: "The big star you circled in the catalogue." },
           },
         ],
@@ -1471,7 +1478,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Navidad a distancia",
-            how: "Añade una cuenta atrás hasta volver a casa.",
+            how: "Pon la cuenta atrás en la hora en que aparcas en la puerta.",
             borrow: { field: "countdown.label", line: "Hasta que vuelva a casa" },
           },
           {
@@ -1481,12 +1488,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "El año en fotos",
-            how: "Hasta ocho fotos siguen a tu carta.",
+            how: "Hasta ocho fotos siguen a tu carta. Empieza por la casa a oscuras.",
             borrow: { field: "caption", line: "El tejado, antes de las luces" },
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di lo que viene en la sorpresa del final.",
+            how: "Da una pista del regalo en la posdata y guarda la caja para el día.",
             borrow: { field: "surprise.text", line: "La estrella grande que marcaste en el catálogo." },
           },
         ],
@@ -1535,7 +1542,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With a present to find",
-            how: "Say what’s coming in the surprise at the end.",
+            how: "Set the P.S. to shake, so they rattle the phone like a wrapped box.",
             borrow: { field: "surprise.text", line: "A real kit, the big one, and Saturday free." },
           },
           {
@@ -1590,7 +1597,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di lo que viene en la sorpresa del final.",
+            how: "Pon la posdata en agitar: sacuden el móvil como una caja envuelta.",
             borrow: { field: "surprise.text", line: "Un kit de verdad, el grande, y el sábado libre." },
           },
           {
@@ -1628,7 +1635,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Christmas",
-            how: "The brass plaque takes 44 characters.",
+            how: "Name the winter on the brass plaque, in 44 characters.",
             borrow: { field: "fields.plaque", line: "the winter we stopped counting trains" },
           },
           {
@@ -1648,7 +1655,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Before you arrive",
-            how: "Add a countdown to the day you’re at their door.",
+            how: "Time the countdown to your train, not to Christmas Day.",
             borrow: { field: "countdown.label", line: "Until I’m at your door" },
           },
           {
@@ -1683,7 +1690,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Navidad",
-            how: "La placa de latón admite 44 caracteres.",
+            how: "Ponle nombre a este invierno en la placa de latón, en 44 caracteres.",
             borrow: { field: "fields.plaque", line: "el invierno de los trenes sin contar" },
           },
           {
@@ -1703,7 +1710,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Antes de llegar",
-            how: "Añade una cuenta atrás hasta estar en su puerta.",
+            how: "Pon la cuenta atrás en tu tren, no en el día de Navidad.",
             borrow: { field: "countdown.label", line: "Hasta llamar a tu puerta" },
           },
           {
@@ -1766,7 +1773,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With a present to find",
-            how: "Say what’s coming in the surprise at the end.",
+            how: "The P.S. gets a sheet of its own. Name the thing they hinted at.",
             borrow: { field: "surprise.text", line: "The thing you hinted at since October." },
           },
         ],
@@ -1797,7 +1804,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Para tu pareja",
             how: "Hasta cuatro fechorías, de 50 caracteres. Ponles número.",
-            borrow: { field: "fields.naughty", line: "me quitó la manta 41 noches de 41" },
+            borrow: { field: "fields.naughty", line: "me quitó la manta las 41 noches" },
           },
           {
             heading: "Para un peque",
@@ -1806,7 +1813,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para tu hermana o tu hermano",
-            how: "Todo fechorías, y el sello de «traviesa y buena».",
+            how: "Todo fechorías, y el sello de «Carbón dulce».",
             borrow: { field: "fields.naughty", line: "se comió mis sobras y lo negó" },
           },
           {
@@ -1821,7 +1828,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di lo que viene en la sorpresa del final.",
+            how: "La posdata tiene su propia hoja. Di eso que lleva meses insinuando.",
             borrow: { field: "surprise.text", line: "Lo que llevas insinuando desde octubre." },
           },
         ],
@@ -1972,7 +1979,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A wedding",
-            how: "The closing line takes 80 characters.",
+            how: "Close the road on today, in a line of 80 characters.",
             borrow: { field: "fields.ending", line: "…and today we add the next one." },
           },
           {
@@ -1988,7 +1995,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Before a big day",
             how: "It ends on a countdown to what comes next.",
-            borrow: { field: "countdown.label", line: "Until four" },
+            borrow: { field: "countdown.label", line: "Until we’re a family of four" },
           },
           {
             heading: "A baby’s first year",
@@ -2023,7 +2030,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una boda",
-            how: "La frase final admite 80 caracteres.",
+            how: "Cierra el camino con el día de hoy, en una frase de 80 caracteres.",
             borrow: { field: "fields.ending", line: "…y hoy añadimos la siguiente." },
           },
           {
@@ -2039,7 +2046,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Antes de un gran día",
             how: "Acaba en una cuenta atrás hacia lo que viene.",
-            borrow: { field: "countdown.label", line: "Hasta los cuatro" },
+            borrow: { field: "countdown.label", line: "Hasta que seamos cuatro" },
           },
           {
             heading: "El primer año de un bebé",
@@ -2072,7 +2079,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary",
-            how: "The cut-out title takes 28 characters.",
+            how: "Say how long it’s been in the cut-out title, in 28 characters.",
             borrow: { field: "fields.headline", line: "a year of you two" },
           },
           {
@@ -2092,7 +2099,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For a best friend",
-            how: "The pinned note takes 40 characters.",
+            how: "Type where it started on the pinned note. It takes 40 characters.",
             borrow: { field: "fields.tag", line: "since the back row of maths" },
           },
           {
@@ -2127,7 +2134,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un aniversario",
-            how: "El título recortado admite 28 caracteres.",
+            how: "Di cuánto lleváis en el título recortado, en 28 caracteres.",
             borrow: { field: "fields.headline", line: "un año de vosotros" },
           },
           {
@@ -2146,8 +2153,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.quote", line: "Guardé el billete de tren. Claro." },
           },
           {
-            heading: "Para tu mejor amistad",
-            how: "La nota con chincheta admite 40 caracteres.",
+            heading: "Para quien te conoce de siempre",
+            how: "Escribe dónde empezó todo en la nota con chincheta. Admite 40 caracteres.",
             borrow: { field: "fields.tag", line: "desde la última fila de mates" },
           },
           {
@@ -2200,7 +2207,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Before the real present",
-            how: "Hide where the present is in the surprise at the end.",
+            how: "The P.S. unlocks after the last level and your message. Hide the present first.",
             borrow: { field: "surprise.text", line: "Cheat code: look under the bed." },
           },
           {
@@ -2210,8 +2217,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Counting down to a trip",
-            how: "Add a countdown to the day you leave.",
-            borrow: { field: "countdown.label", line: "Until we board" },
+            how: "Count down to take-off and label it like the next level.",
+            borrow: { field: "countdown.label", line: "Next level: the airport" },
           },
         ],
       },
@@ -2224,12 +2231,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Su cumpleaños",
             how: "Ponle su nombre y su edad al juego; cada nivel descubre una foto.",
-            borrow: { field: "fields.title", line: "ANA CUMPLE 30" },
+            borrow: { field: "fields.title", line: "ANA: NIVEL 30" },
           },
           {
             heading: "San Valentín",
             how: "Que caigan corazones y guarda tu mensaje para el último nivel.",
-            borrow: { field: "fields.title", line: "JUGADOR DOS, YA FIJO" },
+            borrow: { field: "fields.title", line: "MODO DOS, PARA SIEMPRE" },
           },
           {
             heading: "Un aniversario",
@@ -2238,7 +2245,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Antes del regalo de verdad",
-            how: "Esconde dónde está el regalo en la sorpresa del final.",
+            how: "La posdata se abre tras el último nivel y tu mensaje. Antes, esconde el regalo.",
             borrow: { field: "surprise.text", line: "Truco: mira debajo de la cama." },
           },
           {
@@ -2248,8 +2255,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Cuenta atrás para un viaje",
-            how: "Añade una cuenta atrás hasta el día en que salís.",
-            borrow: { field: "countdown.label", line: "Hasta que embarquemos" },
+            how: "Cuenta atrás hasta el despegue y titúlala como el siguiente nivel.",
+            borrow: { field: "countdown.label", line: "Siguiente nivel: el aeropuerto" },
           },
         ],
       },
@@ -2284,12 +2291,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Asking them out",
-            how: "Keep the plan for the surprise at the end.",
+            how: "Ask in the letter. The P.S. holds the day, the film and the row.",
             borrow: { field: "surprise.text", line: "Sunday, the matinee, back row." },
           },
           {
             heading: "Just because it’s autumn",
-            how: "Your letter comes at the end of the collage.",
+            how: "The collage ends on your letter. Say what autumn does to you.",
             borrow: { field: "message", line: "I like you most in a big coat." },
           },
         ],
@@ -2317,17 +2324,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un Halloween tranquilo",
-            how: "Óxido, café u oliva: elige el que se parezca a vuestro octubre.",
+            how: "Óxido, espresso u oliva: elige el que se parezca a vuestro octubre.",
             borrow: { field: "fields.wish", line: "tú, yo y una calabaza" },
           },
           {
             heading: "Para proponer un plan",
-            how: "Guarda el plan para la sorpresa del final.",
+            how: "Pregunta en la carta. La posdata guarda el día, la peli y la fila.",
             borrow: { field: "surprise.text", line: "Domingo, sesión de tarde, última fila." },
           },
           {
             heading: "Porque es otoño",
-            how: "Tu carta llega al final del collage.",
+            how: "El collage acaba en tu carta. Di qué te hace el otoño.",
             borrow: { field: "message", line: "Con abrigo me gustas todavía más." },
           },
         ],
@@ -2348,7 +2355,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A child’s birthday",
-            how: "Up to eight balloons, one photo in each. Pick the bright palette.",
+            how: "Up to eight balloons, one photo in each. Pick Jewel tones.",
             borrow: { field: "fields.wall", line: "Seven today, taller tomorrow" },
           },
           {
@@ -2386,7 +2393,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "El cumple de un peque",
-            how: "Hasta ocho globos, una foto en cada uno. Elige colores vivos.",
+            how: "Hasta ocho globos, una foto en cada uno. Elige Tonos joya.",
             borrow: { field: "fields.wall", line: "Hoy siete, mañana más alto" },
           },
           {
@@ -2432,7 +2439,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A Halloween date",
-            how: "Keep the plan for the surprise at the end.",
+            how: "The where and when go in the P.S. Add what to bring.",
             borrow: { field: "surprise.text", line: "Friday, 8pm, the roof. Bring a blanket." },
           },
           {
@@ -2461,7 +2468,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "La noche de Halloween",
             how: "Los murciélagos escriben su nombre y luego tu frase, de hasta 14 caracteres.",
-            borrow: { field: "fields.line", line: "sé mi susto" },
+            borrow: { field: "fields.line", line: "¿truco o beso?" },
           },
           {
             heading: "Para invitar a una fiesta",
@@ -2470,7 +2477,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una cita de Halloween",
-            how: "Guarda el plan para la sorpresa del final.",
+            how: "El dónde y el cuándo van en la posdata. Añade qué llevar.",
             borrow: { field: "surprise.text", line: "Viernes a las 20:00, la azotea. Trae manta." },
           },
           {
@@ -2501,7 +2508,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Asking them to be yours",
-            how: "The ghost’s sign holds their name, and your words under it.",
+            how: "The ghost holds up their name. Your words appear under it, heading the collage.",
             borrow: { field: "fields.sign", line: "will you be my boo?" },
           },
           {
@@ -2511,7 +2518,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A pumpkin-carving date",
-            how: "Put the plan in the surprise at the end.",
+            how: "Give the hour in the P.S. and say who brings the pumpkins.",
             borrow: { field: "surprise.text", line: "Friday at 7: pumpkins, then a scary film." },
           },
           {
@@ -2526,7 +2533,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For a best friend",
-            how: "Pink, pumpkin or midnight. The sign takes 24 characters.",
+            how: "Pink, pumpkin or midnight. The words under their name take 24 characters.",
             borrow: { field: "fields.sign", line: "partner in crime" },
           },
         ],
@@ -2538,8 +2545,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué poner en una tarjeta be my boo",
         items: [
           {
-            heading: "Para pedírselo",
-            how: "El cartel del fantasma lleva su nombre y, debajo, tus palabras.",
+            heading: "Para pedirle salir",
+            how: "El fantasma enseña su nombre. Tus palabras salen debajo, encabezando el collage.",
             borrow: { field: "fields.sign", line: "¿quieres ser mi boo?" },
           },
           {
@@ -2549,7 +2556,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un plan de calabazas",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "Pon la hora en la posdata y di quién lleva las calabazas.",
             borrow: { field: "surprise.text", line: "Viernes a las 19:00: calabazas y peli de miedo." },
           },
           {
@@ -2563,8 +2570,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "message", line: "Guárdame un caramelo. Ya voy." },
           },
           {
-            heading: "Para tu mejor amistad",
-            how: "Rosa, calabaza o medianoche. El cartel admite 24 caracteres.",
+            heading: "Para quien te conoce de siempre",
+            how: "Rosa, calabaza o medianoche. Las palabras bajo su nombre admiten 24 caracteres.",
             borrow: { field: "fields.sign", line: "mi cómplice" },
           },
         ],
@@ -2600,12 +2607,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Before a first job",
-            how: "Add a countdown to their first day.",
+            how: "Count down to nine o’clock on their first Monday.",
             borrow: { field: "countdown.label", line: "Until your first day" },
           },
           {
             heading: "With a present to find",
-            how: "Say where the present is in the surprise at the end.",
+            how: "The P.S. says where the present is. Make them press and hold for it.",
             borrow: { field: "surprise.text", line: "Look in the boot of the car." },
           },
         ],
@@ -2638,12 +2645,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Antes del primer trabajo",
-            how: "Añade una cuenta atrás hasta su primer día.",
+            how: "Cuenta atrás hasta las nueve de su primer lunes.",
             borrow: { field: "countdown.label", line: "Hasta tu primer día" },
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di dónde está el regalo en la sorpresa del final.",
+            how: "La posdata dice dónde está el regalo. Que tengan que mantener pulsado.",
             borrow: { field: "surprise.text", line: "Mira en el maletero del coche." },
           },
         ],
@@ -2669,7 +2676,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A Halloween date",
-            how: "Hide the plan in the surprise at the end.",
+            how: "The potion is the invitation. The P.S. says whose kitchen, and when.",
             borrow: { field: "surprise.text", line: "Saturday night, my kitchen. Bring a spoon." },
           },
           {
@@ -2707,13 +2714,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una cita de Halloween",
-            how: "Esconde el plan en la sorpresa del final.",
+            how: "La poción es la invitación. La posdata dice en qué cocina y cuándo.",
             borrow: { field: "surprise.text", line: "Sábado noche, en mi cocina. Trae cuchara." },
           },
           {
-            heading: "Para una amistad",
+            heading: "Entre amigas y amigos",
             how: "Que los ingredientes sean bromas vuestras. Cada uno admite 34 caracteres.",
-            borrow: { field: "fields.ingredients", line: "cada «¿estás despierta?»" },
+            borrow: { field: "fields.ingredients", line: "cada “¿sigues ahí?” a las 3" },
           },
           {
             heading: "A distancia",
@@ -2738,7 +2745,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary",
-            how: "The postcard is in your handwriting and takes 90 characters.",
+            how: "The postcard under the first photo is handwritten. Say one thing you still do.",
             borrow: { field: "fields.note", line: "Two years and I still save you the window seat." },
           },
           {
@@ -2753,7 +2760,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Asking them out",
-            how: "Keep the plan for the surprise at the end.",
+            how: "End on the P.S.: the day, the hour and what to wear.",
             borrow: { field: "surprise.text", line: "Friday, 7pm. Wear the pink dress." },
           },
           {
@@ -2776,7 +2783,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un aniversario",
-            how: "La postal va con tu letra y admite 90 caracteres.",
+            how: "La postal bajo la primera foto va a mano. Di algo que sigues haciendo.",
             borrow: { field: "fields.note", line: "Dos años y te sigo guardando la ventanilla." },
           },
           {
@@ -2791,11 +2798,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para proponer un plan",
-            how: "Guarda el plan para la sorpresa del final.",
+            how: "Acaba en la posdata: el día, la hora y qué ponerse.",
             borrow: { field: "surprise.text", line: "Viernes a las 19:00. Ponte algo rosa." },
           },
           {
-            heading: "Para tu mejor amistad",
+            heading: "Para quien te conoce de siempre",
             how: "Hasta diez polaroids, a lo largo de toda la página.",
             borrow: { field: "caption", line: "Cuando aún no sabíamos maquillarnos" },
           },
@@ -2832,7 +2839,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A date night",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. is for the hour and the wine. Keep the place a secret.",
             borrow: { field: "surprise.text", line: "Saturday, 9pm. Candles and red wine." },
           },
           {
@@ -2866,11 +2873,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Halloween",
             how: "Las palabras recortadas son la apuesta que harías por vosotros.",
-            borrow: { field: "fields.bet", line: "todo a ti, siempre" },
+            borrow: { field: "fields.bet", line: "voy con todo, siempre" },
           },
           {
             heading: "Una noche de cita",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata es para la hora y el vino. El sitio, ni mencionarlo.",
             borrow: { field: "surprise.text", line: "Sábado a las 21:00. Velas y vino tinto." },
           },
           {
@@ -2880,7 +2887,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para quien odia el rosa",
-            how: "Burdeos, negro o pergamino. Hasta diez fotos.",
+            how: "Burdeos, noir o pergamino. Hasta diez fotos.",
             borrow: { field: "caption", line: "La noche de la tormenta" },
           },
         ],
@@ -2896,7 +2903,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Their birthday",
-            how: "Tick “it’s their birthday” and the magazine letters say so.",
+            how: "Leave “It’s their birthday” on: the camera wishes them one when it turns on.",
             borrow: { field: "fields.headline", line: "birthday behaviour only" },
           },
           {
@@ -2911,7 +2918,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A day out to plan",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. carries the meeting time. Tell them to charge the camera.",
             borrow: { field: "surprise.text", line: "Saturday, 11am. Bring the camera." },
           },
           {
@@ -2934,7 +2941,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Su cumpleaños",
-            how: "Marca que es su cumpleaños y las letras de revista lo dicen.",
+            how: "Deja marcado «Es su cumpleaños»: la cámara le felicita al encenderse.",
             borrow: { field: "fields.headline", line: "hoy se permite todo" },
           },
           {
@@ -2949,11 +2956,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para planear un día",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata lleva la hora de quedar. Dile que cargue la cámara.",
             borrow: { field: "surprise.text", line: "Sábado a las 11:00. Trae la cámara." },
           },
           {
-            heading: "Para tu mejor amistad",
+            heading: "Para quien te conoce de siempre",
             how: "Tras la última foto el carrete se imprime en tira, y luego tu carta.",
             borrow: { field: "message", line: "No borres nunca las movidas." },
           },
@@ -2975,12 +2982,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary",
-            how: "The words across the top take 22 characters.",
+            how: "Count the seasons across the top, in 22 characters.",
             borrow: { field: "fields.title", line: "four springs in" },
           },
           {
             heading: "Just because",
-            how: "Your letter comes at the end of the collage.",
+            how: "Your letter closes the collage. Three lines are plenty here.",
             borrow: { field: "message", line: "Thinking of you, for no reason." },
           },
           {
@@ -2990,7 +2997,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A day out",
-            how: "Put the plan in the surprise at the end.",
+            how: "Two stops are enough for the P.S.: where first, and where after.",
             borrow: { field: "surprise.text", line: "Sunday: the botanical garden, then a picnic." },
           },
           {
@@ -3013,12 +3020,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un aniversario",
-            how: "Las palabras de arriba admiten 22 caracteres.",
+            how: "Cuenta las estaciones en las palabras de arriba, en 22 caracteres.",
             borrow: { field: "fields.title", line: "cuatro primaveras" },
           },
           {
             heading: "Porque sí",
-            how: "Tu carta llega al final del collage.",
+            how: "Tu carta cierra el collage. Con tres líneas basta.",
             borrow: { field: "message", line: "Me acordé de ti, sin motivo." },
           },
           {
@@ -3028,7 +3035,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para planear un día",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "Con dos paradas basta para la posdata: adónde primero y adónde después.",
             borrow: { field: "surprise.text", line: "Domingo: el jardín botánico y luego pícnic." },
           },
           {
@@ -3064,7 +3071,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An autumn day out",
-            how: "Put the plan in the surprise at the end.",
+            how: "Name the place in the P.S., and the drink that comes after.",
             borrow: { field: "surprise.text", line: "Saturday: the orchard, then cider." },
           },
           {
@@ -3074,7 +3081,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Long distance",
-            how: "Your letter comes at the end of the collage.",
+            how: "Describe your street in the letter, at the end of the collage.",
             borrow: { field: "message", line: "Leaves are falling here. Come see." },
           },
           {
@@ -3102,7 +3109,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un plan de otoño",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "Di el sitio en la posdata, y lo que se bebe después.",
             borrow: { field: "surprise.text", line: "Sábado: el huerto y luego sidra." },
           },
           {
@@ -3112,7 +3119,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A distancia",
-            how: "Tu carta llega al final del collage.",
+            how: "Describe tu calle en la carta, al final del collage.",
             borrow: { field: "message", line: "Aquí ya caen las hojas. Ven a verlo." },
           },
           {
@@ -3138,12 +3145,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An anniversary",
-            how: "The words under the flowers take 18 characters.",
+            how: "Sign off under the flowers the way you end your texts, in 18 characters.",
             borrow: { field: "fields.signoff", line: "love you, still" },
           },
           {
             heading: "Valentine’s Day",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. is the plan: the morning first, lunch second.",
             borrow: { field: "surprise.text", line: "Saturday: the flower market, then lunch." },
           },
           {
@@ -3153,7 +3160,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A thank-you",
-            how: "Your letter is at the bottom of the page.",
+            how: "Your letter is at the bottom of the page. Thank them for one day.",
             borrow: { field: "message", line: "You showed up. I won’t forget it." },
           },
           {
@@ -3176,22 +3183,22 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un aniversario",
-            how: "Las palabras bajo las flores admiten 18 caracteres.",
+            how: "Despídete bajo las flores como en tus mensajes, en 18 caracteres.",
             borrow: { field: "fields.signoff", line: "te quiero, aún" },
           },
           {
             heading: "San Valentín",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata es el plan: primero la mañana, luego la comida.",
             borrow: { field: "surprise.text", line: "Sábado: el mercado de flores y a comer." },
           },
           {
-            heading: "Para tu mejor amistad",
+            heading: "Para quien te conoce de siempre",
             how: "Hasta diez polaroids, sujetas con cinta de cuadros.",
             borrow: { field: "caption", line: "El corte de pelo innombrable" },
           },
           {
             heading: "Para dar las gracias",
-            how: "Tu carta está al final de la página.",
+            how: "Tu carta está al final de la página. Da las gracias por un día concreto.",
             borrow: { field: "message", line: "Estuviste ahí. No se me olvida." },
           },
           {
@@ -3222,7 +3229,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A weekend away",
-            how: "Put the booking in the surprise at the end.",
+            how: "The booking goes in the P.S. Say which day to pack for.",
             borrow: { field: "surprise.text", line: "Friday. The cabin with the wood burner." },
           },
           {
@@ -3260,7 +3267,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una escapada",
-            how: "Pon la reserva en la sorpresa del final.",
+            how: "La reserva va en la posdata. Di para qué día hay que hacer la maleta.",
             borrow: { field: "surprise.text", line: "Viernes. La cabaña con estufa de leña." },
           },
           {
@@ -3301,7 +3308,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Father’s Day",
-            how: "The weather box takes 80 characters.",
+            how: "Forecast his Sunday in the weather box, in 80 characters.",
             borrow: { field: "fields.weather", line: "Clear skies, with a 100% chance of a nap." },
           },
           {
@@ -3330,7 +3337,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un cumpleaños redondo",
             how: "El titular admite 80 caracteres. Cuéntalo como noticia.",
-            borrow: { field: "fields.headline", line: "VECINA CUMPLE 30; EL PAÍS REACCIONA" },
+            borrow: { field: "fields.headline", line: "CUMPLE 30 Y EL BARRIO REACCIONA" },
           },
           {
             heading: "Una graduación",
@@ -3339,7 +3346,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "El Día del Padre",
-            how: "El recuadro del tiempo admite 80 caracteres.",
+            how: "Pronostica su domingo en el recuadro del tiempo, en 80 caracteres.",
             borrow: { field: "fields.weather", line: "Cielo despejado y siesta asegurada." },
           },
           {
@@ -3375,7 +3382,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An anniversary",
-            how: "The sign on the gate takes 24 characters.",
+            how: "Burn your count of summers into the gate’s sign: 24 characters.",
             borrow: { field: "fields.sign", line: "five summers of us" },
           },
           {
@@ -3413,7 +3420,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un aniversario",
-            how: "El cartel de la verja admite 24 caracteres.",
+            how: "Graba vuestros veranos en el cartel de la verja: 24 caracteres.",
             borrow: { field: "fields.sign", line: "cinco veranos de dos" },
           },
           {
@@ -3434,7 +3441,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Para una casa nueva",
             how: "Puede acompañarles una mariposa, una abeja o un gato.",
-            borrow: { field: "fields.sign", line: "bienvenida a casa" },
+            borrow: { field: "fields.sign", line: "ya estás en casa" },
           },
         ],
       },
@@ -3454,7 +3461,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Halloween night",
-            how: "The tag on the gate takes 18 characters.",
+            how: "Dare them on the gate’s tag. It holds 18 characters.",
             borrow: { field: "fields.tag", line: "enter if you dare" },
           },
           {
@@ -3464,7 +3471,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A scary film night",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. says whose sofa and what time. Don’t name the film.",
             borrow: { field: "surprise.text", line: "Saturday, 8pm, my place. I picked the film." },
           },
           {
@@ -3492,7 +3499,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La noche de Halloween",
-            how: "La etiqueta de la verja admite 18 caracteres.",
+            how: "Rétale desde la etiqueta de la verja. Caben 18 caracteres.",
             borrow: { field: "fields.tag", line: "pasa si te atreves" },
           },
           {
@@ -3502,7 +3509,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una noche de pelis de miedo",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata dice en qué sofá y a qué hora. La peli no se dice.",
             borrow: { field: "surprise.text", line: "Sábado a las 20:00 en mi casa. Peli elegida." },
           },
           {
@@ -3512,8 +3519,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para quien adora el terror",
-            how: "Azul tormenta, luna de sangre, verde pantano o violeta medianoche.",
-            borrow: { field: "fields.tag", line: "la que sobrevive" },
+            how: "Azul tormenta, luna roja, verde pantano o violeta medianoche.",
+            borrow: { field: "fields.tag", line: "siempre sobrevive" },
           },
         ],
       },
@@ -3543,7 +3550,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A pumpkin patch date",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. gives the hour. Say what happens after the patch.",
             borrow: { field: "surprise.text", line: "Saturday, 7pm. Pumpkin patch first." },
           },
           {
@@ -3570,7 +3577,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.carving", line: "MAYA" },
           },
           {
-            heading: "Para pedírselo",
+            heading: "Para pedirle salir",
             how: "Talla la pregunta. Los detalles van en la carta.",
             borrow: { field: "fields.carving", line: "¿SALIMOS?" },
           },
@@ -3581,7 +3588,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un plan de calabazas",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata da la hora. Cuenta qué viene después del huerto.",
             borrow: { field: "surprise.text", line: "Sábado a las 19:00. Primero, las calabazas." },
           },
           {
@@ -3612,7 +3619,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Valentine’s Day",
-            how: "The ribbon banner takes 24 characters.",
+            how: "Ask on the ribbon banner, in 24 characters or fewer.",
             borrow: { field: "fields.banner", line: "be mine, please" },
           },
           {
@@ -3632,7 +3639,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With a plan",
-            how: "Put the plan in the surprise at the end.",
+            how: "Tell them when you’re picking them up in the P.S.",
             borrow: { field: "surprise.text", line: "Saturday. I’m picking you up at 6." },
           },
         ],
@@ -3650,8 +3657,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "San Valentín",
-            how: "La cinta admite 24 caracteres.",
-            borrow: { field: "fields.banner", line: "quédate conmigo" },
+            how: "Pídeselo en la cinta, en 24 caracteres como mucho.",
+            borrow: { field: "fields.banner", line: "¿te quedas conmigo?" },
           },
           {
             heading: "Porque sí",
@@ -3659,18 +3666,18 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "message", line: "Te vi triste, así que toma un conejito." },
           },
           {
-            heading: "Para tu mejor amistad",
+            heading: "Para quien te conoce de siempre",
             how: "Hasta ocho fotos, pegadas como pegatinas.",
-            borrow: { field: "caption", line: "Vestidas igual, sin querer" },
+            borrow: { field: "caption", line: "Íbamos igual, sin querer" },
           },
           {
             heading: "Para desear suerte",
-            how: "Puede decirlo un conejo, un oso o un gatito.",
+            how: "Puede decirlo un conejito, un osito o un gatito.",
             borrow: { field: "fields.greeting", line: "tú puedes con esto" },
           },
           {
             heading: "Con un plan",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "Di en la posdata a qué hora pasas a recogerle.",
             borrow: { field: "surprise.text", line: "Sábado. Te recojo a las 18:00." },
           },
         ],
@@ -3765,7 +3772,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Midnight on their birthday",
-            how: "The headline sits above the timer and takes 60 characters.",
+            how: "Write what the timer is counting to, above it, in 60 characters.",
             borrow: { field: "fields.headline", line: "Until you’re 30" },
           },
           {
@@ -3803,7 +3810,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Su cumpleaños a medianoche",
-            how: "El titular va sobre el reloj y admite 60 caracteres.",
+            how: "Escribe sobre el reloj hacia qué cuenta, en 60 caracteres.",
             borrow: { field: "fields.headline", line: "Hasta que cumplas 30" },
           },
           {
@@ -3948,7 +3955,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A night out",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. names the night. Say you’ve booked, and where to meet.",
             borrow: { field: "surprise.text", line: "Saturday, 8pm. I booked the dance floor." },
           },
         ],
@@ -3961,22 +3968,22 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un aniversario",
-            how: "Elige los dos cisnes para la figura.",
+            how: "Elige los dos cisnes. Tu carta sale al apagarse la melodía.",
             borrow: { field: "message", line: "Cinco años, y le daría cuerda otra vez." },
           },
           {
             heading: "El Día de la Madre",
-            how: "Hasta ocho fotos, una por vuelta.",
+            how: "Hasta ocho fotos en el espejo, una por vuelta.",
             borrow: { field: "caption", line: "Tú, enseñándome a bailar" },
           },
           {
             heading: "San Valentín",
-            how: "El lago de los cisnes o Para Elisa.",
+            how: "El lago de los cisnes, Canción de cuna de Brahms o Para Elisa.",
             borrow: { field: "message", line: "Bailaría mal contigo donde fuera." },
           },
           {
             heading: "Una boda",
-            how: "De la foto más antigua al día mismo.",
+            how: "De la primera foto al día mismo.",
             borrow: { field: "caption", line: "El primer baile, segundo intento" },
           },
           {
@@ -3986,7 +3993,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una noche fuera",
-            how: "Pon el plan en la sorpresa final.",
+            how: "La posdata dice qué noche y dónde quedáis.",
             borrow: { field: "surprise.text", line: "Sábado a las 20:00. He reservado pista." },
           },
         ],
@@ -4002,7 +4009,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary",
-            how: "The playlist’s name takes 24 characters.",
+            how: "Name the playlist after the year. It takes 24 characters.",
             borrow: { field: "fields.playlist", line: "songs from year one" },
           },
           {
@@ -4017,7 +4024,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Concert tickets",
-            how: "Put the tickets in the surprise at the end.",
+            how: "The tickets go in the P.S. Don’t name the band before it.",
             borrow: { field: "surprise.text", line: "Friday night. I got us tickets." },
           },
           {
@@ -4040,7 +4047,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un aniversario",
-            how: "El nombre de la playlist admite 24 caracteres.",
+            how: "Ponle a la playlist el nombre del año. Admite 24 caracteres.",
             borrow: { field: "fields.playlist", line: "canciones del primer año" },
           },
           {
@@ -4055,7 +4062,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Entradas para un concierto",
-            how: "Pon las entradas en la sorpresa del final.",
+            how: "Las entradas van en la posdata. No digas el grupo antes.",
             borrow: { field: "surprise.text", line: "Viernes noche. Tengo entradas." },
           },
           {
@@ -4064,7 +4071,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.playlist", line: "para el tren hacia ti" },
           },
           {
-            heading: "Para una amistad",
+            heading: "Entre amigas y amigos",
             how: "Atardecer, lila o noche para el cielo.",
             borrow: { field: "fields.note", line: "La 4 no te va a gustar. Se queda." },
           },
@@ -4091,12 +4098,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A weekend away",
-            how: "Flight, train or road trip. The date goes on the ticket.",
+            how: "Plane, train or road trip. The date goes on the ticket.",
             borrow: { field: "fields.when", line: "Fri 16 Oct" },
           },
           {
             heading: "A honeymoon",
-            how: "Add a countdown to the day you leave.",
+            how: "Count down to take-off. Left empty, the ticket’s date comes from it.",
             borrow: { field: "countdown.label", line: "Until we fly" },
           },
           {
@@ -4129,12 +4136,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una escapada",
-            how: "Avión, tren o carretera. La fecha va en el billete.",
+            how: "Avión, tren o en coche. La fecha va en el billete.",
             borrow: { field: "fields.when", line: "Vie 16 oct" },
           },
           {
             heading: "Una luna de miel",
-            how: "Añade una cuenta atrás hasta el día de salida.",
+            how: "Cuenta atrás hasta el despegue. Si no pones fecha, el billete usa esa.",
             borrow: { field: "countdown.label", line: "Hasta que volemos" },
           },
           {
@@ -4223,7 +4230,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Porque sí",
-            how: "Papel marfil, rosa, salvia o pizarra.",
+            how: "Papel marfil, rosa palo, salvia o pizarra.",
             borrow: { field: "fields.closing", line: "La doblé pensando en ti." },
           },
         ],
@@ -4239,7 +4246,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A best friend’s birthday",
-            how: "Up to ten shouts, 40 characters each.",
+            how: "Give the animals your in-jokes to yell: ten shouts, 40 characters each.",
             borrow: { field: "fields.shouts", line: "i was told there’d be cake" },
           },
           {
@@ -4259,12 +4266,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A birthday you’ll miss",
-            how: "The word on the second photo takes 18 characters.",
+            how: "Write what you’d say in person under the second photo, up to 18 characters.",
             borrow: { field: "fields.word", line: "wish I was there" },
           },
           {
             heading: "With a present to find",
-            how: "Say where it is in the surprise at the end.",
+            how: "Hide the present first, then give directions in the P.S.",
             borrow: { field: "surprise.text", line: "Look under your pillow. The other one." },
           },
         ],
@@ -4276,8 +4283,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         title: "Qué poner en una tarjeta de cumpleaños divertida",
         items: [
           {
-            heading: "El cumple de tu mejor amistad",
-            how: "Hasta diez gritos, de 40 caracteres.",
+            heading: "Un cumple entre amigas y amigos",
+            how: "Dales a los animales vuestras bromas: diez gritos, de 40 caracteres.",
             borrow: { field: "fields.shouts", line: "me dijeron que habría tarta" },
           },
           {
@@ -4297,12 +4304,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un cumple que te pierdes",
-            how: "La palabra de la segunda foto admite 18 caracteres.",
+            how: "Escribe bajo la segunda foto lo que dirías en persona, hasta 18 caracteres.",
             borrow: { field: "fields.word", line: "ojalá estar ahí" },
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di dónde está en la sorpresa del final.",
+            how: "Primero esconde el regalo; después da las señas en la posdata.",
             borrow: { field: "surprise.text", line: "Mira bajo tu almohada. La otra." },
           },
         ],
@@ -4318,13 +4325,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Long distance",
-            how: "The nationality line takes 40 characters.",
+            how: "Give them a nationality that is about the two of you, in 40 characters.",
             borrow: { field: "fields.nationality", line: "Citizen of wherever you are" },
           },
           {
             heading: "Before a visit",
-            how: "Add a countdown to the day you land.",
-            borrow: { field: "countdown.label", line: "Until I land" },
+            how: "Set the countdown to touchdown, in the time zone you land in.",
+            borrow: { field: "countdown.label", line: "Until wheels down" },
           },
           {
             heading: "An anniversary",
@@ -4338,7 +4345,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Moving to be together",
-            how: "Put the news in the surprise at the end.",
+            how: "Save the one-way ticket for the P.S., after your message.",
             borrow: { field: "surprise.text", line: "It’s a one-way ticket this time." },
           },
           {
@@ -4356,13 +4363,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A distancia",
-            how: "La línea de nacionalidad admite 40 caracteres.",
+            how: "Dale una nacionalidad que hable de vosotros, en 40 caracteres.",
             borrow: { field: "fields.nationality", line: "Ciudadanía: donde estés tú" },
           },
           {
             heading: "Antes de una visita",
-            how: "Añade una cuenta atrás hasta el día en que aterrizas.",
-            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
+            how: "Pon la cuenta atrás en el aterrizaje, en la zona horaria de llegada.",
+            borrow: { field: "countdown.label", line: "Hasta tocar pista" },
           },
           {
             heading: "Un aniversario",
@@ -4376,11 +4383,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Mudarse para estar cerca",
-            how: "Pon la noticia en la sorpresa del final.",
+            how: "Guarda el billete de ida para la posdata, tras tu mensaje.",
             borrow: { field: "surprise.text", line: "Esta vez el billete es solo de ida." },
           },
           {
-            heading: "Para una amistad lejos",
+            heading: "Para quien vive lejos",
             how: "La página del visado muestra tu mensaje.",
             borrow: { field: "message", line: "Válido para visitas, sin avisar." },
           },
@@ -4402,7 +4409,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An anniversary",
-            how: "The sign on top of the booth takes 24 characters.",
+            how: "Light up your years on the sign over the booth, in 24 characters.",
             borrow: { field: "fields.sign", line: "4 YEARS · 4 POSES" },
           },
           {
@@ -4412,7 +4419,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A night out",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. takes the plan. Promise a real booth at the end of it.",
             borrow: { field: "surprise.text", line: "Saturday, 8pm. Bring the blur." },
           },
           {
@@ -4436,11 +4443,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "San Valentín",
             how: "Tu frase va a boli en el muro de cartas de amor.",
-            borrow: { field: "fields.line", line: "mi borrón favorito" },
+            borrow: { field: "fields.line", line: "mi foto movida favorita" },
           },
           {
             heading: "Un aniversario",
-            how: "El letrero del fotomatón admite 24 caracteres.",
+            how: "Enciende vuestros años en el letrero del fotomatón, en 24 caracteres.",
             borrow: { field: "fields.sign", line: "4 AÑOS · 4 POSES" },
           },
           {
@@ -4450,11 +4457,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una noche fuera",
-            how: "Pon el plan en la sorpresa del final.",
-            borrow: { field: "surprise.text", line: "Sábado a las 20:00. Trae el borrón." },
+            how: "La posdata lleva el plan. Promete un fotomatón de verdad al final.",
+            borrow: { field: "surprise.text", line: "Sábado a las 20:00. Trae tu peor cara." },
           },
           {
-            heading: "Para tu mejor amistad",
+            heading: "Para quien te conoce de siempre",
             how: "Cada flash congela una foto en el espejo.",
             borrow: { field: "fields.line", line: "peores fotos, mejor noche" },
           },
@@ -4476,7 +4483,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Just because",
-            how: "Up to eight tags, 48 characters each.",
+            how: "Tag the small things they do. Eight tags, 48 characters each.",
             borrow: { field: "fields.labels", line: "the way you eat the strawberries first" },
           },
           {
@@ -4514,7 +4521,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Porque sí",
-            how: "Hasta ocho etiquetas, de 48 caracteres.",
+            how: "Etiqueta sus pequeñas manías. Ocho etiquetas, de 48 caracteres.",
             borrow: { field: "fields.labels", line: "cómo te comes las fresas primero" },
           },
           {
@@ -4575,7 +4582,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With a present to find",
-            how: "Say where it is in the surprise at the end.",
+            how: "The P.S. sends them to the hiding place. Keep the walk short.",
             borrow: { field: "surprise.text", line: "Look under the plant pot by the door." },
           },
           {
@@ -4613,7 +4620,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di dónde está en la sorpresa del final.",
+            how: "La posdata le manda al escondite. Que el paseo sea corto.",
             borrow: { field: "surprise.text", line: "Mira bajo la maceta de la puerta." },
           },
           {
@@ -4634,7 +4641,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Mother’s Day",
-            how: "Up to six ingredients, 64 characters each.",
+            how: "Measure her out: up to six ingredients, 64 characters each.",
             borrow: { field: "fields.ingredients", line: "two cups of patience" },
           },
           {
@@ -4644,7 +4651,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For a grandmother",
-            how: "The “makes one” line takes 90 characters.",
+            how: "Finish “Makes one…” with her house, in 90 characters.",
             borrow: { field: "fields.makes", line: "Makes one house that always smelled of something." },
           },
           {
@@ -4654,7 +4661,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Sunday lunch",
-            how: "Put the invitation in the surprise at the end.",
+            how: "The P.S. is the invitation: the day, the hour and who cooks.",
             borrow: { field: "surprise.text", line: "Sunday, one o’clock. I’m cooking." },
           },
           {
@@ -4672,7 +4679,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "El Día de la Madre",
-            how: "Hasta seis ingredientes, de 64 caracteres.",
+            how: "Mídela en tazas y pizcas: hasta seis ingredientes, de 64 caracteres.",
             borrow: { field: "fields.ingredients", line: "dos tazas de paciencia" },
           },
           {
@@ -4682,7 +4689,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para tu abuela",
-            how: "La línea de «sale una» admite 90 caracteres.",
+            how: "Termina «Sale una…» con su casa, en 90 caracteres.",
             borrow: { field: "fields.makes", line: "Sale una casa que siempre olía a algo rico." },
           },
           {
@@ -4692,7 +4699,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La comida del domingo",
-            how: "Pon la invitación en la sorpresa del final.",
+            how: "La posdata es la invitación: el día, la hora y quién cocina.",
             borrow: { field: "surprise.text", line: "Domingo a la una. Cocino yo." },
           },
           {
@@ -4728,7 +4735,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A night in",
-            how: "Put the plan in the surprise at the end.",
+            how: "The board asks. The P.S. answers with the hour and the address.",
             borrow: { field: "surprise.text", line: "Saturday, 9pm, mine. Candles are lit." },
           },
           {
@@ -4755,7 +4762,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.spell", line: "quédate conmigo" },
           },
           {
-            heading: "Para pedírselo",
+            heading: "Para pedirle salir",
             how: "Que lo pregunte el tablero.",
             borrow: { field: "fields.spell", line: "sal conmigo" },
           },
@@ -4766,7 +4773,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una noche en casa",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "El tablero pregunta. La posdata responde con la hora y la dirección.",
             borrow: { field: "surprise.text", line: "Sábado a las 21:00 en mi casa. Hay velas." },
           },
           {
@@ -4812,7 +4819,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With a present to find",
-            how: "Say where it is in the surprise at the end.",
+            how: "The P.S. is on a scrap of kraft paper. Say where to look.",
             borrow: { field: "surprise.text", line: "Last page of the notebook on your desk." },
           },
           {
@@ -4850,7 +4857,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Con un regalo escondido",
-            how: "Di dónde está en la sorpresa del final.",
+            how: "La posdata va en un trozo de papel kraft. Di dónde mirar.",
             borrow: { field: "surprise.text", line: "Última página del cuaderno de tu mesa." },
           },
           {
@@ -4871,7 +4878,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A Halloween date",
-            how: "The ticket for two takes 26 characters.",
+            how: "Print the place and the hour on the ticket for two: 26 characters.",
             borrow: { field: "fields.ticket", line: "Haunted house · Fri 8pm" },
           },
           {
@@ -4881,7 +4888,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For a friend who loves autumn",
-            how: "The torn-out words take 28 characters.",
+            how: "Say what October is to you in the torn-out words, 28 characters at most.",
             borrow: { field: "fields.label", line: "it’s finally our season" },
           },
           {
@@ -4891,12 +4898,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A film night",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. takes the hour. Let them argue about which film.",
             borrow: { field: "surprise.text", line: "Friday, 8pm. The scariest one we can find." },
           },
           {
             heading: "Long distance",
-            how: "Your letter is at the end of the page.",
+            how: "Your letter ends the page. Ask for a photo of their pumpkin.",
             borrow: { field: "message", line: "Carve one for me. I’ll judge by photo." },
           },
         ],
@@ -4909,7 +4916,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Una cita de Halloween",
-            how: "La entrada para dos admite 26 caracteres.",
+            how: "Imprime el sitio y la hora en la entrada para dos: 26 caracteres.",
             borrow: { field: "fields.ticket", line: "Casa del terror · vie 20 h" },
           },
           {
@@ -4919,7 +4926,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para quien adora el otoño",
-            how: "Las palabras recortadas admiten 28 caracteres.",
+            how: "Di qué es octubre para vosotros en las palabras recortadas, 28 caracteres como mucho.",
             borrow: { field: "fields.label", line: "por fin es nuestra época" },
           },
           {
@@ -4929,12 +4936,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una noche de pelis",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata lleva la hora. La peli, que la discutan.",
             borrow: { field: "surprise.text", line: "Viernes a las 20:00. La que más miedo dé." },
           },
           {
             heading: "A distancia",
-            how: "Tu carta está al final de la página.",
+            how: "Tu carta cierra la página. Pídele una foto de su calabaza.",
             borrow: { field: "message", line: "Talla una por mí. Juzgaré por foto." },
           },
         ],
@@ -4950,7 +4957,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Just because",
-            how: "Up to six label-maker strips, 28 characters each.",
+            how: "Print what you call them on the label-maker strips: six, 28 characters each.",
             borrow: { field: "fields.labels", line: "certified menace" },
           },
           {
@@ -4960,12 +4967,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Saying sorry",
-            how: "Go for the soft pack.",
+            how: "Pick the pack called The soft ones.",
             borrow: { field: "fields.labels", line: "was wrong (this once)" },
           },
           {
             heading: "Cheering someone up",
-            how: "The line on the empty page takes 40 characters.",
+            how: "They read one line before the first tap. Make it a promise, in 40 characters.",
             borrow: { field: "fields.prompt", line: "tap anywhere. it gets better." },
           },
           {
@@ -4975,7 +4982,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With a small present",
-            how: "Say where it is in the surprise at the end.",
+            how: "A small present needs one line of directions. Put it in the P.S.",
             borrow: { field: "surprise.text", line: "Check your bag. Inside pocket." },
           },
         ],
@@ -4988,7 +4995,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Porque sí",
-            how: "Hasta seis tiras de rotuladora, de 28 caracteres.",
+            how: "Imprime cómo le llamas en las tiras de rotuladora: seis, de 28 caracteres.",
             borrow: { field: "fields.labels", line: "peligro certificado" },
           },
           {
@@ -4998,12 +5005,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para pedir perdón",
-            how: "Usa el paquete de los suaves.",
+            how: "Elige el paquete de Los tiernos.",
             borrow: { field: "fields.labels", line: "me equivoqué (esta vez)" },
           },
           {
             heading: "Para animar a alguien",
-            how: "La frase de la página vacía admite 40 caracteres.",
+            how: "Leen una frase antes del primer toque. Que sea una promesa, en 40 caracteres.",
             borrow: { field: "fields.prompt", line: "toca donde sea. mejora." },
           },
           {
@@ -5013,7 +5020,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Con un detalle escondido",
-            how: "Di dónde está en la sorpresa del final.",
+            how: "Un detalle pide una sola línea de señas. Va en la posdata.",
             borrow: { field: "surprise.text", line: "Mira en tu bolso. Bolsillo interior." },
           },
         ],
@@ -5049,12 +5056,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Before they land",
-            how: "Add a countdown to arrivals.",
-            borrow: { field: "countdown.label", line: "Until I land" },
+            how: "Count down to their landing and label it the way you’d text it.",
+            borrow: { field: "countdown.label", line: "until you land. text me at the gate" },
           },
           {
             heading: "From an old friend",
-            how: "Your name in the chat header takes 40 characters.",
+            how: "Sign the chat header as who you are to them, in 40 characters.",
             borrow: { field: "fields.contactName", line: "The one who still has your hoodie" },
           },
         ],
@@ -5087,12 +5094,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Antes de aterrizar",
-            how: "Añade una cuenta atrás hasta la llegada.",
-            borrow: { field: "countdown.label", line: "Hasta que aterrice" },
+            how: "Cuenta atrás hasta su aterrizaje y titúlala como se lo escribirías.",
+            borrow: { field: "countdown.label", line: "hasta que aterrices. escríbeme al salir" },
           },
           {
-            heading: "De una vieja amistad",
-            how: "Tu nombre en la cabecera del chat admite 40 caracteres.",
+            heading: "De alguien de toda la vida",
+            how: "Firma la cabecera del chat con lo que eres para esa persona, en 40 caracteres.",
             borrow: { field: "fields.contactName", line: "Quien aún tiene tu sudadera" },
           },
         ],
@@ -5108,7 +5115,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A wedding",
-            how: "How the toast opens takes 70 characters.",
+            how: "Open with both their names. The first line takes 70 characters.",
             borrow: { field: "fields.opening", line: "To Ana and Marco" },
           },
           {
@@ -5123,12 +5130,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An engagement",
-            how: "Champagne, red, white or sparkling in the glasses.",
+            how: "Champagne, red, white or alcohol-free in the glasses.",
             borrow: { field: "fields.opening", line: "To the two of you, at last" },
           },
           {
             heading: "Valentine’s Day",
-            how: "The “where” line takes 60 characters.",
+            how: "Print your own kitchen as the venue on the menu card. It takes 60 characters.",
             borrow: { field: "fields.venue", line: "Our kitchen, the good glasses" },
           },
           {
@@ -5146,7 +5153,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Una boda",
-            how: "El arranque del brindis admite 70 caracteres.",
+            how: "Empieza por sus dos nombres. La primera frase admite 70 caracteres.",
             borrow: { field: "fields.opening", line: "Por Ana y Marco" },
           },
           {
@@ -5161,12 +5168,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un compromiso",
-            how: "Champán, tinto, blanco o espumoso en las copas.",
+            how: "Champán, tinto, blanco o sin alcohol en las copas.",
             borrow: { field: "fields.opening", line: "Por vosotros dos, por fin" },
           },
           {
             heading: "San Valentín",
-            how: "La línea de «dónde» admite 60 caracteres.",
+            how: "Imprime tu cocina como lugar en la carta del menú. Admite 60 caracteres.",
             borrow: { field: "fields.venue", line: "Nuestra cocina, las copas buenas" },
           },
           {
@@ -5197,12 +5204,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Asking them to a party",
-            how: "The sign on the door takes 24 characters.",
+            how: "Put the party’s hour on the door’s sign, in 24 characters.",
             borrow: { field: "fields.sign", line: "party inside, 8pm" },
           },
           {
             heading: "Matching costumes",
-            how: "Put the plan in the surprise at the end.",
+            how: "The P.S. is on parchment. Say what you bought for the two of you.",
             borrow: { field: "surprise.text", line: "Saturday, 7pm. I bought the fangs." },
           },
           {
@@ -5235,12 +5242,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para invitar a una fiesta",
-            how: "El cartel de la puerta admite 24 caracteres.",
+            how: "Pon la hora de la fiesta en el cartel de la puerta, en 24 caracteres.",
             borrow: { field: "fields.sign", line: "fiesta dentro, 20:00" },
           },
           {
             heading: "Disfraces a juego",
-            how: "Pon el plan en la sorpresa del final.",
+            how: "La posdata va en pergamino. Di qué has comprado para ti y para mí.",
             borrow: { field: "surprise.text", line: "Sábado a las 19:00. Tengo los colmillos." },
           },
           {
@@ -5291,7 +5298,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "With one more present",
-            how: "Put the last number in the surprise at the end.",
+            how: "Keep one number back for the P.S. and make it the present.",
             borrow: { field: "surprise.text", line: "One more number: 2 tickets." },
           },
         ],
@@ -5320,7 +5327,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "El primer año en pareja",
             how: "Empieza por el número de días.",
-            borrow: { field: "fields.stats", line: "365 días, discusión arriba o abajo" },
+            borrow: { field: "fields.stats", line: "365 días, con sus más y sus menos" },
           },
           {
             heading: "A distancia",
@@ -5329,7 +5336,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Con un regalo más",
-            how: "Pon el último número en la sorpresa del final.",
+            how: "Guarda un número para la posdata y que sea el regalo.",
             borrow: { field: "surprise.text", line: "Un número más: 2 entradas." },
           },
         ],
@@ -5345,7 +5352,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary",
-            how: "The album title takes 40 characters.",
+            how: "Title the album after something only you two know, in 40 characters.",
             borrow: { field: "fields.album", line: "Songs for the 23:40" },
           },
           {
@@ -5365,7 +5372,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A wedding song",
-            how: "The side label takes 12 characters.",
+            how: "Print what the song is for on the side label, in 12 characters.",
             borrow: { field: "fields.side", line: "First dance" },
           },
           {
@@ -5383,7 +5390,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un aniversario",
-            how: "El título del disco admite 40 caracteres.",
+            how: "Titula el disco con algo que solo entendéis vosotros, en 40 caracteres.",
             borrow: { field: "fields.album", line: "Canciones para el de las 23:40" },
           },
           {
@@ -5403,7 +5410,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La canción de la boda",
-            how: "La etiqueta de la cara admite 12 caracteres.",
+            how: "Imprime en la etiqueta de la cara para qué es la canción, en 12 caracteres.",
             borrow: { field: "fields.side", line: "Primer baile" },
           },
           {
@@ -5439,7 +5446,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A dinner to book",
-            how: "Put the booking in the surprise at the end.",
+            how: "The P.S. is where the booking goes: table, day and hour.",
             borrow: { field: "surprise.text", line: "A table for two, Saturday at 7." },
           },
           {
@@ -5449,7 +5456,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The year in photos",
-            how: "Up to eight photos follow your letter.",
+            how: "Eight photos at most, after the letter. Begin with last year’s table.",
             borrow: { field: "caption", line: "Last year, the burnt pie" },
           },
         ],
@@ -5477,17 +5484,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una cena reservada",
-            how: "Pon la reserva en la sorpresa del final.",
+            how: "En la posdata va la reserva: mesa, día y hora.",
             borrow: { field: "surprise.text", line: "Mesa para dos, sábado a las 19:00." },
           },
           {
             heading: "Para tu familia",
-            how: "Cuadros rojos, naranja cosecha, lino salvia o velas.",
+            how: "Cuadros rojos, naranja otoño, lino salvia o a la luz de las velas.",
             borrow: { field: "fields.wish", line: "seguir peleando por lo crujiente" },
           },
           {
             heading: "El año en fotos",
-            how: "Hasta ocho fotos siguen a tu carta.",
+            how: "Ocho fotos como mucho, tras la carta. Empieza por la mesa del año pasado.",
             borrow: { field: "caption", line: "El año pasado, la tarta quemada" },
           },
         ],

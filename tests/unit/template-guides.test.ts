@@ -143,6 +143,117 @@ describe("template guides: the lines to borrow", () => {
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
       for (const idea of guide.es.ideas.items) expect(idea.borrow.line, `${slug}: ${idea.heading}`).not.toMatch(/\bjunt[oa]s\b/i);
   });
+
+  it("never bend a Spanish line to a woman or a man, outside the lines someone read and let stand", () => {
+    // The review of 21 Nov 2026 found six lines that only a woman could be sent («bienvenida a casa»,
+    // «¿estás despierta?», «Vestidas igual», «VECINA CUMPLE 30», «la que sobrevive») or only a man
+    // («JUGADOR DOS»). A word list cannot know Spanish, so this one is short and loud: it holds the
+    // endings that were found and their near kin, and when it fires the line is read by a person,
+    // then reworded or, if it speaks of the sender, of a thing, or of someone the card itself names
+    // (a mother, a daughter), added to READ with why.
+    const bent = /(?<![\p{L}])(bienvenid[oa]s?|despiert[oa]s?|dormid[oa]s?|vestid[oa]s|vecin[oa]|jugador(?:a|es)?|la que|el que|querid[oa]s?|guap[oa]s?|cansad[oa]s?|enamorad[oa]s?|invitad[oa]s?|content[oa]s?|orgullos[oa]s?|amig[oa]|novi[oa]|niñ[oa]|chic[oa]|reina|rey|princesa)(?![\p{L}])/iu;
+    const found: string[] = [];
+    const lines = new Set<string>();
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+      for (const idea of guide.es.ideas.items) {
+        const key = `${slug}: ${idea.borrow.line}`;
+        lines.add(key);
+        if (bent.test(idea.borrow.line) && !Object.hasOwn(READ_AND_LET_STAND, key)) found.push(key);
+      }
+    expect(found).toEqual([]);
+    // Every line let stand is still a line of the guides, so the list never outlives what it excuses.
+    for (const key of Object.keys(READ_AND_LET_STAND)) expect(lines.has(key), `${key} is no longer a line`).toBe(true);
+  });
+});
+
+/** Spanish lines the list above stops at, read by a person and left as they are, each with why. */
+const READ_AND_LET_STAND: Record<string, string> = {
+  "jar-of-reasons: Me esperaste despierta todas las veces.": "Mother’s Day: said to a mother, whom the card’s own title names",
+  "dark-romance: Los Enamorados": "the printed name of a tarot card",
+  "on-repeat: La que sonaba en el coche": "a song, not a person",
+  "spooky-season: Viernes a las 20:00. La que más miedo dé.": "a film, not a person",
+};
+
+/** Every limit a line of text can have in a template: its own fields', its lists' items', and the fields every gift has. */
+async function fieldLimits(slug: string): Promise<number[]> {
+  const schema = await loadFieldsSchema(slug);
+  const own = schema instanceof z.ZodObject ? Object.values(schema.shape).map((field) => maxOf(field)) : [];
+  return [...own, ...Object.values(SHARED)].filter((n): n is number => typeof n === "number");
+}
+
+/** A name as it is compared: lower case, one kind of apostrophe, no closing dots. */
+const plain = (s: string) => s.toLowerCase().replace(/[’']/g, "'").replace(/[.…]+$/, "").trim();
+
+/** What the editor calls a template's fields and their choices, in one language. */
+async function editorNames(slug: string, l: (typeof LOCALES)[number]): Promise<Set<string>> {
+  const mod = (await import(`@/templates/${slug}/field-meta.ts`).catch(() => null)) as { fieldMeta?: Record<string, Record<string, { label: string; options?: Record<string, string> }>> } | null;
+  const names = new Set<string>();
+  for (const meta of Object.values(mod?.fieldMeta?.[l] ?? {})) for (const name of [meta.label, ...Object.values(meta.options ?? {})]) names.add(plain(name));
+  return names;
+}
+
+describe("template guides: what a card tells the sender to do", () => {
+  it("quotes a choice or a field only by the name the editor shows for it", async () => {
+    // The review of 21 Nov 2026: «Séllalo con “aprobado”» where the stamp is «Visto bueno», and
+    // «traviesa y buena» where the Spanish stamps are «Sin carbón», «Carbón» and «Carbón dulce».
+    // Anything a card puts in quotation marks is something the sender will look for on the screen.
+    const wrong: string[] = [];
+    let quoted = 0;
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+      for (const l of LOCALES) {
+        const names = await editorNames(slug, l);
+        for (const idea of guide[l].ideas.items)
+          for (const m of idea.how.matchAll(l === "en" ? /“([^”]+)”/g : /«([^»]+)»/g)) {
+            quoted += 1;
+            if (!names.has(plain(m[1]))) wrong.push(`${slug} ${l}: ${m[0]} is not a field or a choice in this gift’s editor`);
+          }
+      }
+    expect(wrong).toEqual([]);
+    expect(quoted).toBeGreaterThanOrEqual(10);
+  });
+
+  it("gives a number of characters only where a field of that gift has that limit", async () => {
+    const wrong: string[] = [];
+    let counted = 0;
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES)) {
+      const limits = await fieldLimits(slug);
+      for (const l of LOCALES)
+        for (const idea of guide[l].ideas.items)
+          for (const m of idea.how.matchAll(l === "en" ? /(\d+) characters/g : /(\d+) caracteres/g)) {
+            counted += 1;
+            if (!limits.includes(Number(m[1]))) wrong.push(`${slug} ${l}: ${m[0]} in “${idea.how}”`);
+          }
+    }
+    expect(wrong).toEqual([]);
+    expect(counted).toBeGreaterThan(80);
+  });
+
+  it("is said once: no instruction is on two gifts, and a line to borrow hardly ever", () => {
+    // The review of 21 Nov 2026 counted “Put the plan in the surprise at the end.” on fifteen gifts
+    // and “Until I land” lent by five. The brief: no two ideas may share a shape.
+    for (const l of LOCALES) {
+      const hows = new Map<string, string[]>();
+      const lent = new Map<string, string[]>();
+      for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+        for (const idea of guide[l].ideas.items) {
+          hows.set(idea.how.toLowerCase(), [...(hows.get(idea.how.toLowerCase()) ?? []), slug]);
+          lent.set(idea.borrow.line.toLowerCase(), [...(lent.get(idea.borrow.line.toLowerCase()) ?? []), slug]);
+        }
+      const twice = (map: Map<string, string[]>, most: number) => [...map].filter(([, slugs]) => slugs.length > most).map(([text, slugs]) => `${text} (${slugs.join(", ")})`);
+      expect(twice(hows, 1), l).toEqual([]);
+      expect(twice(lent, 1), l).toEqual([]);
+    }
+  });
+
+  it("is never only a limit, and never only “put it in the surprise at the end”", () => {
+    // “The side label takes 12 characters.” tells the sender nothing to write there.
+    const onlyLimit = { en: /^(the|your|how) [^.:,]* takes? \d+ characters\.$/i, es: /^(el|la|los|las|tu) [^.:,]* admiten? \d+ caracteres\.$/i };
+    const shared = { en: /in the surprise at the end|^add a countdown to the day/i, es: /en la sorpresa (del )?final|^añade una cuenta atrás hasta/i };
+    const off: string[] = [];
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+      for (const l of LOCALES) for (const idea of guide[l].ideas.items) if (onlyLimit[l].test(idea.how) || shared[l].test(idea.how)) off.push(`${slug} ${l}: ${idea.how}`);
+    expect(off).toEqual([]);
+  });
 });
 
 /** The free note on or off, "a note with photos" for everyone or not: the four pages a build can make. */
@@ -274,6 +385,26 @@ describe("template guides", () => {
       halfway: /photos beside the letter|fotos junto a la carta/i,
       // The name tag stays on the bare stem (bloom/Template.tsx).
       bloom: /flower stands alone|la flor se queda sola/i,
+      // The second review of 21 Nov 2026 (guides-C21, guides-C29):
+      // the ghost's sign shows their name and who it is from; the sender's words head the collage (be-my-boo/Template.tsx).
+      "be-my-boo": /sign holds their name|the sign takes 24|cartel del fantasma lleva|el cartel admite 24/i,
+      // The Spanish stamps are «Sin carbón», «Carbón» and «Carbón dulce» (nice-list/field-meta.ts).
+      "nice-list": /traviesa y buena/i,
+      // The stamp is «Visto bueno» (the-council/field-meta.ts).
+      "the-council": /«aprobado»/i,
+      // The fourth pour is “No alcohol” (the-toast/field-meta.ts).
+      "the-toast": /sparkling|espumoso/i,
+      // The palettes are Pastel, Sunset, Jewel tones and Cream & gold (balloons/field-meta.ts).
+      balloons: /bright palette|colores vivos/i,
+      // The pack is «Los tiernos» (sticker-bomb/field-meta.ts).
+      "sticker-bomb": /los suaves/i,
+      // «Óxido», «Espresso», «Oliva»; «Burdeos», «Noir», «Pergamino»; the table «Naranja otoño»; the storm «Luna roja».
+      "autumn-reel": /café u oliva/i,
+      "dark-romance": /negro o pergamino/i,
+      wishbone: /naranja cosecha/i,
+      "haunted-house": /luna de sangre/i,
+      // The box is ticked from the start (digicam/schema.ts: birthday defaults to true).
+      digicam: /tick “it’s their birthday”|marca que es su cumpleaños/i,
     };
     const strings = (value: unknown): string[] => (typeof value === "string" ? [value] : value && typeof value === "object" ? Object.values(value).flatMap(strings) : []);
     for (const [slug, pattern] of Object.entries(untrue)) for (const text of strings(TEMPLATE_GUIDES[slug])) expect(text, slug).not.toMatch(pattern);
