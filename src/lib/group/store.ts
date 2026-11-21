@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import type { Db } from "@/lib/commerce/db";
 import { siteUrl } from "@/lib/email/urls";
 import type { GiftContribution } from "@/lib/gift/schema";
+import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { Database } from "@/lib/supabase/types";
 import { getManifest } from "@/templates/manifests";
 import { GROUP_LIMITS, GROUP_RETENTION } from "./limits";
@@ -293,6 +294,23 @@ export async function deleteGroup(admin: Db, group: GroupRow): Promise<void> {
   need(await admin.from("gift_contributions").delete().eq("group_id", group.id), "delete entries");
   need(await admin.from("gift_groups").delete().eq("id", group.id), "delete");
   await deleteGroupStorage(admin, group.id).catch(() => {});
+}
+
+/**
+ * A gift, or a whole account, is being deleted: the photos still waiting at its groups' links are
+ * removed from storage. The rows go by themselves (they cascade from the gift and the account);
+ * files do not. Best effort by design: it never throws, a database without migration 0023 has
+ * nothing to remove, and what it misses the daily job's orphan sweep removes within a day.
+ */
+export async function forgetGroupPhotos(of: { giftId: string } | { userId: string }, admin: Db | null = getSupabaseAdminClient() as Db | null): Promise<void> {
+  if (!admin) return;
+  try {
+    const query = admin.from("gift_groups").select("id");
+    const { data } = await ("giftId" in of ? query.eq("gift_id", of.giftId) : query.eq("user_id", of.userId));
+    for (const group of data ?? []) await deleteGroupStorage(admin, group.id).catch(() => {});
+  } catch {
+    // Nothing here may stand in the way of a deletion.
+  }
 }
 
 // What follows is for whoever holds the link: no account, and nothing but this one group.

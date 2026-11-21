@@ -2,7 +2,10 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
+import type { Db } from "@/lib/commerce/db";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
+import { groupGiftsEnabled } from "@/lib/group/flag";
+import { forgetGroupPhotos } from "@/lib/group/store";
 import { getStripe } from "@/lib/stripe/server";
 import { cancelSubscriptionNow } from "@/lib/stripe/subscriptions";
 
@@ -21,8 +24,8 @@ async function cancelWithStripe(subscriptionId: string): Promise<void> {
  * cancelled at once (the time left isn't refunded): an account must never be gone while its card
  * keeps being charged, so if Stripe can't be reached nothing is deleted. The Stripe customer stays
  * (invoices, disputes). App Store subscriptions can only be cancelled in iOS: the page says so first.
- * Then every gift's files in storage (rows cascade, files don't), then the auth user, whose rows
- * cascade from there. Purchases outlive it without a user, as the accounts need (migration 0011).
+ * Then every gift's files in storage (rows cascade, files don't), the photos waiting at its group
+ * cards' links while those are switched on, then the auth user, whose rows cascade from there. Purchases outlive it without a user, as the accounts need (migration 0011).
  * Shared by the account page's server action and the iPhone app's POST /api/app/account/delete; the
  * caller has already decided who `userId` is. The storage step stops the deletion if it fails, so
  * nobody is left with files and no account.
@@ -64,6 +67,11 @@ export async function deleteAccountData(
     errors.push(...cleanup.errors);
   }
   if (errors.length) return { ok: false, error: "storage_cleanup_failed" };
+
+  // Photos people added at this account's group cards and that were still waiting: their rows go
+  // with the account, the files are removed here (and by the daily job, should this miss any).
+  // Only while group cards are on; it can't fail, so it never keeps an account that asked to go.
+  if (groupGiftsEnabled()) await forgetGroupPhotos({ userId }, admin as Db);
 
   const { error } = await admin.auth.admin.deleteUser(userId);
   if (error) return { ok: false, error: error.message };

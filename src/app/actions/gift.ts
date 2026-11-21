@@ -8,7 +8,7 @@ import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
 import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
 import { EVERY_GROUP, groupUnlock, photosUnlock } from "@/lib/pricing/products";
 import { groupGiftsEnabled } from "@/lib/group/flag";
-import { markGroupSent } from "@/lib/group/store";
+import { forgetGroupPhotos, markGroupSent } from "@/lib/group/store";
 import { sendSignedGiftEmails } from "@/lib/group/signed-email";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
@@ -424,6 +424,10 @@ export async function deleteGift(giftId: string): Promise<ActionResult<null>> {
   if (!gift) return { ok: false, error: "not_found" };
   const cleanup = await deleteGiftStorage(gift.id);
   if (cleanup.errors.length) return { ok: false, error: "storage_cleanup_failed" };
+  // A group card's waiting photos go with it. Its rows cascade from the gift; the files are removed
+  // here as well as can be, and whatever is missed the daily job finds within a day. Only while
+  // group cards are on, and never a reason to keep a gift someone asked to delete.
+  if (groupGiftsEnabled()) await forgetGroupPhotos({ giftId: gift.id }).catch(() => {});
   const { error } = await ctx.supabase.from("gifts").delete().eq("id", giftId).eq("user_id", ctx.user.id);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/dashboard");
