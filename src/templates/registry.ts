@@ -76,6 +76,10 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+/** Development only, and in no list: the reference template for group cards (see DEV_MANIFESTS in ./manifests). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const devLoaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = process.env.NODE_ENV === "development" ? { "group-reference": () => import("./_group-reference") } : {};
+
 /** Every slug with a loader; tests/unit/templates.test.ts checks it against ./manifests. */
 export const LOADER_SLUGS = Object.keys(loaders);
 
@@ -83,7 +87,7 @@ export const LOADER_SLUGS = Object.keys(loaders);
 const loaded = new Map<string, TemplateModule>();
 
 export async function loadTemplate(slug: string): Promise<TemplateModule | null> {
-  const loader = loaders[slug];
+  const loader = loaders[slug] ?? (Object.hasOwn(devLoaders, slug) ? devLoaders[slug] : undefined);
   if (!loader) return null;
   const mod = await loader();
   const template = mod.template as TemplateModule;

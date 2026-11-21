@@ -75,9 +75,12 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);
 
+/** Development only, and in no list: the reference template for group cards (see DEV_MANIFESTS in ./manifests). */
+const devSchemaLoaders: typeof schemaLoaders = process.env.NODE_ENV === "development" ? { "group-reference": () => import("./_group-reference/schema") } : {};
+
 export async function loadFieldsSchema(slug: string): Promise<z.ZodType | null> {
   // Own keys only: "constructor" is in every object, and it is not a template.
-  const loader = Object.hasOwn(schemaLoaders, slug) ? schemaLoaders[slug] : undefined;
+  const loader = Object.hasOwn(schemaLoaders, slug) ? schemaLoaders[slug] : Object.hasOwn(devSchemaLoaders, slug) ? devSchemaLoaders[slug] : undefined;
   if (!loader) return null;
   return (await loader()).fieldsSchema;
 }
