@@ -1095,8 +1095,8 @@ export type FinderCopy = {
   h1: string;
   intro: string;
   ui: FinderUi;
-  how: { title: string; paragraphs: string[] };
-  byWho: { title: string; lead: string };
+  /** The two rows of links under the tool: a small label over each, and no sentence. */
+  byWho: string;
   byDay: { title: string; all: string };
 };
 
@@ -1195,23 +1195,15 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       demoHint: "This is the template with sample words and photos. Yours go in when you make it.",
       close: "Close",
     },
-    how: {
-      title: "How the finder picks",
-      paragraphs: [
-        "Each of the {count} templates is tagged by hand with the people it suits and the feeling it carries, read off its own design. A collage of lipstick kisses is offered for a partner and never for your mom.",
-        "The occasion counts most, then the feeling, then who it's for. A template made for the day you chose comes before one that merely suits it, and when two tie, the one more people make goes first.",
-        "Seasonal gifts stay in their season: a Halloween porch or a Christmas window shows up only when you ask for that day. \"Not sure\" about the person or the feeling widens the match; about the occasion, it leaves out the gifts made for one day, such as a birthday cake or a graduation cap. Your answers sit in the page's address, so a result can be sent to someone or reopened later.",
-      ],
-    },
-    byWho: { title: "Start from the person", lead: "Each of these pages lists the gifts that work for one person, with what to write in them." },
-    byDay: { title: "Or from the day", all: "All {count} templates" },
+    byWho: "By person",
+    byDay: { title: "By occasion", all: "All {count} templates" },
   },
   es: {
     title: "Buscador de regalos digitales: ¿cuál enviar?",
     description: "¿No sabes qué regalo digital enviar? Responde tres preguntas (para quién es, la ocasión y el tono) y verás tres regalos que puedes probar y crear.",
     eyebrow: "Buscador de regalos",
     h1: "¿Qué regalo digital deberías enviar?",
-    intro: "Responde tres preguntas y te proponemos tres regalos: mira cómo se abren y empieza el tuyo. Sin cuenta y sin correo.",
+    intro: "Responde tres preguntas y te proponemos tres regalos: mira cómo se abren y empieza el tuyo. Sin cuenta ni correo.",
     ui: {
       steps: {
         for: { label: "Para quién", question: "¿Para quién es?" },
@@ -1268,15 +1260,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       demoHint: "Es la plantilla con palabras y fotos de ejemplo. Las tuyas entran cuando lo creas.",
       close: "Cerrar",
     },
-    how: {
-      title: "Cómo elige el buscador",
-      paragraphs: [
-        "Cada una de las {count} plantillas está etiquetada a mano con las personas a las que les va y el tono que tiene, según su propio diseño. Un collage de besos de pintalabios se propone para tu pareja y nunca para tu madre.",
-        "Lo que más cuenta es la ocasión, después el tono y después para quién es. Una plantilla hecha para el día que elegiste va antes que otra a la que simplemente le va bien, y si dos empatan, va primero la que más gente hace.",
-        "Los regalos de temporada se quedan en su temporada: un porche de Halloween o una ventana de Navidad solo aparecen si pides ese día. «No lo sé» en la persona o en el tono amplía la búsqueda; en la ocasión, deja fuera los regalos hechos para un solo día, como una tarta de cumpleaños o un birrete de graduación. Tus respuestas van en la dirección de la página, así que el resultado se puede enviar a alguien o abrir más tarde.",
-      ],
-    },
-    byWho: { title: "Empieza por la persona", lead: "Cada una de estas páginas reúne los regalos que funcionan para una persona, con ideas de qué escribir en ellos." },
-    byDay: { title: "O por el día", all: "Las {count} plantillas" },
+    byWho: "Por persona",
+    byDay: { title: "Por ocasión", all: "Las {count} plantillas" },
   },
 };

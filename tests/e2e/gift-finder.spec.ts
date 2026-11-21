@@ -278,7 +278,10 @@ test.describe("the gift finder", () => {
     await page.goto("/gifts/finder?for=mom&occasion=birthday&feel=funny");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Which digital gift should you send?");
     await expect(page.getByRole("heading", { level: 2, name: "Who is it for?" })).toBeAttached();
-    await expect(page.getByRole("heading", { level: 2, name: "How the finder picks" })).toBeVisible();
+    // Under the tool: two labelled rows of links and nothing to read (the paragraphs on how it picks are gone).
+    await expect(page.getByRole("navigation", { name: "By person" }).getByRole("link")).toHaveCount(7);
+    await expect(page.getByRole("navigation", { name: "By occasion" }).getByRole("link").first()).toBeVisible();
+    await expect(page.getByText("How the finder picks")).toHaveCount(0);
     for (const href of ["/gifts/for-mom", "/gifts/for-best-friend", "/occasions/birthday", "/occasions/just-because", "/templates"]) {
       await expect(page.locator(`main a[href="${href}"]`).first()).toBeAttached();
     }

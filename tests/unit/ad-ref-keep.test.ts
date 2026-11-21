@@ -135,3 +135,32 @@ describe("keeping an ad's ref for a buyer who comes back", () => {
     }
   });
 });
+
+describe("a ref our own pages add on the way to the editor", () => {
+  it("never replaces the link the visitor arrived through", async () => {
+    // From a TikTok bio, through the gift finder, to the editor: the sale is TikTok's.
+    const tiktok = await visit();
+    tiktok.rememberRef("?ref=tt-couple", T0);
+    tiktok.rememberRef("?ref=finder", T0 + 60_000);
+    expect(tiktok.currentRef(T0 + 60_000)).toBe("tt-couple");
+
+    // Back within the week after an ad, with nothing in memory but the kept ad ref.
+    const first = await visit();
+    first.setConsent("granted");
+    first.rememberRef("?ref=ad-meta-bq", T0);
+    const later = await visit();
+    later.rememberRef("?ref=finder", T0 + DAY);
+    expect(later.currentRef(T0 + DAY)).toBe("ad-meta-bq");
+  });
+
+  it("is what the visit is counted to when it arrived with no ref, and gives way to a later arrival link", async () => {
+    const plain = await visit();
+    plain.rememberRef("?ref=finder", T0);
+    expect(plain.currentRef(T0)).toBe("finder");
+    plain.rememberRef("?ref=tt-couple", T0 + 60_000);
+    expect(plain.currentRef(T0 + 60_000)).toBe("tt-couple");
+    // An arrival link still replaces an earlier arrival link, as before.
+    plain.rememberRef("?ref=watermark", T0 + 120_000);
+    expect(plain.currentRef(T0 + 120_000)).toBe("watermark");
+  });
+});

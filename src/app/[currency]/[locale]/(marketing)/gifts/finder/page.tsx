@@ -28,8 +28,8 @@ const CHIP = "inline-flex min-h-11 items-center rounded-full border border-borde
 
 /**
  * The gift finder: three questions that end on three templates to watch and make
- * (components/templates/gift-finder.tsx), then, for a reader and a crawler, how it chooses and the
- * pages that start from a person or a day instead.
+ * (components/templates/gift-finder.tsx), then, for a reader and a crawler, the pages that start
+ * from a person or a day instead.
  *
  * The page is static and never reads its query: the answers are read in the browser. Only this
  * language's words, and each template's fit (content/finder.ts), go to it.
@@ -61,59 +61,54 @@ export default async function GiftFinderPage({ params }: Props) {
        * stays unseen while it is marked, and the tool unmarks it once it has read the address. The mark
        * is not in the server's HTML, hence suppressHydrationWarning.
        */}
-      <section className="group/finder container-x pb-20" aria-label={copy.eyebrow} suppressHydrationWarning>
+      <section className="group/finder container-x pb-12 sm:pb-14" aria-label={copy.eyebrow} suppressHydrationWarning>
         <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: finderWaitScript() }} />
         <div className="rounded-[28px] bg-white/70 p-4 shadow-soft ring-1 ring-forest/5 group-data-finder-wait/finder:invisible sm:p-8 lg:p-10">
           <GiftFinder picks={finderPicks(l)} ui={copy.ui} marks={{ free: t("common.free"), premium: t("common.premium") }} locale={l} />
         </div>
       </section>
 
-      <section className="container-narrow border-t border-line pt-14 pb-16" aria-labelledby="finder-how">
-        <h2 id="finder-how" className="display-md">
-          {copy.how.title}
-        </h2>
-        <div className="mt-5 flex flex-col gap-4 leading-relaxed text-ink-soft">
-          {copy.how.paragraphs.map((p) => (
-            <p key={p}>{p.replace("{count}", String(count))}</p>
-          ))}
-        </div>
-      </section>
+      {/*
+       * Two rows of links for a reader who would rather start from a person or a day, and for a crawler.
+       * A small label and chips, on the card's own left edge: nothing here needs reading (the owner,
+       * 21 Nov 2026: "no one's reading all that"; the three paragraphs on how the finder picks went).
+       */}
+      <div className="container-x flex flex-col gap-8 pb-24">
+        <nav aria-labelledby="finder-by-who">
+          <h2 id="finder-by-who" className="text-eyebrow text-ink-soft">
+            {copy.byWho}
+          </h2>
+          <ul className="mt-3.5 flex flex-wrap gap-2">
+            {RECIPIENTS.map((r) => (
+              <li key={r}>
+                <Link href={`/gifts/${recipientSlug(r)}`} className={CHIP}>
+                  {RECIPIENT_GUIDES[r][l].label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-      <nav className="container-narrow border-t border-line pt-10 pb-10" aria-labelledby="finder-by-who">
-        <h2 id="finder-by-who" className="display-md">
-          {copy.byWho.title}
-        </h2>
-        <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">{copy.byWho.lead}</p>
-        <ul className="mt-5 flex flex-wrap gap-2">
-          {RECIPIENTS.map((r) => (
-            <li key={r}>
-              <Link href={`/gifts/${recipientSlug(r)}`} className={CHIP}>
-                {RECIPIENT_GUIDES[r][l].label}
+        <nav aria-labelledby="finder-by-day">
+          <h2 id="finder-by-day" className="text-eyebrow text-ink-soft">
+            {copy.byDay.title}
+          </h2>
+          <ul className="mt-3.5 flex flex-wrap gap-2">
+            {OCCASIONS.map((o) => (
+              <li key={o}>
+                <Link href={`/occasions/${o}`} className={CHIP}>
+                  {t(`occasions.${o}`)}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/templates" className={cn(CHIP, "border-ink/30 font-medium")}>
+                {copy.byDay.all.replace("{count}", String(count))}
               </Link>
             </li>
-          ))}
-        </ul>
-      </nav>
-
-      <nav className="container-narrow border-t border-line pt-10 pb-24" aria-labelledby="finder-by-day">
-        <h2 id="finder-by-day" className="display-md">
-          {copy.byDay.title}
-        </h2>
-        <ul className="mt-5 flex flex-wrap gap-2">
-          {OCCASIONS.map((o) => (
-            <li key={o}>
-              <Link href={`/occasions/${o}`} className={CHIP}>
-                {t(`occasions.${o}`)}
-              </Link>
-            </li>
-          ))}
-          <li>
-            <Link href="/templates" className={cn(CHIP, "border-ink/30 font-medium")}>
-              {copy.byDay.all.replace("{count}", String(count))}
-            </Link>
-          </li>
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      </div>
     </>
   );
 }

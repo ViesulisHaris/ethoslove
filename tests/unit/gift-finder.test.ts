@@ -439,6 +439,22 @@ describe("the page's words", () => {
     }
   });
 
+  it("leave the page to the tool: one short sentence over it, two labels under it, and no account of how it picks", () => {
+    // The owner, 21 Nov 2026: "no one's reading all that" (DESIGN-LESS-TEXT.md). The three paragraphs on
+    // how the finder picks also said two things the scoring does not do; they are gone, not reworded.
+    const words = (text: string) => text.trim().split(/\s+/).length;
+    for (const locale of ["en", "es"] as const) {
+      const copy = FINDER_COPY[locale];
+      expect(copy).not.toHaveProperty("how");
+      expect(words(copy.intro), `${locale} intro`).toBeLessThanOrEqual(20);
+      expect(words(copy.ui.resultLead), `${locale} resultLead`).toBeLessThanOrEqual(14);
+      for (const label of [copy.byWho, copy.byDay.title]) {
+        expect(typeof label, locale).toBe("string");
+        expect(words(label), `${locale} “${label}”`).toBeLessThanOrEqual(2);
+      }
+    }
+  });
+
   it("never mention Spain, and never shout", () => {
     const all = JSON.stringify({ FINDER_COPY, FINDER_FITS });
     expect(all).not.toMatch(/Spain|España|Madrid|Barcelona|Sevilla|Valencia/i);
