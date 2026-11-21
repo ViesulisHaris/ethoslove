@@ -17,6 +17,8 @@ const SIZES: [number, number][] = [
   [375, 812],
   [390, 844],
   [414, 896],
+  // A 1440 px laptop zoomed to 200% lays the page out at this width.
+  [720, 450],
   [768, 1024],
   [820, 1180],
   [1024, 768],

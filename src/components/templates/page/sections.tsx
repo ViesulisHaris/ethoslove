@@ -73,8 +73,8 @@ function StepPicture({ step, manifest, flowers }: { step: 0 | 1 | 2; manifest: T
   const id = (["step-photo", "step-note", "step-send"] as const)[step];
   const art = pageArt(id, flowers, manifest.slug);
   if (!art.standIn) return <Art id={id} flowers={flowers} slug={manifest.slug} className="w-[min(100%,9.5rem)]" />;
-  if (step === 0) return <Polaroid sizes="120px" className="w-[6.75rem] -rotate-6 sm:w-[7.5rem]" />;
-  if (step === 1) return <Art id={id} flowers={flowers} className="w-[7.5rem] rotate-3 drop-shadow-[0_12px_14px_var(--page-shade-soft)] sm:w-[8.75rem]" />;
+  if (step === 0) return <Polaroid sizes="120px" className="w-[5.25rem] -rotate-6 sm:w-[7.5rem]" />;
+  if (step === 1) return <Art id={id} flowers={flowers} className="w-[5.75rem] rotate-3 drop-shadow-[0_12px_14px_var(--page-shade-soft)] sm:w-[8.75rem]" />;
   return (
     <span className="block [--step-phone:3rem] sm:[--step-phone:4.75rem]">
       <PhoneFrame width="var(--step-phone)" className="rotate-3">
@@ -97,7 +97,7 @@ export async function HowToSend({ manifest, locale, heading, flowers }: { manife
           {steps.map((title, i) => (
             <li
               key={title}
-              className="relative grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-x-4 rounded-[1.4rem] border border-page-line bg-page-raised/70 py-4 pr-4 pl-5 shadow-page-card sm:block sm:px-4 sm:pt-10 sm:pb-7 sm:text-center"
+              className="relative grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-x-5 rounded-[1.4rem] border border-page-line bg-page-raised/70 py-4 pr-4 pl-5 shadow-page-card sm:block sm:px-4 sm:pt-10 sm:pb-7 sm:text-center"
             >
               <span className="absolute top-1/2 -left-3 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-page-badge font-display text-base text-page-ink ring-4 ring-page-ground sm:-top-5 sm:left-1/2 sm:size-10 sm:-translate-x-1/2 sm:translate-y-0 sm:text-lg">
                 {i + 1}
