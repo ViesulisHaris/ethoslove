@@ -402,3 +402,16 @@ describe("the publish rule", () => {
     expect(decidePublish(reference, { ...card, message: "" }, { unlocked: false }, none)).toEqual({ ok: false, reason: "not_ready", problems: ["message"] });
   });
 });
+
+describe("paid for and not sent", () => {
+  it("a group card's buyer is reminded like any other buyer of one gift, by the template they bought it on", async () => {
+    const { supabasePublishReminderStore } = await import("@/lib/commerce/publish-reminders");
+    const paid = (id: string, product: string, kind: string | null) => ({ id, user_id: USER, product, kind, status: "paid", template_slugs: [SLUG], created_at: new Date(NOW - 20 * 60_000).toISOString(), stripe_payment_intent_id: `pi_${id}`, store: null });
+    const fake = new FakeDb({ purchases: [paid("p-group", "group", "group"), paid("p-step", "group", "group_addon"), { ...paid("p-pack", "pack", null), template_slugs: [] }] }, NOW);
+    const candidates = await supabasePublishReminderStore(fake.db, null).candidates(NOW - 3_600_000, NOW, 50);
+    expect(candidates.map((c) => [c.id, c.slug])).toEqual([
+      ["p-group", SLUG],
+      ["p-step", SLUG],
+    ]);
+  });
+});
