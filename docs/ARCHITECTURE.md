@@ -26,7 +26,7 @@ Route groups give each surface its own shell:
 | `(marketing)` | homepage, gallery, SEO pages    | header + footer + sticky CTA | static           |
 | `(app)`       | dashboard, account              | sidebar, dark mode           | dynamic (auth)   |
 | `(editor)`    | `/create/[templateSlug]`        | none, full bleed             | static shell     |
-| `(gift)`      | `/g/[shortId]`, `/g/.../react`  | none                         | dynamic          |
+| `(gift)`      | `/g/[shortId]`, `/g/.../react`, `/c/[token]` (a group card's link, docs/GROUP.md) | none | dynamic |
 | `(auth)`      | login, signup                   | logo only                    | static           |
 
 `src/app/auth/*` route handlers sit outside the locale segment (Supabase redirects there).
@@ -54,6 +54,9 @@ See `supabase/migrations/0001_init.sql`. Key decisions:
   credit counter. `has_template_unlock(user, slug)` is the single check.
 - Storage buckets are private. Objects live at `gifts/{gift_id}/…`; owners manage their own folder,
   recipients get long-lived signed URLs minted by the server for live gifts.
+- Group cards (`gift_groups`, `gift_contributions`, the `contributions` bucket; migration 0023) are
+  the server's alone and switched off: see `docs/GROUP.md`. What a group adds reaches a gift only
+  through its editor, as `data.contributions`.
 
 ## Template system
 
