@@ -6,16 +6,16 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
-import { SAMPLE_PHOTO, pageArt, slotStyle } from "@/content/page-art";
+import { SAMPLE_PHOTO, artSrcSet, pageArt, slotStyle } from "@/content/page-art";
 import type { BorrowField, TemplateGuideContent } from "@/content/template-guides";
 import type { Flowers } from "@/content/template-page-themes";
 import { listManifests } from "@/templates/manifests";
 import type { FieldMeta, TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
-import { PhoneFrame } from "@/components/shared/phone-frame";
-import { Art, ArtLayer, BandEdge, type PlacedArt } from "./art";
+import { Art, ArtLayer, ArtWithSlot, BandEdge } from "./art";
 import { IdeasToggle } from "./ideas-toggle";
 import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
+import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
 
 /**
  * A gift's page below its hero, as the owner's mock-up lays it out (docs/marketing/growth-build/
@@ -23,24 +23,6 @@ import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
  * something to look at. The colours are the page's (--page-*, globals.css), the flowers the page
  * art's, and every word a template's own or a line of messages/*.json.
  */
-
-/** Where the art lies, section by section. Off a phone unless marked; nothing over words. */
-const HOW_ART: PlacedArt[] = [
-  // The lily that leans in from the right edge, across the gap between the hero and the steps.
-  { art: "lily-stem-tall", x: 101, y: -7, size: 19, rot: -24, phone: false },
-  { art: "petal-3", x: 31, y: 99, size: 4.2, rot: 24, phone: false },
-  { art: "petal-1", x: 93, y: 1, size: 13, rot: 28, phone: "only" },
-];
-const WRITE_ART: PlacedArt[] = [
-  { art: "lily-side", x: 100, y: 3, size: 12, rot: 160, blur: 4, opacity: 0.8, phone: false },
-  { art: "petal-4", x: 80, y: 100, size: 4.4, rot: -18, phone: false },
-];
-const MORE_ART: PlacedArt[] = [
-  // Lying across the edge between the questions and "More like this".
-  { art: "lily-open", x: 5, y: -17, size: 21, rot: -14, phone: false },
-  { art: "petal-2", x: 97, y: 88, size: 4.5, rot: 40, blur: 1, phone: false },
-  { art: "lily-open", x: 90, y: 0, size: 20, rot: 18, phone: "only" },
-];
 
 /** A section's left column: the label, the heading, at most one line and at most one button. */
 function Intro({ id, label, heading, line, children }: { id?: string; label: string; heading: string; line?: string; children?: ReactNode }) {
@@ -59,33 +41,34 @@ function Intro({ id, label, heading, line, children }: { id?: string; label: str
 /** The two-column spread every section below the hero shares. */
 const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20";
 
-/** A sample photo as a polaroid: the stand-in for the render of one. */
-function Polaroid({ className, sizes }: { className?: string; sizes: string }) {
-  return (
-    <span className={cn("block bg-photo-paper p-[6%] pb-[20%] shadow-page-lift", className)}>
-      <Image src={SAMPLE_PHOTO.src} alt="" width={SAMPLE_PHOTO.width} height={SAMPLE_PHOTO.height} sizes={sizes} className="aspect-square h-auto w-full object-cover" />
-    </span>
-  );
-}
-
-/** One of the three pictures of "How to send": the render when there is one, else its stand-in. */
-function StepPicture({ step, manifest, flowers }: { step: 0 | 1 | 2; manifest: TemplateManifest; flowers: Flowers }) {
-  const id = (["step-photo", "step-note", "step-send"] as const)[step];
-  const art = pageArt(id, flowers, manifest.slug);
-  if (!art.standIn) return <Art id={id} flowers={flowers} slug={manifest.slug} className="w-[min(100%,9.5rem)]" />;
-  if (step === 0) return <Polaroid sizes="120px" className="w-[5.25rem] -rotate-6 sm:w-[7.5rem]" />;
-  if (step === 1) return <Art id={id} flowers={flowers} className="w-[5.75rem] rotate-3 drop-shadow-[0_12px_14px_var(--page-shade-soft)] sm:w-[8.75rem]" />;
-  return (
-    <span className="block [--step-phone:3rem] sm:[--step-phone:4.75rem]">
-      <PhoneFrame width="var(--step-phone)" className="rotate-3">
-        <Image src={art.src} alt="" fill sizes="80px" className="object-cover" />
-      </PhoneFrame>
-    </span>
-  );
+/**
+ * One of the three pictures of "How to send", from the page art: a polaroid with the sample photo
+ * laid into it, a note card with a line of handwriting written on it, a small phone showing a
+ * sealed envelope. `data-flatlay` marks what is laid in as part of a picture, as a phone's screen is.
+ */
+function StepPicture({ step, flowers, noteLine }: { step: 0 | 1 | 2; flowers: Flowers; noteLine: string }) {
+  if (step === 0)
+    return (
+      <span data-flatlay="step" className="block w-[5.5rem] sm:w-[9.25rem]">
+        <ArtWithSlot id="step-photo" flowers={flowers} slot="photo" shown="150px">
+          <Image src={SAMPLE_PHOTO.src} alt="" fill sizes="130px" className="object-cover" />
+        </ArtWithSlot>
+      </span>
+    );
+  if (step === 1)
+    return (
+      <span data-flatlay="step" className="block w-[6.75rem] sm:w-[11.5rem]">
+        {/* The card is a container, so the handwriting is sized by the card and keeps its place at any width. */}
+        <ArtWithSlot id="step-note" flowers={flowers} slot="card" shown="190px" slotClassName="[container-type:inline-size]">
+          <span className="flex h-full items-center px-[9cqw] font-hand text-[12.5cqw] leading-[1.08] text-page-ink">{noteLine}</span>
+        </ArtWithSlot>
+      </span>
+    );
+  return <Art id="step-send" flowers={flowers} shown="100px" className="w-[3.4rem] sm:w-[5.6rem]" />;
 }
 
 /** (2) How to send: three small picture cards, numbered because they are an order. */
-export async function HowToSend({ manifest, locale, heading, flowers }: { manifest: TemplateManifest; locale: GiftLocale; heading: string; flowers: Flowers }) {
+export async function HowToSend({ locale, heading, flowers, noteLine }: { locale: GiftLocale; heading: string; flowers: Flowers; noteLine: string }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
   const steps = [t("step1Title"), t("step2Title"), t("step3Title")];
   return (
@@ -104,7 +87,7 @@ export async function HowToSend({ manifest, locale, heading, flowers }: { manife
               </span>
               <h3 className="order-last font-display text-[1.25rem] leading-tight text-page-ink sm:text-[1.3rem]">{title}</h3>
               <span className="grid h-28 place-items-center sm:mt-5 sm:h-40">
-                <StepPicture step={i as 0 | 1 | 2} manifest={manifest} flowers={flowers} />
+                <StepPicture step={i as 0 | 1 | 2} flowers={flowers} noteLine={noteLine} />
               </span>
               {i < 2 ? <ArrowRight aria-hidden="true" className="absolute top-1/2 -right-[1.6rem] hidden size-4 -translate-y-1/2 text-page-body sm:block lg:-right-[1.75rem]" /> : null}
             </li>
@@ -113,6 +96,24 @@ export async function HowToSend({ manifest, locale, heading, flowers }: { manife
       </div>
     </section>
   );
+}
+
+/**
+ * The line written on the note card of step two. From the template's own guide where it has one:
+ * the first line to borrow that is short enough to be read on a card that small. Otherwise the
+ * title of the template's own demo. Either way a line the product already shows, never one made up
+ * for the picture.
+ */
+export async function stepNoteLine(slug: string, locale: GiftLocale, guide: TemplateGuideContent | null): Promise<string> {
+  const fits = (line: string) => line.length >= 8 && line.length <= 30;
+  const borrowed = guide?.ideas.items.map((idea) => idea.borrow.line).find(fits);
+  if (borrowed) return borrowed;
+  try {
+    const mod = (await import(`@/templates/${slug}/demo-data`)) as { demoData?: Record<GiftLocale, { title?: string }> };
+    return mod.demoData?.[locale]?.title ?? "";
+  } catch {
+    return "";
+  }
 }
 
 /** A template's own fields, by the names its editor gives them. */
@@ -171,39 +172,23 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
 }
 
 /**
- * The picture of "The experience": a larger phone lying on flowers with a polaroid resting on it.
- * It is the page art's `experience-flatlay`; a render brings the phone and the flowers and leaves
- * the photo area empty for the sample photo, laid in by its matrix. Until then: the CSS phone
- * showing the template's cover, a polaroid of the sample photo on it, and two of the flowers.
+ * The picture of "The experience": the page art's `experience-flatlay`, a larger phone lying on
+ * lilies with a polaroid resting on it, and the sample photo laid into the polaroid by the
+ * render's own matrix.
  */
-function ExperienceFlatlay({ manifest, flowers }: { manifest: TemplateManifest; flowers: Flowers }) {
-  const art = pageArt("experience-flatlay", flowers, manifest.slug);
-  const slot = slotStyle(art);
-  if (!art.standIn && slot) {
-    return (
-      <div data-flatlay="experience" className="relative mx-auto w-full max-w-[36rem]" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
-        <CutoutImg src={art.src} srcSet={art.src1x ? `${art.src1x} 1x, ${art.src} 2x` : undefined} width={art.width} height={art.height} className="absolute inset-0 w-full" />
-        <div className="absolute overflow-hidden" style={slot}>
-          <Image src={SAMPLE_PHOTO.src} alt="" fill sizes="(min-width: 1024px) 320px, 60vw" className="object-cover" />
-        </div>
-        {art.bezel ? <CutoutImg src={art.bezel} width={art.width} height={art.height} className="absolute inset-0 w-full" /> : null}
-      </div>
-    );
-  }
-  const width = "clamp(13.5rem, 25vw, 21rem)";
+function ExperienceFlatlay({ flowers }: { flowers: Flowers }) {
+  const art = pageArt("experience-flatlay", flowers);
+  const photo = art.slots.photo;
   return (
-    <div data-flatlay="experience" className="relative mx-auto" style={{ width }}>
-      <Art id="lily-side" flowers={flowers} className="absolute top-[7%] right-[-36%] w-[56%] rotate-[22deg] drop-shadow-[0_14px_18px_var(--page-shade-soft)]" />
-      <div className="relative -rotate-[11deg]">
-        <div aria-hidden="true" className="absolute inset-x-[4%] top-[10%] bottom-[-3%] rounded-[18%/9%] bg-(--page-shade) opacity-70 blur-2xl" />
-        <PhoneFrame width={width}>
-          <Image src={art.src} alt="" fill sizes="(min-width: 1024px) 340px, 60vw" className="object-cover" />
-          <span className="absolute inset-0 bg-black/25" />
-        </PhoneFrame>
-        <Polaroid sizes="(min-width: 1024px) 260px, 45vw" className="absolute top-[21%] left-[11%] w-[78%] rotate-[7deg]" />
-      </div>
-      <Art id="lily-three-quarter" flowers={flowers} className="absolute bottom-[9%] left-[-56%] w-[88%] -rotate-[10deg] drop-shadow-[0_18px_22px_var(--page-shade-soft)]" />
-      <Art id="lily-open" flowers={flowers} className="absolute top-[36%] left-[-40%] w-[40%] rotate-[30deg] blur-[1.5px] drop-shadow-[0_14px_18px_var(--page-shade-soft)]" />
+    <div data-flatlay="experience" className="relative" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
+      <span data-decor="experience-flatlay" className="absolute inset-0 block">
+        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="(min-width: 1024px) 50vw, 120vw" width={art.width} height={art.height} className="block w-full" />
+      </span>
+      {photo ? (
+        <div className="absolute overflow-hidden" style={slotStyle(art, photo)}>
+          <Image src={SAMPLE_PHOTO.src} alt="" fill sizes="(min-width: 1024px) 220px, 45vw" className="object-cover" />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -217,11 +202,12 @@ export async function Experience({ manifest, locale, flowers }: { manifest: Temp
       <BandEdge side="top" className="text-page-band" />
       {/* Clipped: on a desk the phone's foot runs off the band, under its curved lower edge, as the mock-up has it. */}
       <div className="relative isolate -mt-px overflow-hidden bg-page-band">
-        <div className="container-x grid items-center gap-y-12 pt-10 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-6 lg:pb-0">
-          <div className="lg:translate-y-10">
-            <ExperienceFlatlay manifest={manifest} flowers={flowers} />
+        <div className="container-x grid items-center gap-y-6 pt-4 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-0 lg:pb-0">
+          {/* The picture is wider than its column and runs off the page's left side and under the band's lower edge. */}
+          <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
+            <ExperienceFlatlay flowers={flowers} />
           </div>
-          <div className="lg:pb-20">
+          <div className="lg:py-24">
             <p className="text-page-label text-page-body">{t("experienceLabel")}</p>
             <h2 id="template-experience" className="mt-4 display-xl text-balance text-page-ink">
               {t("experienceHeading")}

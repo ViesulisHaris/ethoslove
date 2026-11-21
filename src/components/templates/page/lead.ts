@@ -3,19 +3,21 @@ const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 /**
  * What of a template's description the hero shows: its opening sentences, as many as fit in
  * thirty words (the hero's limit beside the picture, DESIGN-LESS-TEXT.md). Whole sentences only,
- * never a cut one. The rest is not thrown away: the page keeps it in its closed block, and the
- * whole description stays the page's meta description. A description whose first sentence is
- * already longer than that gives the hero none, where the tagline above it does the telling.
+ * never a cut one. But never a stub either: where that leaves fewer than a dozen words ("Tap to
+ * break the seal." and nothing more), the next sentence comes too, as long as the two stay within
+ * forty. The rest is not thrown away: the page keeps it in its closed block, and the whole
+ * description stays the page's meta description. A description that cannot give a dozen words
+ * within forty gives the hero none, where the tagline above it does the telling.
  */
-export function heroLead(description: string, max = 30): { lead: string; rest: string } {
+export function heroLead(description: string, max = 30, least = 12, most = 40): { lead: string; rest: string } {
   const sentences = description.trim().split(/(?<=[.!?])\s+/);
   let taken = 0;
   let count = 0;
-  for (const sentence of sentences) {
-    if (count + words(sentence) > max) break;
-    count += words(sentence);
+  while (taken < sentences.length && count + words(sentences[taken]) <= (count < least ? most : max)) {
+    count += words(sentences[taken]);
     taken += 1;
   }
+  if (count < least) taken = 0;
   return { lead: sentences.slice(0, taken).join(" "), rest: sentences.slice(taken).join(" ") };
 }
 

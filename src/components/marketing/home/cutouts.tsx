@@ -37,9 +37,9 @@ export type CutoutId = keyof typeof CUTOUTS;
  * An eager one is drawn through EagerImg, so the homepage's hero lilies stop being preloaded by
  * every page that merely links to the homepage (see eager-img.tsx); a lazy one needs no such care.
  */
-export function CutoutImg({ src, width, height, srcSet, eager = false, className, style }: { src: string; width: number; height: number; srcSet?: string; eager?: boolean; className?: string; style?: CSSProperties }) {
+export function CutoutImg({ src, width, height, srcSet, sizes, eager = false, className, style }: { src: string; width: number; height: number; srcSet?: string; sizes?: string; eager?: boolean; className?: string; style?: CSSProperties }) {
   const Img = eager ? EagerImg : "img";
-  return <Img src={src} srcSet={srcSet} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
+  return <Img src={src} srcSet={srcSet} sizes={sizes} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
 }
 
 /** One cut-out from public/scraps, by name. */

@@ -20,10 +20,12 @@ import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
 import { JsonLd } from "@/components/shared/json-ld";
 import { templateFaq } from "@/components/templates/template-guide";
-import { ArtLayer, type PlacedArt } from "@/components/templates/page/art";
-import { HeroFlatlay } from "@/components/templates/page/hero-flatlay";
+import { artSrcSet, pageArt, slotGeometry, slotStyle } from "@/content/page-art";
+import { ArtLayer } from "@/components/templates/page/art";
+import { HeroFlatlay, type HeroFlatlayArt } from "@/components/templates/page/hero-flatlay";
 import { heroLead } from "@/components/templates/page/lead";
-import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite } from "@/components/templates/page/sections";
+import { HERO_ART } from "@/components/templates/page/placements";
+import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, stepNoteLine } from "@/components/templates/page/sections";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 
@@ -49,16 +51,9 @@ export async function generateMetadata({
   });
 }
 
-/** The hero's loose pieces: a petal by the phone's foot, one in the top corner, a bloom out of focus. */
-const HERO_ART: PlacedArt[] = [
-  { art: "lily-three-quarter", x: -1, y: 2, size: 12, rot: 42, blur: 5, opacity: 0.75, phone: false, eager: true },
-  { art: "petal-1", x: 5.5, y: 83, size: 4.4, rot: -32, phone: false },
-  { art: "petal-2", x: 95, y: 9, size: 4.2, rot: 28, blur: 1, phone: false, eager: true },
-];
-
 /**
  * A gift's page, laid out as the owner's mock-up (docs/marketing/growth-build/DESIGN-LESS-TEXT.md):
- * the hero with the live demo in a phone lying among flowers, how to send it in three pictures,
+ * the hero with the gift in a phone lying among flowers, how to send it in three pictures,
  * what to write (where the template has a guide), the experience band, the questions and four more
  * gifts. The same layout for every template, each in its own colours
  * (content/template-page-themes.ts) and its colourway of the page art (content/page-art.ts).
@@ -88,6 +83,24 @@ export default async function TemplateDetailPage({
   const about = heroLead(manifest.description[l]);
   const theme = templatePageTheme(manifest.slug);
   const flowers = theme.flowers;
+  // The hero's picture, as the browser needs it: the render, its bezel, and where its screen is.
+  const flatlay = pageArt("hero-flatlay", flowers);
+  const screen = flatlay.slots.screen!;
+  const { centerX, centerY, perWidth, turn, spanX } = slotGeometry(flatlay, screen);
+  const heroArt: HeroFlatlayArt = {
+    src: flatlay.src1x,
+    srcSet: artSrcSet(flatlay),
+    width: flatlay.width,
+    height: flatlay.height,
+    bezel: flatlay.bezel ? { src: flatlay.bezel.src1x, srcSet: `${flatlay.bezel.src1x} ${flatlay.width1x}w, ${flatlay.bezel.src} ${flatlay.width}w` } : undefined,
+    screen: slotStyle(flatlay, screen),
+    centerX,
+    centerY,
+    perWidth,
+    turn,
+    spanX,
+  };
+  const noteLine = await stepNoteLine(manifest.slug, l, guide);
 
   // What's included: only what this template has. What it lacks is not a list to read.
   const included = [
@@ -128,8 +141,8 @@ export default async function TemplateDetailPage({
            * phone takes the left column. The text column is `contents` below `lg`, which makes its
            * two halves grid items that `order` can put either side of the phone.
            */}
-          <div className="container-x relative grid gap-y-10 pt-8 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-x-10 lg:pt-10 lg:pb-24 xl:gap-x-14">
-            <div className="contents lg:block lg:max-w-[35rem]">
+          <div className="container-x relative grid gap-y-10 pt-8 pb-14 sm:pb-20 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] xl:items-center xl:gap-x-14 xl:pt-10 xl:pb-28">
+            <div className="contents xl:block xl:max-w-[33rem]">
               <div className="order-first">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={free ? "rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink" : "rounded-[5px] bg-page-ink px-2 py-1 text-page-label text-page-ground"}>
@@ -170,7 +183,7 @@ export default async function TemplateDetailPage({
                 </p>
               </div>
 
-              <div className="order-last lg:mt-10">
+              <div className="order-last xl:mt-10">
                 <h2 className="text-page-label text-page-body">{t("templates.included")}</h2>
                 <ul className="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
                   {included.map((label) => (
@@ -182,14 +195,21 @@ export default async function TemplateDetailPage({
                 </ul>
               </div>
             </div>
-            {/* The phone's width: most of a phone's screen, a fifth of a desk's. */}
-            <div className="min-w-0 py-2 [--hero-phone:min(17rem,100vw-6.5rem)] lg:order-first lg:py-4 lg:[--hero-phone:clamp(15rem,21.5vw,19.5rem)]">
-              <HeroFlatlay slug={manifest.slug} locale={l} flowers={flowers} width="var(--hero-phone)" />
+            {/*
+             * The phone lying on its flowers. --hero-phone is how wide its screen is drawn; --fl-up
+             * and --fl-down the room kept above and below the screen's middle, in screen widths.
+             * Below `xl` the words are above and below it, so nearly the whole picture is kept clear
+             * of them. From `xl` it has the left column: its leaves run into the section's own
+             * padding, and it sits a little left of centre so its right-hand lilies stop short of
+             * the words.
+             */}
+            <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] xl:order-first xl:[--fl-down:1.2] xl:[--fl-up:1.2] xl:[--hero-phone:15.25rem]">
+              <HeroFlatlay slug={manifest.slug} locale={l} art={heroArt} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 420px) 800px, 190vw" className="xl:mx-0 xl:ml-[4.75rem]" />
             </div>
           </div>
         </section>
 
-        <HowToSend manifest={manifest} locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} flowers={flowers} />
+        <HowToSend locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} flowers={flowers} noteLine={noteLine} />
         {guide ? <WhatToWrite manifest={manifest} locale={l} guide={guide} flowers={flowers} /> : null}
         <Experience manifest={manifest} locale={l} flowers={flowers} />
         <Questions manifest={manifest} locale={l} faq={faq} guide={guide} about={about.rest} />

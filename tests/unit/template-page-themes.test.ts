@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_PAGE_THEME, ON_ACCENT, TEMPLATE_PAGE_THEMES, contrast, luminance, pageThemeChromeCss, pageThemeVars, templatePageTheme, type PageTheme } from "@/content/template-page-themes";
-import { PAGE_ART } from "@/content/page-art";
+import { artVariants } from "@/content/page-art";
 import { TEMPLATE_SLUGS } from "@/templates/manifests";
 
 /**
@@ -29,7 +29,7 @@ describe("template page themes", () => {
     for (const [slug, t] of ALL) {
       for (const key of ["ground", "raised", "band", "ink", "body", "accent", "badge", "footer", "footerText"] as const) expect(t[key], `${slug}.${key}`).toMatch(HEX);
       if (t.onAccent) expect(t.onAccent, `${slug}.onAccent`).toMatch(HEX);
-      expect(Object.hasOwn(PAGE_ART, t.flowers), `${slug}: no art for “${t.flowers}”`).toBe(true);
+      expect(artVariants("lily-open"), `${slug}: no art for “${t.flowers}”`).toContain(t.flowers);
     }
   });
 

@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
 import { OCCASIONS } from "@/config/occasions";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
-import { pageArt } from "@/content/page-art";
+import { artSrcSet, pageArt } from "@/content/page-art";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { Logo } from "@/components/shared/logo";
 import { CookieChoiceButton } from "@/components/shared/cookie-consent";
@@ -91,15 +91,15 @@ export async function MarketingFooter() {
 }
 
 /**
- * One faint flower in the corner, on the pages laid out with the page art (a gift's page): the art
- * table's `lily-footer`. Where it lies and where it shows is globals.css ([data-footer-flower]):
+ * One faint flower in the corner, on the pages laid out with the page art (a gift's page): the
+ * art's `lily-footer`, the one piece rendered for a dark ground. Where it lies and where it shows is globals.css ([data-footer-flower]):
  * hidden on every other page, and lazy, so a page that never shows it never fetches it.
  */
 function FooterFlower() {
   const art = pageArt("lily-footer", "ivory");
   return (
     <span data-footer-flower aria-hidden="true">
-      <CutoutImg src={art.src} srcSet={art.src1x ? `${art.src1x} 1x, ${art.src} 2x` : undefined} width={art.width} height={art.height} className="block w-full" style={art.tint ? { filter: art.tint } : undefined} />
+      <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="24vw" width={art.width} height={art.height} className="block w-full" />
     </span>
   );
 }

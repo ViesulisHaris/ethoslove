@@ -485,16 +485,33 @@ body:has([data-page-theme]) .site-header .btn-rose {
 [data-footer-flower] {
   display: none;
   position: absolute;
-  right: -4.5rem;
-  bottom: -6rem;
-  width: clamp(16rem, 24vw, 23rem);
-  rotate: -20deg;
-  opacity: 0.2;
+  right: -3rem;
+  bottom: -2.5rem;
+  width: clamp(17rem, 25vw, 24rem);
+  rotate: -8deg;
   pointer-events: none;
 }
 @media (min-width: 64rem) {
   body:has([data-page-theme]) [data-footer-flower] {
     display: block;
+  }
+}
+
+/* The hero's phone, picked up to be played (components/templates/page/hero-flatlay.tsx): the live
+   gift comes up over the lying phone from that phone's own turn, and ends upright and still. */
+[data-page-theme] .hero-lift {
+  translate: -50% -50%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-page-theme] .hero-lift {
+    animation: hero-lift 0.7s var(--ease-out-quint) both;
+  }
+}
+@keyframes hero-lift {
+  from {
+    opacity: 0;
+    rotate: var(--lift-turn, -12deg);
+    scale: 0.9;
   }
 }
 

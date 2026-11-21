@@ -1,59 +1,104 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useState, type CSSProperties } from "react";
+import { Play } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
-import { pageArt, slotStyle } from "@/content/page-art";
-import type { Flowers } from "@/content/template-page-themes";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
-import { Art } from "./art";
 
 /**
- * The hero's picture: a phone lying at a slight angle among flowers, with the live demo in its
- * screen. It is the page art's `hero-flatlay`.
- *
- * - Once that is a render, the picture is the phone and the flowers in one, and the demo is laid
- *   into its empty screen by the render's own matrix, under its bezel layer.
- * - Until then the phone is the site's CSS frame, tilted, with three of the colourway's flowers
- *   tucked behind it. A tap starts the demo and stands the phone upright: a gift is played with a
- *   finger (a scratch card, a seal to break), and the template reads where the finger is from an
- *   upright box.
- *
- * `width` is the phone's own width as CSS; everything else follows from it, so the layout is the
- * same whichever of the two is drawn. A render's picture is wider than its phone and is never let
- * past its column: if it would be, make `width` smaller where the page sets it, because the gift's
- * clearance under the island (`--gift-safe-top`) is worked out from `width` as given.
+ * What the page hands over about the render (content/page-art.ts reads it from the art's manifest
+ * on the server, so the manifest never reaches a browser): the picture, its bezel layer, where
+ * the screen is and how the picture sits round it.
  */
-export function HeroFlatlay({ slug, locale, flowers, width, className }: { slug: string; locale: GiftLocale; flowers: Flowers; width: string; className?: string }) {
+export type HeroFlatlayArt = {
+  src: string;
+  srcSet: string;
+  width: number;
+  height: number;
+  bezel?: { src: string; srcSet: string };
+  /** CSS that carries a box onto the phone's screen (slotStyle). */
+  screen: CSSProperties;
+  /** The screen's middle as shares of the picture, the picture's width in screen widths, the screen's turn, and the turned screen's own width in screen widths (slotGeometry). */
+  centerX: number;
+  centerY: number;
+  perWidth: number;
+  turn: number;
+  spanX: number;
+};
+
+/**
+ * The hero's picture: a phone lying at a slight angle on lilies, the page art's `hero-flatlay`,
+ * with the gift's cover laid into its screen by the render's own matrix and the render's bezel
+ * layer over it. Nothing else overlaps the phone.
+ *
+ * A tap plays the gift, and to play it the phone is picked up: the live gift comes up over the
+ * lying phone, upright, and the table goes soft behind it. Upright because a rendered phone can't
+ * be stood up, and a gift is played with a finger: 24 of the 61 templates read where the finger
+ * is (a scratch card, a frosted window, a cork to pull), and a template works that out from an
+ * upright box, so on a screen turned 14 degrees the scratch would land beside the finger. One
+ * way for every gift, so nobody learns two.
+ *
+ * `width` is how wide the lying screen is drawn, as CSS; `up` and `down` how much room the page
+ * keeps above and below the screen's middle, in screen widths. The picture itself is far larger
+ * than that box and spills past it on every side: the page decides how much of that spill may
+ * meet anything (on a phone it keeps nearly all of it clear; on a desk the leaves run into the
+ * section's own padding). `sizes` is how wide the picture is drawn, for the browser's choice of
+ * file: a CSS variable can't say it.
+ */
+export function HeroFlatlay({ slug, locale, art, width, up, down, sizes, className }: { slug: string; locale: GiftLocale; art: HeroFlatlayArt; width: string; up: string; down: string; sizes: string; className?: string }) {
+  const t = useTranslations("templates");
   const [live, setLive] = useState(false);
-  const art = pageArt("hero-flatlay", flowers, slug);
-  const slot = slotStyle(art);
-
-  if (!art.standIn && slot && art.slot) {
-    // How much of the picture's width the screen takes, so the screen comes out `width` wide.
-    const [a, b] = art.slot.matrix;
-    const share = (art.slot.box[0] * Math.hypot(a, b)) / art.width;
-    return (
-      <div data-flatlay="hero" className={cn("relative mx-auto", className)} style={{ width: `calc(${width} / ${share})`, maxWidth: "100%", aspectRatio: `${art.width} / ${art.height}` }}>
-        <CutoutImg src={art.src} srcSet={art.src1x ? `${art.src1x} 1x, ${art.src} 2x` : undefined} width={art.width} height={art.height} eager className="absolute inset-0 w-full" />
-        <div className="absolute overflow-hidden rounded-[11%/5.2%]" style={{ ...slot, "--gift-safe-top": `calc(${width} / ${Math.hypot(a, b)} * 0.143)` } as CSSProperties}>
-          <TemplatePhonePreview slug={slug} locale={locale} bare />
-        </div>
-        {art.bezel ? <CutoutImg src={art.bezel} width={art.width} height={art.height} eager className="absolute inset-0 w-full" /> : null}
-      </div>
-    );
-  }
-
+  const picture = `calc(${width} * ${art.perWidth})`;
+  const settle = cn("transition-[opacity,filter] duration-500 ease-(--ease-out-quint)", live && "opacity-55 blur-[2px]");
   return (
-    <div data-flatlay="hero" className={cn("relative mx-auto", className)} style={{ width }}>
-      <Art id="lily-open" flowers={flowers} eager className="absolute top-[3%] left-[-52%] w-[86%] -rotate-[22deg] drop-shadow-[0_18px_22px_var(--page-shade-soft)]" />
-      <Art id="lily-side" flowers={flowers} eager className="absolute top-[19%] right-[-33%] w-[58%] rotate-[28deg] drop-shadow-[0_14px_18px_var(--page-shade-soft)]" />
-      <Art id="lily-three-quarter" flowers={flowers} className="absolute bottom-[-3%] left-[-30%] w-[48%] rotate-[14deg] blur-[1.5px] drop-shadow-[0_14px_18px_var(--page-shade-soft)]" />
-      <div className={cn("relative origin-center transition-transform duration-700 ease-(--ease-out-quint)", live ? "rotate-0" : "-rotate-[5deg]")}>
-        <div aria-hidden="true" className="absolute inset-x-[6%] top-[12%] bottom-[-2%] rounded-[18%/9%] bg-(--page-shade) opacity-70 blur-2xl" />
-        <TemplatePhonePreview slug={slug} locale={locale} width={width} onLive={() => setLive(true)} />
+    <div data-flatlay="hero" data-live={live ? "" : undefined} className={cn("relative mx-auto", className)} style={{ width: `calc(${width} * ${art.spanX})`, height: `calc(${width} * (${up} + ${down}))` }}>
+      <div
+        className="absolute"
+        style={{
+          width: picture,
+          aspectRatio: `${art.width} / ${art.height}`,
+          left: `calc(50% - ${width} * ${art.perWidth * art.centerX})`,
+          top: `calc(${width} * (${up} - ${(art.perWidth * art.centerY * art.height) / art.width}))`,
+        }}
+      >
+        <span data-decor="hero-flatlay" className={cn("absolute inset-0 block", settle)}>
+          <CutoutImg src={art.src} srcSet={art.srcSet} sizes={sizes} width={art.width} height={art.height} eager className="block w-full" />
+        </span>
+        <div className={cn("absolute overflow-hidden bg-night", settle)} style={art.screen}>
+          {/* The cover until they tap, so the phone never lies there black. */}
+          <button type="button" onClick={() => setLive(true)} disabled={live} aria-label={t("tryDemo")} className="group relative block h-full w-full text-paper">
+            <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            {live ? null : (
+              <>
+                <span className="absolute inset-0 bg-black/20 transition-colors group-hover:bg-black/10" />
+                <span className="relative flex h-full flex-col items-center justify-center gap-3">
+                  <span className="grid size-14 place-items-center rounded-full bg-cream text-forest shadow-[0_14px_40px_-14px_rgba(0,0,0,0.7)] transition-transform group-hover:scale-105">
+                    <Play className="ml-0.5 size-5 fill-current" />
+                  </span>
+                  <span aria-hidden="true" className="rounded-full bg-black/35 px-3 py-1 text-sm font-medium backdrop-blur">
+                    {t("tryDemo")}
+                  </span>
+                </span>
+              </>
+            )}
+          </button>
+        </div>
+        {art.bezel ? (
+          <span className={cn("absolute inset-0 block", settle)}>
+            <CutoutImg src={art.bezel.src} srcSet={art.bezel.srcSet} sizes={sizes} width={art.width} height={art.height} eager className="block w-full" />
+          </span>
+        ) : null}
       </div>
+      {live ? (
+        // Picked up: the live gift, upright, over where the phone lay. It starts at the lying phone's own turn.
+        <div data-upright className="hero-lift absolute left-1/2 z-10" style={{ top: `calc(${width} * ${up})`, "--lift-turn": `${art.turn}deg` } as CSSProperties}>
+          <TemplatePhonePreview slug={slug} locale={locale} autoStart width={`calc(${width} * 1.14)`} />
+        </div>
+      ) : null}
     </div>
   );
 }

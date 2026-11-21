@@ -50,20 +50,38 @@ describe("the text budget of a gift's page", () => {
     expect(over).toEqual([]);
   });
 
-  it("the hero says at most thirty words of a description, in whole sentences, and loses none of it", () => {
+  it("the hero says a dozen to forty words of a description, in whole sentences, and loses none of it", () => {
     let shown = 0;
+    const none: string[] = [];
     for (const m of TEMPLATE_MANIFESTS)
       for (const l of LOCALES) {
         const { lead, rest } = heroLead(m.description[l]);
-        expect(words(lead), `${m.slug} ${l}`).toBeLessThanOrEqual(30);
         expect([lead, rest].filter(Boolean).join(" "), `${m.slug} ${l}`).toBe(m.description[l].trim().replace(/\s+/g, " "));
-        if (lead) {
-          shown += 1;
-          expect(lead, `${m.slug} ${l}: the lead stops mid-sentence`).toMatch(/[.!?]$/);
+        if (!lead) {
+          none.push(`${m.slug} ${l}`);
+          continue;
         }
+        shown += 1;
+        // Never a stub, never past forty, and thirty unless it took a second sentence to say anything.
+        expect(words(lead), `${m.slug} ${l}: “${lead}” is a stub`).toBeGreaterThanOrEqual(12);
+        expect(words(lead), `${m.slug} ${l}`).toBeLessThanOrEqual(40);
+        expect(lead, `${m.slug} ${l}: the lead stops mid-sentence`).toMatch(/[.!?]$/);
       }
-    // Most descriptions open with a sentence short enough to show; where none does, the tagline tells it.
-    expect(shown).toBeGreaterThan(TEMPLATE_MANIFESTS.length);
+    // Where no dozen words fit in forty, the tagline tells it. That is the exception, and it is counted.
+    expect(shown).toBeGreaterThan(TEMPLATE_MANIFESTS.length * 1.5);
+    expect(none.length, none.join(", ")).toBeLessThanOrEqual(TEMPLATE_MANIFESTS.length / 2);
+  });
+
+  it("La carta is not cut down to its first five words", () => {
+    // The owner's example (21 Nov 2026): the Spanish Letter said only "Toca para romper el sello."
+    const es = TEMPLATE_MANIFESTS.find((m) => m.slug === "the-letter")!.description.es;
+    const { lead, rest } = heroLead(es);
+    expect(lead).toBe(es);
+    expect(rest).toBe("");
+    expect(heroLead("Tap to break the seal. " + "word ".repeat(40).trim() + ".").lead).toBe("");
+    expect(heroLead("One two three four five six seven eight nine ten eleven twelve. And a second sentence that would fit, but is not needed.").lead).toBe(
+      "One two three four five six seven eight nine ten eleven twelve. And a second sentence that would fit, but is not needed.",
+    );
   });
 
   it("the closed block under the questions holds at most 180 words, on every template's page", () => {
