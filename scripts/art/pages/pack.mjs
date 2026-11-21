@@ -119,25 +119,57 @@ function innerShade(w, h, area, m) {
 
 const manifest = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, "utf8")) : {};
 manifest.base = "/art/pages/";
+manifest.about =
+  "pieces[id][colourway] (or .plain where a piece has no flowers in it): file, w, h, bytes at 2x, and x1 the same at 1x. An empty place in a piece (screen, photo, card) has box [w, h], the size of what a page lays into it; matrix, the CSS transform that takes that box (transform-origin 0 0, at the picture's top left corner) onto the place in the file's own pixels; corners (top left, top right, bottom right, bottom left) in those pixels; radius, the place's corner radius in box pixels; fill, the colour it is in the picture. For a picture shown at another width, scale the matrix by shown width / w. bezel is a second picture of the same size to lay over what was put in the screen.";
 manifest.colourways = Object.fromEntries(Object.entries(COLOURWAYS).map(([k, v]) => [k, { ground: v.ground }]));
 manifest.pieces ??= {};
 
-const ids = readdirSync(raw).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).filter((id) => !only || only.split(",").some((o) => id === o || id.startsWith(o)));
-for (const id of ids) {
-  const info = JSON.parse(readFileSync(join(raw, `${id}.json`), "utf8"));
-  if (!info.piece || !existsSync(join(raw, `${id}.png`))) continue;
-  const way = info.colourway ?? "plain";
-  const look = COLOURWAYS[way];
+const every = readdirSync(raw).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5));
+const ids = every.filter((id) => !only || only.split(",").some((o) => id === o || id.startsWith(o)));
+const infoOf = (id) => JSON.parse(readFileSync(join(raw, `${id}.json`), "utf8"));
+
+/** The thing laid over its shadow, at the render's own size, and the rectangle that holds all of it. */
+async function whole(id) {
+  const info = infoOf(id);
+  const look = COLOURWAYS[info.colourway ?? "plain"];
   const thing = await sharp(join(raw, `${id}.png`)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = thing.info;
   const shade = existsSync(join(raw, `${id}-shadow.png`)) ? await shadowAlpha(join(raw, `${id}-shadow.png`), w, h, (info.shadow ?? 1) * look.strength) : null;
-  const whole = compose(thing.data, shade, w, h, hex(look.shadow));
-  const box = bbox(whole, w, h);
+  const data = compose(thing.data, shade, w, h, hex(look.shadow));
+  const box = bbox(data, w, h);
   if (!box) throw new Error(`${id} is empty`);
+  return { data, w, h, box };
+}
+
+// A piece's colourways are the same picture in other colours, and a page swaps one for another:
+// all are cut by the one rectangle that holds every one of them, so they are the same size to the
+// pixel and what is in them is in the same place.
+const boxes = {};
+async function sharedBox(piece, have) {
+  if (boxes[piece]) return boxes[piece];
+  let x0 = Infinity, y0 = Infinity, x1 = -1, y1 = -1;
+  for (const id of every) {
+    if (infoOf(id).piece !== piece || !existsSync(join(raw, `${id}.png`))) continue;
+    const { box } = have[id] ?? (await whole(id));
+    x0 = Math.min(x0, box.left);
+    y0 = Math.min(y0, box.top);
+    x1 = Math.max(x1, box.left + box.width);
+    y1 = Math.max(y1, box.top + box.height);
+  }
+  return (boxes[piece] = { left: x0, top: y0, width: x1 - x0, height: y1 - y0 });
+}
+
+for (const id of ids) {
+  const info = infoOf(id);
+  if (!info.piece || !existsSync(join(raw, `${id}.png`))) continue;
+  const way = info.colourway ?? "plain";
+  const made = await whole(id);
+  const { data: wholeData, w, h } = made;
+  const box = await sharedBox(info.piece, { [id]: made });
   const k = Math.min(1, info.long / Math.max(box.width, box.height));
   const W = Math.round(box.width * k), H = Math.round(box.height * k);
   const cut = (buf, scale) => () => sharp(buf, { raw: { width: w, height: h, channels: 4 } }).extract(box).resize({ width: Math.round(W * scale), height: Math.round(H * scale), fit: "fill", kernel: "lanczos3" });
-  const entry = { ...(await save(cut(whole, 1), `${id}.webp`)), x1: await save(cut(whole, 0.5), `${id}-1x.webp`) };
+  const entry = { ...(await save(cut(wholeData, 1), `${id}.webp`)), x1: await save(cut(wholeData, 0.5), `${id}-1x.webp`) };
   for (const key of ["screen", "photo", "card"]) {
     if (!info[key]) continue;
     const big = place(info[key], box, k), small = place(info[key], box, k * 0.5);

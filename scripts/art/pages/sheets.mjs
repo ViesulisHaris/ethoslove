@@ -86,23 +86,28 @@ async function hero(poster) {
     cols.push({ way, w: e.w, h: e.h, buf: await canvas(e.w, e.h, GROUNDS[way]).composite(layers).png().toBuffer(), e });
   }
   if (!cols.length) return;
-  // first the ivory one whole, with the bare piece and the bezel layer beside it; then any other colourways
-  const main = cols[0];
-  const bare = await sharp(join(DIR, main.e.file)).resize({ height: Math.round(main.h / 2) }).png().toBuffer({ resolveWithObject: true });
-  const bez = await sharp(join(DIR, main.e.bezel.file)).resize({ height: Math.round(main.h / 2) }).png().toBuffer({ resolveWithObject: true });
+  // the ivory one whole, with the bare piece and the bezel layer beside it; under them the other colourways at half size
+  const main = cols[0], rest = cols.slice(1);
+  const bare = await sharp(join(DIR, main.e.file)).resize({ height: Math.round(main.h / 2) - 30 }).png().toBuffer({ resolveWithObject: true });
+  const bez = await sharp(join(DIR, main.e.bezel.file)).resize({ height: Math.round(main.h / 2) - 30 }).png().toBuffer({ resolveWithObject: true });
   const pad = 40;
-  const sideW = bare.info.width + pad;
-  const W = pad + cols.reduce((s, c) => s + c.w + pad, 0) + sideW, H = main.h + pad * 2 + 30;
-  const layers = [];
-  let x = pad;
-  for (const c of cols) {
-    layers.push({ input: await canvas(c.w + pad, H, GROUNDS[c.way]).png().toBuffer(), left: x - pad / 2, top: 0 });
-    layers.push({ input: c.buf, left: x, top: pad });
-    layers.push({ input: label(`hero-flatlay-${c.way} + poster by matrix + bezel`, c.w), left: x, top: H - 34 });
-    x += c.w + pad;
+  const topH = main.h + pad * 2 + 30;
+  const half = (c) => Math.round(c.w / 2);
+  const rowW = rest.reduce((s, c) => s + half(c) + pad, pad);
+  const rowH = rest.length ? Math.round(Math.max(...rest.map((c) => c.h)) / 2) + pad + 40 : 0;
+  const W = Math.max(pad + main.w + pad + bare.info.width + pad, rowW), H = topH + rowH;
+  const layers = [{ input: main.buf, left: pad, top: pad }, { input: label(`hero-flatlay-${main.way}: the piece, a poster laid in by the matrix, the bezel on top`, main.w), left: pad, top: topH - 34 }];
+  const x = pad + main.w + pad;
+  layers.push({ input: bare.data, left: x, top: pad }, { input: label("the piece alone (screen: flat black)", bare.info.width, BODY, 13), left: x, top: pad + bare.info.height });
+  layers.push({ input: bez.data, left: x, top: pad + bare.info.height + 34 }, { input: label("the bezel layer alone", bez.info.width, BODY, 13), left: x, top: pad + bare.info.height * 2 + 34 });
+  let rx = pad;
+  for (const c of rest) {
+    const small = await sharp(c.buf).resize({ width: half(c) }).png().toBuffer({ resolveWithObject: true });
+    layers.push({ input: await canvas(half(c) + pad, rowH, GROUNDS[c.way]).png().toBuffer(), left: rx - pad / 2, top: topH });
+    layers.push({ input: small.data, left: rx, top: topH + pad / 2 });
+    layers.push({ input: label(`hero-flatlay-${c.way} on ${GROUNDS[c.way]}`, half(c), BODY, 13), left: rx, top: topH + rowH - 30 });
+    rx += half(c) + pad;
   }
-  layers.push({ input: bare.data, left: x, top: pad }, { input: label("the piece alone", bare.info.width, BODY, 13), left: x, top: pad + bare.info.height });
-  layers.push({ input: bez.data, left: x, top: pad + bare.info.height + 30 }, { input: label("the bezel layer alone", bez.info.width, BODY, 13), left: x, top: pad + bare.info.height * 2 + 30 });
   await canvas(W, H, CREAM).composite(layers).png().toFile(join(outDir, "sheet-hero.png"));
   console.log("sheet-hero.png");
 }

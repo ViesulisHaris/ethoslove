@@ -34,9 +34,10 @@ PALETTES = {
     "wine": dict(base="#9d5068", tip="#b97a8a", throat="#702b44", deep="#551c31", streak="#7b344c", vein="#803a52", vein_mix=0.32, glow="#c67a8b",
                  sss=0.42, sss_radius=(1.0, 0.34, 0.32), sss_scale=0.22, trans=0.2, rough=0.5, sheen=0.4,
                  back="#96506a", anther="#46220e", pollen="#b58040", filament="#e8d2c2", stigma="#bd908a"),
-    "moonlight": dict(base="#eef0f5", tip="#f9fafc", throat="#dae5ce", deep="#b8cba1", streak="#ccdab8", vein="#c9cde2", vein_mix=0.22, glow="#e2e5f7",
-                      sss=0.6, sss_radius=(0.78, 0.82, 1.0), sss_scale=0.3, trans=0.3, rough=0.52, sheen=0.25,
-                      back="#e3e6f0", anther="#5a3418", pollen="#b08a4a", filament="#e4edd6", stigma="#bccf9f"),
+    # moonlight is lit by the same warm lamp as the rest, which greys a cool white: it is given a paler base and more light within
+    "moonlight": dict(base="#f3f5fb", tip="#fcfdff", throat="#dde8d2", deep="#bccfa6", streak="#cfdcbc", vein="#c7cbe3", vein_mix=0.2, glow="#e6e9fb",
+                      sss=0.7, sss_radius=(0.8, 0.84, 1.0), sss_scale=0.36, trans=0.32, rough=0.52, sheen=0.25,
+                      back="#e6e9f3", anther="#5a3418", pollen="#b08a4a", filament="#e4edd6", stigma="#bccf9f"),
 }
 GREENS = dict(stem="#75744a", stem_dark="#555632", leaf="#7b7a45", leaf_dark="#5a5c31", leaf_light="#a19d61", rib="#b9b47c")
 
