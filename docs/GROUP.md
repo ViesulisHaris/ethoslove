@@ -271,7 +271,7 @@ npx playwright test tests/e2e/money.spec.ts --workers=1
 ```
 
 Run bare, 30 of its 52 tests fail (no pay panel to find); with the first three only, 6 fail (the
-pricing page's buttons). BASELINE_LINE
+pricing page's buttons). That is the live code's own behaviour, not this branch's: run bare on `origin/main` (4ad3c39d, 22 Nov 2026) the same 30 tests fail, name for name, and the branch changes neither the spec, the pay panel nor the pricing page.
 
 One test in `group.spec.ts` also wants those settings: the send screen of a signed-out draft that
 holds notes. On a bare server it skips and says so; run `group.spec.ts` once with the four
