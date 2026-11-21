@@ -45,7 +45,7 @@ const FEATHER = 22; // a shadow reaching the frame fades out over this many pixe
 const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const r3 = (n) => Math.round(n * 1000) / 1000;
 
-async function shadowAlpha(file, w, h, strength) {
+async function shadowAlpha(file, w, h, strength, edge) {
   const { data } = await sharp(file).ensureAlpha().extractChannel(3).blur(1.1).raw().toBuffer({ resolveWithObject: true });
   const out = new Float32Array(w * h);
   for (let y = 0; y < h; y++) {
@@ -53,7 +53,9 @@ async function shadowAlpha(file, w, h, strength) {
       let a = data[y * w + x];
       if (a <= LO) continue;
       if (a < HI) a = (a * (a - LO)) / (HI - LO);
-      const d = Math.min(x, w - 1 - x, y, h - 1 - y);
+      // towards the edge of what will be kept: the frame, or the rectangle the piece is held to if that is smaller
+      const d = edge ? Math.min(x - edge.left, edge.left + edge.width - 1 - x, y - edge.top, edge.top + edge.height - 1 - y) : Math.min(x, w - 1 - x, y, h - 1 - y);
+      if (d <= 0) continue;
       if (d < FEATHER) a *= d / FEATHER;
       out[y * w + x] = Math.min(1, (a / 255) * strength);
     }
@@ -142,7 +144,7 @@ async function whole(id) {
   const look = COLOURWAYS[info.colourway ?? "plain"];
   const thing = await sharp(join(raw, `${id}.png`)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = thing.info;
-  const shade = existsSync(join(raw, `${id}-shadow.png`)) ? await shadowAlpha(join(raw, `${id}-shadow.png`), w, h, (info.shadow ?? 1) * look.strength) : null;
+  const shade = existsSync(join(raw, `${id}-shadow.png`)) ? await shadowAlpha(join(raw, `${id}-shadow.png`), w, h, (info.shadow ?? 1) * look.strength, heldBox(info.piece, w)) : null;
   const data = compose(thing.data, shade, w, h, hex(look.shadow));
   const box = bbox(data, w, h);
   if (!box) throw new Error(`${id} is empty`);
@@ -153,14 +155,18 @@ async function whole(id) {
 // all are cut by the one rectangle that holds every one of them, so they are the same size to the
 // pixel and what is in them is in the same place.
 const boxes = {};
+/** The rectangle a piece is held to, if it is, at the size of this render. */
+function heldBox(piece, w) {
+  if (!frames[piece]?.box || PIN) return null;
+  // a --preview render is half the size the rectangle was held at: it is cut by half the rectangle
+  const k = frames[piece].frame ? w / frames[piece].frame[4] : 1;
+  const b = frames[piece].box;
+  return k === 1 ? b : { left: Math.round(b.left * k), top: Math.round(b.top * k), width: Math.round(b.width * k), height: Math.round(b.height * k) };
+}
+
 async function sharedBox(piece, have, w) {
   if (boxes[piece]) return boxes[piece];
-  if (frames[piece]?.box && !PIN) {
-    // a --preview render is half the size the rectangle was held at: it is cut by half the rectangle
-    const k = frames[piece].frame ? w / frames[piece].frame[4] : 1;
-    const b = frames[piece].box;
-    return (boxes[piece] = k === 1 ? b : { left: Math.round(b.left * k), top: Math.round(b.top * k), width: Math.round(b.width * k), height: Math.round(b.height * k) });
-  }
+  if (heldBox(piece, w)) return (boxes[piece] = heldBox(piece, w));
   let x0 = Infinity, y0 = Infinity, x1 = -1, y1 = -1;
   for (const id of every) {
     if (infoOf(id).piece !== piece || !existsSync(join(raw, `${id}.png`))) continue;

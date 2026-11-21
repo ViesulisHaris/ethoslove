@@ -52,7 +52,7 @@ def petal(pid, colour):
                        groove=0.17, ruffle=0.022, ruffle_f=2.4, phase=p["seed"] * 1.3, thick=0.021, nt=44, nu=21, pleat=0.07)
     root = lilies.laid(pid + "_root", ob, (0.0, 0.0), p["yaw"], p["roll"])
     if p.get("refit"):
-        pkit.fit(pid, root, [ob])
+        pkit.fit(pid, root, [ob], margin=0.9)
     pkit.rig(OPT)
     return floor, [ob]
 

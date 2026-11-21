@@ -161,10 +161,12 @@ def polaroid(name, w=3.0, photo=None):
     return [card, pic], dict(photo=pic, corners=corners, width=pw, radius=w * 0.006, size=(w, h, 0.022))
 
 
-def letter_sheet(name, w=3.7, h=2.55, color="#fff3d6", warm="#f6e0b8"):
+def letter_sheet(name, w=3.7, h=2.55, color="#fce2c4", warm="#f1cda6"):
     """
     A sheet of cream letter paper that has been folded once and opened out again: a soft fold line
-    across its middle, the two halves not quite flat, one corner (the top right) lifting off the page.
+    across its middle, the two halves not quite flat (so one takes the light and the other loses a
+    little), one corner (the top right) lifting off the page. The cream is a deep one: it is shown
+    small, on a pale card, and a paler sheet all but vanished there.
     Blank. Returns (parts, info): the place for words is its face inside a margin, as flat as paper is.
     """
     m = Mat(name + "_paper")
@@ -176,10 +178,10 @@ def letter_sheet(name, w=3.7, h=2.55, color="#fff3d6", warm="#f6e0b8"):
     crease = m.math("SUBTRACT", 1.0, m.math("SMOOTHSTEP", m.math("ABSOLUTE", y), 0.0, 0.03))
     col = m.mix(m.math("MULTIPLY", cloud, 0.4), color, kit.lin(warm))
     col = m.mix(m.math("MULTIPLY", fib, 0.05), col, kit.lin(warm))
-    col = m.mix(m.math("MULTIPLY", crease, 0.4), col, kit.lin("#cdb48a"))
+    col = m.mix(m.math("MULTIPLY", crease, 0.5), col, kit.lin("#c2a370"))
     height = m.math("SUBTRACT", m.math("ADD", m.math("MULTIPLY", fine, 0.4), m.math("MULTIPLY", fib, 0.12)), m.math("MULTIPLY", crease, 1.6))
     # its own light is warmer than its colour: lit like the petals it would come out a grey white on a cream page
-    m.set(base=col, rough=0.7, spec=0.22, sheen=0.15, emit=m.mix(0.6, col, kit.lin("#ffdfae")), emit_strength=0.5, normal=m.bump(height, 0.16, 0.006),
+    m.set(base=col, rough=0.7, spec=0.22, sheen=0.15, emit=m.mix(0.5, col, kit.lin("#fbcfa6")), emit_strength=0.3, normal=m.bump(height, 0.16, 0.006),
           sss=0.15, sss_radius=(1.0, 0.8, 0.5), sss_scale=0.05)
     nx, ny = 44, 30
     verts, faces = [], []
@@ -187,13 +189,13 @@ def letter_sheet(name, w=3.7, h=2.55, color="#fff3d6", warm="#f6e0b8"):
         for i in range(nx + 1):
             x, yy = -w / 2 + w * i / nx, -h / 2 + h * j / ny
             # the fold: a low ridge along the middle, its two sides falling away a degree or two
-            z = 0.11 * (1.0 - math.sqrt(yy * yy + 0.03 ** 2) / (h / 2))
+            z = 0.2 * (1.0 - math.sqrt(yy * yy + 0.03 ** 2) / (h / 2))
             # a sheet never lies quite flat
             z += 0.012 * math.sin(x * 1.7 + 0.6) * math.sin(yy * 2.1 + 1.0)
             # the top right corner, lifting and curling back a little
-            d = max(0.0, x / (w / 2) + yy / (h / 2) - 1.1)
-            z += 0.85 * d * d
-            pull = 0.2 * d * d
+            d = max(0.0, x / (w / 2) + yy / (h / 2) - 1.0)
+            z += 0.8 * d * d
+            pull = 0.22 * d * d
             verts.append((x - pull, yy - pull, max(z, 0.0)))
     for j in range(ny):
         for i in range(nx):

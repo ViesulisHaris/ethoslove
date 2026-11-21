@@ -228,11 +228,12 @@ def frame(objs, px_long, pad=(0.5, 0.5, 1.4, 1.4), opt=None, samples=220, piece=
     return Shot(cx, cy, vw, vh, pw, ph)
 
 
-def fit(piece, root, objs, rest=None, grow=True):
+def fit(piece, root, objs, rest=None, grow=True, margin=1.0):
     """
     Brings a thing that has been reshaped back inside the bounds the piece was first framed round (sized
     about its root, then moved), so the held frame still holds all of it. `rest(root)` puts it back on
-    the page after it is resized (the default: lowered till its lowest point touches).
+    the page after it is resized (the default: lowered till its lowest point touches). `margin` under 1
+    leaves it that much smaller than the old bounds, for a thing whose shadow now needs more of the room.
     """
     pin = held(piece)
     if not pin:
@@ -243,6 +244,7 @@ def fit(piece, root, objs, rest=None, grow=True):
     s = min((ox1 - ox0) / (x1 - x0), (oy1 - oy0) / (y1 - y0))
     if not grow:
         s = min(1.0, s)
+    s *= margin
     root.scale = root.scale * s
     bpy.context.view_layer.update()
     (rest or (lambda r: settle(r, objs, 0.004)))(root)

@@ -46,7 +46,7 @@ def note():
     pkit.rig(OPT)
     shot = pkit.frame(objs, 540, pad=PAD, opt=OPT, piece="step-note")
     box = (300, round(300 / info["aspect"]))
-    meta = {"piece": "step-note", "long": 480, "card": dict(pkit.area(shot, things.world_corners(root, info), box, 0.0, info["width"]), fill="#fff5df")}
+    meta = {"piece": "step-note", "long": 480, "card": dict(pkit.area(shot, things.world_corners(root, info), box, 0.0, info["width"]), fill="#fce2c4"), "shadow": 1.35}
     pkit.shoot("step-note", OPT["out"], objs, floor, shot, meta=meta)
 
 
