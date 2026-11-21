@@ -4,7 +4,9 @@ import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
-import { CLOSED_BLOCK_WORDS, fitSentences, heroLead } from "@/components/templates/page/lead";
+import { CLOSED_BLOCK_WORDS, fitSentences, heroKeyword, heroLead } from "@/components/templates/page/lead";
+import { TEMPLATE_LEADS, templateLead } from "@/content/template-leads";
+import { templateSeo } from "@/content/template-seo";
 
 /**
  * "It's SOOO MUCH TEXT… no one's reading all that" (the owner, 21 Nov 2026). The limits a gift's
@@ -81,9 +83,41 @@ describe("the text budget of a gift's page", () => {
         expect(words(lead), `${m.slug} ${l}`).toBeLessThanOrEqual(40);
         expect(lead, `${m.slug} ${l}: the lead stops mid-sentence`).toMatch(/[.!?]$/);
       }
-    // Where no dozen words fit in forty, the tagline tells it. That is the exception, and it is counted.
+    // Where no dozen words fit in forty, the gift has a sentence written for its hero (content/template-leads.ts).
     expect(shown).toBeGreaterThan(TEMPLATE_MANIFESTS.length * 1.5);
     expect(none.length, none.join(", ")).toBeLessThanOrEqual(TEMPLATE_MANIFESTS.length / 2);
+  });
+
+  it("no hero is left with only a name and an italic line: a gift whose description gives no lead has one written", () => {
+    // The test of 21 Nov 2026: eleven heroes in each language said nothing about what the gift is, XOXO's among them.
+    const off: string[] = [];
+    for (const m of TEMPLATE_MANIFESTS)
+      for (const l of LOCALES) {
+        const own = heroLead(m.description[l]).lead;
+        const written = templateLead(m.slug, l);
+        if (!own && !written) off.push(`${m.slug} ${l}: no sentence under the name`);
+        if (own && written) off.push(`${m.slug} ${l}: a lead is written, and the description already gives one`);
+        if (!written) continue;
+        // The hero's own limit beside the picture: a dozen to thirty words, in whole sentences.
+        if (words(written) < 12 || words(written) > 30) off.push(`${m.slug} ${l}: ${words(written)} words`);
+        if (!/[.]$/.test(written)) off.push(`${m.slug} ${l}: stops mid-sentence`);
+        if (/[!¡]|—| – |perfect for|perfecto para|perfecta para|unforgettable|inolvidable/i.test(written)) off.push(`${m.slug} ${l}: reads like an advert`);
+        // It says the gift, not the tagline over again.
+        if (written.trim() === m.tagline[l].trim()) off.push(`${m.slug} ${l}: the tagline twice`);
+      }
+    for (const slug of Object.keys(TEMPLATE_LEADS)) if (!TEMPLATE_MANIFESTS.some((m) => m.slug === slug)) off.push(`${slug} is not a template`);
+    expect(off).toEqual([]);
+  });
+
+  it("the h1 never says the same words twice: a keyword that is the gift's name is left out", () => {
+    expect(heroKeyword("Cuenta atrás de medianoche", "Cuenta atrás de medianoche")).toBeNull();
+    expect(heroKeyword("CUENTA  ATRÁS de medianoche ", "Cuenta atrás de medianoche")).toBeNull();
+    expect(heroKeyword("Digital love letter", "The Letter")).toBe("Digital love letter");
+    expect(heroKeyword(undefined, "The Letter")).toBeNull();
+    // The one page it happened on, read from the page's own data.
+    const midnight = TEMPLATE_MANIFESTS.find((m) => m.slug === "midnight-countdown")!;
+    expect(heroKeyword(templateSeo("midnight-countdown", "es")?.keyword, midnight.name.es)).toBeNull();
+    expect(heroKeyword(templateSeo("midnight-countdown", "en")?.keyword, midnight.name.en)).toBe("Midnight countdown gift");
   });
 
   it("La carta is not cut down to its first five words", () => {

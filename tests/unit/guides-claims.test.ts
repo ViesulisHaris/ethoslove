@@ -29,7 +29,8 @@ import { loadFieldsSchema } from "@/templates/schemas";
  *
  * What a pointer is worth: it shows a reader where to look. "Drawn at" and the limits are exact.
  * A SAID pointer is the first line in which the card's own word appears in the template, which is
- * where its truth is read by a person; it does not prove the sentence by itself.
+ * where its truth is read by a person; it does not prove the sentence by itself. The name a line
+ * declares does not count as the word (`const kraft` passed "a scrap of kraft paper" once).
  */
 type Locale = "en" | "es";
 const ROOT = process.cwd();
@@ -44,10 +45,18 @@ function codeOf(slug: string): { file: string; lines: string[] }[] {
 }
 const SHARED_CODE = ["src/templates/_shared/holiday/page.tsx", "src/templates/_shared/holiday/steps.tsx"].map((file) => ({ file, lines: readFileSync(join(ROOT, file), "utf8").split(/\r?\n/) }));
 
-function find(files: { file: string; lines: string[] }[], pattern: RegExp): string | null {
+/**
+ * A line with the name it declares blanked out: `const kraft = { background: … }` is no proof that
+ * anything is kraft paper. Sketchbook's P.S. was said to be "on a scrap of kraft paper" on the
+ * strength of that variable's name; it is a box tinted 5% grey (the test of 21 Nov 2026).
+ */
+const withoutDeclaredName = (line: string) => line.replace(/^(\s*(?:export\s+)?(?:const|let|var|function|type|interface|class)\s+)[\w$]+/, "$1");
+
+function find(files: { file: string; lines: string[] }[], pattern: RegExp, said = false): string | null {
   for (const { file, lines } of files) {
-    // A comment says what the code does, and is a fair pointer; an import line is not.
-    const at = lines.findIndex((line) => pattern.test(line) && !/^\s*import /.test(line));
+    // A comment says what the code does, and is a fair pointer; an import line is not. Nor, for
+    // what a card says the gift does, is a line whose only match is the name of what it declares.
+    const at = lines.findIndex((line) => pattern.test(said ? withoutDeclaredName(line) : line) && !/^\s*import /.test(line));
     if (at >= 0) return `${file}:${at + 1}`;
   }
   return null;
@@ -127,16 +136,16 @@ const SAID: Record<string, Record<number, RegExp[]>> = {
   "party-animals": { 2: [/candle/i], 3: [/shout/i] },
   passport: { 3: [/stamp/i], 5: [/setDone\(true\)/, /done && data\.surprise/], 6: [/visa/i] },
   "photo-booth": { 1: [/wall/i], 5: [/flash/i, /mirror/i], 6: [/lined|ruled|rule/i] },
-  picnic: { 4: [/note/i], 5: [/gingham|frame/i] },
+  picnic: { 4: [/note/i], 5: [/pattern=\{gingham/] },
   "popup-card": { 1: [/topper/i], 2: [/lid/i], 3: [/blow/i], 4: [/peg/i] },
   "recipe-box": { 6: [/turned over/, /clipped to the card/] },
   seance: { 1: [/spell/i], 3: [/planchette/i], 6: [/mist|develop/i] },
-  sketchbook: { 1: [/circle/i], 2: [/tape|doodle/i], 4: [/hat/i], 5: [/kraft/], 6: [/MessageBody|message/i] },
+  sketchbook: { 1: [/circle/i], 2: [/tape|doodle/i], 4: [/hat/i], 5: [/data\.surprise \?/, /t\("ps"\)/], 6: [/MessageBody|message/i] },
   "spooky-season": { 2: [/note/], 4: [/polaroid/i] },
   "sticker-bomb": { 5: [/kind === "photo"/, /aspect-square/] },
   "text-thread": { 4: [/\[photo\]|photo/i], 6: [/contactName/] },
   "the-toast": { 2: [/menu/i], 3: [/menu/i], 6: [/bubble/i] },
-  "trick-or-treat": { 1: [/porch/i], 2: [/doorLine/], 4: [/parchment/], 5: [/scroll/i], 6: [/frame/i] },
+  "trick-or-treat": { 1: [/porch/i], 2: [/doorLine/], 4: [/parchment/], 5: [/scroll/i], 6: [/haunted frame/] },
   unwrapped: { 1: [/counting up/], 3: [/the gold one, with the year/, /receipt/i] },
   vinyl: { 3: [/crate/i], 4: [/liner/i] },
   wishbone: { 1: [/card/i], 2: [/winner/], 3: [/plate/i] },
@@ -159,7 +168,7 @@ async function cardsOf(slug: string): Promise<Card[]> {
     const drawn = own ? new RegExp(`\\b(?:fields|f|data\\.fields)\\??\\.${own}\\b|\\b${own}\\b`) : shared.drawn;
     const drawnAt = find(code, drawn) ?? find(SHARED_CODE, drawn);
     const editorAt = own ? lineIn(metaFile, new RegExp(`^\\s*${own}:`)) : null;
-    const said = (SAID[slug]?.[i + 1] ?? []).map((pattern) => ({ pattern: String(pattern), at: find(code, pattern) ?? find(SHARED_CODE, pattern) }));
+    const said = (SAID[slug]?.[i + 1] ?? []).map((pattern) => ({ pattern: String(pattern), at: find(code, pattern, true) ?? find(SHARED_CODE, pattern, true) }));
     // Every choice of this gift's editor that the card names, in English.
     const choices: Card["choices"] = [];
     for (const [key, m] of Object.entries(meta.en ?? {}))

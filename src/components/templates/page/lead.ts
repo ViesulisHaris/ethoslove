@@ -22,6 +22,16 @@ export function heroLead(description: string, max = 30, least = 12, most = 40): 
 }
 
 /**
+ * The phrase people search for, which stands in small capitals over a gift's name in its h1. Where
+ * the two are the same words the name alone says it: the Spanish Midnight Countdown read "CUENTA
+ * ATRÁS DE MEDIANOCHE" over "Cuenta atrás de medianoche".
+ */
+export function heroKeyword(keyword: string | undefined, name: string): string | null {
+  const plain = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
+  return keyword && plain(keyword) !== plain(name) ? keyword : null;
+}
+
+/**
  * Which of a list of sentences fit in what is left of a word budget. They are taken in order of
  * `priority` (the indexes of `sentences`, most wanted first) and given back in their own order,
  * so the closed block of a page keeps what a search needs most and never runs past its limit.

@@ -13,7 +13,7 @@ mkdirSync(outDir, { recursive: true });
 const want = (name) => !onlyArg || onlyArg.split(",").includes(name);
 const DIR = process.env.PAGES_OUT ?? join("public", "art", "pages");
 const manifest = JSON.parse(readFileSync(join(DIR, "manifest.json"), "utf8"));
-const CREAM = "#f1e3d3", CARD = "#f7ecdf", BAND = "#e8d3bd", FOOTER = "#2d0e18", INK = "#2b1a14", BODY = "#6f5a4c";
+const CREAM = "#f1e3d3", BAND = "#e8d3bd", FOOTER = "#2d0e18", INK = "#2b1a14", BODY = "#6f5a4c";
 const GROUNDS = { ivory: "#f1e3d3", blush: "#f6e3e0", wine: "#f3e2dc", moonlight: "#e6e6ef" };
 
 const entry = (piece, way) => manifest.pieces[piece]?.[way] ?? manifest.pieces[piece]?.plain ?? manifest.pieces[piece]?.ivory;

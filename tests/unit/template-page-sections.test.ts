@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { stepQuote, type QuoteSource } from "@/components/templates/page/quote";
-import { experienceChecks, moreLikeThis, type ExperienceKey } from "@/components/templates/page/sections";
+import { includedRows } from "@/components/templates/page/included";
+import { experienceChecks, moreGifts, moreLikeThis, type ExperienceKey } from "@/components/templates/page/sections";
+import { giftDataBaseSchema } from "@/lib/gift/schema";
+import { premiumExtras } from "@/lib/gift/publish";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { FREE_NOTE_MAX_CHARS } from "@/lib/gift/free-tier";
@@ -128,7 +131,65 @@ describe("the three checks of “The experience”", () => {
   });
 });
 
+describe("the checklist under the hero", () => {
+  const letter = getManifest("the-letter")!;
+
+  it("lists what the template has, under “What's included”", () => {
+    expect(includedRows(letter, false).map((r) => r.key)).toEqual(["featurePhotos", "featureMusic", "featureCaptions", "featureCountdown", "featureSurprise", "featureVideo"]);
+    expect(includedRows(letter, false)[0].values).toEqual({ max: letter.features.photos.max });
+    // Only what a gift has: Arcade has no music and takes no video.
+    expect(includedRows(getManifest("arcade")!, false).map((r) => r.key)).toEqual(["featurePhotos", "featureCaptions", "featureCountdown", "featureSurprise"]);
+  });
+
+  it("under “With Make it special” lists only what the unlock adds to the free note", () => {
+    // The test of 21 Nov 2026: music, a countdown and the hidden surprise stood under that heading,
+    // and the free note has all three. A visitor read them as costing the unlock's price.
+    const keys = includedRows(letter, true).map((r) => r.key);
+    expect(keys).toEqual(["featurePhotos", "featureCaptions", "featureVideo", "featureFullLetter", "featureVoice"]);
+    for (const free of ["featureMusic", "featureCountdown", "featureSurprise"]) expect(keys).not.toContain(free);
+    // Each row is something the publish rules ask an unlock for on a note, and what they let through free is not listed.
+    const base = { music: undefined, video: undefined, voiceNote: undefined, photos: [], unwrap: undefined, message: "" };
+    const note = { note: true };
+    expect(premiumExtras({ ...base, photos: [{ url: "a.jpg" }] } as never, note)).toEqual(["photos"]);
+    expect(premiumExtras({ ...base, video: { url: "a.mp4" } } as never, note)).toEqual(["video"]);
+    expect(premiumExtras({ ...base, voiceNote: { url: "a.webm" } } as never, note)).toEqual(["voiceNote"]);
+    expect(premiumExtras({ ...base, message: "x".repeat(FREE_NOTE_MAX_CHARS + 1) }, note)).toEqual(["longLetter"]);
+    expect(premiumExtras({ ...base, music: { source: "library", url: "/audio/library/a.mp3" }, message: "x".repeat(FREE_NOTE_MAX_CHARS) } as never, note)).toEqual([]);
+  });
+
+  it("gives the full letter's length as the schema has it, in both languages", () => {
+    const max = (giftDataBaseSchema.shape.message.unwrap() as { maxLength: number | null }).maxLength;
+    expect(max).toBe(4000);
+    expect(en.templates.featureFullLetter).toContain("4,000");
+    expect(es.templates.featureFullLetter).toContain("4.000");
+    // One kind of quotation mark for the heading in each language.
+    expect(en.templates.includedSpecial).toMatch(/“.+”/);
+    expect(es.templates.includedSpecial).toMatch(/«.+»/);
+    expect(es.templates.pagePriceNote).toMatch(/«Hazlo especial»/);
+    expect(JSON.stringify(es.templates)).not.toMatch(/[“”]/);
+  });
+});
+
 describe("the four gifts of “More like this”", () => {
+  it("are four on every gift's page: a day with few gifts is topped up from the gift's other days, then from all of them", () => {
+    // The test of 21 Nov 2026: one card in a row of four on the two Thanksgiving gifts, three on Cap Toss.
+    for (const m of TEMPLATE_MANIFESTS) {
+      const { gifts, full } = moreGifts(m);
+      expect(gifts.map((x) => x.slug), m.slug).toHaveLength(4);
+      expect(new Set(gifts.map((x) => x.slug)).size, m.slug).toBe(4);
+      expect(gifts.map((x) => x.slug), m.slug).not.toContain(m.slug);
+      // The row is headed by the gift's first day only when that day fills it.
+      const sameDay = listManifests({ occasion: m.occasions[0] }).filter((x) => x.slug !== m.slug).length;
+      expect(full, m.slug).toBe(sameDay >= 4);
+      // The gifts of its own day come first, however few.
+      for (const g of gifts.slice(0, Math.min(4, sameDay))) expect(g.occasions, `${m.slug} → ${g.slug}`).toContain(m.occasions[0]);
+    }
+    const candles = moreGifts(getManifest("light-the-candles")!);
+    expect(candles.gifts[0].slug).toBe("wishbone");
+    expect(candles.full).toBe(false);
+    expect(moreGifts(getManifest("the-letter")!).full).toBe(true);
+  });
+
   it("are the next four made for the same day, counted on from the gift itself", () => {
     const list = listManifests({ occasion: "anniversary" }).map((m) => m.slug);
     const letter = getManifest("the-letter")!;

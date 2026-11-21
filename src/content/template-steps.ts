@@ -463,7 +463,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
     ],
   },
   "the-letter": {
-    line: { en: "They break the seal and read it in your handwriting.", es: "Rompen el sello y la leen con tu letra." },
+    line: { en: "They break the seal and your words write themselves by hand.", es: "Rompen el sello y tus palabras se escriben a mano." },
     steps: [
       { picture: "note", quote: "fields.greeting", en: "Write the letter", es: "Escribe la carta" },
       { picture: "note", quote: "fields.signOff", en: "Seal and sign it", es: "Séllala y fírmala" },

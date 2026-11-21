@@ -171,7 +171,6 @@ const READ_AND_LET_STAND: Record<string, string> = {
   "jar-of-reasons: Me esperaste despierta todas las veces.": "Mother’s Day: said to a mother, whom the card’s own title names",
   "dark-romance: Los Enamorados": "the printed name of a tarot card",
   "on-repeat: La que sonaba en el coche": "a song, not a person",
-  "spooky-season: Viernes a las 20:00. La que más miedo dé.": "a film, not a person",
 };
 
 /** Every limit a line of text can have in a template: its own fields', its lists' items', and the fields every gift has. */
@@ -242,6 +241,30 @@ describe("template guides: what a card tells the sender to do", () => {
       const twice = (map: Map<string, string[]>, most: number) => [...map].filter(([, slugs]) => slugs.length > most).map(([text, slugs]) => `${text} (${slugs.join(", ")})`);
       expect(twice(hows, 1), l).toEqual([]);
       expect(twice(lent, 1), l).toEqual([]);
+    }
+  });
+
+  it("lends a P.S. of its own shape: “Saturday, 8pm. …” is not the surprise of every third gift", () => {
+    // The test of 21 Nov 2026 counted seventeen gifts lending a surprise that opened on Saturday and
+    // an hour. One page shows one; "More like this" followed three times showed it three times.
+    const day = { en: /^(mon|tues|wednes|thurs|fri|satur|sun)day\b/i, es: /^(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b/i };
+    const dayAndHour = { en: /^\w+day(,| at| night)? ?(\d|at \d)/i, es: /^\p{L}+ a las? \d/iu };
+    for (const l of LOCALES) {
+      const opens = new Map<string, string[]>();
+      const timed: string[] = [];
+      let lines = 0;
+      for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+        for (const idea of guide[l].ideas.items) {
+          if (idea.borrow.field !== "surprise.text") continue;
+          lines += 1;
+          const first = idea.borrow.line.match(day[l])?.[0].toLowerCase();
+          if (first) opens.set(first, [...(opens.get(first) ?? []), slug]);
+          if (day[l].test(idea.borrow.line) && dayAndHour[l].test(idea.borrow.line)) timed.push(`${slug}: ${idea.borrow.line}`);
+        }
+      expect(lines).toBeGreaterThan(30);
+      // No day of the week opens more than four of them, and a day with its hour opens three at most.
+      for (const [name, slugs] of opens) expect(slugs.length, `${l}: ${slugs.length} surprises open on “${name}” (${slugs.join(", ")})`).toBeLessThanOrEqual(4);
+      expect(timed.length, `${l}: ${timed.join(" | ")}`).toBeLessThanOrEqual(3);
     }
   });
 

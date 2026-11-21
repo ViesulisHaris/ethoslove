@@ -16,6 +16,7 @@ import {
 import { templateGuide } from "@/content/template-guides";
 import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
 import { templateFilmStart } from "@/content/template-film-starts";
+import { templateLead } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
 import { templateSteps } from "@/content/template-steps";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
@@ -25,7 +26,8 @@ import { templateFaq } from "@/components/templates/template-guide";
 import { artSrcSet, pageArt, slotGeometry, slotStyle } from "@/content/page-art";
 import { ArtLayer } from "@/components/templates/page/art";
 import { HeroFlatlay, type HeroFlatlayArt } from "@/components/templates/page/hero-flatlay";
-import { heroLead } from "@/components/templates/page/lead";
+import { includedRows } from "@/components/templates/page/included";
+import { heroKeyword, heroLead } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
 import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
 import { NOTE_TEMPLATES, noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
@@ -110,17 +112,13 @@ export default async function TemplateDetailPage({
   const note = free && noteForEveryone() && NOTE_TEMPLATES.includes(manifest.slug);
   // And the hero says what the note does: a description that ends on "your photos drop in as polaroids"
   // gives way to the same sentences without the photos (messages: templates.noteLead).
-  const lead = note && t.has(`templates.noteLead.${manifest.slug}`) ? t(`templates.noteLead.${manifest.slug}`) : about.lead;
+  // A description that opens on one sentence of fifty words gives the hero none: that gift has its own (content/template-leads.ts).
+  const lead = note && t.has(`templates.noteLead.${manifest.slug}`) ? t(`templates.noteLead.${manifest.slug}`) : about.lead || templateLead(manifest.slug, l);
 
-  // What's included: only what this template has. What it lacks is not a list to read.
-  const included = [
-    t("templates.featurePhotos", { max: manifest.features.photos.max }),
-    manifest.features.music ? t("templates.featureMusic") : null,
-    manifest.features.captions ? t("templates.featureCaptions") : null,
-    manifest.features.countdown ? t("templates.featureCountdown") : null,
-    manifest.features.surprise ? t("templates.featureSurprise") : null,
-    manifest.features.video ? t("templates.featureVideo") : null,
-  ].filter((label): label is string => label !== null);
+  // What's included: only what this template has; under "With “Make it special”", only what the unlock adds (./included).
+  const included = includedRows(manifest, note).map((row) => t(`templates.${row.key}`, row.values));
+  // The phrase people search for stands over the name. Where the two are the same words, the name alone says it.
+  const keyword = heroKeyword(seo?.keyword, manifest.name[l]);
 
   return (
     <>
@@ -166,7 +164,7 @@ export default async function TemplateDetailPage({
                 </div>
                 {/* The phrase people search for, then the name we gave it: one heading, both read. */}
                 <h1 className="mt-7">
-                  {seo ? <span className="mb-3 block text-page-label text-page-body">{seo.keyword}</span> : null}
+                  {keyword ? <span className="mb-3 block text-page-label text-page-body">{keyword}</span> : null}
                   <span className="block font-display text-[clamp(2.6rem,5.7vw,4.75rem)] leading-[0.98] tracking-[-0.03em] text-page-ink">{manifest.name[l]}</span>
                 </h1>
                 <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{manifest.tagline[l]}</p>

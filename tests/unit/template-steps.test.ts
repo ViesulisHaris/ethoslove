@@ -106,6 +106,18 @@ describe("the three steps of a gift's page", () => {
         }
   });
 
+  it("never say a gift is in the sender's own handwriting: it is set in a handwriting face", () => {
+    // The Letter said "They break the seal and read it in your handwriting" (the test of 21 Nov
+    // 2026). Nobody's own hand is in a gift; the words are drawn in a typeface that looks written.
+    const own = /your (own )?handwriting|in your (own )?hand\b|con tu letra|de tu puño/i;
+    const strings = (value: unknown): string[] => (typeof value === "string" ? [value] : value && typeof value === "object" ? Object.values(value).flatMap(strings) : []);
+    for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) for (const text of strings(row)) expect(text, slug).not.toMatch(own);
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES)) for (const text of strings(guide)) expect(text, slug).not.toMatch(own);
+    // The description is the page's hero and its closed block.
+    for (const m of TEMPLATE_MANIFESTS) for (const text of [...Object.values(m.description), ...Object.values(m.tagline)]) expect(text, m.slug).not.toMatch(own);
+    expect(TEMPLATE_STEPS["the-letter"].line.en).toMatch(/write themselves by hand/);
+  });
+
   it("give a note card a line to show: every gift with a note step has a short line of its own", () => {
     // The card shows a line to borrow of 8 to 30 characters, or the demo's title (sections.tsx, templateSamples).
     const none: string[] = [];

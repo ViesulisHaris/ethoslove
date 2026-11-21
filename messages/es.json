@@ -771,7 +771,7 @@
       "popup-card": "Una tarjeta de cumpleaños que se despliega en su móvil",
       "birthday-cinema": "¿No puedes estar en su cumpleaños? Envíale esto.",
       "bouquet": "Un ramo que florece en su móvil",
-      "xoxo": "Cuando un “te quiero” por mensaje no basta"
+      "xoxo": "Cuando un «te quiero» por mensaje no basta"
     },
     "description": "Prueba el regalo de verdad y crea el tuyo con su nombre, tus palabras y tus fotos.",
     "tapHint": "Es el regalo de verdad. Tócalo.",
@@ -859,6 +859,8 @@
       "the-letter": "Toca para romper el sello. La carta sale del sobre y se despliega sobre un escritorio a la luz de una vela, y tus palabras aparecen escritas a mano."
     },
     "featurePhotos": "Hasta {max} fotos",
+    "featureFullLetter": "Una carta de 4.000 caracteres",
+    "featureVoice": "Un mensaje de voz",
     "style": {
       "cinematic": "Cinemática",
       "minimal": "Minimalista",
@@ -871,9 +873,9 @@
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
     "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
-    "detailPriceFreeShort": "Gratis como nota corta: hasta 500 caracteres y su canción. Las fotos, la carta entera, un vídeo, un mensaje de voz o una sorpresa dentro vienen con “Hazlo especial” por {price}, pagado una vez.",
+    "detailPriceFreeShort": "Gratis como nota corta: hasta 500 caracteres y su canción. Las fotos, la carta entera, un vídeo, un mensaje de voz o una sorpresa dentro vienen con «Hazlo especial» por {price}, pagado una vez.",
     "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
-    "pagePriceNote": "Gratis como nota corta. “Hazlo especial” añade fotos y más por {price}, en un solo pago.",
+    "pagePriceNote": "Gratis como nota corta. «Hazlo especial» añade fotos y más por {price}, en un solo pago.",
     "pagePriceFree": "Enviarlo es gratis. Los extras cuestan {price}, en un solo pago.",
     "pagePricePaid": "Pruébalo antes, sin cuenta. {price} una sola vez, cuando lo envías.",
     "sections": {
@@ -929,8 +931,8 @@
       "faqTitle": "Preguntas frecuentes",
       "faqLine": "Cuánto cuesta, cómo se abre y qué puedes cambiar.",
       "faqFreeQ": "¿Es gratis?",
-      "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice “Hecho con Ethos”. Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
-      "faqFreeAShort": "Sí, como nota corta. {name} se envía gratis con hasta 500 caracteres, música y un pequeño pie que dice “Hecho con Ethos”. Las fotos, una carta más larga, vídeo, un mensaje de voz, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
+      "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice «Hecho con Ethos». Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con «Hazlo especial» por {price}, en un solo pago.",
+      "faqFreeAShort": "Sí, como nota corta. {name} se envía gratis con hasta 500 caracteres, música y un pequeño pie que dice «Hecho con Ethos». Las fotos, una carta más larga, vídeo, un mensaje de voz, sin pie y la programación vienen con «Hazlo especial» por {price}, en un solo pago.",
       "faqPaidQ": "¿Cuánto cuesta?",
       "faqPaidA": "Hazlo y pruébalo entero antes, sin cuenta. Enviarlo cuesta {price} una sola vez, y después esa plantilla es tuya para usarla siempre, sin suscripción. La carta es gratis como nota corta.",
       "faqOpenQ": "¿Cómo lo abren?",
@@ -955,7 +957,22 @@
         "just-because": "Más regalos porque sí"
       },
       "moreAbout": "Más sobre {name}",
-      "madeFor": "Pensado para"
+      "madeFor": "Pensado para",
+      "madeForDay": {
+        "birthday": "un cumpleaños",
+        "anniversary": "un aniversario",
+        "valentines": "San Valentín",
+        "wedding": "una boda",
+        "graduation": "una graduación",
+        "christmas": "Navidad",
+        "halloween": "Halloween",
+        "thanksgiving": "Acción de Gracias",
+        "mothers-day": "el Día de la Madre",
+        "fathers-day": "el Día del Padre",
+        "apology": "pedir perdón",
+        "long-distance": "quien está lejos",
+        "just-because": "un día cualquiera"
+      }
     }
   },
   "occasions": {

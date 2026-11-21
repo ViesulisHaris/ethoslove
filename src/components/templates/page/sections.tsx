@@ -402,13 +402,14 @@ export async function Questions({
                   ))}
                 </ol>
               )}
+              {/* A sentence, so each day is said as it is in one ("an anniversary", "saying sorry"): the menu's labels read "Made for Anniversary, Apology". */}
               <p className="mt-3">
                 {g("madeFor")}{" "}
                 {manifest.occasions.map((o, i) => (
                   <span key={o}>
                     {i > 0 ? ", " : null}
                     <Link href={`/occasions/${o}`} className="inline-flex min-h-11 items-center text-page-ink underline decoration-page-line underline-offset-4 hover:decoration-page-ink">
-                      {t(`occasions.${o}`)}
+                      {g(`madeForDay.${o}`)}
                     </Link>
                   </span>
                 ))}
@@ -435,21 +436,36 @@ export async function Questions({
  * own place in that day's list and round to its start. Every page of an occasion used to show the
  * list's first four, so The Letter and Constellations linked to the same gifts and most of the
  * list was linked from nowhere.
+ *
+ * A day with few gifts (Thanksgiving has two, graduation four) left a single card in a row of four.
+ * So the row is topped up: from the gift's next days in turn, then from every gift, each list
+ * counted on from the gift's own place in it. `full` says whether the gift's first day filled the
+ * row by itself: only then is the row headed by that day.
  */
 export function moreLikeThis(manifest: TemplateManifest, count = 4): TemplateManifest[] {
-  const occasion = manifest.occasions[0];
-  const list = occasion ? listManifests({ occasion }) : listManifests();
-  const at = list.findIndex((m) => m.slug === manifest.slug);
-  const round = at < 0 ? list : [...list.slice(at + 1), ...list.slice(0, at)];
-  return round.slice(0, count);
+  return moreGifts(manifest, count).gifts;
+}
+
+export function moreGifts(manifest: TemplateManifest, count = 4): { gifts: TemplateManifest[]; full: boolean } {
+  const gifts: TemplateManifest[] = [];
+  let full = false;
+  const lists = [...manifest.occasions.map((occasion) => listManifests({ occasion })), listManifests()];
+  lists.forEach((list, i) => {
+    const at = list.findIndex((m) => m.slug === manifest.slug);
+    const round = at < 0 ? list : [...list.slice(at + 1), ...list.slice(0, at)];
+    for (const m of round) if (gifts.length < count && m.slug !== manifest.slug && !gifts.some((g) => g.slug === m.slug)) gifts.push(m);
+    if (i === 0) full = gifts.length >= count;
+  });
+  return { gifts, full };
 }
 
 /** (6) More like this: four tall poster cards with the gifts' names, made for the same day. */
 export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
-  const occasion = manifest.occasions[0];
-  const more = moreLikeThis(manifest);
+  const { gifts: more, full } = moreGifts(manifest);
   if (more.length === 0) return null;
+  // "More gifts for Thanksgiving" over a row that is half something else would not be true.
+  const occasion = full ? manifest.occasions[0] : undefined;
   return (
     <section className="relative" aria-labelledby="template-more">
       <BandEdge side="top" className="text-page-raised" />

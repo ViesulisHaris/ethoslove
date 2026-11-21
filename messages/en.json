@@ -859,6 +859,8 @@
       "the-letter": "Tap to break the seal. The letter slides out and unfolds on a candle-lit desk, and your words appear in handwriting."
     },
     "featurePhotos": "Up to {max} photos",
+    "featureFullLetter": "A letter of 4,000 characters",
+    "featureVoice": "A voice message",
     "style": {
       "cinematic": "Cinematic",
       "minimal": "Minimal",
@@ -955,7 +957,22 @@
         "just-because": "More gifts for no reason at all"
       },
       "moreAbout": "More about {name}",
-      "madeFor": "Made for"
+      "madeFor": "Made for",
+      "madeForDay": {
+        "birthday": "a birthday",
+        "anniversary": "an anniversary",
+        "valentines": "Valentine’s Day",
+        "wedding": "a wedding",
+        "graduation": "a graduation",
+        "christmas": "Christmas",
+        "halloween": "Halloween",
+        "thanksgiving": "Thanksgiving",
+        "mothers-day": "Mother’s Day",
+        "fathers-day": "Father’s Day",
+        "apology": "saying sorry",
+        "long-distance": "someone far away",
+        "just-because": "no reason at all"
+      }
     }
   },
   "occasions": {
