@@ -485,11 +485,17 @@ body:has([data-page-theme]) .site-header .btn-rose {
 [data-footer-flower] {
   display: none;
   position: absolute;
-  right: -3rem;
-  bottom: -2.5rem;
-  width: clamp(17rem, 25vw, 24rem);
+  /* Half of it, leaning in from the right edge beside the last column: the corners are the footer's
+     own words (the language switch, the year), and it must not lie under them. */
+  /* As much of it shows as the page has margin for, and a little more: a sliver on a laptop, half on a wide desk. */
+  width: clamp(15rem, 23vw, 22rem);
+  right: calc(clamp(3.5rem, (100vw - 80rem) / 2 + 6.5rem, 12rem) - clamp(15rem, 23vw, 22rem));
+  top: 3.5rem;
   rotate: -8deg;
   pointer-events: none;
+  /* The render is a wine silhouette, made for The Letter's wine footer. Each gift's footer has its
+     own deep colour, so only the lily's light and shade are kept and the colour is the footer's. */
+  mix-blend-mode: luminosity;
 }
 @media (min-width: 64rem) {
   body:has([data-page-theme]) [data-footer-flower] {

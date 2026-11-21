@@ -174,7 +174,8 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
 /**
  * The picture of "The experience": the page art's `experience-flatlay`, a larger phone lying on
  * lilies with a polaroid resting on it, and the sample photo laid into the polaroid by the
- * render's own matrix.
+ * render's own matrix. On a phone it is drawn wider than the screen and most of it is off the
+ * sides, so `sizes` asks for less than it is drawn at: the half-size file is sharp enough there.
  */
 function ExperienceFlatlay({ flowers }: { flowers: Flowers }) {
   const art = pageArt("experience-flatlay", flowers);
@@ -182,7 +183,7 @@ function ExperienceFlatlay({ flowers }: { flowers: Flowers }) {
   return (
     <div data-flatlay="experience" className="relative" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
       <span data-decor="experience-flatlay" className="absolute inset-0 block">
-        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="(min-width: 1024px) 50vw, 120vw" width={art.width} height={art.height} className="block w-full" />
+        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="(min-width: 1024px) 50vw, 80vw" width={art.width} height={art.height} className="block w-full" />
       </span>
       {photo ? (
         <div className="absolute overflow-hidden" style={slotStyle(art, photo)}>

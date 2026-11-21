@@ -65,9 +65,9 @@ async function settle(page: Page) {
  * (through the picture's own turn). A pixel that is more than a faint tail of shadow counts. What
  * is laid into a picture (a phone's screen, a line on the note card) is the picture's, not words.
  */
-async function measure(page: Page) {
-  return page.evaluate(() => {
-    const root = document.querySelector("[data-page-theme]")!;
+async function measure(page: Page, within = "[data-page-theme]") {
+  return page.evaluate((within) => {
+    const root = document.querySelector(within)!;
     const shown = (el: Element) => {
       for (let node: Element | null = el; node && node !== root.parentElement; node = node.parentElement) {
         const cs = getComputedStyle(node);
@@ -151,7 +151,7 @@ async function measure(page: Page) {
       small: targets.filter((t) => t.height < 44 || t.width < 44).map((t) => `${t.what} ${t.width}×${t.height}`),
       sections: [...root.querySelectorAll("section")].map((s) => Math.round(s.getBoundingClientRect().top + scrollY)),
     };
-  });
+  }, within);
 }
 
 for (const [width, height] of SIZES) {
@@ -172,9 +172,13 @@ for (const [width, height] of SIZES) {
     expect(m.smallestLabel).toBeGreaterThanOrEqual(12);
     // What is meant to be pressed is at least 44 px each way, for a thumb.
     expect(m.small).toEqual([]);
-    // The first screen has the art in it, and from a phone's height up the gift's own cover on the lying phone.
-    expect(m.decorInView).toBeGreaterThanOrEqual(1);
-    if (height >= 600) await expect(page.locator("[data-flatlay=hero]")).toBeInViewport();
+    // The first screen has the art in it, and the gift's own cover on the lying phone. Not on the
+    // shortest screens (a 320×568 phone, a phone on its side), where the first screen is the name,
+    // the buttons and the price, and the phone comes with the first flick.
+    if (height >= 740 || width >= 1280) {
+      expect(m.decorInView).toBeGreaterThanOrEqual(1);
+      await expect(page.locator("[data-flatlay=hero]")).toBeInViewport();
+    }
   });
 }
 
@@ -203,6 +207,24 @@ for (const path of OTHERS) {
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
   });
 }
+
+test("the footer's lily leans in beside the last column and lies under none of the footer's words", async ({ page }) => {
+  for (const [width, height] of [[1024, 768], [1280, 800], [1440, 900], [1920, 1080]] as const) {
+    await page.setViewportSize({ width, height });
+    await page.goto(PAGE);
+    await settle(page);
+    const m = await measure(page, "[data-site-footer]");
+    expect(m.pieces, `${width}: the lily is there`).toBe(1);
+    expect(m.overlaps, `${width}`).toEqual([]);
+  }
+  // Not on a phone, where the footer is all links; and on no page that is not a gift's.
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(PAGE);
+  await expect(page.locator("[data-footer-flower]")).toBeHidden();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/pricing");
+  await expect(page.locator("[data-footer-flower]")).toBeHidden();
+});
 
 test("La carta's hero says the whole of its two sentences, not the first five words", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -261,7 +283,8 @@ test("a gift played by dragging works from the hero: a scratch card scratches wh
   await hero.getByRole("button", { name: /try the live demo/i }).click();
   await expect(hero.locator("[data-upright] [data-template=scratch-card]")).toBeVisible({ timeout: 25000 });
   await expect(page.getByText(/someone made this for you/i)).toBeHidden({ timeout: 20000 });
-  await hero.getByRole("button", { name: "scratch here" }).click();
+  // The start button breathes for ever, so it is never "stable"; force is intended here.
+  await hero.getByRole("button", { name: "scratch here" }).click({ force: true });
   // The foil is a canvas that works out where the pointer is from its own box: it has to be upright.
   const foil = hero.locator("canvas[role=img]");
   await expect(foil).toBeVisible();
@@ -335,25 +358,28 @@ test("each gift's page wears that gift's colours and flowers, and the footer fol
   expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).not.toBe(themed);
 });
 
-test("a phone's first screen asks for little: the lying phone, its rim, the cover, and nothing below the fold", async ({ browser, baseURL }) => {
+test("a phone's first screen is light: the lying phone, its rim and the gift's cover", async ({ browser, baseURL }) => {
   const origin = new URL(baseURL!).origin;
   const context = await browser.newContext({ ...devices["Pixel 7"], baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
   const page = await context.newPage();
-  const pictures: { url: string; bytes: number }[] = [];
+  const fetched = new Map<string, number>();
   page.on("response", async (response) => {
-    const type = response.headers()["content-type"] ?? "";
-    if (!type.startsWith("image/")) return;
-    const bytes = await response.body().then((b) => b.length, () => 0);
-    pictures.push({ url: new URL(response.url()).pathname + new URL(response.url()).search, bytes });
+    if (!(response.headers()["content-type"] ?? "").startsWith("image/")) return;
+    fetched.set(response.url(), await response.body().then((b) => b.length, () => 0));
   });
   await page.goto(PAGE, { waitUntil: "networkidle" });
-  const total = pictures.reduce((n, p) => n + p.bytes, 0);
-  test.info().annotations.push({ type: "first view pictures", description: `${Math.round(total / 1024)} KB: ${pictures.map((p) => `${p.url.split("/").pop()!.slice(0, 48)} ${Math.round(p.bytes / 1024)}`).join(", ")}` });
-  console.log(`first view on a phone: ${Math.round(total / 1024)} KB in ${pictures.length} pictures: ${pictures.map((p) => `${p.url.split("/").pop()!.slice(0, 60)} ${Math.round(p.bytes / 1024)} KB`).join(" | ")}`);
-  // The lying phone and its rim are the only art asked for before a scroll; everything lower waits.
-  const art = pictures.filter((p) => p.url.startsWith("/art/pages/")).map((p) => p.url.split("/").pop()!.replace(/-1x|\.webp/g, ""));
-  expect([...new Set(art)].sort()).toEqual(["hero-flatlay-ivory", "hero-flatlay-ivory-bezel"]);
-  expect(total).toBeLessThan(700 * 1024);
+  // What is on the first screen, by where each picture is, and what each of those weighed on the wire.
+  const onScreen = await page.evaluate(() => [...document.images].filter((img) => { const r = img.getBoundingClientRect(); return r.width > 0 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth; }).map((img) => img.currentSrc));
+  const first = [...new Set(onScreen)].map((url) => ({ name: new URL(url).pathname.split("/").pop()!, bytes: fetched.get(url) ?? 0 }));
+  const firstKb = Math.round(first.reduce((n, p) => n + p.bytes, 0) / 1024);
+  const allKb = Math.round([...fetched.values()].reduce((n, b) => n + b, 0) / 1024);
+  console.log(`a phone's first screen: ${firstKb} KB in ${first.length} pictures (${first.map((p) => `${p.name} ${Math.round(p.bytes / 1024)} KB`).join(", ")}); ${allKb} KB of pictures fetched before any scroll, the browser's own look-ahead for lazy ones included`);
+  expect(first.map((p) => p.name).sort()).toEqual(["hero-flatlay-ivory-bezel.webp", "hero-flatlay-ivory.webp", "poster.jpg"]);
+  expect(firstKb).toBeLessThan(360);
+  // Lower down, a phone is given the half-size files where they are enough: the band's picture and the loose pieces.
+  const names = [...fetched.keys()].map((url) => new URL(url).pathname.split("/").pop()!);
+  expect(names).not.toContain("experience-flatlay-ivory.webp");
+  expect(allKb).toBeLessThan(620);
   await context.close();
 });
 

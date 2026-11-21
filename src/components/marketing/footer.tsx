@@ -98,7 +98,7 @@ export async function MarketingFooter() {
 function FooterFlower() {
   const art = pageArt("lily-footer", "ivory");
   return (
-    <span data-footer-flower aria-hidden="true">
+    <span data-footer-flower data-decor="lily-footer" aria-hidden="true">
       <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="24vw" width={art.width} height={art.height} className="block w-full" />
     </span>
   );

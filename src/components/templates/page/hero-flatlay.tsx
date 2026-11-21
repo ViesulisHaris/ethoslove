@@ -65,7 +65,7 @@ export function HeroFlatlay({ slug, locale, art, width, up, down, sizes, classNa
           top: `calc(${width} * (${up} - ${(art.perWidth * art.centerY * art.height) / art.width}))`,
         }}
       >
-        <span data-decor="hero-flatlay" className={cn("absolute inset-0 block", settle)}>
+        <span data-decor="hero-flatlay" className={cn("pointer-events-none absolute inset-0 block", settle)}>
           <CutoutImg src={art.src} srcSet={art.srcSet} sizes={sizes} width={art.width} height={art.height} eager className="block w-full" />
         </span>
         <div className={cn("absolute overflow-hidden bg-night", settle)} style={art.screen}>
@@ -88,7 +88,8 @@ export function HeroFlatlay({ slug, locale, art, width, up, down, sizes, classNa
           </button>
         </div>
         {art.bezel ? (
-          <span className={cn("absolute inset-0 block", settle)}>
+          // Over the screen, and never in a finger's way: a tap goes through the rim to the cover under it.
+          <span className={cn("pointer-events-none absolute inset-0 block", settle)}>
             <CutoutImg src={art.bezel.src} srcSet={art.bezel.srcSet} sizes={sizes} width={art.width} height={art.height} eager className="block w-full" />
           </span>
         ) : null}

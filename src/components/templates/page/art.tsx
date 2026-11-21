@@ -58,7 +58,8 @@ export function ArtLayer({ items, flowers, className }: { items: readonly Placed
         const style: CSSProperties = { left: place.left, top: place.top, width: place.width, transform: place.transform, opacity: place.opacity, ...(b.blur ? { filter: `blur(${b.blur}px)` } : null) };
         // Whole class names, so Tailwind finds them: a piece kept for wide desks (90rem is 1440 px), or for everything narrower.
         // In rem like `lg`, or Tailwind cannot order the two and the narrower rule wins on a wide desk.
-        const when = b.from === 1440 ? "absolute max-w-none hidden min-[90rem]:block" : b.until === 1440 ? "absolute max-w-none hidden lg:block min-[90rem]:hidden" : placementClass(b);
+        const when =
+          b.from === 1440 ? "absolute max-w-none hidden min-[90rem]:block" : b.from === 1280 ? "absolute max-w-none hidden xl:block" : b.until === 1440 ? "absolute max-w-none hidden lg:block min-[90rem]:hidden" : placementClass(b);
         return <Art key={i} id={b.art} flowers={flowers} eager={b.eager} shown={`${b.size}vw`} className={when} style={style} />;
       })}
     </div>

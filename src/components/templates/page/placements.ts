@@ -17,10 +17,11 @@ import type { ArtId } from "@/content/page-art";
  * more than 25 degrees either way (they are all lit from the top left), and none of these goes on
  * a dark ground. And no piece may lie under words at any width: the e2e design spec looks.
  */
-export type PlacedArt = Placement & { art: ArtId; from?: 1440; until?: 1440 };
+export type PlacedArt = Placement & { art: ArtId; from?: 1280 | 1440; until?: 1440 };
 
 /** Over the hero, beside the words: one petal let fall in the top corner. The phone has its own flowers. */
-export const HERO_ART: PlacedArt[] = [{ art: "petal-3", x: 93.5, y: 15, size: 5.4, rot: 14, phone: false, eager: true }];
+// From 1280, where the words have the right-hand column and its top corner is empty; narrower, they run the page's width.
+export const HERO_ART: PlacedArt[] = [{ art: "petal-3", x: 93.5, y: 15, size: 5.4, rot: 14, phone: false, eager: true, from: 1280 }];
 
 /** The stem that leans in from the right edge, beside the hero's lower half and the three steps. */
 export const HOW_ART: PlacedArt[] = [
