@@ -7,6 +7,7 @@ import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { isCatalogPreview } from "@/lib/gift/music";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics/track";
+import { BRAND } from "@/config/brand";
 import { getManifest } from "../manifests";
 import { useGiftChrome } from "./gift-chrome";
 import { giftString } from "./i18n";
@@ -28,6 +29,31 @@ const REPLY_OFFER = {
   en: { free: "The first reply is free", keep: "Keep this gift" },
   es: { free: "La primera respuesta es gratis", keep: "Guardar este regalo" },
 } as const satisfies Record<GiftLocale, Record<string, string>>;
+
+/**
+ * A group card carries words and photos from people other than its sender, so whoever opens it can
+ * report one (Digital Services Act art. 16). It is an email to a person, as on the dates' reviews:
+ * the letter asks for the card's link and the name on the note, and the address it opens carries
+ * nothing of the gift, no id and no name. Shown only on a gift that has notes from a group; no
+ * other gift has the link.
+ */
+const REPORT = {
+  en: {
+    label: "Report a note",
+    subject: "Report a note in a group card",
+    body: ["The card's link:", "", "The name on the note:", "", "What is wrong with it, and why (for example: offensive, someone's personal details, a photo of me I didn't agree to, illegal):", "", "", "Your name:", "", "I believe the information in this report is accurate and complete."].join("\n"),
+  },
+  es: {
+    label: "Denunciar una nota",
+    subject: "Denunciar una nota de una tarjeta en grupo",
+    body: ["El enlace de la tarjeta:", "", "El nombre que firma la nota:", "", "Qué tiene de malo y por qué (por ejemplo: es ofensiva, incluye datos personales de alguien, es una foto mía que no autoricé, es ilegal):", "", "", "Tu nombre:", "", "Creo que la información de esta denuncia es exacta y completa."].join("\n"),
+  },
+} as const satisfies Record<GiftLocale, Record<string, string>>;
+
+const reportHref = (locale: GiftLocale): string => {
+  const r = REPORT[locale] ?? REPORT.en;
+  return `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(r.subject)}&body=${encodeURIComponent(r.body)}`;
+};
 
 /**
  * A paid premium gift (a premium template, sent without the footer) comes with one free reply in the
@@ -197,6 +223,16 @@ export function EndScreen({
       </div>
 
       {chrome.watermarked ? <Watermark locale={locale} slug={data.templateSlug} inline className="mt-8" /> : null}
+
+      {data.contributions?.length ? (
+        <a
+          href={reportHref(locale)}
+          className={cn("mt-6 inline-flex min-h-11 items-center px-3 text-xs underline-offset-4 hover:underline", dark ? "text-white/45 hover:text-white/80" : "text-black/45 hover:text-black/75")}
+          data-testid="report-note"
+        >
+          {(REPORT[locale] ?? REPORT.en).label}
+        </a>
+      ) : null}
     </div>
   );
 }
