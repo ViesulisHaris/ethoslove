@@ -51,7 +51,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "For your boyfriend",
       lead: "He'll forget most things that come in a box. He won't forget opening a letter that says exactly what you think of him, with the photos only you have and the song you two wore out. These are the digital gifts that work for a boyfriend, near or far, each made in about ten minutes and sent as a link.",
       ideas: [
-        { template: "the-letter", heading: "A love letter he opens like a real one", body: "He breaks a wax seal with a tap, then reads your words between your photos while your song plays. It's free, and it's where most people start. Write the thing you'd never say out loud; he'll read it more than once." },
+        { template: "the-letter", heading: "A love letter he opens like a real one", body: "He breaks a wax seal with a tap, then your words write themselves out by hand while your song plays. It's free as a short note, and it's where most people start. Write the thing you'd never say out loud; he'll read it more than once." },
         { template: "on-repeat", heading: "A playlist of the two of you", body: "Your photo as the album cover, a pink sunset and a playlist of the songs that are yours. For the boyfriend with opinions about music." },
         { template: "jar-of-reasons", heading: "100 reasons you love him, in a jar", body: "Folded notes he shakes out one at a time, up to a hundred. Make some sweet, some only he'd get, and a couple that are just rude enough." },
         { template: "arcade", heading: "A little arcade game made for him", body: "He catches the hearts to unlock your photos one by one, then reads your message. For a gamer, or anyone who can't leave a high score alone." },
@@ -60,7 +60,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "passport", heading: "A passport, if he's far away", body: "It flies from your city to his, stamped with the places and photos you share. Made for a long-distance boyfriend." },
         { template: "pack-your-bags", heading: "A surprise trip, revealed", body: "An airport departures board that flips to where you're taking him. Save it for a birthday or an anniversary." },
         { template: "front-page", heading: "His own front page", body: "A newspaper with your headline about him and the stories only you know. Good for a birthday, better for a promotion." },
-        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star he finds by moving his phone, and your song plays when he's found them all. Free, and quietly romantic." },
+        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star he finds by moving his phone, and your song plays when he's found them all. Quietly romantic." },
       ],
       sections: [
         { heading: "What to write to him", body: "Specific beats sweet. Not \"you're the best boyfriend\", but the time he drove back for your charger, the voice he does for the cat, the moment you knew. Three or four sentences are plenty. If you're stuck, start with \"I don't say this enough, but…\" and keep going." },
@@ -79,7 +79,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "Para tu novio",
       lead: "Casi todo lo que viene en una caja se olvida. Lo que no se olvida es abrir una carta que dice exactamente lo que piensas de él, con las fotos que solo tú tienes y la canción que habéis gastado de tanto ponerla. Estos son los regalos digitales que funcionan con un novio, cerca o lejos: cada uno se hace en unos diez minutos y se envía en un enlace.",
       ideas: [
-        { template: "the-letter", heading: "Una carta de amor que abre como una de verdad", body: "Rompe un sello de lacre con un toque y lee tus palabras entre vuestras fotos mientras suena vuestra canción. Es gratis y es por donde empieza casi todo el mundo. Escribe lo que nunca dirías en voz alta: la leerá más de una vez." },
+        { template: "the-letter", heading: "Una carta de amor que abre como una de verdad", body: "Rompe un sello de lacre con un toque y tus palabras se escriben a mano mientras suena vuestra canción. Es gratis como nota corta y es por donde empieza casi todo el mundo. Escribe lo que nunca dirías en voz alta: la leerá más de una vez." },
         { template: "on-repeat", heading: "Una playlist de los dos", body: "Vuestra foto como portada del disco, un atardecer rosa y una lista con las canciones que son vuestras. Para el novio que tiene opiniones sobre música." },
         { template: "jar-of-reasons", heading: "100 razones por las que le quieres, en un frasco", body: "Notas dobladas que salen una a una al agitar el móvil, hasta cien. Unas tiernas, otras que solo entiende él y un par un poco atrevidas." },
         { template: "arcade", heading: "Un pequeño videojuego hecho para él", body: "Atrapa corazones para desbloquear vuestras fotos una a una y luego lee tu mensaje. Para un gamer, o para quien no soporta perder un récord." },
@@ -88,7 +88,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "passport", heading: "Un pasaporte, si está lejos", body: "Vuela de tu ciudad a la suya, sellado con los lugares y las fotos que compartís. Hecho para un novio a distancia." },
         { template: "pack-your-bags", heading: "Un viaje sorpresa, revelado", body: "Un panel de salidas de aeropuerto que gira hasta el sitio al que le llevas. Guárdalo para un cumpleaños o un aniversario." },
         { template: "front-page", heading: "Su propia portada", body: "Un periódico con tu titular sobre él y las historias que solo tú sabes. Bien para un cumpleaños, mejor para un ascenso." },
-        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas. Gratis, y romántico sin hacer ruido." },
+        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas. Romántico sin hacer ruido." },
       ],
       sections: [
         { heading: "Qué escribirle", body: "Lo concreto gana a lo cursi. No \"eres el mejor novio\", sino la vez que volvió a por tu cargador, la voz que pone para hablarle al gato, el momento en que lo supiste. Tres o cuatro frases bastan. Si te atascas, empieza con \"No te lo digo lo suficiente, pero…\" y sigue." },
@@ -109,7 +109,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "For your girlfriend",
       lead: "Flowers wilt by Thursday. A letter that says what you actually think of her, with the photos from your camera roll and the song that's yours, is still there next year, and she will open it again. These are the digital gifts that work for a girlfriend, each made in about ten minutes and sent as a link.",
       ideas: [
-        { template: "the-letter", heading: "A love letter, sealed in wax", body: "She breaks the seal with a tap and reads your words between your photos while your song plays. Free, and the one to start with if you've never written her a letter." },
+        { template: "the-letter", heading: "A love letter, sealed in wax", body: "She breaks the seal with a tap and your words write themselves out by hand while your song plays. Free as a short note, and the one to start with if you've never written her a letter." },
         { template: "bouquet", heading: "A bouquet that never wilts", body: "Pick every stem yourself, roses, peonies, tulips or sunflowers in the colours she likes, with a card inside for your note." },
         { template: "jar-of-reasons", heading: "100 reasons you love her", body: "A jar of folded notes she shakes out one at a time, up to a hundred. Make some of them about tiny things; those are the ones that land." },
         { template: "coquette", heading: "A pink bow and polaroids", body: "She unties the bow and finds a gingham collage of real lilies, your photos and your song. For a girlfriend with a coquette Pinterest board." },
@@ -118,7 +118,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "favorite-person", heading: "For your favorite person", body: "A watercolour scrapbook under tissue paper, with pearls, pressed flowers and your photos. For no reason, which is the best reason." },
         { template: "xoxo", heading: "A card sealed with a kiss", body: "Lipstick prints, polaroids and your song, and every tap leaves another kiss. For Valentine's, or a Wednesday." },
         { template: "photo-booth", heading: "A photo booth strip of you two", body: "She pulls the curtain and four flashes later a strip of the two of you prints, with your message on the back." },
-        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star she finds by moving her phone, and your song plays when she's found them all. Free." },
+        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star she finds by moving her phone, and your song plays when she's found them all." },
       ],
       sections: [
         { heading: "What to write to her", body: "Say what you notice. Not \"you're beautiful\" but the way she reads the end of a book first, the face she makes at bad parking, the second you knew. Three or four honest sentences beat a page of quotes. If you're stuck, start with \"The thing I never tell you is…\"." },
@@ -137,7 +137,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "Para tu novia",
       lead: "Las flores se marchitan antes del jueves. Una carta que dice lo que de verdad piensas de ella, con las fotos de tu carrete y vuestra canción, sigue ahí el año que viene, y la volverá a abrir. Estos son los regalos digitales que funcionan con una novia: cada uno se hace en unos diez minutos y se envía en un enlace.",
       ideas: [
-        { template: "the-letter", heading: "Una carta de amor con sello de lacre", body: "Rompe el sello con un toque y lee tus palabras entre vuestras fotos mientras suena vuestra canción. Gratis, y la mejor forma de empezar si nunca le has escrito una carta." },
+        { template: "the-letter", heading: "Una carta de amor con sello de lacre", body: "Rompe el sello con un toque y tus palabras se escriben a mano mientras suena vuestra canción. Gratis como nota corta, y la mejor forma de empezar si nunca le has escrito una carta." },
         { template: "bouquet", heading: "Un ramo que nunca se marchita", body: "Elige cada flor, rosas, peonías, tulipanes o girasoles en los colores que le gustan, también flores amarillas, con una tarjeta dentro para tu nota." },
         { template: "jar-of-reasons", heading: "100 razones por las que la quieres", body: "Un frasco de notas dobladas que salen una a una al agitar el móvil, hasta cien. Escribe algunas sobre cosas pequeñas: son las que más llegan." },
         { template: "coquette", heading: "Un lazo rosa y polaroids", body: "Desata el lazo y aparece un collage de vichy con lirios de verdad, vuestras fotos y vuestra canción. Para una novia con un tablero coquette en Pinterest." },
@@ -146,7 +146,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "favorite-person", heading: "Para tu persona favorita", body: "Un álbum en acuarela bajo papel de seda, con perlas, flores prensadas y vuestras fotos. Sin motivo, que es el mejor motivo." },
         { template: "xoxo", heading: "Una tarjeta sellada con un beso", body: "Marcas de pintalabios, polaroids y vuestra canción, y cada toque deja otro beso. Para San Valentín o para un miércoles." },
         { template: "photo-booth", heading: "Una tira de fotomatón de los dos", body: "Corre la cortina y, cuatro flashes después, sale una tira de los dos con tu mensaje detrás." },
-        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas. Gratis." },
+        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas." },
       ],
       sections: [
         { heading: "Qué escribirle", body: "Di lo que ves. No \"eres preciosa\", sino que lee el final de los libros primero, la cara que pone cuando alguien aparca fatal, el segundo en que lo supiste. Tres o cuatro frases sinceras valen más que una página de citas. Si te atascas, empieza con \"Lo que nunca te digo es…\"." },
