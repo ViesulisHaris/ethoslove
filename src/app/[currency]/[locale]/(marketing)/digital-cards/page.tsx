@@ -168,6 +168,8 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
             </MoreRow>
             <MoreRow summary={copy.compare.about}>
               <p>{copy.definition}</p>
+              <p>{copy.kinds.lead}</p>
+              <p className="text-page-ink">{copy.compare.heading}</p>
               <dl className="flex flex-col gap-1.5">
                 {copy.compare.rows.map((row) => (
                   <div key={row.term}>

@@ -237,7 +237,7 @@ describe("the text budget of /digital-cards", () => {
       expect(steps, `${l}: the four steps`).toBeLessThanOrEqual(CLOSED_BLOCK_WORDS);
       const prices = words([copy.cost.lead, ...copy.cost.rows.map((row) => `${row.label}, ${row.price}. ${row.note}`)].join(" "));
       expect(prices, `${l}: what each price includes`).toBeLessThanOrEqual(CLOSED_BLOCK_WORDS);
-      const about = words([copy.definition, ...copy.compare.rows.map((row) => `${row.term}. ${row.is}`)].join(" "));
+      const about = words([copy.definition, copy.kinds.lead, copy.compare.heading, ...copy.compare.rows.map((row) => `${row.term}. ${row.is}`)].join(" "));
       expect(about, `${l}: more about digital cards`).toBeLessThanOrEqual(CLOSED_BLOCK_WORDS);
       for (const f of copy.faq.items) expect(words(f.a), f.q).toBeLessThanOrEqual(CLOSED_BLOCK_WORDS);
     }

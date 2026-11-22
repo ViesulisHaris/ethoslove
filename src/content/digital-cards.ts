@@ -62,7 +62,7 @@ export type DigitalCardsCopy = {
   h1: string;
   /** The hero, beside the phone: one italic line, one sentence of at most thirty words, and under the button what the phone is showing. */
   hero: { line: string; sentence: string };
-  /** What a digital card is, in full: the closed block under the questions, with `compare` after it. */
+  /** What a digital card is, in full: the closed block under the questions, with the kinds' opening (`kinds.lead`) and `compare` after it. */
   definition: string;
   browse: string;
   /** The three things people confuse, told apart in full, in that closed block. `about` is its summary. */
