@@ -140,7 +140,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "jar-of-reasons",
-          heading: "One note for every year she has been your mother",
+          heading: "One note for every year she's been your mother",
           body: "A jar of folded notes she shakes out one at a time. Write one for each year you have been hers, and make every note something she did, not something she is: “You pretended the burnt toast was how you liked it.” Give the jar a label of its own, “34 things you did that I noticed”, and start with your oldest photo: pictures attach to the first notes in order.",
         },
         {
@@ -155,7 +155,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "garden",
-          heading: "A garden walk, for the one who taught you the plant names",
+          heading: "A garden walk for whoever taught you the plants",
           body: "She pushes open a gate and walks down a page that grows as she scrolls: seedlings, a meadow, your photos on a trellis, a greenhouse with your letter on the potting table. Choose what is growing in the beds (roses, peonies, sunflowers or wildflowers) and who walks with her: a butterfly, a bee or a cat. The sign on the gate takes 24 characters: “Mind the peonies”.",
         },
         {
@@ -175,7 +175,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "The free one: a short note that says the thing",
+          heading: "The free one: a short note that says it",
           body: "The Letter is free as a short note of up to 500 characters with a song, and that is enough for what most people never write down. Not “thanks for everything”. One memory, and what you understand about it now: “You sat in the car outside my exam for three hours and said you had errands. I know there were no errands.”",
         },
       ],
@@ -195,12 +195,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "jar-of-reasons",
-          heading: "Una nota por cada año que lleva siendo tu madre",
+          heading: "Una nota por cada año siendo tu madre",
           body: "Un frasco de notas dobladas que salen de una en una al agitar el móvil. Escribe una por cada uno de esos años, y que cada nota sea algo que hizo, no algo que es: “Fingiste que la tostada quemada te gustaba así.” Ponle al frasco su propia etiqueta, “34 cosas que hiciste y que vi”, y empieza por tu foto más antigua: las fotos van con las primeras notas, en orden.",
         },
         {
           template: "museum",
-          heading: "Una galería con las fotos en las que sale ella",
+          heading: "Una galería con las fotos donde sale ella",
           body: "Las madres hacen las fotos, así que faltan en casi todas. Busca aquellas en las que sale y cuelga cada una en su propia sala, hasta veinte, con una placa escrita por ti: “Mujer con dos niños y la compra, 1996”. Llama a la exposición “Retrato de una madre, de 1989 a hoy”. Tu mensaje va en la última pared, como el texto de un comisario.",
         },
         {
@@ -210,7 +210,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "garden",
-          heading: "Un paseo por el jardín, para quien te enseñó los nombres de las plantas",
+          heading: "Un jardín para quien te enseñó sus plantas",
           body: "Empuja una verja y baja por una página que crece al deslizar: brotes, un prado, tus fotos en una celosía y un invernadero con tu carta sobre la mesa. Elige qué crece en los parterres (rosas, peonías, girasoles o flores silvestres) y quién la acompaña: una mariposa, una abeja o un gato. En el cartel de la verja caben 24 caracteres: “Cuidado con las peonías”.",
         },
         {
@@ -343,7 +343,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "scratch-card",
-          heading: "Una noticia bajo el metalizado: una visita, un partido, un nieto",
+          heading: "Bajo el metalizado: una visita, un partido, un nieto",
           body: "Para el año en que el regalo es un anuncio. Rasca unas cuantas tarjetas, cada una con su foto y su pie, y la última lo dice en letras grandes: “Dos entradas. El sábado. Conduces tú.” Imprime una frase sobre el metalizado para que la portada no cuente nada, hasta 30 caracteres: “Rasca con una moneda, como tú”.",
         },
       ],
@@ -361,7 +361,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "our-timeline",
-          heading: "From the first day to the last, on one road",
+          heading: "First day to last, on one road",
           body: "The photo outside the building on day one, the awkward middle, the library at 2 a.m., the gown. Each gets a stop on a road that draws itself as they scroll, under a label you write: “Sept 2023: the wrong lecture hall”, “Year two: the flat with the mould”. Add a countdown and it sits under the closing line: aim it at the first day of whatever comes next.",
         },
         {
@@ -396,7 +396,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "From a parent: what you saw when they weren't looking",
+          heading: "From a parent: the things you quietly saw",
           body: "Not “congratulations”. They will get fifty of those. The free note holds 500 characters, enough for the one thing you noticed and never mentioned: “The night before your second-year exams I heard you get up at four. I didn't come in. I have never been prouder of anybody.” Change the greeting to “To the graduate (I can say that now),”.",
         },
         {
@@ -451,7 +451,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "De una madre o un padre: lo que viste cuando no miraba",
+          heading: "De madre o padre: lo que viste sin decirlo",
           body: "No “enhorabuena”; de esas le llegarán cincuenta. En la nota gratis caben 500 caracteres, suficientes para eso que viste y nunca comentaste: “La noche antes de los exámenes de segundo te oí levantarte a las cuatro. No entré. Nunca he sentido tanto orgullo por nadie.” Cambia el saludo por “Para ti, que ya tienes el título:”.",
         },
         {
@@ -554,7 +554,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "Para la persona con la que te casas, una hora antes",
+          heading: "Para quien se casa contigo, una hora antes",
           body: "Escrita la noche anterior y leída a solas, con un sello que romper. En la nota gratis caben 500 caracteres, que dan para una promesa y una broma. Despídete con “Nos vemos delante. Yo soy quien llora,”. Una nota gratis sale cuando la mandas, así que dale el enlace a alguien de confianza y dile el minuto; programarla tú viene con “Hazlo especial”.",
         },
         {
@@ -632,7 +632,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "A note for the bad day, kept until it comes",
+          heading: "A note for the bad day, kept till then",
           body: "Write it now, while things are fine, for the day the distance is too much. The free note holds 500 characters under a wax seal: “If you're reading this it has been a rubbish week. I'm still here, the flight is still booked, and you still snore.” Send the link with one instruction: don't open it until you need it. The link will wait.",
         },
       ],
@@ -642,7 +642,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       items: [
         {
           template: "halfway",
-          heading: "Un avión de papel que cruza soplando la distancia real",
+          heading: "Un avión de papel que cruza la distancia real",
           body: "Una postal con un mapa: tu ciudad en una isla, la suya en la otra y, en grande, la distancia real entre los dos. Sopla al móvil y un avión de papel la recorre por la línea de puntos mientras bajan los kilómetros. Añade los sitios donde os habéis encontrado a medio camino, hasta cuatro, y una frase para el punto medio: “Por aquí debajo está el área de servicio donde nos despedimos.”",
         },
         {
@@ -682,7 +682,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "paper-crane",
-          heading: "Una grulla para la noche en que se cortó la llamada",
+          heading: "Una grulla para la noche de la llamada cortada",
           body: "Una hoja de papel que dobla manteniendo pulsado cada pliegue, de tres a seis, con una frase tuya en cada doblez: “Odio más el retardo de la llamada que la distancia.” “Digo buenas noches dos veces para que una llegue.” Cuando ya es una grulla sopla al móvil y sale volando, y tu carta se queda en la mesa.",
         },
         {
@@ -692,7 +692,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "Una nota para el día malo, guardada hasta que llegue",
+          heading: "Una nota para el día malo, guardada hasta entonces",
           body: "Escríbela ahora, que todo va bien, para el día en que la distancia pese demasiado. En la nota gratis caben 500 caracteres bajo un sello de lacre: “Si estás leyendo esto, la semana ha sido horrible. Sigo aquí, el vuelo sigue comprado y tú sigues roncando.” Manda el enlace con una sola instrucción: no la abras hasta que haga falta. El enlace espera.",
         },
       ],
@@ -903,7 +903,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "arcade",
-          heading: "Un juego para la pausa del café, con tus fotos de premio",
+          heading: "Un juego para el café, con fotos de premio",
           body: "Un minijuego retro con el título que elijas, “MISIÓN MARTES”, en el que arrastran una cesta para atrapar corazones, estrellas o trozos de tarta. Cada nivel superado descubre una foto, y el último descubre tu mensaje. Baja las capturas por nivel de ocho a cuatro y cabe en la pausa del café, con un ranking de una sola persona.",
         },
         {
@@ -1001,7 +1001,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "front-page",
-          heading: "El periódico de la familia, edición de Acción de Gracias",
+          heading: "El periódico familiar, edición de Acción de Gracias",
           body: "Una portada sobre el día en sí. Titular: “EL PAVO, SECO OTRA VEZ; LA FAMILIA DICE QUE ‘ESTÁ BIEN’”. El tiempo: “Frente cálido procedente del horno.” Usa los ocho anuncios clasificados para las bromas de siempre: “SE BUSCA un adulto dispuesto a sentarse en la mesa de los niños. Hay tarta.” Mándalo al grupo de la familia el viernes por la mañana, con las sobras.",
         },
       ],

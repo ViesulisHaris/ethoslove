@@ -96,7 +96,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "birthday-cinema",
-            heading: "Their name in lights, and a wish they make by blowing",
+            heading: "Their name in lights, a wish made by blowing",
             body: "Red curtains part on a marquee with their name, or your own words: “SAM TURNS 30. CRITICS ARE DIVIDED.” Then a cake with flickering candles that they blow out into the microphone (or swipe), confetti, and a film strip of your photos. It takes a short video too, from the people who couldn't be there.",
           },
           {
@@ -111,7 +111,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "constellations",
-            heading: "Twelve stars for the twelve months since their last birthday",
+            heading: "A star for each month since their last birthday",
             body: "Free, and made for this: each photo is a star in a night sky, up to twelve of them, so use one from each month since their last birthday. They tap their way across the sky, and when the last star is found the lines join into a heart, an infinity sign or a star, with your words under it.",
           },
         ],
@@ -147,7 +147,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         items: [
           {
             template: "midnight-countdown",
-            heading: "Una cuenta atrás que acaba a las doce, en su zona horaria",
+            heading: "Una cuenta atrás hasta las doce, en su hora",
             body: "El primer mensaje de un cumpleaños es el que se recuerda, así que manda el enlace por la tarde y deja que el regalo se abra solo a las 00:00; hasta entonces verá el reloj. El titular va sobre el contador, “Hasta tus 30”, y la frase de los fuegos artificiales es tuya: “30. Estás igual. Lo he comprobado.” Si vive ocho horas por delante, pon su zona horaria y se abrirá en su medianoche, en tu tarde.",
           },
           {
@@ -167,12 +167,12 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "fortune-cookie",
-            heading: "Galletas de la fortuna con vuestras fechas como números de la suerte",
+            heading: "Galletas de la fortuna con vuestras fechas",
             body: "Un plato de galletas que se abren en una fortuna escrita por ti, con sus números de la suerte debajo. Haz que los números sean vuestros: el día que os conocisteis, su edad, el número del portal de vuestra primera casa, la mesa de la primera cita. Y escribe las fortunas como una adivina que le conoce: “Hoy te cantarán en un restaurante. No te resistas.”",
           },
           {
             template: "pack-your-bags",
-            heading: "El fin de semana fuera, en un panel de salidas",
+            heading: "La escapada, anunciada en un panel de salidas",
             body: "Esconde el destino tras cinco pistas que va metiendo en la maleta: “bañador”, “las gafas de sol buenas”, “nada del trabajo”, “un libro sin empezar”, “tu pasaporte, sí”. El panel gira hasta la ciudad, la tarjeta de embarque muestra la fecha y las noches, y tu carta está debajo del resguardo.",
           },
           {
@@ -187,7 +187,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "birthday-cinema",
-            heading: "Su nombre en luces y un deseo que se pide soplando",
+            heading: "Su nombre en luces y un deseo soplando",
             body: "Se abre el telón rojo sobre una marquesina con su nombre, o con tus propias palabras: “SAM CUMPLE 30. LA CRÍTICA, DIVIDIDA.” Luego, una tarta con velas que parpadean y se apagan soplando al micrófono (o deslizando el dedo), confeti y una tira de película con tus fotos. Admite también un vídeo corto de quienes no pudieron venir.",
           },
           {
@@ -202,7 +202,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "constellations",
-            heading: "Doce estrellas por los doce meses desde su último cumpleaños",
+            heading: "Una estrella por cada mes desde su último cumpleaños",
             body: "Gratis y hecha para esto: cada foto es una estrella en un cielo nocturno, hasta doce, así que usa una de cada mes desde su último cumpleaños. Va tocando de estrella en estrella y, al encontrar la última, las líneas forman un corazón, un infinito o una estrella, con tus palabras debajo.",
           },
         ],
@@ -291,7 +291,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "picnic",
-            heading: "A picnic basket packed as an inventory of you two",
+            heading: "A picnic basket packed with an inventory of you",
             body: "Every tap takes something out of the basket, strawberries, lemonade, tulips, a ticket, your photos, and each comes with a tag you wrote, up to 48 characters. Write them like an inventory of your relationship: “strawberries, because you always steal mine”, “the lemonade from our first date”. One for a summer anniversary.",
           },
           {
@@ -745,12 +745,12 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         items: [
           {
             template: "snow-globe",
-            heading: "A snow globe that tells the year in four shakes",
+            heading: "A snow globe: the year in four shakes",
             body: "Set it to four shakes and the snow settles four times: a line, a photo, a line, a photo. That's a short story of the year: “January: we said this would be the year”, the photo from the spring, “It was, mostly”, then this month's. The brass plaque at the end takes 44 characters: “Next Christmas: Lisbon, the two of us”.",
           },
           {
             template: "fireside",
-            heading: "A letter by candlelight, with their drink on the sill",
+            heading: "A letter by candlelight, their drink on the sill",
             body: "Set the window to snow and put their real drink on the sill by the candle: cocoa, tea or coffee. The tag tied to the candle says “for Sam” unless you change it, and it takes 24 characters, enough for something only they'd get: “for after the dishes”. Then write what you'd say to them once everyone else has gone to bed.",
           },
           {
@@ -856,12 +856,12 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         items: [
           {
             template: "snow-globe",
-            heading: "Una bola de nieve que cuenta el año en cuatro sacudidas",
+            heading: "Una bola de nieve: el año en cuatro sacudidas",
             body: "Pon cuatro sacudidas y la nieve se posa cuatro veces: una frase, una foto, una frase, una foto. Cabe una historia corta del año: “Enero: dijimos que este sería el año”, la foto de la primavera, “Y lo fue, casi”, y la de este mes. La placa de latón del final admite 44 caracteres: “La próxima Navidad, en Lisboa”.",
           },
           {
             template: "fireside",
-            heading: "Una carta a la luz de una vela, con su bebida en el alféizar",
+            heading: "Una carta con vela, su bebida en el alféizar",
             body: "Pon nieve en la ventana y su bebida de verdad en el alféizar, junto a la vela: chocolate, té o café. La etiqueta atada a la vela admite 24 caracteres, suficientes para algo que solo entienda esa persona: “para después de fregar”. Luego escribe lo que le dirías cuando el resto ya se ha ido a dormir.",
           },
           {

@@ -7,9 +7,9 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { OCCASION_GUIDES } from "@/content/occasions";
-import { GiftIdeaList, withManifests } from "@/components/marketing/gift-idea-list";
 import { JsonLd } from "@/components/shared/json-ld";
-import { OccasionGuide } from "@/components/marketing/occasion-guide";
+import { OccasionGuide, OccasionIdeas } from "@/components/marketing/occasion-guide";
+import { SitePage } from "@/components/marketing/spread/sections";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";
 import { sendsFree } from "@/lib/gift/free-tier";
@@ -56,15 +56,11 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
       />
       <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
       <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} />
-      {guide.ideas ? (
-        <section className="container-x border-t border-line pt-14 sm:pt-16" aria-labelledby={`ideas-${occasion}`}>
-          <h2 id={`ideas-${occasion}`} className="display-md">
-            {guide.ideas.title}
-          </h2>
-          <GiftIdeaList ideas={withManifests(guide.ideas.items)} locale={locale as Locale} className="mt-4 pb-16" />
-        </section>
-      ) : null}
-      <OccasionGuide occasion={occasion} locale={locale as Locale} />
+      {/* Below the gallery the page is laid out as a gift's own page is: the ideas as picture cards, then the guide and the questions as closed rows. */}
+      <SitePage name={`occasion-${occasion}`} under={false}>
+        <OccasionIdeas occasion={occasion} locale={locale as Locale} />
+        <OccasionGuide occasion={occasion} locale={locale as Locale} />
+      </SitePage>
     </>
   );
 }

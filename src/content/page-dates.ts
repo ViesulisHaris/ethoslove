@@ -17,10 +17,11 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
 /**
  * The day the growth build's "pages" area last changed what its pages say: the six gift pages by
  * kind, /digital-cards, the eight new idea lists, and the links /gifts, the /gifts/for-* pages,
- * birthday and anniversary gained. None of it is live yet, so this is a date on a branch (21 Nov:
- * the corrections after review). The day it ships, set this one line to that day.
+ * birthday and anniversary gained. None of it is live yet, so this is a date on a branch (22 Nov:
+ * the pages were laid out again with far fewer words on show, new titles for three of them, and
+ * every occasion's ideas as cards). The day it ships, set this one line to that day.
  */
-const GROWTH_PAGES_DAY = "2026-11-21";
+const GROWTH_PAGES_DAY = "2026-11-22";
 
 /**
  * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
@@ -75,8 +76,9 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // anniversary a row of links to the gift pages by kind.
   "/occasions/birthday": GROWTH_PAGES_DAY,
   "/occasions/anniversary": GROWTH_PAGES_DAY,
-  "/occasions/valentines": "2026-11-13",
-  "/occasions/christmas": "2026-11-13",
+  // Their twelve ideas are cards since 22 Nov, each a title and one line where there was a paragraph.
+  "/occasions/valentines": GROWTH_PAGES_DAY,
+  "/occasions/christmas": GROWTH_PAGES_DAY,
   "/occasions/long-distance": GROWTH_PAGES_DAY,
   "/occasions/thanksgiving": GROWTH_PAGES_DAY,
   "/occasions/wedding": GROWTH_PAGES_DAY,
