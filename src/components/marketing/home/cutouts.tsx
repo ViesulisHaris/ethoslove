@@ -87,21 +87,23 @@ export function placementStyle(b: Placement, shadow: string): CSSProperties {
  */
 
 /**
- * The frame's own pieces, in the blush colourway: where each file is and how big. The same facts
+ * The frame's own pieces, in the ivory colourway of the owner's gallery mock-up (22 Nov 2026): where
+ * each file is and how big. The same facts
  * are in the art's manifest (content/page-art.ts); they are written out here because this module
  * is also drawn in the browser (the gallery, the gifts page's hero), and those pages should not
  * download the whole manifest for eight flowers. tests/unit/frame-art.test.ts holds this table to
  * the manifest, so a new render that changes a size fails there and not on a page.
  */
 export const FRAME_ART = {
-  "lily-open": { src: "/art/pages/lily-open-blush.webp", src1x: "/art/pages/lily-open-blush-1x.webp", width: 900, height: 604, width1x: 450 },
-  "lily-three-quarter": { src: "/art/pages/lily-three-quarter-blush.webp", src1x: "/art/pages/lily-three-quarter-blush-1x.webp", width: 900, height: 771, width1x: 450 },
-  "lily-side": { src: "/art/pages/lily-side-blush.webp", src1x: "/art/pages/lily-side-blush-1x.webp", width: 900, height: 726, width1x: 450 },
-  "petal-1": { src: "/art/pages/petal-1-blush.webp", src1x: "/art/pages/petal-1-blush-1x.webp", width: 360, height: 256, width1x: 180 },
-  "petal-2": { src: "/art/pages/petal-2-blush.webp", src1x: "/art/pages/petal-2-blush-1x.webp", width: 360, height: 271, width1x: 180 },
-  "petal-3": { src: "/art/pages/petal-3-blush.webp", src1x: "/art/pages/petal-3-blush-1x.webp", width: 360, height: 264, width1x: 180 },
-  "petal-4": { src: "/art/pages/petal-4-blush.webp", src1x: "/art/pages/petal-4-blush-1x.webp", width: 360, height: 211, width1x: 180 },
+  "lily-open": { src: "/art/pages/lily-open-ivory.webp", src1x: "/art/pages/lily-open-ivory-1x.webp", width: 900, height: 604, width1x: 450 },
+  "lily-three-quarter": { src: "/art/pages/lily-three-quarter-ivory.webp", src1x: "/art/pages/lily-three-quarter-ivory-1x.webp", width: 900, height: 771, width1x: 450 },
+  "lily-side": { src: "/art/pages/lily-side-ivory.webp", src1x: "/art/pages/lily-side-ivory-1x.webp", width: 900, height: 726, width1x: 450 },
+  "petal-1": { src: "/art/pages/petal-1-ivory.webp", src1x: "/art/pages/petal-1-ivory-1x.webp", width: 360, height: 256, width1x: 180 },
+  "petal-2": { src: "/art/pages/petal-2-ivory.webp", src1x: "/art/pages/petal-2-ivory-1x.webp", width: 360, height: 271, width1x: 180 },
+  "petal-3": { src: "/art/pages/petal-3-ivory.webp", src1x: "/art/pages/petal-3-ivory-1x.webp", width: 360, height: 264, width1x: 180 },
+  "petal-4": { src: "/art/pages/petal-4-ivory.webp", src1x: "/art/pages/petal-4-ivory-1x.webp", width: 360, height: 211, width1x: 180 },
   "leaf-1": { src: "/art/pages/leaf-1.webp", src1x: "/art/pages/leaf-1-1x.webp", width: 700, height: 398, width1x: 350 },
+  "leaf-2": { src: "/art/pages/leaf-2.webp", src1x: "/art/pages/leaf-2-1x.webp", width: 700, height: 260, width1x: 350 },
 } as const;
 export type FrameArtId = keyof typeof FRAME_ART;
 
@@ -120,7 +122,9 @@ const HERO: Bloom[] = [
   { art: "petal-2", x: 1.2, y: 58, size: 5, rot: 18, phone: false },
   { art: "lily-open", x: -1, y: 95, size: 17, rot: 16, blur: 1, phone: false },
   { art: "petal-3", x: 41, y: 101, size: 6, rot: -16, blur: 3, opacity: 0.8, phone: false },
-  { art: "lily-three-quarter", x: 98.5, y: 7, size: 19, rot: 6, blur: 1.5, opacity: 0.95, eager: true, phone: false },
+  { art: "lily-three-quarter", x: 97, y: 9, size: 25, rot: 6, eager: true, phone: false },
+  { art: "leaf-2", x: -1.5, y: 36, size: 13, rot: -40, opacity: 0.85, phone: false },
+  { art: "leaf-1", x: 99.5, y: 73, size: 13, rot: -150, opacity: 0.8, phone: false },
   { art: "lily-side", x: 100.5, y: 44, size: 15, rot: -12, phone: false },
   { art: "leaf-1", x: 78, y: 104, size: 12, rot: 12, blur: 5, opacity: 0.6, phone: false },
 ];
@@ -152,12 +156,12 @@ const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
 export function FloralFrame({ frame, ground, className }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string }) {
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
-      {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 82% 44%, rgba(255,176,200,.5) 0%, rgba(255,176,200,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(255,214,196,.85) 0%, rgba(255,214,196,0) 72%), radial-gradient(44% 46% at 40% 104%, rgba(228,214,255,.75) 0%, rgba(228,214,255,0) 70%), linear-gradient(180deg, #FFF7F3 0%, #FFE9EC 100%)" }} /> : null}
+      {ground === "light" ? <div className="absolute inset-0 paper-ground" /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
       {FRAMES[frame].map((b, i) => {
         // A render brings the shadow it was lit with, so none is added: on the dark ground that shadow is lost in the dark, as a real one would be.
         const place = placementStyle(b, "transparent");
-        return <FrameArt key={i} art={b.art} sizes={`${Math.round(b.size * 1.2)}vw`} eager={b.eager} className={placementClass(b)} style={{ ...place, filter: b.blur ? `blur(${b.blur}px)` : undefined }} />;
+        return <FrameArt key={i} art={b.art} sizes={`${Math.round(b.size * 1.2)}vw`} eager={b.eager} className={placementClass(b)} style={{ ...place, filter: `sepia(0.2) saturate(0.92)${b.blur ? ` blur(${b.blur}px)` : ""}` }} />;
       })}
       {ground !== "bare" ? <div className={cn("grain-overlay mix-blend-overlay", ground === "light" ? "opacity-[0.16]" : "opacity-[0.1]")} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(16,4,11,0.55) 100%)" }} /> : null}

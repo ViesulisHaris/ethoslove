@@ -844,6 +844,12 @@
     "featureVideo": "Video clip",
     "photoRange": "{min}–{max} photos",
     "allTiers": "All",
+    "sort": {
+      "label": "Sort by:",
+      "popular": "Most popular",
+      "new": "Newest",
+      "az": "A to Z"
+    },
     "allOccasions": "All occasions",
     "noMatches": "No template matches that filter yet. Try another occasion.",
     "demoReactionToast": "In a real gift, this sends the sender your reaction. Coming in Phase 4.",
@@ -892,6 +898,14 @@
         "eyebrow": "New",
         "title": "Just arrived",
         "blurb": "A list checked twice, a year to unwrap, a snow globe, a frosted window, lights to hang and a gingerbread house. And two for the Thanksgiving table."
+      },
+      "sortedNew": {
+        "eyebrow": "Newest first",
+        "title": "Every gift, latest first"
+      },
+      "sortedAz": {
+        "eyebrow": "A to Z",
+        "title": "Every gift, by name"
       },
       "all": {
         "eyebrow": "The collection",

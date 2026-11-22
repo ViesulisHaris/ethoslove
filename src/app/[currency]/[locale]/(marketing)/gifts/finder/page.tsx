@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus } from "lucide-react";
+import { Plus, ArrowRight } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { OCCASIONS } from "@/config/occasions";
@@ -88,7 +88,24 @@ export default async function GiftFinderPage({ params }: Props) {
            * a whole question is on it.
            */}
           <div className={cn(SPREAD, "gap-y-4 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:min-h-[40rem] lg:content-start lg:items-start lg:pt-14 lg:pb-32")}>
-            <Intro level={1} id="finder-title" label={copy.eyebrow} heading={copy.h1} line={copy.line} />
+            {/*
+             * The way round the finder is always in view (the owner, 22 Nov 2026: "there should always be
+             * a button browse all… so the finder isnt obligatory"). On a desk it is a button under the
+             * words; on a phone it sits on the label's own line, at the right, so a whole question
+             * still fits the first screen.
+             */}
+            <div className="relative">
+              <Intro level={1} id="finder-title" label={copy.eyebrow} heading={copy.h1} line={copy.line}>
+                <Link
+                  href="/templates"
+                  data-finder-browse
+                  className="group absolute -top-3 right-0 inline-flex min-h-11 items-center gap-1.5 text-[0.875rem] font-medium text-page-ink lg:static lg:mt-7 lg:h-12 lg:rounded-full lg:border lg:border-page-ink/25 lg:px-6 lg:text-[0.9375rem] lg:transition-colors lg:hover:border-page-ink"
+                >
+                  <span className="underline decoration-page-line underline-offset-4 lg:no-underline">{copy.browse.replace("{count}", String(count))}</span>
+                  <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </Intro>
+            </div>
             {/*
              * A link that already carries answers must not flash the first question before its picks: the
              * script marks this column (FINDER_WAIT, lib/gift/finder.ts) before anything paints, the tool

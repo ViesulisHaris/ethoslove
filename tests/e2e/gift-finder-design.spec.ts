@@ -86,7 +86,7 @@ test("it is one page of the same site as a gift's: the site's palette on the pag
     const cs = getComputedStyle(el);
     return ["--page-ground", "--page-raised", "--page-band", "--page-ink", "--page-accent"].map((name) => cs.getPropertyValue(name).trim());
   });
-  expect(colours).toEqual(["#f3e8da", "#faf4ea", "#e9d9c5", "#24121b", "#b0245a"]);
+  expect(colours).toEqual(["#f3e1d5", "#fbf1e9", "#e8cfc1", "#24121b", "#b0245a"]);
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Which digital gift should you send?");
   // The left column of the spread: a label, the heading and one line of at most fourteen words.

@@ -1210,6 +1210,8 @@ export type FinderCopy = {
   ui: FinderUi;
   /** The foot: a label and a heading beside one row of links to the pages that start from a person. */
   byWho: { label: string; heading: string; all: string };
+  /** The way round the finder, always in view: every gift, on the gallery. The owner, 22 Nov 2026: "the finder isnt obligatory". */
+  browse: string;
   /** The closed block: how the finder picks, in three paragraphs, and the occasions as a sentence of links. */
   how: { title: string; paragraphs: string[]; byDay: string };
 };
@@ -1314,6 +1316,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       close: "Close",
     },
     byWho: { label: "By person", heading: "Or start from the person", all: "All {count} gifts" },
+    browse: "Browse all {count} gifts",
     how: {
       title: "How the finder picks",
       paragraphs: [
@@ -1389,6 +1392,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       close: "Cerrar",
     },
     byWho: { label: "Por persona", heading: "O empieza por la persona", all: "Los {count} regalos" },
+    browse: "Ver los {count} regalos",
     how: {
       title: "Cómo elige el buscador",
       paragraphs: [

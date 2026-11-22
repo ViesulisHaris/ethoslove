@@ -844,6 +844,12 @@
     "featureVideo": "Clip de vídeo",
     "photoRange": "{min}–{max} fotos",
     "allTiers": "Todas",
+    "sort": {
+      "label": "Ordenar por:",
+      "popular": "Más populares",
+      "new": "Más nuevas",
+      "az": "De la A a la Z"
+    },
     "allOccasions": "Todas las ocasiones",
     "noMatches": "Ninguna plantilla coincide con ese filtro todavía. Prueba otra ocasión.",
     "demoReactionToast": "En un regalo real, esto le envía tu reacción al remitente. Llega en la fase 4.",
@@ -892,6 +898,14 @@
         "eyebrow": "Novedades",
         "title": "Recién llegadas",
         "blurb": "Una lista repasada dos veces, un año que desenvolver, una bola de nieve, una ventana con escarcha, luces que colgar y una casa de jengibre. Y dos para la mesa de Acción de Gracias."
+      },
+      "sortedNew": {
+        "eyebrow": "Lo más nuevo primero",
+        "title": "Todos los regalos, del último al primero"
+      },
+      "sortedAz": {
+        "eyebrow": "De la A a la Z",
+        "title": "Todos los regalos, por nombre"
       },
       "all": {
         "eyebrow": "La colección",

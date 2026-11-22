@@ -13,8 +13,8 @@
      white, and the owner asked for the gift pages' cream on the whole site. A gift itself keeps
      the paper it was drawn with: see .gift-root below.
      (The accent keeps its old name, "coral"; it is a raspberry rose now, 4.6:1 under white type.) */
-  --brand-paper: #f3e8da;
-  --brand-paper-deep: #e9d9c5;
+  --brand-paper: #f3e1d5;
+  --brand-paper-deep: #e8cfc1;
   --brand-ink: #24121b;
   --brand-ink-soft: #5d4652;
   --brand-coral: #d6336c;
@@ -26,20 +26,20 @@
   --brand-moss: #2e6b4e;
   --brand-night: #14110e;
   --brand-night-raised: #1e1a16;
-  --brand-line: #e2d2be;
+  --brand-line: #e3cbbd;
 
   /* shadcn semantic tokens mapped onto the brand */
   --background: var(--brand-paper);
   --foreground: var(--brand-ink);
-  --card: #faf4ea;
+  --card: #fbf1e9;
   --card-foreground: var(--brand-ink);
-  --popover: #faf4ea;
+  --popover: #fbf1e9;
   --popover-foreground: var(--brand-ink);
   --primary: var(--brand-coral);
   --primary-foreground: #fbf6ee;
   --secondary: var(--brand-paper-deep);
   --secondary-foreground: var(--brand-ink);
-  --muted: #ecdfce;
+  --muted: #ecd8cb;
   --muted-foreground: #6e5963;
   --accent: var(--brand-rose-soft);
   --accent-foreground: var(--brand-ink);
@@ -314,6 +314,18 @@
 @utility grain {
   position: relative;
 }
+/*
+ * The ground of the owner's gallery mock-up (22 Nov 2026): the paper with light in it. A paler
+ * pool where the heading stands, a breath of rose off the right edge and the lower left, and the
+ * paper's own grain over it (.grain-overlay, as a child). For a page's head or a whole section.
+ */
+@utility paper-ground {
+  background-color: var(--brand-paper);
+  background-image:
+    radial-gradient(56% 62% at 26% 8%, rgb(255 246 238 / 0.85) 0%, rgb(255 246 238 / 0) 70%),
+    radial-gradient(42% 52% at 100% 34%, rgb(226 190 170 / 0.5) 0%, rgb(226 190 170 / 0) 72%),
+    radial-gradient(46% 44% at 0% 100%, rgb(238 200 190 / 0.45) 0%, rgb(238 200 190 / 0) 72%);
+}
 @utility grain-overlay {
   pointer-events: none;
   position: absolute;
@@ -377,7 +389,7 @@
   --color-rose-soft: #ffe8ef;
   --color-rose-tint: #ffd6e2;
   --color-rose-mist: #fff0f4;
-  --color-blush-paper: #f6e6dc;
+  --color-blush-paper: #f6ddd3;
   --color-star: #e0962a;
   --color-star-empty: #e9c0cb;
   --color-moss-soft: #dcebdf;
@@ -399,7 +411,7 @@
 /* ------------------------------------------------------------------ */
 :root {
   --page-ground: var(--brand-paper);
-  --page-raised: #faf4ea;
+  --page-raised: #fbf1e9;
   --page-band: var(--brand-paper-deep);
   --page-ink: var(--brand-ink);
   --page-body: var(--brand-ink-soft);

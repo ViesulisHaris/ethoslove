@@ -8,9 +8,9 @@ import { pageArt, type ArtId } from "@/content/page-art";
  * the manifest says: a new render that changes a file or a size shows up here.
  */
 describe("the flower frame's table of rendered pieces", () => {
-  it("names the blush files and sizes the manifest has", () => {
+  it("names the ivory files and sizes the manifest has", () => {
     for (const id of Object.keys(FRAME_ART) as FrameArtId[]) {
-      const art = pageArt(id as ArtId, "blush");
+      const art = pageArt(id as ArtId, "ivory");
       expect(FRAME_ART[id], id).toEqual({ src: art.src, src1x: art.src1x, width: art.width, height: art.height, width1x: art.width1x });
     }
   });
