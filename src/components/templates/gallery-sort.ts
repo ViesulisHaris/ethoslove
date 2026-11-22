@@ -6,7 +6,8 @@
  * - `popular` is the gallery as it has always stood: the best sellers, the new arrivals, then
  *   everything else (config/featured.ts). It is the default and leaves the address alone.
  * - `new` is the catalogue backwards: templates/manifests.ts lists the gifts in the order they
- *   were added, oldest first.
+ *   were added, oldest first. The list a page hands the gallery is not in that order (it is
+ *   sorted for the shelves), so the page also hands over the catalogue's own order, `added`.
  * - `az` is by the gift's name in the visitor's language.
  */
 export const SORTS = ["popular", "new", "az"] as const;
@@ -27,9 +28,13 @@ export function searchWithSort(search: string, sort: GallerySort): string {
   return query ? `?${query}` : "";
 }
 
-/** `items` in catalogue order, given back in the order asked for. `popular` is left to the shelves. */
-export function sortTemplates<T extends { name: Record<L, string> }, L extends string>(items: readonly T[], sort: GallerySort, locale: L): T[] {
-  if (sort === "new") return [...items].reverse();
+/** `items` given back in the order asked for; `added` is every gift's slug, oldest first. `popular` is left to the shelves. */
+export function sortTemplates<T extends { slug: string; name: Record<L, string> }, L extends string>(items: readonly T[], sort: GallerySort, locale: L, added: readonly string[]): T[] {
+  if (sort === "new") {
+    const at = new Map(added.map((slug, i) => [slug, i]));
+    // A gift the list does not know is treated as the newest: it was added after the list was made.
+    return [...items].sort((a, b) => (at.get(b.slug) ?? added.length) - (at.get(a.slug) ?? added.length));
+  }
   if (sort === "az") return [...items].sort((a, b) => a.name[locale].localeCompare(b.name[locale], locale, { sensitivity: "base" }));
   return [...items];
 }

@@ -11,6 +11,13 @@ import { OCCASIONS, isOccasion, type Occasion } from "@/config/occasions";
 /** Who the gift is for. The first seven have a gift-ideas page of their own (/gifts/for-…). */
 export const FINDER_RECIPIENTS = ["girlfriend", "boyfriend", "wife", "husband", "mom", "dad", "best-friend", "someone"] as const;
 export type FinderRecipient = (typeof FINDER_RECIPIENTS)[number];
+/**
+ * The people the first question offers as cards: all but "someone else". With "Not sure" that is
+ * eight cards, two even rows of four on a desk (the owner, 22 Nov 2026: "remove the someone else…
+ * its not symmetrical"). "Someone else" is still an answer an address can carry (`?for=someone`),
+ * so a link made before still opens on its picks; a visitor with nobody on the cards taps "Not sure".
+ */
+export const FINDER_RECIPIENTS_SHOWN = FINDER_RECIPIENTS.filter((r) => r !== "someone");
 
 /** The four a "romantic" sentence is written to: it may say "the two of you", "the day you met", "both your names". */
 export const FINDER_PARTNERS = ["girlfriend", "boyfriend", "wife", "husband"] as const satisfies readonly FinderRecipient[];

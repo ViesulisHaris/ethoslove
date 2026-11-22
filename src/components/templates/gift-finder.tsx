@@ -14,7 +14,7 @@ import {
   FINDER_ASK,
   FINDER_FEELS,
   FINDER_KEYS,
-  FINDER_RECIPIENTS,
+  FINDER_RECIPIENTS_SHOWN,
   FINDER_STEPS,
   FINDER_WAIT,
   NO_ANSWERS,
@@ -232,8 +232,8 @@ export function GiftFinder({
   const occasions = useMemo(() => occasionsFor(answers.for, today), [answers.for, today]);
   const cards = useMemo(() => {
     if (step === "for") {
-      const options: Option[] = [...FINDER_RECIPIENTS, ANY];
-      return { first: FINDER_RECIPIENTS as readonly Option[], more: [] as Option[], gifts: answerGifts(picks, { ...answers, for: null }, "for", options) };
+      const options: Option[] = [...FINDER_RECIPIENTS_SHOWN, ANY];
+      return { first: FINDER_RECIPIENTS_SHOWN as readonly Option[], more: [] as Option[], gifts: answerGifts(picks, { ...answers, for: null }, "for", options) };
     }
     if (step === "occasion") {
       const first: Option[] = occasions.first;

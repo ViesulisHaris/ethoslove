@@ -98,6 +98,7 @@ test.describe("the template gallery", () => {
     const slug = await card.getAttribute("data-gallery-card");
     await expect(card.getByRole("link")).toHaveCount(1);
     await card.getByRole("link").click();
-    await expect(page).toHaveURL(new RegExp(`/templates/${slug}$`));
+    // A dev server builds the gift's page the first time it is asked for.
+    await expect(page).toHaveURL(new RegExp(`/templates/${slug}$`), { timeout: 60_000 });
   });
 });

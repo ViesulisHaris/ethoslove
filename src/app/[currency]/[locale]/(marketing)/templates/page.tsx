@@ -7,7 +7,7 @@ import { FINDER_PATH } from "@/content/finder";
 import { Link, redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
-import { listManifests } from "@/templates/manifests";
+import { TEMPLATE_SLUGS, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateGallery } from "@/components/templates/template-gallery";
 import { parseTier } from "@/components/templates/gallery-tier";
@@ -65,7 +65,7 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
             </Link>
           </p>
         </header>
-        <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} initialSort={parseSort(typeof sort === "string" ? sort : null)} />
+        <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} initialSort={parseSort(typeof sort === "string" ? sort : null)} added={TEMPLATE_SLUGS} />
       </div>
     </>
   );

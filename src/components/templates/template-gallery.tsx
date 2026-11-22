@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -63,6 +63,7 @@ export function TemplateGallery({
   occasion,
   initialTier = "all",
   initialSort = "popular",
+  added = [],
   alsoFree = [],
 }: {
   manifests: TemplateManifest[];
@@ -71,6 +72,8 @@ export function TemplateGallery({
   initialTier?: TierFilter;
   /** The order the server rendered with, from the same `?sort=`. */
   initialSort?: GallerySort;
+  /** Every gift's slug in the order it was added, oldest first: what "Newest" sorts by. */
+  added?: readonly string[];
   alsoFree?: TemplateManifest[];
 }) {
   const t = useTranslations();
@@ -84,11 +87,21 @@ export function TemplateGallery({
   const shelves = useMemo(() => {
     if (occasion) return [{ id: "all" as const, items: filtered }];
     if (sort === "popular") return sectionTemplates(filtered);
-    return [{ id: sort === "new" ? ("sortedNew" as const) : ("sortedAz" as const), items: sortTemplates(filtered, sort, locale) }];
-  }, [filtered, occasion, sort, locale]);
+    return [{ id: sort === "new" ? ("sortedNew" as const) : ("sortedAz" as const), items: sortTemplates(filtered, sort, locale, added) }];
+  }, [filtered, occasion, sort, locale, added]);
   // Cards count on from one shelf to the next, so only the very first row is loaded eagerly.
   const offsets = shelves.map((_, i) => shelves.slice(0, i).reduce((n, shelf) => n + shelf.items.length, 0));
   const fallback = tier === "free" ? alsoFree : [];
+
+  // The open occasion's tile may be past the row's right edge (the last ones are, on every screen): the row is drawn pulled along to it.
+  const row = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const nav = row.current;
+    const open = nav?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!nav || !open) return;
+    const to = open.getBoundingClientRect().left - nav.getBoundingClientRect().left + nav.scrollLeft - (nav.clientWidth - open.offsetWidth) / 2;
+    nav.scrollLeft = Math.max(0, to);
+  }, [occasion]);
 
   const sorter = occasion ? null : (
     <label className="flex shrink-0 items-center gap-3 text-sm text-ink-soft">
@@ -122,7 +135,7 @@ export function TemplateGallery({
          * edge where there are more than fit, and its last tile fades, so it reads as a row to
          * pull along and not as a list that was cut.
          */}
-        <nav aria-label={t("templates.allOccasions")} className="scrollbar-none -mx-5 flex min-w-0 flex-1 snap-x gap-2.5 overflow-x-auto px-5 pt-1 pb-4 sm:mx-0 sm:px-1 lg:[mask-image:linear-gradient(to_right,#000_calc(100%-3.5rem),transparent)]">
+        <nav ref={row} aria-label={t("templates.allOccasions")} className="scrollbar-none -mx-5 flex min-w-0 flex-1 snap-x gap-2.5 overflow-x-auto px-5 pt-1 pb-4 sm:mx-0 sm:px-1 lg:[mask-image:linear-gradient(to_right,#000_calc(100%-3.5rem),transparent)]">
           <OccasionTile href="/templates" icon="all" label={t("templates.allOccasions")} active={!occasion} />
           {OCCASIONS.map((o) => (
             <OccasionTile key={o} href={`/occasions/${o}`} icon={o} label={t(`occasions.${o}`)} active={occasion === o} />
@@ -200,7 +213,7 @@ function OccasionTile({ href, icon, label, active }: { href: string; icon: Occas
       data-occasion-tile={icon}
       className={cn(
         "group relative flex h-[6.5rem] w-[6.75rem] shrink-0 snap-start flex-col items-center justify-end gap-1.5 rounded-[1.25rem] px-2 pb-3.5 text-center text-[0.8125rem] leading-tight font-medium transition-[background-color,box-shadow,translate] duration-300",
-        active ? "bg-forest text-cream shadow-[0_18px_30px_-18px_rgba(42,15,31,0.8)]" : "bg-card/70 text-ink ring-1 ring-ink/[0.07] hover:-translate-y-0.5 hover:bg-card hover:shadow-[0_16px_28px_-20px_rgba(74,32,24,0.5)] motion-reduce:hover:translate-y-0",
+        active ? "bg-forest text-cream shadow-[0_18px_30px_-18px_rgba(42,15,31,0.8)]" : "bg-card text-ink ring-1 ring-ink/[0.07] hover:-translate-y-0.5 hover:bg-card hover:shadow-[0_16px_28px_-20px_rgba(74,32,24,0.5)] motion-reduce:hover:translate-y-0",
       )}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- a 6 KB decoration at a fixed size: next/image would add a request and a srcset for nothing */}
@@ -224,6 +237,7 @@ function Sparkle() {
 function pillClass(active: boolean): string {
   return cn(
     "inline-flex h-11 shrink-0 items-center rounded-full px-5 text-sm font-medium whitespace-nowrap transition-colors",
-    active ? "bg-forest text-cream" : "bg-card/70 text-ink-soft ring-1 ring-ink/[0.07] hover:text-ink hover:ring-ink/25",
+    // Solid, not see-through: on a desk the lilies' leaves pass behind these, and a leaf must not show through a word.
+    active ? "bg-forest text-cream" : "bg-card text-ink-soft ring-1 ring-ink/[0.07] hover:text-ink hover:ring-ink/25",
   );
 }

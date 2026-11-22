@@ -84,7 +84,8 @@ test.describe("the gift finder", () => {
   });
 
   test("every answer is a card with a picture that loaded and its words, and no two cards of a question show the same gift", async ({ page }) => {
-    for (const [path, count] of [["/gifts/finder", 9], ["/gifts/finder?for=girlfriend", 7], ["/es/gifts/finder?for=dad", 7]] as const) {
+    // Seven people and "Not sure" on the first question: "Someone else" is not a card (the owner, 22 Nov 2026).
+    for (const [path, count] of [["/gifts/finder", 8], ["/gifts/finder?for=girlfriend", 7], ["/es/gifts/finder?for=dad", 7]] as const) {
       await page.goto(path);
       const cards = page.locator("[data-answer]");
       await expect(cards, path).toHaveCount(count);
@@ -514,8 +515,9 @@ test.describe("the gift finder", () => {
     await page.goto("/gifts/finder?for=mom&occasion=birthday");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Which digital gift should you send?");
     await expect(page.getByRole("heading", { level: 2, name: "Who is it for?" })).toBeAttached();
-    await expect(page.locator("[data-answer]")).toHaveCount(9);
-    await expect(page.locator("[data-answer] img")).toHaveCount(9);
+    // Seven people and "Not sure": two even rows of four. "Someone else" is not a card (an address can still carry it).
+    await expect(page.locator("[data-answer]")).toHaveCount(8);
+    await expect(page.locator("[data-answer] img")).toHaveCount(8);
     // At the foot: one row of quiet links to the seven pages that start from a person, and every gift.
     const foot = page.locator('section[aria-labelledby="finder-people"]');
     await expect(foot.getByRole("heading", { level: 2 })).toHaveText("Or start from the person");
