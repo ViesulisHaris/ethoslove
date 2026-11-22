@@ -6,10 +6,19 @@ import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug } from "@/content/recipients";
+import { occasionsInSeason } from "@/lib/gift/finder";
+import { ChristmasGifts, hasChristmasGifts } from "@/components/marketing/christmas-gifts";
 import { GiftIdeaList, withManifests } from "@/components/marketing/gift-idea-list";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FaqList } from "@/components/shared/faq-list";
 import { PageHeader } from "@/components/shared/page-header";
+
+/**
+ * A boyfriend's and a girlfriend's page carry a row of Christmas gifts while Christmas is in season
+ * (15 Nov to 25 Dec, by the day the page is rendered with). The pages are static, so they are
+ * rendered again every hour: the row comes and goes by itself, without a deploy.
+ */
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return RECIPIENTS.map((r) => ({ slug: recipientSlug(r) }));
@@ -37,6 +46,7 @@ export default async function RecipientPage({ params }: PageProps<"/[currency]/[
   const guide = RECIPIENT_GUIDES[recipient][l];
   const ideas = withManifests(guide.ideas);
   const url = localizedUrl(locale, `/gifts/${slug}`);
+  const christmas = hasChristmasGifts(recipient) && occasionsInSeason(new Date().toISOString().slice(0, 10)).includes("christmas") ? recipient : null;
 
   return (
     <>
@@ -61,6 +71,9 @@ export default async function RecipientPage({ params }: PageProps<"/[currency]/[
         ]}
       />
       <PageHeader eyebrow={t("eyebrow")} title={guide.h1} subtitle={guide.lead} />
+
+      {/* In season: four Christmas gifts for this person, as pictures, before the list (components/marketing/christmas-gifts.tsx). */}
+      {christmas ? <ChristmasGifts recipient={christmas} locale={l} className="pb-14 sm:pb-20" /> : null}
 
       <GiftIdeaList ideas={ideas} locale={l} heading="h2" className="container-x border-t border-line pb-16" />
 

@@ -3447,6 +3447,15 @@
     "faqTitle": "Preguntas frecuentes",
     "more": "Ideas de regalo para otra persona",
     "occasions": "Por ocasión",
+    "christmas": {
+      "label": "Navidad",
+      "heading": {
+        "boyfriend": "Regalos de Navidad para tu novio",
+        "girlfriend": "Regalos de Navidad para tu novia"
+      },
+      "line": "Se crea en una tarde y se abre en su móvil en Navidad.",
+      "more": "Ver más regalos de Navidad"
+    },
     "footerTitle": "Ideas de regalo"
   },
   "together": {
