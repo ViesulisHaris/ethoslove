@@ -11,7 +11,7 @@ import { CITY_SLUGS, getCity, mentionsSpain } from "@/lib/cities/cities";
 import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS } from "@/lib/dates/date-kinds";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
 
-const words = (text: string): number => text.trim().split(/s+/).length;
+const words = (text: string): number => text.trim().split(/\s+/).length;
 const strings = (v: unknown): string[] => (typeof v === "string" ? [v] : v && typeof v === "object" ? Object.values(v).flatMap(strings) : []);
 const LOCALES = ["en", "es"] as const;
 const COUNT_WORD: Record<number, { en: string; es: string }> = { 8: { en: "eight", es: "ocho" }, 9: { en: "nine", es: "nueve" }, 10: { en: "ten", es: "diez" }, 12: { en: "twelve", es: "doce" } };

@@ -251,10 +251,115 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
   },
 };
 
-export type DateKindUi = { eyebrow: string; planButton: string; tonightLabel: string; tonightHeading: string; tonightLine: string; ideasLabel: string; ideasHeading: string; ideasLine: string; twist: string; planNear: string; freeLabel: string; freeHeading: string; freeLine: string; paidLabel: string; paidHeading: string; paidLine: string; questionsLabel: string; questionsHeading: string; questionsLine: string; citiesLabel: string; citiesHeading: string; citiesLine: string; allCities: string; kindsNav: string; byKind: string; inCityByKind: string; allInCity: string; freePlacesLabel: string; freePlacesHeading: string; freePlacesLine: string; meetLabel: string; meetHeading: string; meetLine: string };
+export type DateKindUi = {
+  eyebrow: string;
+  planButton: string;
+  tonightLabel: string;
+  tonightHeading: string;
+  tonightLine: string;
+  ideasLabel: string;
+  ideasHeading: string;
+  ideasLine: string;
+  twist: string;
+  planNear: string;
+  freeLabel: string;
+  freeHeading: string;
+  freeLine: string;
+  paidLabel: string;
+  paidHeading: string;
+  paidLine: string;
+  questionsLabel: string;
+  questionsHeading: string;
+  questionsLine: string;
+  citiesLabel: string;
+  citiesHeading: string;
+  citiesLine: string;
+  allCities: string;
+  kindsNav: string;
+  byKind: string;
+  inCityByKind: string;
+  allInCity: string;
+  freePlacesLabel: string;
+  freePlacesHeading: string;
+  freePlacesLine: string;
+  meetLabel: string;
+  meetHeading: string;
+  meetLine: string;
+};
 
 /** The words every page by kind shares. */
-export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = { en: {"eyebrow":"Date ideas","planButton":"Plan one tonight","tonightLabel":"Tonight","tonightHeading":"One of these, with real places","tonightLine":"Say where. We pick one that fits the forecast and the hour.","ideasLabel":"The ideas","ideasHeading":"{count} to choose from","ideasLine":"Open a card for why it fits and the twist that makes it a date.","twist":"The twist","planNear":"Plan it near you","freeLabel":"Free","freeHeading":"Free date ideas","freeLine":"These four cost nothing if you bring the flask and the snacks.","paidLabel":"Pocket change","paidHeading":"For pocket change","paidLine":"Four more where the spend is a coffee, a cone or a cheap ticket.","questionsLabel":"Questions","questionsHeading":"Before you go","questionsLine":"The short answers, before you plan.","citiesLabel":"By city","citiesHeading":"The same ideas, with real places","citiesLine":"Each city page fills the stops with cafés, parks and museums near its centre.","allCities":"All {count} cities","kindsNav":"More kinds of date","byKind":"Date ideas by kind","inCityByKind":"In {city}, by kind","allInCity":"All date ideas in {city}","freePlacesLabel":"Free","freePlacesHeading":"Usually free to walk into","freePlacesLine":"Parks, galleries, bookshops and viewpoints the map knows within {km} km.","meetLabel":"Where to meet","meetHeading":"Cafés, bookshops and galleries near the centre","meetLine":"Easy places to find each other, all within {km} km."}, es: {"eyebrow":"Ideas para una cita","planButton":"Planead una para esta noche","tonightLabel":"Esta noche","tonightHeading":"Una de estas, con sitios reales","tonightLine":"Decid dónde. Elegimos una que encaje con la previsión y la hora.","ideasLabel":"Las ideas","ideasHeading":"{count} para elegir","ideasLine":"Abrid una tarjeta: por qué encaja y el giro que la convierte en cita.","twist":"El giro","planNear":"Planeadla cerca de vosotros","freeLabel":"Gratis","freeHeading":"Ideas para una cita gratis","freeLine":"Estas cuatro no cuestan nada si lleváis el termo y algo de picar.","paidLabel":"Calderilla","paidHeading":"Por calderilla","paidLine":"Cuatro más: el gasto es un café, un helado o una entrada barata.","questionsLabel":"Preguntas","questionsHeading":"Antes de salir","questionsLine":"Las respuestas cortas, antes de planear.","citiesLabel":"Por ciudad","citiesHeading":"Las mismas ideas, con sitios reales","citiesLine":"Cada ciudad rellena las paradas con cafeterías, parques y museos cerca de su centro.","allCities":"Las {count} ciudades","kindsNav":"Más tipos de cita","byKind":"Ideas para una cita por tipo","inCityByKind":"En {city}, por tipo","allInCity":"Todas las ideas para una cita en {city}","freePlacesLabel":"Gratis","freePlacesHeading":"Donde se suele entrar gratis","freePlacesLine":"Parques, galerías, librerías y miradores que el mapa conoce a {km} km.","meetLabel":"Dónde quedar","meetHeading":"Cafeterías, librerías y galerías cerca del centro","meetLine":"Sitios fáciles para encontrarse, todos a {km} km."} };
+export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
+  en: {
+    eyebrow: "Date ideas",
+    planButton: "Plan one tonight",
+    tonightLabel: "Tonight",
+    tonightHeading: "One of these, with real places",
+    tonightLine: "Say where. We pick one that fits the forecast and the hour.",
+    ideasLabel: "The ideas",
+    ideasHeading: "{count} to choose from",
+    ideasLine: "Open a card: why it fits, and the twist that makes it a date.",
+    twist: "The twist",
+    planNear: "Plan it near you",
+    freeLabel: "Free",
+    freeHeading: "Free date ideas",
+    freeLine: "These four cost nothing if you bring the flask and the snacks.",
+    paidLabel: "Pocket change",
+    paidHeading: "For pocket change",
+    paidLine: "Four more where the spend is a coffee, a cone or a cheap ticket.",
+    questionsLabel: "Questions",
+    questionsHeading: "Before you go",
+    questionsLine: "The short answers, before you plan.",
+    citiesLabel: "By city",
+    citiesHeading: "The same ideas, with real places",
+    citiesLine: "Each city page fills the stops with cafés, parks and museums near its centre.",
+    allCities: "All {count} cities",
+    kindsNav: "More kinds of date",
+    byKind: "Date ideas by kind",
+    inCityByKind: "In {city}, by kind",
+    allInCity: "All date ideas in {city}",
+    freePlacesLabel: "Free",
+    freePlacesHeading: "Usually free to walk into",
+    freePlacesLine: "Parks, galleries, bookshops and viewpoints the map knows within {km} km.",
+    meetLabel: "Where to meet",
+    meetHeading: "Cafés, bookshops and galleries near the centre",
+    meetLine: "Easy places to find each other, all within {km} km.",
+  },
+  es: {
+    eyebrow: "Ideas para una cita",
+    planButton: "Planead una para esta noche",
+    tonightLabel: "Esta noche",
+    tonightHeading: "Una de estas, con sitios reales",
+    tonightLine: "Decid dónde. Elegimos una que encaje con la previsión y la hora.",
+    ideasLabel: "Las ideas",
+    ideasHeading: "{count} para elegir",
+    ideasLine: "Abrid una tarjeta: por qué encaja y el giro que la convierte en cita.",
+    twist: "El giro",
+    planNear: "Planeadla cerca de vosotros",
+    freeLabel: "Gratis",
+    freeHeading: "Ideas para una cita gratis",
+    freeLine: "Estas cuatro no cuestan nada si lleváis el termo y algo de picar.",
+    paidLabel: "Calderilla",
+    paidHeading: "Por calderilla",
+    paidLine: "Cuatro más: el gasto es un café, un helado o una entrada barata.",
+    questionsLabel: "Preguntas",
+    questionsHeading: "Antes de salir",
+    questionsLine: "Las respuestas cortas, antes de planear.",
+    citiesLabel: "Por ciudad",
+    citiesHeading: "Las mismas ideas, con sitios reales",
+    citiesLine: "Cada ciudad rellena las paradas con cafeterías, parques y museos cerca de su centro.",
+    allCities: "Las {count} ciudades",
+    kindsNav: "Más tipos de cita",
+    byKind: "Ideas para una cita por tipo",
+    inCityByKind: "En {city}, por tipo",
+    allInCity: "Todas las ideas para una cita en {city}",
+    freePlacesLabel: "Gratis",
+    freePlacesHeading: "Donde se suele entrar gratis",
+    freePlacesLine: "Parques, galerías, librerías y miradores que el mapa conoce a {km} km.",
+    meetLabel: "Dónde quedar",
+    meetHeading: "Cafeterías, librerías y galerías cerca del centro",
+    meetLine: "Sitios fáciles para encontrarse, todos a {km} km.",
+  },
+};
 
 /** The two questions every page by kind ends its list with. */
 export const DATE_KIND_SHARED_FAQ: { q: L; a: L }[] = [
