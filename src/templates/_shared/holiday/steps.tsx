@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { motion } from "motion/react";
 import type { GiftData, GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText, type RichBlock, type RichRun } from "@/lib/gift/rich-text";
@@ -230,6 +230,44 @@ const LABELS = { en: { next: "next", back: "back" }, es: { next: "siguiente", ba
 /** What the arrows of a stepped note are called, for whoever cannot see them. */
 export function stepLabel(locale: string, key: "next" | "back"): string {
   return (LABELS as Record<string, { next: string; back: string }>)[locale]?.[key] ?? LABELS.en[key];
+}
+
+const FOOT_FADE = "linear-gradient(to bottom, #000 calc(100% - 3rem), transparent)";
+
+/**
+ * The end step, inside the page or card that holds it. The end screen is taller than a page on a
+ * small phone (a reaction, a reply, two links, the badge; a surprise, a voice message and a song on
+ * top), and a page cuts what doesn't fit in it, so "Keep this gift", "Watch again" and the badge
+ * were out of reach there. Here the end scrolls inside its page, as a page of words does. A page
+ * often cuts it cleanly between two rows, which looks finished; so while more lies below, its foot
+ * fades out, and that is what says there is more.
+ *
+ * For the end only: the surprise's sparks fly past its own box, and a scroller would cut them.
+ */
+export function EndScroll({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [more, setMore] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const look = () => setMore(el.scrollHeight - el.clientHeight - el.scrollTop > 8);
+    look();
+    el.addEventListener("scroll", look, { passive: true });
+    // The end grows after it is first drawn (the song's card loads, a surprise is opened), and the
+    // page changes size with the screen.
+    const sizes = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(look);
+    sizes?.observe(el);
+    for (const child of el.children) sizes?.observe(child);
+    return () => {
+      el.removeEventListener("scroll", look);
+      sizes?.disconnect();
+    };
+  }, []);
+  return (
+    <div ref={ref} className="max-h-full overflow-y-auto scrollbar-none" style={more ? { maskImage: FOOT_FADE, WebkitMaskImage: FOOT_FADE } : undefined}>
+      {children}
+    </div>
+  );
 }
 
 /** The countdown, the surprise or the end, as the shared kit draws them: the steps that are the same in every gift. Nothing for a step that is words or a photo. */

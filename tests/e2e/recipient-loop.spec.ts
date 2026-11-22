@@ -175,6 +175,20 @@ test.describe("a gift's end screen, for whoever received it", () => {
       }
       await expect(page.getByText("The first reply is free")).toHaveCount(1);
       await expect(page.getByText("Made with Ethos")).toHaveCount(0);
+      // On the smallest phone the end is taller than its page. A page often cuts it cleanly between
+      // two rows, which looks finished, so its foot fades while more lies below, and not at the foot.
+      const fade = () =>
+        page.evaluate(() => {
+          for (let p = document.querySelector('[data-testid="keep-gift"]')?.parentElement; p; p = p.parentElement)
+            if (/auto|scroll/.test(getComputedStyle(p).overflowY)) return { more: p.scrollHeight - p.clientHeight - p.scrollTop > 8, fades: getComputedStyle(p).maskImage !== "none" };
+          return null;
+        });
+      await bring(page, '[data-testid="keep-gift"]', "end");
+      await expect.poll(fade).toEqual({ more: false, fades: false });
+      await page.evaluate(() => {
+        for (let p = document.querySelector('[data-testid="keep-gift"]')?.parentElement; p; p = p.parentElement) if (/auto|scroll/.test(getComputedStyle(p).overflowY)) p.scrollTop = 0;
+      });
+      await expect.poll(fade).toEqual({ more: true, fades: true });
     });
 
     test(`${template}: the tallest end screen, in Spanish with the badge, is all in reach on small phones`, async ({ page }) => {

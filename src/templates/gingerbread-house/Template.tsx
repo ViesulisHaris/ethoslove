@@ -14,7 +14,7 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
-import { StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
+import { EndScroll, StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
 import { down, Plate, SoftTable, Sparks, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, SPRITES } from "./art-map";
 import { ENOUGH, inside, readyMade, SPACING, SWEETS, type Mark, type Pt, type Sweet, type Tool } from "./decorate";
@@ -482,13 +482,10 @@ function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onM
                     ) : null}
                   </figure>
                 ) : step.kind === "end" ? (
-                  // The end holds more than a page does on a small phone (a reaction, a reply, a link or
-                  // two, the badge; a surprise, a voice message and a song on top). The page cuts what
-                  // doesn't fit, so the end scrolls inside it as a page of words does. Only the end:
-                  // the surprise's sparks fly past its own box, and a scroller would cut them.
-                  <div className="max-h-full overflow-y-auto scrollbar-none">
+                  // The page cuts what doesn't fit on it, so the end scrolls inside it.
+                  <EndScroll>
                     <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
-                  </div>
+                  </EndScroll>
                 ) : (
                   <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
                 )}

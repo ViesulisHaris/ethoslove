@@ -104,9 +104,13 @@ async function withThumb(page: Page): Promise<void> {
           }
         }
         const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        // Up to a pixel is not a cut: a scroller whose own height is a fraction of a pixel (a page
+        // sized from the screen) rounds how far it scrolls, and leaves that sliver of its last row
+        // below its edge for good. The cuts this is here to find are tens of pixels.
+        const cut = Math.max(through.top - r.top, r.bottom - through.bottom, through.left - r.left, r.right - through.right);
         return {
           height: Math.round(r.height),
-          inside: r.top >= through.top - 0.5 && r.bottom <= through.bottom + 0.5 && r.left >= through.left - 0.5 && r.right <= through.right + 0.5,
+          inside: cut <= 1,
           hit: Boolean(top && (top === el || el.contains(top))),
         };
       },

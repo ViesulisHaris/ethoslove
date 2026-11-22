@@ -14,7 +14,7 @@ import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
 import { PAPER_BASE } from "../_shared/holiday/paper";
-import { StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
+import { EndScroll, StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
 import { down, Plate, Snowfall, SoftTable, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BULBS } from "./art-map";
 import { BULB_COLORS, INK, LOOKS, type LookId } from "./looks";
@@ -463,17 +463,16 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
                   </figcaption>
                 ) : null}
               </figure>
+            ) : step.kind === "end" ? (
+              // The card cuts what doesn't fit in it, so the end scrolls inside it, its sign going up with it.
+              <EndScroll>
+                <p className="mb-[calc(3*var(--u))] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(5.4*var(--u))" }}>
+                  {sign.toLowerCase()}
+                </p>
+                <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+              </EndScroll>
             ) : (
-              // The end holds more than a card does on a small phone (a reaction, a reply, a link or two,
-              // the badge; a surprise, a voice message and a song on top). The card cuts what doesn't
-              // fit, so the end scrolls inside it as a card of words does, its sign going up with it.
-              // Only the end: the surprise's sparks fly past its own box, and a scroller would cut them.
-              <div className={step.kind === "end" ? "max-h-full overflow-y-auto scrollbar-none" : undefined}>
-                {step.kind === "end" ? (
-                  <p className="mb-[calc(3*var(--u))] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(5.4*var(--u))" }}>
-                    {sign.toLowerCase()}
-                  </p>
-                ) : null}
+              <div>
                 <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
               </div>
             )}
