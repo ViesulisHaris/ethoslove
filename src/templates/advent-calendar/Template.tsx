@@ -506,10 +506,12 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
         : s.allOpen
       : [others ? fill(others === 1 ? s.foundOne : s.found, { found, total: others }) : null, left ? fill(left === 1 ? s.leftOne : s.left, { n: left }) : null].filter(Boolean).join(" · ");
   const shadow = "0 0 calc(2.4*var(--k)) rgba(4,8,6,.95), 0 0 calc(.8*var(--k)) rgba(4,8,6,.8)";
+  // while a note or the letter is in front, the words over the wall step back: blurred, they were smudges behind its own words
+  const said: CSSProperties = { opacity: away ? 0 : 1, transition: reduce ? undefined : "opacity .3s ease" };
 
   const words = (
     <>
-      <p dir="auto" className="max-w-full truncate text-[calc(2.2*var(--k))] tracking-[0.3em] uppercase" style={{ color: look.labelSoft }}>
+      <p dir="auto" className="max-w-full truncate uppercase" style={{ color: look.labelSoft, fontSize: "max(8.5px, calc(2.2*var(--k)))", letterSpacing: low ? "0.16em" : "0.3em" }}>
         {byline}
       </p>
       <h1 dir="auto" className="mt-[calc(1.4*var(--k))] line-clamp-2 max-w-full leading-[1.06] text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)", fontWeight: 500, fontSize: title.length > 40 ? "calc(4.6*var(--k))" : title.length > 22 ? "calc(5.8*var(--k))" : "calc(7.6*var(--k))" }}>
@@ -518,7 +520,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
     </>
   );
   const foot = (
-    <p key={nudge} role="status" className={nudge && !reduce ? "ac-nudge" : undefined} style={{ fontFamily: "var(--gift-font-display)", fontStyle: "italic", fontSize: "calc(3.5*var(--k))", lineHeight: 1.2, color: look.labelSoft }}>
+    <p key={nudge} role="status" className={nudge && !reduce ? "ac-nudge" : undefined} style={{ fontFamily: "var(--gift-font-display)", fontStyle: "italic", fontSize: "max(12px, calc(3.5*var(--k)))", lineHeight: 1.2, color: look.labelSoft }}>
       {line}
     </p>
   );
@@ -604,13 +606,13 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
           </div>
         ) : null}
 
-        {/* the words over the wall, on a phone: between the string of lights and the roof, growing upward if the title needs two lines. A low wide screen has them beside the house. */}
+        {/* the words over the wall, on a phone: between the string of lights and the roof, growing upward if the title needs two lines. A low wide screen has them beside the house, on the bare wall this side of the tall candle. */}
         {low ? null : (
           <>
-            <div className="pointer-events-none absolute inset-x-[5%] flex flex-col items-center text-center" style={{ bottom: down(170 - 30.6), color: look.label, textShadow: shadow }}>
+            <div className="pointer-events-none absolute inset-x-[5%] flex flex-col items-center text-center" style={{ ...said, bottom: down(170 - 30.6), color: look.label, textShadow: shadow }}>
               {words}
             </div>
-            <div className="pointer-events-none absolute inset-x-[4%] text-center" style={{ top: down(158.2), textShadow: shadow }}>
+            <div className="pointer-events-none absolute inset-x-[4%] text-center" style={{ ...said, top: down(158.2), textShadow: shadow }}>
               {foot}
             </div>
           </>
@@ -656,7 +658,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
       </div>
 
       {low ? (
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex flex-col items-center justify-center gap-[calc(5*var(--k))] px-[calc(4*var(--k))] text-center" style={{ width: "calc(50% - 45 * var(--k))", color: look.label, textShadow: shadow }}>
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex flex-col items-center justify-center gap-[calc(5*var(--k))] pr-[calc(2*var(--k))] pl-[calc(5*var(--k))] text-center" style={{ ...said, width: "calc(50% - 69 * var(--k))", color: look.label, textShadow: shadow }}>
           <div className="flex max-w-full flex-col items-center">{words}</div>
           {foot}
         </div>
@@ -670,8 +672,9 @@ function TagName({ g, name }: { g: Geometry; name: string }) {
   const length = [...name].length;
   const size = length <= 4 ? 3.9 : length <= 7 ? 3.1 : length <= 12 ? 2.4 : 1.9;
   return (
-    <span className="flex items-center justify-center px-[1.5%]" style={tagFace(g)}>
-      <span dir="auto" data-tag-name className={`${length > 12 ? "line-clamp-3" : "line-clamp-2"} max-w-full text-center [overflow-wrap:anywhere]`} style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size}*var(--k))`, lineHeight: 0.98, color: "#4a2418" }}>
+    <span className="flex items-center justify-center" style={tagFace(g)}>
+      {/* room either side inside its own box: a handwriting face's last stroke runs past the letter's width, and a clamped line cuts what runs past */}
+      <span dir="auto" data-tag-name className={`${length > 12 ? "line-clamp-3" : "line-clamp-2"} max-w-full px-[0.22em] py-[0.06em] text-center [overflow-wrap:anywhere]`} style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size}*var(--k))`, lineHeight: 0.98, color: "#4a2418" }}>
         {name}
       </span>
     </span>
@@ -729,37 +732,42 @@ export function NoteCard({ lookId, s, note, door, from, seed, found, total, redu
   const long = [...note.note].length > 80;
   const signed = [...note.name].length;
   const id = `ac-note-${door}`;
+  const beside = low && !!note.photo;
+  // The card's own unit, a hundredth of its width (of its words' column, on a low screen where the photo is beside them):
+  // everything on it is sized by the card, so it is the same card on a small phone, a phone on its side and a laptop.
+  const width = beside ? "min(78cqw, 138cqh, 640px)" : low ? "min(70cqw, 100cqh, 420px)" : "min(84cqw, 400px)";
+  const unit = { "--n": `calc(${width} / ${beside ? 170 : 100})` } as CSSProperties;
   return (
-    <motion.div role="dialog" aria-modal="true" aria-labelledby={`${id}-name`} aria-describedby={`${id}-words`} className="absolute inset-0 z-[20]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0.15 : 0.3 }}>
+    <motion.div role="dialog" aria-modal="true" aria-labelledby={`${id}-name`} aria-describedby={`${id}-words`} className="absolute inset-0 z-[20] flex flex-col" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0.15 : 0.3 }}>
       <button ref={close} type="button" aria-label={s.putBack} onClick={onClose} className="absolute inset-0 cursor-pointer outline-none" style={{ background: look.veil, backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }} />
-      <div className="pointer-events-none absolute inset-0 overflow-x-hidden overflow-y-auto scrollbar-none">
-        <div className="grid min-h-full place-items-center px-[calc(4*var(--u))] pt-[calc(9*var(--u))] pb-[calc(15*var(--u))]">
+      <div className="pointer-events-none relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto scrollbar-none">
+        <div className="grid min-h-full place-items-center px-[4cqw]" style={{ paddingBlock: low ? "10px 4px" : "calc(9*var(--u)) calc(2*var(--u))" }}>
           <motion.div
             data-note-card
             className="pointer-events-auto cursor-pointer"
-            style={{ width: low && note.photo ? "min(80cqw, 640px)" : "min(84cqw, 400px)" }}
+            style={{ ...unit, width }}
             initial={reduce ? false : { x: from.x, y: from.y, scale: 0.12, rotate: 0 }}
             animate={{ x: 0, y: 0, scale: 1, rotate: tilt }}
             exit={reduce ? undefined : { x: from.x, y: from.y, scale: 0.12, rotate: 0, transition: { duration: 0.28, ease: "easeIn" } }}
             transition={{ type: "spring", stiffness: 190, damping: 22 }}
             onClick={onClose}
           >
-            <Sheet art={SHEETS.card} lengths={3} margin={0.085} head={0.095} tail={0.085}>
-              <div className={low && note.photo ? "flex items-center gap-[6%]" : "flex flex-col items-center"} style={{ color: INK.ink }}>
+            <Sheet art={SHEETS.card} lengths={3} margin={beside ? 0.06 : 0.085} head={beside ? 0.07 : 0.095} tail={beside ? 0.065 : 0.085}>
+              <div className={beside ? "flex items-center gap-[5%]" : "flex flex-col items-center"} style={{ color: INK.ink }}>
                 {note.photo ? (
-                  <div className="relative shrink-0" style={{ ...PRINT, width: low ? "40%" : "86%", padding: "calc(1.6*var(--u))", marginBottom: low ? 0 : "calc(4.5*var(--u))", rotate: `${(-tilt * 0.6).toFixed(2)}deg`, boxShadow: "0 calc(.4*var(--u)) calc(.9*var(--u)) rgba(60,34,14,.28), 0 calc(1.2*var(--u)) calc(3*var(--u)) rgba(60,34,14,.2)" }}>
+                  <div className="relative shrink-0" style={{ ...PRINT, width: beside ? "42%" : "86%", padding: "calc(1.9*var(--n))", marginBottom: beside ? 0 : "calc(5.4*var(--n))", rotate: `${(-tilt * 0.6).toFixed(2)}deg`, boxShadow: "0 calc(.5*var(--n)) calc(1.1*var(--n)) rgba(60,34,14,.28), 0 calc(1.4*var(--n)) calc(3.6*var(--n)) rgba(60,34,14,.2)" }}>
                     {/* the box is the photo's own shape before the photo has come, so nothing on the card moves when it does */}
-                    <img src={note.photo.url} alt="" width={note.photo.width} height={note.photo.height} loading="lazy" decoding="async" draggable={false} className="block h-auto w-full object-cover" style={{ aspectRatio: String(shape), maxHeight: low ? "52cqh" : "32cqh", background: "#e9e1d0" }} />
+                    <img src={note.photo.url} alt="" width={note.photo.width} height={note.photo.height} loading="lazy" decoding="async" draggable={false} className="block h-auto w-full object-cover" style={{ aspectRatio: String(shape), maxHeight: beside ? "62cqh" : "32cqh", background: "#e9e1d0" }} />
                   </div>
                 ) : null}
-                <div className="flex min-w-0 flex-1 flex-col items-center self-stretch">
-                  <p className="text-[calc(2.3*var(--u))] font-semibold tracking-[0.3em] uppercase" style={{ color: INK.soft }}>
+                <div className="flex min-w-0 flex-1 flex-col items-center">
+                  <p className="font-semibold tracking-[0.3em] uppercase" style={{ color: INK.soft, fontSize: "max(8.5px, calc(2.75*var(--n)))" }}>
                     {fill(s.door, { n: door })}
                   </p>
-                  <blockquote id={`${id}-words`} dir="auto" className="m-0 mt-[calc(3.4*var(--u))] w-full text-center leading-[1.36] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)", fontSize: long ? "calc(4.4*var(--u))" : "calc(5*var(--u))" }}>
+                  <blockquote id={`${id}-words`} dir="auto" className="m-0 w-full text-center leading-[1.36] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)", marginTop: "calc(4*var(--n))", fontSize: long ? "calc(5.25*var(--n))" : "calc(5.95*var(--n))" }}>
                     {note.note}
                   </blockquote>
-                  <p id={`${id}-name`} dir="auto" className="mt-[calc(3.6*var(--u))] w-full text-center leading-[1.02] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: signed > 14 ? "calc(5.8*var(--u))" : "calc(8.2*var(--u))", color: look.accent, rotate: "-3deg" }}>
+                  <p id={`${id}-name`} dir="auto" className="w-full text-center leading-[1.02] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", marginTop: "calc(4.3*var(--n))", fontSize: signed > 14 ? "calc(6.9*var(--n))" : "calc(9.8*var(--n))", color: look.accent, rotate: "-3deg" }}>
                     {note.name}
                   </p>
                 </div>
@@ -768,7 +776,7 @@ export function NoteCard({ lookId, s, note, door, from, seed, found, total, redu
           </motion.div>
         </div>
       </div>
-      <p aria-hidden="true" className="pointer-events-none absolute inset-x-0 text-center" style={{ bottom: "calc(5*var(--u) + env(safe-area-inset-bottom))", fontFamily: "var(--gift-font-display)", fontStyle: "italic", fontSize: "calc(3.6*var(--u))", color: look.labelSoft, textShadow: "0 1px calc(2*var(--u)) rgba(0,0,0,.7)" }}>
+      <p aria-hidden="true" className="pointer-events-none relative shrink-0 px-4 text-center" style={{ paddingBlock: low ? "4px 8px" : "calc(2.4*var(--u)) calc(4.6*var(--u) + env(safe-area-inset-bottom))", fontFamily: "var(--gift-font-display)", fontStyle: "italic", fontSize: "max(12px, calc(3.6*var(--u)))", color: look.labelSoft, textShadow: "0 1px calc(2*var(--u)) rgba(0,0,0,.7)" }}>
         {total > 0 ? `${fill(s.notesRead, { found, total })} · ${s.cardHint}` : s.cardHint}
       </p>
     </motion.div>
