@@ -89,7 +89,8 @@ export function DateSpread({ id, sectionId, label, heading, line, art, className
 /** The questions, closed: a native <details> per question, a plus on each, as on a gift's page. */
 export function DateQuestions({ id, name, label, heading, line, faq }: { id: string; name: string; label: string; heading: string; line: string; faq: readonly { q: string; a: string }[] }) {
   return (
-    <DateSpread id={id} label={label} heading={heading} line={line}>
+    // Deep at its foot on a desk, as a gift's questions are: the last band's lily lies across the edge into this space.
+    <DateSpread id={id} label={label} heading={heading} line={line} className="py-12 sm:py-16 lg:pt-20 lg:pb-44">
       <div className="border-t border-page-line">
         {faq.map((item) => (
           <details key={item.q} name={`faq-${name}`} className="group border-b border-page-line">

@@ -156,7 +156,7 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
     <div className="min-w-0">
       {place ? null : (
         <div className="mb-3 max-w-xl">
-          <WhereBox value={where} locale={locale} labels={whereLabels} locating={locating} onPick={(w) => setWhere({ ...w, share: true })} onNearMe={nearMe} />
+          <WhereBox value={where} locale={locale} labels={whereLabels} locating={locating} size="lg" onPick={(w) => setWhere({ ...w, share: true })} onNearMe={nearMe} />
           {notice ? (
             <p role="status" className="mt-2 text-sm text-destructive">
               {notice}
