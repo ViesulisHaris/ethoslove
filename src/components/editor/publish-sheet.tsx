@@ -358,11 +358,15 @@ export function PublishSheet({
       setRefusedFields([...new Set(refused.map((path) => path.split(".")[1]).filter(Boolean))]);
       return;
     }
-    // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
-    // (lib/attribution/recipient.ts). "Paid": it holds something that costs money.
-    if (state.status === "draft") countRecipientGiftSent(new URLSearchParams(window.location.search), slug, premiumKeys.length > 0);
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
+    // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
+    // (lib/attribution/recipient.ts). `state` is this render's, so it still says what the gift was
+    // before the line above: a draft. The last word says whether the gift holds something that
+    // costs money (a premium template, a paid extra), not whether anyone paid just now: someone who
+    // already owns it pays nothing, and a buyer's tab has usually lost its tag by this line
+    // (docs/marketing/LOOP-KPI.md).
+    if (state.status === "draft") countRecipientGiftSent(new URLSearchParams(window.location.search), slug, premiumKeys.length > 0);
     // The app closes the editor and shows its own "It's ready" sheet; the share screen below stays
     // as the fallback for an app that doesn't.
     if (inApp) {

@@ -1,7 +1,7 @@
 /**
  * The loop: someone opens a gift, and makes the next one. How often that happens is read from
- * counts alone (docs/marketing/growth-build/reports/loop-kpi.md): a tap on the gift, the editor opening for
- * someone who came from a gift, and that gift going out. Nothing here knows who anyone is. The
+ * counts alone (docs/marketing/LOOP-KPI.md): a tap on the gift, the editor opening for someone who
+ * came from a gift, and that gift going out. Nothing here knows who anyone is. The
  * tag a recipient arrives with is the same `?ref=` every other visitor has (./ref.ts): in the
  * address, then in the tab's memory, never stored.
  *

@@ -4,8 +4,8 @@ import { currentRef, REF_PATTERN } from "./ref";
 
 /**
  * Counting the loop's last two steps, in the editor: it opened for someone who came from a gift,
- * and their gift went out (./recipient.ts has the tags; the growth build's reports/loop-kpi.md says how to
- * read the counts). Browser only.
+ * and their gift went out (./recipient.ts has the tags; docs/marketing/LOOP-KPI.md says how to read
+ * the counts, and what they cannot say). Browser only.
  */
 
 /** A free reply's token as the editor's address carries it (`?reply=`); only its shape is looked at. */
@@ -35,7 +35,12 @@ export function countRecipientEditorOpened(search: Search, template: string): vo
   if (via) track("recipient_editor_opened", { via, template });
 }
 
-/** A recipient's own gift went out for the first time. `paid`: it holds something that costs money. */
+/**
+ * A recipient's own gift went out for the first time. `paid`: the gift holds something that costs
+ * money (a premium template that is not a free reply, or a paid extra). It does not say a payment
+ * was made: someone who already owns the template is counted too, and most people who do pay are
+ * not, because paying loads the page afresh and the tag is gone (docs/marketing/LOOP-KPI.md).
+ */
 export function countRecipientGiftSent(search: Search, template: string, paid: boolean): void {
   const via = editorVia(search);
   if (via) track("recipient_gift_sent", { via, template, paid });
