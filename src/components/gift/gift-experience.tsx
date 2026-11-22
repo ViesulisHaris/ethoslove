@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import type { TemplateEvent } from "@/templates/types";
@@ -60,9 +60,12 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
   const lastPct = useRef(0);
   const lastReportAt = useRef(0);
   // "Send one back" has been tapped and the editor is on its way: the button says so and takes no
-  // second tap. `leaving` ends by itself when the editor is up, or if it never comes.
-  const [leaving, startLeaving] = useTransition();
+  // second tap. The editor takes this page's place when it is up. If it has not come in ten seconds
+  // (a lost connection), the button wakes, so a tap that led nowhere can be given again.
+  const [leaving, setLeaving] = useState(false);
   const lastReplyTap = useRef(0);
+  const wake = useRef(0);
+  useEffect(() => () => window.clearTimeout(wake.current), []);
 
   // Once per browser per day; a replay shows the cover again but is not a new view.
   const recordView = useCallback(() => {
@@ -120,13 +123,16 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
       const now = performance.now();
       if (leaving || now - lastReplyTap.current < 1000) return;
       lastReplyTap.current = now;
+      setLeaving(true);
+      window.clearTimeout(wake.current);
+      wake.current = window.setTimeout(() => setLeaving(false), 10_000);
       // The easiest gift to make is a reply: the same template, the names already swapped, and
       // whatever else the template carries across (Halfway flips the two places).
       saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
       track("reply_started", { template: data.templateSlug, from });
       // A paid premium gift's reply is free: the link carries the sealed token that proves it,
       // never this gift's id.
-      startLeaving(() => router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken)));
+      router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
     },
     [data, replyToken, router, leaving],
   );

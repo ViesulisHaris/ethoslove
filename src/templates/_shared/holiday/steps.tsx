@@ -232,7 +232,11 @@ export function stepLabel(locale: string, key: "next" | "back"): string {
   return (LABELS as Record<string, { next: string; back: string }>)[locale]?.[key] ?? LABELS.en[key];
 }
 
-const FOOT_FADE = "linear-gradient(to bottom, #000 calc(100% - 3rem), transparent)";
+/** The mask that fades an edge of the end's scroller while more of it lies past that edge. */
+export function edgeFade(above: boolean, below: boolean): string | undefined {
+  if (!above && !below) return undefined;
+  return `linear-gradient(to bottom, ${above ? "transparent, #000 2rem" : "#000"}, ${below ? "#000 calc(100% - 3rem), transparent" : "#000"})`;
+}
 
 /**
  * The end step, inside the page or card that holds it. The end screen is taller than a page on a
@@ -240,17 +244,23 @@ const FOOT_FADE = "linear-gradient(to bottom, #000 calc(100% - 3rem), transparen
  * top), and a page cuts what doesn't fit in it, so "Keep this gift", "Watch again" and the badge
  * were out of reach there. Here the end scrolls inside its page, as a page of words does. A page
  * often cuts it cleanly between two rows, which looks finished; so while more lies below, its foot
- * fades out, and that is what says there is more.
+ * fades out, and that is what says there is more. Scrolled, its top fades the same way, so a button
+ * is not sliced in the middle of the paper.
  *
  * For the end only: the surprise's sparks fly past its own box, and a scroller would cut them.
  */
 export function EndScroll({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [more, setMore] = useState(false);
+  const [more, setMore] = useState({ above: false, below: false });
+  const fade = edgeFade(more.above, more.below);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const look = () => setMore(el.scrollHeight - el.clientHeight - el.scrollTop > 8);
+    const look = () => {
+      const above = el.scrollTop > 8;
+      const below = el.scrollHeight - el.clientHeight - el.scrollTop > 8;
+      setMore((was) => (was.above === above && was.below === below ? was : { above, below }));
+    };
     look();
     el.addEventListener("scroll", look, { passive: true });
     // The end grows after it is first drawn (the song's card loads, a surprise is opened), and the
@@ -264,7 +274,7 @@ export function EndScroll({ children }: { children: ReactNode }) {
     };
   }, []);
   return (
-    <div ref={ref} className="max-h-full overflow-y-auto scrollbar-none" style={more ? { maskImage: FOOT_FADE, WebkitMaskImage: FOOT_FADE } : undefined}>
+    <div ref={ref} className="max-h-full overflow-y-auto scrollbar-none" data-more={more.above && more.below ? "both" : more.above ? "above" : more.below ? "below" : undefined} style={fade ? { maskImage: fade, WebkitMaskImage: fade } : undefined}>
       {children}
     </div>
   );

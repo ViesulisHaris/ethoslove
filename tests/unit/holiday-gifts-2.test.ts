@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getManifest } from "@/templates/manifests";
 import { parseRichText } from "@/lib/gift/rich-text";
-import { breakBlock, MOST_PARTS, noteSteps, partLimit, splitWords } from "@/templates/_shared/holiday/steps";
+import { breakBlock, edgeFade, MOST_PARTS, noteSteps, partLimit, splitWords } from "@/templates/_shared/holiday/steps";
 import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wiped, wipedIn } from "@/templates/frosted-window/frost";
 import { fieldsSchema as windowSchema } from "@/templates/frosted-window/schema";
 import { candleAt, CANDLES, CATCH, nextUnlit, wickAt } from "@/templates/light-the-candles/wicks";
@@ -165,6 +165,16 @@ describe("A note gone through a step at a time", () => {
     expect(steps.map((s) => s.kind)).toEqual(["words", "words", "photo", "photo", "surprise", "end"]);
     expect(steps[0]).toMatchObject({ first: true, last: false });
     expect(steps[1]).toMatchObject({ first: false, last: true });
+  });
+
+  // The end step scrolls inside its page (Gingerbread House, String the Lights): on a small phone it
+  // is taller than the page, and its last buttons were cut off and out of reach. A page often cuts
+  // it between two rows, which looks finished, so the edge that more lies past fades.
+  it("fades the edge of the end that more lies past, and nothing when it all fits", () => {
+    expect(edgeFade(false, false)).toBeUndefined();
+    expect(edgeFade(false, true)).toBe("linear-gradient(to bottom, #000, #000 calc(100% - 3rem), transparent)");
+    expect(edgeFade(true, false)).toBe("linear-gradient(to bottom, transparent, #000 2rem, #000)");
+    expect(edgeFade(true, true)).toBe("linear-gradient(to bottom, transparent, #000 2rem, #000 calc(100% - 3rem), transparent)");
   });
 
   it("still greets and signs when there is no message at all", () => {
