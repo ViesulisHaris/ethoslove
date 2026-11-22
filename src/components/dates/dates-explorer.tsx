@@ -23,7 +23,7 @@ import { matchPhotos, type Sight } from "@/lib/dates/photos";
 import { pairsWith, rankPlaces, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
-import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, type Plan, type PlanStop } from "@/lib/dates/plan";
+import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, stopOf, type Plan } from "@/lib/dates/plan";
 import { mergePlaces } from "@/lib/dates/tiles";
 import { MIN_UNUSUAL, UNUSUAL_SHELF, unusualIndex, unusualPicks } from "@/lib/dates/unusual";
 import { suggestTimes } from "@/lib/dates/timing";
@@ -79,10 +79,6 @@ const subscribeDesktop = (onChange: () => void) => {
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 };
-
-// A place with no name of its own is kept as one (`named: false`), so the plan calls it by its kind
-// in whichever language it is read in, not in the one it was added in (plan.ts stopName).
-const toStop = (place: Place, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}), ...(place.named ? {} : { named: false }) });
 
 /**
  * One set of cards, or the skeletons. On its way out it is lifted from the flow where it stands
@@ -617,7 +613,7 @@ export function DatesExplorer() {
       const fresh = startsOver(place);
       if (fresh === null) return;
       if (!fresh && plan.stops.length >= MAX_STOPS) return sayAboutPlan(t("plan.full", { max: MAX_STOPS }));
-      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, toStop(place))));
+      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, stopOf(place))));
     },
     [plan.stops.length, planIds, startsOver, sayAboutPlan, stamp, t, updatePlan],
   );
@@ -625,7 +621,7 @@ export function DatesExplorer() {
   // didn't, nothing was said, and the button went on offering to add it.
   const addIdea = useCallback(() => {
     if (!idea) return;
-    const picked = stops.flatMap((s, i) => (s.place ? [toStop(s.place, times[i])] : []));
+    const picked = stops.flatMap((s, i) => (s.place ? [stopOf(s.place, times[i])] : []));
     if (picked.length === 0) return;
     const fresh = startsOver(picked[0]);
     if (fresh === null) return;
