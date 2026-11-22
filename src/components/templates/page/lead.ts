@@ -85,4 +85,15 @@ export function fitSentences(sentences: readonly (string | null)[], priority: re
 /** The closed block's limit (DESIGN-LESS-TEXT.md): longer words that search needs, at most 180. */
 export const CLOSED_BLOCK_WORDS = 180;
 
+/**
+ * The words of the closed block's two sentences of links, as the page writes them: "Made for a
+ * birthday, an anniversary." and "A gift for your boyfriend, your girlfriend." (the second only
+ * where the gift suits someone with a page of ideas). They are part of the block's 180 words, and
+ * the page and its test (tests/unit/text-budget.test.ts) count them here, the same way.
+ */
+export function closedBlockLinks(madeFor: string, days: readonly string[], suitsLead: string, people: readonly string[]): number {
+  const sentence = (lead: string, names: readonly string[]) => (names.length > 0 ? words(`${lead} ${names.join(", ")}.`) : 0);
+  return sentence(madeFor, days) + sentence(suitsLead, people);
+}
+
 export const countWords = words;

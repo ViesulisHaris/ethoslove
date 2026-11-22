@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { OCCASIONS } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import { FINDER_COPY, FINDER_PATH, finderPicks } from "@/content/finder";
-import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
+import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { finderWaitScript } from "@/lib/gift/finder";
 import type { GiftLocale } from "@/lib/gift/schema";
@@ -60,7 +60,8 @@ export default async function GiftFinderPage({ params }: Props) {
   const t = await getTranslations();
   const count = listManifests().length;
   const currency = chargedCurrency(shown);
-  const price = formatAmount(PRODUCTS.single.amounts[currency], currency, l);
+  // A pick's price is its own: most are sold as one template, and a free template with no free version left as "Make it special".
+  const prices = { single: formatAmount(PRODUCTS.single.amounts[currency], currency, l), extras: formatAmount(PRODUCTS.extras.amounts[currency], currency, l) };
   const theme = DEFAULT_PAGE_THEME;
   const today = new Date().toISOString().slice(0, 10);
 
@@ -115,7 +116,7 @@ export default async function GiftFinderPage({ params }: Props) {
             <div className="group/finder min-w-0 lg:pt-7" suppressHydrationWarning>
               <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: finderWaitScript() }} />
               <div className="group-data-finder-wait/finder:invisible">
-                <GiftFinder picks={finderPicks(l)} ui={copy.ui} freeLabel={t("common.free")} price={price} locale={l} today={today} />
+                <GiftFinder picks={finderPicks(l)} ui={copy.ui} freeLabel={t("common.free")} prices={prices} locale={l} today={today} />
               </div>
             </div>
           </div>
@@ -133,7 +134,7 @@ export default async function GiftFinderPage({ params }: Props) {
                   {RECIPIENTS.map((r) => (
                     <li key={r}>
                       <Link href={`/gifts/${recipientSlug(r)}`} className={QUIET_LINK}>
-                        {RECIPIENT_GUIDES[r][l].label}
+                        {copy.byWho.people[r]}
                       </Link>
                     </li>
                   ))}
