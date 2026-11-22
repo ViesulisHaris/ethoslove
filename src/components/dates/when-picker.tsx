@@ -56,7 +56,7 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
       {/* Above the phone's floating Map button (z-55) and the place sheet (z-60): at 50 the button
           sat on the calendar's last rows and a tap on a day opened the map. It also stops at the edge
           of the screen and scrolls inside, where it used to run off the bottom of a small phone. */}
-      <PopoverContent align="start" sideOffset={8} collisionPadding={12} className="z-[70] max-h-(--radix-popover-content-available-height) w-[318px] gap-3 overflow-y-auto overscroll-contain rounded-3xl border-0 bg-white p-4 shadow-lift ring-1 ring-forest/10">
+      <PopoverContent align="start" sideOffset={8} collisionPadding={12} className="z-[70] max-h-(--radix-popover-content-available-height) w-[318px] gap-3 overflow-y-auto overscroll-contain rounded-3xl border-0 bg-popover p-4 shadow-lift ring-1 ring-forest/10">
         <div className="flex flex-wrap gap-1.5">
           {quick.map(([name, date]) => (
             <button key={name} type="button" onClick={() => choose(date)} className={cn("h-11 rounded-full px-3.5 text-[13px] font-semibold transition-colors", value === date ? "bg-forest text-cream" : "bg-rose-soft text-rose-ink hover:bg-rose-tint")}>

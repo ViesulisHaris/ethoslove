@@ -37,7 +37,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
       // held every card past the eighth back by the whole stagger, so a list read from its middle
       // went blank for a moment when it changed.
       style={{ animationDelay: `${index < STAGGERED ? index * STAGGER_MS : 0}ms` }}
-      className={cn("place-card-in group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", hovered && !selected && "-translate-y-0.5 shadow-lift ring-2 ring-rose/35", selected && "ring-2 ring-rose")}
+      className={cn("place-card-in group relative flex items-stretch gap-3.5 rounded-[22px] bg-card p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", hovered && !selected && "-translate-y-0.5 shadow-lift ring-2 ring-rose/35", selected && "ring-2 ring-rose")}
     >
       <PlaceThumb place={place} className="size-[92px] rounded-[16px] sm:size-[104px]" />
       <div className="flex min-w-0 flex-1 flex-col justify-center py-1">

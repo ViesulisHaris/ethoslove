@@ -236,7 +236,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         if (info.offset.y > FLING_PX || info.velocity.y > FLING_SPEED) onClose();
         else animate(y, 0, { type: "spring", bounce: 0, visualDuration: 0.3, velocity: info.velocity.y });
       }}
-      className={cn("max-h-[80dvh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-18px_50px_-20px_rgba(60,20,35,0.45)] ring-1 ring-forest/5 lg:max-h-[min(640px,calc(100dvh-var(--header-h)-48px))] lg:rounded-[28px] lg:shadow-lift", className)}
+      className={cn("max-h-[80dvh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-card p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-18px_50px_-20px_rgba(60,20,35,0.45)] ring-1 ring-forest/5 lg:max-h-[min(640px,calc(100dvh-var(--header-h)-48px))] lg:rounded-[28px] lg:shadow-lift", className)}
     >
       {/* Pinned to the top of the sheet as it scrolls, so it can always be put away: the close
           button used to scroll off with the photo, and on a phone a handle to drag it down. Zero

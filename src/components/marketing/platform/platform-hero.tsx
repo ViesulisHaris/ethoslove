@@ -74,7 +74,7 @@ async function DatesFirst() {
           <Cutout id="bow-gingham" className="absolute -top-2 left-1/2 w-24 -translate-x-1/2 rotate-[-6deg] drop-shadow-[0_10px_16px_rgba(120,50,70,0.3)] sm:w-28" />
         </div>
 
-        <div className="absolute top-[34%] left-0 w-[50%] rotate-[-5deg] rounded-[24px] bg-white p-2 shadow-[0_30px_60px_-26px_rgba(120,20,60,0.55)] sm:-left-4">
+        <div className="absolute top-[34%] left-0 w-[50%] rotate-[-5deg] rounded-[24px] bg-card p-2 shadow-[0_30px_60px_-26px_rgba(120,20,60,0.55)] sm:-left-4">
           <MapCard className="block h-auto w-full" />
           <span className="absolute -top-3 left-1/2 h-6 w-20 -translate-x-1/2 -rotate-2 opacity-90 shadow-sm" style={{ backgroundColor: "#FFFFFF", backgroundImage: "linear-gradient(90deg, rgba(238,120,158,.5) 50%, transparent 50%), linear-gradient(rgba(238,120,158,.5) 50%, transparent 50%)", backgroundSize: "8px 8px" }} />
         </div>

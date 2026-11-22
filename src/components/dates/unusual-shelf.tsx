@@ -78,7 +78,7 @@ export function UnusualShelf({ picks, found, locale, labels, selectedId, onOpen,
                 onClick={() => onOpen(p.id)}
                 onPointerEnter={() => onHover(p.id)}
                 onPointerLeave={() => onHover(null)}
-                className={cn("group block w-full overflow-hidden rounded-[22px] bg-white text-left shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 hover:shadow-lift", selectedId === p.id && "ring-2 ring-rose")}
+                className={cn("group block w-full overflow-hidden rounded-[22px] bg-card text-left shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 hover:shadow-lift", selectedId === p.id && "ring-2 ring-rose")}
               >
                 <span className="relative block">
                   {/* With no photograph, the kind's tile carries the quirk's own glyph: a telescope, a key.

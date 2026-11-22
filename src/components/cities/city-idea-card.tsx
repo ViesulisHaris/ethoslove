@@ -24,7 +24,7 @@ type Props = {
 /** One idea on a city's page: the picture, the recipe, the twist, and where in this city to do it. */
 export function CityIdeaCard({ idea, locale, city, href, stops, isPick, labels, eager = false }: Props) {
   return (
-    <article id={`idea-${idea.id}`} className="flex h-full scroll-mt-24 flex-col overflow-hidden rounded-[28px] bg-white shadow-soft ring-1 ring-forest/5">
+    <article id={`idea-${idea.id}`} className="flex h-full scroll-mt-24 flex-col overflow-hidden rounded-[28px] bg-card shadow-soft ring-1 ring-forest/5">
       <div className="relative aspect-[4/3]" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
         {/* An eager one through EagerImg: a server-drawn eager picture is a preload hint that every
             prefetch of the city's page (from /dates, from the other cities) adds to the page doing it. */}

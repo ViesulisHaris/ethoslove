@@ -92,7 +92,7 @@ export function SavePlanPanel({
 
   if (!link)
     return (
-      <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5" data-testid="save-plan">
+      <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5" data-testid="save-plan">
         <h2 className="font-display text-[22px] text-forest">{t("save.title")}</h2>
         <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("save.sub")}</p>
         <button type="button" onClick={() => void save()} disabled={saving} className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-forest text-[14.5px] font-semibold text-cream transition-[transform,opacity] hover:-translate-y-0.5 disabled:opacity-60">
@@ -111,7 +111,7 @@ export function SavePlanPanel({
 
   const partner = list?.partner?.name ?? null;
   return (
-    <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5" data-testid="saved-plan">
+    <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5" data-testid="saved-plan">
       <p className="flex items-center gap-2 font-display text-[21px] leading-tight text-forest">
         <BookmarkCheck aria-hidden="true" className="size-5 shrink-0 text-rose-deep" />
         {link.mine ? t("save.saved") : t("save.partners", { name: link.ownerName ?? "…" })}

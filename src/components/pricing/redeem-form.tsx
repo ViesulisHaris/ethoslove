@@ -44,7 +44,7 @@ export function RedeemForm({ initialCode }: { initialCode: string }) {
 
   if (done)
     return (
-      <div className="rounded-[28px] bg-white p-6 text-center shadow-soft ring-1 ring-forest/5 sm:p-10" data-testid="redeem-done">
+      <div className="rounded-[28px] bg-card p-6 text-center shadow-soft ring-1 ring-forest/5 sm:p-10" data-testid="redeem-done">
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-moss/10">
           <Check aria-hidden="true" className="size-6 text-moss" />
         </span>
@@ -61,7 +61,7 @@ export function RedeemForm({ initialCode }: { initialCode: string }) {
 
   return (
     <div className="grid gap-5">
-      <form onSubmit={redeem} className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-8" data-testid="redeem-form">
+      <form onSubmit={redeem} className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-8" data-testid="redeem-form">
         <label htmlFor={id} className="text-sm font-medium text-forest">
           {t("label")}
         </label>

@@ -175,7 +175,9 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
           }}
           // 16px at least: iPhone Safari zooms the whole page into any smaller field it focuses. The
           // pill's full height, so a tap near its top or bottom edge lands in the field, not on the pill.
-          className={cn("h-full min-w-0 flex-1 bg-transparent text-forest outline-none placeholder:text-forest/45", size === "lg" ? "text-[17px]" : "text-[16px]")}
+          // No width of its own (w-0, then it grows): a text field is otherwise twenty characters wide
+          // at least, and with the pin and "Near me" beside it that set the width of whatever held the box.
+          className={cn("h-full w-0 min-w-0 flex-1 bg-transparent text-forest outline-none placeholder:text-forest/45", size === "lg" ? "text-[17px]" : "text-[16px]")}
         />
         {loading ? <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin text-forest/40" /> : null}
         {onNearMe ? (

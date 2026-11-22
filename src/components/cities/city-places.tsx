@@ -40,7 +40,7 @@ export function CityPlaceList({ places, counts, locale, city, labels }: Props) {
       ) : null}
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-testid="city-places">
         {known.map(({ group, places: inGroup }) => (
-          <section key={group} className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5 sm:p-6">
+          <section key={group} className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5 sm:p-6">
             <h3 className="flex items-center gap-2.5 font-display text-[22px] leading-tight text-forest">
               <span className="grid size-9 place-items-center rounded-full" style={{ backgroundColor: GROUPS[group].soft, color: GROUPS[group].color }}>
                 <GroupIcon group={group} className="size-[18px]" />

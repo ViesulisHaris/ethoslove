@@ -166,7 +166,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
             />
             <ol className="grid gap-3" data-testid="trip-stops">
               {trip.stops.map((s, i) => (
-                <li key={s.name} className="rounded-[24px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+                <li key={s.name} className="rounded-[24px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
                   <div className="flex items-start gap-3.5">
                     <span className="grid size-8 shrink-0 place-items-center rounded-full bg-rose text-[13px] font-bold text-white shadow-[0_6px_14px_-4px_rgba(90,20,45,0.55)]">{i + 1}</span>
                     <div className="min-w-0 flex-1">
@@ -201,7 +201,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
           </h2>
           <ol className="mt-10 grid gap-5 lg:grid-cols-2" data-testid="trip-plan">
             {trip.plan.map((day, i) => (
-              <li key={day.day} data-reveal style={{ "--reveal-delay": `${(i % 2) * 80}ms` } as React.CSSProperties} className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
+              <li key={day.day} data-reveal style={{ "--reveal-delay": `${(i % 2) * 80}ms` } as React.CSSProperties} className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
                 <p className="text-eyebrow text-rose-deep">{t("detail.plan.day", { n: day.day })}</p>
                 <h3 className="mt-2 font-display text-[26px] leading-[1.1] text-forest">{day.title[l]}</h3>
                 <ul className="mt-4 grid gap-3">
@@ -242,7 +242,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     placement="trip_tickets"
                     href={ticket.url}
                     aria-label={ta("tickets.label", { name: ticket.name })}
-                    className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-white p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist"
+                    className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-card p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist"
                   >
                     <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-2xl bg-rose-mist text-rose-deep">
                       <Ticket className="size-5" />
@@ -287,7 +287,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               </div>
             ) : null}
           </div>
-          <div className="rounded-[32px] bg-white p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
+          <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
             <FlightFinder to={trip.flyTo} placement="trip_flights" />
           </div>
         </div>

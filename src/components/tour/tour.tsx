@@ -225,7 +225,7 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: reduced ? 0 : 0.3, ease: EASE }}
-          className="relative overflow-hidden rounded-[26px] bg-white p-5 text-forest shadow-[0_1px_2px_rgba(60,20,40,0.08),0_30px_70px_-26px_rgba(42,15,31,0.6)] ring-1 ring-forest/5 sm:p-6"
+          className="relative overflow-hidden rounded-[26px] bg-card p-5 text-forest shadow-[0_1px_2px_rgba(60,20,40,0.08),0_30px_70px_-26px_rgba(42,15,31,0.6)] ring-1 ring-forest/5 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <p aria-hidden="true" className="text-[12px] font-semibold tracking-[0.18em] text-rose-deep uppercase tabular-nums">

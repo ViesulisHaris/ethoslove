@@ -721,7 +721,9 @@ export function DatesExplorer() {
     return (
       // At least a screen tall and centred in it on a desktop: on a big monitor it sat in the top 40%
       // of a page that is always a screen tall (for the map), over blank paper.
-      <section className="container-x grid items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
+      // One column by name on a phone: a grid's unnamed column is as wide as its widest item's
+      // shortest line, which was the search box (383px in a 350px page), and the page scrolled sideways.
+      <section className="container-x grid grid-cols-1 items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
         <div>
           <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
           <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
@@ -1038,18 +1040,18 @@ export function DatesExplorer() {
             ) : null}
           </AnimatePresence>
           {status === "error" && all.length === 0 ? (
-            <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
+            <div className="rounded-[20px] bg-card p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
               {t("places.error")}{" "}
               <button type="button" onClick={() => go(where, { share: shareable })} className="font-semibold text-rose-deep underline underline-offset-4">
                 {t("places.retry")}
               </button>
             </div>
           ) : null}
-          {status === "ready" && visible.length === 0 && all.length > 0 ? <p className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{t("places.noneInFilter")}</p> : null}
+          {status === "ready" && visible.length === 0 && all.length > 0 ? <p className="rounded-[20px] bg-card p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{t("places.noneInFilter")}</p> : null}
           {status === "ready" && all.length === 0 ? (
             // Nothing mapped here at all (the middle of the sea): "drag the map to the nearest town" was
             // no help on a blank blue phone map. The box above, or a city, in one tap.
-            <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
+            <div className="rounded-[20px] bg-card p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
               <p>{t("map.nothingHere")}</p>
               <ul className="mt-3.5 flex flex-wrap gap-2">
                 {STARTER_CITIES.map((city) => {

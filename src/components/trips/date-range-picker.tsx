@@ -421,7 +421,7 @@ export function DateRangePicker({ value, onChange, today, locale, labels, allowO
                 if (anchor.current?.contains(e.target as Node)) e.preventDefault();
               }}
               style={{ width: placement.width }}
-              className="z-[70] max-h-(--radix-popover-content-available-height) max-w-[calc(100vw-32px)] origin-(--radix-popover-content-transform-origin) overflow-y-auto overscroll-contain rounded-[28px] bg-white p-6 text-forest shadow-lift ring-1 ring-forest/8 outline-none duration-250 ease-out-quint data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-97 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-97 data-[state=open]:slide-in-from-top-2"
+              className="z-[70] max-h-(--radix-popover-content-available-height) max-w-[calc(100vw-32px)] origin-(--radix-popover-content-transform-origin) overflow-y-auto overscroll-contain rounded-[28px] bg-popover p-6 text-forest shadow-lift ring-1 ring-forest/8 outline-none duration-250 ease-out-quint data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-97 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-97 data-[state=open]:slide-in-from-top-2"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 {toggle}
@@ -682,7 +682,7 @@ function Sheet({ panel, reduced, cursorMonth, title, weekdays, header, footer, c
         onDragEnd={(_, info) => {
           if (info.offset.y > FLING_PX || info.velocity.y > FLING_SPEED) onClose();
         }}
-        className="fixed inset-x-0 bottom-0 z-[90] flex h-[calc(100dvh-max(12px,env(safe-area-inset-top)))] flex-col overflow-hidden rounded-t-[28px] bg-white text-forest shadow-[0_-18px_50px_-20px_rgba(42,15,31,0.5)] outline-none"
+        className="fixed inset-x-0 bottom-0 z-[90] flex h-[calc(100dvh-max(12px,env(safe-area-inset-top)))] flex-col overflow-hidden rounded-t-[28px] bg-card text-forest shadow-[0_-18px_50px_-20px_rgba(42,15,31,0.5)] outline-none"
       >
         <div aria-hidden="true" onPointerDown={(e) => drag.start(e)} className="flex h-6 shrink-0 cursor-grab touch-none justify-center pt-2.5 active:cursor-grabbing">
           <span className="h-1.5 w-10 rounded-full bg-forest/20" />

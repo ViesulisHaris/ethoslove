@@ -194,7 +194,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
             <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-forest/70">{t("places.none", { city: name })}</p>
           )}
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
+            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
               <div>
                 <h3 className="font-display text-[24px] leading-tight text-forest">{t("map.title", { city: name })}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{t("map.sub")}</p>
@@ -205,7 +205,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                 <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
               </CityCta>
             </div>
-            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
+            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
               <div>
                 <h3 className="font-display text-[24px] leading-tight text-forest">{t("tickets.title", { city: name })}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{t("tickets.sub")}</p>

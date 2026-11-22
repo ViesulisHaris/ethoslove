@@ -14,7 +14,7 @@ export function SignInDialog({ open, onOpenChange, next, title, sub }: { open: b
   const tc = useTranslations("common");
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title={title} description={sub} closeLabel={tc("close")} testId="saved-dates-sign-in">
-      <div className="mt-5 rounded-[22px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+      <div className="mt-5 rounded-[22px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
         {/* The form reads the address's ?next and ?error, which a static page only knows in the browser. */}
         <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-forest/5" />}>
           <AuthForm mode="login" next={next} compact />

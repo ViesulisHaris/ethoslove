@@ -38,7 +38,7 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       aria-label={idea.title[locale]}
-      className="relative overflow-hidden rounded-[26px] bg-white shadow-lift ring-1 ring-forest/5"
+      className="relative overflow-hidden rounded-[26px] bg-card shadow-lift ring-1 ring-forest/5"
     >
       <div className="relative">
         <img src={ideaImage(idea.id)} alt="" width={960} height={720} decoding="async" className="aspect-[16/8] w-full object-cover" />

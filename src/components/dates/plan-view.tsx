@@ -377,7 +377,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         {editable ? <SavePlanPanel plan={own} defaultTitle={(idea?.title[locale] || own.where || ts("save.defaultTitle")).slice(0, 80)} link={savedLink} status={status} account={account} onUpsell={openUpsell} onSignIn={signInToSave} /> : null}
 
         {editable ? (
-          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+          <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <h2 className="font-display text-[22px] text-forest">{t("send.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("send.sub")}</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
@@ -393,7 +393,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             <p className="mt-3 text-[12px] leading-snug text-forest/65">{t("send.private")}</p>
           </div>
         ) : readOnly ? (
-          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+          <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <p className="flex items-center gap-2 font-display text-[22px] text-forest">
               <Lock aria-hidden="true" className="size-5 text-forest/55" />
               {ts("readOnly.title")}
@@ -410,7 +410,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             </div>
           </div>
         ) : (
-          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+          <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <h2 className="font-display text-[22px] text-forest">{t("received.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("received.sub")}</p>
             <div className="mt-4 grid gap-2">
