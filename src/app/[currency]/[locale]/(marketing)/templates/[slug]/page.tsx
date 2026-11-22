@@ -151,6 +151,8 @@ export default async function TemplateDetailPage({
                 {/* The phrase people search for, then the name we gave it: one heading, both read (and the name alone where they are the same words). */}
                 <h1 className="mt-7">
                   {keyword ? <span className="mb-3 block text-page-label text-page-body">{keyword}</span> : null}
+                  {/* Two blocks to the eye; the space keeps them two phrases to whatever reads the heading's text ("Digital love letterThe Letter"). */}
+                  {keyword ? " " : null}
                   <span className="block font-display text-[clamp(2.6rem,5.7vw,4.75rem)] leading-[0.98] tracking-[-0.03em] text-page-ink">{manifest.name[l]}</span>
                 </h1>
                 <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{about.line}</p>

@@ -494,3 +494,26 @@ describe("/digital-cards", () => {
     expect(all.split("digital gift card").length - 1).toBe(1);
   });
 });
+
+describe("llms.txt", () => {
+  it("lists the six gift pages by kind and /digital-cards, as it lists the pages by person", async () => {
+    // It listed the seven for-* pages only (the review of 22 Nov 2026), and assistants are a measured source of visitors.
+    const { GET } = await import("@/app/llms.txt/route");
+    const text = await GET().text();
+    const urls = sitemap().map((entry) => entry.url);
+    for (const slug of GIFT_GUIDE_SLUGS) {
+      const line = text.split("\n").find((l) => l.includes(`/gifts/${slug})`));
+      expect(line, slug).toBeDefined();
+      // By the page's own heading and description, so the brief never says something the page does not.
+      expect(line, slug).toContain(`[${GIFT_GUIDES[slug].en.h1}]`);
+      expect(line, slug).toContain(GIFT_GUIDES[slug].en.description);
+      // And the address is one the sitemap has.
+      expect(urls, slug).toContain(line!.match(/\((https?:[^)]+)\)/)![1]);
+    }
+    const cards = text.split("\n").find((l) => l.includes(`${DIGITAL_CARDS_PATH})`));
+    expect(cards).toBeDefined();
+    expect(cards).toContain(digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: listManifests().length, ideas: 0, finder: false }).description);
+    // No price is typed into that line: prices have a section of their own, read from the code.
+    expect(cards).not.toMatch(/[€$£]\s?\d/);
+  });
+});

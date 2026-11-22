@@ -55,6 +55,28 @@ async function cardSets(page: Page) {
   );
 }
 
+/**
+ * A row of cards on a phone shows one card at a time, and a poster is lazy: the browser asks for it when its card
+ * comes onto the screen (measured 22 Nov 2026: at 375px, with nothing swiped, one poster of eight is ever asked for).
+ * So "every card has its picture" is read the way a visitor meets the cards: each row is swiped to its end, a card
+ * at a time, and put back. Read without the swipe it passed or failed by what the browser happened to have fetched
+ * at the width before, on one page in fourteen.
+ */
+async function swipeThrough(page: Page) {
+  await page.evaluate(async () => {
+    for (const row of document.querySelectorAll<HTMLElement>("[data-cards]")) {
+      if (row.scrollWidth <= row.clientWidth + 1) continue;
+      row.scrollIntoView({ block: "center" });
+      for (const card of row.querySelectorAll<HTMLElement>("[data-card]")) {
+        row.scrollTo({ left: card.offsetLeft - row.offsetLeft, behavior: "instant" });
+        await new Promise((r) => setTimeout(r, 120));
+      }
+      row.scrollTo({ left: 0, behavior: "instant" });
+    }
+    window.scrollTo(0, 0);
+  });
+}
+
 for (const prefix of ["", "/es"]) {
   for (const path of HERO_PAGES) {
     test(`${prefix}${path}: within 300 words, the art and a gift in the first view, nothing under words`, async ({ page }) => {
@@ -80,8 +102,9 @@ for (const prefix of ["", "/es"]) {
         expect(await cover.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0), `${width}: the gift's cover in the phone`).toBe(true);
         // The band's phone on its flowers, and every card's picture.
         expect(m.pieces, `${width}: pieces of art on the page`).toBeGreaterThanOrEqual(4);
-        // Waited for, not read once: a poster asked for at a new width is made by the dev server's image optimizer the first
-        // time, and on a busy machine that outlasted the read (a card far along a phone's row, the run of 22 Nov 2026).
+        // On a phone the row is swiped through first: a poster is asked for when its card comes on screen. And waited
+        // for, not read once: a poster asked for at a new width is made by the dev server's image optimizer the first time.
+        await swipeThrough(page);
         await expect
           .poll(async () => (await cardSets(page)).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 20_000 })
           .toEqual([]);
@@ -155,6 +178,8 @@ for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversa
 }
 
 test("on the smallest phone the hero's button is on the first screen, in both languages", async ({ page }) => {
+  // Fourteen pages are opened one after another: on a busy machine that outran thirty seconds with nothing wrong on any of them.
+  test.slow();
   // 320×568: the tags, the heading (four rows at its longest), the italic line, the sentence, and still the button.
   await page.setViewportSize({ width: 320, height: 568 });
   for (const prefix of ["", "/es"])
@@ -320,6 +345,7 @@ test("what a card says alone is true: no card but The Letter's says free, and a 
 test("a card opened at the foot of the screen shows what it holds, without a scroll", async ({ page }) => {
   // The site's scroll-reveal hid anything marked data-reveal until it was well inside the screen, and a card's opened
   // part carries that mark for its own fade: opened with its title at the bottom edge, it stayed at opacity 0.
+  test.slow();
   for (const reduced of [false, true]) {
     await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
     await page.setViewportSize({ width: 375, height: 812 });
@@ -344,6 +370,9 @@ test("a card opened at the foot of the screen shows what it holds, without a scr
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/games");
+  // Nothing is hidden until the observer has run (it arms the CSS by a class on <html>): on a slow first load that is
+  // seconds after the page is there, and what is below was read as shown before it had been hidden.
+  await expect(page.locator("html")).toHaveClass(/reveal-ready/, { timeout: 30_000 });
   const below = page.locator("[data-reveal]:not(details *)").last();
   await expect(below).toHaveCSS("opacity", "0");
   await below.scrollIntoViewIfNeeded();
@@ -458,6 +487,12 @@ test("the hero says which gift its button makes, each page opens on a gift of it
   // Two blocks to the eye, two phrases to whatever reads the heading's text.
   await page.goto("/digital-cards");
   expect(await page.locator("h1").evaluate((el) => el.textContent)).toBe("Digital cards by Tryethos A card that opens on their phone");
+  // A gift's own page has the same heading of two blocks (the phrase people search for, then the gift's name), and the same space.
+  await page.goto("/templates/the-letter");
+  const giftHeading = (await page.locator("h1").evaluate((el) => el.textContent)) ?? "";
+  expect(giftHeading.endsWith(" The Letter"), giftHeading).toBe(true);
+  expect(giftHeading.trim()).not.toBe("The Letter");
+  await page.goto("/digital-cards");
   // The five kinds are headed "The five kinds of card": no card's title says "Cards" again.
   const titles = await page.locator("[data-kinds] [data-card] h3").allTextContents();
   expect(titles).toEqual(["Open like a letter", "Built from your photos", "With a game in them", "For a date on the calendar", "For someone far away"]);
