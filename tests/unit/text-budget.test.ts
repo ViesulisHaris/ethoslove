@@ -91,6 +91,8 @@ describe("the text budget of a gift's page", () => {
   it("the italic line is a line: a tagline that is a paragraph gives its first sentence, and the rest stands under it", () => {
     // The deep test of 21 Nov 2026: seven gifts had 21 to 31 words of italic display type under the
     // name, four or five rows on a phone, and Light the Candles' pushed "Make this gift" off a small phone's first screen.
+    // The confirming test of 22 Nov 2026: ten more had two sentences and 17 to 19 words, three or four rows on a
+    // 320px phone, and the Spanish Photo Booth's button began at 567 of the first screen's 568.
     const split: string[] = [];
     for (const m of TEMPLATE_MANIFESTS) {
       const long = LOCALES.some((l) => words(m.tagline[l]) > TAGLINE_WORDS);
@@ -106,13 +108,39 @@ describe("the text budget of a gift's page", () => {
         expect(hero.line, `${m.slug} ${l}`).toMatch(/^[^.!?]+[.!?]$/);
         expect(words(hero.line), `${m.slug} ${l}: “${hero.line}”`).toBeLessThanOrEqual(14);
         expect(`${hero.line} ${hero.lead}`, `${m.slug} ${l}`).toBe(m.tagline[l]);
-        expect(words(hero.lead), `${m.slug} ${l}: “${hero.lead}” is a stub`).toBeGreaterThanOrEqual(12);
+        // A whole sentence, and never a paragraph. It may be short ("Whoever gets the big half gets the
+        // wish."): it follows the line it was written to follow, and the two are the tagline.
+        expect(hero.lead, `${m.slug} ${l}`).toMatch(/[.!?]$/);
+        expect(words(hero.lead), `${m.slug} ${l}: “${hero.lead}” is a stub`).toBeGreaterThanOrEqual(8);
         expect(words(hero.lead), `${m.slug} ${l}`).toBeLessThanOrEqual(30);
+        // The whole of the hero's own words, italic line and sentence, is what the mock-up's has: forty at most.
+        expect(words(hero.line) + words(hero.lead), `${m.slug} ${l}`).toBeLessThanOrEqual(40);
         expect(hero.rest, `${m.slug} ${l}`).toBe(heroLead(m.description[l]).rest);
       }
     }
-    // The seven the test named, and no other: a new gift with a long tagline shows up here to be read.
-    expect(split.sort()).toEqual(["autumn-reel", "fall-for-you", "frosted-window", "gingerbread-house", "light-the-candles", "music-box", "string-the-lights"]);
+    // The seventeen the two tests named, and no other: a new gift with a long tagline shows up here to be read.
+    expect(split.sort()).toEqual([
+      "autumn-reel",
+      "be-my-boo",
+      "digicam",
+      "evergreen",
+      "fall-for-you",
+      "frosted-window",
+      "gingerbread-house",
+      "haunted-house",
+      "keepsake",
+      "light-the-candles",
+      "music-box",
+      "nice-list",
+      "on-repeat",
+      "party-animals",
+      "photo-booth",
+      "string-the-lights",
+      "wishbone",
+    ]);
+    // Every one of them is two sentences in both languages, so no page keeps a paragraph because of its language.
+    for (const slug of split) for (const l of LOCALES) expect(TEMPLATE_MANIFESTS.find((m) => m.slug === slug)!.tagline[l].trim().split(/(?<=[.!?])\s+/).length, `${slug} ${l}`).toBeGreaterThanOrEqual(2);
+    expect(heroWords(TEMPLATE_MANIFESTS.find((m) => m.slug === "photo-booth")!.tagline, "x", "es")).toMatchObject({ line: "Corre la cortina y pulsa el botón.", lead: "Cuatro flashes, y sale una tira de fotos de los dos." });
     expect(heroWords(TEMPLATE_MANIFESTS.find((m) => m.slug === "light-the-candles")!.tagline, "x", "en").line).toBe("A Thanksgiving table at dusk, five candles unlit.");
     // No italic line on any page is a paragraph now.
     for (const m of TEMPLATE_MANIFESTS) for (const l of LOCALES) expect(words(heroWords(m.tagline, m.description[l], l).line), `${m.slug} ${l}`).toBeLessThanOrEqual(TAGLINE_WORDS);

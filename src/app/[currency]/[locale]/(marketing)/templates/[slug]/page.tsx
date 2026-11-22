@@ -224,9 +224,11 @@ export default async function TemplateDetailPage({
              * 1024 and 1280 the two columns used to wait for `xl`: the words filled the left half of an
              * iPad on its side, the right half was empty and the phone began under the fold (the test
              * of 21 Nov 2026). The phone is drawn smaller there, by the same share of the screen.
+             * `sizes` says how wide the picture is drawn, except on a phone, where it says far less
+             * than the 758px it is (hero-flatlay.tsx says why): the half-size files are a phone's.
              */}
             <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] lg:order-first lg:[--fl-down:1.2] lg:[--fl-up:1.2] lg:[--hero-phone:clamp(11.25rem,17.8vw,16rem)]">
-              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 1024px) 700px, (min-width: 420px) 800px, 190vw" className="lg:mx-0 lg:ml-[calc(6.8rem-(80rem-100vw)*0.09)] xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
+              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 1024px) 700px, (min-width: 640px) 800px, 40vw" className="lg:mx-0 lg:ml-[calc(6.8rem-(80rem-100vw)*0.09)] xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
             </div>
           </div>
         </section>

@@ -4,8 +4,8 @@ export const manifest: TemplateManifest = {
   slug: "haunted-house",
   name: { en: "Haunted House", es: "La casa encantada" },
   tagline: {
-    en: "Open the gate in the storm. Every lit window holds a photo, and the door holds your letter.",
-    es: "Abre la verja en plena tormenta. Cada ventana encendida guarda una foto, y la puerta, tu carta.",
+    en: "Open the gate in the storm. Your photos wait in lit windows, your letter behind the door.",
+    es: "Abre la verja en plena tormenta. Tus fotos, en ventanas encendidas; tu carta, tras la puerta.",
   },
   description: {
     en: "A mansion on a hill in a thunderstorm: rain, a wind-bent tree, bats, and lightning that lights the whole house for a heartbeat. They tap the gate and it swings open; the camera walks up the path as the windows light one by one, each with a little silhouette inside. Tap a window and the silhouette steps aside to show one of your photos in a gilt frame. Then they knock on the door, and it swings open on a warm glow and your letter, with your song. Storm blue, blood moon, swamp green or midnight violet.",

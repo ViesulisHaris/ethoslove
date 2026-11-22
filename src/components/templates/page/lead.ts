@@ -21,20 +21,27 @@ export function heroLead(description: string, max = 30, least = 12, most = 40): 
   return { lead: sentences.slice(0, taken).join(" "), rest: sentences.slice(taken).join(" ") };
 }
 
-/** A tagline of more words than this, in either language, is a paragraph and not a line. */
-export const TAGLINE_WORDS = 20;
+/**
+ * A tagline of more words than this, in either language, is a paragraph and not a line. It was 20,
+ * which left ten gifts with two sentences and 17 to 19 words in italics: three or four rows on a
+ * 320px phone, and on the Spanish Photo Booth "Crear regalo" began a pixel above the foot of the
+ * first screen (the confirming test of 22 Nov 2026). Sixteen words are three rows there at most.
+ */
+export const TAGLINE_WORDS = 16;
 
 /**
  * What a gift's hero says under its name: the italic line, the sentences under it, and what is
  * left for the closed block. The italic line is the gift's tagline, and for nearly every gift
- * that is a line. Seven have a tagline of two sentences and 21 to 31 words (Light the Candles,
- * Gingerbread House, String the Lights, Autumn Reel, Frosted Window, Music Box, Fall for You):
- * set in italic display type it was four or five rows on a phone, with the description still to
+ * that is a line. Seventeen have a tagline of two sentences and 17 to 31 words (Light the Candles
+ * and Gingerbread House the longest; Photo Booth, Evergreen and Haunted House among the shorter):
+ * set in italic display type it was three to five rows on a phone, with the description still to
  * come, and on a small phone it pushed "Make this gift" off the first screen (the deep test of
  * 21 Nov 2026). For those the first sentence is the italic line ("A Thanksgiving table at dusk,
  * five candles unlit.") and the rest of the tagline is the sentence under it, in the place of the
  * description's opening, which says the same scene at more length and stays the page's meta
- * description. The closed block keeps what it kept before, the description after that opening:
+ * description. That sentence may be short ("Whoever gets the big half gets the wish."): it was
+ * written to follow the line above it, and the two are the whole tagline, so it is no stub.
+ * The closed block keeps what it kept before, the description after that opening:
  * given the whole description it had room for only three or four of a gift's six ideas (Music
  * Box, Autumn Reel). Decided by the gift, not the language: a tagline long in one is split in
  * both, so the two pages are laid out alike.

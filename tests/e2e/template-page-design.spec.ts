@@ -1,4 +1,5 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
+import sharp from "sharp";
 import { templateFilmStart } from "../../src/content/template-film-starts";
 import { TEMPLATE_SLUGS } from "../../src/templates/manifests";
 
@@ -1092,6 +1093,36 @@ test("an iPhone-sharp phone still gets the half-size picture of “The experienc
   }
 });
 
+test("a phone is sent the half-size picture and rim of the hero's phone, and a desk the full ones", async ({ browser, baseURL }) => {
+  // The hero's picture is drawn twice as wide as a phone's screen, so "190vw" had a phone with three
+  // device pixels to a pixel ask for 2,223 and get the full-size picture and rim, 250 KB before
+  // anything else on the page (the confirming test of 22 Nov 2026). The half-size pair is 100 KB.
+  const origin = new URL(baseURL!).origin;
+  const files = (page: Page) => page.evaluate(() => [...document.querySelectorAll<HTMLImageElement>("[data-flatlay=hero] img[srcset]")].map((img) => (img.complete && img.naturalWidth > 0 ? new URL(img.currentSrc).pathname.split("/").pop()! : "")));
+  for (const [width, height, scale, mobile, want] of [
+    [390, 844, 3, true, ["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp"]],
+    [440, 956, 3, true, ["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp"]],
+    [412, 915, 2.625, true, ["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp"]],
+    [320, 568, 2, true, ["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp"]],
+    // From a tablet up the picture is the art's full size: nothing on a larger screen is softer than it was.
+    [820, 1180, 2, true, ["hero-flatlay-ivory.webp", "hero-flatlay-ivory-bezel.webp"]],
+    [1440, 900, 1, false, ["hero-flatlay-ivory.webp", "hero-flatlay-ivory-bezel.webp"]],
+    [1440, 900, 2, false, ["hero-flatlay-ivory.webp", "hero-flatlay-ivory-bezel.webp"]],
+  ] as const) {
+    const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: scale, isMobile: mobile, hasTouch: mobile, baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
+    const page = await context.newPage();
+    const asked: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/art/pages/hero-flatlay")) asked.push(new URL(request.url()).pathname.split("/").pop()!);
+    });
+    await page.goto(PAGE);
+    await expect.poll(() => files(page), { timeout: 15000, message: `${width}x${height}@${scale}` }).toEqual(want);
+    // And only those were asked for: not the other size first and then this one.
+    expect([...new Set(asked)].sort(), `${width}x${height}@${scale}`).toEqual([...want].sort());
+    await context.close();
+  }
+});
+
 test("the picked-up phone's shadow is drawn inside its own layer, with nothing to cut it", async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 839 });
   await page.goto("/templates/xoxo");
@@ -1114,9 +1145,70 @@ test("the picked-up phone's shadow is drawn inside its own layer, with nothing t
   expect(shadow.events).toBe("none");
 });
 
-test("no hero's italic line is a paragraph: Light the Candles keeps “Make this gift” on a small phone's first screen", async ({ page }) => {
+test("the picked-up phone's shadow ends on nothing: no straight line down its layer's sides", async ({ browser, baseURL }) => {
+  // The test above measures boxes, and passed while the layer drew a one-pixel column down each of
+  // its sides, 15 to 24 levels darker than the page (the confirming test of 22 Nov 2026): the sides
+  // fall between two pixels, and the half pixel past the mask was painted unmasked. So this one
+  // reads the screen: at the two sizes it was seen at, no column of pixels is darker than both of
+  // its neighbours down 200px or more.
+  const origin = new URL(baseURL!).origin;
+  for (const [width, height, scale, path] of [[1280, 620, 1, "/templates/string-the-lights"], [1440, 900, 2, "/templates/the-letter"]] as const) {
+    const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: scale, baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
+    const page = await context.newPage();
+    await page.goto(path);
+    await page.addStyleTag({ content: "nextjs-portal{display:none!important}" });
+    const hero = page.locator("[data-flatlay=hero]");
+    await hero.locator("[data-play]").click();
+    const up = hero.locator("[data-upright]");
+    await expect(up).toBeVisible();
+    // Up and still: the lift is 0.7s, and the table behind it takes half a second to go soft.
+    await up.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+    await page.waitForTimeout(900);
+    const sides = await up.evaluate((el) => { const b = el.getBoundingClientRect(); return [(b.left - 76) * devicePixelRatio, (b.right + 76) * devicePixelRatio]; });
+    // The case this is about: a side that falls between two pixels.
+    expect(sides.some((x) => Math.abs(x - Math.round(x)) > 0.1), `${path}: a side of the layer falls between two pixels`).toBe(true);
+    const { data, info } = await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const at = (x: number, y: number) => data[(y * info.width + x) * info.channels];
+    const lines: string[] = [];
+    // Round the layer's sides, where the line was; the gift's own drawing has straight edges of its own.
+    for (const side of sides)
+      for (let x = Math.max(1, Math.floor(side) - 3); x <= Math.min(info.width - 2, Math.ceil(side) + 3); x++) {
+        let run = 0;
+        let longest = 0;
+        for (let y = 0; y < info.height; y++) {
+          run = at(x - 1, y) - at(x, y) >= 2 && at(x + 1, y) - at(x, y) >= 2 ? run + 1 : 0;
+          longest = Math.max(longest, run);
+        }
+        if (longest >= 200 * scale) lines.push(`${path} ${width}x${height}@${scale}: a column at x=${x}, ${longest} device pixels long`);
+      }
+    expect(lines).toEqual([]);
+    await context.close();
+  }
+});
+
+// The second sentence of each gift's tagline, as it stands under the italic line (a few words of it).
+const UNDER_THE_LINE: Record<string, string> = {
+  "/templates/light-the-candles": "with a match",
+  "/es/templates/light-the-candles": "con una cerilla",
+  // Two sentences and 17 to 19 words, which the rule left whole until the confirming test of 22 Nov 2026:
+  // the Spanish Photo Booth's button began at 567 of the first screen's 568, Evergreen's at 550.
+  "/es/templates/photo-booth": "Cuatro flashes",
+  "/templates/photo-booth": "Four flashes",
+  "/es/templates/evergreen": "Salen mariposas",
+  "/es/templates/haunted-house": "Tus fotos, en ventanas encendidas",
+  "/templates/haunted-house": "Your photos wait in lit windows",
+  "/es/templates/party-animals": "invadido por hámsters",
+  "/es/templates/wishbone": "la mitad grande",
+  "/es/templates/keepsake": "un relicario de oro",
+};
+
+test("no hero's italic line is a paragraph: Light the Candles and Photo Booth keep “Make this gift” on a small phone's first screen", async ({ page }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 320, height: 568 });
-  for (const path of ["/templates/light-the-candles", "/es/templates/light-the-candles"]) {
+  for (const path of Object.keys(UNDER_THE_LINE)) {
+    const slug = path.split("/").pop()!;
+    // A visit to a Spanish page leaves the language's cookie, and the next English address would be answered in Spanish.
+    await page.context().clearCookies();
     await page.goto(path);
     const hero = page.locator("[data-page-theme] section").first();
     const italic = hero.locator("h1 + p");
@@ -1126,9 +1218,12 @@ test("no hero's italic line is a paragraph: Light the Candles keeps “Make this
     expect(m.words, path).toBeLessThanOrEqual(14);
     expect(m.rows, path).toBeLessThanOrEqual(3);
     // The rest of the tagline is the sentence under it.
-    await expect(hero.locator("h1 + p + p")).toContainText(path.startsWith("/es") ? "con una cerilla" : "with a match");
-    const button = (await hero.locator('a[href$="/create/light-the-candles"]').boundingBox())!;
+    await expect(hero.locator("h1 + p + p")).toContainText(UNDER_THE_LINE[path]);
+    const button = (await hero.locator(`a[href$="/create/${slug}"]`).boundingBox())!;
     expect(button.y, `${path}: the button's top`).toBeLessThan(568);
+    // Light the Candles has the longest tagline there is (31 words in Spanish) and keeps most of its
+    // button on the first screen; every other gift keeps all 48px of it.
+    if (slug !== "light-the-candles") expect(button.y + button.height, `${path}: the button's foot`).toBeLessThanOrEqual(568);
   }
 });
 
@@ -1140,7 +1235,19 @@ test("WebKit as an iPhone 13: no sideways scroll, no flower under words, the gif
     const page = await context.newPage();
     const thrown: string[] = [];
     page.on("pageerror", (error) => thrown.push(error.message));
-    await page.goto(PAGE);
+    const art: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/art/pages/")) art.push(new URL(request.url()).pathname.split("/").pop()!);
+    });
+    await page.goto(PAGE, { waitUntil: "load" });
+    // Before any scroll an iPhone is sent the hero's picture and rim at half size, never the full-size
+    // pair: Safari takes the first file with a pixel for each of the screen's. And it waits for a lazy
+    // picture until it is nearly on screen: the band's picture, four screens down, is not asked for.
+    const of = (piece: string) => [...new Set(art.filter((file) => file.startsWith(piece)))].sort();
+    await expect.poll(() => of("hero-flatlay"), { timeout: 15000 }).toEqual(["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp"]);
+    await page.waitForTimeout(1500);
+    expect(of("hero-flatlay")).toEqual(["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp"]);
+    expect(of("experience-flatlay")).toEqual([]);
     await settle(page);
     const m = await measure(page);
     expect(m.overflow).toBeLessThanOrEqual(0);

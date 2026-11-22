@@ -764,13 +764,13 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Haunted house gift",
       title: "Haunted House: A Spooky Gift with Your Photos",
-      description: "Open the gate in the storm: every lit window holds a photo, and the door holds your letter. A haunted house Halloween gift they explore.",
+      description: "Open the gate in the storm: your photos wait behind lit windows, and your letter behind the door. A haunted house Halloween gift they explore.",
       howTo: "How to build a haunted house gift",
     },
     es: {
       keyword: "Casa encantada de regalo",
       title: "La casa encantada: un regalo de Halloween con fotos",
-      description: "Abre la verja en plena tormenta: cada ventana encendida guarda una foto y la puerta guarda tu carta. Una casa encantada para Halloween.",
+      description: "Abre la verja en plena tormenta: tus fotos esperan tras ventanas encendidas y tu carta tras la puerta. Una casa encantada para Halloween.",
       howTo: "Cómo hacer una casa encantada de regalo",
     },
   },

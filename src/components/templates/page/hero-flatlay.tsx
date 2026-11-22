@@ -73,7 +73,13 @@ export type HeroFlatlayArt = {
  * than that box and spills past it on every side: the page decides how much of that spill may
  * meet anything (on a phone it keeps nearly all of it clear; on a desk the leaves run into the
  * section's own padding). `sizes` is how wide the picture is drawn, for the browser's choice of
- * file: a CSS variable can't say it.
+ * file: a CSS variable can't say it. On a phone the page gives a far smaller number than the truth,
+ * on purpose. The picture is drawn 758px wide there, twice the screen, so a phone with three
+ * device pixels to a pixel asked for 2,223 and was sent the full-size picture and rim, 250 KB,
+ * before anything else on the page, where the art's half-size files (100 KB the pair) are the
+ * ones made for a phone (DESIGN-LESS-TEXT.md, "a 1× version for phones"; the confirming test of
+ * 22 Nov 2026). The render is soft-lit and loses a little of a leaf's veins at that size, and
+ * nothing of the phone's shape; the gift's cover in the screen is not part of it and stays sharp.
  */
 export type HeroFrame = {
   /** The second the film starts from, and loops back to: past the demo page's own bar, which most recordings open on (content/template-film-starts.ts). */

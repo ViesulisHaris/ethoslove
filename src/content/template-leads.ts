@@ -10,15 +10,13 @@ import type { GiftLocale } from "@/lib/gift/schema";
  * 21 Nov 2026; XOXO, the second best seller, was one). Each row here is that sentence, written
  * from the gift's own description and nothing else, in 12 to 30 words: what they open, and what
  * is inside. The whole description stays in the page's closed block and in its meta description.
+ * Be My Boo and Party Animals had a row each until 22 Nov 2026: their taglines are two sentences
+ * of 16 to 18 words, and the second now stands under the first as the hero's sentence (lead.ts).
  *
  * A row is only for a language whose description gives no lead: tests/unit/text-budget.test.ts
  * fails a row that is not needed, a hero left without a sentence, and a row out of its length.
  */
 export const TEMPLATE_LEADS: Record<string, Partial<Record<GiftLocale, string>>> = {
-  "be-my-boo": {
-    en: "A little ghost holds a sign with their name. One tap and it says boo and flies off, and a Halloween collage of your photos is underneath.",
-    es: "Un fantasmita sujeta un cartel con su nombre. Un toque y dice bu, sale volando y debajo está su collage de Halloween con tus fotos.",
-  },
   coquette: {
     en: "They untie a satin bow and a collage unrolls under their thumb: polaroids between real lilies, your song on a little player, and your letter waiting at the bottom.",
     es: "Desatan un lazo de raso y un collage se despliega bajo su pulgar: polaroids entre lirios de verdad, vuestra canción en un pequeño reproductor y tu carta al final.",
@@ -26,10 +24,6 @@ export const TEMPLATE_LEADS: Record<string, Partial<Record<GiftLocale, string>>>
   garden: {
     en: "They push open a gate with their name on it and walk down a page that grows as they scroll, to a greenhouse where your letter is waiting.",
     es: "Abren una verja con su nombre y bajan por una página que crece a su paso, hasta un invernadero donde tu carta espera sobre la mesa.",
-  },
-  "party-animals": {
-    en: "An invitation sealed with a hamster in a party hat. Inside, a birthday collage with ten animals in party hats: tap one and it yells a line you wrote.",
-    es: "Una invitación sellada con un hámster con gorrito. Dentro, un collage de cumpleaños con diez animales: tocan uno y grita una frase que tú escribiste.",
   },
   passport: {
     en: "A passport with their name on the cover. Open it and a route draws itself from your city to theirs, and the pages fill with stamps, one per photo.",

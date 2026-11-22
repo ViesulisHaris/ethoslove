@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
+import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_STEPS, templateSteps } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 import { loadFieldsSchema } from "@/templates/schemas";
@@ -71,7 +72,20 @@ describe("the three steps of a gift's page", () => {
 
   it("only promise a photo behind a window for a photo that is there (Haunted House)", () => {
     // All six windows light; only the first of them hold a photo, and it opens with none (haunted-house/windows.ts).
-    for (const l of LOCALES) expect(TEMPLATE_STEPS["haunted-house"].line[l]).not.toMatch(/every lit window|cada ventana guarda/i);
+    const promise = /every lit window|cada ventana( encendida)? guarda/i;
+    for (const l of LOCALES) expect(TEMPLATE_STEPS["haunted-house"].line[l]).not.toMatch(promise);
+    // The same sentence stood in the gift's tagline, which is the italic line of its page's hero and the line
+    // under its name in the gallery, and in the description search engines show (the confirming test of 22 Nov 2026).
+    const house = getManifest("haunted-house")!;
+    for (const l of LOCALES) for (const said of [house.tagline[l], house.description[l], templateSeo("haunted-house", l)!.description]) expect(said, l).not.toMatch(promise);
+    // Said so that it is true with one photo or with six, no longer than the line it replaces (the gallery's card
+    // gives a tagline two rows, and this one filled them), and not the section's line word for word: the tagline's
+    // second sentence stands in the hero of the page whose band says that one.
+    expect(house.tagline).toEqual({ en: "Open the gate in the storm. Your photos wait in lit windows, your letter behind the door.", es: "Abre la verja en plena tormenta. Tus fotos, en ventanas encendidas; tu carta, tras la puerta." });
+    for (const l of LOCALES) {
+      expect(house.tagline[l].length, l).toBeLessThanOrEqual(l === "en" ? 90 : 95);
+      expect(house.tagline[l], l).not.toContain(TEMPLATE_STEPS["haunted-house"].line[l]);
+    }
   });
 
   it("name, on every note step, a field of that gift for its card to quote", async () => {
