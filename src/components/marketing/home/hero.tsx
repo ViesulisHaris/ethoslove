@@ -55,7 +55,7 @@ export function Hero() {
           <h1 className="text-forest">
             <span className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</span>
             <span className="mt-6 block max-w-[6.6em] display-hero text-balance">
-              {t("h1a")} <em className="text-[#B0245A]">{t("h1b")}</em> {t("h1c")}
+              {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em> {t("h1c")}
             </span>
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">
@@ -111,7 +111,7 @@ export function Hero() {
             <span className="absolute -top-2.5 left-1/2 h-5 w-16 -translate-x-1/2 -rotate-3 opacity-90 shadow-sm" style={{ backgroundColor: "#FFFFFF", backgroundImage: "linear-gradient(90deg, rgba(238,120,158,.5) 50%, transparent 50%), linear-gradient(rgba(238,120,158,.5) 50%, transparent 50%)", backgroundSize: "8px 8px" }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/demo/photos/p2.webp" alt="" width={896} height={1200} loading="lazy" decoding="async" draggable={false} className="aspect-square w-full object-cover" />
-            <svg viewBox="0 0 120 40" className="absolute right-3 bottom-1.5 h-5 w-14 text-[#B0245A] sm:bottom-2" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="0 0 120 40" className="absolute right-3 bottom-1.5 h-5 w-14 text-rose-deep sm:bottom-2" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 32 C24 30 40 24 52 17 C62 11 58 2 50 5 C42 8 46 19 60 27 C72 19 86 7 78 3 C70 0 62 11 66 22 C70 32 96 32 116 27" />
             </svg>
           </motion.div>

@@ -244,7 +244,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         <Cutout id="bow-gingham" className="absolute -top-7 right-6 w-20 rotate-12 drop-shadow-[0_10px_16px_rgba(120,50,70,0.25)] sm:w-24" />
         {readOnly ? (
           <div className="mb-6 flex items-start gap-3 rounded-2xl bg-forest/[0.04] px-4 py-3 ring-1 ring-forest/10" data-testid="saved-read-only">
-            <Lock aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/60" />
+            <Lock aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/65" />
             <p className="min-w-0 flex-1 text-[14px] leading-snug text-forest/75">
               <span className="font-semibold text-forest">{ts("readOnly.title")}</span> · {ts("readOnly.body", { limit: FREE_SAVED_DATES })}{" "}
               <button type="button" onClick={() => openUpsell("read_only")} className="-my-2 inline-flex min-h-11 items-center font-semibold text-rose-deep underline underline-offset-4">
@@ -262,11 +262,11 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         {editable ? (
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-[12.5px] font-medium text-forest/60">{t("to")}</span>
+              <span className="text-[12.5px] font-medium text-forest/65">{t("to")}</span>
               <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
             <label className="block">
-              <span className="text-[12.5px] font-medium text-forest/60">{t("from")}</span>
+              <span className="text-[12.5px] font-medium text-forest/65">{t("from")}</span>
               <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
           </div>
@@ -317,7 +317,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                   </span>
                 </div>
                 <h2 className="mt-1 font-display text-[23px] leading-tight text-forest">{name}</h2>
-                {stop.address ? <p className="text-[14px] text-forest/60">{stop.address}</p> : null}
+                {stop.address ? <p className="text-[14px] text-forest/65">{stop.address}</p> : null}
                 {editable ? (
                   <input value={stop.note ?? ""} maxLength={140} aria-label={t("noteFor", { name })} placeholder={t("stopNotePlaceholder")} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, note: e.target.value || undefined } : s)) }))} className="mt-2 h-11 w-full rounded-xl border border-dashed border-forest/20 bg-transparent px-3 text-[16px] text-ellipsis text-forest outline-none placeholder:text-forest/45 focus:border-rose/50" />
                 ) : stop.note ? (
@@ -354,14 +354,14 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
           })}
         </ol>
         {ticketed ? (
-          <p className="mt-4 text-[12px] leading-snug text-forest/60">
+          <p className="mt-4 text-[12px] leading-snug text-forest/65">
             {ta("tickets.via")} {ta("disclosure")}
           </p>
         ) : null}
 
         {editable ? (
           <label className="mt-8 block">
-            <span className="text-[12.5px] font-medium text-forest/60">{t("note")}</span>
+            <span className="text-[12.5px] font-medium text-forest/65">{t("note")}</span>
             <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-white px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
           </label>
         ) : plan.note ? (
@@ -395,7 +395,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         ) : readOnly ? (
           <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <p className="flex items-center gap-2 font-display text-[22px] text-forest">
-              <Lock aria-hidden="true" className="size-5 text-forest/55" />
+              <Lock aria-hidden="true" className="size-5 text-forest/65" />
               {ts("readOnly.title")}
             </p>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{ts("readOnly.body", { limit: FREE_SAVED_DATES })}</p>

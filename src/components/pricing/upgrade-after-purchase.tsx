@@ -115,7 +115,7 @@ export function UpgradeAfterPurchase({ sessionId, returnTo, upgrade }: { session
         {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
         <span className="[text-wrap:balance]">{t("cta", { price })}</span>
       </button>
-      <p className="mt-2 text-center text-[12.5px] text-forest/55">{t("note")}</p>
+      <p className="mt-2 text-center text-[12.5px] text-forest/65">{t("note")}</p>
     </section>
   );
 }

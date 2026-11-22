@@ -77,3 +77,42 @@ for (const path of PAGES) {
     }
   });
 }
+
+for (const [width, height] of [
+  [390, 844],
+  [1440, 900],
+]) {
+  test(`at ${width}px a page fetches one flower with its first view, and it is not the tall stem`, async ({ context }) => {
+    // The review of 22 Nov 2026: the landing page's hero fetched the tall stem (88 KB, 217 KB on a sharp
+    // screen) and two more lilies eagerly, about three times the decoration the old hero carried, ahead
+    // of its photograph. A piece hidden at this width is fetched too unless it is lazy.
+    for (const path of ["/", "/gifts", "/templates"]) {
+      // A page of its own for each address: the page before it is still fetching its lazy pieces while the next one loads.
+      const page = await context.newPage();
+      await page.setViewportSize({ width, height });
+      const fetched: string[] = [];
+      const listen = (request: { url(): string }) => {
+        if (/\/art\/pages\/[a-z0-9-]+\.webp$/.test(request.url())) fetched.push(request.url());
+      };
+      page.on("request", listen);
+      await page.goto(path, { waitUntil: "domcontentloaded" });
+      await expect(page.locator('img[src*="/art/pages/"]').first()).toBeAttached();
+      await page.waitForTimeout(1500);
+      const piece = (src: string) => src.split("/").pop()!.replace(/(-1x)?\.webp$/, "");
+      const drawn = await page.locator('img[src*="/art/pages/"]').evaluateAll((imgs) =>
+        imgs.map((img) => ({ src: img.getAttribute("src")!, lazy: img.getAttribute("loading") === "lazy", shown: getComputedStyle(img).display !== "none" && img.getClientRects().length > 0 })),
+      );
+      page.off("request", listen);
+      // One piece of art is not lazy (it may be drawn twice, once for a phone and once for a desk: the same file).
+      const eager = [...new Set(drawn.filter((img) => !img.lazy).map((img) => piece(img.src)))];
+      expect(eager, `${path}: not lazy`).toHaveLength(1);
+      expect(eager[0], path).not.toContain("stem");
+      // Nothing that is hidden at this width was fetched: only pieces drawn on this screen, and the one eager piece.
+      const mayFetch = new Set([...drawn.filter((img) => img.shown).map((img) => piece(img.src)), ...eager]);
+      expect([...new Set(fetched.map(piece))].filter((file) => !mayFetch.has(file)), `${path}: fetched though hidden at ${width}px`).toEqual([]);
+      // On a phone that leaves the tall stem out altogether.
+      if (width < 1024) expect(fetched.filter((file) => file.includes("stem")), `${path}: the stem on a phone`).toEqual([]);
+      await page.close();
+    }
+  });
+}

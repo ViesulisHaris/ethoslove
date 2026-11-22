@@ -100,7 +100,7 @@ export function SavePlanPanel({
           {saving ? t("save.saving") : t("save.cta")}
         </button>
         {/* Past the limit (a membership ended with more saved): "your free saves are used", never "4 of 3". */}
-        {list && list.quota.limit !== null ? <p className="mt-3 text-center text-[12.5px] text-forest/60 tabular-nums">{list.quota.used >= list.quota.limit ? t("errors.limit_reached") : t("save.quota", { used: list.quota.used, limit: list.quota.limit })}</p> : null}
+        {list && list.quota.limit !== null ? <p className="mt-3 text-center text-[12.5px] text-forest/65 tabular-nums">{list.quota.used >= list.quota.limit ? t("errors.limit_reached") : t("save.quota", { used: list.quota.used, limit: list.quota.limit })}</p> : null}
         {error ? (
           <p role="alert" className="mt-3 text-[13px] leading-snug text-destructive">
             {t(`errors.${error}`)}
@@ -116,7 +116,7 @@ export function SavePlanPanel({
         <BookmarkCheck aria-hidden="true" className="size-5 shrink-0 text-rose-deep" />
         {link.mine ? t("save.saved") : t("save.partners", { name: link.ownerName ?? "…" })}
       </p>
-      <p role="status" aria-live="polite" className={cn("mt-1.5 flex items-center gap-1.5 text-[13.5px]", status === "offline" ? "font-semibold text-forest/80" : "text-forest/60")}>
+      <p role="status" aria-live="polite" className={cn("mt-1.5 flex items-center gap-1.5 text-[13.5px]", status === "offline" ? "font-semibold text-forest/80" : "text-forest/65")}>
         {status === "saving" ? <Loader2 aria-hidden="true" className="size-3.5 animate-spin" /> : status === "offline" ? <CloudOff aria-hidden="true" className="size-3.5 text-star" /> : null}
         {status === "saving" ? t("save.saving") : status === "offline" ? t("save.offline") : status === "pending" ? t("save.saving") : t("save.synced")}
       </p>

@@ -50,7 +50,9 @@ export const DEFAULT_PAGE_THEME: PageTheme = {
   band: "#e8cfc1",
   ink: "#24121b",
   body: "#5d4652",
-  accent: "#b0245a",
+  // The root's own (--page-accent, which is --brand-coral-deep): it was the older rose, so the finder's
+  // button and the header's were two roses on one page.
+  accent: "#a31f52",
   badge: "#e3bfc9",
   footer: "#2a0f1f",
   footerText: "#d9c6cd",

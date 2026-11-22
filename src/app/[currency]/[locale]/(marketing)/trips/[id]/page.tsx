@@ -172,7 +172,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                         <h3 className="font-display text-[22px] leading-tight text-forest">{stopName(s, l)}</h3>
-                        <span className="text-[12.5px] font-semibold text-forest/55">{t("detail.route.nights", { count: s.nights })}</span>
+                        <span className="text-[12.5px] font-semibold text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
                       </div>
                       <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
                       <Link
@@ -249,14 +249,14 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block font-display text-[19px] leading-tight text-forest">{ticket.name}</span>
-                      {ticket.where ? <span className="mt-0.5 block text-[13px] text-forest/55">{ticket.where}</span> : null}
+                      {ticket.where ? <span className="mt-0.5 block text-[13px] text-forest/65">{ticket.where}</span> : null}
                     </span>
                     <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </PartnerLink>
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-[12.5px] leading-snug text-forest/60">
+            <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
               {ta("tickets.via")} {ta("disclosureBoth")}
             </p>
           </div>
@@ -281,7 +281,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   <span className="sr-only">({ta("newTab")})</span>
                 </PartnerLink>
-                <p className="mt-3 text-[12.5px] leading-snug text-forest/60">
+                <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
                   {ta("car.via")} {ta("disclosureBoth")}
                 </p>
               </div>

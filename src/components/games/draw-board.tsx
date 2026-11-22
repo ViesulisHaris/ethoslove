@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { inkPairs, type Stroke } from "@/lib/games/ink";
 import { cn } from "@/lib/utils";
+import { BRAND_ROSE } from "@/config/brand-colours";
 
 /**
  * The paper both phones look at. Points are kept as fractions of the board (0 to 1), never pixels,
@@ -14,7 +15,7 @@ export type { Stroke };
 /** Five inks, named so the buttons can say which is which. */
 export const INK = [
   { id: "ink", colour: "#2A0F1F" },
-  { id: "rose", colour: "#D6336C" },
+  { id: "rose", colour: BRAND_ROSE },
   { id: "violet", colour: "#5B4FB0" },
   { id: "blue", colour: "#2F7FA8" },
   { id: "gold", colour: "#E0962A" },

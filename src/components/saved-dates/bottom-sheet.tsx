@@ -50,7 +50,7 @@ export function BottomSheet({
           )}
         >
           <span aria-hidden="true" className={cn("mx-auto mb-3 block h-1.5 w-11 shrink-0 rounded-full sm:hidden", dusk ? "bg-cream/25" : "bg-forest/20")} />
-          <Dialog.Close aria-label={closeLabel} className={cn("absolute top-2 right-2 grid size-11 place-items-center rounded-full transition-colors sm:top-3 sm:right-3", dusk ? "text-moonlight/80 hover:bg-white/10 hover:text-cream" : "text-forest/60 hover:bg-forest/5 hover:text-forest")}>
+          <Dialog.Close aria-label={closeLabel} className={cn("absolute top-2 right-2 grid size-11 place-items-center rounded-full transition-colors sm:top-3 sm:right-3", dusk ? "text-moonlight/80 hover:bg-white/10 hover:text-cream" : "text-forest/65 hover:bg-forest/5 hover:text-forest")}>
             <X aria-hidden="true" className="size-5" />
           </Dialog.Close>
           {eyebrow}

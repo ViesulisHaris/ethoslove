@@ -289,9 +289,13 @@ export function GiftFinder({
 
           <div id="finder-answers" role="group" aria-labelledby="finder-question" onKeyDown={walk} className="mt-3.5 grid grid-cols-2 gap-1.5 sm:mt-6 sm:grid-cols-4 sm:gap-x-4 sm:gap-y-5">
             {/* "Not sure" is an answer like the others, and always the last card, whether or not the rest are open. */}
-            {[...cards.first, ...(moreShown ? cards.more : []), ANY as Option].map((option, i) => {
+            {[...cards.first, ...(moreShown ? cards.more : []), ANY as Option].map((option, i, shown) => {
               const gift = cards.gifts.get(option);
-              return <AnswerCard key={option} label={label(step, option)} poster={gift?.poster} current={answers[step] === option} eager={i < cards.first.length || option === ANY} onClick={() => answer(step, option)} />;
+              // An answer that has no card any more (an older link's "someone else") is marked on "Not sure",
+              // which is what stands for it now: asked again, the question never comes up with nothing marked.
+              const given = answers[step];
+              const current = given === option || (option === ANY && given !== null && !shown.includes(given));
+              return <AnswerCard key={option} label={label(step, option)} poster={gift?.poster} current={current} eager={i < cards.first.length || option === ANY} onClick={() => answer(step, option)} />;
             })}
           </div>
 

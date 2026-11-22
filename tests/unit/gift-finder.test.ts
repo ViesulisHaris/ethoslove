@@ -45,6 +45,7 @@ import {
   type FinderRecipient,
 } from "@/lib/gift/finder";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
+import { fieldsSchema as musicBoxFields } from "@/templates/music-box/schema";
 import { fillerIn } from "./filler";
 
 const GIFTS = finderGifts();
@@ -547,9 +548,27 @@ describe("the line under a pick", () => {
     expect(line("constellations", "best-friend", "en")).toMatch(/night sky\.$/);
     expect(line("spooky-season", "funny", "es")).toBe("La entrada del álbum es para dos, al plan que tengáis de verdad.");
     // And the three cut mid-list.
-    expect(line("music-box", "romantic", "en")).toBe("Two swans meet as a heart, to Swan Lake, Brahms' Lullaby or Für Elise.");
+    expect(line("music-box", "romantic", "en")).toBe("A music box with a ballerina, or two swans who meet as a heart.");
     expect(line("photo-booth", "best-friend", "en")).toBe("Four flashes, and a strip of your best worst faces prints.");
     expect(line("arcade", "base", "en")).toBe("A small retro game where every level they clear uncovers one of your photos.");
+  });
+
+  it("says a choice the sender makes as a choice: Music Box's swans and its lullaby are not what every Music Box does", () => {
+    // The review of 22 Nov 2026: cut from sentences that begin "Choose…", two lines said "Two swans meet
+    // as a heart…" and "…playing Brahms' Lullaby while a ballerina turns." A Music Box has a ballerina and
+    // plays Swan Lake unless the sender changes them.
+    const fields = musicBoxFields.parse({});
+    expect(fields.figurine).toBe("ballerina");
+    expect(fields.tune).toBe("swan-lake");
+    for (const locale of ["en", "es"] as const) {
+      const romantic = shortLine("music-box", "romantic", locale, FINDER_FITS["music-box"].why.romantic![locale]);
+      const mom = shortLine("music-box", "mom", locale, FINDER_FITS["music-box"].why.mom![locale]);
+      // The swans are one of two figurines, said as one of two.
+      expect(romantic).toMatch(locale === "en" ? /a ballerina, or two swans/ : /una bailarina, o dos cisnes/);
+      // The lullaby is chosen, in the word the long sentence uses.
+      expect(mom).toMatch(locale === "en" ? /Choose Brahms' Lullaby/ : /Elige la Canción de cuna/);
+      for (const said of [romantic, mom]) expect(said).not.toMatch(/^(Two swans|Dos cisnes)|playing Brahms|que toca la Canción/);
+    }
   });
 
   it("where it was written by hand, says nothing its sentence does not: the same numbers, and a real sentence to shorten", () => {

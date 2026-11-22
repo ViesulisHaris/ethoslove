@@ -1,6 +1,8 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
+import { BRAND_ROSE, BRAND_ROSE_DEEP } from "@/config/brand-colours";
+import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
 
 /**
  * The site's paper is cream since 22 Nov 2026 (the owner: "update the white color so it matches the
@@ -61,5 +63,66 @@ describe("the site's paper", () => {
     }
     expect(tears).toBeGreaterThan(8);
     expect(byHand).toEqual([]);
+  });
+});
+
+describe("type on the cream can be read", () => {
+  const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const luminance = (rgb: number[]) => {
+    const [r, g, b] = rgb.map((v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a: number[], b: number[]) => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const over = (ink: number[], ground: number[], strength: number) => ink.map((v, i) => v * strength + ground[i] * (1 - strength));
+
+  it("no label in the wine is fainter than 65%: at 60% it was 4.3:1 on the cream, at 55% 3.7", () => {
+    // The numbers the rule stands on: the paper turned darker on 22 Nov 2026, and 60% of the wine,
+    // which had been 4.6:1 on the near-white, fell under what small type needs.
+    const wine = hex("#2a0f1f");
+    const paper = hex("#f3e1d5");
+    expect(contrast(over(wine, paper, 0.6), paper)).toBeLessThan(4.5);
+    expect(contrast(over(wine, paper, 0.65), paper)).toBeGreaterThanOrEqual(4.5);
+    // On the blush sections and on a card too.
+    for (const ground of ["#f6ddd3", "#fbf1e9"]) expect(contrast(over(wine, hex(ground), 0.65), hex(ground)), ground).toBeGreaterThanOrEqual(4.5);
+    // So nothing in the site's own files sets type at 55% or 60%. (50% and under is kept for what is
+    // not there to be read: a placeholder in an empty field, a control that is switched off.)
+    const faint = sources.flatMap(({ path, text }) => [...text.matchAll(/(?<![\w-])text-forest\/(55|60)(?![\w.])/g)].map(([found]) => `${path}: ${found}`));
+    expect(faint).toEqual([]);
+  });
+});
+
+describe("the site's colours are said in one place", () => {
+  // The first time a name is declared in the stylesheet is its value at the root (a gift's pin and the dark shell come after).
+  const css = readFileSync(join(ROOT, "src/app/globals.css"), "utf8");
+  const atRoot = (name: string): string => {
+    const found = new RegExp(`${name}:\\s*([^;]+);`).exec(css);
+    if (!found) throw new Error(`${name} is not in globals.css`);
+    const value = found[1].trim();
+    const other = /^var\((--[\w-]+)\)$/.exec(value);
+    return other ? atRoot(other[1]) : value;
+  };
+
+  it("has one rose: the hexes a map and a canvas take are the stylesheet's", () => {
+    expect(BRAND_ROSE).toBe(atRoot("--brand-rose-ui"));
+    expect(BRAND_ROSE_DEEP).toBe(atRoot("--brand-rose-ui-deep"));
+    // And the rose it replaced is written nowhere in the site's own files (a gift keeps it, by its pin in the stylesheet).
+    const old = sources.filter(({ text }) => /#d6336c|#b0245a/i.test(text)).map(({ path }) => path);
+    expect(old).toEqual([]);
+  });
+
+  it("gives a page that has no gift's colours the root's own: the default palette is the stylesheet's, name for name", () => {
+    // The finder's button took the default palette's accent and the header's button the root's; they were two roses.
+    expect(DEFAULT_PAGE_THEME.ground).toBe(atRoot("--page-ground"));
+    expect(DEFAULT_PAGE_THEME.raised).toBe(atRoot("--page-raised"));
+    expect(DEFAULT_PAGE_THEME.band).toBe(atRoot("--page-band"));
+    expect(DEFAULT_PAGE_THEME.ink).toBe(atRoot("--page-ink"));
+    expect(DEFAULT_PAGE_THEME.body).toBe(atRoot("--page-body"));
+    expect(DEFAULT_PAGE_THEME.accent).toBe(atRoot("--page-accent"));
+    expect(DEFAULT_PAGE_THEME.badge).toBe(atRoot("--page-badge"));
+    expect(DEFAULT_PAGE_THEME.footer).toBe(atRoot("--page-footer"));
+    expect(DEFAULT_PAGE_THEME.footerText).toBe(atRoot("--page-footer-text"));
   });
 });

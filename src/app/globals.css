@@ -19,7 +19,12 @@
   --brand-ink-soft: #5d4652;
   /* The rose is a shade deeper than it was (#d6336c) since the paper turned cream on 22 Nov 2026:
      on the cream the old rose read at 3.6:1 as text, and the paper's colour on a rose button the
-     same. This one is 4.5:1 both ways, and it is the middle of the rose button's own gradient. */
+     same. This one is 4.5:1 both ways on the paper (5.2 on a card), and it is the middle of the rose
+     button's own gradient. Where it is not enough, by the numbers: on the blush sections it is 4.4
+     and on the deeper paper 3.9, so small type there takes the deeper shade (5.6 and 4.9); on the
+     dark sections neither is for type (3.1 and 2.4), which is blush or cream there.
+     Type in the wine at part strength (text-forest/…) is 5.1:1 on the paper at 65% and 4.3 at 60%:
+     a label that has to be read is 65% or more (tests/unit/site-paper.test.ts). */
   --brand-coral: #bd2a5e;
   --brand-coral-deep: #a31f52;
   --brand-rose-ui: #bd2a5e;

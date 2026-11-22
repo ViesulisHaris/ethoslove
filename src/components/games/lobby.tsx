@@ -261,7 +261,7 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
                 ) : null}
                 {ready && !host && hostPeer ? (
                   <>
-                    <p className="mt-3 text-[13.5px] text-forest/55">{t("two.hostStarts", { name: hostPeer.name || t("someone") })}</p>
+                    <p className="mt-3 text-[13.5px] text-forest/65">{t("two.hostStarts", { name: hostPeer.name || t("someone") })}</p>
                     <GuestAutoStart room={room} hostId={hostPeer.id} onTaken={() => setTaken(true)} onStart={(first) => onStart({ mode: "two", code: entry?.code ?? null, host: false, names: [hostPeer.name || t("someone"), entry?.name ?? names[0].trim()], peer: hostPeer.id, first })} />
                   </>
                 ) : null}

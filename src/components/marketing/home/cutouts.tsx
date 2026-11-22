@@ -125,13 +125,18 @@ export function FrameArt({ art, sizes, eager = false, className, style }: { art:
  */
 const HERO: Bloom[] = [
   // the top right: a spray on its stem, a large head in the corner over it, a leaf above
-  { art: "lily-stem-tall", x: 94, y: 31, size: 27, rot: 18, eager: true, phone: false },
+  // One piece of a frame is fetched with the page, the head in the top right corner (the same file
+  // on a phone and a desk). The rest arrive after it into the room kept for them: the tall stem is
+  // 88 KB (217 KB on a sharp screen), and with two more eager heads the first view carried three
+  // times the decoration the old hero did, ahead of the hero's own photograph. A piece that is
+  // hidden at a width and not lazy is fetched all the same, which a lazy one is not.
+  { art: "lily-stem-tall", x: 94, y: 31, size: 27, rot: 18, phone: false },
   { art: "lily-three-quarter", x: 96.5, y: 8, size: 24, rot: 6, eager: true, phone: false },
   { art: "leaf-1", x: 84, y: 2.5, size: 12, rot: 168, opacity: 0.9, phone: false },
   { art: "lily-side", x: 100.5, y: 62, size: 15, rot: -12, phone: false },
   { art: "leaf-1", x: 99.5, y: 82, size: 13, rot: -150, opacity: 0.85, phone: false },
   // the left edge: a head at the top, leaves down the side, a head and a leaf at the foot
-  { art: "lily-open", x: -1.5, y: 8, size: 19, rot: -10, eager: true, phone: false },
+  { art: "lily-open", x: -1.5, y: 8, size: 19, rot: -10, phone: false },
   { art: "leaf-1", x: -1, y: 25, size: 13, rot: 38, opacity: 0.9, wide: true },
   { art: "leaf-2", x: -1.5, y: 41, size: 14, rot: -40, opacity: 0.9, wide: true },
   { art: "petal-2", x: 1.2, y: 60, size: 5, rot: 18, wide: true },
@@ -173,7 +178,7 @@ const BAND: Bloom[] = [
 
 /** Round a hero whose right half and foot are full: a head in each top corner and nothing along the sides. */
 const CORNERS: Bloom[] = [
-  { art: "lily-open", x: -2, y: 7, size: 17, rot: -10, eager: true, wide: true },
+  { art: "lily-open", x: -2, y: 7, size: 17, rot: -10, wide: true },
   { art: "lily-three-quarter", x: 102.5, y: 3, size: 16, rot: 6, eager: true, phone: false },
   { art: "lily-three-quarter", x: 107, y: 7, size: 22, rot: 8, eager: true, phone: "only" },
 ];

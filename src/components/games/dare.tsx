@@ -131,11 +131,11 @@ function Cards({ names, decks, onChangePlayers }: { names: [string, string]; dec
       {card ? (
         <>
           <PlayingCard key={`${card.kind}${card.n}`} rank={card.kind === "truth" ? "T" : "D"} suit={card.kind === "truth" ? "spade" : "heart"} corners="lg" radius={26} tone={card.kind === "truth" ? "lilac" : "blush"} className="deal-in mx-auto mt-6 w-full max-w-[420px]" faceClassName="min-h-[400px] justify-between px-9 py-12 text-left">
-            <span className="text-[12px] font-semibold tracking-[0.18em] text-forest/55 uppercase">{t(card.kind)}</span>
+            <span className="text-[12px] font-semibold tracking-[0.18em] text-forest/65 uppercase">{t(card.kind)}</span>
             <span className="font-display text-[29px] leading-[1.14] sm:text-[33px]" aria-live="polite">
               {cardText}
             </span>
-            <span className="text-[13px] text-forest/55">{t("for", { name: names[turn] })}</span>
+            <span className="text-[13px] text-forest/65">{t("for", { name: names[turn] })}</span>
           </PlayingCard>
           <button
             type="button"

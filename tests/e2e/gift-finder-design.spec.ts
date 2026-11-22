@@ -86,13 +86,14 @@ test("it is one page of the same site as a gift's: the site's palette on the pag
     const cs = getComputedStyle(el);
     return ["--page-ground", "--page-raised", "--page-band", "--page-ink", "--page-accent"].map((name) => cs.getPropertyValue(name).trim());
   });
-  expect(colours).toEqual(["#f3e1d5", "#fbf1e9", "#e8cfc1", "#24121b", "#b0245a"]);
+  expect(colours).toEqual(["#f3e1d5", "#fbf1e9", "#e8cfc1", "#24121b", "#a31f52"]);
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Which digital gift should you send?");
   // The left column of the spread: a label, the heading and one line of at most fourteen words.
   const line = await page.locator("#finder-title + p").innerText();
   expect(line.trim().split(/\s+/).length).toBeLessThanOrEqual(14);
-  await expect(page.locator("#finder-title").locator("xpath=preceding-sibling::p")).toHaveText(/gift finder/i);
+  // The label over the heading (it shares its line with the way round the finder on a phone, so it is in a row of its own).
+  await expect(page.locator("#finder-title").locator("xpath=preceding-sibling::*[1]").locator("p")).toHaveText(/gift finder/i);
   // Blush flowers, as the site's palette has them, and the faint one in the footer's corner.
   const art = await theme.locator("[data-decor] img").evaluateAll((imgs) => imgs.map((img) => img.getAttribute("src") ?? ""));
   expect(art.length).toBeGreaterThanOrEqual(2);
@@ -103,6 +104,58 @@ test("it is one page of the same site as a gift's: the site's palette on the pag
   await expect(page.getByText("Question 1 of 3")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "How the finder picks" })).toHaveCount(0);
   await expect(page.locator("details[data-finder-how]")).not.toHaveAttribute("open", "");
+});
+
+test("the way round the finder is in view at every size and never printed over the label beside it", async ({ page }) => {
+  // The review of 22 Nov 2026: on a 320px phone in Spanish "Ver los 61 regalos" lay over "BUSCADOR DE
+  // REGALOS". The link was placed on the label's line by hand; it is laid out beside it now, and goes
+  // under it where the two do not fit one line.
+  test.setTimeout(180_000);
+  // English at every size first, then Spanish: a visit in Spanish is remembered, and the plain address would follow it.
+  for (const locale of ["", "/es"]) {
+    for (const [width, height] of [
+      [320, 568],
+      [346, 700],
+      [360, 740],
+      [375, 667],
+      [414, 896],
+      [768, 1024],
+      [1024, 768],
+      [1440, 900],
+    ]) {
+      await page.setViewportSize({ width, height });
+      for (const query of ["", "?for=girlfriend", "?for=girlfriend&occasion=anniversary"]) {
+        const where = `${locale}/gifts/finder${query} at ${width}px`;
+        await page.goto(`${locale}/gifts/finder${query}`, { waitUntil: "domcontentloaded" });
+        const browse = page.locator("[data-finder-browse]:visible");
+        // One of the two is drawn: the link on the label's line on a phone, the button under the words on a desk.
+        await expect(browse, where).toHaveCount(1);
+        await expect(browse, where).toHaveAttribute("href", `${locale}/templates`);
+        await expect(browse, where).toHaveText(locale ? /^Ver los \d+ regalos$/ : /^Browse all \d+ gifts$/);
+        const found = await browse.evaluate((link) => {
+          const box = (el: Element) => {
+            const r = el.getBoundingClientRect();
+            return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, height: r.height };
+          };
+          // The words themselves, not the 44px the link keeps for a thumb.
+          const words = document.createRange();
+          words.selectNodeContents(link);
+          const label = document.querySelector("#finder-title")!.previousElementSibling!.querySelector("p") ?? document.querySelector("#finder-title")!.previousElementSibling!;
+          const labelWords = document.createRange();
+          labelWords.selectNodeContents(label);
+          return { link: box(link), words: box(words as unknown as Element), label: box(labelWords as unknown as Element), heading: box(document.querySelector("#finder-title")!), screen: { width: window.innerWidth, height: window.innerHeight } };
+        });
+        const overlap = (a: typeof found.words, b: typeof found.words) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+        expect(overlap(found.words, found.label), `${where}: the link lies over the label`).toBe(0);
+        expect(overlap(found.words, found.heading), `${where}: the link lies over the heading`).toBe(0);
+        expect(found.link.left, where).toBeGreaterThanOrEqual(0);
+        expect(found.link.right, where).toBeLessThanOrEqual(found.screen.width);
+        // In the first screen, and a thumb tall.
+        expect(found.link.bottom, where).toBeLessThanOrEqual(found.screen.height);
+        expect(found.link.height, where).toBeGreaterThanOrEqual(44);
+      }
+    }
+  }
 });
 
 test("a question fits the first screen of a phone: every first answer at 375×667, all but one row at 320×568", async ({ page }) => {

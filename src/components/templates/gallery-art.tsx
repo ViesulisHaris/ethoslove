@@ -21,7 +21,8 @@ type Piece = { id: ArtId; left: string; top: string; width: string; rot: number;
 
 const PIECES: Piece[] = [
   // the spray, on a desk
-  { id: "lily-stem-tall", left: "87%", top: "25rem", width: "31vw", rot: 14, when: "hidden xl:block", eager: true },
+  // Lazy: the stem is the heaviest piece (88 KB, 217 KB on a sharp screen) and stands under the corner's head, which is the one fetched with the page.
+  { id: "lily-stem-tall", left: "87%", top: "25rem", width: "31vw", rot: 14, when: "hidden xl:block" },
   { id: "lily-three-quarter", left: "92.5%", top: "9.5rem", width: "25vw", rot: 4, when: "hidden xl:block", eager: true },
   { id: "lily-side", left: "100.5%", top: "31rem", width: "21vw", rot: -10, when: "hidden xl:block" },
   { id: "petal-2", left: "60%", top: "9.5rem", width: "4.6vw", rot: 24, when: "hidden xl:block", opacity: 0.9 },

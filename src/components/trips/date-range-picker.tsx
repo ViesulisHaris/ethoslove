@@ -498,7 +498,7 @@ export function DateRangePicker({ value, onChange, today, locale, labels, allowO
                                   blocked && "opacity-55",
                                 )}
                               >
-                                <span className="truncate text-[11.5px] leading-none font-semibold tracking-wide text-forest/55 uppercase">{which === "start" ? labels.start : labels.end}</span>
+                                <span className="truncate text-[11.5px] leading-none font-semibold tracking-wide text-forest/65 uppercase">{which === "start" ? labels.start : labels.end}</span>
                                 <span className={cn("mt-1 truncate text-[15.5px] leading-tight font-medium", date ? "text-forest" : "font-normal text-forest/45")}>{date ? formatShort(date, locale) : muted ? labels.oneWay : labels.add}</span>
                               </button>
                             );
@@ -601,7 +601,7 @@ function Field({ ref, label, extra, date, empty, muted = false, locale, expanded
     >
       <CalendarDays aria-hidden="true" className={cn("hidden size-[18px] shrink-0 @xs:block", muted ? "text-forest/30" : "text-rose-deep")} />
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate text-[12px] leading-none font-semibold tracking-wide text-forest/55 uppercase">
+        <span className="truncate text-[12px] leading-none font-semibold tracking-wide text-forest/65 uppercase">
           {label}
           {/* Only where it fits: at 320px it would cut the label to "Return · opt…". The field's name still says it. */}
           {extra ? <span className="hidden font-normal tracking-normal normal-case @min-[17rem]:inline"> · {extra}</span> : null}
@@ -625,7 +625,7 @@ function TripToggle({ uid, oneWay, labels, reduced, big, onChange }: TripToggleP
           aria-pressed={oneWay === on}
           onClick={() => onChange(on)}
           // On a phone the whole 44px of the group is the target, not just the 38px of the thumb.
-          className={cn("relative rounded-full px-4 text-[13.5px] font-semibold whitespace-nowrap transition-colors", big ? "h-[38px] before:absolute before:inset-x-0 before:-inset-y-[3px]" : "h-9", oneWay === on ? "text-forest" : "text-forest/60 hover:text-forest")}
+          className={cn("relative rounded-full px-4 text-[13.5px] font-semibold whitespace-nowrap transition-colors", big ? "h-[38px] before:absolute before:inset-x-0 before:-inset-y-[3px]" : "h-9", oneWay === on ? "text-forest" : "text-forest/65 hover:text-forest")}
         >
           {oneWay === on ? <motion.span layoutId={`${uid}-trip`} aria-hidden="true" className="absolute inset-0 rounded-full bg-white shadow-soft" transition={{ duration: reduced ? 0 : 0.25, ease: QUINT }} /> : null}
           <span className="relative">{on ? labels.oneWay : labels.roundTrip}</span>
@@ -689,7 +689,7 @@ function Sheet({ panel, reduced, cursorMonth, title, weekdays, header, footer, c
         </div>
         <Dialog.Title className="sr-only">{title}</Dialog.Title>
         <div className="shrink-0 px-4 pt-1 pb-3">{header}</div>
-        <div aria-hidden="true" className="grid shrink-0 grid-cols-7 border-y border-forest/8 bg-blush-paper px-4 py-2 text-center text-[11.5px] font-semibold tracking-wide text-forest/55 uppercase">
+        <div aria-hidden="true" className="grid shrink-0 grid-cols-7 border-y border-forest/8 bg-blush-paper px-4 py-2 text-center text-[11.5px] font-semibold tracking-wide text-forest/65 uppercase">
           {weekdays.map((d) => (
             <span key={d}>{d}</span>
           ))}

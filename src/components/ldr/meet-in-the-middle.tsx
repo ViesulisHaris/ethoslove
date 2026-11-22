@@ -124,12 +124,12 @@ export function MeetInTheMiddle() {
     <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-8">
       <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
         <div>
-          <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("you")}</p>
+          <p className="mb-1.5 text-[12.5px] font-medium text-forest/65">{t("you")}</p>
           <WhereBox value={a} locale={locale} labels={{ ...labels, label: t("you") }} onPick={setA} />
         </div>
         <MoveHorizontal aria-hidden="true" className="mx-auto mb-3.5 hidden size-5 text-rose-deep sm:block" />
         <div>
-          <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("them")}</p>
+          <p className="mb-1.5 text-[12.5px] font-medium text-forest/65">{t("them")}</p>
           <WhereBox value={b} locale={locale} labels={{ ...labels, label: t("them") }} onPick={setB} />
         </div>
       </div>
@@ -142,7 +142,7 @@ export function MeetInTheMiddle() {
               {t("apart")}
             </p>
             <p className="mt-3 font-display text-[40px] leading-none text-forest tabular-nums">{number(result.km)} km</p>
-            <p className="mt-1.5 text-[14px] text-forest/60">{t("miles", { miles: number(milesOf(result.km)) })}</p>
+            <p className="mt-1.5 text-[14px] text-forest/65">{t("miles", { miles: number(milesOf(result.km)) })}</p>
           </div>
 
           <div className="rounded-[24px] bg-blush-paper p-5">
@@ -153,7 +153,7 @@ export function MeetInTheMiddle() {
             {result.near ? (
               <>
                 <p className="mt-3 font-display text-[32px] leading-[1.05] text-forest">{halfwayName}</p>
-                <p className="mt-1.5 text-[14px] text-forest/60">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
+                <p className="mt-1.5 text-[14px] text-forest/65">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
                 <Link href={`/dates?lat=${result.near.city.lat}&lng=${result.near.city.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: halfwayName })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -162,7 +162,7 @@ export function MeetInTheMiddle() {
             ) : (
               <>
                 <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{result.unnamed ? t("eachWay", { km: number(result.km / 2) }) : t("nowhere")}</p>
-                <p className="mt-1.5 text-[14px] leading-snug text-forest/60">{result.unnamed ? t("eachWaySub") : t("nowhereSub")}</p>
+                <p className="mt-1.5 text-[14px] leading-snug text-forest/65">{result.unnamed ? t("eachWaySub") : t("nowhereSub")}</p>
                 <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: b.name })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -222,7 +222,7 @@ export function MeetInTheMiddle() {
               ))}
             </div>
           </div>
-          <p className="mt-3 text-[12px] leading-snug text-forest/60">
+          <p className="mt-3 text-[12px] leading-snug text-forest/65">
             {ta("meet.via")} {ta("disclosure")}
           </p>
         </div>

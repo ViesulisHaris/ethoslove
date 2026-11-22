@@ -52,7 +52,7 @@ export function CityPlaceList({ places, counts, locale, city, labels }: Props) {
                 <li key={place.id} className="border-t border-line first:border-t-0">
                   <CityCta href={mapHref(place, place.name)} cta="place" city={city} className="group flex min-h-11 flex-col justify-center py-2.5">
                     <span className="text-[15px] font-semibold text-forest underline-offset-4 group-hover:underline">{place.name}</span>
-                    <span className="text-[13px] text-forest/60">
+                    <span className="text-[13px] text-forest/65">
                       {KINDS[place.kind].label[locale]} · {labels.fromCentre(formatDistance(place.distanceKm, locale))}
                     </span>
                   </CityCta>

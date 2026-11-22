@@ -162,7 +162,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
         <ul className="mt-4 space-y-3">
           {reviews.map((r) => (
             <li key={r.id} className={cn("rounded-2xl p-3.5 ring-1 ring-forest/5", r.mine ? "bg-blush-paper" : "bg-white")}>
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
                 <Stars value={r.stars} size="xs" locale={locale} />
                 <span className="font-semibold text-forest">{r.name}</span>
                 <span>· {labels.when(r.createdAt)}</span>

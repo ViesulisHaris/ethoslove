@@ -73,13 +73,13 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
               <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
               {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 7.2em is Newsreader's 12ch. */}
               <h1 className="mt-5 max-w-[7.2em] display-hero text-balance">
-                {t("h1a")} <em className="text-rose">{t("h1b")}</em>
+                {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>
             <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
               <h2 className="font-display text-[26px] leading-tight text-forest">{t("finder.title")}</h2>
-              <p className="mt-1 text-[14.5px] leading-snug text-forest/60">{t("finder.sub")}</p>
+              <p className="mt-1 text-[14.5px] leading-snug text-forest/65">{t("finder.sub")}</p>
               <FlightFinder className="mt-5" />
             </div>
           </div>

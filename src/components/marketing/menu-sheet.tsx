@@ -90,7 +90,7 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className={cn("font-display block text-[1.35rem] leading-tight", here && "text-rose-deep")}>{t(`nav.${key}`)}</span>
-                        <span className="mt-0.5 block text-[13px] leading-snug text-forest/60">{t(`nav.blurb.${key}`)}</span>
+                        <span className="mt-0.5 block text-[13px] leading-snug text-forest/65">{t(`nav.blurb.${key}`)}</span>
                       </span>
                       <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-forest/30 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </Link>

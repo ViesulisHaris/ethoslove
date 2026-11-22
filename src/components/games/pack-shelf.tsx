@@ -137,13 +137,13 @@ function OfferSheet({ shelf }: { shelf: Shelf }) {
                 <SheetTitle className="mt-2 font-display text-[34px] leading-none font-normal text-forest">{info.name[locale]}</SheetTitle>
               </div>
               <SheetClose asChild>
-                <button type="button" aria-label={t("sheet.close")} className="-mt-1 -mr-2 grid size-11 shrink-0 place-items-center rounded-full text-forest/60 hover:bg-forest/5">
+                <button type="button" aria-label={t("sheet.close")} className="-mt-1 -mr-2 grid size-11 shrink-0 place-items-center rounded-full text-forest/65 hover:bg-forest/5">
                   <X aria-hidden="true" className="size-5" />
                 </button>
               </SheetClose>
             </div>
             <SheetDescription className="mt-3 text-[15.5px] leading-relaxed text-forest/70">{info.blurb[locale]}</SheetDescription>
-            <p className="mt-1.5 text-[13.5px] text-forest/55">{t("sheet.plays", { games })}</p>
+            <p className="mt-1.5 text-[13.5px] text-forest/65">{t("sheet.plays", { games })}</p>
 
             <ul className="mt-6 grid gap-3 sm:grid-cols-3" aria-label={t("sheet.samples")}>
               {info.samples.map((sample, i) => (
@@ -164,7 +164,7 @@ function OfferSheet({ shelf }: { shelf: Shelf }) {
                 {t("sheet.pass")}
               </Link>
             </div>
-            <p className="mt-3 text-[13px] leading-snug text-forest/60">{inApp ? t("sheet.appOnce") : t("sheet.once")}</p>
+            <p className="mt-3 text-[13px] leading-snug text-forest/65">{inApp ? t("sheet.appOnce") : t("sheet.once")}</p>
             {shelf.signedOut && inApp ? (
               <button type="button" onClick={() => void shelf.signInInApp()} className="inline-flex min-h-11 items-center text-[14px] font-semibold text-forest underline underline-offset-4 hover:text-rose-deep">
                 {t("sheet.signIn")}

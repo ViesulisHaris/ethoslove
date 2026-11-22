@@ -228,7 +228,7 @@ function ChooserCard({
         ) : null}
       </span>
       <span className="mt-2.5 block px-0.5 font-display text-[18px] leading-tight text-forest sm:text-[19px]">{manifest.name[locale]}</span>
-      <span className="mt-0.5 block px-0.5 text-[12.5px] leading-snug text-forest/60">{note}</span>
+      <span className="mt-0.5 block px-0.5 text-[12.5px] leading-snug text-forest/65">{note}</span>
     </button>
   );
 }

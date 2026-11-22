@@ -278,7 +278,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           <h2 ref={heading} tabIndex={-1} id="place-sheet-name" className="font-display text-[24px] leading-[1.08] text-forest outline-none">
             {place.name}
           </h2>
-          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
+          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
             {place.rating?.reviews ? (
               <>
                 <Stars value={place.rating.stars} locale={locale} />
@@ -389,7 +389,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         </button>
       </div>
       {tickets ? (
-        <p className="mt-2 px-1 text-[12px] leading-snug text-forest/60">
+        <p className="mt-2 px-1 text-[12px] leading-snug text-forest/65">
           {ta("tickets.via")} {ta("disclosure")}
         </p>
       ) : null}
@@ -402,7 +402,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
               <a key={r.source} href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-full bg-forest/[0.05] px-3.5 lg:h-10 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/10">
                 <Star aria-hidden="true" className="size-3.5 fill-star text-star" />
                 {formatStars(r.stars, locale)}
-                <span className="font-medium text-forest/60">
+                <span className="font-medium text-forest/65">
                   {SOURCE_NAMES[r.source]} · {labels.reviewsCount(r.reviews)}
                 </span>
               </a>

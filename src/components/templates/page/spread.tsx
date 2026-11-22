@@ -14,12 +14,24 @@ export const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_m
  * A section's left column: the label, the heading, at most one line and at most one button. The
  * heading is an h2 on a gift's page, where the hero has the h1; a page whose first section is a
  * spread (the finder) says `level={1}` there.
+ *
+ * `aside` shares the label's line, at its right end (the finder's way round to the gallery, on a
+ * phone). The two are laid out, not placed: where they do not fit one line, the aside goes under
+ * the label. It was placed over the label's line by hand before, and on a 320px phone in Spanish
+ * "Ver los 61 regalos" was printed over "BUSCADOR DE REGALOS" (the review of 22 Nov 2026).
  */
-export function Intro({ id, label, heading, line, level = 2, children }: { id?: string; label: string; heading: string; line?: string; level?: 1 | 2; children?: ReactNode }) {
+export function Intro({ id, label, heading, line, level = 2, aside, children }: { id?: string; label: string; heading: string; line?: string; level?: 1 | 2; aside?: ReactNode; children?: ReactNode }) {
   const Heading = level === 1 ? "h1" : "h2";
   return (
     <div className="lg:pt-7">
-      <p className="text-page-label text-page-body">{label}</p>
+      {aside ? (
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+          <p className="text-page-label text-page-body">{label}</p>
+          {aside}
+        </div>
+      ) : (
+        <p className="text-page-label text-page-body">{label}</p>
+      )}
       <Heading id={id} className="mt-4 max-w-[22rem] display-lg text-balance text-page-ink">
         {heading}
       </Heading>

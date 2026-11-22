@@ -151,7 +151,7 @@ export function ChoiceMenu<T extends string>({
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="text-[15px] leading-tight font-semibold">{choice.label}</span>
                     {choice.description ? (
-                      <span className="mt-1 text-[13px] leading-snug text-forest/60">
+                      <span className="mt-1 text-[13px] leading-snug text-forest/65">
                         {choice.description}
                       </span>
                     ) : null}

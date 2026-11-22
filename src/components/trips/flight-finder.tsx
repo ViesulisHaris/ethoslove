@@ -198,7 +198,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
           <p>{t("pick")}</p>
         )}
       </div>
-      <p className="mt-2 text-[12.5px] leading-snug text-forest/60">{t("smallPrint")}</p>
+      <p className="mt-2 text-[12.5px] leading-snug text-forest/65">{t("smallPrint")}</p>
     </div>
   );
 }

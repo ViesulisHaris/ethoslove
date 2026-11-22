@@ -216,7 +216,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                   <Ticket aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("tickets.cta", { city: name })}
                 </CityCta>
-                <p className="mt-3 text-[12.5px] leading-relaxed text-forest/55">{t("tickets.disclosure")}</p>
+                <p className="mt-3 text-[12.5px] leading-relaxed text-forest/65">{t("tickets.disclosure")}</p>
               </div>
             </div>
           </div>

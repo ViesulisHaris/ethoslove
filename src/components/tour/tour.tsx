@@ -232,7 +232,7 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
               {counter}
             </p>
             {isLast ? null : (
-              <button type="button" onClick={skip} aria-label={t("skipLabel")} className="-my-2 -mr-2 h-11 rounded-full px-3 text-[13.5px] font-semibold text-forest/55 transition-colors hover:bg-forest/5 hover:text-forest outline-none focus-visible:ring-2 focus-visible:ring-rose/45 focus-visible:ring-offset-2">
+              <button type="button" onClick={skip} aria-label={t("skipLabel")} className="-my-2 -mr-2 h-11 rounded-full px-3 text-[13.5px] font-semibold text-forest/65 transition-colors hover:bg-forest/5 hover:text-forest outline-none focus-visible:ring-2 focus-visible:ring-rose/45 focus-visible:ring-offset-2">
                 {t("skip")}
               </button>
             )}

@@ -93,7 +93,7 @@ export function GiftCardCode({ code, redeemUrl, redeemAt }: { code: string; rede
     <div className="mt-8 w-full max-w-sm rounded-3xl border border-rose/20 bg-blush-paper p-5 text-left" data-testid="giftcard-code">
       <p className="text-eyebrow text-rose-ink">{t("codeLabel")}</p>
       <p className="mt-2 font-mono text-2xl tracking-[0.12em] text-forest select-all">{code}</p>
-      <p className="mt-1 text-[13px] text-forest/60">{t("redeemAt", { url: redeemAt })}</p>
+      <p className="mt-1 text-[13px] text-forest/65">{t("redeemAt", { url: redeemAt })}</p>
       <div className="mt-4 grid grid-cols-2 gap-2">
         <button type="button" onClick={copy} className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-forest text-sm font-semibold text-cream hover:bg-forest-raised">
           {copied ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}

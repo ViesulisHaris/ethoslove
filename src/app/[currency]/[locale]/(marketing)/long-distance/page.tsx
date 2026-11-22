@@ -40,7 +40,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
               <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
               {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 8.4em is Newsreader's 14ch. */}
               <h1 className="mt-5 max-w-[8.4em] display-hero text-balance">
-                {t("h1a")} <em className="text-rose">{t("h1b")}</em>
+                {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>

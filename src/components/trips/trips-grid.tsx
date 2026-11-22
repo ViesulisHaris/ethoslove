@@ -40,7 +40,7 @@ export function TripsGrid({ cards, filters, label, className }: Props) {
               )}
             >
               {f.label}
-              <span className={cn("rounded-full px-1.5 text-[12px] tabular-nums", on ? "bg-white/15 text-cream/85" : "bg-forest/[0.06] text-forest/55")}>{count}</span>
+              <span className={cn("rounded-full px-1.5 text-[12px] tabular-nums", on ? "bg-white/15 text-cream/85" : "bg-forest/[0.06] text-forest/65")}>{count}</span>
             </button>
           );
         })}

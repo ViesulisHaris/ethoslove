@@ -100,7 +100,7 @@ export function GiftCardOffer({
               placeholder={t("notePlaceholder")}
               className={cn(field, "mt-1.5 resize-none py-3")}
             />
-            <p className="mt-1 text-[13px] text-forest/55">{t("noteHelp")}</p>
+            <p className="mt-1 text-[13px] text-forest/65">{t("noteHelp")}</p>
           </div>
         </div>
       ) : (
@@ -126,7 +126,7 @@ export function GiftCardOffer({
           {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
           {t("cta")}
         </button>
-        <p className="mt-3 text-[13px] text-forest/60">{t("note")}</p>
+        <p className="mt-3 text-[13px] text-forest/65">{t("note")}</p>
         <Link href="/redeem" className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-rose-ink underline-offset-4 hover:underline">
           {t("redeem")}
           <ArrowRight aria-hidden="true" className="size-3.5" />

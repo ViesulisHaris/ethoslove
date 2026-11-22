@@ -9,6 +9,7 @@ import { drawRoute, revealWhenDrawn } from "@/lib/dates/map-motion";
 import { applyPalette, MAP_PAPER, type MapStyle } from "@/lib/dates/map-style";
 import { MAPLIBRE_URL, loadMapStyle, preloadMapLibre } from "@/lib/dates/map-vendor";
 import type { TripKind } from "@/lib/trips/presets";
+import { BRAND_ROSE } from "@/config/brand-colours";
 
 type MapLibre = typeof import("maplibre-gl");
 
@@ -28,7 +29,7 @@ type Props = { stops: { name: string; lat: number; lng: number }[]; kind: TripKi
 
 const ROUTE = "ethos-trip-route";
 /* The site's rose and a sea blue, as literals: MapLibre paints on a canvas and cannot read CSS variables. */
-const ROSE = "#D6336C";
+const ROSE = BRAND_ROSE;
 const SEA = "#2F7FB5";
 /**
  * How each kind of trip is drawn: a road is a solid line, a railway a dashed one, a ferry a dotted
@@ -186,7 +187,7 @@ export default function RouteMap({ stops, kind, labels }: Props) {
       <div ref={holder} className="ethos-map-canvas h-full w-full" role="region" aria-label={labels.map} data-map-state={state} data-drawn={drawn ? "true" : "false"} />
       {/* Fades out as the map comes in, and goes once the canvas has been drawn over the paper. */}
       {state !== "failed" && !drawn ? (
-        <div className={cn("pointer-events-none absolute inset-0 grid place-items-center text-[13px] text-forest/55 transition-opacity duration-200 ease-(--ease-out-quint)", state === "ready" && "opacity-0")}>
+        <div className={cn("pointer-events-none absolute inset-0 grid place-items-center text-[13px] text-forest/65 transition-opacity duration-200 ease-(--ease-out-quint)", state === "ready" && "opacity-0")}>
           <span className="inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 shadow-soft backdrop-blur">
             <Loader2 aria-hidden="true" className="size-4 animate-spin" />
             {labels.loading}
@@ -202,7 +203,7 @@ export default function RouteMap({ stops, kind, labels }: Props) {
 export function StopList({ stops, note }: { stops: { name: string }[]; note: string }) {
   return (
     <div className="absolute inset-0 overflow-auto p-5 sm:p-7">
-      <p className="text-[13.5px] leading-snug text-forest/60">{note}</p>
+      <p className="text-[13.5px] leading-snug text-forest/65">{note}</p>
       <ol className="mt-4 grid gap-2">
         {stops.map((s, i) => (
           <li key={`${s.name}-${i}`} className="flex items-center gap-3 text-[15px] font-medium text-forest">

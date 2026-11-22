@@ -30,7 +30,7 @@ export function RemindToggle({ savedId, remind, member, hasDay, onLocked, onChan
 
   if (!hasDay)
     return (
-      <p className={cn("flex items-start gap-3 px-1 py-2 text-[13.5px] leading-snug text-forest/60", className)}>
+      <p className={cn("flex items-start gap-3 px-1 py-2 text-[13.5px] leading-snug text-forest/65", className)}>
         <BellRing aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/40" />
         {t("save.remindNeedsDay")}
       </p>

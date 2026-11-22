@@ -1164,8 +1164,12 @@ export const FINDER_SHORT: Record<string, Partial<Record<FinderRecipient | Finde
   },
   "music-box": {
     base: { en: "Three turns of the key and the lid opens on a turning ballerina.", es: "Tres vueltas de llave y la tapa se abre con una bailarina que gira." },
-    romantic: { en: "Two swans meet as a heart, to Swan Lake, Brahms' Lullaby or Für Elise.", es: "Dos cisnes forman un corazón al juntarse, con la melodía que elijas." },
-    mom: { en: "A music box she winds herself, playing Brahms' Lullaby while a ballerina turns.", es: "Ella da cuerda a una caja de música que toca la Canción de cuna." },
+    // The swans and the lullaby are the sender's to choose (schema.ts: the figurine is a ballerina and the
+    // tune Swan Lake unless changed). Cut to what the gift does, these two lines said every Music Box
+    // has swans ("Two swans meet as a heart…") and plays Brahms ("…playing Brahms' Lullaby while a
+    // ballerina turns"). Each still says what the gift is, and says a choice as a choice.
+    romantic: { en: "A music box with a ballerina, or two swans who meet as a heart.", es: "Una caja de música con una bailarina, o dos cisnes que forman un corazón." },
+    mom: { en: "A music box she winds herself. Choose Brahms' Lullaby from its three tunes.", es: "Ella da cuerda a la caja de música. Elige la Canción de cuna." },
   },
   "spooky-season": {
     funny: { en: "The ticket in the scrapbook admits two to wherever you are really going.", es: "La entrada del álbum es para dos, al plan que tengáis de verdad." },

@@ -66,7 +66,7 @@ export function CityIdeaCard({ idea, locale, city, href, stops, isPick, labels, 
                   {/* A place with no name on the map is called by its kind, so saying the kind again read "Viewpoint · Viewpoint". */}
                   <span className="min-w-0">
                     <span className="font-semibold">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
-                    {place.named ? <span className="text-forest/55"> · {KINDS[place.kind].label[locale]}</span> : null}
+                    {place.named ? <span className="text-forest/65"> · {KINDS[place.kind].label[locale]}</span> : null}
                   </span>
                 </li>
               ))}

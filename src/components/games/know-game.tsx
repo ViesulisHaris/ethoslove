@@ -161,7 +161,7 @@ function KnowPlay({ session, room, deal, closed, onChangePlayers }: { session: S
                 {/* The height goes on the face: the card is a plain block here, not a stretched grid
                     cell, so a height on the outer card never reached the face and left a gap under it. */}
                 <RevealCard delay={flipAt(p)} rank={RANKS[own.self]} suit={SUITS[own.self]} back={p === 0 ? "rose" : "lilac"} backLabel={<span className="rounded-full bg-cream/95 px-3 py-1 text-[13px] font-semibold text-forest">{session.names[p]}</span>} faceClassName="min-h-[170px] items-center justify-center px-8 py-8 text-center">
-                  <span className="text-[12px] font-semibold tracking-[0.16em] text-forest/55 uppercase">{t("reveal.said", { name: session.names[p] })}</span>
+                  <span className="text-[12px] font-semibold tracking-[0.16em] text-forest/65 uppercase">{t("reveal.said", { name: session.names[p] })}</span>
                   <span className="mt-2 font-display text-[24px] leading-tight">{question.options[own.self][locale]}</span>
                 </RevealCard>
                 <AfterFlip delay={faceUpAt(p)}>

@@ -14,6 +14,7 @@ import { loadMapStyle, maplibreUrl, preloadMapLibre } from "@/lib/dates/map-vend
 import type { Place } from "@/lib/dates/places";
 import type { Ratings } from "@/lib/dates/rank";
 import { createPins, openArea, pinInArea, type PinsController } from "./map-pins";
+import { BRAND_ROSE } from "@/config/brand-colours";
 
 type MapLibre = typeof import("maplibre-gl");
 
@@ -88,7 +89,7 @@ const FADE = { duration: 0.2, ease: [0.22, 1, 0.36, 1] } as const;
 /** The status chip over the map: a short drop and fade in, a lift and fade out. */
 const CHIP = { initial: { opacity: 0, y: -6 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -6 }, transition: FADE } as const;
 /* The same rose as the site's tokens, as literals: MapLibre paints on a canvas and cannot read CSS variables. */
-const ROSE = "#D6336C";
+const ROSE = BRAND_ROSE;
 /** How far the map has to be dragged, as a share of what it shows, before it looks again. */
 const MOVED_SHARE = 0.35;
 /**
@@ -577,7 +578,7 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
       </AnimatePresence>
       {state === "failed" || state === "unsupported" ? (
         <div className="absolute inset-x-6 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3 text-center">
-          <p role="status" className="max-w-sm text-sm leading-relaxed text-forest/60">
+          <p role="status" className="max-w-sm text-sm leading-relaxed text-forest/65">
             {labels.unavailable}
           </p>
           {state === "failed" && labels.retry ? (

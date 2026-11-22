@@ -217,6 +217,17 @@ test.describe("the gift finder", () => {
     await page.goto("/gifts/finder?for=girlfriend&occasion=wedding&ask=occasion");
     await expect(page.locator('[data-answer][aria-current="true"]')).toHaveText("Wedding");
     await expect(page.getByRole("button", { name: "More occasions" })).toHaveAttribute("aria-expanded", "true");
+
+    // An older link's "someone else" has no card since 22 Nov 2026. Asked again, its question came up
+    // with nothing marked (the review of that day): "Not sure" stands for it, and is the one marked.
+    await page.goto("/gifts/finder?for=someone&occasion=birthday&ask=for");
+    await expect(question(page, "Who is it for?")).toBeVisible();
+    await expect(page.locator('[data-answer][aria-current="true"]')).toHaveCount(1);
+    await expect(page.locator('[data-answer][aria-current="true"]')).toHaveText("Not sure");
+    // With no answer yet, nothing is marked.
+    await page.goto("/gifts/finder");
+    await expect(question(page, "Who is it for?")).toBeVisible();
+    await expect(page.locator('[data-answer][aria-current="true"]')).toHaveCount(0);
   });
 
   test("a result link opens on the picks in someone else's browser, with no flash of the first question", async ({ page, browser, baseURL }) => {
