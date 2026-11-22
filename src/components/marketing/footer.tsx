@@ -3,6 +3,8 @@ import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
 import { OCCASIONS } from "@/config/occasions";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
+import { artSrcSet, pageArt } from "@/content/page-art";
+import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { Logo } from "@/components/shared/logo";
 import { CookieChoiceButton } from "@/components/shared/cookie-consent";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -14,8 +16,10 @@ export async function MarketingFooter() {
 
   return (
     // The site's focus ring is ink, which vanishes on the wine: here it is cream.
-    <footer data-app-hide className="relative mt-auto overflow-hidden bg-forest text-cream [--ring:var(--color-cream)]">
+    // data-site-footer: a gift's page puts the footer in that gift's colours while it is open (globals.css, --page-footer).
+    <footer data-app-hide data-site-footer className="relative mt-auto overflow-hidden bg-forest text-cream [--ring:var(--color-cream)]">
       <div className="grain-overlay opacity-[0.08] mix-blend-overlay" />
+      <FooterFlower />
       {/*
        * Two columns on a phone: with every link 44px tall for a thumb, one column made the footer
        * 1,400px long. The company links are the longest ("Canjear una tarjeta regalo"), so they
@@ -83,6 +87,20 @@ export async function MarketingFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+/**
+ * One faint flower in the corner, on the pages laid out with the page art (a gift's page): the
+ * art's `lily-footer`, the one piece rendered for a dark ground. Where it lies and where it shows is globals.css ([data-footer-flower]):
+ * hidden on every other page, and lazy, so a page that never shows it never fetches it.
+ */
+function FooterFlower() {
+  const art = pageArt("lily-footer", "ivory");
+  return (
+    <span data-footer-flower data-decor="lily-footer" aria-hidden="true">
+      <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="24vw" width={art.width} height={art.height} className="block w-full" />
+    </span>
   );
 }
 

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { LEGAL_UPDATED } from "@/content/legal";
-import { PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
+import { GUIDES_LIVE, PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 
 type Rules = { allow: string[]; disallow: string[] };
@@ -113,7 +113,7 @@ describe("sitemap dates", () => {
 
   it("are a page's own, else its section's, else none", () => {
     expect(pageUpdated("/templates/scratch-card")).toBe(PAGE_UPDATED["/templates/scratch-card"]);
-    expect(pageUpdated("/templates/xoxo")).toBe(PAGE_UPDATED["/templates/*"]);
+    expect(pageUpdated("/templates/vinyl")).toBe(PAGE_UPDATED["/templates/*"]);
     expect(pageUpdated("/")).toBe(PAGE_UPDATED["/"]);
     expect(pageUpdated("/dates/riga")).toBeUndefined();
     expect(pageUpdated("/creators")).toBeUndefined();
@@ -129,9 +129,11 @@ describe("sitemap dates", () => {
   });
 
   it("give a template launched after the templates' shared date one of its own", () => {
-    // Every template already live on 25 Oct, the day "/templates/*" stands for. The holiday three
-    // launched on 11 Nov inherited it and told Google they were older than they were; a template
-    // added since has to carry its own date (or, if its words haven't changed, join this list).
+    // Every template already live on the day "/templates/*" stands for. That was 25 Oct until the
+    // template page was redesigned (21 Nov 2026), which changed the words on every one of them, so
+    // the shared date is now the day that page goes live. The holiday three launched on 11 Nov once
+    // inherited the old one and told Google they were older than they were; a template added since
+    // has to carry its own date (or, if its words haven't changed, join this list).
     const LIVE_ON_SECTION_DATE = [
       "arcade", "autumn-reel", "balloons", "bat-swarm", "be-my-boo", "birthday-cinema", "bloom", "cap-toss", "cauldron",
       "coquette", "dark-romance", "digicam", "evergreen", "fall-for-you", "favorite-person", "fireside", "front-page",
@@ -141,7 +143,12 @@ describe("sitemap dates", () => {
       "sketchbook", "snow-globe", "spooky-season", "sticker-bomb", "text-thread", "the-council", "the-toast",
       "trick-or-treat", "vinyl", "xoxo",
     ];
-    expect(PAGE_UPDATED["/templates/*"]).toBe("2026-10-25");
+    // The day the redesigned pages go live, set in one place (content/page-dates.ts). It was pinned
+    // here as a second literal, so "one line to set" was two.
+    expect(GUIDES_LIVE).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(PAGE_UPDATED["/templates/*"]).toBe(GUIDES_LIVE);
+    // And no template page says it is older than the redesign that changed its words.
+    for (const m of TEMPLATE_MANIFESTS) expect(PAGE_UPDATED[`/templates/${m.slug}`] ?? PAGE_UPDATED["/templates/*"], m.slug).toBe(PAGE_UPDATED["/templates/*"]);
     for (const m of TEMPLATE_MANIFESTS)
       if (!LIVE_ON_SECTION_DATE.includes(m.slug)) expect(PAGE_UPDATED[`/templates/${m.slug}`], m.slug).toBeDefined();
   });

@@ -3,7 +3,7 @@ import type { FieldMeta } from "../types";
 export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   en: {
     palette: { label: "The night", options: { midnight: "Midnight purple", pumpkin: "Pumpkin orange", witch: "Witch green", candy: "Candy pink" } },
-    host: { label: "Who answers the door", options: { ghost: "A small ghost", cat: "A black cat", pumpkin: "The jack-o'-lantern" } },
+    host: { label: "Who answers the door", options: { ghost: "A small ghost", cat: "A black cat", pumpkin: "The jack-o’-lantern" } },
     doorLine: { label: "What they say at the door", help: "Defaults to “trick or treat?”." },
     sign: { label: "The sign on the door", help: "Defaults to “for {name}”. Keep it short." },
   },

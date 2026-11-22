@@ -121,7 +121,8 @@ describe("template guides", () => {
       for (const l of LOCALES) {
         const g = guide[l];
         expect(new Set(g.ideas.items.map((i) => i.heading)).size, `${slug} ${l} headings repeat`).toBe(g.ideas.items.length);
-        for (const idea of g.ideas.items) expect(words(idea.body), `${slug} ${l}: ${idea.heading}`).toBeGreaterThanOrEqual(25);
+        // An idea is a card since 21 Nov 2026 (tests/unit/text-budget.test.ts holds its lengths); it still has to say what to do.
+        for (const idea of g.ideas.items) expect(words(idea.how), `${slug} ${l}: ${idea.heading}`).toBeGreaterThanOrEqual(5);
         for (const f of g.faq) {
           expect(f.q.trim().endsWith("?"), f.q).toBe(true);
           if (l === "es") expect(f.q.trim().startsWith("¿"), f.q).toBe(true);

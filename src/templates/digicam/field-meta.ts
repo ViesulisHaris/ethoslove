@@ -2,7 +2,7 @@ import type { FieldMeta } from "../types";
 
 export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   en: {
-    birthday: { label: "It's their birthday", help: "The title wishes them happy birthday, and so does the camera when it turns on." },
+    birthday: { label: "It’s their birthday", help: "The title wishes them happy birthday, and so does the camera when it turns on." },
     headline: { label: "The cut-out title", help: "Letters cut out of magazines, above the camera. Leave it empty for “happy birthday”, or their name when it isn't their birthday." },
     body: { label: "Its colour", options: { pink: "Baby pink", silver: "Silver", lilac: "Lilac", black: "Black" } },
     stamp: { label: "Date stamp", help: "The orange date in the corner of every photo, the way cameras printed it in 2006." },

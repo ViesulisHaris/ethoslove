@@ -2,7 +2,7 @@ import type { TemplateManifest } from "../types";
 
 export const manifest: TemplateManifest = {
   slug: "jack-o-lantern",
-  name: { en: "Jack-o'-Lantern", es: "Calabaza tallada" },
+  name: { en: "Jack-o’-Lantern", es: "Calabaza tallada" },
   tagline: {
     en: "Watch a pumpkin get carved with their name. Then light the candle.",
     es: "Mira cómo tallan una calabaza con su nombre. Luego, enciende la vela.",

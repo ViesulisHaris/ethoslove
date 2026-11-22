@@ -3,7 +3,7 @@ import type { FieldMeta } from "../types";
 export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   en: {
     figurine: { label: "Inside the box", help: "Who turns on the velvet while it plays.", options: { ballerina: "A ballerina", swans: "Two swans" } },
-    tune: { label: "The tune", help: "Played note by note on the box's comb, slowing as the spring runs down.", options: { "swan-lake": "Swan Lake", lullaby: "Brahms' Lullaby", "fur-elise": "Für Elise" } },
+    tune: { label: "The tune", help: "Played note by note on the box's comb, slowing as the spring runs down.", options: { "swan-lake": "Swan Lake", lullaby: "Brahms’ Lullaby", "fur-elise": "Für Elise" } },
     box: { label: "The lacquer", help: "The box, its velvet and the wallpaper behind it.", options: { blush: "Blush", ivory: "Ivory", lilac: "Lilac", sage: "Sage" } },
   },
   es: {

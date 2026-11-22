@@ -6,7 +6,7 @@ export const manifest: TemplateManifest = {
   tagline: { en: "A jar of folded notes. Shake one out.", es: "Un frasco de notas dobladas. Agita para sacar una." },
   description: {
     en: "A glass jar stuffed with folded notes, one reason each. They shake the phone (or tap the jar) and a note tumbles out and unfolds. Some notes carry a photo. Keep going until the jar is empty, then your letter waits underneath.",
-    es: "Un frasco de cristal lleno de notas dobladas, una razón en cada una. Agitan el teléfono (o tocan el frasco) y una nota sale y se despliega. Algunas llevan una foto. Siguen hasta vaciar el frasco, y debajo espera tu carta.",
+    es: "Un frasco de cristal lleno de notas dobladas, una razón en cada una. Agitan el móvil (o tocan el frasco) y una nota sale y se despliega. Algunas llevan una foto. Siguen hasta vaciar el frasco, y debajo espera tu carta.",
   },
   occasions: ["valentines", "anniversary", "mothers-day", "fathers-day"],
   styles: ["playful", "romantic"],

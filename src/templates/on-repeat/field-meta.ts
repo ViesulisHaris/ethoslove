@@ -4,7 +4,7 @@ export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   en: {
     look: { label: "The sky", options: { sunset: "Sunset", lilac: "Lilac", night: "Night" } },
     note: { label: "The note under the player", help: "On grid paper, in handwriting. Defaults to “you're my favorite song”." },
-    playlist: { label: "The playlist's name", help: "Your photos are its songs, and their captions are the titles. Defaults to “our playlist”." },
+    playlist: { label: "The playlist’s name", help: "Your photos are its songs, and their captions are the titles. Defaults to “our playlist”." },
   },
   es: {
     look: { label: "El cielo", options: { sunset: "Atardecer", lilac: "Lila", night: "Noche" } },
