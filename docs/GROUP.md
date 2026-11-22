@@ -39,10 +39,14 @@ A template made for group cards must:
 1. draw every item of `data.contributions ?? []`, in array order, from none to its `max`;
 2. draw `name` and `note` as plain text: never through `parseRichText`, never as HTML, never
    auto-linked, both with `overflow-wrap: anywhere`;
-3. treat `photo` as optional, reserve its box from `width` and `height`, and load it lazily past the
+3. set `dir="auto"` on the element that holds a name and on the one that holds a note, and nothing
+   else in them, so writing that runs right to left (Arabic, Hebrew) starts from the right with its
+   full stop at its end; where a name is set inside a sentence of the template's own, pass it
+   through `isolated()` (`src/lib/group/bidi.ts`);
+4. treat `photo` as optional, reserve its box from `width` and `height`, and load it lazily past the
    first screen;
-4. carry no form, no report control and no link out (reporting is the end screen's);
-5. keep working in the editor's preview as the list changes under it.
+5. carry no form, no report control and no link out (reporting is the end screen's);
+6. keep working in the editor's preview as the list changes under it.
 
 The server holds it to that: `readinessProblems` (`src/lib/gift/publish.ts`) adds
 `contributionsMin`, `contributionsMax` and `contributionNote`; a template without `features.group`
@@ -131,7 +135,7 @@ The sender's (signed in, 120 requests in ten minutes per account, each checks th
 | `POST /api/group` | Makes the group for a draft gift on a group template, or returns the one it has |
 | `POST /api/group/find` | The panel asking how its group stands. A POST, because a gift's id is never put in a URL |
 | `PATCH /api/group/[id]` | The page's words, close or reopen, reset the link, keep it open 30 more days: 30 on from the day it closes, or from today once that has passed, never past 90 from the start. The group's `extendsTo` is where that would move it (null at the last day), and `ranOut` says its last day has passed |
-| `POST /api/group/[id]/entries/[entryId]` | `approve` (with or without the photo), `reject`, `remove`, `restore` |
+| `POST /api/group/[id]/entries/[entryId]` | `approve` (with or without the photo), `reject`, `remove`, `restore`. A note its writer took back answers 409 `taken_back`, so the panel can say who did it; one in another state than the panel thought, 409 `not_allowed`; Undo after its day, 410 `gone`. Each entry in a group's answer carries `canUndo`, by the same rule the route keeps, and the panel offers Undo on nothing else |
 | `DELETE /api/group/[id]` | The group and everything sent to it; the gift's own notes stay |
 
 A contributor's address is never part of any answer to the sender, only that one was left.
@@ -140,20 +144,35 @@ Anyone holding the link (no account):
 
 | Route | Does |
 | --- | --- |
-| `POST /api/group/contribute` | Multipart: name, note, the box, an optional photo and an optional address. 40 an hour per connection, 30 an hour per link from it |
+| `POST /api/group/contribute` | Multipart: name, note, the box, an optional photo and an optional address. 40 an hour per connection, 30 an hour per link from it. It answers as soon as the note is stored: the confirming email and the word to the sender are sent after the answer (`later` in `src/lib/group/http.ts`), so a slow mail service never makes anyone send a note twice |
 | `POST /api/group/withdraw` | "Take my note back", with the secret the page kept (in the browser's own storage, one per note), until the card is sent. The secret alone finds the note, so it works after the sender has reset the link. 410 once sent, 404 for a note no longer there: the page gives the support address for both, and never says "taken back" without the server's yes |
 | `GET`/`POST /api/group/confirm` | "Yes, send it to me": GET only asks, so a mail scanner confirms nothing |
 
 What a contributor types is made one line of plain text (`src/lib/group/clean.ts`): control,
 zero-width and bidi characters stripped, whitespace collapsed, anything that looks like a link
-refused. A full stop with no space after it is not a link ("Gracias por todo.Es un placer"): a
-word, a dot and a word counts only with a path after it, with an ending that is no word
-("evil.pt"), or with a word-like ending where the note stops ("tienda.es"). The sender's own form
-in the panel runs the same check. A photo is refused over 2 MB or outside JPEG, PNG and WebP, and always decoded and written
+refused. Two of the zero-width characters are spelling and are kept where they are doing that: the
+joiner (U+200D) between two pictures, which is what holds a family, a flag or a shrug together as
+one emoji, and the joiner or the non-joiner (U+200C) between two letters of a script that joins
+(Persian, Arabic, Hindi and their neighbours). Anywhere else, in a Latin word or at an end, they go
+like the rest. The sender's own form in the panel runs the same cleaning and the same link check,
+and so does the form for what the page says. A photo is refused over 2 MB or outside JPEG, PNG and WebP, and always decoded and written
 out again as WebP of at most 1600 px (`src/lib/group/photo.ts`), which removes its EXIF.
 
+**The address check and its limits.** A full stop with no space after it is not a link ("Gracias
+por todo.Es un placer"): a word, a dot and a word counts only with a path after it ("t.me/abc"),
+with an ending that is no word ("evil.pt"), or with a word-like ending where the note stops
+("tienda.es"). The ending has to be typed as an address is, in lower case or all in capitals,
+except for `com`, `org`, `biz` and `xyz`, which count however they are written ("Evil.Com"). It is
+not a wall, and is not meant to be: nothing in a card is ever made a link, and the sender reads
+every note before it goes in. Known to get through: an ending that is on neither list ("evil.ca",
+"evil.se"), and a word-like ending in the middle of a sentence ("go to evil.shop now"). Known to
+be refused though honest: a note whose last full stop lost its space before a short last word
+("all my love.us", "un abrazo fuerte.de"); the page's words say to take the web address out, and
+putting the space back sends it. Tightening either side loosens the other.
+
 A link is one of: open, full, closed (by its sender), expired (past its last day, which the page
-says without blaming the sender) or sent.
+says without blaming the sender) or sent. A page left open while its sender reset the link learns
+it when it sends (404) and says what `GroupLinkGone` says, never "try again".
 
 The page is `src/app/[currency]/[locale]/(gift)/c/[token]/page.tsx`: no site chrome, noindex, no
 price or payment field, no Clarity, no pixels, no cookie banner (`OFF_LIMITS` in
@@ -161,6 +180,19 @@ price or payment field, no Clarity, no pixels, no cookie banner (`OFF_LIMITS` in
 
 How the page behaves when it is used by hand (each of these was found broken once, and is tested):
 
+- **Before the page's script has run** (seconds on a bad connection, for ever where scripts are
+  off) the form takes typing and can't be sent: its button is switched off until the page is live,
+  and it is `method="post"`, so no browser ever puts a name, a note and an email address into the
+  page's address. The tick opens the address field by the stylesheet (`peer-has-checked`), the
+  count is not shown until it can be right, the round mark is drawn by the stylesheet, and a
+  `<noscript>` line says what to do. `tests/unit/group-first-html.test.tsx` reads the first HTML.
+- **Two tabs on one link** do not move each other: what the browser holds for the link is read
+  once, when the page comes alive, and looked at afresh only to write it back, so neither tab
+  loses a half-written note or the other's way to take a note back.
+- **The keyboard's focus follows the screen.** When the form is replaced (the note went, the link
+  turned out full, closed, past its day, sent or reset, a note was taken back, "Add another note")
+  the new screen's heading takes the focus and sits in a `role="status"` region. Arriving at the
+  page moves nothing.
 - **The fields keep their own values** (name, note, both tick boxes, the address). A browser puts
   them back after Back or a reload, and the page reads the count and the address field's tick back
   off them, so what is drawn and what is sent agree. Sending reads the tick box itself. A tick with
@@ -168,7 +200,13 @@ How the page behaves when it is used by hand (each of these was found broken onc
   email". Privacy opens in its own tab.
 - **The count is under the note's box**, never inside it.
 - **A photo that can't be used is said at the photo button.** Everything else is said under the
-  send button.
+  send button. A photo picked with no connection is not blamed (the photo step's own code is fetched
+  on first use): "Check your connection and pick it again." A form that comes back from Back or a
+  reload with its words and without the photo it had says so there too, once (a flag in the tab's
+  own `sessionStorage`, nothing of the photo).
+- **Readable on the night ground.** Every field is 16 px (an iPhone zooms into anything smaller).
+  Refusal lines are the brand's coral lightened to 6 to 1, and placeholders, which are each field's
+  only visible label, are 5.7 to 1 or better.
 - **The notice names the photo only on a card that takes one** (`groupNotice(locale, from,
   takesPhotos)`), on the page and in what is stored as agreed to.
 - **Someone whose note is already in never sees the empty form first.** `KeptNoteGate`
@@ -184,7 +222,15 @@ How the page behaves when it is used by hand (each of these was found broken onc
   "This link no longer works. Ask whoever sent it for a new one." (`GroupLinkGone`), the same for
   every address.
 
-In the sender's panel: a failed tap is answered inside the thing that was tapped (the note's own
+In the sender's panel: until one read of the group has been answered it shows that it is still
+asking ("Couldn't load your group card. Trying again…", every five seconds; "You've been signed
+out" for a session that ended) and never the price and "Invite people", which is only true of a
+card the server has said has no group. The keyboard's focus follows what a tap changed (`useLanding`
+in `src/components/group/panel.tsx`: the first field of a form as it opens, the button that opened
+it as it closes, Undo when a note is removed, the list's heading when a note leaves it). What is
+said when the server refuses is what happened: a web address in the page's words, a note its
+writer has just taken back, an Undo past its day; "try again in a moment" is kept for what trying
+again can change. A failed tap is answered inside the thing that was tapped (the note's own
 card, the link's controls, the form), never in one line at the foot; under the link, one sentence
 says what the page says with **Edit**, which changes the names and the line on what to write
 without changing the link; a link that is closed or past its last day says so on its own block and
@@ -260,16 +306,28 @@ PORT=3431 npx playwright test tests/e2e/group.spec.ts --workers=1
 The same bare command runs `commerce-api`, `keep-and-footer`, `templates`, `unsent-gift` and
 `lifecycle`.
 
-**`money.spec.ts` needs four placeholder settings**, because the pay panel and the pricing page's
-buy buttons are only drawn on a server that has accounts and payments: the send screen needs
+**`money.spec.ts` needs four placeholder settings**, and so do `attribution.spec.ts`,
+`membership-signed-in.spec.ts` and `pricing-membership.spec.ts` (`currency.spec.ts` and
+`personal-price.spec.ts` pass on the same server, so the six are run together): the pay panel and
+the pricing page's buy buttons are only drawn on a server that has accounts and payments: the send screen needs
 Supabase's public URL and key and a Stripe key, and `/pricing` reads `stripeReady()`
 (`src/lib/stripe/server.ts`), which also wants the service-role key. All four point at nothing:
 
 ```
 PORT=3431 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:9 NEXT_PUBLIC_SUPABASE_ANON_KEY=x \
 SUPABASE_SERVICE_ROLE_KEY=x STRIPE_SECRET_KEY=sk_test_placeholder_reaches_nothing \
-npx playwright test tests/e2e/money.spec.ts --workers=1
+npx playwright test tests/e2e/money.spec.ts tests/e2e/attribution.spec.ts tests/e2e/membership-signed-in.spec.ts \
+  tests/e2e/pricing-membership.spec.ts tests/e2e/currency.spec.ts tests/e2e/personal-price.spec.ts --workers=1
 ```
+
+Run bare, `attribution.spec.ts` fails 2 tests and `membership-signed-in.spec.ts` 9 in each project
+(no pay panel or pricing button to find); with the four placeholders they pass. Do not also set
+`NEXT_PUBLIC_PRICE_CURRENCIES` on that server: the test browsers ask in `en-US` and would be
+served dollars where the specs expect euros.
+
+`server-action-forwarding.spec.ts` cannot pass on a development server at all: it looks for the
+editor's save in a production build's scripts (the file says so) and fails with "no saveDraft
+reference in the editor's scripts" on `next dev`. It belongs to the integration step's build.
 
 Run bare, 30 of its 52 tests fail (no pay panel to find); with the first three only, 6 fail (the
 pricing page's buttons). That is the live code's own behaviour, not this branch's: run bare on `origin/main`
