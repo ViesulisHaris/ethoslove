@@ -90,7 +90,8 @@ test.describe("the template gallery", () => {
       expect(box.h).toBeGreaterThanOrEqual(44);
     }
     await page.locator("[data-occasion-tile=birthday]").click();
-    await expect(page).toHaveURL(new RegExp("/occasions/birthday$"));
+    // A dev server builds the occasion's page the first time it is asked for.
+    await expect(page).toHaveURL(new RegExp("/occasions/birthday$"), { timeout: 60_000 });
     await expect(page.locator("[data-occasion-tile=birthday]")).toHaveAttribute("aria-current", "page");
     // An occasion's page keeps its own order, so it has no "Sort by".
     await expect(page.locator("[data-gallery-sort]")).toHaveCount(0);

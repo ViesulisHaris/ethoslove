@@ -77,7 +77,7 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>
-            <div className="rounded-[32px] bg-white p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
+            <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
               <h2 className="font-display text-[26px] leading-tight text-forest">{t("finder.title")}</h2>
               <p className="mt-1 text-[14.5px] leading-snug text-forest/60">{t("finder.sub")}</p>
               <FlightFinder className="mt-5" />

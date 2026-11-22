@@ -17,8 +17,13 @@
   --brand-paper-deep: #e8cfc1;
   --brand-ink: #24121b;
   --brand-ink-soft: #5d4652;
-  --brand-coral: #d6336c;
-  --brand-coral-deep: #b0245a;
+  /* The rose is a shade deeper than it was (#d6336c) since the paper turned cream on 22 Nov 2026:
+     on the cream the old rose read at 3.6:1 as text, and the paper's colour on a rose button the
+     same. This one is 4.5:1 both ways, and it is the middle of the rose button's own gradient. */
+  --brand-coral: #bd2a5e;
+  --brand-coral-deep: #a31f52;
+  --brand-rose-ui: #bd2a5e;
+  --brand-rose-ui-deep: #a31f52;
   --brand-rose: #f9d5de;
   --brand-rose-soft: #fdeef2;
   --brand-gold: #c9923a;
@@ -383,8 +388,8 @@
 
   /* The couples' side: one rose in five weights, the amber of a star, and the greens and lilac
      the rooms use. Components use these names, never a hex, so the palette is one block here. */
-  --color-rose: #d6336c;
-  --color-rose-deep: #b0245a;
+  --color-rose: var(--brand-rose-ui);
+  --color-rose-deep: var(--brand-rose-ui-deep);
   --color-rose-ink: #8f1f47;
   --color-rose-soft: #ffe8ef;
   --color-rose-tint: #ffd6e2;
@@ -955,6 +960,11 @@ body:has([data-page-theme]) .site-header .btn-rose {
   --popover: #fffaf7;
   --secondary: #f7ebe5;
   --muted: #f6eae5;
+  --brand-coral: #d6336c;
+  --brand-coral-deep: #b0245a;
+  --brand-rose-ui: #d6336c;
+  --brand-rose-ui-deep: #b0245a;
+  --primary: #d6336c;
 }
 
 /*

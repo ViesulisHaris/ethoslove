@@ -83,7 +83,7 @@ export default async function CreatorsPage({ params }: PageProps<"/[currency]/[l
 
           {/* the link as a ticket: what it earns, and when it's paid */}
           <div className="relative mx-auto w-full max-w-[380px] lg:col-span-5 lg:justify-self-end" aria-hidden="true">
-            <div className="rotate-[-3deg] rounded-[28px] bg-white p-7 shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-1 ring-forest/5">
+            <div className="rotate-[-3deg] rounded-[28px] bg-card p-7 shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-1 ring-forest/5">
               <p className="text-eyebrow text-rose-deep">{t("ticket.label")}</p>
               <p className="mt-3 font-mono text-[1.15rem] leading-snug font-medium break-all text-forest">{EXAMPLE_LINK}</p>
               <div className="my-6 border-t-2 border-dashed border-forest/15" />
@@ -144,7 +144,7 @@ export default async function CreatorsPage({ params }: PageProps<"/[currency]/[l
           <h2 className="display-xl mt-4 max-w-[18ch]">{t("rules.title")}</h2>
           <ul className="mt-12 grid gap-5 sm:grid-cols-2">
             {RULES.map(({ key, Icon }) => (
-              <li key={key} className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
+              <li key={key} className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
                 <span className="grid size-11 place-items-center rounded-2xl bg-rose-mist text-rose-deep">
                   <Icon aria-hidden="true" className="size-[22px]" strokeWidth={1.8} />
                 </span>

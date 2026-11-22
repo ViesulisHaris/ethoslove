@@ -39,7 +39,7 @@ export function Hero() {
         mx.set(0);
         my.set(0);
       }}
-      className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-[#FFF5F2] pt-[var(--header-h)] text-forest"
+      className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-blush-paper pt-[var(--header-h)] text-forest"
     >
       <FloralFrame frame="hero" ground="light" />
       <div className="relative container-x grid items-center gap-14 pt-12 pb-16 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-24">

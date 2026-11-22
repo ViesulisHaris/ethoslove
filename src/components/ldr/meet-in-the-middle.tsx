@@ -121,7 +121,7 @@ export function MeetInTheMiddle() {
   const hours = (h: number) => String(Math.abs(h)).replace(".5", "½");
 
   return (
-    <div className="rounded-[32px] bg-white p-5 shadow-lift ring-1 ring-forest/5 sm:p-8">
+    <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-8">
       <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
         <div>
           <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("you")}</p>

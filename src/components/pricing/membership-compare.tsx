@@ -89,7 +89,7 @@ export async function MembershipCompare({
         </div>
 
         {/* overflow-clip, not hidden: hidden would make this box the sticky heads' scroller and pin them to nothing. */}
-        <div className="mx-auto mt-10 max-w-4xl overflow-clip rounded-[28px] bg-white shadow-lift ring-1 ring-forest/5 sm:mt-12" data-reveal style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
+        <div className="mx-auto mt-10 max-w-4xl overflow-clip rounded-[28px] bg-card shadow-lift ring-1 ring-forest/5 sm:mt-12" data-reveal style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
           {/* Separate borders, not collapsed: a collapsed one is painted over the table's white, not the cell's dusk. */}
           <table className="w-full table-fixed border-separate border-spacing-0 text-left" data-testid="membership-compare">
             <caption className="sr-only">{t("title")}</caption>
