@@ -76,6 +76,21 @@ export type FunnelEvent =
   | "reminder_saved"
   | "reply_started"
   | "pack_offer_shown"
+  // The games. A game begun and a game finished (which game, on one phone or two), a room made and a
+  // room joined (which game), and what was picked at the end of a game (the game, and "gift", "today",
+  // "host" or the next game's key). Then today's question (/games/today): the page seen, an answer
+  // tapped, the link sent (by the share sheet or as a copied link), a sent link opened, and both
+  // answers shown (whether they matched). Never a name, an answer, a room's code or a pair's id.
+  | "game_started"
+  | "game_finished"
+  | "room_made"
+  | "room_joined"
+  | "game_end_pick"
+  | "daily_seen"
+  | "daily_answered"
+  | "daily_shared"
+  | "daily_opened_shared"
+  | "daily_revealed"
   | "tour_step"
   | "tour_skipped"
   | "city_page_cta"
