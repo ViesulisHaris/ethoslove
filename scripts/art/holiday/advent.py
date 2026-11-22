@@ -48,8 +48,8 @@ FONTS = [os.environ.get("ADVENT_FONT", ""), r"C:WindowsFontsgeorgiab.ttf", "/Lib
 LOOKS = {
     # the house's paint, its doors' four paints, what a niche is lined with, the wall behind, the mantel's wood
     "evergreen": dict(paint="#1f4a36", doors=["#a8281f", "#f1e6cf", "#c9963a", "#2f6b4a"], lining="#7a1c18", wall="#16302b", mantel=("#7a5230", "#40281a"), ink="#f6d98a", roof="#7a2a1e"),
-    "nordic": dict(paint="#f1ece2", doors=["#b3302a", "#e6dccb", "#8fa58f", "#d9b98a"], lining="#c98a3a", wall="#3b4a5a", mantel=("#c9a678", "#8a6844"), ink="#7a5a20", roof="#5a6a78"),
-    "midnight": dict(paint="#17223f", doors=["#22335e", "#c9a04a", "#7a1f2a", "#e9e1cf"], lining="#c8862a", wall="#0f1526", mantel=("#5a3c26", "#2c1c12"), ink="#f3d78a", roof="#101830"),
+    "nordic": dict(paint="#f1ece2", doors=["#b3302a", "#e6dccb", "#8fa58f", "#d9b98a"], lining="#c98a3a", wall="#3b4a5a", mantel=("#c9a678", "#8a6844"), ink="#fbf3e2", roof="#5a6a78"),
+    "midnight": dict(paint="#17223f", doors=["#22335e", "#c9a04a", "#7a1f2a", "#e9e1cf"], lining="#c8862a", wall="#18213a", mantel=("#5a3c26", "#2c1c12"), ink="#f3d78a", roof="#101830"),
 }
 
 
@@ -240,6 +240,11 @@ def room(look, rnd):
     # a moulding along the wall, so the wall is a room's and not a backdrop
     rail = painted("rail_paint", kit_darken(L["wall"], 1.25) if look != "nordic" else "#4a5a6a", 0.6)
     place(box("rail", (128.0, 0.12, 0.26), rail, 0.0, 0.03, 3), (0, wy - 0.06, 9.6))
+    # panelling: tall frames of thin moulding along the wall, so there is something for the light to catch
+    for k in range(-9, 10):
+        cx = k * 6.4
+        for nm, size, loc in (("t", (5.2, 0.08, 0.12), (cx, wy - 0.04, 8.6)), ("b", (5.2, 0.08, 0.12), (cx, wy - 0.04, 1.0)), ("l", (0.12, 0.08, 7.72), (cx - 2.54, wy - 0.04, 1.0)), ("r", (0.12, 0.08, 7.72), (cx + 2.54, wy - 0.04, 1.0))):
+            place(box("panel_%s%d" % (nm, k), size, rail, 0.0, 0.02, 2), loc)
     # a swag of small lights along the wall above the house, out of focus
     wire = plain("wire", "#1a160e", 0.6)
     socket = plain("socket", "#2a2418", 0.5)
@@ -276,6 +281,11 @@ def room(look, rnd):
         fl = lathe("flame%d" % i, [(0.0, 0.96 + ch), (0.035, 1.0 + ch), (0.05, 1.07 + ch), (0.034, 1.18 + ch), (0.012, 1.28 + ch), (0.0, 1.33 + ch)], 16, flame)
         parent([stick, taper, wick, fl], "candle_pivot%d" % i, Vector((cx, cy, 0.0)))
         persp.point("candle_light%d" % i, Vector((cx, cy - 0.05, 1.2 + ch)), 22.0, (1.0, 0.62, 0.28), 0.05)
+    # two tealights at the house's front corners: the candles a phone's narrow screen still has
+    cup = plain("tealight_cup", "#d9b25a", 0.3, 1.0)
+    for i, (tx, ty) in enumerate(((-1.93, -0.98), (1.93, -0.98))):
+        parent(desk.tealight("tealight%d" % i, cup, wax, emissive("tealight_flame%d" % i, "#ffb040", 34.0), plain("tealight_wick%d" % i, "#2a1a10", 0.8), 0.17), "tealight_pivot%d" % i, Vector((tx, ty, 0.0)), 0.0, 0.34)
+        persp.point("tealight_light%d" % i, Vector((tx, ty - 0.02, 0.36)), 5.0, (1.0, 0.62, 0.28), 0.03)
     # presents further along, for a wide screen
     for i, (px, py, w, d, h, base, rib) in enumerate(((-10.6, 0.3, 1.9, 1.4, 1.2, "#a3151f", "#f6d488"), (10.9, 0.2, 1.6, 1.5, 1.5, "#f1e6cf", "#a3151f"), (-12.9, 0.5, 1.3, 1.2, 0.9, "#1f4a36", "#f6d488"), (13.2, 0.7, 1.2, 1.2, 0.8, "#c9963a", "#f1e6cf"))):
         body, ribs = props.present("gift%d" % i, w, d, h, kit.paper("gift_paper%d" % i, base), kit.satin("gift_ribbon%d" % i, rib), 0.22, True, 0.6)
