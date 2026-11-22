@@ -1,6 +1,6 @@
 import "server-only";
 
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import type { User } from "@supabase/supabase-js";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import type { Db } from "@/lib/commerce/db";
@@ -19,6 +19,19 @@ export const answer = (body: Record<string, unknown>, status = 200) => NextRespo
 export const switchedOff = () => !groupGiftsEnabled();
 export const notThere = () => answer({ error: "not_found" }, 404);
 export const unavailable = () => answer({ error: "unavailable" }, 503);
+
+/**
+ * Work that must not hold up an answer (emails): run once the answer has gone, or at once where
+ * there is no request to wait for. Someone who is kept waiting on a slow mail service, or told
+ * "that didn't go through" when it times out, sends the same thing again.
+ */
+export function later(task: () => Promise<unknown>) {
+  try {
+    after(task);
+  } catch {
+    void task();
+  }
+}
 
 /** A route's own failure: "unavailable" when the tables are missing (0023 not applied), else a plain 500, logged. */
 export function failed(error: unknown): NextResponse {

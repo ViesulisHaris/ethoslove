@@ -18,8 +18,10 @@ import { groupToken, sha256Hex } from "@/lib/group/token";
 import { FakeDb } from "./helpers/fake-db";
 
 type Sent = { kind: "confirm" | "signed" | "nudge"; args: Record<string, unknown> };
-const state = vi.hoisted(() => ({ db: null as unknown, on: true, limitedKeys: [] as string[], asked: [] as string[], sendOk: true, sent: [] as { kind: string; args: Record<string, unknown> }[] }));
+const state = vi.hoisted(() => ({ db: null as unknown, on: true, limitedKeys: [] as string[], asked: [] as string[], sendOk: true, sent: [] as { kind: string; args: Record<string, unknown> }[], afterwards: [] as (() => Promise<unknown>)[] }));
 vi.mock("server-only", () => ({}));
+// What a route leaves for once its answer has gone (`after`): kept here, and run when a test says so.
+vi.mock("next/server", async (original) => ({ ...(await original<typeof import("next/server")>()), after: (task: () => Promise<unknown>) => void state.afterwards.push(task) }));
 vi.mock("@/lib/rate-limit", () => ({
   rateLimit: async (key: string) => {
     state.asked.push(key);
@@ -132,13 +134,25 @@ beforeEach(() => {
   state.asked = [];
   state.sendOk = true;
   state.sent = [];
+  state.afterwards = [];
   return () => vi.useRealTimers();
 });
 
-function add(fields: Record<string, string> = {}) {
+/** Runs what the routes left for after their answers. */
+async function afterwards() {
+  for (const task of state.afterwards.splice(0)) await task();
+}
+/** Adds a note at the link and stops there: the answer is back, and nothing left for afterwards has run. */
+function answered(fields: Record<string, string> = {}) {
   const form = new FormData();
   for (const [key, value] of Object.entries({ token: TOKEN, name: "Mum", note: "Forty is nothing. Ring me.", agree: "1", ...fields })) form.set(key, value);
   return contribute.POST(new NextRequest("https://ethos.test/api/group/contribute", { method: "POST", body: form, headers: { "x-real-ip": "203.0.113.7" } }));
+}
+/** Adds a note, and lets the emails that follow it go. */
+async function add(fields: Record<string, string> = {}) {
+  const res = await answered(fields);
+  await afterwards();
+  return res;
 }
 const confirmUrl = (token: string, locale = "en") => `https://ethos.test/api/group/confirm?t=${token}&l=${locale}`;
 const open = (token: string, locale?: string) => confirm.GET(new NextRequest(confirmUrl(token, locale)));
@@ -193,6 +207,21 @@ describe("leaving an address with a note", () => {
     expect(res.status).toBe(200);
     expect(sent("confirm")).toHaveLength(1);
     expect(rows()[1]).toMatchObject({ name: "Mum again", confirm_sent_at: null });
+  });
+
+  it("the answer does not wait for either email: the note is in and its writer is told before the mail service is asked anything", async () => {
+    const res = await answered({ email: "mum@example.test" });
+    expect([res.status, Object.keys(await res.json()).sort()]).toEqual([200, ["ok", "withdraw"]]);
+    expect(rows()).toHaveLength(1);
+    // Nothing has been sent and nothing about sending is written down yet: it is all left for afterwards.
+    expect(state.sent).toEqual([]);
+    expect(rows()[0]).toMatchObject({ confirm_sent_at: null });
+    expect(fake.rows("gift_groups")[0].nudged_at).toBeNull();
+    expect(state.afterwards).toHaveLength(1);
+    await afterwards();
+    expect(sent("confirm")).toHaveLength(1);
+    expect(sent("nudge")).toHaveLength(1);
+    expect(rows()[0]).toMatchObject({ confirm_sent_at: at(NOW) });
   });
 
   it("the note is kept whatever happens to the email", async () => {

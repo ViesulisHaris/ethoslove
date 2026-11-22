@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 import type { Db } from "@/lib/commerce/db";
 import { cleanEntry, cleanText } from "@/lib/group/clean";
-import { answer, failed, notThere, switchedOff, unavailable } from "@/lib/group/http";
+import { answer, failed, later, notThere, switchedOff, unavailable } from "@/lib/group/http";
 import { GROUP_LIMITS } from "@/lib/group/limits";
 import { askToConfirm, nudgeSender } from "@/lib/group/mail";
 import { groupAgreed, groupEmailConsent } from "@/lib/group/notice";
@@ -98,10 +98,15 @@ export async function POST(request: NextRequest) {
       now,
     );
     if (!added.ok) return added.error === "full" ? answer({ error: "full" }, 409) : unavailable();
-    // The note is in. Neither email is allowed to undo that: one confirmation to the address left
-    // with it (nothing else goes there until it says yes), and a word to the sender, once a day.
-    if (address) await askToConfirm(admin, { entryId: added.id, email: address.address, emailSha256: address.sha256, locale: group.locale, secret, now }).catch((e) => console.error(`[group] confirmation not sent: ${(e as Error).message}`));
-    await nudgeSender(admin, group, now).catch((e) => console.error(`[group] sender not told: ${(e as Error).message}`));
+    // The note is in, and its writer is told so now. Neither email is allowed to undo that or to
+    // keep them waiting: one confirmation to the address left with it (nothing else goes there
+    // until it says yes), and a word to the sender, once a day, both sent once the answer has gone.
+    // Held up by a slow mail service, the page would say "that didn't go through" over a note that
+    // did, and the second try would put it in the sender's list twice.
+    later(async () => {
+      if (address) await askToConfirm(admin, { entryId: added.id, email: address.address, emailSha256: address.sha256, locale: group.locale, secret, now }).catch((e) => console.error(`[group] confirmation not sent: ${(e as Error).message}`));
+      await nudgeSender(admin, group, now).catch((e) => console.error(`[group] sender not told: ${(e as Error).message}`));
+    });
     return answer({ ok: true, withdraw });
   } catch (error) {
     return failed(error);
