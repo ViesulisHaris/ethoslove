@@ -190,9 +190,9 @@ test.describe("the template gallery", () => {
     await expect(page).toHaveURL(/\/create\/bouquet$/, { timeout: 60_000 });
   });
 
-  test("with less motion asked for, a card's film is neither fetched nor played, and no card rises into place", async ({ browser, isMobile }) => {
+  test("with less motion asked for, a card's film is neither fetched nor played, and no card rises into place", async ({ browser, baseURL, isMobile }) => {
     test.skip(isMobile, "the film is for a pointer resting on a card");
-    const context = await browser.newContext({ reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
+    const context = await browser.newContext({ baseURL, reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     const films: string[] = [];
     page.on("request", (request) => {
@@ -219,6 +219,18 @@ test.describe("the template gallery", () => {
     });
     expect(seen).toContain(0);
     expect(seen.filter((y) => y !== 0 && y !== 16)).toEqual([]);
+    await context.close();
+  });
+
+  test("without JavaScript every card is drawn: none waits unseen for a script to fade it in", async ({ browser, baseURL }) => {
+    // The review of 22 Nov 2026: 57 of 61 cards were drawn at opacity 0 with scripts off (the server
+    // writes a card's first state, and only a script moved it on).
+    const context = await browser.newContext({ baseURL, javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await page.goto("/templates");
+    const found = await page.locator("[data-gallery-card]").evaluateAll((cards) => ({ cards: cards.length, unseen: cards.filter((card) => Number(getComputedStyle(card).opacity) < 1 || getComputedStyle(card).transform !== "none").length }));
+    expect(found.cards).toBeGreaterThan(50);
+    expect(found.unseen).toBe(0);
     await context.close();
   });
 
