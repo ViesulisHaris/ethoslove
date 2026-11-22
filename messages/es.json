@@ -2589,6 +2589,54 @@
       "listTitle": "{count} preguntas de ¿qué prefieres? para parejas",
       "listIntro": "Todas las preguntas de la baraja gratis, desde las fáciles para el sofá hasta las que empiezan una discusión digna de captura. Jugadlas arriba en uno o dos móviles, o leedlas en voz alta en una cita."
     },
+    "today": {
+      "label": "Pregunta del día",
+      "h1": "¿Qué prefieres? La pregunta de hoy",
+      "line": "Una pregunta al día para los dos. Elige, envíala y mira si coincidís.",
+      "seoTitle": "¿Qué prefieres? La pregunta del día para parejas",
+      "seoDescription": "Un ¿qué prefieres? cada día, el mismo para todo el mundo. Elige tu respuesta, mándasela a tu pareja con un enlace y mirad las dos juntas. Gratis y sin registro.",
+      "daily": "Una nueva cada día",
+      "broken": "Ese enlace no llegó entero, así que aquí tienes la pregunta de hoy.",
+      "from": "De {name}",
+      "invited": "{name} ya ha respondido. ¿Tú qué eliges?",
+      "prompt": "¿Qué prefieres…",
+      "or": "o",
+      "change": "¿Has cambiado de idea? Toca la otra.",
+      "nameLabel": "Tu nombre",
+      "send": "Envíasela",
+      "copy": "Copiar el enlace",
+      "copied": "Enlace copiado. Pégalo en vuestro chat.",
+      "copyFallback": "Copia este enlace:",
+      "sent": "Enviada. Elegirá sin ver tu respuesta y luego podrá mandarte la suya.",
+      "sendBack": "Devuélvele la tuya",
+      "sentBack": "Enviada. {name} verá las dos respuestas.",
+      "match": "Habéis elegido lo mismo.",
+      "clash": "Habéis elegido distinto.",
+      "you": "Tú",
+      "wholeGame": "Jugar la partida entera",
+      "todays": "Ver la pregunta de hoy",
+      "shareTitle": "El ¿qué prefieres? de hoy",
+      "shareText": "{name} ya ha respondido al ¿qué prefieres? de hoy. ¿Tú qué eliges?",
+      "shareBackText": "{name} también ha respondido. Ábrelo y mira las dos respuestas.",
+      "how": {
+        "label": "Cómo funciona",
+        "heading": "Tres toques, dos móviles",
+        "line": "Tu nombre y tu respuesta viajan en el enlace y nunca llegan a nuestro servidor.",
+        "steps": {
+          "pick": "Elige tu respuesta",
+          "send": "Mándale el enlace",
+          "see": "Mirad las dos"
+        }
+      },
+      "more": {
+        "label": "La partida entera",
+        "heading": "{count} preguntas más como esta",
+        "line": "Diez seguidas, en un móvil que os pasáis o en dos.",
+        "play": "Jugar a ¿qué prefieres?",
+        "all": "Todos los juegos",
+        "faq": "Preguntas"
+      }
+    },
     "roulette": {
       "title": "La ruleta de los platos",
       "blurb": "Una ruleta con vuestros nombres. Cada giro decide una tarea. Lo que diga la ruleta va a misa.",
@@ -2645,7 +2693,11 @@
       "deal": "Reparte",
       "pickTitle": "Elige un juego",
       "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
-      "minutes": "{n} min"
+      "minutes": "{n} min",
+      "todayTitle": "La pregunta de hoy",
+      "todayBlurb": "Un ¿qué prefieres? al día, el mismo para todo el mundo. Respóndelo, envíalo y comparad.",
+      "todayPhones": "Dos móviles, un enlace",
+      "todayCta": "Responder la de hoy"
     },
     "memory": {
       "title": "Memory",

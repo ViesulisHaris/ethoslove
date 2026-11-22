@@ -2589,6 +2589,54 @@
       "listTitle": "{count} would you rather questions for couples",
       "listIntro": "Every question in the free deck, from easy ones for the sofa to the ones that start an argument worth screenshotting. Play them above on one phone or two, or read them out on a date."
     },
+    "today": {
+      "label": "Question of the day",
+      "h1": "Today's would you rather question",
+      "line": "One question a day for two of you. Pick yours, send it, see if they agree.",
+      "seoTitle": "Would You Rather Question of the Day for Couples",
+      "seoDescription": "One would you rather question a day, the same for everyone. Pick your answer, send it to your partner by link, and see both picks side by side. Free, no sign-up.",
+      "daily": "A new one every day",
+      "broken": "That link didn't arrive whole, so here is today's question.",
+      "from": "From {name}",
+      "invited": "{name} has answered. What would you pick?",
+      "prompt": "Would you rather…",
+      "or": "or",
+      "change": "Changed your mind? Tap the other one.",
+      "nameLabel": "Your first name",
+      "send": "Send it to them",
+      "copy": "Copy the link",
+      "copied": "Link copied. Paste it into your chat.",
+      "copyFallback": "Copy this link:",
+      "sent": "Sent. They pick without seeing yours, then can send theirs back.",
+      "sendBack": "Send yours back",
+      "sentBack": "Sent. {name} will see both answers.",
+      "match": "You picked the same one.",
+      "clash": "You picked differently.",
+      "you": "You",
+      "wholeGame": "Play the whole game",
+      "todays": "See today's question",
+      "shareTitle": "Today's would you rather",
+      "shareText": "{name} answered today's would you rather. What would you pick?",
+      "shareBackText": "{name} answered too. Open it to see both picks.",
+      "how": {
+        "label": "How it works",
+        "heading": "Three taps, two phones",
+        "line": "Your name and answer ride in the link and never reach our server.",
+        "steps": {
+          "pick": "Pick your answer",
+          "send": "Send them the link",
+          "see": "See both picks"
+        }
+      },
+      "more": {
+        "label": "The whole game",
+        "heading": "{count} more questions like this",
+        "line": "Ten in a row, on one phone passed across or on two.",
+        "play": "Play would you rather",
+        "all": "All the games",
+        "faq": "Questions"
+      }
+    },
     "roulette": {
       "title": "Dishes roulette",
       "blurb": "A wheel of the two of you. Every spin settles one chore. The wheel's word is final.",
@@ -2645,7 +2693,11 @@
       "deal": "Deal me in",
       "pickTitle": "Pick a game",
       "pickSub": "Every one is quick, and every one ends with something to talk about.",
-      "minutes": "{n} min"
+      "minutes": "{n} min",
+      "todayTitle": "Today's question",
+      "todayBlurb": "One would you rather a day, the same for everyone. Answer it, send it, compare.",
+      "todayPhones": "Two phones, one link",
+      "todayCta": "Answer today's"
     },
     "memory": {
       "title": "Memory",
