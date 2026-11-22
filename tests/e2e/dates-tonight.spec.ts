@@ -36,7 +36,8 @@ async function openLisbon(page: Page, url = lisbonUrl) {
 const sentence = (page: Page) =>
   page.locator("[data-tonight] p.font-display, #tonight p.font-display").first().evaluate((p) => {
     const walk = (node: Node): string => {
-      if (node instanceof HTMLSelectElement) return node.selectedOptions[0]?.textContent ?? "";
+      // Trimmed: each choice carries a no-break space for the lean of its italic letters.
+      if (node instanceof HTMLSelectElement) return (node.selectedOptions[0]?.textContent ?? "").trim();
       if (node instanceof HTMLElement && node.classList.contains("sr-only")) return "";
       if (node.nodeType === Node.TEXT_NODE) return node.textContent ?? "";
       return [...node.childNodes].map(walk).join("");
