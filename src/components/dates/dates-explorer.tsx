@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
-import { formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
+import { addDays, formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES, starterName } from "@/lib/dates/cities";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
@@ -27,6 +27,7 @@ import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, st
 import { mergePlaces } from "@/lib/dates/tiles";
 import { MIN_UNUSUAL, UNUSUAL_SHELF, unusualIndex, unusualPicks } from "@/lib/dates/unusual";
 import { suggestTimes } from "@/lib/dates/timing";
+import { placeNow } from "@/lib/dates/tonight";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
 import { readSharedPlace } from "@/lib/share/links";
@@ -47,6 +48,10 @@ import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
 import { WhereBox, type Where } from "./where-box";
+import { TonightForm } from "./tonight/tonight-form";
+import { TonightProblem } from "./tonight/tonight-island";
+import { TonightResult } from "./tonight/tonight-result";
+import { useTonight } from "./tonight/use-tonight";
 import { WHERE_KEY } from "@/lib/dates/where-store";
 const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
@@ -115,6 +120,7 @@ export function DatesExplorer() {
   const isDesktop = useSyncExternalStore(subscribeDesktop, () => window.matchMedia(desktopQuery).matches, () => false);
 
   const [today] = useState<Ymd>(() => toYmd(new Date()));
+  const [openedAt] = useState(() => Date.now());
   const [date, setDate] = useState<Ymd>(() => thisWeekend(toYmd(new Date())));
   const [where, setWhere] = useState<Where | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
@@ -436,6 +442,24 @@ export function DatesExplorer() {
   }, [ratingKey, loadRatings]);
 
   const day = forecast?.days.find((d) => d.date === date);
+  // The day at the place being looked at, once its forecast says what its clock is; the browser's until then.
+  const placeToday = forecast ? placeNow(forecast, openedAt).date : today;
+  const tonightKeyOf = (d: Ymd) => (where ? `${where.lat},${where.lng}|${d}` : "");
+  const tonight = useTonight({
+    dayOf: (when, placeDay) => (when === "tonight" ? placeDay : when === "tomorrow" ? addDays(placeDay, 1) : date),
+    load: () => (all.length > 0 ? { places: all, forecast } : null),
+    whereName: where?.name && shareable ? where.name : undefined,
+    keyOf: tonightKeyOf,
+    currentKey: tonightKeyOf(date),
+  });
+  // The page's own day is offered too, when it is neither today nor tomorrow ("on Sat 28 Nov").
+  const pageDayIsOther = date !== placeToday && date !== addDays(placeToday, 1);
+  const tonightWhen = tonight.when === "day" && !pageDayIsOther ? "tonight" : tonight.when;
+  const planTonight = (when = tonightWhen) => {
+    // The page follows the planner: its day, its weather card and its ideas become the day planned for.
+    setDate(when === "tonight" ? placeToday : when === "tomorrow" ? addDays(placeToday, 1) : date);
+    void tonight.plan(when);
+  };
   const ideas = useMemo(() => ideasFor(day, all, vibe ?? undefined), [day, all, vibe]);
   const doable = useMemo(() => (status === "ready" || all.length > 0 ? new Set(ideas.filter((i) => isDoable(i, all)).map((i) => i.id)) : null), [ideas, all, status]);
   const idea = ideaById(ideaId ?? undefined);
@@ -898,6 +922,45 @@ export function DatesExplorer() {
           )}
         </div>
 
+        {/* One step: the mood, the day, the length and the budget in, one finished plan out (components/dates/tonight). */}
+        {status === "ready" && all.length === 0 ? null : (
+          <section aria-labelledby="tonight-title" className="mt-6" data-tonight>
+            <h2 id="tonight-title" className="text-page-label text-page-body">
+              {t("tonight.label")}
+            </h2>
+            <div className="mt-1">
+              <TonightForm
+                choice={tonight.choice}
+                when={tonightWhen}
+                whens={[
+                  { value: "tonight", label: t("tonight.when.tonight") },
+                  { value: "tomorrow", label: t("tonight.when.tomorrow") },
+                  ...(pageDayIsOther ? [{ value: "day" as const, label: t("tonight.when.day", { day: formatDay(date, locale, "short") }) }] : []),
+                ]}
+                busy={tonight.busy}
+                waiting={all.length === 0 ? t("tonight.finding") : undefined}
+                onChoice={tonight.setChoice}
+                onWhen={tonight.setWhen}
+                onPlan={() => planTonight()}
+              />
+            </div>
+            <div role="status" aria-live="polite">
+              {tonight.result ? (
+                <TonightResult {...tonight.result} asked={tonight.choice.budget} locale={locale} onOpen={tonight.open} onAnother={tonight.another} />
+              ) : tonight.problem ? (
+                <TonightProblem
+                  problem={tonight.problem}
+                  onRetry={() => planTonight()}
+                  onTomorrow={() => {
+                    tonight.setWhen("tomorrow");
+                    planTonight("tomorrow");
+                  }}
+                />
+              ) : null}
+            </div>
+          </section>
+        )}
+
         {/* ideas */}
         <div className="mt-9">
           <IdeaRail
@@ -1222,6 +1285,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
         </div>
         <div className="mt-4 h-[72px] animate-pulse rounded-[20px] bg-white/70" aria-hidden="true" />
+        <div className="mt-6 h-[13.75rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[10.75rem]" aria-hidden="true" />
         <div className="mt-9">
           <IdeaRail
             heading={
