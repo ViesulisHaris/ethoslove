@@ -1,8 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import en from "../../messages/en.json";
+import es from "../../messages/es.json";
 import { OCCASIONS, type Occasion } from "@/config/occasions";
-import { FINDER_COPY, FINDER_FITS, finderGifts, finderPicks, suitedRecipients } from "@/content/finder";
+import { FINDER_COPY, FINDER_FITS, FINDER_SHORT, christmasPicks, finderGifts, finderPicks, shortLine, suitedRecipients } from "@/content/finder";
 import { RECIPIENTS, RECIPIENT_GUIDES } from "@/content/recipients";
 import { sendsFree } from "@/lib/gift/free-tier";
 import {
@@ -10,18 +12,29 @@ import {
   BEST_SELLERS,
   FINDER_FEELS,
   FINDER_PARTNERS,
-  FINDER_MORE_OCCASIONS,
-  FINDER_OCCASIONS,
   FINDER_RECIPIENTS,
+  FINDER_STEPS,
   NO_ANSWERS,
+  OCCASIONS_FOR,
+  OCCASIONS_SHOWN,
   PICKS_PER_PAGE,
+  REASON_WORDS,
+  answerGifts,
   answersQuery,
+  askedStep,
+  chosenFeel,
+  countWords,
+  finderWaitScript,
   fits,
+  occasionsFor,
+  occasionsInSeason,
   openStep,
   parseAnswers,
   pickReason,
   rankGifts,
+  reasonKey,
   score,
+  shortReason,
   type FinderAnswers,
   type FinderFeel,
   type FinderGift,
@@ -32,9 +45,12 @@ import { fillerIn } from "./filler";
 
 const GIFTS = finderGifts();
 
-/** Every way the three questions can be answered, "Not sure" included: 9 × 14 × 5. */
+/**
+ * Every result there is: the two questions answered every way, "Not sure" included, and over each
+ * no feeling's pill (null), one of the four, or the "any" an old three-question link carries: 9 × 14 × 6.
+ */
 const COMBINATIONS: FinderAnswers[] = [...FINDER_RECIPIENTS, ANY].flatMap((who) =>
-  [...OCCASIONS, ANY].flatMap((occasion) => [...FINDER_FEELS, ANY].map((feel) => ({ for: who, occasion, feel }) as FinderAnswers)),
+  [...OCCASIONS, ANY].flatMap((occasion) => [null, ...FINDER_FEELS, ANY].map((feel) => ({ for: who, occasion, feel }) as FinderAnswers)),
 );
 const said = (a: FinderAnswers) => `${a.for} / ${a.occasion} / ${a.feel}`;
 
@@ -189,6 +205,9 @@ describe("the reasons", () => {
     expect(pickReason(letter.why, { for: "girlfriend", occasion: "birthday", feel: "romantic" })).toBe(FINDER_FITS["the-letter"].why.romantic!.es);
     expect(pickReason(letter.why, { for: "girlfriend", occasion: "birthday", feel: "funny" })).toBe(letter.why.base);
     expect(pickReason(letter.why, { for: ANY, occasion: ANY, feel: ANY })).toBe(letter.why.base);
+    // Two answers and no pill: the person's sentence where the template has one, else the general one.
+    expect(pickReason(letter.why, { for: "mom", occasion: "birthday", feel: null })).toBe(FINDER_FITS["the-letter"].why.mom!.es);
+    expect(pickReason(letter.why, { for: "girlfriend", occasion: "birthday", feel: null })).toBe(letter.why.base);
   });
 
   it("keep the romantic sentence for a partner: nobody else is told about the two of you", () => {
@@ -257,30 +276,244 @@ describe("reading the answers from an address", () => {
     expect(parseAnswers("?%E0%A4%A=1&feel=unusual")).toEqual({ for: null, occasion: null, feel: "unusual" });
   });
 
-  it("starts at the first question a partial address leaves open", () => {
+  it("asks two questions, and never the feeling", () => {
+    expect(FINDER_STEPS).toEqual(["for", "occasion"]);
     expect(openStep(NO_ANSWERS)).toBe("for");
     expect(openStep(parseAnswers("?occasion=birthday&feel=funny"))).toBe("for");
     expect(openStep(parseAnswers("?for=dad&feel=funny"))).toBe("occasion");
-    expect(openStep(parseAnswers("?for=dad&occasion=christmas"))).toBe("feel");
-    expect(openStep(parseAnswers("?for=dad&occasion=christmas&feel=any"))).toBeNull();
+    // Two answers are a result: the third question of the first version is gone.
+    expect(openStep(parseAnswers("?for=dad&occasion=christmas"))).toBeNull();
+    expect(openStep(parseAnswers("?for=any&occasion=any"))).toBeNull();
+  });
+
+  it("still opens the result of an old three-question link, with its feeling's pill on", () => {
+    const old = parseAnswers("?for=girlfriend&occasion=anniversary&feel=romantic");
+    expect(openStep(old)).toBeNull();
+    expect(chosenFeel(old)).toBe("romantic");
+    // "Not sure" was an answer to the third question: the link opens its result with no pill on.
+    const unsure = parseAnswers("?for=dad&occasion=christmas&feel=any");
+    expect(openStep(unsure)).toBeNull();
+    expect(chosenFeel(unsure)).toBeNull();
+    expect(chosenFeel(parseAnswers("?for=dad&occasion=christmas"))).toBeNull();
+    // And the same picks, in the same order, as that link gave before.
+    expect(rankGifts(GIFTS, unsure).map((g) => g.slug)).toEqual(rankGifts(GIFTS, { for: "dad", occasion: "christmas", feel: null }).map((g) => g.slug));
+  });
+
+  it("reads who as for, where an address has no for", () => {
+    expect(parseAnswers("?who=mom&occasion=birthday&feel=funny")).toEqual({ for: "mom", occasion: "birthday", feel: "funny" });
+    expect(parseAnswers("?who=mom&for=dad")).toEqual({ for: "dad", occasion: null, feel: null });
+    expect(parseAnswers("?who=grandma")).toEqual(NO_ANSWERS);
+  });
+
+  it("asks a question again only when the address says so, and only one of the two", () => {
+    expect(askedStep("?for=mom&occasion=birthday&ask=for")).toBe("for");
+    expect(askedStep("?for=mom&occasion=birthday&ask=Occasion")).toBe("occasion");
+    expect(askedStep("?for=mom&occasion=birthday")).toBeNull();
+    expect(askedStep("?ask=feel")).toBeNull();
+    expect(askedStep("?ask=<script>")).toBeNull();
+  });
+
+  it("holds a shared result back until it is read, whichever way the address names the person", () => {
+    const script = finderWaitScript();
+    expect(script).toContain('q.get("for")');
+    expect(script).toContain('q.get("who")');
+    expect(script).toContain("data-finder-wait");
   });
 
   it("writes the answers back in the order they are asked", () => {
     expect(answersQuery(NO_ANSWERS)).toBe("");
     expect(answersQuery({ for: null, occasion: "apology", feel: null })).toBe("?occasion=apology");
     for (const answers of COMBINATIONS) expect(parseAnswers(answersQuery(answers)), said(answers)).toEqual(answers);
-    expect(answersQuery({ for: "best-friend", occasion: "mothers-day", feel: "any" })).toBe("?for=best-friend&occasion=mothers-day&feel=any");
+    expect(answersQuery({ for: "best-friend", occasion: "mothers-day", feel: null })).toBe("?for=best-friend&occasion=mothers-day");
+    expect(answersQuery({ for: "best-friend", occasion: "mothers-day", feel: "funny" })).toBe("?for=best-friend&occasion=mothers-day&feel=funny");
+  });
+});
+
+describe("the second question", () => {
+  const people = [...FINDER_RECIPIENTS, ANY] as const;
+
+  it("shows each person the six occasions that matter most to them, and keeps every other one a tap away", () => {
+    expect(OCCASIONS_SHOWN).toBe(6);
+    for (const who of people) {
+      const own = OCCASIONS_FOR[who];
+      expect(own, who).toHaveLength(6);
+      expect(new Set(own).size, who).toBe(6);
+      for (const o of own) expect(OCCASIONS, who).toContain(o);
+      const { first, more } = occasionsFor(who, "2026-07-01");
+      expect(first, who).toEqual(own);
+      expect([...first, ...more].sort(), who).toEqual([...OCCASIONS].sort());
+    }
+    // A mother is asked about Mother's Day and never, up front, about Valentine's; a friend about a graduation.
+    expect(OCCASIONS_FOR.mom).toContain("mothers-day");
+    expect(OCCASIONS_FOR.mom).not.toContain("valentines");
+    expect(OCCASIONS_FOR.dad).toContain("fathers-day");
+    expect(OCCASIONS_FOR["best-friend"]).toContain("graduation");
+    for (const who of FINDER_PARTNERS) expect(OCCASIONS_FOR[who].slice(0, 3), who).toEqual(["birthday", "anniversary", "valentines"]);
+    // Nobody has answered yet: the general six.
+    expect(occasionsFor(null, "2026-07-01").first).toEqual(OCCASIONS_FOR[ANY]);
   });
 
-  it("asks about every occasion the site has, seven of them up front", () => {
-    expect([...FINDER_OCCASIONS, ...FINDER_MORE_OCCASIONS].sort()).toEqual([...OCCASIONS].sort());
-    expect(FINDER_OCCASIONS).toEqual(["birthday", "anniversary", "valentines", "christmas", "long-distance", "apology", "just-because"]);
+  it("leads with Christmas from 15 Nov to 25 Dec, by the day the page was rendered with", () => {
+    expect(occasionsInSeason("2026-11-14")).toEqual([]);
+    expect(occasionsInSeason("2026-11-15")).toEqual(["christmas"]);
+    expect(occasionsInSeason("2026-12-25")).toEqual(["christmas"]);
+    expect(occasionsInSeason("2026-12-26")).toEqual([]);
+    expect(occasionsInSeason("2027-02-14")).toEqual(["valentines"]);
+    expect(occasionsInSeason("2027-02-15")).toEqual([]);
+    expect(occasionsInSeason("not a day")).toEqual([]);
+    for (const who of people) {
+      const inSeason = occasionsFor(who, "2026-11-22").first;
+      expect(inSeason[0], who).toBe("christmas");
+      // The same six, reordered: nothing is pushed out by the season.
+      expect([...inSeason].sort(), who).toEqual([...OCCASIONS_FOR[who]].sort());
+      expect(occasionsFor(who, "2026-07-01").first[0], who).toBe("birthday");
+    }
+    // A season only reorders a person's own six: a mother is not asked about Valentine's in February.
+    expect(occasionsFor("mom", "2027-02-10").first).toEqual(OCCASIONS_FOR.mom);
+    expect(occasionsFor("girlfriend", "2027-02-10").first[0]).toBe("valentines");
+  });
+
+  it("has three gifts, and three more, behind every answer it shows up front", () => {
+    for (const who of people)
+      for (const occasion of [...OCCASIONS_FOR[who], ANY] as const) expect(rankGifts(GIFTS, { for: who, occasion, feel: null }).length, `${who} / ${occasion}`).toBeGreaterThanOrEqual(6);
+  });
+});
+
+describe("the picture on an answer", () => {
+  const people = [...FINDER_RECIPIENTS, ANY];
+
+  it("is a different gift on every card of the first question, each one that person can be offered", () => {
+    const cards = answerGifts(GIFTS, NO_ANSWERS, "for", people);
+    expect([...cards.keys()]).toEqual(people);
+    expect(new Set([...cards.values()].map((g) => g.slug)).size).toBe(people.length);
+    for (const [who, gift] of cards) {
+      expect(fits(gift, { for: who as FinderAnswers["for"], occasion: null, feel: null }), `${gift.slug} for ${who}`).toBe(true);
+      // Nothing tied to one day or one season stands for a person: no occasion has been named yet.
+      expect(gift.only, gift.slug).toBeUndefined();
+      // Nor a trip's reveal, which only makes sense when the present is a trip.
+      expect(gift.conditional, gift.slug).toBeFalsy();
+    }
+    // The first card is that answer's own first pick.
+    expect(cards.get("girlfriend")!.slug).toBe(rankGifts(GIFTS, { for: "girlfriend", occasion: null, feel: null })[0].slug);
+  });
+
+  it("is a different gift on every card of the second question, for every person, each made for or suited to that day", () => {
+    for (const who of people as FinderAnswers["for"][]) {
+      const { first, more } = occasionsFor(who, "2026-11-22");
+      const options = [...first, ANY, ...more];
+      const cards = answerGifts(GIFTS, { for: who, occasion: null, feel: null }, "occasion", options);
+      expect([...cards.keys()], String(who)).toEqual(options);
+      // Thirteen occasions and "Not sure": a person with few gifts for some day may see one picture twice, never on the cards shown first.
+      const shownFirst = [...first, ANY].map((o) => cards.get(o)!.slug);
+      expect(new Set(shownFirst).size, String(who)).toBe(shownFirst.length);
+      for (const [occasion, gift] of cards) expect(fits(gift, { for: who, occasion: occasion as FinderAnswers["occasion"], feel: null }), `${gift.slug} for ${who} / ${occasion}`).toBe(true);
+      // Christmas shows a Christmas gift, not the best seller.
+      expect(getManifest(cards.get("christmas")!.slug)!.occasions, String(who)).toContain("christmas");
+    }
+  });
+
+  it("is drawn from a poster that exists", () => {
+    const posters = new Map(finderPicks("en").map((p) => [p.slug, p.poster]));
+    for (const gift of answerGifts(GIFTS, NO_ANSWERS, "for", people).values()) {
+      const poster = posters.get(gift.slug)!;
+      expect(fs.existsSync(path.join(__dirname, "../../public", poster)), poster).toBe(true);
+    }
+  });
+});
+
+describe("the line under a pick", () => {
+  const sentences = (["en", "es"] as const).flatMap((locale) =>
+    Object.entries(FINDER_FITS).flatMap(([slug, fit]) => Object.entries(fit.why).map(([key, words]) => ({ where: `${slug}.${key}.${locale}`, slug, key, locale, whole: words![locale] }))),
+  );
+
+  it("is fourteen words at most, for every sentence of every template, in both languages", () => {
+    expect(REASON_WORDS).toBe(14);
+    const over: string[] = [];
+    for (const { where, slug, key, locale, whole } of sentences) {
+      const line = shortLine(slug, key, locale, whole);
+      // A sentence the rule cannot cut needs a line written by hand in FINDER_SHORT.
+      if (line === null) over.push(`${where}: no line, write one`);
+      else if (countWords(line) > REASON_WORDS) over.push(`${where}: ${countWords(line)} words: ${line}`);
+      else if (countWords(line) < 4) over.push(`${where}: too thin to say anything: ${line}`);
+    }
+    expect(over).toEqual([]);
+    expect(sentences.length).toBeGreaterThan(290);
+  });
+
+  it("is a whole clause that ends like a sentence, with no filler", () => {
+    for (const { where, slug, key, locale, whole } of sentences) {
+      const line = shortLine(slug, key, locale, whole)!;
+      expect(line, where).toMatch(/[.?»"”]$/);
+      expect(line, where).not.toMatch(/[,;:]\.$/);
+      expect(line, where).not.toMatch(/[!¡—–]/);
+      expect(fillerIn(line, locale), where).toEqual([]);
+    }
+  });
+
+  it("cuts a sentence only where a thought ends", () => {
+    expect(shortReason("It opens on a wax seal they break with a tap, then your words write themselves out by hand on a candle-lit desk. It is the plainest gift here.")).toBe("It opens on a wax seal they break with a tap.");
+    // As many whole sentences as fit.
+    expect(shortReason("One short sentence. And a second one. Then a third that goes on for a good deal longer than the limit allows it to.")).toBe("One short sentence. And a second one.");
+    // A colon before a comma: the list after it is what gets cut.
+    expect(shortReason("Every page draws itself in ink as they turn to it: a cake, their age circled twice, a party hat.")).toBe("Every page draws itself in ink as they turn to it.");
+    // A question mark inside a quotation does not end the sentence.
+    expect(shortReason('It asks "be my boo?" unless you write your own, which takes 24 characters at most and not one more than that.')).toBe('It asks "be my boo?" unless you write your own.');
+    // Nothing to cut at: it says so, and a line is written by hand.
+    expect(shortReason("Change the shape from a heart to a star and fill the sky with family photos of every single one of you.")).toBeNull();
+  });
+
+  it("where it was written by hand, says nothing its sentence does not: the same numbers, and a real sentence to shorten", () => {
+    let written = 0;
+    for (const [slug, keys] of Object.entries(FINDER_SHORT)) {
+      for (const [key, words] of Object.entries(keys)) {
+        for (const [locale, line] of Object.entries(words!) as ["en" | "es", string][]) {
+          written += 1;
+          const whole = FINDER_FITS[slug]?.why[key as "base"]?.[locale];
+          expect(whole, `${slug}.${key}.${locale} shortens a sentence that does not exist`).toBeDefined();
+          // Every number a line quotes (18 characters, 2006) is in the sentence it shortens.
+          for (const n of line.match(/\d+/g) ?? []) expect(whole, `${slug}.${key}.${locale} says ${n}`).toContain(n);
+          expect(line.length, `${slug}.${key}.${locale}`).toBeLessThan(whole!.length);
+        }
+      }
+    }
+    expect(written).toBeGreaterThan(40);
+  });
+
+  it("goes to the browser beside the whole sentence, under the same key", () => {
+    for (const locale of ["en", "es"] as const) {
+      for (const pick of finderPicks(locale)) {
+        expect(Object.keys(pick.line).sort(), pick.slug).toEqual(Object.keys(pick.why).sort());
+        for (const answers of [{ for: "mom", occasion: "birthday", feel: null }, { for: "girlfriend", occasion: "anniversary", feel: "romantic" }, { for: ANY, occasion: ANY, feel: null }] as FinderAnswers[]) {
+          const key = reasonKey(pick.why, answers);
+          expect(pick.why[key], pick.slug).toBe(pickReason(pick.why, answers));
+          expect(countWords(pick.line[key] as string), `${pick.slug}.${String(key)}`).toBeLessThanOrEqual(REASON_WORDS);
+        }
+      }
+    }
+    // The Letter is free, its line promises no photo either, and its film starts past the recording's opening.
+    const letter = finderPicks("en").find((p) => p.slug === "the-letter")!;
+    for (const line of Object.values(letter.line)) expect(line).not.toMatch(/photo|picture|polaroid/i);
+    expect(letter.film).toBe("/templates/the-letter/preview.webm");
+    expect(letter.filmFrom).toBeGreaterThan(0);
+  });
+});
+
+describe("the Christmas gifts for one person", () => {
+  it("are the finder's own first four for that person at Christmas, and Christmas gifts lead them", () => {
+    for (const who of ["boyfriend", "girlfriend"] as const) {
+      const picks = christmasPicks(who);
+      expect(picks, who).toHaveLength(4);
+      expect(new Set(picks).size, who).toBe(4);
+      expect(picks, who).toEqual(rankGifts(GIFTS, { for: who, occasion: "christmas", feel: null }).slice(0, 4).map((g) => g.slug));
+      for (const slug of picks) expect(TEMPLATE_SLUGS, who).toContain(slug);
+      expect(getManifest(picks[0])!.occasions, who).toContain("christmas");
+    }
   });
 });
 
 describe("the picks", () => {
   it(`gives every one of the ${COMBINATIONS.length} answers three different, registered templates`, () => {
-    expect(COMBINATIONS).toHaveLength(630);
+    expect(COMBINATIONS).toHaveLength(756);
     for (const answers of COMBINATIONS) {
       const ranked = rankGifts(GIFTS, answers);
       const top = ranked.slice(0, PICKS_PER_PAGE).map((g) => g.slug);
@@ -439,20 +672,65 @@ describe("the page's words", () => {
     }
   });
 
-  it("leave the page to the tool: one short sentence over it, two labels under it, and no account of how it picks", () => {
-    // The owner, 21 Nov 2026: "no one's reading all that" (DESIGN-LESS-TEXT.md). The three paragraphs on
-    // how the finder picks also said two things the scoring does not do; they are gone, not reworded.
-    const words = (text: string) => text.trim().split(/\s+/).length;
+  it("name the Gift Finder in the search result's headline, in the words people search", () => {
+    // docs/marketing/growth-build/SEO-PICTURE.md: "gift finder" 1,600 a month; the title says it first.
+    expect(FINDER_COPY.en.title).toMatch(/^Gift Finder\b/);
+    expect(FINDER_COPY.es.title).toMatch(/^Buscador de regalos\b/);
+    for (const locale of ["en", "es"] as const) expect(FINDER_COPY[locale].description, locale).not.toMatch(/three questions|tres preguntas/i);
+  });
+
+  it("keep to the limits of a designed page: one line of fourteen words, short labels, a card's few words", () => {
+    // DESIGN-LESS-TEXT.md, "Limits": a section's left column is a label, a heading and one line of at
+    // most fourteen words; a card is a title of at most nine. Every entry is named when it is over.
+    const over: string[] = [];
+    const hold = (where: string, text: string, max: number) => {
+      if (countWords(text) > max) over.push(`${where}: ${countWords(text)} words, ${max} at most: ${text}`);
+    };
     for (const locale of ["en", "es"] as const) {
       const copy = FINDER_COPY[locale];
-      expect(copy).not.toHaveProperty("how");
-      expect(words(copy.intro), `${locale} intro`).toBeLessThanOrEqual(20);
-      expect(words(copy.ui.resultLead), `${locale} resultLead`).toBeLessThanOrEqual(14);
-      for (const label of [copy.byWho, copy.byDay.title]) {
-        expect(typeof label, locale).toBe("string");
-        expect(words(label), `${locale} “${label}”`).toBeLessThanOrEqual(2);
-      }
+      hold(`${locale} line`, copy.line, 14);
+      hold(`${locale} h1`, copy.h1, 8);
+      hold(`${locale} eyebrow`, copy.eyebrow, 3);
+      hold(`${locale} byWho.label`, copy.byWho.label, 3);
+      hold(`${locale} byWho.heading`, copy.byWho.heading, 6);
+      hold(`${locale} byWho.all`, copy.byWho.all, 4);
+      hold(`${locale} how.title`, copy.how.title, 5);
+      const { ui } = copy;
+      for (const [step, question] of Object.entries(ui.questions)) hold(`${locale} question ${step}`, question, 5);
+      // An answer card: at most five words under its picture, and its pill over the results at most six.
+      for (const [who, label] of Object.entries(ui.people)) hold(`${locale} people.${who}`, label, 5);
+      for (const [who, label] of Object.entries(ui.forWho)) hold(`${locale} forWho.${who}`, label, 6);
+      for (const [o, label] of Object.entries(ui.occasions)) hold(`${locale} occasions.${o}`, label, 4);
+      for (const [feel, label] of Object.entries(ui.feels)) hold(`${locale} feels.${feel}`, label, 1);
+      for (const key of ["notSure", "moreOccasions", "anyOccasion", "resultTitle", "whyThis", "watch", "make", "more", "restart"] as const) hold(`${locale} ui.${key}`, ui[key], 4);
+      hold(`${locale} ui.end`, ui.end, 9);
     }
+    expect(over).toEqual([]);
+  });
+
+  it("keep how the finder picks to one closed block of at most 180 words, and true to the scoring", () => {
+    // It was three paragraphs on the page (the owner, 21 Nov 2026: "no one's reading all that"). They
+    // are in one closed <details> now, with the thirteen occasions as a sentence of links after them.
+    for (const locale of ["en", "es"] as const) {
+      const { how } = FINDER_COPY[locale];
+      expect(how.paragraphs, locale).toHaveLength(3);
+      const occasions = OCCASIONS.reduce((n, o) => n + countWords((locale === "es" ? es : en).occasions[o]), 0);
+      expect(how.paragraphs.reduce((n, p) => n + countWords(p), 0) + countWords(how.byDay) + occasions, locale).toBeLessThanOrEqual(180);
+      expect(how.paragraphs[0], locale).toContain("{count}");
+      expect(fillerIn(how.paragraphs.join(" "), locale), locale).toEqual([]);
+    }
+    const english = FINDER_COPY.en.how.paragraphs.join(" ");
+    // The first version said two things the scoring does not do (the checker's C10): ties went to
+    // "the one more people have bought" (the first of the list is free), and "Not sure" was said to
+    // widen every question (on the occasion it sets aside the gifts made for one day).
+    expect(english).not.toMatch(/bought/);
+    expect(english).toMatch(/the one more people make goes first/);
+    expect(english).not.toMatch(/widens/);
+    expect(english).toMatch(/sets aside every gift made for a single day/);
+    expect(rankGifts(GIFTS, { for: ANY, occasion: ANY, feel: null }).some((g) => g.only)).toBe(false);
+    // Two questions now, and the feeling re-ranks: the block must not describe three.
+    expect(english).not.toMatch(/three questions|then the feeling/i);
+    expect(FINDER_COPY.es.how.paragraphs.join(" ")).not.toMatch(/comprado|amplía/);
   });
 
   it("never mention Spain, and never shout", () => {

@@ -1,9 +1,10 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { FINDER_PARTNERS, FINDER_RECIPIENTS, type FinderFeel, type FinderGift, type FinderReasons, type FinderRecipient, type FinderStep } from "@/lib/gift/finder";
+import { FINDER_PARTNERS, FINDER_RECIPIENTS, rankGifts, shortReason, type FinderFeel, type FinderGift, type FinderReasons, type FinderRecipient, type FinderStep } from "@/lib/gift/finder";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { RECIPIENTS, RECIPIENT_GUIDES, type Recipient } from "./recipients";
+import { templateFilmStart } from "./template-film-starts";
 
 /**
  * What the gift finder (/gifts/finder) knows about every template that a manifest cannot say: who
@@ -1054,7 +1055,100 @@ export const FINDER_FITS: Record<string, FinderFit> = {
   },
 };
 
-/** The gift-ideas pages a template belongs on, in the order the site lists people: its "Who it suits" row. */
+
+/**
+ * The line under a pick, where the rule that cuts a sentence to fourteen words (shortReason,
+ * lib/gift/finder.ts) cuts it badly or cannot cut it: written by hand, and saying nothing its long
+ * sentence does not say. One language may need a line the other does not. A sentence with no line
+ * here shows what the rule makes of it; tests/unit/gift-finder.test.ts holds every one of the 152
+ * to fourteen words and to having a line at all.
+ */
+export const FINDER_SHORT: Record<string, Partial<Record<FinderRecipient | FinderFeel | "base", Partial<Words>>>> = {
+  "the-letter": { base: { es: "Rompe un sello de lacre y tus palabras se escriben a mano." } },
+  constellations: {
+    mom: { en: "Change the heart to a star and fill the sky with family photos.", es: "Cambia el corazón por una estrella y llena el cielo de fotos de familia." },
+    dad: { en: "Change the heart to a star and fill the sky with family photos.", es: "Cambia el corazón por una estrella y llena el cielo de fotos de familia." },
+  },
+  "jar-of-reasons": { funny: { es: "Mezcla las notas: tres motivos tiernos y luego uno descarado." } },
+  "scratch-card": { base: { en: "Each card hides a photo and a line under foil they rub off.", es: "Rasca la lámina de cada tarjeta y aparece una foto con una frase." } },
+  "midnight-countdown": {
+    base: { en: "It counts down as the sky darkens, then fireworks unlock your photos and words.", es: "Hace la cuenta atrás mientras anochece y en el cero se abren tus fotos." },
+  },
+  "our-timeline": { base: { es: "Un camino se dibuja al bajar y clava una foto en cada momento importante." } },
+  museum: {
+    dad: { en: "The old prints from the loft, hung in a quiet gallery.", es: "Las fotos antiguas del altillo, colgadas en una galería tranquila." },
+  },
+  "front-page": {
+    unusual: { en: "Their name goes on the masthead and the lead photo gets a caption.", es: "Su nombre va en la cabecera y la foto principal lleva pie." },
+  },
+  arcade: { funny: { es: "Ponle su nombre al juego y sube las capturas por nivel." } },
+  bloom: {
+    base: { en: "A single 3D flower opens only while they keep a finger on the screen.", es: "Una flor en 3D que solo se abre mientras mantiene el dedo en pantalla." },
+  },
+  kawaii: {
+    romantic: { en: "Pastel from start to finish, and the plushie greets them in your words.", es: "Tonos pastel de principio a fin, y el peluche saluda con tus palabras." },
+  },
+  fireside: {
+    romantic: { en: "A candle, a mug of something hot, and your letter by the window.", es: "Una vela, una taza de algo caliente y tu carta junto a la ventana." },
+  },
+  "trick-or-treat": { base: { es: "Llama al timbre y elige: con «trato» llueven dulces." } },
+  halfway: {
+    base: { es: "Tu ciudad en una isla, la suya en la otra y la distancia real." },
+    romantic: { en: "They blow a plane, a balloon or a bird from your door to theirs.", es: "Sopla y un avión, un globo o un pajarito va hasta su puerta." },
+  },
+  "recipe-box": {
+    base: { en: "A recipe for a person, poured in by tilting the phone.", es: "La receta de una persona, que se echa inclinando el móvil." },
+    funny: { en: "The ingredients are the joke, like \"one tablespoon of being right\".", es: "La gracia está en los ingredientes: «una cucharada de tener siempre razón»." },
+    mom: { en: "Write her as a recipe, starting with two cups of patience.", es: "Escríbela a ella como una receta: dos tazas de paciencia." },
+  },
+  "cap-toss": { sentimental: { es: "Escribe la línea del diploma: por qué se concede de verdad, en 90 caracteres." } },
+  "paper-crane": { base: { en: "Each fold says one more line, and only while they hold the crease." } },
+  "the-toast": {
+    base: { es: "Inclina el móvil para llenar las dos copas y da un golpecito para brindar." },
+    sentimental: { es: "Pon el lugar y la fecha en la carta del menú." },
+  },
+  balloons: { base: { en: "Each balloon they pop drops a polaroid of yours onto the floor." } },
+  xoxo: { base: { es: "Un sobre sellado con un beso de pintalabios se abre a un collage rojo." } },
+  keepsake: {
+    base: { en: "A wax-sealed parcel of kept things, with a gold locket that opens." },
+    romantic: { en: "Engrave the locket in 18 characters: a date, a place or \"always\".", es: "Graba el relicario en 18 caracteres: una fecha, un lugar o «siempre»." },
+  },
+  digicam: {
+    base: { en: "A pocket camera from 2006, with the orange date stamp on every photo.", es: "Una cámara de bolsillo de 2006, con la fecha naranja en cada foto." },
+    sentimental: { es: "Pon la fecha del día en que pasó y un pie en cada foto." },
+  },
+  "music-box": {
+    base: { en: "Three turns of the key and the lid opens on a turning ballerina.", es: "Tres vueltas de llave y la tapa se abre con una bailarina que gira." },
+  },
+  "spooky-season": { funny: { en: "Rewrite the ticket, 26 characters, for wherever you two are really going." } },
+  "favorite-person": { base: { en: "Under tissue paper with their name on it, your photos in soft watercolour." } },
+  evergreen: {
+    base: { en: "They unwrap a parcel in old newspaper and cream butterflies fly out.", es: "Desenvuelve un paquete de papel de periódico y salen volando mariposas color crema." },
+    sentimental: { en: "The words across the top read \"my evergreen\" unless you write your own.", es: "Las palabras de arriba dicen «siempre tú» si no escribes las tuyas." },
+  },
+  "be-my-boo": {
+    romantic: { en: "The line under their name asks \"be my boo?\" unless you write your own.", es: "La frase bajo su nombre pregunta «¿serás mi boo?» si no escribes la tuya." },
+  },
+  "fall-for-you": { base: { es: "Un toque enciende una vela en tarro con su nombre en la etiqueta." } },
+  "bat-swarm": { base: { es: "Toca la luna y salen cientos de murciélagos que escriben su nombre." } },
+  "nice-list": { base: { en: "A North Pole scroll of up to four good deeds and four crimes." } },
+  wishbone: {
+    funny: { en: "Rig it: give yourself the big half and write a wish at their expense.", es: "Amáñalo: quédate tú la mitad grande y escribe un deseo a su costa." },
+  },
+  "light-the-candles": {
+    base: { es: "Cada vela que prende escribe con luz una cosa por la que das gracias." },
+    romantic: { en: "Five thanks, each small and exact: \"the coffee you bring me before I ask\".", es: "Que las cinco velas digan cosas pequeñas y exactas." },
+  },
+  "string-the-lights": { base: { es: "Pasa el dedo por el tejado para colgar las bombillas." } },
+  "gingerbread-house": { base: { es: "La decora a su gusto: gominolas, caramelos de menta y estrellas donde quiera." } },
+};
+
+/** A sentence's line under a pick: the one written for it, or what the rule makes of the sentence. Null means it needs one written. */
+export function shortLine(slug: string, key: string, locale: GiftLocale, sentence: string): string | null {
+  return FINDER_SHORT[slug]?.[key as "base"]?.[locale] ?? shortReason(sentence);
+}
+
+/** The gift-ideas pages a template belongs on, in the order the site lists people: its "who it suits" line. */
 export function suitedRecipients(slug: string): Recipient[] {
   const fit = FINDER_FITS[slug];
   return fit ? RECIPIENTS.filter((r) => fit.for.includes(r)) : [];
@@ -1074,16 +1168,34 @@ export function finderGifts(): (FinderGift & { why: FinderReasons<Words> })[] {
   });
 }
 
-/** One template as the finder's page shows it, in one language: what the browser is sent. */
-export type FinderPick = FinderGift & { name: string; poster: string; free: boolean; why: FinderReasons<string> };
+/**
+ * One template as the finder's page shows it, in one language: what the browser is sent. `why` is
+ * each sentence whole, for a card's closed "Why this one"; `line` the same sentences at fourteen
+ * words or fewer, which is what a card shows. `film` is the gift's silent preview and `filmFrom`
+ * the second it really begins (content/template-film-starts.ts).
+ */
+export type FinderPick = FinderGift & { name: string; poster: string; film?: string; filmFrom: number; free: boolean; why: FinderReasons<string>; line: FinderReasons<string> };
 
 export function finderPicks(locale: GiftLocale): FinderPick[] {
   const manifests = new Map(TEMPLATE_MANIFESTS.map((m) => [m.slug, m]));
   return finderGifts().map(({ why, ...gift }) => {
     const m = manifests.get(gift.slug)!;
     const words = Object.fromEntries(Object.entries(why).map(([key, value]) => [key, value[locale]])) as FinderReasons<string>;
-    return { ...gift, name: m.name[locale], poster: m.thumbnail.poster, free: sendsFree(m), why: words };
+    // A sentence the rule cannot cut and nobody wrote a line for shows whole: the unit test fails before that ships.
+    const line = Object.fromEntries(Object.entries(words).map(([key, sentence]) => [key, shortLine(gift.slug, key, locale, sentence) ?? sentence])) as FinderReasons<string>;
+    return { ...gift, name: m.name[locale], poster: m.thumbnail.poster, film: m.thumbnail.webm, filmFrom: templateFilmStart(gift.slug), free: sendsFree(m), why: words, line };
   });
+}
+
+/**
+ * The Christmas gifts for one person, best first: the block on /gifts/for-boyfriend and
+ * /gifts/for-girlfriend while Christmas is in season (occasionsInSeason, lib/gift/finder.ts). The
+ * finder's own ranking, so the block and the finder never disagree.
+ */
+export function christmasPicks(who: FinderRecipient, count = 4): string[] {
+  return rankGifts(finderGifts(), { for: who, occasion: "christmas", feel: null })
+    .slice(0, count)
+    .map((gift) => gift.slug);
 }
 
 /** The page's own words, and the tool's. */
@@ -1091,39 +1203,43 @@ export type FinderCopy = {
   /** The search result's headline, before " · Ethos", and its description. */
   title: string;
   description: string;
+  /** The small label over the heading, the heading, and the one line under it (fourteen words at most). */
   eyebrow: string;
   h1: string;
-  intro: string;
+  line: string;
   ui: FinderUi;
-  /** The two rows of links under the tool: a small label over each, and no sentence. */
-  byWho: string;
-  byDay: { title: string; all: string };
+  /** The foot: a label and a heading beside one row of links to the pages that start from a person. */
+  byWho: { label: string; heading: string; all: string };
+  /** The closed block: how the finder picks, in three paragraphs, and the occasions as a sentence of links. */
+  how: { title: string; paragraphs: string[]; byDay: string };
 };
 
 export type FinderUi = {
-  steps: Record<FinderStep, { label: string; question: string }>;
-  /** "Question {n} of 3". */
+  questions: Record<FinderStep, string>;
+  /** "{n} of 2". */
   stepOf: string;
+  /** An answer card's words, and the same answer on its pill over the results. */
   people: Record<FinderRecipient, string>;
+  forWho: Record<FinderRecipient | "any", string>;
   occasions: Record<Occasion, string>;
-  feels: Record<FinderFeel, { label: string; hint: string }>;
+  anyOccasion: string;
+  feels: Record<FinderFeel, string>;
+  /** The feelings' row, named for a screen reader. */
+  feelsLabel: string;
   notSure: string;
   moreOccasions: string;
-  /** The row of answers, named for a screen reader. */
-  answers: string;
-  /** A chosen answer's button, for a screen reader: "Change: {question}". */
+  /** An answer's pill, for a screen reader: "Change: {question}". */
   change: string;
   resultTitle: string;
-  resultLead: string;
-  /** "Pick {n}". */
-  pick: string;
+  /** The closed block on a card that holds the whole sentence. */
+  whyThis: string;
   watch: string;
   make: string;
   more: string;
   restart: string;
   end: string;
-  copyLink: string;
-  copied: string;
+  pauseFilms: string;
+  playFilms: string;
   /** The demo's window: "{name}: live demo". */
   demoTitle: string;
   demoHint: string;
@@ -1134,18 +1250,14 @@ export const FINDER_PATH = "/gifts/finder";
 
 export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
   en: {
-    title: "Digital Gift Finder: What Should You Send?",
-    description: "Not sure which digital gift to send? Answer three questions about who it's for, the occasion and the feeling, and get three gifts to watch and make.",
+    title: "Gift Finder: Which Digital Gift Should You Send?",
+    description: "Not sure which digital gift to send? Tap who it's for and the occasion, and get three gifts to watch and make. No account, no email.",
     eyebrow: "Gift finder",
     h1: "Which digital gift should you send?",
-    intro: "Answer three questions and get three gifts you can watch open and start making. No account, no email.",
+    line: "Two taps, and you get three gifts to watch and make.",
     ui: {
-      steps: {
-        for: { label: "Who", question: "Who is it for?" },
-        occasion: { label: "Occasion", question: "What's the occasion?" },
-        feel: { label: "Feeling", question: "What should it feel like?" },
-      },
-      stepOf: "Question {n} of 3",
+      questions: { for: "Who is it for?", occasion: "What's the occasion?" },
+      stepOf: "{n} of 2",
       people: {
         girlfriend: "My girlfriend",
         boyfriend: "My boyfriend",
@@ -1155,6 +1267,17 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         dad: "My dad",
         "best-friend": "My best friend",
         someone: "Someone else",
+      },
+      forWho: {
+        girlfriend: "For my girlfriend",
+        boyfriend: "For my boyfriend",
+        wife: "For my wife",
+        husband: "For my husband",
+        mom: "For my mom",
+        dad: "For my dad",
+        "best-friend": "For my best friend",
+        someone: "For someone else",
+        any: "For anyone",
       },
       occasions: {
         birthday: "Birthday",
@@ -1171,46 +1294,45 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         "mothers-day": "Mother's Day",
         "fathers-day": "Father's Day",
       },
-      feels: {
-        romantic: { label: "Romantic", hint: "Close, and a little old-fashioned" },
-        funny: { label: "Funny", hint: "In-jokes first, feelings second" },
-        sentimental: { label: "Sentimental", hint: "Photos, years, the things you kept" },
-        unusual: { label: "Unusual", hint: "Something to blow on, tilt or shake" },
-      },
+      anyOccasion: "Any occasion",
+      feels: { romantic: "Romantic", funny: "Funny", sentimental: "Sentimental", unusual: "Unusual" },
+      feelsLabel: "Order them by feeling",
       notSure: "Not sure",
-      moreOccasions: "Something else",
-      answers: "Your answers",
+      moreOccasions: "More occasions",
       change: "Change: {question}",
       resultTitle: "Three gifts that fit",
-      resultLead: "Ranked for your answers. Watch each one open before you choose.",
-      pick: "Pick {n}",
+      whyThis: "Why this one",
       watch: "Watch it",
       make: "Make this gift",
       more: "Show three more",
       restart: "Start again",
-      end: "Those are all the gifts that fit these answers.",
-      copyLink: "Copy the link to these picks",
-      copied: "Link copied",
+      end: "Those are all the gifts that fit.",
+      pauseFilms: "Pause the previews",
+      playFilms: "Play the previews",
       demoTitle: "{name}: live demo",
       demoHint: "This is the template with sample words and photos. Yours go in when you make it.",
       close: "Close",
     },
-    byWho: "By person",
-    byDay: { title: "By occasion", all: "All {count} templates" },
+    byWho: { label: "By person", heading: "Or start from the person", all: "All {count} gifts" },
+    how: {
+      title: "How the finder picks",
+      paragraphs: [
+        "Each of the {count} gifts is tagged by hand with the people it suits and the feeling it carries, read off its own design. A collage of lipstick kisses is offered for a partner and never for your mom.",
+        "The occasion counts most, then who it's for. A gift made for the day you chose comes before one that merely suits it, and when two tie, the one more people make goes first. A feeling chosen over the results puts the gifts with that feeling first.",
+        "Seasonal gifts stay in their season: a Halloween porch or a Christmas window shows up only when you ask for that day, and \"Not sure\" about the occasion sets aside every gift made for a single day. Your answers sit in the page's address, so a result can be sent to someone or reopened later.",
+      ],
+      byDay: "Or start from the day:",
+    },
   },
   es: {
-    title: "Buscador de regalos digitales: ¿cuál enviar?",
-    description: "¿No sabes qué regalo digital enviar? Responde tres preguntas (para quién es, la ocasión y el tono) y verás tres regalos que puedes probar y crear.",
+    title: "Buscador de regalos: ¿qué regalo digital enviar?",
+    description: "¿No sabes qué regalo digital enviar? Toca para quién es y la ocasión, y verás tres regalos que puedes probar y crear. Sin cuenta ni correo.",
     eyebrow: "Buscador de regalos",
     h1: "¿Qué regalo digital deberías enviar?",
-    intro: "Responde tres preguntas y te proponemos tres regalos: mira cómo se abren y empieza el tuyo. Sin cuenta ni correo.",
+    line: "Dos toques y verás tres regalos para probar y crear.",
     ui: {
-      steps: {
-        for: { label: "Para quién", question: "¿Para quién es?" },
-        occasion: { label: "Ocasión", question: "¿Cuál es la ocasión?" },
-        feel: { label: "Tono", question: "¿Qué tono debería tener?" },
-      },
-      stepOf: "Pregunta {n} de 3",
+      questions: { for: "¿Para quién es?", occasion: "¿Cuál es la ocasión?" },
+      stepOf: "{n} de 2",
       people: {
         girlfriend: "Mi novia",
         boyfriend: "Mi novio",
@@ -1220,6 +1342,17 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         dad: "Mi padre",
         "best-friend": "Mi mejor amiga o amigo",
         someone: "Otra persona",
+      },
+      forWho: {
+        girlfriend: "Para mi novia",
+        boyfriend: "Para mi novio",
+        wife: "Para mi esposa",
+        husband: "Para mi marido",
+        mom: "Para mi madre",
+        dad: "Para mi padre",
+        "best-friend": "Para mi mejor amiga o amigo",
+        someone: "Para otra persona",
+        any: "Para quien sea",
       },
       occasions: {
         birthday: "Cumpleaños",
@@ -1236,31 +1369,34 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         "mothers-day": "Día de la Madre",
         "fathers-day": "Día del Padre",
       },
-      feels: {
-        romantic: { label: "Romántico", hint: "Cercano y un poco a la antigua" },
-        funny: { label: "Divertido", hint: "Primero las bromas, después lo tierno" },
-        sentimental: { label: "Sentimental", hint: "Fotos, años, lo que se guarda" },
-        unusual: { label: "Original", hint: "Algo que se sopla, se inclina o se agita" },
-      },
+      anyOccasion: "Cualquier ocasión",
+      feels: { romantic: "Romántico", funny: "Divertido", sentimental: "Sentimental", unusual: "Original" },
+      feelsLabel: "Ordénalos por tono",
       notSure: "No lo sé",
-      moreOccasions: "Otra ocasión",
-      answers: "Tus respuestas",
+      moreOccasions: "Más ocasiones",
       change: "Cambiar: {question}",
       resultTitle: "Tres regalos que encajan",
-      resultLead: "Ordenados según tus respuestas. Mira cómo se abre cada uno antes de elegir.",
-      pick: "Opción {n}",
+      whyThis: "Por qué este",
       watch: "Verlo",
       make: "Crear este regalo",
       more: "Ver tres más",
       restart: "Empezar de nuevo",
-      end: "Estos son todos los regalos que encajan con tus respuestas.",
-      copyLink: "Copiar el enlace a esta selección",
-      copied: "Enlace copiado",
+      end: "Estos son todos los regalos que encajan.",
+      pauseFilms: "Pausar las vistas previas",
+      playFilms: "Reproducir las vistas previas",
       demoTitle: "{name}: demo en vivo",
       demoHint: "Es la plantilla con palabras y fotos de ejemplo. Las tuyas entran cuando lo creas.",
       close: "Cerrar",
     },
-    byWho: "Por persona",
-    byDay: { title: "Por ocasión", all: "Las {count} plantillas" },
+    byWho: { label: "Por persona", heading: "O empieza por la persona", all: "Los {count} regalos" },
+    how: {
+      title: "Cómo elige el buscador",
+      paragraphs: [
+        "Cada uno de los {count} regalos está etiquetado a mano con las personas a las que les va y el tono que tiene. Un collage de besos de pintalabios se propone para tu pareja y nunca para tu madre.",
+        "Lo que más cuenta es la ocasión, y después para quién es. Un regalo hecho para el día que elegiste va antes que otro al que simplemente le va bien, y si dos empatan, va primero el que más gente crea. Un tono elegido sobre los resultados pone delante los regalos que lo tienen.",
+        "Los regalos de temporada se quedan en su temporada: un porche de Halloween o una ventana de Navidad solo aparecen si pides ese día, y «No lo sé» en la ocasión deja fuera los regalos hechos para un solo día. Tus respuestas van en la dirección de la página: el resultado se puede enviar o abrir más tarde.",
+      ],
+      byDay: "O empieza por el día:",
+    },
   },
 };

@@ -1,37 +1,48 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ArrowRight, Check, ChevronDown, Link2, Play, RotateCcw, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Pause, Pencil, Play, Plus, X } from "lucide-react";
 import { Dialog } from "radix-ui";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
+import type { Occasion } from "@/config/occasions";
 import type { FinderPick, FinderUi } from "@/content/finder";
 import {
   ANY,
+  FINDER_ASK,
   FINDER_FEELS,
-  FINDER_WAIT,
-  FINDER_MORE_OCCASIONS,
-  FINDER_OCCASIONS,
+  FINDER_KEYS,
   FINDER_RECIPIENTS,
   FINDER_STEPS,
+  FINDER_WAIT,
   NO_ANSWERS,
   PICKS_PER_PAGE,
+  answerGifts,
   answersQuery,
+  askedStep,
+  chosenFeel,
+  occasionsFor,
   openStep,
   parseAnswers,
-  pickReason,
   rankGifts,
+  reasonKey,
+  type Any,
   type FinderAnswers,
+  type FinderDay,
+  type FinderFeel,
+  type FinderRecipient,
   type FinderStep,
 } from "@/lib/gift/finder";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import { PhoneFrame } from "@/components/shared/phone-frame";
+import { IdeasDots } from "@/components/templates/page/ideas-dots";
+import { PosterFilm } from "@/components/templates/page/poster-film";
 
 /**
- * Loaded when someone taps "Watch it", not with the page: a static import reaches the template
+ * Loaded when someone taps a pick's picture, not with the page: a static import reaches the template
  * registry and every template behind it (see template-card.tsx).
  */
 const GiftRenderer = dynamic(() => import("@/templates/_shared/GiftRenderer").then((m) => m.GiftRenderer), { ssr: false });
@@ -41,6 +52,8 @@ const REF = "finder";
 /** How many times "Show three more" was pressed: in the address, so Back from the editor returns to the same list. */
 const MORE = "more";
 const MORE_MAX = 30;
+/** What the finder writes in the address itself; anything else there (a `ref`) is carried along untouched. `who` is an old spelling of `for`. */
+const OWN: readonly string[] = [...FINDER_KEYS, "who", MORE, FINDER_ASK];
 
 /** Fired after the finder rewrites the address, which `popstate` does not report. */
 const CHANGED = "ethos:finder";
@@ -63,39 +76,62 @@ function morePages(search: string): number {
 }
 
 /** The address for these answers: theirs first, in the order asked, then whatever else it carried (a `ref`). */
-function addressFor(answers: FinderAnswers, more = 0): string {
+function addressFor(answers: FinderAnswers, { more = 0, ask = null }: { more?: number; ask?: FinderStep | null } = {}): string {
   const { pathname, search, hash } = window.location;
   const params = new URLSearchParams(answersQuery(answers));
-  for (const [key, value] of new URLSearchParams(search)) {
-    if (key !== MORE && !(FINDER_STEPS as readonly string[]).includes(key)) params.append(key, value);
-  }
+  for (const [key, value] of new URLSearchParams(search)) if (!OWN.includes(key)) params.append(key, value);
   if (more > 0) params.set(MORE, String(more));
+  if (ask) params.set(FINDER_ASK, ask);
   const query = params.toString();
   return `${pathname}${query ? `?${query}` : ""}${hash}`;
 }
 
 const fill = (template: string, values: Record<string, string | number>) => template.replace(/\{(\w+)\}/g, (match, key: string) => (key in values ? String(values[key]) : match));
 
+type Option = FinderRecipient | Occasion | Any;
+
 /**
- * The gift finder on /gifts/finder: three questions, then three templates that fit, each with a
- * sentence written for the answer, its live demo and a way into the editor.
+ * The gift finder on /gifts/finder: two questions answered by tapping a picture, then three gifts
+ * that fit, each playing its own preview, with a line on why, its live demo and a way into the
+ * editor (docs/marketing/growth-build/DESIGN-LESS-TEXT.md, "The finder itself").
  *
- * The answers live in the address (`?for=mom&occasion=birthday&feel=funny`), so a result is a link
- * that can be sent, and Back walks back through the questions. Nothing is fetched: the page hands
- * over every template's fit and the scoring (lib/gift/finder.ts) runs here. The server's HTML is
- * the first question; a visit that arrives with answers switches to them as it hydrates.
+ * The answers live in the address (`?for=mom&occasion=birthday`), so a result is a link that can
+ * be sent, and Back walks back through the questions. A feeling is not asked: four small pills over
+ * the results re-rank them in place (`&feel=funny`), and an old three-question link still opens its
+ * result. Tapping one of the two answers over the results asks that question again (`&ask=for`)
+ * with the current answer marked. Nothing is fetched: the page hands over every template's fit and
+ * the scoring (lib/gift/finder.ts) runs here. The server's HTML is the first question; a visit that
+ * arrives with answers switches to them as it hydrates.
  */
-export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; ui: FinderUi; marks: { free: string; premium: string }; locale: GiftLocale }) {
+export function GiftFinder({
+  picks,
+  ui,
+  freeLabel,
+  price,
+  locale,
+  today,
+}: {
+  picks: FinderPick[];
+  ui: FinderUi;
+  /** "Free", and what a premium gift costs here ("$11.99"): the mark under a pick's name. */
+  freeLabel: string;
+  price: string;
+  locale: GiftLocale;
+  /** The day the page was rendered, for what is in season (lib/gift/finder.ts, occasionsFor). */
+  today: FinderDay;
+}) {
   const search = useSyncExternalStore(subscribe, readSearch, noSearch);
   const answers = useMemo(() => parseAnswers(search), [search]);
   const extra = useMemo(() => morePages(search), [search]);
-  const step = openStep(answers);
+  // A question asked again only once both are answered: until then the open one is the question.
+  const step = openStep(answers) ?? askedStep(search);
   const ranked = useMemo(() => (step ? [] : rankGifts(picks, answers)), [picks, answers, step]);
   const shown = ranked.slice(0, PICKS_PER_PAGE * (1 + extra));
+  const feel = chosenFeel(answers);
 
   const root = useRef<HTMLDivElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
-  /** True once they have answered or changed something here: only then does the view move focus, scroll or animate. */
+  /** True once they have answered or changed something here: only then does the view move focus or scroll. */
   const [moved, setMoved] = useState(false);
   const started = useRef(false);
   const counted = useRef("");
@@ -104,35 +140,40 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
   /** Set by "Show three more": the place of the first new pick, which takes the focus once it is drawn. */
   const added = useRef<number | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  /** The previews: stopped by the visitor, and whether any is really running (the button is only there when one is). */
+  const [filmsPaused, setFilmsPaused] = useState(false);
+  const [filmsMoving, setFilmsMoving] = useState(false);
 
-  // The page hid the first question while answers were on their way (see FINDER_WAIT); they are here now.
+  // The page hid the tool while answers were on their way (see FINDER_WAIT); they are here now.
   useEffect(() => {
     root.current?.closest(`[${FINDER_WAIT}]`)?.removeAttribute(FINDER_WAIT);
   }, []);
 
   const view = step ?? "result";
-  // After an answer the next question (or the picks) takes the focus. Unless the whole tool is already
-  // on screen, its top comes to the top: on a phone that is what puts each question on one screen.
+  // After an answer the next question (or the picks) takes the focus. The page moves only when the
+  // new heading is not on screen, which on a phone is what keeps it in view; otherwise nothing jumps.
   useEffect(() => {
     if (!moved) return;
-    const el = root.current;
-    if (el) {
-      const { top, bottom } = el.getBoundingClientRect();
-      if (top < 0 || bottom > window.innerHeight) {
-        const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-        el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-      }
+    const el = heading.current;
+    if (!el) return;
+    el.focus({ preventScroll: true });
+    const { top, bottom } = el.getBoundingClientRect();
+    const header = parseFloat(getComputedStyle(el).getPropertyValue("--header-h")) || 0;
+    if (top < header || bottom > window.innerHeight) {
+      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     }
-    heading.current?.focus({ preventScroll: true });
   }, [view, moved]);
 
   // "Show three more" leaves its button behind, or removes it at the end of the list: on to the first new pick.
   useEffect(() => {
     if (added.current === null) return;
-    const first = root.current?.querySelectorAll<HTMLElement>("[data-pick] a")[added.current];
+    const first = root.current?.querySelectorAll<HTMLElement>("[data-pick] [data-watch]")[added.current];
     added.current = null;
-    first?.focus({ preventScroll: true });
+    if (!first) return;
+    // On a phone the picks are one row to swipe: the new one is brought in sideways, and the page stays where it is.
+    first.closest("[data-pick]")?.scrollIntoView({ inline: "start", block: "nearest" });
+    first.focus({ preventScroll: true });
   }, [shown.length]);
 
   // A result is counted once per set of answers, however it was reached: answered here, opened from a link, or come back to.
@@ -144,14 +185,14 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
     track("finder_result", { for: answers.for, occasion: answers.occasion, feel: answers.feel });
   }, [step, answers]);
 
-  function go(next: FinderAnswers, { more = 0, replace = false }: { more?: number; replace?: boolean } = {}) {
-    const url = addressFor(next, more);
+  function go(next: FinderAnswers, { more = 0, ask = null, replace = false }: { more?: number; ask?: FinderStep | null; replace?: boolean } = {}) {
+    const url = addressFor(next, { more, ask });
     if (replace) window.history.replaceState(null, "", url);
     else window.history.pushState(null, "", url);
     window.dispatchEvent(new Event(CHANGED));
   }
 
-  function answer<S extends FinderStep>(which: S, value: NonNullable<FinderAnswers[S]>) {
+  function answer(which: FinderStep, value: Option) {
     if (!started.current) {
       started.current = true;
       track("finder_started");
@@ -162,196 +203,224 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
     go({ ...answers, [which]: value });
   }
 
-  /** Ask one question again; the others keep their answers. */
+  /** Ask one question again; both answers stay, and the current one is marked. */
   function reopen(which: FinderStep) {
     setMoved(true);
-    setMoreOpen(false);
-    go({ ...answers, [which]: null });
+    go(answers, { ask: which });
+  }
+
+  /** A feeling's pill: on, or off again. The picks re-rank where they are, so the address is rewritten, not added to. */
+  function toggleFeel(which: FinderFeel) {
+    track("finder_step", { step: "feel" });
+    go({ ...answers, feel: feel === which ? null : which }, { replace: true });
   }
 
   function restart() {
     setMoved(true);
     setMoreOpen(false);
-    setCopied(false);
     go(NO_ANSWERS);
   }
 
-  /** Opens a pick's demo, remembering its "Watch it" button: the focus goes back there when the demo closes. */
+  /** Opens a pick's demo, remembering the picture that opened it: the focus goes back there when the demo closes. */
   function watch(pick: FinderPick, from: HTMLElement) {
-    opener.current = from.closest("li")?.querySelector<HTMLElement>("[data-watch]") ?? null;
+    opener.current = from;
     track("finder_pick", { template: pick.slug, action: "watch" });
     setWatching(pick);
   }
 
-  async function copyLink() {
-    try {
-      // The three they were given, not however many more they went on to open.
-      await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}${answersQuery(answers)}`);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2400);
-    } catch {
-      // Blocked by the browser: the address bar still has the link.
+  // The answer cards of the open question, each with the gift it leads to.
+  const occasions = useMemo(() => occasionsFor(answers.for, today), [answers.for, today]);
+  const cards = useMemo(() => {
+    if (step === "for") {
+      const options: Option[] = [...FINDER_RECIPIENTS, ANY];
+      return { first: FINDER_RECIPIENTS as readonly Option[], more: [] as Option[], gifts: answerGifts(picks, { ...answers, for: null }, "for", options) };
     }
-  }
+    if (step === "occasion") {
+      const first: Option[] = occasions.first;
+      const more: Option[] = occasions.more;
+      return { first, more, gifts: answerGifts(picks, { ...answers, occasion: null }, "occasion", [...first, ANY, ...more]) };
+    }
+    return null;
+  }, [step, picks, answers, occasions]);
+  // A question asked again shows its answer marked: if that answer waits behind "More occasions", they are open.
+  const moreShown = moreOpen || (step === "occasion" && cards !== null && answers.occasion !== null && cards.more.includes(answers.occasion));
 
-  const said = (which: FinderStep): string => {
-    const value = answers[which];
-    if (value === null) return "";
+  const label = (which: FinderStep, value: Option): string => {
     if (value === ANY) return ui.notSure;
-    if (which === "for") return ui.people[value as keyof FinderUi["people"]];
-    if (which === "occasion") return ui.occasions[value as keyof FinderUi["occasions"]];
-    return ui.feels[value as keyof FinderUi["feels"]].label;
+    return which === "for" ? ui.people[value as FinderRecipient] : ui.occasions[value as Occasion];
   };
 
-  const enter = moved ? "animate-in fade-in-0 slide-in-from-bottom-1 duration-300 ease-(--ease-out-quint)" : undefined;
+  /** Arrow keys walk the cards as they are laid out: across a row, and up and down by a row. */
+  function walk(event: KeyboardEvent<HTMLDivElement>) {
+    const moves: Record<string, [number, number]> = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowDown: [0, 1], ArrowUp: [0, -1] };
+    const move = moves[event.key];
+    if (!move) return;
+    const all = [...event.currentTarget.querySelectorAll<HTMLElement>("[data-answer]")];
+    const at = all.indexOf(document.activeElement as HTMLElement);
+    if (at < 0) return;
+    const columns = all.filter((el) => el.offsetTop === all[0].offsetTop).length || 1;
+    const next = all[at + move[0] + move[1] * columns];
+    if (!next) return;
+    event.preventDefault();
+    next.focus();
+  }
+
+  const enter = moved ? "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300" : undefined;
 
   return (
-    <div ref={root} className="scroll-mt-24">
-      {/* The three questions as a row of answers: a chosen one is a button that asks it again. */}
-      <ol className="flex flex-wrap gap-2" aria-label={ui.answers}>
-        {FINDER_STEPS.map((which) => {
-          const done = answers[which] !== null;
-          const current = which === step;
-          return (
-            <li key={which}>
-              {done ? (
-                <button
-                  type="button"
-                  onClick={() => reopen(which)}
-                  className="group inline-flex min-h-11 items-center gap-2 rounded-full bg-ink py-1.5 pr-3 pl-3.5 text-sm text-paper transition-[background-color,scale] duration-200 ease-(--ease-out-quint) hover:bg-ink/85 active:scale-[0.97]"
-                >
-                  <Check aria-hidden="true" className="size-3.5 text-rose" strokeWidth={2.4} />
-                  <span className="font-medium">{said(which)}</span>
-                  {/* Read out after the answer: what pressing it does. */}
-                  <span className="sr-only">{fill(ui.change, { question: ui.steps[which].question })}</span>
-                  <X aria-hidden="true" className="size-3.5 text-paper/50 transition-colors group-hover:text-paper" />
-                </button>
-              ) : (
-                <span
-                  aria-current={current ? "step" : undefined}
-                  className={cn(
-                    "inline-flex min-h-11 items-center rounded-full border px-3.5 py-1.5 text-sm",
-                    current ? "border-ink font-medium text-ink" : "border-dashed border-ink/25 text-ink-soft",
-                  )}
-                >
-                  {ui.steps[which].label}
-                </span>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-
-      {step ? (
-        <div key={step} className={cn("mt-6 sm:mt-8", enter)}>
-          <p className="text-eyebrow text-ink-soft">{fill(ui.stepOf, { n: FINDER_STEPS.indexOf(step) + 1 })}</p>
-          <h2 ref={heading} tabIndex={-1} id="finder-question" className="display-lg mt-3 outline-none">
-            {ui.steps[step].question}
+    <div ref={root}>
+      {step && cards ? (
+        <div key={step} className={enter}>
+          <p className="text-page-label text-page-body">{fill(ui.stepOf, { n: FINDER_STEPS.indexOf(step) + 1 })}</p>
+          <h2 ref={heading} tabIndex={-1} id="finder-question" className="mt-2 scroll-mt-[calc(var(--header-h,0px)+2.5rem)] font-display text-[1.5rem] leading-tight tracking-[-0.015em] text-page-ink outline-none sm:mt-3 sm:text-[1.85rem]">
+            {ui.questions[step]}
           </h2>
 
-          <div role="group" aria-labelledby="finder-question" className={cn("mt-6 grid gap-2.5 sm:mt-7", step === "feel" ? "sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-2 lg:grid-cols-4")}>
-            {step === "for" ? FINDER_RECIPIENTS.map((who) => <Option key={who} label={ui.people[who]} onClick={() => answer("for", who)} />) : null}
-            {step === "occasion" ? (
-              <>
-                {FINDER_OCCASIONS.map((o) => (
-                  <Option key={o} label={ui.occasions[o]} onClick={() => answer("occasion", o)} />
-                ))}
-                <button
-                  type="button"
-                  aria-expanded={moreOpen}
-                  aria-controls="finder-more-occasions"
-                  onClick={() => setMoreOpen((open) => !open)}
-                  className={cn(OPTION, "border-dashed text-ink-soft", moreOpen && "border-solid border-ink/40 text-ink")}
-                >
-                  <span className="font-display text-[1.1rem] leading-tight sm:text-[1.2rem]">{ui.moreOccasions}</span>
-                  <ChevronDown aria-hidden="true" className={cn("size-4 shrink-0 transition-transform duration-200", moreOpen && "rotate-180")} />
-                </button>
-                {/* In the same grid, so the six that were waiting line up under the seven that weren't. */}
-                <div id="finder-more-occasions" hidden={!moreOpen} className="col-span-full grid grid-cols-2 gap-2.5 lg:grid-cols-4">
-                  {FINDER_MORE_OCCASIONS.map((o) => (
-                    <Option key={o} label={ui.occasions[o]} onClick={() => answer("occasion", o)} />
-                  ))}
-                </div>
-              </>
-            ) : null}
-            {step === "feel" ? FINDER_FEELS.map((feel) => <Option key={feel} label={ui.feels[feel].label} hint={ui.feels[feel].hint} onClick={() => answer("feel", feel)} />) : null}
+          <div id="finder-answers" role="group" aria-labelledby="finder-question" onKeyDown={walk} className="mt-3.5 grid grid-cols-2 gap-1.5 sm:mt-6 sm:grid-cols-4 sm:gap-x-4 sm:gap-y-5">
+            {/* "Not sure" is an answer like the others, and always the last card, whether or not the rest are open. */}
+            {[...cards.first, ...(moreShown ? cards.more : []), ANY as Option].map((option, i) => {
+              const gift = cards.gifts.get(option);
+              return <AnswerCard key={option} label={label(step, option)} poster={gift?.poster} current={answers[step] === option} eager={i < cards.first.length || option === ANY} onClick={() => answer(step, option)} />;
+            })}
           </div>
 
-          <button
-            type="button"
-            onClick={() => answer(step, ANY)}
-            className="mt-4 inline-flex min-h-11 items-center text-sm font-medium text-ink-soft underline decoration-ink/25 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink active:text-coral"
-          >
-            {ui.notSure}
-          </button>
+          {cards.more.length > 0 ? (
+            <button
+              type="button"
+              aria-expanded={moreShown}
+              aria-controls="finder-answers"
+              onClick={() => setMoreOpen((open) => !open)}
+              className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink active:text-page-accent sm:mt-4"
+            >
+              {ui.moreOccasions}
+              <ChevronDown aria-hidden="true" className={cn("size-4 text-page-body transition-transform duration-200", moreShown && "rotate-180")} />
+            </button>
+          ) : null}
         </div>
       ) : (
-        <div key="result" className={cn("mt-6 sm:mt-8", enter)}>
-          <h2 ref={heading} tabIndex={-1} id="finder-picks" className="display-lg outline-none">
+        <div key="result" className={enter}>
+          {/* The two answers, where they can be changed: each asks its question again. */}
+          <div className="flex flex-wrap gap-2">
+            {FINDER_STEPS.map((which) => (
+              <button
+                key={which}
+                type="button"
+                data-answered={which}
+                onClick={() => reopen(which)}
+                className="group inline-flex min-h-11 items-center gap-2 rounded-full border border-page-line bg-page-raised py-1.5 pr-3.5 pl-4 text-[0.9375rem] font-medium text-page-ink shadow-page-card transition-[border-color,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/40 active:scale-[0.97]"
+              >
+                {which === "for" ? ui.forWho[answers.for ?? ANY] : answers.occasion && answers.occasion !== ANY ? ui.occasions[answers.occasion] : ui.anyOccasion}
+                {/* Read out after the answer: what pressing it does. */}
+                <span className="sr-only">{fill(ui.change, { question: ui.questions[which] })}</span>
+                <Pencil aria-hidden="true" className="size-3.5 text-page-body transition-colors group-hover:text-page-ink" strokeWidth={1.8} />
+              </button>
+            ))}
+          </div>
+
+          <h2 ref={heading} tabIndex={-1} id="finder-picks" className="mt-6 scroll-mt-[calc(var(--header-h,0px)+5rem)] font-display text-[1.5rem] leading-tight tracking-[-0.015em] text-page-ink outline-none sm:text-[1.85rem]">
             {ui.resultTitle}
           </h2>
-          <p className="mt-3 max-w-xl leading-relaxed text-ink-soft">{ui.resultLead}</p>
 
-          <ol aria-labelledby="finder-picks" className="mt-9 grid gap-x-10 gap-y-10 lg:grid-cols-3">
-            {shown.map((pick, i) => (
-              <li key={pick.slug} data-pick className="grid grid-cols-[7rem_minmax(0,1fr)] items-start gap-x-4 gap-y-4 lg:flex lg:flex-col lg:gap-0">
-                {/* For a pointer: the same demo "Watch it" opens. A screen reader has that button, so this one stays out of its way. */}
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  aria-hidden="true"
-                  onClick={(event) => watch(pick, event.currentTarget)}
-                  className="group relative block w-full rounded-[13%/6%] transition-[translate,scale] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 active:scale-[0.98] lg:w-[min(13.5rem,100%)]"
-                >
-                  <PhoneFrame width="100%">
-                    <Image src={pick.poster} alt="" fill sizes={POSTER_SIZES} quality={75} loading={i < PICKS_PER_PAGE ? "eager" : "lazy"} className="object-cover" />
-                    <span className="absolute inset-0 grid place-items-center bg-black/10 transition-colors group-hover:bg-black/0">
-                      <span className="grid size-9 place-items-center rounded-full bg-cream text-forest shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)] transition-transform duration-300 ease-(--ease-out-quint) group-hover:scale-110 lg:size-12">
-                        <Play className="ml-0.5 size-3.5 fill-current lg:size-4" />
-                      </span>
-                    </span>
-                  </PhoneFrame>
-                </button>
-                {/* Grows on a wide screen, so the three "Make this gift" buttons sit on one line whatever the sentences' lengths. */}
-                <div className="min-w-0 lg:mt-6 lg:flex-1">
-                  <p className="flex items-center gap-2.5">
-                    {/* A label on a plain span is not read out: the number is for the eye, the words for a screen reader. */}
-                    <span aria-hidden="true" className="text-mono-meta text-muted-foreground">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="sr-only">{fill(ui.pick, { n: i + 1 })}</span>
-                    <span className={cn("rounded-full px-2.5 py-1 text-[11px] leading-none font-semibold tracking-wide", pick.free ? "bg-cream text-forest ring-1 ring-forest/15" : "bg-forest/80 text-cream")}>
-                      {pick.free ? marks.free : marks.premium}
-                    </span>
-                  </p>
-                  <h3 className="mt-2.5 font-display text-[1.5rem] leading-tight text-balance">{pick.name}</h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{pickReason(pick.why, answers)}</p>
-                </div>
-                <div className="col-span-2 flex items-center gap-5 lg:mt-5">
-                  <Link
-                    href={`/create/${pick.slug}?ref=${REF}`}
-                    onClick={() => track("finder_pick", { template: pick.slug, action: "make" })}
-                    className="inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-forest px-5 text-sm font-medium text-cream transition-[background-color,scale] duration-200 ease-(--ease-out-quint) hover:bg-forest-raised active:scale-[0.98] lg:flex-none"
+          <div className="mt-1.5 flex items-center justify-between gap-3">
+            {/* A feeling is never asked. Whoever wants one taps it, and the same picks come back in another order. */}
+            <div role="group" aria-label={ui.feelsLabel} className="-ml-1.5 flex flex-wrap">
+              {FINDER_FEELS.map((which) => (
+                <button key={which} type="button" data-feel={which} aria-pressed={feel === which} onClick={() => toggleFeel(which)} className="group inline-flex min-h-11 items-center px-1">
+                  <span
+                    className={cn(
+                      "inline-flex h-8 items-center rounded-full border px-3 text-[0.875rem] transition-[background-color,border-color,color] duration-200",
+                      feel === which ? "border-page-ink bg-page-ink text-page-ground" : "border-page-line text-page-body group-hover:border-page-ink/40 group-hover:text-page-ink",
+                    )}
                   >
-                    {ui.make}
-                    <ArrowRight aria-hidden="true" className="size-3.5" />
-                  </Link>
+                    {ui.feels[which]}
+                  </span>
+                </button>
+              ))}
+            </div>
+            {filmsMoving || filmsPaused ? (
+              <button type="button" data-films-toggle onClick={() => setFilmsPaused((paused) => !paused)} aria-label={filmsPaused ? ui.playFilms : ui.pauseFilms} className="group/film grid size-11 shrink-0 place-items-center rounded-full">
+                <span className="grid size-8 place-items-center rounded-full border border-page-line bg-page-raised text-page-ink shadow-page-card transition-[background-color,scale] duration-200 group-hover/film:bg-page-ground group-active/film:scale-95">
+                  {filmsPaused ? <Play aria-hidden="true" className="ml-px size-3.5 fill-current" strokeWidth={0} /> : <Pause aria-hidden="true" className="size-3.5 fill-current" strokeWidth={0} />}
+                </span>
+              </button>
+            ) : null}
+          </div>
+
+          {/*
+           * Three tall picture cards, as "More like this" shows a gift, each playing its own preview.
+           * On a phone they are one row, one card to a screen, swiped sideways, with dots under it
+           * (the owner, 22 Nov 2026: a set of cards is never shown all at once on a phone); the row
+           * runs to the screen's edges and each card stops at the page's own margin.
+           */}
+          <ol
+            id="finder-row"
+            aria-labelledby="finder-picks"
+            className="-mx-5 mt-3 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-1 pb-2 scrollbar-none sm:mx-0 sm:mt-4 sm:grid sm:snap-none sm:grid-cols-3 sm:gap-x-5 sm:gap-y-12 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-x-6"
+          >
+            {shown.map((pick, i) => {
+              const key = reasonKey(pick.why, answers);
+              const line = pick.line[key] as string;
+              const whole = pick.why[key] as string;
+              return (
+                <li key={pick.slug} data-card data-pick className="group/pick flex w-full shrink-0 snap-start flex-col sm:w-auto">
+                  {/* The picture is the way into the live demo: the real gift, with sample words, in a phone. */}
                   <button
                     type="button"
                     data-watch
                     onClick={(event) => watch(pick, event.currentTarget)}
                     aria-label={`${ui.watch}: ${pick.name}`}
-                    className="inline-flex min-h-11 shrink-0 items-center gap-1.5 text-sm font-medium text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline active:text-coral"
+                    className="group relative block aspect-square w-full overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow,scale] duration-300 ease-(--ease-out-quint) hover:shadow-page-lift active:scale-[0.99] sm:aspect-[4/5] pointer-fine:hover:-translate-y-1"
                   >
-                    <Play aria-hidden="true" className="size-3 fill-current" />
-                    {ui.watch}
+                    <PosterFilm poster={pick.poster} film={pick.film} from={pick.filmFrom} paused={filmsPaused} eager={i < PICKS_PER_PAGE} onMoving={() => setFilmsMoving(true)} sizes="(min-width: 1280px) 260px, (min-width: 640px) 30vw, 90vw" />
+                    <span aria-hidden="true" className="absolute bottom-3 left-3 inline-flex h-8 items-center gap-1.5 rounded-full bg-black/45 pr-3 pl-2.5 text-[0.875rem] font-medium text-white backdrop-blur-sm transition-colors group-hover:bg-black/60">
+                      <Play className="size-3 fill-current" strokeWidth={0} />
+                      {ui.watch}
+                    </span>
                   </button>
-                </div>
-              </li>
-            ))}
+                  <h3 className="mt-3.5 font-display text-xl leading-tight text-page-ink">{pick.name}</h3>
+                  <p className="mt-1.5 text-page-label text-page-body">{pick.free ? freeLabel : price}</p>
+                  <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body">
+                    {line}
+                  </p>
+                  {whole !== line ? (
+                    // The sentence whole, for whoever wants it: closed, and in the page for a search engine once the picks are drawn.
+                    <details className="group/why">
+                      <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-[0.875rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden">
+                        {ui.whyThis}
+                        <Plus aria-hidden="true" className="size-3.5 text-page-body transition-transform duration-200 group-open/why:rotate-45" strokeWidth={1.6} />
+                      </summary>
+                      <p data-reveal className="pb-2 text-[0.9375rem] leading-relaxed text-page-body">
+                        {whole}
+                      </p>
+                    </details>
+                  ) : null}
+                  {/*
+                   * The first pick carries the way into the editor. The other two show theirs when the
+                   * card is pointed at or reached by keyboard, and always where there is no pointer to
+                   * hover with (a phone, a tablet). Its room is kept either way, so nothing moves.
+                   */}
+                  <Link
+                    href={`/create/${pick.slug}?ref=${REF}`}
+                    data-make
+                    onClick={() => track("finder_pick", { template: pick.slug, action: "make" })}
+                    className={cn(
+                      "mt-auto inline-flex h-11 items-center justify-center gap-1.5 self-start rounded-full px-5 text-[0.9375rem] font-medium transition-[background-color,border-color,opacity,scale] duration-200 ease-(--ease-out-quint) active:scale-[0.98] max-sm:w-full",
+                      whole === line && "mt-3",
+                      i === 0
+                        ? "bg-page-accent text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] hover:bg-page-accent-hover"
+                        : "border border-page-ink/30 text-page-ink hover:border-page-ink/50 hover:bg-page-raised lg:pointer-fine:opacity-0 lg:pointer-fine:group-focus-within/pick:opacity-100 lg:pointer-fine:group-hover/pick:opacity-100",
+                    )}
+                  >
+                    {ui.make}
+                    <ArrowRight aria-hidden="true" className="size-3.5" />
+                  </Link>
+                </li>
+              );
+            })}
           </ol>
+          <IdeasDots key={shown.length} target="finder-row" count={shown.length} className="mt-3 sm:hidden" />
 
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-line pt-5">
+          <div className="mt-5 flex flex-wrap items-center gap-x-7 gap-y-1 sm:mt-9">
             {shown.length < ranked.length ? (
               <button
                 type="button"
@@ -359,24 +428,16 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
                   added.current = shown.length;
                   go(answers, { more: extra + 1, replace: true });
                 }}
-                className="inline-flex h-11 items-center rounded-full border border-ink/20 px-5 text-sm font-medium text-ink transition-[border-color,scale] duration-200 ease-(--ease-out-quint) hover:border-ink active:scale-[0.98]"
+                className={QUIET}
               >
                 {ui.more}
               </button>
             ) : (
-              <p className="py-2.5 text-sm text-ink-soft">{ui.end}</p>
+              <p className="py-2.5 text-[0.9375rem] text-page-body">{ui.end}</p>
             )}
             <button type="button" onClick={restart} className={QUIET}>
-              <RotateCcw aria-hidden="true" className="size-3.5" />
               {ui.restart}
             </button>
-            {/* The picks are only ever drawn in a browser (the server draws the first question), so this can ask it. */}
-            {typeof navigator !== "undefined" && typeof navigator.clipboard?.writeText === "function" ? (
-              <button type="button" onClick={copyLink} className={QUIET}>
-                {copied ? <Check aria-hidden="true" className="size-3.5 text-moss" /> : <Link2 aria-hidden="true" className="size-3.5" />}
-                <span aria-live="polite">{copied ? ui.copied : ui.copyLink}</span>
-              </button>
-            ) : null}
           </div>
         </div>
       )}
@@ -386,7 +447,7 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
           <Dialog.Overlay className="fixed inset-0 z-[80] bg-forest/45 duration-200 supports-backdrop-filter:backdrop-blur-[3px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
           <Dialog.Content
             aria-describedby={undefined}
-            // The dialog has no trigger of its own for Radix to return to: back to the button that opened it.
+            // The dialog has no trigger of its own for Radix to return to: back to the picture that opened it.
             onCloseAutoFocus={(event) => {
               event.preventDefault();
               opener.current?.focus();
@@ -419,7 +480,7 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
                      * Until the template's code arrives the screen would be black: the pick's poster waits under it,
                      * at the size the list already loaded, so it is there at once. The template paints over it.
                      */}
-                    <Image src={watching.poster} alt="" fill sizes={POSTER_SIZES} quality={75} loading="eager" className="object-cover" />
+                    <Image src={watching.poster} alt="" fill sizes="300px" quality={75} loading="eager" className="object-cover" />
                     <GiftRenderer slug={watching.slug} mode="demo" demoLocale={locale} />
                   </PhoneFrame>
                   <p className={cn("mx-auto mt-4 max-w-[19rem] text-center text-[13px] leading-snug text-forest/65", DEMO_HINT)}>{ui.demoHint}</p>
@@ -441,9 +502,6 @@ export function GiftFinder({ picks, ui, marks, locale }: { picks: FinderPick[]; 
   );
 }
 
-/** A pick's poster in the list; the demo borrows the same file while its template loads. */
-const POSTER_SIZES = "(min-width: 1024px) 216px, 112px";
-
 /**
  * What the demo's window needs around its phone, which takes the rest of the height: the title (two
  * lines at most), the note and the button. On a phone the window is a sheet the height of the
@@ -453,22 +511,30 @@ const POSTER_SIZES = "(min-width: 1024px) 216px, 112px";
 const DEMO_ROOM = "[--demo-room:10.75rem] [@media(min-height:700px)]:[--demo-room:14.25rem] sm:[--demo-room:14.5rem] sm:[@media(min-height:700px)]:[--demo-room:14.5rem]";
 const DEMO_HINT = "[@media(max-height:699.98px)]:max-sm:hidden";
 
-/** 56px tall at least: a thumb's target, and room for a second line under the feelings. */
-const OPTION =
-  "group flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl border border-line bg-card px-3.5 py-3 text-left sm:px-4 text-ink transition-[border-color,background-color,box-shadow,scale] duration-200 ease-(--ease-out-quint) hover:border-ink/40 hover:bg-white hover:shadow-soft active:scale-[0.98] active:border-coral";
-
 const QUIET =
-  "inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline active:text-coral";
+  "inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink active:text-page-accent";
 
-function Option({ label, hint, onClick }: { label: string; hint?: string; onClick: () => void }) {
+/**
+ * An answer: a picture of the gift it leads to, and its words. The whole card is the button. On a
+ * phone it is a short row (picture, then words), two to a row, so a whole question fits one screen;
+ * from 640px the picture is on top and the words under it, four to a row.
+ */
+function AnswerCard({ label, poster, current, eager, onClick }: { label: string; poster?: string; current: boolean; eager: boolean; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={OPTION}>
-      <span className="min-w-0">
-        <span className="block font-display text-[1.1rem] leading-tight sm:text-[1.2rem]">{label}</span>
-        {hint ? <span className="mt-1 block text-[13px] leading-snug text-ink-soft">{hint}</span> : null}
+    <button
+      type="button"
+      data-answer
+      aria-current={current ? "true" : undefined}
+      onClick={onClick}
+      className={cn(
+        "group flex h-[3.25rem] items-center overflow-hidden rounded-[0.875rem] border border-page-line bg-page-raised text-left shadow-page-card transition-[border-color,box-shadow,translate,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/35 hover:shadow-page-lift active:scale-[0.98] sm:block sm:h-auto sm:rounded-[1.25rem] pointer-fine:hover:-translate-y-0.5",
+        current && "border-page-accent ring-2 ring-page-accent/60",
+      )}
+    >
+      <span className="relative block h-full w-12 shrink-0 overflow-hidden bg-page-band sm:aspect-[6/5] sm:h-auto sm:w-full">
+        {poster ? <Image src={poster} alt="" fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 23vw, 48px" loading={eager ? "eager" : "lazy"} className="object-cover object-[50%_32%]" /> : null}
       </span>
-      {/* Two columns on a phone leave a label about 120px: the arrow would wrap "Valentine's Day". */}
-      <ArrowRight aria-hidden="true" className="hidden size-4 shrink-0 text-ink/20 transition-[color,translate] duration-200 group-hover:translate-x-0.5 group-hover:text-coral sm:block" />
+      <span className="block min-w-0 px-2.5 font-display text-[0.9375rem] leading-[1.12] text-page-ink sm:px-3.5 sm:pt-2.5 sm:pb-3 sm:text-[1.0625rem] sm:leading-snug">{label}</span>
     </button>
   );
 }

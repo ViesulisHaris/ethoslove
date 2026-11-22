@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import manifest from "../../public/art/pages/manifest.json";
 import { ART_IDS, artSrcSet, artVariants, pageArt, slotGeometry, slotStyle, type ArtSlot } from "@/content/page-art";
 import { TEMPLATE_PAGE_THEMES, type Flowers } from "@/content/template-page-themes";
-import { ALL_PLACEMENTS } from "@/components/templates/page/placements";
+import { ALL_PLACEMENTS, FINDER_PLACEMENTS } from "@/components/templates/page/placements";
 
 /**
  * The art of the redesigned pages (content/page-art.ts reads public/art/pages/manifest.json): every
@@ -137,5 +137,22 @@ describe("page art", () => {
     expect(desk.filter((p) => p.art.startsWith("lily-")).length).toBeLessThanOrEqual(2);
     expect(desk.length).toBeLessThanOrEqual(7);
     expect(ALL_PLACEMENTS.filter((p) => p.phone === "only").length).toBeLessThanOrEqual(3);
+  });
+
+  it("places the finder's flowers by the same rules, in the site's blush", () => {
+    for (const piece of FINDER_PLACEMENTS) {
+      expect(ART_IDS, piece.art).toContain(piece.art);
+      expect(() => pageArt(piece.art, "blush"), piece.art).not.toThrow();
+      expect(Math.abs(piece.rot), `${piece.art} is turned ${piece.rot} degrees`).toBeLessThanOrEqual(25);
+      expect(piece.size, piece.art).toBeGreaterThan(0);
+      expect(piece.art).not.toBe("lily-footer");
+      expect(["hero-flatlay", "experience-flatlay", "step-photo", "step-note", "step-send", "step-phone"]).not.toContain(piece.art);
+      expect(Object.keys(piece).filter((k) => !["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until", "top"].includes(k))).toEqual([]);
+    }
+    // Two corners and a loose petal on a desk; a petal and one lily on a phone.
+    const desk = FINDER_PLACEMENTS.filter((p) => p.phone !== "only" && p.until === undefined);
+    expect(desk.filter((p) => p.art.startsWith("lily-")).length).toBeLessThanOrEqual(2);
+    expect(desk.length).toBeLessThanOrEqual(3);
+    expect(FINDER_PLACEMENTS.filter((p) => p.phone === "only").length).toBeLessThanOrEqual(2);
   });
 });

@@ -21,7 +21,7 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * page it changed reads its date from here. The template pages take GUIDES_LIVE below: who each
  * suits now sits in the redesigned page's closed block, and ships with that page.
  */
-export const FINDER_LIVE = "2026-11-21";
+export const FINDER_LIVE = "2026-11-22";
 
 /**
  * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
@@ -44,6 +44,9 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/gifts/finder": FINDER_LIVE,
   // Its "Is it only for couples?" answer now says a few templates are drawn for couples.
   "/gifts/for-best-friend": FINDER_LIVE,
+  // A row of Christmas gifts while Christmas is in season (15 Nov to 25 Dec), linked to the finder.
+  "/gifts/for-boyfriend": FINDER_LIVE,
+  "/gifts/for-girlfriend": FINDER_LIVE,
   // With the finder: the gallery links to it.
   "/templates": FINDER_LIVE,
   "/templates/*": GUIDES_LIVE,

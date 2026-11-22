@@ -1,9 +1,10 @@
 import { OCCASIONS, isOccasion, type Occasion } from "@/config/occasions";
 
 /**
- * The gift finder's reasoning (/gifts/finder): three answers in, the templates that fit out, best
- * first. Pure, with no React and no template data of its own, so it runs the same in a test, on
- * the server and in the browser. What each template suits is written by hand in
+ * The gift finder's reasoning (/gifts/finder): two answers in (who, and the occasion), the
+ * templates that fit out, best first, and a feeling that re-ranks them for anyone who wants to.
+ * Pure, with no React and no template data of its own, so it runs the same in a test, on the
+ * server and in the browser. What each template suits is written by hand in
  * src/content/finder.ts; the manifests say which occasions a template was made for.
  */
 
@@ -17,21 +18,26 @@ export const FINDER_PARTNERS = ["girlfriend", "boyfriend", "wife", "husband"] as
 export const FINDER_FEELS = ["romantic", "funny", "sentimental", "unusual"] as const;
 export type FinderFeel = (typeof FINDER_FEELS)[number];
 
-/** The occasions the second question shows at once; the rest wait behind "Something else". */
-export const FINDER_OCCASIONS = ["birthday", "anniversary", "valentines", "christmas", "long-distance", "apology", "just-because"] as const satisfies readonly Occasion[];
-export const FINDER_MORE_OCCASIONS: readonly Occasion[] = OCCASIONS.filter((o) => !(FINDER_OCCASIONS as readonly Occasion[]).includes(o));
-
 /** "Not sure": the question was answered, and the answer narrows nothing. */
 export const ANY = "any";
 export type Any = typeof ANY;
 
-export const FINDER_STEPS = ["for", "occasion", "feel"] as const;
+/**
+ * The two questions, in the order they are asked. The feeling used to be a third (the first
+ * version, Nov 2026): it is now three or four small pills over the results, and never asked.
+ */
+export const FINDER_STEPS = ["for", "occasion"] as const;
 export type FinderStep = (typeof FINDER_STEPS)[number];
+
+/** Everything the address carries about a result, in the order it is written there. */
+export const FINDER_KEYS = ["for", "occasion", "feel"] as const;
+export type FinderKey = (typeof FINDER_KEYS)[number];
 
 /** An answer per question; null while it is still open. The keys are the address's parameters. */
 export type FinderAnswers = {
   for: FinderRecipient | Any | null;
   occasion: Occasion | Any | null;
+  /** Not a question: a pill over the results. Null and "any" both mean no pill is on. */
   feel: FinderFeel | Any | null;
 };
 
@@ -41,14 +47,15 @@ const isRecipient = (v: string): v is FinderRecipient => (FINDER_RECIPIENTS as r
 const isFeel = (v: string): v is FinderFeel => (FINDER_FEELS as readonly string[]).includes(v);
 
 /**
- * The answers an address carries (`?for=mom&occasion=birthday&feel=funny`). Anything it doesn't
- * recognise is an open question, never an error: a link cut short in a chat, or typed by hand,
- * starts at the first question it leaves unanswered.
+ * The answers an address carries (`?for=mom&occasion=birthday`, and `&feel=funny` when a pill is
+ * on). Anything it doesn't recognise is an open question, never an error: a link cut short in a
+ * chat, or typed by hand, starts at the first question it leaves unanswered. `who` is read as
+ * `for` where an address has no `for`: it is what the question is called, and what people type.
  */
 export function parseAnswers(search: string | URLSearchParams): FinderAnswers {
   const params = typeof search === "string" ? new URLSearchParams(search) : search;
-  const read = (key: FinderStep) => (params.get(key) ?? "").trim().toLowerCase();
-  const who = read("for");
+  const read = (key: string) => (params.get(key) ?? "").trim().toLowerCase();
+  const who = read("for") || read("who");
   const occasion = read("occasion");
   const feel = read("feel");
   return {
@@ -61,18 +68,91 @@ export function parseAnswers(search: string | URLSearchParams): FinderAnswers {
 /** The answers as a query string, in the order they are asked, or "" when there are none. */
 export function answersQuery(answers: FinderAnswers): string {
   const params = new URLSearchParams();
-  for (const step of FINDER_STEPS) {
-    const value = answers[step];
-    if (value) params.set(step, value);
+  for (const key of FINDER_KEYS) {
+    const value = answers[key];
+    if (value) params.set(key, value);
   }
   const query = params.toString();
   return query ? `?${query}` : "";
 }
 
-/** The first question still open, or null once all three are answered and the picks can show. */
+/** The first question still open, or null once both are answered and the picks can show. */
 export function openStep(answers: FinderAnswers): FinderStep | null {
   return FINDER_STEPS.find((step) => answers[step] === null) ?? null;
 }
+
+/** The feeling whose pill is on, if one is. */
+export function chosenFeel(answers: FinderAnswers): FinderFeel | null {
+  return answers.feel && answers.feel !== ANY ? answers.feel : null;
+}
+
+/**
+ * The question an address asks to see again (`&ask=for`): someone on the results tapped one of
+ * their two answers to change it. The answers stay in the address, so the question opens with the
+ * current one marked, and Back returns to the results.
+ */
+export const FINDER_ASK = "ask";
+export function askedStep(search: string | URLSearchParams): FinderStep | null {
+  const params = typeof search === "string" ? new URLSearchParams(search) : search;
+  const asked = (params.get(FINDER_ASK) ?? "").trim().toLowerCase();
+  return (FINDER_STEPS as readonly string[]).includes(asked) ? (asked as FinderStep) : null;
+}
+
+// --- the occasions the second question shows ---
+
+/** How many occasions the second question shows at once; the rest wait behind "More occasions". */
+export const OCCASIONS_SHOWN = 6;
+
+const COUPLE_DAYS: readonly Occasion[] = ["birthday", "anniversary", "valentines", "christmas", "long-distance", "apology"];
+const MARRIED_DAYS: readonly Occasion[] = ["birthday", "anniversary", "valentines", "christmas", "apology", "just-because"];
+
+/**
+ * The six occasions that matter most for each person, most likely first: a mother is asked about
+ * Mother's Day and never about Valentine's, a friend about a graduation. Whatever is left is
+ * behind "More occasions", so nothing is out of reach.
+ */
+export const OCCASIONS_FOR: Record<FinderRecipient | Any, readonly Occasion[]> = {
+  girlfriend: COUPLE_DAYS,
+  boyfriend: COUPLE_DAYS,
+  wife: MARRIED_DAYS,
+  husband: MARRIED_DAYS,
+  mom: ["birthday", "mothers-day", "christmas", "long-distance", "apology", "just-because"],
+  dad: ["birthday", "fathers-day", "christmas", "long-distance", "apology", "just-because"],
+  "best-friend": ["birthday", "christmas", "graduation", "wedding", "long-distance", "just-because"],
+  someone: ["birthday", "anniversary", "christmas", "wedding", "graduation", "just-because"],
+  [ANY]: ["birthday", "anniversary", "valentines", "christmas", "long-distance", "just-because"],
+};
+
+/** A day people shop for weeks ahead: from the first date to the day itself, month and day, both included. */
+const SEASONS: readonly { occasion: Occasion; from: readonly [number, number]; to: readonly [number, number] }[] = [
+  { occasion: "christmas", from: [11, 15], to: [12, 25] },
+  { occasion: "valentines", from: [1, 25], to: [2, 14] },
+];
+
+/** A date as the page was rendered with it: "2026-11-22". Only its month and day are read. */
+export type FinderDay = string;
+
+/** The occasions in season on a day, by the calendar date written in it (no time zones: the page passes the day it was rendered). */
+export function occasionsInSeason(day: FinderDay): Occasion[] {
+  const [, month, date] = day.split("-").map(Number);
+  if (!month || !date) return [];
+  const at = month * 100 + date;
+  return SEASONS.filter(({ from, to }) => at >= from[0] * 100 + from[1] && at <= to[0] * 100 + to[1]).map(({ occasion }) => occasion);
+}
+
+/**
+ * The second question for a person, on a day: the six that matter most to them, with whatever is
+ * in season moved to the front (Christmas from 15 Nov to 25 Dec), and the rest for "More occasions".
+ * A season only reorders a person's own six: a mother is not asked about Valentine's in February.
+ */
+export function occasionsFor(who: FinderAnswers["for"], day: FinderDay): { first: Occasion[]; more: Occasion[] } {
+  const own = OCCASIONS_FOR[who ?? ANY];
+  const season = occasionsInSeason(day).filter((o) => own.includes(o));
+  const first = [...season, ...own.filter((o) => !season.includes(o))].slice(0, OCCASIONS_SHOWN);
+  return { first, more: OCCASIONS.filter((o) => !first.includes(o)) };
+}
+
+// --- which templates fit, and in what order ---
 
 /** What the finder knows about one template: its manifest's occasions and order, and its hand-written fit. */
 export type FinderGift = {
@@ -165,6 +245,29 @@ export function rankGifts<T extends FinderGift>(gifts: readonly T[], answers: Fi
 export const PICKS_PER_PAGE = 3;
 
 /**
+ * The gift each answer card shows: one that answer leads to. The best pick for the first answer,
+ * and for each one after it the best that no earlier card already shows, so nine answers are nine
+ * different pictures (the best seller alone would be on most of them). A gift that only makes
+ * sense when something nobody asked is true (a trip's reveal) is not what an answer is pictured
+ * by. Every card gets a picture: with nothing new left to show, an answer repeats its own best pick.
+ *
+ * `answers` is what is already known; `step` the question the cards answer; `options` its answers
+ * in the order the cards are drawn ("any" for "Not sure").
+ */
+export function answerGifts<T extends FinderGift, V extends string>(gifts: readonly T[], answers: FinderAnswers, step: FinderStep, options: readonly V[]): Map<V, T> {
+  const shown = new Set<string>();
+  const cards = new Map<V, T>();
+  for (const option of options) {
+    const ranked = rankGifts(gifts, { ...answers, [step]: option });
+    const gift = ranked.find((g) => !shown.has(g.slug) && !g.conditional) ?? ranked.find((g) => !shown.has(g.slug)) ?? ranked[0];
+    if (!gift) continue;
+    shown.add(gift.slug);
+    cards.set(option, gift);
+  }
+  return cards;
+}
+
+/**
  * Set on the tool's wrapper, before the page paints, when the address already carries answers: the
  * static HTML shows the first question, and a shared result would flash it before the picks. The
  * page's inline script sets it (and takes it off again by itself if nothing hydrates); the tool
@@ -172,9 +275,9 @@ export const PICKS_PER_PAGE = 3;
  */
 export const FINDER_WAIT = "data-finder-wait";
 
-/** That inline script: only when one of the three answers is in the address. */
+/** That inline script: only when the address answers the first question (as `for`, or as `who`). */
 export const finderWaitScript = (): string =>
-  `(function(s){try{var q=new URLSearchParams(location.search);if(${FINDER_STEPS.map((step) => `q.get(${JSON.stringify(step)})`).join("||")}){var e=s.parentElement;e.setAttribute(${JSON.stringify(FINDER_WAIT)},"");setTimeout(function(){e.removeAttribute(${JSON.stringify(FINDER_WAIT)})},4000)}}catch(_){}})(document.currentScript)`;
+  `(function(s){try{var q=new URLSearchParams(location.search);if(q.get("for")||q.get("who")){var e=s.parentElement;e.setAttribute(${JSON.stringify(FINDER_WAIT)},"");setTimeout(function(){e.removeAttribute(${JSON.stringify(FINDER_WAIT)})},4000)}}catch(_){}})(document.currentScript)`;
 
 /**
  * Why a template fits, in the words written for the answer: the person's own sentence when it has
@@ -187,11 +290,56 @@ export const finderWaitScript = (): string =>
  */
 export type FinderReasons<T> = { base: T } & Partial<Record<FinderRecipient | FinderFeel, T>>;
 
-export function pickReason<T>(why: FinderReasons<T>, answers: FinderAnswers): T {
+/** Which of a template's sentences an answer reads. */
+export function reasonKey<T>(why: FinderReasons<T>, answers: FinderAnswers): keyof FinderReasons<T> {
   const who = answers.for && answers.for !== ANY ? answers.for : null;
-  if (who && why[who] !== undefined) return why[who] as T;
-  const feel = answers.feel && answers.feel !== ANY ? answers.feel : null;
+  if (who && why[who] !== undefined) return who;
+  const feel = chosenFeel(answers);
   const written = feel !== "romantic" || (who !== null && (FINDER_PARTNERS as readonly string[]).includes(who));
-  if (feel && written && why[feel] !== undefined) return why[feel] as T;
-  return why.base;
+  if (feel && written && why[feel] !== undefined) return feel;
+  return "base";
+}
+
+export function pickReason<T>(why: FinderReasons<T>, answers: FinderAnswers): T {
+  return why[reasonKey(why, answers)] as T;
+}
+
+// --- the line under a pick ---
+
+/** The most words a pick's line may be (DESIGN-LESS-TEXT.md: a section's one line is fourteen at most). */
+export const REASON_WORDS = 14;
+
+export const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
+
+/**
+ * A pick's line: its sentence cut to at most fourteen words, and never mid-thought. As many whole
+ * sentences as fit; where even the first is too long, that sentence up to its first colon or
+ * semicolon, or else its last comma, wherever that leaves a clause of five words or more. Null
+ * where nothing gives a whole clause. The rule is a first draft, not the last word: a line it cuts
+ * badly, or cannot cut, is written by hand (content/finder.ts, FINDER_SHORT), and a test fails for
+ * a sentence that has neither. The whole sentence is still on the card, in its closed "Why this one".
+ */
+export function shortReason(sentence: string, max = REASON_WORDS): string | null {
+  // A sentence ends where the next word starts one: «¿serás mi boo?» si no… and "be my boo?" unless… carry on.
+  const sentences: string[] = [];
+  let from = 0;
+  for (const end of sentence.matchAll(/[.!?]+["”»]?(?=\s+[A-ZÁÉÍÓÚÑ¿¡"«“\d]|\s*$)/g)) {
+    sentences.push(sentence.slice(from, end.index + end[0].length).trim());
+    from = end.index + end[0].length;
+  }
+  if (sentence.slice(from).trim()) sentences.push(sentence.slice(from).trim());
+  let whole = "";
+  for (const next of sentences) {
+    const joined = whole ? `${whole} ${next}` : next;
+    if (countWords(joined) > max) break;
+    whole = joined;
+  }
+  if (whole) return whole;
+  const first = sentences[0];
+  const clause = (at: number) => first.slice(0, at).trim();
+  const fitsLine = (text: string) => countWords(text) <= max && countWords(text) >= 5;
+  const stops = [...first.matchAll(/[;:](?=\s)/g)].map((m) => m.index!);
+  const commas = [...first.matchAll(/,(?=\s)/g)].map((m) => m.index!).reverse();
+  for (const at of [...stops, ...commas]) if (fitsLine(clause(at))) return `${clause(at)}.`;
+  return null;
 }

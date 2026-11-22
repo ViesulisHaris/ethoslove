@@ -61,7 +61,7 @@ export function GET() {
     "",
     "## Gift ideas by who it's for",
     "",
-    `- [Gift finder](${localizedUrl("en", FINDER_PATH)}): three questions (who it is for, the occasion, the feeling) that end on three templates to watch and make. The answers are in the page's address, so a result can be shared.`,
+    `- [Gift finder](${localizedUrl("en", FINDER_PATH)}): two questions (who it is for and the occasion) that end on three templates to watch and make, which a feeling can re-order. The answers are in the page's address, so a result can be shared.`,
     ...RECIPIENTS.map((r) => `- [${RECIPIENT_GUIDES[r].en.h1}](${localizedUrl("en", `/gifts/${recipientSlug(r)}`)}): ${RECIPIENT_GUIDES[r].en.description}`),
     "",
     "## Blog",

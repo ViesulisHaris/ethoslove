@@ -47,5 +47,29 @@ export const MORE_ART: PlacedArt[] = [
   { art: "lily-three-quarter", x: 88, y: -1, size: 36, rot: -6, phone: "only" },
 ];
 
-/** Every placement, for the test that holds them to the art's rules. */
+/**
+ * The gift finder (/gifts/finder), in the site's own palette and blush flowers. Its first section
+ * is the tool: words on the left, cards on the right, and no flower may lie on a card. So the
+ * flowers keep to the two places a card never is: the top right corner, in the page's margin on a
+ * wide desk (a petal by the header where there is less margin, and by the label on a phone), and
+ * the lower left, under the short column of words, where the lily of FINDER_FOOT_ART lies across
+ * the edge into the band below, as a gift's page has it between its questions and "More like this".
+ */
+export const FINDER_ART: PlacedArt[] = [
+  { art: "lily-side", x: 101.5, y: 0, top: "11rem", size: 13, rot: -12, phone: false, eager: true, from: 1440 },
+  { art: "petal-3", x: 95, y: 0, top: "2.75rem", size: 5.4, rot: 14, phone: false, eager: true, from: 1280, until: 1440 },
+  { art: "petal-1", x: 90, y: 0, top: "5.9rem", size: 12, rot: 12, phone: "only", eager: true },
+];
+
+/** Held at a fixed height over the band's top: the band is as tall as its words, and a share of that would carry the lily down onto them. */
+export const FINDER_FOOT_ART: PlacedArt[] = [
+  { art: "lily-three-quarter", x: 15, y: 0, top: "-6.75rem", size: 30, rot: -8, phone: false },
+  { art: "petal-2", x: 96, y: 78, size: 5, rot: 20, phone: false },
+  { art: "lily-three-quarter", x: 90, y: 0, top: "-0.5rem", size: 34, rot: -6, phone: "only" },
+];
+
+/** Every placement on a gift's page, for the test that holds them to the art's rules and to being composed, not scattered. */
 export const ALL_PLACEMENTS: readonly PlacedArt[] = [...HERO_ART, ...HOW_ART, ...WRITE_ART, ...MORE_ART];
+
+/** And the finder's, held to the same rules by the same test. */
+export const FINDER_PLACEMENTS: readonly PlacedArt[] = [...FINDER_ART, ...FINDER_FOOT_ART];

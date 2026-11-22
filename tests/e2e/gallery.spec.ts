@@ -26,7 +26,7 @@ test.describe("the template gallery", () => {
 
   test("offers the gift finder above the filters, for someone who can't choose", async ({ page }) => {
     await page.goto("/templates");
-    const finder = page.locator("main").getByRole("link", { name: "Answer three questions" });
+    const finder = page.locator("main").getByRole("link", { name: "Answer two questions" });
     await expect(finder).toBeVisible();
     await expect(finder).toHaveAttribute("href", "/gifts/finder");
     const link = await finder.boundingBox();
