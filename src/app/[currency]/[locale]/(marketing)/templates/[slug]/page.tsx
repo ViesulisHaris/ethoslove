@@ -179,9 +179,16 @@ export default async function TemplateDetailPage({
                     {t("templates.makeThis")}
                     <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
+                  {/*
+                   * Its label is the longer of the two, and a pill of a fixed 48px held two rows of it
+                   * with 2px to spare above and below ("Abrir demo a pantalla completa" under 360px wide,
+                   * the confirming test of 22 Nov 2026). The Spanish label is now short enough for one
+                   * row on a 320px phone, and the pill is 48px at least: a label that does wrap (the
+                   * system's largest type, a zoomed page) gets its rows centred with room round them.
+                   */}
                   <Link
                     href={`/demo/${manifest.slug}`}
-                    className="inline-flex h-12 items-center justify-center gap-2.5 rounded-full border border-page-ink/30 px-6 text-base font-medium text-page-ink transition-[background-color,border-color,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/50 hover:bg-page-raised active:scale-[0.98]"
+                    className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-page-ink/30 px-6 py-2.5 text-center text-base font-medium text-page-ink transition-[background-color,border-color,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/50 hover:bg-page-raised active:scale-[0.98]"
                   >
                     <Play aria-hidden="true" className="size-3.5 fill-current" />
                     {t("templates.fullscreenDemo")}

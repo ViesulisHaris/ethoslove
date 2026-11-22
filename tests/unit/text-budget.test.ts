@@ -192,6 +192,19 @@ describe("the text budget of a gift's page", () => {
     );
   });
 
+  it("La poción de la bruja opens on a short sentence, and the kitchen keeps everything in it", () => {
+    // The second confirming test (22 Nov 2026): the Spanish description opened on one sentence of 34
+    // words, six rows on a 320px phone, and "Crear regalo" began under the first screen (at 586 of
+    // 568). It is two sentences now: the hero takes the first, the closed block the second.
+    const es = TEMPLATE_MANIFESTS.find((m) => m.slug === "cauldron")!.description.es;
+    const { lead, rest } = heroLead(es);
+    expect(lead).toBe("La cocina de una bruja de noche: un gato negro en la ventana y un caldero al fuego.");
+    expect(words(lead)).toBeLessThanOrEqual(20);
+    expect(rest).toMatch(/^Arriba, hierbas secándose; en la estantería, tres tarros, cada uno con una etiqueta en tus palabras\. Tocan los tarros uno a uno/);
+    // The English opening is thirty words and was always whole on that screen: it is as it was.
+    expect(words(heroLead(TEMPLATE_MANIFESTS.find((m) => m.slug === "cauldron")!.description.en).lead)).toBe(30);
+  });
+
   it("the closed block under the questions holds at most 180 words, on every template's page", () => {
     // What the block says: the rest of the description, then each idea's title and its line on what
     // to do, or, on a page without a guide, the steps' sentences: of either, as many as the limit

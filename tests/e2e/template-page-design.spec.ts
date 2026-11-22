@@ -46,6 +46,14 @@ async function settle(page: Page) {
     }
     window.scrollTo(0, 0);
     await document.fonts.ready;
+    // The page comes in on a short rise (the entrance animation on <main>), and its tail is under a
+    // pixel: a section that begins at 855.08 was read at 855.7, a pixel down, on one load in fifteen,
+    // and "the same height when no picture arrives" failed by that pixel. So the rise is waited out.
+    await Promise.all(
+      (document.querySelector("main")?.getAnimations() ?? [])
+        .filter((a) => Number.isFinite(Number(a.effect?.getComputedTiming().endTime)))
+        .map((a) => a.finished.catch(() => {})),
+    );
     // Only what is on show: a piece kept for another screen size is never fetched, and would be waited for for ever.
     await Promise.all(
       [...document.querySelectorAll<HTMLImageElement>("[data-decor] img")]
@@ -1225,8 +1233,115 @@ test("no hero's italic line is a paragraph: Light the Candles and Photo Booth ke
     const button = (await hero.locator(`a[href$="/create/${slug}"]`).boundingBox())!;
     expect(button.y, `${path}: the button's top`).toBeLessThan(568);
     // Light the Candles has the longest tagline there is (31 words in Spanish) and keeps most of its
-    // button on the first screen; every other gift keeps all 48px of it.
+    // button on the first screen; the other gifts read here keep all 48px of it. (Of these ten pages
+    // only: the test below reads every gift's.)
     if (slug !== "light-the-candles") expect(button.y + button.height, `${path}: the button's foot`).toBeLessThanOrEqual(568);
+  }
+});
+
+/** The page at rest for a ruler: its type loaded, and the short rise it comes in on (settle() says more) over. */
+async function atRest(page: Page) {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      (document.querySelector("main")?.getAnimations() ?? [])
+        .filter((a) => Number.isFinite(Number(a.effect?.getComputedTiming().endTime)))
+        .map((a) => a.finished.catch(() => {})),
+    );
+  });
+}
+
+/** Every gift's page, in both languages: 122 of them. */
+const EVERY_GIFT = [...TEMPLATE_SLUGS.map((slug) => `/templates/${slug}`), ...TEMPLATE_SLUGS.map((slug) => `/es/templates/${slug}`)];
+
+test("on the smallest phone every gift's “Make this gift” begins on the first screen, in both languages", async ({ page }) => {
+  // The test above reads ten pages, and its comment said "every other gift". The second confirming
+  // test (22 Nov 2026) read all 122 at 320×568: the Spanish Witch's Brew's button began at 586 of
+  // 568, wholly under the first screen, behind two rows of italic and a first sentence of 34 words;
+  // on two dozen more the first screen's foot cut the button. So this one reads every page, and the
+  // next long opening sentence fails here by name.
+  test.setTimeout(600_000);
+  await page.setViewportSize({ width: 320, height: 568 });
+  const under: string[] = [];
+  const cut: string[] = [];
+  const pills: string[] = [];
+  for (const path of EVERY_GIFT) {
+    const slug = path.split("/").pop()!;
+    // A visit to a Spanish page leaves the language's cookie, and the next English address would be answered in Spanish.
+    await page.context().clearCookies();
+    await page.goto(path);
+    await atRest(page);
+    const hero = page.locator("[data-page-theme] section").first();
+    await expect(page.locator("html"), path).toHaveAttribute("lang", path.startsWith("/es/") ? "es" : "en");
+    const button = (await hero.locator(`a[href$="/create/${slug}"]`).boundingBox())!;
+    const top = Math.round(button.y);
+    const foot = Math.round(button.y + button.height);
+    if (top >= 568) under.push(`${path}: “Make this gift” begins at ${top}`);
+    else if (foot > 568) cut.push(`${path} ${top}–${foot}`);
+    // The second button is one row in a pill of 48px, in both languages (its Spanish label was two
+    // rows under 360px wide, 2px from the pill's top and bottom edges).
+    const pill = await hero.locator(`a[href$="/demo/${slug}"]`).evaluate((a) => {
+      const range = document.createRange();
+      range.selectNodeContents(a);
+      const rects = [...range.getClientRects()].filter((r) => r.width > 20 && r.height < 40);
+      return { height: Math.round(a.getBoundingClientRect().height), rows: new Set(rects.map((r) => Math.round(r.top))).size };
+    });
+    if (pill.rows !== 1 || pill.height !== 48) pills.push(`${path}: ${pill.rows} row(s) in ${pill.height}px`);
+  }
+  expect(under, "under the first screen of a 320×568 phone").toEqual([]);
+  expect(pills, "the second button").toEqual([]);
+  // The page it was found on has the whole button on the first screen now.
+  expect(cut.filter((row) => row.startsWith("/es/templates/cauldron "))).toEqual([]);
+  // Twenty-four pages (twenty of them Spanish) still have the first screen's foot through the
+  // button, which begins 7 to 45px above it: whether that matters on a phone this small is the
+  // owner's to say (reports/guides-confirm.md, N2-1). Held here so that it does not become more.
+  console.log(`320×568: the first screen's foot cuts “Make this gift” on ${cut.length} of ${EVERY_GIFT.length} pages: ${cut.join("; ")}`);
+  expect(cut.length, cut.join("; ")).toBeLessThanOrEqual(24);
+});
+
+test("the second button's label has room: one row on a narrow phone, and rows that wrap are centred in a taller pill", async ({ page }) => {
+  // "Abrir demo a pantalla completa" was two rows from 320 to 359px wide, in a pill of a fixed 48px:
+  // 2px above the first row and 2px under the second, set left beside the play mark.
+  const room = (a: Element) => {
+    const range = document.createRange();
+    range.selectNodeContents(a);
+    const rects = [...range.getClientRects()].filter((r) => r.width > 20 && r.height < 40);
+    const box = a.getBoundingClientRect();
+    const svg = a.querySelector("svg")!.getBoundingClientRect();
+    return {
+      rows: new Set(rects.map((r) => Math.round(r.top))).size,
+      height: Math.round(box.height),
+      above: Math.round(Math.min(...rects.map((r) => r.top)) - box.top),
+      below: Math.round(box.bottom - Math.max(...rects.map((r) => r.bottom))),
+      // The play mark and the label are centred in the pill together.
+      left: Math.round(svg.left - box.left),
+      right: Math.round(box.right - Math.max(...rects.map((r) => r.right))),
+      align: getComputedStyle(a).textAlign,
+    };
+  };
+  for (const width of [320, 344, 360, 375]) {
+    await page.setViewportSize({ width, height: 700 });
+    for (const path of ["/es/templates/photo-booth", "/templates/photo-booth"]) {
+      await page.context().clearCookies();
+      await page.goto(path);
+      await atRest(page);
+      const pill = page.locator("[data-page-theme] section").first().locator('a[href$="/demo/photo-booth"]');
+      await expect(pill).toHaveText(path.startsWith("/es/") ? "Demo a pantalla completa" : "Open full-screen demo");
+      const m = await pill.evaluate(room);
+      expect(m, `${path} at ${width}`).toMatchObject({ rows: 1, height: 48 });
+      expect(Math.min(m.above, m.below), `${path} at ${width}: room above and below the label`).toBeGreaterThanOrEqual(10);
+      expect(Math.abs(m.left - m.right), `${path} at ${width}: the mark and the label sit in the middle`).toBeLessThanOrEqual(2);
+      if (width !== 320 || !path.startsWith("/es/")) continue;
+      // A label that does wrap (a longer one, the system's largest type): the pill grows round its rows.
+      // Made to wrap by a narrower pill, from a style sheet: the label is React's, and words changed
+      // under it before the page has hydrated are a mismatch it answers by drawing the hero again.
+      await page.addStyleTag({ content: '[data-page-theme] a[href*="/demo/"]{max-width:13rem;align-self:center}' });
+      const wrapped = await pill.evaluate(room);
+      expect(wrapped.rows, "the label wraps in a narrower pill").toBeGreaterThanOrEqual(2);
+      expect(wrapped.height).toBeGreaterThan(48);
+      expect(Math.min(wrapped.above, wrapped.below), "room above and below the rows").toBeGreaterThanOrEqual(8);
+      expect(wrapped.align).toBe("center");
+    }
   }
 });
 
