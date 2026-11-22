@@ -3,6 +3,7 @@ import { BRAND } from "@/config/brand";
 import { supportHandoffEmail } from "@/emails/support-handoff";
 import { sendEmail } from "@/lib/email/send";
 import { clientIp } from "@/lib/request-ip";
+import { supportAccount } from "@/lib/support/account";
 import { handleHandoff } from "@/lib/support/handlers";
 import { supportStore } from "@/lib/support/store";
 
@@ -19,6 +20,7 @@ export async function POST(request: Request) {
     to: BRAND.supportEmail,
     send: sendEmail,
     render: supportHandoffEmail,
+    account: supportAccount,
   });
   return NextResponse.json(result.json, { status: result.status, headers: { "cache-control": "no-store" } });
 }

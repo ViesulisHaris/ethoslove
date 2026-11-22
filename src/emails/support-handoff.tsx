@@ -1,8 +1,9 @@
 import { EmailLayout, P, Quiet } from "./layout";
+import type { SupportAccount } from "@/lib/support/account";
 import type { Chat, TranscriptEntry } from "@/lib/support/store";
 
 /** The subject and body for one chat's hand-off. */
-export function supportHandoffEmail(chat: Chat, email: string) {
+export function supportHandoffEmail(chat: Chat, email: string, account: SupportAccount = { kind: "unknown" }) {
   return {
     subject: supportHandoffSubject(chat.transcript),
     react: (
@@ -13,6 +14,7 @@ export function supportHandoffEmail(chat: Chat, email: string) {
         locale={chat.locale}
         currency={chat.currency}
         costMicros={chat.totals.costMicros}
+        account={account}
       />
     ),
   };
@@ -35,6 +37,7 @@ export function SupportHandoffEmail({
   locale,
   currency,
   costMicros,
+  account = { kind: "unknown" },
 }: {
   email: string;
   transcript: TranscriptEntry[];
@@ -42,6 +45,7 @@ export function SupportHandoffEmail({
   locale: "en" | "es";
   currency: string;
   costMicros: number;
+  account?: SupportAccount;
 }) {
   return (
     <EmailLayout
@@ -61,7 +65,46 @@ export function SupportHandoffEmail({
           <Quiet key={i}>Bot: {entry.text}</Quiet>
         ),
       )}
+      <AccountBlock account={account} />
       <Quiet>Chat cost so far: ${(costMicros / 1_000_000).toFixed(4)}.</Quiet>
     </EmailLayout>
+  );
+}
+
+const day = (iso: string) => iso.slice(0, 10);
+const money = (amount: number, currency: string) => `${(amount / 100).toFixed(2)} ${currency.toUpperCase()}`;
+
+/** The account behind the address (lib/support/account.ts), so the reply needs no digging. */
+function AccountBlock({ account }: { account: SupportAccount }) {
+  if (account.kind === "unknown") return <Quiet>Account: could not be looked up.</Quiet>;
+  if (account.kind === "none") return <P><strong>Account:</strong> no account uses this address (a typo at checkout, or another address?).</P>;
+  return (
+    <>
+      <P>
+        <strong>Account</strong> since {day(account.createdAt)}.
+      </P>
+      <Quiet>
+        {account.purchases.length === 0
+          ? "Purchases: none."
+          : account.purchases.map((p, i) => (
+              <span key={i}>
+                Purchase {day(p.createdAt)}: {p.product}
+                {p.templates.length > 0 ? ` (${p.templates.join(", ")})` : ""}, {money(p.amount, p.currency)}, <strong>{p.status === "refunded" ? "refunded or disputed" : p.status}</strong>
+                <br />
+              </span>
+            ))}
+      </Quiet>
+      <Quiet>
+        {account.gifts.length === 0
+          ? "Gifts: none saved."
+          : account.gifts.map((g, i) => (
+              <span key={i}>
+                Gift tryethos.io/g/{g.shortId}: {g.template}, <strong>{g.status}</strong>, made {day(g.createdAt)}
+                {g.publishedAt ? `, published ${day(g.publishedAt)}` : ""}, opened {g.opens}×
+                <br />
+              </span>
+            ))}
+      </Quiet>
+    </>
   );
 }
