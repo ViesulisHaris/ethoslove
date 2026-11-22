@@ -250,7 +250,8 @@ for (const f of readdirSync(raw).filter((n) => /^plate-.*\.png$/.test(n))) {
 }
 
 const lines = [
-  `/* Made by scripts/art/holiday/pack.mjs from the Blender scene scripts/art/holiday/${slug.replace(/-/g, "_")}.py. Not edited by hand. */`,
+  // a scene whose file is not named for its gift (advent.py, for advent-calendar) says so in its manifest
+  `/* Made by scripts/art/holiday/pack.mjs from the Blender scene scripts/art/holiday/${manifest.scene ?? slug.replace(/-/g, "_")}.py. Not edited by hand. */`,
   "",
   "/** Where the pictures are served from. */",
   `export const ART_BASE = "/art/${slug}/";`,

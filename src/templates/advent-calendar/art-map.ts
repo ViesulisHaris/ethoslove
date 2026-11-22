@@ -1,4 +1,4 @@
-/* Made by scripts/art/holiday/pack.mjs from the Blender scene scripts/art/holiday/advent_calendar.py. Not edited by hand. */
+/* Made by scripts/art/holiday/pack.mjs from the Blender scene scripts/art/holiday/advent.py. Not edited by hand. */
 
 /** Where the pictures are served from. */
 export const ART_BASE = "/art/advent-calendar/";

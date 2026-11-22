@@ -44,14 +44,17 @@ SWING = math.radians(-80)   # short of square to the front, so an open leaf stay
 
 # The numerals want a font with plain, closed outlines (a variable font's overlapping contours fill wrongly as a curve:
 # Newsreader's 4 and 7 came out as wedges) and figures that all stand as tall as each other (Georgia's 1, 2 and 0 are
-# half the height of its 6 and 8, and read small on a door). Libre Baskerville where the machine has it, then Georgia,
-# then Blender's own.
-FONTS = [os.environ.get("ADVENT_FONT", ""), "C:/Windows/Fonts/LibreBaskerville-Bold.ttf", "C:/Windows/Fonts/georgiab.ttf", "/Library/Fonts/Georgia Bold.ttf", "/System/Library/Fonts/Supplemental/Georgia Bold.ttf"]
+# half the height of its 6 and 8, and read small on a door). Libre Baskerville Bold, which is kept beside this script
+# (fonts/, under the Open Font License) so that every machine paints the same figures; ADVENT_FONT names another. Georgia
+# and then Blender's own are only what is left if that file has gone.
+FONTS = [os.environ.get("ADVENT_FONT", ""), os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts", "LibreBaskerville-Bold.ttf"), "C:/Windows/Fonts/georgiab.ttf", "/Library/Fonts/Georgia Bold.ttf", "/System/Library/Fonts/Supplemental/Georgia Bold.ttf"]
 
 LOOKS = {
-    # the house's paint, its doors' four paints, what a niche is lined with, the wall behind, the mantel's wood
+    # the house's paint, its doors' four paints, what a niche is lined with, the wall behind, the mantel's wood.
+    # A lining is deep and quiet in every look: with all twenty-four doors open it is most of the house. The pale
+    # look's was a bright tomato (#a23a2a) and turned "white and sage" red; it has midnight's oxblood now.
     "evergreen": dict(paint="#1f4a36", doors=["#a8281f", "#f1e6cf", "#c9963a", "#2f6b4a"], lining="#7a1c18", wall="#16302b", mantel=("#7a5230", "#40281a"), ink="#f6d98a", roof="#7a2a1e"),
-    "nordic": dict(paint="#f1ece2", doors=["#b3302a", "#e6dccb", "#8fa58f", "#d9b98a"], lining="#a23a2a", wall="#3b4a5a", mantel=("#c9a678", "#8a6844"), ink="#fbf3e2", roof="#5a6a78"),
+    "nordic": dict(paint="#f1ece2", doors=["#b3302a", "#e6dccb", "#8fa58f", "#d9b98a"], lining="#6a1c2c", wall="#3b4a5a", mantel=("#c9a678", "#8a6844"), ink="#fbf3e2", roof="#5a6a78"),
     "midnight": dict(paint="#17223f", doors=["#22335e", "#c9a04a", "#7a1f2a", "#e9e1cf"], lining="#6a1c2c", wall="#18213a", mantel=("#5a3c26", "#2c1c12"), ink="#f3d78a", roof="#101830"),
 }
 
@@ -498,7 +501,8 @@ def main():
     # the note is read in front of the scene itself, dimmed: no out-of-focus plates. A photo's print is lifted to white.
     kit.MANIFEST["soft"] = False
     kit.MANIFEST["gains"] = {"print": 1.13}
-    persp.save(os.path.join(out, "manifest.json"), persp=True)
+    # the scene's own file name, for the line pack.mjs writes at the head of art-map.ts (it is not the gift's slug)
+    persp.save(os.path.join(out, "manifest.json"), persp=True, scene="advent")
 
 
 main()
