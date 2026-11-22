@@ -13,7 +13,7 @@
  */
 import { guard } from "../synth";
 import { busFor, filter, glide, hit, noiseSource, ring, send, sine, sprinkle, swell, sweepPan, tap, wobble, bubble, type Voice } from "./foley";
-import { BELL, BONE_MODES, BOTTLE_MODES, CARD_MODES, CELESTA, DESK_MODES, DOOR_MODES, GLASS, JINGLE, JINGLE_HZ, RIND_MODES, bellHz, between, bubbleSpec, clamp, creakPitch, creakSlips, dB, glassHz, grains, sparkHz, thunderEnvelope } from "./sound-math";
+import { BELL, BONE_MODES, BOTTLE_MODES, CARD_MODES, CELESTA, DESK_MODES, DOOR_MODES, GLASS, HATCH, HATCH_MODES, JINGLE, JINGLE_HZ, RENDER_LAG_S, RIND_MODES, bellHz, between, bubbleSpec, clamp, creakPitch, creakSlips, dB, glassHz, grains, sparkHz, thunderEnvelope } from "./sound-math";
 
 /** When a sound that follows a movement starts and how long it runs: `delay` seconds after the call, over `ms`. */
 export type Timing = { delay?: number; ms?: number };
@@ -53,6 +53,9 @@ const MIX = {
   snap: -8.7,
   crackle: -2.6,
   tear: -0.2,
+  hatch: -5.5,
+  envelope: 3.6,
+  ting: 0.1,
 };
 
 /** The arch of a sound that comes up out of nothing and goes back into it. */
@@ -667,8 +670,87 @@ const tear = (v: Voice, ms = 320) => {
   tap(v, t + length, CARD_MODES.map((m) => ({ ...m, hz: m.hz * 0.8 })), { level: 1.2 * k, burst: 0.003, tone: 5000, wet: 0.15, pan: between(rnd, -0.4, 0.4) });
 };
 
+/* -------------------------------------------------------------------------------------------
+ * The Advent Calendar's sounds (November 2026). Twenty-four doors are opened one after another, so
+ * each takes a `level` and the gift plays them at about a third: a sound that repeats starts quiet.
+ * ----------------------------------------------------------------------------------------- */
+
+/**
+ * A small wooden door on the advent house: the catch letting go with a dry click, the hinge giving one short
+ * creak as the leaf comes round, and the leaf tapping to a stop. Timed by `HATCH`, which the door is drawn by.
+ */
+const hatch = (v: Voice, level = 1) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.hatch) * level;
+  const pan = between(rnd, -0.3, 0.3);
+  const tune = between(rnd, 0.92, 1.08);
+  // The catch: thin wood struck, and the tick of the brass knob.
+  tap(v, t, HATCH_MODES.map((m) => ({ ...m, hz: m.hz * tune })), { level: 7 * k, burst: 0.002, tone: 5200, wet: 0.14, pan });
+  click(v, t, 0.1 * k, 3600, 1.2, 0.004, { pan });
+  // The hinge: the creak of a big door, two and a half times up and a quarter as long.
+  const from = t + RENDER_LAG_S + HATCH.creakAt;
+  const length = HATCH.creak * between(rnd, 0.85, 1);
+  const voice = c.createOscillator();
+  voice.type = "sawtooth";
+  voice.frequency.setValueCurveAtTime(Float32Array.from(creakPitch(rnd, 12).map((hz) => hz * 2.7)), from, length);
+  voice.start(from);
+  voice.stop(from + length + 0.03);
+  const mix = c.createGain();
+  for (const [hz, q, gain] of [[1150, 8, 3], [2100, 8, 2.2], [3300, 6, 1]] as const) {
+    const g = c.createGain();
+    g.gain.value = gain;
+    voice.connect(filter(c, "bandpass", hz, q)).connect(g).connect(mix);
+  }
+  const slip = c.createGain();
+  slip.gain.setValueAtTime(0.2, from);
+  for (const sl of creakSlips(rnd, length)) {
+    slip.gain.linearRampToValueAtTime(sl.amp, from + sl.at + 0.004);
+    slip.gain.exponentialRampToValueAtTime(0.2, from + sl.at + sl.len);
+  }
+  const shaped = c.createGain();
+  swell(shaped.gain, from, 1, 0.04, length * 0.4, length * 0.4);
+  mix.connect(slip).connect(shaped);
+  send(v, shaped, { dry: 1, wet: 0.18, pan, level: 0.14 * k });
+  // The leaf, open, against its own hinge.
+  tap(v, t + RENDER_LAG_S + HATCH.swing, HATCH_MODES.slice(1).map((m) => ({ ...m, hz: m.hz * tune * 1.2 })), { level: 2 * k, burst: 0.0015, tone: 4200, wet: 0.12, pan });
+};
+
+/** A small envelope lifted out of a wooden niche: stiff paper sliding on wood, and the tick of its corner coming free. */
+const envelope = (v: Voice, level = 1) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.envelope) * level;
+  const pan = between(rnd, -0.25, 0.25);
+  const length = between(rnd, 0.2, 0.26);
+  const slide = noiseSource(v, "pink", t, length);
+  const band = filter(c, "bandpass", 1800, 1);
+  glide(band.frequency, t, between(rnd, 1500, 1900), between(rnd, 3000, 3600), length);
+  const sg = c.createGain();
+  swell(sg.gain, t, 0.3 * k, length * 0.5, 0, length * 0.5);
+  slide.connect(band).connect(sg);
+  send(v, sg, { dry: 1, wet: 0.1, pan });
+  const fibres = noiseSource(v, "white", t, length);
+  const fb = filter(c, "bandpass", 4200, 1.4);
+  const fg = c.createGain();
+  sprinkle(fg.gain, fb.frequency, t, grains(rnd, { length, rate: 60, hz: [3400, 5600], len: [0.004, 0.01], level: [0.3, 1] }));
+  fibres.connect(fb).connect(fg);
+  send(v, fg, { dry: 1, wet: 0.08, pan, level: 0.4 * k });
+  tap(v, t + length, CARD_MODES.map((m) => ({ ...m, hz: m.hz * between(rnd, 1.05, 1.2) })), { level: 1.6 * k, burst: 0.0015, tone: 6000, wet: 0.1, pan });
+};
+
+/** A small brass bell touched once: a sweet found behind a door. Each `step` is the next note up, an octave over the chime's. */
+const ting = (v: Voice, step = 0, level = 1) => {
+  const { t, rnd } = v;
+  const k = dB(MIX.ting) * level;
+  const hz = bellHz(step) * 2 * between(rnd, 0.998, 1.002);
+  const pan = between(rnd, -0.3, 0.3);
+  ring(v, t, hz, BELL, { level: 0.06 * k, decay: 1.3, attack: 0.002, wet: 0.45, pan });
+  // A twin a hair sharp, so it shimmers as a struck bell does.
+  ring(v, t, hz * 1.004, [BELL[0]], { level: 0.03 * k, decay: 1.1, attack: 0.002, wet: 0.4, pan });
+  click(v, t, 0.015 * k, 4200, 1, 0.006, { wet: 0.2, pan });
+};
+
 /** Every effect as a function of a voice, for anything that wants to render them without a speaker. */
-export const EFFECTS = { thunder, creak, scrape, tink, whoosh, flutter, bubbles, splash, boil, cork, sparkle, glow, ignite, carve, thunk, chime, knock, flap, rattle, jingle, scribble, stamp, rustle, snap, crackle, tear };
+export const EFFECTS = { thunder, creak, scrape, tink, whoosh, flutter, bubbles, splash, boil, cork, sparkle, glow, ignite, carve, thunk, chime, knock, flap, rattle, jingle, scribble, stamp, rustle, snap, crackle, tear, hatch, envelope, ting };
 
 const play =
   <A extends unknown[]>(effect: (v: Voice, ...args: A) => void) =>
@@ -727,3 +809,9 @@ export const playSnap = play(snap);
 export const playCrackle = play(crackle);
 /** Wrapping paper torn off a present, over `ms`. */
 export const playTear = play(tear);
+/** A small wooden door coming open: catch, hinge, stop. `level` (1 by default) turns it down where many are opened one after another. */
+export const playHatch = play(hatch);
+/** A small envelope lifted out of a niche. `level` as above. */
+export const playEnvelope = play(envelope);
+/** A small bell touched once. `step` picks the note; `level` as above. */
+export const playTing = play(ting);
