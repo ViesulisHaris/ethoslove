@@ -131,7 +131,7 @@ export const OCCASIONS_FOR: Record<FinderRecipient | Any, readonly Occasion[]> =
 };
 
 /** A day people shop for weeks ahead: from the first date to the day itself, month and day, both included. */
-const SEASONS: readonly { occasion: Occasion; from: readonly [number, number]; to: readonly [number, number] }[] = [
+export const SEASONS: readonly { occasion: Occasion; from: readonly [number, number]; to: readonly [number, number] }[] = [
   { occasion: "christmas", from: [11, 15], to: [12, 25] },
   { occasion: "valentines", from: [1, 25], to: [2, 14] },
 ];

@@ -413,11 +413,15 @@ test.describe("the gift finder", () => {
     // The review of 22 Nov 2026: one price stood under every pick that was not free, so Constellations,
     // which sells at "Make it special" on the live site, was priced as a premium template.
     await page.goto("/templates");
-    await expect(page.locator("main h3").first()).toBeVisible();
+    await expect(page.locator("[data-gallery-card]").first()).toBeVisible();
+    // Each card's name and the price it prints, by the card's own marks (data-gallery-card, data-price)
+    // and not by where the price happens to sit: this read a sibling of the name until the card was
+    // redrawn on 22 Nov 2026, found the card's one line there instead, and failed on both projects.
     const gallery = new Map(
-      await page.locator("main h3").evaluateAll((titles) => titles.map((h3) => [(h3.textContent ?? "").trim(), (h3.parentElement?.nextElementSibling?.textContent ?? "").trim()] as [string, string])),
+      await page.locator("[data-gallery-card]").evaluateAll((cards) => cards.map((card) => [(card.querySelector("h3")?.textContent ?? "").trim(), (card.querySelector("[data-price]")?.textContent ?? "").trim()] as [string, string])),
     );
     expect(gallery.size).toBeGreaterThan(50);
+    for (const [name, price] of gallery) expect(price, `${name}'s card prints a price`).not.toBe("");
     // The gallery says "Free" or "$8.99 once": the mark itself is the first word.
     const mark = (name: string) => (gallery.get(name) ?? "missing from the gallery").replace(/ once$/, "");
 

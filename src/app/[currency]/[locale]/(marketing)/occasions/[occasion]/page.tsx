@@ -14,6 +14,13 @@ import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";
 import { sendsFree } from "@/lib/gift/free-tier";
 
+/**
+ * The row of occasions over the cards leads with what is in season (gallery-occasions.ts), by the
+ * day the page is rendered with, and must be in the same order here as on /templates. The page is
+ * static, so it is rendered again every hour, as the finder is: the season turns without a deploy.
+ */
+export const revalidate = 3600;
+
 export function generateStaticParams() {
   return OCCASIONS.map((occasion) => ({ occasion }));
 }
@@ -41,6 +48,7 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
   // What "Free" shows when this occasion has no free template of its own.
   const alsoFree = listManifests({ tier: "free" }).filter((m) => sendsFree(m) && !m.occasions.includes(occasion));
   const guide = OCCASION_GUIDES[occasion][locale as Locale];
+  const today = new Date().toISOString().slice(0, 10);
   return (
     <>
       <JsonLd
@@ -55,7 +63,7 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
         ]}
       />
       <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
-      <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} />
+      <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} today={today} />
       {guide.ideas ? (
         <section className="container-x border-t border-line pt-14 sm:pt-16" aria-labelledby={`ideas-${occasion}`}>
           <h2 id={`ideas-${occasion}`} className="display-md">

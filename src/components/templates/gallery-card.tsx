@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import Image from "next/image";
@@ -9,14 +9,37 @@ import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import type { Featured } from "@/config/featured";
+import { galleryLine } from "@/content/gallery-lines";
+import { track } from "@/lib/analytics/track";
 import { sendsFree } from "@/lib/gift/free-tier";
+import { PRODUCTS, formatAmount, templateProduct } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
 
 /**
+ * Which part of a gift's poster the card shows. A poster is a phone's screen (390 by 600) and the
+ * card's picture is 4 by 5, so a fifth of its height is left out. It is the foot that goes, under
+ * the fade into the card: a gift's title is written near the top of its screen, and the first crop
+ * (30% down) cut that lettering in half on some cards and laid the two pills over it on others.
+ * From the top, the title stands whole just under the pills. Two best sellers are the exception,
+ * each with small lettering at the very top that the pills would sit on: they are shown from lower
+ * down, so the pills lie on plain paper. Whole class names, so Tailwind finds them.
+ */
+const CROP: Record<string, string> = {
+  bouquet: "object-[50%_60%]",
+  "the-council": "object-[50%_66%]",
+};
+
+/**
  * A gift in the gallery, as the owner drew it (22 Nov 2026, shots/mockups/OWNER-MOCKUP-gallery.webp):
- * its picture, its name, one line, and an arrow. The whole card is one link to the gift's own page,
- * which is where the film, the live demo, the price and "Make this gift" now are. A pointer resting
- * on the card plays the gift's preview film, as the older card did.
+ * its picture, its name, one line, and an arrow, all of it one link to the gift's own page, where
+ * the film, the live demo and the full description are. A pointer resting on the card plays the
+ * gift's preview film, as the older card did.
+ *
+ * Under that, on a hairline, what the mock-up left out and the older card had: the price, and
+ * "Make this gift" straight to the editor. The gallery is the most visited page and the editor was
+ * one tap from every card on it; without this row nothing on the page reached the editor or said
+ * what a gift costs (the review of 22 Nov 2026). Quiet on purpose: small type, no button.
  *
  * `index` is the card's place in the whole list: the first row is painted at once, never faded in.
  */
@@ -24,13 +47,19 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
   const locale = useLocale() as GiftLocale;
   const t = useTranslations();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const currency = useCurrency();
+  // As the older card prices it: a premium template is bought as one, and a free template with no
+  // free version left (lib/gift/free-tier.ts) costs its "make it special".
   const free = sendsFree(manifest);
+  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, locale);
   const above = index < 4;
+  const crop = CROP[manifest.slug] ?? "object-top";
 
   const play = () => {
     const v = videoRef.current;
-    // A phone fires mouseenter on a tap too; the film is for a pointer resting on a card.
-    if (!v || !window.matchMedia("(hover: hover)").matches) return;
+    // A phone fires mouseenter on a tap too; the film is for a pointer resting on a card. And for
+    // nobody who asked for less motion: the film is hidden then, and must not be fetched and played unseen.
+    if (!v || !window.matchMedia("(hover: hover)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     v.currentTime = 0;
     v.play().catch(() => {});
   };
@@ -43,24 +72,25 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
       viewport={{ once: true, amount: 0.15 }}
       transition={{ type: "spring", stiffness: 120, damping: 20, delay: (index % 4) * 0.05 }}
       data-gallery-card={manifest.slug}
-      className="h-full"
+      onMouseEnter={play}
+      onMouseLeave={pause}
+      className="group relative flex h-full flex-col rounded-[28px] bg-card shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] transition-[translate,box-shadow] duration-500 ease-[var(--ease-out-quint)] hover:-translate-y-1 hover:shadow-[0_34px_60px_-34px_rgba(74,32,24,0.65)] has-[a:active]:translate-y-0 has-[a:active]:shadow-[0_18px_34px_-30px_rgba(74,32,24,0.6)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
-      <Link
-        href={`/templates/${manifest.slug}`}
-        onMouseEnter={play}
-        onMouseLeave={pause}
-        className="group relative flex h-full flex-col overflow-hidden rounded-[28px] bg-card shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] transition-[translate,box-shadow] duration-500 ease-[var(--ease-out-quint)] hover:-translate-y-1 hover:shadow-[0_34px_60px_-34px_rgba(74,32,24,0.65)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-      >
-        <div className="relative aspect-[4/5] overflow-hidden bg-ink/10">
+      <Link href={`/templates/${manifest.slug}`} onClick={() => track("gallery_pick", { template: manifest.slug, action: "page" })} data-card-page className="flex flex-1 flex-col rounded-t-[28px] rounded-b-lg">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-t-[28px] bg-ink/10">
           <Image
             src={manifest.thumbnail.poster}
+            // The tagline says what the poster shows, for a search engine (Bing flags an empty alt on
+            // every card). A screen reader is spared it: the link already says the name and the line
+            // under the picture, and the same sentence twice was what it heard.
             alt={manifest.tagline[locale]}
+            aria-hidden="true"
             fill
             sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             quality={75}
             priority={above}
             decoding={above ? "sync" : "async"}
-            className="object-cover object-[50%_30%]"
+            className={cn("object-cover", crop)}
           />
           {manifest.thumbnail.webm ? (
             <video
@@ -71,7 +101,7 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
               playsInline
               preload="none"
               aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover object-[50%_30%] opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:hidden"
+              className={cn("absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:hidden", crop)}
             />
           ) : null}
           {/* The picture's foot runs into the card it stands on. */}
@@ -90,16 +120,35 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
             </span>
           ) : null}
         </div>
-        <div className="flex flex-1 items-center justify-between gap-4 px-5 pt-2 pb-5">
+        <div className="flex flex-1 items-center justify-between gap-4 px-5 pt-2 pb-3.5">
           <div className="min-w-0">
             <h3 className="font-display text-[1.3rem] leading-tight text-ink">{manifest.name[locale]}</h3>
-            <p className="mt-1 truncate text-[0.8125rem] text-ink-soft">{manifest.tagline[locale]}</p>
+            {/* Never cut: a line is written to fit (content/gallery-lines.ts). Two lines' room on every card, so a row of cards stays level whether a line wraps or not. */}
+            <p data-card-line className="mt-1 min-h-[2.6em] text-[0.8125rem] leading-[1.3] text-ink-soft">
+              {galleryLine(manifest.slug, manifest.tagline, locale)}
+            </p>
           </div>
           <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full bg-paper text-ink ring-1 ring-ink/10 transition-colors duration-300 group-hover:bg-forest group-hover:text-cream">
             <ChevronRight className="size-4.5" strokeWidth={1.8} />
           </span>
         </div>
       </Link>
+      <div className="mx-5 flex items-center justify-between gap-3 border-t border-line">
+        <span data-price className="text-mono-meta text-ink-soft">
+          {free ? t("templates.priceFree") : t("templates.priceOnce", { price })}
+        </span>
+        {/* 44px tall for a thumb; the name rides along for a screen reader, which hears sixty-one of these. */}
+        <Link
+          href={`/create/${manifest.slug}`}
+          onClick={() => track("gallery_pick", { template: manifest.slug, action: "make" })}
+          aria-label={`${t("templates.makeThis")}: ${manifest.name[locale]}`}
+          data-card-make
+          className="group/make -mr-1 inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 text-[0.8125rem] font-semibold text-ink underline decoration-ink/20 underline-offset-4 transition-colors hover:decoration-ink active:text-rose-deep"
+        >
+          {t("templates.makeThis")}
+          <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover/make:translate-x-0.5 motion-reduce:transition-none" />
+        </Link>
+      </div>
     </motion.article>
   );
 }

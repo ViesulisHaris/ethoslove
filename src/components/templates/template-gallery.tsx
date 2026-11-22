@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { ChevronDown } from "lucide-react";
+import { MotionConfig } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { featuredFor, sectionTemplates } from "@/config/featured";
-import { OCCASIONS, type Occasion } from "@/config/occasions";
+import { NEW_SLUGS, featuredFor, sectionTemplates } from "@/config/featured";
+import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,7 @@ import { GALLERY_ID } from "./gallery-id";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { TIER_FILTERS, TIER_PARAM, parseTier, searchWithTier, type TierFilter } from "./gallery-tier";
 import { SORTS, SORT_PARAM, parseSort, searchWithSort, sortTemplates, type GallerySort } from "./gallery-sort";
+import { occasionRow } from "./gallery-occasions";
 
 /** Fired after the filter or the order rewrites the address, which `popstate` does not report. */
 const GALLERY_CHANGE = "ethos:gallery-tier";
@@ -57,6 +59,9 @@ const chooseSort = (sort: GallerySort) => rewrite(searchWithSort(window.location
  *
  * `alsoFree` is the free templates the occasion doesn't list. Half the occasions have none of their
  * own, and "Free" used to empty the page with nowhere to go; it shows these instead.
+ *
+ * `today` is the day the page was rendered with: the row of occasions leads with what is in season
+ * (gallery-occasions.ts), and the server and the browser must agree on the day.
  */
 export function TemplateGallery({
   manifests,
@@ -65,6 +70,7 @@ export function TemplateGallery({
   initialSort = "popular",
   added = [],
   alsoFree = [],
+  today,
 }: {
   manifests: TemplateManifest[];
   occasion?: Occasion;
@@ -75,6 +81,8 @@ export function TemplateGallery({
   /** Every gift's slug in the order it was added, oldest first: what "Newest" sorts by. */
   added?: readonly string[];
   alsoFree?: TemplateManifest[];
+  /** "2026-11-22": the day the page was rendered with, for the order of the row of occasions. */
+  today?: string;
 }) {
   const t = useTranslations();
   const locale = useLocale() as GiftLocale;
@@ -87,13 +95,14 @@ export function TemplateGallery({
   const shelves = useMemo(() => {
     if (occasion) return [{ id: "all" as const, items: filtered }];
     if (sort === "popular") return sectionTemplates(filtered);
-    return [{ id: sort === "new" ? ("sortedNew" as const) : ("sortedAz" as const), items: sortTemplates(filtered, sort, locale, added) }];
+    return [{ id: sort === "new" ? ("sortedNew" as const) : ("sortedAz" as const), items: sortTemplates(filtered, sort, locale, added, NEW_SLUGS) }];
   }, [filtered, occasion, sort, locale, added]);
+  const occasions = useMemo(() => occasionRow(today), [today]);
   // Cards count on from one shelf to the next, so only the very first row is loaded eagerly.
   const offsets = shelves.map((_, i) => shelves.slice(0, i).reduce((n, shelf) => n + shelf.items.length, 0));
   const fallback = tier === "free" ? alsoFree : [];
 
-  // The open occasion's tile may be past the row's right edge (the last ones are, on every screen): the row is drawn pulled along to it.
+  // On a phone or a tablet the row runs off the right edge, and the open occasion's tile may be past it: the row is drawn pulled along to it.
   const row = useRef<HTMLElement>(null);
   useEffect(() => {
     const nav = row.current;
@@ -126,74 +135,82 @@ export function TemplateGallery({
   );
 
   return (
-    // The header's "Make a gift" scrolls here on this page; the margin keeps the fixed header
-    // (promo strip and bar, ~104px) off the tiles it lands on.
-    <div id={GALLERY_ID} className="container-x scroll-mt-32 pb-24">
-      <div className="mb-10 flex flex-col gap-5 border-b border-line pb-8 lg:flex-row lg:items-center lg:gap-8">
-        {/*
-         * One row of occasions, each a small rendered picture over its name. It runs off the right
-         * edge where there are more than fit, and its last tile fades, so it reads as a row to
-         * pull along and not as a list that was cut.
-         */}
-        <nav ref={row} aria-label={t("templates.allOccasions")} className="scrollbar-none -mx-5 flex min-w-0 flex-1 snap-x gap-2.5 overflow-x-auto px-5 pt-1 pb-4 sm:mx-0 sm:px-1 lg:[mask-image:linear-gradient(to_right,#000_calc(100%-3.5rem),transparent)]">
-          <OccasionTile href="/templates" icon="all" label={t("templates.allOccasions")} active={!occasion} />
-          {OCCASIONS.map((o) => (
-            <OccasionTile key={o} href={`/occasions/${o}`} icon={o} label={t(`occasions.${o}`)} active={occasion === o} />
-          ))}
-          {/* Room for the fade: the last tile can be pulled clear of it. */}
-          <span aria-hidden="true" className="hidden w-10 shrink-0 lg:block" />
-        </nav>
-        <div className="flex shrink-0 items-center gap-2 lg:border-l lg:border-line lg:pl-8">
-          {TIER_FILTERS.map((v) => (
-            <button key={v} type="button" onClick={() => chooseTier(v)} aria-pressed={tier === v} className={pillClass(tier === v)}>
-              {v === "all" ? t("templates.allTiers") : v === "free" ? t("common.free") : t("common.premium")}
-            </button>
-          ))}
-        </div>
-      </div>
-      {filtered.length === 0 ? (
-        <>
-          <div className="flex flex-col items-center py-14 text-center">
-            <p className="max-w-md text-muted-foreground">{fallback.length ? t("templates.noneFree") : t("templates.none")}</p>
-            <button type="button" onClick={() => chooseTier("all")} className="mt-5 inline-flex h-11 items-center rounded-full border border-ink/20 px-5 text-sm font-medium text-ink transition-colors hover:border-ink">
-              {t("templates.showAll", { count: manifests.length })}
-            </button>
+    // Less motion, where it is asked for: the cards past the first row then fade in without rising.
+    <MotionConfig reducedMotion="user">
+      {/* The header's "Make a gift" scrolls here on this page; the margin keeps the fixed header (promo strip and bar, ~104px) off the tiles it lands on. */}
+      <div id={GALLERY_ID} className="container-x scroll-mt-32 pb-24">
+        {/* Without JavaScript nothing ever fades a card in: they are drawn as they are. */}
+        <noscript>
+          <style>{"[data-gallery-card]{opacity:1!important;transform:none!important}"}</style>
+        </noscript>
+        <div className="mb-10 flex flex-col gap-5 border-b border-line pb-8 xl:flex-row xl:items-center xl:gap-8">
+          {/*
+           * The occasions, each a small rendered picture over its name, in season first. On a desk
+           * and a laptop all fourteen are in view, in two rows of seven: a row that ran off the edge
+           * could not be pulled along with a mouse, and six occasions were out of reach (the review
+           * of 22 Nov 2026). On a phone and a tablet it is one row to swipe, cut mid-tile at the
+           * edge so it reads as a row that goes on (its padding below is room for the open tile's shadow, which the row would otherwise cut off square).
+           */}
+          <nav ref={row} aria-label={t("occasions.title")} data-occasion-row className="scrollbar-none -mx-5 flex min-w-0 flex-1 snap-x gap-2.5 overflow-x-auto px-5 pt-1 pb-9 -mb-5 sm:mx-0 sm:px-1 lg:mb-0 lg:grid lg:snap-none lg:grid-cols-7 lg:gap-x-2.5 lg:gap-y-5 lg:overflow-visible lg:px-0 lg:pb-3">
+            <OccasionTile href="/templates" icon="all" label={t("templates.allOccasions")} active={!occasion} />
+            {occasions.map((o) => (
+              <OccasionTile key={o} href={`/occasions/${o}`} icon={o} label={t(`occasions.${o}`)} active={occasion === o} />
+            ))}
+          </nav>
+          <div className="flex shrink-0 items-center gap-2 xl:border-l xl:border-line xl:pl-8">
+            {TIER_FILTERS.map((v) => (
+              <button key={v} type="button" onClick={() => chooseTier(v)} aria-pressed={tier === v} className={pillClass(tier === v)}>
+                {v === "all" ? t("templates.allTiers") : v === "free" ? t("common.free") : t("common.premium")}
+              </button>
+            ))}
           </div>
-          {fallback.length ? (
-            <div className={GRID}>
-              {fallback.map((m, i) => (
-                <GalleryCard key={m.slug} manifest={m} index={i} badge={featuredFor(m.slug)} />
-              ))}
+        </div>
+        {filtered.length === 0 ? (
+          <>
+            <div className="flex flex-col items-center py-14 text-center">
+              <p className="max-w-md text-muted-foreground">{fallback.length ? t("templates.noneFree") : t("templates.none")}</p>
+              <button type="button" onClick={() => chooseTier("all")} className="mt-5 inline-flex h-11 items-center rounded-full border border-ink/20 px-5 text-sm font-medium text-ink transition-colors hover:border-ink">
+                {t("templates.showAll", { count: manifests.length })}
+              </button>
             </div>
-          ) : null}
-        </>
-      ) : (
-        <div className="flex flex-col gap-20">
-          {shelves.map((shelf, s) => (
-            <section key={shelf.id} aria-labelledby={occasion ? undefined : `shelf-${shelf.id}`} data-shelf={shelf.id}>
-              {occasion ? null : (
-                <header className="mb-8 flex items-end justify-between gap-6">
-                  <div className="min-w-0">
-                    <p className="text-eyebrow text-ink-soft">{t(`templates.sections.${shelf.id}.eyebrow`)}</p>
-                    <h2 id={`shelf-${shelf.id}`} className="display-md mt-2 flex items-center gap-3">
-                      {t(`templates.sections.${shelf.id}.title`)}
-                      {s === 0 ? <Sparkle /> : null}
-                    </h2>
-                  </div>
-                  {/* "Sort by" stands beside the first heading only: it orders the whole gallery, not one shelf. */}
-                  {s === 0 ? sorter : null}
-                </header>
-              )}
+            {fallback.length ? (
               <div className={GRID}>
-                {shelf.items.map((m, i) => (
-                  <GalleryCard key={m.slug} manifest={m} index={offsets[s] + i} badge={featuredFor(m.slug)} />
+                {fallback.map((m, i) => (
+                  <GalleryCard key={m.slug} manifest={m} index={i} badge={featuredFor(m.slug)} />
                 ))}
               </div>
-            </section>
-          ))}
-        </div>
-      )}
-    </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="flex flex-col gap-20">
+            {shelves.map((shelf, s) => (
+              <section key={shelf.id} aria-labelledby={occasion ? undefined : `shelf-${shelf.id}`} data-shelf={shelf.id}>
+                {occasion ? null : (
+                  // On a phone the heading has the row to itself and "Sort by" stands under it: side by side, a longer heading ("Todas, empezando por la más nueva") was set in four lines of two words.
+                  <header className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+                    <div className="min-w-0">
+                      {/* A sorted list is every gift under one heading: its small label is how many, not the order said twice. */}
+                      <p className="text-eyebrow text-ink-soft">{t(`templates.sections.${shelf.id}.eyebrow`, { count: shelf.items.length })}</p>
+                      <h2 id={`shelf-${shelf.id}`} className="display-md mt-2 flex items-center gap-3">
+                        {t(`templates.sections.${shelf.id}.title`)}
+                        {s === 0 ? <Sparkle /> : null}
+                      </h2>
+                    </div>
+                    {/* "Sort by" stands beside the first heading only: it orders the whole gallery, not one shelf. */}
+                    {s === 0 ? sorter : null}
+                  </header>
+                )}
+                <div className={GRID}>
+                  {shelf.items.map((m, i) => (
+                    <GalleryCard key={m.slug} manifest={m} index={offsets[s] + i} badge={featuredFor(m.slug)} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
+      </div>
+    </MotionConfig>
   );
 }
 
@@ -212,8 +229,10 @@ function OccasionTile({ href, icon, label, active }: { href: string; icon: Occas
       aria-current={active ? "page" : undefined}
       data-occasion-tile={icon}
       className={cn(
-        "group relative flex h-[6.5rem] w-[6.75rem] shrink-0 snap-start flex-col items-center justify-end gap-1.5 rounded-[1.25rem] px-2 pb-3.5 text-center text-[0.8125rem] leading-tight font-medium transition-[background-color,box-shadow,translate] duration-300",
-        active ? "bg-forest text-cream shadow-[0_18px_30px_-18px_rgba(42,15,31,0.8)]" : "bg-card text-ink ring-1 ring-ink/[0.07] hover:-translate-y-0.5 hover:bg-card hover:shadow-[0_16px_28px_-20px_rgba(74,32,24,0.5)] motion-reduce:hover:translate-y-0",
+        "group relative flex h-[6.5rem] w-[6.75rem] shrink-0 snap-start flex-col items-center justify-end gap-1.5 rounded-[1.25rem] px-2 pb-3.5 text-center text-[0.8125rem] leading-tight font-medium transition-[background-color,box-shadow,translate] duration-300 lg:w-auto",
+        active
+          ? "bg-forest text-cream shadow-[0_18px_30px_-18px_rgba(42,15,31,0.8)] active:bg-forest-raised"
+          : "bg-card text-ink ring-1 ring-ink/[0.07] hover:-translate-y-0.5 hover:bg-card hover:shadow-[0_16px_28px_-20px_rgba(74,32,24,0.5)] active:translate-y-0 active:bg-paper-deep active:shadow-none motion-reduce:hover:translate-y-0",
       )}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- a 6 KB decoration at a fixed size: next/image would add a request and a srcset for nothing */}
@@ -238,6 +257,6 @@ function pillClass(active: boolean): string {
   return cn(
     "inline-flex h-11 shrink-0 items-center rounded-full px-5 text-sm font-medium whitespace-nowrap transition-colors",
     // Solid, not see-through: on a desk the lilies' leaves pass behind these, and a leaf must not show through a word.
-    active ? "bg-forest text-cream" : "bg-card text-ink-soft ring-1 ring-ink/[0.07] hover:text-ink hover:ring-ink/25",
+    active ? "bg-forest text-cream active:bg-forest-raised" : "bg-card text-ink-soft ring-1 ring-ink/[0.07] hover:text-ink hover:ring-ink/25 active:bg-paper-deep active:text-ink",
   );
 }

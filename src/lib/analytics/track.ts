@@ -100,6 +100,10 @@ export type FunnelEvent =
   | "finder_step"
   | "finder_result"
   | "finder_pick"
+  // A card in the gallery (/templates, /occasions/…): which of its two ways out was taken, the gift's
+  // own page or straight to the editor (the template and "page" or "make", nothing else). The card
+  // lost its "Try the live demo" on 22 Nov 2026; this is what says where its visitors go instead.
+  | "gallery_pick"
   // A visit that arrived with no referrer, only a tag in its address (lib/attribution/arrival.ts): from
   // ChatGPT, another assistant, a pin or an Instagram link. Named per source because Vercel's reports
   // count by event name; nothing else is sent.

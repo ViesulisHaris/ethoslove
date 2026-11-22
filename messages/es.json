@@ -900,12 +900,12 @@
         "blurb": "Una lista repasada dos veces, un año que desenvolver, una bola de nieve, una ventana con escarcha, luces que colgar y una casa de jengibre. Y dos para la mesa de Acción de Gracias."
       },
       "sortedNew": {
-        "eyebrow": "Lo más nuevo primero",
-        "title": "Todos los regalos, del último al primero"
+        "eyebrow": "{count, plural, one {# plantilla} other {# plantillas}}",
+        "title": "Todas, empezando por la más nueva"
       },
       "sortedAz": {
-        "eyebrow": "De la A a la Z",
-        "title": "Todos los regalos, por nombre"
+        "eyebrow": "{count, plural, one {# plantilla} other {# plantillas}}",
+        "title": "Todas, por nombre"
       },
       "all": {
         "eyebrow": "La colección",

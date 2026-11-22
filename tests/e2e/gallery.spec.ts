@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { occasionRow } from "../../src/components/templates/gallery-occasions";
+import { filedUnder } from "../../src/components/templates/gallery-sort";
+import { NEW_SLUGS } from "../../src/config/featured";
 
 test.describe("the template gallery", () => {
   test("opens on the premium best sellers, then what is new, newest batch first, then the rest", async ({ page }) => {
@@ -63,10 +66,20 @@ test.describe("the template gallery", () => {
     // The catalogue is listed in the order its gifts were added: the last one in is the first one shown.
     expect(newest[0]).toBe("Gingerbread House");
     expect(newest.at(-1)).toBe("The Letter");
+    // Every card wearing "New" stands before every card that does not: Snow Globe, an older address
+    // rebuilt for Christmas, was 39th under "Newest" with "New" on it (the review of 22 Nov 2026).
+    const wearsNew = await page.locator("[data-gallery-card]").evaluateAll((cards) => cards.map((card) => [...card.querySelectorAll("span")].some((span) => span.textContent?.trim() === "New")));
+    expect(wearsNew.filter(Boolean).length).toBe(NEW_SLUGS.length);
+    expect(wearsNew.lastIndexOf(true)).toBe(NEW_SLUGS.length - 1);
+    // The eyebrow over a sorted list is how many there are, not the order said a second time.
+    await expect(page.locator("[data-shelf] header p").first()).toHaveText(`${newest.length} gifts`);
     await sort.selectOption("az");
     await expect(page).toHaveURL(/[?&]sort=az/);
     const names = await page.locator("[data-shelf] h3").allTextContents();
-    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
+    // By name without its article: The Letter is under L, between Kawaii and Light the Candles.
+    expect(names).toEqual([...names].sort((a, b) => filedUnder(a, "en").localeCompare(filedUnder(b, "en"), "en", { sensitivity: "base" })));
+    expect(names.indexOf("The Letter")).toBeGreaterThan(names.indexOf("Kawaii"));
+    expect(names.indexOf("The Letter")).toBeLessThan(names.indexOf("Light the Candles"));
     expect(new Set(names).size).toBe(newest.length);
     // A reload keeps the order; the default order leaves the address as it was.
     await page.reload();
@@ -76,7 +89,140 @@ test.describe("the template gallery", () => {
     await expect(page.locator("[data-shelf]")).toHaveCount(3);
   });
 
-  test("an occasion is a tile with its own picture, and a card is one link to the gift's own page", async ({ page, request }) => {
+  test("every occasion can be reached with a mouse: on a laptop and a desk all fourteen tiles are in view, in season first", async ({ page, isMobile }) => {
+    // The review of 22 Nov 2026: one row ran off the right edge with no scroll bar and no arrow, and a
+    // wheel or a drag could not move it, so six occasions had no link a mouse could press.
+    test.skip(isMobile, "a phone swipes the row");
+    for (const [width, height] of [
+      [1024, 768],
+      [1280, 800],
+      [1440, 900],
+      [1920, 1080],
+    ]) {
+      await page.setViewportSize({ width, height });
+      await page.goto("/templates");
+      const row = page.locator("[data-occasion-row]");
+      await expect(row.locator("[data-occasion-tile]")).toHaveCount(14);
+      const found = await row.evaluate((nav) => {
+        const box = nav.getBoundingClientRect();
+        return {
+          scrolls: nav.scrollWidth - nav.clientWidth,
+          outside: [...nav.querySelectorAll<HTMLElement>("[data-occasion-tile]")].filter((tile) => {
+            const r = tile.getBoundingClientRect();
+            return r.left < box.left - 1 || r.right > box.right + 1 || r.top < box.top - 1 || r.bottom > box.bottom + 1 || r.right > window.innerWidth || r.left < 0;
+          }).map((tile) => tile.dataset.occasionTile),
+          // No name is cut: a tile's words fit the tile.
+          cut: [...nav.querySelectorAll<HTMLElement>("[data-occasion-tile] span")].filter((label) => label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1).map((label) => label.textContent),
+        };
+      });
+      expect(found.outside, `tiles outside the row at ${width}px`).toEqual([]);
+      expect(found.scrolls, `the row scrolls at ${width}px`).toBeLessThanOrEqual(0);
+      expect(found.cut, `names cut at ${width}px`).toEqual([]);
+    }
+    // In season first, by the day the page was rendered with (gallery-occasions.ts), then the catalogue's order.
+    const today = new Date().toISOString().slice(0, 10);
+    const order = await page.locator("[data-occasion-tile]").evaluateAll((tiles) => tiles.map((tile) => (tile as HTMLElement).dataset.occasionTile));
+    expect(order).toEqual(["all", ...occasionRow(today)]);
+    // And an occasion's page has the row in the same order.
+    await page.goto("/occasions/thanksgiving");
+    await expect(page.locator("[data-occasion-tile=thanksgiving]")).toHaveAttribute("aria-current", "page");
+    expect(await page.locator("[data-occasion-tile]").evaluateAll((tiles) => tiles.map((tile) => (tile as HTMLElement).dataset.occasionTile))).toEqual(order);
+  });
+
+  test("no card cuts its line short, in English or Spanish, from a small phone to a wide desk", async ({ page, isMobile }) => {
+    // The review of 22 Nov 2026: the one line ended in an ellipsis on 59 of 61 cards.
+    test.skip(isMobile, "sets its own screen sizes");
+    test.setTimeout(180_000);
+    for (const path of ["/templates", "/es/templates"]) {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto(path);
+      await expect(page.locator("[data-gallery-card]").first()).toBeVisible();
+      await page.evaluate(() => document.fonts.ready);
+      for (const width of [320, 390, 640, 768, 1024, 1280, 1440, 1920]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => done(null)))));
+        const found = await page.locator("[data-gallery-card]").evaluateAll((cards) => {
+          const cut: string[] = [];
+          for (const card of cards) {
+            const line = card.querySelector<HTMLElement>("[data-card-line]")!;
+            const style = getComputedStyle(line);
+            const rows = Math.round(line.scrollHeight / parseFloat(style.lineHeight));
+            // Whole on the card: not clipped sideways, no ellipsis, and within the two lines the card keeps for it.
+            if (line.scrollWidth > line.clientWidth + 1 || style.textOverflow === "ellipsis" || rows > 2 || line.scrollHeight > line.clientHeight + 1) cut.push(`${(card as HTMLElement).dataset.galleryCard}: "${line.textContent}" (${rows} lines)`);
+          }
+          return { cards: cards.length, cut, sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+        });
+        expect(found.cards).toBeGreaterThan(50);
+        expect(found.cut, `${path} at ${width}px`).toEqual([]);
+        expect(found.sideways, `${path} at ${width}px scrolls sideways`).toBeLessThanOrEqual(0);
+      }
+    }
+  });
+
+  test("a card says its price and has two ways out: the gift's own page, and straight to the editor", async ({ page }) => {
+    // The review of 22 Nov 2026: with the older card's "Make this gift" gone, nothing on the most
+    // visited page reached the editor, and no price was printed anywhere on it.
+    await page.goto("/templates");
+    const cards = page.locator("[data-gallery-card]");
+    await expect(cards.first()).toBeVisible();
+    const found = await cards.evaluateAll((all) =>
+      all.map((card) => ({
+        slug: (card as HTMLElement).dataset.galleryCard!,
+        links: [...card.querySelectorAll("a")].map((a) => a.getAttribute("href")!),
+        price: card.querySelector("[data-price]")?.textContent?.trim() ?? "",
+        makeHeight: card.querySelector<HTMLElement>("[data-card-make]")?.getBoundingClientRect().height ?? 0,
+        // What a screen reader hears for the card's first link: the picture's words are not said again.
+        pictureHidden: card.querySelector("img")?.getAttribute("aria-hidden") === "true",
+      })),
+    );
+    expect(found.length).toBeGreaterThan(50);
+    for (const card of found) {
+      expect(card.links, card.slug).toEqual([`/templates/${card.slug}`, `/create/${card.slug}`]);
+      expect(card.price, card.slug).toMatch(/^(Free|[$€£]\d+\.\d{2} once)$/);
+      expect(card.makeHeight, `${card.slug}: "Make this gift" is a thumb tall`).toBeGreaterThanOrEqual(44);
+      expect(card.pictureHidden, card.slug).toBe(true);
+    }
+    // The two that can be sent free say so; a best seller says its price.
+    expect(found.filter((card) => card.price === "Free").map((card) => card.slug).sort()).toEqual(["constellations", "the-letter"]);
+    // "Make this gift" names its gift for a screen reader, and opens that gift's editor.
+    const make = cards.first().getByRole("link", { name: "Make this gift: Bouquet" });
+    await make.click();
+    await expect(page).toHaveURL(/\/create\/bouquet$/, { timeout: 60_000 });
+  });
+
+  test("with less motion asked for, a card's film is neither fetched nor played, and no card rises into place", async ({ browser, isMobile }) => {
+    test.skip(isMobile, "the film is for a pointer resting on a card");
+    const context = await browser.newContext({ reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    const films: string[] = [];
+    page.on("request", (request) => {
+      if (/\.webm(\?|$)/.test(request.url())) films.push(request.url());
+    });
+    await page.goto("/templates");
+    const card = page.locator("[data-gallery-card]").first();
+    await expect(card).toBeVisible();
+    await card.hover();
+    await page.waitForTimeout(600);
+    expect(await card.locator("video").evaluate((video: HTMLVideoElement) => video.paused)).toBe(true);
+    expect(films).toEqual([]);
+    // A card further down does not travel into place: it is 16px low until it is in view (the server
+    // draws it there), and then it is in its place, with no frame anywhere between the two.
+    const seen = await page.locator("[data-gallery-card]").nth(9).evaluate(async (card) => {
+      const heights = new Set<number>();
+      card.scrollIntoView({ block: "center" });
+      const until = performance.now() + 1500;
+      while (performance.now() < until) {
+        heights.add(new DOMMatrixReadOnly(getComputedStyle(card).transform).m42);
+        await new Promise((frame) => requestAnimationFrame(frame));
+      }
+      return [...heights];
+    });
+    expect(seen).toContain(0);
+    expect(seen.filter((y) => y !== 0 && y !== 16)).toEqual([]);
+    await context.close();
+  });
+
+  test("an occasion is a tile with its own picture, and a card's picture and name lead to the gift's own page", async ({ page, request }) => {
     await page.goto("/templates");
     const tiles = page.locator("[data-occasion-tile]");
     await expect(tiles).toHaveCount(14);
@@ -97,8 +243,8 @@ test.describe("the template gallery", () => {
     await expect(page.locator("[data-gallery-sort]")).toHaveCount(0);
     const card = page.locator("[data-gallery-card]").first();
     const slug = await card.getAttribute("data-gallery-card");
-    await expect(card.getByRole("link")).toHaveCount(1);
-    await card.getByRole("link").click();
+    await expect(card.getByRole("link")).toHaveCount(2);
+    await card.locator("[data-card-page]").click();
     // A dev server builds the gift's page the first time it is asked for.
     await expect(page).toHaveURL(new RegExp(`/templates/${slug}$`), { timeout: 60_000 });
   });

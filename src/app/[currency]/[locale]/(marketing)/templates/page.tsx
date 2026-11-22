@@ -34,6 +34,8 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
   setRequestLocale(locale);
   const t = await getTranslations();
   const manifests = listManifests();
+  // The row of occasions leads with what is in season; this page is rendered per request (it reads its query), so the day is today's.
+  const today = new Date().toISOString().slice(0, 10);
   return (
     <>
       <JsonLd
@@ -65,7 +67,7 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
             </Link>
           </p>
         </header>
-        <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} initialSort={parseSort(typeof sort === "string" ? sort : null)} added={TEMPLATE_SLUGS} />
+        <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} initialSort={parseSort(typeof sort === "string" ? sort : null)} added={TEMPLATE_SLUGS} today={today} />
       </div>
     </>
   );

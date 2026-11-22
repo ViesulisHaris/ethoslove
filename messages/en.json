@@ -900,11 +900,11 @@
         "blurb": "A list checked twice, a year to unwrap, a snow globe, a frosted window, lights to hang and a gingerbread house. And two for the Thanksgiving table."
       },
       "sortedNew": {
-        "eyebrow": "Newest first",
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
         "title": "Every gift, latest first"
       },
       "sortedAz": {
-        "eyebrow": "A to Z",
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
         "title": "Every gift, by name"
       },
       "all": {

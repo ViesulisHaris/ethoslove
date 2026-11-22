@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { LEGAL_UPDATED } from "@/content/legal";
-import { GUIDES_LIVE, PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
+import { OCCASIONS } from "@/config/occasions";
+import { GALLERY_LIVE, GUIDES_LIVE, PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 
 type Rules = { allow: string[]; disallow: string[] };
@@ -151,5 +152,14 @@ describe("sitemap dates", () => {
     for (const m of TEMPLATE_MANIFESTS) expect(PAGE_UPDATED[`/templates/${m.slug}`] ?? PAGE_UPDATED["/templates/*"], m.slug).toBe(PAGE_UPDATED["/templates/*"]);
     for (const m of TEMPLATE_MANIFESTS)
       if (!LIVE_ON_SECTION_DATE.includes(m.slug)) expect(PAGE_UPDATED[`/templates/${m.slug}`], m.slug).toBeDefined();
+  });
+
+  it("dates every page that draws the gallery with the day the gallery was redrawn", () => {
+    // The gallery and each occasion's page show the same cards. The cards changed what all of them
+    // say (the line, the price, the two links), and seven occasions kept an older date of their own
+    // (the review of 22 Nov 2026): none may say it is older than the gallery it draws.
+    expect(GALLERY_LIVE).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(pageUpdated("/templates")).toBe(GALLERY_LIVE);
+    for (const occasion of OCCASIONS) expect(pageUpdated(`/occasions/${occasion}`), occasion).toBe(GALLERY_LIVE);
   });
 });

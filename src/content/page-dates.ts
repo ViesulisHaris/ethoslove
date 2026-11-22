@@ -34,6 +34,16 @@ export const FINDER_LIVE = "2026-11-22";
  */
 export const GUIDES_LIVE = "2026-11-21";
 
+/**
+ * The day the redrawn gallery goes live: the gallery and every occasion's page show the same new
+ * cards (a gift's name, a line written for the card, its price, one link to its page and one to
+ * the editor, where each card had a longer line, a price and "Try the live demo"), and the row of
+ * occasions over them. Every page that draws the gallery takes this date, the seven occasions with
+ * a date of their own included. NOT LIVE YET: this is the day the work was finished. Whoever ships
+ * it sets this to that day (tests/unit/crawl.test.ts reads it from here).
+ */
+export const GALLERY_LIVE = "2026-11-22";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
@@ -47,8 +57,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // A row of Christmas gifts while Christmas is in season (15 Nov to 25 Dec), linked to the finder.
   "/gifts/for-boyfriend": FINDER_LIVE,
   "/gifts/for-girlfriend": FINDER_LIVE,
-  // With the finder: the gallery links to it.
-  "/templates": FINDER_LIVE,
+  // With the finder the gallery links to it; then the gallery itself was redrawn.
+  "/templates": GALLERY_LIVE,
   "/templates/*": GUIDES_LIVE,
   // The two free templates, then the three pages that had a guide before the growth build (13 Nov).
   "/templates/the-letter": GUIDES_LIVE,
@@ -75,14 +85,9 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/templates/jar-of-reasons": GUIDES_LIVE,
   "/templates/our-timeline": GUIDES_LIVE,
   "/templates/scrapbook": GUIDES_LIVE,
-  "/occasions/*": "2026-10-25",
-  "/occasions/birthday": "2026-11-13",
-  "/occasions/anniversary": "2026-11-13",
-  "/occasions/valentines": "2026-11-13",
-  "/occasions/christmas": "2026-11-13",
-  "/occasions/long-distance": "2026-11-13",
-  "/occasions/thanksgiving": "2026-11-11",
-  "/occasions/wedding": "2026-11-09",
+  // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
+  // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
+  "/occasions/*": GALLERY_LIVE,
   "/games": "2026-11-13",
   "/games/rather": "2026-10-24",
   "/games/deck": "2026-11-13",
