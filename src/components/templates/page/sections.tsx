@@ -17,7 +17,7 @@ import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
 import { IdeasDots } from "./ideas-dots";
 import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
 import { stepQuote, type QuoteSource } from "./quote";
-import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
+import { HOW_ART, MORE_ART, WRITE_ART, type PlacedArt } from "./placements";
 
 /**
  * A gift's page below its hero, as the owner's mock-up lays it out (docs/marketing/growth-build/
@@ -26,8 +26,8 @@ import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
  * art's, and every word a template's own or a line of messages/*.json.
  */
 
-/** A section's left column: the label, the heading, at most one line and at most one button. */
-function Intro({ id, label, heading, line, children }: { id?: string; label: string; heading: string; line?: string; children?: ReactNode }) {
+/** A section's left column: the label, the heading, at most one line and at most one button. Shared with the pages built from a gift's page (components/marketing/spread). */
+export function Intro({ id, label, heading, line, children }: { id?: string; label: string; heading: string; line?: string; children?: ReactNode }) {
   return (
     <div className="lg:pt-7">
       <p className="text-page-label text-page-body">{label}</p>
@@ -41,7 +41,7 @@ function Intro({ id, label, heading, line, children }: { id?: string; label: str
 }
 
 /** The two-column spread every section below the hero shares. */
-const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20";
+export const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20";
 
 /** A photo a picture on the page shows: the gift's own first sample photo, where its demo has one. */
 export type SamplePhoto = { src: string; width: number; height: number };
@@ -95,10 +95,13 @@ export async function HowToSend({
   source,
   photo,
   poster,
+  art = HOW_ART,
 }: {
   locale: GiftLocale;
   heading: string;
   flowers: Flowers;
+  /** The loose art round the steps: a gift page's own, unless the page that shows the steps lays its stem elsewhere. */
+  art?: readonly PlacedArt[];
   /** The gift's own three steps (content/template-steps.ts); without them, the three every gift shares. */
   steps: TemplateSteps | null;
   /** Lines of this gift for a note card whose step names no field. */
@@ -119,7 +122,7 @@ export async function HowToSend({
   const pictured = shown.map((step) => ({ ...step, line: step.kind === "note" ? noteLine(step, lines, source) : "" }));
   return (
     <section className="relative" aria-labelledby="template-how">
-      <ArtLayer items={HOW_ART} flowers={flowers} />
+      <ArtLayer items={art} flowers={flowers} />
       <div className={cn(SPREAD, "py-14 sm:py-20 lg:py-28")}>
         <Intro id="template-how" label={t("eyebrow")} heading={heading} line={t("howLine")} />
         <ol className="grid gap-3 sm:grid-cols-3 sm:gap-x-9 lg:gap-x-10">
@@ -195,7 +198,7 @@ async function fieldMetaOf(slug: string, locale: GiftLocale): Promise<Record<str
 }
 
 /** A template's own fields, by the names its editor gives them. */
-async function fieldLabels(slug: string, locale: GiftLocale): Promise<Record<string, string>> {
+export async function fieldLabels(slug: string, locale: GiftLocale): Promise<Record<string, string>> {
   return Object.fromEntries(Object.entries(await fieldMetaOf(slug, locale)).map(([key, meta]) => [key, meta.label]));
 }
 
@@ -255,7 +258,7 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
  * still picks it up to 454px wide: at "80vw" an iPhone asked for 936 and was sent the full file,
  * twice the bytes (the deep test of 21 Nov 2026).
  */
-function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo: SamplePhoto }) {
+export function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo: SamplePhoto }) {
   const art = pageArt("experience-flatlay", flowers);
   const photo = art.slots.photo;
   return (
@@ -358,7 +361,20 @@ export async function Experience({ manifest, locale, flowers, photo, line, note 
   const choice = giftChoice(await fieldMetaOf(manifest.slug, "en"), await fieldMetaOf(manifest.slug, locale));
   const checks = experienceChecks(manifest, line, note, say, choice ? choiceCheck(choice, locale, say) : null);
   return (
-    <section className="relative" aria-labelledby="template-experience">
+    <Band labelledBy="template-experience" picture={<ExperienceFlatlay flowers={flowers} photo={photo} />}>
+      <BandWords id="template-experience" label={t("experienceLabel")} heading={t("experienceHeading")} line={t("experienceBody", { name: manifest.name[locale] })} checks={checks} />
+    </Band>
+  );
+}
+
+/**
+ * The deeper band with soft curved edges: a large picture on the left that runs off the page's
+ * side and under the band's foot, and words on the right. A gift's page uses it for "The
+ * experience"; the pages built from that page (components/marketing/spread) for their own.
+ */
+export function Band({ labelledBy, picture, children }: { labelledBy: string; picture: ReactNode; children: ReactNode }) {
+  return (
+    <section className="relative" aria-labelledby={labelledBy}>
       <BandEdge side="top" className="text-page-band" />
       {/*
        * Cut along its foot and its sides only: the picture runs off the page's left side and under the
@@ -368,28 +384,52 @@ export async function Experience({ manifest, locale, flowers, photo, line, note 
       <div className="relative isolate -mt-px bg-page-band [clip-path:inset(-24rem_0_0_0)]">
         <div className="container-x grid items-center gap-y-6 pt-4 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-0 lg:pb-0">
           {/* The picture is wider than its column and runs off the page's left side and under the band's lower edge. */}
-          <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
-            <ExperienceFlatlay flowers={flowers} photo={photo} />
-          </div>
-          <div className="lg:py-24">
-            <p className="text-page-label text-page-body">{t("experienceLabel")}</p>
-            <h2 id="template-experience" className="mt-4 display-xl text-balance text-page-ink">
-              {t("experienceHeading")}
-            </h2>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-page-body">{t("experienceBody", { name: manifest.name[locale] })}</p>
-            <ul className="mt-7 flex flex-col gap-3">
-              {checks.map((check) => (
-                <li key={check} className="flex items-start gap-3 text-[0.9375rem] leading-snug text-page-ink">
-                  <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-page-accent" />
-                  {check}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">{picture}</div>
+          <div className="lg:py-24">{children}</div>
         </div>
         <BandEdge side="bottom" className="absolute inset-x-0 -bottom-px z-10 text-page-ground" />
       </div>
     </section>
+  );
+}
+
+/** The band's words: a label, a heading, one line and three checks. */
+export function BandWords({ id, label, heading, line, checks }: { id: string; label: string; heading: string; line: string; checks: readonly string[] }) {
+  return (
+    <>
+      <p className="text-page-label text-page-body">{label}</p>
+      <h2 id={id} className="mt-4 display-xl text-balance text-page-ink">
+        {heading}
+      </h2>
+      <p className="mt-5 max-w-md text-base leading-relaxed text-page-body">{line}</p>
+      <ul className="mt-7 flex flex-col gap-3">
+        {checks.map((check) => (
+          <li key={check} className="flex items-start gap-3 text-[0.9375rem] leading-snug text-page-ink">
+            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-page-accent" />
+            {check}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/** A closed row of the questions' list: what is asked, and a plus that turns when it opens. */
+export const QUESTION_ROW = "flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden";
+export const QUESTION_PLUS = "size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45";
+
+/** One question and its answer: a native <details>, so the answer is in the HTML, and with a `name` only one of its list is open at a time. */
+export function QuestionRow({ q, a, name }: { q: string; a: string; name?: string }) {
+  return (
+    <details name={name} className="group border-b border-page-line">
+      <summary className={QUESTION_ROW}>
+        {q}
+        <Plus aria-hidden="true" className={QUESTION_PLUS} strokeWidth={1.6} />
+      </summary>
+      <p data-reveal className="max-w-2xl pr-8 pb-5 text-[0.9375rem] leading-relaxed text-page-body">
+        {a}
+      </p>
+    </details>
   );
 }
 
@@ -428,23 +468,15 @@ export async function Questions({
   // With a guide it holds what to do with each idea, in the cards' order, as many as fit.
   const said = (idea: TemplateGuideContent["ideas"]["items"][number]) => `${idea.heading}. ${idea.how}`;
   const fitted = new Set(guide ? fitSentences(guide.ideas.items.map(said), guide.ideas.items.map((_, i) => i), CLOSED_BLOCK_WORDS - countWords(about)) : []);
-  const row = "flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden";
-  const plus = "size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45";
+  const row = QUESTION_ROW;
+  const plus = QUESTION_PLUS;
   return (
     <section className="relative" aria-labelledby="template-questions">
       <div className={cn(SPREAD, "pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-44")}>
         <Intro id="template-questions" label={g("faqLabel")} heading={g("faqTitle")} line={g("faqLine")} />
         <div className="border-t border-page-line">
           {faq.map((item) => (
-            <details key={item.q} name={`faq-${manifest.slug}`} className="group border-b border-page-line">
-              <summary className={row}>
-                {item.q}
-                <Plus aria-hidden="true" className={plus} strokeWidth={1.6} />
-              </summary>
-              <p data-reveal className="max-w-2xl pr-8 pb-5 text-[0.9375rem] leading-relaxed text-page-body">
-                {item.a}
-              </p>
-            </details>
+            <QuestionRow key={item.q} q={item.q} a={item.a} name={`faq-${manifest.slug}`} />
           ))}
           <details data-more-about className="group border-b border-page-line">
             <summary className={cn(row, "text-page-body")}>
@@ -525,6 +557,18 @@ export function moreGifts(manifest: TemplateManifest, count = 4): { gifts: Templ
   return { gifts, full };
 }
 
+/** A tall poster with rounded corners and a name under it, the whole of it a link: a card of "More like this". */
+export function PosterLink({ href, poster, alt, label }: { href: string; poster: string; alt: string; label: string }) {
+  return (
+    <Link href={href} className="group block rounded-[1.25rem]">
+      <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift">
+        <Image src={poster} alt={alt} fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 22vw, 45vw" className="object-cover object-[50%_32%]" />
+      </span>
+      <span className="mt-3.5 block font-display text-xl leading-tight text-page-ink">{label}</span>
+    </Link>
+  );
+}
+
 /** (6) More like this: four tall poster cards with the gifts' names, made for the same day. */
 export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
@@ -533,26 +577,35 @@ export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: Te
   // "More gifts for Thanksgiving" over a row that is half something else would not be true.
   const occasion = full ? manifest.occasions[0] : undefined;
   return (
-    <section className="relative" aria-labelledby="template-more">
+    <Raised labelledBy="template-more" flowers={flowers}>
+      <Intro id="template-more" label={t("moreTitle")} heading={occasion ? t(`moreFor.${occasion}`) : t("moreHeading")} />
+      <ul className={POSTER_ROW}>
+        {more.map((m) => (
+          <li key={m.slug}>
+            {/* The tagline says what the poster shows; Bing flags an empty alt on a linked picture. */}
+            <PosterLink href={`/templates/${m.slug}`} poster={m.thumbnail.poster} alt={m.tagline[locale]} label={m.name[locale]} />
+          </li>
+        ))}
+      </ul>
+    </Raised>
+  );
+}
+
+/** A row of four tall poster cards: two by two on a phone. */
+export const POSTER_ROW = "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:gap-x-6";
+
+/**
+ * The page's last section: a lighter ground that rises into the questions above it on a soft
+ * curve, the lily lying across that edge, and the spread on it. A gift's page uses it for "More
+ * like this"; the pages built from that page for where to go next.
+ */
+export function Raised({ labelledBy, flowers, art = MORE_ART, children }: { labelledBy: string; flowers: Flowers; art?: readonly PlacedArt[]; children: ReactNode }) {
+  return (
+    <section className="relative" aria-labelledby={labelledBy}>
       <BandEdge side="top" className="text-page-raised" />
       <div className="relative -mt-px bg-page-raised">
-        <ArtLayer items={MORE_ART} flowers={flowers} />
-        <div className={cn(SPREAD, "pt-12 pb-20 sm:pb-24 lg:pt-16 lg:pb-28")}>
-          <Intro id="template-more" label={t("moreTitle")} heading={occasion ? t(`moreFor.${occasion}`) : t("moreHeading")} />
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:gap-x-6">
-            {more.map((m) => (
-              <li key={m.slug}>
-                <Link href={`/templates/${m.slug}`} className="group block rounded-[1.25rem]">
-                  <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift">
-                    {/* The tagline says what the poster shows; Bing flags an empty alt on a linked picture. */}
-                    <Image src={m.thumbnail.poster} alt={m.tagline[locale]} fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 22vw, 45vw" className="object-cover object-[50%_32%]" />
-                  </span>
-                  <span className="mt-3.5 block font-display text-xl leading-tight text-page-ink">{m.name[locale]}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ArtLayer items={art} flowers={flowers} />
+        <div className={cn(SPREAD, "pt-12 pb-20 sm:pb-24 lg:pt-16 lg:pb-28")}>{children}</div>
       </div>
     </section>
   );

@@ -24,9 +24,9 @@ import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
 import { JsonLd } from "@/components/shared/json-ld";
 import { templateFaq } from "@/components/templates/template-guide";
-import { artSrcSet, pageArt, slotGeometry, slotStyle } from "@/content/page-art";
 import { ArtLayer } from "@/components/templates/page/art";
-import { HeroFlatlay, type HeroFlatlayArt } from "@/components/templates/page/hero-flatlay";
+import { HERO_BUTTON, HERO_BUTTON_QUIET, HERO_GRID, HERO_PHONE_BOX, HERO_PHONE_PLACE, HERO_SIZES, heroFlatlayArt } from "@/components/templates/page/hero-art";
+import { HeroFlatlay } from "@/components/templates/page/hero-flatlay";
 import { includedRows } from "@/components/templates/page/included";
 import { heroKeyword, heroWords } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
@@ -89,22 +89,7 @@ export default async function TemplateDetailPage({
   const theme = templatePageTheme(manifest.slug);
   const flowers = theme.flowers;
   // The hero's picture, as the browser needs it: the render, its bezel, and where its screen is.
-  const flatlay = pageArt("hero-flatlay", flowers);
-  const screen = flatlay.slots.screen!;
-  const { centerX, centerY, perWidth, turn, spanX } = slotGeometry(flatlay, screen);
-  const heroArt: HeroFlatlayArt = {
-    src: flatlay.src1x,
-    srcSet: artSrcSet(flatlay),
-    width: flatlay.width,
-    height: flatlay.height,
-    bezel: flatlay.bezel ? { src: flatlay.bezel.src1x, srcSet: `${flatlay.bezel.src1x} ${flatlay.width1x}w, ${flatlay.bezel.src} ${flatlay.width}w` } : undefined,
-    screen: slotStyle(flatlay, screen),
-    centerX,
-    centerY,
-    perWidth,
-    turn,
-    spanX,
-  };
+  const heroArt = heroFlatlayArt(flowers);
   const samples = await templateSamples(manifest.slug, l, guide);
   const steps = templateSteps(manifest.slug);
   // While the free version is the short note, a note template's free gift has no photos, video or
@@ -150,7 +135,7 @@ export default async function TemplateDetailPage({
            * phone takes the left column. The text column is `contents` below `lg`, which makes its
            * two halves grid items that `order` can put either side of the phone.
            */}
-          <div className="container-x relative grid gap-y-10 pt-8 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center lg:gap-x-10 lg:pt-10 lg:pb-24 xl:gap-x-14 xl:pb-28">
+          <div className={HERO_GRID}>
             <div className="contents lg:block lg:max-w-[33rem]">
               <div className="order-first">
                 <div className="flex flex-wrap items-center gap-2">
@@ -174,7 +159,7 @@ export default async function TemplateDetailPage({
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href={`/create/${manifest.slug}`}
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px"
+                    className={HERO_BUTTON}
                   >
                     {t("templates.makeThis")}
                     <ArrowRight aria-hidden="true" className="size-4" />
@@ -188,7 +173,7 @@ export default async function TemplateDetailPage({
                    */}
                   <Link
                     href={`/demo/${manifest.slug}`}
-                    className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-page-ink/30 px-6 py-2.5 text-center text-base font-medium text-page-ink transition-[background-color,border-color,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/50 hover:bg-page-raised active:scale-[0.98]"
+                    className={HERO_BUTTON_QUIET}
                   >
                     <Play aria-hidden="true" className="size-3.5 fill-current" />
                     {t("templates.fullscreenDemo")}
@@ -234,8 +219,8 @@ export default async function TemplateDetailPage({
              * `sizes` says how wide the picture is drawn, except on a phone, where it says far less
              * than the 758px it is (hero-flatlay.tsx says why): the half-size files are a phone's.
              */}
-            <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] lg:order-first lg:[--fl-down:1.2] lg:[--fl-up:1.2] lg:[--hero-phone:clamp(11.25rem,17.8vw,16rem)]">
-              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 1024px) 700px, (min-width: 640px) 800px, 40vw" className="lg:mx-0 lg:ml-[calc(6.8rem-(80rem-100vw)*0.09)] xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
+            <div className={HERO_PHONE_BOX}>
+              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes={HERO_SIZES} className={HERO_PHONE_PLACE} />
             </div>
           </div>
         </section>
