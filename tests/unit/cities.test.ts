@@ -13,6 +13,7 @@ import { GROUP_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { tileAt, type PoiFeature } from "@/lib/dates/tiles";
 import { CITIES } from "@/templates/_shared/places";
+import { KIND_PAGE_CITIES } from "@/content/date-kinds";
 
 /** The owner's rule: nothing on the site mentions Spain or its cities. */
 const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary|palma)\b/i;
@@ -24,10 +25,15 @@ const city = (slug: string): City => {
   return c;
 };
 
+/** The cities of Nov 2026 the offline table has no row for: each carries its own centre and country. */
+const OWN_CENTRE = ["kansas-city", "milwaukee", "salt-lake-city", "san-antonio", "columbus", "orlando", "phoenix", "pittsburgh", "portland", "st-louis", "nashville", "san-diego", "leeds", "liverpool"];
+/** The twenty-four cities added in Nov 2026 for the searches people make (SEO-PICTURE.md section 5). */
+const NEW_CITIES = ["birmingham", "glasgow", "bristol", "leeds", "liverpool", "dallas", "kansas-city", "houston", "atlanta", "austin", "denver", "milwaukee", "salt-lake-city", "san-antonio", "columbus", "orlando", "philadelphia", "phoenix", "pittsburgh", "portland", "seattle", "st-louis", "nashville", "san-diego"];
+
 describe("the city pages", () => {
-  it("are about thirty cities, each with its own lower-case, hyphenated English slug", () => {
-    expect(CITY_PAGES.length).toBeGreaterThanOrEqual(28);
-    expect(CITY_PAGES.length).toBeLessThanOrEqual(35);
+  it("are about fifty-five cities, each with its own lower-case, hyphenated English slug", () => {
+    expect(CITY_PAGES.length).toBeGreaterThanOrEqual(50);
+    expect(CITY_PAGES.length).toBeLessThanOrEqual(58);
     expect(new Set(CITY_SLUGS).size).toBe(CITY_SLUGS.length);
     for (const c of CITY_PAGES) {
       expect(c.slug, c.name).toMatch(/^[a-z]+(-[a-z]+)*$/);
@@ -43,13 +49,17 @@ describe("the city pages", () => {
     for (const c of CITY_PAGES) {
       expect(isLatLng(c.lat, c.lng), c.slug).toBe(true);
       const table = CITIES.find((t) => t.name === c.name);
-      expect(table, c.slug).toBeDefined();
-      expect(distanceKm(c, table!), c.slug).toBeLessThan(15);
+      if (table) expect(distanceKm(c, table), c.slug).toBeLessThan(15);
+      else expect(OWN_CENTRE, c.slug).toContain(c.slug);
     }
     // The table's Singapore is the middle of the island; the dates are round the bay.
     expect(distanceKm(city("singapore"), { lat: 1.2834, lng: 103.8607 })).toBeLessThan(2);
     // The dates map's own starting point wins over the table's town hall.
     expect(city("london")).toMatchObject({ lat: 51.5115, lng: -0.1235 });
+    for (const slug of OWN_CENTRE) {
+      expect(getCity(slug), slug).toBeDefined();
+      expect(CITIES.find((t) => t.name === city(slug).name), slug).toBeUndefined();
+    }
   });
 
   it("never includes a city in Spain, by country or by name", () => {
@@ -116,7 +126,7 @@ describe("the city pages", () => {
     const near = nearbyCities(city("london"));
     expect(near).toHaveLength(6);
     expect(near.map((c) => c.slug)).not.toContain("london");
-    expect(near[0].slug).toBe("manchester");
+    expect(near[0].slug).toBe("birmingham");
     const km = near.map((c) => distanceKm(city("london"), c));
     expect([...km].sort((a, b) => a - b)).toEqual(km);
   });
@@ -342,5 +352,38 @@ describe("the page's structured data", () => {
   it("lists the places as places with coordinates", () => {
     const node = placeListNode({ name: "Near the centre", url, places: [{ name: "Tate", lat: 51.5, lng: -0.1 }] });
     expect(node.itemListElement).toEqual([{ "@type": "ListItem", position: 1, item: { "@type": "Place", name: "Tate", geo: { "@type": "GeoCoordinates", latitude: 51.5, longitude: -0.1 } } }]);
+  });
+});
+
+describe("the cities added in Nov 2026", () => {
+  it("C1 every new city's note is its own: no two open alike, and each says something to use", () => {
+    for (const [locale, messages] of [["en", en], ["es", es]] as const) {
+      const notes = messages.cities.notes as Record<string, string>;
+      const openings = new Map<string, string>();
+      for (const slug of NEW_CITIES) {
+        const note = notes[slug];
+        expect(note, `${slug} ${locale}`).toBeTruthy();
+        expect(note.split(/\s+/).length, `${slug} ${locale}`).toBeGreaterThanOrEqual(14);
+        expect(mentionsSpain(note), `${slug} ${locale}`).toBe(false);
+        const opening = note.split(/\s+/).slice(0, 6).join(" ").toLowerCase();
+        expect(openings.get(opening), `${slug} ${locale} opens like ${openings.get(opening)}`).toBeUndefined();
+        openings.set(opening, slug);
+      }
+    }
+  });
+
+  it("C2 every city a page by kind links to has a page", () => {
+    for (const slug of KIND_PAGE_CITIES) expect(CITY_SLUGS, slug).toContain(slug);
+  });
+
+  it("C3 a city the offline table lacks carries its own centre and country, and Spanish has its own name for two of them", () => {
+    for (const slug of OWN_CENTRE) {
+      const c = city(slug);
+      expect(isLatLng(c.lat, c.lng), slug).toBe(true);
+      expect(c.country, slug).toMatch(/^[A-Z]{2}$/);
+    }
+    expect(cityName(city("philadelphia"), "es")).toBe("Filadelfia");
+    expect(cityName(city("st-louis"), "es")).toBe("San Luis");
+    expect(city("st-louis").slug).toMatch(/^[a-z]+(-[a-z]+)*$/);
   });
 });

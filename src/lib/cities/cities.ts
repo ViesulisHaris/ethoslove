@@ -41,12 +41,15 @@ type CityEntry = {
   picks: string[];
   /** Where the dates are, where the tables' point is somewhere else. */
   centre?: LatLng;
+  /** Its country (ISO 3166-1 alpha-2), only where the offline table has no row for it. */
+  country?: string;
 };
 
-export type City = Omit<CityEntry, "centre" | "es"> & { es: string; country: string; lat: number; lng: number };
+export type City = Omit<CityEntry, "centre" | "es" | "country"> & { es: string; country: string; lat: number; lng: number };
 
 /**
- * The cities with a page of their own: where the people who buy are, and never anywhere in the
+ * The cities with a page of their own: where the people who buy are, and, since Nov 2026, the US and
+ * UK cities people search date ideas for (docs/marketing/growth-build/SEO-PICTURE.md), and never anywhere in the
  * one country the site does not mention. The slug is the English name, lower-case and hyphenated,
  * and is the same in both languages so the two pages are one another's translation.
  */
@@ -55,12 +58,60 @@ const ENTRIES: CityEntry[] = [
   { slug: "manchester", name: "Manchester", es: "Mánchester", traits: ["rainy", "nightlife"], picks: ["cinema-and-late-dessert", "pasta-and-a-slow-walk"] },
   { slug: "edinburgh", name: "Edinburgh", traits: ["rainy", "museums", "views"], picks: ["sunrise-and-breakfast"] },
   { slug: "dublin", name: "Dublin", traits: ["rainy", "nightlife", "coastal"], picks: ["gallery-hop", "museum-then-wine"] },
+  // Brindleyplace, by the canals.
+  { slug: "birmingham", name: "Birmingham", traits: ["rainy", "museums", "nightlife"], picks: ["pasta-and-a-slow-walk"], centre: { lat: 52.4775, lng: -1.911 } },
+  // George Square (the table's point).
+  { slug: "glasgow", name: "Glasgow", traits: ["rainy", "museums", "nightlife", "parks"], picks: ["gallery-hop"] },
+  // The old city (the table's point).
+  { slug: "bristol", name: "Bristol", traits: ["rainy", "views", "parks"], picks: ["golden-hour-picnic"] },
+  // Briggate and the arcades.
+  { slug: "leeds", name: "Leeds", country: "GB", traits: ["rainy", "nightlife"], picks: ["cinema-and-late-dessert"], centre: { lat: 53.7997, lng: -1.5437 } },
+  // Bold Street and the Ropewalks.
+  { slug: "liverpool", name: "Liverpool", country: "GB", traits: ["rainy", "museums", "nightlife"], picks: ["karaoke-duet"], centre: { lat: 53.405, lng: -2.985 } },
   { slug: "new-york", name: "New York", traits: ["museums", "nightlife", "parks", "winter"], picks: ["pasta-and-a-slow-walk", "ice-cream-walk"] },
   { slug: "los-angeles", name: "Los Angeles", es: "Los Ángeles", traits: ["coastal", "sunny", "nightlife", "views"], picks: ["beach-until-sunset"] },
   { slug: "chicago", name: "Chicago", traits: ["museums", "nightlife", "parks", "winter", "coastal"], picks: ["beach-until-sunset"] },
   { slug: "san-francisco", name: "San Francisco", traits: ["coastal", "parks", "museums", "views"], picks: ["golden-hour-picnic"] },
   { slug: "miami", name: "Miami", traits: ["coastal", "sunny", "hot", "nightlife"], picks: ["sunrise-and-breakfast", "beach-until-sunset"] },
   { slug: "boston", name: "Boston", traits: ["museums", "parks", "winter", "coastal"], picks: ["garden-afternoon", "boats-on-the-water"] },
+  // Klyde Warren Park, between the Arts District and Uptown.
+  { slug: "dallas", name: "Dallas", traits: ["sunny", "museums", "nightlife"], picks: ["museum-then-wine"], centre: { lat: 32.7894, lng: -96.8016 } },
+  // Between the Power & Light District and the Crossroads.
+  { slug: "kansas-city", name: "Kansas City", country: "US", traits: ["winter", "museums", "nightlife"], picks: ["pasta-and-a-slow-walk"], centre: { lat: 39.093, lng: -94.583 } },
+  // Downtown (the table's point).
+  { slug: "houston", name: "Houston", traits: ["hot", "museums", "parks"], picks: ["museum-then-wine"] },
+  // Old Fourth Ward, on the BeltLine's Eastside Trail.
+  { slug: "atlanta", name: "Atlanta", traits: ["parks", "nightlife"], picks: ["ice-cream-walk"], centre: { lat: 33.761, lng: -84.359 } },
+  // Downtown (the table's point).
+  { slug: "austin", name: "Austin", traits: ["hot", "sunny", "nightlife", "parks"], picks: ["golden-hour-picnic"] },
+  // Union Station and LoDo.
+  { slug: "denver", name: "Denver", traits: ["sunny", "winter", "museums", "parks"], picks: ["golden-hour-picnic"], centre: { lat: 39.7527, lng: -104.9995 } },
+  // Downtown, between the river and the lake.
+  { slug: "milwaukee", name: "Milwaukee", country: "US", traits: ["winter", "coastal", "museums"], picks: ["museum-then-wine"], centre: { lat: 43.0389, lng: -87.9065 } },
+  // Downtown.
+  { slug: "salt-lake-city", name: "Salt Lake City", country: "US", traits: ["sunny", "winter", "views"], picks: ["golden-hour-picnic"], centre: { lat: 40.7608, lng: -111.891 } },
+  // The River Walk, north of downtown.
+  { slug: "san-antonio", name: "San Antonio", country: "US", traits: ["hot", "sunny"], picks: ["pasta-and-a-slow-walk"], centre: { lat: 29.432, lng: -98.488 } },
+  // The Short North, on High Street.
+  { slug: "columbus", name: "Columbus", country: "US", traits: ["winter", "parks"], picks: ["gallery-hop"], centre: { lat: 39.97, lng: -83.002 } },
+  // Lake Eola.
+  { slug: "orlando", name: "Orlando", country: "US", traits: ["hot", "sunny", "parks"], picks: ["golden-hour-picnic"], centre: { lat: 28.5436, lng: -81.3728 } },
+  // City Hall (the table's point).
+  { slug: "philadelphia", name: "Philadelphia", es: "Filadelfia", traits: ["museums", "winter", "parks"], picks: ["pasta-and-a-slow-walk"] },
+  // Roosevelt Row.
+  { slug: "phoenix", name: "Phoenix", country: "US", traits: ["hot", "sunny", "views"], picks: ["sunrise-and-breakfast"], centre: { lat: 33.458, lng: -112.071 } },
+  // Downtown.
+  { slug: "pittsburgh", name: "Pittsburgh", country: "US", traits: ["rainy", "winter", "museums", "views"], picks: ["golden-hour-picnic"], centre: { lat: 40.4406, lng: -79.9959 } },
+  // Downtown and the Pearl District.
+  { slug: "portland", name: "Portland", country: "US", traits: ["rainy", "parks"], picks: ["bookshop-and-coffee"], centre: { lat: 45.5231, lng: -122.6765 } },
+  // Pike Place Market.
+  { slug: "seattle", name: "Seattle", traits: ["rainy", "coastal", "museums", "views"], picks: ["bookshop-and-coffee"], centre: { lat: 47.6097, lng: -122.3422 } },
+  // Downtown.
+  { slug: "st-louis", name: "St Louis", es: "San Luis", country: "US", traits: ["museums", "parks", "winter"], picks: ["museum-then-wine"], centre: { lat: 38.627, lng: -90.1994 } },
+  // The Gulch, a walk from Lower Broadway.
+  { slug: "nashville", name: "Nashville", country: "US", traits: ["nightlife", "parks"], picks: ["karaoke-duet"], centre: { lat: 36.152, lng: -86.784 } },
+  // Between Little Italy, downtown and Balboa Park.
+  { slug: "san-diego", name: "San Diego", country: "US", traits: ["coastal", "sunny", "parks", "museums"], picks: ["beach-until-sunset"], centre: { lat: 32.72, lng: -117.162 } },
   { slug: "toronto", name: "Toronto", traits: ["winter", "parks", "coastal"], picks: ["beach-until-sunset", "boats-on-the-water"] },
   { slug: "vancouver", name: "Vancouver", traits: ["rainy", "coastal", "parks", "views"], picks: ["golden-hour-picnic", "ice-cream-walk"] },
   { slug: "montreal", name: "Montreal", traits: ["winter", "nightlife", "parks", "views"], picks: ["skating-and-hot-chocolate"] },
@@ -91,11 +142,11 @@ const ENTRIES: CityEntry[] = [
  */
 function resolve(entry: CityEntry): City {
   const table = CITIES.find((c) => c.name === entry.name);
-  if (!table) throw new Error(`cities: ${entry.name} is not in the offline city table`);
+  if (!table && !(entry.centre && entry.country)) throw new Error(`cities: ${entry.name} is not in the offline city table and carries no centre and country of its own`);
   const starter = STARTER_CITIES.find((c) => c.name === entry.name);
-  const centre = entry.centre ?? starter ?? table;
+  const centre = entry.centre ?? starter ?? table!;
   const es = entry.es ?? AIRPORTS.find((a) => a.city === entry.name)?.es ?? entry.name;
-  return { slug: entry.slug, name: entry.name, es, country: table.country, traits: entry.traits, picks: entry.picks, lat: centre.lat, lng: centre.lng };
+  return { slug: entry.slug, name: entry.name, es, country: table?.country ?? entry.country!, traits: entry.traits, picks: entry.picks, lat: centre.lat, lng: centre.lng };
 }
 
 export const CITY_PAGES: City[] = ENTRIES.map(resolve);
