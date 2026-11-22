@@ -36,6 +36,7 @@ import {
   type FinderStep,
 } from "@/lib/gift/finder";
 import type { GiftLocale } from "@/lib/gift/schema";
+import type { TemplateProduct } from "@/lib/pricing/products";
 import { cn } from "@/lib/utils";
 import { PhoneFrame } from "@/components/shared/phone-frame";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
@@ -54,6 +55,9 @@ const MORE = "more";
 const MORE_MAX = 30;
 /** What the finder writes in the address itself; anything else there (a `ref`) is carried along untouched. `who` is an old spelling of `for`. */
 const OWN: readonly string[] = [...FINDER_KEYS, "who", MORE, FINDER_ASK];
+
+/** The picks' list: one row to swipe on a phone, three side by side from 640px. */
+const ROW = "finder-row";
 
 /** Fired after the finder rewrites the address, which `popstate` does not report. */
 const CHANGED = "ethos:finder";
@@ -107,15 +111,15 @@ export function GiftFinder({
   picks,
   ui,
   freeLabel,
-  price,
+  prices,
   locale,
   today,
 }: {
   picks: FinderPick[];
   ui: FinderUi;
-  /** "Free", and what a premium gift costs here ("$11.99"): the mark under a pick's name. */
+  /** "Free", and what each kind of paid gift costs here ("$11.99", "$8.99"): the mark under a pick's name is its own (FinderPick.product). */
   freeLabel: string;
-  price: string;
+  prices: Record<TemplateProduct, string>;
   locale: GiftLocale;
   /** The day the page was rendered, for what is in season (lib/gift/finder.ts, occasionsFor). */
   today: FinderDay;
@@ -176,10 +180,12 @@ export function GiftFinder({
     first.focus({ preventScroll: true });
   }, [shown.length]);
 
-  // A result is counted once per set of answers, however it was reached: answered here, opened from a link, or come back to.
+  // A result is counted once per pair of answers, however it was reached: answered here, opened from a link, or come back to.
+  // A feeling's pill is not another result: it puts the same gifts in another order, so it is not part of the key
+  // (keyed on the whole address, every pill tapped on or off counted the visit's result again).
   useEffect(() => {
     if (step !== null) return;
-    const key = answersQuery(answers);
+    const key = `${answers.for}/${answers.occasion}`;
     if (counted.current === key) return;
     counted.current = key;
     track("finder_result", { for: answers.for, occasion: answers.occasion, feel: answers.feel });
@@ -211,8 +217,13 @@ export function GiftFinder({
 
   /** A feeling's pill: on, or off again. The picks re-rank where they are, so the address is rewritten, not added to. */
   function toggleFeel(which: FinderFeel) {
-    track("finder_step", { step: "feel" });
-    go({ ...answers, feel: feel === which ? null : which }, { replace: true });
+    const on = feel !== which;
+    // Choosing a feeling is a step taken; taking it off again is not one.
+    if (on) track("finder_step", { step: "feel" });
+    go({ ...answers, feel: on ? which : null }, { replace: true });
+    // On a phone the picks are one row, swiped: the new order starts at its first card, not at
+    // whichever place the old order was left on (the third card of a list whose best pick is now two swipes back).
+    document.getElementById(ROW)?.scrollTo({ left: 0 });
   }
 
   function restart() {
@@ -318,7 +329,8 @@ export function GiftFinder({
           </div>
 
           <h2 ref={heading} tabIndex={-1} id="finder-picks" className="mt-6 scroll-mt-[calc(var(--header-h,0px)+5rem)] font-display text-[1.5rem] leading-tight tracking-[-0.015em] text-page-ink outline-none sm:text-[1.85rem]">
-            {ui.resultTitle}
+            {/* "Three gifts" is the first three: once "Show three more" has added to them the heading stops counting. */}
+            {shown.length > PICKS_PER_PAGE ? ui.resultTitleMore : ui.resultTitle}
           </h2>
 
           <div className="mt-1.5 flex items-center justify-between gap-3">
@@ -353,7 +365,7 @@ export function GiftFinder({
            * runs to the screen's edges and each card stops at the page's own margin.
            */}
           <ol
-            id="finder-row"
+            id={ROW}
             aria-labelledby="finder-picks"
             className="-mx-5 mt-3 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-1 pb-2 scrollbar-none sm:mx-0 sm:mt-4 sm:grid sm:snap-none sm:grid-cols-3 sm:gap-x-5 sm:gap-y-12 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-x-6"
           >
@@ -378,8 +390,12 @@ export function GiftFinder({
                     </span>
                   </button>
                   <h3 className="mt-3.5 font-display text-xl leading-tight text-page-ink">{pick.name}</h3>
-                  <p className="mt-1.5 text-page-label text-page-body">{pick.free ? freeLabel : price}</p>
-                  <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body">
+                  <p className="mt-1.5 text-page-label text-page-body">{pick.free ? freeLabel : prices[pick.product]}</p>
+                  {/*
+                   * The line stands down while the block under it is open: the block holds the whole
+                   * sentence, which begins with the same words, and they were read twice.
+                   */}
+                  <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body group-has-[details[open]]/pick:hidden">
                     {line}
                   </p>
                   {whole !== line ? (
@@ -418,7 +434,7 @@ export function GiftFinder({
               );
             })}
           </ol>
-          <IdeasDots key={shown.length} target="finder-row" count={shown.length} className="mt-3 sm:hidden" />
+          <IdeasDots key={shown.length} target={ROW} count={shown.length} className="mt-3 sm:hidden" />
 
           <div className="mt-5 flex flex-wrap items-center gap-x-7 gap-y-1 sm:mt-9">
             {shown.length < ranked.length ? (

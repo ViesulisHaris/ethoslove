@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { christmasPicks, finderPicks } from "../../src/content/finder";
 import { ANY, occasionsFor, occasionsInSeason, rankGifts, reasonKey, type FinderAnswers } from "../../src/lib/gift/finder";
+import { PRODUCTS, type Currency } from "../../src/lib/pricing/products";
 import { getManifest } from "../../src/templates/manifests";
 
 /**
@@ -327,8 +328,11 @@ test.describe("the gift finder", () => {
     await page.goto("/gifts/finder?for=boyfriend&occasion=just-because");
     await expect(picks(page)).toHaveCount(3);
     const three = await names(page);
+    await expect(page.locator("#finder-picks")).toHaveText("Three gifts that fit");
     await page.getByRole("button", { name: "Show three more" }).click();
     await expect(picks(page)).toHaveCount(6);
+    // Six gifts are not "Three gifts": the heading stops counting, and keeps the focus's target and its place.
+    await expect(page.locator("#finder-picks")).toHaveText("Gifts that fit");
     const six = await names(page);
     expect(six.slice(0, 3)).toEqual(three);
     expect(new Set(six).size).toBe(6);
@@ -337,6 +341,14 @@ test.describe("the gift finder", () => {
     // In the address, so coming Back from the editor finds the same six.
     expect(search(page)).toBe("?for=boyfriend&occasion=just-because&more=1");
     await page.reload();
+    await expect(picks(page)).toHaveCount(6);
+    await expect(page.locator("#finder-picks")).toHaveText("Gifts that fit");
+    // Every gift that fits, under the same heading, with nothing more to show.
+    await page.goto("/gifts/finder?for=boyfriend&occasion=just-because&more=99");
+    await expect(page.locator("#finder-picks")).toHaveText("Gifts that fit");
+    expect(await picks(page).count()).toBeGreaterThan(20);
+    await expect(page.getByRole("button", { name: "Show three more" })).toHaveCount(0);
+    await page.goto("/gifts/finder?for=boyfriend&occasion=just-because&more=1");
     await expect(picks(page)).toHaveCount(6);
 
     await page.getByRole("button", { name: "Start again" }).click();
@@ -375,6 +387,9 @@ test.describe("the gift finder", () => {
     const answers: FinderAnswers = { for: "girlfriend", occasion: "anniversary", feel: null };
     const best = top(answers)[0];
     const key = reasonKey(best.why, answers);
+    // A girlfriend at an anniversary reads the sentence written for a partner, with no pill tapped.
+    expect(key).toBe("romantic");
+    await expect(page.locator('[data-feel][aria-pressed="true"]')).toHaveCount(0);
     expect(best.line[key]).not.toBe(best.why[key]);
     const first = picks(page).first();
     await expect(first.locator("[data-why]")).toHaveText(best.line[key] as string);
@@ -384,6 +399,130 @@ test.describe("the gift finder", () => {
     await why.locator("summary").click();
     await expect(why.locator("p")).toBeVisible();
     await expect(why.locator("p")).toHaveText(best.why[key] as string);
+    // Open, the block says the sentence whole, so the line over it stands down: the same words were read twice.
+    await expect(first.locator("[data-why]")).toBeHidden();
+    // Only that card's: the others keep their line.
+    await expect(picks(page).nth(1).locator("[data-why]")).toBeVisible();
+    await why.locator("summary").click();
+    await expect(why.locator("p")).toBeHidden();
+    await expect(first.locator("[data-why]")).toBeVisible();
+  });
+
+  test("a pick's price is its own: every gift the finder can show carries the mark the gallery's card gives it", async ({ page }) => {
+    // The review of 22 Nov 2026: one price stood under every pick that was not free, so Constellations,
+    // which sells at "Make it special" on the live site, was priced as a premium template.
+    await page.goto("/templates");
+    await expect(page.locator("main h3").first()).toBeVisible();
+    const gallery = new Map(
+      await page.locator("main h3").evaluateAll((titles) => titles.map((h3) => [(h3.textContent ?? "").trim(), (h3.parentElement?.nextElementSibling?.textContent ?? "").trim()] as [string, string])),
+    );
+    expect(gallery.size).toBeGreaterThan(50);
+    // The gallery says "Free" or "$8.99 once": the mark itself is the first word.
+    const mark = (name: string) => (gallery.get(name) ?? "missing from the gallery").replace(/ once$/, "");
+
+    // "Not sure" twice shows every gift not tied to one day; a second address adds the ones that are.
+    const seen = new Map<string, string>();
+    for (const query of ["?for=any&occasion=any&more=99", "?for=girlfriend&occasion=anniversary&more=99", "?for=any&occasion=christmas&more=99", "?for=any&occasion=birthday&more=99"]) {
+      await page.goto(`/gifts/finder${query}`);
+      await expect(picks(page).first()).toBeVisible();
+      for (const [name, shown] of await picks(page).evaluateAll((cards) => cards.map((card) => [card.querySelector("h3")!.textContent!.trim(), card.querySelector("h3 + p")!.textContent!.trim()] as [string, string]))) {
+        expect(shown, `${name} on /gifts/finder${query}`).toBe(mark(name));
+        seen.set(name, shown);
+      }
+    }
+    expect(seen.size).toBeGreaterThan(40);
+
+    // And it is what the scoring's own data says: "Free" while a gift can go out free, else the price of what it is sold as.
+    const money = [...seen.values()].find((shown) => shown !== "Free")!;
+    const currency = (money.includes("€") ? "eur" : money.includes("£") ? "gbp" : "usd") satisfies Currency;
+    const amount = (minor: number) => (minor / 100).toFixed(2);
+    for (const pick of EN) {
+      if (!seen.has(pick.name)) continue;
+      if (pick.free) expect(seen.get(pick.name), pick.slug).toBe("Free");
+      else expect(seen.get(pick.name), pick.slug).toContain(amount(PRODUCTS[pick.product].amounts[currency]));
+    }
+    // Constellations is the one gift whose price is not a premium template's: free where the free version
+    // still has photos, "Make it special" where the short note is for everyone (the live site). Never the "single" price.
+    const sky = EN.find((pick) => pick.slug === "constellations")!;
+    expect(seen.get(sky.name)).toBeDefined();
+    expect(seen.get(sky.name)).not.toContain(amount(PRODUCTS.single.amounts[currency]));
+    expect(seen.get(sky.name)).toBe(sky.free ? "Free" : mark(sky.name));
+  });
+
+  test("on a phone a feeling starts the row again at its first card", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "from 640px the three stand side by side and nothing is swiped");
+    await page.goto("/gifts/finder?for=girlfriend&occasion=anniversary");
+    await expect(picks(page)).toHaveCount(3);
+    const row = page.locator("#finder-row");
+    const dotOn = () => page.locator("[data-dots] > span").evaluateAll((dots) => dots.findIndex((dot) => dot.hasAttribute("data-on")));
+    // Swiped to the third card.
+    await row.evaluate((el) => el.scrollTo({ left: el.scrollWidth }));
+    await expect.poll(dotOn).toBe(2);
+    expect(await row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(500);
+
+    await page.getByRole("button", { name: "Funny", exact: true }).click();
+    const funny = topNames({ for: "girlfriend", occasion: "anniversary", feel: "funny" });
+    expect(await names(page)).toEqual(funny);
+    // The new first pick is the card on screen, and the first dot is on: not the third of the new order.
+    await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBe(0);
+    await expect.poll(dotOn).toBe(0);
+    await expect(picks(page).first().locator("h3")).toHaveText(funny[0]);
+    // Side to side, that is: the first card is the one within the screen's width, and the rest are off to its right.
+    const across = await picks(page).evaluateAll((cards) => cards.map((card) => { const r = card.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; }));
+    expect(across).toEqual([true, false, false]);
+    // Off again: the same.
+    await row.evaluate((el) => el.scrollTo({ left: el.scrollWidth }));
+    await expect.poll(dotOn).toBe(2);
+    await page.getByRole("button", { name: "Funny", exact: true }).click();
+    await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBe(0);
+    await expect.poll(dotOn).toBe(0);
+  });
+
+  test("a result is counted once per pair of answers, and a feeling only when its pill goes on", async ({ page }) => {
+    // The test stands in for Vercel's script and takes down what the page hands to window.va (as
+    // tests/e2e/arrival.spec.ts). Vercel's own script is kept from loading: once it has, it takes
+    // window.va over, and every event after the page's first effect would go to it unseen.
+    await page.route((url) => url.hostname === "va.vercel-scripts.com" || url.pathname.startsWith("/_vercel/insights/"), (route) => route.abort());
+    await page.addInitScript(() => {
+      const w = window as unknown as { __counted: unknown[][]; va: (...args: unknown[]) => void };
+      w.__counted = [];
+      w.va = (...args: unknown[]) => {
+        w.__counted.push(args);
+      };
+    });
+    const events = () =>
+      page.evaluate(() =>
+        (window as unknown as { __counted: unknown[][] }).__counted
+          .filter((call) => call[0] === "event")
+          .map((call) => call[1] as { name: string; data?: Record<string, unknown> })
+          .filter((event) => event.name.startsWith("finder_"))
+          .map((event) => (event.name === "finder_step" ? `step:${String(event.data?.step)}` : event.name)),
+      );
+    await page.goto("/gifts/finder?for=girlfriend&occasion=anniversary");
+    await expect(picks(page)).toHaveCount(3);
+    await expect.poll(events).toEqual(["finder_result"]);
+
+    const pill = (name: string) => page.getByRole("button", { name, exact: true });
+    // On, off, another on, and across to a third: three pills went on, one came off.
+    await pill("Funny").click();
+    await expect(pill("Funny")).toHaveAttribute("aria-pressed", "true");
+    await pill("Funny").click();
+    await expect(pill("Funny")).toHaveAttribute("aria-pressed", "false");
+    await pill("Romantic").click();
+    await expect(pill("Romantic")).toHaveAttribute("aria-pressed", "true");
+    await pill("Unusual").click();
+    await expect(pill("Unusual")).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Show three more" }).click();
+    await expect(picks(page)).toHaveCount(6);
+    // Still one result: the same two answers, re-ordered. Taking a pill off is not a step.
+    expect(await events()).toEqual(["finder_result", "step:feel", "step:feel", "step:feel"]);
+
+    // Another answer is another result, counted once.
+    await page.getByRole("button", { name: /^For my girlfriend/ }).click();
+    await answer(page, "My dad").click();
+    await expect(question(page, "Three gifts that fit")).toBeVisible();
+    await expect.poll(async () => (await events()).filter((name) => name === "finder_result").length).toBe(2);
+    expect((await events()).filter((name) => name === "step:feel")).toHaveLength(3);
   });
 
   test("each pick plays its own preview while it is on screen, one button stops them all, and less motion means none", async ({ page, isMobile }) => {
@@ -500,6 +639,8 @@ test.describe("the gift finder", () => {
     await expect(xoxo.locator("details summary")).toHaveText("Por qué este");
     await expect(xoxo.getByRole("link", { name: "Crear este regalo" })).toHaveAttribute("href", "/es/create/xoxo?ref=finder");
     await expect(page.getByRole("button", { name: /^Para mi novia/ })).toBeVisible();
+    // A best friend is named the same way on the answer card and in the row of links at the foot.
+    await expect(page.locator('section[aria-labelledby="finder-people"] ul a[href="/es/gifts/for-best-friend"]')).toHaveText("Para tu mejor amiga o amigo");
     await page.getByRole("button", { name: "Romántico", exact: true }).click();
     await expect(page.getByRole("button", { name: "Romántico", exact: true })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: "Ver tres más" }).click();
@@ -521,6 +662,7 @@ test.describe("the gift finder", () => {
     await expect(foot.getByRole("heading", { level: 2 })).toHaveText("Or start from the person");
     await expect(foot.locator("ul a")).toHaveCount(8);
     for (const href of ["/gifts/for-mom", "/gifts/for-best-friend", "/gifts/for-boyfriend", "/templates"]) await expect(foot.locator(`ul a[href="${href}"]`)).toBeVisible();
+    await expect(foot.locator('ul a[href="/gifts/for-best-friend"]')).toHaveText("For your best friend");
     // How it picks is not on the page to be read, and is still in its HTML: one closed block, with the days as links.
     const how = page.locator("details[data-finder-how]");
     await expect(how.locator("summary")).toHaveText("How the finder picks");

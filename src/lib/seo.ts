@@ -3,7 +3,7 @@ import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { routing, type Locale } from "@/i18n/routing";
 import { sendsFree } from "@/lib/gift/free-tier";
-import { PRODUCTS, PRODUCT_ORDER, type Currency } from "@/lib/pricing/products";
+import { PRODUCTS, PRODUCT_ORDER, templateProduct, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 
 type Node = Record<string, unknown>;
@@ -195,7 +195,7 @@ export function appNode(locale: Locale, shown: Currency, description: string, pl
  */
 export function templateOfferAmount(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">, currency: Currency): number {
   if (sendsFree(manifest)) return 0;
-  return PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency];
+  return PRODUCTS[templateProduct(manifest.tier)].amounts[currency];
 }
 
 /**

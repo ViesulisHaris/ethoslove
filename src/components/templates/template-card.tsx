@@ -20,7 +20,7 @@ const GiftRenderer = dynamic(
   () => import("@/templates/_shared/GiftRenderer").then((m) => m.GiftRenderer),
   { ssr: false },
 );
-import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
@@ -42,7 +42,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
   // A premium template is bought as one; a free template that has no free version any more
   // (lib/gift/free-tier.ts) costs its "make it special".
   const free = sendsFree(manifest);
-  const price = formatAmount(PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency], currency, locale);
+  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, locale);
   /** The first row on a phone and on a laptop: painted immediately, never faded in, never lazy. */
   const above = index < 4;
 

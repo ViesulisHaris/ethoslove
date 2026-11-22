@@ -74,6 +74,19 @@ export const PRODUCTS: Record<ProductId, Product> = {
 };
 
 /**
+ * What one gift of a template is sold as: a premium template as itself ("single"), and a free one as
+ * its "Make it special" ("extras"), which is all a free template ever costs, and the whole price of
+ * one that no longer goes out free (Constellations, lib/gift/free-tier.ts). Every page that prints a
+ * template's price reads the product from here (the gallery's card, the template's own page and its
+ * structured data, the ad landing page, the gift finder), so no two of them can name different
+ * prices: the finder once showed the "single" price under Constellations, which sells at "extras".
+ */
+export type TemplateProduct = "single" | "extras";
+export function templateProduct(tier: "free" | "premium"): TemplateProduct {
+  return tier === "free" ? "extras" : "single";
+}
+
+/**
  * The order bump: every other template, forever, added to a single or a "make it special" purchase.
  * Offered unticked; the buyer has to choose it. Its price is whatever takes that purchase to exactly
  * Everything's price (bumpAmount), so ticking it is never a better or a worse deal than Everything.

@@ -287,16 +287,26 @@ export const finderWaitScript = (): string =>
  * The "romantic" sentence is written to a partner and read by nobody else. A mother, a father, a
  * friend, "someone else" and "Not sure" get the general one: the first draft showed a mother that
  * "Will you marry me?" fits the last scratch card. Every other sentence is written for anyone.
+ *
+ * A partner is the commonest answer, and since the feeling stopped being a question nobody is asked
+ * for one: so on the days a partner's gift is a romantic one anyway (ROMANTIC_DAYS), a partner
+ * reads the romantic sentence without tapping its pill. With another pill on, that pill is what
+ * they asked for, and they read its sentence or the general one.
  */
 export type FinderReasons<T> = { base: T } & Partial<Record<FinderRecipient | FinderFeel, T>>;
+
+/** For a partner these read as romantic without asking: an anniversary, Valentine's, no occasion at all, and "Not sure". */
+export const ROMANTIC_DAYS: readonly (Occasion | Any)[] = ["anniversary", "valentines", "just-because", ANY];
 
 /** Which of a template's sentences an answer reads. */
 export function reasonKey<T>(why: FinderReasons<T>, answers: FinderAnswers): keyof FinderReasons<T> {
   const who = answers.for && answers.for !== ANY ? answers.for : null;
   if (who && why[who] !== undefined) return who;
+  const partner = who !== null && (FINDER_PARTNERS as readonly string[]).includes(who);
   const feel = chosenFeel(answers);
-  const written = feel !== "romantic" || (who !== null && (FINDER_PARTNERS as readonly string[]).includes(who));
+  const written = feel !== "romantic" || partner;
   if (feel && written && why[feel] !== undefined) return feel;
+  if (!feel && partner && answers.occasion !== null && ROMANTIC_DAYS.includes(answers.occasion) && why.romantic !== undefined) return "romantic";
   return "base";
 }
 
@@ -314,10 +324,12 @@ export const countWords = (text: string) => text.trim().split(/\s+/).filter(Bool
 /**
  * A pick's line: its sentence cut to at most fourteen words, and never mid-thought. As many whole
  * sentences as fit; where even the first is too long, that sentence up to its first colon or
- * semicolon, or else its last comma, wherever that leaves a clause of five words or more. Null
- * where nothing gives a whole clause. The rule is a first draft, not the last word: a line it cuts
- * badly, or cannot cut, is written by hand (content/finder.ts, FINDER_SHORT), and a test fails for
- * a sentence that has neither. The whole sentence is still on the card, in its closed "Why this one".
+ * semicolon, or else its last comma, wherever that leaves a clause of five words or more. Never at
+ * a comma inside a list of choices (cutsList): "hearts, stars or cakes" cut after "hearts" says one
+ * thing where the gift has three. Null where nothing gives a whole clause. The rule is a first
+ * draft, not the last word: a line it cuts badly, or cannot cut, is written by hand
+ * (content/finder.ts, FINDER_SHORT), and a test fails for a sentence that has neither. The whole
+ * sentence is still on the card, in its closed "Why this one".
  */
 export function shortReason(sentence: string, max = REASON_WORDS): string | null {
   // A sentence ends where the next word starts one: «¿serás mi boo?» si no… and "be my boo?" unless… carry on.
@@ -339,7 +351,25 @@ export function shortReason(sentence: string, max = REASON_WORDS): string | null
   const clause = (at: number) => first.slice(0, at).trim();
   const fitsLine = (text: string) => countWords(text) <= max && countWords(text) >= 5;
   const stops = [...first.matchAll(/[;:](?=\s)/g)].map((m) => m.index!);
-  const commas = [...first.matchAll(/,(?=\s)/g)].map((m) => m.index!).reverse();
+  const commas = [...first.matchAll(/,(?=\s)/g)]
+    .map((m) => m.index!)
+    .filter((at) => !cutsList(first.slice(at)))
+    .reverse();
   for (const at of [...stops, ...commas]) if (fitsLine(clause(at))) return `${clause(at)}.`;
   return null;
+}
+
+/** One thing in a list: up to four words with no punctuation between them ("black and white", "Brahms' Lullaby"). */
+const LIST_ITEM = /\s+(?:[^\s,.;:]+\s+){0,3}[^\s,.;:]+/.source;
+/** From a comma on: any number of such things, each closed by its own comma, then one that goes on to "or" ("o", "u"). */
+const LIST_REST = new RegExp(`^(?:,${LIST_ITEM})*,\\s+(?:[^\\s,.;:]+\\s+){1,4}(?:or|o|u)\\s+\\S`);
+
+/**
+ * Whether what follows a comma (the comma first) is the rest of a list of choices: "…falling
+ * hearts, stars or cakes in a small retro game", "…in colour, black and white or sepia", "…a heart,
+ * and Swan Lake, Brahms' Lullaby or Für Elise". A line cut at such a comma names the first of the
+ * choices as if it were the only one, so the rule never cuts there.
+ */
+export function cutsList(rest: string): boolean {
+  return LIST_REST.test(rest);
 }

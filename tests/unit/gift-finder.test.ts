@@ -1,12 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { OCCASIONS, type Occasion } from "@/config/occasions";
 import { FINDER_COPY, FINDER_FITS, FINDER_SHORT, christmasPicks, finderGifts, finderPicks, shortLine, suitedRecipients } from "@/content/finder";
 import { RECIPIENTS, RECIPIENT_GUIDES } from "@/content/recipients";
 import { sendsFree } from "@/lib/gift/free-tier";
+import { PRODUCTS, templateProduct, type Currency } from "@/lib/pricing/products";
+import { templateOfferAmount } from "@/lib/seo";
 import {
   ANY,
   BEST_SELLERS,
@@ -19,11 +21,13 @@ import {
   OCCASIONS_SHOWN,
   PICKS_PER_PAGE,
   REASON_WORDS,
+  ROMANTIC_DAYS,
   answerGifts,
   answersQuery,
   askedStep,
   chosenFeel,
   countWords,
+  cutsList,
   finderWaitScript,
   fits,
   occasionsFor,
@@ -208,6 +212,34 @@ describe("the reasons", () => {
     // Two answers and no pill: the person's sentence where the template has one, else the general one.
     expect(pickReason(letter.why, { for: "mom", occasion: "birthday", feel: null })).toBe(FINDER_FITS["the-letter"].why.mom!.es);
     expect(pickReason(letter.why, { for: "girlfriend", occasion: "birthday", feel: null })).toBe(letter.why.base);
+  });
+
+  it("give a partner the sentence written for a partner on the days that are romantic anyway, with no pill to tap", () => {
+    // The feeling stopped being a question, so the four partners (the commonest answers) only ever read
+    // a template's general sentence, and the thirty-odd written for them showed only after "Romantic".
+    expect(ROMANTIC_DAYS).toEqual(["anniversary", "valentines", "just-because", ANY]);
+    const letter = FINDER_FITS["the-letter"].why;
+    for (const who of FINDER_PARTNERS) {
+      for (const occasion of ROMANTIC_DAYS) expect(reasonKey(letter, { for: who, occasion, feel: null }), `${who} / ${occasion}`).toBe("romantic");
+      // A birthday, Christmas, an apology and the rest are not romantic by themselves: the general sentence.
+      for (const occasion of OCCASIONS.filter((o) => !ROMANTIC_DAYS.includes(o))) expect(reasonKey(letter, { for: who, occasion, feel: null }), `${who} / ${occasion}`).toBe("base");
+      // "Not sure" as an old link's third answer is no pill either.
+      expect(reasonKey(letter, { for: who, occasion: "anniversary", feel: ANY })).toBe("romantic");
+      // Another pill is what they asked for: its sentence, or the general one, never the romantic one.
+      expect(reasonKey(letter, { for: who, occasion: "anniversary", feel: "sentimental" })).toBe("sentimental");
+      expect(reasonKey(letter, { for: who, occasion: "anniversary", feel: "funny" })).toBe("base");
+      // A template with no romantic sentence gives its general one.
+      expect(reasonKey(FINDER_FITS["the-council"].why, { for: who, occasion: "anniversary", feel: null })).toBe("base");
+    }
+    // Nobody else is read it, whatever the day: a friend, "someone else" and "Not sure" get the general one.
+    for (const who of ["mom", "dad", "best-friend", "someone", ANY] as const)
+      for (const occasion of ROMANTIC_DAYS) expect(reasonKey(FINDER_FITS["scratch-card"].why, { for: who, occasion, feel: null }), who).toBe("base");
+    // It is what the first picks show: for a girlfriend at an anniversary, every pick that has a partner's sentence reads it.
+    const picks = finderPicks("en");
+    const answers: FinderAnswers = { for: "girlfriend", occasion: "anniversary", feel: null };
+    const first = rankGifts(picks, answers).slice(0, 6);
+    expect(first.filter((pick) => pick.why.romantic !== undefined).length).toBeGreaterThanOrEqual(3);
+    for (const pick of first) expect(reasonKey(pick.why, answers), pick.slug).toBe(pick.why.romantic !== undefined ? "romantic" : "base");
   });
 
   it("keep the romantic sentence for a partner: nobody else is told about the two of you", () => {
@@ -462,6 +494,64 @@ describe("the line under a pick", () => {
     expect(shortReason("Change the shape from a heart to a star and fill the sky with family photos of every single one of you.")).toBeNull();
   });
 
+  it("never cuts a sentence inside a list of choices", () => {
+    // The review of 22 Nov 2026: "They drag a basket to catch falling hearts." (the game drops hearts, stars or
+    // cakes), "…your best worst faces prints in colour." (colour, black and white or sepia), "Choose the two
+    // swans who meet as a heart, and Swan Lake." (one of three tunes). Each named the first choice as the only one.
+    expect(cutsList(", stars or cakes in a small retro game.")).toBe(true);
+    expect(cutsList(", black and white or sepia.")).toBe(true);
+    expect(cutsList(", Brahms' Lullaby or Für Elise.")).toBe(true);
+    expect(cutsList(", estrellas o tartas que caen.")).toBe(true);
+    // The first of three or more: the things after it are still the list.
+    expect(cutsList(", red, white or sparkling, poured by tilting the phone.")).toBe(true);
+    // A clause that follows a comma is not a list, even with an "or" far along it.
+    expect(cutsList(", then your words write themselves out by hand on a desk or a table.")).toBe(false);
+    expect(cutsList(", and each carries a tag with a line you wrote.")).toBe(false);
+    expect(cutsList(", de 26 caracteres, con el plan que tengáis.")).toBe(false);
+    // So the rule gives such a sentence up, and a line is written for it by hand.
+    expect(shortReason("They drag a basket to catch falling hearts, stars or cakes in a small retro game that runs on.")).toBeNull();
+    expect(shortReason("Four flashes and a strip of your best worst faces prints in color, black and white or sepia.")).toBeNull();
+    // A list that fits whole is no cut at all.
+    expect(shortReason("One peony, tulip or daisy in the color you choose. It opens for as long as they hold the screen.")).toBe("One peony, tulip or daisy in the color you choose.");
+
+    // And over every sentence: where the rule cut one at a comma, what was left off is not the rest of a list.
+    // The check is spelled out again here, so the rule cannot pass by agreeing with itself.
+    const listRest = /^,\s+(?:[^\s,.;:]+\s+){1,4}(?:or|o|u)\s|^,\s+[^,.;:]{1,30},\s+(?:[^\s,.;:]+\s+){1,4}(?:or|o|u)\s/;
+    let cut = 0;
+    for (const { where, slug, key, locale, whole } of sentences) {
+      if (FINDER_SHORT[slug]?.[key as "base"]?.[locale]) continue;
+      const line = shortReason(whole)!;
+      const kept = line.replace(/\.$/, "");
+      if (line === whole || !whole.startsWith(kept) || whole[kept.length] !== ",") continue;
+      cut += 1;
+      expect(whole.slice(kept.length), `${where}: “${line}” stops inside a list`).not.toMatch(listRest);
+    }
+    expect(cut).toBeGreaterThan(20);
+  });
+
+  it("says what the gift is: no line is only an instruction about a field and its length", () => {
+    // The same review: under the gift's name stood "Use the side label, 12 characters, for the year.",
+    // "Write one reason per tag, 48 characters each.", "Fill in the recipe card, 90 characters under…".
+    // A line may quote a limit ("…in 18 characters: a date, a place or "always""); it may not be nothing else.
+    const bare = /^(?:Use|Write|Fill in|Rewrite|Set|Usa|Escribe|Rellena|Reescribe|Pon) [^.:]*\b\d+ (?:characters|caracteres)[^.:]*\.$/;
+    const off = sentences.map(({ where, slug, key, locale, whole }) => ({ where, line: shortLine(slug, key, locale, whole)! })).filter(({ line }) => bare.test(line));
+    expect(off.map(({ where, line }) => `${where}: ${line}`)).toEqual([]);
+    // The seven the review named, and the Spanish one, each now say the thing.
+    const line = (slug: string, key: string, locale: "en" | "es") => shortLine(slug, key, locale, FINDER_FITS[slug].why[key as "base"]![locale]);
+    expect(line("vinyl", "sentimental", "en")).toBe("A record with the year on its label and your photos as album covers.");
+    expect(line("sticker-bomb", "best-friend", "en")).toMatch(/^Label-maker strips with what you call each other/);
+    expect(line("bat-swarm", "romantic", "en")).toMatch(/^Bats spell their name/);
+    expect(line("fall-for-you", "sentimental", "en")).toMatch(/^An autumn collage with a recipe card/);
+    expect(line("picnic", "sentimental", "en")).toMatch(/^A picnic basket/);
+    expect(line("on-repeat", "sentimental", "en")).toMatch(/^A playlist where each photo is a song/);
+    expect(line("constellations", "best-friend", "en")).toMatch(/night sky\.$/);
+    expect(line("spooky-season", "funny", "es")).toBe("La entrada del álbum es para dos, al plan que tengáis de verdad.");
+    // And the three cut mid-list.
+    expect(line("music-box", "romantic", "en")).toBe("Two swans meet as a heart, to Swan Lake, Brahms' Lullaby or Für Elise.");
+    expect(line("photo-booth", "best-friend", "en")).toBe("Four flashes, and a strip of your best worst faces prints.");
+    expect(line("arcade", "base", "en")).toBe("A small retro game where every level they clear uncovers one of your photos.");
+  });
+
   it("where it was written by hand, says nothing its sentence does not: the same numbers, and a real sentence to shorten", () => {
     let written = 0;
     for (const [slug, keys] of Object.entries(FINDER_SHORT)) {
@@ -694,6 +784,7 @@ describe("the page's words", () => {
       hold(`${locale} byWho.label`, copy.byWho.label, 3);
       hold(`${locale} byWho.heading`, copy.byWho.heading, 6);
       hold(`${locale} byWho.all`, copy.byWho.all, 4);
+      for (const [who, label] of Object.entries(copy.byWho.people)) hold(`${locale} byWho.people.${who}`, label, 6);
       hold(`${locale} how.title`, copy.how.title, 5);
       const { ui } = copy;
       for (const [step, question] of Object.entries(ui.questions)) hold(`${locale} question ${step}`, question, 5);
@@ -702,7 +793,7 @@ describe("the page's words", () => {
       for (const [who, label] of Object.entries(ui.forWho)) hold(`${locale} forWho.${who}`, label, 6);
       for (const [o, label] of Object.entries(ui.occasions)) hold(`${locale} occasions.${o}`, label, 4);
       for (const [feel, label] of Object.entries(ui.feels)) hold(`${locale} feels.${feel}`, label, 1);
-      for (const key of ["notSure", "moreOccasions", "anyOccasion", "resultTitle", "whyThis", "watch", "make", "more", "restart"] as const) hold(`${locale} ui.${key}`, ui[key], 4);
+      for (const key of ["notSure", "moreOccasions", "anyOccasion", "resultTitle", "resultTitleMore", "whyThis", "watch", "make", "more", "restart"] as const) hold(`${locale} ui.${key}`, ui[key], 4);
       hold(`${locale} ui.end`, ui.end, 9);
     }
     expect(over).toEqual([]);
@@ -733,9 +824,116 @@ describe("the page's words", () => {
     expect(FINDER_COPY.es.how.paragraphs.join(" ")).not.toMatch(/comprado|amplía/);
   });
 
+  it("stop counting the gifts once there are more than three, and name a best friend one way in Spanish", () => {
+    // "Three gifts that fit" stood over six, nine or all thirty-seven after "Show three more".
+    expect(FINDER_COPY.en.ui.resultTitle).toMatch(/^Three /);
+    expect(FINDER_COPY.en.ui.resultTitleMore).toBe("Gifts that fit");
+    expect(FINDER_COPY.es.ui.resultTitleMore).toBe("Regalos que encajan");
+    for (const locale of ["en", "es"] as const) expect(FINDER_COPY[locale].ui.resultTitleMore, locale).not.toMatch(/three|tres|\d/i);
+    // The foot row said "Para tu mejor amiga" under an answer card that says "Mi mejor amiga o amigo".
+    expect(Object.keys(FINDER_COPY.es.byWho.people)).toEqual([...RECIPIENTS]);
+    expect(FINDER_COPY.es.byWho.people["best-friend"]).toBe("Para tu mejor amiga o amigo");
+    expect(FINDER_COPY.es.ui.people["best-friend"]).toBe("Mi mejor amiga o amigo");
+    expect(FINDER_COPY.es.ui.forWho["best-friend"]).toBe("Para mi mejor amiga o amigo");
+  });
+
+  it("are in one English: American, as “mom” is", () => {
+    // The pill said "For my mom" over "Her favourite flowers… in her colours" and "the lift at 2am"
+    // (an elevator, to anyone who says mom). Every sentence, line and label of the finder is held to it.
+    const british = /colour|favourite|\bgrey\b|\bmum\b|kilometre|centre\b|recognise|organise|\bloft\b|\bposted\b|in-jokes?\b|\bsweets\b|every sweet\b|\bticked\b|\bpegs?\b|blackboard|car journeys|the lift at/i;
+    const english: string[] = [JSON.stringify(FINDER_COPY.en)];
+    for (const fit of Object.values(FINDER_FITS)) for (const words of Object.values(fit.why)) english.push(words!.en);
+    for (const keys of Object.values(FINDER_SHORT)) for (const words of Object.values(keys)) if (words!.en) english.push(words!.en);
+    for (const text of english) expect(text.match(british)?.[0], text.slice(0, 80)).toBeUndefined();
+    expect(FINDER_FITS["the-letter"].why.mom!.en).toContain("the ride home at 2am");
+  });
+
+  it("say in Spanish who does what: what the person who gets it does is never spelled like an order to the sender", () => {
+    // "Sopla al móvil para apagar las velas" is word for word "Blow on the phone…": in Spanish the
+    // third person with no subject is the same word as an order, and it stood beside real orders to
+    // the sender ("Elige…", "Escribe…"). What the recipient does now has a subject ("Ella rompe el
+    // sello", "quien lo recibe"), or the thing is the subject ("Las velas se apagan soplando").
+    const theirs = /^(?:Rompe|Sopla|Agita|Aparta|Limpia|Tira|Desata|Desenvuelve|Levanta|Gira|Baja|Da|Rasca|Explota|Grita|Llama|Empuja|Enciende|Lleva|Pasa|Inclina|Mantiene|Explora|Toca|Abre|Va|Ve|Hace|Lo|Le) /;
+    const starts = (text: string) => text.split(/(?<=[.;:])\s+/).filter((sentence) => theirs.test(sentence));
+    const off: string[] = [];
+    for (const [slug, fit] of Object.entries(FINDER_FITS)) for (const [key, words] of Object.entries(fit.why)) for (const sentence of starts(words!.es)) off.push(`${slug}.${key}: ${sentence}`);
+    for (const [slug, keys] of Object.entries(FINDER_SHORT)) for (const [key, words] of Object.entries(keys)) for (const sentence of starts(words!.es ?? "")) off.push(`${slug}.${key} (line): ${sentence}`);
+    // "Lo más parecido a la tarjeta…" opens on an article, not on what somebody does.
+    expect(off.filter((entry) => !/: Lo más /.test(entry))).toEqual([]);
+    // The phrases the review quoted are gone.
+    const spanish = JSON.stringify({ fits: Object.values(FINDER_FITS).map((fit) => Object.values(fit.why).map((words) => words!.es)), FINDER_SHORT, copy: FINDER_COPY.es });
+    expect(spanish).not.toMatch(/mejores peores caras|a la que vuela|que se echa inclinando|Las tuyas entran|Toca para quién/);
+  });
+
   it("never mention Spain, and never shout", () => {
     const all = JSON.stringify({ FINDER_COPY, FINDER_FITS });
     expect(all).not.toMatch(/Spain|España|Madrid|Barcelona|Sevilla|Valencia/i);
     expect(JSON.stringify(FINDER_COPY)).not.toMatch(/[!¡—]/);
+  });
+});
+
+describe("the price under a pick", () => {
+  const CURRENCIES: Currency[] = ["usd", "eur", "gbp"];
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("is the gallery card's and the gift's own page's, for every template in every currency, whichever way the site's switch is set", () => {
+    // The review of 22 Nov 2026: the finder printed the price of one template under every pick that
+    // was not free. Constellations has no free version on the live site (the short note is for
+    // everyone, NEXT_PUBLIC_FREE_NOTE_SHARE=1) and sells at "Make it special": €7.49 on its card
+    // and its page, €9.99 in the finder, on the second pick for a girlfriend at an anniversary.
+    for (const share of ["", "0.5", "1"]) {
+      vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", share);
+      for (const pick of finderPicks("en")) {
+        const manifest = getManifest(pick.slug)!;
+        const where = `${pick.slug} with the note share at “${share}”`;
+        // "Free" exactly when the gallery says so, and otherwise the product the gallery's card prices it as.
+        expect(pick.free, where).toBe(sendsFree(manifest));
+        expect(pick.product, where).toBe(templateProduct(manifest.tier));
+        for (const currency of CURRENCIES) {
+          // What the finder prints (components/templates/gift-finder.tsx): nothing for a free gift, else its own product's price.
+          const shown = pick.free ? 0 : PRODUCTS[pick.product].amounts[currency];
+          // What the gift's own page shows and tells search engines (lib/seo.ts).
+          expect(shown, `${where} in ${currency}`).toBe(templateOfferAmount(manifest, currency));
+        }
+      }
+    }
+  });
+
+  it("is “Make it special” for Constellations once the short note is for everyone, and one template for a premium gift", () => {
+    vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", "1");
+    const live = new Map(finderPicks("en").map((pick) => [pick.slug, pick]));
+    expect(live.get("constellations")).toMatchObject({ free: false, product: "extras" });
+    expect(PRODUCTS[live.get("constellations")!.product].amounts).toEqual({ usd: 899, eur: 749, gbp: 649 });
+    expect(live.get("the-letter")).toMatchObject({ free: true });
+    expect(live.get("xoxo")).toMatchObject({ free: false, product: "single" });
+    expect(PRODUCTS[live.get("xoxo")!.product].amounts).toEqual({ usd: 1199, eur: 999, gbp: 899 });
+    // Exactly one pick is priced apart from the rest on the live site, and it is not hard-coded anywhere.
+    expect([...live.values()].filter((pick) => !pick.free && pick.product === "extras").map((pick) => pick.slug)).toEqual(["constellations"]);
+    vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", "");
+    expect(finderPicks("en").find((pick) => pick.slug === "constellations")).toMatchObject({ free: true });
+  });
+
+  it("is read from one place by every page that prints a template's price", () => {
+    // The cause: each page spelled out "a free template sells as its extras" for itself, and the finder's page did not.
+    const read = (file: string) => fs.readFileSync(path.join(__dirname, "../../src", file), "utf8");
+    const own = /tier === "free" \? "extras" : "single"/;
+    for (const file of [
+      "components/templates/template-card.tsx",
+      "app/[currency]/[locale]/(marketing)/templates/[slug]/page.tsx",
+      "app/[currency]/[locale]/(marketing)/try/[slug]/page.tsx",
+      "lib/seo.ts",
+      "content/finder.ts",
+    ]) {
+      expect(read(file), file).toMatch(/templateProduct\(/);
+      expect(read(file), file).not.toMatch(own);
+    }
+    // The finder's page hands over both prices, and the tool prints the pick's own.
+    expect(read("app/[currency]/[locale]/(marketing)/gifts/finder/page.tsx")).toMatch(/PRODUCTS\.single\.amounts\[currency\][\s\S]*PRODUCTS\.extras\.amounts\[currency\]/);
+    expect(read("components/templates/gift-finder.tsx")).toMatch(/pick\.free \? freeLabel : prices\[pick\.product\]/);
+    expect(templateProduct("free")).toBe("extras");
+    expect(templateProduct("premium")).toBe("single");
   });
 });

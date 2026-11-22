@@ -32,7 +32,7 @@ import { heroKeyword, heroWords } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
 import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
 import { NOTE_TEMPLATES, noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
-import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, chargedCurrency, formatAmount, templateProduct } from "@/lib/pricing/products";
 
 export function generateStaticParams() {
   return TEMPLATE_SLUGS.map((slug) => ({ slug }));
@@ -77,7 +77,7 @@ export default async function TemplateDetailPage({
   // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
   const free = sendsFree(manifest);
   const price = formatAmount(
-    PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency],
+    PRODUCTS[templateProduct(manifest.tier)].amounts[currency],
     currency,
     l,
   );
