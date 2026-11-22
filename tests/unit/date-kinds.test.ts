@@ -5,6 +5,8 @@ import { describe, expect, it } from "vitest";
 import { pathToRegexp } from "next/dist/compiled/path-to-regexp";
 import nextConfig from "../../next.config";
 import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } from "@/content/date-kinds";
+import { ART_IDS } from "@/content/page-art";
+import { DATE_CARDS_ART, DATE_FOOT_ART, DATE_HERO_ART, DATE_PLACEMENTS } from "@/components/dates/page/placements";
 import { CITY_SLUGS, getCity, mentionsSpain } from "@/lib/cities/cities";
 import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS } from "@/lib/dates/date-kinds";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
@@ -160,5 +162,16 @@ describe("the kinds of date", () => {
 
   it("K15 the shared words hold a section's line to fourteen words", () => {
     for (const l of LOCALES) for (const [key, text] of Object.entries(DATE_KIND_UI[l])) if (key.endsWith("Line")) expect(words(text), `${key} ${l}`).toBeLessThanOrEqual(14);
+  });
+
+  it("K16 the flowers of a dates page follow the art's rules", () => {
+    const allowed = ["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until", "top"];
+    for (const piece of DATE_PLACEMENTS) {
+      expect(ART_IDS as readonly string[], piece.art).toContain(piece.art);
+      expect(piece.art).not.toBe("lily-footer");
+      expect(Math.abs(piece.rot), piece.art).toBeLessThanOrEqual(25);
+      for (const key of Object.keys(piece)) expect(allowed, `${piece.art}: ${key}`).toContain(key);
+    }
+    for (const section of [DATE_HERO_ART, DATE_CARDS_ART, DATE_FOOT_ART]) expect(section.filter((p) => p.phone === "only").length).toBeLessThanOrEqual(2);
   });
 });
