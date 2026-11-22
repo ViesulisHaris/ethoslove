@@ -8,7 +8,8 @@ import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { ideaImage } from "@/lib/dates/art";
 import { cityMapHref, cityName, getCity, nearbyCities, type City } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode, placeListNode, toldTraits } from "@/lib/cities/copy";
-import { cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
+import { cityIdeaScore, cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
+import { IDEAS } from "@/lib/dates/ideas";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M, topCityPlaces } from "@/lib/cities/places";
 import { tiqetsSearch } from "@/lib/trips/partners";
@@ -19,6 +20,7 @@ import { CityCta } from "@/components/cities/city-cta";
 import { CityIdeaCard } from "@/components/cities/city-idea-card";
 import { CityLinks } from "@/components/cities/city-links";
 import { CityPlaceList } from "@/components/cities/city-places";
+import { TonightIsland } from "@/components/dates/tonight/tonight-island";
 
 /**
  * Built on the first visit and kept for a week, then rebuilt in the background: the places change
@@ -127,6 +129,18 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="tonight" aria-labelledby="tonight-title" className="scroll-mt-24 border-b border-line bg-paper py-10 lg:py-14">
+        <div className="container-x grid gap-y-4 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20">
+          <div>
+            <p className="text-page-label text-page-body">{td("tonight.label")}</p>
+            <h2 id="tonight-title" className="mt-3 display-md text-page-ink">
+              {td("tonight.inCity", { city: name })}
+            </h2>
+          </div>
+          <TonightIsland place={{ lat: city.lat, lng: city.lng, name }} boost={Object.fromEntries(IDEAS.map((idea) => [idea.id, cityIdeaScore(idea, city)]))} mapHref={mapHref} />
         </div>
       </section>
 
