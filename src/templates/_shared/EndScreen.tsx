@@ -1,13 +1,13 @@
 "use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
-import { Bookmark, Heart, Mic, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
+import { Bookmark, Heart, Loader2, Mic, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { isCatalogPreview } from "@/lib/gift/music";
+import { MAKE_OWN_REF, madeWithEthosHref } from "@/lib/attribution/recipient";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics/track";
-import { MAKE_OWN_REF, madeWithEthosHref } from "@/lib/attribution/recipient";
 import { getManifest } from "../manifests";
 import { useGiftChrome } from "./gift-chrome";
 import { giftString } from "./i18n";
@@ -23,8 +23,9 @@ import { Watermark } from "./Watermark";
  * like every other line here. Only this screen says these, so they live with it rather than in
  * ./i18n. "The first": a gift has one free reply, and a page can't know it's been sent without
  * asking, so the line stays true after it has (a "free" that turns out not to be is a banned claim;
- * once it's used the editor opens at the normal price). "or …" reads on from "Send one back to
- * {sender}" just above it, which is why it starts small.
+ * once it's used the editor opens at the normal price). "or …" is the other thing to do after "Send
+ * one back to {sender}", which is why it starts small; it stands in a row of its own, so on a paid
+ * gift it is not read as the next words of the free line.
  */
 const REPLY_OFFER = {
   en: { free: "The first reply is free", someoneElse: "or make one for someone else", keep: "Keep this gift" },
@@ -69,6 +70,8 @@ export function EndScreen({
   // scroll, where it sits unseen for most of the gift.)
   const chrome = useGiftChrome();
   const replyFree = reply && onMakeOne ? freeReplyLine(locale, data.templateSlug, chrome.watermarked) : null;
+  // "Send one back" was tapped on a real gift page and the editor is loading (gift-experience.tsx).
+  const busy = Boolean(chrome.makeOnePending);
   const onScreen = useRef<HTMLDivElement>(null);
   const tell = chrome.onEndScreen;
   useEffect(() => {
@@ -148,14 +151,17 @@ export function EndScreen({
             <button
               type="button"
               onClick={onMakeOne}
+              // Once tapped it waits for the editor: it says so, and takes no second tap.
+              disabled={busy}
+              aria-busy={busy || undefined}
               className={cn(
-                "flex min-h-12 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center text-[15px] leading-snug font-medium",
+                "flex min-h-12 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center text-[15px] leading-snug font-medium disabled:cursor-default",
                 dark
-                  ? "border-white/20 text-white hover:bg-white/10"
-                  : "border-black/15 text-current hover:bg-black/5",
+                  ? "border-white/20 text-white hover:bg-white/10 disabled:bg-white/10"
+                  : "border-black/15 text-current hover:bg-black/5 disabled:bg-black/5",
               )}
             >
-              <Sparkles className="size-4 shrink-0" />
+              {busy ? <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin motion-reduce:animate-none" /> : <Sparkles className="size-4 shrink-0" />}
               <span className="min-w-0 [overflow-wrap:anywhere]">
                 {reply ? giftString(locale, "sendOneBack", { sender: data.senderName }) : giftString(locale, "makeOne")}
               </span>
@@ -163,32 +169,35 @@ export function EndScreen({
             {replyFree ? (
               <p className={cn("text-xs font-medium", dark ? "text-white/70" : "text-black/60")}>{replyFree}</p>
             ) : null}
-            {/* Not everyone who loved the gift wants to answer its sender. For anyone else in their
-                life: the page made for a recipient (/made-with-ethos), the template they just watched
-                first, in a new tab so the gift stays open. A text link, the weight of "Keep this
-                gift"; its address carries the template and never the gift. On a real gift only (free
-                or paid), and not inside the iPhone app, where the gifts are a tab of their own. */}
-            {reply ? (
-              <a
-                data-app-hide
-                href={madeWithEthosHref(locale, MAKE_OWN_REF, data.templateSlug)}
-                target="_blank"
-                rel="noopener"
-                onClick={() => track("make_own_clicked", { template: data.templateSlug, from: "end" })}
-                // Underlined, lightly: with no icon beside it, that is what says it can be tapped. On a
-                // narrow card it breaks in two even lines rather than leaving "else" on its own.
-                // Its keyboard ring sits on its own box, clear of the button above, and on a dark end
-                // screen it is a light one (the site's ring is a dark plum, which a dark gift swallows).
-                className={cn(
-                  "flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current focus-visible:outline-offset-0 active:opacity-70",
-                  dark ? "text-white/70 hover:text-white focus-visible:outline-white/60" : "text-black/60 hover:text-black",
-                )}
-                data-testid="make-for-someone-else"
-              >
-                {(REPLY_OFFER[locale] ?? REPLY_OFFER.en).someoneElse}
-              </a>
-            ) : null}
           </div>
+        ) : null}
+        {/* Not everyone who loved the gift wants to answer its sender. For anyone else in their life:
+            the page made for a recipient (/made-with-ethos), the template they just watched first, in
+            a new tab so the gift stays open. A text link, the weight of "Keep this gift", in a row of
+            its own: the free line above belongs to the button, not to this. Its address carries the
+            template and never the gift, and the page it opens is told only the site's name as where
+            the tap came from, never the gift's address (next.config.ts: Referrer-Policy on /g/).
+            On a real gift only (free or paid), and not inside the iPhone app, where the gifts are a
+            tab of their own. */}
+        {reply && onMakeOne ? (
+          <a
+            data-app-hide
+            href={madeWithEthosHref(locale, MAKE_OWN_REF, data.templateSlug)}
+            target="_blank"
+            rel="noopener"
+            onClick={() => track("make_own_clicked", { template: data.templateSlug, from: "end" })}
+            // Underlined, lightly: with no icon beside it, that is what says it can be tapped. On a
+            // narrow card it breaks in two even lines rather than leaving "else" on its own.
+            // Its keyboard ring sits on its own box, clear of the button above, and on a dark end
+            // screen it is a light one (the site's ring is a dark plum, which a dark gift swallows).
+            className={cn(
+              "flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current focus-visible:outline-offset-0 active:opacity-70",
+              dark ? "text-white/70 hover:text-white focus-visible:outline-white/60" : "text-black/60 hover:text-black",
+            )}
+            data-testid="make-for-someone-else"
+          >
+            {(REPLY_OFFER[locale] ?? REPLY_OFFER.en).someoneElse}
+          </a>
         ) : null}
         {/* Their reason to make one comes later (the sender's birthday, the anniversary): the gift's own
             link by email, to open again, and a nudge before the day if they want one. On a page off

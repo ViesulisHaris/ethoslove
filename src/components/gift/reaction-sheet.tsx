@@ -42,7 +42,8 @@ const S = {
 /**
  * `onSendOneBack`: once the reaction has gone, the confirmation offers the one next step there is,
  * the end screen's own "Send one back to {sender}" (the same words, the same handler, handed down
- * by the gift page). Nothing else is added there: no price, no second link.
+ * by the gift page). Nothing else is added there: no price, no second link. `sendingBack`: it has
+ * been tapped and the editor is loading, so the button shows it and takes no second tap.
  */
 export function ReactionSheet({
   open,
@@ -51,6 +52,7 @@ export function ReactionSheet({
   senderName,
   locale,
   onSendOneBack,
+  sendingBack = false,
 }: {
   open: boolean;
   onClose: () => void;
@@ -58,6 +60,7 @@ export function ReactionSheet({
   senderName: string;
   locale: GiftLocale;
   onSendOneBack?: () => void;
+  sendingBack?: boolean;
 }) {
   const t = S[locale] ?? S.en;
   const [emoji, setEmoji] = useState<(typeof EMOJI)[number]>("❤️");
@@ -100,7 +103,7 @@ export function ReactionSheet({
               <X className="size-4" />
             </button>
             {state === "sent" ? (
-              <ReactionSent key={burst} emoji={emoji} senderName={senderName} locale={locale} onSendOneBack={onSendOneBack} />
+              <ReactionSent key={burst} emoji={emoji} senderName={senderName} locale={locale} onSendOneBack={onSendOneBack} busy={sendingBack} />
             ) : (
               <>
                 <p className="pr-10 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{t.title.replace("{sender}", senderName)}</p>
@@ -140,9 +143,10 @@ export function ReactionSheet({
 /**
  * What the sheet says once the reaction has gone: that it went, and to whom. Under it, the one
  * next step: the end screen's outline button, on the sheet's dark, so the same action looks the
- * same in both places.
+ * same in both places. Once tapped (`busy`) it waits for the editor, as the sheet's own Send waits
+ * for the reaction: a turning mark, and no second tap.
  */
-export function ReactionSent({ emoji, senderName, locale, onSendOneBack }: { emoji: string; senderName: string; locale: GiftLocale; onSendOneBack?: () => void }) {
+export function ReactionSent({ emoji, senderName, locale, onSendOneBack, busy = false }: { emoji: string; senderName: string; locale: GiftLocale; onSendOneBack?: () => void; busy?: boolean }) {
   const t = S[locale] ?? S.en;
   return (
     <div className="flex flex-col items-center py-6 text-center">
@@ -154,11 +158,13 @@ export function ReactionSent({ emoji, senderName, locale, onSendOneBack }: { emo
         <button
           type="button"
           onClick={onSendOneBack}
+          disabled={busy}
+          aria-busy={busy || undefined}
           // The sheet is dark, so its keyboard ring is a light one (the site's own would not show).
-          className="relative mt-7 flex min-h-12 w-full max-w-xs items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-center text-[15px] leading-snug font-medium text-white hover:bg-white/10 focus-visible:outline-white/60 active:bg-white/15"
+          className="relative mt-7 flex min-h-12 w-full max-w-xs items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-center text-[15px] leading-snug font-medium text-white hover:bg-white/10 focus-visible:outline-white/60 active:bg-white/15 disabled:cursor-default disabled:bg-white/10"
           data-testid="reaction-reply"
         >
-          <Sparkles aria-hidden="true" className="size-4 shrink-0" />
+          {busy ? <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin motion-reduce:animate-none" /> : <Sparkles aria-hidden="true" className="size-4 shrink-0" />}
           <span className="min-w-0 [overflow-wrap:anywhere]">{giftString(locale, "sendOneBack", { sender: senderName })}</span>
         </button>
       ) : null}

@@ -15,6 +15,8 @@ export type GiftChrome = {
   onEndScreen?: (onScreen: boolean) => void;
   /** The gift's keep page (/g/<id>/keep): only on a real gift page, never in a demo or the editor. */
   keepHref?: string;
+  /** On a real gift page: "Send one back" has been tapped and the editor is loading, so the button shows it and takes no second tap. */
+  makeOnePending?: boolean;
 };
 
 export const GiftChromeContext = createContext<GiftChrome>({ watermarked: false });

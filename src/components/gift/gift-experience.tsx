@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import type { TemplateEvent } from "@/templates/types";
@@ -59,6 +59,10 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
   const viewed = useRef(false);
   const lastPct = useRef(0);
   const lastReportAt = useRef(0);
+  // "Send one back" has been tapped and the editor is on its way: the button says so and takes no
+  // second tap. `leaving` ends by itself when the editor is up, or if it never comes.
+  const [leaving, startLeaving] = useTransition();
+  const lastReplyTap = useRef(0);
 
   // Once per browser per day; a replay shows the cover again but is not a new view.
   const recordView = useCallback(() => {
@@ -110,15 +114,21 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
   // {sender}." once a reaction has gone). The count says which, so the two can be told apart.
   const sendOneBack = useCallback(
     (from: "end" | "reaction") => {
+      // One tap, one reply: a second tap while the editor loads (it takes a moment on a slow phone)
+      // would count a second reply and open the editor twice. The clock catches the tap that lands
+      // before the button has been redrawn as busy.
+      const now = performance.now();
+      if (leaving || now - lastReplyTap.current < 1000) return;
+      lastReplyTap.current = now;
       // The easiest gift to make is a reply: the same template, the names already swapped, and
       // whatever else the template carries across (Halfway flips the two places).
       saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
       track("reply_started", { template: data.templateSlug, from });
       // A paid premium gift's reply is free: the link carries the sealed token that proves it,
       // never this gift's id.
-      router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
+      startLeaving(() => router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken)));
     },
-    [data, replyToken, router],
+    [data, replyToken, router, leaving],
   );
 
   return (
@@ -135,13 +145,14 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
           onEvent={onEvent}
           onReact={data.showReactionCta ? () => setReactOpen(true) : undefined}
           onMakeOne={() => sendOneBack("end")}
+          makeOnePending={leaving}
           replyMode
           keepHref={`/g/${shortId}/keep`}
           onCoverOpened={hasCover ? recordView : undefined}
         />
       ) : null}
       {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} /> : null}
-      <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} onSendOneBack={() => sendOneBack("reaction")} />
+      <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} onSendOneBack={() => sendOneBack("reaction")} sendingBack={leaving} />
       {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} /> : null}
     </div>
     </div>

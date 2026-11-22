@@ -15,7 +15,9 @@ import { GIFT_CONTROLS, coversControl } from "./watermark-spot";
  * It opens a page made for whoever taps it (/made-with-ethos): they have just been given one and are
  * curious, not ready to pay, so it starts with making one back for free, the gift's own template
  * first among its kind, and never goes straight to a checkout. Gifts carry no app context, so the
- * language prefix is the gift's own, the same as its "send one back".
+ * language prefix is the gift's own, the same as its "send one back". Its address carries the
+ * template and never the gift, and the page it opens is told only the site's name as where the tap
+ * came from (next.config.ts: a gift page sends no more than its origin as a referrer).
  *
  * It floats at the foot of the gift, except on the end screen, which carries it in its own flow
  * (`inline`) so it never lands on top of the buttons there. Floating, it never lands on any other
@@ -67,7 +69,8 @@ export function Watermark({
           <LogoMark className="size-3.5" />
           {BRAND.watermark[locale]}
         </span>
-        <span className={cn("text-[10px] leading-none tracking-[0.04em] whitespace-nowrap", tone === "dark" ? "text-white/55" : "text-black/50")}>
+        {/* Small type, so black at 60% on a light end screen: about 5:1 on paper or white (50% was under the 4.5:1 small text needs). */}
+        <span className={cn("text-[10px] leading-none tracking-[0.04em] whitespace-nowrap", tone === "dark" ? "text-white/55" : "text-black/60")}>
           {BRAND.categoryLine[locale]}
         </span>
       </a>
