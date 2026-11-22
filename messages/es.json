@@ -913,8 +913,6 @@
       "step3Body": "Publícalo y envía el enlace por donde quieras, o imprime su código QR y mételo en una tarjeta de papel. Se abre en cualquier móvil u ordenador, sin instalar nada.",
       "ideasLabel": "Qué escribir",
       "ideasLine": "{count} ideas, cada una con una frase para copiar.",
-      "ideasShow": "Ver más ejemplos",
-      "ideasHide": "Ocultar los ejemplos",
       "experienceLabel": "La experiencia",
       "experienceHeading": "Más que un mensaje",
       "experienceBody": "Sin app ni cuenta: tu enlace abre {name} en su navegador.",

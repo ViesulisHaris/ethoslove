@@ -913,8 +913,6 @@
       "step3Body": "Publish it and send the link anywhere a link goes, or print its QR code and tuck it in a real card. It opens on any phone or laptop, with nothing to install.",
       "ideasLabel": "What to write",
       "ideasLine": "{count} ideas, each with a line to borrow.",
-      "ideasShow": "See more examples",
-      "ideasHide": "Hide the examples",
       "experienceLabel": "The experience",
       "experienceHeading": "More than a message",
       "experienceBody": "No app, no account: your link opens {name} in their browser.",

@@ -31,6 +31,20 @@ describe("the text budget of a gift's page", () => {
     expect(over).toEqual([]);
   });
 
+  it("a card shows its line to borrow: sixteen words at most, and fifty between a gift's six", () => {
+    // Each card of "What to write" shows the line with nothing to press (the owner, 22 Nov 2026), so the
+    // lines are on the page for everyone: a line is a line, and six of them are never a paragraph.
+    const over: string[] = [];
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
+      for (const l of LOCALES) {
+        const items = guide[l].ideas.items;
+        for (const idea of items) if (words(idea.borrow.line) > 16) over.push(`${slug} ${l} line (${words(idea.borrow.line)}): ${idea.borrow.line}`);
+        const all = items.reduce((n, idea) => n + words(idea.borrow.line), 0);
+        if (all > 50) over.push(`${slug} ${l}: ${all} words of handwriting on its cards`);
+      }
+    expect(over).toEqual([]);
+  });
+
   it("a section's left column has one line of at most fourteen words", () => {
     const over: string[] = [];
     for (const [l, messages] of [["en", en], ["es", es]] as const) {

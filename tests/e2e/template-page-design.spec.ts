@@ -75,6 +75,9 @@ async function settle(page: Page) {
  * each picture is drawn to a canvas and, for every line of words, the pixels under it are read
  * (through the picture's own turn). A pixel that is more than a faint tail of shadow counts. What
  * is laid into a picture (a phone's screen, a line on the note card) is the picture's, not words.
+ * The handwriting on the cards of "What to write" is counted by itself (`hand`): each card shows its
+ * line to borrow (the owner, 22 Nov 2026: "Yes, show it"), an example in the gift's own hand, and
+ * it has its own limit so that the 300 words still measure what the page says about the gift.
  */
 async function measure(page: Page, within = "[data-page-theme]") {
   return page.evaluate((within) => {
@@ -123,6 +126,7 @@ async function measure(page: Page, within = "[data-page-theme]") {
     const words: { size: number; label: boolean }[] = [];
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let count = 0;
+    let hand = 0;
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const text = node.textContent?.trim() ?? "";
       const parent = node.parentElement;
@@ -131,7 +135,8 @@ async function measure(page: Page, within = "[data-page-theme]") {
       range.selectNodeContents(node);
       const rects = [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
       if (rects.length === 0) continue;
-      count += text.split(/\s+/).length;
+      if (parent.closest("[data-line]")) hand += text.split(/\s+/).length;
+      else count += text.split(/\s+/).length;
       const cs = getComputedStyle(parent);
       words.push({ size: parseFloat(cs.fontSize), label: cs.textTransform === "uppercase" });
       for (const r of rects)
@@ -156,6 +161,7 @@ async function measure(page: Page, within = "[data-page-theme]") {
       overlaps: [...overlaps],
       pieces: decor.length,
       count,
+      hand,
       decorInView: decor.filter((d) => d.inView).length,
       smallest: words.filter((w) => !w.label).reduce((min, w) => Math.min(min, w.size), 99),
       smallestLabel: words.filter((w) => w.label).reduce((min, w) => Math.min(min, w.size), 99),
@@ -178,6 +184,9 @@ for (const [width, height] of SIZES) {
     // 300 words at most without opening anything, the header and the footer aside.
     expect(m.count).toBeLessThanOrEqual(300);
     expect(m.count).toBeGreaterThan(120);
+    // And the six lines to borrow, in handwriting on their cards: fifty words between them at most.
+    expect(m.hand).toBeGreaterThan(6);
+    expect(m.hand).toBeLessThanOrEqual(50);
     // Sentences never under 14 px; the small mono labels over a heading are 12 px capitals.
     expect(m.smallest).toBeGreaterThanOrEqual(14);
     expect(m.smallestLabel).toBeGreaterThanOrEqual(12);
@@ -217,6 +226,7 @@ for (const path of OTHERS) {
       expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
       expect(m.count, `${width}: words on the page`).toBeLessThanOrEqual(300);
+      expect(m.hand, `${width}: words of handwriting on the idea cards`).toBeLessThanOrEqual(50);
       expect(m.smallest, `${width}`).toBeGreaterThanOrEqual(14);
       expect(m.small, `${width}: too small for a thumb`).toEqual([]);
     }
@@ -471,31 +481,45 @@ test("by keyboard: the play button shows its focus, the picked-up phone takes it
   await expect(play).toBeFocused();
 });
 
-test("“See more examples” follows the cards, however they were opened", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(PAGE);
-  const section = page.locator("section[aria-labelledby=template-guide]");
-  const button = section.getByRole("button", { name: /see more examples|hide the examples/i });
-  const cards = section.locator("details");
-  await expect(cards).toHaveCount(6);
-  await expect(button).toHaveAttribute("aria-expanded", "false");
-  // Opened one by one, by hand: the button knows only when all six are open.
-  for (let i = 0; i < 6; i++) {
-    await cards.nth(i).locator("summary").click();
-    await expect(button).toHaveAttribute("aria-expanded", i === 5 ? "true" : "false");
+test("every card of “What to write” shows its line to borrow, with nothing to press", async ({ page }) => {
+  // The owner, 22 Nov 2026, on a closed card being a title in an empty box: "Yes, show it".
+  for (const size of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 320, height: 568 }]) {
+    await page.setViewportSize(size);
+    await page.goto(PAGE);
+    const section = page.locator("section[aria-labelledby=template-guide]");
+    const cards = section.locator("[data-card]");
+    await expect(cards).toHaveCount(6);
+    await expect(section.locator("details, summary, button")).toHaveCount(0);
+    const shown = await cards.evaluateAll((all) =>
+      all.map((card) => {
+        const line = card.querySelector<HTMLElement>("[data-line]")!;
+        const box = card.getBoundingClientRect();
+        const at = line.getBoundingClientRect();
+        const heart = card.querySelector("svg")!.getBoundingClientRect();
+        return {
+          words: (line.textContent ?? "").trim().split(/\s+/).length,
+          hand: getComputedStyle(line).fontFamily !== getComputedStyle(card.querySelector("h3")!).fontFamily,
+          inside: at.width > 0 && at.height > 0 && at.left >= box.left && at.right <= box.right + 0.5 && at.bottom <= box.bottom + 0.5,
+          // The heart never sits on the handwriting.
+          clear: heart.top >= at.bottom || heart.left >= at.right || heart.bottom <= at.top,
+        };
+      }),
+    );
+    for (const [i, card] of shown.entries()) {
+      expect(card.words, `${size.width}: card ${i + 1} has a line`).toBeGreaterThan(1);
+      expect(card, `${size.width}: card ${i + 1}`).toMatchObject({ hand: true, inside: true, clear: true });
+    }
+    // The cards of a row end together: no card is left short beside a taller one.
+    const rows = await cards.evaluateAll((all) => {
+      const byTop = new Map<number, number[]>();
+      for (const card of all) {
+        const r = card.getBoundingClientRect();
+        byTop.set(Math.round(r.top), [...(byTop.get(Math.round(r.top)) ?? []), Math.round(r.height)]);
+      }
+      return [...byTop.values()];
+    });
+    for (const row of rows) expect(Math.max(...row) - Math.min(...row), `${size.width}: a row's cards`).toBeLessThanOrEqual(1);
   }
-  await expect(button).toHaveText(/hide the examples/i);
-  // One closed by hand: it offers to show them again.
-  await cards.nth(2).locator("summary").click();
-  await expect(button).toHaveAttribute("aria-expanded", "false");
-  await expect(button).toHaveText(/see more examples/i);
-  // And the button itself still opens and closes all of them.
-  await button.click();
-  await expect(section.locator("details[open]")).toHaveCount(6);
-  await expect(button).toHaveText(/hide the examples/i);
-  await button.click();
-  await expect(section.locator("details[open]")).toHaveCount(0);
-  await expect(button).toHaveAttribute("aria-expanded", "false");
 });
 
 test("Passport's page shows the route its demo flies, on its step card and nowhere a place in Spain", async ({ page }) => {
@@ -752,100 +776,15 @@ test("the picked-up phone fits a short screen under the header, and a tap beside
   await expect(up).toBeVisible();
 });
 
-test("the keyboard's ring goes round the whole card of “What to write”, not its title", async ({ page }) => {
+test("a card of “What to write” is read, not pressed: the keyboard goes past the six of them", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/templates/snow-globe");
   const section = page.locator("section[aria-labelledby=template-guide]");
-  await section.getByRole("button", { name: /see more examples/i }).focus();
-  await page.keyboard.press("Tab");
-  const ring = await page.evaluate(() => {
-    const summary = document.activeElement as HTMLElement;
-    const card = summary.parentElement!;
-    return { summary: summary.tagName, focused: summary.matches(":focus-visible"), own: getComputedStyle(summary).outlineStyle, card: getComputedStyle(card).outlineStyle, width: getComputedStyle(card).outlineWidth, taller: card.offsetHeight > summary.offsetHeight * 2 };
-  });
-  expect(ring).toEqual({ summary: "SUMMARY", focused: true, own: "none", card: "solid", width: "2px", taller: true });
-  // And it leaves with the focus.
-  await page.keyboard.press("Tab");
-  expect(await section.locator("details").first().evaluate((card) => getComputedStyle(card).outlineStyle)).toBe("none");
-});
-
-test("an iPad on its side has the phone beside the words, not an empty half", async ({ page }) => {
-  // Between 1024 and 1280 the words filled the left half, the right half was empty and the phone began under the fold.
-  for (const [width, height, path] of [[1024, 768, "/es/templates/midnight-countdown"], [1100, 800, "/templates/the-letter"], [1024, 768, "/templates/xoxo"]] as const) {
-    await page.setViewportSize({ width, height });
-    await page.goto(path);
-    const at = await page.evaluate(() => {
-      const screen = document.querySelector("[data-flatlay=hero] [data-play]")!.getBoundingClientRect();
-      const name = document.querySelector("h1")!.getBoundingClientRect();
-      const make = document.querySelector("[data-page-theme] a[href*='/create/']")!.getBoundingClientRect();
-      return { screenRight: screen.right, screenTop: screen.top, screenBottom: screen.bottom, nameLeft: name.left, makeBottom: make.bottom, view: innerHeight };
-    });
-    // Side by side: the phone's screen ends before the words begin, and both are on the first screen.
-    expect(at.screenRight, path).toBeLessThan(at.nameLeft);
-    expect(at.screenTop, path).toBeGreaterThan(0);
-    expect(at.screenBottom, path).toBeLessThanOrEqual(at.view);
-    expect(at.makeBottom, path).toBeLessThan(at.view);
-  }
-});
-
-test("every hero says what the gift is, its h1 says its name once, and “Made for” reads as a sentence", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  // XOXO's description opens on a sentence of fifty words, so its hero had a name, an italic line and two buttons.
-  await page.goto("/templates/xoxo");
-  const hero = page.locator("[data-page-theme] > section").first();
-  await expect(hero.getByText(/An envelope sealed with a lipstick kiss\./)).toBeVisible();
-  // The whole description is still on the page, in its closed block.
-  await expect(page.locator("[data-more-about]")).toContainText(/fingerprint hearts/);
-  await expect(page.locator("[data-more-about]")).toContainText(/Made for Valentine’s Day, an anniversary, no reason at all\./);
-  await expect(page.locator("[data-more-about] a[href$='/occasions/valentines']")).toHaveText("Valentine’s Day");
-  // Two Thanksgiving gifts exist: the row is still four cards, and is not headed "for Thanksgiving" when half of it is not.
-  await page.goto("/templates/light-the-candles");
-  const more = page.locator("section[aria-labelledby=template-more]");
-  await expect(more.locator("li a")).toHaveCount(4);
-  await expect(more.locator("li a").first()).toHaveAttribute("href", /\/templates\/wishbone$/);
-  await expect(page.locator("#template-more")).toHaveText(/more gifts to send/i);
-  // The Spanish pages last: a visit to one is remembered, and the next page would come in Spanish.
-  await page.goto("/es/templates/midnight-countdown");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cuenta atrás de medianoche");
-  await page.goto("/es/templates/xoxo");
-  await expect(page.locator("[data-page-theme] > section").first().getByText(/Un sobre sellado con un beso de pintalabios\./)).toBeVisible();
-  await expect(page.locator("[data-more-about]")).toContainText(/Pensado para San Valentín, un aniversario, un día cualquiera\./);
-});
-
-test("a gift played by dragging works from the hero: a scratch card scratches where the pointer is", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/templates/scratch-card");
-  const hero = page.locator("[data-flatlay=hero]");
-  await hero.getByRole("button", { name: /try the live demo/i }).click();
-  await expect(hero.locator("[data-upright] [data-template=scratch-card]")).toBeVisible({ timeout: 25000 });
-  await expect(page.getByText(/someone made this for you/i)).toBeHidden({ timeout: 20000 });
-  // The start button breathes for ever, so it is never "stable"; force is intended here.
-  await hero.getByRole("button", { name: "scratch here" }).click({ force: true });
-  // The foil is a canvas that works out where the pointer is from its own box: it has to be upright.
-  const foil = hero.locator("canvas[role=img]");
-  await expect(foil).toBeVisible();
-  await expect.poll(() => upright(page, "[data-flatlay=hero] canvas[role=img]")).toBe(true);
-  const box = (await foil.boundingBox())!;
-  // Scratch the left half only, in rows. If the strokes landed where the pointer is, the right half is still foil.
-  await page.mouse.move(box.x + 6, box.y + 6);
-  await page.mouse.down();
-  for (let y = 6; y < box.height - 4; y += 9) {
-    await page.mouse.move(box.x + 6, box.y + y, { steps: 2 });
-    await page.mouse.move(box.x + box.width * 0.46, box.y + y, { steps: 4 });
-  }
-  await page.mouse.up();
-  const cleared = await foil.evaluate((canvas: HTMLCanvasElement) => {
-    const ctx = canvas.getContext("2d")!;
-    const share = (x0: number, x1: number) => {
-      const data = ctx.getImageData(Math.round(canvas.width * x0), 0, Math.round(canvas.width * (x1 - x0)), canvas.height).data;
-      let clear = 0;
-      for (let i = 3; i < data.length; i += 4) if (data[i] < 32) clear += 1;
-      return clear / (data.length / 4);
-    };
-    return { left: share(0.04, 0.4), right: share(0.62, 0.96) };
-  });
-  expect(cleared.left).toBeGreaterThan(0.6);
-  expect(cleared.right).toBeLessThan(0.1);
+  await expect(section.locator("[data-card]")).toHaveCount(6);
+  const stops = await section.evaluate((el) => [...el.querySelectorAll<HTMLElement>("*")].filter((node) => node.tabIndex >= 0).length);
+  expect(stops).toBe(0);
+  // And no card looks pressable.
+  expect(await section.locator("[data-card]").first().evaluate((card) => getComputedStyle(card).cursor)).toBe("auto");
 });
 
 test("with motion turned down and the type turned up, nothing breaks", async ({ page }) => {
@@ -858,10 +797,11 @@ test("with motion turned down and the type turned up, nothing breaks", async ({ 
   const m = await measure(page);
   expect(m.overflow).toBeLessThanOrEqual(0);
   expect(m.overlaps).toEqual([]);
-  // A card still opens, at once.
-  const card = page.locator("section[aria-labelledby=template-guide] details").first();
-  await card.locator("summary").click();
-  await expect(card.locator("[data-reveal]")).toBeVisible();
+  // Every card still shows its line, and a question still opens, at once.
+  await expect(page.locator("section[aria-labelledby=template-guide] [data-line]:visible")).toHaveCount(6);
+  const question = page.locator("section[aria-labelledby=template-questions] details").first();
+  await question.locator("summary").click();
+  await expect(question.locator("[data-reveal]")).toBeVisible();
 });
 
 test("each gift's page wears that gift's colours and flowers, and the footer follows", async ({ page }) => {

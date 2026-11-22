@@ -36,25 +36,15 @@ for (const p of PAGES) {
 
     const guide = page.locator("section[aria-labelledby=template-guide]");
     await expect(guide.getByRole("heading", { level: 2, name: p.title })).toBeVisible();
-    // Every idea is a card; its line to borrow is in the document, and shows when the card is opened.
+    // Every idea is a card, and its line to borrow shows on it with nothing to press (the owner, 22 Nov 2026).
     const cards = guide.locator(`#ideas-${p.slug} > li`);
     await expect(cards).toHaveCount(p.ideas);
     const card = cards.filter({ hasText: p.heading });
     await expect(card).toHaveCount(1);
-    await expect(card).toContainText(p.line);
-    const line = card.getByText(p.line, { exact: true });
-    await expect(line).toBeHidden();
-    await card.locator("summary").click();
-    await expect(line).toBeVisible();
-    await card.locator("summary").click();
-    await expect(line).toBeHidden();
-    // "See more examples" opens them all, and closes them again.
-    const all = guide.getByRole("button", { expanded: false });
-    await all.click();
-    await expect(guide.locator("details[open]")).toHaveCount(p.ideas);
-    await expect(line).toBeVisible();
-    await guide.getByRole("button", { expanded: true }).click();
-    await expect(guide.locator("details[open]")).toHaveCount(0);
+    await expect(card.getByText(p.line, { exact: true })).toBeVisible();
+    await expect(guide.locator("[data-line]:visible")).toHaveCount(p.ideas);
+    // Nothing in the section opens or closes: no card is a button, and no button stands over them.
+    await expect(guide.locator("details, summary, button")).toHaveCount(0);
 
     const questions = page.locator("section[aria-labelledby=template-questions]");
     // Its own question opens on a tap, and the answer is in the document either way, for a search engine.

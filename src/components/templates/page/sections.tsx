@@ -14,7 +14,6 @@ import { listManifests } from "@/templates/manifests";
 import type { FieldMeta, TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
-import { IdeasToggle } from "./ideas-toggle";
 import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
 import { stepQuote, type QuoteSource } from "./quote";
 import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
@@ -219,23 +218,18 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
     <section className="relative" aria-labelledby="template-guide">
       <ArtLayer items={WRITE_ART} flowers={flowers} />
       <div className={cn(SPREAD, "pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-32")}>
-        <Intro id="template-guide" label={t("templates.guide.ideasLabel")} heading={guide.ideas.title} line={t("templates.guide.ideasLine", { count: guide.ideas.items.length })}>
-          <IdeasToggle target={gridId} show={t("templates.guide.ideasShow")} hide={t("templates.guide.ideasHide")} className="mt-6" />
-        </Intro>
+        <Intro id="template-guide" label={t("templates.guide.ideasLabel")} heading={guide.ideas.title} line={t("templates.guide.ideasLine", { count: guide.ideas.items.length })} />
         <ul id={gridId} className="grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {guide.ideas.items.map((idea) => (
-            <li key={idea.heading}>
-              <details data-card className="group relative h-full rounded-[1.25rem] border border-page-line bg-page-raised/55 transition-colors duration-200 open:bg-page-raised hover:bg-page-raised sm:min-h-[10.25rem]">
-                {/* The whole card is the button: the summary's ::after covers it, and the keyboard's ring is drawn round the card (globals.css). The heart fills when its line is showing. */}
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-[1.25rem] px-5 py-4 after:absolute after:inset-0 after:rounded-[1.25rem] sm:block sm:px-6 sm:pt-6 sm:pb-0 [&::-webkit-details-marker]:hidden">
-                  <h3 className="font-display text-[1.0625rem] leading-snug text-page-ink">{idea.heading}</h3>
-                  <Heart aria-hidden="true" className="size-4 shrink-0 text-page-accent transition-[fill] duration-200 group-open:fill-current sm:absolute sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2" strokeWidth={1.6} />
-                </summary>
-                <div data-reveal className="relative px-5 pt-1 pb-5 sm:px-6 sm:pt-3 sm:pb-12">
-                  <p className="text-page-label text-page-body">{fieldName(idea.borrow.field)}</p>
-                  <p className="mt-1.5 font-hand text-[1.45rem] leading-[1.15] text-page-ink">{idea.borrow.line}</p>
-                </div>
-              </details>
+            // A card says its idea and shows the line to borrow, in handwriting, with nothing to press: a closed
+            // card was a title in an empty box, and the line is the reason the card is there (the owner, 22 Nov 2026).
+            <li key={idea.heading} data-card className="relative rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-4 pb-5 sm:min-h-[10.25rem] sm:px-6 sm:pt-6 sm:pb-12">
+              <div className="flex items-center justify-between gap-4 sm:block">
+                <h3 className="font-display text-[1.0625rem] leading-snug text-page-ink">{idea.heading}</h3>
+                <Heart aria-hidden="true" className="size-4 shrink-0 fill-current text-page-accent sm:absolute sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2" strokeWidth={1.6} />
+              </div>
+              <p className="mt-3 text-page-label text-page-body">{fieldName(idea.borrow.field)}</p>
+              <p data-line className="mt-1.5 font-hand text-[1.45rem] leading-[1.15] text-page-ink">{idea.borrow.line}</p>
             </li>
           ))}
         </ul>
