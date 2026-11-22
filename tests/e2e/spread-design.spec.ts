@@ -150,6 +150,22 @@ for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversa
   }
 }
 
+test("on the smallest phone the hero's button is on the first screen, in both languages", async ({ page }) => {
+  // 320×568: the tags, the heading (four rows at its longest), the italic line, the sentence, and still the button.
+  await page.setViewportSize({ width: 320, height: 568 });
+  for (const prefix of ["", "/es"])
+    for (const path of HERO_PAGES) {
+      await page.goto(`${prefix}${path}`);
+      const button = page.locator("[data-page-theme] > div > section").first().locator("a").first();
+      const box = (await button.boundingBox())!;
+      expect(box.y + box.height, `${prefix}${path}: the button ends at ${Math.round(box.y + box.height)}`).toBeLessThanOrEqual(568);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+      // The tags over the heading are the gift page's small capitals.
+      const tag = page.locator("[data-page-theme] h1").first().locator("xpath=preceding-sibling::div/span").first();
+      if ((await tag.count()) > 0) expect(await tag.evaluate((el) => `${getComputedStyle(el).textTransform} ${getComputedStyle(el).fontSize}`)).toBe("uppercase 12px");
+    }
+});
+
 test("on a phone a swipe brings the next card, and the dots follow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/gifts/last-minute");

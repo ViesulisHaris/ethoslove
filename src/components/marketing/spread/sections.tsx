@@ -46,7 +46,8 @@ export function SitePage({ name, under = true, children }: { name: string; under
 
 /** A small tag over the hero's heading, as a gift's page has for its price and styles. */
 export function HeroTag({ strong = false, children }: { strong?: boolean; children: ReactNode }) {
-  return <span className={cn("rounded-[5px] border px-2 py-1 text-page-label", strong ? "border-page-ink/70 text-page-ink" : "border-page-line text-page-body")}>{children}</span>;
+  // Written out, not merged: tailwind-merge takes `text-page-label` (the label's type) for a colour and drops it beside one.
+  return <span className={strong ? "rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink" : "rounded-[5px] border border-page-line px-2 py-1 text-page-label text-page-body"}>{children}</span>;
 }
 
 /**
@@ -85,15 +86,16 @@ export function SiteHero({
       <ArtLayer items={HERO_ART} flowers={SITE_FLOWERS} />
       <div className={HERO_GRID}>
         <div className="lg:max-w-[33rem]">
-          {tags ? <div className="mb-7 flex flex-wrap items-center gap-2">{tags}</div> : null}
+          {/* On a phone the gaps are a step tighter, so the longest heading (the Spanish anniversary page's, four rows) still leaves the button on a 320×568 screen. */}
+          {tags ? <div className="mb-5 flex flex-wrap items-center gap-2 sm:mb-7">{tags}</div> : null}
           <h1>
             {label ? <span className="mb-3 block text-page-label text-page-body">{label}</span> : null}
             {/* A heading here is a phrase, not a gift's two-word name, so it is set a size down from a gift page's. */}
-            <span className="block max-w-[14em] font-display text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink">{heading}</span>
+            <span className="block max-w-[14em] font-display text-[2rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.25rem,4.5vw,3.75rem)]">{heading}</span>
           </h1>
-          <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{line}</p>
-          <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{sentence}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">{children}</div>
+          <p className="mt-3 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4">{line}</p>
+          <p className="mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6">{sentence}</p>
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">{children}</div>
           {note ? <p className="mt-4 max-w-[31rem] text-sm leading-relaxed text-page-body">{note}</p> : null}
         </div>
         <div className={HERO_PHONE_BOX}>
@@ -162,7 +164,8 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
         data-cards
         className={cn(
           "-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0",
-          columns === 5 ? "md:grid-cols-3 lg:grid-cols-5" : "lg:grid-cols-3",
+          // Five across only where a card is wide enough to be opened and read: from 1280px.
+          columns === 5 ? "md:grid-cols-3 xl:grid-cols-5" : "lg:grid-cols-3",
         )}
       >
         {cards.map((card) => {
