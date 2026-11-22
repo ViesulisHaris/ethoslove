@@ -21,6 +21,50 @@ describe("cleaning a line", () => {
     expect(cleanText("⁦a⁩⁧b⁨")).toBe("ab");
   });
 
+  // The joiners are invisible and are also spelling: taken out, a family is three faces and a Persian word is another word.
+  const J = "‍";
+  const N = "‌";
+  const points = (text: string) => [...text].map((point) => point.codePointAt(0)!.toString(16)).join(" ");
+
+  it("keeps the joiner that holds an emoji together: a family, a heart on fire, a flag, a shrug, a cook with a skin tone", () => {
+    for (const emoji of [
+      `\u{1f468}${J}\u{1f469}${J}\u{1f467}`,
+      `❤️${J}\u{1f525}`,
+      `\u{1f3f3}️${J}\u{1f308}`,
+      `\u{1f937}${J}♀️`,
+      `\u{1f469}\u{1f3fd}${J}\u{1f373}`,
+      `\u{1f469}${J}❤️${J}\u{1f468}`,
+    ]) {
+      expect(points(cleanText(emoji)), points(emoji)).toBe(points(emoji));
+      expect(points(cleanText(`Happy birthday ${emoji} from us`))).toBe(points(`Happy birthday ${emoji} from us`));
+    }
+  });
+
+  it("keeps the joiners that spell a Persian or a Hindi word", () => {
+    const persian = `می${N}خواهم`;
+    const hindi = `क्${J}ष`;
+    expect(points(cleanText(persian))).toBe("645 6cc 200c 62e 648 627 647 645");
+    expect(points(cleanText(hindi))).toBe("915 94d 200d 937");
+    // A whole note, counted as the page's own counter counts it.
+    const note = `${persian} تولدت مبارک`;
+    const entry = cleanEntry({ name: "مامان", note }, 140);
+    expect(entry).toEqual({ ok: true, name: "مامان", note });
+  });
+
+  it("still takes a joiner out wherever it joins nothing: in Latin words, at an end, beside a space, after a picture with a letter next", () => {
+    expect(cleanText(`in${N}vis${J}ible`)).toBe("invisible");
+    expect(cleanText(`${J}Mum${N}`)).toBe("Mum");
+    expect(cleanText(`a ${J} b`)).toBe("a b");
+    expect(points(cleanText(`\u{1f937}${J}x`))).toBe("1f937 78");
+    expect(points(cleanText(`م${N} خ`))).toBe("645 20 62e");
+    // A run of them is one at most, and the non-joiner never stands in for the joiner between pictures.
+    expect(points(cleanText(`\u{1f468}${J}${J}${N}\u{1f469}`))).toBe("1f468 200d 1f469");
+    expect(points(cleanText(`\u{1f468}${N}\u{1f469}`))).toBe("1f468 1f469");
+    expect(points(cleanText(`م${N}${N}${J}خ`))).toBe("645 200c 62e");
+    // And the other hidden marks still go from every script.
+    expect(points(cleanText("م​ی‎خ‮"))).toBe("645 6cc 62e");
+  });
+
   it("composes accents, so the same name is the same text", () => {
     expect(cleanText("José")).toBe("José");
     expect(cleanText("José")).toHaveLength(4);
@@ -70,6 +114,15 @@ describe("addresses", () => {
       "Love you.Mum/Dad",
     ])
       expect(hasLink(text), text).toBe(false);
+  });
+
+  it("a capital does not hide the four endings that are never a word, and makes a word of the others", () => {
+    for (const text of ["Visit Evil.Com for prizes", "Evil.ORG has it", "see Prizes.Biz today", "go to Evil.Xyz now"]) expect(hasLink(text), text).toBe(true);
+    for (const text of ["Happy birthday.Dev and I miss you", "Miss you.UK trip soon", "God bless.Fr Michael", "All done.Net result: a good year", "Te quiero.Arándanos para todos"]) expect(hasLink(text), text).toBe(false);
+  });
+
+  it("a hidden joiner can't split an address past the check", () => {
+    for (const text of ["ev‌il.com", "evil.‍com", "www‍.evil.example", "ht‌tps://evil.example"]) expect(hasLink(cleanText(text)), text).toBe(true);
   });
 
   it("is written without a lookbehind, which Safari before 16.4 refuses to load (the editor's bundle holds this file)", async () => {
