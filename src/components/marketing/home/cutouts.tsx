@@ -97,6 +97,7 @@ export function placementStyle(b: Placement, shadow: string): CSSProperties {
 export const FRAME_ART = {
   "lily-open": { src: "/art/pages/lily-open-ivory.webp", src1x: "/art/pages/lily-open-ivory-1x.webp", width: 900, height: 604, width1x: 450 },
   "lily-three-quarter": { src: "/art/pages/lily-three-quarter-ivory.webp", src1x: "/art/pages/lily-three-quarter-ivory-1x.webp", width: 900, height: 771, width1x: 450 },
+  "lily-stem-tall": { src: "/art/pages/lily-stem-tall-ivory.webp", src1x: "/art/pages/lily-stem-tall-ivory-1x.webp", width: 1144, height: 1600, width1x: 572 },
   "lily-side": { src: "/art/pages/lily-side-ivory.webp", src1x: "/art/pages/lily-side-ivory-1x.webp", width: 900, height: 726, width1x: 450 },
   "petal-1": { src: "/art/pages/petal-1-ivory.webp", src1x: "/art/pages/petal-1-ivory-1x.webp", width: 360, height: 256, width1x: 180 },
   "petal-2": { src: "/art/pages/petal-2-ivory.webp", src1x: "/art/pages/petal-2-ivory-1x.webp", width: 360, height: 271, width1x: 180 },
@@ -113,38 +114,56 @@ export function FrameArt({ art, sizes, eager = false, className, style }: { art:
   return <CutoutImg src={a.src1x} srcSet={`${a.src1x} ${a.width1x}w, ${a.src} ${a.width}w`} sizes={sizes} width={a.width} height={a.height} eager={eager} className={className} style={style} />;
 }
 
-/** Round the hero: lilies spilling off the corners, a few soft with depth, the words left clear. */
+/**
+ * Round the hero: sprays of ivory lilies on their green stems, leaves with them, as the owner's
+ * gallery mock-up has them ("the flowers are missing… i like the ones that look like the mockup so
+ * its just really pretty. with green", 22 Nov 2026). The first frame of rendered lilies was a few
+ * pale heads in the corners; this one has the tall stem and its leaves at the right, a head at each
+ * corner and leaves coming in from both edges. The words are left clear.
+ */
 const HERO: Bloom[] = [
+  // the top right: a spray on its stem, a large head in the corner over it, a leaf above
+  { art: "lily-stem-tall", x: 94, y: 31, size: 27, rot: 18, eager: true, phone: false },
+  { art: "lily-three-quarter", x: 96.5, y: 8, size: 24, rot: 6, eager: true, phone: false },
+  { art: "leaf-1", x: 84, y: 2.5, size: 12, rot: 168, opacity: 0.9, phone: false },
+  { art: "lily-side", x: 100.5, y: 62, size: 15, rot: -12, phone: false },
+  { art: "leaf-1", x: 99.5, y: 82, size: 13, rot: -150, opacity: 0.85, phone: false },
+  // the left edge: a head at the top, leaves down the side, a head and a leaf at the foot
   { art: "lily-open", x: -1.5, y: 8, size: 19, rot: -10, eager: true, phone: false },
-  // On a phone the top-left corner is where the first line of type starts, so the lily leans in
-  // from the right instead, beside the headline, where the short lines leave room.
-  { art: "lily-three-quarter", x: 100, y: 15, size: 32, rot: 8, eager: true, phone: "only" },
-  { art: "petal-2", x: 1.2, y: 58, size: 5, rot: 18, phone: false },
-  { art: "lily-open", x: -1, y: 95, size: 17, rot: 16, blur: 1, phone: false },
+  { art: "leaf-1", x: -1, y: 25, size: 13, rot: 38, opacity: 0.9, phone: false },
+  { art: "leaf-2", x: -1.5, y: 41, size: 14, rot: -40, opacity: 0.9, phone: false },
+  { art: "petal-2", x: 1.2, y: 60, size: 5, rot: 18, phone: false },
+  { art: "lily-open", x: -1, y: 95, size: 18, rot: 16, phone: false },
+  { art: "leaf-2", x: 6.5, y: 101.5, size: 12, rot: -18, opacity: 0.85, phone: false },
+  // along the foot, soft with depth
   { art: "petal-3", x: 41, y: 101, size: 6, rot: -16, blur: 3, opacity: 0.8, phone: false },
-  { art: "lily-three-quarter", x: 97, y: 9, size: 25, rot: 6, eager: true, phone: false },
-  { art: "leaf-2", x: -1.5, y: 36, size: 13, rot: -40, opacity: 0.85, phone: false },
-  { art: "leaf-1", x: 99.5, y: 73, size: 13, rot: -150, opacity: 0.8, phone: false },
-  { art: "lily-side", x: 100.5, y: 44, size: 15, rot: -12, phone: false },
-  { art: "leaf-1", x: 78, y: 104, size: 12, rot: 12, blur: 5, opacity: 0.6, phone: false },
+  { art: "leaf-1", x: 78, y: 104, size: 13, rot: 12, blur: 4, opacity: 0.65, phone: false },
+  // On a phone the top-left corner is where the first line of type starts, so the lily leans in
+  // from the right instead, beside the headline, where the short lines leave room, a leaf under it.
+  { art: "lily-three-quarter", x: 100, y: 15, size: 32, rot: 8, eager: true, phone: "only" },
+  { art: "leaf-2", x: 101, y: 25, size: 30, rot: -62, opacity: 0.85, phone: "only" },
 ];
 
 /** Round the closing section: the same flowers on the dark ground, closer in. */
 const CLOSING: Bloom[] = [
   { art: "lily-open", x: 2, y: 10, size: 22, rot: -14 },
-  { art: "petal-1", x: -0.5, y: 58, size: 6, rot: 24, blur: 2, opacity: 0.8, phone: false },
+  { art: "leaf-1", x: 0.5, y: 33, size: 14, rot: 40, opacity: 0.85, phone: false },
+  { art: "petal-1", x: -0.5, y: 60, size: 6, rot: 24, blur: 2, opacity: 0.8, phone: false },
   { art: "lily-open", x: 3, y: 101, size: 20, rot: 12, blur: 1 },
+  { art: "leaf-2", x: 13, y: 104, size: 13, rot: -14, opacity: 0.8, phone: false },
   { art: "petal-4", x: 38, y: 106, size: 7, rot: 22, blur: 5, opacity: 0.5, phone: false },
-  { art: "lily-three-quarter", x: 97.5, y: 5, size: 20, rot: 10, blur: 2.5, opacity: 0.75 },
-  { art: "lily-side", x: 101, y: 52, size: 16, rot: -16, phone: false },
+  { art: "lily-stem-tall", x: 95.5, y: 40, size: 24, rot: 14, phone: false },
+  { art: "lily-three-quarter", x: 97.5, y: 5, size: 20, rot: 10 },
   { art: "lily-side", x: 96, y: 99, size: 21, rot: 6 },
   { art: "petal-2", x: 66, y: 108, size: 7, rot: -20, blur: 5, opacity: 0.5, phone: false },
 ];
 
-/** Two, far apart and out of focus, behind the covers. */
+/** A head and its leaves, far apart and out of focus, behind the covers. */
 const BAND: Bloom[] = [
   { art: "lily-three-quarter", x: 98.5, y: 9, size: 18, rot: 12, blur: 3, opacity: 0.6 },
+  { art: "leaf-2", x: 93, y: 24, size: 12, rot: -32, blur: 3, opacity: 0.55, phone: false },
   { art: "lily-open", x: 0, y: 96, size: 16, rot: -12, blur: 5, opacity: 0.5, phone: false },
+  { art: "leaf-1", x: 7, y: 101, size: 11, rot: 20, blur: 5, opacity: 0.45, phone: false },
 ];
 
 const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
