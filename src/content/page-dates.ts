@@ -34,6 +34,13 @@ export const FINDER_LIVE = "2026-11-22";
  */
 export const GUIDES_LIVE = "2026-11-21";
 
+/**
+ * The day the dates work of the growth build goes live: the planner on /dates and on every city's
+ * page, the pages by kind, the new cities. NOT LIVE YET: this is the day the work was finished. Set it
+ * to the day it ships (a date ahead of the page is the kind search engines stop believing).
+ */
+export const DATES_LIVE = "2026-11-22";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
@@ -83,6 +90,9 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/occasions/long-distance": "2026-11-13",
   "/occasions/thanksgiving": "2026-11-11",
   "/occasions/wedding": "2026-11-09",
+  "/dates": DATES_LIVE,
+  "/dates/*": DATES_LIVE,
+  "/dates/ideas/*": DATES_LIVE,
   "/games": "2026-11-13",
   "/games/rather": "2026-10-24",
   "/games/deck": "2026-11-13",

@@ -11,6 +11,7 @@ import { TOGETHER_PATH } from "@/content/together-guide";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { CITY_SLUGS } from "@/lib/cities/cities";
+import { DATE_KINDS } from "@/lib/dates/date-kinds";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
 import { getManifest, listManifests } from "@/templates/manifests";
@@ -44,6 +45,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/", priority: 1, changeFrequency: "weekly" },
     { path: "/dates", priority: 0.9, changeFrequency: "weekly" },
     ...CITY_SLUGS.map((slug): Page => ({ path: `/dates/${slug}`, priority: 0.7, changeFrequency: "weekly" })),
+    ...DATE_KINDS.map((kind): Page => ({ path: `/dates/ideas/${kind}`, priority: 0.8, changeFrequency: "monthly" })),
     { path: "/gifts", priority: 0.9, changeFrequency: "weekly" },
     { path: FINDER_PATH, priority: 0.8, changeFrequency: "monthly" },
     ...RECIPIENTS.map((r): Page => ({ path: `/gifts/${recipientSlug(r)}`, priority: 0.8, changeFrequency: "monthly" })),

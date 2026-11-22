@@ -115,9 +115,10 @@ describe("sitemap dates", () => {
     expect(pageUpdated("/templates/scratch-card")).toBe(PAGE_UPDATED["/templates/scratch-card"]);
     expect(pageUpdated("/templates/vinyl")).toBe(PAGE_UPDATED["/templates/*"]);
     expect(pageUpdated("/")).toBe(PAGE_UPDATED["/"]);
-    expect(pageUpdated("/dates/riga")).toBeUndefined();
+    expect(pageUpdated("/dates/riga")).toBe(PAGE_UPDATED["/dates/*"]);
+    expect(pageUpdated("/dates/ideas/first-date")).toBe(PAGE_UPDATED["/dates/ideas/*"]);
     expect(pageUpdated("/creators")).toBeUndefined();
-    const undated = pages.filter((p) => new URL(p.url).pathname.startsWith("/dates"));
+    const undated = pages.filter((p) => new URL(p.url).pathname === "/creators");
     expect(undated.length).toBeGreaterThan(0);
     expect(undated.filter((p) => p.lastModified !== undefined)).toEqual([]);
   });

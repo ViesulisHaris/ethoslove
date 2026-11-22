@@ -7,6 +7,8 @@ import { firstParams, hasSharePreview, previewQuery, readSharedPlace, readShareP
 import { CITY_PAGES } from "@/lib/cities/cities";
 import { DatesExplorer } from "@/components/dates/dates-explorer";
 import { CityLinks } from "@/components/cities/city-links";
+import { KindLinks } from "@/components/dates/page/kind-links";
+import { DATE_KIND_UI } from "@/content/date-kinds";
 
 export async function generateMetadata({ params, searchParams }: PageProps<"/[currency]/[locale]/dates">): Promise<Metadata> {
   const { locale } = await params;
@@ -44,7 +46,8 @@ export default async function DatesPage({ params }: PageProps<"/[currency]/[loca
     <div className="-mt-[var(--header-h)] min-h-dvh bg-blush-paper pt-[var(--header-h)] lg:pt-0">
       <DatesExplorer />
       {/* Plain links in the page's HTML, so search engines find every city's page from here. */}
-      <CityLinks cities={CITY_PAGES} locale={locale === "es" ? "es" : "en"} title={t("eyebrow")} className="border-t border-line px-5 pt-8 pb-32 sm:px-8 lg:px-6 lg:pb-10" />
+      <KindLinks locale={locale === "es" ? "es" : "en"} title={DATE_KIND_UI[locale === "es" ? "es" : "en"].byKind} className="border-t border-line px-5 pt-8 sm:px-8 lg:px-6" />
+      <CityLinks cities={CITY_PAGES} locale={locale === "es" ? "es" : "en"} title={t("eyebrow")} className="px-5 pt-6 pb-32 sm:px-8 lg:px-6 lg:pb-10" />
     </div>
   );
 }
