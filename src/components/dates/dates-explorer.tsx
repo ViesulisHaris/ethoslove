@@ -47,8 +47,7 @@ import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
 import { WhereBox, type Where } from "./where-box";
-
-const WHERE_KEY = "ethos.dates.where.v1";
+import { WHERE_KEY } from "@/lib/dates/where-store";
 const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
 /** Moving the map further than this from the named place stops calling it by that name. */

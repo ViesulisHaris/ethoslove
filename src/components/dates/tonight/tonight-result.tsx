@@ -1,0 +1,98 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import { useEffect, useId, useRef } from "react";
+import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { ideaImage } from "@/lib/dates/art";
+import { ideaHours } from "@/lib/dates/format";
+import { KINDS } from "@/lib/dates/kinds";
+import type { Place } from "@/lib/dates/places";
+import type { Relaxed, TonightPick } from "@/lib/dates/tonight";
+import { TONIGHT_BUTTON } from "./tonight-form";
+
+type Props = {
+  pick: TonightPick;
+  stops: readonly { place: Place | null }[];
+  times: readonly string[];
+  /** What the day is like, for the relaxed line: true when the forecast for it is wet. */
+  wet: boolean;
+  /** The budget that was asked for, when one was. */
+  asked?: 0 | 1 | 2 | 3;
+  locale: "en" | "es";
+  onOpen: () => void;
+  onAnother: () => void;
+  /** False when this is the only idea that can be done: "Another" is not drawn. */
+  more: boolean;
+};
+
+/** The heaviest wish first: the page's kind, the mood, the budget, the length. */
+const HEAVIEST: Relaxed[] = ["kind", "vibe", "budget", "length"];
+
+/** One finished plan: the idea's picture and title, its stops with their times, its twist, and the two ways on. */
+export function TonightResult({ pick, stops, times, wet, asked, locale, onOpen, onAnother, more }: Props) {
+  const t = useTranslations("dates");
+  const headingId = useId();
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const { idea } = pick;
+
+  // A new plan, or "Another": the heading is where a screen reader and a keyboard pick up again.
+  // The card only mounts after a tap, so this never takes focus on a page's first render.
+  useEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+  }, [idea.id]);
+
+  const said = HEAVIEST.filter((wish) => pick.relaxed.includes(wish))
+    .slice(0, 2)
+    .map((wish) => {
+      if (wish === "budget") return t(wet ? "tonight.relaxed.budgetWet" : "tonight.relaxed.budget", { wanted: t(`tonight.wanted.${(asked ?? 0) as 0 | 1 | 2}`), cost: t(`tonight.costs.${idea.budget as 1 | 2 | 3}`) });
+      if (wish === "length") return t("tonight.relaxed.length", { hours: ideaHours(idea.minutes, locale) });
+      if (wish === "vibe") return t("tonight.relaxed.vibe");
+      return t("tonight.relaxed.kind");
+    });
+
+  return (
+    <article data-pick data-tonight-result aria-labelledby={headingId} className="mt-5 overflow-hidden rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card sm:grid sm:grid-cols-[11rem_minmax(0,1fr)]">
+      <span className="relative block aspect-[16/9] sm:aspect-auto sm:h-full" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
+        <img src={ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
+      </span>
+      <div className="p-5">
+        {said.map((line) => (
+          <p key={line} className="mb-2 text-[0.875rem] leading-snug text-page-body">
+            {line}
+          </p>
+        ))}
+        <h3 id={headingId} ref={headingRef} tabIndex={-1} className="font-display text-[1.375rem] leading-tight text-page-ink outline-none">
+          {idea.title[locale]}
+        </h3>
+        <ol className="mt-3 grid gap-1.5">
+          {stops.map(({ place }, i) =>
+            place ? (
+              <li key={place.id} className="flex gap-3 text-[0.9375rem] leading-snug text-page-ink">
+                <span className="w-12 shrink-0 text-page-body tabular-nums">{times[i]}</span>
+                <span className="min-w-0">
+                  <span className="font-medium">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
+                  {place.named ? <span className="text-page-body"> · {KINDS[place.kind].label[locale]}</span> : null}
+                </span>
+              </li>
+            ) : null,
+          )}
+        </ol>
+        <p data-line className="mt-3 font-hand text-[1.3rem] leading-[1.15] text-page-ink">
+          {idea.twist[locale]}
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <button type="button" onClick={onOpen} className={TONIGHT_BUTTON}>
+            {t("tonight.open")}
+            <ArrowRight aria-hidden="true" className="size-4" />
+          </button>
+          {more ? (
+            <button type="button" onClick={onAnother} className="inline-flex min-h-11 min-w-11 items-center text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink active:text-page-accent">
+              {t("tonight.another")}
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </article>
+  );
+}
