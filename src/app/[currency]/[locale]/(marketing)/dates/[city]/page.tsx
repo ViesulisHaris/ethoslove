@@ -21,6 +21,8 @@ import { CityIdeaCard } from "@/components/cities/city-idea-card";
 import { CityLinks } from "@/components/cities/city-links";
 import { CityPlaceList } from "@/components/cities/city-places";
 import { TonightIsland } from "@/components/dates/tonight/tonight-island";
+import { CITY_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
+import { CITY_KIND_PAGES } from "@/lib/dates/date-kinds";
 
 /**
  * Built on the first visit and kept for a week, then rebuilt in the background: the places change
@@ -79,6 +81,8 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const km = (CITY_RADIUS_M / 1000).toLocaleString(l);
   const told = toldTraits(city, ideas);
   const ideaStops = cityIdeaStops(ideas, around);
+  // Its pages by kind of date, only New York's and London's (lib/dates/date-kinds.ts).
+  const kindPages = CITY_KIND_PAGES.filter((p) => p.city === city.slug);
 
   return (
     <>
@@ -255,7 +259,21 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
               <p className="text-[13px] text-cream/55">{t("gift.note")}</p>
             </div>
           </div>
-          <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className="mt-12" />
+          {kindPages.length > 0 ? (
+            <nav aria-label={DATE_KIND_UI[l].inCityByKind.replace("{city}", name)} className="mt-12">
+              <h2 className="text-[12px] font-semibold tracking-wide text-forest/55 uppercase">{DATE_KIND_UI[l].inCityByKind.replace("{city}", name)}</h2>
+              <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
+                {kindPages.map((p) => (
+                  <li key={p.kind} className="flex items-center">
+                    <Link href={`/dates/${city.slug}/${p.kind}`} className="inline-flex min-h-11 items-center px-1.5 text-[14px] font-medium text-forest/75 underline-offset-4 hover:text-rose-deep hover:underline">
+                      {CITY_KIND_COPY[`${city.slug}/${p.kind}`].heading[l]}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+          <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className={kindPages.length > 0 ? "mt-6" : "mt-12"} />
         </div>
       </section>
     </>

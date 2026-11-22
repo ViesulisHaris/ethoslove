@@ -14,6 +14,11 @@ import type { Place } from "@/lib/dates/places";
 import { tileAt, type PoiFeature } from "@/lib/dates/tiles";
 import { CITIES } from "@/templates/_shared/places";
 import { KIND_PAGE_CITIES } from "@/content/date-kinds";
+import sitemap from "@/app/sitemap";
+import { KIND_PLACES, kindPlaces } from "@/lib/cities/kind-places";
+import { guessCost } from "@/lib/dates/cost";
+import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
+import { rankPlaces } from "@/lib/dates/rank";
 
 /** The owner's rule: nothing on the site mentions Spain or its cities. */
 const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary|palma)\b/i;
@@ -385,5 +390,53 @@ describe("the cities added in Nov 2026", () => {
     expect(cityName(city("philadelphia"), "es")).toBe("Filadelfia");
     expect(cityName(city("st-louis"), "es")).toBe("San Luis");
     expect(city("st-louis").slug).toMatch(/^[a-z]+(-[a-z]+)*$/);
+  });
+});
+
+describe("a kind of date inside a city", () => {
+  const fixture: Place[] = [
+    ...Array.from({ length: 5 }, (_, i) => place(`node/park${i}`, "park", 90 - i)),
+    place("node/gal1", "gallery", 85),
+    place("node/gal2", "gallery", 84, { name: "node/gal1" }),
+    place("node/book", "bookshop", 83),
+    place("node/view", "viewpoint", 82),
+    place("node/nameless", "garden", 99, { named: false }),
+    place("node/cafe1", "cafe", 81),
+    place("node/cafe2", "cafe", 80),
+    place("node/dessert", "dessert", 79),
+    place("node/rest", "restaurant", 95),
+    place("node/bar", "bar", 94),
+    place("node/garden", "garden", 70),
+  ];
+
+  it("C4 the free places of a city are named, usually cost nothing, and are a few of each kind at most", () => {
+    const free = kindPlaces("cheap", fixture);
+    expect(free.length).toBeGreaterThan(0);
+    expect(free.length).toBeLessThanOrEqual(KIND_PLACES);
+    for (const p of free) {
+      expect(guessCost(p), p.id).toBe(0);
+      expect(p.named, p.id).toBe(true);
+    }
+    expect(new Set(free.map((p) => p.name.trim().toLowerCase())).size).toBe(free.length);
+    const perKind = new Map<string, number>();
+    for (const p of free) perKind.set(p.kind, (perKind.get(p.kind) ?? 0) + 1);
+    for (const [kind, n] of perKind) expect(n, kind).toBeLessThanOrEqual(3);
+    const ranked = rankPlaces(fixture, {}).map((p) => p.id);
+    expect(free.map((p) => ranked.indexOf(p.id))).toEqual([...free.map((p) => ranked.indexOf(p.id))].sort((a, b) => a - b));
+  });
+
+  it("C5 where to meet is cafés, bookshops, galleries and dessert places, and another kind has no list", () => {
+    const meet = kindPlaces("first-date", fixture);
+    expect(meet.length).toBeGreaterThan(0);
+    for (const p of meet) expect(["cafe", "bookshop", "gallery", "dessert"], p.id).toContain(p.kind);
+    expect(kindPlaces("fun", fixture)).toEqual([]);
+  });
+
+  it("C6 the sitemap lists the seven kinds, the four pairs and every city, each in both languages", () => {
+    const urls = sitemap().map((p) => new URL(p.url).pathname);
+    for (const kind of DATE_KINDS) for (const prefix of ["", "/es"]) expect(urls, kind).toContain(`${prefix}/dates/ideas/${kind}`);
+    for (const { city: c, kind } of CITY_KIND_PAGES) for (const prefix of ["", "/es"]) expect(urls).toContain(`${prefix}/dates/${c}/${kind}`);
+    for (const prefix of ["", "/es"]) expect(urls.filter((u) => CITY_SLUGS.some((s) => u === `${prefix}/dates/${s}`))).toHaveLength(CITY_SLUGS.length);
+    expect(urls.some((u) => u.endsWith("/dates/ideas/at-home"))).toBe(false);
   });
 });
