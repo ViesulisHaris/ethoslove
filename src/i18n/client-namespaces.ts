@@ -1,3 +1,6 @@
+import type { AbstractIntlMessages } from "next-intl";
+import { omitMessages, pickMessages } from "./messages-subset";
+
 /**
  * Which parts of the message catalogue each part of the site sends to the browser.
  *
@@ -59,4 +62,23 @@ export const CLIENT_NAMESPACES = {
   "(gift)/demo/[slug]/page": ["templates"],
 } as const satisfies Record<string, readonly string[]>;
 
+/**
+ * A group card's words, which no layout sends. The editor's and the account's namespaces go to the
+ * browser whole, and while group cards were switched off that put the product's name, its panel
+ * and its price sentence into the source of every editor, dashboard and account page. So
+ * <ClientMessages> leaves these paths out wherever it is used, and a page that can draw a group
+ * card's panel sends `browser` itself (<GroupMessages>, in client-messages.tsx): the editor of a
+ * template made for group cards, and nothing else on the live site. `server` is read by server components alone (the account page's list of
+ * what is held), so it is never sent.
+ */
+export const GROUP_WORDS = {
+  browser: ["editor.group", "editor.sections.group", "editor.publishSheet.signInBlurbGroup"],
+  server: ["money.product.group", "account.groupOn", "account.groupEvery"],
+} as const;
+
 export type ClientScope = keyof typeof CLIENT_NAMESPACES;
+
+/** What <ClientMessages scope="…"> sends to the browser: the scope's share of the catalogue, less a group card's words. */
+export function messagesForScope(all: AbstractIntlMessages, scope: ClientScope): AbstractIntlMessages {
+  return omitMessages(pickMessages(all, CLIENT_NAMESPACES[scope]), [...GROUP_WORDS.browser, ...GROUP_WORDS.server]);
+}

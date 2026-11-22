@@ -11,13 +11,12 @@ import { describe, expect, it, vi } from "vitest";
 import { BRAND } from "@/config/brand";
 import { GroupLinkGone } from "@/components/group/link-gone";
 import { KeptNoteGate } from "@/components/group/kept-gate";
-import { KEPT_ATTRIBUTE, keptNoteScript, notesKey } from "@/lib/group/kept";
+import { KEPT_ATTRIBUTE, keptNoteScript, notesKey, parseNotes, tokenInAddress } from "@/lib/group/kept";
 import { GROUP_RETENTION } from "@/lib/group/limits";
 import { groupAgreed, groupNotice } from "@/lib/group/notice";
 import { groupWriteInLink } from "@/lib/group/report";
 import { groupToken } from "@/lib/group/token";
-import { CLIENT_NAMESPACES } from "@/i18n/client-namespaces";
-import { pickMessages } from "@/i18n/messages-subset";
+import { CLIENT_NAMESPACES, messagesForScope, type ClientScope } from "@/i18n/client-namespaces";
 
 describe("the notice a contributor agrees to", () => {
   it("names the photo on a card that takes one", () => {
@@ -56,6 +55,16 @@ describe("writing in to have a note taken out", () => {
     expect(es.subject).toBe("Quitar mi nota de la tarjeta en grupo abcd1234");
     expect(es.body).toContain("Tarjeta en grupo: abcd1234");
     expect(`${es.subject}\n${es.body}`).not.toMatch(/\b(Take|Group card|name)\b/);
+  });
+
+  it("from a link that opens no card any more there is no reference to quote: the email asks who sent the link instead", () => {
+    const en = parts(groupWriteInLink(null, "en"));
+    expect(en).toMatchObject({ to: BRAND.supportEmail, subject: "Take my note out of a group card" });
+    expect(en.body.split("\n")).toEqual(["The name on my note:", "", "Who sent me the link:", ""]);
+    const es = parts(groupWriteInLink(null, "es"));
+    expect(es.subject).toBe("Quitar mi nota de una tarjeta en grupo");
+    expect(es.body.split("\n")).toEqual(["El nombre que puse en mi nota:", "", "Quién me envió el enlace:", ""]);
+    for (const mail of [en, es]) expect(`${mail.subject}${mail.body}`).not.toMatch(/\{ref\}|null|undefined/);
   });
 });
 
@@ -117,7 +126,36 @@ describe("an address under /c/ that opens no card", () => {
     expect(es).toContain("Este enlace ya no funciona.");
     expect(es).toContain("Pide uno nuevo a quien te lo envió.");
     expect(es).toContain('href="/es/templates?ref=group-contribute"');
-    for (const html of [en, es]) expect(html).not.toMatch(/€|\$|£|<form|<input|mailto:/);
+    for (const html of [en, es]) expect(html).not.toMatch(/€|\$|£|<form|<input|<button|<script|mailto:/);
+  });
+
+  // Someone who wrote a note at the link before its sender made a new one comes back to this page,
+  // and their browser still holds the key to that note: the page offers to take it back, from the
+  // browser's own storage alone (the server's answer is the same for every address).
+  describe("taking back a note written there before the link was reset", () => {
+    const token = groupToken("6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b", 1, "secret");
+
+    it("finds the link's token in the page's own address, with or without a language, and in no other address", () => {
+      expect(tokenInAddress(`/c/${token}`)).toBe(token);
+      expect(tokenInAddress(`/es/c/${token}`)).toBe(token);
+      expect(tokenInAddress(`/c/${token}/`)).toBe(token);
+      for (const other of ["/", "/c/", `/c/${token.slice(1)}`, `/c/${token}x`, `/g/${token}`, `/x/c/${token}/more`, `/group-preview/contribute`, `/c/${token.slice(0, 21)}!`]) expect(tokenInAddress(other), other).toBeNull();
+    });
+
+    it("the server's page is the same for everyone: an empty place that only a browser holding a note fills", () => {
+      const html = renderToStaticMarkup(<GroupLinkGone locale="en" />);
+      const place = /<div[^>]*data-testid="gone-take-back"[^>]*>/.exec(html);
+      expect(place?.[0]).toMatch(/class="[^"]*\bhidden\b/);
+      expect(html).not.toMatch(/<button|Take my note back|taken back|role="(status|alert)"/);
+      // Handed a token (the development preview) or not, the server draws the same.
+      expect(renderToStaticMarkup(<GroupLinkGone locale="en" token={token} />)).toBe(html);
+    });
+
+    it("reads back only what is shaped like a kept note, so nothing else in storage becomes a button", () => {
+      const good = { s: "w".repeat(32), n: "Gran", t: 1 };
+      expect(parseNotes(JSON.stringify([good, { s: "short", n: "x", t: 1 }, { s: "w".repeat(32), n: 5, t: 1 }, null, "text"]))).toEqual([good]);
+      for (const raw of [null, "", "{", "{}", '"x"']) expect(parseNotes(raw)).toEqual([]);
+    });
   });
 
   describe("which page a 404 there is", () => {
@@ -153,13 +191,12 @@ describe("an address under /c/ that opens no card", () => {
   });
 });
 
-describe("what public pages send to the browser while group cards are off", () => {
-  it("no page outside the editor and a signed-in account's own pages carries the words 'group card'", () => {
+describe("what pages send to the browser while group cards are off", () => {
+  it("no page carries the words 'group card', the editor and a signed-in account's own pages included", () => {
     for (const lang of ["en", "es"] as const) {
       const all = JSON.parse(readFileSync(`messages/${lang}.json`, "utf8"));
-      for (const [route, namespaces] of Object.entries(CLIENT_NAMESPACES)) {
-        if (route === "(editor)/layout" || route === "(app)/layout") continue;
-        expect(JSON.stringify(pickMessages(all, namespaces)), `${lang} ${route}`).not.toMatch(/group cards?|tarjetas? en grupo/i);
+      for (const route of Object.keys(CLIENT_NAMESPACES) as ClientScope[]) {
+        expect(JSON.stringify(messagesForScope(all, route)), `${lang} ${route}`).not.toMatch(/group cards?|tarjetas? en grupo/i);
       }
     }
   });

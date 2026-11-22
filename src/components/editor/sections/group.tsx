@@ -405,7 +405,12 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
             </h3>
             {/* What became of a note that is no longer in this list to say it on. */}
             <PanelError text={failed("waiting")} className="mt-1.5" />
-            {waiting.length === 0 && decided.length === 0 ? <p className="mt-1.5 text-sm text-muted-foreground">{t("waitingEmpty")}</p> : null}
+            {/* Not under that line: "Gran has just taken that note back." followed by "Nobody has added a note yet." said two things that can't both be so. */}
+            {waiting.length === 0 && decided.length === 0 && !failed("waiting") ? (
+              <p className="mt-1.5 text-sm text-muted-foreground" data-testid="group-waiting-empty">
+                {t("waitingEmpty")}
+              </p>
+            ) : null}
             <ul className="mt-3 flex flex-col gap-2">
               {waiting.map((entry) => (
                 <WaitingEntry key={entry.id} entry={entry} busy={busy === entry.id} full={full} error={failed(entry.id)} onAdd={(withPhoto) => void add(entry, withPhoto)} onRemove={() => void decide(entry, "reject")} />

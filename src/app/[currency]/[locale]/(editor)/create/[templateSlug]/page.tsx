@@ -12,6 +12,7 @@ import type { RemoteGift } from "@/lib/editor/store";
 import { shownReactions } from "@/lib/proof/proof";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
 import { groupGiftsEnabled } from "@/lib/group/flag";
+import { GroupMessages } from "@/i18n/client-messages";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/create/[templateSlug]">, "searchParams">): Promise<Metadata> {
   const { locale, templateSlug } = await params;
@@ -51,21 +52,29 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
   // (NODE_ENV is inlined at build: a production build never reads the query).
   const groupEnabled = process.env.NODE_ENV === "development" && (group === "on" || group === "off") ? group === "on" : groupGiftsEnabled();
 
+  const shell = (
+    <EditorShell
+      slug={templateSlug}
+      manifest={manifest}
+      user={user ? { id: user.id, email: user.email ?? "" } : null}
+      remote={remote}
+      supabaseConfigured={isConfigured.supabase}
+      aiEnabled={isConfigured.ai}
+      paymentsEnabled={isConfigured.stripe}
+      reaction={reaction ?? null}
+      groupEnabled={groupEnabled}
+    />
+  );
+
   return (
     <Suspense>
       {/* For the ad pixels' per-template audiences (lib/analytics/ads.ts); nothing without consent. */}
       <AdTemplateView slug={manifest.slug} tier={manifest.tier} />
-      <EditorShell
-        slug={templateSlug}
-        manifest={manifest}
-        user={user ? { id: user.id, email: user.email ?? "" } : null}
-        remote={remote}
-        supabaseConfigured={isConfigured.supabase}
-        aiEnabled={isConfigured.ai}
-        paymentsEnabled={isConfigured.stripe}
-        reaction={reaction ?? null}
-        groupEnabled={groupEnabled}
-      />
+      {/* A group card's words go to the browser only with a template made for group cards, whose
+          editor is the one place that reads them (the panel, and the send screen of a draft that
+          holds notes). Every other editor's source holds none of them, switched on or off
+          (src/i18n/client-namespaces.ts, GROUP_WORDS). */}
+      {manifest.features.group ? <GroupMessages locale={locale}>{shell}</GroupMessages> : shell}
     </Suspense>
   );
 }

@@ -1,22 +1,23 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from "react";
 import { CircleCheck, ImagePlus, Loader2, Lock, PenLine, Undo2, X } from "lucide-react";
-import { BRAND } from "@/config/brand";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { LogoMark } from "@/components/shared/logo";
 import { track } from "@/lib/analytics/track";
 import { isolated } from "@/lib/group/bidi";
-import { KEPT_ATTRIBUTE, notesKey } from "@/lib/group/kept";
+import { KEEP_MS, KEPT_ATTRIBUTE, firstRead, parseNotes, storeNotes, withStored, type KeptNote } from "@/lib/group/kept";
 import { GROUP_LIMITS } from "@/lib/group/limits";
 import { groupAgeLine, groupEmailConsent, groupNotice, groupPhotoRule } from "@/lib/group/notice";
-import { groupReportLink, groupWriteInLink } from "@/lib/group/report";
+import { groupReportLink } from "@/lib/group/report";
 import { cn } from "@/lib/utils";
 import { LINK_GONE } from "./link-gone";
+import { INLINE, INLINE_WORD, QUIET, TAKE_BACK, TakeBack, WARN, WriteIn, fill } from "./take-back";
 
-/** In the card's own language, like the keep page: this page sits off a gift, not on the site. */
+/** In the card's own language, like the keep page: this page sits off a gift, not on the site. Taking a note back is said in take-back.tsx's words. */
 const S = {
   en: {
+    ...TAKE_BACK.en,
     title: "Add your note for {for}",
     blurb: "{from} is putting a group card together.",
     name: "Your name",
@@ -38,20 +39,11 @@ const S = {
     report: "Report this page",
     sentTitle: "Your note is with {from}.",
     sentInbox: "Check your inbox to confirm your address.",
-    takeBack: "Take my note back",
-    takeBackOf: "Take back the note from {name}",
-    takingBack: "Taking it back…",
     another: "Add another note",
-    takenTitle: "Your note has been taken back.",
-    takenOne: "The note from {name} has been taken back.",
-    // Under "This card has been sent.", which the page becomes when a note can no longer be taken back.
-    tooLate: "Write to {support} and we'll take your note out.",
-    notHere: "That note can't be taken back from here any more. Write to {support} and we'll take it out.",
     own: "Make a gift of your own",
     fullTitle: "This card has all the notes it can hold.",
     closedTitle: "{from} has closed this link.",
     expiredTitle: "This link has stopped taking notes.",
-    sentAwayTitle: "This card has been sent.",
     invalid: "Add your name and a note, and tick the box.",
     no_links: "A note can't carry a web address. Take it out and try again.",
     bad_photo: "That photo couldn't be used. Try a JPEG or a PNG.",
@@ -60,9 +52,9 @@ const S = {
     invalid_email: "Check the email address.",
     no_email: "Add your email, or untick the box.",
     limited: "Too many notes from this connection. Try again in an hour.",
-    error: "That didn't go through. Try again in a moment.",
   },
   es: {
+    ...TAKE_BACK.es,
     title: "Añade tu nota para {for}",
     blurb: "{from} está preparando una tarjeta en grupo.",
     name: "Tu nombre",
@@ -84,20 +76,11 @@ const S = {
     report: "Denunciar esta página",
     sentTitle: "Tu nota ya la tiene {from}.",
     sentInbox: "Mira tu correo para confirmar tu dirección.",
-    takeBack: "Retirar mi nota",
-    // A colon, not "de": people sign as "El abuelo" and "Los García", and "de El abuelo" is not Spanish.
-    takeBackOf: "Retirar la nota: {name}",
-    takingBack: "Retirándola…",
     another: "Añadir otra nota",
-    takenTitle: "Tu nota se ha retirado.",
-    takenOne: "Nota retirada: {name}.",
-    tooLate: "Escribe a {support} y quitamos tu nota.",
-    notHere: "Esa nota ya no se puede retirar desde aquí. Escribe a {support} y la quitamos.",
     own: "Haz tu propio regalo",
     fullTitle: "En esta tarjeta ya no caben más notas.",
     closedTitle: "{from} ha cerrado este enlace.",
     expiredTitle: "Este enlace ya no admite notas.",
-    sentAwayTitle: "Esta tarjeta ya se ha enviado.",
     invalid: "Pon tu nombre y una nota, y marca la casilla.",
     no_links: "Una nota no puede llevar una dirección web. Quítala y vuelve a intentarlo.",
     bad_photo: "Esa foto no se ha podido usar. Prueba con un JPEG o un PNG.",
@@ -106,80 +89,20 @@ const S = {
     invalid_email: "Revisa la dirección de correo.",
     no_email: "Pon tu correo o desmarca la casilla.",
     limited: "Demasiadas notas desde esta conexión. Vuelve a probar en una hora.",
-    error: "No se ha podido enviar. Inténtalo en un momento.",
   },
 } as const satisfies Record<GiftLocale, Record<string, string>>;
 
 type Problem = "invalid" | "no_links" | "bad_photo" | "photo_offline" | "too_large" | "invalid_email" | "no_email" | "limited" | "error";
 /** What the page is: taking a note, or one of the ends a link comes to. */
 export type ContributeState = "open" | "full" | "closed" | "expired" | "sent";
-/** "gone": the link stopped opening anything while the page was open (its sender made a new one). */
-type Stage = ContributeState | "done" | "taken" | "gone";
-
-const fill = (text: string, values: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ""));
-
 /**
- * A note added from this browser, as the browser keeps it to be able to take it back: the secret the
- * server handed over (`s`), the name it was signed with (`n`, to tell two notes apart when one phone
- * went round a table) and when (`t`). Kept in this browser's own storage under the link, so closing
- * the tab, or adding a second note, takes away nobody's way to withdraw the first; it never leaves
- * the browser except as the secret, when "Take my note back" is tapped.
+ * "gone": the link stopped opening anything while the page was open (its sender made a new one).
+ * "unfound": the last note this browser held could not be taken back because the server no longer
+ * finds it; the page can say nothing of that note any more, least of all whose hands it is in.
  */
-type Kept = { s: string; n: string; t: number };
-/** Longer than any link can stay open, after which the server has nothing left for a secret to find. */
-const KEEP_MS = 120 * 86_400_000;
+type Stage = ContributeState | "done" | "taken" | "gone" | "unfound";
 
-/** What this browser has stored for the link, as written (null where there is nothing, or storage is off). */
-function storedNotes(token: string): string | null {
-  try {
-    return window.localStorage.getItem(notesKey(token));
-  } catch {
-    return null;
-  }
-}
-function parseNotes(raw: string | null): Kept[] {
-  if (!raw) return [];
-  try {
-    const list: unknown = JSON.parse(raw);
-    if (!Array.isArray(list)) return [];
-    return list.filter((item): item is Kept => Boolean(item) && typeof item.s === "string" && /^[A-Za-z0-9_-]{16,64}$/.test(item.s) && typeof item.n === "string" && typeof item.t === "number").slice(-GROUP_LIMITS.total);
-  } catch {
-    return [];
-  }
-}
-function storeNotes(token: string, list: Kept[]) {
-  try {
-    if (list.length) window.localStorage.setItem(notesKey(token), JSON.stringify(list));
-    else window.localStorage.removeItem(notesKey(token));
-  } catch {
-    // Kept for this visit only, then.
-  }
-}
 const never = () => () => {};
-
-/**
- * What this browser held for the link when the page came alive, read once and never again. Read on
- * every render, a second tab's form vanished at its next keystroke once the first tab had sent a
- * note: the half-written note was gone and the screen claimed a note that tab never sent. A page
- * changes screens when its own person does something, not when another tab does.
- */
-const READ = new Map<string, string | null>();
-function firstRead(token: string): string | null {
-  if (!READ.has(token)) READ.set(token, storedNotes(token));
-  return READ.get(token) ?? null;
-}
-
-/**
- * The notes to write back: what the browser holds now (another tab may have added one, or taken one
- * back, since this page read it) together with what this page knows of, each once. Without the
- * fresh look, the tab that sent second wrote the list back without the first tab's note, and that
- * note could no longer be taken back from anywhere.
- */
-function withStored(token: string, known: Kept[]): Kept[] {
-  const held = parseNotes(storedNotes(token));
-  const seen = new Set(held.map((note) => note.s));
-  return [...held, ...known.filter((note) => !seen.has(note.s))].sort((a, b) => a.t - b.t);
-}
 
 /** A photo was picked for this link in this tab: so a page that comes back without it can say so. Nothing of the photo itself. */
 const photoKey = (token: string) => `ethos:group-photo:${token}`;
@@ -197,18 +120,6 @@ function photoWasPicked(token: string): boolean {
   } catch {
     return false;
   }
-}
-
-/** A sentence with one "{support}" in it, drawn with whatever stands there (the address, as a link). */
-function around(text: string, support: ReactNode): ReactNode {
-  const [before, after = ""] = text.split("{support}");
-  return (
-    <>
-      {before}
-      {support}
-      {after}
-    </>
-  );
 }
 
 /**
@@ -256,7 +167,7 @@ export function ContributeForm({
     if (hydrated) document.documentElement.removeAttribute(KEPT_ATTRIBUTE);
   }, [hydrated]);
   const kept = useMemo(() => parseNotes(stored), [stored]);
-  const [own, setOwn] = useState<Kept[] | undefined>(undefined);
+  const [own, setOwn] = useState<KeptNote[] | undefined>(undefined);
   const notes = own ?? kept;
   const stage: Stage = picked === "open" && own === undefined && kept.length > 0 ? "done" : picked;
   const [busy, setBusy] = useState(false);
@@ -424,7 +335,7 @@ export function ContributeForm({
     else setProblem("error");
   };
 
-  const takeBack = async (note: Kept) => {
+  const takeBack = async (note: KeptNote) => {
     if (takingBack) return;
     setTakingBack(note.s);
     setProblem(null);
@@ -439,14 +350,23 @@ export function ContributeForm({
       // The button that was pressed leaves with its note: the heading takes the focus, and what happened is said under it.
       land();
       // Where the link still takes notes, the answer is said on the "your note is with…" screen
-      // (reached by adding a note just now, or by coming back to the page), or on its own once no
-      // note is left. A link that is full, closed or past its last day keeps its own line and says
-      // it under that.
+      // (reached by adding a note just now, or by coming back to the page) while this browser has
+      // another note there, and on a screen of its own once none is left. A link that is full,
+      // closed or past its last day keeps its own line and says it under that.
       const taking = stage === "open" || stage === "done";
-      if (taking) setStage(res.ok && left.length === 0 ? "taken" : "done");
-      if (!res.ok) return setNotHere(true);
+      // Each tap's answer replaces the last one's: two lines about two notes read as one muddle.
+      if (!res.ok) {
+        // With no note left here, "Your note is with Tom." would be said of a note the server has
+        // just said it cannot find, and "Add another note" offered beside it: the page says only
+        // what it knows, and where to write.
+        if (taking) setStage(left.length === 0 ? "unfound" : "done");
+        setTookBack(null);
+        return setNotHere(true);
+      }
+      if (taking) setStage(left.length === 0 ? "taken" : "done");
+      setNotHere(false);
       track("group_note_withdrawn");
-      if (!taking || left.length > 0) setTookBack(note.n);
+      setTookBack(!taking || left.length > 0 ? note.n : null);
     } else if (res?.status === 410) {
       // The card went out while this page was open: it says so, like the link itself now does, with
       // the address to write to. Nothing here offers another note, which could only be refused.
@@ -471,65 +391,37 @@ export function ContributeForm({
     land();
   };
 
-  // Coral as it is on the site reads at 4.1 to 1 on the night ground, under what small text needs:
-  // the lines that tell someone why their note was refused are the last that should be hard to
-  // read. The same coral, lightened until it passes (6 to 1), for words; the icon keeps the brand's own.
-  const warn = "text-[color-mix(in_oklab,var(--color-coral)_70%,white)]";
+  const warn = WARN;
   // A placeholder is each field's only visible label here, so it is held to the same floor as text.
   const field = "w-full border border-white/15 bg-white/8 px-5 text-base text-paper placeholder:text-paper/60 focus:border-coral focus:outline-none";
-  const quiet = "inline-flex min-h-11 items-center gap-1.5 text-sm text-paper/70 underline-offset-4 hover:text-paper hover:underline focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coral";
+  const quiet = QUIET;
   // A tick box on the night ground: the browser's own focus ring is near black there, so it gets the page's.
   const box = "size-5 shrink-0 accent-coral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper";
-  // A link inside a sentence: a thumb's worth of room round it that moves no line, and a focus ring drawn round the word itself.
-  const inline = "group -mx-1.5 -my-3.5 inline-block px-1.5 py-3.5 hover:text-paper focus-visible:outline-none";
-  const inlineWord = "rounded-sm underline underline-offset-2 group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-coral";
+  const inline = INLINE;
+  const inlineWord = INLINE_WORD;
   // A screen's heading: where the keyboard's focus lands when the screen changes (never a stop on the way through the page).
   const title = "text-[1.8rem] leading-tight italic [overflow-wrap:anywhere] focus:outline-none";
   const Icon = stage === "open" ? PenLine : stage === "done" ? CircleCheck : stage === "taken" ? Undo2 : Lock;
-  const ended = stage === "full" ? t.fullTitle : stage === "closed" ? fill(t.closedTitle, { from }) : stage === "expired" ? t.expiredTitle : stage === "sent" ? t.sentAwayTitle : stage === "taken" ? t.takenTitle : stage === "gone" ? gone.title : null;
+  const ended = stage === "full" ? t.fullTitle : stage === "closed" ? fill(t.closedTitle, { from }) : stage === "expired" ? t.expiredTitle : stage === "sent" ? t.sentAwayTitle : stage === "taken" ? t.takenTitle : stage === "unfound" ? t.notHereTitle : stage === "gone" ? gone.title : null;
   // A photo that could not be used is said at the photo button, where the person just was.
   const photoProblem = takesPhotos && (problem === "bad_photo" || problem === "too_large" || problem === "photo_offline");
 
-  // What to do once the page can no longer take a note back: the address is a link that opens an
-  // email with this page's reference in its subject, not a string to select by hand on a phone.
-  const writeIn =
-    tooLate || notHere ? (
-      <p role="alert" className="mt-4 text-sm leading-relaxed [overflow-wrap:anywhere] text-paper/80" data-testid="contribute-write-in">
-        {around(
-          tooLate ? t.tooLate : t.notHere,
-          <a href={groupWriteInLink(reportRef, locale)} className={cn(inline, "text-paper")} data-testid="contribute-write-in-link">
-            <span className={inlineWord}>{BRAND.supportEmail}</span>
-          </a>,
-        )}
-      </p>
-    ) : null;
+  // What to do once the page can no longer take a note back. Where the headline has already said
+  // why (the card was sent; the note is not there), the line is only what to do about it.
+  const writeIn = tooLate || notHere ? <WriteIn text={tooLate ? t.tooLate : stage === "unfound" ? t.notHereDo : `${t.notHereTitle} ${t.notHereDo}`} reportRef={reportRef} locale={locale} /> : null;
 
-  // The notes this browser can still take back, each with its own button (named once there is more
-  // than one to tell apart), and what the last tap came to.
   const takeBackPart = (
-    <>
-      {tookBack !== null ? (
-        <p role="status" className="mt-3 text-sm [overflow-wrap:anywhere] text-paper/80" data-testid="contribute-took-back">
-          {fill(t.takenOne, { name: isolated(tookBack) })}
-        </p>
-      ) : null}
-      {writeIn}
-      {tooLate ? null : (
-        <div className={cn("flex flex-col items-center", notes.length > 0 && "mt-4")}>
-          {notes.map((note) => (
-            <button key={note.s} type="button" onClick={() => void takeBack(note)} disabled={takingBack !== null} className={cn(quiet, "underline [overflow-wrap:anywhere] disabled:opacity-60")} data-testid="contribute-take-back">
-              {takingBack === note.s ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-              {takingBack === note.s ? t.takingBack : notes.length > 1 || tookBack !== null ? fill(t.takeBackOf, { name: isolated(note.n) }) : t.takeBack}
-            </button>
-          ))}
-        </div>
-      )}
-      {problem && stage !== "open" ? (
-        <p role="alert" className={cn("mt-2 text-sm", warn)}>
-          {t[problem]}
-        </p>
-      ) : null}
-    </>
+    <TakeBack
+      locale={locale}
+      notes={notes}
+      takingBack={takingBack}
+      tookBack={tookBack}
+      writeIn={writeIn}
+      named={notes.length > 1 || tookBack !== null || notHere}
+      over={tooLate}
+      problem={problem && stage !== "open" ? t[problem] : null}
+      onTakeBack={(note) => void takeBack(note)}
+    />
   );
 
   return (
@@ -744,7 +636,7 @@ export function ContributeForm({
           </div>
           {/* A link that takes no more notes still lets a note be taken back, until the card is sent (the
               secret alone finds the note, so even at a link that was reset); after that, the address to write to. */}
-          {stage === "full" || stage === "closed" || stage === "expired" || stage === "gone" ? takeBackPart : stage === "sent" ? writeIn : null}
+          {stage === "full" || stage === "closed" || stage === "expired" || stage === "gone" ? takeBackPart : stage === "sent" || stage === "unfound" ? writeIn : null}
         </div>
       )}
 

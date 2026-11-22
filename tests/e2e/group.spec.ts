@@ -47,6 +47,18 @@ test.describe("with the switch off, as it is live", () => {
     expect((await request.post("/api/group/confirm?t=anything&l=en")).status()).toBe(404);
   });
 
+  test("no editor, dashboard or account page carries a group card's words in its source", async ({ request }) => {
+    // The editor's and the account's words go to the browser whole; a group card's are held back
+    // from them (src/i18n/client-namespaces.ts), so the product is not named in any page's source.
+    for (const address of ["/create/the-letter", "/es/create/the-letter", "/create/jar-of-reasons", "/dashboard", "/es/dashboard", "/account", "/es/account"]) {
+      const res = await request.get(address);
+      expect(res.status(), address).toBe(200);
+      const source = await res.text();
+      expect(source.length, address).toBeGreaterThan(5000);
+      expect(source, address).not.toMatch(/group cards?|tarjetas? en grupo|groupOn|groupEvery|signInBlurbGroup|priceLine/i);
+    }
+  });
+
   test("the /c/ address is never redirected to a language: it answers where it was asked", async ({ request }) => {
     const res = await request.get(`/c/${TOKEN}`, { maxRedirects: 0, headers: { "accept-language": "es-ES,es;q=0.9" } });
     expect(res.status()).toBe(404);
@@ -209,7 +221,8 @@ test.describe("the page at a group card's link", () => {
     await write(page, "La abuela", "Cuarenta no es nada.");
     await page.getByTestId("contribute-submit").click();
     await page.getByTestId("contribute-take-back").click();
-    await expect(page.getByTestId("contribute-write-in")).toContainText("Esa nota ya no se puede retirar desde aquí. Escribe a");
+    await expect(page.getByTestId("contribute-ended")).toHaveText("Esa nota ya no se puede retirar desde aquí.");
+    await expect(page.getByTestId("contribute-write-in")).toHaveText(/^Escribe a \S+@\S+ y la quitamos\.$/);
     const href = decodeURIComponent((await page.getByTestId("contribute-write-in-link").getAttribute("href")) ?? "");
     expect(href).toContain("subject=Quitar mi nota de la tarjeta en grupo prev1ew0");
   });
@@ -221,12 +234,45 @@ test.describe("the page at a group card's link", () => {
     await write(page);
     await page.getByTestId("contribute-submit").click();
     await page.getByTestId("contribute-take-back").click();
-    await expect(page.getByTestId("contribute-write-in")).toContainText("That note can't be taken back from here any more. Write to");
-    await expect(page.getByTestId("contribute")).toHaveAttribute("data-stage", "done");
-    await expect(page.getByTestId("contribute-ended")).toHaveCount(0);
+    // The server has just said the note is not there: the page stops saying whose hands it is in,
+    // and says the one thing it knows, once, as its headline, with what to do under it.
+    await expect(page.getByTestId("contribute-ended")).toHaveText("That note can't be taken back from here any more.");
+    await expect(page.getByTestId("contribute-ended")).toBeFocused();
+    await expect(page.getByTestId("contribute")).toHaveAttribute("data-stage", "unfound");
+    await expect(page.getByTestId("contribute-write-in")).toHaveText(/^Write to \S+@\S+ and we'll take it out\.$/);
+    await expect(page.getByTestId("contribute-done")).toHaveCount(0);
+    await expect(page.locator("body")).not.toContainText("Your note is with Tom");
     await expect(page.locator("body")).not.toContainText("has been taken back");
-    // The key that found nothing is not offered again.
+    // Nothing offers another note beside that, and the key that found nothing is not offered again.
+    await expect(page.getByTestId("contribute-another")).toHaveCount(0);
     await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+    await expect(page.getByTestId("contribute-own")).toHaveText("Make a gift of your own");
+    expect(await page.evaluate(() => Object.keys(window.localStorage).filter((key) => key.startsWith("ethos:group-notes:")))).toEqual([]);
+    // Coming back, the link is what it is: here, still taking notes.
+    await page.reload();
+    await expect(page.getByTestId("contribute-name")).toBeVisible();
+  });
+
+  test("one of two notes can no longer be found: the other is still with Tom, still named, and the last tap's answer is the only one said", async ({ page }) => {
+    let n = 0;
+    const secrets = ["a".repeat(32), "b".repeat(32)];
+    await answer(page, "**/api/group/contribute", () => ({ status: 200, body: { ok: true, withdraw: secrets[n++] } }));
+    await answer(page, "**/api/group/withdraw", (request) => ((request.postDataJSON() as { withdraw: string }).withdraw === secrets[0] ? { status: 404, body: { error: "not_found" } } : { status: 200, body: { ok: true } }));
+    await page.goto(PREVIEW);
+    await write(page);
+    await page.getByTestId("contribute-submit").click();
+    await page.getByTestId("contribute-another").click();
+    await write(page, "Sam", "You taught me to drive.");
+    await page.getByTestId("contribute-submit").click();
+    await page.getByTestId("contribute-take-back").first().click();
+    // Sam's note is still there, so the page still says so; Gran's is the one that can't be found.
+    await expect(page.getByTestId("contribute-done")).toContainText("Your note is with Tom.");
+    await expect(page.getByTestId("contribute-write-in")).toContainText("That note can't be taken back from here any more. Write to");
+    await expect(page.getByTestId("contribute-take-back")).toHaveText(["Take back the note from Sam"]);
+    await expect(page.getByTestId("contribute-another")).toBeVisible();
+    await page.getByTestId("contribute-take-back").click();
+    await expect(page.getByTestId("contribute-ended")).toHaveText("Your note has been taken back.");
+    await expect(page.getByTestId("contribute-write-in")).toHaveCount(0);
   });
 
   test("the way to take a note back outlives the tab, and a second note does not cost the first its own", async ({ page, context }) => {
@@ -1344,6 +1390,11 @@ test.describe("the page at a link, used the way people use it", () => {
     await expect(page.getByRole("heading", { name: "Este enlace ya no funciona." })).toBeVisible();
     await expect(page.getByTestId("group-link-gone")).toContainText("Pide uno nuevo a quien te lo envió.");
 
+    // Someone who never wrote a note here is offered nothing to take back, and no address to write to.
+    await expect(page.getByTestId("gone-take-back")).toBeHidden();
+    await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+    await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+
     // Off, as this server is: exactly the page every other missing address gets, light ground and all.
     const res = await page.goto(`/c/${TOKEN}`);
     expect(res?.status()).toBe(404);
@@ -1354,6 +1405,84 @@ test.describe("the page at a link, used the way people use it", () => {
     await page.goto("/no-such-page-anywhere");
     const elsewhere = await page.getByRole("heading", { name: "This page wandered off" }).evaluate((h) => getComputedStyle(h).color);
     expect(there).toBe(elsewhere);
+  });
+
+  /** A browser that wrote notes at the link before its sender made a new one (put there once: a note taken back stays out on a reload). */
+  const keep = (page: Page, notes: { s: string; n: string }[]) =>
+    page.addInitScript(
+      ([key, list]) => {
+        if (window.sessionStorage.getItem("kept-once")) return;
+        window.sessionStorage.setItem("kept-once", "1");
+        window.localStorage.setItem(key, list);
+      },
+      [`ethos:group-notes:${TOKEN}`, JSON.stringify(notes.map((note, i) => ({ ...note, t: Date.now() - 86_400_000 + i })))] as const,
+    );
+
+  test("a link that was reset still lets someone take back the note they wrote there, from the same browser", async ({ page }) => {
+    await keep(page, [{ s: "w".repeat(32), n: "Gran" }]);
+    const taken = await answer(page, "**/api/group/withdraw", { status: 200, body: { ok: true } });
+    await page.goto(`${PREVIEW}?state=gone`);
+    await expect(page.getByRole("heading", { name: "This link no longer works." })).toBeVisible();
+    const button = page.getByTestId("contribute-take-back");
+    await expect(button).toHaveText("Take my note back");
+    expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    // Between the line on what to do and the way on, like on the page the note was written at.
+    const [ask, own, at] = await Promise.all([page.getByText("Ask whoever sent it for a new one.").boundingBox(), page.getByRole("link", { name: "Make a gift of your own" }).boundingBox(), button.boundingBox()]);
+    expect(at!.y).toBeGreaterThan(ask!.y + ask!.height);
+    expect(at!.y + at!.height).toBeLessThanOrEqual(own!.y);
+    await button.click();
+    await expect(page.getByTestId("contribute-took-back")).toHaveText("The note from Gran has been taken back.");
+    // The secret alone finds the note; the token only says which page asked.
+    expect(taken.map((request) => request.postDataJSON())).toEqual([{ token: TOKEN, withdraw: "w".repeat(32) }]);
+    await expect(button).toHaveCount(0);
+    await expect(page.getByTestId("gone-take-back")).toBeFocused();
+    await expect(page.getByRole("heading", { name: "This link no longer works." })).toBeVisible();
+    expect(await page.evaluate(() => Object.keys(window.localStorage).filter((key) => key.startsWith("ethos:group-notes:")))).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    // Coming back again there is nothing left to offer.
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "This link no longer works." })).toBeVisible();
+    await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+  });
+
+  test("at a reset link, two notes are told apart by name, and a note the server can't find or a card already sent gets the address to write to", async ({ page }) => {
+    await keep(page, [
+      { s: "a".repeat(32), n: "La abuela" },
+      { s: "b".repeat(32), n: "El abuelo" },
+    ]);
+    let status = 404;
+    await answer(page, "**/api/group/withdraw", () => ({ status, body: { error: status === 404 ? "not_found" : "sent" } }));
+    await page.goto(`${PREVIEW}?state=gone&lang=es`);
+    await expect(page.getByTestId("contribute-take-back")).toHaveText(["Retirar la nota: La abuela", "Retirar la nota: El abuelo"]);
+    await page.getByTestId("contribute-take-back").first().click();
+    // Not found: never "taken back". The email names no card (this page knows of none) and asks who sent the link.
+    await expect(page.getByTestId("contribute-write-in")).toHaveText(/^Esa nota ya no se puede retirar desde aquí\. Escribe a \S+@\S+ y la quitamos\.$/);
+    await expect(page.getByTestId("contribute-took-back")).toHaveCount(0);
+    const href = decodeURIComponent((await page.getByTestId("contribute-write-in-link").getAttribute("href")) ?? "");
+    expect(href).toMatch(/^mailto:[^?]+@[^?]+\?subject=Quitar mi nota de una tarjeta en grupo&body=El nombre que puse en mi nota:/);
+    expect(href).toContain("Quién me envió el enlace:");
+    expect(href).not.toContain(TOKEN);
+    expect((await page.getByTestId("contribute-write-in-link").boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await expect(page.getByTestId("contribute-take-back")).toHaveText(["Retirar la nota: El abuelo"]);
+    // The card went out in the meantime: no button is left, and the line says why.
+    status = 410;
+    await page.getByTestId("contribute-take-back").click();
+    await expect(page.getByTestId("contribute-write-in")).toHaveText(/^Esta tarjeta ya se ha enviado\. Escribe a \S+@\S+ y quitamos tu nota\.$/);
+    await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+  });
+
+  test("at a reset link, a take-back that fails says so and can be tried again", async ({ page }) => {
+    await keep(page, [{ s: "w".repeat(32), n: "Gran" }]);
+    let status = 500;
+    await answer(page, "**/api/group/withdraw", () => ({ status, body: status === 200 ? { ok: true } : { error: "failed" } }));
+    await page.goto(`${PREVIEW}?state=gone`);
+    await page.getByTestId("contribute-take-back").click();
+    await expect(page.getByTestId("gone-take-back").getByRole("alert")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(page.getByTestId("contribute-take-back")).toBeEnabled();
+    status = 200;
+    await page.getByTestId("contribute-take-back").click();
+    await expect(page.getByTestId("contribute-took-back")).toHaveText("The note from Gran has been taken back.");
+    await expect(page.getByTestId("gone-take-back").getByRole("alert")).toHaveCount(0);
   });
 });
 
@@ -2005,6 +2134,9 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
     await expect(page.getByTestId("group-error")).toHaveText("Gran has just taken that note back.");
     await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (0)");
     await expect(page.getByTestId("group-waiting-entry")).toHaveCount(0);
+    // Somebody did add a note, and the line above has just said what became of it: nothing under it says nobody has.
+    await expect(page.getByTestId("group-waiting-empty")).toHaveCount(0);
+    await expect(page.getByTestId("group-section")).not.toContainText("Nobody has added a note yet");
     await expect(page.getByText("Try again in a moment")).toHaveCount(0);
     await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (0 of 25)");
   });
@@ -2020,6 +2152,15 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
     await page.getByTestId("group-reject").click();
     await expect(page.getByTestId("group-error")).toHaveText("That note was already dealt with somewhere else. This list is up to date now.");
     await expect(page.getByTestId("group-waiting-entry")).toHaveCount(0);
+    await expect(page.getByTestId("group-waiting-empty")).toHaveCount(0);
+  });
+
+  test("a list nobody has added to yet says so, when there is nothing else to say about it", async ({ page }) => {
+    await answer(page, "**/api/group/find", { status: 200, body: { group: serverGroup({}, []) } });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (0)");
+    await expect(page.getByTestId("group-waiting-empty")).toHaveText("Nobody has added a note yet. They appear here when they do.");
+    await expect(page.getByTestId("group-error")).toHaveCount(0);
   });
 
   test("names and notes written right to left are ranged right in the panel, and the count under the sender's own note is 12 px", async ({ page }) => {

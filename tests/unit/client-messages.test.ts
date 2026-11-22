@@ -1,10 +1,12 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { AbstractIntlMessages } from "next-intl";
 import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
-import { CLIENT_NAMESPACES } from "@/i18n/client-namespaces";
-import { isCovered, mergeMessages, pickMessages } from "@/i18n/messages-subset";
+import es from "../../messages/es.json";
+import { CLIENT_NAMESPACES, GROUP_WORDS, messagesForScope, type ClientScope } from "@/i18n/client-namespaces";
+import { isCovered, mergeMessages, omitMessages, pickMessages } from "@/i18n/messages-subset";
 
 describe("cutting the catalogue down", () => {
   const all = { common: { free: "Free", premium: "Premium" }, money: { code: { apply: "Apply" }, invite: { title: "Invite" } }, games: { lobby: { start: "Start" } } };
@@ -22,6 +24,13 @@ describe("cutting the catalogue down", () => {
     expect(mergeMessages({ money: { code: all.money.code } }, { money: { invite: all.money.invite }, games: all.games })).toEqual({ money: all.money, games: all.games });
   });
 
+  it("leaves out a branch or a single line, and a branch that is left empty goes with it", () => {
+    expect(omitMessages(all, ["money.code", "games.lobby.start", "common.free"])).toEqual({ common: { premium: "Premium" }, money: { invite: all.money.invite } });
+    expect(omitMessages(all, ["nope", "money.nope", "common.free.deeper"])).toEqual(all);
+    // The catalogue it was given is not changed.
+    expect(all.money.code).toEqual({ apply: "Apply" });
+  });
+
   it("counts a namespace as covering its branches, not the other way round", () => {
     expect(isCovered("games.lobby", ["games"])).toBe(true);
     expect(isCovered("games", ["games"])).toBe(true);
@@ -32,6 +41,54 @@ describe("cutting the catalogue down", () => {
   it("only names paths the catalogue has", () => {
     const has = (p: string) => p.split(".").reduce<unknown>((node, key) => (node && typeof node === "object" ? (node as Record<string, unknown>)[key] : undefined), en) !== undefined;
     for (const [scope, paths] of Object.entries(CLIENT_NAMESPACES)) for (const p of paths) expect(has(p), `${scope}: ${p}`).toBe(true);
+    for (const p of [...GROUP_WORDS.browser, ...GROUP_WORDS.server]) expect(has(p), `group words: ${p}`).toBe(true);
+  });
+});
+
+/**
+ * A group card's words are in no layout's share. The editor's and the account's namespaces are sent
+ * whole, and while group cards were off that put "Group cards on {template} cost {price}…" and the
+ * whole panel into the source of every editor, dashboard and account page.
+ */
+describe("a group card's words", () => {
+  const NAMED = /group cards?|tarjetas? en grupo/i;
+  const [EN, ES] = [en, es] as unknown as AbstractIntlMessages[];
+  const catalogues = { en: EN, es: ES } as const;
+
+  it("are sent by no layout or page, in either language: what each scope sends does not name the product", () => {
+    for (const [lang, all] of Object.entries(catalogues)) {
+      for (const scope of Object.keys(CLIENT_NAMESPACES) as ClientScope[]) {
+        const sent = JSON.stringify(messagesForScope(all, scope));
+        expect(sent, `${lang} ${scope}`).not.toMatch(NAMED);
+        expect(sent, `${lang} ${scope}`).not.toMatch(/"(groupOn|groupEvery|signInBlurbGroup|priceLine)"/);
+      }
+    }
+  });
+
+  it("are every line of the catalogue that names the product, so a new one can't slip out with its namespace", () => {
+    for (const [lang, all] of Object.entries(catalogues)) {
+      const rest = JSON.stringify(omitMessages(all, [...GROUP_WORDS.browser, ...GROUP_WORDS.server]));
+      expect(rest, lang).not.toMatch(NAMED);
+    }
+  });
+
+  it("the rest of the editor's and the account's words still go: only those lines are held back", () => {
+    const editor = messagesForScope(EN, "(editor)/layout") as unknown as typeof en;
+    expect(editor.editor.publishSheet.signInTitle).toBe(en.editor.publishSheet.signInTitle);
+    expect(Object.keys(editor.editor.publishSheet).length).toBe(Object.keys(en.editor.publishSheet).length - 1);
+    expect(Object.keys(editor.editor.sections).length).toBe(Object.keys(en.editor.sections).length - 1);
+    expect(Object.keys(editor.editor).length).toBe(Object.keys(en.editor).length - 1);
+    expect(Object.keys(editor.money.product).length).toBe(Object.keys(en.money.product).length - 1);
+    const app = messagesForScope(EN, "(app)/layout") as unknown as typeof en;
+    expect(Object.keys(app.account).length).toBe(Object.keys(en.account).length - 2);
+  });
+
+  it("go to the browser whole from the one provider that sends them", () => {
+    const sent = pickMessages(EN, GROUP_WORDS.browser) as unknown as typeof en;
+    expect(sent.editor.group).toEqual(en.editor.group);
+    expect(sent.editor.sections.group).toEqual(en.editor.sections.group);
+    expect(sent.editor.publishSheet).toEqual({ signInBlurbGroup: en.editor.publishSheet.signInBlurbGroup });
+    expect(Object.keys(sent)).toEqual(["editor"]);
   });
 });
 
@@ -156,5 +213,24 @@ describe("every route sends what its client components read", () => {
       }
     }
     expect([...new Set(missing)]).toEqual([]);
+  });
+
+  // No layout sends a group card's words (GROUP_WORDS), so "editor" above does not cover them: a
+  // route whose components read them wraps what it renders in <GroupMessages>, or its panel would
+  // show raw keys. And nothing in the browser may read the lines kept for the server.
+  it("every route that can draw a group card's panel sends its words itself, and no other route does", () => {
+    const under = (ns: string, paths: readonly string[]) => paths.some((p) => ns === p || ns.startsWith(`${p}.`));
+    const draws: string[] = [];
+    for (const file of files) {
+      const namespaces = [...needs(file).keys()];
+      expect(namespaces.filter((ns) => under(ns, GROUP_WORDS.server)), `${keyOf(file)} reads words kept for the server`).toEqual([]);
+      const sends = /<GroupMessages\b/.test(read(file));
+      const reads = namespaces.some((ns) => under(ns, GROUP_WORDS.browser));
+      expect(sends, `${keyOf(file)}: ${reads ? "reads a group card's words and must wrap its panel in <GroupMessages>" : "sends a group card's words and reads none"}`).toBe(reads);
+      if (reads) draws.push(keyOf(file));
+    }
+    expect(draws.sort()).toEqual(["(editor)/create/[templateSlug]/page", "(editor)/group-preview/panel/page", "(editor)/group-preview/pay/page"]);
+    // The editor sends them only with a template made for group cards.
+    expect(read(path.join(APP, "(editor)", "create", "[templateSlug]", "page.tsx"))).toContain("{manifest.features.group ? <GroupMessages locale={locale}>{shell}</GroupMessages> : shell}");
   });
 });

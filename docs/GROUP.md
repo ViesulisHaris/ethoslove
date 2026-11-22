@@ -29,6 +29,17 @@ passed down as a prop.
 Under `next dev` only, `/create/group-reference?group=on` (or `off`) shows either state of the
 editor's panel for the reference template. A production build never reads that query.
 
+**The product's words stay out of every page's source.** The editor's, the dashboard's and the
+account's pages are sent their whole namespaces of the message catalogue, which used to carry the
+panel's text and its price sentence into the source of every editor while switched off. The lines
+that name a group card are listed once, `GROUP_WORDS` in `src/i18n/client-namespaces.ts`, and
+`<ClientMessages>` leaves them out everywhere. The one live page that reads them in the browser,
+the editor of a template that declares `features.group`, sends them itself (`<GroupMessages>` in
+`src/app/[currency]/[locale]/(editor)/create/[templateSlug]/page.tsx`); the account page's two
+lines are read on the server and never sent. A new line that names the product must be added to
+`GROUP_WORDS`: `tests/unit/client-messages.test.ts` fails until it is, and fails a page that draws
+the panel without sending its words.
+
 ## The contract a template keeps
 
 `GiftData.contributions?: { key, name, note, photo? }[]` (at most 25; keys unique; `src/lib/gift/schema.ts`)
@@ -217,10 +228,23 @@ How the page behaves when it is used by hand (each of these was found broken onc
 - **Too late to take a note back** (the card went out while the page was open): the page becomes
   "This card has been sent." and the support address is a link that opens an email with the page's
   reference in its subject (`groupWriteInLink`).
+- **A note the server no longer finds** (404 from the withdraw route) is never said to be taken
+  back. If this browser has another note at the link, the page stays "Your note is with …" and
+  says under it that that note can't be taken back from here, with the address to write to. If it
+  was the last one, the page stops saying whose hands the note is in and stops offering another:
+  its headline is "That note can't be taken back from here any more." with the address under it.
+  Each tap's answer replaces the last one's.
 - **An address that opens no card** (reset, mistyped, made up) is a 404 drawn by `not-found.tsx`
   beside the page: the site's own "not found" while the switch is off, and once it is on one line,
-  "This link no longer works. Ask whoever sent it for a new one." (`GroupLinkGone`), the same for
-  every address.
+  "This link no longer works. Ask whoever sent it for a new one." (`GroupLinkGone`), the same from
+  the server for every address.
+- **A note written at a link that was reset since can still be taken back there.** The browser
+  that wrote it still holds its key under the old link, and the withdraw route finds a note by its
+  key alone, so the "no longer works" page reads the token off its own address and offers "Take my
+  note back" to that browser only (`src/components/group/gone-take-back.tsx`; the words and the
+  buttons are the contribute page's own, `take-back.tsx`). This is what the privacy policy
+  promises: from the page it was written on, in the same browser, until the card is sent. The page
+  knows no card, so its email to support quotes no reference and asks who sent the link instead.
 
 In the sender's panel: until one read of the group has been answered it shows that it is still
 asking ("Couldn't load your group card. Trying again…", every five seconds; "You've been signed
@@ -279,6 +303,14 @@ In this order, each step leaving the site as it was until the last:
    "last updated" line and their dates in the sitemap both read it.
 5. Optionally make a Stripe Product and set `STRIPE_PRODUCT_GROUP` (reporting only).
 6. Set `GROUP_GIFTS_ENABLED=true` in Vercel and redeploy.
+
+**One thing left to the owner: `robots.txt`.** It tells crawlers to stay off `/g/` and says nothing
+of `/c/`, and this branch leaves it so on purpose. The page at `/c/<token>` answers every crawler
+with `noindex, nofollow` and sends no referrer, and a crawler obeys `noindex` only on a page it is
+allowed to fetch: listed in `robots.txt`, a link someone posted in public could still show up in a
+search as a bare address, and the address is the key to the page. Left out, it is fetched, read and
+dropped. If you would rather have the two lists match, add `"/c/"` and `"/es/c/"` beside `"/g/"`
+in `src/app/robots.ts` on the day the switch goes on; nothing else depends on it.
 
 ## Tests
 

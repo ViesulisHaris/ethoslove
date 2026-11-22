@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { GroupPanelPreview, type PanelPreviewState } from "@/components/group/panel-preview";
+import { GroupMessages } from "@/i18n/client-messages";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -28,7 +29,10 @@ export default async function GroupPanelPreviewPage({ params, searchParams }: Pa
   const state = STATES.find((s) => s === one(query.state)) ?? "intro";
   return (
     <Suspense>
-      <GroupPanelPreview state={state} locale={locale === "es" ? "es" : "en"} owned={one(query.owned) === "1"} live={one(query.live) === "1"} />
+      {/* The panel's words, which the editor's layout does not send (src/i18n/client-namespaces.ts, GROUP_WORDS). */}
+      <GroupMessages locale={locale}>
+        <GroupPanelPreview state={state} locale={locale === "es" ? "es" : "en"} owned={one(query.owned) === "1"} live={one(query.live) === "1"} />
+      </GroupMessages>
     </Suspense>
   );
 }

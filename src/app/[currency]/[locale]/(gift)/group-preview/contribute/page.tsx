@@ -27,7 +27,7 @@ export default async function ContributePreviewPage({ params, searchParams }: Pa
   setRequestLocale(locale);
   const query = await searchParams;
   const es = one(query.lang) === "es";
-  if (one(query.state) === "gone") return <GroupLinkGone locale={es ? "es" : "en"} />;
+  if (one(query.state) === "gone") return <GroupLinkGone locale={es ? "es" : "en"} token="previewPreviewPreview0" />;
   const state = STATES.find((s) => s === one(query.state)) ?? "open";
   const prompt = one(query.prompt);
   return (

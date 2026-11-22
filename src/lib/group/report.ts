@@ -31,14 +31,17 @@ export function groupReportLink(kind: "page" | "note", ref: string, locale: stri
  * Writing in to have a note taken out, once the page can no longer do it (the card was sent, or the
  * note is no longer where the browser's key points): the same address, with the page's reference in
  * the subject so support can find the card, and a line for the name the note was signed with. Like a
- * report, it quotes nothing that opens anything.
+ * report, it quotes nothing that opens anything. A link that opens no card any more has no reference
+ * to quote (the page is told nothing about the card it once was), so that email asks who sent the
+ * link instead.
  */
 const WRITE_IN = {
-  en: { subject: "Take my note out of group card {ref}", body: ["Group card: {ref}", "", "The name on my note:", ""] },
-  es: { subject: "Quitar mi nota de la tarjeta en grupo {ref}", body: ["Tarjeta en grupo: {ref}", "", "El nombre que puse en mi nota:", ""] },
+  en: { subject: "Take my note out of group card {ref}", body: ["Group card: {ref}", "", "The name on my note:", ""], bare: { subject: "Take my note out of a group card", body: ["The name on my note:", "", "Who sent me the link:", ""] } },
+  es: { subject: "Quitar mi nota de la tarjeta en grupo {ref}", body: ["Tarjeta en grupo: {ref}", "", "El nombre que puse en mi nota:", ""], bare: { subject: "Quitar mi nota de una tarjeta en grupo", body: ["El nombre que puse en mi nota:", "", "Quién me envió el enlace:", ""] } },
 } as const;
 
-export function groupWriteInLink(ref: string, locale: string): string {
+export function groupWriteInLink(ref: string | null, locale: string): string {
   const words = WRITE_IN[locale === "es" ? "es" : "en"];
-  return `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(words.subject.replace("{ref}", ref))}&body=${encodeURIComponent(words.body.join("\n").replace("{ref}", ref))}`;
+  const { subject, body } = ref === null ? words.bare : { subject: words.subject.replace("{ref}", ref), body: words.body.map((line) => line.replace("{ref}", ref)) };
+  return `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
 }
