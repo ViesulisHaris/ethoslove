@@ -23,7 +23,7 @@ import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
 import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
-import { COPY, NoteCard, Opening, TAG_SMALLEST, Template, artFor } from "@/templates/advent-calendar/Template";
+import { COPY, NoteCard, Opening, TAG_SMALLEST, Template, artFor, fitTag } from "@/templates/advent-calendar/Template";
 import { template } from "@/templates/advent-calendar";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { fillerIn } from "./filler";
@@ -482,9 +482,42 @@ describe("the contract a group template keeps", () => {
       expect(tag, name).not.toBeNull();
       const size = Number(/font-size:max\(8\.5px, calc\(([\d.]+)\*var\(--k\)\)\)/.exec(tag![2])?.[1]);
       expect(size, name).toBeGreaterThanOrEqual(TAG_SMALLEST);
+      // before it has been measured (this is the server's HTML) it is cut to two lines, never three
       expect(tag![1], name).toContain("line-clamp-2");
       expect(tag![1], name).not.toContain("line-clamp-3");
     }
+  });
+
+  it("a name is written as large as leaves every word whole: one line of a large hand, two of a small one, a word broken only when no size holds it", () => {
+    // Widths in ems as the handwriting face draws them (measured in the browser at 390 px: "Okonkwos" is 8.47 stage units at 2.6).
+    const em = { Mum: 1.642, Gran: 1.6, Auntie: 2.154, Jo: 0.75, The: 1.2, Okonkwos: 3.258, Grandma: 3.081, Charlotte: 3.242, Christopher: 4.023 } as const;
+    const space = 0.25;
+    // a tag's face behind a door of the right-hand column, where the open leaf leaves least of it, and behind one of the others
+    const faces = [{ w: 8.35, h: 5.98 }, { w: 8.79, h: 6 }];
+    const fit = (words: (keyof typeof em)[], face: (typeof faces)[number]) => fitTag(words.map((word) => em[word]), words.map((word) => word.length), space, face);
+    for (const face of faces) {
+      // a short name: one line, large
+      expect(fit(["Mum"], face)).toEqual({ size: 3.9, track: 0, whole: true });
+      expect(fit(["Gran"], face)).toEqual({ size: 3.9, track: 0, whole: true });
+      // two words that do not share a line at any size: two lines of a size two lines fit in, each word whole
+      expect(fit(["Auntie", "Jo"], face)).toEqual({ size: 2.8, track: 0, whole: true });
+      // A word of seven to nine letters is as wide as the face at the smallest size. It used to be broken ("Grandm / a") or
+      // written at 7 px; it is whole, at the smallest size that reads, its letters a hair closer.
+      for (const word of ["Grandma", "Okonkwos", "Charlotte"] as const) expect(fit([word], face), word).toEqual({ size: TAG_SMALLEST, track: -0.04, whole: true });
+      expect(fit(["The", "Okonkwos"], face)).toEqual({ size: TAG_SMALLEST, track: -0.04, whole: true });
+      // a word no tag can hold is written at the smallest size and broken, never smaller
+      expect(fit(["Christopher"], face)).toEqual({ size: TAG_SMALLEST, track: 0, whole: false });
+      // whatever the name, never under the smallest size, and never more than two lines' worth claimed whole
+      for (const words of [["Mum"], ["Auntie", "Jo"], ["The", "Okonkwos"], ["Christopher"], ["Charlotte", "Grandma", "Okonkwos"]] as (keyof typeof em)[][]) expect(fit(words, face).size).toBeGreaterThanOrEqual(TAG_SMALLEST);
+      expect(fit(["Charlotte", "Grandma", "Okonkwos"], face).whole).toBe(false);
+    }
+    // A phone on its side draws the house small, and no writing under 8.5 px: there a stage unit is about 2.7 px, so the
+    // smallest sizes are drawn at 3.2 units and take that much room. A short name and two short words are still whole; a
+    // long word no longer is, and is cut rather than written too small to read.
+    const side = (words: (keyof typeof em)[]) => fitTag(words.map((word) => em[word]), words.map((word) => word.length), space, faces[1], 8.5 / 2.67);
+    expect(side(["Mum"])).toEqual({ size: 3.9, track: 0, whole: true });
+    expect(side(["Auntie", "Jo"])).toEqual({ size: 2.8, track: 0, whole: true });
+    expect(side(["The", "Okonkwos"]).whole).toBe(false);
   });
 
   it("the line at the foot says an envelope can be opened while one is in sight and none has been, and never calls unread notes done", () => {
@@ -523,6 +556,19 @@ describe("the contract a group template keeps", () => {
     expect(source).toContain(".ac-root{overflow:hidden;overflow:clip}");
     expect(source.match(/className="ac-root /g)).toHaveLength(2);
     expect(source).toContain('lit && !reduce && !away ? "ac-ring ');
+  });
+
+  it("the cover picker's tile is the house and the title: no button, no door opened, none of the small lines", () => {
+    const html = renderToStaticMarkup(<Opening fields={{ look: "midnight" }} recipientName="Nora" senderName="Tom" locale="en" />);
+    expect(html).toContain("plate-midnight-closed");
+    expect(html).toContain(">Merry Christmas, Nora</h1>");
+    expect(html).not.toMatch(/<button|data-niche=|data-foot/);
+    // the byline and the foot's line have a smallest size, which on a tile is a third of its width
+    expect(html).not.toContain("tap a door to open it");
+    expect(html).not.toMatch(/for Nora/i);
+    // the editor's still frame, a phone wide, keeps them
+    expect(still(demoData.en)).toContain("for Nora · from Tom and 8 more");
+    expect(still(demoData.en)).toMatch(/data-foot=/);
   });
 
   it("the editor's still frame stands as the list changes under it, from none to more than a house holds", () => {

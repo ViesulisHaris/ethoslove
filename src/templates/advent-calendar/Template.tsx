@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "motion/react";
 import type { GiftContribution } from "@/lib/gift/schema";
 import { isolated } from "@/lib/group/bidi";
@@ -205,11 +205,11 @@ function stood(g: Geometry, name: string): CSSProperties {
   return { ...within(g.inside, { x: g.floor.x + aside(g, name) + (sp.x - A.nicheFloor.x) * g.scale, y: g.floor.y + (sp.y - A.nicheFloor.y) * g.scale, w: sp.w * g.scale, h: sp.h * g.scale }), maxWidth: "none" };
 }
 /** Where a name is written on the tag, the same way: as much of the tag's face as the open leaf leaves in sight. */
-function tagFace(g: Geometry): CSSProperties {
+function tagFace(g: Geometry): Rect {
   const x = g.floor.x + aside(g, "tag") + (A.tagTL.x - A.nicheFloor.x) * g.scale;
   const right = x + (A.tagBR.x - A.tagTL.x) * g.scale;
   const left = Math.max(x, g.open.x + g.covered + 0.4);
-  return within(g.inside, { x: left, y: g.floor.y + (A.tagTL.y - A.nicheFloor.y) * g.scale, w: right - left, h: (A.tagBR.y - A.tagTL.y) * g.scale });
+  return { x: left, y: g.floor.y + (A.tagTL.y - A.nicheFloor.y) * g.scale, w: right - left, h: (A.tagBR.y - A.tagTL.y) * g.scale };
 }
 
 /**
@@ -461,7 +461,7 @@ export function Opening({ fields, recipientName, senderName, locale }: OpeningPr
   const doors = useMemo(() => doorsFor(seedOf(recipientName, senderName), 0), [recipientName, senderName]);
   return (
     <div data-advent-tile="" className="ac-root absolute inset-0 overflow-hidden select-none" style={{ ...TILE_VARS, background: look.floor, color: INK.ink } as CSSProperties}>
-      <Scene lookId={f.look} s={s} title={fill(s.title, { name: recipientName })} from={senderName} to={recipientName} notes={[]} doors={doors} opened={[]} readDoors={[]} swinging={[]} lit={false} nudge={0} lastOpened={0} reduce low={false} inert away={false} onDoor={() => {}} onNote={() => {}} onStar={() => {}} onStray={() => {}} onSwung={() => {}} />
+      <Scene lookId={f.look} s={s} title={fill(s.title, { name: recipientName })} from={senderName} to={recipientName} notes={[]} doors={doors} opened={[]} readDoors={[]} swinging={[]} lit={false} nudge={0} lastOpened={0} reduce low={false} inert tile away={false} onDoor={() => {}} onNote={() => {}} onStar={() => {}} onStray={() => {}} onSwung={() => {}} />
     </div>
   );
 }
@@ -504,6 +504,12 @@ type SceneProps = {
   wide?: { width: number; height: number; ready: boolean };
   /** Nothing to press: the editor's still frame and the cover picker's tile. */
   inert?: boolean;
+  /**
+   * The cover picker's tile, a thumb wide: the house and the title, and none of the small lines. Their type has a
+   * smallest size, which on a tile was a third of its width: the byline was cut to "FOR THEIR…" and "tap a door to
+   * open it" ran off the tile's foot.
+   */
+  tile?: boolean;
   /** A note or the letter is being read in front of it: still there, dimmed, out of reach of finger and keyboard. */
   away: boolean;
   onDoor: (number: number) => void;
@@ -513,7 +519,7 @@ type SceneProps = {
   onSwung: (number: number) => void;
 };
 
-function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, lastOpened, reduce, low, wide, inert = false, away, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
+function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, lastOpened, reduce, low, wide, inert = false, tile = false, away, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
   const look = LOOKS[lookId];
   const buttons = useRef(new Map<number, HTMLButtonElement>());
   const starButton = useRef<HTMLButtonElement>(null);
@@ -560,9 +566,11 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
 
   const words = (
     <>
-      <p dir="auto" className="max-w-full truncate uppercase" style={{ color: look.labelSoft, fontSize: "max(8.5px, calc(2.2*var(--k)))", letterSpacing: low ? "0.16em" : "0.3em" }}>
-        {byline}
-      </p>
+      {tile ? null : (
+        <p dir="auto" className="max-w-full truncate uppercase" style={{ color: look.labelSoft, fontSize: "max(8.5px, calc(2.2*var(--k)))", letterSpacing: low ? "0.16em" : "0.3em" }}>
+          {byline}
+        </p>
+      )}
       <h1 dir="auto" className="mt-[calc(1.4*var(--k))] line-clamp-2 max-w-full leading-[1.06] text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)", fontWeight: 500, fontSize: title.length > 40 ? "calc(4.6*var(--k))" : title.length > 22 ? "calc(5.8*var(--k))" : "calc(7.6*var(--k))" }}>
         {title}
       </h1>
@@ -671,9 +679,11 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
             <div className="pointer-events-none absolute inset-x-[5%] flex flex-col items-center text-center" style={{ ...back, bottom: down(170 - 30.6), color: look.label, textShadow: shadow }}>
               {words}
             </div>
-            <div className="ac-foot pointer-events-none absolute inset-x-[4%] text-center" style={{ ...back, textShadow: shadow }}>
-              {foot}
-            </div>
+            {tile ? null : (
+              <div className="ac-foot pointer-events-none absolute inset-x-[4%] text-center" style={{ ...back, textShadow: shadow }}>
+                {foot}
+              </div>
+            )}
           </>
         )}
 
@@ -739,19 +749,149 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
  */
 export const TAG_SMALLEST = 2.6;
 const TAG_FLOOR_PX = 8.5;
+/** The sizes a name is tried at, largest first, in stage units; how its lines are set; the room kept either side of it, in ems. */
+const TAG_SIZES = [3.9, 3.5, 3.1, 2.8, TAG_SMALLEST] as const;
+const TAG_LEADING = 0.98;
+const TAG_MARGIN = 0.16;
+/** A last try at the smallest size before a word is broken: the letters a hair closer, the margins a hair less. */
+const TAG_TIGHT = { track: -0.04, margin: 0.1 };
+
+export type TagFit = {
+  /** The size it is written at, in stage units. */
+  size: number;
+  /** Letters drawn closer together, in ems. */
+  track: number;
+  /** The whole name is on the tag, no word broken: nothing needs cutting. */
+  whole: boolean;
+};
+
+/**
+ * How a name is written on a tag: the largest size at which every word stays whole and the name takes no more
+ * lines than the tag's face has room for (one line of a large hand, two of a small one). `words` and `space` are
+ * widths in ems, as the handwriting face draws them; `letters` is how many each word has; `face` is the tag's face
+ * in stage units. `floor` is the smallest any writing is drawn on this screen, in the same units (8.5 px, which on a
+ * phone on its side is more than the smallest size): a size under it is drawn at it, and takes that much room.
+ * A name that fits at no size is written at the smallest, where it will be broken and cut.
+ */
+export function fitTag(words: readonly number[], letters: readonly number[], space: number, face: { w: number; h: number }, floor = 0): TagFit {
+  const lines = (nominal: number, track: number, margin: number) => {
+    const size = Math.max(nominal, floor);
+    const room = face.w - 2 * margin * size;
+    let count = 1;
+    let used = 0;
+    for (const [i, em] of words.entries()) {
+      const width = (em + track * letters[i]) * size;
+      if (width > room) return Infinity;
+      if (used && used + space * size + width > room) {
+        count++;
+        used = width;
+      } else used += (used ? space * size : 0) + width;
+    }
+    return count;
+  };
+  for (const size of TAG_SIZES) if (lines(size, 0, TAG_MARGIN) <= tagHolds(face, size)) return { size, track: 0, whole: true };
+  if (lines(TAG_SMALLEST, TAG_TIGHT.track, TAG_TIGHT.margin) <= tagHolds(face, TAG_SMALLEST)) return { size: TAG_SMALLEST, track: TAG_TIGHT.track, whole: true };
+  return TAG_BROKEN;
+}
+
+/** How many lines of a size the tag's face has the height for: one of a large hand, two of a small one, never more. */
+const tagHolds = (face: { h: number }, size: number) => Math.min(2, Math.max(1, Math.floor(face.h / (size * TAG_LEADING))));
+/** A name no size holds: the smallest size, broken where it must be and cut past two lines. */
+const TAG_BROKEN: TagFit = { size: TAG_SMALLEST, track: 0, whole: false };
+
+const tagStyle = (fit: TagFit): CSSProperties => ({
+  fontFamily: "var(--gift-font-hand)",
+  fontSize: `max(${TAG_FLOOR_PX}px, calc(${fit.size}*var(--k)))`,
+  lineHeight: TAG_LEADING,
+  letterSpacing: fit.track ? `${fit.track}em` : undefined,
+  paddingInline: `${fit.whole ? (fit.track ? TAG_TIGHT.margin : TAG_MARGIN) : 0.22}em`,
+  color: "#4a2418",
+});
+
+/**
+ * The arithmetic checked against the browser's own lines: the name set once more beside itself, out of sight, the way
+ * the fit says, and looked at. Widths measured a word at a time are not always what is drawn (letters of a joined script,
+ * Arabic among them, are not moved closer by letter-spacing), and a name said to be whole is then shown uncut.
+ */
+function drawnWhole(el: HTMLElement, fit: TagFit, most: number): boolean {
+  const host = el.parentElement;
+  if (!host) return false;
+  const probe = document.createElement("span");
+  probe.textContent = el.textContent;
+  probe.dir = "auto";
+  probe.className = "max-w-full py-[0.06em] text-center";
+  Object.assign(probe.style, tagStyle(fit), { position: "absolute", visibility: "hidden", pointerEvents: "none" });
+  host.appendChild(probe);
+  const range = document.createRange();
+  range.selectNodeContents(probe);
+  let lines = 0;
+  let foot = -Infinity;
+  for (const rect of [...range.getClientRects()].sort((a, b) => a.top - b.top)) {
+    if (rect.top >= foot - rect.height / 2) lines++;
+    foot = Math.max(foot, rect.bottom);
+  }
+  const fits = probe.scrollWidth <= probe.clientWidth + 1 && lines <= most;
+  probe.remove();
+  return fits;
+}
+
+/** Before a name has been measured (the server's HTML, the first frame): by its length, and cut if that was too hopeful. */
+const guessTag = (name: string): TagFit => {
+  const length = [...name].length;
+  return { size: length <= 4 ? 3.9 : length <= 6 ? 3.1 : TAG_SMALLEST, track: 0, whole: false };
+};
+
+let ruler: CanvasRenderingContext2D | null | undefined;
 
 /**
  * The name on the tag a read note leaves in its niche. Someone else's word: plain text, in its own direction, never past the tag.
- * A short name is written large. A longer one is written at the smallest size that reads, over two lines, and one too
- * long for those ends in an ellipsis: the whole name is on the card, and in the name of the door's button.
+ * It is measured in the handwriting face and written as large as leaves every word whole (fitTag): a short name on one
+ * line of a large hand, a longer one on two lines of the smallest that reads. Only a name no size can hold is broken,
+ * and ends in an ellipsis past two lines: the whole name is on the card, and in the name of the door's button.
  */
 function TagName({ g, name }: { g: Geometry; name: string }) {
-  const length = [...name].length;
-  const size = length <= 4 ? 3.9 : length <= 7 ? 3.1 : TAG_SMALLEST;
+  const face = tagFace(g);
+  const text = useRef<HTMLSpanElement>(null);
+  const [fit, setFit] = useState<TagFit>(() => guessTag(name));
+  useLayoutEffect(() => {
+    let alive = true;
+    const measure = () => {
+      const el = text.current;
+      if (!alive || !el) return;
+      if (ruler === undefined) ruler = document.createElement("canvas").getContext("2d");
+      if (!ruler) return;
+      ruler.font = `100px ${getComputedStyle(el).fontFamily}`;
+      const em = (part: string) => ruler!.measureText(part).width / 100;
+      const words = name.trim().split(/\s+/).filter(Boolean);
+      // how many pixels a stage unit is here: the face's box is the face's width in them
+      const k = (el.parentElement?.getBoundingClientRect().width ?? 0) / face.w;
+      const reckoned = fitTag(words.map(em), words.map((word) => [...word].length), em(" "), face, k > 0 ? TAG_FLOOR_PX / k : 0);
+      const next = reckoned.whole && !drawnWhole(el, reckoned, tagHolds(face, reckoned.size)) ? TAG_BROKEN : reckoned;
+      setFit((was) => (was.size === next.size && was.track === next.track && was.whole === next.whole ? was : next));
+    };
+    measure();
+    // the handwriting face may arrive after the tag does: measured in a stand-in face, a name would be sized for the wrong letters
+    void document.fonts?.ready.then(measure);
+    // and the house is another size when the phone is turned
+    const turned = typeof ResizeObserver === "function" && text.current?.parentElement ? new ResizeObserver(measure) : null;
+    if (turned && text.current?.parentElement) turned.observe(text.current.parentElement);
+    return () => {
+      alive = false;
+      turned?.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the face is the same rectangle for as long as the door is
+  }, [name, face.w, face.h]);
   return (
-    <span className="flex items-center justify-center" style={tagFace(g)}>
-      {/* room either side inside its own box: a handwriting face's last stroke runs past the letter's width, and a clamped line cuts what runs past */}
-      <span dir="auto" data-tag-name className="line-clamp-2 max-w-full px-[0.22em] py-[0.06em] text-center [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `max(${TAG_FLOOR_PX}px, calc(${size}*var(--k)))`, lineHeight: 0.98, color: "#4a2418" }}>
+    <span className="flex items-center justify-center" style={within(g.inside, face)}>
+      {/* Whole, it is not cut at all: a handwriting face's last stroke runs past its letter's width, and may. Broken, it is cut to two lines, with room either side for that stroke. */}
+      <span
+        ref={text}
+        dir="auto"
+        data-tag-name
+        data-whole={fit.whole ? "" : undefined}
+        className={`${fit.whole ? "" : "line-clamp-2 [overflow-wrap:anywhere] "}max-w-full py-[0.06em] text-center`}
+        style={tagStyle(fit)}
+      >
         {name}
       </span>
     </span>

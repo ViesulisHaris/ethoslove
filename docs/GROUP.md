@@ -143,7 +143,7 @@ plays both states. Four things do not follow from the switch and are done by han
    spec, `tests/e2e/advent-calendar.spec.ts`, skips itself under `CI`: take that line out.
 3. Where it stands in a list is the owner's call. Its `sortOrder` is 9, the newest gifts' own, so it
    stands among them and does not lead every list (a card that needs three other people and costs
-   more than any other gift, ahead of all of them, should be decided, not happen). To put it under
+   twice what one gift does, ahead of all of them, should be decided, not happen). To put it under
    "New", add it to `NEW_SLUGS` in `src/config/featured.ts`.
 4. Its page's own words. The growth build's template page (branch `growth/guides`) draws a palette,
    three steps and six idea cards per gift from three tables, and its tests hold every template in

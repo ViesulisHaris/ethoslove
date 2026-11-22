@@ -164,6 +164,24 @@ async function tagsRead(root: Locator, least: number) {
     expect(box.y + box.height).toBeLessThanOrEqual(host.y + host.height + 1);
     const size = await tag.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
     expect(size, await tag.innerText()).toBeGreaterThanOrEqual(least);
+    // a name written whole has no word wider than its line, and is on one line or two
+    if ((await tag.getAttribute("data-whole")) !== null) {
+      expect(await tag.evaluate((el) => el.scrollWidth <= el.clientWidth + 1), await tag.innerText()).toBe(true);
+      // (lines counted from where the words are drawn: a name in a script the handwriting face has no letters for is drawn
+      // in another face, whose line stands taller than the line-height says)
+      const lines = await tag.evaluate((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        let count = 0;
+        let foot = -Infinity;
+        for (const rect of [...range.getClientRects()].sort((a, b) => a.top - b.top)) {
+          if (rect.top >= foot - rect.height * 0.5) count++;
+          foot = Math.max(foot, rect.bottom);
+        }
+        return count;
+      });
+      expect(lines, await tag.innerText()).toBeLessThanOrEqual(2);
+    }
   }
 }
 
@@ -573,6 +591,9 @@ for (const size of SIZES) {
     // Every name of the demo, read on its tag: on a phone 390 wide none is under 10 px ("Auntie Jo" was 9.4, the longest 7.4).
     await expect(root.locator("[data-tag-name]")).toHaveCount(8);
     await tagsRead(root, size.name === "390x844" || size.name === "1280x720" ? 10 : 8.2);
+    // And every one of them whole, no word broken: each is measured and written as large as leaves it so. (A phone on its
+    // side draws nothing under 8.5 px, and there the longest, "The Okonkwos", is cut instead of written smaller.)
+    await expect(root.locator("[data-tag-name][data-whole]")).toHaveCount(size.name === "844x390" ? 7 : 8);
     await readTheLetter(page, root);
     expect(w.problems).toEqual([]);
     await context.close();
@@ -637,6 +658,18 @@ test("the editor shows the house with two or three doors already open, and nothi
   await expect(tile.locator('img[src*="plate-midnight-closed"]').first()).toBeAttached();
   await expect.poll(() => tile.locator('img[src*="plate-midnight-closed"]').first().evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
   await expect(tile.locator("button, [data-door], [data-star], [data-niche]")).toHaveCount(0);
+  // On a tile a thumb wide it is the house and the title. The small lines are left out: they have a smallest size, and at
+  // it the byline was cut short and "tap a door to open it" ran off the tile's foot.
+  await expect(tile.locator("[data-foot]")).toHaveCount(0);
+  await expect(tile.getByRole("heading", { level: 1 })).toBeAttached();
+  const shown = (await tile.boundingBox())!;
+  for (const text of await tile.locator("h1, p").all()) {
+    const box = (await text.boundingBox())!;
+    expect(box.y + box.height, "words in the tile end inside it").toBeLessThanOrEqual(shown.y + shown.height + 0.5);
+    expect(box.x).toBeGreaterThanOrEqual(shown.x - 0.5);
+    expect(box.x + box.width).toBeLessThanOrEqual(shown.x + shown.width + 0.5);
+    expect(await text.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+  }
   await expect(tile.locator('[role="img"][aria-label*="advent house of twenty-four numbered doors" i]')).toBeVisible();
   const frame = (await classic.boundingBox())!;
   const drawn = (await tile.boundingBox())!;
