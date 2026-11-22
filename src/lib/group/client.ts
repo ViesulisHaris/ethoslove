@@ -8,10 +8,10 @@ import type { GroupEntryView, GroupView } from "./store";
  */
 export type { GroupEntryView, GroupView };
 
-export type GroupError = "unauthenticated" | "unavailable" | "not_found" | "not_group_template" | "not_draft" | "invalid" | "full" | "gone" | "sent" | "not_allowed" | "photo_failed" | "rate_limited" | "failed";
+export type GroupError = "unauthenticated" | "unavailable" | "not_found" | "not_group_template" | "not_draft" | "invalid" | "full" | "gone" | "sent" | "not_allowed" | "taken_back" | "photo_failed" | "rate_limited" | "failed";
 export type Answer<T> = ({ ok: true } & T) | { ok: false; error: GroupError };
 
-const KNOWN: readonly GroupError[] = ["unauthenticated", "unavailable", "not_found", "not_group_template", "not_draft", "invalid", "full", "gone", "sent", "not_allowed", "photo_failed", "rate_limited", "failed"];
+const KNOWN: readonly GroupError[] = ["unauthenticated", "unavailable", "not_found", "not_group_template", "not_draft", "invalid", "full", "gone", "sent", "not_allowed", "taken_back", "photo_failed", "rate_limited", "failed"];
 
 async function call<T>(url: string, method: "POST" | "PATCH" | "DELETE", body?: unknown): Promise<Answer<T>> {
   try {

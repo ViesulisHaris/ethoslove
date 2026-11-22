@@ -340,8 +340,23 @@ describe("the moderation step", () => {
       const res = await decide(group.id, entryId(n), { action: "restore" });
       expect([res.status, await res.json()]).toEqual([410, { error: "gone" }]);
     }
-    // A scrubbed one is no longer shown either.
-    expect(((await (await read()).json()) as { group: Group }).group.entries.map((e) => e.id)).toEqual([entryId(1)]);
+    // A scrubbed one is no longer shown either; the other still is (the card may hold it), and the panel is told Undo is over.
+    const shown = ((await (await read()).json()) as { group: { entries: { id: string; canUndo: boolean }[] } }).group.entries;
+    expect(shown.map((e) => [e.id, e.canUndo])).toEqual([[entryId(1), false]]);
+  });
+
+  it("the panel is told which notes Undo can still bring back: one turned down or removed within the day, and nothing else", async () => {
+    const group = await made();
+    seed(group.id, 1);
+    seed(group.id, 2, { status: "rejected", decided_at: new Date(NOW - 23 * HOUR).toISOString() });
+    seed(group.id, 3, { status: "removed", item_key: "abcdefghij", decided_at: new Date(NOW - HOUR).toISOString() });
+    seed(group.id, 4, { status: "rejected", decided_at: new Date(NOW - 24 * HOUR - 1000).toISOString() });
+    seed(group.id, 5, { status: "approved", item_key: "bcdefghijk", decided_at: new Date(NOW - HOUR).toISOString() });
+    const shown = ((await (await read()).json()) as { group: { entries: { id: string; canUndo: boolean }[] } }).group.entries;
+    expect(Object.fromEntries(shown.map((e) => [e.id, e.canUndo]))).toEqual({ [entryId(1)]: false, [entryId(2)]: true, [entryId(3)]: true, [entryId(4)]: false, [entryId(5)]: false });
+    // And the route agrees with what it said, note for note.
+    expect((await decide(group.id, entryId(2), { action: "restore" })).status).toBe(200);
+    expect((await decide(group.id, entryId(4), { action: "restore" })).status).toBe(410);
   });
 
   it("each step only from the state it belongs to", async () => {
@@ -351,6 +366,29 @@ describe("the moderation step", () => {
     expect((await decide(group.id, entryId(1), { action: "remove" })).status).toBe(409);
     expect((await decide(group.id, entryId(2), { action: "approve" })).status).toBe(409);
     expect((await decide(group.id, entryId(2), { action: "restore" })).status).toBe(409);
+  });
+
+  it("a note its writer took back says so to whatever the sender asks of it, so the panel can say whose doing it was", async () => {
+    const group = await made();
+    seed(group.id, 1, { status: "withdrawn", decided_at: new Date(NOW).toISOString() });
+    // Its words already scrubbed: still "taken back", not "no such note".
+    seed(group.id, 2, { status: "withdrawn", decided_at: new Date(NOW - 30 * HOUR).toISOString(), scrubbed_at: new Date(NOW).toISOString(), name: null, note: null });
+    seed(group.id, 3, { status: "rejected", decided_at: new Date(NOW).toISOString() });
+    for (const n of [1, 2]) {
+      for (const action of ["approve", "reject", "remove"]) {
+        const res = await decide(group.id, entryId(n), { action });
+        expect([n, action, res.status, await res.json()]).toEqual([n, action, 409, { error: "taken_back" }]);
+      }
+    }
+    // One that is merely in another state than the panel thought is told apart from that.
+    const other = await decide(group.id, entryId(3), { action: "approve" });
+    expect([other.status, await other.json()]).toEqual([409, { error: "not_allowed" }]);
+    expect(row(1)).toMatchObject({ status: "withdrawn" });
+  });
+
+  it("an address that is no note at all is still a 404", async () => {
+    const group = await made();
+    seed(group.id, 1);
     expect((await decide(group.id, entryId(9), { action: "approve" })).status).toBe(404);
     expect((await decide(group.id, entryId(1), { action: "publish" })).status).toBe(400);
     expect((await decide(group.id, "nope", { action: "reject" })).status).toBe(404);

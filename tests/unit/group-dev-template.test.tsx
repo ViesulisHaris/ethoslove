@@ -103,6 +103,13 @@ describe("the reference template's own files", () => {
       expect(html.match(/data-testid="contribution"/g)).toHaveLength(6);
       expect(html.match(/<img /g)).toHaveLength(2);
     });
+
+    it(`${locale}: every note and every name starts from the side its own script starts from`, () => {
+      const html = renderToStaticMarkup(<Template data={data} mode="preview" />);
+      expect(html.match(/<blockquote dir="auto"/g)).toHaveLength(6);
+      expect(html.match(/<figcaption dir="auto"/g)).toHaveLength(6);
+      expect(html).not.toMatch(/<blockquote(?! dir="auto")/);
+    });
   }
 });
 

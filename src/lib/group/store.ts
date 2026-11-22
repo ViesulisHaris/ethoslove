@@ -61,6 +61,8 @@ export type GroupEntryView = {
   reportRef: string;
   createdAt: string;
   decidedAt: string | null;
+  /** A note turned down or removed that "Undo" can still bring back (a day, while its words are kept). The panel offers Undo on nothing else. */
+  canUndo: boolean;
 };
 
 export type GroupView = {
@@ -184,8 +186,20 @@ export async function viewGroup(admin: Db, group: GroupRow, secret: string, now 
       reportRef: row.report_ref,
       createdAt: row.created_at,
       decidedAt: row.decided_at,
+      canUndo: (row.status === "rejected" || row.status === "removed") && undoable(row, now),
     })),
   };
+}
+
+/**
+ * Whether a note the sender turned down or removed can still be brought back: within a day of the
+ * decision, and with its words still there. One rule for the panel's Undo line and for the route
+ * that does it: the line used to stay for as long as the row kept its words (up to a second day,
+ * until the daily job came by), offering an Undo that could only be refused.
+ */
+function undoable(row: Pick<EntryRow, "decided_at" | "scrubbed_at" | "name" | "note">, now: number): boolean {
+  const decided = row.decided_at ? Date.parse(row.decided_at) : 0;
+  return !row.scrubbed_at && Boolean(row.name && row.note) && now - decided <= GROUP_RETENTION.undoHours * HOUR;
 }
 
 export type GroupPatch = { fromName?: string; forName?: string; prompt?: string | null; closed?: boolean; resetLink?: boolean; extend?: boolean };
@@ -232,7 +246,13 @@ export async function patchGroup(admin: Db, group: GroupRow, patch: GroupPatch, 
 
 export type DecideResult =
   | { ok: true; entry: EntryRow; item?: GiftContribution; previewUrl?: string | null }
-  | { ok: false; error: "not_found" | "full" | "gone" | "not_allowed" | "photo_failed" };
+  | { ok: false; error: "not_found" | "full" | "gone" | "not_allowed" | "taken_back" | "photo_failed" };
+
+/**
+ * Why a note can't be decided on: its writer took it back (the sender is told who, in those words),
+ * or it is simply no longer in the state the panel thought (dealt with from another phone).
+ */
+const refusal = (entry: Pick<EntryRow, "status"> | null | undefined): "taken_back" | "not_allowed" => (entry?.status === "withdrawn" ? "taken_back" : "not_allowed");
 
 function itemOf(entry: EntryRow, key: string, photoPath: string | null): GiftContribution {
   return {
@@ -261,6 +281,8 @@ async function counts(admin: Db, groupId: string): Promise<{ open: number; appro
  */
 export async function approveEntry(admin: Db, group: GroupRow, entryId: string, withPhoto: boolean, now: number): Promise<DecideResult> {
   const entry = await entryOf(admin, group.id, entryId);
+  // Taken back by its writer: said as that, for the day the row still says so, with or without its words.
+  if (entry?.status === "withdrawn") return { ok: false, error: "taken_back" };
   if (!entry || entry.scrubbed_at || !entry.name || !entry.note) return { ok: false, error: "not_found" };
   if (entry.status !== "pending" && entry.status !== "approved") return { ok: false, error: "not_allowed" };
   const already = entry.status === "approved" && entry.item_key ? entry.item_key : null;
@@ -282,7 +304,7 @@ export async function approveEntry(admin: Db, group: GroupRow, entryId: string, 
     // Decided from another tab in the same moment: whatever it is now is the answer.
     const again = await entryOf(admin, group.id, entryId);
     if (again?.status === "approved" && again.item_key) return { ok: true, entry: again, item: itemOf(again, again.item_key, null) };
-    return { ok: false, error: "not_allowed" };
+    return { ok: false, error: refusal(again) };
   }
   return { ok: true, entry: claimed[0], item: itemOf(claimed[0], key, copy?.path ?? null), previewUrl: copy?.previewUrl ?? null };
 }
@@ -296,7 +318,7 @@ export async function declineEntry(admin: Db, group: GroupRow, entryId: string, 
   const entry = await entryOf(admin, group.id, entryId);
   if (!entry) return { ok: false, error: "not_found" };
   // Asked twice: it is already what was asked for.
-  return entry.status === to ? { ok: true, entry } : { ok: false, error: "not_allowed" };
+  return entry.status === to ? { ok: true, entry } : { ok: false, error: refusal(entry) };
 }
 
 /** "Undo", within a day of turning a note down or removing it: it waits for the sender again, with a fresh key next time. */
@@ -305,8 +327,7 @@ export async function restoreEntry(admin: Db, group: GroupRow, entryId: string, 
   if (!entry) return { ok: false, error: "not_found" };
   if (entry.status === "pending") return { ok: true, entry };
   if (entry.status !== "rejected" && entry.status !== "removed") return { ok: false, error: "not_allowed" };
-  const decided = entry.decided_at ? Date.parse(entry.decided_at) : 0;
-  if (entry.scrubbed_at || !entry.name || !entry.note || now - decided > GROUP_RETENTION.undoHours * HOUR) return { ok: false, error: "gone" };
+  if (!undoable(entry, now)) return { ok: false, error: "gone" };
   if ((await counts(admin, group.id)).open >= group.max_entries) return { ok: false, error: "full" };
   const restored = need(await admin.from("gift_contributions").update({ status: "pending", decided_at: null, item_key: null, with_photo: null }).eq("id", entry.id).eq("status", entry.status).select("*"), "restore") as EntryRow[] | null;
   return restored?.length ? { ok: true, entry: restored[0] } : { ok: false, error: "not_allowed" };

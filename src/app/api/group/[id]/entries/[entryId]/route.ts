@@ -11,7 +11,7 @@ const input = z.discriminatedUnion("action", [
   z.object({ action: z.enum(["reject", "remove", "restore"]) }),
 ]);
 
-const STATUS: Record<string, number> = { not_found: 404, full: 409, gone: 410, not_allowed: 409, photo_failed: 502 };
+const STATUS: Record<string, number> = { not_found: 404, full: 409, gone: 410, not_allowed: 409, taken_back: 409, photo_failed: 502 };
 
 /**
  * The moderation step: nothing a stranger wrote reaches a gift until its sender says so here.
@@ -20,6 +20,8 @@ const STATUS: Record<string, number> = { not_found: 404, full: 409, gone: 410, n
  *   { action: "reject" }   a waiting note is turned down.
  *   { action: "remove" }   one already added is taken out (the editor takes it out of the gift).
  *   { action: "restore" }  Undo, within a day: it waits again. 410 "gone" after that.
+ * A note its writer has taken back answers 409 "taken_back" to all of them, so the panel can say whose
+ * doing it was; one that is in some other state than the panel thought, 409 "not_allowed".
  * Only the account the group belongs to; anyone else gets 404.
  */
 export async function POST(request: NextRequest, ctx: RouteContext<"/api/group/[id]/entries/[entryId]">) {

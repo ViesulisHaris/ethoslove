@@ -66,6 +66,7 @@ const entry = (n: number, over: Partial<GroupEntryView>): GroupEntryView => ({
   reportRef: `prev000${n}`,
   createdAt: NOW,
   decidedAt: null,
+  canUndo: false,
   ...over,
 });
 
@@ -78,7 +79,7 @@ function fixture(state: PanelPreviewState, locale: GiftLocale): { group: GroupVi
   const items = state === "full" ? [...base, ...Array.from({ length: 22 }, (_, i) => ({ key: `filler${String(i).padStart(4, "0")}`, ...copy.filler(i + 4) }))] : base;
   const entries: GroupEntryView[] = [
     entry(1, { ...copy.waiting[0], wantsEmail: true }),
-    ...(state === "active" ? [entry(2, { ...copy.waiting[1], photo: PHOTO }), entry(3, { status: "rejected", name: copy.removed, note: "…", decidedAt: NOW })] : []),
+    ...(state === "active" ? [entry(2, { ...copy.waiting[1], photo: PHOTO }), entry(3, { status: "rejected", name: copy.removed, note: "…", decidedAt: NOW, canUndo: true })] : []),
     ...items.slice(0, 3).map((item, i) => entry(10 + i, { status: "approved", name: item.name, note: item.note, key: item.key })),
   ];
   return {

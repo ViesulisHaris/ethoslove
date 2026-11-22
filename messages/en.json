@@ -697,6 +697,12 @@
       "sentWaiting": "Notes still waiting can be added until {date}.",
       "error": "That didn't go through. Try again in a moment.",
       "noLinks": "A note can't carry a web address. Take it out to save it.",
+      "pageNoLinks": "The page can't carry a web address. Take it out and try again.",
+      "loadError": "Couldn't load your group card. Trying again…",
+      "signedOut": "You've been signed out. Reload the page and sign in again.",
+      "undoGone": "That note can't come back: its words were deleted a day after it was removed.",
+      "takenBack": "{name} has just taken that note back.",
+      "noteMoved": "That note was already dealt with somewhere else. This list is up to date now.",
       "photoAlt": "Photo from {name}",
       "pay": {
         "title": "Send your group card",

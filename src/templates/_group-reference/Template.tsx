@@ -25,6 +25,8 @@ const LINE = "#E7DCCD";
  *   - every item of `data.contributions` is drawn, in array order, from none to the manifest's 25;
  *   - a name and a note are plain React text, never parsed as rich text and never turned into links,
  *     and both wrap anywhere, so a 24-character name and a note of one long word stay inside the card;
+ *   - each starts from the side its own script starts from (`dir="auto"`), so a note in Arabic or
+ *     Hebrew is ranged right with its full stop at its end;
  *   - a photo is optional, its box is reserved from its width and height, and past the first screen
  *     it loads lazily;
  *   - it carries no form, no report control and no link out: reporting is the end screen's;
@@ -119,8 +121,11 @@ function Signed({ item, eager }: { item: GiftContribution; eager: boolean }) {
           style={{ aspectRatio: `${item.photo.width} / ${item.photo.height}`, background: LINE }}
         />
       ) : null}
-      <blockquote className="px-5 pt-5 text-[1.02rem] leading-relaxed [overflow-wrap:anywhere]">{item.note}</blockquote>
-      <figcaption className="px-5 pt-2 pb-4 text-right leading-tight [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "1.55rem", color: "var(--gift-accent-deep)" }}>
+      <blockquote dir="auto" className="px-5 pt-5 text-start text-[1.02rem] leading-relaxed [overflow-wrap:anywhere]">
+        {item.note}
+      </blockquote>
+      {/* Signed on the right whichever way the name is written: the direction is the name's own, the side is the card's. */}
+      <figcaption dir="auto" className="px-5 pt-2 pb-4 text-right leading-tight [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "1.55rem", color: "var(--gift-accent-deep)" }}>
         {item.name}
       </figcaption>
     </figure>
