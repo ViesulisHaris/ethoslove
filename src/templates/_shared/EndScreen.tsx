@@ -49,6 +49,8 @@ export function EndScreen({
   onMakeOne,
   onReplay,
   songShown = false,
+  compact = false,
+  heart = true,
   className,
 }: {
   data: GiftData;
@@ -58,6 +60,19 @@ export function EndScreen({
   onReplay?: () => void;
   /** The template already shows the song's card, with Apple's link and credit (PreviewMusicCard). */
   songShown?: boolean;
+  /**
+   * For a gift that hands its end over on a card or a page of its own (String the Lights, Gingerbread
+   * House), which is far smaller than a screen: the same end, set closer. The card already has
+   * margins, so the end takes none of its own (they left a column too narrow for a button's words to
+   * stay on one line); the heart is smaller, the rows sit nearer, and "Keep this gift" and "Watch
+   * again" share a row where both fit. Every control is still a thumb tall.
+   */
+  compact?: boolean;
+  /**
+   * False where the gift sets a mark of its own over the end (String the Lights: its sign, in foil),
+   * so the end has one emblem and not two, and the card keeps the room.
+   */
+  heart?: boolean;
   className?: string;
 }) {
   const reduce = useReducedMotion();
@@ -85,39 +100,75 @@ export function EndScreen({
     };
   }, [tell]);
 
-  return (
-    <div ref={onScreen} className={cn("flex flex-col items-center px-6 text-center", className)}>
-      <motion.div
-        initial={{ scale: 0.6, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: true, amount: 0.6 }}
-        transition={{ type: "spring", stiffness: 160, damping: 14 }}
-        className="relative grid size-20 place-items-center rounded-full"
-        style={{ background: "rgba(var(--gift-accent-rgb), 0.14)" }}
-      >
-        <motion.div
-          animate={reduce ? undefined : { scale: [1, 1.12, 1] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+  // The two that stay with this gift: its own link by email, and playing it again.
+  const stay = (
+    <>
+      {reply && chrome.keepHref ? (
+        <a
+          data-app-hide
+          href={chrome.keepHref}
+          onClick={() => track("keep_tapped", { template: data.templateSlug })}
+          className={cn(
+            "flex min-h-11 items-center justify-center gap-1.5 text-sm underline-offset-4 hover:underline",
+            dark ? "text-white/70 hover:text-white" : "text-black/60 hover:text-black",
+          )}
+          data-testid="keep-gift"
         >
-          <Heart
-            className="size-9"
-            style={{ color: "var(--gift-accent)", fill: "var(--gift-accent)" }}
-          />
+          <Bookmark aria-hidden="true" className="size-3.5 shrink-0" />
+          <span>{(REPLY_OFFER[locale] ?? REPLY_OFFER.en).keep}</span>
+        </a>
+      ) : null}
+      {onReplay ? (
+        <button
+          type="button"
+          onClick={onReplay}
+          className={cn(
+            "flex h-11 items-center justify-center gap-2 text-sm",
+            dark ? "text-white/60 hover:text-white" : "text-black/50 hover:text-black",
+          )}
+        >
+          <RotateCcw className="size-4" />
+          {giftString(locale, "replay")}
+        </button>
+      ) : null}
+    </>
+  );
+
+  return (
+    <div ref={onScreen} data-end-screen className={cn("flex flex-col items-center text-center", compact ? "w-full" : "px-6", className)}>
+      {heart ? (
+        <motion.div
+          initial={{ scale: 0.6, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ type: "spring", stiffness: 160, damping: 14 }}
+          className={cn("relative grid place-items-center rounded-full", compact ? "size-12" : "size-20")}
+          style={{ background: "rgba(var(--gift-accent-rgb), 0.14)" }}
+        >
+          <motion.div
+            animate={reduce ? undefined : { scale: [1, 1.12, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Heart
+              className={compact ? "size-[1.375rem]" : "size-9"}
+              style={{ color: "var(--gift-accent)", fill: "var(--gift-accent)" }}
+            />
+          </motion.div>
         </motion.div>
-      </motion.div>
+      ) : null}
 
       <p
-        className="mt-7 text-[1.6rem] leading-tight italic"
+        className={cn("leading-tight italic", compact ? "text-[1.45rem]" : "text-[1.6rem]", heart && (compact ? "mt-3" : "mt-7"))}
         style={{ fontFamily: "var(--gift-font-display)" }}
       >
         {giftString(locale, "theEnd")}
       </p>
-      <p className={cn("mt-2 max-w-full text-sm [overflow-wrap:anywhere]", dark ? "text-white/60" : "text-black/50")}>
+      <p className={cn("max-w-full text-sm [overflow-wrap:anywhere]", compact ? "mt-1" : "mt-2", dark ? "text-white/60" : "text-black/50")}>
         {giftString(locale, "madeBy", { sender: data.senderName, recipient: data.recipientName })}
       </p>
 
       {/* The P.S. of the whole gift: under its last words and before anything asks them to act. */}
-      {data.unwrap ? <UnwrapGift unwrap={data.unwrap} locale={locale} sender={data.senderName} accent={data.accentColor} dark={dark} className="mt-10" /> : null}
+      {data.unwrap ? <UnwrapGift unwrap={data.unwrap} locale={locale} sender={data.senderName} accent={data.accentColor} dark={dark} className={compact ? "mt-6" : "mt-10"} /> : null}
 
       {data.voiceNote ? (
         <VoiceNotePlayer
@@ -133,7 +184,7 @@ export function EndScreen({
 
       {data.dedication ? <SongDedication dedication={data.dedication} locale={locale} dark={dark} /> : null}
 
-      <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
+      <div className={cn("flex w-full max-w-xs flex-col", compact ? "mt-4 gap-2" : "mt-8 gap-3")}>
         {data.showReactionCta && onReact ? (
           <motion.button
             type="button"
@@ -191,7 +242,8 @@ export function EndScreen({
             // Its keyboard ring sits on its own box, clear of the button above, and on a dark end
             // screen it is a light one (the site's ring is a dark plum, which a dark gift swallows).
             className={cn(
-              "flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current focus-visible:outline-offset-0 active:opacity-70",
+              "flex min-h-11 items-center justify-center rounded-full py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current focus-visible:outline-offset-0 active:opacity-70",
+              compact ? "px-1" : "px-2",
               dark ? "text-white/70 hover:text-white focus-visible:outline-white/60" : "text-black/60 hover:text-black",
             )}
             data-testid="make-for-someone-else"
@@ -201,38 +253,13 @@ export function EndScreen({
         ) : null}
         {/* Their reason to make one comes later (the sender's birthday, the anniversary): the gift's own
             link by email, to open again, and a nudge before the day if they want one. On a page off
-            the gift (the gift itself carries no form). Not inside the iPhone app, which has its own. */}
-        {reply && chrome.keepHref ? (
-          <a
-            data-app-hide
-            href={chrome.keepHref}
-            onClick={() => track("keep_tapped", { template: data.templateSlug })}
-            className={cn(
-              "flex min-h-11 items-center justify-center gap-1.5 text-sm underline-offset-4 hover:underline",
-              dark ? "text-white/70 hover:text-white" : "text-black/60 hover:text-black",
-            )}
-            data-testid="keep-gift"
-          >
-            <Bookmark aria-hidden="true" className="size-3.5 shrink-0" />
-            <span>{(REPLY_OFFER[locale] ?? REPLY_OFFER.en).keep}</span>
-          </a>
-        ) : null}
-        {onReplay ? (
-          <button
-            type="button"
-            onClick={onReplay}
-            className={cn(
-              "flex h-11 items-center justify-center gap-2 text-sm",
-              dark ? "text-white/60 hover:text-white" : "text-black/50 hover:text-black",
-            )}
-          >
-            <RotateCcw className="size-4" />
-            {giftString(locale, "replay")}
-          </button>
-        ) : null}
+            the gift (the gift itself carries no form). Not inside the iPhone app, which has its own.
+            On a card the two stand side by side where both fit (and one under the other where they
+            don't: Spanish, a narrow phone), which saves the card a row. */}
+        {compact ? <div className="flex flex-wrap items-center justify-center gap-x-5">{stay}</div> : stay}
       </div>
 
-      {chrome.watermarked ? <Watermark locale={locale} slug={data.templateSlug} inline tone={tone} counted={reply} className="mt-8" /> : null}
+      {chrome.watermarked ? <Watermark locale={locale} slug={data.templateSlug} inline tone={tone} counted={reply} className={compact ? "mt-2" : "mt-8"} /> : null}
     </div>
   );
 }

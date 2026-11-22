@@ -482,9 +482,10 @@ function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onM
                     ) : null}
                   </figure>
                 ) : step.kind === "end" ? (
-                  // The page cuts what doesn't fit on it, so the end scrolls inside it.
-                  <EndScroll>
-                    <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                  // The end is set closer for a page, and may run a little into the page's margin; where
+                  // even that is too small it scrolls inside the page.
+                  <EndScroll give="calc(4*var(--u))">
+                    <StepExtra step={step} data={data} tone="light" compact onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
                   </EndScroll>
                 ) : (
                   <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />

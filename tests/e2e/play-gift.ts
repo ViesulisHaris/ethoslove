@@ -237,6 +237,42 @@ export async function bring(page: Page, selector: string, block: "center" | "end
   );
 }
 
+export type Arrived = { name: string; whole: boolean; cut: number; height: number };
+
+/**
+ * The end screen as it arrives, before anything is scrolled: for each link and button, whether all
+ * of it shows (nothing around it cuts a part off, and it is not under a scroller's faded foot), and
+ * how many of its pixels do not. `more` is what the end's scroller says lies past its edges (null
+ * when it all fits), and `arrow` whether the small arrow that says "more below" is up.
+ */
+export async function asArrived(page: Page, template: string): Promise<{ more: string | null; arrow: boolean; controls: Arrived[] }> {
+  return page.evaluate(
+    async ({ slug, endSelector }) => {
+      const gift = document.querySelector(`[data-template="${slug}"][data-mode="live"]`)!;
+      const end = gift.querySelector(endSelector)!.closest("[data-end-screen]")!;
+      let scroller: HTMLElement | null = end.parentElement;
+      while (scroller && !/auto|scroll/.test(getComputedStyle(scroller).overflowY)) scroller = scroller.parentElement;
+      if (scroller) scroller.scrollTop = 0;
+      // The scroller looks at itself again after a scroll or a change of size, a frame or two later.
+      await new Promise((done) => setTimeout(done, 500));
+      const more = scroller?.getAttribute("data-more") ?? null;
+      const fadeFrom = scroller && (more === "below" || more === "both") ? scroller.getBoundingClientRect().bottom - 48 : Infinity;
+      const controls = [...end.querySelectorAll<HTMLElement>("a[href], button")].map((el) => {
+        const r = el.getBoundingClientRect();
+        let cut = Math.max(0, r.bottom - fadeFrom, r.bottom - innerHeight, -r.top);
+        for (let p = el.parentElement; p && p !== gift.parentElement; p = p.parentElement) {
+          if (getComputedStyle(p).overflowY === "visible") continue;
+          const b = p.getBoundingClientRect();
+          cut = Math.max(cut, b.top - r.top, r.bottom - b.bottom);
+        }
+        return { name: (el.getAttribute("data-testid") || el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40), whole: cut <= 1, cut: Math.round(Math.min(cut, r.height)), height: Math.round(r.height) };
+      });
+      return { more, arrow: Boolean(gift.querySelector('[data-testid="end-more"]')), controls };
+    },
+    { slug: template, endSelector: END },
+  );
+}
+
 export type EndControl = Seen & { name: string };
 
 /**
@@ -251,7 +287,7 @@ export async function endControls(page: Page, template: string): Promise<{ sidew
     async ({ slug, endSelector }) => {
       const { __thumb: thumb } = window as unknown as { __thumb: Thumb };
       const gift = document.querySelector(`[data-template="${slug}"][data-mode="live"]`)!;
-      const end = gift.querySelector(endSelector)!.parentElement!.parentElement!;
+      const end = gift.querySelector(endSelector)!.closest("[data-end-screen]")!;
       const controls: (Seen & { name: string })[] = [];
       for (const el of end.querySelectorAll<HTMLElement>("a[href], button")) {
         thumb.scroll(el);

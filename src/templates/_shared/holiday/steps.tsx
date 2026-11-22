@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { ChevronDown } from "lucide-react";
 import { motion } from "motion/react";
 import type { GiftData, GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText, type RichBlock, type RichRun } from "@/lib/gift/rich-text";
@@ -239,17 +240,24 @@ export function edgeFade(above: boolean, below: boolean): string | undefined {
 }
 
 /**
- * The end step, inside the page or card that holds it. The end screen is taller than a page on a
- * small phone (a reaction, a reply, two links, the badge; a surprise, a voice message and a song on
- * top), and a page cuts what doesn't fit in it, so "Keep this gift", "Watch again" and the badge
- * were out of reach there. Here the end scrolls inside its page, as a page of words does. A page
- * often cuts it cleanly between two rows, which looks finished; so while more lies below, its foot
- * fades out, and that is what says there is more. Scrolled, its top fades the same way, so a button
- * is not sliced in the middle of the paper.
+ * The end step, inside the page or card that holds it. A card is far smaller than a screen, and it
+ * cuts what doesn't fit in it, so the end is set closer here (EndScreen's `compact`) and on an
+ * ordinary phone all of it shows as it arrives. Where it still doesn't fit (the first iPhone SE, a
+ * phone on its side, a surprise, a voice message and a song on top), it scrolls inside its card, as
+ * a card of words does.
+ *
+ * `give` is how much of the card's own margin the end may take, top and bottom, before it scrolls:
+ * an end a few pixels taller than the card's inside runs a little into the margin and stays whole,
+ * as it did before there was a scroller, rather than losing its last row to one.
+ *
+ * A card often cuts a scrolling end cleanly between two rows, which looks finished. So while more
+ * lies below, its foot fades out and a small arrow stands there, whatever row the cut falls on; a
+ * tap on the arrow brings the next part up. Scrolled, its top fades the same way, so a button is not
+ * sliced in the middle of the paper.
  *
  * For the end only: the surprise's sparks fly past its own box, and a scroller would cut them.
  */
-export function EndScroll({ children }: { children: ReactNode }) {
+export function EndScroll({ children, give = "0px" }: { children: ReactNode; give?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [more, setMore] = useState({ above: false, below: false });
   const fade = edgeFade(more.above, more.below);
@@ -273,15 +281,35 @@ export function EndScroll({ children }: { children: ReactNode }) {
       sizes?.disconnect();
     };
   }, []);
+  const on = () => {
+    const el = ref.current;
+    if (!el) return;
+    const still = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollBy({ top: Math.round(el.clientHeight * 0.7), behavior: still ? "auto" : "smooth" });
+  };
   return (
-    <div ref={ref} className="max-h-full overflow-y-auto scrollbar-none" data-more={more.above && more.below ? "both" : more.above ? "above" : more.below ? "below" : undefined} style={fade ? { maskImage: fade, WebkitMaskImage: fade } : undefined}>
-      {children}
+    // The card centres this box. Its margins are negative by `give`, so it may grow that far into the
+    // card's own margin on each side before the scroller inside it has to shrink.
+    <div className="relative flex min-h-0 flex-col" style={{ maxHeight: `calc(100% + 2 * ${give})`, marginBlock: `calc(-1 * ${give})` }}>
+      <div ref={ref} className="min-h-0 overflow-y-auto overscroll-contain scrollbar-none" data-more={more.above && more.below ? "both" : more.above ? "above" : more.below ? "below" : undefined} style={fade ? { maskImage: fade, WebkitMaskImage: fade } : undefined}>
+        {children}
+      </div>
+      {/* For a finger or a mouse, like the sides of a card of words that turn it: the keyboard reaches
+          every row by Tab and a screen reader reads them all, so neither is told about it. Its disc
+          stands on the foot of the scroller, where the fade has all but taken the row under it. */}
+      {more.below ? (
+        <button type="button" tabIndex={-1} aria-hidden="true" data-testid="end-more" onClick={on} className="group/more absolute bottom-0 left-1/2 grid size-11 -translate-x-1/2 translate-y-2 cursor-pointer place-items-center outline-none">
+          <span className="grid size-7 place-items-center rounded-full bg-white/85 text-black/65 shadow-[0_1px_4px_rgba(0,0,0,.22)] ring-1 ring-black/10 transition-transform group-hover/more:translate-y-0.5 group-active/more:translate-y-0.5 motion-reduce:transition-none">
+            <ChevronDown className="size-4" strokeWidth={2.25} />
+          </span>
+        </button>
+      ) : null}
     </div>
   );
 }
 
 /** The countdown, the surprise or the end, as the shared kit draws them: the steps that are the same in every gift. Nothing for a step that is words or a photo. */
-export function StepExtra({ step, data, tone, onEvent, onReact, onMakeOne, onReplay }: { step: NoteStep; data: GiftData; tone: "light" | "dark"; onEvent?: (event: TemplateEvent) => void; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
+export function StepExtra({ step, data, tone, compact, heart, onEvent, onReact, onMakeOne, onReplay }: { step: NoteStep; data: GiftData; tone: "light" | "dark"; /** The end set closer, for a card smaller than a screen (EndScreen). */ compact?: boolean; /** False where the gift sets its own mark over the end (EndScreen). */ heart?: boolean; onEvent?: (event: TemplateEvent) => void; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   if (step.kind === "countdown" && data.countdown) return <Countdown countdown={data.countdown} locale={data.locale} tone={tone} />;
   if (step.kind === "surprise" && data.surprise)
     return (
@@ -290,7 +318,7 @@ export function StepExtra({ step, data, tone, onEvent, onReact, onMakeOne, onRep
         <SurpriseReveal surprise={data.surprise} locale={data.locale} tone={tone} onReveal={() => onEvent?.({ type: "surprise" })} />
       </>
     );
-  if (step.kind === "end") return <EndScreen data={data} tone={tone} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />;
+  if (step.kind === "end") return <EndScreen data={data} tone={tone} compact={compact} heart={heart} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />;
   return null;
 }
 

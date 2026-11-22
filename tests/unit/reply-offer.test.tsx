@@ -75,6 +75,84 @@ describe("the reply offer on a gift's end screen", () => {
   });
 });
 
+describe("the end screen set closer, for a gift that ends on a card", () => {
+  // String the Lights and Gingerbread House end on a card far smaller than a screen. The end as every
+  // other gift draws it was two screens of that card: on an ordinary phone it arrived with the new
+  // link, "Keep this gift" and "Watch again" out of sight.
+  const end = (compact: boolean, locale: "en" | "es" = "en", watermarked = false) =>
+    renderToStaticMarkup(
+      <GiftChromeContext.Provider value={{ watermarked, keepHref: KEEP }}>
+        <ReplyModeContext.Provider value>
+          <EndScreen data={{ ...gift("string-the-lights", locale), showReactionCta: true } as GiftData} tone="light" compact={compact} onReact={() => {}} onMakeOne={() => {}} onReplay={() => {}} />
+        </ReplyModeContext.Provider>
+      </GiftChromeContext.Provider>,
+    );
+  const root = (html: string) => /^<div[^>]*>/.exec(html)?.[0] ?? "";
+  const row = /<div class="flex flex-wrap items-center justify-center gap-x-5"><a [^>]*data-testid="keep-gift"[^>]*>.*?<\/a><button[^>]*>.*?<\/button><\/div>/;
+
+  it("takes no side margins of its own (the card has them), so a button's words stay on one line", () => {
+    expect(root(end(true))).not.toContain("px-6");
+    expect(root(end(false))).toContain("px-6");
+  });
+
+  it("puts Keep this gift and Watch again in one row, which wraps where the two don't fit", () => {
+    expect(end(true)).toMatch(row);
+    expect(end(true, "es")).toMatch(row);
+    // Everywhere else they stay one under the other, straight in the column of buttons.
+    expect(end(false)).not.toContain("flex-wrap");
+    expect(end(false)).toMatch(/<\/a><a [^>]*data-testid="keep-gift"[^>]*>.*?<\/a><button/);
+  });
+
+  it("has a smaller heart and rows that sit nearer, and every control is still a thumb tall", () => {
+    const html = end(true);
+    expect(html).toContain("size-12");
+    expect(html).not.toContain("size-20");
+    expect(html).toContain("mt-4 gap-2");
+    expect(end(false)).toContain("size-20");
+    expect(end(false)).toContain("mt-8 gap-3");
+    // The two buttons 48px, the three text controls 44px.
+    expect(html.match(/min-h-12/g)).toHaveLength(2);
+    expect(/<a [^>]*data-testid="make-for-someone-else"/.exec(html)?.[0]).toContain("min-h-11");
+    expect(/<a [^>]*data-testid="keep-gift"/.exec(html)?.[0]).toContain("min-h-11");
+    expect(/<button[^>]*>(?:(?!<\/button>).)*Watch again/.exec(html)?.[0]).toContain("h-11");
+  });
+
+  it("leaves its heart out where the gift has a mark of its own over it, and only there", () => {
+    const withHeart = (heart: boolean | undefined) =>
+      renderToStaticMarkup(<EndScreen data={gift("string-the-lights")} tone="light" compact heart={heart} onMakeOne={() => {}} />);
+    expect(withHeart(undefined)).toContain("lucide-heart");
+    expect(withHeart(true)).toContain("lucide-heart");
+    expect(withHeart(false)).not.toContain("lucide-heart");
+    // The words that end the gift then start the end, with no gap over them.
+    expect(/<p class="([^"]*)"[^>]*>The end\. For now\.<\/p>/.exec(withHeart(false))?.[1]).not.toMatch(/\bmt-/);
+    expect(/<p class="([^"]*)"[^>]*>The end\. For now\.<\/p>/.exec(withHeart(true))?.[1]).toContain("mt-3");
+    expect(renderToStaticMarkup(<EndScreen data={gift("bouquet")} onMakeOne={() => {}} />)).toContain("lucide-heart");
+  });
+
+  it("says and links the same things, in the same order, as the end everywhere else", () => {
+    const words = (html: string) => html.replace(/<[^>]+>/g, "|").replace(/\|+/g, "|");
+    const hrefs = (html: string) => html.match(/href="[^"]*"/g);
+    for (const locale of ["en", "es"] as const)
+      for (const watermarked of [false, true]) {
+        expect(words(end(true, locale, watermarked))).toBe(words(end(false, locale, watermarked)));
+        expect(hrefs(end(true, locale, watermarked))).toEqual(hrefs(end(false, locale, watermarked)));
+      }
+  });
+
+  it("is what the two gifts that end on a card ask for, and nobody else", () => {
+    for (const slug of ["string-the-lights", "gingerbread-house"]) {
+      const template = readFileSync(`src/templates/${slug}/Template.tsx`, "utf8");
+      expect(template, slug).toMatch(/<EndScroll give="calc\([\d.]+\*var\(--u\)\)">/);
+      expect(template, slug).toMatch(/<StepExtra step=\{step\} data=\{data\} tone="light" compact /);
+    }
+    // String the Lights sets its sign over the end, and that is the end's mark there: no heart under it.
+    expect(readFileSync("src/templates/string-the-lights/Template.tsx", "utf8")).toContain('tone="light" compact heart={false} ');
+    expect(readFileSync("src/templates/gingerbread-house/Template.tsx", "utf8")).not.toContain("heart={false}");
+    // The end as the other 59 gifts draw it is untouched unless a gift asks.
+    expect(readFileSync("src/templates/_shared/EndScreen.tsx", "utf8")).toContain("compact = false,");
+  });
+});
+
 /** The end screen's "or make one for someone else", as the markup has it (or null). */
 const someoneElse = (html: string) => /<a [^>]*data-testid="make-for-someone-else"[^>]*>[^<]*<\/a>/.exec(html)?.[0] ?? null;
 

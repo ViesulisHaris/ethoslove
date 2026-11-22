@@ -464,12 +464,15 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
                 ) : null}
               </figure>
             ) : step.kind === "end" ? (
-              // The card cuts what doesn't fit in it, so the end scrolls inside it, its sign going up with it.
-              <EndScroll>
+              // The end is set closer for a card, and may run into the card's margin, short of its gold
+              // line; where even that is too small it scrolls inside the card, its sign going up with it.
+              // The sign is the mark over this end, so the end's own heart is left out: with both, a
+              // Spanish gift's end (longer words, a row more) did not fit the card on an iPhone.
+              <EndScroll give="calc(5*var(--u))">
                 <p className="mb-[calc(3*var(--u))] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(5.4*var(--u))" }}>
                   {sign.toLowerCase()}
                 </p>
-                <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                <StepExtra step={step} data={data} tone="light" compact heart={false} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
               </EndScroll>
             ) : (
               <div>
