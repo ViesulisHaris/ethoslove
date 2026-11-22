@@ -24,7 +24,7 @@ export function groupNotice(locale: L, fromName: string, takesPhotos: boolean): 
   const days = GROUP_RETENTION.sentPromiseDays;
   if (locale === "es") {
     const what = takesPhotos ? "tu nombre, tu nota y tu foto" : "tu nombre y tu nota";
-    return `${fromName} verá ${what}, y decide si entran en la tarjeta. Si entran, los verá quien la abra. Lo que no se use se borra en los ${days} días siguientes al envío.`;
+    return `${fromName} verá ${what}, y decidirá si entran en la tarjeta. Si entran, los verá quien la abra. Lo que no se use se borra en los ${days} días siguientes al envío.`;
   }
   const what = takesPhotos ? "your name, note and photo" : "your name and note";
   return `${fromName} will see ${what} and choose whether they go in. If they do, whoever opens the card sees them. What isn't used is deleted within ${days} days of the card being sent.`;

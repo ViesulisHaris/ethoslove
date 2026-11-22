@@ -22,7 +22,8 @@ import { pickMessages } from "@/i18n/messages-subset";
 describe("the notice a contributor agrees to", () => {
   it("names the photo on a card that takes one", () => {
     expect(groupNotice("en", "Tom", true)).toBe(`Tom will see your name, note and photo and choose whether they go in. If they do, whoever opens the card sees them. What isn't used is deleted within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent.`);
-    expect(groupNotice("es", "Tomás", true)).toContain("Tomás verá tu nombre, tu nota y tu foto, y decide si entran en la tarjeta.");
+    // One tense from start to end: this sentence is stored, word for word, as what was agreed to.
+    expect(groupNotice("es", "Tomás", true)).toContain("Tomás verá tu nombre, tu nota y tu foto, y decidirá si entran en la tarjeta.");
   });
 
   it("says nothing of a photo on a card that takes none, on the page and in what is stored as agreed", () => {
@@ -31,7 +32,7 @@ describe("the notice a contributor agrees to", () => {
       expect(text).not.toMatch(/photo/i);
     }
     for (const text of [groupNotice("es", "Tomás", false), groupAgreed("es", "Tomás", false)]) {
-      expect(text).toContain("Tomás verá tu nombre y tu nota, y decide si entran en la tarjeta.");
+      expect(text).toContain("Tomás verá tu nombre y tu nota, y decidirá si entran en la tarjeta.");
       expect(text).not.toMatch(/foto/i);
     }
     // The rest of the promise is the same either way.

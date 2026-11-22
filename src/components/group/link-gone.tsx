@@ -1,7 +1,8 @@
 import { Lock } from "lucide-react";
 import { LogoMark } from "@/components/shared/logo";
 
-const S = {
+/** Said on this page, and by the contribute page itself when its link stops opening anything while someone is writing (a note sent to a link that was reset). */
+export const LINK_GONE = {
   en: { title: "This link no longer works.", ask: "Ask whoever sent it for a new one.", own: "Make a gift of your own" },
   es: { title: "Este enlace ya no funciona.", ask: "Pide uno nuevo a quien te lo envió.", own: "Haz tu propio regalo" },
 } as const;
@@ -14,7 +15,7 @@ const S = {
  * nothing about any link that ever existed.
  */
 export function GroupLinkGone({ locale }: { locale: "en" | "es" }) {
-  const t = S[locale];
+  const t = LINK_GONE[locale];
   return (
     <div lang={locale} className="flex min-h-dvh flex-col items-center justify-center bg-night px-6 py-12 text-center text-paper" data-testid="group-link-gone">
       <div className="grain-overlay" />
