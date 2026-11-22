@@ -4,7 +4,8 @@ import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
-import { CLOSED_BLOCK_WORDS, TAGLINE_WORDS, fitSentences, heroKeyword, heroLead, heroWords } from "@/components/templates/page/lead";
+import { CLOSED_BLOCK_WORDS, TAGLINE_WORDS, closedBlockLinks, fitSentences, heroKeyword, heroLead, heroWords } from "@/components/templates/page/lead";
+import { suitedRecipients } from "@/content/finder";
 import { TEMPLATE_LEADS, templateLead } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
 
@@ -222,8 +223,12 @@ describe("the text budget of a gift's page", () => {
   it("the closed block under the questions holds at most 180 words, on every template's page", () => {
     // What the block says: the rest of the description, then each idea's title and its line on what
     // to do, or, on a page without a guide, the steps' sentences: of either, as many as the limit
-    // leaves room for (components/templates/page/sections.tsx fits them the same way).
+    // leaves room for (components/templates/page/sections.tsx fits them the same way). And, always,
+    // its two sentences of links: the days it is made for and the people it suits. They were not
+    // counted, here or by the page, and with them 38 of the 122 pages ran to between 181 and 213
+    // words (the review of 22 Nov 2026): they are counted first now, and the rest fitted after them.
     const over: string[] = [];
+    let cut = 0;
     for (const [l, messages] of [["en", en], ["es", es]] as const) {
       const g = messages.templates.guide;
       // ICU's two wordings of the first step, counted as the longer one.
@@ -231,19 +236,36 @@ describe("the text budget of a gift's page", () => {
       for (const m of TEMPLATE_MANIFESTS) {
         const guide = Object.hasOwn(TEMPLATE_GUIDES, m.slug) ? TEMPLATE_GUIDES[m.slug][l] : null;
         const rest = heroWords(m.tagline, m.description[l], l).rest;
-        expect(words(rest), `${m.slug} ${l}: the description alone overruns the block`).toBeLessThanOrEqual(CLOSED_BLOCK_WORDS);
-        const steps = fitSentences([step1, g.step1Music, g.step2Body, g.step2Extras, g.step3Body], [4, 0, 3, 1, 2], CLOSED_BLOCK_WORDS - (rest ? words(rest) : 0));
+        const links = closedBlockLinks(
+          g.madeFor,
+          m.occasions.map((o) => (g.madeForDay as Record<string, string>)[o]),
+          g.suitsLead,
+          suitedRecipients(m.slug).map((r) => (g.suitsWho as Record<string, string>)[r]),
+        );
+        // Both sentences are on every page: a gift is made for at least one day and suits at least one person with a page.
+        expect(links, `${m.slug} ${l}: a sentence of links is missing`).toBeGreaterThanOrEqual(words(g.madeFor) + words(g.suitsLead) + 2);
+        const room = CLOSED_BLOCK_WORDS - (rest ? words(rest) : 0) - links;
+        expect(room, `${m.slug} ${l}: the description and the links alone overrun the block`).toBeGreaterThanOrEqual(0);
+        const steps = fitSentences([step1, g.step1Music, g.step2Body, g.step2Extras, g.step3Body], [4, 0, 3, 1, 2], room);
         // How it is sent, and how many photos it takes, are on every page whatever else is cut.
         if (!guide) expect(steps, `${m.slug} ${l}`).toEqual(expect.arrayContaining([g.step3Body, step1]));
-        const ideas = guide ? fitSentences(guide.ideas.items.map((idea) => `${idea.heading}. ${idea.how}`), guide.ideas.items.map((_, i) => i), CLOSED_BLOCK_WORDS - (rest ? words(rest) : 0)) : [];
-        // A long description may push the last idea's line out of the block; never more than that.
-        if (guide) expect(ideas.length, `${m.slug} ${l}`).toBeGreaterThanOrEqual(guide.ideas.items.length - 1);
+        const ideas = guide ? fitSentences(guide.ideas.items.map((idea) => `${idea.heading}. ${idea.how}`), guide.ideas.items.map((_, i) => i), room) : [];
+        // A long description pushes the last ideas' lines out of the block (their titles and lines to
+        // borrow stay on the cards above it). The first two are in it on every page: the Spanish Music
+        // Box, whose description leaves 27 words, is the page that keeps only those.
+        if (guide) {
+          expect(ideas.length, `${m.slug} ${l}`).toBeGreaterThanOrEqual(2);
+          expect(ideas.slice(0, 2), `${m.slug} ${l}`).toEqual(guide.ideas.items.slice(0, 2).map((idea) => `${idea.heading}. ${idea.how}`));
+          cut += guide.ideas.items.length - ideas.length;
+        }
         const body = (guide ? ideas : steps).reduce((n, s) => n + words(s), 0);
-        const count = (rest ? words(rest) : 0) + body;
+        const count = (rest ? words(rest) : 0) + body + links;
         if (count > CLOSED_BLOCK_WORDS) over.push(`${m.slug} ${l}: ${count}`);
       }
     }
     expect(over).toEqual([]);
+    // What the limit costs, so it is seen if it grows: between every page, in both languages, this many ideas' lines are left out.
+    expect(cut).toBeLessThanOrEqual(60);
   });
 
   it("sentences are fitted by what a search needs most, and given back in their own order", () => {

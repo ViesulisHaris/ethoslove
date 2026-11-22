@@ -17,7 +17,7 @@ import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
 import { IdeasDots } from "./ideas-dots";
 import { Intro, SPREAD } from "./spread";
-import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
+import { CLOSED_BLOCK_WORDS, closedBlockLinks, countWords, fitSentences } from "./lead";
 import { stepQuote, type QuoteSource } from "./quote";
 import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
 
@@ -401,20 +401,33 @@ export async function Questions({
 }) {
   const g = await getTranslations({ locale, namespace: "templates.guide" });
   const { photos, music, countdown, surprise } = manifest.features;
-  // Without a guide the block holds the three steps in full, as far as its 180 words allow after the
-  // description: how it is sent first, then the photos, the extras, the song, and the advice last.
+  // The people it suits, from the gift finder's hand-written table (content/finder.ts): each has a page of gift ideas.
+  const suited = suitedRecipients(manifest.slug);
+  // The block's 180 words are everything in it. Its two sentences of links (the days it is made
+  // for, the people it suits) are always there, so they are counted first, with the description,
+  // and the ideas or the steps are fitted into what is left. Fitted against the description alone,
+  // 38 of the 122 pages ran to between 181 and 213 words (the review of 22 Nov 2026).
+  const room =
+    CLOSED_BLOCK_WORDS -
+    countWords(about) -
+    closedBlockLinks(
+      g("madeFor"),
+      manifest.occasions.map((o) => g(`madeForDay.${o}`)),
+      g("suitsLead"),
+      suited.map((r) => g(`suitsWho.${r}`)),
+    );
+  // Without a guide the block holds the three steps in full, as far as that room allows: how it is
+  // sent first, then the photos, the extras, the song, and the advice last.
   const steps = guide
     ? []
     : fitSentences(
         [g("step1Body", { min: photos.min, max: photos.max }), music ? g("step1Music") : null, g("step2Body"), countdown && surprise ? g("step2Extras") : null, g("step3Body")],
         [4, 0, 3, 1, 2],
-        CLOSED_BLOCK_WORDS - countWords(about),
+        room,
       );
   // With a guide it holds what to do with each idea, in the cards' order, as many as fit.
   const said = (idea: TemplateGuideContent["ideas"]["items"][number]) => `${idea.heading}. ${idea.how}`;
-  const fitted = new Set(guide ? fitSentences(guide.ideas.items.map(said), guide.ideas.items.map((_, i) => i), CLOSED_BLOCK_WORDS - countWords(about)) : []);
-  // The people it suits, from the gift finder's hand-written table (content/finder.ts): each has a page of gift ideas.
-  const suited = suitedRecipients(manifest.slug);
+  const fitted = new Set(guide ? fitSentences(guide.ideas.items.map(said), guide.ideas.items.map((_, i) => i), room) : []);
   const row = "flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden";
   const plus = "size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45";
   return (
