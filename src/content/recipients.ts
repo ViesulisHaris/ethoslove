@@ -51,7 +51,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "For your boyfriend",
       lead: "He'll forget most things that come in a box. He won't forget opening a letter that says exactly what you think of him, with the photos only you have and the song you two wore out. These are the digital gifts that work for a boyfriend, near or far, each made in about ten minutes and sent as a link.",
       ideas: [
-        { template: "the-letter", heading: "A love letter he opens like a real one", body: "He breaks a wax seal with a tap, then reads your words between your photos while your song plays. It's free, and it's where most people start. Write the thing you'd never say out loud; he'll read it more than once." },
+        { template: "the-letter", heading: "A love letter he opens like a real one", body: "He breaks a wax seal with a tap, then your words write themselves out by hand while your song plays. It's free as a short note, and it's where most people start. Write the thing you'd never say out loud; he'll read it more than once." },
         { template: "on-repeat", heading: "A playlist of the two of you", body: "Your photo as the album cover, a pink sunset and a playlist of the songs that are yours. For the boyfriend with opinions about music." },
         { template: "jar-of-reasons", heading: "100 reasons you love him, in a jar", body: "Folded notes he shakes out one at a time, up to a hundred. Make some sweet, some only he'd get, and a couple that are just rude enough." },
         { template: "arcade", heading: "A little arcade game made for him", body: "He catches the hearts to unlock your photos one by one, then reads your message. For a gamer, or anyone who can't leave a high score alone." },
@@ -60,7 +60,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "passport", heading: "A passport, if he's far away", body: "It flies from your city to his, stamped with the places and photos you share. Made for a long-distance boyfriend." },
         { template: "pack-your-bags", heading: "A surprise trip, revealed", body: "An airport departures board that flips to where you're taking him. Save it for a birthday or an anniversary." },
         { template: "front-page", heading: "His own front page", body: "A newspaper with your headline about him and the stories only you know. Good for a birthday, better for a promotion." },
-        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star he finds by moving his phone, and your song plays when he's found them all. Free, and quietly romantic." },
+        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star he finds by moving his phone, and your song plays when he's found them all. Quietly romantic." },
       ],
       sections: [
         { heading: "What to write to him", body: "Specific beats sweet. Not \"you're the best boyfriend\", but the time he drove back for your charger, the voice he does for the cat, the moment you knew. Three or four sentences are plenty. If you're stuck, start with \"I don't say this enough, but…\" and keep going." },
@@ -79,7 +79,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "Para tu novio",
       lead: "Casi todo lo que viene en una caja se olvida. Lo que no se olvida es abrir una carta que dice exactamente lo que piensas de él, con las fotos que solo tú tienes y la canción que habéis gastado de tanto ponerla. Estos son los regalos digitales que funcionan con un novio, cerca o lejos: cada uno se hace en unos diez minutos y se envía en un enlace.",
       ideas: [
-        { template: "the-letter", heading: "Una carta de amor que abre como una de verdad", body: "Rompe un sello de lacre con un toque y lee tus palabras entre vuestras fotos mientras suena vuestra canción. Es gratis y es por donde empieza casi todo el mundo. Escribe lo que nunca dirías en voz alta: la leerá más de una vez." },
+        { template: "the-letter", heading: "Una carta de amor que abre como una de verdad", body: "Rompe un sello de lacre con un toque y tus palabras se escriben a mano mientras suena vuestra canción. Es gratis como nota corta y es por donde empieza casi todo el mundo. Escribe lo que nunca dirías en voz alta: la leerá más de una vez." },
         { template: "on-repeat", heading: "Una playlist de los dos", body: "Vuestra foto como portada del disco, un atardecer rosa y una lista con las canciones que son vuestras. Para el novio que tiene opiniones sobre música." },
         { template: "jar-of-reasons", heading: "100 razones por las que le quieres, en un frasco", body: "Notas dobladas que salen una a una al agitar el móvil, hasta cien. Unas tiernas, otras que solo entiende él y un par un poco atrevidas." },
         { template: "arcade", heading: "Un pequeño videojuego hecho para él", body: "Atrapa corazones para desbloquear vuestras fotos una a una y luego lee tu mensaje. Para un gamer, o para quien no soporta perder un récord." },
@@ -88,7 +88,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "passport", heading: "Un pasaporte, si está lejos", body: "Vuela de tu ciudad a la suya, sellado con los lugares y las fotos que compartís. Hecho para un novio a distancia." },
         { template: "pack-your-bags", heading: "Un viaje sorpresa, revelado", body: "Un panel de salidas de aeropuerto que gira hasta el sitio al que le llevas. Guárdalo para un cumpleaños o un aniversario." },
         { template: "front-page", heading: "Su propia portada", body: "Un periódico con tu titular sobre él y las historias que solo tú sabes. Bien para un cumpleaños, mejor para un ascenso." },
-        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas. Gratis, y romántico sin hacer ruido." },
+        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas. Romántico sin hacer ruido." },
       ],
       sections: [
         { heading: "Qué escribirle", body: "Lo concreto gana a lo cursi. No \"eres el mejor novio\", sino la vez que volvió a por tu cargador, la voz que pone para hablarle al gato, el momento en que lo supiste. Tres o cuatro frases bastan. Si te atascas, empieza con \"No te lo digo lo suficiente, pero…\" y sigue." },
@@ -109,7 +109,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "For your girlfriend",
       lead: "Flowers wilt by Thursday. A letter that says what you actually think of her, with the photos from your camera roll and the song that's yours, is still there next year, and she will open it again. These are the digital gifts that work for a girlfriend, each made in about ten minutes and sent as a link.",
       ideas: [
-        { template: "the-letter", heading: "A love letter, sealed in wax", body: "She breaks the seal with a tap and reads your words between your photos while your song plays. Free, and the one to start with if you've never written her a letter." },
+        { template: "the-letter", heading: "A love letter, sealed in wax", body: "She breaks the seal with a tap and your words write themselves out by hand while your song plays. Free as a short note, and the one to start with if you've never written her a letter." },
         { template: "bouquet", heading: "A bouquet that never wilts", body: "Pick every stem yourself, roses, peonies, tulips or sunflowers in the colours she likes, with a card inside for your note." },
         { template: "jar-of-reasons", heading: "100 reasons you love her", body: "A jar of folded notes she shakes out one at a time, up to a hundred. Make some of them about tiny things; those are the ones that land." },
         { template: "coquette", heading: "A pink bow and polaroids", body: "She unties the bow and finds a gingham collage of real lilies, your photos and your song. For a girlfriend with a coquette Pinterest board." },
@@ -118,7 +118,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "favorite-person", heading: "For your favorite person", body: "A watercolour scrapbook under tissue paper, with pearls, pressed flowers and your photos. For no reason, which is the best reason." },
         { template: "xoxo", heading: "A card sealed with a kiss", body: "Lipstick prints, polaroids and your song, and every tap leaves another kiss. For Valentine's, or a Wednesday." },
         { template: "photo-booth", heading: "A photo booth strip of you two", body: "She pulls the curtain and four flashes later a strip of the two of you prints, with your message on the back." },
-        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star she finds by moving her phone, and your song plays when she's found them all. Free." },
+        { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star she finds by moving her phone, and your song plays when she's found them all." },
       ],
       sections: [
         { heading: "What to write to her", body: "Say what you notice. Not \"you're beautiful\" but the way she reads the end of a book first, the face she makes at bad parking, the second you knew. Three or four honest sentences beat a page of quotes. If you're stuck, start with \"The thing I never tell you is…\"." },
@@ -137,7 +137,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       label: "Para tu novia",
       lead: "Las flores se marchitan antes del jueves. Una carta que dice lo que de verdad piensas de ella, con las fotos de tu carrete y vuestra canción, sigue ahí el año que viene, y la volverá a abrir. Estos son los regalos digitales que funcionan con una novia: cada uno se hace en unos diez minutos y se envía en un enlace.",
       ideas: [
-        { template: "the-letter", heading: "Una carta de amor con sello de lacre", body: "Rompe el sello con un toque y lee tus palabras entre vuestras fotos mientras suena vuestra canción. Gratis, y la mejor forma de empezar si nunca le has escrito una carta." },
+        { template: "the-letter", heading: "Una carta de amor con sello de lacre", body: "Rompe el sello con un toque y tus palabras se escriben a mano mientras suena vuestra canción. Gratis como nota corta, y la mejor forma de empezar si nunca le has escrito una carta." },
         { template: "bouquet", heading: "Un ramo que nunca se marchita", body: "Elige cada flor, rosas, peonías, tulipanes o girasoles en los colores que le gustan, también flores amarillas, con una tarjeta dentro para tu nota." },
         { template: "jar-of-reasons", heading: "100 razones por las que la quieres", body: "Un frasco de notas dobladas que salen una a una al agitar el móvil, hasta cien. Escribe algunas sobre cosas pequeñas: son las que más llegan." },
         { template: "coquette", heading: "Un lazo rosa y polaroids", body: "Desata el lazo y aparece un collage de vichy con lirios de verdad, vuestras fotos y vuestra canción. Para una novia con un tablero coquette en Pinterest." },
@@ -146,7 +146,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "favorite-person", heading: "Para tu persona favorita", body: "Un álbum en acuarela bajo papel de seda, con perlas, flores prensadas y vuestras fotos. Sin motivo, que es el mejor motivo." },
         { template: "xoxo", heading: "Una tarjeta sellada con un beso", body: "Marcas de pintalabios, polaroids y vuestra canción, y cada toque deja otro beso. Para San Valentín o para un miércoles." },
         { template: "photo-booth", heading: "Una tira de fotomatón de los dos", body: "Corre la cortina y, cuatro flashes después, sale una tira de los dos con tu mensaje detrás." },
-        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas. Gratis." },
+        { template: "constellations", heading: "Un cielo hecho de vuestras fotos", body: "Cada foto es una estrella que encuentra moviendo el móvil, y vuestra canción suena cuando las encuentra todas." },
       ],
       sections: [
         { heading: "Qué escribirle", body: "Di lo que ves. No \"eres preciosa\", sino que lee el final de los libros primero, la cara que pone cuando alguien aparca fatal, el segundo en que lo supiste. Tres o cuatro frases sinceras valen más que una página de citas. Si te atascas, empieza con \"Lo que nunca te digo es…\"." },
@@ -168,7 +168,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       lead: "After a few years together the hard part isn't money, it's finding something he doesn't already have. He doesn't have this: the story of the two of you, told with your photos and your words, waiting on his phone. These are the digital gifts that work for a husband, each made in about ten minutes.",
       ideas: [
         { template: "our-timeline", heading: "Your years together, as a timeline", body: "A road that draws itself as he scrolls: the day you met, the first flat, the wedding, the kids or the dog, with up to 20 photos and a video." },
-        { template: "the-letter", heading: "A letter he opens like a real one", body: "A wax seal, your words and your photos, with your song playing. Free, and the gift most husbands never get: a letter." },
+        { template: "the-letter", heading: "A letter he opens like a real one", body: "A wax seal, then your words write themselves out by hand while your song plays. Free as a short note, and the gift most husbands never get: a letter." },
         { template: "vinyl", heading: "His song, on vinyl", body: "He drops the needle on the song from your wedding, or the one from the car, and your photos and message play along." },
         { template: "front-page", heading: "He makes the front page", body: "A newspaper with your headline about him and the stories you'd tell at his retirement party. For his birthday or Father's Day." },
         { template: "museum", heading: "A museum of the two of you", body: "Your photos hung in a quiet gallery with labels on the wall and a video room. The anniversary gift for someone who has everything." },
@@ -194,7 +194,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       lead: "Después de unos años juntos lo difícil no es el dinero, sino encontrar algo que no tenga ya. Esto no lo tiene: la historia de los dos, contada con vuestras fotos y tus palabras, esperando en su móvil. Estos son los regalos digitales que funcionan con un marido, y cada uno se hace en unos diez minutos.",
       ideas: [
         { template: "our-timeline", heading: "Vuestros años juntos, en una línea del tiempo", body: "Un camino que se dibuja mientras baja: el día que os conocisteis, el primer piso, la boda, los niños o el perro, con hasta 20 fotos y un vídeo." },
-        { template: "the-letter", heading: "Una carta que abre como una de verdad", body: "Un sello de lacre, tus palabras y vuestras fotos, con vuestra canción sonando. Gratis, y el regalo que casi ningún marido recibe: una carta." },
+        { template: "the-letter", heading: "Una carta que abre como una de verdad", body: "Un sello de lacre, y tus palabras se escriben a mano mientras suena vuestra canción. Gratis como nota corta, y el regalo que casi ningún marido recibe: una carta." },
         { template: "vinyl", heading: "Su canción, en vinilo", body: "Baja la aguja sobre la canción de vuestra boda, o la del coche, y aparecen tus fotos y tu mensaje." },
         { template: "front-page", heading: "Sale en portada", body: "Un periódico con tu titular sobre él y las historias que contarías en su fiesta de jubilación. Para su cumpleaños o el Día del Padre." },
         { template: "museum", heading: "Un museo de los dos", body: "Vuestras fotos colgadas en una galería tranquila, con cartelas en la pared y una sala de vídeo. El regalo de aniversario para quien lo tiene todo." },
@@ -224,7 +224,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "our-timeline", heading: "The story of you two, as a timeline", body: "A road that draws itself as she scrolls, from the first date to now, with up to 20 photos and a video." },
         { template: "museum", heading: "A museum of your life together", body: "Your photos in a quiet gallery, each with its own label on the wall. The wedding, the move, the small Sundays." },
         { template: "bouquet", heading: "Her flowers, picked stem by stem", body: "Roses, peonies, tulips or sunflowers in her colours, wrapped, with a card inside. They never wilt." },
-        { template: "the-letter", heading: "The letter you've never written her", body: "A wax seal, your words and your photos, with your song. Free. Write what you'd say in the speech you didn't give." },
+        { template: "the-letter", heading: "The letter you've never written her", body: "A wax seal, then your words write themselves out by hand while your song plays. Free as a short note. Write what you'd say in the speech you didn't give." },
         { template: "music-box", heading: "A music box with your song", body: "She winds the key and a ballerina turns to your song while your photos appear in the mirror." },
         { template: "keepsake", heading: "A keepsake, sealed in wax", body: "Pressed flowers, a gold locket that opens and a typed letter. For an anniversary, or for when you're away." },
         { template: "garden", heading: "A garden that blooms as she scrolls", body: "Flowers open between your photos, a video and your words. For Mother's Day or your anniversary." },
@@ -250,7 +250,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "our-timeline", heading: "Vuestra historia, en una línea del tiempo", body: "Un camino que se dibuja mientras baja, de la primera cita a hoy, con hasta 20 fotos y un vídeo." },
         { template: "museum", heading: "Un museo de vuestra vida juntos", body: "Vuestras fotos en una galería tranquila, cada una con su cartela en la pared. La boda, la mudanza, los domingos pequeños." },
         { template: "bouquet", heading: "Sus flores, elegidas tallo a tallo", body: "Rosas, peonías, tulipanes o girasoles en sus colores, envueltos, con una tarjeta dentro. Nunca se marchitan." },
-        { template: "the-letter", heading: "La carta que nunca le has escrito", body: "Un sello de lacre, tus palabras y vuestras fotos, con vuestra canción. Gratis. Escribe lo que dirías en el discurso que no diste." },
+        { template: "the-letter", heading: "La carta que nunca le has escrito", body: "Un sello de lacre, y tus palabras se escriben a mano mientras suena vuestra canción. Gratis como nota corta. Escribe lo que dirías en el discurso que no diste." },
         { template: "music-box", heading: "Una caja de música con vuestra canción", body: "Da cuerda a la llave y una bailarina gira con vuestra canción mientras vuestras fotos aparecen en el espejo." },
         { template: "keepsake", heading: "Un recuerdo sellado con lacre", body: "Flores prensadas, un medallón de oro que se abre y una carta mecanografiada. Para un aniversario, o para cuando estás lejos." },
         { template: "garden", heading: "Un jardín que florece al bajar", body: "Se abren flores entre vuestras fotos, un vídeo y tus palabras. Para el Día de la Madre o vuestro aniversario." },
@@ -290,7 +290,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ],
       faq: [
         { q: "What's a good digital gift for a best friend?", a: "Something only you could make: your photos, your in-jokes and a line you mean. Party Animals and Sticker Bomb are for laughing; Favorite Person is for the soft version." },
-        { q: "Is it only for couples?", a: "No. Every template works for a friend, a sister or your mum: the words and photos are yours, and nothing in it says it's romantic unless you write it." },
+        { q: "Is it only for couples?", a: "No. Most templates work for a friend, a sister or your mum: the words and photos are yours, and nothing in them says romance unless you write it. A few are drawn for couples, a collage of lipstick kisses for one, and each template's page says who it suits." },
         freeEn,
       ],
     },
@@ -316,7 +316,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ],
       faq: [
         { q: "¿Qué regalo digital le hago a mi mejor amiga?", a: "Algo que solo tú podrías hacer: vuestras fotos, vuestras bromas y una frase que sientas. Fiesta Animal y Bomba de Stickers son para reír; Mi persona favorita, para la versión tierna." },
-        { q: "¿Es solo para parejas?", a: "No. Todas las plantillas sirven para una amiga, una hermana o tu madre: las palabras y las fotos son tuyas, y nada dice que sea romántico salvo que lo escribas." },
+        { q: "¿Es solo para parejas?", a: "No. La mayoría de las plantillas sirven para una amiga, una hermana o tu madre: las palabras y las fotos son tuyas, y nada dice que sea romántico salvo que lo escribas. Unas pocas están dibujadas para parejas, como un collage de besos de pintalabios, y la página de cada plantilla dice a quién le va." },
         freeEs,
       ],
     },
@@ -336,7 +336,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "music-box", heading: "A music box with her song", body: "She winds the key and a ballerina turns to the song she always sings along to, with your photos in the mirror." },
         { template: "garden", heading: "A garden that blooms as she scrolls", body: "Flowers open between photos of her, a video and your words. Made for Mother's Day." },
         { template: "popup-card", heading: "A pop-up birthday card", body: "A paper card that opens and a cake stands up out of the fold, with your message and photos inside." },
-        { template: "the-letter", heading: "A letter, like the ones she wrote you", body: "A wax seal, your words and your photos, with a song. Free. Thank her for one thing in particular." },
+        { template: "the-letter", heading: "A letter, like the ones she wrote you", body: "A wax seal, then your words write themselves out by hand while a song plays. Free as a short note. Thank her for one thing in particular." },
       ],
       sections: [
         { heading: "What to write to her", body: "Thank her for one specific thing: the lift at 2am, the packed lunch with a note, what she said before your exam. Mums keep the specific ones. Add a photo she's never seen, or one she hates; she'll love it anyway." },
@@ -362,7 +362,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "music-box", heading: "Una caja de música con su canción", body: "Da cuerda a la llave y una bailarina gira con la canción que siempre canta, con vuestras fotos en el espejo." },
         { template: "garden", heading: "Un jardín que florece al bajar", body: "Se abren flores entre fotos suyas, un vídeo y tus palabras. Hecho para el Día de la Madre." },
         { template: "popup-card", heading: "Una tarjeta de cumpleaños pop-up", body: "Una tarjeta de papel que se abre y una tarta que se levanta del pliegue, con tu mensaje y tus fotos dentro." },
-        { template: "the-letter", heading: "Una carta, como las que ella te escribía", body: "Un sello de lacre, tus palabras y vuestras fotos, con una canción. Gratis. Dale las gracias por una cosa en concreto." },
+        { template: "the-letter", heading: "Una carta, como las que ella te escribía", body: "Un sello de lacre, y tus palabras se escriben a mano mientras suena una canción. Gratis como nota corta. Dale las gracias por una cosa en concreto." },
       ],
       sections: [
         { heading: "Qué escribirle", body: "Dale las gracias por algo concreto: cuando te fue a buscar a las dos de la mañana, el táper con una nota, lo que te dijo antes de aquel examen. Las madres guardan lo concreto. Añade una foto que no haya visto, o una que odie: le encantará igual." },
@@ -389,7 +389,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "vinyl", heading: "His song, on vinyl", body: "He drops the needle on the song from the car journeys, and your photos and message play along." },
         { template: "fortune-cookie", heading: "A fortune cookie of dad jokes", body: "He cracks it open to find the fortunes you wrote, up to twenty. Put his own jokes back in there." },
         { template: "jar-of-reasons", heading: "A jar of reasons he's a good dad", body: "Folded notes he shakes out one at a time. Get the whole family to write some." },
-        { template: "the-letter", heading: "The letter he'll keep", body: "A wax seal, your words and your photos, with a song. Free. Say the one thing you'd want him to know." },
+        { template: "the-letter", heading: "The letter he'll keep", body: "A wax seal, then your words write themselves out by hand while a song plays. Free as a short note. Say the one thing you'd want him to know." },
       ],
       sections: [
         { heading: "What to write to him", body: "Dads remember being thanked for specific things: teaching you to drive, the match he never missed, what he said when it all went wrong. One of those, said plainly, is worth more than a page." },
@@ -414,7 +414,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "vinyl", heading: "Su canción, en vinilo", body: "Baja la aguja sobre la canción de los viajes en coche, y aparecen tus fotos y tu mensaje." },
         { template: "fortune-cookie", heading: "Una galleta de la fortuna con chistes de padre", body: "La abre y encuentra las fortunas que escribiste, hasta veinte. Devuélvele sus propios chistes." },
         { template: "jar-of-reasons", heading: "Un frasco de razones por las que es buen padre", body: "Notas dobladas que salen una a una. Que escriba algunas toda la familia." },
-        { template: "the-letter", heading: "La carta que guardará", body: "Un sello de lacre, tus palabras y vuestras fotos, con una canción. Gratis. Dile lo único que querrías que supiera." },
+        { template: "the-letter", heading: "La carta que guardará", body: "Un sello de lacre, y tus palabras se escriben a mano mientras suena una canción. Gratis como nota corta. Dile lo único que querrías que supiera." },
       ],
       sections: [
         { heading: "Qué escribirle", body: "Los padres recuerdan que les den las gracias por cosas concretas: enseñarte a conducir, el partido al que nunca faltó, lo que dijo cuando todo salió mal. Una de esas, dicha sin adornos, vale más que una página." },

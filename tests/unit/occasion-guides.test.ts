@@ -65,8 +65,8 @@ describe("occasion guides", () => {
   }
 });
 
-/** The quoted samples in an idea's body, in order: “like this”. */
-const samples = (body: string) => [...body.matchAll(/“([^”]*)”/g)].map((m) => m[1]);
+/** The quoted samples in an idea's body, in order: “like this”, and in Spanish «like this» (a quotation inside one is “this”, and no sample). */
+const samples = (body: string) => [...body.matchAll(/«([^»]*)»|“([^”]*)”/g)].map((m) => m[1] ?? m[2]);
 
 /**
  * The lists added on 20 Nov 2026 (content/occasion-ideas.ts). Every sample line an idea offers is
@@ -131,7 +131,9 @@ describe("every occasion's idea list", () => {
           expect(fields.filter((field) => field.startsWith("+")).length, idea.template).toBeLessThanOrEqual(1);
           for (const [i, marked] of fields.entries()) {
             if (marked === "-") continue;
-            const field = marked.replace(/^\+/, "");
+            // "&" is a sample shown with the one before it (the next bubble of a thread): it follows one for the same field.
+            if (marked.startsWith("&")) expect(fields[i - 1]?.replace(/^[+&]/, ""), `${idea.template}: “&” after another field`).toBe(marked.slice(1));
+            const field = marked.replace(/^[+&]/, "");
             const limit = await fieldLimit(idea.template, field);
             expect(limit, `${idea.template}.${field} is not a text field`).not.toBeNull();
             expect(found[i].length, `${idea.template}.${field}: “${found[i]}”`).toBeLessThanOrEqual(limit!);

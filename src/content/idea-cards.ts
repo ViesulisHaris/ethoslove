@@ -86,9 +86,12 @@ export function handLine(text: string, max = HAND_LINE_WORDS): string {
   return sentences.slice(0, taken).join(" ");
 }
 
-/** The quoted samples in an idea's body, in order: “like this”. */
+/**
+ * The quoted samples in an idea's body, in order: “like this” in English and «like this» in
+ * Spanish, where “these” are the marks of a quotation inside one and never a sample of their own.
+ */
 export function sampleLines(body: string): string[] {
-  return [...body.matchAll(/“([^”]*)”/g)].map((m) => m[1]);
+  return [...body.matchAll(/«([^»]*)»|“([^”]*)”/g)].map((m) => m[1] ?? m[2]);
 }
 
 /**
@@ -97,12 +100,30 @@ export function sampleLines(body: string): string[] {
  * "+", or where none is marked the first one it says is a line for a field. Each of them
  * tests/unit/occasion-guides.test.ts has counted against that field's limit. A quotation the table
  * marks "-" is never shown: it is a label of the editor, or what not to write.
+ *
+ * `rows` is what the card shows where the sample is one of a run: the bubbles of a Text Thread are
+ * a conversation, and the first of them alone was "Dad." or "You're asleep." on a card, a fragment
+ * (the test of 23 Nov 2026). The quotations that follow it and are marked "&" are shown with it, one
+ * to a row, for as long as the rows together stay within a card's sixteen words.
  */
-export function occasionSample(occasion: Occasion, idea: { template: string; body: string }, locale: GiftLocale): { field: string; text: string } | null {
+export function occasionSample(occasion: Occasion, idea: { template: string; body: string }, locale: GiftLocale): { field: string; text: string; rows: string[] } | null {
   const fields = sampleFieldsOf(occasion, idea.template, locale);
   if (!fields) return null;
   const found = sampleLines(idea.body);
   const marked = fields.findIndex((field) => field.startsWith("+"));
   const at = marked >= 0 ? marked : fields.findIndex((field) => field !== "-");
-  return at >= 0 && found[at] ? { field: fields[at].replace(/^\+/, ""), text: found[at] } : null;
+  if (at < 0 || !found[at]) return null;
+  const field = fields[at].replace(/^\+/, "");
+  const rows = [found[at]];
+  let count = words(found[at]);
+  for (let next = at + 1; fields[next] === `&${field}` && found[next] && count + words(found[next]) <= HAND_LINE_WORDS; next += 1) {
+    rows.push(found[next]);
+    count += words(found[next]);
+  }
+  return { field, text: found[at], rows };
+}
+
+/** An occasion idea's sample as its card writes it by hand: a run of bubbles one to a row, or the one line cut to what a card holds. */
+export function sampleHand(sample: { text: string; rows: readonly string[] }): string {
+  return sample.rows.length > 1 ? sample.rows.join("\n") : handLine(sample.text);
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ArrowDown } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { OCCASIONS, isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
@@ -54,7 +55,22 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
           faqNode(guide.faq),
         ]}
       />
-      <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
+      <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)}>
+        {/* The ideas are what the page's search result promises ("12 ideas"), and they lie under the whole gallery: seven
+            screens down on a phone for Christmas, far more for an anniversary (the test of 23 Nov 2026). One quiet link
+            from the top says they are there and goes to them. Whether the gallery and the ideas stay two grids is the
+            owner's to decide; this is not that decision. */}
+        {guide.ideas ? (
+          <a
+            href={`#ideas-${occasion}`}
+            data-testid="to-ideas"
+            className="inline-flex min-h-11 items-center gap-2 rounded-md text-[0.9375rem] font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-ink active:text-rose-deep"
+          >
+            {guide.ideas.title}
+            <ArrowDown aria-hidden="true" className="size-4" />
+          </a>
+        ) : null}
+      </PageHeader>
       <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} />
       {/* Below the gallery the page is laid out as a gift's own page is: the ideas as picture cards, then the guide and the questions as closed rows. */}
       <SitePage name={`occasion-${occasion}`} under={false}>

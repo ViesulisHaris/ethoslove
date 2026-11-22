@@ -8,7 +8,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { PRODUCTS, chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
 import { NOTE_PHOTOS_MAX, sendsFree } from "@/lib/gift/free-tier";
-import { DIGITAL_CARDS_LEAD, DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
+import { DIGITAL_CARDS_BAND_PHOTO, DIGITAL_CARDS_LEAD, DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { templateGuide } from "@/content/template-guides";
@@ -19,6 +19,9 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { ArtLayer } from "@/components/templates/page/art";
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
 import { Band, BandWords, ExperienceFlatlay, HowToSend, Intro, templateSamples } from "@/components/templates/page/sections";
+
+/** Where "See full pricing" lands: the single gifts' own section of the pricing page (components/pricing/single-gifts.tsx, `id="gifts"`). */
+const PRICING_GIFTS = "/pricing#gifts";
 
 /** What the copy reads from the code: the prices in this page's currency, written the locale's way, the counts, and whether the finder is there to link to. */
 function facts(currency: Currency, locale: string): DigitalCardsFacts {
@@ -125,7 +128,8 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
 
           <HowToSend locale={l} heading={copy.steps.heading} flowers={SITE_FLOWERS} art={STEPS_ART} steps={null} lines={samples.lines} source={samples.source} photo={samples.photo} poster={lead.thumbnail.poster} />
 
-          <Band labelledBy="not-the-same" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={samples.photo} />}>
+          {/* A photo of its own in the band's polaroid: the first step's picture, a few lines up, already shows the card's first sample photo. */}
+          <Band labelledBy="not-the-same" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={DIGITAL_CARDS_BAND_PHOTO} />}>
             <BandWords id="not-the-same" label={copy.band.label} heading={copy.band.heading} line={copy.band.line} checks={copy.band.checks} />
           </Band>
 
@@ -137,7 +141,8 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
             art={PRICES_ART}
             className="pt-16 pb-4 sm:pt-20 lg:pt-28"
             intro={
-              <Link href="/pricing" className={`${QUIET_LINK} mt-3 gap-1.5`}>
+              // To the cards' own prices: the top of /pricing is the dates membership, another product at another price.
+              <Link href={PRICING_GIFTS} data-testid="full-pricing" className={`${QUIET_LINK} mt-3 gap-1.5`}>
                 {copy.cost.more}
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>

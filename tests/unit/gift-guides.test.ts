@@ -434,7 +434,7 @@ describe("/digital-cards", () => {
   it("reads every price from the code", () => {
     for (const locale of GIFT_LOCALES) {
       const copy = digitalCardsCopy(locale, facts);
-      expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<single>", "<pick3>", "<everything>", "<photos>", "<extras>"]);
+      expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<photos>", "<extras>", "<single>", "<pick3>", "<everything>"]);
       for (const s of strings(copy)) expect(s, s).not.toMatch(TYPED_PRICE);
       expect(strings(copy).join(" ")).toContain(String(facts.count));
     }

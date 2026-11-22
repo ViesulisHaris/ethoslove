@@ -1,4 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import { DEMO_PHOTOS } from "@/templates/_shared/demo-photos";
 import { PAGE_UPDATED } from "./page-dates";
 
 /**
@@ -76,7 +77,7 @@ export type DigitalCardsCopy = {
   kinds: { label: string; heading: string; lead: string; also: string; watch: string; make: string; full: string; items: CardKind[] };
   /** `more` is the summary of the closed block that holds the steps in full. */
   steps: { heading: string; more: string; items: { title: string; body: string }[] };
-  /** Three prices are shown as cards (`shown`: their rows); every row is in the closed block `includes`. */
+  /** Three prices are shown as cards (`shown`: their rows); every row is in the closed block `includes`, from the least to the most: the free note, what is added to it, then the cards. */
   cost: { label: string; heading: string; line: string; lead: string; rows: { label: string; price: string; note: string }[]; shown: [number, number, number]; includes: string; more: string };
   faq: { label: string; heading: string; items: { q: string; a: string }[] };
   /** Where to go next: the gifts, the finder when it is built, the occasions and the pages by person. Every card is one tap from the hero ("See all 61 cards"), so /templates is not listed again. */
@@ -94,6 +95,13 @@ const KINDS: { template: string; also: string[] }[] = [
 
 /** The card that plays in the hero's phone: the first kind's, The Letter. tests/unit/spread-budget.test.ts holds every page's lead to a gift of its own. */
 export const DIGITAL_CARDS_LEAD = KINDS[0].template;
+
+/**
+ * The photo in the polaroid of the page's band: the sample of a note left in an open book. The
+ * card's first sample photo (two hands and a coffee) is already in the first of the three steps
+ * above it, and stood in both pictures.
+ */
+export const DIGITAL_CARDS_BAND_PHOTO = { src: DEMO_PHOTOS.p8.url, width: DEMO_PHOTOS.p8.width, height: DEMO_PHOTOS.p8.height } as const;
 
 /** Every template the page shows or names, for the tests. */
 export const DIGITAL_CARD_TEMPLATES = KINDS.flatMap((k) => [k.template, ...k.also]);
@@ -196,17 +204,17 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       cost: {
         label: "Precios",
         line: "Un solo pago, sin suscripción. La carta es gratis como nota corta.",
-        shown: [1, 2, 3],
+        shown: [3, 4, 5],
         includes: "Qué incluye cada precio",
         heading: "Cuánto cuesta una tarjeta digital",
         lead: "Todos los precios son pagos únicos. Para las tarjetas no hay suscripción.",
         rows: [
           { label: "La carta, como nota corta", price: "Gratis", note: "Hasta 500 caracteres y una canción, con un pequeño pie que dice «Hecho con Ethos»." },
+          { label: "La carta, como nota con fotos", price: f.photos, note: `La nota corta, con hasta ${f.notePhotos} fotos tuyas.` },
+          { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." },
           { label: "Una tarjeta", price: f.single, note: "Una plantilla, para siempre: haz con ella todas las tarjetas que quieras." },
           { label: "Tres tarjetas", price: f.pick3, note: "Tres plantillas, las que tú elijas." },
           { label: "Todas las tarjetas", price: f.everything, note: "Todas, y las que vayan llegando." },
-          { label: "La carta, como nota con fotos", price: f.photos, note: `La nota corta, con hasta ${f.notePhotos} fotos tuyas.` },
-          { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." },
         ],
         more: "Ver todos los precios",
       },
@@ -350,17 +358,17 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
     cost: {
       label: "Prices",
       line: "Paid once, never a subscription. The Letter is free as a short note.",
-      shown: [1, 2, 3],
+      shown: [3, 4, 5],
       includes: "What each price includes",
       heading: "What a digital card costs",
       lead: "Every price is a one-time payment. There is no subscription for cards.",
       rows: [
         { label: "The Letter, as a short note", price: "Free", note: "Up to 500 characters and a song, with a small “Made with Ethos” footer." },
+        { label: "The Letter, as a note with photos", price: f.photos, note: `The short note, with up to ${f.notePhotos} of your photos.` },
+        { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." },
         { label: "One card", price: f.single, note: "One template, for good: make as many cards from it as you like." },
         { label: "Three cards", price: f.pick3, note: "Three templates of your choosing." },
         { label: "Every card", price: f.everything, note: "All of them, and the ones still to come." },
-        { label: "The Letter, as a note with photos", price: f.photos, note: `The short note, with up to ${f.notePhotos} of your photos.` },
-        { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." },
       ],
       more: "See full pricing",
     },
@@ -390,7 +398,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         },
         {
           q: "Can I make a digital card on my phone?",
-          a: "Yes. The editor runs in the phone's browser and photos come straight from the camera roll. Ten minutes is a fair estimate, longer if you keep rewriting the message.",
+          a: "Yes. The editor runs in the phone’s browser and photos come straight from the camera roll. Ten minutes is a fair estimate, longer if you keep rewriting the message.",
         },
         {
           q: "Do digital cards expire?",

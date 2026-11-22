@@ -28,7 +28,11 @@ test.describe("the template gallery", () => {
     await page.goto("/templates");
     await page.getByRole("button", { name: "Free", exact: true }).click();
     await expect(page.locator("[data-shelf]")).toHaveCount(1);
-    await expect(page.locator("[data-shelf=all] h3")).toHaveText(["The Letter", "Constellations"]);
+    // "Free" is what can be sent free as the build is set (lib/gift/free-tier.ts, sendsFree). The live site has run since
+    // 19 Nov 2026 with the free version as The Letter's short note (NEXT_PUBLIC_FREE_NOTE_SHARE=1): Constellations is made
+    // of photos, so there it is paid. Run with the server's own setting, the spec follows it; it used to expect both always.
+    const noteForEveryone = Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) >= 1;
+    await expect(page.locator("[data-shelf=all] h3")).toHaveText(noteForEveryone ? ["The Letter"] : ["The Letter", "Constellations"]);
   });
 
   test("an occasion's page keeps its own order, without shelves, in Spanish too", async ({ page }) => {

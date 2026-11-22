@@ -3,7 +3,7 @@ import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { GIFT_GUIDES, GUIDES_FOR_OCCASION } from "@/content/gift-guides";
-import { handLine, occasionCardLine, occasionSample } from "@/content/idea-cards";
+import { occasionCardLine, occasionSample, sampleHand } from "@/content/idea-cards";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { Link } from "@/i18n/navigation";
 import { withManifests } from "@/components/marketing/gift-idea-list";
@@ -32,7 +32,7 @@ export async function OccasionIdeas({ occasion, locale }: { occasion: Occasion; 
         manifest: idea.manifest,
         title: idea.heading,
         line: occasionCardLine(idea),
-        borrow: sample ? { where, text: handLine(sample.text) } : undefined,
+        borrow: sample ? { where, text: sampleHand(sample), whole: sample.rows.length > 1 ? undefined : sample.text } : undefined,
         full: idea.body,
         make: `/create/${idea.template}`,
         // Every Letter idea of these lists is the free note (tests/unit/occasion-guides.test.ts holds each to saying so).
@@ -46,7 +46,7 @@ export async function OccasionIdeas({ occasion, locale }: { occasion: Occasion; 
         id={`idea-cards-${occasion}`}
         cards={cards}
         locale={locale}
-        labels={{ make: t("recipients.make"), watch: t("recipients.watch"), free: t("recipients.free"), full: t("recipients.ideaInFull") }}
+        labels={{ make: t("recipients.make"), watch: t("recipients.watch"), free: t("recipients.free"), full: t("recipients.ideaInFull"), copy: t("recipients.copyLine"), copied: t("recipients.copiedLine") }}
       />
     </Spread>
   );

@@ -1,5 +1,6 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { DEMO_PHOTOS, type DemoPhotoId } from "@/templates/_shared/demo-photos";
 import type { BorrowedLine } from "@/components/marketing/gift-idea-list";
 
 /**
@@ -21,6 +22,31 @@ export type GiftGuideSlug = (typeof GIFT_GUIDE_SLUGS)[number];
 
 export function isGiftGuide(slug: string): slug is GiftGuideSlug {
   return (GIFT_GUIDE_SLUGS as readonly string[]).includes(slug);
+}
+
+/**
+ * The photo in the polaroid that lies on the phone of each page's band. Every page had the first
+ * sample photo of its lead gift there, which is the same two photos on seven pages: a pair of hands
+ * and a coffee cup beside "So the candles go out" (the test of 23 Nov 2026). They are the samples
+ * every demo shares (templates/_shared/demo-photos.ts), one to a page, chosen for what the page is
+ * about: the night train for a gift made late, the tent under the stars for a place worth filming,
+ * the puppy on the picnic rug for the card with animals in it, the cake for the cake, the dated
+ * print of two bicycles for an album, the two of them walking for an anniversary. /digital-cards has
+ * the eighth (content/digital-cards.ts). tests/unit/spread-budget.test.ts holds them apart.
+ */
+export const GUIDE_BAND_PHOTOS: Record<GiftGuideSlug, DemoPhotoId> = {
+  "last-minute": "p6",
+  "video-message": "p5",
+  "interactive-birthday-card": "p4",
+  "virtual-birthday-cake": "p3",
+  "photo-album": "p7",
+  "anniversary-website": "p2",
+};
+
+/** That photo, as a picture on the page takes it. */
+export function guideBandPhoto(slug: GiftGuideSlug): { src: string; width: number; height: number } {
+  const photo = DEMO_PHOTOS[GUIDE_BAND_PHOTOS[slug]];
+  return { src: photo.url, width: photo.width, height: photo.height };
 }
 
 /**
@@ -113,7 +139,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "midnight-countdown",
           heading: "Late becomes early: set it for midnight",
           body: "If the day is tomorrow, you are ahead of schedule. Send the link tonight: it shows a clock running down under a darkening sky and opens by itself at the moment you set, in their time zone, with fireworks. Beyond the names and your message it needs only one photo and the moment to open. Nobody who gets a gift at 00:00 thinks it was made at 21:40.",
-          line: { field: "zeroLine", where: "The line that appears with the fireworks", text: "It's officially your day. I got here first." },
+          line: { field: "zeroLine", where: "The line that appears with the fireworks", text: "It’s officially your day. I got here first." },
         },
         {
           template: "bouquet",
@@ -125,8 +151,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "scratch-card",
           heading: "Turn an IOU into a reveal",
           brief: "Tell them what is coming, and make finding out the fun part.",
-          body: "The honest fix for a present that won't arrive in time: tell them what is coming, and make finding out the fun part. Each card hides a photo and its caption under foil they rub off with a finger; the last one carries the news in big letters. One photo is enough and three is better. Name the day and the hour on that last card: a late present with a date on it reads as a plan.",
-          line: { field: "finalTitle", where: "The headline on the last card", text: "Saturday, 8pm. Wear the green one. It's booked." },
+          body: "The honest fix for a present that won’t arrive in time: tell them what is coming, and make finding out the fun part. Each card hides a photo and its caption under foil they rub off with a finger; the last one carries the news in big letters. One photo is enough and three is better. Name the day and the hour on that last card: a late present with a date on it reads as a plan.",
+          line: { field: "finalTitle", where: "The headline on the last card", text: "Saturday, 8pm. Wear the green one. It’s booked." },
         },
         {
           template: "fortune-cookie",
@@ -151,7 +177,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "birthday-cinema",
           heading: "For a birthday: a cake they can blow out",
           body: "For the birthday you remembered at lunch. Their name goes up in lights, a cake waits with one candle per year up to twelve, and they put them out by blowing into the phone or swiping. It needs the two names, one photo and your message, and their age if you want the candles to match. Add a second photo if you have ten more seconds.",
-          line: { field: "marquee", where: "On the marquee", text: "SAM AT 30: THE DIRECTOR'S CUT" },
+          line: { field: "marquee", where: "On the marquee", text: "SAM AT 30: THE DIRECTOR’S CUT" },
         },
       ],
       sections: [
@@ -215,7 +241,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "midnight-countdown",
-          heading: "De llegar tarde a llegar antes: prográmalo a medianoche",
+          heading: "De tarde a primero: prográmalo a medianoche",
           body: "Si el día es mañana, vas con tiempo de sobra. Manda el enlace esta noche: muestra un reloj que baja bajo un cielo que oscurece y se abre solo en el momento que elijas, en su zona horaria, con fuegos artificiales. Aparte de los nombres y tu mensaje, solo pide una foto y el momento de abrirse. Nadie que recibe un regalo a las 00:00 piensa que se hizo a las 21:40.",
           line: { field: "zeroLine", where: "La frase que sale con los fuegos", text: "Ya es tu día, oficialmente. He llegado antes que nadie." },
         },
@@ -310,22 +336,22 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       craft: "A clip worth keeping",
       film: "birthday-cinema",
       lead: [
-        "A video sent in a chat is watched once, between two other messages. Put the same clip inside a gift and it has an opening, a place of its own and a letter beside it. Five templates on Ethos take a video clip, one clip per gift: an MP4 or MOV file of up to 50 MB. The editor's own advice is to keep it under a minute.",
-        "Two things to know before you film. The clip starts muted when they scroll to it and one tap turns the sound on, so don't put the important sentence in the first second. And video is a paid feature: it comes with any premium template, and on The Letter with “Make it special”. The last two ideas use a voice message, which every template takes once it is unlocked, and which is easier if you hate being on camera.",
+        "A video sent in a chat is watched once, between two other messages. Put the same clip inside a gift and it has an opening, a place of its own and a letter beside it. Five templates on Ethos take a video clip, one clip per gift: an MP4 or MOV file of up to 50 MB. The editor’s own advice is to keep it under a minute.",
+        "Two things to know before you film. The clip starts muted when they scroll to it and one tap turns the sound on, so don’t put the important sentence in the first second. And video is a paid feature: it comes with any premium template, and on The Letter with “Make it special”. The last two ideas use a voice message, which every template takes once it is unlocked, and which is easier if you hate being on camera.",
       ],
       ideas: [
         {
           template: "birthday-cinema",
-          heading: "The people who couldn't be there, after the candles",
+          heading: "The people who couldn’t be there, after the candles",
           brief: "Once the candles are out, the clip is the first thing on the screen.",
-          body: "Once the candles are out and the confetti has fired, the clip is the first thing on the screen, framed above a film strip of your photos. It suits a group: ask five people for five seconds of “happy birthday” each and join them in your phone's video editor. Five seconds each keeps the file far under the limit, and nobody rambles.",
+          body: "Once the candles are out and the confetti has fired, the clip is the first thing on the screen, framed above a film strip of your photos. It suits a group: ask five people for five seconds of “happy birthday” each and join them in your phone’s video editor. Five seconds each keeps the file far under the limit, and nobody rambles.",
           line: { field: "marquee", where: "On the marquee", text: "ONE NIGHT ONLY: MAYA TURNS 25" },
         },
         {
           template: "museum",
           heading: "A dark screening room after the last photo",
           brief: "The clip gets a dark room to itself after the last photo, just before your message.",
-          body: "Each photo hangs framed in a room of its own with a plaque, and the clip gets a room to itself after the last photo, just before your message: dark walls and the video on the far one, like the film room in an exhibition. Use it for what a photo can't hold: the dog greeting them, the street you grew up on, a table of people shouting the same thing. It takes two to twenty photos.",
+          body: "Each photo hangs framed in a room of its own with a plaque, and the clip gets a room to itself after the last photo, just before your message: dark walls and the video on the far one, like the film room in an exhibition. Use it for what a photo can’t hold: the dog greeting them, the street you grew up on, a table of people shouting the same thing. It takes two to twenty photos.",
           line: { field: "exhibition", where: "The exhibition title", text: "The Ana Retrospective: ten years, mostly laughing" },
         },
         {
@@ -346,14 +372,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "the-letter",
           heading: "A letter with you in it",
           brief: "The letter writes itself out, and the clip arrives last on a postcard of its own.",
-          body: "The envelope opens, the letter writes itself out, the photos drop as polaroids, and the clip arrives last on a postcard of its own. Write the letter as the reasons and keep the video for the part that is better heard: a promise, an apology, the song you can't sing. On The Letter, video comes with “Make it special”.",
-          line: { field: "signOff", where: "The sign-off", text: "Now play the video. I practised," },
+          body: "The envelope opens, the letter writes itself out, the photos drop as polaroids, and the clip arrives last on a postcard of its own. Write the letter as the reasons and keep the video for the part that is better heard: a promise, an apology, the song you can’t sing. On The Letter, video comes with “Make it special”.",
+          line: { field: "signOff", where: "The sign-off", text: "Now play the video. I practised." },
         },
         {
           template: "vinyl",
           heading: "No camera: your voice after the last track",
           body: "The needle goes down and the record plays while your photos flip past as album covers. When it is over, your voice message is waiting on the last screen: up to a minute, recorded in the editor on your own phone. Say where you first heard the song and why it is theirs. Twenty seconds of that is enough.",
-          line: { field: "album", where: "The album title on the record label", text: "Songs I Can't Hear Without You" },
+          line: { field: "album", where: "The album title on the record label", text: "Songs I Can’t Hear Without You" },
         },
         {
           template: "halfway",
@@ -373,7 +399,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Voice, if video is too much",
-          body: "A voice message is a minute at most and plays on the last screen of the gift, after everything else. You record it in the editor, on any template you have unlocked, and can re-record until it is right. Don't read it out from a script, because it always sounds read. Jot down three words, press record and talk to one person.",
+          body: "A voice message is a minute at most and plays on the last screen of the gift, after everything else. You record it in the editor, on any template you have unlocked, and can re-record until it is right. Don’t read it out from a script, because it always sounds read. Jot down three words, press record and talk to one person.",
         },
       ],
       faq: [
@@ -391,7 +417,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "What else does the gift need besides the clip?",
-          a: "Their name, yours and a message, plus at least one photo: two for Our Timeline and Museum. The clip is an addition to the gift: a video can't be sent with nothing around it.",
+          a: "Their name, yours and a message, plus at least one photo: two for Our Timeline and Museum. The clip is an addition to the gift: a video can’t be sent with nothing around it.",
         },
         freeEn,
       ],
@@ -452,7 +478,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "Una carta contigo dentro",
           brief: "La carta se va escribiendo y el clip llega al final, en una postal propia.",
           body: "El sobre se abre, la carta se va escribiendo, las fotos caen como polaroids y el clip llega al final, en una postal propia. Escribe en la carta los motivos y guarda el vídeo para lo que se entiende mejor oído: una promesa, una disculpa, la canción que no sabes cantar. En La carta, el vídeo viene con «Hazlo especial».",
-          line: { field: "signOff", where: "La despedida", text: "Ahora dale al vídeo. He ensayado," },
+          line: { field: "signOff", where: "La despedida", text: "Ahora dale al vídeo. He ensayado." },
         },
         {
           template: "vinyl",
@@ -551,7 +577,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "They tap: ten guests who heckle on cue",
           brief: "Ten animals in party hats each jump and yell a line of yours when tapped.",
           body: "An invitation that opens into a long birthday collage: their age in foil balloons, your photos in polaroids, and ten animals in party hats who each jump and yell a line of yours when tapped. A tap anywhere else pops confetti under the finger. Further down there is a cake with their age in number candles, to tap or to blow out.",
-          line: { field: "shouts", where: "One of the ten lines the animals yell", text: "you don't look a day over the last one" },
+          line: { field: "shouts", where: "One of the ten lines the animals yell", text: "you don’t look a day over the last one" },
         },
         {
           template: "sketchbook",
@@ -563,26 +589,26 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "digicam",
           heading: "They press the shutter: a camera from 2006",
           body: "A pocket camera lies on a collage with happy birthday cut out of magazines above it. They press power, the lens whirs out, and your photos are on the roll with an orange date stamp in the corner and your captions in pixel type. Every press of the shutter fires the flash and moves to the next photo; after the last, the camera prints the whole roll as a strip.",
-          line: { field: "caption", where: "A photo caption, on the camera's screen", text: "IMG_0412: you, pretending not to pose" },
+          line: { field: "caption", where: "A photo caption, on the camera’s screen", text: "IMG_0412: you, pretending not to pose" },
         },
         {
           template: "midnight-countdown",
           heading: "They wait: a card that opens at midnight",
           brief: "Send it early: it shows a clock counting down, and opens with fireworks at zero.",
           body: "The only one that makes them wait. Send it early and it shows a clock counting down under a sky going from dusk to night. At zero, in the time zone you chose, fireworks go off and it opens on your photos and your message. Of the eight it does the least when touched and the most when timed right.",
-          line: { field: "headline", where: "Headline above the timer", text: "Until you're officially older than me again" },
+          line: { field: "headline", where: "Headline above the timer", text: "Until you’re officially older than me again" },
         },
         {
           template: "arcade",
           heading: "They play: a tiny game that rains cake",
           body: "A retro arcade game where the things that fall can be slices of cake. They drag a basket to catch them; every level cleared reveals one of your photos, up to eight, and the last one reveals your message. Eight catches a level is the default, and you can lower it to three for someone who would rather get to the photos.",
-          line: { field: "title", where: "The game's title", text: "NORA VS. THE BIG 3-0" },
+          line: { field: "title", where: "The game’s title", text: "NORA VS. THE BIG 3-0" },
         },
       ],
       sections: [
         {
           heading: "How the blowing works",
-          body: "Three of these listen for breath: Birthday Cinema, Pop-up Card and Party Animals. The card asks for the microphone with a button, only when the cake is on screen, and listens for about half a second of steady rushing air. Nothing is recorded or sent anywhere. If they say no, or the phone can't, a swipe or a tap puts the candles out, and on the first two you can switch the microphone off altogether in the editor.",
+          body: "Three of these listen for breath: Birthday Cinema, Pop-up Card and Party Animals. The card asks for the microphone with a button, only when the cake is on screen, and listens for about half a second of steady rushing air. Nothing is recorded or sent anywhere. If they say no, or the phone can’t, a swipe or a tap puts the candles out, and on the first two you can switch the microphone off altogether in the editor.",
         },
         {
           heading: "Pick by the person",
@@ -615,7 +641,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       related: [
         { href: "/occasions/birthday", label: "Birthday gift ideas: what to write and when to send" },
         { href: "/gifts/virtual-birthday-cake", label: "Virtual birthday cakes" },
-        { href: "/blog/what-to-write-in-boyfriends-birthday-card", label: "What to write in a boyfriend's birthday card" },
+        { href: "/blog/what-to-write-in-boyfriends-birthday-card", label: "What to write in a boyfriend’s birthday card" },
         { href: "/gifts/last-minute", label: "Last-minute gifts" },
       ],
     },
@@ -737,14 +763,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       h1: "A virtual birthday cake they can blow out",
       label: "Virtual birthday cakes",
       hero: {
-        line: "A wish on a cake, when you can't be in the room.",
+        line: "A wish on a cake, when you can’t be in the room.",
         sentence: "Three cards on Ethos have a cake whose candles go out when they blow into the phone, and two more work another way.",
       },
       ideasTitle: "Five cakes, three to blow out",
       craft: "So the candles go out",
       film: "popup-card",
       lead: [
-        "Three cards on Ethos have a cake with candles that go out when the person blows into their phone. The microphone does it: the card listens for about half a second of breath and puts the flames out, with smoke. Nobody can cut these cakes or eat them. They can make a wish on one, and when you can't be in the room the wish is the part that counts.",
+        "Three cards on Ethos have a cake with candles that go out when the person blows into their phone. The microphone does it: the card listens for about half a second of breath and puts the flames out, with smoke. Nobody can cut these cakes or eat them. They can make a wish on one, and when you can’t be in the room the wish is the part that counts.",
         "Below are those three, then two more with a cake in them that works differently: one that draws itself and one you catch. Five is all there are, so five is the list. Each takes your photos and your message, and all but Arcade take their age and a song. Each is paid once when you publish.",
       ],
       ideas: [
@@ -753,7 +779,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "A candle for every year, up to twelve",
           brief: "One breath takes a few candles at a time, so a full cake needs two or three goes.",
           body: "A cake on a stage between red curtains, with flames that flicker and lean when they breathe near the phone. A child turning eight gets eight candles. Anyone past twelve gets six, and their age as a number on top, which is kinder to everybody. One breath takes a few candles at a time, so a full cake needs two or three goes, the way a real one does.",
-          line: { field: "marquee", where: "On the marquee above the cake", text: "MAKE A WISH, LENA. WE'RE ALL WATCHING." },
+          line: { field: "marquee", where: "On the marquee above the cake", text: "MAKE A WISH, LENA. WE’RE ALL WATCHING." },
         },
         {
           template: "popup-card",
@@ -767,7 +793,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "The whole party cheers when the flames go out",
           brief: "They tap the cake or blow, and every animal around it cheers at once.",
           body: "Partway down a collage full of animals in party hats sits a cake with their age in number candles. They tap it or blow into the phone, the flames go out, and every animal around the cake cheers at once. The guests yell lines you wrote when tapped, so give one of them an opinion about the wish.",
-          line: { field: "shouts", where: "One of the lines the animals yell", text: "BLOW. we can't hold these hats forever" },
+          line: { field: "shouts", where: "One of the lines the animals yell", text: "BLOW. we can’t hold these hats forever" },
         },
         {
           template: "sketchbook",
@@ -779,27 +805,27 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "arcade",
           heading: "Slices of cake to catch in a basket",
           body: "Set what falls to cake slices and the birthday cake becomes a game. They drag a basket along the bottom of the screen to catch them, and each level cleared reveals a photo. It is the only cake here with a score. Send it to a brother, a best friend, or anyone whose reply to a soppy card would be one emoji.",
-          line: { field: "title", where: "The game's title", text: "CAKE QUEST: LEVEL 30" },
+          line: { field: "title", where: "The game’s title", text: "CAKE QUEST: LEVEL 30" },
         },
       ],
       sections: [
         {
           heading: "Before they open it",
-          body: "Tell them to turn the sound on and hold the phone the way they would lean over a cake, a hand's width from their mouth. The card shows a “Use microphone” button when the cake appears, and the phone asks permission once. In a loud room the candles may go out early, because any steady rush of noise can count as breath. At a party, nobody minds.",
+          body: "Tell them to turn the sound on and hold the phone the way they would lean over a cake, a hand’s width from their mouth. The card shows a “Use microphone” button when the cake appears, and the phone asks permission once. In a loud room the candles may go out early, because any steady rush of noise can count as breath. At a party, nobody minds.",
         },
         {
           heading: "If the microphone says no",
-          body: "Some people refuse every permission on principle, and some phones won't offer the microphone at all. Nothing breaks. Birthday Cinema and Pop-up Card go out on a swipe up, and Party Animals on a tap. In the editor those first two have a setting called “Blowing out the candles”, and choosing “Swipe only” there means the microphone is never asked for.",
+          body: "Some people refuse every permission on principle, and some phones won’t offer the microphone at all. Nothing breaks. Birthday Cinema and Pop-up Card go out on a swipe up, and Party Animals on a tap. In the editor those first two have a setting called “Blowing out the candles”, and choosing “Swipe only” there means the microphone is never asked for.",
         },
         {
           heading: "A cake for someone far away",
-          body: "The usual way is a video call with a cake held up to the camera, which someone else then eats. Send this the same evening instead, or schedule it for midnight where they are. Get on the call afterwards and ask what they wished for. They won't tell you, which is correct.",
+          body: "The usual way is a video call with a cake held up to the camera, which someone else then eats. Send this the same evening instead, or schedule it for midnight where they are. Get on the call afterwards and ask what they wished for. They won’t tell you, which is correct.",
         },
       ],
       faq: [
         {
           q: "Can you really blow out candles on a phone?",
-          a: "Yes. The card uses the phone's microphone to hear breath: about half a second of steady rushing air puts the flames out. It asks for the microphone with a button, only when the cake is on screen, and nothing is recorded.",
+          a: "Yes. The card uses the phone’s microphone to hear breath: about half a second of steady rushing air puts the flames out. It asks for the microphone with a button, only when the cake is on screen, and nothing is recorded.",
         },
         {
           q: "How many candles can the cake have?",
@@ -811,7 +837,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "Does it work without a microphone?",
-          a: "Yes. If the microphone isn't available, or they say no, a swipe or a tap puts the candles out instead. Nothing has to be set up for that to happen.",
+          a: "Yes. If the microphone isn’t available, or they say no, a swipe or a tap puts the candles out instead. Nothing has to be set up for that to happen.",
         },
         {
           q: "Is a virtual birthday cake free?",
@@ -963,15 +989,15 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "digicam",
           heading: "A camera roll from 2006",
-          brief: "Twelve photos at most, on a pocket camera's small screen with an orange date stamp.",
-          body: "Twelve photos at most, shown on the small screen of a pocket camera with an orange date stamp in the corner. They flick through with the arrows or a swipe, and at the end the camera prints the whole roll as one strip. Set the stamp to the real date of the trip and it reads like a roll you found in a drawer. Switch off “It's their birthday” and the title becomes their name.",
-          line: { field: "caption", where: "A photo caption, on the camera's screen", text: "DSC_0031: the night the car broke down and we didn't mind" },
+          brief: "Twelve photos at most, on a pocket camera’s small screen with an orange date stamp.",
+          body: "Twelve photos at most, shown on the small screen of a pocket camera with an orange date stamp in the corner. They flick through with the arrows or a swipe, and at the end the camera prints the whole roll as one strip. Set the stamp to the real date of the trip and it reads like a roll you found in a drawer. Switch off “It’s their birthday” and the title becomes their name.",
+          line: { field: "caption", where: "A photo caption, on the camera’s screen", text: "DSC_0031: the night the car broke down and we didn’t mind" },
         },
         {
           template: "constellations",
           heading: "A night sky with a photo in every star",
           body: "Three to twelve photos, each one a star. They tap a star to fly to it and see the photo; when every star has been visited, lines join them into a heart, an infinity sign or a star, and your closing line appears under it. It asks for patience, in a good way: nobody skims an album they have to find.",
-          line: { field: "finalLine", where: "The line that appears when the constellation completes", text: "Twelve nights I'd live again, in the order they happened." },
+          line: { field: "finalLine", where: "The line that appears when the constellation completes", text: "Twelve nights I’d live again, in the order they happened." },
         },
         {
           template: "vinyl",
@@ -983,14 +1009,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "keepsake",
           heading: "A box of kept things, with a locket",
-          body: "Nine photos, and each one's place is decided by where it comes in the order. The first lies on deckle-edged paper under dried flowers. The second is inside a gold locket that opens on a tap, opposite the few characters you had engraved, and its caption shows while the locket is open. The other seven are pressed in below, like pages. Choose the first two before anything else, because those places are fixed.",
+          body: "Nine photos, and each one’s place is decided by where it comes in the order. The first lies on deckle-edged paper under dried flowers. The second is inside a gold locket that opens on a tap, opposite the few characters you had engraved, and its caption shows while the locket is open. The other seven are pressed in below, like pages. Choose the first two before anything else, because those places are fixed.",
           line: { field: "engraving", where: "Engraved inside the locket", text: "14.06 · the pier" },
         },
         {
           template: "music-box",
           heading: "A mirror with a new photo at every turn",
           brief: "They wind a key three turns, and a photo comes up in the mirror, then the next.",
-          body: "An album that can't be hurried. They wind a key three turns and the box starts to play; a photo comes up in the oval mirror inside the lid, then the next, eight at most, each with its caption on a slip of paper. A tap on the mirror brings one close. When the spring runs down, a folded letter lifts out, with all the photos laid out after it.",
+          body: "An album that can’t be hurried. They wind a key three turns and the box starts to play; a photo comes up in the oval mirror inside the lid, then the next, eight at most, each with its caption on a slip of paper. A tap on the mirror brings one close. When the spring runs down, a folded letter lifts out, with all the photos laid out after it.",
           line: { field: "message", where: "The first line of the letter", text: "Wind it again whenever you miss this." },
         },
       ],
@@ -1001,7 +1027,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Writing the captions",
-          body: "A caption has 140 characters, which is one good sentence. Don't describe what the photo already shows. Say what happened just before it or just after, or what somebody said. “Ten minutes before the rain” does more than “Us at the beach”, and “You had just lost the keys” does more than both.",
+          body: "A caption has 140 characters, which is one good sentence. Don’t describe what the photo already shows. Say what happened just before it or just after, or what somebody said. “Ten minutes before the rain” does more than “Us at the beach”, and “You had just lost the keys” does more than both.",
         },
         {
           heading: "Old photos and odd files",
@@ -1015,7 +1041,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "Can I write a caption for each photo?",
-          a: "Yes, up to 140 characters per photo. It shows as the plaque in Museum, under the polaroid in Scrapbook and in pixel type on the Digicam's screen.",
+          a: "Yes, up to 140 characters per photo. It shows as the plaque in Museum, under the polaroid in Scrapbook and in pixel type on the Digicam’s screen.",
         },
         {
           q: "Can I change the photos after I have sent it?",
@@ -1168,14 +1194,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "our-timeline",
           heading: "Your story as a road, one stop a year",
-          body: "The closest thing to the “our story” site people picture. A road draws itself as they scroll and stops at each photo, labelled in your words: the first message, the first trip, the keys. Two to twenty stops. After the last one comes a closing line, a countdown if you set one, and your letter. Aim the countdown at tonight's dinner or at next year's date.",
+          body: "The closest thing to the “our story” site people picture. A road draws itself as they scroll and stops at each photo, labelled in your words: the first message, the first trip, the keys. Two to twenty stops. After the last one comes a closing line, a countdown if you set one, and your letter. Aim the countdown at tonight’s dinner or at next year’s date.",
           line: { field: "ending", where: "The closing line, above the countdown", text: "Year four starts here. Same seats?" },
         },
         {
           template: "museum",
           heading: "An exhibition of you two, room by room",
           brief: "Up to twenty photos, one to a wall, and they swipe from room to room like visitors.",
-          body: "A site with rooms. Give the exhibition a title, put the years on every plaque, and hang up to twenty photos, one to a wall, each with a caption. They swipe from room to room like visitors, and the last wall carries your message as the curator's text. A video clip can have a room of its own.",
+          body: "A site with rooms. Give the exhibition a title, put the years on every plaque, and hang up to twenty photos, one to a wall, each with a caption. They swipe from room to room like visitors, and the last wall carries your message as the curator’s text. A video clip can have a room of its own.",
           line: { field: "exhibition", where: "The exhibition title", text: "Three Years of Us: A Retrospective" },
         },
         {
@@ -1189,7 +1215,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "News under foil, for an anniversary with a secret",
           brief: "Each card hides a photo under foil, and the last one carries the announcement.",
           body: "They rub the foil off a stack of cards with a finger; each hides a photo and its caption, and the last one carries the announcement in big letters: the trip, the ring, the reservation. You choose the words printed on the foil, so the cover gives nothing away.",
-          line: { field: "finalTitle", where: "The headline on the last card", text: "We're going back to where we met. Friday." },
+          line: { field: "finalTitle", where: "The headline on the last card", text: "We’re going back to where we met. Friday." },
         },
         {
           template: "unwrapped",
@@ -1205,7 +1231,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "midnight-countdown",
-          heading: "The page that isn't there until midnight",
+          heading: "The page that isn’t there until midnight",
           body: "A surprise page needs a reveal, and this one is built around it. Send the link days before and all they see is a clock running down over a skyline at dusk. At the second you chose, in their time zone, fireworks go off and the page opens on your photos and your words. It holds up to twenty photos.",
           line: { field: "headline", where: "Headline above the timer", text: "Three years ago today you said yes to a second coffee" },
         },
@@ -1239,7 +1265,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "Will the page stay online?",
-          a: "Yes. Links are meant to be permanent, so it opens again on the next anniversary. You can add this year's photos to it then: edits go live at the same link.",
+          a: "Yes. Links are meant to be permanent, so it opens again on the next anniversary. You can add this year’s photos to it then: edits go live at the same link.",
         },
         freeEn,
       ],

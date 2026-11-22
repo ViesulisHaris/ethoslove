@@ -6,8 +6,9 @@ import { ClientMessages } from "@/i18n/client-messages";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateOfferAmount } from "@/lib/seo";
+import { chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
 import { handLine, kindCardLine, kindIdeaIsFree } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
 import { getManifest } from "@/templates/manifests";
@@ -19,7 +20,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { FaqList } from "@/components/shared/faq-list";
 import { PageHeader } from "@/components/shared/page-header";
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
-import { Band, ExperienceFlatlay, QuestionRow, templateSamples } from "@/components/templates/page/sections";
+import { Band, ExperienceFlatlay, QuestionRow } from "@/components/templates/page/sections";
 
 /** One address, two kinds of page: /gifts/for-<who> (content/recipients.ts) and /gifts/<kind> (content/gift-guides.ts). */
 function pageFor(slug: string): { recipient: Recipient } | { kind: GiftGuideSlug } | null {
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 }
 
 export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[locale]/gifts/[slug]">) {
-  const { locale, slug } = await params;
+  const { currency, locale, slug } = await params;
   const page = pageFor(slug);
   if (!page) notFound();
   setRequestLocale(locale);
@@ -49,7 +50,7 @@ export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[
   return (
     // The phone in the hero plays a gift, and its buttons are a client component's (src/i18n/client-namespaces.ts).
     <ClientMessages scope="(marketing)/gifts/[slug]/page" locale={locale}>
-      <KindPage kind={page.kind} locale={locale as GiftLocale} />
+      <KindPage kind={page.kind} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
     </ClientMessages>
   );
 }
@@ -182,19 +183,21 @@ function leadGift(kind: GiftGuideSlug) {
  * HTML, in closed <details>: each idea in full inside its card, the three how-tos, the answers, and
  * the opening under "More about".
  */
-async function KindPage({ kind, locale }: { kind: GiftGuideSlug; locale: GiftLocale }) {
+async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; locale: GiftLocale; currency: Currency }) {
   const t = await getTranslations("recipients");
   const guide = GIFT_GUIDES[kind][locale];
   const ideas = withManifests(guide.ideas);
   const url = localizedUrl(locale, `/gifts/${kind}`);
   const ref = `gifts-${kind}`;
   const lead = leadGift(kind) ?? ideas[0].manifest;
-  const samples = await templateSamples(lead.slug, locale, null);
+  // What the gift in the phone costs to send, as its own page says it (lib/seo.ts): the button beside it opens that gift's
+  // editor, and a page that named no price let a stranger build a paid gift and meet the price at Publish.
+  const leadCost = templateOfferAmount(lead, currency);
   const cards: IdeaCard[] = ideas.map((idea) => ({
     manifest: idea.manifest,
     title: idea.heading,
     line: kindCardLine(idea),
-    borrow: { where: idea.line.where, text: handLine(idea.line.text) },
+    borrow: { where: idea.line.where, text: handLine(idea.line.text), whole: idea.line.text },
     full: idea.body,
     make: `/create/${idea.template}?ref=${ref}`,
     // "Free" is said of the idea, not the template: a Letter with a video clip in it is not the free note.
@@ -250,7 +253,11 @@ async function KindPage({ kind, locale }: { kind: GiftGuideSlug; locale: GiftLoc
             heading={guide.h1}
             line={guide.hero.line}
             sentence={guide.hero.sentence}
-            note={t("inPhone", { name: lead.name[locale] })}
+            note={
+              <span data-testid="hero-note">
+                {leadCost > 0 ? t("inPhone", { name: lead.name[locale], price: formatAmount(leadCost, currency, locale) }) : t("inPhoneFree", { name: lead.name[locale] })}
+              </span>
+            }
           >
             {/* The page lists several gifts, so the button names the one it opens: the one playing in the phone. */}
             <Link href={`/create/${lead.slug}?ref=${ref}`} data-testid="hero-make" className={HERO_BUTTON}>
@@ -260,10 +267,11 @@ async function KindPage({ kind, locale }: { kind: GiftGuideSlug; locale: GiftLoc
           </SiteHero>
 
           <Spread id="kind-ideas" label={t("ideasLabel")} heading={guide.ideasTitle} line={t("ideasLine")} art={CARDS_ART} className="pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-32">
-            <IdeaCards id={`ideas-${kind}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), free: t("free"), full: t("ideaInFull") }} />
+            <IdeaCards id={`ideas-${kind}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), free: t("free"), full: t("ideaInFull"), copy: t("copyLine"), copied: t("copiedLine") }} />
           </Spread>
 
-          <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={samples.photo} />}>
+          {/* The polaroid on the band's phone holds this page's own photo, not the one every page had (content/gift-guides.ts). */}
+          <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={guideBandPhoto(kind)} />}>
             <p className="text-page-label text-page-body">{t("craftLabel")}</p>
             {/* Each page's own heading: what its three how-tos are about (content/gift-guides.ts, `craft`). */}
             <h2 id="kind-guide" className="mt-4 display-xl text-balance text-page-ink">

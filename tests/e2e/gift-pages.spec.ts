@@ -200,7 +200,11 @@ for (const lang of LANGS) {
       expect(prices).toHaveLength(6);
       expect(prices[0]).toBe(lang.lang === "en" ? "Free" : "Gratis");
       for (const price of prices.slice(1)) expect(price).toMatch(money);
-      expect(prices.slice(1, 4)).toEqual(shown);
+      // The three cards are the last three rows: the list runs from the least to the most (the free note, a note with
+      // photos, the full Letter, then one card, three and every card), not with the two cheapest last.
+      expect(prices.slice(3, 6)).toEqual(shown);
+      const amounts = prices.slice(1).map((price) => Number(price.replace(/[^0-9.,]/g, "").replace(",", ".")));
+      expect(amounts, prices.join(" ")).toEqual([...amounts].sort((x, y) => x - y));
 
       // It links to /gifts, which owns "digital gift", and on to the occasions and the people.
       for (const href of ["/gifts", "/occasions", "/templates", "/pricing", "/gifts/for-mom", "/gifts/photo-album"]) await expect(page.locator(`a[href="${lang.prefix}${href}"]`).first()).toBeAttached();

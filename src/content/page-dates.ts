@@ -19,9 +19,11 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * kind, /digital-cards, the eight new idea lists, and the links /gifts, the /gifts/for-* pages,
  * birthday and anniversary gained. None of it is live yet, so this is a date on a branch (22 Nov:
  * the pages were laid out again with far fewer words on show, new titles for three of them, and
- * every occasion's ideas as cards). The day it ships, set this one line to that day.
+ * every occasion's ideas as cards; 23 Nov: a page by kind names the price of the gift in its
+ * phone, the price list runs from the least to the most, and the Spanish Christmas letter's title
+ * changed). The day it ships, set this one line to that day.
  */
-const GROWTH_PAGES_DAY = "2026-11-22";
+const GROWTH_PAGES_DAY = "2026-11-23";
 
 /**
  * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
