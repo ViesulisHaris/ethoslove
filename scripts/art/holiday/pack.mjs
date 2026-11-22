@@ -64,6 +64,9 @@ for (const [name, s] of Object.entries(manifest.sprites)) {
   const { data, info } = await sharp(join(raw, s.file)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const box = clean(data, info.width, info.height);
   if (!box) throw new Error(`${name} is empty`);
+  // A paper that has to read as white (a photo's print) is lifted to it: the table's light leaves it grey.
+  const gain = manifest.gains?.[name];
+  if (gain) for (let i = 0; i < data.length; i += 4) for (let c = 0; c < 3; c++) data[i + c] = Math.min(255, Math.round(data[i + c] * gain));
   const img = () => sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).extract(box);
   const res = await img().webp(WEBP).toFile(join(out, `${name}.webp`));
   bytes += res.size;
@@ -233,6 +236,8 @@ for (const f of readdirSync(raw).filter((n) => /^plate-.*\.png$/.test(n))) {
   const res = await sharp(join(raw, f)).webp({ quality: 80, effort: 6, smartSubsample: true }).toFile(join(out, `${name}.webp`));
   bytes += res.size;
   console.log(`${name}.webp  ${res.width}x${res.height}  ${(res.size / 1024).toFixed(0)} KB`);
+  // A gift that reads its note in front of its own scene, dimmed, has no use for an out-of-focus one.
+  if (manifest.soft === false) continue;
   // The letter is read over the same table out of focus: rendered that way where the scene has
   // done so, and otherwise this plate, blurred.
   const softName = name.replace(/^plate-/, "soft-");
@@ -277,6 +282,21 @@ if (manifest.board) {
   lines.push(
     "/** A board in the picture seen through the window: its corners (top left, top right, bottom right, bottom left) as shares of the picture across and down. */",
     `export const BOARD = ${JSON.stringify(manifest.board)} as const;`,
+    "",
+  );
+}
+// A house of doors (Advent Calendar): which number is painted on the door of which column and row, how big a
+// niche is in the scene's own lengths, and the outline of each open leaf in the picture.
+if (manifest.doors) {
+  lines.push("/** Where each numbered door is: its column from the left and its row from the bottom. */", `export const DOORS = ${JSON.stringify(manifest.doors)} as const;`, "");
+}
+if (manifest.niche) {
+  lines.push("/** A niche's opening and the frame between two, in the scene's own lengths: what the sprites that stand in one were modelled against. */", `export const NICHE = ${JSON.stringify(manifest.niche)} as const;`, "");
+}
+if (manifest.leaves) {
+  lines.push(
+    "/** The outline of each door's open leaf in the picture, in stage units, going one way round: it stands out towards the lens, a little outside its own opening. */",
+    `export const LEAVES: Readonly<Record<string, readonly (readonly [number, number])[]>> = ${JSON.stringify(manifest.leaves)};`,
     "",
   );
 }
