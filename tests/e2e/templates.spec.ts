@@ -44,8 +44,8 @@ test.describe("template engine", () => {
 test.describe("who a template suits", () => {
   // The sentence sits in the page's closed block under the questions ("More about …"), beside the
   // days it is made for: the redesigned page shows no rows of chips. It is in the server's HTML
-  // whether or not the block is ever opened.
-  const suits = (page: import("@playwright/test").Page) => page.locator("details[data-more-about] [data-suits]").getByRole("link");
+  // whether or not the block is ever opened: found as elements, since a closed block's links have no role to be found by.
+  const suits = (page: import("@playwright/test").Page) => page.locator("details[data-more-about] [data-suits] a");
 
   test("a couples' template names partners only, each linking to that person's gift ideas", async ({ page }) => {
     await page.goto("/templates/xoxo");
