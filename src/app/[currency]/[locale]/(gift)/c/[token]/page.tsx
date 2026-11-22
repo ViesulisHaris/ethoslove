@@ -34,9 +34,11 @@ const groupAt = cache(async (token: string): Promise<{ group: GroupRow; state: L
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/c/[token]">, "searchParams">): Promise<Metadata> {
   const { token } = await params;
   const found = await groupAt(token);
-  const es = found?.group.locale === "es";
   return {
-    title: es ? "Añade tu nota a la tarjeta en grupo" : "Add your note to the group card",
+    // Named only at a link that opens a card. An address that opens none (every address while group
+    // cards are off) keeps the title any missing page has, so the tab never names a product that is
+    // not on sale.
+    ...(found ? { title: found.group.locale === "es" ? "Añade tu nota a la tarjeta en grupo" : "Add your note to the group card" } : {}),
     // Never indexed, never followed, and the address (which is the key to the page) is never sent on as a referrer.
     robots: { index: false, follow: false },
     referrer: "no-referrer",

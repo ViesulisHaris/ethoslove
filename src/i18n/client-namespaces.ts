@@ -64,16 +64,32 @@ export const CLIENT_NAMESPACES = {
 
 /**
  * A group card's words, which no layout sends. The editor's and the account's namespaces go to the
- * browser whole, and while group cards were switched off that put the product's name, its panel
- * and its price sentence into the source of every editor, dashboard and account page. So
- * <ClientMessages> leaves these paths out wherever it is used, and a page that can draw a group
- * card's panel sends `browser` itself (<GroupMessages>, in client-messages.tsx): the editor of a
- * template made for group cards, and nothing else on the live site. `server` is read by server components alone (the account page's list of
- * what is held), so it is never sent.
+ * browser whole, and while group cards were switched off that put the product's name, its panel,
+ * its price sentence, the send screen's lines about a group's notes and the confirming page's
+ * sentences into the source of every editor, dashboard and account page. So <ClientMessages> leaves
+ * these paths out wherever it is used, and a page that draws a group card's panel sends `browser`
+ * itself (<GroupMessages>, in client-messages.tsx): the editor of a template made for group cards
+ * while group cards are on, and nothing else on the live site. Off, no page sends them and the
+ * editor reads none (its panel is not drawn; the send screen takes `groupEnabled`).
+ *
+ * `browser`: the panel and its pay panel, the section's heading, and on the send screen the sign-in
+ * line and the checklist's three lines about a group's notes.
+ * `server`: read by the server alone and never sent: the product's name, the account page's two
+ * lines of what is held, and the page a contributor's confirming link opens (api/group/confirm).
+ *
+ * Every key of the catalogue named for a group or a contribution is in one of the two lists:
+ * tests/unit/client-messages.test.ts fails a new one that is not.
  */
 export const GROUP_WORDS = {
-  browser: ["editor.group", "editor.sections.group", "editor.publishSheet.signInBlurbGroup"],
-  server: ["money.product.group", "account.groupOn", "account.groupEvery"],
+  browser: [
+    "editor.group",
+    "editor.sections.group",
+    "editor.publishSheet.signInBlurbGroup",
+    "editor.publishSheet.problems.contributionsMin",
+    "editor.publishSheet.problems.contributionsMax",
+    "editor.publishSheet.problems.contributionNote",
+  ],
+  server: ["money.product.group", "account.groupOn", "account.groupEvery", "lifecycle.group"],
 } as const;
 
 export type ClientScope = keyof typeof CLIENT_NAMESPACES;

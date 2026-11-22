@@ -22,7 +22,7 @@ passed down as a prop.
 
 | State | What happens |
 | --- | --- |
-| Off (today) | Every `/api/group/*` route answers 404, `/c/<token>` is a 404, the editor draws no group panel, checkout refuses the product, the daily job skips its group step, deleting a gift or an account and the account's export read no group table, and the terms and the privacy policy do not mention group cards. |
+| Off (today) | Every `/api/group/*` route answers 404, `/c/<token>` is a 404 titled as any missing page is, the editor draws no group panel, fetches no script for one and is sent none of its words, the send screen draws nothing of a group card's, checkout refuses the product, the daily job skips its group step, deleting a gift or an account and the account's export read no group table, and the terms and the privacy policy do not mention group cards. |
 | On, migration 0023 not applied | The group routes answer 503 `unavailable`, `/c/<token>` is a 404, the panel says it could not start, the daily job reports `{ error }` in its JSON and finishes the rest of its run, publishing still works. |
 | On, 0023 applied, a group template in the gallery | On sale. |
 
@@ -31,14 +31,40 @@ editor's panel for the reference template. A production build never reads that q
 
 **The product's words stay out of every page's source.** The editor's, the dashboard's and the
 account's pages are sent their whole namespaces of the message catalogue, which used to carry the
-panel's text and its price sentence into the source of every editor while switched off. The lines
-that name a group card are listed once, `GROUP_WORDS` in `src/i18n/client-namespaces.ts`, and
-`<ClientMessages>` leaves them out everywhere. The one live page that reads them in the browser,
-the editor of a template that declares `features.group`, sends them itself (`<GroupMessages>` in
-`src/app/[currency]/[locale]/(editor)/create/[templateSlug]/page.tsx`); the account page's two
-lines are read on the server and never sent. A new line that names the product must be added to
-`GROUP_WORDS`: `tests/unit/client-messages.test.ts` fails until it is, and fails a page that draws
+panel's text and its price sentence into the source of every editor while switched off. A group
+card's lines are listed once, `GROUP_WORDS` in `src/i18n/client-namespaces.ts`, and
+`<ClientMessages>` leaves them out everywhere. They are the lines that name the product and also
+the ones that name nothing and are its all the same: the send screen's three about a group's notes
+("Add at least … notes from your group") and the page a contributor's confirming link opens. The
+one live page that reads any of them in the browser, the editor of a template that declares
+`features.group`, sends them itself, and only while group cards are on (`<GroupMessages>` in
+`src/app/[currency]/[locale]/(editor)/create/[templateSlug]/page.tsx`). The account page's two
+lines and the confirming page's seven are read on the server and never sent. A new line must be
+added to `GROUP_WORDS`: `tests/unit/client-messages.test.ts` fails a line that names the product,
+and any key named for a group or a contribution, until it is listed, and fails a page that draws
 the panel without sending its words.
+
+**Off, a template made for group cards is an ordinary template.** Its editor is sent none of those
+words, so it reads none: no panel, and on the send screen no line about a group's notes, the plain
+sign-in line, and no group pay panel (`groupEnabled` on `PublishSheet`; `groupOnSheet` in
+`src/components/pricing/offers.ts`). Two things follow, both for the days between a group template
+reaching the gallery and the switch going on, or after the switch is turned off again:
+
+- A template whose `features.group.min` is above 0 cannot be sent while group cards are off: the
+  server's rule holds either way, there is no panel to add notes with, and the send screen has no
+  line to say why. Ship such a template in the same deploy as the switch, or with `min: 0`.
+- A draft that already holds notes (made while group cards were on) still needs the group card's
+  own unlock, and checkout refuses the product. Signed in and not yet paid for, its send screen
+  shows no price and no button, only the sentence checkout itself would answer ("That isn't on
+  sale right now. Reload the page."). It can be sent again once group cards are back on.
+
+**The panel's script comes only with the panel.** The editor's shell fetches
+`src/components/editor/sections/group.tsx` (and with it `src/components/group/panel.tsx` and the
+emails `src/lib/group/report.ts` writes) only when it draws the panel: group cards on, a template
+made for them. It asks for it beside the template's own script and holds the form until it has
+come, so nothing under the panel moves. No other editor's scripts hold it
+(`tests/e2e/group.spec.ts`, "an ordinary template's editor fetches no script that holds the
+sender's panel…").
 
 ## The contract a template keeps
 
@@ -262,7 +288,8 @@ offers nothing to share it with; "Share…" is drawn only where the browser has 
 
 A draft that holds a group's notes, opened signed out, gets the sign-in step on the send screen and
 never the guest pay panel (`guestPaysOnSheet` in `src/components/pricing/offers.ts`): that panel
-sells the template or Everything, and neither sends a card with notes in it.
+sells the template or Everything, and neither sends a card with notes in it. That holds with group
+cards off too; what changes then is the words (the plain sign-in line) and that nothing is priced.
 
 ## Emails (`src/emails/group.tsx`)
 
@@ -297,7 +324,9 @@ In this order, each step leaving the site as it was until the last:
 2. Apply `supabase/migrations/0023_group_gifts.sql` by hand. Check: both tables exist with row-level
    security on, the `contributions` bucket is private, `group_photo_orphans` is executable by
    `service_role` only.
-3. Ship a real template that declares `features.group` and keeps the contract above.
+3. Ship a real template that declares `features.group` and keeps the contract above. Until step 6
+   it is an ordinary template: if its `min` is above 0 it cannot be sent in between (see "Off, a
+   template made for group cards is an ordinary template"), so ship that one with step 6.
 4. Read the group paragraphs of the terms and the privacy policy (`GROUP` in `src/content/legal.ts`;
    they appear only when the switch is on). Set `LEGAL_UPDATED` there to that day: the pages'
    "last updated" line and their dates in the sitemap both read it.
@@ -371,6 +400,6 @@ Starting `next dev` by hand within a few seconds of another one on the same fold
 preview page while `/pricing` answered 200. Stopping it and starting it again cleared it both
 times; check `/create/the-letter` answers 200 before trusting a run.
 
-One test in `group.spec.ts` also wants those settings: the send screen of a signed-out draft that
-holds notes. On a bare server it skips and says so; run `group.spec.ts` once with the four
-placeholders to see it.
+Two tests in `group.spec.ts` also want those settings: the send screen of a signed-out draft that
+holds notes, with group cards on and off. On a bare server they skip and say so; run
+`group.spec.ts` once with the four placeholders to see them.

@@ -70,11 +70,12 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
     <Suspense>
       {/* For the ad pixels' per-template audiences (lib/analytics/ads.ts); nothing without consent. */}
       <AdTemplateView slug={manifest.slug} tier={manifest.tier} />
-      {/* A group card's words go to the browser only with a template made for group cards, whose
-          editor is the one place that reads them (the panel, and the send screen of a draft that
-          holds notes). Every other editor's source holds none of them, switched on or off
+      {/* A group card's words go to the browser only while group cards are on, and only with a
+          template made for them, whose editor is the one place that reads them (the panel, and the
+          send screen of a draft that holds notes). Off, that editor draws neither and is sent none;
+          every other editor's source holds none of them either way
           (src/i18n/client-namespaces.ts, GROUP_WORDS). */}
-      {manifest.features.group ? <GroupMessages locale={locale}>{shell}</GroupMessages> : shell}
+      {groupEnabled && manifest.features.group ? <GroupMessages locale={locale}>{shell}</GroupMessages> : shell}
     </Suspense>
   );
 }

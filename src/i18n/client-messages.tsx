@@ -15,9 +15,9 @@ export async function ClientMessages({ scope, locale, children }: { scope: Clien
 }
 
 /**
- * A group card's words, for a page that can draw its panel: the editor of a template made for group
- * cards, and the development previews. Wrapped round only that, so the words are in no other page's
- * source.
+ * A group card's words, for a page that draws its panel: the editor of a template made for group
+ * cards while group cards are on, and the development previews. Wrapped round only that, so the
+ * words are in no other page's source, and in none at all while group cards are off.
  */
 export async function GroupMessages({ locale, children }: { locale: string; children: React.ReactNode }) {
   const all = await getMessages({ locale });

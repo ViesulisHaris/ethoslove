@@ -25,6 +25,53 @@ async function answer(page: Page, url: string, reply: Reply | ((request: Request
 /** One field of a multipart body, as the browser sent it. */
 const field = (request: Request, name: string) => new RegExp(`name="${name}"\\r\\n\\r\\n([^\\r]*)\\r\\n`).exec(request.postData() ?? "")?.[1];
 
+/** The product by name, in either language. */
+const NAMED = /group cards?|tarjetas? en grupo/i;
+/**
+ * A group card's lines that name nothing: the send screen's three about a group's notes (their keys,
+ * as the page's source carries them, and their words) and the page a contributor's confirming link
+ * opens (src/i18n/client-namespaces.ts, GROUP_WORDS).
+ */
+const UNNAMED = /contributionsMin|contributionsMax|contributionNote|from your group|de tu grupo|Send you the finished card|Te enviamos la tarjeta terminada/i;
+/**
+ * What a script that holds the sender's panel still says once it is built: a test id of the panel's
+ * own, and the emails it writes to report a note or to have one taken out (lib/group/report.ts). A
+ * development server's scripts keep their comments too, which say "group card" freely, so the
+ * product's name is not what is looked for.
+ */
+const PANEL_SCRIPT = /"group-invite"|Take my note out of|Quitar mi nota|group card \{ref\}|tarjeta en grupo \{ref\}/;
+
+/** Every script the page fetches from here on that holds the sender's panel; await the answer once the page has settled. */
+function panelScripts(page: Page): () => Promise<string[]> {
+  const reads: Promise<string | null>[] = [];
+  page.on("response", (res) => {
+    if (!/\.js(\?|$)/.test(res.url())) return;
+    reads.push(
+      res
+        .text()
+        .then((body) => (PANEL_SCRIPT.test(body) ? new URL(res.url()).pathname : null))
+        .catch(() => null),
+    );
+  });
+  return async () => (await Promise.all(reads)).filter((url): url is string => url !== null);
+}
+
+/** A draft in this browser on the reference template that holds one note from a group. */
+function draftWithNote(note = "Forty is nothing. Ring me.") {
+  return JSON.stringify({
+    version: 1,
+    slug: "group-reference",
+    giftId: null,
+    shortId: null,
+    status: "draft",
+    schedule: { enabled: false, timezone: "UTC" },
+    password: "",
+    removeWatermark: false,
+    updatedAt: Date.now(),
+    data: { version: 1, templateSlug: "group-reference", locale: "en", title: "", recipientName: "Nora", senderName: "Tom", message: "Forty looks good on you.", messageStyle: "fade", photos: [], accentColor: "#B4552D", fontPairing: "editorial", cover: "classic", showReactionCta: true, watermark: true, fields: {}, contributions: [{ key: "abcdefghij", name: "Gran", note }] },
+  });
+}
+
 async function write(page: Page, name = "Gran", note = "Forty is nothing. Ring me.") {
   await page.getByTestId("contribute-name").fill(name);
   await page.getByTestId("contribute-note").fill(note);
@@ -56,7 +103,42 @@ test.describe("with the switch off, as it is live", () => {
       const source = await res.text();
       expect(source.length, address).toBeGreaterThan(5000);
       expect(source, address).not.toMatch(/group cards?|tarjetas? en grupo|groupOn|groupEvery|signInBlurbGroup|priceLine/i);
+      // Nor the lines that name nothing and are a group card's all the same: every editor carried
+      // "Add at least … notes from your group", and these pages the confirming link's seven lines.
+      expect(source, address).not.toMatch(UNNAMED);
     }
+  });
+
+  test("an address under /c/ names nothing: not in its source, and its tab reads as any missing page's does", async ({ page, request }) => {
+    // The tab used to say "Add your note to the group card" for every address under /c/, card or no card.
+    for (const address of [`/c/${TOKEN}`, `/es/c/${TOKEN}`, "/c/x", "/es/c/x"]) {
+      const res = await request.get(address);
+      expect(res.status(), address).toBe(404);
+      const source = await res.text();
+      expect(source, address).not.toMatch(NAMED);
+      expect(source, address).not.toMatch(/Add your note|Añade tu nota/i);
+    }
+    for (const lang of ["", "/es"]) {
+      await page.goto(`${lang}/no-such-page-anywhere`);
+      const missing = await page.title();
+      expect(missing).not.toBe("");
+      for (const address of [`${lang}/c/${TOKEN}`, `${lang}/c/x`]) {
+        const res = await page.goto(address);
+        expect(res?.status(), address).toBe(404);
+        await expect(page, address).toHaveTitle(missing);
+        expect(await page.content(), address).not.toMatch(NAMED);
+      }
+    }
+  });
+
+  test("an ordinary template's editor fetches no script that holds the sender's panel or the emails it writes", async ({ page }) => {
+    const found = panelScripts(page);
+    await page.goto("/create/the-letter");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await page.getByRole("button", { name: "Publish", exact: true }).click();
+    await expect(page.getByRole("dialog").getByTestId("publish-checklist")).toBeAttached();
+    await page.waitForLoadState("networkidle");
+    expect(await found()).toEqual([]);
   });
 
   test("the /c/ address is never redirected to a language: it answers where it was asked", async ({ request }) => {
@@ -1098,6 +1180,91 @@ test.describe("the reference template and the editor", () => {
     await expect(page.locator("body")).not.toContainText("A group card");
   });
 
+  test("off, the editor of a template made for group cards is sent none of the product's words and fetches no panel; on, it has both", async ({ page, request }) => {
+    // The reference template is itself called "Group card (reference)": its own name is not the product's words.
+    const ownName = /Group card \(reference\)|Tarjeta en grupo \(referencia\)/g;
+    for (const address of ["/create/group-reference?group=off", "/es/create/group-reference?group=off", "/create/group-reference"]) {
+      const res = await request.get(address);
+      expect(res.status(), address).toBe(200);
+      const source = (await res.text()).replace(ownName, "");
+      expect(source, address).not.toMatch(NAMED);
+      expect(source, address).not.toMatch(UNNAMED);
+      expect(source, address).not.toMatch(/signInBlurbGroup|priceLine/);
+    }
+    // On, the same page carries them: the panel's, and the send screen's.
+    const on = await (await request.get("/create/group-reference?group=on")).text();
+    expect(on).toContain("priceLine");
+    expect(on).toContain("signInBlurbGroup");
+    expect(on).toContain("contributionsMin");
+    // The page the confirming link opens is the server's own, never an editor's.
+    expect(on).not.toMatch(/Send you the finished card/);
+
+    const off = panelScripts(page);
+    await page.goto("/create/group-reference?group=off");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await page.waitForLoadState("networkidle");
+    expect(await off()).toEqual([]);
+
+    const fetched = panelScripts(page);
+    await page.goto("/create/group-reference?group=on");
+    await expect(page.getByTestId("group-section")).toBeVisible();
+    await page.waitForLoadState("networkidle");
+    expect((await fetched()).length).toBeGreaterThan(0);
+  });
+
+  test("the panel comes with the form, not after it: nothing under it moves once it is drawn", async ({ page }) => {
+    await page.goto("/create/group-reference?group=on");
+    // The first frame the form is in already has the panel in it, between the words and the photos.
+    const first = await page.evaluate(
+      () =>
+        new Promise<{ panel: boolean; top: number }>((resolve) => {
+          const look = () => {
+            const form = document.querySelector('[data-tour="form"]');
+            if (!form) return requestAnimationFrame(look);
+            const sections = [...form.querySelectorAll(":scope > section")];
+            resolve({ panel: Boolean(form.querySelector('[data-testid="group-section"]')), top: sections[sections.length - 1].getBoundingClientRect().top + window.scrollY });
+          };
+          look();
+        }),
+    );
+    expect(first.panel).toBe(true);
+    await expect(page.getByTestId("group-invite")).toBeVisible();
+    await page.waitForLoadState("networkidle");
+    const settled = await page.evaluate(() => {
+      const sections = [...document.querySelectorAll('[data-tour="form"] > section')];
+      return sections[sections.length - 1].getBoundingClientRect().top + window.scrollY;
+    });
+    expect(Math.abs(settled - first.top)).toBeLessThanOrEqual(1);
+  });
+
+  test("off, the send screen of a draft that holds a note reads no line it was sent no words for; on, the same draft gets them", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("console", (message) => /MISSING_MESSAGE|IntlError/i.test(message.text()) && errors.push(message.text().slice(0, 200)));
+    // A note longer than the template takes (140): the one line of the three the reference template can show.
+    await page.addInitScript((value) => window.localStorage.setItem("ethos:draft:group-reference", value), draftWithNote("x".repeat(150)));
+
+    await page.goto("/create/group-reference?group=off");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await expect(page.getByTestId("group-section")).toHaveCount(0);
+    await page.getByRole("button", { name: "Publish", exact: true }).click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet.getByTestId("publish-checklist")).toBeAttached();
+    await expect(sheet.getByTestId("publish-checklist").locator("li")).toHaveCount(3);
+    // next-intl draws a line it has no words for as its dotted path.
+    await expect(sheet).not.toContainText(/editor\.|publishSheet|problems\.|contribution/i);
+    await expect(sheet).not.toContainText(/group card|from your group|One note is longer/i);
+    await expect(sheet.getByTestId("group-pay")).toHaveCount(0);
+    await expect(sheet).not.toContainText(/€|\$|£/);
+    expect(errors).toEqual([]);
+
+    await page.goto("/create/group-reference?group=on");
+    await expect(page.getByTestId("group-section")).toBeVisible();
+    await page.getByRole("button", { name: "Publish", exact: true }).click();
+    await expect(sheet.getByTestId("publish-checklist")).toContainText("One note is longer than this template takes: 140 characters");
+    await expect(sheet).not.toContainText(/editor\.|publishSheet|problems\./);
+    expect(errors).toEqual([]);
+  });
+
   test("the editor's preview draws the notes the draft holds", async ({ page, isMobile }) => {
     const draft = {
       version: 1,
@@ -1613,6 +1780,23 @@ test.describe("the send screen for a draft that holds a group's notes, signed ou
     test.skip((await sheet.getByText("Publishing needs Supabase").count()) > 0, "this server has no accounts: run it with the placeholder settings in docs/GROUP.md (Tests) to see the send screen's sign-in step");
     await expect(sheet.getByTestId("publish-sign-in")).toContainText("A group card is sent from an account, where its notes are kept.");
     await expect(sheet.getByTestId("pay-panel")).toHaveCount(0);
+    await expect(sheet).not.toContainText(/Pay .* and send|Everything|second gift/i);
+    await expect(sheet).not.toContainText(/€|\$|£/);
+  });
+
+  test("with group cards off the same draft is still asked to sign in, in the plain words, and is offered no price", async ({ page }) => {
+    await page.addInitScript((value) => window.localStorage.setItem("ethos:draft:group-reference", value), draftWithNote());
+    await page.goto("/create/group-reference?group=off");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await page.getByRole("button", { name: "Publish", exact: true }).click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet.getByTestId("publish-checklist")).toBeAttached();
+    test.skip((await sheet.getByText("Publishing needs Supabase").count()) > 0, "this server has no accounts: run it with the placeholder settings in docs/GROUP.md (Tests) to see the send screen's sign-in step");
+    // The line about a group card is not in the page while they are off; the screen never reads it.
+    await expect(sheet.getByTestId("publish-sign-in")).toContainText("Your draft is saved on this device. Sign in and we'll pick up right here.");
+    await expect(sheet).not.toContainText(/group card|signInBlurbGroup|editor\./i);
+    await expect(sheet.getByTestId("pay-panel")).toHaveCount(0);
+    await expect(sheet.getByTestId("group-pay")).toHaveCount(0);
     await expect(sheet).not.toContainText(/Pay .* and send|Everything|second gift/i);
     await expect(sheet).not.toContainText(/€|\$|£/);
   });
