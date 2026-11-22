@@ -9,6 +9,10 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
  * idea is a template that exists, "Make this gift" opens that template's editor with the page's
  * ref, the answers to its questions are in the HTML a crawler reads, and nothing is wider than
  * the screen.
+ *
+ * Since 22 Nov 2026 an idea is a picture card that opens (docs/marketing/growth-build/
+ * DESIGN-LESS-TEXT.md): its line to borrow and its two links are inside the card, in the HTML from
+ * the start and on show once the card is opened. tests/e2e/spread-design.spec.ts holds the layout.
  */
 
 /**
@@ -27,7 +31,7 @@ const LANGS = [
 
 /** The six pages by kind: their h1 in each language, and how many ideas each lists. */
 const KINDS = [
-  { slug: "last-minute", ideas: 8, h1: { en: "Last-minute digital gifts", es: "Regalos digitales de última hora" } },
+  { slug: "last-minute", ideas: 8, h1: { en: "Last-minute gifts you can send today", es: "Regalos de última hora para enviar hoy" } },
   { slug: "video-message", ideas: 7, h1: { en: "Video message gifts", es: "Regalos con mensaje en vídeo" } },
   { slug: "interactive-birthday-card", ideas: 8, h1: { en: "Interactive birthday cards", es: "Tarjetas de cumpleaños interactivas" } },
   { slug: "virtual-birthday-cake", ideas: 5, h1: { en: "A virtual birthday cake they can blow out", es: "Una tarta de cumpleaños virtual con velas que se soplan" } },
@@ -90,7 +94,7 @@ async function answersAreInTheHtml(request: APIRequestContext, path: string) {
   }
 }
 
-/** Every idea on the page: a numbered item whose editor link names a real template, and carries the page's ref when it has one. */
+/** Every idea on the page: a card whose editor link names a real template, and carries the page's ref when it has one. */
 async function ideasCanBeMade(page: Page, prefix: string, count: number, ref?: string) {
   const makes = page.getByTestId("idea-make");
   await expect(makes).toHaveCount(count);
@@ -117,21 +121,34 @@ for (const lang of LANGS) {
         await expect(page.locator("h1")).toHaveCount(1);
 
         const slugs = await ideasCanBeMade(page, lang.prefix, kind.ideas, `gifts-${kind.slug}`);
-        // Each idea can be watched first (the template's demo), and has a line to borrow with the field's limit beside it.
+        // Each idea is a card with the gift's picture and a title, and can be watched first (the template's demo).
+        const cards = page.locator("[data-cards] [data-card]");
+        await expect(cards).toHaveCount(kind.ideas);
         const watches = page.getByTestId("idea-watch");
         await expect(watches).toHaveCount(kind.ideas);
         expect(await watches.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(slugs.map((slug) => `${lang.prefix}/demo/${slug}`));
         await expect(watches.first()).toContainText(lang.watch);
-        const lines = page.getByTestId("borrowed-line");
+        // Every card holds one line and a line to borrow, in the HTML from the start, and shows them once it is opened.
+        const lines = page.locator("[data-cards] [data-line]");
         await expect(lines).toHaveCount(kind.ideas);
-        for (const line of await lines.all()) expect((await line.locator("blockquote").innerText()).trim().length).toBeGreaterThan(5);
+        for (const text of await lines.evaluateAll((els) => els.map((el) => el.textContent ?? ""))) expect(text.trim().length).toBeGreaterThan(5);
+        const first = cards.first();
+        await first.locator("summary").scrollIntoViewIfNeeded();
+        await expect(first.locator("[data-line]")).toBeHidden();
+        await first.locator("summary").click();
+        await expect(first.locator("[data-line]")).toBeVisible();
+        await expect(first.getByTestId("idea-make")).toBeVisible();
+        await expect(first.getByTestId("idea-make")).toHaveText(lang.make);
 
         await expect(page.getByRole("heading", { level: 2, name: lang.faq })).toBeVisible();
-        // The neighbours: the pages that answer the searches next to this one, then the other kinds and the people.
+        // The neighbours: the other kinds, four of them as posters, and the pages that answer the searches next to this one.
         const next = page.getByRole("navigation", { name: lang.readNext }).getByRole("link");
-        expect(await next.count()).toBeGreaterThanOrEqual(3);
+        expect(await next.count()).toBeGreaterThanOrEqual(6);
         for (const other of KINDS.filter((k) => k.slug !== kind.slug)) await expect(page.locator(`nav a[href="${lang.prefix}/gifts/${other.slug}"]`).first()).toBeAttached();
-        await expect(page.locator(`nav a[href="${lang.prefix}/gifts/for-boyfriend"]`).first()).toBeAttached();
+        // The pages by person are one row down, in the site's footer.
+        await expect(page.locator(`footer a[href="${lang.prefix}/gifts/for-boyfriend"]`).first()).toBeAttached();
+        // The hero's one button opens the editor of the gift playing in its phone, with the page's ref.
+        expect(await page.getByTestId("hero-make").getAttribute("href")).toMatch(new RegExp(`^${lang.prefix}/create/[a-z-]+\\?ref=gifts-${kind.slug}$`));
 
         await readsClean(page);
         noErrors();
@@ -155,10 +172,10 @@ for (const lang of LANGS) {
       const body = await page.locator("body").innerText();
       expect(body.toLowerCase().split(line.toLowerCase()).length - 1).toBe(1);
 
-      const kinds = page.getByTestId("card-kind");
+      const kinds = page.locator("[data-kinds] [data-card]");
       await expect(kinds).toHaveCount(5);
-      const watch = await page.getByTestId("kind-watch").evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
-      const make = await page.getByTestId("kind-make").evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
+      const watch = await kinds.getByTestId("idea-watch").evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
+      const make = await kinds.getByTestId("idea-make").evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
       expect(watch).toHaveLength(5);
       for (const [i, href] of watch.entries()) {
         const slug = href.replace(`${lang.prefix}/demo/`, "");
@@ -166,17 +183,23 @@ for (const lang of LANGS) {
         expect(make[i]).toBe(`${lang.prefix}/create/${slug}?ref=digital-cards`);
       }
 
-      // Five prices: the free note, then four read from the catalogue in this page's currency.
-      const prices = await page.getByTestId("card-prices").locator("dd.font-display").allInnerTexts();
+      // Three prices as cards, and all five in the closed block under the questions: the free note, then four read
+      // from the catalogue in this page's currency.
+      const money = /[€$£]\s?\d+[.,]\d{2}|\d+[.,]\d{2}\s?[€$£]/;
+      const shown = await page.getByTestId("card-prices").locator("[data-price]").allInnerTexts();
+      expect(shown).toHaveLength(3);
+      for (const price of shown) expect(price).toMatch(money);
+      const prices = await page.getByTestId("card-prices-all").locator("[data-price]").evaluateAll((els) => els.map((el) => el.textContent ?? ""));
       expect(prices).toHaveLength(5);
       expect(prices[0]).toBe(lang.lang === "en" ? "Free" : "Gratis");
-      for (const price of prices.slice(1)) expect(price).toMatch(/[€$£]\s?\d+[.,]\d{2}|\d+[.,]\d{2}\s?[€$£]/);
+      for (const price of prices.slice(1)) expect(price).toMatch(money);
+      expect(prices.slice(1, 4)).toEqual(shown);
 
       // It links to /gifts, which owns "digital gift", and on to the occasions and the people.
       for (const href of ["/gifts", "/occasions", "/templates", "/pricing", "/gifts/for-mom", "/gifts/photo-album"]) await expect(page.locator(`a[href="${lang.prefix}${href}"]`).first()).toBeAttached();
       // The way on: every row opens a page that is there. The finder's row shows exactly when the finder is built.
-      const onward = await page.locator('nav[aria-labelledby="onward"] a').evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
-      expect(onward.length).toBeGreaterThanOrEqual(3);
+      const onward = await page.locator('section[aria-labelledby="onward"] nav a').evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
+      expect(onward.length).toBeGreaterThanOrEqual(8);
       expect(onward.includes(`${lang.prefix}/gifts/finder`), "the finder's row").toBe(FINDER_BUILT);
       for (const href of onward) expect((await page.request.get(href)).status(), href).toBe(200);
       await readsClean(page);
@@ -232,13 +255,16 @@ test.describe("from a gift page into the editor", () => {
   for (const kind of KINDS) {
     test(`/gifts/${kind.slug}: "Make this gift" opens that template's editor, with the page's ref`, async ({ page }) => {
       await page.goto(`/gifts/${kind.slug}`);
-      const first = page.getByTestId("idea-make").first();
+      const card = page.locator("[data-cards] [data-card]").first();
+      const first = card.getByTestId("idea-make");
       const href = (await first.getAttribute("href")) ?? "";
       const slug = href.match(/^\/create\/([a-z-]+)\?ref=/)?.[1] ?? "";
       expect(TEMPLATES.has(slug), href).toBe(true);
-      // The idea's own line names its template: "01 · The Letter · Free".
-      const name = ((await page.locator("ol > li").first().locator("p").first().innerText()).split("·")[1] ?? "").trim();
+      // The card's own label names its template: "The Letter · Free".
+      const name = ((await card.locator("summary > span").nth(1).textContent()) ?? "").split("·")[0].trim();
       expect(name.length).toBeGreaterThan(2);
+      // The way into the editor is inside the card: it is opened first, as a visitor would.
+      await card.locator("summary").click();
       await first.click();
       await expect(page).toHaveURL(new RegExp(`/create/${slug}\\?ref=gifts-${kind.slug}$`), { timeout: 60_000 });
       await expect(page.getByLabel("Their name")).toBeVisible({ timeout: 60_000 });
@@ -249,9 +275,12 @@ test.describe("from a gift page into the editor", () => {
 
   test('/digital-cards: "Make this one" opens the card shown, and "Watch it" its demo', async ({ page }) => {
     await page.goto("/digital-cards");
-    const kind = page.getByTestId("card-kind").first();
-    await expect(kind.getByTestId("kind-watch")).toHaveAttribute("href", "/demo/the-letter");
-    await kind.getByTestId("kind-make").click();
+    const kind = page.locator("[data-kinds] [data-card]").first();
+    await expect(kind.getByTestId("idea-watch")).toHaveAttribute("href", "/demo/the-letter");
+    await kind.locator("summary").click();
+    // The others of its kind are named in the opened card, each a link to its own page.
+    await expect(kind.locator('a[href="/templates/keepsake"]')).toBeVisible();
+    await kind.getByTestId("idea-make").click();
     await expect(page).toHaveURL(/\/create\/the-letter\?ref=digital-cards$/, { timeout: 60_000 });
     await expect(page.getByLabel("Their name")).toBeVisible({ timeout: 60_000 });
   });

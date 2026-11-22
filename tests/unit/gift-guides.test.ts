@@ -421,8 +421,9 @@ describe("/digital-cards", () => {
     for (const locale of GIFT_LOCALES) {
       const withIt = digitalCardsCopy(locale, { ...facts, finder: true });
       const without = digitalCardsCopy(locale, { ...facts, finder: false });
-      expect(withIt.onward.links.map((l) => l.href)).toEqual(["/gifts", FINDER_LINK, "/occasions", "/templates"]);
-      expect(without.onward.links.map((l) => l.href)).toEqual(["/gifts", "/occasions", "/templates"]);
+      // Every card is the hero's own button ("See all 61 cards"), so /templates is not listed a second time at the foot.
+      expect(withIt.onward.links.map((l) => l.href)).toEqual(["/gifts", FINDER_LINK, "/occasions"]);
+      expect(without.onward.links.map((l) => l.href)).toEqual(["/gifts", "/occasions"]);
       expect(strings(without).join(" ")).not.toMatch(/finder|buscador/i);
     }
   });
