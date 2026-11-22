@@ -90,6 +90,8 @@ export function SiteHero({
           {tags ? <div className="mb-5 flex flex-wrap items-center gap-2 sm:mb-7">{tags}</div> : null}
           <h1>
             {label ? <span className="mb-3 block text-page-label text-page-body">{label}</span> : null}
+            {/* Two blocks to the eye, and still two phrases to whatever reads the heading's text. */}
+            {label ? " " : null}
             {/* A heading here is a phrase, not a gift's two-word name, so it is set a size down from a gift page's. */}
             <span className="block max-w-[14em] font-display text-[2rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.25rem,4.5vw,3.75rem)]">{heading}</span>
           </h1>
@@ -130,6 +132,7 @@ const CARD_LINK = "inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] fo
  * - `line`: the one line the card opens to.
  * - `borrow`: a line to type into the gift, shown in handwriting under the name of the field it goes in.
  * - `also`: other gifts of the same kind, linked by name.
+ * - `full`: the idea in full, kept in a closed row inside the opened card.
  */
 export type IdeaCard = {
   manifest: TemplateManifest;
@@ -137,24 +140,47 @@ export type IdeaCard = {
   line: string;
   borrow?: { where: string; text: string };
   also?: readonly TemplateManifest[];
+  full?: string;
   /** Where "Make this gift" goes: the gift's editor, with the page's ref. */
   make: string;
-  /** Says the gift can be sent free, where it can. */
+  /** Says the idea can be sent free, where it can: the idea, not only its template (content/idea-cards.ts, kindIdeaIsFree). */
   free?: boolean;
 };
 
-export type IdeaCardLabels = { make: string; watch: string; watchNamed: (name: string) => string; free: string; also?: string };
+export type IdeaCardLabels = { make: string; watch: string; free: string; also?: string; full?: string };
+
+/**
+ * How wide a card's picture is drawn, for the browser's choice of file. Under 640px one card is a
+ * screen wide; from 640px two stand side by side; from 1024px the spread's right column holds
+ * three (about a fifth of the screen each), and from 1280px a card is 250px at most. The first
+ * version said 45vw all the way to 1280px, twice the width of a card at 1024px, for up to twelve
+ * posters a page. The set of five is two, then three (from 768px), then five across.
+ */
+const CARD_SIZES = {
+  3: "(min-width: 1280px) 250px, (min-width: 1024px) 22vw, (min-width: 640px) 45vw, 92vw",
+  5: "(min-width: 1280px) 250px, (min-width: 768px) 31vw, (min-width: 640px) 45vw, 92vw",
+} as const;
 
 /**
  * A set of picture cards. A closed card is a picture and a title: the gift's poster, its name and
  * the idea. It opens (a native <details>, so what it holds is in the HTML and it works without
  * script) to one line, the line to borrow in handwriting, and the two ways on: into the editor,
- * and to watch the gift play. One card of a set is open at a time.
+ * and to watch the gift play. One card of a set is open at a time. Under those, where a page has
+ * the idea written out in full, a closed row holds it: the paragraph the first version printed for
+ * every idea is no longer on show, and is still in the HTML for whoever wants all of it and for
+ * search (DESIGN-LESS-TEXT.md: "longer words that search needs go in a native <details>").
  *
  * On a phone a set of cards is never shown all at once (the owner, 22 Nov 2026: six stacked cards
  * "looks clustered… a swipe function where you only see one at a time"): under 640px the set is
  * one row, one card to a screen, swiped sideways, with the gift page's dots under it. From 640px
  * it is a grid: `columns` is how many across on a desk.
+ *
+ * In the grid a row of closed cards ends on one line: every card is as tall as the tallest of its
+ * row, however many lines its title or its gift's name runs to (a three-line title beside a
+ * one-line one left the row ragged, and no fixed room for the title holds at every width and in
+ * both languages). While a card is open the cards go back to their own heights, so the open one
+ * grows alone and its neighbours are not stretched down beside it. That is one selector, `:has()`:
+ * a browser without it keeps every card at its own height, as before.
  */
 export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: string; cards: readonly IdeaCard[]; locale: GiftLocale; labels: IdeaCardLabels; columns?: 3 | 5 }) {
   return (
@@ -164,6 +190,7 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
         data-cards
         className={cn(
           "-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0",
+          "sm:[&:not(:has(details[open]))]:items-stretch",
           // Five across only where a card is wide enough to be opened and read: from 1280px.
           columns === 5 ? "md:grid-cols-3 xl:grid-cols-5" : "lg:grid-cols-3",
         )}
@@ -172,12 +199,13 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
           const name = card.manifest.name[locale];
           return (
             <li key={card.manifest.slug} data-card className="w-full shrink-0 snap-start sm:w-auto">
-              <details name={`${id}-open`} className="group/card rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card transition-shadow duration-300 hover:shadow-page-lift open:shadow-page-lift motion-reduce:transition-none">
-                <summary className="relative grid cursor-pointer list-none rounded-[1.25rem] outline-offset-4 active:opacity-90 [&::-webkit-details-marker]:hidden">
+              <details name={`${id}-open`} className="group/card rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card transition-shadow duration-300 hover:shadow-page-lift open:shadow-page-lift motion-reduce:transition-none sm:h-full">
+                {/* As tall as its card, with its rows packed at the top: the plus stays in the card's corner when the card is taller than its words. */}
+                <summary className="relative grid cursor-pointer list-none content-start rounded-[1.25rem] outline-offset-4 active:opacity-90 sm:h-full [&::-webkit-details-marker]:hidden">
                   {/* On a phone the one card showing is a screen wide, so its picture is cropped squarer and the title stays on the screen with it. */}
                   <span className="relative block aspect-[5/4] overflow-hidden rounded-t-[1.2rem] bg-page-band sm:aspect-[4/5]">
-                    {/* The gift's name and tagline: what the poster shows, for image search and a screen reader. */}
-                    <Image src={card.manifest.thumbnail.poster} alt={`${name}: ${card.manifest.tagline[locale]}`} fill sizes="(min-width: 1280px) 250px, (min-width: 640px) 45vw, 92vw" className="object-cover object-[50%_32%]" />
+                    {/* What the poster shows, in the gift's own words. Its name is the next thing read, so it is not said here too. */}
+                    <Image src={card.manifest.thumbnail.poster} alt={card.manifest.tagline[locale]} fill sizes={CARD_SIZES[columns]} className="object-cover object-[50%_32%]" />
                   </span>
                   <span className="block px-5 pt-4 text-page-label text-page-body">
                     {name}
@@ -215,11 +243,23 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
                       {labels.make}
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
-                    <Link href={`/demo/${card.manifest.slug}`} data-testid="idea-watch" aria-label={labels.watchNamed(name)} className={cn(CARD_LINK, "font-normal text-page-ink")}>
+                    {/* Named by the words on it and then the gift: a voice-control user says what the button says (WCAG 2.5.3). */}
+                    <Link href={`/demo/${card.manifest.slug}`} data-testid="idea-watch" aria-label={`${labels.watch}: ${name}`} className={cn(CARD_LINK, "font-normal text-page-ink")}>
                       <Play aria-hidden="true" className="size-3.5 fill-current" />
                       {labels.watch}
                     </Link>
                   </div>
+                  {card.full && labels.full ? (
+                    <details data-idea-full className="group/full mt-1 border-t border-page-line">
+                      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-sm text-[0.9375rem] text-page-body outline-offset-2 hover:text-page-ink active:opacity-80 [&::-webkit-details-marker]:hidden">
+                        {labels.full}
+                        <Plus aria-hidden="true" className="size-3.5 shrink-0 transition-transform duration-200 group-open/full:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                      </summary>
+                      <p data-reveal className="pb-2 text-[0.9375rem] leading-relaxed text-page-body">
+                        {card.full}
+                      </p>
+                    </details>
+                  ) : null}
                 </div>
               </details>
             </li>
@@ -237,9 +277,14 @@ export function Spread({ id, label, heading, line, intro, art, className, childr
     <section className="relative" aria-labelledby={id}>
       {art ? <ArtLayer items={art} flowers={SITE_FLOWERS} /> : null}
       <div className={cn(SPREAD, className)}>
-        <Intro id={id} label={label} heading={heading} line={line}>
-          {intro}
-        </Intro>
+        {/* Twelve picture cards are four rows and two screens tall, and beside them the heading's column stood empty from
+            the second row down. So on a desk the heading stays in view under the site's header while its cards scroll
+            past, and stops with the section's foot. Beside a short column it has nowhere to go and is where it was. */}
+        <div className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
+          <Intro id={id} label={label} heading={heading} line={line}>
+            {intro}
+          </Intro>
+        </div>
         {children}
       </div>
     </section>

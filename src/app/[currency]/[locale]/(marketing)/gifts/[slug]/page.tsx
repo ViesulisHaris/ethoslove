@@ -8,9 +8,8 @@ import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
-import { handLine, kindCardLine } from "@/content/idea-cards";
+import { handLine, kindCardLine, kindIdeaIsFree } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
-import { sendsFree } from "@/lib/gift/free-tier";
 import { getManifest } from "@/templates/manifests";
 import { CHIP } from "@/components/marketing/chip";
 import { GiftIdeaList, withManifests } from "@/components/marketing/gift-idea-list";
@@ -178,13 +177,13 @@ function leadGift(kind: GiftGuideSlug) {
  * Gift ideas of one kind (a format, or a situation), laid out as a gift's own page is
  * (docs/marketing/growth-build/DESIGN-LESS-TEXT.md, "built from the gift page"): the hero with the
  * film of the gift the page leads with, the ideas as picture cards that open to one line and a
- * line to borrow, how to make it land as three closed rows in the deeper band, the questions, and
+ * line to borrow, the page's three how-tos as closed rows in the deeper band, the questions, and
  * the neighbouring pages as posters. What the first version printed as paragraphs is still in the
- * HTML, in closed <details>: the three how-tos, the answers, and the opening under "More about".
+ * HTML, in closed <details>: each idea in full inside its card, the three how-tos, the answers, and
+ * the opening under "More about".
  */
 async function KindPage({ kind, locale }: { kind: GiftGuideSlug; locale: GiftLocale }) {
   const t = await getTranslations("recipients");
-  const tt = await getTranslations("templates");
   const guide = GIFT_GUIDES[kind][locale];
   const ideas = withManifests(guide.ideas);
   const url = localizedUrl(locale, `/gifts/${kind}`);
@@ -196,8 +195,10 @@ async function KindPage({ kind, locale }: { kind: GiftGuideSlug; locale: GiftLoc
     title: idea.heading,
     line: kindCardLine(idea),
     borrow: { where: idea.line.where, text: handLine(idea.line.text) },
+    full: idea.body,
     make: `/create/${idea.template}?ref=${ref}`,
-    free: sendsFree(idea.manifest),
+    // "Free" is said of the idea, not the template: a Letter with a video clip in it is not the free note.
+    free: kindIdeaIsFree(idea, idea.manifest),
   }));
   // The other kinds, counted on from this page's own place and round to the start: four as posters, the fifth by name,
   // then the pages that answer the searches next to this one. The pages by person are in the site's footer, a few lines down.
@@ -251,20 +252,22 @@ async function KindPage({ kind, locale }: { kind: GiftGuideSlug; locale: GiftLoc
             sentence={guide.hero.sentence}
             note={t("inPhone", { name: lead.name[locale] })}
           >
+            {/* The page lists several gifts, so the button names the one it opens: the one playing in the phone. */}
             <Link href={`/create/${lead.slug}?ref=${ref}`} data-testid="hero-make" className={HERO_BUTTON}>
-              {tt("makeThis")}
+              {t("makeNamed", { name: lead.name[locale] })}
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </SiteHero>
 
           <Spread id="kind-ideas" label={t("ideasLabel")} heading={guide.ideasTitle} line={t("ideasLine")} art={CARDS_ART} className="pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-32">
-            <IdeaCards id={`ideas-${kind}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), watchNamed: (name) => t("watchNamed", { name }), free: t("free") }} />
+            <IdeaCards id={`ideas-${kind}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), free: t("free"), full: t("ideaInFull") }} />
           </Spread>
 
           <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={samples.photo} />}>
             <p className="text-page-label text-page-body">{t("craftLabel")}</p>
+            {/* Each page's own heading: what its three how-tos are about (content/gift-guides.ts, `craft`). */}
             <h2 id="kind-guide" className="mt-4 display-xl text-balance text-page-ink">
-              {t("guideTitle")}
+              {guide.craft}
             </h2>
             {/* The three how-tos, closed: each opens in place, one at a time. */}
             <div className="mt-7 border-t border-page-line">

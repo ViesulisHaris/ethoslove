@@ -1,6 +1,6 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { OCCASION_IDEAS } from "./occasion-ideas";
+import { OCCASION_IDEAS, type OccasionIdeas } from "./occasion-ideas";
 
 /**
  * What each occasion page says below its templates: how to make the gift for that day, and the
@@ -14,9 +14,11 @@ export type OccasionGuide = {
   lead: string;
   /**
    * A numbered list of gifts for the day, under the templates: the occasion's own and others that
-   * fit it, each said the way that day needs it. Every one is a template, so it can be made.
+   * fit it, each said the way that day needs it. Every one is a template, so it can be made. On
+   * the page an idea is a picture card (content/idea-cards.ts): its `heading`, opening to one line
+   * (its `brief`, or its opening sentence) with the idea in full in a closed row under it.
    */
-  ideas?: { title: string; items: { template: string; heading: string; body: string }[] };
+  ideas?: OccasionIdeas;
   sections: { heading: string; body: string }[];
   faq: { q: string; a: string }[];
 };
@@ -57,6 +59,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "midnight-countdown",
             heading: "A countdown that ends at midnight, their time",
+            brief: "Send the link in the evening and it opens by itself at 00:00, their time.",
             body: "The first message of a birthday is the one they remember, so send the link in the evening and let the gift open at 00:00 by itself; until then it shows the clock. The headline sits over the timer, “Until you're 30”, and the line with the fireworks is yours: “30. You look exactly the same. I checked.” If they're eight hours ahead, set their time zone and it opens on their midnight, in your afternoon.",
           },
           {
@@ -67,6 +70,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "party-animals",
             heading: "A party crashed by hamsters who heckle",
+            brief: "Ten animals in party hats, and each yells a line you wrote when tapped.",
             body: "Their age in foil balloons, their name in cut-out letters and ten animals in party hats, each of which yells a line you wrote when tapped. Use all ten: “THIRTY?”, “who invited the ferrets”, “you said no fuss, we heard fuss”, “make a wish, we'll wait”. At the bottom they blow out the candles into the phone.",
           },
           {
@@ -87,11 +91,13 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "text-thread",
             heading: "A conversation that starts at 00:00",
+            brief: "Your chat arrives bubble by bubble with the typing dots, typos and in-jokes included.",
             body: "Write the chat the way you two actually text, typos and in-jokes included, and it arrives bubble by bubble with the typing dots: “ok it's officially your birthday”, “I've been sitting on this since 11:40”, a photo, then the paragraph you'd never send by text. Type [photo] on a line of its own wherever the next photo should drop in.",
           },
           {
             template: "jar-of-reasons",
             heading: "One reason for every year",
+            brief: "One folded note for every year they're turning, shaken out one at a time.",
             body: "One folded note in the jar for every year they're turning, up to a hundred, shaken out one at a time. If you've only known them for a few of those years, the rest can come from the stories you've heard: the school play, the first car, the haircut nobody mentions. The rule: each note is something they did, not something they are.",
           },
           {
@@ -102,17 +108,20 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "sticker-bomb",
             heading: "Twelve taps of chaos, labelled by you",
+            brief: "Every tap slaps a sticker where their finger lands, some on labels you wrote.",
             body: "Every tap slaps a sticker where their finger lands, and some sit on label-maker strips you wrote, up to six of 28 characters: “officially vintage”, “30 and still can't whistle”, “best in show”. Twelve stickers in, the page is a mess and your card opens. For the friend who'd never forgive you a mushy one.",
           },
           {
             template: "balloons",
             heading: "A ceiling of balloons that drop your photos",
+            brief: "Every balloon with a photo drops it when popped, and the biggest holds your letter.",
             body: "Their age floats in as gold foil numbers and the bunting spells a line of up to 24 characters: “SAM IS 30, ACT NORMAL”. Every balloon with a photo drops it when popped, up to eight, and two or three hold only confetti. Hide a baby photo among them, the one they'll shriek at. The biggest balloon, popped last, holds your letter.",
           },
           {
             template: "constellations",
             heading: "A star for each month since their last birthday",
-            body: "Free, and made for this: each photo is a star in a night sky, up to twelve of them, so use one from each month since their last birthday. They tap their way across the sky, and when the last star is found the lines join into a heart, an infinity sign or a star, with your words under it.",
+            brief: "Each photo is a star in a night sky: one for every month since their last birthday.",
+            body: "Each photo is a star in a night sky, up to twelve of them, so use one from each month since their last birthday. They tap their way across the sky, and when the last star is found the lines join into a heart, an infinity sign or a star, with your words under it.",
           },
         ],
       },
@@ -148,6 +157,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "midnight-countdown",
             heading: "Una cuenta atrás hasta las doce, en su hora",
+            brief: "Manda el enlace por la tarde y se abre solo a las 00:00, en su hora.",
             body: "El primer mensaje de un cumpleaños es el que se recuerda, así que manda el enlace por la tarde y deja que el regalo se abra solo a las 00:00; hasta entonces verá el reloj. El titular va sobre el contador, “Hasta tus 30”, y la frase de los fuegos artificiales es tuya: “30. Estás igual. Lo he comprobado.” Si vive ocho horas por delante, pon su zona horaria y se abrirá en su medianoche, en tu tarde.",
           },
           {
@@ -158,6 +168,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "party-animals",
             heading: "Una fiesta colada por hámsteres con opiniones",
+            brief: "Diez animales con gorro de fiesta, y cada uno grita una frase tuya al tocarlo.",
             body: "Su edad en globos metalizados, su nombre en letras recortadas y diez animales con gorro de fiesta que gritan una frase tuya al tocarlos. Usa las diez: “¿¡TREINTA!?”, “¿quién ha invitado a los hurones?”, “dijiste sin lío y oímos lío”, “pide un deseo, esperamos”. Abajo, las velas se apagan soplando al móvil.",
           },
           {
@@ -168,6 +179,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "fortune-cookie",
             heading: "Galletas de la fortuna con vuestras fechas",
+            brief: "Un plato de galletas, y cada una se abre en una fortuna escrita por ti.",
             body: "Un plato de galletas que se abren en una fortuna escrita por ti, con sus números de la suerte debajo. Haz que los números sean vuestros: el día que os conocisteis, su edad, el número del portal de vuestra primera casa, la mesa de la primera cita. Y escribe las fortunas como una adivina que le conoce: “Hoy te cantarán en un restaurante. No te resistas.”",
           },
           {
@@ -178,21 +190,24 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "text-thread",
             heading: "Una conversación que empieza a las 00:00",
+            brief: "Vuestro chat llega burbuja a burbuja, con los puntitos de escribiendo, las erratas y las bromas.",
             body: "Escribe el chat como os escribís de verdad, con erratas y bromas incluidas, y llega burbuja a burbuja con los puntitos de escribiendo: “vale, ya es oficialmente tu cumple”, “llevo desde las 23:40 aguantándome”, una foto, y luego el párrafo que nunca mandarías por mensaje. Escribe [photo] en una línea propia donde quieras que caiga la siguiente foto.",
           },
           {
             template: "jar-of-reasons",
             heading: "Una razón por cada año",
+            brief: "Una nota doblada por cada año que cumple, y salen de una en una.",
             body: "Una nota doblada en el frasco por cada año que cumple, hasta cien, y salen de una en una. Si solo conoces unos pocos de esos años, el resto puede salir de las historias que te han contado: la función del colegio, el primer coche, el corte de pelo del que nadie habla. La regla: cada nota es algo que hizo, no algo que es.",
           },
           {
             template: "birthday-cinema",
-            heading: "Su nombre en luces y un deseo soplando",
+            heading: "Su nombre en luces y un deseo al soplar",
             body: "Se abre el telón rojo sobre una marquesina con su nombre, o con tus propias palabras: “SAM CUMPLE 30. LA CRÍTICA, DIVIDIDA.” Luego, una tarta con velas que parpadean y se apagan soplando al micrófono (o deslizando el dedo), confeti y una tira de película con tus fotos. Admite también un vídeo corto de quienes no pudieron venir.",
           },
           {
             template: "sticker-bomb",
             heading: "Doce toques de caos, con etiquetas tuyas",
+            brief: "Cada toque pega una pegatina donde cae el dedo, algunas con una etiqueta tuya.",
             body: "Cada toque pega una pegatina donde cae el dedo, y algunas llevan debajo una tira de etiquetadora que escribes tú, hasta seis de 28 caracteres: “oficialmente vintage”, “30 y aún no sabe silbar”, “primer premio”. Con doce pegatinas la página es un caos y se abre tu tarjeta. Para quien nunca te perdonaría una cursilada.",
           },
           {
@@ -203,7 +218,8 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "constellations",
             heading: "Una estrella por cada mes desde su último cumpleaños",
-            body: "Gratis y hecha para esto: cada foto es una estrella en un cielo nocturno, hasta doce, así que usa una de cada mes desde su último cumpleaños. Va tocando de estrella en estrella y, al encontrar la última, las líneas forman un corazón, un infinito o una estrella, con tus palabras debajo.",
+            brief: "Cada foto es una estrella en un cielo nocturno: una por cada mes desde su último cumpleaños.",
+            body: "Cada foto es una estrella en un cielo nocturno, hasta doce, así que usa una de cada mes desde su último cumpleaños. Va tocando de estrella en estrella y, al encontrar la última, las líneas forman un corazón, un infinito o una estrella, con tus palabras debajo.",
           },
         ],
       },
@@ -242,26 +258,31 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "Paper, the traditional first-anniversary gift",
+            brief: "Paper is the first-anniversary gift, and The Letter is the free template.",
             body: "Paper is the gift for a first anniversary, on lists going back to Emily Post's Etiquette in 1922, and The Letter is the free template. Choose kraft paper, press your initial into the wax, and open with the first message you ever sent them, word for word if you can find it. Then write what you'd send now.",
           },
           {
             template: "text-thread",
             heading: "Your first conversation, replayed",
+            brief: "Your first messages, rebuilt as a thread that arrives bubble by bubble, awkward bits included.",
             body: "Scroll back to your first messages (it's worth the scrolling) and rebuild them as a thread that arrives bubble by bubble with the typing dots, awkward bits included. Then keep going past where it really ended: the last few bubbles are what you'd say to that person now, a year or ten later. It holds up to 40 bubbles.",
           },
           {
             template: "our-timeline",
             heading: "Every year as a stop on a road",
+            brief: "Photos pinned to a road that draws itself as they scroll, each with a label.",
             body: "Photos pinned to a road that draws itself as they scroll, each with a label of up to 40 characters. Label what happened, not just when: “2021: the first place, the noisy one”, “2023: the dog”, “2024: the year we nearly moved abroad”. It ends on a countdown, so aim it at your next plan.",
           },
           {
             template: "museum",
             heading: "A retrospective, framed and titled",
+            brief: "Each photo hangs framed over a plaque with your caption, your years and a room number.",
             body: "A quiet gallery where each photo hangs framed over a plaque with your caption, your years and the room number. Name the exhibition, “The Sam and Alex Years: A Retrospective”, set the years (“2019–2026”), and caption each photo like a curator who is far too close to the subject: “Untitled (Burnt Toast)”, “Study in Blanket Theft”.",
           },
           {
             template: "halfway",
             heading: "The distance you've already covered",
+            brief: "For a long-distance anniversary: they close the distance between your homes by blowing into the phone.",
             body: "For a long-distance anniversary: a postcard map with your homes on two islands and the distance between them, which they close by blowing into the phone. Halfway along, a line of yours pops up: “Halfway. This is where we ate the worst sandwich of 2022.” Add up to four places you've met in the middle; they're stamped on the postcard and counted, so the total is how far you've travelled to be together.",
           },
           {
@@ -277,6 +298,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-toast",
             heading: "Your wedding toast, given again",
+            brief: "They tilt the phone to fill two glasses, knock to clink, and your speech opens.",
             body: "Two glasses on a table, filled by tilting the phone and clinked by knocking it, then the menu card opens into your speech. Print the card like the original: the venue, and the date as free text, so “the hottest day of 2019” works. Then give the toast you'd give now, years in.",
           },
           {
@@ -287,17 +309,19 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "pack-your-bags",
             heading: "Back to where it started",
+            brief: "Five packing clues, then the departures board clatters to the city where you met.",
             body: "Take them back to the city where you met, or the town of your first trip, and let the packing list do the talking: five clues like “the jacket you wore that night” or “comfortable shoes, there's a hill”. The departures board clatters to the place, and the boarding pass has both your names and the date.",
           },
           {
             template: "picnic",
-            heading: "A picnic basket packed with an inventory of you",
+            heading: "A picnic, packed as an inventory of you two",
+            brief: "Every tap takes something out of the basket, each with a tag you wrote.",
             body: "Every tap takes something out of the basket, strawberries, lemonade, tulips, a ticket, your photos, and each comes with a tag you wrote, up to 48 characters. Write them like an inventory of your relationship: “strawberries, because you always steal mine”, “the lemonade from our first date”. One for a summer anniversary.",
           },
           {
             template: "constellations",
             heading: "A sky with a star for every year",
-            body: "The other free template. One photo per year together, up to twelve, each a star in a night sky; when they've found them all the stars connect, in the shape you chose: a heart, a star, or an infinity sign if you're feeling confident. Your line appears beneath.",
+            body: "One photo per year together, up to twelve, each a star in a night sky; when they've found them all the stars connect, in the shape you chose: a heart, a star, or an infinity sign if you're feeling confident. Your line appears beneath.",
           },
         ],
       },
@@ -341,21 +365,25 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "text-thread",
             heading: "Vuestra primera conversación, otra vez",
+            brief: "Vuestros primeros mensajes, reconstruidos en un hilo que llega burbuja a burbuja, con sus momentos incómodos.",
             body: "Sube hasta vuestros primeros mensajes (merece la pena) y reconstrúyelos como un hilo que llega burbuja a burbuja con los puntitos de escribiendo, momentos incómodos incluidos. Luego sigue más allá de donde terminó de verdad: las últimas burbujas son lo que le dirías hoy, uno o diez años después. Caben hasta 40 burbujas.",
           },
           {
             template: "our-timeline",
             heading: "Cada año como una parada del camino",
+            brief: "Fotos clavadas en un camino que se dibuja al bajar, cada una con su etiqueta.",
             body: "Fotos clavadas en un camino que se dibuja al bajar, cada una con una etiqueta de hasta 40 caracteres. Pon qué pasó, no solo cuándo: “2021: el primer piso, el del ruido”, “2023: el perro”, “2024: el año que casi nos vamos fuera”. Termina en una cuenta atrás, así que apúntala a vuestro próximo plan.",
           },
           {
             template: "museum",
             heading: "Una retrospectiva, enmarcada y con título",
+            brief: "Cada foto cuelga enmarcada sobre una cartela con tu texto, vuestros años y el número de sala.",
             body: "Una galería tranquila donde cada foto cuelga enmarcada sobre una cartela con tu texto, vuestros años y el número de sala. Ponle nombre a la exposición, “Sam y Alex: una retrospectiva”, pon los años (“2019–2026”) y titula cada foto como un comisario demasiado implicado: “Sin título (tostada quemada)”, “Estudio sobre el robo de manta”.",
           },
           {
             template: "halfway",
             heading: "La distancia que ya habéis recorrido",
+            brief: "Para un aniversario a distancia: la distancia entre vuestras casas se acorta soplando al móvil.",
             body: "Para un aniversario a distancia: un mapa en forma de postal con vuestras casas en dos islas y la distancia que las separa, que se acorta soplando al móvil. A mitad de camino aparece una frase tuya: “A medio camino. Aquí nos comimos el peor bocadillo de 2022.” Añade hasta cuatro sitios donde os habéis visto como paradas: quedan sellados y cuentan en el total, que pasa a ser lo que habéis viajado para veros.",
           },
           {
@@ -381,17 +409,19 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "pack-your-bags",
             heading: "Volver a donde empezó todo",
+            brief: "Cinco pistas en la maleta, y el panel de salidas gira hasta la ciudad donde os conocisteis.",
             body: "Llévale a la ciudad donde os conocisteis, o al pueblo del primer viaje, y deja que la lista de equipaje hable: cinco pistas como “la chaqueta que llevabas esa noche” o “zapatos cómodos, hay cuesta”. El panel gira hasta el sitio y la tarjeta de embarque lleva vuestros nombres y la fecha.",
           },
           {
             template: "picnic",
             heading: "Una cesta de pícnic hecha como inventario vuestro",
+            brief: "Cada toque saca algo de la cesta, con una etiqueta escrita por ti.",
             body: "Cada toque saca algo de la cesta, fresas, limonada, tulipanes, una entrada, tus fotos, y cada cosa trae una etiqueta escrita por ti, de hasta 48 caracteres. Escríbelas como un inventario de vuestra relación: “fresas, porque siempre me robas las mías”, “la limonada de nuestra primera cita”. Para un aniversario de verano.",
           },
           {
             template: "constellations",
             heading: "Un cielo con una estrella por cada año",
-            body: "La otra plantilla gratuita. Una foto por cada año de relación, hasta doce, cada una una estrella en un cielo nocturno; cuando las encuentra todas, se unen en la forma que elijas: un corazón, una estrella o un infinito, si lo tienes claro. Tu frase aparece debajo.",
+            body: "Una foto por cada año de relación, hasta doce, cada una una estrella en un cielo nocturno; cuando las encuentra todas, se unen en la forma que elijas: un corazón, una estrella o un infinito, si lo tienes claro. Tu frase aparece debajo.",
           },
         ],
       },
@@ -443,6 +473,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "xoxo",
             heading: "The name only you call them, in cut-out letters",
+            brief: "XOXO spells out what you call them in ransom-note letters, up to 16 characters.",
             body: "XOXO spells out what you call them in ransom-note letters, “my person” unless you change it, and you should: use the nickname nobody else is allowed to, up to 16 characters. Under the first photo goes a card with the lines you'd underline in a book about them, already underlined. Wherever they tap, a kiss lands.",
           },
           {
@@ -463,6 +494,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-council",
             heading: "Five cats approve the relationship",
+            brief: "The cats hold a hearing, read out findings you wrote, and stamp the relationship approved.",
             body: "For the ones who don't do mushy. The cats hold a hearing, each one reads out a finding you wrote, and the stamp comes down: guilty, approved, certified icon or pardoned. Charge them with “taking my side of the bed, nightly”, add findings like “claims to hate romcoms, cried at the airport scene”, and go with approved.",
           },
           {
@@ -473,6 +505,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "coquette",
             heading: "A ticket that gets them into an actual date",
+            brief: "A pink gingham collage unrolls when they untie the bow, with a ticket in the middle.",
             body: "A pink gingham collage that unrolls when they untie the bow, with a ticket in the middle that reads “ticket to happiness” until you change it. Change it to the plan, in 26 characters: “admit two. Bring a coat.” The postcard in your handwriting has room for a line and where to meet.",
           },
           {
@@ -483,12 +516,13 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "arcade",
             heading: "A game for the one who'd rather play",
+            brief: "They drag a basket to catch falling hearts, and each level clears one of your photos.",
             body: "A tiny retro game: they drag a basket to catch falling hearts, each level clears one of your photos, and the last reveals your message. You set how many catches a level takes, from 3 to 20: eight is a nice game, twenty is a dare. And put something on the title screen: “LEVEL 14: PLAYER 2 JOINS”.",
           },
           {
             template: "constellations",
             heading: "If you're apart on the fourteenth",
-            body: "The other free template: a night sky where every photo is a star. They fly from star to star, and once they've found them all the stars join into a heart and your line appears beneath it. Use a photo from each place you've met, and end on the date you'll next see each other.",
+            body: "A night sky where every photo is a star. They fly from star to star, and once they've found them all the stars join into a heart and your line appears beneath it. Use a photo from each place you've met, and end on the date you'll next see each other.",
           },
         ],
       },
@@ -558,6 +592,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-council",
             heading: "Cinco gatos dan el visto bueno a la relación",
+            brief: "Los gatos celebran una vista, leen las conclusiones que has escrito y dan su visto bueno.",
             body: "Para quien no soporta lo cursi. Los gatos celebran una vista, cada uno lee una conclusión que has escrito y cae el sello: culpable, visto bueno, icono certificado o indulto. Acúsale de “quedarse con mi lado de la cama, cada noche”, añade conclusiones como “dice que odia las comedias románticas y lloró en la del aeropuerto” y elige visto bueno.",
           },
           {
@@ -578,12 +613,13 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "arcade",
             heading: "Un juego para quien prefiere jugar",
+            brief: "Arrastra una cesta para atrapar corazones, y cada nivel descubre una de tus fotos.",
             body: "Un pequeño juego retro: arrastra una cesta para atrapar corazones, cada nivel descubre una de tus fotos y el último muestra tu mensaje. Tú decides cuántos hay que atrapar por nivel, de 3 a 20: ocho es una partida bonita; veinte, un reto. Y en la pantalla de título: “NIVEL 14: ENTRA EL J2”.",
           },
           {
             template: "constellations",
             heading: "Si el catorce estáis lejos",
-            body: "La otra plantilla gratuita: un cielo nocturno donde cada foto es una estrella. Va de estrella en estrella y, cuando las encuentra todas, se unen en un corazón y aparece tu frase debajo. Usa una foto de cada sitio donde os habéis visto y termina con la fecha en que os volvéis a ver.",
+            body: "Un cielo nocturno donde cada foto es una estrella. Va de estrella en estrella y, cuando las encuentra todas, se unen en un corazón y aparece tu frase debajo. Usa una foto de cada sitio donde os habéis visto y termina con la fecha en que os volvéis a ver.",
           },
         ],
       },
@@ -761,6 +797,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "front-page",
             heading: "The year's front page, with them as the story",
+            brief: "A newspaper with their name on the masthead, and it works best when it's petty.",
             body: "A newspaper with their name on the masthead and room for a headline, a weather box, a horoscope and up to eight classified ads. It works best when it's petty: “LOCAL LEGEND STILL HASN'T PUT UP THE SHELF”, weather “Mild, with a chance of leftovers”, and in the classifieds, “FOUND: the end of the tape. Owner may collect.” A good one for a parent.",
           },
           {
@@ -786,16 +823,19 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "halfway",
             heading: "If you're apart this Christmas",
+            brief: "A postcard map of your two homes, and they close the distance by blowing into the phone.",
             body: "A postcard map with your homes on two islands and the real distance between them in big numbers, which they close by blowing into the phone. Halfway along, a line of yours pops up: “Halfway there. Leave the porch light on.” Add the places you've met in between as stops: they're stamped on the postcard and counted in the total.",
           },
           {
             template: "jar-of-reasons",
             heading: "Twelve reasons for the twelve days of Christmas",
+            brief: "Twelve folded notes, and they shake out one a day from Christmas Day.",
             body: "Twelve folded notes in a jar, and one rule: they shake out one a day, from Christmas Day to the fifth of January, no shaking ahead. Make each note a moment rather than a compliment: “The way you said ‘oh no’ when the tree fell over, then laughed for ten minutes.”",
           },
           {
             template: "our-timeline",
             heading: "The year as a road, month by month",
+            brief: "A road that draws itself through your year, each photo labelled with its month.",
             body: "Every photo gets a label of up to 40 characters, and a month with a note says more than a date: “March: no heating, all month”, “July: the wedding we nearly missed”. The road draws itself as they scroll and ends on a countdown, so point it at the next thing you've planned together.",
           },
           {
@@ -861,17 +901,19 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "fireside",
-            heading: "Una carta con vela, su bebida en el alféizar",
+            heading: "Una carta a la luz de una vela",
             body: "Pon nieve en la ventana y su bebida de verdad en el alféizar, junto a la vela: chocolate, té o café. La etiqueta atada a la vela admite 24 caracteres, suficientes para algo que solo entienda esa persona: “para después de fregar”. Luego escribe lo que le dirías cuando el resto ya se ha ido a dormir.",
           },
           {
             template: "the-letter",
             heading: "Una carta, no un christmas",
+            brief: "La gratuita: un christmas se firma y acaba en una estantería, y una carta se guarda.",
             body: "La gratuita. Un christmas se firma y acaba en una estantería; una carta se guarda. Cambia el saludo por cómo le llamas de verdad, imprime tu inicial en el lacre y deja los resúmenes del año para el grupo de la familia: escribe sobre una sola tarde de este año, de principio a fin, y por qué es la que te quedarías.",
           },
           {
             template: "front-page",
             heading: "La portada del año, con esa persona de protagonista",
+            brief: "Un periódico con su nombre en la cabecera, y cuanto más pequeña la queja, mejor.",
             body: "Un periódico con su nombre en la cabecera y sitio para un titular, el tiempo, el horóscopo y hasta ocho anuncios por palabras. Cuanto más pequeña la queja, mejor: “LEYENDA LOCAL SIGUE SIN PONER LA BALDA”, el tiempo, “Templado, con probabilidad de sobras”, y en los anuncios, “SE BUSCA: el principio del celo. Se gratificará.” Ideal para un padre o una madre.",
           },
           {
@@ -897,16 +939,19 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "halfway",
             heading: "Si este año pasáis la Navidad lejos",
+            brief: "Un mapa con vuestras dos casas, y la distancia se acorta soplando al móvil.",
             body: "Un mapa en forma de postal con vuestras casas en dos islas y la distancia real en números grandes, que se acorta soplando al móvil. A mitad de camino aparece una frase tuya: “A medio camino. Deja la luz del portal encendida.” Añade como paradas los sitios donde os habéis visto: quedan sellados en la postal y cuentan en el total.",
           },
           {
             template: "jar-of-reasons",
             heading: "Una razón al día, de Navidad a Reyes",
+            brief: "Trece notas dobladas, y sale una al día, del 25 de diciembre al 6 de enero.",
             body: "Trece notas dobladas en un frasco y una regla: sale una al día, del 25 de diciembre al 6 de enero, sin agitar antes de tiempo. Que cada nota sea un momento y no un cumplido: “Tu ‘ay, no’ cuando se cayó el árbol, y luego diez minutos de risa.”",
           },
           {
             template: "our-timeline",
             heading: "El año como un camino, mes a mes",
+            brief: "Un camino que se dibuja por vuestro año, con cada foto bajo la etiqueta de su mes.",
             body: "Cada foto lleva una etiqueta de hasta 40 caracteres, y un mes con nota dice más que una fecha: “Marzo: un mes sin calefacción”, “Julio: la boda a la que casi no llegamos”. El camino se dibuja al bajar por la página y termina en una cuenta atrás, así que apúntala a lo próximo que tengáis planeado.",
           },
           {

@@ -71,7 +71,10 @@ export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }
           ))}
         </div>
 
-        <h2 className="display-md mt-20">{guide.byWho}</h2>
+        {/* /digital-cards links here ("Gifts by who it is for"): the seven pages by person have no index of their own. */}
+        <h2 id="by-person" className="display-md mt-20 scroll-mt-28">
+          {guide.byWho}
+        </h2>
         <ul className="mt-5 flex flex-wrap gap-2">
           {RECIPIENTS.map((r) => (
             <li key={r}>

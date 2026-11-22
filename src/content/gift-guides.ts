@@ -54,6 +54,8 @@ export type GiftGuide = {
   hero: { line: string; sentence: string };
   /** The heading over the cards. */
   ideasTitle: string;
+  /** The heading of the deeper band, over the page's three how-tos: what those three are about on this page. */
+  craft: string;
   /** The gift whose film plays in the hero's phone, where it is not the first idea's. */
   film?: string;
   /** The opening, in two paragraphs: what this is, then what it honestly isn't or costs. On the page it is the closed block under the questions. */
@@ -94,6 +96,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Each of these digital gifts is made on your phone, published the moment you finish and sent as a link.",
       },
       ideasTitle: "Eight that look planned",
+      craft: "Late, without looking late",
+      film: "bouquet",
       lead: [
         "Nothing ships, so the only deadline is how fast you type. Every gift here is made on your phone, published the moment you finish and sent as a link in the chat you already have open. Ten minutes is a fair estimate for most of them, and the quickest takes five.",
         "The risk with a late gift is that it looks late. So each idea below is the one that looks most planned for the least typing, with a line you can use as it stands. One is free: The Letter, as a short note of up to 500 characters. The rest are paid once, when you publish, and you can build the whole thing first to see whether it is worth it.",
@@ -133,6 +137,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "text-thread",
           heading: "Send it the way you meant to: as texts",
+          brief: "Your messages arrive one bubble at a time, ending on the paragraph you would never send cold.",
           body: "You were going to text them anyway. This is that, staged: your messages arrive one bubble at a time with the typing dots, and the last one is the paragraph you would never send cold. Two bubbles is the minimum and forty the limit. Being late can be the opening joke, as long as the last bubbles mean it.",
           line: { field: "lines", where: "The first bubble", text: "ok confession: I started this an hour ago" },
         },
@@ -195,6 +200,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Cada uno de estos regalos digitales se hace desde el móvil, se publica en cuanto terminas y se manda en un enlace.",
       },
       ideasTitle: "Ocho que parecen preparados",
+      craft: "Tarde, sin que se note",
+      film: "bouquet",
       lead: [
         "Aquí no hay envío, así que el único plazo es lo rápido que escribas. Todos estos regalos se hacen desde el móvil, se publican en cuanto terminas y se mandan en un enlace por el chat que ya tienes abierto. Cuenta unos diez minutos para casi todos; el más rápido sale en cinco.",
         "El riesgo de un regalo tardío es que se note. Por eso cada idea es la que más preparada parece con menos texto, con una frase que puedes usar tal cual. Una es gratis: La carta, como nota corta de hasta 500 caracteres. Las demás se pagan una sola vez, al publicar, y antes puedes montarlo entero para ver si te convence.",
@@ -234,6 +241,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "text-thread",
           heading: "Mándalo como ibas a mandarlo: por mensajes",
+          brief: "Tus mensajes llegan burbuja a burbuja, y el último es el párrafo que nunca mandarías en frío.",
           body: "Ibas a escribirle de todas formas. Esto es lo mismo, con puesta en escena: tus mensajes llegan burbuja a burbuja con los puntitos de «escribiendo», y el último es el párrafo que nunca mandarías en frío. El mínimo son dos burbujas y el máximo, cuarenta. Llegar tarde puede ser la broma del principio, siempre que las últimas burbujas vayan en serio.",
           line: { field: "lines", where: "La primera burbuja", text: "vale, confieso: he empezado esto hace una hora" },
         },
@@ -241,7 +249,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "the-council",
           heading: "Una vista, un mazo y un sello de goma",
           body: "Lo gracioso disimula la prisa mejor que lo tierno. Un tribunal de gatos celebra una vista sobre la persona a la que se lo regalas: tú pones la acusación, escribes una conclusión para que la lea cada gato y eliges el sello que cae al final: culpable, visto bueno, certificado o indulto. Las fotos entran como pruebas y son opcionales. Tu carta es la sentencia completa.",
-          line: { field: "charge", where: "La acusación", text: "ser imposible de regalar, un año más" },
+          line: { field: "charge", where: "El cargo", text: "ser imposible de regalar, un año más" },
         },
         {
           template: "birthday-cinema",
@@ -299,24 +307,26 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Five gifts on Ethos take a video clip, one clip per gift: an MP4 or MOV file of up to 50 MB.",
       },
       ideasTitle: "Five for a clip, two for your voice",
+      craft: "A clip worth keeping",
+      film: "birthday-cinema",
       lead: [
         "A video sent in a chat is watched once, between two other messages. Put the same clip inside a gift and it has an opening, a place of its own and a letter beside it. Five templates on Ethos take a video clip, one clip per gift: an MP4 or MOV file of up to 50 MB. The editor's own advice is to keep it under a minute.",
         "Two things to know before you film. The clip starts muted when they scroll to it and one tap turns the sound on, so don't put the important sentence in the first second. And video is a paid feature: it comes with any premium template, and on The Letter with “Make it special”. The last two ideas use a voice message, which every template takes once it is unlocked, and which is easier if you hate being on camera.",
       ],
       ideas: [
         {
-          template: "museum",
-          heading: "A dark screening room after the last photo",
-          brief: "The clip gets a dark room to itself after the last photo, just before your message.",
-          body: "Each photo hangs framed in a room of its own with a plaque, and the clip gets a room to itself after the last photo, just before your message: dark walls and the video on the far one, like the film room in an exhibition. Use it for what a photo can't hold: the dog greeting them, the street you grew up on, a table of people shouting the same thing. It takes two to twenty photos.",
-          line: { field: "exhibition", where: "The exhibition title", text: "The Ana Retrospective: ten years, mostly laughing" },
-        },
-        {
           template: "birthday-cinema",
           heading: "The people who couldn't be there, after the candles",
           brief: "Once the candles are out, the clip is the first thing on the screen.",
           body: "Once the candles are out and the confetti has fired, the clip is the first thing on the screen, framed above a film strip of your photos. It suits a group: ask five people for five seconds of “happy birthday” each and join them in your phone's video editor. Five seconds each keeps the file far under the limit, and nobody rambles.",
           line: { field: "marquee", where: "On the marquee", text: "ONE NIGHT ONLY: MAYA TURNS 25" },
+        },
+        {
+          template: "museum",
+          heading: "A dark screening room after the last photo",
+          brief: "The clip gets a dark room to itself after the last photo, just before your message.",
+          body: "Each photo hangs framed in a room of its own with a plaque, and the clip gets a room to itself after the last photo, just before your message: dark walls and the video on the far one, like the film room in an exhibition. Use it for what a photo can't hold: the dog greeting them, the street you grew up on, a table of people shouting the same thing. It takes two to twenty photos.",
+          line: { field: "exhibition", where: "The exhibition title", text: "The Ana Retrospective: ten years, mostly laughing" },
         },
         {
           template: "our-timeline",
@@ -402,24 +412,26 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "En Ethos hay cinco regalos que llevan vídeo, un clip por regalo: un archivo MP4 o MOV de hasta 50 MB.",
       },
       ideasTitle: "Cinco para un clip, dos para tu voz",
+      craft: "Un clip que merezca guardarse",
+      film: "birthday-cinema",
       lead: [
         "Un vídeo mandado por el chat se ve una vez, entre otros dos mensajes. Mete ese mismo clip en un regalo y tiene una apertura, un sitio propio y una carta al lado. En Ethos hay cinco plantillas que llevan vídeo, un clip por regalo: un archivo MP4 o MOV de hasta 50 MB. El propio editor aconseja que no pase de un minuto.",
         "Dos cosas antes de grabar. El clip empieza sin sonido cuando llegan a él y el sonido se activa con un toque, así que no pongas la frase importante en el primer segundo. Y el vídeo es de pago: viene con cualquier plantilla premium, y en La carta con «Hazlo especial». Las dos últimas ideas usan un mensaje de voz, que admite cualquier plantilla una vez desbloqueada y que es más fácil si no soportas verte en cámara.",
       ],
       ideas: [
         {
-          template: "museum",
-          heading: "Una sala de proyección tras la última foto",
-          brief: "El clip tiene una sala oscura para él solo tras la última foto, justo antes de tu mensaje.",
-          body: "Cada foto cuelga enmarcada en su propia sala, con su placa, y el clip tiene una para él solo después de la última foto, justo antes de tu mensaje: paredes oscuras y el vídeo en la del fondo, como la sala de proyección de una exposición. Úsalo para lo que una foto no puede guardar: el perro saliendo a recibirle, la calle donde creciste, una mesa entera gritando lo mismo. Admite de dos a veinte fotos.",
-          line: { field: "exhibition", where: "El título de la exposición", text: "Retrospectiva Ana: diez años, casi todos riéndonos" },
-        },
-        {
           template: "birthday-cinema",
           heading: "Los que no pudieron ir, después de las velas",
           brief: "Cuando se apagan las velas, el clip es lo primero que aparece.",
           body: "Cuando se apagan las velas y salta el confeti, el clip es lo primero que aparece, enmarcado sobre una tira de película con tus fotos. Va muy bien en grupo: pide a cinco personas cinco segundos de «feliz cumpleaños» cada una y únelos en el editor de vídeo del móvil. Con cinco segundos por cabeza el archivo queda muy por debajo del límite, y nadie se enrolla.",
           line: { field: "marquee", where: "En la marquesina", text: "ÚNICA FUNCIÓN: MAYA CUMPLE 25" },
+        },
+        {
+          template: "museum",
+          heading: "Una sala de proyección tras la última foto",
+          brief: "El clip tiene una sala oscura para él solo tras la última foto, justo antes de tu mensaje.",
+          body: "Cada foto cuelga enmarcada en su propia sala, con su placa, y el clip tiene una para él solo después de la última foto, justo antes de tu mensaje: paredes oscuras y el vídeo en la del fondo, como la sala de proyección de una exposición. Úsalo para lo que una foto no puede guardar: el perro saliendo a recibirle, la calle donde creciste, una mesa entera gritando lo mismo. Admite de dos a veinte fotos.",
+          line: { field: "exhibition", where: "El título de la exposición", text: "Retrospectiva Ana: diez años, casi todos riéndonos" },
         },
         {
           template: "our-timeline",
@@ -508,6 +520,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "An interactive birthday card waits for them to do something: a tap folds a paper card open, a breath puts the candles out.",
       },
       ideasTitle: "Eight cards, by what they do",
+      craft: "Choosing between the eight",
+      film: "party-animals",
       lead: [
         "An interactive birthday card is one that waits for them to do something. They tap, and a paper card folds open. They blow into the phone, and the candles go out. They pop a balloon, and a photo falls out of it. What they do to the card is the reason they show it to whoever is sitting next to them.",
         "These are the eight on Ethos made for a birthday, sorted by what the person does. Every one takes your photos and a message of your own, and all but Arcade take a song. Each is paid once, when you publish. This page is about the cards themselves. What to write in one, and when to send it, is on the birthday ideas page linked at the foot.",
@@ -554,8 +568,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "They wait: a card that opens at midnight",
+          brief: "Send it early: it shows a clock counting down, and opens with fireworks at zero.",
           body: "The only one that makes them wait. Send it early and it shows a clock counting down under a sky going from dusk to night. At zero, in the time zone you chose, fireworks go off and it opens on your photos and your message. Of the eight it does the least when touched and the most when timed right.",
-          line: { field: "headline", where: "Above the timer", text: "Until you're officially older than me again" },
+          line: { field: "headline", where: "Headline above the timer", text: "Until you're officially older than me again" },
         },
         {
           template: "arcade",
@@ -614,6 +629,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Una tarjeta de cumpleaños interactiva espera a que hagan algo: un toque despliega una tarjeta de papel, un soplido apaga las velas.",
       },
       ideasTitle: "Ocho tarjetas, según lo que hacen",
+      craft: "Cómo elegir entre las ocho",
+      film: "party-animals",
       lead: [
         "Una tarjeta de cumpleaños interactiva es la que espera a que hagan algo. Tocan, y una tarjeta de papel se despliega. Soplan al móvil, y las velas se apagan. Explotan un globo, y cae una foto. Lo que le hacen a la tarjeta es el motivo por el que se la enseñan a quien tengan al lado.",
         "Estas son las ocho de Ethos hechas para un cumpleaños, ordenadas por lo que hace quien la recibe. Todas llevan tus fotos y un mensaje tuyo, y todas menos Arcade, una canción. Cada una se paga una sola vez, al publicar. Esta página va de las tarjetas. Qué escribir en ellas y cuándo enviarlas está en la página de ideas de cumpleaños, enlazada al final.",
@@ -622,7 +639,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "popup-card",
           heading: "La abren: una tarjeta de papel con su tarta",
-          body: "Lo más parecido a una tarjeta de papelería, hasta que se mueve. Un toque y se despliega sobre una mesa: una tarta de papel de tres pisos se levanta del pliegue con su edad en el topper, y detrás se alzan globos y banderines. Tocan cada vela para encenderla, hasta cinco, y luego soplan al móvil o deslizan hacia arriba. Tu carta está dentro de la tapa, escrita a mano.",
+          body: "Lo más parecido a una tarjeta de papelería, hasta que se mueve. Un toque y se despliega sobre una mesa: una tarta de papel de tres pisos se levanta del pliegue con su edad en lo alto, y detrás se alzan globos y banderines. Tocan cada vela para encenderla, hasta cinco, y luego soplan al móvil o deslizan hacia arriba. Tu carta está dentro de la tapa, escrita a mano.",
           line: { field: "banner", where: "En los banderines, sobre la tarta", text: "un año más de ruido" },
         },
         {
@@ -660,8 +677,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "Esperan: una tarjeta que se abre a medianoche",
+          brief: "Mándala antes: muestra un reloj que baja y, a cero, se abre con fuegos artificiales.",
           body: "La única que hace esperar. Mándala antes y muestra un reloj que baja bajo un cielo que pasa del atardecer a la noche. A cero, en la zona horaria que elegiste, estallan los fuegos artificiales y se abre con tus fotos y tu mensaje. De las ocho es la que menos hace al tocarla y la que más hace si aciertas con la hora.",
-          line: { field: "headline", where: "Sobre el contador", text: "Hasta que vuelvas a ser mayor que yo, oficialmente" },
+          line: { field: "headline", where: "Titular sobre el reloj", text: "Hasta que vuelvas a ser mayor que yo, oficialmente" },
         },
         {
           template: "arcade",
@@ -723,6 +741,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Three cards on Ethos have a cake whose candles go out when they blow into the phone, and two more work another way.",
       },
       ideasTitle: "Five cakes, three to blow out",
+      craft: "So the candles go out",
+      film: "popup-card",
       lead: [
         "Three cards on Ethos have a cake with candles that go out when the person blows into their phone. The microphone does it: the card listens for about half a second of breath and puts the flames out, with smoke. Nobody can cut these cakes or eat them. They can make a wish on one, and when you can't be in the room the wish is the part that counts.",
         "Below are those three, then two more with a cake in them that works differently: one that draws itself and one you catch. Five is all there are, so five is the list. Each takes your photos and your message, and all but Arcade take their age and a song. Each is paid once when you publish.",
@@ -815,6 +835,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "En Ethos hay tres tarjetas con una tarta cuyas velas se apagan al soplar al móvil, y dos más que funcionan de otra manera.",
       },
       ideasTitle: "Cinco tartas, tres que se soplan",
+      craft: "Para que las velas se apaguen",
+      film: "popup-card",
       lead: [
         "En Ethos hay tres tarjetas con una tarta cuyas velas se apagan cuando alguien sopla al móvil. Lo hace el micrófono: la tarjeta espera medio segundo de soplido y apaga las llamas, con su humo. Estas tartas no se pueden cortar ni comer. Sí se puede pedir un deseo, que es lo que cuenta cuando no puedes estar allí.",
         "Abajo están esas tres y dos más con una tarta que funciona de otra forma: una que se dibuja sola y otra que se atrapa. No hay más que cinco, así que la lista tiene cinco. Cada una lleva tus fotos y tu mensaje, y todas menos Arcade, su edad y una canción. Cada una se paga una sola vez al publicar.",
@@ -831,7 +853,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "popup-card",
           heading: "Primero se encienden, luego se soplan",
           brief: "Tocan cada vela para encenderla, hasta cinco, y solo entonces la tarjeta pide un soplido.",
-          body: "Una tarta de papel de tres pisos que se levanta de la tarjeta al abrirla, con su edad en el topper. Las velas empiezan apagadas. Tocan cada una para encenderla, hasta cinco, y solo entonces la tarjeta pide un deseo y un soplido. Encenderlas antes alarga el momento. Mándasela a quien vaya a abrirla a solas la mañana de su cumpleaños.",
+          body: "Una tarta de papel de tres pisos que se levanta de la tarjeta al abrirla, con su edad en lo alto. Las velas empiezan apagadas. Tocan cada una para encenderla, hasta cinco, y solo entonces la tarjeta pide un deseo y un soplido. Encenderlas antes alarga el momento. Mándasela a quien vaya a abrirla a solas la mañana de su cumpleaños.",
           line: { field: "banner", where: "En los banderines, sobre la tarta", text: "pide un deseo, Jo" },
         },
         {
@@ -875,7 +897,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "¿Cuántas velas puede tener la tarta?",
-          a: "Cine de cumpleaños pone una por año hasta doce; a partir de ahí, seis velas y la edad en número encima. Tarjeta pop-up tiene hasta cinco, con la edad en el topper. Fiesta Animal pone la edad en la tarta con velas de número. Cuaderno dibuja hasta ocho.",
+          a: "Cine de cumpleaños pone una por año hasta doce; a partir de ahí, seis velas y la edad en número encima. Tarjeta pop-up tiene hasta cinco, con la edad en lo alto de la tarta. Fiesta Animal pone la edad en la tarta con velas de número. Cuaderno dibuja hasta ocho.",
         },
         {
           q: "¿Se puede cortar la tarta?",
@@ -910,6 +932,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "These eight albums differ in how they are looked through: a gallery room for each photo, a road of dates, a camera from 2006.",
       },
       ideasTitle: "Eight ways to look through them",
+      craft: "Photos first, then the words",
       film: "scrapbook",
       lead: [
         "A photo album you send as a link is a set of photos with an order, captions and a way of being looked through. That last part is where these eight differ. One hangs each photo in a gallery room. One pins them along a road with dates. One hides them on a camera from 2006.",
@@ -926,12 +949,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "our-timeline",
           heading: "A road with a date at every photo",
+          brief: "A road draws itself down the page and pins each photo at a milestone.",
           body: "For photos that have an order. A road draws itself down the page and pins each photo at a milestone with a label of its own, twenty stops at most. Say what happened, not only when. Under the last photo are your closing line, then a countdown if you add one, then the letter. Point the countdown at the next thing: the trip, the move, the wedding.",
           line: { field: "dates", where: "The label at one milestone", text: "March 2021: the flat with loud pipes" },
         },
         {
           template: "scrapbook",
           heading: "A scrapbook page, taped and pinned",
+          brief: "Up to twelve photos land on a page as polaroids, a photo-booth strip and a roll of film.",
           body: "The one that looks handmade. Cut-out letters spell the title, and up to twelve photos land on the page as polaroids that develop, a photo-booth strip, a stamp and a roll of film, taped and pinned between flowers. There is a torn note for one handwritten line, and a typed letter from you. Five page styles, from Blossom to Seaside.",
           line: { field: "quote", where: "The handwritten line on the torn note", text: "Proof that we do, occasionally, leave the house." },
         },
@@ -964,6 +989,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "music-box",
           heading: "A mirror with a new photo at every turn",
+          brief: "They wind a key three turns, and a photo comes up in the mirror, then the next.",
           body: "An album that can't be hurried. They wind a key three turns and the box starts to play; a photo comes up in the oval mirror inside the lid, then the next, eight at most, each with its caption on a slip of paper. A tap on the mirror brings one close. When the spring runs down, a folded letter lifts out, with all the photos laid out after it.",
           line: { field: "message", where: "The first line of the letter", text: "Wind it again whenever you miss this." },
         },
@@ -1018,6 +1044,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Estos ocho álbumes se diferencian en cómo se recorren: una sala de galería para cada foto, un camino con fechas, una cámara de 2006.",
       },
       ideasTitle: "Ocho maneras de recorrerlas",
+      craft: "Primero las fotos, luego las palabras",
       film: "scrapbook",
       lead: [
         "Un álbum de fotos que se manda en un enlace es un conjunto de fotos con un orden, unos pies de foto y una manera de recorrerlo. En eso último se diferencian estos ocho. Uno cuelga cada foto en la sala de una galería. Otro las clava a lo largo de un camino con fechas. Otro las esconde en una cámara de 2006.",
@@ -1034,12 +1061,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "our-timeline",
           heading: "Un camino con una fecha en cada foto",
+          brief: "Un camino se dibuja página abajo y clava cada foto en un hito, con su etiqueta.",
           body: "Para fotos que tienen un orden. Un camino se dibuja página abajo y clava cada foto en un hito con su propia etiqueta, veinte paradas como máximo. Cuenta qué pasó, no solo cuándo. Bajo la última foto quedan tu frase final, luego una cuenta atrás si la añades, y al final la carta. Apunta la cuenta atrás a lo siguiente: el viaje, la mudanza, la boda.",
           line: { field: "dates", where: "La etiqueta de un hito", text: "Marzo de 2021: el piso de las tuberías" },
         },
         {
           template: "scrapbook",
           heading: "Una página de álbum, con cinta y chinchetas",
+          brief: "Hasta doce fotos caen en la página como polaroids, una tira de fotomatón y un carrete.",
           body: "El que parece hecho a mano. Unas letras recortadas forman el título, y hasta doce fotos caen en la página como polaroids que se revelan, una tira de fotomatón, un sello y un carrete, pegadas con cinta y chinchetas entre flores. Hay una nota rasgada para una frase a mano y una carta tuya a máquina. Cinco estilos de página, de Flores a Playa.",
           line: { field: "quote", where: "La frase a mano de la nota rasgada", text: "Pruebas de que, a veces, salimos de casa." },
         },
@@ -1072,6 +1101,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "music-box",
           heading: "Un espejo con una foto nueva en cada vuelta",
+          brief: "Dan tres vueltas a una llave y en el espejo aparece una foto, luego la siguiente.",
           body: "Un álbum que no se puede pasar deprisa. Dan tres vueltas a una llave y la caja empieza a sonar; en el espejo ovalado de la tapa aparece una foto, luego la siguiente, ocho como máximo, cada una con su pie en una tira de papel. Con un toque en el espejo se ve de cerca. Cuando se acaba la cuerda sale una carta doblada y, después de ella, todas las fotos juntas.",
           line: { field: "message", where: "La primera línea de la carta", text: "Dale cuerda otra vez cuando eches esto de menos." },
         },
@@ -1129,6 +1159,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "No code and no hosting: you fill in a single page with your photos, your dates and your song, and it opens in their browser.",
       },
       ideasTitle: "Seven pages, and what goes in each",
+      craft: "Ready before the day",
       lead: [
         "People who search for an anniversary website usually want one of two things: a page that tells the story of the two of them, or a surprise their partner opens on the day. You can code one over a weekend, host it, and hope it works on their phone. Or you can fill one in tonight. These are single pages with a link of their own, made from your photos, your dates and your song. The same seven make a birthday website for a girlfriend or boyfriend.",
         "To be plain about what you get: one page at a tryethos.io link, opened in a browser, with nothing to install. It is not a site with its own domain name or several pages. In return it does things a hand-built page rarely does, like staying shut until midnight or asking for a password. Each format is paid once, when you publish, and one of them has a free version.",
@@ -1143,6 +1174,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "museum",
           heading: "An exhibition of you two, room by room",
+          brief: "Up to twenty photos, one to a wall, and they swipe from room to room like visitors.",
           body: "A site with rooms. Give the exhibition a title, put the years on every plaque, and hang up to twenty photos, one to a wall, each with a caption. They swipe from room to room like visitors, and the last wall carries your message as the curator's text. A video clip can have a room of its own.",
           line: { field: "exhibition", where: "The exhibition title", text: "Three Years of Us: A Retrospective" },
         },
@@ -1175,7 +1207,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "midnight-countdown",
           heading: "The page that isn't there until midnight",
           body: "A surprise page needs a reveal, and this one is built around it. Send the link days before and all they see is a clock running down over a skyline at dusk. At the second you chose, in their time zone, fireworks go off and the page opens on your photos and your words. It holds up to twenty photos.",
-          line: { field: "headline", where: "Above the timer", text: "Three years ago today you said yes to a second coffee" },
+          line: { field: "headline", where: "Headline above the timer", text: "Three years ago today you said yes to a second coffee" },
         },
       ],
       sections: [
@@ -1228,6 +1260,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Sin programar y sin alojarla: rellenas una sola página con vuestras fotos, vuestras fechas y vuestra canción, y se abre en su navegador.",
       },
       ideasTitle: "Siete páginas, y qué lleva cada una",
+      craft: "Lista antes del día",
       lead: [
         "Quien busca una página web de aniversario suele querer una de dos cosas: una página que cuente la historia de los dos, o una sorpresa que su pareja abra ese día. Puedes programarla en un fin de semana, alojarla y cruzar los dedos para que funcione en su móvil. O puedes rellenar una esta noche. Estas son páginas únicas con su propio enlace, hechas con vuestras fotos, vuestras fechas y vuestra canción. Las mismas siete sirven de página web de cumpleaños para tu novia o tu novio.",
         "Para que quede claro lo que es: una página en un enlace de tryethos.io, que se abre en el navegador, sin instalar nada. No es un sitio con dominio propio ni con varias páginas. A cambio hace cosas que una página hecha a mano casi nunca hace, como quedarse cerrada hasta medianoche o pedir una contraseña. Cada formato se paga una sola vez, al publicar, y uno de ellos tiene versión gratis.",
@@ -1242,6 +1275,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "museum",
           heading: "Una exposición de los dos, sala a sala",
+          brief: "Hasta veinte fotos, una por pared, y pasan de sala en sala como visitantes.",
           body: "Una web con salas. Ponle título a la exposición, escribe los años en cada placa y cuelga hasta veinte fotos, una por pared, cada una con su pie. Pasan de sala en sala como visitantes, y la última pared lleva tu mensaje como texto del comisario. Un clip de vídeo puede tener una sala para él solo.",
           line: { field: "exhibition", where: "El título de la exposición", text: "Tres años de nosotros: una retrospectiva" },
         },
@@ -1253,8 +1287,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "scratch-card",
-          heading: "Una noticia bajo el metalizado, si hay un secreto",
-          brief: "Cada tarjeta esconde una foto bajo el metalizado, y la última lleva el anuncio.",
+          heading: "Una noticia para rascar, si hay un secreto",
+          brief: "Cada tarjeta esconde una foto bajo una capa que se rasca, y la última lleva el anuncio.",
           body: "Rascan con el dedo un montón de tarjetas; cada una esconde una foto y su pie, y la última lleva el anuncio en letras grandes: el viaje, el anillo, la reserva. Las palabras impresas sobre la capa metalizada las eliges tú, para que la portada no cuente nada.",
           line: { field: "finalTitle", where: "El titular de la última tarjeta", text: "Volvemos a donde nos conocimos. El viernes." },
         },
@@ -1274,7 +1308,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "midnight-countdown",
           heading: "La página que no existe hasta medianoche",
           body: "Una página sorpresa necesita su golpe de efecto, y esta está hecha alrededor de él. Manda el enlace días antes y solo se ve un reloj que baja sobre una ciudad al atardecer. En el segundo que elegiste, en su zona horaria, estallan los fuegos artificiales y la página se abre con tus fotos y tus palabras. Caben hasta veinte fotos.",
-          line: { field: "headline", where: "Sobre el contador", text: "Hoy hace tres años dijiste que sí a un segundo café" },
+          line: { field: "headline", where: "Titular sobre el reloj", text: "Hoy hace tres años dijiste que sí a un segundo café" },
         },
       ],
       sections: [

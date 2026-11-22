@@ -29,7 +29,7 @@ function lines(value: unknown, where: string, locale?: Locale): Line[] {
 }
 
 /** /digital-cards takes its prices and counts from the code; any stand-ins do for reading its words. */
-const CARD_FACTS = { single: "1", pick3: "2", everything: "3", extras: "4", count: 61, ideas: 30, finder: true };
+const CARD_FACTS = { single: "1", pick3: "2", everything: "3", extras: "4", photos: "5", notePhotos: 5, count: 61, ideas: 30, finder: true };
 
 /**
  * The words on the pages people find from search, and in the games and templates they land on.

@@ -80,7 +80,11 @@ for (const prefix of ["", "/es"]) {
         expect(await cover.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0), `${width}: the gift's cover in the phone`).toBe(true);
         // The band's phone on its flowers, and every card's picture.
         expect(m.pieces, `${width}: pieces of art on the page`).toBeGreaterThanOrEqual(4);
-        for (const set of await cardSets(page)) for (const card of set.cards) expect(card.picture, `${width}: “${card.title}” has no picture`).toBe(true);
+        // Waited for, not read once: a poster asked for at a new width is made by the dev server's image optimizer the first
+        // time, and on a busy machine that outlasted the read (a card far along a phone's row, the run of 22 Nov 2026).
+        await expect
+          .poll(async () => (await cardSets(page)).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 20_000 })
+          .toEqual([]);
       }
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
       await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
@@ -107,7 +111,7 @@ for (const prefix of ["", "/es"]) {
         await page.locator("[data-cards]").scrollIntoViewIfNeeded();
         for (const card of (await cardSets(page))[0].cards.slice(0, width < 640 ? 1 : 3)) expect(card.picture, `${width}: “${card.title}” has no picture`).toBe(true);
       }
-      // No paragraph of an idea is on the page any more: under the gallery, no block of text runs past thirty words until something is opened.
+      // No paragraph of an idea is on show any more: under the gallery, no block of text runs past thirty words until something is opened.
       const longest = await page.evaluate(() => {
         const root = document.querySelector("[data-page-theme]")!;
         return Math.max(0, ...[...root.querySelectorAll("p, li, h2, h3")].filter((el) => !el.closest("details") || el.closest("summary")).map((el) => (el.children.length === 0 ? (el.textContent ?? "").trim().split(/\s+/).length : 0)));
@@ -195,7 +199,7 @@ test("a card opens to one line and a line in handwriting, one card at a time, an
   await expect(first.locator("h3")).toBeVisible();
   await expect(first.locator("[data-line]")).toBeHidden();
   await expect(first.getByTestId("idea-make")).toBeHidden();
-  await first.locator("summary").click();
+  await first.locator("summary").first().click();
   await expect(first.locator("[data-line]")).toBeVisible();
   await expect(first.getByTestId("idea-make")).toBeVisible();
   await expect(first.getByTestId("idea-watch")).toBeVisible();
@@ -208,18 +212,18 @@ test("a card opens to one line and a line in handwriting, one card at a time, an
   expect(m.small).toEqual([]);
   expect(m.overlaps).toEqual([]);
   // Opening another closes the first.
-  await second.locator("summary").click();
+  await second.locator("summary").first().click();
   await expect(second.locator("[data-line]")).toBeVisible();
   await expect(first.locator("[data-line]")).toBeHidden();
   // By keyboard: the card's title is the thing focused, Enter opens and closes it, and the focus ring is drawn.
   const third = cards.nth(2);
-  await third.locator("summary").focus();
+  await third.locator("summary").first().focus();
   await page.keyboard.press("Enter");
   await expect(third.locator("[data-line]")).toBeVisible();
-  expect(await third.locator("summary").evaluate((el) => el.matches(":focus-visible") && getComputedStyle(el).outlineStyle !== "none")).toBe(true);
+  expect(await third.locator("summary").first().evaluate((el) => el.matches(":focus-visible") && getComputedStyle(el).outlineStyle !== "none")).toBe(true);
   await page.keyboard.press("Tab");
   await expect(third.getByTestId("idea-make")).toBeFocused();
-  await third.locator("summary").focus();
+  await third.locator("summary").first().focus();
   await page.keyboard.press("Enter");
   await expect(third.locator("[data-line]")).toBeHidden();
 });
@@ -229,18 +233,248 @@ test("an occasion's cards show a sample in handwriting under its field's name, w
   await page.goto("/occasions/mothers-day");
   await settle(page);
   const bouquet = page.locator('[data-cards] [data-card]:has(a[href="/create/bouquet"])');
-  await bouquet.locator("summary").click();
+  await bouquet.locator("summary").first().click();
   // The card in the bouquet: its editor's own name for the field, and the sample that fits its thirty characters.
   await expect(bouquet.locator("[data-line]")).toHaveText("From the one who picked yours");
   await expect(bouquet.getByText("The little card", { exact: true })).toBeVisible();
   await expect(bouquet.getByTestId("idea-make")).toHaveAttribute("href", "/create/bouquet");
-  // A list written before the fields were recorded shows the idea's line and no handwriting.
+  // The four older lists show one too (Christmas had none): the first sample that goes in a field…
   await page.goto("/occasions/christmas");
   await settle(page);
-  const card = page.locator("[data-cards] [data-card]").first();
-  await card.locator("summary").click();
-  await expect(card.getByTestId("idea-make")).toBeVisible();
-  await expect(card.locator("[data-line]")).toHaveCount(0);
+  const globe = page.locator('[data-cards] [data-card]:has(a[href="/create/snow-globe"])');
+  await globe.locator("summary").first().click();
+  await expect(globe.getByTestId("idea-make")).toBeVisible();
+  await expect(globe.locator("[data-line]")).toHaveText("January: we said this would be the year");
+  // …or the one the list marks as the card's: the news on the last scratch card, not the caption before it.
+  const scratch = page.locator('[data-cards] [data-card]:has(a[href="/create/scratch-card"])');
+  await scratch.locator("summary").first().click();
+  await expect(scratch.locator("[data-line]")).toHaveText("We got the house");
+  // Most of the twelve cards have a line to borrow, and no card opens onto a slogan or two words.
+  const lines = await page.locator("[data-cards] [data-card]").evaluateAll((cards) => cards.map((card) => ({ line: card.querySelector("details > div > p")?.textContent ?? "", hand: card.querySelector("[data-line]")?.textContent ?? "" })));
+  expect(lines).toHaveLength(12);
+  expect(lines.filter((card) => card.hand).length).toBeGreaterThanOrEqual(10);
+  for (const card of lines) expect(card.line.trim().split(/\s+/).length, card.line).toBeGreaterThanOrEqual(6);
+});
+
+test("the idea in full is in the HTML, closed inside its card, and opens there", async ({ page, request }) => {
+  // Four of these lists are live and found by search today. What each idea said in a paragraph is no longer printed,
+  // and it has not left the page: a closed row inside the card holds it, as the owner's rule for longer words asks.
+  for (const [path, phrase] of [
+    ["/occasions/birthday", "Their age in foil balloons, their name in cut-out letters and ten animals in party hats"],
+    ["/gifts/last-minute", "Five hundred characters is room for one specific memory and one promise."],
+    ["/digital-cards", "Choose this kind when the message is the gift and everything else should stay out of its way."],
+    // Spanish last: a visit to /es leaves the language cookie, and an English address after it is answered in Spanish.
+    ["/es/occasions/christmas", "Va envuelto en papel de periódico y cordel, con su nombre en la etiqueta"],
+  ] as const) {
+    const html = (await (await request.get(path)).text()).replace(/&#x27;|&#39;/g, "'");
+    const rows = [...html.matchAll(/<details data-idea-full[\s\S]*?<\/details>/g)].map((m) => m[0].replace(/<[^>]+>/g, ""));
+    expect(rows.length, path).toBeGreaterThanOrEqual(5);
+    expect(rows.some((row) => row.includes(phrase)), `${path}: “${phrase}”`).toBe(true);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/occasions/birthday");
+  await settle(page);
+  const card = page.locator('[data-cards] [data-card]:has(a[href="/create/party-animals"])');
+  const full = card.locator("details[data-idea-full]");
+  // Closed with the card, closed when the card opens, and open only when asked for.
+  await expect(full.locator("p")).toBeHidden();
+  await card.locator("summary").first().click();
+  await expect(full.locator("summary")).toBeVisible();
+  await expect(full.locator("summary")).toHaveText("The idea in full");
+  await expect(full.locator("p")).toBeHidden();
+  const closed = await measure(page);
+  expect(closed.count).toBeLessThanOrEqual(300);
+  expect(closed.small).toEqual([]);
+  await full.locator("summary").first().click();
+  await expect(full.locator("p")).toBeVisible();
+  await expect(full.locator("p")).toContainText("At the bottom they blow out the candles into the phone.");
+  // By keyboard too: the row is a summary of its own, focused after the card's two links.
+  await full.locator("summary").first().focus();
+  await page.keyboard.press("Enter");
+  await expect(full.locator("p")).toBeHidden();
+});
+
+test("what a card says alone is true: no card but The Letter's says free, and a Letter with a clip in it is not tagged", async ({ page }) => {
+  // Whatever the build's free-note switch says: these are the card's own words.
+  for (const path of ["/occasions/birthday", "/occasions/anniversary", "/occasions/valentines", "/es/occasions/birthday", "/es/occasions/anniversary", "/es/occasions/valentines"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveAttribute("lang", path.startsWith("/es") ? "es" : "en");
+    const sky = page.locator(`[data-cards] [data-card]:has(a[href$="/create/constellations"])`);
+    await expect(sky).toHaveCount(1);
+    // Its label, its title, its line and its idea in full: none says free.
+    expect(((await sky.textContent()) ?? "").toLowerCase(), path).not.toMatch(/\b(free|gratis|gratuita)\b/);
+  }
+  // The video page's Letter needs "Make it special" for its clip, so its card carries no "Free"; the last-minute note is the free one.
+  // (The Spanish pages above left the language cookie: without it gone, these English addresses are answered in Spanish.)
+  await page.context().clearCookies();
+  await page.goto("/gifts/video-message");
+  const withClip = page.locator('[data-cards] [data-card]:has(a[href^="/create/the-letter"])');
+  await expect(withClip.locator("summary").first()).toContainText("The Letter");
+  await expect(withClip.locator("summary").first()).not.toContainText("Free");
+  await page.goto("/gifts/last-minute");
+  await expect(page.locator('[data-cards] [data-card]:has(a[href^="/create/the-letter"]) summary').first()).toContainText("The Letter · Free");
+  await page.goto("/es/gifts/anniversary-website");
+  await expect(page.locator('[data-cards] [data-card]:has(a[href*="/create/the-letter"]) summary').first()).not.toContainText("Gratis");
+});
+
+test("a card opened at the foot of the screen shows what it holds, without a scroll", async ({ page }) => {
+  // The site's scroll-reveal hid anything marked data-reveal until it was well inside the screen, and a card's opened
+  // part carries that mark for its own fade: opened with its title at the bottom edge, it stayed at opacity 0.
+  for (const reduced of [false, true]) {
+    await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/gifts/last-minute");
+    await settle(page);
+    const card = page.locator("[data-cards] [data-card]").first();
+    const summary = card.locator("summary").first();
+    // The card's title ends thirty pixels above the bottom edge.
+    await summary.evaluate((el) => window.scrollBy(0, el.getBoundingClientRect().bottom - (window.innerHeight - 30)));
+    await summary.click();
+    const opened = card.locator("details > div[data-reveal]");
+    expect(await opened.evaluate((el) => el.getBoundingClientRect().top)).toBeGreaterThan(812 - 60);
+    await expect.poll(async () => opened.evaluate((el) => getComputedStyle(el).opacity), { timeout: 3000 }).toBe("1");
+    expect(await opened.evaluate((el) => el.classList.contains("is-in"))).toBe(false);
+    // The same for a question's answer, on these pages and on a gift's own page.
+    const row = page.locator("#kind-questions").locator("xpath=ancestor::section").locator("details").first();
+    await row.locator("summary").first().evaluate((el) => window.scrollBy(0, el.getBoundingClientRect().bottom - (window.innerHeight - 10)));
+    await row.locator("summary").first().click();
+    await expect.poll(async () => row.locator("[data-reveal]").evaluate((el) => getComputedStyle(el).opacity), { timeout: 3000 }).toBe("1");
+  }
+  // And what is not inside a <details> still rises into view as the page is scrolled: the fix is only for what opens.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/games");
+  const below = page.locator("[data-reveal]:not(details *)").last();
+  await expect(below).toHaveCSS("opacity", "0");
+  await below.scrollIntoViewIfNeeded();
+  await expect(below).toHaveCSS("opacity", "1");
+});
+
+test("on a desk the heading stays beside a long list of cards, and a row of cards ends on one line", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/occasions/christmas");
+  await settle(page);
+  const heading = page.locator("#ideas-christmas");
+  const rows = page.locator("#idea-cards-christmas");
+  // Scrolled to the third row of cards: the left column is not empty, the heading is still on the screen, clear of the header.
+  await rows.locator("[data-card]").nth(7).scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollBy(0, 200));
+  await expect(heading).toBeInViewport({ ratio: 1 });
+  const top = await heading.evaluate((el) => el.getBoundingClientRect().top);
+  const header = await page.locator("header").first().evaluate((el) => el.getBoundingClientRect().bottom);
+  expect(top).toBeGreaterThan(header);
+  // It stops with its section: at the questions below, it has scrolled away with the cards.
+  await page.locator("#guide-christmas").scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollBy(0, 300));
+  await expect(heading).not.toBeInViewport();
+  // No flower under the words where the heading now rests, at the top and part-way down.
+  await rows.locator("[data-card]").nth(4).scrollIntoViewIfNeeded();
+  expect((await measure(page)).overlaps).toEqual([]);
+  // Cards in one row are one height closed, whatever the length of their titles (a three-line title beside a one-line one).
+  for (const path of ["/gifts/last-minute", "/occasions/christmas", "/es/occasions/birthday"]) {
+    await page.goto(path);
+    await settle(page);
+    const boxes = await page.locator("[data-cards]").first().locator("[data-card]").evaluateAll((cards) => cards.map((card) => ({ top: Math.round(card.getBoundingClientRect().top), bottom: Math.round(card.getBoundingClientRect().bottom) })));
+    const byRow = new Map<number, number[]>();
+    for (const box of boxes) byRow.set(box.top, [...(byRow.get(box.top) ?? []), box.bottom]);
+    expect(byRow.size, path).toBeGreaterThanOrEqual(3);
+    // Titles of different lengths stand in these rows: the test has something to hold level.
+    expect(new Set(await page.locator("[data-cards]").first().locator("[data-card] h3").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().height)))).size, path).toBeGreaterThanOrEqual(2);
+    for (const [rowTop, bottoms] of byRow) expect(Math.max(...bottoms) - Math.min(...bottoms), `${path}: the row at ${rowTop}`).toBeLessThanOrEqual(1);
+  }
+  // While a card is open the others keep their own heights: the open one grows alone, and its neighbours are not stretched down beside it.
+  const cards = page.locator("[data-cards]").first().locator("[data-card]");
+  const closed = (await cards.nth(1).boundingBox())!.height;
+  await cards.nth(0).locator("summary").first().click();
+  await expect(cards.nth(0).getByTestId("idea-make")).toBeVisible();
+  const open = (await cards.nth(0).boundingBox())!.height;
+  expect(open).toBeGreaterThan(closed + 100);
+  expect((await cards.nth(1).boundingBox())!.height).toBeLessThanOrEqual(closed);
+  await cards.nth(0).locator("summary").first().click();
+  // And the plus of a card that is taller than its own words is still in the card's corner.
+  const gaps = await cards.evaluateAll((els) => els.map((card) => card.getBoundingClientRect().bottom - card.querySelector("summary > svg")!.getBoundingClientRect().bottom));
+  for (const gap of gaps) expect(gap).toBeLessThan(40);
+  // On a tablet the column is one, and nothing sticks.
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await page.goto("/occasions/christmas");
+  expect(await page.locator("#ideas-christmas").evaluate((el) => getComputedStyle(el.closest("div.lg\\:sticky")!).position)).toBe("static");
+});
+
+test("a card's picture is asked for at the size it is drawn, and its links are named by what they say", async ({ page }) => {
+  for (const [width, path] of [[1024, "/occasions/christmas"], [1280, "/gifts/last-minute"], [768, "/digital-cards"], [1440, "/digital-cards"]] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(path);
+    const pictures = await page.locator("[data-cards]").first().locator("[data-card] summary img").evaluateAll((imgs) => imgs.map((img) => ({ drawn: img.getBoundingClientRect().width, sizes: (img as HTMLImageElement).sizes })));
+    expect(pictures.length).toBeGreaterThanOrEqual(5);
+    for (const picture of pictures) {
+      // What `sizes` tells the browser the picture's width is, at this screen: within a third of what is drawn (it said 45vw, twice a card, at 1024px).
+      const slot = picture.sizes.split(",").map((part) => part.trim()).find((part) => { const media = part.match(/^\(min-width: (\d+)px\)/); return !media || width >= Number(media[1]); })!.replace(/^\([^)]*\)\s*/, "");
+      const told = slot.endsWith("vw") ? (parseFloat(slot) / 100) * width : parseFloat(slot);
+      expect(told / picture.drawn, `${path} at ${width}: told ${Math.round(told)}px, drawn ${Math.round(picture.drawn)}px`).toBeLessThan(1.34);
+      expect(told / picture.drawn, `${path} at ${width}: told ${Math.round(told)}px, drawn ${Math.round(picture.drawn)}px`).toBeGreaterThan(0.75);
+    }
+  }
+  // "Watch it" is named by its own words, then the gift: what is on the button is in its name (WCAG 2.5.3).
+  for (const [path, label] of [["/gifts/last-minute", "Watch it"], ["/es/gifts/last-minute", "Verlo"], ["/digital-cards", "Watch it"], ["/es/digital-cards", "Verla"], ["/occasions/apology", "Watch it"]] as const) {
+    // Each address in its own language: a Spanish page leaves a cookie that would answer the next English one in Spanish.
+    await page.context().clearCookies();
+    await page.goto(path);
+    const watches = await page.getByTestId("idea-watch").evaluateAll((links) => links.map((a) => ({ name: a.getAttribute("aria-label") ?? "", text: (a.textContent ?? "").trim() })));
+    expect(watches.length).toBeGreaterThanOrEqual(5);
+    for (const watch of watches) {
+      expect(watch.text, path).toBe(label);
+      expect(watch.name.startsWith(`${label}: `), `${path}: “${watch.name}”`).toBe(true);
+    }
+    // The picture's alt says what the poster shows; the gift's name is the next thing read, and is not said twice.
+    const cards = await page.locator("[data-cards] [data-card]").evaluateAll((els) => els.map((el) => ({ alt: el.querySelector("img")?.getAttribute("alt") ?? "", name: (el.querySelector("summary > span:nth-of-type(2)")?.textContent ?? "").split("·")[0].trim() })));
+    for (const card of cards) {
+      expect(card.alt.length, path).toBeGreaterThan(8);
+      expect(card.alt.startsWith(`${card.name}:`), `${path}: “${card.alt}”`).toBe(false);
+    }
+  }
+});
+
+test("the hero says which gift its button makes, each page opens on a gift of its own, and the heading reads as two phrases", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const covers = new Map<string, string>();
+  for (const path of HERO_PAGES) {
+    await page.goto(path);
+    const cover = (await page.locator("[data-flatlay=hero] [data-cover] img").getAttribute("src")) ?? "";
+    const poster = decodeURIComponent(cover).match(/templates\/([a-z-]+)\//)?.[1] ?? cover;
+    // No two of the seven pages have the same first screen: /digital-cards and the last-minute page both opened on The Letter.
+    expect(covers.has(poster), `${path} opens on the same gift as ${covers.get(poster)}: ${poster}`).toBe(false);
+    covers.set(poster, path);
+    if (path.startsWith("/gifts/")) {
+      const href = (await page.getByTestId("hero-make").getAttribute("href")) ?? "";
+      expect(href, path).toContain(`/create/${poster}?ref=`);
+      await expect(page.getByTestId("hero-make")).toHaveText(/^Make [A-Z]/);
+      // The band over the three how-tos has this page's own heading.
+      await expect(page.locator("#kind-guide")).not.toHaveText("How to make it land");
+    }
+  }
+  expect(covers.get("birthday-cinema")).toBe("/gifts/video-message");
+  await page.goto("/gifts/video-message");
+  await expect(page.locator("[data-cards] [data-card]").first().getByTestId("idea-make")).toHaveAttribute("href", "/create/birthday-cinema?ref=gifts-video-message");
+  // Two blocks to the eye, two phrases to whatever reads the heading's text.
+  await page.goto("/digital-cards");
+  expect(await page.locator("h1").evaluate((el) => el.textContent)).toBe("Digital cards by Tryethos A card that opens on their phone");
+  // The five kinds are headed "The five kinds of card": no card's title says "Cards" again.
+  const titles = await page.locator("[data-kinds] [data-card] h3").allTextContents();
+  expect(titles).toEqual(["Open like a letter", "Built from your photos", "With a game in them", "For a date on the calendar", "For someone far away"]);
+});
+
+// The rule is 300 words a page (DESIGN-LESS-TEXT.md). Under the gallery an occasion page keeps it; with the gallery
+// above it does not (anniversary 1,086, just-because 1,070, birthday 817 at 1440×900, the review of 22 Nov 2026),
+// and the test above measures only what this build laid out. The gallery is the live one, shared with /templates
+// and redrawn to the owner's own mock-up on another branch (growth/home), so whether an occasion page keeps it,
+// and in what shape, is the owner's to decide. Until then this stands here, not passing, so the gap is not hidden.
+test.fixme("an occasion page, its gallery included, is within 300 words", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const path of ["/occasions/birthday", "/occasions/anniversary", "/occasions/christmas", "/occasions/mothers-day"]) {
+    await page.goto(path);
+    await settle(page);
+    expect((await measure(page, "main")).count, path).toBeLessThanOrEqual(300);
+  }
 });
 
 test("the pages are whole, and the same height, when no picture arrives", async ({ page }) => {
@@ -330,8 +564,8 @@ test("WebKit as an iPhone 13: no sideways scroll, one card to a screen, and a ca
     // A finger opens the card that is showing, and its way into the editor is under a thumb.
     await page.goto("/gifts/last-minute", { waitUntil: "load" });
     const card = page.locator("[data-cards] [data-card]").first();
-    await card.locator("summary").scrollIntoViewIfNeeded();
-    await card.locator("summary").tap();
+    await card.locator("summary").first().scrollIntoViewIfNeeded();
+    await card.locator("summary").first().tap();
     await expect(card.locator("[data-line]")).toBeVisible();
     await expect(card.getByTestId("idea-make")).toBeVisible();
     const box = (await card.getByTestId("idea-make").boundingBox())!;

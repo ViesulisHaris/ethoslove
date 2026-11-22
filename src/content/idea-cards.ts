@@ -1,21 +1,31 @@
 import type { Occasion } from "@/config/occasions";
+import { sendsFree } from "@/lib/gift/free-tier";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import type { GiftGuideIdea } from "./gift-guides";
-import { SAMPLE_FIELDS, type ListedOccasion } from "./occasion-ideas";
+import { sampleFieldsOf } from "./occasion-ideas";
 
 /**
  * What an idea's picture card says (components/marketing/spread), drawn from the idea as it is
  * written in full. The owner refused the pages that printed a paragraph for every idea ("it's
  * SOOO MUCH TEXT… no one's reading all that", 21 Nov 2026), so a card is a poster and a title, and
  * opens to one line and a line to borrow in handwriting (DESIGN-LESS-TEXT.md). Nothing here writes
- * a sentence: a card's line is a whole sentence or a whole clause of the idea's own, or the gift's
- * own tagline, so a fact checked against a template stays the fact that was checked.
+ * a sentence: a card's line is the idea's own short line (`brief`), written beside the idea and cut
+ * from it, or a whole sentence or a whole clause of the idea's opening, so a fact checked against a
+ * template stays the fact that was checked.
+ *
+ * A line has a floor as well as a ceiling. The first version fell back on the gift's tagline, and
+ * took any opening sentence however short: a card then opened onto "You're invited.", "Press
+ * power." or "Not “congratulations”.", a slogan or half a thought, and the same tagline stood on
+ * three pages (the review of 22 Nov 2026). So there is no fallback: an idea whose opening is not a
+ * line by itself is given a brief, and the tests fail one that has neither.
  *
  * The limits, held by tests/unit/spread-budget.test.ts in both languages.
  */
 export const CARD_TITLE_WORDS = 9;
 export const CARD_LINE_WORDS = 18;
+/** Under this a line is a fragment: "Press play.", "A jar of folded notes." */
+export const CARD_LINE_MIN_WORDS = 6;
 /** A line of handwriting on a card, as on a gift page's cards. */
 export const HAND_LINE_WORDS = 16;
 
@@ -39,22 +49,25 @@ export function openingLine(body: string, max = CARD_LINE_WORDS): string | null 
   return words(clause) >= 5 && words(clause) <= max && whole(clause) ? `${clause}.` : null;
 }
 
-/** The first sentence of a gift's tagline: what the gift is, in its own words. */
-export function taglineLine(manifest: TemplateManifest, locale: GiftLocale): string {
-  return sentencesOf(manifest.tagline[locale])[0] ?? "";
-}
-
 /** The one line a card of a gift page by kind opens to: the idea's own short line, or its opening sentence. */
 export function kindCardLine(idea: GiftGuideIdea): string {
   return idea.brief ?? openingLine(idea.body) ?? "";
 }
 
+/** The one line a card of an occasion's idea list opens to: the idea's own short line, or its opening where that is one line. */
+export function occasionCardLine(idea: { body: string; brief?: string }): string {
+  return idea.brief ?? openingLine(idea.body) ?? "";
+}
+
 /**
- * The one line a card of an occasion's idea list opens to: the idea's opening where that is one
- * line, and otherwise the gift's own tagline, which says what the card's picture shows.
+ * Whether a card of a gift page by kind says "Free". The tag is about the idea, not the template:
+ * The Letter goes out free as a short note, and an idea that puts a video clip or a long letter in
+ * it does not (lib/gift/publish.ts, premiumExtras). So only an idea whose line to borrow is the
+ * free note itself is tagged. The first version asked the template alone, and the video page's
+ * "A letter with you in it" was tagged free.
  */
-export function occasionCardLine(idea: { body: string }, manifest: TemplateManifest, locale: GiftLocale): string {
-  return openingLine(idea.body) ?? taglineLine(manifest, locale);
+export function kindIdeaIsFree(idea: Pick<GiftGuideIdea, "line">, manifest: Pick<TemplateManifest, "slug" | "tier" | "features">): boolean {
+  return idea.line.field === "freeNote" && sendsFree(manifest);
 }
 
 /**
@@ -80,16 +93,16 @@ export function sampleLines(body: string): string[] {
 
 /**
  * The sample line an occasion idea's card shows in handwriting, and the field of the template it
- * goes in: the first quotation in the idea that content/occasion-ideas.ts (SAMPLE_FIELDS) says is
- * a line for a field, each of which tests/unit/occasion-guides.test.ts has counted against that
- * field's limit. The lists written before that table (birthday, anniversary, Valentine's,
- * Christmas) have no such record, so their cards show none: a quotation there may be a label of
- * the editor or what not to write.
+ * goes in: the quotation in the idea that content/occasion-ideas.ts (SAMPLE_FIELDS) marks with a
+ * "+", or where none is marked the first one it says is a line for a field. Each of them
+ * tests/unit/occasion-guides.test.ts has counted against that field's limit. A quotation the table
+ * marks "-" is never shown: it is a label of the editor, or what not to write.
  */
-export function occasionSample(occasion: Occasion, idea: { template: string; body: string }): { field: string; text: string } | null {
-  if (!Object.hasOwn(SAMPLE_FIELDS, occasion)) return null;
-  const fields = SAMPLE_FIELDS[occasion as ListedOccasion][idea.template] ?? [];
+export function occasionSample(occasion: Occasion, idea: { template: string; body: string }, locale: GiftLocale): { field: string; text: string } | null {
+  const fields = sampleFieldsOf(occasion, idea.template, locale);
+  if (!fields) return null;
   const found = sampleLines(idea.body);
-  const at = fields.findIndex((field) => field !== "-");
-  return at >= 0 && found[at] ? { field: fields[at], text: found[at] } : null;
+  const marked = fields.findIndex((field) => field.startsWith("+"));
+  const at = marked >= 0 ? marked : fields.findIndex((field) => field !== "-");
+  return at >= 0 && found[at] ? { field: fields[at].replace(/^\+/, ""), text: found[at] } : null;
 }

@@ -7,8 +7,8 @@ import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { PRODUCTS, chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
-import { sendsFree } from "@/lib/gift/free-tier";
-import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
+import { NOTE_PHOTOS_MAX, sendsFree } from "@/lib/gift/free-tier";
+import { DIGITAL_CARDS_LEAD, DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { templateGuide } from "@/content/template-guides";
@@ -22,8 +22,18 @@ import { Band, BandWords, ExperienceFlatlay, HowToSend, Intro, templateSamples }
 
 /** What the copy reads from the code: the prices in this page's currency, written the locale's way, the counts, and whether the finder is there to link to. */
 function facts(currency: Currency, locale: string): DigitalCardsFacts {
-  const price = (id: "single" | "pick3" | "everything" | "extras") => formatAmount(PRODUCTS[id].amounts[currency], currency, locale);
-  return { single: price("single"), pick3: price("pick3"), everything: price("everything"), extras: price("extras"), count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
+  const price = (id: "single" | "pick3" | "everything" | "extras" | "photos") => formatAmount(PRODUCTS[id].amounts[currency], currency, locale);
+  return {
+    single: price("single"),
+    pick3: price("pick3"),
+    everything: price("everything"),
+    extras: price("extras"),
+    photos: price("photos"),
+    notePhotos: NOTE_PHOTOS_MAX,
+    count: listManifests().length,
+    ideas: DIGITAL_GIFT_IDEAS.length,
+    finder: finderIsBuilt(),
+  };
 }
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/digital-cards">, "searchParams">): Promise<Metadata> {
@@ -38,7 +48,8 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
  * cards in a row, how one gets made in three pictures, the band that tells it from an e-card and a
  * voucher, three prices, the questions and where to go next. The one page that carries the
  * category line, as the small label of its heading. Everything the first version said in
- * paragraphs is still in the HTML, in closed <details> under the questions.
+ * paragraphs is still in the HTML, in closed <details>: each kind in full inside its card, the rest
+ * under the questions.
  */
 export default async function DigitalCardsPage({ params }: PageProps<"/[currency]/[locale]/digital-cards">) {
   const { currency, locale } = await params;
@@ -52,12 +63,13 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
     return manifest ? [{ ...kind, manifest, also: kind.also.flatMap((slug) => getManifest(slug) ?? []) }] : [];
   });
   // The card in the hero's phone, and in the pictures of how one is made: the first kind's, The Letter.
-  const lead = kinds[0].manifest;
+  const lead = getManifest(DIGITAL_CARDS_LEAD) ?? kinds[0].manifest;
   const samples = await templateSamples(lead.slug, l, templateGuide(lead.slug, l));
   const cards: IdeaCard[] = kinds.map((kind) => ({
     manifest: kind.manifest,
     title: kind.title,
     line: kind.brief,
+    full: kind.body,
     also: kind.also,
     make: `/create/${kind.template}?ref=${DIGITAL_CARDS_REF}`,
     free: sendsFree(kind.manifest),
@@ -79,7 +91,7 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
             itemListElement: kinds.map((kind, i) => ({
               "@type": "ListItem",
               position: i + 1,
-              name: kind.title,
+              name: kind.name,
               url: localizedUrl(locale, `/templates/${kind.template}`),
             })),
           },
@@ -106,7 +118,7 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
             <div className="container-x relative pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-28">
               <Intro id="kinds" label={copy.kinds.label} heading={copy.kinds.heading} />
               <div className="mt-9 lg:mt-12" data-kinds>
-                <IdeaCards id="card-kinds" cards={cards} locale={l} columns={5} labels={{ make: copy.kinds.make, watch: copy.kinds.watch, watchNamed: (name) => t("watchNamed", { name }), free: t("free"), also: copy.kinds.also }} />
+                <IdeaCards id="card-kinds" cards={cards} locale={l} columns={5} labels={{ make: copy.kinds.make, watch: copy.kinds.watch, free: t("free"), also: copy.kinds.also, full: copy.kinds.full }} />
               </div>
             </div>
           </section>

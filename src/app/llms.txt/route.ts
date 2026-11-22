@@ -3,6 +3,8 @@ import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { ABOUT_PATH, aboutCopy } from "@/content/about";
 import { BLOG_POSTS } from "@/content/blog";
+import { DIGITAL_CARDS_PATH, digitalCardsCopy } from "@/content/digital-cards";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { LEGAL_ENTITY } from "@/content/legal";
 import { PT_LETTER_PATH } from "@/content/pt-letter";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
@@ -28,6 +30,8 @@ export function GET() {
   // Who runs the site, in the About page's own words: what an assistant is asked right before someone pays.
   const about = aboutCopy("en", { templates: manifests.length, single: "" });
   const aboutSaid = (id: string, from = 0) => (about.sections.find((section) => section.id === id)?.paragraphs ?? []).slice(from).map((p) => `- ${p}`);
+  // /digital-cards, by its own name, heading and description: none of the three reads a price, so none is given here (prices are in "Pricing" below).
+  const cards = digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: manifests.length, ideas: 0, finder: false });
 
   const lines = [
     ...briefIntro(),
@@ -61,6 +65,11 @@ export function GET() {
     "## Gift ideas by who it's for",
     "",
     ...RECIPIENTS.map((r) => `- [${RECIPIENT_GUIDES[r].en.h1}](${localizedUrl("en", `/gifts/${recipientSlug(r)}`)}): ${RECIPIENT_GUIDES[r].en.description}`),
+    "",
+    "## Gift ideas by kind, and what a digital card is",
+    "",
+    ...GIFT_GUIDE_SLUGS.map((slug) => `- [${GIFT_GUIDES[slug].en.h1}](${localizedUrl("en", `/gifts/${slug}`)}): ${GIFT_GUIDES[slug].en.description}`),
+    `- [${cards.breadcrumb}: ${cards.h1.toLowerCase()}](${localizedUrl("en", DIGITAL_CARDS_PATH)}): ${cards.description}`,
     "",
     "## Blog",
     "",

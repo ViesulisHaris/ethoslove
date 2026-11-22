@@ -15,8 +15,8 @@ import { QuestionRow, fieldLabels } from "@/components/templates/page/sections";
  * An occasion's ideas, as picture cards (docs/marketing/growth-build/DESIGN-LESS-TEXT.md): each a
  * gift's poster and the idea's title, opening to one line and, where the list records which field
  * its samples are for, one of them in handwriting under that field's name. What was a paragraph
- * for every idea is now that one line; content/occasions.ts and content/occasion-ideas.ts still
- * hold each idea in full, and the tests still hold every fact in them to the templates.
+ * for every idea is now that one line, and the paragraph itself is a closed row inside the opened
+ * card: four of these lists are live and found by search today, and their words stay in the HTML.
  */
 export async function OccasionIdeas({ occasion, locale }: { occasion: Occasion; locale: GiftLocale }) {
   const ideas = OCCASION_GUIDES[occasion][locale].ideas;
@@ -26,21 +26,28 @@ export async function OccasionIdeas({ occasion, locale }: { occasion: Occasion; 
   const shared: Record<string, string> = { caption: t("editor.photos.caption"), message: t("editor.fields.message"), freeNote: t("editor.fields.message") };
   const cards: IdeaCard[] = await Promise.all(
     withManifests(ideas.items).map(async (idea) => {
-      const sample = occasionSample(occasion, idea);
+      const sample = occasionSample(occasion, idea, locale);
       const where = sample ? (shared[sample.field] ?? (await fieldLabels(idea.template, locale))[sample.field] ?? t("recipients.borrowLabel")) : "";
       return {
         manifest: idea.manifest,
         title: idea.heading,
-        line: occasionCardLine(idea, idea.manifest, locale),
+        line: occasionCardLine(idea),
         borrow: sample ? { where, text: handLine(sample.text) } : undefined,
+        full: idea.body,
         make: `/create/${idea.template}`,
+        // Every Letter idea of these lists is the free note (tests/unit/occasion-guides.test.ts holds each to saying so).
         free: sendsFree(idea.manifest),
       };
     }),
   );
   return (
     <Spread id={`ideas-${occasion}`} label={t("occasions.ideasLabel")} heading={ideas.title} line={t("occasions.ideasLine")} art={LIST_ART} className="pt-16 pb-6 sm:pt-20 lg:pt-24 lg:pb-10">
-      <IdeaCards id={`idea-cards-${occasion}`} cards={cards} locale={locale} labels={{ make: t("recipients.make"), watch: t("recipients.watch"), watchNamed: (name) => t("recipients.watchNamed", { name }), free: t("recipients.free") }} />
+      <IdeaCards
+        id={`idea-cards-${occasion}`}
+        cards={cards}
+        locale={locale}
+        labels={{ make: t("recipients.make"), watch: t("recipients.watch"), free: t("recipients.free"), full: t("recipients.ideaInFull") }}
+      />
     </Spread>
   );
 }

@@ -4,14 +4,16 @@ import es from "../../messages/es.json";
 import { OCCASIONS } from "@/config/occasions";
 import { SPREAD_PLACEMENTS } from "@/components/marketing/spread/placements";
 import { CLOSED_BLOCK_WORDS } from "@/components/templates/page/lead";
-import { digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
+import { DIGITAL_CARDS_LEAD, digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
-import { CARD_LINE_WORDS, CARD_TITLE_WORDS, HAND_LINE_WORDS, handLine, kindCardLine, occasionCardLine, occasionSample, openingLine, sampleLines, taglineLine } from "@/content/idea-cards";
-import { SAMPLE_FIELDS, type ListedOccasion } from "@/content/occasion-ideas";
+import { CARD_LINE_MIN_WORDS, CARD_LINE_WORDS, CARD_TITLE_WORDS, HAND_LINE_WORDS, handLine, kindCardLine, kindIdeaIsFree, occasionCardLine, occasionSample, openingLine, sampleLines } from "@/content/idea-cards";
+import { sampleFieldsOf } from "@/content/occasion-ideas";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { ART_IDS } from "@/content/page-art";
 import { fieldLimit } from "@/lib/gift/field-limit";
 import { getManifest, listManifests } from "@/templates/manifests";
+import { fieldMeta as councilFields } from "@/templates/the-council/field-meta";
+import { fieldMeta as countdownFields } from "@/templates/midnight-countdown/field-meta";
 
 /**
  * "It's SOOO MUCH TEXT… shorten the text and add more visual things, as no one's reading all that"
@@ -27,8 +29,10 @@ const LOCALES = ["en", "es"] as const;
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 /** A whole statement: it ends where a sentence does. */
 const ends = (s: string) => /[.?!…]["”»)]?$/.test(s.trim());
-/** Every figure a text states. */
-const figures = (s: string) => s.match(/\d[\d.,:]*/g) ?? [];
+/** Every figure a text states: "500", "00:00", "4,000", without the comma or full stop that follows it. */
+const figures = (s: string) => (s.match(/\d[\d.,:]*/g) ?? []).map((figure) => figure.replace(/[.,:]+$/, ""));
+/** Every gift's slogan, in both languages: what a card's line must never be (it says the same on every page the gift is on). */
+const TAGLINES = new Set(listManifests().flatMap((m) => LOCALES.flatMap((l) => [m.tagline[l], ...m.tagline[l].split(/(?<=[.!?])\s+/)])).map((s) => s.trim()));
 
 const HERO_LINE_WORDS = 16;
 const HERO_SENTENCE_WORDS = 30;
@@ -56,9 +60,56 @@ describe("the text budget of the gift pages by kind", () => {
       if (film) expect(GIFT_GUIDES[slug].en.ideas.map((i) => i.template), slug).toContain(film);
       expect(getManifest(film ?? GIFT_GUIDES[slug].en.ideas[0].template)?.thumbnail.webm, `${slug}: the gift in the hero has no film`).toBeTruthy();
     }
-    // No two pages open on the same gift's film.
-    const leads = GIFT_GUIDE_SLUGS.map((slug) => GIFT_GUIDES[slug].en.film ?? GIFT_GUIDES[slug].en.ideas[0].template);
-    expect(new Set(leads).size).toBe(leads.length);
+    // No two pages open on the same gift's film: the six by kind, and /digital-cards, whose first screen is the same hero.
+    const leads = [DIGITAL_CARDS_LEAD, ...GIFT_GUIDE_SLUGS.map((slug) => GIFT_GUIDES[slug].en.film ?? GIFT_GUIDES[slug].en.ideas[0].template)];
+    expect(new Set(leads).size, leads.join(", ")).toBe(leads.length);
+  });
+
+  it("a page whose title promises a kind of gift opens on that gift", () => {
+    // "Video Birthday Cards and Video Gifts": the film in the phone and the first card are the birthday card that takes a video.
+    for (const l of LOCALES) {
+      expect(GIFT_GUIDES["video-message"][l].film).toBe("birthday-cinema");
+      expect(GIFT_GUIDES["video-message"][l].ideas[0].template).toBe("birthday-cinema");
+    }
+    expect(getManifest("birthday-cinema")?.features.video).toBe(true);
+  });
+
+  it("the band over the three how-tos has a heading of the page's own", () => {
+    // "How to make it land" stood over all six, a display heading that said the same of six different sets of advice.
+    for (const l of LOCALES) {
+      const headings = GIFT_GUIDE_SLUGS.map((slug) => GIFT_GUIDES[slug][l].craft);
+      expect(new Set(headings).size, headings.join(" | ")).toBe(headings.length);
+      for (const slug of GIFT_GUIDE_SLUGS) {
+        const guide = GIFT_GUIDES[slug][l];
+        expect(words(guide.craft), `${slug} ${l}: ${guide.craft}`).toBeLessThanOrEqual(6);
+        expect(words(guide.craft), `${slug} ${l}: ${guide.craft}`).toBeGreaterThanOrEqual(3);
+        // It heads the three rows, so it is none of them.
+        expect(guide.sections.map((s) => s.heading), `${slug} ${l}`).not.toContain(guide.craft);
+      }
+      expect(headings).not.toContain(l === "en" ? en.recipients.guideTitle : es.recipients.guideTitle);
+    }
+  });
+
+  it("a card says Free only when the idea itself goes out free: its line to borrow is the free note", () => {
+    // With the note for everyone (the live site), as lib/gift/free-tier.ts decides it.
+    const tagged: string[] = [];
+    for (const slug of GIFT_GUIDE_SLUGS)
+      for (const l of LOCALES)
+        for (const idea of GIFT_GUIDES[slug][l].ideas) {
+          const manifest = getManifest(idea.template)!;
+          const free = kindIdeaIsFree(idea, manifest);
+          if (free) tagged.push(`${slug} ${l} ${idea.template}`);
+          expect(free, `${slug} ${l} ${idea.template}`).toBe(idea.line.field === "freeNote" && manifest.slug === "the-letter");
+          // An idea that puts a clip, a voice or a long letter in a gift is paid, whatever its template.
+          if (free) expect(`${idea.heading} ${idea.brief ?? ""}`, `${slug} ${l}`).not.toMatch(/\b(clip|video|vídeo|voice|voz)\b/i);
+        }
+    // The video page's "A letter with you in it" needs "Make it special" for its clip: it was tagged free.
+    for (const l of LOCALES) {
+      const letter = GIFT_GUIDES["video-message"][l].ideas.find((i) => i.template === "the-letter")!;
+      expect(kindIdeaIsFree(letter, getManifest("the-letter")!), `video-message ${l}`).toBe(false);
+    }
+    // The one free idea there is, in both languages: the five-minute note of the last-minute page.
+    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter"]);
   });
 
   it("an idea is a card: a title of at most nine words, one line, and one line of handwriting", () => {
@@ -71,7 +122,9 @@ describe("the text budget of the gift pages by kind", () => {
           const line = kindCardLine(idea);
           if (!line) over.push(`${at}: no line for its card (its opening sentence is too long: give it a brief)`);
           else if (words(line) > CARD_LINE_WORDS) over.push(`${at} line (${words(line)}): ${line}`);
+          else if (words(line) < CARD_LINE_MIN_WORDS) over.push(`${at}: its card's line is a fragment (${words(line)} words: give it a brief): ${line}`);
           else if (!ends(line)) over.push(`${at}: its card's line is not a whole sentence: ${line}`);
+          if (TAGLINES.has(line)) over.push(`${at}: its card's line is the gift's slogan: ${line}`);
           const hand = handLine(idea.line.text);
           if (words(hand) > HAND_LINE_WORDS) over.push(`${at} handwriting (${words(hand)}): ${hand}`);
           // What is shown of a line to borrow is its own opening, so it fits the field the whole line fits.
@@ -79,6 +132,22 @@ describe("the text budget of the gift pages by kind", () => {
           if (words(idea.line.where) > 9) over.push(`${at} where (${words(idea.line.where)}): ${idea.line.where}`);
         }
     expect(over).toEqual([]);
+  });
+
+  it("names a field as the editor names it, where an occasion's card names the same field", () => {
+    // An occasion's card takes the field's name from the editor ("El cargo", "Titular sobre el reloj"); the pages by
+    // kind typed theirs by hand, and the same field of the same gift had two names on two pages.
+    const named = { "the-council": { field: "charge", meta: councilFields }, "midnight-countdown": { field: "headline", meta: countdownFields } } as const;
+    let checked = 0;
+    for (const slug of GIFT_GUIDE_SLUGS)
+      for (const l of LOCALES)
+        for (const idea of GIFT_GUIDES[slug][l].ideas) {
+          const known = named[idea.template as keyof typeof named];
+          if (!known || idea.line.field !== known.field) continue;
+          expect(idea.line.where, `${slug} ${l} ${idea.template}`).toBe(known.meta[l][known.field].label);
+          checked += 1;
+        }
+    expect(checked).toBeGreaterThanOrEqual(6);
   });
 
   it("a card's own short line states no figure the idea in full does not", () => {
@@ -128,50 +197,65 @@ describe("the text budget of an occasion's idea list", () => {
       for (const l of LOCALES)
         for (const idea of OCCASION_GUIDES[occasion][l].ideas!.items) {
           const at = `${occasion} ${l} ${idea.template}`;
-          const manifest = getManifest(idea.template)!;
           if (words(idea.heading) > CARD_TITLE_WORDS) over.push(`${at} heading (${words(idea.heading)}): ${idea.heading}`);
-          const line = occasionCardLine(idea, manifest, l);
-          if (!line) over.push(`${at}: no line for its card`);
+          const line = occasionCardLine(idea);
+          if (!line) over.push(`${at}: no line for its card (its opening is not one line: give it a brief)`);
           else if (words(line) > CARD_LINE_WORDS) over.push(`${at} line (${words(line)}): ${line}`);
+          else if (words(line) < CARD_LINE_MIN_WORDS) over.push(`${at}: its card's line is a fragment (${words(line)} words: give it a brief): ${line}`);
           else if (!ends(line)) over.push(`${at}: its card's line is not a whole sentence: ${line}`);
         }
     expect(over).toEqual([]);
   });
 
-  it("a card's line is the idea's own opening, or the gift's own tagline", () => {
+  it("a card's line is the idea's own: its opening, or a brief that brings no figure the idea does not state", () => {
     for (const occasion of listed)
       for (const l of LOCALES)
         for (const idea of OCCASION_GUIDES[occasion][l].ideas!.items) {
-          const manifest = getManifest(idea.template)!;
-          const line = occasionCardLine(idea, manifest, l);
-          const own = idea.body.startsWith(line.replace(/\.$/, ""));
-          expect(own || line === taglineLine(manifest, l), `${occasion} ${l} ${idea.template}: ${line}`).toBe(true);
+          const at = `${occasion} ${l} ${idea.template}`;
+          const line = occasionCardLine(idea);
+          if (idea.brief) {
+            expect(line, at).toBe(idea.brief);
+            for (const figure of figures(idea.brief)) expect(idea.body, `${at}: “${figure}” is in the brief and not in the idea`).toContain(figure);
+            expect(idea.brief, at).not.toMatch(/[—!]/);
+          } else expect(idea.body.startsWith(line.replace(/\.$/, "")), `${at}: ${line}`).toBe(true);
         }
   });
 
-  it("every gift's tagline opens on a sentence short enough to be a card's line", () => {
-    const over: string[] = [];
-    for (const manifest of listManifests()) for (const l of LOCALES) if (words(taglineLine(manifest, l)) > CARD_LINE_WORDS || !taglineLine(manifest, l)) over.push(`${manifest.slug} ${l} (${words(taglineLine(manifest, l))}): ${taglineLine(manifest, l)}`);
-    expect(over).toEqual([]);
+  it("no card opens onto a gift's slogan, and no two cards of a page onto the same line", () => {
+    // The first version fell back on the tagline: "You're invited." under a card about hamsters, and "A conversation that
+    // arrives one bubble at a time." on three pages (the review of 22 Nov 2026).
+    const bad: string[] = [];
+    for (const occasion of listed)
+      for (const l of LOCALES) {
+        const lines = OCCASION_GUIDES[occasion][l].ideas!.items.map((idea) => occasionCardLine(idea));
+        for (const [i, line] of lines.entries()) {
+          if (TAGLINES.has(line)) bad.push(`${occasion} ${l}: a slogan: ${line}`);
+          if (lines.indexOf(line) !== i) bad.push(`${occasion} ${l}: twice: ${line}`);
+        }
+      }
+    expect(bad).toEqual([]);
   });
 
-  it("the handwriting on a card is a sample the list records a field for, and fits that field", async () => {
+  // Every template's schema is loaded once here: slow on a busy machine, so it has more than the default five seconds.
+  it("the handwriting on a card is a sample the list records a field for, and fits that field", { timeout: 60_000 }, async () => {
     const over: string[] = [];
-    let shown = 0;
+    const shown: Record<string, number> = {};
     for (const occasion of listed)
       for (const l of LOCALES)
         for (const idea of OCCASION_GUIDES[occasion][l].ideas!.items) {
-          const sample = occasionSample(occasion, idea);
+          const sample = occasionSample(occasion, idea, l);
           const at = `${occasion} ${l} ${idea.template}`;
-          // Only the lists that record their samples' fields show one; the four older lists show none.
-          if (!Object.hasOwn(SAMPLE_FIELDS, occasion)) {
-            expect(sample, at).toBeNull();
+          const fields = sampleFieldsOf(occasion, idea.template, l);
+          expect(fields, `${at}: no row in SAMPLE_FIELDS`).toBeDefined();
+          if (!sample) {
+            // No handwriting only where the idea quotes nothing that goes in a field.
+            expect(fields!.filter((field) => field !== "-"), at).toEqual([]);
             continue;
           }
-          if (!sample) continue;
-          shown += 1;
-          const fields = SAMPLE_FIELDS[occasion as ListedOccasion][idea.template];
-          expect(sample.field, at).toBe(fields.find((field) => field !== "-"));
+          shown[`${occasion} ${l}`] = (shown[`${occasion} ${l}`] ?? 0) + 1;
+          // The one the table marks with "+", or the first that is a line for a field.
+          const marked = fields!.find((field) => field.startsWith("+"));
+          expect(sample.field, at).toBe(marked ? marked.slice(1) : fields!.find((field) => field !== "-"));
           expect(sampleLines(idea.body), at).toContain(sample.text);
           const limit = await fieldLimit(idea.template, sample.field);
           expect(limit, `${at}: ${sample.field} is not a text field`).not.toBeNull();
@@ -180,8 +264,15 @@ describe("the text budget of an occasion's idea list", () => {
           if (words(hand) > HAND_LINE_WORDS) over.push(`${at} handwriting (${words(hand)}): ${hand}`);
         }
     expect(over).toEqual([]);
-    // Most cards of the eight lists have one: the check has something to check.
-    expect(shown).toBeGreaterThan(100);
+    // Every list shows a line to borrow on most of its cards, the four older ones too (Christmas had none).
+    for (const occasion of listed) for (const l of LOCALES) expect(shown[`${occasion} ${l}`] ?? 0, `${occasion} ${l}`).toBeGreaterThanOrEqual(Math.ceil(OCCASION_GUIDES[occasion][l].ideas!.items.length * 0.7));
+  });
+
+  it("the idea in full, kept closed inside its card, is at most 180 words", () => {
+    const over: string[] = [];
+    for (const occasion of listed) for (const l of LOCALES) for (const idea of OCCASION_GUIDES[occasion][l].ideas!.items) if (words(idea.body) > CLOSED_BLOCK_WORDS) over.push(`${occasion} ${l} ${idea.template} (${words(idea.body)})`);
+    for (const slug of GIFT_GUIDE_SLUGS) for (const l of LOCALES) for (const idea of GIFT_GUIDES[slug][l].ideas) if (words(idea.body) > CLOSED_BLOCK_WORDS) over.push(`${slug} ${l} ${idea.template} (${words(idea.body)})`);
+    expect(over).toEqual([]);
   });
 
   it("the guide's rows are closed blocks of at most 180 words", () => {
@@ -199,7 +290,7 @@ describe("the text budget of an occasion's idea list", () => {
 });
 
 describe("the text budget of /digital-cards", () => {
-  const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", count: listManifests().length, ideas: 30, finder: true };
+  const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", photos: "€3.99", notePhotos: 5, count: listManifests().length, ideas: 30, finder: true };
 
   it("keeps the hero, the cards, the band and the prices to a line each", () => {
     const over: string[] = [];
@@ -209,7 +300,11 @@ describe("the text budget of /digital-cards", () => {
       if (words(copy.hero.sentence) > HERO_SENTENCE_WORDS) over.push(`${l} hero.sentence`);
       for (const kind of copy.kinds.items) {
         if (words(kind.title) > CARD_TITLE_WORDS) over.push(`${l} ${kind.template} title`);
-        if (words(kind.brief) > CARD_LINE_WORDS || !ends(kind.brief)) over.push(`${l} ${kind.template} brief (${words(kind.brief)})`);
+        // Under "The five kinds of card" a title says what sets its kind apart; the kind's whole name is kept for a list read without that heading.
+        if (/^(cards|tarjetas)\b/i.test(kind.title)) over.push(`${l} ${kind.template}: its title begins with the heading's own word: ${kind.title}`);
+        if (!/^(cards|tarjetas) /i.test(kind.name) || !kind.name.toLowerCase().endsWith(kind.title.toLowerCase())) over.push(`${l} ${kind.template}: its name is not “Cards” and its title: ${kind.name}`);
+        if (words(kind.brief) > CARD_LINE_WORDS || words(kind.brief) < CARD_LINE_MIN_WORDS || !ends(kind.brief)) over.push(`${l} ${kind.template} brief (${words(kind.brief)})`);
+        if (words(kind.body) > CLOSED_BLOCK_WORDS) over.push(`${l} ${kind.template} body (${words(kind.body)})`);
         // The card's line is cut from the kind in full: no figure of its own, and the same card named.
         for (const figure of figures(kind.brief)) expect(kind.body, `${l} ${kind.template}: “${figure}”`).toContain(figure);
       }
@@ -218,6 +313,16 @@ describe("the text budget of /digital-cards", () => {
       if (words(copy.cost.line) > SECTION_LINE_WORDS) over.push(`${l} cost.line`);
       // Three prices as cards, each a row of the full list, none of them the free one's.
       expect(copy.cost.shown.map((row) => copy.cost.rows[row].price), l).toEqual([facts.single, facts.pick3, facts.everything]);
+      // The full list has every way to pay for a card, the cheapest among them: a note with photos (PRODUCTS.photos).
+      expect(copy.cost.rows.map((row) => row.price), l).toEqual([l === "en" ? "Free" : "Gratis", facts.single, facts.pick3, facts.everything, facts.photos, facts.extras]);
+      expect(copy.cost.rows[4].note, l).toContain(String(facts.notePhotos));
+      // And the answer about free cards prices photos at what photos cost, not at a whole card's price.
+      const free = copy.faq.items.find((item) => /free|gratis/i.test(item.q))!.a;
+      for (const price of [facts.photos, facts.extras, facts.single]) expect(free, l).toContain(price);
+      expect(free.indexOf(facts.photos), l).toBeLessThan(free.indexOf(facts.single));
+      // Midnight Countdown opens at the minute the sender sets, and an e-card is not only a picture.
+      expect(copy.kinds.items[4].body, l).toMatch(l === "en" ? /until the minute you set, in their time zone/ : /hasta el minuto que elijas, en su zona horaria/);
+      expect(copy.band.line, l).toMatch(l === "en" ? /a picture or a clip/ : /una imagen o un clip/);
       for (const row of copy.cost.shown) if (words(copy.cost.rows[row].label) > 4) over.push(`${l} price card: ${copy.cost.rows[row].label}`);
     }
     expect(over).toEqual([]);

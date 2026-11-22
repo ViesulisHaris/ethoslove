@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
@@ -46,7 +46,10 @@ const FINDER_BUILT = existsSync(join(process.cwd(), "src/app/[currency]/[locale]
 
 /** Whether a site path is a page that exists, in this language. */
 function resolves(href: string, locale: "en" | "es"): boolean {
-  const [, section, slug, ...rest] = href.split("/");
+  const [path, anchor] = href.split("#");
+  // The one place on a page a link may point into: the row of pages by person on /gifts, which has that id.
+  if (anchor !== undefined && !(path === "/gifts" && readFileSync(join(process.cwd(), "src/components/marketing/digital-gift-guide.tsx"), "utf8").includes(`id="${anchor}"`))) return false;
+  const [, section, slug, ...rest] = path.split("/");
   if (rest.length > 0) return false;
   if (!slug) return ["gifts", "occasions", "templates", "pricing", DIGITAL_CARDS_PATH.slice(1)].includes(section);
   if (section === "blog") {
@@ -399,7 +402,7 @@ describe("gift pages by kind", () => {
 
 describe("/digital-cards", () => {
   // Markers instead of prices: any price left in the copy would then be one typed by hand.
-  const facts: DigitalCardsFacts = { single: "<single>", pick3: "<pick3>", everything: "<everything>", extras: "<extras>", count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
+  const facts: DigitalCardsFacts = { single: "<single>", pick3: "<pick3>", everything: "<everything>", extras: "<extras>", photos: "<photos>", notePhotos: 5, count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
 
   it("carries the owner's line exactly, once, as its eyebrow", () => {
     expect(digitalCardsCopy("en", facts).eyebrow).toBe("Digital cards by Tryethos");
@@ -422,8 +425,8 @@ describe("/digital-cards", () => {
       const withIt = digitalCardsCopy(locale, { ...facts, finder: true });
       const without = digitalCardsCopy(locale, { ...facts, finder: false });
       // Every card is the hero's own button ("See all 61 cards"), so /templates is not listed a second time at the foot.
-      expect(withIt.onward.links.map((l) => l.href)).toEqual(["/gifts", FINDER_LINK, "/occasions"]);
-      expect(without.onward.links.map((l) => l.href)).toEqual(["/gifts", "/occasions"]);
+      expect(withIt.onward.links.map((l) => l.href)).toEqual(["/gifts", FINDER_LINK, "/occasions", "/gifts#by-person"]);
+      expect(without.onward.links.map((l) => l.href)).toEqual(["/gifts", "/occasions", "/gifts#by-person"]);
       expect(strings(without).join(" ")).not.toMatch(/finder|buscador/i);
     }
   });
@@ -431,7 +434,7 @@ describe("/digital-cards", () => {
   it("reads every price from the code", () => {
     for (const locale of GIFT_LOCALES) {
       const copy = digitalCardsCopy(locale, facts);
-      expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<single>", "<pick3>", "<everything>", "<extras>"]);
+      expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<single>", "<pick3>", "<everything>", "<photos>", "<extras>"]);
       for (const s of strings(copy)) expect(s, s).not.toMatch(TYPED_PRICE);
       expect(strings(copy).join(" ")).toContain(String(facts.count));
     }

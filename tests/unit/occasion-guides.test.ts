@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import { OCCASIONS } from "@/config/occasions";
 import { GIFT_LOCALES } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
-import { OCCASION_IDEAS, SAMPLE_FIELDS, type ListedOccasion } from "@/content/occasion-ideas";
+import { occasionCardLine } from "@/content/idea-cards";
+import { OCCASION_IDEAS, SAMPLE_FIELDS, SAMPLE_FIELDS_ES, sampleFieldsOf, type ListedOccasion, type SampledOccasion } from "@/content/occasion-ideas";
 import { fieldLimit } from "@/lib/gift/field-limit";
+import { sendsFree } from "@/lib/gift/free-tier";
 import { getManifest, listManifests } from "@/templates/manifests";
 
 const words = (s: string) => s.trim().split(/\s+/).length;
@@ -98,14 +100,38 @@ describe("occasion idea lists added in the growth build", () => {
         }
       });
 
-      it(`${occasion} (${locale}) offers only sample lines that fit their fields`, async () => {
-        expect(Object.keys(SAMPLE_FIELDS[occasion]).sort()).toEqual(list.items.map((i) => i.template).sort());
-        for (const idea of list.items) {
-          const fields = SAMPLE_FIELDS[occasion][idea.template];
+    }
+  }
+});
+
+/**
+ * All twelve lists: the eight above and the four written before them (birthday, anniversary,
+ * Valentine's, Christmas, in content/occasions.ts). Since 22 Nov 2026 each idea is a card that opens
+ * to one line and one sample in handwriting, so what a card says alone has to be true alone.
+ */
+describe("every occasion's idea list", () => {
+  const listed = (Object.keys(SAMPLE_FIELDS) as SampledOccasion[]).filter((occasion) => OCCASION_GUIDES[occasion].en.ideas);
+
+  it("is one of the twelve, each with a row for every idea", () => {
+    expect(listed).toHaveLength(12);
+    expect(OCCASIONS.filter((occasion) => OCCASION_GUIDES[occasion].en.ideas).sort()).toEqual([...listed].sort());
+    for (const occasion of listed) expect(Object.keys(SAMPLE_FIELDS[occasion]).sort(), occasion).toEqual(OCCASION_GUIDES[occasion].en.ideas!.items.map((i) => i.template).sort());
+    // A Spanish row of its own only for an idea that list has.
+    for (const [occasion, rows] of Object.entries(SAMPLE_FIELDS_ES)) for (const template of Object.keys(rows)) expect(Object.keys(SAMPLE_FIELDS[occasion as SampledOccasion]), `${occasion} ${template}`).toContain(template);
+  });
+
+  for (const occasion of listed) {
+    for (const locale of GIFT_LOCALES) {
+      it(`${occasion} (${locale}) offers only sample lines that fit their fields`, { timeout: 30_000 }, async () => {
+        for (const idea of OCCASION_GUIDES[occasion][locale].ideas!.items) {
+          const fields = sampleFieldsOf(occasion, idea.template, locale)!;
           const found = samples(idea.body);
           expect(found.length, `${idea.template}: ${found.join(" | ")}`).toBe(fields.length);
-          for (const [i, field] of fields.entries()) {
-            if (field === "-") continue;
+          // At most one sample is marked as the card's.
+          expect(fields.filter((field) => field.startsWith("+")).length, idea.template).toBeLessThanOrEqual(1);
+          for (const [i, marked] of fields.entries()) {
+            if (marked === "-") continue;
+            const field = marked.replace(/^\+/, "");
             const limit = await fieldLimit(idea.template, field);
             expect(limit, `${idea.template}.${field} is not a text field`).not.toBeNull();
             expect(found[i].length, `${idea.template}.${field}: “${found[i]}”`).toBeLessThanOrEqual(limit!);
@@ -115,14 +141,28 @@ describe("occasion idea lists added in the growth build", () => {
     }
   }
 
-  it("calls only The Letter free", () => {
-    for (const occasion of occasions) {
-      for (const locale of GIFT_LOCALES) {
-        for (const idea of OCCASION_IDEAS[occasion][locale].items) {
+  it("calls only The Letter free: in an idea's title, its text and the one line its card opens to", () => {
+    // Constellations was free until 19 Nov 2026 and three of the older lists still said so. On the live site it is
+    // paid (lib/gift/free-tier.ts: the note is for everyone, and a sky needs three photos), and its card showed
+    // no "Free" tag over a line that read "Free, and made for this."
+    for (const occasion of listed)
+      for (const locale of GIFT_LOCALES)
+        for (const idea of OCCASION_GUIDES[occasion][locale].ideas!.items) {
           if (idea.template === "the-letter") continue;
-          expect(`${idea.heading} ${idea.body}`, `${occasion} ${idea.template}`).not.toMatch(/\b(free|gratis)\b/i);
+          // "The date as free text" (The Toast) is about a field, not a price.
+          for (const text of [idea.heading, idea.body, idea.brief ?? "", occasionCardLine(idea)]) expect(text, `${occasion} ${locale} ${idea.template}`).not.toMatch(/\b(free(?! text)|gratis|gratuit[ao]s?)\b/i);
         }
-      }
-    }
+    expect(sendsFree(getManifest("constellations")!, 1), "Constellations has no free version once the note is for everyone").toBe(false);
+  });
+
+  it("a card tagged Free is an idea about the free note, and says so", () => {
+    // An occasion's card is tagged by its template (sendsFree), which is right only while every Letter idea is the free note.
+    for (const occasion of listed)
+      for (const locale of GIFT_LOCALES)
+        for (const idea of OCCASION_GUIDES[occasion][locale].ideas!.items) {
+          if (!sendsFree(getManifest(idea.template)!, 1)) continue;
+          expect(idea.template, `${occasion} ${locale}`).toBe("the-letter");
+          expect(idea.body, `${occasion} ${locale}: its Letter idea does not say it is the free one`).toMatch(/\b(free|gratis|gratuita)\b/i);
+        }
   });
 });

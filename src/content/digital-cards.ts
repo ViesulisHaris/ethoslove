@@ -33,15 +33,18 @@ export function finderIsBuilt(): boolean {
 }
 
 /**
- * What the page needs from the code: prices as the visitor's currency writes them, two counts
- * (`count` is how many templates there are, `ideas` how many ideas /gifts lists), and whether the
- * finder's page exists to be linked to.
+ * What the page needs from the code: prices as the visitor's currency writes them (`photos` is "a
+ * note with your photos", PRODUCTS.photos, and `notePhotos` how many it holds, NOTE_PHOTOS_MAX),
+ * two counts (`count` is how many templates there are, `ideas` how many ideas /gifts lists), and
+ * whether the finder's page exists to be linked to.
  */
-export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; count: number; ideas: number; finder: boolean };
+export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; photos: string; notePhotos: number; count: number; ideas: number; finder: boolean };
 
 export type CardKind = {
-  /** The card's title: nine words at most. */
+  /** The card's title: nine words at most. Under "The five kinds of card" it says only what sets the kind apart. */
   title: string;
+  /** The kind's whole name, for a list read without that heading over it (the page's structured data). */
+  name: string;
   /** The one line the card opens to. */
   brief: string;
   /** The kind in full, with every fact checked against its templates; the card's line is drawn from it. */
@@ -69,13 +72,14 @@ export type DigitalCardsCopy = {
   compare: { heading: string; rows: { term: string; is: string }[]; about: string };
   /** The deeper band: a card is not an e-card and not a voucher, in a heading, one line and three checks. */
   band: { label: string; heading: string; line: string; checks: [string, string, string] };
-  kinds: { label: string; heading: string; lead: string; also: string; watch: string; make: string; items: CardKind[] };
+  /** `full` is the summary of the closed row, inside an opened card, that holds the kind in full. */
+  kinds: { label: string; heading: string; lead: string; also: string; watch: string; make: string; full: string; items: CardKind[] };
   /** `more` is the summary of the closed block that holds the steps in full. */
   steps: { heading: string; more: string; items: { title: string; body: string }[] };
   /** Three prices are shown as cards (`shown`: their rows); every row is in the closed block `includes`. */
   cost: { label: string; heading: string; line: string; lead: string; rows: { label: string; price: string; note: string }[]; shown: [number, number, number]; includes: string; more: string };
   faq: { label: string; heading: string; items: { q: string; a: string }[] };
-  /** Where to go next. Every card is one tap from the hero ("See all 61 cards"), so /templates is not listed again. */
+  /** Where to go next: the gifts, the finder when it is built, the occasions and the pages by person. Every card is one tap from the hero ("See all 61 cards"), so /templates is not listed again. */
   onward: { label: string; heading: string; links: { href: string; label: string }[] };
 };
 
@@ -88,10 +92,13 @@ const KINDS: { template: string; also: string[] }[] = [
   { template: "halfway", also: ["passport", "midnight-countdown"] },
 ];
 
+/** The card that plays in the hero's phone: the first kind's, The Letter. tests/unit/spread-budget.test.ts holds every page's lead to a gift of its own. */
+export const DIGITAL_CARDS_LEAD = KINDS[0].template;
+
 /** Every template the page shows or names, for the tests. */
 export const DIGITAL_CARD_TEMPLATES = KINDS.flatMap((k) => [k.template, ...k.also]);
 
-const kinds = (texts: { title: string; brief: string; body: string }[]): CardKind[] => KINDS.map((k, i) => ({ ...k, ...texts[i] }));
+const kinds = (texts: { title: string; name: string; brief: string; body: string }[]): CardKind[] => KINDS.map((k, i) => ({ ...k, ...texts[i] }));
 
 export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): DigitalCardsCopy {
   if (locale === "es")
@@ -111,8 +118,8 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       band: {
         label: "Qué es",
         heading: "Más que una e-card",
-        line: "Una e-card es una imagen en un email. Esta responde.",
-        checks: ["Se abre en el navegador y hace algo", "La haces tú, para una persona", "No es un vale: no hay saldo que gastar"],
+        line: "Una e-card es una imagen o un clip en un email. Esta responde.",
+        checks: ["Se abre en el navegador: se despliega, se enciende o cuenta atrás", "La haces tú, para una persona", "No es un vale: no hay saldo que gastar"],
       },
       compare: {
         about: "Más sobre las tarjetas digitales",
@@ -130,31 +137,37 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         also: "Del mismo tipo:",
         watch: "Verla",
         make: "Hacer esta",
+        full: "Este tipo, entero",
         items: kinds([
           {
-            title: "Tarjetas que se abren como una carta",
+            title: "Se abren como una carta",
+            name: "Tarjetas que se abren como una carta",
             brief: "Rompen el lacre con un toque y tus palabras se van escribiendo a mano.",
             body: "Un sobre, un sello, papel. Rompen el lacre con un toque y tus palabras se van escribiendo a mano. Elige este tipo cuando el mensaje es el regalo y lo demás no debe estorbar. La que ves es La carta, la única tarjeta con versión gratis: una nota corta de hasta 500 caracteres.",
           },
           {
-            title: "Tarjetas hechas con tus fotos",
+            title: "Hechas con tus fotos",
+            name: "Tarjetas hechas con tus fotos",
             brief: "Álbum de recortes pega hasta doce fotos en una página: polaroids, una tira de fotomatón, un carrete.",
             body: "Estas tarjetas son maneras de colocar tus fotos. Álbum de recortes, la que ves, pega hasta doce en una página como polaroids, una tira de fotomatón y un carrete, con una nota rasgada para una frase a mano. Otras las cuelgan en una galería o las cargan en una cámara de 2006. Cada pie de foto puede tener 140 caracteres.",
           },
           {
-            title: "Tarjetas con un juego dentro",
+            title: "Con un juego dentro",
+            name: "Tarjetas con un juego dentro",
             brief: "En Arcade atrapan corazones que caen, y cada nivel superado descubre una de tus fotos.",
             body: "Hay que hacer algo para llegar a tu mensaje. En Arcade, la que ves, atrapan corazones que caen y cada nivel superado descubre una de tus fotos. Otras esconden la noticia bajo una capa que se rasca, o dentro de una galleta de la fortuna que se parte. Es el tipo para quien se moriría de vergüenza con una página de sentimientos, pero juega con gusto para llegar a ellos.",
           },
           {
-            title: "Tarjetas para una fecha del calendario",
+            title: "Para una fecha del calendario",
+            name: "Tarjetas para una fecha del calendario",
             brief: "Cine de cumpleaños tiene una tarta con velas que se apagan al soplar al móvil.",
             body: "Hechas para un día concreto y para lo que se hace ese día. Cine de cumpleaños, la que ves, tiene una tarta con velas que se apagan al soplar al móvil. Hay un birrete que lanzar en una graduación, una copa con la que brindar en una boda y unas luces que colgar en Navidad. En una tarjeta de pago eliges el minuto en que se abre, en su zona horaria.",
           },
           {
-            title: "Tarjetas para alguien que está lejos",
+            title: "Para alguien que está lejos",
+            name: "Tarjetas para alguien que está lejos",
             brief: "En A medio camino, un avión de papel cruza un mapa desde tu ciudad hasta la suya.",
-            body: "Aquí el tema es la distancia. En A medio camino, la que ves, un avión de papel cruza un mapa desde tu ciudad hasta la suya cuando soplan al móvil, y los kilómetros reales bajan mientras vuela. Pasaporte dibuja la ruta en un globo y sella una página por cada foto. Cuenta atrás de medianoche no se abre hasta que es medianoche allí.",
+            body: "Aquí el tema es la distancia. En A medio camino, la que ves, un avión de papel cruza un mapa desde tu ciudad hasta la suya cuando soplan al móvil, y los kilómetros reales bajan mientras vuela. Pasaporte dibuja la ruta en un globo y sella una página por cada foto. Cuenta atrás de medianoche no se abre hasta el minuto que elijas, en su zona horaria.",
           },
         ]),
       },
@@ -192,7 +205,8 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           { label: "Una tarjeta", price: f.single, note: "Una plantilla, para siempre: haz con ella todas las tarjetas que quieras." },
           { label: "Tres tarjetas", price: f.pick3, note: "Tres plantillas, las que tú elijas." },
           { label: "Todas las tarjetas", price: f.everything, note: "Todas, y las que vayan llegando." },
-          { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: tus fotos, la carta entera, vídeo y voz en La carta." },
+          { label: "La carta, como nota con fotos", price: f.photos, note: `La nota corta, con hasta ${f.notePhotos} fotos tuyas.` },
+          { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." },
         ],
         more: "Ver todos los precios",
       },
@@ -214,7 +228,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           },
           {
             q: "¿Se puede enviar una tarjeta de felicitación digital gratis?",
-            a: `Sí, de un tipo: La carta como nota corta, hasta 500 caracteres con una canción. Las fotos, una carta más larga y las demás tarjetas son un pago único: ${f.single} por una tarjeta, o ${f.extras} por La carta completa.`,
+            a: `Sí, de un tipo: La carta como nota corta, hasta 500 caracteres con una canción. Lo demás es un pago único: ${f.photos} por la misma nota con hasta ${f.notePhotos} fotos, ${f.extras} por La carta completa, con una carta más larga, vídeo y voz, o ${f.single} por cualquier otra tarjeta.`,
           },
           {
             q: "¿Cómo se envía una tarjeta digital?",
@@ -237,6 +251,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           { href: "/gifts", label: "Regalos digitales" },
           ...(f.finder ? [{ href: FINDER_LINK, label: "El buscador de regalos" }] : []),
           { href: "/occasions", label: "Tarjetas por ocasión" },
+          { href: "/gifts#by-person", label: "Regalos según para quién" },
         ],
       },
     };
@@ -257,8 +272,8 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
     band: {
       label: "What it is",
       heading: "More than an ecard",
-      line: "An ecard is a picture in an email. This one answers back.",
-      checks: ["Opens in the browser and does something", "Made by you, for one person", "Not a voucher: no credit to spend in a shop"],
+      line: "An ecard is a picture or a clip by email. This one answers back.",
+      checks: ["Opens in the browser: it unfolds, lights up or counts down", "Made by you, for one person", "Not a voucher: no credit to spend in a shop"],
     },
     compare: {
       about: "More about digital cards",
@@ -276,31 +291,37 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       also: "The same kind:",
       watch: "Watch it",
       make: "Make this one",
+      full: "This kind, in full",
       items: kinds([
         {
-          title: "Cards that open like a letter",
+          title: "Open like a letter",
+          name: "Cards that open like a letter",
           brief: "They break the wax with a tap and your words write themselves out by hand.",
           body: "An envelope, a seal, paper. They break the wax with a tap and your words write themselves out by hand. Choose this kind when the message is the gift and everything else should stay out of its way. The Letter is the one shown, and the only card with a free version: a short note of up to 500 characters.",
         },
         {
-          title: "Cards built from your photos",
+          title: "Built from your photos",
+          name: "Cards built from your photos",
           brief: "Scrapbook tapes up to twelve photos onto a page: polaroids, a photo-booth strip, a roll of film.",
           body: "These cards are layouts for your photos. Scrapbook, shown here, tapes up to twelve onto a page as polaroids, a photo-booth strip and a roll of film, with a torn note for one handwritten line. Others hang them in a gallery or load them onto a camera from 2006. Each caption can be 140 characters.",
         },
         {
-          title: "Cards with a game in them",
+          title: "With a game in them",
+          name: "Cards with a game in them",
           brief: "In Arcade they catch falling hearts, and every level cleared reveals one of your photos.",
           body: "They have to do something to reach your message. In Arcade, shown here, they catch falling hearts and every level cleared reveals one of your photos. Others hide the news under foil to scratch off, or inside a fortune cookie to crack. It is the kind for someone who would squirm at a page of feelings and will happily play to get to them.",
         },
         {
-          title: "Cards for a date on the calendar",
+          title: "For a date on the calendar",
+          name: "Cards for a date on the calendar",
           brief: "Birthday Cinema has a cake whose candles go out when they blow into the phone.",
           body: "Made for one day and for what people do on it. Birthday Cinema, shown here, has a cake whose candles go out when they blow into the phone. There is a cap to throw at a graduation, a glass to clink at a wedding and a string of lights to hang at Christmas. On a paid card you choose the minute it opens, in their time zone.",
         },
         {
-          title: "Cards for someone far away",
+          title: "For someone far away",
+          name: "Cards for someone far away",
           brief: "In Halfway a paper plane crosses a map from your town to theirs.",
-          body: "Here the distance is the subject. In Halfway, shown here, a paper plane crosses a map from your town to theirs when they blow into the phone, and the real kilometres count down as it flies. Passport draws the route on a globe and stamps a page for every photo. Midnight Countdown stays shut until it is midnight where they are.",
+          body: "Here the distance is the subject. In Halfway, shown here, a paper plane crosses a map from your town to theirs when they blow into the phone, and the real kilometres count down as it flies. Passport draws the route on a globe and stamps a page for every photo. Midnight Countdown stays shut until the minute you set, in their time zone.",
         },
       ]),
     },
@@ -338,7 +359,8 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         { label: "One card", price: f.single, note: "One template, for good: make as many cards from it as you like." },
         { label: "Three cards", price: f.pick3, note: "Three templates of your choosing." },
         { label: "Every card", price: f.everything, note: "All of them, and the ones still to come." },
-        { label: "The full Letter", price: f.extras, note: "“Make it special”: your photos, the whole letter, video and voice on The Letter." },
+        { label: "The Letter, as a note with photos", price: f.photos, note: `The short note, with up to ${f.notePhotos} of your photos.` },
+        { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." },
       ],
       more: "See full pricing",
     },
@@ -360,7 +382,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         },
         {
           q: "Can I send a digital greeting card for free?",
-          a: `Yes, one kind: The Letter as a short note, up to 500 characters with a song. Photos, a longer letter and every other card are a one-time payment: ${f.single} for one card, or ${f.extras} for the full Letter.`,
+          a: `Yes, one kind: The Letter as a short note, up to 500 characters with a song. Everything else is paid once: ${f.photos} for the same note with up to ${f.notePhotos} photos, ${f.extras} for the full Letter with a longer letter, video and voice, or ${f.single} for any other card.`,
         },
         {
           q: "How do I send a digital card?",
@@ -383,6 +405,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         { href: "/gifts", label: "Digital gifts" },
         ...(f.finder ? [{ href: FINDER_LINK, label: "The gift finder" }] : []),
         { href: "/occasions", label: "Cards by occasion" },
+        { href: "/gifts#by-person", label: "Gifts by who it is for" },
       ],
     },
   };
