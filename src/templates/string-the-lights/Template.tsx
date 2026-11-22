@@ -464,7 +464,11 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
                 ) : null}
               </figure>
             ) : (
-              <div>
+              // The end holds more than a card does on a small phone (a reaction, a reply, a link or two,
+              // the badge; a surprise, a voice message and a song on top). The card cuts what doesn't
+              // fit, so the end scrolls inside it as a card of words does, its sign going up with it.
+              // Only the end: the surprise's sparks fly past its own box, and a scroller would cut them.
+              <div className={step.kind === "end" ? "max-h-full overflow-y-auto scrollbar-none" : undefined}>
                 {step.kind === "end" ? (
                   <p className="mb-[calc(3*var(--u))] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(5.4*var(--u))" }}>
                     {sign.toLowerCase()}

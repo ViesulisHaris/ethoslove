@@ -481,6 +481,14 @@ function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onM
                       </figcaption>
                     ) : null}
                   </figure>
+                ) : step.kind === "end" ? (
+                  // The end holds more than a page does on a small phone (a reaction, a reply, a link or
+                  // two, the badge; a surprise, a voice message and a song on top). The page cuts what
+                  // doesn't fit, so the end scrolls inside it as a page of words does. Only the end:
+                  // the surprise's sparks fly past its own box, and a scroller would cut them.
+                  <div className="max-h-full overflow-y-auto scrollbar-none">
+                    <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                  </div>
                 ) : (
                   <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
                 )}
