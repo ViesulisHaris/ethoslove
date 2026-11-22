@@ -19,12 +19,14 @@ import { ANCHORS, DOORS, LEAVES, NICHE, SPRITES } from "@/templates/advent-calen
 import { DOOR_COUNT, SWEETS, doorsFor, previewDoors, progressOf, seedOf } from "@/templates/advent-calendar/doors";
 import { demoData } from "@/templates/advent-calendar/demo-data";
 import { fieldMeta } from "@/templates/advent-calendar/field-meta";
-import { LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
+import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
 import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
-import { COPY, NoteCard, Opening, Template, artFor } from "@/templates/advent-calendar/Template";
+import { COPY, NoteCard, Opening, TAG_SMALLEST, Template, artFor } from "@/templates/advent-calendar/Template";
 import { template } from "@/templates/advent-calendar";
+import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
+import { fillerIn } from "./filler";
 
 const SLUG = "advent-calendar";
 const LOCALES = ["en", "es"] as const;
@@ -81,6 +83,20 @@ describe("what is behind the twenty-four doors", () => {
       expect(after.size).toBe(before.size + 1);
       for (const number of before) expect(after.has(number)).toBe(true);
     }
+  });
+
+  it("a note added later takes its place in the order: everyone whose door is above the new one moves up to the next", () => {
+    // Said plainly, because it was once said that a later note "moves nobody". It shuts no door (above); it does move names.
+    let moved = 0;
+    for (let n = 1; n < 24; n++) {
+      const before = noteDoors(seed, n).map((d) => d.number);
+      const after = noteDoors(seed, n + 1).map((d) => d.number);
+      const added = after.find((number) => !before.includes(number))!;
+      // the people before it keep their doors; each one after it has the next chosen door up
+      for (let i = 0; i < n; i++) expect(after[before[i] < added ? i : i + 1], `${n} notes, person ${i}`).toBe(before[i]);
+      if (before.some((number) => number > added)) moved++;
+    }
+    expect(moved).toBeGreaterThan(10);
   });
 
   it("puts a sweet behind every other door, every kind having its turn, never the same behind two doors running", () => {
@@ -203,6 +219,39 @@ describe("the picture the doors are found in", () => {
   });
 });
 
+describe("where the pictures come from", () => {
+  it("the map names the scene it was packed from, and the scene is there", () => {
+    const head = readFileSync("src/templates/advent-calendar/art-map.ts", "utf8").split("\n")[0];
+    const script = /scripts\/art\/holiday\/[a-z_]+\.py/.exec(head)?.[0];
+    expect(script).toBe("scripts/art/holiday/advent.py");
+    expect(existsSync(script!)).toBe(true);
+  });
+
+  it("the numerals' font is in the repo with its licence, and is the first the scene looks for after one named by hand", () => {
+    expect(existsSync("scripts/art/holiday/fonts/LibreBaskerville-Bold.ttf")).toBe(true);
+    expect(readFileSync("scripts/art/holiday/fonts/OFL.txt", "utf8")).toMatch(/SIL OPEN FONT LICENSE Version 1\.1/);
+    const scene = readFileSync("scripts/art/holiday/advent.py", "utf8");
+    const fonts = /^FONTS = \[(.+)\]$/m.exec(scene)?.[1] ?? "";
+    expect(fonts.indexOf("ADVENT_FONT")).toBeGreaterThanOrEqual(0);
+    expect(fonts.indexOf('"fonts", "LibreBaskerville-Bold.ttf"')).toBeGreaterThan(fonts.indexOf("ADVENT_FONT"));
+    expect(fonts.indexOf('"fonts", "LibreBaskerville-Bold.ttf"')).toBeLessThan(fonts.indexOf("georgiab"));
+    expect(fonts).not.toMatch(/Windows\/Fonts\/LibreBaskerville/);
+  });
+
+  it("every look lines its niches with a deep, quiet colour: open, they are most of the house", () => {
+    // The pale look's lining was a bright tomato and turned "white and sage" red (the check of 22 Nov 2026).
+    const scene = readFileSync("scripts/art/holiday/advent.py", "utf8");
+    const linings = [...scene.matchAll(/^    "(\w+)": dict\(.*lining="(#[0-9a-f]{6})"/gm)].map((m) => [m[1], m[2]] as const);
+    expect(linings.map(([look]) => look).sort()).toEqual(Object.keys(LOOKS).sort());
+    for (const [look, hex] of linings) {
+      const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+      const max = Math.max(r, g, b);
+      // value under a half: nothing brighter than the doors' own paint
+      expect(max, `${look} ${hex}`).toBeLessThan(0.5);
+    }
+  });
+});
+
 describe("the door's sound and its swing are one thing", () => {
   it("the hinge is heard inside the swing, and the leaf taps to a stop as the swing ends", () => {
     expect(HATCH.creakAt + HATCH.creak).toBeLessThanOrEqual(HATCH.swing);
@@ -255,17 +304,50 @@ describe("the template's own files", () => {
     // what the description names as sweets are sweets the house holds
     expect(SWEETS).toEqual(expect.arrayContaining(["gingerbread", "cane", "bell"]));
     expect(manifest.features.music && manifest.features.photos.max > 0).toBe(true);
+    // The star window holds the letter and the photos. The song is not in it: it starts at the first tap anywhere (begin() in Template.tsx).
+    expect(manifest.description.en).toMatch(/is yours: your letter and your photos\. Your song starts at the first tap\./);
+    expect(manifest.description.es).toMatch(/es la tuya: tu carta y tus fotos\. Tu canción empieza con el primer toque\./);
+    expect(readFileSync("src/templates/advent-calendar/Template.tsx", "utf8")).toMatch(/const begin = \(\) => \{[^}]*void audio\.start\(\);/);
+    // people sign the card, not the house; a name is written by hand; a tree's ball is not a fortune-teller's
+    expect(manifest.description.es).toContain("firman la tarjeta desde un mismo enlace");
+    expect(manifest.description.es).toContain("su nombre escrito a mano");
+    expect(COPY.es.sweets.bauble).toBe("una bola de Navidad");
+    expect(COPY.en.sweets.starcookie).toBe("a star cookie");
+  });
+
+  it("no line of the held template is filler: its manifest, its own lines and its page's are read here, since the site's copy test cannot see them yet", () => {
+    // tests/unit/site-copy.test.ts reads listManifests(), which does not return a template that is held back.
+    const strings = (value: unknown): string[] => (typeof value === "string" ? [value] : value && typeof value === "object" ? Object.values(value).flatMap(strings) : []);
+    for (const locale of LOCALES) {
+      const lines = [manifest.name[locale], manifest.tagline[locale], manifest.description[locale], ...strings(COPY[locale]), ...strings(PAGE_IDEAS[locale]), PAGE_STEPS.line[locale], ...PAGE_STEPS.steps.map((step) => step[locale]), ...strings(fieldMeta[locale]), demoData[locale].message, ...(demoData[locale].contributions ?? []).map((item) => item.note)];
+      expect(lines.length).toBeGreaterThan(60);
+      for (const line of lines) {
+        expect(fillerIn(line, locale), line).toEqual([]);
+        expect(line, line).not.toMatch(/—| – |perfect for|perfecto para|digital gift card/i);
+        expect(line, line).not.toMatch(/\b(spain|españa|spanish|madrid|barcelona|sevilla|valencia|málaga|bilbao|mallorca|ibiza)\b/i);
+      }
+    }
+  });
+
+  it("stands among the newest gifts in a list, not ahead of every one of them", () => {
+    // 8 was below every other template's: the day the switch went on, a card that needs three other people led every list.
+    expect(manifest.sortOrder).toBe(Math.min(...TEMPLATE_MANIFESTS.map((m) => m.sortOrder)));
+    expect(TEMPLATE_MANIFESTS.filter((m) => m.sortOrder === manifest.sortOrder).length).toBeGreaterThan(5);
   });
 
   for (const locale of LOCALES) {
     const data = demoData[locale];
     const notes = data.contributions ?? [];
 
-    it(`${locale}: eight notes, two with a photo, one of the full 140 and one signed with the full 24`, () => {
+    it(`${locale}: eight notes, two with a photo, one of the full 140, and no name longer than a tag shows whole`, () => {
       expect(notes).toHaveLength(8);
       expect(notes.filter((item) => item.photo)).toHaveLength(2);
       expect(Math.max(...notes.map((item) => Array.from(item.note).length))).toBe(140);
-      expect(Math.max(...notes.map((item) => Array.from(item.name).length))).toBe(24);
+      // The showcase is not where the limits are tried (that is `notes-<n>-long`): a name of the full 24 was 7 px on its tag.
+      const longest = Math.max(...notes.map((item) => Array.from(item.name).length));
+      expect(longest).toBeLessThanOrEqual(12);
+      // and one of them is signed for more than one person, on two lines of a tag
+      expect(longest).toBeGreaterThanOrEqual(9);
       expect(new Set(notes.map((item) => item.key)).size).toBe(8);
     });
 
@@ -305,7 +387,7 @@ describe("the template's own files", () => {
 });
 
 describe("the contract a group template keeps", () => {
-  const card = (note: GiftContribution, locale: "en" | "es" = "en") => renderToStaticMarkup(<NoteCard lookId="evergreen" s={COPY[locale]} note={note} door={6} from={{ x: 0, y: 0 }} seed={1} found={2} total={8} reduce low={false} onClose={() => {}} />);
+  const card = (note: GiftContribution, locale: "en" | "es" = "en") => renderToStaticMarkup(<NoteCard lookId="evergreen" s={COPY[locale]} note={note} door={6} from={{ x: 0, y: 0 }} seed={1} read={2} total={8} reduce low={false} onClose={() => {}} />);
   const still = (data: GiftData<AdventCalendarFields>) => renderToStaticMarkup(<Template data={data} mode="preview" />);
 
   for (const locale of LOCALES) {
@@ -356,10 +438,91 @@ describe("the contract a group template keeps", () => {
     expect(wide).toMatch(/<img [^>]*src="\/demo\/photos\/p4\.webp"[^>]*width="1200"[^>]*height="896"/);
     expect(wide).toMatch(/loading="lazy"/);
     expect(wide).toMatch(/aspect-ratio:1\.33/);
-    // a photo taller or wider than a card can hold keeps a box the card can: never a jump, never off the screen
+    // A photo from a phone held upright is printed whole: the print is the photo's shape, and what bounds it is its height
+    // (a third of the screen), so a tall photo is a narrower print. It used to be cut to 4 by 5 and then to that height.
+    const upright = card({ key: "photo00004", name: "Sam", note: "Look.", photo: { url: "/demo/photos/p3.webp", width: 896, height: 1200 } });
+    expect(upright).toMatch(/aspect-ratio:0\.746/);
+    expect(upright).toMatch(/width:min\(86%, calc\(32cqh \* 0\.7467 \+ 3\.8\*var\(--n\)\)\)/);
+    expect(upright).not.toMatch(/max-height/);
+    const phone = card({ key: "photo00005", name: "Sam", note: "Look.", photo: { url: "/demo/photos/p3.webp", width: 1080, height: 1920 } });
+    expect(phone).toMatch(/aspect-ratio:0\.5625/);
+    // past a phone's own shape either way it keeps a box the card can hold: never a jump, never off the screen
     const tall = card({ key: "photo00002", name: "Sam", note: "Look.", photo: { url: "/demo/photos/p1.webp", width: 400, height: 4000 } });
-    expect(tall).toMatch(/aspect-ratio:0\.8/);
+    expect(tall).toMatch(/aspect-ratio:0\.5625/);
+    const long = card({ key: "photo00006", name: "Sam", note: "Look.", photo: { url: "/demo/photos/p1.webp", width: 4000, height: 400 } });
+    expect(long).toMatch(/aspect-ratio:2[;"]/);
     expect(card({ key: "photo00003", name: "Sam", note: "Look." })).not.toMatch(/<img [^>]*\/demo\//);
+  });
+
+  it("the line under a note in hand counts notes read, this one among them, and says how to put it back", () => {
+    // It said "8 of 8 notes" under the first note anyone read: the number of envelopes in sight, which is nothing about this note.
+    const one = (demoData.en.contributions ?? [])[0];
+    expect(card(one)).toContain(">2 of 8 notes read · tap to put it back</p>");
+    expect(card(one, "es")).toContain(">2 de 8 notas leídas · toca para guardarla</p>");
+    const source = readFileSync("src/templates/advent-calendar/Template.tsx", "utf8");
+    expect(source).toContain("read={readCount + (readKeys.includes(inHand.key) ? 0 : 1)}");
+  });
+
+  it("the small label on a card reads: its ink is 4.5 to 1 on the card's stock", () => {
+    const lum = (hex: string) => {
+      const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    // the stock at its darkest, where the light falls off towards a corner
+    for (const paper of ["#efe9dc", "#e4dccb"]) expect((lum(paper) + 0.05) / (lum(INK.soft) + 0.05), paper).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("a name on a tag is never written smaller than reads, and one too long for two lines ends in an ellipsis", () => {
+    // 2.6 stage units are 10 px on a phone 390 wide. "Auntie Jo" was 9.4 px there and a name of 24 characters 7.4 px on three lines.
+    expect(TAG_SMALLEST * 3.9).toBeGreaterThanOrEqual(10);
+    const one = (demoData.en.contributions ?? [])[0];
+    for (const name of ["Jo", "Gran", "Auntie Jo", "Grandma and Grandpa", "W".repeat(24), "عبد الرحمن بن عبد الله"]) {
+      const html = still({ ...demoData.en, contributions: Array.from({ length: 3 }, (_, i) => ({ ...one, key: `tag${String(i).padStart(7, "0")}`, name })) });
+      const tag = /<span dir="auto" data-tag-name="true" class="([^"]*)" style="([^"]*)"/.exec(html);
+      expect(tag, name).not.toBeNull();
+      const size = Number(/font-size:max\(8\.5px, calc\(([\d.]+)\*var\(--k\)\)\)/.exec(tag![2])?.[1]);
+      expect(size, name).toBeGreaterThanOrEqual(TAG_SMALLEST);
+      expect(tag![1], name).toContain("line-clamp-2");
+      expect(tag![1], name).not.toContain("line-clamp-3");
+    }
+  });
+
+  it("the line at the foot says an envelope can be opened while one is in sight and none has been, and never calls unread notes done", () => {
+    const one = (demoData.en.contributions ?? [])[0];
+    // the still frame of a card with one note: its envelope in sight, nothing read
+    const sealed = still({ ...demoData.en, contributions: [one] });
+    expect(sealed).toContain(">tap an envelope to read it</p>");
+    expect(still({ ...demoData.es, contributions: [one] })).toContain(">toca un sobre para leerlo</p>");
+    // with a note read (the still frame of eight shows one as a tag) the line is not needed any more
+    expect(still(demoData.en)).not.toContain("tap an envelope to read it");
+    expect(still(demoData.en)).toContain(">2 of 8 notes found · 21 doors left</p>");
+    // every door open: what is counted is what has been read
+    for (const locale of LOCALES) {
+      expect(COPY[locale].read).toMatch(locale === "en" ? /^\{read\} of \{total\} notes read$/ : /^\{read\} de \{total\} notas leídas$/);
+      expect(COPY[locale].envelopeHint).toMatch(/envelope|sobre/);
+    }
+    const source = readFileSync("src/templates/advent-calendar/Template.tsx", "utf8");
+    expect(source).toContain("left ? fill(others === 1 ? s.foundOne : s.found, { found, total: others }) : fill(others === 1 ? s.readOne : s.read, { read, total: others })");
+  });
+
+  it("an open door with a sweet behind it stays a button, switched off and named for what it holds", () => {
+    // It became a picture, and the keyboard's focus went with the button that was taken away.
+    const source = readFileSync("src/templates/advent-calendar/Template.tsx", "utf8");
+    expect(source).not.toMatch(/role="img" aria-label=\{fill\(s\.sweetAt/);
+    expect(source).toContain("aria-disabled={sweet || undefined}");
+    expect(source).toContain("if (sweet) return onStray();");
+    for (const locale of LOCALES) {
+      expect(COPY[locale].sweetAt).toMatch(/\{n\}: \{sweet\}$/);
+      expect(COPY[locale].noteAt).toMatch(/\{n\}/);
+    }
+  });
+
+  it("the room cannot be scrolled inside its own box, and the star's ring rests while something is read in front of it", () => {
+    const source = readFileSync("src/templates/advent-calendar/Template.tsx", "utf8");
+    // clip where the browser has it (it makes no scroll container), hidden where it has not
+    expect(source).toContain(".ac-root{overflow:hidden;overflow:clip}");
+    expect(source.match(/className="ac-root /g)).toHaveLength(2);
+    expect(source).toContain('lit && !reduce && !away ? "ac-ring ');
   });
 
   it("the editor's still frame stands as the list changes under it, from none to more than a house holds", () => {
@@ -510,7 +673,42 @@ describe("the words waiting for its page", () => {
       expect(words(step.es)).toBeLessThanOrEqual(5);
     }
     expect(PAGE_STEPS.steps[2].picture).toBe("phone");
-    for (const sample of Object.values(PAGE_STEPS.steps[0].sample)) expect(sample.length).toBeLessThanOrEqual(30);
+    // a step's title is said once, and none is longer than its card shows (the guides' own limits)
+    for (const locale of LOCALES) {
+      expect(new Set(PAGE_STEPS.steps.map((step) => step[locale].toLowerCase())).size).toBe(3);
+      for (const step of PAGE_STEPS.steps) expect(step[locale].length, step[locale]).toBeLessThanOrEqual(28);
+    }
+  });
+
+  it("each note step shows a value of what it is about, short enough for its card, and needs no sample", () => {
+    // The guides' cards show a real value of the field a step quotes (2 to 30 characters), and their test
+    // fails a sample the field does not need. The letter's step has the line the idea cards lend for it.
+    const fits = (line: string) => line.length >= 2 && line.length <= 30;
+    const [letter, sign, send] = PAGE_STEPS.steps;
+    expect(letter).toMatchObject({ picture: "note", quote: "message" });
+    expect(sign).toMatchObject({ picture: "note", quote: "contributions" });
+    expect("sample" in letter || "sample" in sign).toBe(false);
+    for (const locale of LOCALES) {
+      const lent = PAGE_IDEAS[locale].items.find((item) => item.borrow.field === "message" && fits(item.borrow.line));
+      expect(lent?.borrow.line).toBe(locale === "en" ? "We are keeping your chair." : "Te guardamos la silla.");
+      // "Invite people to sign" is not about photos (it showed a polaroid): its card shows the first signer's name
+      const first = (demoData[locale].contributions ?? [])[0].name;
+      expect(fits(first), first).toBe(true);
+    }
+    // the last step sends the card, which is another link than the one people sign at
+    expect(send.en).toBe("Send the card");
+    expect(send.es).toBe("Envía la tarjeta");
+  });
+
+  it("wait here only until the growth build's tables are on this branch: then they are moved", () => {
+    // docs/GROUP.md, "The first template", step 4. Nothing reads page-content.ts; on the day the three tables are in this
+    // tree its rows go into them (behind ADVENT_CALENDAR_LIVE), the file goes, and these checks go with it onto the tables.
+    // (template-guides.ts is on this branch already, in its older shape: the two files that are new on that branch are the sign)
+    const here = ["template-page-themes", "template-steps"].filter((name) => existsSync(`src/content/${name}.ts`));
+    expect(here, "the tables are here now: move PAGE_THEME, PAGE_STEPS and PAGE_IDEAS into them and delete src/templates/advent-calendar/page-content.ts (docs/GROUP.md, the first template, step 4)").toEqual([]);
+    const doc = readFileSync("docs/GROUP.md", "utf8");
+    expect(doc).toMatch(/^4\. Its page's own words\./m);
+    expect(doc).toContain('do the four things listed under "The first template"');
   });
 
   it("six idea cards in each language: a title of six words, one line of sixteen, and a line that fits the field it is for", () => {
@@ -527,6 +725,26 @@ describe("the words waiting for its page", () => {
       }
     }
     expect(PAGE_IDEAS.es.items.map((item) => item.borrow.field)).toEqual(PAGE_IDEAS.en.items.map((item) => item.borrow.field));
+  });
+
+  it("the six cards do not share one sentence: at most two are a pair of clipped ones, and no two open on the same word", () => {
+    // Five of six were "an instruction. A fact.", and three opened on "Each" (the check of 22 Nov 2026).
+    for (const locale of LOCALES) {
+      const hows = PAGE_IDEAS[locale].items.map((item) => item.how);
+      expect(hows.filter((how) => how.split(/[.?] /).length > 1).length, locale).toBeLessThanOrEqual(2);
+      const first = hows.map((how) => how.split(" ")[0].toLowerCase());
+      expect(new Set(first).size, first.join()).toBe(6);
+    }
+  });
+
+  it("says where the countdown is, with photos or without: after the letter, not under it", () => {
+    // _shared/holiday/page.tsx draws the letter, then the photos, then the countdown.
+    const page = readFileSync("src/templates/_shared/holiday/page.tsx", "utf8");
+    expect(page.indexOf("data.photos.length ?")).toBeGreaterThan(page.indexOf('on("letter"'));
+    expect(page.indexOf("data.countdown ?")).toBeGreaterThan(page.indexOf("data.photos.length ?"));
+    expect(PAGE_IDEAS.en.items[5].how).toMatch(/shows after your letter/);
+    expect(PAGE_IDEAS.es.items[5].how).toMatch(/sale después de tu carta/);
+    expect(JSON.stringify(PAGE_IDEAS)).not.toMatch(/under your letter|bajo tu carta/);
   });
 
   it("claims only what the template does", () => {

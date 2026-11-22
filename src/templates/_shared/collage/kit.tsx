@@ -281,7 +281,7 @@ export function Caption({ children, color = "#3A2A2E", size = 3.6, label }: { ch
 /** Opens a photo large over everything; a tap anywhere closes it. */
 export function Lightbox({ photo, onClose, closeLabel }: { photo: GiftPhoto; onClose: () => void; closeLabel: string }) {
   return (
-    <motion.div className="absolute inset-0 z-[60] grid place-items-center bg-black/80 p-[calc(5*var(--k))]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <motion.div data-lightbox="" className="absolute inset-0 z-[60] grid place-items-center bg-black/80 p-[calc(5*var(--k))]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <motion.figure className="m-0 max-h-full bg-[#FFFDF8] p-[calc(2.4*var(--k))] pb-[calc(3*var(--k))] shadow-2xl" initial={{ scale: 0.8, rotate: -4 }} animate={{ scale: 1, rotate: -1.5 }} exit={{ scale: 0.85 }} transition={{ type: "spring", stiffness: 260, damping: 20 }}>
         <img src={photo.url} alt={photo.alt ?? ""} className="block max-h-[68cqh] max-w-full object-contain" />
         {photo.caption ? (

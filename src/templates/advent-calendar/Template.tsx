@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "motion/react";
 import type { GiftContribution } from "@/lib/gift/schema";
 import { isolated } from "@/lib/group/bidi";
 import type { OpeningProps, TemplateProps } from "../types";
@@ -33,21 +33,25 @@ const S = {
     foundOne: "{found} of 1 note found",
     left: "{n} doors left",
     leftOne: "1 door left",
+    read: "{read} of {total} notes read",
+    readOne: "{read} of 1 note read",
+    envelopeHint: "tap an envelope to read it",
     allFound: "every note read · the star is lit",
     allOpen: "every door is open · the star is lit",
     openDoor: "Open door {n}",
     readNote: "Read the note behind door {n}",
     readAgain: "{name}, door {n}",
     sweetAt: "Door {n}: {sweet}",
-    sweets: { gingerbread: "a gingerbread man", starcookie: "a star biscuit", cane: "a candy cane", bauble: "a glass bauble", bell: "a sleigh bell", orange: "a slice of dried orange" } as Record<Sweet, string>,
+    noteAt: "Door {n}: a note",
+    sweets: { gingerbread: "a gingerbread man", starcookie: "a star cookie", cane: "a candy cane", bauble: "a glass bauble", bell: "a sleigh bell", orange: "a slice of dried orange" } as Record<Sweet, string>,
     star: "Open {from}’s letter",
     door: "door {n}",
     putBack: "Put the note back",
     cardHint: "tap to put it back",
-    notesRead: "{found} of {total} notes",
     letterFrom: "a letter from {name}",
     backToDoors: "Back to the doors",
     gallery: "with the letter",
+    photo: "photo",
     house: "An advent house of twenty-four numbered doors",
   },
   es: {
@@ -59,21 +63,25 @@ const S = {
     foundOne: "{found} de 1 nota encontrada",
     left: "quedan {n} puertas",
     leftOne: "queda 1 puerta",
+    read: "{read} de {total} notas leídas",
+    readOne: "{read} de 1 nota leída",
+    envelopeHint: "toca un sobre para leerlo",
     allFound: "todas las notas leídas · la estrella está encendida",
     allOpen: "todas las puertas abiertas · la estrella está encendida",
     openDoor: "Abrir la puerta {n}",
     readNote: "Leer la nota de la puerta {n}",
     readAgain: "{name}, puerta {n}",
     sweetAt: "Puerta {n}: {sweet}",
-    sweets: { gingerbread: "un hombrecito de jengibre", starcookie: "una galleta de estrella", cane: "un bastón de caramelo", bauble: "una bola de cristal", bell: "un cascabel", orange: "una rodaja de naranja seca" } as Record<Sweet, string>,
+    noteAt: "Puerta {n}: una nota",
+    sweets: { gingerbread: "un hombrecito de jengibre", starcookie: "una galleta de estrella", cane: "un bastón de caramelo", bauble: "una bola de Navidad", bell: "un cascabel", orange: "una rodaja de naranja seca" } as Record<Sweet, string>,
     star: "Abrir la carta de {from}",
     door: "puerta {n}",
     putBack: "Volver a guardar la nota",
     cardHint: "toca para guardarla",
-    notesRead: "{found} de {total} notas",
     letterFrom: "una carta de {name}",
     backToDoors: "Volver a las puertas",
     gallery: "con la carta",
+    photo: "foto",
     house: "Una casita de Adviento con veinticuatro puertas numeradas",
   },
 };
@@ -176,7 +184,9 @@ const READING_ORDER = Array.from({ length: DOOR_COUNT }, (_, i) => i + 1).sort((
 
 /** The gable's round window: its middle and how far out its wreath reaches. */
 const STAR = { x: A.starC.x, y: A.starC.y, r: A.starR.x - A.starC.x };
-const STAR_BUTTON: Rect = { x: STAR.x - STAR.r, y: STAR.y - STAR.r, w: STAR.r * 2, h: STAR.r * 2 };
+/** Where a finger opens it: the wreath and a little of the gable round it, which on a phone on its side is what makes it 44 px. */
+const STAR_REACH = 1.1;
+const STAR_BUTTON: Rect = { x: STAR.x - STAR.r * STAR_REACH, y: STAR.y - STAR.r * STAR_REACH, w: STAR.r * 2 * STAR_REACH, h: STAR.r * 2 * STAR_REACH };
 /** What of the other picture the lit window is: the glass and its wreath, and nothing of the doors under it. */
 const STAR_LIT: Rect = { x: STAR.x - STAR.r * 1.22, y: STAR.y - STAR.r * 1.22, w: STAR.r * 2.44, h: STAR.r * 2.44 };
 const STAR_HALO: Rect = { x: STAR.x - STAR.r * 2.6, y: STAR.y - STAR.r * 2.6, w: STAR.r * 5.2, h: STAR.r * 5.2 };
@@ -202,6 +212,18 @@ function tagFace(g: Geometry): CSSProperties {
   return within(g.inside, { x: left, y: g.floor.y + (A.tagTL.y - A.nicheFloor.y) * g.scale, w: right - left, h: (A.tagBR.y - A.tagTL.y) * g.scale });
 }
 
+/**
+ * The line at the foot. The picture ends at the mantel's front edge (171 units down); under it the room is dark.
+ * On most phones that edge is at the foot of the screen and the line is written on the wood. A screen tall enough
+ * to show a band of that dark under the mantel has the line there, a third of the way down what is spare.
+ */
+const MANTEL_EDGE = 171;
+const FOOT_LINES = 8;
+/** How many units tall, for a hundred across, a screen is before the band holds two lines with room round them. */
+const TALL = 2 * (MANTEL_EDGE - 85) + FOOT_LINES + 16;
+const FOOT_ON_WOOD = down(156.6);
+const FOOT_IN_BAND = `calc(${MANTEL_EDGE} * var(--k) + (50cqh - ${MANTEL_EDGE - 85 + FOOT_LINES} * var(--k)) * .35)`;
+
 const SWING_S = HATCH.swing;
 const KEYFRAMES = `
 .ac-leaf{transform-origin:0% 50%;animation:ac-swing ${SWING_S}s cubic-bezier(.42,.08,.3,1) both}
@@ -214,18 +236,28 @@ const KEYFRAMES = `
 @keyframes ac-ring{0%,100%{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.04)}}
 .ac-nudge{animation:ac-nudge .5s ease-out}
 @keyframes ac-nudge{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+.ac-root{overflow:hidden;overflow:clip}
 .ac-door{-webkit-tap-highlight-color:transparent}
-@media (hover:hover){.ac-door[data-shut]:hover{background:rgba(255,240,205,.14)}.ac-star:hover{background:radial-gradient(circle closest-side, rgba(255,226,160,.3) 0%, rgba(255,226,160,0) 100%)}}
+.ac-door[data-sweet]{cursor:default}
+@media (hover:hover){.ac-door[data-shut]:hover{background:rgba(255,240,205,.14)}.ac-door[data-note]:hover{background:radial-gradient(ellipse closest-side, rgba(255,238,196,.3) 0%, rgba(255,238,196,.12) 62%, rgba(255,238,196,0) 100%)}.ac-star:hover{background:radial-gradient(circle closest-side, rgba(255,226,160,.3) 0%, rgba(255,226,160,0) 100%)}}
 .ac-door[data-shut]:active{background:rgba(255,240,205,.24)}
+.ac-door[data-note]:active{background:radial-gradient(ellipse closest-side, rgba(255,238,196,.46) 0%, rgba(255,238,196,.2) 62%, rgba(255,238,196,0) 100%)}
 .ac-star:active{background:radial-gradient(circle closest-side, rgba(255,226,160,.45) 0%, rgba(255,226,160,0) 100%)}
+.ac-foot{top:${FOOT_ON_WOOD}}
+@container (max-aspect-ratio: 100 / ${TALL}){.ac-foot{top:${FOOT_IN_BAND}}}
 @media (prefers-reduced-motion: reduce){.ac-leaf,.ac-settle,.ac-pop,.ac-ring,.ac-nudge{animation:none}.ac-leaf{opacity:0}}
 `;
 
 /** The scene's own unit. A phone held upright fits the house to its width; a low wide screen fits it to its height and moves the words beside it. */
 const UNIT = { "--k": "min(1cqw, calc(100cqh / 162))" } as CSSProperties;
-const UNIT_LOW = { "--k": "calc(100cqh / 136)" } as CSSProperties;
+/**
+ * A phone on its side: the house from the snow on its ridge (31 units down) to the mantel under it (150), and
+ * no more wall or wood than frames it, so that a door is as big as six rows under a gable can be on that screen.
+ */
+const LOW_UNITS = 128;
+const UNIT_LOW = { "--k": `calc(100cqh / ${LOW_UNITS})` } as CSSProperties;
 /** On a low screen the stage is moved up so that the house, not the wall over it, is in the middle. */
-const LOW_SHIFT = -9;
+const LOW_SHIFT = -8.5;
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<AdventCalendarFields>) {
   const reduce = !!useReducedMotion();
@@ -251,6 +283,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [reading, setReading] = useState<{ door: number; from: Pt } | null>(null);
   const [letter, setLetter] = useState(false);
   const [nudge, setNudge] = useState(0);
+  /** The door opened last: what was behind it is said once, for whoever cannot see it. */
+  const [lastOpened, setLastOpened] = useState(0);
   const [run, setRun] = useState(0);
   const { after, clear } = useTimers();
 
@@ -286,6 +320,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     begin();
     const next = [...opened, number];
     setOpened(next);
+    setLastOpened(number);
     if (!reduce) setSwinging((list) => [...list, number]);
     playHatch(mutedRef.current, 0.33);
     buzz(8);
@@ -354,6 +389,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     setSwinging([]);
     setReading(null);
     setLetter(false);
+    setLastOpened(0);
     setRun((r) => r + 1);
   };
 
@@ -366,11 +402,14 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     <div
       ref={root}
       data-advent-root=""
-      className="absolute inset-0 overflow-hidden select-none"
+      className="ac-root absolute inset-0 overflow-hidden select-none"
       style={{ ...COVER_VARS, background: look.floor, color: INK.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}
       onKeyDown={(e) => {
         if (e.key !== "Escape") return;
-        if (inHand) putBack();
+        // a photo of the letter's, open over it, is what Escape closes first: the letter stays where it was being read
+        const photo = root.current?.querySelector<HTMLElement>("[data-lightbox] button");
+        if (photo) photo.click();
+        else if (inHand) putBack();
         else if (letter) setLetter(false);
       }}
     >
@@ -389,6 +428,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         swinging={swinging}
         lit={!preview && lit}
         nudge={nudge}
+        lastOpened={preview ? 0 : lastOpened}
         reduce={reduce}
         low={low}
         wide={size}
@@ -402,7 +442,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       />
       <AnimatePresence>
         {inHand && reading ? (
-          <NoteCard key={`note-${reading.door}`} lookId={f.look} s={s} note={inHand} door={reading.door} from={reading.from} seed={seed} found={opened.filter((n) => doors[n - 1]?.kind === "note").length} total={notes.length} reduce={reduce} low={low} onClose={putBack} />
+          <NoteCard key={`note-${reading.door}`} lookId={f.look} s={s} note={inHand} door={reading.door} from={reading.from} seed={seed} read={readCount + (readKeys.includes(inHand.key) ? 0 : 1)} total={notes.length} reduce={reduce} low={low} onClose={putBack} />
         ) : null}
       </AnimatePresence>
       {letter && !preview ? (
@@ -420,8 +460,8 @@ export function Opening({ fields, recipientName, senderName, locale }: OpeningPr
   const s = S[locale] ?? S.en;
   const doors = useMemo(() => doorsFor(seedOf(recipientName, senderName), 0), [recipientName, senderName]);
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...TILE_VARS, background: look.floor, color: INK.ink } as CSSProperties}>
-      <Scene lookId={f.look} s={s} title={fill(s.title, { name: recipientName })} from={senderName} to={recipientName} notes={[]} doors={doors} opened={[]} readDoors={[]} swinging={[]} lit={false} nudge={0} reduce low={false} inert away={false} onDoor={() => {}} onNote={() => {}} onStar={() => {}} onStray={() => {}} onSwung={() => {}} />
+    <div data-advent-tile="" className="ac-root absolute inset-0 overflow-hidden select-none" style={{ ...TILE_VARS, background: look.floor, color: INK.ink } as CSSProperties}>
+      <Scene lookId={f.look} s={s} title={fill(s.title, { name: recipientName })} from={senderName} to={recipientName} notes={[]} doors={doors} opened={[]} readDoors={[]} swinging={[]} lit={false} nudge={0} lastOpened={0} reduce low={false} inert away={false} onDoor={() => {}} onNote={() => {}} onStar={() => {}} onStray={() => {}} onSwung={() => {}} />
     </div>
   );
 }
@@ -457,6 +497,8 @@ type SceneProps = {
   swinging: readonly number[];
   lit: boolean;
   nudge: number;
+  /** The door opened last, 0 for none: what it held is said once in the foot's line, out of sight. */
+  lastOpened: number;
   reduce: boolean;
   low: boolean;
   wide?: { width: number; height: number; ready: boolean };
@@ -471,7 +513,7 @@ type SceneProps = {
   onSwung: (number: number) => void;
 };
 
-function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, reduce, low, wide, inert = false, away, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
+function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, lastOpened, reduce, low, wide, inert = false, away, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
   const look = LOOKS[lookId];
   const buttons = useRef(new Map<number, HTMLButtonElement>());
   const starButton = useRef<HTMLButtonElement>(null);
@@ -490,7 +532,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   }, [away, inHand]);
 
   // past the picture's own edges, on a screen wider than it, the room goes on as its own reflection
-  const k = wide?.ready ? (low ? wide.height / 136 : Math.min(wide.width / 100, wide.height / 162)) : 0;
+  const k = wide?.ready ? (low ? wide.height / LOW_UNITS : Math.min(wide.width / 100, wide.height / 162)) : 0;
   const beyond = !!wide?.ready && wide.width > PICTURE.w * k + 2;
 
   // found: its door is open and its envelope in sight. Read is another thing, and what lights the star.
@@ -498,16 +540,23 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   const left = DOOR_COUNT - opened.length;
   const others = notes.length;
   const byline = others > 0 ? fill(s.forFromMore, { to: isolated(to), from: isolated(from), n: others }) : fill(s.forFrom, { to: isolated(to), from: isolated(from) });
+  const read = readDoors.length;
+  // Until every door is open the line counts what has been found; after that, what has been read: "8 of 8 notes found" read as done, with eight envelopes unopened.
+  const count = !others ? null : left ? fill(others === 1 ? s.foundOne : s.found, { found, total: others }) : fill(others === 1 ? s.readOne : s.read, { read, total: others });
   const line = !opened.length
     ? s.hint
     : lit
       ? others
         ? s.allFound
         : s.allOpen
-      : [others ? fill(others === 1 ? s.foundOne : s.found, { found, total: others }) : null, left ? fill(left === 1 ? s.leftOne : s.left, { n: left }) : null].filter(Boolean).join(" · ");
+      : [count, left ? fill(left === 1 ? s.leftOne : s.left, { n: left }) : null].filter(Boolean).join(" · ");
+  // An envelope is in sight and none has been opened yet: nothing else on the screen says it can be.
+  const next = !lit && found > 0 && read === 0 ? s.envelopeHint : null;
+  const last = lastOpened ? doors[lastOpened - 1] : undefined;
+  const said = !last ? "" : last.kind === "sweet" ? fill(s.sweetAt, { n: last.number, sweet: s.sweets[last.sweet] }) : fill(s.noteAt, { n: last.number });
   const shadow = "0 0 calc(2.4*var(--k)) rgba(4,8,6,.95), 0 0 calc(.8*var(--k)) rgba(4,8,6,.8)";
   // while a note or the letter is in front, the words over the wall step back: blurred, they were smudges behind its own words
-  const said: CSSProperties = { opacity: away ? 0 : 1, transition: reduce ? undefined : "opacity .3s ease" };
+  const back: CSSProperties = { opacity: away ? 0 : 1, transition: reduce ? undefined : "opacity .3s ease" };
 
   const words = (
     <>
@@ -520,9 +569,19 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
     </>
   );
   const foot = (
-    <p key={nudge} role="status" className={nudge && !reduce ? "ac-nudge" : undefined} style={{ fontFamily: "var(--gift-font-display)", fontStyle: "italic", fontSize: "max(12px, calc(3.5*var(--k)))", lineHeight: 1.2, color: look.labelSoft }}>
-      {line}
-    </p>
+    <div role="status" data-foot="" style={{ fontFamily: "var(--gift-font-display)", fontStyle: "italic", lineHeight: 1.2, color: look.labelSoft }}>
+      {said ? <span className="sr-only">{said}. </span> : null}
+      <div key={nudge} className={nudge && !reduce ? "ac-nudge" : undefined}>
+        <p data-foot-count="" style={{ fontSize: "max(12px, calc(3.5*var(--k)))" }}>
+          {line}
+        </p>
+        {next ? (
+          <p data-foot-hint="" style={{ fontSize: "max(11px, calc(3*var(--k)))", marginTop: "calc(.5*var(--k))", color: look.label }}>
+            {next}
+          </p>
+        ) : null}
+      </div>
+    </div>
   );
 
   return (
@@ -553,7 +612,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
           <Picture lookId={lookId} open box={STAR_LIT} />
         </div>
         <div aria-hidden="true" data-star-lit={lit ? "" : undefined} className="pointer-events-none" style={{ ...laid(STAR_HALO), opacity: lit ? 1 : 0, transition: reduce ? undefined : "opacity 1.6s ease" }}>
-          <span className={lit && !reduce ? "ac-ring absolute inset-0 rounded-full" : "absolute inset-0 rounded-full"} style={{ background: "radial-gradient(circle closest-side, rgba(255,206,120,.34) 0%, rgba(255,190,96,.16) 38%, rgba(255,180,80,0) 100%)", mixBlendMode: "screen" }} />
+          <span className={lit && !reduce && !away ? "ac-ring absolute inset-0 rounded-full" : "absolute inset-0 rounded-full"} style={{ background: "radial-gradient(circle closest-side, rgba(255,206,120,.34) 0%, rgba(255,190,96,.16) 38%, rgba(255,180,80,0) 100%)", mixBlendMode: "screen" }} />
         </div>
 
         {/* what is behind each open door: its lit niche out of the other picture, and whatever stands in it */}
@@ -609,10 +668,10 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
         {/* the words over the wall, on a phone: between the string of lights and the roof, growing upward if the title needs two lines. A low wide screen has them beside the house, on the bare wall this side of the tall candle. */}
         {low ? null : (
           <>
-            <div className="pointer-events-none absolute inset-x-[5%] flex flex-col items-center text-center" style={{ ...said, bottom: down(170 - 30.6), color: look.label, textShadow: shadow }}>
+            <div className="pointer-events-none absolute inset-x-[5%] flex flex-col items-center text-center" style={{ ...back, bottom: down(170 - 30.6), color: look.label, textShadow: shadow }}>
               {words}
             </div>
-            <div className="pointer-events-none absolute inset-x-[4%] text-center" style={{ ...said, top: down(158.2), textShadow: shadow }}>
+            <div className="ac-foot pointer-events-none absolute inset-x-[4%] text-center" style={{ ...back, textShadow: shadow }}>
               {foot}
             </div>
           </>
@@ -628,9 +687,10 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
               if (!g || !door) return null;
               const isOpen = opened.includes(n);
               const note = door.kind === "note" ? notes[door.index] : undefined;
-              // an open door with a sweet behind it is something to look at, not to press
-              if (isOpen && !note) return <span key={n} role="img" aria-label={fill(s.sweetAt, { n, sweet: door.kind === "sweet" ? s.sweets[door.sweet] : "" })} style={laid(g.cell)} />;
-              const label = !isOpen ? fill(s.openDoor, { n }) : readDoors.includes(n) && note ? fill(s.readAgain, { name: isolated(note.name), n }) : fill(s.readNote, { n });
+              // An open door with a sweet behind it is something to look at, not to press. It stays a button all the same, switched off and
+              // named for what it holds: taken away, it took the keyboard's focus with it, and a screen reader's place in the house.
+              const sweet = isOpen && !note;
+              const label = !isOpen ? fill(s.openDoor, { n }) : sweet ? fill(s.sweetAt, { n, sweet: door.kind === "sweet" ? s.sweets[door.sweet] : "" }) : readDoors.includes(n) && note ? fill(s.readAgain, { name: isolated(note.name), n }) : fill(s.readNote, { n });
               return (
                 <button
                   key={n}
@@ -641,9 +701,14 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
                   type="button"
                   data-door={n}
                   data-shut={isOpen ? undefined : ""}
+                  data-note={isOpen && !sweet ? "" : undefined}
+                  data-sweet={sweet ? "" : undefined}
+                  aria-disabled={sweet || undefined}
                   aria-label={label}
                   onClick={(e) => {
                     if (!isOpen) return onDoor(n);
+                    // nothing more to open here: the foot's line answers, as it does a tap on the wall
+                    if (sweet) return onStray();
                     const host = e.currentTarget.closest("[data-advent-root]")?.getBoundingClientRect();
                     const box = e.currentTarget.getBoundingClientRect();
                     onNote(n, host ? { x: box.left + box.width / 2 - (host.left + host.width / 2), y: box.top + box.height / 2 - (host.top + host.height / 2) } : { x: 0, y: 0 });
@@ -658,7 +723,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
       </div>
 
       {low ? (
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex flex-col items-center justify-center gap-[calc(5*var(--k))] pr-[calc(2*var(--k))] pl-[calc(5*var(--k))] text-center" style={{ ...said, width: "calc(50% - 69 * var(--k))", color: look.label, textShadow: shadow }}>
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex flex-col items-center justify-center gap-[calc(5*var(--k))] pr-[calc(2*var(--k))] pl-[calc(5*var(--k))] text-center" style={{ ...back, width: "calc(50% - 69 * var(--k))", color: look.label, textShadow: shadow }}>
           <div className="flex max-w-full flex-col items-center">{words}</div>
           {foot}
         </div>
@@ -667,14 +732,26 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   );
 }
 
-/** The name on the tag a read note leaves in its niche. Someone else's word: plain text, in its own direction, never past the tag. */
+/**
+ * The smallest a name is written on a tag, in stage units: 10 px on a phone 390 wide. Smaller, it was there and could
+ * not be read. Where the whole house is drawn small (a phone on its side) it is never under 8.5 px, which two lines of
+ * still fit the tag's face.
+ */
+export const TAG_SMALLEST = 2.6;
+const TAG_FLOOR_PX = 8.5;
+
+/**
+ * The name on the tag a read note leaves in its niche. Someone else's word: plain text, in its own direction, never past the tag.
+ * A short name is written large. A longer one is written at the smallest size that reads, over two lines, and one too
+ * long for those ends in an ellipsis: the whole name is on the card, and in the name of the door's button.
+ */
 function TagName({ g, name }: { g: Geometry; name: string }) {
   const length = [...name].length;
-  const size = length <= 4 ? 3.9 : length <= 7 ? 3.1 : length <= 12 ? 2.4 : 1.9;
+  const size = length <= 4 ? 3.9 : length <= 7 ? 3.1 : TAG_SMALLEST;
   return (
     <span className="flex items-center justify-center" style={tagFace(g)}>
       {/* room either side inside its own box: a handwriting face's last stroke runs past the letter's width, and a clamped line cuts what runs past */}
-      <span dir="auto" data-tag-name className={`${length > 12 ? "line-clamp-3" : "line-clamp-2"} max-w-full px-[0.22em] py-[0.06em] text-center [overflow-wrap:anywhere]`} style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size}*var(--k))`, lineHeight: 0.98, color: "#4a2418" }}>
+      <span dir="auto" data-tag-name className="line-clamp-2 max-w-full px-[0.22em] py-[0.06em] text-center [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `max(${TAG_FLOOR_PX}px, calc(${size}*var(--k)))`, lineHeight: 0.98, color: "#4a2418" }}>
         {name}
       </span>
     </span>
@@ -686,6 +763,9 @@ function TagName({ g, name }: { g: Geometry; name: string }) {
  * shape: it has nothing on it to pull out of shape. (Cut in nine as a border, its pieces showed their joins.)
  */
 const PRINT: CSSProperties = { backgroundImage: `url(${ART_BASE}print.webp)`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat" };
+/** The shapes a note's photo is printed in, as width over height: past these it is cropped to the nearest. */
+const PHOTO_TALLEST = 9 / 16;
+const PHOTO_WIDEST = 2;
 
 /**
  * A sheet of the gift's card stock, as long as what is written on it: its top, as many lengths of its middle as
@@ -721,14 +801,18 @@ function Sheet({ art, lengths, margin, head, tail, children, style }: { art: She
  * their photo if they added one, their words and their name. The house stays behind it, dimmed.
  * Every word on it is someone else's: plain text, its own direction, wrapped anywhere, never a link.
  */
-export function NoteCard({ lookId, s, note, door, from, seed, found, total, reduce, low, onClose }: { lookId: LookId; s: Copy; note: GiftContribution; door: number; from: Pt; seed: number; found: number; total: number; reduce: boolean; low: boolean; onClose: () => void }) {
+export function NoteCard({ lookId, s, note, door, from, seed, read, total, reduce, low, onClose }: { lookId: LookId; s: Copy; note: GiftContribution; door: number; from: Pt; seed: number; /** How many notes have been read, this one among them. */ read: number; total: number; reduce: boolean; low: boolean; onClose: () => void }) {
   const look = LOOKS[lookId];
   const close = useRef<HTMLButtonElement>(null);
+  // on its way back into its niche it is no longer in the way of a finger: a tap on the next door lands on the door
+  const here = useIsPresent();
   useEffect(() => {
     close.current?.focus({ preventScroll: true });
   }, []);
   const tilt = useMemo(() => (mulberry32(seed + door * 31)() - 0.5) * 3.2, [seed, door]);
-  const shape = note.photo ? Math.min(1.6, Math.max(0.8, note.photo.width / note.photo.height)) : 1;
+  // The print is the photo's own shape, from a phone held upright (9 by 16) to a wide one (2 by 1), so the whole photo is on it.
+  // What bounds it is its height: a tall photo is a narrower print, never a cropped one.
+  const shape = note.photo ? Math.min(PHOTO_WIDEST, Math.max(PHOTO_TALLEST, note.photo.width / note.photo.height)) : 1;
   const long = [...note.note].length > 80;
   const signed = [...note.name].length;
   const id = `ac-note-${door}`;
@@ -738,13 +822,13 @@ export function NoteCard({ lookId, s, note, door, from, seed, found, total, redu
   const width = beside ? "min(78cqw, 138cqh, 640px)" : low ? "min(70cqw, 100cqh, 420px)" : "min(84cqw, 400px)";
   const unit = { "--n": `calc(${width} / ${beside ? 170 : 100})` } as CSSProperties;
   return (
-    <motion.div role="dialog" aria-modal="true" aria-labelledby={`${id}-name`} aria-describedby={`${id}-words`} className="absolute inset-0 z-[20] flex flex-col" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0.15 : 0.3 }}>
+    <motion.div role="dialog" aria-modal="true" aria-labelledby={`${id}-name`} aria-describedby={`${id}-words`} className="absolute inset-0 z-[20] flex flex-col" style={{ pointerEvents: here ? undefined : "none" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0.15 : 0.3 }}>
       <button ref={close} type="button" aria-label={s.putBack} onClick={onClose} className="absolute inset-0 cursor-pointer outline-none" style={{ background: look.veil, backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }} />
       <div className="pointer-events-none relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto scrollbar-none">
         <div className="grid min-h-full place-items-center px-[4cqw]" style={{ paddingBlock: low ? "10px 4px" : "calc(9*var(--u)) calc(2*var(--u))" }}>
           <motion.div
             data-note-card
-            className="pointer-events-auto cursor-pointer"
+            className={here ? "pointer-events-auto cursor-pointer" : "pointer-events-none"}
             style={{ ...unit, width }}
             initial={reduce ? false : { x: from.x, y: from.y, scale: 0.12, rotate: 0 }}
             animate={{ x: 0, y: 0, scale: 1, rotate: tilt }}
@@ -755,9 +839,9 @@ export function NoteCard({ lookId, s, note, door, from, seed, found, total, redu
             <Sheet art={SHEETS.card} lengths={3} margin={beside ? 0.06 : 0.085} head={beside ? 0.07 : 0.095} tail={beside ? 0.065 : 0.085}>
               <div className={beside ? "flex items-center gap-[5%]" : "flex flex-col items-center"} style={{ color: INK.ink }}>
                 {note.photo ? (
-                  <div className="relative shrink-0" style={{ ...PRINT, width: beside ? "42%" : "86%", padding: "calc(1.9*var(--n))", marginBottom: beside ? 0 : "calc(5.4*var(--n))", rotate: `${(-tilt * 0.6).toFixed(2)}deg`, boxShadow: "0 calc(.5*var(--n)) calc(1.1*var(--n)) rgba(60,34,14,.28), 0 calc(1.4*var(--n)) calc(3.6*var(--n)) rgba(60,34,14,.2)" }}>
+                  <div className="relative shrink-0" style={{ ...PRINT, width: `min(${beside ? "42%" : "86%"}, calc(${beside ? "62cqh" : "32cqh"} * ${shape.toFixed(4)} + 3.8*var(--n)))`, padding: "calc(1.9*var(--n))", marginBottom: beside ? 0 : "calc(5.4*var(--n))", rotate: `${(-tilt * 0.6).toFixed(2)}deg`, boxShadow: "0 calc(.5*var(--n)) calc(1.1*var(--n)) rgba(60,34,14,.28), 0 calc(1.4*var(--n)) calc(3.6*var(--n)) rgba(60,34,14,.2)" }}>
                     {/* the box is the photo's own shape before the photo has come, so nothing on the card moves when it does */}
-                    <img src={note.photo.url} alt="" width={note.photo.width} height={note.photo.height} loading="lazy" decoding="async" draggable={false} className="block h-auto w-full object-cover" style={{ aspectRatio: String(shape), maxHeight: beside ? "62cqh" : "32cqh", background: "#e9e1d0" }} />
+                    <img src={note.photo.url} alt="" width={note.photo.width} height={note.photo.height} loading="lazy" decoding="async" draggable={false} className="block h-auto w-full object-cover" style={{ aspectRatio: String(shape), background: "#e9e1d0" }} />
                   </div>
                 ) : null}
                 <div className="flex min-w-0 flex-1 flex-col items-center">
@@ -777,18 +861,18 @@ export function NoteCard({ lookId, s, note, door, from, seed, found, total, redu
         </div>
       </div>
       <p aria-hidden="true" className="pointer-events-none relative shrink-0 px-4 text-center" style={{ paddingBlock: low ? "4px 8px" : "calc(2.4*var(--u)) calc(4.6*var(--u) + env(safe-area-inset-bottom))", fontFamily: "var(--gift-font-display)", fontStyle: "italic", fontSize: "max(12px, calc(3.6*var(--u)))", color: look.labelSoft, textShadow: "0 1px calc(2*var(--u)) rgba(0,0,0,.7)" }}>
-        {total > 0 ? `${fill(s.notesRead, { found, total })} · ${s.cardHint}` : s.cardHint}
+        {total > 0 ? `${fill(total === 1 ? s.readOne : s.read, { read, total })} · ${s.cardHint}` : s.cardHint}
       </p>
     </motion.div>
   );
 }
 
 /** A photo that came with the sender's letter, as a print: the rendered paper round it, the caption in handwriting in its foot. */
-function LetterPrint({ slot, rot }: { slot: PhotoSlot; rot: number }) {
+function LetterPrint({ slot, rot, label }: { slot: PhotoSlot; rot: number; /** What the print is called when it has no words of its own. */ label: string }) {
   const { photo, open } = slot;
   return (
     <figure className="relative m-0" style={{ rotate: `${rot.toFixed(1)}deg` }}>
-      <button type="button" onClick={open} aria-label={photo.alt || photo.caption || "photo"} className="relative block w-full cursor-pointer text-left outline-none focus-visible:ring-4 focus-visible:ring-white/60" style={{ ...PRINT, padding: "calc(1.8*var(--u)) calc(1.8*var(--u)) 0", boxShadow: "0 calc(.5*var(--u)) calc(.8*var(--u)) rgba(0,0,0,.3), calc(1.2*var(--u)) calc(3*var(--u)) calc(6*var(--u)) rgba(0,0,0,.42)" }}>
+      <button type="button" onClick={open} aria-label={photo.alt || photo.caption || label} className="relative block w-full cursor-pointer text-left outline-none focus-visible:ring-4 focus-visible:ring-white/60" style={{ ...PRINT, padding: "calc(1.8*var(--u)) calc(1.8*var(--u)) 0", boxShadow: "0 calc(.5*var(--u)) calc(.8*var(--u)) rgba(0,0,0,.3), calc(1.2*var(--u)) calc(3*var(--u)) calc(6*var(--u)) rgba(0,0,0,.42)" }}>
         <img src={photo.url} alt="" loading="lazy" decoding="async" draggable={false} className="block aspect-square w-full object-cover" style={{ background: "#e9e1d0" }} />
         <span className="flex h-[calc(11*var(--u))] items-center justify-center px-[4%]">
           {photo.caption ? (
@@ -854,7 +938,7 @@ function Letter({ lookId, s, data, seed, mode, still, onBack, onEvent, onReact, 
           block={block}
           eyebrow={fill(s.letterFrom, { name: isolated(data.senderName) })}
           gallery={s.gallery}
-          photo={(slot) => <LetterPrint slot={slot} rot={tilts[slot.index] ?? 0} />}
+          photo={(slot) => <LetterPrint slot={slot} rot={tilts[slot.index] ?? 0} label={s.photo} />}
           onEvent={onEvent}
           onReact={onReact}
           onMakeOne={onMakeOne}

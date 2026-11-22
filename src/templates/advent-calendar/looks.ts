@@ -21,7 +21,7 @@ export const LOOKS: Record<LookId, Look> = {
 };
 
 /** The ink of the card a note is read on, and a quieter one for its small labels. */
-export const INK = { ink: "#3a2416", soft: "#94703c" };
+export const INK = { ink: "#3a2416", soft: "#7c5b2b" };
 
 export const SWATCHES: Record<LookId, LookSwatch> = {
   evergreen: { page: "#16302b", paper: "#1f4a36", accent: "#a8281f" },

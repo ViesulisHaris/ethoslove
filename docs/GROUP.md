@@ -109,9 +109,13 @@ itself.
   sold only as the group product.
 - Which doors hold notes is one seeded shuffle of the numbers from the gift's two names
   (`doors.ts`): the same on the server, in the browser and on replay. The order of
-  `data.contributions` decides who has which of the chosen doors, lowest number first.
+  `data.contributions` decides who has which of the chosen doors, lowest number first. A note added
+  later opens one more door to a note and shuts none, but the chosen numbers are handed out in order
+  each time, so everyone whose door is above the new one moves up to the next chosen door. Whoever
+  gets the card never sees that; the sender does, in the editor's still frame, as notes are approved.
 - The room is two rendered pictures of the same view per look, every door shut and every door open
-  (`scripts/art/holiday/advent.py`, three looks). An open door is the open picture laid over the
+  (`scripts/art/holiday/advent.py`, three looks; the numerals' font is beside it in `fonts/`, so
+  any machine paints the same figures). An open door is the open picture laid over the
   shut one inside that door's opening and its leaf's outline; the swing is the shut picture's own
   door turned in the lens's perspective. What stands in a niche is a sprite placed by its rectangle
   in `art-map.ts`. To change the art: render, then `node scripts/art/holiday/pack.mjs advent-calendar <renders>`.
@@ -130,18 +134,43 @@ slug under `next dev` only: `/demo/advent-calendar`, `/create/advent-calendar` a
 Setting it to `true` puts the template in every list at once, with its page
 (`/templates/advent-calendar`), its entry in `src/content/template-seo.ts` and its date in
 `src/content/page-dates.ts` (set that date to the day itself). `tests/unit/advent-calendar.test.tsx`
-plays both states. Three things do not follow from the switch and are done by hand with it:
+plays both states. Four things do not follow from the switch and are done by hand with it:
 
 1. `tests/unit/group-contract.test.ts` has a test named "no template in the gallery declares it yet:
    nothing is on sale". It is true until that day and fails on it: change it to name the Advent
    Calendar.
 2. `tests/e2e/templates.spec.ts`: move `advent-calendar` from `HELD` into the list. The file's own
    spec, `tests/e2e/advent-calendar.spec.ts`, skips itself under `CI`: take that line out.
-3. Whether it is featured: `NEW_SLUGS` in `src/config/featured.ts` is the owner's call.
+3. Where it stands in a list is the owner's call. Its `sortOrder` is 9, the newest gifts' own, so it
+   stands among them and does not lead every list (a card that needs three other people and costs
+   more than any other gift, ahead of all of them, should be decided, not happen). To put it under
+   "New", add it to `NEW_SLUGS` in `src/config/featured.ts`.
+4. Its page's own words. The growth build's template page (branch `growth/guides`) draws a palette,
+   three steps and six idea cards per gift from three tables, and its tests hold every template in
+   the gallery to a row in each (`tests/unit/template-steps.test.ts` and its neighbours), so with no
+   rows the switch fails them. The rows are written and wait in
+   `src/templates/advent-calendar/page-content.ts`. As soon as that branch and this one are in one
+   tree (before the switch, not with it):
+   - move `PAGE_THEME` into `TEMPLATE_PAGE_THEMES` (`src/content/template-page-themes.ts`),
+     `PAGE_STEPS` into `TEMPLATE_STEPS` (`src/content/template-steps.ts`) and `PAGE_IDEAS` into
+     `TEMPLATE_GUIDES` (`src/content/template-guides.ts`, with `faq: []`), each under
+     `"advent-calendar"` and behind the same `...(ADVENT_CALENDAR_LIVE ? { … } : {})` spread its
+     entry in `src/content/template-seo.ts` has: a row for a template in no list fails "and for
+     nothing else";
+   - teach the steps' cards the one thing they do not know. The second step ("Invite people to
+     sign") quotes `contributions`, which is no field of an ordinary gift: add it to the fields a
+     note step may name for a template with `features.group` (the list `shared` in
+     `tests/unit/template-steps.test.ts`). `stepQuote` already reads it as it stands: the first
+     signer's name, "Mum";
+   - delete `page-content.ts`, and move the checks under "the words waiting for its page" in
+     `tests/unit/advent-calendar.test.tsx` onto the tables. One test there fails from the moment
+     the tables are on the branch until this is done, so it cannot be forgotten.
 
-The words for its page on the growth build's template page (a palette, three steps, six idea
-cards) are written and wait in `src/templates/advent-calendar/page-content.ts`: the three tables
-they go into are on another branch.
+At the integration build, search what is served for the held template (`grep -r "Advent Calendar"
+.next/static .next/server/app | head`). Its manifest and its `import("./advent-calendar")` are held
+back by a constant from another module (`held.ts`), which a bundler may or may not fold away: the
+name, the description and the chunk can be in a production build though nothing links to them, as
+its pictures already are. Decide then whether that matters before the switch.
 
 Its tests:
 
@@ -384,7 +413,7 @@ In this order, each step leaving the site as it was until the last:
    security on, the `contributions` bucket is private, `group_photo_orphans` is executable by
    `service_role` only.
 3. Put the Advent Calendar in the gallery: set `ADVENT_CALENDAR_LIVE` to `true`
-   (`src/templates/held.ts`) and do the three things listed under "The first template". Its `min`
+   (`src/templates/held.ts`) and do the four things listed under "The first template". Its `min`
    is 3, so it cannot be sent while group cards are off (see "Off, a template made for group cards
    is an ordinary template"): this step and step 6 go out in one deploy. Any later template that
    declares `features.group` and keeps the contract above needs no switch of its own.

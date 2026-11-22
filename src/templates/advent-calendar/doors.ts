@@ -32,8 +32,12 @@ export const seedOf = (recipientName: string, senderName: string) => hashString(
  * The doors by number, 1 to 24. `notes` is how many people signed: each gets a door (the first
  * twenty-four, should a card ever hold more), picked by one shuffle of the numbers, so a note added
  * later opens one more door to a note and shuts none. Whoever is first in the list has the
- * lowest of the chosen numbers, and so on up. The sweets go round in a shuffled order of their own,
- * so no kind runs out before the others have had a turn.
+ * lowest of the chosen numbers, and so on up: the chosen numbers are handed out afresh, in order,
+ * each time. So a note added later does move people. Everyone whose door has a higher number than
+ * the new one moves up to the next chosen door, and the sweets after it change places. Whoever gets
+ * the card never sees that (it is sent with its notes in it); the sender does, in the editor's still
+ * frame, as notes are approved. The sweets go round in a shuffled order of their own, so no kind
+ * runs out before the others have had a turn.
  */
 export function doorsFor(seed: number, notes: number): Door[] {
   const count = Math.max(0, Math.min(DOOR_COUNT, Math.floor(notes)));
