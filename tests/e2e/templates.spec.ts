@@ -42,27 +42,35 @@ test.describe("template engine", () => {
 });
 
 test.describe("who a template suits", () => {
-  const suits = (page: import("@playwright/test").Page) => page.locator('ul[aria-labelledby="who-it-suits"]').getByRole("link");
+  // The sentence sits in the page's closed block under the questions ("More about …"), beside the
+  // days it is made for: the redesigned page shows no rows of chips. It is in the server's HTML
+  // whether or not the block is ever opened.
+  const suits = (page: import("@playwright/test").Page) => page.locator("details[data-more-about] [data-suits]").getByRole("link");
 
   test("a couples' template names partners only, each linking to that person's gift ideas", async ({ page }) => {
     await page.goto("/templates/xoxo");
-    await expect(page.getByRole("heading", { level: 2, name: "Who it suits" })).toBeVisible();
-    await expect(suits(page)).toHaveText(["For your boyfriend", "For your girlfriend", "For your husband", "For your wife"]);
+    const block = page.locator("details[data-more-about]");
+    // Closed until asked for: nothing of it is on the page a visitor first sees.
+    await expect(suits(page).first()).toBeHidden();
+    await block.locator("summary").click();
+    await expect(block.locator("[data-suits]")).toHaveText("A gift for your boyfriend, your girlfriend, your husband, your wife.");
+    await expect(suits(page)).toHaveText(["your boyfriend", "your girlfriend", "your husband", "your wife"]);
     expect(await suits(page).evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts/for-boyfriend", "/gifts/for-girlfriend", "/gifts/for-husband", "/gifts/for-wife"]);
     // It sits with the occasions, after them.
-    const perfect = await page.getByRole("heading", { level: 2, name: "Perfect for" }).boundingBox();
-    const who = await page.getByRole("heading", { level: 2, name: "Who it suits" }).boundingBox();
-    expect(who!.y).toBeGreaterThan(perfect!.y);
+    const days = await block.locator('a[href*="/occasions/"]').first().boundingBox();
+    const who = await suits(page).first().boundingBox();
+    expect(who!.y).toBeGreaterThan(days!.y);
   });
 
   test("one for a partner or a parent says so, and one for anyone lists everyone, in the server's HTML", async ({ page, isMobile }) => {
     await page.route("**/*.js", (route) => route.abort());
     await page.goto("/templates/keepsake");
-    await expect(suits(page)).toHaveText(["For your boyfriend", "For your girlfriend", "For your husband", "For your wife", "For your mom", "For your dad"]);
-    // Both rows of chips are a thumb's height.
+    await expect(suits(page)).toHaveText(["your boyfriend", "your girlfriend", "your husband", "your wife", "your mom", "your dad"]);
+    // Each person is a thumb's target once the block is open (a native <details> opens without scripts).
     if (isMobile) {
-      const heights = await page.locator('ul[aria-labelledby="who-it-suits"] a, a[href^="/occasions/"].rounded-full').evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
-      expect(heights.length).toBeGreaterThan(6);
+      await page.locator("details[data-more-about] summary").click();
+      const heights = await suits(page).evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+      expect(heights).toHaveLength(6);
       for (const height of heights) expect(height).toBeGreaterThanOrEqual(43.5);
     }
     // Flowers and a recipe card are kept from nobody.
@@ -73,8 +81,8 @@ test.describe("who a template suits", () => {
     await page.goto("/templates/the-letter");
     await expect(suits(page)).toHaveCount(7);
     await page.goto("/es/templates/front-page");
-    await expect(page.getByRole("heading", { level: 2, name: "A quién le va" })).toBeAttached();
-    await expect(suits(page).last()).toHaveText("Para tu padre");
+    await expect(page.locator("details[data-more-about] [data-suits]")).toContainText("Un regalo para tu novio");
+    await expect(suits(page).last()).toHaveText("tu padre");
     await expect(suits(page).last()).toHaveAttribute("href", "/es/gifts/for-dad");
   });
 });

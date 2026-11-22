@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
 import { ArrowRight, Check, Heart, Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { suitedRecipients } from "@/content/finder";
 import { SAMPLE_PHOTO, artSrcSet, pageArt, slotStyle } from "@/content/page-art";
+import { recipientSlug } from "@/content/recipients";
 import type { BorrowField, TemplateGuideContent } from "@/content/template-guides";
 import type { TemplateSteps } from "@/content/template-steps";
 import type { Flowers } from "@/content/template-page-themes";
@@ -15,6 +16,7 @@ import type { FieldMeta, TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
 import { IdeasDots } from "./ideas-dots";
+import { Intro, SPREAD } from "./spread";
 import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
 import { stepQuote, type QuoteSource } from "./quote";
 import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
@@ -25,23 +27,6 @@ import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
  * something to look at. The colours are the page's (--page-*, globals.css), the flowers the page
  * art's, and every word a template's own or a line of messages/*.json.
  */
-
-/** A section's left column: the label, the heading, at most one line and at most one button. */
-function Intro({ id, label, heading, line, children }: { id?: string; label: string; heading: string; line?: string; children?: ReactNode }) {
-  return (
-    <div className="lg:pt-7">
-      <p className="text-page-label text-page-body">{label}</p>
-      <h2 id={id} className="mt-4 max-w-[22rem] display-lg text-balance text-page-ink">
-        {heading}
-      </h2>
-      {line ? <p className="mt-4 max-w-[21rem] text-[0.9375rem] leading-relaxed text-page-body">{line}</p> : null}
-      {children}
-    </div>
-  );
-}
-
-/** The two-column spread every section below the hero shares. */
-const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20";
 
 /** A photo a picture on the page shows: the gift's own first sample photo, where its demo has one. */
 export type SamplePhoto = { src: string; width: number; height: number };
@@ -428,6 +413,8 @@ export async function Questions({
   // With a guide it holds what to do with each idea, in the cards' order, as many as fit.
   const said = (idea: TemplateGuideContent["ideas"]["items"][number]) => `${idea.heading}. ${idea.how}`;
   const fitted = new Set(guide ? fitSentences(guide.ideas.items.map(said), guide.ideas.items.map((_, i) => i), CLOSED_BLOCK_WORDS - countWords(about)) : []);
+  // The people it suits, from the gift finder's hand-written table (content/finder.ts): each has a page of gift ideas.
+  const suited = suitedRecipients(manifest.slug);
   const row = "flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden";
   const plus = "size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45";
   return (
@@ -489,6 +476,25 @@ export async function Questions({
                 ))}
                 .
               </p>
+              {/*
+               * Who it suits, as the same kind of sentence: a couples' collage names partners only. It was a
+               * row of chips beside the occasions before the page was redesigned; a chip row is not in the
+               * mock-up, and these links are for whoever opens the block and for a search engine.
+               */}
+              {suited.length > 0 ? (
+                <p data-suits className="leading-8">
+                  {g("suitsLead")}{" "}
+                  {suited.map((r, i) => (
+                    <span key={r}>
+                      {i > 0 ? ", " : null}
+                      <Link href={`/gifts/${recipientSlug(r)}`} className="py-[0.8125rem] text-page-ink underline decoration-page-line underline-offset-4 hover:decoration-page-ink">
+                        {g(`suitsWho.${r}`)}
+                      </Link>
+                    </span>
+                  ))}
+                  .
+                </p>
+              ) : null}
             </div>
           </details>
         </div>
@@ -525,6 +531,23 @@ export function moreGifts(manifest: TemplateManifest, count = 4): { gifts: Templ
   return { gifts, full };
 }
 
+/**
+ * A gift as a picture: its poster cropped tall with rounded corners, its name under it, the whole
+ * of it a link to the gift's page. The card of "More like this", and of any other row of gifts on
+ * the pages built from this one (the Christmas rows on /gifts/for-boyfriend and for-girlfriend).
+ */
+export function GiftPosterLink({ manifest: m, locale, sizes = "(min-width: 1280px) 190px, (min-width: 640px) 22vw, 45vw" }: { manifest: TemplateManifest; locale: GiftLocale; sizes?: string }) {
+  return (
+    <Link href={`/templates/${m.slug}`} className="group block rounded-[1.25rem]">
+      <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift">
+        {/* The tagline says what the poster shows; Bing flags an empty alt on a linked picture. */}
+        <Image src={m.thumbnail.poster} alt={m.tagline[locale]} fill sizes={sizes} className="object-cover object-[50%_32%]" />
+      </span>
+      <span className="mt-3.5 block font-display text-xl leading-tight text-page-ink">{m.name[locale]}</span>
+    </Link>
+  );
+}
+
 /** (6) More like this: four tall poster cards with the gifts' names, made for the same day. */
 export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
@@ -542,13 +565,7 @@ export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: Te
           <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:gap-x-6">
             {more.map((m) => (
               <li key={m.slug}>
-                <Link href={`/templates/${m.slug}`} className="group block rounded-[1.25rem]">
-                  <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift">
-                    {/* The tagline says what the poster shows; Bing flags an empty alt on a linked picture. */}
-                    <Image src={m.thumbnail.poster} alt={m.tagline[locale]} fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 22vw, 45vw" className="object-cover object-[50%_32%]" />
-                  </span>
-                  <span className="mt-3.5 block font-display text-xl leading-tight text-page-ink">{m.name[locale]}</span>
-                </Link>
+                <GiftPosterLink manifest={m} locale={locale} />
               </li>
             ))}
           </ul>
