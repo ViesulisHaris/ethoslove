@@ -1,4 +1,4 @@
-import type { GiftData, GiftLocale, GiftPhoto } from "@/lib/gift/schema";
+import { CONTRIBUTION_LIMITS, type GiftContribution, type GiftData, type GiftLocale, type GiftPhoto } from "@/lib/gift/schema";
 import { describeObjectSchema, type FieldDescriptor } from "@/lib/editor/zod-describe";
 import type { TemplateModule } from "../../types";
 import { loadTemplate } from "../../registry";
@@ -19,6 +19,14 @@ import { DEMO_PHOTOS } from "../demo-photos";
  *   lists, blank texts, an option that no longer exists.
  * - `options-<k>`: every choice field on its k-th option, so each option is seen once.
  * - `look-<k>`: the gift in its k-th look (looks have their own editor, so `options` skips them).
+ *
+ * A template made for group cards (`features.group`) also has its notes varied: `min` holds the
+ * fewest it can be sent with, short and without photos; `max` the most, every name and note at its
+ * limit, every one with a photo where the template takes them; and three cases of its own,
+ * `notes-<n>` (n of the demo's notes, as they are), `notes-<n>-long` (n at the limits, with photos
+ * of every shape, a word too long for any line, and a name and a note written right to left) and
+ * `notes-<n>-plain` (n with no photo at all). `-look-<k>` on the end of any of the three plays it
+ * in the template's k-th look.
  */
 export type EdgeCase = { data: GiftData; options: number };
 
@@ -36,6 +44,35 @@ function photosOf(demo: GiftData, count: number, captions: boolean): GiftPhoto[]
   return Array.from({ length: count }, (_, i) => {
     const base = source[i % source.length];
     return { ...base, id: `${base.id}-${i}`, caption: captions ? fill(140, `Photo ${i + 1}: the day we said yes to everything. `) : undefined };
+  });
+}
+
+type NoteKind = "demo" | "long" | "plain";
+
+/**
+ * `count` notes for a group template, made from its demo's own. A key is ten characters, as the
+ * server makes them. The long ones are what a real card can hold at its worst: a name of the full
+ * 24 characters with no space in it, a note at the template's limit that opens on a word longer
+ * than a line, and every fifth one in Arabic, which starts from the right.
+ */
+function notesOf(mod: TemplateModule, demo: GiftData, count: number, kind: NoteKind): GiftContribution[] {
+  const group = mod.manifest.features.group;
+  if (!group) return [];
+  const source = demo.contributions?.length ? demo.contributions : [{ key: "e2e0000000", name: "Sam", note: "Happy Christmas." }];
+  return Array.from({ length: count }, (_, i): GiftContribution => {
+    const base = source[i % source.length];
+    const key = `e2e${String(i).padStart(7, "0")}`;
+    if (kind === "demo") return { ...base, key };
+    if (kind === "plain") return { key, name: base.name, note: base.note };
+    const shot = pool[i % pool.length];
+    const photo = group.photos ? { url: shot.url, width: shot.width ?? 1024, height: shot.height ?? 1024 } : undefined;
+    if (i % 5 === 3) return { key, name: "عبد الرحمن الفلاني", note: "كل عام وأنتِ بخير. البيت ليس كما كان منذ سافرتِ، والكرسي في مكانه ينتظرك.", photo };
+    return {
+      key,
+      name: fill(CONTRIBUTION_LIMITS.name, "Wolfeschlegelsteinhausen "),
+      note: fill(group.noteMax, `${i + 1}. Donaudampfschifffahrtsgesellschaftskapitänsmütze, and then every single thing I never got round to saying while you were here. `),
+      photo,
+    };
   });
 }
 
@@ -69,6 +106,18 @@ export function edgeCase(mod: TemplateModule, locale: GiftLocale, name: string):
   const fields = (demo.fields ?? {}) as Record<string, unknown>;
   const { min, max } = mod.manifest.features.photos;
   const features = mod.manifest.features;
+  const group = features.group;
+
+  // A group template's own cases: how many notes, of which kind, and optionally in which look.
+  const n = /^notes-(\d+)(?:-(long|plain))?(?:-look-(\d+))?$/.exec(name);
+  if (n) {
+    if (!group) return null;
+    const count = Number(n[1]);
+    if (count > CONTRIBUTION_LIMITS.max) return null;
+    const look = describeObjectSchema(mod.fieldsSchema as never).find((d) => d.key === "look" && d.widget === "select");
+    if (n[3] !== undefined && (!look?.options || Number(n[3]) >= look.options.length)) return null;
+    return { ...demo, contributions: notesOf(mod, demo, count, (n[2] as NoteKind | undefined) ?? "demo"), fields: n[3] !== undefined && look?.options ? { ...fields, look: look.options[Number(n[3])] } : demo.fields };
+  }
 
   if (name === "demo") return demo;
   if (name === "empty") return { ...demo, fields: {} };
@@ -92,6 +141,7 @@ export function edgeCase(mod: TemplateModule, locale: GiftLocale, name: string):
       surprise: undefined,
       dedication: undefined,
       unwrap: undefined,
+      contributions: group ? notesOf(mod, demo, group.min, "plain") : demo.contributions,
       fields: mapFields(mod, fields, (d, value) => {
         if (d.widget === "list") return (Array.isArray(value) ? value : []).slice(0, d.minItems ?? 0);
         if (d.optional && d.defaultValue === undefined && (d.widget === "text" || d.widget === "textarea" || d.widget === "number")) return undefined;
@@ -108,6 +158,7 @@ export function edgeCase(mod: TemplateModule, locale: GiftLocale, name: string):
       // Typed out, 4000 letters take minutes; `min` plays the typed message (an empty one) instead.
       messageStyle: "fade",
       photos: photosOf(demo, max, features.captions),
+      contributions: group ? notesOf(mod, demo, group.max, "long") : demo.contributions,
       surprise: features.surprise ? { text: fill(600, "One more thing: pack a bag, we leave on Friday at six. "), reveal: "tap" } : demo.surprise,
       // Seconds away, so a gift that waits for its moment (Midnight Countdown) reaches it while played.
       countdown: features.countdown ? { targetAt: new Date(Date.now() + 8_000).toISOString(), timezone: "Europe/London", label: fill(80, "Until our next adventure together, wherever it takes us ") } : demo.countdown,

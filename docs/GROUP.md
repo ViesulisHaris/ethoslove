@@ -7,8 +7,9 @@ long, what it costs and which files decide that, and what has to happen before i
 People read "group card" everywhere (Spanish: "tarjeta en grupo"). In code the product is `group`
 and the tables are `gift_groups` and `gift_contributions`.
 
-**It ships switched off, and there is no template for it yet.** The engine is proven by a
-development-only reference template. Nothing a visitor can reach today changes.
+**It ships switched off.** Its first template, the Advent Calendar, is built and held back with it
+(see "The first template" below); the engine is also proven by a development-only reference
+template. Nothing a visitor can reach today changes.
 
 ## The switch
 
@@ -18,7 +19,8 @@ development-only reference template. Nothing a visitor can reach today changes.
 2. at least one template in the gallery declares `features.group` in its manifest.
 
 With no such template, setting the variable turns nothing on. It is read on the server only and
-passed down as a prop.
+passed down as a prop. Today there is none in the gallery: the Advent Calendar declares
+`features.group` and is kept out of every list by `ADVENT_CALENDAR_LIVE` (`src/templates/held.ts`).
 
 | State | What happens |
 | --- | --- |
@@ -93,6 +95,63 @@ has `contributions` removed when a draft is saved or a gift published (`src/app/
 `src/templates/_group-reference/` is the reference: plain on purpose, resolvable only under
 `NODE_ENV=development` (`manifests.ts`, `registry.ts`, `schemas.ts` each fall back to it there) and
 in none of the lists the gallery, sitemap, app catalogue, llms brief or checkout read.
+
+## The first template: the Advent Calendar
+
+`src/templates/advent-calendar/`. A wooden advent house of twenty-four numbered doors on a
+mantelpiece at night. A finger opens a door; behind it is one person's note (a small sealed
+envelope, lifted out as a card with their photo, their words and their name, and leaving a tag
+with their name when it is put back) or a sweet where nobody wrote. The star window in the gable is
+the sender's own letter, photos, countdown and surprise, and then the end screen. Nothing opens by
+itself.
+
+- `features.group = { min: 3, max: 24, noteMax: 140, photos: true }`: one door a person, so it is
+  sold only as the group product.
+- Which doors hold notes is one seeded shuffle of the numbers from the gift's two names
+  (`doors.ts`): the same on the server, in the browser and on replay. The order of
+  `data.contributions` decides who has which of the chosen doors, lowest number first.
+- The room is two rendered pictures of the same view per look, every door shut and every door open
+  (`scripts/art/holiday/advent.py`, three looks). An open door is the open picture laid over the
+  shut one inside that door's opening and its leaf's outline; the swing is the shut picture's own
+  door turned in the lens's perspective. What stands in a niche is a sprite placed by its rectangle
+  in `art-map.ts`. To change the art: render, then `node scripts/art/holiday/pack.mjs advent-calendar <renders>`.
+- Its three sounds (`playHatch`, `playEnvelope`, `playTing` in `_shared/night/sfx.ts`) are played at
+  about a third, because they repeat; the door's is timed by `HATCH`, which its swing is drawn by.
+
+**Held back.** `ADVENT_CALENDAR_LIVE` in `src/templates/held.ts` is `false`. While it is, the
+template is in none of the lists (`TEMPLATE_MANIFESTS`, `TEMPLATE_SLUGS`, `LOADER_SLUGS`,
+`SCHEMA_SLUGS`), so the gallery, the occasion pages, the sitemap, the app's catalogue, the llms
+brief and checkout never see it, it has no page, no search entry and no date, and
+`GROUP_GIFTS_ENABLED` alone still turns nothing on. Like the reference template it is found by its
+slug under `next dev` only: `/demo/advent-calendar`, `/create/advent-calendar` and
+`/create/advent-calendar?group=on`. Its pictures are static files under `/art/advent-calendar/` and
+`/templates/advent-calendar/`: they are in the deploy, and nothing links to them.
+
+Setting it to `true` puts the template in every list at once, with its page
+(`/templates/advent-calendar`), its entry in `src/content/template-seo.ts` and its date in
+`src/content/page-dates.ts` (set that date to the day itself). `tests/unit/advent-calendar.test.tsx`
+plays both states. Three things do not follow from the switch and are done by hand with it:
+
+1. `tests/unit/group-contract.test.ts` has a test named "no template in the gallery declares it yet:
+   nothing is on sale". It is true until that day and fails on it: change it to name the Advent
+   Calendar.
+2. `tests/e2e/templates.spec.ts`: move `advent-calendar` from `HELD` into the list. The file's own
+   spec, `tests/e2e/advent-calendar.spec.ts`, skips itself under `CI`: take that line out.
+3. Whether it is featured: `NEW_SLUGS` in `src/config/featured.ts` is the owner's call.
+
+The words for its page on the growth build's template page (a palette, three steps, six idea
+cards) are written and wait in `src/templates/advent-calendar/page-content.ts`: the three tables
+they go into are on another branch.
+
+Its tests:
+
+```
+npx vitest run tests/unit/advent-calendar.test.tsx tests/unit/night-sounds.test.ts
+PORT=3432 NEXT_PUBLIC_E2E=1 npx playwright test tests/e2e/advent-calendar.spec.ts --workers=1
+NEXT_PUBLIC_E2E=1 SWEEP=advent-calendar PORT=3432 npx playwright test template-sweep --project=mobile-chrome --workers=1
+```
+
+Without `NEXT_PUBLIC_E2E=1` the cases with three, eight and twenty-four notes skip and say so.
 
 ## What is stored (migration `0023_group_gifts.sql`)
 
@@ -324,9 +383,11 @@ In this order, each step leaving the site as it was until the last:
 2. Apply `supabase/migrations/0023_group_gifts.sql` by hand. Check: both tables exist with row-level
    security on, the `contributions` bucket is private, `group_photo_orphans` is executable by
    `service_role` only.
-3. Ship a real template that declares `features.group` and keeps the contract above. Until step 6
-   it is an ordinary template: if its `min` is above 0 it cannot be sent in between (see "Off, a
-   template made for group cards is an ordinary template"), so ship that one with step 6.
+3. Put the Advent Calendar in the gallery: set `ADVENT_CALENDAR_LIVE` to `true`
+   (`src/templates/held.ts`) and do the three things listed under "The first template". Its `min`
+   is 3, so it cannot be sent while group cards are off (see "Off, a template made for group cards
+   is an ordinary template"): this step and step 6 go out in one deploy. Any later template that
+   declares `features.group` and keeps the contract above needs no switch of its own.
 4. Read the group paragraphs of the terms and the privacy policy (`GROUP` in `src/content/legal.ts`;
    they appear only when the switch is on). Set `LEGAL_UPDATED` there to that day: the pages'
    "last updated" line and their dates in the sitemap both read it.

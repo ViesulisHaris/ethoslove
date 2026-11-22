@@ -1,4 +1,5 @@
 import type { z } from "zod";
+import { ADVENT_CALENDAR_LIVE } from "./held";
 
 /**
  * Each template's field schema on its own, for code that validates a gift without rendering it
@@ -71,12 +72,15 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   "frosted-window": () => import("./frosted-window/schema"),
   unwrapped: () => import("./unwrapped/schema"),
   "nice-list": () => import("./nice-list/schema"),
+  // held back until group cards are on sale: see ./held
+  ...(ADVENT_CALENDAR_LIVE ? { "advent-calendar": () => import("./advent-calendar/schema") } : {}),
 };
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);
 
-/** Development only, and in no list: the reference template for group cards (see DEV_MANIFESTS in ./manifests). */
-const devSchemaLoaders: typeof schemaLoaders = process.env.NODE_ENV === "development" ? { "group-reference": () => import("./_group-reference/schema") } : {};
+/** Development only, and in no list: the reference template for group cards, and the Advent Calendar while it is held back (see DEV_MANIFESTS in ./manifests). */
+const devSchemaLoaders: typeof schemaLoaders =
+  process.env.NODE_ENV === "development" ? { "group-reference": () => import("./_group-reference/schema"), ...(ADVENT_CALENDAR_LIVE ? {} : { "advent-calendar": () => import("./advent-calendar/schema") }) } : {};
 
 export async function loadFieldsSchema(slug: string): Promise<z.ZodType | null> {
   // Own keys only: "constructor" is in every object, and it is not a template.

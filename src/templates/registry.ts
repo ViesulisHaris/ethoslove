@@ -9,6 +9,7 @@ import type { TemplateModule } from "./types";
  * costs. The manifest helpers are re-exported here so older imports keep working.
  */
 export { TEMPLATE_MANIFESTS, TEMPLATE_SLUGS, getManifest, isTemplateSlug, listManifests } from "./manifests";
+import { ADVENT_CALENDAR_LIVE } from "./held";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = {
@@ -73,12 +74,15 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "frosted-window": () => import("./frosted-window"),
   unwrapped: () => import("./unwrapped"),
   "nice-list": () => import("./nice-list"),
+  // held back until group cards are on sale: see ./held
+  ...(ADVENT_CALENDAR_LIVE ? { "advent-calendar": () => import("./advent-calendar") } : {}),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-/** Development only, and in no list: the reference template for group cards (see DEV_MANIFESTS in ./manifests). */
+/** Development only, and in no list: the reference template for group cards, and the Advent Calendar while it is held back (see DEV_MANIFESTS in ./manifests). */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const devLoaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = process.env.NODE_ENV === "development" ? { "group-reference": () => import("./_group-reference") } : {};
+const devLoaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> =
+  process.env.NODE_ENV === "development" ? { "group-reference": () => import("./_group-reference"), ...(ADVENT_CALENDAR_LIVE ? {} : { "advent-calendar": () => import("./advent-calendar") }) } : {};
 
 /** Every slug with a loader; tests/unit/templates.test.ts checks it against ./manifests. */
 export const LOADER_SLUGS = Object.keys(loaders);

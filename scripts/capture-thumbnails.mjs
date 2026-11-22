@@ -629,6 +629,28 @@ const SCRIPTS = {
     await page.waitForTimeout(1500);
     return poster;
   },
+  "advent-calendar": async (page) => {
+    await hideControls(page);
+    const door = (n) => page.locator(`[data-door="${n}"]`);
+    await door(19).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    // Notes are behind 19, 22, 12 and 1 in the demo; the rest of these hold sweets.
+    for (const n of [19, 13, 23, 22, 12, 1, 15, 18, 4]) {
+      await door(n).click();
+      await page.waitForTimeout(650);
+    }
+    // Nine doors open, envelopes and sweets in sight, the other numbers still to find: that is the poster.
+    await page.waitForTimeout(500);
+    const poster = await page.screenshot();
+    // One note out of its niche and back again, then the letter behind the star window.
+    await door(19).click();
+    await page.waitForTimeout(2600);
+    await page.getByRole("button", { name: /put the note back/i }).click({ position: { x: 10, y: 10 } });
+    await page.waitForTimeout(900);
+    await page.getByRole("button", { name: /letter/i }).click();
+    await page.waitForTimeout(2400);
+    return poster;
+  },
   "nice-list": async (page) => {
     await hideControls(page);
     const untie = page.getByRole("button", { name: /untie the ribbon/i });
