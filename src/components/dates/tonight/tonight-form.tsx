@@ -29,7 +29,7 @@ export const TONIGHT_BUTTON =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px aria-disabled:cursor-default aria-disabled:opacity-60 aria-disabled:active:scale-100 motion-reduce:transition-none";
 
 const SELECT =
-  "field-sizing-content h-11 max-w-full cursor-pointer appearance-none truncate rounded-md border-0 border-b border-page-ink/35 bg-transparent py-0 pr-6 pl-0.5 font-display text-[1.375rem] leading-none text-page-accent italic outline-offset-4 transition-colors hover:border-page-ink focus-visible:border-page-accent active:text-page-accent-hover disabled:cursor-default disabled:opacity-50";
+  "field-sizing-content h-11 max-w-full cursor-pointer appearance-none truncate rounded-none border-0 border-b border-page-ink/35 bg-transparent py-0 pr-7 pl-1 font-display text-[1.375rem] leading-none text-page-accent italic outline-offset-4 transition-colors hover:border-page-ink focus-visible:border-page-accent active:text-page-accent-hover disabled:cursor-default disabled:opacity-50";
 
 /** One choice inside the sentence: a native select, read by its name, with a small chevron. */
 function Choice({ name, value, onChange, children }: { name: string; value: string; onChange: (value: string) => void; children: ReactNode }) {
