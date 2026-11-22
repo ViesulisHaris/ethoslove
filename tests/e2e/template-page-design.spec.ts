@@ -519,6 +519,29 @@ test("every card of “What to write” shows its line to borrow, with nothing t
       return [...byTop.values()];
     });
     for (const row of rows) expect(Math.max(...row) - Math.min(...row), `${size.width}: a row's cards`).toBeLessThanOrEqual(1);
+    // On a phone the six are one row to swipe: stacked they were a screen and a half of boxes, "clustered" (the owner, 22 Nov 2026).
+    const row = await section.locator(`#ideas-the-letter`).evaluate((list) => {
+      const cards = [...list.querySelectorAll<HTMLElement>("[data-card]")];
+      const at = (i: number) => cards[i].getBoundingClientRect();
+      const first = { left: Math.round(at(0).left), right: Math.round(at(0).right) };
+      const peek = Math.round(innerWidth - at(1).left);
+      const heading = Math.round(document.querySelector("#template-guide")!.getBoundingClientRect().left);
+      list.scrollLeft = list.scrollWidth;
+      return { swipes: list.scrollWidth > list.clientWidth + 1, first, peek, heading, lastRight: Math.round(at(5).right), width: innerWidth, page: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+    });
+    if (size.width < 640) {
+      expect(rows, `${size.width}: one row`).toHaveLength(1);
+      expect(row.swipes, `${size.width}: the row swipes`).toBe(true);
+      // The first card starts where the heading does, the next one's edge shows that there is more, and the last ends at the page's margin.
+      expect(row.first.left, `${size.width}`).toBe(row.heading);
+      expect(row.peek, `${size.width}: the next card's edge`).toBeGreaterThanOrEqual(24);
+      expect(row.width - row.lastRight, `${size.width}: the last card's margin`).toBe(row.heading);
+    } else {
+      expect(rows, `${size.width}: two rows of three`).toHaveLength(2);
+      expect(row.swipes, `${size.width}: a grid has nothing to swipe`).toBe(false);
+    }
+    // The row moves; the page never does.
+    expect(row.page, `${size.width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
   }
 });
 

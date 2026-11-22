@@ -219,11 +219,14 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
       <ArtLayer items={WRITE_ART} flowers={flowers} />
       <div className={cn(SPREAD, "pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-32")}>
         <Intro id="template-guide" label={t("templates.guide.ideasLabel")} heading={guide.ideas.title} line={t("templates.guide.ideasLine", { count: guide.ideas.items.length })} />
-        <ul id={gridId} className="grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+        {/* On a phone the six are one row to swipe, a card and the edge of the next: stacked, six boxes of handwriting
+            were a screen and a half of clutter (the owner, 22 Nov 2026). The row runs to the screen’s edges, and
+            each card stops at the page’s own margin. From 640px they are the grid they were. */}
+        <ul id={gridId} className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-1 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {guide.ideas.items.map((idea) => (
             // A card says its idea and shows the line to borrow, in handwriting, with nothing to press: a closed
             // card was a title in an empty box, and the line is the reason the card is there (the owner, 22 Nov 2026).
-            <li key={idea.heading} data-card className="relative rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-4 pb-5 sm:min-h-[10.25rem] sm:px-6 sm:pt-6 sm:pb-12">
+            <li key={idea.heading} data-card className="relative w-[78%] shrink-0 snap-start rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-4 pb-5 sm:min-h-[10.25rem] sm:w-auto sm:px-6 sm:pt-6 sm:pb-12">
               <div className="flex items-center justify-between gap-4 sm:block">
                 <h3 className="font-display text-[1.0625rem] leading-snug text-page-ink">{idea.heading}</h3>
                 <Heart aria-hidden="true" className="size-4 shrink-0 fill-current text-page-accent sm:absolute sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2" strokeWidth={1.6} />
