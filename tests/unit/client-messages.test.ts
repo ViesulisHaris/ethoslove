@@ -156,5 +156,7 @@ describe("every route sends what its client components read", () => {
       }
     }
     expect([...new Set(missing)]).toEqual([]);
-  });
+    // It reads every route's whole tree of imports: four seconds alone on a quiet machine, and past
+    // the usual five when the whole suite runs four files at once.
+  }, 30_000);
 });
