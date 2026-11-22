@@ -226,7 +226,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
       <section className="bg-paper py-16 lg:py-24">
         <div className="container-x">
           <div className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">
-            <FloralFrame frame="band" ground="dark" className="-z-10" />
+            <FloralFrame frame="card" ground="dark" className="-z-10" />
             <div className="relative max-w-2xl">
               <p className="text-eyebrow text-blush">{t("gift.eyebrow")}</p>
               <h2 className="display-xl mt-4 text-cream">{t("gift.title")}</h2>

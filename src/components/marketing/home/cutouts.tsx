@@ -53,11 +53,13 @@ export function Cutout({ id, eager = false, className, style }: { id: CutoutId; 
  * is one placed for a phone's taller, narrower page and hidden everywhere else. "Phone" means
  * anything under `lg`: a tablet gets the same single column, with the type starting at the left edge.
  */
-export type Placement = { x: number; y: number; size: number; rot: number; blur?: number; opacity?: number; phone?: boolean | "only"; eager?: boolean };
+export type Placement = { x: number; y: number; size: number; rot: number; blur?: number; opacity?: number; phone?: boolean | "only"; eager?: boolean; /** Only from 1440px: under that the words start too near the screen's edge for it. */ wide?: boolean };
 type Bloom = Placement & { art: FrameArtId };
 
 /** Which screens a placed bloom is drawn on. */
-export function placementClass(b: Pick<Placement, "phone">): string {
+export function placementClass(b: Pick<Placement, "phone" | "wide">): string {
+  // Whole class names, so Tailwind finds them. 90rem is 1440px.
+  if (b.wide) return "absolute max-w-none hidden min-[90rem]:block";
   return cn("absolute max-w-none", b.phone === false && "hidden lg:block", b.phone === "only" && "lg:hidden");
 }
 
@@ -130,43 +132,63 @@ const HERO: Bloom[] = [
   { art: "leaf-1", x: 99.5, y: 82, size: 13, rot: -150, opacity: 0.85, phone: false },
   // the left edge: a head at the top, leaves down the side, a head and a leaf at the foot
   { art: "lily-open", x: -1.5, y: 8, size: 19, rot: -10, eager: true, phone: false },
-  { art: "leaf-1", x: -1, y: 25, size: 13, rot: 38, opacity: 0.9, phone: false },
-  { art: "leaf-2", x: -1.5, y: 41, size: 14, rot: -40, opacity: 0.9, phone: false },
-  { art: "petal-2", x: 1.2, y: 60, size: 5, rot: 18, phone: false },
+  { art: "leaf-1", x: -1, y: 25, size: 13, rot: 38, opacity: 0.9, wide: true },
+  { art: "leaf-2", x: -1.5, y: 41, size: 14, rot: -40, opacity: 0.9, wide: true },
+  { art: "petal-2", x: 1.2, y: 60, size: 5, rot: 18, wide: true },
   { art: "lily-open", x: -1, y: 95, size: 18, rot: 16, phone: false },
-  { art: "leaf-2", x: 6.5, y: 101.5, size: 12, rot: -18, opacity: 0.85, phone: false },
+  { art: "leaf-2", x: 6.5, y: 101.5, size: 12, rot: -18, opacity: 0.85, wide: true },
   // along the foot, soft with depth
   { art: "petal-3", x: 41, y: 101, size: 6, rot: -16, blur: 3, opacity: 0.8, phone: false },
   { art: "leaf-1", x: 78, y: 104, size: 13, rot: 12, blur: 4, opacity: 0.65, phone: false },
   // On a phone the top-left corner is where the first line of type starts, so the lily leans in
   // from the right instead, beside the headline, where the short lines leave room, a leaf under it.
-  { art: "lily-three-quarter", x: 100, y: 15, size: 32, rot: 8, eager: true, phone: "only" },
-  { art: "leaf-2", x: 101, y: 25, size: 30, rot: -62, opacity: 0.85, phone: "only" },
+  { art: "lily-three-quarter", x: 105.5, y: 11, size: 24, rot: 8, eager: true, phone: "only" },
+  { art: "leaf-2", x: 105, y: 19.5, size: 22, rot: -62, opacity: 0.85, phone: "only" },
 ];
 
 /** Round the closing section: the same flowers on the dark ground, closer in. */
 const CLOSING: Bloom[] = [
-  { art: "lily-open", x: 2, y: 10, size: 22, rot: -14 },
+  { art: "lily-open", x: 2, y: 10, size: 22, rot: -14, phone: false },
+  { art: "lily-open", x: -7, y: 1, size: 22, rot: -14, phone: "only" },
   { art: "leaf-1", x: 0.5, y: 33, size: 14, rot: 40, opacity: 0.85, phone: false },
   { art: "petal-1", x: -0.5, y: 60, size: 6, rot: 24, blur: 2, opacity: 0.8, phone: false },
-  { art: "lily-open", x: 3, y: 101, size: 20, rot: 12, blur: 1 },
+  { art: "lily-open", x: 3, y: 101, size: 20, rot: 12, blur: 1, phone: false },
   { art: "leaf-2", x: 13, y: 104, size: 13, rot: -14, opacity: 0.8, phone: false },
   { art: "petal-4", x: 38, y: 106, size: 7, rot: 22, blur: 5, opacity: 0.5, phone: false },
   { art: "lily-stem-tall", x: 95.5, y: 40, size: 24, rot: 14, phone: false },
-  { art: "lily-three-quarter", x: 97.5, y: 5, size: 20, rot: 10 },
-  { art: "lily-side", x: 96, y: 99, size: 21, rot: 6 },
+  { art: "lily-three-quarter", x: 97.5, y: 5, size: 20, rot: 10, phone: false },
+  { art: "lily-side", x: 96, y: 99, size: 21, rot: 6, phone: false },
+  { art: "lily-side", x: 107, y: 101, size: 22, rot: 6, phone: "only" },
   { art: "petal-2", x: 66, y: 108, size: 7, rot: -20, blur: 5, opacity: 0.5, phone: false },
 ];
 
 /** A head and its leaves, far apart and out of focus, behind the covers. */
 const BAND: Bloom[] = [
-  { art: "lily-three-quarter", x: 98.5, y: 9, size: 18, rot: 12, blur: 3, opacity: 0.6 },
-  { art: "leaf-2", x: 93, y: 24, size: 12, rot: -32, blur: 3, opacity: 0.55, phone: false },
+  { art: "lily-three-quarter", x: 100.5, y: 5, size: 18, rot: 12, blur: 3, opacity: 0.6 },
+  // Only on a wide screen: under 1440px a section's paragraph runs to where this leaf lies.
+  { art: "leaf-2", x: 93, y: 24, size: 12, rot: -32, blur: 3, opacity: 0.55, wide: true },
   { art: "lily-open", x: 0, y: 96, size: 16, rot: -12, blur: 5, opacity: 0.5, phone: false },
   { art: "leaf-1", x: 7, y: 101, size: 11, rot: 20, blur: 5, opacity: 0.45, phone: false },
 ];
 
-const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
+/** Round a hero whose right half and foot are full: a head in each top corner and nothing along the sides. */
+const CORNERS: Bloom[] = [
+  { art: "lily-open", x: -2, y: 7, size: 17, rot: -10, eager: true, wide: true },
+  { art: "lily-three-quarter", x: 102.5, y: 3, size: 16, rot: 6, eager: true, phone: false },
+  { art: "lily-three-quarter", x: 107, y: 7, size: 22, rot: 8, eager: true, phone: "only" },
+];
+
+/**
+ * Inside a card (the dark invitation at the foot of a trip or a city): a card is a fraction of the
+ * screen and a bloom is sized by the screen, so these are small, and lie in two opposite corners,
+ * clear of the card's words and its button at every width.
+ */
+const CARD: Bloom[] = [
+  { art: "lily-three-quarter", x: 100, y: 3, size: 9, rot: 12, blur: 2, opacity: 0.6 },
+  { art: "lily-open", x: 0, y: 103, size: 8, rot: -12, blur: 3, opacity: 0.5, phone: false },
+];
+
+const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, card: CARD } as const;
 
 /**
  * A frame of real flowers round a section. `light` lays them on blush paper, `dark` on the forest
@@ -174,7 +196,7 @@ const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
  */
 export function FloralFrame({ frame, ground, className }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string }) {
   return (
-    <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
+    <div aria-hidden="true" data-floral-frame={frame} className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
       {ground === "light" ? <div className="absolute inset-0 paper-ground" /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
       {FRAMES[frame].map((b, i) => {
@@ -191,10 +213,13 @@ export function FloralFrame({ frame, ground, className }: { frame: keyof typeof 
 /**
  * A torn paper edge between two sections: the lower section's colour, torn along the top, laid
  * over the upper one's. The tear is fixed, so it is the same on the server and in the browser.
+ * Every colour is a token by name, never a hex: the pink a hero used to end in was written here
+ * by hand on three pages, and was left behind as a pink strip when the paper turned cream. The
+ * tear's fibre is the card's paper, a shade lighter than the page, as torn paper is at its edge.
  */
 const TEAR = "polygon(0% 62%, 3% 40%, 6.5% 58%, 10% 30%, 13.5% 52%, 17% 28%, 21% 55%, 24.5% 34%, 28% 60%, 32% 38%, 35.5% 56%, 39% 26%, 43% 50%, 46.5% 32%, 50% 58%, 54% 36%, 57.5% 54%, 61% 28%, 65% 52%, 68.5% 34%, 72% 60%, 76% 40%, 79.5% 56%, 83% 30%, 87% 52%, 90.5% 36%, 94% 58%, 97% 42%, 100% 60%, 100% 100%, 0% 100%)";
 
-export function TornEdge({ from, to, fibre = "#FFFFFF" }: { from: string; to: string; fibre?: string }) {
+export function TornEdge({ from, to, fibre = "var(--card)" }: { from: string; to: string; fibre?: string }) {
   return (
     <div aria-hidden="true" className="relative -mb-px h-5 sm:h-7" style={{ background: from }}>
       <div className="absolute inset-0 opacity-70" style={{ background: fibre, clipPath: TEAR, transform: "translateY(-18%)" }} />

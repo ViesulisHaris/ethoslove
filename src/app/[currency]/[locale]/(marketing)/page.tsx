@@ -37,13 +37,13 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[cu
     <ClientMessages scope="(marketing)/page" locale={locale}>
       <JsonLd nodes={[organizationNode(), websiteNode()]} />
       <PlatformHero variant={hero} />
-      <TornEdge from="#f6ddd3" to="var(--brand-paper)" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-paper)" />
       {hero === "gift" ? strip : null}
       <Doors />
       <IdeasTeaser />
       {hero === "dates" ? strip : null}
       {/* The tear starts in the colour of whatever sits above it: the blush of the ideas when the gallery moved up. */}
-      <TornEdge from={hero === "gift" ? "#f6ddd3" : "var(--brand-paper)"} to="var(--brand-forest)" fibre="#4d2139" />
+      <TornEdge from={hero === "gift" ? "var(--brand-blush-paper)" : "var(--brand-paper)"} to="var(--brand-forest)" fibre="#4d2139" />
       <LongDistanceBand />
       <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" fibre="#4d2139" />
       <GamesBand />

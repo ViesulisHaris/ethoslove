@@ -296,7 +296,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
       <section id="surprise" className="scroll-mt-24 bg-paper pb-20 lg:pb-28">
         <div className="container-x">
           <div className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">
-            <FloralFrame frame="band" ground="dark" className="-z-10" />
+            <FloralFrame frame="card" ground="dark" className="-z-10" />
             <div className="relative max-w-2xl">
               <p className="text-eyebrow text-blush">{t("detail.surprise.eyebrow")}</p>
               <h2 className="display-xl mt-4 text-cream">{t("detail.surprise.title")}</h2>

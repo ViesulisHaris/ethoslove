@@ -32,6 +32,8 @@
   --brand-night: #14110e;
   --brand-night-raised: #1e1a16;
   --brand-line: #e3cbbd;
+  /* The blush sections (a hero's ground under its flowers, the ideas band): the paper with a little rose in it. */
+  --brand-blush-paper: #f6ddd3;
 
   /* shadcn semantic tokens mapped onto the brand */
   --background: var(--brand-paper);
@@ -394,7 +396,7 @@
   --color-rose-soft: #ffe8ef;
   --color-rose-tint: #ffd6e2;
   --color-rose-mist: #fff0f4;
-  --color-blush-paper: #f6ddd3;
+  --color-blush-paper: var(--brand-blush-paper);
   --color-star: #e0962a;
   --color-star-empty: #e9c0cb;
   --color-moss-soft: #dcebdf;
@@ -949,22 +951,101 @@ body:has([data-page-theme]) .site-header .btn-rose {
  * that asks for the site's paper, card or line by name (a button on Birthday Cinema does) must look
  * to whoever opens it exactly as it did, in the editor's preview, in a demo and at its own link:
  * the gift itself, and the page round it on the gift routes (its dark ground and what is written on it).
+ *
+ * Three rules, and tests/unit/gift-paper.test.ts holds them to the live site's values:
+ * 1. The colours themselves, and every name that is worked out from one of them. A name declared
+ *    on :root as var(--brand-…) is worked out there and handed down finished, so pinning --brand-line
+ *    alone left --border the cream's line inside a gift (the reaction sheet's recorder at /g/ draws
+ *    with it). Each such name is therefore said again here, to be worked out from the pinned colours.
+ * 2. The names the app's dark shell also sets (.dark): pinned only outside it, so a gift shown in
+ *    the dark shell reads the shell's dark values, as it did.
+ * 3. The whole document on a gift route: a toast there is drawn by the root layout, outside
+ *    [data-gift-page]. A rule of its own, because a browser without :has() drops a whole rule over
+ *    one selector it cannot read, and rules 1 and 2 must hold there too.
  */
 .gift-root,
 [data-gift-page] {
   --brand-paper: #fdf7f3;
   --brand-paper-deep: #f7ebe5;
   --brand-line: #ecdcd6;
-  --background: #fdf7f3;
-  --card: #fffaf7;
-  --popover: #fffaf7;
-  --secondary: #f7ebe5;
-  --muted: #f6eae5;
+  --brand-blush-paper: #fff5f2;
   --brand-coral: #d6336c;
   --brand-coral-deep: #b0245a;
   --brand-rose-ui: #d6336c;
   --brand-rose-ui-deep: #b0245a;
-  --primary: #d6336c;
+  --chart-1: var(--brand-coral);
+  --color-paper: var(--brand-paper);
+  --color-paper-deep: var(--brand-paper-deep);
+  --color-line: var(--brand-line);
+  --color-blush-paper: var(--brand-blush-paper);
+  --color-coral: var(--brand-coral);
+  --color-coral-deep: var(--brand-coral-deep);
+  --color-rose: var(--brand-rose-ui);
+  --color-rose-deep: var(--brand-rose-ui-deep);
+  --color-chart-1: var(--chart-1);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-border: var(--sidebar-border);
+}
+:root:not(.dark) .gift-root,
+:root:not(.dark) [data-gift-page] {
+  --background: var(--brand-paper);
+  --card: #fffaf7;
+  --popover: #fffaf7;
+  --primary: var(--brand-coral);
+  --secondary: var(--brand-paper-deep);
+  --muted: #f6eae5;
+  --border: var(--brand-line);
+  --input: var(--brand-line);
+  --sidebar-primary: var(--brand-coral);
+  --sidebar-border: var(--brand-line);
+}
+:root:has([data-gift-page]) {
+  --brand-paper: #fdf7f3;
+  --brand-paper-deep: #f7ebe5;
+  --brand-line: #ecdcd6;
+  --brand-blush-paper: #fff5f2;
+  --brand-coral: #d6336c;
+  --brand-coral-deep: #b0245a;
+  --brand-rose-ui: #d6336c;
+  --brand-rose-ui-deep: #b0245a;
+  --chart-1: var(--brand-coral);
+  --color-paper: var(--brand-paper);
+  --color-paper-deep: var(--brand-paper-deep);
+  --color-line: var(--brand-line);
+  --color-blush-paper: var(--brand-blush-paper);
+  --color-coral: var(--brand-coral);
+  --color-coral-deep: var(--brand-coral-deep);
+  --color-rose: var(--brand-rose-ui);
+  --color-rose-deep: var(--brand-rose-ui-deep);
+  --color-chart-1: var(--chart-1);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-border: var(--sidebar-border);
+  --background: var(--brand-paper);
+  --card: #fffaf7;
+  --popover: #fffaf7;
+  --primary: var(--brand-coral);
+  --secondary: var(--brand-paper-deep);
+  --muted: #f6eae5;
+  --border: var(--brand-line);
+  --input: var(--brand-line);
+  --sidebar-primary: var(--brand-coral);
+  --sidebar-border: var(--brand-line);
 }
 
 /*

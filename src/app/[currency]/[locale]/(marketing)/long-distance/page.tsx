@@ -60,7 +60,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
           </div>
         </div>
       </section>
-      <TornEdge from="#FFE9EC" to="var(--brand-paper)" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-paper)" />
 
       <section className="bg-paper py-20 lg:py-28">
         <div className="container-x">
