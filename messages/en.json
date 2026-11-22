@@ -1846,6 +1846,69 @@
       "added": "In your plan",
       "close": "Close this idea"
     },
+    "tonight": {
+      "label": "Tonight",
+      "inCity": "Tonight in {city}",
+      "sentence": "Plan <mood></mood> date <when></when>. <length></length>, <budget></budget>.",
+      "sentenceKind": "Plan one of these <when></when>. <length></length>, <budget></budget>.",
+      "lengthLabel": "How long",
+      "budgetLabel": "Budget",
+      "mood": {
+        "any": "any kind of",
+        "cozy": "a cozy",
+        "playful": "a playful",
+        "outdoorsy": "an outdoorsy",
+        "foodie": "a foodie",
+        "artsy": "an artsy",
+        "fancy": "a dressed-up"
+      },
+      "when": {
+        "tonight": "tonight",
+        "tomorrow": "tomorrow",
+        "weekend": "this weekend",
+        "day": "on {day}"
+      },
+      "length": {
+        "any": "Any length",
+        "short": "Up to 2 hours",
+        "medium": "2 to 3 hours",
+        "long": "The whole evening"
+      },
+      "budget": {
+        "0": "free",
+        "1": "pocket change at most",
+        "2": "dinner money at most",
+        "3": "a treat is fine",
+        "any": "any budget"
+      },
+      "plan": "Plan it",
+      "finding": "Finding places…",
+      "whereFirst": "Say where first",
+      "open": "Open the plan",
+      "another": "Another",
+      "relaxed": {
+        "budget": "Nothing {wanted} fits that day here; this one costs {cost}.",
+        "budgetWet": "Nothing {wanted} fits a rainy day here; this one costs {cost}.",
+        "length": "Nothing of that length fits; this one takes about {hours} h.",
+        "vibe": "Nothing in that mood fits that day; this is the nearest.",
+        "kind": "None of the ideas on this page fits that day; this one does."
+      },
+      "wanted": {
+        "0": "free",
+        "1": "for pocket change",
+        "2": "for dinner money"
+      },
+      "costs": {
+        "1": "a coffee each",
+        "2": "about what dinner costs",
+        "3": "a treat"
+      },
+      "none": "Nothing fits that here.",
+      "late": "It is late for tonight. Tomorrow has more.",
+      "tryTomorrow": "Plan tomorrow",
+      "openMap": "Open the map",
+      "replace": "This replaces the plan you were making on this device. Open this one instead?"
+    },
     "places": {
       "title": "Places for a date",
       "count": "{count, plural, =0 {no places} one {# place} other {# places}}",
