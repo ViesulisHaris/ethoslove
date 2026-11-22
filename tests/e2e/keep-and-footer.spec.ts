@@ -115,7 +115,7 @@ test.describe("the page a free gift's footer opens", () => {
   test("someone made you one of these: free templates first, premium after, the gift's own first among its kind", async ({ page }) => {
     await page.goto("/made-with-ethos?ref=watermark&template=constellations", ready);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Someone made you one of these.");
-    await expect(page.getByText("Make one back — free to start.")).toBeVisible();
+    await expect(page.getByText("Make one back. Free to start.")).toBeVisible();
     const shelves = page.locator("[data-shelf]");
     await expect(shelves).toHaveCount(2);
     await expect(shelves.nth(0)).toHaveAttribute("data-shelf", "free");
@@ -133,8 +133,10 @@ test.describe("the page a free gift's footer opens", () => {
     const makes = page_.getByRole("link", { name: /^Make this/ });
     expect(await makes.count()).toBeGreaterThan(4);
     for (const href of await makes.evaluateAll((links) => links.map((a) => a.getAttribute("href")))) expect(href).toMatch(/^\/create\/[a-z0-9-]+\?ref=watermark$/);
-    // The gift's premium template leads the premium shelf.
-    await expect(page.locator('[data-shelf="premium"]').getByRole("link", { name: /^Make this/ }).first()).toHaveAttribute("href", "/create/bouquet?ref=watermark");
+    // The gift's premium template leads the page, in front of the free shelf, and is shown once.
+    await expect(makes.first()).toHaveAttribute("href", "/create/bouquet?ref=watermark");
+    await expect(page.locator("[data-lead]").getByText("The one you got", { exact: true })).toHaveCount(1);
+    await expect(page.locator('[data-shelf="premium"] a[href^="/create/bouquet?"]')).toHaveCount(0);
   });
 
   test("in Spanish, and found by nobody searching", async ({ page }) => {
