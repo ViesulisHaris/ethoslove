@@ -26,7 +26,7 @@ export async function Doors() {
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {DOORS.map(({ key, href, Icon, image, ink, soon: isSoon }, i) => (
             <li key={key} data-reveal style={{ "--reveal-delay": `${140 + i * 90}ms` } as React.CSSProperties}>
-              <Link href={href} className={cn("group relative flex h-full flex-col overflow-hidden rounded-[28px] bg-white shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift", i % 2 === 1 ? "lg:translate-y-6 lg:hover:translate-y-[18px]" : "")}>
+              <Link href={href} className={cn("group relative flex h-full flex-col overflow-hidden rounded-[28px] bg-card shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift", i % 2 === 1 ? "lg:translate-y-6 lg:hover:translate-y-[18px]" : "")}>
                 <span className="relative block overflow-hidden">
                   <img src={image} srcSet={heroSrcSet(image)} sizes={heroSizes("(min-width: 1024px) 300px", "(min-width: 640px) 50vw")} alt="" width={1800} height={1350} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.06]" />
                   <span className="absolute top-3.5 left-3.5 grid size-11 place-items-center rounded-2xl bg-white/92 shadow-soft backdrop-blur" style={{ color: ink }}>

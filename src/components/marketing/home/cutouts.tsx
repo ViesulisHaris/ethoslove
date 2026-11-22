@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { EagerImg } from "@/components/shared/eager-img";
+import { artSrcSet, pageArt, type ArtId } from "@/content/page-art";
+import type { Flowers } from "@/content/template-page-themes";
 
 /**
  * The real flowers, bows and kisses the collage templates are made of (public/scraps), used on the
@@ -54,7 +56,7 @@ export function Cutout({ id, eager = false, className, style }: { id: CutoutId; 
  * anything under `lg`: a tablet gets the same single column, with the type starting at the left edge.
  */
 export type Placement = { x: number; y: number; size: number; rot: number; blur?: number; opacity?: number; phone?: boolean | "only"; eager?: boolean };
-type Bloom = Placement & { id: CutoutId };
+type Bloom = Placement & { art: ArtId };
 
 /** Which screens a placed bloom is drawn on. */
 export function placementClass(b: Pick<Placement, "phone">): string {
@@ -77,36 +79,45 @@ export function placementStyle(b: Placement, shadow: string): CSSProperties {
   };
 }
 
+/**
+ * The flowers round a section are the rendered lilies of the gift pages (content/page-art.ts), not
+ * the photographs they were until 22 Nov 2026 (the owner: "update the lilies… so it's more high
+ * quality"). What comes with a render: it is lit from the top left, so none is mirrored and none
+ * turned more than about 25 degrees, and each has a stem, so each lies where its stem can leave
+ * the page: `lily-open`'s runs down to the left, `lily-three-quarter`'s up to the right,
+ * `lily-side`'s down to the right. Petals and leaves have no such rule.
+ */
+
 /** Round the hero: lilies spilling off the corners, a few soft with depth, the words left clear. */
 const HERO: Bloom[] = [
-  { id: "lily-stargazer", x: -1, y: 11, size: 19, rot: -24, eager: true, phone: false },
+  { art: "lily-open", x: -1.5, y: 8, size: 19, rot: -10, eager: true, phone: false },
   // On a phone the top-left corner is where the first line of type starts, so the lily leans in
   // from the right instead, beside the headline, where the short lines leave room.
-  { id: "lily-stargazer", x: 103, y: 17, size: 28, rot: 28, eager: true, phone: "only" },
-  { id: "sakura", x: -1.2, y: 60, size: 7, rot: 18, phone: false },
-  { id: "hibiscus-pink", x: -2, y: 92, size: 15, rot: 10, blur: 1, phone: false },
-  { id: "plumeria-pink", x: 41, y: 102, size: 12, rot: -16, blur: 4, opacity: 0.7, phone: false },
-  { id: "blossom-gold", x: 99, y: 6, size: 16, rot: 22, blur: 2, opacity: 0.9, eager: true },
-  { id: "lily-blush", x: 101.5, y: 41, size: 14, rot: -28, phone: false },
-  { id: "hibiscus-coral", x: 77, y: 105, size: 17, rot: 12, blur: 6, opacity: 0.55, phone: false },
+  { art: "lily-three-quarter", x: 100, y: 15, size: 32, rot: 8, eager: true, phone: "only" },
+  { art: "petal-2", x: 1.2, y: 58, size: 5, rot: 18, phone: false },
+  { art: "lily-open", x: -1, y: 95, size: 17, rot: 16, blur: 1, phone: false },
+  { art: "petal-3", x: 41, y: 101, size: 6, rot: -16, blur: 3, opacity: 0.8, phone: false },
+  { art: "lily-three-quarter", x: 98.5, y: 7, size: 19, rot: 6, blur: 1.5, opacity: 0.95, eager: true, phone: false },
+  { art: "lily-side", x: 100.5, y: 44, size: 15, rot: -12, phone: false },
+  { art: "leaf-1", x: 78, y: 104, size: 12, rot: 12, blur: 5, opacity: 0.6, phone: false },
 ];
 
 /** Round the closing section: the same flowers on the dark ground, closer in. */
 const CLOSING: Bloom[] = [
-  { id: "lily-pink", x: 1, y: 8, size: 20, rot: -18 },
-  { id: "blossom-pale", x: -2, y: 58, size: 11, rot: 24, blur: 2, opacity: 0.8, phone: false },
-  { id: "hibiscus-coral", x: 4, y: 102, size: 19, rot: 8, blur: 1 },
-  { id: "plumeria-pink", x: 38, y: 108, size: 13, rot: 30, blur: 6, opacity: 0.5, phone: false },
-  { id: "blossom-gold", x: 98, y: 4, size: 18, rot: 20, blur: 3, opacity: 0.7 },
-  { id: "lily-blush", x: 102, y: 50, size: 15, rot: -30, phone: false },
-  { id: "lily-stargazer", x: 95, y: 98, size: 20, rot: -12 },
-  { id: "sakura", x: 66, y: 110, size: 12, rot: -20, blur: 5, opacity: 0.5, phone: false },
+  { art: "lily-open", x: 2, y: 10, size: 22, rot: -14 },
+  { art: "petal-1", x: -0.5, y: 58, size: 6, rot: 24, blur: 2, opacity: 0.8, phone: false },
+  { art: "lily-open", x: 3, y: 101, size: 20, rot: 12, blur: 1 },
+  { art: "petal-4", x: 38, y: 106, size: 7, rot: 22, blur: 5, opacity: 0.5, phone: false },
+  { art: "lily-three-quarter", x: 97.5, y: 5, size: 20, rot: 10, blur: 2.5, opacity: 0.75 },
+  { art: "lily-side", x: 101, y: 52, size: 16, rot: -16, phone: false },
+  { art: "lily-side", x: 96, y: 99, size: 21, rot: 6 },
+  { art: "petal-2", x: 66, y: 108, size: 7, rot: -20, blur: 5, opacity: 0.5, phone: false },
 ];
 
 /** Two, far apart and out of focus, behind the covers. */
 const BAND: Bloom[] = [
-  { id: "lily-pink", x: 99, y: 8, size: 17, rot: 26, blur: 3, opacity: 0.55 },
-  { id: "hibiscus-pink", x: -1, y: 96, size: 15, rot: -14, blur: 5, opacity: 0.45, phone: false },
+  { art: "lily-three-quarter", x: 98.5, y: 9, size: 18, rot: 12, blur: 3, opacity: 0.6 },
+  { art: "lily-open", x: 0, y: 96, size: 16, rot: -12, blur: 5, opacity: 0.5, phone: false },
 ];
 
 const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
@@ -115,14 +126,17 @@ const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
  * A frame of real flowers round a section. `light` lays them on blush paper, `dark` on the forest
  * ground with a vignette; `bare` adds the flowers to a ground the section already has.
  */
-export function FloralFrame({ frame, ground, className }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string }) {
+export function FloralFrame({ frame, ground, className, flowers = "blush" }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string; flowers?: Flowers }) {
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
       {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 82% 44%, rgba(255,176,200,.5) 0%, rgba(255,176,200,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(255,214,196,.85) 0%, rgba(255,214,196,0) 72%), radial-gradient(44% 46% at 40% 104%, rgba(228,214,255,.75) 0%, rgba(228,214,255,0) 70%), linear-gradient(180deg, #FFF7F3 0%, #FFE9EC 100%)" }} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
-      {FRAMES[frame].map((b, i) => (
-        <Cutout key={i} id={b.id} eager={b.eager} className={placementClass(b)} style={placementStyle(b, `rgba(${ground === "light" ? "120,50,70,.22" : "0,0,0,.5"})`)} />
-      ))}
+      {FRAMES[frame].map((b, i) => {
+        const art = pageArt(b.art, flowers);
+        // A render brings the shadow it was lit with, so none is added: on the dark ground that shadow is lost in the dark, as a real one would be.
+        const place = placementStyle(b, "transparent");
+        return <CutoutImg key={i} src={art.src1x} srcSet={artSrcSet(art)} sizes={`${Math.round(b.size * 1.2)}vw`} width={art.width} height={art.height} eager={b.eager} className={placementClass(b)} style={{ ...place, filter: b.blur ? `blur(${b.blur}px)` : undefined }} />;
+      })}
       {ground !== "bare" ? <div className={cn("grain-overlay mix-blend-overlay", ground === "light" ? "opacity-[0.16]" : "opacity-[0.1]")} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(16,4,11,0.55) 100%)" }} /> : null}
     </div>

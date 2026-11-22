@@ -462,6 +462,33 @@
   outline-color: var(--page-ink);
 }
 
+/* ------------------------------------------------------------------ */
+/* The front page on the gift pages' cream. Its ground was the site's    */
+/* near-white paper, which read as plain white beside a gift's page (the */
+/* owner, 22 Nov 2026: "update the white color so it matches the         */
+/* templates"). The page's sections ask for paper, card and line by      */
+/* name, so the names are given the cream here, on the wrapper and, for  */
+/* the header and the strip behind an overscroll, on <body> while the    */
+/* page is open. Nothing else on the site changes.                       */
+/* ------------------------------------------------------------------ */
+[data-ground="cream"],
+body:has([data-ground="cream"]) {
+  --brand-paper: #f3e8da;
+  --brand-paper-deep: #e9d9c5;
+  --brand-line: #e2d2be;
+  --background: #f3e8da;
+  --card: #faf4ea;
+  --secondary: #e9d9c5;
+  --muted: #ecdfce;
+}
+body:has([data-ground="cream"]) {
+  background-color: #f3e8da;
+}
+/* The blush sections (the hero, the date ideas) are a colour of their own, written into the utility: on this page they are the cream with the blush still in it. */
+[data-ground="cream"] .bg-blush-paper {
+  background-color: #f6e6dc;
+}
+
 /* Outside the wrapper, while a themed page is open. */
 body:has([data-page-theme]) {
   background-color: var(--page-ground);

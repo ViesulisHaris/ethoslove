@@ -36,20 +36,22 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[cu
   return (
     <ClientMessages scope="(marketing)/page" locale={locale}>
       <JsonLd nodes={[organizationNode(), websiteNode()]} />
+      <div data-ground="cream">
       <PlatformHero variant={hero} />
-      <TornEdge from="#FFE9EC" to="var(--brand-paper)" />
+      <TornEdge from="#f6e6dc" to="var(--brand-paper)" />
       {hero === "gift" ? strip : null}
       <Doors />
       <IdeasTeaser />
       {hero === "dates" ? strip : null}
       {/* The tear starts in the colour of whatever sits above it: the blush of the ideas when the gallery moved up. */}
-      <TornEdge from={hero === "gift" ? "#FFF5F2" : "var(--brand-paper)"} to="var(--brand-forest)" fibre="#4d2139" />
+      <TornEdge from={hero === "gift" ? "#f6e6dc" : "var(--brand-paper)"} to="var(--brand-forest)" fibre="#4d2139" />
       <LongDistanceBand />
       <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" fibre="#4d2139" />
       <GamesBand />
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <PlatformClosing />
       <DirectoryLine />
+      </div>
     </ClientMessages>
   );
 }
