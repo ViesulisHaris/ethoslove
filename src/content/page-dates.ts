@@ -16,12 +16,23 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  */
 
 /**
- * The day the gift finder goes live, and with it "Who it suits" on every template page, Gifts first
- * in the rooms and the links to the finder. NOT LIVE YET: this is the day the work was finished.
- * Set it to the day it ships; every page it changed reads its date from here, and so does
- * tests/unit/crawl.test.ts.
+ * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
+ * finder. NOT LIVE YET: this is the day the work was finished. Set it to the day it ships; every
+ * page it changed reads its date from here. The template pages take GUIDES_LIVE below: who each
+ * suits now sits in the redesigned page's closed block, and ships with that page.
  */
 export const FINDER_LIVE = "2026-11-21";
+
+/**
+ * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
+ * template pages gain what people make with them, lines to borrow and their own questions, and the
+ * bouquet page's Mother's Day line changes. With them goes every template's page as redesigned on
+ * 21 Nov 2026 (far fewer words on show, new lines beside each section, the steps written out only
+ * in a closed block), so every template page takes this date. They are not live yet, and a date
+ * that runs ahead of the page is the kind search engines stop believing: whoever ships them sets
+ * this to that day. It is the one line to set: tests/unit/crawl.test.ts reads it from here.
+ */
+export const GUIDES_LIVE = "2026-11-21";
 
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
@@ -33,25 +44,34 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/gifts/finder": FINDER_LIVE,
   // Its "Is it only for couples?" answer now says a few templates are drawn for couples.
   "/gifts/for-best-friend": FINDER_LIVE,
-  // With the finder: the gallery links to it, and every template page gained "Who it suits", with
-  // links to the gift-idea pages.
+  // With the finder: the gallery links to it.
   "/templates": FINDER_LIVE,
-  "/templates/*": FINDER_LIVE,
-  // A template with a date of its own would otherwise keep the older one: the five given theirs for
-  // their search phrases, the holiday three (live 11 Nov) and the second holiday four (live 15 Nov).
-  // A template launched after "/templates/*" was set needs its own date too (crawl.test.ts checks).
-  "/templates/the-letter": FINDER_LIVE,
-  "/templates/constellations": FINDER_LIVE,
-  "/templates/scratch-card": FINDER_LIVE,
-  "/templates/bouquet": FINDER_LIVE,
-  "/templates/fortune-cookie": FINDER_LIVE,
-  "/templates/nice-list": FINDER_LIVE,
-  "/templates/unwrapped": FINDER_LIVE,
-  "/templates/wishbone": FINDER_LIVE,
-  "/templates/frosted-window": FINDER_LIVE,
-  "/templates/gingerbread-house": FINDER_LIVE,
-  "/templates/light-the-candles": FINDER_LIVE,
-  "/templates/string-the-lights": FINDER_LIVE,
+  "/templates/*": GUIDES_LIVE,
+  // The two free templates, then the three pages that had a guide before the growth build (13 Nov).
+  "/templates/the-letter": GUIDES_LIVE,
+  "/templates/constellations": GUIDES_LIVE,
+  "/templates/scratch-card": GUIDES_LIVE,
+  "/templates/bouquet": GUIDES_LIVE,
+  "/templates/fortune-cookie": GUIDES_LIVE,
+  // A template launched after "/templates/*" was set needs its own date (crawl.test.ts checks).
+  "/templates/nice-list": GUIDES_LIVE,
+  "/templates/unwrapped": GUIDES_LIVE,
+  "/templates/wishbone": GUIDES_LIVE,
+  // The second holiday batch went live on the night of 15 Nov (UTC); their words last changed with their guides.
+  "/templates/frosted-window": GUIDES_LIVE,
+  "/templates/gingerbread-house": GUIDES_LIVE,
+  "/templates/light-the-candles": GUIDES_LIVE,
+  "/templates/string-the-lights": GUIDES_LIVE,
+  // The other nine templates with a guide. The eight above that already had a date moved to GUIDES_LIVE too.
+  "/templates/birthday-cinema": GUIDES_LIVE,
+  "/templates/xoxo": GUIDES_LIVE,
+  "/templates/the-council": GUIDES_LIVE,
+  "/templates/bloom": GUIDES_LIVE,
+  "/templates/halfway": GUIDES_LIVE,
+  "/templates/snow-globe": GUIDES_LIVE,
+  "/templates/jar-of-reasons": GUIDES_LIVE,
+  "/templates/our-timeline": GUIDES_LIVE,
+  "/templates/scrapbook": GUIDES_LIVE,
   "/occasions/*": "2026-10-25",
   "/occasions/birthday": "2026-11-13",
   "/occasions/anniversary": "2026-11-13",

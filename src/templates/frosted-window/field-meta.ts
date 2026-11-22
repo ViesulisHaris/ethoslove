@@ -2,7 +2,7 @@ import type { FieldMeta } from "../types";
 
 export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   en: {
-    sign: { label: "The snowman's sign", help: "Up to 36 characters, chalked on the little board the snowman holds up outside. Left empty, it says merry christmas and their name.", placeholder: "merry christmas, Ava" },
+    sign: { label: "The snowman’s sign", help: "Up to 36 characters, chalked on the little board the snowman holds up outside. Left empty, it says merry christmas and their name.", placeholder: "merry christmas, Ava" },
     look: { label: "The room", options: { cottage: "Cream cottage", cabin: "Log cabin", midnight: "Midnight blue" } },
   },
   es: {

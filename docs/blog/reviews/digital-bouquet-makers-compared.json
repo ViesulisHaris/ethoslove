@@ -1,0 +1,200 @@
+{
+  "slug": "digital-bouquet-makers-compared",
+  "keyword": "digital bouquet maker",
+  "sources": [
+    {
+      "maker": "Beyond Bloom Co.",
+      "url": "https://www.beyondbloomco.com/gift",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "DigiBouquet",
+      "url": "https://digibouquet.net/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "DigiBouquet",
+      "url": "https://digibouquet.net/faq",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Digital Bouquet",
+      "url": "https://digitalbouquet.org/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Digital Bouquet",
+      "url": "https://digitalbouquet.org/create",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "E Greet",
+      "url": "https://egreet.in/bouquet/create",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "My Digital Bouquet",
+      "url": "https://mydigitalbouquet.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "theBouquet",
+      "url": "https://thebouquet.me/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "theBouquet",
+      "url": "https://thebouquet.me/supporter",
+      "checked": "2026-11-20"
+    }
+  ],
+  "sources_note": "The cloud sandbox's WebFetch could not resolve these hosts, so each page was read on 20 Nov 2026 with DataForSEO's page reader (on_page/content_parsing/live), as VOICE.md allows when a site can't be fetched. digitalbouquet.org/pricing, digitalbouquet.org/faq, mydigitalbouquet.com/faq and thebouquet.me/pricing returned no content, so nothing in the post comes from them. Ethos's row comes from src/templates/bouquet, src/config/site.ts and src/lib/pricing/products.ts.",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Lead left out E Greet (free, no account) and sent readers to Digital Bouquet for photos and voice without saying its price isn't stated; asked for both in EN and ES."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Factual error about Ethos: 'Up to 24 stems from 14 kinds, each in a choice of colours' — 5 of the 14 kinds come in one colour only (catalogue.ts).",
+            "A claim about another maker its pages don't show: 'theBouquet and Ethos also give you a QR code you can print' — theBouquet's pages show a QR code, and downloadable QR cards only with Supporter."
+          ],
+          "summary": "Two dealbreakers (single-colour kinds; theBouquet printable QR). Also: mention theBouquet's 3-Month Couples Pass, drop 'prettiest' (ranks looks), vary the repeated 'Pick it...' endings, smoother Spanish lead, and reword the link line in virtual-flowers-for-girlfriend that implied all seven are free."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Add the searcher's variant words ('virtual flowers', 'digital flower bouquet') in the text and put search words in the first table's heading."
+        }
+      ],
+      "applied": [
+        "Lead (EN, ES): E Greet added to the free makers; Digital Bouquet's missing price noted",
+        "Definition line with 'virtual flowers' / 'digital flower bouquet' (ES 'ramo de flores virtual') added before 'On every maker here it works the same way'",
+        "First table heading: 'Free digital bouquet makers, and what the paid ones cost' (ES 'Crear un ramo online gratis, y lo que cuestan las de pago')",
+        "Ethos flowers: 'most in a choice of colours' (ES 'la mayoría')",
+        "FAQ 'How do I send': theBouquet QR code and Supporter QR cards stated separately from Ethos's printable QR code (EN, ES)",
+        "theBouquet's 3-Month Couples Pass named in the price table and its paragraph (EN, ES)",
+        "'prettiest free bouquet' replaced with what the maker says (balanced); two 'Pick it...' endings varied (EN, ES)",
+        "Spanish lead reworded ('Abajo tienes las siete, una al lado de otra...')",
+        "virtual-flowers-for-girlfriend link line reworded so it doesn't imply all seven are free (EN, ES)",
+        "Polish taken: 'No los hemos revisado', 'Nosotros hacemos Ethos', 'enlace oculto' for 'no listado', the sampler line reworded so it doesn't repeat the virtual-flowers post",
+        "Spanish lead rewritten to stay under the test's 90 words after the fixes (same content: four free makers, Digital Bouquet's missing price, the date, who wrote it)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that puts seven digital bouquet makers in one set of tables (price, flowers and card, photos, music and voice, sending and expiry), says 'not stated' where a site was silent, and says plainly where Ethos is the weaker pick. Round-1 lead fix confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "A claim about another maker that its pages don't show: 'Pick it for a bouquet with a teddy bear in it' (ES 'osito de peluche'). theBouquet's page says 'plush toys', never a teddy bear."
+          ],
+          "summary": "All round-1 fixes confirmed. Asked for 'plush toy' in place of 'teddy bear' (EN, ES), and for Ethos's weak points to include that it needs an account to send and that theBouquet is free for 14 days."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: no ranking page is a head-to-head comparison; this one puts seven makers on the same columns, with set opening time, lock and link lifespan, plus cards to copy. Round-1 variant words and keyworded heading confirmed."
+        }
+      ],
+      "applied": [
+        "'teddy bear' -> 'plush toy' (ES 'un peluche dentro'), as theBouquet's page says",
+        "Ethos weak points (EN, ES): a fifth maker (theBouquet) is free for 14 days; Ethos needs an account to send it, where five of the others say they don't ask for one (messages/en.json 'No account until you publish'). The editor's 'where the others don't ask for one' was narrowed to 'five of the others say', because Digital Bouquet's pages don't say"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: dated, says openly that its author is one of the seven makers, marks every gap 'not stated', and says plainly when a free maker is the better pick, with Ethos's cost and account requirement up front."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: round-2 fixes made correctly; every Ethos fact matches the code, every maker claim appears in that maker's own page text of 20 Nov 2026, every link resolves, and the Spanish is the same post in natural Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the first page has only single makers, forum posts, AI image tools and florists; this is the only side-by-side of price, free tier, link lifespan, set opening time, lock and languages, with a pick-by-need list and cards to borrow."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: 'Several sites let you make a bouquet free' in virtual-flowers-for-girlfriend",
+        "Editor: vary one more 'Pick it for...' ending",
+        "Editor: ES takeaway 'hora de apertura' -> 'una hora fijada para abrirse'",
+        "Editor (round 2): Ethos music cell could mention your own file",
+        "Search: at the 60-day refresh check Attached, Build-A-Bouquet and Bloom (RIT) on their own sites; E Greet music says Spotify only if its own page does",
+        "Search: link the love-letter comparison from the pick list",
+        "Reader: check the 5-column table scrolls on a phone"
+      ]
+    }
+  ]
+}

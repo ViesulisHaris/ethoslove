@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { routing, type Locale } from "@/i18n/routing";
+import { sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, PRODUCT_ORDER, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 
@@ -186,9 +187,26 @@ export function appNode(locale: Locale, shown: Currency, description: string, pl
   };
 }
 
-/** A template as a product: what it is, what it looks like, and what it costs to send one, in the page's currency. */
+/**
+ * What it costs to send one gift of a template, as its own page says it: nothing while the template
+ * can go out free (lib/gift/free-tier.ts), "Make it special" for a free template that no longer can
+ * (Constellations since 19 Nov 2026, when the free version became the short note), and one template
+ * for a premium one.
+ */
+export function templateOfferAmount(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">, currency: Currency): number {
+  if (sendsFree(manifest)) return 0;
+  return PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency];
+}
+
+/**
+ * A template as a product: what it is, what it looks like, and what it costs to send one, in the
+ * page's currency. The price is the one the page shows. It used to be 0 for every template whose
+ * `tier` is "free", so Constellations told search engines it cost nothing beside a visible
+ * "€7.49 once when you send it" (the deep test of 21 Nov 2026).
+ */
 export function templateProductNode(manifest: TemplateManifest, locale: Locale, currency: Currency, category: string): Node {
   const url = localizedUrl(locale, `/templates/${manifest.slug}`);
+  const amount = templateOfferAmount(manifest, currency);
   return {
     "@type": "Product",
     "@id": `${url}#product`,
@@ -200,7 +218,7 @@ export function templateProductNode(manifest: TemplateManifest, locale: Locale, 
     url,
     offers: {
       "@type": "Offer",
-      price: manifest.tier === "free" ? "0" : price(PRODUCTS.single.amounts[currency]),
+      price: amount === 0 ? "0" : price(amount),
       priceCurrency: currency.toUpperCase(),
       availability: "https://schema.org/InStock",
       url,

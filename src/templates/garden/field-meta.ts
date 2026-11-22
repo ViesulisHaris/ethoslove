@@ -8,7 +8,7 @@ export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
       options: { blush: "Blush, at midday", wild: "Wild meadow", dusk: "Golden hour", moonlit: "Moonlit" },
     },
     blooms: {
-      label: "What's growing",
+      label: "What’s growing",
       help: "Fills every bed they pass, and the bouquet at the end.",
       options: { wildflowers: "Wildflowers", roses: "Roses", peonies: "Peonies", sunflowers: "Sunflowers" },
     },
