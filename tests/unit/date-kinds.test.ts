@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+// @ts-expect-error -- Next's compiled copy carries no types
+import { pathToRegexp } from "next/dist/compiled/path-to-regexp";
+import nextConfig from "../../next.config";
 import { CITY_SLUGS, getCity } from "@/lib/cities/cities";
 import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS } from "@/lib/dates/date-kinds";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
@@ -65,5 +68,14 @@ describe("the kinds of date", () => {
     expect(isCityKindPage("paris", "cheap")).toBe(false);
     expect(isCityKindPage("london", "fun")).toBe(false);
     for (const slug of [...DATE_KIND_IDS, "ideas"]) expect(CITY_SLUGS, slug).not.toContain(slug);
+  });
+
+  it("K17 the idea pictures' week-long cache is for the pictures, not for a page under the same path", async () => {
+    const rules = await nextConfig.headers!();
+    const dates = rules.filter((rule) => rule.source.startsWith("/dates/"));
+    expect(dates).toHaveLength(1);
+    const re = pathToRegexp(dates[0].source) as RegExp;
+    for (const file of ["/dates/ideas/bowling-night.webp", "/dates/hero/dates.webp", "/dates/kinds/cafe.webp"]) expect(re.test(file), file).toBe(true);
+    for (const page of ["/dates/ideas/first-date", ...DATE_KINDS.map((kind) => `/dates/ideas/${kind}`)]) expect(re.test(page), page).toBe(false);
   });
 });
