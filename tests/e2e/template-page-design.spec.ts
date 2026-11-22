@@ -905,14 +905,17 @@ test("a phone's first screen is light: the lying phone, its rim and the gift's c
   const firstKb = Math.round(first.reduce((n, p) => n + p.bytes, 0) / 1024);
   const allKb = Math.round([...fetched.values()].reduce((n, b) => n + b, 0) / 1024);
   console.log(`a phone's first screen: ${firstKb} KB in ${first.length} pictures (${first.map((p) => `${p.name} ${Math.round(p.bytes / 1024)} KB`).join(", ")}); ${allKb} KB of pictures fetched before any scroll, the browser's own look-ahead for lazy ones included`);
-  expect(first.map((p) => p.name).sort()).toEqual(["hero-flatlay-ivory-bezel.webp", "hero-flatlay-ivory.webp", "poster.jpg"]);
+  // The half-size picture and rim: the full-size pair was 250 KB of a phone's first screen (the confirming test of 22 Nov 2026).
+  expect(first.map((p) => p.name).sort()).toEqual(["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp", "poster.jpg"]);
   // The film is not part of a phone's first screen: under two fifths of the lying phone is on it, so the film has not been asked for.
   expect([...films.keys()]).toEqual([]);
-  expect(firstKb).toBeLessThan(360);
+  expect(firstKb).toBeLessThan(200);
   // Lower down, a phone is given the half-size files where they are enough: the band's picture and the loose pieces.
   const names = [...fetched.keys()].map((url) => new URL(url).pathname.split("/").pop()!);
   expect(names).not.toContain("experience-flatlay-ivory.webp");
-  expect(allKb).toBeLessThan(620);
+  expect(names).not.toContain("hero-flatlay-ivory.webp");
+  expect(names).not.toContain("hero-flatlay-ivory-bezel.webp");
+  expect(allKb).toBeLessThan(470);
   // One flick down and the phone is on screen: the film is asked for then, one file, this gift's own.
   await page.locator("[data-flatlay=hero] video").evaluate((v) => v.scrollIntoView({ block: "center" }));
   await expect(page.locator("[data-flatlay=hero] video[data-on]")).toHaveCount(1, { timeout: 20000 });

@@ -25,7 +25,9 @@ export function heroLead(description: string, max = 30, least = 12, most = 40): 
  * A tagline of more words than this, in either language, is a paragraph and not a line. It was 20,
  * which left ten gifts with two sentences and 17 to 19 words in italics: three or four rows on a
  * 320px phone, and on the Spanish Photo Booth "Crear regalo" began a pixel above the foot of the
- * first screen (the confirming test of 22 Nov 2026). Sixteen words are three rows there at most.
+ * first screen (the confirming test of 22 Nov 2026). A line left whole is now sixteen words at
+ * most: three rows on that phone, and four for one (the Spanish Spooky Season), measured on all
+ * 122 pages.
  */
 export const TAGLINE_WORDS = 16;
 
