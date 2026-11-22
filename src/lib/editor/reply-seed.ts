@@ -2,8 +2,13 @@
  * "Send one back": the names on the gift a recipient just watched travel to the editor, swapped,
  * so their reply opens with "To" and "From" already filled in. The gift's own template fields ride
  * along for templates that keep something in a reply (Halfway swaps its two places). Kept in
- * sessionStorage rather than the URL, and read once. The gift's id never goes in the link: a paid
- * premium gift's reply is free, and what proves it is a sealed token (replyEditorHref).
+ * sessionStorage rather than the URL. The gift's id never goes in the link: a paid premium gift's
+ * reply is free, and what proves it is a sealed token (replyEditorHref).
+ *
+ * The seed stays until the editor has something of its own to keep (clearReplySeed, on the reply's
+ * first change, when its draft is saved with the names in it). Read once and thrown away, a reload
+ * of the editor, or Back to the gift and Forward again, opened the reply with both names empty.
+ * It is this tab's only, and an hour old at most.
  */
 const KEY = "ethos:reply";
 const MAX_AGE_MS = 60 * 60 * 1000;
@@ -24,15 +29,27 @@ export function saveReplySeed(seed: ReplySeed): void {
   } catch {}
 }
 
-/** The seed for this template when there is a fresh one. It is removed either way. */
-export function takeReplySeed(slug: string): ReplySeed | null {
+/** The reply has a draft of its own now, or was never one: the seed has done its work. */
+export function clearReplySeed(): void {
+  try {
+    window.sessionStorage.removeItem(KEY);
+  } catch {}
+}
+
+/**
+ * The seed for this template when there is a fresh one. A fresh one for this template is left where
+ * it is, for a reload (see above); one for another template, a stale one or a broken one is removed.
+ */
+export function readReplySeed(slug: string): ReplySeed | null {
   try {
     const raw = window.sessionStorage.getItem(KEY);
     if (!raw) return null;
-    window.sessionStorage.removeItem(KEY);
     const seed = JSON.parse(raw) as Partial<ReplySeed & { savedAt: number }>;
-    if (seed.slug !== slug || typeof seed.savedAt !== "number" || Date.now() - seed.savedAt > MAX_AGE_MS) return null;
-    if (typeof seed.recipientName !== "string" || typeof seed.senderName !== "string") return null;
+    const fresh = seed.slug === slug && typeof seed.savedAt === "number" && Date.now() - seed.savedAt <= MAX_AGE_MS;
+    if (!fresh || typeof seed.recipientName !== "string" || typeof seed.senderName !== "string") {
+      window.sessionStorage.removeItem(KEY);
+      return null;
+    }
     const fields =
       seed.fields && typeof seed.fields === "object" && !Array.isArray(seed.fields) && JSON.stringify(seed.fields).length <= FIELDS_MAX_CHARS
         ? seed.fields
@@ -44,6 +61,7 @@ export function takeReplySeed(slug: string): ReplySeed | null {
       ...(fields ? { fields } : {}),
     };
   } catch {
+    clearReplySeed();
     return null;
   }
 }

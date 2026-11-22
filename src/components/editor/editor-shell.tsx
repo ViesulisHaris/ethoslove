@@ -10,7 +10,7 @@ import type { ShownReaction } from "@/lib/proof/numbers";
 import { loadTemplate } from "@/templates/registry";
 import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
-import { takeReplySeed } from "@/lib/editor/reply-seed";
+import { clearReplySeed, readReplySeed } from "@/lib/editor/reply-seed";
 import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
 import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
@@ -115,6 +115,12 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   // gift until init() below replaces it, so this template's form would be drawn over another
   // template's data (and anything touched in that moment saved under this template's key).
   const ready = hydrated && storeSlug === slug && (!remote || storeGiftId === remote.id);
+  // A reply's swapped names wait in this tab until the reply is first changed: from then on they
+  // are in its own draft, and the seed would only put them on some other gift made here later.
+  const dirty = useEditor((s) => s.dirty);
+  useEffect(() => {
+    if (ready && dirty) clearReplySeed();
+  }, [ready, dirty]);
 
   useEffect(() => {
     track("editor_opened", { template: slug });
@@ -132,8 +138,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       if (!active || !m) return;
       setMod(m);
       const initial = blankGift(manifest, locale, m);
-      // Arrived from "Send one back" on a gift: the names come already swapped.
-      const reply = remote ? null : takeReplySeed(slug);
+      // Arrived from "Send one back" on a gift: the names come already swapped. The seed is left in
+      // place until this reply is first changed (below), so a reload before then still has them.
+      const reply = remote ? null : readReplySeed(slug);
       if (reply) {
         initial.recipientName = reply.recipientName;
         initial.senderName = reply.senderName;
