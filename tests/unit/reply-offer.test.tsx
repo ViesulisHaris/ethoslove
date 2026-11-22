@@ -109,6 +109,17 @@ describe("or make one for someone else, on a gift's end screen", () => {
     expect(html).not.toMatch(/<form|<input|€|\$\d/);
   });
 
+  it("stands in a row of its own, so the free line stays the button's and is not read on into it", () => {
+    // "The first reply is free / or make one for someone else" read as one sentence when the two
+    // shared the button's tight group. The group closes after the free line; the link follows it.
+    for (const locale of ["en", "es"] as const) {
+      const html = onGiftPage(gift("bouquet", locale));
+      expect(html).toMatch(/(The first reply is free|La primera respuesta es gratis)<\/p><\/div><a [^>]*data-testid="make-for-someone-else"/);
+    }
+    // And on a gift with no free line, the same row: straight after the button's group.
+    expect(onGiftPage(gift("the-letter"), true)).toMatch(/<\/button><\/div><a [^>]*data-testid="make-for-someone-else"/);
+  });
+
   it("never carries the gift: its address holds the template and nothing else", () => {
     const link = someoneElse(onGiftPage(gift("bouquet")));
     expect(link).not.toContain("abc23def4");
@@ -142,6 +153,36 @@ describe("or make one for someone else, on a gift's end screen", () => {
   });
 });
 
+describe("Send one back, once it has been tapped", () => {
+  const button = (html: string) => /<button[^>]*>(?:(?!<\/button>).)*Send one back to Mia(?:(?!<\/button>).)*<\/button>/.exec(html)?.[0] ?? "";
+  const end = (makeOnePending: boolean) =>
+    renderToStaticMarkup(
+      <GiftChromeContext.Provider value={{ watermarked: false, keepHref: KEEP, makeOnePending }}>
+        <ReplyModeContext.Provider value>
+          <EndScreen data={gift("bouquet")} onMakeOne={() => {}} />
+        </ReplyModeContext.Provider>
+      </GiftChromeContext.Provider>,
+    );
+
+  it("waits for the editor: busy, and it takes no second tap", () => {
+    const busy = button(end(true));
+    expect(busy).toMatch(/^<button[^>]* disabled=""/);
+    expect(busy).toContain('aria-busy="true"');
+    expect(busy).toContain("animate-spin");
+    // A turning mark that stands still for someone who asked for less motion.
+    expect(busy).toContain("motion-reduce:animate-none");
+  });
+
+  it("is an ordinary button until then, and on demos, which never wait", () => {
+    for (const html of [end(false), renderToStaticMarkup(<EndScreen data={gift("bouquet")} onMakeOne={() => {}} />)]) {
+      const idle = /<button[^>]*>/.exec(html)?.[0] ?? "";
+      expect(idle).not.toContain("disabled=");
+      expect(idle).not.toContain("aria-busy");
+      expect(html).not.toContain("animate-spin");
+    }
+  });
+});
+
 describe("the maker's mark at the foot of a free gift", () => {
   const endOf = (locale: "en" | "es", tone: "light" | "dark" = "dark") =>
     renderToStaticMarkup(
@@ -165,8 +206,10 @@ describe("the maker's mark at the foot of a free gift", () => {
     expect(BRAND.categoryLine).toEqual({ en: "Digital cards by Tryethos", es: "Tarjetas digitales de Tryethos" });
   });
 
-  it("takes the end screen's tone, so it is quiet on a paper end screen and on a dark one", () => {
-    expect(mark(endOf("en", "light"))).toContain("text-black/50");
+  it("takes the end screen's tone, so it is quiet on a paper end screen and on a dark one, and still readable", () => {
+    // 10px type: black at 60% is about 5:1 on paper or white. At 50% it was 3.9:1, under what small text needs.
+    expect(mark(endOf("en", "light"))).toContain("text-black/60");
+    expect(mark(endOf("en", "light"))).not.toContain("text-black/50");
     expect(mark(endOf("en", "dark"))).toContain("text-white/55");
   });
 

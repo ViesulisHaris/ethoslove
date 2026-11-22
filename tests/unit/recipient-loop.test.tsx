@@ -10,6 +10,7 @@ import { countRecipientEditorOpened, countRecipientGiftSent, editorVia } from "@
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { REPLY_REF, replyEditorHref } from "@/lib/editor/reply-seed";
 import { ReactionSent } from "@/components/gift/reaction-sheet";
+import nextConfig from "../../next.config";
 
 /**
  * The loop a gift starts: the recipient taps something on it, opens the editor, sends their own.
@@ -123,15 +124,47 @@ describe("recipient_gift_sent", () => {
     expect(counted).toEqual([]);
   });
 
-  it("fires from the send screen once, when a draft first goes out, and where the editor opens", () => {
+  // NOT PROVEN HERE: that the event fires on a real publish. Publishing needs an account and a
+  // database, and a worktree has neither, so no test in this repository watches it happen. What
+  // follows only reads the send screen's source: the call is there, once, for a draft, with the
+  // gift's template and whether it holds anything paid. It passes for dead code too. Whoever tests
+  // a preview deployment publishes one gift from /create/the-letter?ref=reply with the browser's
+  // network panel open and looks for `recipient_gift_sent` among Vercel's events
+  // (docs/marketing/LOOP-KPI.md). The editor's own count is proven in the browser:
+  // tests/e2e/recipient-loop.spec.ts opens the editor through each of the four doors.
+  it("is called from the send screen, once, for a draft (read from the source: see the note above)", () => {
     const sheet = readFileSync("src/components/editor/publish-sheet.tsx", "utf8");
-    expect(sheet).toMatch(/if \(state\.status === "draft"\) countRecipientGiftSent\(.*, slug, premiumKeys\.length > 0\);\s+state\.markPublished\(/);
-    expect(sheet.match(/countRecipientGiftSent\(/g)).toHaveLength(1);
-    const shell = readFileSync("src/components/editor/editor-shell.tsx", "utf8");
-    expect(shell).toMatch(/track\("editor_opened", \{ template: slug \}\);[\s\S]{0,400}countRecipientEditorOpened\(/);
+    const calls = sheet.match(/^.*countRecipientGiftSent\(.*$/gm)?.filter((line) => !line.trimStart().startsWith("import")) ?? [];
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toContain('state.status === "draft"');
+    expect(calls[0]).toMatch(/countRecipientGiftSent\([^;]*,\s*slug,\s*premiumKeys\.length > 0\)/);
   });
 });
 
+describe("where a tap on a gift is said to have come from", () => {
+  // A gift's address is private: whoever holds it can open the gift. The page a gift's badge and its
+  // "or make one for someone else" open is a marketing page, where analytics run after a yes to
+  // cookies, and under the site-wide policy it was handed the gift's whole address as its referrer.
+  it("a gift page, and its keep page, send only the site's origin, in both languages", async () => {
+    const rules = await nextConfig.headers!();
+    const policy = (rule: (typeof rules)[number]) => rule.headers.find((h) => h.key === "Referrer-Policy")?.value;
+    const site = rules.findIndex((rule) => rule.source === "/(.*)");
+    const gift = rules.findIndex((rule) => /\(g\b[^)]*\)|\/g\//.test(rule.source) && policy(rule) !== undefined);
+    expect(policy(rules[site])).toBe("strict-origin-when-cross-origin");
+    expect(gift, "a rule for /g/…").toBeGreaterThan(-1);
+    expect(policy(rules[gift])).toBe("strict-origin");
+    // For the same header the later rule wins, so it has to come after the site's.
+    expect(gift).toBeGreaterThan(site);
+    // An optional /es, then /g, then anything: the gift, and /g/<id>/keep.
+    expect(rules[gift].source).toMatch(/^\/:locale\(es\)\?\/:\w+\(g(\|[a-z-]+)*\)\/:path\*$/);
+  });
+});
+
+// These read the source, so they only pin where each count is called and what it is handed; they
+// would pass for a call that never runs. That each one fires is watched in a browser, on a gift
+// played to its end (tests/e2e/recipient-loop.spec.ts): make_own_clicked, watermark_clicked from
+// the floating badge and from the end screen's, reply_started from the end screen and from the
+// reaction (once for two taps), recipient_editor_opened through all four doors.
 describe("the events the gift page sends", () => {
   const source = (file: string) => readFileSync(file, "utf8");
 
@@ -180,6 +213,18 @@ describe("after a reaction is sent", () => {
     const html = sent("es", () => {});
     expect(html).toContain("Enviado a Mia.");
     expect(html).toContain("Hazle uno a Mia");
+  });
+
+  it("waits for the editor once tapped: busy, and it takes no second tap", () => {
+    const button = (busy: boolean) => /<button[^>]*>/.exec(renderToStaticMarkup(<ReactionSent emoji="❤️" senderName="Mia" locale="en" onSendOneBack={() => {}} busy={busy} />))?.[0] ?? "";
+    expect(button(true)).toContain('disabled=""');
+    expect(button(true)).toContain('aria-busy="true"');
+    expect(button(false)).not.toContain("disabled=");
+    expect(button(false)).not.toContain("aria-busy");
+    const waiting = renderToStaticMarkup(<ReactionSent emoji="❤️" senderName="Mia" locale="en" onSendOneBack={() => {}} busy />);
+    expect(waiting).toContain("animate-spin");
+    // Still the same words: it is the same button, waiting.
+    expect(waiting).toContain("Send one back to Mia");
   });
 
   it("stays as it was where there is nothing to send back to", () => {
