@@ -45,9 +45,9 @@ export const ON_ACCENT = "#fffaf5";
 
 /** For a template added later, until someone picks its colours: the site's own paper, ink and rose. */
 export const DEFAULT_PAGE_THEME: PageTheme = {
-  ground: "#fdf7f3",
-  raised: "#fffbf9",
-  band: "#f7ebe5",
+  ground: "#f3e8da",
+  raised: "#faf4ea",
+  band: "#e9d9c5",
   ink: "#24121b",
   body: "#5d4652",
   accent: "#b0245a",

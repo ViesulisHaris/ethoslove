@@ -1,8 +1,6 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { EagerImg } from "@/components/shared/eager-img";
-import { artSrcSet, pageArt, type ArtId } from "@/content/page-art";
-import type { Flowers } from "@/content/template-page-themes";
 
 /**
  * The real flowers, bows and kisses the collage templates are made of (public/scraps), used on the
@@ -56,7 +54,7 @@ export function Cutout({ id, eager = false, className, style }: { id: CutoutId; 
  * anything under `lg`: a tablet gets the same single column, with the type starting at the left edge.
  */
 export type Placement = { x: number; y: number; size: number; rot: number; blur?: number; opacity?: number; phone?: boolean | "only"; eager?: boolean };
-type Bloom = Placement & { art: ArtId };
+type Bloom = Placement & { art: FrameArtId };
 
 /** Which screens a placed bloom is drawn on. */
 export function placementClass(b: Pick<Placement, "phone">): string {
@@ -87,6 +85,31 @@ export function placementStyle(b: Placement, shadow: string): CSSProperties {
  * the page: `lily-open`'s runs down to the left, `lily-three-quarter`'s up to the right,
  * `lily-side`'s down to the right. Petals and leaves have no such rule.
  */
+
+/**
+ * The frame's own pieces, in the blush colourway: where each file is and how big. The same facts
+ * are in the art's manifest (content/page-art.ts); they are written out here because this module
+ * is also drawn in the browser (the gallery, the gifts page's hero), and those pages should not
+ * download the whole manifest for eight flowers. tests/unit/frame-art.test.ts holds this table to
+ * the manifest, so a new render that changes a size fails there and not on a page.
+ */
+export const FRAME_ART = {
+  "lily-open": { src: "/art/pages/lily-open-blush.webp", src1x: "/art/pages/lily-open-blush-1x.webp", width: 900, height: 604, width1x: 450 },
+  "lily-three-quarter": { src: "/art/pages/lily-three-quarter-blush.webp", src1x: "/art/pages/lily-three-quarter-blush-1x.webp", width: 900, height: 771, width1x: 450 },
+  "lily-side": { src: "/art/pages/lily-side-blush.webp", src1x: "/art/pages/lily-side-blush-1x.webp", width: 900, height: 726, width1x: 450 },
+  "petal-1": { src: "/art/pages/petal-1-blush.webp", src1x: "/art/pages/petal-1-blush-1x.webp", width: 360, height: 256, width1x: 180 },
+  "petal-2": { src: "/art/pages/petal-2-blush.webp", src1x: "/art/pages/petal-2-blush-1x.webp", width: 360, height: 271, width1x: 180 },
+  "petal-3": { src: "/art/pages/petal-3-blush.webp", src1x: "/art/pages/petal-3-blush-1x.webp", width: 360, height: 264, width1x: 180 },
+  "petal-4": { src: "/art/pages/petal-4-blush.webp", src1x: "/art/pages/petal-4-blush-1x.webp", width: 360, height: 211, width1x: 180 },
+  "leaf-1": { src: "/art/pages/leaf-1.webp", src1x: "/art/pages/leaf-1-1x.webp", width: 700, height: 398, width1x: 350 },
+} as const;
+export type FrameArtId = keyof typeof FRAME_ART;
+
+/** One rendered piece of the frame by name, for a place outside the frame (a heading's corner). */
+export function FrameArt({ art, sizes, eager = false, className, style }: { art: FrameArtId; sizes: string; eager?: boolean; className?: string; style?: CSSProperties }) {
+  const a = FRAME_ART[art];
+  return <CutoutImg src={a.src1x} srcSet={`${a.src1x} ${a.width1x}w, ${a.src} ${a.width}w`} sizes={sizes} width={a.width} height={a.height} eager={eager} className={className} style={style} />;
+}
 
 /** Round the hero: lilies spilling off the corners, a few soft with depth, the words left clear. */
 const HERO: Bloom[] = [
@@ -126,16 +149,15 @@ const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
  * A frame of real flowers round a section. `light` lays them on blush paper, `dark` on the forest
  * ground with a vignette; `bare` adds the flowers to a ground the section already has.
  */
-export function FloralFrame({ frame, ground, className, flowers = "blush" }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string; flowers?: Flowers }) {
+export function FloralFrame({ frame, ground, className }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string }) {
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
       {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 82% 44%, rgba(255,176,200,.5) 0%, rgba(255,176,200,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(255,214,196,.85) 0%, rgba(255,214,196,0) 72%), radial-gradient(44% 46% at 40% 104%, rgba(228,214,255,.75) 0%, rgba(228,214,255,0) 70%), linear-gradient(180deg, #FFF7F3 0%, #FFE9EC 100%)" }} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
       {FRAMES[frame].map((b, i) => {
-        const art = pageArt(b.art, flowers);
         // A render brings the shadow it was lit with, so none is added: on the dark ground that shadow is lost in the dark, as a real one would be.
         const place = placementStyle(b, "transparent");
-        return <CutoutImg key={i} src={art.src1x} srcSet={artSrcSet(art)} sizes={`${Math.round(b.size * 1.2)}vw`} width={art.width} height={art.height} eager={b.eager} className={placementClass(b)} style={{ ...place, filter: b.blur ? `blur(${b.blur}px)` : undefined }} />;
+        return <FrameArt key={i} art={b.art} sizes={`${Math.round(b.size * 1.2)}vw`} eager={b.eager} className={placementClass(b)} style={{ ...place, filter: b.blur ? `blur(${b.blur}px)` : undefined }} />;
       })}
       {ground !== "bare" ? <div className={cn("grain-overlay mix-blend-overlay", ground === "light" ? "opacity-[0.16]" : "opacity-[0.1]")} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(16,4,11,0.55) 100%)" }} /> : null}

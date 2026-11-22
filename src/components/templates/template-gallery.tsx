@@ -7,7 +7,7 @@ import { featuredFor, sectionTemplates } from "@/config/featured";
 import { OCCASIONS, type Occasion } from "@/config/occasions";
 import type { TemplateManifest } from "@/templates/types";
 import { cn } from "@/lib/utils";
-import { Cutout } from "@/components/marketing/home/cutouts";
+import { Cutout, FrameArt } from "@/components/marketing/home/cutouts";
 import { TemplateCard } from "./template-card";
 import { GALLERY_ID } from "./gallery-id";
 import { sendsFree } from "@/lib/gift/free-tier";
@@ -130,7 +130,7 @@ export function TemplateGallery({
                     <h2 id={`shelf-${shelf.id}`} className="display-md mt-2">
                       {t(`templates.sections.${shelf.id}.title`)}
                     </h2>
-                    {shelf.id === "popular" ? <Cutout id="lily-pink" className="absolute -top-3 left-full ml-3 w-14 rotate-12 drop-shadow-[0_6px_10px_rgba(120,40,70,0.25)]" /> : null}
+                    {shelf.id === "popular" ? <FrameArt art="lily-three-quarter" sizes="80px" className="absolute -top-3 left-full ml-3 w-20 rotate-6" /> : null}
                     {shelf.id === "new" ? <Cutout id="bow-gingham" className="absolute -top-2 left-full ml-3 w-14 rotate-[14deg] drop-shadow-[0_6px_10px_rgba(120,30,50,0.3)]" /> : null}
                   </div>
                   <p className="hidden max-w-sm pb-1 text-sm leading-relaxed text-muted-foreground md:block">{t(`templates.sections.${shelf.id}.blurb`)}</p>

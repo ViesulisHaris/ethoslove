@@ -36,7 +36,6 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[cu
   return (
     <ClientMessages scope="(marketing)/page" locale={locale}>
       <JsonLd nodes={[organizationNode(), websiteNode()]} />
-      <div data-ground="cream">
       <PlatformHero variant={hero} />
       <TornEdge from="#f6e6dc" to="var(--brand-paper)" />
       {hero === "gift" ? strip : null}
@@ -51,7 +50,6 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[cu
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <PlatformClosing />
       <DirectoryLine />
-      </div>
     </ClientMessages>
   );
 }

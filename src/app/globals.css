@@ -8,10 +8,13 @@
 /* Brand tokens — the only place raw colours live.                     */
 /* ------------------------------------------------------------------ */
 :root {
-  /* Warm paper, plum ink, one rose accent. Everything else is a tint of these.
+  /* Cream paper, plum ink, one rose accent. Everything else is a tint of these.
+     The paper was a near-white (#fdf7f3) until 22 Nov 2026; beside a gift's page it read as plain
+     white, and the owner asked for the gift pages' cream on the whole site. A gift itself keeps
+     the paper it was drawn with: see .gift-root below.
      (The accent keeps its old name, "coral"; it is a raspberry rose now, 4.6:1 under white type.) */
-  --brand-paper: #fdf7f3;
-  --brand-paper-deep: #f7ebe5;
+  --brand-paper: #f3e8da;
+  --brand-paper-deep: #e9d9c5;
   --brand-ink: #24121b;
   --brand-ink-soft: #5d4652;
   --brand-coral: #d6336c;
@@ -23,20 +26,20 @@
   --brand-moss: #2e6b4e;
   --brand-night: #14110e;
   --brand-night-raised: #1e1a16;
-  --brand-line: #ecdcd6;
+  --brand-line: #e2d2be;
 
   /* shadcn semantic tokens mapped onto the brand */
   --background: var(--brand-paper);
   --foreground: var(--brand-ink);
-  --card: #fffaf7;
+  --card: #faf4ea;
   --card-foreground: var(--brand-ink);
-  --popover: #fffaf7;
+  --popover: #faf4ea;
   --popover-foreground: var(--brand-ink);
   --primary: var(--brand-coral);
   --primary-foreground: #fbf6ee;
   --secondary: var(--brand-paper-deep);
   --secondary-foreground: var(--brand-ink);
-  --muted: #f6eae5;
+  --muted: #ecdfce;
   --muted-foreground: #6e5963;
   --accent: var(--brand-rose-soft);
   --accent-foreground: var(--brand-ink);
@@ -374,7 +377,7 @@
   --color-rose-soft: #ffe8ef;
   --color-rose-tint: #ffd6e2;
   --color-rose-mist: #fff0f4;
-  --color-blush-paper: #fff5f2;
+  --color-blush-paper: #f6e6dc;
   --color-star: #e0962a;
   --color-star-empty: #e9c0cb;
   --color-moss-soft: #dcebdf;
@@ -396,7 +399,7 @@
 /* ------------------------------------------------------------------ */
 :root {
   --page-ground: var(--brand-paper);
-  --page-raised: #fffbf9;
+  --page-raised: #faf4ea;
   --page-band: var(--brand-paper-deep);
   --page-ink: var(--brand-ink);
   --page-body: var(--brand-ink-soft);
@@ -460,33 +463,6 @@
 }
 [data-page-theme] :focus-visible {
   outline-color: var(--page-ink);
-}
-
-/* ------------------------------------------------------------------ */
-/* The front page on the gift pages' cream. Its ground was the site's    */
-/* near-white paper, which read as plain white beside a gift's page (the */
-/* owner, 22 Nov 2026: "update the white color so it matches the         */
-/* templates"). The page's sections ask for paper, card and line by      */
-/* name, so the names are given the cream here, on the wrapper and, for  */
-/* the header and the strip behind an overscroll, on <body> while the    */
-/* page is open. Nothing else on the site changes.                       */
-/* ------------------------------------------------------------------ */
-[data-ground="cream"],
-body:has([data-ground="cream"]) {
-  --brand-paper: #f3e8da;
-  --brand-paper-deep: #e9d9c5;
-  --brand-line: #e2d2be;
-  --background: #f3e8da;
-  --card: #faf4ea;
-  --secondary: #e9d9c5;
-  --muted: #ecdfce;
-}
-body:has([data-ground="cream"]) {
-  background-color: #f3e8da;
-}
-/* The blush sections (the hero, the date ideas) are a colour of their own, written into the utility: on this page they are the cream with the blush still in it. */
-[data-ground="cream"] .bg-blush-paper {
-  background-color: #f6e6dc;
 }
 
 /* Outside the wrapper, while a themed page is open. */
@@ -949,6 +925,24 @@ body:has([data-page-theme]) .site-header .btn-rose {
  */
 .gift-root {
   --u: min(1cqw, calc(1cqh * 0.6));
+}
+
+/*
+ * A gift keeps the paper it was drawn with. The site's paper became cream on 22 Nov 2026; a gift
+ * that asks for the site's paper, card or line by name (a button on Birthday Cinema does) must look
+ * to whoever opens it exactly as it did, in the editor's preview, in a demo and at its own link:
+ * the gift itself, and the page round it on the gift routes (its dark ground and what is written on it).
+ */
+.gift-root,
+[data-gift-page] {
+  --brand-paper: #fdf7f3;
+  --brand-paper-deep: #f7ebe5;
+  --brand-line: #ecdcd6;
+  --background: #fdf7f3;
+  --card: #fffaf7;
+  --popover: #fffaf7;
+  --secondary: #f7ebe5;
+  --muted: #f6eae5;
 }
 
 /*
