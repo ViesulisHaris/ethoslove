@@ -15,6 +15,8 @@ const at = (hour: number, minute: number): Date => {
   return new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate(), hour, minute));
 };
 const today = (): string => ymd(new Date());
+/** The first visit to /plan compiles it on a dev server: longer than an assertion's usual wait. */
+const PLAN_COMPILES = { timeout: 20_000 };
 
 async function pinClock(page: Page, time = at(17, 10)) {
   await page.clock.install({ time });
@@ -86,7 +88,7 @@ test.describe("plan our date tonight", () => {
     await planButton(page).click();
     await expect(result(page).getByRole("heading", { name: "Dinner, then the long way home" })).toBeVisible();
     await result(page).getByRole("button", { name: "Open the plan" }).click();
-    await expect(page).toHaveURL(/\/plan$/);
+    await expect(page).toHaveURL(/\/plan$/, PLAN_COMPILES);
     await expect(page.getByRole("heading", { level: 2, name: "Taberna Boa Noite" })).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: "Miradouro das Flores" })).toBeVisible();
     await expect(page.getByRole("button", { name: /^Time at Taberna Boa Noite/ })).toHaveText("19:00");
@@ -124,7 +126,7 @@ test.describe("plan our date tonight", () => {
     await expect(result(page).getByRole("heading")).toBeVisible();
     expect(searches).toHaveLength(1);
     await result(page).getByRole("button", { name: "Open the plan" }).click();
-    await expect(page).toHaveURL(/\/plan$/);
+    await expect(page).toHaveURL(/\/plan$/, PLAN_COMPILES);
     await expect(page.getByText(/^London · /)).toBeVisible();
   });
 
@@ -217,12 +219,14 @@ test.describe("plan our date tonight", () => {
     expect(await page.evaluate(() => JSON.parse(window.localStorage.getItem("ethos.dates.plan.v1") ?? "null"))).toEqual(before);
     page.once("dialog", (d) => void d.accept());
     await open.click();
-    await expect(page).toHaveURL(/\/plan$/);
+    await expect(page).toHaveURL(/\/plan$/, PLAN_COMPILES);
     await expect(page.getByRole("heading", { level: 2, name: "Taberna Boa Noite" })).toBeVisible();
     expect(await page.evaluate(() => window.localStorage.getItem("ethos.dates.saved.v1"))).toBeNull();
   });
 
   test("E10 what is counted, and that nothing private is", async ({ page, context }) => {
+    // Three pages, a reload and five events: longer than one page's test.
+    test.setTimeout(90_000);
     await mockWorld(page);
     await pinClock(page);
     await context.grantPermissions(["clipboard-read", "clipboard-write"]).catch(() => undefined);
@@ -237,7 +241,7 @@ test.describe("plan our date tonight", () => {
     await expect.poll(ours).toEqual([{ name: "tonight_planned", data: { mood: "cozy", budget: 1, when: "tonight" } }, { name: "tonight_another" }]);
 
     await result(page).getByRole("button", { name: "Open the plan" }).click();
-    await expect(page).toHaveURL(/\/plan$/);
+    await expect(page).toHaveURL(/\/plan$/, PLAN_COMPILES);
     await page.getByRole("button", { name: "Copy link" }).click();
     await expect.poll(async () => (await ours()).filter((e) => e.name === "plan_shared")).toEqual([{ name: "plan_shared", data: { how: "copy" } }]);
     await page.getByRole("button", { name: "Share", exact: true }).click();
@@ -248,7 +252,7 @@ test.describe("plan our date tonight", () => {
     await page.goto(`/plan#p=${encoded}`);
     await expect(page.getByRole("button", { name: "Keep this plan" })).toBeVisible();
     await expect.poll(async () => (await ours()).filter((e) => e.name === "shared_plan_opened")).toEqual([{ name: "shared_plan_opened" }]);
-    await page.reload();
+    await page.reload({ waitUntil: "domcontentloaded" });
     await expect(page.getByRole("button", { name: "Keep this plan" })).toBeVisible();
     await expect.poll(async () => (await ours()).filter((e) => e.name === "shared_plan_opened")).toEqual([{ name: "shared_plan_opened" }]);
     page.once("dialog", (d) => void d.accept());
@@ -284,7 +288,8 @@ test.describe("plan our date tonight", () => {
     const band = page.locator("#tonight");
     const waiting = band.getByRole("button", { name: "Say where first" });
     await expect(waiting).toBeVisible();
-    await waiting.click();
+    // It says why it waits and stays reachable (aria-disabled, not disabled): pressed, it does nothing.
+    await waiting.click({ force: true });
     await expect(result(page)).toHaveCount(0);
     await expect(band.getByRole("combobox", { name: "Mood" })).toHaveCount(0);
     await page.evaluate(() => window.localStorage.setItem("ethos.dates.where.v1", JSON.stringify({ lat: 38.714, lng: -9.139, name: "Lisbon", share: true })));
