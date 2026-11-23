@@ -127,7 +127,7 @@ test("X5 London's and New York's pages point at their two kinds, and no other ci
 });
 
 test("X6 every city's page has the planner", async ({ page }) => {
-  for (const [path, button] of [["/dates/sydney", "Plan it"], ["/es/dates/sydney", "Planeadla"]]) {
+  for (const [path, button] of [["/dates/sydney", "Plan it"], ["/es/dates/sydney", "Planear"]]) {
     await page.context().clearCookies();
     await page.goto(path);
     const band = page.locator("#tonight");

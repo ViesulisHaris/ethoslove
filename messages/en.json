@@ -1814,7 +1814,7 @@
     "empty": {
       "title": "Where are you two?",
       "sub": "A town, a neighbourhood, or just where you are now. We'll find the dates hiding in it.",
-      "subIdea": "Say where you two are, and “{idea}” is planned with real places there.",
+      "subIdea": "Say where you are and we'll plan “{idea}” with real places there.",
       "or": "Or start somewhere",
       "note": "pick a street, any street"
     },
@@ -1897,7 +1897,7 @@
         "any": "Any length",
         "short": "Up to 2 hours",
         "medium": "2 to 3 hours",
-        "long": "The whole evening"
+        "long": "3 hours or more"
       },
       "budget": {
         "0": "free",
@@ -1931,9 +1931,12 @@
       "optional": "optional",
       "none": "Nothing fits that here.",
       "noneKind": "Nothing on this page can still be done {when} there.",
-      "late": "It is late for tonight. Tomorrow has more.",
+      "movedTomorrow": "Nothing on this page can still be done tonight there, so this one is for tomorrow.",
+      "late": "It's too late to start one tonight.",
       "tryTomorrow": "Plan tomorrow",
       "openMap": "Open the map",
+      "noScript": "The planner needs JavaScript.",
+      "noScriptCities": "Real places, city by city",
       "replace": "This replaces the plan you were making on this device.",
       "replaceYes": "Replace it",
       "replaceNo": "Keep mine"

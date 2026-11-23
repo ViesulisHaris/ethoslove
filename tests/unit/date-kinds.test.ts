@@ -8,7 +8,7 @@ import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } fr
 import { ART_IDS } from "@/content/page-art";
 import { DATE_CARDS_ART, DATE_FOOT_ART, DATE_HERO_ART, DATE_PLACEMENTS } from "@/components/dates/page/placements";
 import { CITY_SLUGS, getCity, mentionsSpain } from "@/lib/cities/cities";
-import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS } from "@/lib/dates/date-kinds";
+import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS, type DateKind } from "@/lib/dates/date-kinds";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
 
 const words = (text: string): number => text.trim().split(/\s+/).length;
@@ -105,7 +105,9 @@ describe("the kinds of date", () => {
       for (const l of LOCALES) {
         expect(copy.title[l].startsWith(copy.phrase[l]), `${kind} ${l}`).toBe(true);
         expect(copy.title[l], `${kind} ${l}`).toContain("{count}");
-        expect(copy.title[l].replace("{count}", String(count)).length, `${kind} ${l}`).toBeLessThanOrEqual(70);
+        // What a search result shows before it cuts (dates-D9): sixty for the title, 155 for the description.
+        expect(copy.title[l].replace("{count}", String(count)).length, `${kind} ${l}`).toBeLessThanOrEqual(60);
+        expect(copy.description[l].length, `${kind} ${l} description`).toBeLessThanOrEqual(155);
         const word = COUNT_WORD[count][l];
         expect(copy.description[l].toLowerCase(), `${kind} ${l} description`).toContain(word);
         expect(copy.sentence[l].toLowerCase(), `${kind} ${l} sentence`).toContain(word);
@@ -146,6 +148,19 @@ describe("the kinds of date", () => {
     }
   });
 
+  it("K19 the hero's picture is never the first card of a row below it (dates-D6)", () => {
+    // The rows a page shows: the cheap page has two (the free four, then the rest), every other kind one.
+    const firsts = (kind: DateKind): string[] => (kind === "cheap" ? [CHEAP_FREE[0], KIND_IDEAS.cheap.find((id) => !CHEAP_FREE.includes(id))!] : [KIND_IDEAS[kind][0]]);
+    for (const kind of DATE_KINDS) expect(firsts(kind), kind).not.toContain(DATE_KIND_COPY[kind]!.hero);
+    for (const { city, kind } of CITY_KIND_PAGES) expect(firsts(kind), `${city}/${kind}`).not.toContain(CITY_KIND_COPY[`${city}/${kind}`].hero ?? DATE_KIND_COPY[kind]!.hero);
+  });
+
+  it("K20 the first-date words never claim every idea keeps your hands busy: the gallery, the museum and the garden do not (dates-D5)", () => {
+    const copy = DATE_KIND_COPY["first-date"]!;
+    const said = [copy.sentence, copy.description, ...copy.faq.map((f) => f.a)].flatMap((x) => [x.en, x.es]).join(" ");
+    for (const claim of [/each of these nine gives/i, /each with something for your hands/i, /your hands have something/i, /las nueve dan algo que hacer a las manos/i, /(?<!casi )todas dan algo que hacer a las manos/i, /las manos tienen algo/i]) expect(said).not.toMatch(claim);
+  });
+
   it("K12 the fun page's rain answer counts its own ideas", () => {
     const fun = kindIdeas("fun");
     expect(fun.filter((i) => i.goodInRain)).toHaveLength(6);
@@ -157,7 +172,8 @@ describe("the kinds of date", () => {
     expect(Object.keys(CITY_KIND_COPY).sort()).toEqual(CITY_KIND_PAGES.map((p) => `${p.city}/${p.kind}`).sort());
     for (const [key, copy] of Object.entries(CITY_KIND_COPY)) {
       for (const l of LOCALES) {
-        expect(copy.title[l].length, `${key} ${l}`).toBeLessThanOrEqual(70);
+        expect(copy.title[l].length, `${key} ${l}`).toBeLessThanOrEqual(60);
+        expect(copy.description[l].length, `${key} ${l} description`).toBeLessThanOrEqual(155);
         expect(words(copy.line[l]), `${key} ${l} line`).toBeLessThanOrEqual(14);
         expect(words(copy.sentence[l]), `${key} ${l} sentence`).toBeLessThanOrEqual(30);
         for (const text of strings(copy)) expect(text.trim().length).toBeGreaterThan(0);

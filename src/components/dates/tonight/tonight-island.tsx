@@ -216,6 +216,18 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
         onWhen={tonight.setWhen}
         onPlan={() => void tonight.plan()}
       />
+      {/* With JavaScript off the form above cannot answer: say so, and on a page by kind point to the
+          city pages at its foot, which list real places in plain HTML. */}
+      <noscript>
+        <p className="mt-4 text-[0.9375rem] text-page-body">
+          {t("tonight.noScript")}{" "}
+          {place ? null : (
+            <a href="#cities-title" className={QUIET}>
+              {t("tonight.noScriptCities")}
+            </a>
+          )}
+        </p>
+      </noscript>
       {/* The card is not in the live region: its heading takes focus, which already reads it out once. */}
       {tonight.result ? <TonightResult {...tonight.result} confirming={tonight.confirming} onReplace={tonight.replace} onKeep={tonight.keep} locale={locale} onOpen={tonight.open} onAnother={tonight.another} /> : null}
       <div role="status" aria-live="polite">
@@ -223,7 +235,8 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
           <TonightProblem
             problem={tonight.problem}
             mapHref={mapHref}
-            offerTomorrow={tonight.problemWhen === "tonight"}
+            // A page by kind has already tried tomorrow when tonight had none of its ideas (use-tonight).
+            offerTomorrow={tonight.problemWhen === "tonight" && !kind}
             ofKind={Boolean(kind)}
             whenLabel={tonight.problemWhen && tonight.problemWhen !== "day" ? t(`tonight.when.${tonight.problemWhen}`) : undefined}
             onRetry={() => void tonight.plan()}

@@ -250,7 +250,8 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   }
 
   return (
-    <section className="container-x grid gap-8 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
+    // A place name can be one long word (Llanfairpwllgwyngyll…): it wraps rather than widening the page.
+    <section className="container-x grid gap-8 py-10 [overflow-wrap:anywhere] sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
       <article className="relative rounded-[32px] bg-card p-6 shadow-lift ring-1 ring-forest/5 sm:p-10">
         <Cutout id="bow-gingham" className="absolute -top-7 right-6 w-20 rotate-12 drop-shadow-[0_10px_16px_rgba(120,50,70,0.25)] sm:w-24" />
         {readOnly ? (

@@ -39,7 +39,7 @@ export const GUIDES_LIVE = "2026-11-21";
  * page, the pages by kind, the new cities. NOT LIVE YET: this is the day the work was finished. Set it
  * to the day it ships (a date ahead of the page is the kind search engines stop believing).
  */
-export const DATES_LIVE = "2026-11-22";
+export const DATES_LIVE = "2026-11-23";
 
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.

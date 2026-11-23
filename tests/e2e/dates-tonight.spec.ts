@@ -130,7 +130,7 @@ test.describe("plan our date tonight", () => {
     const starts: string[] = [];
     for (let i = 0; i < 12; i++) {
       const heading = await result(page).getByRole("heading").textContent();
-      starts.push((await result(page).locator("li span.tabular-nums").first().textContent()) ?? "");
+      starts.push((await result(page).locator("li [data-time]").first().textContent()) ?? "");
       if (starts.at(-1)! < "17:00") break;
       await result(page).getByRole("button", { name: "Another" }).click();
       await expect(result(page).getByRole("heading")).not.toHaveText(heading ?? "");
@@ -166,9 +166,9 @@ test.describe("plan our date tonight", () => {
     await pinClock(page);
     await openLisbon(page, `/es/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisboa&date=${today()}`);
     expect(await sentence(page)).toBe("Planead una cita de cualquier tipo esta noche. Cualquier duración, con cualquier presupuesto.");
-    await expect(planButton(page, "Planeadla")).toBeVisible();
+    await expect(planButton(page, "Planear")).toBeVisible();
     await page.getByRole("combobox", { name: "Presupuesto" }).selectOption("0");
-    await planButton(page, "Planeadla").click();
+    await planButton(page, "Planear").click();
     await expect(result(page).getByRole("button", { name: "Abrir el plan" })).toBeVisible();
     await expect(result(page).getByRole("button", { name: "Otra" })).toBeVisible();
     await expect(result(page)).toContainText("Con lluvia no hay nada gratis para esta noche; esta cuesta lo que una cena fuera.");
@@ -225,7 +225,7 @@ test.describe("plan our date tonight", () => {
     await openLisbon(page);
     await planButton(page).click();
     const band = page.locator("[data-tonight]");
-    await expect(band).toContainText("It is late for tonight. Tomorrow has more.");
+    await expect(band).toContainText("It's too late to start one tonight.");
     await band.getByRole("button", { name: "Plan tomorrow" }).click();
     await expect(result(page).getByRole("heading")).toBeVisible();
     expect(await sentence(page)).toContain("tomorrow");
@@ -341,7 +341,7 @@ test.describe("plan our date tonight", () => {
     await planButton(page).click();
     await expect(result(page).getByRole("heading")).toHaveText("Bowling, bumpers optional");
   });
-  test("E13 a page by kind keeps to its kind: tonight with none of its ideas doable says so and offers tomorrow", async ({ page }) => {
+  test("E13 a page by kind keeps to its kind: tonight with none of its ideas doable plans tomorrow at once and says so", async ({ page }) => {
     await mockWorld(page);
     // The rare finds' servers are busy: no bowling alley tonight.
     await page.route("**/api/dates/rare*", (route) => route.fulfill({ status: 503, json: { unavailable: true } }));
@@ -351,9 +351,10 @@ test.describe("plan our date tonight", () => {
     const band = page.locator("#tonight");
     await expect(band.getByRole("combobox", { name: "Where" })).toHaveValue("Lisbon");
     await planButton(page).click();
-    await expect(band).toContainText("Nothing on this page can still be done tonight there.");
-    await expect(result(page)).toHaveCount(0);
-    await band.getByRole("button", { name: "Plan tomorrow" }).click();
+    // The page's own button never ends on a refusal: one tap, and tomorrow is planned (dates-D1).
+    await expect(result(page)).toContainText("Nothing on this page can still be done tonight there, so this one is for tomorrow.");
+    await expect(band.getByRole("button", { name: "Plan tomorrow" })).toHaveCount(0);
+    expect(await sentence(page)).toContain("tomorrow");
     // Tomorrow every pick, round to the first again, is one of the page's own ideas.
     const titles = await page.locator("[data-cards] [data-card-title]").allTextContents();
     expect(titles.length).toBeGreaterThanOrEqual(8);
@@ -426,8 +427,66 @@ test.describe("plan our date tonight", () => {
   test("E17 an idea's 'Plan it near you' is named on the where screen", async ({ page }) => {
     await mockWorld(page);
     await page.goto("/dates?idea=gallery-hop");
-    await expect(page.getByText("Say where you two are, and “Gallery hop” is planned with real places there.")).toBeVisible();
+    await expect(page.getByText("Say where you are and we'll plan “Gallery hop” with real places there.")).toBeVisible();
     await page.goto("/es/dates?idea=gallery-hop");
     await expect(page.getByText("Decid dónde estáis y planeamos «Ruta de galerías» con sitios reales de allí.")).toBeVisible();
+  });
+
+  test("E18 a tab left open past midnight plans the new day's evening and still calls it tonight (dates-D2)", async ({ page }) => {
+    await mockWorld(page);
+    // 23:30 at the place (the forecast puts it an hour ahead of UTC).
+    await pinClock(page, at(22, 30));
+    await openLisbon(page);
+    expect(await sentence(page)).toContain("tonight");
+    await page.clock.fastForward("50:00");
+    await planButton(page).click();
+    await expect(result(page).getByRole("heading")).toBeVisible();
+    const next = new Date();
+    next.setDate(next.getDate() + 1);
+    await expect.poll(() => new URL(page.url()).searchParams.get("date")).toBe(ymd(next));
+    // The sentence reads its "tonight" from the same clock as the plan: a second tap plans the same evening.
+    expect(await sentence(page)).toContain("tonight");
+    expect(await sentence(page)).not.toContain("tomorrow");
+  });
+
+  test("E19 before the page can answer, the button says so; with no JavaScript, the planner says it needs it (dates-D7, D13)", async ({ page }) => {
+    const html = await (await page.request.get("/dates/ideas/fun")).text();
+    const band = html.slice(html.indexOf('id="tonight"'));
+    // Drawn held in the server's HTML: a tap before hydration is never silently lost.
+    expect(band).toMatch(/<button[^>]*aria-disabled="true"[^>]*>Say where first<\/button>/);
+    expect(band).toContain("<noscript>");
+    expect(band).toContain("The planner needs JavaScript.");
+    await mockWorld(page);
+    await page.goto("/dates/ideas/fun");
+    await expect(planButton(page, "Say where first")).not.toHaveAttribute("aria-disabled", "true");
+  });
+
+  test("E20 each choice is named once, by its select, and the where box shows a ring when the keyboard reaches it (dates-D14, D15)", async ({ page, isMobile }) => {
+    test.skip(isMobile, "a keyboard is a desktop's");
+    await mockWorld(page);
+    await page.goto("/dates/ideas/fun");
+    const band = page.locator("#tonight");
+    await expect(band.locator("p.font-display .sr-only")).toHaveCount(0);
+    for (const name of ["When", "How long", "Budget"]) await expect(band.getByRole("combobox", { name, exact: true })).toBeVisible();
+    const where = band.getByRole("combobox", { name: "Where" });
+    await where.focus();
+    await expect(where).toBeFocused();
+    const ring = await where.evaluate((input) => {
+      const box = input.parentElement!;
+      const cs = getComputedStyle(box);
+      return { style: cs.outlineStyle, width: parseFloat(cs.outlineWidth) };
+    });
+    expect(ring.style).not.toBe("none");
+    expect(ring.width).toBeGreaterThanOrEqual(2);
+  });
+
+  test("E21 a long unbroken place name wraps on /plan instead of widening the page (dates-D11)", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const plan = { v: 1, date: today(), where: "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch".repeat(2).slice(0, 80), stops: [{ id: "node/105", name: "Miradouro".repeat(8), kind: "viewpoint", lat: 38.712, lng: -9.138, time: "18:45" }] };
+    await page.addInitScript((p) => window.localStorage.setItem("ethos.dates.plan.v1", JSON.stringify(p)), plan);
+    await page.goto("/plan");
+    await expect(page.getByRole("heading", { level: 2, name: /^Miradouro/ })).toBeVisible(PLAN_COMPILES);
+    const wide = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(wide).toBeLessThanOrEqual(0);
   });
 });

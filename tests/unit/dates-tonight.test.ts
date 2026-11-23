@@ -4,8 +4,9 @@ import { canBeFree, fillStops, forTheDay, IDEAS, ideaById, isDoable, type DateId
 import { KIND_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { readPlan } from "@/lib/dates/plan";
+import { clipName } from "@/lib/dates/where-store";
 import { suggestTimes } from "@/lib/dates/timing";
-import { forTonight, isSportsBar, lengthFits, placeNow, placesFor, rankTonight, startFor, TONIGHT_ENDS_MIN, tonightPlan, tonightShift, tonightStart, tonightTimes } from "@/lib/dates/tonight";
+import { forTonight, isKaraokeBar, isSportsBar, lengthFits, placeNow, placesFor, rankTonight, startFor, TONIGHT_ENDS_MIN, tonightPlan, tonightShift, tonightStart, tonightTimes } from "@/lib/dates/tonight";
 import type { Condition, DayWeather } from "@/lib/dates/weather";
 
 const place = (id: string, kind: PlaceKind, over: Partial<Place> = {}): Place => ({
@@ -235,6 +236,19 @@ describe("tonight's stops suit the idea", () => {
     expect(fillStopsNames(theatre.idea, placesFor(theatre.idea, world))).toEqual(["node/t", "node/r"]);
     expect(ids(rankTonight({ startMin: EVENING }, { day: DRY, places: [sports, place("node/t", "theatre")] }))).not.toContain("theatre-night");
   });
+
+  it("T23 the karaoke is planned at a karaoke booth or a bar that says it has karaoke, never at a plain bar (dates-D4)", () => {
+    const plain = place("node/pub", "bar", { name: "Bar do Rio", score: 99 });
+    const sings = place("node/kbar", "bar", { name: "Karaoke Bar Soho" });
+    const dinner = place("node/r", "restaurant");
+    expect(ids(rankTonight({ startMin: EVENING }, { day: DRY, places: [plain, dinner] }))).not.toContain("karaoke-duet");
+    const atBar = rankTonight({ startMin: EVENING }, { day: DRY, places: [plain, sings, dinner] }).find((p) => p.idea.id === "karaoke-duet")!;
+    expect(fillStopsNames(atBar.idea, placesFor(atBar.idea, [plain, sings, dinner]))).toEqual(["node/kbar", "node/r"]);
+    const booth = place("node/k", "karaoke");
+    expect(placesFor(idea("karaoke-duet"), [plain, booth, dinner])).toEqual([booth, dinner]);
+    expect(isKaraokeBar(place("node/x", "bar", { name: "Sing Sing" }))).toBe(true);
+    expect(isKaraokeBar(place("node/y", "bar", { name: "Singapore Sling" }))).toBe(false);
+  });
 });
 
 describe("tonight's times and plan", () => {
@@ -264,5 +278,13 @@ describe("tonight's times and plan", () => {
     const gap = tonightPlan(idea("pasta-and-a-slow-walk"), [restaurant, null], ["19:00", "20:30"], { date: "2026-11-28" });
     expect(gap.stops).toHaveLength(1);
     expect("where" in gap).toBe(false);
+  });
+
+  it("T24 a long place name is cut at 80 whole characters, never inside an emoji (dates-D10)", () => {
+    const name = `${"a".repeat(79)}\u{1F600} more`;
+    const plan = tonightPlan(idea("pasta-and-a-slow-walk"), [place("node/r", "restaurant")], ["19:00"], { date: "2026-11-28", where: name });
+    expect(plan.where).toBe(`${"a".repeat(79)}\u{1F600}`);
+    expect(plan.where).not.toMatch(/[\ud800-\udbff]$/);
+    expect(clipName("Lisbon")).toBe("Lisbon");
   });
 });

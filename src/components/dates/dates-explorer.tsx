@@ -52,7 +52,7 @@ import { TonightForm, type TonightWhen } from "./tonight/tonight-form";
 import { TonightProblem } from "./tonight/tonight-island";
 import { TonightResult } from "./tonight/tonight-result";
 import { useTonight } from "./tonight/use-tonight";
-import { WHERE_KEY, writeStoredWhere } from "@/lib/dates/where-store";
+import { clipName, WHERE_KEY, writeStoredWhere } from "@/lib/dates/where-store";
 const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
 /** Moving the map further than this from the named place stops calling it by that name. */
@@ -120,7 +120,9 @@ export function DatesExplorer() {
   const isDesktop = useSyncExternalStore(subscribeDesktop, () => window.matchMedia(desktopQuery).matches, () => false);
 
   const [today] = useState<Ymd>(() => toYmd(new Date()));
-  const [openedAt] = useState(() => Date.now());
+  // The clock the planner's "today" is read from: set when the page opens and again at every tap,
+  // so a tab left open past midnight speaks of the new day after it plans for it.
+  const [clockAt, setClockAt] = useState(() => Date.now());
   const [date, setDate] = useState<Ymd>(() => thisWeekend(toYmd(new Date())));
   const [where, setWhere] = useState<Where | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
@@ -290,7 +292,7 @@ export function DatesExplorer() {
       const lng = Number(params.get("lng"));
       const wantedDate = params.get("date");
       const wantedIdea = params.get("idea");
-      let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: (params.get("q") ?? "").slice(0, 80), share: true } : null;
+      let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: clipName(params.get("q") ?? ""), share: true } : null;
       // A town named without coordinates (/dates?q=Lisboa, typed or pasted into a bio) is looked up
       // the way the where box would. None by that name is said, not swapped for last time's town;
       // a lookup that couldn't be made falls through to the usual start.
@@ -305,7 +307,7 @@ export function DatesExplorer() {
         try {
           const saved = JSON.parse(window.localStorage.getItem(WHERE_KEY) ?? "null") as (Where & { share?: unknown }) | null;
           // Saved before the share flag was: private, as they all were then.
-          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: saved.name.slice(0, 80), share: saved.share === true };
+          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: clipName(saved.name), share: saved.share === true };
         } catch {
           // Unreadable: ask again.
         }
@@ -439,7 +441,7 @@ export function DatesExplorer() {
 
   const day = forecast?.days.find((d) => d.date === date);
   // The day at the place being looked at, once its forecast says what its clock is; the browser's until then.
-  const placeToday = forecast ? placeNow(forecast, openedAt).date : today;
+  const placeToday = placeNow(forecast, clockAt).date;
   const tonightKeyOf = (d: Ymd) => (where ? `${where.lat},${where.lng}|${d}` : "");
   const tonight = useTonight({
     dayOf: (when, placeDay) => (when === "tonight" ? placeDay : when === "tomorrow" ? addDays(placeDay, 1) : date),
@@ -458,14 +460,19 @@ export function DatesExplorer() {
   // sentence keeps the height the page kept for it ("on Saturday" wrapped it to a third line on a phone).
   const plannerDay = date > placeToday && date <= addDays(placeToday, 6) ? (fromYmd(date)?.toLocaleDateString(locale === "es" ? "es-ES" : "en-GB", { weekday: "short" }).replace(/\.$/, "") ?? date) : formatDay(date, locale, "short");
   const chooseWhen = (when: TonightWhen) => {
-    const nowToday = placeNow(forecast, Date.now()).date;
+    const nowMs = Date.now();
+    setClockAt(nowMs);
+    const nowToday = placeNow(forecast, nowMs).date;
     if (when !== "day") setDate(when === "tonight" ? nowToday : addDays(nowToday, 1));
     tonight.setWhen(when);
   };
   const planTonight = (when = tonightWhen) => {
     // The page follows the planner: its day, its weather card and its ideas become the day planned for.
-    // Today is read at the tap, the way the planner reads it: a tab left open past midnight has a new one.
-    const nowToday = placeNow(forecast, Date.now()).date;
+    // Today is read at the tap, the way the planner reads it: a tab left open past midnight has a new
+    // one, and the sentence reads its "tonight" from the same clock (clockAt), not the page's opening.
+    const nowMs = Date.now();
+    setClockAt(nowMs);
+    const nowToday = placeNow(forecast, nowMs).date;
     setDate(when === "tonight" ? nowToday : when === "tomorrow" ? addDays(nowToday, 1) : date);
     void tonight.plan(when);
   };
@@ -622,7 +629,7 @@ export function DatesExplorer() {
     return () => cancelAnimationFrame(frame);
   }, [linkedPlace, where, ranked, open]);
 
-  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
+  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: clipName(where.name) } : {}) }), [date, where, shareable]);
   const sayAboutPlan = useCallback((text: string) => setPlanNotice({ text, at: Date.now() }), []);
   // A plan saved to their account is saved again from here as stops go in and out (components/saved-dates).
   const syncNoticeText = useSyncNoticeText();

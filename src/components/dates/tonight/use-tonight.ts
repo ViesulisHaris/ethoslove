@@ -62,11 +62,19 @@ function writeKept(kept: Kept | null) {
 
 /** What was asked, kept with the answer: the card speaks of the wishes it was made from, not of the form as it stands now. */
 type Asked = { choice: TonightChoice; when: TonightWhen };
-type Outcome = ({ key: string; problem: TonightProblemKind } | { key: string; problem: null; picks: TonightPick[]; at: number; day: DayWeather | undefined; date: Ymd; places: Place[] }) & {
+type Outcome = ({ key: string; problem: TonightProblemKind } | { key: string; problem: null; picks: TonightPick[]; at: number; day: DayWeather | undefined; date: Ymd; places: Place[]; moved?: boolean }) & {
   asked: Asked;
   /** Shown again from this tab's storage, not just asked for: it takes no focus and does not scroll. */
   restored?: boolean;
 };
+
+/** Tomorrow's picks from the places already loaded, for a tonight that has none; null when tomorrow has none either. */
+function moveToTomorrow(o: Options, choice: TonightChoice, data: TonightData, now: { date: Ymd; minutes: number }): { key: string; problem: null; picks: TonightPick[]; day: DayWeather | undefined; date: Ymd } | null {
+  const date = o.dayOf("tomorrow", now.date);
+  const day = data.forecast?.days.find((d) => d.date === date);
+  const picks = rankTonight({ ...choice, kind: o.kind, startMin: startFor(false, date, now) }, { day, places: data.places, boost: o.boost });
+  return picks.length > 0 ? { key: o.keyOf(date), problem: null, picks, day, date } : null;
+}
 
 /**
  * One planner's state: the choices, the result, and the two actions. The host says where the places
@@ -108,7 +116,7 @@ export function useTonight(options: Options) {
 
   const current = outcome && outcome.key === options.currentKey ? outcome : null;
   const problem = current?.problem ?? null;
-  let result: { pick: TonightPick; stops: { place: Place | null; options: number }[]; times: string[]; wet: boolean; more: boolean; asked?: 0 | 1 | 2 | 3; when: TonightWhen; date: Ymd; restored: boolean } | null = null;
+  let result: { pick: TonightPick; stops: { place: Place | null; options: number }[]; times: string[]; wet: boolean; more: boolean; asked?: 0 | 1 | 2 | 3; when: TonightWhen; date: Ymd; restored: boolean; moved: boolean } | null = null;
   if (current && current.problem === null) {
     const pick = current.picks[current.at % current.picks.length];
     result = {
@@ -122,6 +130,7 @@ export function useTonight(options: Options) {
       when: current.asked.when,
       date: current.date,
       restored: Boolean(current.restored),
+      moved: Boolean(current.moved),
     };
   }
 
@@ -145,15 +154,23 @@ export function useTonight(options: Options) {
       const key = o.keyOf(date);
       const day = data.forecast?.days.find((d) => d.date === date);
       const startMin = startFor(w === "tonight", date, now);
-      if (startMin !== undefined && startMin > TONIGHT_ENDS_MIN) {
-        const late: Outcome = { key, problem: "late", asked: wishes };
-        setOutcome(late);
-        keep(late, wishes);
-        return;
-      }
-      const picks = rankTonight({ ...choice, kind: o.kind, startMin }, { day, places: data.places, boost: o.boost });
+      const late = startMin !== undefined && startMin > TONIGHT_ENDS_MIN;
+      const picks = late ? [] : rankTonight({ ...choice, kind: o.kind, startMin }, { day, places: data.places, boost: o.boost });
       if (picks.length === 0) {
-        const none: Outcome = { key, problem: "none", asked: wishes };
+        // A page by kind whose ideas cannot be done tonight (a day idea after half past three, the
+        // bowling when its alley was not found in time) plans tomorrow at once and says so, instead
+        // of ending its own button on a refusal. Tomorrow is planned from the same places.
+        const next = w === "tonight" && o.kind ? moveToTomorrow(o, choice, data, now) : null;
+        if (next) {
+          const movedAsked: Asked = { choice, when: "tomorrow" };
+          setWhen("tomorrow");
+          const made: Outcome = { ...next, at: 0, places: data.places, asked: movedAsked, moved: true };
+          setOutcome(made);
+          keep(made, movedAsked);
+          track("tonight_planned", { mood: choice.vibe ?? "any", budget: choice.budget ?? "any", when: "tomorrow" });
+          return;
+        }
+        const none: Outcome = { key, problem: late ? "late" : "none", asked: wishes };
         setOutcome(none);
         keep(none, wishes);
         return;

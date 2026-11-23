@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Vibe } from "@/lib/dates/ideas";
@@ -35,7 +35,7 @@ export const TONIGHT_BUTTON =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px aria-disabled:cursor-default aria-disabled:opacity-60 aria-disabled:active:scale-100 motion-reduce:transition-none";
 
 const SELECT =
-  "field-sizing-content h-11 max-w-full cursor-pointer appearance-none truncate rounded-none border-0 border-b border-page-ink/35 bg-transparent py-0 pr-7 pl-1 font-display text-[1.375rem] leading-none text-page-accent italic outline-offset-4 transition-colors hover:border-page-ink focus-visible:border-page-accent active:text-page-accent-hover disabled:cursor-default disabled:opacity-50";
+  "field-sizing-content h-11 max-w-full cursor-pointer appearance-none truncate rounded-none border-0 border-b border-page-ink/35 bg-transparent py-0 pr-7 pl-1 font-display text-[1.375rem] leading-none text-page-accent italic outline-offset-4 transition-colors hover:border-page-ink focus-visible:border-page-accent active:text-page-accent-hover disabled:cursor-default";
 
 /**
  * A choice as the select shows it: with a no-break space after it (an ordinary one is trimmed). A
@@ -44,18 +44,22 @@ const SELECT =
  */
 const room = (label: string): string => `${label}\u00a0`;
 
-/** One choice inside the sentence: a native select, read by its name, with a small chevron. */
-function Choice({ name, value, onChange, children }: { name: string; value: string; onChange: (value: string) => void; children: ReactNode }) {
+/**
+ * One choice inside the sentence: a native select, named by aria-label, with a small chevron. A
+ * hidden name inside the sentence was read twice, once as text and once as the select's name.
+ */
+function Choice({ name, value, held, onChange, children }: { name: string; value: string; held: boolean; onChange: (value: string) => void; children: ReactNode }) {
   return (
-    <label className="relative inline-flex max-w-full align-baseline">
-      <span className="sr-only">{name}</span>
-      <select value={value} onChange={(e) => onChange(e.target.value)} className={SELECT}>
+    <span className="relative inline-flex max-w-full align-baseline">
+      <select aria-label={name} value={value} disabled={held} onChange={(e) => onChange(e.target.value)} className={SELECT}>
         {children}
       </select>
       <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-0.5 size-4 -translate-y-1/2 text-page-body" />
-    </label>
+    </span>
   );
 }
+
+const noSubscribe = () => () => {};
 
 /**
  * "Plan a cozy date tonight. Up to 2 hours, free." One sentence with the choices inside it, then
@@ -63,10 +67,14 @@ function Choice({ name, value, onChange, children }: { name: string; value: stri
  */
 export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, busy, onChoice, onWhen, onPlan }: Props) {
   const t = useTranslations("dates");
-  const blocked = Boolean(busy || (waiting && !onWaiting));
+  // False in the server's HTML and until the page has hydrated: a tap before then was lost (a slow
+  // phone saw nothing for a minute), and a choice made then was put back by hydration. So the button
+  // is drawn held and the choices cannot be changed until the form can answer.
+  const ready = useSyncExternalStore(noSubscribe, () => true, () => false);
+  const blocked = Boolean(!ready || busy || (waiting && !onWaiting));
   const parts = {
     mood: () => (
-      <Choice name={t("ideas.vibes")} value={choice.vibe ?? ""} onChange={(v) => onChoice({ ...choice, vibe: (v || undefined) as Vibe | undefined })}>
+      <Choice held={!ready} name={t("ideas.vibes")} value={choice.vibe ?? ""} onChange={(v) => onChoice({ ...choice, vibe: (v || undefined) as Vibe | undefined })}>
         <option value="">{room(t("tonight.mood.any"))}</option>
         {TONIGHT_VIBES.map((vibe) => (
           <option key={vibe} value={vibe}>
@@ -76,7 +84,7 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
       </Choice>
     ),
     when: () => (
-      <Choice name={t("when.label")} value={when} onChange={(v) => onWhen(v as TonightWhen)}>
+      <Choice held={!ready} name={t("when.label")} value={when} onChange={(v) => onWhen(v as TonightWhen)}>
         {whens.map((w) => (
           <option key={w.value} value={w.value}>
             {room(w.label)}
@@ -85,7 +93,7 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
       </Choice>
     ),
     length: () => (
-      <Choice name={t("tonight.lengthLabel")} value={choice.length ?? ""} onChange={(v) => onChoice({ ...choice, length: (v || undefined) as TonightLength | undefined })}>
+      <Choice held={!ready} name={t("tonight.lengthLabel")} value={choice.length ?? ""} onChange={(v) => onChoice({ ...choice, length: (v || undefined) as TonightLength | undefined })}>
         <option value="">{room(t("tonight.length.any"))}</option>
         <option value="short">{room(t("tonight.length.short"))}</option>
         <option value="medium">{room(t("tonight.length.medium"))}</option>
@@ -93,7 +101,7 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
       </Choice>
     ),
     budget: () => (
-      <Choice name={t("tonight.budgetLabel")} value={choice.budget === undefined ? "" : String(choice.budget)} onChange={(v) => onChoice({ ...choice, budget: v === "" ? undefined : (Number(v) as 0 | 1 | 2 | 3) })}>
+      <Choice held={!ready} name={t("tonight.budgetLabel")} value={choice.budget === undefined ? "" : String(choice.budget)} onChange={(v) => onChoice({ ...choice, budget: v === "" ? undefined : (Number(v) as 0 | 1 | 2 | 3) })}>
         <option value="">{room(t("tonight.budget.any"))}</option>
         <option value="0">{room(t("tonight.budget.0"))}</option>
         <option value="1">{room(t("tonight.budget.1"))}</option>

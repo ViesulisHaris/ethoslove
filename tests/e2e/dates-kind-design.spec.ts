@@ -29,7 +29,8 @@ const SIZES: [number, number][] = [
   [1280, 620],
 ];
 const MAIN = ["/dates/ideas/first-date", "/es/dates/ideas/first-date"];
-const MORE = ["/dates/ideas/rainy-day", "/es/dates/ideas/rainy-day", "/dates/ideas/cheap", "/es/dates/ideas/cheap", "/dates/london/first-date", "/es/dates/london/first-date"];
+// Every page the deep test counted at or near 300 (dates-D8) is held to it here.
+const MORE = ["/dates/ideas/rainy-day", "/es/dates/ideas/rainy-day", "/dates/ideas/cheap", "/es/dates/ideas/cheap", "/es/dates/ideas/romantic", "/dates/london/first-date", "/es/dates/london/first-date", "/dates/new-york/cheap", "/es/dates/new-york/cheap"];
 
 test.skip(({ isMobile }) => isMobile, "sets its own screen sizes");
 

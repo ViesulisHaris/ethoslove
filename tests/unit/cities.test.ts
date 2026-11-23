@@ -440,6 +440,23 @@ describe("a kind of date inside a city", () => {
     expect(kindPlaces("fun", fixture)).toEqual([]);
   });
 
+  it("C5b neither list names a chain café, a gallery that charges, a sports ground or a square filed as a park (dates-D3)", () => {
+    const odd = [
+      place("node/courtauld", "gallery", 300, { name: "The Courtauld Gallery" }),
+      place("node/leicester", "park", 299, { name: "Leicester Square" }),
+      place("node/cage", "park", 298, { name: "West Fourth Street Courts" }),
+      place("node/sbux", "cafe", 297, { name: "Starbucks" }),
+      place("node/kft", "cafe", 296, { name: "Kung Fu Tea" }),
+      place("node/nero", "cafe", 295, { name: "Caffè Nero" }),
+      place("node/gails", "cafe", 294, { name: "GAIL’s Bakery" }),
+    ];
+    const kept = [place("node/wsp", "park", 293, { name: "Washington Square Park" }), place("node/russell", "garden", 292, { name: "Russell Square Gardens" }), place("node/kasmin", "gallery", 291, { name: "Paul Kasmin Gallery" }), place("node/own", "cafe", 290, { name: "Café Paulette" })];
+    const all = [...fixture, ...odd, ...kept];
+    const listed = [...kindPlaces("cheap", all, 40), ...kindPlaces("first-date", all, 40)].map((p) => p.id);
+    for (const p of odd) expect(listed, p.name).not.toContain(p.id);
+    for (const p of kept) expect(listed, p.name).toContain(p.id);
+  });
+
   it("C6 the sitemap lists the seven kinds, the four pairs and every city, each in both languages", () => {
     const urls = sitemap().map((p) => new URL(p.url).pathname);
     for (const kind of DATE_KINDS) for (const prefix of ["", "/es"]) expect(urls, kind).toContain(`${prefix}/dates/ideas/${kind}`);

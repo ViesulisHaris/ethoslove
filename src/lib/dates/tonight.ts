@@ -5,6 +5,7 @@ import { stopOf, type Plan } from "./plan";
 import type { Place } from "./places";
 import { suggestTimes } from "./timing";
 import { isWet, type DayWeather, type Forecast } from "./weather";
+import { clipName } from "./where-store";
 
 /**
  * "Plan our date tonight" in one step: which idea fits the wishes, the weather and the hour best.
@@ -137,14 +138,19 @@ export function forTonight(idea: DateIdea, times: readonly string[]): DateIdea {
 /** A bar that says "sports" in its name: big screens and a match on. */
 export const isSportsBar = (place: Pick<Place, "kind" | "name">): boolean => place.kind === "bar" && /\bsports?\b/i.test(place.name);
 
+/** A bar whose name says it has karaoke ("Karaoke Bar Soho", "Sing Sing", a noraebang, a KTV). */
+export const isKaraokeBar = (place: Pick<Place, "kind" | "name">): boolean => place.kind === "bar" && /karaoke|\bsing\b|noraebang|\bk-?tv\b/i.test(place.name);
+
 /**
  * The places an idea may be planned with. A sports bar suits a playful idea's drink after (the
- * bowling, the arcade); it never follows the theatre or a museum, and never stands in for the
- * karaoke booth an idea starts at.
+ * bowling, the arcade); it never follows the theatre or a museum. Where a bar stands in for the
+ * place an idea starts at (the karaoke booth), only a bar that says it has karaoke may: a plain
+ * pub planned as "one duet, no backing out" sends them somewhere with no microphone.
  */
 export function placesFor(idea: DateIdea, places: Place[]): Place[] {
   const barStandsIn = (idea.stops[0] ?? []).indexOf("bar") > 0;
-  if (idea.vibes.includes("playful") && !barStandsIn) return places;
+  if (barStandsIn) return places.filter((p) => p.kind !== "bar" || isKaraokeBar(p));
+  if (idea.vibes.includes("playful")) return places;
   return places.some(isSportsBar) ? places.filter((p) => !isSportsBar(p)) : places;
 }
 
@@ -199,7 +205,7 @@ export function tonightPlan(idea: DateIdea, stops: readonly (Place | null)[], ti
   return {
     v: 1,
     date: stamp.date,
-    ...(stamp.where ? { where: stamp.where.slice(0, 80) } : {}),
+    ...(stamp.where ? { where: clipName(stamp.where) } : {}),
     idea: idea.id,
     stops: stops.flatMap((place, i) => (place ? [stopOf(place, times[i])] : [])),
   };

@@ -26,6 +26,8 @@ type Props = {
   date: Ymd;
   /** Shown again after Back or a reload: it takes no focus and does not scroll the page. */
   restored?: boolean;
+  /** Planned for tomorrow because none of the page's ideas could still be done tonight: the card says so first. */
+  moved?: boolean;
   /** The card is asking whether to replace the plan being made on this device. */
   confirming?: boolean;
   onReplace?: () => void;
@@ -43,7 +45,7 @@ const QUIET_BUTTON = "inline-flex min-h-11 min-w-11 items-center text-[0.9375rem
 const HEAVIEST: Relaxed[] = ["vibe", "budget", "length"];
 
 /** One finished plan: the idea's picture and title, its stops with their times, its twist, and the two ways on. */
-export function TonightResult({ pick, stops, times, wet, asked, when, date, restored, confirming, onReplace, onKeep, locale, onOpen, onAnother, more }: Props) {
+export function TonightResult({ pick, stops, times, wet, asked, when, date, restored, moved, confirming, onReplace, onKeep, locale, onOpen, onAnother, more }: Props) {
   const t = useTranslations("dates");
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -87,6 +89,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
         <img src={ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
       </span>
       <div className="p-5">
+        {moved ? <p className="mb-2 text-[0.875rem] leading-snug text-page-body">{t("tonight.movedTomorrow")}</p> : null}
         {said.map((line) => (
           <p key={line} className="mb-2 text-[0.875rem] leading-snug text-page-body">
             {line}
@@ -100,7 +103,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
           {stops.map(({ place }, i) =>
             place ? (
               <li key={place.id} className="flex gap-3 text-[0.9375rem] leading-snug text-page-ink">
-                <span className="w-12 shrink-0 text-page-body tabular-nums">{times[i]}</span>
+                <span data-time className="w-12 shrink-0 text-page-body">{times[i]}</span>
                 <span className="min-w-0">
                   <span className="font-medium">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
                   {place.named ? <span className="text-page-body"> · {KINDS[place.kind].label[locale]}</span> : null}

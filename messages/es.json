@@ -1884,7 +1884,7 @@
         "playful": "divertida",
         "outdoorsy": "al aire libre",
         "foodie": "para comer bien",
-        "artsy": "con arte",
+        "artsy": "artística",
         "fancy": "para arreglarse"
       },
       "when": {
@@ -1897,7 +1897,7 @@
         "any": "Cualquier duración",
         "short": "Hasta 2 horas",
         "medium": "De 2 a 3 horas",
-        "long": "Toda la velada"
+        "long": "3 horas o más"
       },
       "budget": {
         "0": "gratis",
@@ -1906,7 +1906,7 @@
         "3": "sin mirar el precio",
         "any": "con cualquier presupuesto"
       },
-      "plan": "Planeadla",
+      "plan": "Planear",
       "finding": "Buscando sitios…",
       "whereFirst": "Decid primero dónde",
       "open": "Abrir el plan",
@@ -1931,9 +1931,12 @@
       "optional": "opcional",
       "none": "Nada encaja con eso aquí.",
       "noneKind": "Ninguna idea de esta página encaja {when} allí.",
-      "late": "Ya es tarde para esta noche. Mañana hay más.",
-      "tryTomorrow": "Planeadla para mañana",
+      "movedTomorrow": "Ninguna idea de esta página cabe ya esta noche allí, así que esta es para mañana.",
+      "late": "Ya es tarde para empezar una esta noche.",
+      "tryTomorrow": "Planear para mañana",
       "openMap": "Abrir el mapa",
+      "noScript": "El planificador necesita JavaScript.",
+      "noScriptCities": "Sitios reales, ciudad a ciudad",
       "replace": "Esto sustituye el plan que estabais haciendo en este dispositivo.",
       "replaceYes": "Sustituirlo",
       "replaceNo": "Seguir con el nuestro"

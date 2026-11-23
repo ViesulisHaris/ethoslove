@@ -22,7 +22,7 @@ export type DateKindCopy = {
   line: L;
   /** One sentence beside the picture: at most 30 words. */
   sentence: L;
-  /** The idea whose picture the hero shows. One of the kind's own, and no two kinds share one. */
+  /** The idea whose picture the hero shows. One of the kind's own, never the first card of a row below it, and no two kinds share one. */
   hero: string;
   /** Why each idea fits this kind: one line, at most 22 words, keyed by idea id. Exactly the kind's ideas. */
   fits: Record<string, L>;
@@ -34,12 +34,12 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
   "first-date": {
     nav: { en: "First date", es: "Primera cita" },
     phrase: { en: "First Date Ideas", es: "Ideas para una primera cita" },
-    title: { en: "First Date Ideas: {count} That Are Easy to Say Yes To", es: "Ideas para una primera cita: {count} a las que es fácil decir que sí" },
-    description: { en: "Nine first date ideas you can leave after an hour, each with something for your hands to do. Pick one and the planner fills it with real places near you.", es: "Nueve ideas para una primera cita de la que podéis iros al cabo de una hora, y todas dan algo que hacer a las manos. Elegid una y el planificador la llena de sitios reales cerca." },
+    title: { en: "First Date Ideas: {count} That Are Easy to Say Yes To", es: "Ideas para una primera cita: {count} fáciles de aceptar" },
+    description: { en: "Nine first date ideas you can leave after an hour, most with something to do besides talk. The planner fills the one you pick with real places nearby.", es: "Nueve ideas para una primera cita de la que podéis iros al cabo de una hora. El planificador llena la que elijáis de sitios reales cerca." },
     heading: { en: "First date ideas that are easy to say yes to", es: "Ideas para una primera cita a las que es fácil decir que sí" },
     line: { en: "Short, public, and easy to leave if it isn't working.", es: "Corta, en público, y fácil de dejar si no funciona." },
-    sentence: { en: "Each of these nine gives you something to do with your hands and something to talk about after, and none of them traps you at a table for three hours.", es: "Las nueve dan algo que hacer a las manos y algo de lo que hablar después, y ninguna os deja atrapados tres horas en una mesa." },
-    hero: "bookshop-and-coffee",
+    sentence: { en: "Most of these nine give your hands something to do, all of them give you something to talk about after, and none traps you at a table for hours.", es: "Casi todas dan algo que hacer a las manos, las nueve dan de qué hablar después y ninguna os deja horas atrapados en una mesa." },
+    hero: "gallery-hop",
     fits: {
       "bookshop-and-coffee": { en: "Twenty minutes apart is a breather for both of you, and the book each picked starts the conversation.", es: "Veinte minutos por separado son un respiro para los dos, y el libro que elija cada uno abre la conversación." },
       "ice-cream-walk": { en: "An hour and a half, side by side, which is easier than face to face across a table.", es: "Hora y media, caminando lado a lado, que es más fácil que mirarse desde los dos lados de una mesa." },
@@ -54,7 +54,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     faq: [
       {
         q: { en: "What makes a good first date idea?", es: "¿Qué hace buena una idea para una primera cita?" },
-        a: { en: "Three things these nine share: you can leave after an hour without it being rude, your hands have something to do, and nobody is stuck across a table for three hours. Dinner can be the second date.", es: "Tres cosas que comparten estas nueve: podéis iros al cabo de una hora sin quedar mal, las manos tienen algo que hacer y nadie se queda atrapado tres horas en una mesa. La cena puede ser la segunda cita." },
+        a: { en: "Three things these nine share: you can leave after an hour without it being rude, there is something to look at besides each other, and nobody is stuck across a table for three hours. Dinner can be the second date.", es: "Tres cosas que comparten estas nueve: podéis iros al cabo de una hora sin quedar mal, hay algo que mirar aparte de vosotros y nadie se queda atrapado tres horas en una mesa. La cena puede ser la segunda cita." },
       },
       {
         q: { en: "How long should a first date be?", es: "¿Cuánto debería durar una primera cita?" },
@@ -66,11 +66,11 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     nav: { en: "Fun", es: "Divertida" },
     phrase: { en: "Fun Date Ideas", es: "Ideas para una cita divertida" },
     title: { en: "Fun Date Ideas: {count} That Give You Something to Do", es: "Ideas para una cita divertida: {count} con algo a lo que jugar" },
-    description: { en: "Eight fun date ideas with a game in them: mini golf, bowling, an escape room, karaoke, a rowing boat. Each has a twist that turns the game into a small bet.", es: "Ocho ideas para una cita divertida con un juego dentro: minigolf, bolos, un escape room, karaoke, una barca de remos. Cada una trae un giro que convierte el juego en una apuesta pequeña." },
+    description: { en: "Eight fun date ideas with a game in them: mini golf, bowling, an escape room, karaoke, a rowing boat. Each has a twist that makes the game a small bet.", es: "Ocho ideas para una cita divertida con un juego dentro: minigolf, bolos, escape room, karaoke o una barca. Cada una trae un giro que lo vuelve una apuesta." },
     heading: { en: "Fun date ideas that give you something to do", es: "Ideas para una cita divertida, con algo a lo que jugar" },
     line: { en: "Somebody keeps score, and somebody ends up buying dessert.", es: "Alguien lleva la cuenta, y alguien acaba pagando el postre." },
-    sentence: { en: "Eight dates built round playing something together. Each has a twist of its own, from loser buys dessert to narrating the rowing like a nature documentary.", es: "Ocho citas montadas alrededor de jugar a algo juntos. Cada una trae su giro, desde «quien pierda paga el postre» hasta narrar la remada como un documental." },
-    hero: "mini-golf-and-milkshakes",
+    sentence: { en: "Eight dates built round playing something together. Each has a twist of its own, from loser buys dessert to narrating the rowing like a nature documentary.", es: "Ocho citas para jugar a algo juntos. Cada una trae su giro, desde «quien pierda paga el postre» hasta narrar la remada como un documental." },
+    hero: "arcade-night",
     fits: {
       "mini-golf-and-milkshakes": { en: "Eighteen chances to be bad at something together, and the loser buys dessert.", es: "Dieciocho ocasiones de hacerlo fatal en compañía, y quien pierda paga el postre." },
       "bowling-night": { en: "Bumpers are allowed, score is kept, and every gutter ball costs a truth.", es: "Se permiten las barreras, se lleva la cuenta y cada bola fuera cuesta una verdad." },
@@ -95,11 +95,11 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
   cheap: {
     nav: { en: "Cheap and free", es: "Barata o gratis" },
     phrase: { en: "Cheap Date Ideas", es: "Ideas para una cita barata" },
-    title: { en: "Cheap Date Ideas: {count} for the Price of a Coffee, 4 of Them Free", es: "Ideas para una cita barata: {count} por lo que cuesta un café, 4 gratis" },
-    description: { en: "Eight cheap date ideas that cost a coffee each or nothing at all: a gallery hop, a picnic at golden hour, a sunrise, a garden. Four are free if you bring your own.", es: "Ocho ideas para una cita barata que cuestan un café por cabeza o nada: una ruta de galerías, un pícnic a la hora dorada, un amanecer, un jardín. Cuatro salen gratis si lleváis lo vuestro." },
+    title: { en: "Cheap Date Ideas: {count} for the Price of a Coffee, 4 Free", es: "Ideas para una cita barata: {count} por un café, 4 gratis" },
+    description: { en: "Eight cheap date ideas for a coffee each or nothing: a gallery hop, a golden-hour picnic, a sunrise, a garden. Four are free if you bring your own.", es: "Ocho ideas para una cita barata por un café o nada: galerías, un pícnic a la hora dorada, un amanecer, un jardín. Cuatro, gratis si lleváis lo vuestro." },
     heading: { en: "Cheap date ideas, and four that are free", es: "Ideas para una cita barata, y cuatro que salen gratis" },
     line: { en: "Fill the flask at home and four of these cost nothing.", es: "Llenad el termo en casa y cuatro de estas no cuestan nada." },
-    sentence: { en: "Eight dates that cost the price of a coffee each at most. Four of them cost nothing if the picnic comes from your own kitchen and you skip the café.", es: "Ocho citas que cuestan, como mucho, un café por cabeza. Cuatro salen gratis si el pícnic viene de vuestra cocina y os saltáis la cafetería." },
+    sentence: { en: "Eight dates that cost the price of a coffee each at most. Four of them cost nothing if the picnic comes from your own kitchen and you skip the café.", es: "Ocho citas por un café por cabeza, como mucho. Cuatro salen gratis si el pícnic sale de vuestra cocina." },
     hero: "golden-hour-picnic",
     fits: {
       "gallery-hop": { en: "Small galleries are free to walk into, and the only cost is the coffee after, if you want one.", es: "En las galerías pequeñas se entra gratis; el único gasto es el café de después, si os apetece." },
@@ -126,10 +126,10 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     nav: { en: "Romantic", es: "Romántica" },
     phrase: { en: "Romantic Date Ideas", es: "Ideas para una cita romántica" },
     title: { en: "Romantic Date Ideas: {count} That Slow the Evening Down", es: "Ideas para una cita romántica: {count} planes sin prisas" },
-    description: { en: "Ten romantic date ideas built round a view, a table or the dark: a picnic at golden hour, dinner and a slow walk, the stars, a rowing boat. The ones that hang on the light are timed to the real sunset.", es: "Diez ideas para una cita romántica alrededor de una vista, una mesa o la oscuridad: un pícnic a la hora dorada, cena y paseo lento, las estrellas, una barca. Las que dependen de la luz se ajustan a la puesta de sol real." },
+    description: { en: "Ten romantic date ideas built round a view, a table or the dark: a golden-hour picnic, dinner and a slow walk, the stars. Timed to the real sunset.", es: "Diez ideas para una cita romántica con una vista, una mesa o la noche: pícnic a la hora dorada, cena y paseo, las estrellas. Ajustadas a la puesta de sol." },
     heading: { en: "Romantic date ideas that slow the evening down", es: "Ideas para una cita romántica, sin prisas" },
     line: { en: "Be at the view three quarters of an hour before sunset.", es: "Estad en el mirador tres cuartos de hora antes de la puesta de sol." },
-    sentence: { en: "Ten dates with nowhere else to be. Four of them hang on the light, so the planner times those to the real sunset or sunrise of the day you pick.", es: "Diez citas sin otro sitio al que ir. Cuatro dependen de la luz, y el planificador las ajusta a la puesta o la salida del sol del día que elijáis." },
+    sentence: { en: "Ten dates with nowhere else to be. Four of them hang on the light, so the planner times those to the real sunset or sunrise of the day you pick.", es: "Diez citas sin otro sitio al que ir. Cuatro dependen de la luz, y el planificador las ajusta al sol del día que elijáis." },
     hero: "pasta-and-a-slow-walk",
     fits: {
       "golden-hour-picnic": { en: "The best view in town as the light goes, and one thing each that the other has never tried.", es: "La mejor vista de la ciudad mientras cae la luz, y algo que el otro nunca haya probado." },
@@ -158,14 +158,14 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     nav: { en: "Double date", es: "Cita doble" },
     phrase: { en: "Double Date Ideas", es: "Ideas para una cita doble" },
     title: { en: "Double Date Ideas: {count} That Work Better With Four", es: "Ideas para una cita doble: {count} que mejoran con cuatro" },
-    description: { en: "Eight double date ideas where four people is the right number: bowling in teams, an escape room, mini golf, karaoke duets, a picnic. The planner finds the lanes and rooms near you.", es: "Ocho ideas para una cita doble en las que cuatro es el número justo: bolos por equipos, un escape room, minigolf, duetos de karaoke, un pícnic. El planificador encuentra las pistas y las salas cerca." },
+    description: { en: "Eight double date ideas where four is the right number: bowling in teams, an escape room, mini golf, karaoke duets. The planner finds lanes and rooms.", es: "Ocho ideas para una cita doble en las que cuatro es el número justo: bolos por equipos, escape room, minigolf, karaoke, con pistas y salas reales cerca." },
     heading: { en: "Double date ideas that work better with four", es: "Ideas para una cita doble que mejoran con cuatro" },
     line: { en: "Couple against couple beats four people making small talk.", es: "Pareja contra pareja funciona mejor que cuatro personas buscando de qué hablar." },
     sentence: { en: "Eight dates where a second couple helps: there are teams to pick, a puzzle that wants four heads, or a table worth sharing.", es: "Ocho citas en las que una segunda pareja ayuda: hay equipos que formar, un enigma que pide cuatro cabezas o una mesa que merece compartirse." },
-    hero: "bowling-night",
+    hero: "escape-room-debrief",
     fits: {
       "bowling-night": { en: "Couple against couple, or swap partners for a game and see who sulks.", es: "Pareja contra pareja, o cambiad de compañero una partida y a ver quién se enfurruña." },
-      "escape-room-debrief": { en: "Four heads find the clues that two walk past, and the debrief is twice as loud.", es: "Cuatro cabezas ven las pistas que dos pasan de largo, y el análisis de después suena el doble." },
+      "escape-room-debrief": { en: "Four heads find the clues that two walk past, and the debrief is twice as loud.", es: "Cuatro cabezas ven las pistas que dos pasan de largo, y el comentario de después, a cuatro voces." },
       "mini-golf-and-milkshakes": { en: "Four scorecards, one loser, and a round of milkshakes on them.", es: "Cuatro tarjetas de puntos, alguien pierde y paga una ronda de batidos." },
       "karaoke-duet": { en: "Two duets and an audience of two that has to clap.", es: "Dos duetos y un público de dos que tiene que aplaudir." },
       "arcade-night": { en: "Pool four people's tickets and argue about who takes the prize home.", es: "Juntad los tickets de los cuatro y discutid quién se lleva el premio a casa." },
@@ -187,12 +187,12 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
   winter: {
     nav: { en: "Winter", es: "Invierno" },
     phrase: { en: "Winter Date Ideas", es: "Ideas para una cita en invierno" },
-    title: { en: "Winter Date Ideas: {count} for When It's Dark by Five", es: "Ideas para una cita en invierno: {count} para cuando anochece a las cinco" },
-    description: { en: "Nine winter date ideas for cold days and long nights: skating and hot chocolate, a spa evening, a planetarium, a film and a late dessert. Seven of them are indoors.", es: "Nueve ideas para una cita en invierno, con días fríos y noches largas: patinar y chocolate caliente, una tarde de spa, un planetario, una peli y un postre tardío. Siete son a cubierto." },
+    title: { en: "Winter Date Ideas: {count} for When It's Dark by Five", es: "Ideas para una cita en invierno: {count} para días cortos" },
+    description: { en: "Nine winter date ideas for cold days and long nights: skating and hot chocolate, a spa evening, a planetarium, a film. Seven of them are indoors.", es: "Nueve ideas para una cita en invierno: patinar y chocolate caliente, una tarde de spa, un planetario, una peli y un postre. Siete son a cubierto." },
     heading: { en: "Winter date ideas for when it's dark by five", es: "Ideas para una cita en invierno, cuando anochece a las cinco" },
     line: { en: "Skate first, then thaw out over a hot chocolate.", es: "Primero a patinar, y después a descongelarse con un chocolate caliente." },
     sentence: { en: "Nine dates that suit short days: one on the ice, one under the stars, and seven indoors where the coats come off.", es: "Nueve citas para días cortos: una sobre hielo, una bajo las estrellas y siete a cubierto, donde sobran los abrigos." },
-    hero: "skating-and-hot-chocolate",
+    hero: "spa-evening",
     fits: {
       "skating-and-hot-chocolate": { en: "The one date that is better cold: a rink, mittens, and whoever falls first buys the hot chocolate.", es: "La única cita que mejora con frío: una pista, manoplas, y quien se caiga primero paga el chocolate." },
       "spa-evening": { en: "Warm water while it's freezing outside, and not one word about work.", es: "Agua caliente mientras fuera hiela, y ni una palabra de trabajo." },
@@ -219,10 +219,10 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     nav: { en: "Rainy day", es: "Día de lluvia" },
     phrase: { en: "Rainy Day Date Ideas", es: "Ideas para una cita con lluvia" },
     title: { en: "Rainy Day Date Ideas: {count} That Never Needed the Sun", es: "Ideas para una cita con lluvia: {count} planes bajo techo" },
-    description: { en: "Twelve rainy day date ideas under a roof: a bookshop and coffee, a gallery hop, bowling, an escape room, a film and a late dessert. The planner checks the forecast before it picks one.", es: "Doce ideas para una cita en un día de lluvia, todas bajo techo: librería y café, ruta de galerías, bolos, un escape room, una peli y un postre tardío. El planificador mira la previsión antes de elegir una." },
+    description: { en: "Twelve rainy day date ideas under a roof: a bookshop and coffee, a gallery hop, bowling, an escape room, a film. The planner checks the forecast first.", es: "Doce ideas para una cita con lluvia, todas bajo techo: librería y café, galerías, bolos, escape room, una peli. El planificador mira antes la previsión." },
     heading: { en: "Rainy day date ideas that never needed the sun", es: "Ideas para una cita con lluvia, todas bajo techo" },
     line: { en: "All twelve are under a roof, so let the forecast do its worst.", es: "Las doce están bajo techo: que la previsión haga lo que quiera." },
-    sentence: { en: "Twelve dates that work in any weather. When the forecast for your day is wet, the planner leads with these and leaves the picnic out.", es: "Doce citas que funcionan con cualquier tiempo. Cuando la previsión de vuestro día es de lluvia, el planificador empieza por estas y deja fuera el pícnic." },
+    sentence: { en: "Twelve dates that work in any weather. When the forecast for your day is wet, the planner leads with these and leaves the picnic out.", es: "Doce citas para cualquier tiempo. Si vuestro día sale de lluvia, el planificador empieza por estas y deja fuera el pícnic." },
     hero: "cinema-and-late-dessert",
     fits: {
       "bookshop-and-coffee": { en: "Rain on the window is what a bookshop is for. Twenty minutes apart, then coffee.", es: "Para eso está una librería: lluvia en el cristal. Veinte minutos por separado y luego un café." },
@@ -385,39 +385,39 @@ export type CityKindCopy = {
   sentence: L;
   /**
    * The hero's idea when the kind's own picture would not do under a city's name: the cheap page's
-   * picnic has a skyline of spires, which is not London's or New York's. Indoors fits any city.
+   * picnic has a skyline of spires, which is not London's or New York's. Two cones on a tree-lined path fit any city.
    */
   hero?: string;
 };
 export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
   "new-york/cheap": {
-    title: { en: "Cheap Date Ideas in NYC: 8 With Real Places, 4 of Them Free", es: "Ideas para una cita barata en Nueva York: 8 con sitios reales" },
-    description: { en: "Eight cheap date ideas in New York, each filled with real cafés, parks and galleries near Washington Square, plus the places near the centre that usually cost nothing to walk into.", es: "Ocho ideas para una cita barata en Nueva York, cada una con cafeterías, parques y galerías reales cerca de Washington Square, y los sitios del centro en los que se suele entrar gratis." },
+    title: { en: "Cheap Date Ideas in NYC: 8 With Real Places, 4 Free", es: "Ideas para una cita barata en Nueva York, con sitios reales" },
+    description: { en: "Eight cheap date ideas in New York with real cafés, parks and galleries near Washington Square, and the places nearby that are usually free to walk into.", es: "Ocho ideas para una cita barata en Nueva York con cafeterías, parques y galerías reales cerca de Washington Square, y sitios donde se entra gratis." },
     heading: { en: "Cheap date ideas in New York", es: "Ideas para una cita barata en Nueva York" },
     line: { en: "The streets are free, and so is the Staten Island Ferry.", es: "Las calles son gratis, y el ferri de Staten Island también." },
-    hero: "gallery-hop",
-    sentence: { en: "The same eight ideas as our cheap list, with real places near Washington Square for each stop, and the nearby parks, galleries and bookshops that are usually free.", es: "Las mismas ocho ideas de nuestra lista barata, con sitios reales cerca de Washington Square para cada parada, y los parques, galerías y librerías cercanos, que suelen ser gratis." },
+    hero: "ice-cream-walk",
+    sentence: { en: "Our eight cheap ideas with real places near Washington Square, and the parks, galleries and bookshops nearby that are usually free.", es: "Nuestras ocho ideas baratas con sitios reales cerca de Washington Square, y los parques, galerías y librerías cercanos, que suelen ser gratis." },
   },
   "new-york/first-date": {
-    title: { en: "First Date Ideas in NYC: 9 Easy Ones With Real Places", es: "Ideas para una primera cita en Nueva York: 9 con sitios reales" },
-    description: { en: "Nine first date ideas in New York that are easy to enjoy and easy to leave, each with real cafés, bookshops and galleries near Washington Square for the stops.", es: "Nueve ideas para una primera cita en Nueva York, fáciles de disfrutar y fáciles de dejar, con cafeterías, librerías y galerías reales cerca de Washington Square para cada parada." },
+    title: { en: "First Date Ideas in NYC: 9 Easy Ones With Real Places", es: "Ideas para una primera cita en Nueva York, con sitios reales" },
+    description: { en: "Nine first date ideas in New York that are easy to leave, with real cafés, bookshops and galleries near Washington Square for each stop.", es: "Nueve ideas para una primera cita en Nueva York, fáciles de dejar, con cafeterías, librerías y galerías reales cerca de Washington Square." },
     heading: { en: "First date ideas in New York", es: "Ideas para una primera cita en Nueva York" },
     line: { en: "Around Washington Square, bookshops, small galleries and cafés sit a block apart.", es: "Alrededor de Washington Square, librerías, galerías pequeñas y cafeterías están a una manzana." },
-    sentence: { en: "Nine dates you can leave after an hour, each with real places near Washington Square, and a short list of cafés and bookshops near the centre to meet at.", es: "Nueve citas de las que podéis iros al cabo de una hora, con sitios reales cerca de Washington Square y una lista corta de cafeterías y librerías donde quedar." },
+    sentence: { en: "Nine dates you can leave after an hour, each with real places near Washington Square, and a short list of cafés and bookshops near the centre to meet at.", es: "Nueve citas de las que podéis iros al cabo de una hora, con sitios reales cerca de Washington Square y unas cafeterías y librerías donde quedar." },
   },
   "london/first-date": {
     title: { en: "First Date Ideas in London: 9 Easy Ones With Real Places", es: "Ideas para una primera cita en Londres: 9 con sitios reales" },
-    description: { en: "Nine first date ideas in London that are easy to enjoy and easy to leave, each with real cafés, bookshops and galleries around Covent Garden for the stops.", es: "Nueve ideas para una primera cita en Londres, fáciles de disfrutar y fáciles de dejar, con cafeterías, librerías y galerías reales alrededor de Covent Garden para cada parada." },
+    description: { en: "Nine first date ideas in London that are easy to enjoy and easy to leave, each with real cafés, bookshops and galleries around Covent Garden for the stops.", es: "Nueve ideas para una primera cita en Londres, fáciles de dejar, con cafeterías, librerías y galerías reales alrededor de Covent Garden." },
     heading: { en: "First date ideas in London", es: "Ideas para una primera cita en Londres" },
     line: { en: "Most of the big museums are free, so the first hour costs nothing.", es: "Casi todos los grandes museos son gratis: la primera hora no cuesta nada." },
-    sentence: { en: "Nine dates you can leave after an hour, each with real places around Covent Garden, and a short list of cafés and bookshops near the centre to meet at.", es: "Nueve citas de las que podéis iros al cabo de una hora, con sitios reales alrededor de Covent Garden y una lista corta de cafeterías y librerías donde quedar." },
+    sentence: { en: "Nine dates you can leave after an hour, each with real places around Covent Garden, and a short list of cafés and bookshops near the centre to meet at.", es: "Nueve citas de las que podéis iros al cabo de una hora, con sitios reales alrededor de Covent Garden y unas cafeterías y librerías donde quedar." },
   },
   "london/cheap": {
-    title: { en: "Cheap Date Ideas in London: 8 With Real Places, 4 of Them Free", es: "Ideas para una cita barata en Londres: 8 con sitios reales" },
-    description: { en: "Eight cheap date ideas in London, each filled with real cafés, parks and galleries around Covent Garden, plus the places near the centre that usually cost nothing to walk into.", es: "Ocho ideas para una cita barata en Londres, cada una con cafeterías, parques y galerías reales alrededor de Covent Garden, y los sitios del centro en los que se suele entrar gratis." },
+    title: { en: "Cheap Date Ideas in London: 8 With Real Places, 4 Free", es: "Ideas para una cita barata en Londres, con sitios reales" },
+    description: { en: "Eight cheap date ideas in London with real cafés, parks and galleries around Covent Garden, and the places nearby that are usually free to walk into.", es: "Ocho ideas para una cita barata en Londres con cafeterías, parques y galerías reales cerca de Covent Garden, y sitios donde se entra gratis." },
     heading: { en: "Cheap date ideas in London", es: "Ideas para una cita barata en Londres" },
     line: { en: "Most of the big museums charge nothing at the door.", es: "Casi ningún gran museo cobra en la puerta." },
-    hero: "gallery-hop",
-    sentence: { en: "The same eight ideas as our cheap list, with real places around Covent Garden for each stop, and the nearby galleries, parks and bookshops that are usually free.", es: "Las mismas ocho ideas de nuestra lista barata, con sitios reales alrededor de Covent Garden para cada parada, y las galerías, parques y librerías cercanos, que suelen ser gratis." },
+    hero: "ice-cream-walk",
+    sentence: { en: "Our eight cheap ideas with real places around Covent Garden, and the galleries, parks and bookshops nearby that are usually free.", es: "Nuestras ocho ideas baratas con sitios reales alrededor de Covent Garden, y las galerías, parques y librerías cercanos, que suelen ser gratis." },
   },
 };
