@@ -894,8 +894,8 @@ describe("the page's words", () => {
       const tiles = (locale === "en" ? en : es).occasions as Record<string, string>;
       for (const [occasion, name] of Object.entries(FINDER_COPY[locale].ui.occasions)) expect(name, `${locale} ${occasion}`).toBe(tiles[occasion]);
     }
-    expect(FINDER_COPY.en.ui.end).toBe("That is every gift we have.");
-    expect(FINDER_COPY.es.ui.end).toBe("Esos son todos los regalos que tenemos.");
+    expect(FINDER_COPY.en.ui.end).toBe("Those are all the gifts for these two answers.");
+    expect(FINDER_COPY.es.ui.end).toBe("Esos son todos los regalos para estas dos respuestas.");
   });
 
   it("are in one English: American, as “mom” is", () => {

@@ -623,8 +623,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "favorite-person": {
     en: {
       keyword: "Favorite person gift",
-      title: "Favorite Person Gift: A Watercolour Scrapbook",
-      description: "Lift the tissue paper: a watercolour scrapbook of your photos, pearls and pressed flowers, for your favorite person. A digital gift for no reason at all.",
+      title: "Favorite Person Gift: A Watercolor Scrapbook",
+      description: "Lift the tissue paper: a watercolor scrapbook of your photos, pearls and pressed flowers, for your favorite person. A digital gift for no reason at all.",
       howTo: "How to make a gift for your favorite person",
     },
     es: {

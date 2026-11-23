@@ -52,7 +52,7 @@ export function ScrollRow({
     el.scrollBy({ left: direction * el.clientWidth * 0.8, behavior: calm ? "auto" : "smooth" });
   };
 
-  const button = "absolute top-1/2 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-paper text-ink shadow-[0_10px_24px_-14px_rgba(74,32,24,0.6)] ring-1 ring-ink/10 transition-colors duration-300 hover:bg-forest hover:text-cream disabled:pointer-events-none disabled:opacity-40 lg:grid";
+  const button = "absolute top-[38%] z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-paper text-ink shadow-[0_10px_24px_-14px_rgba(74,32,24,0.6)] ring-1 ring-ink/10 transition-colors duration-300 hover:bg-forest hover:text-cream disabled:pointer-events-none disabled:opacity-0 lg:grid";
   // In the row's side margin where it is wide enough (half of max(2rem, (100vw - 80rem) / 2 + 2rem)), and never closer than 12px to the window's edge.
   const side = "max(0.75rem, calc((100vw - 80rem) / 4 + 1rem - 1.375rem))";
 

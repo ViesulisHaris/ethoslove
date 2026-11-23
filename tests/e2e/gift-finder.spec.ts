@@ -333,7 +333,7 @@ test.describe("the gift finder", () => {
     await expect(picks(page).first()).toBeVisible();
     const forMom = await names(page);
     for (const name of ["XOXO", "Coquette", "Dark Romance", "Evergreen", "Snow Globe"]) expect(forMom).not.toContain(name);
-    await expect(page.getByText("That is every gift we have.")).toBeVisible();
+    await expect(page.getByText("Those are all the gifts for these two answers.")).toBeVisible();
   });
 
   test("three more, then start again", async ({ page }) => {

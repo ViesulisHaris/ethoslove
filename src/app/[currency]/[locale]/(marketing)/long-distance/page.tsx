@@ -49,7 +49,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
               {/* Through EagerImg: drawn here it was a preload hint in this page's RSC payload, which the
                   header's prefetch of /long-distance added to every other page it was open on. */}
               <EagerImg src={HERO_ART.ldr} srcSet={heroSrcSet(HERO_ART.ldr)} sizes={heroSizes("(min-width: 1024px) 460px")} alt="" width={1800} height={1350} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-              <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-white px-4 py-2.5 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift">{t("polaroid")}</span>
+              <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-card px-4 py-2.5 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift">{t("polaroid")}</span>
             </div>
           </div>
           <div className="mt-12">

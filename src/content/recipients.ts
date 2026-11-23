@@ -115,7 +115,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "coquette", heading: "A pink bow and polaroids", body: "She unties the bow and finds a gingham collage of real lilies, your photos and your song. For a girlfriend with a coquette Pinterest board." },
         { template: "scrapbook", heading: "A scrapbook of the two of you", body: "Polaroids, washi tape and a torn note in the corner. The trips, the bad haircuts, the night you met." },
         { template: "music-box", heading: "A music box with your song", body: "She winds the key, the lid opens, a ballerina turns to the tune and your photos appear in the mirror." },
-        { template: "favorite-person", heading: "For your favorite person", body: "A watercolour scrapbook under tissue paper, with pearls, pressed flowers and your photos. For no reason, which is the best reason." },
+        { template: "favorite-person", heading: "For your favorite person", body: "A watercolor scrapbook under tissue paper, with pearls, pressed flowers and your photos. For no reason, which is the best reason." },
         { template: "xoxo", heading: "A card sealed with a kiss", body: "Lipstick prints, polaroids and your song, and every tap leaves another kiss. For Valentine's, or a Wednesday." },
         { template: "photo-booth", heading: "A photo booth strip of you two", body: "She pulls the curtain and four flashes later a strip of the two of you prints, with your message on the back." },
         { template: "constellations", heading: "A sky made of your photos", body: "Every photo is a star she finds by moving her phone, and your song plays when she's found them all." },
@@ -282,7 +282,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "photo-booth", heading: "A photo booth strip of you two", body: "Four flashes and a strip of your best worst faces prints, with a message on the back." },
         { template: "scrapbook", heading: "A scrapbook of your friendship", body: "Polaroids, washi tape and a torn note, full of the photos nobody else gets to see." },
         { template: "fortune-cookie", heading: "A fortune cookie with their future", body: "They crack it open to find the fortunes you wrote for them, up to twenty, all suspiciously accurate." },
-        { template: "favorite-person", heading: "For your favorite person", body: "A watercolour scrapbook of your photos with pearls and pressed flowers, when you want to say the soft thing for once." },
+        { template: "favorite-person", heading: "For your favorite person", body: "A watercolor scrapbook of your photos with pearls and pressed flowers, when you want to say the soft thing for once." },
       ],
       sections: [
         { heading: "What to write to them", body: "The in-jokes, obviously, but also one sentence you've never said: why they're the one you call. Funny on the way in, honest at the end, is the order that works." },

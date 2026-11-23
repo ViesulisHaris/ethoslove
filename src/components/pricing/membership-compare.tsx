@@ -100,10 +100,10 @@ export async function MembershipCompare({
             </colgroup>
             <thead>
               <tr>
-                <th scope="col" className="sticky top-0 z-10 bg-card px-3.5 py-4 align-bottom text-eyebrow font-medium text-ink-soft sm:px-7 sm:py-5">
+                <th scope="col" className="sticky top-0 z-10 bg-card px-3.5 py-4 align-bottom shadow-[inset_0_-1px_0_var(--color-line)] text-eyebrow font-medium text-ink-soft sm:px-7 sm:py-5">
                   {t("feature")}
                 </th>
-                <th scope="col" className="sticky top-0 z-10 bg-card px-2 py-4 text-center align-bottom sm:px-4 sm:py-5">
+                <th scope="col" className="sticky top-0 z-10 bg-card px-2 py-4 text-center align-bottom shadow-[inset_0_-1px_0_var(--color-line)] sm:px-4 sm:py-5">
                   <span className="font-display text-[19px] text-forest sm:text-[22px]">{t("free")}</span>
                 </th>
                 <th scope="col" className="sticky top-0 z-10 bg-dusk px-2 py-4 text-center align-bottom text-cream sm:px-4 sm:py-5">
