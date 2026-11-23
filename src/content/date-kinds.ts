@@ -69,7 +69,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     description: { en: "Eight fun date ideas with a game in them: mini golf, bowling, an escape room, karaoke, a rowing boat. Each has a twist that makes the game a small bet.", es: "Ocho ideas para una cita divertida con un juego dentro: minigolf, bolos, escape room, karaoke o una barca. Cada una trae un giro que lo vuelve una apuesta." },
     heading: { en: "Fun date ideas that give you something to do", es: "Ideas para una cita divertida, con algo a lo que jugar" },
     line: { en: "Somebody keeps score, and somebody ends up buying dessert.", es: "Alguien lleva la cuenta, y alguien acaba pagando el postre." },
-    sentence: { en: "Eight dates built round playing something together. Each has a twist of its own, from loser buys dessert to narrating the rowing like a nature documentary.", es: "Ocho citas para jugar a algo juntos. Cada una trae su giro, desde «quien pierda paga el postre» hasta narrar la remada como un documental." },
+    sentence: { en: "Eight dates built round playing something together. Each has a twist of its own, from loser buys dessert to narrating the rowing like a nature documentary.", es: "Ocho citas para jugar a algo juntos. Cada una trae su giro, desde «quien pierda paga el postre» hasta narrar la remada como un documental de naturaleza." },
     hero: "arcade-night",
     fits: {
       "mini-golf-and-milkshakes": { en: "Eighteen chances to be bad at something together, and the loser buys dessert.", es: "Dieciocho ocasiones de hacerlo fatal en compañía, y quien pierda paga el postre." },
@@ -78,7 +78,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       "escape-room-debrief": { en: "Sixty minutes on the same side, which is rarer on a date than it should be.", es: "Sesenta minutos en el mismo bando, algo más raro en una cita de lo que debería." },
       "karaoke-duet": { en: "A private booth means only one person hears you, and it's the right person.", es: "En una sala privada solo os oye una persona, y es la que importa." },
       "climbing-first-timers": { en: "You hold the rope while the other climbs, so trust arrives faster than usual.", es: "Uno sujeta la cuerda mientras el otro sube, así que la confianza llega antes de lo normal." },
-      "boats-on-the-water": { en: "An hour of going in circles, with one of you narrating like a nature documentary.", es: "Una hora dando vueltas, con uno de los dos narrando como en un documental." },
+      "boats-on-the-water": { en: "An hour of going in circles, with one of you narrating like a nature documentary.", es: "Una hora dando vueltas, con uno de los dos narrando como en un documental de naturaleza." },
       "skating-and-hot-chocolate": { en: "Holding hands is how you stay upright, so nobody has to make the first move.", es: "Ir de la mano es la forma de no caerse, así que nadie tiene que dar el primer paso." },
     },
     faq: [
@@ -99,7 +99,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     description: { en: "Eight cheap date ideas for a coffee each or nothing: a gallery hop, a golden-hour picnic, a sunrise, a garden. Four are free if you bring your own.", es: "Ocho ideas para una cita barata por un café o nada: galerías, un pícnic a la hora dorada, un amanecer, un jardín. Cuatro, gratis si lleváis lo vuestro." },
     heading: { en: "Cheap date ideas, and four that are free", es: "Ideas para una cita barata, y cuatro que salen gratis" },
     line: { en: "Fill the flask at home and four of these cost nothing.", es: "Llenad el termo en casa y cuatro de estas no cuestan nada." },
-    sentence: { en: "Eight dates that cost the price of a coffee each at most. Four of them cost nothing if the picnic comes from your own kitchen and you skip the café.", es: "Ocho citas por un café por cabeza, como mucho. Cuatro salen gratis si el pícnic sale de vuestra cocina." },
+    sentence: { en: "Eight dates that cost the price of a coffee each at most. Four of them cost nothing if the picnic comes from your own kitchen and you skip the café.", es: "Ocho citas por un café por cabeza, como mucho. Cuatro salen gratis si el pícnic sale de vuestra cocina y os saltáis la cafetería." },
     hero: "golden-hour-picnic",
     fits: {
       "gallery-hop": { en: "Small galleries are free to walk into, and the only cost is the coffee after, if you want one.", es: "En las galerías pequeñas se entra gratis; el único gasto es el café de después, si os apetece." },
@@ -138,7 +138,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       "beach-until-sunset": { en: "Sand, salt and dinner with your shoes still off. Write something for the tide to take.", es: "Arena, sal y cenar todavía sin zapatos. Escribid algo para que se lo lleve la marea." },
       "sunrise-and-breakfast": { en: "A view with nobody else in it, and phones in pockets until the sun is fully up.", es: "Una vista sin nadie más, y los móviles en el bolsillo hasta que el sol haya salido del todo." },
       "boats-on-the-water": { en: "An hour on the water with nowhere to go and nobody else in the boat.", es: "Una hora en el agua, sin sitio al que ir y sin nadie más en la barca." },
-      "theatre-night": { en: "A reason to wear the good outfit, and a drink at intermission to guess the ending.", es: "Una excusa para ponerse lo bueno, y una copa en el descanso para apostar el final." },
+      "theatre-night": { en: "A reason to wear the good outfit, and a drink at intermission to guess the ending.", es: "Una excusa para ponerse lo bueno, y una copa en el descanso para adivinar el final." },
       "spa-evening": { en: "Warm water, no phones, and the slowest two hours of the month.", es: "Agua caliente, sin móviles y las dos horas más lentas del mes." },
       "garden-afternoon": { en: "Slow paths, a bench for two and tea afterwards. Nothing about it can be hurried.", es: "Caminos lentos, un banco para dos y un té después. Nada de esto admite prisas." },
       "skating-and-hot-chocolate": { en: "You hold hands for the whole hour, and the hot chocolate is earned.", es: "Vais de la mano toda la hora, y el chocolate caliente se gana." },
@@ -169,7 +169,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       "mini-golf-and-milkshakes": { en: "Four scorecards, one loser, and a round of milkshakes on them.", es: "Cuatro tarjetas de puntos, alguien pierde y paga una ronda de batidos." },
       "karaoke-duet": { en: "Two duets and an audience of two that has to clap.", es: "Dos duetos y un público de dos que tiene que aplaudir." },
       "arcade-night": { en: "Pool four people's tickets and argue about who takes the prize home.", es: "Juntad los tickets de los cuatro y discutid quién se lleva el premio a casa." },
-      "boats-on-the-water": { en: "Two boats make it a race, however badly both are rowed.", es: "Con dos barcas ya es una carrera, por mal que reme cada una." },
+      "boats-on-the-water": { en: "Two boats make it a race, however badly both are rowed.", es: "Con dos barcas ya es una carrera, por mal que se reme en cada una." },
       "pasta-and-a-slow-walk": { en: "A table for four where each couple orders for the other one. No vetoes.", es: "Una mesa para cuatro en la que cada pareja pide por la otra. Sin vetos." },
       "golden-hour-picnic": { en: "Everybody brings one thing the others have never tried, so the blanket fills up fast.", es: "Cada cual lleva algo que los demás no hayan probado, y la manta se llena enseguida." },
     },
@@ -245,7 +245,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       },
       {
         q: { en: "What if the forecast changes?", es: "¿Y si cambia la previsión?" },
-        a: { en: "The planner on this page reads the forecast for tonight, tomorrow or the weekend each time you plan; the dates map picks any day up to sixteen days ahead. If the day turns dry, the outdoor ideas come back.", es: "El planificador de esta página lee la previsión de esta noche, mañana o el finde cada vez que planeáis; el mapa de citas elige cualquier día hasta dieciséis días vista. Si el día sale seco, vuelven las ideas al aire libre." },
+        a: { en: "The planner on this page reads the forecast for tonight, tomorrow or the weekend each time you plan; the dates map picks any day up to sixteen days ahead. If the day turns dry, the outdoor ideas come back.", es: "El planificador de esta página lee la previsión de esta noche, mañana o el finde cada vez que planeáis; el mapa de citas elige cualquier día con hasta dieciséis días de antelación. Si el día sale seco, vuelven las ideas al aire libre." },
       },
     ],
   },
@@ -354,10 +354,10 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
     allInCity: "Todas las ideas para una cita en {city}",
     freePlacesLabel: "Gratis",
     freePlacesHeading: "Sitios donde se suele entrar gratis",
-    freePlacesLine: "Parques, galerías, librerías y miradores que el mapa conoce a {km} km.",
+    freePlacesLine: "Parques, galerías, librerías y miradores que el mapa conoce a menos de {km} km.",
     meetLabel: "Dónde quedar",
     meetHeading: "Cafeterías, librerías y galerías cerca del centro",
-    meetLine: "Sitios fáciles para encontrarse, todos a {km} km.",
+    meetLine: "Sitios fáciles para encontrarse, todos a menos de {km} km.",
   },
 };
 

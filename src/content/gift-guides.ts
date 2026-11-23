@@ -236,13 +236,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "La de cinco minutos: una nota con lacre",
-          body: "Dos nombres y hasta 500 caracteres: eso es todo lo que pide la versión gratis. Rompe el sello con un toque y tus palabras se escriben a mano sobre el papel, con una canción si quieres. Sin fotos que buscar. Quinientos caracteres dan para un recuerdo concreto y una promesa. A una nota tardía le hacen falta las dos cosas.",
+          body: "Dos nombres y hasta 500 caracteres: eso es todo lo que pide la versión gratis. Rompen el sello con un toque y tus palabras se escriben a mano sobre el papel, con una canción si quieres. Sin fotos que buscar. Quinientos caracteres dan para un recuerdo concreto y una promesa. A una nota tardía le hacen falta las dos cosas.",
           line: { field: "freeNote", where: "La nota entera", text: "Mi plan para hoy se ha torcido, así que aquí va la parte que importaba. Haces mejores los días normales que yo los planes. La cena la pago yo y el sitio lo eliges tú." },
         },
         {
           template: "midnight-countdown",
-          heading: "De tarde a primero: prográmalo a medianoche",
-          body: "Si el día es mañana, vas con tiempo de sobra. Manda el enlace esta noche: muestra un reloj que baja bajo un cielo que oscurece y se abre solo en el momento que elijas, en su zona horaria, con fuegos artificiales. Aparte de los nombres y tu mensaje, solo pide una foto y el momento de abrirse. Nadie que recibe un regalo a las 00:00 piensa que se hizo a las 21:40.",
+          heading: "Llega el primero: prográmalo para medianoche",
+          body: "Si el día es mañana, vas con tiempo de sobra. Manda el enlace esta noche: muestra una cuenta atrás bajo un cielo que oscurece y se abre solo en el momento que elijas, en su zona horaria, con fuegos artificiales. Aparte de los nombres y tu mensaje, solo pide una foto y el momento de abrirse. Nadie que reciba un regalo a las 00:00 piensa que se hizo a las 21:40.",
           line: { field: "zeroLine", where: "La frase que sale con los fuegos", text: "Ya es tu día, oficialmente. He llegado antes que nadie." },
         },
         {
@@ -456,7 +456,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "museum",
           heading: "Una sala de proyección tras la última foto",
           brief: "El clip tiene una sala oscura para él solo tras la última foto, justo antes de tu mensaje.",
-          body: "Cada foto cuelga enmarcada en su propia sala, con su placa, y el clip tiene una para él solo después de la última foto, justo antes de tu mensaje: paredes oscuras y el vídeo en la del fondo, como la sala de proyección de una exposición. Úsalo para lo que una foto no puede guardar: el perro saliendo a recibirle, la calle donde creciste, una mesa entera gritando lo mismo. Admite de dos a veinte fotos.",
+          body: "Cada foto cuelga enmarcada en su propia sala, con su cartela, y el clip tiene una para él solo después de la última foto, justo antes de tu mensaje: paredes oscuras y el vídeo en la del fondo, como la sala de proyección de una exposición. Úsalo para lo que una foto no puede guardar: el perro saliendo a recibirle, la calle donde creciste, una mesa entera gritando lo mismo. Admite de dos a veinte fotos.",
           line: { field: "exhibition", where: "El título de la exposición", text: "Retrospectiva Ana: diez años, casi todos riéndonos" },
         },
         {
@@ -490,7 +490,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "halfway",
           heading: "Para la distancia: aterriza el avión y hablas tú",
           body: "Cuando alguien está lejos, lo que le falta es oírte. Sopla al móvil y un avión de papel cruza con su aliento un mapa desde tu ciudad hasta la suya, con los kilómetros bajando, hasta que la postal se da la vuelta y aparece tu carta. En la última pantalla, hasta un minuto de ti hablando. Grábalo en un sitio tranquilo y de una sola toma.",
-          line: { field: "halfwayNote", where: "La frase que aparece al pasar la mitad", text: "La mitad cae en medio del mar. Lo he mirado. Sigue siendo lejos." },
+          line: { field: "halfwayNote", where: "La frase que aparece al pasar la mitad", text: "La mitad cae en medio del mar. Lo he mirado. Sigue estando lejos." },
         },
       ],
       sections: [
@@ -500,7 +500,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Grábalo en horizontal",
-          body: "En Museo, Cine de cumpleaños, Nuestra línea del tiempo y La carta el clip se ve en un marco ancho, con forma de televisor, y un vídeo grabado en vertical se recorta para caber. Gira el móvil antes de grabar. La imagen fija que se ve antes de que empiece sale de medio segundo después del principio, así que para entonces ya tienes que estar en el plano y mirando.",
+          body: "En Museo, Cine de cumpleaños, Nuestra línea del tiempo y La carta el clip se ve en un marco ancho, con forma de televisor, y un vídeo grabado en vertical se recorta para caber. Gira el móvil antes de grabar. La imagen fija que se ve antes de que empiece se toma a medio segundo del principio, así que para entonces ya tienes que estar en el plano y mirando.",
         },
         {
           heading: "La voz, si el vídeo te supera",
@@ -898,7 +898,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "arcade",
           heading: "Trozos de tarta que se atrapan con una cesta",
-          body: "Elige que caigan trozos de tarta y la tarta de cumpleaños se convierte en un juego. Arrastran una cesta por la parte de abajo de la pantalla para atraparlos, y cada nivel superado descubre una foto. Es la única tarta de aquí con marcador. Mándasela a un hermano, a tu mejor amiga o a cualquiera que contestaría a una tarjeta cursi con un solo emoji.",
+          body: "Elige que caigan trozos de tarta y la tarta de cumpleaños se convierte en un juego. Arrastran una cesta por la parte de abajo de la pantalla para atraparlos, y cada nivel superado descubre una foto. Es la única tarta de aquí con marcador. Mándasela a un hermano, a tu mejor amiga o a cualquiera que contestara a una tarjeta cursi con un solo emoji.",
           line: { field: "title", where: "El título del juego", text: "MISIÓN TARTA: NIVEL 30" },
         },
       ],
@@ -927,7 +927,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "¿Se puede cortar la tarta?",
-          a: "No. Ninguna de estas tartas se corta ni se reparte: son para las velas y el deseo. Si cortar una tarta a la vez es importante, hacedlo por videollamada y manda la tarjeta para el deseo.",
+          a: "No. Ninguna de estas tartas se corta ni se reparte: son para las velas y el deseo. Si cortar una tarta a la vez es importante, cortadla juntos por videollamada y manda tú la tarjeta para el deseo.",
         },
         {
           q: "¿Funciona sin micrófono?",
@@ -1080,9 +1080,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "museum",
           heading: "Una galería, con una foto por sala",
-          brief: "Hasta veinte fotos, cada una sola en su propia sala, con una placa debajo.",
-          body: "Hasta veinte fotos, cada una sola en una pared de su propia sala, con una placa debajo: tu pie de foto como título y los años que le pongas a la exposición. Pasan de sala en sala deslizando, y la última pared es tu mensaje, compuesto como el texto que cierra una exposición. Escribe los pies como los escriben los museos, con toda la seriedad, y cada sala hace más gracia.",
-          line: { field: "caption", where: "Un pie de foto, en su placa", text: "Sin título (Tú, durmiendo en el tren), 2022. Cedida por mi carrete." },
+          brief: "Hasta veinte fotos, cada una sola en su propia sala, con una cartela debajo.",
+          body: "Hasta veinte fotos, cada una sola en una pared de su propia sala, con una cartela debajo: tu pie de foto como título y los años que le pongas a la exposición. Pasan de sala en sala deslizando, y la última pared es tu mensaje, compuesto como el texto que cierra una exposición. Escribe los pies como los escriben los museos, con toda la seriedad, y cada sala hace más gracia.",
+          line: { field: "caption", where: "Un pie de foto, en su cartela", text: "Sin título (Tú, durmiendo en el tren), 2022. Cedida por mi carrete." },
         },
         {
           template: "our-timeline",
@@ -1302,7 +1302,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "museum",
           heading: "Una exposición de los dos, sala a sala",
           brief: "Hasta veinte fotos, una por pared, y pasan de sala en sala como visitantes.",
-          body: "Una web con salas. Ponle título a la exposición, escribe los años en cada placa y cuelga hasta veinte fotos, una por pared, cada una con su pie. Pasan de sala en sala como visitantes, y la última pared lleva tu mensaje como texto del comisario. Un clip de vídeo puede tener una sala para él solo.",
+          body: "Una web con salas. Ponle título a la exposición, escribe los años en cada cartela y cuelga hasta veinte fotos, una por pared, cada una con su pie. Pasan de sala en sala como visitantes, y la última pared lleva tu mensaje como texto del comisario. Un clip de vídeo puede tener una sala para él solo.",
           line: { field: "exhibition", where: "El título de la exposición", text: "Tres años de nosotros: una retrospectiva" },
         },
         {
