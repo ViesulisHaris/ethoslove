@@ -23,7 +23,7 @@ import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
 import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
-import { COPY, LOW_UNITS, NoteCard, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, settleMs } from "@/templates/advent-calendar/Template";
+import { COPY, LOW_COLUMN_MIN, LOW_UNITS, NoteCard, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, lowColumn, lowTitlePx, settleMs, shortCapOf, TAG_SIZES } from "@/templates/advent-calendar/Template";
 import { keep, keptKey, recall } from "@/templates/advent-calendar/kept";
 import { soldAsGroup } from "@/lib/gift/free-tier";
 import { templateProductNode } from "@/lib/seo";
@@ -37,6 +37,8 @@ const SLUG = "advent-calendar";
 const LOCALES = ["en", "es"] as const;
 const words = (line: string) => line.trim().split(/\s+/).length;
 const escaped = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+/** The words of some markup, without its tags. */
+const plain = (html: string) => html.replace(/<[^>]+>/g, "");
 const noteDoors = (seed: number, notes: number) => doorsFor(seed, notes).filter((d) => d.kind === "note");
 
 afterEach(() => {
@@ -572,7 +574,7 @@ describe("the contract a group template keeps", () => {
     expect(html).not.toContain("tap a door to open it");
     expect(html).not.toMatch(/for Nora/i);
     // the editor's still frame, a phone wide, keeps them
-    expect(still(demoData.en)).toContain("for Nora · from Tom and 8 more");
+    expect(plain(still(demoData.en))).toContain("for Nora · from Tom and 8 more");
     expect(still(demoData.en)).toMatch(/data-foot=/);
   });
 
@@ -595,9 +597,9 @@ describe("the contract a group template keeps", () => {
 
   it("a name set inside a sentence of the template's own is kept to itself when it runs right to left", () => {
     const html = still({ ...demoData.en, senderName: "عبد", recipientName: "נועה", title: "" });
-    expect(html).toContain("for ⁨נועה⁩ · from ⁨عبد⁩ and 8 more");
+    expect(plain(html)).toContain("for ⁨נועה⁩ · from ⁨عبد⁩ and 8 more");
     // a name in Latin letters is left exactly as it was
-    expect(still(demoData.en)).toContain("for Nora · from Tom and 8 more");
+    expect(plain(still(demoData.en))).toContain("for Nora · from Tom and 8 more");
   });
 
   it("no line of its own would be mistaken by the sweep for a way out, or pressed as a way on when it is one back", () => {
@@ -834,7 +836,7 @@ describe("after the hands-on test", () => {
     const s = source();
     expect(s).toContain("const next = lit || (!left && read > 0) ? starLine : found > 0 && read === 0 ? s.envelopeHint : null;");
     expect(COPY.en.starHint).toBe("tap the star for {from}’s letter");
-    expect(COPY.es.starHint).toBe("toca la estrella: la carta de {from}");
+    expect(COPY.es.starHint).toBe("toca la estrella para leer la carta de {from}");
     for (const locale of LOCALES) {
       expect(COPY[locale].starHintPlain).toMatch(locale === "en" ? /^tap the star/ : /^toca la estrella/);
       // the lit line no longer runs onto two lines on a small phone in Spanish
@@ -955,5 +957,94 @@ describe("its page prices it as what it is sold as: a group card", () => {
     expect(page).toContain('PRODUCTS[manifest.tier === "free" ? "extras" : group ? "group" : "single"]');
     expect(page).toContain('t("templates.group.detailPrice", { price })');
     expect(readFileSync("src/components/templates/template-guide.tsx", "utf8")).toContain('soldAsGroup(manifest) ? group("faqA", { name, price })');
+  });
+});
+
+describe("the deep test's findings of 23 Nov", () => {
+  const source = () => readFileSync("src/templates/advent-calendar/Template.tsx", "utf8");
+  const still = (data: GiftData<AdventCalendarFields>) => renderToStaticMarkup(<Template data={data} mode="preview" />);
+
+  it("keeps the keyboard in front while a note or the letter is out, and hears Escape on the page (D1)", () => {
+    const s = source();
+    // Escape was heard only on the gift's root: with the focus gone past it, it no longer put the note back
+    expect(s).not.toMatch(/onKeyDown=\{\(e\) => \{\s*if \(e\.key !== "Escape"\)/);
+    expect(s).toContain('document.addEventListener("keydown", onKey);');
+    expect(s).toContain("if (!busy || preview) return;");
+    // the room behind is inert, and nothing in it is a stop for the Tab key
+    expect(s).toContain('!el.closest("[inert]")');
+  });
+
+  it("writes the byline whole: names wrap, and the count of who else signed is never cut or broken (D2, D3)", () => {
+    const html = still({ ...demoData.en, recipientName: "Grandma Margaret", senderName: "The Henderson family" });
+    expect(html).not.toMatch(/class="[^"]*truncate[^"]*"[^>]*>for /);
+    expect(html).toContain('<span class="whitespace-nowrap">and 8 more</span>');
+    expect(plain(html)).toContain("for Grandma Margaret · from The Henderson family and 8 more");
+    expect(plain(still(demoData.es))).toContain("para Nora · de Tomás y 8 más");
+    // no count where nobody else has signed
+    expect(still({ ...demoData.en, contributions: undefined })).toContain(">for Nora · from Tom</p>");
+  });
+
+  it("gives the words beside the house on a low screen a column they fit in, and the house moves for it (D2)", () => {
+    // a phone on its side keeps the house in the middle, as it was
+    expect(lowColumn(844, 390).shift).toBe(0);
+    expect(lowColumn(844, 390).col).toBeCloseTo(844 / 2 - 69 * (390 / LOW_UNITS), 5);
+    // a laptop at 200%, and the small phones on their side, give the column what it needs
+    for (const [w, h] of [
+      [640, 400],
+      [667, 375],
+      [740, 360],
+      [568, 320],
+    ]) {
+      const c = lowColumn(w, h);
+      expect(c.col, `${w}x${h}`).toBeGreaterThanOrEqual(Math.min(LOW_COLUMN_MIN, w - 138 * c.k) - 0.01);
+      // and the house is still whole on the screen
+      expect(c.col + 138 * c.k, `${w}x${h}`).toBeLessThanOrEqual(w + 0.01);
+    }
+    // the title is set so its longest word fits the column and the whole takes three lines at most
+    for (const [w, h] of [
+      [640, 400],
+      [667, 375],
+      [844, 390],
+    ]) {
+      const c = lowColumn(w, h);
+      for (const title of ["Merry Christmas, Nora", "Feliz Navidad, Nora", "Merry Christmas to the whole Henderson family"]) {
+        const px = lowTitlePx(title, c.inner, c.k);
+        const longest = Math.max(...title.split(" ").map((word) => word.length));
+        expect(longest * 0.58 * px, `${title} at ${w}x${h}`).toBeLessThanOrEqual(c.inner + 0.01);
+        expect(px).toBeGreaterThanOrEqual(13);
+      }
+    }
+  });
+
+  it("fetches the sender's letter paper with the rest of the art, before the letter is opened (D4)", () => {
+    for (const piece of ["top", "mid", "bottom"]) expect(artFor("evergreen")).toContain(`/art/advent-calendar/sheet-letter-${piece}.webp`);
+  });
+
+  it("writes every short name in a house at one size, and that size no longer drops a whole step for one narrow tag (D7)", () => {
+    expect(shortCapOf([])).toBeUndefined();
+    expect(shortCapOf([3.5])).toBe(3.5);
+    // one hand for every short name, the size the narrowest of their tags holds
+    expect(shortCapOf([3.9, 3.1])).toBe(3.1);
+    expect(shortCapOf([3.9, 3.5, 3.5, 3.9, 3.3])).toBe(3.3);
+    expect(source()).toContain("const fit = short && own.whole && cap !== undefined && cap < own.size ? { ...own, size: cap } : own;");
+    // Between the largest and 3.1 the sizes are a fifth of a unit apart: 'Mamá', whose tag its leaf narrows, held 3.3 and
+    // not 3.5, and was set at 3.1 with every other short name: 9.9 px on a phone 320 wide, now 3.3 (10.6 px).
+    const steps = TAG_SIZES.filter((size) => size >= 3.1);
+    for (const [i, size] of steps.slice(1).entries()) expect(steps[i] - size).toBeLessThanOrEqual(0.2 + 1e-9);
+    expect(3.3 * 3.2).toBeGreaterThanOrEqual(10.5);
+    expect(TAG_SIZES[TAG_SIZES.length - 1]).toBe(TAG_SMALLEST);
+  });
+
+  it("reads as Spanish to a Spanish reader (D6)", () => {
+    const es = (demoData.es.contributions ?? []).map((c) => c.note).join(" ");
+    expect(es).not.toMatch(/igualmente|fusible menos/);
+    expect(es).toContain("de todas formas");
+    expect(es).toContain("un fusible saltado");
+    for (const c of demoData.es.contributions ?? []) expect([...c.note].length).toBeLessThanOrEqual(140);
+    expect(COPY.es.starHint).toBe("toca la estrella para leer la carta de {from}");
+    const es_ = JSON.parse(readFileSync("messages/es.json", "utf8"));
+    expect(es_.templates.group.detailPrice).toContain("Para invitar a la gente tienes que iniciar sesión.");
+    // the longer Spanish line names the sender only while it stays on one line at the foot
+    expect(source()).toContain('[...from].length + s.starHint.length - "{from}".length <= STAR_HINT_MOST ? named : s.starHintPlain');
   });
 });

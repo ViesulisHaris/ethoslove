@@ -29,7 +29,7 @@ const S = {
   en: {
     title: "Merry Christmas, {name}",
     forFrom: "for {to} · from {from}",
-    forFromMore: "for {to} · from {from} and {n} more",
+    more: "and {n} more",
     hint: "tap a door to open it",
     found: "{found} of {total} notes found",
     foundOne: "{found} of 1 note found",
@@ -61,7 +61,7 @@ const S = {
   es: {
     title: "Feliz Navidad, {name}",
     forFrom: "para {to} · de {from}",
-    forFromMore: "para {to} · de {from} y {n} más",
+    more: "y {n} más",
     hint: "toca una puerta para abrirla",
     found: "{found} de {total} notas encontradas",
     foundOne: "{found} de 1 nota encontrada",
@@ -72,7 +72,7 @@ const S = {
     envelopeHint: "toca un sobre para leerlo",
     allFound: "todas las notas leídas · la estrella brilla",
     allOpen: "todas las puertas abiertas · la estrella brilla",
-    starHint: "toca la estrella: la carta de {from}",
+    starHint: "toca la estrella para leer la carta de {from}",
     starHintPlain: "toca la estrella para leer la carta",
     openDoor: "Abrir la puerta {n}",
     readNote: "Leer la nota de la puerta {n}",
@@ -108,11 +108,15 @@ export const readLook = (fields: unknown): LookId => readFields(fields).look;
 /** A screen wider than a phone held upright shows more of the room than the phone's picture holds. */
 const WIDE_MEDIA = "(min-width: 700px), (orientation: landscape)";
 
-/** Every picture a gift in this look opens on, so they can be fetched before it does. The sender's letter's paper comes with the letter. */
+/**
+ * Every picture a gift in this look opens on, so they can be fetched before it does. The sender's letter's paper is among
+ * them (28 KB): fetched only when the letter opened, a line that had dropped, or was slow, showed its words as dark ink
+ * on the dimmed room, round broken pictures.
+ */
 export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia(WIDE_MEDIA).matches;
   const size = wide ? "wide" : "phone";
-  const names = [`plate-${lookId}-closed-${size}`, `plate-${lookId}-open-${size}`, "envelope", "tag", "gingerbread", "starcookie", "cane", "bauble", "bell", "orange", "sheet-card-top", "sheet-card-mid", "sheet-card-bottom", "print"];
+  const names = [`plate-${lookId}-closed-${size}`, `plate-${lookId}-open-${size}`, "envelope", "tag", "gingerbread", "starcookie", "cane", "bauble", "bell", "orange", "sheet-card-top", "sheet-card-mid", "sheet-card-bottom", "sheet-letter-top", "sheet-letter-mid", "sheet-letter-bottom", "print"];
   return names.map((n) => `${ART_BASE}${n}.webp`);
 }
 
@@ -300,6 +304,55 @@ const UNIT_LOW = { "--k": `calc(100cqh / ${LOW_UNITS})` } as CSSProperties;
 /** On a low screen the stage is moved up so that the house, not the wall over it, is in the middle: its ridge 1.5 units under the top. */
 const LOW_SHIFT = 85 - (31 + 150) / 2 - (LOW_UNITS / 2 - 1.5 - (150 - 31) / 2);
 
+/** What the Tab key stops on in the gift, in order: nothing inert (the room behind a note), hidden or switched off. */
+function tabStops(host: HTMLElement): HTMLElement[] {
+  const all = host.querySelectorAll<HTMLElement>("button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]");
+  return [...all].filter((el) => el.tabIndex >= 0 && !el.closest("[inert]") && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== "hidden");
+}
+
+/** Half the house, candles and all, in stage units: what the column of words beside it on a low screen keeps clear of. */
+const LOW_HALF_HOUSE = 69;
+/** The narrowest the column of words beside the house is, in px, where the screen has it to spare. */
+export const LOW_COLUMN_MIN = 170;
+/** The room the column keeps round its words, in stage units: left and right. */
+const LOW_PAD = { left: 5, right: 2 };
+
+/**
+ * The column of words beside the house on a low screen, in px. It was the room left of a house in the middle, which on a
+ * phone on its side is 200 px and enough, but on a laptop at 200% (640 by 400) was 96 px: the title went to "Merry
+ * Christmas…" and the byline to "FOR NORA · FROM…". Where that is narrower than LOW_COLUMN_MIN and the screen has room
+ * either side of the house, the house moves right (`shift`) to give the column what it needs.
+ */
+export function lowColumn(width: number, height: number): { k: number; col: number; shift: number; inner: number } {
+  const k = height / LOW_UNITS;
+  const even = width / 2 - LOW_HALF_HOUSE * k;
+  const all = width - 2 * LOW_HALF_HOUSE * k;
+  const col = Math.max(even, Math.min(LOW_COLUMN_MIN, all));
+  return { k, col, shift: Math.max(0, col - even), inner: Math.max(0, col - (LOW_PAD.left + LOW_PAD.right) * k) };
+}
+
+/** The title's size, in stage units, by its length: one line of a short one, two of a long one. */
+const titleUnits = (title: string) => {
+  const length = [...title].length;
+  return length > 40 ? 4.6 : length > 22 ? 5.8 : 7.6;
+};
+/** How wide a letter of the display face is, at most on average, in ems: what a word's width is reckoned by. */
+const DISPLAY_EM = 0.58;
+/** The smallest the title is set beside the house, in px. */
+const LOW_TITLE_FLOOR = 13;
+
+/**
+ * The title's size in px in the column beside the house: its own size, unless its longest word would not fit the column's
+ * width or the whole would take more than three lines of it, and then as large as keeps every word whole on three.
+ */
+export function lowTitlePx(title: string, inner: number, k: number): number {
+  const words = title.trim().split(/\s+/).filter(Boolean);
+  const longest = Math.max(1, ...words.map((w) => [...w].length));
+  const byWord = inner / (longest * DISPLAY_EM);
+  const byLines = (3 * inner * 0.85) / Math.max(1, [...title].length * DISPLAY_EM * 0.9);
+  return Math.max(LOW_TITLE_FLOOR, Math.min(titleUnits(title) * k, byWord, byLines));
+}
+
 /** The time now, for what a tap is measured against (always in an event or an effect, never while drawing). */
 const clock = () => performance.now();
 
@@ -471,20 +524,60 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const inHand = reading ? noteAt(reading.door) : undefined;
   const busy = !!inHand || letter;
 
+  /** What Escape does while a note or the letter is out: a photo of the letter's, open over it, first (the letter stays where it was being read). */
+  const escapeRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    escapeRef.current = () => {
+      const photo = root.current?.querySelector<HTMLElement>("[data-lightbox] button");
+      if (photo) photo.click();
+      else if (inHand) putBack();
+      else if (letter) setLetter(false);
+    };
+  });
+  // While a note or the letter is out the room behind it is inert, so the Tab key went from the last thing on it to the
+  // page round the gift, and Escape, heard only inside the gift, no longer put the note back: a keyboard was stuck. Now
+  // Tab goes round what is in front (the card or the letter, and the sound button), and Escape is heard wherever the
+  // focus is in the gift or, lost, on the page itself. Focus that someone put elsewhere (the editor beside its preview) is left alone.
+  useEffect(() => {
+    if (!busy || preview) return;
+    const onKey = (e: KeyboardEvent) => {
+      const host = root.current;
+      if (!host || (e.key !== "Escape" && e.key !== "Tab")) return;
+      const active = document.activeElement;
+      const inside = !!active && host.contains(active);
+      const lost = !active || active === document.body || active === document.documentElement;
+      if (!inside && !lost) return;
+      if (e.key === "Escape") {
+        if (e.defaultPrevented) return;
+        e.preventDefault();
+        escapeRef.current();
+        return;
+      }
+      const stops = tabStops(host);
+      if (!stops.length) return;
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      if (!inside) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [busy, preview]);
+
   return (
     <div
       ref={root}
       data-advent-root=""
       className="ac-root absolute inset-0 overflow-hidden select-none"
       style={{ ...COVER_VARS, background: look.floor, color: INK.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}
-      onKeyDown={(e) => {
-        if (e.key !== "Escape") return;
-        // a photo of the letter's, open over it, is what Escape closes first: the letter stays where it was being read
-        const photo = root.current?.querySelector<HTMLElement>("[data-lightbox] button");
-        if (photo) photo.click();
-        else if (inHand) putBack();
-        else if (letter) setLetter(false);
-      }}
     >
       <Scene
         key={`scene-${run}`}
@@ -557,6 +650,8 @@ function Picture({ lookId, open, box, mirrored }: { lookId: LookId; open: boolea
 const STAGE_BOX: Rect = { x: 0, y: 0, w: 100, h: 170 };
 /** The longest sender's name the star's line names: a longer one would run the line onto two, and it says "the letter". */
 const STAR_HINT_NAME = 16;
+/** And the longest the line is with the name in it, in letters: what one line holds at the foot of a phone 320 wide. */
+const STAR_HINT_MOST = 48;
 
 type SceneProps = {
   lookId: LookId;
@@ -601,10 +696,11 @@ type SceneProps = {
 function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, lastOpened, reduce, low, wide, inert = false, tile = false, away, clear = false, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
   const look = LOOKS[lookId];
   const buttons = useRef(new Map<number, HTMLButtonElement>());
-  // The size each short name on a tag could be written at, by door: they are all written at the smallest of them, so that
-  // "Papá" and "Mamá" two rows apart are not one hand at 14.6 px and the other at 11.6 (each tag's face is its own width).
+  // The size each short name on a tag could be written at, by door: they are all written at the smallest of them
+  // (shortCapOf), so that "Papá" and "Mamá" two rows apart are not one hand at 14.6 px and the other at 11.6 (each tag's
+  // face is its own width).
   const [shortSizes, setShortSizes] = useState<Record<number, number>>({});
-  const shortCap = Object.values(shortSizes).length ? Math.min(...Object.values(shortSizes)) : undefined;
+  const shortCap = shortCapOf(Object.values(shortSizes));
   const onShortFit = useMemo(
     () => (door: number, size: number | null) =>
       setShortSizes((was) => {
@@ -633,13 +729,16 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
 
   // past the picture's own edges, on a screen wider than it, the room goes on as its own reflection
   const k = wide?.ready ? (low ? wide.height / LOW_UNITS : Math.min(wide.width / 100, wide.height / 162)) : 0;
-  const beyond = !!wide?.ready && wide.width > PICTURE.w * k + 2;
+  const column = low && wide?.ready ? lowColumn(wide.width, wide.height) : null;
+  const beyond = !!wide?.ready && wide.width + 2 * (column?.shift ?? 0) > PICTURE.w * k + 2;
 
   // found: its door is open and its envelope in sight. Read is another thing, and what lights the star.
   const found = opened.filter((n) => doors[n - 1]?.kind === "note").length;
   const left = DOOR_COUNT - opened.length;
   const others = notes.length;
-  const byline = others > 0 ? fill(s.forFromMore, { to: isolated(to), from: isolated(from), n: others }) : fill(s.forFrom, { to: isolated(to), from: isolated(from) });
+  const byline = fill(s.forFrom, { to: isolated(to), from: isolated(from) });
+  // How many more signed it is what a group card exists to show: it is never cut, and never broken over two lines.
+  const more = others > 0 ? fill(s.more, { n: others }) : null;
   const read = readDoors.length;
   // Until every door is open the line counts what has been found; after that, what has been read: "8 of 8 notes found" read as done, with eight envelopes unopened.
   const count = !others ? null : left ? fill(others === 1 ? s.foundOne : s.found, { found, total: others }) : fill(others === 1 ? s.readOne : s.read, { read, total: others });
@@ -653,7 +752,8 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   // What can be done next, which nothing else on the screen says. An envelope in sight and none opened yet: that it can be.
   // Then, once the star is lit, or every door is open and a note has been read, the star: the sender's letter, the
   // photos, the reaction and the end are all behind it, and "the star is lit" never said it could be tapped.
-  const starLine = [...from].length <= STAR_HINT_NAME ? fill(s.starHint, { from: isolated(from) }) : s.starHintPlain;
+  const named = fill(s.starHint, { from: isolated(from) });
+  const starLine = [...from].length <= STAR_HINT_NAME && [...from].length + s.starHint.length - "{from}".length <= STAR_HINT_MOST ? named : s.starHintPlain;
   const next = lit || (!left && read > 0) ? starLine : found > 0 && read === 0 ? s.envelopeHint : null;
   const last = lastOpened ? doors[lastOpened - 1] : undefined;
   const said = !last ? "" : last.kind === "sweet" ? fill(s.sweetAt, { n: last.number, sweet: s.sweets[last.sweet] }) : fill(s.noteAt, { n: last.number });
@@ -664,11 +764,19 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   const words = (
     <>
       {tile ? null : (
-        <p dir="auto" className="max-w-full truncate uppercase" style={{ color: look.labelSoft, fontSize: "max(8.5px, calc(2.2*var(--k)))", letterSpacing: low ? "0.16em" : "0.3em" }}>
+        // Two names of up to forty characters each and the count: on one line, cut to fit, the count went first and then
+        // the names. It wraps, a name anywhere it must, and the count stays whole.
+        <p dir="auto" className="max-w-full text-balance uppercase [overflow-wrap:anywhere]" style={{ color: look.labelSoft, fontSize: "max(8.5px, calc(2.2*var(--k)))", lineHeight: 1.35, letterSpacing: low ? "0.16em" : "0.3em" }}>
           {byline}
+          {more ? (
+            <>
+              {" "}
+              <span className="whitespace-nowrap">{more}</span>
+            </>
+          ) : null}
         </p>
       )}
-      <h1 dir="auto" className="mt-[calc(1.4*var(--k))] line-clamp-2 max-w-full leading-[1.06] text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)", fontWeight: 500, fontSize: title.length > 40 ? "calc(4.6*var(--k))" : title.length > 22 ? "calc(5.8*var(--k))" : "calc(7.6*var(--k))" }}>
+      <h1 dir="auto" className={`mt-[calc(1.4*var(--k))] ${column ? "line-clamp-3" : "line-clamp-2"} max-w-full leading-[1.06] text-balance [overflow-wrap:anywhere]`} style={{ fontFamily: "var(--gift-font-display)", fontWeight: 500, fontSize: column ? `${lowTitlePx(title, column.inner, column.k).toFixed(2)}px` : `calc(${titleUnits(title)}*var(--k))` }}>
         {title}
       </h1>
     </>
@@ -704,7 +812,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
       <div
         role={inert ? "img" : "group"}
         aria-label={s.house}
-        style={{ position: "absolute", top: "50%", left: "50%", width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: low ? `translate(-50%, calc(-50% + ${LOW_SHIFT} * var(--k)))` : "translate(-50%, calc(-50% - var(--ac-lift, 0px)))" }}
+        style={{ position: "absolute", top: "50%", left: "50%", width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: low ? `translate(calc(-50% + ${(column?.shift ?? 0).toFixed(2)}px), calc(-50% + ${LOW_SHIFT} * var(--k)))` : "translate(-50%, calc(-50% - var(--ac-lift, 0px)))" }}
       >
         {/* the room, every door shut */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -830,7 +938,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
       </div>
 
       {low ? (
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex flex-col items-center justify-center gap-[calc(5*var(--k))] pr-[calc(2*var(--k))] pl-[calc(5*var(--k))] text-center" style={{ ...back, width: "calc(50% - 69 * var(--k))", color: look.label, textShadow: shadow }}>
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex flex-col items-center justify-center gap-[calc(5*var(--k))] text-center" style={{ ...back, width: column ? `${column.col.toFixed(2)}px` : `calc(50% - ${LOW_HALF_HOUSE} * var(--k))`, paddingLeft: `calc(${LOW_PAD.left}*var(--k))`, paddingRight: `calc(${LOW_PAD.right}*var(--k))`, color: look.label, textShadow: shadow }}>
           <div className="flex max-w-full flex-col items-center">{words}</div>
           {foot}
         </div>
@@ -847,7 +955,9 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
 export const TAG_SMALLEST = 2.6;
 const TAG_FLOOR_PX = 8.5;
 /** The sizes a name is tried at, largest first, in stage units; how its lines are set; the room kept either side of it, in ems. */
-const TAG_SIZES = [3.9, 3.5, 3.1, 2.8, TAG_SMALLEST] as const;
+// The steps above 3.1 are a fifth of a unit apart: every short name in a house is written at the size the narrowest of
+// their tags holds, and a step of 0.4 under it cost them all: on a phone 320 wide every Spanish short name was 9.9 px.
+export const TAG_SIZES = [3.9, 3.7, 3.5, 3.3, 3.1, 2.8, TAG_SMALLEST] as const;
 const TAG_LEADING = 0.98;
 const TAG_MARGIN = 0.16;
 /** A last try at the smallest size before a word is broken: the letters a hair closer, the margins a hair less. */
@@ -895,6 +1005,15 @@ export function fitTag(words: readonly number[], letters: readonly number[], spa
 const tagHolds = (face: { h: number }, size: number) => Math.min(2, Math.max(1, Math.floor(face.h / (size * TAG_LEADING))));
 /** A name no size holds: the smallest size, broken where it must be and cut past two lines. */
 const TAG_BROKEN: TagFit = { size: TAG_SMALLEST, track: 0, whole: false };
+/**
+ * The size the short names in a house are written at, from the sizes each could be written at on its own tag: the
+ * smallest of them, so that every short name is one hand. (The largest most of them reach was tried: "Mamá", whose tag
+ * its open leaf narrows, was then 9.9 px beside "Papá" at 12.5.) What keeps that size up is TAG_SIZES' finer steps.
+ */
+export function shortCapOf(sizes: readonly number[]): number | undefined {
+  return sizes.length ? Math.min(...sizes) : undefined;
+}
+
 /** A name of one word of up to six letters ("Mum", "Gran", "Papá"): the names a reader sees side by side and compares. */
 export const isShortName = (name: string) => !/\s/.test(name.trim()) && [...name.trim()].length <= 6;
 

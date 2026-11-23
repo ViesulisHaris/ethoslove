@@ -278,7 +278,7 @@ for (const locale of ["en", "es"] as const) {
     await expect(card(root).locator("blockquote")).toHaveText(
       en
         ? "I lit the candles on your cake anyway and Dad blew them out for you. Ring me when you wake up, whatever time it is here."
-        : "Encendí las velas de tu tarta igualmente y las sopló papá por ti. Llámame cuando te despiertes, sea la hora que sea aquí.",
+        : "Encendí las velas de tu tarta de todas formas y las sopló papá por ti. Llámame cuando te despiertes, sea la hora que sea aquí.",
     );
     await expect(card(root).getByText(en ? "Mum" : "Mamá", { exact: true })).toBeVisible();
     await expect(card(root).getByText(en ? `door ${noteDoor}` : `puerta ${noteDoor}`)).toBeVisible();
@@ -432,6 +432,24 @@ test("by keyboard alone: a sweet's door keeps the focus, a note comes out and go
   await expect(card(root)).toHaveCount(0);
   await expect(door(root, 19)).toBeFocused();
 
+  // With a note out, the Tab key goes round what is in front of the room and never out of the gift: it used to go from
+  // the sound button to the page, where Escape was no longer heard and the room behind was inert.
+  await page.keyboard.press("Enter");
+  await expect(putBack(root)).toBeFocused();
+  for (let i = 0; i < 5; i++) {
+    await page.keyboard.press("Tab");
+    expect(await inHouse(), `Tab ${i + 1} with a note out`).toBe(true);
+  }
+  for (let i = 0; i < 5; i++) {
+    await page.keyboard.press("Shift+Tab");
+    expect(await inHouse(), `Shift+Tab ${i + 1} with a note out`).toBe(true);
+  }
+  // and Escape is heard with the focus lost to the page
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  await page.keyboard.press("Escape");
+  await expect(card(root)).toHaveCount(0);
+  await expect(door(root, 19)).toBeFocused();
+
   // The rest of the house by Tab, Enter and nothing else: every door opened, every note read and put back.
   for (let i = 0; i < 22; i++) {
     await page.keyboard.press("Tab");
@@ -484,6 +502,18 @@ test("by keyboard alone: a sweet's door keeps the focus, a note comes out and go
   for (let i = 0; i < 30 && !(await onEnd()); i++) await page.keyboard.press("Tab");
   await expect(end).toBeFocused();
   await expect(end).toBeInViewport();
+  // past the end the Tab key goes round the letter, and never out of the gift
+  for (let i = 0; i < 12; i++) {
+    await page.keyboard.press("Tab");
+    expect(await inHouse(), `Tab ${i + 1} past the letter's end`).toBe(true);
+  }
+  // lost to the page, Escape still leaves the letter
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  await page.keyboard.press("Escape");
+  await expect(scroller).toHaveCount(0);
+  await expect(star(root)).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(scroller).toBeVisible();
 
   // and Escape, with no print open, is the way back to the doors
   await page.keyboard.press("Escape");
@@ -617,6 +647,69 @@ for (const size of SIZES) {
     // side draws nothing under 8.5 px, and there the longest, "The Okonkwos", is cut instead of written smaller.)
     await expect(root.locator("[data-tag-name][data-whole]")).toHaveCount(size.name === "844x390" ? 7 : 8);
     await readTheLetter(page, root);
+    expect(w.problems).toEqual([]);
+    await context.close();
+  });
+}
+
+/**
+ * Low screens with little room beside the house: a laptop at 200% (1280 by 800 is 640 by 400) and small phones on their
+ * side. The byline was one line cut to "FOR NORA · FROM…" and the title two lines cut to "Merry Christmas…": the name and
+ * the count of who else signed were gone.
+ */
+for (const view of [
+  { width: 640, height: 400 },
+  { width: 667, height: 375 },
+  { width: 740, height: 360 },
+] as const) {
+  test(`${view.width}x${view.height}: the title and the byline beside the house are whole, the count of who signed with them too`, async ({ browser }, info) => {
+    test.skip(info.project.name !== "desktop-chrome", "the sizes are set here, not by the project");
+    test.setTimeout(120_000);
+    const context = await browser.newContext({ viewport: view, storageState: STORAGE });
+    const page = await context.newPage();
+    const w = watch(page);
+    for (const [path, more] of [
+      [`/demo/${SLUG}`, "and 8 more"],
+      // (before the Spanish page: once it has been seen the demo stays in Spanish)
+      ...(E2E ? ([[`/demo/${SLUG}?e2e=notes-24-long`, "and 24 more"]] as const) : []),
+      [`/es/demo/${SLUG}`, "y 8 más"],
+    ] as const) {
+      await page.goto(path);
+      const root = await ready(page, page.locator(`[data-template="${SLUG}"]`).first());
+      const view_ = (await root.boundingBox())!;
+      const title = root.getByRole("heading", { level: 1 });
+      const byline = title.locator("xpath=preceding-sibling::p[1]");
+      // nothing cut: no line clamped away, nothing run past its column
+      for (const el of [title, byline]) {
+        // (a line clamp hides whole lines: the element unclamped is as tall as it is clamped, give or take a descender)
+        const cut = await el.evaluate((node) => {
+          const el = node as HTMLElement;
+          const clamped = el.getBoundingClientRect().height;
+          const was = el.style.cssText;
+          el.style.setProperty("-webkit-line-clamp", "unset");
+          el.style.setProperty("display", "block");
+          el.style.setProperty("overflow", "visible");
+          const whole = el.getBoundingClientRect().height;
+          el.style.cssText = was;
+          return whole > clamped + 2 || el.scrollWidth > el.clientWidth + 1;
+        });
+        expect(cut, `${path}: ${await el.textContent()}`).toBe(false);
+        await inside(page, el);
+      }
+      const count = byline.locator("span.whitespace-nowrap");
+      await expect(count).toHaveText(more);
+      const countBox = (await count.boundingBox())!;
+      const bylineBox = (await byline.boundingBox())!;
+      expect(countBox.x + countBox.width).toBeLessThanOrEqual(bylineBox.x + bylineBox.width + 1);
+      // the words stay clear of the house: they end left of its first door
+      const doorsLeft = Math.min(...(await root.locator("[data-door]").evaluateAll((els) => els.map((el) => el.getBoundingClientRect().left))));
+      expect((await title.boundingBox())!.x + (await title.boundingBox())!.width).toBeLessThanOrEqual(doorsLeft);
+      // and the whole house is still on the screen
+      for (const target of [...(await root.locator("[data-door]").all()), star(root)]) {
+        const box = (await target.boundingBox())!;
+        expect(box.x + box.width).toBeLessThanOrEqual(view_.x + view_.width + 1);
+      }
+    }
     expect(w.problems).toEqual([]);
     await context.close();
   });

@@ -45,9 +45,9 @@ const en: GiftContribution[] = [
 ];
 
 const es: GiftContribution[] = [
-  { key: "advent00a1", name: "Mamá", note: "Encendí las velas de tu tarta igualmente y las sopló papá por ti. Llámame cuando te despiertes, sea la hora que sea aquí.", photo: photo("p3") },
+  { key: "advent00a1", name: "Mamá", note: "Encendí las velas de tu tarta de todas formas y las sopló papá por ti. Llámame cuando te despiertes, sea la hora que sea aquí.", photo: photo("p3") },
   { key: "advent00a2", name: "Iris", note: "El paseo del día 26 se aplaza hasta que aterrices. No subimos la cuesta sin ti." },
-  { key: "advent00a3", name: "Papá", note: "Este año he puesto las luces yo solo. Dos bombillas fundidas y un fusible menos. Ven y dime cuáles están torcidas." },
+  { key: "advent00a3", name: "Papá", note: "Este año he puesto las luces yo solo. Dos bombillas fundidas y un fusible saltado. Ven y dime cuáles están torcidas." },
   { key: "advent00a4", name: "Los Okonkwo", note: "Lisboa en mayo, la noche que nos perdimos por tu culpa. Todavía discutimos qué calle era.", photo: photo("p2") },
   { key: "advent00a5", name: "Sam", note: "Te debo un amigo invisible desde 2019. Este año pago." },
   { key: "advent00a6", name: "La abuela", note: "Abrígate. Te he tejido una cosa y no, no vas a adivinar qué es." },
