@@ -2414,6 +2414,24 @@
       "eachWay": "{km} km cada uno",
       "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino."
     },
+    "ways": {
+      "label": "Y ahora qué",
+      "gift": {
+        "label": "El regalo",
+        "title": "Hazle el regalo A medio camino"
+      },
+      "dates": {
+        "label": "Una cita allí",
+        "in": "Ideas para una cita en {city}",
+        "near": "Ideas para una cita cerca de {town}",
+        "any": "Ideas para una cita cerca de cualquiera de los dos"
+      },
+      "trip": {
+        "label": "La próxima visita",
+        "any": "Viajes para dos, planeados día a día"
+      },
+      "note": "A medio camino está {city}. ¿Nos vemos allí?"
+    },
     "virtual": {
       "eyebrow": "Citas para dos pantallas",
       "title": "Algo que hacer durante la llamada.",

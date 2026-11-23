@@ -1,8 +1,16 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { TRIP_SEO } from "@/content/trip-seo";
+import { CITY_PAGES } from "@/lib/cities/cities";
 import { halfwayBetween, halfwayCityName, isOwnTown } from "@/lib/ldr/halfway";
+import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
+import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
+import { waysData } from "@/lib/ldr/ways-data";
+import { fieldsSchema as halfwaySchema } from "@/templates/halfway/schema";
+import { getManifest } from "@/templates/manifests";
 import { tripStopCities, tripsThrough } from "@/lib/trips/cities";
 import { getTrip, TRIP_IDS, TRIPS } from "@/lib/trips/presets";
 import { CITIES } from "@/templates/_shared/places";
@@ -142,5 +150,88 @@ describe("halfway between two towns", () => {
     expect(halfwayCityName({ name: "Munich" }, "es")).toBe("Múnich");
     expect(halfwayCityName({ name: "Toronto" }, "es")).toBe("Toronto");
     expect(halfwayCityName({ name: "Munich" }, "en")).toBe("Munich");
+  });
+});
+
+describe("the halfway finder's link", () => {
+  const riga = town("Riga");
+  const lisbon = town("Lisbon");
+  const link = (query: string) => readHalfwayLink(new URLSearchParams(query));
+
+  it("a link carries the two towns and reads back the same", () => {
+    const query = halfwayQuery(riga, lisbon);
+    expect(query).toBe("a=Riga~56.95~24.11&b=Lisbon~38.72~-9.14");
+    expect(link(query)).toEqual({ a: { name: "Riga", lat: 56.95, lng: 24.11 }, b: { name: "Lisbon", lat: 38.72, lng: -9.14 } });
+    for (const name of ["São Paulo", "Ho Chi Minh City"]) {
+      const back = link(halfwayQuery({ ...riga, name }, lisbon));
+      expect(back?.a.name).toBe(name);
+    }
+  });
+
+  it("a link that is not two whole towns is no link", () => {
+    for (const bad of ["a=Riga~56.95~24.11", "a=Riga&b=Lisbon~38.72~-9.14", "a=Riga~91~0&b=Lisbon~38.72~-9.14", "a=Riga~56.95~x&b=Lisbon~38.72~-9.14", "a=~56.95~24.11&b=Lisbon~38.72~-9.14", "a=https%3A%2F%2Fx.example~56.95~24.11&b=Lisbon~38.72~-9.14", "a=Riga~1e2~3&b=Lisbon~38.72~-9.14"])
+      expect(link(bad), bad).toBeNull();
+    const long = "x".repeat(90);
+    expect(link(halfwayQuery({ ...riga, name: long }, lisbon))?.a.name).toHaveLength(60);
+    expect(link(halfwayQuery({ ...riga, name: "Riga~Old Town" }, lisbon))?.a.name).toBe("Riga Old Town");
+    expect(link(`${halfwayQuery(riga, lisbon)}&utm_source=x`)?.b.name).toBe("Lisbon");
+  });
+
+  it("a link never says more than a town", () => {
+    const query = halfwayQuery({ name: "Riga", lat: 56.949612, lng: 24.105186 }, lisbon);
+    const params = new URLSearchParams(query);
+    expect([...params.keys()]).toEqual(["a", "b"]);
+    for (const n of query.match(/-?d+.d+/g) ?? []) expect(n.split(".")[1].length, n).toBeLessThanOrEqual(2);
+  });
+});
+
+describe("the ways on from a halfway city", () => {
+  const data = waysData("en");
+  const at = (name: string) => town(name);
+
+  it("the halfway city is 'one of ours' within 25 km of a dates page", () => {
+    expect(cityPageNear(at("Manchester"), data.cities)?.slug).toBe("manchester");
+    expect(cityPageNear(at("Luxembourg"), data.cities)).toBeNull();
+    expect(cityPageNear(null, data.cities)).toBeNull();
+  });
+
+  it("the next visit is the trip that starts nearest, if one starts within reach", () => {
+    expect(tripNear([at("Luxembourg"), at("Riga"), at("Lisbon")], data.trips)?.id).toBe("baltic-coast");
+    expect(tripNear([null, at("London"), at("New York")], data.trips)?.id).toBe("paris-without-cliches");
+    expect(tripNear([at("Toronto"), at("Chicago"), at("Boston")], data.trips)).toBeNull();
+    expect(tripNear([], data.trips)).toBeNull();
+  });
+
+  it("the Halfway gift takes what the finder hands it", () => {
+    const riga = at("Riga");
+    const lisbon = at("Lisbon");
+    const fields = halfwayGiftFields(riga, lisbon, "Halfway is Luxembourg. Meet me there?");
+    const parsed = halfwaySchema.safeParse({ ...halfwaySchema.parse({}), ...fields });
+    expect(parsed.success).toBe(true);
+    expect(parsed.data?.from.name).toBe("Riga");
+    expect(parsed.data?.to.name).toBe("Lisbon");
+    expect(parsed.data?.stops).toEqual([]);
+    expect(parsed.data?.halfwayNote).toBe("Halfway is Luxembourg. Meet me there?");
+    expect((halfwayGiftFields({ ...riga, name: "x".repeat(90) }, lisbon).from as { name: string }).name).toHaveLength(60);
+    expect(halfwayGiftFields(riga, lisbon, "y".repeat(200)).halfwayNote).toHaveLength(120);
+    expect("halfwayNote" in halfwayGiftFields(riga, lisbon)).toBe(false);
+    expect("distanceKm" in fields).toBe(false);
+    expect(getManifest(HALFWAY_GIFT_SLUG)).toBeDefined();
+  });
+
+  it("what the server hands the ways on is whole", () => {
+    const es = waysData("es");
+    const onDisk = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
+    expect(es.cities).toHaveLength(CITY_PAGES.length);
+    for (const c of es.cities) expect(onDisk(c.image), c.image).toBe(true);
+    expect(es.cities.find((c) => c.slug === "lisbon")?.name).toBe("Lisboa");
+    expect(es.trips).toHaveLength(12);
+    for (const tr of es.trips) {
+      const trip = getTrip(tr.id)!;
+      expect([tr.lat, tr.lng]).toEqual([trip.stops[0].lat, trip.stops[0].lng]);
+      if (tr.image) expect(onDisk(tr.image), tr.image).toBe(true);
+    }
+    expect(onDisk(es.giftPoster)).toBe(true);
+    expect(onDisk(es.datesImage)).toBe(true);
   });
 });

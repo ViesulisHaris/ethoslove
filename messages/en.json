@@ -2414,6 +2414,24 @@
       "eachWay": "{km} km each",
       "eachWaySub": "How far each of you would travel to meet exactly halfway."
     },
+    "ways": {
+      "label": "What next",
+      "gift": {
+        "label": "The gift",
+        "title": "Make them the Halfway gift"
+      },
+      "dates": {
+        "label": "A date there",
+        "in": "Date ideas in {city}",
+        "near": "Date ideas near {town}",
+        "any": "Date ideas near either of you"
+      },
+      "trip": {
+        "label": "The next visit",
+        "any": "Trips for two, planned day by day"
+      },
+      "note": "Halfway is {city}. Meet me there?"
+    },
     "virtual": {
       "eyebrow": "Dates for two screens",
       "title": "Something to do on the call.",
