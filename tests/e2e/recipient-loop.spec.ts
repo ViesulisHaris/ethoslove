@@ -467,19 +467,22 @@ test.describe("the page the badge and the new link open", () => {
         const r = el?.getBoundingClientRect();
         return r ? { left: r.left, top: r.top + scrollY, right: r.right, bottom: r.bottom + scrollY } : null;
       };
-      const marker = [...document.querySelectorAll('[data-testid="made-with-ethos"] span')].find((s) => s.textContent === "The one you got");
-      const cards = [...document.querySelectorAll('[data-testid="made-with-ethos"] > div:first-child article')];
+      // The label over their card: a paid gift's column, or a free gift's card at the head of its shelf.
+      const marker = [...document.querySelectorAll('[data-testid="made-with-ethos"] :is(h2, p)')].find((s) => s.textContent === "The one you got");
+      const cards = [...document.querySelectorAll('[data-testid="made-with-ethos"] > :first-child article')];
       return {
         screen: innerHeight,
         sideways: document.documentElement.scrollWidth > innerWidth,
         marker: box(marker),
         names: [...document.querySelectorAll('[data-testid="made-with-ethos"] h3')].slice(0, 3).map((h) => h.textContent),
         cards: cards.map((c) => box(c)!),
-        words: box(document.querySelector('[data-shelf="free"] > header'))!,
+        words: box(document.querySelector('[data-shelf="free"] header'))!,
+        visibleCards: [...document.querySelectorAll('[data-testid="made-with-ethos"] article')].filter((a) => a.getClientRects().length > 0).length,
+        height: document.documentElement.scrollHeight,
       };
     });
 
-  test("opens with the gift they got, on the first screen, whether it was a free one or a paid one", async ({ page }) => {
+  test("opens with the gift they got, on the first screen, whether it was a free one or a paid one", async ({ page, isMobile }) => {
     // A paid gift's template is not on the free shelf. It used to lead the premium shelf: a screen
     // and a half down (two and a half on a phone), under "Someone made you one of these." and a
     // picture of The Letter. It stands in front of the free shelf now, and nowhere else.
@@ -488,8 +491,9 @@ test.describe("the page the badge and the new link open", () => {
     let seen = await layout(page);
     expect(seen.names[0]).toBe("Bouquet");
     expect(seen.marker!.bottom, "“The one you got” is on the first screen").toBeLessThan(seen.screen);
-    expect(seen.marker!.top).toBeGreaterThanOrEqual(seen.cards[0].top);
-    expect(seen.marker!.bottom).toBeLessThanOrEqual(seen.cards[0].bottom);
+    // A label over their card, not a pill on its picture (it covered the preview's own headline).
+    expect(seen.marker!.bottom).toBeLessThanOrEqual(seen.cards[0].top);
+    expect(seen.cards[0].top - seen.marker!.bottom).toBeLessThan(isMobile ? 40 : 200);
     expect(seen.sideways).toBe(false);
     await expect(page.locator('[data-shelf="premium"] h3', { hasText: /^Bouquet$/ })).toHaveCount(0);
     await expect(page.locator('[data-testid="made-with-ethos"] h3', { hasText: /^Bouquet$/ })).toHaveCount(1);
@@ -502,6 +506,11 @@ test.describe("the page the badge and the new link open", () => {
     seen = await layout(page);
     expect(seen.names[0]).toBe("The Letter");
     expect(seen.marker!.bottom, "“The one you got” is on the first screen").toBeLessThan(seen.screen);
+    // A free gift's card has the same label over it, and nothing on its picture.
+    expect(seen.marker!.bottom).toBeLessThanOrEqual(seen.cards[0].top);
+    expect(seen.cards[0].top - seen.marker!.bottom).toBeLessThan(40);
+    // The free cards beside it start level with it all the same.
+    if (!isMobile) for (const card of seen.cards) expect(Math.abs(card.top - seen.cards[0].top)).toBeLessThan(2);
     expect(seen.sideways).toBe(false);
 
     // A template that does not exist leads nothing, and marks nothing.
@@ -510,7 +519,7 @@ test.describe("the page the badge and the new link open", () => {
     await expect(page.getByText("The one you got", { exact: true })).toHaveCount(0);
   });
 
-  test("the first row is the cards and the free shelf's words: beside them on a wide screen, over them on a phone", async ({ page, isMobile }) => {
+  test("the first row: their card under its own label, then the free shelf's words and cards, words first", async ({ page, isMobile }) => {
     for (const address of ["/made-with-ethos?ref=g&template=bouquet", "/made-with-ethos?ref=watermark&template=the-letter"]) {
       await page.goto(address, ready);
       const seen = await layout(page);
@@ -522,13 +531,46 @@ test.describe("the page the badge and the new link open", () => {
         // One column: their card (when it leads), then the free shelf's heading, then its cards.
         if (lead) expect(seen.words.top).toBeGreaterThanOrEqual(seen.cards[0].bottom);
         expect(seen.words.bottom).toBeLessThanOrEqual(seen.cards[lead].top);
+      } else if (lead) {
+        // Their card under its label, the free shelf's words beside the label, its cards beside their
+        // card: read left to right, "The one you got", then "Free" over the free cards.
+        for (const card of seen.cards) expect(Math.abs(card.top - seen.cards[0].top), `${address}: the cards start level`).toBeLessThan(2);
+        expect(Math.abs(seen.words.top - seen.marker!.top), `${address}: the two labels start level`).toBeLessThan(2);
+        expect(seen.words.left).toBeGreaterThanOrEqual(seen.cards[0].right);
+        expect(seen.words.bottom).toBeLessThanOrEqual(seen.cards[1].top);
       } else {
-        // One row: the cards from the left, and the words in what is left of it, level with their tops.
-        for (const card of seen.cards) expect(Math.abs(card.top - seen.cards[0].top)).toBeLessThan(2);
-        expect(seen.words.left).toBeGreaterThanOrEqual(seen.cards[seen.cards.length - 1].right);
-        expect(Math.abs(seen.words.top - seen.cards[0].top)).toBeLessThan(2);
+        // A spread: the words first, at the left, level with the label over the cards beside them.
+        for (const card of seen.cards) expect(seen.words.right, `${address}: the words come before the cards`).toBeLessThanOrEqual(card.left);
+        expect(Math.abs(seen.words.top - seen.marker!.top)).toBeLessThan(2);
       }
     }
+  });
+
+  // Every recipient lands here, mostly on a phone. It listed all 61 templates: about twenty-five phone
+  // screens of cards with a title, a line, a price and two links each (the deep tester's loop-D5).
+  test("is short: their card, the free shelf, one row of premium cards, and a link to every template", async ({ page, isMobile }) => {
+    for (const address of ["/made-with-ethos?ref=g&template=bouquet", "/made-with-ethos?ref=watermark&template=the-letter"]) {
+      await page.goto(address, ready);
+      const seen = await layout(page);
+      const premium = await page.locator('[data-shelf="premium"] article').evaluateAll((cards) => cards.filter((a) => a.getClientRects().length > 0).length);
+      const width = page.viewportSize()!.width;
+      const columns = width >= 1280 ? 4 : width >= 1024 ? 3 : width >= 640 ? 2 : 2;
+      expect(premium, `${address}: one row of premium cards`).toBe(columns);
+      expect(seen.visibleCards).toBeLessThanOrEqual(3 + columns);
+      if (isMobile) expect(seen.height / seen.screen, `${address}: phone screens`).toBeLessThan(10);
+      const all = page.getByTestId("made-with-all");
+      await expect(all).toHaveText("See every template");
+      await expect(all).toHaveAttribute("href", `/templates?ref=${address.includes("ref=g") ? "g" : "watermark"}`);
+      // At most 300 words on the page, the site's header and footer aside.
+      const words = await page.evaluate(() => {
+        const text = [document.querySelector("main header"), document.querySelector('[data-testid="made-with-ethos"]')].map((el) => (el as HTMLElement | null)?.innerText ?? "").join(" ");
+        return text.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+      });
+      expect(words, `${address}: words on the page`).toBeLessThanOrEqual(300);
+    }
+    await page.goto("/es/made-with-ethos?ref=g&template=bouquet", ready);
+    await expect(page.getByTestId("made-with-all")).toHaveText("Ver todas las plantillas");
+    await expect(page.getByTestId("made-with-all")).toHaveAttribute("href", "/es/templates?ref=g");
   });
 });
 

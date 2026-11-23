@@ -11,7 +11,9 @@ import { PageHeader } from "@/components/shared/page-header";
 import { TemplateCard } from "@/components/templates/template-card";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { cn } from "@/lib/utils";
-import { firstRow, wordsSpan } from "./first-row";
+import { ArrowRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { PREMIUM_SHOWN, firstRow, freeSpan, wordsSpan } from "./first-row";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/made-with-ethos">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -21,15 +23,21 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 }
 
 /**
- * How many columns the free shelf's words take beside its cards, at each width the grid changes:
- * whatever the cards leave of their row (lib: ./first-row.ts). Written out, as Tailwind reads
- * class names from the source.
+ * Column classes for the first row at each width the grid changes (./first-row.ts). Written out, as
+ * Tailwind reads class names from the source.
  */
-const WORDS_SPAN = {
+const SPAN = {
   sm: ["", "sm:col-span-1", "sm:col-span-2"],
   lg: ["", "lg:col-span-1", "lg:col-span-2", "lg:col-span-3"],
   xl: ["", "xl:col-span-1", "xl:col-span-2", "xl:col-span-3", "xl:col-span-4"],
 } as const;
+const COLS = {
+  sm: ["", "sm:grid-cols-1", "sm:grid-cols-2"],
+  lg: ["", "lg:grid-cols-1", "lg:grid-cols-2", "lg:grid-cols-3"],
+  xl: ["", "xl:grid-cols-1", "xl:grid-cols-2", "xl:grid-cols-3", "xl:grid-cols-4"],
+} as const;
+/** The premium shelf is one row: two cards from a small tablet, three on a laptop, four wider. */
+const PREMIUM_FROM = ["", "", "hidden lg:block", "hidden xl:block"] as const;
 
 /**
  * Where a free gift's "Made with Ethos" footer leads (?ref=watermark&template=<the gift's>): someone
@@ -43,13 +51,15 @@ const WORDS_SPAN = {
  * for them. The eyebrow is what Ethos makes (BRAND.categoryLine): this is the first page of the
  * site most recipients ever see.
  *
- * The gift they were given is the first card under the heading, marked, whichever kind it is: a
- * free template leads the free shelf, and a premium one stands in front of it, in the same row.
- * (It used to lead the premium shelf, a screen and a half down, under a picture of The Letter.)
- * That first row is one grid: their card, the free cards, and the free shelf's words in what is
- * left of the row, so a shelf of one card (The Letter, since the free note) is a card with its words
- * beside it and not a card and three empty columns. On a phone the words come before the free
- * cards, as a shelf's heading does.
+ * The gift they were given is the first card under the heading, with "The one you got" over it (a
+ * pill on its picture covered the preview's own headline). A free one leads the free shelf. A premium
+ * one stands in front of the shelf in a column of its own, so the row reads "The one you got", then
+ * "Free", and never a paid card under the free heading. With no card in front of it the free shelf
+ * is a spread: its words first, its cards beside them.
+ *
+ * Every recipient lands here, mostly on a phone, so the page stays short: their card, the free
+ * shelf, one row of premium cards, and a link to all of them (/templates). It used to list all 61:
+ * twenty-five phone screens.
  */
 export default async function MadeWithEthosPage({ params, searchParams }: PageProps<"/[currency]/[locale]/made-with-ethos">) {
   const { locale } = await params;
@@ -61,37 +71,79 @@ export default async function MadeWithEthosPage({ params, searchParams }: PagePr
   const theirs = typeof query.template === "string" ? query.template : null;
   const forSomeoneElse = ref === MAKE_OWN_REF;
   const { lead, free, premium } = firstRow(listManifests(), theirs, sendsFree);
-  const first = (lead ? 1 : 0) + free.length;
+  // Their card carries no pill on its picture (one covered the preview's own headline): a label over
+  // it says which it is, and its "popular" badge stays off so the picture is left as it is.
   const card = (m: TemplateManifest, index: number) => (
-    <TemplateCard key={m.slug} manifest={m} index={index} badge={featuredFor(m.slug)} linkQuery={linkQuery} marker={m.slug === theirs ? t("yours") : undefined} />
+    <TemplateCard key={m.slug} manifest={m} index={index} badge={m.slug === theirs ? undefined : featuredFor(m.slug)} linkQuery={linkQuery} />
+  );
+  // A free gift's card leads the free shelf with the same label over it; the cards beside it keep the
+  // label's room, empty, so the row's pictures start level (on a phone, one under another, they don't).
+  const theirsIsFree = free[0]?.slug === theirs;
+  const freeCard = (m: TemplateManifest, index: number) =>
+    theirsIsFree ? (
+      <div key={m.slug} className="flex flex-col gap-3">
+        {m.slug === theirs ? (
+          <p className="text-eyebrow text-ink-soft" data-yours>
+            {t("yours")}
+          </p>
+        ) : (
+          <p aria-hidden="true" className="text-eyebrow invisible max-sm:hidden">
+            {"\u00a0"}
+          </p>
+        )}
+        {card(m, index)}
+      </div>
+    ) : (
+      card(m, index)
+    );
+  const shown = premium.slice(0, PREMIUM_SHOWN);
+  const first = (lead ? 1 : 0) + free.length;
+  // Each shelf is a header over its cards. Where two stand in a row (their card's, the free one) they
+  // share the row's two lines, so the headers start level and so do the cards.
+  const shelf = "grid grid-rows-[auto_1fr] gap-y-5 sm:row-span-2 sm:grid-rows-subgrid";
+
+  const freeWords = (
+    <header>
+      <p className="text-eyebrow text-ink-soft">{t("free.eyebrow")}</p>
+      <h2 id="shelf-free" className="display-md mt-2 max-w-md text-balance">
+        {t("free.title")}
+      </h2>
+      <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">{t(forSomeoneElse ? "free.blurbElse" : "free.blurb")}</p>
+    </header>
   );
 
   return (
     <ClientMessages scope="(marketing)/made-with-ethos/page" locale={locale}>
       <PageHeader eyebrow={BRAND.categoryLine[locale === "es" ? "es" : "en"]} title={t("title")} subtitle={t(forSomeoneElse ? "subtitleElse" : "subtitle")} />
       <div className="container-x flex flex-col gap-20 pb-24" data-testid="made-with-ethos">
-        <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {lead ? <div data-lead>{card(lead, 0)}</div> : null}
-          {/* Its heading and its cards are cells of the grid above, beside the card that leads. */}
-          <section aria-labelledby="shelf-free" data-shelf="free" className="contents">
-            <header
-              className={cn(
-                // A phone: a shelf's heading, over its cards. Wider: the last cell of the row, beside them.
-                "-mb-4 border-b border-line pb-5 sm:order-last sm:mb-0 sm:border-b-0 sm:pt-1 sm:pb-0",
-                WORDS_SPAN.sm[wordsSpan(first, 2)],
-                WORDS_SPAN.lg[wordsSpan(first, 3)],
-                WORDS_SPAN.xl[wordsSpan(first, 4)],
-              )}
-            >
-              <p className="text-eyebrow text-ink-soft">{t("free.eyebrow")}</p>
-              <h2 id="shelf-free" className="display-md mt-2 max-w-md text-balance">
-                {t("free.title")}
+        {lead ? (
+          <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <section aria-labelledby="shelf-yours" data-lead className={shelf}>
+              <h2 id="shelf-yours" className="text-eyebrow text-ink-soft">
+                {t("yours")}
               </h2>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">{t(forSomeoneElse ? "free.blurbElse" : "free.blurb")}</p>
-            </header>
-            {free.map((m, i) => card(m, (lead ? 1 : 0) + i))}
+              {card(lead, 0)}
+            </section>
+            <section
+              aria-labelledby="shelf-free"
+              data-shelf="free"
+              className={cn(shelf, SPAN.sm[freeSpan(free.length, 2)], SPAN.lg[freeSpan(free.length, 3)], SPAN.xl[freeSpan(free.length, 4)])}
+            >
+              {freeWords}
+              <div className={cn("grid gap-x-6 gap-y-12", COLS.sm[freeSpan(free.length, 2)], COLS.lg[freeSpan(free.length, 3)], COLS.xl[freeSpan(free.length, 4)])}>
+                {free.map((m, i) => card(m, 1 + i))}
+              </div>
+            </section>
+          </div>
+        ) : (
+          <section aria-labelledby="shelf-free" data-shelf="free" className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* A phone: the shelf's heading over its cards. Wider: first in the row, its cards beside it. */}
+            <div className={cn("-mb-4 border-b border-line pb-5 sm:mb-0 sm:border-b-0 sm:pb-0", SPAN.sm[wordsSpan(first, 2)], SPAN.lg[wordsSpan(first, 3)], SPAN.xl[wordsSpan(first, 4)])}>
+              {freeWords}
+            </div>
+            {free.map((m, i) => freeCard(m, i))}
           </section>
-        </div>
+        )}
         <section aria-labelledby="shelf-premium" data-shelf="premium">
           <header className="mb-8 border-b border-line pb-5 md:flex md:items-end md:justify-between md:gap-8">
             <div>
@@ -102,7 +154,21 @@ export default async function MadeWithEthosPage({ params, searchParams }: PagePr
             </div>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground md:mt-0 md:pb-1">{t("premium.blurb")}</p>
           </header>
-          <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{premium.map((m, i) => card(m, first + i))}</div>
+          <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {shown.map((m, i) => (
+              <div key={m.slug} className={PREMIUM_FROM[i]}>
+                {card(m, first + i)}
+              </div>
+            ))}
+          </div>
+          <Link
+            href={`/templates${linkQuery}`}
+            className="group mt-8 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink underline-offset-4 hover:underline focus-visible:underline"
+            data-testid="made-with-all"
+          >
+            {t("all")}
+            <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" />
+          </Link>
         </section>
       </div>
     </ClientMessages>
