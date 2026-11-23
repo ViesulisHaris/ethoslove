@@ -448,11 +448,23 @@ describe("GET /api/entitlements, as the pages read it", () => {
       packs: ["*", "deep"],
       pass: { endsAt: "2027-09-23T00:00:00.000Z", isOwner: true, partnerJoined: false, inviteUrl: "https://tryethos.io/for-two/join?code=abcdefgh23" },
       membership: member(),
+      giftsReady: 2,
+      pairOffer: null,
     };
     expect(parseEntitlements(body)).toEqual(body);
-    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null, membership: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null });
+    // Answers from before two more gifts (and the iPhone app's) say nothing of them: none ready, none offered.
+    const none = { giftsReady: 0, pairOffer: null };
+    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null, membership: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null, ...none });
     // The iPhone app's current build and older answers carry no membership: read as none.
-    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null });
+    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null, ...none });
+  });
+
+  it("reads the offer of two more gifts only when its price and currency are whole", () => {
+    const base = { signedIn: true, templates: ["vinyl"], packs: [], pass: null, membership: null };
+    expect(parseEntitlements({ ...base, giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } })).toMatchObject({ giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } });
+    for (const pairOffer of [{ amount: "500", currency: "eur" }, { amount: 500, currency: "chf" }, { amount: -1, currency: "eur" }, { amount: 4.5, currency: "eur" }, "yes", null])
+      expect(parseEntitlements({ ...base, pairOffer })?.pairOffer).toBeNull();
+    for (const giftsReady of [-1, "2", 1.5, null]) expect(parseEntitlements({ ...base, giftsReady })?.giftsReady).toBe(0);
   });
 
   it("reads a malformed field as nothing rather than breaking the page", () => {
@@ -462,6 +474,8 @@ describe("GET /api/entitlements, as the pages read it", () => {
       packs: [],
       pass: null,
       membership: null,
+      giftsReady: 0,
+      pairOffer: null,
     });
     expect(parseEntitlements({ templates: [] })).toBeNull();
     expect(parseEntitlements(null)).toBeNull();

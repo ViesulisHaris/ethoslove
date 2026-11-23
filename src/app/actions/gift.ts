@@ -24,6 +24,7 @@ import { notifyPublished } from "@/lib/email/notify";
 import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
 import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
 import { countCampaignGift } from "@/lib/commerce/campaign";
+import { readyGifts, spendGift } from "@/lib/commerce/gift-credits";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -336,17 +337,19 @@ export type CampaignEntitlement = { left: number; endsAt: string | null };
  * Does the current user own this template (or Everything)? False when signed out. `campaign` is set
  * when they don't, but a running creator-campaign grant lets them publish a new gift in it free.
  */
-export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null }> {
+export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null; giftsReady: number }> {
   const ctx = await requireContext();
-  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null };
-  // `owned` lets the editor say which template the buyer already paid for instead of a bare paywall.
-  const [{ data }, { data: unlocks }] = await Promise.all([
+  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null, giftsReady: 0 };
+  // `owned` lets the editor say which template the buyer already paid for instead of a bare paywall,
+  // and `giftsReady` lets it send this one with a gift already paid for (two more gifts).
+  const [{ data }, { data: unlocks }, ready] = await Promise.all([
     ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: templateSlug }),
     ctx.supabase.from("template_unlocks").select("template_slug").eq("user_id", ctx.user.id),
+    readyGifts(ctx.supabase, ctx.user.id),
   ]);
   const grant = parseCampaignGrant(ctx.user.app_metadata);
   const campaign = !data && campaignCoversNewGift(grant, templateSlug, Date.now()) && grant ? { left: campaignGiftsLeft(grant), endsAt: grant.endsAt } : null;
-  return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug), campaign };
+  return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug), campaign, giftsReady: ready ?? 0 };
 }
 
 /** Dashboard: duplicate a gift as a new draft (assets are shared by reference until edited). */
