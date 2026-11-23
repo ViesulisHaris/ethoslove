@@ -383,6 +383,8 @@ test("a card opened at the foot of the screen shows what it holds, without a scr
 });
 
 test("on a desk the heading stays beside a long list of cards, and a row of cards ends on one line", async ({ page }) => {
+  // Several pages, each a first compile under a dev server: on a busy machine this ran past 30s (23 Nov 2026).
+  test.slow();
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/occasions/christmas");
   await settle(page);
@@ -500,6 +502,8 @@ test("a card's picture is asked for at the size it is drawn, and its links are n
 });
 
 test("the hero says which gift its button makes, each page opens on a gift of its own, and the heading reads as two phrases", async ({ page }) => {
+  // Several pages, each a first compile under a dev server: on a busy machine this ran past 30s (23 Nov 2026).
+  test.slow();
   await page.setViewportSize({ width: 1440, height: 900 });
   const covers = new Map<string, string>();
   for (const path of HERO_PAGES) {
@@ -758,6 +762,8 @@ test("each of the seven pages has a photo of its own on the band's phone, and th
 });
 
 test("a page by kind names the price of the gift its button makes, the one that gift's own page gives", async ({ page }) => {
+  // Several pages, each a first compile under a dev server: on a busy machine this ran past 30s (23 Nov 2026).
+  test.slow();
   await page.setViewportSize({ width: 1440, height: 900 });
   // What one card costs in this visitor's currency, as /digital-cards prints it from the catalogue.
   await page.goto("/digital-cards");

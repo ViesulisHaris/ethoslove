@@ -167,6 +167,8 @@ for (const lang of LANGS) {
     }
 
     test("/digital-cards: the category line once, five kinds with a real card each, and prices", async ({ page }) => {
+      // The page, then every page it links onward to, each fetched: past 30s on a busy machine (23 Nov 2026).
+      test.slow();
       const noErrors = watchErrors(page);
       const response = await page.goto(`${lang.prefix}/digital-cards`);
       expect(response?.status()).toBe(200);
