@@ -32,12 +32,13 @@ export function locate(name: string, coords?: string): { lat: number; lng: numbe
 }
 
 /**
- * Kilometres along the trip as the crow flies, through every stop we can place. Null unless both
- * ends are known: a distance that quietly skipped the start would be a wrong number on a ticket.
+ * Kilometres along the trip as the crow flies, through every stop. Null unless both ends and every
+ * stop are known: a distance that quietly skipped a place would be a wrong number on a ticket (a
+ * six-day Highlands loop printed 181 km when only its two ends could be placed).
  */
 export function tripKm(from: { lat: number; lng: number } | null, stops: ({ lat: number; lng: number } | null)[], to: { lat: number; lng: number } | null): number | null {
-  if (!from || !to) return null;
-  const legs = [from, ...stops.filter((s): s is { lat: number; lng: number } => Boolean(s)), to];
+  if (!from || !to || stops.some((s) => !s)) return null;
+  const legs = [from, ...(stops as { lat: number; lng: number }[]), to];
   let km = 0;
   for (let i = 1; i < legs.length; i++) km += haversineKm(legs[i - 1], legs[i]);
   return Math.round(km);
