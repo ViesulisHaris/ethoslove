@@ -395,3 +395,25 @@ test.describe("agreed-15: an idea card on a phone", () => {
     for (const b of boxes) expect(Math.abs(b.above - 16 - (b.below - 20)), JSON.stringify(b)).toBeLessThanOrEqual(2);
   });
 });
+
+test.describe("agreed-2: a phone sees the photograph on the front page before the three facts", () => {
+  test("the picture comes straight after the buttons, and most of it is on the first screen of a 390 by 844 phone", async ({ page }) => {
+    // The user walk of 23 Nov 2026: the first screen was a headline, a paragraph, two buttons and three facts, and the photograph began under it.
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const words = (await page.locator("[data-hero-words]").boundingBox())!;
+    const picture = (await page.locator("[data-hero-picture] img").first().boundingBox())!;
+    const facts = (await page.locator("[data-hero-facts]").boundingBox())!;
+    expect(picture.y).toBeGreaterThan(words.y + words.height);
+    expect(facts.y).toBeGreaterThan(picture.y + picture.height - 60);
+    // At least four fifths of the photograph is above the foot of the first screen.
+    expect(844 - picture.y).toBeGreaterThan(picture.height * 0.8);
+    // On a desk the facts are back under the buttons, beside the picture.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const deskWords = (await page.locator("[data-hero-words]").boundingBox())!;
+    const deskFacts = (await page.locator("[data-hero-facts]").boundingBox())!;
+    const deskPicture = (await page.locator("[data-hero-picture] img").first().boundingBox())!;
+    expect(Math.abs(deskFacts.x - deskWords.x)).toBeLessThan(2);
+    expect(deskPicture.x).toBeGreaterThan(deskWords.x + 400);
+  });
+});

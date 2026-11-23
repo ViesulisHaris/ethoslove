@@ -22,7 +22,7 @@ export async function PlatformHero({ variant = "gift" }: { variant?: HomeHero })
   return (
     <section className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-blush-paper pt-[var(--header-h)] text-forest">
       <FloralFrame frame="hero" ground="light" />
-      <div className="relative container-x grid items-center gap-14 pt-12 pb-20 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-28">
+      <div className="relative container-x grid items-center gap-10 pt-12 pb-20 sm:gap-14 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-28">
         {variant === "gift" ? <GiftFirst /> : <DatesFirst />}
       </div>
     </section>
@@ -115,7 +115,14 @@ async function GiftFirst() {
   const line = BRAND.categoryLine[(await getLocale()) === "es" ? "es" : "en"];
   return (
     <>
-      <div className="lg:col-span-6">
+      {/*
+       * On a phone the column's two halves are laid out as the page's own rows, with the picture
+       * between them: the first screen was a headline, a paragraph, two buttons and three facts,
+       * and the photograph began under it (the user walk of 23 Nov 2026: "on a phone the front
+       * page's first screen is words only"). On a desk they are one column again, beside the picture.
+       */}
+      <div className="max-lg:contents lg:col-span-6">
+        <div data-hero-words className="max-lg:order-1">
         {/*
          * The line over the headline is the maker's mark (BRAND.categoryLine, config/brand.ts): the first thing
          * a visitor reads, so that the kind of thing and the name arrive together (the owner, 20 and
@@ -143,8 +150,10 @@ async function GiftFirst() {
           </Link>
         </div>
         <p className="mt-4 text-sm text-forest/70">{t("note")}</p>
+        </div>
 
-        <dl className="mt-12 grid max-w-xl grid-cols-3 gap-x-6 border-t border-forest/15 pt-7">
+        <div data-hero-facts className="max-lg:order-3">
+        <dl className="grid max-w-xl grid-cols-3 gap-x-6 border-t border-forest/15 pt-7 lg:mt-12">
           {(["free", "time", "noApp"] as const).map((k) => (
             <div key={k}>
               <dt className="font-display text-[1.7rem] leading-none tracking-tight text-forest">{t(`facts.${k}.a`)}</dt>
@@ -158,9 +167,10 @@ async function GiftFirst() {
         <div>
           <AppSoon className="mt-6" />
         </div>
+        </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[540px] lg:col-span-6 lg:justify-self-end" aria-hidden="true">
+      <div data-hero-picture className="relative mx-auto w-full max-w-[540px] max-lg:order-2 lg:col-span-6 lg:justify-self-end" aria-hidden="true">
         <div className="relative ml-auto w-[88%]">
           {/* 476px from `sm` (88% of the 540px box); a phone past 2.2x takes the 900px file (heroSizes), not the 1800. */}
           <EagerImg src={HERO_ART.gifts} srcSet={heroSrcSet(HERO_ART.gifts)} sizes={heroSizes("(min-width: 640px) 476px")} alt="" width={1800} height={1350} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[36px] object-cover shadow-[0_50px_100px_-44px_rgba(120,20,60,0.65)] ring-[10px] ring-white" />
