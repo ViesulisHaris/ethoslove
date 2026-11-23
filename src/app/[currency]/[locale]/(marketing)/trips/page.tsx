@@ -4,14 +4,19 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 import { monthRanges } from "@/lib/trips/months";
-import { TRIP_KINDS, TRIPS, type Trip } from "@/lib/trips/presets";
-import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
+import { budgetMark, TRIP_KINDS, tripImageSm, TRIPS, tripSrcSet, type Trip } from "@/lib/trips/presets";
+import { TRIP_GIFT_SLUG, tripGiftFields } from "@/lib/trips/trip-gift";
 import { Sticker } from "@/templates/_shared/covers/stickers";
+import { MATCH_ART, ROOMS_THEME } from "@/content/rooms-art";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
 import { JsonLd } from "@/components/shared/json-ld";
+import { ArtLayer } from "@/components/templates/page/art";
+import { Intro, SPREAD } from "@/components/templates/page/spread";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { TripCard } from "@/components/trips/trip-card";
+import { TripMatcher, type MatcherTrip } from "@/components/trips/trip-matcher";
 import { TripsGrid } from "@/components/trips/trips-grid";
 
 const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<Trip["budget"], string>;
@@ -48,6 +53,24 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
     ),
   }));
   const filters = [{ value: "all" as const, label: t("filter.all") }, ...TRIP_KINDS.map((k) => ({ value: k, label: t(`filter.${k}`) }))];
+  // What "Where should we go together?" ranks and draws: worked out here, so the browser never gets presets.ts.
+  const matcherTrips: MatcherTrip[] = TRIPS.map((trip) => ({
+    id: trip.id,
+    kind: trip.kind,
+    days: trip.days,
+    budget: trip.budget,
+    bestMonths: trip.bestMonths,
+    flyTo: trip.flyTo,
+    title: trip.title[l],
+    image: trip.image ? tripImageSm(trip.image) : null,
+    srcSet: trip.image ? tripSrcSet(trip.image) : null,
+    art: { from: trip.art.from, to: trip.art.to },
+    facts: `${t("days", { count: trip.days })} · ${t(`kind.${trip.kind}`)}`,
+    budgetMark: budgetMark(trip.budget),
+    budgetWords: t(`budget.${BUDGET_KEY[trip.budget]}`),
+    best: t("best", { months: monthRanges(trip.bestMonths, l) }),
+    gift: tripGiftFields(trip, l),
+  }));
 
   return (
     <>
@@ -86,6 +109,17 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
         </div>
       </section>
       <TornEdge from="var(--brand-paper)" to="var(--brand-paper)" />
+
+      {/* Above the grid, under the flight search. z-[5]: its airport list drops over the grid; the hero's own (z-10) still drops over this. Clipped sideways because a lily lies off its right edge, and this old page has no [data-page-theme] to clip it. */}
+      <section id="match" aria-labelledby="match-title" className="relative z-[5] overflow-x-clip bg-paper pt-14 lg:pt-20">
+        <ArtLayer items={MATCH_ART} flowers={ROOMS_THEME.flowers} />
+        <div className={cn(SPREAD, "lg:items-start")}>
+          <Intro id="match-title" label={t("match.label")} heading={t("match.title")} line={t("match.line", { count: TRIPS.length })} />
+          <div className="min-w-0 lg:pt-7">
+            <TripMatcher trips={matcherTrips} giftSlug={TRIP_GIFT_SLUG} />
+          </div>
+        </div>
+      </section>
 
       <section id="trips" className="bg-paper py-16 lg:py-24">
         <div className="container-x">
