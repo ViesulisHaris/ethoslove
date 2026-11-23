@@ -109,4 +109,21 @@ describe("a reply keeps a draft of its own", () => {
     saveReplySeed({ slug: "the-letter", recipientName: "Bea", senderName: "Marco" });
     expect(kept.has(draftKey(replyDraftScope("the-letter")))).toBe(false);
   });
+
+  // loop-N2-3: the recipient edited a name in their reply, then Send one back on the same gift again.
+  // Matched by the names as edited, the draft read as another pair and was deleted with the edit.
+  it("the same gift answered again keeps the reply even after a name in it was edited", async () => {
+    saveReplySeed({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
+    await open(true, { ...blank, recipientName: "Marco", senderName: "Ana" });
+    useEditor.getState().patch({ senderName: "Ana edited", message: "Half a reply" });
+    useEditor.getState().flushLocal();
+
+    saveReplySeed({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
+    const draft = JSON.parse(kept.get(draftKey(replyDraftScope("the-letter"))) ?? "null") as { data?: GiftData } | null;
+    expect(draft?.data).toMatchObject({ senderName: "Ana edited", message: "Half a reply" });
+
+    // A different gift still lets it go.
+    saveReplySeed({ slug: "the-letter", recipientName: "Bea", senderName: "Ana" });
+    expect(kept.has(draftKey(replyDraftScope("the-letter")))).toBe(false);
+  });
 });

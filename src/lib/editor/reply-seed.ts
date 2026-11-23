@@ -35,18 +35,28 @@ export function saveReplySeed(seed: ReplySeed): void {
 /**
  * A reply keeps a draft of its own (store.ts pageScope), and a draft this device kept wins over the
  * seed when the editor opens. One started for another gift of this template, addressed to someone
- * else, is let go, so this reply opens with this gift's names. The same pair answered again (Back to
- * the gift and Send one back once more) keeps what was typed. A signed-in sender's row stays on
- * their dashboard either way.
+ * else, is let go, so this reply opens with this gift's names. The same gift answered again (Back to
+ * the gift and Send one back once more) keeps what was typed, even when the names were edited in it:
+ * the draft is matched by the pair its seed carried (PAIR_KEY), never by the names as they stand.
+ * A signed-in sender's row stays on their dashboard either way.
  */
+const PAIR_KEY = "ethos:reply-pair:";
+
 function dropOtherReplyDraft(seed: ReplySeed): void {
   try {
+    const name = (n: string) => n.trim().slice(0, NAME_MAX);
+    const pair = { recipientName: name(seed.recipientName), senderName: name(seed.senderName) };
     const key = draftKey(replyDraftScope(seed.slug));
+    const marker = PAIR_KEY + seed.slug;
+    const rawPair = window.localStorage.getItem(marker);
+    window.localStorage.setItem(marker, JSON.stringify(pair));
     const raw = window.localStorage.getItem(key);
     if (!raw) return;
-    const data = (JSON.parse(raw) as { data?: { recipientName?: unknown; senderName?: unknown } }).data;
-    const name = (n: string) => n.trim().slice(0, NAME_MAX);
-    const same = data?.recipientName === name(seed.recipientName) && data?.senderName === name(seed.senderName);
+    // The pair the draft was seeded with; a draft kept from before there was one is read by its names.
+    const was = (rawPair ? JSON.parse(rawPair) : (JSON.parse(raw) as { data?: unknown }).data) as
+      | { recipientName?: unknown; senderName?: unknown }
+      | undefined;
+    const same = was?.recipientName === pair.recipientName && was?.senderName === pair.senderName;
     if (!same) window.localStorage.removeItem(key);
   } catch {}
 }
