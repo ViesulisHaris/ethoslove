@@ -120,8 +120,14 @@ test.describe("the page a free gift's footer opens", () => {
     await expect(shelves).toHaveCount(2);
     await expect(shelves.nth(0)).toHaveAttribute("data-shelf", "free");
     await expect(shelves.nth(1)).toHaveAttribute("data-shelf", "premium");
+    // With the free version as The Letter's short note (NEXT_PUBLIC_FREE_NOTE_SHARE=1, live since 19 Nov 2026)
+    // Constellations is paid, so it leads the premium shelf and the free one is The Letter alone. The spec follows
+    // the server's own setting, as gallery.spec.ts does (lib/gift/free-tier.ts, noteForEveryone).
+    const noteForEveryone = Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) >= 1;
     const free = shelves.nth(0).getByRole("link", { name: /^Make this/ });
-    await expect(free.first()).toHaveAttribute("href", "/create/constellations?ref=watermark");
+    const theirs = shelves.nth(noteForEveryone ? 1 : 0).getByRole("link", { name: /^Make this/ });
+    await expect(theirs.first()).toHaveAttribute("href", "/create/constellations?ref=watermark");
+    if (noteForEveryone) await expect(free.first()).toHaveAttribute("href", "/create/the-letter?ref=watermark");
     // Marked as the one they got, and only that one.
     await expect(page.getByText("The one you got", { exact: true })).toHaveCount(1);
   });

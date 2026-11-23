@@ -49,8 +49,9 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
 
   // A phone fires mouseenter on tap too, and the looping preview then played on, off screen,
   // after the page had scrolled on; the preview is for a pointer resting on a card. It starts past
-  // the recording's opening and the poster stays until it is really playing (use-hover-film.ts).
-  const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, () => !live && window.matchMedia("(hover: hover)").matches);
+  // the recording's opening and the poster stays until it is really playing, and the film gets its
+  // address on the first hover, not in the HTML (use-hover-film.ts).
+  const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, () => !live && window.matchMedia("(hover: hover)").matches, manifest.thumbnail.webm);
 
   return (
     <motion.article
@@ -103,7 +104,6 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
             {manifest.thumbnail.webm ? (
               <video
                 ref={videoRef}
-                src={manifest.thumbnail.webm}
                 muted
                 loop={loop}
                 playsInline

@@ -2,6 +2,7 @@ import { devices, expect, test, webkit, type Page } from "@playwright/test";
 import sharp from "sharp";
 import { templateFilmStart } from "../../src/content/template-film-starts";
 import { TEMPLATE_SLUGS } from "../../src/templates/manifests";
+import { measure, settle } from "./page-measure";
 
 /**
  * A gift's page as the owner's mock-up lays it out (docs/marketing/growth-build/
@@ -36,140 +37,6 @@ const SIZES: [number, number][] = [
 
 // One browser is enough for a layout that sets its own sizes; the phone project would only repeat it.
 test.skip(({ isMobile }) => isMobile, "sets its own screen sizes");
-
-/** Scroll the page through once, so everything lazy has arrived and is laid out, and every picture is decoded. */
-async function settle(page: Page) {
-  await page.evaluate(async () => {
-    for (let y = 0; y < document.documentElement.scrollHeight; y += window.innerHeight * 0.7) {
-      window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 60));
-    }
-    window.scrollTo(0, 0);
-    await document.fonts.ready;
-    // The page comes in on a short rise (the entrance animation on <main>), and its tail is under a
-    // pixel: a section that begins at 855.08 was read at 855.7, a pixel down, on one load in fifteen,
-    // and "the same height when no picture arrives" failed by that pixel. So the rise is waited out.
-    await Promise.all(
-      (document.querySelector("main")?.getAnimations() ?? [])
-        .filter((a) => Number.isFinite(Number(a.effect?.getComputedTiming().endTime)))
-        .map((a) => a.finished.catch(() => {})),
-    );
-    // Only what is on show: a piece kept for another screen size is never fetched, and would be waited for for ever.
-    await Promise.all(
-      [...document.querySelectorAll<HTMLImageElement>("[data-decor] img")]
-        .filter((img) => img.getClientRects().length > 0)
-        .map(async (img) => {
-          if (!img.complete) await new Promise((done) => ((img.onload = img.onerror = done), setTimeout(done, 4000)));
-          if (img.complete && img.naturalWidth > 0) await Promise.race([img.decode().catch(() => {}), new Promise((done) => setTimeout(done, 2000))]);
-        }),
-    );
-  });
-}
-
-/**
- * What the page looks like to a ruler: its sideways overflow, the words a visitor can read
- * without opening anything, and whether any of the art lies under one of them.
- *
- * "Under a word" is looked at, not boxed: the art is a tall stem, a phone on a spray of leaves, a
- * lily with a stalk, and most of each picture's box is empty air that words may well stand in. So
- * each picture is drawn to a canvas and, for every line of words, the pixels under it are read
- * (through the picture's own turn). A pixel that is more than a faint tail of shadow counts. What
- * is laid into a picture (a phone's screen, a line on the note card) is the picture's, not words.
- * The handwriting on the cards of "What to write" is counted by itself (`hand`): each card shows its
- * line to borrow (the owner, 22 Nov 2026: "Yes, show it"), an example in the gift's own hand, and
- * it has its own limit so that the 300 words still measure what the page says about the gift.
- */
-async function measure(page: Page, within = "[data-page-theme]") {
-  return page.evaluate((within) => {
-    const root = document.querySelector(within)!;
-    const shown = (el: Element) => {
-      for (let node: Element | null = el; node && node !== root.parentElement; node = node.parentElement) {
-        const cs = getComputedStyle(node);
-        if (cs.display === "none" || cs.visibility === "hidden") return false;
-        if (node instanceof HTMLDetailsElement && !node.open && !(el.closest("summary")?.parentElement === node)) return false;
-      }
-      return true;
-    };
-
-    // Every piece of art on show, with a way to ask what it has at a point of the page.
-    const SOLID = 40; // of 255: under this is the outer tail of a soft shadow
-    const decor = [...root.querySelectorAll<HTMLElement>("[data-decor]")]
-      .filter((el) => shown(el))
-      .flatMap((el) => {
-        const img = el.querySelector("img");
-        if (!img || !img.complete || img.naturalWidth === 0) return [];
-        const r = el.getBoundingClientRect();
-        const w = el.offsetWidth, h = el.offsetHeight;
-        if (w === 0 || h === 0) return [];
-        const canvas = document.createElement("canvas");
-        canvas.width = 240;
-        canvas.height = Math.max(1, Math.round((240 * h) / w));
-        const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const alpha = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-        const m = new DOMMatrix(getComputedStyle(el).transform);
-        const turn = Math.atan2(m.b, m.a);
-        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        const at = (x: number, y: number) => {
-          // Back through the piece's turn, into its own box.
-          const dx = x - cx, dy = y - cy;
-          const lx = dx * Math.cos(-turn) - dy * Math.sin(-turn) + w / 2;
-          const ly = dx * Math.sin(-turn) + dy * Math.cos(-turn) + h / 2;
-          if (lx < 0 || ly < 0 || lx >= w || ly >= h) return 0;
-          return alpha[(Math.floor((ly / h) * canvas.height) * canvas.width + Math.floor((lx / w) * canvas.width)) * 4 + 3];
-        };
-        const inView = r.top < innerHeight && r.bottom > 0 && r.left < innerWidth && r.right > 0;
-        return [{ id: el.dataset.decor!, rect: r, at, inView }];
-      });
-
-    const overlaps = new Set<string>();
-    const words: { size: number; label: boolean }[] = [];
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    let count = 0;
-    let hand = 0;
-    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-      const text = node.textContent?.trim() ?? "";
-      const parent = node.parentElement;
-      if (!text || !parent || !shown(parent) || parent.closest("[data-flatlay], style, script")) continue;
-      const range = document.createRange();
-      range.selectNodeContents(node);
-      const rects = [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
-      if (rects.length === 0) continue;
-      if (parent.closest("[data-line]")) hand += text.split(/\s+/).length;
-      else count += text.split(/\s+/).length;
-      const cs = getComputedStyle(parent);
-      words.push({ size: parseFloat(cs.fontSize), label: cs.textTransform === "uppercase" });
-      for (const r of rects)
-        for (const d of decor) {
-          if (d.rect.left > r.right || d.rect.right < r.left || d.rect.top > r.bottom || d.rect.bottom < r.top) continue;
-          // A grid of points over the line of words, a little inside its box.
-          let hit = false;
-          for (let i = 0; i <= 12 && !hit; i++) for (let j = 0; j <= 3 && !hit; j++) hit = d.at(r.left + 1 + ((r.width - 2) * i) / 12, r.top + 1 + ((r.height - 2) * j) / 3) > SOLID;
-          if (hit) overlaps.add(`${d.id} under “${text.slice(0, 32)}”`);
-        }
-    }
-    const targets = [...root.querySelectorAll<HTMLElement>("a, button, summary")]
-      .filter((el) => shown(el) && !el.closest("[data-flatlay]"))
-      .map((el) => {
-        // A card's summary is pressed anywhere on the card: its ::after covers it.
-        const r = (el.tagName === "SUMMARY" && getComputedStyle(el, "::after").position === "absolute" ? el.parentElement! : el).getBoundingClientRect();
-        return { what: (el.textContent ?? "").trim().slice(0, 30), width: Math.round(r.width), height: Math.round(r.height) };
-      });
-    return {
-      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      height: document.documentElement.scrollHeight,
-      overlaps: [...overlaps],
-      pieces: decor.length,
-      count,
-      hand,
-      decorInView: decor.filter((d) => d.inView).length,
-      smallest: words.filter((w) => !w.label).reduce((min, w) => Math.min(min, w.size), 99),
-      smallestLabel: words.filter((w) => w.label).reduce((min, w) => Math.min(min, w.size), 99),
-      small: targets.filter((t) => t.height < 44 || t.width < 44).map((t) => `${t.what} ${t.width}×${t.height}`),
-      sections: [...root.querySelectorAll("section")].map((s) => Math.round(s.getBoundingClientRect().top + scrollY)),
-    };
-  }, within);
-}
 
 for (const [width, height] of SIZES) {
   test(`${width}×${height}: no sideways scroll, no flower under words, words within the budget`, async ({ page }) => {
@@ -1244,18 +1111,50 @@ test("on the smallest phone every gift's “Make this gift” begins on the firs
   await page.setViewportSize({ width: 320, height: 568 });
   const under: string[] = [];
   const cut: string[] = [];
+  const flicker: string[] = [];
   const pills: string[] = [];
-  for (const path of EVERY_GIFT) {
-    const slug = path.split("/").pop()!;
+  /**
+   * The button's box once it has stopped moving: two reads a quarter second apart that agree. One
+   * read straight after atRest() was a few pixels off now and then in a long run on a busy machine
+   * (The Toast's sits 1px inside the screen at rest, 519–567, and read 523–571 once in the full file
+   * at one worker, never alone: reports, pages N2-1).
+   */
+  const restingBox = async (path: string, slug: string) => {
     // A visit to a Spanish page leaves the language's cookie, and the next English address would be answered in Spanish.
     await page.context().clearCookies();
     await page.goto(path);
     await atRest(page);
-    const hero = page.locator("[data-page-theme] section").first();
     await expect(page.locator("html"), path).toHaveAttribute("lang", path.startsWith("/es/") ? "es" : "en");
-    const button = (await hero.locator(`a[href$="/create/${slug}"]`).boundingBox())!;
-    const top = Math.round(button.y);
-    const foot = Math.round(button.y + button.height);
+    const link = page.locator("[data-page-theme] section").first().locator(`a[href$="/create/${slug}"]`);
+    const read = async () => {
+      const box = (await link.boundingBox())!;
+      return { top: Math.round(box.y), foot: Math.round(box.y + box.height) };
+    };
+    let last = await read();
+    await expect
+      .poll(async () => {
+        await page.waitForTimeout(250);
+        const now = await read();
+        const same = now.top === last.top && now.foot === last.foot;
+        last = now;
+        return same;
+      }, { message: `${path}: “Make this gift” keeps moving`, timeout: 10_000 })
+      .toBe(true);
+    return last;
+  };
+  for (const path of EVERY_GIFT) {
+    const slug = path.split("/").pop()!;
+    const hero = page.locator("[data-page-theme] section").first();
+    let { top, foot } = await restingBox(path, slug);
+    if (top < 568 && foot > 568) {
+      // Cut on this load: counted only if a fresh load of the page, at rest, cuts it too. A page that
+      // is really cut is cut every time; one that sits on the line is logged by name, not counted.
+      const again = await restingBox(path, slug);
+      if (again.foot <= 568) {
+        flicker.push(`${path} ${top}–${foot}, then ${again.top}–${again.foot}`);
+        ({ top, foot } = again);
+      }
+    }
     if (top >= 568) under.push(`${path}: “Make this gift” begins at ${top}`);
     else if (foot > 568) cut.push(`${path} ${top}–${foot}`);
     // The second button is one row in a pill of 48px, in both languages (its Spanish label was two
@@ -1276,6 +1175,7 @@ test("on the smallest phone every gift's “Make this gift” begins on the firs
   // button, which begins 7 to 45px above it: whether that matters on a phone this small is the
   // owner's to say (reports/guides-confirm.md, N2-1). Held here so that it does not become more.
   console.log(`320×568: the first screen's foot cuts “Make this gift” on ${cut.length} of ${EVERY_GIFT.length} pages: ${cut.join("; ")}`);
+  if (flicker.length) console.log(`320×568: on the line, cut on one load and not the next: ${flicker.join("; ")}`);
   expect(cut.length, cut.join("; ")).toBeLessThanOrEqual(24);
 });
 

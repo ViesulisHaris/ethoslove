@@ -10,6 +10,8 @@ import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { TOGETHER_PATH } from "@/content/together-guide";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
+import { GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
+import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
 import { localizedUrl } from "@/lib/seo";
@@ -50,6 +52,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/gifts", priority: 0.9, changeFrequency: "weekly" },
     { path: FINDER_PATH, priority: 0.8, changeFrequency: "monthly" },
     ...RECIPIENTS.map((r): Page => ({ path: `/gifts/${recipientSlug(r)}`, priority: 0.8, changeFrequency: "monthly" })),
+    ...GIFT_GUIDE_SLUGS.map((slug): Page => ({ path: `/gifts/${slug}`, priority: 0.8, changeFrequency: "monthly" })),
+    { path: DIGITAL_CARDS_PATH, priority: 0.8, changeFrequency: "monthly" },
     { path: "/trips", priority: 0.8, changeFrequency: "monthly" },
     ...TRIPS.map((trip): Page => ({ path: `/trips/${trip.id}`, priority: 0.7, changeFrequency: "monthly", ...(trip.image ? { images: [`${SITE.url}${trip.image}`] } : {}) })),
     { path: "/long-distance", priority: 0.8, changeFrequency: "monthly" },

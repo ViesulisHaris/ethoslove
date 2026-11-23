@@ -14,6 +14,16 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * /x that has none of its own. A page without a date sends none, which is honest too. Blog posts
  * carry their own dates (content/blog).
  */
+/**
+ * The day the growth build's "pages" area last changed what its pages say: the six gift pages by
+ * kind, /digital-cards, the eight new idea lists, and the links /gifts, the /gifts/for-* pages,
+ * birthday and anniversary gained. None of it is live yet, so this is a date on a branch (22 Nov:
+ * the pages were laid out again with far fewer words on show, new titles for three of them, and
+ * every occasion's ideas as cards; 23 Nov: a page by kind names the price of the gift in its
+ * phone, the price list runs from the least to the most, and the Spanish Christmas letter's title
+ * changed). The day it ships, set this one line to that day.
+ */
+const GROWTH_PAGES_DAY = "2026-11-23";
 
 /**
  * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
@@ -56,14 +66,12 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
   // With the finder: Gifts lead the rooms, and the front page, /gifts and the gallery link to it.
   "/": FINDER_LIVE,
-  "/gifts": FINDER_LIVE,
-  "/gifts/*": "2026-10-24",
+  // The gift pages by kind (content/gift-guides.ts) and /digital-cards are new, and /gifts and every
+  // /gifts/for-* page gained their links.
+  "/gifts": GROWTH_PAGES_DAY,
+  "/gifts/*": GROWTH_PAGES_DAY,
   "/gifts/finder": FINDER_LIVE,
-  // Its "Is it only for couples?" answer now says a few templates are drawn for couples.
-  "/gifts/for-best-friend": FINDER_LIVE,
-  // A row of Christmas gifts while Christmas is in season (15 Nov to 25 Dec), linked to the finder.
-  "/gifts/for-boyfriend": FINDER_LIVE,
-  "/gifts/for-girlfriend": FINDER_LIVE,
+  "/digital-cards": GROWTH_PAGES_DAY,
   // With the finder the gallery links to it; then the gallery itself was redrawn.
   "/templates": GALLERY_LIVE,
   "/templates/*": GUIDES_LIVE,
@@ -95,6 +103,23 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
   // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
   "/occasions/*": GALLERY_LIVE,
+  // Eight occasions gained their idea lists (content/occasion-ideas.ts), and birthday and
+  // anniversary a row of links to the gift pages by kind.
+  "/occasions/birthday": GROWTH_PAGES_DAY,
+  "/occasions/anniversary": GROWTH_PAGES_DAY,
+  // Their twelve ideas are cards since 22 Nov, each a title and one line where there was a paragraph.
+  "/occasions/valentines": GROWTH_PAGES_DAY,
+  "/occasions/christmas": GROWTH_PAGES_DAY,
+  "/occasions/long-distance": GROWTH_PAGES_DAY,
+  "/occasions/thanksgiving": GROWTH_PAGES_DAY,
+  "/occasions/wedding": GROWTH_PAGES_DAY,
+  "/occasions/graduation": GROWTH_PAGES_DAY,
+  "/occasions/mothers-day": GROWTH_PAGES_DAY,
+  "/occasions/fathers-day": GROWTH_PAGES_DAY,
+  "/occasions/apology": GROWTH_PAGES_DAY,
+  "/occasions/just-because": GROWTH_PAGES_DAY,
+  // Its Spanish guide names the gift by its Spanish name since 23 Nov ("Truco o trato").
+  "/occasions/halloween": GROWTH_PAGES_DAY,
   "/dates": DATES_LIVE,
   "/dates/*": DATES_LIVE,
   "/dates/ideas/*": DATES_LIVE,

@@ -18,6 +18,9 @@ export type DigitalGiftGuide = {
   ideasLead: string;
   groups: { title: string; templates: string[] }[];
   byWho: string;
+  /** The heading over the gift pages by kind (content/gift-guides.ts), and what the link to /digital-cards says. */
+  byKind: string;
+  cards: string;
   faq: { q: string; a: string }[];
 };
 
@@ -48,6 +51,8 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
     ideasLead: "Each one is a template you can open, try and make in about ten minutes.",
     groups: GROUPS.map((g) => ({ title: GROUP_TITLES.en[g.key], templates: g.templates })),
     byWho: "Digital gift ideas by who it's for",
+    byKind: "Digital gift ideas by kind",
+    cards: "What a digital card is",
     faq: [
       {
         q: "What is a good digital gift?",
@@ -90,6 +95,8 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
     ideasLead: "Cada una es una plantilla que puedes abrir, probar y hacer en unos diez minutos.",
     groups: GROUPS.map((g) => ({ title: GROUP_TITLES.es[g.key], templates: g.templates })),
     byWho: "Ideas de regalos digitales según para quién",
+    byKind: "Ideas de regalos digitales por tipo",
+    cards: "Qué es una tarjeta digital",
     faq: [
       {
         q: "¿Cuál es un buen regalo digital?",

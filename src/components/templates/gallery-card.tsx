@@ -60,7 +60,7 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
   // A phone fires mouseenter on a tap too; the film is for a pointer resting on a card. And for
   // nobody who asked for less motion: the film is hidden then, and must not be fetched and played unseen.
   // It starts past the recording's opening (use-hover-film.ts).
-  const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, wantsFilm);
+  const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, wantsFilm, manifest.thumbnail.webm);
 
   return (
     <motion.article
@@ -92,7 +92,6 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
           {manifest.thumbnail.webm ? (
             <video
               ref={videoRef}
-              src={manifest.thumbnail.webm}
               muted
               loop={loop}
               playsInline

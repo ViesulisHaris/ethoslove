@@ -13,8 +13,13 @@ import { templateFilmStart } from "@/content/template-film-starts";
  * Pop-up Card's card turn black with the demo bar in it on hover (walk-front-3).
  *
  * `canPlay` says whether this pointer and this visitor want a film at all.
+ *
+ * `src` is the film's address, given to the video on the first hover and not written in the HTML.
+ * With a WebM `src` in the page, even at preload="none", WebKit held the page's load event for good:
+ * an occasion page with nine cards stayed "interactive" in Playwright's iPhone 13 (growth-build pages
+ * T14). A phone never hovers, so there the film is never fetched at all.
  */
-export function useHoverFilm(slug: string, canPlay: () => boolean = () => true) {
+export function useHoverFilm(slug: string, canPlay: () => boolean = () => true, src?: string) {
   const ref = useRef<HTMLVideoElement>(null);
   const from = templateFilmStart(slug);
 
@@ -50,10 +55,11 @@ export function useHoverFilm(slug: string, canPlay: () => boolean = () => true) 
   const play = useCallback(() => {
     const v = ref.current;
     if (!v || !canPlay()) return;
+    if (src && !v.getAttribute("src")) v.src = src;
     // Before its metadata a video ignores a seek on some browsers; `loadedmetadata` above catches that.
     if (v.readyState >= 1) v.currentTime = from;
     v.play().catch(() => {});
-  }, [from, canPlay]);
+  }, [from, canPlay, src]);
 
   const pause = useCallback(() => {
     const v = ref.current;

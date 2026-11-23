@@ -1,0 +1,4 @@
+# The HEIC decoder in public/workers is held, byte for byte, to the one heic2any ships
+# (tests/unit/heic-worker.test.ts). On a Windows checkout with core.autocrlf its line ends were
+# rewritten to CRLF and that test failed there, and nowhere else. It is never converted now.
+public/workers/*.js -text

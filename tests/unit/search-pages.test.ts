@@ -92,6 +92,24 @@ describe("gift ideas by who it's for", () => {
       });
     }
   });
+
+  it("calls no idea free but The Letter's short note", () => {
+    // Constellations is made of photos, and photos are paid since 19 Nov 2026 (lib/gift/free-tier.ts): the boyfriend's
+    // page still ended its idea "Free, and quietly romantic." (the test of 23 Nov 2026).
+    const free = /\bfree\b|\bgratis\b/i;
+    const said: string[] = [];
+    for (const r of RECIPIENTS)
+      for (const l of LOCALES)
+        for (const idea of RECIPIENT_GUIDES[r][l].ideas) {
+          if (idea.template === "the-letter") {
+            // Where the Letter is called free, it is as a short note, never with photos in the same breath.
+            if (free.test(idea.body) && !/short note|nota corta/i.test(idea.body)) said.push(`${r} ${l} the-letter: free, with no "short note"`);
+            continue;
+          }
+          if (free.test(`${idea.heading} ${idea.body}`)) said.push(`${r} ${l} ${idea.template}: ${idea.body}`);
+        }
+    expect(said).toEqual([]);
+  });
 });
 
 /** A result shows about seventy characters of a title, so a long one drops the brand rather than its end. */

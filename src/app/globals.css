@@ -1457,19 +1457,22 @@ body:has([data-page-theme]) .site-header .btn-rose {
 /* Sections that fade up into view (components/motion/reveal-root).    */
 /* Armed only once the observer has run, so nothing is ever hidden     */
 /* without the script that shows it; reduced motion only fades.        */
+/* Never what a <details> opens to: that is shown by whoever opens it, */
+/* and the observer does not watch it (a card opened near the foot of  */
+/* the screen stayed at opacity 0 until the page was scrolled).        */
 /* ------------------------------------------------------------------ */
-.reveal-ready [data-reveal]:not(.is-in) {
+.reveal-ready [data-reveal]:not(.is-in):not(details *) {
   opacity: 0;
   translate: 0 22px;
 }
-.reveal-ready [data-reveal] {
+.reveal-ready [data-reveal]:not(details *) {
   transition:
     opacity 0.7s var(--ease-out-quint),
     translate 0.8s var(--ease-out-quint);
   transition-delay: var(--reveal-delay, 0ms);
 }
 @media (prefers-reduced-motion: reduce) {
-  .reveal-ready [data-reveal]:not(.is-in) {
+  .reveal-ready [data-reveal]:not(.is-in):not(details *) {
     translate: none;
   }
 }

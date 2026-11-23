@@ -161,6 +161,7 @@ describe("sitemap dates", () => {
     // (the review of 22 Nov 2026): none may say it is older than the gallery it draws.
     expect(GALLERY_LIVE).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(pageUpdated("/templates")).toBe(GALLERY_LIVE);
-    for (const occasion of OCCASIONS) expect(pageUpdated(`/occasions/${occasion}`), occasion).toBe(GALLERY_LIVE);
+    // Each occasion gained its idea cards a day after the gallery was redrawn (GROWTH_PAGES_DAY): the same day or later, never older.
+    for (const occasion of OCCASIONS) expect((pageUpdated(`/occasions/${occasion}`) ?? "") >= GALLERY_LIVE, occasion).toBe(true);
   });
 });
