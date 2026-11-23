@@ -287,6 +287,11 @@ describe("the places on a city's page", () => {
     expect(topCityPlaces(places, 2, 5).map((p) => p.id)).toEqual(["node/r0", "node/r1"]);
   });
 
+  it("leaves off what the pages by kind leave off: a paved square filed as a park, a chain café (dates-N3-3)", () => {
+    const places = [place("node/ls", "park", 99, { name: "Leicester Square" }), place("node/sb", "cafe", 98, { name: "Starbucks" }), place("node/rs", "garden", 97, { name: "Russell Square" }), place("node/cafe", "cafe", 96, { name: "Monmouth Coffee" })];
+    expect(topCityPlaces(places, 10, 5).map((p) => p.id)).toEqual(["node/rs", "node/cafe"]);
+  });
+
   it("sends each idea to places the ideas above it haven't, while there are others of the kind a walk away", () => {
     const books = ideaById("bookshop-and-coffee")!;
     const gallery = ideaById("gallery-hop")!;
@@ -465,6 +470,8 @@ describe("a kind of date inside a city", () => {
     // A branch named after its street is still the bakery (dates-N2-2); a person called Paul still is not.
     for (const name of ["Paul (Covent Garden)", "Paul - Covent Garden", "Paul – Marylebone", "Paul(Soho)", "Paul Bakery (Kensington)"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(true);
     for (const name of ["Paul Smith Café", "Paul's Coffee", "Pauls - Corner Café"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(false);
+    // A double first name is a person too: the dash counts only with a space before it (dates-N3-2).
+    for (const name of ["Paul-Henri Café", "Paul–Émile", "Paul-Bakery"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(false);
   });
 
   it("C5d every city title and city-by-kind title fits a search result with the brand on, in both languages (dates-D9)", () => {

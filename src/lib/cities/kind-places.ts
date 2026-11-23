@@ -20,12 +20,12 @@ const GENERIC = new Set(["books", "bookshop", "bookstore", "gallery", "art galle
 const CHAINS = ["starbucks", "costa", "costa coffee", "pret", "pret a manger", "caffe nero", "cafe nero", "dunkin", "tim hortons", "blank street", "joe & the juice", "black sheep coffee", "gail's", "le pain quotidien", "kung fu tea", "gong cha", "chatime", "tiger sugar", "peet's coffee", "la colombe", "bluestone lane", "joe coffee"];
 /**
  * A chain whose name is also a person's: only the whole name or the name with its trade ("Paul
- * Bakery"), alone or with the branch after it in brackets or a dash ("Paul (Covent Garden)", "Paul -
- * Covent Garden"), never "Paul Rothe & Son".
+ * Bakery"), alone or with the branch after it in brackets or a dash with a space before it ("Paul
+ * (Covent Garden)", "Paul - Covent Garden"), never "Paul Rothe & Son" or "Paul-Henri Café" (dates-N3-2).
  */
 const NAMED_CHAINS = ["paul", "paul bakery", "paul boulangerie", "boulangerie paul"];
 const namedChain = (name: string): boolean =>
-  NAMED_CHAINS.some((chain) => name === chain || (name.startsWith(chain) && /^\s*[(\-–—]/.test(name.slice(chain.length))));
+  NAMED_CHAINS.some((chain) => name === chain || (name.startsWith(chain) && /^(\s*\(|\s+[-–—])/.test(name.slice(chain.length))));
 /**
  * Squares the map files as parks that are paving, traffic and cinemas, not a lawn to sit on. Named
  * one by one: a square with a garden in the middle (Russell Square, Soho Square) is filed the same
