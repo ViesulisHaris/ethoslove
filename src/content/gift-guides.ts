@@ -704,7 +704,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "midnight-countdown",
           heading: "Esperan: una tarjeta que se abre a medianoche",
           brief: "Mándala antes: muestra un reloj que baja y, a cero, se abre con fuegos artificiales.",
-          body: "La única que hace esperar. Mándala antes y muestra un reloj que baja bajo un cielo que pasa del atardecer a la noche. A cero, en la zona horaria que elegiste, estallan los fuegos artificiales y se abre con tus fotos y tu mensaje. De las ocho es la que menos hace al tocarla y la que más hace si aciertas con la hora.",
+          body: "La única que hace esperar. Mándala antes y muestra una cuenta atrás bajo un cielo que pasa del atardecer a la noche. A cero, en la zona horaria que elegiste, estallan los fuegos artificiales y se abre con tus fotos y tu mensaje. De las ocho es la que menos hace al tocarla y la que más hace si aciertas con la hora.",
           line: { field: "headline", where: "Titular sobre el reloj", text: "Hasta que vuelvas a ser mayor que yo, oficialmente" },
         },
         {

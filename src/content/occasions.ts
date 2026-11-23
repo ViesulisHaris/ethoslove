@@ -388,7 +388,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "keepsake",
-            heading: "Un guardapelo con vuestra fecha grabada",
+            heading: "Un relicario con vuestra fecha grabada",
             body: "Un paquete con sello de lacre y, dentro, una caja de cosas guardadas: una entrada, flores prensadas, una palabra arrancada de un libro y un relicario de oro que se abre con un toque. Graba vuestra fecha, hasta 18 caracteres («12·06·2021»), haz que la entrada sea para la noche en que os conocisteis y elige la palabra que arrancarías para esa persona.",
           },
           {
