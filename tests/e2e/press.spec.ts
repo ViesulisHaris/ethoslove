@@ -51,7 +51,7 @@ test.describe("with figures in (the sample)", () => {
     const errors = errorsOf(page);
     const cases = [
       { where: "/press", title: "Ethos in numbers: figures and pictures for the press", h1: "Ethos in numbers", maker: "Digital cards by Tryethos", canonical: "/press" },
-      { where: "/es/press", title: "Ethos en cifras: datos, números e imágenes para la prensa", h1: "Ethos en cifras", maker: "Tarjetas digitales de Tryethos", canonical: "/es/press" },
+      { where: "/es/press", title: "Ethos en cifras: números e imágenes para la prensa", h1: "Ethos en cifras", maker: "Tarjetas digitales de Tryethos", canonical: "/es/press" },
     ];
     for (const c of cases) {
       const response = await page.goto(c.where);
