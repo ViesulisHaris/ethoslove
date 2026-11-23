@@ -57,6 +57,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       onEvent?.({ type: "progress", pct: Math.min(80, pct) });
     }
   }), [scrollXProgress, onEvent]);
+  // The last room is the end screen: there is nowhere left to walk, and its buttons sit where the
+  // hint is, so the hint leaves once the walk is more than halfway into that room.
+  const [atEnd, setAtEnd] = useState(false);
+  useEffect(() => scrollXProgress.on("change", () => {
+    const el = scroller.current;
+    if (el) setAtEnd(el.scrollLeft > el.scrollWidth - el.clientWidth * 1.5);
+  }), [scrollXProgress]);
 
   const enter = () => {
     setStarted(true);
@@ -195,7 +202,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         </section>
       </div>
 
-      {started ? (
+      {started && !atEnd ? (
         <p className="pointer-events-none absolute inset-x-0 bottom-[max(0.9rem,env(safe-area-inset-bottom))] text-center text-[10px] tracking-[0.3em] uppercase" style={{ color: palette.muted, fontFamily: "var(--gift-font-body)" }}>
           {s.swipe}
         </p>
