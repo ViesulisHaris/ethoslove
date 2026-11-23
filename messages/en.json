@@ -202,6 +202,7 @@
     "explore": "Explore",
     "digitalGifts": "Digital gifts",
     "togetherCounter": "Days together counter",
+    "halfwayFinder": "Halfway between two cities",
     "loveQuiz": "Love language quiz"
   },
   "auth": {
@@ -2389,6 +2390,7 @@
     "meet": {
       "title": "Meet in the middle",
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
+      "tool": "The halfway finder alone, with a link you can send",
       "you": "Where you are",
       "them": "Where they are",
       "hint": "Pick both towns and we'll do the math.",
@@ -3355,6 +3357,10 @@
       "tickets": "Things to do in {city}",
       "car": "Hire a car",
       "disclosure": "Partner links: if you book, we may earn a commission, at no extra cost to you. The booking is with the partner, under its terms."
+    },
+    "dates": {
+      "line": "Planning the day too?",
+      "link": "Date ideas for an anniversary"
     },
     "page": {
       "title": "Reminders",

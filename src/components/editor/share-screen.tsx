@@ -13,6 +13,7 @@ import { isInApp, shareLink } from "@/lib/app/bridge";
 import { PARTNER_NAMES, type PartnerId, type PartnerPlacement } from "@/lib/trips/partners";
 import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
+import { AnniversaryDates } from "@/components/reminders/anniversary-dates";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
 import { OfferEmailsBox } from "./offer-emails-box";
@@ -87,6 +88,7 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <BookTheTrip data={data} />
 
       {authed ? <RemindNextYear data={data} /> : null}
+      <AnniversaryDates templateSlug={data.templateSlug} />
 
       {/* The yes our offer emails need, asked of the account that just sent a gift; not inside the iPhone app. */}
       {authed ? (

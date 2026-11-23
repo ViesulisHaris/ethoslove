@@ -12,7 +12,9 @@ import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
 import { TRIP_SEO } from "@/content/trip-seo";
 import { GAMES } from "@/lib/games/catalogue";
 import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
+import { showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
+import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
 import { halfwayBetween, halfwayCityName, isOwnTown } from "@/lib/ldr/halfway";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
@@ -253,6 +255,15 @@ function strings(value: unknown, where: string): [string, string][] {
 }
 const words = (text: string) => text.split(/\s+/).filter(Boolean).length;
 const MESSAGES = { en, es } as const;
+
+describe("the share screen's line to date ideas", () => {
+  it("date ideas are offered after an anniversary gift, and only then", () => {
+    for (const slug of ["our-timeline", "museum", "the-letter"]) expect(showsAnniversaryDates(slug), slug).toBe(true);
+    // A birthday's, a Valentine's first, long distance first, the trip gift, and no template at all.
+    for (const slug of ["birthday-cinema", "bouquet", "halfway", "pack-your-bags", "nope"]) expect(showsAnniversaryDates(slug), slug).toBe(false);
+    expect(TRIP_GIFT_SLUG).toBe("pack-your-bags");
+  });
+});
 
 describe("the rooms' pages", () => {
   it("the flowers of these pages follow the art's rules", () => {

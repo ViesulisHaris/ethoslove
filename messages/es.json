@@ -202,6 +202,7 @@
     "explore": "Explorar",
     "digitalGifts": "Regalos digitales",
     "togetherCounter": "Contador de días juntos",
+    "halfwayFinder": "A medio camino entre dos ciudades",
     "loveQuiz": "Test de los lenguajes del amor"
   },
   "auth": {
@@ -2389,6 +2390,7 @@
     "meet": {
       "title": "Quedad a medio camino",
       "sub": "Entran dos ciudades. Sale cuánto os separa, la ciudad a medio camino y las horas del día en que estáis los dos despiertos.",
+      "tool": "Solo el punto medio, con un enlace para enviar",
       "you": "Dónde estás tú",
       "them": "Dónde está la otra persona",
       "hint": "Elige las dos ciudades y hacemos las cuentas.",
@@ -3355,6 +3357,10 @@
       "tickets": "Qué hacer en {city}",
       "car": "Alquilar un coche",
       "disclosure": "Enlaces de afiliado: si reservas a través de ellos, puede que ganemos una comisión. A ti no te cuesta nada más. La reserva la haces con cada web, según sus condiciones."
+    },
+    "dates": {
+      "line": "¿Planeando también el día?",
+      "link": "Ideas de citas para un aniversario"
     },
     "page": {
       "title": "Recordatorios",
