@@ -70,16 +70,134 @@ def puff(name, outline, h, mat, r=0.06):
     return kit.prism(name, outline, h, mat, 0.0, r, 4)
 
 
+def glossy(color):
+    """Clay with a glaze on it: the light slides over a round thing and shows that it is round."""
+    _n[0] += 1
+    return plain("glossy%d" % _n[0], color, 0.32, sss=0.25, sss_scale=0.04, coat=0.6, coat_rough=0.12)
+
+
+def dome(name, outline, h, mat, centre=(0.0, 0.0), rings=12):
+    """
+    A flat shape puffed up like a cushion: its edge on the ground, rising in a quarter round to a top
+    over `centre` (a point from which the whole edge can be seen). `puff` gives a slab with soft
+    edges, which from straight above is a flat colour; this has no flat part, so the light falls
+    off across it and it reads as a solid thing.
+
+    As it rises the shape is smoothed round its edge, more with every ring, and drawn towards an
+    oval: scaled down as it is, a heart kept its cleft and its point all the way to the top, and the
+    two met in a hard crease down the middle with the light on one side of it and the shade on the
+    other. Now the cleft is a valley that opens out as it climbs, and the top is one round swell.
+    """
+    n = len(outline)
+    cx, cy = centre
+    polar = [(math.atan2(y - cy, x - cx), math.hypot(x - cx, y - cy)) for (x, y) in outline]
+    mean = sum(r for (_, r) in polar) / n
+    verts, faces = [], []
+    for k in range(rings):
+        a = (math.pi / 2) * k / rings
+        s, z = math.cos(a), h * math.sin(a)
+        # how far round the edge a point is averaged with its neighbours, in points, and how far towards the oval
+        sigma = 0.6 + 0.16 * n * (k / rings)
+        m = 0.55 * (k / rings) ** 1.5
+        reach = int(3 * sigma) + 1
+        weights = [math.exp(-0.5 * (d / sigma) ** 2) for d in range(-reach, reach + 1)]
+        total = sum(weights)
+        for i, (t, _) in enumerate(polar):
+            r = sum(w * polar[(i + d) % n][1] for d, w in zip(range(-reach, reach + 1), weights)) / total if k else polar[i][1]
+            r = (1.0 - m) * r + m * mean
+            verts.append((cx + s * r * math.cos(t), cy + s * r * math.sin(t), z))
+    verts.append((cx, cy, h))
+    top = len(verts) - 1
+    for k in range(rings - 1):
+        for i in range(n):
+            j = (i + 1) % n
+            faces.append((k * n + i, k * n + j, (k + 1) * n + j, (k + 1) * n + i))
+    last = (rings - 1) * n
+    for i in range(n):
+        faces.append((last + i, last + (i + 1) % n, top))
+    faces.append(tuple(range(n - 1, -1, -1)))
+    return kit.mesh_obj(name, verts, faces, mat, True)
+
+
+def ribbed_pumpkin(name, mat, stem_mat, r=1.0, lobes=8, squash=0.78, rib=0.3):
+    """
+    A pumpkin whose ribs can be seen from the front: broad round lobes with a narrow groove between
+    each two, a lobe (not a groove) facing the camera. props_desk.pumpkin is drawn for a desk seen
+    from above, where its shallow ribs show in the top; from the front it was one smooth ball.
+    """
+    seg, rings = lobes * 12, 26
+    front = -math.pi / 2 - math.pi / lobes
+    verts, faces = [], []
+    for i in range(rings + 1):
+        v = i / rings
+        phi = math.pi * v
+        for j in range(seg):
+            th = TAU * j / seg
+            groove = 1.0 - abs(math.sin(lobes * (th - front) / 2.0)) ** 0.5
+            rr = r * math.sin(phi) ** 0.82 * (1.0 - rib * groove * math.sin(phi) ** 0.5)
+            zz = r * squash * (-math.cos(phi)) * (1.0 - 0.16 * math.cos(phi) ** 8)
+            if v > 0.86:
+                zz -= r * 0.2 * ((v - 0.86) / 0.14) ** 2
+            verts.append((rr * math.cos(th), rr * math.sin(th), zz + r * squash))
+    for i in range(rings):
+        for j in range(seg):
+            a, b = i * seg + j, i * seg + (j + 1) % seg
+            faces.append((a, b, b + seg, a + seg))
+    body = kit.mesh_obj(name, verts, faces, mat, True)
+    top = r * squash * 2 - r * 0.2
+    path = [Vector((0.14 * r * math.sin(t * 2.0) * t, 0.12 * r * t * t, top - 0.06 * r + 0.5 * r * t)) for t in [i / 10 for i in range(11)]]
+    stem = tube(name + "_stem", path, [0.2 * r * (1.0 - 0.45 * i / 10) for i in range(11)], 10, stem_mat)
+    return [body, stem]
+
+
+def veined_leaf(name, mat, vein_mat, size=1.0, curl=0.16):
+    """
+    A maple leaf with its veins standing on it and a stalk thick enough to be a stalk: props_desk's
+    leaf is one of many scattered on a table, and alone on a tile it was a spiky shape on a wire.
+    """
+    half = desk.MAPLE[1:-1]
+    outline = [desk.MAPLE[0]] + half + [desk.MAPLE[-1]] + [(-x, y) for (x, y) in reversed(half)]
+
+    def lift(x, y):
+        return 0.02 + curl * size * (x * x + 0.4 * (y - 0.1) ** 2)
+
+    verts = [(0.0, 0.1 * size, lift(0.0, 0.1))] + [(x * size, y * size, lift(x, y)) for (x, y) in outline]
+    n = len(outline)
+    leaf = kit.mesh_obj(name, verts, [(0, 1 + i, 1 + (i + 1) % n) for i in range(n)], mat, True)
+    kit.solidify(leaf, 0.03 * size, 0.0)
+    # The midrib runs from the stalk to the top lobe; four side veins leave it at the blade's middle
+    # for the four large lobes, half sunk in the blade and thinning as they go. Run from the stalk's
+    # foot to every lobe they crossed the notches between the lobes and stood out past the blade's
+    # edge like twigs.
+    hub = (0.0, -0.05)
+    veins = [((0.0, -0.44), (0.0, 0.78), 0.024), (hub, (0.5, 0.42), 0.016), (hub, (-0.5, 0.42), 0.016), (hub, (0.72, 0.08), 0.016), (hub, (-0.72, 0.08), 0.016)]
+    parts = [leaf]
+    for k, (a, b, thick) in enumerate(veins):
+        path = []
+        for step in range(6):
+            f = 0.84 * step / 5
+            x, y = a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f
+            path.append(Vector((x * size, y * size, lift(x, y) + 0.018 * size)))
+        parts.append(tube("%s_vein%d" % (name, k), path, [thick * size * (1.0 - 0.8 * i / 5) for i in range(6)], 6, vein_mat))
+    stalk = tube(name + "_stalk", [Vector((0.0, -0.4 * size, lift(0.0, -0.4) + 0.03 * size)), Vector((0.0, -0.56 * size, 0.04)), Vector((0.04 * size, -0.8 * size, 0.04)), Vector((0.13 * size, -1.02 * size, 0.04))], [0.03 * size, 0.034 * size, 0.036 * size, 0.042 * size], 8, vein_mat)
+    return parts + [stalk]
+
+
 def build(icon):
     layer(icon)
     if icon == "all":
-        parts = desk.envelope("env", clay(CREAM), clay(RED), 2.0, 1.4)
-        # the seal is a heart, not a blob of wax
-        bpy.data.objects.remove(parts[2], do_unlink=True)
-        heart = puff("env_heart", heart_outline(0.3), 0.07, clay(RED), 0.03)
-        place(heart, (0.0, -0.12, 0.05))
+        # A letter seen from its back: the body, the flap lying on it as a triangle with an edge of its
+        # own, the two folds under the flap's point, and a heart where the seal goes. It was one flat
+        # sheet with a line on it.
+        w, h = 2.0, 1.4
+        body = kit.prism("env", kit.rounded_rect(w, h, 0.07), 0.07, clay(WHITE), 0.0, 0.02, 3)
+        flap = kit.prism("env_flap", [(-w / 2 + 0.04, h / 2 - 0.04), (0.0, -h * 0.14), (w / 2 - 0.04, h / 2 - 0.04)], 0.05, clay("#f9d8d0"), 0.07, 0.015, 2)
+        fold = clay("#ecd9c6")
+        folds = [tube("env_fold%d" % s, [Vector((s * (w / 2 - 0.06), -h / 2 + 0.06, 0.072)), Vector((s * 0.1, -h * 0.1, 0.072))], 0.012, 6, fold) for s in (-1, 1)]
+        heart = dome("env_heart", heart_outline(0.3), 0.1, glossy(RED), (0.0, -0.01))
+        place(heart, (0.0, -0.17, 0.12))
         edge = kit.prism("env_edge", kit.rounded_rect(2.1, 1.5, 0.08), 0.02, clay(ROSE), -0.0, 0.0)
-        return parts[:2] + [heart, edge]
+        return [body, flap, heart, edge] + folds
     if icon == "birthday":
         white = clay(WHITE)
         plate = lathe("plate", [(0.0, 0.0), (1.05, 0.0), (1.1, 0.05), (1.05, 0.1), (0.0, 0.1)], 48, clay(SKY))
@@ -104,7 +222,8 @@ def build(icon):
         heart.location = (0.0, 0.04, 2.02)
         return [stand(groups + [heart], "flutes_pivot", 0.35)]
     if icon == "valentines":
-        return [puff("heart", heart_outline(1.0), 0.32, clay(RED), 0.12)]
+        # Puffed, like a heart of blown glass: a slab with soft edges is a flat red shape from above.
+        return [dome("heart", heart_outline(1.0, 72), 0.62, glossy(RED), (0.0, -0.05), 14)]
     if icon == "wedding":
         gold = metal(GOLD)
         ring = tube("ring", [Vector((0.62 * math.cos(TAU * i / 64), 0.62 * math.sin(TAU * i / 64) - 0.25, 0.14)) for i in range(65)], 0.115, 16, gold, cap=False)
@@ -132,9 +251,9 @@ def build(icon):
         dots = [place(sphere("bauble%d" % i, 0.08, colours[i % 3], 10, 6), (x, -abs(r_) * 0.9, z)) for i, (x, r_, z) in enumerate(((-0.4, 0.5, 0.62), (0.3, 0.6, 0.78), (-0.1, 0.5, 1.2), (0.28, 0.3, 1.36), (-0.12, 0.3, 1.66)))]
         return [stand(tiers + [trunk, star] + dots, "tree_pivot", 0.5)]
     if icon == "halloween":
-        return [stand(desk.pumpkin("pumpkin", clay(ORANGE), clay(LEAF), 0.95, 7, 0.74, 3), "pumpkin_pivot", 0.95)]
+        return [stand(ribbed_pumpkin("pumpkin", desk.pumpkin_material("pumpkin_mat", ORANGE, RUST), clay("#5f7f3a"), 0.95), "pumpkin_pivot", 0.95)]
     if icon == "thanksgiving":
-        return [parent(desk.maple_leaf("maple", clay(RUST), 1.15, 2), "maple_pivot", Vector((0, 0, 0)), math.radians(-14))]
+        return [parent(veined_leaf("maple", desk.leaf_material("maple_mat", ORANGE, RUST), clay("#9c3f17"), 1.15), "maple_pivot", Vector((0, 0, 0)), math.radians(-14))]
     if icon == "mothers-day":
         petals = []
         for i in range(5):
