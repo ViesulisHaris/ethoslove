@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { getGiftDetail } from "@/lib/gift/dashboard";
+import { getGiftDetail, holidayExtraOf } from "@/lib/gift/dashboard";
 import { GIFTS_BUCKET, isStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { readQrDesign } from "@/lib/qr/compose";
@@ -25,7 +25,8 @@ async function photoFor(data: Partial<GiftData>, id: string): Promise<string | n
 }
 
 /**
- * A6 card, two-up on A4/Letter, print-ready. The code is drawn the way the QR designer left it (its
+ * A6 card, two-up on A4/Letter, print-ready; or, with ?shape=tree-tag on a gift that has it, The Tree
+ * Tag, four to a page. The code is drawn the way the QR designer left it (its
  * choices come in the query string), in colours a phone can scan on the card's paper.
  */
 export default async function PrintCardPage({ params, searchParams }: PageProps<"/[currency]/[locale]/dashboard/gift/[id]/print">) {
@@ -37,10 +38,15 @@ export default async function PrintCardPage({ params, searchParams }: PageProps<
   const data = detail.gift.data as unknown as Partial<GiftData>;
   const url = `${SITE.url}${SITE.giftPath}/${detail.gift.short_id}`;
   const accent = normalHex(data.accentColor, "#d6336c");
-  const design = readQrDesign(await searchParams, accent);
+  const query = await searchParams;
+  const design = readQrDesign(query, accent);
   const photoUrl = design.centre === "photo" ? await photoFor(data, design.photo) : null;
+  // The Tree Tag only for a gift that came with it (lib/lifecycle/holiday-extras.ts); any other
+  // gift asked for it gets the card, without a word.
+  const shape = user && query.shape === "tree-tag" && (await holidayExtraOf(user.id, detail.gift)) === "tree-tag" ? "tree-tag" : "card";
   return (
     <PrintCard
+      shape={shape}
       url={url}
       recipientName={data.recipientName ?? ""}
       senderName={data.senderName ?? ""}
