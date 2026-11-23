@@ -58,6 +58,12 @@ export type EarlyOptions = {
    * into the HTTP cache alongside the app's own scripts instead of after them.
    */
   warm?: string[];
+  /**
+   * The picture the page opens on when nobody's town can be found (the explorer's empty state), as
+   * its <img> describes it. Fetched as soon as the connection's guess comes back empty, rather than
+   * once the app has loaded and drawn it: it is that page's largest picture.
+   */
+  emptyArt?: { srcSet: string; sizes: string };
 };
 
 /**
@@ -109,7 +115,26 @@ export function earlyStart(o: EarlyOptions): void {
       parked[url] = { at: Date.now(), response };
     };
     if (!start) {
-      if (!lookUp) ask("/api/dates/here");
+      if (!lookUp) {
+        ask("/api/dates/here");
+        const art = o.emptyArt;
+        if (art) {
+          // A copy of the answer is read here; the explorer reads the parked one itself.
+          parked["/api/dates/here"].response
+            .then((res) => res.clone().json())
+            .then((json: { place?: unknown }) => {
+              if (json && json.place) return;
+              const link = document.createElement("link");
+              link.rel = "preload";
+              link.as = "image";
+              link.setAttribute("imagesrcset", art.srcSet);
+              link.setAttribute("imagesizes", art.sizes);
+              link.setAttribute("fetchpriority", "high");
+              document.head.appendChild(link);
+            })
+            .catch(() => undefined);
+        }
+      }
     } else {
       const r = (n: number, places: number) => Math.round(n * 10 ** places) / 10 ** places + 0;
       const c = { lat: r(start.lat, 3), lng: r(start.lng, 3) };

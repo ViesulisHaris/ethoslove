@@ -69,6 +69,8 @@ const FADE_OUT = { opacity: 0, transition: { duration: 0.2, ease: QUINT } } as c
 const LIST_OUT = { opacity: 0, transition: { duration: 0.26, ease: QUINT } } as const;
 
 const noop = () => () => undefined;
+/** The empty state's picture's `sizes`, which the page's HTML also fetches it by (lib/dates/early.ts). */
+const EMPTY_HERO_SIZES = heroSizes("(min-width: 1024px) 560px");
 const desktopQuery = "(min-width: 1024px)";
 /** The heading the page's HTML carries before the explorer has loaded (ExplorerSkeleton). */
 const TITLE_ID = "dates-title";
@@ -800,7 +802,7 @@ export function DatesExplorer() {
           </ul>
         </div>
         <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
-          <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={heroSizes("(min-width: 1024px) 560px")} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
+          <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={EMPTY_HERO_SIZES} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
           <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-card px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
         </div>
       </section>
@@ -1313,7 +1315,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
         </h1>
         {/* The server's copy of earlyStart and the browser's are compiled separately and need not match
             to the character; the one that runs is the server's, so hydration isn't to compare them. */}
-        {early ? <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: earlyScript({ key: EARLY_KEY, whereKey: WHERE_KEY, locale, radius: snapSearch({ lat: 0, lng: 0 }, DEFAULT_RADIUS_M).radiusM, headingId: TITLE_ID, titleIn: t.raw("titleIn") as string, warm: [MAPLIBRE_URL, MAPLIBRE_SHARED_URL, MAP_STYLE_URL] }) }} /> : null}
+        {early ? <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: earlyScript({ key: EARLY_KEY, whereKey: WHERE_KEY, locale, radius: snapSearch({ lat: 0, lng: 0 }, DEFAULT_RADIUS_M).radiusM, headingId: TITLE_ID, titleIn: t.raw("titleIn") as string, warm: [MAPLIBRE_URL, MAPLIBRE_SHARED_URL, MAP_STYLE_URL], emptyArt: { srcSet: heroSrcSet(HERO_ART.dates), sizes: EMPTY_HERO_SIZES } }) }} /> : null}
         <div className="mt-5 flex flex-wrap gap-2" aria-hidden="true">
           <div className="h-12 min-w-[230px] flex-1 animate-pulse rounded-full bg-white/70" />
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
