@@ -33,7 +33,7 @@ test.describe("the template gallery", () => {
     await expect(finder).toBeVisible();
     await expect(finder).toHaveAttribute("href", "/gifts/finder");
     const link = await finder.boundingBox();
-    const filters = await page.getByRole("link", { name: "All occasions" }).boundingBox();
+    const filters = await page.locator("main").getByRole("link", { name: "All occasions" }).boundingBox();
     expect(link!.y + link!.height).toBeLessThanOrEqual(filters!.y);
     // The gallery under it is as it was: three shelves, the best sellers first.
     await expect(page.locator("[data-shelf]")).toHaveCount(3);
@@ -43,7 +43,8 @@ test.describe("the template gallery", () => {
     await page.goto("/templates");
     await page.getByRole("button", { name: "Free", exact: true }).click();
     await expect(page.locator("[data-shelf]")).toHaveCount(1);
-    await expect(page.locator("[data-shelf=all] h3")).toHaveText(["The Letter", "Constellations"]);
+    // One list under "Free gifts" (walk-choose-5).
+    await expect(page.locator("[data-shelf=tierFree] h3")).toHaveText(["The Letter", "Constellations"]);
   });
 
   test("an occasion's page keeps its own order, without shelves, in Spanish too", async ({ page }) => {
