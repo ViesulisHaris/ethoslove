@@ -574,7 +574,7 @@ test("the hero says which gift its button makes, each page opens on a gift of it
     if (path.startsWith("/gifts/")) {
       const href = (await page.getByTestId("hero-make").getAttribute("href")) ?? "";
       expect(href, path).toContain(`/create/${poster}?ref=`);
-      await expect(page.getByTestId("hero-make")).toHaveText("Make this gift");
+      await expect(page.getByTestId("hero-make")).toHaveText("Make the one in the phone");
       // The band over the three how-tos has this page's own heading.
       await expect(page.locator("#kind-guide")).not.toHaveText("How to make it land");
     }
@@ -593,7 +593,7 @@ test("the hero says which gift its button makes, each page opens on a gift of it
   await page.goto("/digital-cards");
   // A kind's title stands alone ("With a game in them" named nothing), and the list search engines read names the same five (the deep test of 23 Nov 2026).
   const titles = await page.locator("[data-kinds] [data-card] [data-card-title]").allTextContents();
-  expect(titles).toEqual(["Cards that open like a letter", "Cards built from your photos", "Cards with a game in them", "Cards for a date on the calendar", "Cards for someone far away"]);
+  expect(titles).toEqual(["Letters that write themselves out", "Photo cards and scrapbooks", "Small games that hide your message", "Cards for birthdays, weddings and other big days", "Long-distance cards"]);
   const listed = await page.locator("script[type=\"application/ld+json\"]").evaluateAll((els) =>
     els.flatMap((el) => [JSON.parse(el.textContent ?? "{}")].flatMap((d) => d["@graph"] ?? [d])).filter((n) => n["@type"] === "ItemList").flatMap((n) => n.itemListElement.map((i: { name: string }) => i.name)),
   );
@@ -671,24 +671,13 @@ test("WebKit as an iPhone 13: no sideways scroll, one card to a screen, and a ca
     const thrown: string[] = [];
     page.on("pageerror", (error) => thrown.push(error.message));
     for (const path of ["/gifts/last-minute", "/digital-cards", "/occasions/mothers-day"]) {
-      // An occasion page opens on the live gallery, and in this WebKit a page with the gallery's films on it is never
-      // "loaded" and its fonts never "ready" (/templates, which this build does not touch, is the same): `settle` would
-      // wait for ever. So that page is scrolled through by hand, and its art waited for.
-      if (path.startsWith("/occasions")) {
-        await page.goto(path, { waitUntil: "domcontentloaded" });
-        await page.locator("[data-page-theme] h2").first().waitFor();
-        await page.evaluate(async () => {
-          for (let y = 0; y < document.documentElement.scrollHeight; y += window.innerHeight * 0.7) {
-            window.scrollTo(0, y);
-            await new Promise((r) => setTimeout(r, 60));
-          }
-          window.scrollTo(0, 0);
-          await Promise.all([...document.querySelectorAll<HTMLImageElement>("[data-decor] img")].filter((img) => img.getClientRects().length > 0 && !img.complete).map((img) => new Promise((done) => ((img.onload = img.onerror = done), setTimeout(done, 4000)))));
-        });
-      } else {
-        await page.goto(path, { waitUntil: "load" });
-        await settle(page);
-      }
+      // An occasion page opens on the live gallery. Its cards had their films' WebM addresses in the HTML, and with
+      // them this WebKit never fired "load": the page stayed "interactive" (round 2, T14). A card now gets its film on
+      // the first hover, so every page here loads, the occasion page with no film fetched at all.
+      await page.goto(path, { waitUntil: "load", timeout: 30_000 });
+      expect(await page.evaluate(() => document.readyState), path).toBe("complete");
+      expect(await page.locator("article video[src]").count(), `${path}: gallery films in the HTML`).toBe(0);
+      await settle(page);
       const m = await measure(page);
       expect(m.overflow, path).toBeLessThanOrEqual(0);
       expect(m.overlaps, path).toEqual([]);
@@ -708,10 +697,9 @@ test("WebKit as an iPhone 13: no sideways scroll, one card to a screen, and a ca
     await expect(card.getByTestId("idea-make")).toBeVisible();
     const box = (await card.getByTestId("idea-make").boundingBox())!;
     expect(box.height).toBeGreaterThanOrEqual(44);
-    // The same on an occasion page, under its gallery. In this WebKit that page never reports "load" (see above), and no
-    // picture could be taken of it by the tester (23 Nov 2026): what a finger does there is held here. The quiet link
-    // at the top goes to the ideas, the card showing opens under a tap, and its way into the editor is under a thumb.
-    await page.goto("/occasions/mothers-day", { waitUntil: "domcontentloaded" });
+    // The same on an occasion page, under its gallery. The quiet link at the top goes to the ideas, the card showing
+    // opens under a tap, and its way into the editor is under a thumb.
+    await page.goto("/occasions/mothers-day", { waitUntil: "load" });
     await page.getByTestId("to-ideas").tap();
     const heading = page.locator("#ideas-mothers-day");
     await expect(heading).toBeInViewport({ ratio: 1 });
@@ -867,7 +855,7 @@ test("a page by kind names the price of the gift its button makes, the one that 
     expect(note, kind).toMatch(/^In the phone: .+, [€$£]\d+\.\d{2} once\. Tap it to play\.$/);
     expect(note, kind).toContain(`, ${one} once.`);
     // It is the gift the button opens.
-    const name = ((await page.getByTestId("hero-make").getAttribute("aria-label")) ?? "").replace(/^Make this gift: /, "").trim();
+    const name = ((await page.getByTestId("hero-make").getAttribute("aria-label")) ?? "").replace(/^Make the one in the phone: /, "").trim();
     expect(name, kind).not.toBe("");
     expect(note, kind).toContain(`In the phone: ${name},`);
   }

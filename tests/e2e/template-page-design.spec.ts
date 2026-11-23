@@ -1103,18 +1103,50 @@ test("on the smallest phone every gift's “Make this gift” begins on the firs
   await page.setViewportSize({ width: 320, height: 568 });
   const under: string[] = [];
   const cut: string[] = [];
+  const flicker: string[] = [];
   const pills: string[] = [];
-  for (const path of EVERY_GIFT) {
-    const slug = path.split("/").pop()!;
+  /**
+   * The button's box once it has stopped moving: two reads a quarter second apart that agree. One
+   * read straight after atRest() was a few pixels off now and then in a long run on a busy machine
+   * (The Toast's sits 1px inside the screen at rest, 519–567, and read 523–571 once in the full file
+   * at one worker, never alone: reports, pages N2-1).
+   */
+  const restingBox = async (path: string, slug: string) => {
     // A visit to a Spanish page leaves the language's cookie, and the next English address would be answered in Spanish.
     await page.context().clearCookies();
     await page.goto(path);
     await atRest(page);
-    const hero = page.locator("[data-page-theme] section").first();
     await expect(page.locator("html"), path).toHaveAttribute("lang", path.startsWith("/es/") ? "es" : "en");
-    const button = (await hero.locator(`a[href$="/create/${slug}"]`).boundingBox())!;
-    const top = Math.round(button.y);
-    const foot = Math.round(button.y + button.height);
+    const link = page.locator("[data-page-theme] section").first().locator(`a[href$="/create/${slug}"]`);
+    const read = async () => {
+      const box = (await link.boundingBox())!;
+      return { top: Math.round(box.y), foot: Math.round(box.y + box.height) };
+    };
+    let last = await read();
+    await expect
+      .poll(async () => {
+        await page.waitForTimeout(250);
+        const now = await read();
+        const same = now.top === last.top && now.foot === last.foot;
+        last = now;
+        return same;
+      }, { message: `${path}: “Make this gift” keeps moving`, timeout: 10_000 })
+      .toBe(true);
+    return last;
+  };
+  for (const path of EVERY_GIFT) {
+    const slug = path.split("/").pop()!;
+    const hero = page.locator("[data-page-theme] section").first();
+    let { top, foot } = await restingBox(path, slug);
+    if (top < 568 && foot > 568) {
+      // Cut on this load: counted only if a fresh load of the page, at rest, cuts it too. A page that
+      // is really cut is cut every time; one that sits on the line is logged by name, not counted.
+      const again = await restingBox(path, slug);
+      if (again.foot <= 568) {
+        flicker.push(`${path} ${top}–${foot}, then ${again.top}–${again.foot}`);
+        ({ top, foot } = again);
+      }
+    }
     if (top >= 568) under.push(`${path}: “Make this gift” begins at ${top}`);
     else if (foot > 568) cut.push(`${path} ${top}–${foot}`);
     // The second button is one row in a pill of 48px, in both languages (its Spanish label was two
@@ -1135,6 +1167,7 @@ test("on the smallest phone every gift's “Make this gift” begins on the firs
   // button, which begins 7 to 45px above it: whether that matters on a phone this small is the
   // owner's to say (reports/guides-confirm.md, N2-1). Held here so that it does not become more.
   console.log(`320×568: the first screen's foot cuts “Make this gift” on ${cut.length} of ${EVERY_GIFT.length} pages: ${cut.join("; ")}`);
+  if (flicker.length) console.log(`320×568: on the line, cut on one load and not the next: ${flicker.join("; ")}`);
   expect(cut.length, cut.join("; ")).toBeLessThanOrEqual(24);
 });
 

@@ -25,8 +25,8 @@ const FINDER_BUILT = existsSync(join(process.cwd(), "src/app/[currency]/[locale]
 const TEMPLATES = new Set(readdirSync(join(process.cwd(), "src/templates")).filter((dir) => existsSync(join(process.cwd(), "src/templates", dir, "manifest.ts"))));
 
 const LANGS = [
-  { prefix: "", lang: "en", make: "Make this gift", watch: "Watch it", faq: "Questions people ask", readNext: "Read next" },
-  { prefix: "/es", lang: "es", make: "Crear este regalo", watch: "Verlo", faq: "Preguntas frecuentes", readNext: "Sigue leyendo" },
+  { prefix: "", lang: "en", make: "Make this gift", makeLead: "Make the one in the phone", watch: "Watch it", faq: "Questions people ask", readNext: "Read next" },
+  { prefix: "/es", lang: "es", make: "Crear este regalo", makeLead: "Crear el del móvil", watch: "Verlo", faq: "Preguntas frecuentes", readNext: "Sigue leyendo" },
 ] as const;
 
 /** The six pages by kind: their h1 in each language, and how many ideas each lists. */
@@ -149,12 +149,13 @@ for (const lang of LANGS) {
         await expect(page.locator(`footer a[href="${lang.prefix}/gifts/for-boyfriend"]`).first()).toBeAttached();
         // The hero's one button opens the editor of the gift playing in its phone, with the page's ref. The page lists
         // several gifts, so that gift is named: in the note under the button, and to a screen reader after the button's
-        // own words. In the button itself the name read badly ("Hacer Ramo", "Make Bouquet", the deep test of 23 Nov 2026).
+        // own words. In the button itself the name read badly ("Hacer Ramo", "Make Bouquet", the deep test of 23 Nov 2026), and
+        // "Make this gift" on a page of eight did not say which (round 2, C13): the button points at the phone.
         const heroMake = page.getByTestId("hero-make");
         expect(await heroMake.getAttribute("href")).toMatch(new RegExp(`^${lang.prefix}/create/[a-z-]+\\?ref=gifts-${kind.slug}$`));
-        await expect(heroMake).toHaveText(lang.make);
-        const named = ((await heroMake.getAttribute("aria-label")) ?? "").slice(`${lang.make}: `.length);
-        await expect(heroMake).toHaveAttribute("aria-label", `${lang.make}: ${named}`);
+        await expect(heroMake).toHaveText(lang.makeLead);
+        const named = ((await heroMake.getAttribute("aria-label")) ?? "").slice(`${lang.makeLead}: `.length);
+        await expect(heroMake).toHaveAttribute("aria-label", `${lang.makeLead}: ${named}`);
         expect(named).not.toBe("");
         await expect(page.getByTestId("hero-note")).toContainText(`${named},`);
         // Every idea in full is in the HTML from the start, closed inside its card: one closed row a card.

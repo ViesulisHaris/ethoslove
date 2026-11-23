@@ -361,7 +361,7 @@ describe("the text budget of /digital-cards", () => {
         if (words(kind.title) > CARD_TITLE_WORDS) over.push(`${l} ${kind.template} title`);
         // A title stands alone, and is the kind's name in the page's structured data too: "With a game in them" named
         // nothing, and none of the five names in the ItemList was on the page (the deep test of 23 Nov 2026).
-        if (!/^(cards|tarjetas) /i.test(kind.title)) over.push(`${l} ${kind.template}: its title does not stand alone: ${kind.title}`);
+        if (/^(with|for|open|built|made|con|para|hechas|se) /i.test(kind.title)) over.push(`${l} ${kind.template}: its title does not stand alone: ${kind.title}`);
         if (words(kind.brief) > CARD_LINE_WORDS || words(kind.brief) < CARD_LINE_MIN_WORDS || !ends(kind.brief)) over.push(`${l} ${kind.template} brief (${words(kind.brief)})`);
         if (words(kind.body) > CLOSED_BLOCK_WORDS) over.push(`${l} ${kind.template} body (${words(kind.body)})`);
         // The card's line is cut from the kind in full: no figure of its own, and the same card named.
@@ -384,6 +384,10 @@ describe("the text budget of /digital-cards", () => {
       expect(copy.kinds.items[4].body, l).toMatch(l === "en" ? /until the minute you set, in their time zone/ : /hasta el minuto que elijas, en su zona horaria/);
       expect(copy.band.line, l).toMatch(l === "en" ? /a picture or a clip/ : /una imagen o un clip/);
       for (const row of copy.cost.shown) if (words(copy.cost.rows[row].label) > 4) over.push(`${l} price card: ${copy.cost.rows[row].label}`);
+      // Five titles of one shape ("Cards that…", "Cards with…", "Cards for…" under "The five kinds of card") read as a
+      // template (round 2, C13): no more than two begin with the same word.
+      const firsts = copy.kinds.items.map((kind) => kind.title.split(" ")[0].toLowerCase());
+      for (const first of new Set(firsts)) if (firsts.filter((f) => f === first).length > 2) over.push(`${l} kind titles: ${firsts.filter((f) => f === first).length} begin “${first}”`);
     }
     expect(over).toEqual([]);
   });

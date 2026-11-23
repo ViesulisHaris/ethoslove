@@ -260,10 +260,11 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
             }
           >
             {/* The page lists several gifts: the button opens the one playing in the phone, which the note under it names.
-                The name in the button read badly ("Hacer Ramo", "Make Bouquet", the deep test of 23 Nov 2026), so it is said
-                to a screen reader after the button's own words (WCAG 2.5.3) and shown in the note. */}
-            <Link href={`/create/${lead.slug}?ref=${ref}`} data-testid="hero-make" aria-label={`${t("make")}: ${lead.name[locale]}`} className={HERO_BUTTON}>
-              {t("make")}
+                The name in the button read badly ("Hacer Ramo", "Make Bouquet", the deep test of 23 Nov 2026), and "Make this
+                gift" on a page of eight did not say which (round 2, C13): so the button points at the phone, the note names
+                the gift, and a screen reader hears the name after the button's own words (WCAG 2.5.3). */}
+            <Link href={`/create/${lead.slug}?ref=${ref}`} data-testid="hero-make" aria-label={`${t("makeLead")}: ${lead.name[locale]}`} className={HERO_BUTTON}>
+              {t("makeLead")}
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </SiteHero>

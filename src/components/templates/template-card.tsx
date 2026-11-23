@@ -51,6 +51,12 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
     // A phone fires mouseenter on tap too, and the looping preview then played on, off screen,
     // after the page had scrolled on; the preview is for a pointer resting on a card.
     if (!v || live || !window.matchMedia("(hover: hover)").matches) return;
+    // The film gets its address on the first hover, not in the HTML. With a WebM `src` in the page,
+    // even at preload="none", WebKit held the page's load event forever: an occasion page with nine
+    // cards stayed "interactive" in Playwright's iPhone 13 (growth-build pages T14). A phone never
+    // hovers, so there it is never fetched at all.
+    const src = manifest.thumbnail.webm;
+    if (src && !v.getAttribute("src")) v.src = src;
     v.currentTime = 0;
     v.play().catch(() => {});
   };
@@ -107,7 +113,6 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
             {manifest.thumbnail.webm ? (
               <video
                 ref={videoRef}
-                src={manifest.thumbnail.webm}
                 muted
                 loop
                 playsInline

@@ -464,8 +464,10 @@ describe("/digital-cards", () => {
       expect(copy.kinds.items).toHaveLength(5);
       for (const kind of copy.kinds.items) {
         expect(kind.also.length, kind.title).toBeGreaterThanOrEqual(2);
-        // A title that stands alone: it is also the kind's name in the page's ItemList.
-        expect(kind.title, kind.title).toMatch(locale === "es" ? /^Tarjetas / : /^Cards /);
+        // A title that stands alone: it is also the kind's name in the page's ItemList. It begins on a noun, not on
+        // "With…" or "Open…" (the deep test of 23 Nov 2026), and not every one on "Cards" (round 2, C13: spread-budget.test.ts).
+        expect(kind.title, kind.title).toMatch(/^[A-ZÁÉÍÓÚ]/);
+        expect(kind.title, kind.title).not.toMatch(/^(with|for|open|built|made|con|para|hechas|se) /i);
         expect(words(kind.body), kind.title).toBeGreaterThanOrEqual(45);
         // The card shown is named in the words beside it.
         expect(kind.body, kind.title).toContain(getManifest(kind.template)!.name[locale]);
