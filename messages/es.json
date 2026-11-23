@@ -1348,7 +1348,7 @@
     },
     "error": {
       "title": "No pudimos confirmarlo.",
-      "detail": "Si se te ha cobrado, el desbloqueo aparecerá en unos minutos. Si no, inténtalo de nuevo desde la página de precios."
+      "detail": "Si se te ha cobrado, el desbloqueo aparecerá en unos minutos. Si no, inténtalo de nuevo desde <pricing>la página de precios</pricing>."
     },
     "signin": {
       "title": "Pagado. Ahora inicia sesión.",

@@ -1348,7 +1348,7 @@
     },
     "error": {
       "title": "We couldn't confirm that.",
-      "detail": "If you were charged, your unlock will appear within a few minutes. Otherwise, try again from the pricing page."
+      "detail": "If you were charged, your unlock will appear within a few minutes. Otherwise, try again from <pricing>the pricing page</pricing>."
     },
     "signin": {
       "title": "Paid. Now sign in.",
