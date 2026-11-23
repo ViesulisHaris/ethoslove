@@ -853,6 +853,25 @@ for (const view of [
   });
 }
 
+/**
+ * Taps made by the page itself, at the moments a hand makes them: a click whose `detail` counts the taps, as a finger's
+ * does. (Playwright's own taps, on a test machine busy with other work, landed seconds apart: a double tap was two taps.)
+ * A target that is only now coming (the veil round a note's card) is waited for, a frame at a time.
+ */
+const taps = (page: Page, steps: { target: string; after?: number; detail: number }[]) =>
+  page.evaluate(async (plan) => {
+    for (const step of plan) {
+      if (step.after) await new Promise((done) => setTimeout(done, step.after));
+      let el = document.querySelector(step.target);
+      for (let i = 0; !el && i < 120; i++) {
+        await new Promise((done) => requestAnimationFrame(done));
+        el = document.querySelector(step.target);
+      }
+      el?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, detail: step.detail }));
+    }
+  }, steps);
+const VEIL = "[data-advent-root] [role=dialog] > button";
+
 test("a finger tapping fast: a double tap opens a door and nothing more, and no note is put back before it was seen", async ({ browser }, info) => {
   test.skip(info.project.name !== "mobile-chrome", "a touch screen is set up here");
   test.setTimeout(120_000);
@@ -860,22 +879,18 @@ test("a finger tapping fast: a double tap opens a door and nothing more, and no 
   const page = await context.newPage();
   const w = watch(page);
   const root = await openGift(page, `/demo/${SLUG}`);
-  const centre = async (n: number) => {
-    const box = (await door(root, n).boundingBox())!;
-    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-  };
   // Door 3 holds a note in the English demo. Two taps 140 ms apart: the door opens, and its note stays in its niche.
   await expect(door(root, 3)).toHaveAttribute("data-shut", "");
-  const three = await centre(3);
-  await page.touchscreen.tap(three.x, three.y);
-  await page.waitForTimeout(140);
-  await page.touchscreen.tap(three.x, three.y);
+  await taps(page, [
+    { target: '[data-door="3"]', detail: 1 },
+    { target: '[data-door="3"]', after: 140, detail: 2 },
+  ]);
   await expect(niche(root, 3)).toHaveAttribute("data-holds", "envelope");
   await page.waitForTimeout(400);
   await expect(card(root)).toHaveCount(0);
-  // the next tap is for the next door, and opens it
-  const nineteen = await centre(19);
-  await page.touchscreen.tap(nineteen.x, nineteen.y);
+  // the next tap, a real finger's, is for the next door, and opens it
+  const box = (await door(root, 19).boundingBox())!;
+  await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
   await expect(niche(root, 19)).toHaveAttribute("data-holds", "envelope");
   await expect(niche(root, 3)).toHaveAttribute("data-holds", "envelope");
   await expect(card(root)).toHaveCount(0);
@@ -883,24 +898,24 @@ test("a finger tapping fast: a double tap opens a door and nothing more, and no 
   // Once door 3 has swung, its envelope is a tap away. A tap on the veil the moment the card is out (meant for something
   // else) leaves it out; one after it has arrived puts it back, read.
   await swung(page);
-  await page.touchscreen.tap(three.x, three.y);
-  await expect(card(root)).toBeVisible();
-  await page.waitForTimeout(80);
-  const view = page.viewportSize()!;
-  await page.touchscreen.tap(view.width / 2, view.height - 70);
+  await taps(page, [
+    { target: '[data-door="3"]', detail: 1 },
+    { target: VEIL, detail: 1 },
+  ]);
   await page.waitForTimeout(150);
   await expect(card(root)).toBeVisible();
   await settled(page, root);
+  const view = page.viewportSize()!;
   await page.touchscreen.tap(view.width / 2, view.height - 70);
   await expect(card(root)).toHaveCount(0);
   await expect(niche(root, 3)).toHaveAttribute("data-holds", "tag");
 
   // Two taps on every shut door, as fast as a hand goes: every door opens, and not one note is taken out or put back.
   for (const n of await shut(root).evaluateAll((els) => els.map((el) => Number(el.getAttribute("data-door"))))) {
-    const at = await centre(n);
-    await page.touchscreen.tap(at.x, at.y);
-    await page.waitForTimeout(120);
-    await page.touchscreen.tap(at.x, at.y);
+    await taps(page, [
+      { target: `[data-door="${n}"]`, detail: 1 },
+      { target: `[data-door="${n}"]`, after: 120, detail: 2 },
+    ]);
     await page.waitForTimeout(110);
   }
   await expect(shut(root)).toHaveCount(0);
