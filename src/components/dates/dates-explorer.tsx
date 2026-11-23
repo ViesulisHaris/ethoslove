@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
-import { addDays, formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
+import { addDays, formatDay, fromYmd, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES, starterName } from "@/lib/dates/cities";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
@@ -454,6 +454,9 @@ export function DatesExplorer() {
   // day, and choosing another in the planner moves them with it (the weather card used to say
   // Saturday over a planner that said tonight).
   const tonightWhen: TonightWhen = date === placeToday ? "tonight" : date === addDays(placeToday, 1) ? "tomorrow" : "day";
+  // The page's day as the sentence says it: "on Sat" within the week, as short as "tonight", so the
+  // sentence keeps the height the page kept for it ("on Saturday" wrapped it to a third line on a phone).
+  const plannerDay = date > placeToday && date <= addDays(placeToday, 6) ? (fromYmd(date)?.toLocaleDateString(locale === "es" ? "es-ES" : "en-GB", { weekday: "short" }).replace(/\.$/, "") ?? date) : formatDay(date, locale, "short");
   const chooseWhen = (when: TonightWhen) => {
     const nowToday = placeNow(forecast, Date.now()).date;
     if (when !== "day") setDate(when === "tonight" ? nowToday : addDays(nowToday, 1));
@@ -943,7 +946,7 @@ export function DatesExplorer() {
                 whens={[
                   { value: "tonight", label: t("tonight.when.tonight") },
                   { value: "tomorrow", label: t("tonight.when.tomorrow") },
-                  ...(pageDayIsOther ? [{ value: "day" as const, label: t("tonight.when.day", { day: formatDay(date, locale, "short") }) }] : []),
+                  ...(pageDayIsOther ? [{ value: "day" as const, label: t("tonight.when.day", { day: plannerDay }) }] : []),
                 ]}
                 busy={tonight.busy}
                 waiting={all.length === 0 ? t("tonight.finding") : undefined}

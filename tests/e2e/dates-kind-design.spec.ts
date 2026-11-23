@@ -101,6 +101,22 @@ test("D3 on a phone the cards are one row, one to a screen, with dots; on a desk
   expect(tops[2]).toBe(tops[0]);
   expect(tops[3]).toBeGreaterThan(tops[0]);
   await expect(page.locator("[data-dots]").first()).toBeHidden();
+
+  // Four cards in rows of three left one alone: the cheap page's two fours are two by two.
+  await page.goto("/dates/ideas/cheap");
+  for (const id of ["#ideas-cheap-free", "#ideas-cheap-paid"]) {
+    const rows = await page.locator(`${id} [data-card]`).evaluateAll((cards) => cards.map((c) => Math.round(c.getBoundingClientRect().top)));
+    expect(rows, id).toHaveLength(4);
+    expect(rows[1], id).toBe(rows[0]);
+    expect(rows[2], id).toBeGreaterThan(rows[0]);
+    expect(rows[3], id).toBe(rows[2]);
+  }
+  // The kinds row: the gap after a short word is the gap after a long one.
+  const gaps = await page.locator("nav[aria-label] ul li a[href*='/dates/ideas/']").evaluateAll((links) =>
+    links.slice(0, -1).map((a, i) => Math.round(links[i + 1].getBoundingClientRect().left - a.getBoundingClientRect().right)).filter((g) => g > 0),
+  );
+  expect(gaps.length).toBeGreaterThan(2);
+  expect(Math.max(...gaps) - Math.min(...gaps)).toBeLessThanOrEqual(2);
 });
 
 test("D4 the page is whole, and the same height, when no picture arrives", async ({ page }) => {

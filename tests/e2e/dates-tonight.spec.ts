@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { catchShares, LISBON, lisbonUrl, mockWorld, ymd } from "./dates-world";
+import { catchShares, LISBON, lisbonUrl, mockWorld, startingDay, ymd } from "./dates-world";
 
 /**
  * "Plan our date tonight" in one step (components/dates/tonight): on the dates map, on a city's
@@ -25,8 +25,11 @@ async function pinClock(page: Page, time = at(17, 10)) {
 const planButton = (page: Page, name = "Plan it") => page.locator("[data-tonight], #tonight").getByRole("button", { name, exact: true });
 const result = (page: Page) => page.locator("[data-tonight-result]");
 
-/** On /dates the ideas re-sort as the places and then the rare find arrive: wait for both. */
-async function openLisbon(page: Page, url = lisbonUrl) {
+/**
+ * On /dates the ideas re-sort as the places and then the rare find arrive: wait for both. The map
+ * is opened on today, so its planner says "tonight" (the planner follows the map's day).
+ */
+async function openLisbon(page: Page, url = `${lisbonUrl}&date=${today()}`) {
   await page.goto(url);
   await expect(page.getByRole("button", { name: /^Livraria do Bairro/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
@@ -107,7 +110,7 @@ test.describe("plan our date tonight", () => {
     await planButton(page).click();
     // Lisbon's world has a viewpoint and no planetarium: on a wet night the stars are not offered at all.
     await expect(result(page).getByRole("heading", { name: "Bowling, bumpers optional" })).toBeVisible();
-    const said = "Nothing free fits a rainy day here. Expect to spend about what dinner out costs.";
+    const said = "Nothing free fits a rainy night here. Expect to spend about what dinner out costs.";
     await expect(result(page)).toContainText(said);
     await expect(result(page)).not.toContainText("Look up");
     // Changing the form afterwards does not rewrite what the card says it was asked.
@@ -161,14 +164,14 @@ test.describe("plan our date tonight", () => {
   test("E5 in Spanish, all of it", async ({ page }) => {
     await mockWorld(page, { wet: true });
     await pinClock(page);
-    await openLisbon(page, `/es/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisboa`);
+    await openLisbon(page, `/es/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisboa&date=${today()}`);
     expect(await sentence(page)).toBe("Planead una cita de cualquier tipo esta noche. Cualquier duración, con cualquier presupuesto.");
     await expect(planButton(page, "Planeadla")).toBeVisible();
     await page.getByRole("combobox", { name: "Presupuesto" }).selectOption("0");
     await planButton(page, "Planeadla").click();
     await expect(result(page).getByRole("button", { name: "Abrir el plan" })).toBeVisible();
     await expect(result(page).getByRole("button", { name: "Otra" })).toBeVisible();
-    await expect(result(page)).toContainText("Con lluvia no hay nada gratis para ese día; esta cuesta lo que una cena fuera.");
+    await expect(result(page)).toContainText("Con lluvia no hay nada gratis para esta noche; esta cuesta lo que una cena fuera.");
   });
 
   test("E6 by keyboard alone", async ({ page, isMobile }) => {
@@ -311,7 +314,7 @@ test.describe("plan our date tonight", () => {
       const page = await on.newPage();
       await mockWorld(page);
       await pinClock(page);
-      await openLisbon(page);
+      await openLisbon(page, lisbonUrl);
       await expect(page.locator("[data-tonight]")).toBeVisible();
       const y1 = await page.getByRole("heading", { name: "Ideas for that day" }).evaluate((h) => h.getBoundingClientRect().top + window.scrollY);
       await on.close();
@@ -326,14 +329,105 @@ test.describe("plan our date tonight", () => {
     const band = page.locator("#tonight");
     const waiting = band.getByRole("button", { name: "Say where first" });
     await expect(waiting).toBeVisible();
-    // It says why it waits and stays reachable (aria-disabled, not disabled): pressed, it does nothing.
-    await waiting.click({ force: true });
+    // It says what to do, in full colour, and pressed it takes them to the where box.
+    await expect(waiting).not.toHaveAttribute("aria-disabled", "true");
+    await waiting.click();
     await expect(result(page)).toHaveCount(0);
+    await expect(band.getByRole("combobox", { name: "Where" })).toBeFocused();
     await expect(band.getByRole("combobox", { name: "Mood" })).toHaveCount(0);
     await page.evaluate(() => window.localStorage.setItem("ethos.dates.where.v1", JSON.stringify({ lat: 38.714, lng: -9.139, name: "Lisbon", share: true })));
     await page.reload();
     await expect(band.getByRole("combobox", { name: "Where" })).toHaveValue("Lisbon");
     await planButton(page).click();
     await expect(result(page).getByRole("heading")).toHaveText("Bowling, bumpers optional");
+  });
+  test("E13 a page by kind keeps to its kind: tonight with none of its ideas doable says so and offers tomorrow", async ({ page }) => {
+    await mockWorld(page);
+    // The rare finds' servers are busy: no bowling alley tonight.
+    await page.route("**/api/dates/rare*", (route) => route.fulfill({ status: 503, json: { unavailable: true } }));
+    await pinClock(page);
+    await page.addInitScript(() => window.localStorage.setItem("ethos.dates.where.v1", JSON.stringify({ lat: 38.714, lng: -9.139, name: "Lisbon", share: true })));
+    await page.goto("/dates/ideas/first-date");
+    const band = page.locator("#tonight");
+    await expect(band.getByRole("combobox", { name: "Where" })).toHaveValue("Lisbon");
+    await planButton(page).click();
+    await expect(band).toContainText("Nothing on this page can still be done tonight there.");
+    await expect(result(page)).toHaveCount(0);
+    await band.getByRole("button", { name: "Plan tomorrow" }).click();
+    // Tomorrow every pick, round to the first again, is one of the page's own ideas.
+    const titles = await page.locator("[data-cards] [data-card-title]").allTextContents();
+    expect(titles.length).toBeGreaterThanOrEqual(8);
+    const seen: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      const heading = ((await result(page).getByRole("heading").textContent()) ?? "").trim();
+      expect(titles.map((x) => x.trim()), heading).toContain(heading);
+      await expect(result(page)).not.toContainText("None of the ideas on this page");
+      if (seen.includes(heading)) break;
+      seen.push(heading);
+      if ((await result(page).getByRole("button", { name: "Another" }).count()) === 0) break;
+      await result(page).getByRole("button", { name: "Another" }).click();
+      await expect(result(page).getByRole("heading")).not.toHaveText(heading);
+    }
+    expect(seen.length).toBeGreaterThan(1);
+  });
+
+  test("E14 Back from the plan, and a reload, show the town and the plan again", async ({ page }) => {
+    await mockWorld(page);
+    await pinClock(page);
+    await page.route("**/api/places*", (route) => route.fulfill({ json: { results: [{ name: "Lisbon", kind: "city", lat: 38.714, lng: -9.139, country: "Portugal" }] } }));
+    await page.goto("/dates/ideas/fun");
+    const band = page.locator("#tonight");
+    const where = band.getByRole("combobox", { name: "Where" });
+    await where.fill("Lisbon");
+    await where.press("Enter");
+    await expect(where).toHaveValue("Lisbon");
+    await planButton(page).click();
+    const heading = (await result(page).getByRole("heading").textContent()) ?? "";
+    expect(heading).not.toBe("");
+    await result(page).getByRole("button", { name: "Open the plan" }).click();
+    await expect(page).toHaveURL(/\/plan$/, PLAN_COMPILES);
+    await page.goBack();
+    await expect(where).toHaveValue("Lisbon");
+    await expect(result(page).getByRole("heading")).toHaveText(heading);
+    // Shown again, it takes no focus.
+    await expect(result(page).getByRole("heading")).not.toBeFocused();
+    await page.reload();
+    await expect(where).toHaveValue("Lisbon");
+    await expect(result(page).getByRole("heading")).toHaveText(heading);
+  });
+
+  test("E15 on a phone a new plan is brought on screen", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await mockWorld(page);
+    await pinClock(page);
+    await page.goto("/dates/london");
+    await page.locator("#tonight").scrollIntoViewIfNeeded();
+    await planButton(page).click();
+    const heading = result(page).getByRole("heading");
+    await expect(heading).toBeVisible();
+    await expect(heading).toBeInViewport({ ratio: 1 });
+    await expect(result(page).locator("li").first()).toBeInViewport();
+  });
+
+  test("E16 on /dates the planner speaks of the map's day, and choosing tonight moves the map to today", async ({ page }) => {
+    await mockWorld(page);
+    await pinClock(page);
+    await openLisbon(page, lisbonUrl);
+    const first = ymd(startingDay());
+    const said = await sentence(page);
+    if (first === today()) expect(said).toContain("tonight");
+    else expect(said).not.toContain("tonight");
+    await expect.poll(() => new URL(page.url()).searchParams.get("date")).toBe(first);
+    await page.locator("[data-tonight]").getByRole("combobox", { name: "When" }).selectOption("tonight");
+    await expect.poll(() => new URL(page.url()).searchParams.get("date")).toBe(today());
+    expect(await sentence(page)).toContain("tonight");
+  });
+
+  test("E17 an idea's 'Plan it near you' is named on the where screen", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto("/dates?idea=gallery-hop");
+    await expect(page.getByText("Say where you two are, and “Gallery hop” is planned with real places there.")).toBeVisible();
+    await page.goto("/es/dates?idea=gallery-hop");
+    await expect(page.getByText("Decid dónde estáis y planeamos «Ruta de galerías» con sitios reales de allí.")).toBeVisible();
   });
 });
