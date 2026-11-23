@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { VIRTUAL_DATES } from "@/lib/dates/virtual";
 import { LDR_GAMES } from "@/lib/ldr/games";
@@ -66,6 +67,10 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
             <div className="mt-6">
               <MeetInTheMiddle ways={waysData(lang)} />
             </div>
+            <Link href={HALFWAY_TOOL_PATH} data-testid="ldr-tool" className="group mt-4 inline-flex min-h-11 items-center gap-1.5 text-[14.5px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+              {t("meet.tool")}
+              <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </div>
       </section>
