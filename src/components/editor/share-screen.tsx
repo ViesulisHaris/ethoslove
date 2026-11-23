@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Car, Check, Copy, ExternalLink, MessageCircle, Plane, Share2, Star, Ticket } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -18,12 +19,31 @@ import { QrDesigner } from "./qr-designer";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
 
-export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null }) {
+// Two more gifts: loaded after the link is on screen, in the browser only, so none of it weighs on the editor.
+const TwoMoreGifts = dynamic(() => import("./two-more-gifts").then((m) => m.TwoMoreGifts), { ssr: false });
+
+export function ShareScreen({
+  shortId,
+  status,
+  unlockAt,
+  data,
+  giftId,
+  usedGift = false,
+}: {
+  shortId: string;
+  status: "live" | "scheduled";
+  unlockAt?: string;
+  data: GiftData;
+  giftId: string | null;
+  /** This gift went out on a gift ready (two more gifts): the card under the link says so. */
+  usedGift?: boolean;
+}) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
   // Publishing needs an account, so this is always true here; the reminder is saved to it.
   const authed = useEditor((s) => s.authed);
   const [copied, setCopied] = useState(false);
+  const [etsy] = useEtsyMode();
   const origin = typeof window !== "undefined" ? window.location.origin : SITE.url;
   const url = `${origin}${SITE.giftPath}/${shortId}`;
   const text = t("shareText", { url });
@@ -81,6 +101,13 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <p className="mt-2 text-xs text-muted-foreground">
         {t("instagram")}: {t("instagramHint")}
       </p>
+
+      {/* Under the link, never in its way; not for an Etsy buyer, nor inside the iPhone app (the App Store sells there). */}
+      {authed && !etsy ? (
+        <div data-app-hide>
+          <TwoMoreGifts data={data} usedGift={usedGift} />
+        </div>
+      ) : null}
 
       <EtsyReview template={data.templateSlug} />
 
