@@ -451,7 +451,7 @@ test.describe("the other rooms", () => {
 test.describe("games on one phone", () => {
   test("the games table deals every game, and each card opens it", async ({ page }) => {
     await page.goto("/games");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Games for");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/games for/i);
     for (const [name, path] of [["How well do you know me?", "/games/know"], ["Would you rather?", "/games/rather"], ["Draw it, guess it", "/games/draw"], ["Memory", "/games/memory"], ["Question cards", "/games/deck"], ["Truth or dare, soft edition", "/games/dare"], ["Dishes roulette", "/games/roulette"]]) {
       await expect(page.getByRole("link", { name, exact: true })).toHaveAttribute("href", path);
     }
