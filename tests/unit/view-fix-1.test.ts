@@ -11,7 +11,7 @@ const words = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
 
 describe("choose-7: the English site copy is American, as “mom” is", () => {
   // The four words the walk met: "Mums keep everything" under "Digital gifts for Mom", "Her favourite flowers", "colours", "cosy".
-  const british = (text: string) => /\b(mums?|favourites?|colours?|cosy)\b/i.test(text);
+  const british = (text: string) => /\b(mums?|favourites?|colours?|watercolours?|cosy)\b/i.test(text);
 
   /** Every string value of a messages file, with where it is. */
   function values(node: unknown, at = ""): [string, string][] {
