@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -42,23 +41,20 @@ export function StickyCta() {
   const asking = isConfigured.cookieConsent && consent === null;
   const visible = scrolled && wanted && !asking && !atFooter;
 
+  // Always there on the two pages that want it, slid away while it isn't wanted (globals.css,
+  // .sticky-cta): a CSS transition, so the motion library is not loaded on every page for it.
+  if (!wanted) return null;
   return (
-    <AnimatePresence>
-      {visible ? (
-        <motion.div
-          initial={{ y: 80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 80, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 380, damping: 32, mass: 0.8 }}
-          // The strip is full width but the button isn't: taps beside it go to the page underneath.
-          data-app-hide
-          className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-5 pb-[max(1rem,env(safe-area-inset-bottom))] md:hidden"
-        >
-          <Button asChild size="lg" className="pointer-events-auto h-12 w-full max-w-sm rounded-full text-base shadow-lift">
-            <Link href="/templates">{t("createGiftFree")}</Link>
-          </Button>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+    <div
+      // The strip is full width but the button isn't: taps beside it go to the page underneath.
+      data-app-hide
+      data-on={visible ? "" : undefined}
+      inert={!visible}
+      className="sticky-cta pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-5 pb-[max(1rem,env(safe-area-inset-bottom))] md:hidden"
+    >
+      <Button asChild size="lg" className="pointer-events-auto h-12 w-full max-w-sm rounded-full text-base shadow-lift">
+        <Link href="/templates">{t("createGiftFree")}</Link>
+      </Button>
+    </div>
   );
 }

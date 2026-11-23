@@ -48,6 +48,13 @@ export function setConsent(value: Consent): void {
   window.dispatchEvent(new CustomEvent(EVENT, { detail: value }));
 }
 
+/**
+ * Runs in the page's HTML before the consent strip is parsed: a visitor who has answered already is
+ * marked on <html>, and the strip, which the server always sends, is never drawn for them
+ * (globals.css, [data-consent-answered]). The same test as read() above, as source text.
+ */
+export const CONSENT_ANSWERED_SCRIPT = `try{var s=window.localStorage,v=s.getItem(${JSON.stringify(CONSENT_KEY)});if(v==="granted"||v==="denied"||s.getItem(${JSON.stringify(LEGACY_CONSENT_KEY)})==="denied")document.documentElement.setAttribute("data-consent-answered","")}catch(e){}`;
+
 /** For `useSyncExternalStore`: same tab via our event, other tabs via `storage`. */
 export function subscribeToConsent(onChange: () => void): () => void {
   const local = () => onChange();

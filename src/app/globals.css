@@ -1492,6 +1492,56 @@ body:has([data-page-theme]) .site-header .btn-rose {
   }
 }
 
+/* The cookie strip (shared/cookie-consent.tsx): in the page's HTML, drawn with the page and slid up */
+/* from under the screen's foot; slid back down when answered. Transform only: it is never faded,   */
+/* so it is never drawn half-there. Never drawn at all for a visitor who answered before.         */
+@keyframes consent-in {
+  from {
+    translate: 0 calc(100% + 2rem);
+  }
+}
+@keyframes consent-out {
+  to {
+    translate: 0 calc(100% + 2rem);
+  }
+}
+.consent-strip {
+  animation: consent-in 0.6s var(--ease-out-quint) both;
+}
+.consent-strip[data-leaving] {
+  animation: consent-out 0.26s var(--ease-in-out-quart) both;
+}
+[data-consent-answered] [data-consent-strip] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .consent-strip,
+  .consent-strip[data-leaving] {
+    animation: none;
+  }
+}
+
+/* The phone's "Make a gift" bar (marketing/sticky-cta.tsx): slides up once the hero has scrolled away. */
+.sticky-cta {
+  transition:
+    translate 0.45s var(--ease-out-quint),
+    opacity 0.3s var(--ease-out-quint);
+}
+.sticky-cta:not([data-on]) {
+  translate: 0 80px;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    translate 0.3s var(--ease-out-quint),
+    opacity 0.2s var(--ease-out-quint),
+    visibility 0s 0.3s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sticky-cta {
+    transition: none;
+  }
+}
+
 /* A place card arriving in the Dates list: a short rise and fade, staggered by its place in the
    list. Keyed cards that survive a re-sort or a filter keep their element and don't replay it. */
 @keyframes place-card-in {

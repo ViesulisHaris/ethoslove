@@ -8,7 +8,8 @@ import { CLIENT_NAMESPACES } from "@/i18n/client-namespaces";
 import { pickMessages } from "@/i18n/messages-subset";
 import { SITE } from "@/config/site";
 import { ogImageUrl } from "@/lib/seo";
-import { env } from "@/lib/env";
+import { env, isConfigured } from "@/lib/env";
+import { CONSENT_ANSWERED_SCRIPT } from "@/lib/analytics/consent";
 import { CHARGED_CURRENCIES } from "@/lib/pricing/products";
 import { Providers } from "@/components/shared/providers";
 import { RefCapture } from "@/components/shared/ref-capture";
@@ -181,6 +182,8 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[cu
       className={`${sans.variable} ${sansItalic.variable} ${fraunces.variable} ${display.variable} ${mono.variable} ${caveat.variable} ${coverScript.variable} ${typewriter.variable} ${poster.variable} ${script.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
+        {/* First, so a visitor who has answered the cookie question never sees the strip drawn (cookie-consent.tsx). */}
+        {isConfigured.cookieConsent ? <script dangerouslySetInnerHTML={{ __html: CONSENT_ANSWERED_SCRIPT }} /> : null}
         <RefCapture />
         <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>
