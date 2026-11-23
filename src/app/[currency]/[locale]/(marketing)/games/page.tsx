@@ -25,6 +25,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
   const titles = Object.fromEntries(GAMES.map((g) => [g.key, t(`${g.key}.title`)])) as Record<GameKey, string>;
   const lang = locale === "es" ? "es" : "en";
   const list = new Intl.ListFormat(lang, { type: "conjunction" });
+  const price = formatAmount(PRODUCTS.pack.amounts[chargedCurrency(shown)], chargedCurrency(shown), locale);
 
   return (
     <GameTable>
@@ -120,13 +121,34 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
         </ul>
       </section>
 
+      {/* The three tiers, once, and only here: what is free, what a pack is, what Ethos for Two adds. Quiet, on the table's own colours. */}
+      <section aria-labelledby="tiers" data-app-hide className="container-x pb-16">
+        <h2 id="tiers" className="text-[12px] font-medium tracking-[0.22em] text-blush uppercase">
+          {t("hub.tiers.label")}
+        </h2>
+        <ul data-tiers className="mt-4 grid divide-y divide-white/10 rounded-[24px] bg-white/[0.05] ring-1 ring-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {(["free", "pack", "two"] as const).map((tier) => (
+            <li key={tier} className="px-5 py-5 sm:px-7 sm:py-6">
+              <p className="font-display text-[21px] leading-tight text-cream">{t(`hub.tiers.${tier}.title`, { price })}</p>
+              <p className="mt-1.5 text-[14.5px] leading-relaxed text-cream/65">{t(`hub.tiers.${tier}.line`)}</p>
+              {tier === "two" ? (
+                <Link href="/pricing#for-two" className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-tint">
+                  {t("hub.tiers.cta")}
+                  <ArrowRight aria-hidden="true" className="size-4" />
+                </Link>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {/* The packs, told about here and sold where they're played: every one deals into the question
           cards, whose shelf this links to. The free games above stay the whole of the page's promise. */}
       <section id="packs" className="container-x scroll-mt-28 pb-24">
         <h2 data-reveal className="display-lg text-cream">
           {tp("hub.title")}
         </h2>
-        <p className="mt-2 max-w-xl text-[15.5px] text-cream/60">{tp("hub.sub", { price: formatAmount(PRODUCTS.pack.amounts[chargedCurrency(shown)], chargedCurrency(shown), locale) })}</p>
+        <p className="mt-2 max-w-xl text-[15.5px] text-cream/60">{tp("hub.sub", { price })}</p>
         <ul className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-6" data-tour="packs">
           {PACK_IDS.map((id, i) => {
             const pack = PACKS[id];

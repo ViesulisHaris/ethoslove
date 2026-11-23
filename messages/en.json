@@ -2697,7 +2697,23 @@
       "todayTitle": "Today's question",
       "todayBlurb": "One would you rather a day, the same for everyone. Answer it, send it, compare.",
       "todayPhones": "Two phones, one link",
-      "todayCta": "Answer today's"
+      "todayCta": "Answer today's",
+      "tiers": {
+        "label": "What costs what",
+        "free": {
+          "title": "Free",
+          "line": "Every game here, whole. No account, no app."
+        },
+        "pack": {
+          "title": "A pack, {price}",
+          "line": "More cards for one game, yours for good."
+        },
+        "two": {
+          "title": "Ethos for Two",
+          "line": "Every pack and every gift template, for both of you."
+        },
+        "cta": "See Ethos for Two"
+      }
     },
     "memory": {
       "title": "Memory",

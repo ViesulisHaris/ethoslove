@@ -2697,7 +2697,23 @@
       "todayTitle": "La pregunta de hoy",
       "todayBlurb": "Un ¿qué prefieres? al día, el mismo para todo el mundo. Respóndelo, envíalo y comparad.",
       "todayPhones": "Dos móviles, un enlace",
-      "todayCta": "Responder la de hoy"
+      "todayCta": "Responder la de hoy",
+      "tiers": {
+        "label": "Qué cuesta qué",
+        "free": {
+          "title": "Gratis",
+          "line": "Todos los juegos, enteros. Sin cuenta ni app."
+        },
+        "pack": {
+          "title": "Un pack, {price}",
+          "line": "Más cartas para un juego, tuyas para siempre."
+        },
+        "two": {
+          "title": "Ethos for Two",
+          "line": "Todos los packs y todas las plantillas de regalo, para los dos."
+        },
+        "cta": "Ver Ethos for Two"
+      }
     },
     "memory": {
       "title": "Memory",
