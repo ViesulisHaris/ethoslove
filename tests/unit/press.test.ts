@@ -1,7 +1,12 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
-import { PRESS_COUNTS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
+import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
+
+const ROOT = path.join(__dirname, "../..");
+const read = (file: string) => fs.readFileSync(path.join(ROOT, file), "utf8");
 
 /** The sample with some keys changed: a whole snapshot to break one thing at a time. */
 const whole = (over: Partial<PressNumbers> = {}): PressNumbers => ({ ...PRESS_SAMPLE, ...over });
@@ -101,5 +106,30 @@ describe("press figures: how they are written", () => {
       { slug: "scratch-card", share: "6%" },
       { slug: "constellations", share: "5%" },
     ]);
+  });
+});
+
+describe("press query", () => {
+  /** The query with its -- comments taken out (none of them is inside a string). */
+  const sql = () => read("scripts/press-numbers.sql").replace(/--[^\n]*/g, "");
+
+  it("Q1 the query is one read-only statement", () => {
+    const body = sql().trim();
+    expect(body.toLowerCase().startsWith("with")).toBe(true);
+    expect(body.split(";").length - 1).toBe(1);
+    expect(body.endsWith(";")).toBe(true);
+    expect(body).not.toMatch(/\b(insert|update|delete|create|alter|drop|truncate|grant|revoke|call|copy|do|set|execute|merge|into|begin|commit)\b/i);
+    expect(body).not.toMatch(/public\.\w+\(/);
+    const addresses = [...new Set(read("scripts/press-numbers.sql").match(/[\w.+-]+@[\w-]+\.[\w.]+/g) ?? [])].sort();
+    expect(addresses).toEqual(["owner@example.com", "second@example.com"]);
+  });
+
+  it("Q2 the query returns every count the snapshot holds, by the snapshot's own names", () => {
+    const text = read("scripts/press-numbers.sql");
+    for (const key of ["asOf", ...PRESS_COUNTS, "topTemplates", "reminders", "slug", "made", "total", ...REMINDER_OCCASIONS]) expect(text, key).toContain(`'${key}'`);
+    const allowed = new Set<string>(["asOf", ...PRESS_COUNTS, "topTemplates", "reminders", "slug", "made", "total", ...REMINDER_OCCASIONS, "teamAccounts"]);
+    const values = new Set(["ios", "android", "utc", "birthday", "anniversary", "valentines", "YYYY"]);
+    const keys = [...sql().matchAll(/'(\w+)',/g)].map((m) => m[1]!).filter((k) => !values.has(k) || allowed.has(k));
+    for (const key of keys) expect(allowed.has(key), key).toBe(true);
   });
 });
