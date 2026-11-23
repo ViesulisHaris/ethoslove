@@ -1,6 +1,6 @@
 import type { Ymd } from "./calendar";
-import { fitsKind, type DateKind } from "./date-kinds";
-import { IDEAS, isDoable, type DateIdea, type Vibe } from "./ideas";
+import { fitsKind, KIND_MAX_BUDGET, type DateKind } from "./date-kinds";
+import { canBeFree, forTheDay, IDEAS, isDoable, type DateIdea, type Vibe } from "./ideas";
 import { stopOf, type Plan } from "./plan";
 import type { Place } from "./places";
 import { suggestTimes } from "./timing";
@@ -64,6 +64,16 @@ export function tonightStart(nowMin: number): number {
   return Math.max(TONIGHT_FROM_MIN, Math.ceil((nowMin + 30) / 15) * 15);
 }
 
+/**
+ * The minute before which nothing can start, for the day being planned. "Tonight" is the evening:
+ * half an hour from now and never before five. Any other choice that lands on today ("this
+ * weekend" on a Saturday) is the rest of the day, from half an hour from now. Another day is open.
+ */
+export function startFor(tonight: boolean, date: Ymd, now: { date: Ymd; minutes: number }): number | undefined {
+  if (tonight) return tonightStart(now.minutes);
+  return date === now.date ? Math.ceil((now.minutes + 30) / 15) * 15 : undefined;
+}
+
 /** Today's date and the minute of the day at the place: its forecast knows its clock; without one, the browser's. */
 export function placeNow(forecast: Pick<Forecast, "utcOffsetSeconds"> | null | undefined, nowMs: number): { date: Ymd; minutes: number } {
   if (forecast) {
@@ -85,9 +95,11 @@ export function tonightShift(idea: DateIdea, day: DayWeather | undefined, startM
   const natural = minutesOf(suggestTimes(idea, day)[0]) ?? 0;
   if (startMin === undefined || startMin <= natural) return 0;
   if (idea.moment === "sunset" || idea.moment === "morning") return null;
-  const latest = LATEST[idea.moment];
-  if (latest === undefined || startMin > latest) return null;
   const sunset = day ? minutesOf(day.sunset) : null;
+  // An idea's own evening window counts only when its light can be checked, if it needs light.
+  const own = idea.latestStart && (!idea.needsDry || sunset !== null) ? minutesOf(idea.latestStart) : null;
+  const latest = own ?? LATEST[idea.moment];
+  if (latest === undefined || startMin > latest) return null;
   if (idea.moment === "day" && idea.needsDry && sunset !== null && startMin + idea.minutes > sunset) return null;
   return startMin - natural;
 }
@@ -101,7 +113,7 @@ export function tonightTimes(idea: DateIdea, day: DayWeather | undefined, shift:
 
 /**
  * Every idea that can be done there that day from that hour, best first. The weather, the hour and
- * what is nearby are never given up; the wishes are, one at a time and the lightest first: the
+ * what is nearby are never given up, nor a kind's own ceiling on cost (KIND_MAX_BUDGET); the wishes are, one at a time and the lightest first: the
  * length, then the budget a step at a time, then the mood, and the page's kind only when none of its
  * ideas can be done at all. Each pick says which wishes it gave up. An empty list is an answer.
  */
@@ -110,8 +122,12 @@ export function rankTonight(wish: TonightWish, context: TonightContext): Tonight
   const wet = day ? isWet(day) : false;
   const ideas = context.ideas ?? IDEAS;
   const ranked: { pick: TonightPick; weight: number; score: number; index: number }[] = [];
-  ideas.forEach((idea, index) => {
+  const kindMax = wish.kind ? KIND_MAX_BUDGET[wish.kind] : undefined;
+  ideas.forEach((written, index) => {
+    // On a wet day an idea with rain stops is planned with them (the stars under a dome).
+    const idea = forTheDay(written, day);
     if ((wet && idea.needsDry) || !isDoable(idea, places)) return;
+    if (kindMax !== undefined && idea.budget > Math.max(kindMax, wish.budget ?? kindMax)) return;
     const shift = tonightShift(idea, day, wish.startMin);
     if (shift === null) return;
     const relaxed: Relaxed[] = [];
@@ -120,9 +136,11 @@ export function rankTonight(wish: TonightWish, context: TonightContext): Tonight
       relaxed.push("length");
       weight += 1;
     }
-    if (wish.budget !== undefined && idea.budget > wish.budget) {
+    // "Free" takes the ideas that can be done for nothing, bringing your own (the result says how).
+    const cost = wish.budget === 0 && canBeFree(idea) ? 0 : idea.budget;
+    if (wish.budget !== undefined && cost > wish.budget) {
       relaxed.push("budget");
-      weight += 2 * (idea.budget - wish.budget);
+      weight += 2 * (cost - wish.budget);
     }
     if (wish.vibe && !idea.vibes.includes(wish.vibe)) {
       relaxed.push("vibe");

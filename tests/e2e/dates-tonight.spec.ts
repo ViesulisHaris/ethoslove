@@ -98,14 +98,41 @@ test.describe("plan our date tonight", () => {
     expect(stored).toMatchObject({ idea: "pasta-and-a-slow-walk", date: today() });
   });
 
-  test("E3 a wish nothing fits gives way, and the page says which", async ({ page }) => {
+  test("E3 a wish nothing fits gives way, and the page says which, in the words of the wish it was made from", async ({ page }) => {
     await mockWorld(page, { wet: true });
     await pinClock(page);
     await openLisbon(page);
-    await page.getByRole("combobox", { name: "Budget" }).selectOption("0");
+    const budget = page.getByRole("combobox", { name: "Budget" });
+    await budget.selectOption("0");
     await planButton(page).click();
-    await expect(result(page).getByRole("heading", { name: "Look up" })).toBeVisible();
-    await expect(result(page)).toContainText("Nothing free fits a rainy day here; this one costs a coffee each.");
+    // Lisbon's world has a viewpoint and no planetarium: on a wet night the stars are not offered at all.
+    await expect(result(page).getByRole("heading", { name: "Bowling, bumpers optional" })).toBeVisible();
+    const said = "Nothing free fits a rainy day here. Expect to spend about what dinner out costs.";
+    await expect(result(page)).toContainText(said);
+    await expect(result(page)).not.toContainText("Look up");
+    // Changing the form afterwards does not rewrite what the card says it was asked.
+    await budget.selectOption("2");
+    await expect(result(page)).toContainText(said);
+  });
+
+  test("E3b this weekend on a Saturday morning plans the day, not the evening", async ({ page }) => {
+    await mockWorld(page);
+    const n = new Date();
+    const saturday = new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate() + ((6 - n.getDay() + 7) % 7), 10, 0));
+    await pinClock(page, saturday);
+    await page.goto("/dates/london");
+    await page.locator("#tonight").getByRole("combobox", { name: "When" }).selectOption("weekend");
+    await planButton(page).click();
+    // Before, a Saturday was planned as tonight: nothing started before five. Now the day ideas are in the list.
+    const starts: string[] = [];
+    for (let i = 0; i < 12; i++) {
+      const heading = await result(page).getByRole("heading").textContent();
+      starts.push((await result(page).locator("li span.tabular-nums").first().textContent()) ?? "");
+      if (starts.at(-1)! < "17:00") break;
+      await result(page).getByRole("button", { name: "Another" }).click();
+      await expect(result(page).getByRole("heading")).not.toHaveText(heading ?? "");
+    }
+    expect(starts.some((s) => s < "17:00"), starts.join(" ")).toBe(true);
   });
 
   test("E4 a city's page asks for its places on the tap, not before, and plans there", async ({ page }) => {
@@ -141,7 +168,7 @@ test.describe("plan our date tonight", () => {
     await planButton(page, "Planeadla").click();
     await expect(result(page).getByRole("button", { name: "Abrir el plan" })).toBeVisible();
     await expect(result(page).getByRole("button", { name: "Otra" })).toBeVisible();
-    await expect(result(page)).toContainText("Nada gratis encaja con un día de lluvia aquí; esta cuesta un café cada uno.");
+    await expect(result(page)).toContainText("Con lluvia no hay nada gratis para ese día; esta cuesta lo que una cena fuera.");
   });
 
   test("E6 by keyboard alone", async ({ page, isMobile }) => {
@@ -201,7 +228,7 @@ test.describe("plan our date tonight", () => {
     expect(await sentence(page)).toContain("tomorrow");
   });
 
-  test("E9 an existing plan is asked about before it is replaced", async ({ page }) => {
+  test("E9 an existing plan is asked about in the card before it is replaced", async ({ page }) => {
     await mockWorld(page);
     await pinClock(page);
     const before = { v: 1, stops: [{ id: "node/101", name: "Livraria do Bairro", kind: "bookshop", lat: 38.715, lng: -9.138 }, { id: "node/103", name: "Café da Esquina", kind: "cafe", lat: 38.716, lng: -9.1375 }] };
@@ -214,12 +241,22 @@ test.describe("plan our date tonight", () => {
     await openLisbon(page);
     await planButton(page).click();
     const open = result(page).getByRole("button", { name: "Open the plan" });
-    page.once("dialog", (d) => void d.dismiss());
+    let dialogs = 0;
+    page.on("dialog", (d) => {
+      dialogs += 1;
+      void d.dismiss();
+    });
     await open.click();
+    const question = result(page).getByText("This replaces the plan you were making on this device.");
+    await expect(question).toBeVisible();
+    await expect(question).toBeFocused();
+    await result(page).getByRole("button", { name: "Keep mine" }).click();
+    await expect(question).toHaveCount(0);
     await expect(open).toBeVisible();
     expect(await page.evaluate(() => JSON.parse(window.localStorage.getItem("ethos.dates.plan.v1") ?? "null"))).toEqual(before);
-    page.once("dialog", (d) => void d.accept());
     await open.click();
+    await result(page).getByRole("button", { name: "Replace it" }).click();
+    expect(dialogs).toBe(0);
     await expect(page).toHaveURL(/\/plan$/, PLAN_COMPILES);
     await expect(page.getByRole("heading", { level: 2, name: "Taberna Boa Noite" })).toBeVisible();
     expect(await page.evaluate(() => window.localStorage.getItem("ethos.dates.saved.v1"))).toBeNull();

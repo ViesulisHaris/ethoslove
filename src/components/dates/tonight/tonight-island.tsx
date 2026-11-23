@@ -32,7 +32,7 @@ const RARE_WAIT_MS = 2500;
 const QUIET = "inline-flex min-h-11 min-w-11 items-center text-page-ink underline decoration-page-line underline-offset-4 hover:decoration-page-ink";
 
 /** What the planner says when it cannot give a plan, and the way on from there. */
-export function TonightProblem({ problem, mapHref, onRetry, onTomorrow }: { problem: TonightProblemKind; mapHref?: string; onRetry: () => void; onTomorrow: () => void }) {
+export function TonightProblem({ problem, mapHref, offerTomorrow, onRetry, onTomorrow }: { problem: TonightProblemKind; mapHref?: string; offerTomorrow?: boolean; onRetry: () => void; onTomorrow: () => void }) {
   const t = useTranslations("dates");
   const map = mapHref ? (
     <Link href={mapHref} className={QUIET}>
@@ -58,8 +58,14 @@ export function TonightProblem({ problem, mapHref, onRetry, onTomorrow }: { prob
         </>
       ) : (
         <>
-          {t("tonight.none")}
-          {map ? <> {map}</> : null}
+          {t("tonight.none")}{" "}
+          {offerTomorrow ? (
+            <button type="button" onClick={onTomorrow} className={QUIET}>
+              {t("tonight.tryTomorrow")}
+            </button>
+          ) : null}
+          {offerTomorrow && map ? " · " : null}
+          {map}
         </>
       )}
     </p>
@@ -175,13 +181,14 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
         onWhen={tonight.setWhen}
         onPlan={() => void tonight.plan()}
       />
+      {/* The card is not in the live region: its heading takes focus, which already reads it out once. */}
+      {tonight.result ? <TonightResult {...tonight.result} confirming={tonight.confirming} onReplace={tonight.replace} onKeep={tonight.keep} locale={locale} onOpen={tonight.open} onAnother={tonight.another} /> : null}
       <div role="status" aria-live="polite">
-        {tonight.result ? (
-          <TonightResult {...tonight.result} asked={tonight.choice.budget} locale={locale} onOpen={tonight.open} onAnother={tonight.another} />
-        ) : tonight.problem ? (
+        {!tonight.result && tonight.problem ? (
           <TonightProblem
             problem={tonight.problem}
             mapHref={mapHref}
+            offerTomorrow={tonight.problemWhen === "tonight"}
             onRetry={() => void tonight.plan()}
             onTomorrow={() => {
               tonight.setWhen("tomorrow");

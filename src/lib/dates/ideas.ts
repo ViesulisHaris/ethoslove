@@ -25,9 +25,21 @@ export type DateIdea = {
   /** Better for rain: moved to the front when it is wet. */
   goodInRain: boolean;
   moment: Moment;
-  /** 0 free, 1 a coffee each, 2 dinner, 3 a treat. */
+  /**
+   * 0 free, 1 a coffee each, 2 dinner, 3 a treat: what it costs as its stops stand. An idea with
+   * the "free" vibe can also be done for nothing (the picnic from home, a flask), leaving out the
+   * stop that sells something: see canBeFree.
+   */
   budget: 0 | 1 | 2 | 3;
   minutes: number;
+  /**
+   * The latest it can still start when tonight begins after its own hour, "HH:MM". Only for a
+   * daytime idea whose places usually stay open into the evening (rinks, climbing walls, mini golf
+   * and ice cream on a long summer day); otherwise its moment decides (tonight.ts).
+   */
+  latestStart?: string;
+  /** Its stops on a wet day, when the dry ones would put it outdoors (the stars: a planetarium only). */
+  rainStops?: PlaceKind[][];
   vibes: Vibe[];
   /** The drawn sticker on the card, and the two papers behind it. */
   art: { sticker: StickerId; from: string; to: string };
@@ -101,6 +113,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 1,
     minutes: 150,
+    latestStart: "19:30",
     vibes: ["playful", "outdoorsy"],
     art: { sticker: "candy", from: "#D8EAF3", to: "#BFDDEB" },
   },
@@ -185,6 +198,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 1,
     minutes: 90,
+    latestStart: "20:00",
     vibes: ["cozy", "outdoorsy"],
     art: { sticker: "cherries", from: "#FFE0E6", to: "#FBC4D0" },
   },
@@ -241,6 +255,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 2,
     minutes: 180,
+    latestStart: "20:00",
     vibes: ["playful", "rainy"],
     art: { sticker: "leaf", from: "#E1EFD9", to: "#CBE3BE" },
   },
@@ -278,6 +293,7 @@ export const IDEAS: DateIdea[] = [
     blurb: { en: "A planetarium if the sky's against you, the darkest viewpoint in town if it isn't.", es: "Un planetario si el cielo no acompaña; el mirador más oscuro de la ciudad si sí." },
     twist: { en: "Name a star after the other. Make it official on a napkin.", es: "Ponedle a una estrella el nombre del otro. Hacedlo oficial en una servilleta." },
     stops: [["planetarium", "viewpoint"], ["cafe", "bar", "dessert"]],
+    rainStops: [["planetarium"], ["cafe", "bar", "dessert"]],
     needsDry: false,
     goodInRain: false,
     moment: "night",
@@ -325,6 +341,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 2,
     minutes: 120,
+    latestStart: "20:30",
     vibes: ["playful", "cozy"],
     art: { sticker: "snowflake", from: "#E0EEF8", to: "#C7DFF2" },
   },
@@ -397,6 +414,14 @@ export function fitsVibe(place: { kind: PlaceKind; cost?: number }, vibe: Vibe):
   return place.cost === undefined ? KINDS[place.kind].free : place.cost === 0;
 }
 
+/** Whether an idea can be done for nothing: free as it stands, or with the "free" vibe, bringing your own instead of buying at the stop that sells it. */
+export const canBeFree = (idea: Pick<DateIdea, "budget" | "vibes">): boolean => idea.budget === 0 || idea.vibes.includes("free");
+
+/** The idea as it stands on the day: on a wet one, its rain stops when it has them (the stars move under a planetarium's dome). */
+export function forTheDay(idea: DateIdea, day: DayWeather | undefined): DateIdea {
+  return idea.rainStops && day && isWet(day) ? { ...idea, stops: idea.rainStops } : idea;
+}
+
 /** True when every stop of an idea can be filled near here. */
 export const isDoable = (idea: DateIdea, places: Place[]): boolean => idea.stops.every((kinds) => places.some((p) => kinds.includes(p.kind)));
 
@@ -419,7 +444,7 @@ export const VIBES: Record<Vibe, L> = {
   outdoorsy: { en: "Outdoorsy", es: "Al aire libre" },
   foodie: { en: "Foodie", es: "Para comer bien" },
   artsy: { en: "Artsy", es: "Con arte" },
-  fancy: { en: "Dressed up", es: "De gala" },
+  fancy: { en: "Dressed up", es: "Para arreglarse" },
   free: { en: "Free", es: "Gratis" },
   rainy: { en: "Rainy day", es: "Día de lluvia" },
 };

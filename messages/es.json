@@ -1237,7 +1237,7 @@
       },
       "mood": {
         "title": "¿Qué os apetece?",
-        "body": "Acogedor, divertido, de gala… Cada opción cambia las ideas y los sitios que aparecen."
+        "body": "Acogedor, divertido, para arreglarse… Cada opción cambia las ideas y los sitios que aparecen."
       },
       "place": {
         "title": "Échale un vistazo",
@@ -1728,7 +1728,7 @@
       "glasgow": "Aquí los grandes museos son gratis, entre ellos Kelvingrove y la Galería de Arte Moderno, así que una tarde de lluvia no cuesta más que el café de después.",
       "bristol": "Brandon Hill es una subida corta desde el puerto, y arriba está la Cabot Tower, a la que se sube gratis. Es el sitio para la hora dorada.",
       "leeds": "Las galerías victorianas del centro os mantienen bajo cristal entre la cena y el postre. El Hyde Park Picture House, abierto desde 1914, sigue iluminado con lámparas de gas.",
-      "liverpool": "Esta ciudad canta: en Mathew Street hay música en directo casi todas las noches. Antes, los museos nacionales del puerto son gratis para pasar la tarde.",
+      "liverpool": "En Mathew Street, alrededor del Cavern Club, hay música en directo casi todas las noches. Antes, los museos nacionales del puerto son gratis para pasar la tarde.",
       "new-york": "Elegid dos paradas en el mismo barrio y caminad de una a otra: en Nueva York, las calles son media cita.",
       "los-angeles": "Aquí las distancias son largas, así que elegid un barrio y quedaos en él. La playa al atardecer sí merece el trayecto.",
       "chicago": "La orilla del lago tiene playas de arena a poca distancia del Loop, así que la cita en la playa está más cerca de lo que parece.",
@@ -1752,7 +1752,7 @@
       "portland": "Powell's ocupa una manzana entera de libros, nuevos y de segunda mano en los mismos estantes: «elegid un libro el uno para el otro» se convierte en un trabajo largo y feliz.",
       "seattle": "Aquí llovizna más de lo que diluvia, y para eso están las cafeterías y las grandes librerías independientes de la ciudad. En una tarde despejada, Kerry Park tiene la vista de los rascacielos.",
       "st-louis": "Forest Park reúne el museo de arte, el de historia y el zoo, y los tres son gratis. En invierno abre su pista de patinaje al aire libre.",
-      "nashville": "Los honky-tonks de Lower Broadway tienen música en directo desde última hora de la mañana hasta el cierre, y casi nunca cobran entrada. A nadie le importará que cantéis.",
+      "nashville": "Los honky-tonks de Lower Broadway tienen música en directo desde última hora de la mañana hasta el cierre, y casi nunca cobran entrada. Los grupos tocan por propinas: llevad unos dólares en efectivo.",
       "san-diego": "Balboa Park reúne jardines y más de una docena de museos en un mismo sitio, y las playas quedan a un trayecto corto. Empezad en el parque y acabad con la puesta de sol.",
       "toronto": "Las islas están a un trayecto corto en ferri desde el centro, con playas, caminos y vistas de los rascacielos.",
       "vancouver": "Stanley Park y el paseo marítimo empiezan donde acaba el centro, así que una cita al aire libre no necesita coche.",
@@ -1871,8 +1871,8 @@
       "close": "Cerrar esta idea"
     },
     "tonight": {
-      "label": "Esta noche",
-      "inCity": "Esta noche en {city}",
+      "label": "El planificador",
+      "inCity": "Planead una cita en {city}",
       "sentence": "Planead una cita <mood></mood> <when></when>. <length></length>, <budget></budget>.",
       "sentenceKind": "Planead una de estas <when></when>. <length></length>, <budget></budget>.",
       "lengthLabel": "Cuánto tiempo",
@@ -1884,7 +1884,7 @@
         "outdoorsy": "al aire libre",
         "foodie": "para comer bien",
         "artsy": "con arte",
-        "fancy": "de gala"
+        "fancy": "para arreglarse"
       },
       "when": {
         "tonight": "esta noche",
@@ -1900,9 +1900,9 @@
       },
       "budget": {
         "0": "gratis",
-        "1": "por calderilla como mucho",
-        "2": "por lo de una cena como mucho",
-        "3": "con capricho incluido",
+        "1": "como mucho un café por cabeza",
+        "2": "como mucho lo que cuesta una cena",
+        "3": "aunque sea un capricho",
         "any": "con cualquier presupuesto"
       },
       "plan": "Planeadla",
@@ -1911,27 +1911,31 @@
       "open": "Abrir el plan",
       "another": "Otra",
       "relaxed": {
-        "budget": "Nada {wanted} encaja ese día aquí; esta cuesta {cost}.",
-        "budgetWet": "Nada {wanted} encaja con un día de lluvia aquí; esta cuesta {cost}.",
+        "budget": "No hay nada {wanted} para ese día; esta cuesta {cost}.",
+        "budgetWet": "Con lluvia no hay nada {wanted} para ese día; esta cuesta {cost}.",
         "length": "Nada de esa duración encaja; esta dura unas {hours} h.",
         "vibe": "Nada de ese estilo encaja ese día; esta es la más cercana.",
         "kind": "Ninguna idea de esta página encaja ese día; esta sí."
       },
       "wanted": {
         "0": "gratis",
-        "1": "por calderilla",
-        "2": "por lo de una cena"
+        "1": "tan barato",
+        "2": "por ese precio"
       },
       "costs": {
-        "1": "un café cada uno",
-        "2": "lo de una cena",
-        "3": "un capricho"
+        "1": "un café por cabeza",
+        "2": "lo que una cena fuera",
+        "3": "lo que una entrada por cabeza"
       },
+      "freeIf": "Gratis si lleváis vuestra comida y bebida. La parada marcada como opcional es donde la compraríais.",
+      "optional": "opcional",
       "none": "Nada encaja con eso aquí.",
       "late": "Ya es tarde para esta noche. Mañana hay más.",
       "tryTomorrow": "Planear mañana",
       "openMap": "Abrir el mapa",
-      "replace": "Esto sustituye el plan que estabais haciendo en este dispositivo. ¿Abrir este?"
+      "replace": "Esto sustituye el plan que estabais haciendo en este dispositivo.",
+      "replaceYes": "Sustituirlo",
+      "replaceNo": "Seguir con el nuestro"
     },
     "places": {
       "title": "Sitios para una cita",

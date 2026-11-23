@@ -14,7 +14,7 @@ import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { datesUrls, EARLY_KEY, earlyScript, HERE_URL, takeEarly } from "@/lib/dates/early";
 import { distanceKm, isLatLng, snapSearch, type LatLng } from "@/lib/dates/geo";
-import { fillStops, fitsVibe, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
+import { fillStops, fitsVibe, forTheDay, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
 import { MAP_PAPER } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
@@ -457,13 +457,16 @@ export function DatesExplorer() {
   const tonightWhen = tonight.when === "day" && !pageDayIsOther ? "tonight" : tonight.when;
   const planTonight = (when = tonightWhen) => {
     // The page follows the planner: its day, its weather card and its ideas become the day planned for.
-    setDate(when === "tonight" ? placeToday : when === "tomorrow" ? addDays(placeToday, 1) : date);
+    // Today is read at the tap, the way the planner reads it: a tab left open past midnight has a new one.
+    const nowToday = placeNow(forecast, Date.now()).date;
+    setDate(when === "tonight" ? nowToday : when === "tomorrow" ? addDays(nowToday, 1) : date);
     void tonight.plan(when);
   };
   const ideas = useMemo(() => ideasFor(day, all, vibe ?? undefined), [day, all, vibe]);
   const doable = useMemo(() => (status === "ready" || all.length > 0 ? new Set(ideas.filter((i) => isDoable(i, all)).map((i) => i.id)) : null), [ideas, all, status]);
   const idea = ideaById(ideaId ?? undefined);
-  const stops = useMemo(() => (idea ? fillStops(idea, all, skip) : []), [idea, all, skip]);
+  // On a wet day an idea with rain stops is filled with them, as the planner does (the stars under a dome).
+  const stops = useMemo(() => (idea ? fillStops(forTheDay(idea, day), all, skip) : []), [idea, day, all, skip]);
   const times = useMemo(() => (idea ? suggestTimes(idea, day) : []), [idea, day]);
   const ranked = useMemo(() => rankPlaces(all, ratings, sort), [all, ratings, sort]);
   // A vibe chooses places as well as ideas: the kinds of place the mood is made of (ideas.ts
@@ -944,12 +947,13 @@ export function DatesExplorer() {
                 onPlan={() => planTonight()}
               />
             </div>
+            {/* The card is not in the live region: its heading takes focus, which already reads it out once. */}
+            {tonight.result ? <TonightResult {...tonight.result} confirming={tonight.confirming} onReplace={tonight.replace} onKeep={tonight.keep} locale={locale} onOpen={tonight.open} onAnother={tonight.another} /> : null}
             <div role="status" aria-live="polite">
-              {tonight.result ? (
-                <TonightResult {...tonight.result} asked={tonight.choice.budget} locale={locale} onOpen={tonight.open} onAnother={tonight.another} />
-              ) : tonight.problem ? (
+              {!tonight.result && tonight.problem ? (
                 <TonightProblem
                   problem={tonight.problem}
+                  offerTomorrow={tonight.problemWhen === "tonight"}
                   onRetry={() => planTonight()}
                   onTomorrow={() => {
                     tonight.setWhen("tomorrow");

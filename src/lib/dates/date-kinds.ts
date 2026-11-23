@@ -23,7 +23,13 @@ export const KIND_IDEAS: Record<DateKind, readonly string[]> = {
 /** The cheap page's two sections: the four that can cost nothing, then the four for pocket change. */
 export const CHEAP_FREE: readonly string[] = ["gallery-hop", "golden-hour-picnic", "sunrise-and-breakfast", "garden-afternoon"];
 
-export const kindIdeas = (kind: DateKind): DateIdea[] => KIND_IDEAS[kind].flatMap((id) => ideaById(id) ?? []);
+/**
+ * What a kind's page never plans past, its own ideas or not: the cheap page's planner giving way to
+ * an escape room is not a cheap date. A budget the visitor chose above it still counts.
+ */
+export const KIND_MAX_BUDGET: Partial<Record<DateKind, 0 | 1 | 2 | 3>> = { cheap: 1 };
+
+export const kindIdeas =(kind: DateKind): DateIdea[] => KIND_IDEAS[kind].flatMap((id) => ideaById(id) ?? []);
 export const fitsKind = (idea: Pick<DateIdea, "id">, kind: DateKind): boolean => KIND_IDEAS[kind].includes(idea.id);
 
 /** The kinds with a page. */

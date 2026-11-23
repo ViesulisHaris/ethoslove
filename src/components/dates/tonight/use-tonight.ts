@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import type { Ymd } from "@/lib/dates/calendar";
 import type { DateKind } from "@/lib/dates/date-kinds";
 import { fillStops } from "@/lib/dates/ideas";
 import type { Place } from "@/lib/dates/places";
-import { placeNow, rankTonight, TONIGHT_ENDS_MIN, tonightPlan, tonightStart, tonightTimes, type TonightPick } from "@/lib/dates/tonight";
+import { placeNow, rankTonight, startFor, TONIGHT_ENDS_MIN, tonightPlan, tonightTimes, type TonightPick } from "@/lib/dates/tonight";
 import { isWet, type DayWeather, type Forecast } from "@/lib/dates/weather";
 import { writeLink } from "@/lib/saved-dates/link";
 import { usePlan } from "@/components/dates/use-plan";
@@ -31,7 +30,9 @@ type Options = {
   currentKey: string;
 };
 
-type Outcome = { key: string; problem: TonightProblemKind } | { key: string; problem: null; picks: TonightPick[]; at: number; day: DayWeather | undefined; date: Ymd; places: Place[] };
+/** What was asked, kept with the answer: the card speaks of the wishes it was made from, not of the form as it stands now. */
+type Asked = { choice: TonightChoice; when: TonightWhen };
+type Outcome = ({ key: string; problem: TonightProblemKind } | { key: string; problem: null; picks: TonightPick[]; at: number; day: DayWeather | undefined; date: Ymd; places: Place[] }) & { asked: Asked };
 
 /**
  * One planner's state: the choices, the result, and the two actions. The host says where the places
@@ -40,13 +41,14 @@ type Outcome = { key: string; problem: TonightProblemKind } | { key: string; pro
  * stops matching and is not shown. No effect resets anything.
  */
 export function useTonight(options: Options) {
-  const t = useTranslations("dates");
   const router = useRouter();
   const [own, updatePlan] = usePlan();
   const [choice, setChoice] = useState<TonightChoice>({});
   const [when, setWhen] = useState<TonightWhen>("tonight");
   const [busy, setBusy] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
+  // "This replaces the plan you were making": asked inside the card, for the pick it was asked about.
+  const [confirming, setConfirming] = useState<Outcome | null>(null);
   // The host's latest options, for `plan`, which runs after an await.
   const latest = useRef(options);
   useEffect(() => {
@@ -55,37 +57,40 @@ export function useTonight(options: Options) {
 
   const current = outcome && outcome.key === options.currentKey ? outcome : null;
   const problem = current?.problem ?? null;
-  let result: { pick: TonightPick; stops: { place: Place | null; options: number }[]; times: string[]; wet: boolean; more: boolean } | null = null;
+  let result: { pick: TonightPick; stops: { place: Place | null; options: number }[]; times: string[]; wet: boolean; more: boolean; asked?: 0 | 1 | 2 | 3 } | null = null;
   if (current && current.problem === null) {
     const pick = current.picks[current.at];
-    result = { pick, stops: fillStops(pick.idea, current.places), times: tonightTimes(pick.idea, current.day, pick.shift), wet: current.day ? isWet(current.day) : false, more: current.picks.length > 1 };
+    result = { pick, stops: fillStops(pick.idea, current.places), times: tonightTimes(pick.idea, current.day, pick.shift), wet: current.day ? isWet(current.day) : false, more: current.picks.length > 1, asked: current.asked.choice.budget };
   }
 
   const plan = async (asked?: TonightWhen) => {
     const w = asked ?? when;
+    const wishes: Asked = { choice, when: w };
     setBusy(true);
+    setConfirming(null);
     try {
       const data = await latest.current.load();
       const o = latest.current;
       if (!data) {
-        setOutcome({ key: o.currentKey, problem: "failed" });
+        setOutcome({ key: o.currentKey, problem: "failed", asked: wishes });
         return;
       }
+      // Read now, at the tap: a tab left open past midnight plans for the new day.
       const now = placeNow(data.forecast, Date.now());
       const date = o.dayOf(w, now.date);
       const key = o.keyOf(date);
       const day = data.forecast?.days.find((d) => d.date === date);
-      const startMin = date === now.date ? tonightStart(now.minutes) : undefined;
+      const startMin = startFor(w === "tonight", date, now);
       if (startMin !== undefined && startMin > TONIGHT_ENDS_MIN) {
-        setOutcome({ key, problem: "late" });
+        setOutcome({ key, problem: "late", asked: wishes });
         return;
       }
       const picks = rankTonight({ ...choice, kind: o.kind, startMin }, { day, places: data.places, boost: o.boost });
       if (picks.length === 0) {
-        setOutcome({ key, problem: "none" });
+        setOutcome({ key, problem: "none", asked: wishes });
         return;
       }
-      setOutcome({ key, problem: null, picks, at: 0, day, date, places: data.places });
+      setOutcome({ key, problem: null, picks, at: 0, day, date, places: data.places, asked: wishes });
       track("tonight_planned", { mood: choice.vibe ?? "any", budget: choice.budget ?? "any", when: w === "tonight" || w === "tomorrow" ? w : "other" });
     } finally {
       setBusy(false);
@@ -93,16 +98,17 @@ export function useTonight(options: Options) {
   };
 
   const another = () => {
-    if (!outcome || outcome.problem !== null) return;
-    setOutcome({ ...outcome, at: (outcome.at + 1) % outcome.picks.length });
+    // Only the answer on screen moves on: one made for another place or day is not shown, so not touched.
+    if (!current || current.problem !== null) return;
+    setConfirming(null);
+    setOutcome({ ...current, at: (current.at + 1) % current.picks.length });
     track("tonight_another");
   };
 
-  const open = () => {
+  const write = () => {
     if (!current || current.problem !== null || !result) return;
     const { pick, stops, times } = result;
     if (!stops.some((s) => s.place)) return;
-    if (own.stops.length > 0 && !window.confirm(t("tonight.replace"))) return;
     // A plan linked to a saved date is re-saved whenever it changes: this one is new, not that one.
     writeLink(null);
     const date = current.date;
@@ -111,5 +117,28 @@ export function useTonight(options: Options) {
     router.push("/plan");
   };
 
-  return { choice, setChoice, when, setWhen, busy, problem, result, plan, another, open };
+  const open = () => {
+    if (!current || current.problem !== null || !result) return;
+    if (own.stops.length > 0) return setConfirming(current);
+    write();
+  };
+
+  return {
+    choice,
+    setChoice,
+    when,
+    setWhen,
+    busy,
+    problem,
+    /** The "when" the shown problem was planned for: "none" tonight offers tomorrow. */
+    problemWhen: current?.problem ? current.asked.when : null,
+    result,
+    plan,
+    another,
+    open,
+    /** True while the card asks whether to replace the plan being made on this device. */
+    confirming: confirming !== null && confirming === current,
+    replace: write,
+    keep: () => setConfirming(null),
+  };
 }
