@@ -78,6 +78,8 @@ const layersIn = (state: unknown): number => {
   const n = (state as Record<string, unknown> | null)?.[LAYERS];
   return typeof n === "number" && n > 0 ? n : 0;
 };
+/** Whether the address bar still shows this path (null: not known yet). */
+const isAt = (path: string | null) => path !== null && window.location.pathname === path;
 const subscribeDesktop = (onChange: () => void) => {
   const mq = window.matchMedia(desktopQuery);
   mq.addEventListener("change", onChange);
@@ -178,6 +180,12 @@ export function DatesExplorer() {
   const sightsKey = useRef("");
   const forecastAt = useRef<LatLng | null>(null);
   const searchedAt = useRef<LatLng | null>(null);
+  // The address this page opened at (/dates, /es/dates). Back can leave Dates while the explorer is
+  // still mounted for a moment: nothing is written onto an address that is not this one.
+  const datesPath = useRef<string | null>(null);
+  useEffect(() => {
+    datesPath.current = window.location.pathname;
+  }, []);
 
   const search = useCallback(
     async (center: LatLng, radiusM: number) => {
@@ -341,7 +349,7 @@ export function DatesExplorer() {
   // The address bar follows a search for a named town, so it can be sent to someone. A search round
   // "near me" never goes in it: a link is forwarded without a thought for what is inside.
   useEffect(() => {
-    if (!where) return;
+    if (!where || !isAt(datesPath.current)) return;
     const params = new URLSearchParams();
     if (shareable) {
       params.set("lat", String(where.lat));
@@ -351,7 +359,7 @@ export function DatesExplorer() {
       if (ideaId) params.set("idea", ideaId);
     }
     const query = params.toString();
-    window.history.replaceState(window.history.state, "", query ? `?${query}` : window.location.pathname);
+    window.history.replaceState(window.history.state, "", query ? `${window.location.pathname}?${query}` : window.location.pathname);
     // `popped`: Back lands on an entry written before the last search on the map; write it again.
   }, [where, date, ideaId, shareable, popped]);
 
@@ -378,6 +386,8 @@ export function DatesExplorer() {
     // A reload on one of those entries opens with nothing on top: count from nothing.
     if (layersIn(window.history.state) > 0) window.history.replaceState({ ...window.history.state, [LAYERS]: 0 }, "");
     const onPop = (event: PopStateEvent) => {
+      // Back has left Dates: the page going away has nothing to write or close.
+      if (!isAt(datesPath.current)) return;
       const depth = layersIn(event.state);
       pushed.current = depth;
       setPopped((n) => n + 1);
