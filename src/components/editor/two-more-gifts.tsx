@@ -103,7 +103,8 @@ function Days({ days, name }: { days: NextDay[]; name: string }) {
   );
 }
 
-function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDay[]; name: string; onBought: () => void }) {
+/** Exported for the unit tests (tests/unit/two-more-gifts.test.tsx), like the two below. */
+export function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDay[]; name: string; onBought: () => void }) {
   const t = useTranslations("editor.share.pair");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
   const showCheckoutError = useCheckoutError();
@@ -113,7 +114,7 @@ function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDa
   // Which way to pay: the wallet's own button where there is one (and a key to draw it with), else
   // the card button. The wallet falls back to the card button, silently, when it can't be drawn.
   const key = env.stripePublishableKey;
-  const [wallet] = useState<Wallet | null>(() => (key ? walletHere() : null));
+  const [wallet] = useState<Wallet | null>(() => (key && typeof window !== "undefined" ? walletHere() : null));
   const [walletState, setWalletState] = useState<"waiting" | "ready" | "none">(wallet ? "waiting" : "none");
   const [secret, setSecret] = useState<{ clientSecret: string; sessionId?: string } | null>(null);
   const [pay, setPay] = useState<Pay>("idle");
@@ -282,7 +283,7 @@ function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDa
 }
 
 /** Picture a7: paid. The two days again, and the first one to start now. */
-function Bought({ days, name }: { days: NextDay[]; name: string }) {
+export function Bought({ days, name }: { days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
   const named = useDayName(name);
   const first = days[0];
@@ -306,7 +307,7 @@ function Bought({ days, name }: { days: NextDay[]; name: string }) {
 }
 
 /** Picture a8: this gift went out on one of the two. */
-function UsedOne({ left, days, name }: { left: number; days: NextDay[]; name: string }) {
+export function UsedOne({ left, days, name }: { left: number; days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
   const named = useDayName(name);
   const next = days[0];
