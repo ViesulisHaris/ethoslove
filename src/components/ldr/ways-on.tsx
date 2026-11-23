@@ -13,7 +13,7 @@ import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear, type Ways
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 
 export type WayKey = "gift" | "dates" | "trip";
-type Way = { key: WayKey; href: string; title: string; image: string | null; style?: CSSProperties; seed?: () => void };
+type Way = { key: WayKey; href: string; title: string; image: string | null; style?: CSSProperties; seed?: () => void; /** Where the picture is held in its square: the gift's tall poster by its top, where the distance is. */ focus?: string };
 
 const TO = { gift: "halfway_gift", dates: "dates", trip: "trip" } as const;
 
@@ -55,6 +55,7 @@ export function WaysOn({
     href: both ? `/create/${HALFWAY_GIFT_SLUG}` : `/templates/${HALFWAY_GIFT_SLUG}`,
     title: t("gift.title"),
     image: data.giftPoster,
+    focus: "object-top",
     seed: both ? () => saveGiftSeed({ slug: HALFWAY_GIFT_SLUG, fields: halfwayGiftFields(both.a, both.b, near ? t("note", { city }) : undefined) }) : undefined,
   });
 
@@ -104,7 +105,7 @@ export function WaysOn({
                 style={way.style}
               >
                 {way.image ? (
-                  <img src={way.image} alt="" width={640} height={640} loading={i === 0 ? "eager" : "lazy"} decoding="async" className="absolute inset-0 size-full object-cover object-[50%_32%]" />
+                  <img src={way.image} alt="" width={640} height={640} loading={i === 0 ? "eager" : "lazy"} decoding="async" className={cn("absolute inset-0 size-full object-cover", way.focus ?? "object-[50%_32%]")} />
                 ) : null}
               </span>
               <span className="mt-3.5 block text-page-label text-page-body">{t(`${way.key}.label`)}</span>

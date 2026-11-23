@@ -2438,6 +2438,10 @@
       "twist": "El giro:",
       "openMap": "Abrir el mapa"
     },
+    "play": {
+      "title": "O echad una partida, cada uno con su móvil.",
+      "today": "La pregunta de hoy"
+    },
     "gifts": {
       "eyebrow": "Regalos para la distancia",
       "title": "Algo que abrir mientras esperáis.",

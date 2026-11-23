@@ -8,11 +8,13 @@ import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
 import { halfwayBetween, halfwayCityName, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
 import { flightLinks, weekendAhead, type FlightSite } from "@/lib/trips/flights";
 import { WhereBox, type Where } from "@/components/dates/where-box";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { setTheirTown } from "./plan-visit-link";
+import { WaysOn } from "./ways-on";
 
 /**
  * The town boxes' field and its list on the card's cream, not pure white (walk-rooms-5). WhereBox is
@@ -71,8 +73,9 @@ function useZone(place: Where | null): ZoneAnswer {
  * day when both of them are awake. Offsets come from the forecast service, which knows each
  * town's time zone today, daylight saving included.
  */
-export function MeetInTheMiddle() {
+export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   const t = useTranslations("ldr.meet");
+  const tw2 = useTranslations("ldr.ways");
   const tw = useTranslations("dates.where");
   const tf = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
@@ -230,6 +233,14 @@ export function MeetInTheMiddle() {
           <p className="mt-3 text-[12px] leading-snug text-forest/65">
             {ta("meet.via")} {ta("disclosure")}
           </p>
+        </div>
+      ) : null}
+
+      {/* After the answer, the ways on: the gift made of this distance, and a trip for the next visit. The dates in the halfway city are the link the card above already has. */}
+      {result && a && b ? (
+        <div className="mt-6" data-testid="meet-ways">
+          <p className="text-page-label text-page-body">{tw2("label")}</p>
+          <WaysOn className="mt-3" a={a} b={b} halfway={result} data={ways} ways={["gift", "trip"]} from="long_distance" rowId="meet-ways-row" />
         </div>
       ) : null}
     </div>

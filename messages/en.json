@@ -2438,6 +2438,10 @@
       "twist": "The twist:",
       "openMap": "Open the map"
     },
+    "play": {
+      "title": "Or play a round, each on your own phone.",
+      "today": "Today's question"
+    },
     "gifts": {
       "eyebrow": "Gifts for the distance",
       "title": "Something to open while you wait.",

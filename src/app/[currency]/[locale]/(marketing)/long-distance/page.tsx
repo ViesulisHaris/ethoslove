@@ -2,15 +2,20 @@ import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { pageMetadata } from "@/lib/seo";
+import { SITE } from "@/config/site";
+import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { VIRTUAL_DATES } from "@/lib/dates/virtual";
+import { LDR_GAMES } from "@/lib/ldr/games";
+import { waysData } from "@/lib/ldr/ways-data";
 import { listManifests } from "@/templates/manifests";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
+import { PlayingCard } from "@/components/games/cards";
 import { MeetInTheMiddle } from "@/components/ldr/meet-in-the-middle";
 import { PlanVisitLink } from "@/components/ldr/plan-visit-link";
 import { EagerImg } from "@/components/shared/eager-img";
+import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateCard } from "@/components/templates/template-card";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/long-distance">, "searchParams">): Promise<Metadata> {
@@ -24,6 +29,8 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
   setRequestLocale(locale);
   const t = await getTranslations("ldr");
   const lang = locale === "es" ? "es" : "en";
+  const tg = await getTranslations("games");
+  const gameTitle = { draw: tg("draw.title"), rather: tg("rather.title"), today: t("play.today") };
   // Most central first, as the occasion page orders them: built for distance before merely suited to it.
   const gifts = listManifests()
     .filter((m) => m.occasions.includes("long-distance"))
@@ -32,6 +39,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
 
   return (
     <>
+      <JsonLd nodes={[breadcrumbNode([{ name: SITE.name, url: localizedUrl(locale) }, { name: t("eyebrow"), url: localizedUrl(locale, "/long-distance") }])]} />
       {/* Not clipped, and above what follows: the town picker's list drops down past the torn edge. The flowers clip themselves. */}
       <section className="relative isolate z-10 -mt-[var(--header-h)] bg-blush-paper pt-[var(--header-h)] text-forest">
         <FloralFrame frame="band" ground="light" />
@@ -56,7 +64,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
             <h2 className="display-md text-forest">{t("meet.title")}</h2>
             <p className="mt-2 max-w-xl text-[15.5px] leading-relaxed text-forest/65">{t("meet.sub")}</p>
             <div className="mt-6">
-              <MeetInTheMiddle />
+              <MeetInTheMiddle ways={waysData(lang)} />
             </div>
           </div>
         </div>
@@ -89,6 +97,22 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
                   </PlanVisitLink>
                 ) : null}
                 {v.id === "plan-the-visit" ? <span aria-hidden="true" className="h-9" /> : null}
+              </li>
+            ))}
+          </ul>
+          {/* The games that play across a call, as the games' own cards: a picture and a name. */}
+          <h3 className="mt-14 font-display text-[26px] leading-tight text-forest">{t("play.title")}</h3>
+          <ul className="mt-6 grid max-w-2xl grid-cols-3 gap-3 sm:gap-6" data-testid="ldr-games">
+            {LDR_GAMES.map((g) => (
+              <li key={g.id}>
+                <Link href={g.href} className="group block rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-rose/50 focus-visible:ring-offset-4 focus-visible:ring-offset-paper">
+                  <PlayingCard rank={g.rank} suit={g.suit} radius={20} className="aspect-[5/7] w-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5 motion-reduce:transition-none" faceClassName="items-center justify-center">
+                    <span aria-hidden="true" className="block w-[58%]">
+                      <Sticker id={g.sticker} />
+                    </span>
+                  </PlayingCard>
+                  <span className="mt-3 block font-display text-[17px] leading-tight text-forest sm:text-[20px]">{gameTitle[g.id]}</span>
+                </Link>
               </li>
             ))}
           </ul>
