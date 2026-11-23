@@ -100,7 +100,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           },
           {
             template: "sticker-bomb",
-            heading: "Twelve taps of chaos, labelled by you",
+            heading: "Twelve taps of chaos, labeled by you",
             body: "Every tap slaps a sticker where their finger lands, and some sit on label-maker strips you wrote, up to six of 28 characters: “officially vintage”, “30 and still can't whistle”, “best in show”. Twelve stickers in, the page is a mess and your card opens. For the friend who'd never forgive you a mushy one.",
           },
           {
@@ -261,7 +261,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "halfway",
             heading: "The distance you've already covered",
-            body: "For a long-distance anniversary: a postcard map with your homes on two islands and the distance between them, which they close by blowing into the phone. Halfway along, a line of yours pops up: “Halfway. This is where we ate the worst sandwich of 2022.” Add up to four places you've met in the middle; they're stamped on the postcard and counted, so the total is how far you've travelled to be together.",
+            body: "For a long-distance anniversary: a postcard map with your homes on two islands and the distance between them, which they close by blowing into the phone. Halfway along, a line of yours pops up: “Halfway. This is where we ate the worst sandwich of 2022.” Add up to four places you've met in the middle; they're stamped on the postcard and counted, so the total is how far you've traveled to be together.",
           },
           {
             template: "keepsake",
@@ -452,7 +452,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "bouquet",
             heading: "Their flowers, not a dozen red roses",
-            body: "Built stem by stem, so it can be what they actually like: peonies if that's their flower, sunflowers if roses make them sigh, in the colours of the scarf they never take off. It doesn't wilt by the weekend or cost more on the fourteenth. The card inside takes 30 characters: “Peonies. You said peonies.”",
+            body: "Built stem by stem, so it can be what they actually like: peonies if that's their flower, sunflowers if roses make them sigh, in the colors of the scarf they never take off. It doesn't wilt by the weekend or cost more on the fourteenth. The card inside takes 30 characters: “Peonies. You said peonies.”",
           },
           {
             template: "dark-romance",
@@ -807,7 +807,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "The photos from this year, and one old Christmas photo for the ones who'll recognise it — twenty fit, but eight good ones beat twenty. End on the real song, thirty seconds of it a tap away, and if you're apart, add a voice message: the closest you'll get to being there.",
+          body: "The photos from this year, and one old Christmas photo for the ones who'll recognize it — twenty fit, but eight good ones beat twenty. End on the real song, thirty seconds of it a tap away, and if you're apart, add a voice message: the closest you'll get to being there.",
         },
         {
           heading: "When to send it",

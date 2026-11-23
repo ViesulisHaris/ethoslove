@@ -194,13 +194,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Mother’s Day",
-            how: "Her flowers in her colours. The little card holds 30 characters.",
+            how: "Her flowers in her colors. The little card holds 30 characters.",
             borrow: { field: "fields.cardNote", line: "Still calling you first." },
           },
           {
             heading: "Valentine’s Day",
             how: "Skip the red roses if they’d pick something else.",
-            borrow: { field: "fields.cardNote", line: "Your favourites. I asked." },
+            borrow: { field: "fields.cardNote", line: "Your favorites. I asked." },
           },
           {
             heading: "A birthday",
@@ -231,7 +231,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "How many flowers can a digital bouquet have?",
-          a: "Up to 24 stems, from 14 kinds of flower, each in its own colours. Pick the paper, the ribbon and the background, then shuffle the arrangement until it looks right.",
+          a: "Up to 24 stems, from 14 kinds of flower, each in its own colors. Pick the paper, the ribbon and the background, then shuffle the arrangement until it looks right.",
         },
         {
           q: "Do virtual flowers wilt?",
@@ -430,7 +430,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "A letter for no reason",
             how: "The P.S. arrives as a postcard with a present to tap. One line is enough.",
-            borrow: { field: "surprise.text", line: "P.S. Your favourite is in the fridge." },
+            borrow: { field: "surprise.text", line: "P.S. Your favorite is in the fridge." },
           },
         ],
       },
@@ -559,7 +559,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "surprise.text", line: "Check your coat pocket. Two tickets." },
           },
           {
-            heading: "For your mum or dad",
+            heading: "For your mom or dad",
             how: "Your message follows the film strip. Start with a memory of theirs.",
             borrow: { field: "message", line: "You taught me to blow them all out at once." },
           },
@@ -973,7 +973,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Mother’s Day",
-            how: "A peony, tulip or daisy in her colour. The message waits inside.",
+            how: "A peony, tulip or daisy in her color. The message waits inside.",
             borrow: { field: "message", line: "You kept every plant alive, and me." },
           },
           {
@@ -998,7 +998,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Just because",
-            how: "Pick the colour they wear most.",
+            how: "Pick the color they wear most.",
             borrow: { field: "message", line: "This one doesn’t wilt." },
           },
         ],
@@ -1009,8 +1009,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "About three seconds in all. The flower opens only while a finger is down; if they let go it waits where it is and carries on when they press again.",
         },
         {
-          q: "Which flowers and colours can I choose?",
-          a: "A peony, a tulip or a daisy, with petals in any colour. The light is dawn, dusk or paper white, and the pot, the stickers and the drifting pollen can each be switched off.",
+          q: "Which flowers and colors can I choose?",
+          a: "A peony, a tulip or a daisy, with petals in any color. The light is dawn, dusk or paper white, and the pot, the stickers and the drifting pollen can each be switched off.",
         },
         {
           q: "Does a digital flower need photos?",
@@ -1123,11 +1123,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "Does this long-distance relationship gift show the real distance?",
-          a: "Yes. Pick both towns from the list and the kilometres are measured between them as the crow flies, through any stops you add. You can type your own number over it, such as the length of the drive.",
+          a: "Yes. Pick both towns from the list and the kilometers are measured between them as the crow flies, through any stops you add. You can type your own number over it, such as the length of the drive.",
         },
         {
           q: "What happens if they stop blowing halfway?",
-          a: "The plane coasts for a moment, then drifts slowly back the way it came, and the kilometres climb again. Only landing makes it stay.",
+          a: "The plane coasts for a moment, then drifts slowly back the way it came, and the kilometers climb again. Only landing makes it stay.",
         },
         {
           q: "How many photos go on the postcard?",
@@ -1443,7 +1443,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "With a present to find",
             how: "Hint at the present in the P.S. and keep the box for the day.",
-            borrow: { field: "surprise.text", line: "The big star you circled in the catalogue." },
+            borrow: { field: "surprise.text", line: "The big star you circled in the catalog." },
           },
         ],
       },
@@ -2100,7 +2100,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "For a best friend",
             how: "Type where it started on the pinned note. It takes 40 characters.",
-            borrow: { field: "fields.tag", line: "since the back row of maths" },
+            borrow: { field: "fields.tag", line: "since the back row of math" },
           },
           {
             heading: "Just because",
@@ -2666,7 +2666,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Halloween night",
-            how: "Three jars, each labelled in your words: three things you love.",
+            how: "Three jars, each labeled in your words: three things you love.",
             borrow: { field: "fields.ingredients", line: "a pinch of your laugh" },
           },
           {
@@ -3065,7 +3065,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.blocks", line: "OCT 12" },
           },
           {
-            heading: "A cosy night in",
+            heading: "A cozy night in",
             how: "The recipe card is for the two of you. Write the evening on it.",
             borrow: { field: "fields.note", line: "Soup, one blanket, the long film." },
           },
@@ -3077,7 +3077,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Halloween",
             how: "Choose cranberry or gingham. The tag takes 24 characters.",
-            borrow: { field: "fields.tag", line: "my favourite pumpkin" },
+            borrow: { field: "fields.tag", line: "my favorite pumpkin" },
           },
           {
             heading: "Long distance",
@@ -3164,7 +3164,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "message", line: "You showed up. I won’t forget it." },
           },
           {
-            heading: "For your mum",
+            heading: "For your mom",
             how: "Blush, lilac or peach. Start with the oldest photo you have.",
             borrow: { field: "caption", line: "You, at my age" },
           },
@@ -3378,7 +3378,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Mother’s Day",
             how: "The bouquet at the end is tagged for her, in up to 60 characters.",
-            borrow: { field: "fields.tag", line: "For Mum, who grew all of us" },
+            borrow: { field: "fields.tag", line: "For Mom, who grew all of us" },
           },
           {
             heading: "An anniversary",
@@ -4405,7 +4405,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Valentine’s Day",
             how: "Your line is written in pen on the wall of love letters.",
-            borrow: { field: "fields.line", line: "my favourite blur" },
+            borrow: { field: "fields.line", line: "my favorite blur" },
           },
           {
             heading: "An anniversary",
@@ -4414,7 +4414,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Just because",
-            how: "Colour, black and white, or sepia for the strip.",
+            how: "Color, black and white, or sepia for the strip.",
             borrow: { field: "caption", line: "The face you make at 2am" },
           },
           {
@@ -4507,7 +4507,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "caption", line: "Last summer, the same hill" },
           },
           {
-            heading: "For your mum",
+            heading: "For your mom",
             how: "Pink, blue, red or lilac for the blanket.",
             borrow: { field: "fields.labels", line: "you always packed too much" },
           },
@@ -4647,7 +4647,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Her birthday",
             how: "Name the recipe after her.",
-            borrow: { field: "fields.recipeName", line: "Mum, from scratch" },
+            borrow: { field: "fields.recipeName", line: "Mom, from scratch" },
           },
           {
             heading: "For a grandmother",

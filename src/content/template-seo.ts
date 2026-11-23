@@ -232,7 +232,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Digital bouquet maker",
       title: "Digital Bouquet Maker: Virtual Flowers with a Note",
-      description: "Build a digital bouquet stem by stem: roses, peonies, tulips or sunflowers in your colours, wrapped, with a card inside for your message. Flowers that never wilt.",
+      description: "Build a digital bouquet stem by stem: roses, peonies, tulips or sunflowers in your colors, wrapped, with a card inside for your message. Flowers that never wilt.",
       howTo: "How to make a digital bouquet",
     },
     es: {
@@ -259,7 +259,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   fireside: {
     en: {
       keyword: "Digital Christmas letter",
-      title: "Fireside: A Cosy Digital Christmas Letter",
+      title: "Fireside: A Cozy Digital Christmas Letter",
       description: "A candle, a blanket and a letter by the window, with your photos and a song: a warm digital Christmas gift for someone you won't see this year.",
       howTo: "How to send a Christmas letter by the fire",
     },
@@ -595,8 +595,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "spooky-season": {
     en: {
       keyword: "Spooky season gift",
-      title: "Spooky Season Gift: A Cosy Halloween Collage",
-      description: "Blow the leaves away: a cosy Halloween collage of black cats, pumpkins, film and your photos, with your song. A spooky season gift for your person.",
+      title: "Spooky Season Gift: A Cozy Halloween Collage",
+      description: "Blow the leaves away: a cozy Halloween collage of black cats, pumpkins, film and your photos, with your song. A spooky season gift for your person.",
       howTo: "How to make a Spooky Season collage",
     },
     es: {
@@ -679,7 +679,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "fall-for-you": {
     en: {
       keyword: "Autumn love gift",
-      title: "Fall for You: A Cosy Autumn Love Collage",
+      title: "Fall for You: A Cozy Autumn Love Collage",
       description: "Light the candle: a gingham collage of your photos, real leaves and their name in letter blocks, with your song. An autumn gift for the one you fell for.",
       howTo: "How to make a Fall for You collage",
     },

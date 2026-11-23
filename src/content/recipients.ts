@@ -110,7 +110,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       lead: "Flowers wilt by Thursday. A letter that says what you actually think of her, with the photos from your camera roll and the song that's yours, is still there next year, and she will open it again. These are the digital gifts that work for a girlfriend, each made in about ten minutes and sent as a link.",
       ideas: [
         { template: "the-letter", heading: "A love letter, sealed in wax", body: "She breaks the seal with a tap and your words write themselves out by hand while your song plays. Free as a short note, and the one to start with if you've never written her a letter." },
-        { template: "bouquet", heading: "A bouquet that never wilts", body: "Pick every stem yourself, roses, peonies, tulips or sunflowers in the colours she likes, with a card inside for your note." },
+        { template: "bouquet", heading: "A bouquet that never wilts", body: "Pick every stem yourself, roses, peonies, tulips or sunflowers in the colors she likes, with a card inside for your note." },
         { template: "jar-of-reasons", heading: "100 reasons you love her", body: "A jar of folded notes she shakes out one at a time, up to a hundred. Make some of them about tiny things; those are the ones that land." },
         { template: "coquette", heading: "A pink bow and polaroids", body: "She unties the bow and finds a gingham collage of real lilies, your photos and your song. For a girlfriend with a coquette Pinterest board." },
         { template: "scrapbook", heading: "A scrapbook of the two of you", body: "Polaroids, washi tape and a torn note in the corner. The trips, the bad haircuts, the night you met." },
@@ -177,7 +177,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "pack-your-bags", heading: "A trip, revealed", body: "A departures board that flips to the weekend you've booked. The best way to tell him." },
       ],
       sections: [
-        { heading: "What to write to him", body: "Tell him what you'd tell a friend about him. The thing he did last month that nobody saw, what he's like with your mum, why you'd marry him again. Leave out the card clichés; he's read them." },
+        { heading: "What to write to him", body: "Tell him what you'd tell a friend about him. The thing he did last month that nobody saw, what he's like with your mom, why you'd marry him again. Leave out the card clichés; he's read them." },
         { heading: "When to send it", body: "On your anniversary, his birthday, Father's Day, or the night before something hard for him. A premium template can be scheduled to open at a set time; otherwise send the link from the next room and watch." },
       ],
       faq: [
@@ -223,7 +223,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ideas: [
         { template: "our-timeline", heading: "The story of you two, as a timeline", body: "A road that draws itself as she scrolls, from the first date to now, with up to 20 photos and a video." },
         { template: "museum", heading: "A museum of your life together", body: "Your photos in a quiet gallery, each with its own label on the wall. The wedding, the move, the small Sundays." },
-        { template: "bouquet", heading: "Her flowers, picked stem by stem", body: "Roses, peonies, tulips or sunflowers in her colours, wrapped, with a card inside. They never wilt." },
+        { template: "bouquet", heading: "Her flowers, picked stem by stem", body: "Roses, peonies, tulips or sunflowers in her colors, wrapped, with a card inside. They never wilt." },
         { template: "the-letter", heading: "The letter you've never written her", body: "A wax seal, your words and your photos, with your song. Free. Write what you'd say in the speech you didn't give." },
         { template: "music-box", heading: "A music box with your song", body: "She winds the key and a ballerina turns to your song while your photos appear in the mirror." },
         { template: "keepsake", heading: "A keepsake, sealed in wax", body: "Pressed flowers, a gold locket that opens and a typed letter. For an anniversary, or for when you're away." },
@@ -290,7 +290,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ],
       faq: [
         { q: "What's a good digital gift for a best friend?", a: "Something only you could make: your photos, your in-jokes and a line you mean. Party Animals and Sticker Bomb are for laughing; Favorite Person is for the soft version." },
-        { q: "Is it only for couples?", a: "No. Most templates work for a friend, a sister or your mum: the words and photos are yours, and nothing in them says romance unless you write it. A few are drawn for couples, a collage of lipstick kisses for one, and each template's page says who it suits." },
+        { q: "Is it only for couples?", a: "No. Most templates work for a friend, a sister or your mom: the words and photos are yours, and nothing in them says romance unless you write it. A few are drawn for couples, a collage of lipstick kisses for one, and each template's page says who it suits." },
         freeEn,
       ],
     },
@@ -327,10 +327,10 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       description: "Digital gift ideas for your mom: her recipes in a recipe box, a bouquet that never wilts, a jar of reasons, a museum of old photos. Sent as a link she keeps.",
       h1: "Digital gifts for Mom",
       label: "For your mom",
-      lead: "Mums keep everything: the drawings, the cards, the bad school photos. Give her one more thing to keep, made from the photos she's in and the words you don't say often enough. These are the digital gifts that work for a mum, each made in about ten minutes and sent as a link she can open again.",
+      lead: "Moms keep everything: the drawings, the cards, the bad school photos. Give her one more thing to keep, made from the photos she's in and the words you don't say often enough. These are the digital gifts that work for a mom, each made in about ten minutes and sent as a link she can open again.",
       ideas: [
         { template: "recipe-box", heading: "Her recipes, in a recipe box", body: "The dishes she taught you, card by card, with photos of her kitchen and a note from you. A family keepsake that can't get lost." },
-        { template: "bouquet", heading: "A bouquet that never wilts", body: "Her favourite flowers, stem by stem, with a card inside. Send it from anywhere, on the day." },
+        { template: "bouquet", heading: "A bouquet that never wilts", body: "Her favorite flowers, stem by stem, with a card inside. Send it from anywhere, on the day." },
         { template: "jar-of-reasons", heading: "A jar of reasons she's the best", body: "Folded notes she shakes out one at a time, up to a hundred. Ask your siblings for theirs." },
         { template: "museum", heading: "A museum of old family photos", body: "The scanned prints from the shoebox hung in a quiet gallery, each with a label in your words." },
         { template: "music-box", heading: "A music box with her song", body: "She winds the key and a ballerina turns to the song she always sings along to, with your photos in the mirror." },
@@ -339,7 +339,7 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
         { template: "the-letter", heading: "A letter, like the ones she wrote you", body: "A wax seal, your words and your photos, with a song. Free. Thank her for one thing in particular." },
       ],
       sections: [
-        { heading: "What to write to her", body: "Thank her for one specific thing: the lift at 2am, the packed lunch with a note, what she said before your exam. Mums keep the specific ones. Add a photo she's never seen, or one she hates; she'll love it anyway." },
+        { heading: "What to write to her", body: "Thank her for one specific thing: the ride at 2am, the packed lunch with a note, what she said before your exam. Moms keep the specific ones. Add a photo she's never seen, or one she hates; she'll love it anyway." },
         { heading: "When to send it", body: "On her birthday, on Mother's Day, or on the anniversary of something she got you through. A premium template can be scheduled to open in the morning, so it's there with her coffee." },
       ],
       faq: [
