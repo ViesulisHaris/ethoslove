@@ -111,7 +111,9 @@
       "all": "See all templates",
       "moreTitle": "More every month",
       "moreBlurb": "New templates land regularly. Everything buyers get every future one, forever.",
-      "count": "{n} templates, {free} free"
+      "count": "{n} templates, {free} free",
+      "previous": "Earlier gifts",
+      "next": "More gifts"
     },
     "reactions": {
       "eyebrow": "See the reaction",
@@ -2230,7 +2232,9 @@
       "title": "An evening with a shape to it.",
       "blurb": "Every idea is a small recipe: a couple of stops and a twist. Pick one and we fill it with real places near you.",
       "all": "All {count} ideas, on the map",
-      "hours": "{hours} h"
+      "hours": "{hours} h",
+      "previous": "Earlier ideas",
+      "next": "More ideas"
     },
     "ldr": {
       "eyebrow": "Long distance",

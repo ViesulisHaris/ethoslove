@@ -111,7 +111,9 @@
       "all": "Ver todas las plantillas",
       "moreTitle": "Más cada mes",
       "moreBlurb": "Llegan plantillas nuevas con regularidad. Quien compra Todo recibe las futuras, para siempre.",
-      "count": "{n} plantillas, {free} gratis"
+      "count": "{n} plantillas, {free} gratis",
+      "previous": "Regalos anteriores",
+      "next": "Más regalos"
     },
     "reactions": {
       "eyebrow": "Mira la reacción",
@@ -2227,10 +2229,12 @@
     },
     "ideas": {
       "eyebrow": "Ideas para citas",
-      "title": "Una noche con forma.",
+      "title": "Una noche con plan.",
       "blurb": "Cada idea es una pequeña receta: un par de paradas y un giro. Elige una y la llenamos de sitios reales cerca de ti.",
       "all": "Las {count} ideas, en el mapa",
-      "hours": "{hours} h"
+      "hours": "{hours} h",
+      "previous": "Ideas anteriores",
+      "next": "Más ideas"
     },
     "ldr": {
       "eyebrow": "A distancia",

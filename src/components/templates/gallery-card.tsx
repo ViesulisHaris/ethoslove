@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
@@ -15,6 +14,9 @@ import { sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
+import { useHoverFilm } from "./use-hover-film";
+
+const wantsFilm = () => window.matchMedia("(hover: hover)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
  * Which part of a gift's poster the card shows. A poster is a phone's screen (390 by 600) and the
@@ -46,7 +48,6 @@ const CROP: Record<string, string> = {
 export function GalleryCard({ manifest, index = 0, badge }: { manifest: TemplateManifest; index?: number; badge?: Featured }) {
   const locale = useLocale() as GiftLocale;
   const t = useTranslations();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const currency = useCurrency();
   // As the older card prices it: a premium template is bought as one, and a free template with no
   // free version left (lib/gift/free-tier.ts) costs its "make it special".
@@ -55,15 +56,10 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
   const above = index < 4;
   const crop = CROP[manifest.slug] ?? "object-top";
 
-  const play = () => {
-    const v = videoRef.current;
-    // A phone fires mouseenter on a tap too; the film is for a pointer resting on a card. And for
-    // nobody who asked for less motion: the film is hidden then, and must not be fetched and played unseen.
-    if (!v || !window.matchMedia("(hover: hover)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    v.currentTime = 0;
-    v.play().catch(() => {});
-  };
-  const pause = () => videoRef.current?.pause();
+  // A phone fires mouseenter on a tap too; the film is for a pointer resting on a card. And for
+  // nobody who asked for less motion: the film is hidden then, and must not be fetched and played unseen.
+  // It starts past the recording's opening (use-hover-film.ts).
+  const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, wantsFilm);
 
   return (
     <motion.article
@@ -97,11 +93,12 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
               ref={videoRef}
               src={manifest.thumbnail.webm}
               muted
-              loop
+              loop={loop}
               playsInline
               preload="none"
               aria-hidden="true"
-              className={cn("absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:hidden", crop)}
+              data-card-film
+              className={cn("absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 data-on:opacity-100 motion-reduce:hidden", crop)}
             />
           ) : null}
           {/* The picture's foot runs into the card it stands on. */}
