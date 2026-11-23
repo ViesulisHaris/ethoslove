@@ -53,11 +53,15 @@ test.describe("the Dates tour", () => {
     await mockWorld(page);
     await page.goto(lisbonUrl);
 
+    // The town is already picked (it is in the link): the tour opens on the day, a Back away from the town (walk-rooms-10).
     const tour = page.getByRole("dialog");
-    await expect(tour).toHaveAccessibleName(STEPS[0], { timeout: OPENS_WITHIN });
-    await expect(tour).toContainText(`1 of ${STEPS.length}`);
+    await expect(tour).toHaveAccessibleName(STEPS[1], { timeout: OPENS_WITHIN });
+    await expect(tour).toContainText(`2 of ${STEPS.length}`);
     // Focus starts on the way forward.
     await expect(tour.getByRole("button", { name: "Next" })).toBeFocused();
+    await tour.getByRole("button", { name: "Back" }).click();
+    await expect(tour).toHaveAccessibleName(STEPS[0]);
+    await expect(tour).toContainText(`1 of ${STEPS.length}`);
 
     for (const [i, title] of STEPS.entries()) {
       await expect(tour).toHaveAccessibleName(title);
@@ -83,7 +87,7 @@ test.describe("the Dates tour", () => {
     await page.evaluate(() => window.scrollTo(0, 0));
     const help = page.getByRole("button", { name: "How it works" });
     await help.click();
-    await expect(tour).toHaveAccessibleName(STEPS[0]);
+    await expect(tour).toHaveAccessibleName(STEPS[1]);
     await page.keyboard.press("Escape");
     await expect(tour).toBeHidden();
     await expect(help).toBeFocused();
@@ -95,7 +99,7 @@ test.describe("the Dates tour", () => {
     await page.goto(lisbonUrl);
 
     const tour = page.getByRole("dialog");
-    await expect(tour).toHaveAccessibleName(STEPS[0], { timeout: OPENS_WITHIN });
+    await expect(tour).toHaveAccessibleName(STEPS[1], { timeout: OPENS_WITHIN });
     await tour.getByRole("button", { name: "Next" }).click();
     await tour.getByRole("button", { name: "Skip the tour" }).click();
     await expect(tour).toBeHidden();
@@ -121,7 +125,7 @@ test.describe("the Dates tour", () => {
     await expect(page.getByRole("dialog")).toHaveCount(0);
 
     await page.getByRole("button", { name: "List", exact: true }).click();
-    await expect(page.getByRole("dialog")).toHaveAccessibleName(STEPS[0], { timeout: OPENS_WITHIN });
+    await expect(page.getByRole("dialog")).toHaveAccessibleName(STEPS[1], { timeout: OPENS_WITHIN });
   });
 
   test("speaks Spanish on the Spanish site", async ({ page }) => {
@@ -129,7 +133,7 @@ test.describe("the Dates tour", () => {
     await mockWorld(page);
     await page.goto(`/es${lisbonUrl}`);
     const tour = page.getByRole("dialog");
-    await expect(tour).toHaveAccessibleName("Elige tu ciudad", { timeout: OPENS_WITHIN });
+    await expect(tour).toHaveAccessibleName("Elige un día", { timeout: OPENS_WITHIN });
     await tour.getByRole("button", { name: "Saltar la guía" }).click();
     await expect(tour).toBeHidden();
   });

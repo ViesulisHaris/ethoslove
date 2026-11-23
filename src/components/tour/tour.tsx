@@ -20,7 +20,8 @@ const SCRIM = "0 0 0 200vmax rgba(42, 15, 31, 0.58)";
 const RING = "0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 7px rgba(214, 51, 108, 0.3)";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-type Props = { room: TourRoom; steps: readonly TourStep[]; topInset: number; onClose: () => void };
+/** : the step it opens on (one already done is passed over, lib/tour/steps.ts doneWhen). */
+type Props = { room: TourRoom; steps: readonly TourStep[]; start?: number; topInset: number; onClose: () => void };
 
 const viewport = () => ({ width: document.documentElement.clientWidth, height: window.innerHeight });
 const onScreen = (step: TourStep) => findTarget(step.targets) !== null;
@@ -33,11 +34,11 @@ const showable = (step: TourStep) => canShow(step, onScreen);
  * React render: the page scrolls under them, a list reflows, the phone rotates, and they stay put
  * on what they point at. They glide there rather than jump, unless motion is reduced.
  */
-export function Tour({ room, steps, topInset, onClose }: Props) {
+export function Tour({ room, steps, start = 0, topInset, onClose }: Props) {
   const t = useTranslations("tour");
   const reduced = useReducedMotion() ?? false;
   const present = useIsPresent();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(start);
   const step = steps[index];
   const isLast = index === steps.length - 1;
   const titleId = useId();
