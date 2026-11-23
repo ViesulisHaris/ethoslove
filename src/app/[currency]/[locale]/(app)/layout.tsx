@@ -1,4 +1,6 @@
+import { headers } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
+import { ASKED_PATH_HEADER, wallNext } from "@/lib/auth/sign-in-wall";
 import { ClientMessages } from "@/i18n/client-messages";
 import { redirect } from "@/i18n/navigation";
 import { isConfigured } from "@/lib/env";
@@ -14,7 +16,9 @@ export default async function AppLayout({ children, params }: LayoutProps<"/[cur
 
   const user = await getCurrentUser();
   if (!user && isConfigured.supabase) {
-    redirect({ href: "/login", locale });
+    // Where the person was going, so signing in carries on there (walk-make-4).
+    const next = wallNext((await headers()).get(ASKED_PATH_HEADER));
+    redirect({ href: next ? { pathname: "/login", query: { next } } : "/login", locale });
   }
 
   return (

@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import { refreshSupabaseSession } from "@/lib/supabase/proxy";
 import { visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { forwardedActionPath, isServerActionPost } from "@/lib/server-action-forwarding";
+import { ASKED_PATH_HEADER, isBehindWall } from "@/lib/auth/sign-in-wall";
 
 const handleI18n = createIntlMiddleware(routing);
 
@@ -77,6 +78,12 @@ export async function proxy(request: NextRequest) {
     url.pathname = `/${currency}/${routing.defaultLocale}${pathname}`;
     return NextResponse.rewrite(url);
   }
+
+  // The app's sign-in wall is a layout, which is not told its path: hand it over, so /login gets a
+  // `next` (src/lib/auth/sign-in-wall.ts). next-intl passes the request's headers on to the page.
+  const path = unprefixedPathname(pathname);
+  if (isBehindWall(path)) request.headers.set(ASKED_PATH_HEADER, `${path}${request.nextUrl.search}`);
+  else request.headers.delete(ASKED_PATH_HEADER);
 
   const response = inCurrency(request, handleI18n(request), currency);
   return needsServerSession(pathname) || isServerActionPost(request) ? refreshSupabaseSession(request, response) : response;
