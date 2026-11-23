@@ -61,6 +61,7 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
     pack: "Game pack",
     giftcard: "Gift card: Give Everything",
     upgrade: "Upgrade to Everything",
+    pair: "Two more gifts",
   },
   es: {
     single: "Una plantilla",
@@ -73,6 +74,7 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
     pack: "Pack de juegos",
     giftcard: "Tarjeta regalo: Regálalo todo",
     upgrade: "Pasar a Todo",
+    pair: "Dos regalos más",
   },
 };
 

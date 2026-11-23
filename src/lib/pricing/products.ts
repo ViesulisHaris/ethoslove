@@ -9,7 +9,7 @@
  * Prices, no trials), and while STRIPE_SUBSCRIPTIONS_ENABLED is off it is sold as the one-time
  * yearly pass instead.
  */
-export type ProductId = "single" | "pick3" | "everything" | "extras" | "photos" | "pass" | "membership" | "pack" | "giftcard" | "upgrade";
+export type ProductId = "single" | "pick3" | "everything" | "extras" | "photos" | "pass" | "membership" | "pack" | "giftcard" | "upgrade" | "pair";
 export type MembershipPlan = "monthly" | "yearly";
 /** The three template plans the pricing page shows as cards. */
 export type PlanId = "single" | "pick3" | "everything";
@@ -70,6 +70,11 @@ export const PRODUCTS: Record<ProductId, Product> = {
   membership: { id: "membership", picks: 0, amounts: MEMBERSHIP_PLANS.yearly.amounts, highlight: false, envProductKey: "STRIPE_PRODUCT_FORTWO", name: { en: "Ethos for Two", es: "Ethos for Two" } },
   pack: { id: "pack", picks: 0, amounts: { usd: 299, eur: 299, gbp: 249 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PACK", name: { en: "Ethos: game pack", es: "Ethos: pack de juegos" } },
   giftcard: { id: "giftcard", picks: 0, amounts: { usd: 2999, eur: 2499, gbp: 2199 }, highlight: false, envProductKey: "STRIPE_PRODUCT_GIFTCARD", name: { en: "Ethos gift card: Give Everything", es: "Tarjeta regalo Ethos: Regálalo todo" } },
+  // Two more gifts, offered on the share screen right after a paid gift (components/editor/two-more-gifts.tsx):
+  // two gifts ready on the account, each spent on publishing a template the buyer doesn't hold
+  // (lib/commerce/gift-credits.ts). Its price is Pick three's minus a single, so three gifts always cost
+  // what the pricing page says three cost. It grants no unlock row itself, like a gift card.
+  pair: { id: "pair", picks: 0, amounts: { usd: 600, eur: 500, gbp: 400 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PAIR", name: { en: "Ethos: two more gifts", es: "Ethos: dos regalos más" } },
   upgrade: { id: "upgrade", picks: 0, amounts: { usd: 499, eur: 499, gbp: 499 }, highlight: false, envProductKey: "STRIPE_PRODUCT_UPGRADE", name: { en: "Ethos: upgrade to every template, forever", es: "Ethos: pasa a todas las plantillas, para siempre" } },
 };
 
@@ -143,12 +148,39 @@ export function giftCardsOnSale(env: Record<string, string | undefined> = proces
   return env.GIFT_CARDS_ENABLED === "true";
 }
 
+/** How many gifts ready one "pair" puts on the account. */
+export const PAIR_GIFTS = 2;
+
+/**
+ * Two more gifts are sold only while GIFT_PAIR_ENABLED is "true", and only once migration
+ * 0024_gift_credits.sql has made the table they live in (lib/commerce/gift-credits.ts reads a
+ * missing table as "not on sale"). Server-side only, like giftCardsOnSale: the browser reads false,
+ * so the share screen only ever draws what /api/entitlements says.
+ */
+export function pairOnSale(env: Record<string, string | undefined> = process.env): boolean {
+  return env.GIFT_PAIR_ENABLED === "true";
+}
+
+/** What the two gifts would cost bought one at a time: twice a single, worked out, never typed. */
+export function pairApart(currency: Currency): number {
+  return PAIR_GIFTS * PRODUCTS.single.amounts[currency];
+}
+
 export function isProductId(v: string): v is ProductId {
   return Object.hasOwn(PRODUCTS, v);
 }
 
 export function formatAmount(minor: number, currency: Currency, locale = "en"): string {
   return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: 2 }).format(minor / 100);
+}
+
+/**
+ * A price without its cents when it has none ("€5", "5 €"), and with them otherwise. Only the two
+ * more gifts are shown this way: every other price on the site keeps formatAmount's two places.
+ */
+export function formatRound(minor: number, currency: Currency, locale = "en"): string {
+  const digits = minor % 100 === 0 ? 0 : 2;
+  return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: digits, maximumFractionDigits: digits }).format(minor / 100);
 }
 
 /**
@@ -221,7 +253,8 @@ export const photosUnlock = (templateSlug: string) => `photos:${templateSlug}`;
 export function unlocksFor(product: ProductId, chosenSlugs: string[], options: { packId?: string } = {}): string[] {
   if (product === "everything" || product === "upgrade") return [EVERY_TEMPLATE];
   if (product === "pass" || product === "membership") return [EVERY_TEMPLATE, EVERY_PACK];
-  if (product === "giftcard") return [];
+  // Two more gifts grant gifts ready, not rows: each becomes a row when it is used (lib/commerce/gift-credits.ts).
+  if (product === "giftcard" || product === "pair") return [];
   if (product === "pack") {
     if (!options.packId) throw new Error("product pack needs a pack id");
     return [packUnlock(options.packId)];

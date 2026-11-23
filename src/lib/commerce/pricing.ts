@@ -12,8 +12,11 @@ export function creditIn(amount: number, from: string, to: Currency): number {
   return Math.floor((amount * PRODUCTS.everything.amounts[to]) / fromList);
 }
 
-/** What counts towards "upgrade to Everything for the difference". */
-export const UPGRADE_CREDITED = ["single", "pick3", "extras", "photos"] as const;
+/**
+ * What counts towards "upgrade to Everything for the difference". What two more gifts cost counts
+ * too, as a Pick three's does: they are two of the gifts Everything would have covered.
+ */
+export const UPGRADE_CREDITED = ["single", "pick3", "extras", "photos", "pair"] as const;
 
 /**
  * How many days a purchase counts towards the upgrade, from the day it was made; null: for as long
