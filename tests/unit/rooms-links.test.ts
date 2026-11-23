@@ -279,10 +279,8 @@ describe("the rooms' pages", () => {
     // The matcher is far below the first screen: nothing of it is fetched eagerly.
     expect(MATCH_ART.some((p) => p.eager)).toBe(false);
     expect(HALFWAY_ART.length).toBeGreaterThan(0);
-    const { flowers, ...rest } = ROOMS_THEME;
-    const { flowers: _default, ...base } = DEFAULT_PAGE_THEME;
-    expect(flowers).toBe("ivory");
-    expect(rest).toEqual(base);
+    // The site's own theme, with the ivory lilies.
+    expect(ROOMS_THEME).toEqual({ ...DEFAULT_PAGE_THEME, flowers: "ivory" });
   });
 
   it("the words fit the page", () => {
