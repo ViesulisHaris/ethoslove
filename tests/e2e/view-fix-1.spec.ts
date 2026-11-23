@@ -365,7 +365,7 @@ test.describe("cream, not white: the dates room", () => {
   });
 
   test("/plan: the name and note fields, and a shared plan's twist box", async ({ page }) => {
-    const plan = { v: 1 as const, date: "2030-06-15", where: "Lisbon", idea: "bookshop-and-coffee", stops: [{ id: "node/101", name: "Livraria do Bairro", kind: "bookshop", lat: 38.715, lng: -9.138, time: "14:00" }] };
+    const plan = { v: 1 as const, date: "2030-06-15", where: "Lisbon", idea: "bookshop-and-coffee", stops: [{ id: "node/101", name: "Livraria do Bairro", kind: "bookshop" as const, lat: 38.715, lng: -9.138, time: "14:00" }] };
     await page.addInitScript((p) => window.localStorage.setItem("ethos.dates.plan.v1", p), JSON.stringify(plan));
     // The map draws on blank paper (dates-world.ts): one that cannot load shows its own Try again.
     await mockWorld(page);
