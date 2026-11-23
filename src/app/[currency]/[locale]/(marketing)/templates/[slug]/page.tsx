@@ -159,8 +159,12 @@ export default async function TemplateDetailPage({
                 {lead ? <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{lead}</p> : null}
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  {/* Fetched ahead in full as soon as it is on screen: the editor is drawn per request, and a
+                      link to such a page fetches nothing ahead by default, so the press waited for the
+                      server and the editor's code (3.6 s on a slow phone). */}
                   <Link
                     href={`/create/${manifest.slug}`}
+                    prefetch
                     className={HERO_BUTTON}
                   >
                     {/* Its own key: in Spanish the short "Crear regalo", measured to fit a small phone beside the demo button (everywhere else "Crear este regalo"). */}

@@ -8,8 +8,21 @@ import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { COVER_RATIO, COVER_SHAPE } from "./cover-in-screen";
-import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
+import dynamic from "next/dynamic";
 import { loadTemplate } from "@/templates/registry";
+
+/**
+ * The live phone's code (the gift renderer, and the schema library it reads gifts with) is fetched
+ * when the phone is about to be picked up, not with the page: it was a third of what a gift's page
+ * and an occasion's page loaded, for a phone most visitors never pick up. A finger or a pointer
+ * arriving on "Try the live demo" fetches it, and the gift's own code with it (warmDemo).
+ */
+const importPreview = () => import("@/components/templates/template-phone-preview");
+const TemplatePhonePreview = dynamic(() => importPreview().then((m) => m.TemplatePhonePreview), { ssr: false });
+const warmDemo = (slug: string) => {
+  void importPreview().catch(() => undefined);
+  void loadTemplate(slug).catch(() => undefined);
+};
 
 /**
  * What the page hands over about the render (content/page-art.ts reads it from the art's manifest
@@ -382,7 +395,7 @@ export function HeroFlatlay({
            * which cuts off anything drawn outside it, a focus ring included: the keyboard's ring is
            * drawn round the play disc instead, dark then light, so it shows on any cover.
            */}
-          <button ref={play} type="button" data-play onClick={() => setLive(true)} aria-label={t("tryDemo")} className="group relative block h-full w-full text-paper focus-visible:outline-none">
+          <button ref={play} type="button" data-play onPointerEnter={() => warmDemo(slug)} onPointerDown={() => warmDemo(slug)} onFocus={() => warmDemo(slug)} onClick={() => setLive(true)} aria-label={t("tryDemo")} className="group relative block h-full w-full text-paper focus-visible:outline-none">
             {/* The soft copy that fills the taller screen: blurred as one piece, and larger than the screen, so its faded rim is never seen. */}
             <span data-soft aria-hidden="true" className="pointer-events-none absolute inset-0 block scale-125 blur-lg">
               {["-150%", "50%", "-50%"].map((shift) => (
