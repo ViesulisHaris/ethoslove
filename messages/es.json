@@ -608,6 +608,12 @@
       "shareText": "Te he hecho algo. Ábrelo con el sonido activado 💌 {url}",
       "qrTitle": "Tarjeta QR",
       "qrBlurb": "Imprímela, métela en una tarjeta, pégala en la nevera.",
+      "treeTag": {
+        "title": "La etiqueta del árbol",
+        "line": "Una etiqueta para imprimir y colgar del árbol. La escanean la mañana de Navidad y se abre tu regalo.",
+        "print": "Imprimir la etiqueta",
+        "until": "Con cada regalo hecho hasta el 20 de diciembre"
+      },
       "dashboard": "Verlo en mis regalos",
       "another": "Hacer otro"
     },

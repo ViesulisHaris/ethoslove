@@ -72,6 +72,8 @@ export type FunnelEvent =
   | "etsy_found"
   // The share screen's "Review it on Etsy" (the template).
   | "etsy_review_click"
+  // "Print The Tree Tag" (lib/lifecycle/holiday-extras.ts): where it was tapped, "share" or "dashboard".
+  | "tree_tag_print_opened"
   | "affiliate_click"
   | "reminder_saved"
   // "Send one back to {sender}": the template, and where it was tapped ("end": the end screen,

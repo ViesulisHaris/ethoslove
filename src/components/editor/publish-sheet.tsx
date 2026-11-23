@@ -493,6 +493,7 @@ export function PublishSheet({
             unlockAt={state.schedule.enabled ? state.schedule.unlockAt : undefined}
             data={state.data}
             giftId={state.giftId}
+            paid={Boolean(fetchedEntitlement?.unlocked)}
           />
         ) : (
           <div className="px-4 pt-8 pb-10 min-[360px]:px-5 sm:px-8">

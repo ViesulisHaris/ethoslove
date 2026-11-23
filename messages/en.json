@@ -608,6 +608,12 @@
       "shareText": "I made you something. Open it with your sound on 💌 {url}",
       "qrTitle": "QR card",
       "qrBlurb": "Print it, tuck it in a card, stick it on the fridge.",
+      "treeTag": {
+        "title": "The Tree Tag",
+        "line": "A tag to print and hang on the tree. They scan it on Christmas morning and your gift opens.",
+        "print": "Print The Tree Tag",
+        "until": "With every gift made by 20 December"
+      },
       "dashboard": "See it in your gifts",
       "another": "Make another"
     },

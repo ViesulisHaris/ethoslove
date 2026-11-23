@@ -9,18 +9,24 @@ import { SITE } from "@/config/site";
 import { useEditor } from "@/lib/editor/store";
 import { track } from "@/lib/analytics/track";
 import { tripLinks } from "@/lib/lifecycle/trip-links";
+import { extraFor } from "@/lib/lifecycle/holiday-extras";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import { PARTNER_NAMES, type PartnerId, type PartnerPlacement } from "@/lib/trips/partners";
 import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
+import { TreeTagRow } from "./tree-tag-row";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
 
-export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null }) {
+export function ShareScreen({ shortId, status, unlockAt, data, giftId, paid = false }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null; paid?: boolean }) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
+  // Published this moment, so "made" is now (lib/lifecycle/holiday-extras.ts); read once.
+  const [publishedAt] = useState(() => new Date().toISOString());
+  const treeTag = extraFor({ createdAt: null, publishedAt, paid }) === "tree-tag";
+  const [designQuery, setDesignQuery] = useState("");
   // Publishing needs an account, so this is always true here; the reminder is saved to it.
   const authed = useEditor((s) => s.authed);
   const [copied, setCopied] = useState(false);
@@ -98,8 +104,16 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <section className="mt-8">
         <p className="font-display text-xl">{t("qrTitle")}</p>
         <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
-        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} />
+        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} onDesignChange={setDesignQuery} />
       </section>
+
+      {treeTag && giftId ? (
+        <TreeTagRow
+          href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
+          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), until: t("treeTag.until") }}
+          place="share"
+        />
+      ) : null}
 
       {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}
       <div className="mt-8 flex flex-col gap-2" data-app-hide>
