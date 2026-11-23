@@ -102,7 +102,7 @@ function RatherPlay({ session, room, deal, closed, onChangePlayers }: { session:
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </div>
-        <GameEnd guest={session.mode === "two" && !session.host} />
+        <GameEnd game="rather" phones={session.mode === "two" ? 2 : 1} guest={session.mode === "two" && !session.host} />
       </section>
     );
   }

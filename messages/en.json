@@ -2779,8 +2779,8 @@
       "label": "What next",
       "gift": "Make them a gift",
       "giftBlurb": "A letter, your photos, your song: something they open on their phone.",
-      "another": "Play another game",
-      "anotherBlurb": "Seven on the table. None takes more than a quarter of an hour.",
+      "next": "Or play next",
+      "today": "Send them today's question",
       "host": {
         "title": "Your turn to deal",
         "blurb": "Start your own room and send the link to anyone.",

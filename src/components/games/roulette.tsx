@@ -91,7 +91,7 @@ function Wheel({ names, onChangePlayers }: { names: [string, string]; onChangePl
             {tl("change")}
           </button>
         </div>
-        <GameEnd />
+        <GameEnd game="roulette" />
       </section>
     );
   }

@@ -84,14 +84,15 @@ test.describe("the packs shelf", () => {
 });
 
 test.describe("the end of every game", () => {
-  test("question cards: the last card leads to a gift or another game", async ({ page }) => {
+  test("question cards: the last card leads to a gift and to two named games", async ({ page }) => {
     await page.goto("/games/deck");
     const deal = page.getByRole("button", { name: /^Card 1 of 12/ });
     await expect(deal).toBeVisible();
     for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
     const end = page.getByRole("navigation", { name: "What next" });
     await expect(end.getByRole("link", { name: /Make them a gift/ })).toHaveAttribute("href", "/templates?ref=game-end");
-    await expect(end.getByRole("link", { name: /Play another game/ })).toHaveAttribute("href", "/games#pick");
+    await expect(end.getByRole("link", { name: /Truth or dare/ })).toHaveAttribute("href", "/games/dare");
+    await expect(end.getByRole("link", { name: /How well do you know me/ })).toHaveAttribute("href", "/games/know");
   });
 
   test("truth or dare ends when they say so", async ({ page }) => {

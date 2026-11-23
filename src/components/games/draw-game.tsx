@@ -172,7 +172,7 @@ function DrawPlay({ session, room, closed, onChangePlayers }: { session: Session
             {tl("change")}
           </button>
         </div>
-        <GameEnd guest={two && !session.host} />
+        <GameEnd game="draw" phones={two ? 2 : 1} guest={two && !session.host} />
       </section>
     );
   }

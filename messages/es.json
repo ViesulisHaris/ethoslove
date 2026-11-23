@@ -2779,8 +2779,8 @@
       "label": "¿Y ahora qué?",
       "gift": "Hazle un regalo",
       "giftBlurb": "Una carta, vuestras fotos, vuestra canción: algo que se abre en su móvil.",
-      "another": "Jugar a otro juego",
-      "anotherBlurb": "Hay siete en la mesa. Ninguno dura más de un cuarto de hora.",
+      "next": "O jugad a otro",
+      "today": "Mándale la pregunta de hoy",
       "host": {
         "title": "Te toca repartir",
         "blurb": "Crea tu propia sala y manda el enlace a quien quieras.",
