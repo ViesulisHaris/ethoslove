@@ -8,6 +8,8 @@ import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
 import { CLOSED_BLOCK_WORDS, countWords } from "@/components/templates/page/lead";
 import { pressBrief, pressNav, pressUpdated, shownPress } from "@/lib/press/shown";
+import { PRESS_PLACEMENTS } from "@/components/press/placements";
+import { ART_IDS, pageArt } from "@/content/page-art";
 import { mentionsSpain } from "@/lib/cities/cities";
 import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
 
@@ -230,5 +232,32 @@ describe("press page: when it shows", () => {
     expect(pressNav("es")).toBeNull();
     expect(pressBrief()).toEqual([]);
     expect(pressUpdated()).toBeUndefined();
+  });
+});
+
+describe("press page: how it is drawn", () => {
+  it("P1 the flowers of the page follow the art's rules", () => {
+    const keys = new Set(["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until", "top"]);
+    const pictures = new Set(["lily-footer", "hero-flatlay", "experience-flatlay", "step-photo", "step-note", "step-send", "step-phone"]);
+    for (const p of PRESS_PLACEMENTS) {
+      expect(ART_IDS as readonly string[], p.art).toContain(p.art);
+      expect(pictures.has(p.art), p.art).toBe(false);
+      expect(Math.abs(p.rot), p.art).toBeLessThanOrEqual(25);
+      expect(() => pageArt(p.art, "blush")).not.toThrow();
+      for (const key of Object.keys(p)) expect(keys.has(key), `${p.art}.${key}`).toBe(true);
+    }
+    const desk = PRESS_PLACEMENTS.filter((p) => p.phone !== "only");
+    expect(desk.filter((p) => p.art.startsWith("lily")).length).toBeLessThanOrEqual(2);
+    expect(desk.length).toBeLessThanOrEqual(4);
+    expect(PRESS_PLACEMENTS.filter((p) => p.phone === "only").length).toBeLessThanOrEqual(2);
+  });
+
+  it("W1 nothing on the page is a white, or any colour, written by hand", () => {
+    for (const file of ["src/components/press/press-page.tsx", "src/app/[currency]/[locale]/(marketing)/press/page.tsx"]) {
+      const text = read(file);
+      expect(text, file).not.toMatch(/\b(bg|text|ring|border|from|to)-white\b/);
+      expect(text, file).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+      expect(text, file).not.toMatch(/\brgba?\(/);
+    }
   });
 });
