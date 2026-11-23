@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "motion/react";
 import type { GiftContribution } from "@/lib/gift/schema";
 import { isolated } from "@/lib/group/bidi";
@@ -194,9 +194,13 @@ const READING_ORDER = Array.from({ length: DOOR_COUNT }, (_, i) => i + 1).sort((
 
 /** The gable's round window: its middle and how far out its wreath reaches. */
 const STAR = { x: A.starC.x, y: A.starC.y, r: A.starR.x - A.starC.x };
-/** Where a finger opens it: the wreath and a little of the gable round it, which on a phone on its side is what makes it 44 px. */
+/**
+ * Where a finger opens it: the wreath and a little of the gable round it, and down to the first row of doors. On a phone
+ * on its side whose house is cut over the wreath (lowFit), what is left of it on the screen is still 44 px high.
+ */
 const STAR_REACH = 1.1;
-const STAR_BUTTON: Rect = { x: STAR.x - STAR.r * STAR_REACH, y: STAR.y - STAR.r * STAR_REACH, w: STAR.r * 2 * STAR_REACH, h: STAR.r * 2 * STAR_REACH };
+const STAR_FOOT = Math.min(...Object.values(GEOMETRY).map((g) => g.cell.y));
+const STAR_BUTTON: Rect = { x: STAR.x - STAR.r * STAR_REACH, y: STAR.y - STAR.r * STAR_REACH, w: STAR.r * 2 * STAR_REACH, h: STAR_FOOT - (STAR.y - STAR.r * STAR_REACH) };
 /** What of the other picture the lit window is: the glass and its wreath, and nothing of the doors under it. */
 const STAR_LIT: Rect = { x: STAR.x - STAR.r * 1.22, y: STAR.y - STAR.r * 1.22, w: STAR.r * 2.44, h: STAR.r * 2.44 };
 const STAR_HALO: Rect = { x: STAR.x - STAR.r * 2.6, y: STAR.y - STAR.r * 2.6, w: STAR.r * 5.2, h: STAR.r * 5.2 };
@@ -294,15 +298,42 @@ const KEYFRAMES = `
 const UNIT = { "--k": "min(1cqw, calc(100cqh / 162))" } as CSSProperties;
 /**
  * A phone on its side: the house from the snow on its ridge (31 units down) to the mantel under it (150), and
- * no more wall or wood than frames it, so that a door is as big as six rows under a gable can be on that screen.
- * Four units to spare: a unit and a half over the ridge, two and a half under the mantel. (It was 128, with more
- * mantel under the house: a door 46 by 36 px and the star 43 on a phone 375 high. Six rows of doors and a gable in
- * that height cannot be 44 px a row: at 123 a door is 38 high, and the star is 44.)
+ * no more wall or wood than frames it. Four units to spare: a unit and a half over the ridge, two and a half under
+ * the mantel. That is the whole house where the screen is high enough for a door to be 44 px a row (lowFit).
  */
 export const LOW_UNITS = 123;
-const UNIT_LOW = { "--k": `calc(100cqh / ${LOW_UNITS})` } as CSSProperties;
-/** On a low screen the stage is moved up so that the house, not the wall over it, is in the middle: its ridge 1.5 units under the top. */
-const LOW_SHIFT = 85 - (31 + 150) / 2 - (LOW_UNITS / 2 - 1.5 - (150 - 31) / 2);
+/** The whole house's window on a low screen, in stage units: from over its ridge to under its mantel. */
+const LOW_WINDOW = { top: 31 - 1.5, bottom: 31 - 1.5 + LOW_UNITS };
+/** The doors, frame and all: the top of the first row, the foot of the last, and the lowest a row is. */
+const DOORS_TOP = Math.min(...Object.values(GEOMETRY).map((g) => g.cell.y));
+const DOORS_FOOT = Math.max(...Object.values(GEOMETRY).map((g) => g.cell.y + g.cell.h));
+const ROW_LEAST = Math.min(...Object.values(GEOMETRY).map((g) => g.cell.h));
+/** What a finger is given, a door's height and the star's, in px: a hair over 44, so no rounding takes it under. */
+export const TAP_PX = 44.5;
+/**
+ * The least of the house a low screen shows so that every door and the star are 44 px: the six rows, and over them a
+ * row's height of the star window (its tap area reaches down to the first row).
+ */
+export const LOW_LEAST = DOORS_FOOT - (DOORS_TOP - ROW_LEAST);
+/** Of what has to be cut, how much comes off the foot (the house's plinth and the mantel), the rest off the top (the ridge). */
+const FOOT_SHARE = 0.3;
+
+/**
+ * The house on a low screen (a phone on its side, a laptop zoomed in): `k`, px to a stage unit, and the stage unit at
+ * the screen's middle. Six rows of doors and a gable in a phone's 327 px cannot all be 44 px a row with the whole house
+ * on the screen: at 123 units a door was 38 px high. So where the whole house would make a row under 44 px, the house is
+ * drawn as large as makes it 44, and what the screen has no room for is cut: first the wood under it and the ridge over
+ * it, never a door, nor the star window's tap area. Only a screen under LOW_LEAST rows of 44 px (312 px) has a row under 44.
+ */
+export function lowFit(height: number): { k: number; middle: number } {
+  const whole = height / LOW_UNITS;
+  const k = Math.max(whole, Math.min(TAP_PX / ROW_LEAST, height / LOW_LEAST));
+  const shown = height / k;
+  const cut = Math.max(0, LOW_UNITS - shown);
+  const foot = Math.min(LOW_WINDOW.bottom - DOORS_FOOT, cut * FOOT_SHARE);
+  const bottom = LOW_WINDOW.bottom - foot;
+  return { k, middle: bottom - shown / 2 };
+}
 
 /** What the Tab key stops on in the gift, in order: nothing inert (the room behind a note), hidden or switched off. */
 function tabStops(host: HTMLElement): HTMLElement[] {
@@ -324,7 +355,7 @@ const LOW_PAD = { left: 5, right: 2 };
  * either side of the house, the house moves right (`shift`) to give the column what it needs.
  */
 export function lowColumn(width: number, height: number): { k: number; col: number; shift: number; inner: number } {
-  const k = height / LOW_UNITS;
+  const { k } = lowFit(height);
   const even = width / 2 - LOW_HALF_HOUSE * k;
   const all = width - 2 * LOW_HALF_HOUSE * k;
   const col = Math.max(even, Math.min(LOW_COLUMN_MIN, all));
@@ -647,6 +678,40 @@ function Picture({ lookId, open, box, mirrored }: { lookId: LookId; open: boolea
   );
 }
 
+/**
+ * What is behind an open door: its lit niche out of the open picture, and whatever stands in it. A memo of its own: a
+ * house with every door open holds forty-eight windows onto the whole picture, and a door opened, a note read or the foot's
+ * line nudged drew every one of them again, on the frame its own leaf starts to swing in.
+ */
+const Niche = memo(function Niche({ n, lookId, sweet, name, read, out, fresh, cap, onShortFit }: { n: number; lookId: LookId; sweet?: Sweet; /** The name of whoever wrote the note behind it. */ name?: string; read: boolean; /** Its note is out, being read. */ out: boolean; fresh: boolean; cap?: number; onShortFit: (door: number, size: number | null) => void }) {
+  const g = GEOMETRY[n];
+  return (
+    <div aria-hidden="true" className="pointer-events-none overflow-hidden" style={laid(g.inside)} data-niche={n} data-holds={sweet ?? (read ? "tag" : "envelope")}>
+      <Picture lookId={lookId} open box={g.inside} />
+      {sweet ? (
+        <img src={`${ART_BASE}${sweet}.webp`} alt="" draggable={false} className={fresh ? "ac-pop" : undefined} style={{ ...stood(g, sweet), transformOrigin: "50% 100%" }} />
+      ) : out ? null : read && name !== undefined ? (
+        <>
+          <img src={`${ART_BASE}tag.webp`} alt="" draggable={false} style={stood(g, "tag")} />
+          <TagName g={g} name={name} door={n} cap={cap} onShortFit={onShortFit} />
+        </>
+      ) : (
+        <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} style={stood(g, "envelope")} />
+      )}
+    </div>
+  );
+});
+
+/** An open door's leaf in the open picture, standing towards the lens. */
+const Leaf = memo(function Leaf({ n, lookId, settling }: { n: number; lookId: LookId; settling: boolean }) {
+  const g = GEOMETRY[n];
+  return (
+    <div aria-hidden="true" className={`pointer-events-none overflow-hidden${settling ? " ac-settle" : ""}`} style={{ ...laid(g.leaf), clipPath: g.leafClip, WebkitClipPath: g.leafClip }}>
+      <Picture lookId={lookId} open box={g.leaf} />
+    </div>
+  );
+});
+
 const STAGE_BOX: Rect = { x: 0, y: 0, w: 100, h: 170 };
 /** The longest sender's name the star's line names: a longer one would run the line onto two, and it says "the letter". */
 const STAR_HINT_NAME = 16;
@@ -728,7 +793,8 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   }, [away, inHand]);
 
   // past the picture's own edges, on a screen wider than it, the room goes on as its own reflection
-  const k = wide?.ready ? (low ? wide.height / LOW_UNITS : Math.min(wide.width / 100, wide.height / 162)) : 0;
+  const fit = low && wide?.ready ? lowFit(wide.height) : null;
+  const k = wide?.ready ? (fit ? fit.k : Math.min(wide.width / 100, wide.height / 162)) : 0;
   const column = low && wide?.ready ? lowColumn(wide.width, wide.height) : null;
   const beyond = !!wide?.ready && wide.width + 2 * (column?.shift ?? 0) > PICTURE.w * k + 2;
 
@@ -801,7 +867,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
     // while a note or the letter is read the room stays where it is, behind it, out of reach of finger and keyboard
     <div
       className={clear && !low ? "ac-clear absolute inset-0" : "absolute inset-0"}
-      style={low ? UNIT_LOW : clear ? { ...UNIT, ...CLEAR } : UNIT}
+      style={low ? ({ "--k": fit ? `${fit.k.toFixed(4)}px` : `calc(100cqh / ${LOW_UNITS})` } as CSSProperties) : clear ? { ...UNIT, ...CLEAR } : UNIT}
       inert={away}
       aria-hidden={away || undefined}
       onClick={(e: ReactMouseEvent) => {
@@ -812,7 +878,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
       <div
         role={inert ? "img" : "group"}
         aria-label={s.house}
-        style={{ position: "absolute", top: "50%", left: "50%", width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: low ? `translate(calc(-50% + ${(column?.shift ?? 0).toFixed(2)}px), calc(-50% + ${LOW_SHIFT} * var(--k)))` : "translate(-50%, calc(-50% - var(--ac-lift, 0px)))" }}
+        style={{ position: "absolute", top: "50%", left: "50%", width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: low ? `translate(calc(-50% + ${(column?.shift ?? 0).toFixed(2)}px), calc(-50% + ${(85 - (fit?.middle ?? (LOW_WINDOW.top + LOW_WINDOW.bottom) / 2)).toFixed(3)} * var(--k)))` : "translate(-50%, calc(-50% - var(--ac-lift, 0px)))" }}
       >
         {/* the room, every door shut */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -829,40 +895,29 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
         </div>
 
         {/* what is behind each open door: its lit niche out of the other picture, and whatever stands in it */}
+        {/* (each is its own memo: opening one door draws that door, not every door already open) */}
         {opened.map((n) => {
-          const g = GEOMETRY[n];
           const door = doors[n - 1];
-          if (!g || !door) return null;
+          if (!GEOMETRY[n] || !door) return null;
           const note = door.kind === "note" ? notes[door.index] : undefined;
-          const read = readDoors.includes(n);
-          const fresh = !inert && !reduce && swinging.includes(n);
           return (
-            <div key={n} aria-hidden="true" className="pointer-events-none overflow-hidden" style={laid(g.inside)} data-niche={n} data-holds={door.kind === "sweet" ? door.sweet : read ? "tag" : "envelope"}>
-              <Picture lookId={lookId} open box={g.inside} />
-              {door.kind === "sweet" ? (
-                <img src={`${ART_BASE}${door.sweet}.webp`} alt="" draggable={false} className={fresh ? "ac-pop" : undefined} style={{ ...stood(g, door.sweet), transformOrigin: "50% 100%" }} />
-              ) : inHand === n ? null : read && note ? (
-                <>
-                  <img src={`${ART_BASE}tag.webp`} alt="" draggable={false} style={stood(g, "tag")} />
-                  <TagName g={g} name={note.name} door={n} cap={shortCap} onShortFit={onShortFit} />
-                </>
-              ) : (
-                <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} style={stood(g, "envelope")} />
-              )}
-            </div>
+            <Niche
+              key={n}
+              n={n}
+              lookId={lookId}
+              sweet={door.kind === "sweet" ? door.sweet : undefined}
+              name={note?.name}
+              read={readDoors.includes(n)}
+              out={inHand === n}
+              fresh={!inert && !reduce && swinging.includes(n)}
+              cap={shortCap}
+              onShortFit={onShortFit}
+            />
           );
         })}
 
         {/* each open door's leaf, standing out of the picture towards the lens: over its neighbours, as it is in the room */}
-        {opened.map((n) => {
-          const g = GEOMETRY[n];
-          if (!g) return null;
-          return (
-            <div key={n} aria-hidden="true" className={`pointer-events-none overflow-hidden${!inert && !reduce && swinging.includes(n) ? " ac-settle" : ""}`} style={{ ...laid(g.leaf), clipPath: g.leafClip, WebkitClipPath: g.leafClip }}>
-              <Picture lookId={lookId} open box={g.leaf} />
-            </div>
-          );
-        })}
+        {opened.map((n) => (GEOMETRY[n] ? <Leaf key={n} n={n} lookId={lookId} settling={!inert && !reduce && swinging.includes(n)} /> : null))}
 
         {/* a door on its way open: the shut picture's own door, turned on its left edge as the lens would see it turn, gone as the open leaf comes in under it */}
         {swinging.length && !inert ? (
@@ -954,11 +1009,18 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
  */
 export const TAG_SMALLEST = 2.6;
 const TAG_FLOOR_PX = 8.5;
+/**
+ * Where a name is whole only a hair under that ("The Okonkwos" on a tag 25 px wide: a laptop at 200%), it is written whole
+ * at 8 px rather than cut at 8.5: the whole name, a hair smaller, reads better than "The Okon…".
+ */
+const TAG_LAST_PX = 8;
 /** The sizes a name is tried at, largest first, in stage units; how its lines are set; the room kept either side of it, in ems. */
 // The steps above 3.1 are a fifth of a unit apart: every short name in a house is written at the size the narrowest of
 // their tags holds, and a step of 0.4 under it cost them all: on a phone 320 wide every Spanish short name was 9.9 px.
 export const TAG_SIZES = [3.9, 3.7, 3.5, 3.3, 3.1, 2.8, TAG_SMALLEST] as const;
-const TAG_LEADING = 0.98;
+// Two lines of a hand set close: at 0.98 a two-word name ("Auntie Jo", "Aunt Jo") took two lines more height than a
+// tag 19 px high has at 10 px, and was written at 9 instead. Its letters do not reach into the line under them.
+const TAG_LEADING = 0.9;
 const TAG_MARGIN = 0.16;
 /** A last try at the smallest size before a word is broken: the letters a hair closer, the margins a hair less. */
 const TAG_TIGHT = { track: -0.04, margin: 0.1 };
@@ -970,6 +1032,8 @@ export type TagFit = {
   track: number;
   /** The whole name is on the tag, no word broken: nothing needs cutting. */
   whole: boolean;
+  /** The smallest it is drawn at, in px, where that is not TAG_FLOOR_PX. */
+  least?: number;
 };
 
 /**
@@ -1019,7 +1083,7 @@ export const isShortName = (name: string) => !/\s/.test(name.trim()) && [...name
 
 const tagStyle = (fit: TagFit): CSSProperties => ({
   fontFamily: "var(--gift-font-hand)",
-  fontSize: `max(${TAG_FLOOR_PX}px, calc(${fit.size}*var(--k)))`,
+  fontSize: `max(${fit.least ?? TAG_FLOOR_PX}px, calc(${fit.size}*var(--k)))`,
   lineHeight: TAG_LEADING,
   letterSpacing: fit.track ? `${fit.track}em` : undefined,
   paddingInline: `${fit.whole ? (fit.track ? TAG_TIGHT.margin : TAG_MARGIN) : 0.22}em`,
@@ -1091,9 +1155,12 @@ function TagName({ g, name, door, cap, onShortFit }: { g: Geometry; name: string
       const words = name.trim().split(/\s+/).filter(Boolean);
       // how many pixels a stage unit is here: the face's box is the face's width in them
       const k = (el.parentElement?.getBoundingClientRect().width ?? 0) / face.w;
-      const reckoned = fitTag(words.map(em), words.map((word) => [...word].length), em(" "), face, k > 0 ? TAG_FLOOR_PX / k : 0);
+      const at = (px: number) => fitTag(words.map(em), words.map((word) => [...word].length), em(" "), face, k > 0 ? px / k : 0);
+      const first = at(TAG_FLOOR_PX);
+      const last = first.whole ? first : at(TAG_LAST_PX);
+      const reckoned = last.whole && last !== first ? { ...last, least: TAG_LAST_PX } : first;
       const next = reckoned.whole && !drawnWhole(el, reckoned, tagHolds(face, reckoned.size)) ? TAG_BROKEN : reckoned;
-      setFit((was) => (was.size === next.size && was.track === next.track && was.whole === next.whole ? was : next));
+      setFit((was) => (was.size === next.size && was.track === next.track && was.whole === next.whole && was.least === next.least ? was : next));
     };
     measure();
     // the handwriting face may arrive after the tag does: measured in a stand-in face, a name would be sized for the wrong letters
@@ -1207,7 +1274,11 @@ export function NoteCard({ lookId, s, note, door, from, seed, read, total, reduc
           if (e.detail > 0 && clock() - shownAt.current < VEIL_WAIT_MS) return;
           onClose();
         }}
-        className="absolute inset-0 cursor-pointer outline-none" style={{ background: look.veil, backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }} />
+        // The veil is what the keyboard is on while a note is out (Enter puts it back): focused from a key it is ringed, as the sound button is.
+        data-veil=""
+        className="absolute inset-0 cursor-pointer outline-none focus-visible:shadow-[inset_0_0_0_3px_rgba(255,255,255,0.9)]"
+        style={{ background: look.veil, backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }}
+      />
       <div className="pointer-events-none relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto scrollbar-none">
         <div className="grid min-h-full place-items-center px-[4cqw]" style={{ paddingBlock: low ? "10px 4px" : `${CARD_TOP} calc(2*var(--u))` }}>
           <motion.div

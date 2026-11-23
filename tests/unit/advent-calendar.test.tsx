@@ -23,7 +23,7 @@ import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
 import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
-import { COPY, LOW_COLUMN_MIN, LOW_UNITS, NoteCard, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, lowColumn, lowTitlePx, settleMs, shortCapOf, TAG_SIZES } from "@/templates/advent-calendar/Template";
+import { COPY, LOW_COLUMN_MIN, LOW_LEAST, LOW_UNITS, NoteCard, TAP_PX, lowFit, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, lowColumn, lowTitlePx, settleMs, shortCapOf, TAG_SIZES } from "@/templates/advent-calendar/Template";
 import { keep, keptKey, recall } from "@/templates/advent-calendar/kept";
 import { soldAsGroup } from "@/lib/gift/free-tier";
 import { templateProductNode } from "@/lib/seo";
@@ -506,8 +506,10 @@ describe("the contract a group template keeps", () => {
       // a short name: one line, large
       expect(fit(["Mum"], face)).toEqual({ size: 3.9, track: 0, whole: true });
       expect(fit(["Gran"], face)).toEqual({ size: 3.9, track: 0, whole: true });
-      // two words that do not share a line at any size: two lines of a size two lines fit in, each word whole
-      expect(fit(["Auntie", "Jo"], face)).toEqual({ size: 2.8, track: 0, whole: true });
+      // Two words that do not share a line at any size: two lines of a size two lines fit in, each word whole. (Set at 0.98
+      // two lines of 3.1 were taller than the face, and "Auntie Jo" was 2.8 units: 9 px on a phone 320 wide. Now 10.6.)
+      expect(fit(["Auntie", "Jo"], face)).toEqual({ size: 3.3, track: 0, whole: true });
+      expect(3.3 * 3.2).toBeGreaterThanOrEqual(10);
       // A word of seven to nine letters is as wide as the face at the smallest size. It used to be broken ("Grandm / a") or
       // written at 7 px; it is whole, at the smallest size that reads, its letters a hair closer.
       for (const word of ["Grandma", "Okonkwos", "Charlotte"] as const) expect(fit([word], face), word).toEqual({ size: TAG_SMALLEST, track: -0.04, whole: true });
@@ -523,7 +525,7 @@ describe("the contract a group template keeps", () => {
     // long word no longer is, and is cut rather than written too small to read.
     const side = (words: (keyof typeof em)[]) => fitTag(words.map((word) => em[word]), words.map((word) => word.length), space, faces[1], 8.5 / 2.67);
     expect(side(["Mum"])).toEqual({ size: 3.9, track: 0, whole: true });
-    expect(side(["Auntie", "Jo"])).toEqual({ size: 2.8, track: 0, whole: true });
+    expect(side(["Auntie", "Jo"]).whole).toBe(true);
     expect(side(["The", "Okonkwos"]).whole).toBe(false);
   });
 
@@ -859,22 +861,41 @@ describe("after the hands-on test", () => {
     expect(s).toContain("if (e.detail > 0 && clock() - shownAt.current < VEIL_WAIT_MS) return;");
   });
 
-  it("on a phone on its side the house is fitted to the screen with four units to spare, and the star is 44 px on a phone 375 high", () => {
+  it("on a phone on its side every door and the star are 44 px to a finger: the house is drawn that large, and the ridge and the wood under it are cut first (C5)", () => {
     const anchors = ANCHORS as unknown as Record<string, { x: number; y: number }>;
     expect(LOW_UNITS - (150 - 31)).toBe(4);
-    // a door's tap area on a phone 375 high, under the browser's bar (327 px of gift): six rows and a gable in that height
-    const k = 327 / LOW_UNITS;
-    const tall = Math.min(
-      ...Array.from({ length: DOOR_COUNT }, (_, i) => {
-        const n = i + 1;
-        const h = anchors[`d${n}BR`].y - anchors[`d${n}TL`].y;
-        return h + (NICHE.frame / NICHE.w) * (anchors[`d${n}BR`].x - anchors[`d${n}TL`].x);
-      }),
-    );
-    expect(tall * k).toBeGreaterThanOrEqual(37.5);
-    // 44 px a row would need the house 44 / tall pixels to a stage unit: more height than the screen has
-    expect((150 - 31) * (44 / tall)).toBeGreaterThan(327);
-    expect((anchors.starR.x - anchors.starC.x) * 2 * 1.1 * k).toBeGreaterThanOrEqual(44);
+    const cells = Array.from({ length: DOOR_COUNT }, (_, i) => {
+      const n = i + 1;
+      const frame = (NICHE.frame / NICHE.w) * (anchors[`d${n}BR`].x - anchors[`d${n}TL`].x);
+      return { top: anchors[`d${n}TL`].y - frame / 2, foot: anchors[`d${n}BR`].y + frame / 2 };
+    });
+    const row = Math.min(...cells.map((c) => c.foot - c.top));
+    const top = Math.min(...cells.map((c) => c.top));
+    const foot = Math.max(...cells.map((c) => c.foot));
+    const star = { y: anchors.starC.y, r: anchors.starR.x - anchors.starC.x };
+    // The gifts measured on a phone on its side, under the demo's bar: 844x390 (342 px), 812x375 and 667x375 (327), 740x360 (312).
+    // The whole house made a door 38 px high in 327; now every row is 44 at each of them.
+    for (const height of [342, 327, 312.5, 360, 384]) {
+      const { k, middle } = lowFit(height);
+      expect(row * k, `${height}: a row`).toBeGreaterThanOrEqual(44);
+      const shown = { top: middle - height / k / 2, foot: middle + height / k / 2 };
+      // every door is whole on the screen
+      expect(shown.top, `${height}`).toBeLessThanOrEqual(top);
+      expect(shown.foot, `${height}`).toBeGreaterThanOrEqual(foot - 1e-9);
+      // the star's tap area (wreath and gable, down to the first row) has 44 px of it on the screen
+      expect((top - Math.max(shown.top, star.y - star.r * 1.1)) * k, `${height}: the star`).toBeGreaterThanOrEqual(44);
+    }
+    // At 342 and 327 the star window is whole on the screen: what is cut is the snow on the ridge.
+    for (const height of [342, 327]) {
+      const { k, middle } = lowFit(height);
+      expect(middle - height / k / 2, `${height}`).toBeLessThanOrEqual(star.y - star.r);
+      expect(middle - height / k / 2, `${height}`).toBeGreaterThan(31);
+    }
+    // A screen high enough draws the whole house as before, 123 units, its middle 91 units down.
+    expect(lowFit(400)).toEqual({ k: 400 / LOW_UNITS, middle: 91 });
+    // Under 312 px a row is under 44: six rows and a row of the star cannot be more than the screen.
+    expect(LOW_LEAST * (44 / row)).toBeGreaterThan(300);
+    expect(TAP_PX).toBeGreaterThanOrEqual(44);
   });
 
   it("remembers, for the tab, the doors opened and the notes read on a real gift's page only, with nothing in it that says whose", () => {

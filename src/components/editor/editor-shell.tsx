@@ -365,7 +365,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                     </div>
                   ) : null}
                 </WhoSection>
-                <WordsSection aiEnabled={aiEnabled} />
+                <WordsSection aiEnabled={aiEnabled} groupCard={drawsGroup} />
                 {GroupSection ? <GroupSection manifest={manifest} /> : null}
                 {manifest.tier === "free" ? <MoveOffer manifest={manifest} /> : null}
                 <UnwrapSection manifest={manifest} />

@@ -277,10 +277,10 @@ for (const locale of ["en", "es"] as const) {
     await expect(card(root)).toBeVisible();
     await expect(card(root).locator("blockquote")).toHaveText(
       en
-        ? "I lit the candles on your cake anyway and Dad blew them out for you. Ring me when you wake up, whatever time it is here."
+        ? "I lit the candles on your cake anyway and Dad blew them out for you. Call me when you wake up, whatever time it is here."
         : "Encendí las velas de tu tarta de todas formas y las sopló papá por ti. Llámame cuando te despiertes, sea la hora que sea aquí.",
     );
-    await expect(card(root).getByText(en ? "Mum" : "Mamá", { exact: true })).toBeVisible();
+    await expect(card(root).getByText(en ? "Mom" : "Mamá", { exact: true })).toBeVisible();
     await expect(card(root).getByText(en ? `door ${noteDoor}` : `puerta ${noteDoor}`)).toBeVisible();
     await expect(card(root).locator('img[src*="/demo/photos/p3"]')).toBeVisible();
     // under it: how many notes have been read, this one among them. Not how many envelopes are in sight.
@@ -298,8 +298,8 @@ for (const locale of ["en", "es"] as const) {
     await expect(niche(root, nextShut)).toHaveAttribute("data-holds", /.+/, { timeout: 2_000 });
     await expect(card(root)).toHaveCount(0);
     await expect(niche(root, noteDoor)).toHaveAttribute("data-holds", "tag");
-    await expect(niche(root, noteDoor).locator("[data-tag-name]")).toHaveText(en ? "Mum" : "Mamá");
-    await expect(door(root, noteDoor)).toHaveAccessibleName(en ? `Mum, door ${noteDoor}` : `Mamá, puerta ${noteDoor}`);
+    await expect(niche(root, noteDoor).locator("[data-tag-name]")).toHaveText(en ? "Mom" : "Mamá");
+    await expect(door(root, noteDoor)).toHaveAccessibleName(en ? `Mom, door ${noteDoor}` : `Mamá, puerta ${noteDoor}`);
     await expect(root.locator("[data-star-lit]")).toHaveCount(0);
     // a note has been read: the line that said an envelope can be opened has done its work
     await expect(hint(root)).toHaveCount(0);
@@ -315,7 +315,7 @@ for (const locale of ["en", "es"] as const) {
       signed.push((await card(root).locator("p[dir=auto]").innerText()).trim());
     });
     // whoever is first in the card has the lowest of the chosen doors, and so on up
-    expect(signed).toEqual(en ? ["Mum", "Iris", "Dad", "The Okonkwos", "Sam", "Gran", "Leo", "Auntie Jo"] : ["Mamá", "Iris", "Papá", "Los Okonkwo", "Sam", "La abuela", "Leo", "La tía Jo"]);
+    expect(signed).toEqual(en ? ["Mom", "Iris", "Dad", "The Okonkwos", "Sam", "Nana", "Leo", "Aunt Jo"] : ["Mamá", "Iris", "Papá", "Los Okonkwo", "Sam", "Abuela", "Leo", "Tía Jo"]);
     await expect(root.locator("[data-star-lit]")).toHaveCount(1);
     await expect(foot(root)).toHaveText(en ? "every note read · the star is lit" : "todas las notas leídas · la estrella brilla");
     // "the star is lit" never said it could be tapped, and everything of the sender's is behind it
@@ -422,6 +422,9 @@ test("by keyboard alone: a sweet's door keeps the focus, a note comes out and go
   await page.keyboard.press("Enter");
   await expect(card(root)).toBeVisible();
   await expect(putBack(root)).toBeFocused();
+  // Focused from a key, the veil (the button that puts the note back) is ringed: Tab went between it and the sound button,
+  // and on every other press nothing on the screen looked focused (N1-1).
+  expect(await putBack(root).evaluate((el) => el.matches(":focus-visible") && /inset/.test(getComputedStyle(el).boxShadow) && /3px/.test(getComputedStyle(el).boxShadow))).toBe(true);
   await page.keyboard.press("Enter");
   await expect(card(root)).toHaveCount(0);
   await expect(door(root, 19)).toBeFocused();
@@ -603,14 +606,14 @@ for (const size of SIZES) {
     }
     // the star window is 44 px to a finger on every one of them
     expect(Math.min(starBox.width, starBox.height)).toBeGreaterThanOrEqual(44);
-    // A phone on its side, under the demo's own bar: six rows and a gable in 342 px. A door is as big as that allows
-    // (it was 46 by 36, the star 38.5; then 48.7 by 38.3): wider than 44, and 39.5 high, which is what is left of the height.
-    if (size.name === "844x390") {
-      expect(first.width).toBeGreaterThanOrEqual(50);
-      expect(first.height).toBeGreaterThanOrEqual(39.5);
+    // And every door, on every one of them. A phone on its side, under the demo's own bar, has six rows and a gable in
+    // 342 px: the whole house made a door 46 by 36 there, then 48.7 by 38.3. The house is drawn large enough for 44, and
+    // the snow on its ridge and the wood under it are what the screen leaves out (C5).
+    for (const box of await root.locator("[data-door]").evaluateAll((els) => els.map((el) => el.getBoundingClientRect()).map((r) => ({ w: r.width, h: r.height })))) {
+      expect(box.w).toBeGreaterThanOrEqual(44);
+      expect(box.h).toBeGreaterThanOrEqual(44);
     }
-    // on any of them a door is never smaller than a fingertip can find
-    expect(Math.min(first.width, first.height)).toBeGreaterThanOrEqual(36);
+    expect(first.height).toBeGreaterThanOrEqual(44);
     // the title and the line at the foot are on the screen, and nothing scrolls sideways
     await inside(page, root.getByRole("heading", { level: 1 }));
     await inside(page, foot(root));
@@ -709,6 +712,15 @@ for (const view of [
         const box = (await target.boundingBox())!;
         expect(box.x + box.width).toBeLessThanOrEqual(view_.x + view_.width + 1);
       }
+      // Every door 44 px to a finger and whole on the screen, and 44 px of the star's tap area on it: the house is drawn
+      // that large, and on a screen this low the ridge over the star and the wood under the doors are left out (C5).
+      for (const box of await root.locator("[data-door]").evaluateAll((els) => els.map((el) => el.getBoundingClientRect()).map((r) => ({ y: r.top, w: r.width, h: r.height })))) {
+        expect(Math.min(box.w, box.h), `${path}: a door`).toBeGreaterThanOrEqual(44);
+        expect(box.y).toBeGreaterThanOrEqual(view_.y - 1);
+        expect(box.y + box.h).toBeLessThanOrEqual(view_.y + view_.height + 1);
+      }
+      const starBox = (await star(root).boundingBox())!;
+      expect(Math.min(starBox.y + starBox.height, view_.y + view_.height) - Math.max(starBox.y, view_.y), `${path}: the star`).toBeGreaterThanOrEqual(44);
     }
     expect(w.problems).toEqual([]);
     await context.close();

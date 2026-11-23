@@ -289,11 +289,16 @@ test.describe("the note, each gift its own way", () => {
     await GIFTS[2].finish(page, "en");
     await expect(page.getByText(/dear mia/i)).toBeVisible({ timeout: 20000 });
     await expect(page.getByText("1 / 9")).toBeVisible();
-    // a tap on the right of the card goes on, on its left goes back
-    const vp = page.viewportSize()!;
-    await page.mouse.click(vp.width * 0.7, vp.height * 0.5);
+    // A tap on the right of the card goes on, on its left goes back. (Measured on the card itself: at 70% of a 1280 px
+    // screen the tap was right of a card 300 px wide, on the letter's backdrop, and turned nothing.)
+    const at = async (share: number) => {
+      const card = page.locator('button[aria-hidden="true"][tabindex="-1"]').last().locator("xpath=..");
+      const box = (await card.boundingBox())!;
+      await page.mouse.click(box.x + box.width * share, box.y + box.height * 0.5);
+    };
+    await at(0.7);
     await expect(page.getByText("2 / 9")).toBeVisible({ timeout: 5000 });
-    await page.mouse.click(vp.width * 0.16, vp.height * 0.5);
+    await at(0.16);
     await expect(page.getByText("1 / 9")).toBeVisible({ timeout: 5000 });
     await toTheEnd(page);
     await expect(page.getByText("9 / 9")).toBeVisible();

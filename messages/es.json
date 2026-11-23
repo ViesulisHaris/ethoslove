@@ -636,6 +636,7 @@
       "forName": "Para quién es",
       "prompt": "¿Qué quieres que escriban?",
       "promptPlaceholder": "P. ej.: un recuerdo solo vuestro",
+      "messagePlaceholder": "Empieza contando por qué pediste a todos que escribieran. Sus notas van en la tarjeta; esta carta es la tuya…",
       "optional": "Opcional",
       "create": "Crear el enlace",
       "creating": "Creando…",

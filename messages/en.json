@@ -636,6 +636,7 @@
       "forName": "Who it's for",
       "prompt": "What should they write?",
       "promptPlaceholder": "e.g. A memory only you two share",
+      "messagePlaceholder": "Start with why you asked everyone to write. Their notes are in the card; this letter is yours…",
       "optional": "Optional",
       "create": "Create the link",
       "creating": "Creating…",
