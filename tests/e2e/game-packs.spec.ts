@@ -46,7 +46,10 @@ test.describe("the packs shelf", () => {
     await expect(far).toContainText("€2.99", { timeout: 15_000 });
     await far.click();
     await page.getByRole("button", { name: "Get it for €2.99" }).click();
-    await expect.poll(() => asked).toEqual({ product: "pack", packId: "distance", returnTo: "/games/deck?pack=distance", locale: "en", currency: "eur" });
+    // The pack, where to come back to, the language and the currency; the checkout also adds where the
+    // buyer came from (ref, source: purchase attribution, 14 Nov). No amount ever travels.
+    await expect.poll(() => asked).toMatchObject({ product: "pack", packId: "distance", returnTo: "/games/deck?pack=distance", locale: "en", currency: "eur" });
+    expect(asked).not.toHaveProperty("amount");
     await expect(page.getByText("Couldn't open checkout. Please try again.")).toBeVisible();
   });
 
