@@ -72,8 +72,12 @@ export function upgradeLineDescription(currency: Currency, locale: Locale): stri
   return locale === "es" ? `Todas las plantillas cuestan ${full}, y lo que ya has pagado se resta.` : `Every template is ${full}, and what you've already paid counts towards it.`;
 }
 
+/** What Stripe's page says under two more gifts. */
+export const PAIR_LINE_DESCRIPTION: Record<Locale, string> = { en: "Two gifts, any you like, whenever you like", es: "Dos regalos, los que quieras, cuando quieras" };
+
 function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | undefined {
   if (line.key === "bump") return undefined;
+  if (line.key === "pair") return PAIR_LINE_DESCRIPTION[locale];
   // The second gift says which template it is.
   if (line.key === "second") return plan.second ? (getManifest(plan.second)?.name[locale] ?? plan.second) : undefined;
   if (line.key === "upgrade") return upgradeLineDescription(plan.currency, locale);
@@ -148,6 +152,7 @@ export function consentSentence(product: CheckoutPlan["product"], locale: Locale
     if (product === "pass") return `Pido a Ethos que active mi año de Ethos for Two de inmediato. Es un pago único por un año y no se renueva solo. ${withdrawal}`;
     if (product === "giftcard")
       return "Pido a Ethos que emita el código de mi tarjeta regalo de inmediato. Entiendo que puedo desistir en un plazo de 14 días, con el reembolso íntegro, siempre que el código no se haya canjeado, y que una vez canjeado ya no podré desistir.";
+    if (product === "pair") return "Entiendo que puedo desistir en un plazo de 30 días, con el reembolso de los regalos que no haya usado, y que un regalo ya usado no se puede cancelar.";
     return "Pido a Ethos que desbloquee mi compra de inmediato, antes de que termine el plazo de desistimiento de 14 días, y entiendo que, una vez desbloqueada, pierdo mi derecho de desistimiento.";
   }
   const withdrawal = "I understand that I can still withdraw within 14 days, and that I would then pay only for the days I've used.";
@@ -156,6 +161,9 @@ export function consentSentence(product: CheckoutPlan["product"], locale: Locale
   if (product === "pass") return `I ask Ethos to start my Ethos for Two year straight away. It's one payment for one year and doesn't renew by itself. ${withdrawal}`;
   if (product === "giftcard")
     return "I ask Ethos to issue my gift card code straight away. I understand that I can cancel within 14 days for a full refund as long as the code hasn't been redeemed, and that once it has been redeemed I can no longer cancel.";
+  // Two more gifts: nothing is supplied until a gift is used, so an unused one stays refundable, for
+  // 30 days (the owner's promise, longer than the law's 14), and a used one is like any unlock.
+  if (product === "pair") return "I understand that I can cancel within 30 days for a refund of any of these gifts I haven't used, and that a gift I've used can no longer be cancelled.";
   return "I ask Ethos to unlock my purchase straight away, before the 14-day cancellation period ends, and I understand that once it's unlocked I lose my right to cancel.";
 }
 
@@ -195,12 +203,14 @@ export function withdrawalNotice(product: CheckoutPlan["product"], locale: Local
     if (product === "pass") return `Al pagar, pides que tu año de Ethos for Two empiece de inmediato. Es un pago único por un año y no se renueva solo. Puedes desistir en un plazo de 14 días. Términos: ${terms}`;
     if (product === "giftcard")
       return `El código de tu tarjeta regalo se emite al instante. Puedes cambiar de opinión en un plazo de 14 días y te devolvemos el importe íntegro, siempre que el código no se haya canjeado; una vez canjeado, ya no se reembolsa. Términos: ${terms}`;
+    if (product === "pair") return `Se añaden dos regalos a tu cuenta. Un regalo que no hayas usado se reembolsa durante 30 días; uno que ya hayas usado no se puede cancelar. Términos: ${terms}`;
     return `Al pagar, pides que tu compra se desbloquee al instante y aceptas que, una vez desbloqueada, pierdes el derecho de desistimiento de 14 días. Términos: ${terms}`;
   }
   if (product === "membership") return `By subscribing, you ask for Ethos for Two to start straight away. ${renewalNotice(plan, currency, locale)} You can withdraw within 14 days. Terms: ${terms}`;
   if (product === "pass") return `By paying, you ask for your year of Ethos for Two to start straight away. It's one payment for one year and doesn't renew by itself. You can withdraw within 14 days. Terms: ${terms}`;
   if (product === "giftcard")
     return `Your gift card code is issued straight away. You can change your mind within 14 days for a full refund, as long as the code hasn't been redeemed; once it has, it can't be refunded. Terms: ${terms}`;
+  if (product === "pair") return `Two gifts are added to your account. A gift you haven't used can be refunded for 30 days; once you've used one it can't be cancelled. Terms: ${terms}`;
   return `By paying, you ask for your purchase to be unlocked straight away and accept that, once it is, you lose the 14-day right to cancel. Terms: ${terms}`;
 }
 
@@ -334,12 +344,17 @@ export function sellsInOneTap(product: CheckoutPlan["product"]): boolean {
  * "pay_sheet", and fulfilment records the sentence the way it records Stripe's (lib/stripe/fulfil.ts).
  * The buyer comes back to the same success page, and Stripe's language follows the page it sits on.
  */
-export function oneTapSessionParams(params: Stripe.Checkout.SessionCreateParams): Stripe.Checkout.SessionCreateParams {
+export function oneTapSessionParams(
+  params: Stripe.Checkout.SessionCreateParams,
+  options: { notice: "pay_sheet" | "shown_at_payment" } = { notice: "pay_sheet" },
+): Stripe.Checkout.SessionCreateParams {
   const oneTap: Stripe.Checkout.SessionCreateParams = {
     ...params,
     ui_mode: "elements",
     return_url: params.success_url,
-    metadata: { ...params.metadata, withdrawal_notice: "pay_sheet" },
+    // Two more gifts have no box to tick: their wallet button has the 30-day line beside it
+    // ("shown_at_payment"), which binds nobody to anything, so fulfilment records no consent for it.
+    metadata: { ...params.metadata, withdrawal_notice: options.notice },
   };
   for (const key of ["success_url", "cancel_url", "custom_text", "consent_collection", "after_expiration", "branding_settings", "locale"] as const) delete oneTap[key];
   return oneTap;
