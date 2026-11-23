@@ -165,15 +165,21 @@ test("E9: the hub shows the three tiers once, as the packs' own header, with the
   await expect(page.locator("[data-tiers]")).toHaveCount(0);
 });
 
-for (const [country, price] of [
-  ["US", "$2.99"],
-  ["GB", "£2.49"],
+// A visitor in the US or the UK: their own price where this build charges their currency
+// (NEXT_PUBLIC_PRICE_CURRENCIES, read back from /llms.txt as tests/e2e/currency.spec.ts does), euros otherwise.
+for (const [country, price, single] of [
+  ["US", "$2.99", "$11.99"],
+  ["GB", "£2.49", "£8.99"],
 ] as const) {
   test.describe(`E9 ${country}`, () => {
     test.use({ extraHTTPHeaders: { "x-vercel-ip-country": country } });
-    test(`the pack's price on the hub is the shelf's, ${price}`, async ({ page }) => {
+    test(`the pack's price on the hub is the shelf's: ${price} where that currency is charged`, async ({ page, request }) => {
+      const charged = (await (await request.get("/llms.txt")).text()).includes(single);
+      const want = charged ? price : "€2.99";
       await page.goto("/games");
-      await expect(page.locator("[data-tiers] li").nth(1)).toContainText(`A pack, ${price}`);
+      await expect(page.locator("[data-tiers] li").nth(1)).toContainText(`A pack, ${want}`);
+      await page.goto("/games/deck");
+      await expect(page.getByRole("button", { name: /Miles apart/ })).toContainText(want, { timeout: 15_000 });
     });
   });
 }

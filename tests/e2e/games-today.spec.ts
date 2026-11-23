@@ -284,7 +284,8 @@ test("T13: a tab that already answered opens the other's link straight on the re
   await card(one.page, "b").click();
   await open(one.page, `/games/today${encodeDaily({ day: today(), pairId: pair.id, from: { name: "Sam", side: 1 } })}`);
   await expect(phase(one.page)).toHaveAttribute("data-phase", "reveal");
-  await expect.poll(() => events(one.page)).toEqual(["daily_opened_shared", 'daily_revealed:{"match":true}']);
+  // The same page, the hash changed: what it counted on its own visit comes first.
+  await expect.poll(() => events(one.page)).toEqual(["daily_seen", "daily_answered", "daily_opened_shared", 'daily_revealed:{"match":true}']);
   await one.context.close();
 });
 
