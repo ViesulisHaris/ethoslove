@@ -268,8 +268,16 @@
 /* ------------------------------------------------------------------ */
 /* Utilities                                                           */
 /* ------------------------------------------------------------------ */
+/* The layout is viewport-fit=cover: on a phone on its side the notch takes the left or right edge,
+   so the gutter is never less than the screen's own safe inset there. */
 @utility container-x {
-  @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  @apply mx-auto w-full max-w-7xl;
+  --gutter-x: 1.25rem;
+  padding-left: max(var(--gutter-x), env(safe-area-inset-left));
+  padding-right: max(var(--gutter-x), env(safe-area-inset-right));
+  @variant sm {
+    --gutter-x: 2rem;
+  }
 }
 @utility container-narrow {
   @apply mx-auto w-full max-w-3xl px-5 sm:px-8;
@@ -1450,6 +1458,13 @@ body:has([data-page-theme]) .site-header .btn-rose {
 }
 .deal-in {
   animation: deal-in 0.55s var(--ease-out-quint) backwards;
+}
+
+/* Today's question still loading a second after it was drawn: its answer cards dim (today-question.tsx). */
+@keyframes today-wait {
+  to {
+    opacity: 0.55;
+  }
 }
 
 /* ------------------------------------------------------------------ */

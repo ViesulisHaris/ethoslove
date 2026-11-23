@@ -594,7 +594,7 @@ test.describe("games on one phone", () => {
     await page.getByLabel("Their name").fill("Marco");
     await page.getByRole("button", { name: "Start" }).click();
     await page.getByRole("button", { name: "Spin" }).click();
-    await expect(page.getByText(/^(Maya|Marco) (cooks tonight|washes up|picks the film|makes the tea|gets up first tomorrow|books the next date|takes the bins out|chooses the music)\.$/)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/^(Maya|Marco) (cooks tonight|washes up|picks the film|makes the coffee|gets up first tomorrow|books the next date|takes out the trash|chooses the music)\.$/)).toBeVisible({ timeout: 10_000 });
     await page.goto("/games/dare");
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");

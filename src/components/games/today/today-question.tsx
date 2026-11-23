@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { ArrowRight, Gift } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -20,21 +20,31 @@ type Phase = "ask" | "invited" | "answered" | "sent" | "reveal";
 
 /**
  * This tab's own answer to a day's pair, so a reload keeps it, and what the last link it sent
- * carried (`s`: the name and the answer), so that link opened again here is known as its own.
- * sessionStorage: it never leaves the tab.
+ * carried (`s`: the name, the answer, and `r` when it was a reply), so that link opened again here
+ * is known as its own, and a reload still knows the link went out. sessionStorage: it never leaves the tab.
  */
-type Kept = { d: number; p: string; a: Side; s?: { n: string; a: Side } };
+type Kept = { d: number; p: string; a: Side; s?: { n: string; a: Side; r?: 1 } };
 const KEPT = savedKey("today", "play");
 function reviveToday(raw: unknown): Kept | null {
   if (!raw || typeof raw !== "object") return null;
   const { d, p, a, s } = raw as Record<string, unknown>;
   if (!(typeof d === "number" && Number.isInteger(d) && typeof p === "string" && (a === 0 || a === 1))) return null;
   const sent = s && typeof s === "object" ? (s as Record<string, unknown>) : null;
-  return sent && typeof sent.n === "string" && (sent.a === 0 || sent.a === 1) ? { d, p, a, s: { n: sent.n, a: sent.a } } : { d, p, a };
+  return sent && typeof sent.n === "string" && (sent.a === 0 || sent.a === 1) ? { d, p, a, s: { n: sent.n, a: sent.a, ...(sent.r === 1 ? { r: 1 as const } : {}) } } : { d, p, a };
 }
 
 /** Next's own state for this page's history entry, which a hash change leaves out of the entry it adds. */
 type RouterState = { __NA?: boolean } & Record<string, unknown>;
+
+/**
+ * A link made by Next's <Link> does nothing at all when the phone is offline (the page's code is
+ * fetched first). Offline, it goes the old way, so the browser says it has no connection.
+ */
+function plainWhenOffline(e: MouseEvent<HTMLAnchorElement>) {
+  if (navigator.onLine !== false) return;
+  e.preventDefault();
+  window.location.assign(e.currentTarget.href);
+}
 
 function rememberedNames(): [string, string] | null {
   try {
@@ -47,7 +57,7 @@ function rememberedNames(): [string, string] | null {
 
 // On a phone on its side the cards are shorter, so the question is on the first screen (the page's spread, page.tsx).
 const CARD =
-  "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none [@media(orientation:landscape)_and_(max-height:520px)]:min-h-32 [@media(orientation:landscape)_and_(max-height:520px)]:pt-10 [@media(orientation:landscape)_and_(max-height:520px)]:pb-4";
+  "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none [@media(orientation:landscape)_and_(max-height:520px)]:min-h-0 [@media(orientation:landscape)_and_(max-height:520px)]:pt-9 [@media(orientation:landscape)_and_(max-height:520px)]:pb-3 [@media(orientation:portrait)_and_(max-height:600px)]:min-h-0 [@media(orientation:portrait)_and_(max-height:600px)]:pt-9 [@media(orientation:portrait)_and_(max-height:600px)]:pb-4";
 const PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:opacity-60 motion-reduce:transition-none";
 const SECOND =
@@ -99,7 +109,7 @@ export function TodayQuestion({ day }: { day: number }) {
     const asked = hash.startsWith("#q=");
     const decoded = asked ? decodeDaily(hash, now) : null;
     const kept = readSaved(tabStorage(), KEPT, reviveToday);
-    const own = !!decoded && sentHere(decoded, kept?.s ? { day: kept.d, pairId: kept.p, name: kept.s.n, side: kept.s.a } : null);
+    const own = !!decoded && sentHere(decoded, kept?.s ? { day: kept.d, pairId: kept.p, name: kept.s.n, side: kept.s.a, reply: kept.s.r === 1 } : null);
     // The tab's own first link opens as the tab left it, the answer marked sent: never a reveal against itself.
     const link = own && !decoded.to ? null : decoded;
     const next: View = decoded ? { day: decoded.day, pair: decoded.pair, link, broken: false, own } : { day: now, pair: dailyPair(now), link: null, broken: asked, own: false };
@@ -108,10 +118,11 @@ export function TodayQuestion({ day }: { day: number }) {
     setView(next);
     const restored = kept && kept.d === next.day && kept.p === next.pair.id && !link?.to ? kept.a : null;
     setMine(restored);
-    const ownFirst = own && !decoded.to;
-    setSent(ownFirst && restored === kept?.s?.a);
-    // Changed since that link went out: it carries the old answer, so it must go again.
-    setChanged(ownFirst && restored !== kept?.s?.a);
+    // A link went out for this answer before (the tab's own link opened again, or a reload after
+    // sending): it is still sent. Changed since: the link carries the old answer, so it must go again.
+    const wentOut = restored !== null && !!kept?.s;
+    setSent(wentOut && restored === kept?.s?.a);
+    setChanged(wentOut && restored !== kept?.s?.a);
     setCopied(false);
     setReady(true);
     if (names) setName(names[0]);
@@ -184,7 +195,7 @@ export function TodayQuestion({ day }: { day: number }) {
   /** A link went out: remember what it carried, so opening it again here is known as the tab's own. */
   const markSent = () => {
     const side = mine ?? 0;
-    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side, s: { n: cleanName(name), a: side } });
+    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side, s: { n: cleanName(name), a: side, ...(link && !link.to ? { r: 1 as const } : {}) } });
     setSent(true);
     setChanged(false);
     setView((v) => (v.own ? { ...v, own: false } : v));
@@ -209,7 +220,10 @@ export function TodayQuestion({ day }: { day: number }) {
   };
 
   const share = async () => {
-    const payload = { title: t("shareTitle"), text: t(link ? "shareBackText" : "shareText", { name: who(name) }), url: url() };
+    // With no name the text speaks for the sender ("I've answered…"): "Someone answered" reads as spam.
+    const named = cleanName(name);
+    const text = named ? t(link ? "shareBackText" : "shareText", { name: named }) : t(link ? "shareBackTextAnon" : "shareTextAnon");
+    const payload = { title: t("shareTitle"), text, url: url() };
     if (isInApp()) {
       if (!(await shareLink(payload))) return copy();
     } else if (navigator.share) {
@@ -242,7 +256,9 @@ export function TodayQuestion({ day }: { day: number }) {
   const words = (side: Side) => (side === 0 ? view.pair.a : view.pair.b)[locale];
   const notToday = view.day !== today || view.pair.id !== dailyPair(today).id;
   // A pair from another day says which day, where today's says it is the day's.
-  const date = notToday ? new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(view.day * DAY_MS)) : "";
+  // In the reader's own order of day and month where the browser says it (24 November, or November 24).
+  const dateLocale = notToday && navigator.language?.toLowerCase().startsWith(locale) ? navigator.language : locale;
+  const date = notToday ? new Intl.DateTimeFormat(dateLocale, { day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(view.day * DAY_MS)) : "";
 
   // In a reveal: whose answer is which. The other person on the left, the reader ("You") on the right,
   // both ways round: a reply's `to` is the reader's own answer, unless the reader sent that reply.
@@ -273,7 +289,7 @@ export function TodayQuestion({ day }: { day: number }) {
   const status = changed ? t("resend") : copied ? t("copied") : sent ? (view.own ? t("own") : link && !link.to ? t("sentBack", { name: who(link.from.name) }) : t("sent")) : "";
 
   return (
-    <div data-today data-day={view.day} data-phase={phase} data-ready={ready || undefined} className="min-h-[27rem] sm:min-h-[28rem]">
+    <div data-today data-day={view.day} data-phase={phase} data-ready={ready || undefined} aria-busy={ready ? undefined : true} className="group/today min-h-[27rem] sm:min-h-[28rem] lg:min-h-[26.25rem]">
       <p className="text-page-label text-page-body">{label}</p>
       {view.broken && phase === "ask" ? <p className="mt-3 text-[0.9375rem] text-page-body">{t("broken")}</p> : null}
       {phase === "invited" && link ? <p className="mt-3 text-[0.9375rem] text-page-body">{t("invited", { name: who(link.from.name) })}</p> : null}
@@ -283,23 +299,26 @@ export function TodayQuestion({ day }: { day: number }) {
           {t(match ? "match" : "clash")}
         </h2>
       ) : (
-        <h2 id="today-question" className="mt-3 font-display text-[1.75rem] leading-tight text-page-ink sm:text-[2rem]">
+        <h2 id="today-question" className={cn("mt-3 font-display text-[1.75rem] leading-tight text-page-ink sm:text-[2rem]", "[@media(orientation:portrait)_and_(max-height:600px)]:mt-2 [@media(orientation:portrait)_and_(max-height:600px)]:text-[1.5rem] [@media(orientation:landscape)_and_(max-height:520px)]:mt-2 [@media(orientation:landscape)_and_(max-height:520px)]:text-[1.375rem]")}>
           {t("prompt")}
         </h2>
       )}
 
       {reveal ? (
-        <div className="relative mt-6 grid grid-cols-2 gap-3 sm:gap-4">
+        <ul aria-label={t("answers")} className="relative mt-6 grid grid-cols-2 gap-3 sm:gap-4">
           {[reveal.left, reveal.right].map((who, i) => (
-            <div key={i} data-reveal-card data-answer data-side={who.side === 0 ? "a" : "b"} className={cn(CARD, "px-4 sm:px-6")}>
+            <li key={i} data-reveal-card data-answer data-side={who.side === 0 ? "a" : "b"} className={cn(CARD, "px-4 sm:px-6")}>
               <Corner side={who.side} />
-              <span className="block truncate text-page-label text-page-body">{who.name}</span>
+              <span className="block truncate text-page-label text-page-body">
+                {who.name}
+                <span className="sr-only">:</span>
+              </span>
               <span className="mt-2 font-display text-[1.25rem] leading-snug text-page-ink sm:text-[1.625rem]">{words(who.side)}</span>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
-        <div className="relative mt-6 grid gap-4 sm:grid-cols-2">
+        <div role="group" aria-labelledby="today-question" className="relative mt-6 grid gap-4 sm:grid-cols-2 [@media(orientation:portrait)_and_(max-height:600px)]:mt-4 [@media(orientation:portrait)_and_(max-height:600px)]:gap-3 [@media(orientation:landscape)_and_(max-height:520px)]:mt-3">
           {([0, 1] as const).map((side) => (
             <button
               key={side}
@@ -312,11 +331,20 @@ export function TodayQuestion({ day }: { day: number }) {
               className={cn(
                 CARD,
                 "cursor-pointer hover:border-page-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px aria-pressed:border-page-accent aria-pressed:ring-2 aria-pressed:ring-page-accent",
-                mine !== null && mine !== side && "opacity-60 hover:opacity-90",
+                // Still loading a second after it was drawn (a slow phone): the cards dim, so a tap that does nothing yet is not a surprise.
+                "group-not-data-ready/today:cursor-progress group-not-data-ready/today:animate-[today-wait_0.3s_ease-out_1s_both]",
               )}
             >
               <Corner side={side} />
-              <span className="font-display text-[1.375rem] leading-snug text-page-ink sm:text-[1.625rem]">{words(side)}</span>
+              {/* The side not taken dims its words only: the corner letter keeps its contrast. */}
+              <span
+                className={cn(
+                  "font-display text-[1.375rem] leading-snug text-page-ink transition-opacity sm:text-[1.625rem] motion-reduce:transition-none [@media(orientation:portrait)_and_(max-height:600px)]:text-[1.25rem] [@media(orientation:landscape)_and_(max-height:520px)]:text-[1.125rem]",
+                  mine !== null && mine !== side && "opacity-60 group-hover:opacity-90",
+                )}
+              >
+                {words(side)}
+              </span>
             </button>
           ))}
           <span aria-hidden="true" className="pointer-events-none absolute top-1/2 left-1/2 z-10 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-page-ground font-display text-base text-page-ink italic ring-1 ring-page-line">
@@ -326,7 +354,7 @@ export function TodayQuestion({ day }: { day: number }) {
       )}
 
       {/* Once sent, the hint goes (a change then asks for the link to go again, in the status) but its line stays, so the form does not move under the thumb. */}
-      {phase === "answered" || phase === "sent" ? <p className="mt-3 min-h-5 text-[0.875rem] text-page-body">{phase === "answered" && !changed ? t("change") : ""}</p> : null}
+      {phase === "answered" || phase === "sent" ? <p className="mt-3 min-h-5 text-[0.875rem] text-page-body lg:mt-2">{phase === "answered" && !changed ? t("change") : ""}</p> : null}
 
       {canSend ? (
         <form
@@ -334,7 +362,7 @@ export function TodayQuestion({ day }: { day: number }) {
             e.preventDefault();
             void share();
           }}
-          className="mt-6 flex flex-wrap items-end gap-3"
+          className="mt-6 flex flex-wrap items-end gap-3 lg:mt-4"
         >
           <label className="flex w-full flex-col gap-2 sm:w-auto">
             <span className="text-page-label text-page-body">{t("nameLabel")}</span>
@@ -356,13 +384,19 @@ export function TodayQuestion({ day }: { day: number }) {
         </form>
       ) : null}
 
-      <p ref={statusLine} role="status" aria-live="polite" className="mt-4 min-h-6 scroll-mb-4 text-[0.9375rem] text-page-body">
+      <p ref={statusLine} role="status" aria-live="polite" className="mt-4 min-h-6 scroll-mb-4 text-[0.9375rem] text-page-body lg:mt-3">
         {status}
       </p>
 
       {phase === "reveal" ? (
         <After>
-          <Link href="/games/rather" data-whole-game className={canSend ? SECOND : PRIMARY}>
+          {/* The reply has gone and its form with it: the same link once more, for a chat it did not reach. */}
+          {sent && !canSend && !link?.to ? (
+            <button type="button" data-copy-again onClick={() => void copy()} className={SECOND}>
+              {t("copyAgain")}
+            </button>
+          ) : null}
+          <Link href="/games/rather" data-whole-game onClick={plainWhenOffline} className={canSend ? SECOND : PRIMARY}>
             {t("wholeGame")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
@@ -372,7 +406,7 @@ export function TodayQuestion({ day }: { day: number }) {
             </button>
           ) : null}
           {/* The same two lines and the same address the end of every game uses. Inside the iPhone app the gifts are a tab of their own. */}
-          <Link href="/templates?ref=game-end" data-app-hide className="group mt-2 flex w-full items-center gap-4 rounded-[1.25rem] border border-page-line bg-page-raised p-5 shadow-page-card transition-colors hover:border-page-ink/40">
+          <Link href="/templates?ref=game-end" data-app-hide onClick={plainWhenOffline} className="group mt-2 flex w-full items-center gap-4 rounded-[1.25rem] border border-page-line bg-page-raised p-5 shadow-page-card transition-colors hover:border-page-ink/40">
             <Gift aria-hidden="true" className="size-6 shrink-0 text-page-accent" />
             <span className="min-w-0">
               <span className="block font-display text-[1.375rem] leading-tight text-page-ink">{te("gift")}</span>

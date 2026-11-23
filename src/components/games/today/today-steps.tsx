@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { PlayingCard } from "../cards";
 
 const SMALL = { className: "aspect-[5/7] h-28", corners: "md", radius: 10, faceClassName: "shadow-page-card" } as const;
@@ -7,8 +6,8 @@ const SMALL = { className: "aspect-[5/7] h-28", corners: "md", radius: 10, faceC
 /**
  * How today's question goes, as three picture cards: the room's own playing cards, small, never a
  * new drawing. Pick one (a card face up), send it (a card face down, on its way unseen), see both
- * (the two face up). Three in a row on a desk; on a phone one card to a screen, flicked sideways,
- * with dots under the row, the gift page's own recipe (the owner's rule for any set of cards there).
+ * (the two face up). Three in a row on a desk; on a phone the three stacked as short numbered rows,
+ * the picture small at the end of each (no swipe row and no dots: RULES, "Less text").
  */
 export function TodaySteps({ steps }: { steps: [string, string, string] }) {
   const pictures: ReactNode[] = [
@@ -23,21 +22,25 @@ export function TodaySteps({ steps }: { steps: [string, string, string] }) {
     </span>,
   ];
   return (
-    <>
-      <ol id="today-steps" className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0">
-        {steps.map((step, i) => (
-          <li key={step} data-card className="relative flex w-full shrink-0 snap-start flex-col items-center rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-9 pb-6 text-center sm:w-auto">
-            <span aria-hidden="true" className="absolute -top-5 left-1/2 grid size-10 -translate-x-1/2 place-items-center rounded-full bg-page-badge font-display text-lg text-page-ink ring-4 ring-page-raised">
-              {i + 1}
-            </span>
-            <span className="font-display text-[1.25rem] leading-snug text-page-ink">{step}</span>
-            <span aria-hidden="true" className="mt-5 flex h-32 items-center justify-center">
-              {pictures[i]}
-            </span>
-          </li>
-        ))}
-      </ol>
-      <IdeasDots target="today-steps" count={3} className="mt-4 sm:hidden" />
-    </>
+    <ol id="today-steps" className="grid gap-3 sm:grid-cols-3 sm:gap-4 sm:pt-5">
+      {steps.map((step, i) => (
+        <li
+          key={step}
+          data-card
+          className="relative flex items-center gap-4 rounded-[1.25rem] border border-page-line bg-page-raised py-3 pr-3 pl-4 sm:flex-col sm:gap-0 sm:px-5 sm:pt-9 sm:pb-6 sm:text-center"
+        >
+          <span
+            aria-hidden="true"
+            className="grid size-10 shrink-0 place-items-center rounded-full bg-page-badge font-display text-lg text-page-ink sm:absolute sm:-top-5 sm:left-1/2 sm:-translate-x-1/2 sm:ring-4 sm:ring-page-raised"
+          >
+            {i + 1}
+          </span>
+          <span className="min-w-0 flex-1 font-display text-[1.125rem] leading-snug text-page-ink sm:flex-none sm:text-[1.25rem]">{step}</span>
+          <span aria-hidden="true" className="flex h-20 w-20 shrink-0 items-center justify-center sm:mt-5 sm:h-32 sm:w-auto">
+            <span className="block max-sm:scale-[0.6]">{pictures[i]}</span>
+          </span>
+        </li>
+      ))}
+    </ol>
   );
 }

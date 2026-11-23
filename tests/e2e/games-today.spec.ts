@@ -1,6 +1,5 @@
 import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test";
-import { RATHER_PAIRS } from "../../src/lib/games/content";
-import { dailyPair, dayOf, encodeDaily } from "../../src/lib/games/daily";
+import { DAILY_PAIRS, dailyPair, dayOf, encodeDaily } from "../../src/lib/games/daily";
 
 /**
  * Today's question (/games/today), between two phones: one person answers and sends a link, the
@@ -96,7 +95,7 @@ for (const locale of ["", "/es"] as const) {
     await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
     await expect(one.page.getByRole("status")).toContainText(words.sent);
     const link = await copied(one.page);
-    expect(link).toContain(`${locale}/games/today#q=1.${today()}.${pair.id}.1.Ana`);
+    expect(link).toContain(`${locale}/games/today#q=1.${today()}.${pair.id}.Ana.1`);
     // Nothing a server would see: no query, and the name only after the #.
     expect(new URL(link).search).toBe("");
 
@@ -122,10 +121,12 @@ for (const locale of ["", "/es"] as const) {
     await two.page.locator("[data-today] input").fill("Sam");
     await two.page.locator("[data-copy]").click();
     const reply = await copied(two.page);
-    expect(reply).toContain(`#q=1.${today()}.${pair.id}.0.Sam.1.Ana`);
+    expect(reply).toContain(`#q=1.${today()}.${pair.id}.Sam.0.Ana.1`);
     await expect(two.page.getByRole("status")).toContainText("Ana");
-    // Sent back: one thing at a time, so the form makes way for the whole game.
+    // Sent back: one thing at a time, so the form makes way for the whole game, with the link once more for a chat it missed.
     await expect(two.page.locator("[data-send]")).toHaveCount(0);
+    await two.page.locator("[data-copy-again]").click();
+    expect(await copied(two.page)).toBe(reply);
 
     // The first phone opens the reply (in a browser that remembers nothing of the first visit) and sees both.
     const back = await phone(browser, "none", size);
@@ -142,7 +143,7 @@ for (const locale of ["", "/es"] as const) {
 
     // What was counted: no names, no answers, no ids.
     expect(await events(one.page)).toEqual(["daily_seen", "daily_answered", 'daily_shared:{"how":"copy"}']);
-    expect(await events(two.page)).toEqual(["daily_opened_shared", "daily_answered", 'daily_revealed:{"match":false}', 'daily_shared:{"how":"copy"}']);
+    expect(await events(two.page)).toEqual(["daily_opened_shared", "daily_answered", 'daily_revealed:{"match":false}', 'daily_shared:{"how":"copy"}', 'daily_shared:{"how":"copy"}']);
     expect(await events(back.page)).toEqual(["daily_opened_shared", 'daily_revealed:{"match":false}']);
     for (const p of [one.page, two.page, back.page]) for (const e of await events(p)) expect(e).not.toMatch(/Ana|Sam|#|q=/);
     await Promise.all([one.context.close(), two.context.close(), back.context.close()]);
@@ -186,7 +187,7 @@ test("T5: a link from an earlier day still opens on the pair it was sent with, a
   const two = await phone(browser);
   await two.context.clock.setFixedTime(later * 86_400_000 + 3_600_000);
   const sent = later - 3;
-  const old = RATHER_PAIRS.find((p) => p.id !== dailyPair(later).id && p.id !== dailyPair(sent).id)!;
+  const old = DAILY_PAIRS.find((p) => p.id !== dailyPair(later).id && p.id !== dailyPair(sent).id)!;
   await open(two.page, `/games/today${encodeDaily({ day: sent, pairId: old.id, from: { name: "Ana", side: 1 } })}`);
   await expect(phase(two.page)).toHaveAttribute("data-day", String(sent));
   await expect(card(two.page, "a")).toContainText(old.a.en);
@@ -208,7 +209,7 @@ test("T5: a link from an earlier day still opens on the pair it was sent with, a
 
 test("T6: a broken or hostile link falls back to today's question and shows nothing from it", async ({ browser }) => {
   const two = await phone(browser);
-  for (const hash of ["#q=1.99999999.beach.0.Ana", "#q=1.20000.nope.0.Ana", "#q=garbage", `#q=1.${today()}.beach.0.%E0%A4%A`, `#q=1.${today()}.beach.0.<img src=x onerror=alert(1)>`]) {
+  for (const hash of ["#q=1.99999999.beach.0.Ana", "#q=1.20000.nope.0.Ana", "#q=garbage", `#q=1.${today()}.beach.%E0%A4%A.0`, `#q=1.${today()}.beach.<img src=x onerror=alert(1)>.0`]) {
     await open(two.page, `/games/today${hash}`);
     await two.page.reload();
     await expect(two.page.locator("[data-today][data-ready]")).toHaveCount(1);
@@ -275,7 +276,7 @@ test("T12: a change after sending asks for the link to go again, and the new lin
   await one.page.locator("[data-today] input").fill("Ana");
   await one.page.locator("[data-copy]").click();
   await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
-  expect(await copied(one.page)).toContain(`.${pair.id}.0.Ana`);
+  expect(await copied(one.page)).toContain(`.${pair.id}.Ana.0`);
   // Sent: the hint is gone, so nobody believes the link they already sent has changed.
   await expect(one.page.getByText("Changed your mind? Tap the other one.")).toHaveCount(0);
   await card(one.page, "b").click();
@@ -283,7 +284,7 @@ test("T12: a change after sending asks for the link to go again, and the new lin
   await expect(one.page.getByRole("status")).toContainText("Send it again");
   await one.page.locator("[data-copy]").click();
   await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
-  expect(await copied(one.page)).toContain(`.${pair.id}.1.Ana`);
+  expect(await copied(one.page)).toContain(`.${pair.id}.Ana.1`);
   await expect(one.page.getByRole("status")).not.toContainText("Send it again");
   await one.context.close();
 });
@@ -368,8 +369,86 @@ test("T18: on a phone, the first tap brings the send button and its status into 
 test("T19: a phone on its side shows an answer on the first screen", async ({ browser }) => {
   const one = await phone(browser, "none", { viewport: { width: 812, height: 375 }, isMobile: true, hasTouch: true });
   await open(one.page, "/games/today");
-  await expect(card(one.page, "a")).toBeInViewport({ ratio: 0.9 });
-  await expect(card(one.page, "b")).toBeInViewport({ ratio: 0.9 });
+  await expect(card(one.page, "a")).toBeInViewport({ ratio: 1 });
+  await expect(card(one.page, "b")).toBeInViewport({ ratio: 1 });
+  await one.context.close();
+});
+
+test("T20: a reload after sending still knows the link went out", async ({ browser }) => {
+  const one = await phone(browser);
+  await open(one.page, "/games/today");
+  await card(one.page, "a").click();
+  await one.page.locator("[data-copy]").click();
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
+  await one.page.reload();
+  await expect(one.page.locator("[data-today][data-ready]")).toHaveCount(1);
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
+  await expect(one.page.getByRole("status")).toContainText("Sent");
+  // A change after the reload still asks for the link to go again.
+  await card(one.page, "b").click();
+  await expect(one.page.getByRole("status")).toContainText("Send it again");
+  await one.context.close();
+});
+
+test("T21: two blank names on the same side: the reply is a reveal in the first tab, and counted", async ({ browser }) => {
+  const one = await phone(browser);
+  const two = await phone(browser);
+  await open(one.page, "/games/today");
+  await card(one.page, "a").click();
+  await one.page.locator("[data-copy]").click();
+  const link = await copied(one.page);
+  expect(link).toMatch(/\.0$/);
+  await open(two.page, link);
+  await card(two.page, "a").click();
+  await two.page.locator("[data-copy]").click();
+  const reply = await copied(two.page);
+  expect(reply).toMatch(/\.\.0\.\.0$/);
+  // The first tab opens the reply (same tab, the hash changes): both answers, the other's on the left.
+  await one.page.goto(reply);
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "reveal");
+  await expect(one.page.locator("[data-reveal-card]").nth(1)).toContainText("You");
+  await expect.poll(() => events(one.page)).toContain('daily_revealed:{"match":true}');
+  // The replying tab opening its own reply again is still its own: nothing counted twice.
+  const before = (await events(two.page)).length;
+  await two.page.goto(reply);
+  await expect(phase(two.page)).toHaveAttribute("data-phase", "reveal");
+  expect((await events(two.page)).length).toBe(before);
+  await Promise.all([one.context.close(), two.context.close()]);
+});
+
+test("T22: with no name, the share text speaks for the sender instead of naming somebody", async ({ browser }) => {
+  const ok = await phone(browser, "ok");
+  await open(ok.page, "/games/today");
+  await card(ok.page, "a").click();
+  await ok.page.locator("[data-today] input").fill("");
+  await ok.page.locator("[data-send]").click();
+  const shared = await ok.page.evaluate(() => (window as unknown as { __shared: { text: string }[] }).__shared);
+  expect(shared[0].text).toMatch(/^I've answered today's would you rather\./);
+  expect(shared[0].text).not.toMatch(/Someone|Somebody/);
+  await ok.context.close();
+});
+
+test("T23: on a phone, how it works is three rows stacked, with no swipe row and no dots", async ({ browser }) => {
+  const one = await phone(browser, "none", { viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
+  await open(one.page, "/games/today");
+  const rows = one.page.locator("#today-steps li");
+  await expect(rows).toHaveCount(3);
+  const boxes = await rows.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON() as DOMRect));
+  for (const [i, b] of boxes.entries()) {
+    expect(b.left).toBeGreaterThanOrEqual(0);
+    expect(b.right).toBeLessThanOrEqual(375);
+    if (i) expect(b.top).toBeGreaterThan(boxes[i - 1].bottom - 1);
+  }
+  expect(await one.page.locator("#today-steps").evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+  await expect(one.page.locator("section[aria-labelledby=today-how] [data-dots]")).toHaveCount(0);
+  await one.context.close();
+});
+
+test("T24: a small phone has both answers on the first screen", async ({ browser }) => {
+  const one = await phone(browser, "none", { viewport: { width: 320, height: 568 }, isMobile: true, hasTouch: true });
+  await open(one.page, "/games/today");
+  await expect(card(one.page, "a")).toBeInViewport({ ratio: 1 });
+  await expect(card(one.page, "b")).toBeInViewport({ ratio: 1 });
   await one.context.close();
 });
 

@@ -6,7 +6,7 @@ import { SITE } from "@/config/site";
 import { TODAY_FAQ } from "@/content/game-pages";
 import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { RATHER_PAIRS } from "@/lib/games/content";
-import { dayOf } from "@/lib/games/daily";
+import { DAILY_PAIRS, dayOf } from "@/lib/games/daily";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -57,7 +57,7 @@ export default async function TodayPage({ params }: Props) {
   const count = RATHER_PAIRS.length;
   // The day the page is rendered with, as the finder reads its season: the browser checks it again once loaded.
   const day = dayOf(new Date().getTime());
-  const faq = TODAY_FAQ.map(({ q, a }) => ({ q: q[l], a: a[l].replace("{count}", String(count)) }));
+  const faq = TODAY_FAQ.map(({ q, a }) => ({ q: q[l], a: a[l].replace("{count}", String(DAILY_PAIRS.length)) }));
 
   return (
     <>
@@ -77,7 +77,8 @@ export default async function TodayPage({ params }: Props) {
           {/* On a phone on its side the question stands in the right column, where the petal lies: the corner is left bare there. */}
           <ArtLayer items={TODAY_ART} flowers={TODAY_FLOWERS} className="[@media(orientation:landscape)_and_(max-height:520px)]:hidden" />
           {/* A phone on its side is the two columns too, tighter: stacked, its first screen held only the heading. */}
-          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-6", "[@media(orientation:landscape)_and_(max-height:520px)]:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] [@media(orientation:landscape)_and_(max-height:520px)]:items-start [@media(orientation:landscape)_and_(max-height:520px)]:gap-x-8 [@media(orientation:landscape)_and_(max-height:520px)]:pt-2!")}>
+          {/* A small phone (320 by 568) keeps the heading and both answers on the first screen: the line under the heading waits on a taller one. */}
+          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 [@media(orientation:portrait)_and_(max-height:600px)]:gap-y-4 [@media(orientation:portrait)_and_(max-height:600px)]:[&_h1+p]:hidden sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-6", "[@media(orientation:landscape)_and_(max-height:520px)]:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] [@media(orientation:landscape)_and_(max-height:520px)]:items-start [@media(orientation:landscape)_and_(max-height:520px)]:gap-x-8 [@media(orientation:landscape)_and_(max-height:520px)]:pt-2!")}>
             <Intro level={1} id="today-title" label={t("label")} heading={t("h1")} line={t("line")} />
             <div className="min-w-0 lg:pt-7">
               <TodayQuestion day={day} />

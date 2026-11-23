@@ -120,13 +120,13 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       en: [
         "16 cards lie face down: 8 pairs of stickers, or of up to 8 of your own photos.",
         "Turn two over. A pair is yours, and you go again.",
-        "Not a pair: they turn back, and it's the other's turn.",
+        "Not a pair: they turn face down again, and your partner turns two.",
         "When every pair is found, whoever holds more wins.",
       ],
       es: [
         "16 cartas boca abajo: 8 parejas de pegatinas, o de hasta 8 fotos vuestras.",
         "Da la vuelta a dos. Si son pareja, es tuya y repites.",
-        "Si no lo son, se vuelven a tapar y le toca a la otra persona.",
+        "Si no lo son, se vuelven a tapar y tu pareja da la vuelta a otras dos.",
         "Cuando salen todas las parejas, gana quien tenga más.",
       ],
     },
@@ -153,7 +153,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         },
       },
     ],
-    posts: ["quality-time-love-language", "virtual-date-ideas-long-distance"],
+    posts: ["quality-time-love-language", "anniversary-ideas-at-home"],
   },
   deck: {
     faq: [
@@ -219,15 +219,15 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         "Poned vuestros nombres: la ruleta es vuestra, mitad y mitad.",
         "Gírala. Elige una de 8 tareas y cae en uno de los dos nombres.",
         "Volved a girar para la siguiente, tantas veces como queráis.",
-        "Cuando esté todo decidido, cerradlo: las seis últimas tiradas son el veredicto.",
+        "Cuando esté todo decidido, cerradlo: los seis últimos giros son el veredicto.",
       ],
     },
     faq: [
       {
         q: { en: "Which chores are on it?", es: "¿Qué tareas salen?" },
         a: {
-          en: "Who cooks tonight, washes up, picks the film, makes the tea, gets up first tomorrow, books the next date, takes the bins out or chooses the music.",
-          es: "Quién cocina esta noche, friega, elige la peli, hace el té, se levanta primero mañana, reserva la próxima cita, saca la basura o elige la música.",
+          en: "Who cooks tonight, washes up, picks the film, makes the coffee, gets up first tomorrow, books the next date, takes out the trash or chooses the music.",
+          es: "Quién cocina esta noche, friega, elige la peli, hace el café, se levanta primero mañana, reserva la próxima cita, saca la basura o elige la música.",
         },
       },
       {
@@ -271,8 +271,8 @@ export const TODAY_FAQ: GameFaq[] = [
   {
     q: { en: "Is it the same question for everyone?", es: "¿Es la misma pregunta para todo el mundo?" },
     a: {
-      en: "Yes. A new pair comes at midnight UTC, picked from the {count} questions of the free deck, and none comes back until every one has had its day.",
-      es: "Sí. Cada día a medianoche UTC llega una pareja nueva, sacada de las {count} preguntas de la baraja gratis, y ninguna se repite hasta que todas han tenido su día.",
+      en: "Yes. A new pair comes at midnight UTC, picked from {count} of the free deck's questions, and none comes back until every one has had its day.",
+      es: "Sí. Cada día a medianoche UTC llega una pareja nueva, sacada de {count} de las preguntas de la baraja gratis, y ninguna se repite hasta que todas han tenido su día.",
     },
   },
   {
