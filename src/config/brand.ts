@@ -26,11 +26,12 @@ export const BRAND = {
     pinterest: "https://www.pinterest.com/tryethosgifts/",
   },
   /**
-   * What Ethos makes, in the owner's words (20 Nov 2026), set like a maker's mark: one small line
-   * under the footer's wordmark, and for machines (the Organization's slogan, the first words of
-   * /llms.txt). Never a banner, never in a page title, and not in the front page's headline, whose
-   * first line is the phrase the page is found by ("Digital gifts, made by you"). English never
-   * says "digital gift card", which means a voucher. Read it from here and nowhere else.
+   * What Ethos makes, in the owner's words (20 Nov 2026), set like a maker's mark: the small line
+   * over the front page's headline, one under the footer's wordmark, on the card a shared link
+   * shows, and for machines (the Organization's slogan, the first words of /llms.txt). Never a
+   * banner and never in a page title. It left the front page once, for the phrase the page is found
+   * by, and the owner asked where it had gone (23 Nov 2026): it stays. English never says "digital
+   * gift card", which means a voucher. Read it from here and nowhere else.
    */
   categoryLine: {
     en: "Digital cards by Tryethos",

@@ -8,6 +8,7 @@ import { FINDER_COPY, FINDER_PATH, finderPicks } from "@/content/finder";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { finderWaitScript } from "@/lib/gift/finder";
+import { HydrationScript } from "@/components/shared/hydration-script";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -122,10 +123,12 @@ export default async function GiftFinderPage({ params }: Props) {
              * A link that already carries answers must not flash the first question before its picks: the
              * script marks this column (FINDER_WAIT, lib/gift/finder.ts) before anything paints, the tool
              * stays unseen while it is marked, and unmarks it once it has read the address. The mark
-             * is not in the server's HTML, hence suppressHydrationWarning.
+             * is not in the server's HTML, hence suppressHydrationWarning. The script is in the server's HTML
+             * only (HydrationScript): reached by a click, the tool reads the address as it mounts and
+             * there is nothing to wait for.
              */}
             <div className="group/finder min-w-0 lg:pt-7" suppressHydrationWarning>
-              <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: finderWaitScript() }} />
+              <HydrationScript html={finderWaitScript()} />
               <div className="group-data-finder-wait/finder:invisible">
                 <GiftFinder picks={finderPicks(l)} ui={copy.ui} freeLabel={t("common.free")} prices={prices} locale={l} today={today} />
               </div>

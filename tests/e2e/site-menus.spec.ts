@@ -9,7 +9,8 @@ import { expect, test, type Page } from "@playwright/test";
  */
 const ARRIVE = { timeout: 60_000 };
 const ROOMS = [
-  ["Gifts", "/gifts"],
+  // Gifts opens the gallery itself, where a gift is chosen: the owner, 23 Nov 2026, "when i click gifts i want to see this page. the chooser, not some other page that adds friction".
+  ["Gifts", "/templates"],
   ["Dates", "/dates"],
   ["Trips", "/trips"],
   ["Long distance", "/long-distance"],
@@ -56,6 +57,31 @@ test.describe("the site's menus", () => {
       await expect(page).toHaveURL(new RegExp(path + "$"), ARRIVE);
       await expect(header(page).getByRole("link", { name: label, exact: true })).toHaveAttribute("aria-current", "page");
     }
+  });
+
+  test("Gifts opens the gallery with its occasions and cards, and the finder reached from there by a click raises no error", async ({ page }) => {
+    // The owner met React's red "Encountered a script tag" error on the finder (23 Nov 2026): it only shows when
+    // the page is reached by a click from another page, which no test did. So this one clicks.
+    test.setTimeout(300_000);
+    const errors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    page.on("pageerror", (error) => errors.push(String(error)));
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+    await header(page).getByRole("link", { name: "Gifts", exact: true }).click();
+    await expect(page).toHaveURL(/\/templates$/, ARRIVE);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Digital gift templates");
+    await expect(page.locator("[data-gallery-card]").first()).toBeVisible();
+    await expect(page.locator("main").getByRole("link", { name: "Christmas", exact: true })).toBeVisible();
+    await page.locator("main").getByRole("link", { name: /Answer two questions/ }).click();
+    await expect(page).toHaveURL(/\/gifts\/finder$/, ARRIVE);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    // The first question can be answered, and the picks come.
+    await page.locator("main").getByRole("button").first().waitFor({ state: "visible" });
+    await page.waitForTimeout(1500);
+    expect(errors.filter((text) => /script tag|hydrat|Minified React error/i.test(text)), errors.join("\n")).toEqual([]);
   });
 
   test("the header's words are readable on what is behind them, on the cream", async ({ page }) => {

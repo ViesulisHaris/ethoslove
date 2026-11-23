@@ -99,7 +99,7 @@ export async function PlatformClosing() {
             {t("dates")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
-          <Link href="/gifts" className="inline-flex h-14 items-center rounded-full border border-cream/25 px-8 text-base font-semibold text-cream transition-colors hover:bg-white/10">
+          <Link href="/templates" className="inline-flex h-14 items-center rounded-full border border-cream/25 px-8 text-base font-semibold text-cream transition-colors hover:bg-white/10">
             {t("gifts")}
           </Link>
         </div>

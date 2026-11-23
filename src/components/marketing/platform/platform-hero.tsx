@@ -1,5 +1,6 @@
 import { ArrowRight, Play } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { BRAND } from "@/config/brand";
 import { Link } from "@/i18n/navigation";
 import type { HomeHero } from "@/lib/attribution/landing";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
@@ -105,12 +106,18 @@ async function DatesFirst() {
  */
 async function GiftFirst() {
   const t = await getTranslations("growth.hero");
+  const line = BRAND.categoryLine[(await getLocale()) === "es" ? "es" : "en"];
   return (
     <>
       <div className="lg:col-span-6">
-        {/* The eyebrow is the first line of the h1: "Digital gifts" is what this page is found by. */}
+        {/*
+         * The line over the headline is the maker's mark, "Digital cards by Tryethos": the first thing
+         * a visitor reads, so that the kind of thing and the name arrive together (the owner, 20 and
+         * 23 Nov 2026). The words the page is found by, "digital gift", are in the sentence under the
+         * headline and in the page's title.
+         */}
         <h1 className="text-forest">
-          <span className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</span>
+          <span data-brand-line className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{line}</span>
           <span className="mt-6 block max-w-[7.8em] display-hero text-balance">
             {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
           </span>

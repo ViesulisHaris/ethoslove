@@ -43,12 +43,13 @@ test.describe("gifts come first in the rooms", () => {
     // The four doors on the page: Gifts is the first of them.
     const doors = page.locator("section", { has: page.locator("h2", { hasText: "Whatever kind of couple you are this week." }) }).locator("ul > li > a");
     await expect(doors).toHaveCount(4);
-    expect(await doors.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts", "/dates", "/long-distance", "/games"]);
+    // The Gifts door opens the gallery itself, where a gift is chosen (the owner, 23 Nov 2026: "when i click gifts i want to see this page. the chooser").
+    expect(await doors.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/templates", "/dates", "/long-distance", "/games"]);
     // And the footer's list of what there is to explore.
     const explore = page.locator("footer ul").first().locator("a");
     expect((await explore.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).slice(0, 4)).toEqual(["/gifts", "/templates", "/dates", "/trips"]);
 
-    const order = ["/gifts", "/dates", "/trips", "/long-distance", "/games", "/pricing"];
+    const order = ["/templates", "/dates", "/trips", "/long-distance", "/games", "/pricing"];
     if (isMobile) {
       await page.getByRole("button", { name: "Open menu" }).click();
       const rooms = page.getByRole("navigation", { name: "Menu" }).getByRole("link");
@@ -62,16 +63,22 @@ test.describe("gifts come first in the rooms", () => {
 });
 
 test.describe("the category line, set like a maker's mark", () => {
-  test("leaves the front page's headline alone: its first line is still the phrase the page is found by", async ({ page }) => {
+  test("is the first line a visitor reads on the front page, over the headline, and the page still says what it is found by", async ({ page }) => {
+    // It left the hero once for the search phrase, and the owner asked where it had gone (23 Nov 2026).
     // The headline's second line is asked for in the same visit: after /es the site remembers the language, and "/" is Spanish too.
-    for (const [path, found, line, second] of [["/", "Digital gifts, made by you", "Digital cards by Tryethos", "Make them a gift"], ["/es", "Regalos digitales hechos por ti", "Tarjetas digitales de Tryethos", "Hazle un regalo"]] as const) {
+    for (const [path, found, line, second] of [["/", "digital gift", "Digital cards by Tryethos", "Make them a gift"], ["/es", "regalo digital", "Tarjetas digitales de Tryethos", "Hazle un regalo"]] as const) {
       await page.goto(path);
       const h1 = page.getByRole("heading", { level: 1 });
-      await expect(h1, path).toContainText(found);
       await expect(h1, path).toContainText(second);
-      await expect(h1, path).not.toContainText(line);
-      // On the front page too, the line is the footer's and nobody else's.
-      await expect(page.getByText(line), path).toHaveCount(1);
+      const mark = h1.locator("[data-brand-line]");
+      await expect(mark, path).toHaveText(line);
+      await expect(mark, path).toBeInViewport();
+      // It stands above the headline's own words, not after them.
+      expect((await mark.boundingBox())!.y, path).toBeLessThan((await h1.locator("em").boundingBox())!.y);
+      // The words the page is found by are in the sentence under the headline.
+      await expect(page.locator("main").getByText(found).first(), path).toBeVisible();
+      // Twice on the front page and no more: over the headline and under the footer's wordmark.
+      await expect(page.getByText(line), path).toHaveCount(2);
       await expect(page.locator("footer").getByText(line), path).toBeVisible();
     }
   });

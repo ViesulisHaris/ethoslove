@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 
 const DOORS = [
-  { key: "gifts", href: "/gifts", Icon: Gift, image: HERO_ART.gifts, ink: "#9A5A12", soon: false },
+  { key: "gifts", href: "/templates", Icon: Gift, image: HERO_ART.gifts, ink: "#9A5A12", soon: false },
   { key: "dates", href: "/dates", Icon: MapPinned, image: HERO_ART.dates, ink: "var(--color-rose-deep)", soon: false },
   { key: "ldr", href: "/long-distance", Icon: Plane, image: HERO_ART.ldr, ink: "#22607F", soon: false },
   { key: "games", href: "/games", Icon: Gamepad2, image: HERO_ART.games, ink: "var(--color-lilac)", soon: false },
