@@ -582,7 +582,7 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
             {labels.unavailable}
           </p>
           {state === "failed" && labels.retry ? (
-            <button type="button" onClick={retry} className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-[14px] font-semibold text-forest shadow-soft ring-1 ring-forest/10 transition-colors hover:bg-rose-mist">
+            <button type="button" onClick={retry} className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-[14px] font-semibold text-forest shadow-soft ring-1 ring-forest/10 transition-colors hover:bg-blush-paper">
               <RotateCw aria-hidden="true" className="size-4" />
               {labels.retry}
             </button>

@@ -1,6 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { occasionRow } from "../../src/components/templates/gallery-occasions";
 import { templateFilmStart } from "../../src/content/template-film-starts";
+import { encodePlan } from "../../src/lib/dates/plan";
+import { lisbonUrl, mockWorld } from "./dates-world";
 
 /**
  * The first fix round on the preview (docs/marketing/growth-build/reports/view-fix-1-brief.md): each
@@ -331,6 +333,74 @@ test("rooms-5: a plan's Open in Maps button is cream", async ({ page }) => {
   await expect(maps).toBeVisible();
   expect(await maps.evaluate((b) => getComputedStyle(b).backgroundColor)).not.toBe(WHITE);
 });
+
+// The third fix round (view-fix-3-brief.md): rooms-2 and rooms-4/5 inside the Dates room.
+test.describe("cream, not white: the dates room", () => {
+  test("rooms-5: /dates's start screen (search box, city pills, the note, the city strip)", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto("/dates");
+    await expect(page.getByRole("button", { name: "Lisbon", exact: true })).toBeVisible();
+    expect(await offPalette(page.locator("main"))).toEqual([]);
+  });
+
+  test("rooms-5: the results' pills, picker and idea panel on /dates; its twist box is the warm blush", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto(lisbonUrl);
+    await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
+    await page.getByRole("button", { name: /^Pick a book for each other/ }).click();
+    const panel = page.getByRole("region", { name: "Pick a book for each other" });
+    await expect(panel.getByRole("button", { name: "Open: Livraria do Bairro" })).toBeVisible();
+    const twist = panel.locator("p", { hasText: "The twist" }).first();
+    expect(await twist.evaluate((p) => getComputedStyle(p).backgroundColor)).toBe(BLUSH);
+    // The map draws its own controls on the map, not on the cream: the list's column is what is read.
+    expect(await offPalette(page.locator("main").locator("[data-tour=vibes], [role=group]"))).toEqual([]);
+    expect(await offPalette(panel)).toEqual([]);
+  });
+
+  test("a city page and a page by kind", async ({ page }) => {
+    for (const path of ["/dates/london", "/dates/ideas/first-date"]) {
+      await page.goto(path);
+      expect(await offPalette(page.locator("main")), path).toEqual([]);
+    }
+  });
+
+  test("/plan: the name and note fields, and a shared plan's twist box", async ({ page }) => {
+    const plan = { v: 1 as const, date: "2030-06-15", where: "Lisbon", idea: "bookshop-and-coffee", stops: [{ id: "node/101", name: "Livraria do Bairro", kind: "bookshop", lat: 38.715, lng: -9.138, time: "14:00" }] };
+    await page.addInitScript((p) => window.localStorage.setItem("ethos.dates.plan.v1", p), JSON.stringify(plan));
+    // The map draws on blank paper (dates-world.ts): one that cannot load shows its own Try again.
+    await mockWorld(page);
+    await page.goto("/plan");
+    const note = page.locator("textarea").first();
+    await expect(note).toBeVisible();
+    expect(await offPalette(page.locator("main"))).toEqual([]);
+    await page.goto(`/plan#p=${encodePlan(plan)}`);
+    const twist = page.locator("main p", { hasText: "The twist" }).first();
+    await expect(twist).toBeVisible();
+    expect(await twist.evaluate((p) => getComputedStyle(p).backgroundColor)).toBe(BLUSH);
+    expect(await offPalette(page.locator("main"))).toEqual([]);
+  });
+
+  test.describe("on a phone", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+    test("rooms-2: the place sheet's action bar is the sheet's cream, and In your plan is the warm blush", async ({ page }) => {
+      await mockWorld(page);
+      await page.goto(lisbonUrl);
+      await page.getByRole("button", { name: /^Livraria do Bairro/ }).first().click();
+      const add = page.getByRole("button", { name: "Add to our plan", exact: true });
+      await expect(add).toBeVisible();
+      await add.click();
+      const remove = page.getByRole("button", { name: /In your plan/ }).last();
+      await expect(remove).toBeVisible();
+      expect(await remove.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe(BLUSH);
+      const bar = remove.locator("xpath=..");
+      expect(await bar.evaluate((d) => getComputedStyle(d).backgroundColor)).not.toBe(WHITE);
+      expect(await offPalette(bar)).toEqual([]);
+    });
+  });
+});
+
+/** The warm blush of the new palette (--brand-blush-paper, #f6ddd3). */
+const BLUSH = "rgb(246, 221, 211)";
 
 /** Visible things in `scope` (and `scope` itself) drawn pure white or in the old cool pink rose-mist (#fff0f4). */
 async function offPalette(scope: import("@playwright/test").Locator) {

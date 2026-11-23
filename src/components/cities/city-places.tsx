@@ -29,7 +29,7 @@ export function CityPlaceList({ places, counts, locale, city, labels }: Props) {
           <p className="text-[12px] font-semibold tracking-wide text-forest/50 uppercase">{labels.counts}</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {tally.map(([group, n]) => (
-              <li key={group} className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-[13.5px] font-semibold text-forest shadow-soft ring-1 ring-forest/5">
+              <li key={group} className="inline-flex items-center gap-2 rounded-full bg-card px-3.5 py-2 text-[13.5px] font-semibold text-forest shadow-soft ring-1 ring-forest/5">
                 <GroupIcon group={group} className="size-4" />
                 <span style={{ color: GROUPS[group].color }}>{n.toLocaleString(locale)}</span>
                 <span className="font-medium text-forest/70">{GROUPS[group].label[locale]}</span>

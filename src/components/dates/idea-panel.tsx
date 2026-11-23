@@ -49,7 +49,7 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
       </div>
       <div className="p-5 sm:p-6">
       <p className="text-[15px] leading-relaxed text-forest/70">{idea.blurb[locale]}</p>
-      <p className="mt-4 flex gap-2.5 rounded-2xl bg-rose-soft p-3.5 text-[14px] leading-snug text-rose-ink">
+      <p className="mt-4 flex gap-2.5 rounded-2xl bg-blush-paper p-3.5 text-[14px] leading-snug text-rose-ink">
         <Sparkles aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
         <span>
           <span className="font-semibold">{labels.twist}</span> {idea.twist[locale]}

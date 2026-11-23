@@ -51,7 +51,7 @@ export function CityIdeaCard({ idea, locale, city, href, stops, isPick, labels, 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <h3 className="font-display text-[24px] leading-[1.1] text-forest">{idea.title[locale]}</h3>
         <p className="mt-2 text-[15px] leading-relaxed text-forest/75">{idea.blurb[locale]}</p>
-        <p className="mt-3 rounded-2xl bg-rose-mist px-4 py-3 text-[14.5px] leading-relaxed text-forest">
+        <p className="mt-3 rounded-2xl bg-blush-paper px-4 py-3 text-[14.5px] leading-relaxed text-forest">
           <strong className="font-semibold text-rose-ink">{labels.twist}</strong> {idea.twist[locale]}
         </p>
         {stops ? (

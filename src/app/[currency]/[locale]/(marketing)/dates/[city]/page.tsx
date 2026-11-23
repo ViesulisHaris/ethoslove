@@ -126,7 +126,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                   <MapIcon aria-hidden="true" className="size-4" />
                   {t("cta.map", { city: name })}
                 </CityCta>
-                <CityCta href="/templates?ref=city" cta="gift" city={city.slug} className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-rose-mist">
+                <CityCta href="/templates?ref=city" cta="gift" city={city.slug} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
                   <Gift aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("cta.gift")}
                 </CityCta>
@@ -230,7 +230,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
               </div>
               <div>
                 {/* Searched by the English name in both languages, as the trips' ticket queries are, so the two pages send the same search. */}
-                <CityCta href={tiqetsSearch(city.name, l)} cta="tickets" city={city.slug} partner="tiqets" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-rose-mist">
+                <CityCta href={tiqetsSearch(city.name, l)} cta="tickets" city={city.slug} partner="tiqets" className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
                   <Ticket aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("tickets.cta", { city: name })}
                 </CityCta>

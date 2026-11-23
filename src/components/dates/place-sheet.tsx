@@ -313,7 +313,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         <ul className="mt-3.5 flex flex-wrap gap-1.5">
           {oddity ? (
             <li>
-              <QuirkBadge quirk={oddity} locale={locale} className="h-[26px] bg-rose-mist px-2.5 text-[12px] text-rose-ink" />
+              <QuirkBadge quirk={oddity} locale={locale} className="h-[26px] bg-blush-paper px-2.5 text-[12px] text-rose-ink" />
             </li>
           ) : null}
           {info.free ? <li className="rounded-full bg-moss-soft px-2.5 py-1 text-[12px] font-semibold text-moss">{labels.free}</li> : null}
@@ -346,8 +346,8 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
 
       {/* On a phone the sheet is short and the photo, the hours and the blurb come first, so the one
           thing to do here waits at the bottom of the sheet (on a white band) until it scrolls into place. */}
-      <div className="mt-3 pt-2 max-lg:sticky max-lg:bottom-0 max-lg:z-[5] max-lg:-mx-5 max-lg:bg-white max-lg:px-5 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-        <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-rose-soft text-rose-ink" : "btn-rose")}>
+      <div className="mt-3 pt-2 max-lg:sticky max-lg:bottom-0 max-lg:z-[5] max-lg:-mx-5 max-lg:bg-card max-lg:px-5 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+        <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-blush-paper text-rose-ink" : "btn-rose")}>
           {inPlan ? <Check aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
           {inPlan ? labels.remove : labels.add}
         </button>

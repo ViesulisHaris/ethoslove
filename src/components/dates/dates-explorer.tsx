@@ -788,7 +788,7 @@ export function DatesExplorer() {
               const name = starterName(city, locale);
               return (
                 <li key={city.name}>
-                  <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-white px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist">
+                  <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-card px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper">
                     {name}
                   </button>
                 </li>
@@ -798,7 +798,7 @@ export function DatesExplorer() {
         </div>
         <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
           <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={heroSizes("(min-width: 1024px) 560px")} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-white px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
+          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-card px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
         </div>
       </section>
     );
@@ -920,7 +920,7 @@ export function DatesExplorer() {
         <div className="mt-4 flex items-center gap-3 rounded-[20px] bg-white/70 p-3.5 ring-1 ring-forest/5 backdrop-blur" aria-live="polite">
           {day ? (
             <>
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white shadow-soft">
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-card shadow-soft">
                 <WeatherGlyph condition={day.condition} className="size-6" />
               </span>
               <p className="min-w-0 flex-1 text-[14px] leading-snug text-forest/80">
@@ -940,7 +940,7 @@ export function DatesExplorer() {
             </>
           ) : (
             <>
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white shadow-soft">
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-card shadow-soft">
                 <CloudOff aria-hidden="true" className="size-5 text-forest/35" />
               </span>
               <p className="text-[14px] leading-snug text-forest/70">
@@ -1005,7 +1005,7 @@ export function DatesExplorer() {
               // Wrapped on a desktop: a mouse wheel can't scroll a row sideways, and "Rainy day" was out of reach.
               <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("ideas.vibes")} data-tour="vibes">
                 {VIBE_IDS.map((v) => (
-                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => { setVibe(vibe === v ? null : v); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
+                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => { setVibe(vibe === v ? null : v); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-card text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
                     {VIBES[v][locale]}
                   </button>
                 ))}
@@ -1068,7 +1068,7 @@ export function DatesExplorer() {
             {COST_IDS.map((c) => {
               const on = costs.includes(c);
               return (
-                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-card text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
                   {COST_LABELS[c][locale]}
                 </button>
               );
@@ -1076,7 +1076,7 @@ export function DatesExplorer() {
           </div>
         </div>
         <div className="scrollbar-none -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("places.filter")}>
-          <button type="button" aria-pressed={groups.length === 0 && !oddOnly} onClick={() => { if (groups.length > 0 || oddOnly) nextList(); setGroups([]); setOddOnly(false); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 && !oddOnly ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+          <button type="button" aria-pressed={groups.length === 0 && !oddOnly} onClick={() => { if (groups.length > 0 || oddOnly) nextList(); setGroups([]); setOddOnly(false); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 && !oddOnly ? "bg-forest text-cream" : "bg-card text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
             {t("places.all")}
           </button>
           {/* A category across the groups, the way Airbnb's "OMG!" is: a cellar bar, a rooftop, a planetarium. */}
@@ -1089,7 +1089,7 @@ export function DatesExplorer() {
               setShown(PAGE);
               nextList();
             }}
-            className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", oddOnly ? "bg-rose-deep text-white ring-transparent" : "bg-white text-rose-deep ring-forest/10 hover:bg-rose-mist")}
+            className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", oddOnly ? "bg-rose-deep text-white ring-transparent" : "bg-card text-rose-deep ring-forest/10 hover:bg-blush-paper")}
           >
             <Sparkles aria-hidden="true" className="size-4" />
             {t("unusual.chip")}
@@ -1107,7 +1107,7 @@ export function DatesExplorer() {
                   setShown(PAGE);
                   nextList();
                 }}
-                className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", on ? "text-white ring-transparent" : "bg-white ring-forest/10 hover:bg-forest/5")}
+                className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", on ? "text-white ring-transparent" : "bg-card ring-forest/10 hover:bg-forest/5")}
                 // The group's ink, not its pin colour: gold chip text on white, and white on a gold chip, read at 3.7:1.
                 style={on ? { background: GROUPS[g].ink } : { color: GROUPS[g].ink }}
               >
@@ -1151,7 +1151,7 @@ export function DatesExplorer() {
                           setOrigin(null);
                           go({ lat: city.lat, lng: city.lng, name });
                         }}
-                        className="h-11 rounded-full border border-rose/15 bg-white px-3.5 text-[13.5px] font-medium text-forest shadow-soft transition-colors hover:bg-rose-mist lg:h-10"
+                        className="h-11 rounded-full border border-rose/15 bg-card px-3.5 text-[13.5px] font-medium text-forest shadow-soft transition-colors hover:bg-blush-paper lg:h-10"
                       >
                         {name}
                       </button>
@@ -1183,7 +1183,7 @@ export function DatesExplorer() {
             </ListSet>
           </AnimatePresence>
           {visible.length > shown ? (
-            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-2 h-12 w-full rounded-full border border-forest/15 bg-white text-[14.5px] font-semibold text-forest hover:bg-forest/5">
+            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-2 h-12 w-full rounded-full border border-forest/15 bg-card text-[14.5px] font-semibold text-forest hover:bg-forest/5">
               {t("places.more", { count: Math.min(PAGE, visible.length - shown) })}
             </button>
           ) : null}
@@ -1328,7 +1328,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
             filters={
               <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" aria-hidden="true">
                 {VIBE_IDS.map((v) => (
-                  <span key={v} className="inline-flex h-11 shrink-0 items-center rounded-full bg-white px-3.5 text-[13px] font-semibold text-forest/75 ring-1 ring-forest/10 lg:h-10">
+                  <span key={v} className="inline-flex h-11 shrink-0 items-center rounded-full bg-card px-3.5 text-[13px] font-semibold text-forest/75 ring-1 ring-forest/10 lg:h-10">
                     {VIBES[v][locale]}
                   </span>
                 ))}

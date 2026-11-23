@@ -47,7 +47,7 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
       }}
     >
       <PopoverTrigger asChild>
-        <button type="button" data-tour="when" aria-label={`${labels.label}: ${formatDay(value, locale)}`} className={cn("inline-flex h-12 items-center gap-2 rounded-full border border-forest/15 bg-white px-4 text-[15px] font-medium text-forest shadow-soft transition-colors hover:border-forest/30", className)}>
+        <button type="button" data-tour="when" aria-label={`${labels.label}: ${formatDay(value, locale)}`} className={cn("inline-flex h-12 items-center gap-2 rounded-full border border-forest/15 bg-card px-4 text-[15px] font-medium text-forest shadow-soft transition-colors hover:border-forest/30", className)}>
           <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
           <span className="truncate first-letter:uppercase">{value === today ? labels.today : formatDay(value, locale, "short")}</span>
           {weather.get(value) ? <WeatherGlyph condition={weather.get(value)!.condition} className="size-4 shrink-0" /> : null}

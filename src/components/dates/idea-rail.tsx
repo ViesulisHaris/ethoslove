@@ -88,10 +88,10 @@ export function IdeaRail({ heading, filters, empty, ideas, doable, selectedId, l
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">{heading}</div>
         <div className={cn("hidden shrink-0 gap-1.5 pb-0.5 lg:flex", ideas.length === 0 && "lg:hidden")}>
-          <button type="button" aria-label={labels.previous} disabled={edges.start} onClick={() => scroll(-1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-rose-mist disabled:opacity-35">
+          <button type="button" aria-label={labels.previous} disabled={edges.start} onClick={() => scroll(-1)} className="grid size-9 place-items-center rounded-full bg-card text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-blush-paper disabled:opacity-35">
             <ChevronLeft className="size-4" />
           </button>
-          <button type="button" aria-label={labels.next} disabled={edges.end} onClick={() => scroll(1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-rose-mist disabled:opacity-35">
+          <button type="button" aria-label={labels.next} disabled={edges.end} onClick={() => scroll(1)} className="grid size-9 place-items-center rounded-full bg-card text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-blush-paper disabled:opacity-35">
             <ChevronRight className="size-4" />
           </button>
         </div>

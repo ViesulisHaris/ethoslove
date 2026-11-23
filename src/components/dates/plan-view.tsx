@@ -275,11 +275,11 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <label className="block">
               <span className="text-[12.5px] font-medium text-forest/65">{t("to")}</span>
-              <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+              <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-card px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
             <label className="block">
               <span className="text-[12.5px] font-medium text-forest/65">{t("from")}</span>
-              <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+              <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-card px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
           </div>
         ) : plan.to || plan.from ? (
@@ -318,7 +318,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-semibold" style={{ color: group.ink }}>
                   {editable ? (
                     // 16px: iPhone Safari zooms the whole page into any smaller field it focuses.
-                    <TimePicker label={t("timeFor", { name })} value={stop.time} onChange={(time) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time } : s)) }))} className="w-auto rounded-xl border-forest/15 bg-white pr-2.5 pl-3 text-forest md:text-base" />
+                    <TimePicker label={t("timeFor", { name })} value={stop.time} onChange={(time) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time } : s)) }))} className="w-auto rounded-xl border-forest/15 bg-card pr-2.5 pl-3 text-forest md:text-base" />
                   ) : stop.time ? (
                     <span className="text-[15px] text-forest tabular-nums">{stop.time}</span>
                   ) : null}
@@ -374,12 +374,12 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         {editable ? (
           <label className="mt-8 block">
             <span className="text-[12.5px] font-medium text-forest/65">{t("note")}</span>
-            <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-white px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+            <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-card px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
           </label>
         ) : plan.note ? (
           <p className="mt-8 border-t border-dashed border-forest/15 pt-6 font-hand text-[1.7rem] leading-snug text-forest/85">{plan.note}</p>
         ) : null}
-        {idea && !editable ? <p className="mt-6 rounded-2xl bg-rose-soft p-4 text-[14.5px] leading-snug text-rose-ink"><span className="font-semibold">{t("twist")}</span> {idea.twist[locale]}</p> : null}
+        {idea && !editable ? <p className="mt-6 rounded-2xl bg-blush-paper p-4 text-[14.5px] leading-snug text-rose-ink"><span className="font-semibold">{t("twist")}</span> {idea.twist[locale]}</p> : null}
       </article>
 
       <aside className="space-y-4 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">

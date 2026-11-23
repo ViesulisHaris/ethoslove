@@ -63,7 +63,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
           <CostChip cost={place.cost} locale={locale} reported={place.rating?.cost !== null && place.rating?.cost !== undefined} />
           <span>{place.distanceKm <= WALK_KM ? labels.walk(walkingMinutes(place.distanceKm)) : formatDistance(place.distanceKm, locale)}</span>
           {/* Only what the name or the map says: "Karaoke" on a karaoke bar would say it twice. */}
-          {isTold(unusual) ? <QuirkBadge quirk={unusual.quirk} locale={locale} className="h-6 bg-rose-mist px-2 text-[11.5px] text-rose-ink" /> : null}
+          {isTold(unusual) ? <QuirkBadge quirk={unusual.quirk} locale={locale} className="h-6 bg-blush-paper px-2 text-[11.5px] text-rose-ink" /> : null}
           {real ? (
             <span className="inline-flex items-center gap-1 text-[11.5px] text-forest/65">
               <Camera aria-hidden="true" className="size-3" />

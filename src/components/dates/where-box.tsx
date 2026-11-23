@@ -125,7 +125,7 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
       }}
     >
-      <div className={cn("flex items-center gap-2 rounded-full border border-forest/15 bg-white pr-1.5 pl-4 shadow-soft transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)] has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-forest", size === "lg" ? "h-14" : "h-12")}>
+      <div className={cn("flex items-center gap-2 rounded-full border border-forest/15 bg-card pr-1.5 pl-4 shadow-soft transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)] has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-forest", size === "lg" ? "h-14" : "h-12")}>
         <MapPin aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
         <input
           type="text"
@@ -199,7 +199,7 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
           onMouseDown={(e) => e.preventDefault()}
           // With only "Looking…" in it the list is a note, not a target: a tap on the field it is
           // drawn over (the second town on Long distance) goes to that field.
-          className={cn("absolute inset-x-0 top-[calc(100%+6px)] z-30 max-h-72 overflow-auto rounded-2xl border border-forest/10 bg-white p-1.5 shadow-lift", options.length === 0 && "pointer-events-none")}
+          className={cn("absolute inset-x-0 top-[calc(100%+6px)] z-30 max-h-72 overflow-auto rounded-2xl border border-forest/10 bg-card p-1.5 shadow-lift", options.length === 0 && "pointer-events-none")}
         >
           {options.length === 0 ? (
             <li className="px-3 py-3 text-sm text-forest/65">{loading ? labels.searching : failed ? (labels.failed ?? labels.searching) : labels.nothing}</li>
