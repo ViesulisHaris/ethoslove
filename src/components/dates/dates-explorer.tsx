@@ -18,7 +18,7 @@ import { fillStops, fitsVibe, forTheDay, ideaById, ideasFor, IDEAS, isDoable, VI
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
 import { MAP_PAPER } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
-import type { Place } from "@/lib/dates/places";
+import { pinnable, type Place } from "@/lib/dates/places";
 import { matchPhotos, type Sight } from "@/lib/dates/photos";
 import { pairsWith, rankPlaces, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
@@ -525,7 +525,8 @@ export function DatesExplorer() {
       .sort((a, b) => a.key - b.key)
       .map(({ p }) => p);
   }, [visible, listOrder]);
-  const picks = useMemo(() => topPicks(inVibe), [inVibe]);
+  // Only places with a name of their own: a row of "Viewpoint" picks says nothing (walk-rooms-12).
+  const picks = useMemo(() => topPicks(pinnable(inVibe)), [inVibe]);
   const listUp = status === "ready" || (status === "loading" && all.length > 0);
   const pickIds = useMemo(() => new Set(picks.map((p) => p.id)), [picks]);
   const oddPicks = useMemo(() => unusualPicks(inVibe, found, UNUSUAL_SHELF, pickIds), [inVibe, found, pickIds]);
@@ -546,6 +547,8 @@ export function DatesExplorer() {
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
   const oddCount = found.size;
   const selected = selectedId ? (ranked.find((p) => p.id === selectedId) ?? null) : null;
+  // The map pins the places with a name of their own, and the one open now (walk-rooms-12).
+  const pins = useMemo(() => pinnable(visible, selectedId), [visible, selectedId]);
   // A place opened over another (a pairing from inside the sheet) swaps what the sheet shows in
   // place, with a fade; only a sheet opening from nothing slides in. Worked out while rendering,
   // from the last render's choice (React's way to follow a change of state without an effect).
@@ -1197,7 +1200,7 @@ export function DatesExplorer() {
           <HoveredMap
             hover={hover}
             center={where}
-            places={visible}
+            places={pins}
             selected={selected}
             ratings={ratings}
             locale={locale}

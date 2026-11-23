@@ -7,7 +7,7 @@ import { closesAt, formatHours, hoursOn, isOpenAt } from "@/lib/dates/hours";
 import { IDEAS, ideaById, ideasFor, isDoable, suggestStops, VIBE_IDS } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, KIND_IDS, KINDS, kindOf, kindOfPoi, kindsIn } from "@/lib/dates/kinds";
 import { boxAround, buildIdQuery, buildRareQuery } from "@/lib/dates/overpass";
-import { balance, parseOverpass, scorePlace, type Place } from "@/lib/dates/places";
+import { balance, onlyItsKind, parseOverpass, pinnable, scorePlace, type Place } from "@/lib/dates/places";
 import { addStop, decodePlan, EMPTY_PLAN, encodePlan, MAX_STOPS, moveStop, parseStoredPlan, removeStop, type Plan, type PlanStop } from "@/lib/dates/plan";
 import { mergePlaces, osmIdOf, placesFromPois, scorePoi, tileAt, tilePointToLatLng, tilesCovering, type PoiFeature } from "@/lib/dates/tiles";
 import { conditionOf, isWet, parseOpenMeteo, weatherUrl, type DayWeather } from "@/lib/dates/weather";
@@ -161,6 +161,30 @@ describe("places from OpenStreetMap", () => {
     expect(first).toMatchObject({ name: "Taberna", kind: "restaurant", group: "eat", address: "Rua Nova 12, Lisboa", cuisine: ["portuguese", "seafood"], website: "https://taberna.example/", outdoorSeating: true });
     // A viewpoint with no name is still a viewpoint; a café with no name is nothing to go on.
     expect(viewpoint).toMatchObject({ name: "Viewpoint", named: false });
+  });
+
+  it("walk-rooms-12: a name that only says what the place is counts as no name, in either language", () => {
+    const json = {
+      elements: [
+        { type: "node", id: 11, lat: 38.716, lon: -9.138, tags: { tourism: "viewpoint", name: "Viewpoint" } },
+        { type: "node", id: 12, lat: 38.717, lon: -9.137, tags: { tourism: "viewpoint", name: "mirador" } },
+        { type: "node", id: 13, lat: 38.718, lon: -9.136, tags: { tourism: "viewpoint", name: "Miradouro de Santa Luzia" } },
+        { type: "node", id: 14, lat: 38.719, lon: -9.135, tags: { amenity: "cafe", name: "Cafe" } },
+      ],
+    };
+    const places = parseOverpass(json, LISBON, 1500, (kind) => KINDS[kind].label.en);
+    expect(places.map((p) => [p.id, p.named])).toEqual(expect.arrayContaining([["node/11", false], ["node/12", false], ["node/13", true]]));
+    // A café called "Cafe" is a café with no name: nothing to go on.
+    expect(places.some((p) => p.id === "node/14")).toBe(false);
+    expect(onlyItsKind(" Viewpoint ", "viewpoint")).toBe(true);
+    expect(onlyItsKind("Tempio D", "viewpoint")).toBe(false);
+  });
+
+  it("walk-rooms-12: the map's pins and the top picks keep the places with a name, and the one open now", () => {
+    const list = [place({ id: "node/1", kind: "viewpoint", named: false }), place({ id: "node/2", kind: "cafe" }), place({ id: "node/3", kind: "park", named: false })];
+    expect(pinnable(list).map((p) => p.id)).toEqual(["node/2"]);
+    expect(pinnable(list, "node/3").map((p) => p.id)).toEqual(["node/2", "node/3"]);
+    expect(pinnable(list, null).map((p) => p.id)).toEqual(["node/2"]);
   });
 
   it("ranks a looked-after local place above a takeaway chain, and never trusts a broken answer", () => {
