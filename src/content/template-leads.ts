@@ -63,7 +63,9 @@ export const TEMPLATE_LEADS: Record<string, Partial<Record<GiftLocale, string>>>
  * "Watch a pumpkin get carved with their name. Then light the candle." Jack-o'-Lantern's hero said
  * "A pumpkin on a table in a dark room, and a knife." and stopped there, because the sentence where
  * the gift happens is too long to follow it (the user walk of 23 Nov 2026). Each row is written
- * from the gift's own description and nothing else, in 12 to 30 words, and says what the line
+ * from the gift's own description and nothing else, in 12 to 30 words (the Spanish ones and Dark
+ * Romance's nearer twenty: at thirty, "Make this gift" went through the foot of the first screen
+ * of a 320 by 568 phone on seven pages), and says what the line
  * above it does not: what comes out, and what is waiting under it. The description keeps its
  * opening in the page's meta description, and the rest of it in the closed block.
  *
@@ -73,26 +75,28 @@ export const TEMPLATE_LEADS: Record<string, Partial<Record<GiftLocale, string>>>
 export const SCENE_LEADS: Record<string, Partial<Record<GiftLocale, string>>> = {
   "bat-swarm": {
     en: "Hundreds of bats pour out of the moon to spell their name, a line you choose and a heart. Underneath, your letter, your photos in the moonlight and your song.",
-    es: "Cientos de murciélagos salen de la luna para escribir su nombre, una frase que elijas y un corazón. Debajo, tu carta, tus fotos y vuestra canción.",
+    es: "Cientos salen de la luna y escriben su nombre. Debajo, tu carta, tus fotos y vuestra canción.",
   },
   "dark-romance": {
-    en: "A black leather diary with their name in gold. The cover swings open onto your photos, your words in cut-out letters and your letter under a wax seal.",
-    es: "Un diario de piel negra con su nombre en dorado. La tapa se abre sobre tus fotos, tus palabras en letras recortadas y tu carta bajo un sello de lacre.",
+    en: "The cover swings open onto your photos, your words in cut-out letters and your letter under a wax seal.",
+    es: "La tapa se abre sobre tus fotos, tus palabras en letras recortadas y tu carta bajo un sello de lacre.",
   },
   "favorite-person": {
     en: "Their name is written on the tissue. Under it, your photos on polaroids, your song on a player and a bouquet, down to your letter. Every tap doodles a heart.",
-    es: "Su nombre está escrito en el papel de seda. Debajo, tus fotos en polaroids, vuestra canción en un reproductor y un ramo, hasta tu carta. Cada toque dibuja un corazón.",
+    // Shorter than the English: with thirty words the Spanish button began under the first screen of a 320 by 568 phone.
+    es: "Debajo, tus fotos en polaroids, vuestra canción y un ramo, hasta tu carta.",
   },
   "jack-o-lantern": {
     en: "The eyes, the nose and the grin drop out piece by piece, and the face glows through the cuts. Underneath, your letter, your photos as candlelit polaroids and your song.",
-    es: "Los ojos, la nariz y la sonrisa caen trozo a trozo, y la cara brilla por los cortes. Debajo, tu carta, tus fotos como polaroids y vuestra canción.",
+    es: "Los trozos caen uno a uno y la cara brilla por los cortes. Debajo, tu carta, tus fotos y vuestra canción.",
   },
   picnic: {
-    es: "Tocan la cesta y la tapa se abre con un crujido. Salen fresas, limonada rosa, tulipanes y vuestras fotos, y al final una nota doblada con tu carta dentro.",
+    es: "Salen fresas, limonada rosa, tulipanes y vuestras fotos, y al final una nota doblada con tu carta dentro.",
   },
   "spooky-season": {
     en: "A heap of autumn leaves with their name on a kraft tag. A gust clears them, and a scrapbook runs from your photo under the moon down to your letter.",
-    es: "Un montón de hojas de otoño con su nombre en una etiqueta. Una ráfaga se las lleva y aparece un álbum, desde tu foto bajo la luna hasta tu carta.",
+    // Shorter than the English, for the same small phone.
+    es: "Una ráfaga se lleva las hojas y debajo hay un álbum, hasta tu carta.",
   },
 };
 

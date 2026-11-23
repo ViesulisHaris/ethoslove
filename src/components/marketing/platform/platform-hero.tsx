@@ -117,7 +117,7 @@ async function GiftFirst() {
     <>
       <div className="lg:col-span-6">
         {/*
-         * The line over the headline is the maker's mark, "Digital cards by Tryethos": the first thing
+         * The line over the headline is the maker's mark (BRAND.categoryLine, config/brand.ts): the first thing
          * a visitor reads, so that the kind of thing and the name arrive together (the owner, 20 and
          * 23 Nov 2026). The words the page is found by, "digital gift", are in the sentence under the
          * headline and in the page's title.
