@@ -1,6 +1,8 @@
 import { ABOUT_PATH, ABOUT_UPDATED } from "@/content/about";
 import { LEGAL_UPDATED } from "@/content/legal";
+import { PRESS_PATH } from "@/content/press";
 import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
+import { pressUpdated } from "@/lib/press/shown";
 
 /**
  * When each page's own words last changed, for the sitemap's <lastmod>. Search engines believe
@@ -50,6 +52,12 @@ export const GALLERY_LIVE = "2026-11-22";
  * to the day it ships (a date ahead of the page is the kind search engines stop believing).
  */
 export const DATES_LIVE = "2026-11-23";
+
+/**
+ * Ethos in numbers is dated only once it is on (a date for a page that is in no sitemap fails
+ * crawl.test.ts): the later of the day its words changed and the day its figures were counted.
+ */
+const PRESS_DATED = pressUpdated();
 
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
@@ -115,6 +123,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/legal/*": LEGAL_UPDATED,
   [ABOUT_PATH]: ABOUT_UPDATED,
   [PT_LETTER_PATH]: PT_LETTER_UPDATED,
+  ...(PRESS_DATED ? { [PRESS_PATH]: PRESS_DATED } : {}),
 };
 
 /** The day a page last changed (its own date, else its section's), or undefined when it isn't known. */

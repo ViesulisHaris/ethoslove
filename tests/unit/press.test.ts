@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { BRAND } from "@/config/brand";
 import { ABOUT_FOUNDED, aboutCopy } from "@/content/about";
 import { PRESS_COPY, pressFounderLine } from "@/content/press";
@@ -259,5 +259,40 @@ describe("press page: how it is drawn", () => {
       expect(text, file).not.toMatch(/#[0-9a-f]{3,8}\b/i);
       expect(text, file).not.toMatch(/\brgba?\(/);
     }
+  });
+});
+
+describe("press page: once the figures are in", () => {
+  afterEach(() => {
+    vi.doUnmock("@/content/press-numbers");
+    vi.resetModules();
+  });
+
+  it("S2 once they are in, the sitemap lists it in both languages, dated, and the footer and llms.txt name it", async () => {
+    vi.resetModules();
+    vi.doMock("@/content/press-numbers", () => ({ PRESS_NUMBERS: PRESS_SAMPLE }));
+    const { default: sitemap } = await import("@/app/sitemap");
+    const { PAGE_UPDATED } = await import("@/content/page-dates");
+    const shown = await import("@/lib/press/shown");
+    const { PRESS_UPDATED } = await import("@/content/press");
+    const entries = sitemap();
+    const press = entries.filter((e) => /\/press$/.test(e.url));
+    expect(press).toHaveLength(2);
+    expect(press.filter((e) => e.url.endsWith("/es/press"))).toHaveLength(1);
+    for (const e of press) {
+      expect(String(e.lastModified).slice(0, 10)).toBe(shown.pressUpdated());
+      expect(Object.keys(e.alternates?.languages ?? {}).sort()).toEqual(["en", "es", "x-default"]);
+    }
+    const later = PRESS_UPDATED > "2026-11-20" ? PRESS_UPDATED : "2026-11-20";
+    expect(PAGE_UPDATED["/press"]).toBe(later);
+    expect(shown.pressNav("es")).toEqual({ href: "/press", label: "Prensa" });
+    const brief = shown.pressBrief();
+    expect(brief[0]).toBe("## Ethos in numbers");
+    const text = brief.join("\n");
+    expect(text).toContain("21,000+");
+    expect(text).toContain("3.2");
+    expect(text).toContain("The Letter, Bouquet, Jar of Reasons, Scratch Card, Constellations");
+    expect(text).toMatch(/\]\([^)]*\/press\)/);
+    expect(brief.at(-1)).toBe("");
   });
 });

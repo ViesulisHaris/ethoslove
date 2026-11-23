@@ -7,11 +7,14 @@ import { artSrcSet, pageArt } from "@/content/page-art";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { Logo } from "@/components/shared/logo";
 import { CookieChoiceButton } from "@/components/shared/cookie-consent";
+import { pressNav } from "@/lib/press/shown";
 import { LocaleSwitcher } from "./locale-switcher";
 
 export async function MarketingFooter() {
   const t = await getTranslations();
   const locale = (await getLocale()) === "es" ? "es" : "en";
+  // Ethos in numbers, once its real figures are in; until then the page is a 404 and nothing links to it.
+  const press = pressNav(locale);
   const year = new Date().getFullYear();
 
   return (
@@ -61,6 +64,7 @@ export async function MarketingFooter() {
         </FooterColumn>
         <FooterColumn title={t("footer.company")} className="col-span-2 md:col-span-1">
           <FooterLink href="/about">{t("footer.about")}</FooterLink>
+          {press ? <FooterLink href={press.href}>{press.label}</FooterLink> : null}
           <FooterLink href="/legal/terms">{t("footer.terms")}</FooterLink>
           <FooterLink href="/legal/privacy">{t("footer.privacy")}</FooterLink>
           {/* EU consumer law wants the way to withdraw easy to find, on every page (CRD art. 11a). */}
