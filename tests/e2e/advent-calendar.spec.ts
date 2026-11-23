@@ -309,7 +309,7 @@ for (const locale of ["en", "es"] as const) {
     expect(notes).toHaveLength(8);
     await expect(foot(root)).toHaveText(en ? "1 of 8 notes read" : "1 de 8 notas leídas");
     // every door is open and a note has been read: the line under the count says where the sender's own letter is
-    await expect(hint(root)).toHaveText(en ? "tap the star for Tom’s letter" : "toca la estrella: la carta de Tomás");
+    await expect(hint(root)).toHaveText(en ? "tap the star for Tom’s letter" : "toca la estrella para leer la carta de Tomás");
     const signed: string[] = [];
     await readEveryNote(page, root, [...notes].sort((a, b) => a - b), async () => {
       signed.push((await card(root).locator("p[dir=auto]").innerText()).trim());
@@ -319,7 +319,7 @@ for (const locale of ["en", "es"] as const) {
     await expect(root.locator("[data-star-lit]")).toHaveCount(1);
     await expect(foot(root)).toHaveText(en ? "every note read · the star is lit" : "todas las notas leídas · la estrella brilla");
     // "the star is lit" never said it could be tapped, and everything of the sender's is behind it
-    await expect(hint(root)).toHaveText(en ? "tap the star for Tom’s letter" : "toca la estrella: la carta de Tomás");
+    await expect(hint(root)).toHaveText(en ? "tap the star for Tom’s letter" : "toca la estrella para leer la carta de Tomás");
     // Names of one short word are written in one hand, at one size: "Papá" and "Mamá" two rows apart were 14.6 and 11.6 px.
     const sizes = await root.locator("[data-tag-name]").evaluateAll((els) =>
       els.filter((el) => !/\s/.test((el.textContent ?? "").trim()) && [...(el.textContent ?? "").trim()].length <= 6).map((el) => getComputedStyle(el).fontSize),
