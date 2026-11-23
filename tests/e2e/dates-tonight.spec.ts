@@ -110,7 +110,7 @@ test.describe("plan our date tonight", () => {
     await planButton(page).click();
     // Lisbon's world has a viewpoint and no planetarium: on a wet night the stars are not offered at all.
     await expect(result(page).getByRole("heading", { name: "Bowling, bumpers optional" })).toBeVisible();
-    const said = "Nothing free fits a rainy night here. Expect to spend about what dinner out costs.";
+    const said = "Nothing free fits tonight in the rain here. Expect to spend about what dinner out costs.";
     await expect(result(page)).toContainText(said);
     await expect(result(page)).not.toContainText("Look up");
     // Changing the form afterwards does not rewrite what the card says it was asked.

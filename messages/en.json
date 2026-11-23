@@ -1913,7 +1913,7 @@
       "another": "Another",
       "relaxed": {
         "budget": "Nothing {wanted} fits {when} here. Expect to spend {cost}.",
-        "budgetWet": "Nothing {wanted} fits a rainy {night, select, yes {night} other {day}} here. Expect to spend {cost}.",
+        "budgetWet": "Nothing {wanted} fits {when} in the rain here. Expect to spend {cost}.",
         "length": "Nothing of that length fits; this one takes about {hours} h.",
         "vibe": "Nothing in that mood fits {when}; this is the nearest."
       },

@@ -76,7 +76,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
   const said = HEAVIEST.filter((wish) => pick.relaxed.includes(wish))
     .slice(0, 2)
     .map((wish) => {
-      if (wish === "budget") return t(wet ? "tonight.relaxed.budgetWet" : "tonight.relaxed.budget", { wanted: t(`tonight.wanted.${(asked ?? 0) as 0 | 1 | 2}`), cost: t(`tonight.costs.${idea.budget as 1 | 2 | 3}`), when: whenLabel, night: when === "tonight" ? "yes" : "no" });
+      if (wish === "budget") return t(wet ? "tonight.relaxed.budgetWet" : "tonight.relaxed.budget", { wanted: t(`tonight.wanted.${(asked ?? 0) as 0 | 1 | 2}`), cost: t(`tonight.costs.${idea.budget as 1 | 2 | 3}`), when: whenLabel });
       if (wish === "length") return t("tonight.relaxed.length", { hours: ideaHours(idea.minutes, locale) });
       return t("tonight.relaxed.vibe", { when: whenLabel });
     });
