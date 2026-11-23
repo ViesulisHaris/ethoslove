@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo";
 import { GameTable } from "@/components/games/cards";
+import { GameNotes } from "@/components/games/page/game-notes";
 import { KnowGame } from "@/components/games/know-game";
 import { QuestionList } from "@/components/games/question-list";
 import { KNOW_QUESTIONS } from "@/lib/games/content";
@@ -26,6 +27,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
         intro={t("listIntro")}
         groups={[{ items: KNOW_QUESTIONS.map((q) => `${q.prompt[l]} ${q.options.map((o) => o[l]).join(" · ")}`) }]}
       />
+      <GameNotes game="know" locale={locale} />
     </GameTable>
   );
 }

@@ -102,3 +102,45 @@ test("E4: in Spanish the next games are named in Spanish and keep /es", async ({
   await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/es/games/dare");
   await expect(end).toContainText("O jugad a otro");
 });
+
+const SEVEN = ["know", "rather", "draw", "memory", "deck", "dare", "roulette"] as const;
+
+test("E5: every game's page answers its questions, closed, and gives them to search engines", async ({ page }) => {
+  for (const g of SEVEN) {
+    await page.goto(`/games/${g}`);
+    const notes = page.locator(`section[aria-labelledby="${g}-notes"]`);
+    const details = notes.locator("details");
+    expect(await details.count(), g).toBeGreaterThanOrEqual(2);
+    for (const d of await details.all()) await expect(d, g).not.toHaveAttribute("open", "");
+    const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("");
+    expect(ld, g).toContain('"FAQPage"');
+    expect(ld, g).toContain(await details.first().locator("summary").innerText());
+  }
+});
+
+test("E6: Draw, Memory and the wheel say how they are played, and Draw lists its words", async ({ page }) => {
+  for (const g of ["draw", "memory", "roulette"]) {
+    await page.goto(`/games/${g}`);
+    await expect(page.getByRole("heading", { name: "How to play" }), g).toBeVisible();
+    await expect(page.locator(`section[aria-labelledby="${g}-notes"] ol li`), g).toHaveCount(4);
+  }
+  await page.goto("/games/draw");
+  await expect(page.getByRole("heading", { name: /^40 words for a drawing game/ })).toBeVisible();
+  await expect(page.locator("#draw-words").locator("xpath=ancestor::section").locator("ol li")).toHaveCount(40);
+});
+
+test("E7: the blog posts that link to a game are linked back from it", async ({ page }) => {
+  await page.goto("/games/rather");
+  const more = page.locator('section[aria-labelledby="rather-notes"]');
+  await expect(more.locator('a[href="/blog/would-you-rather-questions-for-couples"]')).toHaveCount(1);
+  await page.goto("/games/dare");
+  await expect(page.locator('section[aria-labelledby="dare-notes"] a[href="/blog/truth-or-dare-questions-for-couples"]')).toHaveCount(1);
+});
+
+test("E8: in Spanish, the same in Spanish", async ({ page }) => {
+  await page.goto("/es/games/memory");
+  await expect(page.getByRole("heading", { name: "Cómo se juega" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Preguntas sobre este juego" })).toBeVisible();
+  await page.goto("/es/games/draw");
+  await expect(page.getByRole("heading", { name: /^40 palabras/ })).toBeVisible();
+});
