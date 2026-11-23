@@ -173,7 +173,7 @@ export default async function CityKindPage({ params }: Props) {
             title={ui.kindsNav}
             className="mt-8 border-t border-page-line pt-5"
             titleClassName="text-page-label text-page-body"
-            linkClassName="mr-5 inline-flex min-h-11 items-center text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink"
+            linkClassName="inline-flex min-h-11 items-center px-2.5 text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink"
           />
         </DateFoot>
       </DatePage>
