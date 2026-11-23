@@ -3,6 +3,7 @@ import { missingMembershipColumns, type Db } from "@/lib/commerce/db";
 import { applySubscriptionState, rowBySubscription, switchToMonthlyNow, type SendEnded } from "@/lib/commerce/memberships";
 import type { Pass } from "@/lib/commerce/passes";
 import { restorePurchase, revokePurchase, withdrawPurchase } from "@/lib/commerce/revoke";
+import { revokeOneUnusedOf } from "@/lib/commerce/gift-credits";
 import type { Fulfilment } from "./fulfil";
 import {
   cancelSubscriptionNow,
@@ -256,14 +257,19 @@ const cancelWith = (deps: StripeEventDeps) => async (subscriptionId: string) => 
 /**
  * A full refund takes back what the purchase granted (lib/commerce/revoke.ts). A partial one
  * "requested by customer" of an Ethos for Two payment is a withdrawal within the 14 days: the owner
- * refunds what's left after the days used, and the membership ends for both. Any other partial
- * refund is a goodwill gesture and changes nothing.
+ * refunds what's left after the days used, and the membership ends for both. Half or more of two
+ * more gifts refunded is one unused gift given back (the 30-day promise, terms): one gift ready goes.
+ * Any other partial refund is a goodwill gesture and changes nothing.
  */
 async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<EventOutcome> {
   const purchase = await purchaseByPaymentIntent(deps.db, idOf(charge.payment_intent as string | { id: string } | null));
   if (!purchase) return ok("foreign");
   if (charge.refunded) {
     await revokePurchase(deps.db, purchase, deps.now, { mode: "refund", cancelSubscription: cancelWith(deps) });
+    return ok();
+  }
+  if (purchase.product === "pair") {
+    if (charge.amount_refunded * 2 >= charge.amount) await revokeOneUnusedOf(deps.db, purchase.id, deps.now);
     return ok();
   }
   if (purchase.product !== "pass" && purchase.product !== "membership") return ok();
