@@ -284,13 +284,42 @@ test.describe("a gift's end screen, for whoever received it", () => {
     await page.route("**/api/gift/*/react", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) }));
     expect(await playToEnd(page, { template: "the-letter" }), "The Letter plays to its end").toBe(true);
     await bring(page, '[data-testid="make-for-someone-else"]');
-    await page.getByRole("button", { name: "Send Marco a reaction" }).click();
-    const sheet = page.getByRole("dialog");
+    const opener = page.getByRole("button", { name: "Send Marco a reaction" });
+    await opener.click();
+    // A modal with a name, that Escape closes and that gives the focus back to what opened it.
+    const sheet = page.getByRole("dialog", { name: "Send Marco a reaction" });
+    await expect(sheet).toBeVisible();
+    await expect.poll(() => sheet.evaluate((el) => el.contains(document.activeElement))).toBe(true);
+    await page.keyboard.press("Escape");
+    await expect(sheet).toHaveCount(0);
+    await expect(opener).toBeFocused();
+    await opener.click();
+    await expect(sheet).toBeVisible();
+    // Tab goes round the sheet's own controls and never reaches the gift behind it.
+    for (let i = 0; i < 16; i++) {
+      await page.keyboard.press("Tab");
+      expect(await sheet.evaluate((el) => el.contains(document.activeElement)), `Tab ${i + 1} stays in the sheet`).toBe(true);
+    }
+    // Held sideways (an iPhone 13 at 844×340) the sheet scrolls inside the screen: Close and Send can
+    // both be reached.
+    const upright = page.viewportSize()!;
+    await page.setViewportSize({ width: 844, height: 340 });
+    const close = sheet.getByRole("button", { name: "Close" });
+    await sheet.evaluate((el) => (el.scrollTop = 0));
+    expect((await close.boundingBox())!.y, "Close is on the screen").toBeGreaterThanOrEqual(0);
+    const sendIt = sheet.getByRole("button", { name: /^Send/ });
+    await sendIt.scrollIntoViewIfNeeded();
+    const sendBox = (await sendIt.boundingBox())!;
+    expect(sendBox.y + sendBox.height, "Send is on the screen").toBeLessThanOrEqual(340);
+    await page.setViewportSize(upright);
     // Before it is sent there is nothing about replying.
     await expect(sheet.getByTestId("reaction-reply")).toHaveCount(0);
-    await sheet.getByRole("button", { name: /^Send/ }).click();
+    await sendIt.click();
     await expect(sheet.getByText("Sent to Marco.")).toBeVisible();
+    // Said out loud, and the focus is on the next step (the Send button it was on is gone).
+    await expect(page.getByRole("status").filter({ hasText: "Sent to Marco." })).toHaveCount(1);
     const next = sheet.getByTestId("reaction-reply");
+    await expect(next).toBeFocused();
     await expect(next).toHaveText("Send one back to Marco");
     // The one action there, besides closing the sheet.
     await expect(sheet.getByRole("button")).toHaveCount(2);
@@ -371,10 +400,22 @@ test.describe("a stepped gift's end on a desktop", () => {
 });
 
 test.describe("a gift's address stays with the gift", () => {
-  test("a gift page and its keep page send only the site's origin as a referrer; other pages keep the site's policy", async ({ request }) => {
+  test("a gift page and its keep page send only the site's origin as a referrer; other pages keep the site's policy", async ({ playwright, baseURL }) => {
+    // Cold pages compile on first request in development.
+    test.setTimeout(120_000);
     // No gift answers here (a worktree has no database): the header rides on whatever the address answers.
-    for (const address of ["/g/prev2ew3k", "/es/g/prev2ew3k", "/g/prev2ew3k/keep"]) expect((await request.get(address)).headers()["referrer-policy"], address).toBe("strict-origin");
-    for (const address of ["/made-with-ethos", "/gifts"]) expect((await request.get(address)).headers()["referrer-policy"], address).toBe("strict-origin-when-cross-origin");
+    // Each address is asked with no cookies: a shared context kept the Spanish locale cookie /es/g/…
+    // set, so /gifts went on to /es/gifts, another page to compile, and ran past the time limit.
+    const headerOf = async (address: string) => {
+      const fresh = await playwright.request.newContext({ baseURL });
+      try {
+        return (await fresh.get(address, { timeout: 90_000 })).headers()["referrer-policy"];
+      } finally {
+        await fresh.dispose();
+      }
+    };
+    for (const address of ["/g/prev2ew3k", "/es/g/prev2ew3k", "/g/prev2ew3k/keep"]) expect(await headerOf(address), address).toBe("strict-origin");
+    for (const address of ["/made-with-ethos", "/gifts"]) expect(await headerOf(address), address).toBe("strict-origin-when-cross-origin");
   });
 });
 
@@ -487,6 +528,32 @@ test.describe("the page the badge and the new link open", () => {
         expect(seen.words.left).toBeGreaterThanOrEqual(seen.cards[seen.cards.length - 1].right);
         expect(Math.abs(seen.words.top - seen.cards[0].top)).toBeLessThan(2);
       }
+    }
+  });
+});
+
+test.describe("the swapped names go to the reply and nowhere else", () => {
+  // A seed kept in the tab for a reload was put on the next gift of the same template made there:
+  // "or make one for someone else" opened a gift addressed to the person who sent the first one.
+  test.skip(({ isMobile }) => !isMobile, "the phone project's");
+  test.setTimeout(240_000);
+
+  test("a reply opens with them; the same template opened any other way in that tab does not, and throws them away", async ({ page }) => {
+    const seed = () =>
+      page.evaluate(() => window.sessionStorage.setItem("ethos:reply", JSON.stringify({ slug: "the-letter", recipientName: "Marco", senderName: "Ana", savedAt: Date.now() })));
+    const carried = () => page.evaluate(() => window.sessionStorage.getItem("ethos:reply") !== null);
+    await page.goto("/made-with-ethos", { waitUntil: "domcontentloaded" });
+    await seed();
+    await page.goto("/create/the-letter?ref=reply");
+    await expect(page.locator("#recipientName")).toHaveValue("Marco", { timeout: 90_000 });
+    await expect(page.locator("#senderName")).toHaveValue("Ana");
+    for (const address of ["/create/the-letter?ref=g", "/create/the-letter"]) {
+      await page.goto(address);
+      await expect(page.locator("#recipientName"), address).toBeVisible({ timeout: 90_000 });
+      await expect(page.locator("#recipientName"), address).not.toHaveValue("Marco");
+      await expect(page.locator("#senderName"), address).not.toHaveValue("Ana");
+      expect(await carried(), `${address} throws the seed away`).toBe(false);
+      await seed();
     }
   });
 });

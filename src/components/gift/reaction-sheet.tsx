@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Loader2, Sparkles, X } from "lucide-react";
 import type { GiftLocale } from "@/lib/gift/schema";
@@ -39,6 +39,13 @@ const S = {
   },
 };
 
+/** "{sender}" in a line, filled in with a function so a "$&" or "$$" in a name stays as typed. */
+function withSender(line: string, senderName: string): string {
+  return line.replace("{sender}", () => senderName);
+}
+
+const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /**
  * `onSendOneBack`: once the reaction has gone, the confirmation offers the one next step there is,
  * the end screen's own "Send one back to {sender}" (the same words, the same handler, handed down
@@ -70,6 +77,47 @@ export function ReactionSheet({
   const [share, setShare] = useState(false);
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [burst, setBurst] = useState(0);
+  const titleId = useId();
+  const dialog = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(onClose);
+  useEffect(() => {
+    closeRef.current = onClose;
+  }, [onClose]);
+
+  // A modal sheet behaves like one: it takes the focus when it opens and gives it back when it
+  // closes, Escape closes it, and Tab goes round its own controls instead of the gift behind it.
+  useEffect(() => {
+    if (!open) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const frame = requestAnimationFrame(() => dialog.current?.focus({ preventScroll: true }));
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeRef.current();
+        return;
+      }
+      if (e.key !== "Tab" || !dialog.current) return;
+      const stops = [...dialog.current.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => el.getClientRects().length > 0);
+      if (!stops.length) return;
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      const at = document.activeElement;
+      const inside = at instanceof Node && dialog.current.contains(at);
+      if (e.shiftKey && (!inside || at === first || at === dialog.current)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (!inside || at === last)) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", onKey);
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
+    };
+  }, [open]);
 
   const send = async () => {
     setState("sending");
@@ -90,23 +138,28 @@ export function ReactionSheet({
       {open ? (
         <motion.div className="absolute inset-0 z-[80] flex items-end justify-center bg-black/55 backdrop-blur-sm sm:items-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
           <motion.div
+            ref={dialog}
             role="dialog"
             aria-modal="true"
+            aria-labelledby={titleId}
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 26 }}
-            className="relative w-full max-w-md rounded-t-3xl bg-[#1e1a17] p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-paper shadow-2xl sm:rounded-3xl"
+            className="relative max-h-full w-full max-w-md overflow-y-auto overscroll-contain rounded-t-3xl bg-[#1e1a17] p-6 outline-none pb-[max(1.5rem,env(safe-area-inset-bottom))] text-paper shadow-2xl sm:rounded-3xl"
           >
             <button type="button" onClick={onClose} aria-label={t.close} className="absolute top-4 right-4 grid size-9 place-items-center rounded-full bg-white/8 text-white/70">
               <X className="size-4" />
             </button>
+            {/* Present from the start, so the words that the reaction went are read out when they come. */}
+            <p role="status" className="sr-only">{state === "sent" ? withSender(t.sent, senderName) : ""}</p>
             {state === "sent" ? (
-              <ReactionSent key={burst} emoji={emoji} senderName={senderName} locale={locale} onSendOneBack={onSendOneBack} busy={sendingBack} />
+              <ReactionSent key={burst} emoji={emoji} senderName={senderName} locale={locale} onSendOneBack={onSendOneBack} busy={sendingBack} titleId={titleId} />
             ) : (
               <>
-                <p className="pr-10 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{t.title.replace("{sender}", senderName)}</p>
+                <p id={titleId} className="pr-10 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{withSender(t.title, senderName)}</p>
                 <p className="mt-1 text-sm text-white/55">{t.blurb}</p>
                 <div className="mt-5 flex justify-between gap-2">
                   {EMOJI.map((e) => (
@@ -146,16 +199,40 @@ export function ReactionSheet({
  * same in both places. Once tapped (`busy`) it waits for the editor, as the sheet's own Send waits
  * for the reaction: a turning mark, and no second tap.
  */
-export function ReactionSent({ emoji, senderName, locale, onSendOneBack, busy = false }: { emoji: string; senderName: string; locale: GiftLocale; onSendOneBack?: () => void; busy?: boolean }) {
+export function ReactionSent({
+  emoji,
+  senderName,
+  locale,
+  onSendOneBack,
+  busy = false,
+  titleId,
+}: {
+  emoji: string;
+  senderName: string;
+  locale: GiftLocale;
+  onSendOneBack?: () => void;
+  busy?: boolean;
+  /** The sheet is named by its title; once sent, by this line. */
+  titleId?: string;
+}) {
   const t = S[locale] ?? S.en;
+  const next = useRef<HTMLButtonElement>(null);
+  const said = useRef<HTMLDivElement>(null);
+  // The Send button that had the focus is gone: the focus goes to the next step, or to the words.
+  useEffect(() => {
+    (next.current ?? said.current)?.focus({ preventScroll: true });
+  }, []);
   return (
     <div className="flex flex-col items-center py-6 text-center">
       <Burst emoji={emoji} />
-      <span className="text-6xl">{emoji}</span>
-      <p className="mt-5 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{t.sent.replace("{sender}", senderName)}</p>
-      <p className="mt-2 text-sm text-white/60">{t.sentBlurb}</p>
+      <span className="text-6xl" aria-hidden="true">{emoji}</span>
+      <div ref={said} tabIndex={-1} className="outline-none">
+        <p id={titleId} className="mt-5 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{withSender(t.sent, senderName)}</p>
+        <p className="mt-2 text-sm text-white/60">{t.sentBlurb}</p>
+      </div>
       {onSendOneBack ? (
         <button
+          ref={next}
           type="button"
           onClick={onSendOneBack}
           disabled={busy}

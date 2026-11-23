@@ -215,6 +215,29 @@ describe("after a reaction is sent", () => {
     expect(html).toContain("Hazle uno a Mia");
   });
 
+  it("writes a name with a $ in it as it was typed", () => {
+    // String.replace reads "$&" and "$$" in a replacement string as patterns.
+    const html = renderToStaticMarkup(<ReactionSent emoji="❤️" senderName="Ca$h $& Co" locale="en" onSendOneBack={() => {}} />);
+    expect(html).toContain("Sent to Ca$h $&amp; Co.");
+    expect(html).toContain("Send one back to Ca$h $&amp; Co");
+    expect(html).not.toContain("{sender}");
+  });
+
+  it("is named by its words once sent, and those words are where the focus can go", () => {
+    const html = renderToStaticMarkup(<ReactionSent emoji="❤️" senderName="Mia" locale="en" titleId="t1" />);
+    expect(html).toMatch(/<p id="t1"[^>]*>Sent to Mia\.<\/p>/);
+    expect(html).toContain('tabindex="-1"');
+  });
+
+  it("is a named sheet that scrolls inside a short screen", () => {
+    const sheet = readFileSync("src/components/gift/reaction-sheet.tsx", "utf8");
+    expect(sheet).toContain("aria-labelledby={titleId}");
+    expect(sheet).toMatch(/max-h-full[^"]*overflow-y-auto/);
+    expect(sheet).toContain('if (e.key === "Escape")');
+    expect(sheet).toContain('<p role="status" className="sr-only">');
+    expect(sheet).not.toContain('.replace("{sender}", senderName)');
+  });
+
   it("waits for the editor once tapped: busy, and it takes no second tap", () => {
     const button = (busy: boolean) => /<button[^>]*>/.exec(renderToStaticMarkup(<ReactionSent emoji="❤️" senderName="Mia" locale="en" onSendOneBack={() => {}} busy={busy} />))?.[0] ?? "";
     expect(button(true)).toContain('disabled=""');
