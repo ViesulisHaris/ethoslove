@@ -63,6 +63,8 @@ export function TodayQuestion({ day }: { day: number }) {
   const [name, setName] = useState("");
   const [copied, setCopied] = useState(false);
   const [today, setToday] = useState(day);
+  // Set once the address has been read: the tests wait for it, and nothing is drawn differently.
+  const [ready, setReady] = useState(false);
   const counted = useRef<string | null>(null);
   const revealHeading = useRef<HTMLHeadingElement>(null);
   const focusReveal = useRef(false);
@@ -79,6 +81,7 @@ export function TodayQuestion({ day }: { day: number }) {
     setView(next);
     setMine(kept && kept.d === next.day && kept.p === next.pair.id && !link?.to ? kept.a : null);
     setSent(false);
+    setReady(true);
     if (names) setName(names[0]);
     if (counted.current !== hash) {
       counted.current = hash;
@@ -182,7 +185,7 @@ export function TodayQuestion({ day }: { day: number }) {
   const notToday = view.day !== today || view.pair.id !== dailyPair(today).id;
 
   return (
-    <div data-today data-day={view.day} data-phase={phase} className="min-h-[27rem] sm:min-h-[23rem]">
+    <div data-today data-day={view.day} data-phase={phase} data-ready={ready || undefined} className="min-h-[27rem] sm:min-h-[28rem]">
       <p className="text-page-label text-page-body">{label}</p>
       {view.broken && phase === "ask" ? <p className="mt-3 text-[0.9375rem] text-page-body">{t("broken")}</p> : null}
       {phase === "invited" && link ? <p className="mt-3 text-[0.9375rem] text-page-body">{t("invited", { name: who(link.from.name) })}</p> : null}

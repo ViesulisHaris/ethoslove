@@ -2621,7 +2621,7 @@
       "how": {
         "label": "Cómo funciona",
         "heading": "Tres toques, dos móviles",
-        "line": "Tu nombre y tu respuesta viajan en el enlace y nunca llegan a nuestro servidor.",
+        "line": "Tu nombre y tu respuesta van en el enlace, nunca a nuestro servidor.",
         "steps": {
           "pick": "Elige tu respuesta",
           "send": "Mándale el enlace",

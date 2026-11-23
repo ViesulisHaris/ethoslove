@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { PlayingCard } from "../cards";
 
-const SMALL = { className: "aspect-[5/7] h-28", corners: "sm", radius: 10, faceClassName: "shadow-page-card" } as const;
+const SMALL = { className: "aspect-[5/7] h-28", corners: "md", radius: 10, faceClassName: "shadow-page-card" } as const;
 
 /**
  * How today's question goes, as three picture cards: the room's own playing cards, small, never a
