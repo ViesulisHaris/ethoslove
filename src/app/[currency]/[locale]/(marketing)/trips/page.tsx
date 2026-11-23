@@ -19,7 +19,7 @@ const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<T
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/trips">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "trips.meta" });
-  return pageMetadata({ locale, path: "/trips", title: t("title"), description: t("description") });
+  return pageMetadata({ locale, path: "/trips", title: t("title", { count: TRIPS.length }), description: t("description") });
 }
 
 /** Trips: the flight search on the first screen, then twelve trips to pick from, then the gift they can become. */
@@ -55,7 +55,7 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
         nodes={[
           {
             "@type": "ItemList",
-            name: t("meta.title"),
+            name: t("meta.title", { count: TRIPS.length }),
             itemListElement: TRIPS.map((trip, i) => ({ "@type": "ListItem", position: i + 1, name: trip.title[l], url: localizedUrl(locale, `/trips/${trip.id}`) })),
           },
           breadcrumbNode([

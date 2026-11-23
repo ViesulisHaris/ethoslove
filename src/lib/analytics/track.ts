@@ -73,6 +73,15 @@ export type FunnelEvent =
   // The share screen's "Review it on Etsy" (the template).
   | "etsy_review_click"
   | "affiliate_click"
+  // Trips (components/trips/trip-matcher.tsx): a match asked for (the length, the budget ceiling and the
+  // kind asked, and whether an airport was given: never which), a trip opened or made a surprise from a
+  // match (the trip, "page" or "surprise"), and a trip's link sent ("share" or "copy"). And a tap on one
+  // of the ways from one room to another (from: "halfway_tool", "long_distance", "saved_trip" or
+  // "share_screen"; to: "halfway_gift", "dates", "trip" or "surprise"). No towns, no names, no ids of people.
+  | "trip_match"
+  | "trip_match_pick"
+  | "trip_shared"
+  | "room_handoff"
   | "reminder_saved"
   | "reply_started"
   | "pack_offer_shown"

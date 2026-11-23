@@ -243,6 +243,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <PartnerLink
                     partner="tiqets"
                     placement="trip_tickets"
+                    trip={trip.id}
                     href={ticket.url}
                     aria-label={ta("tickets.label", { name: ticket.name })}
                     className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-card p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper"
@@ -279,7 +280,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   {ta("car.title")}
                 </h3>
                 <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{ta("car.sub")}</p>
-                <PartnerLink partner="autoeurope" placement="trip_car" href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-card px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper">
+                <PartnerLink partner="autoeurope" placement="trip_car" trip={trip.id} href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-card px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper">
                   {ta("car.cta")}
                   <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   <span className="sr-only">({ta("newTab")})</span>
@@ -291,7 +292,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
             ) : null}
           </div>
           <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
-            <FlightFinder to={trip.flyTo} placement="trip_flights" />
+            <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} />
           </div>
         </div>
       </section>

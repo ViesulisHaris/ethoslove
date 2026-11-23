@@ -2451,8 +2451,8 @@
   },
   "trips": {
     "meta": {
-      "title": "Trips for two: ready-made itineraries and a free flight search",
-      "description": "Twelve trips for couples, planned day by day: road trips, city breaks, islands and trains. Plus a free flight search that opens Aviasales, Google Flights, Skyscanner and Kayak already filled in."
+      "title": "Couples trip ideas: {count} ready-made itineraries for two",
+      "description": "Couples trip ideas, planned day by day: twelve trips for two, from weekend city breaks to a week on the road. Say where you fly from and we pick three."
     },
     "eyebrow": "Trips for two",
     "h1a": "Go somewhere",
@@ -2461,6 +2461,49 @@
     "finder": {
       "title": "Find flights",
       "sub": "For two, on any dates. We open the search; you book with them."
+    },
+    "match": {
+      "label": "Where to",
+      "title": "Where should we go together?",
+      "line": "Three answers and an airport. We pick three of the {count}.",
+      "from": "Leaving from",
+      "fromHint": "Optional. Without it we skip the flight times.",
+      "clearFrom": "Leave the airport out",
+      "sentence": "We have <length></length>, <budget></budget>, and we'd like <kind></kind>.",
+      "lengthLabel": "How long",
+      "budgetLabel": "Budget there",
+      "kindLabel": "Kind of trip",
+      "length": {
+        "any": "any number of days",
+        "weekend": "a weekend",
+        "mid": "four to six days",
+        "week": "a week"
+      },
+      "budget": {
+        "1": "about €150 a day for two at most",
+        "2": "about €300 a day for two at most",
+        "any": "no ceiling on spending"
+      },
+      "kind": {
+        "any": "any kind of trip",
+        "city": "a city break",
+        "road": "a road trip",
+        "islands": "islands",
+        "train": "a train journey"
+      },
+      "go": "Show our three trips",
+      "allFit": "Three trips that fit.",
+      "someFit": "{count, plural, one {One trip fits} other {# trips fit}} all of that. The rest come close.",
+      "letGo": "Nothing fits all of that, so we let go of {wishes}.",
+      "wish": {
+        "length": "the length",
+        "budget": "the budget",
+        "kind": "the kind of trip"
+      },
+      "air": "About {time} in the air from {city}.",
+      "airTrain": "About {time} in the air from {city}. A train might be nicer.",
+      "home": "It starts where you are. No flight to find.",
+      "inSeason": "In season now"
     },
     "filter": {
       "label": "Kind of trip",

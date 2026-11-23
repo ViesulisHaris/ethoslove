@@ -20,6 +20,8 @@ type Props = {
   to?: string;
   /** Where the finder sits, for counting which spot's Aviasales button gets pressed. */
   placement?: PartnerPlacement;
+  /** The preset trip whose page the link is on (its id, like a template's slug). */
+  trip?: string;
   className?: string;
 };
 
@@ -34,7 +36,7 @@ const localDay = () => toYmd(new Date());
  * Google Flights, Skyscanner or Kayak, already filled in, and the fares are whatever they say. It
  * lays itself out by its own width, so it sits in a hero card or across a page.
  */
-export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", className }: Props) {
+export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, className }: Props) {
   const t = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
@@ -156,7 +158,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
             );
             const press = "group transition-[transform,filter,background-color] active:scale-[0.98]";
             return link.partner ? (
-              <PartnerLink key={link.id} partner={link.partner} placement={placement} href={link.url} className={cn(BUTTON, press, "btn-rose hover:brightness-110 @md:col-span-3")}>
+              <PartnerLink key={link.id} partner={link.partner} placement={placement} trip={trip} href={link.url} className={cn(BUTTON, press, "btn-rose hover:brightness-110 @md:col-span-3")}>
                 {content}
               </PartnerLink>
             ) : (

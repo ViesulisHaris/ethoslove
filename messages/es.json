@@ -2451,8 +2451,8 @@
   },
   "trips": {
     "meta": {
-      "title": "Viajes en pareja: itinerarios hechos y buscador de vuelos gratis",
-      "description": "Doce viajes en pareja, planeados día a día: en coche, escapadas urbanas, islas y en tren. Y un buscador de vuelos gratis que abre Aviasales, Google Flights, Skyscanner y Kayak con todo ya puesto."
+      "title": "Ideas de viajes en pareja: {count} itinerarios ya planeados",
+      "description": "Ideas de viajes en pareja, planeadas día a día: doce viajes para dos, de escapadas de fin de semana a una semana en coche. Decid de dónde salís y elegimos tres."
     },
     "eyebrow": "Viajes para dos",
     "h1a": "Escapaos",
@@ -2461,6 +2461,49 @@
     "finder": {
       "title": "Buscar vuelos",
       "sub": "Para dos, en las fechas que queráis. Nosotros abrimos la búsqueda; reserváis con ellos."
+    },
+    "match": {
+      "label": "Adónde",
+      "title": "¿Adónde vamos juntos?",
+      "line": "Tres respuestas y un aeropuerto. Elegimos tres de los {count}.",
+      "from": "Salimos de",
+      "fromHint": "Opcional. Sin él, nos saltamos las horas de vuelo.",
+      "clearFrom": "Quitar el aeropuerto",
+      "sentence": "Tenemos <length></length>, <budget></budget>, y nos apetece <kind></kind>.",
+      "lengthLabel": "Cuánto tiempo",
+      "budgetLabel": "Presupuesto allí",
+      "kindLabel": "Tipo de viaje",
+      "length": {
+        "any": "los días que hagan falta",
+        "weekend": "un fin de semana",
+        "mid": "de cuatro a seis días",
+        "week": "una semana"
+      },
+      "budget": {
+        "1": "unos 150 € al día para dos como mucho",
+        "2": "unos 300 € al día para dos como mucho",
+        "any": "sin tope de gasto"
+      },
+      "kind": {
+        "any": "cualquier tipo de viaje",
+        "city": "una escapada urbana",
+        "road": "un viaje en coche",
+        "islands": "islas",
+        "train": "un viaje en tren"
+      },
+      "go": "Ver nuestros tres viajes",
+      "allFit": "Tres viajes que encajan.",
+      "someFit": "{count, plural, one {Un viaje encaja} other {# viajes encajan}} con todo. Los demás se acercan.",
+      "letGo": "Nada encaja con todo, así que hemos soltado {wishes}.",
+      "wish": {
+        "length": "la duración",
+        "budget": "el presupuesto",
+        "kind": "el tipo de viaje"
+      },
+      "air": "Alrededor de {time} de vuelo desde {city}.",
+      "airTrain": "Alrededor de {time} de vuelo desde {city}. Quizá os compense más el tren.",
+      "home": "Empieza donde estáis. No hay vuelo que buscar.",
+      "inSeason": "En temporada ahora"
     },
     "filter": {
       "label": "Tipo de viaje",
