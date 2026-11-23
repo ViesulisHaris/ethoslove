@@ -12,6 +12,7 @@ import { monthRanges } from "@/lib/trips/months";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { budgetMark, getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
+import { TRIP_SEO } from "@/content/trip-seo";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -35,7 +36,9 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
   if (!trip) return {};
   const l = locale === "es" ? "es" : "en";
   // The trip's own picture on its link preview (app/og/share.jpg), not the site's general card.
-  return pageMetadata({ locale, path: `/trips/${trip.id}`, title: trip.title[l], description: trip.blurb[l], image: shareCardPath({ kind: "trip", locale: l, trip: trip.id }) });
+  // What a search shows is the searched pattern ("3 days in Lisbon for two"); the page keeps the trip's own name as its h1.
+  const seo = TRIP_SEO[trip.id];
+  return pageMetadata({ locale, path: `/trips/${trip.id}`, title: seo?.title[l] ?? trip.title[l], description: seo?.description[l] ?? trip.blurb[l], image: shareCardPath({ kind: "trip", locale: l, trip: trip.id }) });
 }
 
 /** One trip: the picture and the facts, the route on a map, the plan day by day, tickets for its sights, flights (and a car for a road trip), and the gift it can become. */
