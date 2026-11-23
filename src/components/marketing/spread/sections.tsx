@@ -215,7 +215,11 @@ function shortRow(count: number): string {
  * both languages). While a card is open the row is no longer stretched, so the open one grows
  * alone and its neighbours are not pulled down beside it (one selector, `:has()`); and every card
  * is held at the height its row had closed (level-cards.tsx), so a card nobody touched does not
- * move. Without script, or without `:has()`, each card keeps its own height, as before.
+ * move. Without script, each card keeps its own height, as before.
+ *
+ * The selector says "while a card is open, not stretched", not "while none is open, stretched": a
+ * `:not(:has())` made the browser look the whole page over again each time anything was added to
+ * it, which on a slow phone held every press back (performance pass, 24 Nov 2026).
  */
 export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: string; cards: readonly IdeaCard[]; locale: GiftLocale; labels: IdeaCardLabels; columns?: 3 | 5 }) {
   return (
@@ -227,7 +231,7 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
           "-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0",
           // A card of its own, not the closed row inside one: "the idea in full" stays open in a card that is shut, and the
           // row was left unstretched after that card closed (the deep test of 23 Nov 2026).
-          "sm:[&:not(:has(>li>details[open]))]:items-stretch",
+          "sm:items-stretch sm:has-[>li>details[open]]:items-start",
           CARD_COLUMNS[columns],
           columns === 3 && shortRow(cards.length),
         )}

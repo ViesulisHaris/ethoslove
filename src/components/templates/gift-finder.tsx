@@ -42,6 +42,7 @@ import { PhoneFrame } from "@/components/shared/phone-frame";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { PosterFilm } from "@/components/templates/page/poster-film";
 import { posterFit } from "@/components/templates/poster-fit";
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer";
 
 /**
  * Loaded when someone taps a pick's picture, not with the page: a static import reaches the template
@@ -401,7 +402,7 @@ export function GiftFinder({
                    * The line stands down while the block under it is open: the block holds the whole
                    * sentence, which begins with the same words, and they were read twice.
                    */}
-                  <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body group-has-[details[open]]/pick:hidden">
+                  <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body [[data-pick]:has(details[open])_&]:hidden">
                     {line}
                   </p>
                   {whole !== line ? (
@@ -517,6 +518,7 @@ export function GiftFinder({
                 </div>
               </>
             ) : null}
+            <KeepPagePointer />
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
