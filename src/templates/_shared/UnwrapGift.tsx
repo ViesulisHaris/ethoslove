@@ -249,10 +249,12 @@ export function UnwrapPeek({ data }: { data: GiftData }) {
         <span className="relative block size-11">
           <Present vars={presentVars(colors)} phase="closed" reduce={Boolean(reduce)} small />
         </span>
-        {/* Says what it is for a few seconds, then gets out of the way of the gift behind it. */}
+        {/* Says what it is for a few seconds, then gets out of the way of the gift behind it. Above
+            the present, not beside it: beside it, it sat on the line most templates keep along the
+            bottom (Bouquet's "Open the card"). */}
         <motion.span
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 right-[calc(100%+0.5rem)] -translate-y-1/2 rounded-full bg-[#1c1216]/75 px-3 py-1.5 text-[12.5px] leading-none font-semibold whitespace-nowrap text-white shadow-lg backdrop-blur-md"
+          className="pointer-events-none absolute right-0 bottom-[calc(100%+0.5rem)] rounded-full bg-[#1c1216]/75 px-3 py-1.5 text-[12.5px] leading-none font-semibold whitespace-nowrap text-white shadow-lg backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 1, 0] }}
           transition={{ delay: 0.9, duration: 5, times: [0, 0.08, 0.85, 1] }}
