@@ -432,10 +432,11 @@ describe("a kind of date inside a city", () => {
     expect(free).toContain("node/bridge");
   });
 
-  it("C5 where to meet is cafés, bookshops, galleries and dessert places, and another kind has no list", () => {
-    const meet = kindPlaces("first-date", fixture);
+  it("C5 where to meet is cafés, bookshops and galleries, as its heading says, and another kind has no list", () => {
+    const meet = kindPlaces("first-date", [...fixture, place("node/plain", "bookshop", 300, { name: "Books" })]);
     expect(meet.length).toBeGreaterThan(0);
-    for (const p of meet) expect(["cafe", "bookshop", "gallery", "dessert"], p.id).toContain(p.kind);
+    for (const p of meet) expect(["cafe", "bookshop", "gallery"], p.id).toContain(p.kind);
+    expect(meet.map((p) => p.id)).not.toContain("node/plain");
     expect(kindPlaces("fun", fixture)).toEqual([]);
   });
 

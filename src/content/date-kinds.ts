@@ -291,7 +291,7 @@ export type DateKindUi = {
 export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
   en: {
     eyebrow: "Date ideas",
-    planButton: "Plan one with real places",
+    planButton: "Plan one in a tap",
     tonightLabel: "The planner",
     tonightHeading: "One of these, with real places",
     tonightLine: "Say where. We pick one that fits the forecast and the hour.",
@@ -326,7 +326,7 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
   },
   es: {
     eyebrow: "Ideas para una cita",
-    planButton: "Planead una con sitios reales",
+    planButton: "Planead una al momento",
     tonightLabel: "El planificador",
     tonightHeading: "Una de estas, con sitios reales",
     tonightLine: "Decid dónde. Elegimos una que encaje con la previsión y la hora.",

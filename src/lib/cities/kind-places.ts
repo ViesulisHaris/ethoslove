@@ -7,7 +7,10 @@ import { rankPlaces, type Ranked } from "@/lib/dates/rank";
 /** How many places a city-by-kind page names, and how many of one kind at most. */
 export const KIND_PLACES = 8;
 const PER_KIND = 3;
-const MEETING: readonly PlaceKind[] = ["cafe", "bookshop", "gallery", "dessert"];
+/** What the "where to meet" heading names: cafés, bookshops and galleries (a row of chocolatiers is not a place to meet). */
+const MEETING: readonly PlaceKind[] = ["cafe", "bookshop", "gallery"];
+/** A name that is only what the place is ("Books", "Gallery") says nothing a reader can find it by. */
+const GENERIC = new Set(["books", "bookshop", "bookstore", "gallery", "art gallery", "park", "garden", "cafe", "café", "coffee", "coffee shop"]);
 
 /**
  * The places of a city that belong to a kind of date, best first by the dates map's own ranking,
@@ -27,7 +30,7 @@ export function kindPlaces(kind: DateKind, places: Place[], count = KIND_PLACES)
   for (const place of rankPlaces(places, {})) {
     if (picked.length === count) break;
     const name = place.name.trim().toLowerCase();
-    if (!place.named || !fits(place) || names.has(name) || (taken.get(place.kind) ?? 0) >= PER_KIND) continue;
+    if (!place.named || GENERIC.has(name) || !fits(place) || names.has(name) || (taken.get(place.kind) ?? 0) >= PER_KIND) continue;
     names.add(name);
     taken.set(place.kind, (taken.get(place.kind) ?? 0) + 1);
     picked.push(place);

@@ -39,6 +39,9 @@ export function generateStaticParams(): { city: string; kind: string }[] {
 
 type Props = PageProps<"/[currency]/[locale]/dates/[city]/[kind]">;
 
+/** "Cheap Date Ideas" as a link among sentence-case ones: "Cheap date ideas". The phrases name no proper nouns. */
+const sentenceCase = (phrase: string): string => phrase.charAt(0) + phrase.slice(1).toLowerCase();
+
 export async function generateMetadata({ params }: Omit<Props, "searchParams">): Promise<Metadata> {
   const { locale, city: citySlug, kind: kindSlug } = await params;
   const city = getCity(citySlug);
@@ -154,7 +157,7 @@ export default async function CityKindPage({ params }: Props) {
             </li>
             <li>
               <Link href={`/dates/ideas/${kind}`} className={QUIET_ROW_LINK}>
-                {copy.heading[l]}
+                {sentenceCase(copy.phrase[l])}
               </Link>
             </li>
             {other ? (
