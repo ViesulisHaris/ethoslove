@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { ArrowRight, Check, Gift, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, Gift, Loader2, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
@@ -43,7 +43,7 @@ const OneTapPay = dynamic(() => import("./one-tap-pay").then((m) => m.OneTapPay)
  * the gift is for (their face when it opens, or a real reaction to one when the site has one it may
  * show), then what each paid part does for them. Two rows to choose between (this template, or every
  * template), the add-ons below them in one group, unticked (every template, or a second gift), the pay
- * button with the guarantee right under it, then one-tap Apple Pay / Google Pay where the phone has it. Every amount comes from the catalogue, and is what checkout
+ * button, then one-tap Apple Pay / Google Pay where the phone has it. Every amount comes from the catalogue, and is what checkout
  * charges: there are no codes or discounts to apply on the way.
  */
 export function Paywall({
@@ -486,11 +486,6 @@ export function Paywall({
         {paying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
         <span>{paying ? t("paying") : t("payButton", { price: money(total) })}</span>
       </Button>
-      {/* Right under the button, for either way of paying; the shield sits in the line, so the line centres. */}
-      <p className="mt-2.5 text-center text-[13px] text-balance text-ink-soft" data-testid="guarantee">
-        <ShieldCheck aria-hidden="true" className="mr-1 inline size-4 -translate-y-px align-middle text-moss" />
-        {tm("guarantee")}
-      </p>
       <OneTapPay
         request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) }}
         locale={locale}

@@ -1279,7 +1279,6 @@
       "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
-      "guarantee": "If it doesn't open on their phone, you get your money back.",
       "personalPrice": "Your personal price from our email, until {ends}."
     },
     "etsy": {
