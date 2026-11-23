@@ -95,8 +95,13 @@ export function serverConsent(): Consent | null {
  */
 const OFF_LIMITS = ["/g", "/checkout", "/dashboard", "/account", "/games/today"];
 
-/** Takes the path with or without a locale prefix, since callers get it from either router. */
-export const withoutLocale = (pathname: string) => pathname.replace(/^\/(?:en|es)(?=\/|$)/, "");
+/**
+ * Takes the path with or without a locale prefix, since callers get it from either router. While a
+ * page is built on the server the path is the one inside the app, with the hidden currency segment
+ * in front as well (/eur/en/demo/bloom, src/proxy.ts): that goes too, or the consent strip, which
+ * is in the page's HTML, was drawn on every demo until the browser took it away.
+ */
+export const withoutLocale = (pathname: string) => pathname.replace(/^(?:\/[a-z]{3}(?=\/(?:en|es)(?:\/|$)))?\/(?:en|es)(?=\/|$)/, "");
 const bare = withoutLocale;
 const under = (path: string, roots: readonly string[]) =>
   roots.some((p) => path === p || path.startsWith(`${p}/`));
