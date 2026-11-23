@@ -349,10 +349,11 @@ export function purchaseOutcome(sold: { product: ProductId; bump: boolean }): Pu
 /**
  * Whether a finished checkout is one the success page follows with "every template for the
  * difference": a single, a pick three or "make it special" (what counts towards the upgrade), and
- * not one that already took the bump, which made it Everything.
+ * not one that already took the bump, which made it Everything. Two more gifts count towards the
+ * upgrade but are bought on the share screen, and their success page has its own ending.
  */
 export function upgradesAfter(sold: { product: ProductId; bump: boolean }): boolean {
-  return (UPGRADE_CREDITED as readonly string[]).includes(sold.product) && !sold.bump;
+  return (UPGRADE_CREDITED as readonly string[]).includes(sold.product) && sold.product !== "pair" && !sold.bump;
 }
 
 /**

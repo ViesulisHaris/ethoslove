@@ -113,7 +113,14 @@ export function GiftUnlockedEmail({ locale, recipientName, url }: { locale: L; r
  * Ethos for Two's year (the pass) is a service: the right to withdraw doesn't go, and a buyer who
  * withdraws within 14 days pays only for the days used (in full back when nothing was ticked).
  */
-function consentLine(es: boolean, kind: "giftcard" | "pass" | "other", consent: string | undefined): string {
+function consentLine(es: boolean, kind: "giftcard" | "pass" | "pair" | "other", consent: string | undefined): string {
+  // Two more gifts: an unused one is refunded for 30 days, ticked or not (the owner's promise, terms).
+  if (kind === "pair") {
+    const back = es
+      ? "Un regalo que no hayas usado se reembolsa durante 30 días: responde a este correo. Uno que ya hayas usado no se puede cancelar."
+      : "A gift you haven't used can be refunded for 30 days: reply to this email. Once you've used one, it can't be cancelled.";
+    return consent ? `${es ? `Al pagar marcaste: «${consent}»` : `At checkout you ticked: “${consent}”`} ${back}` : back;
+  }
   if (consent) {
     const ticked = es ? `Al pagar marcaste: «${consent}»` : `At checkout you ticked: “${consent}”`;
     if (kind === "giftcard")
@@ -147,11 +154,17 @@ function consentLine(es: boolean, kind: "giftcard" | "pass" | "other", consent: 
  * the "Everything for the difference" offer after a single or a pick three: its price already takes
  * off what they've paid. `giftCard` is for a "Give Everything" card: nothing is unlocked for the
  * buyer, and the right to cancel stays until the code is redeemed (terms, section 8), so the receipt
- * must not say it has gone. `consent` is the withdrawal sentence the buyer ticked (consentLine).
+ * must not say it has gone. `pair` is for two more gifts: two gifts ready on the account, never
+ * "yours, forever", and the 30 days on an unused one. `consent` is the withdrawal sentence the buyer
+ * ticked (consentLine).
  */
-export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl, until, upgrade, giftCard = false, consent }: { locale: L; productLabel: string; amountLabel: string; unlocks: string[]; dashboardUrl: string; until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; consent?: string }) {
+export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl, until, upgrade, giftCard = false, pair = false, consent }: { locale: L; productLabel: string; amountLabel: string; unlocks: string[]; dashboardUrl: string; until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; consent?: string }) {
   const es = locale === "es";
-  const heading = giftCard
+  const heading = pair
+    ? es
+      ? "Gracias. Tienes dos regalos listos en tu cuenta."
+      : "Thank you. Two gifts are ready on your account."
+    : giftCard
     ? es
       ? "Gracias. El código te llega en otro correo."
       : "Thank you. The code comes in its own email."
@@ -169,7 +182,7 @@ export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashb
       </P>
       {unlocks.length ? (
         <P>
-          {es ? "Desbloqueado:" : "Unlocked:"} {unlocks.join(", ")}
+          {pair ? (es ? "En tu cuenta:" : "On your account:") : es ? "Desbloqueado:" : "Unlocked:"} {unlocks.join(", ")}
         </P>
       ) : null}
       {upgrade ? (
@@ -180,7 +193,7 @@ export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashb
       ) : null}
       <Quiet>{es ? "Pago único, sin renovaciones. Stripe te envía la factura por separado." : "One-time payment, no renewals. Stripe sends the invoice separately."}</Quiet>
       {/* The confirmation, on a durable medium, of the consent given at payment (Consumer Rights Directive art. 8(7)). */}
-      <Quiet>{consentLine(es, giftCard ? "giftcard" : until ? "pass" : "other", consent)}</Quiet>
+      <Quiet>{consentLine(es, pair ? "pair" : giftCard ? "giftcard" : until ? "pass" : "other", consent)}</Quiet>
     </EmailLayout>
   );
 }

@@ -54,3 +54,21 @@ describe("email templates", () => {
     expect(passNotice).toContain("te devolvemos el importe íntegro");
   });
 });
+
+describe("the receipt for two more gifts", () => {
+  const text = (html: string) => html.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/<!-- -->/g, "");
+  it("says the two gifts are on the account and repeats the 30 days, never 'yours, forever'", async () => {
+    const en = text(await render(ReceiptEmail({ locale: "en", productLabel: "Two more gifts", amountLabel: "€5.00", unlocks: ["Two gifts, ready to make whenever you like"], dashboardUrl: "https://x", pair: true })));
+    expect(en).toContain("Two gifts are ready on your account");
+    expect(en).toContain("On your account: Two gifts, ready to make whenever you like");
+    expect(en).toContain("A gift you haven't used can be refunded for 30 days");
+    expect(en).not.toContain("forever");
+    expect(en).not.toContain("Unlocked:");
+    expect(en).not.toContain("14-day");
+    const es = text(await render(ReceiptEmail({ locale: "es", productLabel: "Dos regalos más", amountLabel: "5,00 €", unlocks: ["Dos regalos, listos para cuando quieras"], dashboardUrl: "https://x", pair: true, consent: consentSentence("pair", "es") })));
+    expect(es).toContain("Tienes dos regalos listos en tu cuenta");
+    expect(es).toContain(`Al pagar marcaste: «${consentSentence("pair", "es")}»`);
+    expect(es).toContain("se reembolsa durante 30 días");
+    expect(es).not.toContain("para siempre");
+  });
+});
