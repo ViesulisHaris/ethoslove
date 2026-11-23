@@ -40,6 +40,7 @@ import { SITE } from "@/config/site";
 import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
+import { AlreadyPaid } from "./already-paid";
 import { ShareScreen } from "./share-screen";
 import { humanize } from "./template-fields";
 
@@ -73,7 +74,7 @@ export function PublishSheet({
   const state = useEditor();
   const search = useSearchParams();
   const [fetchedEntitlement, setFetchedEntitlement] = useState<Awaited<ReturnType<typeof getEntitlement>> | null>(null);
-  const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [], campaign: null };
+  const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [], campaign: null, giftsReady: 0 };
   const [busy, setBusy] = useState(false);
   const [upgrade, setUpgrade] = useState<UpgradeQuote | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
@@ -100,7 +101,10 @@ export function PublishSheet({
   const [published, setPublished] = useState<{
     shortId: string;
     status: "live" | "scheduled";
+    usedGift?: true;
   } | null>(null);
+  // "Pay for this one instead": the sender would rather keep their gift ready, or it went meanwhile.
+  const [payInstead, setPayInstead] = useState(false);
 
   // Opening the sheet kicks uploads + a fresh entitlement check.
   useEffect(() => {
@@ -328,7 +332,7 @@ export function PublishSheet({
     }, 350);
   };
 
-  const publish = async () => {
+  const publish = async ({ useGift = false }: { useGift?: boolean } = {}) => {
     setBusy(true);
     setError(null);
     setRefusedFields([]);
@@ -349,8 +353,15 @@ export function PublishSheet({
           ? { unlockAt: state.schedule.unlockAt, timezone: state.schedule.timezone }
           : undefined,
       ...(freeReply ? { replyToken } : {}),
+      ...(useGift ? { useGift: true } : {}),
     });
     setBusy(false);
+    // The gift ready went meanwhile (used in another tab, or refunded): the pay panel, as today.
+    if (!result.ok && useGift && result.error === "payment_required") {
+      setPayInstead(true);
+      void getEntitlement(slug).then(setFetchedEntitlement);
+      return;
+    }
     if (!result.ok) {
       if (result.error === "reply_used" || result.error === "reply_invalid") setReplyRefused(result.error);
       else setError(result.error);
@@ -360,6 +371,7 @@ export function PublishSheet({
     }
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
+    if (result.data.usedGift) track("gift_ready_used", { template: slug, left: Math.max(0, (entitlement?.giftsReady ?? 1) - 1) });
     // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
     // (lib/attribution/recipient.ts). `state` is this render's, so it still says what the gift was
     // before the line above: a draft. The last word says whether the gift holds something that
@@ -429,6 +441,13 @@ export function PublishSheet({
     (serialized ? premiumExtras(serialized, { note, photosOwned }).length > 0 : false);
 
   const guestCanPay = wouldNeedPayment && paymentsEnabled;
+  // A gift ready (two more gifts) sends this one with nothing to pay, in place of the pay panel; never
+  // inside the iPhone app, where the App Store sells. A free reply or a creator's grant covers it already.
+  const useGiftReady = state.authed && !inApp && !payInstead && !freeReply && !campaign && (entitlement?.giftsReady ?? 0) > 0;
+  const opensWhen =
+    state.schedule.enabled && state.schedule.unlockAt
+      ? new Intl.DateTimeFormat(locale, { dateStyle: "long", timeStyle: "short" }).format(new Date(state.schedule.unlockAt))
+      : null;
   // The "keep" version: the note with and without their photos, the extra row among the options,
   // and what the step that takes the photos out offers.
   const compareOffer =
@@ -493,6 +512,7 @@ export function PublishSheet({
             unlockAt={state.schedule.enabled ? state.schedule.unlockAt : undefined}
             data={state.data}
             giftId={state.giftId}
+            usedGift={published.usedGift === true}
           />
         ) : (
           <div className="px-4 pt-8 pb-10 min-[360px]:px-5 sm:px-8">
@@ -626,7 +646,18 @@ export function PublishSheet({
               </section>
             ) : null}
 
-            {state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+            {state.authed && decision && !decision.ok && decision.reason === "payment_required" && useGiftReady ? (
+              <AlreadyPaid
+                ready={entitlement?.giftsReady ?? 0}
+                thumbs={(state.data?.photos ?? []).slice(0, 4).map((photo) => photo.url)}
+                photos={serialized?.photos.length ?? 0}
+                name={state.data.recipientName.trim()}
+                opensWhen={opensWhen}
+                busy={busy}
+                onSend={() => void publish({ useGift: true })}
+                onPayInstead={() => setPayInstead(true)}
+              />
+            ) : state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
               paymentsEnabled || inApp ? (
                 <Paywall
                   manifest={manifest}
@@ -695,7 +726,7 @@ export function PublishSheet({
               disabled={
                 !supabaseConfigured || !state.authed || busy || problems.length > 0 || !decision?.ok
               }
-              onClick={publish}
+              onClick={() => void publish()}
             >
               {busy ? <Loader2 className="size-4 animate-spin" /> : null}
               <span>

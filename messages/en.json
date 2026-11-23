@@ -278,7 +278,13 @@
     "opensTotal": "{n} opens in the last 30 days",
     "showTable": "Show as table",
     "showChart": "Show as chart",
-    "day": "Day"
+    "day": "Day",
+    "ready": {
+      "count": "{count, plural, one {gift ready to make} other {gifts ready to make}}",
+      "line": "Paid for. Any gift you like.",
+      "make": "Make the {day} one",
+      "makeAny": "Make a gift"
+    }
   },
   "account": {
     "title": "Account",
@@ -617,7 +623,19 @@
         "network": "The connection dropped. Try again, or remove it to send the gift without it.",
         "remove": "Remove"
       },
-      "campaign": "Free with the creator campaign: {left} of {limit} free gifts left. The Ethos footer stays on."
+      "campaign": "Free with the creator campaign: {left} of {limit} free gifts left. The Ethos footer stays on.",
+      "paid": {
+        "title": "It's already paid for.",
+        "oneOfTwo": "One of your two gifts.",
+        "oneLeft": "One left after this.",
+        "last": "Your last gift ready.",
+        "arrives": "Arrives the moment you send it",
+        "opens": "Opens {when}",
+        "forGood": "Yours for good, with everything in it",
+        "send": "Send to {name}",
+        "sendNoName": "Send it",
+        "payInstead": "Pay for this one instead"
+      }
     },
     "share": {
       "title": "It's live.",
@@ -636,7 +654,35 @@
       "qrTitle": "QR card",
       "qrBlurb": "Print it, tuck it in a card, stick it on the fridge.",
       "dashboard": "See it in your gifts",
-      "another": "Make another"
+      "another": "Make another",
+      "pair": {
+        "title": "Nobody likes to be forgotten.",
+        "next": "You remembered today. Next up:",
+        "christmas": "Christmas",
+        "inDays": "in {count, plural, one {# day} other {# days}}",
+        "inWeeks": "in {count, plural, one {# week} other {# weeks}}",
+        "inMonths": "in {count, plural, one {# month} other {# months}}",
+        "both": "Both gifts",
+        "apart": "Separately {price}",
+        "tickAny": "Any gift, with your photos already in",
+        "tickMidnight": "There at midnight, before anyone else",
+        "tickBack": "Not used? Your money back, for 30 days",
+        "add": "Add both for {price}",
+        "byCard": "Pay by card instead",
+        "paying": "One moment…",
+        "foot": "One payment. No subscription.",
+        "notice": "A gift you haven't used can be refunded for 30 days.",
+        "terms": "Terms",
+        "declined": "That payment didn't go through, and nothing was charged. Try again, or pay by card.",
+        "readyTitle": "Two gifts are ready.",
+        "readyLine": "Paid for. Nobody gets forgotten.",
+        "startOne": "Start the {day} one now",
+        "startAny": "Make one now",
+        "readyStay": "They stay ready until you need them.",
+        "usedOne": "This was one of your gifts. Nothing to pay.",
+        "leftOne": "One left, ready for {day}.",
+        "leftNone": "That was your last gift ready."
+      }
     },
     "qr": {
       "frame": "Frame",
@@ -1374,7 +1420,7 @@
       "noteCompare": "Premium templates are {premium}. This one is {price}.",
       "noteOnce": "once, no subscription",
       "oneHeadline": "{template} for {name}",
-      "oneMore": "More options: every template, three templates, a second gift",
+      "oneMore": "More options: every template, three templates",
       "noteCheckPhotos": "{count, plural, one {Your photo in it} other {All # of your photos}}",
       "noteCheckLetter": "Your whole letter, every word",
       "noteCheckFooter": "No Ethos footer: it's all from you",

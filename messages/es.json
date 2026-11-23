@@ -278,7 +278,13 @@
     "opensTotal": "{n} aperturas en los últimos 30 días",
     "showTable": "Ver como tabla",
     "showChart": "Ver como gráfico",
-    "day": "Día"
+    "day": "Día",
+    "ready": {
+      "count": "{count, plural, one {regalo listo para hacer} other {regalos listos para hacer}}",
+      "line": "Ya pagados. El regalo que quieras.",
+      "make": "Hacer el de {day}",
+      "makeAny": "Hacer un regalo"
+    }
   },
   "account": {
     "title": "Cuenta",
@@ -617,7 +623,19 @@
         "network": "Se cortó la conexión. Vuelve a intentarlo o quítalo para enviar el regalo sin él.",
         "remove": "Quitar"
       },
-      "campaign": "Gratis con la campaña de creadores: te quedan {left} de {limit} regalos gratis. El pie de Ethos se queda."
+      "campaign": "Gratis con la campaña de creadores: te quedan {left} de {limit} regalos gratis. El pie de Ethos se queda.",
+      "paid": {
+        "title": "Ya está pagado.",
+        "oneOfTwo": "Uno de tus dos regalos.",
+        "oneLeft": "Te queda otro.",
+        "last": "Es tu último regalo listo.",
+        "arrives": "Llega en cuanto lo envías",
+        "opens": "Se abre {when}",
+        "forGood": "Tuyo para siempre, con todo incluido",
+        "send": "Enviar a {name}",
+        "sendNoName": "Enviarlo",
+        "payInstead": "Prefiero pagar este"
+      }
     },
     "share": {
       "title": "Ya está publicado.",
@@ -636,7 +654,35 @@
       "qrTitle": "Tarjeta QR",
       "qrBlurb": "Imprímela, métela en una tarjeta, pégala en la nevera.",
       "dashboard": "Verlo en mis regalos",
-      "another": "Hacer otro"
+      "another": "Hacer otro",
+      "pair": {
+        "title": "A nadie le gusta que se olviden.",
+        "next": "Hoy te has acordado. Ahora vienen:",
+        "christmas": "Navidad",
+        "inDays": "en {count, plural, one {# día} other {# días}}",
+        "inWeeks": "en {count, plural, one {# semana} other {# semanas}}",
+        "inMonths": "en {count, plural, one {# mes} other {# meses}}",
+        "both": "Los dos regalos",
+        "apart": "Por separado {price}",
+        "tickAny": "Cualquier regalo, con tus fotos puestas",
+        "tickMidnight": "A medianoche, antes que nadie",
+        "tickBack": "¿Sin usar? Te devolvemos el dinero, 30 días",
+        "add": "Añadir los dos por {price}",
+        "byCard": "Pagar con tarjeta",
+        "paying": "Un momento…",
+        "foot": "Un solo pago. Sin suscripción.",
+        "notice": "Un regalo que no hayas usado se reembolsa durante 30 días.",
+        "terms": "Términos",
+        "declined": "El pago no se ha completado y no se ha cobrado nada. Inténtalo otra vez o paga con tarjeta.",
+        "readyTitle": "Tienes dos regalos listos.",
+        "readyLine": "Ya están pagados. Nadie se queda sin el suyo.",
+        "startOne": "Empezar ya el de {day}",
+        "startAny": "Hacer uno ahora",
+        "readyStay": "Se quedan listos hasta que los necesites.",
+        "usedOne": "Era uno de tus regalos. No hay nada que pagar.",
+        "leftOne": "Te queda uno, listo para {day}.",
+        "leftNone": "Era tu último regalo listo."
+      }
     },
     "qr": {
       "frame": "Marco",
@@ -1374,7 +1420,7 @@
       "noteCompare": "Las plantillas premium cuestan {premium}. Esta cuesta {price}.",
       "noteOnce": "una sola vez, sin suscripción",
       "oneHeadline": "{template} para {name}",
-      "oneMore": "Más opciones: todas las plantillas, tres plantillas, un segundo regalo",
+      "oneMore": "Más opciones: todas las plantillas, tres plantillas",
       "noteCheckPhotos": "{count, plural, one {Tu foto dentro} other {Tus # fotos, todas}}",
       "noteCheckLetter": "Tu carta entera, palabra por palabra",
       "noteCheckFooter": "Sin pie de Ethos: todo es tuyo",
