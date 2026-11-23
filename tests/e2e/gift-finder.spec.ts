@@ -714,6 +714,8 @@ test.describe("the gift finder", () => {
 
 test.describe("the ways into the finder", () => {
   test("from the front page's templates, the gifts page and the gallery", async ({ page }) => {
+    // Five pages, two of them the 61-card gallery: on a phone under a dev server that is more than 30 seconds.
+    test.setTimeout(90_000);
     for (const path of ["/", "/gifts", "/templates"]) {
       await page.goto(path);
       const link = page.locator("main").getByRole("link", { name: "Answer two questions" });
