@@ -130,8 +130,9 @@ test.describe("a gift's end screen, for whoever received it", () => {
     // The maker's mark at the foot of a free gift: two quiet lines, one link.
     const badge = page.getByRole("link", { name: /Made with Ethos/ }).filter({ hasText: "Digital cards by Tryethos" });
     await bring(page, '[data-testid="keep-gift"]', "end");
-    // Once the end is in view, the end screen carries the only badge.
-    await expect(page.getByRole("link", { name: /Made with Ethos/ })).toHaveCount(1);
+    // Once the end is in view, the end screen carries the only badge. The floating one stands down on
+    // the badge check's next pass, which under a full run can come later than the default 5 s.
+    await expect(page.getByRole("link", { name: /Made with Ethos/ })).toHaveCount(1, { timeout: 15_000 });
     await expect(badge).toContainText("Made with Ethos");
     await expect(badge).toContainText("Digital cards by Tryethos");
     await expect(badge).toHaveAttribute("href", "/made-with-ethos?ref=watermark&template=the-letter");
