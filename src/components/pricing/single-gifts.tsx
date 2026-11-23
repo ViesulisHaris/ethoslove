@@ -42,8 +42,8 @@ export function SingleGifts({
   const names = new Intl.ListFormat(locale, { type: "conjunction" }).format(free.map((m) => m.name[locale]));
 
   return (
-    <section id="gifts" className="relative bg-rose-mist pb-20 lg:pb-28" aria-labelledby="gifts-title">
-      <TornEdge from="var(--brand-paper)" to="var(--color-rose-mist)" />
+    <section id="gifts" className="relative bg-blush-paper pb-20 lg:pb-28" aria-labelledby="gifts-title">
+      <TornEdge from="var(--brand-paper)" to="var(--color-blush-paper)" />
       <div className="container-x pt-14 lg:pt-20">
         <div className="grid gap-4 lg:grid-cols-12 lg:items-end" data-reveal>
           <div className="lg:col-span-7">

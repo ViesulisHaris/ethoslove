@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { Mail, MailCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
@@ -29,6 +29,8 @@ function callbackFor(next: string): string {
   return `${window.location.origin}/auth/callback`;
 }
 
+const noStore = () => () => {};
+
 /** `bare` (with compact): no title or blurb of its own, for a card that already has both (the publish sheet). */
 export function AuthForm({
   mode,
@@ -49,6 +51,8 @@ export function AuthForm({
   const next = safeNext(nextOverride ?? search.get("next"));
   const callbackError = search.get("error") === "callback";
 
+  // False in the server's HTML and until the page has come alive in the browser.
+  const alive = useSyncExternalStore(noStore, () => true, () => false);
   const [email, setEmail] = useState(knownEmail);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [code, setCode] = useState("");
@@ -242,18 +246,19 @@ export function AuthForm({
                   {t.rich("emailDidYouMean", {
                     suggestion: emailNote.suggestion,
                     take: (chunks) => (
-                      <button type="button" data-take-suggestion onClick={() => takeSuggestion(emailNote.suggestion)} className="font-medium text-coral underline underline-offset-4">
+                      <button type="button" data-take-suggestion onClick={() => takeSuggestion(emailNote.suggestion)} className="-my-3 inline-flex min-h-11 items-center font-medium text-coral underline underline-offset-4">
                         {chunks}
                       </button>
                     ),
                   })}
                 </p>
-                <button type="button" onClick={() => void sendTo(emailNote.typed, true)} className="mt-1 py-1 text-xs text-muted-foreground underline underline-offset-4">
+                <button type="button" onClick={() => void sendTo(emailNote.typed, true)} className="-mb-2 inline-flex min-h-11 items-center text-left text-xs text-muted-foreground underline underline-offset-4">
                   {t("emailKeepTyped", { email: emailNote.typed })}
                 </button>
               </div>
             ) : null}
-            <Button type="submit" className="h-11 rounded-full" disabled={status === "sending" || (callbackError && !email.trim())}>
+            {/* Not pressable until the page is alive: pressed sooner, the browser sent the form itself, the page came back empty and nothing was sent (the confirming walk of 23 Nov 2026, on a slow phone). */}
+            <Button type="submit" className="h-11 rounded-full" disabled={!alive || status === "sending" || (callbackError && !email.trim())}>
               <Mail className="size-4" />
               <span>{status === "sending" ? t("sending") : t("sendLink")}</span>
             </Button>

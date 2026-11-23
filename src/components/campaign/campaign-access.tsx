@@ -72,7 +72,7 @@ export function CampaignAccess({ templates }: { templates: CampaignTemplateCard[
       <section className="rounded-[28px] border border-line bg-card p-6 sm:p-8" data-testid="campaign-sign-in">
         <h2 className="font-display text-2xl">{t("signInTitle")}</h2>
         <p className="mt-1 mb-5 text-sm text-muted-foreground">{t("signInBlurb")}</p>
-        <AuthForm mode="login" next="/campaign" compact />
+        <AuthForm mode="login" next="/campaign" compact bare />
       </section>
     );
 

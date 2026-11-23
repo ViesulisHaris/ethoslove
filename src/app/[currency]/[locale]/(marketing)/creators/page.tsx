@@ -145,7 +145,7 @@ export default async function CreatorsPage({ params }: PageProps<"/[currency]/[l
           <ul className="mt-12 grid gap-5 sm:grid-cols-2">
             {RULES.map(({ key, Icon }) => (
               <li key={key} className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
-                <span className="grid size-11 place-items-center rounded-2xl bg-rose-mist text-rose-deep">
+                <span className="grid size-11 place-items-center rounded-2xl bg-blush-paper text-rose-deep">
                   <Icon aria-hidden="true" className="size-[22px]" strokeWidth={1.8} />
                 </span>
                 <h3 className="mt-5 font-display text-[1.5rem] leading-tight text-forest">{t(`rules.${key}.title`)}</h3>

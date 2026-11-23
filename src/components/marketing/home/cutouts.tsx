@@ -198,20 +198,17 @@ const CARD: Bloom[] = [
  * blurred pieces at the foot lay half over the band's lower edge, where the band cut them off flat
  * (walk-agreed-13). Here they lie whole inside it; the head at the top right is as in BAND.
  */
-const BAND_INSIDE: Bloom[] = [
-  BAND[0],
-  BAND[1],
-  // Only from 1440px: at 1024 they lay under "Open the long-distance room" (tests/e2e/floral-frame.spec.ts).
-  { art: "lily-open", x: 3, y: 74, size: 14, rot: -12, blur: 5, opacity: 0.5, phone: false, wide: true },
-  { art: "leaf-1", x: 10, y: 84, size: 9, rot: 20, blur: 5, opacity: 0.45, phone: false, wide: true },
-];
+// Its foot has no flowers now: moved inside the band they lay under "Open the long-distance room",
+// at 1024px wholly and at 1440px by a petal's tip (the confirming walk of 23 Nov 2026).
+const BAND_INSIDE: Bloom[] = [BAND[0], BAND[1]];
+const FOOT_LILY: Bloom = { art: "lily-open", x: 3, y: 74, size: 14, rot: -12, blur: 5, opacity: 0.5, phone: false, wide: true };
 
 /**
  * A trip's hero (walk-rooms-3): BAND cut its lily flat at the hero's foot. The foot's pieces lie whole
  * inside it, as in BAND_INSIDE, and only from 1440px: narrower, the facts and buttons run over it.
  * BAND_INSIDE's leaf is left out: it lay under the first button.
  */
-const BAND_HERO: Bloom[] = [BAND[0], BAND[1], { ...BAND_INSIDE[2], wide: true }];
+const BAND_HERO: Bloom[] = [BAND[0], BAND[1], FOOT_LILY];
 
 const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, bandInside: BAND_INSIDE, bandHero: BAND_HERO, card: CARD } as const;
 

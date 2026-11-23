@@ -432,10 +432,10 @@ export function DateRangePicker({ value, onChange, today, locale, labels, allowO
 
               <div className="relative mt-5" onKeyDown={onGridKey} onPointerLeave={() => setHover(null)}>
                 {/* Before the months, so Tab goes header, arrows, the day, then the footer. */}
-                <button type="button" onClick={() => turn(-1)} disabled={view.at <= 0} aria-label={labels.previous} className="absolute top-0 left-0 z-10 grid size-10 place-items-center rounded-full border border-forest/10 bg-white text-forest transition-[background-color,opacity] hover:bg-rose-mist disabled:pointer-events-none disabled:opacity-30">
+                <button type="button" onClick={() => turn(-1)} disabled={view.at <= 0} aria-label={labels.previous} className="absolute top-0 left-0 z-10 grid size-10 place-items-center rounded-full border border-forest/10 bg-card text-forest transition-[background-color,opacity] hover:bg-blush-paper disabled:pointer-events-none disabled:opacity-30">
                   <ChevronLeft aria-hidden="true" className="size-[18px]" />
                 </button>
-                <button type="button" onClick={() => turn(1)} disabled={view.at >= lastView} aria-label={labels.next} className="absolute top-0 right-0 z-10 grid size-10 place-items-center rounded-full border border-forest/10 bg-white text-forest transition-[background-color,opacity] hover:bg-rose-mist disabled:pointer-events-none disabled:opacity-30">
+                <button type="button" onClick={() => turn(1)} disabled={view.at >= lastView} aria-label={labels.next} className="absolute top-0 right-0 z-10 grid size-10 place-items-center rounded-full border border-forest/10 bg-card text-forest transition-[background-color,opacity] hover:bg-blush-paper disabled:pointer-events-none disabled:opacity-30">
                   <ChevronRight aria-hidden="true" className="size-[18px]" />
                 </button>
                 <motion.div key={view.at} initial={view.dir === 0 || reduced ? false : { opacity: 0, x: view.dir * 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.24, ease: QUINT }} className="grid grid-cols-2 gap-10">
@@ -493,7 +493,7 @@ export function DateRangePicker({ value, onChange, today, locale, labels, allowO
                                 onClick={() => chooseEnd(which)}
                                 className={cn(
                                   "flex h-14 min-w-0 flex-col justify-center rounded-2xl border px-3 text-left transition-[border-color,background-color,box-shadow] duration-200",
-                                  active ? "border-rose/55 bg-rose-mist shadow-[0_0_0_3px_rgba(178,58,94,0.12)]" : "border-forest/12 bg-white",
+                                  active ? "border-rose/55 bg-blush-paper shadow-[0_0_0_3px_rgba(178,58,94,0.12)]" : "border-forest/12 bg-card",
                                   muted && "border-dashed border-forest/20 bg-transparent",
                                   blocked && "opacity-55",
                                 )}
@@ -627,7 +627,7 @@ function TripToggle({ uid, oneWay, labels, reduced, big, onChange }: TripToggleP
           // On a phone the whole 44px of the group is the target, not just the 38px of the thumb.
           className={cn("relative rounded-full px-4 text-[13.5px] font-semibold whitespace-nowrap transition-colors", big ? "h-[38px] before:absolute before:inset-x-0 before:-inset-y-[3px]" : "h-9", oneWay === on ? "text-forest" : "text-forest/65 hover:text-forest")}
         >
-          {oneWay === on ? <motion.span layoutId={`${uid}-trip`} aria-hidden="true" className="absolute inset-0 rounded-full bg-white shadow-soft" transition={{ duration: reduced ? 0 : 0.25, ease: QUINT }} /> : null}
+          {oneWay === on ? <motion.span layoutId={`${uid}-trip`} aria-hidden="true" className="absolute inset-0 rounded-full bg-card shadow-soft" transition={{ duration: reduced ? 0 : 0.25, ease: QUINT }} /> : null}
           <span className="relative">{on ? labels.oneWay : labels.roundTrip}</span>
         </button>
       ))}
@@ -697,7 +697,7 @@ function Sheet({ panel, reduced, cursorMonth, title, weekdays, header, footer, c
         <div ref={scroller} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-6">
           {children}
         </div>
-        <div className="shrink-0 border-t border-forest/8 bg-white px-4 pt-2 pb-[max(16px,env(safe-area-inset-bottom))] shadow-[0_-10px_24px_-18px_rgba(42,15,31,0.35)]">{footer}</div>
+        <div className="shrink-0 border-t border-forest/8 bg-card px-4 pt-2 pb-[max(16px,env(safe-area-inset-bottom))] shadow-[0_-10px_24px_-18px_rgba(42,15,31,0.35)]">{footer}</div>
       </motion.div>
     </Dialog.Content>
   );
@@ -743,7 +743,7 @@ function MonthGrid({ month, size, locale, labels, today, max, range, preview, ta
       style={card ? undefined : { containIntrinsicSize: `auto ${SHEET_TITLE + weeks.length * SHEET_ROW}px` }}
     >
       {/* In the sheet the month's name stays in view while its weeks scroll under it, until the next month's takes its place. */}
-      <h3 id={titleId} className={cn("flex items-center font-display text-forest", card ? "h-10 justify-center text-[19px]" : "sticky top-0 z-10 -mx-4 h-11 bg-white px-5 text-[20px]")}>
+      <h3 id={titleId} className={cn("flex items-center font-display text-forest", card ? "h-10 justify-center text-[19px]" : "sticky top-0 z-10 -mx-4 h-11 bg-card px-5 text-[20px]")}>
         {title.name}
         <span className="ml-1.5 text-forest/40">{title.year}</span>
       </h3>
@@ -786,7 +786,7 @@ function MonthGrid({ month, size, locale, labels, today, max, range, preview, ta
                         "absolute",
                         card ? "inset-y-0" : "inset-y-0.5",
                         mark.isStart ? "right-0 left-1/2" : mark.isEnd ? "right-1/2 left-0" : "inset-x-0",
-                        mark.isPreview ? "bg-rose-mist" : "bg-rose-soft",
+                        mark.isPreview ? "bg-blush-paper" : "bg-rose-soft",
                         roundLeft && "rounded-l-full",
                         roundRight && "rounded-r-full",
                       )}
@@ -809,7 +809,7 @@ function MonthGrid({ month, size, locale, labels, today, max, range, preview, ta
                       !off && !filled && !outlined && "hover:shadow-[inset_0_0_0_1.5px_rgba(42,15,31,0.55)]",
                       band && !filled && !outlined && "text-rose-ink",
                       filled && "bg-rose font-semibold text-white shadow-[0_6px_14px_-6px_rgba(214,51,108,0.7)]",
-                      outlined && "bg-white font-semibold text-rose-deep shadow-[inset_0_0_0_2px_var(--color-rose)]",
+                      outlined && "bg-card font-semibold text-rose-deep shadow-[inset_0_0_0_2px_var(--color-rose)]",
                     )}
                   >
                     {date}

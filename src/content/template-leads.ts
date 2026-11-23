@@ -96,7 +96,7 @@ export const SCENE_LEADS: Record<string, Partial<Record<GiftLocale, string>>> = 
   "spooky-season": {
     en: "A heap of autumn leaves with their name on a kraft tag. A gust clears them, and a scrapbook runs from your photo under the moon down to your letter.",
     // Shorter than the English, for the same small phone.
-    es: "Una ráfaga se lleva las hojas y debajo hay un álbum, hasta tu carta.",
+    es: "Una ráfaga se lleva las hojas y debajo aparece un álbum de Halloween con tus fotos y tu carta.",
   },
 };
 

@@ -827,14 +827,15 @@ body:has([data-page-theme]) .site-header .btn-rose {
 }
 /* Before the script has placed the pill, the room you are in carries the rose itself. */
 .nav-rooms:not([data-armed]) a[aria-current="page"] {
-  background: var(--color-rose-soft);
+  background: var(--color-blush-paper);
 }
 .nav-lit > i {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  background: var(--color-rose-soft);
+  /* The warm blush of the paper, as the phone menu marks its current room: the cool rose it was is the old palette's. */
+  background: var(--color-blush-paper);
   transition:
     translate 0.3s var(--ease-out-quint),
     scale 0.3s var(--ease-out-quint);
