@@ -103,9 +103,10 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
           ) : null}
           {/* The picture's foot runs into the card it stands on. */}
           <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-linear-to-t from-card to-card/0" />
-          <span className={cn("pointer-events-none absolute top-3.5 left-3.5 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide backdrop-blur", free ? "bg-cream/90 text-forest" : "bg-forest/75 text-cream")}>
-            {free ? t("common.free") : t("common.premium")}
-          </span>
+          {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". A gift that costs something says nothing here; the one that is free says so. */}
+          {free ? (
+            <span data-card-free className="pointer-events-none absolute top-3.5 left-3.5 rounded-full bg-cream/90 px-3 py-1 text-[11px] font-semibold tracking-wide text-forest backdrop-blur">{t("common.free")}</span>
+          ) : null}
           {badge ? (
             <span className={cn("pointer-events-none absolute top-3.5 right-3.5 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]", badge === "popular" ? "bg-rose-soft text-forest" : "bg-cream text-forest")}>
               {badge === "popular" ? (

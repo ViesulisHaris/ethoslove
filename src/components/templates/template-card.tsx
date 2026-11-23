@@ -129,14 +129,12 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
             </button>
           </>
         )}
-        <span
-          className={cn(
-            "pointer-events-none absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur",
-            free ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream",
-          )}
-        >
-          {free ? t("common.free") : t("common.premium")}
-        </span>
+        {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". A gift that costs something says nothing here; the one that is free says so. */}
+        {free ? (
+          <span data-card-free className="pointer-events-none absolute top-3 left-3 rounded-full bg-cream/90 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-forest backdrop-blur">
+            {t("common.free")}
+          </span>
+        ) : null}
         {/* A word in the badge's place (the footer page's "The one you got"); off once the demo runs, like the badge. */}
         {marker && !live ? (
           <span className="pointer-events-none absolute top-3 right-3 rounded-full bg-coral px-2.5 py-1 text-[11px] font-semibold tracking-wide text-paper shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]">{marker}</span>

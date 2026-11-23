@@ -140,9 +140,8 @@ export default async function TemplateDetailPage({
             <div className="contents lg:block lg:max-w-[33rem]">
               <div className="order-first">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={free ? "rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink" : "rounded-[5px] bg-page-ink px-2 py-1 text-page-label text-page-ground"}>
-                    {free ? t("common.free") : t("common.premium")}
-                  </span>
+                  {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". A gift that costs something says nothing here; the one that is free says so. The price is said once, under the buttons. */}
+                  {free ? <span className="rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink">{t("common.free")}</span> : null}
                   {manifest.styles.map((s) => (
                     <span key={s} className="rounded-[5px] border border-page-line px-2 py-1 text-page-label text-page-body">
                       {t(`templates.style.${s}`)}
