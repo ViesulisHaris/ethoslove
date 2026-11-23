@@ -28,6 +28,8 @@ import things  # noqa: E402
 OPT = pkit.cli()
 PHONE_Z = 0.22
 HIGH = 7.0
+# The experience flat-lay's polaroid: its width, where its middle lies on the page (right of the phone), and its turn.
+POLAROID = dict(w=3.4, at=(4.75, 1.0, 0.05), yaw=-9.0)
 
 
 def phone_over(w, yaw, screen="#0b0908", screen_mat=None):
@@ -133,27 +135,31 @@ def experience(colour):
         (-1.8, -4.2, 232.0, 4.4, 0.34, 0.6, 0.16, 8.0),
         (-0.8, 4.2, 104.0, 3.8, 0.3, -0.5, 0.14, -6.0),
         (-2.0, 0.9, 172.0, 3.6, 0.3, 0.6, -0.16, 10.0)))
-    objs += loose(mats, colour, ((5.3, 0.9, 32.0, 20.0, 1.9, 70.0, 1.2), (4.7, -3.2, 150.0, -30.0, 1.6, 50.0, 1.0), (-6.2, 1.5, 200.0, 60.0, 1.7, 95.0, 1.25)))
-    parts, info, proot = phone_over(4.9, 16.0, screen_mat=things.glow_screen("screen_glow"))
+    objs += loose(mats, colour, ((5.2, -5.3, 32.0, 20.0, 1.9, 70.0, 1.2), (4.7, -3.2, 150.0, -30.0, 1.6, 50.0, 1.0), (-6.2, 1.5, 200.0, 60.0, 1.7, 95.0, 1.25)))
+    # The phone's screen is an empty flat black, as the hero's is: a page lays the gift itself into
+    # it, straight in the phone, and the bezel layer goes back over that.
+    parts, info, proot = phone_over(4.9, 16.0)
     objs += parts
-    # the polaroid lies on the phone's glass (and so is held up with it); its shadow falls on the glass
-    lift = HIGH - PHONE_Z
-    back = -lift * pkit.SIN_T / pkit.COS_T
-    top = HIGH + info["size"][2]
-    pparts, pinfo = things.polaroid("polaroid", 4.2)
-    pol = things.place("polaroid_root", pparts, (0.05, 0.5 + back, top + 0.03), yaw=8.0, pitch=0.6, roll=-1.2)
-    w_, h_, _ = pinfo["size"]
-    shade = things.soft_shadow("polaroid_shade", w_ * 1.12, h_ * 1.1, 0.16, 0.62)
-    things.place("polaroid_shade_root", [shade], (0.05 + 0.13, 0.5 + back - 0.16, top + 0.015), yaw=8.0, pitch=0.6, roll=-1.2)
-    for ob in pparts:
-        ob.visible_shadow = False
-    objs += pparts + [shade]
+    # The polaroid lies on the page BESIDE the phone, turned the other way. It used to rest on the
+    # phone's glass at its own angle, and read as the screen's picture sitting crooked and sticking
+    # out of the phone (the owner, 23 Nov 2026: "its coming out of the phone").
+    pparts, pinfo = things.polaroid("polaroid", POLAROID["w"])
+    pol = things.place("polaroid_root", pparts, POLAROID["at"], yaw=POLAROID["yaw"], pitch=0.0, roll=0.0)
+    objs += pparts
     pkit.rig(OPT)
     shot = pkit.frame(objs, 1980, pad=(0.5, 0.5, 1.3, 1.3), opt=OPT, piece="experience-flatlay")
     meta = {"piece": "experience-flatlay", "colourway": colour, "long": 1800,
             "photo": dict(pkit.area(shot, things.world_corners(pol, pinfo), (400, 400), pinfo["radius"], pinfo["width"]), fill="#3d2f29"),
-            "screen": dict(pkit.area(shot, things.world_corners(proot, info), things.SCREEN_BOX, info["radius"], info["width"]), fill="#3e2318")}
-    pkit.shoot("experience-flatlay-" + colour, OPT["out"], objs, floor, shot, meta=meta)
+            "screen": dict(pkit.area(shot, things.world_corners(proot, info), things.SCREEN_BOX, info["radius"], info["width"]), fill="#0b0908")}
+    scr = info["screen"]
+    black, hole = scr.data.materials[0], things.holdout()
+
+    def cut():
+        scr.data.materials[0] = hole
+
+    def uncut():
+        scr.data.materials[0] = black
+    pkit.shoot("experience-flatlay-" + colour, OPT["out"], objs, floor, shot, meta=meta, extra=[("bezel", parts, cut, uncut)])
 
 
 def main():

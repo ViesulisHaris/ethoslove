@@ -68,7 +68,21 @@ describe("page art", () => {
       const hero = pageArt("hero-flatlay", flowers);
       expect(hero.slots.screen?.box, flowers).toEqual([390, 844]);
       expect(hero.bezel, `${flowers}: the hero's phone has no bezel layer`).toBeDefined();
-      expect(pageArt("experience-flatlay", flowers).slots.photo, flowers).toBeDefined();
+      // The band's phone shows the gift in its own screen, under its own rim, and the polaroid lies beside
+      // it: a polaroid resting on the glass read as a crooked screen sticking out of the phone (the owner, 23 Nov 2026).
+      const band = pageArt("experience-flatlay", flowers);
+      expect(band.slots.photo, flowers).toBeDefined();
+      expect(band.slots.screen?.box, flowers).toEqual([390, 844]);
+      expect(band.bezel, `${flowers}: the band's phone has no bezel layer`).toBeDefined();
+      // A slot's corners in the picture (top left, top right, bottom right, bottom left): matrix(a, b, c, d, e, f) carries (x, y) to (a·x + c·y + e, b·x + d·y + f).
+      const [screen, photo] = [band.slots.screen!, band.slots.photo!].map(({ box: [w, h], matrix: [a, b, c, d, e, f] }) =>
+        [[0, 0], [w, 0], [w, h], [0, h]].map(([x, y]) => [a * x + c * y + e, b * x + d * y + f] as const),
+      );
+      // The whole polaroid is on the far side of the screen's right edge (the line from its top right corner to its bottom right), with room for the phone's rim between.
+      const [[x1, y1], [x2, y2]] = [screen[1], screen[2]];
+      const edge = Math.hypot(x2 - x1, y2 - y1);
+      const beyond = photo.map(([x, y]) => ((x2 - x1) * (y1 - y) - (y2 - y1) * (x1 - x)) / edge);
+      expect(Math.min(...beyond), `${flowers}: the polaroid lies clear of the phone, in the picture's own pixels`).toBeGreaterThan(40);
       expect(pageArt("step-photo", flowers).slots.photo, flowers).toBeDefined();
       expect(pageArt("step-note", flowers).slots.card, flowers).toBeDefined();
       // The third step's small phone takes any gift's cover in its screen, under a rim of its own.

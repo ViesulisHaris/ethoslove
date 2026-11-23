@@ -233,24 +233,40 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
 
 /**
  * The picture of "The experience": the page art's `experience-flatlay`, a larger phone lying on
- * lilies with a polaroid resting on it, and the gift's sample photo laid into the polaroid by the
- * render's own matrix. On a phone it is drawn wider than the screen and most of it is off the
- * sides, so `sizes` asks for less than it is drawn at: the half-size file (900 wide) is sharp
- * enough there. Two thirds of the screen's width, so a phone with three device pixels to a pixel
- * still picks it up to 454px wide: at "80vw" an iPhone asked for 936 and was sent the full file,
- * twice the bytes (the deep test of 21 Nov 2026).
+ * lilies with a polaroid on the page beside it. The gift's own cover is laid into the phone's
+ * screen and its sample photo into the polaroid, each by the render's own matrix, so each sits
+ * straight in the thing it belongs to; the phone's rim goes back over the cover.
+ *
+ * The polaroid used to rest on the phone's glass at its own angle, with nothing on the screen
+ * under it. It read as the screen's picture sitting crooked and sticking out of the phone, and
+ * the owner called it broken (23 Nov 2026). Nothing lies on the phone now.
+ *
+ * On a phone it is drawn wider than the screen and most of it is off the sides, so `sizes` asks
+ * for less than it is drawn at: the half-size file (900 wide) is sharp enough there. Two thirds
+ * of the screen's width, so a phone with three device pixels to a pixel still picks it up to
+ * 454px wide: at "80vw" an iPhone asked for 936 and was sent the full file, twice the bytes (the
+ * deep test of 21 Nov 2026).
  */
-function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo: SamplePhoto }) {
+const EXPERIENCE_SIZES = "(min-width: 1024px) 50vw, (min-width: 640px) 80vw, 66vw";
+
+function ExperienceFlatlay({ flowers, photo: sample, poster }: { flowers: Flowers; photo: SamplePhoto; poster: string }) {
   const art = pageArt("experience-flatlay", flowers);
-  const photo = art.slots.photo;
+  const { photo, screen } = art.slots;
   return (
     <div data-flatlay="experience" className="relative" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
       <span data-decor="experience-flatlay" className="absolute inset-0 block">
-        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="(min-width: 1024px) 50vw, (min-width: 640px) 80vw, 66vw" width={art.width} height={art.height} className="block w-full" />
+        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes={EXPERIENCE_SIZES} width={art.width} height={art.height} className="block w-full" />
       </span>
+      {screen ? (
+        <div data-slot="screen" className="absolute overflow-hidden bg-night" style={slotStyle(art, screen)}>
+          <Image src={poster} alt="" fill sizes="(min-width: 1024px) 280px, 40vw" className="object-cover" />
+        </div>
+      ) : null}
+      {/* The phone's rim, over what was laid into its screen. Outside the span above: that one holds the picture alone. */}
+      {art.bezel ? <CutoutImg src={art.bezel.src1x} srcSet={`${art.bezel.src1x} ${art.width1x}w, ${art.bezel.src} ${art.width}w`} sizes={EXPERIENCE_SIZES} width={art.width} height={art.height} className="absolute inset-0 block w-full" /> : null}
       {photo ? (
-        <div className="absolute overflow-hidden" style={slotStyle(art, photo)}>
-          <Image src={sample.src} alt="" fill sizes="(min-width: 1024px) 220px, 45vw" className="object-cover" />
+        <div data-slot="photo" className="absolute overflow-hidden" style={slotStyle(art, photo)}>
+          <Image src={sample.src} alt="" fill sizes="(min-width: 1024px) 180px, 30vw" className="object-cover" />
         </div>
       ) : null}
     </div>
@@ -354,7 +370,7 @@ export async function Experience({ manifest, locale, flowers, photo, line, note 
         <div className="container-x grid items-center gap-y-6 pt-4 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-0 lg:pb-0">
           {/* The picture is wider than its column and runs off the page's left side and under the band's lower edge. */}
           <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
-            <ExperienceFlatlay flowers={flowers} photo={photo} />
+            <ExperienceFlatlay flowers={flowers} photo={photo} poster={manifest.thumbnail.poster} />
           </div>
           <div className="lg:py-24">
             <p className="text-page-label text-page-body">{t("experienceLabel")}</p>
