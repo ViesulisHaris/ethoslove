@@ -13,6 +13,7 @@ import { IDEAS } from "@/lib/dates/ideas";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M, topCityPlaces } from "@/lib/cities/places";
 import { tiqetsSearch } from "@/lib/trips/partners";
+import { tripsThrough } from "@/lib/trips/cities";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { EagerImg } from "@/components/shared/eager-img";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -81,6 +82,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const km = (CITY_RADIUS_M / 1000).toLocaleString(l);
   const told = toldTraits(city, ideas);
   const ideaStops = cityIdeaStops(ideas, around);
+  const passing = tripsThrough(city.slug);
   // Its pages by kind of date, only New York's and London's (lib/dates/date-kinds.ts).
   const kindPages = CITY_KIND_PAGES.filter((p) => p.city === city.slug);
 
@@ -241,6 +243,20 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
               </div>
             </div>
           </div>
+          {passing.length > 0 ? (
+            <p data-testid="city-trip" className="mt-6 text-[15px] leading-relaxed text-forest/75">
+              {t("trip")}:{" "}
+              {passing.map((trip, i) => (
+                <span key={trip.id}>
+                  {i > 0 ? ", " : null}
+                  <Link href={`/trips/${trip.id}`} className="group inline-flex min-h-11 items-center gap-1.5 font-semibold text-rose-deep underline-offset-4 hover:underline">
+                    {trip.title[l]}
+                    <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </span>
+              ))}
+            </p>
+          ) : null}
         </div>
       </section>
 

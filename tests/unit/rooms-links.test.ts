@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { TRIP_SEO } from "@/content/trip-seo";
-import { TRIP_IDS, TRIPS } from "@/lib/trips/presets";
+import { tripStopCities, tripsThrough } from "@/lib/trips/cities";
+import { getTrip, TRIP_IDS, TRIPS } from "@/lib/trips/presets";
 
 /**
  * The rooms of the growth build: a trip's words for search, the links between a trip and the cities
@@ -50,5 +51,43 @@ describe("a trip in search", () => {
     expect(TRIPS.length).toBe(12);
     expect(en.trips.meta.description).toContain("twelve");
     expect(es.trips.meta.description).toContain("doce");
+  });
+});
+
+describe("a trip and the cities it passes through", () => {
+  const slugs = (id: string) => tripStopCities(getTrip(id)!).map((c) => c?.slug);
+
+  it("a stop in one of our cities is given that city, and a stop that is not is given none", () => {
+    expect(slugs("baltic-coast")).toEqual(["riga", undefined, undefined, undefined, "tallinn"]);
+    expect(slugs("prague-krumlov-vienna")).toEqual(["prague", undefined, "vienna"]);
+    // Louisiana is 33 km out of Copenhagen: not in it.
+    expect(slugs("copenhagen-hygge")).toEqual(["copenhagen", undefined, undefined]);
+    expect(slugs("amalfi-coast").every((s) => s === undefined)).toBe(true);
+  });
+
+  it("a city is named once a trip, at its first stop", () => {
+    expect(slugs("lisbon-slow-weekend")).toEqual(["lisbon", undefined, undefined, undefined]);
+    for (const trip of TRIPS) {
+      const named = slugs(trip.id).filter(Boolean);
+      expect(new Set(named).size, trip.id).toBe(named.length);
+    }
+  });
+
+  it("seven trips pass through nine of our cities, and each city knows its trip", () => {
+    // When more cities arrive this holds unless one lies within 12 km of a stop: then add it here on purpose.
+    expect(TRIPS.filter((t) => tripStopCities(t).some(Boolean)).map((t) => t.id)).toEqual([
+      "lisbon-slow-weekend",
+      "paris-without-cliches",
+      "scottish-highlands",
+      "baltic-coast",
+      "prague-krumlov-vienna",
+      "copenhagen-hygge",
+      "amsterdam-by-bike",
+    ]);
+    expect(new Set(TRIPS.flatMap((t) => tripStopCities(t).filter(Boolean).map((c) => c!.slug))).size).toBe(9);
+    expect(tripsThrough("riga").map((t) => t.id)).toEqual(["baltic-coast"]);
+    expect(tripsThrough("tallinn").map((t) => t.id)).toEqual(["baltic-coast"]);
+    expect(tripsThrough("london")).toEqual([]);
+    expect(tripsThrough("nope")).toEqual([]);
   });
 });

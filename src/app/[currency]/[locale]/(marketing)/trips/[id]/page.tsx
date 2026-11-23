@@ -7,7 +7,9 @@ import { SITE } from "@/config/site";
 import { chargedCurrency, subscriptionsEnabled } from "@/lib/pricing/products";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { shareCardPath } from "@/lib/share/links";
+import { cityName as cityPageName } from "@/lib/cities/cities";
 import { cityName, findAirport } from "@/lib/trips/airports";
+import { tripStopCities } from "@/lib/trips/cities";
 import { monthRanges } from "@/lib/trips/months";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { budgetMark, getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
@@ -55,6 +57,8 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   const gift = tripGiftFields(trip, l);
   const url = localizedUrl(locale, `/trips/${trip.id}`);
   const stops = trip.stops.map((s) => ({ name: stopName(s, l), lat: s.lat, lng: s.lng }));
+  // A stop in one of the cities with a dates page links to it, once a city (lib/trips/cities.ts).
+  const stopCities = tripStopCities(trip);
   const tickets = tripTickets(trip.id).map((ticket) => {
     const stop = trip.stops.find((s) => s.name === ticket.stop);
     return { name: ticket.name[l], where: stop ? stopName(stop, l) : null, url: tiqetsSearch(ticket.query, l) };
@@ -183,13 +187,21 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                         <span className="text-[12.5px] font-semibold text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
                       </div>
                       <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
-                      <Link
-                        href={`/dates?lat=${s.lat}&lng=${s.lng}&q=${encodeURIComponent(stopName(s, l))}`}
-                        className="group -mb-2.5 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline"
-                      >
-                        {t("detail.route.datesHere")}
-                        <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                      </Link>
+                      <div className="-mb-2.5 flex flex-wrap gap-x-5">
+                        <Link
+                          href={`/dates?lat=${s.lat}&lng=${s.lng}&q=${encodeURIComponent(stopName(s, l))}`}
+                          className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline"
+                        >
+                          {t("detail.route.datesHere")}
+                          <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                        </Link>
+                        {stopCities[i] ? (
+                          <Link href={`/dates/${stopCities[i].slug}`} data-testid="stop-city" className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                            {t("detail.route.cityDates", { city: cityPageName(stopCities[i], l) })}
+                            <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                          </Link>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </li>
