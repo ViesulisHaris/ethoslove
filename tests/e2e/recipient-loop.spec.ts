@@ -121,12 +121,17 @@ test.describe("a gift's end screen, for whoever received it", () => {
     // That page is told the site's name as where the tap came from, and nothing of the gift's address.
     expect(await made.evaluate(() => document.referrer)).toBe(`${new URL(gift).origin}/`);
     await made.close();
+    // Back on the gift's tab. While the other tab was in front, the end screen's visibility watcher
+    // could read "not in view" and the floating badge come back for a moment beside the inline one.
+    await page.bringToFront();
     expect(page.url()).toBe(gift);
     expect(await events(page)).toContainEqual({ name: "make_own_clicked", data: { template: "the-letter", from: "end" } });
 
     // The maker's mark at the foot of a free gift: two quiet lines, one link.
-    const badge = page.getByRole("link", { name: /Made with Ethos/ });
+    const badge = page.getByRole("link", { name: /Made with Ethos/ }).filter({ hasText: "Digital cards by Tryethos" });
     await bring(page, '[data-testid="keep-gift"]', "end");
+    // Once the end is in view, the end screen carries the only badge.
+    await expect(page.getByRole("link", { name: /Made with Ethos/ })).toHaveCount(1);
     await expect(badge).toContainText("Made with Ethos");
     await expect(badge).toContainText("Digital cards by Tryethos");
     await expect(badge).toHaveAttribute("href", "/made-with-ethos?ref=watermark&template=the-letter");
