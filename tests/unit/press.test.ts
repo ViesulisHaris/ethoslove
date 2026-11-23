@@ -1,0 +1,105 @@
+import { describe, expect, it } from "vitest";
+import { PRESS_NUMBERS } from "@/content/press-numbers";
+import { PRESS_SAMPLE } from "@/content/press-sample";
+import { PRESS_COUNTS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
+
+/** The sample with some keys changed: a whole snapshot to break one thing at a time. */
+const whole = (over: Partial<PressNumbers> = {}): PressNumbers => ({ ...PRESS_SAMPLE, ...over });
+const TODAY = "2026-12-01";
+const byId = (n: PressNumbers, locale: "en" | "es") => Object.fromEntries(pressFigures(n, locale).map((f) => [f.id, f.value]));
+
+describe("press figures: the gate", () => {
+  it("G1 the committed snapshot is either off, or whole", () => {
+    if (PRESS_NUMBERS.ready) expect(pressProblems(PRESS_NUMBERS)).toEqual([]);
+    expect(pressLive(PRESS_NUMBERS)).toBe(PRESS_NUMBERS.ready && pressProblems(PRESS_NUMBERS).length === 0);
+  });
+
+  it("G2 a snapshot switched on with any figure at 0 is refused, and says which", () => {
+    for (const key of PRESS_COUNTS) {
+      const n = whole({ [key]: 0 });
+      expect(pressProblems(n, TODAY).some((p) => p.startsWith(`${key}:`)), key).toBe(true);
+      expect(pressLive(n, TODAY), key).toBe(false);
+    }
+    const zeroTemplate = whole({ topTemplates: PRESS_SAMPLE.topTemplates.map((t, i) => (i === 4 ? { ...t, made: 0 } : t)) });
+    expect(pressProblems(zeroTemplate, TODAY).some((p) => p.startsWith("topTemplates:"))).toBe(true);
+    expect(pressProblems(whole({ countries: 0 }), TODAY).some((p) => p.startsWith("countries:"))).toBe(true);
+    expect(pressProblems(whole({ reminders: { total: 0, birthday: 0, anniversary: 0, valentines: 0 } }), TODAY).some((p) => p.startsWith("reminders:"))).toBe(true);
+    expect(pressProblems({ ...PRESS_NUMBERS, ready: true }, TODAY).length).toBeGreaterThanOrEqual(7);
+    expect(pressLive({ ...PRESS_NUMBERS, ready: true }, TODAY)).toBe(false);
+  });
+
+  it("G3 figures that contradict each other are refused", () => {
+    const t = PRESS_SAMPLE.topTemplates;
+    const cases: Record<string, PressNumbers> = {
+      "opened above made": whole({ cardsOpened: PRESS_SAMPLE.cardsMade + 1 }),
+      "opens below opened": whole({ opens: PRESS_SAMPLE.cardsOpened - 1, deviceOpens: PRESS_SAMPLE.cardsOpened - 1, phoneOpens: 100 }),
+      "again above opened": whole({ openedAgain: PRESS_SAMPLE.cardsOpened + 1 }),
+      "phone above device": whole({ phoneOpens: PRESS_SAMPLE.deviceOpens + 1 }),
+      "device above opens": whole({ deviceOpens: PRESS_SAMPLE.opens + 1 }),
+      "four templates": whole({ topTemplates: t.slice(0, 4) }),
+      "six templates": whole({ topTemplates: [...t, { slug: "polaroid-wall", made: 10 }] }),
+      "no such template": whole({ topTemplates: [...t.slice(0, 4), { slug: "nope", made: 10 }] }),
+      "a slug twice": whole({ topTemplates: [...t.slice(0, 4), { slug: t[0]!.slug, made: 10 }] }),
+      "out of order": whole({ topTemplates: [t[0]!, { ...t[1]!, made: t[0]!.made + 1 }, ...t.slice(2)] }),
+      "more than made": whole({ topTemplates: t.map((x, i) => ({ ...x, made: 5000 - i })) }),
+      "a count of 1.5": whole({ openedAgain: 1.5 }),
+      "300 countries": whole({ countries: 300 }),
+      "reminders above total": whole({ reminders: { total: 100, birthday: 50, anniversary: 40, valentines: 20 } }),
+    };
+    for (const [name, n] of Object.entries(cases)) expect(pressProblems(n, TODAY), name).not.toEqual([]);
+  });
+
+  it("G4 a date that is not a day, is ahead of today, or is before the query existed is refused", () => {
+    for (const asOf of ["2026-02-30", "20 Nov", ""]) expect(pressProblems(whole({ asOf }), TODAY).some((p) => p.startsWith("asOf:")), asOf).toBe(true);
+    expect(pressProblems(whole({ asOf: "2026-12-02" }), TODAY).some((p) => p.startsWith("asOf:"))).toBe(true);
+    expect(pressProblems(whole({ asOf: "2026-10-31" }), TODAY).some((p) => p.startsWith("asOf:"))).toBe(true);
+    expect(pressProblems(whole({ asOf: "2026-12-01" }), TODAY)).toEqual([]);
+  });
+
+  it("G5 the sample used for pictures is whole, and is not what is committed", () => {
+    expect(pressProblems(PRESS_SAMPLE, TODAY)).toEqual([]);
+    expect(PRESS_NUMBERS).not.toEqual(PRESS_SAMPLE);
+    expect(PRESS_NUMBERS.cardsMade).not.toBe(PRESS_SAMPLE.cardsMade);
+  });
+});
+
+describe("press figures: how they are written", () => {
+  it("F1 every figure is rounded down, never up", () => {
+    expect(byId(PRESS_SAMPLE, "en")).toMatchObject({ cardsMade: "21,000+", cardsOpened: "15,000+", opensEach: "3.2", openedAgain: "61%", onPhone: "88%" });
+    expect(byId(whole({ cardsMade: 21000 }), "en").cardsMade).toBe("21,000");
+    expect(byId(whole({ opens: 63719, deviceOpens: 63719, phoneOpens: 46120 }), "en").opensEach).toBe("3.9");
+  });
+
+  it("F2 in Spanish the same figures are written the Spanish way", () => {
+    const es = byId(PRESS_SAMPLE, "es");
+    expect(es.cardsMade).toBe("21.000+");
+    expect(es.opensEach).toBe("3,2");
+    expect(es.openedAgain).toMatch(/^61\s?%$/);
+    expect(pressDate("2026-11-20", "es")).toBe("20 de noviembre de 2026");
+    expect(pressDate("2026-11-20", "en")).toBe("20 November 2026");
+  });
+
+  it("F3 a figure the snapshot lacks is left out, not shown as nothing", () => {
+    const all = pressFigures(PRESS_SAMPLE, "en");
+    expect(all.map((f) => f.id)).toEqual(["cardsMade", "cardsOpened", "opensEach", "openedAgain", "onPhone", "countries", "reminder"]);
+    expect(all.at(-1)).toEqual({ id: "reminder", value: "48%", occasion: "birthday" });
+    expect(pressFigures(whole({ countries: null }), "en").map((f) => f.id)).not.toContain("countries");
+    expect(pressFigures(whole({ reminders: null }), "en").map((f) => f.id)).not.toContain("reminder");
+    expect(pressFigures(whole({ reminders: { total: 99, birthday: 48, anniversary: 34, valentines: 7 } }), "en").map((f) => f.id)).not.toContain("reminder");
+    const reminder = (r: NonNullable<PressNumbers["reminders"]>) => pressFigures(whole({ reminders: r }), "en").find((f) => f.id === "reminder");
+    expect(reminder({ total: 840, birthday: 290, anniversary: 410, valentines: 60 })).toMatchObject({ occasion: "anniversary" });
+    expect(reminder({ total: 840, birthday: 300, anniversary: 300, valentines: 60 })).toMatchObject({ occasion: "birthday" });
+    // "other" (the rest of the total) is never named, however large.
+    expect(reminder({ total: 840, birthday: 10, anniversary: 5, valentines: 1 })).toMatchObject({ occasion: "birthday" });
+  });
+
+  it("F4 the five templates come out in the snapshot's order, each with its share of all cards", () => {
+    expect(pressTemplates(PRESS_SAMPLE, "en")).toEqual([
+      { slug: "the-letter", share: "32%" },
+      { slug: "bouquet", share: "11%" },
+      { slug: "jar-of-reasons", share: "8%" },
+      { slug: "scratch-card", share: "6%" },
+      { slug: "constellations", share: "5%" },
+    ]);
+  });
+});
