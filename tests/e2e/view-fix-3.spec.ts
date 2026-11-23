@@ -48,3 +48,29 @@ test.describe("rooms-1: Back from a Dates search leaves no search on another pag
     expect(new URL(page.url()).search).toBe("");
   });
 });
+
+test.describe("rooms-3: a city page's hero at 1440", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+  test("its flowers lie whole inside it, and its ground fades into the page's", async ({ page }) => {
+    for (const path of ["/dates/london", "/es/dates/lisbon", "/dates/new-york"]) {
+      await page.goto(path);
+      const hero = page.locator("main section").first();
+      const frame = hero.locator("[data-floral-frame]");
+      await expect(frame).toHaveAttribute("data-floral-frame", "bandHero");
+      const out = await frame.evaluate((box) => {
+        const band = box.getBoundingClientRect();
+        return [...box.querySelectorAll("img")]
+          .map((img) => ({ r: img.getBoundingClientRect(), shown: getComputedStyle(img).display !== "none" }))
+          .filter(({ r, shown }) => shown && r.left < band.left + band.width / 2 && r.bottom > band.bottom + 1)
+          .map(({ r }) => Math.round(r.bottom - band.bottom));
+      });
+      expect(out, path).toEqual([]);
+      const gap = await hero.evaluate((section) => {
+        const fade = section.querySelector("[data-hero-fade]");
+        return fade ? Math.abs(section.getBoundingClientRect().bottom - fade.getBoundingClientRect().bottom) : null;
+      });
+      expect(gap, path).not.toBeNull();
+      expect(gap!, path).toBeLessThanOrEqual(1);
+    }
+  });
+});

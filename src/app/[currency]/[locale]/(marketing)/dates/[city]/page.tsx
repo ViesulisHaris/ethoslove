@@ -99,7 +99,10 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
       />
 
       <section className="relative isolate -mt-[var(--header-h)] bg-blush-paper pt-[var(--header-h)] text-forest">
-        <FloralFrame frame="band" ground="light" />
+        {/* As on a trip's page: the pieces at the foot lie whole inside the hero, and its ground runs
+            softly into the page's paper below instead of stepping (walk-rooms-3). */}
+        <FloralFrame frame="bandHero" ground="light" />
+        <div aria-hidden="true" data-hero-fade className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-paper" />
         <div className="relative container-x pt-6 pb-14 sm:pt-10 lg:pb-20">
           <Link href="/dates" className="group -ml-2 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
             <ArrowLeft aria-hidden="true" className="size-4 transition-transform group-hover:-translate-x-0.5" />
