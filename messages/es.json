@@ -2220,7 +2220,7 @@
       },
       "games": {
         "title": "Juegos",
-        "blurb": "Siete juegos de cartas para dos: en un móvil en el sofá o en dos móviles a un continente de distancia.",
+        "blurb": "Ocho juegos de cartas para dos: en un móvil en el sofá o en dos móviles a un continente de distancia.",
         "cta": "Jugar"
       }
     },
@@ -2242,7 +2242,7 @@
       "cityB": "Londres"
     },
     "games": {
-      "eyebrow": "Juegos · siete para jugar ya",
+      "eyebrow": "Juegos · ocho para jugar ya",
       "title": "Jugaos quién friega los platos.",
       "blurb": "Juegos de cartas para dos personas que se gustan: adivinad las respuestas del otro, encontrad las parejas, girad la ruleta de los platos. Sin descargas ni cuentas.",
       "cta": "Reparte"
@@ -2460,8 +2460,8 @@
   },
   "games": {
     "meta": {
-      "title": "Juegos para parejas online: siete juegos gratis para dos",
-      "description": "Juegos para parejas online y gratis: ¿Cuánto me conoces?, ¿Qué prefieres?, verdad o reto, cartas de preguntas, Memory con vuestras fotos y más. Sin descargas."
+      "title": "Juegos para parejas online: ocho juegos gratis para dos",
+      "description": "Juegos para parejas online y gratis: ¿Qué prefieres?, Esto o aquello, ¿Cuánto me conoces?, verdad o reto, Memory con vuestras fotos y más. Sin descargas."
     },
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
@@ -2638,6 +2638,28 @@
         "faq": "Preguntas"
       }
     },
+    "thisthat": {
+      "title": "¿Esto o aquello?",
+      "blurb": "Diez parejas rápidas. Elegís en secreto y luego veis en cuántas coincidís. En un móvil o en dos.",
+      "prompt": "¿Esto o aquello?",
+      "sofar": "Coincidís en {same} de {total} por ahora",
+      "reveal": {
+        "match": "Lo mismo.",
+        "clash": "Cada cual lo suyo."
+      },
+      "end": {
+        "eyebrow": "Diez parejas después",
+        "twins": "Podríais pedir por la otra persona sin preguntar.",
+        "balanced": "Lo justo en común y lo justo para discutir.",
+        "opposites": "Polos opuestos. Alguien tiene que darle interés.",
+        "sub": "Habéis coincidido en {same} de {total}. Preguntad por las demás.",
+        "again": "Jugar otra vez"
+      },
+      "seoTitle": "Preguntas de esto o aquello para parejas: 120 para jugar",
+      "seoDescription": "120 preguntas de esto o aquello para parejas: elegís en secreto en uno o dos móviles y veis en cuántas coincidís. Gratis, sin app y sin registro.",
+      "listTitle": "{count} preguntas de esto o aquello para parejas",
+      "listIntro": "Todas las parejas del juego, para jugarlas arriba o leerlas en voz alta. Contad hasta tres y responded a la vez."
+    },
     "roulette": {
       "title": "La ruleta de los platos",
       "blurb": "Una ruleta con vuestros nombres. Cada giro decide una tarea. Lo que diga la ruleta va a misa.",
@@ -2688,7 +2710,7 @@
     },
     "hub": {
       "eyebrow": "Noche de juegos para dos",
-      "sub": "Siete juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
+      "sub": "Ocho juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
       "one": "Pasaos un móvil",
       "two": "O dos móviles, un enlace",
       "deal": "Reparte",

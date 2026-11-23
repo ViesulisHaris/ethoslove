@@ -11,6 +11,7 @@ import { TOGETHER_PATH } from "@/content/together-guide";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { CITY_SLUGS } from "@/lib/cities/cities";
+import { GAMES } from "@/lib/games/catalogue";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
 import { getManifest, listManifests } from "@/templates/manifests";
@@ -54,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: LOVE_QUIZ_PATH, priority: 0.8, changeFrequency: "monthly" },
     { path: "/games", priority: 0.7, changeFrequency: "monthly" },
     { path: "/games/today", priority: 0.7, changeFrequency: "daily" },
-    ...["know", "rather", "draw", "memory", "deck", "dare", "roulette"].map((g): Page => ({ path: `/games/${g}`, priority: 0.6, changeFrequency: "monthly" })),
+    ...GAMES.map((g): Page => ({ path: g.href, priority: 0.6, changeFrequency: "monthly" })),
     { path: "/templates", priority: 0.9, changeFrequency: "weekly" },
     { path: "/occasions", priority: 0.8, changeFrequency: "monthly" },
     { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },

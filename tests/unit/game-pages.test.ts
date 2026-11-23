@@ -8,6 +8,8 @@ import { MEMORY_PAIRS } from "@/lib/games/memory";
 import { KNOW_ROUNDS, RATHER_ROUNDS } from "@/lib/games/play";
 import { DECK_ROUND } from "@/lib/games/questions";
 import { PACK_IDS, PACKS } from "@/lib/games/packs";
+import { PICKS_ROUNDS } from "@/lib/games/picks";
+import { THIS_PAIRS } from "@/lib/games/this-or-that";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { fillerIn } from "./filler";
@@ -30,7 +32,7 @@ describe("what every game's page says", () => {
   });
 
   it("G2: the three pages that said nothing say how to play, in three or four lines, the same count in both languages", () => {
-    for (const key of ["draw", "memory", "roulette"] as const) {
+    for (const key of ["draw", "memory", "roulette", "thisthat"] as const) {
       const how = GAME_PAGES[key].how!;
       expect(how.en.length, key).toBeGreaterThanOrEqual(3);
       expect(how.en.length, key).toBeLessThanOrEqual(4);
@@ -49,6 +51,7 @@ describe("what every game's page says", () => {
       deck: [DECK_ROUND],
       dare: [DARE_ROUND, TRUTHS.length, DARES.length],
       roulette: [CHORES.length],
+      thisthat: [PICKS_ROUNDS, THIS_PAIRS.length],
     };
     expect(TRUTHS.length).toBe(DARES.length);
     for (const g of GAMES)
@@ -63,6 +66,7 @@ describe("what every game's page says", () => {
     expect(numbers(text("memory", "en"))).toEqual(expect.arrayContaining([MEMORY_PAIRS, MEMORY_PAIRS * 2]));
     expect(numbers(text("dare", "es"))).toEqual(expect.arrayContaining([DARE_ROUND, TRUTHS.length]));
     expect(numbers(text("roulette", "es"))).toEqual(expect.arrayContaining([CHORES.length]));
+    expect(numbers(text("thisthat", "en"))).toEqual(expect.arrayContaining([PICKS_ROUNDS, THIS_PAIRS.length]));
   });
 
   it("G4: the roulette's chores are the wheel's own, all of them", () => {
@@ -125,6 +129,22 @@ describe("what every game's page says", () => {
       expect(DARES.some((d) => dare.test(d.en)), dare.source).toBe(true);
     }
     expect(GAME_PAGES.dare.faq[1].a.en).toContain("both piles run out");
+  });
+
+  it("G10: This or that's page is titled on the searched phrase and fits a search result, and the hub counts it", () => {
+    expect(en.games.thisthat.seoTitle.startsWith("This or That Questions for Couples")).toBe(true);
+    for (const m of [en, es]) {
+      expect(m.games.thisthat.seoTitle.length).toBeLessThanOrEqual(60);
+      expect(m.games.thisthat.seoDescription.length).toBeLessThanOrEqual(160);
+      expect(m.games.meta.description.length).toBeLessThanOrEqual(160);
+    }
+    // The hub says how many games there are, in words, and nothing says seven any more.
+    const word = { en: ["seven", "eight", "nine"][GAMES.length - 7], es: ["siete", "ocho", "nueve"][GAMES.length - 7] };
+    expect(en.games.meta.title.toLowerCase()).toContain(word.en);
+    expect(en.games.hub.sub.toLowerCase()).toContain(word.en);
+    expect(es.games.meta.title.toLowerCase()).toContain(word.es);
+    expect(es.games.hub.sub.toLowerCase()).toContain(word.es);
+    for (const m of [en, es]) expect(JSON.stringify({ games: m.games, platform: m.platform })).not.toMatch(/\b(seven|siete)\b/i);
   });
 
   it("G7: nothing names a place in Spain", () => {

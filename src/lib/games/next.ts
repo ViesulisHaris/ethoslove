@@ -5,8 +5,9 @@ import { GAMES, type GameInfo, type GameKey } from "./catalogue";
  * one or two), then one that is played the other way. Every game is somebody's next game.
  */
 export const NEXT_GAMES: Record<GameKey, readonly [GameKey, GameKey]> = {
-  know: ["rather", "deck"],
+  know: ["thisthat", "deck"],
   rather: ["know", "dare"],
+  thisthat: ["rather", "deck"],
   draw: ["know", "memory"],
   memory: ["roulette", "draw"],
   deck: ["dare", "know"],

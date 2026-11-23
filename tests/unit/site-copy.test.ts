@@ -8,6 +8,7 @@ import { RECIPIENT_GUIDES } from "@/content/recipients";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "@/lib/games/content";
+import { THIS_PAIRS } from "@/lib/games/this-or-that";
 import { PACK_CARDS } from "@/lib/games/pack-cards";
 import { DECKS } from "@/lib/games/questions";
 import { listManifests } from "@/templates/manifests";
@@ -41,7 +42,7 @@ const SOURCES: Record<string, unknown> = {
   "template guides": TEMPLATE_GUIDES,
   "days-together counter": TOGETHER_GUIDE,
   "love language quiz": { LOVE_QUIZ, LOVE_QUIZ_QUESTIONS },
-  games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS },
+  games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS, THIS_PAIRS },
   "game packs": PACK_CARDS,
   "game pages": GAME_PAGES,
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),

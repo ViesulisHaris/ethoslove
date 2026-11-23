@@ -9,7 +9,7 @@ describe("the end of a game names the next two", () => {
       expect(a).not.toBe(g.key);
       expect(b).not.toBe(g.key);
       expect(a).not.toBe(b);
-      expect(nextGames(g.key).map((n) => n.href)).toEqual([`/games/${a}`, `/games/${b}`]);
+      expect(nextGames(g.key).map((n) => n.key)).toEqual([a, b]);
     }
   });
 

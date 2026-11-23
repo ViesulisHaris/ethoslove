@@ -60,8 +60,8 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "How long is a game?", es: "¿Cuánto dura una partida?" },
         a: {
-          en: "10 pairs, dealt from the 150 below. You both pick in secret, then see whether you agree. About five minutes.",
-          es: "10 dilemas, sacados de los 150 de abajo. Elegís en secreto y luego veis si coincidís. Unos cinco minutos.",
+          en: "10 pairs, dealt from the 150 in the list above. You both pick in secret, then see whether you agree. About five minutes.",
+          es: "10 dilemas, sacados de los 150 de la lista de arriba. Elegís en secreto y luego veis si coincidís. Unos cinco minutos.",
         },
       },
       twoPhones("On one phone, the phone is handed over between the two picks.", "En un móvil, os lo pasáis entre una elección y la otra."),
@@ -108,8 +108,8 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "How long is a game?", es: "¿Cuánto dura una partida?" },
         a: {
-          en: "6 words, picked from the 40 below. About ten minutes, longer if one of you is a perfectionist.",
-          es: "6 palabras, sacadas de las 40 de abajo. Unos diez minutos, más si alguien es perfeccionista.",
+          en: "6 words, picked from the 40 in the list above. About ten minutes, longer if one of you is a perfectionist.",
+          es: "6 palabras, sacadas de las 40 de la lista de arriba. Unos diez minutos, más si alguien es perfeccionista.",
         },
       },
     ],
@@ -193,8 +193,8 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "How long is a game?", es: "¿Cuánto dura una partida?" },
         a: {
-          en: "12 truths and 12 dares, drawn fresh from the 50 of each below. It ends when both piles run out, or when you say you're done for the night.",
-          es: "12 verdades y 12 retos, sacados cada vez de los 50 de cada tipo de abajo. Termina cuando se acaban los dos montones o cuando decís que ya está por esta noche.",
+          en: "12 truths and 12 dares, drawn fresh from the 50 of each in the list above. It ends when both piles run out, or when you say you're done for the night.",
+          es: "12 verdades y 12 retos, sacados cada vez de los 50 de cada tipo de la lista de arriba. Termina cuando se acaban los dos montones o cuando decís que ya está por esta noche.",
         },
       },
       {
@@ -240,6 +240,25 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       SAVED,
     ],
     posts: ["quality-time-love-language"],
+  },
+  // Read from lib/games/picks.ts (PICKS_ROUNDS, picksMatches), lib/games/this-or-that.ts and components/games/picks-game.tsx.
+  thisthat: {
+    how: {
+      en: ["10 pairs are dealt from the 120 in the list above.", "You both pick a side in secret: pass one phone across, or play from two.", "Both picks turn over together, and the game counts how many you matched."],
+      es: ["Se reparten 10 parejas de las 120 de la lista de arriba.", "Elegís en secreto: os pasáis un móvil o jugáis con dos.", "Las dos elecciones se destapan a la vez y el juego cuenta las coincidencias."],
+    },
+    faq: [
+      {
+        q: { en: "Is it the same as would you rather?", es: "¿Es lo mismo que el juego de qué prefieres?" },
+        a: {
+          en: "It is faster. Each side is a few words, so a round takes seconds; would you rather gives you two whole situations to weigh.",
+          es: "Es más rápido. Cada opción son pocas palabras y una ronda dura segundos; en el otro juego hay dos situaciones enteras que sopesar.",
+        },
+      },
+      twoPhones("Each picks on their own screen, and both picks turn over on both.", "Cada cual elige en su pantalla y las dos elecciones se destapan en las dos."),
+      SAVED,
+    ],
+    posts: ["questions-for-couples"],
   },
 };
 

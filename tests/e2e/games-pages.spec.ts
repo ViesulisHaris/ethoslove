@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { GAMES } from "../../src/lib/games/catalogue";
+import { THIS_PAIRS } from "../../src/lib/games/this-or-that";
 
 /**
  * The games' pages beyond the game itself: the end of a game names the next two (lib/games/next.ts)
@@ -104,11 +105,10 @@ test("E4: in Spanish the next games are named in Spanish and keep /es", async ({
   await expect(end).toContainText("O jugad a otro");
 });
 
-const SEVEN = ["know", "rather", "draw", "memory", "deck", "dare", "roulette"] as const;
-
 test("E5: every game's page answers its questions, closed, and gives them to search engines", async ({ page }) => {
-  for (const g of SEVEN) {
-    await page.goto(`/games/${g}`);
+  test.setTimeout(120_000);
+  for (const { key: g, href } of GAMES) {
+    await page.goto(href);
     const notes = page.locator(`section[aria-labelledby="${g}-notes"]`);
     const details = notes.locator("details");
     expect(await details.count(), g).toBeGreaterThanOrEqual(2);
@@ -177,6 +177,37 @@ for (const [country, price] of [
     });
   });
 }
+
+test("E12: This or that, a whole game on one phone, and its page", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await counter(page);
+  await startOnePhone(page, "/games/this-or-that");
+  await expect(page.getByRole("heading", { name: "This or that?" })).toBeVisible();
+  await playRather(page);
+  await expect(page.getByText("You matched on 0 of 10.")).toBeVisible();
+  const end = page.getByRole("navigation", { name: "What next" });
+  await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/games/rather");
+  await expect(end.locator("[data-next-game]").nth(1)).toHaveAttribute("href", "/games/deck");
+  expect(await events(page)).toEqual(['game_started:{"game":"thisthat","phones":1}', 'game_finished:{"game":"thisthat","phones":1}']);
+  await expect(page).toHaveTitle(/^This or That Questions for Couples/);
+  const list = page.locator("#thisthat-questions").locator("xpath=ancestor::section").locator("ol li");
+  await expect(list).toHaveCount(THIS_PAIRS.length);
+  await expect(list.first()).toHaveText(/ or .+\?$/);
+  await expect(page.getByRole("heading", { name: "How to play" })).toBeVisible();
+
+  await page.goto("/es/games/this-or-that");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("¿Esto o aquello?");
+  await expect(page).toHaveTitle(/^Preguntas de esto o aquello para parejas/);
+});
+
+test("E13: the hub deals every game, the hand on top stays seven", async ({ page }) => {
+  await page.goto("/games");
+  await expect(page.locator("#pick > ul > li")).toHaveCount(GAMES.length + 1);
+  for (const g of GAMES) await expect(page.locator(`#pick a[href="${g.href}"]`), g.key).toHaveCount(1);
+  await expect(page.getByRole("list", { name: "Pick a game" }).getByRole("link")).toHaveCount(7);
+  await expect(page).toHaveTitle(/Eight Free Games/);
+});
 
 test("E10: inside the iPhone app the end of a game offers the app's own list, not a web link it cannot follow", async ({ page }) => {
   await page.addInitScript(() => {

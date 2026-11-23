@@ -4,7 +4,7 @@ import { etagMatches } from "@/lib/app/http";
 import { APP_STORE_PRODUCTS, appStoreProduct } from "@/lib/commerce/app-store-products";
 import { IDEAS } from "@/lib/dates/ideas";
 import { KIND_IDS } from "@/lib/dates/kinds";
-import { GAMES } from "@/lib/games/catalogue";
+import { HAND_GAMES } from "@/lib/games/catalogue";
 import { PACK_IDS } from "@/lib/games/packs";
 import { TRIPS } from "@/lib/trips/presets";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
@@ -94,7 +94,8 @@ describe("the app catalogue", () => {
   });
 
   it("has every game, in both languages, and every pack without its cards", () => {
-    expect(catalog.games.map((g) => g.key)).toEqual(GAMES.map((g) => g.key));
+    expect(catalog.games.map((g) => g.key)).toEqual(HAND_GAMES.map((g) => g.key));
+    expect(catalog.games).toHaveLength(7);
     for (const game of catalog.games) {
       expect(bothLanguages(game.title) && bothLanguages(game.blurb), game.key).toBe(true);
       expect(game.path).toBe(`/games/${game.key}`);

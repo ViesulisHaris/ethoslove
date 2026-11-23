@@ -1,5 +1,6 @@
 import type { DrawState } from "./draw";
 import type { MemoryState } from "./memory";
+import type { PicksGame, PicksState } from "./picks";
 import type { KnowState, Player, RatherState } from "./play";
 import { parseRoomCode, type Entry, type Mode, type Session } from "./room";
 import type { HostBook } from "./sync";
@@ -131,6 +132,13 @@ export function reviveRather(raw: unknown): RatherState | null {
   const state = turns(raw, "rather");
   return state && twoRecords(state.picks) ? (state as unknown as RatherState) : null;
 }
+
+export const revivePicks =
+  (game: PicksGame) =>
+  (raw: unknown): PicksState | null => {
+    const state = turns(raw, game);
+    return state && twoRecords(state.picks) ? (state as unknown as PicksState) : null;
+  };
 
 export function reviveDraw(raw: unknown): DrawState | null {
   const state = turns(raw, "draw");

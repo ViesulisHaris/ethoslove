@@ -2220,7 +2220,7 @@
       },
       "games": {
         "title": "Games",
-        "blurb": "Seven card games for two: on one phone on the sofa, or on two phones a continent apart.",
+        "blurb": "Eight card games for two: on one phone on the sofa, or on two phones a continent apart.",
         "cta": "Play a game"
       }
     },
@@ -2242,7 +2242,7 @@
       "cityB": "London"
     },
     "games": {
-      "eyebrow": "Games · seven to play now",
+      "eyebrow": "Games · eight to play now",
       "title": "Play for who does the dishes.",
       "blurb": "Card games made for two people who like each other: guess each other's answers, find the pairs, spin for the dishes. No downloads, no accounts.",
       "cta": "Deal me in"
@@ -2460,8 +2460,8 @@
   },
   "games": {
     "meta": {
-      "title": "Couple Games Online: Seven Free Games for Two",
-      "description": "Couple games to play online, free: How well do you know me, Would you rather, truth or dare, question cards, Memory with your photos and more. No downloads."
+      "title": "Couple Games Online: Eight Free Games for Two",
+      "description": "Couple games to play online, free: Would you rather, This or that, How well do you know me, truth or dare, Memory with your photos and more. No downloads."
     },
     "h1a": "Couple games for",
     "h1b": "exactly two.",
@@ -2638,6 +2638,28 @@
         "faq": "Questions"
       }
     },
+    "thisthat": {
+      "title": "This or that?",
+      "blurb": "Ten quick pairs. You both pick in secret, then see how many you matched. Play on one phone, or from two.",
+      "prompt": "This or that?",
+      "sofar": "Matched {same} of {total} so far",
+      "reveal": {
+        "match": "Same pick.",
+        "clash": "One each."
+      },
+      "end": {
+        "eyebrow": "Ten pairs later",
+        "twins": "You could order for each other.",
+        "balanced": "Enough in common, enough to argue about.",
+        "opposites": "Opposites. Somebody has to keep it interesting.",
+        "sub": "You matched on {same} of {total}. Ask about the ones you didn't.",
+        "again": "Play again"
+      },
+      "seoTitle": "This or That Questions for Couples: 120 to Play Now",
+      "seoDescription": "120 this or that questions for couples, written for two: pick in secret on one phone or two, then see how many you match. Free, no app, no sign-up.",
+      "listTitle": "{count} this or that questions for couples",
+      "listIntro": "Every pair in the game, to play above or read out across a table. Count to three and answer at the same time."
+    },
     "roulette": {
       "title": "Dishes roulette",
       "blurb": "A wheel of the two of you. Every spin settles one chore. The wheel's word is final.",
@@ -2688,7 +2710,7 @@
     },
     "hub": {
       "eyebrow": "Game night for two",
-      "sub": "Seven little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
+      "sub": "Eight little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
       "one": "Pass one phone",
       "two": "Or two phones, one link",
       "deal": "Deal me in",
