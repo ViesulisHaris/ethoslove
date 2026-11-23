@@ -318,5 +318,7 @@ describe("where the cards live", () => {
       return /^import\s+(?!type\s)[^;]*from\s+["'](@\/lib\/games\/pack-cards|\.\/pack-cards)["']/m.test(source);
     });
     expect(offenders).toEqual([]);
-  });
+    // It reads every file under src: alone it takes a moment, beside the whole suite on four workers
+    // it ran past the five-second default.
+  }, 30_000);
 });

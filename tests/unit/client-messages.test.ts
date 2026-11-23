@@ -42,7 +42,10 @@ describe("cutting the catalogue down", () => {
  * the way the bundler would, collects what every component on the way reads, and checks that the
  * providers above it send it.
  */
-describe("every route sends what its client components read", () => {
+// Each test here reads every route's whole tree of imports: four seconds alone on a quiet machine,
+// and past the usual five when the whole suite runs four files at once. The time is set on the block,
+// not on a test, so a test added at its end does not meet this line at a merge.
+describe("every route sends what its client components read", { timeout: 30_000 }, () => {
   const ROOT = fileURLToPath(new URL("../..", import.meta.url));
   const SRC = path.join(ROOT, "src");
   const APP = path.join(SRC, "app", "[currency]", "[locale]");
@@ -156,7 +159,5 @@ describe("every route sends what its client components read", () => {
       }
     }
     expect([...new Set(missing)]).toEqual([]);
-    // It reads every route's whole tree of imports: four seconds alone on a quiet machine, and past
-    // the usual five when the whole suite runs four files at once.
-  }, 30_000);
+  });
 });

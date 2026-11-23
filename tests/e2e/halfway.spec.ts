@@ -362,7 +362,9 @@ test.describe("Halfway: the editor", () => {
         }),
       );
     }, PLACES);
-    await page.goto("/create/halfway");
+    // "Send one back" always opens the editor as a reply (replyEditorHref adds ?ref=reply), and only
+    // an editor opened that way takes the swapped seed.
+    await page.goto("/create/halfway?ref=reply");
     await expect(placeSearch(page, "Your town or city")).toHaveValue("Boston", { timeout: 30_000 });
     await expect(placeSearch(page, "Their town or city")).toHaveValue("Lisbon");
     await expect(page.getByLabel("Their name")).toHaveValue("Iván");
