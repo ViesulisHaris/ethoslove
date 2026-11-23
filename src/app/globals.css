@@ -1521,6 +1521,16 @@ body:has([data-page-theme]) .site-header .btn-rose {
   }
 }
 
+/* /plan before its app has loaded (dates/plan-view.tsx): the loading card, or, when the page's first  */
+/* script found no plan anywhere, the empty state the HTML also carries.                               */
+[data-plan-early],
+[data-plan-none] [data-plan-wait] {
+  display: none;
+}
+[data-plan-none] [data-plan-early] {
+  display: block;
+}
+
 /* The phone's "Make a gift" bar (marketing/sticky-cta.tsx): slides up once the hero has scrolled away. */
 .sticky-cta {
   transition:

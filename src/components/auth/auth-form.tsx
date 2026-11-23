@@ -3,7 +3,6 @@
 import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { Mail, MailCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SUPABASE_CONFIGURED } from "@/lib/supabase/configured";
 import { checkEmail } from "@/lib/auth/email-check";
@@ -31,6 +30,17 @@ function callbackFor(next: string): string {
 
 const noStore = () => () => {};
 
+/**
+ * The address's query, read once the page is running. Not `useSearchParams`: on the statically built
+ * /login it made the whole form render only in the browser, so its HTML held nothing and a slow
+ * phone drew the form four seconds in. `next` and the callback's error are only ever needed after
+ * that anyway: on a press, and in a line under the form.
+ */
+function useQuery(): URLSearchParams {
+  const search = useSyncExternalStore(noStore, () => window.location.search, () => "");
+  return new URLSearchParams(search);
+}
+
 /** `bare` (with compact): no title or blurb of its own, for a card that already has both (the publish sheet). */
 export function AuthForm({
   mode,
@@ -47,7 +57,7 @@ export function AuthForm({
 }) {
   const t = useTranslations("auth");
   const locale = useLocale();
-  const search = useSearchParams();
+  const search = useQuery();
   const next = safeNext(nextOverride ?? search.get("next"));
   const callbackError = search.get("error") === "callback";
 

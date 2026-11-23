@@ -40,6 +40,15 @@ import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 
 const noop = () => () => undefined;
+
+/**
+ * Runs in the page's HTML, before anything is drawn: with no plan in the link and none kept in this
+ * browser the page will open on its empty state, so <html> is marked and the empty state the HTML
+ * also carries is shown instead of the loading card (globals.css, [data-plan-none]). It was drawn
+ * only once the app had loaded: five seconds on a slow phone, for a page that says one sentence.
+ * The same key as use-plan.ts; any doubt (a plan it cannot read) leaves the loading card.
+ */
+const PLAN_NONE_SCRIPT = `try{var h=location.hash;if(h.indexOf("#p=")!==0&&h.indexOf("#s=")!==0){var r=localStorage.getItem("ethos.dates.plan.v1"),n=r===null;if(!n){var o=JSON.parse(r);n=!!o&&Array.isArray(o.stops)&&o.stops.length===0}if(n)document.documentElement.setAttribute("data-plan-none","")}}catch(e){}`;
 const subscribeHash = (onChange: () => void) => {
   window.addEventListener("hashchange", onChange);
   return () => window.removeEventListener("hashchange", onChange);
@@ -203,12 +212,29 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     </>
   );
 
+  const emptyState = (early: boolean) => (
+    <section data-plan-early={early ? "" : undefined} className="container-narrow py-16 text-center sm:py-24">
+      <Cutout id="envelope-ps" className="mx-auto w-24 -rotate-6 drop-shadow-[0_14px_24px_rgba(120,50,70,0.25)]" />
+      <h1 className="mt-6 display-xl text-forest">{broken ? t("broken.title") : t("empty.title")}</h1>
+      <p className="mx-auto mt-4 max-w-md text-[17px] leading-relaxed text-forest/70">{broken ? t("broken.sub") : t("empty.sub")}</p>
+      <Link href="/dates" className="mt-8 inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(42,15,31,0.7)] transition-transform hover:-translate-y-0.5">
+        {t("empty.cta")}
+        <ArrowRight aria-hidden="true" className="size-4" />
+      </Link>
+    </section>
+  );
+
   if (!isClient || opened.state === "opening")
     return (
-      <div className="container-narrow py-16" aria-busy="true">
-        {opened.state === "opening" ? <p className="mb-4 text-center text-[15px] text-forest/65">{ts("open.loading")}</p> : null}
-        <div aria-hidden="true" className="h-[520px] animate-pulse rounded-[32px] bg-white/70" />
-      </div>
+      <>
+        {/* Server's HTML (and the hydration that matches it) only: see PLAN_NONE_SCRIPT. */}
+        {!isClient ? <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: PLAN_NONE_SCRIPT }} /> : null}
+        <div data-plan-wait className="container-narrow py-16" aria-busy="true">
+          {opened.state === "opening" ? <p className="mb-4 text-center text-[15px] text-forest/65">{ts("open.loading")}</p> : null}
+          <div aria-hidden="true" className="h-[520px] animate-pulse rounded-[32px] bg-white/70" />
+        </div>
+        {!isClient ? emptyState(true) : null}
+      </>
     );
 
   if (opened.state === "notFound" || opened.state === "failed" || opened.state === "signIn") {
@@ -235,19 +261,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     );
   }
 
-  if (broken || plan.stops.length === 0) {
-    return (
-      <section className="container-narrow py-16 text-center sm:py-24">
-        <Cutout id="envelope-ps" className="mx-auto w-24 -rotate-6 drop-shadow-[0_14px_24px_rgba(120,50,70,0.25)]" />
-        <h1 className="mt-6 display-xl text-forest">{broken ? t("broken.title") : t("empty.title")}</h1>
-        <p className="mx-auto mt-4 max-w-md text-[17px] leading-relaxed text-forest/70">{broken ? t("broken.sub") : t("empty.sub")}</p>
-        <Link href="/dates" className="mt-8 inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(42,15,31,0.7)] transition-transform hover:-translate-y-0.5">
-          {t("empty.cta")}
-          <ArrowRight aria-hidden="true" className="size-4" />
-        </Link>
-      </section>
-    );
-  }
+  if (broken || plan.stops.length === 0) return emptyState(false);
 
   return (
     // A place name can be one long word (Llanfairpwllgwyngyll…): it wraps rather than widening the page.
