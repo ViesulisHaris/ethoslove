@@ -10,6 +10,8 @@
  * of the editor, or Back to the gift and Forward again, opened the reply with both names empty.
  * It is this tab's only, and an hour old at most.
  */
+import { draftKey, replyDraftScope } from "./persistence";
+
 const KEY = "ethos:reply";
 const MAX_AGE_MS = 60 * 60 * 1000;
 const NAME_MAX = 40;
@@ -26,6 +28,26 @@ export type ReplySeed = {
 export function saveReplySeed(seed: ReplySeed): void {
   try {
     window.sessionStorage.setItem(KEY, JSON.stringify({ ...seed, savedAt: Date.now() }));
+  } catch {}
+  dropOtherReplyDraft(seed);
+}
+
+/**
+ * A reply keeps a draft of its own (store.ts pageScope), and a draft this device kept wins over the
+ * seed when the editor opens. One started for another gift of this template, addressed to someone
+ * else, is let go, so this reply opens with this gift's names. The same pair answered again (Back to
+ * the gift and Send one back once more) keeps what was typed. A signed-in sender's row stays on
+ * their dashboard either way.
+ */
+function dropOtherReplyDraft(seed: ReplySeed): void {
+  try {
+    const key = draftKey(replyDraftScope(seed.slug));
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return;
+    const data = (JSON.parse(raw) as { data?: { recipientName?: unknown; senderName?: unknown } }).data;
+    const name = (n: string) => n.trim().slice(0, NAME_MAX);
+    const same = data?.recipientName === name(seed.recipientName) && data?.senderName === name(seed.senderName);
+    if (!same) window.localStorage.removeItem(key);
   } catch {}
 }
 

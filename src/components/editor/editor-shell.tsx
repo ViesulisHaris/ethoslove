@@ -10,7 +10,7 @@ import type { ShownReaction } from "@/lib/proof/numbers";
 import { loadTemplate } from "@/templates/registry";
 import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
-import { clearReplySeed, replySeedForEditor } from "@/lib/editor/reply-seed";
+import { clearReplySeed, opensAsReply, replySeedForEditor } from "@/lib/editor/reply-seed";
 import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
 import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
@@ -173,6 +173,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           authed: Boolean(user),
           userId: user?.id ?? null,
           remote,
+          // A reply keeps its own draft: a gift of this template for someone else, in another tab
+          // or later in this one, is a different gift and never writes over it.
+          reply: !remote && opensAsReply(window.location.search),
         })
         .then(() => {
           // init() puts a draft left in this browser in place of `initial`. They have just asked
