@@ -107,3 +107,12 @@ export function sendsFree(manifest: Pick<TemplateManifest, "slug" | "tier" | "fe
 export function noteRules(manifest: Pick<TemplateManifest, "slug" | "tier">, data: { freeTier?: unknown } | null | undefined): boolean {
   return manifest.tier === "free" && NOTE_TEMPLATES.includes(manifest.slug) && data?.freeTier === "note";
 }
+
+/**
+ * A template made only for group cards: it cannot be sent with fewer than `features.group.min` notes, and notes come
+ * only with a group card, so the group card is the only way it is sold. Its page prices it as one (PRODUCTS.group), says
+ * that collecting notes is free, and does not promise "no account needed": inviting people takes a sign-in.
+ */
+export function soldAsGroup(manifest: Pick<TemplateManifest, "features">): boolean {
+  return (manifest.features.group?.min ?? 0) > 0;
+}

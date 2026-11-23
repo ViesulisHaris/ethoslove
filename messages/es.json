@@ -970,6 +970,11 @@
     "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
     "detailPriceFreeShort": "Gratis como nota corta: hasta 500 caracteres y su canción. Las fotos, la carta entera, un vídeo, un mensaje de voz o una sorpresa dentro vienen con “Hazlo especial” por {price}, pagado una vez.",
     "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
+    "group": {
+      "detailPrice": "Reunir las notas es gratis. {price} una sola vez al enviarla, y desde entonces las tarjetas en grupo con esta plantilla son tuyas. Para invitar a la gente, inicias sesión.",
+      "featureNotes": "Hasta {max} notas de quienes invites",
+      "faqA": "Invitar a la gente y reunir sus notas no cuesta nada. Enviar la tarjeta cuesta {price} una sola vez, desde tu cuenta, y después las tarjetas en grupo con {name} son tuyas para enviarlas otra vez, sin suscripción."
+    },
     "sections": {
       "popular": {
         "eyebrow": "Las más populares",

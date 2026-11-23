@@ -89,7 +89,8 @@ export const GROUP_WORDS = {
     "editor.publishSheet.problems.contributionsMax",
     "editor.publishSheet.problems.contributionNote",
   ],
-  server: ["money.product.group", "account.groupOn", "account.groupEvery", "lifecycle.group"],
+  // templates.group: the page of a template sold only as a group card, drawn on the server (templates/[slug]/page.tsx)
+  server: ["money.product.group", "account.groupOn", "account.groupEvery", "lifecycle.group", "templates.group"],
 } as const;
 
 export type ClientScope = keyof typeof CLIENT_NAMESPACES;

@@ -3,6 +3,7 @@ import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { routing, type Locale } from "@/i18n/routing";
 import { PRODUCTS, PRODUCT_ORDER, type Currency } from "@/lib/pricing/products";
+import { soldAsGroup } from "@/lib/gift/free-tier";
 import type { TemplateManifest } from "@/templates/types";
 
 type Node = Record<string, unknown>;
@@ -196,7 +197,8 @@ export function templateProductNode(manifest: TemplateManifest, locale: Locale, 
     url,
     offers: {
       "@type": "Offer",
-      price: manifest.tier === "free" ? "0" : price(PRODUCTS.single.amounts[currency]),
+      // a template sold only as a group card is offered at a group card's price
+      price: manifest.tier === "free" ? "0" : price(PRODUCTS[soldAsGroup(manifest) ? "group" : "single"].amounts[currency]),
       priceCurrency: currency.toUpperCase(),
       availability: "https://schema.org/InStock",
       url,

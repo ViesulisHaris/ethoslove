@@ -970,6 +970,11 @@
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
     "detailPriceFreeShort": "Free as a short note: up to 500 characters and their song. Photos, the full letter, a video, a voice message or a surprise inside come with “Make it special” for {price}, paid once.",
     "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
+    "group": {
+      "detailPrice": "Collecting notes is free. {price} once when you send it, then group cards on it are yours for good. You sign in to invite people.",
+      "featureNotes": "Up to {max} notes from people you invite",
+      "faqA": "Inviting people and collecting their notes costs nothing. Sending the card costs {price} once, from your account, and then group cards on {name} are yours to send again, with no subscription."
+    },
     "sections": {
       "popular": {
         "eyebrow": "Most popular",

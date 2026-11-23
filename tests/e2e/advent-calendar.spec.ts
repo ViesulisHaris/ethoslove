@@ -67,6 +67,14 @@ const hint = (root: Locator) => root.locator("[data-foot-hint]");
 const said = (root: Locator) => root.locator("[data-foot] .sr-only");
 /** The line under a note in hand. */
 const under = (root: Locator) => root.getByRole("dialog").locator(":scope > p");
+/** The gift's music button, in the corner over everything. */
+const soundButton = (root: Locator) => root.getByRole("button", { name: /^(mute music|play music|silenciar música|reproducir música)$/i });
+/**
+ * Until a door has all but swung, a finger's tap on it is the second tap of a double tap and opens nothing more (it
+ * took the note out before the door had opened, and the next tap put it back unseen). A test that taps a door it has
+ * just opened, to read its note, waits this long first, as a hand does.
+ */
+const swung = (page: Page) => page.waitForTimeout(600);
 
 /** Every door opened. The numbers of the doors that hold a note come back: the ones still there to be pressed. */
 async function openEveryDoor(page: Page, root: Locator): Promise<number[]> {
@@ -75,6 +83,7 @@ async function openEveryDoor(page: Page, root: Locator): Promise<number[]> {
     await page.waitForTimeout(60);
   }
   await expect(root.locator("[data-niche]")).toHaveCount(24);
+  await swung(page);
   return root.locator("[data-door][data-note]").evaluateAll((els) => els.map((el) => Number(el.getAttribute("data-door"))));
 }
 
@@ -263,6 +272,7 @@ for (const locale of ["en", "es"] as const) {
     await expect(card(root)).toHaveCount(0);
 
     // The envelope: one person's note, on a card over the same house. The lowest door with a note is the first person's.
+    await swung(page);
     await door(root, noteDoor).click();
     await expect(card(root)).toBeVisible();
     await expect(card(root).locator("blockquote")).toHaveText(
@@ -298,6 +308,8 @@ for (const locale of ["en", "es"] as const) {
     const notes = await openEveryDoor(page, root);
     expect(notes).toHaveLength(8);
     await expect(foot(root)).toHaveText(en ? "1 of 8 notes read" : "1 de 8 notas leídas");
+    // every door is open and a note has been read: the line under the count says where the sender's own letter is
+    await expect(hint(root)).toHaveText(en ? "tap the star for Tom’s letter" : "toca la estrella: la carta de Tomás");
     const signed: string[] = [];
     await readEveryNote(page, root, [...notes].sort((a, b) => a - b), async () => {
       signed.push((await card(root).locator("p[dir=auto]").innerText()).trim());
@@ -305,7 +317,15 @@ for (const locale of ["en", "es"] as const) {
     // whoever is first in the card has the lowest of the chosen doors, and so on up
     expect(signed).toEqual(en ? ["Mum", "Iris", "Dad", "The Okonkwos", "Sam", "Gran", "Leo", "Auntie Jo"] : ["Mamá", "Iris", "Papá", "Los Okonkwo", "Sam", "La abuela", "Leo", "La tía Jo"]);
     await expect(root.locator("[data-star-lit]")).toHaveCount(1);
-    await expect(foot(root)).toHaveText(en ? "every note read · the star is lit" : "todas las notas leídas · la estrella está encendida");
+    await expect(foot(root)).toHaveText(en ? "every note read · the star is lit" : "todas las notas leídas · la estrella brilla");
+    // "the star is lit" never said it could be tapped, and everything of the sender's is behind it
+    await expect(hint(root)).toHaveText(en ? "tap the star for Tom’s letter" : "toca la estrella: la carta de Tomás");
+    // Names of one short word are written in one hand, at one size: "Papá" and "Mamá" two rows apart were 14.6 and 11.6 px.
+    const sizes = await root.locator("[data-tag-name]").evaluateAll((els) =>
+      els.filter((el) => !/\s/.test((el.textContent ?? "").trim()) && [...(el.textContent ?? "").trim()].length <= 6).map((el) => getComputedStyle(el).fontSize),
+    );
+    expect(sizes.length).toBeGreaterThanOrEqual(5);
+    expect(new Set(sizes).size, sizes.join()).toBe(1);
     await staysPut(page);
 
     // the star window: the sender's own letter, then the end
@@ -432,6 +452,7 @@ test("by keyboard alone: a sweet's door keeps the focus, a note comes out and go
   await expect(root.locator('[data-holds="tag"]')).toHaveCount(8);
   await expect(root.locator("[data-star-lit]")).toHaveCount(1);
   await expect(foot(root)).toHaveText("every note read · the star is lit");
+  await expect(hint(root)).toHaveText("tap the star for Tom’s letter");
 
   // back up the house to the star, and into the letter
   for (let i = 0; i < 24; i++) await page.keyboard.press("Shift+Tab");
@@ -476,6 +497,7 @@ test("with a mouse: an open door with an envelope answers the pointer over it an
   const root = await openGift(page, `/demo/${SLUG}`);
   await door(root, 19).click();
   await expect(niche(root, 19)).toHaveAttribute("data-holds", "envelope");
+  await swung(page);
   const glow = () => door(root, 19).evaluate((el) => getComputedStyle(el).backgroundImage);
   await page.mouse.move(5, 300);
   expect(await glow()).toBe("none");
@@ -552,10 +574,10 @@ for (const size of SIZES) {
     // the star window is 44 px to a finger on every one of them
     expect(Math.min(starBox.width, starBox.height)).toBeGreaterThanOrEqual(44);
     // A phone on its side, under the demo's own bar: six rows and a gable in 342 px. A door is as big as that allows
-    // (it was 46 by 36, the star 38.5): wider than 44, and 38 high, which is what is left of the height.
+    // (it was 46 by 36, the star 38.5; then 48.7 by 38.3): wider than 44, and 39.5 high, which is what is left of the height.
     if (size.name === "844x390") {
-      expect(first.width).toBeGreaterThanOrEqual(48);
-      expect(first.height).toBeGreaterThanOrEqual(38);
+      expect(first.width).toBeGreaterThanOrEqual(50);
+      expect(first.height).toBeGreaterThanOrEqual(39.5);
     }
     // on any of them a door is never smaller than a fingertip can find
     expect(Math.min(first.width, first.height)).toBeGreaterThanOrEqual(36);
@@ -694,12 +716,25 @@ async function playCase(page: Page, root: Locator, count: number, least = 8.2) {
     await settled(page, root);
     await onTheCard(root, await inside(page, card(root), 12));
     await photoWhole(root);
+    await clearOfSound(root);
   });
   await expect(root.locator("[data-star-lit]")).toHaveCount(1);
   await expect(root.locator('[data-holds="tag"]')).toHaveCount(count);
   await tagsRead(root, least);
   await readTheLetter(page, root);
   expect(await root.innerText()).not.toMatch(/\bundefined\b|\bNaN\b|\[object Object\]/);
+}
+
+/** A note's card, from the top of its scroll, never starts under the music button in the corner (a card taller than 320 by 568 did). */
+async function clearOfSound(root: Locator) {
+  const button = soundButton(root);
+  if (!(await button.count())) return;
+  const scroll = card(root).locator("xpath=ancestor::*[contains(@class,'overflow-y-auto')][1]");
+  await scroll.evaluate((el) => el.scrollTo({ top: 0 }));
+  const b = (await button.boundingBox())!;
+  const c = (await card(root).boundingBox())!;
+  // only where the card is under it from side to side (on a phone on its side it is not); the card leans a degree or two
+  if (c.x + c.width > b.x && c.x < b.x + b.width) expect(c.y, "the card's top is under the music button").toBeGreaterThanOrEqual(b.y + b.height - 3);
 }
 
 const CASES = [
@@ -769,4 +804,110 @@ test("in WebKit as an iPhone 13 has it, in Spanish and the pale look: twenty-fou
   await playCase(page, root, 24, 9.5);
   expect(w.problems).toEqual([]);
   await browser.close();
+});
+
+/*
+ * What the hands-on test found that only a browser can show: the free gift's badge over the foot's lines, a finger
+ * tapping fast through the house, and the star's line.
+ */
+
+for (const view of [
+  // the gift's own size is the viewport less the demo page's bar (48 px): 505, 553 (an iPhone SE in Safari), 560, 664 (an iPhone 13 in Safari)
+  { width: 375, height: 553 },
+  { width: 375, height: 601 },
+  { width: 360, height: 608 },
+  { width: 390, height: 712 },
+]) {
+  test(`${view.width}x${view.height}, a free gift: the "Made with Ethos" badge never lies over the line at the foot`, async ({ browser }, info) => {
+    test.skip(!E2E, "needs the demo page's test switch: run with NEXT_PUBLIC_E2E=1");
+    test.skip(info.project.name !== "mobile-chrome", "the size is set here, not by the project");
+    test.setTimeout(120_000);
+    const context = await browser.newContext({ viewport: view, deviceScaleFactor: 2, hasTouch: true, storageState: STORAGE, baseURL: BASE });
+    const page = await context.newPage();
+    const w = watch(page);
+    const root = await openCase(page, "en", "watermarked");
+    const badge = page.getByRole("link", { name: /made with ethos/i });
+    await expect(badge).toBeVisible({ timeout: 10_000 });
+    const lowest = async () => Math.max(...(await root.locator("[data-door]").evaluateAll((els) => els.map((el) => el.getBoundingClientRect().bottom))));
+    const check = async (state: string) => {
+      await expect(badge).toBeVisible({ timeout: 10_000 });
+      const b = (await badge.boundingBox())!;
+      const lines = (await root.locator("[data-foot]").boundingBox())!;
+      expect(lines.y + lines.height, `${state}: the foot's lines end over the badge`).toBeLessThanOrEqual(b.y + 0.5);
+      for (const line of await root.locator("[data-foot-count], [data-foot-hint]").all()) {
+        const box = (await line.boundingBox())!;
+        expect(box.y + box.height, `${state}: "${await line.innerText()}" ends over the badge`).toBeLessThanOrEqual(b.y + 0.5);
+        // under the house's lowest row (a door's tap area takes in half the frame below its paint, which the line may touch)
+        expect(box.y, `${state}: "${await line.innerText()}" starts under the doors`).toBeGreaterThanOrEqual((await lowest()) - 3);
+      }
+      // and the title over the roof is still on the screen
+      expect((await root.getByRole("heading", { level: 1 }).boundingBox())!.y).toBeGreaterThanOrEqual((await root.boundingBox())!.y);
+    };
+    await check("shut");
+    // the first envelope found: both lines
+    await door(root, 19).click();
+    await expect(hint(root)).toBeVisible();
+    await check("an envelope in sight");
+    expect(w.problems).toEqual([]);
+    await context.close();
+  });
+}
+
+test("a finger tapping fast: a double tap opens a door and nothing more, and no note is put back before it was seen", async ({ browser }, info) => {
+  test.skip(info.project.name !== "mobile-chrome", "a touch screen is set up here");
+  test.setTimeout(120_000);
+  const context = await browser.newContext({ ...devices["Pixel 7"], storageState: STORAGE, baseURL: BASE });
+  const page = await context.newPage();
+  const w = watch(page);
+  const root = await openGift(page, `/demo/${SLUG}`);
+  const centre = async (n: number) => {
+    const box = (await door(root, n).boundingBox())!;
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+  // Door 3 holds a note in the English demo. Two taps 140 ms apart: the door opens, and its note stays in its niche.
+  await expect(door(root, 3)).toHaveAttribute("data-shut", "");
+  const three = await centre(3);
+  await page.touchscreen.tap(three.x, three.y);
+  await page.waitForTimeout(140);
+  await page.touchscreen.tap(three.x, three.y);
+  await expect(niche(root, 3)).toHaveAttribute("data-holds", "envelope");
+  await page.waitForTimeout(400);
+  await expect(card(root)).toHaveCount(0);
+  // the next tap is for the next door, and opens it
+  const nineteen = await centre(19);
+  await page.touchscreen.tap(nineteen.x, nineteen.y);
+  await expect(niche(root, 19)).toHaveAttribute("data-holds", "envelope");
+  await expect(niche(root, 3)).toHaveAttribute("data-holds", "envelope");
+  await expect(card(root)).toHaveCount(0);
+
+  // Once door 3 has swung, its envelope is a tap away. A tap on the veil the moment the card is out (meant for something
+  // else) leaves it out; one after it has arrived puts it back, read.
+  await swung(page);
+  await page.touchscreen.tap(three.x, three.y);
+  await expect(card(root)).toBeVisible();
+  await page.waitForTimeout(80);
+  const view = page.viewportSize()!;
+  await page.touchscreen.tap(view.width / 2, view.height - 70);
+  await page.waitForTimeout(150);
+  await expect(card(root)).toBeVisible();
+  await settled(page, root);
+  await page.touchscreen.tap(view.width / 2, view.height - 70);
+  await expect(card(root)).toHaveCount(0);
+  await expect(niche(root, 3)).toHaveAttribute("data-holds", "tag");
+
+  // Two taps on every shut door, as fast as a hand goes: every door opens, and not one note is taken out or put back.
+  for (const n of await shut(root).evaluateAll((els) => els.map((el) => Number(el.getAttribute("data-door"))))) {
+    const at = await centre(n);
+    await page.touchscreen.tap(at.x, at.y);
+    await page.waitForTimeout(120);
+    await page.touchscreen.tap(at.x, at.y);
+    await page.waitForTimeout(110);
+  }
+  await expect(shut(root)).toHaveCount(0);
+  await expect(card(root)).toHaveCount(0);
+  await expect(root.locator('[data-holds="tag"]')).toHaveCount(1);
+  await expect(root.locator("[data-star-lit]")).toHaveCount(0);
+  await expect(foot(root)).toHaveText("1 of 8 notes read");
+  expect(w.problems).toEqual([]);
+  await context.close();
 });

@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "motion/
 import type { GiftContribution } from "@/lib/gift/schema";
 import { isolated } from "@/lib/group/bidi";
 import type { OpeningProps, TemplateProps } from "../types";
+import { useGiftChrome } from "../_shared/gift-chrome";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { mulberry32 } from "../_shared/random";
@@ -20,6 +21,7 @@ import { HolidayPage, type BlockKind, type HolidayTheme, type PhotoSlot, type Sh
 import { down, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, DOORS, LEAVES, NICHE, SHEETS, SPRITES } from "./art-map";
 import { DOOR_COUNT, doorsFor, previewDoors, progressOf, seedOf, type Door, type Sweet } from "./doors";
+import { keep, keptKey, recall, tabStore, type Kept } from "./kept";
 import { INK, LOOKS, type LookId } from "./looks";
 import { fieldsSchema, type AdventCalendarFields } from "./schema";
 
@@ -38,6 +40,8 @@ const S = {
     envelopeHint: "tap an envelope to read it",
     allFound: "every note read · the star is lit",
     allOpen: "every door is open · the star is lit",
+    starHint: "tap the star for {from}’s letter",
+    starHintPlain: "tap the star to read the letter",
     openDoor: "Open door {n}",
     readNote: "Read the note behind door {n}",
     readAgain: "{name}, door {n}",
@@ -66,8 +70,10 @@ const S = {
     read: "{read} de {total} notas leídas",
     readOne: "{read} de 1 nota leída",
     envelopeHint: "toca un sobre para leerlo",
-    allFound: "todas las notas leídas · la estrella está encendida",
-    allOpen: "todas las puertas abiertas · la estrella está encendida",
+    allFound: "todas las notas leídas · la estrella brilla",
+    allOpen: "todas las puertas abiertas · la estrella brilla",
+    starHint: "toca la estrella: la carta de {from}",
+    starHintPlain: "toca la estrella para leer la carta",
     openDoor: "Abrir la puerta {n}",
     readNote: "Leer la nota de la puerta {n}",
     readAgain: "{name}, puerta {n}",
@@ -224,7 +230,36 @@ const TALL = 2 * (MANTEL_EDGE - 85) + FOOT_LINES + 16;
 const FOOT_ON_WOOD = down(156.6);
 const FOOT_IN_BAND = `calc(${MANTEL_EDGE} * var(--k) + (50cqh - ${MANTEL_EDGE - 85 + FOOT_LINES} * var(--k)) * .35)`;
 
+/*
+ * A gift with the "Made with Ethos" badge (useGiftChrome().watermarked): the badge floats at the foot of the screen and
+ * stands down only for a control, and the foot's lines are words. On a phone browser with its bars (375 by 553, 390 by
+ * 664) the badge lay right over them. So the lines are kept above the badge's band: where they would reach into it they
+ * go up, ending where it begins, and the house goes up with them as far as the title over it allows, so that they stay
+ * under the lowest row of doors. Each is worked out by the browser, as both depend on the screen's height.
+ */
+/** The badge's band, from the gift's foot: where it floats (Watermark.tsx), its height, and a little air over it. */
+const BADGE_BAND = "(max(.75rem, env(safe-area-inset-bottom)) + 2.3rem)";
+/** The foot's two lines at their sizes (the count, and the line under it): kept for them even with one showing, so nothing jumps. */
+const FOOT_H = "calc(max(12px, 3.5*var(--k)) * 1.2 + max(11px, 3*var(--k)) * 1.2 + .5*var(--k))";
+/** Where the lowest row of doors ends, frame and all, in stage units: the lines are not lifted over it. */
+const DOORS_END = 147;
+/** How far the house may go up for them: no further than leaves the title over the roof on the screen. */
+const LIFT_MOST = 4.5;
+const CLEAR: CSSProperties = {
+  "--ac-lift": `clamp(0px, calc(${DOORS_END - 85} * var(--k) + ${FOOT_H} + ${BADGE_BAND} - 50cqh), ${LIFT_MOST} * var(--k))`,
+  // the top of the badge's band, measured down from the top of the (lifted) stage
+  "--ac-limit": `calc(50cqh + 85 * var(--k) + var(--ac-lift) - ${BADGE_BAND})`,
+} as CSSProperties;
+
 const SWING_S = HATCH.swing;
+/**
+ * How long after a door opens a finger's tap on it is taken for the second tap of a double tap: until its leaf has all
+ * but swung (a hair less, so a tap the moment it rests is answered), or, with less motion and nothing swinging, about
+ * as long as a double tap takes.
+ */
+export const settleMs = (reduce: boolean) => (reduce ? 350 : SWING_S * 1000 - 80);
+/** How long a note's card is on its way out before a tap on the veil round it puts it back: until then it is a stray tap. */
+export const VEIL_WAIT_MS = 450;
 const KEYFRAMES = `
 .ac-leaf{transform-origin:0% 50%;animation:ac-swing ${SWING_S}s cubic-bezier(.42,.08,.3,1) both}
 @keyframes ac-swing{0%{transform:rotateY(0deg);opacity:1}72%{opacity:1}100%{transform:rotateY(-80deg);opacity:0}}
@@ -243,8 +278,11 @@ const KEYFRAMES = `
 .ac-door[data-shut]:active{background:rgba(255,240,205,.24)}
 .ac-door[data-note]:active{background:radial-gradient(ellipse closest-side, rgba(255,238,196,.46) 0%, rgba(255,238,196,.2) 62%, rgba(255,238,196,0) 100%)}
 .ac-star:active{background:radial-gradient(circle closest-side, rgba(255,226,160,.45) 0%, rgba(255,226,160,0) 100%)}
-.ac-foot{top:${FOOT_ON_WOOD}}
-@container (max-aspect-ratio: 100 / ${TALL}){.ac-foot{top:${FOOT_IN_BAND}}}
+.ac-foot{--ac-foot-top:${FOOT_ON_WOOD};top:var(--ac-foot-top)}
+@container (max-aspect-ratio: 100 / ${TALL}){.ac-foot{--ac-foot-top:${FOOT_IN_BAND}}}
+.ac-clear .ac-foot{top:min(var(--ac-foot-top),var(--ac-limit));bottom:calc(170*var(--k) - var(--ac-limit));display:flex;flex-direction:column;justify-content:flex-end}
+.ac-clear .ac-foot>[role=status]{flex:none;min-height:${FOOT_H}}
+.ac-clear .ac-foot::after{content:"";flex:1 1 0}
 @media (prefers-reduced-motion: reduce){.ac-leaf,.ac-settle,.ac-pop,.ac-ring,.ac-nudge{animation:none}.ac-leaf{opacity:0}}
 `;
 
@@ -253,11 +291,27 @@ const UNIT = { "--k": "min(1cqw, calc(100cqh / 162))" } as CSSProperties;
 /**
  * A phone on its side: the house from the snow on its ridge (31 units down) to the mantel under it (150), and
  * no more wall or wood than frames it, so that a door is as big as six rows under a gable can be on that screen.
+ * Four units to spare: a unit and a half over the ridge, two and a half under the mantel. (It was 128, with more
+ * mantel under the house: a door 46 by 36 px and the star 43 on a phone 375 high. Six rows of doors and a gable in
+ * that height cannot be 44 px a row: at 123 a door is 38 high, and the star is 44.)
  */
-const LOW_UNITS = 128;
+export const LOW_UNITS = 123;
 const UNIT_LOW = { "--k": `calc(100cqh / ${LOW_UNITS})` } as CSSProperties;
-/** On a low screen the stage is moved up so that the house, not the wall over it, is in the middle. */
-const LOW_SHIFT = -8.5;
+/** On a low screen the stage is moved up so that the house, not the wall over it, is in the middle: its ridge 1.5 units under the top. */
+const LOW_SHIFT = 85 - (31 + 150) / 2 - (LOW_UNITS / 2 - 1.5 - (150 - 31) / 2);
+
+/** The time now, for what a tap is measured against (always in an event or an effect, never while drawing). */
+const clock = () => performance.now();
+
+/** What was kept for the tab, as far as it fits this house: a note counts as read only behind a door that is open. */
+function restore(kept: Kept | null, doors: readonly Door[], notes: readonly GiftContribution[]): Kept | null {
+  if (!kept) return null;
+  const read = kept.read.filter((key) => {
+    const index = notes.findIndex((n) => n.key === key);
+    return doors.some((d) => d.kind === "note" && d.index === index && kept.opened.includes(d.number));
+  });
+  return { opened: kept.opened, read };
+}
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<AdventCalendarFields>) {
   const reduce = !!useReducedMotion();
@@ -275,9 +329,16 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const size = useContainerSize(root);
   const low = size.ready && size.height < 500 && size.width > size.height * 1.15;
 
-  const [opened, setOpened] = useState<number[]>([]);
+  const chrome = useGiftChrome();
+  // Kept for the tab only on a real gift's page: the editor's "play from the start" means it, and a demo is a demo.
+  const remembers = mode === "live" && !!chrome.keepHref;
+  const memory = useMemo(() => keptKey(seed, notes.map((n) => n.key)), [seed, notes]);
+  // A reload, or a tab the phone threw away, opens on the doors as they were left, from its first frame: nothing swings,
+  // nothing is heard, and nothing is told as progress again. (The gift is drawn only in the browser, once its pictures are in.)
+  const [restored] = useState(() => (remembers ? restore(recall(tabStore(), memory, notes.map((n) => n.key)), doors, notes) : null));
+  const [opened, setOpened] = useState<number[]>(restored?.opened ?? []);
   /** The keys of the notes that have been read: a key stays its note's own as the list changes round it. */
-  const [readKeys, setReadKeys] = useState<string[]>([]);
+  const [readKeys, setReadKeys] = useState<string[]>(restored?.read ?? []);
   const [swinging, setSwinging] = useState<number[]>([]);
   /** The note in hand: its door, and where on the screen it was lifted from. */
   const [reading, setReading] = useState<{ door: number; from: Pt } | null>(null);
@@ -291,12 +352,18 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const begun = useRef(false);
   const mutedRef = useRef(false);
   const eventRef = useRef(onEvent);
-  const sweetsFound = useRef(0);
-  const starLit = useRef(false);
+  const sweetsFound = useRef(restored ? restored.opened.filter((n) => doors[n - 1]?.kind === "sweet").length : 0);
+  const starLit = useRef(restored ? (notes.length ? restored.read.length === notes.length : restored.opened.length === DOOR_COUNT) : false);
+  /** When each door was opened: a finger's second tap of a double tap, landing while it swings, is not a tap on its envelope. */
+  const openedAt = useRef(new Map<number, number>());
   useEffect(() => {
     eventRef.current = onEvent;
     mutedRef.current = audio.muted;
   });
+
+  useEffect(() => {
+    if (remembers) keep(tabStore(), memory, { opened, read: readKeys });
+  }, [remembers, memory, opened, readKeys]);
 
   const begin = () => {
     if (begun.current) return;
@@ -319,6 +386,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     if (opened.includes(number)) return;
     begin();
     const next = [...opened, number];
+    openedAt.current.set(number, clock());
     setOpened(next);
     setLastOpened(number);
     if (!reduce) setSwinging((list) => [...list, number]);
@@ -344,9 +412,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     after(reduce ? 80 : 700, () => playSparkle(mutedRef.current, { delay: 0.05, ms: 1100 }));
   };
 
-  const readNote = (number: number, from: Pt) => {
+  const readNote = (number: number, from: Pt, pointer: boolean) => {
     const note = noteAt(number);
     if (!note) return;
+    // Two quick taps on a door opened it and took its note out before it had swung; the next tap, meant for the next door,
+    // landed on the veil, put the note back unseen and counted it read. A finger's tap on a door still swinging is the
+    // second of a double tap, and does nothing. (A key pressed again is meant: the keyboard is never held back.)
+    if (pointer && clock() - (openedAt.current.get(number) ?? -Infinity) < settleMs(reduce)) return;
     begin();
     setReading({ door: number, from });
     playEnvelope(mutedRef.current, 0.35);
@@ -384,6 +456,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     begun.current = false;
     sweetsFound.current = 0;
     starLit.current = false;
+    openedAt.current.clear();
     setOpened([]);
     setReadKeys([]);
     setSwinging([]);
@@ -434,6 +507,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         wide={size}
         inert={preview}
         away={busy}
+        clear={chrome.watermarked && !preview}
         onDoor={openDoor}
         onNote={readNote}
         onStar={openLetter}
@@ -481,6 +555,8 @@ function Picture({ lookId, open, box, mirrored }: { lookId: LookId; open: boolea
 }
 
 const STAGE_BOX: Rect = { x: 0, y: 0, w: 100, h: 170 };
+/** The longest sender's name the star's line names: a longer one would run the line onto two, and it says "the letter". */
+const STAR_HINT_NAME = 16;
 
 type SceneProps = {
   lookId: LookId;
@@ -512,16 +588,34 @@ type SceneProps = {
   tile?: boolean;
   /** A note or the letter is being read in front of it: still there, dimmed, out of reach of finger and keyboard. */
   away: boolean;
+  /** The "Made with Ethos" badge floats at the foot of the screen: the foot's lines are kept above it (CLEAR). */
+  clear?: boolean;
   onDoor: (number: number) => void;
-  onNote: (number: number, from: Pt) => void;
+  /** `pointer`: pressed by a finger or a mouse, not a key. */
+  onNote: (number: number, from: Pt, pointer: boolean) => void;
   onStar: () => void;
   onStray: () => void;
   onSwung: (number: number) => void;
 };
 
-function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, lastOpened, reduce, low, wide, inert = false, tile = false, away, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
+function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, inHand, swinging, lit, nudge, lastOpened, reduce, low, wide, inert = false, tile = false, away, clear = false, onDoor, onNote, onStar, onStray, onSwung }: SceneProps) {
   const look = LOOKS[lookId];
   const buttons = useRef(new Map<number, HTMLButtonElement>());
+  // The size each short name on a tag could be written at, by door: they are all written at the smallest of them, so that
+  // "Papá" and "Mamá" two rows apart are not one hand at 14.6 px and the other at 11.6 (each tag's face is its own width).
+  const [shortSizes, setShortSizes] = useState<Record<number, number>>({});
+  const shortCap = Object.values(shortSizes).length ? Math.min(...Object.values(shortSizes)) : undefined;
+  const onShortFit = useMemo(
+    () => (door: number, size: number | null) =>
+      setShortSizes((was) => {
+        if ((was[door] ?? null) === size) return was;
+        const next = { ...was };
+        if (size === null) delete next[door];
+        else next[door] = size;
+        return next;
+      }),
+    [],
+  );
   const starButton = useRef<HTMLButtonElement>(null);
   const wasAway = useRef<{ door?: number; star: boolean } | null>(null);
   // When a note is put back, or the letter left, the keyboard is back on what opened it.
@@ -556,8 +650,11 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
         ? s.allFound
         : s.allOpen
       : [count, left ? fill(left === 1 ? s.leftOne : s.left, { n: left }) : null].filter(Boolean).join(" · ");
-  // An envelope is in sight and none has been opened yet: nothing else on the screen says it can be.
-  const next = !lit && found > 0 && read === 0 ? s.envelopeHint : null;
+  // What can be done next, which nothing else on the screen says. An envelope in sight and none opened yet: that it can be.
+  // Then, once the star is lit, or every door is open and a note has been read, the star: the sender's letter, the
+  // photos, the reaction and the end are all behind it, and "the star is lit" never said it could be tapped.
+  const starLine = [...from].length <= STAR_HINT_NAME ? fill(s.starHint, { from: isolated(from) }) : s.starHintPlain;
+  const next = lit || (!left && read > 0) ? starLine : found > 0 && read === 0 ? s.envelopeHint : null;
   const last = lastOpened ? doors[lastOpened - 1] : undefined;
   const said = !last ? "" : last.kind === "sweet" ? fill(s.sweetAt, { n: last.number, sweet: s.sweets[last.sweet] }) : fill(s.noteAt, { n: last.number });
   const shadow = "0 0 calc(2.4*var(--k)) rgba(4,8,6,.95), 0 0 calc(.8*var(--k)) rgba(4,8,6,.8)";
@@ -595,8 +692,8 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
   return (
     // while a note or the letter is read the room stays where it is, behind it, out of reach of finger and keyboard
     <div
-      className="absolute inset-0"
-      style={low ? UNIT_LOW : UNIT}
+      className={clear && !low ? "ac-clear absolute inset-0" : "absolute inset-0"}
+      style={low ? UNIT_LOW : clear ? { ...UNIT, ...CLEAR } : UNIT}
       inert={away}
       aria-hidden={away || undefined}
       onClick={(e: ReactMouseEvent) => {
@@ -607,7 +704,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
       <div
         role={inert ? "img" : "group"}
         aria-label={s.house}
-        style={{ position: "absolute", top: "50%", left: "50%", width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: low ? `translate(-50%, calc(-50% + ${LOW_SHIFT} * var(--k)))` : "translate(-50%, -50%)" }}
+        style={{ position: "absolute", top: "50%", left: "50%", width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: low ? `translate(-50%, calc(-50% + ${LOW_SHIFT} * var(--k)))` : "translate(-50%, calc(-50% - var(--ac-lift, 0px)))" }}
       >
         {/* the room, every door shut */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -639,7 +736,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
               ) : inHand === n ? null : read && note ? (
                 <>
                   <img src={`${ART_BASE}tag.webp`} alt="" draggable={false} style={stood(g, "tag")} />
-                  <TagName g={g} name={note.name} />
+                  <TagName g={g} name={note.name} door={n} cap={shortCap} onShortFit={onShortFit} />
                 </>
               ) : (
                 <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} style={stood(g, "envelope")} />
@@ -721,7 +818,7 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
                     if (sweet) return onStray();
                     const host = e.currentTarget.closest("[data-advent-root]")?.getBoundingClientRect();
                     const box = e.currentTarget.getBoundingClientRect();
-                    onNote(n, host ? { x: box.left + box.width / 2 - (host.left + host.width / 2), y: box.top + box.height / 2 - (host.top + host.height / 2) } : { x: 0, y: 0 });
+                    onNote(n, host ? { x: box.left + box.width / 2 - (host.left + host.width / 2), y: box.top + box.height / 2 - (host.top + host.height / 2) } : { x: 0, y: 0 }, e.detail > 0);
                   }}
                   className="ac-door z-[6] cursor-pointer rounded-[calc(.5*var(--k))] outline-none focus-visible:ring-[3px] focus-visible:ring-white focus-visible:ring-inset"
                   style={laid(g.cell)}
@@ -798,6 +895,8 @@ export function fitTag(words: readonly number[], letters: readonly number[], spa
 const tagHolds = (face: { h: number }, size: number) => Math.min(2, Math.max(1, Math.floor(face.h / (size * TAG_LEADING))));
 /** A name no size holds: the smallest size, broken where it must be and cut past two lines. */
 const TAG_BROKEN: TagFit = { size: TAG_SMALLEST, track: 0, whole: false };
+/** A name of one word of up to six letters ("Mum", "Gran", "Papá"): the names a reader sees side by side and compares. */
+export const isShortName = (name: string) => !/\s/.test(name.trim()) && [...name.trim()].length <= 6;
 
 const tagStyle = (fit: TagFit): CSSProperties => ({
   fontFamily: "var(--gift-font-hand)",
@@ -849,10 +948,18 @@ let ruler: CanvasRenderingContext2D | null | undefined;
  * line of a large hand, a longer one on two lines of the smallest that reads. Only a name no size can hold is broken,
  * and ends in an ellipsis past two lines: the whole name is on the card, and in the name of the door's button.
  */
-function TagName({ g, name }: { g: Geometry; name: string }) {
+function TagName({ g, name, door, cap, onShortFit }: { g: Geometry; name: string; door: number; /** The size every short name in the house is written at. */ cap?: number; onShortFit: (door: number, size: number | null) => void }) {
   const face = tagFace(g);
   const text = useRef<HTMLSpanElement>(null);
-  const [fit, setFit] = useState<TagFit>(() => guessTag(name));
+  const [own, setFit] = useState<TagFit>(() => guessTag(name));
+  const short = isShortName(name);
+  // What it reports is its own fit, never the size it is drawn at, so the smallest of them settles at once.
+  useEffect(() => {
+    onShortFit(door, short && own.whole ? own.size : null);
+    return () => onShortFit(door, null);
+  }, [door, short, own.whole, own.size, onShortFit]);
+  // A short name is written at the house's size for them, which is never more than its own: smaller, it still fits.
+  const fit = short && own.whole && cap !== undefined && cap < own.size ? { ...own, size: cap } : own;
   useLayoutEffect(() => {
     let alive = true;
     const measure = () => {
@@ -903,6 +1010,11 @@ function TagName({ g, name }: { g: Geometry; name: string }) {
  * shape: it has nothing on it to pull out of shape. (Cut in nine as a border, its pieces showed their joins.)
  */
 const PRINT: CSSProperties = { backgroundImage: `url(${ART_BASE}print.webp)`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat" };
+/**
+ * The room over a note's card. A card taller than the screen (a photo and the longest words, 320 by 568) starts here and
+ * scrolls: it is kept clear of the sound button in the corner (SoundToggle: 2.5rem, as far down as the safe area or .75rem).
+ */
+const CARD_TOP = "max(calc(9*var(--u)), calc(max(.75rem, var(--gift-safe-top, env(safe-area-inset-top))) + 2.5rem + 8px))";
 /** The shapes a note's photo is printed in, as width over height: past these it is cropped to the nearest. */
 const PHOTO_TALLEST = 9 / 16;
 const PHOTO_WIDEST = 2;
@@ -946,7 +1058,10 @@ export function NoteCard({ lookId, s, note, door, from, seed, read, total, reduc
   const close = useRef<HTMLButtonElement>(null);
   // on its way back into its niche it is no longer in the way of a finger: a tap on the next door lands on the door
   const here = useIsPresent();
+  /** When it came out: a finger's tap on the veil round it before it has arrived was meant for something else. */
+  const shownAt = useRef(Infinity);
   useEffect(() => {
+    shownAt.current = clock();
     close.current?.focus({ preventScroll: true });
   }, []);
   const tilt = useMemo(() => (mulberry32(seed + door * 31)() - 0.5) * 3.2, [seed, door]);
@@ -963,9 +1078,19 @@ export function NoteCard({ lookId, s, note, door, from, seed, read, total, reduc
   const unit = { "--n": `calc(${width} / ${beside ? 170 : 100})` } as CSSProperties;
   return (
     <motion.div role="dialog" aria-modal="true" aria-labelledby={`${id}-name`} aria-describedby={`${id}-words`} className="absolute inset-0 z-[20] flex flex-col" style={{ pointerEvents: here ? undefined : "none" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0.15 : 0.3 }}>
-      <button ref={close} type="button" aria-label={s.putBack} onClick={onClose} className="absolute inset-0 cursor-pointer outline-none" style={{ background: look.veil, backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }} />
+      <button
+        ref={close}
+        type="button"
+        aria-label={s.putBack}
+        onClick={(e) => {
+          // A tap on the next door, made as the card was still on its way out, put the note back unseen and counted it
+          // read. Until the card has arrived a finger's tap on the veil does nothing; a key, or a tap on the card, is meant.
+          if (e.detail > 0 && clock() - shownAt.current < VEIL_WAIT_MS) return;
+          onClose();
+        }}
+        className="absolute inset-0 cursor-pointer outline-none" style={{ background: look.veil, backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }} />
       <div className="pointer-events-none relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto scrollbar-none">
-        <div className="grid min-h-full place-items-center px-[4cqw]" style={{ paddingBlock: low ? "10px 4px" : "calc(9*var(--u)) calc(2*var(--u))" }}>
+        <div className="grid min-h-full place-items-center px-[4cqw]" style={{ paddingBlock: low ? "10px 4px" : `${CARD_TOP} calc(2*var(--u))` }}>
           <motion.div
             data-note-card
             className={here ? "pointer-events-auto cursor-pointer" : "pointer-events-none"}

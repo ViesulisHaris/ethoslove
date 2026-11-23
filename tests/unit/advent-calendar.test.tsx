@@ -23,7 +23,12 @@ import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
 import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
-import { COPY, NoteCard, Opening, TAG_SMALLEST, Template, artFor, fitTag } from "@/templates/advent-calendar/Template";
+import { COPY, LOW_UNITS, NoteCard, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, settleMs } from "@/templates/advent-calendar/Template";
+import { keep, keptKey, recall } from "@/templates/advent-calendar/kept";
+import { soldAsGroup } from "@/lib/gift/free-tier";
+import { templateProductNode } from "@/lib/seo";
+import { PRODUCTS } from "@/lib/pricing/products";
+import { GROUP_WORDS } from "@/i18n/client-namespaces";
 import { template } from "@/templates/advent-calendar";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { fillerIn } from "./filler";
@@ -803,5 +808,152 @@ describe("the words waiting for its page", () => {
     expect(manifest.features.countdown).toBe(true);
     expect(manifest.features.captions).toBe(true);
     expect(manifest.features.group!.photos).toBe(true);
+  });
+});
+
+/* ------------------------------------------------------------------------------------------------
+ * What the hands-on test found (reports/prior-advent.json, T1 to T12), each held where a unit can.
+ * The rest is played in tests/e2e/advent-calendar.spec.ts.
+ * ---------------------------------------------------------------------------------------------- */
+
+describe("after the hands-on test", () => {
+  const source = () => readFileSync("src/templates/advent-calendar/Template.tsx", "utf8");
+
+  it("a free gift's badge keeps to its band: the foot's lines and the house go up out of it, and only when there is a badge", () => {
+    const s = source();
+    expect(s).toContain("clear={chrome.watermarked && !preview}");
+    expect(s).toContain(".ac-clear .ac-foot{top:min(var(--ac-foot-top),var(--ac-limit))");
+    // the band is where Watermark.tsx floats the badge: max(.75rem, the safe area) from the foot, about 1.8rem high
+    expect(readFileSync("src/templates/_shared/Watermark.tsx", "utf8")).toContain("bottom-[max(0.75rem,env(safe-area-inset-bottom))]");
+    expect(s).toContain('const BADGE_BAND = "(max(.75rem, env(safe-area-inset-bottom)) + 2.3rem)"');
+    // the house is lifted with them, never by more than leaves the title over the roof on the screen
+    expect(s).toContain("translate(-50%, calc(-50% - var(--ac-lift, 0px)))");
+  });
+
+  it("says the star can be tapped once it is lit, or once every door is open and a note has been read", () => {
+    const s = source();
+    expect(s).toContain("const next = lit || (!left && read > 0) ? starLine : found > 0 && read === 0 ? s.envelopeHint : null;");
+    expect(COPY.en.starHint).toBe("tap the star for {from}’s letter");
+    expect(COPY.es.starHint).toBe("toca la estrella: la carta de {from}");
+    for (const locale of LOCALES) {
+      expect(COPY[locale].starHintPlain).toMatch(locale === "en" ? /^tap the star/ : /^toca la estrella/);
+      // the lit line no longer runs onto two lines on a small phone in Spanish
+      expect([...COPY[locale].allFound].length, locale).toBeLessThanOrEqual(45);
+      expect(fillerIn(`${COPY[locale].starHint} ${COPY[locale].starHintPlain}`, locale)).toEqual([]);
+    }
+  });
+
+  it("a finger's second tap on a door still swinging is not a tap on its envelope, and the veil waits for the card", () => {
+    // longer than a double tap, shorter than the swing, so a tap the moment the door rests is answered
+    expect(settleMs(false)).toBeGreaterThan(350);
+    expect(settleMs(false)).toBeLessThan(HATCH.swing * 1000);
+    expect(settleMs(true)).toBeGreaterThanOrEqual(300);
+    expect(VEIL_WAIT_MS).toBeGreaterThanOrEqual(300);
+    expect(VEIL_WAIT_MS).toBeLessThanOrEqual(600);
+    const s = source();
+    // a key pressed again is meant: only a pointer's click (detail above 0) is held back
+    expect(s).toContain("if (pointer && clock() - (openedAt.current.get(number) ?? -Infinity) < settleMs(reduce)) return;");
+    expect(s).toContain("e.detail > 0);");
+    expect(s).toContain("if (e.detail > 0 && clock() - shownAt.current < VEIL_WAIT_MS) return;");
+  });
+
+  it("on a phone on its side the house is fitted to the screen with four units to spare, and the star is 44 px on a phone 375 high", () => {
+    const anchors = ANCHORS as unknown as Record<string, { x: number; y: number }>;
+    expect(LOW_UNITS - (150 - 31)).toBe(4);
+    // a door's tap area on a phone 375 high, under the browser's bar (327 px of gift): six rows and a gable in that height
+    const k = 327 / LOW_UNITS;
+    const tall = Math.min(
+      ...Array.from({ length: DOOR_COUNT }, (_, i) => {
+        const n = i + 1;
+        const h = anchors[`d${n}BR`].y - anchors[`d${n}TL`].y;
+        return h + (NICHE.frame / NICHE.w) * (anchors[`d${n}BR`].x - anchors[`d${n}TL`].x);
+      }),
+    );
+    expect(tall * k).toBeGreaterThanOrEqual(37.5);
+    // 44 px a row would need the house 44 / tall pixels to a stage unit: more height than the screen has
+    expect((150 - 31) * (44 / tall)).toBeGreaterThan(327);
+    expect((anchors.starR.x - anchors.starC.x) * 2 * 1.1 * k).toBeGreaterThanOrEqual(44);
+  });
+
+  it("remembers, for the tab, the doors opened and the notes read on a real gift's page only, with nothing in it that says whose", () => {
+    expect(source()).toContain('const remembers = mode === "live" && !!chrome.keepHref;');
+    const keys = ["advent00a1", "advent00a2", "advent00a3"];
+    const seed = seedOf("Nora", "Tom");
+    const key = keptKey(seed, keys);
+    expect(key).not.toMatch(/Nora|Tom|advent00/);
+    expect(keptKey(seed, [...keys, "advent00a4"])).not.toBe(key);
+    expect(keptKey(seedOf("Nora", "Sam"), keys)).not.toBe(key);
+    const map = new Map<string, string>();
+    const store = { getItem: (k: string) => map.get(k) ?? null, setItem: (k: string, v: string) => void map.set(k, v), removeItem: (k: string) => void map.delete(k) } as unknown as Storage;
+    keep(store, key, { opened: [3, 19, 6], read: ["advent00a2"] });
+    expect(recall(store, key, keys)).toEqual({ opened: [3, 19, 6], read: ["advent00a2"] });
+    // only what still fits the house: a door that is a door, a note still in it
+    map.set(key, JSON.stringify({ opened: [0, 3, 3, 25, 2.5, "7", 24], read: ["gone", "advent00a1", 4] }));
+    expect(recall(store, key, keys)).toEqual({ opened: [3, 24], read: ["advent00a1"] });
+    map.set(key, "{not json");
+    expect(recall(store, key, keys)).toBeNull();
+    // every door shut is forgotten
+    keep(store, key, { opened: [], read: [] });
+    expect(map.has(key)).toBe(false);
+    // storage switched off, full or missing: nothing kept, nothing thrown
+    const fail = () => {
+      throw new Error("blocked");
+    };
+    const broken = { getItem: fail, setItem: fail, removeItem: fail } as unknown as Storage;
+    expect(recall(broken, key, keys)).toBeNull();
+    expect(() => keep(broken, key, { opened: [1], read: [] })).not.toThrow();
+    expect(recall(null, key, keys)).toBeNull();
+  });
+
+  it("the demo's photos are the pool's unframed ones: no border or film edge of their own inside the print", () => {
+    for (const locale of LOCALES) {
+      const used = [...demoData[locale].photos.map((p) => p.url), ...(demoData[locale].contributions ?? []).flatMap((c) => (c.photo ? [c.photo.url] : []))].join();
+      for (const framed of ["p1", "p4", "p7"]) expect(used, `${locale} ${framed}`).not.toContain(`/demo/photos/${framed}.webp`);
+    }
+  });
+
+  it("short names on tags are written at one size, the smallest any of them needs", () => {
+    for (const name of ["Mum", "Gran", "Mamá", "Papá", "Iris", "Leo"]) expect(isShortName(name), name).toBe(true);
+    for (const name of ["Auntie Jo", "La tía Jo", "The Okonkwos", "Grandma"]) expect(isShortName(name), name).toBe(false);
+    expect(source()).toContain("const fit = short && own.whole && cap !== undefined && cap < own.size ? { ...own, size: cap } : own;");
+  });
+
+  it("a note taller than the screen starts clear of the sound button in the corner", () => {
+    expect(source()).toContain('const CARD_TOP = "max(calc(9*var(--u)), calc(max(.75rem, var(--gift-safe-top, env(safe-area-inset-top))) + 2.5rem + 8px))";');
+    expect(readFileSync("src/templates/_shared/SoundToggle.tsx", "utf8")).toContain("top-[max(0.75rem,var(--gift-safe-top,env(safe-area-inset-top)))] right-3 z-40 grid size-10");
+  });
+});
+
+describe("its page prices it as what it is sold as: a group card", () => {
+  it("a template that needs notes to be sent is sold only as a group card; one that stands without them is not", () => {
+    expect(soldAsGroup(manifest)).toBe(true);
+    expect(soldAsGroup({ features: { ...manifest.features, group: { ...manifest.features.group!, min: 0 } } })).toBe(false);
+    expect(soldAsGroup({ features: { ...manifest.features, group: undefined } })).toBe(false);
+  });
+
+  it("its search entry offers it at a group card's price, in every currency", () => {
+    for (const currency of ["eur", "usd", "gbp"] as const) {
+      const node = templateProductNode(manifest, "en", currency, "Digital card") as { offers: { price: string } };
+      expect(Number(node.offers.price), currency).toBe(PRODUCTS.group.amounts[currency] / 100);
+    }
+  });
+
+  it("its page says collecting notes is free and inviting takes a sign-in, and no browser is sent those lines", () => {
+    for (const locale of LOCALES) {
+      const all = JSON.parse(readFileSync(`messages/${locale}.json`, "utf8"));
+      const lines = all.templates.group as Record<string, string>;
+      expect(Object.keys(lines).sort()).toEqual(["detailPrice", "faqA", "featureNotes"]);
+      expect(lines.detailPrice).toContain("{price}");
+      expect(lines.detailPrice).not.toMatch(/no account|sin cuenta/i);
+      expect(lines.detailPrice).toMatch(locale === "en" ? /free/ : /gratis/);
+      expect(lines.featureNotes).toContain("{max}");
+      expect(lines.faqA).toMatch(/\{price\}[\s\S]*\{name\}/);
+      expect(fillerIn(Object.values(lines).join(" "), locale)).toEqual([]);
+    }
+    expect(GROUP_WORDS.server).toContain("templates.group");
+    const page = readFileSync("src/app/[currency]/[locale]/(marketing)/templates/[slug]/page.tsx", "utf8");
+    expect(page).toContain('PRODUCTS[manifest.tier === "free" ? "extras" : group ? "group" : "single"]');
+    expect(page).toContain('t("templates.group.detailPrice", { price })');
+    expect(readFileSync("src/components/templates/template-guide.tsx", "utf8")).toContain('soldAsGroup(manifest) ? group("faqA", { name, price })');
   });
 });

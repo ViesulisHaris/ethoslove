@@ -6,7 +6,7 @@ import { templateGuide } from "@/content/template-guides";
 import { templateSeo } from "@/content/template-seo";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { noteForEveryone, sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
 import { FaqList } from "@/components/shared/faq-list";
 
 /**
@@ -17,10 +17,12 @@ import { FaqList } from "@/components/shared/faq-list";
 export async function templateFaq(manifest: TemplateManifest, locale: GiftLocale, price: string) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
   const name = manifest.name[locale];
+  const group = await getTranslations({ locale, namespace: "templates.group" });
   return [
     sendsFree(manifest)
       ? { q: t("faqFreeQ"), a: t(noteForEveryone() ? "faqFreeAShort" : "faqFreeA", { name, price }) }
-      : { q: t("faqPaidQ"), a: t("faqPaidA", { name, price }) },
+      : // sold only as a group card: not "with no account", and not the price of one template
+        { q: t("faqPaidQ"), a: soldAsGroup(manifest) ? group("faqA", { name, price }) : t("faqPaidA", { name, price }) },
     { q: t("faqOpenQ"), a: t("faqOpenA") },
     { q: t("faqEditQ"), a: t("faqEditA") },
     ...(templateGuide(manifest.slug, locale)?.faq ?? []),

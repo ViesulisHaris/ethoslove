@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateGuide, templateFaq } from "@/components/templates/template-guide";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { noteForEveryone, sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 
 export function generateStaticParams() {
@@ -59,8 +59,10 @@ export default async function TemplateDetailPage({
   // A premium template is bought as one; a free one only ever costs its "make it special" extras.
   // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
   const free = sendsFree(manifest);
+  // A template that needs notes to be sent is sold only as a group card, at a group card's price.
+  const group = soldAsGroup(manifest);
   const price = formatAmount(
-    PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency],
+    PRODUCTS[manifest.tier === "free" ? "extras" : group ? "group" : "single"].amounts[currency],
     currency,
     l,
   );
@@ -68,6 +70,7 @@ export default async function TemplateDetailPage({
   const faq = await templateFaq(manifest, l, price);
 
   const featureList: [boolean, string][] = [
+    ...(group ? [[true, t("templates.group.featureNotes", { max: manifest.features.group?.max ?? 0 })] as [boolean, string]] : []),
     [true, t("templates.featurePhotos", { max: manifest.features.photos.max })],
     [manifest.features.music, t("templates.featureMusic")],
     [manifest.features.captions, t("templates.featureCaptions")],
@@ -152,7 +155,9 @@ export default async function TemplateDetailPage({
             <p className="mt-3 max-w-md text-sm text-muted-foreground">
               {free
                 ? t(noteForEveryone() ? "templates.detailPriceFreeShort" : "templates.detailPriceFree", { price })
-                : t("templates.detailPricePaid", { price })}
+                : group
+                  ? t("templates.group.detailPrice", { price })
+                  : t("templates.detailPricePaid", { price })}
             </p>
           </div>
 

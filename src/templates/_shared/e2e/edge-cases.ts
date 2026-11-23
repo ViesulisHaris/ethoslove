@@ -120,6 +120,8 @@ export function edgeCase(mod: TemplateModule, locale: GiftLocale, name: string):
   }
 
   if (name === "demo") return demo;
+  // The demo as a free gift is sent: with the floating "Made with Ethos" badge, which a demo never draws.
+  if (name === "watermarked") return { ...demo, watermark: true };
   if (name === "empty") return { ...demo, fields: {} };
   // No message at all, faded in rather than typed: nothing to finish, and the gift still ends.
   // (No countdown either: a gift that waits for its moment waits, and this case is about the message.)

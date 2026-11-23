@@ -121,6 +121,14 @@ itself.
   in `art-map.ts`. To change the art: render, then `node scripts/art/holiday/pack.mjs advent-calendar <renders>`.
 - Its three sounds (`playHatch`, `playEnvelope`, `playTing` in `_shared/night/sfx.ts`) are played at
   about a third, because they repeat; the door's is timed by `HATCH`, which its swing is drawn by.
+- On a real gift's page (never the editor's played preview or a demo) the doors opened and the notes
+  read are kept for the tab in sessionStorage (`kept.ts`), so a reload does not shut twenty-four
+  doors again. The key is worked out from the two names and the notes' own keys; it holds no gift
+  id and never leaves the browser. Taking it out is one line in `Template.tsx` (`remembers`).
+- A free gift's badge floats at the foot of the screen; the foot's lines and the house go up out of
+  its band (`CLEAR` in `Template.tsx`). A finger's second tap on a door still swinging, and a tap on
+  the veil before a note's card has arrived, do nothing (a fast double tap used to take a note out
+  and put it back unseen).
 
 **Held back.** `ADVENT_CALENDAR_LIVE` in `src/templates/held.ts` is `false`. While it is, the
 template is in none of the lists (`TEMPLATE_MANIFESTS`, `TEMPLATE_SLUGS`, `LOADER_SLUGS`,
@@ -164,7 +172,14 @@ plays both states. Four things do not follow from the switch and are done by han
      signer's name, "Mum";
    - delete `page-content.ts`, and move the checks under "the words waiting for its page" in
      `tests/unit/advent-calendar.test.tsx` onto the tables. One test there fails from the moment
-     the tables are on the branch until this is done, so it cannot be forgotten.
+     the tables are on the branch until this is done, so it cannot be forgotten;
+   - check the page's price once more. A template that needs notes to be sent (`features.group.min`
+     above 0, `soldAsGroup` in `src/lib/gift/free-tier.ts`) is priced on its page as a group card
+     (`PRODUCTS.group`) in the price line, the FAQ's answer and the Product JSON-LD, says collecting
+     notes is free and that inviting takes a sign-in, not "no account needed", and lists its notes
+     first under "What's included". Those lines are `templates.group` in `messages/*.json`, which no
+     layout sends to a browser (`GROUP_WORDS.server`). If `growth/guides` draws the page's price or
+     its included list anew, it has to keep that.
 
 At the integration build, search what is served for the held template (`grep -r "Advent Calendar"
 .next/static .next/server/app | head`). Its manifest and its `import("./advent-calendar")` are held
