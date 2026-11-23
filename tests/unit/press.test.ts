@@ -1,9 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { BRAND } from "@/config/brand";
+import { ABOUT_FOUNDED, aboutCopy } from "@/content/about";
+import { PRESS_COPY, pressFounderLine } from "@/content/press";
 import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
+import { CLOSED_BLOCK_WORDS, countWords } from "@/components/templates/page/lead";
+import { mentionsSpain } from "@/lib/cities/cities";
 import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
+
+import { fillerIn } from "./filler";
 
 const ROOT = path.join(__dirname, "../..");
 const read = (file: string) => fs.readFileSync(path.join(ROOT, file), "utf8");
@@ -131,5 +138,71 @@ describe("press query", () => {
     const values = new Set(["ios", "android", "utc", "birthday", "anniversary", "valentines", "YYYY"]);
     const keys = [...sql().matchAll(/'(\w+)',/g)].map((m) => m[1]!).filter((k) => !values.has(k) || allowed.has(k));
     for (const key of keys) expect(allowed.has(key), key).toBe(true);
+  });
+});
+
+describe("press words", () => {
+  type Copy = (typeof PRESS_COPY)["en"];
+  const shape = (v: unknown): unknown => (typeof v === "string" ? "s" : Array.isArray(v) ? v.map(shape) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, shape(x)])) : v);
+  const strings = (v: unknown, where: string): { text: string; where: string }[] =>
+    typeof v === "string" ? [{ text: v, where }] : Array.isArray(v) ? v.flatMap((x, i) => strings(x, `${where}[${i}]`)) : v && typeof v === "object" ? Object.entries(v).flatMap(([k, x]) => strings(x, `${where}.${k}`)) : [];
+
+  it("C1 the words are there in both languages, in the same shape", () => {
+    expect(shape(PRESS_COPY.en)).toEqual(shape(PRESS_COPY.es));
+    for (const locale of ["en", "es"] as const) {
+      for (const s of strings(PRESS_COPY[locale], locale)) expect(s.text.trim(), s.where).not.toBe("");
+      expect(PRESS_COPY[locale].method.faq).toHaveLength(4);
+    }
+  });
+
+  it("C2 the words fit the page", () => {
+    for (const locale of ["en", "es"] as const) {
+      const c: Copy = PRESS_COPY[locale];
+      const most = (text: string, max: number, where: string) => expect(countWords(text), `${locale} ${where}: ${text}`).toBeLessThanOrEqual(max);
+      most(c.sentence, 30, "sentence");
+      most(c.numbers.line, 14, "numbers.line");
+      most(c.made.line, 14, "made.line");
+      most(c.contact.line, 14, "contact.line");
+      for (const [id, f] of Object.entries(c.numbers.figures)) {
+        most(f.label, 9, `${id}.label`);
+        most(f.counts, 12, `${id}.counts`);
+      }
+      for (const [o, label] of Object.entries(c.numbers.reminder.labels)) most(label, 9, `reminder.${o}`);
+      most(c.numbers.reminder.counts, 12, "reminder.counts");
+      c.article.checks.forEach((check, i) => most(check, 14, `check ${i}`));
+      most(c.method.faq.map((f) => f.a).join(" "), CLOSED_BLOCK_WORDS, "the four answers");
+      expect(c.metaTitle.length, `${locale} metaTitle`).toBeLessThanOrEqual(70);
+      expect(c.metaDescription.length, `${locale} metaDescription`).toBeLessThanOrEqual(200);
+    }
+  });
+
+  it("C3 it says who makes Ethos in the About page's and the brand's own words", () => {
+    expect(pressFounderLine("en")).toBe("A small company in Latvia makes Ethos.");
+    for (const locale of ["en", "es"] as const) {
+      const line = pressFounderLine(locale);
+      expect(aboutCopy(locale, { templates: 0, single: "" }).subtitle.startsWith(line), locale).toBe(true);
+      expect(line.endsWith("."), locale).toBe(true);
+      const [first, second] = PRESS_COPY[locale].article.checks;
+      expect(first).toContain("{name}");
+      expect(first).toContain("{domain}");
+      expect(second).toContain("{company}");
+      expect(PRESS_COPY[locale].metaTitle).not.toMatch(/Tryethos/);
+      expect(PRESS_COPY[locale].metaTitle).not.toMatch(/Digital cards|Tarjetas digitales/);
+    }
+    expect(PRESS_COPY.en.article.checks[1]).toContain("March 2026");
+    expect(PRESS_COPY.es.article.checks[1]).toContain("marzo de 2026");
+    expect(ABOUT_FOUNDED.startsWith("2026-03")).toBe(true);
+  });
+
+  it("C4 no filler, no shouting, nothing about Spain, never a voucher's name", () => {
+    for (const locale of ["en", "es"] as const) {
+      for (const { text, where } of strings(PRESS_COPY[locale], locale)) {
+        expect(fillerIn(text, locale), where).toEqual([]);
+        expect(text, where).not.toMatch(/[!¡—–]/);
+        expect(mentionsSpain(text), where).toBe(false);
+        expect(text, where).not.toMatch(/gift card/i);
+        expect(text.includes(BRAND.categoryLine.en) || text.includes(BRAND.categoryLine.es), where).toBe(false);
+      }
+    }
   });
 });

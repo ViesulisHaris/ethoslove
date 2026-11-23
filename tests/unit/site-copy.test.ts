@@ -14,6 +14,7 @@ import { listManifests } from "@/templates/manifests";
 import { TOGETHER_GUIDE } from "@/content/together-guide";
 import { LOVE_QUIZ, QUESTIONS as LOVE_QUIZ_QUESTIONS } from "@/content/love-language-quiz";
 import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } from "@/content/date-kinds";
+import { PRESS_COPY } from "@/content/press";
 import { fillerIn } from "./filler";
 
 type Locale = "en" | "es";
@@ -41,6 +42,7 @@ const SOURCES: Record<string, unknown> = {
   "template guides": TEMPLATE_GUIDES,
   "days-together counter": TOGETHER_GUIDE,
   "love language quiz": { LOVE_QUIZ, LOVE_QUIZ_QUESTIONS },
+  "press page": PRESS_COPY,
   games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS },
   "game packs": PACK_CARDS,
   "dates by kind": { DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, CITY_KIND_COPY },
