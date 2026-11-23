@@ -5,6 +5,8 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { BRAND } from "@/config/brand";
 import { LogoMark } from "@/components/shared/logo";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics/track";
+import { WATERMARK_REF, madeWithEthosHref } from "@/lib/attribution/recipient";
 import { GIFT_CONTROLS, coversControl } from "./watermark-spot";
 
 /**
@@ -13,29 +15,90 @@ import { GIFT_CONTROLS, coversControl } from "./watermark-spot";
  * It opens a page made for whoever taps it (/made-with-ethos): they have just been given one and are
  * curious, not ready to pay, so it starts with making one back for free, the gift's own template
  * first among its kind, and never goes straight to a checkout. Gifts carry no app context, so the
- * language prefix is the gift's own, the same as its "send one back".
+ * language prefix is the gift's own, the same as its "send one back". Its address carries the
+ * template and never the gift, and the page it opens is told only the site's name as where the tap
+ * came from (next.config.ts: a gift page sends no more than its origin as a referrer).
  *
  * It floats at the foot of the gift, except on the end screen, which carries it in its own flow
  * (`inline`) so it never lands on top of the buttons there. Floating, it never lands on any other
  * button either: while one of the gift's controls is under it, it stands down (./watermark-spot.ts).
+ *
+ * On the end screen it is the maker's mark at the foot of the gift, and reads as two quiet lines:
+ * the badge, and under it what Ethos makes (BRAND.categoryLine), in the end screen's own `tone`.
+ * One link, a thumb tall. The floating badge stays the one line it was: its size is tuned.
+ *
+ * `counted`: on a real gift page a tap is counted (the template, nothing else). A demo shows the
+ * badge too, and a tap there is a visitor's, not a recipient's.
  */
-export function Watermark({ locale, slug, inline = false, className }: { locale: GiftLocale; slug?: string; inline?: boolean; className?: string }) {
+export function Watermark({
+  locale,
+  slug,
+  inline = false,
+  tone = "dark",
+  counted = false,
+  className,
+}: {
+  locale: GiftLocale;
+  slug?: string;
+  inline?: boolean;
+  tone?: "light" | "dark";
+  counted?: boolean;
+  className?: string;
+}) {
   const ref = useRef<HTMLAnchorElement>(null);
   const standDown = useControlUnder(ref, !inline);
-  const prefix = locale === "es" ? "/es" : "";
-  const href = `${prefix}/made-with-ethos?ref=watermark${slug ? `&template=${encodeURIComponent(slug)}` : ""}`;
+  const href = madeWithEthosHref(locale, WATERMARK_REF, slug);
+  // Not counted with no connection: the new tab opens on the browser's error page, not on ours.
+  const onClick = counted
+    ? () => {
+        if (navigator.onLine !== false) track("watermark_clicked", { template: slug ?? null });
+      }
+    : undefined;
+  if (inline)
+    return (
+      <a
+        ref={ref}
+        href={href}
+        target="_blank"
+        rel="noopener"
+        onClick={onClick}
+        // Its keyboard ring stands off both lines, and on a dark end screen it is a light one (the
+        // site's own is a dark plum, lost on a dark gift).
+        className={cn(
+          "group/mark relative z-40 flex min-h-11 flex-col items-center justify-center gap-1.5 rounded-2xl px-3 focus-visible:outline-offset-4 active:opacity-70",
+          tone === "dark" && "focus-visible:outline-white/60",
+          className,
+        )}
+      >
+        {/* On a light end screen the pill is darker: white on black at 40% over paper was under 3:1. */}
+        <span
+          className={cn(
+            "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium whitespace-nowrap shadow-sm backdrop-blur-md transition-colors",
+            tone === "light" ? "bg-black/65 text-white group-hover/mark:bg-black/75" : "bg-black/40 text-white/85 group-hover/mark:bg-black/55",
+          )}
+        >
+          <LogoMark className="size-3.5" />
+          {BRAND.watermark[locale]}
+        </span>
+        {/* Small type, so black at 60% on a light end screen: about 5:1 on paper or white (50% was under the 4.5:1 small text needs). */}
+        <span className={cn("text-[10px] leading-none tracking-[0.04em] whitespace-nowrap", tone === "dark" ? "text-white/55" : "text-black/60")}>
+          {BRAND.categoryLine[locale]}
+        </span>
+      </a>
+    );
   return (
     <a
       ref={ref}
       href={href}
       target="_blank"
       rel="noopener"
+      onClick={onClick}
       className={cn(
         "z-40 flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[11px] font-medium whitespace-nowrap text-white/85 shadow-sm backdrop-blur-md transition-colors hover:bg-black/55",
-        inline ? "relative" : "absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2",
+        "absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2",
         // Gone at once when a button turns up under it (out of reach and out of the tab order too), back
         // gently once its spot is clear.
-        standDown ? "invisible opacity-0" : !inline && "transition-[opacity,background-color] duration-300",
+        standDown ? "invisible opacity-0" : "transition-[opacity,background-color] duration-300",
         className,
       )}
     >

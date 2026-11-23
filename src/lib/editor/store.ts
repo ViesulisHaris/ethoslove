@@ -23,7 +23,7 @@ import { UploadError, timeoutFor, uploadBlob } from "./upload";
 import { uploadTypeFor } from "./media-types";
 import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, stuckUploads, type FailedGroup } from "./failed-uploads";
 import { processImageFile, transformImage } from "./image";
-import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
+import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, replyDraftScope, serializeForLocal, writeLocalDraft } from "./persistence";
 import { completeGiftData } from "./complete-data";
 import { askedArm, pickFreeTier } from "./free-tier-split";
 import { NOTE_TEMPLATES, noteForEveryone } from "@/lib/gift/free-tier";
@@ -63,6 +63,8 @@ export type EditorState = {
     authed: boolean;
     userId: string | null;
     remote?: RemoteGift | null;
+    /** Opened as a reply ("Send one back"): it keeps its own draft, apart from the template's page. */
+    reply?: boolean;
   }) => Promise<void>;
   setAuth: (authed: boolean, userId: string | null) => void;
   patch: (p: Partial<GiftData>) => void;
@@ -222,6 +224,9 @@ async function captureVideoPoster(file: File): Promise<Blob | null> {
 export const useEditor = create<EditorState>((set, get) => {
   // The local-draft key this editing session opened: the template's own page, or a gift from the dashboard.
   let sessionKey: string | null = null;
+  // The key of the page this session opened when it is not an existing gift: the template's own, or
+  // its reply's (pageScope). Null while editing a gift from the dashboard.
+  let pageKey: string | null = null;
 
   const saveLocal = () => {
     localTimer = undefined;
@@ -300,7 +305,7 @@ export const useEditor = create<EditorState>((set, get) => {
     }
     const { slug } = get();
     set({ giftId: null, shortId: null, assets });
-    if (sessionKey === draftScope(slug, oldGiftId)) sessionKey = slug;
+    if (sessionKey === draftScope(slug, oldGiftId)) sessionKey = pageKey ?? slug;
     persistLocal();
   };
 
@@ -385,10 +390,11 @@ export const useEditor = create<EditorState>((set, get) => {
     savedAt: null,
     dirty: false,
 
-    async init({ slug, manifest, initial, authed, userId, remote }) {
+    async init({ slug, manifest, initial, authed, userId, remote, reply = false }) {
       // The gift this editor had open is saved under its own key before the key moves on.
       flushLocal();
-      sessionKey = draftScope(slug, remote?.id ?? null);
+      pageKey = remote ? null : pageScope(slug, reply);
+      sessionKey = pageKey ?? draftScope(slug, remote?.id ?? null);
       const timezone = defaultTimezone();
       let data = initial;
       let assets: Record<string, AssetRecord> = {};
@@ -401,7 +407,7 @@ export const useEditor = create<EditorState>((set, get) => {
 
       // Both made whole first: a draft's row is empty until its first save, and a draft this browser
       // kept from an older version can miss pieces (see completeGiftData).
-      const saved = readLocalDraft(draftScope(slug, giftId));
+      const saved = pageKey ? readLocalDraft(pageKey, slug) : readLocalDraft(draftScope(slug, giftId));
       const local = saved ? { ...saved, data: completeGiftData(initial, saved.data) } : null;
 
       if (remote) {
@@ -1069,7 +1075,10 @@ export const useEditor = create<EditorState>((set, get) => {
       const { slug, giftId } = get();
       if (giftId) {
         // The template's page starts the next gift fresh; this one stays editable from the dashboard.
-        if (sessionKey === slug || readLocalDraft(slug)?.giftId === giftId) clearLocalDraft(slug);
+        if (pageKey && sessionKey === pageKey) clearLocalDraft(pageKey);
+        if (readLocalDraft(slug)?.giftId === giftId) clearLocalDraft(slug);
+        const replyKey = pageScope(slug, true);
+        if (readLocalDraft(replyKey, slug)?.giftId === giftId) clearLocalDraft(replyKey);
         sessionKey = draftScope(slug, giftId);
       }
       set({ shortId, status, dirty: false, save: "saved", savedAt: Date.now() });
@@ -1091,6 +1100,16 @@ async function readable(blob: Blob): Promise<boolean> {
 
 export function draftScope(slug: string, giftId: string | null): string {
   return giftId ? `${slug}:${giftId}` : slug;
+}
+
+/**
+ * The draft a new gift's editor opens: the template's own page, or, opened as a reply ("Send one
+ * back", lib/editor/reply-seed.ts), a draft of the reply's own. Sharing one, a reply in one tab and a
+ * gift for someone else of the same template in another wrote over each other, and a reply opened
+ * on an older draft of the template instead of the swapped names.
+ */
+export function pageScope(slug: string, reply: boolean): string {
+  return reply ? replyDraftScope(slug) : slug;
 }
 
 /** Turn a stored draft (idb refs) back into previewable object URLs. Drops photos whose blob is gone. */

@@ -14,7 +14,7 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
-import { StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
+import { EndScroll, StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
 import { down, Plate, SoftTable, Sparks, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, SPRITES } from "./art-map";
 import { ENOUGH, inside, readyMade, SPACING, SWEETS, type Mark, type Pt, type Sweet, type Tool } from "./decorate";
@@ -481,6 +481,12 @@ function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onM
                       </figcaption>
                     ) : null}
                   </figure>
+                ) : step.kind === "end" ? (
+                  // The end is set closer for a page, and may run a little into the page's margin; where
+                  // even that is too small it scrolls inside the page.
+                  <EndScroll give="calc(4*var(--u))">
+                    <StepExtra step={step} data={data} tone="light" compact onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                  </EndScroll>
                 ) : (
                   <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
                 )}

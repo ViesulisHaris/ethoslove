@@ -10,12 +10,13 @@ import type { ShownReaction } from "@/lib/proof/numbers";
 import { loadTemplate } from "@/templates/registry";
 import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
-import { takeReplySeed } from "@/lib/editor/reply-seed";
+import { clearReplySeed, opensAsReply, replySeedForEditor } from "@/lib/editor/reply-seed";
 import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
 import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
+import { countRecipientEditorOpened } from "@/lib/attribution/recipient-loop";
 import { OPEN_PUBLISH_EVENT } from "@/lib/editor/open-publish";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
@@ -114,9 +115,18 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   // gift until init() below replaces it, so this template's form would be drawn over another
   // template's data (and anything touched in that moment saved under this template's key).
   const ready = hydrated && storeSlug === slug && (!remote || storeGiftId === remote.id);
+  // A reply's swapped names wait in this tab until the reply is first changed: from then on they
+  // are in its own draft, and the seed would only put them on some other gift made here later.
+  const dirty = useEditor((s) => s.dirty);
+  useEffect(() => {
+    if (ready && dirty) clearReplySeed();
+  }, [ready, dirty]);
 
   useEffect(() => {
     track("editor_opened", { template: slug });
+    // And, when whoever opened it came from a gift (its "send one back", its "someone else" link, its
+    // badge, a kept gift's reminder), that the loop turned: which door, which template, nothing else.
+    countRecipientEditorOpened(new URLSearchParams(window.location.search), slug);
   }, [slug]);
 
   // Load the template module (schema + field meta), then hydrate the store. A seed in the address
@@ -128,8 +138,10 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       if (!active || !m) return;
       setMod(m);
       const initial = blankGift(manifest, locale, m);
-      // Arrived from "Send one back" on a gift: the names come already swapped.
-      const reply = remote ? null : takeReplySeed(slug);
+      // Arrived from "Send one back" on a gift: the names come already swapped. The seed is left in
+      // place until this reply is first changed (below), so a reload before then still has them.
+      // Only an editor opened as a reply takes it; any other editor of this template throws it away.
+      const reply = remote ? null : replySeedForEditor(slug, window.location.search);
       if (reply) {
         initial.recipientName = reply.recipientName;
         initial.senderName = reply.senderName;
@@ -161,6 +173,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           authed: Boolean(user),
           userId: user?.id ?? null,
           remote,
+          // A reply keeps its own draft: a gift of this template for someone else, in another tab
+          // or later in this one, is a different gift and never writes over it.
+          reply: !remote && opensAsReply(window.location.search),
         })
         .then(() => {
           // init() puts a draft left in this browser in place of `initial`. They have just asked

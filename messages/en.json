@@ -3558,16 +3558,18 @@
     }
   },
   "madeWith": {
-    "metaTitle": "Make one back",
-    "metaDescription": "Someone made you an Ethos gift. Make one back: two templates are free, and every other one is free to try.",
-    "eyebrow": "Made with Ethos",
+    "metaTitle": "Make one of your own",
+    "metaDescription": "Someone made you an Ethos gift. Make one of your own: every template is free to try.",
     "title": "Someone made you one of these.",
-    "subtitle": "Make one back — free to start.",
+    "subtitle": "Make one back. Free to start.",
+    "subtitleElse": "Make one for someone else. Free to start.",
     "yours": "The one you got",
+    "all": "See every template",
     "free": {
       "eyebrow": "Free",
       "title": "Free to make and send",
-      "blurb": "No payment, and no account until you send it. These carry the small “Made with Ethos” footer, like the one you got."
+      "blurb": "No payment, and no account until you send it. A free gift carries the small “Made with Ethos” footer, like the one you got.",
+      "blurbElse": "No payment, and no account until you send it. A free gift carries a small “Made with Ethos” footer."
     },
     "premium": {
       "eyebrow": "Premium",

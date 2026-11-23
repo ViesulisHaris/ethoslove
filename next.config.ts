@@ -141,6 +141,18 @@ const nextConfig: NextConfig = {
       headers: [{ key: "Referrer-Policy", value: "strict-origin" }],
     },
     {
+      // A gift's address is private: whoever holds it can open the gift. Under the site-wide policy a
+      // page of ours opened from a gift (the "Made with Ethos" badge and the end screen's "or make one
+      // for someone else" both open /made-with-ethos, a marketing page where Clarity and the Meta
+      // pixel run after a yes to cookies) was handed the gift's whole address as its referrer. From a
+      // gift, and from its keep page, every page gets the origin and no more, as with the checkout
+      // above; the site's own attribution only ever kept the host. After the `/(.*)` rule on purpose.
+      // /gift-preview is the development-only stand-in for a gift page (a 404 in production), so the
+      // browser tests see the same policy a real gift has.
+      source: "/:locale(es)?/:gift(g|gift-preview)/:path*",
+      headers: [{ key: "Referrer-Policy", value: "strict-origin" }],
+    },
+    {
       // MapLibre's browser files (scripts/copy-maplibre.mjs). The folder is named after the version.
       source: "/vendor/maplibre-gl/:version/:file",
       headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
