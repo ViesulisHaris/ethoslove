@@ -1118,10 +1118,6 @@
     "faqEyebrow": "Questions",
     "faqTitle": "Questions people ask",
     "faqHelp": "Something else? Write to <email>{address}</email> and a person answers.",
-    "faqGroups": {
-      "forTwo": "Ethos for Two",
-      "rest": "Gifts, games and paying"
-    },
     "faq": [
       {
         "id": "subscriptions",
@@ -1225,7 +1221,56 @@
     ],
     "perTemplate": "All {n} premium templates · {price} each",
     "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe",
-    "separately": "{price} separately"
+    "separately": "{price} separately",
+    "page": {
+      "label": "Pricing",
+      "title": "One gift, paid once.",
+      "titleTemplate": "Unlock {name}",
+      "lineOne": "No subscription. {name} is free.",
+      "lineTwo": "No subscription. Two are free.",
+      "lineNone": "No subscription.",
+      "priceNote": "for one gift, yours for good",
+      "make": "Make a gift",
+      "seeFree": "See what is free",
+      "buyTemplate": "Unlock this gift",
+      "giftsLabel": "Paid once",
+      "giftsHeading": "Pay once. Keep it for good.",
+      "cards": {
+        "single": {
+          "name": "One gift",
+          "line": "Any one of the paid gifts.",
+          "ticks": [
+            "Your voice or your video",
+            "Up to 20 photos, no footer"
+          ]
+        },
+        "pick3": {
+          "name": "Pick three",
+          "line": "Any three, free or paid.",
+          "ticks": [
+            "All that One gift has"
+          ]
+        },
+        "everything": {
+          "name": "Everything",
+          "line": "All {n} paid gifts · {price} each",
+          "ticks": [
+            "Every new gift too",
+            "Make as many as you like"
+          ]
+        }
+      },
+      "includes": "What each one includes",
+      "specialLine": "Photos, video and no footer on a free gift.",
+      "faqForTwo": "Questions about Ethos for Two",
+      "forTwoTicks": [
+        "Unlimited saved dates and trips",
+        "Planned together on both phones",
+        "Every gift and every game pack"
+      ],
+      "compareOpen": "Compare free and Ethos for Two, line by line",
+      "faqLabel": "Questions"
+    }
   },
   "legal": {
     "terms": "Terms of Service",
@@ -3043,14 +3088,6 @@
       "passTerms": "One payment for 365 days. We'll email you two weeks before it ends.",
       "renewCta": "Renew for another year",
       "renewNote": "Renewing adds a year from the day yours ends, so renewing early loses nothing.",
-      "covers": "One payment covers both of you",
-      "coversCancel": "One payment covers both of you · cancel any time",
-      "trust": {
-        "stripe": "Secure checkout by Stripe",
-        "wallets": "Card, Apple Pay or Google Pay",
-        "cancel": "Cancel in two taps",
-        "once": "No renewal, no surprise"
-      },
       "art": {
         "myDates": "My dates",
         "shared": "Shared with {name}",
@@ -3096,7 +3133,6 @@
       "fix": "Update your card"
     },
     "compare": {
-      "eyebrow": "Free and For Two",
       "title": "What's free, and what For Two adds",
       "sub": "Finding a date, planning it and sending it stays free for everyone, with no account.",
       "feature": "What you get",
@@ -3132,11 +3168,7 @@
       "noAccount": "Find a date"
     },
     "single": {
-      "eyebrow": "Paid once",
-      "title": "Or buy a single gift",
-      "sub": "Pay once and it's yours for good. No subscription.",
       "special": {
-        "eyebrow": "For a free template",
         "name": "Make it special",
         "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no footer, on that template for good.",
         "blurbShort": "For {names}: your photos, the full letter, video, voice messages, scheduling, a password and no footer, on that template for good.",

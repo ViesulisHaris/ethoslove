@@ -1118,10 +1118,6 @@
     "faqEyebrow": "Preguntas",
     "faqTitle": "Preguntas frecuentes",
     "faqHelp": "¿Otra cosa? Escríbenos a <email>{address}</email> y te responde una persona.",
-    "faqGroups": {
-      "forTwo": "Ethos for Two",
-      "rest": "Regalos, juegos y pagos"
-    },
     "faq": [
       {
         "id": "subscriptions",
@@ -1225,7 +1221,56 @@
     ],
     "perTemplate": "Las {n} plantillas premium · {price} cada una",
     "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
-    "separately": "{price} por separado"
+    "separately": "{price} por separado",
+    "page": {
+      "label": "Precios",
+      "title": "Un regalo, un solo pago.",
+      "titleTemplate": "Desbloquea {name}",
+      "lineOne": "Sin suscripción. {name} es gratis.",
+      "lineTwo": "Sin suscripción. Dos son gratis.",
+      "lineNone": "Sin suscripción.",
+      "priceNote": "por regalo, tuyo para siempre",
+      "make": "Crear un regalo",
+      "seeFree": "Ver lo que es gratis",
+      "buyTemplate": "Desbloquear este regalo",
+      "giftsLabel": "Un solo pago",
+      "giftsHeading": "Paga una vez. Es tuyo.",
+      "cards": {
+        "single": {
+          "name": "Un regalo",
+          "line": "Cualquiera de los regalos de pago.",
+          "ticks": [
+            "Tu voz o tu vídeo",
+            "Hasta 20 fotos, sin pie"
+          ]
+        },
+        "pick3": {
+          "name": "Elige tres",
+          "line": "Tres, gratis o de pago.",
+          "ticks": [
+            "Todo lo de Un regalo"
+          ]
+        },
+        "everything": {
+          "name": "Todo",
+          "line": "{n} regalos de pago · {price} cada uno",
+          "ticks": [
+            "Y cada regalo nuevo",
+            "Haz tantos como quieras"
+          ]
+        }
+      },
+      "includes": "Qué incluye cada uno",
+      "specialLine": "Fotos, vídeo y sin pie en un regalo gratis.",
+      "faqForTwo": "Preguntas sobre Ethos for Two",
+      "forTwoTicks": [
+        "Citas y viajes guardados, sin límite",
+        "Planeados juntos en los dos móviles",
+        "Cada regalo y cada pack de juegos"
+      ],
+      "compareOpen": "Compara lo gratis con Ethos for Two, línea a línea",
+      "faqLabel": "Preguntas"
+    }
   },
   "legal": {
     "terms": "Términos del servicio",
@@ -3043,14 +3088,6 @@
       "passTerms": "Un solo pago por 365 días. Te escribiremos dos semanas antes de que termine.",
       "renewCta": "Renovar otro año",
       "renewNote": "Al renovar se suma un año desde el día en que termina el tuyo, así que renovar antes no te hace perder nada.",
-      "covers": "Un solo pago os cubre a los dos",
-      "coversCancel": "Un solo pago os cubre a los dos · cancela cuando quieras",
-      "trust": {
-        "stripe": "Pago seguro con Stripe",
-        "wallets": "Tarjeta, Apple Pay o Google Pay",
-        "cancel": "Cancela en dos toques",
-        "once": "Sin renovaciones ni sorpresas"
-      },
       "art": {
         "myDates": "Mis citas",
         "shared": "Compartidas con {name}",
@@ -3096,7 +3133,6 @@
       "fix": "Actualizar la tarjeta"
     },
     "compare": {
-      "eyebrow": "Gratis y For Two",
       "title": "Lo que es gratis y lo que añade For Two",
       "sub": "Buscar una cita, planearla y enviarla sigue siendo gratis para todo el mundo, sin cuenta.",
       "feature": "Qué incluye",
@@ -3132,11 +3168,7 @@
       "noAccount": "Buscar una cita"
     },
     "single": {
-      "eyebrow": "Un solo pago",
-      "title": "O compra un regalo suelto",
-      "sub": "Pagas una vez y es tuyo para siempre. Sin suscripción.",
       "special": {
-        "eyebrow": "Para una plantilla gratis",
         "name": "Hazlo especial",
         "blurb": "Para {names}: vídeo, mensajes de voz, 20 fotos, programación, contraseña y sin pie, en esa plantilla para siempre.",
         "blurbShort": "Para {names}: tus fotos, la carta entera, vídeo, mensajes de voz, programación, contraseña y sin pie, en esa plantilla para siempre.",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { AlertTriangle, ArrowRight, CalendarCheck, CreditCard, Loader2, Lock } from "lucide-react";
+import { AlertTriangle, ArrowRight, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics/track";
@@ -31,7 +31,7 @@ function Swap({ shown, items, className }: { shown: string; items: { key: string
             key={key}
             aria-hidden={!on || undefined}
             inert={!on}
-            className={cn("col-start-1 row-start-1 transition-[opacity,translate] duration-300 ease-(--ease-out-quint)", on ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-1.5 opacity-0")}
+            className={cn("col-start-1 row-start-1 transition-[opacity,translate,visibility] duration-300 ease-(--ease-out-quint)", on ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible translate-y-1.5 opacity-0")}
           >
             {node}
           </div>
@@ -97,9 +97,9 @@ export function MembershipOffer({
     <>
       <p className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
         <span className="font-display text-[clamp(3rem,13vw,3.75rem)] leading-none tracking-tight text-cream">{money(membershipAmount(p === "pass" ? "yearly" : p, currency))}</span>
-        <span className="text-[15px] text-moonlight/80">{t(p === "monthly" ? "unitMonth" : p === "yearly" ? "unitYear" : "unitPass")}</span>
+        <span className="text-[15px] text-cream/75">{t(p === "monthly" ? "unitMonth" : p === "yearly" ? "unitYear" : "unitPass")}</span>
       </p>
-      <p className="mt-2 text-[14px] font-medium text-horizon">
+      <p className="mt-2 text-[14px] font-medium text-cream/85">
         {p === "yearly"
           ? t("yearlyNote", { price: money(yearlyPerMonth(currency)), pct: yearlySavingPct(currency) })
           : p === "monthly"
@@ -110,7 +110,7 @@ export function MembershipOffer({
   );
 
   const terms = (p: MembershipPlan | "pass") => (
-    <p className="text-[13px] leading-snug text-moonlight/70">
+    <p className="text-sm leading-snug text-cream/70">
       {p === "pass" ? t("passTerms") : t(p === "monthly" ? "termsMonthly" : "termsYearly", { price: money(membershipAmount(p, currency)) })}
     </p>
   );
@@ -125,14 +125,14 @@ export function MembershipOffer({
       <div
         ref={ref}
         data-testid="membership-offer"
-        className={cn("relative rounded-[28px] bg-white/[0.06] p-5 ring-1 ring-starlight/40 backdrop-blur-[2px] sm:p-7", highlight && "shadow-starlight-halo ring-2 ring-starlight/70")}
+        className={cn("relative rounded-[28px] bg-cream/[0.06] p-5 ring-1 ring-starlight/40 backdrop-blur-[2px] sm:p-7", highlight && "shadow-starlight-halo ring-2 ring-starlight/70")}
       >
         <div data-testid="membership-member" data-state={state.kind === "member" ? state.line : state.kind}>
           <SealMark className="size-9" />
           <p className="mt-4 font-display text-[1.75rem] leading-tight text-cream sm:text-[2rem]">{state.kind === "partner" ? tMember("partnerIn") : tMember("title")}</p>
           {state.kind === "member" ? (
             // A payment to fix reads as one, in the horizon's warm colour, wherever it is fixed (a card here, Settings for Apple).
-            <p className={cn("mt-2 flex items-start gap-2 text-[15px] leading-snug", fix ? "font-medium text-horizon" : "text-moonlight/80")} data-testid="membership-member-line">
+            <p className={cn("mt-2 flex items-start gap-2 text-[15px] leading-snug", fix ? "font-medium text-starlight" : "text-cream/75")} data-testid="membership-member-line">
               {fix ? <AlertTriangle aria-hidden="true" className="mt-0.5 size-4 shrink-0" /> : null}
               <span>{state.date ? tMember(state.line, { date: longDate(state.date) }) : tMember(state.line)}</span>
             </p>
@@ -142,7 +142,7 @@ export function MembershipOffer({
             className={cn(
               "mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold",
               // Apple's billing is fixed in iOS: the account page says how, so it stays "Manage".
-              fix && state.line !== "appStoreBilling" ? "btn-star w-full sm:w-auto" : "border border-starlight/50 text-starlight hover:bg-starlight/10",
+              fix && state.line !== "appStoreBilling" ? "w-full bg-cream text-forest hover:bg-paper sm:w-auto" : "border border-cream/30 text-cream hover:bg-cream/10",
             )}
           >
             {fix && state.line !== "appStoreBilling" ? tMember("fix") : tMember("manage")}
@@ -158,7 +158,7 @@ export function MembershipOffer({
       ref={ref}
       data-testid="membership-offer"
       className={cn(
-        "relative rounded-[28px] bg-white/[0.06] p-4 ring-1 ring-white/12 backdrop-blur-[2px] sm:p-6",
+        "relative rounded-[28px] bg-cream/[0.06] p-4 ring-1 ring-cream/12 backdrop-blur-[2px] sm:p-6",
         highlight && "shadow-starlight-halo ring-2 ring-starlight/70",
       )}
     >
@@ -166,13 +166,6 @@ export function MembershipOffer({
 
       <div className={cn(subscriptions ? "mt-6" : "mt-1", "px-1")}>
         {subscriptions ? <Swap shown={plan} items={PLANS.map((p) => ({ key: p, node: priceLine(p) }))} /> : priceLine("pass")}
-        <p className="mt-3 flex items-center gap-2.5 text-[14px] text-moonlight/85">
-          <span aria-hidden="true" className="flex -space-x-1.5">
-            <span className="grid size-6 place-items-center rounded-full bg-horizon text-[11px] font-bold text-dusk-deep ring-2 ring-dusk">A</span>
-            <span className="grid size-6 place-items-center rounded-full bg-starlight text-[11px] font-bold text-dusk-deep ring-2 ring-dusk">S</span>
-          </span>
-          {subscriptions ? t("coversCancel") : t("covers")}
-        </p>
       </div>
 
       <div className="mt-6">
@@ -181,7 +174,7 @@ export function MembershipOffer({
           onClick={buy}
           disabled={busy}
           data-testid="buy-membership"
-          className={cn("btn-star inline-flex h-14 w-full items-center justify-center gap-2 rounded-full px-7 text-[16px] font-semibold", busy && "opacity-80")}
+          className={cn("inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-cream px-7 text-[16px] font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-[background-color,translate,scale] duration-200 hover:bg-paper active:scale-[0.98] disabled:opacity-70 pointer-fine:hover:-translate-y-px", busy && "opacity-80")}
         >
           {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
           {state.kind === "renew" ? t("renewCta") : subscriptions ? t("cta") : t("passCta")}
@@ -189,7 +182,7 @@ export function MembershipOffer({
         </button>
         <div className="mt-3 px-1">
           {state.kind === "renew" ? (
-            <p className="text-[13px] leading-snug text-moonlight/70">{t("renewNote")}</p>
+            <p className="text-sm leading-snug text-cream/70">{t("renewNote")}</p>
           ) : subscriptions ? (
             <Swap shown={plan} items={PLANS.map((p) => ({ key: p, node: terms(p) }))} />
           ) : (
@@ -198,20 +191,6 @@ export function MembershipOffer({
         </div>
       </div>
 
-      <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-white/10 px-1 pt-4 text-[12.5px] text-moonlight/70">
-        <li className="flex items-center gap-1.5">
-          <Lock aria-hidden="true" className="size-3.5 text-starlight/80" />
-          {t("trust.stripe")}
-        </li>
-        <li className="flex items-center gap-1.5">
-          <CreditCard aria-hidden="true" className="size-3.5 text-starlight/80" />
-          {t("trust.wallets")}
-        </li>
-        <li className="flex items-center gap-1.5">
-          <CalendarCheck aria-hidden="true" className="size-3.5 text-starlight/80" />
-          {subscriptions ? t("trust.cancel") : t("trust.once")}
-        </li>
-      </ul>
     </div>
   );
 }

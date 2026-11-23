@@ -12,6 +12,9 @@ import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { SingleGifts } from "@/components/pricing/single-gifts";
 import { initialPlan, pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
 import { sendsFree } from "@/lib/gift/free-tier";
+import { SitePage } from "@/components/marketing/spread/sections";
+import { PriceHead } from "@/components/pricing/price-head";
+import { PricingChoice } from "@/components/pricing/pricing-choice";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/pricing">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -61,6 +64,12 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
   const renewAsked = one(query.renew) === "pass";
   const manifests = listManifests();
 
+  // Someone who came for the membership: its band is scrolled to and marked, and the table opened.
+  const highlight = renewAsked || FROM.includes(one(query.from) ?? "") || qPlan === "monthly" || qPlan === "yearly";
+
+  // The page, top to foot (docs/marketing/growth-build/PLAN-pricing.md, 24 Nov 2026): a gift's price first, the
+  // three ways to pay for gifts, Ethos for Two in its band, the questions with the table as their first closed row. The site's
+  // paper and layout (SitePage), the gift pages' parts.
   return (
     <>
       <JsonLd
@@ -72,30 +81,40 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
           ]),
         ]}
       />
-      <MembershipHero
-        currency={currency}
-        paymentsEnabled={stripeReady()}
-        subscriptions={subscriptions}
-        initialPlan={initialPlan(qPlan, subscriptions)}
-        highlight={renewAsked || FROM.includes(one(query.from) ?? "") || qPlan === "monthly" || qPlan === "yearly"}
-        renewAsked={renewAsked}
-      />
-      <MembershipCompare
-        currency={currency}
-        subscriptions={subscriptions}
-        freeTemplates={manifests.filter((m) => sendsFree(m)).map((m) => m.name[lang])}
-        templateCount={manifests.length}
-      />
-      <SingleGifts
-        currency={currency}
-        manifests={manifests}
-        paymentsEnabled={stripeReady()}
-        giftCards={giftCards}
-        preselect={template}
-        openPick3={qPlan === "pick3" && Boolean(template)}
-        returnTo={returnTo ? safeReturnPath(returnTo, "/dashboard") : undefined}
-      />
-      <PricingFaq faq={faq} currency={currency} subscriptions={subscriptions} />
+      <SitePage name="pricing">
+        <PricingChoice>
+          <PriceHead currency={currency} manifests={manifests} template={template} />
+          <SingleGifts
+            currency={currency}
+            manifests={manifests}
+            paymentsEnabled={stripeReady()}
+            giftCards={giftCards}
+            preselect={template}
+            openPick3={qPlan === "pick3" && Boolean(template)}
+            returnTo={returnTo ? safeReturnPath(returnTo, "/dashboard") : undefined}
+          />
+        </PricingChoice>
+        <MembershipHero
+          currency={currency}
+          paymentsEnabled={stripeReady()}
+          subscriptions={subscriptions}
+          initialPlan={initialPlan(qPlan, subscriptions)}
+          highlight={highlight}
+          renewAsked={renewAsked}
+        />
+        <PricingFaq
+          faq={faq}
+          before={
+            <MembershipCompare
+              currency={currency}
+              subscriptions={subscriptions}
+              freeTemplates={manifests.filter((m) => sendsFree(m)).map((m) => m.name[lang])}
+              templateCount={manifests.length}
+              open={highlight}
+            />
+          }
+        />
+      </SitePage>
     </>
   );
 }

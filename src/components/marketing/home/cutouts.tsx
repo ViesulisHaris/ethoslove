@@ -210,7 +210,26 @@ const FOOT_LILY: Bloom = { art: "lily-open", x: 3, y: 74, size: 14, rot: -12, bl
  */
 const BAND_HERO: Bloom[] = [BAND[0], BAND[1], FOOT_LILY];
 
-const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, bandInside: BAND_INSIDE, bandHero: BAND_HERO, card: CARD } as const;
+/**
+ * Round Ethos for Two's band on /pricing: the closing band's flowers on the same dark, laid for a
+ * spread (the words at the left, the collage at the right) rather than for words in the middle. At
+ * the left only the corners: a head peeking in over the top and one at the foot, clear of the
+ * words. The right edge has the stem and two heads, beside and behind the collage. On a phone one
+ * head at the top right corner and one at the foot, behind the collage.
+ */
+const FOR_TWO: Bloom[] = [
+  { art: "lily-open", x: -3, y: -1, size: 15, rot: -12, phone: false },
+  { art: "petal-1", x: 1.5, y: 30, size: 5, rot: 24, blur: 2, opacity: 0.8, wide: true },
+  { art: "lily-open", x: 2, y: 104, size: 17, rot: 10, blur: 1, phone: false },
+  { art: "leaf-2", x: 13, y: 106, size: 12, rot: -14, opacity: 0.8, phone: false },
+  { art: "lily-three-quarter", x: 98.5, y: 4, size: 17, rot: 10, phone: false },
+  { art: "lily-stem-tall", x: 101, y: 48, size: 18, rot: 12, phone: false, wide: true },
+  { art: "lily-side", x: 98, y: 101, size: 18, rot: 6, phone: false },
+  { art: "lily-three-quarter", x: 104, y: 1, size: 34, rot: 10, phone: "only" },
+  { art: "lily-side", x: 104, y: 100.5, size: 36, rot: 6, phone: "only" },
+];
+
+const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, bandInside: BAND_INSIDE, bandHero: BAND_HERO, card: CARD, forTwo: FOR_TWO } as const;
 
 /**
  * A frame of real flowers round a section. `light` lays them on blush paper, `dark` on the forest

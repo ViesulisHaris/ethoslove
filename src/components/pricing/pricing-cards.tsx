@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { startCheckout, useCheckoutError } from "./checkout";
 import { everythingPlan } from "./offers";
 import { useUpgradeQuote } from "./upgrade-quote";
+import { useRegisterChoice } from "./pricing-choice";
 import {
   Dialog,
   DialogContent,
@@ -90,6 +91,9 @@ export function PricingCards({
     setPicking(product);
   };
 
+  // The pricing page's head presses "One gift" with this same handler (pricing-choice.tsx).
+  useRegisterChoice(choose, busy);
+
   const needed = picking ? PRODUCTS[picking].picks : 0;
   const premium = manifests.filter((m) => m.tier === "premium").length;
 
@@ -100,7 +104,7 @@ export function PricingCards({
        * widest card's unbreakable content (the price and its "separately" note), which pushed the
        * cards 26px past a 320px screen in Spanish and let the page scroll sideways.
        */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:items-stretch" data-authed={authed}>
+      <div className={cn("grid grid-cols-1 items-stretch", quiet ? "gap-4 md:grid-cols-3 xl:gap-5" : "gap-5 lg:grid-cols-3")} data-authed={authed}>
         {PRODUCT_ORDER.map((id) => {
           const p = PRODUCTS[id];
           const dominant = p.highlight && !quiet;
@@ -108,6 +112,69 @@ export function PricingCards({
           const upgrading = id === "everything" && all.plan === "upgrade";
           const amount = id === "everything" ? all.amount : p.amounts[currency];
           const features = t.raw(`plans.${id}.features`) as string[];
+          if (quiet) {
+            // /pricing (remade 24 Nov 2026): the gallery card's paper, a name, the price, one line, at most three
+            // ticks and the button. Every line the cards used to list is in "What each one includes" under them.
+            const ticks = t.raw(`page.cards.${id}.ticks`) as string[];
+            return (
+              <article
+                key={id}
+                data-plan={id}
+                className={cn(
+                  "relative flex flex-col rounded-[28px] bg-card p-6 shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 sm:p-7",
+                  picked ? "ring-rose/30" : "ring-ink/[0.07]",
+                )}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                  <h3 className="font-display text-[1.625rem] leading-tight text-ink">{t(`page.cards.${id}.name`)}</h3>
+                  {picked ? <span className="rounded-full bg-rose/10 px-3 py-1 text-page-label text-rose-ink">{t("bestValue")}</span> : null}
+                </div>
+                {/* The note drops under the price when a narrow phone can't hold both on one line. */}
+                <div className="mt-5 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                  <span className="font-display text-[clamp(2.5rem,11vw,3rem)] leading-none tracking-tight text-ink tabular-nums" data-testid={`price-${id}`}>
+                    {formatAmount(amount, currency, locale)}
+                  </span>
+                  {upgrading ? (
+                    // The line below says the same in words, for a screen reader that reads no strikethrough.
+                    <s aria-hidden="true" className="text-[0.9375rem] text-ink-soft">{formatAmount(p.amounts[currency], currency, locale)}</s>
+                  ) : p.compareAt ? (
+                    <span className="text-[0.9375rem] text-ink-soft">{t("separately", { price: formatAmount(p.compareAt[currency], currency, locale) })}</span>
+                  ) : null}
+                </div>
+                {upgrading ? (
+                  <p className="mt-3 text-[0.9375rem] leading-snug font-medium text-rose-ink" data-testid="pricing-upgrade">
+                    {tPlans("upgradeNote", { full: formatAmount(p.amounts[currency], currency, locale) })}
+                  </p>
+                ) : (
+                  <p className="mt-3 text-[0.9375rem] leading-snug text-ink-soft">
+                    {id === "everything"
+                      ? t("page.cards.everything.line", { n: premium, price: formatAmount(Math.round(p.amounts[currency] / Math.max(premium, 1)), currency, locale) })
+                      : t(`page.cards.${id}.line`)}
+                  </p>
+                )}
+                <ul className="mt-5 mb-7 flex flex-col gap-2.5 text-[0.9375rem] leading-snug text-ink">
+                  {ticks.map((tick) => (
+                    <li key={tick} className="flex items-start gap-2.5">
+                      <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-rose-ink" strokeWidth={2.2} />
+                      <span>{tick}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  onClick={() => choose(id)}
+                  disabled={busy}
+                  className={cn(
+                    "mt-auto flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-semibold transition-[background-color,border-color,scale] duration-200 active:scale-[0.98] disabled:opacity-60",
+                    picked ? "btn-rose" : "border border-ink/20 text-ink hover:border-ink/45 hover:bg-paper active:bg-paper-deep",
+                  )}
+                >
+                  {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+                  <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`plans.${id}.cta`)}</span>
+                </button>
+              </article>
+            );
+          }
           return (
             <article
               key={id}
@@ -200,7 +267,7 @@ export function PricingCards({
           );
         })}
       </div>
-      <p className="mt-5 text-center text-[13px] text-muted-foreground">{t("checkoutNote")}</p>
+      <p className={quiet ? "mt-4 text-sm leading-relaxed text-ink-soft" : "mt-5 text-center text-[13px] text-muted-foreground"}>{t("checkoutNote")}</p>
 
       <Dialog open={picking !== null} onOpenChange={(v) => !v && setPicking(null)}>
         <DialogContent closeLabel={tCommon("close")} className="sm:max-w-lg">
