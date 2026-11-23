@@ -8,7 +8,8 @@ import { SKIP_WINDOW_DAYS, nextOccurrence, occurrenceIn, type MonthDay, type Rem
 
 export type NextDayKind = "christmas" | "valentines" | "birthday" | "anniversary" | "other";
 
-export type NextDay = { kind: NextDayKind; month: number; day: number; daysAway: number };
+/** `name`: whose day a saved birthday or other day is (the reminder's name); absent for Christmas and Valentine's Day. */
+export type NextDay = { kind: NextDayKind; month: number; day: number; daysAway: number; name?: string };
 
 /** A day fewer than this many days away is too close to make a gift for: it is left out. */
 export const NEXT_DAY_MIN = 8;
@@ -45,21 +46,21 @@ export function nextDays(
   made: { occasion: ReminderOccasion | "christmas" | null; month: number; day: number } | null,
 ): NextDay[] {
   const madeFor = made?.occasion ? { kind: made.occasion as NextDayKind } : null;
-  const candidates: { kind: NextDayKind; date: MonthDay }[] = [
+  const candidates: { kind: NextDayKind; date: MonthDay; name?: string }[] = [
     { kind: "christmas", date: CHRISTMAS },
     { kind: "valentines", date: VALENTINES },
-    ...saved.filter((r) => r.occasion !== "valentines").map((r) => ({ kind: r.occasion as NextDayKind, date: { month: r.month, day: r.day } })),
+    ...saved.filter((r) => r.occasion !== "valentines").map((r) => ({ kind: r.occasion as NextDayKind, date: { month: r.month, day: r.day }, name: r.recipientName })),
   ];
   const seen = new Set<string>();
   const days: NextDay[] = [];
-  for (const { kind, date } of candidates) {
-    const key = `${kind}:${date.month}-${date.day}`;
+  for (const { kind, date, name } of candidates) {
+    const key = `${kind}:${date.month}-${date.day}:${name ?? ""}`;
     if (seen.has(key)) continue;
     seen.add(key);
     const coming = comingFor(kind, date, today, madeFor);
     const daysAway = daysBetween(today, coming);
     if (daysAway < NEXT_DAY_MIN) continue;
-    days.push({ kind, month: date.month, day: date.day, daysAway });
+    days.push({ kind, month: date.month, day: date.day, daysAway, ...(name ? { name } : {}) });
   }
   return days.sort((a, b) => a.daysAway - b.daysAway).slice(0, 2);
 }
@@ -71,6 +72,28 @@ export function distance(days: number): Distance {
   if (days <= 13) return { unit: "days", count: days };
   if (days <= 112) return { unit: "weeks", count: Math.round(days / 7) };
   return { unit: "months", count: Math.round(days / 30.4) };
+}
+
+/** A message lookup, as next-intl's `t` is on the server and in the browser. */
+type Words = (key: string, values?: Record<string, string | number>) => string;
+
+/**
+ * A day's name as the reminder card says it ("Mia's birthday", "Your anniversary", "Valentine's
+ * Day", "Christmas"), from `pair` (editor.share.pair) and `remind` (lifecycle.remind). `fallback`
+ * names the person when the day doesn't (the share screen's recipient).
+ */
+export function dayName(day: Pick<NextDay, "kind" | "name">, pair: Words, remind: Words, fallback = ""): string {
+  if (day.kind === "christmas") return pair("christmas");
+  if (day.kind === "valentines") return remind("occasions.valentines");
+  if (day.kind === "anniversary") return remind("rows.anniversary");
+  const who = (day.name ?? fallback).trim();
+  return who ? remind(`rows.${day.kind}`, { name: who }) : remind(`rows.${day.kind}NoName`);
+}
+
+/** "in 4 weeks", from editor.share.pair. */
+export function dayAway(daysAway: number, pair: Words): string {
+  const { unit, count } = distance(daysAway);
+  return pair(unit === "days" ? "inDays" : unit === "weeks" ? "inWeeks" : "inMonths", { count });
 }
 
 /** The occasion page a day's "Start the … one now" leads to; /templates for a day of another kind. */

@@ -10,7 +10,8 @@ import { env } from "@/lib/env";
 import { track } from "@/lib/analytics/track";
 import { formatAmount, formatRound, pairApart } from "@/lib/pricing/products";
 import { REMINDER_NAME_MAX, formatMonthDay, reminderDateFor, reminderOccasionFor, type Reminder } from "@/lib/lifecycle/reminders";
-import { distance, localToday, nextDays, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
+import { dayAway, dayName, localToday, nextDays, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
+import { DayRows } from "@/components/pricing/day-rows";
 import { getManifest } from "@/templates/manifests";
 import { useEntitlements, type PairOffer } from "@/components/pricing/entitlements";
 import { startCheckout, startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
@@ -88,38 +89,17 @@ function useNextDays(data: GiftData): NextDay[] {
 function useDayName(name: string) {
   const t = useTranslations("editor.share.pair");
   const r = useTranslations("lifecycle.remind");
-  const who = name.trim();
-  return (kind: NextDay["kind"]) => {
-    if (kind === "christmas") return t("christmas");
-    if (kind === "valentines") return r("occasions.valentines");
-    if (kind === "anniversary") return r("rows.anniversary");
-    return who ? r(`rows.${kind}`, { name: who }) : r(`rows.${kind}NoName`);
-  };
+  return (day: Pick<NextDay, "kind" | "name">) => dayName(day, t, r, name);
 }
 
-function DayRows({ days, name }: { days: NextDay[]; name: string }) {
+function Days({ days, name }: { days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
   const locale = useLocale() === "es" ? "es" : "en";
-  const dayName = useDayName(name);
-  const away = (d: NextDay) => {
-    const { unit, count } = distance(d.daysAway);
-    return unit === "days" ? t("inDays", { count }) : unit === "weeks" ? t("inWeeks", { count }) : t("inMonths", { count });
-  };
+  const named = useDayName(name);
   return (
-    <ul className="mt-4 divide-y divide-border border-y border-border" data-testid="pair-days">
-      {days.map((d) => (
-        <li key={`${d.kind}-${d.month}-${d.day}`} className="flex items-center gap-4 py-3">
-          {/* The occasions' own rendered pictures (public/art/occasions), 6 KB each. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={occasionIcon(d.kind)} alt="" width={40} height={40} className="size-10 shrink-0 object-contain" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[15px] leading-snug font-medium text-ink">{dayName(d.kind)}</p>
-            <p className="text-sm text-muted-foreground">{formatMonthDay(d, locale)}</p>
-          </div>
-          <p className="shrink-0 text-[13px] text-ink-soft">{away(d)}</p>
-        </li>
-      ))}
-    </ul>
+    <DayRows
+      rows={days.map((d) => ({ key: `${d.kind}-${d.month}-${d.day}-${d.name ?? ""}`, icon: occasionIcon(d.kind), name: named(d), date: formatMonthDay(d, locale), away: dayAway(d.daysAway, t) }))}
+    />
   );
 }
 
@@ -224,7 +204,7 @@ function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDa
     <section ref={cardRef} className="mt-7 rounded-2xl border border-ink bg-card p-5" data-testid="pair-offer">
       <h3 className="font-display text-2xl leading-tight text-balance text-ink">{t("title")}</h3>
       <p className="mt-1.5 text-[15px] text-ink-soft">{t("next")}</p>
-      <DayRows days={days} name={name} />
+      <Days days={days} name={name} />
 
       <div className="mt-4 flex items-end justify-between gap-4">
         <div>
@@ -304,9 +284,9 @@ function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDa
 /** Picture a7: paid. The two days again, and the first one to start now. */
 function Bought({ days, name }: { days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
-  const dayName = useDayName(name);
+  const named = useDayName(name);
   const first = days[0];
-  const start = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("startOne", { day: dayName(first.kind) }) } : { href: "/templates", label: t("startAny") };
+  const start = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("startOne", { day: named(first) }) } : { href: "/templates", label: t("startAny") };
   return (
     <section className="mt-7 rounded-2xl border border-border bg-card p-5" data-testid="pair-bought" aria-live="polite">
       <div className="flex items-start gap-3">
@@ -316,7 +296,7 @@ function Bought({ days, name }: { days: NextDay[]; name: string }) {
           <p className="mt-1 text-[15px] text-ink-soft">{t("readyLine")}</p>
         </div>
       </div>
-      <DayRows days={days} name={name} />
+      <Days days={days} name={name} />
       <Button asChild variant="outline" className="mt-5 h-12 w-full rounded-full text-base">
         <Link href={start.href}>{start.label}</Link>
       </Button>
@@ -328,14 +308,14 @@ function Bought({ days, name }: { days: NextDay[]; name: string }) {
 /** Picture a8: this gift went out on one of the two. */
 function UsedOne({ left, days, name }: { left: number; days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
-  const dayName = useDayName(name);
+  const named = useDayName(name);
   const next = days[0];
   return (
     <section className="mt-7 flex items-start gap-3 rounded-2xl border border-border bg-card p-5" data-testid="pair-used">
       <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-moss" />
       <div className="min-w-0">
         <p className="text-base font-medium text-ink">{t("usedOne")}</p>
-        <p className="mt-1 text-[15px] text-ink-soft">{left > 0 && next ? t("leftOne", { day: dayName(next.kind) }) : t("leftNone")}</p>
+        <p className="mt-1 text-[15px] text-ink-soft">{left > 0 && next ? t("leftOne", { day: named(next) }) : t("leftNone")}</p>
       </div>
     </section>
   );
