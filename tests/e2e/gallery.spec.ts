@@ -239,7 +239,9 @@ test.describe("the template gallery", () => {
       expect(card.pictureHidden, card.slug).toBe(true);
     }
     // The two that can be sent free say so; a best seller says its price.
-    expect(found.filter((card) => card.price === "Free").map((card) => card.slug).sort()).toEqual(["constellations", "the-letter"]);
+    // With the free version as The Letter's short note (the live site's setting), Constellations is paid: the spec follows the server's own setting.
+    const noteForEveryone = Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) >= 1;
+    expect(found.filter((card) => card.price === "Free").map((card) => card.slug).sort()).toEqual(noteForEveryone ? ["the-letter"] : ["constellations", "the-letter"]);
     // "Make this gift" names its gift for a screen reader, and opens that gift's editor.
     const make = cards.first().getByRole("link", { name: "Make this gift: Bouquet" });
     await make.click();

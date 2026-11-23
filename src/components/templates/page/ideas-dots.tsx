@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
  * are what says there are six and which one this is. They are only that: the row is swiped, the
  * dots are not pressed, and a screen reader reads the six cards as the list they are.
  */
-/** The most cards shown as dots. */
-export const DOTS_MAX = 9;
+/** The most cards shown as dots: an occasion's page has up to twelve ideas, and each has its dot. Past that (the finder's longer lists) the place is said as a count. */
+export const DOTS_MAX = 12;
 
 export function IdeasDots({ target, count, className }: { target: string; count: number; className?: string }) {
   const [at, setAt] = useState(0);
@@ -44,7 +44,7 @@ export function IdeasDots({ target, count, className }: { target: string; count:
       row.removeEventListener("scroll", follow);
     };
   }, [target]);
-  // Past nine cards the dots fill a line and are too small to count (the finder's end, 31 picks:
+  // Past twelve cards the dots fill a line and are too small to count (the finder's end, 31 picks:
   // walk-choose-9): the place is written out instead, "4 / 31".
   if (count > DOTS_MAX)
     return (

@@ -195,7 +195,7 @@ test.describe("the finder's second question", () => {
 test.describe("the finder's results on a phone", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test("choose-9: past nine picks the place is a count, and the list ends by saying these are the gifts for the two answers", async ({ page }) => {
+  test("choose-9: past twelve picks the place is a count, and the list ends by saying these are the gifts for the two answers", async ({ page }) => {
     await page.goto("/es/gifts/finder?for=mom&occasion=christmas&more=30");
     await expect(page.getByText("Esos son todos los regalos para estas dos respuestas.")).toBeVisible();
     const count = page.locator("[data-dots][data-count]");

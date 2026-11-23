@@ -6,12 +6,12 @@ import { OCCASIONS, isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
-import { listManifests } from "@/templates/manifests";
+import { getManifest, listManifests } from "@/templates/manifests";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { JsonLd } from "@/components/shared/json-ld";
 import { OccasionGuide, OccasionIdeas } from "@/components/marketing/occasion-guide";
 import { SitePage } from "@/components/marketing/spread/sections";
-import { PageHeader } from "@/components/shared/page-header";
+import { GalleryHead } from "@/components/templates/gallery-head";
 import { TemplateGallery } from "@/components/templates/template-gallery";
 import { sendsFree } from "@/lib/gift/free-tier";
 
@@ -45,10 +45,16 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
   setRequestLocale(locale);
   const t = await getTranslations();
   const title = t(`seo.occasion.${occasion}.title`);
-  const templates = listManifests({ occasion });
-  // What "Free" shows when this occasion has no free template of its own.
-  const alsoFree = listManifests({ tier: "free" }).filter((m) => sendsFree(m) && !m.occasions.includes(occasion));
   const guide = OCCASION_GUIDES[occasion][locale as Locale];
+  // The cards: the gifts made for this occasion, best fit first, and after them every gift the page's
+  // own ideas name. The Christmas page recommended twelve gifts and its grid knew seven: idea 03 said
+  // "The Letter · Free" while "Free" answered that none of this occasion's gifts are free (the user
+  // walk of 23 Nov 2026). An idea's gift is on the page, so it is in the list and in the filter.
+  const tagged = listManifests({ occasion });
+  const named = (guide.ideas?.items ?? []).map((idea) => getManifest(idea.template)).filter((m): m is NonNullable<typeof m> => m != null && !tagged.some((x) => x.slug === m.slug));
+  const templates = [...tagged, ...named.filter((m, i) => named.findIndex((x) => x.slug === m.slug) === i)];
+  // What "Free" shows when nothing on this page can be sent free.
+  const alsoFree = listManifests({ tier: "free" }).filter((m) => sendsFree(m) && !templates.some((x) => x.slug === m.slug));
   return (
     <>
       <JsonLd
@@ -62,23 +68,37 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
           faqNode(guide.faq),
         ]}
       />
-      <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)}>
-        {/* The ideas are what the page's search result promises ("12 ideas"), and they lie under the whole gallery: seven
-            screens down on a phone for Christmas, far more for an anniversary (the test of 23 Nov 2026). One quiet link
-            from the top says they are there and goes to them. Whether the gallery and the ideas stay two grids is the
-            owner's to decide; this is not that decision. */}
-        {guide.ideas ? (
-          <a
-            href={`#ideas-${occasion}`}
-            data-testid="to-ideas"
-            className="inline-flex min-h-11 items-center gap-2 rounded-md text-[0.9375rem] font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-ink active:text-rose-deep"
-          >
-            {guide.ideas.title}
-            <ArrowDown aria-hidden="true" className="size-4" />
-          </a>
-        ) : null}
-      </PageHeader>
-      <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} today={new Date().toISOString().slice(0, 10)} />
+      {/*
+       * The gallery's own head (components/templates/gallery-head.tsx), so the row of occasions stands
+       * at the same height here as on /templates and on every other occasion's page. Beside the italic
+       * line, one quiet link to the ideas: they are what the page's search result promises ("12
+       * ideas"), and they lie under the whole gallery (the test of 23 Nov 2026). The occasion's own
+       * paragraph, which stood here in four lines, opens the part under the cards.
+       */}
+      <GalleryHead
+        eyebrow={t("occasions.title")}
+        title={title}
+        line={t("templates.subtitle")}
+        aside={
+          guide.ideas ? (
+            <a
+              href={`#ideas-${occasion}`}
+              data-testid="to-ideas"
+              className="-my-2.5 inline-flex min-h-11 items-center gap-2 rounded-md text-[0.9375rem] font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-ink active:text-rose-deep"
+            >
+              {guide.ideas.title}
+              <ArrowDown aria-hidden="true" className="size-4" />
+            </a>
+          ) : undefined
+        }
+      >
+        <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} today={new Date().toISOString().slice(0, 10)} />
+      </GalleryHead>
+      <div className="container-x pb-4">
+        <p data-occasion-intro className="max-w-2xl border-t border-line pt-10 text-lg leading-relaxed text-ink-soft">
+          {t(`seo.occasion.${occasion}.intro`)}
+        </p>
+      </div>
       {/* Below the gallery the page is laid out as a gift's own page is: the ideas as picture cards, then the guide and the questions as closed rows. */}
       <SitePage name={`occasion-${occasion}`} under={false}>
         <OccasionIdeas occasion={occasion} locale={locale as Locale} />
