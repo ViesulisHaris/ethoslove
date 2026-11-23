@@ -249,6 +249,25 @@ describe("tonight's stops suit the idea", () => {
     expect(isKaraokeBar(place("node/x", "bar", { name: "Sing Sing" }))).toBe(true);
     expect(isKaraokeBar(place("node/y", "bar", { name: "Singapore Sling" }))).toBe(false);
   });
+
+  it("T25 'nothing free fits' is said only when no pick is free: after the free ones, a paid pick is not said to be the only way (dates-N1-1)", () => {
+    const summer = day({ sunset: "21:00" });
+    const picks = rankTonight({ kind: "cheap", budget: 0 }, { day: summer, places: EVERYTHING });
+    const firstPaid = picks.findIndex((p) => p.relaxed.includes("budget"));
+    expect(firstPaid).toBeGreaterThan(0);
+    for (const p of picks) expect(p.noneMeet, p.idea.id).toEqual([]);
+    // With no free idea doable at all, the paid picks do say nothing free fits.
+    const [wet] = rankTonight({ budget: 0, startMin: EVENING }, { day: WET, places: EVERYTHING });
+    expect(wet).toMatchObject({ relaxed: ["budget"], noneMeet: ["budget"] });
+  });
+
+  it("T26 on a wet night the dinner's long way home ends somewhere dry, never at a viewpoint (dates-N1-2)", () => {
+    const pasta = rankTonight({ startMin: 20 * 60 }, { day: WET, places: EVERYTHING }).find((p) => p.idea.id === "pasta-and-a-slow-walk");
+    expect(pasta).toBeDefined();
+    for (const kinds of pasta!.idea.stops) for (const k of ["viewpoint", "park", "garden"] as const) expect(kinds).not.toContain(k);
+    expect(fillStopsNames(pasta!.idea, EVERYTHING)).toEqual(["node/restaurant", "node/dessert"]);
+    expect(forTheDay(idea("pasta-and-a-slow-walk"), DRY).stops[1]).toEqual(["viewpoint", "park", "garden"]);
+  });
 });
 
 describe("tonight's times and plan", () => {

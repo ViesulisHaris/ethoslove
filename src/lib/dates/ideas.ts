@@ -66,6 +66,8 @@ export const IDEAS: DateIdea[] = [
     blurb: { en: "A table for two, then a walk with no destination until somebody's feet hurt.", es: "Una mesa para dos y luego un paseo sin destino hasta que a alguien le duelan los pies." },
     twist: { en: "Order for each other. No vetoes.", es: "Pedid el uno por el otro. Sin vetos." },
     stops: [["restaurant"], ["viewpoint", "park", "garden"]],
+    // In the rain the long way home goes somewhere dry: pudding or a nightcap, never a viewpoint.
+    rainStops: [["restaurant"], ["dessert", "bar"]],
     needsDry: false,
     goodInRain: false,
     moment: "evening",

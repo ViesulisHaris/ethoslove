@@ -17,7 +17,15 @@ const GENERIC = new Set(["books", "bookshop", "bookstore", "gallery", "art galle
  * tiles the city pages are built from carry no brand tag, so a chain is known by its name. Only
  * for a café: "Paul Kasmin Gallery" is not the bakery. Matched at the start ("Starbucks Reserve").
  */
-const CHAINS = ["starbucks", "costa", "costa coffee", "pret", "pret a manger", "caffe nero", "cafe nero", "dunkin", "tim hortons", "blank street", "joe & the juice", "black sheep coffee", "gail's", "le pain quotidien", "paul", "kung fu tea", "gong cha", "chatime", "tiger sugar", "peet's coffee", "la colombe", "bluestone lane", "joe coffee"];
+const CHAINS = ["starbucks", "costa", "costa coffee", "pret", "pret a manger", "caffe nero", "cafe nero", "dunkin", "tim hortons", "blank street", "joe & the juice", "black sheep coffee", "gail's", "le pain quotidien", "kung fu tea", "gong cha", "chatime", "tiger sugar", "peet's coffee", "la colombe", "bluestone lane", "joe coffee"];
+/** A chain whose name is also a person's: only the whole name or the name with its trade ("Paul Bakery"), never "Paul Rothe & Son". */
+const NAMED_CHAINS = ["paul", "paul bakery", "paul boulangerie", "boulangerie paul"];
+/**
+ * Squares the map files as parks that are paving, traffic and cinemas, not a lawn to sit on. Named
+ * one by one: a square with a garden in the middle (Russell Square, Soho Square) is filed the same
+ * way and is exactly what the list is for.
+ */
+const PAVED_SQUARES = ["leicester square", "trafalgar square", "times square", "duffy square", "herald square", "parliament square", "piccadilly circus"];
 /** Galleries that charge to walk in, though a gallery usually does not (cost.ts): never under "usually free". */
 const PAID = ["courtauld", "hayward gallery", "barbican art gallery", "dulwich picture gallery", "queen's gallery", "photographers' gallery", "neue galerie", "frick", "international center of photography"];
 /** Sports grounds the map files as parks: the basketball courts are not a walk for two. */
@@ -34,14 +42,14 @@ const plain = (name: string): string =>
 
 /**
  * True for a place no hand-picked list should name: a chain café, a gallery that charges, a sports
- * ground, or a square the map calls a park (Leicester Square is paving and cinemas, not a lawn).
+ * ground, or a paved square the map calls a park (Leicester Square is paving and cinemas, not a lawn).
  */
 export function leftOff(place: Pick<Place, "name" | "kind">): boolean {
   const name = plain(place.name);
-  if (place.kind === "cafe" && CHAINS.some((chain) => name === chain || name.startsWith(`${chain} `) || name.startsWith(`${chain}(`))) return true;
+  if (place.kind === "cafe" && (NAMED_CHAINS.includes(name) || CHAINS.some((chain) => name === chain || name.startsWith(`${chain} `) || name.startsWith(`${chain}(`)))) return true;
   if (PAID.some((paid) => name.includes(paid))) return true;
   if (SPORTS.test(name)) return true;
-  return (place.kind === "park" || place.kind === "garden") && /\bsquare$/.test(name) && !/\b(park|gardens?)\b/.test(name);
+  return (place.kind === "park" || place.kind === "garden") && PAVED_SQUARES.includes(name);
 }
 
 /**

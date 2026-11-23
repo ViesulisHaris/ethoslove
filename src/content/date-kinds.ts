@@ -391,7 +391,7 @@ export type CityKindCopy = {
 };
 export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
   "new-york/cheap": {
-    title: { en: "Cheap Date Ideas in NYC: 8 With Real Places, 4 Free", es: "Ideas para una cita barata en Nueva York, con sitios reales" },
+    title: { en: "Cheap Date Ideas in NYC: 8 With Real Places, 4 Free", es: "Citas baratas en Nueva York: 8 ideas, 4 gratis" },
     description: { en: "Eight cheap date ideas in New York with real cafés, parks and galleries near Washington Square, and the places nearby that are usually free to walk into.", es: "Ocho ideas para una cita barata en Nueva York con cafeterías, parques y galerías reales cerca de Washington Square, y sitios donde se entra gratis." },
     heading: { en: "Cheap date ideas in New York", es: "Ideas para una cita barata en Nueva York" },
     line: { en: "The streets are free, and so is the Staten Island Ferry.", es: "Las calles son gratis, y el ferri de Staten Island también." },
@@ -399,21 +399,21 @@ export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
     sentence: { en: "Our eight cheap ideas with real places near Washington Square, and the parks, galleries and bookshops nearby that are usually free.", es: "Nuestras ocho ideas baratas con sitios reales cerca de Washington Square, y los parques, galerías y librerías cercanos, que suelen ser gratis." },
   },
   "new-york/first-date": {
-    title: { en: "First Date Ideas in NYC: 9 Easy Ones With Real Places", es: "Ideas para una primera cita en Nueva York, con sitios reales" },
+    title: { en: "First Date Ideas in NYC: 9 Easy Ones With Real Places", es: "Primera cita en Nueva York: 9 ideas fáciles" },
     description: { en: "Nine first date ideas in New York that are easy to leave, with real cafés, bookshops and galleries near Washington Square for each stop.", es: "Nueve ideas para una primera cita en Nueva York, fáciles de dejar, con cafeterías, librerías y galerías reales cerca de Washington Square." },
     heading: { en: "First date ideas in New York", es: "Ideas para una primera cita en Nueva York" },
     line: { en: "Around Washington Square, bookshops, small galleries and cafés sit a block apart.", es: "Alrededor de Washington Square, librerías, galerías pequeñas y cafeterías están a una manzana." },
     sentence: { en: "Nine dates you can leave after an hour, each with real places near Washington Square, and a short list of cafés and bookshops near the centre to meet at.", es: "Nueve citas de las que podéis iros al cabo de una hora, con sitios reales cerca de Washington Square y unas cafeterías y librerías donde quedar." },
   },
   "london/first-date": {
-    title: { en: "First Date Ideas in London: 9 Easy Ones With Real Places", es: "Ideas para una primera cita en Londres: 9 con sitios reales" },
+    title: { en: "First Date Ideas in London: 9 Easy Ones With Real Places", es: "Primera cita en Londres: 9 ideas fáciles" },
     description: { en: "Nine first date ideas in London that are easy to enjoy and easy to leave, each with real cafés, bookshops and galleries around Covent Garden for the stops.", es: "Nueve ideas para una primera cita en Londres, fáciles de dejar, con cafeterías, librerías y galerías reales alrededor de Covent Garden." },
     heading: { en: "First date ideas in London", es: "Ideas para una primera cita en Londres" },
     line: { en: "Most of the big museums are free, so the first hour costs nothing.", es: "Casi todos los grandes museos son gratis: la primera hora no cuesta nada." },
     sentence: { en: "Nine dates you can leave after an hour, each with real places around Covent Garden, and a short list of cafés and bookshops near the centre to meet at.", es: "Nueve citas de las que podéis iros al cabo de una hora, con sitios reales alrededor de Covent Garden y unas cafeterías y librerías donde quedar." },
   },
   "london/cheap": {
-    title: { en: "Cheap Date Ideas in London: 8 With Real Places, 4 Free", es: "Ideas para una cita barata en Londres, con sitios reales" },
+    title: { en: "Cheap Date Ideas in London: 8 With Real Places, 4 Free", es: "Citas baratas en Londres: 8 ideas, 4 gratis" },
     description: { en: "Eight cheap date ideas in London with real cafés, parks and galleries around Covent Garden, and the places nearby that are usually free to walk into.", es: "Ocho ideas para una cita barata en Londres con cafeterías, parques y galerías reales cerca de Covent Garden, y sitios donde se entra gratis." },
     heading: { en: "Cheap date ideas in London", es: "Ideas para una cita barata en Londres" },
     line: { en: "Most of the big museums charge nothing at the door.", es: "Casi ningún gran museo cobra en la puerta." },

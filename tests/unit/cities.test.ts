@@ -13,9 +13,11 @@ import { GROUP_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { tileAt, type PoiFeature } from "@/lib/dates/tiles";
 import { CITIES } from "@/templates/_shared/places";
-import { KIND_PAGE_CITIES } from "@/content/date-kinds";
+import { CITY_KIND_COPY, KIND_PAGE_CITIES } from "@/content/date-kinds";
+import { createTranslator } from "next-intl";
+import { SITE } from "@/config/site";
 import sitemap from "@/app/sitemap";
-import { KIND_PLACES, kindPlaces } from "@/lib/cities/kind-places";
+import { KIND_PLACES, kindPlaces, leftOff } from "@/lib/cities/kind-places";
 import { guessCost } from "@/lib/dates/cost";
 import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
 import { rankPlaces } from "@/lib/dates/rank";
@@ -455,6 +457,29 @@ describe("a kind of date inside a city", () => {
     const listed = [...kindPlaces("cheap", all, 40), ...kindPlaces("first-date", all, 40)].map((p) => p.id);
     for (const p of odd) expect(listed, p.name).not.toContain(p.id);
     for (const p of kept) expect(listed, p.name).toContain(p.id);
+  });
+
+  it("C5c a garden square and an independent café named after a Paul stay on; the Paul bakery and the paved squares do not (dates-N1-3)", () => {
+    for (const [name, kind] of [["Russell Square", "garden"], ["Soho Square", "park"], ["Paul Rothe & Son", "cafe"], ["Paulette", "cafe"]] as const) expect(leftOff({ name, kind }), name).toBe(false);
+    for (const [name, kind] of [["PAUL", "cafe"], ["Paul Bakery", "cafe"], ["Leicester Square", "park"], ["Trafalgar Square", "park"], ["Times Square", "park"]] as const) expect(leftOff({ name, kind }), name).toBe(true);
+  });
+
+  it("C5d every city title and city-by-kind title fits a search result with the brand on, in both languages (dates-D9)", () => {
+    // pageMetadata drops " · Ethos" from a title past seventy characters: fitting keeps it on every page alike.
+    const branded = (title: string) => `${title} · ${SITE.name}`;
+    for (const [l, messages] of [["en", en], ["es", es]] as const) {
+      const t = createTranslator({ locale: l, messages, namespace: "cities" });
+      for (const c of CITY_PAGES)
+        for (const places of [0, 1, PLACES_PER_CITY]) {
+          const title = t("meta.title", { city: cityName(c, l), ideas: ideasForCity(c).length, places });
+          expect(branded(title).length, title).toBeLessThanOrEqual(70);
+        }
+      for (const { city: c, kind } of CITY_KIND_PAGES) {
+        const { title, description } = CITY_KIND_COPY[`${c}/${kind}`];
+        expect(title[l].length, title[l]).toBeLessThanOrEqual(60);
+        expect(description[l].length, description[l]).toBeLessThanOrEqual(155);
+      }
+    }
   });
 
   it("C6 the sitemap lists the seven kinds, the four pairs and every city, each in both languages", () => {

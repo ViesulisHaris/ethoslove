@@ -29,6 +29,12 @@ export type TonightPick = {
   /** The idea as it is planned that day: its rain stops on a wet one, no café after nine (forTonight). */
   idea: DateIdea;
   relaxed: Relaxed[];
+  /**
+   * The relaxed wishes that no pick in the list meets: only these may be said as "Nothing free fits".
+   * A wish another pick meets (the free ideas came first, "Another" reached the paid ones) is said
+   * as what this one costs or takes, never as nothing fitting.
+   */
+  noneMeet: Relaxed[];
   /** Minutes every stop is moved later than the idea's own hour. */
   shift: number;
 };
@@ -195,9 +201,13 @@ export function rankTonight(wish: TonightWish, context: TonightContext): Tonight
       weight += 8;
     }
     const score = (wet && idea.goodInRain ? 2 : 0) + (wish.startMin !== undefined && shift === 0 ? 1 : 0) + (boost?.[idea.id] ?? 0);
-    ranked.push({ pick: { idea, relaxed, shift }, weight, score, index });
+    ranked.push({ pick: { idea, relaxed, noneMeet: [], shift }, weight, score, index });
   });
-  return ranked.sort((a, b) => a.weight - b.weight || b.score - a.score || a.index - b.index).map((r) => r.pick);
+  const picks = ranked.sort((a, b) => a.weight - b.weight || b.score - a.score || a.index - b.index).map((r) => r.pick);
+  // A wish some pick keeps is met here; "nothing fits" is said only of the wishes none keeps.
+  const metBySome = (wish: Relaxed): boolean => picks.some((p) => !p.relaxed.includes(wish));
+  for (const p of picks) p.noneMeet = p.relaxed.filter((wish) => !metBySome(wish));
+  return picks;
 }
 
 /** The plan "Open the plan" writes: what adding the idea by hand writes for an empty plan. */

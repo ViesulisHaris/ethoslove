@@ -87,10 +87,10 @@ test("X2 the Spanish page of a new city says its name the Spanish way", async ({
 });
 
 const PAIRS = [
-  { path: "new-york/cheap", city: "new-york", kind: "cheap", en: "Cheap Date Ideas in NYC", es: "Ideas para una cita barata en Nueva York", cards: 8 },
-  { path: "new-york/first-date", city: "new-york", kind: "first-date", en: "First Date Ideas in NYC", es: "Ideas para una primera cita en Nueva York", cards: 9 },
-  { path: "london/first-date", city: "london", kind: "first-date", en: "First Date Ideas in London", es: "Ideas para una primera cita en Londres", cards: 9 },
-  { path: "london/cheap", city: "london", kind: "cheap", en: "Cheap Date Ideas in London", es: "Ideas para una cita barata en Londres", cards: 8 },
+  { path: "new-york/cheap", city: "new-york", kind: "cheap", en: "Cheap Date Ideas in NYC", es: "Citas baratas en Nueva York", cards: 8 },
+  { path: "new-york/first-date", city: "new-york", kind: "first-date", en: "First Date Ideas in NYC", es: "Primera cita en Nueva York", cards: 9 },
+  { path: "london/first-date", city: "london", kind: "first-date", en: "First Date Ideas in London", es: "Primera cita en Londres", cards: 9 },
+  { path: "london/cheap", city: "london", kind: "cheap", en: "Cheap Date Ideas in London", es: "Citas baratas en Londres", cards: 8 },
 ];
 
 test("X3 the four city-by-kind pages are there in both languages", async ({ page }) => {

@@ -1688,7 +1688,7 @@
   },
   "cities": {
     "meta": {
-      "title": "Date ideas in {city}: {ideas} ideas and {places, plural, =0 {a map of real places} one {# real place} other {# real places}}",
+      "title": "Date ideas in {city}: {ideas} ideas and {places, plural, =0 {a map of places} one {# real place} other {# real places}}",
       "description": "{ideas} date ideas picked for what {city} is really like, with real cafés, parks and museums near the centre on a free map. No account needed."
     },
     "eyebrow": "Date ideas by city",
@@ -1917,6 +1917,11 @@
         "length": "Nothing of that length fits; this one takes about {hours} h.",
         "vibe": "Nothing in that mood fits {when}; this is the nearest."
       },
+      "beyond": {
+        "budget": "This one costs more: expect to spend {cost}.",
+        "length": "This one runs to about {hours} h.",
+        "vibe": "This one is in a different mood."
+      },
       "wanted": {
         "0": "free",
         "1": "for pocket change",
@@ -1930,7 +1935,7 @@
       "freeIf": "Free if you bring your own food and drink. The stop marked optional is where you would buy it.",
       "optional": "optional",
       "none": "Nothing fits that here.",
-      "noneKind": "Nothing on this page can still be done {when} there.",
+      "noneKind": "None of the ideas on this page fit {when} there.",
       "movedTomorrow": "Nothing on this page can still be done tonight there, so this one is for tomorrow.",
       "late": "It's too late to start one tonight.",
       "tryTomorrow": "Plan tomorrow",
