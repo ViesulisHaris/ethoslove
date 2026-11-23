@@ -1552,7 +1552,8 @@
       },
       "redirecting": "Taking you back to your gift…",
       "toAccount": "Go to your account",
-      "toGift": "Back to your gift"
+      "toGift": "Back to your gift",
+      "toGifts": "See your gifts"
     },
     "after": {
       "eyebrow": "Every template, forever",

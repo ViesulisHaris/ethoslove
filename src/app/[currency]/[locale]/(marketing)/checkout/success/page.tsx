@@ -16,6 +16,7 @@ import { membershipSuccess, readStartedMembership, type StartedRead } from "@/co
 import { isFresh, settledSession, upgradeAfterCheckout, type UpgradeAfter } from "@/lib/commerce/after-checkout";
 import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
 import { CONTINUE_AFTER_MS } from "./continue-timing";
+import { PairSuccessButtons } from "./pair-success";
 import { HoldAdPurchase } from "@/components/shared/ad-pixels";
 import { adPurchaseOf } from "@/lib/ads/purchase";
 import type { AdPurchase } from "@/lib/analytics/ads";
@@ -32,6 +33,7 @@ export default async function CheckoutSuccessPage({
   const t = await getTranslations("checkout");
   const tm = await getTranslations("money.success");
   const tf = await getTranslations("membership.success");
+  const tp = await getTranslations("editor.share.pair");
   const user = await getCurrentUser();
   const stripe = getStripe();
   const lang = locale === "es" ? "es" : "en";
@@ -94,6 +96,13 @@ export default async function CheckoutSuccessPage({
 
   const paid = state === "paid" || state === "signin";
   const outcome = sold && paid ? purchaseOutcome(sold) : "gift";
+  // Two more gifts (bought on the share screen): their own ending, with nothing that leaves by itself.
+  const pair = paid && sold?.product === "pair";
+  // A page about to leave for the editor by itself shows no upgrade card: it would be on screen for
+  // under a second (CONTINUE_AFTER_MS), and holding the page for it kept gifts unsent. A buyer who
+  // stays here (a purchase from /pricing) is still offered it, as before.
+  const toEditor = returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo);
+  if (state === "paid" && toEditor) upgrade = null;
   // Where "Continue" leads: through the one-time sign-in when there is one, then back.
   const continueHref = signInUrl ?? returnTo;
 
@@ -148,6 +157,7 @@ export default async function CheckoutSuccessPage({
         }) as ReactNode,
       };
     if (!paid) return { title: t(`${state}.title`), detail: t(`${state}.detail`) as ReactNode };
+    if (pair) return { title: tp("readyTitle"), detail: tp("readyLine") };
     switch (outcome) {
       case "membership": {
         if (!membership?.renewsOn) return { title: tf("title"), detail: tf(invite ? "noDate" : "noDateEmailed") };
@@ -176,7 +186,6 @@ export default async function CheckoutSuccessPage({
   // the three weeks to 13 Nov 2026 took over 15 minutes to publish or never did, while one buyer in
   // 601 took the offer. A guest with the offer goes back by BackToGift (a sign-in by request); a
   // signed-in buyer with it, by this redirect; tapping the offer first stops either.
-  const toEditor = returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo);
   const guestWithOffer = Boolean(upgrade) && signInUrl !== null && typeof session_id === "string";
   const autoContinue =
     state === "paid" &&
@@ -184,6 +193,7 @@ export default async function CheckoutSuccessPage({
     outcome !== "pass" &&
     outcome !== "membership" &&
     outcome !== "giftcard" &&
+    !pair &&
     (signInUrl !== null || toEditor);
   const giftCardUrl = paid && outcome === "giftcard" && giftCardCode ? new URL(redeemUrl(giftCardCode, lang)) : null;
   const continueLabel = returnTo.startsWith("/create/") ? tm("toGift") : returnTo.startsWith("/account") ? tm("toAccount") : t("continue");
@@ -226,7 +236,9 @@ export default async function CheckoutSuccessPage({
       {forTwoState?.kind === "arriving" || (state === "pending" && !forTwo) ? <RefreshWhileArriving /> : null}
 
       {autoContinue ? <AutoContinue href={continueHref} /> : null}
-      {member ? (
+      {pair ? (
+        <PairSuccessButtons />
+      ) : member ? (
         <div className="mt-8 grid w-full max-w-sm gap-2.5">
           {/* The one-time sign-in lives outside the locale routes: plain links, not the i18n ones. */}
           {tokenHash ? (

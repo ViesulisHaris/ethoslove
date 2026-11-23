@@ -1552,7 +1552,8 @@
       },
       "redirecting": "Volviendo a tu regalo…",
       "toAccount": "Ir a tu cuenta",
-      "toGift": "Volver a tu regalo"
+      "toGift": "Volver a tu regalo",
+      "toGifts": "Ver tus regalos"
     },
     "after": {
       "eyebrow": "Todas las plantillas, para siempre",

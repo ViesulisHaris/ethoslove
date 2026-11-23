@@ -22,7 +22,7 @@ describe("legal documents", () => {
       // /legal/withdraw links to it as #s9.
       expect(LEGAL_DOCS.terms[locale].sections[8].heading).toMatch(/^9\. .*(withdrawal|desistimiento)/);
       const s9 = withdrawal(LEGAL_DOCS.terms[locale]);
-      for (const product of ["single", "extras", "pack", "upgrade", "pass", "giftcard"] as const) expect(s9).toContain(consentSentence(product, locale));
+      for (const product of ["single", "extras", "pack", "upgrade", "pass", "giftcard", "pair"] as const) expect(s9).toContain(consentSentence(product, locale));
       // A membership's box states its own price and renewal, so each plan's is quoted.
       for (const plan of ["monthly", "yearly"] as const) expect(s9).toContain(consentSentence("membership", locale, { plan }));
     }
