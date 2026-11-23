@@ -455,6 +455,7 @@
       "startAt": "Start from",
       "previewPlay": "Preview",
       "previewStop": "Stop",
+      "moodAll": "All",
       "mood": {
         "warm": "Warm",
         "dreamy": "Dreamy",

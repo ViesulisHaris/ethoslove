@@ -11,7 +11,7 @@ import { useEditor } from "@/lib/editor/store";
 import { appleMusicTrackUrl } from "@/lib/gift/music";
 import { uploadTypeFor } from "@/lib/editor/media-types";
 import { reasonOf } from "@/lib/editor/failed-uploads";
-import { LIBRARY_TRACKS, TRACK_MOODS, type TrackMood } from "@/lib/editor/music-library";
+import { LIBRARY_TRACKS, TRACK_MOODS, trackNote, type TrackMood } from "@/lib/editor/music-library";
 import { LIMITS } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Field, SectionHeader, Segmented } from "../field";
@@ -139,7 +139,7 @@ export function MusicSection() {
                   mood === m ? "border-ink bg-ink text-paper" : "border-border bg-card",
                 )}
               >
-                {m === "all" ? "·" : t(`mood.${m}`)}
+                {m === "all" ? t("moodAll") : t(`mood.${m}`)}
               </button>
             ))}
           </div>
@@ -170,7 +170,7 @@ export function MusicSection() {
                   >
                     <span translate="no" className="text-sm font-medium">{tr.title}</span>
                     <span className="text-xs text-muted-foreground">
-                      {tr.note} · {t(`mood.${tr.mood}`)}
+                      {trackNote(tr, locale)} · {t(`mood.${tr.mood}`)}
                     </span>
                   </button>
                   <span
