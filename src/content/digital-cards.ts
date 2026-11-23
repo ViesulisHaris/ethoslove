@@ -202,7 +202,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       },
       cost: {
         label: "Precios",
-        line: "Pago único, sin suscripción. La carta es gratis como nota corta.",
+        line: "Pago único, sin suscripción. La carta, gratis como nota corta.",
         shown: [3, 4, 5],
         includes: "Qué incluye cada precio",
         heading: "Cuánto cuesta una tarjeta digital",

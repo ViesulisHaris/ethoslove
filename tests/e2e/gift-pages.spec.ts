@@ -181,8 +181,9 @@ for (const lang of LANGS) {
       await expect(h1).toContainText(line);
       await expect(h1).toContainText(lang.lang === "en" ? "A card that opens on their phone" : "Una tarjeta que se abre en su móvil");
       await expect(page.locator("h1")).toHaveCount(1);
-      // The owner's line is a maker's mark: once on the page, and nowhere in the header or footer.
-      const body = await page.locator("body").innerText();
+      // The owner's line is a maker's mark: once in the page's own content. The footer's small line
+      // under the wordmark is the same on every page and stays (the owner, 24 Nov 2026).
+      const body = await page.locator("main").innerText();
       expect(body.toLowerCase().split(line.toLowerCase()).length - 1).toBe(1);
 
       const kinds = page.locator("[data-kinds] [data-card]");

@@ -699,8 +699,8 @@ test("these pages wear the site's own colours, not a gift's", async ({ page }) =
     const art = await page.locator("[data-page-theme] [data-decor] img").evaluateAll((imgs) => imgs.map((img) => (img as HTMLImageElement).getAttribute("src") ?? ""));
     for (const src of art) expect(src, src).not.toMatch(/-(ivory|wine|moonlight)[-.]/);
   }
-  // The site's paper and ink (globals.css, --brand-paper and --brand-ink), the same on each.
-  expect([...grounds]).toEqual(["rgb(253, 247, 243) rgb(36, 18, 27)"]);
+  // The site's paper and ink (globals.css, --brand-paper #f3e1d5 and --brand-ink #24121b), the same on each.
+  expect([...grounds]).toEqual(["rgb(243, 225, 213) rgb(36, 18, 27)"]);
 });
 
 test("WebKit as an iPhone 13: no sideways scroll, one card to a screen, and a card opens under a finger", async ({ baseURL }) => {
