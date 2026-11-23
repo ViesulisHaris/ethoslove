@@ -6,6 +6,7 @@ import { Dialog as SheetPrimitive } from "radix-ui"
 
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -99,6 +100,7 @@ function SheetContent({
             </Button>
           </SheetPrimitive.Close>
         )}
+        <KeepPagePointer />
       </SheetPrimitive.Content>
     </SheetPortal>
   )

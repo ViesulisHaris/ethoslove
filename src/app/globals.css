@@ -1492,6 +1492,20 @@ body:has([data-page-theme]) .site-header .btn-rose {
   }
 }
 
+/* A sheet or dialog that locks the page's scroll (the menu, every Radix dialog) sets this on <body>  */
+/* (react-remove-scroll-bar). As an ordinary custom property it is inherited, so setting it made the */
+/* browser work out the style of every element on the page again inside the press that opened the */
+/* sheet: 0.4 s on the front page on a slow phone. Nothing here reads it below <body>.              */
+@property --removed-body-scroll-bar-size {
+  syntax: "*";
+  inherits: false;
+}
+/* And the `pointer-events: none` a modal Radix dialog puts on <body>, inherited by every element:  */
+/* while one with a backdrop is open, the backdrop takes the presses (shared/keep-page-pointer.tsx). */
+html[data-overlay-open] body {
+  pointer-events: auto !important;
+}
+
 /* The cookie strip (shared/cookie-consent.tsx): in the page's HTML, drawn with the page and slid up */
 /* from under the screen's foot; slid back down when answered. Transform only: it is never faded,   */
 /* so it is never drawn half-there. Never drawn at all for a visitor who answered before.         */

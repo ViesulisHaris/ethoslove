@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { sendsFree } from "@/lib/gift/free-tier";
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer";
 
 type Filter = "all" | "loved" | "free";
 const FILTERS: Filter[] = ["all", "loved", "free"];
@@ -173,6 +174,7 @@ export function TemplateChooser({
               ))}
             </ul>
           </div>
+          <KeepPagePointer />
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

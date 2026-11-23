@@ -7,6 +7,7 @@ import { Dialog, Popover } from "radix-ui";
 import { cn } from "@/lib/utils";
 import type { useQuietFocus } from "./quiet-focus";
 import { CARD, CARD_MOTION } from "./styles";
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer";
 
 /** From here up a card under the field; below it (a phone) a sheet from the bottom, as the trips' range picker does. */
 const WIDE = "(min-width: 768px)";
@@ -102,6 +103,7 @@ export function PickerSurface({
             </Dialog.Close>
           </div>
           <div className="mx-auto max-w-[420px]">{children}</div>
+          <KeepPagePointer />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

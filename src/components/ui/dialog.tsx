@@ -6,6 +6,7 @@ import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer"
 
 function Dialog({
   ...props
@@ -84,6 +85,7 @@ function DialogContent({
             </Button>
           </DialogPrimitive.Close>
         )}
+        <KeepPagePointer />
       </DialogPrimitive.Content>
     </DialogPortal>
   )

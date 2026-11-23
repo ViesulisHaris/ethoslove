@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { X } from "lucide-react";
 import { Dialog } from "radix-ui";
 import { cn } from "@/lib/utils";
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer";
 
 /**
  * The frame the saved-dates sheets share: from the bottom on a phone, where a thumb is, and a small
@@ -57,6 +58,7 @@ export function BottomSheet({
           <Dialog.Title className={cn("pr-10 font-display text-[26px] leading-[1.1] text-balance sm:text-[28px]", dusk ? "text-cream" : "text-forest")}>{title}</Dialog.Title>
           {description ? <Dialog.Description className={cn("mt-2 text-[15px] leading-relaxed", dusk ? "text-moonlight/85" : "text-forest/70")}>{description}</Dialog.Description> : null}
           {children}
+          <KeepPagePointer />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

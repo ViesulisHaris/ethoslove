@@ -10,6 +10,7 @@ import { Logo } from "@/components/shared/logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { AuthStatus } from "./auth-status";
 import { ROOMS, type RoomKey } from "./rooms";
+import { KeepPagePointer } from "@/components/shared/keep-page-pointer";
 
 /**
  * The phone and tablet menu: a full-height sheet from the right with a tile for each room (its
@@ -45,9 +46,12 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
         <Dialog.Content
           aria-describedby={undefined}
           onOpenAutoFocus={(event) => {
-            // To the way out, not to the first thing in the sheet (the language pill).
+            // To the way out, not to the first thing in the sheet (the language pill). A frame later:
+            // focusing makes the browser lay out the whole page the sheet has just been added to,
+            // and done inside the press it held the sheet's first frame back (0.3 s on a slow phone);
+            // after that frame the page is laid out already and the focus costs nothing.
             event.preventDefault();
-            close.current?.focus();
+            requestAnimationFrame(() => setTimeout(() => close.current?.focus(), 0));
           }}
           className="fixed inset-y-0 right-0 z-[80] flex w-[min(88vw,25rem)] flex-col rounded-l-[28px] bg-blush-paper text-forest shadow-[-30px_0_70px_-30px_rgba(60,15,35,0.5)] outline-none data-open:animate-in data-open:slide-in-from-right data-open:duration-[440ms] data-open:ease-(--ease-out-quint) data-closed:animate-out data-closed:slide-out-to-right data-closed:duration-[260ms] data-closed:ease-(--ease-in-out-quart)"
         >
@@ -103,6 +107,7 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
           <div className="menu-item-in shrink-0 border-t border-forest/[0.07] px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]" style={{ "--i": ROOMS.length } as CSSProperties}>
             <AuthStatus block onNavigate={done} />
           </div>
+          <KeepPagePointer />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
