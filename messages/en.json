@@ -2773,7 +2773,9 @@
       },
       "imHere": "I'm {name}, go",
       "seoTitle": "Drawing Game for Couples, Live on Two Phones",
-      "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two."
+      "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two.",
+      "listTitle": "{count} words for a drawing game for two",
+      "listIntro": "Every word in the free game. Six are dealt each time, and you take turns drawing them with a finger."
     },
     "end": {
       "label": "What next",
@@ -2786,6 +2788,11 @@
         "blurb": "Start your own room and send the link to anyone.",
         "cta": "Start a room"
       }
+    },
+    "notes": {
+      "how": "How to play",
+      "faq": "Questions about this game",
+      "more": "More like this:"
     }
   },
   "packs": {

@@ -2773,7 +2773,9 @@
       },
       "imHere": "Soy {name}, vamos",
       "seoTitle": "Juego de dibujar para parejas, en dos móviles",
-      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis."
+      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis.",
+      "listTitle": "{count} palabras para un juego de dibujar en pareja",
+      "listIntro": "Todas las palabras del juego gratis. Cada partida reparte seis y os turnáis para dibujarlas con el dedo."
     },
     "end": {
       "label": "¿Y ahora qué?",
@@ -2786,6 +2788,11 @@
         "blurb": "Crea tu propia sala y manda el enlace a quien quieras.",
         "cta": "Crear una sala"
       }
+    },
+    "notes": {
+      "how": "Cómo se juega",
+      "faq": "Preguntas sobre este juego",
+      "more": "Más como esto:"
     }
   },
   "packs": {
