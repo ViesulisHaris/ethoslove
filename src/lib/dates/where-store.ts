@@ -4,8 +4,19 @@ import { isLatLng } from "./geo";
 export const WHERE_KEY = "ethos.dates.where.v1";
 export type StoredWhere = { lat: number; lng: number; name: string; share: boolean };
 
-/** A place name cut to 80 characters, counting whole characters: a cut never splits an emoji in two. */
-export const clipName = (name: string, max = 80): string => Array.from(name).slice(0, max).join("");
+/**
+ * A place name cut to at most 80 UTF-16 units, the length a plan's reader accepts (plan.ts), and
+ * only between whole characters: a cut never splits an emoji in two, which /plan showed as a
+ * replacement character.
+ */
+export function clipName(name: string, max = 80): string {
+  let out = "";
+  for (const char of name) {
+    if (out.length + char.length > max) break;
+    out += char;
+  }
+  return out;
+}
 
 /** Last time's place, or null. Never throws: no storage, or something else under the key, is null. */
 export function readStoredWhere(): StoredWhere | null {

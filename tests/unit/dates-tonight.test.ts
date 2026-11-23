@@ -280,11 +280,18 @@ describe("tonight's times and plan", () => {
     expect("where" in gap).toBe(false);
   });
 
-  it("T24 a long place name is cut at 80 whole characters, never inside an emoji (dates-D10)", () => {
+  it("T24 a long place name is cut between whole characters, never inside an emoji, and the plan still reads (dates-D10)", () => {
+    // The emoji would end at unit 81: it is left out whole, not cut in half.
     const name = `${"a".repeat(79)}\u{1F600} more`;
     const plan = tonightPlan(idea("pasta-and-a-slow-walk"), [place("node/r", "restaurant")], ["19:00"], { date: "2026-11-28", where: name });
-    expect(plan.where).toBe(`${"a".repeat(79)}\u{1F600}`);
-    expect(plan.where).not.toMatch(/[\ud800-\udbff]$/);
+    expect(plan.where).toBe("a".repeat(79));
+    expect(readPlan(plan)?.where).toBe("a".repeat(79));
+    const fits = `${"a".repeat(78)}\u{1F600} more`;
+    expect(clipName(fits)).toBe(`${"a".repeat(78)}\u{1F600}`);
+    // Eighty emoji are 160 units: the plan's reader takes at most 80, so forty of them.
+    const many = clipName("\u{1F600}".repeat(80));
+    expect(many.length).toBe(80);
+    expect(readPlan({ ...plan, where: many })?.where).toBe(many);
     expect(clipName("Lisbon")).toBe("Lisbon");
   });
 });
