@@ -236,6 +236,10 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
           const name = card.manifest.name[locale];
           return (
             <li key={card.manifest.slug} data-card className="w-full shrink-0 snap-start sm:w-auto">
+              {/* The card's heading, for whoever moves through a page by its headings. A heading inside <summary> is lost: the
+                  summary is exposed as a button, and a button's contents are read as its name only (the check of 22 Nov 2026).
+                  The title a reader sees is in the summary, so the card is still pressed by its words. */}
+              <h3 className="sr-only">{card.title}</h3>
               <details name={`${id}-open`} className="group/card rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card transition-shadow duration-300 hover:shadow-page-lift open:shadow-page-lift motion-reduce:transition-none sm:h-full">
                 {/* As tall as its card, with its rows packed at the top: the plus stays in the card's corner when the card is taller than its words. */}
                 <summary className="relative grid cursor-pointer list-none content-start rounded-[1.25rem] outline-offset-4 active:opacity-90 sm:h-full [&::-webkit-details-marker]:hidden">
@@ -249,7 +253,9 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
                     {name}
                     {card.free ? <span className="text-page-accent"> · {labels.free}</span> : null}
                   </span>
-                  <h3 className="mt-2 px-5 pr-10 pb-5 font-display text-[1.25rem] leading-[1.18] text-page-ink">{card.title}</h3>
+                  <span data-card-title className="mt-2 block px-5 pr-10 pb-5 font-display text-[1.25rem] leading-[1.18] text-page-ink">
+                    {card.title}
+                  </span>
                   <Plus aria-hidden="true" className="absolute right-4 bottom-5 size-4 text-page-body transition-transform duration-200 group-open/card:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                 </summary>
                 <div data-reveal className="px-5 pb-4">

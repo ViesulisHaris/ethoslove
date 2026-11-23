@@ -47,7 +47,7 @@ async function cardSets(page: Page) {
       const cards = [...row.querySelectorAll<HTMLElement>("[data-card]")].map((card) => {
         const r = card.getBoundingClientRect();
         const img = card.querySelector("img");
-        return { left: r.left, right: r.right, width: r.width, title: card.querySelector("h3")?.textContent ?? "", open: card.querySelector("details")?.open ?? false, picture: !!img && img.complete && img.naturalWidth > 0 };
+        return { left: r.left, right: r.right, width: r.width, title: card.querySelector("[data-card-title]")?.textContent ?? "", open: card.querySelector("details")?.open ?? false, picture: !!img && img.complete && img.naturalWidth > 0 };
       });
       const dots = row.parentElement!.querySelector<HTMLElement>("[data-dots]");
       return { id: row.id, cards, scrolls: row.scrollWidth > row.clientWidth + 1, dots: dots && getComputedStyle(dots).display !== "none" ? dots.children.length : 0, on: dots ? [...dots.children].findIndex((d) => d.hasAttribute("data-on")) : -1 };
@@ -256,7 +256,7 @@ test("a card opens to one line and a line in handwriting, one card at a time, an
   const first = cards.nth(0);
   const second = cards.nth(1);
   // Closed: a picture and a title, and nothing of what it holds.
-  await expect(first.locator("h3")).toBeVisible();
+  await expect(first.locator("[data-card-title]")).toBeVisible();
   await expect(first.locator("[data-line]")).toBeHidden();
   await expect(first.getByTestId("idea-make")).toBeHidden();
   await first.locator("summary").first().click();
@@ -448,7 +448,7 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
     for (const box of boxes) byRow.set(box.top, [...(byRow.get(box.top) ?? []), box.bottom]);
     expect(byRow.size, path).toBeGreaterThanOrEqual(3);
     // Titles of different lengths stand in these rows: the test has something to hold level.
-    expect(new Set(await page.locator("[data-cards]").first().locator("[data-card] h3").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().height)))).size, path).toBeGreaterThanOrEqual(2);
+    expect(new Set(await page.locator("[data-cards]").first().locator("[data-card] [data-card-title]").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().height)))).size, path).toBeGreaterThanOrEqual(2);
     for (const [rowTop, bottoms] of byRow) expect(Math.max(...bottoms) - Math.min(...bottoms), `${path}: the row at ${rowTop}`).toBeLessThanOrEqual(1);
   }
   // While a card is open the open one grows alone: its neighbours are not stretched down beside it, and none of them
@@ -464,7 +464,7 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
     await settle(page);
     const before = await heights();
     // Titles of one line and of two stand in these rows, or the test holds nothing.
-    expect(new Set(await cards.locator("h3").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().height)))).size, path).toBeGreaterThanOrEqual(2);
+    expect(new Set(await cards.locator("[data-card-title]").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().height)))).size, path).toBeGreaterThanOrEqual(2);
     await cards.nth(opened).locator("summary").first().click();
     await expect(cards.nth(opened).getByTestId("idea-make")).toBeVisible();
     const during = await heights();
@@ -549,6 +549,13 @@ test("a card's picture is asked for at the size it is drawn, and its links are n
       expect(card.alt.length, path).toBeGreaterThan(8);
       expect(card.alt.startsWith(`${card.name}:`), `${path}: “${card.alt}”`).toBe(false);
     }
+    // Each card is a level-3 heading a screen reader can move to: never inside <summary>, which is read as a button and
+    // drops a heading in it. The heading says what the card's own words say.
+    const set = page.locator("[data-cards]").first();
+    expect(await set.locator("summary h1, summary h2, summary h3, summary h4").count(), path).toBe(0);
+    const titles = (await set.locator("[data-card-title]").allTextContents()).map((t) => t.trim());
+    expect(titles.length, path).toBeGreaterThanOrEqual(5);
+    await expect(set.getByRole("heading", { level: 3 })).toHaveText(titles);
   }
 });
 
@@ -585,7 +592,7 @@ test("the hero says which gift its button makes, each page opens on a gift of it
   expect(giftHeading.trim()).not.toBe("The Letter");
   await page.goto("/digital-cards");
   // A kind's title stands alone ("With a game in them" named nothing), and the list search engines read names the same five (the deep test of 23 Nov 2026).
-  const titles = await page.locator("[data-kinds] [data-card] h3").allTextContents();
+  const titles = await page.locator("[data-kinds] [data-card] [data-card-title]").allTextContents();
   expect(titles).toEqual(["Cards that open like a letter", "Cards built from your photos", "Cards with a game in them", "Cards for a date on the calendar", "Cards for someone far away"]);
   const listed = await page.locator("script[type=\"application/ld+json\"]").evaluateAll((els) =>
     els.flatMap((el) => [JSON.parse(el.textContent ?? "{}")].flatMap((d) => d["@graph"] ?? [d])).filter((n) => n["@type"] === "ItemList").flatMap((n) => n.itemListElement.map((i: { name: string }) => i.name)),
@@ -734,7 +741,7 @@ test("between a tablet and a small laptop the idea cards stay two across, and th
   for (const [width, across, least] of [[768, 2, 300], [1024, 2, 290], [1100, 2, 320], [1151, 2, 340], [1152, 3, 236], [1280, 3, 236], [1440, 3, 236]] as const) {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/es/gifts/last-minute");
-    const boxes = await page.locator("[data-cards]").first().locator("[data-card]").evaluateAll((cards) => cards.map((card) => ({ top: Math.round(card.getBoundingClientRect().top), width: card.getBoundingClientRect().width, rows: Math.round(card.querySelector("h3")!.getBoundingClientRect().height / parseFloat(getComputedStyle(card.querySelector("h3")!).lineHeight)) })));
+    const boxes = await page.locator("[data-cards]").first().locator("[data-card]").evaluateAll((cards) => cards.map((card) => ({ top: Math.round(card.getBoundingClientRect().top), width: card.getBoundingClientRect().width, rows: Math.round(card.querySelector("[data-card-title]")!.getBoundingClientRect().height / parseFloat(getComputedStyle(card.querySelector("[data-card-title]")!).lineHeight)) })));
     expect(boxes.filter((box) => box.top === boxes[0].top).length, `${width}: cards in the first row`).toBe(across);
     for (const box of boxes) {
       expect(box.width, `${width}: a card's width`).toBeGreaterThanOrEqual(least);

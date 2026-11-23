@@ -2,10 +2,10 @@ import type { Page } from "@playwright/test";
 
 /**
  * How the redesigned pages are measured by the browser tests: `settle` scrolls a page through once
- * so everything lazy has arrived, and `measure` reads what a ruler would. Both are the gift page's
- * own, copied word for word from tests/e2e/template-page-design.spec.ts (which stays as it is, the
- * proof of the page the owner approved), so the pages built from a gift's page are held to the same
- * ruler: tests/e2e/spread-design.spec.ts. Change one and change the other.
+ * so everything lazy has arrived, and `measure` reads what a ruler would. One ruler for every page
+ * laid out to the owner's mock-up: the gift page the owner approved
+ * (tests/e2e/template-page-design.spec.ts) and the pages built from it
+ * (tests/e2e/spread-design.spec.ts) both import it, so the two cannot drift apart.
  */
 
 /** Scroll the page through once, so everything lazy has arrived and is laid out, and every picture is decoded. */
@@ -102,6 +102,9 @@ export async function measure(page: Page, within = "[data-page-theme]") {
       const text = node.textContent?.trim() ?? "";
       const parent = node.parentElement;
       if (!text || !parent || !shown(parent) || parent.closest("[data-flatlay], style, script")) continue;
+      // Words for a screen reader alone (a card's heading, .sr-only: a 1px box clipped to nothing) are not on show.
+      const box = parent.getBoundingClientRect();
+      if (box.width <= 1 && box.height <= 1) continue;
       const range = document.createRange();
       range.selectNodeContents(node);
       const rects = [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
