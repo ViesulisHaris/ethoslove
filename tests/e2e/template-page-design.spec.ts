@@ -798,7 +798,15 @@ test("the picked-up phone fits a short screen under the header, and a tap beside
   await up.click({ position: { x: 100, y: 300 }, force: true });
   await expect(up).toHaveCount(1);
   // Not the header's: the language switch and the links are not "beside the phone".
-  await page.locator(".site-header").click({ position: { x: 560, y: 20 }, force: true });
+  // On the bar itself, between the wordmark and the first room: a fixed 560px across was the bar's cream once, and became the Trips link when the rooms were put in a new order (it opened /trips, and the test lost its page).
+  const bare = await page.locator(".site-header").evaluate((header) => {
+    const links = [...header.querySelectorAll<HTMLElement>("a, button")].map((el) => el.getBoundingClientRect()).filter((r) => r.width > 20).sort((a, b) => a.left - b.left);
+    const left = header.getBoundingClientRect().left;
+    for (let i = 1; i < links.length; i++) if (links[i].left - links[i - 1].right > 60) return (links[i - 1].right + links[i].left) / 2 - left;
+    return 8;
+  });
+  await page.locator(".site-header").click({ position: { x: bare, y: 20 }, force: true });
+  await expect(page).toHaveURL(new RegExp("/templates/snow-globe$"));
   await expect(up).toHaveCount(1);
   await page.locator("h1").click();
   await expect(up).toHaveCount(0);
