@@ -48,11 +48,11 @@ import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
 import { WhereBox, type Where } from "./where-box";
-import { TonightForm } from "./tonight/tonight-form";
+import { TonightForm, type TonightWhen } from "./tonight/tonight-form";
 import { TonightProblem } from "./tonight/tonight-island";
 import { TonightResult } from "./tonight/tonight-result";
 import { useTonight } from "./tonight/use-tonight";
-import { WHERE_KEY } from "@/lib/dates/where-store";
+import { WHERE_KEY, writeStoredWhere } from "@/lib/dates/where-store";
 const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
 /** Moving the map further than this from the named place stops calling it by that name. */
@@ -272,14 +272,10 @@ export function DatesExplorer() {
       setSelectedId(null);
       setSkip([]);
       setNotice(null);
-      try {
-        // With whether it can be named: a town they picked comes back next time as "Date ideas in
-        // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
-        // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
-        window.localStorage.setItem(WHERE_KEY, JSON.stringify({ ...place, share: options.share ?? true }));
-      } catch {
-        // No storage: it just will not be remembered.
-      }
+      // With whether it can be named: a town they picked comes back next time as "Date ideas in
+      // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
+      // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
+      writeStoredWhere({ ...place, share: options.share ?? true });
       void search(place, snapped.radiusM);
     },
     [search],
@@ -454,7 +450,15 @@ export function DatesExplorer() {
   });
   // The page's own day is offered too, when it is neither today nor tomorrow ("on Sat 28 Nov").
   const pageDayIsOther = date !== placeToday && date !== addDays(placeToday, 1);
-  const tonightWhen = tonight.when === "day" && !pageDayIsOther ? "tonight" : tonight.when;
+  // The planner speaks of the page's day: the day pill and the weather card above it say the same
+  // day, and choosing another in the planner moves them with it (the weather card used to say
+  // Saturday over a planner that said tonight).
+  const tonightWhen: TonightWhen = date === placeToday ? "tonight" : date === addDays(placeToday, 1) ? "tomorrow" : "day";
+  const chooseWhen = (when: TonightWhen) => {
+    const nowToday = placeNow(forecast, Date.now()).date;
+    if (when !== "day") setDate(when === "tonight" ? nowToday : addDays(nowToday, 1));
+    tonight.setWhen(when);
+  };
   const planTonight = (when = tonightWhen) => {
     // The page follows the planner: its day, its weather card and its ideas become the day planned for.
     // Today is read at the tap, the way the planner reads it: a tab left open past midnight has a new one.
@@ -747,7 +751,8 @@ export function DatesExplorer() {
         <div>
           <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
           <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
-          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{t("empty.sub")}</p>
+          {/* Sent here by an idea's "Plan it near you": it is named, so the visitor knows it is carried. */}
+          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{idea ? t("empty.subIdea", { idea: idea.title[locale] }) : t("empty.sub")}</p>
           <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
           {notice || townMissing ? (
             <p role="status" className="mt-3 text-sm text-destructive">
@@ -943,7 +948,7 @@ export function DatesExplorer() {
                 busy={tonight.busy}
                 waiting={all.length === 0 ? t("tonight.finding") : undefined}
                 onChoice={tonight.setChoice}
-                onWhen={tonight.setWhen}
+                onWhen={chooseWhen}
                 onPlan={() => planTonight()}
               />
             </div>

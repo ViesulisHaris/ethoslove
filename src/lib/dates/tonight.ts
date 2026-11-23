@@ -18,13 +18,14 @@ export type TonightWish = {
   /** A ceiling on the ideas' own scale: 0 free, 1 a coffee each, 2 dinner, 3 a treat. */
   budget?: 0 | 1 | 2 | 3;
   length?: TonightLength;
-  /** The page's own kind (a kind page plans only from its ideas, while one of them can be done). */
+  /** The page's own kind: a page by kind plans only from its own ideas, never from outside them. */
   kind?: DateKind;
   /** Minutes after midnight, by the place's own clock, before which nothing can start. Set only for a date today. */
   startMin?: number;
 };
-export type Relaxed = "length" | "budget" | "vibe" | "kind";
+export type Relaxed = "length" | "budget" | "vibe";
 export type TonightPick = {
+  /** The idea as it is planned that day: its rain stops on a wet one, no café after nine (forTonight). */
   idea: DateIdea;
   relaxed: Relaxed[];
   /** Minutes every stop is moved later than the idea's own hour. */
@@ -111,11 +112,49 @@ export function tonightTimes(idea: DateIdea, day: DayWeather | undefined, shift:
   return times.map((t) => clock((minutesOf(t) ?? 0) + shift));
 }
 
+/** Past this a café is usually shut (21:00); the small hours count as late too. */
+const LATE_CAFE_MIN = 21 * 60;
+const isLate = (hhmm: string): boolean => {
+  const m = minutesOf(hhmm);
+  return m !== null && (m >= LATE_CAFE_MIN || m < 5 * 60);
+};
+
+/**
+ * The idea with its stops as they can be had at their times: a stop timed at nine or later does not
+ * send them to a café when it lists something else (the stars at 22:00 end at a bar or a dessert
+ * place, not a café that shut at six). A stop that is only a café keeps it.
+ */
+export function forTonight(idea: DateIdea, times: readonly string[]): DateIdea {
+  let changed = false;
+  const stops = idea.stops.map((kinds, i) => {
+    if (!times[i] || !isLate(times[i]) || !kinds.includes("cafe") || kinds.length === 1) return kinds;
+    changed = true;
+    return kinds.filter((k) => k !== "cafe");
+  });
+  return changed ? { ...idea, stops } : idea;
+}
+
+/** A bar that says "sports" in its name: big screens and a match on. */
+export const isSportsBar = (place: Pick<Place, "kind" | "name">): boolean => place.kind === "bar" && /\bsports?\b/i.test(place.name);
+
+/**
+ * The places an idea may be planned with. A sports bar suits a playful idea's drink after (the
+ * bowling, the arcade); it never follows the theatre or a museum, and never stands in for the
+ * karaoke booth an idea starts at.
+ */
+export function placesFor(idea: DateIdea, places: Place[]): Place[] {
+  const barStandsIn = (idea.stops[0] ?? []).indexOf("bar") > 0;
+  if (idea.vibes.includes("playful") && !barStandsIn) return places;
+  return places.some(isSportsBar) ? places.filter((p) => !isSportsBar(p)) : places;
+}
+
 /**
  * Every idea that can be done there that day from that hour, best first. The weather, the hour and
- * what is nearby are never given up, nor a kind's own ceiling on cost (KIND_MAX_BUDGET); the wishes are, one at a time and the lightest first: the
- * length, then the budget a step at a time, then the mood, and the page's kind only when none of its
- * ideas can be done at all. Each pick says which wishes it gave up. An empty list is an answer.
+ * what is nearby are never given up, nor the page's kind: a page by kind plans only its own ideas
+ * (an empty list then says none of them can be done, and the planner offers tomorrow), nor its
+ * ceiling on cost (KIND_MAX_BUDGET). The wishes are, one at a time and the lightest first: the
+ * length, then the budget a step at a time, then the mood. Each pick says which wishes it gave up.
+ * An empty list is an answer.
  */
 export function rankTonight(wish: TonightWish, context: TonightContext): TonightPick[] {
   const { day, places, boost } = context;
@@ -124,12 +163,15 @@ export function rankTonight(wish: TonightWish, context: TonightContext): Tonight
   const ranked: { pick: TonightPick; weight: number; score: number; index: number }[] = [];
   const kindMax = wish.kind ? KIND_MAX_BUDGET[wish.kind] : undefined;
   ideas.forEach((written, index) => {
+    if (wish.kind && !fitsKind(written, wish.kind)) return;
     // On a wet day an idea with rain stops is planned with them (the stars under a dome).
-    const idea = forTheDay(written, day);
-    if ((wet && idea.needsDry) || !isDoable(idea, places)) return;
-    if (kindMax !== undefined && idea.budget > Math.max(kindMax, wish.budget ?? kindMax)) return;
-    const shift = tonightShift(idea, day, wish.startMin);
+    const forDay = forTheDay(written, day);
+    if (wet && forDay.needsDry) return;
+    if (kindMax !== undefined && forDay.budget > Math.max(kindMax, wish.budget ?? kindMax)) return;
+    const shift = tonightShift(forDay, day, wish.startMin);
     if (shift === null) return;
+    const idea = forTonight(forDay, tonightTimes(forDay, day, shift));
+    if (!isDoable(idea, placesFor(idea, places))) return;
     const relaxed: Relaxed[] = [];
     let weight = 0;
     if (wish.length && !lengthFits(idea.minutes, wish.length)) {
@@ -145,10 +187,6 @@ export function rankTonight(wish: TonightWish, context: TonightContext): Tonight
     if (wish.vibe && !idea.vibes.includes(wish.vibe)) {
       relaxed.push("vibe");
       weight += 8;
-    }
-    if (wish.kind && !fitsKind(idea, wish.kind)) {
-      relaxed.push("kind");
-      weight += 16;
     }
     const score = (wet && idea.goodInRain ? 2 : 0) + (wish.startMin !== undefined && shift === 0 ? 1 : 0) + (boost?.[idea.id] ?? 0);
     ranked.push({ pick: { idea, relaxed, shift }, weight, score, index });

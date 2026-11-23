@@ -18,6 +18,12 @@ type Props = {
   ofKind?: boolean;
   /** Why the button cannot be pressed yet, said on it: "Finding places…" or "Say where first." */
   waiting?: string;
+  /**
+   * What pressing the button does while it waits, when the visitor can act on it ("Say where first"
+   * takes them to the where box). Then the button keeps its full colour: the instruction on it is
+   * read, not greyed out. Without it the button is held ("Finding places…").
+   */
+  onWaiting?: () => void;
   busy?: boolean;
   onChoice: (next: TonightChoice) => void;
   onWhen: (when: TonightWhen) => void;
@@ -55,9 +61,9 @@ function Choice({ name, value, onChange, children }: { name: string; value: stri
  * "Plan a cozy date tonight. Up to 2 hours, free." One sentence with the choices inside it, then
  * one button: the one-step planner's form, on the dates map, a city's page and a page by kind.
  */
-export function TonightForm({ choice, when, whens, ofKind, waiting, busy, onChoice, onWhen, onPlan }: Props) {
+export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, busy, onChoice, onWhen, onPlan }: Props) {
   const t = useTranslations("dates");
-  const blocked = Boolean(busy || waiting);
+  const blocked = Boolean(busy || (waiting && !onWaiting));
   const parts = {
     mood: () => (
       <Choice name={t("ideas.vibes")} value={choice.vibe ?? ""} onChange={(v) => onChoice({ ...choice, vibe: (v || undefined) as Vibe | undefined })}>
@@ -106,7 +112,9 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, busy, onChoi
         type="button"
         aria-disabled={blocked ? "true" : undefined}
         onClick={() => {
-          if (!blocked) onPlan();
+          if (blocked) return;
+          if (waiting) onWaiting?.();
+          else onPlan();
         }}
         className={`mt-4 ${TONIGHT_BUTTON}`}
       >

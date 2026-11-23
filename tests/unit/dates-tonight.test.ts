@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { KIND_IDEAS } from "@/lib/dates/date-kinds";
-import { canBeFree, forTheDay, IDEAS, ideaById, isDoable, type DateIdea } from "@/lib/dates/ideas";
+import { canBeFree, fillStops, forTheDay, IDEAS, ideaById, isDoable, type DateIdea } from "@/lib/dates/ideas";
 import { KIND_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { readPlan } from "@/lib/dates/plan";
 import { suggestTimes } from "@/lib/dates/timing";
-import { lengthFits, placeNow, rankTonight, startFor, TONIGHT_ENDS_MIN, tonightPlan, tonightShift, tonightStart, tonightTimes } from "@/lib/dates/tonight";
+import { forTonight, isSportsBar, lengthFits, placeNow, placesFor, rankTonight, startFor, TONIGHT_ENDS_MIN, tonightPlan, tonightShift, tonightStart, tonightTimes } from "@/lib/dates/tonight";
 import type { Condition, DayWeather } from "@/lib/dates/weather";
 
 const place = (id: string, kind: PlaceKind, over: Partial<Place> = {}): Place => ({
@@ -35,6 +35,7 @@ const WET = day({ condition: "rain", rainChance: 90 });
 const idea = (id: string): DateIdea => ideaById(id)!;
 const ids = (picks: { idea: DateIdea }[]): string[] => picks.map((p) => p.idea.id);
 const EVENING = 18 * 60 + 45;
+const fillStopsNames = (i: DateIdea, places: Place[]): (string | undefined)[] => fillStops(i, places).map((s) => s.place?.id);
 
 describe("tonight's start and clock", () => {
   it("T1 tonight starts half an hour from now on the quarter hour, and never before five", () => {
@@ -116,13 +117,30 @@ describe("tonight's ranking", () => {
     expect(fancy.relaxed).toEqual(["length"]);
   });
 
-  it("T11 the page's kind is the last thing to give way", () => {
+  it("T11 a page by kind never plans outside its kind: with none of its ideas doable, it has nothing", () => {
     const [first] = rankTonight({ kind: "first-date", startMin: EVENING }, { day: WET, places: EVERYTHING });
     expect(first).toMatchObject({ idea: { id: "bowling-night" }, relaxed: [] });
+    // London on a November night without the rare finds: no bowling, arcade or rink. Before, it gave
+    // the three-hour dinner the first-date page says it never is; now it says none fits (and offers tomorrow).
     const without = EVERYTHING.filter((p) => !["bowling", "arcade", "skating"].includes(p.kind));
-    const [other] = rankTonight({ kind: "first-date", startMin: EVENING }, { day: WET, places: without });
-    expect(KIND_IDEAS["first-date"]).not.toContain(other.idea.id);
-    expect(other.relaxed).toContain("kind");
+    expect(rankTonight({ kind: "first-date", startMin: EVENING }, { day: WET, places: without })).toEqual([]);
+    // Tomorrow the day ideas are back, all of them the kind's own.
+    const tomorrow = rankTonight({ kind: "first-date" }, { day: WET, places: without });
+    expect(tomorrow.length).toBeGreaterThan(0);
+    for (const p of tomorrow) expect(KIND_IDEAS["first-date"], p.idea.id).toContain(p.idea.id);
+  });
+
+  it("T11b Another wraps within the kind: every pick on every kind's page is one of its own", () => {
+    for (const kind of Object.keys(KIND_IDEAS) as (keyof typeof KIND_IDEAS)[])
+      for (const d of [DRY, WET])
+        for (const startMin of [undefined, EVENING, 21 * 60]) {
+          const picks = rankTonight({ kind, startMin, budget: 3, vibe: "fancy" }, { day: d, places: EVERYTHING });
+          for (const p of picks) expect(KIND_IDEAS[kind], `${kind} ${p.idea.id}`).toContain(p.idea.id);
+        }
+    // The rainy-day page ("all twelve are under a roof") never offers the dinner walk or the viewpoint.
+    const rainy = ids(rankTonight({ kind: "rainy-day" }, { day: DRY, places: EVERYTHING }));
+    expect(rainy).not.toContain("pasta-and-a-slow-walk");
+    expect(rainy).not.toContain("stars-and-planets");
   });
 
   it("T16 'free' takes the ideas that can be done for nothing: the cheap page's picnic on a dry summer evening", () => {
@@ -141,7 +159,8 @@ describe("tonight's ranking", () => {
         const picks = rankTonight({ kind: "cheap", startMin }, { day: d, places: outside });
         for (const p of picks) expect(p.idea.budget, p.idea.id).toBeLessThanOrEqual(1);
       }
-    expect(ids(rankTonight({ kind: "cheap", budget: 3, startMin: EVENING }, { day: WET, places: outside }))).toContain("escape-room-debrief");
+    // A bigger budget no longer reaches outside the page: a wet night with no dome has no cheap date, and it says so.
+    expect(rankTonight({ kind: "cheap", budget: 3, startMin: EVENING }, { day: WET, places: outside })).toEqual([]);
   });
 
   it("T18 a wet night's stars are under a planetarium's dome, never at an outdoor viewpoint", () => {
@@ -181,6 +200,40 @@ describe("tonight's ranking", () => {
   it("T13 a city's own standing breaks a tie, and only a tie", () => {
     expect(rankTonight({}, { day: DRY, places: EVERYTHING, boost: { "bowling-night": 5 } })[0].idea.id).toBe("bowling-night");
     expect(rankTonight({ budget: 1 }, { day: DRY, places: EVERYTHING, boost: { "bowling-night": 5 } })[0].idea.id).not.toBe("bowling-night");
+  });
+});
+
+describe("tonight's stops suit the idea", () => {
+  it("T21 a stop timed at nine or later is not a café when it can be something else", () => {
+    const stars = idea("stars-and-planets");
+    const late = forTonight(stars, ["21:00", "22:00"]);
+    expect(late.stops[1]).toEqual(["bar", "dessert"]);
+    expect(late.stops[0]).toEqual(stars.stops[0]);
+    expect(forTonight(stars, ["19:00", "20:30"])).toBe(stars);
+    expect(forTonight(idea("karaoke-duet"), ["23:30", "00:45"]).stops).toEqual(idea("karaoke-duet").stops);
+    // A stop that is only a café keeps it.
+    const onlyCafe = { ...stars, stops: [["viewpoint"], ["cafe"]] } as DateIdea;
+    expect(forTonight(onlyCafe, ["21:00", "22:00"])).toBe(onlyCafe);
+    // The planner: the stars at night with only a café near the viewpoint cannot be planned.
+    const cafeOnly = [place("node/v", "viewpoint"), place("node/c", "cafe")];
+    expect(ids(rankTonight({ startMin: EVENING }, { day: DRY, places: cafeOnly }))).not.toContain("stars-and-planets");
+    const [pick] = rankTonight({ startMin: EVENING }, { day: DRY, places: [...cafeOnly, place("node/b", "bar")] });
+    expect(pick.idea.id).toBe("stars-and-planets");
+    expect(pick.idea.stops[1]).not.toContain("cafe");
+  });
+
+  it("T22 a sports bar is never the drink after the theatre, nor the karaoke; it can follow the bowling", () => {
+    const sports = place("node/s", "bar", { name: "The Nook Sports Bar", score: 99 });
+    expect(isSportsBar(sports)).toBe(true);
+    expect(isSportsBar(place("node/x", "bar", { name: "Passport Lounge" }))).toBe(false);
+    expect(isSportsBar(place("node/y", "restaurant", { name: "Sports Café" }))).toBe(false);
+    const world = [sports, place("node/t", "theatre"), place("node/k", "karaoke"), place("node/bo", "bowling"), place("node/r", "restaurant")];
+    for (const id of ["theatre-night", "karaoke-duet", "museum-then-wine", "spa-evening"]) expect(placesFor(idea(id), world), id).not.toContain(sports);
+    expect(placesFor(idea("bowling-night"), world)).toContain(sports);
+    // With only the sports bar for a drink, the theatre ends at the restaurant; with neither, it is not planned.
+    const theatre = rankTonight({ startMin: EVENING }, { day: DRY, places: world }).find((p) => p.idea.id === "theatre-night")!;
+    expect(fillStopsNames(theatre.idea, placesFor(theatre.idea, world))).toEqual(["node/t", "node/r"]);
+    expect(ids(rankTonight({ startMin: EVENING }, { day: DRY, places: [sports, place("node/t", "theatre")] }))).not.toContain("theatre-night");
   });
 });
 

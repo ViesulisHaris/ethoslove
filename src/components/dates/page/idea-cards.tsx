@@ -22,12 +22,13 @@ export type DateCardLabels = { twist: string; plan: string; hours: (idea: DateId
  * Date ideas as picture cards: closed, a card is the idea's picture and its title; opened, why it
  * fits this page, its twist in handwriting, its real stops on a city's page, and the way to plan
  * it. One opens at a time. On a phone the cards are one row, one to a screen, with dots under it;
- * from 640px a grid, two and then three across.
+ * from 640px a grid, two and then three across. A count that would leave one card alone on the
+ * last row of three (four, ten) stays two across.
  */
 export function DateIdeaCards({ id, cards, locale, labels }: { id: string; cards: readonly DateCard[]; locale: "en" | "es"; labels: DateCardLabels }) {
   return (
     <div className="min-w-0">
-      <ul id={id} data-cards className="-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0 sm:[&:not(:has(details[open]))]:items-stretch lg:grid-cols-3">
+      <ul id={id} data-cards className={`-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0 sm:[&:not(:has(details[open]))]:items-stretch ${cards.length % 3 === 1 ? "" : "lg:grid-cols-3"}`}>
         {cards.map(({ idea, fit, stops, href }) => (
           <li key={idea.id} id={`idea-${idea.id}`} data-card data-pick className="w-full shrink-0 scroll-mt-24 snap-start sm:w-auto">
             <details name={`${id}-open`} className="group/card rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card transition-shadow duration-300 open:shadow-page-lift hover:shadow-page-lift motion-reduce:transition-none sm:h-full">

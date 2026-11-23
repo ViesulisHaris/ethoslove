@@ -1,6 +1,6 @@
 import { isLatLng } from "./geo";
 
-/** Where the Dates map last looked, as it keeps it in the browser (the explorer writes it; the planner on a page by kind reads it). */
+/** Where the Dates map last looked, as it keeps it in the browser (the explorer and the planner on a page by kind write and read it). */
 export const WHERE_KEY = "ethos.dates.where.v1";
 export type StoredWhere = { lat: number; lng: number; name: string; share: boolean };
 
@@ -14,4 +14,13 @@ export function readStoredWhere(): StoredWhere | null {
     // Unreadable, or no storage at all.
   }
   return null;
+}
+
+/** Keeps the place for next time. Never throws: without storage it is just not remembered. */
+export function writeStoredWhere(where: StoredWhere): void {
+  try {
+    window.localStorage.setItem(WHERE_KEY, JSON.stringify({ lat: where.lat, lng: where.lng, name: where.name.slice(0, 80), share: where.share }));
+  } catch {
+    // No storage: it just will not be remembered.
+  }
 }

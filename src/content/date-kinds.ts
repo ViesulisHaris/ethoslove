@@ -88,7 +88,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       },
       {
         q: { en: "Which of these work when it rains?", es: "¿Cuáles sirven si llueve?" },
-        a: { en: "Six of the eight are under a roof: bowling, the arcade, the escape room, karaoke, climbing and skating. Mini golf and the rowing boat need a dry day, and the planner leaves them out when the forecast is wet.", es: "Seis de las ocho son bajo techo: los bolos, los recreativos, el escape room, el karaoke, la escalada y el patinaje. El minigolf y la barca necesitan un día seco, y el planificador las deja fuera cuando la previsión es de lluvia." },
+        a: { en: "Six of the eight are under a roof: bowling, the arcade, the escape room, karaoke, climbing and skating. Mini golf and the rowing boat need a dry day, and the planner leaves them out when the forecast is wet.", es: "Seis de las ocho están bajo techo: los bolos, los recreativos, el escape room, el karaoke, la escalada y el patinaje. El minigolf y la barca necesitan un día seco, y el planificador las deja fuera cuando la previsión es de lluvia." },
       },
     ],
   },
@@ -118,16 +118,16 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       },
       {
         q: { en: "How do I plan a cheap date tonight?", es: "¿Cómo planeo una cita barata para hoy?" },
-        a: { en: "Set the planner's budget to “free” or “pocket change at most” and say where you are. It picks an idea that fits the forecast and the hour, and tells you when nothing that cheap fits.", es: "Poned el presupuesto del planificador en «gratis» o «como mucho un café por cabeza» y decid dónde estáis. Elige una idea que encaje con la previsión y con la hora, y avisa cuando no hay nada tan barato." },
+        a: { en: "Set the planner's budget to “free” or “pocket change at most” and say where you are. It picks an idea that fits the forecast and the hour, and tells you when nothing that cheap fits.", es: "Poned el presupuesto del planificador en «gratis» o «gastando solo calderilla» y decid dónde estáis. Elige una idea que encaje con la previsión y con la hora, y avisa cuando no hay nada tan barato." },
       },
     ],
   },
   romantic: {
     nav: { en: "Romantic", es: "Romántica" },
     phrase: { en: "Romantic Date Ideas", es: "Ideas para una cita romántica" },
-    title: { en: "Romantic Date Ideas: {count} That Slow the Evening Down", es: "Ideas para una cita romántica: {count} que frenan la tarde" },
+    title: { en: "Romantic Date Ideas: {count} That Slow the Evening Down", es: "Ideas para una cita romántica: {count} planes sin prisas" },
     description: { en: "Ten romantic date ideas built round a view, a table or the dark: a picnic at golden hour, dinner and a slow walk, the stars, a rowing boat. The ones that hang on the light are timed to the real sunset.", es: "Diez ideas para una cita romántica alrededor de una vista, una mesa o la oscuridad: un pícnic a la hora dorada, cena y paseo lento, las estrellas, una barca. Las que dependen de la luz se ajustan a la puesta de sol real." },
-    heading: { en: "Romantic date ideas that slow the evening down", es: "Ideas para una cita romántica que frenan la tarde" },
+    heading: { en: "Romantic date ideas that slow the evening down", es: "Ideas para una cita romántica, sin prisas" },
     line: { en: "Be at the view three quarters of an hour before sunset.", es: "Estad en el mirador tres cuartos de hora antes de la puesta de sol." },
     sentence: { en: "Ten dates with nowhere else to be. Four of them hang on the light, so the planner times those to the real sunset or sunrise of the day you pick.", es: "Diez citas sin otro sitio al que ir. Cuatro dependen de la luz, y el planificador las ajusta a la puesta o la salida del sol del día que elijáis." },
     hero: "pasta-and-a-slow-walk",
@@ -160,7 +160,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     title: { en: "Double Date Ideas: {count} That Work Better With Four", es: "Ideas para una cita doble: {count} que mejoran con cuatro" },
     description: { en: "Eight double date ideas where four people is the right number: bowling in teams, an escape room, mini golf, karaoke duets, a picnic. The planner finds the lanes and rooms near you.", es: "Ocho ideas para una cita doble en las que cuatro es el número justo: bolos por equipos, un escape room, minigolf, duetos de karaoke, un pícnic. El planificador encuentra las pistas y las salas cerca." },
     heading: { en: "Double date ideas that work better with four", es: "Ideas para una cita doble que mejoran con cuatro" },
-    line: { en: "Couple against couple beats four people making small talk.", es: "Pareja contra pareja gana a cuatro personas dándose conversación." },
+    line: { en: "Couple against couple beats four people making small talk.", es: "Pareja contra pareja funciona mejor que cuatro personas buscando de qué hablar." },
     sentence: { en: "Eight dates where a second couple helps: there are teams to pick, a puzzle that wants four heads, or a table worth sharing.", es: "Ocho citas en las que una segunda pareja ayuda: hay equipos que formar, un enigma que pide cuatro cabezas o una mesa que merece compartirse." },
     hero: "bowling-night",
     fits: {
@@ -221,7 +221,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     title: { en: "Rainy Day Date Ideas: {count} That Never Needed the Sun", es: "Ideas para una cita con lluvia: {count} planes bajo techo" },
     description: { en: "Twelve rainy day date ideas under a roof: a bookshop and coffee, a gallery hop, bowling, an escape room, a film and a late dessert. The planner checks the forecast before it picks one.", es: "Doce ideas para una cita en un día de lluvia, todas bajo techo: librería y café, ruta de galerías, bolos, un escape room, una peli y un postre tardío. El planificador mira la previsión antes de elegir una." },
     heading: { en: "Rainy day date ideas that never needed the sun", es: "Ideas para una cita con lluvia, todas bajo techo" },
-    line: { en: "All twelve are under a roof, so let the forecast do its worst.", es: "Las doce son bajo techo: que la previsión haga lo que quiera." },
+    line: { en: "All twelve are under a roof, so let the forecast do its worst.", es: "Las doce están bajo techo: que la previsión haga lo que quiera." },
     sentence: { en: "Twelve dates that work in any weather. When the forecast for your day is wet, the planner leads with these and leaves the picnic out.", es: "Doce citas que funcionan con cualquier tiempo. Cuando la previsión de vuestro día es de lluvia, el planificador empieza por estas y deja fuera el pícnic." },
     hero: "cinema-and-late-dessert",
     fits: {
@@ -326,7 +326,7 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
   },
   es: {
     eyebrow: "Ideas para una cita",
-    planButton: "Planead una al momento",
+    planButton: "Planead una ya",
     tonightLabel: "El planificador",
     tonightHeading: "Una de estas, con sitios reales",
     tonightLine: "Decid dónde. Elegimos una que encaje con la previsión y la hora.",
@@ -353,7 +353,7 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
     inCityByKind: "En {city}, por tipo",
     allInCity: "Todas las ideas para una cita en {city}",
     freePlacesLabel: "Gratis",
-    freePlacesHeading: "Donde se suele entrar gratis",
+    freePlacesHeading: "Sitios donde se suele entrar gratis",
     freePlacesLine: "Parques, galerías, librerías y miradores que el mapa conoce a {km} km.",
     meetLabel: "Dónde quedar",
     meetHeading: "Cafeterías, librerías y galerías cerca del centro",
@@ -377,13 +377,25 @@ export const DATE_KIND_SHARED_FAQ: { q: L; a: L }[] = [
 export const KIND_PAGE_CITIES: readonly string[] = ["new-york", "chicago", "london", "los-angeles", "boston", "dallas", "houston", "kansas-city"];
 
 /** A kind inside a city: the four pages of BRIEF-dates.md 2b, keyed "city/kind". */
-export type CityKindCopy = { title: L; description: L; heading: L; line: L; sentence: L };
+export type CityKindCopy = {
+  title: L;
+  description: L;
+  heading: L;
+  line: L;
+  sentence: L;
+  /**
+   * The hero's idea when the kind's own picture would not do under a city's name: the cheap page's
+   * picnic has a skyline of spires, which is not London's or New York's. Indoors fits any city.
+   */
+  hero?: string;
+};
 export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
   "new-york/cheap": {
     title: { en: "Cheap Date Ideas in NYC: 8 With Real Places, 4 of Them Free", es: "Ideas para una cita barata en Nueva York: 8 con sitios reales" },
     description: { en: "Eight cheap date ideas in New York, each filled with real cafés, parks and galleries near Washington Square, plus the places near the centre that usually cost nothing to walk into.", es: "Ocho ideas para una cita barata en Nueva York, cada una con cafeterías, parques y galerías reales cerca de Washington Square, y los sitios del centro en los que se suele entrar gratis." },
     heading: { en: "Cheap date ideas in New York", es: "Ideas para una cita barata en Nueva York" },
     line: { en: "The streets are free, and so is the Staten Island Ferry.", es: "Las calles son gratis, y el ferri de Staten Island también." },
+    hero: "gallery-hop",
     sentence: { en: "The same eight ideas as our cheap list, with real places near Washington Square for each stop, and the nearby parks, galleries and bookshops that are usually free.", es: "Las mismas ocho ideas de nuestra lista barata, con sitios reales cerca de Washington Square para cada parada, y los parques, galerías y librerías cercanos, que suelen ser gratis." },
   },
   "new-york/first-date": {
@@ -405,6 +417,7 @@ export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
     description: { en: "Eight cheap date ideas in London, each filled with real cafés, parks and galleries around Covent Garden, plus the places near the centre that usually cost nothing to walk into.", es: "Ocho ideas para una cita barata en Londres, cada una con cafeterías, parques y galerías reales alrededor de Covent Garden, y los sitios del centro en los que se suele entrar gratis." },
     heading: { en: "Cheap date ideas in London", es: "Ideas para una cita barata en Londres" },
     line: { en: "Most of the big museums charge nothing at the door.", es: "Casi ningún gran museo cobra en la puerta." },
+    hero: "gallery-hop",
     sentence: { en: "The same eight ideas as our cheap list, with real places around Covent Garden for each stop, and the nearby galleries, parks and bookshops that are usually free.", es: "Las mismas ocho ideas de nuestra lista barata, con sitios reales alrededor de Covent Garden para cada parada, y las galerías, parques y librerías cercanos, que suelen ser gratis." },
   },
 };

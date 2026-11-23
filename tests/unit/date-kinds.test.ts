@@ -135,6 +135,17 @@ describe("the kinds of date", () => {
     }
   });
 
+  it("K18 a city-by-kind page never leads with a picture of somewhere else: no outdoor skyline under a city's name", () => {
+    // The picnic's skyline has spires that are neither London's nor New York's.
+    const OUTDOOR_SKYLINE = ["golden-hour-picnic"];
+    for (const { city, kind } of CITY_KIND_PAGES) {
+      const hero = CITY_KIND_COPY[`${city}/${kind}`].hero ?? DATE_KIND_COPY[kind]!.hero;
+      expect(OUTDOOR_SKYLINE, `${city}/${kind}`).not.toContain(hero);
+      expect(KIND_IDEAS[kind], `${city}/${kind}`).toContain(hero);
+      expect(existsSync(join(process.cwd(), "public", "dates", "ideas", `${hero}.webp`)), hero).toBe(true);
+    }
+  });
+
   it("K12 the fun page's rain answer counts its own ideas", () => {
     const fun = kindIdeas("fun");
     expect(fun.filter((i) => i.goodInRain)).toHaveLength(6);

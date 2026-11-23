@@ -1814,6 +1814,7 @@
     "empty": {
       "title": "¿Dónde estáis?",
       "sub": "Una ciudad, un barrio o donde estés ahora mismo. Encontramos las citas que esconde.",
+      "subIdea": "Decid dónde estáis y planeamos «{idea}» con sitios reales de allí.",
       "or": "O empieza por aquí",
       "note": "elige una calle, la que sea"
     },
@@ -1872,9 +1873,9 @@
     },
     "tonight": {
       "label": "El planificador",
-      "inCity": "Planead una cita en {city}",
+      "inCity": "Adónde ir en {city}",
       "sentence": "Planead una cita <mood></mood> <when></when>. <length></length>, <budget></budget>.",
-      "sentenceKind": "Planead una de estas <when></when>. <length></length>, <budget></budget>.",
+      "sentenceKind": "Planead una de estas ideas para <when></when>. <length></length>, <budget></budget>.",
       "lengthLabel": "Cuánto tiempo",
       "budgetLabel": "Presupuesto",
       "mood": {
@@ -1900,9 +1901,9 @@
       },
       "budget": {
         "0": "gratis",
-        "1": "como mucho un café por cabeza",
+        "1": "gastando solo calderilla",
         "2": "como mucho lo que cuesta una cena",
-        "3": "aunque sea un capricho",
+        "3": "sin mirar el precio",
         "any": "con cualquier presupuesto"
       },
       "plan": "Planeadla",
@@ -1911,11 +1912,10 @@
       "open": "Abrir el plan",
       "another": "Otra",
       "relaxed": {
-        "budget": "No hay nada {wanted} para ese día; esta cuesta {cost}.",
-        "budgetWet": "Con lluvia no hay nada {wanted} para ese día; esta cuesta {cost}.",
+        "budget": "No hay nada {wanted} para {when}; esta cuesta {cost}.",
+        "budgetWet": "Con lluvia no hay nada {wanted} para {when}; esta cuesta {cost}.",
         "length": "Nada de esa duración encaja; esta dura unas {hours} h.",
-        "vibe": "Nada de ese estilo encaja ese día; esta es la más cercana.",
-        "kind": "Ninguna idea de esta página encaja ese día; esta sí."
+        "vibe": "Nada de ese estilo encaja {when}; esta es la más cercana."
       },
       "wanted": {
         "0": "gratis",
@@ -1923,15 +1923,16 @@
         "2": "por ese precio"
       },
       "costs": {
-        "1": "un café por cabeza",
+        "1": "calderilla, un café por cabeza",
         "2": "lo que una cena fuera",
         "3": "lo que una entrada por cabeza"
       },
       "freeIf": "Gratis si lleváis vuestra comida y bebida. La parada marcada como opcional es donde la compraríais.",
       "optional": "opcional",
       "none": "Nada encaja con eso aquí.",
+      "noneKind": "Ninguna idea de esta página encaja {when} allí.",
       "late": "Ya es tarde para esta noche. Mañana hay más.",
-      "tryTomorrow": "Planear mañana",
+      "tryTomorrow": "Planeadla para mañana",
       "openMap": "Abrir el mapa",
       "replace": "Esto sustituye el plan que estabais haciendo en este dispositivo.",
       "replaceYes": "Sustituirlo",
