@@ -7,6 +7,7 @@ import { PRESS_COPY, pressFounderLine } from "@/content/press";
 import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
 import { CLOSED_BLOCK_WORDS, countWords } from "@/components/templates/page/lead";
+import { pressBrief, pressNav, pressUpdated, shownPress } from "@/lib/press/shown";
 import { mentionsSpain } from "@/lib/cities/cities";
 import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
 
@@ -204,5 +205,30 @@ describe("press words", () => {
         expect(text.includes(BRAND.categoryLine.en) || text.includes(BRAND.categoryLine.es), where).toBe(false);
       }
     }
+  });
+});
+
+describe("press page: when it shows", () => {
+  it("G6 the page shows the real figures when they are whole, the sample only on a dev server that asks, and otherwise nothing", () => {
+    const off: PressNumbers = { ...PRESS_NUMBERS, ready: false, cardsMade: 0 };
+    expect(shownPress({ numbers: off, preview: false, production: false })).toBeNull();
+    expect(shownPress({ numbers: off, preview: true, production: false })).toEqual({ numbers: PRESS_SAMPLE, sample: true });
+    expect(shownPress({ numbers: off, preview: true, production: true })).toBeNull();
+    const real = whole();
+    expect(shownPress({ numbers: real, preview: false, production: true })).toEqual({ numbers: real, sample: false });
+    expect(shownPress({ numbers: whole({ opens: 0 }), preview: false, production: true })).toBeNull();
+  });
+
+  it("S1 while the figures are not in, nothing names the page", async () => {
+    if (PRESS_NUMBERS.ready) return;
+    const { default: sitemap } = await import("@/app/sitemap");
+    const { PAGE_UPDATED } = await import("@/content/page-dates");
+    const entries = sitemap();
+    expect(entries.filter((e) => /\/press$/.test(e.url))).toEqual([]);
+    expect(PAGE_UPDATED["/press"]).toBeUndefined();
+    expect(pressNav("en")).toBeNull();
+    expect(pressNav("es")).toBeNull();
+    expect(pressBrief()).toEqual([]);
+    expect(pressUpdated()).toBeUndefined();
   });
 });
