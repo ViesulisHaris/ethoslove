@@ -105,3 +105,30 @@ test.describe("rooms-9: the strip of cities and kinds at the foot of /dates is o
     });
   }
 });
+
+test.describe("rooms-11: the where box's placeholder is whole on a small phone", () => {
+  for (const width of [320, 360, 390]) {
+    for (const [lang, prefix] of [["en", ""], ["es", "/es"]] as const) {
+      test(`${lang} at ${width}, on the start screen and over the results`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 700 });
+        await mockWorld(page);
+        for (const path of [`${prefix}/dates`, `${prefix}/dates?lat=38.714&lng=-9.139&q=Lisbon`]) {
+          await page.goto(path);
+          const box = page.getByRole("combobox").first();
+          await expect(box).toBeVisible();
+          if (path.includes("lat=")) await box.fill("");
+          // The words drawn in the field's own font, against the room the field leaves them.
+          const fit = await box.evaluate((input: HTMLInputElement) => {
+            const style = getComputedStyle(input);
+            const ctx = document.createElement("canvas").getContext("2d")!;
+            ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+            const room = input.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+            return { placeholder: input.placeholder, text: Math.ceil(ctx.measureText(input.placeholder).width), room: Math.floor(room), size: parseFloat(style.fontSize) };
+          });
+          expect(fit.size, path).toBeGreaterThanOrEqual(16);
+          expect(fit.text, `${path}: "${fit.placeholder}"`).toBeLessThanOrEqual(fit.room);
+        }
+      });
+    }
+  }
+});
