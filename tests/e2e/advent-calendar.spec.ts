@@ -820,6 +820,8 @@ test("with group cards on, the editor talks to a group: the letter and the surpr
     const surprise = page.getByTestId("unwrap-section");
     await expect(surprise).toContainText(locale === "en" ? "A present from all of you" : "Un regalo de parte de todos");
     await expect(surprise).toContainText(locale === "en" ? "Open the map" : "Abrir el mapa");
+    // (the badge agrees with "Un regalo")
+    await expect(surprise).toContainText(locale === "en" ? "Included" : "Incluido");
     await expect(surprise).not.toContainText(couple[locale]);
     await expect(page.getByPlaceholder(locale === "en" ? /why you asked everyone to write/ : /por qué pediste a todos/)).toBeVisible();
     await expect(page.getByPlaceholder(couple[locale])).toHaveCount(0);

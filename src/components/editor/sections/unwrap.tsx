@@ -20,8 +20,11 @@ import { stopArt, tripNights, unwrapDay } from "@/templates/_shared/unwrap";
 import type { TemplateManifest } from "@/templates/types";
 import { Field, SectionHeader } from "../field";
 
-/** The lines a group card says its own way; the rest are the same for everyone. */
-const GROUP_KEYS: ReadonlySet<string> = new Set(["addPlan", "addPlanHelp", "noPlan", "planLink", "addTripHelp"]);
+/**
+ * The lines a group card says its own way; the rest are the same for everyone. ("included" too: the Spanish badge agrees
+ * with the section's noun, "Incluido" with "Un regalo", "Incluida" with "Una sorpresa".)
+ */
+const GROUP_KEYS: ReadonlySet<string> = new Set(["addPlan", "addPlanHelp", "noPlan", "planLink", "addTripHelp", "included"]);
 
 /**
  * "A surprise inside" (GiftData.unwrap): a planned date or a trip, wrapped as a present at the end

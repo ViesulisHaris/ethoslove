@@ -645,7 +645,8 @@
         "noPlan": "Primero haz un plan en el mapa y luego vuelve aquí.",
         "planLink": "Abrir el mapa",
         "addTripHelp": "Uno de nuestros doce viajes, con cada parada pensada.",
-        "date": "Una salida"
+        "date": "Una salida",
+        "included": "Incluido"
       },
       "optional": "Opcional",
       "create": "Crear el enlace",

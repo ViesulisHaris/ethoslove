@@ -645,7 +645,8 @@
         "noPlan": "Make a plan on the map first, then come back for it.",
         "planLink": "Open the map",
         "addTripHelp": "One of our twelve trips, every stop planned.",
-        "date": "Evening out"
+        "date": "Evening out",
+        "included": "Included"
       },
       "optional": "Optional",
       "create": "Create the link",
