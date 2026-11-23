@@ -286,7 +286,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "bouquet",
-          heading: "Flores que duran más que el domingo",
+          heading: "Flores que duran más que el día",
           body: "Elige tú cada tallo, hasta 24: tulipanes, peonías, ranúnculos, lirios, en los colores de las que cultiva o de las que se compra ella. En la tarjetita caben 30 caracteres, suficientes para «De quien arrancaba las tuyas». Mira la fecha antes de programarlo: en México el Día de la Madre es el 10 de mayo, caiga como caiga; en Estados Unidos, el segundo domingo de mayo; en Argentina, el tercer domingo de octubre.",
         },
         {

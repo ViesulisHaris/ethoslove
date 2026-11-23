@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useMounted } from "@/hooks/use-mounted";
+import { cn } from "@/lib/utils";
 
 /**
  * "Copy", beside a card's line to borrow. The card shows a line in handwriting and its "Make this
@@ -19,10 +20,24 @@ import { useMounted } from "@/hooks/use-mounted";
  * is not shown. Its own height is a thumb's (44px) and it takes a label's room in the card, so an
  * opened card is no taller for it.
  */
-export function CopyLine({ text, label, done }: { text: string; label: string; done: string }) {
+export function CopyLine({
+  text,
+  label,
+  done,
+  field,
+  className,
+}: {
+  text: string;
+  label: string;
+  done: string;
+  /** The name of the field the line goes in. Every opened card has a "Copy", so each one says what it copies. */
+  field: string;
+  className?: string;
+}) {
   const ready = useMounted();
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const button = useRef<HTMLButtonElement>(null);
   useEffect(
     () => () => {
       if (timer.current) clearTimeout(timer.current);
@@ -50,6 +65,9 @@ export function CopyLine({ text, label, done }: { text: string; label: string; d
         ok = false;
       }
       area.remove();
+      // The field took the focus to be selected, and taking it out of the page dropped the focus to the page's top: the
+      // next Tab went to "Skip to content" (the deep test of 23 Nov 2026). It goes back to the button it came from.
+      button.current?.focus({ preventScroll: true });
     }
     if (!ok) return;
     setCopied(true);
@@ -59,12 +77,14 @@ export function CopyLine({ text, label, done }: { text: string; label: string; d
 
   return (
     <button
+      ref={button}
       type="button"
+      aria-label={`${copied ? done : label}: ${field}`}
       hidden={!ready}
       onClick={copy}
       data-testid="idea-copy"
       data-copied={copied ? "" : undefined}
-      className="-my-3.5 -mr-1 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-1 text-page-label text-page-accent outline-offset-0 transition-colors hover:text-page-accent-hover active:opacity-70 motion-reduce:transition-none"
+      className={cn("-my-3.5 -mr-1 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-1 text-page-label text-page-accent outline-offset-0 transition-colors hover:text-page-accent-hover active:opacity-70 motion-reduce:transition-none", className)}
     >
       {copied ? <Check aria-hidden="true" className="size-3.5" strokeWidth={2} /> : <Copy aria-hidden="true" className="size-3.5" strokeWidth={1.8} />}
       {/* Said to a screen reader when it changes: the button's own words are its news. */}

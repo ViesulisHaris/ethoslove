@@ -33,6 +33,15 @@ describe("occasion guides", () => {
         const total = words(guide.lead) + guide.sections.reduce((n, s) => n + words(s.body), 0) + guide.faq.reduce((n, f) => n + words(f.q) + words(f.a), 0);
         expect(total, "total words").toBeGreaterThanOrEqual(300);
         expect(new Set(guide.sections.map((s) => s.heading)).size).toBe(3);
+        // A Spanish guide names each gift by its Spanish name, the one on the cards above it: "Jar of Reasons" sat
+        // under a card that says "Frasco de razones", 39 times across the pages (the deep test of 23 Nov 2026).
+        if (locale === "es") {
+          const text = [guide.title, guide.lead, ...guide.sections.flatMap((s) => [s.heading, s.body]), ...guide.faq.flatMap((f) => [f.q, f.a])].join("\n");
+          for (const m of listManifests()) {
+            if (m.name.en === m.name.es) continue;
+            expect(text.match(new RegExp(`\\b${m.name.en.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`)), `${occasion}: ${m.name.en} (es: ${m.name.es})`).toBeNull();
+          }
+        }
       });
 
       if (guide?.ideas) {
@@ -54,7 +63,7 @@ describe("occasion guides", () => {
 
       it(`${occasion} (${locale}) only names templates that exist`, () => {
         // A template named in a guide must be a real one, so the advice can be followed.
-        const names = new Set(listManifests().map((m) => m.name.en));
+        const names = new Set(listManifests().map((m) => m.name[locale]));
         const text = [guide.lead, ...guide.sections.map((s) => s.body), ...guide.faq.map((f) => f.a)].join(" ");
         const mentioned = [...names].filter((n) => text.includes(n));
         expect(mentioned.length, "should point at at least one template").toBeGreaterThan(0);
@@ -166,5 +175,15 @@ describe("every occasion's idea list", () => {
           expect(idea.template, `${occasion} ${locale}`).toBe("the-letter");
           expect(idea.body, `${occasion} ${locale}: its Letter idea does not say it is the free one`).toMatch(/\b(free|gratis|gratuita)\b/i);
         }
+  });
+});
+
+describe("an occasion page's headings", () => {
+  it("use the typographic apostrophe, as the idea titles under them do", async () => {
+    // "Digital Mother's Day gifts" (straight) sat over "Mother’s Day …" (typographic) on the same page (the deep test of
+    // 23 Nov 2026). The h1 is messages seo.occasion.<occasion>.title.
+    const { default: en } = await import("../../messages/en.json");
+    const titles = Object.entries((en as { seo: { occasion: Record<string, { title: string }> } }).seo.occasion).map(([k, v]) => `${k}: ${v.title}`);
+    expect(titles.filter((t) => t.includes("'"))).toEqual([]);
   });
 });

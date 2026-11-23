@@ -94,7 +94,7 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
             itemListElement: kinds.map((kind, i) => ({
               "@type": "ListItem",
               position: i + 1,
-              name: kind.name,
+              name: kind.title,
               url: localizedUrl(locale, `/templates/${kind.template}`),
             })),
           },

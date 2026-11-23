@@ -42,10 +42,12 @@ export function finderIsBuilt(): boolean {
 export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; photos: string; notePhotos: number; count: number; ideas: number; finder: boolean };
 
 export type CardKind = {
-  /** The card's title: nine words at most. Under "The five kinds of card" it says only what sets the kind apart. */
+  /**
+   * The kind's name, nine words at most: the card's title and its name in the page's structured data. It stands
+   * alone ("Cards with a game in them", never "With a game in them"), so the list search engines read names
+   * what the page shows (the deep test of 23 Nov 2026 found none of the five there).
+   */
   title: string;
-  /** The kind's whole name, for a list read without that heading over it (the page's structured data). */
-  name: string;
   /** The one line the card opens to. */
   brief: string;
   /** The kind in full, with every fact checked against its templates; the card's line is drawn from it. */
@@ -106,12 +108,12 @@ export const DIGITAL_CARDS_BAND_PHOTO = { src: DEMO_PHOTOS.p8.url, width: DEMO_P
 /** Every template the page shows or names, for the tests. */
 export const DIGITAL_CARD_TEMPLATES = KINDS.flatMap((k) => [k.template, ...k.also]);
 
-const kinds = (texts: { title: string; name: string; brief: string; body: string }[]): CardKind[] => KINDS.map((k, i) => ({ ...k, ...texts[i] }));
+const kinds = (texts: { title: string; brief: string; body: string }[]): CardKind[] => KINDS.map((k, i) => ({ ...k, ...texts[i] }));
 
 export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): DigitalCardsCopy {
   if (locale === "es")
     return {
-      title: "Tarjetas digitales: felicitaciones que se abren en el móvil",
+      title: "Tarjetas digitales: felicitaciones en el móvil",
       description: "Una tarjeta digital es una felicitación que se abre en el móvil, con tus fotos, una canción y tus palabras. En qué se distingue de una e-card y cuánto cuesta.",
       eyebrow: "Tarjetas digitales de Tryethos",
       breadcrumb: "Tarjetas digitales",
@@ -148,32 +150,27 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         full: "Este tipo, entero",
         items: kinds([
           {
-            title: "Se abren como una carta",
-            name: "Tarjetas que se abren como una carta",
+            title: "Tarjetas que se abren como una carta",
             brief: "Rompen el lacre con un toque y tus palabras se van escribiendo a mano.",
             body: "Un sobre, un sello, papel. Rompen el lacre con un toque y tus palabras se van escribiendo a mano. Elige este tipo cuando el mensaje es el regalo y lo demás no debe estorbar. La que ves es La carta, la única tarjeta con versión gratis: una nota corta de hasta 500 caracteres.",
           },
           {
-            title: "Hechas con tus fotos",
-            name: "Tarjetas hechas con tus fotos",
+            title: "Tarjetas hechas con tus fotos",
             brief: "Álbum de recortes pega hasta doce fotos en una página: polaroids, una tira de fotomatón, un carrete.",
             body: "Estas tarjetas son maneras de colocar tus fotos. Álbum de recortes, la que ves, pega hasta doce en una página como polaroids, una tira de fotomatón y un carrete, con una nota rasgada para una frase a mano. Otras las cuelgan en una galería o las cargan en una cámara de 2006. Cada pie de foto puede tener 140 caracteres.",
           },
           {
-            title: "Con un juego dentro",
-            name: "Tarjetas con un juego dentro",
+            title: "Tarjetas con un juego dentro",
             brief: "En Arcade atrapan corazones que caen, y cada nivel superado descubre una de tus fotos.",
             body: "Hay que hacer algo para llegar a tu mensaje. En Arcade, la que ves, atrapan corazones que caen y cada nivel superado descubre una de tus fotos. Otras esconden la noticia bajo una capa que se rasca, o dentro de una galleta de la fortuna que se parte. Es el tipo para quien se moriría de vergüenza con una página de sentimientos, pero juega con gusto para llegar a ellos.",
           },
           {
-            title: "Para una fecha del calendario",
-            name: "Tarjetas para una fecha del calendario",
+            title: "Tarjetas para una fecha del calendario",
             brief: "Cine de cumpleaños tiene una tarta con velas que se apagan al soplar al móvil.",
             body: "Hechas para un día concreto y para lo que se hace ese día. Cine de cumpleaños, la que ves, tiene una tarta con velas que se apagan al soplar al móvil. Hay un birrete que lanzar en una graduación, una copa con la que brindar en una boda y unas luces que colgar en Navidad. En una tarjeta de pago eliges el minuto en que se abre, en su zona horaria.",
           },
           {
-            title: "Para alguien que está lejos",
-            name: "Tarjetas para alguien que está lejos",
+            title: "Tarjetas para alguien que está lejos",
             brief: "En A medio camino, un avión de papel cruza un mapa desde tu ciudad hasta la suya.",
             body: "Aquí el tema es la distancia. En A medio camino, la que ves, un avión de papel cruza un mapa desde tu ciudad hasta la suya cuando soplan al móvil, y los kilómetros reales bajan mientras vuela. Pasaporte dibuja la ruta en un globo y sella una página por cada foto. Cuenta atrás de medianoche no se abre hasta el minuto que elijas, en su zona horaria.",
           },
@@ -214,7 +211,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." },
           { label: "Una tarjeta", price: f.single, note: "Una plantilla, para siempre: haz con ella todas las tarjetas que quieras." },
           { label: "Tres tarjetas", price: f.pick3, note: "Tres plantillas, las que tú elijas." },
-          { label: "Todas las tarjetas", price: f.everything, note: "Todas, y las que vayan llegando." },
+          { label: `Las ${f.count} tarjetas`, price: f.everything, note: "Todas, y las que vayan llegando." },
         ],
         more: "Ver todos los precios",
       },
@@ -302,32 +299,27 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       full: "This kind, in full",
       items: kinds([
         {
-          title: "Open like a letter",
-          name: "Cards that open like a letter",
+          title: "Cards that open like a letter",
           brief: "They break the wax with a tap and your words write themselves out by hand.",
           body: "An envelope, a seal, paper. They break the wax with a tap and your words write themselves out by hand. Choose this kind when the message is the gift and everything else should stay out of its way. The Letter is the one shown, and the only card with a free version: a short note of up to 500 characters.",
         },
         {
-          title: "Built from your photos",
-          name: "Cards built from your photos",
+          title: "Cards built from your photos",
           brief: "Scrapbook tapes up to twelve photos onto a page: polaroids, a photo-booth strip, a roll of film.",
           body: "These cards are layouts for your photos. Scrapbook, shown here, tapes up to twelve onto a page as polaroids, a photo-booth strip and a roll of film, with a torn note for one handwritten line. Others hang them in a gallery or load them onto a camera from 2006. Each caption can be 140 characters.",
         },
         {
-          title: "With a game in them",
-          name: "Cards with a game in them",
+          title: "Cards with a game in them",
           brief: "In Arcade they catch falling hearts, and every level cleared reveals one of your photos.",
           body: "They have to do something to reach your message. In Arcade, shown here, they catch falling hearts and every level cleared reveals one of your photos. Others hide the news under foil to scratch off, or inside a fortune cookie to crack. It is the kind for someone who would squirm at a page of feelings and will happily play to get to them.",
         },
         {
-          title: "For a date on the calendar",
-          name: "Cards for a date on the calendar",
+          title: "Cards for a date on the calendar",
           brief: "Birthday Cinema has a cake whose candles go out when they blow into the phone.",
           body: "Made for one day and for what people do on it. Birthday Cinema, shown here, has a cake whose candles go out when they blow into the phone. There is a cap to throw at a graduation, a glass to clink at a wedding and a string of lights to hang at Christmas. On a paid card you choose the minute it opens, in their time zone.",
         },
         {
-          title: "For someone far away",
-          name: "Cards for someone far away",
+          title: "Cards for someone far away",
           brief: "In Halfway a paper plane crosses a map from your town to theirs.",
           body: "Here the distance is the subject. In Halfway, shown here, a paper plane crosses a map from your town to theirs when they blow into the phone, and the real kilometres count down as it flies. Passport draws the route on a globe and stamps a page for every photo. Midnight Countdown stays shut until the minute you set, in their time zone.",
         },
@@ -368,7 +360,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." },
         { label: "One card", price: f.single, note: "One template, for good: make as many cards from it as you like." },
         { label: "Three cards", price: f.pick3, note: "Three templates of your choosing." },
-        { label: "Every card", price: f.everything, note: "All of them, and the ones still to come." },
+        { label: `All ${f.count} cards`, price: f.everything, note: "All of them, and the ones still to come." },
       ],
       more: "See full pricing",
     },

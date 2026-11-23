@@ -213,6 +213,39 @@ test("on a phone a swipe brings the next card, and the dots follow", async ({ pa
   await expect.poll(async () => (await cardSets(page))[0].on).toBe(set.cards.length - 1);
 });
 
+test("on a phone, Back from the editor finds the card that was being read, open, where it was", async ({ page }) => {
+  test.slow();
+  // Back from "Make this gift" came to the row on its first card, every card closed, and the page 380px lower (the
+  // deep test of 23 Nov 2026, a Pixel 7 on /gifts/last-minute).
+  await page.setViewportSize({ width: 412, height: 915 });
+  await page.goto("/gifts/last-minute");
+  await settle(page);
+  const row = page.locator("[data-cards]").first();
+  const cards = row.locator(":scope > [data-card]");
+  await row.scrollIntoViewIfNeeded();
+  await row.evaluate((el) => el.scrollTo({ left: (el.children[2] as HTMLElement).offsetLeft - (el as HTMLElement).offsetLeft, behavior: "instant" }));
+  await expect.poll(async () => (await cardSets(page))[0].on).toBe(2);
+  await cards.nth(2).locator("summary").first().click();
+  const make = cards.nth(2).getByTestId("idea-make");
+  await make.scrollIntoViewIfNeeded();
+  const before = await page.evaluate(() => ({ y: Math.round(window.scrollY), x: Math.round(document.querySelector("[data-cards]")!.scrollLeft) }));
+  const href = (await make.getAttribute("href")) ?? "";
+  await make.click();
+  await expect(page).toHaveURL(new RegExp(href.replace(/[?]/g, "\\?")), { timeout: 60_000 });
+  await page.goBack();
+  await expect(page).toHaveURL(/\/gifts\/last-minute$/);
+  await expect(cards.nth(2).locator("details").first()).toHaveAttribute("open", "", { timeout: 30_000 });
+  await expect(cards.nth(2).getByTestId("idea-make")).toBeInViewport();
+  await expect.poll(async () => (await cardSets(page))[0].on).toBe(2);
+  const after = await page.evaluate(() => ({ y: Math.round(window.scrollY), x: Math.round(document.querySelector("[data-cards]")!.scrollLeft) }));
+  expect(after.x).toBe(before.x);
+  expect(Math.abs(after.y - before.y), `${before.y} then ${after.y}`).toBeLessThanOrEqual(4);
+  // A new visit to the page starts closed, as before.
+  await page.goto("/gifts/last-minute");
+  await settle(page);
+  await expect(page.locator("[data-cards] [data-card] > details[open]")).toHaveCount(0);
+});
+
 test("a card opens to one line and a line in handwriting, one card at a time, and by keyboard", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/gifts/last-minute");
@@ -445,6 +478,18 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
     expect(await heights(), `${path}: closed again`).toEqual(before);
     // (The browser tells the page a card has closed a moment after it has: the hold is let go then.)
     await expect.poll(() => page.locator("[data-cards] summary[style*='min-height']").count(), { message: `${path}: heights still held with every card closed` }).toBe(0);
+    // A card closed with its "idea in full" left open inside it: the row is level again, as it was before anything was
+    // opened. The row's stretch looked for any open <details>, the inner one too, and stayed off (435/435/435/435 to
+    // 412/426/435/388 on /es/gifts/photo-album, the deep test of 23 Nov 2026).
+    const full = cards.nth(opened).locator("details[data-idea-full] > summary");
+    if ((await full.count()) > 0) {
+      await cards.nth(opened).locator("summary").first().click();
+      await full.click();
+      await expect(cards.nth(opened).locator("details[data-idea-full]")).toHaveAttribute("open", "");
+      await cards.nth(opened).locator("summary").first().click();
+      await expect(cards.nth(opened).getByTestId("idea-make")).toBeHidden();
+      await expect.poll(heights, { message: `${path}: closed with its idea in full open inside` }).toEqual(before);
+    }
   }
   // Open while the screen changes width: the cards are levelled again for the new rows, not left at the old row's height.
   await cards.nth(0).locator("summary").first().click();
@@ -516,7 +561,7 @@ test("the hero says which gift its button makes, each page opens on a gift of it
     if (path.startsWith("/gifts/")) {
       const href = (await page.getByTestId("hero-make").getAttribute("href")) ?? "";
       expect(href, path).toContain(`/create/${poster}?ref=`);
-      await expect(page.getByTestId("hero-make")).toHaveText(/^Make [A-Z]/);
+      await expect(page.getByTestId("hero-make")).toHaveText("Make this gift");
       // The band over the three how-tos has this page's own heading.
       await expect(page.locator("#kind-guide")).not.toHaveText("How to make it land");
     }
@@ -533,9 +578,13 @@ test("the hero says which gift its button makes, each page opens on a gift of it
   expect(giftHeading.endsWith(" The Letter"), giftHeading).toBe(true);
   expect(giftHeading.trim()).not.toBe("The Letter");
   await page.goto("/digital-cards");
-  // The five kinds are headed "The five kinds of card": no card's title says "Cards" again.
+  // A kind's title stands alone ("With a game in them" named nothing), and the list search engines read names the same five (the deep test of 23 Nov 2026).
   const titles = await page.locator("[data-kinds] [data-card] h3").allTextContents();
-  expect(titles).toEqual(["Open like a letter", "Built from your photos", "With a game in them", "For a date on the calendar", "For someone far away"]);
+  expect(titles).toEqual(["Cards that open like a letter", "Cards built from your photos", "Cards with a game in them", "Cards for a date on the calendar", "Cards for someone far away"]);
+  const listed = await page.locator("script[type=\"application/ld+json\"]").evaluateAll((els) =>
+    els.flatMap((el) => [JSON.parse(el.textContent ?? "{}")].flatMap((d) => d["@graph"] ?? [d])).filter((n) => n["@type"] === "ItemList").flatMap((n) => n.itemListElement.map((i: { name: string }) => i.name)),
+  );
+  expect(listed).toEqual(titles);
 });
 
 // The rule is 300 words a page (DESIGN-LESS-TEXT.md). Under the gallery an occasion page keeps it; with the gallery
@@ -707,6 +756,32 @@ test("the five kinds never leave a row with an empty place: the short row is cen
   }
 });
 
+test("a list of ideas whose last row is short centres that row under the full ones", async ({ page }) => {
+  test.slow();
+  // Seven ideas (the video and anniversary pages) and five (the cake page): the seventh stood alone at the left with two
+  // empty places beside it (the deep test of 23 Nov 2026). Two across and three across; eight on a page are even at two.
+  for (const [path, width, rows] of [
+    ["/gifts/video-message", 1440, [3, 3, 1]],
+    ["/gifts/video-message", 800, [2, 2, 2, 1]],
+    ["/gifts/virtual-birthday-cake", 1440, [3, 2]],
+    ["/gifts/last-minute", 1440, [3, 3, 2]],
+    ["/gifts/last-minute", 800, [2, 2, 2, 2]],
+  ] as const) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(path);
+    const boxes = await page.locator("[data-cards]").first().locator("[data-card]").evaluateAll((cards) => cards.map((card) => ({ top: Math.round(card.getBoundingClientRect().top), left: card.getBoundingClientRect().left, right: card.getBoundingClientRect().right, width: Math.round(card.getBoundingClientRect().width) })));
+    const tops = [...new Set(boxes.map((box) => box.top))];
+    expect(tops.map((top) => boxes.filter((box) => box.top === top).length), `${path} at ${width}: cards a row`).toEqual(rows);
+    expect(new Set(boxes.map((box) => box.width)).size, `${path} at ${width}: card widths`).toBe(1);
+    const first = boxes.filter((box) => box.top === tops[0]);
+    const [edgeLeft, edgeRight] = [first[0].left, first.at(-1)!.right];
+    for (const top of tops) {
+      const row = boxes.filter((box) => box.top === top);
+      expect(Math.abs(row[0].left - edgeLeft - (edgeRight - row.at(-1)!.right)), `${path} at ${width}: the row at ${top} is off centre`).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
 test("on a phone turned on its side the hero's button is on the first screen, and a card's picture and title share one", async ({ page }) => {
   test.slow();
   // 812×375 and the shorter 667×375: the button began at the fold, and a card's poster alone was 455px tall.
@@ -765,6 +840,9 @@ test("a page by kind names the price of the gift its button makes, the one that 
   // Several pages, each a first compile under a dev server: on a busy machine this ran past 30s (23 Nov 2026).
   test.slow();
   await page.setViewportSize({ width: 1440, height: 900 });
+  // A visitor in Latvia, charged in euros: with no country the price follows the browser's language, and an en-US
+  // browser is charged dollars (the deep test of 23 Nov 2026). The Spanish line below is held to euros.
+  await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "LV" });
   // What one card costs in this visitor's currency, as /digital-cards prints it from the catalogue.
   await page.goto("/digital-cards");
   const one = (await page.getByTestId("card-prices").locator("[data-price]").first().innerText()).trim();
@@ -776,7 +854,8 @@ test("a page by kind names the price of the gift its button makes, the one that 
     expect(note, kind).toMatch(/^In the phone: .+, [€$£]\d+\.\d{2} once\. Tap it to play\.$/);
     expect(note, kind).toContain(`, ${one} once.`);
     // It is the gift the button opens.
-    const name = ((await page.getByTestId("hero-make").innerText()) ?? "").replace(/^Make /, "").trim();
+    const name = ((await page.getByTestId("hero-make").getAttribute("aria-label")) ?? "").replace(/^Make this gift: /, "").trim();
+    expect(name, kind).not.toBe("");
     expect(note, kind).toContain(`In the phone: ${name},`);
   }
   await page.goto("/es/gifts/photo-album");
@@ -868,9 +947,20 @@ test("“Copy” puts a card's line to borrow on the clipboard, whole, and says 
   await expect(copy).toHaveText("Copy");
   const box = (await copy.boundingBox())!;
   expect(box.height).toBeGreaterThanOrEqual(44);
-  // It takes a label's room: the handwriting begins where it did, a few pixels under the field's name.
-  const gap = await card.evaluate((el) => el.querySelector("[data-line]")!.getBoundingClientRect().top - el.querySelector("[data-line]")!.previousElementSibling!.querySelector("p")!.getBoundingClientRect().bottom);
-  expect(gap).toBeLessThan(12);
+  // The handwriting begins a few pixels under the field's name. A phone's card is narrow, so the name has the whole row
+  // and "Copy" stands under the line, at its right: a long Spanish name ran to four rows beside it (the deep test of
+  // 23 Nov 2026).
+  const place = await card.evaluate((el) => {
+    const line = el.querySelector("[data-line]")!.getBoundingClientRect();
+    const name = el.querySelector("[data-line]")!.parentElement!.querySelector("p")!.getBoundingClientRect();
+    const button = el.querySelector("[data-testid=idea-copy]")!.getBoundingClientRect();
+    return { gap: line.top - name.bottom, under: button.top >= line.bottom - 1, right: Math.abs(button.right - line.right) < 8 };
+  });
+  expect(place.gap).toBeLessThan(12);
+  expect(place.under).toBe(true);
+  expect(place.right).toBe(true);
+  // Every card has a "Copy": each is named by the field it copies for.
+  await expect(copy).toHaveAccessibleName(/^Copy: \S/);
   expect((await measure(page)).small).toEqual([]);
   await copy.click();
   await expect(copy).toHaveText("Copied");
@@ -888,6 +978,22 @@ test("“Copy” puts a card's line to borrow on the clipboard, whole, and says 
   expect(await copy.evaluate((el) => el.matches(":focus-visible") && getComputedStyle(el).outlineStyle !== "none")).toBe(true);
   await page.keyboard.press("Enter");
   await expect(copy).toHaveText("Copied");
+  await expect(copy).toBeFocused();
+  // A long Spanish field name at 320px has the whole row, on two lines at most, and "Copiar" is under the line.
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/es/gifts/anniversary-website");
+  await settle(page);
+  for (const [i, open] of (await page.locator("[data-cards] [data-card]").all()).entries()) {
+    if (i > 0) await page.locator("[data-cards]").first().evaluate((el, n) => el.scrollTo({ left: (el.children[n] as HTMLElement).offsetLeft - (el as HTMLElement).offsetLeft, behavior: "instant" }), i);
+    await open.locator("summary").first().click();
+    const label = await open.evaluate((el) => {
+      const name = el.querySelector("[data-line]")?.parentElement?.querySelector("p");
+      if (!name) return null;
+      return { rows: Math.round(name.getBoundingClientRect().height / parseFloat(getComputedStyle(name).lineHeight)), text: name.textContent };
+    });
+    if (label) expect(label.rows, `${label.text}`).toBeLessThanOrEqual(2);
+  }
+  await page.setViewportSize({ width: 375, height: 812 });
   // A thread's bubbles are copied one to a row, as the field takes them.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/occasions/fathers-day");
@@ -921,4 +1027,37 @@ test("“Copy” puts a card's line to borrow on the clipboard, whole, and says 
   } finally {
     await plain.close();
   }
+});
+
+test("the hero's “Try the live demo” shows where the keyboard is: a ring round its play disc", async ({ page }) => {
+  // The button fills the phone's screen, which would cut off a ring of its own, so the ring is drawn round the disc
+  // (hero-flatlay.tsx): the button's own outline is none by design, and the disc's shadow is the ring.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/gifts/last-minute");
+  await settle(page);
+  const play = page.locator("[data-flatlay=hero] [data-play]");
+  for (let i = 0; i < 40 && !(await play.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
+  await expect(play).toBeFocused();
+  expect(await play.evaluate((el) => el.matches(":focus-visible"))).toBe(true);
+  expect(await page.locator("[data-flatlay=hero] [data-play-disc]").evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(/0px 0px 0px 3px.*0px 0px 0px 6px/);
+});
+
+test("“Copy” keeps the keyboard's place when the browser refuses the clipboard", async ({ page }) => {
+  // Refused, the line is copied the older way, through a field put on the page for a moment: taking that field away
+  // dropped the focus to the page's top, and the next Tab went to "Skip to content" (the deep test of 23 Nov 2026).
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { value: { writeText: () => Promise.reject(new Error("refused")) }, configurable: true });
+  });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/gifts/last-minute");
+  await settle(page);
+  const card = page.locator("[data-cards] [data-card]").first();
+  await card.locator("summary").first().click();
+  const copy = card.getByTestId("idea-copy");
+  await copy.focus();
+  await page.keyboard.press("Enter");
+  await expect(copy).toHaveText("Copied");
+  await expect(copy).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(card.getByTestId("idea-make")).toBeFocused();
 });

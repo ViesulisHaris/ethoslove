@@ -1622,12 +1622,12 @@
         "intro": "For the people you won't see this year, and the ones you will: a digital Christmas card that opens on Christmas morning wherever they are, with no shipping deadline to miss. Shake your photos into the snow in Snow Globe, or leave a letter by the fire in Fireside."
       },
       "mothers-day": {
-        "title": "Digital Mother's Day gifts",
+        "title": "Digital Mother’s Day gifts",
         "description": "Tell your mum what she means to you with a digital Mother's Day gift: old photos, her favourite song and a letter in your words, sent as a link she can keep.",
         "intro": "Find the old photos, pick the song she always sings along to, and write the things that are hard to say out loud. Give her a Bouquet that never wilts, or a Jar of Reasons to shake one out whenever she likes."
       },
       "fathers-day": {
-        "title": "Digital Father's Day gifts",
+        "title": "Digital Father’s Day gifts",
         "description": "A Father's Day gift he'll actually keep: photos through the years, a song he loves and a note from you, in an animated gift sent as a link.",
         "intro": "Skip another tie. Put the road trips, the lessons and the terrible jokes into a gift that opens on his phone: his own Front Page, or a Museum of the two of you."
       },
@@ -3432,7 +3432,6 @@
     "breadcrumb": "Digital gifts",
     "free": "Free",
     "make": "Make this gift",
-    "makeNamed": "Make {name}",
     "watch": "Watch it",
     "ideaInFull": "The idea in full",
     "readNext": "Read next",

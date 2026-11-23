@@ -16,6 +16,7 @@ import { fieldLimit } from "@/lib/gift/field-limit";
 import { FREE_NOTE_MAX_CHARS } from "@/lib/gift/free-tier";
 import { GIFT_LOCALES } from "@/lib/gift/schema";
 import { pageMetadata } from "@/lib/seo";
+import { TEMPLATE_SEO } from "@/content/template-seo";
 import { getManifest, listManifests } from "@/templates/manifests";
 import { loadFieldsSchema } from "@/templates/schemas";
 import type { TemplateManifest } from "@/templates/types";
@@ -145,8 +146,21 @@ describe("gift pages by kind", () => {
 
       it(`${slug} (${locale}) is a whole page`, () => {
         expect(guide.title.length, guide.title).toBeLessThanOrEqual(65);
+        // A Spanish title runs longer for the same words, and results cut it at about sixty characters with the brand
+        // after it: 67 and 68 were cut (the deep test of 23 Nov 2026).
+        if (locale === "es") expect(`${guide.title} · Ethos`.length, guide.title).toBeLessThanOrEqual(60);
         expect(guide.description.length, guide.description).toBeLessThanOrEqual(160);
         expect(words(guide.h1)).toBeGreaterThanOrEqual(3);
+        // One search, one page: a page by kind's h1 and title must not nearly repeat a gift page's own title. The
+        // Spanish cake h1 was eight words of Birthday Cinema's ten (the deep test of 23 Nov 2026).
+        const bag = (s: string) => new Set(s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean));
+        for (const [template, seo] of Object.entries(TEMPLATE_SEO)) {
+          for (const own of [guide.h1, guide.title]) {
+            const [a, b] = [bag(own), bag(seo[locale].title)];
+            const shared = [...a].filter((w) => b.has(w)).length;
+            expect(shared / new Set([...a, ...b]).size, `${own} / ${template}: ${seo[locale].title}`).toBeLessThan(0.6);
+          }
+        }
         expect(guide.label.length).toBeLessThanOrEqual(40);
         expect(guide.lead).toHaveLength(2);
         for (const p of guide.lead) expect(words(p), p.slice(0, 40)).toBeGreaterThanOrEqual(45);
@@ -435,6 +449,8 @@ describe("/digital-cards", () => {
     for (const locale of GIFT_LOCALES) {
       const copy = digitalCardsCopy(locale, facts);
       expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<photos>", "<extras>", "<single>", "<pick3>", "<everything>"]);
+      // Beside "One card", the whole set is counted: "Every card" read as a price per card (the deep test of 23 Nov 2026).
+      expect(copy.cost.rows.at(-1)!.label).toContain(String(facts.count));
       for (const s of strings(copy)) expect(s, s).not.toMatch(TYPED_PRICE);
       expect(strings(copy).join(" ")).toContain(String(facts.count));
     }
@@ -448,6 +464,8 @@ describe("/digital-cards", () => {
       expect(copy.kinds.items).toHaveLength(5);
       for (const kind of copy.kinds.items) {
         expect(kind.also.length, kind.title).toBeGreaterThanOrEqual(2);
+        // A title that stands alone: it is also the kind's name in the page's ItemList.
+        expect(kind.title, kind.title).toMatch(locale === "es" ? /^Tarjetas / : /^Cards /);
         expect(words(kind.body), kind.title).toBeGreaterThanOrEqual(45);
         // The card shown is named in the words beside it.
         expect(kind.body, kind.title).toContain(getManifest(kind.template)!.name[locale]);
@@ -465,6 +483,7 @@ describe("/digital-cards", () => {
     expect(b.onward.links.map((l) => l.href)).toEqual(a.onward.links.map((l) => l.href));
     for (const [locale, copy] of [["en", a], ["es", b]] as const) {
       expect(copy.title.length, copy.title).toBeLessThanOrEqual(60);
+      expect(`${copy.title} · Ethos`.length, copy.title).toBeLessThanOrEqual(60);
       expect(copy.description.length, copy.description).toBeLessThanOrEqual(160);
       for (const f of copy.faq.items) {
         expect(f.q.trim().endsWith("?"), f.q).toBe(true);

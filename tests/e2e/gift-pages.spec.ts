@@ -26,7 +26,7 @@ const TEMPLATES = new Set(readdirSync(join(process.cwd(), "src/templates")).filt
 
 const LANGS = [
   { prefix: "", lang: "en", make: "Make this gift", watch: "Watch it", faq: "Questions people ask", readNext: "Read next" },
-  { prefix: "/es", lang: "es", make: "Hacer este regalo", watch: "Verlo", faq: "Preguntas frecuentes", readNext: "Sigue leyendo" },
+  { prefix: "/es", lang: "es", make: "Crear este regalo", watch: "Verlo", faq: "Preguntas frecuentes", readNext: "Sigue leyendo" },
 ] as const;
 
 /** The six pages by kind: their h1 in each language, and how many ideas each lists. */
@@ -34,7 +34,7 @@ const KINDS = [
   { slug: "last-minute", ideas: 8, h1: { en: "Last-minute gifts you can send today", es: "Regalos de última hora para enviar hoy" } },
   { slug: "video-message", ideas: 7, h1: { en: "Video message gifts", es: "Regalos con mensaje en vídeo" } },
   { slug: "interactive-birthday-card", ideas: 8, h1: { en: "Interactive birthday cards", es: "Tarjetas de cumpleaños interactivas" } },
-  { slug: "virtual-birthday-cake", ideas: 5, h1: { en: "A virtual birthday cake they can blow out", es: "Una tarta de cumpleaños virtual con velas que se soplan" } },
+  { slug: "virtual-birthday-cake", ideas: 5, h1: { en: "A virtual birthday cake they can blow out", es: "Una tarta de cumpleaños virtual para soplar desde su móvil" } },
   { slug: "photo-album", ideas: 8, h1: { en: "Interactive photo albums", es: "Álbumes de fotos interactivos" } },
   { slug: "anniversary-website", ideas: 7, h1: { en: "An anniversary website for your girlfriend or boyfriend", es: "Una página web de aniversario para tu novia o tu novio" } },
 ] as const;
@@ -147,13 +147,16 @@ for (const lang of LANGS) {
         for (const other of KINDS.filter((k) => k.slug !== kind.slug)) await expect(page.locator(`nav a[href="${lang.prefix}/gifts/${other.slug}"]`).first()).toBeAttached();
         // The pages by person are one row down, in the site's footer.
         await expect(page.locator(`footer a[href="${lang.prefix}/gifts/for-boyfriend"]`).first()).toBeAttached();
-        // The hero's one button opens the editor of the gift playing in its phone, with the page's ref, and names
-        // that gift: the page lists several, so "Make this gift" did not say which.
+        // The hero's one button opens the editor of the gift playing in its phone, with the page's ref. The page lists
+        // several gifts, so that gift is named: in the note under the button, and to a screen reader after the button's
+        // own words. In the button itself the name read badly ("Hacer Ramo", "Make Bouquet", the deep test of 23 Nov 2026).
         const heroMake = page.getByTestId("hero-make");
         expect(await heroMake.getAttribute("href")).toMatch(new RegExp(`^${lang.prefix}/create/[a-z-]+\\?ref=gifts-${kind.slug}$`));
-        const said = ((await heroMake.textContent()) ?? "").trim();
-        expect(said).toMatch(lang.lang === "en" ? /^Make \S/ : /^Hacer \S/);
-        expect(said).not.toBe(lang.make);
+        await expect(heroMake).toHaveText(lang.make);
+        const named = ((await heroMake.getAttribute("aria-label")) ?? "").slice(`${lang.make}: `.length);
+        await expect(heroMake).toHaveAttribute("aria-label", `${lang.make}: ${named}`);
+        expect(named).not.toBe("");
+        await expect(page.getByTestId("hero-note")).toContainText(`${named},`);
         // Every idea in full is in the HTML from the start, closed inside its card: one closed row a card.
         await expect(page.locator("[data-cards] [data-card] details[data-idea-full]")).toHaveCount(kind.ideas);
 
@@ -194,7 +197,9 @@ for (const lang of LANGS) {
 
       // Three prices as cards, and all six in the closed block under the questions: the free note, then five read
       // from the catalogue in this page's currency, the note with photos among them.
-      const money = /[€$£]\s?\d+[.,]\d{2}|\d+[.,]\d{2}\s?[€$£]/;
+      // In whatever currency this browser is charged in: an en-US browser with no country header is charged dollars,
+      // which Spanish writes "11,99 US$" (the deep test of 23 Nov 2026).
+      const money = /[€$£]\s?\d+[.,]\d{2}|\d+[.,]\d{2}\s?(?:US)?[€$£]/;
       const shown = await page.getByTestId("card-prices").locator("[data-price]").allInnerTexts();
       expect(shown).toHaveLength(3);
       for (const price of shown) expect(price).toMatch(money);

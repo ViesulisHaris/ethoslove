@@ -14,6 +14,7 @@ import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import type { PlacedArt } from "@/components/templates/page/placements";
 import { Intro, POSTER_ROW, PosterLink, QUESTION_PLUS, QUESTION_ROW, QuestionRow, Raised, SPREAD } from "@/components/templates/page/sections";
 import { CopyLine } from "./copy-line";
+import { KeepCards } from "./keep-cards";
 import { LevelCards } from "./level-cards";
 import { HERO_ART, NEXT_ART } from "./placements";
 
@@ -103,7 +104,9 @@ export function SiteHero({
           <p className="mt-3 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4 sm:max-lg:[@media(max-height:30rem)]:mt-2 sm:max-lg:[@media(max-height:30rem)]:text-[1.2rem]">{line}</p>
           <p className="mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6 sm:max-lg:[@media(max-height:30rem)]:mt-2.5 sm:max-lg:[@media(max-height:30rem)]:max-w-none">{sentence}</p>
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:max-lg:[@media(max-height:30rem)]:mt-4">{children}</div>
-          {note ? <p className="mt-4 max-w-[31rem] text-sm leading-relaxed text-page-body">{note}</p> : null}
+          {/* On a desk the note stops short of the lily that leans in at the hero's right: priced in dollars ("11,99 US$")
+              the Spanish note ran one line to 1,274px and into the flower (the deep test of 23 Nov 2026). */}
+          {note ? <p className="mt-4 max-w-[31rem] text-sm leading-relaxed text-page-body lg:max-w-[28rem]">{note}</p> : null}
         </div>
         <div className={HERO_PHONE_BOX}>
           <HeroFlatlay
@@ -172,7 +175,10 @@ const CARD_SIZES = {
 
 /**
  * How many cards stand in a row. Whole class names, so Tailwind finds them.
- * - Three: two from 640px, three from 1152px.
+ * - Three: two from 640px, three from 1152px. A short last row is centred under the full ones, as the five kinds
+ *   are: seven ideas left the seventh alone at the left with two empty places beside it (the deep test of 23 Nov
+ *   2026). The grid is of half-columns, every card takes two, and the short row's first card starts one half-column
+ *   in per empty place (shortRow).
  * - Five (exactly five cards: the kinds of /digital-cards): no row is left with an empty place. Two
  *   and two with the fifth centred under them, then from 768px three with the last two centred
  *   under them, then from 1280px, where a card is wide enough to be opened and read, five across.
@@ -180,9 +186,14 @@ const CARD_SIZES = {
  *   row starts one half-column in.
  */
 const CARD_COLUMNS = {
-  3: "sm:grid-cols-2 min-[72rem]:grid-cols-3",
+  3: "sm:grid-cols-4 sm:[&>li]:col-span-2 min-[72rem]:grid-cols-6",
   5: "sm:grid-cols-4 sm:[&>li]:col-span-2 sm:max-md:[&>li:nth-child(5)]:col-start-2 md:grid-cols-6 md:max-xl:[&>li:nth-child(4)]:col-start-2 xl:grid-cols-5 xl:[&>li]:col-span-1",
 } as const;
+
+/** The classes that centre the short last row of a set of three-across cards: at two across (640px to 1152px) and at three. */
+function shortRow(count: number): string {
+  return cn(count % 2 === 1 && "sm:max-[72rem]:[&>li:last-child]:col-start-2", count % 3 === 1 && "min-[72rem]:[&>li:last-child]:col-start-3", count % 3 === 2 && "min-[72rem]:[&>li:nth-last-child(2)]:col-start-2");
+}
 
 /**
  * A set of picture cards. A closed card is a picture and a title: the gift's poster, its name and
@@ -214,8 +225,11 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
         data-cards
         className={cn(
           "-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0",
-          "sm:[&:not(:has(details[open]))]:items-stretch",
+          // A card of its own, not the closed row inside one: "the idea in full" stays open in a card that is shut, and the
+          // row was left unstretched after that card closed (the deep test of 23 Nov 2026).
+          "sm:[&:not(:has(>li>details[open]))]:items-stretch",
           CARD_COLUMNS[columns],
+          columns === 3 && shortRow(cards.length),
         )}
       >
         {cards.map((card) => {
@@ -241,20 +255,25 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
                 <div data-reveal className="px-5 pb-4">
                   <p className="border-t border-page-line pt-4 text-[0.9375rem] leading-relaxed text-page-body">{card.line}</p>
                   {card.borrow ? (
-                    <>
-                      <div className="mt-4 flex items-center justify-between gap-3">
-                        <p className="text-page-label text-page-body">{card.borrow.where}</p>
-                        {labels.copy && labels.copied ? <CopyLine text={card.borrow.whole ?? card.borrow.text} label={labels.copy} done={labels.copied} /> : null}
+                    // The field's name with "Copy" beside it, and the line under them. Where the card is narrow (a phone, or three
+                    // across on a desk) a long field's name in spaced capitals ran to four rows beside "Copy" (the deep test of
+                    // 23 Nov 2026): there the name has the whole row, and "Copy" goes under the line it copies.
+                    <div className="mt-4 @container">
+                      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3">
+                        <p className="text-page-label text-page-body @max-[20rem]:col-span-2">{card.borrow.where}</p>
+                        {labels.copy && labels.copied ? (
+                          <CopyLine text={card.borrow.whole ?? card.borrow.text} label={labels.copy} done={labels.copied} field={card.borrow.where} className="col-start-2 row-start-1 @max-[20rem]:row-start-3 @max-[20rem]:my-0 @max-[20rem]:mt-1 @max-[20rem]:justify-self-end" />
+                        ) : null}
+                        {/* A run of bubbles keeps its rows, a little apart, so a bubble that wraps is still one bubble. */}
+                        <p data-line className="col-span-2 mt-1.5 font-hand text-[1.45rem] leading-[1.15] text-page-ink">
+                          {card.borrow.text.split("\n").map((row, i) => (
+                            <span key={row} className={cn("block", i > 0 && "mt-2")}>
+                              {row}
+                            </span>
+                          ))}
+                        </p>
                       </div>
-                      {/* A run of bubbles keeps its rows, a little apart, so a bubble that wraps is still one bubble. */}
-                      <p data-line className="mt-1.5 font-hand text-[1.45rem] leading-[1.15] text-page-ink">
-                        {card.borrow.text.split("\n").map((row, i) => (
-                          <span key={row} className={cn("block", i > 0 && "mt-2")}>
-                            {row}
-                          </span>
-                        ))}
-                      </p>
-                    </>
+                    </div>
                   ) : null}
                   {card.also && card.also.length > 0 ? (
                     // A sentence of names, each a link a thumb can hit: its height is padding, so the rows of the sentence stay 32px apart.
@@ -300,6 +319,7 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
       </ul>
       <IdeasDots target={id} count={cards.length} className="mt-4 sm:hidden" />
       <LevelCards target={id} />
+      <KeepCards target={id} />
     </div>
   );
 }

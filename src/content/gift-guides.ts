@@ -429,7 +429,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       ],
     },
     es: {
-      title: "Vídeo de cumpleaños y regalos con vídeo: tu clip en una tarjeta",
+      title: "Regalos con vídeo: tu clip dentro de una tarjeta",
       description: "Mete un mensaje de vídeo de cumpleaños en una tarjeta: cinco regalos digitales que llevan un vídeo y dos que llevan tu voz, el límite de 50 MB y qué grabar.",
       h1: "Regalos con mensaje en vídeo",
       label: "Con mensaje en vídeo",
@@ -646,7 +646,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       ],
     },
     es: {
-      title: "Tarjetas de cumpleaños interactivas: tocar, explotar, soplar",
+      title: "Tarjetas de cumpleaños interactivas: toca y sopla",
       description: "Ocho tarjetas de cumpleaños interactivas: velas que se apagan al soplar, globos que sueltan fotos, una tarjeta que se despliega. Con una frase para cada una.",
       h1: "Tarjetas de cumpleaños interactivas",
       label: "Tarjetas de cumpleaños interactivas",
@@ -854,7 +854,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
     es: {
       title: "Tarta de cumpleaños virtual: sopla las velas online",
       description: "Tres tartas de cumpleaños virtuales con velas que se apagan al soplar al móvil, y dos que funcionan de otra manera. Cómo va lo de soplar, y qué pasa si falla.",
-      h1: "Una tarta de cumpleaños virtual con velas que se soplan",
+      h1: "Una tarta de cumpleaños virtual para soplar desde su móvil",
       label: "Tartas de cumpleaños virtuales",
       hero: {
         line: "Un deseo ante una tarta, cuando no puedes estar allí.",
@@ -1061,7 +1061,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       ],
     },
     es: {
-      title: "Álbum de fotos digital: álbumes interactivos en un enlace",
+      title: "Álbum de fotos digital: interactivo y en un enlace",
       description: "Un álbum de fotos digital que se envía en un enlace: una galería, un camino con fechas, un carrete, un cielo. Cuántas fotos caben en cada uno.",
       h1: "Álbumes de fotos interactivos",
       label: "Álbumes de fotos interactivos",
@@ -1286,7 +1286,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Sin programar y sin alojarla: rellenas una sola página con vuestras fotos, vuestras fechas y vuestra canción, y se abre en su navegador.",
       },
       ideasTitle: "Siete páginas, y qué lleva cada una",
-      craft: "Lista antes del día",
+      craft: "Todo listo antes del día",
       lead: [
         "Quien busca una página web de aniversario suele querer una de dos cosas: una página que cuente la historia de los dos, o una sorpresa que su pareja abra ese día. Puedes programarla en un fin de semana, alojarla y cruzar los dedos para que funcione en su móvil. O puedes rellenar una esta noche. Estas son páginas únicas con su propio enlace, hechas con vuestras fotos, vuestras fechas y vuestra canción. Las mismas siete sirven de página web de cumpleaños para tu novia o tu novio.",
         "Para que quede claro lo que es: una página en un enlace de tryethos.io, que se abre en el navegador, sin instalar nada. No es un sitio con dominio propio ni con varias páginas. A cambio hace cosas que una página hecha a mano casi nunca hace, como quedarse cerrada hasta medianoche o pedir una contraseña. Cada formato se paga una sola vez, al publicar, y uno de ellos tiene versión gratis.",

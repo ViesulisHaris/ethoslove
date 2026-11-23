@@ -230,7 +230,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Elige fotos con historia, no las mejor iluminadas: el año del corte de pelo terrible, el viaje en el que llovió. Pon una canción de la biblioteca para que suene al abrirlo, o la de verdad que siempre elige: treinta segundos esperan al final, a un toque, en cualquier plantilla. Una premium añade un vídeo corto o un mensaje de voz, lo más parecido a estar allí. En Birthday Cinema sopla las velas; Balloons y Party Animals son para quien prefiere reírse.",
+          body: "Elige fotos con historia, no las mejor iluminadas: el año del corte de pelo terrible, el viaje en el que llovió. Pon una canción de la biblioteca para que suene al abrirlo, o la de verdad que siempre elige: treinta segundos esperan al final, a un toque, en cualquier plantilla. Una premium añade un vídeo corto o un mensaje de voz, lo más parecido a estar allí. En Cine de cumpleaños sopla las velas; Globos y Fiesta Animal son para quien prefiere reírse.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -428,11 +428,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "No resumas la relación. Elige tres momentos y ponlos en orden: el primero, uno difícil que superasteis y algo del mes pasado. Di qué te enseñó cada uno sobre esa persona. Eso es una carta de aniversario, y gana a cualquiera de una estantería. The Letter es gratis; Our Timeline dibuja los años como un camino.",
+          body: "No resumas la relación. Elige tres momentos y ponlos en orden: el primero, uno difícil que superasteis y algo del mes pasado. Di qué te enseñó cada uno sobre esa persona. Eso es una carta de aniversario, y gana a cualquiera de una estantería. La carta es gratis; Nuestra línea del tiempo dibuja los años como un camino.",
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de todos esos años, en orden, para que la historia se lea como una historia: hasta diez en una plantilla gratis, veinte en una premium. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museum cuelga las fotos en salas; Vinyl construye todo el regalo alrededor de un disco.",
+          body: "Fotos de todos esos años, en orden, para que la historia se lea como una historia: hasta diez en una plantilla gratis, veinte en una premium. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museo cuelga las fotos en salas; Vinilo construye todo el regalo alrededor de un disco.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -626,11 +626,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "No un «te quiero» a secas; ya lo sabe. Escribe lo que has notado este año: cómo hace el café, lo que hizo la semana que se te vino abajo, lo que te apetece que venga. Unas pocas líneas que solo le vayan a esa persona. The Letter es gratis y se abre con un sello; XOXO y Coquette son para tontear.",
+          body: "No un «te quiero» a secas; ya lo sabe. Escribe lo que has notado este año: cómo hace el café, lo que hizo la semana que se te vino abajo, lo que te apetece que venga. Unas pocas líneas que solo le vayan a esa persona. La carta es gratis y se abre con un sello; XOXO y Coquette son para tontear.",
         },
         {
           heading: "Qué añadir",
-          body: "Con dos o tres fotos basta: la primera que os hicisteis y la más reciente. En Bouquet eliges tú las flores y nunca se marchitan; en Bloom se abre una sola flor mientras mantiene pulsada la pantalla. Añade una canción de la biblioteca, o treinta segundos de la vuestra, la grabación real, esperando al final a un toque. Un mensaje de voz al final, un extra de pago, llega más hondo que cualquier línea escrita.",
+          body: "Con dos o tres fotos basta: la primera que os hicisteis y la más reciente. En Ramo eliges tú las flores y nunca se marchitan; en Flor se abre una sola flor mientras mantiene pulsada la pantalla. Añade una canción de la biblioteca, o treinta segundos de la vuestra, la grabación real, esperando al final a un toque. Un mensaje de voz al final, un extra de pago, llega más hondo que cualquier línea escrita.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -690,11 +690,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Si es para la pareja: un recuerdo de cada uno y una frase sobre los dos juntos que nunca dirías en un discurso. Si es para tu pareja, escrito la noche antes: en qué piensas y qué prometes. The Toast levanta la copa; Front Page los pone en la portada de su propio periódico.",
+          body: "Si es para la pareja: un recuerdo de cada uno y una frase sobre los dos juntos que nunca dirías en un discurso. Si es para tu pareja, escrito la noche antes: en qué piensas y qué prometes. El brindis levanta la copa; Portada los pone en la portada de su propio periódico.",
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de antes de conocerse y de los años desde entonces: Our Timeline las coloca a lo largo de un camino, Museum las cuelga en salas. La canción del primer baile si la sabes: treinta segundos de la grabación real esperan al final, a un toque. En un regalo para tu pareja, un mensaje de voz es a lo que volverá una y otra vez.",
+          body: "Fotos de antes de conocerse y de los años desde entonces: Nuestra línea del tiempo las coloca a lo largo de un camino, Museo las cuelga en salas. La canción del primer baile si la sabes: treinta segundos de la grabación real esperan al final, a un toque. En un regalo para tu pareja, un mensaje de voz es a lo que volverá una y otra vez.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -750,11 +750,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "No «enhorabuena»; recibirá cincuenta. Escribe una cosa que le viste hacer y que no sabe que notaste: el cuatrimestre en que casi lo deja, la noche antes del examen, la llamada en la que sonaba distinto. Luego una línea sobre lo que viene. Front Page le pone en la portada; Fortune Cookie esconde la frase dentro para que la rompa.",
+          body: "No «enhorabuena»; recibirá cincuenta. Escribe una cosa que le viste hacer y que no sabe que notaste: el cuatrimestre en que casi lo deja, la noche antes del examen, la llamada en la que sonaba distinto. Luego una línea sobre lo que viene. Portada le pone en la portada; Galleta de la fortuna esconde la frase dentro para que la rompa.",
         },
         {
           heading: "Qué añadir",
-          body: "La foto del primer día, los años torpes del medio y este mes: Our Timeline las coloca a lo largo del camino que le trajo hasta aquí. Añade la canción con la que estudiaba, o la del coche de camino al colegio: la de verdad espera al final, con treinta segundos a un toque. Cap Toss es la del día en sí: anima al móvil a gritos y el birrete sale volando.",
+          body: "La foto del primer día, los años torpes del medio y este mes: Nuestra línea del tiempo las coloca a lo largo del camino que le trajo hasta aquí. Añade la canción con la que estudiaba, o la del coche de camino al colegio: la de verdad espera al final, con treinta segundos a un toque. Vuela el birrete es la del día en sí: anima al móvil a gritos y el birrete sale volando.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -964,7 +964,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "El año en tres líneas: lo que recordarás de él, lo que esa persona hizo por ti y lo que le deseas para el siguiente. Di lo que dirías después de la cena, cuando la mesa se queda en silencio. Fireside despliega tu carta a la luz de una vela; Snow Globe agita tus fotos en la nieve.",
+          body: "El año en tres líneas: lo que recordarás de él, lo que esa persona hizo por ti y lo que le deseas para el siguiente. Di lo que dirías después de la cena, cuando la mesa se queda en silencio. Junto al fuego despliega tu carta a la luz de una vela; Bola de nieve agita tus fotos en la nieve.",
         },
         {
           heading: "Qué añadir",
@@ -1039,7 +1039,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Ligero y corto: con tres o cuatro frases basta. Un chiste privado, la historia del disfraz que salió mal, un reto para la noche. Trick or Treat lo entrega después del timbre: «treat» enciende la calabaza y llueven chuches; «trick» se gana primero un buu, y luego las chuches igualmente.",
+          body: "Ligero y corto: con tres o cuatro frases basta. Un chiste privado, la historia del disfraz que salió mal, un reto para la noche. Truco o trato lo entrega después del timbre: «treat» enciende la calabaza y llueven chuches; «trick» se gana primero un buu, y luego las chuches igualmente.",
         },
         {
           heading: "Qué añadir",
@@ -1096,7 +1096,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "El agradecimiento se queda plano cuando es general. «Gracias por ser como eres» es una tarjeta de supermercado; «gracias por calentar el coche antes de que yo salga» es una persona. Elige tres cosas pequeñas y concretas de este año y una más grande, y deja la grande para el final. En Wishbone, el deseo de la tarjeta tiene 120 caracteres: que hable del año que viene, no de este.",
+          body: "El agradecimiento se queda plano cuando es general. «Gracias por ser como eres» es una tarjeta de supermercado; «gracias por calentar el coche antes de que yo salga» es una persona. Elige tres cosas pequeñas y concretas de este año y una más grande, y deja la grande para el final. En La espoleta, el deseo de la tarjeta tiene 120 caracteres: que hable del año que viene, no de este.",
         },
         {
           heading: "Para quién",
@@ -1109,7 +1109,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       ],
       faq: [
         {
-          q: "¿Qué pasa en el regalo de Wishbone?",
+          q: "¿Qué pasa en el regalo de La espoleta?",
           a: "Tira de su punta de la espoleta con el dedo hasta que se parte. Tú eliges antes a quién le toca la mitad grande; después sale tu deseo en una tarjeta y, luego, tu carta, tus fotos y vuestra canción.",
         },
         phoneEs,
@@ -1153,11 +1153,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Empieza por un recuerdo concreto: las meriendas, el coche a las dos de la madrugada, la frase que dijo y que sigues repitiendo. Luego di qué entiendes ahora que entonces no. Dos párrafos. Jar of Reasons te deja darle un tarro de razones cortas para sacar de una en una, que es más fácil que una carta larga.",
+          body: "Empieza por un recuerdo concreto: las meriendas, el coche a las dos de la madrugada, la frase que dijo y que sigues repitiendo. Luego di qué entiendes ahora que entonces no. Dos párrafos. Frasco de razones te deja darle un tarro de razones cortas para sacar de una en una, que es más fácil que una carta larga.",
         },
         {
           heading: "Qué añadir",
-          body: "Busca las fotos en las que sale ella, no las que hizo ella; siempre hay menos. Añade su canción: algo de la biblioteca, o la de verdad, con treinta segundos esperando al final a un toque. Bouquet nunca se marchita y eliges cada tallo; Recipe Box escribe la receta de ella, ingrediente a ingrediente.",
+          body: "Busca las fotos en las que sale ella, no las que hizo ella; siempre hay menos. Añade su canción: algo de la biblioteca, o la de verdad, con treinta segundos esperando al final a un toque. Ramo nunca se marchita y eliges cada tallo; Caja de recetas escribe la receta de ella, ingrediente a ingrediente.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -1210,7 +1210,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "A los padres les llegan los mensajes más cortos de todos. Dale uno de verdad: la vez que apareció, lo que te enseñó y usas cada semana, el chiste que le has robado. Luego una línea que nunca has dicho en voz alta. Front Page le hace titular; Museum os da un edificio a los dos.",
+          body: "A los padres les llegan los mensajes más cortos de todos. Dale uno de verdad: la vez que apareció, lo que te enseñó y usas cada semana, el chiste que le has robado. Luego una línea que nunca has dicho en voz alta. Portada le hace titular; Museo os da un edificio a los dos.",
         },
         {
           heading: "Qué añadir",
@@ -1218,7 +1218,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Cuándo enviarlo",
-          body: "Mándalo por la mañana, antes de la comida, o prográmalo para que sea lo primero que vea en el móvil. Si estáis juntos, imprime la tarjeta QR y ponla con el regalo; se abre con la cámara. Jar of Reasons le da un tarro de razones cortas para ir sacando durante la semana.",
+          body: "Mándalo por la mañana, antes de la comida, o prográmalo para que sea lo primero que vea en el móvil. Si estáis juntos, imprime la tarjeta QR y ponla con el regalo; se abre con la cámara. Frasco de razones le da un tarro de razones cortas para ir sacando durante la semana.",
         },
       ],
       faq: [
@@ -1270,11 +1270,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Di lo que hiciste, con palabras claras, sin «si» y sin «pero». Di qué entiendes que le costó. Di qué harás distinto, y solo si es verdad. No pidas nada a cambio. The Letter es gratis y le da espacio a las palabras; Text Thread lo dice burbuja a burbuja, como lo habrías dicho si te hubieras atrevido.",
+          body: "Di lo que hiciste, con palabras claras, sin «si» y sin «pero». Di qué entiendes que le costó. Di qué harás distinto, y solo si es verdad. No pidas nada a cambio. La carta es gratis y le da espacio a las palabras; Hilo de mensajes lo dice burbuja a burbuja, como lo habrías dicho si te hubieras atrevido.",
         },
         {
           heading: "Qué añadir",
-          body: "Una foto, dos como mucho, de un buen día: no como moneda de cambio, sino para recordar por qué pides perdón. Aquí puede ir sin canción, o algo tranquilo de la biblioteca. Paper Crane le hace doblar la hoja pliegue a pliegue, una línea por doblez, y eso pide paciencia; Bloom se abre despacio, que va con el tono.",
+          body: "Una foto, dos como mucho, de un buen día: no como moneda de cambio, sino para recordar por qué pides perdón. Aquí puede ir sin canción, o algo tranquilo de la biblioteca. Grulla de papel le hace doblar la hoja pliegue a pliegue, una línea por doblez, y eso pide paciencia; Flor se abre despacio, que va con el tono.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -1288,7 +1288,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           q: "¿Puedo hacerlo sin que se entere hasta que lo envíe?",
-          a: "Sí. Nadie lo ve hasta que lo publicas, y nadie se entera hasta que tú mismo mandas el enlace. The Letter es gratis, así que tampoco hay un cargo que explicar.",
+          a: "Sí. Nadie lo ve hasta que lo publicas, y nadie se entera hasta que tú mismo mandas el enlace. La carta es gratis, así que tampoco hay un cargo que explicar.",
         },
         keepEs,
       ],
@@ -1333,7 +1333,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Escribe sobre un día normal, no sobre un gran sentimiento: qué comiste, qué le habrías enseñado en el paseo, lo que casi le escribes a las tres de la mañana y no. La distancia convierte lo pequeño en lo importante. Halfway lanza un avión de papel de tu puerta a la suya; Passport dibuja la ruta de tu ciudad a la suya y sella una página por cada foto.",
+          body: "Escribe sobre un día normal, no sobre un gran sentimiento: qué comiste, qué le habrías enseñado en el paseo, lo que casi le escribes a las tres de la mañana y no. La distancia convierte lo pequeño en lo importante. A medio camino lanza un avión de papel de tu puerta a la suya; Pasaporte dibuja la ruta de tu ciudad a la suya y sella una página por cada foto.",
         },
         {
           heading: "Qué añadir",
@@ -1351,7 +1351,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           q: "¿Puede responder con uno?",
-          a: "Sí. Al final de cada regalo hay un «devolver uno» que abre un regalo nuevo con los nombres ya cambiados. Halfway incluso intercambia los dos sitios.",
+          a: "Sí. Al final de cada regalo hay un «devolver uno» que abre un regalo nuevo con los nombres ya cambiados. A medio camino incluso intercambia los dos sitios.",
         },
         costEs,
       ],
@@ -1393,11 +1393,11 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Una línea sobre por qué hoy: algo te ha recordado a esa persona, ha tenido una semana dura, te apetecía. Luego una cosa que te gusta de ella y que nunca has dicho. Nada más; que no pase de cien palabras. Fortune Cookie lo esconde dentro; Sticker Bomb y The Council son para hacerle reír en su mesa de trabajo.",
+          body: "Una línea sobre por qué hoy: algo te ha recordado a esa persona, ha tenido una semana dura, te apetecía. Luego una cosa que te gusta de ella y que nunca has dicho. Nada más; que no pase de cien palabras. Galleta de la fortuna lo esconde dentro; Bomba de Stickers y El Consejo son para hacerle reír en su mesa de trabajo.",
         },
         {
           heading: "Qué añadir",
-          body: "Una foto del carrete que no ha visto y otra que había olvidado. Una canción de la biblioteca, o la de verdad que suena ahora mismo, esperando al final a un toque. No hace falta más. The Letter es gratis si lo quieres sencillo; Kawaii y Balloons si lo quieres ligero.",
+          body: "Una foto del carrete que no ha visto y otra que había olvidado. Una canción de la biblioteca, o la de verdad que suena ahora mismo, esperando al final a un toque. No hace falta más. La carta es gratis si lo quieres sencillo; Kawaii y Globos si lo quieres ligero.",
         },
         {
           heading: "Cuándo enviarlo",

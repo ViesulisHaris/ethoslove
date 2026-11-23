@@ -359,9 +359,9 @@ describe("the text budget of /digital-cards", () => {
       if (words(copy.hero.sentence) > HERO_SENTENCE_WORDS) over.push(`${l} hero.sentence`);
       for (const kind of copy.kinds.items) {
         if (words(kind.title) > CARD_TITLE_WORDS) over.push(`${l} ${kind.template} title`);
-        // Under "The five kinds of card" a title says what sets its kind apart; the kind's whole name is kept for a list read without that heading.
-        if (/^(cards|tarjetas)\b/i.test(kind.title)) over.push(`${l} ${kind.template}: its title begins with the heading's own word: ${kind.title}`);
-        if (!/^(cards|tarjetas) /i.test(kind.name) || !kind.name.toLowerCase().endsWith(kind.title.toLowerCase())) over.push(`${l} ${kind.template}: its name is not “Cards” and its title: ${kind.name}`);
+        // A title stands alone, and is the kind's name in the page's structured data too: "With a game in them" named
+        // nothing, and none of the five names in the ItemList was on the page (the deep test of 23 Nov 2026).
+        if (!/^(cards|tarjetas) /i.test(kind.title)) over.push(`${l} ${kind.template}: its title does not stand alone: ${kind.title}`);
         if (words(kind.brief) > CARD_LINE_WORDS || words(kind.brief) < CARD_LINE_MIN_WORDS || !ends(kind.brief)) over.push(`${l} ${kind.template} brief (${words(kind.brief)})`);
         if (words(kind.body) > CLOSED_BLOCK_WORDS) over.push(`${l} ${kind.template} body (${words(kind.body)})`);
         // The card's line is cut from the kind in full: no figure of its own, and the same card named.
