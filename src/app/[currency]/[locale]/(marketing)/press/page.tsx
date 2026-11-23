@@ -6,7 +6,7 @@ import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { ABOUT_PATH, ABOUT_PROFILES } from "@/content/about";
 import { LEGAL_ENTITY } from "@/content/legal";
-import { PRESS_COPY, PRESS_PATH, pressFounderLine } from "@/content/press";
+import { PRESS_COPY, PRESS_PATH, pressCompany, pressFounderLine } from "@/content/press";
 import { pressDate, pressFigures, pressTemplates, type PressLocale } from "@/lib/press/figures";
 import { shownPress } from "@/lib/press/shown";
 import { breadcrumbNode, localizedUrl, organizationNode, pageMetadata } from "@/lib/seo";
@@ -43,9 +43,7 @@ export default async function PressRoute({ params }: Props) {
   const copy = PRESS_COPY[l];
   const { numbers, sample } = shown;
   const url = localizedUrl(locale, PRESS_PATH);
-  const figures = pressFigures(numbers, l).map((f) =>
-    f.id === "reminder" ? { id: f.id, value: f.value, label: copy.numbers.reminder.labels[f.occasion], counts: copy.numbers.reminder.counts } : { id: f.id, value: f.value, ...copy.numbers.figures[f.id] },
-  );
+  const figures = pressFigures(numbers, l).map((f) => ({ id: f.id, value: f.value, ...copy.numbers.figures[f.id] }));
   const cards = pressTemplates(numbers, l).flatMap(({ slug, share }) => {
     const manifest = getManifest(slug);
     return manifest ? [{ manifest, share }] : [];
@@ -54,7 +52,7 @@ export default async function PressRoute({ params }: Props) {
   const lead = cards[0]?.manifest;
   const second = cards[1]?.manifest ?? lead;
   if (!lead || !second) notFound();
-  const fill = (s: string) => s.replace("{name}", BRAND.name).replace("{domain}", BRAND.domain).replace("{company}", LEGAL_ENTITY.name).replace("{count}", String(listManifests().length));
+  const fill = (s: string) => s.replace("{name}", BRAND.name).replace("{domain}", BRAND.domain).replace("{company}", pressCompany(LEGAL_ENTITY.name, l)).replace("{count}", String(listManifests().length));
 
   return (
     <>

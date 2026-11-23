@@ -3,7 +3,8 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BRAND } from "@/config/brand";
 import { ABOUT_FOUNDED, aboutCopy } from "@/content/about";
-import { PRESS_COPY, PRESS_OWNER_PENDING, pressFounderLine } from "@/content/press";
+import { PRESS_COPY, PRESS_OWNER_PENDING, pressCompany, pressFounderLine } from "@/content/press";
+import { LEGAL_ENTITY } from "@/content/legal";
 import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
 import { CLOSED_BLOCK_WORDS, countWords } from "@/components/templates/page/lead";
@@ -11,7 +12,7 @@ import { pressBrief, pressNav, pressUpdated, shownPress } from "@/lib/press/show
 import { PRESS_PLACEMENTS } from "@/components/press/placements";
 import { ART_IDS, pageArt } from "@/content/page-art";
 import { mentionsSpain } from "@/lib/cities/cities";
-import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressTemplates, type PressNumbers } from "@/lib/press/figures";
+import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressReminder, pressTemplates, type PressNumbers } from "@/lib/press/figures";
 
 import { fillerIn } from "./filler";
 
@@ -106,14 +107,17 @@ describe("press figures: how they are written", () => {
     expect(pressDate("2026-11-20", "en")).toBe("20 November 2026");
   });
 
-  it("F3 a figure the snapshot lacks is left out, not shown as nothing", () => {
+  it("F3 a figure the snapshot lacks is left out, not shown as nothing; six at most, two whole rows of three", () => {
     const all = pressFigures(PRESS_SAMPLE, "en");
-    expect(all.map((f) => f.id)).toEqual(["cardsMade", "cardsOpened", "opensEach", "openedAgain", "onPhone", "countries", "reminder"]);
-    expect(all.at(-1)).toEqual({ id: "reminder", value: "48%", occasion: "birthday" });
+    expect(all.map((f) => f.id)).toEqual(["cardsMade", "cardsOpened", "opensEach", "openedAgain", "onPhone", "countries"]);
     expect(pressFigures(whole({ countries: null }), "en").map((f) => f.id)).not.toContain("countries");
-    expect(pressFigures(whole({ reminders: null }), "en").map((f) => f.id)).not.toContain("reminder");
-    expect(pressFigures(whole({ reminders: { total: 99, birthday: 48, anniversary: 34, valentines: 7 } }), "en").map((f) => f.id)).not.toContain("reminder");
-    const reminder = (r: NonNullable<PressNumbers["reminders"]>) => pressFigures(whole({ reminders: r }), "en").find((f) => f.id === "reminder");
+  });
+
+  it("F5 the reminders' split is not a figure of the page, only a line of llms.txt, and only when there are enough", () => {
+    expect(pressReminder(PRESS_SAMPLE, "en")).toEqual({ value: "48%", occasion: "birthday" });
+    expect(pressReminder(whole({ reminders: null }), "en")).toBeNull();
+    expect(pressReminder(whole({ reminders: { total: 99, birthday: 48, anniversary: 34, valentines: 7 } }), "en")).toBeNull();
+    const reminder = (r: NonNullable<PressNumbers["reminders"]>) => pressReminder(whole({ reminders: r }), "en");
     expect(reminder({ total: 840, birthday: 290, anniversary: 410, valentines: 60 })).toMatchObject({ occasion: "anniversary" });
     expect(reminder({ total: 840, birthday: 300, anniversary: 300, valentines: 60 })).toMatchObject({ occasion: "birthday" });
     // "other" (the rest of the total) is never named, however large.
@@ -159,18 +163,41 @@ describe("press query", () => {
 describe("press query: what an open is", () => {
   const sql = () => read("scripts/press-numbers.sql").replace(/--[^\n]*/g, "");
 
-  it("Q3 the sender's look is measured from each card's first open and its last publish, never from a sent time an edit moves", () => {
+  it("Q3 the sender's look is the ten minutes after the last publish, and after the first open only for a card edited after it", () => {
     const body = sql().replace(/\s+/g, " ");
     // Every publish, an edit included, overwrites published_at and may null unlock_at (actions/gift.ts),
     // so neither can say when a card was first sent.
     expect(body).not.toMatch(/unlock_at/);
     expect(body).not.toMatch(/sent_at/);
     expect(body).toContain("min(v.opened_at)");
-    expect(body).toContain("v.opened_at >= f.opened_at + interval '10 minutes'");
     expect(body).toContain("not (v.opened_at >= c.published_at and v.opened_at < c.published_at + interval '10 minutes')");
+    expect(body).toContain("not (f.opened_at < c.published_at and v.opened_at < f.opened_at + interval '10 minutes')");
+    // The old rule dropped the ten minutes after every first open, so a card opened once, by its
+    // recipient a day after it was sent, counted as not opened (growth-build test, 23 Nov 2026).
+    expect(body).not.toContain("v.opened_at >= f.opened_at + interval");
     // A refunded card goes back to draft but keeps published_at (commerce/unlocks.ts): only cards whose link opens count.
     expect(body).toContain("g.status in ('live', 'scheduled')");
     expect(read("src/app/actions/gift.ts")).toMatch(/published_at: new Date\(\)\.toISOString\(\)/);
+  });
+
+  it("Q4 the rule, card by card: a recipient's one open a day later counts; the sender's look after a send or an edit does not", () => {
+    // The two conditions of the query's `opens`, written out (Q3 holds the query to exactly these).
+    const MIN = 60_000;
+    const DAY = 24 * 60 * MIN;
+    const counts = (open: number, published: number, firstOpen: number) =>
+      !(open >= published && open < published + 10 * MIN) && !(firstOpen < published && open < firstOpen + 10 * MIN);
+    const opened = (published: number, opens: number[]) => opens.filter((o) => counts(o, published, Math.min(...opens))).length;
+    // Opened once, by the recipient, a day after it was sent: an opened card, with one open.
+    expect(opened(0, [DAY])).toBe(1);
+    // The sender's look a minute after sending is left out; the recipient's next day is counted.
+    expect(opened(0, [MIN, DAY])).toBe(1);
+    // Looked at by the sender, edited an hour later and looked at again, then opened by the
+    // recipient: both looks are left out, the first by the first-open window, the second by the publish one.
+    expect(opened(60 * MIN, [MIN, 61 * MIN, DAY])).toBe(1);
+    // A scheduled card records its first open when it unlocks, a week after it was published.
+    expect(opened(0, [7 * DAY])).toBe(1);
+    // Only the sender's look: not an opened card.
+    expect(opened(0, [2 * MIN])).toBe(0);
   });
 });
 
@@ -200,8 +227,6 @@ describe("press words", () => {
         most(f.label, 9, `${id}.label`);
         most(f.counts, 12, `${id}.counts`);
       }
-      for (const [o, label] of Object.entries(c.numbers.reminder.labels)) most(label, 9, `reminder.${o}`);
-      most(c.numbers.reminder.counts, 12, "reminder.counts");
       c.article.checks.forEach((check, i) => most(check, 14, `check ${i}`));
       most(c.method.faq.map((f) => f.a).join(" "), CLOSED_BLOCK_WORDS, "the four answers");
       expect(c.metaTitle.length, `${locale} metaTitle`).toBeLessThanOrEqual(70);
@@ -225,6 +250,13 @@ describe("press words", () => {
     expect(PRESS_COPY.en.article.checks[1]).toContain("March 2026");
     expect(PRESS_COPY.es.article.checks[1]).toContain("marzo de 2026");
     expect(ABOUT_FOUNDED.startsWith("2026-03")).toBe(true);
+    // The name is a sentence that says which word to print, and the company's quotation marks are set as type.
+    expect(PRESS_COPY.en.article.checks[0]).toBe("The name is {name}; {domain} is its address.");
+    expect(PRESS_COPY.es.article.checks[0]).toBe("El nombre es {name}; {domain} es su dirección.");
+    expect(LEGAL_ENTITY.name).toBe('SIA "MIGLAI"');
+    expect(pressCompany(LEGAL_ENTITY.name, "en")).toBe("SIA “MIGLAI”");
+    expect(pressCompany(LEGAL_ENTITY.name, "es")).toBe("SIA «MIGLAI»");
+    expect(PRESS_COPY.es.article.heading).toBe("Cómo se escribe el nombre y qué imágenes usar");
   });
 
   it("C5 every figure says what it counts, and the words match the query's rule", () => {
@@ -235,14 +267,14 @@ describe("press words", () => {
     // The five percentages are a share of every card made, and the section says so.
     expect(en.made.line).toMatch(/share of every card made/);
     expect(PRESS_COPY.es.made.line).toMatch(/todas las tarjetas hechas/);
-    // The open rule is the query's: first open and last edit, never "after they were sent".
-    for (const locale of ["en", "es"] as const) {
-      const c = PRESS_COPY[locale];
-      expect(c.numbers.figures.cardsOpened.counts, locale).not.toMatch(/sent|enviarse|envío/);
-      expect(c.method.faq[1]!.a, locale).not.toMatch(/after a card is sent|tras el envío/);
-    }
-    expect(en.numbers.figures.cardsOpened.counts).toMatch(/first open or last edit/);
-    expect(en.method.faq[1]!.a).toMatch(/first open and after its last edit/);
+    // The open rule is the query's: the ten minutes after the last publish (sent or last edited),
+    // and after the first open only for a card edited after it; never after every first open.
+    expect(en.numbers.figures.cardsOpened.counts).toMatch(/sent or last edited/);
+    expect(PRESS_COPY.es.numbers.figures.cardsOpened.counts).toMatch(/enviarla o editarla por última vez/);
+    for (const locale of ["en", "es"] as const) expect(PRESS_COPY[locale].numbers.figures.cardsOpened.counts, locale).not.toMatch(/first open|primera apertura/);
+    expect(en.method.faq[1]!.a).toMatch(/sent or last edited/);
+    expect(en.method.faq[1]!.a).toMatch(/edited after its first open/);
+    expect(PRESS_COPY.es.method.faq[1]!.a).toMatch(/si se editó después de abrirse/);
     // The phone share is of opens whose device is known; an iPad counts as 'ios'.
     expect(en.numbers.figures.onPhone.counts).toMatch(/device we know/);
     expect(en.numbers.figures.onPhone.counts).toMatch(/iPads/);
@@ -348,6 +380,7 @@ describe("press page: once the figures are in", () => {
     expect(text).toContain("21,000+");
     expect(text).toContain("3.2");
     expect(text).toContain("The Letter, Bouquet, Jar of Reasons, Scratch Card, Constellations");
+    expect(text).toContain("Of the dates people set a reminder for, 48% are for a birthday.");
     expect(text).toMatch(/\]\([^)]*\/press\)/);
     expect(brief.at(-1)).toBe("");
   });

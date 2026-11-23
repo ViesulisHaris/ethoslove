@@ -44,7 +44,7 @@ export const PRESS_EARLIEST = "2026-11-01";
 export const REMINDERS_WORTH_SAYING = 100;
 
 export type PressFigureId = "cardsMade" | "cardsOpened" | "opensEach" | "openedAgain" | "onPhone" | "countries";
-export type PressFigure = { id: PressFigureId; value: string } | { id: "reminder"; value: string; occasion: ReminderOccasion };
+export type PressFigure = { id: PressFigureId; value: string };
 
 const isDay = (day: string): boolean => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return false;
@@ -120,7 +120,11 @@ function share(part: number, of: number, locale: PressLocale): string {
   return new Intl.NumberFormat(intlLocale(locale), { style: "percent", maximumFractionDigits: 0 }).format(whole / 100);
 }
 
-/** The figures the page shows, in its order; one the snapshot lacks is left out. */
+/**
+ * The figures the page shows, in its order; one the snapshot lacks is left out. Six at most, two
+ * rows of three on a desk. The reminders' split is about another feature and is not one of them:
+ * it is a line of llms.txt (pressReminder).
+ */
 export function pressFigures(numbers: PressNumbers, locale: PressLocale): PressFigure[] {
   const n = numbers;
   const each = n.cardsOpened > 0 ? Math.floor((n.opens / n.cardsOpened) * 10) / 10 : 0;
@@ -132,13 +136,16 @@ export function pressFigures(numbers: PressNumbers, locale: PressLocale): PressF
     { id: "onPhone", value: share(n.phoneOpens, n.deviceOpens, locale) },
   ];
   if (n.countries !== null) figures.push({ id: "countries", value: new Intl.NumberFormat(intlLocale(locale)).format(n.countries) });
-  const r = n.reminders;
-  if (r && r.total >= REMINDERS_WORTH_SAYING) {
-    // The largest; a tie goes to the earlier in REMINDER_OCCASIONS.
-    const occasion = REMINDER_OCCASIONS.reduce((best, o) => (r[o] > r[best] ? o : best), REMINDER_OCCASIONS[0]);
-    if (r[occasion] > 0) figures.push({ id: "reminder", value: share(r[occasion], r.total, locale), occasion });
-  }
   return figures;
+}
+
+/** The occasion most reminders are set for, with its share of all reminders; null when there are too few to say. */
+export function pressReminder(numbers: PressNumbers, locale: PressLocale): { value: string; occasion: ReminderOccasion } | null {
+  const r = numbers.reminders;
+  if (!r || r.total < REMINDERS_WORTH_SAYING) return null;
+  // The largest; a tie goes to the earlier in REMINDER_OCCASIONS.
+  const occasion = REMINDER_OCCASIONS.reduce((best, o) => (r[o] > r[best] ? o : best), REMINDER_OCCASIONS[0]);
+  return r[occasion] > 0 ? { value: share(r[occasion], r.total, locale), occasion } : null;
 }
 
 /** The five templates, in the snapshot's order, each with its share of all cards made. */

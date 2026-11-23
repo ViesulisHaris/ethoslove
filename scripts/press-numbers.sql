@@ -19,22 +19,25 @@
 --   deleted cards     a card or an account its owner deleted is gone, with its opens (on delete
 --                     cascade). Every figure is of what is in the database on the day it is run.
 --   test cards        every card made from an account in `team`.
---   the sender's look two windows of ten minutes per card, and every open in them:
---                     1. after the card's first recorded open. Seven in ten cards were first
---                        "opened" within two minutes of being sent, from the share screen's own
---                        Open button (src/lib/gift/own-view.ts): the first open is mostly the
---                        sender. It is measured from the first open, not from published_at,
---                        because every publish overwrites published_at, an edit to a live card
---                        included (src/app/actions/gift.ts), so published_at is the LAST publish.
---                        A scheduled card records no open before it unlocks (record_gift_view,
---                        0005), so its first open is on or after the day it unlocks.
---                     2. after the card's last publish (published_at): the sender checking an edit.
---                        Earlier edits leave no time behind, so the looks after them are counted.
+--   the sender's look the ten minutes after the card's last publish (published_at), and every open
+--                     in them: the share screen's own Open button, or the sender checking an edit.
+--                     src/lib/gift/own-view.ts records the count behind its fix: seven in ten cards
+--                     were first "opened" within two minutes of being sent, that way (not counted
+--                     again for this query).
+--                     Every publish overwrites published_at, an edit to a live card included
+--                     (src/app/actions/gift.ts), so it is the LAST publish, and the looks after
+--                     earlier publishes leave no time behind. So for a card whose first recorded
+--                     open came BEFORE its last publish (it was opened, then edited), the ten
+--                     minutes after that first open are left out too: that first open was most
+--                     likely the sender's look after the first send. A card never edited after
+--                     its first open keeps its first open when it came after those ten minutes:
+--                     a recipient who opens a card once, a day later, makes it an opened card.
+--                     A scheduled card records no open before it unlocks (record_gift_view, 0005),
+--                     so its first open is the recipient's, on or after the day it unlocks.
 --                     Since 20 Nov 2026 a signed-in sender's look is not recorded at all; before
 --                     that, and for a sender who is signed out, the row cannot be told from a
---                     recipient's. The windows also leave out a recipient who opened it in those
---                     minutes, and a card opened only once, in one sitting, counts as not opened:
---                     the figures err low.
+--                     recipient's. A sender who comes back signed out more than ten minutes after
+--                     sending is counted; a recipient who opened in a left-out window is not.
 -- An "open" is one row of gift_views: one visitor (a hash of address, browser and card) at most once
 -- in 24 hours (record_gift_view, 0005).
 --
@@ -60,22 +63,22 @@ with
       and g.status in ('live', 'scheduled')
       and g.user_id not in (select id from team)
   ),
-  -- Each card's first recorded open, the start of the first window.
+  -- Each card's first recorded open: the start of a second window, for a card edited after it.
   first_open as (
     select v.gift_id, min(v.opened_at) as opened_at
     from public.gift_views v
     join cards c on c.id = v.gift_id
     group by v.gift_id
   ),
-  -- An open that counts: of one of those cards, outside both windows (ten minutes after its first
-  -- open, ten minutes after its last publish).
+  -- An open that counts: of one of those cards, not in the ten minutes after its last publish, and,
+  -- for a card first opened before its last publish, not in the ten minutes after that first open.
   opens as (
     select v.gift_id, v.device
     from public.gift_views v
     join cards c on c.id = v.gift_id
     join first_open f on f.gift_id = v.gift_id
-    where v.opened_at >= f.opened_at + interval '10 minutes'
-      and not (v.opened_at >= c.published_at and v.opened_at < c.published_at + interval '10 minutes')
+    where not (v.opened_at >= c.published_at and v.opened_at < c.published_at + interval '10 minutes')
+      and not (f.opened_at < c.published_at and v.opened_at < f.opened_at + interval '10 minutes')
   ),
   per_card as (
     select o.gift_id, count(*) as n
@@ -104,7 +107,7 @@ select jsonb_pretty(jsonb_build_object(
   -- Cards made: published, not deleted, not ours. Leaves out drafts and test cards.
   'cardsMade', (select count(*) from cards),
   -- Cards opened: of those, the ones with at least one open that counts. Leaves out a card whose
-  -- only opens came in the two windows.
+  -- only opens came in the left-out windows.
   'cardsOpened', (select count(*) from per_card),
   -- Opens: every open that counts, of every card. Divided by cardsOpened it is the average opens
   -- per opened card.

@@ -115,7 +115,8 @@ test("D3 on a phone the figures are a list and the gifts one card to a screen wi
     }),
   }));
   for (const bg of phone.backgrounds) expect(bg).toBe("rgba(0, 0, 0, 0)");
-  expect(new Set(phone.lefts).size).toBe(1);
+  // Two short figures to a row: six make three rows, not a column of six.
+  expect(new Set(phone.lefts).size).toBe(2);
   expect(phone.whole).toEqual([true, false, false, false, false]);
   const dots = page.locator("[data-dots] > *");
   await expect(dots).toHaveCount(5);
@@ -143,6 +144,9 @@ test("D3 on a phone the figures are a list and the gifts one card to a screen wi
   expect(desk.tops[1]).toBe(desk.tops[0]);
   expect(desk.tops[2]).toBe(desk.tops[0]);
   expect(desk.tops[3]).toBeGreaterThan(desk.tops[0]!);
+  // Six figures: two whole rows, nothing alone on a third.
+  expect(desk.tops).toHaveLength(6);
+  expect(desk.tops[5]).toBe(desk.tops[3]);
   expect(new Set(desk.cardTops).size).toBe(1);
   await expect(page.locator("[data-dots]")).toBeHidden();
 });
@@ -218,4 +222,46 @@ test("D6 an iPhone in Safari: nothing off the side, no flower under a word, a qu
   } finally {
     await browser.close();
   }
+});
+
+test("D7 the page's largest picture loads at once, every cover of the most made is whole, and a phone on its side opens on the picture and the whole button", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page, "/press");
+  await expect(page.locator('[data-flatlay=press] img[alt]:not([alt=""])')).toHaveAttribute("loading", "eager");
+  for (const width of [1440, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await open(page, "/press");
+    const covers = await page.locator("#press-most-made img").evaluateAll((imgs) =>
+      imgs.map((img) => {
+        const box = img.getBoundingClientRect();
+        const i = img as HTMLImageElement;
+        // Drawn whole: the box has the picture's own shape, so object-cover cuts nothing.
+        return { box: box.width / box.height, own: i.naturalWidth / i.naturalHeight, top: box.top };
+      }),
+    );
+    expect(covers).toHaveLength(5);
+    for (const c of covers) expect(Math.abs(c.box - c.own), `${width}`).toBeLessThan(0.01);
+    // Nothing stands over a cover: its place in the list is beside its name.
+    await page.locator("#press-most-made").evaluate((row) => row.scrollIntoView({ block: "center", behavior: "instant" }));
+    const over = await page.locator("#press-most-made [data-card]").evaluateAll((cards) =>
+      cards.filter((card) => {
+        const r = card.querySelector("img")!.getBoundingClientRect();
+        const el = document.elementFromPoint(r.left + 12, r.top + 12);
+        return el && !card.querySelector("a span")!.contains(el) && r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight;
+      }).length,
+    );
+    expect(over, `${width}`).toBe(0);
+  }
+  await page.setViewportSize({ width: 812, height: 375 });
+  await open(page, "/press");
+  const first = await page.evaluate(() => {
+    const inView = (el: Element | null) => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth;
+    };
+    const flatlay = document.querySelector("[data-flatlay=press]")!.getBoundingClientRect();
+    return { button: inView(document.querySelector('[data-page-theme] a[href^="mailto:"]')), picture: flatlay.top < innerHeight && flatlay.bottom > 0 && flatlay.left > innerWidth / 2 };
+  });
+  expect(first).toEqual({ button: true, picture: true });
 });

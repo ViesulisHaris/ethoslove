@@ -44,22 +44,26 @@ export function PressPage({ children }: { children: ReactNode }) {
   );
 }
 
-/** (1) The words on the left, the phone on lilies on the right; below `lg` the words first and the picture after. */
+/**
+ * (1) The words on the left, the phone on lilies on the right; below `lg` the words first and the picture after,
+ * except on a phone on its side (wider than 640px, landscape, under 520px tall), where the picture
+ * stands beside the words too, so the first screen is not words alone with the button half under its foot.
+ */
 export function PressHero({ maker, heading, line, sentence, poster, posterAlt, children }: { maker: string; heading: string; line: string; sentence: string; poster: string; posterAlt: string; children: ReactNode }) {
   return (
     <section className="relative" aria-labelledby="press-title">
-      <div className="container-x relative grid items-center gap-y-6 pt-5 pb-14 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-x-14 lg:pt-14 lg:pb-20 xl:grid-cols-[minmax(0,1fr)_minmax(0,34rem)]">
+      <div className={cn("container-x relative grid items-center gap-y-6 pt-5 pb-14 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-x-14 lg:pt-14 lg:pb-20 xl:grid-cols-[minmax(0,1fr)_minmax(0,34rem)]", "sm:landscape:[@media(max-height:520px)]:grid-cols-[minmax(0,1fr)_minmax(0,15rem)] sm:landscape:[@media(max-height:520px)]:gap-x-8 sm:landscape:[@media(max-height:520px)]:pt-3 sm:landscape:[@media(max-height:520px)]:pb-10")}>
         <div className="lg:max-w-[33rem]">
           {/* The maker's mark, as the brief places it: over the heading, not in it. */}
           <p data-maker className="text-page-label text-page-body">
             {maker}
           </p>
-          <h1 id="press-title" className="mt-3 font-display text-[2.5rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.75rem,5vw,4.25rem)]">
+          <h1 id="press-title" className={cn("mt-3 font-display text-[2.5rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.75rem,5vw,4.25rem)]", "sm:landscape:[@media(max-height:520px)]:mt-2 sm:landscape:[@media(max-height:520px)]:text-[2.5rem]")}>
             {heading}
           </h1>
           <p className="mt-3 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4">{line}</p>
-          <p className="mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6">{sentence}</p>
-          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">{children}</div>
+          <p className={cn("mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6", "sm:landscape:[@media(max-height:520px)]:mt-3")}>{sentence}</p>
+          <div className={cn("mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap", "sm:landscape:[@media(max-height:520px)]:mt-5")}>{children}</div>
         </div>
         <PressFlatlay poster={poster} alt={posterAlt} />
       </div>
@@ -79,17 +83,18 @@ function PressFlatlay({ poster, alt }: { poster: string; alt: string }) {
   const screen = art.slots.screen;
   const sizes = "(min-width: 1280px) 544px, (min-width: 1024px) 480px, (min-width: 640px) 448px, 86vw";
   return (
-    <div data-flatlay="press" className="relative mx-auto w-full max-w-[21.5rem] sm:max-w-[28rem] lg:max-w-none" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
+    <div data-flatlay="press" className={cn("relative mx-auto w-full max-w-[21.5rem] sm:max-w-[28rem] lg:max-w-none", "sm:landscape:[@media(max-height:520px)]:max-w-[15rem]")} style={{ aspectRatio: `${art.width} / ${art.height}` }}>
       <span data-decor="hero-flatlay" className="absolute inset-0 block">
         <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes={sizes} width={art.width} height={art.height} eager className="block w-full" />
       </span>
       {screen ? (
         <div className="absolute overflow-hidden bg-night [container-type:inline-size]" style={slotStyle(art, screen)}>
           <span aria-hidden="true" className="pointer-events-none absolute inset-0 block scale-125 blur-[7cqw]">
-            <Image src={poster} alt="" width={COVER_SHAPE[0] * 4} height={COVER_SHAPE[1] * 4} sizes="48px" quality={60} className="absolute inset-0 block size-full object-cover" />
+            <Image src={poster} alt="" width={COVER_SHAPE[0] * 4} height={COVER_SHAPE[1] * 4} sizes="48px" quality={60} loading="eager" className="absolute inset-0 block size-full object-cover" />
           </span>
           <span className="hero-cover absolute top-1/2 left-0 block w-full -translate-y-1/2" style={{ aspectRatio: COVER_RATIO }}>
-            <Image src={poster} alt={alt} fill sizes="(min-width: 1024px) 200px, 40vw" className="object-contain" />
+            {/* The page's largest picture on first paint, and the soft copy under it: loaded at once, as the hero's lilies are. */}
+            <Image src={poster} alt={alt} fill sizes="(min-width: 1024px) 200px, 40vw" loading="eager" fetchPriority="high" className="object-contain" />
           </span>
         </div>
       ) : null}
@@ -105,10 +110,9 @@ function PressFlatlay({ poster, alt }: { poster: string; alt: string }) {
 export type PressFigureRow = { id: string; value: string; label: string; counts: string };
 
 /**
- * (2) The figures: rows with hairlines on a phone, unboxed columns from 640px with a hairline over
- * each, as the questions are drawn. Never boxed cards: each figure carries a sentence, and a card is
- * never a paragraph (DESIGN-LESS-TEXT.md); seven boxes read as a dashboard. A short last row is
- * simply short.
+ * (2) The figures: unboxed columns with a hairline over each, as the questions are drawn: two to a
+ * row on a phone and up to a desk, three from 1280px, so six figures make two whole rows. Never
+ * boxed cards: each figure carries a sentence, and a card is never a paragraph (DESIGN-LESS-TEXT.md).
  */
 export function PressFigures({ label, heading, line, figures, asOf, day }: { label: string; heading: string; line: string; figures: PressFigureRow[]; asOf: string; day: string }) {
   return (
@@ -117,11 +121,11 @@ export function PressFigures({ label, heading, line, figures, asOf, day }: { lab
       <div className={cn(SPREAD, "py-12 sm:py-16 lg:py-20")}>
         <Intro id="press-numbers" label={label} heading={heading} line={line} />
         <div className="min-w-0 lg:pt-7">
-          <dl data-figures className="grid border-b border-page-line sm:grid-cols-2 sm:gap-x-8 sm:gap-y-2 sm:border-b-0 xl:grid-cols-3 xl:gap-x-10">
+          <dl data-figures className="grid grid-cols-2 gap-x-5 sm:gap-x-8 sm:gap-y-2 xl:grid-cols-3 xl:gap-x-10">
             {figures.map((f) => (
-              <div key={f.id} data-pick data-figure={f.id} className="flex flex-col border-t border-page-line py-5 sm:pt-6 sm:pb-4">
+              <div key={f.id} data-pick data-figure={f.id} className="flex min-w-0 flex-col border-t border-page-line pt-5 pb-4 sm:pt-6">
                 <dt className="order-2 mt-2 text-[0.9375rem] font-medium text-page-ink">{f.label}</dt>
-                <dd data-value className="order-1 font-display text-[clamp(2.75rem,5vw,3.5rem)] leading-none tracking-[-0.03em] text-page-ink tabular-nums">
+                <dd data-value className="order-1 font-display text-[clamp(2rem,9vw,2.5rem)] leading-none tracking-[-0.03em] text-page-ink tabular-nums sm:text-[clamp(2.75rem,5vw,3.5rem)]">
                   {f.value}
                 </dd>
                 <dd data-counts className="order-3 mt-2 text-sm leading-relaxed text-page-body">
@@ -139,7 +143,11 @@ export function PressFigures({ label, heading, line, figures, asOf, day }: { lab
   );
 }
 
-/** (3) The five most-made templates: five covers in a row on a desk, one to a screen with dots on a phone. */
+/**
+ * (3) The five most-made templates: five covers in a row on a desk, one to a screen with dots on a
+ * phone. Each cover is drawn whole, in the shape it is recorded in (13:20), so no title on it is cut;
+ * its place in the list stands before its name, never over the picture.
+ */
 export function PressMostMade({ label, heading, line, cards, locale }: { label: string; heading: string; line: string; cards: { manifest: TemplateManifest; share: string }[]; locale: "en" | "es" }) {
   const row = "press-most-made";
   return (
@@ -147,25 +155,26 @@ export function PressMostMade({ label, heading, line, cards, locale }: { label: 
       <div className={cn(SPREAD, "pt-6 pb-16 sm:pb-20 lg:pt-10 lg:pb-28")}>
         <Intro id="press-made" label={label} heading={heading} line={line} />
         <div className="min-w-0 lg:pt-7">
-          {/* pt-4: the number on each card stands 12px over its top, and a row that scrolls sideways clips what stands outside it. */}
-          <ol id={row} className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-4 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-5 sm:gap-x-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-x-5">
+          <ol id={row} className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-1 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-5 sm:gap-x-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-x-5">
             {cards.map(({ manifest: m, share }, i) => (
-              <li key={m.slug} data-card data-pick className="relative w-full shrink-0 snap-start sm:w-auto">
+              <li key={m.slug} data-card data-pick className="relative w-[78%] shrink-0 snap-start sm:w-auto">
                 <Link href={`/templates/${m.slug}`} className="group block rounded-[1.25rem]">
-                  <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift group-active:translate-y-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
-                    <Image src={m.thumbnail.poster} alt={m.tagline[locale]} fill sizes="(min-width: 1280px) 150px, (min-width: 640px) 18vw, 90vw" className="object-cover object-[50%_32%]" />
+                  <span style={{ aspectRatio: COVER_RATIO }} className="relative block overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift group-active:translate-y-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+                    <Image src={m.thumbnail.poster} alt={m.tagline[locale]} fill sizes="(min-width: 1280px) 150px, (min-width: 640px) 18vw, 90vw" className="object-cover" />
                   </span>
-                  <span data-card-title className="mt-3.5 block font-display text-[1.0625rem] leading-tight text-page-ink">
-                    {m.name[locale]}
+                  <span className="mt-3.5 flex items-baseline gap-2 font-display text-[1.0625rem] leading-tight">
+                    {/* The list is an <ol>, which says the order; the number is for the eye. */}
+                    <span aria-hidden="true" className="text-page-body tabular-nums">
+                      {i + 1}
+                    </span>
+                    <span data-card-title className="block text-page-ink">
+                      {m.name[locale]}
+                    </span>
                   </span>
                   <span data-share className="mt-1.5 block text-page-label text-page-body">
                     {share}
                   </span>
                 </Link>
-                {/* The list is an <ol>, which says the order; the badge is for the eye. */}
-                <span aria-hidden="true" className="absolute top-1 left-3 grid size-8 place-items-center rounded-full bg-page-badge font-display text-base text-page-ink ring-4 ring-page-ground">
-                  {i + 1}
-                </span>
               </li>
             ))}
           </ol>

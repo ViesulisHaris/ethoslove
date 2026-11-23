@@ -1,5 +1,5 @@
 import { aboutCopy } from "@/content/about";
-import type { PressFigureId, PressLocale, ReminderOccasion } from "@/lib/press/figures";
+import type { PressFigureId, PressLocale } from "@/lib/press/figures";
 
 /**
  * The press page (/press, "Ethos in numbers"): the words round the figures of
@@ -42,7 +42,6 @@ export type PressCopy = {
     line: string;
     asOf: string;
     figures: Record<PressFigureId, Figure>;
-    reminder: { labels: Record<ReminderOccasion, string>; counts: string };
   };
   made: { label: string; heading: string; line: string };
   article: {
@@ -80,7 +79,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         cardsOpened: {
           label: "cards opened",
-          counts: "Not counting the ten minutes after its first open or last edit.",
+          counts: "Not counting the ten minutes after it was sent or last edited.",
         },
         opensEach: {
           label: "opens per opened card",
@@ -99,14 +98,6 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
           counts: "Where a card has been paid for.",
         },
       },
-      reminder: {
-        labels: {
-          birthday: "of reminders are for a birthday",
-          anniversary: "of reminders are for an anniversary",
-          valentines: "of reminders are for Valentine's Day",
-        },
-        counts: "Of the dates people set a reminder for.",
-      },
     },
     made: {
       label: "Most made",
@@ -117,7 +108,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
       label: "For your article",
       heading: "How to write the name, and pictures to use",
       checks: [
-        "Written {name}. The address is {domain}.",
+        "The name is {name}; {domain} is its address.",
         "Made in Riga by {company}, registered in Latvia in March 2026.",
         "{count} templates, each with a live demo, in two languages.",
       ],
@@ -134,7 +125,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         {
           q: "What counts as an open?",
-          a: "Each time a card's link is opened; the same visitor within 24 hours counts once. We leave out the ten minutes after a card's first open and after its last edit, when it is mostly the sender checking it, so the figures err low. A signed-in sender's own look is not recorded at all.",
+          a: "Each time a card's link is opened; the same visitor within 24 hours counts once. We leave out the ten minutes after a card is sent or last edited, when it is mostly the sender checking it, and for a card edited after its first open, the ten minutes after that open too. So the figures err low. A signed-in sender's own look is not recorded at all.",
         },
         {
           q: "May I use the numbers and the pictures?",
@@ -176,7 +167,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         cardsOpened: {
           label: "tarjetas abiertas",
-          counts: "Sin los diez minutos tras su primera apertura o última edición.",
+          counts: "Sin contar los diez minutos tras enviarla o editarla por última vez.",
         },
         opensEach: {
           label: "aperturas por tarjeta abierta",
@@ -195,14 +186,6 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
           counts: "Donde se ha pagado una tarjeta.",
         },
       },
-      reminder: {
-        labels: {
-          birthday: "de los recordatorios son de cumpleaños",
-          anniversary: "de los recordatorios son de aniversario",
-          valentines: "de los recordatorios son de San Valentín",
-        },
-        counts: "De las fechas con recordatorio.",
-      },
     },
     made: {
       label: "Las favoritas",
@@ -211,9 +194,9 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     },
     article: {
       label: "Para tu artículo",
-      heading: "Cómo escribir el nombre, e imágenes para usar",
+      heading: "Cómo se escribe el nombre y qué imágenes usar",
       checks: [
-        "Se escribe {name}. La dirección es {domain}.",
+        "El nombre es {name}; {domain} es su dirección.",
         "Hecho en Riga por {company}, registrada en Letonia en marzo de 2026.",
         "{count} plantillas con demo, en dos idiomas.",
       ],
@@ -230,7 +213,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         {
           q: "¿Qué cuenta como una apertura?",
-          a: "Cada vez que se abre el enlace de una tarjeta; la misma persona en 24 horas cuenta una vez. No contamos los diez minutos tras su primera apertura ni tras su última edición, cuando casi siempre es quien la envía comprobándola, así que las cifras se quedan cortas. Cuando quien la envía la mira con su sesión iniciada, no se registra.",
+          a: "Cada vez que se abre el enlace de una tarjeta; la misma persona en 24 horas cuenta una vez. No contamos los diez minutos tras enviarla o editarla por última vez, cuando casi siempre es quien la envía comprobándola, ni, si se editó después de abrirse, los diez minutos tras esa primera apertura. Así que las cifras se quedan cortas. Cuando quien la envía la mira con su sesión iniciada, no se registra.",
         },
         {
           q: "¿Puedo usar las cifras y las imágenes?",
@@ -255,4 +238,9 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
 export function pressFounderLine(locale: PressLocale): string {
   const subtitle = aboutCopy(locale, { templates: 0, single: "" }).subtitle;
   return subtitle.slice(0, subtitle.indexOf(".") + 1);
+}
+
+/** The company's name with its quotation marks set as type, not typed: SIA “MIGLAI”, and in Spanish SIA «MIGLAI». */
+export function pressCompany(name: string, locale: PressLocale): string {
+  return name.replace(/"([^"]*)"/g, locale === "es" ? "«$1»" : "“$1”");
 }

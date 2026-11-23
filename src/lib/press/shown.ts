@@ -3,7 +3,9 @@ import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
 import { localizedUrl } from "@/lib/seo";
 import { getManifest } from "@/templates/manifests";
-import { pressDate, pressFigures, pressLive, type PressLocale, type PressNumbers } from "./figures";
+import { pressDate, pressFigures, pressLive, pressReminder, type PressLocale, type PressNumbers, type ReminderOccasion } from "./figures";
+
+const REMINDER_DAY: Record<ReminderOccasion, string> = { birthday: "a birthday", anniversary: "an anniversary", valentines: "Valentine's Day" };
 
 export type ShownPress = { numbers: PressNumbers; sample: boolean };
 
@@ -36,15 +38,17 @@ export function pressUpdated(numbers: PressNumbers = PRESS_NUMBERS): string | un
 export function pressBrief(numbers: PressNumbers = PRESS_NUMBERS): string[] {
   if (!pressLive(numbers)) return [];
   const f = Object.fromEntries(pressFigures(numbers, "en").map((x) => [x.id, x.value]));
+  const reminder = pressReminder(numbers, "en");
   const names = numbers.topTemplates.map(({ slug }) => getManifest(slug)?.name.en ?? slug).join(", ");
   return [
     "## Ethos in numbers",
     "",
     `- Counted from Ethos's own database on ${pressDate(numbers.asOf, "en")}; every figure is rounded down.`,
     `- Cards made (finished and published; drafts and test cards are left out): ${f.cardsMade}.`,
-    `- Cards opened, not counting the ten minutes after a card's first open or last edit: ${f.cardsOpened}.`,
+    `- Cards opened, not counting the ten minutes after a card was sent or last edited (nor, for a card edited after its first open, the ten minutes after that open): ${f.cardsOpened}.`,
     `- Opens per opened card: ${f.opensEach}. Opened more than once: ${f.openedAgain}. Opens on a phone, of those whose device is known: ${f.onPhone}.`,
     `- The five most-made templates: ${names}.`,
+    ...(reminder ? [`- Of the dates people set a reminder for, ${reminder.value} are for ${REMINDER_DAY[reminder.occasion]}.`] : []),
     `- [Ethos in numbers](${localizedUrl("en", PRESS_PATH)}): the method, and pictures for an article.`,
     "",
   ];

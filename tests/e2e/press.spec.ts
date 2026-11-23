@@ -73,8 +73,10 @@ test.describe("with figures in (the sample)", () => {
 
   test("V2 every figure says what it is, what it counts, and the day it was counted", async ({ page }) => {
     await page.goto("/press");
-    await expect(page.locator("[data-figure]")).toHaveCount(7);
-    const values = { cardsMade: "21,000+", cardsOpened: "15,000+", opensEach: "3.2", openedAgain: "61%", onPhone: "88%", countries: "64", reminder: "48%" };
+    // Six, two whole rows of three on a desk: the reminders' split is about another feature and is a line of llms.txt.
+    await expect(page.locator("[data-figure]")).toHaveCount(6);
+    await expect(page.locator("[data-figure=reminder]")).toHaveCount(0);
+    const values = { cardsMade: "21,000+", cardsOpened: "15,000+", opensEach: "3.2", openedAgain: "61%", onPhone: "88%", countries: "64" };
     for (const [id, value] of Object.entries(values)) {
       const figure = page.locator(`[data-figure="${id}"]`);
       await expect(figure.locator("[data-value]")).toHaveText(value);
@@ -161,7 +163,7 @@ test.describe("with figures in (the sample)", () => {
     await expect(page.locator('[data-figure="cardsMade"] [data-value]')).toHaveText("21.000+");
     await expect(page.locator('[data-figure="cardsOpened"] [data-value]')).toHaveText("15.000+");
     await expect(page.locator('[data-figure="opensEach"] [data-value]')).toHaveText("3,2");
-    for (const id of ["openedAgain", "onPhone", "reminder"]) await expect(page.locator(`[data-figure="${id}"] [data-value]`)).toHaveText(/^\d+\s?%$/);
+    for (const id of ["openedAgain", "onPhone"]) await expect(page.locator(`[data-figure="${id}"] [data-value]`)).toHaveText(/^\d+\s?%$/);
     await expect(page.locator("time")).toHaveText("Contado el 20 de noviembre de 2026.");
     const button = page.getByRole("link", { name: "Escríbenos" });
     await expect(button).toBeVisible();
@@ -172,6 +174,10 @@ test.describe("with figures in (the sample)", () => {
     const text = await page.locator("[data-page-theme]").innerText();
     for (const english of ["cards made", "Write to us", "Most made"]) expect(text).not.toContain(english);
     await expect(page.locator("a[download]")).toHaveText("Descargar el icono");
+    // The company's name with the quotation marks of Spanish type, and the name said as a sentence.
+    await expect(page.locator("section:has(#press-article)")).toContainText("SIA «MIGLAI»");
+    await expect(page.locator("section:has(#press-article)")).toContainText("El nombre es Ethos; tryethos.io es su dirección.");
+    await expect(page.locator("#press-article")).toHaveText("Cómo se escribe el nombre y qué imágenes usar");
   });
 
   test("V7 by keyboard alone", async ({ page, isMobile }) => {
@@ -185,7 +191,10 @@ test.describe("with figures in (the sample)", () => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || !el.closest("[data-page-theme]")) return null;
         const cs = getComputedStyle(el);
-        return { text: (el.textContent ?? "").trim(), outline: cs.outlineStyle !== "none" && cs.outlineWidth !== "0px" };
+        // What a screen reader says: the number before a gift's name is for the eye (aria-hidden).
+        const heard = el.cloneNode(true) as HTMLElement;
+        heard.querySelectorAll("[aria-hidden=true]").forEach((x) => x.remove());
+        return { text: (heard.textContent ?? "").trim(), outline: cs.outlineStyle !== "none" && cs.outlineWidth !== "0px" };
       });
       if (!focused) continue;
       expect(focused.text.startsWith(order[at]!), `focus ${at}: expected “${order[at]}”, got “${focused.text.slice(0, 40)}”`).toBe(true);
