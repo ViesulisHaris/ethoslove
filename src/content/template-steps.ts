@@ -272,7 +272,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "light-the-candles": {
     line: { en: "They light five candles; each shows one thing you’re thankful for.", es: "Encienden cinco velas y cada una muestra un motivo." },
     steps: [
-      { picture: "note", quote: "fields.thanks", en: "Write five thanks", es: "Escribe cinco gracias" },
+      { picture: "note", quote: "fields.thanks", en: "Write five thanks", es: "Escribe cinco motivos" },
       { picture: "photo", en: "Add your photos", es: "Añade tus fotos" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -294,7 +294,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
     ],
   },
   "music-box": {
-    line: { en: "They wind the key and your photos appear in the mirror.", es: "Dan cuerda a la llave y tus fotos salen en el espejo." },
+    line: { en: "They wind the key and your photos appear in the mirror.", es: "Dan cuerda a la caja y tus fotos salen en el espejo." },
     steps: [
       { picture: "photo", en: "Choose the photos", es: "Elige las fotos" },
       { picture: "note", quote: "message", en: "Write the letter", es: "Escribe la carta" },
@@ -382,7 +382,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
     ],
   },
   "recipe-box": {
-    line: { en: "She tilts the phone and pours in what you wrote.", es: "Inclina el móvil y echa lo que escribiste." },
+    line: { en: "She tilts the phone and pours in what you wrote.", es: "Ella inclina el móvil y echa lo que escribiste." },
     steps: [
       { picture: "note", quote: "fields.recipeName", en: "Name the recipe", es: "Ponle nombre a la receta" },
       { picture: "note", quote: "fields.ingredients", en: "Write the ingredients", es: "Escribe los ingredientes" },

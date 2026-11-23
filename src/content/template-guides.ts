@@ -269,7 +269,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.cardNote", line: "Me equivoqué. Perdón." },
           },
           {
-            heading: "Para una mala semana",
+            heading: "Que te mejores",
             how: "Girasoles en papel kraft para quien pasa una mala semana.",
             borrow: { field: "fields.cardNote", line: "Mira esto, no las noticias" },
           },
@@ -354,7 +354,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.fortunes", line: "Te cantarán, y mal, personas que te quieren." },
           },
           {
-            heading: "Antes de un examen",
+            heading: "Antes de un examen o entrevista",
             how: "Escribe lo que das por hecho. La última galleta guarda tu mensaje.",
             borrow: { field: "fields.fortunes", line: "Ya sabes más de lo que crees." },
           },
@@ -478,7 +478,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una carta a distancia",
-            how: "Pon la cuenta atrás en el minuto en que aterrizas y escríbele el rótulo.",
+            how: "Pon la cuenta atrás en el minuto en que aterrizas y escribe su rótulo.",
             borrow: { field: "countdown.label", line: "Hasta que sea yo quien llame a tu timbre" },
           },
           {
@@ -494,7 +494,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Una carta porque sí",
             how: "La posdata llega en una postal con un regalo que se toca. Basta una línea.",
-            borrow: { field: "surprise.text", line: "P. D.: Tu favorito está en la nevera." },
+            borrow: { field: "surprise.text", line: "P. D.: tu favorito está en la nevera." },
           },
         ],
       },
@@ -623,7 +623,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       faq: [
         {
           q: "¿Cómo se soplan las velas?",
-          a: "Soplando al móvil después de tocar «Usar el micrófono», o deslizando el dedo hacia arriba. Cada soplido o cada gesto apaga unas cuantas velas. Si prefieres que no se pida el micrófono, pon las velas en «solo deslizar».",
+          a: "Soplando al móvil después de tocar «Usar el micrófono», o deslizando el dedo hacia arriba. Cada soplido o cada gesto apaga unas cuantas velas. Si prefieres que no se pida el micrófono, pon las velas en «Solo deslizar».",
         },
         {
           q: "¿Cuántas velas lleva la tarta?",
@@ -952,7 +952,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       faq: [
         {
           q: "¿Cuántas conclusiones pueden leer los gatos?",
-          a: "Hasta seis, de 90 caracteres cada una, una por toque. Hay cinco gatos, así que con seis la presidencia habla dos veces. Si dejas la lista vacía, el consejo lee cinco suyas.",
+          a: "Hasta seis, de 90 caracteres cada una, una por toque. Hay cinco gatos, así que con seis el gato que preside habla dos veces. Si dejas la lista vacía, el consejo lee cinco suyas.",
         },
         {
           q: "¿Qué veredictos puede sellar el consejo?",
@@ -1047,7 +1047,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "caption", line: "El balcón, primer año" },
           },
           {
-            heading: "Para desear una pronta mejoría",
+            heading: "Que te mejores",
             how: "Solo se abre mientras mantienen el dedo: que el mensaje sea corto.",
             borrow: { field: "message", line: "Una flor. Sin jarrón." },
           },
@@ -1385,7 +1385,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Para tu madre y tu padre",
             how: "Tu carta llega cuando las cinco están encendidas.",
-            borrow: { field: "message", line: "Gracias por una casa siempre caliente." },
+            borrow: { field: "message", line: "Gracias por una casa siempre cálida." },
           },
         ],
       },
@@ -1474,7 +1474,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Una pregunta importante",
             how: "Pon la pregunta en el cartel del jardín.",
-            borrow: { field: "fields.sign", line: "¿VIVIMOS EN LA MISMA CASA?" },
+            borrow: { field: "fields.sign", line: "¿TE MUDAS CONMIGO?" },
           },
           {
             heading: "Navidad a distancia",
@@ -1691,7 +1691,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Navidad",
             how: "Ponle nombre a este invierno en la placa de latón, en 44 caracteres.",
-            borrow: { field: "fields.plaque", line: "el invierno de los trenes sin contar" },
+            borrow: { field: "fields.plaque", line: "el invierno en que dejamos de contar trenes" },
           },
           {
             heading: "Navidad a distancia",
@@ -1840,7 +1840,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "¿Qué puede poner el sello?",
-          a: "SIN CARBÓN, CARBÓN o CARBÓN DULCE, que son dos sellos, uno detrás de otro. Elijas el que elijas, la frase de debajo aprueba los regalos.",
+          a: "SIN CARBÓN, CARBÓN o los dos, CARBÓN DULCE, con un sello detrás de otro. Elijas el que elijas, la frase de debajo aprueba los regalos.",
         },
         {
           q: "¿Qué año aparece en la lista?",
@@ -1948,7 +1948,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "¿Caben 100 razones por las que te amo en el frasco?",
+          q: "¿Cuántas razones caben en un frasco de razones por las que te quiero?",
           a: "Sí: caben de 3 a 100, de hasta 160 caracteres cada una. La etiqueta las cuenta por ti («100 razones por las que te quiero»), salvo que escribas la tuya.",
         },
         {
@@ -2058,11 +2058,11 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       faq: [
         {
           q: "¿Cuántos momentos caben en una línea del tiempo de pareja?",
-          a: "Entre 2 y 20, uno por foto. Cada foto tiene una pantalla para ella sola, con su rótulo, su pie y el camino dibujado hasta ahí.",
+          a: "Entre 2 y 20, uno por foto. Cada foto tiene una pantalla para ella sola, con su etiqueta, su pie y el camino dibujado hasta ahí.",
         },
         {
           q: "¿Hace falta recordar las fechas exactas?",
-          a: "No. Cada rótulo es texto libre de hasta 40 caracteres, así que valen «Verano de 2022» o «El primer piso», y uno vacío pone «Capítulo 3». Si tus rótulos llevan años, la portada enseña los años que abarca, por ejemplo 2022 → 2026.",
+          a: "No. Cada etiqueta es texto libre de hasta 40 caracteres, así que valen «Verano de 2022» o «El primer piso», y una vacía pone «Capítulo 3». Si tus etiquetas llevan años, la portada enseña los años que abarca, por ejemplo 2022 → 2026.",
         },
         {
           q: "¿Se puede cambiar la última frase?",
@@ -2310,7 +2310,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un aniversario en otoño",
             how: "Pon en la entrada para dos la fecha en que os conocisteis.",
-            borrow: { field: "fields.ticket", line: "Vale por dos · 12 octubre" },
+            borrow: { field: "fields.ticket", line: "Vale por dos · 12 de oct." },
           },
           {
             heading: "La primera semana de frío",
@@ -2789,7 +2789,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "San Valentín",
             how: "El billete admite una fecha o un lugar.",
-            borrow: { field: "fields.ticket", line: "Vale por uno · 14 febrero" },
+            borrow: { field: "fields.ticket", line: "Vale por uno · 14 de feb." },
           },
           {
             heading: "Su cumpleaños",
@@ -3095,7 +3095,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué poner en un collage de otoño contigo",
+        title: "Qué poner en un collage Otoño contigo",
         items: [
           {
             heading: "Un aniversario en otoño",
@@ -3184,7 +3184,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un aniversario",
             how: "Despídete bajo las flores como en tus mensajes, en 18 caracteres.",
-            borrow: { field: "fields.signoff", line: "te quiero, aún" },
+            borrow: { field: "fields.signoff", line: "te sigo queriendo" },
           },
           {
             heading: "San Valentín",
@@ -3515,7 +3515,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "A distancia",
             how: "Llaman, la puerta se abre y ahí está tu carta.",
-            borrow: { field: "message", line: "Ojalá estuvieras aquí para esconderme." },
+            borrow: { field: "message", line: "Ojalá estuvieras aquí para esconderme detrás de ti." },
           },
           {
             heading: "Para quien adora el terror",
@@ -3816,7 +3816,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un aniversario",
             how: "La frase a cero aparece con los fuegos.",
-            borrow: { field: "fields.zeroLine", line: "Tres años, desde ahora mismo." },
+            borrow: { field: "fields.zeroLine", line: "Tres años, justo ahora." },
           },
           {
             heading: "Hasta volver a veros",
@@ -4224,7 +4224,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.lines", line: "Tenía que habértelo dicho en marzo." },
           },
           {
-            heading: "Para una pronta mejoría",
+            heading: "Que te mejores",
             how: "Frases cortas. Pueden tocar para doblar si sujetar cuesta.",
             borrow: { field: "fields.lines", line: "Un pliegue al día. Nada más." },
           },
@@ -4300,12 +4300,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un cumple entre hermanos",
             how: "Usa lo que jamás dirías con cariño.",
-            borrow: { field: "fields.shouts", line: "más mayor que el wifi" },
+            borrow: { field: "fields.shouts", line: "más viejo que el wifi" },
           },
           {
             heading: "Un cumple que te pierdes",
             how: "Escribe bajo la segunda foto lo que dirías en persona, hasta 18 caracteres.",
-            borrow: { field: "fields.word", line: "ojalá estar ahí" },
+            borrow: { field: "fields.word", line: "quiero estar ahí" },
           },
           {
             heading: "Con un regalo escondido",
@@ -5237,7 +5237,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para los peques",
-            how: "Abre un fantasma, un gato o una calabaza y dice tu frase.",
+            how: "Abre la puerta un fantasma, un gato o una calabaza, y dice tu frase.",
             borrow: { field: "fields.doorLine", line: "uno por cabeza, sin empujar" },
           },
           {
@@ -5247,7 +5247,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Disfraces a juego",
-            how: "La posdata va en pergamino. Di qué has comprado para ti y para mí.",
+            how: "La posdata va en pergamino. Di qué has comprado para los dos.",
             borrow: { field: "surprise.text", line: "He comprado dos pares de colmillos. Los tuyos brillan." },
           },
           {
@@ -5475,7 +5475,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Acción de Gracias a distancia",
             how: "Decides quién se lleva la mitad grande. Dásela.",
-            borrow: { field: "fields.wish", line: "el año que viene, una mesa y una hora" },
+            borrow: { field: "fields.wish", line: "el año que viene, una mesa y un solo huso horario" },
           },
           {
             heading: "El primer Acción de Gracias",
