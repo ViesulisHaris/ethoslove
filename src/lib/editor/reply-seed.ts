@@ -69,6 +69,29 @@ export function readReplySeed(slug: string): ReplySeed | null {
 /** Sales that start from a reply are counted under this ref (scripts/revenue-by-ref.mjs). */
 export const REPLY_REF = "reply";
 
+/** The editor was opened as a reply: "Send one back" (`?ref=reply`, and `&reply=` when it is free). */
+export function opensAsReply(search: string): boolean {
+  const params = new URLSearchParams(search);
+  return params.get("ref")?.trim().toLowerCase() === REPLY_REF || params.has("reply");
+}
+
+/**
+ * The seed for an editor that has just opened, given its address. Only a reply gets the swapped
+ * names. Kept in the tab for a reload, a seed was put on the next gift of the same template made
+ * there for someone else ("or make one for someone else", a plain /create/<slug>), addressed back to
+ * the person who sent the first one. That editor throws its template's seed away instead.
+ */
+export function replySeedForEditor(slug: string, search: string): ReplySeed | null {
+  if (opensAsReply(search)) return readReplySeed(slug);
+  try {
+    const raw = window.sessionStorage.getItem(KEY);
+    if (raw && (JSON.parse(raw) as { slug?: unknown }).slug === slug) clearReplySeed();
+  } catch {
+    clearReplySeed();
+  }
+  return null;
+}
+
 /**
  * The editor link for "send one back". When the gift answered is a paid premium one, the gift page
  * hands over the token that makes the reply free (lib/commerce/free-reply.ts), and it rides on the

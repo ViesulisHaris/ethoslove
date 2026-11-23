@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clearReplySeed, readReplySeed, saveReplySeed } from "@/lib/editor/reply-seed";
+import { clearReplySeed, opensAsReply, readReplySeed, replySeedForEditor, saveReplySeed } from "@/lib/editor/reply-seed";
 
 function memoryStorage(): Storage {
   const map = new Map<string, string>();
@@ -50,8 +50,31 @@ describe("send one back", () => {
 
   it("is cleared by the editor on the reply's first change, and not before", () => {
     const shell = readFileSync("src/components/editor/editor-shell.tsx", "utf8");
-    expect(shell).toContain("remote ? null : readReplySeed(slug)");
+    expect(shell).toContain("remote ? null : replySeedForEditor(slug, window.location.search)");
     expect(shell).toContain("if (ready && dirty) clearReplySeed();");
+  });
+
+  it("gives the names only to an editor opened as a reply, and another editor of that template throws them away", () => {
+    expect(opensAsReply("?ref=reply")).toBe(true);
+    expect(opensAsReply("?ref=reply&reply=tok")).toBe(true);
+    expect(opensAsReply("?reply=tok")).toBe(true);
+    expect(opensAsReply("?ref=g")).toBe(false);
+    expect(opensAsReply("")).toBe(false);
+    saveReplySeed({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
+    expect(replySeedForEditor("the-letter", "?ref=reply")).toEqual({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
+    // Back on the gift, then "or make one for someone else" in the same tab: a gift for someone else
+    // used to open addressed to Marco.
+    expect(replySeedForEditor("the-letter", "?ref=g")).toBeNull();
+    expect(window.sessionStorage.getItem("ethos:reply")).toBeNull();
+    expect(replySeedForEditor("the-letter", "?ref=reply")).toBeNull();
+    // A plain editor of the same template does the same.
+    saveReplySeed({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
+    expect(replySeedForEditor("the-letter", "")).toBeNull();
+    expect(window.sessionStorage.getItem("ethos:reply")).toBeNull();
+    // Another template's editor leaves it for the reply.
+    saveReplySeed({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
+    expect(replySeedForEditor("bouquet", "?ref=watermark")).toBeNull();
+    expect(replySeedForEditor("the-letter", "?ref=reply")).toEqual({ slug: "the-letter", recipientName: "Marco", senderName: "Ana" });
   });
 
   it("carries the answered gift's own fields when there are some", () => {

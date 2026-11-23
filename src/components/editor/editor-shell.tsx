@@ -10,7 +10,7 @@ import type { ShownReaction } from "@/lib/proof/numbers";
 import { loadTemplate } from "@/templates/registry";
 import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
-import { clearReplySeed, readReplySeed } from "@/lib/editor/reply-seed";
+import { clearReplySeed, replySeedForEditor } from "@/lib/editor/reply-seed";
 import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
 import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
@@ -140,7 +140,8 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       const initial = blankGift(manifest, locale, m);
       // Arrived from "Send one back" on a gift: the names come already swapped. The seed is left in
       // place until this reply is first changed (below), so a reload before then still has them.
-      const reply = remote ? null : readReplySeed(slug);
+      // Only an editor opened as a reply takes it; any other editor of this template throws it away.
+      const reply = remote ? null : replySeedForEditor(slug, window.location.search);
       if (reply) {
         initial.recipientName = reply.recipientName;
         initial.senderName = reply.senderName;
