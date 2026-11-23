@@ -147,8 +147,17 @@ export function isProductId(v: string): v is ProductId {
   return Object.hasOwn(PRODUCTS, v);
 }
 
+/** One formatter per language and currency: building one is slow, and a page of cards prices sixty-one. */
+const amountFormats = new Map<string, Intl.NumberFormat>();
+
 export function formatAmount(minor: number, currency: Currency, locale = "en"): string {
-  return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: 2 }).format(minor / 100);
+  const key = `${locale}|${currency}`;
+  let format = amountFormats.get(key);
+  if (!format) {
+    format = new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: 2 });
+    amountFormats.set(key, format);
+  }
+  return format.format(minor / 100);
 }
 
 /**
