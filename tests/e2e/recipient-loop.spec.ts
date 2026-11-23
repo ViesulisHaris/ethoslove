@@ -287,8 +287,10 @@ test.describe("a gift's end screen, for whoever received it", () => {
     const opener = page.getByRole("button", { name: "Send Marco a reaction" });
     await opener.click();
     // A modal with a name, that Escape closes and that gives the focus back to what opened it.
-    const sheet = page.getByRole("dialog", { name: "Send Marco a reaction" });
+    // Named by its title; once sent, by "Sent to Marco." (the line that then heads it).
+    const sheet = page.getByRole("dialog");
     await expect(sheet).toBeVisible();
+    await expect(sheet).toHaveAccessibleName("Send Marco a reaction");
     await expect.poll(() => sheet.evaluate((el) => el.contains(document.activeElement))).toBe(true);
     await page.keyboard.press("Escape");
     await expect(sheet).toHaveCount(0);
@@ -315,11 +317,12 @@ test.describe("a gift's end screen, for whoever received it", () => {
     // Before it is sent there is nothing about replying.
     await expect(sheet.getByTestId("reaction-reply")).toHaveCount(0);
     await sendIt.click();
-    await expect(sheet.getByText("Sent to Marco.")).toBeVisible();
+    await expect(sheet.locator("p:not(.sr-only)", { hasText: "Sent to Marco." })).toBeVisible();
     // Said out loud, and the focus is on the next step (the Send button it was on is gone).
     await expect(page.getByRole("status").filter({ hasText: "Sent to Marco." })).toHaveCount(1);
     const next = sheet.getByTestId("reaction-reply");
     await expect(next).toBeFocused();
+    await expect(sheet).toHaveAccessibleName("Sent to Marco.");
     await expect(next).toHaveText("Send one back to Marco");
     // The one action there, besides closing the sheet.
     await expect(sheet.getByRole("button")).toHaveCount(2);
