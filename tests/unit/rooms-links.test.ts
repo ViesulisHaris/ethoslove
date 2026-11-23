@@ -3,8 +3,16 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
+import sitemap from "@/app/sitemap";
+import { HALFWAY_TOOL, HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
+import { pageUpdated, ROOMS_LIVE } from "@/content/page-dates";
+import { ART_IDS, artVariants } from "@/content/page-art";
+import { HALFWAY_ART, MATCH_ART, ROOMS_PLACEMENTS, ROOMS_THEME } from "@/content/rooms-art";
+import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
 import { TRIP_SEO } from "@/content/trip-seo";
-import { CITY_PAGES } from "@/lib/cities/cities";
+import { GAMES } from "@/lib/games/catalogue";
+import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
+import { LDR_GAMES } from "@/lib/ldr/games";
 import { halfwayBetween, halfwayCityName, isOwnTown } from "@/lib/ldr/halfway";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
@@ -233,5 +241,98 @@ describe("the ways on from a halfway city", () => {
     }
     expect(onDisk(es.giftPoster)).toBe(true);
     expect(onDisk(es.datesImage)).toBe(true);
+  });
+});
+
+/** Every string in a value, with where it is. */
+function strings(value: unknown, where: string): [string, string][] {
+  if (typeof value === "string") return [[where, value]];
+  if (Array.isArray(value)) return value.flatMap((v, i) => strings(v, `${where}[${i}]`));
+  if (value && typeof value === "object") return Object.entries(value).flatMap(([k, v]) => strings(v, `${where}.${k}`));
+  return [];
+}
+const words = (text: string) => text.split(/\s+/).filter(Boolean).length;
+const MESSAGES = { en, es } as const;
+
+describe("the rooms' pages", () => {
+  it("the flowers of these pages follow the art's rules", () => {
+    const KEYS = new Set(["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until", "top"]);
+    for (const p of ROOMS_PLACEMENTS) {
+      expect(ART_IDS as readonly string[]).toContain(p.art);
+      expect(p.art).not.toBe("lily-footer");
+      expect(Math.abs(p.rot)).toBeLessThanOrEqual(25);
+      for (const k of Object.keys(p)) expect(KEYS.has(k), k).toBe(true);
+      expect(artVariants(p.art).some((v) => v === "ivory" || v === "plain"), p.art).toBe(true);
+      if (p.art === "lily-stem-tall") expect(p.phone).not.toBe("only");
+    }
+    // The matcher is far below the first screen: nothing of it is fetched eagerly.
+    expect(MATCH_ART.some((p) => p.eager)).toBe(false);
+    expect(HALFWAY_ART.length).toBeGreaterThan(0);
+    const { flowers, ...rest } = ROOMS_THEME;
+    const { flowers: _default, ...base } = DEFAULT_PAGE_THEME;
+    expect(flowers).toBe("ivory");
+    expect(rest).toEqual(base);
+  });
+
+  it("the words fit the page", () => {
+    for (const l of LOCALES) {
+      const m = MESSAGES[l];
+      const short: [string, string][] = [
+        ["trips.match.line", m.trips.match.line.replace("{count}", "12")],
+        ["trips.match.fromHint", m.trips.match.fromHint],
+        ["HALFWAY_TOOL.line", HALFWAY_TOOL[l].line],
+        ["HALFWAY_TOOL.questionsLine", HALFWAY_TOOL[l].questionsLine],
+        ["ldr.play.title", m.ldr.play.title],
+        ["ldr.meet.tool", (m.ldr.meet as Record<string, string>).tool ?? ""],
+      ];
+      for (const [key, text] of short) expect(words(text), `${l} ${key}: ${text}`).toBeLessThanOrEqual(14);
+      const titles: [string, string][] = [
+        ["ldr.ways.gift.title", m.ldr.ways.gift.title],
+        ["ldr.ways.dates.in", m.ldr.ways.dates.in.replace("{city}", "Ho Chi Minh City")],
+        ["ldr.ways.dates.any", m.ldr.ways.dates.any],
+        ["ldr.ways.trip.any", m.ldr.ways.trip.any],
+        ...TRIPS.map((t) => [`trip ${t.id}`, t.title[l]] as [string, string]),
+      ];
+      for (const [key, text] of titles) expect(words(text), `${l} ${key}: ${text}`).toBeLessThanOrEqual(9);
+      for (const { q, a } of HALFWAY_TOOL[l].faq) expect(words(a), `${l} ${q}`).toBeLessThanOrEqual(180);
+      expect(m.ldr.ways.note.replace("{city}", "x".repeat(60)).length, `${l} ldr.ways.note`).toBeLessThanOrEqual(120);
+    }
+  });
+
+  it("nothing in the new words mentions Spain", () => {
+    const found: string[] = [];
+    for (const l of LOCALES) {
+      const m = MESSAGES[l] as Record<string, Record<string, unknown>>;
+      const sources: [string, unknown][] = [
+        ["trips.match", m.trips.match],
+        ["ldr.ways", m.ldr.ways],
+        ["ldr.play", m.ldr.play],
+        ["ldr.tool", m.ldr.tool],
+        ["lifecycle.dates", (m.lifecycle as Record<string, unknown>).dates],
+        ["TRIP_SEO", Object.fromEntries(Object.entries(TRIP_SEO).map(([id, v]) => [id, [v.title[l], v.description[l]]]))],
+        ["HALFWAY_TOOL", HALFWAY_TOOL[l]],
+      ];
+      for (const [name, value] of sources) for (const [where, text] of strings(value, `${l} ${name}`)) if (mentionsSpain(text)) found.push(`${where}: ${text}`);
+    }
+    expect(found).toEqual([]);
+  });
+
+  it("the sitemap lists the halfway finder in both languages, dated, and the rooms' dates belong to pages", () => {
+    const pages = sitemap();
+    for (const prefix of ["", "/es"]) {
+      const entry = pages.find((p) => p.url.endsWith(`${prefix}${HALFWAY_TOOL_PATH}`) && (prefix ? true : !p.url.includes("/es/")));
+      expect(entry, prefix + HALFWAY_TOOL_PATH).toBeDefined();
+      expect(entry?.lastModified).toBe(ROOMS_LIVE);
+    }
+    for (const path of ["/trips", "/trips/amalfi-coast", "/long-distance", HALFWAY_TOOL_PATH]) expect(pageUpdated(path), path).toBe(ROOMS_LIVE);
+    expect(ROOMS_LIVE <= new Date().toISOString().slice(0, 10)).toBe(true);
+  });
+
+  it("the games for a call are three, two of them from the games' own shelf", () => {
+    expect(LDR_GAMES.map((g) => g.href)).toEqual(["/games/draw", "/games/rather", "/games/today"]);
+    for (const g of LDR_GAMES.slice(0, 2)) {
+      const shelf = GAMES.find((x) => x.href === g.href)!;
+      expect([g.rank, g.suit, g.sticker]).toEqual([shelf.rank, shelf.suit, shelf.sticker]);
+    }
   });
 });

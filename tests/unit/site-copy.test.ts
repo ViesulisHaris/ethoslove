@@ -15,6 +15,7 @@ import { TOGETHER_GUIDE } from "@/content/together-guide";
 import { LOVE_QUIZ, QUESTIONS as LOVE_QUIZ_QUESTIONS } from "@/content/love-language-quiz";
 import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } from "@/content/date-kinds";
 import { TRIP_SEO } from "@/content/trip-seo";
+import { HALFWAY_TOOL } from "@/content/halfway-tool";
 import { fillerIn } from "./filler";
 
 type Locale = "en" | "es";
@@ -47,6 +48,7 @@ const SOURCES: Record<string, unknown> = {
   "dates by kind": { DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, CITY_KIND_COPY },
   "dates by kind, shared": DATE_KIND_UI,
   "trip pages in search": TRIP_SEO,
+  "halfway finder": HALFWAY_TOOL,
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),
 };
 

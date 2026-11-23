@@ -2424,13 +2424,24 @@
         "label": "Una cita allí",
         "in": "Ideas para una cita en {city}",
         "near": "Ideas para una cita cerca de {town}",
-        "any": "Ideas para una cita cerca de cualquiera de los dos"
+        "any": "Ideas de citas cerca de cualquiera de los dos"
       },
       "trip": {
         "label": "La próxima visita",
         "any": "Viajes para dos, planeados día a día"
       },
       "note": "A medio camino está {city}. ¿Nos vemos allí?"
+    },
+    "tool": {
+      "forYou": "{km} km para ti",
+      "forThem": "{km} km para la otra persona",
+      "share": "Envíaselo",
+      "copied": "Enlace copiado",
+      "shareText": "A medio camino entre los dos está {city}.",
+      "shareTextBare": "Mira dónde queda la mitad del camino.",
+      "manual": "Copia este enlace",
+      "same": "Es el mismo sitio dos veces.",
+      "noCity": "No hay ninguna gran ciudad entre los dos. La más cercana al punto medio es {city}."
     },
     "virtual": {
       "eyebrow": "Citas para dos pantallas",

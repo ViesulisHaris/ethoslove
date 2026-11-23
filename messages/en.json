@@ -2432,6 +2432,17 @@
       },
       "note": "Halfway is {city}. Meet me there?"
     },
+    "tool": {
+      "forYou": "{km} km for you",
+      "forThem": "{km} km for them",
+      "share": "Send them this",
+      "copied": "Link copied",
+      "shareText": "Halfway between us is {city}.",
+      "shareTextBare": "Here is where halfway is.",
+      "manual": "Copy this link",
+      "same": "That's the same place twice.",
+      "noCity": "No big city lies between you. The nearest to halfway is {city}."
+    },
     "virtual": {
       "eyebrow": "Dates for two screens",
       "title": "Something to do on the call.",
