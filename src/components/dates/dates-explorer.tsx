@@ -8,13 +8,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
-import { formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
+import { addDays, formatDay, fromYmd, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES, starterName } from "@/lib/dates/cities";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { datesUrls, EARLY_KEY, earlyScript, HERE_URL, takeEarly } from "@/lib/dates/early";
 import { distanceKm, isLatLng, snapSearch, type LatLng } from "@/lib/dates/geo";
-import { fillStops, fitsVibe, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
+import { fillStops, fitsVibe, forTheDay, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
 import { MAP_PAPER } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
@@ -23,10 +23,11 @@ import { matchPhotos, type Sight } from "@/lib/dates/photos";
 import { pairsWith, rankPlaces, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
-import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, type Plan, type PlanStop } from "@/lib/dates/plan";
+import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, stopOf, type Plan } from "@/lib/dates/plan";
 import { mergePlaces } from "@/lib/dates/tiles";
 import { MIN_UNUSUAL, UNUSUAL_SHELF, unusualIndex, unusualPicks } from "@/lib/dates/unusual";
 import { suggestTimes } from "@/lib/dates/timing";
+import { placeNow } from "@/lib/dates/tonight";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
 import { readSharedPlace } from "@/lib/share/links";
@@ -47,8 +48,11 @@ import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
 import { WhereBox, type Where } from "./where-box";
-
-const WHERE_KEY = "ethos.dates.where.v1";
+import { TonightForm, type TonightWhen } from "./tonight/tonight-form";
+import { TonightProblem } from "./tonight/tonight-island";
+import { TonightResult } from "./tonight/tonight-result";
+import { useTonight } from "./tonight/use-tonight";
+import { clipName, WHERE_KEY, writeStoredWhere } from "@/lib/dates/where-store";
 const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
 /** Moving the map further than this from the named place stops calling it by that name. */
@@ -79,10 +83,6 @@ const subscribeDesktop = (onChange: () => void) => {
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 };
-
-// A place with no name of its own is kept as one (`named: false`), so the plan calls it by its kind
-// in whichever language it is read in, not in the one it was added in (plan.ts stopName).
-const toStop = (place: Place, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}), ...(place.named ? {} : { named: false }) });
 
 /**
  * One set of cards, or the skeletons. On its way out it is lifted from the flow where it stands
@@ -120,6 +120,9 @@ export function DatesExplorer() {
   const isDesktop = useSyncExternalStore(subscribeDesktop, () => window.matchMedia(desktopQuery).matches, () => false);
 
   const [today] = useState<Ymd>(() => toYmd(new Date()));
+  // The clock the planner's "today" is read from: set when the page opens and again at every tap,
+  // so a tab left open past midnight speaks of the new day after it plans for it.
+  const [clockAt, setClockAt] = useState(() => Date.now());
   const [date, setDate] = useState<Ymd>(() => thisWeekend(toYmd(new Date())));
   const [where, setWhere] = useState<Where | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
@@ -271,14 +274,10 @@ export function DatesExplorer() {
       setSelectedId(null);
       setSkip([]);
       setNotice(null);
-      try {
-        // With whether it can be named: a town they picked comes back next time as "Date ideas in
-        // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
-        // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
-        window.localStorage.setItem(WHERE_KEY, JSON.stringify({ ...place, share: options.share ?? true }));
-      } catch {
-        // No storage: it just will not be remembered.
-      }
+      // With whether it can be named: a town they picked comes back next time as "Date ideas in
+      // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
+      // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
+      writeStoredWhere({ ...place, share: options.share ?? true });
       void search(place, snapped.radiusM);
     },
     [search],
@@ -293,7 +292,7 @@ export function DatesExplorer() {
       const lng = Number(params.get("lng"));
       const wantedDate = params.get("date");
       const wantedIdea = params.get("idea");
-      let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: (params.get("q") ?? "").slice(0, 80), share: true } : null;
+      let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: clipName(params.get("q") ?? ""), share: true } : null;
       // A town named without coordinates (/dates?q=Lisboa, typed or pasted into a bio) is looked up
       // the way the where box would. None by that name is said, not swapped for last time's town;
       // a lookup that couldn't be made falls through to the usual start.
@@ -308,7 +307,7 @@ export function DatesExplorer() {
         try {
           const saved = JSON.parse(window.localStorage.getItem(WHERE_KEY) ?? "null") as (Where & { share?: unknown }) | null;
           // Saved before the share flag was: private, as they all were then.
-          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: saved.name.slice(0, 80), share: saved.share === true };
+          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: clipName(saved.name), share: saved.share === true };
         } catch {
           // Unreadable: ask again.
         }
@@ -441,10 +440,47 @@ export function DatesExplorer() {
   }, [ratingKey, loadRatings]);
 
   const day = forecast?.days.find((d) => d.date === date);
+  // The day at the place being looked at, once its forecast says what its clock is; the browser's until then.
+  const placeToday = placeNow(forecast, clockAt).date;
+  const tonightKeyOf = (d: Ymd) => (where ? `${where.lat},${where.lng}|${d}` : "");
+  const tonight = useTonight({
+    dayOf: (when, placeDay) => (when === "tonight" ? placeDay : when === "tomorrow" ? addDays(placeDay, 1) : date),
+    load: () => (all.length > 0 ? { places: all, forecast } : null),
+    whereName: where?.name && shareable ? where.name : undefined,
+    keyOf: tonightKeyOf,
+    currentKey: tonightKeyOf(date),
+  });
+  // The page's own day is offered too, when it is neither today nor tomorrow ("on Sat 28 Nov").
+  const pageDayIsOther = date !== placeToday && date !== addDays(placeToday, 1);
+  // The planner speaks of the page's day: the day pill and the weather card above it say the same
+  // day, and choosing another in the planner moves them with it (the weather card used to say
+  // Saturday over a planner that said tonight).
+  const tonightWhen: TonightWhen = date === placeToday ? "tonight" : date === addDays(placeToday, 1) ? "tomorrow" : "day";
+  // The page's day as the sentence says it: "on Sat" within the week, as short as "tonight", so the
+  // sentence keeps the height the page kept for it ("on Saturday" wrapped it to a third line on a phone).
+  const plannerDay = date > placeToday && date <= addDays(placeToday, 6) ? (fromYmd(date)?.toLocaleDateString(locale === "es" ? "es-ES" : "en-GB", { weekday: "short" }).replace(/\.$/, "") ?? date) : formatDay(date, locale, "short");
+  const chooseWhen = (when: TonightWhen) => {
+    const nowMs = Date.now();
+    setClockAt(nowMs);
+    const nowToday = placeNow(forecast, nowMs).date;
+    if (when !== "day") setDate(when === "tonight" ? nowToday : addDays(nowToday, 1));
+    tonight.setWhen(when);
+  };
+  const planTonight = (when = tonightWhen) => {
+    // The page follows the planner: its day, its weather card and its ideas become the day planned for.
+    // Today is read at the tap, the way the planner reads it: a tab left open past midnight has a new
+    // one, and the sentence reads its "tonight" from the same clock (clockAt), not the page's opening.
+    const nowMs = Date.now();
+    setClockAt(nowMs);
+    const nowToday = placeNow(forecast, nowMs).date;
+    setDate(when === "tonight" ? nowToday : when === "tomorrow" ? addDays(nowToday, 1) : date);
+    void tonight.plan(when);
+  };
   const ideas = useMemo(() => ideasFor(day, all, vibe ?? undefined), [day, all, vibe]);
   const doable = useMemo(() => (status === "ready" || all.length > 0 ? new Set(ideas.filter((i) => isDoable(i, all)).map((i) => i.id)) : null), [ideas, all, status]);
   const idea = ideaById(ideaId ?? undefined);
-  const stops = useMemo(() => (idea ? fillStops(idea, all, skip) : []), [idea, all, skip]);
+  // On a wet day an idea with rain stops is filled with them, as the planner does (the stars under a dome).
+  const stops = useMemo(() => (idea ? fillStops(forTheDay(idea, day), all, skip) : []), [idea, day, all, skip]);
   const times = useMemo(() => (idea ? suggestTimes(idea, day) : []), [idea, day]);
   const ranked = useMemo(() => rankPlaces(all, ratings, sort), [all, ratings, sort]);
   // A vibe chooses places as well as ideas: the kinds of place the mood is made of (ideas.ts
@@ -593,7 +629,7 @@ export function DatesExplorer() {
     return () => cancelAnimationFrame(frame);
   }, [linkedPlace, where, ranked, open]);
 
-  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
+  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: clipName(where.name) } : {}) }), [date, where, shareable]);
   const sayAboutPlan = useCallback((text: string) => setPlanNotice({ text, at: Date.now() }), []);
   // A plan saved to their account is saved again from here as stops go in and out (components/saved-dates).
   const syncNoticeText = useSyncNoticeText();
@@ -617,7 +653,7 @@ export function DatesExplorer() {
       const fresh = startsOver(place);
       if (fresh === null) return;
       if (!fresh && plan.stops.length >= MAX_STOPS) return sayAboutPlan(t("plan.full", { max: MAX_STOPS }));
-      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, toStop(place))));
+      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, stopOf(place))));
     },
     [plan.stops.length, planIds, startsOver, sayAboutPlan, stamp, t, updatePlan],
   );
@@ -625,7 +661,7 @@ export function DatesExplorer() {
   // didn't, nothing was said, and the button went on offering to add it.
   const addIdea = useCallback(() => {
     if (!idea) return;
-    const picked = stops.flatMap((s, i) => (s.place ? [toStop(s.place, times[i])] : []));
+    const picked = stops.flatMap((s, i) => (s.place ? [stopOf(s.place, times[i])] : []));
     if (picked.length === 0) return;
     const fresh = startsOver(picked[0]);
     if (fresh === null) return;
@@ -727,7 +763,8 @@ export function DatesExplorer() {
         <div>
           <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
           <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
-          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{t("empty.sub")}</p>
+          {/* Sent here by an idea's "Plan it near you": it is named, so the visitor knows it is carried. */}
+          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{idea ? t("empty.subIdea", { idea: idea.title[locale] }) : t("empty.sub")}</p>
           <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
           {notice || townMissing ? (
             <p role="status" className="mt-3 text-sm text-destructive">
@@ -905,6 +942,46 @@ export function DatesExplorer() {
           )}
         </div>
 
+        {/* One step: the mood, the day, the length and the budget in, one finished plan out (components/dates/tonight). */}
+        {status === "ready" && all.length === 0 ? null : (
+          <section aria-labelledby="tonight-title" className="mt-6" data-tonight>
+            <h2 id="tonight-title" className="text-page-label text-page-body">
+              {t("tonight.label")}
+            </h2>
+            <div className="mt-1">
+              <TonightForm
+                choice={tonight.choice}
+                when={tonightWhen}
+                whens={[
+                  { value: "tonight", label: t("tonight.when.tonight") },
+                  { value: "tomorrow", label: t("tonight.when.tomorrow") },
+                  ...(pageDayIsOther ? [{ value: "day" as const, label: t("tonight.when.day", { day: plannerDay }) }] : []),
+                ]}
+                busy={tonight.busy}
+                waiting={all.length === 0 ? t("tonight.finding") : undefined}
+                onChoice={tonight.setChoice}
+                onWhen={chooseWhen}
+                onPlan={() => planTonight()}
+              />
+            </div>
+            {/* The card is not in the live region: its heading takes focus, which already reads it out once. */}
+            {tonight.result ? <TonightResult {...tonight.result} confirming={tonight.confirming} onReplace={tonight.replace} onKeep={tonight.keep} locale={locale} onOpen={tonight.open} onAnother={tonight.another} /> : null}
+            <div role="status" aria-live="polite">
+              {!tonight.result && tonight.problem ? (
+                <TonightProblem
+                  problem={tonight.problem}
+                  offerTomorrow={tonight.problemWhen === "tonight"}
+                  onRetry={() => planTonight()}
+                  onTomorrow={() => {
+                    tonight.setWhen("tomorrow");
+                    planTonight("tomorrow");
+                  }}
+                />
+              ) : null}
+            </div>
+          </section>
+        )}
+
         {/* ideas */}
         <div className="mt-9">
           <IdeaRail
@@ -941,7 +1018,7 @@ export function DatesExplorer() {
           <div ref={ideaBox} className="scroll-mt-[calc(var(--header-h)+12px)]">
             <IdeaPanel
               key={idea.id}
-              idea={idea}
+              idea={forTheDay(idea, day)}
               stops={stops}
               times={times}
               inPlan={ideaInPlan}
@@ -1229,6 +1306,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
         </div>
         <div className="mt-4 h-[72px] animate-pulse rounded-[20px] bg-white/70" aria-hidden="true" />
+        <div className="mt-6 h-[11.75rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[10.75rem]" aria-hidden="true" />
         <div className="mt-9">
           <IdeaRail
             heading={

@@ -86,6 +86,16 @@ export type FunnelEvent =
   | "saved_date_saved"
   | "saved_date_upsell"
   | "maps_opened"
+  // Dates in one step (components/dates/tonight): a plan asked for (the mood, the budget ceiling and whether
+  // it was for tonight, tomorrow or another day: never where), and the next one asked for. Then the plan
+  // page: a plan sent (by the share sheet or as a copied link), a plan opened from somebody's link, and
+  // that plan kept. And a page of one kind of date seen (which kind). No ids, no places, no coordinates.
+  | "tonight_planned"
+  | "tonight_another"
+  | "plan_shared"
+  | "shared_plan_opened"
+  | "shared_plan_kept"
+  | "date_kind_view"
   // "Keep this gift": the end screen's tap (the template), and the keep page sent (how many reminders were asked for). No ids, no addresses.
   | "keep_tapped"
   | "keep_requested"

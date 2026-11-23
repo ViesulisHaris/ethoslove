@@ -3,9 +3,8 @@
 
 import { Check, Plus, Shuffle, Sparkles, X } from "lucide-react";
 import { motion } from "motion/react";
-import { ideaImage } from "@/lib/dates/art";
 import { distanceKm, formatDistance, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
-import type { DateIdea } from "@/lib/dates/ideas";
+import { ideaPicture, type DateIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { GroupIcon } from "./group-icon";
@@ -41,7 +40,7 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
       className="relative overflow-hidden rounded-[26px] bg-card shadow-lift ring-1 ring-forest/5"
     >
       <div className="relative">
-        <img src={ideaImage(idea.id)} alt="" width={960} height={720} decoding="async" className="aspect-[16/8] w-full object-cover" />
+        <img src={ideaPicture(idea)} alt="" width={960} height={720} decoding="async" className="aspect-[16/8] w-full object-cover" />
         <span aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(36,10,24,0)_30%,rgba(36,10,24,0.78)_100%)]" />
         <h3 className="absolute inset-x-5 bottom-4 font-display text-[28px] leading-[1.04] text-white [text-shadow:0_1px_12px_rgba(30,5,18,0.55)] sm:inset-x-6">{idea.title[locale]}</h3>
         <button type="button" onClick={onClose} aria-label={labels.close} className="absolute top-3 right-3 grid size-10 place-items-center rounded-full bg-white/90 text-forest shadow-soft backdrop-blur hover:bg-white">

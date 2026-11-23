@@ -108,7 +108,8 @@ const nextConfig: NextConfig = {
     // names carry no version, and a redrawn picture goes out under the same one.
     // Files only: `/dates/:path*` would also match the city pages /dates/<city>, and `/trips/:path*` the trips.
     {
-      source: "/dates/:dir(ideas|hero|kinds)/:file",
+      // Files only, by their extension: `/dates/ideas/:file` also matched the page /dates/ideas/first-date.
+      source: "/dates/:dir(ideas|hero|kinds)/:file([^/]+\\.webp)",
       headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=31536000" }],
     },
     {

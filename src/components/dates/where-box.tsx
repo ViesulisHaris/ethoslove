@@ -125,7 +125,7 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
       }}
     >
-      <div className={cn("flex items-center gap-2 rounded-full border border-forest/15 bg-white pr-1.5 pl-4 shadow-soft transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]", size === "lg" ? "h-14" : "h-12")}>
+      <div className={cn("flex items-center gap-2 rounded-full border border-forest/15 bg-white pr-1.5 pl-4 shadow-soft transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)] has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-forest", size === "lg" ? "h-14" : "h-12")}>
         <MapPin aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
         <input
           type="text"

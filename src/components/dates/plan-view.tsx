@@ -19,6 +19,7 @@ import { rememberSaveAfterSignIn, writeLink } from "@/lib/saved-dates/link";
 import type { SyncNotice } from "@/lib/saved-dates/sync";
 import type { UpsellReason } from "@/lib/saved-dates/types";
 import { tiqetsSearch } from "@/lib/trips/partners";
+import { track } from "@/lib/analytics/track";
 import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { gatherPhotos } from "@/components/gifts/unwrap-photos";
 import { Cutout } from "@/components/marketing/home/cutouts";
@@ -103,6 +104,14 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const readOnly = opened.state === "readOnly" ? opened.saved : null;
   const readOnlyPlan = useMemo(() => (readOnly ? readPlan(readOnly.data) : null), [readOnly]);
   const kept = keptHash === hash;
+  // Counted once per link, and never a link that does not hold a plan. A ref, not state: React's
+  // development double-run of effects must not count it twice.
+  const countedHash = useRef<string | null>(null);
+  useEffect(() => {
+    if (!shared || countedHash.current === hash) return;
+    countedHash.current = hash;
+    track("shared_plan_opened");
+  }, [shared, hash]);
   const broken = hash.startsWith("#p=") && !shared;
   const plan: Plan = readOnlyPlan ?? shared ?? own;
   const editable = !shared && !readOnlyPlan;
@@ -164,6 +173,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(link());
+      track("plan_shared", { how: "copy" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     } catch {
@@ -174,6 +184,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     if (!navigator.share) return copy();
     try {
       await navigator.share({ title: t("shareTitle"), text: plan.to ? t("shareTextTo", { name: plan.to }) : t("shareText"), url: link() });
+      track("plan_shared", { how: "share" });
     } catch {
       // Closed the share sheet: nothing to do.
     }
@@ -239,7 +250,8 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   }
 
   return (
-    <section className="container-x grid gap-8 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
+    // A place name can be one long word (Llanfairpwllgwyngyll…): it wraps rather than widening the page.
+    <section className="container-x grid gap-8 py-10 [overflow-wrap:anywhere] sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
       <article className="relative rounded-[32px] bg-card p-6 shadow-lift ring-1 ring-forest/5 sm:p-10">
         <Cutout id="bow-gingham" className="absolute -top-7 right-6 w-20 rotate-12 drop-shadow-[0_10px_16px_rgba(120,50,70,0.25)] sm:w-24" />
         {readOnly ? (
@@ -426,6 +438,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                   writeLink(null);
                   updateOwn(() => ({ ...EMPTY_PLAN, ...plan }));
                   setKeptHash(hash);
+                  track("shared_plan_kept");
                   // Kept, it is theirs: drop the link's copy from the address, so the page shows
                   // it as their own to edit, and a reload does not offer to keep it again.
                   // replaceState fires no hashchange, so the page is told by hand.
