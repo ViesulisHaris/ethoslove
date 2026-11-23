@@ -75,7 +75,7 @@ export default async function TodayPage({ params }: Props) {
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="today-title">
           <ArtLayer items={TODAY_ART} flowers={TODAY_FLOWERS} />
-          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-20")}>
+          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-6")}>
             <Intro level={1} id="today-title" label={t("label")} heading={t("h1")} line={t("line")} />
             <div className="min-w-0 lg:pt-7">
               <TodayQuestion day={day} />
