@@ -407,6 +407,32 @@ test.describe("a stepped gift's end on a desktop", () => {
   }
 });
 
+test.describe("the add-to-home-screen tip and the reaction sheet", () => {
+  // iOS Safari is the only browser the tip comes in (it reads the user agent), and it comes five
+  // seconds after the end: about when a recipient opens the reaction sheet. In WebKit it drew
+  // undimmed beside the sheet, its close button still under a finger (loop-N1-2).
+  test.skip(({ isMobile }) => !isMobile, "the phone project's");
+  test.use({
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+  });
+  test.beforeEach(async ({ request }) => needGiftPreview(request));
+  test.setTimeout(240_000);
+
+  test("stands down while the sheet is open, and is back once it closes", async ({ page }) => {
+    expect(await playToEnd(page, { template: "the-letter" }), "The Letter plays to its end").toBe(true);
+    const tip = page.getByText("Save it to your phone", { exact: false });
+    await expect(tip).toBeVisible({ timeout: 15_000 });
+    await bring(page, '[data-testid="make-for-someone-else"]');
+    await page.getByRole("button", { name: "Send Marco a reaction" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(tip).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Close" })).toHaveCount(1);
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(tip).toBeVisible();
+  });
+});
+
 test.describe("a gift's address stays with the gift", () => {
   test("a gift page and its keep page send only the site's origin as a referrer; other pages keep the site's policy", async ({ playwright, baseURL }) => {
     // Cold pages compile on first request in development.

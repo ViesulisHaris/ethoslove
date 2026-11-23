@@ -20,8 +20,15 @@ const S = {
 export const TIP_AFTER_MS = 5000;
 export const TIP_FOR_MS = 12000;
 
-/** iOS Safari only — the one browser with no install prompt of its own. */
-export function HomeScreenTip({ locale, onReplay }: { locale: "en" | "es"; onReplay?: () => void }) {
+/**
+ * iOS Safari only — the one browser with no install prompt of its own.
+ *
+ * `held` while something modal is over the gift (the reaction sheet): the tip comes about when a
+ * recipient opens that sheet, and in WebKit it drew undimmed beside the sheet with its close button
+ * still under a finger. It stands down while held, and comes back when the sheet closes if its time
+ * is not up.
+ */
+export function HomeScreenTip({ locale, onReplay, held = false }: { locale: "en" | "es"; onReplay?: () => void; held?: boolean }) {
   const [open, setOpen] = useState(false);
   void onReplay;
   useEffect(() => {
@@ -36,7 +43,7 @@ export function HomeScreenTip({ locale, onReplay }: { locale: "en" | "es"; onRep
   }, []);
   return (
     <AnimatePresence>
-      {open ? (
+      {open && !held ? (
         // At the top, left of the sound button: at the bottom it sat over the end screen's buttons on
         // the templates that end at the foot of the screen.
         <motion.div initial={{ y: -60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -60, opacity: 0 }} className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-16 left-4 z-[75] flex items-center gap-3 rounded-2xl bg-white/95 p-3 text-sm text-ink shadow-lift backdrop-blur">

@@ -178,7 +178,7 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
       ) : null}
       {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} /> : null}
       <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} onSendOneBack={() => sendOneBack("reaction")} sendingBack={leaving} />
-      {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} /> : null}
+      {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} held={reactOpen} /> : null}
     </div>
     </div>
   );
