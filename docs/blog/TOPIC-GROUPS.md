@@ -44,7 +44,8 @@ with a strong group; hundreds means links first.
   deep questions to ask your boyfriend 4,400 · truth or dare questions for couples 4,400 · funny
   questions to ask your boyfriend 3,600 · deep questions to ask your girlfriend 2,900 · 21 questions
   for couples 1,900, KD 1 · flirty questions to ask your boyfriend 1,900 · funny questions to ask your
-  girlfriend 1,900 · this or that questions for couples 1,600 · date night questions 1,300 · questions
+  girlfriend 1,900 · this or that questions for couples 1,600 (taken by the game's own page, /games/this-or-that,
+  23 Nov 2026: not a post) · date night questions 1,300 · questions
   to ask your husband 1,000 · questions to ask your wife 720.
 
 ## 2. Love languages

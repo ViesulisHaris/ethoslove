@@ -46,7 +46,10 @@ test.describe("the packs shelf", () => {
     await expect(far).toContainText("€2.99", { timeout: 15_000 });
     await far.click();
     await page.getByRole("button", { name: "Get it for €2.99" }).click();
-    await expect.poll(() => asked).toEqual({ product: "pack", packId: "distance", returnTo: "/games/deck?pack=distance", locale: "en", currency: "eur" });
+    // The pack, where to come back to, the language and the currency; the checkout also adds where the
+    // buyer came from (ref, source: purchase attribution, 14 Nov). No amount ever travels.
+    await expect.poll(() => asked).toMatchObject({ product: "pack", packId: "distance", returnTo: "/games/deck?pack=distance", locale: "en", currency: "eur" });
+    expect(asked).not.toHaveProperty("amount");
     await expect(page.getByText("Couldn't open checkout. Please try again.")).toBeVisible();
   });
 
@@ -84,14 +87,15 @@ test.describe("the packs shelf", () => {
 });
 
 test.describe("the end of every game", () => {
-  test("question cards: the last card leads to a gift or another game", async ({ page }) => {
+  test("question cards: the last card leads to a gift and to two named games", async ({ page }) => {
     await page.goto("/games/deck");
     const deal = page.getByRole("button", { name: /^Card 1 of 12/ });
     await expect(deal).toBeVisible();
     for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
     const end = page.getByRole("navigation", { name: "What next" });
     await expect(end.getByRole("link", { name: /Make them a gift/ })).toHaveAttribute("href", "/templates?ref=game-end");
-    await expect(end.getByRole("link", { name: /Play another game/ })).toHaveAttribute("href", "/games#pick");
+    await expect(end.getByRole("link", { name: /Truth or dare/ })).toHaveAttribute("href", "/games/dare");
+    await expect(end.getByRole("link", { name: /How well do you know me/ })).toHaveAttribute("href", "/games/know");
   });
 
   test("truth or dare ends when they say so", async ({ page }) => {

@@ -268,8 +268,16 @@
 /* ------------------------------------------------------------------ */
 /* Utilities                                                           */
 /* ------------------------------------------------------------------ */
+/* The layout is viewport-fit=cover: on a phone on its side the notch takes the left or right edge,
+   so the gutter is never less than the screen's own safe inset there. */
 @utility container-x {
-  @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  @apply mx-auto w-full max-w-7xl;
+  --gutter-x: 1.25rem;
+  padding-left: max(var(--gutter-x), env(safe-area-inset-left));
+  padding-right: max(var(--gutter-x), env(safe-area-inset-right));
+  @variant sm {
+    --gutter-x: 2rem;
+  }
 }
 @utility container-narrow {
   @apply mx-auto w-full max-w-3xl px-5 sm:px-8;
@@ -1453,6 +1461,13 @@ body:has([data-page-theme]) .site-header .btn-rose {
   animation: deal-in 0.55s var(--ease-out-quint) backwards;
 }
 
+/* Today's question still loading a second after it was drawn: its answer cards dim (today-question.tsx). */
+@keyframes today-wait {
+  to {
+    opacity: 0.55;
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Sections that fade up into view (components/motion/reveal-root).    */
 /* Armed only once the observer has run, so nothing is ever hidden     */
@@ -1501,6 +1516,10 @@ body:has([data-page-theme]) .site-header .btn-rose {
    call to action, the tour, the consent strip, links back to the site, and anything that would sell
    outside the App Store. Nothing changes for a browser, which never has the attribute. */
 html[data-app] [data-app-hide] {
+  display: none !important;
+}
+/* And the other way round: something drawn only inside the app, where a web link would not land. */
+html:not([data-app]) [data-app-only] {
   display: none !important;
 }
 /* The floating header's room at the top of a page (the marketing layout's --header-h), gone with it. */

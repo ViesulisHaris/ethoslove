@@ -508,7 +508,7 @@ test.describe("games on one phone", () => {
     await page.getByLabel("Their name").fill("Marco");
     await page.getByRole("button", { name: "Start" }).click();
     await page.getByRole("button", { name: "Spin" }).click();
-    await expect(page.getByText(/^(Maya|Marco) (cooks tonight|washes up|picks the film|makes the tea|gets up first tomorrow|books the next date|takes the bins out|chooses the music)\.$/)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/^(Maya|Marco) (cooks tonight|washes up|picks the film|makes the coffee|gets up first tomorrow|books the next date|takes out the trash|chooses the music)\.$/)).toBeVisible({ timeout: 10_000 });
     await page.goto("/games/dare");
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
@@ -587,6 +587,9 @@ test.describe("games on one phone", () => {
 
   test("draw it, guess it: the phone goes over, the word stays private, and a finger leaves ink", async ({ page }) => {
     await page.goto("/games/draw");
+    // The page's list of every word is there to read before a game starts.
+    const wordList = page.locator("section[aria-labelledby='draw-words']");
+    await expect(wordList).toBeVisible();
     await page.getByRole("button", { name: /^One phone/ }).click();
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
@@ -600,7 +603,9 @@ test.describe("games on one phone", () => {
     await page.getByRole("button", { name: "Got it, hide it" }).click();
     const board = page.getByRole("img", { name: "Draw here with your finger" });
     await expect(board).toBeVisible();
-    await expect(page.getByText(word, { exact: true })).toHaveCount(0);
+    // Nowhere on screen, the page's word list under the board included: it steps away while a word is drawn.
+    await expect(page.getByText(word, { exact: true }).filter({ visible: true })).toHaveCount(0);
+    await expect(wordList).toBeHidden();
 
     const ink = () => board.evaluate((el) => {
       const canvas = el as HTMLCanvasElement;

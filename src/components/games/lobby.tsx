@@ -13,7 +13,7 @@ import type { useRoom } from "./use-room";
 
 export type { Entry, Mode, Session };
 
-const NAMES_KEY = "ethos.games.names";
+export const NAMES_KEY = "ethos.games.names";
 /** How long a guest waits for the room's maker before being told the room may be gone. */
 const NO_HOST_MS = 8000;
 const input = "h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none placeholder:text-forest/40 focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]";

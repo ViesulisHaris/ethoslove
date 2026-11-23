@@ -155,7 +155,7 @@ function Board({ names, onChangePlayers }: { names: [string, string]; onChangePl
               {tl("change")}
             </button>
           </div>
-          <GameEnd />
+          <GameEnd game="memory" />
         </>
       ) : (
         <>

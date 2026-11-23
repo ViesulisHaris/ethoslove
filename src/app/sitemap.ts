@@ -14,6 +14,7 @@ import { GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
+import { GAMES } from "@/lib/games/catalogue";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
 import { getManifest, listManifests } from "@/templates/manifests";
@@ -60,7 +61,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: TOGETHER_PATH, priority: 0.7, changeFrequency: "monthly" },
     { path: LOVE_QUIZ_PATH, priority: 0.8, changeFrequency: "monthly" },
     { path: "/games", priority: 0.7, changeFrequency: "monthly" },
-    ...["know", "rather", "draw", "memory", "deck", "dare", "roulette"].map((g): Page => ({ path: `/games/${g}`, priority: 0.6, changeFrequency: "monthly" })),
+    { path: "/games/today", priority: 0.7, changeFrequency: "daily" },
+    ...GAMES.map((g): Page => ({ path: g.href, priority: 0.6, changeFrequency: "monthly" })),
     { path: "/templates", priority: 0.9, changeFrequency: "weekly" },
     { path: "/occasions", priority: 0.8, changeFrequency: "monthly" },
     { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },

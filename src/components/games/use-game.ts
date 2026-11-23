@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { GameKey } from "@/lib/games/catalogue";
 import type { Entry, Session } from "@/lib/games/room";
 import { forgetGame, readSaved, removeSaved, resumes, reviveEntry, reviveSession, savedKey, sessionToSave, tabStorage, writeSaved } from "@/lib/games/saved";
+import { track } from "@/lib/analytics/track";
 import { useRoom } from "./use-room";
 
 /** The same address without its room code, so a reload (or the lobby) doesn't walk back into a room that's over. */
@@ -55,6 +56,7 @@ export function useGame(game: GameKey, { twoPhones = true }: { twoPhones?: boole
 
   const enter = useCallback(
     (next: Entry | null) => {
+      if (next) track(next.host ? "room_made" : "room_joined", { game });
       setEntry(next);
       const storage = tabStorage();
       if (next) writeSaved(storage, savedKey(game, "entry"), next);
@@ -65,6 +67,8 @@ export function useGame(game: GameKey, { twoPhones = true }: { twoPhones?: boole
 
   const start = useCallback(
     (next: Session) => {
+      // Called by a tap (or, for a guest, by the host's start arriving); a game back from a reload is set from the tab and not counted again.
+      track("game_started", { game, phones: next.mode === "two" ? 2 : 1 });
       setClosed(false);
       setSession(next);
       writeSaved(tabStorage(), savedKey(game, "session"), sessionToSave(next));

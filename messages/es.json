@@ -2343,7 +2343,7 @@
       },
       "games": {
         "title": "Juegos",
-        "blurb": "Siete juegos de cartas para dos.",
+        "blurb": "Ocho juegos de cartas para dos.",
         "cta": "Jugar"
       }
     },
@@ -2367,7 +2367,7 @@
       "cityB": "Londres"
     },
     "games": {
-      "eyebrow": "Juegos · siete para jugar ya",
+      "eyebrow": "Juegos · ocho para jugar ya",
       "title": "Jugaos quién friega los platos.",
       "blurb": "Juegos de cartas para dos personas que se gustan. Sin descargas ni cuentas.",
       "cta": "Reparte"
@@ -2586,8 +2586,8 @@
   },
   "games": {
     "meta": {
-      "title": "Juegos para parejas online: siete juegos gratis para dos",
-      "description": "Juegos para parejas online y gratis: ¿Cuánto me conoces?, ¿Qué prefieres?, verdad o reto, cartas de preguntas, Memory con vuestras fotos y más. Sin descargas."
+      "title": "Juegos para parejas online: ocho juegos gratis para dos",
+      "description": "Juegos para parejas online y gratis: ¿Qué prefieres?, Esto o aquello, ¿Cuánto me conoces?, verdad o reto, Memory con vuestras fotos y más. Sin descargas."
     },
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
@@ -2715,6 +2715,88 @@
       "listTitle": "{count} preguntas de ¿qué prefieres? para parejas",
       "listIntro": "Todas las preguntas de la baraja gratis, desde las fáciles para el sofá hasta las que empiezan una discusión digna de captura. Jugadlas arriba en uno o dos móviles, o leedlas en voz alta en una cita."
     },
+    "today": {
+      "label": "Pregunta del día",
+      "h1": "¿Qué prefieres? La pregunta de hoy",
+      "line": "Hoy es la misma para todo el mundo. Descubre qué elegiría tu pareja.",
+      "h1Old": "¿Qué prefieres? La pregunta de ese día",
+      "lineOld": "Ese día fue la misma para todo el mundo. Descubre qué elegiría tu pareja.",
+      "seoTitle": "¿Qué prefieres? La pregunta del día para parejas",
+      "seoDescription": "Un ¿qué prefieres? nuevo cada día, el mismo para todo el mundo. Tu pareja elige antes de ver tu respuesta y luego salen las dos juntas. Gratis y sin registro.",
+      "daily": "Una nueva cada día",
+      "broken": "Ese enlace no llegó entero, así que aquí tienes la pregunta de hoy.",
+      "from": "De {name}",
+      "fromOn": "De {name}, {date}",
+      "on": "La pregunta del {date}",
+      "both": "Las dos respuestas",
+      "bothOn": "Las dos respuestas, {date}",
+      "invited": "{name} ya ha respondido. ¿Tú qué eliges?",
+      "prompt": "¿Con cuál te quedas?",
+      "or": "o",
+      "change": "¿Has cambiado de idea? Toca la otra.",
+      "resend": "Has cambiado de respuesta: vuelve a enviar el enlace para que le llegue la nueva.",
+      "nameLabel": "Tu nombre",
+      "send": "Envíasela",
+      "copy": "Copiar el enlace",
+      "copyAgain": "Copiar el enlace otra vez",
+      "copied": "Enlace copiado. Pégalo en vuestro chat.",
+      "copyFallback": "Copia este enlace:",
+      "sent": "Enviada. Elegirá sin ver tu respuesta y luego podrá mandarte la suya.",
+      "sendBack": "Devuélvele la tuya",
+      "sentBack": "Enviada. {name} verá las dos respuestas.",
+      "own": "Es el enlace que enviaste. Elegirá sin ver tu respuesta.",
+      "match": "Habéis elegido lo mismo. Ahora decid por qué, a ver si también coinciden los motivos.",
+      "clash": "Cada cual por su lado. Una frase por cabeza para convencer a la otra persona.",
+      "you": "Tú",
+      "answers": "Las dos respuestas",
+      "wholeGame": "Jugar la partida entera",
+      "todays": "Ver la pregunta de hoy",
+      "shareTitle": "El ¿qué prefieres? de hoy",
+      "shareText": "{name} ya ha respondido al ¿qué prefieres? de hoy. ¿Tú qué eliges?",
+      "shareTextAnon": "Ya he respondido al ¿qué prefieres? de hoy. ¿Tú qué eliges?",
+      "shareBackText": "{name} también ha respondido. Ábrelo y mira las dos respuestas.",
+      "shareBackTextAnon": "Yo también he respondido. Ábrelo y mira las dos respuestas.",
+      "how": {
+        "label": "Cómo funciona",
+        "heading": "Una pregunta, dos móviles",
+        "line": "Tu nombre y tu respuesta van en el enlace, nunca a nuestro servidor.",
+        "steps": {
+          "pick": "Toca la opción que prefieres",
+          "send": "Mándale el enlace",
+          "see": "Elige sin ver la tuya y luego salen las dos"
+        }
+      },
+      "more": {
+        "label": "La partida entera",
+        "heading": "{count} preguntas como esta",
+        "line": "Diez seguidas, en un móvil que os pasáis o en dos.",
+        "play": "Jugar a ¿qué prefieres?",
+        "all": "Todos los juegos",
+        "faq": "Preguntas"
+      }
+    },
+    "thisthat": {
+      "title": "¿Esto o aquello?",
+      "blurb": "Diez parejas rápidas. Elegís en secreto y luego veis en cuántas coincidís. En un móvil o en dos.",
+      "prompt": "¿Esto o aquello?",
+      "sofar": "Coincidís en {same} de {total} por ahora",
+      "reveal": {
+        "match": "Lo mismo.",
+        "clash": "Cada cual lo suyo."
+      },
+      "end": {
+        "eyebrow": "Diez parejas después",
+        "twins": "Podríais pedir por la otra persona sin preguntar.",
+        "balanced": "Lo justo en común y lo justo para discutir.",
+        "opposites": "Polos opuestos. Alguien tiene que darle interés.",
+        "sub": "Habéis coincidido en {same} de {total}. Preguntad por las demás.",
+        "again": "Jugar otra vez"
+      },
+      "seoTitle": "Preguntas de esto o aquello para parejas: 120 para jugar",
+      "seoDescription": "120 preguntas de esto o aquello para parejas: elegís en secreto en uno o dos móviles y veis en cuántas coincidís. Gratis, sin app y sin registro.",
+      "listTitle": "{count} preguntas de esto o aquello para parejas",
+      "listIntro": "Todas las parejas del juego, para jugarlas arriba o leerlas en voz alta. Contad hasta tres y responded a la vez."
+    },
     "roulette": {
       "title": "La ruleta de los platos",
       "blurb": "Una ruleta con vuestros nombres. Cada giro decide una tarea. Lo que diga la ruleta va a misa.",
@@ -2734,7 +2816,7 @@
     },
     "dare": {
       "title": "Verdad o reto, versión suave",
-      "blurb": "Nada de lo que arrepentirse por la mañana. Sobre todo piropos y bailar mal. Un móvil, por turnos.",
+      "blurb": "Discursos, imitaciones, un baile lento. Nada que no pudierais hacer con los vecinos en casa. Un móvil, por turnos.",
       "turn": "Turno de {name}",
       "pick": "{name}, ¿verdad o reto?",
       "truth": "Verdad",
@@ -2754,7 +2836,7 @@
       "seoTitle": "Verdad o reto para parejas: juego online gratis",
       "seoDescription": "Verdad o reto para parejas, versión suave: verdades tiernas y retos tontos, nada de lo que arrepentirse por la mañana. Un móvil, por turnos. Gratis.",
       "listTitle": "{count} preguntas de verdad o reto para parejas",
-      "listIntro": "Todas las verdades y todos los retos del juego gratis. Sobre todo piropos y bailar mal.",
+      "listIntro": "Todas las verdades y todos los retos del juego gratis: pequeñas confesiones, discursos, imitaciones, un baile lento.",
       "listTruths": "Verdades",
       "listDares": "Retos"
     },
@@ -2765,13 +2847,31 @@
     },
     "hub": {
       "eyebrow": "Noche de juegos para dos",
-      "sub": "Siete juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
+      "sub": "Ocho juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
       "one": "Pasaos un móvil",
       "two": "O dos móviles, un enlace",
       "deal": "Reparte",
       "pickTitle": "Elige un juego",
       "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
-      "minutes": "{n} min"
+      "minutes": "{n} min",
+      "todayTitle": "La pregunta de hoy",
+      "todayPhones": "Dos móviles",
+      "todayCta": "Responder",
+      "tiers": {
+        "free": {
+          "title": "Gratis",
+          "line": "Los {count} juegos, completos. Sin registro y sin descargas."
+        },
+        "pack": {
+          "title": "Un pack, {price}",
+          "line": "Más cartas para dos o tres de los juegos, tuyas para siempre."
+        },
+        "two": {
+          "title": "Ethos for Two",
+          "line": "Todos los packs y todas las plantillas de regalo, para la pareja."
+        },
+        "cta": "Ver Ethos for Two"
+      }
     },
     "memory": {
       "title": "Memory",
@@ -2847,19 +2947,30 @@
       },
       "imHere": "Soy {name}, vamos",
       "seoTitle": "Juego de dibujar para parejas, en dos móviles",
-      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis."
+      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis.",
+      "listTitle": "{count} palabras para un juego de dibujar en pareja",
+      "listIntro": "Todas las palabras del juego gratis. Cada partida reparte seis y os turnáis para dibujarlas con el dedo."
     },
     "end": {
       "label": "¿Y ahora qué?",
       "gift": "Hazle un regalo",
       "giftBlurb": "Una carta, vuestras fotos, vuestra canción: algo que se abre en su móvil.",
-      "another": "Jugar a otro juego",
-      "anotherBlurb": "Hay siete en la mesa. Ninguno dura más de un cuarto de hora.",
+      "next": "O jugad a otro",
+      "another": "Volver a los juegos",
+      "today": "Mándale la pregunta de hoy",
       "host": {
         "title": "Te toca repartir",
         "blurb": "Crea tu propia sala y manda el enlace a quien quieras.",
         "cta": "Crear una sala"
       }
+    },
+    "notes": {
+      "label": "Antes de repartir",
+      "how": "Cómo se juega",
+      "faq": "Preguntas sobre este juego",
+      "line": "Las reglas, cuánto dura y qué se guarda.",
+      "moreLabel": "Para seguir leyendo",
+      "more": "Más como este"
     }
   },
   "packs": {
@@ -2905,7 +3016,6 @@
     },
     "hub": {
       "title": "Packs de juegos",
-      "sub": "Más cartas para los mismos juegos, a {price} cada uno y tuyos para siempre. O todos los packs y todas las plantillas de regalo, para los dos, con Ethos for Two.",
       "cta": "Ver qué trae: {n} cartas"
     }
   },

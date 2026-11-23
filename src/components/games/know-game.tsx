@@ -123,7 +123,7 @@ function KnowPlay({ session, room, deal, closed, onChangePlayers }: { session: S
             {tl("change")}
           </button>
         </div>
-        <GameEnd guest={session.mode === "two" && !session.host} />
+        <GameEnd game="know" phones={session.mode === "two" ? 2 : 1} guest={session.mode === "two" && !session.host} />
       </section>
     );
   }

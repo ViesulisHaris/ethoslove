@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 /**
  * Every free question of a game, written out under the table. The game deals them one at a time,
  * so a page that only held the game said almost nothing to anyone reading it as text, search
@@ -5,9 +7,9 @@
  * a long list. This is that list, and the game above it is what the list pages don't have. Only
  * the free decks: the paid packs stay in their packs.
  */
-export function QuestionList({ id, title, intro, groups }: { id: string; title: string; intro: string; groups: { name?: string; items: string[] }[] }) {
+export function QuestionList({ id, title, intro, groups, className }: { id: string; title: string; intro: string; groups: { name?: string; items: string[] }[]; className?: string }) {
   return (
-    <section className="container-x relative pb-24" aria-labelledby={id}>
+    <section className={cn("container-x relative pb-24", className)} aria-labelledby={id}>
       <div className="border-t border-cream/15 pt-12">
         <h2 id={id} className="display-md max-w-3xl text-cream">
           {title}

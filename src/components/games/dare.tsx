@@ -119,7 +119,7 @@ function Cards({ names, decks, onChangePlayers }: { names: [string, string]; dec
             {tl("change")}
           </button>
         </div>
-        <GameEnd />
+        <GameEnd game="dare" />
       </section>
     );
   }

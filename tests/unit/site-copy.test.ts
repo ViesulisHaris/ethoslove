@@ -10,12 +10,14 @@ import { digitalCardsCopy } from "@/content/digital-cards";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "@/lib/games/content";
+import { THIS_PAIRS } from "@/lib/games/this-or-that";
 import { PACK_CARDS } from "@/lib/games/pack-cards";
 import { DECKS } from "@/lib/games/questions";
 import { listManifests } from "@/templates/manifests";
 import { TOGETHER_GUIDE } from "@/content/together-guide";
 import { LOVE_QUIZ, QUESTIONS as LOVE_QUIZ_QUESTIONS } from "@/content/love-language-quiz";
 import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } from "@/content/date-kinds";
+import * as GAME_PAGES from "@/content/game-pages";
 import { fillerIn } from "./filler";
 
 type Locale = "en" | "es";
@@ -48,10 +50,11 @@ const SOURCES: Record<string, unknown> = {
   "template guides": TEMPLATE_GUIDES,
   "days-together counter": TOGETHER_GUIDE,
   "love language quiz": { LOVE_QUIZ, LOVE_QUIZ_QUESTIONS },
-  games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS },
+  games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS, THIS_PAIRS },
   "game packs": PACK_CARDS,
   "dates by kind": { DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, CITY_KIND_COPY },
   "dates by kind, shared": DATE_KIND_UI,
+  "game pages": GAME_PAGES,
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),
 };
 
