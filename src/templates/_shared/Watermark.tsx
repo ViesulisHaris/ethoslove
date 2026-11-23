@@ -48,7 +48,12 @@ export function Watermark({
   const ref = useRef<HTMLAnchorElement>(null);
   const standDown = useControlUnder(ref, !inline);
   const href = madeWithEthosHref(locale, WATERMARK_REF, slug);
-  const onClick = counted ? () => track("watermark_clicked", { template: slug ?? null }) : undefined;
+  // Not counted with no connection: the new tab opens on the browser's error page, not on ours.
+  const onClick = counted
+    ? () => {
+        if (navigator.onLine !== false) track("watermark_clicked", { template: slug ?? null });
+      }
+    : undefined;
   if (inline)
     return (
       <a
@@ -65,7 +70,13 @@ export function Watermark({
           className,
         )}
       >
-        <span className="flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[11px] font-medium whitespace-nowrap text-white/85 shadow-sm backdrop-blur-md transition-colors group-hover/mark:bg-black/55">
+        {/* On a light end screen the pill is darker: white on black at 40% over paper was under 3:1. */}
+        <span
+          className={cn(
+            "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium whitespace-nowrap shadow-sm backdrop-blur-md transition-colors",
+            tone === "light" ? "bg-black/65 text-white group-hover/mark:bg-black/75" : "bg-black/40 text-white/85 group-hover/mark:bg-black/55",
+          )}
+        >
           <LogoMark className="size-3.5" />
           {BRAND.watermark[locale]}
         </span>

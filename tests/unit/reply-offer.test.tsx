@@ -291,6 +291,14 @@ describe("the maker's mark at the foot of a free gift", () => {
     expect(mark(endOf("en", "dark"))).toContain("text-white/55");
   });
 
+  it("darkens its pill on a light end screen, so the badge's own words read on paper", () => {
+    // White at 85% on black at 40% over The Letter's paper measured 2.8:1 (the deep tester's loop-D9).
+    expect(mark(endOf("en", "light"))).toContain("bg-black/65 text-white");
+    expect(mark(endOf("en", "light"))).not.toContain("bg-black/40");
+    // A dark end screen keeps the pill it had.
+    expect(mark(endOf("en", "dark"))).toContain("bg-black/40 text-white/85");
+  });
+
   it("shows its keyboard ring on a dark end screen, where the site's dark ring is lost, as the link above it does", () => {
     const light = /focus-visible:outline-white\/60/;
     expect(mark(endOf("en", "dark"))).toMatch(light);

@@ -181,7 +181,10 @@ describe("the events the gift page sends", () => {
   it("make_own_clicked and watermark_clicked carry the template and never an id", () => {
     expect(source("src/templates/_shared/EndScreen.tsx")).toContain('track("make_own_clicked", { template: data.templateSlug, from: "end" })');
     const badge = source("src/templates/_shared/Watermark.tsx");
-    expect(badge).toContain('counted ? () => track("watermark_clicked", { template: slug ?? null }) : undefined');
+    expect(badge).toContain('if (navigator.onLine !== false) track("watermark_clicked", { template: slug ?? null });');
+    // A tap with no connection opens the browser's error page in the new tab: not counted (loop-D11).
+    expect(source("src/templates/_shared/EndScreen.tsx")).toContain('if (navigator.onLine !== false) track("make_own_clicked"');
+    expect(badge).toMatch(/const onClick = counted\s+\? \(\) => \{/);
     // Counted on a real gift page only: the floating badge and the end screen's both know when they are on one.
     expect(source("src/templates/_shared/GiftRenderer.tsx")).toContain("counted={replyMode}");
     expect(source("src/templates/_shared/EndScreen.tsx")).toContain("counted={reply}");

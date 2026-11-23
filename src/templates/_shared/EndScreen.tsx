@@ -236,7 +236,10 @@ export function EndScreen({
             href={madeWithEthosHref(locale, MAKE_OWN_REF, data.templateSlug)}
             target="_blank"
             rel="noopener"
-            onClick={() => track("make_own_clicked", { template: data.templateSlug, from: "end" })}
+            // Not counted with no connection: the new tab opens on the browser's error page, not on ours.
+            onClick={() => {
+              if (navigator.onLine !== false) track("make_own_clicked", { template: data.templateSlug, from: "end" });
+            }}
             // Underlined, lightly: with no icon beside it, that is what says it can be tapped. On a
             // narrow card it breaks in two even lines rather than leaving "else" on its own.
             // Its keyboard ring sits on its own box, clear of the button above, and on a dark end

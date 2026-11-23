@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Share, X } from "lucide-react";
 
@@ -13,11 +13,27 @@ const S = {
   es: { tip: "Tenlo en tu móvil: toca Compartir y luego «Añadir a pantalla de inicio».", close: "Cerrar" },
 };
 
+/**
+ * The end is seen before the tip comes, and the tip goes by itself: at the top of the screen it lay
+ * over the last words of the gifts that end there (String the Lights' sign, "Fin. Por ahora.").
+ */
+export const TIP_AFTER_MS = 5000;
+export const TIP_FOR_MS = 12000;
+
 /** iOS Safari only — the one browser with no install prompt of its own. */
 export function HomeScreenTip({ locale, onReplay }: { locale: "en" | "es"; onReplay?: () => void }) {
-  const isIosSafari = typeof navigator !== "undefined" && /iPhone|iPad/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent) && !window.matchMedia("(display-mode: standalone)").matches;
-  const [open, setOpen] = useState(isIosSafari);
+  const [open, setOpen] = useState(false);
   void onReplay;
+  useEffect(() => {
+    const isIosSafari = /iPhone|iPad/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent) && !window.matchMedia("(display-mode: standalone)").matches;
+    if (!isIosSafari) return;
+    const show = window.setTimeout(() => setOpen(true), TIP_AFTER_MS);
+    const hide = window.setTimeout(() => setOpen(false), TIP_AFTER_MS + TIP_FOR_MS);
+    return () => {
+      window.clearTimeout(show);
+      window.clearTimeout(hide);
+    };
+  }, []);
   return (
     <AnimatePresence>
       {open ? (
