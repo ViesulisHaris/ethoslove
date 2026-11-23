@@ -52,18 +52,26 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
   const corner = useRef(0);
   const insets = useRef<Insets>({ top: 0, bottom: 0 });
 
+  /** Where the page stood when the tour began: finished or skipped, the visitor goes back there (walk-rooms-10). */
+  const startedAt = useRef<number | null>(null);
+  const close = useCallback(() => {
+    const y = startedAt.current;
+    onClose();
+    if (y !== null && Math.abs(window.scrollY - y) > 1) window.scrollTo({ top: y, behavior: reduced ? "instant" : "smooth" });
+  }, [onClose, reduced]);
+
   const go = useCallback(
     (dir: 1 | -1) => {
       const to = stepAfter(steps, index, dir, showable);
       if (to !== -1) setIndex(to);
-      else if (dir === 1) onClose();
+      else if (dir === 1) close();
     },
-    [steps, index, onClose],
+    [steps, index, close],
   );
   const skip = useCallback(() => {
     track("tour_skipped", { room, step: step.id });
-    onClose();
-  }, [room, step.id, onClose]);
+    close();
+  }, [room, step.id, close]);
 
   useEffect(() => {
     track("tour_step", { room, step: step.id });
@@ -73,6 +81,8 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
   // decides how far to scroll.
   useLayoutEffect(() => {
     insets.current = safeInsets();
+    // Before the first step scrolls anything.
+    startedAt.current = window.scrollY;
   }, []);
 
   // Each step finds its target afresh (the page may have changed under the last one) and brings it
