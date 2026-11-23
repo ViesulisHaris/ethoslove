@@ -9,7 +9,7 @@ import { DATE_KINDS, type DateKind } from "@/lib/dates/date-kinds";
 export function KindLinks({ locale, title, skip, className, titleClassName, linkClassName }: { locale: "en" | "es"; title: string; skip?: DateKind; className?: string; titleClassName?: string; linkClassName?: string }) {
   return (
     <nav aria-label={title} className={className}>
-      <h2 className={titleClassName ?? "text-[12px] font-semibold tracking-wide text-forest/55 uppercase"}>{title}</h2>
+      <h2 className={titleClassName ?? "text-eyebrow text-forest/65"}>{title}</h2>
       <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
         {DATE_KINDS.filter((kind) => kind !== skip).map((kind) => (
           <li key={kind} className="flex items-center">

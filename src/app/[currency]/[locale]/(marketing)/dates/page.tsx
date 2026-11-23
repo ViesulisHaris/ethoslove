@@ -45,9 +45,14 @@ export default async function DatesPage({ params }: PageProps<"/[currency]/[loca
     // Pulled up under the floating header: on a wide screen the map runs the full height of the window behind it.
     <div className="-mt-[var(--header-h)] min-h-dvh bg-blush-paper pt-[var(--header-h)] lg:pt-0">
       <DatesExplorer />
-      {/* Plain links in the page's HTML, so search engines find every city's page from here. */}
-      <KindLinks locale={locale === "es" ? "es" : "en"} title={DATE_KIND_UI[locale === "es" ? "es" : "en"].byKind} className="border-t border-line px-5 pt-8 sm:px-8 lg:px-6" />
-      <CityLinks cities={CITY_PAGES} locale={locale === "es" ? "es" : "en"} title={t("eyebrow")} className="px-5 pt-6 pb-32 sm:px-8 lg:px-6 lg:pb-10" />
+      {/* Plain links in the page's HTML, so search engines find every city's page from here. On the
+          page's grid, as on a city's page and the footer (walk-rooms-9). */}
+      <div className="border-t border-line">
+        <div className="container-x pt-8 pb-32 lg:pb-10">
+          <KindLinks locale={locale === "es" ? "es" : "en"} title={DATE_KIND_UI[locale === "es" ? "es" : "en"].byKind} />
+          <CityLinks cities={CITY_PAGES} locale={locale === "es" ? "es" : "en"} title={t("eyebrow")} className="pt-6" />
+        </div>
+      </div>
     </div>
   );
 }

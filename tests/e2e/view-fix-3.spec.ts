@@ -74,3 +74,34 @@ test.describe("rooms-3: a city page's hero at 1440", () => {
     }
   });
 });
+
+test.describe("rooms-9: the strip of cities and kinds at the foot of /dates is on the page's grid", () => {
+  for (const width of [1440, 1024, 390]) {
+    test(`at ${width}`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await mockWorld(page);
+      await page.goto("/dates");
+      const strip = page.getByRole("navigation", { name: "Date ideas by city" });
+      await expect(strip).toBeAttached();
+      const lefts = await page.evaluate(() => {
+        const left = (el: Element | null) => (el ? Math.round(el.getBoundingClientRect().left + parseFloat(getComputedStyle(el).paddingLeft)) : null);
+        const nav = document.querySelector('nav[aria-label="Date ideas by city"]');
+        return { cities: left(nav?.querySelector("h2") ?? null), footer: left(document.querySelector("footer .container-x")) };
+      });
+      expect(lefts.cities).toBe(lefts.footer);
+      // Its label is the site's eyebrow (mono, tracked caps), as on a city's page, not the serif of a heading.
+      const [label, eyebrow] = await Promise.all([
+        strip.locator("h2").evaluate((h) => getComputedStyle(h).fontFamily),
+        page.evaluate(() => {
+          const probe = document.createElement("span");
+          probe.className = "text-eyebrow";
+          document.body.append(probe);
+          const family = getComputedStyle(probe).fontFamily;
+          probe.remove();
+          return family;
+        }),
+      ]);
+      expect(label).toBe(eyebrow);
+    });
+  }
+});

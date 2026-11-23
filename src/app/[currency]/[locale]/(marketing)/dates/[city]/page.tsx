@@ -264,7 +264,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
           </div>
           {kindPages.length > 0 ? (
             <nav aria-label={DATE_KIND_UI[l].inCityByKind.replace("{city}", name)} className="mt-12">
-              <h2 className="text-[12px] font-semibold tracking-wide text-forest/55 uppercase">{DATE_KIND_UI[l].inCityByKind.replace("{city}", name)}</h2>
+              <h2 className="text-eyebrow text-forest/65">{DATE_KIND_UI[l].inCityByKind.replace("{city}", name)}</h2>
               <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
                 {kindPages.map((p) => (
                   <li key={p.kind} className="flex items-center">
