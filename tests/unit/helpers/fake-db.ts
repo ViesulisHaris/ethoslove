@@ -25,11 +25,13 @@ const UNIQUE: Record<string, string[][]> = {
   gift_keeps: [["id"], ["gift_id", "email_sha256"]],
   keep_reminders: [["id"], ["keep_id", "occasion", "month", "day"]],
   etsy_connection: [["id"]],
+  gift_credits: [["id"], ["purchase_id", "n"]],
 };
 
 const DEFAULTS: Record<string, Row> = {
   purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null, store: null, store_product_id: null, store_transaction_id: null, store_environment: null, stripe_invoice_id: null, membership_id: null },
   template_unlocks: { purchase_id: null },
+  gift_credits: { spent_slug: null, spent_at: null, revoked_at: null },
   gift_keeps: { locale: "en", requested: [], confirm_sent_at: null, confirmed_at: null },
   keep_reminders: { last_sent_year: null },
   couple_passes: {
@@ -260,6 +262,8 @@ class Query implements PromiseLike<Result> {
   }
 
   private run(): Result {
+    // A table the database doesn't have yet (FakeDb options.missingTables): PostgREST's PGRST205.
+    if (this.store.missingTables.includes(this.table)) return { data: null, error: { code: "PGRST205", message: `Could not find the table 'public.${this.table}' in the schema cache` } };
     const failure = this.store.failures.find((f) => f.table === this.table && f.op === this.op);
     if (failure) {
       this.store.failures.splice(this.store.failures.indexOf(failure), 1);
@@ -348,10 +352,13 @@ export class FakeDb {
   clock: number;
   /** Columns the database doesn't have yet, per table: a statement naming one fails as PostgREST's would. */
   missingColumns: Record<string, string[]>;
+  /** Tables the database doesn't have yet (gift_credits before migration 0024): any statement on one fails. */
+  missingTables: string[];
 
-  constructor(seed: Record<string, Row[]> = {}, now = Date.parse("2026-09-23T12:00:00.000Z"), options: { missingColumns?: Record<string, string[]> } = {}) {
+  constructor(seed: Record<string, Row[]> = {}, now = Date.parse("2026-09-23T12:00:00.000Z"), options: { missingColumns?: Record<string, string[]>; missingTables?: string[] } = {}) {
     this.tables = structuredClone(seed);
     this.missingColumns = options.missingColumns ?? {};
+    this.missingTables = options.missingTables ?? [];
     const missing = this.missingColumns.couple_passes ?? [];
     // A membership row always has its 0014 columns in the database (they have defaults), so a seeded
     // pass reads the way a real one does: a one-time year, active, not cancelling. Before 0014, it
@@ -371,7 +378,29 @@ export class FakeDb {
     return this.tables[table] ?? [];
   }
 
+  /**
+   * The database functions the commerce code calls: has_template_unlock, and migration 0024's
+   * spend_gift_credit as its SQL does it (no gift used when the template is held; the oldest ready one
+   * otherwise, marked used, and the unlock row written pointing at its purchase).
+   */
+  rpc(fn: string, args: Record<string, unknown>): Promise<Result> {
+    const holds = (user: unknown, slug: unknown) => this.rows("template_unlocks").some((r) => r.user_id === user && (r.template_slug === slug || r.template_slug === "*"));
+    if (fn === "has_template_unlock") return Promise.resolve({ data: holds(args.p_user, args.p_slug), error: null });
+    if (fn === "spend_gift_credit") {
+      if (this.missingTables.includes("gift_credits")) return Promise.resolve({ data: null, error: { code: "PGRST202", message: "Could not find the function public.spend_gift_credit" } });
+      if (holds(args.p_user, args.p_slug)) return Promise.resolve({ data: null, error: null });
+      const ready = this.rows("gift_credits")
+        .filter((r) => r.user_id === args.p_user && isNull(r.spent_slug) && isNull(r.revoked_at))
+        .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)) || (a.n as number) - (b.n as number))[0];
+      if (!ready) return Promise.resolve({ data: null, error: null });
+      Object.assign(ready, { spent_slug: args.p_slug, spent_at: new Date(this.clock).toISOString() });
+      (this.tables.template_unlocks ??= []).push({ id: nextId(), user_id: args.p_user, template_slug: args.p_slug, purchase_id: ready.purchase_id, created_at: new Date(this.clock).toISOString() });
+      return Promise.resolve({ data: ready.id, error: null });
+    }
+    return Promise.resolve({ data: null, error: { code: "PGRST202", message: `fake db: no function ${fn}` } });
+  }
+
   get db(): Db {
-    return { from: (table: string) => new Query(this, table) } as unknown as Db;
+    return { from: (table: string) => new Query(this, table), rpc: (fn: string, args: Record<string, unknown>) => this.rpc(fn, args) } as unknown as Db;
   }
 }
