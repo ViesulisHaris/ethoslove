@@ -89,6 +89,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/occasions/fathers-day": GROWTH_PAGES_DAY,
   "/occasions/apology": GROWTH_PAGES_DAY,
   "/occasions/just-because": GROWTH_PAGES_DAY,
+  // Its Spanish guide names the gift by its Spanish name since 23 Nov ("Truco o trato").
+  "/occasions/halloween": GROWTH_PAGES_DAY,
   "/games": "2026-11-13",
   "/games/rather": "2026-10-24",
   "/games/deck": "2026-11-13",
