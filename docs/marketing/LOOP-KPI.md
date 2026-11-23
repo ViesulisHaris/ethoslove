@@ -85,6 +85,11 @@ token in the address, which only "Send one back" on a paid gift puts there. It i
   there, they are counted as a recipient all the way down. The page cannot tell the two apart
   without knowing who is looking, so ratio 1's bottom number is a little large and its top a
   little too.
+- **On a free gift, one person can tap twice.** Its end screen holds both "or make one for someone
+  else" and the "Made with Ethos" badge, and both open `/made-with-ethos`. Someone who taps one,
+  comes back to the gift and taps the other is two taps in ratio 1's top number. Paid gifts carry no
+  badge, so there it cannot happen. Whether a free gift needs both is the owner's call; the brief
+  asked for the link on every live gift.
 - **`recipient_editor_opened` counts editors opened, not people.** Someone who taps the badge, then
   opens three templates' editors from `/made-with-ethos`, is three; reloading the editor while its
   address still says `?ref=` is one more. So ratio 2 for `via = g` and `via = watermark` can pass
