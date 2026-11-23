@@ -1016,7 +1016,7 @@ export function DatesExplorer() {
           <div ref={ideaBox} className="scroll-mt-[calc(var(--header-h)+12px)]">
             <IdeaPanel
               key={idea.id}
-              idea={idea}
+              idea={forTheDay(idea, day)}
               stops={stops}
               times={times}
               inPlan={ideaInPlan}

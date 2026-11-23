@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ArrowRight, Clock3, MapPin, Sparkles } from "lucide-react";
-import { ideaImage } from "@/lib/dates/art";
+import { ideaImageInCity } from "@/lib/dates/art";
 import type { DateIdea } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
@@ -29,9 +29,9 @@ export function CityIdeaCard({ idea, locale, city, href, stops, isPick, labels, 
         {/* An eager one through EagerImg: a server-drawn eager picture is a preload hint that every
             prefetch of the city's page (from /dates, from the other cities) adds to the page doing it. */}
         {eager ? (
-          <EagerImg src={ideaImage(idea.id)} alt="" width={960} height={720} loading="eager" decoding="async" className="absolute inset-0 size-full object-cover" />
+          <EagerImg src={ideaImageInCity(idea.id)} alt="" width={960} height={720} loading="eager" decoding="async" className="absolute inset-0 size-full object-cover" />
         ) : (
-          <img src={ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
+          <img src={ideaImageInCity(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
         )}
         {isPick ? (
           <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-rose-deep shadow-soft backdrop-blur">

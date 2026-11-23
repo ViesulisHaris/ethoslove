@@ -5,7 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
-import { ideaImage } from "@/lib/dates/art";
+import { ideaImageInCity } from "@/lib/dates/art";
 import { cityMapHref, cityName, getCity, nearbyCities, type City } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode, placeListNode, toldTraits } from "@/lib/cities/copy";
 import { cityIdeaScore, cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
@@ -111,7 +111,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                 <span key={idea.id} className="relative block aspect-[4/3] overflow-hidden rounded-[22px] shadow-[0_30px_60px_-34px_rgba(120,20,60,0.6)] ring-4 ring-white" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
                   {/* EagerImg, not <img>: /dates links to every city page, and each prefetch of one
                       would otherwise add these four pictures to /dates as preloads it never shows. */}
-                  <EagerImg src={ideaImage(idea.id)} alt="" width={960} height={720} loading="eager" fetchPriority={i === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 size-full object-cover" />
+                  <EagerImg src={ideaImageInCity(idea.id)} alt="" width={960} height={720} loading="eager" fetchPriority={i === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 size-full object-cover" />
                 </span>
               ))}
             </div>

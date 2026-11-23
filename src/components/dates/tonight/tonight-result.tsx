@@ -4,10 +4,9 @@
 import { useEffect, useId, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ideaImage } from "@/lib/dates/art";
 import { formatDay, type Ymd } from "@/lib/dates/calendar";
 import { ideaHours } from "@/lib/dates/format";
-import { canBeFree } from "@/lib/dates/ideas";
+import { canBeFree, ideaPicture } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import type { Relaxed, TonightPick } from "@/lib/dates/tonight";
@@ -92,7 +91,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
   return (
     <article ref={cardRef} data-pick data-tonight-result aria-labelledby={headingId} className="mt-5 overflow-hidden rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card sm:grid sm:grid-cols-[11rem_minmax(0,1fr)]">
       <span className="relative block aspect-[16/9] sm:aspect-auto sm:h-full" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
-        <img src={ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
+        <img src={ideaPicture(idea)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
       </span>
       <div className="p-5">
         {moved ? <p className="mb-2 text-[0.875rem] leading-snug text-page-body">{t("tonight.movedTomorrow")}</p> : null}

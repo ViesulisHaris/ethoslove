@@ -13,6 +13,8 @@ export type DateCard = {
   fit: string;
   /** Real places for its stops, on a city's page; absent on a page with no city. */
   stops?: Place[] | null;
+  /** Its picture, when not the idea's own (a city's page: ideaImageInCity). */
+  image?: string;
   /** Where "Plan it" goes. */
   href: string;
 };
@@ -29,12 +31,12 @@ export function DateIdeaCards({ id, cards, locale, labels }: { id: string; cards
   return (
     <div className="min-w-0">
       <ul id={id} data-cards className={`-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0 sm:[&:not(:has(details[open]))]:items-stretch ${cards.length % 3 === 1 ? "" : "lg:grid-cols-3"}`}>
-        {cards.map(({ idea, fit, stops, href }) => (
+        {cards.map(({ idea, fit, stops, href, image }) => (
           <li key={idea.id} id={`idea-${idea.id}`} data-card data-pick className="w-full shrink-0 scroll-mt-24 snap-start sm:w-auto">
             <details name={`${id}-open`} className="group/card rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card transition-shadow duration-300 open:shadow-page-lift hover:shadow-page-lift motion-reduce:transition-none sm:h-full">
               <summary className="relative grid cursor-pointer list-none content-start rounded-[1.25rem] outline-offset-4 active:opacity-90 sm:h-full [&::-webkit-details-marker]:hidden">
                 <span className="relative block aspect-[5/4] overflow-hidden rounded-t-[1.2rem] sm:aspect-[4/3]" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
-                  <img src={ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
+                  <img src={image ?? ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
                 </span>
                 {/* Not a heading: a browser gives a summary a button's role, and a heading inside one cannot be reached as a heading. */}
                 <span data-card-title className="block px-5 pt-4 pr-12 pb-5 font-display text-[1.25rem] leading-[1.18] text-page-ink">

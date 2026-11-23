@@ -18,8 +18,14 @@ const GENERIC = new Set(["books", "bookshop", "bookstore", "gallery", "art galle
  * for a café: "Paul Kasmin Gallery" is not the bakery. Matched at the start ("Starbucks Reserve").
  */
 const CHAINS = ["starbucks", "costa", "costa coffee", "pret", "pret a manger", "caffe nero", "cafe nero", "dunkin", "tim hortons", "blank street", "joe & the juice", "black sheep coffee", "gail's", "le pain quotidien", "kung fu tea", "gong cha", "chatime", "tiger sugar", "peet's coffee", "la colombe", "bluestone lane", "joe coffee"];
-/** A chain whose name is also a person's: only the whole name or the name with its trade ("Paul Bakery"), never "Paul Rothe & Son". */
+/**
+ * A chain whose name is also a person's: only the whole name or the name with its trade ("Paul
+ * Bakery"), alone or with the branch after it in brackets or a dash ("Paul (Covent Garden)", "Paul -
+ * Covent Garden"), never "Paul Rothe & Son".
+ */
 const NAMED_CHAINS = ["paul", "paul bakery", "paul boulangerie", "boulangerie paul"];
+const namedChain = (name: string): boolean =>
+  NAMED_CHAINS.some((chain) => name === chain || (name.startsWith(chain) && /^\s*[(\-–—]/.test(name.slice(chain.length))));
 /**
  * Squares the map files as parks that are paving, traffic and cinemas, not a lawn to sit on. Named
  * one by one: a square with a garden in the middle (Russell Square, Soho Square) is filed the same
@@ -46,7 +52,7 @@ const plain = (name: string): string =>
  */
 export function leftOff(place: Pick<Place, "name" | "kind">): boolean {
   const name = plain(place.name);
-  if (place.kind === "cafe" && (NAMED_CHAINS.includes(name) || CHAINS.some((chain) => name === chain || name.startsWith(`${chain} `) || name.startsWith(`${chain}(`)))) return true;
+  if (place.kind === "cafe" && (namedChain(name) || CHAINS.some((chain) => name === chain || name.startsWith(`${chain} `) || name.startsWith(`${chain}(`)))) return true;
   if (PAID.some((paid) => name.includes(paid))) return true;
   if (SPORTS.test(name)) return true;
   return (place.kind === "park" || place.kind === "garden") && PAVED_SQUARES.includes(name);

@@ -11,7 +11,7 @@ import { cityIdeaScore, cityIdeaStops } from "@/lib/cities/ideas";
 import { kindPlaces } from "@/lib/cities/kind-places";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M } from "@/lib/cities/places";
-import { ideaImage } from "@/lib/dates/art";
+import { ideaImageInCity } from "@/lib/dates/art";
 import { CITY_KIND_PAGES, getDateKind, isCityKindPage, kindIdeas } from "@/lib/dates/date-kinds";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
@@ -104,7 +104,7 @@ export default async function CityKindPage({ params }: Props) {
           heading={pair.heading[l]}
           line={pair.line[l]}
           sentence={pair.sentence[l]}
-          picture={{ src: ideaImage(hero.id), from: hero.art.from, to: hero.art.to }}
+          picture={{ src: ideaImageInCity(hero.id), from: hero.art.from, to: hero.art.to }}
           note={hero.title[l]}
           back={
             <Link href={`/dates/${city.slug}`} className="group -ml-2 mb-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-page-accent underline-offset-4 hover:underline">
@@ -126,7 +126,7 @@ export default async function CityKindPage({ params }: Props) {
         <KindIdeas
           kind={kind}
           locale={l}
-          card={(idea, i) => ({ idea, fit: copy.fits[idea.id][l], stops: stops[i], href: cityMapHref(city, l, idea.id) })}
+          card={(idea, i) => ({ idea, fit: copy.fits[idea.id][l], stops: stops[i], href: cityMapHref(city, l, idea.id), image: ideaImageInCity(idea.id) })}
           labels={{ twist: ui.twist, plan: tc("ideas.onMap"), inCity: tc("ideas.inCity", { city: name }), hours: (idea) => td("ideas.hours", { hours: hoursOf(idea.minutes, l) }), budget: (idea) => td(`ideas.budget.${idea.budget}`) }}
         />
 

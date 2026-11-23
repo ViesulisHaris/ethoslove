@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { KIND_IDEAS } from "@/lib/dates/date-kinds";
-import { canBeFree, fillStops, forTheDay, IDEAS, ideaById, isDoable, type DateIdea } from "@/lib/dates/ideas";
+import { canBeFree, fillStops, forTheDay, IDEAS, ideaById, ideaPicture, isDoable, type DateIdea } from "@/lib/dates/ideas";
 import { KIND_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { readPlan } from "@/lib/dates/plan";
@@ -267,6 +267,20 @@ describe("tonight's stops suit the idea", () => {
     for (const kinds of pasta!.idea.stops) for (const k of ["viewpoint", "park", "garden"] as const) expect(kinds).not.toContain(k);
     expect(fillStopsNames(pasta!.idea, EVERYTHING)).toEqual(["node/restaurant", "node/dessert"]);
     expect(forTheDay(idea("pasta-and-a-slow-walk"), DRY).stops[1]).toEqual(["viewpoint", "park", "garden"]);
+  });
+
+  it("T27 a wet night's dinner is not called the long way home and is not shown on a terrace (dates-N2-1)", () => {
+    const pasta = rankTonight({ startMin: 20 * 60 }, { day: WET, places: EVERYTHING }).find((p) => p.idea.id === "pasta-and-a-slow-walk")!;
+    expect(pasta.idea.title.en).toBe("Dinner, then dessert somewhere dry");
+    expect(pasta.idea.title.es).toBe("Cena, y el postre a cubierto");
+    for (const l of ["en", "es"] as const) expect(pasta.idea.blurb[l]).not.toMatch(/walk|paseo/i);
+    expect(ideaPicture(pasta.idea)).toBe("/dates/kinds/bar.webp");
+    // A dry night keeps its own title and picture; the stars keep theirs in the rain (no rain title).
+    const dry = forTheDay(idea("pasta-and-a-slow-walk"), DRY);
+    expect(dry.title.en).toBe("Dinner, then the long way home");
+    expect(ideaPicture(dry)).toBe("/dates/ideas/pasta-and-a-slow-walk.webp");
+    expect(forTheDay(idea("stars-and-planets"), WET).title).toEqual(idea("stars-and-planets").title);
+    expect(ideaPicture(forTheDay(idea("stars-and-planets"), WET))).toBe("/dates/ideas/stars-and-planets.webp");
   });
 });
 

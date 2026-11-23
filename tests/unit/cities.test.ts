@@ -462,6 +462,9 @@ describe("a kind of date inside a city", () => {
   it("C5c a garden square and an independent café named after a Paul stay on; the Paul bakery and the paved squares do not (dates-N1-3)", () => {
     for (const [name, kind] of [["Russell Square", "garden"], ["Soho Square", "park"], ["Paul Rothe & Son", "cafe"], ["Paulette", "cafe"]] as const) expect(leftOff({ name, kind }), name).toBe(false);
     for (const [name, kind] of [["PAUL", "cafe"], ["Paul Bakery", "cafe"], ["Leicester Square", "park"], ["Trafalgar Square", "park"], ["Times Square", "park"]] as const) expect(leftOff({ name, kind }), name).toBe(true);
+    // A branch named after its street is still the bakery (dates-N2-2); a person called Paul still is not.
+    for (const name of ["Paul (Covent Garden)", "Paul - Covent Garden", "Paul – Marylebone", "Paul(Soho)", "Paul Bakery (Kensington)"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(true);
+    for (const name of ["Paul Smith Café", "Paul's Coffee", "Pauls - Corner Café"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(false);
   });
 
   it("C5d every city title and city-by-kind title fits a search result with the brand on, in both languages (dates-D9)", () => {

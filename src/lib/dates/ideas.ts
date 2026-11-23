@@ -1,3 +1,4 @@
+import { ideaImageInCity } from "./art";
 import { distanceKm } from "./geo";
 import { KINDS, type PlaceKind } from "./kinds";
 import type { Place } from "./places";
@@ -40,6 +41,14 @@ export type DateIdea = {
   latestStart?: string;
   /** Its stops on a wet day, when the dry ones would put it outdoors (the stars: a planetarium only). */
   rainStops?: PlaceKind[][];
+  /**
+   * What it is called and shown as on a wet day, when its rain stops change what the evening is: the
+   * dinner that walks home past a viewpoint ends under a roof instead, and says so. `image` is a path
+   * under public/; without one the idea keeps its own picture.
+   */
+  rain?: { title: L; blurb: L; image?: string };
+  /** A picture other than its own (public/dates/ideas/<id>.webp): set by forTheDay on a wet day. */
+  image?: string;
   vibes: Vibe[];
   /** The drawn sticker on the card, and the two papers behind it. */
   art: { sticker: StickerId; from: string; to: string };
@@ -68,6 +77,11 @@ export const IDEAS: DateIdea[] = [
     stops: [["restaurant"], ["viewpoint", "park", "garden"]],
     // In the rain the long way home goes somewhere dry: pudding or a nightcap, never a viewpoint.
     rainStops: [["restaurant"], ["dessert", "bar"]],
+    rain: {
+      title: { en: "Dinner, then dessert somewhere dry", es: "Cena, y el postre a cubierto" },
+      blurb: { en: "A table for two, then a second stop under a roof for dessert or one last drink.", es: "Una mesa para dos y luego otra parada bajo techo, para el postre o una última copa." },
+      image: "/dates/kinds/bar.webp",
+    },
     needsDry: false,
     goodInRain: false,
     moment: "evening",
@@ -421,8 +435,15 @@ export const canBeFree = (idea: Pick<DateIdea, "budget" | "vibes">): boolean => 
 
 /** The idea as it stands on the day: on a wet one, its rain stops when it has them (the stars move under a planetarium's dome). */
 export function forTheDay(idea: DateIdea, day: DayWeather | undefined): DateIdea {
-  return idea.rainStops && day && isWet(day) ? { ...idea, stops: idea.rainStops } : idea;
+  if (!idea.rainStops || !day || !isWet(day)) return idea;
+  // Rain stops that change what the evening is bring its rain title, blurb and picture with them.
+  const { rain } = idea;
+  if (!rain) return { ...idea, stops: idea.rainStops };
+  return { ...idea, stops: idea.rainStops, title: rain.title, blurb: rain.blurb, ...(rain.image ? { image: rain.image } : {}) };
 }
+
+/** The picture a plan for a real place shows: the one its day gave it (forTheDay), else its own unless that shows another city. */
+export const ideaPicture = (idea: Pick<DateIdea, "id" | "image">): string => idea.image ?? ideaImageInCity(idea.id);
 
 /** True when every stop of an idea can be filled near here. */
 export const isDoable = (idea: DateIdea, places: Place[]): boolean => idea.stops.every((kinds) => places.some((p) => kinds.includes(p.kind)));

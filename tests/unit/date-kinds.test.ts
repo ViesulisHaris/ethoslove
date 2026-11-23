@@ -9,7 +9,8 @@ import { ART_IDS } from "@/content/page-art";
 import { DATE_CARDS_ART, DATE_FOOT_ART, DATE_HERO_ART, DATE_PLACEMENTS } from "@/components/dates/page/placements";
 import { CITY_SLUGS, getCity, mentionsSpain } from "@/lib/cities/cities";
 import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS, type DateKind } from "@/lib/dates/date-kinds";
-import { IDEAS, ideaById } from "@/lib/dates/ideas";
+import { ideaImage, ideaImageInCity } from "@/lib/dates/art";
+import { IDEAS, ideaById, ideaPicture } from "@/lib/dates/ideas";
 
 const words = (text: string): number => text.trim().split(/\s+/).length;
 const strings = (v: unknown): string[] => (typeof v === "string" ? [v] : v && typeof v === "object" ? Object.values(v).flatMap(strings) : []);
@@ -146,6 +147,20 @@ describe("the kinds of date", () => {
       expect(KIND_IDEAS[kind], `${city}/${kind}`).toContain(hero);
       expect(existsSync(join(process.cwd(), "public", "dates", "ideas", `${hero}.webp`)), hero).toBe(true);
     }
+  });
+
+  it("K18b no card under a city's name shows another city's skyline, and every picture shown is a file (dates-D6)", () => {
+    const skyline = ideaImage("golden-hour-picnic");
+    for (const { city, kind } of CITY_KIND_PAGES) {
+      const shown = kindIdeas(kind).map((idea) => ideaImageInCity(idea.id));
+      expect(shown, `${city}/${kind}`).not.toContain(skyline);
+      expect(new Set(shown).size, `${city}/${kind}`).toBe(shown.length);
+      for (const src of shown) expect(existsSync(join(process.cwd(), "public", src)), src).toBe(true);
+    }
+    // The plan for a real place (the planner's result, the map's idea panel) never shows it either.
+    expect(ideaPicture(ideaById("golden-hour-picnic")!)).not.toBe(skyline);
+    // Where no city is named, the picnic keeps its own picture.
+    expect(ideaImage("golden-hour-picnic")).toBe("/dates/ideas/golden-hour-picnic.webp");
   });
 
   it("K19 the hero's picture is never the first card of a row below it (dates-D6)", () => {
