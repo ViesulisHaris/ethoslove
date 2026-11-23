@@ -29,7 +29,6 @@ import {
   replyTokenFrom,
   resumePath,
   secondOffered,
-  secondSuggestions,
   safeReturnPath,
   templatePlan,
 } from "@/components/pricing/offers";
@@ -146,12 +145,6 @@ describe("the paywall's offer", () => {
     expect(secondOffered("single", false)).toBe(true);
     expect(secondOffered("single", true)).toBe(false);
     for (const plan of ["extras", "everything", "upgrade"] as const) expect(secondOffered(plan, false)).toBe(false);
-  });
-
-  it("suggests three best sellers for the second gift, never this one or one already owned", () => {
-    expect(secondSuggestions("vinyl")).toEqual(["bouquet", "xoxo", "popup-card"]);
-    expect(secondSuggestions("bouquet")).toEqual(["xoxo", "popup-card", "birthday-cinema"]);
-    expect(secondSuggestions("bouquet", ["xoxo"])).toEqual(["popup-card", "birthday-cinema", "coquette"]);
   });
 
   it("adds the second gift to the pay button and the checkout body only when it is ticked", () => {

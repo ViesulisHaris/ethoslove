@@ -3,7 +3,6 @@ import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import type { PublishDecision } from "@/lib/gift/publish";
 import type { MembershipSummary } from "@/lib/membership/types";
 import { BUMP, PRODUCTS, SECOND_GIFT, bumpAmount, templateProduct, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
-import { getManifest } from "@/templates/manifests";
 import { membershipState, needsPayment } from "@/components/membership/status";
 
 /**
@@ -149,14 +148,6 @@ export function pick3Offered(tier: "free" | "premium", currency: Currency, all: 
  */
 export function secondOffered(plan: PaywallPlan, bumpOn: boolean): boolean {
   return SECOND_GIFT.onto.includes(plan) && !bumpOn;
-}
-
-/** The best-selling premium templates, in order: the second gift's suggestions. */
-export const SECOND_SUGGESTIONS = ["bouquet", "xoxo", "popup-card", "birthday-cinema", "coquette", "digicam"] as const;
-
-/** Three suggestions for the second gift: best sellers, never this gift's own template or one already owned. */
-export function secondSuggestions(slug: string, owned: string[] = []): string[] {
-  return SECOND_SUGGESTIONS.filter((s) => s !== slug && !owned.includes(s) && getManifest(s)?.tier === "premium").slice(0, 3);
 }
 
 /**
