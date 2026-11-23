@@ -116,3 +116,16 @@ export function decodeDaily(hash: unknown, today: number, pairs: readonly Rather
   }
   return link;
 }
+
+/** What a tab remembers of the last link it sent: the day, the pair, and the answer and name it carried. */
+export type DailySent = { day: number; pairId: string; name: string; side: 0 | 1 };
+
+/**
+ * Whether a link is one this tab sent itself (people tap their own link in the chat to check it):
+ * the same day, pair, answer and name as the last link the tab sent. A reply carries the tab's own
+ * answer as its `to`, so it is matched on its `from`, as the first link is: a reply this tab sent
+ * back is its own too. Such a link is never a reveal against oneself, and is never counted.
+ */
+export function sentHere(link: DailyLink, sent: DailySent | null): boolean {
+  return !!sent && sent.day === link.day && sent.pairId === link.pair.id && sent.side === link.from.side && cleanName(sent.name) === link.from.name;
+}

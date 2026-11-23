@@ -2598,6 +2598,10 @@
       "daily": "Una nueva cada día",
       "broken": "Ese enlace no llegó entero, así que aquí tienes la pregunta de hoy.",
       "from": "De {name}",
+      "fromOn": "De {name}, {date}",
+      "on": "La pregunta del {date}",
+      "both": "Las dos respuestas",
+      "bothOn": "Las dos respuestas, {date}",
       "invited": "{name} ya ha respondido. ¿Tú qué eliges?",
       "prompt": "¿Qué prefieres…",
       "or": "o",
@@ -2611,6 +2615,7 @@
       "sent": "Enviada. Elegirá sin ver tu respuesta y luego podrá mandarte la suya.",
       "sendBack": "Devuélvele la tuya",
       "sentBack": "Enviada. {name} verá las dos respuestas.",
+      "own": "Es el enlace que enviaste. Elegirá sin ver tu respuesta.",
       "match": "Lo mismo. Ahora decid por qué, a ver si también coinciden los motivos.",
       "clash": "Cada cual por su lado. Tenéis una frase para convencer a la otra persona.",
       "you": "Tú",
@@ -2719,8 +2724,8 @@
       "minutes": "{n} min",
       "todayTitle": "La pregunta de hoy",
       "todayBlurb": "Hoy, el mismo ¿qué prefieres? para todo el mundo. Tu respuesta no se ve hasta que la otra persona elige.",
-      "todayPhones": "Dos móviles, un enlace",
-      "todayCta": "Responder la de hoy",
+      "todayPhones": "Dos móviles",
+      "todayCta": "Responder",
       "tiers": {
         "free": {
           "title": "Gratis",
@@ -2732,7 +2737,7 @@
         },
         "two": {
           "title": "Ethos for Two",
-          "line": "Todos los packs y todas las plantillas de regalo, para los dos."
+          "line": "Todos los packs y todas las plantillas de regalo, para la pareja."
         },
         "cta": "Ver Ethos for Two"
       }
@@ -2829,9 +2834,12 @@
       }
     },
     "notes": {
+      "label": "Antes de repartir",
       "how": "Cómo se juega",
       "faq": "Preguntas sobre este juego",
-      "more": "Para seguir leyendo:"
+      "line": "Las reglas, cuánto dura y qué se guarda.",
+      "moreLabel": "Para seguir leyendo",
+      "more": "Más como este"
     }
   },
   "packs": {

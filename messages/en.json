@@ -2598,6 +2598,10 @@
       "daily": "A new one every day",
       "broken": "That link didn't arrive whole, so here is today's question.",
       "from": "From {name}",
+      "fromOn": "From {name}, {date}",
+      "on": "The question of {date}",
+      "both": "Both answers",
+      "bothOn": "Both answers, {date}",
       "invited": "{name} has answered. What would you pick?",
       "prompt": "Would you rather…",
       "or": "or",
@@ -2611,6 +2615,7 @@
       "sent": "Sent. They pick without seeing yours, then can send theirs back.",
       "sendBack": "Send yours back",
       "sentBack": "Sent. {name} will see both answers.",
+      "own": "This is the link you sent. They pick without seeing yours.",
       "match": "Same pick. Now each say why, and see if the reasons match too.",
       "clash": "Different picks. You each get one sentence to win the other over.",
       "you": "You",
@@ -2829,9 +2834,12 @@
       }
     },
     "notes": {
+      "label": "Before you deal",
       "how": "How to play",
       "faq": "Questions about this game",
-      "more": "More like this:"
+      "line": "The rules, how long it takes, and what is kept.",
+      "moreLabel": "Keep reading",
+      "more": "More like this"
     }
   },
   "packs": {

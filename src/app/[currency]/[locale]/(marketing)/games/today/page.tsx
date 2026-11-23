@@ -74,8 +74,10 @@ export default async function TodayPage({ params }: Props) {
       <style>{pageThemeChromeCss(THEME, theme)}</style>
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="today-title">
-          <ArtLayer items={TODAY_ART} flowers={TODAY_FLOWERS} />
-          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-6")}>
+          {/* On a phone on its side the question stands in the right column, where the petal lies: the corner is left bare there. */}
+          <ArtLayer items={TODAY_ART} flowers={TODAY_FLOWERS} className="[@media(orientation:landscape)_and_(max-height:520px)]:hidden" />
+          {/* A phone on its side is the two columns too, tighter: stacked, its first screen held only the heading. */}
+          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-6", "[@media(orientation:landscape)_and_(max-height:520px)]:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] [@media(orientation:landscape)_and_(max-height:520px)]:items-start [@media(orientation:landscape)_and_(max-height:520px)]:gap-x-8 [@media(orientation:landscape)_and_(max-height:520px)]:pt-2!")}>
             <Intro level={1} id="today-title" label={t("label")} heading={t("h1")} line={t("line")} />
             <div className="min-w-0 lg:pt-7">
               <TodayQuestion day={day} />

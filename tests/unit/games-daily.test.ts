@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { RATHER_PAIRS } from "@/lib/games/content";
-import { DAILY_EPOCH, DAILY_HASH_MAX, DAY_MS, cleanName, dailyCycle, dailyPair, dayIso, dayOf, decodeDaily, encodeDaily, pairById } from "@/lib/games/daily";
+import { DAILY_EPOCH, DAILY_HASH_MAX, DAY_MS, cleanName, dailyCycle, dailyPair, dayIso, dayOf, decodeDaily, encodeDaily, pairById, sentHere } from "@/lib/games/daily";
 
 const N = RATHER_PAIRS.length;
 const TODAY = DAILY_EPOCH + 40;
@@ -164,5 +164,39 @@ describe("the link", () => {
     const hash = encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "A.B", side: 0 }, to: { name: "C.D", side: 1 } });
     expect(hash.split(".").length).toBe(7);
     expect(hash).not.toMatch(/[?&\s]/);
+  });
+});
+
+describe("a link the tab sent itself", () => {
+  const pair = RATHER_PAIRS[5];
+  const sent = { day: TODAY, pairId: pair.id, name: "Ana", side: 1 as const };
+  const open = (hash: string) => decodeDaily(hash, TODAY)!;
+
+  it("S1: the link this tab sent, opened again here, is its own (never a reveal against itself)", () => {
+    expect(sentHere(open(encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "Ana", side: 1 } })), sent)).toBe(true);
+    // The name as it travels: tidied the same way on both ends.
+    expect(sentHere(open(encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "  Ana ", side: 1 } })), { ...sent, name: " Ana  " })).toBe(true);
+  });
+
+  it("S2: someone else's link is not, even on the same pair: another name, another side, another day", () => {
+    expect(sentHere(open(encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "Sam", side: 1 } })), sent)).toBe(false);
+    expect(sentHere(open(encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "Ana", side: 0 } })), sent)).toBe(false);
+    expect(sentHere(open(encodeDaily({ day: TODAY - 1, pairId: pair.id, from: { name: "Ana", side: 1 } })), sent)).toBe(false);
+    expect(sentHere(open(encodeDaily({ day: TODAY, pairId: RATHER_PAIRS[6].id, from: { name: "Ana", side: 1 } })), sent)).toBe(false);
+    expect(sentHere(open(encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "Ana", side: 1 } })), null)).toBe(false);
+  });
+
+  it("S3: a reply is matched on who sent it: the reply this tab sent back is its own, the one it receives is not", () => {
+    const reply = open(encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "Ana", side: 1 }, to: { name: "Sam", side: 0 } }));
+    expect(sentHere(reply, sent)).toBe(true);
+    expect(sentHere(reply, { ...sent, name: "Sam", side: 0 })).toBe(false);
+  });
+});
+
+describe("the launch day's pair in Spanish", () => {
+  it("S4: says who cooks, with both halves the same shape", () => {
+    const cooking = RATHER_PAIRS.find((p) => p.id === "cooking")!;
+    expect(cooking.a.es).toBe("Que cocine tu pareja, pero siempre pasta");
+    expect(cooking.b.es).toBe("Que cocines tú, pero siempre tostadas");
   });
 });

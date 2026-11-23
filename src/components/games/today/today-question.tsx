@@ -7,24 +7,34 @@ import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import type { RatherPair } from "@/lib/games/content";
-import { cleanName, dailyPair, dayOf, decodeDaily, encodeDaily, type DailyLink } from "@/lib/games/daily";
+import { cleanName, DAY_MS, dailyPair, dayOf, decodeDaily, encodeDaily, sentHere, type DailyLink } from "@/lib/games/daily";
 import { readSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
 import { cn } from "@/lib/utils";
 import { Suit } from "../cards";
 import { NAMES_KEY } from "../lobby";
 
 type Side = 0 | 1;
-type View = { day: number; pair: RatherPair; link: DailyLink | null; broken: boolean };
+/** `own`: the address is a link this tab sent itself, opened again to check it (lib/games/daily.ts, sentHere). */
+type View = { day: number; pair: RatherPair; link: DailyLink | null; broken: boolean; own: boolean };
 type Phase = "ask" | "invited" | "answered" | "sent" | "reveal";
 
-/** This tab's own answer to a day's pair, so a reload keeps it. sessionStorage: it never leaves the tab. */
-type Kept = { d: number; p: string; a: Side };
+/**
+ * This tab's own answer to a day's pair, so a reload keeps it, and what the last link it sent
+ * carried (`s`: the name and the answer), so that link opened again here is known as its own.
+ * sessionStorage: it never leaves the tab.
+ */
+type Kept = { d: number; p: string; a: Side; s?: { n: string; a: Side } };
 const KEPT = savedKey("today", "play");
 function reviveToday(raw: unknown): Kept | null {
   if (!raw || typeof raw !== "object") return null;
-  const { d, p, a } = raw as Record<string, unknown>;
-  return typeof d === "number" && Number.isInteger(d) && typeof p === "string" && (a === 0 || a === 1) ? { d, p, a } : null;
+  const { d, p, a, s } = raw as Record<string, unknown>;
+  if (!(typeof d === "number" && Number.isInteger(d) && typeof p === "string" && (a === 0 || a === 1))) return null;
+  const sent = s && typeof s === "object" ? (s as Record<string, unknown>) : null;
+  return sent && typeof sent.n === "string" && (sent.a === 0 || sent.a === 1) ? { d, p, a, s: { n: sent.n, a: sent.a } } : { d, p, a };
 }
+
+/** Next's own state for this page's history entry, which a hash change leaves out of the entry it adds. */
+type RouterState = { __NA?: boolean } & Record<string, unknown>;
 
 function rememberedNames(): [string, string] | null {
   try {
@@ -35,8 +45,9 @@ function rememberedNames(): [string, string] | null {
   }
 }
 
+// On a phone on its side the cards are shorter, so the question is on the first screen (the page's spread, page.tsx).
 const CARD =
-  "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none";
+  "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none [@media(orientation:landscape)_and_(max-height:520px)]:min-h-32 [@media(orientation:landscape)_and_(max-height:520px)]:pt-10 [@media(orientation:landscape)_and_(max-height:520px)]:pb-4";
 const PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:opacity-60 motion-reduce:transition-none";
 const SECOND =
@@ -57,7 +68,7 @@ export function TodayQuestion({ day }: { day: number }) {
   const te = useTranslations("games.end");
   const locale = useLocale() === "es" ? "es" : "en";
 
-  const [view, setView] = useState<View>(() => ({ day, pair: dailyPair(day), link: null, broken: false }));
+  const [view, setView] = useState<View>(() => ({ day, pair: dailyPair(day), link: null, broken: false, own: false }));
   const [mine, setMine] = useState<Side | null>(null);
   const [sent, setSent] = useState(false);
   const [name, setName] = useState("");
@@ -70,29 +81,49 @@ export function TodayQuestion({ day }: { day: number }) {
   const counted = useRef<string | null>(null);
   const revealHeading = useRef<HTMLHeadingElement>(null);
   const focusReveal = useRef(false);
+  const statusLine = useRef<HTMLParagraphElement>(null);
+  const showForm = useRef(false);
+  const copiedTimer = useRef<number | undefined>(undefined);
+  const routerState = useRef<RouterState | null>(null);
 
   const read = useCallback(() => {
+    // A link opened in a tab that already had this page is a hash change: the browser adds a history
+    // entry without Next's state, and Back to it from another page changed the address but left that
+    // page on screen. The entry gets this page's state back, so Next can draw it (it is the same page).
+    const state = window.history.state as RouterState | null;
+    if (state?.__NA) routerState.current = state;
+    else if (routerState.current) window.history.replaceState(routerState.current, "", window.location.href);
+
     const now = dayOf(Date.now());
     const hash = window.location.hash;
     const asked = hash.startsWith("#q=");
-    const link = asked ? decodeDaily(hash, now) : null;
-    const next: View = link ? { day: link.day, pair: link.pair, link, broken: false } : { day: now, pair: dailyPair(now), link: null, broken: asked };
+    const decoded = asked ? decodeDaily(hash, now) : null;
     const kept = readSaved(tabStorage(), KEPT, reviveToday);
+    const own = !!decoded && sentHere(decoded, kept?.s ? { day: kept.d, pairId: kept.p, name: kept.s.n, side: kept.s.a } : null);
+    // The tab's own first link opens as the tab left it, the answer marked sent: never a reveal against itself.
+    const link = own && !decoded.to ? null : decoded;
+    const next: View = decoded ? { day: decoded.day, pair: decoded.pair, link, broken: false, own } : { day: now, pair: dailyPair(now), link: null, broken: asked, own: false };
     const names = rememberedNames();
     setToday(now);
     setView(next);
     const restored = kept && kept.d === next.day && kept.p === next.pair.id && !link?.to ? kept.a : null;
     setMine(restored);
-    setSent(false);
-    setChanged(false);
+    const ownFirst = own && !decoded.to;
+    setSent(ownFirst && restored === kept?.s?.a);
+    // Changed since that link went out: it carries the old answer, so it must go again.
+    setChanged(ownFirst && restored !== kept?.s?.a);
+    setCopied(false);
     setReady(true);
     if (names) setName(names[0]);
     if (counted.current !== hash) {
       counted.current = hash;
-      track(link ? "daily_opened_shared" : "daily_seen");
-      if (link?.to) track("daily_revealed", { match: link.from.side === link.to.side });
-      // This tab answered the same pair before the link came: the reveal shows at once, and counts.
-      else if (link && restored !== null) track("daily_revealed", { match: link.from.side === restored });
+      // The tab's own link: nothing new happened, so nothing is counted.
+      if (!own) {
+        track(link ? "daily_opened_shared" : "daily_seen");
+        if (link?.to) track("daily_revealed", { match: link.from.side === link.to.side });
+        // This tab answered the same pair before the link came: the reveal shows at once, and counts.
+        else if (link && restored !== null) track("daily_revealed", { match: link.from.side === restored });
+      }
     }
   }, []);
 
@@ -105,6 +136,8 @@ export function TodayQuestion({ day }: { day: number }) {
     };
   }, [read]);
 
+  useEffect(() => () => window.clearTimeout(copiedTimer.current), []);
+
   const { link } = view;
   const phase: Phase = link?.to ? "reveal" : link ? (mine === null ? "invited" : "reveal") : mine === null ? "ask" : sent ? "sent" : "answered";
 
@@ -114,12 +147,23 @@ export function TodayQuestion({ day }: { day: number }) {
     revealHeading.current?.focus();
   }, [phase]);
 
+  // After the first tap on a phone the name field, the send button and its status come up into view
+  // (they stood under the bottom edge). Only as far as needed; a desk has them on screen already.
+  useEffect(() => {
+    if (phase !== "answered" || !showForm.current) return;
+    showForm.current = false;
+    if (!window.matchMedia("(max-width: 1023.98px)").matches) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    statusLine.current?.scrollIntoView({ block: "nearest", behavior: still ? "auto" : "smooth" });
+  }, [phase]);
+
   const who = (n: string) => n || tl("someone");
 
   const choose = (side: Side) => {
     // Until the address is read the cards may still be the server's day: a tap then would answer the wrong pair.
     if (!ready || phase === "reveal" || side === mine) return;
     if (mine === null) track("daily_answered");
+    if (mine === null && phase === "ask") showForm.current = true;
     if (phase === "invited" && link) {
       track("daily_revealed", { match: side === link.from.side });
       focusReveal.current = true;
@@ -128,8 +172,22 @@ export function TodayQuestion({ day }: { day: number }) {
       setSent(false);
       setChanged(true);
     }
+    // "Link copied" would hide that the link already sent is now out of date.
+    window.clearTimeout(copiedTimer.current);
+    setCopied(false);
     setMine(side);
-    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side });
+    const kept = readSaved(tabStorage(), KEPT, reviveToday);
+    const s = kept && kept.d === view.day && kept.p === view.pair.id ? kept.s : undefined;
+    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side, ...(s ? { s } : {}) });
+  };
+
+  /** A link went out: remember what it carried, so opening it again here is known as the tab's own. */
+  const markSent = () => {
+    const side = mine ?? 0;
+    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side, s: { n: cleanName(name), a: side } });
+    setSent(true);
+    setChanged(false);
+    setView((v) => (v.own ? { ...v, own: false } : v));
   };
 
   const url = () =>
@@ -141,10 +199,10 @@ export function TodayQuestion({ day }: { day: number }) {
     try {
       await navigator.clipboard.writeText(url());
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      window.clearTimeout(copiedTimer.current);
+      copiedTimer.current = window.setTimeout(() => setCopied(false), 2000);
       track("daily_shared", { how: "copy" });
-      setSent(true);
-      setChanged(false);
+      markSent();
     } catch {
       window.prompt(t("copyFallback"), url());
     }
@@ -163,8 +221,7 @@ export function TodayQuestion({ day }: { day: number }) {
       }
     } else return copy();
     track("daily_shared", { how: "share" });
-    setSent(true);
-    setChanged(false);
+    markSent();
   };
 
   const changeName = (value: string) => {
@@ -183,19 +240,37 @@ export function TodayQuestion({ day }: { day: number }) {
   };
 
   const words = (side: Side) => (side === 0 ? view.pair.a : view.pair.b)[locale];
-  const label = phase === "invited" && link ? t("from", { name: who(link.from.name) }) : t("daily");
+  const notToday = view.day !== today || view.pair.id !== dailyPair(today).id;
+  // A pair from another day says which day, where today's says it is the day's.
+  const date = notToday ? new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(view.day * DAY_MS)) : "";
 
-  // In a reveal: whose answer is which. A reply shows the replier's answer to the first person.
+  // In a reveal: whose answer is which. The other person on the left, the reader ("You") on the right,
+  // both ways round: a reply's `to` is the reader's own answer, unless the reader sent that reply.
   const reveal: { left: { name: string; side: Side }; right: { name: string; side: Side } } | null =
     phase !== "reveal" || !link
       ? null
       : link.to
-        ? { left: { name: who(link.to.name), side: link.to.side }, right: { name: who(link.from.name), side: link.from.side } }
+        ? view.own
+          ? { left: { name: who(link.to.name), side: link.to.side }, right: { name: t("you"), side: link.from.side } }
+          : { left: { name: who(link.from.name), side: link.from.side }, right: { name: t("you"), side: link.to.side } }
         : { left: { name: who(link.from.name), side: link.from.side }, right: { name: t("you"), side: mine ?? 0 } };
   const match = reveal ? reveal.left.side === reveal.right.side : false;
-  const canSend = phase === "answered" || phase === "sent" || (phase === "reveal" && !link?.to);
-  const status = copied ? t("copied") : changed ? t("resend") : sent ? (link && !link.to ? t("sentBack", { name: who(link.from.name) }) : t("sent")) : "";
-  const notToday = view.day !== today || view.pair.id !== dailyPair(today).id;
+  const label =
+    phase === "invited" && link
+      ? notToday
+        ? t("fromOn", { name: who(link.from.name), date })
+        : t("from", { name: who(link.from.name) })
+      : phase === "reveal"
+        ? notToday
+          ? t("bothOn", { date })
+          : t("both")
+        : notToday
+          ? t("on", { date })
+          : t("daily");
+  // In a reveal there is one thing to do with the link at a time: send yours back, and once it has
+  // gone (or when there is nothing to send) the way on to today's question.
+  const canSend = phase === "answered" || phase === "sent" || (phase === "reveal" && !link?.to && !sent);
+  const status = changed ? t("resend") : copied ? t("copied") : sent ? (view.own ? t("own") : link && !link.to ? t("sentBack", { name: who(link.from.name) }) : t("sent")) : "";
 
   return (
     <div data-today data-day={view.day} data-phase={phase} data-ready={ready || undefined} className="min-h-[27rem] sm:min-h-[28rem]">
@@ -281,17 +356,17 @@ export function TodayQuestion({ day }: { day: number }) {
         </form>
       ) : null}
 
-      <p role="status" aria-live="polite" className="mt-4 min-h-6 text-[0.9375rem] text-page-body">
+      <p ref={statusLine} role="status" aria-live="polite" className="mt-4 min-h-6 scroll-mb-4 text-[0.9375rem] text-page-body">
         {status}
       </p>
 
       {phase === "reveal" ? (
         <After>
-          <Link href="/games/rather" data-whole-game className={PRIMARY}>
+          <Link href="/games/rather" data-whole-game className={canSend ? SECOND : PRIMARY}>
             {t("wholeGame")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
-          {notToday ? (
+          {notToday && !canSend ? (
             <button type="button" data-todays onClick={backToToday} className={SECOND}>
               {t("todays")}
             </button>

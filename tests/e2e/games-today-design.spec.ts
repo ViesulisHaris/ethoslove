@@ -83,6 +83,11 @@ test("Y3: the questions are closed, and nothing moves when an answer is picked",
   await state(page, "/games/today", "ask");
   for (const d of await page.locator("[data-page-theme] details").all()) await expect(d).not.toHaveAttribute("open", "");
   const top = () => page.locator("#today-how").evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
+  // Measured once the type has loaded and laid out: under load the fallback font was still up, and a 2px move was the font, not the page.
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+  });
   const before = await top();
   await page.locator("[data-today] [data-side=b]").first().click();
   await page.locator("[data-copy]").click();
