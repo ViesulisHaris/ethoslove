@@ -184,7 +184,9 @@ export default function RouteMap({ stops, kind, labels }: Props) {
   return (
     <div className="relative isolate h-full w-full overflow-hidden" style={{ background: MAP_PAPER }}>
       {/* Sized with height, not inset: MapLibre's stylesheet sets `position: relative` on this element. */}
-      <div ref={holder} className="ethos-map-canvas h-full w-full" role="region" aria-label={labels.map} data-map-state={state} data-drawn={drawn ? "true" : "false"} />
+      {/* MapLibre's zoom buttons are 29px; a finger needs 44, as on the Dates map (walk-rooms-13).
+          Important: MapLibre's own sheet is not in a layer, so it outranks any utility that is not. */}
+      <div ref={holder} className="ethos-map-canvas h-full w-full [&_.maplibregl-ctrl-group_button]:size-11!" role="region" aria-label={labels.map} data-map-state={state} data-drawn={drawn ? "true" : "false"} />
       {/* Fades out as the map comes in, and goes once the canvas has been drawn over the paper. */}
       {state !== "failed" && !drawn ? (
         <div className={cn("pointer-events-none absolute inset-0 grid place-items-center text-[13px] text-forest/65 transition-opacity duration-200 ease-(--ease-out-quint)", state === "ready" && "opacity-0")}>
