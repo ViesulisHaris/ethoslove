@@ -103,7 +103,7 @@ test("D2 the first screen says what the page is: the brand line, the heading, th
   }
 });
 
-test("D3 on a phone the figures are a list and the gifts one card to a screen with dots; on a desk both are cards in rows", async ({ page }) => {
+test("D3 on a phone the figures are a list and the gifts one card to a screen with dots; on a desk the figures are unboxed columns under hairlines and the gifts a row", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await open(page, "/press");
   const phone = await page.evaluate(() => ({
@@ -128,9 +128,18 @@ test("D3 on a phone the figures are a list and the gifts one card to a screen wi
   const desk = await page.evaluate(() => ({
     backgrounds: [...document.querySelectorAll("[data-figure]")].map((el) => getComputedStyle(el).backgroundColor),
     tops: [...document.querySelectorAll("[data-figure]")].map((el) => Math.round(el.getBoundingClientRect().top)),
+    widths: [...document.querySelectorAll("[data-figure]")].map((el) => Math.round(el.getBoundingClientRect().width)),
+    boxes: [...document.querySelectorAll("[data-figure]")].map((el) => {
+      const cs = getComputedStyle(el);
+      return { radius: cs.borderTopLeftRadius, shadow: cs.boxShadow, left: cs.borderLeftWidth, top: cs.borderTopWidth };
+    }),
     cardTops: [...document.querySelectorAll("[data-card]")].map((el) => Math.round(el.getBoundingClientRect().top)),
   }));
-  for (const bg of desk.backgrounds) expect(bg).toBe("rgb(251, 241, 233)");
+  // Not a dashboard of boxed cards: no ground, no radius, no shadow, no side borders; a hairline over each.
+  for (const bg of desk.backgrounds) expect(bg).toBe("rgba(0, 0, 0, 0)");
+  for (const box of desk.boxes) expect(box).toEqual({ radius: "0px", shadow: "none", left: "0px", top: "1px" });
+  // The last figure keeps its column's width: nothing is stretched across a row.
+  expect(new Set(desk.widths).size).toBe(1);
   expect(desk.tops[1]).toBe(desk.tops[0]);
   expect(desk.tops[2]).toBe(desk.tops[0]);
   expect(desk.tops[3]).toBeGreaterThan(desk.tops[0]!);

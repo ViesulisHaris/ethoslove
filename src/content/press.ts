@@ -14,6 +14,18 @@ export const PRESS_PATH = "/press";
 /** The day these words last changed, for the sitemap (content/page-dates.ts, once the page is on). */
 export const PRESS_UPDATED = "2026-11-23";
 
+/**
+ * What the owner has not decided yet, each a promise or a choice the page makes on the owner's
+ * behalf (growth-build review, 23 Nov 2026). While any is listed the snapshot may not be switched
+ * on: tests/unit/press.test.ts G7 fails if press-numbers.ts says `ready: true`. Empty the list as
+ * each is decided; if a question is refused, delete it in both languages and fix the FAQ count in C1.
+ */
+export const PRESS_OWNER_PENDING: readonly string[] = [
+  "method.faq[2]: may an article use the posters of the template pages?",
+  "method.faq[3]: does every writer who asks get a free code for a paid template (each one made by hand)?",
+  "contact: is the press address support@secuora.xyz, or one on the brand's own domain?",
+];
+
 type Figure = { label: string; counts: string };
 export type PressCopy = {
   nav: string;
@@ -47,19 +59,19 @@ export type PressCopy = {
 export const PRESS_COPY: Record<PressLocale, PressCopy> = {
   en: {
     nav: "Press",
-    metaTitle: "Ethos in numbers: facts, figures and pictures for the press",
+    metaTitle: "Ethos in numbers: figures and pictures for the press",
     metaDescription:
       "How many cards people have made with Ethos, how often they are opened and which templates lead, counted from our own database. With pictures to use and an address to write to.",
     h1: "Ethos in numbers",
     sentence:
-      "Ethos is a website for making a personal card that opens on a phone: your photos, your words and a song, sent as a link or a printed QR code.",
+      "Ethos is a website for making a personal card that opens on a phone, with photos, words and music, sent as a link or a printed QR code.",
     write: "Write to us",
     mailSubject: "Press",
     sample: "Sample figures, not real ones",
     numbers: {
       label: "The numbers",
       heading: "Counted from our own database",
-      line: "Every figure is a count, rounded down.",
+      line: "Worked out from counts, and always rounded down.",
       asOf: "Counted on {date}.",
       figures: {
         cardsMade: {
@@ -68,7 +80,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         cardsOpened: {
           label: "cards opened",
-          counts: "Opened ten minutes or more after they were sent.",
+          counts: "Not counting the ten minutes after its first open or last edit.",
         },
         opensEach: {
           label: "opens per opened card",
@@ -76,11 +88,11 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         openedAgain: {
           label: "opened more than once",
-          counts: "By a second person, or on another day.",
+          counts: "From another device, browser or network, or on another day.",
         },
         onPhone: {
           label: "of opens are on a phone",
-          counts: "On an iPhone or an Android device.",
+          counts: "Of opens whose device we know; iPhones, older iPads and Android.",
         },
         countries: {
           label: "countries",
@@ -99,17 +111,17 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     made: {
       label: "Most made",
       heading: "The five cards people make most",
-      line: "Each opens its own page, with a demo.",
+      line: "Under each, its share of every card made.",
     },
     article: {
       label: "For your article",
-      heading: "The name, the makers, the pictures",
+      heading: "How to write the name, and pictures to use",
       checks: [
         "Written {name}. The address is {domain}.",
         "Made in Riga by {company}, registered in Latvia in March 2026.",
         "{count} templates, each with a live demo, in two languages.",
       ],
-      logo: "Download the logo",
+      logo: "Download the app icon",
       templates: "See every template",
     },
     method: {
@@ -122,7 +134,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         {
           q: "What counts as an open?",
-          a: "Each time a card's link is opened; the same visitor within 24 hours counts once. An open in the first ten minutes after a card is sent is left out, because most of those are the sender checking it. A signed-in sender's own look is not recorded at all.",
+          a: "Each time a card's link is opened; the same visitor within 24 hours counts once. We leave out the ten minutes after a card's first open and after its last edit, when it is mostly the sender checking it, so the figures err low. A signed-in sender's own look is not recorded at all.",
         },
         {
           q: "May I use the numbers and the pictures?",
@@ -136,26 +148,26 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     },
     contact: {
       label: "Contact",
-      heading: "Write to the people who make it",
+      heading: "Your questions reach the team in Riga",
       line: "Questions, a quote, a card to try: one address.",
       about: "About Ethos",
     },
   },
   es: {
     nav: "Prensa",
-    metaTitle: "Ethos en cifras: datos, números e imágenes para la prensa",
+    metaTitle: "Ethos en cifras: números e imágenes para la prensa",
     metaDescription:
       "Cuántas tarjetas se han hecho con Ethos, cuántas veces se abren y qué plantillas van primero, contado en nuestra propia base de datos. Con imágenes para usar y una dirección a la que escribir.",
     h1: "Ethos en cifras",
     sentence:
-      "Ethos es una web para hacer una tarjeta personal que se abre en el móvil: tus fotos, tus palabras y una canción, enviadas como enlace o como código QR impreso.",
+      "Ethos es una web para hacer una tarjeta personal que se abre en el móvil, con fotos, palabras y música, enviada como enlace o como código QR impreso.",
     write: "Escríbenos",
     mailSubject: "Prensa",
     sample: "Cifras de muestra, no reales",
     numbers: {
       label: "Las cifras",
       heading: "Contadas en nuestra propia base de datos",
-      line: "Cada cifra es un recuento, redondeado a la baja.",
+      line: "Salen de recuentos y siempre se redondean a la baja.",
       asOf: "Contado el {date}.",
       figures: {
         cardsMade: {
@@ -164,19 +176,19 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         cardsOpened: {
           label: "tarjetas abiertas",
-          counts: "Abiertas diez minutos o más después de enviarse.",
+          counts: "Sin contar los diez minutos tras su primera apertura o última edición.",
         },
         opensEach: {
           label: "aperturas por tarjeta abierta",
-          counts: "La misma visita en un día cuenta una vez.",
+          counts: "Quien la abre varias veces en un día cuenta una vez.",
         },
         openedAgain: {
           label: "abiertas más de una vez",
-          counts: "Por una segunda persona, o en otro día.",
+          counts: "Desde otro dispositivo, navegador o red, o en otro día.",
         },
         onPhone: {
-          label: "de las aperturas, en un móvil",
-          counts: "En un iPhone o un dispositivo Android.",
+          label: "de las aperturas son desde el móvil",
+          counts: "De las aperturas con dispositivo conocido: iPhone, iPad antiguos y Android.",
         },
         countries: {
           label: "países",
@@ -185,27 +197,27 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
       },
       reminder: {
         labels: {
-          birthday: "de los recordatorios, de cumpleaños",
-          anniversary: "de los recordatorios, de aniversario",
-          valentines: "de los recordatorios, de San Valentín",
+          birthday: "de los recordatorios son de cumpleaños",
+          anniversary: "de los recordatorios son de aniversario",
+          valentines: "de los recordatorios son de San Valentín",
         },
-        counts: "Entre las fechas con un recordatorio puesto.",
+        counts: "De todas las fechas con recordatorio.",
       },
     },
     made: {
-      label: "Las más hechas",
+      label: "Las favoritas",
       heading: "Las cinco tarjetas que más se hacen",
-      line: "Cada una abre su página, con una demo.",
+      line: "Debajo de cada una, su parte de todas las tarjetas hechas.",
     },
     article: {
       label: "Para tu artículo",
-      heading: "El nombre, quién lo hace, las imágenes",
+      heading: "Cómo se escribe el nombre, e imágenes para usar",
       checks: [
         "Se escribe {name}. La dirección es {domain}.",
         "Hecho en Riga por {company}, registrada en Letonia en marzo de 2026.",
         "{count} plantillas, cada una con su demo, en dos idiomas.",
       ],
-      logo: "Descargar el logo",
+      logo: "Descargar el icono",
       templates: "Ver todas las plantillas",
     },
     method: {
@@ -218,7 +230,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         {
           q: "¿Qué cuenta como una apertura?",
-          a: "Cada vez que se abre el enlace de una tarjeta; la misma visita en 24 horas cuenta una vez. Una apertura en los diez primeros minutos tras el envío no se cuenta, porque casi siempre es quien la envía comprobándola. Cuando quien la envía la mira con su sesión iniciada, no se registra.",
+          a: "Cada vez que se abre el enlace de una tarjeta; la misma persona en 24 horas cuenta una vez. No contamos los diez minutos tras su primera apertura ni tras su última edición, cuando casi siempre es quien la envía comprobándola, así que las cifras se quedan cortas. Cuando quien la envía la mira con su sesión iniciada, no se registra.",
         },
         {
           q: "¿Puedo usar las cifras y las imágenes?",
@@ -232,8 +244,8 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     },
     contact: {
       label: "Contacto",
-      heading: "Escribe a quienes lo hacen",
-      line: "Preguntas, una declaración, una tarjeta de prueba: una dirección.",
+      heading: "Tus preguntas llegan al equipo de Riga",
+      line: "Preguntas, declaraciones o una tarjeta para probar: una sola dirección.",
       about: "Sobre Ethos",
     },
   },

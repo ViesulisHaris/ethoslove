@@ -50,9 +50,10 @@ export default async function PressRoute({ params }: Props) {
     const manifest = getManifest(slug);
     return manifest ? [{ manifest, share }] : [];
   });
-  // A whole snapshot always has five.
+  // A whole snapshot always has five. The band's phone shows the second, so the Letter's cover is not on the page twice.
   const lead = cards[0]?.manifest;
-  if (!lead) notFound();
+  const second = cards[1]?.manifest ?? lead;
+  if (!lead || !second) notFound();
   const fill = (s: string) => s.replace("{name}", BRAND.name).replace("{domain}", BRAND.domain).replace("{company}", LEGAL_ENTITY.name).replace("{count}", String(listManifests().length));
 
   return (
@@ -76,8 +77,9 @@ export default async function PressRoute({ params }: Props) {
         </PressHero>
         <PressFigures label={copy.numbers.label} heading={copy.numbers.heading} line={copy.numbers.line} figures={figures} asOf={copy.numbers.asOf.replace("{date}", pressDate(numbers.asOf, l))} day={numbers.asOf} />
         <PressMostMade label={copy.made.label} heading={copy.made.heading} line={copy.made.line} cards={cards} locale={l} />
-        <PressArticle label={copy.article.label} heading={copy.article.heading} checks={copy.article.checks.map(fill)} poster={lead.thumbnail.poster}>
-          <a href="/icons/icon-512.png" download="ethos-logo.png" className={PRESS_LINK}>
+        <PressArticle label={copy.article.label} heading={copy.article.heading} checks={copy.article.checks.map(fill)} poster={second.thumbnail.poster}>
+          {/* The app icon (a heart on cream), the one mark public/ holds: there is no wordmark file yet, so it is not called a logo. */}
+          <a href="/icons/icon-512.png" download="ethos-app-icon.png" className={PRESS_LINK}>
             {copy.article.logo}
           </a>
           <Link href="/templates" className={PRESS_LINK}>

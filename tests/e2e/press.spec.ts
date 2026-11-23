@@ -50,7 +50,7 @@ test.describe("with figures in (the sample)", () => {
   test("V1 the page stands in both languages, titled for a writer, with the brand line over its heading", async ({ page }) => {
     const errors = errorsOf(page);
     const cases = [
-      { where: "/press", title: "Ethos in numbers: facts, figures and pictures for the press", h1: "Ethos in numbers", maker: "Digital cards by Tryethos", canonical: "/press" },
+      { where: "/press", title: "Ethos in numbers: figures and pictures for the press", h1: "Ethos in numbers", maker: "Digital cards by Tryethos", canonical: "/press" },
       { where: "/es/press", title: "Ethos en cifras: datos, números e imágenes para la prensa", h1: "Ethos en cifras", maker: "Tarjetas digitales de Tryethos", canonical: "/es/press" },
     ];
     for (const c of cases) {
@@ -94,6 +94,8 @@ test.describe("with figures in (the sample)", () => {
     await expect(cards).toHaveCount(5);
     await expect(cards.locator("[data-card-title]")).toHaveText(["The Letter", "Bouquet", "Jar of Reasons", "Scratch Card", "Constellations"]);
     await expect(cards.locator("[data-share]")).toHaveText(["32%", "11%", "8%", "6%", "5%"]);
+    // The bare percentages say what they are a share of, in the section's own line.
+    await expect(page.locator("section:has(#press-most-made)")).toContainText("Under each, its share of every card made.");
     const hrefs = await cards.locator("a").evaluateAll((links) => links.map((a) => a.getAttribute("href")));
     expect(hrefs).toEqual(["the-letter", "bouquet", "jar-of-reasons", "scratch-card", "constellations"].map((s) => `/templates/${s}`));
     await row.scrollIntoViewIfNeeded();
@@ -126,6 +128,9 @@ test.describe("with figures in (the sample)", () => {
     }
     const logo = page.locator("a[download]");
     await expect(logo).toHaveCount(1);
+    // It is the app icon, and says so: there is no wordmark to call a logo.
+    await expect(logo).toHaveText("Download the app icon");
+    await expect(logo).toHaveAttribute("download", "ethos-app-icon.png");
     const file = await request.get((await logo.getAttribute("href"))!);
     expect(file.status()).toBe(200);
     expect(file.headers()["content-type"]).toMatch(/^image\/png/);
@@ -166,12 +171,13 @@ test.describe("with figures in (the sample)", () => {
     await expect(page.locator("details[name=press-faq] summary").first()).toHaveText("¿Qué cuenta como una tarjeta hecha?");
     const text = await page.locator("[data-page-theme]").innerText();
     for (const english of ["cards made", "Write to us", "Most made"]) expect(text).not.toContain(english);
+    await expect(page.locator("a[download]")).toHaveText("Descargar el icono");
   });
 
   test("V7 by keyboard alone", async ({ page, isMobile }) => {
     test.skip(isMobile, "a keyboard is a desk's");
     await page.goto("/press");
-    const order = ["Write to us", "The Letter", "Bouquet", "Jar of Reasons", "Scratch Card", "Constellations", "Download the logo", "See every template", "What counts as a card made?", "What counts as an open?", "May I use the numbers and the pictures?", "Can I try a paid template?", "support@", "About Ethos", "Etsy", "Pinterest", "TikTok", "YouTube"];
+    const order = ["Write to us", "The Letter", "Bouquet", "Jar of Reasons", "Scratch Card", "Constellations", "Download the app icon", "See every template", "What counts as a card made?", "What counts as an open?", "May I use the numbers and the pictures?", "Can I try a paid template?", "support@", "About Ethos", "Etsy", "Pinterest", "TikTok", "YouTube"];
     let at = 0;
     for (let i = 0; i < 120 && at < order.length; i++) {
       await page.keyboard.press("Tab");

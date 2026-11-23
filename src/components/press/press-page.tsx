@@ -102,21 +102,14 @@ function PressFlatlay({ poster, alt }: { poster: string; alt: string }) {
   );
 }
 
+export type PressFigureRow = { id: string; value: string; label: string; counts: string };
+
 /**
- * The last figure runs to the row's end, so a row of cards never ends on an empty place: five to
- * seven figures (countries and the reminder are each optional) do not all fill two or three
- * columns evenly. By the count, in whole class names, so Tailwind finds them.
+ * (2) The figures: rows with hairlines on a phone, unboxed columns from 640px with a hairline over
+ * each, as the questions are drawn. Never boxed cards: each figure carries a sentence, and a card is
+ * never a paragraph (DESIGN-LESS-TEXT.md); seven boxes read as a dashboard. A short last row is
+ * simply short.
  */
-const LAST_FIGURE: Record<number, string> = {
-  5: "sm:col-span-2 xl:col-span-2",
-  6: "",
-  7: "sm:col-span-2 xl:col-span-3",
-};
-const lastFigure = (count: number): string => LAST_FIGURE[count] ?? "";
-
-export type PressFigureRow ={ id: string; value: string; label: string; counts: string };
-
-/** (2) The figures: rows with hairlines on a phone (a phone never shows a set of cards at once), cards from 640px. */
 export function PressFigures({ label, heading, line, figures, asOf, day }: { label: string; heading: string; line: string; figures: PressFigureRow[]; asOf: string; day: string }) {
   return (
     <section id="numbers" className="relative scroll-mt-24" aria-labelledby="press-numbers">
@@ -124,9 +117,9 @@ export function PressFigures({ label, heading, line, figures, asOf, day }: { lab
       <div className={cn(SPREAD, "py-12 sm:py-16 lg:py-20")}>
         <Intro id="press-numbers" label={label} heading={heading} line={line} />
         <div className="min-w-0 lg:pt-7">
-          <dl data-figures className="grid border-b border-page-line sm:grid-cols-2 sm:gap-5 sm:border-b-0 xl:grid-cols-3">
-            {figures.map((f, i) => (
-              <div key={f.id} data-pick data-figure={f.id} className={cn("flex flex-col border-t border-page-line py-5 sm:rounded-[1.25rem] sm:border sm:bg-page-raised sm:px-6 sm:py-6 sm:shadow-page-card", i === figures.length - 1 ? lastFigure(figures.length) : null)}>
+          <dl data-figures className="grid border-b border-page-line sm:grid-cols-2 sm:gap-x-8 sm:gap-y-2 sm:border-b-0 xl:grid-cols-3 xl:gap-x-10">
+            {figures.map((f) => (
+              <div key={f.id} data-pick data-figure={f.id} className="flex flex-col border-t border-page-line py-5 sm:pt-6 sm:pb-4">
                 <dt className="order-2 mt-2 text-[0.9375rem] font-medium text-page-ink">{f.label}</dt>
                 <dd data-value className="order-1 font-display text-[clamp(2.75rem,5vw,3.5rem)] leading-none tracking-[-0.03em] text-page-ink tabular-nums">
                   {f.value}

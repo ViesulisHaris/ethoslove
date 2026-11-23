@@ -3,7 +3,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BRAND } from "@/config/brand";
 import { ABOUT_FOUNDED, aboutCopy } from "@/content/about";
-import { PRESS_COPY, pressFounderLine } from "@/content/press";
+import { PRESS_COPY, PRESS_OWNER_PENDING, pressFounderLine } from "@/content/press";
 import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
 import { CLOSED_BLOCK_WORDS, countWords } from "@/components/templates/page/lead";
@@ -24,9 +24,21 @@ const TODAY = "2026-12-01";
 const byId = (n: PressNumbers, locale: "en" | "es") => Object.fromEntries(pressFigures(n, locale).map((f) => [f.id, f.value]));
 
 describe("press figures: the gate", () => {
-  it("G1 the committed snapshot is either off, or whole", () => {
-    if (PRESS_NUMBERS.ready) expect(pressProblems(PRESS_NUMBERS)).toEqual([]);
-    expect(pressLive(PRESS_NUMBERS)).toBe(PRESS_NUMBERS.ready && pressProblems(PRESS_NUMBERS).length === 0);
+  // While `ready` is false this holds the committed fake zeros in place; it says nothing about real
+  // figures until the snapshot is switched on, when its first line is the check that matters.
+  it("G1 the committed snapshot is either whole and on, or off with its obvious zeros, and then the page is a 404 in production", () => {
+    if (PRESS_NUMBERS.ready) {
+      expect(pressProblems(PRESS_NUMBERS)).toEqual([]);
+      return;
+    }
+    for (const key of PRESS_COUNTS) expect(PRESS_NUMBERS[key], key).toBe(0);
+    expect(shownPress({ numbers: PRESS_NUMBERS, preview: false, production: true })).toBeNull();
+    expect(shownPress({ numbers: PRESS_NUMBERS, preview: true, production: true })).toBeNull();
+  });
+
+  it("G7 the snapshot is not switched on while the owner still has a decision to make about the page", () => {
+    if (PRESS_NUMBERS.ready) expect(PRESS_OWNER_PENDING).toEqual([]);
+    for (const p of PRESS_OWNER_PENDING) expect(p).toMatch(/^(method\.faq\[\d\]|contact): /);
   });
 
   it("G2 a snapshot switched on with any figure at 0 is refused, and says which", () => {
@@ -138,9 +150,27 @@ describe("press query", () => {
     const text = read("scripts/press-numbers.sql");
     for (const key of ["asOf", ...PRESS_COUNTS, "topTemplates", "reminders", "slug", "made", "total", ...REMINDER_OCCASIONS]) expect(text, key).toContain(`'${key}'`);
     const allowed = new Set<string>(["asOf", ...PRESS_COUNTS, "topTemplates", "reminders", "slug", "made", "total", ...REMINDER_OCCASIONS, "teamAccounts"]);
-    const values = new Set(["ios", "android", "utc", "birthday", "anniversary", "valentines", "YYYY"]);
+    const values = new Set(["ios", "android", "utc", "birthday", "anniversary", "valentines", "YYYY", "live", "scheduled"]);
     const keys = [...sql().matchAll(/'(\w+)',/g)].map((m) => m[1]!).filter((k) => !values.has(k) || allowed.has(k));
     for (const key of keys) expect(allowed.has(key), key).toBe(true);
+  });
+});
+
+describe("press query: what an open is", () => {
+  const sql = () => read("scripts/press-numbers.sql").replace(/--[^\n]*/g, "");
+
+  it("Q3 the sender's look is measured from each card's first open and its last publish, never from a sent time an edit moves", () => {
+    const body = sql().replace(/\s+/g, " ");
+    // Every publish, an edit included, overwrites published_at and may null unlock_at (actions/gift.ts),
+    // so neither can say when a card was first sent.
+    expect(body).not.toMatch(/unlock_at/);
+    expect(body).not.toMatch(/sent_at/);
+    expect(body).toContain("min(v.opened_at)");
+    expect(body).toContain("v.opened_at >= f.opened_at + interval '10 minutes'");
+    expect(body).toContain("not (v.opened_at >= c.published_at and v.opened_at < c.published_at + interval '10 minutes')");
+    // A refunded card goes back to draft but keeps published_at (commerce/unlocks.ts): only cards whose link opens count.
+    expect(body).toContain("g.status in ('live', 'scheduled')");
+    expect(read("src/app/actions/gift.ts")).toMatch(/published_at: new Date\(\)\.toISOString\(\)/);
   });
 });
 
@@ -195,6 +225,32 @@ describe("press words", () => {
     expect(PRESS_COPY.en.article.checks[1]).toContain("March 2026");
     expect(PRESS_COPY.es.article.checks[1]).toContain("marzo de 2026");
     expect(ABOUT_FOUNDED.startsWith("2026-03")).toBe(true);
+  });
+
+  it("C5 every figure says what it counts, and the words match the query's rule", () => {
+    const en = PRESS_COPY.en;
+    // Averages and shares are not counts: the line says they are worked out from counts.
+    expect(en.numbers.line).not.toMatch(/is a count/);
+    expect(PRESS_COPY.es.numbers.line).not.toMatch(/es un recuento/);
+    // The five percentages are a share of every card made, and the section says so.
+    expect(en.made.line).toMatch(/share of every card made/);
+    expect(PRESS_COPY.es.made.line).toMatch(/todas las tarjetas hechas/);
+    // The open rule is the query's: first open and last edit, never "after they were sent".
+    for (const locale of ["en", "es"] as const) {
+      const c = PRESS_COPY[locale];
+      expect(c.numbers.figures.cardsOpened.counts, locale).not.toMatch(/sent|enviarse|envío/);
+      expect(c.method.faq[1]!.a, locale).not.toMatch(/after a card is sent|tras el envío/);
+    }
+    expect(en.numbers.figures.cardsOpened.counts).toMatch(/first open or last edit/);
+    expect(en.method.faq[1]!.a).toMatch(/first open and after its last edit/);
+    // The phone share is of opens whose device is known; an iPad counts as 'ios'.
+    expect(en.numbers.figures.onPhone.counts).toMatch(/device we know/);
+    expect(en.numbers.figures.onPhone.counts).toMatch(/iPads/);
+    // A visitor is a hash of address, browser and card.
+    expect(en.numbers.figures.openedAgain.counts).toMatch(/device, browser or network/);
+    // The app icon is not called a logo.
+    expect(en.article.logo).not.toMatch(/logo/i);
+    expect(PRESS_COPY.es.article.logo).not.toMatch(/logo/i);
   });
 
   it("C4 no filler, no shouting, nothing about Spain, never a voucher's name", () => {

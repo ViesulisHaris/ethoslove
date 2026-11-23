@@ -11,18 +11,30 @@
 -- many accounts matched; if it is 0 the list is wrong and our own test cards are being counted.
 --
 -- What every figure leaves out, for the reasons the page's closed "How we count" block gives:
---   drafts            a card counts once it has been published (gifts.published_at is set). Drafts
---                     are deleted after seven days anyway (purge_stale_drafts, 0006).
+--   drafts            a card counts while it can be opened: it has been published (gifts.published_at
+--                     is set) and is live or scheduled now. Drafts are deleted after seven days anyway
+--                     (purge_stale_drafts, 0006). A paid card that was refunded is set back to draft
+--                     but keeps its published_at (lib/commerce/unlocks.ts): the status test leaves
+--                     it out, since its link no longer opens.
 --   deleted cards     a card or an account its owner deleted is gone, with its opens (on delete
 --                     cascade). Every figure is of what is in the database on the day it is run.
 --   test cards        every card made from an account in `team`.
---   the sender's look an open less than ten minutes after the card was sent. Seven in ten cards
---                     were first "opened" within two minutes of being sent, from the share screen's
---                     own Open button (src/lib/gift/own-view.ts). Since 20 Nov 2026 a signed-in
---                     sender's look is not recorded at all; before that, and for a sender who is
---                     signed out, the row cannot be told from a recipient's, so the first ten
---                     minutes are left out for every card. This also leaves out a recipient who
---                     opened it in those minutes: the figures err low, never high.
+--   the sender's look two windows of ten minutes per card, and every open in them:
+--                     1. after the card's first recorded open. Seven in ten cards were first
+--                        "opened" within two minutes of being sent, from the share screen's own
+--                        Open button (src/lib/gift/own-view.ts): the first open is mostly the
+--                        sender. It is measured from the first open, not from published_at,
+--                        because every publish overwrites published_at, an edit to a live card
+--                        included (src/app/actions/gift.ts), so published_at is the LAST publish.
+--                        A scheduled card records no open before it unlocks (record_gift_view,
+--                        0005), so its first open is on or after the day it unlocks.
+--                     2. after the card's last publish (published_at): the sender checking an edit.
+--                        Earlier edits leave no time behind, so the looks after them are counted.
+--                     Since 20 Nov 2026 a signed-in sender's look is not recorded at all; before
+--                     that, and for a sender who is signed out, the row cannot be told from a
+--                     recipient's. The windows also leave out a recipient who opened it in those
+--                     minutes, and a card opened only once, in one sitting, counts as not opened:
+--                     the figures err low.
 -- An "open" is one row of gift_views: one visitor (a hash of address, browser and card) at most once
 -- in 24 hours (record_gift_view, 0005).
 --
@@ -40,20 +52,30 @@ with
     from public.profiles p
     where lower(p.email) = any (array['owner@example.com', 'second@example.com']::text[])
   ),
-  -- A card made: published at least once, still in the database, not one of ours.
-  -- sent_at is when it could first be opened: the day it unlocks, for a scheduled card.
+  -- A card made: published, still able to be opened (live or scheduled), not one of ours.
   cards as (
-    select g.id, g.template_slug, greatest(g.published_at, coalesce(g.unlock_at, g.published_at)) as sent_at
+    select g.id, g.template_slug, g.published_at
     from public.gifts g
     where g.published_at is not null
+      and g.status in ('live', 'scheduled')
       and g.user_id not in (select id from team)
   ),
-  -- An open that counts: of one of those cards, ten minutes or more after it was sent.
+  -- Each card's first recorded open, the start of the first window.
+  first_open as (
+    select v.gift_id, min(v.opened_at) as opened_at
+    from public.gift_views v
+    join cards c on c.id = v.gift_id
+    group by v.gift_id
+  ),
+  -- An open that counts: of one of those cards, outside both windows (ten minutes after its first
+  -- open, ten minutes after its last publish).
   opens as (
     select v.gift_id, v.device
     from public.gift_views v
     join cards c on c.id = v.gift_id
-    where v.opened_at >= c.sent_at + interval '10 minutes'
+    join first_open f on f.gift_id = v.gift_id
+    where v.opened_at >= f.opened_at + interval '10 minutes'
+      and not (v.opened_at >= c.published_at and v.opened_at < c.published_at + interval '10 minutes')
   ),
   per_card as (
     select o.gift_id, count(*) as n
@@ -82,18 +104,19 @@ select jsonb_pretty(jsonb_build_object(
   -- Cards made: published, not deleted, not ours. Leaves out drafts and test cards.
   'cardsMade', (select count(*) from cards),
   -- Cards opened: of those, the ones with at least one open that counts. Leaves out a card whose
-  -- only opens came in its first ten minutes.
+  -- only opens came in the two windows.
   'cardsOpened', (select count(*) from per_card),
   -- Opens: every open that counts, of every card. Divided by cardsOpened it is the average opens
   -- per opened card.
   'opens', (select coalesce(sum(n), 0) from per_card),
-  -- Opened more than once: cards with two or more opens that count (a second visitor, or the same
-  -- one on another day). Divided by cardsOpened it is the share opened more than once.
+  -- Opened more than once: cards with two or more opens that count. A visitor is a hash of address,
+  -- browser and card, so this is another device, browser or network, or the same one on another day. Divided by cardsOpened it is the share opened more than once.
   'openedAgain', (select count(*) from per_card where n >= 2),
   -- Opens on a phone: the request said iPhone, iPad, iPod or Android (the view route's device():
   -- 'ios' or 'android'). A newer iPad calls itself a Mac and is counted as a computer.
   'phoneOpens', (select count(*) from opens where device in ('ios', 'android')),
-  -- Opens whose device is known at all: what phoneOpens is a share of. Old rows have none.
+  -- Opens whose device is known at all: what phoneOpens is a share of, and the page says so. Old
+  -- rows have none. iPads and iPods count as 'ios', so the page says "older iPads" too.
   'deviceOpens', (select count(*) from opens where device is not null),
   -- The five templates with the most cards made, most first; a tie goes by name.
   'topTemplates', (select coalesce(jsonb_agg(jsonb_build_object('slug', t.slug, 'made', t.made) order by t.made desc, t.slug), '[]'::jsonb) from top_templates t),
