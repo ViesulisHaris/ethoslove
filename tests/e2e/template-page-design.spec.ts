@@ -118,7 +118,9 @@ test("the footer's lily leans in beside the last column and lies under none of t
   await page.goto(PAGE);
   await expect(page.locator("[data-footer-flower]")).toBeHidden();
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/pricing");
+  // /trips: a page in the site's older layout. /pricing was this page until its remake of 24 Nov 2026 made it one of
+  // the pages built from a gift's page (SitePage), which carry the footer's flower as /digital-cards does.
+  await page.goto("/trips");
   await expect(page.locator("[data-footer-flower]")).toBeHidden();
 });
 

@@ -30,9 +30,12 @@ const hiddenAbove = (line: Locator) => line.locator("xpath=ancestor-or-self::*[@
 test.describe("Ethos for Two, sold as a subscription", () => {
   test.beforeEach(async ({ request }) => needSubscriptions(request, "on"));
 
-  test("leads the page: yearly chosen, what that is a month, and the terms under the one button", async ({ page }) => {
+  // Since the remake of 24 Nov 2026 (docs/marketing/growth-build/PLAN-pricing.md) Ethos for Two is a band after the single
+  // gifts, so its heading is an h2; its six lines are three ticks (all six are rows of the table), and the line
+  // "One payment covers both of you" and the three trust notes under the button are gone, for the page's 300 words.
+  test("its band: yearly chosen, what that is a month, and the terms under the one button", async ({ page }) => {
     await page.goto("/pricing?subscriptions=on");
-    await expect(page.getByTestId("membership-hero").getByRole("heading", { level: 1 })).toHaveText("Every date you plan, kept for both of you.");
+    await expect(page.getByTestId("membership-hero").getByRole("heading", { level: 2 }).first()).toHaveText("Every date you plan, kept for both of you.");
     await expect(page.getByTestId("plan-yearly")).toHaveAttribute("aria-checked", "true");
     await expect(page.getByTestId("plan-monthly")).toHaveAttribute("aria-checked", "false");
     await expect(page.getByTestId("plan-yearly")).toContainText("Save 50%");
@@ -40,9 +43,8 @@ test.describe("Ethos for Two, sold as a subscription", () => {
     const offer = page.getByTestId("membership-offer");
     await expect(hiddenAbove(offer.getByText("That's €2.50 a month · save 50% on monthly"))).toHaveCount(0);
     await expect(hiddenAbove(offer.getByText("€29.99 today, then every year until you cancel. We'll remind you a week before each renewal."))).toHaveCount(0);
-    await expect(offer.getByText("One payment covers both of you · cancel any time")).toBeVisible();
     await expect(page.getByTestId("buy-membership")).toHaveText("Get Ethos for Two");
-    await expect(page.getByTestId("membership-hero").getByRole("listitem")).toHaveCount(6 + 3);
+    await expect(page.getByTestId("membership-hero").getByRole("listitem")).toHaveCount(3);
   });
 
   test("the toggle changes the price and the terms, by tap or by arrow key, and nothing below it moves", async ({ page }) => {
@@ -80,6 +82,8 @@ test.describe("Ethos for Two, sold as a subscription", () => {
 
   test("the comparison is a real table: free next to Ethos for Two, with the catalogue's prices", async ({ page }) => {
     await page.goto("/pricing?subscriptions=on");
+    // Closed behind one row since the remake (open for whoever arrives with ?plan=, ?renew= or ?from=).
+    await page.getByText("Compare free and Ethos for Two, line by line").click();
     const table = page.getByTestId("membership-compare");
     await expect(table.getByRole("columnheader", { name: "Free" })).toBeVisible();
     await expect(table.getByRole("columnheader", { name: "Ethos for Two" })).toBeVisible();
@@ -88,16 +92,18 @@ test.describe("Ethos for Two, sold as a subscription", () => {
     await expect(table.getByRole("row", { name: /^Price/ })).toContainText("€4.99 a month or €29.99 a year, for two");
   });
 
-  test("answers the questions for a subscription, Ethos for Two's first", async ({ page }) => {
+  test("answers the questions for a subscription, Ethos for Two's together", async ({ page }) => {
     await page.goto("/pricing?subscriptions=on");
+    // Ethos for Two's questions are one closed row under the others since the remake.
+    await page.getByText("Questions about Ethos for Two").click();
     const forTwo = page.getByTestId("pricing-faq-forTwo");
-    await expect(forTwo.getByRole("button", { name: "What is Ethos for Two?" })).toBeVisible();
-    await expect(forTwo.getByRole("button", { name: "How do I cancel?" })).toBeVisible();
-    await expect(forTwo.getByRole("button", { name: "Can I change my mind after subscribing?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Can I change my mind after buying?" })).toHaveCount(0);
-    await expect(page.getByTestId("pricing-faq-rest").getByRole("button", { name: "Refunds?" })).toBeVisible();
+    await expect(forTwo.locator("summary").getByText("What is Ethos for Two?", { exact: true })).toBeVisible();
+    await expect(forTwo.locator("summary").getByText("How do I cancel?", { exact: true })).toBeVisible();
+    await expect(forTwo.locator("summary").getByText("Can I change my mind after subscribing?", { exact: true })).toBeVisible();
+    await expect(page.locator("summary").getByText("Can I change my mind after buying?", { exact: true })).toHaveCount(0);
+    await expect(page.getByTestId("pricing-faq-rest").locator("summary").getByText("Refunds?", { exact: true })).toBeVisible();
     // Only one of the two answers to "Is this a subscription?".
-    await expect(page.getByRole("button", { name: "Is this a subscription?" })).toHaveCount(1);
+    await expect(page.locator("summary").getByText("Is this a subscription?", { exact: true })).toHaveCount(1);
   });
 });
 
@@ -123,9 +129,11 @@ test.describe("Ethos for Two, sold as a one-year pass (the switch off)", () => {
 
   test("the table and the questions talk about the pass", async ({ page }) => {
     await page.goto("/pricing?subscriptions=off");
+    await page.getByText("Compare free and Ethos for Two, line by line").click();
     await expect(page.getByTestId("membership-compare").getByRole("row", { name: /^Price/ })).toContainText("€29.99 for a year, paid once, for two");
-    await expect(page.getByRole("button", { name: "Can I change my mind after buying?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "How do I cancel?" })).toHaveCount(0);
+    await page.getByText("Questions about Ethos for Two").click();
+    await expect(page.locator("summary").getByText("Can I change my mind after buying?", { exact: true })).toBeVisible();
+    await expect(page.locator("summary").getByText("How do I cancel?", { exact: true })).toHaveCount(0);
   });
 });
 

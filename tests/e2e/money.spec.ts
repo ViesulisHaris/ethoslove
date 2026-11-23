@@ -38,7 +38,9 @@ async function pricingAsOneTimeYear(page: Page, path = "/pricing", query = "") {
 test.describe("the pricing page", () => {
   // With STRIPE_SUBSCRIPTIONS_ENABLED off, Ethos for Two is sold as the one-time year
   // (docs/MEMBERSHIP.md 2.10). tests/e2e/pricing-membership.spec.ts covers both states.
-  test("leads with Ethos for Two, then the single gifts at their prices; no gift card and no code field while they're off", async ({ page }) => {
+  // Since the remake of 24 Nov 2026 (docs/marketing/growth-build/PLAN-pricing.md) the page leads with a gift's price and
+  // Ethos for Two follows the single gifts; its own questions are one closed row under the others.
+  test("the single gifts at their prices and Ethos for Two at its own; no gift card and no code field while they're off", async ({ page }) => {
     await pricingAsOneTimeYear(page);
     const offer = page.getByTestId("membership-offer");
     await expect(offer).toContainText("€29.99");
@@ -58,11 +60,12 @@ test.describe("the pricing page", () => {
 
     // Ethos for Two is for sale: no waitlist form anywhere.
     await expect(page.getByRole("textbox", { name: /email/i })).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Is this a subscription?" })).toHaveCount(1);
-    await expect(page.getByRole("button", { name: "What is Ethos for Two?" })).toHaveCount(1);
-    await expect(page.getByRole("button", { name: "Can they send one back?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Is there a discount code?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "How do gift cards work?" })).toHaveCount(0);
+    await page.getByText("Questions about Ethos for Two").click();
+    await expect(page.locator("summary").getByText("Is this a subscription?", { exact: true })).toHaveCount(1);
+    await expect(page.locator("summary").getByText("What is Ethos for Two?", { exact: true })).toHaveCount(1);
+    await expect(page.locator("summary").getByText("Can they send one back?", { exact: true })).toBeVisible();
+    await expect(page.locator("summary").getByText("Is there a discount code?", { exact: true })).toBeVisible();
+    await expect(page.locator("summary").getByText("How do gift cards work?", { exact: true })).toHaveCount(0);
   });
 
   test("buys Ethos for Two with nothing but the product and the plan: no code, no amount", async ({ page }) => {
