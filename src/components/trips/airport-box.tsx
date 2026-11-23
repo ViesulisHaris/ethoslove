@@ -68,7 +68,7 @@ export function AirportBox({ label, placeholder, nothing, value, locale, directi
 
   return (
     <div ref={box} className="relative min-w-0">
-      <label className="flex h-14 items-center gap-2.5 rounded-2xl border border-forest/15 bg-white px-4 transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]">
+      <label className="flex h-14 items-center gap-2.5 rounded-2xl border border-forest/15 bg-card px-4 transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]">
         <Icon aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="text-[12px] leading-none font-semibold tracking-wide text-forest/65 uppercase">{label}</span>
@@ -126,7 +126,7 @@ export function AirportBox({ label, placeholder, nothing, value, locale, directi
           aria-label={label}
           // Keeps the focus in the input, so its blur doesn't settle on the lit airport before a click on another lands.
           onMouseDown={(e) => e.preventDefault()}
-          className="absolute inset-x-0 top-[calc(100%+6px)] z-30 max-h-72 overflow-auto rounded-2xl border border-forest/10 bg-white p-1.5 shadow-lift">
+          className="absolute inset-x-0 top-[calc(100%+6px)] z-30 max-h-72 overflow-auto rounded-2xl border border-forest/10 bg-card p-1.5 shadow-lift">
           {results.length === 0 ? (
             <li className="px-3 py-3 text-sm leading-snug text-forest/65">{nothing}</li>
           ) : (

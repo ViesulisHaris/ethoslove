@@ -205,7 +205,14 @@ const BAND_INSIDE: Bloom[] = [
   { art: "leaf-1", x: 10, y: 84, size: 9, rot: 20, blur: 5, opacity: 0.45, phone: false },
 ];
 
-const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, bandInside: BAND_INSIDE, card: CARD } as const;
+/**
+ * A trip's hero (walk-rooms-3): BAND cut its lily flat at the hero's foot. The foot's pieces lie whole
+ * inside it, as in BAND_INSIDE, and only from 1440px: narrower, the facts and buttons run over it.
+ * BAND_INSIDE's leaf is left out: it lay under the first button.
+ */
+const BAND_HERO: Bloom[] = [BAND[0], BAND[1], { ...BAND_INSIDE[2], wide: true }];
+
+const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, bandInside: BAND_INSIDE, bandHero: BAND_HERO, card: CARD } as const;
 
 /**
  * A frame of real flowers round a section. `light` lays them on blush paper, `dark` on the forest

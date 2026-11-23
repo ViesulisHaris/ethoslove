@@ -36,7 +36,7 @@ export function TripsGrid({ cards, filters, label, className }: Props) {
               onClick={() => setKind(f.value)}
               className={cn(
                 "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-[14.5px] font-semibold whitespace-nowrap transition-colors",
-                on ? "bg-forest text-cream" : "bg-white text-forest ring-1 ring-forest/12 hover:bg-rose-mist",
+                on ? "bg-forest text-cream" : "bg-card text-forest ring-1 ring-forest/12 hover:bg-blush-paper",
               )}
             >
               {f.label}

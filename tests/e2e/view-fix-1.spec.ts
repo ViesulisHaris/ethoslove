@@ -273,8 +273,59 @@ test.describe("cream, not white", () => {
       await expect(login).toBeVisible();
       expect(await login.evaluate((a) => getComputedStyle(a).backgroundColor)).not.toBe(WHITE);
     });
+
+    test("rooms-4: the menu's current room and its cards are neither the old cool pink nor white", async ({ page }) => {
+      await page.goto("/trips");
+      await page.getByRole("button", { name: "Open menu" }).click();
+      const nav = page.getByRole("dialog").getByRole("navigation");
+      await expect(nav.locator("a[aria-current=page]")).toBeVisible();
+      expect(await offPalette(nav)).toEqual([]);
+    });
+  });
+
+  // The second fix round (view-fix-2-brief.md): rooms-4 and rooms-5 outside the Dates folders.
+  test("rooms-4: a trip's Evening lines and its hero's buttons are on the cream", async ({ page }) => {
+    await page.goto("/trips/baltic-coast");
+    const evenings = page.locator("[data-testid=trip-plan] li li", { has: page.locator("strong") });
+    await expect(evenings.first()).toBeAttached();
+    expect(await offPalette(page.locator("[data-testid=trip-plan]"))).toEqual([]);
+    expect(await offPalette(page.locator("main section").first())).toEqual([]);
+  });
+
+  test("rooms-5: the trips search form's fields and pills are cream", async ({ page }) => {
+    await page.goto("/trips");
+    const finder = page.getByTestId("flight-finder");
+    await expect(finder).toBeVisible();
+    expect(await offPalette(finder)).toEqual([]);
+    const pills = page.locator("[role=group]", { has: page.locator("button[aria-pressed]") });
+    await expect(pills.first()).toBeVisible();
+    expect(await offPalette(pills)).toEqual([]);
+  });
+
+  test("rooms-5: the long-distance town boxes and the front page's iPhone card are cream", async ({ page }) => {
+    await page.goto("/long-distance");
+    const box = page.getByRole("combobox", { name: "Where they are" }).locator("xpath=ancestor::div[contains(@class,'rounded-[32px]')][1]");
+    await expect(box).toBeVisible();
+    expect(await offPalette(box)).toEqual([]);
+    await page.goto("/");
+    const app = page.locator("[data-app-soon]").first();
+    expect(await app.evaluate((p) => getComputedStyle(p).backgroundColor)).not.toMatch(/^rgba?\(255, 255, 255/);
   });
 });
+
+/** Visible things in `scope` (and `scope` itself) drawn pure white or in the old cool pink rose-mist (#fff0f4). */
+async function offPalette(scope: import("@playwright/test").Locator) {
+  return (
+    await scope.evaluateAll((roots) =>
+      roots.flatMap((root) =>
+        [root, ...root.querySelectorAll("*")]
+          .filter((el) => (el as HTMLElement).offsetParent !== null || el === root)
+          .filter((el) => ["rgb(255, 255, 255)", "rgb(255, 240, 244)"].includes(getComputedStyle(el).backgroundColor))
+          .map((el) => `${el.tagName.toLowerCase()} ${(el.textContent ?? el.getAttribute("aria-label") ?? "").trim().slice(0, 40)}`),
+      ),
+    )
+  );
+}
 
 test.describe("choose-5: with Free or Premium on, the gallery says what it shows", () => {
   for (const [path, title, eyebrow] of [

@@ -96,7 +96,10 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
       />
 
       <section className="relative isolate -mt-[var(--header-h)] bg-blush-paper pt-[var(--header-h)] text-forest">
-        <FloralFrame frame="band" ground="light" />
+        {/* The pieces at the foot lie whole inside the hero, and its ground runs softly into the
+            page's paper below instead of stepping: a lily was cut flat there (walk-rooms-3). */}
+        <FloralFrame frame="bandHero" ground="light" />
+        <div aria-hidden="true" data-hero-fade className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-paper" />
         <div className="relative container-x pt-6 pb-14 sm:pt-10 lg:pb-20">
           <Link href="/trips" className="group -ml-2 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
             <ArrowLeft aria-hidden="true" className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -113,7 +116,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest/75">{trip.blurb[l]}</p>
               <dl className="mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                 {facts.map((f) => (
-                  <div key={f.label} className="rounded-2xl bg-white/85 px-4 py-3 shadow-soft ring-1 ring-forest/5" title={f.hint}>
+                  <div key={f.label} className="rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5" title={f.hint}>
                     <dt className="text-[12px] font-semibold tracking-wide text-forest/50 uppercase">{f.label}</dt>
                     <dd className="mt-1 font-display text-[19px] leading-tight text-forest">
                       {f.value}
@@ -127,7 +130,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <Gift aria-hidden="true" className="size-4" />
                   {t("detail.surprise.cta")}
                 </a>
-                <a href="#flights" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-rose-mist">
+                <a href="#flights" className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
                   <Plane aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("detail.jump.flights")}
                 </a>
@@ -208,7 +211,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   {day.items[l].map((item) => {
                     const evening = item.startsWith(EVENING[l]);
                     return (
-                      <li key={item} className={evening ? "flex gap-3 rounded-2xl bg-rose-mist px-4 py-3 text-[15px] leading-relaxed text-forest" : "flex gap-3 text-[15px] leading-relaxed text-forest/80"}>
+                      <li key={item} className={evening ? "flex gap-3 rounded-2xl bg-blush-paper px-4 py-3 text-[15px] leading-relaxed text-forest" : "flex gap-3 text-[15px] leading-relaxed text-forest/80"}>
                         {evening ? <Moon aria-hidden="true" className="mt-1 size-4 shrink-0 text-rose-deep" /> : <span aria-hidden="true" className="mt-[9px] size-1.5 shrink-0 rounded-full bg-rose" />}
                         <span>
                           {evening ? <strong className="font-semibold text-rose-ink">{EVENING[l]}</strong> : null}
@@ -242,9 +245,9 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     placement="trip_tickets"
                     href={ticket.url}
                     aria-label={ta("tickets.label", { name: ticket.name })}
-                    className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-card p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist"
+                    className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-card p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper"
                   >
-                    <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-2xl bg-rose-mist text-rose-deep">
+                    <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-2xl bg-blush-paper text-rose-deep">
                       <Ticket className="size-5" />
                     </span>
                     <span className="min-w-0 flex-1">
@@ -276,7 +279,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   {ta("car.title")}
                 </h3>
                 <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{ta("car.sub")}</p>
-                <PartnerLink partner="autoeurope" placement="trip_car" href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-rose-mist">
+                <PartnerLink partner="autoeurope" placement="trip_car" href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-card px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper">
                   {ta("car.cta")}
                   <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   <span className="sr-only">({ta("newTab")})</span>

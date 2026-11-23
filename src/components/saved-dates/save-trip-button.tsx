@@ -14,7 +14,7 @@ import { SignInDialog } from "./sign-in-dialog";
 import { SavedDatesUpsell } from "./upsell-sheet";
 import { useSavedAccount, useSignedInWhile } from "./use-saved-account";
 
-const PILL = "inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-rose-mist disabled:opacity-60";
+const PILL = "inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper disabled:opacity-60";
 
 /**
  * "Save trip", in a trip's hero: a toggle that keeps the trip in My dates, beside the dates they

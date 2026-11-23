@@ -560,7 +560,7 @@ function QuickChips({ chips, value, max, big, onPick }: QuickChipsProps) {
       className={cn(
         "shrink-0 rounded-full border px-3.5 text-[13.5px] font-semibold whitespace-nowrap transition-[background-color,border-color,color,transform] active:scale-[0.97] disabled:opacity-35",
         big ? "h-11 px-4" : "h-9",
-        sameRange(value, range) ? "border-forest bg-forest text-cream" : "border-forest/15 bg-white text-forest hover:border-forest/40",
+        sameRange(value, range) ? "border-forest bg-forest text-cream" : "border-forest/15 bg-card text-forest hover:border-forest/40",
       )}
     >
       {name}
@@ -594,7 +594,7 @@ function Field({ ref, label, extra, date, empty, muted = false, locale, expanded
       aria-label={`${label}${extra ? ` (${extra})` : ""}: ${date ? formatLong(date, locale) : empty}`}
       onClick={onOpen}
       className={cn(
-        "flex h-14 min-w-0 items-center gap-2.5 rounded-2xl border border-forest/15 bg-white px-3 text-left transition-[border-color,box-shadow] duration-200 hover:border-forest/30 @xs:px-4",
+        "flex h-14 min-w-0 items-center gap-2.5 rounded-2xl border border-forest/15 bg-card px-3 text-left transition-[border-color,box-shadow] duration-200 hover:border-forest/30 @xs:px-4",
         active && "border-rose/50 shadow-[0_0_0_4px_rgba(178,58,94,0.12)] hover:border-rose/50",
         muted && "border-dashed border-forest/20 bg-transparent",
       )}

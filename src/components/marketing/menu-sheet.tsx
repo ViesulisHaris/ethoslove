@@ -30,7 +30,7 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
         <button
           type="button"
           aria-label={t("common.openMenu")}
-          className="grid size-11 shrink-0 place-items-center rounded-full text-forest transition-[background-color,scale] duration-200 hover:bg-rose-mist active:scale-95"
+          className="grid size-11 shrink-0 place-items-center rounded-full text-forest transition-[background-color,scale] duration-200 hover:bg-blush-paper active:scale-95"
         >
           {/* Two lines, not three: the quieter glyph, the way Apple draws it. */}
           <svg aria-hidden="true" viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -59,7 +59,7 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
               <Dialog.Close
                 ref={close}
                 aria-label={t("common.closeMenu")}
-                className="grid size-11 place-items-center rounded-full text-forest/80 transition-[background-color,color,scale] duration-200 hover:bg-rose-mist hover:text-forest active:scale-95"
+                className="grid size-11 place-items-center rounded-full text-forest/80 transition-[background-color,color,scale] duration-200 hover:bg-blush-paper hover:text-forest active:scale-95"
               >
                 <X aria-hidden="true" className="size-5" strokeWidth={1.9} />
               </Dialog.Close>
@@ -82,10 +82,10 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
                       onClick={done}
                       className={cn(
                         "group flex min-h-[4.5rem] items-center gap-3.5 rounded-[22px] py-3 pr-3.5 pl-3 ring-1 transition-[background-color,scale,box-shadow] duration-200 ease-(--ease-out-quint) active:scale-[0.98]",
-                        here ? "bg-rose-soft ring-rose/15" : "bg-white/80 shadow-[0_1px_2px_rgba(60,20,40,0.04)] ring-forest/[0.06] hover:bg-white",
+                        here ? "bg-blush-paper ring-rose/15" : "bg-card shadow-[0_1px_2px_rgba(60,20,40,0.04)] ring-forest/[0.06] hover:bg-paper-deep",
                       )}
                     >
-                      <span className={cn("grid size-11 shrink-0 place-items-center rounded-2xl", here ? "bg-white text-rose" : "bg-rose-mist text-rose-deep")}>
+                      <span className={cn("grid size-11 shrink-0 place-items-center rounded-2xl", here ? "bg-card text-rose" : "bg-blush-paper text-rose-deep")}>
                         <Icon aria-hidden="true" className="size-5" strokeWidth={1.8} />
                       </span>
                       <span className="min-w-0 flex-1">
