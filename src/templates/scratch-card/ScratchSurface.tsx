@@ -30,7 +30,9 @@ export function ScratchSurface({ foil, label, onCleared, threshold = 0.55, reset
     canvas.height = h * dpr;
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
-    const ctx = canvas.getContext("2d")!;
+    // The first getContext call fixes the context's attributes: the scratch handler reads the
+    // foil back with getImageData every few strokes, so ask for a CPU-backed canvas here.
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     // Foil: gradient + fine noise + label
     const g = ctx.createLinearGradient(0, 0, w, h);
@@ -76,7 +78,7 @@ export function ScratchSurface({ foil, label, onCleared, threshold = 0.55, reset
     const r = canvas.getBoundingClientRect();
     const x = e.clientX - r.left;
     const y = e.clientY - r.top;
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
     ctx.globalCompositeOperation = "destination-out";
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
