@@ -19,10 +19,34 @@ export const dayIso = (day: number): string => new Date(day * DAY_MS).toISOStrin
  */
 export const DAILY_EPOCH = dayOf(Date.UTC(2026, 10, 23));
 
+/**
+ * Pairs worded from the answerer's own side, whose two sides swap who is who ("They cook" / "You
+ * cook"). In the game both people read the same card on one table, so it works; today's question
+ * carries one person's answer to the other's phone, where "you" is the other person, and the verdict
+ * would say the opposite of what happened. They stay out of the daily pool (tests/unit/games-daily).
+ */
+export const DAILY_MIRRORED: readonly string[] = [
+  "ex-bff", "dumped", "hates", "dms", "double", "old-texts", "mum", "boss", "wedding", "remote", "cooking", "commute",
+  "front-row", "flu", "mums", "sorry-first", "christmas", "friends-over", "mum-calls", "third-wheel", "speech",
+  "family-chat", "group-holiday", "bump-into", "love-advice", "truth-hour",
+];
+/**
+ * Exes, jealousy, snooping and secrets: good at a table where both laugh, but as the one question a
+ * person sends their partner today they read as a hint, and can start a fight. Also out of the pool.
+ */
+export const DAILY_FIGHTS: readonly string[] = [
+  "nearly", "keep", "deepest-secret", "group-chat", "checks", "app", "ex-friends", "ex-birthday", "bestie", "next-door",
+  "hoodie", "first-date", "settled", "disapprove", "out-loud", "lie", "hidden", "crush", "secret-account", "talk", "2am",
+  "text", "jealousy", "friend-secret", "ex-gift", "follows", "face-down",
+];
+const NOT_DAILY = new Set([...DAILY_MIRRORED, ...DAILY_FIGHTS]);
+/** The pairs a day can show: the free pairs, less the two lists above. */
+export const DAILY_PAIRS: readonly RatherPair[] = RATHER_PAIRS.filter((p) => !NOT_DAILY.has(p.id));
+
 const raw = (cycle: number, pairs: readonly RatherPair[]) => shuffle([...pairs], 9973 + cycle * 7919);
 
 /** One round of the list: every pair once, in an order of its own. The last of one round is never the first of the next. */
-export function dailyCycle(cycle: number, pairs: readonly RatherPair[] = RATHER_PAIRS): RatherPair[] {
+export function dailyCycle(cycle: number, pairs: readonly RatherPair[] = DAILY_PAIRS): RatherPair[] {
   const round = raw(cycle, pairs);
   if (pairs.length >= 3) {
     const before = raw(cycle - 1, pairs);
@@ -33,7 +57,7 @@ export function dailyCycle(cycle: number, pairs: readonly RatherPair[] = RATHER_
 }
 
 /** The pair of a day: the same for everyone, and no pair twice until the whole list has gone round. */
-export function dailyPair(day: number, pairs: readonly RatherPair[] = RATHER_PAIRS): RatherPair {
+export function dailyPair(day: number, pairs: readonly RatherPair[] = DAILY_PAIRS): RatherPair {
   const n = pairs.length;
   if (n === 0) throw new Error("daily: no pairs");
   const since = day - DAILY_EPOCH;
@@ -42,7 +66,7 @@ export function dailyPair(day: number, pairs: readonly RatherPair[] = RATHER_PAI
   return dailyCycle(cycle, pairs)[index];
 }
 
-export const pairById = (id: string, pairs: readonly RatherPair[] = RATHER_PAIRS): RatherPair | null => pairs.find((p) => p.id === id) ?? null;
+export const pairById = (id: string, pairs: readonly RatherPair[] = DAILY_PAIRS): RatherPair | null => pairs.find((p) => p.id === id) ?? null;
 
 /* ---- the link ---- */
 
@@ -72,10 +96,14 @@ export function cleanName(raw: unknown): string {
 /** A field of the link: never holds a dot, so the dot can separate the fields. */
 const field = (name: string) => encodeURIComponent(cleanName(name)).replace(/\./g, "%2E");
 
-/** "#q=1.<day>.<pairId>.<side>.<name>" and, for a reply, ".<side>.<name>" of the answer replied to. */
+/**
+ * "#q=1.<day>.<pairId>.<name>.<side>" and, for a reply, ".<name>.<side>" of the answer replied to.
+ * The name comes before the side so a link always ends on a digit: a chat app leaves a link's last
+ * dot (or bracket, or "!") out of what it makes tappable, and a link that ended on an empty name did.
+ */
 export function encodeDaily(link: { day: number; pairId: string; from: DailyAnswer; to?: DailyAnswer }): string {
-  const parts = ["1", String(link.day), link.pairId, String(link.from.side), field(link.from.name)];
-  if (link.to) parts.push(String(link.to.side), field(link.to.name));
+  const parts = ["1", String(link.day), link.pairId, field(link.from.name), String(link.from.side)];
+  if (link.to) parts.push(field(link.to.name), String(link.to.side));
   // The "=" matters: the ad pixels stay off on any address whose hash holds one (isAdTrackingOffHere).
   return `#q=${parts.join(".")}`;
 }
@@ -90,13 +118,13 @@ function name(s: string): string | null {
 }
 
 /** What a hash holds, or null for anything that is not a whole, sane link. `today` is the reader's UTC day. */
-export function decodeDaily(hash: unknown, today: number, pairs: readonly RatherPair[] = RATHER_PAIRS): DailyLink | null {
+export function decodeDaily(hash: unknown, today: number, pairs: readonly RatherPair[] = DAILY_PAIRS): DailyLink | null {
   if (typeof hash !== "string" || hash.length > DAILY_HASH_MAX) return null;
   const body = hash.startsWith("#q=") ? hash.slice(3) : hash.startsWith("q=") ? hash.slice(2) : null;
   if (body === null) return null;
   const parts = body.split(".");
   if ((parts.length !== 5 && parts.length !== 7) || parts[0] !== "1") return null;
-  const [, dayText, pairId, fromSide, fromName, toSide, toName] = parts;
+  const [, dayText, pairId, fromName, fromSide, toName, toSide] = parts;
   if (!/^\d{1,6}$/.test(dayText)) return null;
   const day = Number(dayText);
   // A clock a little behind must not refuse today's link.
@@ -117,15 +145,18 @@ export function decodeDaily(hash: unknown, today: number, pairs: readonly Rather
   return link;
 }
 
-/** What a tab remembers of the last link it sent: the day, the pair, and the answer and name it carried. */
-export type DailySent = { day: number; pairId: string; name: string; side: 0 | 1 };
+/** What a tab remembers of the last link it sent: the day, the pair, the answer and name it carried, and whether it was a reply. */
+export type DailySent = { day: number; pairId: string; name: string; side: 0 | 1; reply?: boolean };
 
 /**
  * Whether a link is one this tab sent itself (people tap their own link in the chat to check it):
  * the same day, pair, answer and name as the last link the tab sent. A reply carries the tab's own
  * answer as its `to`, so it is matched on its `from`, as the first link is: a reply this tab sent
  * back is its own too. Such a link is never a reveal against oneself, and is never counted.
+ * A first link and a reply are told apart by what the tab sent: two people who both leave the name
+ * blank and pick the same side send links whose names and sides are all alike.
  */
 export function sentHere(link: DailyLink, sent: DailySent | null): boolean {
-  return !!sent && sent.day === link.day && sent.pairId === link.pair.id && sent.side === link.from.side && cleanName(sent.name) === link.from.name;
+  if (!sent || !!sent.reply !== !!link.to) return false;
+  return sent.day === link.day && sent.pairId === link.pair.id && sent.side === link.from.side && cleanName(sent.name) === link.from.name;
 }
