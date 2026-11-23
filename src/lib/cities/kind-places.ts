@@ -16,7 +16,10 @@ const MEETING: readonly PlaceKind[] = ["cafe", "bookshop", "gallery", "dessert"]
  * (cost.ts). `first-date`: where to meet. Any other kind has no list.
  */
 export function kindPlaces(kind: DateKind, places: Place[], count = KIND_PLACES): Ranked[] {
-  const fits = kind === "cheap" ? (p: Place) => guessCost(p) === 0 : kind === "first-date" ? (p: Place) => MEETING.includes(p.kind) : null;
+  // A "landmark" is whatever the map calls an attraction, a sewer lamp and a private house among them:
+  // only one with an encyclopedia entry is worth naming on a page.
+  const free = (p: Place) => guessCost(p) === 0 && (p.kind !== "landmark" || p.notable);
+  const fits = kind === "cheap" ? free : kind === "first-date" ? (p: Place) => MEETING.includes(p.kind) : null;
   if (!fits) return [];
   const names = new Set<string>();
   const taken = new Map<PlaceKind, number>();

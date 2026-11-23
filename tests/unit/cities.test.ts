@@ -425,6 +425,13 @@ describe("a kind of date inside a city", () => {
     expect(free.map((p) => ranked.indexOf(p.id))).toEqual([...free.map((p) => ranked.indexOf(p.id))].sort((a, b) => a - b));
   });
 
+  it("C4b a landmark is named on the free list only when it is notable (no sewer lamps, no private houses)", () => {
+    const withLandmarks = [...fixture, place("node/lamp", "landmark", 200, { name: "Sewer ventilation lamp" }), place("node/bridge", "landmark", 199, { name: "Old bridge", notable: true })];
+    const free = kindPlaces("cheap", withLandmarks).map((p) => p.id);
+    expect(free).not.toContain("node/lamp");
+    expect(free).toContain("node/bridge");
+  });
+
   it("C5 where to meet is cafés, bookshops, galleries and dessert places, and another kind has no list", () => {
     const meet = kindPlaces("first-date", fixture);
     expect(meet.length).toBeGreaterThan(0);

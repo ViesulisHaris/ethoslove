@@ -74,7 +74,7 @@ test("D2 the first screen has a flower and a real picture, on a desk and on a ph
   await page.setViewportSize({ width: 375, height: 667 });
   await page.context().clearCookies();
   await page.goto("/dates/ideas/first-date");
-  const button = page.getByRole("link", { name: "Plan one tonight" });
+  const button = page.getByRole("link", { name: "Plan one with real places" });
   expect((await button.boundingBox())!.y + (await button.boundingBox())!.height).toBeLessThanOrEqual(667);
   await page.setViewportSize({ width: 320, height: 568 });
   await page.reload();

@@ -154,7 +154,7 @@ export default async function CityKindPage({ params }: Props) {
             </li>
             <li>
               <Link href={`/dates/ideas/${kind}`} className={QUIET_ROW_LINK}>
-                {copy.phrase[l]}
+                {copy.heading[l]}
               </Link>
             </li>
             {other ? (
