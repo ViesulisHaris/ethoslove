@@ -884,6 +884,7 @@
       "3d": "3D"
     },
     "makeThis": "Make this gift",
+    "makeHero": "Make this gift",
     "priceOnce": "{price} once",
     "priceFree": "Free",
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
@@ -1022,7 +1023,7 @@
     "thanksgiving": "Thanksgiving",
     "mothers-day": "Mother's Day",
     "fathers-day": "Father's Day",
-    "apology": "Apology",
+    "apology": "Saying sorry",
     "long-distance": "Long distance",
     "just-because": "Just because"
   },

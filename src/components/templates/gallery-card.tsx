@@ -14,6 +14,7 @@ import { sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
+import { posterFit } from "./poster-fit";
 import { useHoverFilm } from "./use-hover-film";
 
 const wantsFilm = () => window.matchMedia("(hover: hover)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -54,7 +55,7 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
   const free = sendsFree(manifest);
   const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, locale);
   const above = index < 4;
-  const crop = CROP[manifest.slug] ?? "object-top";
+  const crop = cn(CROP[manifest.slug] ?? "object-top", posterFit(manifest.thumbnail.poster));
 
   // A phone fires mouseenter on a tap too; the film is for a pointer resting on a card. And for
   // nobody who asked for less motion: the film is hidden then, and must not be fetched and played unseen.

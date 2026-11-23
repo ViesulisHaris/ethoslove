@@ -540,7 +540,7 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
       retake: "Hacerlo otra vez",
       giftTitle: "El regalo que lo dice",
       see: "Verlo",
-      make: "Hacer uno",
+      make: "Crear uno",
       allFive: "Qué regalo dice cada lenguaje",
       compareEyebrow: "Tú y {name}",
       you: "Tú",

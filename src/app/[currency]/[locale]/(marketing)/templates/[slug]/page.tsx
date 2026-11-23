@@ -177,7 +177,8 @@ export default async function TemplateDetailPage({
                     href={`/create/${manifest.slug}`}
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px"
                   >
-                    {t("templates.makeThis")}
+                    {/* Its own key: in Spanish the short "Crear regalo", measured to fit a small phone beside the demo button (everywhere else "Crear este regalo"). */}
+                    {t("templates.makeHero")}
                     <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
                   {/*

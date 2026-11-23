@@ -295,10 +295,10 @@ export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGui
       ],
     },
     es: {
-      title: "Regalos digitales para tu mejor amiga (o amigo)",
+      title: "Regalos digitales para tu mejor amigo o amiga",
       description: "Ideas de regalos digitales para tu mejor amiga: una tarjeta invadida por hámsteres, una de memes, un álbum de vuestras peores fotos. En un enlace.",
-      h1: "Regalos digitales para tu mejor amiga",
-      label: "Para tu mejor amiga",
+      h1: "Regalos digitales para tu mejor amigo o amiga",
+      label: "Para tu mejor amigo o amiga",
       lead: "Tu mejor amiga, o tu mejor amigo, no necesita otra vela. Necesita la prueba de que te acuerdas del kebab de las tres de la mañana, del viaje que salió fatal y de cada foto que te pidió que borraras. Estos son los regalos digitales que funcionan con una amistad, divertidos o tiernos, y cada uno se hace en unos diez minutos.",
       ideas: [
         { template: "party-animals", heading: "Una tarjeta invadida por hámsteres", body: "Hámsteres con gorro de fiesta toman un collage de hasta 7 fotos, y cada uno grita una frase tuya al tocarlo." },

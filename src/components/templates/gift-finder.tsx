@@ -41,6 +41,7 @@ import { cn } from "@/lib/utils";
 import { PhoneFrame } from "@/components/shared/phone-frame";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { PosterFilm } from "@/components/templates/page/poster-film";
+import { posterFit } from "@/components/templates/poster-fit";
 
 /**
  * Loaded when someone taps a pick's picture, not with the page: a static import reaches the template
@@ -337,9 +338,10 @@ export function GiftFinder({
             {shown.length > PICKS_PER_PAGE ? ui.resultTitleMore : ui.resultTitle}
           </h2>
 
-          <div className="mt-1.5 flex items-center justify-between gap-3">
+          {/* The pause button is the row's last item, right after the pills: on a phone the pills wrap to two rows and the button stood alone at the right between them (walk-agreed-14). */}
+          <div data-feels-row className="mt-1.5 -ml-1.5 flex flex-wrap items-center">
             {/* A feeling is never asked. Whoever wants one taps it, and the same picks come back in another order. */}
-            <div role="group" aria-label={ui.feelsLabel} className="-ml-1.5 flex flex-wrap">
+            <div role="group" aria-label={ui.feelsLabel} className="contents">
               {FINDER_FEELS.map((which) => (
                 <button key={which} type="button" data-feel={which} aria-pressed={feel === which} onClick={() => toggleFeel(which)} className="group inline-flex min-h-11 items-center px-1">
                   <span
@@ -547,14 +549,15 @@ function AnswerCard({ label, poster, current, eager, onClick }: { label: string;
       aria-current={current ? "true" : undefined}
       onClick={onClick}
       className={cn(
-        "group flex h-[3.25rem] items-center overflow-hidden rounded-[0.875rem] border border-page-line bg-page-raised text-left shadow-page-card transition-[border-color,box-shadow,translate,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/35 hover:shadow-page-lift active:scale-[0.98] sm:block sm:h-auto sm:rounded-[1.25rem] pointer-fine:hover:-translate-y-0.5",
+        "group flex min-h-[3.25rem] items-stretch overflow-hidden rounded-[0.875rem] border border-page-line bg-page-raised text-left shadow-page-card transition-[border-color,box-shadow,translate,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/35 hover:shadow-page-lift active:scale-[0.98] sm:block sm:h-auto sm:rounded-[1.25rem] pointer-fine:hover:-translate-y-0.5",
         current && "border-page-accent ring-2 ring-page-accent/60",
       )}
     >
-      <span className="relative block h-full w-12 shrink-0 overflow-hidden bg-page-band sm:aspect-[6/5] sm:h-auto sm:w-full">
-        {poster ? <Image src={poster} alt="" fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 23vw, 48px" loading={eager ? "eager" : "lazy"} className="object-cover object-[50%_32%]" /> : null}
+      <span className="relative block w-12 shrink-0 overflow-hidden bg-page-band max-[359.98px]:w-10 sm:aspect-[6/5] sm:h-auto sm:w-full">
+        {poster ? <Image src={poster} alt="" fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 23vw, 48px" loading={eager ? "eager" : "lazy"} className={cn("object-cover object-[50%_32%]", posterFit(poster))} /> : null}
       </span>
-      <span className="block min-w-0 px-2.5 font-display text-[0.9375rem] leading-[1.12] text-page-ink sm:px-3.5 sm:pt-2.5 sm:pb-3 sm:text-[1.0625rem] sm:leading-snug">{label}</span>
+      {/* Never cut (walk-agreed-6): a long answer takes a second or third line and the card grows; under 360px the picture and the type give a little, so "Thanksgiving" stands whole on one line. */}
+      <span data-answer-label className="flex min-w-0 items-center px-2.5 py-1.5 font-display text-[0.9375rem] leading-[1.12] text-page-ink max-[359.98px]:px-2 max-[359.98px]:text-[0.875rem] sm:block sm:px-3.5 sm:pt-2.5 sm:pb-3 sm:text-[1.0625rem] sm:leading-snug">{label}</span>
     </button>
   );
 }

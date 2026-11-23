@@ -107,14 +107,20 @@ export function askedStep(search: string | URLSearchParams): FinderStep | null {
 
 // --- the occasions the second question shows ---
 
-/** How many occasions the second question shows at once; the rest wait behind "More occasions". */
-export const OCCASIONS_SHOWN = 6;
+/**
+ * How many occasions the second question shows at once; the rest wait behind "More occasions".
+ * Seven, and "Not sure" makes eight cards: two even rows of four on a desk, four rows of two on a
+ * phone. With six the grid was seven cards and lopsided, which the owner rejected on the first
+ * question ("its not symmetrical", 22 Nov 2026; walk-agreed-1). After "More occasions" all thirteen
+ * and "Not sure" are fourteen, even again.
+ */
+export const OCCASIONS_SHOWN = 7;
 
-const COUPLE_DAYS: readonly Occasion[] = ["birthday", "anniversary", "valentines", "christmas", "long-distance", "apology"];
-const MARRIED_DAYS: readonly Occasion[] = ["birthday", "anniversary", "valentines", "christmas", "apology", "just-because"];
+const COUPLE_DAYS: readonly Occasion[] = ["birthday", "anniversary", "valentines", "christmas", "long-distance", "apology", "just-because"];
+const MARRIED_DAYS: readonly Occasion[] = ["birthday", "anniversary", "valentines", "christmas", "apology", "just-because", "long-distance"];
 
 /**
- * The six occasions that matter most for each person, most likely first: a mother is asked about
+ * The seven occasions that matter most for each person, most likely first: a mother is asked about
  * Mother's Day and never about Valentine's, a friend about a graduation. Whatever is left is
  * behind "More occasions", so nothing is out of reach.
  */
@@ -123,17 +129,24 @@ export const OCCASIONS_FOR: Record<FinderRecipient | Any, readonly Occasion[]> =
   boyfriend: COUPLE_DAYS,
   wife: MARRIED_DAYS,
   husband: MARRIED_DAYS,
-  mom: ["birthday", "mothers-day", "christmas", "long-distance", "apology", "just-because"],
-  dad: ["birthday", "fathers-day", "christmas", "long-distance", "apology", "just-because"],
-  "best-friend": ["birthday", "christmas", "graduation", "wedding", "long-distance", "just-because"],
-  someone: ["birthday", "anniversary", "christmas", "wedding", "graduation", "just-because"],
-  [ANY]: ["birthday", "anniversary", "valentines", "christmas", "long-distance", "just-because"],
+  mom: ["birthday", "mothers-day", "christmas", "thanksgiving", "long-distance", "apology", "just-because"],
+  dad: ["birthday", "fathers-day", "christmas", "thanksgiving", "long-distance", "apology", "just-because"],
+  "best-friend": ["birthday", "christmas", "graduation", "wedding", "long-distance", "just-because", "apology"],
+  someone: ["birthday", "anniversary", "christmas", "wedding", "graduation", "just-because", "long-distance"],
+  [ANY]: ["birthday", "anniversary", "valentines", "christmas", "long-distance", "just-because", "apology"],
 };
 
-/** A day people shop for weeks ahead: from the first date to the day itself, month and day, both included. */
-export const SEASONS: readonly { occasion: Occasion; from: readonly [number, number]; to: readonly [number, number] }[] = [
-  { occasion: "christmas", from: [11, 15], to: [12, 25] },
-  { occasion: "valentines", from: [1, 25], to: [2, 14] },
+/**
+ * A day people shop for weeks ahead: from the first date to the day itself, month and day, both
+ * included. `everyone`: in season it is offered to every person, in their list or not (Thanksgiving
+ * three days before it was behind "More occasions" for all eight people, walk-choose-1). Valentine's
+ * only moves up for the people who have it: a mother is not asked about it in February.
+ */
+export const SEASONS: readonly { occasion: Occasion; from: readonly [number, number]; to: readonly [number, number]; everyone: boolean }[] = [
+  { occasion: "christmas", from: [11, 15], to: [12, 25], everyone: true },
+  { occasion: "thanksgiving", from: [11, 1], to: [11, 28], everyone: true },
+  { occasion: "halloween", from: [10, 1], to: [10, 31], everyone: true },
+  { occasion: "valentines", from: [1, 25], to: [2, 14], everyone: false },
 ];
 
 /** A date as the page was rendered with it: "2026-11-22". Only its month and day are read. */
@@ -148,13 +161,15 @@ export function occasionsInSeason(day: FinderDay): Occasion[] {
 }
 
 /**
- * The second question for a person, on a day: the six that matter most to them, with whatever is
- * in season moved to the front (Christmas from 15 Nov to 25 Dec), and the rest for "More occasions".
- * A season only reorders a person's own six: a mother is not asked about Valentine's in February.
+ * The second question for a person, on a day: the seven that matter most to them, with whatever is
+ * in season moved to the front in the gallery row's order (Christmas, then Thanksgiving, in late
+ * November), and the rest for "More occasions". A day in season for everyone that is not among a
+ * person's seven takes a place of theirs, the last one; Valentine's only reorders the people who
+ * have it (SEASONS, `everyone`).
  */
 export function occasionsFor(who: FinderAnswers["for"], day: FinderDay): { first: Occasion[]; more: Occasion[] } {
   const own = OCCASIONS_FOR[who ?? ANY];
-  const season = occasionsInSeason(day).filter((o) => own.includes(o));
+  const season = occasionsInSeason(day).filter((o) => own.includes(o) || SEASONS.some((s) => s.occasion === o && s.everyone));
   const first = [...season, ...own.filter((o) => !season.includes(o))].slice(0, OCCASIONS_SHOWN);
   return { first, more: OCCASIONS.filter((o) => !first.includes(o)) };
 }
@@ -185,6 +200,12 @@ export type FinderGift = {
    * first pick: the best template that needs nothing of the kind goes ahead of it.
    */
   conditional?: boolean;
+  /**
+   * False for a gift whose poster reads as a picture that failed to load at an answer card's size
+   * (Paper Crane's near-black screen, walk-agreed-11): it is still offered as a pick, never as the
+   * picture on an answer.
+   */
+  pictured?: boolean;
 };
 
 /** Ties go to what people buy most, in this order (the owner's list, Nov 2026). */
@@ -266,7 +287,8 @@ export function answerGifts<T extends FinderGift, V extends string>(gifts: reado
   const cards = new Map<V, T>();
   for (const option of options) {
     const ranked = rankGifts(gifts, { ...answers, [step]: option });
-    const gift = ranked.find((g) => !shown.has(g.slug) && !g.conditional) ?? ranked.find((g) => !shown.has(g.slug)) ?? ranked[0];
+    const pictured = ranked.filter((g) => g.pictured !== false);
+    const gift = pictured.find((g) => !shown.has(g.slug) && !g.conditional) ?? pictured.find((g) => !shown.has(g.slug)) ?? ranked.find((g) => !shown.has(g.slug)) ?? pictured[0] ?? ranked[0];
     if (!gift) continue;
     shown.add(gift.slug);
     cards.set(option, gift);

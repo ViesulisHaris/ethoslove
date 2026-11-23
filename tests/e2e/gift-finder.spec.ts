@@ -32,7 +32,7 @@ const OCCASION_NAMES: Record<string, string> = {
   christmas: "Christmas",
   "long-distance": "Long distance",
   apology: "Saying sorry",
-  "just-because": "No occasion",
+  "just-because": "Just because",
   wedding: "Wedding",
   graduation: "Graduation",
   halloween: "Halloween",
@@ -85,8 +85,8 @@ test.describe("the gift finder", () => {
   });
 
   test("every answer is a card with a picture that loaded and its words, and no two cards of a question show the same gift", async ({ page }) => {
-    // Seven people and "Not sure" on the first question: "Someone else" is not a card (the owner, 22 Nov 2026).
-    for (const [path, count] of [["/gifts/finder", 8], ["/gifts/finder?for=girlfriend", 7], ["/es/gifts/finder?for=dad", 7]] as const) {
+    // Seven people and "Not sure" on the first question: "Someone else" is not a card (the owner, 22 Nov 2026); seven occasions and "Not sure" on the second (walk-agreed-1).
+    for (const [path, count] of [["/gifts/finder", 8], ["/gifts/finder?for=girlfriend", 8], ["/es/gifts/finder?for=dad", 8]] as const) {
       await page.goto(path);
       const cards = page.locator("[data-answer]");
       await expect(cards, path).toHaveCount(count);
@@ -333,7 +333,7 @@ test.describe("the gift finder", () => {
     await expect(picks(page).first()).toBeVisible();
     const forMom = await names(page);
     for (const name of ["XOXO", "Coquette", "Dark Romance", "Evergreen", "Snow Globe"]) expect(forMom).not.toContain(name);
-    await expect(page.getByText("Those are all the gifts that fit.")).toBeVisible();
+    await expect(page.getByText("That is every gift we have.")).toBeVisible();
   });
 
   test("three more, then start again", async ({ page }) => {
@@ -656,7 +656,7 @@ test.describe("the gift finder", () => {
     await expect(xoxo.getByRole("link", { name: "Crear este regalo" })).toHaveAttribute("href", "/es/create/xoxo?ref=finder");
     await expect(page.getByRole("button", { name: /^Para mi novia/ })).toBeVisible();
     // A best friend is named the same way on the answer card and in the row of links at the foot.
-    await expect(page.locator('section[aria-labelledby="finder-people"] ul a[href="/es/gifts/for-best-friend"]')).toHaveText("Para tu mejor amiga o amigo");
+    await expect(page.locator('section[aria-labelledby="finder-people"] ul a[href="/es/gifts/for-best-friend"]')).toHaveText("Para tu mejor amigo o amiga");
     await page.getByRole("button", { name: "Romántico", exact: true }).click();
     await expect(page.getByRole("button", { name: "Romántico", exact: true })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: "Ver tres más" }).click();

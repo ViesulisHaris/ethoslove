@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils";
  * are what says there are six and which one this is. They are only that: the row is swiped, the
  * dots are not pressed, and a screen reader reads the six cards as the list they are.
  */
+/** The most cards shown as dots. */
+export const DOTS_MAX = 9;
+
 export function IdeasDots({ target, count, className }: { target: string; count: number; className?: string }) {
   const [at, setAt] = useState(0);
   useEffect(() => {
@@ -41,6 +44,14 @@ export function IdeasDots({ target, count, className }: { target: string; count:
       row.removeEventListener("scroll", follow);
     };
   }, [target]);
+  // Past nine cards the dots fill a line and are too small to count (the finder's end, 31 picks:
+  // walk-choose-9): the place is written out instead, "4 / 31".
+  if (count > DOTS_MAX)
+    return (
+      <p data-dots data-count aria-hidden="true" className={cn("text-center text-page-label text-page-body tabular-nums", className)}>
+        {at + 1} / {count}
+      </p>
+    );
   return (
     <div data-dots aria-hidden="true" className={cn("flex justify-center gap-2", className)}>
       {Array.from({ length: count }, (_, i) => (

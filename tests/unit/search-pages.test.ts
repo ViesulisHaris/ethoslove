@@ -80,7 +80,7 @@ describe("gift ideas by who it's for", () => {
       girlfriend: ["girlfriend", "novia"],
       husband: ["husband", "marido"],
       wife: ["wife", "esposa"],
-      "best-friend": ["best friend", "mejor amiga"],
+      "best-friend": ["best friend", "mejor amigo o amiga"],
       mom: ["mom", "mamá"],
       dad: ["dad", "papá"],
     };

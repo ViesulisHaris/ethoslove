@@ -138,3 +138,108 @@ test.describe("front-5: a mouse can move the front page's rows", () => {
     await expect(page.locator("[data-row-next]").first()).toBeHidden();
   });
 });
+
+/** An answer card's words are whole and clear of the card's edges. */
+async function answersFit(page: Page) {
+  return page.$$eval("[data-answer]", (cards) =>
+    cards
+      .map((card) => {
+        const label = card.lastElementChild as HTMLElement;
+        const range = document.createRange();
+        range.selectNodeContents(label);
+        const t = range.getBoundingClientRect();
+        const c = card.getBoundingClientRect();
+        const ok = label.scrollWidth <= label.clientWidth + 1 && c.right - t.right >= 4 && t.left - c.left >= 4 && t.top - c.top >= 3 && c.bottom - t.bottom >= 3;
+        return ok ? null : label.textContent;
+      })
+      .filter(Boolean),
+  );
+}
+
+test.describe("the finder's second question", () => {
+  for (const lang of ["", "/es"]) {
+    test(`agreed-1: an even number of answers for every person, before and after More (${lang || "/"})`, async ({ page }) => {
+      for (const who of ["girlfriend", "boyfriend", "wife", "husband", "mom", "dad", "best-friend", "any"]) {
+        await page.goto(`${lang}/gifts/finder?for=${who}`);
+        const cards = page.locator("[data-answer]");
+        await expect(cards.first()).toBeVisible();
+        expect((await cards.count()) % 2, who).toBe(0);
+        expect(await cards.count(), who).toBe(8);
+        await page.locator("button[aria-controls=finder-answers]").click();
+        await expect(cards).toHaveCount(14);
+      }
+    });
+  }
+
+  for (const width of [320, 360, 390]) {
+    test.describe(`at ${width}`, () => {
+      test.use({ viewport: { width, height: 740 } });
+      test("agreed-6: no answer is cut or touches its card's edge, in either language", async ({ page }) => {
+        for (const lang of ["", "/es"]) {
+          await page.goto(`${lang}/gifts/finder`);
+          await expect(page.locator("[data-answer]").first()).toBeVisible();
+          expect(await answersFit(page), `${lang} q1`).toEqual([]);
+          await page.goto(`${lang}/gifts/finder?for=best-friend`);
+          await page.locator("button[aria-controls=finder-answers]").click();
+          await expect(page.locator("[data-answer]")).toHaveCount(14);
+          expect(await answersFit(page), `${lang} q2`).toEqual([]);
+        }
+      });
+    });
+  }
+});
+
+test.describe("the finder's results on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("choose-9: past nine picks the place is a count, and the list ends on every gift we have", async ({ page }) => {
+    await page.goto("/es/gifts/finder?for=mom&occasion=christmas&more=30");
+    await expect(page.getByText("Esos son todos los regalos que tenemos.")).toBeVisible();
+    const count = page.locator("[data-dots][data-count]");
+    await expect(count).toBeVisible();
+    await expect(count).toHaveText(/^1 \/ \d{2}$/);
+    await page.goto("/gifts/finder?for=mom&occasion=christmas");
+    // Three picks: still dots.
+    await expect(page.locator("[data-dots] > span")).toHaveCount(3);
+  });
+
+  test("agreed-14: the pause button sits right after the last feeling pill", async ({ page }) => {
+    await page.goto("/es/gifts/finder?for=girlfriend&occasion=christmas");
+    // The button comes once a film really moves, and a film plays once its card is on screen.
+    await page.locator("#finder-row").scrollIntoViewIfNeeded();
+    const pause = page.locator("[data-films-toggle]");
+    await expect(pause).toBeVisible({ timeout: 20_000 });
+    const last = page.locator("[data-feel]").last();
+    const [p, l] = [(await pause.boundingBox())!, (await last.boundingBox())!];
+    expect(Math.abs(p.y + p.height / 2 - (l.y + l.height / 2))).toBeLessThanOrEqual(4);
+    expect(p.x).toBeGreaterThanOrEqual(l.x + l.width - 1);
+    expect(p.x - (l.x + l.width)).toBeLessThan(16);
+  });
+});
+
+test.describe("agreed-7 and agreed-11: pictures that looked wrong on their cards", () => {
+  test("Frosted Window's poster fills its card, in the gallery and in the finder", async ({ page }) => {
+    await page.goto("/templates");
+    const card = page.locator('[data-gallery-card="frosted-window"] [data-card-page] > div').first();
+    await card.scrollIntoViewIfNeeded();
+    const widths = await card.evaluate((box) => ({ box: box.getBoundingClientRect().width, img: box.querySelector("img")!.getBoundingClientRect().width }));
+    // The poster's own beige bars are an eighth of its width each: drawn 1.3 times as wide, they fall outside the card.
+    expect(widths.img / widths.box).toBeGreaterThanOrEqual(1.29);
+    await page.goto("/gifts/finder?for=girlfriend&occasion=christmas");
+    const pick = page.locator("[data-pick]").first();
+    await expect(pick.locator("h3")).toHaveText("Frosted Window");
+    const film = await pick.locator("[data-watch]").evaluate((box) => ({ box: box.getBoundingClientRect().width, img: box.querySelector("img")!.getBoundingClientRect().width }));
+    expect(film.img / film.box).toBeGreaterThanOrEqual(1.29);
+    // Zoomed past its frame, the film still plays (the frame is what is watched for being on screen).
+    await expect(pick.locator("video")).toHaveAttribute("data-on", "", { timeout: 20_000 });
+  });
+
+  test("the finder's Saying sorry answer is not Paper Crane's dark poster", async ({ page }) => {
+    for (const who of ["girlfriend", "wife", "mom"]) {
+      await page.goto(`/gifts/finder?for=${who}`);
+      const sorry = page.locator("[data-answer]", { hasText: "Saying sorry" });
+      await expect(sorry).toBeVisible();
+      expect(await sorry.locator("img").getAttribute("src"), who).not.toContain("paper-crane");
+    }
+  });
+});

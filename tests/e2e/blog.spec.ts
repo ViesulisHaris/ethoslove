@@ -30,7 +30,7 @@ async function readsClean(page: Page) {
 
 const LANGS = [
   { prefix: "", title: "What to write, make and send", takeaways: "Key takeaways", faq: "Questions people ask", make: "Make this gift" },
-  { prefix: "/es", title: "Qué escribir, qué hacer y qué enviar", takeaways: "Lo esencial", faq: "Preguntas frecuentes", make: "Hacer este regalo" },
+  { prefix: "/es", title: "Qué escribir, qué hacer y qué enviar", takeaways: "Lo esencial", faq: "Preguntas frecuentes", make: "Crear este regalo" },
 ];
 
 for (const lang of LANGS) {

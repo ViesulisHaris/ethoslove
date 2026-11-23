@@ -24,6 +24,7 @@ import { PRODUCTS, formatAmount, templateProduct } from "@/lib/pricing/products"
 import { sendsFree } from "@/lib/gift/free-tier";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
+import { posterFit } from "./poster-fit";
 import { useHoverFilm } from "./use-hover-film";
 
 /**
@@ -97,7 +98,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
               quality={75}
               priority={above}
               decoding={above ? "sync" : "async"}
-              className="object-cover"
+              className={cn("object-cover", posterFit(manifest.thumbnail.poster))}
             />
             {manifest.thumbnail.webm ? (
               <video
@@ -109,7 +110,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
                 preload="none"
                 aria-hidden="true"
                 data-card-film
-                className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 data-on:opacity-100"
+                className={cn("absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 data-on:opacity-100", posterFit(manifest.thumbnail.poster))}
               />
             ) : null}
             <button

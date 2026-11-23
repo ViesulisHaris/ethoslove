@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { posterFit } from "@/components/templates/poster-fit";
 
 /**
  * A gift as a tall picture that moves: its poster, and over it the gift's own silent preview
@@ -82,7 +83,8 @@ export function PosterFilm({
       },
       { threshold: 0.6 },
     );
-    watcher.observe(el);
+    // The frame, not the film: a film zoomed past its frame (poster-fit.ts) is never 60% inside it.
+    watcher.observe(el.parentElement ?? el);
     const settle = () => {
       if (calm.matches) {
         el.pause();
@@ -104,7 +106,7 @@ export function PosterFilm({
 
   return (
     <span data-poster-film className={cn("absolute inset-0 block", className)}>
-      <Image src={poster} alt="" fill sizes={sizes} loading={eager ? "eager" : "lazy"} className="object-cover object-[50%_32%]" />
+      <Image src={poster} alt="" fill sizes={sizes} loading={eager ? "eager" : "lazy"} className={cn("object-cover object-[50%_32%]", posterFit(poster))} />
       {film ? (
         <video
           ref={video}
@@ -114,7 +116,7 @@ export function PosterFilm({
           preload="none"
           aria-hidden="true"
           tabIndex={-1}
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[50%_32%] opacity-0 transition-opacity duration-300 data-on:opacity-100"
+          className={cn("pointer-events-none absolute inset-0 h-full w-full object-cover object-[50%_32%] opacity-0 transition-opacity duration-300 data-on:opacity-100", posterFit(poster))}
         />
       ) : null}
     </span>

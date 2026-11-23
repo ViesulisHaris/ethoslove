@@ -1227,12 +1227,19 @@ function listedFor(slug: string): Recipient[] {
   return RECIPIENTS.filter((r) => RECIPIENT_GUIDES[r].en.ideas.some((idea) => idea.template === slug));
 }
 
+/**
+ * Gifts never used as the picture on an answer card: Paper Crane's poster is a near-black screen
+ * with a small paper triangle, and as "Saying sorry"'s picture among seven bright ones it read as a
+ * picture that failed (walk-agreed-11). The answer shows the next apology gift (Bloom, The Letter).
+ */
+const UNPICTURED: readonly string[] = ["paper-crane"];
+
 /** Every template the finder can offer, as the scoring reads it. A template with no entry in the table is left out. */
 export function finderGifts(): (FinderGift & { why: FinderReasons<Words> })[] {
   return TEMPLATE_MANIFESTS.flatMap((m) => {
     const fit = FINDER_FITS[m.slug];
     if (!fit) return [];
-    return [{ slug: m.slug, occasions: m.occasions, sortOrder: m.sortOrder, for: fit.for, feels: fit.feels, only: fit.only, conditional: fit.conditional, listedFor: listedFor(m.slug), why: fit.why }];
+    return [{ slug: m.slug, occasions: m.occasions, sortOrder: m.sortOrder, for: fit.for, feels: fit.feels, only: fit.only, conditional: fit.conditional, pictured: !UNPICTURED.includes(m.slug), listedFor: listedFor(m.slug), why: fit.why }];
   });
 }
 
@@ -1290,8 +1297,8 @@ export type FinderCopy = {
   ui: FinderUi;
   /**
    * The foot: a label and a heading beside one row of links to the pages that start from a person.
-   * The links' words are the finder's own, said as its answers are: a page's own label may name
-   * one of two ("Para tu mejor amiga") where the answer card names both.
+   * The links' words are the finder's own, said as its answers are, and the same as the pages'
+   * own labels ("Para tu mejor amigo o amiga").
    */
   byWho: { label: string; heading: string; all: string; people: Record<Recipient, string> };
   /** The way round the finder, always in view: every gift, on the gallery. The owner, 22 Nov 2026: "the finder isnt obligatory". */
@@ -1374,7 +1381,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         christmas: "Christmas",
         "long-distance": "Long distance",
         apology: "Saying sorry",
-        "just-because": "No occasion",
+        "just-because": "Just because",
         wedding: "Wedding",
         graduation: "Graduation",
         halloween: "Halloween",
@@ -1395,7 +1402,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       make: "Make this gift",
       more: "Show three more",
       restart: "Start again",
-      end: "Those are all the gifts that fit.",
+      end: "That is every gift we have.",
       pauseFilms: "Pause the previews",
       playFilms: "Play the previews",
       demoTitle: "{name}: live demo",
@@ -1443,7 +1450,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         husband: "Mi marido",
         mom: "Mi madre",
         dad: "Mi padre",
-        "best-friend": "Mi mejor amiga o amigo",
+        "best-friend": "Mi mejor amigo o amiga",
         someone: "Otra persona",
       },
       forWho: {
@@ -1453,7 +1460,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         husband: "Para mi marido",
         mom: "Para mi madre",
         dad: "Para mi padre",
-        "best-friend": "Para mi mejor amiga o amigo",
+        "best-friend": "Para mi mejor amigo o amiga",
         someone: "Para otra persona",
         any: "Para quien sea",
       },
@@ -1464,7 +1471,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         christmas: "Navidad",
         "long-distance": "A distancia",
         apology: "Pedir perdón",
-        "just-because": "Sin ocasión",
+        "just-because": "Porque sí",
         wedding: "Boda",
         graduation: "Graduación",
         halloween: "Halloween",
@@ -1485,7 +1492,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       make: "Crear este regalo",
       more: "Ver tres más",
       restart: "Empezar de nuevo",
-      end: "Estos son todos los regalos que encajan.",
+      end: "Esos son todos los regalos que tenemos.",
       pauseFilms: "Pausar las vistas previas",
       playFilms: "Reproducir las vistas previas",
       demoTitle: "{name}: demo en vivo",
@@ -1501,7 +1508,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         girlfriend: "Para tu novia",
         husband: "Para tu marido",
         wife: "Para tu esposa",
-        "best-friend": "Para tu mejor amiga o amigo",
+        "best-friend": "Para tu mejor amigo o amiga",
         mom: "Para tu madre",
         dad: "Para tu padre",
       },

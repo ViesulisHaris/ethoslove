@@ -365,12 +365,15 @@ describe("reading the answers from an address", () => {
 describe("the second question", () => {
   const people = [...FINDER_RECIPIENTS, ANY] as const;
 
-  it("shows each person the six occasions that matter most to them, and keeps every other one a tap away", () => {
-    expect(OCCASIONS_SHOWN).toBe(6);
+  it("shows each person the seven occasions that matter most to them, and keeps every other one a tap away", () => {
+    // Seven and "Not sure" are eight cards, and all thirteen and "Not sure" fourteen: an even grid either way (walk-agreed-1).
+    expect(OCCASIONS_SHOWN).toBe(7);
+    expect((OCCASIONS_SHOWN + 1) % 2).toBe(0);
+    expect((OCCASIONS.length + 1) % 2).toBe(0);
     for (const who of people) {
       const own = OCCASIONS_FOR[who];
-      expect(own, who).toHaveLength(6);
-      expect(new Set(own).size, who).toBe(6);
+      expect(own, who).toHaveLength(7);
+      expect(new Set(own).size, who).toBe(7);
       for (const o of own) expect(OCCASIONS, who).toContain(o);
       const { first, more } = occasionsFor(who, "2026-07-01");
       expect(first, who).toEqual(own);
@@ -386,24 +389,40 @@ describe("the second question", () => {
     expect(occasionsFor(null, "2026-07-01").first).toEqual(OCCASIONS_FOR[ANY]);
   });
 
-  it("leads with Christmas from 15 Nov to 25 Dec, by the day the page was rendered with", () => {
-    expect(occasionsInSeason("2026-11-14")).toEqual([]);
-    expect(occasionsInSeason("2026-11-15")).toEqual(["christmas"]);
+  it("leads with Christmas from 15 Nov to 25 Dec, Thanksgiving from 1 to 28 Nov, by the day the page was rendered with", () => {
+    expect(occasionsInSeason("2026-11-14")).toEqual(["thanksgiving"]);
+    expect(occasionsInSeason("2026-11-15")).toEqual(["christmas", "thanksgiving"]);
+    expect(occasionsInSeason("2026-11-29")).toEqual(["christmas"]);
     expect(occasionsInSeason("2026-12-25")).toEqual(["christmas"]);
     expect(occasionsInSeason("2026-12-26")).toEqual([]);
     expect(occasionsInSeason("2027-02-14")).toEqual(["valentines"]);
     expect(occasionsInSeason("2027-02-15")).toEqual([]);
     expect(occasionsInSeason("not a day")).toEqual([]);
     for (const who of people) {
-      const inSeason = occasionsFor(who, "2026-11-22").first;
+      const inSeason = occasionsFor(who, "2026-12-10").first;
       expect(inSeason[0], who).toBe("christmas");
-      // The same six, reordered: nothing is pushed out by the season.
+      // The same seven, reordered: nothing is pushed out by a season the person already has.
       expect([...inSeason].sort(), who).toEqual([...OCCASIONS_FOR[who]].sort());
       expect(occasionsFor(who, "2026-07-01").first[0], who).toBe("birthday");
     }
     // A season only reorders a person's own six: a mother is not asked about Valentine's in February.
     expect(occasionsFor("mom", "2027-02-10").first).toEqual(OCCASIONS_FOR.mom);
     expect(occasionsFor("girlfriend", "2027-02-10").first[0]).toBe("valentines");
+  });
+
+  it("offers Thanksgiving to everyone three days before it, and Halloween in October, in the gallery row's order (walk-choose-1)", () => {
+    for (const who of people) {
+      const nov = occasionsFor(who, "2026-11-23").first;
+      expect(nov.slice(0, 6), who).toContain("thanksgiving");
+      expect(nov.slice(0, 2), who).toEqual(["christmas", "thanksgiving"]);
+      expect(nov, who).toHaveLength(OCCASIONS_SHOWN);
+      const oct = occasionsFor(who, "2026-10-20").first;
+      expect(oct.slice(0, 6), who).toContain("halloween");
+      expect(oct, who).toHaveLength(OCCASIONS_SHOWN);
+      // What a season pushes out is behind "More occasions", not lost.
+      const { first, more } = occasionsFor(who, "2026-10-20");
+      expect([...first, ...more].sort(), who).toEqual([...OCCASIONS].sort());
+    }
   });
 
   it("has three gifts, and three more, behind every answer it shows up front", () => {
@@ -443,6 +462,16 @@ describe("the picture on an answer", () => {
       // Christmas shows a Christmas gift, not the best seller.
       expect(getManifest(cards.get("christmas")!.slug)!.occasions, String(who)).toContain("christmas");
     }
+  });
+
+  it("is never Paper Crane's near-black poster, which read as a picture that failed (walk-agreed-11)", () => {
+    for (const day of ["2026-11-23", "2026-07-01", "2027-02-10"])
+      for (const who of people as FinderAnswers["for"][]) {
+        const { first, more } = occasionsFor(who, day);
+        const cards = answerGifts(GIFTS, { for: who, occasion: null, feel: null }, "occasion", [...first, ANY, ...more]);
+        for (const [occasion, gift] of cards) expect(gift.slug, `${who} / ${occasion} on ${day}`).not.toBe("paper-crane");
+      }
+    expect(answerGifts(GIFTS, NO_ANSWERS, "for", people).size).toBe(people.length);
   });
 
   it("is drawn from a poster that exists", () => {
@@ -849,11 +878,24 @@ describe("the page's words", () => {
     expect(FINDER_COPY.en.ui.resultTitleMore).toBe("Gifts that fit");
     expect(FINDER_COPY.es.ui.resultTitleMore).toBe("Regalos que encajan");
     for (const locale of ["en", "es"] as const) expect(FINDER_COPY[locale].ui.resultTitleMore, locale).not.toMatch(/three|tres|\d/i);
-    // The foot row said "Para tu mejor amiga" under an answer card that says "Mi mejor amiga o amigo".
+    // The foot row said "Para tu mejor amiga" under an answer card that says "Mi mejor amiga o amigo";
+    // since walk-choose-6 the finder, the page's title, its h1 and the menu all say "amigo o amiga".
     expect(Object.keys(FINDER_COPY.es.byWho.people)).toEqual([...RECIPIENTS]);
-    expect(FINDER_COPY.es.byWho.people["best-friend"]).toBe("Para tu mejor amiga o amigo");
-    expect(FINDER_COPY.es.ui.people["best-friend"]).toBe("Mi mejor amiga o amigo");
-    expect(FINDER_COPY.es.ui.forWho["best-friend"]).toBe("Para mi mejor amiga o amigo");
+    expect(FINDER_COPY.es.byWho.people["best-friend"]).toBe("Para tu mejor amigo o amiga");
+    expect(FINDER_COPY.es.ui.people["best-friend"]).toBe("Mi mejor amigo o amiga");
+    expect(FINDER_COPY.es.ui.forWho["best-friend"]).toBe("Para mi mejor amigo o amiga");
+    expect(RECIPIENT_GUIDES["best-friend"].es.title).toBe("Regalos digitales para tu mejor amigo o amiga");
+    expect(RECIPIENT_GUIDES["best-friend"].es.h1).toBe("Regalos digitales para tu mejor amigo o amiga");
+    expect(RECIPIENT_GUIDES["best-friend"].es.label).toBe("Para tu mejor amigo o amiga");
+  });
+
+  it("call an occasion what the gallery's tile calls it (walk-choose-6), and say at the end that the list is every gift", () => {
+    for (const locale of ["en", "es"] as const) {
+      const tiles = (locale === "en" ? en : es).occasions as Record<string, string>;
+      for (const [occasion, name] of Object.entries(FINDER_COPY[locale].ui.occasions)) expect(name, `${locale} ${occasion}`).toBe(tiles[occasion]);
+    }
+    expect(FINDER_COPY.en.ui.end).toBe("That is every gift we have.");
+    expect(FINDER_COPY.es.ui.end).toBe("Esos son todos los regalos que tenemos.");
   });
 
   it("are in one English: American, as “mom” is", () => {
