@@ -18,6 +18,7 @@ import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { PartnerLink } from "@/components/trips/partner-link";
+import { ShareTripButton } from "@/components/trips/share-trip-button";
 import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link";
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
@@ -139,6 +140,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                 </a>
                 {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
                 <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)} />
+                <ShareTripButton tripId={trip.id} title={trip.title[l]} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper" />
               </div>
             </div>
           </div>

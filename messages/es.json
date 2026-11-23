@@ -2549,6 +2549,12 @@
       "jump": {
         "flights": "Buscar vuelos"
       },
+      "share": {
+        "cta": "Envíale este viaje",
+        "copied": "Enlace copiado",
+        "text": "¿Nos vamos? {title}",
+        "manual": "Copia este enlace"
+      },
       "route": {
         "eyebrow": "La ruta",
         "title": "Por dónde vais",

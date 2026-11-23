@@ -2549,6 +2549,12 @@
       "jump": {
         "flights": "Find flights"
       },
+      "share": {
+        "cta": "Send this trip to them",
+        "copied": "Link copied",
+        "text": "Shall we? {title}",
+        "manual": "Copy this link"
+      },
       "route": {
         "eyebrow": "The route",
         "title": "Where you'll go",
