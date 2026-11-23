@@ -169,12 +169,12 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
             template: "party-animals",
             heading: "Una fiesta colada por hámsteres con opiniones",
             brief: "Diez animales con gorro de fiesta, y cada uno grita una frase tuya al tocarlo.",
-            body: "Su edad en globos metalizados, su nombre en letras recortadas y diez animales con gorro de fiesta que gritan una frase tuya al tocarlos. Usa las diez: «¿¡TREINTA!?», «¿quién ha invitado a los hurones?», «dijiste sin lío y oímos lío», «pide un deseo, esperamos». Abajo, las velas se apagan soplando al móvil.",
+            body: "Su edad en globos metalizados, su nombre en letras recortadas y diez animales con gorro de fiesta que gritan una frase tuya al tocarlos. Usa las diez: «¿TREINTA?», «¿quién ha invitado a los hurones?», «dijiste sin lío y oímos lío», «pide un deseo, esperamos». Abajo, las velas se apagan soplando al móvil.",
           },
           {
             template: "front-page",
             heading: "Una portada que le adora",
-            body: "Un periódico con su nombre en la cabecera, escrito como una revista del corazón obsesionada con esa persona. Titular: «40 AÑOS Y NI UNA CANA, SEGÚN SU PELUQUERÍA». El tiempo: «Nublado, con probabilidad de que le canten». Y los ocho anuncios por palabras, para las bromas vuestras: «SE BUSCA: quien sepa explicar su especiero. Recompensa: tarta.»",
+            body: "Un periódico con su nombre en la cabecera, escrito como una revista del corazón obsesionada con esa persona. Titular: «40 AÑOS Y NI UNA CANA, SEGÚN SU PELUQUERÍA». El tiempo: «Nublado, con probabilidad de que le canten». Y los ocho anuncios clasificados, para las bromas vuestras: «SE BUSCA: quien sepa explicar su especiero. Recompensa: tarta.»",
           },
           {
             template: "fortune-cookie",
@@ -207,8 +207,8 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "sticker-bomb",
             heading: "Doce toques de caos, con etiquetas tuyas",
-            brief: "Cada toque pega una pegatina donde cae el dedo, algunas con una etiqueta tuya.",
-            body: "Cada toque pega una pegatina donde cae el dedo, y algunas llevan debajo una tira de etiquetadora que escribes tú, hasta seis de 28 caracteres: «oficialmente vintage», «30 y aún no sabe silbar», «primer premio». Con doce pegatinas la página es un caos y se abre tu tarjeta. Para quien nunca te perdonaría una cursilada.",
+            brief: "Cada toque pega un sticker donde cae el dedo, algunos con una etiqueta tuya.",
+            body: "Cada toque pega un sticker donde cae el dedo, y algunos llevan debajo una tira de rotuladora que escribes tú, hasta seis de 28 caracteres: «oficialmente vintage», «30 y aún no sabe silbar», «primer premio». Con doce stickers la página es un caos y se abre tu tarjeta. Para quien nunca te perdonaría una cursilada.",
           },
           {
             template: "balloons",
@@ -389,7 +389,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "keepsake",
             heading: "Un guardapelo con vuestra fecha grabada",
-            body: "Un paquete con sello de lacre y, dentro, una caja de cosas guardadas: una entrada, flores prensadas, una palabra arrancada de un libro y un guardapelo de oro que se abre con un toque. Graba vuestra fecha, hasta 18 caracteres («12·06·2021»), haz que la entrada sea para la noche en que os conocisteis y elige la palabra que arrancarías para esa persona.",
+            body: "Un paquete con sello de lacre y, dentro, una caja de cosas guardadas: una entrada, flores prensadas, una palabra arrancada de un libro y un relicario de oro que se abre con un toque. Graba vuestra fecha, hasta 18 caracteres («12·06·2021»), haz que la entrada sea para la noche en que os conocisteis y elige la palabra que arrancarías para esa persona.",
           },
           {
             template: "jar-of-reasons",
@@ -582,7 +582,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "bouquet",
             heading: "Sus flores, no una docena de rosas rojas",
-            body: "Se monta tallo a tallo, así que puede ser lo que le gusta de verdad: peonías si son lo suyo, girasoles si las rosas le aburren, en los colores de esa bufanda que no se quita nunca. No se marchita el fin de semana ni cuesta más el catorce. La tarjeta admite 30 caracteres: «Peonías. Dijiste peonías.» En Cataluña sirve también para Sant Jordi, el 23 de abril, con un libro al lado.",
+            body: "Se monta tallo a tallo, así que puede ser lo que le gusta de verdad: peonías si son lo suyo, girasoles si las rosas le aburren, en los colores de esa bufanda que no se quita nunca. No se marchita el fin de semana ni cuesta más el catorce. La tarjeta admite 30 caracteres: «Peonías. Dijiste peonías.»",
           },
           {
             template: "dark-romance",
@@ -613,8 +613,8 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "arcade",
             heading: "Un juego para quien prefiere jugar",
-            brief: "Arrastra una cesta para atrapar corazones, y cada nivel descubre una de tus fotos.",
-            body: "Un pequeño juego retro: arrastra una cesta para atrapar corazones, cada nivel descubre una de tus fotos y el último muestra tu mensaje. Tú decides cuántos hay que atrapar por nivel, de 3 a 20: ocho es una partida bonita; veinte, un reto. Y en la pantalla de título: «NIVEL 14: ENTRA EL J2».",
+            brief: "Arrastran una cesta para atrapar corazones, y cada nivel descubre una de tus fotos.",
+            body: "Un pequeño juego retro: arrastran una cesta para atrapar corazones, cada nivel descubre una de tus fotos y el último muestra tu mensaje. Tú decides cuántos hay que atrapar por nivel, de 3 a 20: ocho es una partida bonita; veinte, un reto. Y en la pantalla de título: «NIVEL 14: ENTRA EL J2».",
           },
           {
             template: "constellations",
@@ -914,7 +914,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
             template: "front-page",
             heading: "La portada del año, con esa persona de protagonista",
             brief: "Un periódico con su nombre en la cabecera, y cuanto más pequeña la queja, mejor.",
-            body: "Un periódico con su nombre en la cabecera y sitio para un titular, el tiempo, el horóscopo y hasta ocho anuncios por palabras. Cuanto más pequeña la queja, mejor: «LEYENDA LOCAL SIGUE SIN PONER LA BALDA», el tiempo, «Templado, con probabilidad de sobras», y en los anuncios, «SE BUSCA: el principio del celo. Se gratificará.» Ideal para un padre o una madre.",
+            body: "Un periódico con su nombre en la cabecera y sitio para un titular, el tiempo, el horóscopo y hasta ocho anuncios clasificados. Cuanto más pequeña la queja, mejor: «LEYENDA LOCAL SIGUE SIN PONER LA BALDA», el tiempo, «Templado, con probabilidad de sobras», y en los anuncios, «SE BUSCA: el principio del celo. Se gratificará.» Va bien para un padre o una madre.",
           },
           {
             template: "recipe-box",
@@ -1039,7 +1039,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Ligero y corto: con tres o cuatro frases basta. Un chiste privado, la historia del disfraz que salió mal, un reto para la noche. Truco o trato lo entrega después del timbre: «treat» enciende la calabaza y llueven chuches; «trick» se gana primero un buu, y luego las chuches igualmente.",
+          body: "Ligero y corto: con tres o cuatro frases basta. Un chiste privado, la historia del disfraz que salió mal, un reto para la noche. Truco o trato lo entrega después del timbre: «trato» enciende la calabaza y llueven chuches; con «truco» primero hay un susto («bu»), y luego las chuches igualmente.",
         },
         {
           heading: "Qué añadir",
@@ -1153,7 +1153,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "Qué escribir",
-          body: "Empieza por un recuerdo concreto: las meriendas, el coche a las dos de la madrugada, la frase que dijo y que sigues repitiendo. Luego di qué entiendes ahora que entonces no. Dos párrafos. Frasco de razones te deja darle un tarro de razones cortas para sacar de una en una, que es más fácil que una carta larga.",
+          body: "Empieza por un recuerdo concreto: las meriendas, el coche a las dos de la madrugada, la frase que dijo y que sigues repitiendo. Luego di qué entiendes ahora que entonces no. Dos párrafos. Frasco de razones te deja darle un frasco de razones cortas para sacar de una en una, que es más fácil que una carta larga.",
         },
         {
           heading: "Qué añadir",
@@ -1218,7 +1218,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Cuándo enviarlo",
-          body: "Mándalo por la mañana, antes de la comida, o prográmalo para que sea lo primero que vea en el móvil. Si estáis juntos, imprime la tarjeta QR y ponla con el regalo; se abre con la cámara. Frasco de razones le da un tarro de razones cortas para ir sacando durante la semana.",
+          body: "Mándalo por la mañana, antes de la comida, o prográmalo para que sea lo primero que vea en el móvil. Si estáis juntos, imprime la tarjeta QR y ponla con el regalo; se abre con la cámara. Frasco de razones le da un frasco de razones cortas para ir sacando durante la semana.",
         },
       ],
       faq: [
@@ -1341,7 +1341,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Cuándo enviarlo",
-          body: "Prográmalo para la mañana donde está, para que le espere al despertar; la zona horaria se elige. O mándalo al final de tu día, para que lo tenga al principio del suyo. Su reacción te llega a tu panel, y «devolver uno» le da una forma de contestar con uno suyo.",
+          body: "Prográmalo para la mañana donde está, para que le espere al despertar; la zona horaria se elige. O mándalo al final de tu día, para que lo tenga al principio del suyo. Su reacción llega a tu panel, y «devolver uno» le da una forma de contestar con uno suyo.",
         },
       ],
       faq: [
