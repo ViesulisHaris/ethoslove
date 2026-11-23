@@ -100,3 +100,15 @@ export function listManifests(filter: { occasion?: Occasion; tier?: TemplateTier
       : a.sortOrder - b.sortOrder,
   );
 }
+
+/** No words. */
+const BLANK = { en: "", es: "" } as const;
+
+/**
+ * Manifests as a page of cards hands them to the browser: without the paragraph that describes each
+ * gift, which no card shows (its own page does). Sixty-one of them rode in every gallery's and the
+ * front page's data, fetched again with each move to the gallery.
+ */
+export function forCards(manifests: TemplateManifest[]): TemplateManifest[] {
+  return manifests.map((m) => ({ ...m, description: BLANK }));
+}

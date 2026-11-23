@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -54,14 +53,13 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
   const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, () => !live && window.matchMedia("(hover: hover)").matches, manifest.thumbnail.webm);
 
   return (
-    <motion.article
-      // The first row ships visible. `initial` is serialised into the server HTML, so every card
-      // arrived as `opacity:0` and waited for hydration and an intersection observer before it
-      // appeared — on /templates, the most visited page, that is a blank grid on arrival.
-      initial={above ? false : { opacity: 0, y: 16 }}
-      whileInView={above ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ type: "spring", stiffness: 120, damping: 20, delay: (index % 3) * 0.06 }}
+    <article
+      // The first row ships visible. Past it a card rises into view as it is scrolled to, with the
+      // site's one observer (motion/reveal-root.tsx), which arms only once it runs: before that, and
+      // without JavaScript, every card is simply there. Sixty-one cards each with an animation of its
+      // own and an observer of its own were most of the front page's work while it loaded.
+      data-reveal={above ? undefined : ""}
+      style={above ? undefined : ({ "--reveal-delay": `${(index % 3) * 60}ms` } as CSSProperties)}
       className="group flex h-full flex-col"
     >
       <div
@@ -173,6 +171,6 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
           </Link>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }

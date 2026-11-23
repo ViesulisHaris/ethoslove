@@ -7,7 +7,7 @@ import { appNode, faqNode, localizedUrl, organizationNode, pageMetadata } from "
 import { chargedCurrency } from "@/lib/pricing/products";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { templateSeo } from "@/content/template-seo";
-import { listManifests } from "@/templates/manifests";
+import { forCards, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { DigitalGiftGuideSection } from "@/components/marketing/digital-gift-guide";
 import { Hero } from "@/components/marketing/home/hero";
@@ -71,7 +71,7 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
       />
       <Hero />
       <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" />
-      <TemplateStrip manifests={listManifests()} />
+      <TemplateStrip manifests={forCards(listManifests())} />
       <Openings locale={locale as GiftLocale} />
       <Reactions real={reactions.length >= 3 ? reactions : null} numbers={numbers} />
       <HowItWorks />

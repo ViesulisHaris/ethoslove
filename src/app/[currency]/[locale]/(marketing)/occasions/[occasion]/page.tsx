@@ -6,7 +6,7 @@ import { OCCASIONS, isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
-import { getManifest, listManifests } from "@/templates/manifests";
+import { forCards, getManifest, listManifests } from "@/templates/manifests";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { JsonLd } from "@/components/shared/json-ld";
 import { OccasionGuide, OccasionIdeas } from "@/components/marketing/occasion-guide";
@@ -92,7 +92,7 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
           ) : undefined
         }
       >
-        <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} today={new Date().toISOString().slice(0, 10)} />
+        <TemplateGallery manifests={forCards(templates)} occasion={occasion} alsoFree={forCards(alsoFree)} today={new Date().toISOString().slice(0, 10)} />
       </GalleryHead>
       <div className="container-x pb-4">
         <p data-occasion-intro className="max-w-2xl border-t border-line pt-10 text-lg leading-relaxed text-ink-soft">

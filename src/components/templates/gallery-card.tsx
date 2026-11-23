@@ -2,7 +2,7 @@
 
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "motion/react";
+import { memo, type CSSProperties } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
@@ -46,7 +46,7 @@ const CROP: Record<string, string> = {
  *
  * `index` is the card's place in the whole list: the first row is painted at once, never faded in.
  */
-export function GalleryCard({ manifest, index = 0, badge }: { manifest: TemplateManifest; index?: number; badge?: Featured }) {
+export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badge }: { manifest: TemplateManifest; index?: number; badge?: Featured }) {
   const locale = useLocale() as GiftLocale;
   const t = useTranslations();
   const currency = useCurrency();
@@ -63,11 +63,11 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
   const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, wantsFilm, manifest.thumbnail.webm);
 
   return (
-    <motion.article
-      initial={above ? false : { opacity: 0, y: 16 }}
-      whileInView={above ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ type: "spring", stiffness: 120, damping: 20, delay: (index % 4) * 0.05 }}
+    // Past the first row a card rises into view as it is scrolled to, with the site's one observer
+    // (motion/reveal-root.tsx), staggered along its row; the first row is painted at once. On a box
+    // of its own, so the rise's transition never takes over the card's own lift on a pointer.
+    <div data-reveal={above ? undefined : ""} style={above ? undefined : ({ "--reveal-delay": `${(index % 4) * 50}ms` } as CSSProperties)} className="h-full">
+    <article
       data-gallery-card={manifest.slug}
       onMouseEnter={play}
       onMouseLeave={pause}
@@ -147,6 +147,7 @@ export function GalleryCard({ manifest, index = 0, badge }: { manifest: Template
           <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover/make:translate-x-0.5 motion-reduce:transition-none" />
         </Link>
       </div>
-    </motion.article>
+    </article>
+    </div>
   );
-}
+});

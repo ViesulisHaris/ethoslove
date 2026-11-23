@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ClientMessages } from "@/i18n/client-messages";
 import { homeHeroFor } from "@/lib/attribution/landing";
 import { ogImageUrl, organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
-import { listManifests } from "@/templates/manifests";
+import { forCards, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { DirectoryLine } from "@/components/marketing/home/directory-line";
 import { TemplateStrip } from "@/components/marketing/home/template-strip";
@@ -32,7 +32,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[cu
   const { locale } = await params;
   setRequestLocale(locale);
   const hero = homeHeroFor((await searchParams).ref);
-  const strip = <TemplateStrip manifests={listManifests()} />;
+  const strip = <TemplateStrip manifests={forCards(listManifests())} />;
   return (
     <ClientMessages scope="(marketing)/page" locale={locale}>
       <JsonLd nodes={[organizationNode(), websiteNode()]} />

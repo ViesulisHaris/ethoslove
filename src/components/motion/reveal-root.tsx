@@ -41,9 +41,23 @@ export function RevealRoot() {
         if (!el.closest("details")) seen.observe(el);
       });
     // A frame after the new page's elements are in the document.
-    const frame = requestAnimationFrame(watch);
+    let frame = requestAnimationFrame(watch);
+    // And whatever a page adds later without a navigation (the gallery's cards after "Free" or a new
+    // order): once per frame, however many arrive in it.
+    let queued = false;
+    const added = new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      frame = requestAnimationFrame(() => {
+        queued = false;
+        watch();
+      });
+    });
+    const main = document.getElementById("main");
+    if (main) added.observe(main, { childList: true, subtree: true });
     return () => {
       cancelAnimationFrame(frame);
+      added.disconnect();
       seen.disconnect();
     };
   }, [pathname]);

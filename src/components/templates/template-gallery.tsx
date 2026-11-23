@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ChevronDown, Plus } from "lucide-react";
-import { MotionConfig } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { NEW_SLUGS, featuredFor, sectionTemplates } from "@/config/featured";
@@ -86,8 +85,13 @@ export function TemplateGallery({
 }) {
   const t = useTranslations();
   const locale = useLocale() as GiftLocale;
-  const tier = useSyncExternalStore(subscribe, readTier, () => initialTier);
-  const chosen = useSyncExternalStore(subscribe, readSort, () => initialSort);
+  const pressedTier = useSyncExternalStore(subscribe, readTier, () => initialTier);
+  const pressedSort = useSyncExternalStore(subscribe, readSort, () => initialSort);
+  // The pills and the select change at once; the sixty-one cards follow in the background, where
+  // React can stop for a frame, so a press is painted before the cards are redrawn (on a slow
+  // phone "All" after "Free" held its paint back for most of a second).
+  const tier = useDeferredValue(pressedTier);
+  const chosen = useDeferredValue(pressedSort);
   const sort: GallerySort = occasion ? "popular" : chosen;
 
   // "Free" is what can be sent free as the site stands (sendsFree), not the template's price class.
@@ -130,7 +134,7 @@ export function TemplateGallery({
       <span className="hidden font-medium text-ink sm:inline">{t("templates.sort.label")}</span>
       <span className="relative">
         <select
-          value={sort}
+          value={occasion ? "popular" : pressedSort}
           onChange={(e) => chooseSort(parseSort(e.target.value))}
           aria-label={t("templates.sort.label")}
           data-gallery-sort
@@ -147,15 +151,9 @@ export function TemplateGallery({
     </label>
   );
 
+  // The header's "Make a gift" scrolls here on this page; the margin keeps the fixed header (promo strip and bar, ~104px) off the tiles it lands on.
   return (
-    // Less motion, where it is asked for: the cards past the first row then fade in without rising.
-    <MotionConfig reducedMotion="user">
-      {/* The header's "Make a gift" scrolls here on this page; the margin keeps the fixed header (promo strip and bar, ~104px) off the tiles it lands on. */}
       <div id={GALLERY_ID} className="container-x scroll-mt-32 pb-24">
-        {/* Without JavaScript nothing ever fades a card in: they are drawn as they are. */}
-        <noscript>
-          <style>{"[data-gallery-card]{opacity:1!important;transform:none!important}"}</style>
-        </noscript>
         <div className="mb-10 flex flex-col gap-5 border-b border-line pb-8 lg:mb-8 lg:pb-6 xl:flex-row xl:items-start xl:gap-8">
           {/*
            * The occasions, each a small rendered picture over its name, in season first. On a desk
@@ -188,7 +186,7 @@ export function TemplateGallery({
           {/* As tall as a tile, so the filter stands beside the first row when the second is open. */}
           <div className="flex shrink-0 items-center gap-2 xl:mt-1 xl:h-24 xl:border-l xl:border-line xl:pl-8">
             {TIER_FILTERS.map((v) => (
-              <button key={v} type="button" onClick={() => chooseTier(v)} aria-pressed={tier === v} className={pillClass(tier === v)}>
+              <button key={v} type="button" onClick={() => chooseTier(v)} aria-pressed={pressedTier === v} className={pillClass(pressedTier === v)}>
                 {v === "all" ? t("templates.allTiers") : v === "free" ? t("common.free") : t("common.premium")}
               </button>
             ))}
@@ -239,7 +237,6 @@ export function TemplateGallery({
           </div>
         )}
       </div>
-    </MotionConfig>
   );
 }
 
