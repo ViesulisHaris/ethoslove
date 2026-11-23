@@ -119,8 +119,8 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       breadcrumb: "Tarjetas digitales",
       h1: "Una tarjeta que se abre en su móvil",
       hero: {
-        line: "Con tus fotos, una canción y tus palabras dentro.",
-        sentence: "La haces con una plantilla y la mandas en un enlace o en un código QR impreso.",
+        line: "Con tus fotos, una canción y tus palabras.",
+        sentence: "La haces con una plantilla y la mandas por enlace o con un QR impreso.",
       },
       definition:
         "Una tarjeta digital es una tarjeta que se abre y cobra vida en el móvil. Tiene una portada que se toca, algo que ocurre al tocarla y, dentro, tus fotos, una canción y un mensaje con tus palabras. La mandas en un enlace, o imprimes su código QR y lo metes en un sobre. No se instala nada y no hay nada que llevar a correos.",
@@ -128,8 +128,8 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       band: {
         label: "Qué es",
         heading: "Más que una e-card",
-        line: "Una e-card es una imagen o un clip en un email. Esta responde.",
-        checks: ["Se abre en el navegador: se despliega, se enciende o cuenta atrás", "La haces tú, para una persona", "No es un vale: no hay saldo que gastar"],
+        line: "Una e-card es una imagen o un clip por email. Esta responde.",
+        checks: ["En el navegador se despliega, se enciende o cuenta atrás", "La haces tú, para una persona", "No es un vale: no hay saldo"],
       },
       compare: {
         about: "Más sobre las tarjetas digitales",
@@ -200,7 +200,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       },
       cost: {
         label: "Precios",
-        line: "Un solo pago, sin suscripción. La carta es gratis como nota corta.",
+        line: "Pago único, sin suscripción. La carta es gratis como nota corta.",
         shown: [3, 4, 5],
         includes: "Qué incluye cada precio",
         heading: "Cuánto cuesta una tarjeta digital",
@@ -268,7 +268,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
     breadcrumb: "Digital cards",
     h1: "A card that opens on their phone",
     hero: {
-      line: "With your photos, a song and your own words inside.",
+      line: "With your photos, a song and your own words.",
       sentence: "You make it from a template and send it as a link or a printed QR code.",
     },
     definition:
@@ -278,7 +278,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       label: "What it is",
       heading: "More than an ecard",
       line: "An ecard is a picture or a clip by email. This one answers back.",
-      checks: ["Opens in the browser: it unfolds, lights up or counts down", "Made by you, for one person", "Not a voucher: no credit to spend in a shop"],
+      checks: ["Opens in the browser: it unfolds, lights up or counts down", "Made by you, for one person", "Not a voucher: no credit to spend"],
     },
     compare: {
       about: "More about digital cards",

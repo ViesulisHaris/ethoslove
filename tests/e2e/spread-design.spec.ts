@@ -240,7 +240,9 @@ test("on a phone, Back from the editor finds the card that was being read, open,
   const after = await page.evaluate(() => ({ y: Math.round(window.scrollY), x: Math.round(document.querySelector("[data-cards]")!.scrollLeft) }));
   expect(after.x).toBe(before.x);
   expect(Math.abs(after.y - before.y), `${before.y} then ${after.y}`).toBeLessThanOrEqual(4);
-  // A new visit to the page starts closed, as before.
+  // A new visit to the page, from another page, starts closed, as before. (Going to the very address the tab is on is
+  // taken by the browser as a reload of this entry, which keeps it as it was: that is meant, so it is not used here.)
+  await page.goto("/gifts");
   await page.goto("/gifts/last-minute");
   await settle(page);
   await expect(page.locator("[data-cards] [data-card] > details[open]")).toHaveCount(0);
@@ -454,7 +456,9 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
   // nobody touched moved: 388px to 363px for The Letter's on /digital-cards (the test of 23 Nov 2026).
   const cards = page.locator("[data-cards]").first().locator("[data-card]");
   const heights = () => cards.evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().height)));
-  for (const [path, opened] of [["/digital-cards", 2], ["/es/gifts/photo-album", 1], ["/occasions/christmas", 4]] as const) {
+  // (/digital-cards was the first of these: since its five titles all begin "Cards" they are all two lines at 1440, so
+  // there is nothing there to hold level, and the page that has two title heights in one row takes its place.)
+  for (const [path, opened] of [["/gifts/last-minute", 2], ["/es/gifts/photo-album", 1], ["/occasions/christmas", 4]] as const) {
     await page.context().clearCookies();
     await page.goto(path);
     await settle(page);
@@ -513,6 +517,8 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
 });
 
 test("a card's picture is asked for at the size it is drawn, and its links are named by what they say", async ({ page }) => {
+  // Four pages under a dev server: on a busy machine this ran past 30s (23 Nov 2026).
+  test.slow();
   for (const [width, path] of [[1024, "/occasions/christmas"], [1280, "/gifts/last-minute"], [768, "/digital-cards"], [1440, "/digital-cards"]] as const) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(path);
@@ -993,7 +999,8 @@ test("“Copy” puts a card's line to borrow on the clipboard, whole, and says 
     });
     if (label) expect(label.rows, `${label.text}`).toBeLessThanOrEqual(2);
   }
-  await page.setViewportSize({ width: 375, height: 812 });
+  // The visit to /es left a language cookie: without this the English page below is answered in Spanish.
+  await page.context().clearCookies();
   // A thread's bubbles are copied one to a row, as the field takes them.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/occasions/fathers-day");
