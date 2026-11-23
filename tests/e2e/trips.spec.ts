@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { catchShares, clickInPlace, countEvents, lastShare, noShare } from "./rooms-world";
 
 /**
  * Trips: the room of ready-made trips, the flight search that only builds links (nothing is
@@ -172,5 +173,98 @@ test.describe("the trips room", () => {
     await expect
       .poll(() => page.locator("input").evaluateAll((els) => els.map((el) => (el as HTMLInputElement).value)), { timeout: 60_000 })
       .toContain("Ravello");
+  });
+});
+
+test.describe("a trip, in search and in their hands", () => {
+  const jsonLd = (page: Page) => page.locator('script[type="application/ld+json"]').evaluateAll((els) => els.flatMap((el) => { const v = JSON.parse(el.textContent ?? "{}"); return v["@graph"] ?? [v]; }));
+
+  test("the room is titled with what couples search, in both languages", async ({ page }) => {
+    await page.goto("/trips");
+    await expect(page).toHaveTitle(/^Couples trip ideas: 12 /);
+    const list = (await jsonLd(page)).find((n: { "@type"?: string }) => n["@type"] === "ItemList");
+    expect(list?.itemListElement).toHaveLength(12);
+    await page.goto("/es/trips");
+    await expect(page).toHaveTitle(/^Ideas de viajes en pareja: 12 /);
+  });
+
+  test("a trip is titled the way it is searched, keeps its own name on the page, and sends its own picture", async ({ page }) => {
+    await page.goto("/trips/lisbon-slow-weekend");
+    await expect(page).toHaveTitle(/^3 days in Lisbon for two/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lisbon, slowly");
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /itinerary/);
+    const og = await page.locator('meta[property="og:image"]').getAttribute("content");
+    expect(og).toContain("/og/share.jpg?k=trip");
+    expect(og).toContain("trip=lisbon-slow-weekend");
+    await page.goto("/es/trips/lisbon-slow-weekend");
+    await expect(page).toHaveTitle(/^3 días en Lisboa/);
+  });
+
+  test("Send this trip to them: the share sheet where there is one, a copied link where there is not", async ({ page, context, isMobile }) => {
+    await catchShares(page);
+    await page.goto("/trips/lisbon-slow-weekend#plan");
+    await page.getByTestId("share-trip").click();
+    await expect.poll(async () => (await lastShare(page))?.url ?? "").toMatch(/\/trips\/lisbon-slow-weekend$/);
+    expect((await lastShare(page))?.text).toBe("Shall we? Lisbon, slowly");
+    if (isMobile) return;
+
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    const copy = await context.newPage();
+    await noShare(copy);
+    const events = await countEvents(copy);
+    await copy.goto("/trips/lisbon-slow-weekend");
+    await copy.getByTestId("share-trip").click();
+    await expect(copy.getByTestId("share-trip")).toContainText("Link copied");
+    expect(await copy.evaluate(() => navigator.clipboard.readText())).toMatch(/\/trips\/lisbon-slow-weekend$/);
+    await expect.poll(async () => (await events()).filter((e) => e.name === "trip_shared").map((e) => e.data)).toEqual([{ trip: "lisbon-slow-weekend", how: "copy" }]);
+  });
+
+  test("a stop that is one of our cities links to its date ideas, once a city", async ({ page }) => {
+    await page.goto("/trips/baltic-coast");
+    const cities = page.getByTestId("stop-city");
+    await expect(cities).toHaveCount(2);
+    await expect(page.getByRole("link", { name: "Date ideas in Riga" })).toHaveAttribute("href", "/dates/riga");
+    await expect(page.getByRole("link", { name: "Date ideas in Tallinn" })).toHaveAttribute("href", "/dates/tallinn");
+    await expect(page.getByRole("link", { name: "Date spots here" })).toHaveCount(5);
+    await page.goto("/trips/lisbon-slow-weekend");
+    await expect(page.getByTestId("stop-city")).toHaveCount(1);
+    await expect(page.getByTestId("trip-stops").locator("li").first().getByTestId("stop-city")).toHaveText("Date ideas in Lisbon");
+    await page.goto("/trips/amalfi-coast");
+    await expect(page.getByTestId("stop-city")).toHaveCount(0);
+    await page.goto("/es/trips/baltic-coast");
+    await expect(page.getByRole("link", { name: "Ideas para una cita en Riga" })).toHaveAttribute("href", "/es/dates/riga");
+  });
+
+  test("a partner click on a trip's page says which trip; on the room's page it does not", async ({ page }) => {
+    const events = await countEvents(page);
+    await page.goto("/trips/baltic-coast");
+    await clickInPlace(page.getByRole("link", { name: /House of the Blackheads/ }));
+    await expect.poll(async () => (await events()).filter((e) => e.name === "affiliate_click").map((e) => e.data)).toEqual([{ partner: "tiqets", placement: "trip_tickets", trip: "baltic-coast" }]);
+
+    await page.goto("/trips");
+    const finder = page.getByTestId("flight-finder");
+    await finder.getByRole("combobox", { name: "From" }).fill("Rig");
+    await page.getByRole("option", { name: /Riga · RIX/ }).click();
+    await finder.getByRole("combobox", { name: "To" }).fill("Lisb");
+    await page.getByRole("option", { name: /Lisbon · LIS/ }).click();
+    await clickInPlace(finder.getByRole("link", { name: /Search on Aviasales/ }));
+    await expect.poll(async () => (await events()).filter((e) => e.name === "affiliate_click").length).toBe(1);
+    const [click] = (await events()).filter((e) => e.name === "affiliate_click");
+    expect(click.data?.placement).toBe("trips_finder");
+    expect(click.data?.partner).toBeTruthy();
+    expect(click.data && "trip" in click.data).toBe(false);
+  });
+
+  test("the city a trip passes through says so, and a city none passes through says nothing", async ({ page }) => {
+    test.setTimeout(90_000);
+    // A city's page reads map tiles on the server: its first load is given its time.
+    await page.goto("/dates/riga", { timeout: 60_000 });
+    const line = page.getByTestId("city-trip");
+    await expect(line).toContainText("A trip that passes through here");
+    await expect(line.getByRole("link", { name: "The Baltic coast, Riga to Tallinn" })).toHaveAttribute("href", "/trips/baltic-coast");
+    await page.goto("/es/dates/riga", { timeout: 60_000 });
+    await expect(page.getByTestId("city-trip")).toContainText("Un viaje que pasa por aquí");
+    await page.goto("/dates/london", { timeout: 60_000 });
+    await expect(page.getByTestId("city-trip")).toHaveCount(0);
   });
 });

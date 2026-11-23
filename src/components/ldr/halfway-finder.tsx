@@ -123,16 +123,16 @@ export function HalfwayFinder({ ways }: { ways: WaysData }) {
       <div data-halfway-tool className="rounded-[1.75rem] border border-page-line bg-page-raised p-5 shadow-page-card sm:p-7">
         <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
           <div>
-            <p className="mb-1.5 text-[0.8125rem] font-medium text-page-body">{t("you")}</p>
+            <p className="mb-1.5 text-[0.875rem] font-medium text-page-body">{t("you")}</p>
             <WhereBox value={a} locale={locale} labels={{ ...labels, label: t("you") }} onPick={pick(setA)} className={TOWN_BOX} />
           </div>
           <MoveHorizontal aria-hidden="true" className="mx-auto mb-3.5 hidden size-5 text-page-accent sm:block" />
           <div>
-            <p className="mb-1.5 text-[0.8125rem] font-medium text-page-body">{t("them")}</p>
+            <p className="mb-1.5 text-[0.875rem] font-medium text-page-body">{t("them")}</p>
             <WhereBox value={b} locale={locale} labels={{ ...labels, label: t("them") }} onPick={pick(setB)} className={TOWN_BOX} />
           </div>
         </div>
-        <div data-halfway-result aria-live="polite" className="mt-6 min-h-[11.5rem]">
+        <div data-halfway-result aria-live="polite" className="mt-6 min-h-[14.5rem] sm:min-h-[11.5rem]">
           {answer}
           {result && result.km >= 1 ? (
             <div className="mt-4 flex flex-wrap items-center gap-3">

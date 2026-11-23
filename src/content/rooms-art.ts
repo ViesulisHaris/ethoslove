@@ -15,7 +15,7 @@ export const MATCH_ART: PlacedArt[] = [
 export const HALFWAY_ART: PlacedArt[] = [
   { art: "lily-side", x: 101.5, y: 0, top: "11rem", size: 13, rot: -12, phone: false, eager: true, from: 1440 },
   { art: "petal-3", x: 95, y: 0, top: "2.75rem", size: 5.4, rot: 14, phone: false, eager: true, from: 1280, until: 1440 },
-  { art: "petal-1", x: 90, y: 0, top: "5.9rem", size: 12, rot: 12, phone: "only", eager: true },
+  { art: "petal-1", x: 88, y: 0, top: "1.25rem", size: 12, rot: 12, phone: "only", eager: true },
 ];
 
 /** Held at a fixed height over the questions band's top, as the finder's foot is. */

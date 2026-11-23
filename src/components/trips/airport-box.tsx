@@ -116,7 +116,7 @@ export function AirportBox({ label, placeholder, nothing, value, locale, directi
             className="mt-1 min-w-0 bg-transparent text-[16px] font-medium text-forest outline-none placeholder:font-normal placeholder:text-forest/40"
           />
         </span>
-        {value ? <span className="shrink-0 font-mono text-[12.5px] font-medium text-forest/45">{value.iata}</span> : null}
+        {value ? <span className="shrink-0 font-mono text-[12.5px] font-medium text-forest/45 uppercase">{value.iata}</span> : null}
       </label>
 
       {listed ? (
