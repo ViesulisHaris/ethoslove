@@ -44,6 +44,13 @@ export const GUIDES_LIVE = "2026-11-21";
  */
 export const GALLERY_LIVE = "2026-11-22";
 
+/**
+ * The day the games of the growth build go live: today's question, the games' new end screen, how
+ * to play and the questions on every game's page, the hub's three tiers, and the new games.
+ * NOT LIVE YET: set it to the day they ship. Every games page reads its date from here.
+ */
+export const GAMES_LIVE = "2026-11-23";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
@@ -88,11 +95,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
   // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
   "/occasions/*": GALLERY_LIVE,
-  "/games": "2026-11-13",
-  "/games/rather": "2026-10-24",
-  "/games/deck": "2026-11-13",
-  "/games/dare": "2026-11-13",
-  "/games/know": "2026-10-24",
+  "/games": GAMES_LIVE,
+  "/games/*": GAMES_LIVE,
   "/long-distance": "2026-11-13",
   "/tools/how-long-have-we-been-together": "2026-11-09",
   "/tools/love-language-quiz": "2026-11-15",

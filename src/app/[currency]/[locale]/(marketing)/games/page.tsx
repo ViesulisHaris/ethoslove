@@ -64,8 +64,34 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
             games the last one sits in the middle of its row, not alone at the left of an empty one,
             and any count to come lays out the same way. Cards in a row still stretch to one height. */}
         <ul className="mt-8 flex flex-wrap justify-center gap-3 sm:mt-10 sm:gap-6">
+          {/* Today's question first: one would you rather a day, sent between two phones by a link. */}
+          <li data-reveal className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]">
+            <Link href="/games/today" data-today-card className="group block h-full rounded-[24px]">
+              <PlayingCard rank="★" suit="heart" radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
+                <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
+                  <Sticker id="sparkle" />
+                </span>
+                <span className="mt-3 block font-display text-[19px] leading-[1.08] sm:mt-4 sm:text-[26px]">{t("hub.todayTitle")}</span>
+                <span className="mt-2 hidden text-[14.5px] leading-relaxed text-forest/65 sm:block">{t("hub.todayBlurb")}</span>
+                <span className="mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-5">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
+                    <Smartphone aria-hidden="true" className="size-3.5" />
+                    {t("hub.todayPhones")}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
+                    <Timer aria-hidden="true" className="size-3.5" />
+                    {t("hub.minutes", { n: 1 })}
+                  </span>
+                </span>
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[14px] font-semibold text-rose-deep sm:pt-6 sm:text-[14.5px]">
+                  {t("hub.todayCta")}
+                  <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </PlayingCard>
+            </Link>
+          </li>
           {GAMES.map((g, i) => (
-            <li key={g.key} data-reveal data-tour={g.phones === "two" ? "two-phones" : undefined} className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}>
+            <li key={g.key} data-reveal data-tour={g.phones === "two" ? "two-phones" : undefined} className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": `${((i + 1) % 3) * 80}ms` } as React.CSSProperties}>
               <Link href={g.href} className="group block h-full rounded-[24px]">
                 <PlayingCard rank={g.rank} suit={g.suit} radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
                   <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
