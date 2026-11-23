@@ -116,7 +116,7 @@ export const RATHER_PAIRS: RatherPair[] = [
   { id: "texter", a: { en: "They reply in one word", es: "Que conteste con una palabra" }, b: { en: "They reply in twelve messages", es: "Que conteste en doce mensajes" } },
   { id: "voice-notes", a: { en: "Only voice notes, never texts", es: "Solo audios, nunca mensajes" }, b: { en: "Only texts, never calls", es: "Solo mensajes, nunca llamadas" } },
   { id: "tidy", a: { en: "A partner who's messy but fun", es: "Una pareja que desordena pero divierte" }, b: { en: "A partner who's tidy but strict", es: "Una pareja que ordena pero manda" } },
-  { id: "cooking", a: { en: "They cook, but it's always pasta", es: "Que cocine, pero siempre pasta" }, b: { en: "You cook, but it's always toast", es: "Cocinar tú, pero siempre tostadas" } },
+  { id: "cooking", a: { en: "They cook, but it's always pasta", es: "Que cocine tu pareja, pero siempre pasta" }, b: { en: "You cook, but it's always toast", es: "Que cocines tú, pero siempre tostadas" } },
   { id: "sleep-in", a: { en: "They wake you with coffee", es: "Que te despierte con café" }, b: { en: "They let you sleep till noon", es: "Que te deje dormir hasta mediodía" } },
   { id: "gym", a: { en: "Go to the gym together", es: "Ir al gimnasio en pareja" }, b: { en: "Never go to the gym, together", es: "No ir nunca al gimnasio, en pareja" } },
   { id: "pet-choice", a: { en: "Three cats", es: "Tres gatos" }, b: { en: "One very big dog", es: "Un perro enorme" } },

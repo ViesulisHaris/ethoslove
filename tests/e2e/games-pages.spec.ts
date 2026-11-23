@@ -115,15 +115,22 @@ test("E5: every game's page answers its questions, closed, and gives them to sea
     for (const d of await details.all()) await expect(d, g).not.toHaveAttribute("open", "");
     const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("");
     expect(ld, g).toContain('"FAQPage"');
-    expect(ld, g).toContain(await details.first().locator("summary").innerText());
+    // "How to play" opens the list where a game has one; it is not a question, so the FAQ data starts at the next.
+    expect(ld, g).toContain(await notes.locator("details:not([data-how])").first().locator("summary").innerText());
   }
 });
 
-test("E6: Draw, Memory and the wheel say how they are played, and Draw lists its words", async ({ page }) => {
+test("E6: Draw, Memory and the wheel say how they are played, closed beside the questions, and Draw lists its words", async ({ page }) => {
   for (const g of ["draw", "memory", "roulette"]) {
     await page.goto(`/games/${g}`);
-    await expect(page.getByRole("heading", { name: "How to play" }), g).toBeVisible();
-    await expect(page.locator(`section[aria-labelledby="${g}-notes"] ol li`), g).toHaveCount(4);
+    const how = page.locator(`section[aria-labelledby="${g}-notes"] details[data-how]`);
+    // The first entry of the closed list, not a numbered block in view (DESIGN-LESS-TEXT: "how it works" is never shown open).
+    await expect(how.locator("summary"), g).toHaveText("How to play");
+    await expect(how, g).not.toHaveAttribute("open", "");
+    await expect(how.locator("ol li").first(), g).toBeHidden();
+    await expect(how.locator("ol li"), g).toHaveCount(4);
+    await how.locator("summary").click();
+    await expect(how.locator("ol li").first(), g).toBeVisible();
   }
   await page.goto("/games/draw");
   await expect(page.getByRole("heading", { name: /^40 words for a drawing game/ })).toBeVisible();
@@ -134,13 +141,16 @@ test("E7: the blog posts that link to a game are linked back from it", async ({ 
   await page.goto("/games/rather");
   const more = page.locator('section[aria-labelledby="rather-notes"]');
   await expect(more.locator('a[href="/blog/would-you-rather-questions-for-couples"]')).toHaveCount(1);
+  // A picture card: the poster of the gift the post leads with, and the post's title.
+  await expect(more.locator('[data-more] a[href="/blog/would-you-rather-questions-for-couples"] img')).toHaveCount(1);
+  await expect(more.getByRole("heading", { name: "More like this" })).toBeVisible();
   await page.goto("/games/dare");
   await expect(page.locator('section[aria-labelledby="dare-notes"] a[href="/blog/truth-or-dare-questions-for-couples"]')).toHaveCount(1);
 });
 
 test("E8: in Spanish, the same in Spanish", async ({ page }) => {
   await page.goto("/es/games/memory");
-  await expect(page.getByRole("heading", { name: "Cómo se juega" })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="memory-notes"] details[data-how] summary')).toHaveText("Cómo se juega");
   await expect(page.getByRole("heading", { name: "Preguntas sobre este juego" })).toBeVisible();
   await page.goto("/es/games/draw");
   await expect(page.getByRole("heading", { name: /^40 palabras/ })).toBeVisible();
@@ -200,18 +210,19 @@ test("E12: This or that, a whole game on one phone, and its page", async ({ page
   const list = page.locator("#thisthat-questions").locator("xpath=ancestor::section").locator("ol li");
   await expect(list).toHaveCount(THIS_PAIRS.length);
   await expect(list.first()).toHaveText(/ or .+\?$/);
-  await expect(page.getByRole("heading", { name: "How to play" })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="thisthat-notes"] details[data-how] summary')).toHaveText("How to play");
 
   await page.goto("/es/games/this-or-that");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("¿Esto o aquello?");
   await expect(page).toHaveTitle(/^Preguntas de esto o aquello para parejas/);
 });
 
-test("E13: the hub deals every game, the hand on top stays seven", async ({ page }) => {
+test("E13: the hub deals every game, in the grid and in the hand on top", async ({ page }) => {
   await page.goto("/games");
   await expect(page.locator("#pick > ul > li")).toHaveCount(GAMES.length + 1);
   for (const g of GAMES) await expect(page.locator(`#pick a[href="${g.href}"]`), g.key).toHaveCount(1);
-  await expect(page.getByRole("list", { name: "Pick a game" }).getByRole("link")).toHaveCount(7);
+  // "Eight little card games": the hub's hand holds all eight (the app's catalogue and the home page's hand keep their seven).
+  await expect(page.getByRole("list", { name: "Pick a game" }).getByRole("link")).toHaveCount(GAMES.length);
   await expect(page).toHaveTitle(/Eight Free Games/);
 });
 

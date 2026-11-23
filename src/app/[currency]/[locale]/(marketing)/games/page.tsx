@@ -53,7 +53,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
           </Link>
         </div>
 
-        <GameHand titles={titles} label={t("hub.pickTitle")} className="order-first lg:order-last" />
+        <GameHand titles={titles} games={GAMES} label={t("hub.pickTitle")} className="order-first lg:order-last" />
       </section>
 
       <section id="pick" className="container-x scroll-mt-28 pb-24">
@@ -128,8 +128,9 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
           {tp("hub.title")}
         </h2>
         {/* The three tiers, said once and only here, as the packs' own header: what is free, what a
-            pack is, what Ethos for Two adds. One box with hairlines, not three cards. */}
-        <ul data-tiers data-app-hide className="mt-6 grid max-w-4xl divide-y divide-white/10 rounded-[24px] bg-white/[0.05] ring-1 ring-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            pack is, what Ethos for Two adds. One box with hairlines, not three cards, as wide as the
+            three packs under it so its columns stand over theirs. */}
+        <ul data-tiers data-app-hide className="mt-6 grid divide-y divide-white/10 rounded-[24px] bg-white/[0.05] ring-1 ring-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {(["free", "pack", "two"] as const).map((tier) => (
             <li key={tier} className="px-5 py-5 sm:px-7 sm:py-6">
               <p className="font-display text-[21px] leading-tight text-cream">{t(`hub.tiers.${tier}.title`, { price })}</p>

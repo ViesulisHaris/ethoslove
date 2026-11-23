@@ -16,7 +16,8 @@ describe("HEIC decoder worker", () => {
   const worker = extractHeicWorker(root);
 
   it("is exactly the decoder heic2any ships, for the installed version", () => {
-    const committed = readFileSync(resolve(root, "public/workers", workerFileName(worker.version)), "utf8");
+    // Line endings aside: a Windows checkout with core.autocrlf turns the file's LF into CRLF, and git hands back LF.
+    const committed = readFileSync(resolve(root, "public/workers", workerFileName(worker.version)), "utf8").replace(/\r\n/g, "\n");
     // Upgrading heic2any without rerunning `node scripts/heic-worker.mjs` fails here.
     expect(committed).toBe(workerFileContents(worker));
   });

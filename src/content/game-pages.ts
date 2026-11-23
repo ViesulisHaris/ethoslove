@@ -24,7 +24,7 @@ const twoPhones = (en: string, es: string): GameFaq => ({
   q: { en: "Can we play on two phones?", es: "¿Se puede jugar en dos móviles?" },
   a: {
     en: `Yes. One of you makes a room and sends the link, or reads out its four-letter code; the other opens it, no account needed. ${en}`,
-    es: `Sí. Uno crea una sala y manda el enlace, o dicta su código de cuatro letras; el otro lo abre, sin cuenta. ${es}`,
+    es: `Sí. Una persona crea una sala y manda el enlace, o dicta su código de cuatro letras; la otra lo abre, sin cuenta. ${es}`,
   },
 });
 
@@ -40,7 +40,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "How does the scoring work?", es: "¿Cómo se puntúa?" },
         a: {
           en: "For each question you answer for yourself, then guess what the other will say. Only the guesses score: a point for every right guess about them.",
-          es: "En cada pregunta respondes por ti y luego adivinas qué dirá el otro. Solo puntúan las apuestas: un punto por cada acierto sobre el otro.",
+          es: "En cada pregunta respondes por ti y luego adivinas qué dirá la otra persona. Solo puntúan las apuestas: un punto por cada acierto.",
         },
       },
       {
@@ -50,7 +50,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
           es: "8 preguntas, sacadas de las 40 de la baraja gratis, cada una con cuatro respuestas. Unos diez minutos.",
         },
       },
-      twoPhones("Each answers on their own screen, so nobody sees the other's pick.", "Cada uno responde en su pantalla, así que nadie ve lo que elige el otro."),
+      twoPhones("Each answers on their own screen, so nobody sees the other's pick.", "Cada cual responde en su pantalla, así que nadie ve lo que elige la otra persona."),
       SAVED,
     ],
     posts: ["questions-for-couples", "questions-to-ask-your-partner"],
@@ -69,7 +69,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "Is there a question of the day?", es: "¿Hay una pregunta del día?" },
         a: {
           en: "Yes: one pair a day, the same for everyone. Answer it and send it by link; the other picks before seeing yours.",
-          es: "Sí: un dilema al día, el mismo para todo el mundo. Respóndelo y mándalo con un enlace; el otro elige antes de ver tu respuesta.",
+          es: "Sí: un dilema al día, el mismo para todo el mundo. Respóndelo y mándalo con un enlace; quien lo recibe elige antes de ver tu respuesta.",
         },
       },
     ],
@@ -84,10 +84,10 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         "You swap after every word: 6 words, 3 each.",
       ],
       es: [
-        "Quien dibuja ve la palabra primero; el otro no mira.",
+        "Quien dibuja ve la palabra primero; la otra persona no mira.",
         "La dibuja con el dedo, en una de cinco tintas, con deshacer y borrar.",
         "En un móvil se adivina en voz alta. En dos, se escribe y el juego sabe cuándo aciertas.",
-        "Os turnáis en cada palabra: 6 palabras, 3 cada uno.",
+        "Os turnáis en cada palabra: 6 palabras, 3 por persona.",
       ],
     },
     faq: [
@@ -126,7 +126,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       es: [
         "16 cartas boca abajo: 8 parejas de pegatinas, o de hasta 8 fotos vuestras.",
         "Da la vuelta a dos. Si son pareja, es tuya y repites.",
-        "Si no lo son, se vuelven a tapar y le toca al otro.",
+        "Si no lo son, se vuelven a tapar y le toca a la otra persona.",
         "Cuando salen todas las parejas, gana quien tenga más.",
       ],
     },
@@ -142,7 +142,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "One phone or two?", es: "¿Un móvil o dos?" },
         a: {
           en: "One, passed between you: the board needs both of you looking at it. A game takes about five minutes.",
-          es: "Uno, que os vais pasando: el tablero necesita que lo miréis los dos. Una partida dura unos cinco minutos.",
+          es: "Uno, que os vais pasando: el tablero necesita que lo miréis a la vez. Una partida dura unos cinco minutos.",
         },
       },
       {
@@ -161,7 +161,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "How do you play?", es: "¿Cómo se juega?" },
         a: {
           en: "Pick a deck. Whoever holds the phone reads the card out, you both answer, and a tap turns the next one. 12 cards a round.",
-          es: "Elegid una baraja. Quien tenga el móvil lee la carta en voz alta, respondéis los dos y un toque pasa a la siguiente. 12 cartas por ronda.",
+          es: "Elegid una baraja. Quien tenga el móvil lee la carta en voz alta, respondéis y un toque pasa a la siguiente. 12 cartas por ronda.",
         },
       },
       {
@@ -201,7 +201,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "One phone or two?", es: "¿Un móvil o dos?" },
         a: {
           en: "One phone, going round: each turn asks one of you, by name, truth or dare.",
-          es: "Un móvil que va pasando: en cada turno pregunta a uno, por su nombre, verdad o reto.",
+          es: "Un móvil que va pasando: en cada turno pregunta a quien le toca, por su nombre, verdad o reto.",
         },
       },
     ],
@@ -216,8 +216,8 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         "When it's all decided, settle it: the last six spins are the verdict.",
       ],
       es: [
-        "Poned vuestros nombres: la ruleta sois los dos, mitad y mitad.",
-        "Gírala. Elige una de 8 tareas y cae en uno de los dos.",
+        "Poned vuestros nombres: la ruleta es vuestra, mitad y mitad.",
+        "Gírala. Elige una de 8 tareas y cae en uno de los dos nombres.",
         "Volved a girar para la siguiente, tantas veces como queráis.",
         "Cuando esté todo decidido, cerradlo: las seis últimas tiradas son el veredicto.",
       ],
@@ -234,7 +234,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "Is it fair?", es: "¿Es justa?" },
         a: {
           en: "Each of you has half the wheel and every spin lands at random. Whether the result is fair is between the two of you.",
-          es: "Cada uno tiene media ruleta y cada giro cae al azar. Si el resultado es justo, eso ya lo habláis vosotros.",
+          es: "Cada cual tiene media ruleta y cada giro cae al azar. Si el resultado es justo, eso ya lo habláis vosotros.",
         },
       },
       SAVED,
@@ -252,7 +252,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "Is it the same as would you rather?", es: "¿Es lo mismo que el juego de qué prefieres?" },
         a: {
           en: "It is faster. Each side is a few words, so a round takes seconds; would you rather gives you two whole situations to weigh.",
-          es: "Es más rápido. Cada opción son pocas palabras y una ronda dura segundos; en el otro juego hay dos situaciones enteras que sopesar.",
+          es: "Es más rápido. Cada opción son pocas palabras y una ronda dura segundos; en ¿qué prefieres? hay dos situaciones enteras que sopesar.",
         },
       },
       twoPhones("Each picks on their own screen, and both picks turn over on both.", "Cada cual elige en su pantalla y las dos elecciones se destapan en las dos."),
@@ -292,8 +292,8 @@ export const TODAY_FAQ: GameFaq[] = [
   {
     q: { en: "What if they open it tomorrow?", es: "¿Y si lo abre mañana?" },
     a: {
-      en: "It still opens on the question you answered, and the reveal works the same. After it, there is a button for that day's new question.",
-      es: "Se sigue abriendo en la pregunta que respondiste y las dos respuestas se ven igual. Después hay un botón para la pregunta nueva de ese día.",
+      en: "It still opens on the question you answered, and the reveal works the same. After it, a link leads to that day's new question.",
+      es: "Se sigue abriendo en la pregunta que respondiste y las dos respuestas se ven igual. Después, un enlace lleva a la pregunta nueva de ese día.",
     },
   },
 ];

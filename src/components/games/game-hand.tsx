@@ -1,25 +1,26 @@
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { HAND_GAMES, type GameKey } from "@/lib/games/catalogue";
+import { HAND_GAMES, type GameInfo, type GameKey } from "@/lib/games/catalogue";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { PlayingCard } from "./cards";
 
 /**
  * Every game as a hand of cards, fanned; each card opens its game. Everything is sized in the
  * hand's own width (cqw), so it fills whatever column it is put in and the outer cards never spill
- * onto the words beside it.
+ * onto the words beside it. `games` is the seven of the app's catalogue unless a page says otherwise:
+ * the games hub, whose words say "eight", deals all of them.
  */
-export function GameHand({ titles, label, className }: { titles: Record<GameKey, string>; label: string; className?: string }) {
-  const middle = (HAND_GAMES.length - 1) / 2;
+export function GameHand({ titles, label, className, games = HAND_GAMES }: { titles: Record<GameKey, string>; label: string; className?: string; games?: GameInfo[] }) {
+  const middle = (games.length - 1) / 2;
   // The outer cards sit 34cqw either side of the middle, however many there are. A card is 1.6
   // steps wide, so each one covers only part of the one before it: the middle of every card stays
   // uncovered, which is what a finger aims at. More games means a tighter fan and smaller cards.
-  const step = 68 / (HAND_GAMES.length - 1);
+  const step = 68 / (games.length - 1);
   const card = Math.min(24, step * 1.6);
-  const tilt = 36 / (HAND_GAMES.length - 1);
+  const tilt = 36 / (games.length - 1);
   return (
     <ul className={cn("relative mx-auto aspect-[16/9] w-full max-w-[560px] [container-type:inline-size]", className)} aria-label={label} style={{ ["--card-w" as string]: `${card.toFixed(2)}cqw` }}>
-      {HAND_GAMES.map((g, i) => {
+      {games.map((g, i) => {
         const k = i - middle;
         return (
           <li key={g.key} className="absolute top-[7%] left-1/2 w-[var(--card-w)] hover:z-20 focus-within:z-20" style={{ rotate: `${(k * tilt).toFixed(2)}deg`, marginLeft: `calc(${(k * step).toFixed(2)}cqw - var(--card-w) / 2)`, marginTop: `${(k * k).toFixed(2)}cqw`, transformOrigin: "50% 120%" }}>

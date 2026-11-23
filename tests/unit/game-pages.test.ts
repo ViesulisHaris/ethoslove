@@ -154,4 +154,10 @@ describe("what every game's page says", () => {
     const all = JSON.stringify({ GAME_PAGES, TODAY_FAQ });
     expect(all).not.toMatch(/Spain|España|Madrid|Barcelona|Valencia|Sevilla|Seville/);
   });
+
+  it("G8: the Spanish never genders the other person (el otro, uno de los dos), here or on the hub and today's page", () => {
+    const pages = [...Object.keys(GAME_PAGES).map((k) => text(k as keyof typeof GAME_PAGES, "es")), ...TODAY_FAQ.map((f) => f.q.es + " " + f.a.es)].join(" ");
+    const words = JSON.stringify([es.games.today, es.games.hub, es.games.notes]);
+    for (const all of [pages, words]) expect(all).not.toMatch(/\b(el|al|del) otro\b|\bcada uno\b|\bsois los dos\b|\bpara los dos\b|\buno de los dos\b(?! nombres)/i);
+  });
 });
