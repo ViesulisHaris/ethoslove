@@ -119,33 +119,6 @@
       "eyebrow": "Mira la reacción",
       "title": "El enlace sale. La respuesta vuelve.",
       "blurb": "Al final de cada regalo hay un botón de reacción: un emoji, una nota o un mensaje de voz de 20 segundos, directo a ti.",
-      "cards": [
-        {
-          "from": "Marco",
-          "to": "Ana",
-          "sent": "Te he hecho algo. Ábrelo con el sonido.",
-          "reply": "Estoy en el trabajo llorando en las escaleras. Tres años. TRES.",
-          "emoji": "😭",
-          "time": "22:41"
-        },
-        {
-          "from": "Lucas",
-          "to": "Sofía",
-          "sent": "Mira arriba. Bueno, mira el móvil.",
-          "reply": "Metiste la noche de la tienda. Encontré las seis. Catorce días.",
-          "emoji": "🥹",
-          "time": "07:12"
-        },
-        {
-          "from": "Dani",
-          "to": "Mamá",
-          "sent": "Feliz día, ma. Toca el sello.",
-          "reply": "¿¿Quién te enseñó a hacer esto?? Ya lo vi cuatro veces.",
-          "emoji": "❤️",
-          "time": "09:58"
-        }
-      ],
-      "placeholderNote": "Reacciones de muestra. Las reales las sustituyen conforme llegan.",
       "realNote": "Reacciones reales, compartidas por quienes recibieron los regalos. Sin nombres.",
       "realLabel": "Una reacción real",
       "opened": "{count} regalos de Ethos abiertos hasta ahora.",
@@ -3697,6 +3670,7 @@
     "makeLead": "Crear el del móvil",
     "watch": "Verlo",
     "ideaInFull": "La idea completa",
+    "giftPage": "Sobre este regalo",
     "readNext": "Sigue leyendo",
     "byKind": "Ideas de regalo por tipo",
     "guideTitle": "Cómo acertar",

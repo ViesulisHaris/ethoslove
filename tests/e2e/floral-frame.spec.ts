@@ -86,7 +86,9 @@ for (const [width, height] of [
     // The review of 22 Nov 2026: the landing page's hero fetched the tall stem (88 KB, 217 KB on a sharp
     // screen) and two more lilies eagerly, about three times the decoration the old hero carried, ahead
     // of its photograph. A piece hidden at this width is fetched too unless it is lazy.
-    for (const path of ["/", "/gifts", "/templates"]) {
+    // (/gifts left this list in fix round 4, 24 Nov 2026: it is laid out as the pages by kind now, its first view the
+    // hero's phone lying on its flowers, which those pages fetch eagerly as one picture with its bezel.)
+    for (const path of ["/", "/templates"]) {
       // A page of its own for each address: the page before it is still fetching its lazy pieces while the next one loads.
       const page = await context.newPage();
       await page.setViewportSize({ width, height });

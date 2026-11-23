@@ -248,14 +248,13 @@ for (const lang of LANGS) {
       await expect(page.locator("main h2#by-person")).toHaveCount(1);
       await expect(page.locator(`main a[href="${lang.prefix}/digital-cards"]`).first()).toBeAttached();
       for (const kind of KINDS) await expect(page.locator(`main a[href="${lang.prefix}/gifts/${kind.slug}"]`).first()).toBeAttached();
-      // The two rows of pills, by person and by kind: each 44px to a thumb, with a ring when reached by keyboard.
-      const chips = page.locator(`main ul a.rounded-full[href^="${lang.prefix}/gifts/"], main ul a.rounded-full[href="${lang.prefix}/occasions"], main ul a.rounded-full[href="${lang.prefix}/digital-cards"]`);
-      expect(await chips.count()).toBeGreaterThanOrEqual(KINDS.length + 7);
-      const heights = await chips.evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+      // Where next (fix round 4: the page laid out as the pages by kind end): four pages by kind as posters, and the people,
+      // the occasions, the other kinds and /digital-cards as the quiet row of links, each 44px to a thumb.
+      const next = page.locator('section[aria-labelledby="by-person"] nav');
+      const links = next.locator(`a[href^="${lang.prefix}/gifts/"], a[href="${lang.prefix}/occasions"], a[href="${lang.prefix}/digital-cards"]`);
+      expect(await links.count()).toBeGreaterThanOrEqual(KINDS.length + 7 + 2);
+      const heights = await next.locator("ul.mt-9 a").evaluateAll((all) => all.map((a) => a.getBoundingClientRect().height));
       for (const h of heights) expect(h).toBeGreaterThanOrEqual(44);
-      const chip = page.locator(`main ul a.rounded-full[href="${lang.prefix}/gifts/last-minute"]`).first();
-      await chip.focus();
-      expect(await chip.evaluate((a) => a.matches(":focus-visible") && getComputedStyle(a).boxShadow !== "none")).toBe(true);
     });
 
     for (const [occasion, count] of OCCASIONS) {
