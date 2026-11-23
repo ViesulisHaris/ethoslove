@@ -183,7 +183,7 @@ function DrawPlay({ session, room, closed, onChangePlayers }: { session: Session
   }
   if (!two && !done && at === "peek") {
     return (
-      <section className="container-narrow py-12 text-center sm:py-16">
+      <section data-draw-round className="container-narrow py-12 text-center sm:py-16">
         <ScreenTop screen={`peek:${roundKey}`} />
         <p className="text-eyebrow text-blush">{t("peekEyebrow", { name: session.names[artist] })}</p>
         <PlayingCard rank="9" suit="diamond" corners="lg" className="deal-in mx-auto mt-6 w-full max-w-[420px]" faceClassName="min-h-[220px] items-center justify-center px-8 py-10">
@@ -223,7 +223,8 @@ function DrawPlay({ session, room, closed, onChangePlayers }: { session: Session
   const guessed = state.guesses.filter((g) => g.player !== artist);
 
   return (
-    <section className="container-narrow py-8 sm:py-12 max-lg:landscape:py-4">
+    // While a word is being drawn, the page's word list under the game steps out of the way (draw/page.tsx).
+    <section data-draw-round={done ? undefined : true} className="container-narrow py-8 sm:py-12 max-lg:landscape:py-4">
       <ScreenTop screen={`round:${roundKey}`} />
       {peerGone}
       {/* Sideways, the board's column is as wide as the height allows it to be at 4:3, and never more than 60% of the row. */}

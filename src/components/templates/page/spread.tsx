@@ -20,7 +20,7 @@ export const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_m
  * the label. It was placed over the label's line by hand before, and on a 320px phone in Spanish
  * "Ver los 61 regalos" was printed over "BUSCADOR DE REGALOS" (the review of 22 Nov 2026).
  */
-export function Intro({ id, label, heading, line, level = 2, aside, children }: { id?: string; label: string; heading: string; line?: string; level?: 1 | 2; aside?: ReactNode; children?: ReactNode }) {
+export function Intro({ id, label, heading, line, level = 2, aside, children }: { id?: string; label: string; heading: ReactNode; line?: ReactNode; level?: 1 | 2; aside?: ReactNode; children?: ReactNode }) {
   const Heading = level === 1 ? "h1" : "h2";
   return (
     <div className="lg:pt-7">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { ArrowRight, Gift } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -12,6 +12,7 @@ import { readSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
 import { cn } from "@/lib/utils";
 import { Suit } from "../cards";
 import { NAMES_KEY } from "../lobby";
+import { setOldDay } from "./old-day";
 
 type Side = 0 | 1;
 /** `own`: the address is a link this tab sent itself, opened again to check it (lib/games/daily.ts, sentHere). */
@@ -59,9 +60,9 @@ function rememberedNames(): [string, string] | null {
 const CARD =
   "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none [@media(orientation:landscape)_and_(max-height:520px)]:min-h-0 [@media(orientation:landscape)_and_(max-height:520px)]:pt-9 [@media(orientation:landscape)_and_(max-height:520px)]:pb-3 [@media(orientation:portrait)_and_(max-height:600px)]:min-h-0 [@media(orientation:portrait)_and_(max-height:600px)]:pt-9 [@media(orientation:portrait)_and_(max-height:600px)]:pb-4";
 const PRIMARY =
-  "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:opacity-60 motion-reduce:transition-none";
+  "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
 const SECOND =
-  "inline-flex h-12 items-center justify-center rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:opacity-60 motion-reduce:transition-none";
+  "inline-flex h-12 items-center justify-center rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
 
 /**
  * Today's question (/games/today): one "Would you rather" pair a day, answered with one tap and
@@ -170,6 +171,16 @@ export function TodayQuestion({ day }: { day: number }) {
 
   const who = (n: string) => n || tl("someone");
 
+  // The two answers are a radio pair: one tab stop, and the arrows move to the other answer and pick it.
+  const answerRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const arrow = (e: KeyboardEvent<HTMLButtonElement>, side: Side) => {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) return;
+    e.preventDefault();
+    const other: Side = side === 0 ? 1 : 0;
+    answerRefs.current[other]?.focus();
+    choose(other);
+  };
+
   const choose = (side: Side) => {
     // Until the address is read the cards may still be the server's day: a tap then would answer the wrong pair.
     if (!ready || phase === "reveal" || side === mine) return;
@@ -207,6 +218,8 @@ export function TodayQuestion({ day }: { day: number }) {
     encodeDaily({ day: view.day, pairId: view.pair.id, from: { name, side: mine ?? 0 }, to: link && !link.to ? link.from : undefined });
 
   const copy = async () => {
+    // On a desk the send block stands under the question before an answer is picked: nothing to send yet.
+    if (mine === null) return;
     try {
       await navigator.clipboard.writeText(url());
       setCopied(true);
@@ -220,6 +233,7 @@ export function TodayQuestion({ day }: { day: number }) {
   };
 
   const share = async () => {
+    if (mine === null) return;
     // With no name the text speaks for the sender ("I've answered…"): "Someone answered" reads as spam.
     const named = cleanName(name);
     const text = named ? t(link ? "shareBackText" : "shareText", { name: named }) : t(link ? "shareBackTextAnon" : "shareTextAnon");
@@ -259,6 +273,11 @@ export function TodayQuestion({ day }: { day: number }) {
   // In the reader's own order of day and month where the browser says it (24 November, or November 24).
   const dateLocale = notToday && navigator.language?.toLowerCase().startsWith(locale) ? navigator.language : locale;
   const date = notToday ? new Intl.DateTimeFormat(dateLocale, { day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(view.day * DAY_MS)) : "";
+  // The page's heading and line above say "today": with another day's pair they say that day instead.
+  useEffect(() => {
+    setOldDay(notToday);
+    return () => setOldDay(false);
+  }, [notToday]);
 
   // In a reveal: whose answer is which. The other person on the left, the reader ("You") on the right,
   // both ways round: a reply's `to` is the reader's own answer, unless the reader sent that reply.
@@ -286,6 +305,9 @@ export function TodayQuestion({ day }: { day: number }) {
   // In a reveal there is one thing to do with the link at a time: send yours back, and once it has
   // gone (or when there is nothing to send) the way on to today's question.
   const canSend = phase === "answered" || phase === "sent" || (phase === "reveal" && !link?.to && !sent);
+  // On a desk the send block already stands, waiting, under the question it will send: the space
+  // kept for it was an empty band of cream there, and nothing moves when an answer is picked.
+  const waiting = phase === "ask";
   const status = changed ? t("resend") : copied ? t("copied") : sent ? (view.own ? t("own") : link && !link.to ? t("sentBack", { name: who(link.from.name) }) : t("sent")) : "";
 
   return (
@@ -307,7 +329,8 @@ export function TodayQuestion({ day }: { day: number }) {
       {reveal ? (
         <ul aria-label={t("answers")} className="relative mt-6 grid grid-cols-2 gap-3 sm:gap-4">
           {[reveal.left, reveal.right].map((who, i) => (
-            <li key={i} data-reveal-card data-answer data-side={who.side === 0 ? "a" : "b"} className={cn(CARD, "px-4 sm:px-6")}>
+            // The name at the top under the corner, so the two names stand level however the answers wrap.
+            <li key={i} data-reveal-card data-answer data-side={who.side === 0 ? "a" : "b"} className={cn(CARD, "justify-start px-4 sm:px-6")}>
               <Corner side={who.side} />
               <span className="block truncate text-page-label text-page-body">
                 {who.name}
@@ -318,19 +341,25 @@ export function TodayQuestion({ day }: { day: number }) {
           ))}
         </ul>
       ) : (
-        <div role="group" aria-labelledby="today-question" className="relative mt-6 grid gap-4 sm:grid-cols-2 [@media(orientation:portrait)_and_(max-height:600px)]:mt-4 [@media(orientation:portrait)_and_(max-height:600px)]:gap-3 [@media(orientation:landscape)_and_(max-height:520px)]:mt-3">
+        <div role="radiogroup" aria-labelledby="today-question" className="relative mt-6 grid gap-4 sm:grid-cols-2 [@media(orientation:portrait)_and_(max-height:600px)]:mt-4 [@media(orientation:portrait)_and_(max-height:600px)]:gap-3 [@media(orientation:landscape)_and_(max-height:520px)]:mt-3">
           {([0, 1] as const).map((side) => (
             <button
               key={side}
+              ref={(el) => {
+                answerRefs.current[side] = el;
+              }}
               type="button"
+              role="radio"
               data-answer
               data-side={side === 0 ? "a" : "b"}
-              aria-pressed={mine === side}
+              aria-checked={mine === side}
               aria-disabled={ready ? undefined : true}
+              tabIndex={(mine ?? 0) === side ? 0 : -1}
               onClick={() => choose(side)}
+              onKeyDown={(e) => arrow(e, side)}
               className={cn(
                 CARD,
-                "cursor-pointer hover:border-page-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px aria-pressed:border-page-accent aria-pressed:ring-2 aria-pressed:ring-page-accent",
+                "cursor-pointer hover:border-page-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px aria-checked:border-page-accent aria-checked:ring-2 aria-checked:ring-page-accent",
                 // Still loading a second after it was drawn (a slow phone): the cards dim, so a tap that does nothing yet is not a surprise.
                 "group-not-data-ready/today:cursor-progress group-not-data-ready/today:animate-[today-wait_0.3s_ease-out_1s_both]",
               )}
@@ -354,15 +383,18 @@ export function TodayQuestion({ day }: { day: number }) {
       )}
 
       {/* Once sent, the hint goes (a change then asks for the link to go again, in the status) but its line stays, so the form does not move under the thumb. */}
-      {phase === "answered" || phase === "sent" ? <p className="mt-3 min-h-5 text-[0.875rem] text-page-body lg:mt-2">{phase === "answered" && !changed ? t("change") : ""}</p> : null}
+      {phase === "answered" || phase === "sent" || waiting ? (
+        <p className={cn("mt-3 min-h-5 text-[0.875rem] text-page-body lg:mt-2", waiting && "max-lg:hidden")}>{phase === "answered" && !changed ? t("change") : ""}</p>
+      ) : null}
 
-      {canSend ? (
+      {canSend || waiting ? (
         <form
+          data-send-block
           onSubmit={(e) => {
             e.preventDefault();
             void share();
           }}
-          className="mt-6 flex flex-wrap items-end gap-3 lg:mt-4"
+          className={cn("mt-6 flex flex-wrap items-end gap-3 lg:mt-4", waiting && "max-lg:hidden")}
         >
           <label className="flex w-full flex-col gap-2 sm:w-auto">
             <span className="text-page-label text-page-body">{t("nameLabel")}</span>
@@ -375,10 +407,10 @@ export function TodayQuestion({ day }: { day: number }) {
               className="h-12 w-full rounded-full border border-page-line bg-page-raised px-5 text-[1rem] text-page-ink placeholder:text-page-body/70 sm:w-52"
             />
           </label>
-          <button type="submit" data-send className={PRIMARY}>
+          <button type="submit" data-send disabled={waiting} className={PRIMARY}>
             {link ? t("sendBack") : t("send")}
           </button>
-          <button type="button" data-copy onClick={() => void copy()} className={SECOND}>
+          <button type="button" data-copy disabled={waiting} onClick={() => void copy()} className={SECOND}>
             {t("copy")}
           </button>
         </form>

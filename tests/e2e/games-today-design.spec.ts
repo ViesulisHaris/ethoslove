@@ -89,9 +89,37 @@ test("Y3: the questions are closed, and nothing moves when an answer is picked",
     await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
   });
   const before = await top();
+  // The room kept for the send block is the send block, waiting with nothing to send yet: no band of
+  // empty cream under the answers (the second pass, C16 and D12: 178px of it at this size).
+  const block = page.locator("[data-send-block]");
+  await expect(block).toBeVisible();
+  await expect(block.locator("[data-send]")).toBeDisabled();
+  await expect(block.locator("[data-copy]")).toBeDisabled();
+  const gap = await page.evaluate(() => {
+    const status = document.querySelector("[data-today] [role=status]")!.getBoundingClientRect().bottom;
+    return document.querySelector("#today-how")!.closest("section")!.getBoundingClientRect().top - status;
+  });
+  expect(gap, "empty cream between the question's block and the band below").toBeLessThan(60);
   await page.locator("[data-today] [data-side=b]").first().click();
+  await expect(block.locator("[data-send]")).toBeEnabled();
   await page.locator("[data-copy]").click();
   const after = await top();
   // The send block and the status line fill the space the question keeps for them: the band below does not move.
   expect(Math.abs(after - before)).toBeLessThan(1);
+});
+
+test("Y4: on a phone the send block waits for an answer; in the reveal the two names stand level", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await state(page, "/games/today", "ask");
+  await expect(page.locator("[data-send-block]")).toBeHidden();
+  await page.locator("[data-today] [data-side=a]").first().click();
+  await expect(page.locator("[data-send-block]")).toBeVisible();
+  // A short answer beside a long one: the names sit at the top under the corner, at one height.
+  for (const [width, height] of [[375, 812], [1440, 900]] as const) {
+    await page.setViewportSize({ width, height });
+    await state(page, "/games/today", "reveal");
+    const tops = await page.locator("[data-reveal-card] > span:nth-of-type(2)").evaluateAll((names) => names.map((n) => n.getBoundingClientRect().top));
+    expect(tops).toHaveLength(2);
+    expect(Math.abs(tops[0] - tops[1]), `${width}px: the names' heights`).toBeLessThan(1);
+  }
 });

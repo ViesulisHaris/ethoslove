@@ -89,7 +89,7 @@ for (const locale of ["", "/es"] as const) {
     await expect(phase(one.page)).toHaveAttribute("data-phase", "ask");
     await card(one.page, "b").click();
     await expect(phase(one.page)).toHaveAttribute("data-phase", "answered");
-    await expect(card(one.page, "b")).toHaveAttribute("aria-pressed", "true");
+    await expect(card(one.page, "b")).toHaveAttribute("aria-checked", "true");
     await one.page.locator("[data-today] input").fill("Ana");
     await one.page.locator("[data-send]").click();
     await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
@@ -191,9 +191,10 @@ test("T5: a link from an earlier day still opens on the pair it was sent with, a
   await open(two.page, `/games/today${encodeDaily({ day: sent, pairId: old.id, from: { name: "Ana", side: 1 } })}`);
   await expect(phase(two.page)).toHaveAttribute("data-day", String(sent));
   await expect(card(two.page, "a")).toContainText(old.a.en);
-  // Marked as that day's, not as today's.
+  // Marked as that day's, not as today's: the label over the question, and the page's heading and line too.
   await expect(two.page.locator("[data-today] > p").first()).toHaveText(/^From Ana, .+$/);
-  await card(two.page, "b").click();
+  await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("That day's would you rather question");
+  await expect(two.page.locator("#today-title + p")).toHaveText(/^Everyone got this one that day\./);  await card(two.page, "b").click();
   await expect(phase(two.page)).toHaveAttribute("data-phase", "reveal");
   await expect(two.page.locator("[data-today] > p").first()).toHaveText(/^Both answers, .+$/);
   // One thing at a time: sending yours back first, then the way on to today's question.
@@ -203,6 +204,7 @@ test("T5: a link from an earlier day still opens on the pair it was sent with, a
   await expect(phase(two.page)).toHaveAttribute("data-phase", "ask");
   await expect(phase(two.page)).toHaveAttribute("data-day", String(later));
   await expect(card(two.page, "a")).toContainText(dailyPair(later).a.en);
+  await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("Today's would you rather question");
   expect(new URL(two.page.url()).hash).toBe("");
   await two.context.close();
 });
@@ -234,10 +236,10 @@ test("T7: a reload keeps the tab's own answer; a new tab starts fresh", async ({
   await one.page.reload();
   await expect(one.page.locator("[data-today][data-ready]")).toHaveCount(1);
   await expect(phase(one.page)).toHaveAttribute("data-phase", "answered");
-  await expect(card(one.page, "b")).toHaveAttribute("aria-pressed", "true");
+  await expect(card(one.page, "b")).toHaveAttribute("aria-checked", "true");
   // Changing the pick before sending.
   await card(one.page, "a").click();
-  await expect(card(one.page, "a")).toHaveAttribute("aria-pressed", "true");
+  await expect(card(one.page, "a")).toHaveAttribute("aria-checked", "true");
   const fresh = await one.context.newPage();
   await open(fresh, "/games/today");
   await expect(phase(fresh)).toHaveAttribute("data-phase", "ask");
@@ -255,16 +257,30 @@ test("T8: the name the games remember is offered, and a long name is cut at 24",
   await one.context.close();
 });
 
-test("T9: by keyboard alone: Tab to an answer, Enter picks it", async ({ page, isMobile }) => {
+test("T9: by keyboard alone: the two answers are one radio pair, Enter picks, the arrows move the pick", async ({ page, isMobile }) => {
   test.skip(isMobile, "a keyboard is a desk's");
   await prepare(page.context());
   await open(page, "/games/today");
+  // A one-of-two choice, said as one: a radio group named by the question, not two pressed buttons.
+  const group = page.getByRole("radiogroup", { name: "Which one would you take?" });
+  await expect(group.getByRole("radio")).toHaveCount(2);
+  await expect(card(page, "a")).not.toHaveAttribute("aria-pressed");
   await card(page, "a").focus();
   await page.keyboard.press("Enter");
-  await expect(card(page, "a")).toHaveAttribute("aria-pressed", "true");
+  await expect(card(page, "a")).toHaveAttribute("aria-checked", "true");
+  await expect(card(page, "b")).toHaveAttribute("aria-checked", "false");
+  await page.keyboard.press("ArrowRight");
+  await expect(card(page, "b")).toBeFocused();
+  await expect(card(page, "b")).toHaveAttribute("aria-checked", "true");
+  await page.keyboard.press("ArrowLeft");
+  await expect(card(page, "a")).toHaveAttribute("aria-checked", "true");
+  // One tab stop for the pair: Tab goes on to the name.
   await page.keyboard.press("Tab");
+  await expect(page.locator("[data-today] input")).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(card(page, "a")).toBeFocused();
   await page.keyboard.press("Space");
-  await expect(card(page, "b")).toHaveAttribute("aria-pressed", "true");
+  await expect(card(page, "a")).toHaveAttribute("aria-checked", "true");
 });
 
 test("T12: a change after sending asks for the link to go again, and the new link carries the new answer", async ({ browser }) => {
@@ -312,7 +328,7 @@ test("T15: the sender's own link opened in the tab that sent it is not a reveal 
   // A tap on their own link in the chat: the same tab, the hash changes.
   await one.page.goto(link);
   await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
-  await expect(card(one.page, "b")).toHaveAttribute("aria-pressed", "true");
+  await expect(card(one.page, "b")).toHaveAttribute("aria-checked", "true");
   await expect(one.page.locator("[data-reveal-card]")).toHaveCount(0);
   await expect(one.page.getByRole("status")).toContainText("This is the link you sent");
   // And after a reload, in the same way.

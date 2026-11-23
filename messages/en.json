@@ -2593,6 +2593,8 @@
       "label": "Question of the day",
       "h1": "Today's would you rather question",
       "line": "Everyone gets the same one today. Find out which side your person takes.",
+      "h1Old": "That day's would you rather question",
+      "lineOld": "Everyone got this one that day. Find out which side your person takes.",
       "seoTitle": "Would You Rather Question of the Day for Couples",
       "seoDescription": "A new would you rather question every day, the same for everyone. Your partner picks before seeing your answer, then both show side by side. Free, no sign-up.",
       "daily": "A new one every day",
@@ -2727,7 +2729,6 @@
       "pickSub": "Every one is quick, and every one ends with something to talk about.",
       "minutes": "{n} min",
       "todayTitle": "Today's question",
-      "todayBlurb": "The same would you rather for everyone today. They only see your pick after making theirs.",
       "todayPhones": "Two phones, one link",
       "todayCta": "Answer today's",
       "tiers": {

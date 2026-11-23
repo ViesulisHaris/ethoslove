@@ -11,6 +11,7 @@ import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TODAY_ART, TODAY_FLOWERS, TODAY_FOOT_ART } from "@/components/games/today/placements";
+import { OldDayText } from "@/components/games/today/old-day";
 import { TodayQuestion } from "@/components/games/today/today-question";
 import { TodaySteps } from "@/components/games/today/today-steps";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
@@ -79,7 +80,8 @@ export default async function TodayPage({ params }: Props) {
           {/* A phone on its side is the two columns too, tighter: stacked, its first screen held only the heading. */}
           {/* A small phone (320 by 568) keeps the heading and both answers on the first screen: the line under the heading waits on a taller one. */}
           <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 [@media(orientation:portrait)_and_(max-height:600px)]:gap-y-4 [@media(orientation:portrait)_and_(max-height:600px)]:[&_h1+p]:hidden sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-6", "[@media(orientation:landscape)_and_(max-height:520px)]:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] [@media(orientation:landscape)_and_(max-height:520px)]:items-start [@media(orientation:landscape)_and_(max-height:520px)]:gap-x-8 [@media(orientation:landscape)_and_(max-height:520px)]:pt-2!")}>
-            <Intro level={1} id="today-title" label={t("label")} heading={t("h1")} line={t("line")} />
+            {/* The server's words are today's; a link from another day turns them to that day's in the browser. */}
+            <Intro level={1} id="today-title" label={t("label")} heading={<OldDayText today={t("h1")} other={t("h1Old")} />} line={<OldDayText today={t("line")} other={t("lineOld")} />} />
             <div className="min-w-0 lg:pt-7">
               <TodayQuestion day={day} />
             </div>

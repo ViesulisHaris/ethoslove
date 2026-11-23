@@ -21,7 +21,8 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
   return (
     <GameTable>
       <DrawGame />
-      <QuestionList id="draw-words" title={t("listTitle", { count: DRAW_WORDS.length })} intro={t("listIntro")} groups={[{ items: DRAW_WORDS.map((w) => w.word[l]) }]} />
+      {/* The words are text for anyone reading the page, but not under the board while one is being drawn: the guesser would only have to scroll. */}
+      <QuestionList id="draw-words" className="[body:has([data-draw-round])_&]:hidden" title={t("listTitle", { count: DRAW_WORDS.length })} intro={t("listIntro")} groups={[{ items: DRAW_WORDS.map((w) => w.word[l]) }]} />
       <GameNotes game="draw" locale={locale} />
     </GameTable>
   );

@@ -175,6 +175,19 @@ test("E9: the hub shows the three tiers once, as the packs' own header, with the
   await expect(page.locator("[data-tiers]")).toHaveCount(0);
 });
 
+test("E9b: on a desk the hub holds to 300 words, its cards a title and a picture, and the tiers stand as wide as the packs", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const locale of ["", "/es"]) {
+    await page.goto(`${locale}/games`);
+    const words = await page.locator("main").evaluate((el) => (el as HTMLElement).innerText.trim().split(/\s+/).filter(Boolean).length);
+    expect(words, `${locale}/games: words on the page`).toBeLessThanOrEqual(300);
+    const tiers = (await page.locator("[data-tiers]").boundingBox())!;
+    const packs = (await page.locator('[data-tour="packs"]').boundingBox())!;
+    expect(Math.abs(tiers.x - packs.x)).toBeLessThan(1);
+    expect(Math.abs(tiers.width - packs.width)).toBeLessThan(1);
+  }
+});
+
 // A visitor in the US or the UK: their own price where this build charges their currency
 // (NEXT_PUBLIC_PRICE_CURRENCIES, read back from /llms.txt as tests/e2e/currency.spec.ts does), euros otherwise.
 for (const [country, price, single] of [

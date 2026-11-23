@@ -73,7 +73,6 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
                   <Sticker id="sparkle" />
                 </span>
                 <span className="mt-3 block font-display text-[19px] leading-[1.08] sm:mt-4 sm:text-[26px]">{t("hub.todayTitle")}</span>
-                <span className="mt-2 hidden text-[14.5px] leading-relaxed text-forest/65 sm:block">{t("hub.todayBlurb")}</span>
                 <span className="mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-5">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
                     <Smartphone aria-hidden="true" className="size-3.5" />
@@ -99,7 +98,6 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
                     <Sticker id={g.sticker} />
                   </span>
                   <span className="mt-3 block font-display text-[19px] leading-[1.08] sm:mt-4 sm:text-[26px]">{t(`${g.key}.title`)}</span>
-                  <span className="mt-2 hidden text-[14.5px] leading-relaxed text-forest/65 sm:block">{t(`${g.key}.blurb`)}</span>
                   <span className="mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-5">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
                       {g.phones === "two" ? <Smartphone aria-hidden="true" className="size-3.5" /> : <Users aria-hidden="true" className="size-3.5" />}
@@ -153,7 +151,6 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
                   <PlayingCard faceDown back={pack.back} radius={12} className="aspect-[5/7] w-16 shrink-0 rotate-[-4deg] transition-transform duration-300 ease-(--ease-out-quint) group-hover:rotate-[-8deg] sm:w-20" backLabel={pack.adult ? <span className="rounded-full bg-cream/95 px-2 py-0.5 text-[11px] font-bold text-forest">18+</span> : undefined} />
                   <span className="min-w-0">
                     <span className="block font-display text-[22px] leading-tight text-cream sm:text-[25px]">{pack.name[lang]}</span>
-                    <span className="mt-1.5 block text-[14px] leading-relaxed text-cream/65">{pack.blurb[lang]}</span>
                     <span className="mt-2 block text-[12.5px] text-cream/45">{tp("sheet.plays", { games: list.format(pack.games.map((g) => tp(`games.${g}`))) })}</span>
                     <span className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-tint">
                       {tp("hub.cta", { n: pack.cards })}
