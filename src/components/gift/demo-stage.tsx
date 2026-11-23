@@ -75,7 +75,7 @@ function recordEvent(event: TemplateEvent) {
  * Full-screen live demo. The control strip sits in its own row above the template so it
  * never covers template controls (templates assume they own the whole viewport).
  */
-export function DemoStage({ slug, backHref = "/templates" }: { slug: string; backHref?: string }) {
+export function DemoStage({ slug, backHref = "/templates", backName }: { slug: string; backHref?: string; backName?: string }) {
   const locale = useLocale() as GiftLocale;
   const router = useRouter();
   const t = useTranslations("templates");
@@ -102,7 +102,9 @@ export function DemoStage({ slug, backHref = "/templates" }: { slug: string; bac
         <Link href={backHref} prefetch={false} onClick={closeInApp} className="flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-2 text-xs font-medium whitespace-nowrap text-white/80 hover:bg-white/10 sm:text-sm">
           <LogoMark className="hidden size-5 shrink-0 min-[400px]:block" />
           <ArrowLeft className="size-3.5 shrink-0" />
-          <span className="truncate max-[359px]:sr-only">{t("backToGallery")}</span>
+          {/* The label says where it goes (walk-giftpages-4): "Back to Bouquet" when the way back is the gift's own page, "All templates" when it is the gallery; under 360px "Back". */}
+          <span data-demo-back className="truncate max-[359px]:hidden">{backName ? t("backTo", { name: backName }) : t("backToGallery")}</span>
+          {backName ? <span className="hidden max-[359px]:inline">{t("back")}</span> : <span className="sr-only min-[360px]:hidden">{t("backToGallery")}</span>}
         </Link>
         <div className="flex shrink-0 items-center gap-1">
           <button type="button" onClick={() => setReplayKey((k) => k + 1)} className="grid size-11 shrink-0 place-items-center rounded-full text-white/80 hover:bg-white/10" aria-label={t("replay")}>

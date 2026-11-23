@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
-import { OCCASIONS } from "@/config/occasions";
+import { occasionRow } from "@/components/templates/gallery-occasions";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { artSrcSet, pageArt } from "@/content/page-art";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
@@ -44,12 +44,20 @@ export async function MarketingFooter() {
           <FooterLink href="/pricing">{t("nav.pricing")}</FooterLink>
           <FooterLink href="/blog">{t("common.blog")}</FooterLink>
         </FooterColumn>
+        {/*
+         * The six that lead the gallery's row today (in season first: Christmas and Thanksgiving in late
+         * November, where the catalogue's first six had neither, walk-choose-8), and the gallery for the
+         * rest. A page rendered ahead of time takes the day it was built on.
+         */}
         <FooterColumn title={t("nav.occasions")}>
-          {OCCASIONS.slice(0, 6).map((o) => (
-            <FooterLink key={o} href={`/occasions/${o}`}>
-              {t(`occasions.${o}`)}
-            </FooterLink>
-          ))}
+          {occasionRow(new Date().toISOString().slice(0, 10))
+            .slice(0, 6)
+            .map((o) => (
+              <FooterLink key={o} href={`/occasions/${o}`}>
+                {t(`occasions.${o}`)}
+              </FooterLink>
+            ))}
+          <FooterLink href="/templates">{t("footer.allOccasions")}</FooterLink>
         </FooterColumn>
         <FooterColumn title={t("footer.company")} className="col-span-2 md:col-span-1">
           <FooterLink href="/about">{t("footer.about")}</FooterLink>

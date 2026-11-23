@@ -94,9 +94,15 @@ export function TemplateGallery({
   const filtered = useMemo(() => manifests.filter((m) => tier === "all" || sendsFree(m) === (tier === "free")), [manifests, tier]);
   const shelves = useMemo(() => {
     if (occasion) return [{ id: "all" as const, items: filtered }];
+    // With Free or Premium on, the gallery is one list under what it is ("Free gifts", and how many), in the order chosen:
+    // its shelves said "Everything else" and "Every gift" over two free gifts (walk-choose-5).
+    if (tier !== "all") {
+      const items = sort === "popular" ? sectionTemplates(filtered).flatMap((shelf) => shelf.items) : sortTemplates(filtered, sort, locale, added, NEW_SLUGS);
+      return [{ id: tier === "free" ? ("tierFree" as const) : ("tierPremium" as const), items }];
+    }
     if (sort === "popular") return sectionTemplates(filtered);
     return [{ id: sort === "new" ? ("sortedNew" as const) : ("sortedAz" as const), items: sortTemplates(filtered, sort, locale, added, NEW_SLUGS) }];
-  }, [filtered, occasion, sort, locale, added]);
+  }, [filtered, occasion, sort, locale, added, tier]);
   const occasions = useMemo(() => occasionRow(today), [today]);
   // The first row on a desk: the six in season, and the open occasion in the last place where it is not one of them.
   const lead = useMemo(() => {

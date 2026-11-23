@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { occasionRow } from "../../src/components/templates/gallery-occasions";
 import { templateFilmStart } from "../../src/content/template-film-starts";
 
 /**
@@ -241,5 +242,156 @@ test.describe("agreed-7 and agreed-11: pictures that looked wrong on their cards
       await expect(sorry).toBeVisible();
       expect(await sorry.locator("img").getAttribute("src"), who).not.toContain("paper-crane");
     }
+  });
+});
+
+test.describe("small front-door fixes", () => {
+  test("front-9: the 404 page has its own tab title, in both languages", async ({ page }) => {
+    await page.goto("/this-page-is-not-here");
+    await expect(page).toHaveTitle("Page not found · Ethos");
+    await page.goto("/es/esta-pagina-no-existe");
+    await expect(page).toHaveTitle("Página no encontrada · Ethos");
+  });
+});
+
+const WHITE = "rgb(255, 255, 255)";
+
+test.describe("cream, not white", () => {
+  test("front-4: /pricing's comparison table has no white top row", async ({ page }) => {
+    await page.goto("/pricing");
+    const heads = page.locator("table thead th");
+    await heads.first().scrollIntoViewIfNeeded();
+    for (const bg of await heads.evaluateAll((cells) => cells.map((c) => getComputedStyle(c).backgroundColor))) expect(bg).not.toBe(WHITE);
+  });
+
+  test.describe("on a phone", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+    test("front-14: the menu's Log in button is not pure white", async ({ page }) => {
+      await page.goto("/");
+      await page.getByRole("button", { name: "Open menu" }).click();
+      const login = page.getByRole("dialog").getByRole("link", { name: "Log in" });
+      await expect(login).toBeVisible();
+      expect(await login.evaluate((a) => getComputedStyle(a).backgroundColor)).not.toBe(WHITE);
+    });
+  });
+});
+
+test.describe("choose-5: with Free or Premium on, the gallery says what it shows", () => {
+  for (const [path, title, eyebrow] of [
+    ["/templates?tier=free", "Free gifts", /^\d+ gifts?$/],
+    ["/templates?tier=premium&sort=new", "Premium gifts", /^\d+ gifts$/],
+    ["/es/templates?tier=free&sort=az", "Regalos gratis", /^\d+ regalos?$/],
+    ["/es/templates?tier=premium", "Regalos premium", /^\d+ regalos$/],
+  ] as const) {
+    test(path, async ({ page }) => {
+      await page.goto(path);
+      const shelves = page.locator("[data-shelf]");
+      await expect(shelves).toHaveCount(1);
+      await expect(shelves.locator("h2")).toHaveText(title);
+      await expect(shelves.locator("header p").first()).toHaveText(eyebrow);
+      const count = Number((await shelves.locator("header p").first().textContent())!.match(/\d+/)![0]);
+      await expect(shelves.locator("[data-gallery-card]")).toHaveCount(count);
+    });
+  }
+});
+
+test.describe("the front page's hero and close", () => {
+  test("front-6: a Dates link's hero carries the brand line too, in both languages", async ({ page }) => {
+    for (const [path, line] of [
+      ["/?ref=dates-test", "Digital cards by Tryethos"],
+      ["/es?ref=dates-test", "Tarjetas digitales de Tryethos"],
+    ] as const) {
+      await page.goto(path);
+      const h1 = page.getByRole("heading", { level: 1 });
+      await expect(h1.locator("[data-brand-line]"), path).toHaveText(line);
+      expect((await h1.locator("[data-brand-line]").boundingBox())!.y, path).toBeLessThan((await h1.locator("em").boundingBox())!.y);
+    }
+  });
+
+  test("agreed-3: the closing band's first, filled button makes a gift, in both languages", async ({ page }) => {
+    for (const [path, gallery] of [
+      ["/", "/templates"],
+      ["/es", "/es/templates"],
+    ] as const) {
+      await page.goto(path);
+      await expect(page.locator("[data-closing-buttons] a").first(), path).toHaveAttribute("href", gallery);
+      await expect(page.locator("[data-closing-buttons] a").nth(1), path).toHaveAttribute("href", /\/dates$/);
+    }
+  });
+
+  test("front-8: the games band's two ways to play are labels, and the app card answers no pointer", async ({ page }) => {
+    await page.goto("/");
+    const ways = page.locator("[data-games-ways] > span");
+    await expect(ways).toHaveCount(2);
+    for (const style of await ways.evaluateAll((spans) => spans.map((s) => ({ radius: getComputedStyle(s).borderRadius, bg: getComputedStyle(s).backgroundColor })))) {
+      expect(style.radius).toBe("0px");
+      expect(style.bg).toBe("rgba(0, 0, 0, 0)");
+    }
+    const app = page.locator("[data-app-soon]").first();
+    expect(await app.evaluate((p) => ({ cursor: getComputedStyle(p).cursor, events: getComputedStyle(p).pointerEvents, inControl: p.closest("a, button") !== null }))).toEqual({ cursor: "default", events: "none", inControl: false });
+  });
+
+  test("agreed-13: the long-distance band's pieces at its foot lie whole inside it", async ({ page }) => {
+    for (const width of [1024, 1280, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      const frame = page.locator('[data-floral-frame="bandInside"]');
+      await frame.scrollIntoViewIfNeeded();
+      const out = await frame.evaluate((box) => {
+        const band = box.getBoundingClientRect();
+        return [...box.querySelectorAll("img")]
+          .map((img) => ({ r: img.getBoundingClientRect(), shown: getComputedStyle(img).display !== "none" }))
+          .filter(({ r, shown }) => shown && r.left < band.left + band.width / 2)
+          .filter(({ r }) => r.bottom > band.bottom + 1 || r.top < band.top - 1)
+          .map(({ r }) => Math.round(r.bottom - band.bottom));
+      });
+      expect(out, `${width}`).toEqual([]);
+    }
+  });
+});
+
+test.describe("choose-8: the footer's occasions", () => {
+  test("are the first six of the gallery's row today, then All occasions", async ({ page }) => {
+    const today = new Date().toISOString().slice(0, 10);
+    await page.goto("/pricing");
+    const column = page.locator("footer div", { has: page.locator("p", { hasText: /^Occasions$/ }) }).last();
+    const hrefs = await column.locator("a").evaluateAll((links) => links.map((a) => a.getAttribute("href")));
+    expect(hrefs).toEqual([...occasionRow(today).slice(0, 6).map((o) => `/occasions/${o}`), "/templates"]);
+    await expect(column.locator("a").last()).toHaveText("All occasions");
+  });
+});
+
+test.describe("giftpages-4: the demo bar's way back says where it goes", () => {
+  test("Back to the gift, in both languages, and Back alone under 360px", async ({ page }) => {
+    await page.goto("/demo/bouquet");
+    const back = page.locator("[data-demo-chrome] a").first();
+    await expect(back).toHaveAttribute("href", "/templates/bouquet");
+    await expect(back).toHaveText("Back to Bouquet", { useInnerText: true });
+    await page.goto("/es/demo/bouquet");
+    await expect(page.locator("[data-demo-chrome] a").first()).toHaveText(/^Volver a /, { useInnerText: true });
+    // The site now remembers Spanish: under 360px the way back is "Volver" alone.
+    await page.setViewportSize({ width: 340, height: 700 });
+    await page.goto("/es/demo/bouquet");
+    await expect(page.locator("[data-demo-chrome] a").first()).toHaveText("Volver", { useInnerText: true });
+  });
+});
+
+test.describe("agreed-15: an idea card on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  test("holds its words in its middle, the row's cards one height", async ({ page }) => {
+    await page.goto("/templates/the-letter");
+    const cards = page.locator('[id^="ideas-"] > li');
+    await cards.first().scrollIntoViewIfNeeded();
+    const boxes = await cards.evaluateAll((lis) =>
+      lis.map((li) => {
+        const r = li.getBoundingClientRect();
+        const first = li.firstElementChild!.getBoundingClientRect();
+        const last = li.lastElementChild!.getBoundingClientRect();
+        return { h: Math.round(r.height), above: Math.round(first.top - r.top), below: Math.round(r.bottom - last.bottom) };
+      }),
+    );
+    expect(new Set(boxes.map((b) => b.h)).size).toBe(1);
+    // The padding is 16px above and 20px below: what is left over is shared, not all at the foot.
+    for (const b of boxes) expect(Math.abs(b.above - 16 - (b.below - 20)), JSON.stringify(b)).toBeLessThanOrEqual(2);
   });
 });

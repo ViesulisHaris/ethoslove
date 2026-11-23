@@ -11,7 +11,7 @@ export async function LongDistanceBand() {
   const t = await getTranslations("platform.ldr");
   return (
     <section className="relative isolate overflow-hidden bg-forest py-24 text-cream lg:py-32">
-      <FloralFrame frame="band" ground="bare" />
+      <FloralFrame frame="bandInside" ground="bare" />
       <div className="container-x relative grid items-center gap-12 lg:grid-cols-2">
         <div data-reveal>
           <p className="text-eyebrow text-cream/60">{t("eyebrow")}</p>
@@ -66,12 +66,13 @@ export async function GamesBand() {
           <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full bg-forest/[0.06] px-4 py-2 text-[13.5px] font-semibold text-forest/80">
+          {/* Two labels, not two buttons: no pill shape, which read as something to press (walk-front-8). */}
+          <div data-games-ways className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+            <span className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-forest/80">
               <Users aria-hidden="true" className="size-4 text-rose-deep" />
               {tg("hub.one")}
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-forest/[0.06] px-4 py-2 text-[13.5px] font-semibold text-forest/80">
+            <span className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-forest/80">
               <Smartphone aria-hidden="true" className="size-4 text-rose-deep" />
               {tg("hub.two")}
             </span>
@@ -94,13 +95,14 @@ export async function PlatformClosing() {
       <div data-reveal className="container-x relative flex flex-col items-center text-center">
         <h2 className="display-hero max-w-[14ch] italic">{t("title")}</h2>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream/75">{t("blurb")}</p>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Link href="/dates" className="inline-flex h-14 items-center gap-2 rounded-full bg-cream px-8 text-base font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5">
-            {t("dates")}
+        {/* Gifts first, as the page opens: the filled button makes a gift, the quiet one finds a date (walk-agreed-3). */}
+        <div data-closing-buttons className="mt-10 flex flex-wrap justify-center gap-3">
+          <Link href="/templates" className="inline-flex h-14 items-center gap-2 rounded-full bg-cream px-8 text-base font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5">
+            {t("gifts")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
-          <Link href="/templates" className="inline-flex h-14 items-center rounded-full border border-cream/25 px-8 text-base font-semibold text-cream transition-colors hover:bg-white/10">
-            {t("gifts")}
+          <Link href="/dates" className="inline-flex h-14 items-center rounded-full border border-cream/25 px-8 text-base font-semibold text-cream transition-colors hover:bg-white/10">
+            {t("dates")}
           </Link>
         </div>
       </div>

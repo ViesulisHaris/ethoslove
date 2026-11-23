@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils";
 export async function AppSoon({ className }: { className?: string }) {
   const t = await getTranslations("common.appSoon");
   return (
-    <p className={cn("inline-flex items-center gap-3 rounded-2xl bg-white/75 py-2 pr-5 pl-2 text-forest shadow-soft ring-1 ring-forest/10 backdrop-blur", className)}>
+    // Words, not a control (walk-front-8): the plain arrow over it, nothing that answers a hover or a press.
+    <p data-app-soon className={cn("pointer-events-none inline-flex cursor-default items-center gap-3 rounded-2xl bg-white/75 py-2 pr-5 pl-2 text-forest shadow-soft ring-1 ring-forest/10 backdrop-blur select-none", className)}>
       <img src="/icons/ios-app.webp" alt="" width={40} height={40} decoding="async" className="size-10 rounded-[11px] shadow-[0_4px_12px_-4px_rgba(120,20,60,0.45)]" />
       <span className="flex flex-col leading-tight">
         <span className="text-[14.5px] font-semibold">{t("title")}</span>

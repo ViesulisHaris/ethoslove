@@ -83,6 +83,17 @@ test.describe("the category line, set like a maker's mark", () => {
     }
   });
 
+  test("is over the headline of a Dates link's hero too (walk-front-6)", async ({ page }) => {
+    for (const [path, line, second] of [["/?ref=dates-test", "Digital cards by Tryethos", "Find the date."], ["/es?ref=dates-test", "Tarjetas digitales de Tryethos", ""]] as const) {
+      await page.goto(path);
+      const h1 = page.getByRole("heading", { level: 1 });
+      if (second) await expect(h1, path).toContainText(second);
+      await expect(h1.locator("[data-brand-line]"), path).toHaveText(line);
+      expect((await h1.locator("[data-brand-line]").boundingBox())!.y, path).toBeLessThan((await h1.locator("em").boundingBox())!.y);
+      await expect(page.getByText(line), path).toHaveCount(2);
+    }
+  });
+
   test("is one small line under the footer's wordmark on an ordinary page, and nowhere else on it", async ({ page }) => {
     for (const [path, line] of [["/pricing", "Digital cards by Tryethos"], ["/es/templates/bouquet", "Tarjetas digitales de Tryethos"]] as const) {
       await page.goto(path);
@@ -116,7 +127,7 @@ test.describe("the creator programme", () => {
     await expect(page.getByText("Your own purchases don't count", { exact: false })).toBeVisible();
     await expect(page.getByText("% off", { exact: false })).toHaveCount(0);
     const apply = page.locator("main").getByRole("link", { name: "Apply by email" }).first();
-    await expect(apply).toHaveAttribute("href", /^mailto:[^?]+\?subject=Creator%20programme%20application&body=/);
+    await expect(apply).toHaveAttribute("href", /^mailto:[^?]+\?subject=Creator%20program%20application&body=/);
   });
 
   test("in Spanish", async ({ page }) => {

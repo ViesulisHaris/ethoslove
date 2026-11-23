@@ -19,12 +19,14 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 
 export default async function DemoPage({ params }: PageProps<"/[currency]/[locale]/demo/[slug]">) {
   const { locale, slug } = await params;
-  if (!getManifest(slug)) notFound();
+  const manifest = getManifest(slug);
+  if (!manifest) notFound();
   setRequestLocale(locale);
   return (
     <ClientMessages scope="(gift)/demo/[slug]/page" locale={locale}>
       <Suspense fallback={<div className="h-dvh w-full bg-night" />}>
-        <DemoStage slug={slug} backHref={`/templates/${slug}`} />
+        {/* Back to the gift's own page, and the label says so: "Back to Bouquet". */}
+        <DemoStage slug={slug} backHref={`/templates/${slug}`} backName={manifest.name[locale as GiftLocale]} />
       </Suspense>
     </ClientMessages>
   );

@@ -215,7 +215,8 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
           {guide.ideas.items.map((idea) => (
             // A card says its idea and shows the line to borrow, in handwriting, with nothing to press: a closed
             // card was a title in an empty box, and the line is the reason the card is there (the owner, 22 Nov 2026).
-            <li key={idea.heading} data-card className="relative w-full shrink-0 snap-start rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-4 pb-5 sm:min-h-[10.25rem] sm:w-auto sm:px-6 sm:pt-6 sm:pb-12">
+            // On a phone the row's cards share the tallest one's height; each card's words sit in its middle, not at its top over a third of empty card (walk-agreed-15).
+            <li key={idea.heading} data-card className="relative flex w-full shrink-0 snap-start flex-col justify-center rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-4 pb-5 sm:block sm:min-h-[10.25rem] sm:w-auto sm:px-6 sm:pt-6 sm:pb-12">
               <div className="flex items-center justify-between gap-4 sm:block">
                 <h3 className="font-display text-[1.0625rem] leading-snug text-page-ink">{idea.heading}</h3>
                 <Heart aria-hidden="true" className="size-4 shrink-0 fill-current text-page-accent sm:absolute sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2" strokeWidth={1.6} />

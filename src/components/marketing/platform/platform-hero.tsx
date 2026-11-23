@@ -31,17 +31,23 @@ export async function PlatformHero({ variant = "gift" }: { variant?: HomeHero })
 
 async function DatesFirst() {
   const t = await getTranslations("platform.hero");
+  const line = BRAND.categoryLine[(await getLocale()) === "es" ? "es" : "en"];
   return (
     <>
       <div className="lg:col-span-6">
-        <p className="text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</p>
         {/*
+         * The maker's mark over the headline, as on the gift hero: a visitor from a Dates link meets
+         * the name first too (walk-front-6). It takes the place of the old eyebrow.
+         *
          * The width is in em, not ch: `ch` is the "0" of whichever font has loaded, and the fallback's
          * is narrower than Newsreader's, so on a slow phone the headline wrapped to three lines and
          * jumped to two when the font arrived, moving the search below it. 7.2em is Newsreader's 12ch.
          */}
-        <h1 className="mt-6 max-w-[7.2em] display-hero text-balance text-forest">
-          {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
+        <h1 className="text-forest">
+          <span data-brand-line className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{line}</span>
+          <span className="mt-6 block max-w-[7.2em] display-hero text-balance">
+            {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
+          </span>
         </h1>
         <p className="mt-7 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
 

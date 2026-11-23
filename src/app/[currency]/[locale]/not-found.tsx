@@ -7,6 +7,8 @@ export default async function NotFound() {
   const t = await getTranslations("notFound");
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">
+      {/* Its own tab title: it carried the front page's (walk-front-9). React puts a <title> in the head. */}
+      <title>{t("metaTitle")}</title>
       <Logo />
       <p className="text-eyebrow mt-12 text-coral">404</p>
       <h1 className="display-xl mt-3">{t("title")}</h1>

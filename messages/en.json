@@ -187,6 +187,7 @@
     }
   },
   "footer": {
+    "allOccasions": "All occasions",
     "about": "About",
     "blurb": "Gifts that open like a story.",
     "product": "Product",
@@ -346,7 +347,7 @@
       "look": {
         "n": "05",
         "title": "The look",
-        "blurb": "Accent colour, type, and this template's own details."
+        "blurb": "Accent color, type, and this template's own details."
       },
       "extras": {
         "n": "06",
@@ -391,7 +392,7 @@
       "keepWordsLine": "A free note would end at: “…{tail}”",
       "keepWordsPay": "Keep every word · {price}",
       "keepWordsOr": "or shorten it to {max} to send free",
-      "accentColor": "Accent colour",
+      "accentColor": "Accent color",
       "customColor": "Custom",
       "fontPairing": "Type pairing",
       "editorial": "Editorial",
@@ -643,10 +644,10 @@
       "dotsSquare": "Square",
       "dotsDots": "Dots",
       "dotsClassy": "Classy",
-      "colour": "Colour",
+      "color": "Color",
       "background": "Background",
       "gradient": "Gradient",
-      "centre": "Centre",
+      "center": "Center",
       "centreNone": "None",
       "centreLogo": "Ethos mark",
       "centrePhoto": "A photo",
@@ -669,7 +670,7 @@
       "blurb": "Give me a few real details and I'll draft three openings. Keep what's true, cut the rest.",
       "occasion": "Occasion",
       "relationship": "Who are they to you?",
-      "relationshipPlaceholder": "My partner of three years, my mum, my best friend…",
+      "relationshipPlaceholder": "My partner of three years, my mom, my best friend…",
       "facts": "Three real things",
       "factsHelp": "Specific moments beat adjectives: the trip, the joke, the habit. One per line.",
       "factsPlaceholder": "She hums when she cooks\nWe got lost in Lisbon on purpose\nShe always gives me the window seat",
@@ -817,7 +818,7 @@
       "invalid_input": "That doesn't look like an Etsy order number. It's the long number after \"Order #\".",
       "order_not_found": "We can't find that order in our Etsy shop. Check the number in Etsy's email.",
       "not_paid": "Etsy hasn't confirmed this payment yet. Try again in a few minutes.",
-      "refunded": "This order was cancelled or refunded on Etsy.",
+      "refunded": "This order was canceled or refunded on Etsy.",
       "rate_limited": "Too many tries. Wait a little while and try again.",
       "etsy_unavailable": "We can't reach Etsy right now. Try again in a minute.",
       "failed": "Something went wrong on our side. Try again, or message us on Etsy."
@@ -831,6 +832,8 @@
     "useTemplate": "Use this template",
     "openFullscreen": "Open full-screen demo",
     "backToGallery": "All templates",
+    "backTo": "Back to {name}",
+    "back": "Back",
     "replay": "Replay",
     "tryNote": "The editor is free to use with a live preview. You only pay to publish a premium template.",
     "includes": "Includes",
@@ -903,6 +906,14 @@
         "eyebrow": "New",
         "title": "Just arrived",
         "blurb": "A list checked twice, a year to unwrap, a snow globe, a frosted window, lights to hang and a gingerbread house. And two for the Thanksgiving table."
+      },
+      "tierFree": {
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
+        "title": "Free gifts"
+      },
+      "tierPremium": {
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
+        "title": "Premium gifts"
       },
       "sortedNew": {
         "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
@@ -1069,7 +1080,7 @@
       },
       "pick3": {
         "name": "Pick three",
-        "blurb": "Three days they'll remember: their birthday, your anniversary, and one for your mum.",
+        "blurb": "Three days they'll remember: their birthday, your anniversary, and one for your mom.",
         "cta": "Pick three",
         "features": [
           "Any three templates, forever",
@@ -1234,7 +1245,7 @@
     "dates": {
       "where": {
         "title": "Pick your town",
-        "body": "Type a town or a neighbourhood, or tap “Near me”. Every idea below is made of real places there."
+        "body": "Type a town or a neighborhood, or tap “Near me”. Every idea below is made of real places there."
       },
       "when": {
         "title": "Pick a day",
@@ -1311,7 +1322,8 @@
   "notFound": {
     "title": "This page wandered off",
     "detail": "The link may be broken, or the page may have moved.",
-    "home": "Back to the homepage"
+    "home": "Back to the homepage",
+    "metaTitle": "Page not found · Ethos"
   },
   "error": {
     "title": "Something broke on our side",
@@ -1400,7 +1412,7 @@
         "email_required": "Add your email, so your gift has an account to live in.",
         "order_not_found": "We can't find that order in our Etsy shop. Check the number on your Etsy receipt.",
         "not_paid": "Etsy hasn't confirmed this payment yet. Try again in a few minutes.",
-        "refunded": "This order was cancelled or refunded on Etsy, so it can't send a gift.",
+        "refunded": "This order was canceled or refunded on Etsy, so it can't send a gift.",
         "other_template": "This order is for {templates}. Open that one to send it.",
         "order_used": "This order has already sent a gift. If that wasn't you, message us on Etsy.",
         "rate_limited": "Too many tries. Wait a little while and try again.",
@@ -1452,7 +1464,7 @@
       "cta": "Buy a gift card",
       "note": "We email you the code as soon as you've paid.",
       "redeem": "Got a code? Redeem it",
-      "personalise": "Add their name and a note",
+      "personalize": "Add their name and a note",
       "nameLabel": "Who it's for",
       "noteLabel": "A note to go with it",
       "notePlaceholder": "Happy birthday. Make me something.",
@@ -1619,7 +1631,7 @@
       "birthday": {
         "title": "Digital birthday gifts",
         "metaTitle": "Digital and Virtual Birthday Gifts: 12 Ideas to Send Today",
-        "description": "Make a digital birthday gift they'll open again and again: your photos, their favourite song and your words, animated and sent as a link or QR code. Free to start.",
+        "description": "Make a digital birthday gift they'll open again and again: your photos, their favorite song and your words, animated and sent as a link or QR code. Free to start.",
         "intro": "A birthday message that does more than sit in a chat. Blow out the candles in Birthday Cinema, crack open a Fortune Cookie or print a Front Page about them, with your photos and their song, and set it to open at midnight."
       },
       "anniversary": {
@@ -1653,7 +1665,7 @@
       },
       "mothers-day": {
         "title": "Digital Mother's Day gifts",
-        "description": "Tell your mum what she means to you with a digital Mother's Day gift: old photos, her favourite song and a letter in your words, sent as a link she can keep.",
+        "description": "Tell your mom what she means to you with a digital Mother's Day gift: old photos, her favorite song and a letter in your words, sent as a link she can keep.",
         "intro": "Find the old photos, pick the song she always sings along to, and write the things that are hard to say out loud. Give her a Bouquet that never wilts, or a Jar of Reasons to shake one out whenever she likes."
       },
       "fathers-day": {
@@ -1694,12 +1706,12 @@
   "cities": {
     "meta": {
       "title": "Date ideas in {city}: {ideas} ideas and {places, plural, =0 {a map of real places} one {# real place} other {# real places}}",
-      "description": "{ideas} date ideas picked for what {city} is really like, with real cafés, parks and museums near the centre on a free map. No account needed."
+      "description": "{ideas} date ideas picked for what {city} is really like, with real cafés, parks and museums near the center on a free map. No account needed."
     },
     "eyebrow": "Date ideas by city",
     "title": "Date ideas in {city}",
     "back": "All date ideas",
-    "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the centre for the stops.",
+    "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the center for the stops.",
     "leadNoPlaces": "{ideas} dates for {city}, in the order the city deserves. Open any of them on the map and it finds the places.",
     "cta": {
       "map": "Open the map in {city}",
@@ -1721,20 +1733,20 @@
       "winter": "Winters in {city} are properly cold, which is what ice rinks and hot chocolate are for.",
       "museums": "{city} has big museums and galleries worth an afternoon, so the culture ideas sit high.",
       "nightlife": "{city} stays up late, so the evening ideas get more room than usual.",
-      "parks": "There are big parks and gardens near the centre of {city}, so picnics and slow walks feature.",
+      "parks": "There are big parks and gardens near the center of {city}, so picnics and slow walks feature.",
       "views": "{city} has hills and lookouts, so a sunrise or a golden hour is worth the climb."
     },
     "notes": {
-      "london": "Most of London's big museums are free, so the museum date costs only the glass of something after. And with the West End so close, a night at the theatre is an easy yes.",
-      "manchester": "The centre is compact, so dinner, a film and a late dessert rarely need more than a walk between them.",
+      "london": "Most of London's big museums are free, so the museum date costs only the glass of something after. And with the West End so close, a night at the theater is an easy yes.",
+      "manchester": "The center is compact, so dinner, a film and a late dessert rarely need more than a walk between them.",
       "edinburgh": "Calton Hill is a short walk from Princes Street and costs nothing, which makes getting up for the sunrise an easy sell.",
       "dublin": "The National Gallery and the National Museum are free to walk into, which is exactly what a wet afternoon needs.",
-      "new-york": "Pick two stops in the same neighbourhood and walk between them: in New York, the streets are half the date.",
-      "los-angeles": "Distances are long here, so choose one neighbourhood and keep the date in it. The beach at sunset is worth the drive.",
+      "new-york": "Pick two stops in the same neighborhood and walk between them: in New York, the streets are half the date.",
+      "los-angeles": "Distances are long here, so choose one neighborhood and keep the date in it. The beach at sunset is worth the drive.",
       "chicago": "The lakefront has sandy beaches a short ride from the Loop, so the beach date is closer than you'd think.",
-      "san-francisco": "Most neighbourhoods have a hilltop park within a steep walk, and they are the best seats in town for the golden hour.",
+      "san-francisco": "Most neighborhoods have a hilltop park within a steep walk, and they are the best seats in town for the golden hour.",
       "miami": "Midday heat is serious for much of the year, so the ideas for early mornings and evenings come first.",
-      "boston": "The centre is small and walkable, and the Public Garden, with its lagoon, sits right in the middle of it.",
+      "boston": "The center is small and walkable, and the Public Garden, with its lagoon, sits right in the middle of it.",
       "toronto": "The islands are a short ferry ride from downtown, with beaches, paths and a view of the skyline back.",
       "vancouver": "Stanley Park and the seawall start at the edge of downtown, so an outdoor date needs no car.",
       "montreal": "Winters are long and cold, so ice rinks and hot chocolate aren't a novelty here: they're the season. For the view, walk up Mount Royal.",
@@ -1744,14 +1756,14 @@
       "paris": "A picnic by the river is a local habit, and some of the big museums stay open late one evening a week.",
       "amsterdam": "It rains a fair bit, and the city is full of small galleries and big museums for exactly those days.",
       "berlin": "Late nights are normal here, so the evening ideas can start later than you'd plan anywhere else.",
-      "munich": "The English Garden, one of the largest city parks anywhere, is a short walk from the centre.",
+      "munich": "The English Garden, one of the largest city parks anywhere, is a short walk from the center.",
       "vienna": "The coffee houses are made for staying: nobody will hurry you away from a table for two.",
-      "prague": "The old centre is at its quietest early in the morning, which is when the bridges belong to the two of you.",
+      "prague": "The old center is at its quietest early in the morning, which is when the bridges belong to the two of you.",
       "copenhagen": "Hiring a small boat for the canals and the harbour is a summer habit here, and nobody expects you to know how to sail.",
       "stockholm": "The city is built on islands, so walking between two stops usually means walking along the water.",
-      "oslo": "The fjord starts at the edge of the centre, and the opera house roof is free to walk up for the view.",
+      "oslo": "The fjord starts at the edge of the center, and the opera house roof is free to walk up for the view.",
       "lisbon": "The miradouros, the city's lookout terraces, are free and made for the golden hour.",
-      "rome": "Gelato and a slow walk through the centre: a date the city has had a long time to perfect.",
+      "rome": "Gelato and a slow walk through the center: a date the city has had a long time to perfect.",
       "riga": "The Old Town is small enough to cross in a quarter of an hour, and the canal parks run right alongside it.",
       "tallinn": "The Old Town has viewing platforms over its rooftops, a short climb from the main square.",
       "singapore": "The heat is steady and afternoon downpours are common, so indoor and evening ideas sit near the top: eat late, then walk once the air cools.",
@@ -1759,10 +1771,10 @@
     },
     "places": {
       "eyebrow": "Real places",
-      "title": "Near the centre of {city}",
-      "sub": "The best-placed spots within {km} km of the centre, ranked the way the dates map ranks them. Tap one to see it on the map.",
+      "title": "Near the center of {city}",
+      "sub": "The best-placed spots within {km} km of the center, ranked the way the dates map ranks them. Tap one to see it on the map.",
       "counts": "What the map knows within {km} km",
-      "fromCentre": "{distance} from the centre",
+      "fromCentre": "{distance} from the center",
       "none": "We couldn't read the map for {city} just now. The ideas above still stand: open the map and it will find places for them."
     },
     "map": {
@@ -1794,13 +1806,13 @@
     "titleNear": "Date ideas near you",
     "empty": {
       "title": "Where are you two?",
-      "sub": "A town, a neighbourhood, or just where you are now. We'll find the dates hiding in it.",
+      "sub": "A town, a neighborhood, or just where you are now. We'll find the dates hiding in it.",
       "or": "Or start somewhere",
       "note": "pick a street, any street"
     },
     "where": {
       "label": "Where",
-      "placeholder": "City or neighbourhood",
+      "placeholder": "City or neighborhood",
       "nearMe": "Near me",
       "searching": "Looking…",
       "nothing": "No town by that name. Try the nearest city.",
@@ -2079,10 +2091,10 @@
     },
     "creators": {
       "meta": {
-        "title": "Creator programme: {commission}% of every sale",
+        "title": "Creator program: {commission}% of every sale",
         "description": "Share your own Ethos link and earn {commission}% of every sale it brings, worked out after VAT and refunds. Paid monthly. No codes, no discounts, no cookies."
       },
-      "eyebrow": "Creator programme",
+      "eyebrow": "Creator program",
       "h1a": "Share Ethos.",
       "h1b": "Keep {commission}%.",
       "sub": "Post the gifts and dates you make with Ethos. Every sale that comes through your personal link earns you {commission}% of it, worked out after VAT and refunds.",
@@ -2105,7 +2117,7 @@
       "ticket": {
         "label": "Your link",
         "you": "of the sale, for you",
-        "paid": "and it's paid out every month"
+        "paid": "minimum payout, paid monthly"
       },
       "how": {
         "eyebrow": "How it works",
@@ -2164,7 +2176,7 @@
         "body": "Send us your handle, where you post and a link to a video of yours you love."
       },
       "mail": {
-        "subject": "Creator programme application",
+        "subject": "Creator program application",
         "body": "Hi Ethos,\n\nMy handle: \nWhere I post (TikTok, Instagram, YouTube…): \nFollowers, roughly: \nA video of mine I love: \n\n"
       }
     }
@@ -2209,29 +2221,29 @@
       "title": "Whatever kind of couple you are this week.",
       "dates": {
         "title": "Dates",
-        "blurb": "Ideas built from real places on a map of your town, matched to the weather and the sunset.",
+        "blurb": "Ideas built from real places on a map.",
         "cta": "Find a date"
       },
       "gifts": {
         "title": "Digital gifts",
-        "blurb": "A letter, a bouquet, a scratch card: made in minutes, opened on their phone, kept for good.",
+        "blurb": "Made in minutes, kept for good.",
         "cta": "Make a gift"
       },
       "ldr": {
         "title": "Long distance",
-        "blurb": "Meet in the middle, date across time zones, and send something that closes the gap.",
+        "blurb": "Meet in the middle, date across time zones.",
         "cta": "Close the distance"
       },
       "games": {
         "title": "Games",
-        "blurb": "Seven card games for two: on one phone on the sofa, or on two phones a continent apart.",
+        "blurb": "Seven card games for two.",
         "cta": "Play a game"
       }
     },
     "ideas": {
       "eyebrow": "Date ideas",
       "title": "An evening with a shape to it.",
-      "blurb": "Every idea is a small recipe: a couple of stops and a twist. Pick one and we fill it with real places near you.",
+      "blurb": "Pick one and we fill it with real places near you.",
       "all": "All {count} ideas, on the map",
       "hours": "{hours} h",
       "previous": "Earlier ideas",
@@ -2241,7 +2253,7 @@
       "eyebrow": "Long distance",
       "titleA": "Apart is not",
       "titleB": "the same as far.",
-      "blurb": "Find the city halfway between you, plan the date for when you land, and keep the everyday going with things you can do on two screens.",
+      "blurb": "Find the city halfway between you, plan the date for when you land.",
       "cta": "Open the long-distance room",
       "halfway": "halfway",
       "cityA": "Riga",
@@ -2250,12 +2262,12 @@
     "games": {
       "eyebrow": "Games · seven to play now",
       "title": "Play for who does the dishes.",
-      "blurb": "Card games made for two people who like each other: guess each other's answers, find the pairs, spin for the dishes. No downloads, no accounts.",
+      "blurb": "Card games made for two people who like each other. No downloads, no accounts.",
       "cta": "Deal me in"
     },
     "closing": {
-      "title": "Saturday isn't going to plan itself.",
-      "blurb": "Two minutes now, and the weekend has a shape.",
+      "title": "Make them something they will keep.",
+      "blurb": "Ten minutes now, and it is in their hands tonight.",
       "dates": "Find a date",
       "gifts": "Make a gift"
     }
@@ -2274,7 +2286,7 @@
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
       "you": "Where you are",
       "them": "Where they are",
-      "hint": "Pick both towns and we'll do the maths.",
+      "hint": "Pick both towns and we'll do the math.",
       "apart": "Apart",
       "miles": "{miles} miles, as the plane flies",
       "halfway": "Halfway",
@@ -2431,9 +2443,9 @@
       "depart": "Depart",
       "return": "Return",
       "optional": "optional",
-      "travellers": "{count, plural, one {# traveller} other {# travellers}}",
-      "fewer": "One fewer traveller",
-      "more": "One more traveller",
+      "travelers": "{count, plural, one {# traveler} other {# travelers}}",
+      "fewer": "One fewer traveler",
+      "more": "One more traveler",
       "nothing": "No airport by that name. Try the city, or its three-letter code.",
       "pick": "Pick both airports and the searches appear here.",
       "same": "That's the same airport at both ends.",
@@ -2959,8 +2971,8 @@
       "see": "See Ethos for Two",
       "inApp": "Manage your membership at tryethos.io/account",
       "done": {
-        "cancel": "Cancelled. You both keep everything until {date}.",
-        "cancelNow": "Cancelled. Nothing more will be charged.",
+        "cancel": "Canceled. You both keep everything until {date}.",
+        "cancelNow": "Canceled. Nothing more will be charged.",
         "resume": "It renews again.",
         "switchYearly": "You're on yearly now.",
         "switchMonthly": "It switches to monthly around {date}.",
@@ -3077,8 +3089,8 @@
       "monthlyNote": "The day before each one, we'll ask if it's still on, and only remind you if you say yes. Nothing is ever sent to {name}.",
       "sinceFuture": "That day hasn't come yet.",
       "monthlySave": "Remind me every month",
-      "someoneSub": "Mum, a best friend…",
-      "someonePlaceholder": "Mum",
+      "someoneSub": "Mom, a best friend…",
+      "someonePlaceholder": "Mom",
       "othersLabel": "Added",
       "occasions": {
         "birthday": "Birthday",

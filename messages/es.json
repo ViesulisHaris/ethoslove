@@ -187,6 +187,7 @@
     }
   },
   "footer": {
+    "allOccasions": "Todas las ocasiones",
     "about": "Sobre Ethos",
     "blurb": "Regalos que se abren como una historia.",
     "product": "Producto",
@@ -831,6 +832,8 @@
     "useTemplate": "Usar esta plantilla",
     "openFullscreen": "Abrir demo a pantalla completa",
     "backToGallery": "Todas las plantillas",
+    "backTo": "Volver a {name}",
+    "back": "Volver",
     "replay": "Repetir",
     "tryNote": "El editor es gratis y tiene vista previa en vivo. Solo pagas para publicar una plantilla premium.",
     "includes": "Incluye",
@@ -903,6 +906,14 @@
         "eyebrow": "Novedades",
         "title": "Recién llegadas",
         "blurb": "Una lista repasada dos veces, un año que desenvolver, una bola de nieve, una ventana con escarcha, luces que colgar y una casa de jengibre. Y dos para la mesa de Acción de Gracias."
+      },
+      "tierFree": {
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Regalos gratis"
+      },
+      "tierPremium": {
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Regalos premium"
       },
       "sortedNew": {
         "eyebrow": "{count, plural, one {# plantilla} other {# plantillas}}",
@@ -1311,7 +1322,8 @@
   "notFound": {
     "title": "Esta página se perdió",
     "detail": "Puede que el enlace esté roto o que la página se haya movido.",
-    "home": "Volver al inicio"
+    "home": "Volver al inicio",
+    "metaTitle": "Página no encontrada · Ethos"
   },
   "error": {
     "title": "Algo falló de nuestro lado",
@@ -2105,7 +2117,7 @@
       "ticket": {
         "label": "Tu enlace",
         "you": "de la venta, para ti",
-        "paid": "y se paga cada mes"
+        "paid": "pago mínimo, cada mes"
       },
       "how": {
         "eyebrow": "Cómo funciona",
@@ -2209,29 +2221,29 @@
       "title": "Seáis la pareja que seáis esta semana.",
       "dates": {
         "title": "Citas",
-        "blurb": "Ideas hechas con sitios reales en un mapa de tu ciudad, según el tiempo y la puesta de sol.",
+        "blurb": "Ideas hechas con sitios reales en un mapa.",
         "cta": "Buscar una cita"
       },
       "gifts": {
         "title": "Regalos digitales",
-        "blurb": "Una carta, un ramo, un rasca: hecho en minutos, abierto en su móvil, guardado para siempre.",
+        "blurb": "Hecho en minutos, guardado para siempre.",
         "cta": "Crear un regalo"
       },
       "ldr": {
         "title": "A distancia",
-        "blurb": "Quedad a medio camino, tened citas entre husos horarios y enviad algo que acorte la distancia.",
+        "blurb": "Quedad a medio camino.",
         "cta": "Acortar la distancia"
       },
       "games": {
         "title": "Juegos",
-        "blurb": "Siete juegos de cartas para dos: en un móvil en el sofá o en dos móviles a un continente de distancia.",
+        "blurb": "Siete juegos de cartas para dos.",
         "cta": "Jugar"
       }
     },
     "ideas": {
       "eyebrow": "Ideas para citas",
       "title": "Una noche con plan.",
-      "blurb": "Cada idea es una pequeña receta: un par de paradas y un giro. Elige una y la llenamos de sitios reales cerca de ti.",
+      "blurb": "Elige una y la llenamos de sitios reales cerca de ti.",
       "all": "Las {count} ideas, en el mapa",
       "hours": "{hours} h",
       "previous": "Ideas anteriores",
@@ -2241,7 +2253,7 @@
       "eyebrow": "A distancia",
       "titleA": "Estar separados no es",
       "titleB": "estar lejos.",
-      "blurb": "Encontrad la ciudad a medio camino, planead la cita para cuando aterricéis y mantened el día a día con cosas para hacer en dos pantallas.",
+      "blurb": "Encontrad la ciudad a medio camino, planead la cita para cuando aterricéis.",
       "cta": "Abrir la habitación a distancia",
       "halfway": "a medio camino",
       "cityA": "Riga",
@@ -2250,12 +2262,12 @@
     "games": {
       "eyebrow": "Juegos · siete para jugar ya",
       "title": "Jugaos quién friega los platos.",
-      "blurb": "Juegos de cartas para dos personas que se gustan: adivinad las respuestas del otro, encontrad las parejas, girad la ruleta de los platos. Sin descargas ni cuentas.",
+      "blurb": "Juegos de cartas para dos personas que se gustan. Sin descargas ni cuentas.",
       "cta": "Reparte"
     },
     "closing": {
-      "title": "El sábado no se va a planear solo.",
-      "blurb": "Dos minutos ahora y el finde ya tiene forma.",
+      "title": "Hazle algo que vaya a guardar.",
+      "blurb": "Diez minutos ahora, y esta noche lo tiene en sus manos.",
       "dates": "Buscar una cita",
       "gifts": "Crear un regalo"
     }

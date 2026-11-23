@@ -193,7 +193,19 @@ const CARD: Bloom[] = [
   { art: "lily-open", x: 0, y: 103, size: 8, rot: -12, blur: 3, opacity: 0.5, phone: false },
 ];
 
-const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, card: CARD } as const;
+/**
+ * The band frame for a band that ends on a torn edge (the front page's long distance): its two
+ * blurred pieces at the foot lay half over the band's lower edge, where the band cut them off flat
+ * (walk-agreed-13). Here they lie whole inside it; the head at the top right is as in BAND.
+ */
+const BAND_INSIDE: Bloom[] = [
+  BAND[0],
+  BAND[1],
+  { art: "lily-open", x: 3, y: 74, size: 14, rot: -12, blur: 5, opacity: 0.5, phone: false },
+  { art: "leaf-1", x: 10, y: 84, size: 9, rot: 20, blur: 5, opacity: 0.45, phone: false },
+];
+
+const FRAMES = { hero: HERO, corners: CORNERS, closing: CLOSING, band: BAND, bandInside: BAND_INSIDE, card: CARD } as const;
 
 /**
  * A frame of real flowers round a section. `light` lays them on blush paper, `dark` on the forest
