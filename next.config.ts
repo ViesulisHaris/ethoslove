@@ -47,6 +47,16 @@ const nextConfig: NextConfig = {
     // People, and the assistants they ask, try /contact (404 until 20 Nov 2026): the About page says how to reach us.
     { source: "/contact", destination: "/about#contact", permanent: false },
     { source: "/es/contact", destination: "/es/about#contact", permanent: false },
+    // An occasion has its own page; the old query form of the gallery (/templates?occasion=christmas)
+    // goes there rather than serving the same list under two addresses that compete in search. Here,
+    // not in the page, so the gallery can be built ahead and fetched before "Gifts" is pressed. The
+    // names are src/config/occasions.ts's OCCASIONS (tests/unit/occasion-redirect.test.ts holds them to it).
+    ...["", "/es"].map((prefix) => ({
+      source: `${prefix}/templates`,
+      has: [{ type: "query" as const, key: "occasion", value: `(?<occasion>${OCCASION_SLUGS.join("|")})` }],
+      destination: `${prefix}/occasions/:occasion`,
+      permanent: false,
+    })),
   ],
   headers: async () => [
     // Universal links for the iPhone app (public/.well-known/apple-app-site-association): a shared plan,
@@ -171,6 +181,9 @@ const nextConfig: NextConfig = {
     },
   ],
 };
+
+/** Every occasion with a page of its own: src/config/occasions.ts's OCCASIONS, which next.config cannot import. */
+const OCCASION_SLUGS = ["birthday", "anniversary", "valentines", "wedding", "graduation", "christmas", "halloween", "thanksgiving", "mothers-day", "fathers-day", "apology", "long-distance", "just-because"];
 
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';

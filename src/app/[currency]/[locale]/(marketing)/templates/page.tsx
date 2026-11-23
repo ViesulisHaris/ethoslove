@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import { FINDER_PATH } from "@/content/finder";
-import { Link, redirect } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
-import { TEMPLATE_SLUGS, listManifests } from "@/templates/manifests";
+import { TEMPLATE_SLUGS, forCards, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateGallery } from "@/components/templates/template-gallery";
-import { parseTier } from "@/components/templates/gallery-tier";
-import { parseSort } from "@/components/templates/gallery-sort";
 import { GalleryHead } from "@/components/templates/gallery-head";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/templates">, "searchParams">): Promise<Metadata> {
@@ -25,16 +22,22 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
   });
 }
 
-export default async function TemplatesPage({ params, searchParams }: PageProps<"/[currency]/[locale]/templates">) {
+/**
+ * Built ahead and served as it is, refreshed every hour, like an occasion's page: the gallery is the
+ * room the header's "Gifts" opens, and a page rendered per request could not be fetched ahead of the
+ * press, so every visit to it from another room waited for the server and the whole gallery to
+ * arrive (5.6 s on a slow phone). It no longer reads its query: the price filter and the order are
+ * read from the address in the browser (template-gallery.tsx), and the old `?occasion=` form is sent
+ * to the occasion's own page by next.config.ts.
+ */
+export const revalidate = 3600;
+
+export default async function TemplatesPage({ params }: PageProps<"/[currency]/[locale]/templates">) {
   const { locale } = await params;
-  const { occasion, tier, sort } = await searchParams;
-  // An occasion has its own page; send the old query-param form there rather than serving the
-  // same list under two URLs, which would have them compete with each other in search.
-  if (typeof occasion === "string" && isOccasion(occasion)) redirect({ href: `/occasions/${occasion}`, locale });
   setRequestLocale(locale);
   const t = await getTranslations();
   const manifests = listManifests();
-  // The row of occasions leads with what is in season; this page is rendered per request (it reads its query), so the day is today's.
+  // The row of occasions leads with what is in season: the day the page was last built, at most an hour old.
   const today = new Date().toISOString().slice(0, 10);
   return (
     <>
@@ -68,7 +71,7 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
           </p>
         }
       >
-        <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} initialSort={parseSort(typeof sort === "string" ? sort : null)} added={TEMPLATE_SLUGS} today={today} />
+        <TemplateGallery manifests={forCards(manifests)} added={TEMPLATE_SLUGS} today={today} />
       </GalleryHead>
     </>
   );
