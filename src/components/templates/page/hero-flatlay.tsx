@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
+import { COVER_RATIO, COVER_SHAPE } from "./cover-in-screen";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
 import { loadTemplate } from "@/templates/registry";
 
@@ -86,9 +87,6 @@ export type HeroFrame = {
   from?: number;
 };
 
-/** The shape every cover and film is recorded in: 13 across, 20 down (public/templates/<slug>/poster.jpg and preview.webm; tests/unit/template-film-starts.test.ts measures them). */
-export const COVER_SHAPE = [13, 20] as const;
-const COVER_RATIO = `${COVER_SHAPE[0]} / ${COVER_SHAPE[1]}`;
 
 /** A finger's tap beside the picked-up phone: it lifts where it came down, give or take this many pixels, within this many milliseconds. */
 const TAP_SLOP = 10;

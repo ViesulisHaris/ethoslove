@@ -2,7 +2,7 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import sharp from "sharp";
-import { COVER_SHAPE } from "@/components/templates/page/hero-flatlay";
+import { COVER_SHAPE } from "@/components/templates/page/cover-in-screen";
 import { TEMPLATE_FILM_STARTS, templateFilmStart } from "@/content/template-film-starts";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 
@@ -50,7 +50,7 @@ describe("where a gift's preview film starts", () => {
 
   it("is recorded, with its cover, in the one shape the lying phone lays it into: 13 across, 20 down", async () => {
     // The hero draws each cover and film whole, at the phone screen's width, in a box of this shape
-    // (hero-flatlay.tsx, COVER_SHAPE). A recording of another shape would still be whole, but it
+    // (cover-in-screen.tsx, COVER_SHAPE). A recording of another shape would still be whole, but it
     // would sit in that box with a gap beside it; this fails before anyone sees that.
     const [across, down] = COVER_SHAPE;
     for (const m of TEMPLATE_MANIFESTS) {

@@ -15,6 +15,7 @@ import { listManifests } from "@/templates/manifests";
 import type { FieldMeta, TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
+import { CoverInScreen } from "./cover-in-screen";
 import { IdeasDots } from "./ideas-dots";
 import { Intro, SPREAD } from "./spread";
 import { CLOSED_BLOCK_WORDS, closedBlockLinks, countWords, fitSentences } from "./lead";
@@ -64,7 +65,7 @@ function StepPicture({ kind, flowers, line, photo, poster }: { kind: "photo" | "
   return (
     <span data-flatlay="step" className="block w-[3.4rem] sm:w-[5.6rem]">
       <ArtWithSlot id="step-phone" flowers={flowers} slot="screen" shown="100px" slotClassName="bg-night">
-        <Image src={poster} alt="" fill sizes="110px" className="object-cover" />
+        <CoverInScreen poster={poster} sizes="110px" />
       </ArtWithSlot>
     </span>
   );
@@ -259,7 +260,7 @@ function ExperienceFlatlay({ flowers, photo: sample, poster }: { flowers: Flower
       </span>
       {screen ? (
         <div data-slot="screen" className="absolute overflow-hidden bg-night" style={slotStyle(art, screen)}>
-          <Image src={poster} alt="" fill sizes="(min-width: 1024px) 280px, 40vw" className="object-cover" />
+          <CoverInScreen poster={poster} sizes="(min-width: 1024px) 280px, 40vw" />
         </div>
       ) : null}
       {/* The phone's rim, over what was laid into its screen. Outside the span above: that one holds the picture alone. */}

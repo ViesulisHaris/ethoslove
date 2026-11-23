@@ -99,9 +99,13 @@ test("The Letter's steps are a letter's: nothing about photos, and its own cover
   // The last picture is the small phone with The Letter's own cover under its rim.
   const phone = steps.nth(2).locator("[data-decor=step-phone]");
   await phone.scrollIntoViewIfNeeded();
-  await expect(phone.locator("img")).toHaveCount(3);
-  expect(await phone.locator("img").nth(1).getAttribute("src")).toContain(encodeURIComponent("/templates/the-letter/poster.jpg"));
-  expect(await phone.locator("img").nth(2).getAttribute("src")).toContain("step-phone-bezel");
+  // The cover is drawn whole, over three soft copies of itself that fill the taller screen (cover-in-screen.tsx), and the rim is the last picture, on top.
+  const whole = phone.locator("[data-screen-cover] [data-whole] img");
+  await expect(whole).toHaveCount(1);
+  expect(await whole.getAttribute("src")).toContain(encodeURIComponent("/templates/the-letter/poster.jpg"));
+  expect(await whole.evaluate((img) => getComputedStyle(img).objectFit)).toBe("contain");
+  await expect(phone.locator("img")).toHaveCount(6);
+  expect(await phone.locator("img").last().getAttribute("src")).toContain("step-phone-bezel");
 });
 
 test("a gift with no questions of its own still has its six cards, its own steps and the shared questions", async ({ page }) => {
