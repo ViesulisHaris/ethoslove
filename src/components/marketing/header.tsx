@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/shared/logo";
 import { useHeaderScroll } from "@/components/motion/use-header-scroll";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -11,44 +10,7 @@ import { AuthStatus } from "./auth-status";
 import { MakeGiftLink } from "./make-gift-link";
 import { MenuSheet } from "./menu-sheet";
 import { RoomNav } from "./room-nav";
-import { ROOMS, roomOf } from "./rooms";
-
-/** After the page has loaded and gone quiet, at the latest this long after. */
-const AHEAD_TIMEOUT_MS = 5000;
-
-/**
- * The rooms, fetched ahead once the page has loaded and the browser is idle, so pressing one shows it
- * at once. A link only fetches its page ahead when it is on screen, and on a phone the rooms are in
- * the closed menu, never on screen until the press; on a desk the bar's links are, but a room that is
- * drawn per request (Dates, Pricing, the front page) is not fetched ahead by a link at all. Not on a
- * connection that asked to save data. The router keeps each for five minutes; asked again after every move
- * between pages, what it still has is not fetched again.
- */
-function useRoomsAhead(pathname: string) {
-  const router = useRouter();
-  useEffect(() => {
-    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    if (connection?.saveData) return;
-    let idle = 0;
-    let timer = 0;
-    const go = () => {
-      // Whole: a room drawn per request is otherwise fetched only up to its first loading state, of which it has none.
-      for (const { href } of ROOMS) router.prefetch(href, { kind: PrefetchKind.FULL });
-      router.prefetch("/", { kind: PrefetchKind.FULL });
-    };
-    const whenIdle = () => {
-      if (typeof window.requestIdleCallback === "function") idle = window.requestIdleCallback(go, { timeout: AHEAD_TIMEOUT_MS });
-      else timer = window.setTimeout(go, 1500);
-    };
-    if (document.readyState === "complete") whenIdle();
-    else window.addEventListener("load", whenIdle, { once: true });
-    return () => {
-      window.removeEventListener("load", whenIdle);
-      if (idle) window.cancelIdleCallback(idle);
-      window.clearTimeout(timer);
-    };
-  }, [router, pathname]);
-}
+import { roomOf } from "./rooms";
 
 /**
  * A floating pill of frosted white. Light, so it reads as part of the paper it floats over, and it
@@ -65,7 +27,6 @@ export function MarketingHeader() {
   const pathname = usePathname();
   const current = roomOf(pathname);
   const { compact, hidden } = useHeaderScroll();
-  useRoomsAhead(pathname);
   // The menu is open on the page it was opened on: a navigation (a room, back) closes it by itself.
   const [menuOn, setMenuOn] = useState<string | null>(null);
   const menuOpen = menuOn === pathname;
