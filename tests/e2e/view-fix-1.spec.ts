@@ -313,6 +313,25 @@ test.describe("cream, not white", () => {
   });
 });
 
+test("rooms-5: a plan's Open in Maps button is cream", async ({ page }) => {
+  const plan = {
+    v: 1,
+    date: "2030-06-15",
+    where: "Lisbon",
+    stops: [
+      { id: "node/107", name: "Museu do Fado Pequeno", kind: "museum", lat: 38.7118, lng: -9.1284, time: "17:00" },
+      { id: "node/104", name: "Gelados Santini", kind: "dessert", lat: 38.713, lng: -9.137, time: "18:30" },
+    ],
+  };
+  await page.addInitScript((p) => window.localStorage.setItem("ethos.dates.plan.v1", p), JSON.stringify(plan));
+  await page.route("https://tiles.openfreemap.org/**", (route) => route.abort());
+  await page.route("**/api/dates/weather*", (route) => route.fulfill({ json: { days: [], utcOffsetSeconds: 3600, timezone: "Europe/Lisbon" } }));
+  await page.goto("/plan");
+  const maps = page.locator("[data-testid=maps-locked], [data-testid=maps-menu]").first();
+  await expect(maps).toBeVisible();
+  expect(await maps.evaluate((b) => getComputedStyle(b).backgroundColor)).not.toBe(WHITE);
+});
+
 /** Visible things in `scope` (and `scope` itself) drawn pure white or in the old cool pink rose-mist (#fff0f4). */
 async function offPalette(scope: import("@playwright/test").Locator) {
   return (
