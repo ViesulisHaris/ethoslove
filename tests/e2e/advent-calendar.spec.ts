@@ -824,10 +824,11 @@ test("with group cards on, the editor talks to a group: the letter and the surpr
     await expect(page.getByPlaceholder(locale === "en" ? /why you asked everyone to write/ : /por qué pediste a todos/)).toBeVisible();
     await expect(page.getByPlaceholder(couple[locale])).toHaveCount(0);
   }
-  // Off, the same template's editor is an ordinary one, and so is every other template's with it on.
-  await page.goto(`/create/the-letter?group=on`);
-  await expect(page.getByTestId("unwrap-section")).toContainText("A surprise inside", { timeout: 60_000 });
-  await expect(page.getByTestId("unwrap-section")).toContainText("Plan a date");
+  // Every other template's editor keeps its own words with the switch on: it is not a group card. (Last in Spanish: the
+  // site keeps the language a visitor last chose.)
+  await page.goto(`/es/create/the-letter?group=on`);
+  await expect(page.getByTestId("unwrap-section")).toContainText("Una sorpresa dentro", { timeout: 60_000 });
+  await expect(page.getByTestId("unwrap-section")).toContainText("Planear una cita");
 });
 
 /* ------------------------------------------------------------------------------------------------
