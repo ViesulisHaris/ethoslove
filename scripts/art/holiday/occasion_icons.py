@@ -273,7 +273,8 @@ def build(icon):
         dots = [place(sphere("dot%d" % i, 0.06, white, 10, 6, 0.5), (x, y, 0.23)) for i, (x, y) in enumerate(((-0.55, 0.14), (-0.78, -0.16), (-0.42, -0.14), (0.55, 0.14), (0.78, -0.16), (0.42, -0.14)))]
         return wings + [knot] + dots
     if icon == "apology":
-        heart = puff("mended", heart_outline(0.95), 0.3, clay(ROSE), 0.12)
+        # A warm coral red, not the pale rose it was: next to the red heart and the orange pumpkin it was nearly the tile's own colour (the user walk of 23 Nov 2026).
+        heart = puff("mended", heart_outline(0.95), 0.3, clay("#e0566c"), 0.12)
         strip = puff("plaster", kit.rounded_rect(1.0, 0.34, 0.14), 0.07, clay(CREAM), 0.03)
         place(strip, (0.02, 0.22, 0.3), (0, 0, math.radians(-28)))
         pad = puff("plaster_pad", kit.rounded_rect(0.3, 0.26, 0.05), 0.03, clay("#f0d2bd"), 0.01)
@@ -281,10 +282,11 @@ def build(icon):
         return [heart, strip, pad]
     if icon == "long-distance":
         # a paper plane as it is always drawn: a dart flying up to the right, the near wing pale and the far one in shade
-        near = puff("plane_near", [(-1.15, 0.1), (1.2, 0.95), (-0.15, -0.3)], 0.1, clay(WHITE), 0.02)
-        far = puff("plane_far", [(-0.15, -0.3), (1.2, 0.95), (0.25, -1.0)], 0.08, clay(SKY), 0.02)
-        keel = puff("plane_keel", [(-0.15, -0.3), (0.25, -1.0), (-0.02, -0.62)], 0.06, clay(BLUE), 0.01)
-        sky = clay(SKY)
+        # Blue paper, not white: a white plane on a cream tile was the palest of the fourteen (the same walk).
+        near = puff("plane_near", [(-1.15, 0.1), (1.2, 0.95), (-0.15, -0.3)], 0.1, clay("#86b8ee"), 0.02)
+        far = puff("plane_far", [(-0.15, -0.3), (1.2, 0.95), (0.25, -1.0)], 0.08, clay(BLUE), 0.02)
+        keel = puff("plane_keel", [(-0.15, -0.3), (0.25, -1.0), (-0.02, -0.62)], 0.06, clay(NAVY), 0.01)
+        sky = clay(BLUE)
         trail = [place(sphere("trail%d" % i, 0.05, sky, 8, 6), (-1.05 - 0.24 * i, -0.62 - 0.2 * i, 0.06)) for i in range(3)]
         return [near, far, keel] + trail
     if icon == "just-because":
