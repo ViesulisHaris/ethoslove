@@ -365,6 +365,12 @@ export const IDEAS: DateIdea[] = [
 
 export const ideaById = (id: string | undefined): DateIdea | undefined => IDEAS.find((i) => i.id === id);
 
+/** A plan's idea as the plan was made (asPlanned): the wet night's title for a wet night's stops. */
+export function plannedIdea(plan: { idea?: string; stops: readonly { kind: PlaceKind }[] }): DateIdea | undefined {
+  const idea = ideaById(plan.idea);
+  return idea ? asPlanned(idea, plan.stops.map((s) => s.kind)) : undefined;
+}
+
 /** Stops closer together than this make a date you can walk. */
 const WALKABLE_KM = 1.6;
 
@@ -436,10 +442,30 @@ export const canBeFree = (idea: Pick<DateIdea, "budget" | "vibes">): boolean => 
 /** The idea as it stands on the day: on a wet one, its rain stops when it has them (the stars move under a planetarium's dome). */
 export function forTheDay(idea: DateIdea, day: DayWeather | undefined): DateIdea {
   if (!idea.rainStops || !day || !isWet(day)) return idea;
-  // Rain stops that change what the evening is bring its rain title, blurb and picture with them.
+  return inTheRain(idea, idea.rainStops);
+}
+
+/** Rain stops that change what the evening is bring its rain title, blurb and picture with them. */
+function inTheRain(idea: DateIdea, rainStops: PlaceKind[][]): DateIdea {
   const { rain } = idea;
-  if (!rain) return { ...idea, stops: idea.rainStops };
-  return { ...idea, stops: idea.rainStops, title: rain.title, blurb: rain.blurb, ...(rain.image ? { image: rain.image } : {}) };
+  if (!rain) return { ...idea, stops: rainStops };
+  return { ...idea, stops: rainStops, title: rain.title, blurb: rain.blurb, ...(rain.image ? { image: rain.image } : {}) };
+}
+
+/**
+ * The idea as its plan was made, read from the plan's own stops: a plan with a stop only the wet
+ * night has (dessert where the dry one has a viewpoint) and none only the dry night has is the wet
+ * night's idea, title and all. /plan, the gift made from it and the saved date say what the card
+ * said, whatever the weather is by the time the plan is opened (dates-N3-1).
+ */
+export function asPlanned(idea: DateIdea, kinds: readonly PlaceKind[]): DateIdea {
+  const { rainStops } = idea;
+  if (!rainStops || !idea.rain) return idea;
+  const dry = new Set(idea.stops.flat());
+  const wet = new Set(rainStops.flat());
+  const wetOnly = kinds.some((k) => wet.has(k) && !dry.has(k));
+  const dryOnly = kinds.some((k) => dry.has(k) && !wet.has(k));
+  return wetOnly && !dryOnly ? inTheRain(idea, rainStops) : idea;
 }
 
 /** The picture a plan for a real place shows: the one its day gave it (forTheDay), else its own unless that shows another city. */

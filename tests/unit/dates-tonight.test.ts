@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { KIND_IDEAS } from "@/lib/dates/date-kinds";
-import { canBeFree, fillStops, forTheDay, IDEAS, ideaById, ideaPicture, isDoable, type DateIdea } from "@/lib/dates/ideas";
+import { canBeFree, fillStops, forTheDay, IDEAS, ideaById, ideaPicture, isDoable, plannedIdea, type DateIdea } from "@/lib/dates/ideas";
 import { KIND_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { readPlan } from "@/lib/dates/plan";
@@ -281,6 +281,19 @@ describe("tonight's stops suit the idea", () => {
     expect(ideaPicture(dry)).toBe("/dates/ideas/pasta-and-a-slow-walk.webp");
     expect(forTheDay(idea("stars-and-planets"), WET).title).toEqual(idea("stars-and-planets").title);
     expect(ideaPicture(forTheDay(idea("stars-and-planets"), WET))).toBe("/dates/ideas/stars-and-planets.webp");
+  });
+
+  it("T28 a wet night's plan keeps the wet night's title on /plan, in the gift and the saved date (dates-N3-1)", () => {
+    const wet = plannedIdea({ idea: "pasta-and-a-slow-walk", stops: [{ kind: "restaurant" }, { kind: "dessert" }] })!;
+    expect(wet.title.en).toBe("Dinner, then dessert somewhere dry");
+    expect(wet.title.es).toBe("Cena, y el postre a cubierto");
+    // The dry night's stops, or a stop only the dry night has, keep the dry title; so does a plan with no stops yet.
+    for (const kinds of [["restaurant", "viewpoint"], ["restaurant", "dessert", "park"], ["restaurant"], []] as const) {
+      expect(plannedIdea({ idea: "pasta-and-a-slow-walk", stops: kinds.map((kind) => ({ kind })) })!.title.en, kinds.join(",")).toBe("Dinner, then the long way home");
+    }
+    // An idea without a rain title keeps its own whatever its stops; no idea is no idea.
+    expect(plannedIdea({ idea: "stars-and-planets", stops: [{ kind: "planetarium" }] })!.title).toEqual(idea("stars-and-planets").title);
+    expect(plannedIdea({ stops: [{ kind: "dessert" }] })).toBeUndefined();
   });
 });
 

@@ -7,7 +7,7 @@ import { Link, getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
-import { ideaById } from "@/lib/dates/ideas";
+import { plannedIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, stopName, type Plan } from "@/lib/dates/plan";
 import { planUnwrap } from "@/lib/dates/plan-gift";
@@ -53,7 +53,7 @@ const PREVIEW_KEYS = ["c", "t", "d"];
  * only: who it is for, who from and the notes stay after the `#`, where no server sees them.
  */
 function previewTitle(plan: Plan, locale: "en" | "es"): string | null {
-  const idea = ideaById(plan.idea);
+  const idea = plannedIdea(plan);
   if (idea) return idea.title[locale];
   const names = plan.stops.filter((s) => s.named !== false).map((s) => s.name);
   return names.length > 0 ? names.join(" · ") : null;
@@ -140,7 +140,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
 
   const forecast = forecastFor?.at === at ? forecastFor.forecast : null;
   const day = forecast?.days.find((d) => d.date === plan.date);
-  const idea = ideaById(plan.idea);
+  const idea = plannedIdea(plan);
   const past = Boolean(plan.date && plan.date < toYmd(new Date()));
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
   const ticketed = plan.stops.some((s) => sellsTickets(s));
