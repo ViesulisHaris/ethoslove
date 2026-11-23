@@ -201,8 +201,9 @@ const CARD: Bloom[] = [
 const BAND_INSIDE: Bloom[] = [
   BAND[0],
   BAND[1],
-  { art: "lily-open", x: 3, y: 74, size: 14, rot: -12, blur: 5, opacity: 0.5, phone: false },
-  { art: "leaf-1", x: 10, y: 84, size: 9, rot: 20, blur: 5, opacity: 0.45, phone: false },
+  // Only from 1440px: at 1024 they lay under "Open the long-distance room" (tests/e2e/floral-frame.spec.ts).
+  { art: "lily-open", x: 3, y: 74, size: 14, rot: -12, blur: 5, opacity: 0.5, phone: false, wide: true },
+  { art: "leaf-1", x: 10, y: 84, size: 9, rot: 20, blur: 5, opacity: 0.45, phone: false, wide: true },
 ];
 
 /**
