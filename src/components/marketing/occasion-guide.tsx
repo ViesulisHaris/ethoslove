@@ -42,10 +42,12 @@ export async function OccasionIdeas({ occasion, locale }: { occasion: Occasion; 
   );
   return (
     <Spread id={`ideas-${occasion}`} label={t("occasions.ideasLabel")} heading={ideas.title} line={t("occasions.ideasLine")} art={LIST_ART} className="pt-16 pb-6 sm:pt-20 lg:pt-24 lg:pb-10">
+      {/* The compact cards: the gallery right above shows these gifts' posters, so no picture is shown twice (pages-C3). */}
       <IdeaCards
         id={`idea-cards-${occasion}`}
         cards={cards}
         locale={locale}
+        poster={false}
         labels={{ make: t("recipients.make"), watch: t("recipients.watch"), free: t("recipients.free"), full: t("recipients.ideaInFull"), copy: t("recipients.copyLine"), copied: t("recipients.copiedLine") }}
       />
     </Spread>

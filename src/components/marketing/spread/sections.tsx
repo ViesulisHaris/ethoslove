@@ -78,7 +78,8 @@ export function SiteHero({
   label?: string;
   heading: string;
   line: string;
-  sentence: string;
+  /** One sentence under the italic line; a page whose line says enough leaves it out. */
+  sentence?: string;
   /** One quiet line under the button. */
   note?: ReactNode;
   /** The button. */
@@ -102,7 +103,7 @@ export function SiteHero({
             <span className="block max-w-[14em] font-display text-[2rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.25rem,4.5vw,3.75rem)] sm:max-lg:[@media(max-height:30rem)]:max-w-none sm:max-lg:[@media(max-height:30rem)]:text-[1.75rem]">{heading}</span>
           </h1>
           <p className="mt-3 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4 sm:max-lg:[@media(max-height:30rem)]:mt-2 sm:max-lg:[@media(max-height:30rem)]:text-[1.2rem]">{line}</p>
-          <p className="mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6 sm:max-lg:[@media(max-height:30rem)]:mt-2.5 sm:max-lg:[@media(max-height:30rem)]:max-w-none">{sentence}</p>
+          {sentence ? <p className="mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6 sm:max-lg:[@media(max-height:30rem)]:mt-2.5 sm:max-lg:[@media(max-height:30rem)]:max-w-none">{sentence}</p> : null}
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:max-lg:[@media(max-height:30rem)]:mt-4">{children}</div>
           {/* On a desk the note stops short of the lily that leans in at the hero's right: priced in dollars ("11,99 US$")
               the Spanish note ran one line to 1,274px and into the flower (the deep test of 23 Nov 2026). */}
@@ -157,8 +158,11 @@ export type IdeaCard = {
   free?: boolean;
 };
 
-/** `copy` and `copied` are the two states of the button beside a line to borrow: "Copy", then "Copied". */
-export type IdeaCardLabels = { make: string; watch: string; free: string; also?: string; full?: string; copy?: string; copied?: string };
+/**
+ * `copy` and `copied` are the two states of the button beside a line to borrow: "Copy", then "Copied". `page`, where
+ * given, is a third way on from an opened card: to the gift's own page (the pages by person linked every idea there).
+ */
+export type IdeaCardLabels = { make: string; watch?: string; free: string; also?: string; full?: string; copy?: string; copied?: string; page?: string };
 
 /**
  * How wide a card's picture is drawn, for the browser's choice of file. Under 640px one card is a
@@ -216,8 +220,12 @@ function shortRow(count: number): string {
  * alone and its neighbours are not pulled down beside it (one selector, `:has()`); and every card
  * is held at the height its row had closed (level-cards.tsx), so a card nobody touched does not
  * move. Without script, or without `:has()`, each card keeps its own height, as before.
+ *
+ * `poster={false}` is the compact card: the same card without its picture, for a page that has just
+ * shown the same gifts' posters above (an occasion's page, under its gallery: pages-C3), so no
+ * picture is shown twice. A closed compact card is the gift's name and the idea; it opens the same.
  */
-export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: string; cards: readonly IdeaCard[]; locale: GiftLocale; labels: IdeaCardLabels; columns?: 3 | 5 }) {
+export function IdeaCards({ id, cards, locale, labels, columns = 3, poster = true }: { id: string; cards: readonly IdeaCard[]; locale: GiftLocale; labels: IdeaCardLabels; columns?: 3 | 5; poster?: boolean }) {
   return (
     <div className="min-w-0">
       <ul
@@ -245,21 +253,36 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
                 <summary className="relative grid cursor-pointer list-none content-start rounded-[1.25rem] outline-offset-4 active:opacity-90 sm:h-full [&::-webkit-details-marker]:hidden">
                   {/* On a phone the one card showing is a screen wide, so its picture is cropped squarer and the title stays on the screen with it.
                       A phone on its side is the same case from the other end: two cards across, and a tall poster alone was taller than the screen. */}
-                  <span className="relative block aspect-[5/4] overflow-hidden rounded-t-[1.2rem] bg-page-band sm:aspect-[4/5] sm:max-lg:[@media(max-height:30rem)]:aspect-[3/2]">
-                    {/* What the poster shows, in the gift's own words. Its name is the next thing read, so it is not said here too. */}
-                    <Image src={card.manifest.thumbnail.poster} alt={card.manifest.tagline[locale]} fill sizes={CARD_SIZES[columns]} className="object-cover object-[50%_32%]" />
-                  </span>
-                  <span className="block px-5 pt-4 text-page-label text-page-body">
-                    {name}
-                    {card.free ? <span className="text-page-accent"> · {labels.free}</span> : null}
-                  </span>
-                  <span data-card-title className="mt-2 block px-5 pr-10 pb-5 font-display text-[1.25rem] leading-[1.18] text-page-ink">
+                  {poster ? (
+                    <span className="relative block aspect-[5/4] overflow-hidden rounded-t-[1.2rem] bg-page-band sm:aspect-[4/5] sm:max-lg:[@media(max-height:30rem)]:aspect-[3/2]">
+                      {/* What the poster shows, in the gift's own words. Its name is the next thing read, so it is not said here too. */}
+                      <Image src={card.manifest.thumbnail.poster} alt={card.manifest.tagline[locale]} fill sizes={CARD_SIZES[columns]} className="object-cover object-[50%_32%]" />
+                    </span>
+                  ) : null}
+                  {/* A compact card is the idea alone while closed: the gift's name opens with it, over its line. */}
+                  {poster ? (
+                    <span className="block px-5 pt-4 text-page-label text-page-body">
+                      {name}
+                      {card.free ? <span className="text-page-accent"> · {labels.free}</span> : null}
+                    </span>
+                  ) : null}
+                  <span data-card-title className={cn("block px-5 pr-10 pb-5 font-display text-[1.25rem] leading-[1.18] text-page-ink", poster ? "mt-2" : "pt-5")}>
                     {card.title}
                   </span>
                   <Plus aria-hidden="true" className="absolute right-4 bottom-5 size-4 text-page-body transition-transform duration-200 group-open/card:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                 </summary>
                 <div data-reveal className="px-5 pb-4">
-                  <p className="border-t border-page-line pt-4 text-[0.9375rem] leading-relaxed text-page-body">{card.line}</p>
+                  {poster ? null : (
+                    <p className="border-t border-page-line pt-4 text-page-label text-page-body">
+                      {name}
+                      {card.free ? <span className="text-page-accent"> · {labels.free}</span> : null}
+                    </p>
+                  )}
+                  {card.line ? (
+                    <p data-card-brief className={cn("text-[0.9375rem] leading-relaxed text-page-body", poster ? "border-t border-page-line pt-4" : "mt-2")}>{card.line}</p>
+                  ) : poster ? (
+                    <div className="border-t border-page-line" />
+                  ) : null}
                   {card.borrow ? (
                     // The field's name with "Copy" beside it, and the line under them. Where the card is narrow (a phone, or three
                     // across on a desk) a long field's name in spaced capitals ran to four rows beside "Copy" (the deep test of
@@ -301,10 +324,17 @@ export function IdeaCards({ id, cards, locale, labels, columns = 3 }: { id: stri
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
                     {/* Named by the words on it and then the gift: a voice-control user says what the button says (WCAG 2.5.3). */}
-                    <Link href={`/demo/${card.manifest.slug}`} data-testid="idea-watch" aria-label={`${labels.watch}: ${name}`} className={cn(CARD_LINK, "font-normal text-page-ink")}>
-                      <Play aria-hidden="true" className="size-3.5 fill-current" />
-                      {labels.watch}
-                    </Link>
+                    {labels.watch ? (
+                      <Link href={`/demo/${card.manifest.slug}`} data-testid="idea-watch" aria-label={`${labels.watch}: ${name}`} className={cn(CARD_LINK, "font-normal text-page-ink")}>
+                        <Play aria-hidden="true" className="size-3.5 fill-current" />
+                        {labels.watch}
+                      </Link>
+                    ) : null}
+                    {labels.page ? (
+                      <Link href={`/templates/${card.manifest.slug}`} data-testid="idea-page" aria-label={`${labels.page}: ${name}`} className={cn(CARD_LINK, "font-normal text-page-ink")}>
+                        {labels.page}
+                      </Link>
+                    ) : null}
                   </div>
                   {card.full && labels.full ? (
                     <details data-idea-full className="group/full mt-1 border-t border-page-line">
