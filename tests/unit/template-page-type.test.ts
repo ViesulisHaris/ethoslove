@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
-import { TEMPLATE_LEADS } from "@/content/template-leads";
+import { SCENE_LEADS, TEMPLATE_LEADS } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
@@ -52,6 +52,7 @@ async function giftWords(slug: string, l: Locale): Promise<[string, string][]> {
     ...strings(TEMPLATE_STEPS[slug]?.line[l], `${slug} steps.line`),
     ...(TEMPLATE_STEPS[slug]?.steps ?? []).flatMap((step, i) => [...strings(step[l], `${slug} steps.${i}`), ...strings(step.sample?.[l], `${slug} steps.${i}.sample`)]),
     ...strings(TEMPLATE_LEADS[slug]?.[l], `${slug} lead`),
+    ...strings(SCENE_LEADS[slug]?.[l], `${slug} scene lead`),
     ...strings(seo?.keyword, `${slug} seo.keyword`),
     ...strings(seo?.howTo, `${slug} seo.howTo`),
     ...Object.entries(meta).flatMap(([key, field]) => [...strings(field.label, `${slug} field ${key}`), ...strings(field.options, `${slug} field ${key} options`)]),

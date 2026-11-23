@@ -6,7 +6,7 @@ import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { CLOSED_BLOCK_WORDS, TAGLINE_WORDS, closedBlockLinks, fitSentences, heroKeyword, heroLead, heroWords } from "@/components/templates/page/lead";
 import { suitedRecipients } from "@/content/finder";
-import { TEMPLATE_LEADS, templateLead } from "@/content/template-leads";
+import { SCENE_LEADS, TEMPLATE_LEADS, sceneLead, templateLead } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
 
 /**
@@ -182,6 +182,34 @@ describe("the text budget of a gift's page", () => {
       }
     for (const slug of Object.keys(TEMPLATE_LEADS)) if (!TEMPLATE_MANIFESTS.some((m) => m.slug === slug)) off.push(`${slug} is not a template`);
     expect(off).toEqual([]);
+  });
+
+  it("a hero that would only set a scene has a sentence that goes on from its italic line", () => {
+    // The user walk of 23 Nov 2026: Jack-o'-Lantern's hero ended on "A pumpkin on a table in a dark room, and a knife."
+    const off: string[] = [];
+    for (const [slug, row] of Object.entries(SCENE_LEADS)) {
+      const m = TEMPLATE_MANIFESTS.find((x) => x.slug === slug);
+      if (!m) {
+        off.push(`${slug} is not a template`);
+        continue;
+      }
+      for (const l of LOCALES) {
+        const written = row[l];
+        if (!written) continue;
+        const own = heroWords(m.tagline, m.description[l], l).lead;
+        // A gift whose description gives no lead has its sentence in TEMPLATE_LEADS, and not in both.
+        if (!own) off.push(`${slug} ${l}: the description gives no lead, so this row belongs in TEMPLATE_LEADS`);
+        if (templateLead(slug, l)) off.push(`${slug} ${l}: written twice`);
+        if (words(written) < 12 || words(written) > 30) off.push(`${slug} ${l}: ${words(written)} words`);
+        if (!/[.]$/.test(written)) off.push(`${slug} ${l}: stops mid-sentence`);
+        if (/[!¡]|—| – |perfect for|perfecto para|perfecta para|unforgettable|inolvidable/i.test(written)) off.push(`${slug} ${l}: reads like an advert`);
+        if (written.trim() === own.trim() || written.trim() === m.tagline[l].trim()) off.push(`${slug} ${l}: says the same sentence again`);
+      }
+    }
+    expect(off).toEqual([]);
+    // The one it was found on, as the page reads it; and a gift with no row keeps its description's opening.
+    expect(sceneLead("jack-o-lantern", "en")).toMatch(/^The eyes, the nose and the grin/);
+    expect(sceneLead("the-letter", "en")).toBeNull();
   });
 
   it("the h1 never says the same words twice: a keyword that is the gift's name is left out", () => {

@@ -17,7 +17,7 @@ import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { templateGuide } from "@/content/template-guides";
 import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
 import { templateFilmStart } from "@/content/template-film-starts";
-import { templateLead } from "@/content/template-leads";
+import { sceneLead, templateLead } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
 import { templateSteps } from "@/content/template-steps";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
@@ -114,7 +114,8 @@ export default async function TemplateDetailPage({
   // And the hero says what the note does: a description that ends on "your photos drop in as polaroids"
   // gives way to the same sentences without the photos (messages: templates.noteLead).
   // A description that opens on one sentence of fifty words gives the hero none: that gift has its own (content/template-leads.ts).
-  const lead = note && t.has(`templates.noteLead.${manifest.slug}`) ? t(`templates.noteLead.${manifest.slug}`) : about.lead || templateLead(manifest.slug, l);
+  // And one that opens on a scene the italic line has already walked into has a sentence that goes on from it (SCENE_LEADS, same file).
+  const lead = note && t.has(`templates.noteLead.${manifest.slug}`) ? t(`templates.noteLead.${manifest.slug}`) : sceneLead(manifest.slug, l) ?? (about.lead || templateLead(manifest.slug, l));
 
   // What's included: only what this template has; under "With “Make it special”", only what the unlock adds (./included).
   const included = includedRows(manifest, note).map((row) => t(`templates.${row.key}`, row.values));
