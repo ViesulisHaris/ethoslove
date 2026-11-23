@@ -16,6 +16,19 @@ const KINDS = ["last-minute", "video-message", "interactive-birthday-card", "vir
 const HERO_PAGES = ["/digital-cards", ...KINDS.map((kind) => `/gifts/${kind}`)];
 /** Occasion pages: one whose list records its samples' fields, one written before that, and one with the links to the pages by kind. */
 const OCCASION_PAGES = ["/occasions/mothers-day", "/occasions/christmas", "/occasions/birthday"];
+/**
+ * The pages by person, laid out as the pages by kind in fix round 4 (24 Nov 2026): one with the Christmas row in
+ * season and one without. They open on the hero as the kind pages do, with the first idea's gift in the phone.
+ */
+const PERSON_PAGES = ["/gifts/for-boyfriend", "/gifts/for-mom"];
+/**
+ * /gifts, laid out the same way in fix round 4. It is over the 300 words: its thirty ideas are thirty cards in five
+ * groups (the brief: "the items as cards grouped as they are now"), about 180 words of names and titles alone, and
+ * the covers' row, the steps and the occasions add about 170. This holds it where the round left it (592 at
+ * 1440×900, 643 in Spanish) so it cannot grow back towards the 3,040 it had; what would bring it to 300 is the
+ * owner's to choose (fewer idea cards shown, or the covers' row folded), docs/marketing/growth-build/reports/view-fix-4.md.
+ */
+const HUB_WORDS = 760;
 
 /** The owner's list of screens: phones, tablets, laptops, a wide desk, a phone on its side, a short laptop. */
 const SIZES: [number, number][] = [
@@ -78,7 +91,7 @@ async function swipeThrough(page: Page) {
 }
 
 for (const prefix of ["", "/es"]) {
-  for (const path of HERO_PAGES) {
+  for (const path of [...HERO_PAGES, ...PERSON_PAGES]) {
     test(`${prefix}${path}: within 300 words, the art and a gift in the first view, nothing under words`, async ({ page }) => {
       for (const [width, height] of [[1440, 900], [375, 812]] as const) {
         await page.setViewportSize({ width, height });
@@ -124,7 +137,8 @@ for (const prefix of ["", "/es"]) {
         const m = await measure(page);
         expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
         expect(m.overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
-        expect(m.count, `${width}: words under the gallery`).toBeLessThanOrEqual(300);
+        // About 200 under the cards with every row closed (fix round 4); the occasion's own paragraph above this part aside.
+        expect(m.count, `${width}: words under the gallery`).toBeLessThanOrEqual(220);
         expect(m.count, `${width}: words under the gallery`).toBeGreaterThan(80);
         expect(m.hand, `${width}`).toBe(0);
         expect(m.smallest, `${width}`).toBeGreaterThanOrEqual(14);
@@ -132,7 +146,9 @@ for (const prefix of ["", "/es"]) {
         const [set] = await cardSets(page);
         expect(set.cards.length).toBeGreaterThanOrEqual(8);
         await page.locator("[data-cards]").scrollIntoViewIfNeeded();
-        for (const card of (await cardSets(page))[0].cards.slice(0, width < 640 ? 1 : 3)) expect(card.picture, `${width}: “${card.title}” has no picture`).toBe(true);
+        // The compact cards (fix round 4, pages-C3): the gallery right above shows these gifts' posters, so no card has a picture.
+        await expect(page.locator("[data-cards] [data-card] img")).toHaveCount(0);
+        for (const card of (await cardSets(page))[0].cards) expect(card.title.length, `${width}: a card with no title`).toBeGreaterThan(5);
       }
       // No paragraph of an idea is on show any more: under the gallery, no block of text runs past thirty words until something is opened.
       const longest = await page.evaluate(() => {
@@ -142,9 +158,32 @@ for (const prefix of ["", "/es"]) {
       expect(longest).toBeLessThanOrEqual(30);
     });
   }
+
+  test(`${prefix}/gifts: the hero, the ideas as cards in their groups, everything long closed, no flower under words`, async ({ page }) => {
+    test.slow();
+    for (const [width, height] of [[1440, 900], [375, 812]] as const) {
+      await page.setViewportSize({ width, height });
+      await page.goto(`${prefix}/gifts`);
+      await settle(page);
+      const m = await measure(page);
+      expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
+      expect(m.overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
+      expect(m.count, `${width}: words on the page (HUB_WORDS says why it is over 300)`).toBeLessThanOrEqual(HUB_WORDS);
+      expect(m.smallest, `${width}: a sentence under 14px`).toBeGreaterThanOrEqual(14);
+      expect(m.small, `${width}: too small for a thumb`).toEqual([]);
+      if (width >= 1024) await expect(page.locator("[data-flatlay=hero]")).toBeInViewport();
+      // Five groups of idea cards, thirty in all, each with its poster once swiped to.
+      const sets = await cardSets(page);
+      expect(sets.length, `${width}: groups of ideas`).toBe(5);
+      expect(sets.flatMap((set) => set.cards).length).toBe(30);
+      await swipeThrough(page);
+      await expect.poll(async () => (await cardSets(page)).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 30_000 }).toEqual([]);
+    }
+    await expect(page.locator("h1")).toHaveCount(1);
+  });
 }
 
-for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversary-website", "/occasions/mothers-day"]) {
+for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversary-website", "/occasions/mothers-day", "/gifts/for-boyfriend", "/es/gifts/for-mom", "/gifts"]) {
   for (const [width, height] of SIZES) {
     test(`${path} at ${width}×${height}: no sideways scroll, no flower under words, nothing too small to press`, async ({ page }) => {
       await page.setViewportSize({ width, height });
@@ -153,7 +192,7 @@ for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversa
       const m = await measure(page);
       expect(m.overflow, "the page scrolls sideways").toBeLessThanOrEqual(0);
       expect(m.overlaps, "a piece of the art lies under words").toEqual([]);
-      expect(m.count).toBeLessThanOrEqual(300);
+      expect(m.count).toBeLessThanOrEqual(path === "/gifts" ? HUB_WORDS : 300);
       expect(m.smallest).toBeGreaterThanOrEqual(14);
       expect(m.smallestLabel).toBeGreaterThanOrEqual(12);
       expect(m.small).toEqual([]);
@@ -313,7 +352,8 @@ test("an occasion's cards show a sample in handwriting under its field's name, w
   await scratch.locator("summary").first().click();
   await expect(scratch.locator("[data-line]")).toHaveText("We got the house");
   // Most of the twelve cards have a line to borrow, and no card opens onto a slogan or two words.
-  const lines = await page.locator("[data-cards] [data-card]").evaluateAll((cards) => cards.map((card) => ({ line: card.querySelector("details > div > p")?.textContent ?? "", hand: card.querySelector("[data-line]")?.textContent ?? "" })));
+  // The card's one line (a compact card opens on the gift's name first, then this line: fix round 4).
+  const lines = await page.locator("[data-cards] [data-card]").evaluateAll((cards) => cards.map((card) => ({ line: card.querySelector("[data-card-brief]")?.textContent ?? "", hand: card.querySelector("[data-line]")?.textContent ?? "" })));
   expect(lines).toHaveLength(12);
   expect(lines.filter((card) => card.hand).length).toBeGreaterThanOrEqual(10);
   for (const card of lines) expect(card.line.trim().split(/\s+/).length, card.line).toBeGreaterThanOrEqual(6);
@@ -433,7 +473,8 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
   const header = await page.locator("header").first().evaluate((el) => el.getBoundingClientRect().bottom);
   expect(top).toBeGreaterThan(header);
   // It stops with its section: at the questions below, it has scrolled away with the cards.
-  await page.locator("#guide-christmas").scrollIntoViewIfNeeded();
+  // The compact cards (fix round 4) leave the section short, so the questions are brought to the top of the screen.
+  await page.locator("#guide-christmas").evaluate((el) => el.scrollIntoView({ block: "start" }));
   await page.evaluate(() => window.scrollBy(0, 300));
   await expect(heading).not.toBeInViewport();
   // No flower under the words where the heading now rests, at the top and part-way down.
@@ -519,7 +560,8 @@ test("on a desk the heading stays beside a long list of cards, and a row of card
 test("a card's picture is asked for at the size it is drawn, and its links are named by what they say", async ({ page }) => {
   // Four pages under a dev server: on a busy machine this ran past 30s (23 Nov 2026).
   test.slow();
-  for (const [width, path] of [[1024, "/occasions/christmas"], [1280, "/gifts/last-minute"], [768, "/digital-cards"], [1440, "/digital-cards"]] as const) {
+  // (An occasion's cards have no picture since fix round 4: a page by person stands in for /occasions/christmas at 1024.)
+  for (const [width, path] of [[1024, "/gifts/for-boyfriend"], [1280, "/gifts/last-minute"], [768, "/digital-cards"], [1440, "/digital-cards"]] as const) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(path);
     const pictures = await page.locator("[data-cards]").first().locator("[data-card] summary img").evaluateAll((imgs) => imgs.map((img) => ({ drawn: img.getBoundingClientRect().width, sizes: (img as HTMLImageElement).sizes })));
@@ -544,7 +586,8 @@ test("a card's picture is asked for at the size it is drawn, and its links are n
       expect(watch.name.startsWith(`${label}: `), `${path}: “${watch.name}”`).toBe(true);
     }
     // The picture's alt says what the poster shows; the gift's name is the next thing read, and is not said twice.
-    const cards = await page.locator("[data-cards] [data-card]").evaluateAll((els) => els.map((el) => ({ alt: el.querySelector("img")?.getAttribute("alt") ?? "", name: (el.querySelector("summary > span:nth-of-type(2)")?.textContent ?? "").split("·")[0].trim() })));
+    // Cards with a picture: an occasion's compact cards have none (fix round 4).
+    const cards = await page.locator("[data-cards] [data-card]:has(img)").evaluateAll((els) => els.map((el) => ({ alt: el.querySelector("img")?.getAttribute("alt") ?? "", name: (el.querySelector("summary > span:nth-of-type(2)")?.textContent ?? "").split("·")[0].trim() })));
     for (const card of cards) {
       expect(card.alt.length, path).toBeGreaterThan(8);
       expect(card.alt.startsWith(`${card.name}:`), `${path}: “${card.alt}”`).toBe(false);
