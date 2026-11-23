@@ -1688,7 +1688,7 @@
   },
   "cities": {
     "meta": {
-      "title": "Ideas para una cita en {city}, {places, plural, =0 {en un mapa} one {con # sitio real} other {con # sitios reales}}",
+      "title": "{ideas} ideas para una cita en {city}, {places, plural, =0 {en un mapa} one {con # sitio real} other {con # sitios reales}}",
       "description": "{ideas} ideas para una cita pensadas para cómo es {city} de verdad, con cafeterías, parques y museos reales cerca del centro en un mapa gratis. Sin cuenta."
     },
     "eyebrow": "Ideas para una cita por ciudad",
