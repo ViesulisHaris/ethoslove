@@ -613,7 +613,8 @@ export function PublishSheet({
                       ? t("signInBlurbFreeReply")
                       : t("signInBlurb")}
                 </p>
-                <AuthForm mode="login" next={next} compact />
+                {/* The card has its own title and blurb: no second "Welcome back" to a first-time guest (walk-make-8). */}
+                <AuthForm mode="login" next={next} compact bare />
               </section>
             ) : null}
 
@@ -678,7 +679,9 @@ export function PublishSheet({
                 "mt-8 h-12 w-full rounded-full text-base",
                 ((decision && !decision.ok && decision.reason === "payment_required") ||
                   (!state.authed && guestCanPay && !showSignIn) ||
-                  (!state.authed && inApp)) &&
+                  (!state.authed && inApp) ||
+                  // Under the sign-in card a disabled "Publish now" does nothing (walk-make-8).
+                  (!state.authed && supabaseConfigured)) &&
                   "hidden",
               )}
               disabled={

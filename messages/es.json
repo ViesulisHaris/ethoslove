@@ -230,7 +230,10 @@
     "verify": "Verificar",
     "codeHint": "Útil si el enlace se abre en otro dispositivo.",
     "codeWrong": "Ese código no coincide. Mira el correo más reciente.",
-    "useAnotherEmail": "Usar otro correo"
+    "useAnotherEmail": "Usar otro correo",
+    "emailNoDot": "A esa dirección le falta el final, como .com",
+    "emailDidYouMean": "¿Quisiste decir <take>{suggestion}</take>?",
+    "emailKeepTyped": "No, envíalo a {email}"
   },
   "dashboard": {
     "title": "Mis regalos",

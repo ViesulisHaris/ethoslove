@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SUPABASE_CONFIGURED } from "@/lib/supabase/configured";
+import { checkEmail } from "@/lib/auth/email-check";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +23,26 @@ function safeNext(value: string | null): string {
   return value;
 }
 
-export function AuthForm({ mode, next: nextOverride, compact = false, email: knownEmail = "" }: { mode: "login" | "signup"; next?: string; compact?: boolean; email?: string }) {
+/** Remembers where to go after the callback (a short cookie) and returns the clean callback address. */
+function callbackFor(next: string): string {
+  document.cookie = `auth_next=${encodeURIComponent(next)}; Path=/; Max-Age=600; SameSite=Lax`;
+  return `${window.location.origin}/auth/callback`;
+}
+
+/** `bare` (with compact): no title or blurb of its own, for a card that already has both (the publish sheet). */
+export function AuthForm({
+  mode,
+  next: nextOverride,
+  compact = false,
+  bare = false,
+  email: knownEmail = "",
+}: {
+  mode: "login" | "signup";
+  next?: string;
+  compact?: boolean;
+  bare?: boolean;
+  email?: string;
+}) {
   const t = useTranslations("auth");
   const locale = useLocale();
   const search = useSearchParams();
@@ -33,6 +53,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false, email: kno
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [code, setCode] = useState("");
   const [codeState, setCodeState] = useState<"idle" | "checking" | "wrong">("idle");
+  const [emailNote, setEmailNote] = useState<null | { kind: "noDot" } | { kind: "suggest"; typed: string; suggestion: string }>(null);
   const router = useRouter();
 
   /** The same email carries a 6-digit code; typing it here works even if the link opens elsewhere. */
@@ -56,22 +77,33 @@ export function AuthForm({ mode, next: nextOverride, compact = false, email: kno
    * `.../auth/callback?next=/dashboard` when only `.../auth/callback` is listed,
    * falls back to Site URL (production), and PKCE exchange fails.
    */
-  const redirectTo = () => {
-    document.cookie = `auth_next=${encodeURIComponent(next)}; Path=/; Max-Age=600; SameSite=Lax`;
-    return `${window.location.origin}/auth/callback`;
-  };
+  const redirectTo = () => callbackFor(next);
 
-  const sendMagicLink = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!SUPABASE_CONFIGURED || !email.trim()) return;
+  /** Sends the link to `to`; `asTyped` skips the slip check, for an address the person chose to keep. */
+  const sendTo = async (to: string, asTyped = false) => {
+    if (!SUPABASE_CONFIGURED || !to.trim()) return;
+    const check = asTyped ? ({ kind: "ok" } as const) : checkEmail(to);
+    if (check.kind !== "ok") return setEmailNote(check.kind === "noDot" ? { kind: "noDot" } : { kind: "suggest", typed: to, suggestion: check.suggestion });
+    setEmailNote(null);
     setStatus("sending");
     const supabase = await client();
     if (!supabase) return setStatus("error");
     const { error } = await supabase.auth.signInWithOtp({
-      email,
+      email: to,
       options: { emailRedirectTo: redirectTo(), shouldCreateUser: true, data: { locale } },
     });
     setStatus(error ? "error" : "sent");
+  };
+
+  const sendMagicLink = (e: FormEvent) => {
+    e.preventDefault();
+    // Pressed again on the very address we questioned: the person has seen the suggestion and keeps it.
+    void sendTo(email, emailNote?.kind === "suggest" && emailNote.typed === email);
+  };
+
+  const takeSuggestion = (suggestion: string) => {
+    setEmail(suggestion);
+    void sendTo(suggestion, true);
   };
 
   const oauth = async (provider: "apple" | "google") => {
@@ -84,14 +116,16 @@ export function AuthForm({ mode, next: nextOverride, compact = false, email: kno
     <div className={compact ? "w-full" : "w-full max-w-md rounded-3xl border border-border bg-card p-7 shadow-lift sm:p-9"}>
       {/* Compact, the form sits inside another page (the publish sheet, /redeem, /for-two/join) under
           that page's own h1 and a "Sign in to…" h2, so its title is a step below rather than a second h1. */}
-      {compact ? (
+      {compact && bare ? null : compact ? (
         <h3 className="font-display text-xl">{mode === "login" ? t("loginTitle") : t("signupTitle")}</h3>
       ) : (
         <h1 className="display-md">{mode === "login" ? t("loginTitle") : t("signupTitle")}</h1>
       )}
-      <p className="mt-2 text-sm text-muted-foreground">
-        {mode === "login" ? t("loginSubtitle") : t("signupSubtitle")}
-      </p>
+      {compact && bare ? null : (
+        <p className="mt-2 text-sm text-muted-foreground">
+          {mode === "login" ? t("loginSubtitle") : t("signupSubtitle")}
+        </p>
+      )}
 
       {!SUPABASE_CONFIGURED ? (
         <div className="mt-6 rounded-xl border border-dashed border-gold/60 bg-gold/5 p-4 text-sm">
@@ -145,7 +179,10 @@ export function AuthForm({ mode, next: nextOverride, compact = false, email: kno
                   inputMode="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailNote) setEmailNote(null);
+                  }}
                   placeholder={t("emailPlaceholder")}
                   className="h-11"
                 />
@@ -184,12 +221,38 @@ export function AuthForm({ mode, next: nextOverride, compact = false, email: kno
                   inputMode="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailNote) setEmailNote(null);
+                  }}
+                  aria-invalid={emailNote?.kind === "noDot" || undefined}
+                  aria-describedby={emailNote ? "email-note" : undefined}
                   placeholder={t("emailPlaceholder")}
                   className="h-11"
                 />
               </div>
             )}
+            {emailNote?.kind === "noDot" ? (
+              <p id="email-note" role="alert" data-email-note="noDot" className="-mt-2 text-sm text-destructive">
+                {t("emailNoDot")}
+              </p>
+            ) : emailNote?.kind === "suggest" ? (
+              <div id="email-note" role="alert" data-email-note="suggest" className="-mt-1 rounded-xl bg-accent px-4 py-3 text-sm">
+                <p>
+                  {t.rich("emailDidYouMean", {
+                    suggestion: emailNote.suggestion,
+                    take: (chunks) => (
+                      <button type="button" data-take-suggestion onClick={() => takeSuggestion(emailNote.suggestion)} className="font-medium text-coral underline underline-offset-4">
+                        {chunks}
+                      </button>
+                    ),
+                  })}
+                </p>
+                <button type="button" onClick={() => void sendTo(emailNote.typed, true)} className="mt-1 py-1 text-xs text-muted-foreground underline underline-offset-4">
+                  {t("emailKeepTyped", { email: emailNote.typed })}
+                </button>
+              </div>
+            ) : null}
             <Button type="submit" className="h-11 rounded-full" disabled={status === "sending" || (callbackError && !email.trim())}>
               <Mail className="size-4" />
               <span>{status === "sending" ? t("sending") : t("sendLink")}</span>

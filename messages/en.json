@@ -230,7 +230,10 @@
     "verify": "Verify",
     "codeHint": "Handy when the link opens on another device.",
     "codeWrong": "That code didn't match. Check the newest email.",
-    "useAnotherEmail": "Use a different email"
+    "useAnotherEmail": "Use a different email",
+    "emailNoDot": "That address is missing its ending, like .com",
+    "emailDidYouMean": "Did you mean <take>{suggestion}</take>?",
+    "emailKeepTyped": "No, send it to {email}"
   },
   "dashboard": {
     "title": "My gifts",
