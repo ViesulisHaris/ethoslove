@@ -1141,7 +1141,7 @@ test.describe("the reference template and the editor", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 
     await page.goto("/es/demo/group-reference?cover=classic");
-    await expect(page.getByTestId("report-note")).toHaveText("Denunciar una nota");
+    await expect(page.getByTestId("report-note")).toHaveText("Avisar de una nota");
   });
 
   test("the same template with no notes from a group has no Report link, like every gift before it", async ({ page, isMobile }) => {

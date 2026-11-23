@@ -166,7 +166,7 @@ describe("legal documents and group cards", () => {
     // The three links, by the words the screens use.
     expect(section(on.terms.en, 13)).toContain("“Report a note”");
     expect(section(on.terms.en, 13)).toContain("“Report this page”");
-    expect(section(on.terms.es, 13)).toContain("«Denunciar una nota»");
+    expect(section(on.terms.es, 13)).toContain("«Avisar de una nota»");
     expect(section(on.terms.es, 13)).toContain("«Denunciar esta página»");
   });
 

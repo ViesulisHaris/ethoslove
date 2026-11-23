@@ -261,7 +261,8 @@ describe("every route sends what its client components read", () => {
     }
   });
 
-  it("covers every namespace a client component reads", () => {
+  // It reads every client component in the repo: on a machine busy with a dev server beside it, more than the default 5 s.
+  it("covers every namespace a client component reads", { timeout: 30_000 }, () => {
     const missing: string[] = [];
     for (const file of files) {
       const sent: string[] = [];

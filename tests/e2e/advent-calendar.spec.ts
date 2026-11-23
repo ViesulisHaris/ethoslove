@@ -807,6 +807,29 @@ test("the editor shows the house with two or three doors already open, and nothi
   expect(w.problems).toEqual([]);
 });
 
+test("with group cards on, the editor talks to a group: the letter and the surprise under it say nothing of a couple, in both languages", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop-chrome", "the editor's words are the same on every screen");
+  test.setTimeout(120_000);
+  const couple = {
+    en: /only the two of you|Plan a date|trips for two|A surprise inside|Add your date plan|Date night/,
+    es: /solo vosotros dos|planea una cita|Planear una cita|viajes en pareja|Una sorpresa dentro|plan de cita|Noche de cita/i,
+  };
+  for (const locale of ["en", "es"] as const) {
+    await page.goto(`${locale === "en" ? "" : "/es"}/create/${SLUG}?group=on`);
+    await expect(page.getByTestId("group-section")).toBeVisible({ timeout: 60_000 });
+    const surprise = page.getByTestId("unwrap-section");
+    await expect(surprise).toContainText(locale === "en" ? "A present from all of you" : "Un regalo de parte de todos");
+    await expect(surprise).toContainText(locale === "en" ? "Open the map" : "Abrir el mapa");
+    await expect(surprise).not.toContainText(couple[locale]);
+    await expect(page.getByPlaceholder(locale === "en" ? /why you asked everyone to write/ : /por qué pediste a todos/)).toBeVisible();
+    await expect(page.getByPlaceholder(couple[locale])).toHaveCount(0);
+  }
+  // Off, the same template's editor is an ordinary one, and so is every other template's with it on.
+  await page.goto(`/create/the-letter?group=on`);
+  await expect(page.getByTestId("unwrap-section")).toContainText("A surprise inside", { timeout: 60_000 });
+  await expect(page.getByTestId("unwrap-section")).toContainText("Plan a date");
+});
+
 /* ------------------------------------------------------------------------------------------------
  * Three, eight and twenty-four notes; the longest note and name; with photos and without; each look.
  * ---------------------------------------------------------------------------------------------- */

@@ -160,7 +160,51 @@ type Geometry = {
   scale: number;
   /** How much of the opening's left its own open leaf stands in front of. */
   covered: number;
+  /**
+   * An open door once its swing is over: the niche and its leaf are one window onto the open picture, `whole`, whose outline
+   * (`wholeClip`) is the two shapes together, and `nicheClip` the niche alone in that same box, for while the leaf swings.
+   * `behind` is how far into the niche, as a share of its width, the leaf reaches: what stands in the niche is cut there,
+   * where the leaf hid it. Null where the two shapes cannot be drawn as one (the leaf then keeps a window of its own).
+   */
+  one: { whole: Rect; wholeClip: string; nicheClip: string; behind: number } | null;
 };
+
+type Xy = readonly [number, number];
+const inRect = (r: Rect, [x, y]: Xy) => x > r.x && x < r.x + r.w && y > r.y && y < r.y + r.h;
+/** Twice the signed area of an outline: its sign says which way round it goes. */
+const turn = (pts: readonly Xy[]) =>
+  pts.reduce((sum, [x, y], i) => {
+    const [nx, ny] = pts[(i + 1) % pts.length];
+    return sum + x * ny - nx * y;
+  }, 0);
+
+/**
+ * A niche and its open leaf as one outline. The two are walked one after the other, the same way round, joined by a bridge
+ * walked there and back between the niche's top-left corner and a corner of the leaf that stands inside the niche: under
+ * the nonzero rule whatever either covers is inside, and the bridge, inside the niche, adds nothing. (Every door's leaf
+ * stands over the left of its own opening, so it has such a corner; a door whose leaf had none would keep two windows.)
+ */
+export function oneOutline(inside: Rect, leaf: readonly Xy[]): { whole: Rect; points: Xy[] } | null {
+  if (leaf.length < 3) return null;
+  const niche: Xy[] = [
+    [inside.x, inside.y],
+    [inside.x + inside.w, inside.y],
+    [inside.x + inside.w, inside.y + inside.h],
+    [inside.x, inside.y + inside.h],
+  ];
+  const mid: Xy = [inside.x + inside.w / 2, inside.y + inside.h / 2];
+  const own = Math.sign(turn(leaf)) === Math.sign(turn(niche)) ? [...leaf] : [...leaf].reverse();
+  const at = own
+    .map((p, i) => ({ i, d: Math.hypot(p[0] - mid[0], p[1] - mid[1]) }))
+    .filter(({ i }) => inRect(inside, own[i]))
+    .sort((a, b) => a.d - b.d)[0];
+  if (!at) return null;
+  const points: Xy[] = [...niche, niche[0], ...own.slice(at.i), ...own.slice(0, at.i), own[at.i]];
+  const xs = points.map((p) => p[0]);
+  const ys = points.map((p) => p[1]);
+  return { whole: { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) }, points };
+}
+const clipOf = (box: Rect, points: readonly Xy[], rule = "") => `polygon(${rule}${points.map(([x, y]) => `${pct((x - box.x) / box.w)} ${pct((y - box.y) / box.h)}`).join(", ")})`;
 
 const GEOMETRY: Record<number, Geometry> = Object.fromEntries(
   Array.from({ length: DOOR_COUNT }, (_, i) => {
@@ -185,7 +229,21 @@ const GEOMETRY: Record<number, Geometry> = Object.fromEntries(
     const leaf = grown.length ? { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) } : open;
     const leafClip = grown.length ? `polygon(${grown.map(([x, y]) => `${pct((x - leaf.x) / leaf.w)} ${pct((y - leaf.y) / leaf.h)}`).join(", ")})` : "none";
     const covered = Math.max(0, Math.min(open.w * 0.4, Math.max(...outline.map((p) => p[0]), open.x) - open.x));
-    return [n, { open, cell, inside, leaf, leafClip, floor: A[`d${n}C`], scale: (open.w / (A.nicheBR.x - A.nicheTL.x)) * DEPTH, covered }];
+    const both = oneOutline(inside, grown);
+    const one = both
+      ? {
+          whole: both.whole,
+          wholeClip: clipOf(both.whole, both.points, "nonzero, "),
+          nicheClip: clipOf(both.whole, [
+            [inside.x, inside.y],
+            [inside.x + inside.w, inside.y],
+            [inside.x + inside.w, inside.y + inside.h],
+            [inside.x, inside.y + inside.h],
+          ]),
+          behind: Math.max(0, Math.min(1, (Math.max(...xs) - inside.x) / inside.w)),
+        }
+      : null;
+    return [n, { open, cell, inside, leaf, leafClip, floor: A[`d${n}C`], scale: (open.w / (A.nicheBR.x - A.nicheTL.x)) * DEPTH, covered, one }];
   }),
 );
 
@@ -679,15 +737,14 @@ function Picture({ lookId, open, box, mirrored }: { lookId: LookId; open: boolea
 }
 
 /**
- * What is behind an open door: its lit niche out of the open picture, and whatever stands in it. A memo of its own: a
- * house with every door open holds forty-eight windows onto the whole picture, and a door opened, a note read or the foot's
- * line nudged drew every one of them again, on the frame its own leaf starts to swing in.
+ * What is behind an open door: its lit niche out of the open picture, its open leaf once it has swung, and whatever stands
+ * in the niche. A memo of its own: a door opened, a note read or the foot's line nudged drew every open door again, on the
+ * frame its own leaf starts to swing in.
  */
-const Niche = memo(function Niche({ n, lookId, sweet, name, read, out, fresh, cap, onShortFit }: { n: number; lookId: LookId; sweet?: Sweet; /** The name of whoever wrote the note behind it. */ name?: string; read: boolean; /** Its note is out, being read. */ out: boolean; fresh: boolean; cap?: number; onShortFit: (door: number, size: number | null) => void }) {
+const Niche = memo(function Niche({ n, lookId, sweet, name, read, out, fresh, cap, onShortFit }: { n: number; lookId: LookId; sweet?: Sweet; /** The name of whoever wrote the note behind it. */ name?: string; read: boolean; /** Its note is out, being read. */ out: boolean; /** Its door is swinging open now. */ fresh: boolean; cap?: number; onShortFit: (door: number, size: number | null) => void }) {
   const g = GEOMETRY[n];
-  return (
-    <div aria-hidden="true" className="pointer-events-none overflow-hidden" style={laid(g.inside)} data-niche={n} data-holds={sweet ?? (read ? "tag" : "envelope")}>
-      <Picture lookId={lookId} open box={g.inside} />
+  const held = (
+    <>
       {sweet ? (
         <img src={`${ART_BASE}${sweet}.webp`} alt="" draggable={false} className={fresh ? "ac-pop" : undefined} style={{ ...stood(g, sweet), transformOrigin: "50% 100%" }} />
       ) : out ? null : read && name !== undefined ? (
@@ -698,11 +755,35 @@ const Niche = memo(function Niche({ n, lookId, sweet, name, read, out, fresh, ca
       ) : (
         <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} style={stood(g, "envelope")} />
       )}
+    </>
+  );
+  const holds = sweet ?? (read ? "tag" : "envelope");
+  if (!g.one) {
+    return (
+      <div aria-hidden="true" className="pointer-events-none overflow-hidden" style={laid(g.inside)} data-niche={n} data-holds={holds}>
+        <Picture lookId={lookId} open box={g.inside} />
+        {held}
+      </div>
+    );
+  }
+  // One window onto the open picture for the niche and, once it has swung, its leaf: a house with every door open held two
+  // of the whole picture a door, and frames dropped on a slow phone. While the door swings the window is the niche alone,
+  // and the leaf fades in over it in a window of its own (Leaf); at rest the leaf is this window's, and what stands in the
+  // niche is cut where the leaf stands in front of it, as the leaf's own window hid it.
+  const { whole, wholeClip, nicheClip, behind } = g.one;
+  const clip = fresh ? nicheClip : wholeClip;
+  const cut = fresh ? undefined : `inset(0 0 0 ${pct(behind)})`;
+  return (
+    <div aria-hidden="true" className="pointer-events-none" style={{ ...laid(whole), clipPath: clip, WebkitClipPath: clip }} data-niche={n} data-holds={holds} data-one={fresh ? undefined : ""}>
+      <Picture lookId={lookId} open box={whole} />
+      <div className="overflow-hidden" style={{ ...within(whole, g.inside), clipPath: cut, WebkitClipPath: cut }}>
+        {held}
+      </div>
     </div>
   );
 });
 
-/** An open door's leaf in the open picture, standing towards the lens. */
+/** An open door's leaf in the open picture, standing towards the lens: drawn by itself only while it swings, or where it cannot be drawn with its niche (Niche). */
 const Leaf = memo(function Leaf({ n, lookId, settling }: { n: number; lookId: LookId; settling: boolean }) {
   const g = GEOMETRY[n];
   return (
@@ -917,7 +998,11 @@ function Scene({ lookId, s, title, from, to, notes, doors, opened, readDoors, in
         })}
 
         {/* each open door's leaf, standing out of the picture towards the lens: over its neighbours, as it is in the room */}
-        {opened.map((n) => (GEOMETRY[n] ? <Leaf key={n} n={n} lookId={lookId} settling={!inert && !reduce && swinging.includes(n)} /> : null))}
+        {/* (at rest, a door's leaf is drawn in its niche's own window: only a swinging one has a window of its own) */}
+        {opened.map((n) => {
+          const settling = !inert && !reduce && swinging.includes(n);
+          return GEOMETRY[n] && (settling || !GEOMETRY[n].one) ? <Leaf key={n} n={n} lookId={lookId} settling={settling} /> : null;
+        })}
 
         {/* a door on its way open: the shut picture's own door, turned on its left edge as the lens would see it turn, gone as the open leaf comes in under it */}
         {swinging.length && !inert ? (

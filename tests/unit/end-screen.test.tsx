@@ -74,7 +74,8 @@ describe("end screen on a group card", () => {
 
   it("speaks the gift's language", () => {
     const html = renderToStaticMarkup(<EndScreen data={{ ...card, locale: "es" } as GiftData} onMakeOne={() => {}} />);
-    expect(html).toContain("Denunciar una nota");
+    expect(html).toContain("Avisar de una nota");
+    expect(html).not.toContain("Denunciar");
     expect(decodeURIComponent(hrefOf(html))).toContain("El enlace de la tarjeta:");
   });
 

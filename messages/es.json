@@ -637,6 +637,16 @@
       "prompt": "¿Qué quieres que escriban?",
       "promptPlaceholder": "P. ej.: un recuerdo solo vuestro",
       "messagePlaceholder": "Empieza contando por qué pediste a todos que escribieran. Sus notas van en la tarjeta; esta carta es la tuya…",
+      "unwrap": {
+        "title": "Un regalo de parte de todos",
+        "blurb": "Una salida o un viaje, envuelto como un regalo bajo tu carta. Lo abre con un toque.",
+        "addPlan": "Añadir tu plan del mapa",
+        "addPlanHelp": "El plan del mapa, con una foto de cada parada.",
+        "noPlan": "Primero haz un plan en el mapa y luego vuelve aquí.",
+        "planLink": "Abrir el mapa",
+        "addTripHelp": "Uno de nuestros doce viajes, con cada parada pensada.",
+        "date": "Una salida"
+      },
       "optional": "Opcional",
       "create": "Crear el enlace",
       "creating": "Creando…",

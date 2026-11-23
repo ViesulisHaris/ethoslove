@@ -44,8 +44,9 @@ const REPORT = {
     body: ["The card's link:", "", "The name on the note:", "", "What is wrong with it, and why (for example: offensive, someone's personal details, a photo of me I didn't agree to, illegal):", "", "", "Your name:", "", "I believe the information in this report is accurate and complete."].join("\n"),
   },
   es: {
-    label: "Denunciar una nota",
-    subject: "Denunciar una nota de una tarjeta en grupo",
+    // ("Avisar de", not "Denunciar": a card from a family is not a police matter, and that is how "denunciar" reads at its foot)
+    label: "Avisar de una nota",
+    subject: "Aviso sobre una nota de una tarjeta en grupo",
     body: ["El enlace de la tarjeta:", "", "El nombre que firma la nota:", "", "Qué tiene de malo y por qué (por ejemplo: es ofensiva, incluye datos personales de alguien, es una foto mía que no autoricé, es ilegal):", "", "", "Tu nombre:", "", "Creo que la información de esta denuncia es exacta y completa."].join("\n"),
   },
 } as const satisfies Record<GiftLocale, Record<string, string>>;

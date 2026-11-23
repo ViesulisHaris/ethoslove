@@ -637,6 +637,16 @@
       "prompt": "What should they write?",
       "promptPlaceholder": "e.g. A memory only you two share",
       "messagePlaceholder": "Start with why you asked everyone to write. Their notes are in the card; this letter is yours…",
+      "unwrap": {
+        "title": "A present from all of you",
+        "blurb": "An evening out or a trip, wrapped as a present under your letter. They tap it to open it.",
+        "addPlan": "Add your plan from the map",
+        "addPlanHelp": "The plan from the map, with a photo of every stop.",
+        "noPlan": "Make a plan on the map first, then come back for it.",
+        "planLink": "Open the map",
+        "addTripHelp": "One of our twelve trips, every stop planned.",
+        "date": "Evening out"
+      },
       "optional": "Optional",
       "create": "Create the link",
       "creating": "Creating…",

@@ -23,7 +23,7 @@ import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
 import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
-import { COPY, LOW_COLUMN_MIN, LOW_LEAST, LOW_UNITS, NoteCard, TAP_PX, lowFit, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, lowColumn, lowTitlePx, settleMs, shortCapOf, TAG_SIZES } from "@/templates/advent-calendar/Template";
+import { COPY, LOW_COLUMN_MIN, LOW_LEAST, LOW_UNITS, NoteCard, TAP_PX, lowFit, oneOutline, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, lowColumn, lowTitlePx, settleMs, shortCapOf, TAG_SIZES } from "@/templates/advent-calendar/Template";
 import { keep, keptKey, recall } from "@/templates/advent-calendar/kept";
 import { soldAsGroup } from "@/lib/gift/free-tier";
 import { templateProductNode } from "@/lib/seo";
@@ -168,6 +168,36 @@ describe("the picture the doors are found in", () => {
       seen.add(`${places[String(n)].col},${places[String(n)].row}`);
     }
     expect(seen.size).toBe(DOOR_COUNT);
+  });
+
+  it("an open door at rest is one window onto the open picture, its niche and its leaf together: a whole house is twenty-four, not forty-eight", () => {
+    // Every door can be drawn so (its leaf has a corner inside its niche), and the outline holds both shapes: the niche's
+    // corners and every corner of its leaf are on it, and nothing reaches past the two of them.
+    const EDGE = 0.35;
+    for (let n = 1; n <= DOOR_COUNT; n++) {
+      const tl = anchors[`d${n}TL`];
+      const br = anchors[`d${n}BR`];
+      const inside = { x: tl.x, y: tl.y - EDGE, w: br.x - tl.x + EDGE, h: br.y - tl.y + 2 * EDGE };
+      const leaf = (LEAVES[String(n)] ?? []) as unknown as [number, number][];
+      const one = oneOutline(inside, leaf);
+      expect(one, `door ${n}`).not.toBeNull();
+      const key = ([x, y]: readonly [number, number]) => `${x.toFixed(4)},${y.toFixed(4)}`;
+      const on = new Set(one!.points.map(key));
+      for (const p of leaf) expect(on.has(key(p)), `door ${n}, leaf corner ${p}`).toBe(true);
+      expect(on.has(key([inside.x + inside.w, inside.y + inside.h]))).toBe(true);
+      const xs = [...leaf.map((p) => p[0]), inside.x, inside.x + inside.w];
+      expect(one!.whole.x).toBeCloseTo(Math.min(...xs), 6);
+      expect(one!.whole.x + one!.whole.w).toBeCloseTo(Math.max(...xs), 6);
+    }
+    // A leaf with no corner in its niche is left to a window of its own.
+    expect(oneOutline({ x: 0, y: 0, w: 10, h: 10 }, [[-5, 0], [-1, 0], [-1, 10], [-5, 10]])).toBeNull();
+    // The editor's still frame, two or three doors open and none swinging: one picture of the open room a door, and the
+    // star's lit window (only once every note is read).
+    const html = renderToStaticMarkup(<Template data={demoData.en} mode="preview" />);
+    const doors = html.match(/data-niche=/g)?.length ?? 0;
+    expect(doors).toBeGreaterThanOrEqual(2);
+    expect(html.match(/data-one=""/g)?.length).toBe(doors);
+    expect(html.match(/plate-evergreen-open-phone/g)?.length).toBe(doors + 1);
   });
 
   it("a door is at least 44 px to tap on a 360 px phone", () => {
