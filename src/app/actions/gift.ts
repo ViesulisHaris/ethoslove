@@ -4,7 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
-import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
+import { decidePublish, liveEditNeedsUnlock, mayUseGiftReady } from "@/lib/gift/publish";
 import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
 import { photosUnlock } from "@/lib/pricing/products";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
@@ -178,9 +178,11 @@ const publishInput = z.object({
   schedule: z.object({ unlockAt: z.iso.datetime({ offset: true }), timezone: z.string().min(1) }).optional(),
   // "Send one back" from a paid premium gift: the signed token that makes this reply free.
   replyToken: z.string().max(400).optional(),
+  // "It's already paid for": send this one with a gift ready from two more gifts (lib/commerce/gift-credits.ts).
+  useGift: z.boolean().optional(),
 });
 
-export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled" }>> {
+export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; usedGift?: true }>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
   const input = publishInput.safeParse(raw);
@@ -229,15 +231,31 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   // A note with photos: only looked up for a note that carries photos and has no unlock behind it.
   const photos = !unlocked && sellsNotePhotos(manifest) && data.freeTier === "note" && data.photos.length > 0 ? await holdsNotePhotos(ctx, gift.template_slug) : false;
-  const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos }, {
+  const rules = {
     removeWatermark: input.data.removeWatermark,
     schedule: Boolean(input.data.schedule),
     password: Boolean(input.data.password),
     freeReply: reply?.free === true,
     campaign,
-  });
+  };
+  let decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos }, rules);
   // A free gift from before the note, published again once the note is for everyone: no new photos without the unlock.
-  if (decision.ok && live && !unlocked && oldFreeGiftAddsPhotos(manifest, { stored: gift.free_tier, photos: gift.held_photos }, data.photos)) return { ok: false, error: "payment_required" };
+  const oldGiftNeedsUnlock = decision.ok && live && !unlocked && oldFreeGiftAddsPhotos(manifest, { stored: gift.free_tier, photos: gift.held_photos }, data.photos);
+  // "It's already paid for": a gift ready is used only where it is what makes this publish possible
+  // (mayUseGiftReady). Using it writes the template's unlock row, so from here on the template is the
+  // sender's own, exactly as after a purchase: the footer, the extras and the password all read it.
+  let usedGift = false;
+  const needsPayment = (!decision.ok && decision.reason === "payment_required") || oldGiftNeedsUnlock;
+  const asUnlocked = input.data.useGift && needsPayment ? decidePublish(manifest, data, { unlocked: true, photos }, rules) : null;
+  if (mayUseGiftReady({ useGift: input.data.useGift === true, unlocked: Boolean(unlocked), freeReply: reply?.free === true, campaign, needsPayment, asUnlocked }) && asUnlocked) {
+    // Checked before the gift is used, not only after: a publish refused for its files must not cost one.
+    if (!mediaUrlsAllowed(data) || !(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
+    if ((await spendGift(writer, ctx.user.id, gift.template_slug)) === "spent") {
+      decision = asUnlocked;
+      usedGift = true;
+    }
+  }
+  if (oldGiftNeedsUnlock && !usedGift) return { ok: false, error: "payment_required" };
   // A token that doesn't hold (used already, or not for this gift) says so, so the sheet can explain the price.
   if (!decision.ok) return { ok: false, error: decision.reason === "payment_required" && reply && !reply.free && reply.reason ? reply.reason : decision.reason, problems: decision.problems };
   // Media only from the sender's uploads, the demo and library files and Apple previews (lib/gift/media-urls.ts).
@@ -287,7 +305,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     gift.id,
     scheduled ? new Intl.DateTimeFormat(data.locale, { dateStyle: "long", timeStyle: "short", timeZone: input.data.schedule?.timezone }).format(new Date(input.data.schedule!.unlockAt)) : undefined,
   ).catch(() => {});
-  return { ok: true, data: { shortId: row?.short_id ?? "", status } };
+  return { ok: true, data: { shortId: row?.short_id ?? "", status, ...(usedGift ? { usedGift: true as const } : {}) } };
 }
 
 /** Owner-only signed URLs so the editor can preview assets already in Storage. */

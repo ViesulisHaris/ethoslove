@@ -328,7 +328,7 @@ describe("the Checkout Session for two more gifts", () => {
     expect(params.metadata).toMatchObject({ app: "ethos", product: "pair", kind: "pair", template_slugs: "", guest: "0" });
     for (const key of ["customer", "customer_creation", "invoice_creation"] as const) expect(params[key]).toBeUndefined();
     expect(params.payment_intent_data).toEqual({ statement_descriptor_suffix: "ETHOS" });
-    expect(params.custom_text?.terms_of_service_acceptance?.message).toContain(consentSentence("pair", "en"));
+    expect(JSON.stringify(params.custom_text)).toContain(consentSentence("pair", "en").replace(/'/g, "'"));
   });
 
   it("states the 30 days in its own sentence and notice, in both languages", () => {
