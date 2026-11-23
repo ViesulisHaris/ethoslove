@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
-import { ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { ChevronDown, Plus } from "lucide-react";
 import { MotionConfig } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -98,6 +98,13 @@ export function TemplateGallery({
     return [{ id: sort === "new" ? ("sortedNew" as const) : ("sortedAz" as const), items: sortTemplates(filtered, sort, locale, added, NEW_SLUGS) }];
   }, [filtered, occasion, sort, locale, added]);
   const occasions = useMemo(() => occasionRow(today), [today]);
+  // The first row on a desk: the six in season, and the open occasion in the last place where it is not one of them.
+  const lead = useMemo(() => {
+    const first = occasions.slice(0, FIRST_ROW);
+    if (occasion && !first.includes(occasion)) first[FIRST_ROW - 1] = occasion;
+    return first;
+  }, [occasions, occasion]);
+  const [more, setMore] = useState(false);
   // Cards count on from one shelf to the next, so only the very first row is loaded eagerly.
   const offsets = shelves.map((_, i) => shelves.slice(0, i).reduce((n, shelf) => n + shelf.items.length, 0));
   const fallback = tier === "free" ? alsoFree : [];
@@ -143,21 +150,37 @@ export function TemplateGallery({
         <noscript>
           <style>{"[data-gallery-card]{opacity:1!important;transform:none!important}"}</style>
         </noscript>
-        <div className="mb-10 flex flex-col gap-5 border-b border-line pb-8 xl:flex-row xl:items-center xl:gap-8">
+        <div className="mb-10 flex flex-col gap-5 border-b border-line pb-8 lg:mb-8 lg:pb-6 xl:flex-row xl:items-start xl:gap-8">
           {/*
            * The occasions, each a small rendered picture over its name, in season first. On a desk
-           * and a laptop all fourteen are in view, in two rows of seven: a row that ran off the edge
-           * could not be pulled along with a mouse, and six occasions were out of reach (the review
-           * of 22 Nov 2026). On a phone and a tablet it is one row to swipe, cut mid-tile at the
-           * edge so it reads as a row that goes on (its padding below is room for the open tile's shadow, which the row would otherwise cut off square).
+           * and a laptop it is one row, as the owner drew it: "All occasions", the six in season
+           * and a "More" tile that lays the other seven out in a second row under it. Fourteen
+           * tiles in two rows stood between the heading and the gifts, and at 1440 by 900 no gift
+           * was on the first screen (the user walk of 23 Nov 2026); one row that ran off the edge
+           * could not be pulled along with a mouse (the review of 22 Nov 2026). The open occasion
+           * is always in the first row, so the row looks the same on every occasion's page. On a
+           * phone and a tablet it is one row of all fourteen to swipe, cut mid-tile at the edge so
+           * it reads as a row that goes on (its padding below is room for the open tile's shadow,
+           * which the row would otherwise cut off square). The tiles stay in the catalogue's order
+           * in the page itself; `order` only says which row a tile stands in on a desk.
            */}
-          <nav ref={row} aria-label={t("occasions.title")} data-occasion-row className="scrollbar-none -mx-5 flex min-w-0 flex-1 snap-x gap-2.5 overflow-x-auto px-5 pt-1 pb-9 -mb-5 sm:mx-0 sm:px-1 lg:mb-0 lg:grid lg:snap-none lg:grid-cols-7 lg:gap-x-2.5 lg:gap-y-5 lg:overflow-visible lg:px-0 lg:pb-3">
-            <OccasionTile href="/templates" icon="all" label={t("templates.allOccasions")} active={!occasion} />
+          <nav ref={row} aria-label={t("occasions.title")} data-occasion-row className="scrollbar-none -mx-5 flex min-w-0 flex-1 snap-x gap-2.5 overflow-x-auto px-5 pt-1 pb-9 -mb-5 sm:mx-0 sm:px-1 lg:mb-0 lg:snap-none lg:flex-wrap lg:gap-x-2.5 lg:gap-y-5 lg:overflow-visible lg:px-0 lg:pb-3">
+            <OccasionTile href="/templates" icon="all" label={t("templates.allOccasions")} active={!occasion} row="first" />
             {occasions.map((o) => (
-              <OccasionTile key={o} href={`/occasions/${o}`} icon={o} label={t(`occasions.${o}`)} active={occasion === o} />
+              <OccasionTile key={o} href={`/occasions/${o}`} icon={o} label={t(`occasions.${o}`)} active={occasion === o} row={lead.includes(o) ? "first" : more ? "second" : "folded"} />
             ))}
+            {/* The folded tiles' pictures are not fetched while they are not drawn: a pointer or the keyboard arriving on "More" fetches them, so the second row opens with its pictures in it. */}
+            <button type="button" onClick={() => setMore((open) => !open)} onPointerEnter={() => warmIcons(occasions)} onFocus={() => warmIcons(occasions)} aria-expanded={more} data-occasion-more className={cn(TILE, TILE_IDLE, "hidden cursor-pointer lg:order-2 lg:flex")}>
+              <span aria-hidden="true" className="mb-1 grid size-9 place-items-center rounded-full bg-paper text-ink ring-1 ring-ink/10 transition-colors duration-300 group-hover:bg-forest group-hover:text-cream">
+                <Plus className={cn("size-4 transition-[rotate] duration-300 motion-reduce:transition-none", more && "rotate-45")} strokeWidth={1.8} />
+              </span>
+              <span>{t(more ? "templates.fewerOccasions" : "templates.moreOccasions")}</span>
+            </button>
+            {/* Ends the first row on a desk, so the second starts at the left edge whatever the tiles' widths. */}
+            {more ? <span aria-hidden="true" className="hidden lg:order-3 lg:block lg:h-0 lg:basis-full" /> : null}
           </nav>
-          <div className="flex shrink-0 items-center gap-2 xl:border-l xl:border-line xl:pl-8">
+          {/* As tall as a tile, so the filter stands beside the first row when the second is open. */}
+          <div className="flex shrink-0 items-center gap-2 xl:mt-1 xl:h-24 xl:border-l xl:border-line xl:pl-8">
             {TIER_FILTERS.map((v) => (
               <button key={v} type="button" onClick={() => chooseTier(v)} aria-pressed={tier === v} className={pillClass(tier === v)}>
                 {v === "all" ? t("templates.allTiers") : v === "free" ? t("common.free") : t("common.premium")}
@@ -187,7 +210,7 @@ export function TemplateGallery({
               <section key={shelf.id} aria-labelledby={occasion ? undefined : `shelf-${shelf.id}`} data-shelf={shelf.id}>
                 {occasion ? null : (
                   // On a phone the heading has the row to itself and "Sort by" stands under it: side by side, a longer heading ("Todas, empezando por la más nueva") was set in four lines of two words.
-                  <header className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+                  <header className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:mb-6">
                     <div className="min-w-0">
                       {/* A sorted list is every gift under one heading: its small label is how many, not the order said twice. */}
                       <p className="text-eyebrow text-ink-soft">{t(`templates.sections.${shelf.id}.eyebrow`, { count: shelf.items.length })}</p>
@@ -222,26 +245,47 @@ const GRID = "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl
  * scripts/art/holiday/occasion_icons.py), in its own colours. The open one is the dark tile, with
  * a dot under it. At least 44px each way for a thumb; the picture is decoration, the name is the link.
  */
-function OccasionTile({ href, icon, label, active }: { href: string; icon: Occasion | "all"; label: string; active: boolean }) {
+function OccasionTile({ href, icon, label, active, row }: { href: string; icon: Occasion | "all"; label: string; active: boolean; row: "first" | "second" | "folded" }) {
   return (
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
       data-occasion-tile={icon}
       className={cn(
-        "group relative flex h-[6.5rem] w-[6.75rem] shrink-0 snap-start flex-col items-center justify-end gap-1.5 rounded-[1.25rem] px-2 pb-3.5 text-center text-[0.8125rem] leading-tight font-medium transition-[background-color,box-shadow,translate] duration-300 lg:w-auto",
-        active
-          ? "bg-forest text-cream shadow-[0_18px_30px_-18px_rgba(42,15,31,0.8)] active:bg-forest-raised"
-          : "bg-card text-ink ring-1 ring-ink/[0.07] hover:-translate-y-0.5 hover:bg-card hover:shadow-[0_16px_28px_-20px_rgba(74,32,24,0.5)] active:translate-y-0 active:bg-paper-deep active:shadow-none motion-reduce:hover:translate-y-0",
+        TILE,
+        active ? "bg-forest text-cream shadow-[0_18px_30px_-18px_rgba(42,15,31,0.8)] active:bg-forest-raised" : TILE_IDLE,
+        // Which row it stands in on a desk; on a phone every tile is in the one row.
+        row === "first" ? "lg:order-1" : row === "second" ? "lg:order-4" : "lg:hidden",
       )}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- a 6 KB decoration at a fixed size: next/image would add a request and a srcset for nothing */}
-      <img src={`/art/occasions/${icon}.webp`} alt="" aria-hidden="true" width={96} height={96} loading="lazy" decoding="async" draggable={false} className="pointer-events-none size-12 object-contain drop-shadow-[0_5px_6px_rgba(74,32,24,0.28)] select-none" />
+      <img src={iconSrc(icon)} alt="" aria-hidden="true" width={96} height={96} loading="lazy" decoding="async" draggable={false} className="pointer-events-none size-12 object-contain drop-shadow-[0_5px_6px_rgba(74,32,24,0.28)] select-none lg:size-11" />
       <span className="line-clamp-2">{label}</span>
       {active ? <span aria-hidden="true" className="absolute -bottom-3 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-forest" /> : null}
     </Link>
   );
 }
+
+/**
+ * A tile's box. On a phone every tile is the same size, in a row to swipe. On a desk a tile is as
+ * wide as its name asks, within limits, as in the owner's drawing ("Valentine's Day" wider than
+ * "Wedding"), and may give a little where the row is tight: a long name then takes two lines.
+ */
+const TILE =
+  "group relative flex h-[6.5rem] w-[6.75rem] shrink-0 snap-start flex-col items-center justify-end gap-1.5 rounded-[1.25rem] px-2 pb-3.5 text-center text-[0.8125rem] leading-tight font-medium transition-[background-color,box-shadow,translate] duration-300 lg:h-24 lg:w-auto lg:max-w-[7.75rem] lg:min-w-[5.25rem] lg:shrink lg:px-3 lg:pb-3";
+const TILE_IDLE =
+  "bg-card text-ink ring-1 ring-ink/[0.07] hover:-translate-y-0.5 hover:bg-card hover:shadow-[0_16px_28px_-20px_rgba(74,32,24,0.5)] active:translate-y-0 active:bg-paper-deep active:shadow-none motion-reduce:hover:translate-y-0";
+
+/** Where an occasion's small picture is. */
+const iconSrc = (icon: Occasion | "all") => `/art/occasions/${icon}.webp`;
+
+/** Fetches the occasions' pictures ahead of their tiles being drawn (6 KB each; the browser keeps them). */
+function warmIcons(occasions: readonly Occasion[]) {
+  for (const o of occasions) new window.Image().src = iconSrc(o);
+}
+
+/** How many occasions stand beside "All occasions" in the first row on a desk, before "More". */
+const FIRST_ROW = 6;
 
 /** The small gold star beside the first heading. */
 function Sparkle() {

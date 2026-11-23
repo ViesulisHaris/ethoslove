@@ -89,38 +89,89 @@ test.describe("the template gallery", () => {
     await expect(page.locator("[data-shelf]")).toHaveCount(3);
   });
 
-  test("every occasion can be reached with a mouse: on a laptop and a desk all fourteen tiles are in view, in season first", async ({ page, isMobile }) => {
+  test("every occasion can be reached with a mouse: on a laptop and a desk the row is eight tiles, and More lays out the other seven, in season first", async ({ page, isMobile }) => {
     // The review of 22 Nov 2026: one row ran off the right edge with no scroll bar and no arrow, and a
-    // wheel or a drag could not move it, so six occasions had no link a mouse could press.
+    // wheel or a drag could not move it, so six occasions had no link a mouse could press. Then all
+    // fourteen stood in two rows, and at 1440 by 900 no gift was on the first screen (the user walk of
+    // 23 Nov 2026). Now: "All occasions", the six in season and "More", as the owner drew it.
     test.skip(isMobile, "a phone swipes the row");
-    for (const [width, height] of [
-      [1024, 768],
-      [1280, 800],
-      [1440, 900],
-      [1920, 1080],
-    ]) {
-      await page.setViewportSize({ width, height });
-      await page.goto("/templates");
-      const row = page.locator("[data-occasion-row]");
-      await expect(row.locator("[data-occasion-tile]")).toHaveCount(14);
-      const found = await row.evaluate((nav) => {
-        const box = nav.getBoundingClientRect();
-        return {
-          scrolls: nav.scrollWidth - nav.clientWidth,
-          outside: [...nav.querySelectorAll<HTMLElement>("[data-occasion-tile]")].filter((tile) => {
+    // Two languages at four widths, each page opened fresh.
+    test.setTimeout(300_000);
+    const look = (nav: Element) => {
+      const box = nav.getBoundingClientRect();
+      const shown = [...nav.querySelectorAll<HTMLElement>("[data-occasion-tile], [data-occasion-more]")].filter((tile) => tile.getBoundingClientRect().width > 0);
+      const pills = [...document.querySelectorAll("[aria-pressed]")].map((pill) => pill.getBoundingClientRect());
+      return {
+        shown: shown.map((tile) => tile.dataset.occasionTile ?? "more"),
+        scrolls: nav.scrollWidth - nav.clientWidth,
+        outside: shown
+          .filter((tile) => {
             const r = tile.getBoundingClientRect();
-            return r.left < box.left - 1 || r.right > box.right + 1 || r.top < box.top - 1 || r.bottom > box.bottom + 1 || r.right > window.innerWidth || r.left < 0;
-          }).map((tile) => tile.dataset.occasionTile),
-          // No name is cut: a tile's words fit the tile.
-          cut: [...nav.querySelectorAll<HTMLElement>("[data-occasion-tile] span")].filter((label) => label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1).map((label) => label.textContent),
-        };
-      });
-      expect(found.outside, `tiles outside the row at ${width}px`).toEqual([]);
-      expect(found.scrolls, `the row scrolls at ${width}px`).toBeLessThanOrEqual(0);
-      expect(found.cut, `names cut at ${width}px`).toEqual([]);
-    }
-    // In season first, by the day the page was rendered with (gallery-occasions.ts), then the catalogue's order.
+            return r.left < box.left - 1 || r.right > box.right + 1 || r.right > window.innerWidth || r.left < 0;
+          })
+          .map((tile) => tile.dataset.occasionTile ?? "more"),
+        // No tile stands under the price filter beside the row.
+        underFilter: shown
+          .filter((tile) => {
+            const r = tile.getBoundingClientRect();
+            return pills.some((p) => r.right > p.left - 4 && r.left < p.right && r.bottom > p.top && r.top < p.bottom);
+          })
+          .map((tile) => tile.dataset.occasionTile ?? "more"),
+        // No name is cut: a tile's words fit the tile.
+        cut: shown.flatMap((tile) => [...tile.querySelectorAll<HTMLElement>("span")]).filter((label) => label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1).map((label) => label.textContent),
+        // The rows the shown links stand in, by their tops (the open tile and a tile under the pointer are drawn a pixel or two off).
+        rows: shown.filter((tile) => tile.dataset.occasionTile).map((tile) => Math.round(tile.getBoundingClientRect().top / 20)).filter((top, i, all) => all.indexOf(top) === i).length,
+      };
+    };
+    for (const path of ["/templates", "/es/templates"])
+      for (const [width, height] of [
+        [1024, 768],
+        [1280, 800],
+        [1440, 900],
+        [1920, 1080],
+      ]) {
+        await page.setViewportSize({ width, height });
+        await page.goto(path);
+        const row = page.locator("[data-occasion-row]");
+        await expect(row.locator("[data-occasion-tile]")).toHaveCount(14);
+        const today = new Date().toISOString().slice(0, 10);
+        const closed = await row.evaluate(look);
+        expect(closed.shown, `${path} at ${width}px`).toEqual(["all", ...occasionRow(today).slice(0, 6), "more"]);
+        expect(closed.rows, `${path} at ${width}px: one row`).toBe(1);
+        expect(closed.outside, `${path}: tiles outside the row at ${width}px`).toEqual([]);
+        expect(closed.underFilter, `${path}: tiles under the filter at ${width}px`).toEqual([]);
+        expect(closed.scrolls, `${path}: the row scrolls at ${width}px`).toBeLessThanOrEqual(0);
+        expect(closed.cut, `${path}: names cut at ${width}px`).toEqual([]);
+        // What the row was folded for: on a 1440 by 900 screen the best sellers' pictures begin well inside the first screen.
+        if (width === 1440 && path === "/templates") expect((await page.locator("[data-gallery-card]").first().boundingBox())!.y).toBeLessThan(600);
+        const more = page.locator("[data-occasion-more]");
+        await expect(more).toHaveAttribute("aria-expanded", "false");
+        // Pressed again if the page had not yet come alive under the first press.
+        await expect(async () => {
+          if ((await more.getAttribute("aria-expanded")) !== "true") await more.click();
+          await expect(more).toHaveAttribute("aria-expanded", "true", { timeout: 1500 });
+        }).toPass({ timeout: 30_000 });
+        const open = await row.evaluate(look);
+        expect(open.shown.filter((name) => name !== "more").sort(), `${path} at ${width}px, opened`).toEqual(["all", ...occasionRow(today)].sort());
+        expect(open.rows, `${path} at ${width}px: two rows`).toBe(2);
+        expect(open.outside, `${path}: tiles outside the opened row at ${width}px`).toEqual([]);
+        expect(open.underFilter, `${path}: tiles under the filter at ${width}px, opened`).toEqual([]);
+        expect(open.cut, `${path}: names cut at ${width}px, opened`).toEqual([]);
+        await more.click();
+        await expect(more).toHaveAttribute("aria-expanded", "false");
+      }
+    // An occasion that is not one of the six in season still has its tile in the first row when its page is open.
     const today = new Date().toISOString().slice(0, 10);
+    const late = occasionRow(today)[12];
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/occasions/${late}`);
+    const openTile = page.locator(`[data-occasion-tile=${late}]`);
+    await expect(openTile).toHaveAttribute("aria-current", "page");
+    await expect(openTile).toBeVisible();
+    expect(Math.abs((await openTile.boundingBox())!.y - (await page.locator("[data-occasion-tile=all]").boundingBox())!.y)).toBeLessThan(4);
+    await expect(page.locator("[data-occasion-tile]:visible")).toHaveCount(7);
+    await page.goto("/templates");
+    // In season first, by the day the page was rendered with (gallery-occasions.ts), then the catalogue's order.
     const order = await page.locator("[data-occasion-tile]").evaluateAll((tiles) => tiles.map((tile) => (tile as HTMLElement).dataset.occasionTile));
     expect(order).toEqual(["all", ...occasionRow(today)]);
     // And an occasion's page has the row in the same order.
@@ -239,6 +290,9 @@ test.describe("the template gallery", () => {
     const tiles = page.locator("[data-occasion-tile]");
     await expect(tiles).toHaveCount(14);
     await expect(page.locator("[data-occasion-tile=all]")).toHaveAttribute("aria-current", "page");
+    // On a desk seven of them are folded under "More"; a phone has them all in the row.
+    const more = page.locator("[data-occasion-more]");
+    if (await more.isVisible()) await more.click();
     // Every tile's picture exists.
     const srcs = await tiles.locator("img").evaluateAll((imgs) => imgs.map((img) => img.getAttribute("src")!));
     for (const src of srcs) expect((await request.get(src)).ok(), src).toBe(true);

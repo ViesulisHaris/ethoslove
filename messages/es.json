@@ -851,6 +851,8 @@
       "az": "De la A a la Z"
     },
     "allOccasions": "Todas las ocasiones",
+    "moreOccasions": "Más",
+    "fewerOccasions": "Menos",
     "noMatches": "Ninguna plantilla coincide con ese filtro todavía. Prueba otra ocasión.",
     "demoReactionToast": "En un regalo real, esto le envía tu reacción al remitente. Llega en la fase 4.",
     "tryDemo": "Probar la demo en vivo",

@@ -54,18 +54,25 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
        */}
       <div className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <GalleryArt />
-        <header className="container-x pt-12 pb-9 sm:pt-16 sm:pb-11">
+        <header className="container-x pt-12 pb-9 sm:pt-16 sm:pb-11 lg:pt-14 lg:pb-8">
           <p className="text-eyebrow mb-5 text-ink-soft">{t("templates.title")}</p>
           <h1 className="display-xl max-w-3xl">{t("seo.templatesTitle")}</h1>
-          <p className="mt-5 max-w-xl font-display text-xl leading-snug text-ink-soft italic sm:text-2xl">{t("templates.subtitle")}</p>
-          {/* For someone facing every template at once: the finder narrows them to three (/gifts/finder). */}
-          <p className="mt-5 -mb-2.5 text-[15px] text-ink-soft">
-            {t("templates.finder.ask")}{" "}
-            <Link href={FINDER_PATH} className="group inline-flex min-h-11 items-center gap-1.5 font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-ink">
-              {t("templates.finder.link")}
-              <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </p>
+          {/*
+           * The italic line, and beside it on a desk the way to the finder, for someone facing every
+           * template at once (/gifts/finder narrows them to three). It had a row of its own, which was
+           * one of the things that kept the gifts under the first screen (the user walk of 23 Nov 2026).
+           */}
+          <div className="mt-5 flex flex-wrap items-baseline gap-x-10 gap-y-6">
+            {/* Wide enough for the Spanish line in one row on a desk: at 36rem it took two, and the row of occasions stood 35px lower there than in English. */}
+            <p className="max-w-2xl font-display text-xl leading-snug text-ink-soft italic sm:text-2xl">{t("templates.subtitle")}</p>
+            <p className="-my-2.5 text-[15px] text-ink-soft">
+              {t("templates.finder.ask")}{" "}
+              <Link href={FINDER_PATH} className="group inline-flex min-h-11 items-center gap-1.5 font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-ink">
+                {t("templates.finder.link")}
+                <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </p>
+          </div>
         </header>
         <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} initialSort={parseSort(typeof sort === "string" ? sort : null)} added={TEMPLATE_SLUGS} today={today} />
       </div>

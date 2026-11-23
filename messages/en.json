@@ -851,6 +851,8 @@
       "az": "A to Z"
     },
     "allOccasions": "All occasions",
+    "moreOccasions": "More",
+    "fewerOccasions": "Fewer",
     "noMatches": "No template matches that filter yet. Try another occasion.",
     "demoReactionToast": "In a real gift, this sends the sender your reaction. Coming in Phase 4.",
     "tryDemo": "Try the live demo",
