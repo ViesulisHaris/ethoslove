@@ -144,3 +144,14 @@ test("E8: in Spanish, the same in Spanish", async ({ page }) => {
   await page.goto("/es/games/draw");
   await expect(page.getByRole("heading", { name: /^40 palabras/ })).toBeVisible();
 });
+
+test("E9: the hub shows the three tiers once, with the pack's price", async ({ page }) => {
+  await page.goto("/games");
+  const tiers = page.locator("[data-tiers] li");
+  await expect(tiers).toHaveCount(3);
+  await expect(tiers.nth(0)).toContainText("Free");
+  await expect(tiers.nth(1)).toContainText(/A pack, [€$£]\d/);
+  await expect(tiers.nth(2).getByRole("link")).toHaveAttribute("href", "/pricing#for-two");
+  await page.goto("/games/rather");
+  await expect(page.locator("[data-tiers]")).toHaveCount(0);
+});
