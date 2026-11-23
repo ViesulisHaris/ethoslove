@@ -191,7 +191,8 @@ describe("the pay panel", () => {
     const html = pay();
     expect(html.match(/role="radio"/g)).toHaveLength(2);
     expect(html.match(/data-testid="pay-single"/g)).toHaveLength(1);
-    expect(html).toContain('data-testid="guarantee"');
+    // The refund guarantee lives in the terms, not under the pay button.
+    expect(html).not.toContain('data-testid="guarantee"');
   });
 
   it("opens with a real reaction instead, when the site has one it may show, and still within budget", () => {

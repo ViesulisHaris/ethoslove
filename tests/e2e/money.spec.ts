@@ -175,8 +175,7 @@ test.describe("the paywall in the publish sheet", () => {
     await panel.getByTestId("plan-everything").click();
     await expect(panel.getByTestId("bump")).toHaveCount(0);
     await expect(panel.getByTestId("pay-single")).toHaveText("Pay €24.99 and send");
-
-    await expect(panel.getByTestId("guarantee")).toHaveText("If it doesn't open on their phone, you get your money back.");
+    await expect(panel.getByTestId("guarantee")).toHaveCount(0);
   });
 
   test("has no checkout-reminder box anywhere near the pay button", async ({ page }) => {

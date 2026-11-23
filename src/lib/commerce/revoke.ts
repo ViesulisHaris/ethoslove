@@ -2,9 +2,10 @@ import { unique, type Db } from "./db";
 import { voidUnredeemedCards } from "./gift-cards";
 import { endMembershipNow, membershipOfPurchase, paysLatestPeriod } from "./memberships";
 import { regrantRunningPasses } from "./passes";
-import { regrantFromOtherPurchases, relockGifts, revokeUnlocksOf } from "./unlocks";
+import { foreverRowsOfPurchase, grantForever, regrantFromOtherPurchases, relockGifts, republishGifts, revokeUnlocksOf } from "./unlocks";
 
 type RevokedPurchase = { id: string; user_id: string | null; product: string; membership_id?: string | null };
+type RestoredPurchase = { id: string; user_id: string | null; product: string; status: string; template_slugs: string[] | null; kind: string | null };
 
 export type RevokeOptions = {
   /** A chargeback ends a membership whichever of its payments it is about; a refund, only the latest. */
@@ -47,6 +48,25 @@ export async function revokePurchase(db: Db, purchase: RevokedPurchase, now: num
   await regrantFromOtherPurchases(db, affected, purchase.id);
   await regrantRunningPasses(db, affected, now);
   for (const userId of affected) await relockGifts(db, userId);
+}
+
+/**
+ * A chargeback decided in our favour: the money came back, so what the dispute took returns by
+ * itself. The purchase is paid again, its rows are granted to the buyer once more, and gifts the
+ * dispute unpublished (drafts that had been published, now covered again) go back to live, or to
+ * scheduled when their opening time is still ahead. Ethos for Two and gift cards are left alone: the
+ * dispute ended the membership (and may have cancelled the subscription) or voided the cards, and
+ * the team restores those by hand. Returns what it did. Safe to run twice.
+ */
+export async function restorePurchase(db: Db, purchase: RestoredPurchase, now: number): Promise<{ restored: boolean; gifts: number }> {
+  if (!purchase.user_id || purchase.status !== "refunded") return { restored: false, gifts: 0 };
+  const rows = foreverRowsOfPurchase(purchase);
+  if (rows.length === 0) return { restored: false, gifts: 0 };
+  const { error } = await db.from("purchases").update({ status: "paid" }).eq("id", purchase.id).eq("status", "refunded");
+  if (error) throw new Error(`restore failed: ${error.message}`);
+  const granted = await grantForever(db, purchase.user_id, rows, purchase.id);
+  if (granted.error) throw new Error(`restore failed: ${granted.error}`);
+  return { restored: true, gifts: await republishGifts(db, purchase.user_id, now) };
 }
 
 /**

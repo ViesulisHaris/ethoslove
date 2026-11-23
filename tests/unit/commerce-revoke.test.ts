@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DAY_MS, iso } from "@/lib/commerce/db";
 import { issueGiftCard, redeemGiftCard } from "@/lib/commerce/gift-cards";
 import { joinPass, startPass } from "@/lib/commerce/passes";
-import { revokePurchase } from "@/lib/commerce/revoke";
+import { restorePurchase, revokePurchase } from "@/lib/commerce/revoke";
 import { grantForever } from "@/lib/commerce/unlocks";
 import { FakeDb } from "./helpers/fake-db";
 
@@ -155,5 +155,39 @@ describe("refunds and chargebacks", () => {
     await revokePurchase(fake.db, { id: "p1", user_id: "owner", product: "pass" }, NOW + 2 * DAY_MS);
     expect(fake.rows("couple_passes")[0].ends_at).toBe(iso(NOW + DAY_MS));
     expect(slugs(fake, "owner")).toEqual([]);
+  });
+});
+
+describe("a chargeback decided in our favour", () => {
+  const single = { ...purchase("s1", "u1", "single"), template_slugs: ["vinyl"], kind: null };
+  const published = { published_at: "2026-09-20T10:00:00.000Z" };
+
+  it("gives the purchase, its unlock and the gifts it unpublished back", async () => {
+    const fake = new FakeDb({ purchases: [single], gifts: [gift("g1", "u1", "vinyl", published), gift("g2", "u1", "vinyl", { status: "draft", published_at: null })] }, NOW);
+    await grantForever(fake.db, "u1", ["vinyl"], "s1");
+    await revokePurchase(fake.db, { id: "s1", user_id: "u1", product: "single" }, NOW, { mode: "dispute" });
+    expect(fake.rows("gifts").map((g) => g.status)).toEqual(["draft", "draft"]);
+
+    const done = await restorePurchase(fake.db, { ...single, status: "refunded" }, NOW + DAY_MS);
+    expect(done).toEqual({ restored: true, gifts: 1 });
+    expect(fake.rows("purchases")[0].status).toBe("paid");
+    expect(fake.rows("template_unlocks").filter((r) => r.user_id === "u1").map((r) => [r.template_slug, r.purchase_id])).toEqual([["vinyl", "s1"]]);
+    // The one never published stays a draft.
+    expect(fake.rows("gifts").map((g) => g.status)).toEqual(["live", "draft"]);
+  });
+
+  it("puts a gift whose opening time is still ahead back to scheduled", async () => {
+    const later = new Date(NOW + 10 * DAY_MS).toISOString();
+    const fake = new FakeDb({ purchases: [{ ...single, status: "refunded" }], gifts: [gift("g1", "u1", "vinyl", { ...published, status: "draft", unlock_at: later })] }, NOW);
+    await restorePurchase(fake.db, { ...single, status: "refunded" }, NOW);
+    expect(fake.rows("gifts")[0].status).toBe("scheduled");
+  });
+
+  it("changes nothing for a purchase that is still paid, or a pass", async () => {
+    const fake = new FakeDb({ purchases: [single], gifts: [gift("g1", "u1", "vinyl", { ...published, status: "draft" })] }, NOW);
+    expect(await restorePurchase(fake.db, single, NOW)).toEqual({ restored: false, gifts: 0 });
+    expect(await restorePurchase(fake.db, { ...single, product: "pass", status: "refunded" }, NOW)).toEqual({ restored: false, gifts: 0 });
+    expect(fake.rows("gifts")[0].status).toBe("draft");
+    expect(fake.rows("template_unlocks")).toEqual([]);
   });
 });

@@ -53,7 +53,6 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
   const t = await getTranslations("adLanding");
   const tt = await getTranslations("templates");
   const tr = await getTranslations("home.reactions");
-  const tm = await getTranslations("money.paywall");
   const currency = chargedCurrency(shown);
   // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
   const free = sendsFree(manifest);
@@ -128,7 +127,6 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
               </li>
             ))}
           </ol>
-          {free ? null : <p className="mt-5 text-sm text-ink-soft">{tm("guarantee")}</p>}
 
           {reactions.length >= 3 ? (
             <>

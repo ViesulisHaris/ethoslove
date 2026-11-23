@@ -6,6 +6,7 @@ import type { ReactElement } from "react";
 import { z } from "zod";
 import { cleanLanding } from "@/lib/attribution/source";
 import { isUndeliverable } from "@/lib/email/send";
+import type { SupportAccount } from "./account";
 import { fixedTurn, visitorTurn, type SupportAnswer } from "./answer";
 import { SUPPORT_LIMITS, type SupportModelId } from "./config";
 import { looksLikeGiveaway } from "./guard";
@@ -154,7 +155,9 @@ export type HandoffDeps = {
   ip: string;
   to: string;
   send: (args: { to: string; subject: string; react: ReactElement; replyTo: string; idempotencyKey: string }) => Promise<{ ok: boolean; error?: string }>;
-  render: (chat: Chat, email: string) => { subject: string; react: ReactElement };
+  render: (chat: Chat, email: string, account: SupportAccount) => { subject: string; react: ReactElement };
+  /** The account behind the address, for the team only (lib/support/account.ts). */
+  account?: (email: string) => Promise<SupportAccount>;
   log?: (message: string) => void;
 };
 
@@ -174,7 +177,8 @@ export async function handleHandoff(body: unknown, deps: HandoffDeps): Promise<R
     if (!chat || chat.visitorTurns === 0) return { status: 404, json: { error: "not_found" } };
 
     await store.handoff(chat.id, email);
-    const { subject, react } = deps.render(chat, email);
+    const account: SupportAccount = deps.account ? await deps.account(email).catch((): SupportAccount => ({ kind: "unknown" })) : { kind: "unknown" };
+    const { subject, react } = deps.render(chat, email, account);
     // Once per chat and length: a double tap sends one email, a later question in the same chat another.
     const result = await deps.send({ to: deps.to, subject, react, replyTo: email, idempotencyKey: `support-handoff:${chat.id}:${chat.visitorTurns}` });
     if (!result.ok) {
