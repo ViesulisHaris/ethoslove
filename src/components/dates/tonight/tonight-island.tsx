@@ -59,13 +59,15 @@ export function TonightProblem({ problem, mapHref, offerTomorrow, onRetry, onTom
       ) : (
         <>
           {t("tonight.none")}{" "}
-          {offerTomorrow ? (
-            <button type="button" onClick={onTomorrow} className={QUIET}>
-              {t("tonight.tryTomorrow")}
-            </button>
-          ) : null}
-          {offerTomorrow && map ? " · " : null}
-          {map}
+          {/* Two ways on, kept together: a wrapped line never starts with a separator. */}
+          <span className="inline-flex flex-wrap gap-x-5">
+            {offerTomorrow ? (
+              <button type="button" onClick={onTomorrow} className={QUIET}>
+                {t("tonight.tryTomorrow")}
+              </button>
+            ) : null}
+            {map}
+          </span>
         </>
       )}
     </p>
