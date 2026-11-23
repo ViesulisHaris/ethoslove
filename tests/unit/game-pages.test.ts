@@ -129,6 +129,9 @@ describe("what every game's page says", () => {
       expect(DARES.some((d) => dare.test(d.en)), dare.source).toBe(true);
     }
     expect(GAME_PAGES.dare.faq[1].a.en).toContain("both piles run out");
+    // The game's own blurb and list said the same untrue thing.
+    expect(JSON.stringify(en.games.dare)).not.toMatch(/compliments and bad dancing/i);
+    expect(JSON.stringify(es.games.dare)).not.toMatch(/bailar mal/i);
   });
 
   it("G10: This or that's page is titled on the searched phrase and fits a search result, and the hub counts it", () => {

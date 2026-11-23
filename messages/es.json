@@ -2679,7 +2679,7 @@
     },
     "dare": {
       "title": "Verdad o reto, versión suave",
-      "blurb": "Nada de lo que arrepentirse por la mañana. Sobre todo piropos y bailar mal. Un móvil, por turnos.",
+      "blurb": "Discursos, imitaciones, un baile lento. Nada que no pudierais hacer con los vecinos en casa. Un móvil, por turnos.",
       "turn": "Turno de {name}",
       "pick": "{name}, ¿verdad o reto?",
       "truth": "Verdad",
@@ -2699,7 +2699,7 @@
       "seoTitle": "Verdad o reto para parejas: juego online gratis",
       "seoDescription": "Verdad o reto para parejas, versión suave: verdades tiernas y retos tontos, nada de lo que arrepentirse por la mañana. Un móvil, por turnos. Gratis.",
       "listTitle": "{count} preguntas de verdad o reto para parejas",
-      "listIntro": "Todas las verdades y todos los retos del juego gratis. Sobre todo piropos y bailar mal.",
+      "listIntro": "Todas las verdades y todos los retos del juego gratis: pequeñas confesiones, discursos, imitaciones, un baile lento.",
       "listTruths": "Verdades",
       "listDares": "Retos"
     },
