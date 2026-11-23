@@ -7,6 +7,9 @@ import { DRAW_ROUNDS, DRAW_WORDS } from "@/lib/games/draw";
 import { MEMORY_PAIRS } from "@/lib/games/memory";
 import { KNOW_ROUNDS, RATHER_ROUNDS } from "@/lib/games/play";
 import { DECK_ROUND } from "@/lib/games/questions";
+import { PACK_IDS, PACKS } from "@/lib/games/packs";
+import en from "../../messages/en.json";
+import es from "../../messages/es.json";
 import { fillerIn } from "./filler";
 
 const LOCALES = ["en", "es"] as const;
@@ -88,6 +91,40 @@ describe("what every game's page says", () => {
         expect(fillerIn(words, l), g.key).toEqual([]);
         expect(words, g.key).not.toMatch(/[!—]/);
       }
+  });
+
+  it("G8: the hub's tiers are true of the packs, and today's question does not count itself twice", () => {
+    // "More cards for two or three of the games": every pack deals into two or three.
+    for (const id of PACK_IDS) {
+      expect(PACKS[id].games.length, id).toBeGreaterThanOrEqual(2);
+      expect(PACKS[id].games.length, id).toBeLessThanOrEqual(3);
+    }
+    expect(en.games.hub.tiers.pack.line).toContain("two or three");
+    expect(es.games.hub.tiers.pack.line).toContain("dos o tres");
+    // The free line names the count, which the page fills from GAMES.
+    for (const m of [en, es]) expect(m.games.hub.tiers.free.line).toContain("{count}");
+    // Today's pair is one of the list: "{count} more" would count it twice.
+    expect(en.games.today.more.heading).not.toMatch(/\bmore\b/);
+    expect(es.games.today.more.heading).not.toMatch(/\bmás\b/);
+    // The packs' own line no longer says the price and Ethos for Two a second time under the tiers.
+    for (const m of [en, es]) expect((m.packs.hub as Record<string, string>).sub).toBeUndefined();
+  });
+
+  it("G9: the soft dares are described by what the deck holds, and the dare game's end by both of its ends", () => {
+    const soft = GAME_PAGES.dare.faq[0].a.en;
+    expect(soft).not.toMatch(/mostly|compliments|regret/i);
+    // Each thing the answer names, and the dare it comes from.
+    const named: [RegExp, RegExp][] = [
+      [/speeches/i, /speech/i],
+      [/impressions/i, /impression/i],
+      [/a slow dance/i, /slow dance/i],
+      [/a kiss on the hand/i, /kiss my hand/i],
+    ];
+    for (const [said, dare] of named) {
+      expect(soft).toMatch(said);
+      expect(DARES.some((d) => dare.test(d.en)), dare.source).toBe(true);
+    }
+    expect(GAME_PAGES.dare.faq[1].a.en).toContain("both piles run out");
   });
 
   it("G7: nothing names a place in Spain", () => {

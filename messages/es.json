@@ -2592,9 +2592,9 @@
     "today": {
       "label": "Pregunta del día",
       "h1": "¿Qué prefieres? La pregunta de hoy",
-      "line": "Una pregunta al día para los dos. Elige, envíala y mira si coincidís.",
+      "line": "Hoy es la misma para todo el mundo. Descubre qué elegiría tu pareja.",
       "seoTitle": "¿Qué prefieres? La pregunta del día para parejas",
-      "seoDescription": "Un ¿qué prefieres? cada día, el mismo para todo el mundo. Elige tu respuesta, mándasela a tu pareja con un enlace y mirad las dos juntas. Gratis y sin registro.",
+      "seoDescription": "Un ¿qué prefieres? nuevo cada día, el mismo para todo el mundo. Tu pareja elige antes de ver tu respuesta y luego salen las dos juntas. Gratis y sin registro.",
       "daily": "Una nueva cada día",
       "broken": "Ese enlace no llegó entero, así que aquí tienes la pregunta de hoy.",
       "from": "De {name}",
@@ -2602,6 +2602,7 @@
       "prompt": "¿Qué prefieres…",
       "or": "o",
       "change": "¿Has cambiado de idea? Toca la otra.",
+      "resend": "Cambiada. Vuelve a enviarla para que le llegue la nueva.",
       "nameLabel": "Tu nombre",
       "send": "Envíasela",
       "copy": "Copiar el enlace",
@@ -2610,8 +2611,8 @@
       "sent": "Enviada. Elegirá sin ver tu respuesta y luego podrá mandarte la suya.",
       "sendBack": "Devuélvele la tuya",
       "sentBack": "Enviada. {name} verá las dos respuestas.",
-      "match": "Habéis elegido lo mismo.",
-      "clash": "Habéis elegido distinto.",
+      "match": "Lo mismo. Ahora decid por qué, a ver si también coinciden los motivos.",
+      "clash": "Cada cual por su lado. Tenéis una frase para convencer a la otra persona.",
       "you": "Tú",
       "wholeGame": "Jugar la partida entera",
       "todays": "Ver la pregunta de hoy",
@@ -2623,14 +2624,14 @@
         "heading": "Tres toques, dos móviles",
         "line": "Tu nombre y tu respuesta van en el enlace, nunca a nuestro servidor.",
         "steps": {
-          "pick": "Elige tu respuesta",
+          "pick": "Toca la opción que prefieres",
           "send": "Mándale el enlace",
-          "see": "Mirad las dos"
+          "see": "Elige sin ver la tuya y luego salen las dos"
         }
       },
       "more": {
         "label": "La partida entera",
-        "heading": "{count} preguntas más como esta",
+        "heading": "{count} preguntas como esta",
         "line": "Diez seguidas, en un móvil que os pasáis o en dos.",
         "play": "Jugar a ¿qué prefieres?",
         "all": "Todos los juegos",
@@ -2695,18 +2696,17 @@
       "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
       "minutes": "{n} min",
       "todayTitle": "La pregunta de hoy",
-      "todayBlurb": "Un ¿qué prefieres? al día, el mismo para todo el mundo. Respóndelo, envíalo y comparad.",
+      "todayBlurb": "Hoy, el mismo ¿qué prefieres? para todo el mundo. Tu respuesta no se ve hasta que la otra persona elige.",
       "todayPhones": "Dos móviles, un enlace",
       "todayCta": "Responder la de hoy",
       "tiers": {
-        "label": "Qué cuesta qué",
         "free": {
           "title": "Gratis",
-          "line": "Todos los juegos, enteros. Sin cuenta ni app."
+          "line": "Los {count} juegos, completos. Sin registro y sin descargas."
         },
         "pack": {
           "title": "Un pack, {price}",
-          "line": "Más cartas para un juego, tuyas para siempre."
+          "line": "Más cartas para dos o tres de los juegos, tuyas para siempre."
         },
         "two": {
           "title": "Ethos for Two",
@@ -2798,6 +2798,7 @@
       "gift": "Hazle un regalo",
       "giftBlurb": "Una carta, vuestras fotos, vuestra canción: algo que se abre en su móvil.",
       "next": "O jugad a otro",
+      "another": "Volver a los juegos",
       "today": "Mándale la pregunta de hoy",
       "host": {
         "title": "Te toca repartir",
@@ -2808,7 +2809,7 @@
     "notes": {
       "how": "Cómo se juega",
       "faq": "Preguntas sobre este juego",
-      "more": "Más como esto:"
+      "more": "Para seguir leyendo:"
     }
   },
   "packs": {
@@ -2854,7 +2855,6 @@
     },
     "hub": {
       "title": "Packs de juegos",
-      "sub": "Más cartas para los mismos juegos, a {price} cada uno y tuyos para siempre. O todos los packs y todas las plantillas de regalo, para los dos, con Ethos for Two.",
       "cta": "Ver qué trae: {n} cartas"
     }
   },

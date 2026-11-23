@@ -52,7 +52,12 @@ export type DailyLink = { day: number; pair: RatherPair; from: DailyAnswer; to?:
 
 /** The lobby's limit for a name (lobby.tsx, maxLength). */
 export const DAILY_NAME_MAX = 24;
-export const DAILY_HASH_MAX = 400;
+/**
+ * The longest hash a real link can be: "#q=1." and a day (6 digits), a pair id (40), two sides, and
+ * two names of 24 characters each, a character taking up to 12 once percent-encoded (four UTF-8
+ * bytes, an emoji). About 630; anything longer was not made by encodeDaily.
+ */
+export const DAILY_HASH_MAX = 5 + 7 + 41 + 2 * (3 + DAILY_NAME_MAX * 12);
 
 // Control characters, zero-width marks and the characters that turn text round.
 const UNSAFE = /[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩﻿]/g;

@@ -1499,6 +1499,10 @@ body:has([data-page-theme]) .site-header .btn-rose {
 html[data-app] [data-app-hide] {
   display: none !important;
 }
+/* And the other way round: something drawn only inside the app, where a web link would not land. */
+html:not([data-app]) [data-app-only] {
+  display: none !important;
+}
 /* The floating header's room at the top of a page (the marketing layout's --header-h), gone with it. */
 html[data-app] [data-header-offset] {
   --header-h: 0px !important;

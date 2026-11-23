@@ -62,6 +62,8 @@ export function TodayQuestion({ day }: { day: number }) {
   const [sent, setSent] = useState(false);
   const [name, setName] = useState("");
   const [copied, setCopied] = useState(false);
+  // Changed after the link went out: the link they hold carries the old answer, so it must go again.
+  const [changed, setChanged] = useState(false);
   const [today, setToday] = useState(day);
   // Set once the address has been read: the tests wait for it, and nothing is drawn differently.
   const [ready, setReady] = useState(false);
@@ -79,14 +81,18 @@ export function TodayQuestion({ day }: { day: number }) {
     const names = rememberedNames();
     setToday(now);
     setView(next);
-    setMine(kept && kept.d === next.day && kept.p === next.pair.id && !link?.to ? kept.a : null);
+    const restored = kept && kept.d === next.day && kept.p === next.pair.id && !link?.to ? kept.a : null;
+    setMine(restored);
     setSent(false);
+    setChanged(false);
     setReady(true);
     if (names) setName(names[0]);
     if (counted.current !== hash) {
       counted.current = hash;
       track(link ? "daily_opened_shared" : "daily_seen");
       if (link?.to) track("daily_revealed", { match: link.from.side === link.to.side });
+      // This tab answered the same pair before the link came: the reveal shows at once, and counts.
+      else if (link && restored !== null) track("daily_revealed", { match: link.from.side === restored });
     }
   }, []);
 
@@ -111,11 +117,16 @@ export function TodayQuestion({ day }: { day: number }) {
   const who = (n: string) => n || tl("someone");
 
   const choose = (side: Side) => {
-    if (phase === "reveal") return;
+    // Until the address is read the cards may still be the server's day: a tap then would answer the wrong pair.
+    if (!ready || phase === "reveal" || side === mine) return;
     if (mine === null) track("daily_answered");
     if (phase === "invited" && link) {
       track("daily_revealed", { match: side === link.from.side });
       focusReveal.current = true;
+    }
+    if (sent) {
+      setSent(false);
+      setChanged(true);
     }
     setMine(side);
     writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side });
@@ -133,6 +144,7 @@ export function TodayQuestion({ day }: { day: number }) {
       window.setTimeout(() => setCopied(false), 2000);
       track("daily_shared", { how: "copy" });
       setSent(true);
+      setChanged(false);
     } catch {
       window.prompt(t("copyFallback"), url());
     }
@@ -152,6 +164,7 @@ export function TodayQuestion({ day }: { day: number }) {
     } else return copy();
     track("daily_shared", { how: "share" });
     setSent(true);
+    setChanged(false);
   };
 
   const changeName = (value: string) => {
@@ -181,7 +194,7 @@ export function TodayQuestion({ day }: { day: number }) {
         : { left: { name: who(link.from.name), side: link.from.side }, right: { name: t("you"), side: mine ?? 0 } };
   const match = reveal ? reveal.left.side === reveal.right.side : false;
   const canSend = phase === "answered" || phase === "sent" || (phase === "reveal" && !link?.to);
-  const status = copied ? t("copied") : sent ? (link && !link.to ? t("sentBack", { name: who(link.from.name) }) : t("sent")) : "";
+  const status = copied ? t("copied") : changed ? t("resend") : sent ? (link && !link.to ? t("sentBack", { name: who(link.from.name) }) : t("sent")) : "";
   const notToday = view.day !== today || view.pair.id !== dailyPair(today).id;
 
   return (
@@ -219,6 +232,7 @@ export function TodayQuestion({ day }: { day: number }) {
               data-answer
               data-side={side === 0 ? "a" : "b"}
               aria-pressed={mine === side}
+              aria-disabled={ready ? undefined : true}
               onClick={() => choose(side)}
               className={cn(
                 CARD,
@@ -236,7 +250,8 @@ export function TodayQuestion({ day }: { day: number }) {
         </div>
       )}
 
-      {phase === "answered" || phase === "sent" ? <p className="mt-3 text-[0.875rem] text-page-body">{t("change")}</p> : null}
+      {/* Once sent, the hint goes (a change then asks for the link to go again, in the status) but its line stays, so the form does not move under the thumb. */}
+      {phase === "answered" || phase === "sent" ? <p className="mt-3 min-h-5 text-[0.875rem] text-page-body">{phase === "answered" && !changed ? t("change") : ""}</p> : null}
 
       {canSend ? (
         <form

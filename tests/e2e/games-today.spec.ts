@@ -61,8 +61,8 @@ async function open(page: Page, url: string) {
 
 for (const locale of ["", "/es"] as const) {
   const words = locale
-    ? { from: "De Ana", invited: "Ana ya ha respondido", same: "Habéis elegido lo mismo.", differ: "Habéis elegido distinto.", sent: "Enviada", you: "Tú" }
-    : { from: "From Ana", invited: "Ana has answered", same: "You picked the same one.", differ: "You picked differently.", sent: "Sent", you: "You" };
+    ? { from: "De Ana", invited: "Ana ya ha respondido", differ: /^Cada cual por su lado\./, sent: "Enviada", you: "Tú" }
+    : { from: "From Ana", invited: "Ana has answered", differ: /^Different picks\./, sent: "Sent", you: "You" };
   const lang = locale ? "es" : "en";
 
   test(`T1 ${lang}: the server's page holds today's pair as text, the h1 and how it works`, async ({ page, request }) => {
@@ -149,7 +149,7 @@ test("T3: the same pick on both phones says so", async ({ browser }) => {
   const pair = dailyPair(today());
   await open(two.page, `/games/today${encodeDaily({ day: today(), pairId: pair.id, from: { name: "Ana", side: 0 } })}`);
   await card(two.page, "a").click();
-  await expect(two.page.getByRole("heading", { name: "You picked the same one." })).toBeVisible();
+  await expect(two.page.getByRole("heading", { name: /^Same pick\./ })).toBeVisible();
   await two.context.close();
 });
 
@@ -253,6 +253,45 @@ test("T9: by keyboard alone: Tab to an answer, Enter picks it", async ({ page, i
   await page.keyboard.press("Tab");
   await page.keyboard.press("Space");
   await expect(card(page, "b")).toHaveAttribute("aria-pressed", "true");
+});
+
+test("T12: a change after sending asks for the link to go again, and the new link carries the new answer", async ({ browser }) => {
+  const one = await phone(browser);
+  const pair = dailyPair(today());
+  await open(one.page, "/games/today");
+  await card(one.page, "a").click();
+  await expect(one.page.getByText("Changed your mind? Tap the other one.")).toBeVisible();
+  await one.page.locator("[data-today] input").fill("Ana");
+  await one.page.locator("[data-copy]").click();
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
+  expect(await copied(one.page)).toContain(`.${pair.id}.0.Ana`);
+  // Sent: the hint is gone, so nobody believes the link they already sent has changed.
+  await expect(one.page.getByText("Changed your mind? Tap the other one.")).toHaveCount(0);
+  await card(one.page, "b").click();
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "answered");
+  await expect(one.page.getByRole("status")).toContainText("Send it again");
+  await one.page.locator("[data-copy]").click();
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "sent");
+  expect(await copied(one.page)).toContain(`.${pair.id}.1.Ana`);
+  await expect(one.page.getByRole("status")).not.toContainText("Send it again");
+  await one.context.close();
+});
+
+test("T13: a tab that already answered opens the other's link straight on the reveal, and counts it", async ({ browser }) => {
+  const one = await phone(browser);
+  const pair = dailyPair(today());
+  await open(one.page, "/games/today");
+  await card(one.page, "b").click();
+  await open(one.page, `/games/today${encodeDaily({ day: today(), pairId: pair.id, from: { name: "Sam", side: 1 } })}`);
+  await expect(phase(one.page)).toHaveAttribute("data-phase", "reveal");
+  await expect.poll(() => events(one.page)).toEqual(["daily_opened_shared", 'daily_revealed:{"match":true}']);
+  await one.context.close();
+});
+
+test("T14: the answers are inert until the page has read the day and the address", async ({ request }) => {
+  // The server's HTML may be a few minutes old after midnight: a tap on it must not answer yesterday's pair.
+  const html = await (await request.get("/games/today")).text();
+  expect(html.match(/data-answer[^>]*aria-disabled="true"|aria-disabled="true"[^>]*data-answer/g) ?? []).toHaveLength(2);
 });
 
 test("T10: the hub leads with today's question, and the end of would you rather points to it", async ({ page }) => {

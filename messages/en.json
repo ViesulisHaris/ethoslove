@@ -2592,9 +2592,9 @@
     "today": {
       "label": "Question of the day",
       "h1": "Today's would you rather question",
-      "line": "One question a day for two. Pick yours, send it, see if they agree.",
+      "line": "Everyone gets the same one today. Find out which side your person takes.",
       "seoTitle": "Would You Rather Question of the Day for Couples",
-      "seoDescription": "One would you rather question a day, the same for everyone. Pick your answer, send it to your partner by link, and see both picks side by side. Free, no sign-up.",
+      "seoDescription": "A new would you rather question every day, the same for everyone. Your partner picks before seeing your answer, then both show side by side. Free, no sign-up.",
       "daily": "A new one every day",
       "broken": "That link didn't arrive whole, so here is today's question.",
       "from": "From {name}",
@@ -2602,6 +2602,7 @@
       "prompt": "Would you rather…",
       "or": "or",
       "change": "Changed your mind? Tap the other one.",
+      "resend": "Changed. Send it again so they get the new answer.",
       "nameLabel": "Your first name",
       "send": "Send it to them",
       "copy": "Copy the link",
@@ -2610,8 +2611,8 @@
       "sent": "Sent. They pick without seeing yours, then can send theirs back.",
       "sendBack": "Send yours back",
       "sentBack": "Sent. {name} will see both answers.",
-      "match": "You picked the same one.",
-      "clash": "You picked differently.",
+      "match": "Same pick. Now each say why, and see if the reasons match too.",
+      "clash": "Different picks. You each get one sentence to win the other over.",
       "you": "You",
       "wholeGame": "Play the whole game",
       "todays": "See today's question",
@@ -2623,14 +2624,14 @@
         "heading": "Three taps, two phones",
         "line": "Your name and answer ride in the link and never reach our server.",
         "steps": {
-          "pick": "Pick your answer",
+          "pick": "Tap the side you'd take",
           "send": "Send them the link",
-          "see": "See both picks"
+          "see": "They choose blind, then both show"
         }
       },
       "more": {
         "label": "The whole game",
-        "heading": "{count} more questions like this",
+        "heading": "{count} questions like this",
         "line": "Ten in a row, on one phone passed across or on two.",
         "play": "Play would you rather",
         "all": "All the games",
@@ -2695,18 +2696,17 @@
       "pickSub": "Every one is quick, and every one ends with something to talk about.",
       "minutes": "{n} min",
       "todayTitle": "Today's question",
-      "todayBlurb": "One would you rather a day, the same for everyone. Answer it, send it, compare.",
+      "todayBlurb": "The same would you rather for everyone today. They only see your pick after making theirs.",
       "todayPhones": "Two phones, one link",
       "todayCta": "Answer today's",
       "tiers": {
-        "label": "What costs what",
         "free": {
           "title": "Free",
-          "line": "Every game here, whole. No account, no app."
+          "line": "All {count} games, start to finish. Nothing to sign up for or download."
         },
         "pack": {
           "title": "A pack, {price}",
-          "line": "More cards for one game, yours for good."
+          "line": "More cards for two or three of the games, yours for good."
         },
         "two": {
           "title": "Ethos for Two",
@@ -2798,6 +2798,7 @@
       "gift": "Make them a gift",
       "giftBlurb": "A letter, your photos, your song: something they open on their phone.",
       "next": "Or play next",
+      "another": "Back to the games",
       "today": "Send them today's question",
       "host": {
         "title": "Your turn to deal",
@@ -2854,7 +2855,6 @@
     },
     "hub": {
       "title": "Game packs",
-      "sub": "More cards for the same games, {price} each and yours for good. Or every pack and every gift template, for both of you, with Ethos for Two.",
       "cta": "See inside: {n} cards"
     }
   },

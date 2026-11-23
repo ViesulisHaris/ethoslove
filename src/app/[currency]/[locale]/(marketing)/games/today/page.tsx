@@ -18,8 +18,12 @@ import { Intro, SPREAD } from "@/components/templates/page/spread";
 
 type Props = PageProps<"/[currency]/[locale]/games/today">;
 
-/** The day turns at midnight UTC by itself, without a deploy: the page is rendered again every hour, and the browser checks the day once it has loaded. */
-export const revalidate = 3600;
+/**
+ * The day turns at midnight UTC by itself, without a deploy: the page is rendered again every five
+ * minutes, so yesterday's pair is served for five minutes at most after midnight, and the browser
+ * checks the day once it has loaded (the answers stay inert until it has).
+ */
+export const revalidate = 300;
 
 /** The key of this page's colours on <body> (content/template-page-themes.ts, pageThemeChromeCss). */
 const THEME = "games-today";
@@ -71,7 +75,7 @@ export default async function TodayPage({ params }: Props) {
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="today-title">
           <ArtLayer items={TODAY_ART} flowers={TODAY_FLOWERS} />
-          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:min-h-[38rem] lg:content-start lg:items-start lg:pt-14 lg:pb-32")}>
+          <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:content-start lg:items-start lg:pt-14 lg:pb-20")}>
             <Intro level={1} id="today-title" label={t("label")} heading={t("h1")} line={t("line")} />
             <div className="min-w-0 lg:pt-7">
               <TodayQuestion day={day} />

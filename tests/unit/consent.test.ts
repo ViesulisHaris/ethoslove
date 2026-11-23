@@ -76,6 +76,13 @@ describe("hidesConsentBanner", () => {
     }
   });
 
+  it("keeps the banner off today's question, where nothing would use the answer", () => {
+    // /games/today is off-limits to the recorder and the pixels, so there is nothing to ask about,
+    // and the banner would cover the two answers a shared link opens on. The other games still ask.
+    for (const p of ["/games/today", "/es/games/today", "/en/games/today"]) expect(hidesConsentBanner(p), p).toBe(true);
+    expect(hidesConsentBanner("/games/rather")).toBe(false);
+  });
+
   it("does not mistake a slug that merely starts the same way", () => {
     for (const p of ["/demos", "/democracy", "/templates/demo"]) {
       expect(hidesConsentBanner(p), p).toBe(false);

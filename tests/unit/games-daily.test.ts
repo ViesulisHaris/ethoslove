@@ -148,6 +148,18 @@ describe("the link", () => {
     expect(decodeDaily(`#q=1.${TODAY}.constructor.0.Ana`, TODAY)).toBeNull();
   });
 
+  it("L11: the longest reply a person can make comes back whole: two names of 24 emoji, the longest pair id", () => {
+    const longest = [...RATHER_PAIRS].sort((x, y) => y.id.length - x.id.length)[0];
+    const big = "🌙".repeat(40);
+    const hash = encodeDaily({ day: TODAY + 1, pairId: longest.id, from: { name: big, side: 1 }, to: { name: "👩🏽".repeat(30), side: 0 } });
+    expect(hash.length).toBeGreaterThan(400);
+    expect(hash.length).toBeLessThanOrEqual(DAILY_HASH_MAX);
+    const back = decodeDaily(hash, TODAY);
+    expect(back?.pair.id).toBe(longest.id);
+    expect(Array.from(back!.from.name)).toHaveLength(24);
+    expect(back!.to!.name).toBe(cleanName("👩🏽".repeat(30)));
+  });
+
   it("L10: a link carries no dot except between fields, and nothing a server sees", () => {
     const hash = encodeDaily({ day: TODAY, pairId: pair.id, from: { name: "A.B", side: 0 }, to: { name: "C.D", side: 1 } });
     expect(hash.split(".").length).toBe(7);

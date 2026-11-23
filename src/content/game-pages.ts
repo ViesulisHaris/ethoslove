@@ -101,8 +101,8 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "Does spelling count?", es: "¿Cuenta la ortografía?" },
         a: {
-          en: "Accents, capitals and a stray “a” or “the” don't cost the point, and a guess counts in English or Spanish.",
-          es: "Las tildes, las mayúsculas o un “el” o “una” de más no quitan el punto, y vale adivinar en español o en inglés.",
+          en: "Yes, but accents, capitals and a stray “a” or “the” don't cost the point. A guess counts in either of the site's two languages.",
+          es: "Sí, pero las tildes, las mayúsculas o un “el” o “una” de más no quitan el punto. Vale adivinar en cualquiera de los dos idiomas de la web.",
         },
       },
       {
@@ -145,7 +145,13 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
           es: "Uno, que os vais pasando: el tablero necesita que lo miréis los dos. Una partida dura unos cinco minutos.",
         },
       },
-      SAVED,
+      {
+        q: SAVED.q,
+        a: {
+          en: "No account, and nothing kept on our side. The board survives a reload in this tab; your photos don't, so pick them again.",
+          es: "Sin cuenta y sin nada guardado por nuestra parte. El tablero aguanta una recarga en esta pestaña; las fotos no, así que volved a elegirlas.",
+        },
+      },
     ],
     posts: ["quality-time-love-language", "virtual-date-ideas-long-distance"],
   },
@@ -180,15 +186,15 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "How soft is the soft edition?", es: "¿Cómo de suave es la versión suave?" },
         a: {
-          en: "Mostly compliments and bad dancing. Nothing to regret in the morning, and nothing you couldn't do with the neighbours in.",
-          es: "Sobre todo cumplidos y bailes malos. Nada de lo que arrepentirse por la mañana, y nada que no pudierais hacer con los vecinos en casa.",
+          en: "Speeches, impressions, a slow dance, a kiss on the hand. Nothing you couldn't do with the neighbours in.",
+          es: "Discursos, imitaciones, un baile lento, un beso en la mano. Nada que no pudierais hacer con los vecinos en casa.",
         },
       },
       {
         q: { en: "How long is a game?", es: "¿Cuánto dura una partida?" },
         a: {
-          en: "12 truths and 12 dares, drawn fresh from the 50 of each below. It ends when you say you're done for the night.",
-          es: "12 verdades y 12 retos, sacados cada vez de los 50 de cada tipo de abajo. Acaba cuando decís que ya está por esta noche.",
+          en: "12 truths and 12 dares, drawn fresh from the 50 of each below. It ends when both piles run out, or when you say you're done for the night.",
+          es: "12 verdades y 12 retos, sacados cada vez de los 50 de cada tipo de abajo. Termina cuando se acaban los dos montones o cuando decís que ya está por esta noche.",
         },
       },
       {
@@ -207,13 +213,13 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         "Put in both your names: the wheel is the two of you, half each.",
         "Spin. It picks one of 8 chores and lands on one of you.",
         "Spin again for the next one, as many times as you like.",
-        "When it's all decided, settle it: the list of who does what is the verdict.",
+        "When it's all decided, settle it: the last six spins are the verdict.",
       ],
       es: [
         "Poned vuestros nombres: la ruleta sois los dos, mitad y mitad.",
         "Gírala. Elige una de 8 tareas y cae en uno de los dos.",
         "Volved a girar para la siguiente, tantas veces como queráis.",
-        "Cuando esté todo decidido, cerradlo: la lista de quién hace qué es el veredicto.",
+        "Cuando esté todo decidido, cerradlo: las seis últimas tiradas son el veredicto.",
       ],
     },
     faq: [
@@ -261,7 +267,7 @@ export const TODAY_FAQ: GameFaq[] = [
     q: { en: "Is anything saved?", es: "¿Se guarda algo?" },
     a: {
       en: "No. Your first name and your pick travel in the link itself, after the #, a part a browser never sends to a server. No account, no room, nothing kept on our side.",
-      es: "No. Tu nombre y tu respuesta viajan en el propio enlace, después de la #, una parte que el navegador nunca envía a un servidor. Sin cuenta, sin sala, nada guardado por nuestra parte.",
+      es: "No. Tu nombre y tu respuesta viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Sin cuenta, sin sala, nada guardado por nuestra parte.",
     },
   },
   {

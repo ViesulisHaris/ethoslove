@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { GAMES } from "../../src/lib/games/catalogue";
 
 /**
  * The games' pages beyond the game itself: the end of a game names the next two (lib/games/next.ts)
@@ -145,13 +146,58 @@ test("E8: in Spanish, the same in Spanish", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /^40 palabras/ })).toBeVisible();
 });
 
-test("E9: the hub shows the three tiers once, with the pack's price", async ({ page }) => {
+test("E9: the hub shows the three tiers once, as the packs' own header, with the pack's price", async ({ page }) => {
   await page.goto("/games");
   const tiers = page.locator("[data-tiers] li");
+  await expect(page.locator("[data-tiers]")).toHaveCount(1);
   await expect(tiers).toHaveCount(3);
   await expect(tiers.nth(0)).toContainText("Free");
-  await expect(tiers.nth(1)).toContainText(/A pack, [€$£]\d/);
+  await expect(tiers.nth(0)).toContainText(`All ${GAMES.length} games`);
+  await expect(tiers.nth(1)).toContainText("A pack, €2.99");
+  await expect(tiers.nth(1)).toContainText("two or three of the games");
   await expect(tiers.nth(2).getByRole("link")).toHaveAttribute("href", "/pricing#for-two");
+  // Said once: the packs under it carry no second sentence about the price or Ethos for Two.
+  const packs = page.locator("section#packs");
+  await expect(packs.locator("[data-tiers]")).toHaveCount(1);
+  await expect(packs).not.toContainText("each and yours for good");
+  await expect(packs.locator('[data-tour="packs"] a[href="/games/deck#packs"]')).toHaveCount(3);
   await page.goto("/games/rather");
   await expect(page.locator("[data-tiers]")).toHaveCount(0);
+});
+
+for (const [country, price] of [
+  ["US", "$2.99"],
+  ["GB", "£2.49"],
+] as const) {
+  test.describe(`E9 ${country}`, () => {
+    test.use({ extraHTTPHeaders: { "x-vercel-ip-country": country } });
+    test(`the pack's price on the hub is the shelf's, ${price}`, async ({ page }) => {
+      await page.goto("/games");
+      await expect(page.locator("[data-tiers] li").nth(1)).toContainText(`A pack, ${price}`);
+    });
+  });
+}
+
+test("E10: inside the iPhone app the end of a game offers the app's own list, not a web link it cannot follow", async ({ page }) => {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __told: string[]; EthosNative: unknown };
+    w.__told = [];
+    w.EthosNative = { version: 1, platform: "ios", locale: "en", signedIn: false, request: (type: string) => (w.__told.push(type), { ok: true }) };
+    document.documentElement.setAttribute("data-app", "ios");
+  });
+  await page.goto("/games/deck");
+  for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
+  const end = page.getByRole("navigation", { name: "What next" });
+  await expect(end.locator("[data-next-game]").first()).toBeHidden();
+  await end.locator("[data-end-games]").click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __told: string[] }).__told)).toContain("close");
+  await expect(page).toHaveURL(/\/games\/deck$/);
+});
+
+test("E11: in a browser the app's card is never shown", async ({ page }) => {
+  await page.goto("/games/deck");
+  for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
+  const end = page.getByRole("navigation", { name: "What next" });
+  await expect(end.locator("[data-next-game]")).toHaveCount(2);
+  await expect(end.locator("[data-end-games]")).toBeHidden();
 });

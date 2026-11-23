@@ -45,19 +45,13 @@ export function GameEnd({ game, phones = 1, guest = false }: { game: GameKey; ph
       </Link>
 
       <p className="mt-6 text-eyebrow text-blush">{t("next")}</p>
-      <div className="mt-3 grid grid-cols-2 gap-3">
+      {/* The two named games are web links. Inside the iPhone app a page cannot open another game (a
+          link that leaves what the app opened closes it, lib/app/bridge.ts), so a named card there
+          would land on the app's list, not on the game it names: the app gets one plain card instead
+          that says where it goes. */}
+      <div data-app-hide className="mt-3 grid grid-cols-2 gap-3">
         {nextGames(game).map((g) => (
-          // Inside the iPhone app a tap goes back to the app's own list of games, as "Play another game" did.
-          <Link
-            key={g.key}
-            href={g.href}
-            data-next-game={g.key}
-            onClick={(e) => {
-              track("game_end_pick", { game, to: g.key });
-              closeInApp(e);
-            }}
-            className="group block rounded-[20px]"
-          >
+          <Link key={g.key} href={g.href} data-next-game={g.key} onClick={() => track("game_end_pick", { game, to: g.key })} className="group block rounded-[20px]">
             <PlayingCard rank={g.rank} suit={g.suit} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="min-h-[150px] items-center px-3 pt-9 pb-4 text-center sm:px-6">
               <span className="block size-12 sm:size-14">
                 <Sticker id={g.sticker} />
@@ -68,6 +62,15 @@ export function GameEnd({ game, phones = 1, guest = false }: { game: GameKey; ph
           </Link>
         ))}
       </div>
+
+      <Link href="/games" data-app-only data-end-games onClick={(e) => closeInApp(e)} className="group mt-3 block rounded-[20px]">
+        <PlayingCard rank="7" suit="club" className="transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="min-h-[96px] justify-center px-6 py-6">
+          <span className="flex items-center gap-2 font-display text-[21px] leading-tight">
+            {t("another")}
+            <ArrowRight aria-hidden="true" className="size-4" />
+          </span>
+        </PlayingCard>
+      </Link>
 
       {game === "rather" ? (
         <Link href="/games/today" data-end-today onClick={() => track("game_end_pick", { game, to: "today" })} className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-cream/75 underline decoration-cream/30 underline-offset-4 hover:text-cream">
