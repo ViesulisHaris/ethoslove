@@ -77,14 +77,15 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
 
   // "Nothing free fits" only when no pick in the list is free; after the free ones, "Another" says what this one costs.
   const noneMeet = pick.noneMeet ?? pick.relaxed;
-  const cost = t(`tonight.costs.${idea.budget as 1 | 2 | 3}`);
-  const hours = ideaHours(idea.minutes, locale);
+  // Only a pick that gave up the budget costs something to name (a free idea has no costs.0).
+  const cost = () => t(`tonight.costs.${idea.budget as 1 | 2 | 3}`);
+  const hours = () => ideaHours(idea.minutes, locale);
   const said = HEAVIEST.filter((wish) => pick.relaxed.includes(wish))
     .slice(0, 2)
     .map((wish) => {
-      if (!noneMeet.includes(wish)) return wish === "budget" ? t("tonight.beyond.budget", { cost }) : wish === "length" ? t("tonight.beyond.length", { hours }) : t("tonight.beyond.vibe");
-      if (wish === "budget") return t(wet ? "tonight.relaxed.budgetWet" : "tonight.relaxed.budget", { wanted: t(`tonight.wanted.${(asked ?? 0) as 0 | 1 | 2}`), cost, when: whenLabel });
-      if (wish === "length") return t("tonight.relaxed.length", { hours });
+      if (!noneMeet.includes(wish)) return wish === "budget" ? t("tonight.beyond.budget", { cost: cost() }) : wish === "length" ? t("tonight.beyond.length", { hours: hours() }) : t("tonight.beyond.vibe");
+      if (wish === "budget") return t(wet ? "tonight.relaxed.budgetWet" : "tonight.relaxed.budget", { wanted: t(`tonight.wanted.${(asked ?? 0) as 0 | 1 | 2}`), cost: cost(), when: whenLabel });
+      if (wish === "length") return t("tonight.relaxed.length", { hours: hours() });
       return t("tonight.relaxed.vibe", { when: whenLabel });
     });
 
