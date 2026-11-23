@@ -2316,7 +2316,8 @@
     "virtual": {
       "eyebrow": "Dates for two screens",
       "title": "Something to do on the call.",
-      "twist": "The twist:"
+      "twist": "The twist:",
+      "openMap": "Open the map"
     },
     "gifts": {
       "eyebrow": "Gifts for the distance",

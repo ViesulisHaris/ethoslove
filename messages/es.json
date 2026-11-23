@@ -2316,7 +2316,8 @@
     "virtual": {
       "eyebrow": "Citas para dos pantallas",
       "title": "Algo que hacer durante la llamada.",
-      "twist": "El giro:"
+      "twist": "El giro:",
+      "openMap": "Abrir el mapa"
     },
     "gifts": {
       "eyebrow": "Regalos para la distancia",

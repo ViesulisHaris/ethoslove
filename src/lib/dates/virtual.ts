@@ -18,14 +18,14 @@ export const VIRTUAL_DATES: VirtualDate[] = [
     title: { en: "Three, two, one, play", es: "Tres, dos, uno, play" },
     blurb: { en: "The same film, started on the count of three, with the call left open for commentary.", es: "La misma peli, empezada a la de tres, con la llamada abierta para comentar." },
     twist: { en: "Same snacks on both sofas. Post the shopping list the day before.", es: "Lo mismo para picar en los dos sofás. Pasaos la lista de la compra el día antes." },
-    art: { sticker: "moon", from: "#DADDF5", to: "#BFC5EE" },
+    art: { sticker: "moon", from: "#EFDDE2", to: "#E2C4CF" },
   },
   {
     id: "walk-me-round",
     title: { en: "Walk me round your day", es: "Enséñame tu día andando" },
     blurb: { en: "A video walk through your actual neighbourhood: the coffee place, the shortcut, the dog you always say hello to.", es: "Un paseo en vídeo por tu barrio de verdad: el sitio del café, el atajo, el perro al que siempre saludas." },
     twist: { en: "End at the spot you'll take them first when they visit.", es: "Acaba en el sitio al que le llevarás primero cuando venga." },
-    art: { sticker: "leaf", from: "#E1EFD9", to: "#CBE3BE" },
+    art: { sticker: "leaf", from: "#ECE6D3", to: "#DDD3B6" },
   },
   {
     id: "order-for-each-other",
@@ -46,14 +46,14 @@ export const VIRTUAL_DATES: VirtualDate[] = [
     title: { en: "A museum, from bed", es: "Un museo, desde la cama" },
     blurb: { en: "Half the great museums have a virtual tour. Share a screen and wander in your pyjamas.", es: "Medio mundo de museos tiene visita virtual. Compartid pantalla y paseaos en pijama." },
     twist: { en: "Each choose the piece you'd hang in the flat you'll share one day.", es: "Elegid cada uno la obra que colgaríais en el piso que compartiréis algún día." },
-    art: { sticker: "butterfly", from: "#EADFF6", to: "#DCCBF0" },
+    art: { sticker: "butterfly", from: "#F2E0E3", to: "#E7CAD3" },
   },
   {
     id: "plan-the-visit",
     title: { en: "Plan the next visit, properly", es: "Planead la próxima visita, pero bien" },
     blurb: { en: "Open the map of their town and build the first day together: every stop, in order.", es: "Abrid el mapa de su ciudad y montad el primer día juntos: cada parada, en orden." },
     twist: { en: "Send the plan as an invitation and let them open it on the plane.", es: "Envía el plan como invitación y que lo abra en el avión." },
-    art: { sticker: "planet", from: "#D9EEF3", to: "#BBDDE8" },
+    art: { sticker: "planet", from: "#F5E2D3", to: "#EACAB5" },
   },
   {
     id: "sunday-paper",

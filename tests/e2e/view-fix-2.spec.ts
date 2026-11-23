@@ -152,6 +152,110 @@ test.describe("make-6: the Spanish editor's music list", () => {
   });
 });
 
+/** The tour keeps itself off automated browsers; these tests tell the page they are a person (tour.spec.ts). */
+async function asAPerson(page: Page) {
+  await page.addInitScript(() => Object.defineProperty(Navigator.prototype, "webdriver", { get: () => false }));
+}
+
+test.describe("rooms-10: after a room's tour a phone is where it started", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  for (const [path, how] of [
+    ["/trips", "finished"],
+    ["/games", "finished"],
+    ["/trips", "skipped"],
+  ] as const) {
+    test(`${path}, ${how}`, async ({ page }) => {
+      await asAPerson(page);
+      await page.goto(path);
+      const tour = page.locator("[data-tour-card]");
+      await expect(tour).toBeVisible({ timeout: 20_000 });
+      const started = await page.evaluate(() => window.scrollY);
+      if (how === "skipped") {
+        // A step on, so the page has moved, then Skip.
+        await tour.getByRole("button", { name: "Next" }).click();
+        await page.waitForTimeout(900);
+        await tour.getByRole("button", { name: /^Skip/ }).click();
+      } else {
+        for (let i = 0; i < 8; i++) {
+          const done = tour.getByRole("button", { name: "Got it" });
+          if (await done.isVisible()) {
+            await page.waitForTimeout(900);
+            expect(await page.evaluate(() => window.scrollY), "the tour moved the page").toBeGreaterThan(started + 100);
+            await done.click();
+            break;
+          }
+          await tour.getByRole("button", { name: "Next" }).click();
+          await page.waitForTimeout(500);
+        }
+      }
+      await expect(tour).toBeHidden();
+      await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 5_000 }).toBeLessThanOrEqual(started + 2);
+    });
+  }
+});
+
+test.describe("rooms-13: a trip map's zoom buttons are a finger's size on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  test("44 by 44", async ({ page }) => {
+    await page.goto("/trips/lisbon-slow-weekend");
+    const map = page.locator(".ethos-map-canvas");
+    await map.scrollIntoViewIfNeeded();
+    for (const name of ["Zoom in", "Zoom out"]) {
+      const button = map.getByRole("button", { name });
+      await expect(button).toBeVisible({ timeout: 30_000 });
+      const box = (await button.boundingBox())!;
+      expect(Math.round(box.width), name).toBeGreaterThanOrEqual(44);
+      expect(Math.round(box.height), name).toBeGreaterThanOrEqual(44);
+    }
+  });
+});
+
+test.describe("rooms-3: a trip's hero at 1440", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+  test("its flowers lie whole inside it, and its ground fades into the page's", async ({ page }) => {
+    for (const id of ["baltic-coast", "lisbon-slow-weekend"]) {
+      await page.goto(`/trips/${id}`);
+      const frame = page.locator("main section").first().locator("[data-floral-frame]");
+      await expect(frame).toHaveAttribute("data-floral-frame", "bandHero");
+      const out = await frame.evaluate((box) => {
+        const band = box.getBoundingClientRect();
+        return [...box.querySelectorAll("img")]
+          .map((img) => ({ r: img.getBoundingClientRect(), shown: getComputedStyle(img).display !== "none" }))
+          .filter(({ r, shown }) => shown && r.left < band.left + band.width / 2 && r.bottom > band.bottom + 1)
+          .map(({ r }) => Math.round(r.bottom - band.bottom));
+      });
+      expect(out, id).toEqual([]);
+      // Measured in one go: the page may still be settling between two separate reads.
+      const gap = await page.locator("main section").first().evaluate((section) => {
+        const fade = section.querySelector("[data-hero-fade]");
+        return fade ? Math.abs(section.getBoundingClientRect().bottom - fade.getBoundingClientRect().bottom) : null;
+      });
+      expect(gap, id).not.toBeNull();
+      expect(gap!, id).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+test.describe("rooms-14: Plan the next visit opens Dates", () => {
+  test("on /dates, then on their town once the box has one; the idea cards are warm", async ({ page }) => {
+    await page.goto("/long-distance");
+    const plan = page.locator("[data-plan-visit]");
+    await expect(plan).toHaveAttribute("href", "/dates");
+    const them = page.getByRole("combobox", { name: "Where they are" });
+    await them.fill("Paris");
+    await page.getByRole("option", { name: /^Paris/ }).first().click();
+    await expect(plan).toHaveAttribute("href", /^\/dates\?lat=[-\d.]+&lng=[-\d.]+&q=Paris/);
+    // No cool card left among the ideas: each gradient's colours have more red than blue.
+    const cool = await page.$$eval("main ul li[style*='linear-gradient']", (cards) =>
+      cards
+        .flatMap((c) => [...(c as HTMLElement).style.background.matchAll(/rgb\((\d+), (\d+), (\d+)\)/g)].map((m) => ({ r: +m[1], b: +m[3], title: c.querySelector("h3")?.textContent })))
+        .filter(({ r, b }) => b > r)
+        .map(({ title }) => title),
+    );
+    expect(cool).toEqual([]);
+  });
+});
+
 test.describe("make-7: a long name shows its count before it is cut", () => {
   test("from 30 characters, under both name fields", async ({ page }) => {
     await page.goto("/create/the-letter");

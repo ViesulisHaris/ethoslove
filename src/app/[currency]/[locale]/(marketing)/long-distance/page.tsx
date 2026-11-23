@@ -9,6 +9,7 @@ import { listManifests } from "@/templates/manifests";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
 import { MeetInTheMiddle } from "@/components/ldr/meet-in-the-middle";
+import { PlanVisitLink } from "@/components/ldr/plan-visit-link";
 import { EagerImg } from "@/components/shared/eager-img";
 import { TemplateCard } from "@/components/templates/template-card";
 
@@ -78,6 +79,16 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
                 <p className="relative mt-4 border-t border-forest/10 pt-3 text-[13.5px] leading-snug text-forest/70">
                   <span className="font-semibold text-forest">{t("virtual.twist")}</span> {v.twist[lang]}
                 </p>
+                {v.id === "plan-the-visit" ? (
+                  // The one idea that is a place on the site: the whole card opens Dates, on their town once the box above has it (walk-rooms-14).
+                  <PlanVisitLink label={`${v.title[lang]}: ${t("virtual.openMap")}`} className="group absolute inset-0 z-10 flex items-end rounded-[26px] p-5 outline-none focus-visible:ring-2 focus-visible:ring-rose/50">
+                    <span aria-hidden="true" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 group-hover:underline">
+                      {t("virtual.openMap")}
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </PlanVisitLink>
+                ) : null}
+                {v.id === "plan-the-visit" ? <span aria-hidden="true" className="h-9" /> : null}
               </li>
             ))}
           </ul>
