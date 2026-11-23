@@ -4,13 +4,12 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { ArrowRight, ArrowUpRight, Clock3, MoveHorizontal, Plane } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { awakeOverlap, clockOf, halfwayPlace, hoursAhead, milesOf } from "@/lib/dates/apart";
+import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
-import { ES_CITY_NAMES } from "@/lib/dates/cities";
-import { distanceKm, midpoint, round } from "@/lib/dates/geo";
+import { round } from "@/lib/dates/geo";
+import { halfwayBetween, halfwayCityName, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
 import { flightLinks, weekendAhead, type FlightSite } from "@/lib/trips/flights";
-import { CITIES } from "@/templates/_shared/places";
 import { WhereBox, type Where } from "@/components/dates/where-box";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { setTheirTown } from "./plan-visit-link";
@@ -20,11 +19,6 @@ import { setTheirTown } from "./plan-visit-link";
  * the Dates page's own, which this round leaves as it is, so the colour is set from here.
  */
 const TOWN_BOX = "[&>div:first-child]:bg-card [&>ul]:bg-card";
-
-/** Further than this from any city we know, the halfway point is somewhere nobody can meet: open sea, or a lot of forest. */
-const NOWHERE_KM = 400;
-/** Countries never named as the place to meet: neither their cities nor their airports. */
-const NEVER_SUGGESTED = new Set(["ES"]);
 
 type Zone = { offset: number; name: string };
 /** A town's time zone: `undefined` while it is being asked for, `null` when it could not be. */
@@ -92,13 +86,8 @@ export function MeetInTheMiddle() {
   const zoneA = useZone(a);
   const zoneB = useZone(b);
 
-  const result = useMemo(() => {
-    if (!a || !b) return null;
-    const km = distanceKm(a, b);
-    const middle = midpoint(a, b);
-    const place = halfwayPlace(middle, CITIES, { maxKm: NOWHERE_KM, neverNamed: NEVER_SUGGESTED });
-    return { km, middle, near: typeof place === "string" ? null : place, unnamed: place === "unnamed" };
-  }, [a, b]);
+  // The same calculation as the halfway finder's own page (lib/ldr/halfway.ts).
+  const result = useMemo(() => (a && b ? halfwayBetween(a, b) : null), [a, b]);
   // Each of them flying to the airport nearest halfway; or, when halfway has no airport of its
   // own (or is one of their home towns), one of them flying to the other. One seat each way.
   const flights = useMemo(() => {
@@ -121,7 +110,7 @@ export function MeetInTheMiddle() {
     return { to: null, hops: [hop(fromA, fromB)] };
   }, [a, b, result, locale, today]);
   // The city table is in English; a Spanish page says "Ciudad de México", and so does the link to its dates.
-  const halfwayName = result?.near ? (locale === "es" ? ES_CITY_NAMES[result.near.city.name] : undefined) ?? result.near.city.name : "";
+  const halfwayName = result?.near ? halfwayCityName(result.near.city, locale) : "";
   const ahead = zoneA && zoneB ? hoursAhead(zoneA.offset, zoneB.offset) : null;
   const windows = zoneA && zoneB ? awakeOverlap(zoneA.offset, zoneB.offset) : null;
   const number = (n: number) => Math.round(n).toLocaleString(locale === "es" ? "es-ES" : "en-GB");
