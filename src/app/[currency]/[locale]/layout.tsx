@@ -20,10 +20,12 @@ import "../../globals.css";
 // or Łucja fetches latin-ext the moment it appears; English and Spanish never need it, and
 // preloading it cost every first visit five font files (~250 KB) that no page drew.
 //
-// Preloaded: only what the first screen of a page draws — the body face and Newsreader, whose
-// italic is the logo and the headline's second line. Every preload is fetched at high priority
-// alongside the render-blocking CSS, so on slow 4G the six the site used to preload (482 KB)
-// held first paint back by a second; the rest now load, with `swap`, once text asks for them.
+// Preloaded: only the body face (47 KB). Every preload is fetched at high priority alongside the
+// render-blocking CSS, so on slow 4G the six the site used to preload (482 KB) held first paint
+// back by a second; the rest load, with `swap`, once text asks for them. Newsreader was preloaded
+// too until 24 Nov 2026: with its optical-size axis its two faces are 275 KB, and on a slow phone
+// they took the line for the first 4 s, ahead of the stylesheet, the scripts and the page's main
+// picture, while the words they are for are painted at once in the matched fallback anyway.
 const sans = Schibsted_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -49,16 +51,25 @@ const display = Newsreader({
   display: "swap",
   style: ["normal", "italic"],
   axes: ["opsz"],
+  preload: false,
 });
 
 // Small labels (a card's number and price) and a few form fields: never a headline, and when it
 // swaps in, a one-line label changes nothing around it.
+//
+// Until it arrives, a monospace face of the phone's own: every one of them gives each letter the
+// width JetBrains Mono does (0.6 of the size), so a label takes the same room before and after.
+// The default stand-in was Arial stretched to the font's average lowercase width, a third wider
+// again in the capitals the labels are set in: "BUSCADOR DE REGALOS" pushed the finder's link
+// under it on a phone and the whole tool jumped back up when the font came (layout shift 0.22).
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
   weight: ["400", "500"],
   preload: false,
+  adjustFontFallback: false,
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "Roboto Mono", "Droid Sans Mono", "Liberation Mono", "Courier New", "monospace"],
 });
 
 // The gift templates keep Fraunces (their type was tuned to it); the site itself uses Newsreader.
