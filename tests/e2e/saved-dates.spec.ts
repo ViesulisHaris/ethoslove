@@ -244,3 +244,27 @@ test("a trip saved signed in is a toggle", async ({ page }) => {
   await expect(page.getByTestId("save-trip")).toBeVisible();
   expect(asked.some((a) => a.method === "DELETE" && a.url.endsWith(ID))).toBe(true);
 });
+
+test("a trip just saved offers the surprise; one found saved does not", async ({ page, context }) => {
+  await signIn(page);
+  const trip = savedDate({ kind: "trip", tripId: "lisbon-slow-weekend", data: { v: 1, tripId: "lisbon-slow-weekend" } });
+  await api(page, ({ method }) => (method === "POST" ? { status: 201, body: { savedDate: trip } } : method === "DELETE" ? { status: 200, body: { ok: true } } : { status: 200, body: list() }));
+  await page.goto("/trips/lisbon-slow-weekend");
+  await page.getByTestId("save-trip").click();
+  const next = page.getByTestId("trip-saved-next");
+  await expect(next).toContainText("It's in My dates. Keep it a secret?");
+  const surprise = next.getByRole("link", { name: "Make it a surprise" });
+  await expect(surprise).toHaveAttribute("href", "#surprise");
+  await surprise.click();
+  await expect(page.locator("#surprise")).toBeInViewport();
+  await page.getByTestId("trip-saved").getByRole("button", { name: "Remove" }).click();
+  await expect(page.getByTestId("save-trip")).toBeVisible();
+  await expect(next).toHaveCount(0);
+
+  // Saved before: "Saved" shows, and the line does not.
+  const again = await context.newPage();
+  await api(again, () => ({ status: 200, body: list({ items: [trip] }) }));
+  await again.goto("/trips/lisbon-slow-weekend");
+  await expect(again.getByTestId("trip-saved")).toContainText("Saved");
+  await expect(again.getByTestId("trip-saved-next")).toHaveCount(0);
+});

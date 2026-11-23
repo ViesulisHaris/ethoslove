@@ -3480,6 +3480,8 @@
         "removeLabel": "Quitar {title} de Mis citas",
         "byPartner": "Guardado por {name}",
         "failed": "El viaje no se ha guardado. Prueba otra vez.",
+        "then": "Ya está en Mis citas. ¿Y si es un secreto?",
+        "thenCta": "Que sea una sorpresa",
         "signIn": {
           "title": "Inicia sesión para guardar este viaje",
           "sub": "Irá a Mis citas y se guardará solo cuando vuelvas."

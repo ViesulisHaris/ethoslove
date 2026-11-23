@@ -3480,6 +3480,8 @@
         "removeLabel": "Remove {title} from My dates",
         "byPartner": "Saved by {name}",
         "failed": "The trip didn't save. Try again.",
+        "then": "It's in My dates. Keep it a secret?",
+        "thenCta": "Make it a surprise",
         "signIn": {
           "title": "Sign in to save this trip",
           "sub": "It goes in My dates, and saves itself once you're back."

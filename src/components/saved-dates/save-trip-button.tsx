@@ -129,6 +129,15 @@ export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: s
           {error === "network" || error === "invalid_input" ? t("save.trip.failed") : t(`errors.${error}`)}
         </p>
       ) : null}
+      {/* Saved here, on this visit (also the save that makes itself after signing in): the trip page's own way on, once. A trip found already saved shows none, and removing it takes the line away. */}
+      {done?.id ? (
+        <p role="status" data-testid="trip-saved-next" className="basis-full text-[14px] leading-snug text-forest/75">
+          {t("save.trip.then")}{" "}
+          <a href="#surprise" onClick={() => track("room_handoff", { from: "saved_trip", to: "surprise" })} className="-my-3 inline-flex min-h-11 items-center font-semibold text-rose-deep underline underline-offset-4">
+            {t("save.trip.thenCta")}
+          </a>
+        </p>
+      ) : null}
       <SavedDatesUpsell open={upsell} onOpenChange={setUpsell} reason="limit" monthly={monthly} currency={currency} />
       <SignInDialog open={signIn} onOpenChange={setSignIn} next={`/trips/${tripId}`} title={t("save.trip.signIn.title")} sub={t("save.trip.signIn.sub")} />
     </>
