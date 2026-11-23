@@ -4,6 +4,7 @@ import { balance, type Place } from "@/lib/dates/places";
 import { rankPlaces, type Ranked } from "@/lib/dates/rank";
 import { mergePlaces, placesFromPois, type PoiFeature, type TileXY } from "@/lib/dates/tiles";
 import { mentionsSpain } from "./cities";
+import { leftOff } from "./kind-places";
 
 /** How far from the centre a city's page looks: the same circle the dates map searches by default. */
 export const CITY_RADIUS_M = 1500;
@@ -50,7 +51,9 @@ export function topCityPlaces(places: Place[], count = PLACES_PER_CITY, perGroup
   for (const place of rankPlaces(places, {})) {
     if (picked.length === count) break;
     const name = place.name.trim().toLowerCase();
-    if (!place.named || names.has(name) || (taken[place.group] ?? 0) >= perGroup) continue;
+    // The pages by kind leave off the chains, the paid galleries and the paved squares filed as
+    // parks (Leicester Square); a city's own page names none of them either (dates-N3-3).
+    if (!place.named || leftOff(place) || names.has(name) || (taken[place.group] ?? 0) >= perGroup) continue;
     names.add(name);
     taken[place.group] = (taken[place.group] ?? 0) + 1;
     picked.push(place);
