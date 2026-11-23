@@ -829,7 +829,7 @@
     "sort": {
       "label": "Ordenar por:",
       "popular": "Más populares",
-      "new": "Más nuevas",
+      "new": "Más nuevos",
       "az": "De la A a la Z"
     },
     "allOccasions": "Todas las ocasiones",
@@ -893,12 +893,12 @@
         "title": "Regalos premium"
       },
       "sortedNew": {
-        "eyebrow": "{count, plural, one {# plantilla} other {# plantillas}}",
-        "title": "Todas, empezando por la más nueva"
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Todos, empezando por el más nuevo"
       },
       "sortedAz": {
-        "eyebrow": "{count, plural, one {# plantilla} other {# plantillas}}",
-        "title": "Todas, por nombre"
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Todos, por nombre"
       },
       "all": {
         "eyebrow": "La colección",
@@ -992,7 +992,7 @@
         "fathers-day": "el Día del Padre",
         "apology": "pedir perdón",
         "long-distance": "quien está lejos",
-        "just-because": "un día cualquiera"
+        "just-because": "porque sí"
       }
     }
   },
@@ -2310,7 +2310,7 @@
       },
       "ldr": {
         "title": "A distancia",
-        "blurb": "Quedad a medio camino.",
+        "blurb": "Quedad a medio camino. Citas entre husos horarios.",
         "cta": "Acortar la distancia"
       },
       "games": {
@@ -2827,7 +2827,7 @@
       "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
       "minutes": "{n} min",
       "todayTitle": "La pregunta de hoy",
-      "todayPhones": "Dos móviles",
+      "todayPhones": "Dos móviles, un enlace",
       "todayCta": "Responder",
       "tiers": {
         "free": {
@@ -3653,8 +3653,8 @@
     "free": {
       "eyebrow": "Gratis",
       "title": "Gratis para hacer y enviar",
-      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Un regalo gratis lleva la pequeña marca «Hecho con Ethos», como el que te llegó.",
-      "blurbElse": "Sin pagar, y sin cuenta hasta que lo envíes. Un regalo gratis lleva una pequeña marca «Hecho con Ethos»."
+      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Un regalo gratis lleva el pequeño pie «Hecho con Ethos», como el que te llegó.",
+      "blurbElse": "Sin pagar, y sin cuenta hasta que lo envíes. Un regalo gratis lleva un pequeño pie «Hecho con Ethos»."
     },
     "premium": {
       "eyebrow": "Premium",

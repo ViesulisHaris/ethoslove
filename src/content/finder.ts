@@ -145,7 +145,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
       },
       mom: {
         en: "Ask your brothers and sisters for their reasons too, and rename the jar on its label, 40 characters. She shakes them out one note at a time.",
-        es: "Pide también sus motivos a tus hermanos y cambia la etiqueta del tarro, de 40 caracteres. Ella las va sacando nota a nota.",
+        es: "Pide también sus motivos a tus hermanos y cambia la etiqueta del tarro, de 40 caracteres. Ella los va sacando nota a nota.",
       },
       dad: {
         en: "Get everyone in the family to write a note, and change the label from the one it comes with. He shakes the jar and they fall out one at a time.",
