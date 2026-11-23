@@ -369,7 +369,8 @@ export async function Experience({ manifest, locale, flowers, photo, line, note 
       <div className="relative isolate -mt-px bg-page-band [clip-path:inset(-24rem_0_0_0)]">
         <div className="container-x grid items-center gap-y-6 pt-4 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-0 lg:pb-0">
           {/* The picture is wider than its column and runs off the page's left side and under the band's lower edge. */}
-          <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
+          {/* On a phone it runs off the left side more than the right: the polaroid lies at the picture's right, and the screen's edge must not cut a photo. */}
+          <div className="-ml-[21%] -mr-[7%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
             <ExperienceFlatlay flowers={flowers} photo={photo} poster={manifest.thumbnail.poster} />
           </div>
           <div className="lg:py-24">
