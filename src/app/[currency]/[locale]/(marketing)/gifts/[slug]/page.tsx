@@ -9,18 +9,17 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateOfferAmount } from "@/lib/seo";
 import { chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
-import { handLine, kindCardLine, kindIdeaIsFree } from "@/content/idea-cards";
+import { handLine, kindCardLine, kindIdeaIsFree, openingLine } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
 import { getManifest } from "@/templates/manifests";
-import { CHIP } from "@/components/marketing/chip";
+import { DEMO_PHOTOS } from "@/templates/_shared/demo-photos";
+import { sendsFree } from "@/lib/gift/free-tier";
 import { occasionsInSeason } from "@/lib/gift/finder";
 import { ChristmasGifts, hasChristmasGifts } from "@/components/marketing/christmas-gifts";
-import { GiftIdeaList, withManifests } from "@/components/marketing/gift-idea-list";
+import { withManifests } from "@/components/marketing/gift-idea-list";
 import { CARDS_ART } from "@/components/marketing/spread/placements";
 import { HeroTag, IdeaCards, MoreRow, QuestionsSpread, SITE_FLOWERS, SiteHero, SitePage, Spread, WhereNext, type IdeaCard } from "@/components/marketing/spread/sections";
 import { JsonLd } from "@/components/shared/json-ld";
-import { FaqList } from "@/components/shared/faq-list";
-import { PageHeader } from "@/components/shared/page-header";
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
 import { Band, ExperienceFlatlay, QuestionRow } from "@/components/templates/page/sections";
 
@@ -55,74 +54,63 @@ export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[
   const page = pageFor(slug);
   if (!page) notFound();
   setRequestLocale(locale);
-  if ("recipient" in page) return <RecipientPage recipient={page.recipient} locale={locale as GiftLocale} />;
   return (
     // The phone in the hero plays a gift, and its buttons are a client component's (src/i18n/client-namespaces.ts).
     <ClientMessages scope="(marketing)/gifts/[slug]/page" locale={locale}>
-      <KindPage kind={page.kind} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
+      {"recipient" in page ? (
+        <RecipientPage recipient={page.recipient} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
+      ) : (
+        <KindPage kind={page.kind} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
+      )}
     </ClientMessages>
   );
 }
 
-/** The gift pages by kind, as chips: on every /gifts/<slug> page, so each of them is one tap from the others. */
-async function KindLinks({ locale, except }: { locale: GiftLocale; except?: GiftGuideSlug }) {
-  const t = await getTranslations("recipients");
-  return (
-    <>
-      <h2 id="by-kind" className="text-eyebrow text-ink-soft">
-        {t("byKind")}
-      </h2>
-      <ul className="mt-5 flex flex-wrap gap-2">
-        {GIFT_GUIDE_SLUGS.filter((s) => s !== except).map((s) => (
-          <li key={s}>
-            <Link href={`/gifts/${s}`} className={CHIP}>
-              {GIFT_GUIDES[s][locale].label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
+/** The photo on the band's phone of a page by person: the café table, which no page by kind has on its own band. */
+const RECIPIENT_BAND_PHOTO = { src: DEMO_PHOTOS.p1.url, width: DEMO_PHOTOS.p1.width, height: DEMO_PHOTOS.p1.height } as const;
 
-/** The gift pages by person, as chips, with the occasions after them. */
-async function PersonLinks({ locale, except, heading }: { locale: GiftLocale; except?: Recipient; heading: string }) {
-  const t = await getTranslations("recipients");
-  return (
-    <>
-      <h2 id="more-people" className="text-eyebrow text-ink-soft">
-        {heading}
-      </h2>
-      <ul className="mt-5 flex flex-wrap gap-2">
-        {RECIPIENTS.filter((r) => r !== except).map((r) => (
-          <li key={r}>
-            <Link href={`/gifts/${recipientSlug(r)}`} className={CHIP}>
-              {RECIPIENT_GUIDES[r][locale].label}
-            </Link>
-          </li>
-        ))}
-        <li>
-          <Link href="/occasions" className={CHIP}>
-            {t("occasions")}
-          </Link>
-        </li>
-      </ul>
-    </>
-  );
-}
+/** The first sentence of a page's opening: the hero's one line. The whole opening is kept under "More about". */
+const firstSentence = (text: string) => text.trim().split(/(?<=[.!?])\s+/)[0] ?? text;
 
 /**
- * Gift ideas for one person: a numbered list where every idea is a template, then what to write,
- * when to send it and the questions people ask. The other people, the occasions and the pages by
- * kind at the foot.
+ * Gift ideas for one person, laid out as the gift pages by kind are (DESIGN-LESS-TEXT.md): the hero
+ * with the first idea's gift playing in the phone, the Christmas row in season, the ideas as picture
+ * cards that open to their first line and the idea in full, what to write and when to send it as
+ * closed rows in the band, the questions, and the other people, the occasions and the kinds as the
+ * quiet row the kind pages end on. What the numbered list printed as paragraphs is all still in the
+ * HTML, in closed <details>: every idea in full inside its card, the two how-tos, the answers, and
+ * the page's opening under "More about".
  */
-async function RecipientPage({ recipient, locale }: { recipient: Recipient; locale: GiftLocale }) {
+async function RecipientPage({ recipient, locale, currency }: { recipient: Recipient; locale: GiftLocale; currency: Currency }) {
   const t = await getTranslations("recipients");
+  const tOccasions = await getTranslations("occasions");
   const slug = recipientSlug(recipient);
   const guide = RECIPIENT_GUIDES[recipient][locale];
   const ideas = withManifests(guide.ideas);
   const url = localizedUrl(locale, `/gifts/${slug}`);
+  const ref = `gifts-${slug}`;
   const christmas = hasChristmasGifts(recipient) && occasionsInSeason(new Date().toISOString().slice(0, 10)).includes("christmas") ? recipient : null;
+  const lead = ideas[0].manifest;
+  const leadCost = templateOfferAmount(lead, currency);
+  const cards: IdeaCard[] = ideas.map((idea) => ({
+    manifest: idea.manifest,
+    title: idea.heading,
+    line: openingLine(idea.body) ?? "",
+    full: idea.body,
+    // The same address the numbered list's "Make this gift" had.
+    make: `/create/${idea.template}`,
+    free: sendsFree(idea.manifest),
+  }));
+  // Where next: four pages by kind as posters; the other people, the occasions and the rest of the kinds by name.
+  const kinds = GIFT_GUIDE_SLUGS.flatMap((s) => {
+    const manifest = leadGift(s);
+    return manifest ? [{ href: `/gifts/${s}`, label: GIFT_GUIDES[s][locale].label, manifest }] : [];
+  });
+  const links = [
+    ...RECIPIENTS.filter((r) => r !== recipient).map((r) => ({ href: `/gifts/${recipientSlug(r)}`, label: RECIPIENT_GUIDES[r][locale].label })),
+    { href: "/occasions", label: t("occasions") },
+    ...kinds.slice(4).map(({ href, label }) => ({ href, label })),
+  ];
 
   return (
     <>
@@ -146,37 +134,60 @@ async function RecipientPage({ recipient, locale }: { recipient: Recipient; loca
           faqNode(guide.faq),
         ]}
       />
-      <PageHeader eyebrow={t("eyebrow")} title={guide.h1} subtitle={guide.lead} />
+      <SitePage name={ref}>
+        <div data-testid="gift-person-page">
+          <SiteHero
+            manifest={lead}
+            locale={locale}
+            tags={
+              <>
+                <HeroTag strong>{t("eyebrow")}</HeroTag>
+                <HeroTag>{t("ideasTag", { count: ideas.length })}</HeroTag>
+              </>
+            }
+            heading={guide.h1}
+            line={firstSentence(guide.lead)}
+            note={
+              <span data-testid="hero-note">
+                {leadCost > 0 ? t("inPhone", { name: lead.name[locale], price: formatAmount(leadCost, currency, locale) }) : t("inPhoneFree", { name: lead.name[locale] })}
+              </span>
+            }
+          >
+            <Link href={`/create/${lead.slug}?ref=${ref}`} data-testid="hero-make" aria-label={`${t("makeLead")}: ${lead.name[locale]}`} className={HERO_BUTTON}>
+              {t("makeLead")}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
+          </SiteHero>
 
-      {/* In season: four Christmas gifts for this person, as pictures, before the list (components/marketing/christmas-gifts.tsx). */}
-      {christmas ? <ChristmasGifts recipient={christmas} locale={locale} className="pb-14 sm:pb-20" /> : null}
+          {/* In season: four Christmas gifts for this person, as pictures, before the ideas (components/marketing/christmas-gifts.tsx). */}
+          {christmas ? <ChristmasGifts recipient={christmas} locale={locale} className="pt-4 pb-14 sm:pb-20" /> : null}
 
-      <GiftIdeaList ideas={ideas} locale={locale} heading="h2" className="container-x border-t border-line pb-16" />
+          <Spread id="person-ideas" label={t("ideasLabel")} heading={t("ideasTag", { count: ideas.length })} line={tOccasions("ideasLine")} art={christmas ? CARDS_ART.filter((piece) => piece.art !== "lily-stem-tall") : CARDS_ART} className="pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-32">
+            <IdeaCards id={`ideas-${slug}`} cards={cards} locale={locale} labels={{ make: t("make"), free: t("free"), full: t("ideaInFull"), page: t("giftPage") }} />
+          </Spread>
 
-      <section className="container-narrow pb-16" aria-labelledby="recipient-guide">
-        <h2 id="recipient-guide" className="sr-only">
-          {t("guideTitle")}
-        </h2>
-        <div className="flex flex-col gap-8">
-          {guide.sections.map((section) => (
-            <div key={section.heading}>
-              <h3 className="font-display text-2xl">{section.heading}</h3>
-              <p className="mt-2.5 leading-relaxed text-ink-soft">{section.body}</p>
+          <Band labelledBy="person-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={RECIPIENT_BAND_PHOTO} />}>
+            <p className="text-page-label text-page-body">{t("craftLabel")}</p>
+            <h2 id="person-guide" className="mt-4 display-xl text-balance text-page-ink">
+              {t("guideTitle")}
+            </h2>
+            {/* What to write and when to send it, closed: each opens in place, one at a time. */}
+            <div className="mt-7 border-t border-page-line">
+              {guide.sections.map((section) => (
+                <QuestionRow key={section.heading} q={section.heading} a={section.body} name={`guide-${recipient}`} />
+              ))}
             </div>
-          ))}
-        </div>
-        <h2 className="display-md mt-16 mb-6">{t("faqTitle")}</h2>
-        <FaqList items={guide.faq} name={`faq-${recipient}`} />
-      </section>
+          </Band>
 
-      <div className="container-x border-t border-line pt-10 pb-24">
-        <nav aria-labelledby="more-people">
-          <PersonLinks locale={locale} except={recipient} heading={t("more")} />
-        </nav>
-        <nav className="mt-10" aria-labelledby="by-kind">
-          <KindLinks locale={locale} />
-        </nav>
-      </div>
+          <QuestionsSpread id="person-questions" name={`faq-${recipient}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq} className="pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-60">
+            <MoreRow summary={t("moreAbout")}>
+              <p>{guide.lead}</p>
+            </MoreRow>
+          </QuestionsSpread>
+
+          <WhereNext id="person-next" label={t("more")} heading={t("byKind")} posters={kinds.slice(0, 4)} locale={locale} navLabel={t("more")} links={links} />
+        </div>
+      </SitePage>
     </>
   );
 }
