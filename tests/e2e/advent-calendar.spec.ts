@@ -646,9 +646,10 @@ for (const size of SIZES) {
     // Every name of the demo, read on its tag: on a phone 390 wide none is under 10 px ("Auntie Jo" was 9.4, the longest 7.4).
     await expect(root.locator("[data-tag-name]")).toHaveCount(8);
     await tagsRead(root, size.name === "390x844" || size.name === "1280x720" ? 10 : 8.2);
-    // And every one of them whole, no word broken: each is measured and written as large as leaves it so. (A phone on its
-    // side draws nothing under 8.5 px, and there the longest, "The Okonkwos", is cut instead of written smaller.)
-    await expect(root.locator("[data-tag-name][data-whole]")).toHaveCount(size.name === "844x390" ? 7 : 8);
+    // And every one of them whole, no word broken, on every screen: each is measured and written as large as leaves it so.
+    // (On a phone on its side "The Okonkwos" was cut to "The Okon…"; the house is drawn larger there now, and a name whole
+    // only a hair under 8.5 px is written whole at 8.)
+    await expect(root.locator("[data-tag-name][data-whole]")).toHaveCount(8);
     await readTheLetter(page, root);
     expect(w.problems).toEqual([]);
     await context.close();
