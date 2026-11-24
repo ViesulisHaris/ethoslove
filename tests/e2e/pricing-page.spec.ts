@@ -493,25 +493,25 @@ test("the band's buttons show a cream focus ring to a keyboard, not wine on wine
   await page.goto("/pricing?subscriptions=on");
   const band = page.getByTestId("membership-hero");
   const buy = page.getByTestId("buy-membership");
-  // Reach the band by keyboard, so :focus-visible holds: Tab from a stand-in put just before it.
-  await band.evaluate((el) => {
-    const marker = document.createElement("button");
-    marker.dataset.testMarker = "";
-    el.before(marker);
-    marker.focus();
-  });
+  // Reach the band by keyboard, so :focus-visible holds: a click on its heading sets where Tab starts from.
+  await page.locator("#for-two-title").click();
   const seen: string[] = [];
   for (let i = 0; i < 12 && !(await buy.evaluate((el) => el === document.activeElement)); i++) {
     await page.keyboard.press("Tab");
-    const ring = await page.evaluate(() => {
+    const ring = await page.evaluate(async () => {
       const el = document.activeElement as HTMLElement;
       if (!el.closest("[data-testid=membership-hero]") || !el.matches(":focus-visible")) return null;
+      // The toggle's choices transition their colours (outline-color among them): read the ring once it has landed.
+      await Promise.all(el.getAnimations().map((a) => a.finished.catch(() => undefined)));
       return getComputedStyle(el).outlineColor;
     });
     if (ring) seen.push(ring);
   }
   await expect(buy).toBeFocused();
-  seen.push(await buy.evaluate((el) => getComputedStyle(el).outlineColor));
+  seen.push(await buy.evaluate(async (el) => {
+    await Promise.all(el.getAnimations().map((a) => a.finished.catch(() => undefined)));
+    return getComputedStyle(el).outlineColor;
+  }));
   const ground = await band.evaluate((el) => getComputedStyle(el).backgroundColor);
   const cream = await band.evaluate((el) => {
     const probe = document.createElement("span");

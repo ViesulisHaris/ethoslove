@@ -159,7 +159,7 @@ test.describe("in Spanish", () => {
     await expect(page.getByTestId("plan-monthly")).toContainText("4,99 € al mes");
     await expect(page.getByTestId("plan-yearly")).toContainText("Ahorra un 50 %");
     const offer = page.getByTestId("membership-offer");
-    await expect(hiddenAbove(offer.getByText("Salen a 2,50 € al mes · ahorras un 50 % frente al plan mensual"))).toHaveCount(0);
+    await expect(hiddenAbove(offer.getByText("Salen a 2,50 € al mes · ahorras un 50 %"))).toHaveCount(0);
     await expect(page.getByTestId("buy-membership")).toHaveText("Conseguir Ethos for Two");
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
   });

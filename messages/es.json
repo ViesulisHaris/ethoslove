@@ -1226,7 +1226,7 @@
     "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
     "separately": "{price} por separado",
     "page": {
-      "pick3Separately": "{price} si compras tres por separado",
+      "pick3Separately": "{price} los tres sueltos",
       "label": "Precios",
       "title": "Un regalo, un solo pago.",
       "titleTemplate": "Desbloquea {name}",
@@ -1296,7 +1296,7 @@
       "giftCardLine": "Todos los regalos, para otra persona, en un código.",
       "giftCardNote": "Añadir una nota",
       "faqForTwo": "Preguntas sobre Ethos for Two",
-      "forTwoLine": "Una sola suscripción os cubre a los dos.",
+      "forTwoLine": "Una suscripción os cubre a los dos.",
       "forTwoLinePass": "Un solo pago os cubre a los dos durante un año.",
       "forTwoTicks": [
         "Citas y viajes guardados, sin límite",
@@ -3108,7 +3108,7 @@
       "unitMonth": "al mes",
       "unitYear": "al año",
       "unitPass": "por un año",
-      "yearlyNote": "Salen a {price} al mes · ahorras un {pct} % frente al plan mensual",
+      "yearlyNote": "Salen a {price} al mes · ahorras un {pct} %",
       "monthlyNote": "Se cobra cada mes · cancela cuando quieras",
       "cta": "Conseguir Ethos for Two",
       "termsMonthly": "{price} hoy y después cada mes hasta que canceles. Cancela cuando quieras desde tu cuenta.",
