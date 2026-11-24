@@ -50,11 +50,14 @@ Check these files before stating any fact. If a file disagrees with this list, t
 - **Templates.** There are 61 (16 Nov 2026; count the folders in `src/templates`). Each has a name,
   tagline and description in its manifest. Describe a template only by what its manifest says it
   does.
-- **Free.** The Letter and Constellations are free (`pricing.freeNote` in `messages/en.json`):
+- **Free.** Since 19 Nov 2026 one template is free, The Letter, as a short note
+  (`pricing.freeNoteShort` in `messages/en.json`, `src/lib/gift/free-tier.ts`):
   - unlimited gifts
-  - up to 10 photos
+  - up to 500 characters, and no photos
   - the music library, and a 30-second preview of a real song they can tap to hear
   - a small "Made with Ethos" footer
+  Photos and the full letter come with "Make it special" (below). Constellations has no free
+  version any more. Say "free as a short note", never "free with photos".
 - **Premium.** Every other template is a one-time payment, never a subscription. Prices follow the
   reader's country: US dollars in the US, pounds in the UK, euros elsewhere
   (`src/lib/pricing/products.ts`, checked 16 Nov 2026):

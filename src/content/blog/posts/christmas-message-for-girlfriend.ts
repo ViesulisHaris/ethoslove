@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "christmas-message-for-girlfriend",
   published: "2026-11-08",
+  updated: "2026-11-24",
   occasion: "christmas",
   templates: ["snow-globe", "fireside", "the-letter"],
   content: {
@@ -119,7 +120,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "The free one, for a message that wants to be a letter: she breaks a wax seal and your words appear in handwriting, with a few photos falling in as polaroids.",
+          note: "Free as a short note, for a message that wants to be a letter: up to 500 characters and a song. She breaks a wax seal and your words appear in handwriting. Photos, falling in as polaroids, and a longer letter come with \"Make it special\", paid once ([prices](/pricing)).",
         },
       ],
       faq: [
@@ -254,7 +255,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "La gratuita, para un mensaje que quiere ser carta: ella rompe un sello de lacre y tus palabras aparecen escritas a mano, con unas cuantas fotos que caen como polaroids.",
+          note: "Gratis como nota corta, para un mensaje que quiere ser carta: hasta 500 caracteres y una canción. Ella rompe un sello de lacre y tus palabras aparecen escritas a mano. Las fotos, que caen como polaroids, y una carta más larga vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).",
         },
       ],
       faq: [

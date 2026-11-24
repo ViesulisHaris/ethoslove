@@ -1,0 +1,49 @@
+{
+  "slug": "christmas-message-for-girlfriend",
+  "keyword": "christmas message for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The formula lead (one detail from this year, one plan for next), specific plain lines and the what-to-leave-out list beat the bulk lists; the corrected Letter card sells nothing it does not give. Polish: say earlier that photos are paid."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Free note (500 characters and a song), Make it special, the seal and polaroids, Snow Globe and Fireside all checked against the code; \"a longer letter\" matches faqFreeAShort; Spanish matches sentence for sentence. Polish: reorder \"photos, falling in as polaroids,\" so it does not read as a list; /pricing FAQ still describes the old free tier: a site issue already in the backlog for a person, not counted against the post."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Against 120-150 line lists (American Greetings, scoopwhoop, swifdoo, AOL), the personal-touch section, long-distance lines and the letter section cover every intent on page one, and the refreshed card is accurate in both languages."
+        }
+      ],
+      "applied": [
+        "Letter card: free as a short note of up to 500 characters and a song; photos and a longer letter with Make it special, paid once, linked to /pricing; Spanish to match; updated 2026-11-24"
+      ],
+      "rejected": [
+        "Polish left for later: the panel passed this version"
+      ]
+    }
+  ]
+}

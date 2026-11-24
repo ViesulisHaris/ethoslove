@@ -3,6 +3,34 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-24: the free Letter as a short note, corrected in gifft-me-alternatives and both Christmas message posts
+- **Page:** /blog/gifft-me-alternatives, /blog/christmas-message-for-boyfriend,
+  /blog/christmas-message-for-girlfriend (and /es to match); `docs/blog/VOICE.md`
+- **Why:** First run of the day, a Tuesday; the ranks were five days old, so the rank check ran too
+  (`seo-ranks.md`). The first open backlog item: since 19 Nov a free Letter is a short note (500
+  characters and a song, no photos) and Constellations has no free version, but posts still promised
+  free photos. Search Console (28 days to 22 Nov, brand left out): /es/blog/gifft-me-alternatives is the
+  blog's most-seen page, 1,075 impressions and 13 clicks, mostly "gifft me" at 4.5, and its comparison
+  table still said Ethos had two free templates with up to 10 free photos, the very facts a comparison
+  reader checks. The two Christmas message posts are a month from their day and their Letter cards
+  offered photos free.
+- **What changed:** gifft-me-alternatives: Ethos's free cell is now "One template, The Letter, as a
+  short note of up to 500 characters", photos "None on the free note; up to 20 with a paid option",
+  and "Photos and the full letter on The Letter: $8.99" (7,49 € in Spanish); its Letter card says
+  what is free. Both Christmas posts' Letter cards now say "Free as a short note: up to 500
+  characters and a song", with photos and the full letter under "Make it special". VOICE.md's "Free"
+  list, which every post is written from, still said The Letter and Constellations with 10 photos:
+  corrected to the short note. `updated` 2026-11-24 on the three posts.
+- **Panel:** 10/10/10 after 1 round for gifft-me-alternatives and christmas-message-for-girlfriend,
+  2 rounds for christmas-message-for-boyfriend (the editor split the card's long sentence)
+  (`docs/blog/reviews/refresh/<slug>-2026-11-24.json`)
+- **Cost:** $1.77 (the rank check, 296 SERPs, and `ranked_keywords`); balance $44.35
+- **Also found:** the editor confirmed the /pricing FAQ still describes the old free tier (already in
+  the backlog's "For a person"); the posts' [Pricing] links lead to it.
+- **Check on:** 2026-12-08 whether /es/blog/gifft-me-alternatives keeps "gifft me" near 4.5 and its
+  clicks, and whether the Christmas message posts show for "christmas message for boyfriend" and
+  "christmas message for girlfriend" as December starts
+
 ## 2026-11-20: digital-love-letter-websites-compared adds Just Meant For You and ShareLove Letters, corrects Ethos's free note; Spanish aims at "carta de amor digital"
 - **Page:** /blog/digital-love-letter-websites-compared (and /es to match)
 - **Why:** Second run of the day; the first open backlog item. Asked in Spanish on 20 Nov ("página para
