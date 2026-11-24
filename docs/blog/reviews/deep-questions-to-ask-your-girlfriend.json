@@ -1,0 +1,184 @@
+{
+  "slug": "deep-questions-to-ask-your-girlfriend",
+  "keyword": "deep questions to ask your girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Three product mentions in the text where VOICE.md allows two: cut the closing /gifts/for-girlfriend line and point the earlier 'digital gift' link there. Polish: the 'Remember it' example reused the asker's own answer."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "A claim about Ethos the code no longer supports, in both languages: The Letter's note says photos drop in as polaroids and 'It's free'. Since 19 Nov 2026 the free Letter is a short note of up to 500 characters with no photos (src/lib/gift/free-tier.ts; pricing.freeNoteShort).",
+            "A claim misattributed to its source: the post said pairs who took turns liked each other more 'than pairs where one person did all the talking'; Greater Good says 'one speaker at a time', where both still talked."
+          ],
+          "summary": "Fix the free Letter wording and the turn-taking study; mark the Gable good-news finding as extended to deep answers rather than shown for them; replace two questions that near-repeat the hub and the boyfriend post; fix the 'Remember it' example; ten Spanish calques and slips (con quién había roto, no la superes, suena muy solitario, plantarse, se sienta nuestra casa, en corto, una lee una, por qué merece la pena)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Against page-one lists of 100 to 500+ unpaced questions, it gives 45 in five levels with when and how far in, a sourced go-first method, scripted follow-ups and what to do with silence or tears, and answers every People also ask question."
+        }
+      ],
+      "applied": [
+        "The Letter note rewritten: free as a short note of up to 500 characters with a song, photos and a longer letter with 'Make it special', paid once (EN and ES)",
+        "Turn-taking study corrected to 'one talked while the other listened, then swapped' (ES adds 'de estudiantes')",
+        "Gable finding framed as about good news, the habit extended to deep answers",
+        "Closing /gifts/for-girlfriend paragraph removed; 'digital gift' link now goes to /gifts/for-girlfriend (EN and ES)",
+        "'Remember it' example now a detail she told you (a teacher)",
+        "Two near-duplicate questions replaced (collect as a kid; future you're scared to say) and FAQ 1 updated",
+        "All Spanish fixes the editor listed",
+        "Polish taken to head off fixes: 'piropo' removed; the marriage-and-children question (a topic the hub covers) replaced; four sentences reworded so they no longer repeat the boyfriend post"
+      ],
+      "rejected": [
+        "Polish: replace the 3 6 9 FAQ because the hub answers it too. Kept: it is a People also ask question for this exact search, and the search reviewer requires every one answered."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Last round's fix made; it beats first-page question dumps because it gives order, a way to go first, a listening technique and a plan for her silence or tears, and answers in its first paragraph."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round 1 fixes made and the Letter and study claims now match the code and sources. Asked to replace 'What do I do that makes you feel looked after?' (near-repeats the hub's 'feel safe'), change 'It stays with me' to 'It's safe with me', and four Spanish slips (como en una entrevista, la solución, the 'te vaya bien a los cincuenta' question)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Edits didn't weaken it: 45 paced questions with when and how far in, a sourced go-first method, scripted follow-ups and handling for silence and tears, and every People also ask question answered, where page one gives 100 to 500+ unpaced questions."
+        }
+      ],
+      "applied": [
+        "Level 4 question replaced with 'What do you think I still don't understand about you?' (EN and ES)",
+        "'It stays with me' -> 'It's safe with me'",
+        "Spanish: 'como en una entrevista', 'La solución', '¿Qué significa para ti que te vaya bien a los cincuenta, y quién lo decidió?'",
+        "Polish taken to head off fixes: 'pairs of students' to match the source and the Spanish; 'a queue' -> 'a wait for a table' for US readers; three Spanish smoothings (que te gustaría, te alegras de ello, ¿Eso no significa que vas a salir tarde...?)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 2 edits made it stronger; it answers in the first paragraph and then gives the order to climb, a script for going first, a listening technique and a plan for her silence, laughter or tears, which no plain list on page one gives."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round 2 fixes made correctly; every claim checked against the code and sources. One Spanish fix: tense agreement in «¿Qué te da miedo que piense si lo supiera todo de ti?» (lead and level 5)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one offers 100 to 500+ unpaced questions; this gives 45 ordered by how far in you are, a sourced go-first method, scripted follow-ups, handling for silence and tears, and answers every People also ask question."
+        }
+      ],
+      "applied": [
+        "ES tense fix: «¿Qué te daría miedo que pensara si lo supiera todo de ti?» in the lead and level 5",
+        "Polish taken to head off fixes: ES 'importa más que la pregunta en sí' (two 'la primera' in a row), 'los domingos', 'Hay estudios que explican', 'esto va en serio'; 'When do you feel most like yourself?' -> 'Where are you when you feel most like yourself?' (EN, ES and FAQ 1) since it repeated a line in questions-to-ask-your-partner"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It answers in the first paragraph and then gives the order to climb, how to go first and what to do when she goes quiet or cries, where top results are bare lists; every part can be used tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result for this search that orders deep questions by how far in you are, then shows how to go first, follow up and handle silence or tears, with every study claim traceable to its source. Polish (not applied, final round): 'What's something you'd like us to try that we never have?' near-repeats questions-to-ask-your-partner; 'What would you like to be braver about?' is close to questions-to-ask-your-boyfriend."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "45 questions ordered by how far in you are, a sourced go-first method, scripted follow-ups and handling for silence and tears, where page one offers 100 to 500+ unpaced questions; every People also ask question answered."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}

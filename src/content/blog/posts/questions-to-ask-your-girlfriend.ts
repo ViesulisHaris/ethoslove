@@ -125,7 +125,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Deep questions to ask your girlfriend" },
         {
           type: "p",
-          text: "Keep these for when there's time and neither of you is tired. One a night is plenty:",
+          text: "Keep these for when there's time and neither of you is tired. One a night is plenty. For 45 more in five levels, from light to brave, and how to listen to her answers, see our [deep questions to ask your girlfriend](/blog/deep-questions-to-ask-your-girlfriend). Here are 25 to start:",
         },
         {
           type: "list",
@@ -469,7 +469,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Preguntas profundas para tu novia" },
         {
           type: "p",
-          text: "Guárdalas para cuando haya tiempo y ninguno de los dos esté cansado. Con una por noche basta:",
+          text: "Guárdalas para cuando haya tiempo y ninguno de los dos esté cansado. Con una por noche basta. Si quieres 45 más en cinco niveles, de ligeras a valientes, y cómo escuchar sus respuestas, mira nuestras [preguntas profundas para mi novia](/blog/deep-questions-to-ask-your-girlfriend). Aquí tienes 25 para empezar:",
         },
         {
           type: "list",

@@ -1026,3 +1026,15 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-20T18:20Z | on_page/content_parsing/live | 0.00015 | blog: digital-bouquet-makers-compared |
 | 2026-11-20T18:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-bouquet-makers-compared |
 | 2026-11-20T18:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-bouquet-makers-compared |
+| 2026-11-24T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | dataforseo_labs/google/keyword_suggestions/live | 0.018 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:21Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:21Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:21Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
