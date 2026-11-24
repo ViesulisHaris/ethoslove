@@ -19,8 +19,8 @@ const COUNT_WORD: Record<number, { en: string; es: string }> = { 8: { en: "eight
 const sorted = (ids: readonly string[]): string[] => [...ids].sort();
 
 describe("the kinds of date", () => {
-  it("K1 the kinds are the brief's eight, and every idea a kind names exists, once", () => {
-    expect([...DATE_KIND_IDS]).toEqual(["first-date", "fun", "cheap", "romantic", "double-date", "winter", "at-home", "rainy-day"]);
+  it("K1 the kinds are the briefs' eleven, and every idea a kind names exists, once", () => {
+    expect([...DATE_KIND_IDS]).toEqual(["first-date", "fun", "cheap", "romantic", "double-date", "winter", "at-home", "rainy-day", "night", "outdoor", "unique"]);
     for (const kind of DATE_KIND_IDS) {
       for (const id of KIND_IDEAS[kind]) expect(ideaById(id), `${kind}: ${id}`).toBeDefined();
       expect(new Set(KIND_IDEAS[kind]).size, kind).toBe(KIND_IDEAS[kind].length);
@@ -55,8 +55,8 @@ describe("the kinds of date", () => {
     }
   });
 
-  it("K6 a kind with fewer than eight ideas has no page: at-home has none, the other seven have one", () => {
-    expect(DATE_KINDS).toEqual(["first-date", "fun", "cheap", "romantic", "double-date", "winter", "rainy-day"]);
+  it("K6 a kind with fewer than eight ideas has no page: at-home has none, the other ten have one", () => {
+    expect(DATE_KINDS).toEqual(["first-date", "fun", "cheap", "romantic", "double-date", "winter", "rainy-day", "night", "outdoor", "unique"]);
     expect(kindIdeas("at-home")).toEqual([]);
     expect(getDateKind("at-home")).toBeUndefined();
     expect(getDateKind("nope")).toBeUndefined();
@@ -78,6 +78,36 @@ describe("the kinds of date", () => {
     expect(isCityKindPage("paris", "cheap")).toBe(false);
     expect(isCityKindPage("london", "fun")).toBe(false);
     for (const slug of [...DATE_KIND_IDS, "ideas"]) expect(CITY_SLUGS, slug).not.toContain(slug);
+  });
+
+  it("K21 no kind is another's twin: two kinds share fewer than seven in ten of their ideas", () => {
+    for (const a of DATE_KINDS) {
+      for (const b of DATE_KINDS) {
+        if (a >= b) continue;
+        const A = new Set(KIND_IDEAS[a]);
+        const B = new Set(KIND_IDEAS[b]);
+        const shared = [...A].filter((id) => B.has(id)).length;
+        const either = new Set([...A, ...B]).size;
+        expect(shared / either, `${a} and ${b}`).toBeLessThan(0.7);
+        expect(sorted([...A]), `${a} and ${b}`).not.toEqual(sorted([...B]));
+      }
+    }
+  });
+
+  it("K22 night is evening and night ideas only", () => {
+    for (const idea of kindIdeas("night")) expect(["evening", "night"], idea.id).toContain(idea.moment);
+  });
+
+  it("K23 outdoor is what rain can spoil: seven need a dry day, the eighth is the stars", () => {
+    const outdoor = kindIdeas("outdoor");
+    for (const idea of outdoor) expect(idea.goodInRain, idea.id).toBe(false);
+    expect(outdoor.filter((i) => i.needsDry)).toHaveLength(7);
+    expect(outdoor.filter((i) => !i.needsDry).map((i) => i.id)).toEqual(["stars-and-planets"]);
+  });
+
+  it("K24 unique leaves out the dinner and the film", () => {
+    expect(KIND_IDEAS.unique).not.toContain("pasta-and-a-slow-walk");
+    expect(KIND_IDEAS.unique).not.toContain("cinema-and-late-dessert");
   });
 
   it("K17 the idea pictures' week-long cache is for the pictures, not for a page under the same path", async () => {
