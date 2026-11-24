@@ -236,7 +236,7 @@ async function onInvoiceUnpaid(event: Stripe.Invoice, kind: "failed" | "action_r
   return ok();
 }
 
-type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null };
+type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null; currency?: string | null };
 
 /**
  * The purchase a charge paid for, or null when it isn't ours. A lookup that fails throws (Stripe
@@ -245,7 +245,7 @@ type Purchase = { id: string; user_id: string | null; product: string; membershi
  */
 async function purchaseByPaymentIntent(db: Db, paymentIntent: string | null): Promise<Purchase | null> {
   if (!paymentIntent) return null;
-  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
+  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id, currency").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
   const missing = missingMembershipColumns(error, "a refund or a dispute reads purchases.membership_id");
   if (missing) throw missing;
   if (error) throw new Error(`purchase lookup failed: ${error.message}`);
@@ -273,7 +273,8 @@ async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<E
     // The purchase stays paid, so it keeps counting towards the upgrade (lib/commerce/pricing.ts):
     // only for what was kept. amount_refunded is the charge's running total, so the same event again
     // writes the same number.
-    const kept = Math.max(0, charge.amount - charge.amount_refunded);
+    const kept = await pairKept(charge, purchase, deps);
+    if (kept === null) return retry("pair refund: the checkout session it was paid with was not found");
     const { error } = await deps.db.from("purchases").update({ amount: kept }).eq("id", purchase.id);
     if (error) throw new Error(`pair amount not lowered after a refund: ${error.message}`);
     return ok();
@@ -282,6 +283,28 @@ async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<E
   const refunds = await deps.stripe.refunds.list({ charge: charge.id, limit: 1 });
   if (refunds.data[0]?.reason === "requested_by_customer") await withdrawPurchase(deps.db, purchase, deps.now, { cancelSubscription: cancelWith(deps) });
   return ok();
+}
+
+/**
+ * What is left of a pair's payment after a partial refund, in the currency purchases.amount is kept in
+ * (the catalogue's, fulfil.ts chargedAmount). The charge speaks the buyer's currency: when Adaptive
+ * Pricing converted the price (a 5 euro pair charged as 2,170 grosz), the share kept is applied to what
+ * the checkout session says the catalogue charged, never to the row's own amount (the same event again
+ * would shrink it again). Null when that session can't be found, so Stripe retries.
+ */
+async function pairKept(charge: Stripe.Charge, purchase: Purchase, deps: StripeEventDeps): Promise<number | null> {
+  const left = Math.max(0, charge.amount - charge.amount_refunded);
+  const rowCurrency = purchase.currency?.toLowerCase();
+  if (!charge.currency || !rowCurrency || charge.currency.toLowerCase() === rowCurrency) return left;
+  const paymentIntent = idOf(charge.payment_intent as string | { id: string } | null);
+  if (!paymentIntent || charge.amount <= 0) return null;
+  const sessions = await deps.stripe.checkout.sessions.list({ payment_intent: paymentIntent, limit: 1 });
+  const session = sessions.data[0];
+  if (!session) return null;
+  // fulfil.ts chargedAmount, which this module may not import (it is server-only, these handlers are tested bare).
+  const paid = session.currency_conversion?.source_currency ? session.currency_conversion.amount_total : session.amount_total;
+  if (paid == null) return null;
+  return Math.round((paid * left) / charge.amount);
 }
 
 /** A chargeback takes the money back, so it takes the unlock back too, and ends a membership for both. */

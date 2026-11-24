@@ -108,6 +108,36 @@ describe("refunds of two more gifts", () => {
     expect(fake.rows("purchases").find((p) => p.id === "s1")?.amount).toBe(999);
   });
 
+  it("partly refunded after Adaptive Pricing charged it in złoty: the euros kept count, never the grosz, and a repeat changes nothing", async () => {
+    const fake = seed();
+    await bought(fake);
+    const list = vi.fn(async () => ({ data: [{ id: "cs_p", amount_total: 2170, currency: "pln", currency_conversion: { amount_total: 500, source_currency: "eur" } }] }));
+    const converted = (): StripeEventDeps => {
+      const d = deps(fake.db);
+      (d.stripe as unknown as { checkout: unknown }).checkout = { sessions: { list } };
+      return d;
+    };
+    const pln = (amountRefunded: number) => ({ ...refund(0), currency: "pln", amount: 2170, amount_refunded: amountRefunded, refunded: false });
+    await handleStripeEvent(event("charge.refunded", pln(1085)), converted());
+    expect(list).toHaveBeenCalledWith({ payment_intent: "pi_p", limit: 1 });
+    expect(fake.rows("purchases").find((p) => p.id === PAIR)?.amount).toBe(250);
+    await handleStripeEvent(event("charge.refunded", pln(1085)), converted());
+    expect(fake.rows("purchases").find((p) => p.id === PAIR)?.amount).toBe(250);
+    expect(await readyGifts(fake.db, "u1")).toBe(1);
+  });
+
+  it("a converted charge whose checkout session can't be found answers 500, so Stripe retries; the gift half the money paid for still goes, once", async () => {
+    const fake = seed();
+    await bought(fake);
+    const d = deps(fake.db);
+    (d.stripe as unknown as { checkout: unknown }).checkout = { sessions: { list: vi.fn(async () => ({ data: [] })) } };
+    const half = { ...refund(0), currency: "pln", amount: 2170, amount_refunded: 1085, refunded: false };
+    expect((await handleStripeEvent(event("charge.refunded", half), d)).status).toBe(500);
+    expect((await handleStripeEvent(event("charge.refunded", half), d)).status).toBe(500);
+    expect(fake.rows("purchases").find((p) => p.id === PAIR)?.amount).toBe(500);
+    expect(await readyGifts(fake.db, "u1")).toBe(1);
+  });
+
   it("a dispute takes it all, and a won dispute brings back the gifts, the template and the gift made with it", async () => {
     const fake = seed();
     await bought(fake, ["bouquet"]);

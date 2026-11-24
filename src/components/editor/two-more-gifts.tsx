@@ -242,7 +242,10 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         </p>
       ) : null}
 
-      <div className="mt-5">
+      {/* A card that may show a wallet keeps the wallet block's height (pill 48 + 12 + "Pay by card
+          instead" 44) for good: when the card button takes its place, at the same top, the foot below
+          stays where it was drawn (no layout shift on an Android phone without Google Pay). */}
+      <div className={cn("mt-5", wallet !== null && "min-h-[104px]")} data-testid="pair-pay">
         {useWallet ? (
           <>
             {/* The wallet's own button, with a black pill holding its place while it comes, so nothing moves.
@@ -261,7 +264,7 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
               ) : null}
             </div>
             {/* Hidden while paying but keeping its line, so the card keeps its height. */}
-            <p className={cn("mt-3 text-center", paying && "invisible")}>
+            <p className={cn("mt-3 flex justify-center", paying && "invisible")}>
               <button
                 type="button"
                 onClick={() => void payByCard()}
@@ -281,11 +284,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         )}
       </div>
 
-      {/* A card that began with the wallet block (pill 48 + 12 + "Pay by card instead" 44, foot 8 below)
-          and ends on the card button (48, foot 16 below) keeps the 48 px it gave up under its foot:
-          on an Android phone without Google Pay, nothing below the card moves when the button swaps. */}
       <p
-        className={cn("text-center text-[13px] text-pretty text-muted-foreground", useWallet ? "mt-2" : "mt-4", wallet !== null && !useWallet && "pb-12")}
+        className={cn("text-center text-[13px] text-pretty text-muted-foreground", wallet !== null ? "mt-2" : "mt-4")}
         data-testid="pair-foot"
       >
         {t("foot")} {t("notice")}{" "}

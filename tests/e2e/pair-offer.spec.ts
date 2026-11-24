@@ -185,10 +185,15 @@ test.describe("two more gifts under the link", () => {
     expect(asked[0]).toMatchObject({ product: "pair", currency: "eur", oneTap: true });
     expect(asked[0]).not.toHaveProperty("waiver");
     const height = (await page.getByTestId("pair-offer").boundingBox())!.height;
-    // Stripe's button can't load here: after four seconds the card button, silently, in the same height.
+    const pill = (await page.getByTestId("pair-wallet-holding").boundingBox())!.y;
+    const foot = (await page.getByTestId("pair-foot").boundingBox())!;
+    // Stripe's button can't load here: after four seconds the card button, silently, in the same height,
+    // where the pill was, with the foot where it was drawn.
     await expect(page.getByTestId("pair-add")).toBeVisible({ timeout: 8000 });
     expect(asked).toHaveLength(1);
     expect((await page.getByTestId("pair-offer").boundingBox())!.height).toBe(height);
+    expect((await page.getByTestId("pair-add").boundingBox())!.y).toBe(pill);
+    expect(await page.getByTestId("pair-foot").boundingBox()).toEqual(foot);
   });
 
   test.describe("on an Android phone in Chrome", () => {
@@ -197,14 +202,27 @@ test.describe("two more gifts under the link", () => {
 
     test("without Google Pay confirmed: no wallet session is made, and nothing below the card moves when the card button takes over", async ({ page }) => {
       // Stripe.js can't load here (held, then refused), as on a phone where Stripe can't answer: Google Pay is never confirmed.
+      await page.addInitScript(() => {
+        const w = window as unknown as { shifts: string[] };
+        w.shifts = [];
+        new PerformanceObserver((list) => {
+          for (const e of list.getEntries() as unknown as { value: number; sources?: { node?: Node | null }[] }[])
+            for (const src of e.sources ?? []) w.shifts.push(((src.node as HTMLElement | null)?.dataset?.testid ?? (src.node as Element | null)?.nodeName ?? "?") + ":" + e.value);
+        }).observe({ type: "layout-shift", buffered: true });
+      });
       const { asked } = await open(page, "/share-preview", { stripeDelayMs: 2500 });
       await expect(page.getByTestId("pair-wallet-holding")).toBeVisible();
+      const foot = (await page.getByTestId("pair-foot").boundingBox())!;
+      const shiftsBefore = await page.evaluate(() => (window as unknown as { shifts: string[] }).shifts.length);
       const card = page.getByTestId("pair-offer");
       const qr = page.getByText("QR card");
       const before = { card: (await card.boundingBox())!.height, qr: (await qr.boundingBox())!.y };
       await expect(page.getByTestId("pair-add")).toBeVisible({ timeout: 8000 });
       expect((await card.boundingBox())!.height).toBe(before.card);
       expect((await qr.boundingBox())!.y).toBe(before.qr);
+      // The foot keeps its place and size: the reserved space is in the pay block, nothing jumps inside the card.
+      expect(await page.getByTestId("pair-foot").boundingBox()).toEqual(foot);
+      expect(await page.evaluate((n) => (window as unknown as { shifts: string[] }).shifts.slice(n), shiftsBefore)).toEqual([]);
       expect(asked.filter((b) => b.oneTap)).toHaveLength(0);
     });
   });
