@@ -23,6 +23,11 @@ import { useEditor } from "@/lib/editor/store";
 import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";
 import { LIMITS } from "@/config/site";
 import { getEntitlement, publishGift } from "@/app/actions/gift";
+import { getIdeaHint } from "@/app/actions/monthly-idea";
+import type { IdeaHint, IdeaMode } from "@/lib/lifecycle/monthly-idea";
+import { useEtsyMode } from "./etsy-claim";
+import { FreeTermsBox } from "./free-terms-box";
+import { IdeaWhereNote } from "./idea-where-note";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -59,6 +64,7 @@ export function PublishSheet({
   resume = false,
   reaction = null,
   groupEnabled = false,
+  ideaMode = "off",
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -78,6 +84,8 @@ export function PublishSheet({
    * (src/i18n/client-namespaces.ts, GROUP_WORDS) and the product is not on sale.
    */
   groupEnabled?: boolean;
+  /** The monthly idea's setting, from the server (lib/lifecycle/monthly-idea.ts); "off" draws nothing new. */
+  ideaMode?: IdeaMode;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tCommon = useTranslations("common");
@@ -95,6 +103,10 @@ export function PublishSheet({
   // Inside the iPhone app (lib/app/bridge.ts): paying is the App Store's sheet, signing in is the
   // app's, and once the app says a purchase went through the gift goes out as it does back from Stripe.
   const inApp = useInApp();
+  // Inside the app or in Etsy mode the monthly idea's notice can't be shown: no box, no line, no enrolment.
+  const [etsy] = useEtsyMode();
+  const quiet = inApp || etsy;
+  const [ideaHintNow, setIdeaHintNow] = useState<IdeaHint>("none");
   const [appUnlocked, setAppUnlocked] = useState(false);
   const signingIn = useRef(false);
   const currency = useCurrency();
@@ -115,6 +127,8 @@ export function PublishSheet({
     status: "live" | "scheduled";
     holidayExtra: HolidayExtra | null;
     usedGift?: true;
+    /** Sending it started the monthly idea: the line the share screen shows. */
+    ideaNotice?: string;
     /** With `usedGift`: gifts ready left after this one. */
     usedLeft: number;
     /** Two more gifts under the link, as it stood when the gift went out (never drawn later: nothing moves). */
@@ -129,6 +143,7 @@ export function PublishSheet({
     // Anything still waiting on this device goes up now, including files an earlier visit never sent.
     void state.ensureRemote().then(() => useEditor.getState().uploadPending());
     getEntitlement(slug).then(setFetchedEntitlement);
+    if (ideaMode === "all") void getIdeaHint(slug).then(setIdeaHintNow).catch(() => {});
     void fetchUpgradeQuote(currency).then(setUpgrade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, state.authed, slug]);
@@ -354,7 +369,31 @@ export function PublishSheet({
     }, 350);
   };
 
+  // The free version's Terms box (lib/lifecycle/monthly-idea.ts): only in the setting "all", for a
+  // signed-in account the server says needs it, on a first send that is free and not a reply, a
+  // campaign gift, the app or Etsy. Off, none of this draws anything or changes the button.
+  const needsTerms = ideaMode === "all" && state.authed && state.status === "draft" && Boolean(decision?.ok) && !freeReply && !campaign && !quiet && ideaHintNow === "box";
+  const [termsOn, setTermsOn] = useState(false);
+  const [termsNudge, setTermsNudge] = useState(false);
+  const termsRef = useRef<HTMLInputElement>(null);
+  const termsMissing = needsTerms && !termsOn;
+  const termsShown = useRef(false);
+  useEffect(() => {
+    if (!open) termsShown.current = false;
+    else if (needsTerms && !termsShown.current) {
+      termsShown.current = true;
+      track("free_terms_shown", { template: slug });
+    }
+  }, [open, needsTerms, slug]);
+
   const publish = async ({ useGift = false }: { useGift?: boolean } = {}) => {
+    // The free version's Terms box isn't ticked: say so, where the box is, and send nothing.
+    if (termsMissing && !useGift) {
+      setTermsNudge(true);
+      termsRef.current?.focus();
+      track("free_terms_nudged", { template: slug });
+      return;
+    }
     setBusy(true);
     setError(null);
     setRefusedFields([]);
@@ -376,12 +415,21 @@ export function PublishSheet({
           : undefined,
       ...(freeReply ? { replyToken } : {}),
       ...(useGift ? { useGift: true } : {}),
+      ...(quiet ? { quiet: true } : {}),
+      ...(needsTerms && termsOn ? { acceptFreeTerms: true } : {}),
     });
     setBusy(false);
     // The gift ready went meanwhile (used in another tab, or refunded): the pay panel, as today.
     if (!result.ok && useGift && result.error === "payment_required") {
       setPayInstead(true);
       void getEntitlement(slug).then(setFetchedEntitlement);
+      return;
+    }
+    // The server says this send needs the box (its answer is newer than the sheet's hint): show it.
+    if (!result.ok && result.error === "terms_required") {
+      setError(null);
+      setTermsNudge(true);
+      void getIdeaHint(slug).then(setIdeaHintNow).catch(() => {});
       return;
     }
     if (!result.ok) {
@@ -537,7 +585,9 @@ export function PublishSheet({
   const checklistDone = payArm === "one" && (state.authed ? problems : guestProblems).length === 0;
 
   // Back from Stripe, signed in, everything in place: one less tap.
+  // (Never past an unticked Terms box: termsMissing is declared above, with the box.)
   const canAutoPublish =
+    !termsMissing &&
     (resume || appUnlocked) &&
     open &&
     state.authed &&
@@ -576,6 +626,8 @@ export function PublishSheet({
             usedGift={published.usedGift === true}
             usedLeft={published.usedLeft}
             pair={published.pair}
+            ideaNotice={published.ideaNotice ?? null}
+            ideaBox={ideaMode === "optin" || ideaMode === "buyers"}
           />
         ) : (
           <div className="px-4 pt-8 pb-10 min-[360px]:px-5 sm:px-8">
@@ -695,6 +747,7 @@ export function PublishSheet({
                 keepArm={keepArm}
                 keepRow={keepRow}
                 ownedRows={ownedRows}
+                ideaWhere={ideaMode === "all" || ideaMode === "buyers"}
               />
             ) : null}
             {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
@@ -716,6 +769,7 @@ export function PublishSheet({
                 </p>
                 {/* The card has its own title and blurb: no second "Welcome back" to a first-time guest (walk-make-8). */}
                 <AuthForm mode="login" next={next} compact bare />
+                {ideaMode === "all" || (ideaMode === "buyers" && wouldNeedPayment && paymentsEnabled) ? <IdeaWhereNote className="mt-3" /> : null}
               </section>
             ) : null}
 
@@ -761,6 +815,7 @@ export function PublishSheet({
                   keepArm={keepArm}
                   keepRow={keepRow}
                   ownedRows={ownedRows}
+                  ideaWhere={ideaMode === "all" || ideaMode === "buyers"}
                 />
               ) : (
                 <Notice tone="info" className="mt-7">
@@ -794,9 +849,25 @@ export function PublishSheet({
               </Notice>
             ) : null}
 
+            {needsTerms ? (
+              <FreeTermsBox
+                checked={termsOn}
+                onChange={(v) => {
+                  setTermsOn(v);
+                  if (v) {
+                    setTermsNudge(false);
+                    track("free_terms_ticked", { template: slug });
+                  }
+                }}
+                nudge={termsNudge}
+                inputRef={termsRef}
+              />
+            ) : null}
             <Button
               className={cn(
-                "mt-8 h-12 w-full rounded-full text-base",
+                needsTerms ? "mt-4" : "mt-8",
+                "h-12 w-full rounded-full text-base",
+                termsMissing && "opacity-50",
                 ((decision && !decision.ok && decision.reason === "payment_required") ||
                   (!state.authed && guestCanPay && !showSignIn) ||
                   (!state.authed && inApp) ||
@@ -807,6 +878,8 @@ export function PublishSheet({
               disabled={
                 !supabaseConfigured || !state.authed || busy || problems.length > 0 || !decision?.ok
               }
+              aria-disabled={termsMissing || undefined}
+              aria-describedby={termsNudge && needsTerms ? "free-terms-nudge" : undefined}
               onClick={() => void publish()}
             >
               {busy ? <Loader2 className="size-4 animate-spin" /> : null}

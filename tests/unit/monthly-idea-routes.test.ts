@@ -142,3 +142,24 @@ describe("the signed-in switch", () => {
     expect(fake.rows("monthly_ideas")).toHaveLength(2);
   });
 });
+
+describe("the offers box", () => {
+  it("R6 enrols only when the setting asks it to", async () => {
+    const offers = await import("@/app/api/offer/emails/route");
+    const NEW = "88888888-8888-4888-8888-888888888888";
+    const yes = (body: Record<string, unknown>) => offers.POST(new NextRequest("https://ethos.test/api/offer/emails", { method: "POST", body: JSON.stringify({ on: true, locale: "en", ...body }) }));
+    state.user = { id: NEW, email: "new@mail.com" };
+    process.env.MONTHLY_IDEA_EMAILS = "optin";
+    expect((await yes({ idea: true })).status).toBe(200);
+    expect(fake.rows("offer_emails").find((r) => r.user_id === NEW)?.wording).toBe(en.offerEmails.boxIdea);
+    expect(fake.rows("monthly_ideas").find((r) => r.user_id === NEW)).toMatchObject({ basis: "box", wording: en.offerEmails.boxIdea, off_at: null });
+    for (const [mode, body] of [["off", { idea: true }], ["all", { idea: true }], ["optin", {}]] as const) {
+      fake = new FakeDb({ monthly_ideas: [] });
+      state.db = fake.db;
+      process.env.MONTHLY_IDEA_EMAILS = mode;
+      expect((await yes(body)).status).toBe(200);
+      expect(fake.rows("offer_emails")[0].wording).toBe(en.offerEmails.box);
+      expect(fake.rows("monthly_ideas")).toHaveLength(0);
+    }
+  });
+});

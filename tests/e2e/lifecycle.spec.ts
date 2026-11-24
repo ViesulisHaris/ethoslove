@@ -7,7 +7,7 @@ import { expect, test } from "@playwright/test";
  */
 
 test.describe("links from emails", () => {
-  for (const path of ["/api/reminders/remove", "/api/email/unsubscribe"]) {
+  for (const path of ["/api/reminders/remove", "/api/email/unsubscribe", "/api/monthly-idea/stop"]) {
     test(`${path} with a forged token shows a page and acts on nothing`, async ({ page, request }) => {
       const response = await page.goto(`${path}?t=5f0c6f7e-3a55-4d2b-9a57-0e8a3f1b2c4d.forged&l=en`);
       // 404 for a token we didn't make; 503 on a server without the secret to check it with.
@@ -36,5 +36,6 @@ test.describe("reminders API", () => {
 
   test("the cron refuses a request without the secret", async ({ request }) => {
     expect((await request.get("/api/cron/reminders")).status()).toBe(401);
+    expect((await request.get("/api/cron/monthly-idea")).status()).toBe(401);
   });
 });

@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { currentRef } from "@/lib/attribution/ref";
 import { personalPriceEnds, usePersonalPrice } from "@/components/pricing/use-personal-price";
+import { IdeaWhereNote } from "./idea-where-note";
 import { useInApp } from "@/lib/app/use-bridge";
 import { extraOnOffer } from "@/lib/lifecycle/holiday-extras";
 import {
@@ -68,6 +69,7 @@ export function Paywall({
   keepArm = null,
   keepRow = null,
   ownedRows = [],
+  ideaWhere = false,
 }: {
   manifest: TemplateManifest;
   currency: Currency;
@@ -115,6 +117,8 @@ export function Paywall({
   keepRow?: { price: string; max: number; busy: boolean; onPay: () => void } | null;
   /** The account's unlock rows, for a price that depends on them (extrasAmount). */
   ownedRows?: string[];
+  /** The monthly idea's line under the small print (the settings "buyers" and "all"). */
+  ideaWhere?: boolean;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -538,6 +542,7 @@ export function Paywall({
         {guest ? ` ${t("uploadsAfterPay")}` : null}
         {panel && guest ? ` ${tm("noteGuest")}` : null}
       </p>
+      {ideaWhere ? <IdeaWhereNote className="mt-2 text-center text-balance" /> : null}
       {guest && onSignInInstead ? (
         <button
           type="button"

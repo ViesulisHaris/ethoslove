@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
+import { ideaMode, ideaSince } from "@/lib/lifecycle/monthly-idea";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -14,8 +15,12 @@ export const maxDuration = 10;
  * GET says whether the signed-in account said yes; POST { on, locale } records the yes, with the
  * sentence they ticked as the server words it (never the page's copy of it), or takes it back.
  * Signed in only: the address the offers go to is the account's (migration 0021).
+ *
+ * In the monthly idea's settings "optin" and "buyers" (lib/lifecycle/monthly-idea.ts) the box's
+ * sentence names the monthly idea too (`idea: true`): a yes then also starts it, as a "box" row. In
+ * "off" and "all" the route is as it was.
  */
-const input = z.object({ on: z.boolean(), locale: z.enum(["en", "es"]).default("en") });
+const input = z.object({ on: z.boolean(), locale: z.enum(["en", "es"]).default("en"), idea: z.boolean().optional() });
 
 const noStore = { "cache-control": "no-store" };
 
@@ -36,7 +41,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   const parsed = input.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
-  const { on, locale } = parsed.data;
+  const { on, locale, idea } = parsed.data;
+  const mode = ideaMode();
+  const withIdea = idea === true && (mode === "optin" || mode === "buyers");
 
   if (!on) {
     const { error } = await admin.from("offer_emails").delete().eq("user_id", user.id);
@@ -46,11 +53,22 @@ export async function POST(request: NextRequest) {
   const t = await getTranslations({ locale, namespace: "offerEmails" });
   const { error } = await admin
     .from("offer_emails")
-    .upsert({ user_id: user.id, wording: t("box"), source: "send", locale, created_at: new Date().toISOString() }, { onConflict: "user_id" });
+    .upsert({ user_id: user.id, wording: t(withIdea ? "boxIdea" : "box"), source: "send", locale, created_at: new Date().toISOString() }, { onConflict: "user_id" });
   if (error) {
     // Before migration 0021 is applied the table isn't there: the box says it couldn't save.
     console.error("[offer-emails] couldn't save a yes", error.message);
     return NextResponse.json({ error: "save_failed" }, { status: 500 });
+  }
+  if (withIdea) {
+    // Never fails the yes: before migration 0022 the table isn't there, and the offers still are.
+    try {
+      const { error: ideaError } = await admin
+        .from("monthly_ideas")
+        .upsert({ user_id: user.id, since: ideaSince(new Date()), locale, basis: "box", wording: t("boxIdea"), off_at: null }, { onConflict: "user_id" });
+      if (ideaError) console.error("[offer-emails] couldn't start the monthly idea", ideaError.message);
+    } catch (e) {
+      console.error("[offer-emails] couldn't start the monthly idea", (e as Error).message);
+    }
   }
   return NextResponse.json({ on: true }, { headers: noStore });
 }

@@ -42,6 +42,8 @@ export function ShareScreen({
   pair,
   pairPreview,
   holidayExtra = null,
+  ideaNotice = null,
+  ideaBox = false,
 }: {
   shortId: string;
   status: "live" | "scheduled";
@@ -57,6 +59,10 @@ export function ShareScreen({
   pairPreview?: PairPreviewState;
   /** What the publish says this gift is offered (lib/lifecycle/holiday-extras.ts). */
   holidayExtra?: HolidayExtra | null;
+  /** Sending this gift started the monthly idea: the line that says so (lib/lifecycle/monthly-idea.ts). */
+  ideaNotice?: string | null;
+  /** The offers box's sentence names the monthly idea too (the settings "optin" and "buyers"). */
+  ideaBox?: boolean;
 }) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
@@ -156,7 +162,7 @@ export function ShareScreen({
       {/* The yes our offer emails need, asked of the account that just sent a gift; not inside the iPhone app. */}
       {authed ? (
         <div data-app-hide>
-          <OfferEmailsBox />
+          <OfferEmailsBox ideaNotice={ideaNotice} ideaBox={ideaBox} />
         </div>
       ) : null}
 
