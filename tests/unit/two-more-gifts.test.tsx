@@ -90,7 +90,11 @@ describe("the two more gifts card", () => {
       expect(html).toContain("Can open at midnight on their day");
       expect(html).not.toContain("Set to open");
       // The 30-day refund is said once, in the foot beside Terms.
-      expect(html).toContain("Paid once. They wait on your account. A gift you haven't used can be refunded for 30 days. Terms");
+      // Without a wallet: the card button, "Paid once." in the second slot under it, the ticks, then the
+      // notice and Terms (with a wallet "Paid once." opens that small line instead: the e2e spec).
+      expect(html).toContain(`Add both for ${price} Paid once. They wait on your account. Any template`);
+      expect(html).toContain("Can open at midnight on their day A gift you haven't used can be refunded for 30 days. Terms");
+      expect(html.match(/Paid once/g)).toHaveLength(1);
       expect(html.match(/30 days/g)).toHaveLength(1);
       expect(html).not.toContain("money back");
       // Nothing that isn't true on this branch yet (the started gift is the next area).

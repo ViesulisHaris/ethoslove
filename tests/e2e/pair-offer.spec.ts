@@ -104,7 +104,7 @@ test.describe("two more gifts under the link", () => {
           // With a wallet: its pill, or the card button in the same place once four seconds have gone by
           // (a slow first load of the page in WebKit can take that long).
           const control = wallet ? page.getByTestId("pair-wallet").or(page.getByTestId("pair-add")).first() : page.getByTestId("pair-add");
-          await expect(control).toBeVisible();
+          await expect(control).toBeVisible({ timeout: 20_000 }); // a first WebKit load of a recompiled dev page is slow
           if (wallet) await expect(page.getByTestId("pair-by-card").or(page.getByTestId("pair-add"))).toHaveCount(1);
           await page.evaluate(() => document.fonts.ready);
           const seen = await page.evaluate(() => ({ height: window.innerHeight, scrolled: window.scrollY }));
@@ -272,6 +272,49 @@ test.describe("two more gifts under the link", () => {
       expect(await page.evaluate((n) => (window as unknown as { shifts: string[] }).shifts.slice(n), shiftsBefore)).toEqual([]);
       expect(asked.filter((b) => b.oneTap)).toHaveLength(0);
     });
+  });
+
+  test.describe("the pay area's two slots: nothing blank, nothing moves when the wallet answers", () => {
+    test.skip(!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, "the wallet is only tried with a publishable key (run with the placeholder one)");
+
+    for (const [name, path, setup, end] of [
+      ["the wallet arrives", "/share-preview?state=wallet", {}, "pair-wallet-standin"],
+      ["Stripe says there is none", "/share-preview", { wallet: true, stripeDelayMs: 2000 }, "pair-add"],
+      ["nothing comes in four seconds", "/share-preview", { wallet: true, stripeDelayMs: 7000 }, "pair-add"],
+    ] as const) {
+      test(name, async ({ page }) => {
+        await page.addInitScript(() => {
+          const w = window as unknown as { shifts: number };
+          w.shifts = 0;
+          new PerformanceObserver((list) => {
+            for (const e of list.getEntries() as unknown as { value: number; hadRecentInput: boolean }[]) if (!e.hadRecentInput) w.shifts += 1;
+          }).observe({ type: "layout-shift", buffered: true });
+        });
+        await open(page, path, setup);
+        const card = page.getByTestId("pair-offer");
+        const first = page.getByTestId("pair-wallet").or(page.getByTestId("pair-add")).first();
+        await expect(first).toBeVisible();
+        await page.evaluate(() => document.fonts.ready);
+        await page.waitForTimeout(300);
+        const before = { card: (await card.boundingBox())!.height, slot: (await first.boundingBox())!, foot: (await page.getByTestId("pair-foot").boundingBox())! };
+        const shifts = await page.evaluate(() => (window as unknown as { shifts: number }).shifts);
+        await expect(page.getByTestId(end)).toBeVisible({ timeout: 8000 });
+        await page.waitForTimeout(300);
+        expect((await card.boundingBox())!.height).toBe(before.card);
+        expect(await page.getByTestId("pair-foot").boundingBox()).toEqual(before.foot);
+        const slot = (await page.getByTestId(end).boundingBox())!;
+        expect([slot.y, slot.height]).toEqual([before.slot.y, 48]);
+        expect(await page.evaluate(() => (window as unknown as { shifts: number }).shifts)).toBe(shifts);
+        // Slot two follows slot one with no blank between: "Pay by card instead", or "Paid once." once the card button is there.
+        const two = page.getByTestId("pair-slot-two");
+        const twoBox = (await two.boundingBox())!;
+        expect(twoBox.height).toBe(44);
+        expect(twoBox.y - (slot.y + slot.height)).toBeLessThanOrEqual(4);
+        await expect(two).toHaveText(end === "pair-add" ? "Paid once. They wait on your account." : "Pay by card instead");
+        // And the foot under it in every state: the notice and Terms.
+        await expect(page.getByTestId("pair-foot")).toContainText("A gift you haven't used can be refunded for 30 days. Terms");
+      });
+    }
   });
 
   test("paying, declined and bought", async ({ page }) => {

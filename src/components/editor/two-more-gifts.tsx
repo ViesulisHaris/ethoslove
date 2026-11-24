@@ -58,14 +58,24 @@ export function TwoMoreGifts({ data, ent, afterPayment, saved, preview }: PairOn
   const days = useNextDays(data, saved, bought || offered);
   if (bought) return <Bought days={days} name={data.recipientName} />;
   if (!offered || !ent?.pairOffer) return null;
-  return <Offer offer={ent.pairOffer} days={days} name={data.recipientName} onBought={() => setBought(true)} initialPay={preview === "paying" || preview === "declined" ? preview : "idle"} />;
+  return (
+    <Offer
+      offer={ent.pairOffer}
+      days={days}
+      name={data.recipientName}
+      onBought={() => setBought(true)}
+      initialPay={preview === "paying" || preview === "declined" ? preview : "idle"}
+      previewWallet={preview === "wallet"}
+    />
+  );
 }
 
 /**
  * A state the development page (app/.../(editor)/share-preview) can open the card in, for pictures
- * and browser tests: paying, declined and bought only ever follow a real wallet payment otherwise.
+ * and browser tests: paying, declined and bought only ever follow a real wallet payment otherwise,
+ * and "wallet" draws a stand-in for Stripe's wallet button arriving (Stripe.js never loads in tests).
  */
-export type PairPreviewState = "paying" | "declined" | "bought";
+export type PairPreviewState = "paying" | "declined" | "bought" | "wallet";
 
 /** A day's name as the reminder card says it: "Mia's birthday", "Your anniversary", "Valentine's Day". */
 function useDayName(name: string) {
@@ -87,7 +97,22 @@ function Days({ days, name, short = false }: { days: NextDay[]; name: string; sh
 }
 
 /** Exported for the unit tests (tests/unit/two-more-gifts.test.tsx), like the two below. */
-export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { offer: PairOffer; days: NextDay[]; name: string; onBought: () => void; initialPay?: Pay }) {
+export function Offer({
+  offer,
+  days,
+  name,
+  onBought,
+  initialPay = "idle",
+  previewWallet = false,
+}: {
+  offer: PairOffer;
+  days: NextDay[];
+  name: string;
+  onBought: () => void;
+  initialPay?: Pay;
+  /** The development page's "a wallet arrives": a black stand-in button 2.5 s after view, no Stripe, no session. */
+  previewWallet?: boolean;
+}) {
   const t = useTranslations("editor.share.pair");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
   const showCheckoutError = useCheckoutError();
@@ -97,7 +122,7 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   // Which way to pay: the wallet's own button where there is one (and a key to draw it with), else
   // the card button. The wallet falls back to the card button, silently, when it can't be drawn.
   const key = env.stripePublishableKey;
-  const [wallet] = useState<Wallet | null>(() => (key && typeof window !== "undefined" ? walletHere() : null));
+  const [wallet] = useState<Wallet | null>(() => (previewWallet ? "apple" : key && typeof window !== "undefined" ? walletHere() : null));
   const [walletState, setWalletState] = useState<"waiting" | "ready" | "none">(wallet ? "waiting" : "none");
   const [secret, setSecret] = useState<{ clientSecret: string; sessionId?: string } | null>(null);
   const [pay, setPay] = useState<Pay>(initialPay);
@@ -128,6 +153,10 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
 
   useEffect(() => {
     if (!inView || walletState !== "waiting") return;
+    if (previewWallet) {
+      const shown = window.setTimeout(() => setWalletState("ready"), 2500);
+      return () => window.clearTimeout(shown);
+    }
     let live = true;
     const timer = window.setTimeout(() => live && setWalletState((s) => (s === "waiting" ? "none" : s)), WALLET_WAIT_MS);
     // Google Pay is only a guess from the browser's name: Stripe confirms it before a session is made.
@@ -237,16 +266,20 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         </p>
       ) : null}
 
-      {/* A card that may show a wallet keeps the wallet block's height (pill 48 + 12 + "Pay by card
-          instead" 44) for good: when the card button takes its place, at the same top, the foot below
-          stays where it was drawn (no layout shift on an Android phone without Google Pay). */}
-      <div className={cn("mt-5", wallet !== null && "min-h-[104px]")} data-testid="pair-pay">
+      {/* Two fixed slots, in every state, so nothing is blank and nothing moves when the wallet answers:
+          one (48 px) the wallet's button, its holding pill or the card button; two (44 px) "Pay by card
+          instead" beside a wallet, else the "Paid once." line in the same place. */}
+      <div className="mt-5" data-testid="pair-pay">
         {useWallet ? (
           <>
             {/* The wallet's own button, with a black pill holding its place while it comes, so nothing moves.
                 It stays mounted while it pays: the wallet's confirmation runs inside it. */}
             <div className="relative h-12" data-testid="pair-wallet">
-              {secret && key ? <PairWallet clientSecret={secret.clientSecret} publishableKey={key} locale={locale} events={events} /> : null}
+              {previewWallet ? (
+                walletState === "ready" ? <span className="block h-12 rounded-full bg-black" data-testid="pair-wallet-standin" /> : null
+              ) : secret && key ? (
+                <PairWallet clientSecret={secret.clientSecret} publishableKey={key} locale={locale} events={events} />
+              ) : null}
               {paying ? (
                 <span role="status" className="absolute inset-0 flex items-center justify-center gap-2 rounded-full bg-primary/55 text-base font-medium text-primary-foreground" data-testid="pair-paying">
                   <Loader2 aria-hidden="true" className="size-4 animate-spin motion-reduce:animate-none" />
@@ -258,8 +291,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
                 </span>
               ) : null}
             </div>
-            {/* Hidden while paying but keeping its line, so the card keeps its height. */}
-            <p className={cn("mt-3 flex justify-center", paying && "invisible")}>
+            {/* Hidden while paying but keeping its slot, so the card keeps its height. */}
+            <p className={cn("mt-1 flex h-11 items-center justify-center", paying && "invisible")} data-testid="pair-slot-two">
               <button
                 type="button"
                 onClick={() => void payByCard()}
@@ -277,6 +310,11 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
             <span>{paying ? t("paying") : t("add", { price })}</span>
           </Button>
         )}
+        {useWallet ? null : (
+          <p className="mt-1 flex h-11 items-center justify-center text-center text-sm text-ink-soft" data-testid="pair-slot-two">
+            {t("foot")}
+          </p>
+        )}
       </div>
 
       {/* Under the pay control, so it is on the first screen of a short phone. */}
@@ -290,23 +328,33 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         ))}
       </ul>
 
-      <p
-        className="mt-4 text-center text-[13px] text-pretty text-muted-foreground"
-        data-testid="pair-foot"
-      >
-        {t("foot")} {t("notice")}{" "}
-        {/* The 44 px tap target is a pseudo-element around the word, so the line it sits on keeps its height. */}
-        {/* A new tab, so the link above stays on this screen (it is only ever drawn here, after a publish). */}
-        <Link
-          href="/legal/terms"
-          target="_blank"
-          rel="noopener"
-          className="relative underline underline-offset-2 after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-[''] hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-        >
-          {t("terms")}
-          <span className="sr-only"> {t("newTab")}</span>
-        </Link>
-      </p>
+      {/* The small line: with a wallet, "Paid once." first (as the second slot holds "Pay by card
+          instead"); without one, the notice and Terms only. A card that may show a wallet keeps the
+          longer line's height for good, through an unseen copy in the same grid cell, so the card's
+          height is the same before and after the wallet answers; the line seen is drawn anew (key)
+          when it changes, so no text inside it counts as moved. */}
+      <div className="mt-4 grid text-center text-[13px] text-pretty text-muted-foreground" data-testid="pair-foot">
+        {wallet !== null ? (
+          <p aria-hidden="true" className="invisible col-start-1 row-start-1">
+            {t("foot")} {t("notice")} {t("terms")}
+          </p>
+        ) : null}
+        <p key={useWallet ? "wallet" : "card"} className="col-start-1 row-start-1">
+          {useWallet ? `${t("foot")} ` : null}
+          {t("notice")}{" "}
+          {/* The 44 px tap target is a pseudo-element around the word, so the line it sits on keeps its height. */}
+          {/* A new tab, so the link above stays on this screen (it is only ever drawn here, after a publish). */}
+          <Link
+            href="/legal/terms"
+            target="_blank"
+            rel="noopener"
+            className="relative underline underline-offset-2 after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-[''] hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            {t("terms")}
+            <span className="sr-only"> {t("newTab")}</span>
+          </Link>
+        </p>
+      </div>
     </section>
   );
 }
