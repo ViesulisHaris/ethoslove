@@ -38,6 +38,7 @@ import { StartedForYou, type StartedState } from "./started-for-you";
 import { START_COOKIE, START_PARAM, parseStartRef, readCookie, startPending } from "@/lib/editor/start-ref";
 import { draftHasContent, finishStart, prepareDemo, prepareStart, startPhotoLimit, type PreparedStart, type StartSeed } from "@/lib/editor/start-from-gift";
 import { clearLocalDraft, readLocalDraft, writeLocalDraft } from "@/lib/editor/persistence";
+import { deleteBlob } from "@/lib/editor/blob-store";
 import type { EditorDraft } from "@/lib/editor/types";
 
 export type EditorShellProps = {
@@ -58,7 +59,10 @@ export type EditorShellProps = {
  * then the layout switches later and this has to switch with it, or a tablet would draw no preview.
  */
 const WIDE = "(min-width: 48rem)";
-/** The longest the form waits behind its skeleton for a start (lib/editor/start-from-gift.ts) to come in. */
+/**
+ * The longest the form waits behind its skeleton for a start (lib/editor/start-from-gift.ts) to come
+ * in, counted from when the start begins to be read (after the template and the draft are in).
+ */
 const START_WAIT_MS = 6000;
 const subscribeWide = (onChange: () => void) => {
   const query = window.matchMedia(WIDE);
@@ -138,20 +142,31 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
 
   // A gift a reminder e-mail started (lib/editor/start-from-gift.ts): what came in, or what could.
   const reinit = useRef<() => Promise<void>>(async () => {});
-  const [started, setStarted] = useState<{ state: StartedState; start: PreparedStart } | null>(null);
+  // `done`: the start with its photos already on this device, when it came after the form showed and
+  // was only offered: "Use them" puts those in rather than fetching every photo again.
+  const [started, setStarted] = useState<{ state: StartedState; start: PreparedStart; done?: StartSeed } | null>(null);
   // While a start is on its way, the form waits behind its skeleton, so "Started for you." and the
   // names and photos arrive with it rather than pushing it down once it is read. Never for long:
-  // past START_WAIT_MS the form shows, and a start that comes after is only offered.
+  // START_WAIT_MS after the start begins (beginStart) the form shows; a start that comes after goes
+  // in all the same while the form is still empty, and is only offered once something is in it.
   const [starting, setStarting] = useState(() => typeof window !== "undefined" && !remote && startPending(window.location.search, document.cookie, Boolean(user)));
-  const late = useRef(false);
-  useEffect(() => {
-    if (!starting) return;
-    const timer = window.setTimeout(() => {
-      late.current = true;
-      setStarting(false);
-    }, START_WAIT_MS);
-    return () => window.clearTimeout(timer);
-  }, [starting]);
+  // A gift's id never stays in the address (it would reach a page-view event): it is read into this
+  // at the first render and taken out of the address before anything else runs.
+  const [startAsked] = useState(() => (typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(START_PARAM)));
+  const startTaken = useRef(false);
+  useLayoutEffect(() => {
+    if (!new URLSearchParams(window.location.search).has(START_PARAM)) return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete(START_PARAM);
+    window.history.replaceState(window.history.state, "", url.toString());
+  }, []);
+  const clock = useRef<number | null>(null);
+  useEffect(
+    () => () => {
+      if (clock.current !== null) window.clearTimeout(clock.current);
+    },
+    [],
+  );
 
   /** The draft of this template's page with the start's names (and photos, when it brings any) in it, opened again. */
   const applySeed = async (seed: StartSeed["seed"]) => {
@@ -175,16 +190,14 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   };
 
   const beginStart = async (demo: unknown) => {
-    const params = new URLSearchParams(window.location.search);
-    const asked = params.get(START_PARAM);
+    // The form waits for the start from now, not from when the page opened: a slow line spends its
+    // first seconds on the template and the draft.
+    if (starting) clock.current = window.setTimeout(() => setStarting(false), START_WAIT_MS);
+    const asked = startTaken.current ? null : startAsked;
     const cookie = readCookie(document.cookie, START_COOKIE);
     // Used once: the address wins over the cookie, and both are cleared so a reload starts nothing again.
     if (cookie) document.cookie = `${START_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
-    if (asked) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete(START_PARAM);
-      window.history.replaceState(window.history.state, "", url.toString());
-    }
+    startTaken.current = true;
     // Development only: the template's own demo, to see the card without an account.
     const isDemo = process.env.NODE_ENV === "development" && asked === "demo";
     const ref = asked ? parseStartRef(asked) : parseStartRef(cookie);
@@ -198,18 +211,32 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     // A draft they are already working on is never written over: the start is offered instead.
     if (draftHasContent(useEditor.getState().data)) return offer();
     const done = await finishStart(start);
+    if (clock.current !== null) window.clearTimeout(clock.current);
     const now = useEditor.getState();
     if (now.slug !== slug) return;
-    if (draftHasContent(now.data) || late.current) return offer();
+    // Something went into the form while the photos came (only possible once it showed, late): the
+    // start is offered, with its photos kept for "Use them". An empty form takes it in place.
+    if (draftHasContent(now.data)) {
+      if (done.from.mode !== "name") setStarted({ state: { kind: "offer", from: start.from }, start, done });
+      return;
+    }
     await applySeed(done.seed);
     if (done.from.mode !== "name") setStarted({ state: { kind: "started", from: done.from }, start });
   };
 
   const takeStart = async () => {
     if (!started) return;
-    const done = await finishStart(started.start);
+    // The photos fetched while the form was showing are used, not fetched (and stored) a second time.
+    const done = started.done ?? (await finishStart(started.start));
     await applySeed(done.seed);
     setStarted({ state: { kind: "started", from: done.from }, start: started.start });
+  };
+
+  /** "No thanks" to an offer whose photos are already on this device: those copies go too. */
+  const dismissStart = () => {
+    const unused = started?.state.kind === "offer" ? (started.done?.seed.photos ?? []) : [];
+    setStarted(null);
+    for (const photo of unused) if (photo.url.startsWith("idb:")) void deleteBlob(photo.url.slice(4)).catch(() => undefined);
   };
 
   const startEmpty = async () => {
@@ -449,7 +476,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
-            {ready && !starting && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={() => setStarted(null)} /> : null}
+            {ready && !starting && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={dismissStart} noPhotos={startPhotoLimit(manifest) === 0} /> : null}
             {ready && mod && !starting ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>

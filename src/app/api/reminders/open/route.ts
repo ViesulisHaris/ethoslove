@@ -7,7 +7,7 @@ import { clientIp } from "@/lib/request-ip";
 import { isPageNavigation } from "@/lib/auth/navigation";
 import { suggestTemplate } from "@/lib/lifecycle/suggest";
 import { lastGiftFor } from "@/lib/lifecycle/last-gift";
-import { START_COOKIE, START_COOKIE_SECONDS, START_PARAM, startRefValue, type StartRef } from "@/lib/editor/start-ref";
+import { START_COOKIE, START_COOKIE_SECONDS, startRefValue, type StartRef } from "@/lib/editor/start-ref";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -17,8 +17,9 @@ export const maxDuration = 10;
  * before a day (lib/lifecycle/reminder-job.ts). Opens the suggested template's editor with a new gift
  * started from the account's last gift for that person (its names and photos, put together in the
  * reader's own browser: lib/editor/start-from-gift.ts), or with the name alone when no gift was made
- * for them; `to=templates` opens the gallery instead, and a cookie keeps the start for whichever
- * gift they pick there.
+ * for them; `to=templates` opens the gallery instead. Which gift it starts from goes in a cookie,
+ * never in the address: a gift's id in the editor's address would reach a page-view event (the ad
+ * pixel and Clarity record the address). The cookie also starts whichever gift they pick in the gallery.
  *
  * Signed in to the reminder's account, as the publish reminder's link is (api/checkout/finish): the
  * e-mail went to that account's address. The sign-in is made at the tap, never when the e-mail is
@@ -37,18 +38,19 @@ export async function GET(request: NextRequest) {
   const admin = getSupabaseAdminClient();
   if (!value || !admin) return to(`${lang}/dashboard`);
   const [reminderId, until] = value.split(":");
-  const { data: reminder } = await admin.from("reminders").select("user_id, recipient_name, occasion, template_slug").eq("id", reminderId).maybeSingle();
-  if (!reminder) return to(`${lang}/dashboard`);
-
   const stage = /^[123]$/.test(url.searchParams.get("s") ?? "") ? url.searchParams.get("s") : "1";
   const ref = `email-reminder-${stage}`;
+  const { data: reminder, error } = await admin.from("reminders").select("user_id, recipient_name, occasion, template_slug").eq("id", reminderId).maybeSingle();
+  // The database didn't answer: the gifts to choose from, rather than an account page with nothing started.
+  if (error) return to(`${lang}/templates?ref=${ref}`);
+  if (!reminder) return to(`${lang}/dashboard`);
   const gift = await lastGiftFor(admin, reminder.user_id, reminder.recipient_name);
   const start: StartRef = gift ? { kind: "gift", id: gift.id } : { kind: "reminder", id: reminderId };
   const next =
     url.searchParams.get("to") === "templates"
       ? `${lang}/templates?ref=${ref}`
-      : `${lang}/create/${suggestTemplate(reminder.occasion, { avoid: reminder.template_slug, paid: true }).slug}?${START_PARAM}=${startRefValue(start)}&ref=${ref}`;
-  // Kept for the gallery's way round: whichever gift they pick starts from the same names and photos.
+      : `${lang}/create/${suggestTemplate(reminder.occasion, { avoid: reminder.template_slug, paid: true }).slug}?ref=${ref}`;
+  // The start, for the editor this opens or whichever gift they pick in the gallery.
   const withStart = (response: NextResponse) => {
     response.cookies.set(START_COOKIE, startRefValue(start), { maxAge: START_COOKIE_SECONDS, sameSite: "lax", path: "/", httpOnly: false, secure: process.env.NODE_ENV === "production" });
     return response;
@@ -61,9 +63,9 @@ export async function GET(request: NextRequest) {
   if (!(await rateLimit(`reminder-open:${clientIp(request.headers)}`, { limit: 30, windowSeconds: 600 }))) return signIn();
   const { data: profile } = await admin.from("profiles").select("email").eq("id", reminder.user_id).maybeSingle();
   if (!profile?.email) return signIn();
-  const { data: link, error } = await admin.auth.admin.generateLink({ type: "magiclink", email: profile.email });
+  const { data: link, error: linkError } = await admin.auth.admin.generateLink({ type: "magiclink", email: profile.email });
   const tokenHash = link?.properties?.hashed_token;
-  if (error || !tokenHash) return signIn();
+  if (linkError || !tokenHash) return signIn();
   // The same one-time sign-in the publish reminder hands its reader (auth/confirm).
   return withStart(to(`/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent(next)}`));
 }

@@ -62,7 +62,7 @@ describe("'Open my gift' from a reminder e-mail", () => {
     state.user = { id: USER };
     const out = await open(LATER);
     // The anniversary's ideas, without the template the reminder was saved with.
-    expect(out.to).toBe(`/create/museum?start=${GIFT}&ref=email-reminder-2`);
+    expect(out.to).toBe(`/create/museum?ref=email-reminder-2`);
     expect(out.cookie).toContain(`ethos_start_from=${GIFT}`);
     expect(out.cookie).toMatch(/Max-Age=7200/);
     expect(out.cookie).toMatch(/SameSite=lax/i);
@@ -74,7 +74,9 @@ describe("'Open my gift' from a reminder e-mail", () => {
   it("starts with the name alone when no live or scheduled gift was made for them", async () => {
     world([{ ...live, status: "draft" }]);
     state.user = { id: USER };
-    expect((await open(LATER)).to).toBe(`/create/museum?start=r-${R}&ref=email-reminder-2`);
+    const out = await open(LATER);
+    expect(out.to).toBe(`/create/museum?ref=email-reminder-2`);
+    expect(out.cookie).toContain(`ethos_start_from=r-${R}`);
   });
 
   it("opens the gallery with the start kept in the cookie, in Spanish", async () => {
@@ -88,16 +90,34 @@ describe("'Open my gift' from a reminder e-mail", () => {
   it("signs the reader in once, at the tap, while the link is in time", async () => {
     world([live]);
     const out = await open(LATER);
-    expect(out.to).toBe(`/auth/confirm?token_hash=hash-1&type=magiclink&next=/create/museum?start=${GIFT}&ref=email-reminder-2`);
+    expect(out.to).toBe(`/auth/confirm?token_hash=hash-1&type=magiclink&next=/create/museum?ref=email-reminder-2`);
     expect(state.links).toEqual(["leo@icloud.test"]);
   });
 
   it("asks for a sign-in after the link's time, when rate-limited, or for someone else's account", async () => {
     world([live]);
-    expect((await open(PAST)).to).toBe(`/login?next=/create/museum?start=${GIFT}&ref=email-reminder-2`);
+    expect((await open(PAST)).to).toBe(`/login?next=/create/museum?ref=email-reminder-2`);
     state.limited = true;
     expect((await open(LATER)).to).toMatch(/^\/login\?next=/);
     expect(state.links).toEqual([]);
+  });
+
+  it("never puts the gift's id in the address it opens: only the cookie carries it", async () => {
+    world([live]);
+    state.user = { id: USER };
+    expect((await open(LATER)).to).not.toContain(GIFT);
+    state.user = null;
+    expect((await open(LATER)).to).not.toContain(GIFT);
+    expect((await open(PAST)).to).not.toContain(GIFT);
+  });
+
+  it("opens the gifts to choose from when the database doesn't answer", async () => {
+    const fake = world([live]);
+    state.user = { id: USER };
+    fake.failNext("reminders", "select");
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect((await open(LATER, "&l=es")).to).toBe("/es/templates?ref=email-reminder-2");
+    errors.mockRestore();
   });
 
   it("does nothing for a forged link, a loaded image, or a reminder that is gone", async () => {

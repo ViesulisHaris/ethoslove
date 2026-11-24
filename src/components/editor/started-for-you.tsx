@@ -19,7 +19,22 @@ export type StartedState = { kind: "started"; from: StartedFrom } | { kind: "off
  * It goes once the reader changes the names or the photos themselves, or dismisses it, and never
  * shows on a gift that is already out.
  */
-export function StartedForYou({ state, onChangePhotos, onEmpty, onUse, onDismiss }: { state: StartedState; onChangePhotos: () => void; onEmpty: () => Promise<void> | void; onUse: () => Promise<void> | void; onDismiss: () => void }) {
+export function StartedForYou({
+  state,
+  onChangePhotos,
+  onEmpty,
+  onUse,
+  onDismiss,
+  noPhotos = false,
+}: {
+  state: StartedState;
+  onChangePhotos: () => void;
+  onEmpty: () => Promise<void> | void;
+  onUse: () => Promise<void> | void;
+  onDismiss: () => void;
+  /** A free note, where photos are the paid step: the card never asks for them. */
+  noPhotos?: boolean;
+}) {
   const t = useTranslations("editor.started");
   const photos = useEditor((s) => s.data.photos);
   const status = useEditor((s) => s.status);
@@ -50,7 +65,7 @@ export function StartedForYou({ state, onChangePhotos, onEmpty, onUse, onDismiss
     return (
       // Clear of "How it works", which floats over the top of the form on a phone.
       <div className="mt-6 mb-8 rounded-[24px] bg-card px-5 py-4 ring-1 ring-black/5 md:mt-0" data-testid="started-offer">
-        <p className="text-[15px] leading-snug">{t("offer", { name: state.from.name })}</p>
+        <p className="text-[15px] leading-snug">{t(state.from.mode === "photos" ? "offer" : "offerNames", { name: state.from.name })}</p>
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
           <button
             type="button"
@@ -89,7 +104,7 @@ export function StartedForYou({ state, onChangePhotos, onEmpty, onUse, onDismiss
       ) : null}
       <h2 className="font-display text-[1.65rem] leading-tight">{t("title")}</h2>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-        {state.from.mode === "photos" && photos.length > 0 ? t("withPhotos", { count: photos.length, name: state.from.name }) : t("namesOnly")}
+        {state.from.mode === "photos" && photos.length > 0 ? t("withPhotos", { count: photos.length, name: state.from.name }) : noPhotos ? t("namesWords") : t("namesOnly")}
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
         {/* Only when photos came in: with none there is nothing to change, and on a free note the photos are a paid step. */}
