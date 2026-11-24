@@ -156,9 +156,10 @@ plays both states. Four things do not follow from the switch and are done by han
 4. Its page's own words. The growth build's template page (branch `growth/guides`) draws a palette,
    three steps and six idea cards per gift from three tables, and its tests hold every template in
    the gallery to a row in each (`tests/unit/template-steps.test.ts` and its neighbours), so with no
-   rows the switch fails them. The rows are written and wait in
-   `src/templates/advent-calendar/page-content.ts`. As soon as that branch and this one are in one
-   tree (before the switch, not with it):
+   rows the switch fails them. **Done at the merge of `growth/view` (24 Nov 2026)**: the rows that
+   waited in `src/templates/advent-calendar/page-content.ts` are in the three tables behind the
+   switch, the file is gone, and `tests/unit/advent-calendar.test.tsx` reads them from the tables
+   with the switch on (and finds none with it off). What was done, for the record:
    - move `PAGE_THEME` into `TEMPLATE_PAGE_THEMES` (`src/content/template-page-themes.ts`),
      `PAGE_STEPS` into `TEMPLATE_STEPS` (`src/content/template-steps.ts`) and `PAGE_IDEAS` into
      `TEMPLATE_GUIDES` (`src/content/template-guides.ts`, with `faq: []`), each under

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 
 /**
  * A gift's page in that gift's own colours (the owner, 21 Nov 2026: "each gift has a similar thing
@@ -137,6 +138,9 @@ export const TEMPLATE_PAGE_THEMES: Record<string, PageTheme> = {
   "bat-swarm": { ground: "#ebe5f3", raised: "#f4f0f9", band: "#dbd1ea", ink: "#2a2145", body: "#5b5275", accent: "#4f3a8a", badge: "#e8dfb8", footer: "#1c1538", footerText: "#c6bedd", flowers: "moonlight" },
   "trick-or-treat": { ground: "#efe2ee", raised: "#f6eef5", band: "#e0cde0", ink: "#33203a", body: "#655068", accent: "#a04a12", badge: "#e6ab6c", footer: "#25143a", footerText: "#cdbfd9", flowers: "moonlight" },
   "haunted-house": { ground: "#e6e6f0", raised: "#f0f0f6", band: "#d4d4e4", ink: "#25263d", body: "#575970", accent: "#8f5510", badge: "#efc47a", footer: "#14162c", footerText: "#bcbdd4", flowers: "moonlight" },
+  // The Advent Calendar, only while it is in the gallery (src/templates/held.ts): the house's evergreen as a pale
+  // sage, its red taken down to a deep one, the mantel's brass for the step badges.
+  ...(ADVENT_CALENDAR_LIVE ? { "advent-calendar": { ground: "#e6ede3", raised: "#f1f5ee", band: "#d4e0d0", ink: "#1f2c24", body: "#4d5d52", accent: "#96242a", badge: "#d2b67c", footer: "#14261d", footerText: "#bfd0c4", flowers: "ivory" as const } } : {}),
   arcade: { ground: "#ebe2f2", raised: "#f4eef8", band: "#dacbe7", ink: "#2c2140", body: "#5b4f70", accent: "#9c3058", badge: "#c3aede", footer: "#241a38", footerText: "#cdc3df", flowers: "moonlight" },
 };
 

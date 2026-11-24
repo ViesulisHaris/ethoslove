@@ -21,7 +21,6 @@ import { demoData } from "@/templates/advent-calendar/demo-data";
 import { fieldMeta } from "@/templates/advent-calendar/field-meta";
 import { INK, LOOKS, SWATCHES } from "@/templates/advent-calendar/looks";
 import { manifest } from "@/templates/advent-calendar/manifest";
-import { PAGE_IDEAS, PAGE_STEPS, PAGE_THEME } from "@/templates/advent-calendar/page-content";
 import { fieldsSchema, type AdventCalendarFields } from "@/templates/advent-calendar/schema";
 import { COPY, LOW_COLUMN_MIN, LOW_LEAST, LOW_UNITS, NoteCard, TAP_PX, lowFit, oneOutline, Opening, TAG_SMALLEST, Template, VEIL_WAIT_MS, artFor, fitTag, isShortName, lowColumn, lowTitlePx, settleMs, shortCapOf, TAG_SIZES } from "@/templates/advent-calendar/Template";
 import { keep, keptKey, recall } from "@/templates/advent-calendar/kept";
@@ -40,6 +39,25 @@ const escaped = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt
 /** The words of some markup, without its tags. */
 const plain = (html: string) => html.replace(/<[^>]+>/g, "");
 const noteDoors = (seed: number, notes: number) => doorsFor(seed, notes).filter((d) => d.kind === "note");
+
+/** The template page's three tables (content/template-page-themes.ts, template-steps.ts, template-guides.ts), read with the switch set one way. */
+async function pageTables(live: boolean) {
+  vi.resetModules();
+  vi.doMock("@/templates/held", () => ({ ADVENT_CALENDAR_LIVE: live }));
+  // One after the other: imported side by side, two of the three kept the switch of an earlier read.
+  const themes = await import("@/content/template-page-themes");
+  const steps = await import("@/content/template-steps");
+  const guides = await import("@/content/template-guides");
+  vi.doUnmock("@/templates/held");
+  vi.resetModules();
+  return { themes: themes.TEMPLATE_PAGE_THEMES, steps: steps.TEMPLATE_STEPS, guides: guides.TEMPLATE_GUIDES };
+}
+
+// Its page's own words, as those tables hold them once it is in the gallery (docs/GROUP.md, "The first template", step 4).
+const LIVE_TABLES = await pageTables(true);
+const PAGE_THEME = LIVE_TABLES.themes[SLUG];
+const PAGE_STEPS = LIVE_TABLES.steps[SLUG];
+const PAGE_IDEAS = { en: LIVE_TABLES.guides[SLUG].en.ideas, es: LIVE_TABLES.guides[SLUG].es.ideas };
 
 afterEach(() => {
   vi.doUnmock("@/templates/held");
@@ -785,12 +803,15 @@ describe("the words waiting for its page", () => {
     expect(send.es).toBe("Envía la tarjeta");
   });
 
-  it("wait here only until the growth build's tables are on this branch: then they are moved", () => {
-    // docs/GROUP.md, "The first template", step 4. Nothing reads page-content.ts; on the day the three tables are in this
-    // tree its rows go into them (behind ADVENT_CALENDAR_LIVE), the file goes, and these checks go with it onto the tables.
-    // (template-guides.ts is on this branch already, in its older shape: the two files that are new on that branch are the sign)
-    const here = ["template-page-themes", "template-steps"].filter((name) => existsSync(`src/content/${name}.ts`));
-    expect(here, "the tables are here now: move PAGE_THEME, PAGE_STEPS and PAGE_IDEAS into them and delete src/templates/advent-calendar/page-content.ts (docs/GROUP.md, the first template, step 4)").toEqual([]);
+  it("are in the growth build's three tables behind the switch, as its search entry is, and wait in no file of their own", async () => {
+    // docs/GROUP.md, "The first template", step 4: done at the merge of growth/view, where the tables came in.
+    expect(existsSync("src/templates/advent-calendar/page-content.ts")).toBe(false);
+    expect(PAGE_THEME.flowers).toBe("ivory");
+    expect(LIVE_TABLES.guides[SLUG].en.faq).toEqual([]);
+    expect(LIVE_TABLES.guides[SLUG].es.faq).toEqual([]);
+    // held, a row for a template in no list would fail the tables' own "and for nothing else"
+    const held = await pageTables(false);
+    for (const table of [held.themes, held.steps, held.guides]) expect(Object.hasOwn(table, SLUG)).toBe(false);
     const doc = readFileSync("docs/GROUP.md", "utf8");
     expect(doc).toMatch(/^4\. Its page's own words\./m);
     expect(doc).toContain('do the four things listed under "The first template"');
@@ -805,7 +826,8 @@ describe("the words waiting for its page", () => {
       for (const item of items) {
         expect(words(item.heading), item.heading).toBeLessThanOrEqual(6);
         expect(words(item.how), item.how).toBeLessThanOrEqual(16);
-        expect(item.borrow.line.length, item.borrow.line).toBeLessThanOrEqual(limits[item.borrow.field]);
+        expect(Object.keys(limits), item.borrow.field).toContain(item.borrow.field);
+        expect(item.borrow.line.length, item.borrow.line).toBeLessThanOrEqual(limits[item.borrow.field as keyof typeof limits]);
         expect(`${item.heading} ${item.how} ${item.borrow.line}`).not.toMatch(/!|—|perfect for|unforgettable|elevate|whether you/i);
       }
     }
@@ -1005,7 +1027,8 @@ describe("its page prices it as what it is sold as: a group card", () => {
     }
     expect(GROUP_WORDS.server).toContain("templates.group");
     const page = readFileSync("src/app/[currency]/[locale]/(marketing)/templates/[slug]/page.tsx", "utf8");
-    expect(page).toContain('PRODUCTS[manifest.tier === "free" ? "extras" : group ? "group" : "single"]');
+    // Since growth/view, every page that prints a price reads templateProduct (tests/unit/gift-finder.test.ts): the group step comes first.
+    expect(page).toContain('PRODUCTS[manifest.tier !== "free" && group ? "group" : templateProduct(manifest.tier)]');
     expect(page).toContain('t("templates.group.detailPrice", { price })');
     expect(readFileSync("src/components/templates/template-guide.tsx", "utf8")).toContain('soldAsGroup(manifest) ? group("faqA", { name, price })');
   });
