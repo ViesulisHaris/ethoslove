@@ -208,6 +208,16 @@ export function reminderOccasionFor(occasions: readonly Occasion[] | undefined):
   return first === "birthday" || first === "anniversary" || first === "valentines" ? first : "other";
 }
 
+/**
+ * The one occasion a template is for, when it is for only one (besides "just because"): only then is
+ * the day its gift counts down to that occasion's. A scrapbook counting down to 25 December is not an
+ * anniversary because anniversaries come first in its list. Null for a template of several occasions.
+ */
+export function soleReminderOccasion(occasions: readonly Occasion[] | undefined): ReminderOccasion | null {
+  const own = (occasions ?? []).filter((o) => o !== "just-because");
+  return own.length === 1 ? reminderOccasionFor(own) : null;
+}
+
 /** The day a gift counts down to, in its own timezone (UTC when that can't be read), as YYYY-MM-DD. */
 export function countdownDay(countdown: GiftCountdown | undefined): string | null {
   if (!countdown) return null;

@@ -19,6 +19,7 @@ import {
   initialLastSentYear,
   reminderDateFor,
   reminderOccasionFor,
+  soleReminderOccasion,
   type MonthDay,
   type Reminder,
   type ReminderOccasion,
@@ -52,12 +53,14 @@ const TOGGLE_MS = 400;
 
 /**
  * "Never be late for their day.", under a published gift: the share screen's one question, two days
- * ("Mia's birthday", "Your anniversary") and one button. The day this gift tells (its template's
- * occasion, on its countdown's day) is filled in and marked as coming from the gift, and can be
- * changed; a gift with no countdown tells no day, and a day only the person knows is never guessed. Each saved day gets three e-mails a
- * year (lib/lifecycle/reminder-job.ts). "Add another day" opens the other rows as they always worked:
- * this gift's occasion when it is neither of the two, Valentine's Day, every month (the monthsary)
- * and someone else. A day the account already has for this person shows as saved.
+ * ("Mia's birthday", "Your anniversary") and one button. The day this gift tells (its countdown's
+ * day) is filled in and marked as coming from the gift when its template is for that one occasion
+ * (Birthday Cinema), and can be changed; a template of several occasions offers it as a row of its
+ * own behind "Add another day"; a gift with no countdown tells no day, and a day only the person
+ * knows is never guessed. Each saved day gets three e-mails a year (lib/lifecycle/reminder-job.ts).
+ * "Add another day" opens the other rows as they always worked: this gift's day when it is neither
+ * of the two, Valentine's Day, every month (the monthsary) and someone else. A day the account
+ * already has for this person shows as added and is changed on the reminders page, not here.
  */
 export function RemindNextYear({ data }: { data: GiftData }) {
   const t = useTranslations("lifecycle.remind");
@@ -65,12 +68,21 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   const currency = useCurrency();
   const partner = data.recipientName.trim().slice(0, REMINDER_NAME_MAX);
   const [initial] = useState(() => {
-    const occasion = reminderOccasionFor(getManifest(data.templateSlug)?.occasions);
+    const occasions = getManifest(data.templateSlug)?.occasions;
+    const day = countdownDay(data.countdown);
     // `told`: the gift counts down to a real day. Without one, the date below is only today.
-    return { occasion, told: countdownDay(data.countdown) !== null, ...reminderDateFor(occasion, data.countdown, new Date()) };
+    const told = day !== null;
+    // Only a template for one occasion says which occasion its day is: Scrapbook counting down to
+    // 25 December is not an anniversary because anniversaries come first in its list.
+    const sole = soleReminderOccasion(occasions);
+    const occasion: ReminderOccasion = sole ?? (day !== null ? (day.slice(5) === "02-14" ? "valentines" : "other") : reminderOccasionFor(occasions));
+    return { occasion, told, sole, ...reminderDateFor(occasion, data.countdown, new Date()) };
   });
-  // The gift's own day is one of the two fields when it is a birthday or an anniversary.
-  const giftField: Field | null = initial.occasion === "birthday" || initial.occasion === "anniversary" ? initial.occasion : null;
+  // The gift's own day is one of the two fields when its template is for birthdays alone, or anniversaries alone.
+  const giftField: Field | null = initial.sole === "birthday" || initial.sole === "anniversary" ? initial.sole : null;
+  // Otherwise the day it tells is a row of its own behind "Add another day" ("A day for Ana · 25 December
+  // · from this gift"), its occasion to change; with no day told, a birthday or anniversary is never guessed.
+  const nextOccasion: ReminderOccasion | null = giftField || (!initial.told && (initial.occasion === "birthday" || initial.occasion === "anniversary")) ? null : initial.occasion;
   // Filled in only when the gift tells the day (its countdown): today is no one's anniversary by default.
   const prefill = giftField !== null && initial.told;
   const [name, setName] = useState(partner);
@@ -89,7 +101,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   const [more, setMore] = useState(false);
 
   // The rows behind "Add another day".
-  const [occasion, setOccasion] = useState<ReminderOccasion>(initial.occasion);
+  const [occasion, setOccasion] = useState<ReminderOccasion>(nextOccasion ?? "other");
   const [nextDate, setNextDate] = useState<MonthDay>({ month: initial.month, day: initial.day });
   const [editing, setEditing] = useState(false);
   const [days, setDays] = useState<Partial<Record<"birthday" | "anniversary" | "someone", MonthDay>>>({});
@@ -127,16 +139,16 @@ export function RemindNextYear({ data }: { data: GiftData }) {
       const found: Partial<Record<RowId, Status>> = {};
       const foundDays: Partial<Record<Field, MonthDay>> = {};
       const sentDays: Partial<Record<Field, Sent>> = {};
-      // This gift's occasion, when it is not one of the two days, on whatever day the account has it.
-      if (!giftField) {
-        const first = mine.find((r) => r.occasion === initial.occasion && (initial.occasion !== "other" || (r.month === initial.month && r.day === initial.day)));
+      // This gift's own row, when it is not one of the two days, on whatever day the account has it.
+      if (nextOccasion) {
+        const first = mine.find((r) => r.occasion === nextOccasion && (nextOccasion !== "other" || (r.month === initial.month && r.day === initial.day)));
         if (first) {
           found.next = "saved";
           setNextDate({ month: first.month, day: first.day });
         }
       }
       for (const row of ["birthday", "anniversary", "valentines"] as const) {
-        if (row === initial.occasion && !giftField) continue;
+        if (row === nextOccasion) continue;
         const hit = mine.find((r) => r.occasion === row);
         if (!hit) continue;
         found[row] = "saved";
@@ -160,7 +172,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
     return () => {
       live = false;
     };
-  }, [partner, initial, giftField]);
+  }, [partner, initial, giftField, nextOccasion]);
   const anySaved = Object.values(status).includes("saved") || others.length > 0;
   const setRow = (row: RowId | "dates", next: Status) => setStatus((s) => ({ ...s, [row]: next }));
   const busy = Object.values(status).includes("saving");
@@ -302,7 +314,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
 
   // Behind "Add another day": this gift's occasion when it isn't one of the two days, a day of the two
   // not saved, Valentine's Day unless it is this gift's, then every month and someone else.
-  const showNext = giftField === null;
+  const showNext = nextOccasion !== null;
   const partnerRows = (["birthday", "anniversary", "valentines"] as const).filter((row) => {
     if (row === "valentines") return !(showNext && occasion === "valentines" && status.valentines !== "saved");
     return datesDone && status[row] !== "saved";
@@ -330,7 +342,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
           <div className="flex items-start gap-3">
             <BellRing className="mt-1 size-5 shrink-0 text-coral" aria-hidden />
             <div className="min-w-0">
-              <p className="font-display text-xl">{t("datesTitle")}</p>
+              <h2 className="font-display text-xl">{t("datesTitle")}</h2>
               {/* "your photos" only when this gift has some: a free note has none, and the next gift would start with the names alone. */}
               <p className="mt-1 text-sm text-muted-foreground">{data.photos.length > 0 ? t("datesWhy") : t("datesWhyNames")}</p>
             </div>
@@ -347,6 +359,36 @@ export function RemindNextYear({ data }: { data: GiftData }) {
             {FIELDS.map((f) => {
               const saved = status[f] === "saved";
               const marked = f === giftField && fromGift && !saved;
+              const savedDay = saved ? fields[f] : undefined;
+              if (savedDay)
+                // A day the account already has is not changed here, where a change would never be saved:
+                // it reads as added, and "Change" opens the reminders page, where it can be.
+                return (
+                  <div key={f} className="grid gap-1.5 text-[15px] font-medium" data-testid={`remind-field-${f}`}>
+                    <span className="flex flex-wrap items-baseline justify-between gap-x-3">
+                      <span aria-hidden="true">{fieldLabel(f)}</span>
+                      <Link
+                        href="/account/reminders"
+                        aria-label={t("changeOnPage", { what: fieldLabel(f) })}
+                        className="-my-3 inline-flex min-h-11 items-center text-sm font-normal text-muted-foreground underline underline-offset-4 hover:text-ink focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none"
+                        data-testid={`remind-change-${f}`}
+                      >
+                        {t("edit")}
+                      </Link>
+                    </span>
+                    <p className="flex h-11 min-w-0 items-center gap-2.5 rounded-xl border border-border bg-paper px-3 text-base font-normal" data-testid={`remind-locked-${f}`}>
+                      <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
+                      <span className="min-w-0 truncate">
+                        <span className="sr-only">{fieldLabel(f)}: </span>
+                        {formatMonthDay(savedDay, locale)}
+                      </span>
+                      <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-moss">
+                        <Check className="size-4" aria-hidden />
+                        {t("added")}
+                      </span>
+                    </p>
+                  </div>
+                );
               return (
                 // Not a <label> round the picker: a label names the button it holds, and the name would lose the day.
                 <div key={f} className="grid gap-1.5 text-[15px] font-medium" data-testid={`remind-field-${f}`}>
@@ -368,17 +410,9 @@ export function RemindNextYear({ data }: { data: GiftData }) {
                     onChange={(next) => {
                       setFields((d) => ({ ...d, [f]: next }));
                       if (f === giftField) setFromGift(false);
-                      setStatus((s) => ({ ...s, [f]: s[f] === "saved" ? "saved" : "idle", dates: "idle" }));
+                      setStatus((s) => ({ ...s, [f]: "idle", dates: "idle" }));
                     }}
                     className={pickerClass}
-                    adornment={
-                      saved ? (
-                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-moss">
-                          <Check className="size-4" aria-hidden />
-                          {t("added")}
-                        </span>
-                      ) : undefined
-                    }
                   />
                 </div>
               );
@@ -404,7 +438,8 @@ export function RemindNextYear({ data }: { data: GiftData }) {
                 label={nextLabel(t, occasion, who)}
                 sub={
                   <>
-                    {formatMonthDay(nextDate, locale)} · {t("nextYear")}
+                    {/* The day the gift counts down to, until it is changed, says where it came from. */}
+                    {formatMonthDay(nextDate, locale)} · {initial.told && nextDate.month === initial.month && nextDate.day === initial.day ? t("fromGift") : t("nextYear")}
                     {status.next !== "saved" ? (
                       <button type="button" onClick={() => setEditing(!editing)} aria-expanded={editing} className="ml-1.5 inline-flex min-h-11 items-center underline underline-offset-4 hover:text-ink">
                         {editing ? t("done") : t("edit")}

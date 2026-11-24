@@ -23,6 +23,7 @@ import {
   occurrenceIn,
   reminderDateFor,
   reminderOccasionFor,
+  soleReminderOccasion,
 } from "@/lib/lifecycle/reminders";
 import { reminderInput } from "@/lib/lifecycle/reminder-input";
 
@@ -122,6 +123,13 @@ describe("reminder prefill", () => {
     expect(reminderOccasionFor(["valentines"])).toBe("valentines");
     expect(reminderOccasionFor(["long-distance", "birthday"])).toBe("other");
     expect(reminderOccasionFor(undefined)).toBe("other");
+    // Only a template for one occasion says what its gift's day is.
+    expect(soleReminderOccasion(["birthday"])).toBe("birthday");
+    expect(soleReminderOccasion(["christmas"])).toBe("other");
+    expect(soleReminderOccasion(["halloween", "just-because"])).toBe("other");
+    expect(soleReminderOccasion(["anniversary", "birthday", "just-because", "long-distance"])).toBeNull();
+    expect(soleReminderOccasion(["anniversary", "wedding", "graduation", "long-distance"])).toBeNull();
+    expect(soleReminderOccasion(undefined)).toBeNull();
   });
 
   it("uses the countdown's day in its own timezone, else today", () => {
