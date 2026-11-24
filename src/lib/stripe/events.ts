@@ -245,7 +245,7 @@ type Purchase = { id: string; user_id: string | null; product: string; membershi
  */
 async function purchaseByPaymentIntent(db: Db, paymentIntent: string | null): Promise<Purchase | null> {
   if (!paymentIntent) return null;
-  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
+  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id, kind").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
   const missing = missingMembershipColumns(error, "a refund or a dispute reads purchases.membership_id");
   if (missing) throw missing;
   if (error) throw new Error(`purchase lookup failed: ${error.message}`);

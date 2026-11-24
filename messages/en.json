@@ -580,6 +580,7 @@
       "payIncludes": "In this gift: {features}",
       "payBlurb": "Pay once and this template is yours for good.",
       "payButton": "Pay {price} and send",
+      "three": "Or this one and your next two: {price}",
       "appUnlock": "Unlock and send",
       "appUnlockNote": "Through the App Store: you'll see the options and prices next.",
       "appUnlockFailed": "That didn't go through. Try again, or come back to it later: your draft is saved.",

@@ -48,3 +48,22 @@ describe("entitlements: two more gifts", () => {
     expect(SIGNED_OUT).toMatchObject({ giftsReady: 0, pairOffer: null });
   });
 });
+
+describe("entitlements: two more gifts added at payment, for a reader a reminder brought", () => {
+  it("may be added by anyone with none ready, even someone who never paid, while on sale", async () => {
+    vi.stubEnv("GIFT_PAIR_ENABLED", "true");
+    expect((await read(new FakeDb({}, NOW))).addPair).toBe(true);
+    expect((await read(new FakeDb({ purchases: [paid("single")] }, NOW))).addPair).toBe(true);
+  });
+
+  it("not while switched off, with gifts ready, for an Everything owner, or before migration 0024", async () => {
+    expect((await read(new FakeDb({}, NOW))).addPair).toBe(false);
+    vi.stubEnv("GIFT_PAIR_ENABLED", "true");
+    const ready = new FakeDb({}, NOW);
+    await grantGifts(ready.db, "u1", "p-pair", 2);
+    expect((await read(ready)).addPair).toBe(false);
+    expect((await read(new FakeDb({ template_unlocks: [{ id: "t", user_id: "u1", template_slug: "*", purchase_id: "e1" }] }, NOW))).addPair).toBe(false);
+    expect((await read(new FakeDb({}, NOW, { missingTables: ["gift_credits"] }))).addPair).toBe(false);
+    expect(SIGNED_OUT.addPair).toBe(false);
+  });
+});

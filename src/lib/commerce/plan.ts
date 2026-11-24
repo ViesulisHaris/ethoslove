@@ -23,10 +23,11 @@ import { upgradeAmount, type PaidPurchase } from "./pricing";
 import { pairAllowed, type PairRefusal } from "./gift-credits";
 
 /**
- * purchases.kind: the product, "bump" for a single or extras with every other template added, or
- * "second" for a single with a second gift.
+ * purchases.kind: the product, "bump" for a single or extras with every other template added,
+ * "second" for a single with a second gift, or "with_pair" for a single or extras with two more gifts
+ * added (a reader who came from a reminder e-mail).
  */
-export type PurchaseKind = ProductId | "bump" | "second";
+export type PurchaseKind = ProductId | "bump" | "second" | "with_pair";
 
 export type CheckoutRequest = {
   product: ProductId;
@@ -44,6 +45,11 @@ export type CheckoutRequest = {
    * charged at the full price the buyer didn't see.
    */
   personalPrice?: boolean;
+  /**
+   * Two more gifts added to this gift, in the same payment ("Or this one and your next two"): offered
+   * only to a reader who came from a reminder e-mail, on a single or "Make it special".
+   */
+  addPair?: boolean;
 };
 
 /** The buyer's own membership, as checkout needs to know it (lib/commerce/memberships.ts membershipContextOf). */
@@ -74,6 +80,12 @@ export type CheckoutContext = {
    * the product is refused as not on sale.
    */
   pair?: { onSale: boolean; ready: number | null; memberRunning: boolean; paidProducts: string[] };
+  /**
+   * Two more gifts added to a gift (CheckoutRequest.addPair): whether they are on sale and the table
+   * they live in is there, and how many the buyer has ready (0 for a guest; null when the table isn't
+   * there). Absent, addPair is refused.
+   */
+  addPair?: { onSale: boolean; ready: number | null };
 };
 
 export type PlanLine = { key: ProductId | "bump" | "second"; amount: number };
@@ -88,6 +100,8 @@ export type CheckoutPlan = {
   bump: boolean;
   /** The second gift's template, or null. */
   second: string | null;
+  /** Two more gifts added to the gift (kind "with_pair"): fulfilment puts them on the account. */
+  pair?: boolean;
   lines: PlanLine[];
   total: number;
   /** The creator credited with the sale (purchases.creator_code), or null. */
@@ -125,6 +139,7 @@ function alreadyCovered(owned: string[], unlock: string): boolean {
 export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok: true } & CheckoutPlan) | ({ ok: false } & PlanError) {
   const { currency } = req;
   if (req.product === "pair") return planPair(req, ctx);
+  if (req.addPair && req.product !== "single" && req.product !== "extras") return fail("pair_not_available", 400);
   // A personal price is for one gift (PERSONAL_PRICE.onto), and only while it still holds.
   if (req.personalPrice) {
     if (!PERSONAL_PRICE.onto.includes(req.product)) return fail("personal_price_unavailable", 400);
@@ -199,6 +214,17 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   if (second) unlocks.push(second);
   if (unlocks.length > 0 && unlocks.every((u) => alreadyCovered(ctx.ownedForever, u))) return fail("already_owned", 409);
 
+  // Two more gifts with this one: only on a gift of one template, never with anything else added,
+  // while they are on sale, and never to a buyer with gifts ready or every template already.
+  const pair = req.addPair === true;
+  if (pair) {
+    if ((product !== "single" && product !== "extras") || bump || second !== null || req.personalPrice) return fail("pair_not_available", 400);
+    const allowed = ctx.addPair;
+    if (!allowed?.onSale || allowed.ready === null) return fail("not_on_sale", 400);
+    if (allowed.ready > 0) return fail("pair_ready", 409);
+    if (ctx.ownedForever.includes(EVERY_TEMPLATE)) return fail("already_owned", 409);
+  }
+
   // Never with the bump or a second gift: the price is for one gift.
   const personal = req.personalPrice && ctx.personalPrice ? ctx.personalPrice : null;
   if (personal && (bump || second !== null)) return fail("personal_price_unavailable", 400);
@@ -210,16 +236,18 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   // The bump takes the order to exactly Everything's price.
   if (bump) lines.push({ key: "bump", amount: bumpAmount(product, currency) });
   if (second) lines.push({ key: "second", amount: SECOND_GIFT.amounts[currency] });
+  if (pair) lines.push({ key: "pair", amount: PRODUCTS.pair.amounts[currency] });
 
   return {
     ok: true,
     product,
-    kind: bump ? "bump" : second ? "second" : product,
+    kind: bump ? "bump" : second ? "second" : pair ? "with_pair" : product,
     currency,
     templateSlugs: packId ? [`pack:${packId}`] : slugs,
     packId,
     bump,
     second,
+    ...(pair ? { pair: true } : {}),
     lines,
     total: lines.reduce((sum, line) => sum + line.amount, 0),
     creatorCode: ctx.creatorCode,
@@ -237,6 +265,7 @@ const PAIR_STATUS: Record<PairRefusal, number> = { not_on_sale: 400, sign_in_req
  * pairAllowed says (lib/commerce/gift-credits.ts). It grants gifts ready, not unlock rows.
  */
 function planPair(req: CheckoutRequest, ctx: CheckoutContext): ({ ok: true } & CheckoutPlan) | ({ ok: false } & PlanError) {
+  if (req.addPair) return fail("pair_not_available", 400);
   if (req.addEverything) return fail("bump_not_available", 400);
   if (req.secondSlug !== undefined) return fail("second_not_available", 400);
   if (req.personalPrice) return fail("personal_price_unavailable", 400);

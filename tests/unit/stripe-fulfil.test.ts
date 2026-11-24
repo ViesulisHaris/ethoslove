@@ -86,6 +86,7 @@ describe("reading a session back", () => {
       packId: null,
       bump: true,
       second: null,
+      pair: false,
       kind: "bump",
       creatorCode: "MARIA",
       ref: "c-maria",
@@ -564,5 +565,34 @@ describe("fulfilment of two more gifts", () => {
     await fulfilCheckoutSession(session(pairMeta(), { consent: { terms_of_service: "accepted", promotions: null }, amount_total: 500 }));
     expect(fake.rows("purchases")[0].terms_consent).toBe(consentSentence("pair", "en"));
     expect(mail.notifyReceipt).toHaveBeenLastCalledWith("u1", "Two more gifts", "€5.00", ["Two gifts, ready to make whenever you like"], { pair: true, consent: consentSentence("pair", "en") });
+  });
+});
+
+describe("fulfilment: a gift with two more, from a reminder e-mail", () => {
+  const signedIn = (meta: Record<string, string>) => ({ ...meta, user_id: "u1", guest: "0" });
+  const ctx: CheckoutContext = { ...guest, addPair: { onSale: true, ready: 0 } };
+
+  it("unlocks the template, then puts two gifts ready on the account, once, and says both on the receipt", async () => {
+    useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "pending", amount: 1499, currency: "eur" }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
+    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"], addPair: true }, {}, ctx);
+    expect(meta).toMatchObject({ kind: "with_pair", pair: "1", product: "single" });
+    expect(readSession(session(meta))).toMatchObject({ product: "single", pair: true, kind: "with_pair" });
+    expect(await fulfilCheckoutSession(session(signedIn(meta), { amount_total: 1499 }))).toEqual({ ok: true, userId: "u1" });
+    await fulfilCheckoutSession(session(signedIn(meta), { amount_total: 1499 }));
+    expect(unlocks("u1")).toEqual([`vinyl@${PURCHASE}`]);
+    expect(fake.rows("gift_credits").map((r) => [r.user_id, r.purchase_id, r.n])).toEqual([
+      ["u1", PURCHASE, 1],
+      ["u1", PURCHASE, 2],
+    ]);
+    expect(mail.notifyReceipt).toHaveBeenCalledTimes(1);
+    expect(mail.notifyReceipt).toHaveBeenCalledWith("u1", "One template + two more gifts", "€14.99", ["Vinyl", "Two gifts, ready to make whenever you like"], { withPair: true });
+  });
+
+  it("reads no pair a session can't carry", () => {
+    const withBump = metadata({ product: "single", templateSlugs: ["vinyl"], addEverything: true }).meta;
+    expect(readSession(session({ ...withBump, pair: "1" }))?.pair).toBe(false);
+    const pick3 = metadata({ product: "pick3", templateSlugs: ["vinyl", "bloom", "museum"] }).meta;
+    expect(readSession(session({ ...pick3, pair: "1" }))?.pair).toBe(false);
+    expect(readSession(session(metadata({ product: "single", templateSlugs: ["vinyl"] }).meta))?.pair).toBe(false);
   });
 });

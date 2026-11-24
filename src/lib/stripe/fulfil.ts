@@ -84,6 +84,7 @@ const RECEIPT_LINES = {
   en: {
     withBump: (label: string) => `${label} + every other template`,
     withSecond: (label: string) => `${label} + a second gift`,
+    withPair: (label: string) => `${label} + two more gifts`,
     everyTemplate: "All templates, current and future",
     pass: "Every gift template and every game pack, for both of you",
     giftcard: "A gift card code for Everything, forever (sent in its own email)",
@@ -92,6 +93,7 @@ const RECEIPT_LINES = {
   es: {
     withBump: (label: string) => `${label} + todas las demás plantillas`,
     withSecond: (label: string) => `${label} + un segundo regalo`,
+    withPair: (label: string) => `${label} + dos regalos más`,
     everyTemplate: "Todas las plantillas, las de ahora y las que vengan",
     pass: "Todas las plantillas de regalo y todos los packs de juegos, para los dos",
     giftcard: "Un código de tarjeta regalo para «Todo», para siempre (te llega en otro correo)",
@@ -108,6 +110,8 @@ export type Sold = {
   bump: boolean;
   /** The second gift's template (metadata `second`), only ever on a single; null otherwise. */
   second: string | null;
+  /** Two more gifts added to a single or "Make it special" (metadata `pair`, kind "with_pair"). */
+  pair: boolean;
   kind: string;
   creatorCode: string | null;
   ref: string | null;
@@ -143,6 +147,7 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
   if (product === "membership" && !plan) return null;
   const bump = m.bump === "1" && BUMP.onto.includes(product);
   const second = SECOND_GIFT.onto.includes(product) && !bump && isTemplateSlug(m.second) ? m.second : null;
+  const pair = m.pair === "1" && (product === "single" || product === "extras") && !bump && !second;
   return {
     purchaseId,
     product,
@@ -150,7 +155,8 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
     packId,
     bump,
     second,
-    kind: m.kind || (bump ? "bump" : second ? "second" : product),
+    pair,
+    kind: m.kind || (bump ? "bump" : second ? "second" : pair ? "with_pair" : product),
     creatorCode: m.creator_code || null,
     ref: m.ref || null,
     locale: m.locale === "es" ? "es" : "en",
@@ -282,11 +288,23 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
           ? PACK_NAMES[sold.packId][buyer.locale]
           : (getManifest(row)?.name[buyer.locale] ?? row),
     );
+    // Two more gifts paid with this one: after the template's unlock, keyed by (purchase, n) like the pair's own.
+    if (sold.pair) {
+      const gifts = await grantGifts(admin, userId, sold.purchaseId, PAIR_GIFTS);
+      if (gifts.error) return { ok: false, reason: gifts.error };
+      unlockNames.push(lines.pair);
+    }
   }
 
   if (buyer.guest && buyer.createdUser) void notifyWelcome(buyer.email!, sold.locale).catch(() => {});
   if (claimed) {
-    const label = sold.bump ? lines.withBump(LABELS[buyer.locale][sold.product]) : sold.second ? lines.withSecond(LABELS[buyer.locale][sold.product]) : LABELS[buyer.locale][sold.product];
+    const label = sold.bump
+      ? lines.withBump(LABELS[buyer.locale][sold.product])
+      : sold.second
+        ? lines.withSecond(LABELS[buyer.locale][sold.product])
+        : sold.pair
+          ? lines.withPair(LABELS[buyer.locale][sold.product])
+          : LABELS[buyer.locale][sold.product];
     // A pass lasts a year: `until` stops the receipt saying "yours, forever". A gift card keeps its
     // 14-day right to cancel until the code is redeemed, so its receipt must not say it's gone.
     const extra =
@@ -297,7 +315,10 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
           : // Two more gifts: what is on the account and the 30 days, never "yours, forever", and no upgrade line.
             sold.product === "pair"
             ? { pair: true }
-            : UPGRADE_CREDITED.some((p) => p === sold.product) && !sold.bump
+            : // A gift with two more: the gift is theirs for good, and the receipt adds the 30 days on the two.
+              sold.pair
+              ? { withPair: true }
+              : UPGRADE_CREDITED.some((p) => p === sold.product) && !sold.bump
             ? await receiptUpgrade(admin, userId, buyer.currency, buyer.locale)
             : undefined;
     // The receipt repeats the sentence they ticked, word for word: the confirmation on a durable

@@ -213,6 +213,49 @@ test.describe("the paywall in the publish sheet", () => {
     await expect(panel.getByTestId("pay-single")).toBeEnabled();
   });
 
+  test("offers 'this one and your next two' only to a reader a reminder e-mail brought, and only when the server says so", async ({ page }) => {
+    const entitlements: string[] = [];
+    await page.route("**/api/entitlements**", async (route) => {
+      entitlements.push(route.request().url());
+      await route.fulfill({ json: { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: 3, upgrade: null, giftsReady: 0, pairOffer: null, addPair: true } });
+    });
+    // Without the reminder's ref: the panel as everyone else has it, and nothing asked of the server.
+    const plain = await openSheet(page, "/create/bouquet");
+    await expect(plain.getByTestId("pay-single")).toHaveText("Pay €9.99 and send");
+    await expect(plain.getByTestId("pay-with-pair")).toHaveCount(0);
+    expect(entitlements).toEqual([]);
+  });
+
+  test("a reader from a reminder e-mail pays this gift with the next two in one request, with no amount in it", async ({ page }) => {
+    const asked = await answerCheckout(page, { status: 400, body: { error: "checkout" } });
+    await page.route("**/api/entitlements**", (route) =>
+      route.fulfill({ json: { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: 3, upgrade: null, giftsReady: 0, pairOffer: null, addPair: true } }),
+    );
+    const panel = await openSheet(page, "/create/bouquet?ref=email-reminder-1");
+    const three = panel.getByTestId("pay-with-pair");
+    await expect(three).toHaveText("Or this one and your next two: €14.99");
+    // The panel's one price is unchanged.
+    await expect(panel.getByTestId("pay-single")).toHaveText("Pay €9.99 and send");
+    // Not beside the bump or Everything: it is this gift's own price with two more.
+    await panel.getByTestId("bump").getByRole("checkbox").check();
+    await expect(three).toHaveCount(0);
+    await panel.getByTestId("bump").getByRole("checkbox").uncheck();
+    await three.click();
+    await expect.poll(() => asked.length).toBe(1);
+    expect(asked[0]).toMatchObject({ product: "single", templateSlugs: ["bouquet"], addPair: true, currency: "eur", locale: "en", ref: "email-reminder-1" });
+    expect(asked[0]).not.toHaveProperty("addEverything");
+    expect(noAmounts(asked[0])).toEqual([]);
+  });
+
+  test("a reader from a reminder e-mail sees no second button when the server says no", async ({ page }) => {
+    await page.route("**/api/entitlements**", (route) =>
+      route.fulfill({ json: { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: 3, upgrade: null, giftsReady: 0, pairOffer: null, addPair: false } }),
+    );
+    const panel = await openSheet(page, "/create/bouquet?ref=email-reminder-2");
+    await expect(panel.getByTestId("pay-single")).toBeVisible();
+    await expect(panel.getByTestId("pay-with-pair")).toHaveCount(0);
+  });
+
   test("a free reply signed out asks for a sign-in, not a payment, and keeps its token through it", async ({ page }) => {
     await page.goto(`/create/bouquet?ref=reply&reply=${REPLY_TOKEN}`);
     await expect(page.getByLabel("Their name")).toBeVisible({ timeout: 30_000 });

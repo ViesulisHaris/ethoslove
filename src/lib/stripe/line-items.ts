@@ -265,6 +265,8 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     kind: plan.kind,
     ...(plan.bump ? { bump: "1" } : {}),
     ...(plan.second ? { second: plan.second } : {}),
+    // Two more gifts added to the gift: fulfilment puts them on the account after its unlock.
+    ...(plan.pair ? { pair: "1" } : {}),
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     // A personal price (lib/commerce/personal-price.ts): which link it was, so fulfilment spends it,

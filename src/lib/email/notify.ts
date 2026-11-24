@@ -142,7 +142,7 @@ export async function notifyUnlocked(giftId: string) {
  * cancel is gone (it lasts until the code is redeemed). `extra.consent` is the withdrawal sentence the
  * buyer ticked, as recorded on the purchase, which the receipt quotes.
  */
-export async function notifyReceipt(userId: string, productLabel: string, amountLabel: string, unlocks: string[], extra?: { until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; consent?: string }) {
+export async function notifyReceipt(userId: string, productLabel: string, amountLabel: string, unlocks: string[], extra?: { until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; withPair?: boolean; consent?: string }) {
   const admin = getSupabaseAdminClient();
   if (!admin) return;
   const { data: profile } = await admin.from("profiles").select("email, locale").eq("id", userId).single();
@@ -150,7 +150,7 @@ export async function notifyReceipt(userId: string, productLabel: string, amount
   const locale: L = profile.locale === "es" ? "es" : "en";
   const until = extra?.until ? emailDate(extra.until, locale) : undefined;
   const upgrade = extra?.upgrade && !(await optedOut(admin, await emailKey(profile.email))) ? extra.upgrade : undefined;
-  return sendEmail({ to: profile.email, subject: locale === "es" ? `Recibo de Ethos: ${productLabel}` : `Your Ethos receipt: ${productLabel}`, react: ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl: `${siteUrl()}/account`, until, upgrade, giftCard: extra?.giftCard, pair: extra?.pair, consent: extra?.consent }) });
+  return sendEmail({ to: profile.email, subject: locale === "es" ? `Recibo de Ethos: ${productLabel}` : `Your Ethos receipt: ${productLabel}`, react: ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl: `${siteUrl()}/account`, until, upgrade, giftCard: extra?.giftCard, pair: extra?.pair, withPair: extra?.withPair, consent: extra?.consent }) });
 }
 
 // Lifecycle emails (contract C6). Each returns whether an email went out, and none of them throws:

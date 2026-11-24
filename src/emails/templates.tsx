@@ -158,7 +158,7 @@ function consentLine(es: boolean, kind: "giftcard" | "pass" | "pair" | "other", 
  * "yours, forever", and the 30 days on an unused one. `consent` is the withdrawal sentence the buyer
  * ticked (consentLine).
  */
-export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl, until, upgrade, giftCard = false, pair = false, consent }: { locale: L; productLabel: string; amountLabel: string; unlocks: string[]; dashboardUrl: string; until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; consent?: string }) {
+export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl, until, upgrade, giftCard = false, pair = false, withPair = false, consent }: { locale: L; productLabel: string; amountLabel: string; unlocks: string[]; dashboardUrl: string; until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; withPair?: boolean; consent?: string }) {
   const es = locale === "es";
   const heading = pair
     ? es
@@ -194,6 +194,8 @@ export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashb
       <Quiet>{es ? "Pago único, sin renovaciones. Stripe te envía la factura por separado." : "One-time payment, no renewals. Stripe sends the invoice separately."}</Quiet>
       {/* The confirmation, on a durable medium, of the consent given at payment (Consumer Rights Directive art. 8(7)). */}
       <Quiet>{consentLine(es, pair ? "pair" : giftCard ? "giftcard" : until ? "pass" : "other", consent)}</Quiet>
+      {/* A gift bought with two more (from a reminder e-mail): the two keep their own 30 days. */}
+      {withPair ? <Quiet>{consentLine(es, "pair", undefined)}</Quiet> : null}
     </EmailLayout>
   );
 }
