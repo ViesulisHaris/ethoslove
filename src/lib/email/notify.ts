@@ -7,7 +7,8 @@ import { emailKey, linkSecret, signToken } from "@/lib/lifecycle/links";
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { getManifest } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
-import { suggestTemplate, suggestionPath } from "@/lib/lifecycle/suggest";
+import { suggestTemplate, suggestionPath, type SeasonId } from "@/lib/lifecycle/suggest";
+import { IDEA_REF, type IdeaBasis } from "@/lib/lifecycle/monthly-idea";
 import type { PaidLine, StagedReminderEmail } from "@/lib/lifecycle/reminder-job";
 import { optedOut } from "./optouts";
 import { isUndeliverable, sendEmail } from "./send";
@@ -18,12 +19,14 @@ import {
   GiftCardEmail,
   MonthsaryCheckInEmail,
   MonthsaryReminderEmail,
+  MonthlyIdeaEmail,
   PassRenewalEmail,
   PassWelcomeEmail,
   PublishReminderEmail,
   ReminderEmail,
   monthsaryCheckInHeading,
   monthsaryHeading,
+  monthlyIdeaHeading,
   publishReminderSubject,
   recoveryHeading,
   reminderHeading,
@@ -528,4 +531,42 @@ export async function sendMonthsaryReminder({ to, locale, partnerName, months, s
       ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
+}
+
+/**
+ * The monthly idea (lib/lifecycle/monthly-idea.ts). `ideaUrl` and `moreUrl` are made by the job: the
+ * editor and the gallery, or, in the first email, the link that carries the one-time price.
+ * `onceKey` makes it once-only on Resend's side for a day.
+ */
+export async function sendMonthlyIdea(args: {
+  to: string;
+  locale: L;
+  season: SeasonId;
+  templateSlug: string;
+  ideaUrl: string;
+  moreUrl: string;
+  stopUrl: string;
+  basis: IdeaBasis;
+  priceUntil?: string;
+  onceKey: string;
+}): Promise<boolean> {
+  return safely("monthly idea", async () => {
+    const manifest = getManifest(args.templateSlug);
+    if (!manifest) return false;
+    return deliver("monthly idea", {
+      to: args.to,
+      subject: monthlyIdeaHeading(args.season, args.locale),
+      react: MonthlyIdeaEmail({
+        locale: args.locale,
+        season: args.season,
+        idea: { ...emailIdea(manifest, args.locale, IDEA_REF), url: args.ideaUrl },
+        moreUrl: args.moreUrl,
+        stopUrl: args.stopUrl,
+        basis: args.basis,
+        ...(args.priceUntil ? { priceUntil: args.priceUntil } : {}),
+      }),
+      headers: unsubscribeHeaders(args.stopUrl),
+      idempotencyKey: args.onceKey,
+    });
+  });
 }

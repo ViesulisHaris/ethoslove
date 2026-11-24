@@ -1,4 +1,6 @@
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
+import type { SeasonId } from "@/lib/lifecycle/suggest";
+import type { IdeaBasis } from "@/lib/lifecycle/monthly-idea";
 import { CtaButton, EmailLayout, Idea, InlineLink, Mono, P, Quiet } from "./layout";
 
 type L = "en" | "es";
@@ -410,6 +412,135 @@ export function MonthsaryReminderEmail({ locale, partnerName, months, idea, stop
       <P>{es ? "¿Qué tal algo pequeño para que lo abra esta noche? Una idea:" : "Something small, for tonight? One idea:"}</P>
       <Idea name={idea.name} tagline={idea.tagline} href={idea.url} poster={idea.poster} />
       <CtaButton href={idea.url} label={es ? `Hacerlo para ${partnerName}` : `Make it for ${partnerName}`} />
+    </EmailLayout>
+  );
+}
+
+/**
+ * The monthly idea's words, by season (lib/lifecycle/suggest.ts SEASON_IDEAS): the heading, which is
+ * also the subject, the one paragraph, and the preview line. General on purpose: a question anyone
+ * could be asked that month, never who their last gift was for, which template, or when.
+ */
+export const IDEA_COPY: Record<SeasonId, Record<L, { heading: string; body: string; preview: string }>> = {
+  "jan-birthday": {
+    en: { heading: "A birthday coming up?", body: "January birthdays come right after everyone has spent their ideas on December. If one is close, here is one idea:", preview: "One idea for a January birthday." },
+    es: { heading: "¿Se acerca un cumpleaños?", body: "Los cumpleaños de enero llegan cuando todo el mundo ha gastado ya sus ideas en diciembre. Si hay uno cerca, aquí va una idea:", preview: "Una idea para un cumpleaños de enero." },
+  },
+  valentines: {
+    en: { heading: "Anyone in mind for Valentine's Day?", body: "It's on 14 February. A gift made today can wait until then: schedule it, and it opens that morning. One idea:", preview: "It's on 14 February. One idea." },
+    es: { heading: "¿Alguien en mente para San Valentín?", body: "Es el 14 de febrero. Un regalo hecho hoy puede esperar hasta entonces: prográmalo y se abrirá esa mañana. Una idea:", preview: "Es el 14 de febrero. Una idea." },
+  },
+  "feb-anniversary": {
+    en: { heading: "An anniversary coming up?", body: "Any anniversary counts: a first date, a wedding, the day you moved in. If one is close, here is one idea:", preview: "One idea for an anniversary." },
+    es: { heading: "¿Se acerca un aniversario?", body: "Cualquier aniversario cuenta: una primera cita, una boda, el día de la mudanza. Si hay uno cerca, aquí va una idea:", preview: "Una idea para un aniversario." },
+  },
+  march: {
+    en: { heading: "Whose birthday is next?", body: "Someone in the family, a friend, someone at work. Whoever is next, here is one idea:", preview: "Whoever is next, one idea." },
+    es: { heading: "¿De quién es el próximo cumpleaños?", body: "Alguien de la familia, del grupo de amigos, del trabajo. Sea quien sea, aquí va una idea:", preview: "Sea quien sea, una idea." },
+  },
+  april: {
+    en: { heading: "Someone who'd love a surprise?", body: "It doesn't need a date. A gift that arrives on an ordinary Tuesday is a surprise by itself. One idea:", preview: "No date needed. One idea." },
+    es: { heading: "¿Alguien a quien le haría ilusión una sorpresa?", body: "No hace falta una fecha. Un regalo que llega un martes cualquiera ya es una sorpresa. Una idea:", preview: "No hace falta fecha. Una idea." },
+  },
+  may: {
+    en: { heading: "A birthday, an anniversary, a thank-you?", body: "One of them is probably in your calendar already. Here is one idea for it:", preview: "One idea for whichever comes first." },
+    es: { heading: "¿Un cumpleaños, un aniversario, un gracias?", body: "Seguro que alguno ya está en tu calendario. Aquí va una idea:", preview: "Una idea para el que llegue antes." },
+  },
+  june: {
+    en: { heading: "A wedding, a graduation, an anniversary?", body: "June has plenty of them. If one is coming up for someone close to you, here is one idea:", preview: "June has plenty of them. One idea." },
+    es: { heading: "¿Una boda, una graduación, un aniversario?", body: "Junio viene lleno de ellos. Si se acerca el de alguien cercano, aquí va una idea:", preview: "Junio viene lleno de ellos. Una idea." },
+  },
+  july: {
+    en: { heading: "Someone far away right now?", body: "A gift opens wherever they are, as soon as you send the link. One idea:", preview: "It opens wherever they are. One idea." },
+    es: { heading: "¿Alguien que está lejos ahora mismo?", body: "Un regalo se abre allí donde esté, en cuanto envías el enlace. Una idea:", preview: "Se abre allí donde esté. Una idea." },
+  },
+  august: {
+    en: { heading: "A birthday coming up soon?", body: "The photos are probably in your phone already. Here is one idea for them:", preview: "The photos are already in your phone. One idea." },
+    es: { heading: "¿Hay un cumpleaños a la vista?", body: "Las fotos seguramente ya están en tu móvil. Aquí va una idea para ellas:", preview: "Las fotos ya están en tu móvil. Una idea." },
+  },
+  september: {
+    en: { heading: "Is an anniversary close?", body: "Find a photo from each year. Here is one idea for what to do with them:", preview: "A photo from each year, and one idea." },
+    es: { heading: "¿Hay un aniversario cerca?", body: "Busca una foto de cada año. Aquí va una idea para qué hacer con ellas:", preview: "Una foto de cada año, y una idea." },
+  },
+  october: {
+    en: { heading: "Anyone in mind for Halloween?", body: "It's on 31 October. A gift doesn't have to be scary to belong to it. One idea:", preview: "It's on 31 October. One idea." },
+    es: { heading: "¿Alguien en mente para Halloween?", body: "Es el 31 de octubre. Un regalo no tiene que dar miedo para ser de Halloween. Una idea:", preview: "Es el 31 de octubre. Una idea." },
+  },
+  november: {
+    en: { heading: "Someone to thank this month?", body: "A thank-you is easier to write than it sounds: say what they did, and what it changed. One idea:", preview: "Say what they did, and what it changed." },
+    es: { heading: "¿Alguien a quien dar las gracias este mes?", body: "Dar las gracias es más fácil de lo que parece: di qué hizo y qué cambió. Una idea:", preview: "Di qué hizo y qué cambió." },
+  },
+  christmas: {
+    en: { heading: "Anyone to surprise this Christmas?", body: "Christmas is on 25 December, and December birthdays tend to get lost behind it. If someone's day is coming up, here is one idea:", preview: "Christmas is on 25 December. One idea." },
+    es: { heading: "¿Alguien a quien sorprender estas Navidades?", body: "Navidad es el 25 de diciembre, y los cumpleaños de diciembre suelen quedar a su sombra. Si se acerca el día de alguien, aquí va una idea:", preview: "Navidad es el 25 de diciembre. Una idea." },
+  },
+  "year-end": {
+    en: { heading: "Someone to thank before the year ends?", body: "The year is nearly over. If someone made it better, here is one idea for telling them:", preview: "One idea, before the year ends." },
+    es: { heading: "¿Un último gracias antes de fin de año?", body: "El año está a punto de acabar. Si alguien lo ha hecho mejor, aquí va una idea para decírselo:", preview: "Una idea, antes de que acabe el año." },
+  },
+};
+
+export const monthlyIdeaHeading = (season: SeasonId, locale: L): string => IDEA_COPY[season][locale].heading;
+
+const IDEA_FOOTER: Record<IdeaBasis, Record<L, string>> = {
+  notice: { en: "You're getting this because you sent a gift with Ethos.", es: "Recibes esto porque enviaste un regalo con Ethos." },
+  terms: { en: "You're getting this because you sent a free gift with Ethos, which comes with these emails.", es: "Recibes esto porque enviaste un regalo gratis con Ethos, que incluye estos correos." },
+  box: { en: "You're getting this because you asked for Ethos offers.", es: "Recibes esto porque pediste las ofertas de Ethos." },
+};
+
+/**
+ * One gift idea a month, for a year after someone's last gift (lib/lifecycle/monthly-idea.ts). A
+ * question for the season, one template, the button. The first one may carry a one-time price: it
+ * says until when, never how much (the page shows the price before anyone pays). No name, nothing
+ * from a gift, no tracking: the only pictures are the mark and the template's own cover.
+ */
+export function MonthlyIdeaEmail({
+  locale,
+  season,
+  idea,
+  moreUrl,
+  stopUrl,
+  basis,
+  priceUntil,
+}: {
+  locale: L;
+  season: SeasonId;
+  idea: EmailIdea;
+  moreUrl: string;
+  stopUrl: string;
+  basis: IdeaBasis;
+  /** The last day the one-time price works, already formatted ("27 December"); only in the first email. */
+  priceUntil?: string;
+}) {
+  const es = locale === "es";
+  const copy = IDEA_COPY[season][locale];
+  const stop = es ? "Dejar de recibir estos correos" : "Stop these emails";
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={priceUntil ? (es ? "Una idea, y un precio especial de un solo uso." : "One idea, and a one-time price on it.") : copy.preview}
+      heading={copy.heading}
+      footer={IDEA_FOOTER[basis][locale]}
+      footerLink={{ label: stop, href: stopUrl }}
+    >
+      <P>{copy.body}</P>
+      <Idea name={idea.name} tagline={idea.tagline} href={idea.url} poster={idea.poster} />
+      <CtaButton href={idea.url} label={es ? "Hacer este regalo" : "Make this one"} />
+      {priceUntil ? (
+        <P>
+          {es
+            ? `Este primer correo trae un precio especial de un solo uso: un regalo por menos de lo habitual, hasta el ${priceUntil}. Va en el botón de arriba, y verás el precio antes de pagar.`
+            : `This first email comes with a one-time price: one gift for less than usual, until ${priceUntil}. The button above carries it, and you see the price before you pay.`}
+        </P>
+      ) : null}
+      <Quiet>
+        {es ? "¿Otra cosa? " : "Something else? "}
+        <InlineLink href={moreUrl}>{es ? "Todas las plantillas" : "Every template"}</InlineLink>.
+      </Quiet>
+      <Quiet>
+        {es ? "Una idea al mes, durante un año desde tu último regalo. " : "One idea a month, for a year after your last gift. "}
+        <InlineLink href={stopUrl}>{stop}</InlineLink>.
+      </Quiet>
     </EmailLayout>
   );
 }
