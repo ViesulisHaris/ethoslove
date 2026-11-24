@@ -9,7 +9,7 @@ export function DayRows({ rows }: { rows: DayRow[] }) {
   return (
     <ul className="mt-4 divide-y divide-border border-y border-border" data-testid="pair-days">
       {rows.map((row) => (
-        <li key={row.key} className="flex items-center gap-4 py-3">
+        <li key={row.key} className="flex items-center gap-4 py-2.5">
           {/* The occasions' own rendered pictures (public/art/occasions), 6 KB each. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={row.icon} alt="" width={40} height={40} className="size-10 shrink-0 object-contain" />
