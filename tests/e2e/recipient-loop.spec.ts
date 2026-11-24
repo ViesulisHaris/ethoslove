@@ -478,7 +478,7 @@ test.describe("the page the badge and the new link open", () => {
     // (Spanish last: once a visitor has been on /es, the site keeps them there.)
     await page.goto("/es/made-with-ethos?ref=g", ready);
     await expect(page).toHaveTitle(/^Haz el tuyo/);
-    await expect(page.locator('[data-shelf="free"]')).toContainText("Un regalo gratis lleva una pequeña marca «Hecho con Ethos».");
+    await expect(page.locator('[data-shelf="free"]')).toContainText("Un regalo gratis lleva un pequeño pie «Hecho con Ethos».");
   });
 
   test("for someone making one for someone else: their template first, the tag carried to every editor link", async ({ page }) => {
