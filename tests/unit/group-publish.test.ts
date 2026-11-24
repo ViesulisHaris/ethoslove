@@ -133,7 +133,7 @@ describe("sending a group card", () => {
 
   it("goes out with its notes, closes its link, and sends the card to whoever signed it and said yes", async () => {
     seed();
-    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live" } });
+    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live", holidayExtra: null } });
     expect(stored()).toMatchObject({ status: "live", watermark: false });
     expect((stored().data as typeof card).contributions).toEqual(card.contributions);
     expect(groupRow().sent_at).toBe(at(NOW));
@@ -177,7 +177,7 @@ describe("a note that is no longer the card's to carry", () => {
   it("taken back by its writer: it never goes out, whatever the editor still held, and the editor is told which", async () => {
     seed();
     takeOut(0, "withdrawn");
-    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live", takenBack: ["abcdefghij"] } });
+    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live", holidayExtra: null, takenBack: ["abcdefghij"] } });
     expect(stored().status).toBe("live");
     expect(notes()).toEqual(["bcdefghijk"]);
     // Nothing of the note is in what recipients are sent, and nobody is told they signed it.
@@ -213,7 +213,7 @@ describe("a note that is no longer the card's to carry", () => {
     seed();
     // Removed, then restored and added again: the row holds the new key; the old one is on no row.
     Object.assign(fake.rows("gift_contributions")[0], { status: "approved", item_key: "zzzzzzzzzz" });
-    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live" } });
+    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live", holidayExtra: null } });
     expect(notes()).toEqual(["abcdefghij", "bcdefghijk"]);
   });
 
@@ -241,7 +241,7 @@ describe("a note that is no longer the card's to carry", () => {
 describe("what sending never depends on", () => {
   it("before migration 0023 the card still goes out: the missing tables are logged, not thrown", async () => {
     seed({ missingTables: ["gift_groups", "gift_contributions"] });
-    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live" } });
+    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live", holidayExtra: null } });
     expect(stored().status).toBe("live");
   });
 

@@ -192,7 +192,8 @@ describe("the publish and save actions keep the stamp the server's", async () =>
   });
 
   it("a save of a gift that is out keeps what the row holds; a draft holds none", () => {
-    expect(source).toContain('holidayExtra: row.status === "draft" ? undefined : (stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined),');
+    // Only a gift that is out gets the key at all (the merge with group cards keeps a draft's saved data free of it).
+    expect(source).toContain('...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }), holidayExtra: stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined }),');
   });
 
   it("a duplicate leaves the stamp behind", () => {

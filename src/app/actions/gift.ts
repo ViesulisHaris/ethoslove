@@ -186,8 +186,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   const typed = onlyGroupTemplates(row.template_slug, {
     ...loose.data,
     templateSlug: row.template_slug,
-    ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }),
-    holidayExtra: row.status === "draft" ? undefined : (stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined),
+    ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }), holidayExtra: stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined }),
   });
 
   if (row.status === "draft") {

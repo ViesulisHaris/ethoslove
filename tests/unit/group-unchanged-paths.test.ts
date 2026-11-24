@@ -112,7 +112,7 @@ describe("saving a draft, as before", () => {
 describe("publishing, as before", () => {
   it("a free Letter goes out free, footer on", async () => {
     seed({ template_slug: "the-letter", status: "draft" });
-    expect(await publishGift({ giftId: GIFT, data: letter })).toEqual({ ok: true, data: { shortId: "abc234def", status: "live" } });
+    expect(await publishGift({ giftId: GIFT, data: letter })).toEqual({ ok: true, data: { shortId: "abc234def", status: "live", holidayExtra: null } });
     expect(statements()).toMatchInlineSnapshot(`
       [
         "select gifts",
@@ -131,6 +131,7 @@ describe("publishing, as before", () => {
         "fields",
         "fontPairing",
         "freeTier",
+        "holidayExtra",
         "locale",
         "message",
         "messageStyle",
@@ -165,7 +166,7 @@ describe("publishing, as before", () => {
 
   it("a premium gift with its template unlocked goes out without the footer", async () => {
     seed({ template_slug: "vinyl", status: "draft" }, ["vinyl"]);
-    expect(await publishGift({ giftId: GIFT, data: vinyl })).toEqual({ ok: true, data: { shortId: "abc234def", status: "live" } });
+    expect(await publishGift({ giftId: GIFT, data: vinyl })).toEqual({ ok: true, data: { shortId: "abc234def", status: "live", holidayExtra: null } });
     expect(statements()).toMatchInlineSnapshot(`
       [
         "select gifts",
@@ -184,6 +185,7 @@ describe("publishing, as before", () => {
         "fields",
         "fontPairing",
         "freeTier",
+        "holidayExtra",
         "locale",
         "message",
         "messageStyle",
@@ -204,7 +206,7 @@ describe("publishing, as before", () => {
 
   it("Everything covers a premium gift exactly as it did", async () => {
     seed({ template_slug: "vinyl", status: "draft" }, ["*"]);
-    expect(await publishGift({ giftId: GIFT, data: vinyl, password: "sesame" })).toEqual({ ok: true, data: { shortId: "abc234def", status: "live" } });
+    expect(await publishGift({ giftId: GIFT, data: vinyl, password: "sesame" })).toEqual({ ok: true, data: { shortId: "abc234def", status: "live", holidayExtra: null } });
     expect(statements()).toMatchInlineSnapshot(`
       [
         "select gifts",
