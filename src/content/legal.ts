@@ -88,7 +88,7 @@ const GROUP = {
   en: {
     /** Terms 3, Your content. */
     content:
-      "Group cards. When you invite people to add to a group card, what they write and the photo they add reach you first: nothing goes into the card until you add it, and you can take it out again. Whatever you add is part of your gift from then on, so this section applies to it like the rest: you choose what goes in, and you answer for it. A person who adds a note keeps their rights in it and gives us the same licence, to show it to you and, once you've added it, to whoever opens the card. They can take the note back, from the page they wrote it on, until the card is sent; after that they can ask us to remove it (section 13).",
+      "Group cards. When you invite people to add to a group card, what they write and the photo they add reach you first: nothing goes into the card until you add it, and you can take it out again. Whatever you add is part of your gift from then on, so this section applies to it like the rest: you choose what goes in, and you answer for it. A person who adds a note keeps their rights in it and gives us the same license, to show it to you and, once you've added it, to whoever opens the card. They can take the note back, from the page they wrote it on, until the card is sent; after that they can ask us to remove it (section 13).",
     /** Terms 6, the price list's last item. */
     price: `; a group card ${P.en("group")}`,
     /** Terms 6, what it is and what it costs. */
