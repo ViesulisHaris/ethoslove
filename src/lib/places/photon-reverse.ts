@@ -78,10 +78,11 @@ export function pickSpot(point: LatLng, eachKm: number, cities: unknown, towns: 
 const PHOTON = "https://photon.komoot.io/reverse";
 const TIMEOUT_MS = 8000;
 
-async function ask(point: LatLng, radius: number, tags: string[], limit: number, lang: "en" | null): Promise<unknown> {
+async function ask(point: LatLng, radius: number, tags: string[], limit: number): Promise<unknown> {
   const params = new URLSearchParams({ lat: String(point.lat), lon: String(point.lng), radius: String(radius), limit: String(limit) });
   for (const tag of tags) params.append("osm_tag", tag);
-  if (lang) params.set("lang", lang);
+  // Names in English (a Latin-script exonym: Bologoe, El Arish, Volos), on every page: Photon has no Spanish.
+  params.set("lang", "en");
   const res = await fetch(`${PHOTON}?${params}`, {
     next: { revalidate: 60 * 60 * 24 * 30 },
     headers: { "user-agent": "Ethos/1.0 (+https://tryethos.io)" },
@@ -92,9 +93,9 @@ async function ask(point: LatLng, radius: number, tags: string[], limit: number,
 }
 
 /** What lies at a point, asked of Photon. Throws when Photon could not be asked: "couldn't ask" is not "nothing there". */
-export async function spotAt(point: LatLng, eachKm: number, lang: "en" | null): Promise<Spot> {
-  const [cities, towns] = await Promise.all([ask(point, CITY_KM, ["place:city"], 5, lang), ask(point, TOWN_KM, ["place:town"], 5, lang)]);
+export async function spotAt(point: LatLng, eachKm: number): Promise<Spot> {
+  const [cities, towns] = await Promise.all([ask(point, CITY_KM, ["place:city"], 5), ask(point, TOWN_KM, ["place:town"], 5)]);
   const named = pickSpot(point, eachKm, cities, towns, null);
   if (named) return named;
-  return pickSpot(point, eachKm, cities, towns, await ask(point, LAND_KM, [], 3, lang)) ?? { kind: "none" };
+  return pickSpot(point, eachKm, cities, towns, await ask(point, LAND_KM, [], 3)) ?? { kind: "none" };
 }

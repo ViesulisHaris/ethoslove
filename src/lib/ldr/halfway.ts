@@ -1,7 +1,7 @@
 import { halfwayPlace, nearestCity } from "@/lib/dates/apart";
 import { ES_CITY_NAMES } from "@/lib/dates/cities";
 import { distanceKm, midpoint, type LatLng } from "@/lib/dates/geo";
-import type { Spot } from "@/lib/places/photon-reverse";
+import { fairKm, type Spot } from "@/lib/places/photon-reverse";
 import { CITIES, type City } from "@/templates/_shared/places";
 
 /**
@@ -13,9 +13,10 @@ import { CITIES, type City } from "@/templates/_shared/places";
 /** Further than this from any city in the table, the table has nothing to say about the halfway point. */
 export const NOWHERE_KM = 400;
 /**
- * Nearer than this to the middle, a city in the table is named outright (Luxembourg for Riga and
- * Lisbon, 139 km off). Further, the map is asked for the town nearest the middle: the table has only
- * sixteen cities in the United States, and Toronto is no answer for New York and Chicago.
+ * Further than this from the middle, a city in the table is never the answer (and nearer, only when
+ * it is fair to both: tableFair); the map is asked for the town nearest the middle instead. The table
+ * has only sixteen cities in the United States, and Toronto is no answer for New York and Chicago.
+ * Within it, a city in a country never named still makes the answer unnamed.
  */
 export const TABLE_NAME_KM = 150;
 /** Countries never named as the place to meet: neither their cities nor their airports (the owner's rule). */
@@ -77,8 +78,29 @@ export type SpotState = Spot | null | undefined;
 /** The table's nearest city is in a country never named, and near enough to be the answer. */
 const tableUnnamed = (h: Halfway): boolean => h.unnamed && h.nearestKm !== null && h.nearestKm <= TABLE_NAME_KM;
 
-/** Whether the table's answer needs the map: no table city near enough to name, or only one of their own towns. */
-export const needsMap = (h: Halfway): boolean => h.km >= 1 && !tableUnnamed(h) && (!h.near || h.near.km > TABLE_NAME_KM || isOwnTown(h));
+/**
+ * Whether the table's city is fair to both of them: no further off the middle than a city the map
+ * finds may be (fairKm, a quarter of each one's journey, 40 to 100 km), and the two journeys to it
+ * no further apart than that either (a city off to one side of the middle can still be even; one
+ * along the way is not). New York is 88 km off the middle of Boston and Philadelphia (306 km for
+ * one, 130 for the other), Luxembourg 139 km off the middle of Riga and Lisbon (1,440 against
+ * 1,712), Paris 99 km off Bristol and Milan's (455 against 640): none is halfway, so the map is asked.
+ */
+export const tableFair = (h: Halfway): boolean => {
+  if (!h.near) return false;
+  const fair = fairKm(h.km / 2);
+  return h.near.km <= fair && Math.abs(h.near.kmFromA - h.near.kmFromB) <= fair;
+};
+
+/** Whether the table's answer needs the map: no table city fair to both, or only one of their own towns. */
+export const needsMap = (h: Halfway): boolean => h.km >= 1 && !tableUnnamed(h) && (!h.near || h.near.km > TABLE_NAME_KM || !tableFair(h) || isOwnTown(h));
+
+/**
+ * Whether a named place is as good as exactly halfway: the two journeys within a twentieth of the
+ * whole (or 8 km) of each other. Being near the middle is not enough: Madisonville is 33 km off the
+ * middle of Dallas and Houston, and 136 miles from one against 88 from the other.
+ */
+export const isEven = (kmFromA: number, kmFromB: number): boolean => Math.abs(kmFromA - kmFromB) <= Math.max(8, 0.05 * (kmFromA + kmFromB));
 
 export function halfwayAnswer(h: Halfway, a: LatLng, b: LatLng, spot: SpotState, locale: "en" | "es"): HalfwayAnswer {
   if (h.km < 1) return { kind: "same" };

@@ -8,7 +8,7 @@ import { toYmd } from "@/lib/dates/calendar";
 import { distanceKm } from "@/lib/dates/geo";
 import { findAirport, type Airport } from "@/lib/trips/airports";
 import { estimateFlight, flightLinks, formatFlightTime, MAX_ADULTS, MIN_ADULTS, trainHint, weekendAhead } from "@/lib/trips/flights";
-import { readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
+import { onLastFromPicked, readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
 import { PARTNER_NAMES, type PartnerPlacement } from "@/lib/trips/partners";
 import { AirportBox } from "./airport-box";
 import { DateRangePicker, type DateRangeLabels } from "./date-range-picker";
@@ -60,6 +60,12 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
       if (last) setFrom((current) => current ?? last);
     });
     return () => cancelAnimationFrame(frame);
+  }, [fromCode]);
+
+  // On /trips the matcher has its own "Leaving from": an airport picked there is this one's too.
+  useEffect(() => {
+    if (fromCode) return;
+    return onLastFromPicked((a) => setFrom(a));
   }, [fromCode]);
 
   const pickFrom = (a: Airport) => {

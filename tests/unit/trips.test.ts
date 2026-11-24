@@ -149,8 +149,9 @@ describe("best months", () => {
   it("joins runs of months, in the page's language", () => {
     expect(monthRanges([3, 4, 5, 6, 9, 10], "en")).toMatch(/^Mar–Jun, Sept?–Oct$/);
     expect(monthRanges([4, 5, 6, 9, 10, 12], "en")).toMatch(/^Apr–Jun, Sept?–Oct, Dec$/);
-    expect(monthRanges([6, 7, 8], "es")).toBe("Jun–Ago");
-    expect(monthRanges([12], "es")).toBe("Dic");
+    expect(monthRanges([6, 7, 8], "es")).toBe("jun.–ago.");
+    expect(monthRanges([4, 5, 6, 9, 10, 12], "es")).toBe("abr.–jun., sept.–oct., dic.");
+    expect(monthRanges([12], "es")).toBe("dic.");
   });
 });
 

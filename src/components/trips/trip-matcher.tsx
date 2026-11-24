@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -9,11 +9,9 @@ import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics/track";
 import { cityName, type Airport } from "@/lib/trips/airports";
 import { formatFlightTime } from "@/lib/trips/flights";
-import { readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
+import { clearLastFrom, onLastFromPicked, readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
 import { MATCH_LENGTHS, metWishes, nextBestMonth, topMatches, type MatchLength, type MatchPick, type MatchTrip, type MatchWish } from "@/lib/trips/match";
 import { MATCH_KINDS, readMatchLink, writeMatchLink, type MatchState } from "@/lib/trips/match-link";
-import { useCurrency } from "@/lib/pricing/use-currency";
-import type { Currency } from "@/lib/pricing/products";
 import type { TripKind } from "@/lib/trips/presets";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { AirportBox } from "./airport-box";
@@ -44,10 +42,11 @@ const BUDGETS: readonly Budget[] = ["any", "1", "2"];
 const KINDS: readonly Kind[] = ["any", ...MATCH_KINDS];
 
 /**
- * A budget band's ceiling a day for two, in the page's money: the €150 and €300 of the trips' own
- * bands (lib/trips/presets.ts), said in round dollars and pounds near what they come to.
+ * A budget band's ceiling a day for two: the €150 and €300 of the trips' own bands
+ * (lib/trips/presets.ts), in euros on every page. Each card says its band in euros (the trips are
+ * all in the euro's Europe), so a sentence in dollars above "€150–300" would be two currencies at once.
  */
-const BUDGET_MONEY: Record<Currency, Record<1 | 2, number>> = { eur: { 1: 150, 2: 300 }, usd: { 1: 175, 2: 350 }, gbp: { 1: 130, 2: 260 } };
+const BUDGET_EUR: Record<1 | 2, number> = { 1: 150, 2: 300 };
 
 /**
  * A choice set into the sentence: a rose word in a pill, as wide as what it says, never wider than
@@ -67,6 +66,10 @@ export const REFINE_MS = 1500;
  */
 let mountedBefore = false;
 const readAddress = (): MatchState | null => readMatchLink(new URLSearchParams(window.location.search));
+const noop = () => () => {};
+const isLength = (v: string): v is Length => (LENGTHS as readonly string[]).includes(v);
+const isBudget = (v: string): v is Budget => (BUDGETS as readonly string[]).includes(v);
+const isKind = (v: string): v is Kind => (KINDS as readonly string[]).includes(v);
 const thisMonth = () => new Date().getMonth() + 1;
 
 const wishOf = (from: Airport | null, length: Length, budget: Budget, kind: Kind): MatchWish => ({
@@ -87,7 +90,6 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   const tf = useTranslations("trips.flights");
   const ts = useTranslations("trips.detail.surprise");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
-  const currency = useCurrency();
   // The answer in the address, read at once on a mount after the first (see mountedBefore).
   const [linked] = useState(() => (mountedBefore ? readAddress() : null));
   const [from, setFrom] = useState<Airport | null>(linked?.from ?? null);
@@ -99,16 +101,37 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   const [month, setMonth] = useState<number | null>(() => (linked ? thisMonth() : null));
   const summaryRef = useRef<HTMLHeadingElement>(null);
   const goRef = useRef<HTMLButtonElement>(null);
+  const lengthRef = useRef<HTMLSelectElement>(null);
+  const budgetRef = useRef<HTMLSelectElement>(null);
+  const kindRef = useRef<HTMLSelectElement>(null);
+  // False until the page's script runs: before that the button can do nothing, so it says so.
+  const ready = useSyncExternalStore(noop, () => true, () => false);
   const firstMount = useRef(!mountedBefore);
   const refineTimer = useRef<number | undefined>(undefined);
 
   // A frame after the first mount, so its first render is the same as the server's: the answer the
-  // address carries, else the airport they last flew from.
+  // address carries, else what was chosen in the selects before the script arrived (on a slow phone
+  // they can be turned before it runs, and the next render would put them back to "any"), and the
+  // airport they last flew from.
+  // What the selects say the moment the page's script has taken them over, before any render (the
+  // button's own, once ready) can put them back to the server's "any".
+  const chosen = useRef<{ length: string; budget: string; kind: string } | null>(null);
+  useLayoutEffect(() => {
+    chosen.current = { length: lengthRef.current?.value ?? "any", budget: budgetRef.current?.value ?? "any", kind: kindRef.current?.value ?? "any" };
+  }, []);
+
   useEffect(() => {
     mountedBefore = true;
     if (linked) return;
     const frame = requestAnimationFrame(() => {
       const fromAddress = firstMount.current ? readAddress() : null;
+      const before = chosen.current;
+      // Only where nothing has been chosen since: a select turned after the script arrived wins.
+      if (!fromAddress && before) {
+        if (isLength(before.length)) setLength((current) => (current === "any" ? (before.length as Length) : current));
+        if (isBudget(before.budget)) setBudget((current) => (current === "any" ? (before.budget as Budget) : current));
+        if (isKind(before.kind)) setKind((current) => (current === "any" ? (before.kind as Kind) : current));
+      }
       if (fromAddress) {
         setFrom(fromAddress.from);
         setLength(fromAddress.length ?? "any");
@@ -123,6 +146,9 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
     return () => cancelAnimationFrame(frame);
   }, [linked]);
 
+  // The hero's flight search on /trips has its own "From": an airport picked there is this one's too.
+  useEffect(() => onLastFromPicked((a) => setFrom(a)), []);
+
   // Once there is an answer, the address carries it: a reload, or Back from a trip, opens on the same three.
   useEffect(() => {
     if (month === null) return;
@@ -133,12 +159,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
     window.history.replaceState(window.history.state, "", `${url.pathname}?${search}${url.hash}`);
   }, [month, from, length, budget, kind]);
 
-  const money = (band: 1 | 2) =>
-    new Intl.NumberFormat(locale === "es" ? "es-ES" : currency === "gbp" ? "en-GB" : currency === "usd" ? "en-US" : "en-IE", {
-      style: "currency",
-      currency: currency.toUpperCase(),
-      maximumFractionDigits: 0,
-    }).format(BUDGET_MONEY[currency][band]);
+  const money = (band: 1 | 2) => new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-IE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(BUDGET_EUR[band]);
   const monthName = (m: number) => new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2026, m - 1, 15)));
 
   const wish = wishOf(from, length, budget, kind);
@@ -165,21 +186,26 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   useEffect(() => () => window.clearTimeout(refineTimer.current), []);
 
   const list = (items: string[]) => new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(items);
-  // Why a pick fits: the wishes it meets (and which it lets go of), else that it is the nearest; with
-  // every choice left open, its own season: now, or the month it starts. Then the hours in the air
-  // when there is an airport.
+  // Why this pick, in words that are its own and not the heading's: which wishes it lets go of
+  // (where the heading does not already say so for all three), or that it is one that fits all of
+  // it; then its season, the month it starts. Never the select's own words again: the heading has
+  // said they fit. Then the hours in the air when there is an airport.
   const fitLine = (pick: MatchPick, trip: MatcherTrip) => {
     const met = metWishes(wish, pick);
-    // Where the heading already names what all three let go of, each card says what it keeps instead.
-    if (met.length && pick.relaxed.length && result?.summary.kind !== "none") return t("allBut", { wishes: list(pick.relaxed.map((w) => t(`wish.${w}`))) });
-    if (met.length)
-      return t("fits", {
-        list: list(met.map((w) => (w === "length" ? t(`length.${wish.length!}`) : w === "budget" ? t("fit.budget", { money: money(wish.budget!) }) : t(`fit.kind.${wish.kind!}`)))),
-      });
-    if (pick.relaxed.length) return t("closest");
-    if (pick.inSeason || month === null) return t("fitsSeason");
-    const next = nextBestMonth(trip.bestMonths, month);
-    return next ? t("fitsLater", { month: monthName(next) }) : t("fitsSeason");
+    const summaryKind = result?.summary.kind;
+    const fit = pick.relaxed.length
+      ? summaryKind === "none"
+        ? ""
+        : met.length
+          ? t("allBut", { wishes: list(pick.relaxed.map((w) => t(`wish.${w}`))) })
+          : t("closest")
+      : met.length && summaryKind === "some"
+        ? t("fitsAll")
+        : "";
+    const next = month === null || pick.inSeason ? null : nextBestMonth(trip.bestMonths, month);
+    // In season, the picture's badge says so: the line says it only when it has nothing else to say.
+    const season = next ? t("fitsLater", { month: monthName(next) }) : fit ? "" : t("fitsSeason");
+    return [fit, season].filter(Boolean).join(" ");
   };
 
   const go = () => {
@@ -227,6 +253,8 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
               type="button"
               onClick={() => {
                 setFrom(null);
+                // Forgotten too, or the next visit (and another tab) would open on it again.
+                clearLastFrom();
                 changed(wishOf(null, length, budget, kind));
               }}
               className="inline-flex min-h-11 items-center rounded-sm font-medium text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink"
@@ -244,6 +272,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
           length: (after) => (
             <span className="whitespace-nowrap">
               <select
+                ref={lengthRef}
                 aria-label={t("lengthLabel")}
                 value={length}
                 onChange={(e) => {
@@ -265,6 +294,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
           budget: (after) => (
             <span className="whitespace-nowrap">
               <select
+                ref={budgetRef}
                 aria-label={t("budgetLabel")}
                 value={budget}
                 onChange={(e) => {
@@ -286,6 +316,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
           kind: (after) => (
             <span className="whitespace-nowrap">
               <select
+                ref={kindRef}
                 aria-label={t("kindLabel")}
                 value={kind}
                 onChange={(e) => {
@@ -312,7 +343,9 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
         data-match-go
         ref={goRef}
         onClick={go}
-        className="mt-5 inline-flex h-12 items-center gap-1.5 rounded-full bg-page-accent px-6 text-[0.9375rem] font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,scale] duration-200 hover:bg-page-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink active:scale-[0.98] motion-reduce:transition-none"
+        disabled={!ready}
+        aria-busy={!ready || undefined}
+        className="mt-5 inline-flex h-12 items-center gap-1.5 rounded-full bg-page-accent px-6 text-[0.9375rem] font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,scale,opacity] duration-200 hover:bg-page-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink active:scale-[0.98] disabled:cursor-wait disabled:opacity-60 disabled:hover:bg-page-accent disabled:active:scale-100 motion-reduce:transition-none"
       >
         {t("go")}
         <ArrowRight aria-hidden="true" className="size-3.5" />
@@ -369,10 +402,13 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
                     fields={trip.gift}
                     onPick={() => track("trip_match_pick", { trip: pick.id, to: "surprise" })}
                     className={cn(
-                      "mt-3 inline-flex h-11 items-center justify-center gap-1.5 self-start rounded-full px-5 text-[0.9375rem] font-medium transition-[background-color,border-color,opacity,scale] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink active:scale-[0.98] motion-reduce:transition-none max-sm:w-full",
+                      "mt-3 h-11 items-center justify-center gap-1.5 self-start rounded-full px-5 text-[0.9375rem] font-medium transition-[background-color,border-color,opacity,scale] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink active:scale-[0.98] motion-reduce:transition-none max-sm:w-full",
+                      // One button in the three (DESIGN-LESS-TEXT: no card with a button in each): the
+                      // first card's. On a desk with a mouse the others show theirs on hover or focus;
+                      // elsewhere their picture and name lead to the trip, which has the same button.
                       i === 0
-                        ? "bg-page-accent text-page-on-accent hover:bg-page-accent-hover"
-                        : "border border-page-ink/30 text-page-ink hover:border-page-ink/50 hover:bg-page-raised lg:pointer-fine:opacity-0 lg:pointer-fine:group-focus-within/pick:opacity-100 lg:pointer-fine:group-hover/pick:opacity-100",
+                        ? "inline-flex bg-page-accent text-page-on-accent hover:bg-page-accent-hover"
+                        : "hidden border border-page-ink/30 text-page-ink hover:border-page-ink/50 hover:bg-page-raised lg:pointer-fine:inline-flex lg:pointer-fine:opacity-0 lg:pointer-fine:group-focus-within/pick:opacity-100 lg:pointer-fine:group-hover/pick:opacity-100",
                     )}
                   >
                     {ts("cta")}

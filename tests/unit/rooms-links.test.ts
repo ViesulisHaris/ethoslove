@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import sitemap from "@/app/sitemap";
@@ -15,8 +15,8 @@ import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
 import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
-import { halfwayAnswer, halfwayBetween, halfwayCityName, isOwnTown, mapLink, needsMap, readsMiles } from "@/lib/ldr/halfway";
-import { fairKm, pickSpot } from "@/lib/places/photon-reverse";
+import { halfwayAnswer, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, tableFair } from "@/lib/ldr/halfway";
+import { fairKm, pickSpot, spotAt } from "@/lib/places/photon-reverse";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
 import { waysData } from "@/lib/ldr/ways-data";
@@ -121,7 +121,7 @@ describe("a trip and the cities it passes through", () => {
 });
 
 describe("halfway between two towns", () => {
-  it("halfway between Riga and Lisbon is Luxembourg, and it says how far for each", () => {
+  it("the table's nearest city to Riga and Lisbon's middle is Luxembourg, and it knows how far for each", () => {
     const h = halfwayBetween(town("Riga"), town("Lisbon"));
     near(h.km, 3151);
     expect(h.near?.city.name).toBe("Luxembourg");
@@ -175,11 +175,39 @@ describe("the halfway answer, table and map together", () => {
   const photon = (name: string, lat: number, lng: number, extra: Record<string, string> = {}) => ({ features: [{ geometry: { coordinates: [lng, lat] }, properties: { name, ...extra } }] });
   const EMPTY = { features: [] };
 
-  it("a city in the table near the middle is named without asking the map", () => {
-    const h = halfwayBetween(town("Riga"), town("Lisbon"));
+  it("a city in the table near the middle and fair to both is named without asking the map", () => {
+    const h = halfwayBetween(town("London"), town("Edinburgh"));
+    expect(tableFair(h)).toBe(true);
     expect(needsMap(h)).toBe(false);
-    expect(halfwayAnswer(h, town("Riga"), town("Lisbon"), undefined, "en")).toMatchObject({ kind: "city", name: "Luxembourg", fromMap: false });
-    expect(halfwayAnswer(halfwayBetween(town("Berlin"), town("Rome")), town("Berlin"), town("Rome"), undefined, "es")).toMatchObject({ kind: "city", name: "Múnich" });
+    expect(halfwayAnswer(h, town("London"), town("Edinburgh"), undefined, "en")).toMatchObject({ kind: "city", name: "Manchester", fromMap: false });
+    expect(halfwayAnswer(halfwayBetween(town("Prague"), town("Milan")), town("Prague"), town("Milan"), undefined, "es")).toMatchObject({ kind: "city", name: "Múnich" });
+  });
+
+  it("a city in the table that is not fair to both is never named as halfway: the map is asked", () => {
+    const PHILADELPHIA = { name: "Philadelphia", lat: 39.95, lng: -75.17 };
+    // New York, 306 km from Boston and 130 from Philadelphia; Luxembourg, 1,440 km from Riga and
+    // 1,711 from Lisbon; Munich, 504 km from Berlin and 697 from Rome; Paris, 455 from Bristol, 640 from Milan.
+    for (const [a, b] of [
+      [BOSTON, PHILADELPHIA],
+      [town("Riga"), town("Lisbon")],
+      [town("Berlin"), town("Rome")],
+      [town("Bristol"), town("Milan")],
+    ]) {
+      const h = halfwayBetween(a, b);
+      expect(h.near, `${a.name}–${b.name}`).not.toBeNull();
+      expect(tableFair(h), `${a.name}–${b.name}`).toBe(false);
+      expect(needsMap(h), `${a.name}–${b.name}`).toBe(true);
+      expect(halfwayAnswer(h, a, b, undefined, "en").kind).toBe("pending");
+    }
+  });
+
+  it("'almost exactly halfway' only when the two journeys are as good as even", () => {
+    expect(isEven(262, 282)).toBe(true);
+    expect(isEven(100, 104)).toBe(true);
+    expect(isEven(3, 9)).toBe(true);
+    // Dallas and Houston at Madisonville (136 miles against 88); Leeds and Bristol (92 against 77).
+    expect(isEven(219, 142)).toBe(false);
+    expect(isEven(148, 124)).toBe(false);
   });
 
   it("dry land far from any city in the table is never called the sea (Austin and Denver)", () => {
@@ -251,6 +279,20 @@ describe("the halfway answer, table and map together", () => {
   it("distances are in miles for visitors from the United States and the United Kingdom", () => {
     for (const where of ["US", "en-US", "GB", "en-GB", "PR"]) expect(readsMiles(where), where).toBe(true);
     for (const where of ["LV", "en", "es-ES", "es-MX", "", null, undefined]) expect(readsMiles(where), String(where)).toBe(false);
+  });
+
+  describe("the map is always asked for names in English", () => {
+    afterEach(() => vi.unstubAllGlobals());
+    it("on any page: with no language Photon answers 恵那市 or Бологое, which no page of ours can read", async () => {
+      const asked: string[] = [];
+      vi.stubGlobal("fetch", async (url: string) => {
+        asked.push(url);
+        return new Response(JSON.stringify({ features: [{ geometry: { coordinates: [137.41, 35.45] }, properties: { name: "Ena", state: "Gifu Prefecture", countrycode: "JP" } }] }));
+      });
+      expect(await spotAt({ lat: 35.4, lng: 137.4 }, 200)).toMatchObject({ kind: "town", name: "Ena", region: "Gifu Prefecture" });
+      expect(asked.length).toBeGreaterThan(0);
+      for (const url of asked) expect(new URL(url).searchParams.get("lang"), url).toBe("en");
+    });
   });
 
   it("a halfway with no town to name can be seen on a map", () => {

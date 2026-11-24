@@ -78,6 +78,10 @@ export const TOWNS: Record<string, Town> = {
   Vienna: { lat: 48.2082, lng: 16.3738, offset: 3600, country: "Austria" },
   Austin: { lat: 30.2672, lng: -97.7431, offset: -21600, country: "United States" },
   Denver: { lat: 39.7392, lng: -104.9903, offset: -25200, country: "United States" },
+  Philadelphia: { lat: 39.9526, lng: -75.1652, offset: -18000, country: "United States" },
+  Dallas: { lat: 32.7767, lng: -96.797, offset: -21600, country: "United States" },
+  Houston: { lat: 29.7604, lng: -95.3698, offset: -21600, country: "United States" },
+  Milan: { lat: 45.4642, lng: 9.19, offset: 3600, country: "Italy" },
 };
 
 /** What the map says lies at a halfway point (lib/places/photon-reverse.ts), as /api/places answers it. */
@@ -119,3 +123,22 @@ export async function typeTown(page: Page, box: string, town: string) {
   await input.fill(town);
   await input.press("Enter");
 }
+
+/**
+ * Which rows of the Halfway poster a way-on picture shows, as fractions of its height: the picture
+ * is cropped (object-fit and its position) and then enlarged about its centre.
+ */
+export const posterRows = (img: Locator) =>
+  img.evaluate((el) => {
+    const image = el as HTMLImageElement;
+    const style = getComputedStyle(image);
+    const k = style.scale === "none" ? 1 : parseFloat(style.scale);
+    const [cw, ch] = [image.clientWidth, image.clientHeight];
+    const s = Math.max(cw / image.naturalWidth, ch / image.naturalHeight);
+    const p = parseFloat(style.objectPosition.split(" ")[1]) / 100;
+    const oy = p * (ch - image.naturalHeight * s);
+    const top = (ch / 2 - ch / (2 * k) - oy) / s / image.naturalHeight;
+    const bottom = (ch / 2 + ch / (2 * k) - oy) / s / image.naturalHeight;
+    return { top, bottom };
+  });
+

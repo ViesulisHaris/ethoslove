@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { clickInPlace, countEvents, mockTowns, typeTown, watchErrors } from "./rooms-world";
+import { clickInPlace, countEvents, mockTowns, posterRows, TOWNS, typeTown, watchErrors } from "./rooms-world";
 
 /**
  * The ways from one room to another, each once and where it fits: long distance after its halfway
@@ -15,10 +15,13 @@ test.describe("long distance, joined up", () => {
 
   test("after the halfway city, the gift and a trip, and still one link to the dates", async ({ page }) => {
     const noErrors = watchErrors(page);
+    // Riga and Lisbon: the table's Luxembourg is not fair to both, so the map is asked; it names Reims.
+    await mockTowns(page, TOWNS, () => ({ kind: "town", name: "Reims", region: "Grand Est", countryCode: "FR", lat: 49.2583, lng: 4.0317 }));
     await page.goto("/long-distance");
     await expect(page.getByTestId("meet-ways")).toHaveCount(0);
     await typeTown(page, "Where you are", "Riga");
     await typeTown(page, "Where they are", "Lisbon");
+    await expect(page.getByText("Reims", { exact: true })).toBeVisible();
     const ways = page.getByTestId("meet-ways").locator("[data-way]");
     await expect(ways).toHaveCount(2);
     const gift = page.locator('[data-way="gift"] a');
@@ -33,15 +36,44 @@ test.describe("long distance, joined up", () => {
     expect(seed.fields.from.name).toBe("Riga");
     expect(seed.fields.to.name).toBe("Lisbon");
     expect(seed.fields.stops).toEqual([]);
-    expect(seed.fields.halfwayNote).toBe("Halfway is Luxembourg. Meet me there?");
+    expect(seed.fields.halfwayNote).toBe("Halfway is Reims. Meet me there?");
     noErrors();
+  });
+
+  test("the halfway card says a map town's region, and in miles where people read miles", async ({ page }) => {
+    await mockTowns(page, TOWNS, () => ({ kind: "town", name: "Warren", region: "Ohio", countryCode: "US", lat: 41.2376, lng: -80.8184 }));
+    await page.goto("/long-distance");
+    await typeTown(page, "Where you are", "New York");
+    await typeTown(page, "Where they are", "Chicago");
+    await expect(page.getByText("Warren", { exact: true })).toBeVisible();
+    await expect(page.getByText(/^Ohio, /)).toBeVisible();
+    // A euro visitor reads kilometres first.
+    await expect(page.getByText(/^1,1\d\d km$/)).toBeVisible();
+  });
+
+  test("two ways on share the whole width on a desk, and the gift's picture shows no sample names", async ({ page, isMobile }) => {
+    await page.goto("/long-distance");
+    await typeTown(page, "Where you are", "Riga");
+    await typeTown(page, "Where they are", "Lisbon");
+    const row = page.locator("#meet-ways-row");
+    await expect(row.locator("[data-way]")).toHaveCount(2);
+    const img = row.locator('[data-way="gift"] img');
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    const rows = await posterRows(img);
+    expect(rows.top).toBeGreaterThan(0.21);
+    expect(rows.bottom).toBeLessThan(0.63);
+    if (isMobile) return;
+    const [r, cards] = await Promise.all([row.boundingBox(), row.locator("[data-way]").evaluateAll((els) => els.map((el) => el.getBoundingClientRect().right))]);
+    // The second card ends at the row's right edge: no empty third.
+    expect(Math.abs(Math.max(...cards) - (r!.x + r!.width))).toBeLessThanOrEqual(2);
   });
 
   test("when no trip starts near them it offers the shelf, not a trip", async ({ page }) => {
     await page.goto("/long-distance");
     await typeTown(page, "Where you are", "Chicago");
     await typeTown(page, "Where they are", "Boston");
-    await expect(page.getByText("Toronto", { exact: true })).toBeVisible();
+    await expect(page.getByTestId("meet-ways")).toBeVisible();
     const trip = page.locator('[data-way="trip"] a');
     await expect(trip).toContainText("Trips for two, planned day by day");
     await expect(trip).toHaveAttribute("href", "/trips");
@@ -74,10 +106,12 @@ test.describe("the share screen after an anniversary gift", () => {
   test("one line under the reminders leads to date ideas", async ({ page }) => {
     await page.goto("/reminders/preview?template=our-timeline&name=Ana");
     const line = page.getByTestId("anniversary-dates");
-    await expect(line).toHaveText("Planning the day too? Date ideas for an anniversary (opens in a new tab)");
-    await expect(line.getByRole("link")).toHaveAccessibleName("Date ideas for an anniversary (opens in a new tab)");
+    await expect(line).toHaveText("Planning the day too? An anniversary evening, planned hour by hour (opens in a new tab)");
+    await expect(line.getByRole("link")).toHaveAccessibleName("An anniversary evening, planned hour by hour (opens in a new tab)");
     const link = line.getByRole("link");
-    await expect(link).toHaveAttribute("href", "/dates");
+    // The words promise anniversary ideas, so it leads to the post that has them, not the dates map.
+    await expect(link).toHaveAttribute("href", "/blog/anniversary-ideas-at-home");
+    expect((await page.request.get("/blog/anniversary-ideas-at-home")).status()).toBe(200);
     await expect(link).toHaveAttribute("target", "_blank");
     // It comes after the reminder card.
     expect(await page.evaluate(() => { const card = document.querySelector('[data-testid="remind-card"]'); const line = document.querySelector('[data-testid="anniversary-dates"]'); return Boolean(card && line && card.compareDocumentPosition(line) & Node.DOCUMENT_POSITION_FOLLOWING); })).toBe(true);
@@ -87,8 +121,9 @@ test.describe("the share screen after an anniversary gift", () => {
       await expect(page.getByTestId("anniversary-dates"), template).toHaveCount(0);
     }
     await page.goto("/es/reminders/preview?template=our-timeline&name=Ana");
-    await expect(page.getByTestId("anniversary-dates")).toHaveText("¿Preparáis también el día? Ideas de citas para un aniversario (se abre en otra pestaña)");
-    await expect(page.getByTestId("anniversary-dates").getByRole("link")).toHaveAttribute("href", "/es/dates");
+    await expect(page.getByTestId("anniversary-dates")).toHaveText("¿Preparáis también el día? Una noche de aniversario, hora a hora (se abre en otra pestaña)");
+    await expect(page.getByTestId("anniversary-dates").getByRole("link")).toHaveAttribute("href", "/es/blog/anniversary-ideas-at-home");
+    expect((await page.request.get("/es/blog/anniversary-ideas-at-home")).status()).toBe(200);
   });
 
   test("that line sells nothing", async ({ page }) => {
@@ -98,6 +133,6 @@ test.describe("the share screen after an anniversary gift", () => {
     await expect(line.locator('a[rel*="sponsored"]')).toHaveCount(0);
     expect(await line.innerText()).not.toMatch(/[€$£]|\d+[.,]\d{2}/);
     await clickInPlace(line.getByRole("link"));
-    await expect.poll(async () => (await events()).filter((e) => e.name === "room_handoff").map((e) => e.data)).toEqual([{ from: "share_screen", to: "dates" }]);
+    await expect.poll(async () => (await events()).filter((e) => e.name === "room_handoff").map((e) => e.data)).toEqual([{ from: "share_screen", to: "anniversary_ideas" }]);
   });
 });

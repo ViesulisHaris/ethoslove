@@ -23,9 +23,14 @@ describe("the trip matcher", () => {
     expect(lengthFits(6, "week")).toBe(false);
   });
 
-  it("with no wishes every trip comes back once, in the shelf's own order when none is in season", () => {
+  it("with no wishes every trip comes back once; when none is in season, the soonest season first", () => {
     const picks = matchTrips({}, TABLE, 11);
-    expect(picks.map((p) => p.id)).toEqual(TRIPS.map((t) => t.id));
+    expect(new Set(picks.map((p) => p.id))).toEqual(new Set(TRIPS.map((t) => t.id)));
+    // In November: the two whose December is next, then March (Lisbon), then April, and so on; the
+    // shelf's order only among trips whose season starts the same month.
+    expect(picks.slice(0, 4).map((p) => p.id)).toEqual(["prague-krumlov-vienna", "copenhagen-hygge", "lisbon-slow-weekend", "tuscany-hill-towns"]);
+    const waits = picks.map((p) => (nextBestMonth(TABLE.find((t) => t.id === p.id)!.bestMonths, 11)! - 11 + 12) % 12);
+    expect(waits).toEqual([...waits].sort((a, b) => a - b));
     for (const p of picks) {
       expect(p.relaxed).toEqual([]);
       expect(p.km).toBeUndefined();
@@ -46,7 +51,7 @@ describe("the trip matcher", () => {
 
   it("a length narrows the list", () => {
     const picks = matchTrips({ length: "weekend" }, TABLE, 11);
-    expect(picks.slice(0, 3).map((p) => p.id)).toEqual(["lisbon-slow-weekend", "copenhagen-hygge", "amsterdam-by-bike"]);
+    expect(picks.slice(0, 3).map((p) => p.id)).toEqual(["copenhagen-hygge", "lisbon-slow-weekend", "amsterdam-by-bike"]);
     expect(picks.slice(0, 3).every((p) => p.relaxed.length === 0)).toBe(true);
     expect(picks[3].relaxed).toEqual(["length"]);
     expect(topMatches({ length: "weekend" }, TABLE, 11).summary).toEqual({ kind: "all" });
@@ -137,8 +142,9 @@ describe("the trip matcher", () => {
     expect(riga[1].train).toBe(false);
 
     const london = matchTrips({ from: air("London") }, TABLE, 11);
-    expect(london.slice(0, 3).map((p) => p.id)).toEqual(["paris-without-cliches", "amsterdam-by-bike", "scottish-highlands"]);
-    expect(london.slice(0, 3).every((p) => p.train)).toBe(true);
+    // Copenhagen's December is near enough to put it before the Highlands, a train away but not till May.
+    expect(london.slice(0, 4).map((p) => p.id)).toEqual(["paris-without-cliches", "amsterdam-by-bike", "copenhagen-hygge", "scottish-highlands"]);
+    expect(london.slice(0, 4).map((p) => p.train)).toEqual([true, true, false, true]);
     expect(london[0].airMinutes).toBe(60);
   });
 

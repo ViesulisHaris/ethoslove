@@ -7,7 +7,8 @@ import { Link } from "@/i18n/navigation";
 import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
-import { answerPlace, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { answerPlace, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
 import { flightLinks, weekendAhead, type FlightSite } from "@/lib/trips/flights";
@@ -82,6 +83,9 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   const tf = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale = useLocale() === "es" ? "es" : "en";
+  // Miles where people read miles, as the halfway finder does. This page is built ahead, with no
+  // visitor's country, so the money they are shown stands in for it: dollars and pounds read miles.
+  const miles = useCurrency() !== "eur";
   // Aviasales only searches with a date, so each flight is for a long weekend three weeks out, from
   // the visitor's own today; they change it there.
   const today = useSyncExternalStore(noop, localDay, () => undefined);
@@ -117,7 +121,8 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   }, [a, b, result, place, locale, today]);
   // The answer's name is already in the page's language: a Spanish page says "Ciudad de México", and so does the link to its dates.
   const halfwayName = place?.name ?? "";
-  const each = answer && answer.kind !== "same" && answer.kind !== "city" ? t("eachWay", { distance: t("km", { n: Math.round(answer.eachKm) }) }) : "";
+  const distance = (km: number) => (miles ? t("mi", { n: Math.max(1, Math.round(milesOf(km))) }) : t("km", { n: Math.max(1, Math.round(km)) }));
+  const each = answer && answer.kind !== "same" && answer.kind !== "city" ? t("eachWay", { distance: distance(answer.eachKm) }) : "";
   const ahead = zoneA && zoneB ? hoursAhead(zoneA.offset, zoneB.offset) : null;
   const windows = zoneA && zoneB ? awakeOverlap(zoneA.offset, zoneB.offset) : null;
   const number = (n: number) => Math.round(n).toLocaleString(locale === "es" ? "es-ES" : "en-GB");
@@ -153,8 +158,8 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
               <Plane aria-hidden="true" className="size-4" />
               {t("apart")}
             </p>
-            <p className="mt-3 font-display text-[40px] leading-none text-forest tabular-nums">{number(result.km)} km</p>
-            <p className="mt-1.5 text-[14px] text-forest/65">{t("miles", { miles: number(milesOf(result.km)) })}</p>
+            <p className="mt-3 font-display text-[40px] leading-none text-forest tabular-nums">{miles ? t("mi", { n: Math.round(milesOf(result.km)) }) : `${number(result.km)} km`}</p>
+            <p className="mt-1.5 text-[14px] text-forest/65">{miles ? t("kmFlown", { km: number(result.km) }) : t("miles", { miles: number(milesOf(result.km)) })}</p>
           </div>
 
           <div className="rounded-[24px] bg-blush-paper p-5">
@@ -165,7 +170,16 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
             {answer?.kind === "city" && place ? (
               <>
                 <p className="mt-3 font-display text-[32px] leading-[1.05] text-forest">{halfwayName}</p>
-                <p className="mt-1.5 text-[14px] text-forest/65">{answer.offKm < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(answer.offKm) })}</p>
+                {/* As the halfway finder says it: the region of a town from the map (Warren: Ohio, not Michigan), and "almost exactly" only when the two journeys are. */}
+                <p className="mt-1.5 text-[14px] text-forest/65">
+                  {isEven(answer.kmFromA, answer.kmFromB)
+                    ? answer.region
+                      ? tt("exactIn", { region: answer.region })
+                      : t("halfwayExact")
+                    : answer.region
+                      ? tt("offIn", { region: answer.region, distance: distance(answer.offKm) })
+                      : tt("off", { distance: distance(answer.offKm) })}
+                </p>
                 <Link href={`/dates?lat=${place.lat}&lng=${place.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: halfwayName })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />

@@ -2380,7 +2380,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "Long-Distance Relationship Ideas: Meet Halfway, Dates, Gifts",
+      "title": "Long-Distance Relationship Ideas: Dates, Gifts, Time Zones",
       "description": "Free tools for a long-distance relationship: the city halfway between you, the hours you're both awake, date ideas for two screens and instant gifts."
     },
     "eyebrow": "Long distance",
@@ -2388,7 +2388,7 @@
     "h1b": "the same as far.",
     "sub": "A few small tools for the months between visits: where to meet, when you're both awake, and what to do on a call besides recap your day.",
     "meet": {
-      "title": "Meet in the middle",
+      "title": "Between your two towns",
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
       "tool": "Just the halfway finder, with a link to send",
       "you": "Where you are",
@@ -2396,9 +2396,9 @@
       "hint": "Pick both towns and we'll do the math.",
       "apart": "Apart",
       "miles": "{miles} miles, as the plane flies",
+      "kmFlown": "{km} km, as the plane flies",
       "halfway": "Halfway",
       "halfwayExact": "Almost exactly halfway between you.",
-      "halfwayNear": "The nearest city to your halfway point, {km} km from it.",
       "datesThere": "Date ideas in {city}",
       "sea": "Open water",
       "seaSub": "Halfway between you is out at sea. One of you is getting on a plane.",
@@ -2527,8 +2527,8 @@
         "week": "a week"
       },
       "budget": {
-        "1": "about {money} a day for two at most",
-        "2": "about {money} a day for two at most",
+        "1": "up to {money} a day for two",
+        "2": "up to {money} a day for two",
         "any": "no ceiling on spending"
       },
       "kind": {
@@ -2552,16 +2552,7 @@
       "airTrain": "About {time} in the air from {city}. A train might be nicer.",
       "home": "It starts where you are. No flight to find.",
       "inSeason": "In season now",
-      "fits": "Fits {list}.",
-      "fit": {
-        "budget": "a budget of {money} a day",
-        "kind": {
-          "city": "a city break",
-          "road": "a road trip",
-          "islands": "an island trip",
-          "train": "a train journey"
-        }
-      },
+      "fitsAll": "Fits all of it.",
       "closest": "The nearest to what you asked.",
       "allBut": "Fits all but {wishes}.",
       "fitsLater": "Its season starts in {month}.",
@@ -3386,7 +3377,7 @@
     },
     "dates": {
       "line": "Planning the day too?",
-      "link": "Date ideas for an anniversary",
+      "link": "An anniversary evening, planned hour by hour",
       "newTab": "opens in a new tab"
     },
     "page": {

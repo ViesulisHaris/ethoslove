@@ -62,7 +62,9 @@ async function reverse(request: NextRequest, latText: string | null, lngText: st
   try {
     // How far each of them travels (to ten kilometres): how far off the middle a city may be and still be fair.
     const each = Math.round(Math.min(20040, Math.max(0, Number(request.nextUrl.searchParams.get("each")) || 0)) / 10) * 10;
-    const spot = await spotAt({ lat, lng }, each, request.nextUrl.searchParams.get("lang") === "en" ? "en" : null);
+    // Always in English, whatever the page's language: Photon has no Spanish, and with no language it
+    // answers in the local script (恵那市, Бологое), which a Spanish page cannot read either.
+    const spot = await spotAt({ lat, lng }, each);
     return NextResponse.json({ spot }, { headers: { "cache-control": "public, s-maxage=604800, stale-while-revalidate=2592000" } });
   } catch {
     return NextResponse.json({ error: "unavailable" }, { status: 504 });

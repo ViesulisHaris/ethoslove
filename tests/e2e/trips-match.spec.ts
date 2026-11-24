@@ -3,8 +3,8 @@ import { clickInPlace, countEvents, watchErrors } from "./rooms-world";
 
 /**
  * "Where should we go together?" on /trips: an airport and a sentence of three choices rank the
- * twelve trips. The clock is pinned to 15 November, when no trip is in season, so the order is the
- * shelf's and the airport's. Nothing is fetched: the airports are an offline table.
+ * twelve trips. The clock is pinned to 15 November, when no trip is in season, so the order is
+ * whose season starts soonest (December's Prague to Vienna and Copenhagen first) and the airport's. Nothing is fetched: the airports are an offline table.
  */
 
 const picks = (page: Page) => page.locator("#match [data-pick]");
@@ -52,16 +52,17 @@ test.describe("where should we go together", () => {
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(summary(page)).toHaveText("Three trips that fit.");
     await expect(picks(page)).toHaveCount(3);
-    await expect(names(page)).toHaveText(["Lisbon, slowly", "The Amalfi Coast by car", "Tuscany's hill towns"]);
+    // In mid November none is in season: the two whose season starts in December lead, then March's Lisbon.
+    await expect(names(page)).toHaveText(["Prague to Vienna by train", "A hygge weekend in Copenhagen", "Lisbon, slowly"]);
     for (const img of await picks(page).locator("img").all()) {
       await img.scrollIntoViewIfNeeded();
       await expect.poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     }
-    await expect(picks(page).first()).toContainText(/3 days · city break/i);
-    await expect(picks(page).first()).toContainText("Best Mar–Jun, Sept–Oct");
+    await expect(picks(page).nth(2)).toContainText(/3 days · city break/i);
+    await expect(picks(page).nth(2)).toContainText("Best Mar–Jun, Sept–Oct");
     // Each says something of its own, even with no airport and every choice left open (in mid
     // November none is in season: when its season starts); never a flight time then.
-    await expect(picks(page).locator("[data-fit]")).toHaveText(["Its season starts in March.", "Its season starts in May.", "Its season starts in April."]);
+    await expect(picks(page).locator("[data-fit]")).toHaveText(["Its season starts in December.", "Its season starts in December.", "Its season starts in March."]);
     await expect(page.locator("#match [data-air]")).toHaveCount(0);
     // No money beside a trip but its band for spending there (€€, and for a screen reader the band's
     // own words, "about €150–300 a day for two", which is not a fare): never a price for a flight.
@@ -111,9 +112,42 @@ test.describe("where should we go together", () => {
     await page.reload();
     await expect(picks(page)).toHaveCount(3);
     await expect(box).toHaveValue("");
-    // A fresh visit starts from the airport they last flew from.
+    // Left out is forgotten too: a fresh visit (or another tab) does not bring it back.
+    expect(await page.evaluate(() => localStorage.getItem("ethos:trips:from"))).toBeNull();
     await page.goto("/trips");
-    await expect(box).toHaveValue("Riga");
+    await page.waitForTimeout(300);
+    await expect(box).toHaveValue("");
+  });
+
+  test("the hero's flight search and the matcher leave from the same airport", async ({ page }) => {
+    await open(page);
+    const hero = page.getByTestId("flight-finder").getByRole("combobox", { name: "From" });
+    await hero.fill("Lond");
+    await page.getByRole("option", { name: /London · LHR/ }).first().click();
+    await expect(page.locator("#match").getByRole("combobox", { name: "Leaving from" })).toHaveValue("London");
+    await pickAirport(page, "Rig", /Riga · RIX/);
+    await expect(hero).toHaveValue("Riga");
+  });
+
+  test("choices made before the page's script arrives are kept, and the button waits for it", async ({ page }) => {
+    // A slow phone: the page is there and its selects can be turned before the script runs.
+    await page.route("**/_next/static/chunks/**/*.js", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      await route.continue();
+    });
+    await page.clock.install({ time: new Date("2026-11-15T12:00:00Z") });
+    await page.goto("/trips", { waitUntil: "domcontentloaded" });
+    const go = page.locator("[data-match-go]");
+    await expect(go).toBeDisabled();
+    await page.getByRole("combobox", { name: "How long" }).selectOption("weekend");
+    await page.getByRole("combobox", { name: "Kind of trip" }).selectOption("city");
+    await expect(go).toBeEnabled({ timeout: 30_000 });
+    await go.click();
+    await expect(page.getByRole("combobox", { name: "How long" })).toHaveValue("weekend");
+    await expect(page.getByRole("combobox", { name: "Kind of trip" })).toHaveValue("city");
+    await expect(page).toHaveURL(/len=weekend/);
+    await expect(page).toHaveURL(/kind=city/);
+    await expect(names(page).first()).toHaveText("A hygge weekend in Copenhagen");
   });
 
   test("when only one fits it says so, and the rest come close", async ({ page }) => {
@@ -122,8 +156,9 @@ test.describe("where should we go together", () => {
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(summary(page)).toHaveText("One trip fits all of that. The rest come close.");
     await expect(names(page).first()).toHaveText("The Baltic coast, Riga to Tallinn");
-    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Fits a week.");
-    await expect(picks(page).nth(1).locator("[data-fit]")).toHaveText("The nearest to what you asked.");
+    // The heading says what fits; each card says what is its own, never the select's words again.
+    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Fits all of it. Its season starts in June.");
+    await expect(picks(page).nth(1).locator("[data-fit]")).toHaveText("The nearest to what you asked. Its season starts in December.");
   });
 
   test("when nothing fits it lets one wish go and says which", async ({ page }) => {
@@ -133,16 +168,19 @@ test.describe("where should we go together", () => {
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(summary(page)).toHaveText("Nothing fits all of that, so we let go of the length.");
     await expect(names(page).first()).toHaveText("Paris without the clichés");
-    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Fits a city break.");
+    // The heading has said what all three let go of: each card says when its season starts.
+    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Its season starts in April.");
+    const lines = await picks(page).locator("[data-fit]").allInnerTexts();
+    expect(new Set(lines).size, lines.join(" | ")).toBeGreaterThan(1);
 
     await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "islands" });
     await page.getByRole("combobox", { name: "How long" }).selectOption({ label: "a weekend" });
-    await page.getByRole("combobox", { name: "Budget there" }).selectOption({ label: "about €150 a day for two at most" });
+    await page.getByRole("combobox", { name: "Budget there" }).selectOption({ label: "up to €150 a day for two" });
     // The three let go of different wishes, so none is named in the heading; each card says its own.
     await expect(summary(page)).toHaveText("Nothing fits all of that. These three come closest.");
     await expect(names(page).first()).toHaveText("Santorini and Naxos");
-    await expect(picks(page).nth(0).locator("[data-fit]")).toHaveText("Fits all but the length and the budget.");
-    await expect(picks(page).nth(1).locator("[data-fit]")).toHaveText("Fits all but the budget and the kind of trip.");
+    await expect(picks(page).nth(0).locator("[data-fit]")).toHaveText("Fits all but the length and the budget. Its season starts in May.");
+    await expect(picks(page).nth(1).locator("[data-fit]")).toHaveText(/^Fits all but (the budget and )?the kind of trip. Its season starts in \w+\.$/);
   });
 
   test("the commas and the full stop stay with their choices", async ({ page }) => {
@@ -166,7 +204,7 @@ test.describe("where should we go together", () => {
     await open(page);
     await pickAirport(page, "Rig", /Riga · RIX/);
     await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "islands" });
-    await page.getByRole("combobox", { name: "Budget there" }).selectOption({ label: "about €150 a day for two at most" });
+    await page.getByRole("combobox", { name: "Budget there" }).selectOption({ label: "up to €150 a day for two" });
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(page).toHaveURL(/\/trips\?match=1&budget=1&kind=islands&from=Riga%7ERIX$/);
     const shown = await names(page).allInnerTexts();
@@ -217,11 +255,15 @@ test.describe("where should we go together", () => {
     await open(page);
     await page.getByRole("button", { name: "Show our three trips" }).click();
     const first = picks(page).first();
-    await expect(first.getByRole("link", { name: "Lisbon, slowly" })).toHaveAttribute("href", "/trips/lisbon-slow-weekend");
+    await expect(first.getByRole("link", { name: "Prague to Vienna by train" })).toHaveAttribute("href", "/trips/prague-krumlov-vienna");
     const surprise = first.getByTestId("make-surprise");
     await expect(surprise).toBeVisible();
     await expect(surprise).toHaveAttribute("href", "/create/pack-your-bags");
-    if (isMobile) return;
+    // One button in the three: on a phone the others lead to their trip, which has its own.
+    if (isMobile) {
+      await expect(picks(page).nth(1).getByTestId("make-surprise")).toBeHidden();
+      return;
+    }
     await pickAirport(page, "Rig", /Riga · RIX/);
     await expect(names(page).first()).toHaveText("The Baltic coast, Riga to Tallinn");
     await picks(page).first().getByTestId("make-surprise").click();
@@ -233,7 +275,7 @@ test.describe("where should we go together", () => {
 
   test("in Spanish, all of it", async ({ page }) => {
     await open(page, "/es/trips");
-    await expect(page.getByRole("heading", { level: 2, name: "¿Adónde nos vamos los dos?" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: "¿Adónde nos escapamos?" })).toBeVisible();
     expect(await sentence(page)).toBe("Tenemos los días que hagan falta, sin tope de gasto, y buscamos cualquier tipo de viaje.");
     await page.getByRole("button", { name: "Ver nuestros tres viajes" }).click();
     await expect(summary(page)).toHaveText("Tres viajes que encajan.");
@@ -242,7 +284,11 @@ test.describe("where should we go together", () => {
     await page.getByRole("combobox", { name: "Cuánto tiempo" }).selectOption({ label: "una semana" });
     await page.getByRole("combobox", { name: "Tipo de viaje" }).selectOption({ label: "una escapada urbana" });
     await expect(summary(page)).toHaveText("Nada encaja con todo, así que hemos dejado de lado la duración.");
-    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Encaja con una escapada urbana.");
+    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Su temporada empieza en abril.");
+    await expect(picks(page).first()).toContainText("Mejor en abr.–jun., sept.–oct.");
+    await page.getByRole("combobox", { name: "Presupuesto allí" }).selectOption("2");
+    expect(await sentence(page)).toBe("Tenemos una semana, hasta 300 € al día para dos, y buscamos una escapada urbana.");
+    await page.getByRole("combobox", { name: "Presupuesto allí" }).selectOption("any");
     await page.getByRole("combobox", { name: "Tipo de viaje" }).selectOption({ label: "unas islas" });
     expect(await sentence(page)).toBe("Tenemos una semana, sin tope de gasto, y buscamos unas islas.");
   });

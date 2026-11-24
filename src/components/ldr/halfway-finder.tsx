@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowUpRight, Check, Link2, MoveHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { shareLink } from "@/lib/app/bridge";
-import { mapLink } from "@/lib/ldr/halfway";
-import { halfwayQuery, type Town } from "@/lib/ldr/halfway-link";
+import { isEven, mapLink } from "@/lib/ldr/halfway";
+import { halfwayQuery, readHalfwayLink, type Town } from "@/lib/ldr/halfway-link";
 import type { WaysData } from "@/lib/ldr/ways";
 import { WhereBox, type Where } from "@/components/dates/where-box";
 import { useHalfway } from "./use-halfway";
@@ -18,13 +18,27 @@ const SUB = "mt-2 text-[0.9375rem] leading-relaxed text-page-body";
 const QUIET =
   "inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink";
 
+/** Where this history entry keeps the towns (see the effects below). */
+const KEPT = "ethosHalfway";
+const noop = () => () => {};
+const town = (w: Town): Town => ({ name: w.name, lat: w.lat, lng: w.lng });
+const isTown = (v: unknown): v is Town => {
+  const t = v as Town | null;
+  return Boolean(t && typeof t.name === "string" && t.name && Number.isFinite(t.lat) && Number.isFinite(t.lng));
+};
+function keptTowns(state: unknown): { a: Town; b: Town } | null {
+  const kept = (state as Record<string, { a?: unknown; b?: unknown } | undefined> | null)?.[KEPT];
+  return kept && isTown(kept.a) && isTown(kept.b) ? { a: town(kept.a), b: town(kept.b) } : null;
+}
+
 /**
  * Halfway between two towns, on a page of its own: two town boxes, the place in the middle (the
  * table's city when one is near enough, else the town nearest the middle from the map, both through
  * useHalfway, the same as the long-distance room's), how far it is for each, a link that carries
  * the two towns and nothing else, and three ways on. A link's towns come from the server, so a
- * shared link opens on its answer; the towns are written into the address once there is an answer,
- * so a reload keeps it. Distances are in miles where people read miles (`miles`, from the visitor's
+ * shared link opens on its answer. The towns typed here are never written into the address (it
+ * reaches server logs and, with consent, Clarity): they are kept in this history entry's state,
+ * which a reload or Back from a way on opens on again, and only the link they send carries them. Distances are in miles where people read miles (`miles`, from the visitor's
  * country). Nothing is counted but a tap on a way on, and no town is ever in an event.
  */
 export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData; initial: { a: Town; b: Town } | null; broken: boolean; miles: boolean }) {
@@ -38,16 +52,36 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
   const [copied, setCopied] = useState(false);
   const [manual, setManual] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
+  // False in the server's page and the first render: without JavaScript the map is never asked, so
+  // the page says how far each travels rather than "Finding…", which would never resolve.
+  const live = useSyncExternalStore(noop, () => true, () => false);
+  const toolRef = useRef<HTMLDivElement>(null);
   const labels = { label: "", placeholder: tw("placeholder"), nearMe: tw("nearMe"), searching: tw("searching"), nothing: tw("nothing"), failed: tw("failed") };
   const { answer } = useHalfway(a, b, locale);
 
-  // The two towns in the address once there is an answer: a reload, or Back from a way on, opens on it again.
+  // Back from a way on, or a reload, with no link in the address: the towns this entry kept.
+  useEffect(() => {
+    if (initial) return;
+    const frame = requestAnimationFrame(() => {
+      const kept = keptTowns(window.history.state);
+      // Never over what is being typed: on a slow phone a town can be typed before the script runs.
+      const typing = Array.from(toolRef.current?.querySelectorAll("input") ?? []).some((input) => input.value.trim());
+      if (!kept || typing) return;
+      setA((current) => current ?? kept.a);
+      setB((current) => current ?? kept.b);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [initial]);
+
+  // The two towns in this history entry's state, never in the address. A link they came in on stays
+  // in the address only while it still says these two towns.
   useEffect(() => {
     if (!a || !b) return;
     const url = new URL(window.location.href);
-    const search = `?${halfwayQuery(a, b)}`;
-    if (url.search === search) return;
-    window.history.replaceState(window.history.state, "", `${url.pathname}${search}${url.hash}`);
+    const linked = readHalfwayLink(url.searchParams);
+    const stillLinked = linked !== null && url.search === `?${halfwayQuery(linked.a, linked.b)}` && url.search === `?${halfwayQuery(a, b)}`;
+    const state = { ...(window.history.state ?? {}), [KEPT]: { a: town(a), b: town(b) } };
+    window.history.replaceState(state, "", stillLinked ? url.href : `${url.pathname}${url.hash}`);
   }, [a, b]);
 
   const distance = (km: number) => (miles ? t("mi", { n: Math.max(1, Math.round(km * 0.621371)) }) : t("km", { n: Math.max(1, Math.round(km)) }));
@@ -90,7 +124,7 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
         {name}
       </p>
       <p className={SUB}>
-        {answer.offKm < 40
+        {isEven(answer.kmFromA, answer.kmFromB)
           ? answer.region
             ? tt("exactIn", { region: answer.region })
             : t("halfwayExact")
@@ -127,7 +161,9 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
               : answer.kind === "unnamed"
                 ? t("eachWaySub")
                 : answer.kind === "pending"
-                  ? t("finding")
+                  ? live
+                    ? t("finding")
+                    : t("eachWaySub")
                   : t("failed")}
       </p>
       {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" ? (
@@ -141,7 +177,7 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
 
   return (
     <>
-      <div data-halfway-tool className="rounded-[1.75rem] border border-page-line bg-page-raised p-5 shadow-page-card sm:p-7">
+      <div ref={toolRef} data-halfway-tool className="rounded-[1.75rem] border border-page-line bg-page-raised p-5 shadow-page-card sm:p-7">
         <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
           <div>
             <p className="mb-1.5 text-[0.875rem] font-medium text-page-body">{t("you")}</p>

@@ -50,6 +50,17 @@ export const lengthFits = (days: number, length: MatchLength): boolean => length
 
 type Ranked = { pick: MatchPick; weight: number; score: number; index: number };
 
+/** How much a season starting soon counts, at most (next month). Nearness counts up to 1. */
+export const SEASON_SOON = 0.4;
+
+/** Out of season: SEASON_SOON × 11/12 when its season starts next month, falling with each month to wait; 0 with no season. */
+function seasonSoon(bestMonths: readonly number[], month: number): number {
+  const next = nextBestMonth(bestMonths, month);
+  if (next === null) return 0;
+  const wait = (next - month + 12) % 12 || 12;
+  return (SEASON_SOON * (12 - wait)) / 12;
+}
+
 /** Every trip once, best first. `month` is 1–12. */
 export function matchTrips(wish: MatchWish, trips: readonly MatchTrip[], month: number): MatchPick[] {
   const ranked: Ranked[] = trips.map((trip, index) => {
@@ -86,7 +97,11 @@ export function matchTrips(wish: MatchWish, trips: readonly MatchTrip[], month: 
         near = Math.max(0, 1 - exact / 3000);
       }
     }
-    const score = (inSeason ? 2 : 0) + near;
+    // In season now counts most; out of it, the sooner its season starts the better (in late November
+    // Prague to Vienna and Copenhagen, whose Decembers are near, before Lisbon's March). Never as much
+    // as being in season, and less than a short way from home: a trip that starts at their own
+    // airport still leads one that comes into season next month a flight away.
+    const score = (inSeason ? 2 : seasonSoon(trip.bestMonths, month)) + near;
     const pick: MatchPick = {
       id: trip.id,
       relaxed,

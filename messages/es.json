@@ -2380,7 +2380,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "Relación a distancia: ideas, citas y un punto a medio camino",
+      "title": "Relación a distancia: ideas, citas, regalos y husos horarios",
       "description": "Herramientas gratis para una relación a distancia: la ciudad a medio camino, las horas en que estáis despiertos, citas para dos pantallas y regalos al instante."
     },
     "eyebrow": "A distancia",
@@ -2388,7 +2388,7 @@
     "h1b": "estar lejos.",
     "sub": "Unas cuantas herramientas pequeñas para los meses entre visita y visita: dónde quedar, cuándo estáis los dos despiertos y qué hacer en una llamada además de repasar el día.",
     "meet": {
-      "title": "Quedad a medio camino",
+      "title": "Entre vuestras dos ciudades",
       "sub": "Entran dos ciudades. Sale cuánto os separa, la ciudad a medio camino y las horas del día en que estáis los dos despiertos.",
       "tool": "Solo el punto medio, con un enlace para enviar",
       "you": "Dónde estás tú",
@@ -2396,9 +2396,9 @@
       "hint": "Elige las dos ciudades y hacemos las cuentas.",
       "apart": "Distancia",
       "miles": "{miles} millas, en línea de vuelo",
+      "kmFlown": "{km} km, en línea de vuelo",
       "halfway": "A medio camino",
       "halfwayExact": "Casi exactamente a medio camino entre los dos.",
-      "halfwayNear": "La ciudad más cercana a vuestro punto medio, a {km} km de él.",
       "datesThere": "Ideas para una cita en {city}",
       "sea": "Mar abierto",
       "seaSub": "A medio camino entre los dos solo hay mar. A uno le toca coger un avión.",
@@ -2511,7 +2511,7 @@
     },
     "match": {
       "label": "Adónde",
-      "title": "¿Adónde nos vamos los dos?",
+      "title": "¿Adónde nos escapamos?",
       "line": "Tres respuestas y un aeropuerto. Elegimos tres de los {count}.",
       "from": "Salimos de",
       "fromHint": "Opcional. Sin él, nos saltamos las horas de vuelo.",
@@ -2527,8 +2527,8 @@
         "week": "una semana"
       },
       "budget": {
-        "1": "unos {money} al día para dos como mucho",
-        "2": "unos {money} al día para dos como mucho",
+        "1": "hasta {money} al día para dos",
+        "2": "hasta {money} al día para dos",
         "any": "sin tope de gasto"
       },
       "kind": {
@@ -2552,16 +2552,7 @@
       "airTrain": "Alrededor de {time} de vuelo desde {city}. Quizá os compense más el tren.",
       "home": "Empieza donde estáis. No hay vuelo que buscar.",
       "inSeason": "En temporada ahora",
-      "fits": "Encaja con {list}.",
-      "fit": {
-        "budget": "un presupuesto de {money} al día",
-        "kind": {
-          "city": "una escapada urbana",
-          "road": "un viaje en coche",
-          "islands": "un viaje por islas",
-          "train": "un viaje en tren"
-        }
-      },
+      "fitsAll": "Encaja con todo.",
       "closest": "Lo más cercano a lo que pedís.",
       "allBut": "Encaja con todo menos {wishes}.",
       "fitsLater": "Su temporada empieza en {month}.",
@@ -3386,7 +3377,7 @@
     },
     "dates": {
       "line": "¿Preparáis también el día?",
-      "link": "Ideas de citas para un aniversario",
+      "link": "Una noche de aniversario, hora a hora",
       "newTab": "se abre en otra pestaña"
     },
     "page": {

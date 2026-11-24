@@ -15,8 +15,15 @@ import { IdeasDots } from "@/components/templates/page/ideas-dots";
 export type WayKey = "gift" | "dates" | "trip";
 type Way = { key: WayKey; href: string; title: string; image: string | null; style?: CSSProperties; seed?: () => void; /** Where the picture is held in its square. */ focus?: string };
 
-/** The Halfway poster's square, below its sample distance and above its button. */
-export const GIFT_POSTER_FOCUS = "object-[50%_61%]";
+/**
+ * The Halfway poster (1170 x 1800) held on its map alone: the sky, the arc of hearts and the two
+ * houses, from y 430 to 1120. Above that is its own sample "6,863 km between you"; below, the
+ * sample names and towns (Iván, Clara, LISBON, BOSTON), which under a couple's real answer would read
+ * as theirs. In a square (one card to a screen, or three in a row) it is enlarged 1.7 times about
+ * its centre; in the wider 3:2 of two in a row, 1.13 times.
+ */
+export const GIFT_POSTER_FOCUS = "origin-center object-[50%_30%] scale-[1.7]";
+export const GIFT_POSTER_FOCUS_WIDE = "origin-center object-[50%_30%] scale-[1.7] sm:object-[50%_38%] sm:scale-[1.13]";
 
 const TO = { gift: "halfway_gift", dates: "dates", trip: "trip" } as const;
 
@@ -25,7 +32,9 @@ const TO = { gift: "halfway_gift", dates: "dates", trip: "trip" } as const;
  * towns and a line for the middle; date ideas there (its own page where it is one of our cities);
  * and a trip for the next visit, the one whose route starts nearest. Before the towns are known
  * each still leads somewhere honest: the gift's page, the dates, the trips. A card is a label, a
- * title and a picture: no paragraph, no button. On a phone they are one row, one to a screen.
+ * title and a picture: no paragraph, no button. On a phone they are one row, one to a screen; on a
+ * desk three stand in a row of squares, and two share the whole width in wider pictures, so no
+ * third of the row is left empty.
  */
 export function WaysOn({
   a,
@@ -48,6 +57,7 @@ export function WaysOn({
 }) {
   const t = useTranslations("ldr.ways");
   const both = a && b ? { a, b } : null;
+  const two = ways.length === 2;
   // The place the answer names (the table's city or the map's town), already in the page's language.
   const near = answerPlace(answer);
   const city = near?.name ?? "";
@@ -59,7 +69,7 @@ export function WaysOn({
     image: data.giftPoster,
     // The poster (1170 x 1800) opens on its own "6,863 km between you", which under the couple's real
     // answer reads as theirs: the square is held below it (y 384 to 1554), on the map of the two towns.
-    focus: GIFT_POSTER_FOCUS,
+    focus: two ? GIFT_POSTER_FOCUS_WIDE : GIFT_POSTER_FOCUS,
     seed: both ? () => saveGiftSeed({ slug: HALFWAY_GIFT_SLUG, fields: halfwayGiftFields(both.a, both.b, near ? t("note", { city }) : undefined) }) : undefined,
   });
 
@@ -93,7 +103,7 @@ export function WaysOn({
         id={rowId}
         className={cn(
           "-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-1 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:gap-x-5 sm:overflow-visible sm:px-0 sm:pb-0",
-          ways.length === 3 ? "sm:grid-cols-3" : "sm:max-w-xl sm:grid-cols-2",
+          two ? "sm:grid-cols-2" : "sm:grid-cols-3",
           className,
         )}
       >
@@ -108,7 +118,10 @@ export function WaysOn({
               className="group block rounded-[1.25rem] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-page-ink"
             >
               <span
-                className="relative block aspect-square overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:shadow-page-lift motion-reduce:transition-none pointer-fine:group-hover:-translate-y-1"
+                className={cn(
+                  "relative block aspect-square overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:shadow-page-lift motion-reduce:transition-none pointer-fine:group-hover:-translate-y-1",
+                  two && "sm:aspect-[3/2]",
+                )}
                 style={way.style}
               >
                 {way.image ? (
