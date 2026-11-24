@@ -157,6 +157,40 @@ test.describe("two more gifts under the link", () => {
     await expect(bought.getByRole("link", { name: "Start the Christmas one now" })).toHaveAttribute("href", /\/occasions\/christmas$/);
   });
 
+  test("the foot's lines are evenly spaced, and Terms is still a 44 px tap target", async ({ page }) => {
+    await open(page, "/share-preview");
+    const foot = page.getByTestId("pair-foot");
+    await expect(foot).toContainText("A gift you haven't used can be refunded for 30 days. Terms");
+    // Every line box the same height: the link's tap area no longer stretches the one it sits on.
+    const lines = await foot.evaluate((el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const tops = [...new Set([...range.getClientRects()].map((r) => Math.round(r.top)))].sort((a, b) => a - b);
+      return tops.slice(1).map((top, i) => top - tops[i]);
+    });
+    expect(lines.length).toBeGreaterThan(0);
+    for (const gap of lines) expect(gap).toBeLessThanOrEqual(22);
+    // The tap area is the pseudo-element around the word.
+    const hit = await foot.getByRole("link", { name: "Terms" }).evaluate((a) => parseFloat(getComputedStyle(a, "::after").height));
+    expect(hit).toBeGreaterThanOrEqual(44);
+  });
+
+  test("on a 320 px phone the day rows keep the name on one line and the distance goes under the date", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await open(page, "/es/share-preview");
+    const row = page.getByTestId("pair-days").locator("li").nth(1);
+    await expect(row).toContainText("San Valentín");
+    const name = row.getByText("San Valentín", { exact: true });
+    const date = row.getByText("14 de febrero", { exact: true });
+    const away = row.getByText(/^en \d+ semanas$/);
+    // One line each (15 px text, leading-snug; 14 px text).
+    expect((await name.boundingBox())!.height).toBeLessThan(26);
+    expect((await date.boundingBox())!.height).toBeLessThan(24);
+    expect((await away.boundingBox())!.y).toBeGreaterThan((await date.boundingBox())!.y);
+    expect((await away.boundingBox())!.x).toBe((await date.boundingBox())!.x);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  });
+
   test("a gift sent on one of the two says so; a sender with no offer sees no card at all", async ({ page }) => {
     await open(page, "/share-preview?used=1", { ready: 1, offer: false });
     await expect(page.getByTestId("pair-used")).toContainText("This was one of your gifts. Nothing to pay.");

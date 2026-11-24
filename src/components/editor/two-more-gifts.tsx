@@ -238,10 +238,11 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
       </div>
 
       <ul className="mt-4 space-y-2">
-        {(["tickAny", "tickMidnight", "tickBack"] as const).map((key) => (
+        {/* The 30-day refund is said once, in the foot beside Terms. */}
+        {(["tickAny", "tickMidnight"] as const).map((key) => (
           <li key={key} className="flex items-start gap-2.5 text-sm text-ink">
             <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
-            <span>{t(key)}</span>
+            <span className="text-pretty">{t(key)}</span>
           </li>
         ))}
       </ul>
@@ -291,13 +292,13 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         )}
       </div>
 
-      <p className={cn("text-center text-[13px] text-muted-foreground", useWallet && !paying ? "mt-2" : "mt-4")}>{t("foot")}</p>
-      <p className="mt-1 text-center text-[13px] text-muted-foreground">
-        {t("notice")}{" "}
+      <p className={cn("text-center text-[13px] text-pretty text-muted-foreground", useWallet && !paying ? "mt-2" : "mt-4")} data-testid="pair-foot">
+        {t("foot")} {t("notice")}{" "}
+        {/* The 44 px tap target is a pseudo-element around the word, so the line it sits on keeps its height. */}
         <Link
           href="/legal/terms"
           target="_blank"
-          className="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="relative underline underline-offset-2 after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-[''] hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           {t("terms")}
         </Link>

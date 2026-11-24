@@ -210,6 +210,15 @@ describe("the publish sheet's “One payment, no subscription”", () => {
     expect(signedIn(decidePublish(premium, ready, { unlocked: true }, { ...none, removeWatermark: true }))).toBe(false);
   });
 
+  it("is not said when the gift goes out on a gift already paid for (It's already paid for. in place of the pay panel)", () => {
+    // The decision still says payment_required: the sheet draws AlreadyPaid, not the paywall.
+    const decision = decidePublish(premium, ready, { unlocked: false }, none);
+    expect(publishAsksForMoney({ ...web, authed: true, wouldNeedPayment: true, decision, giftReady: true })).toBe(false);
+    expect(publishAsksForMoney({ ...web, authed: true, wouldNeedPayment: true, decision, giftReady: false })).toBe(true);
+    // A guest has no gifts ready to use: the flag never hides their paywall's line.
+    expect(publishAsksForMoney({ ...web, authed: false, wouldNeedPayment: true, decision: null, giftReady: true })).toBe(true);
+  });
+
   it("is not said before there is a price to show", () => {
     // Their entitlement is still loading, or the gift is missing a name.
     expect(signedIn(null)).toBe(false);

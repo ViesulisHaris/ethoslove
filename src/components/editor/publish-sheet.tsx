@@ -499,7 +499,7 @@ export function PublishSheet({
     if (keepArm) track(keepArm === "keep" ? "letter_confirm_keep" : "letter_confirm_plain", { guest: !state.authed });
   };
   // "One payment, no subscription" under a free publish read as if sending it cost something.
-  const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision });
+  const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision, giftReady: useGiftReady });
   // Guests can't upload before they have an account; those uploads run right after payment.
   const guestProblems = problems.filter((p) => p !== "uploadsPending");
   // The simpler panel folds a finished checklist into one line; anything still missing opens it again.

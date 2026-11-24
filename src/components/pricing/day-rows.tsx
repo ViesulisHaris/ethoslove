@@ -9,15 +9,15 @@ export function DayRows({ rows }: { rows: DayRow[] }) {
   return (
     <ul className="mt-4 divide-y divide-border border-y border-border" data-testid="pair-days">
       {rows.map((row) => (
-        <li key={row.key} className="flex items-center gap-4 py-2.5">
+        // Picture, then name over date, then the distance on the right; under 360 px the distance
+        // moves under the date so the name and date keep their room (no "San / Valentín" on a small phone).
+        <li key={row.key} className="grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-x-4 py-2.5 max-[359px]:grid-cols-[2.5rem_minmax(0,1fr)]">
           {/* The occasions' own rendered pictures (public/art/occasions), 6 KB each. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={row.icon} alt="" width={40} height={40} className="size-10 shrink-0 object-contain" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[15px] leading-snug font-medium text-ink">{row.name}</p>
-            <p className="text-sm text-muted-foreground">{row.date}</p>
-          </div>
-          <p className="shrink-0 text-[13px] text-ink-soft">{row.away}</p>
+          <img src={row.icon} alt="" width={40} height={40} className="row-span-2 size-10 object-contain max-[359px]:row-span-3" />
+          <p className="col-start-2 row-start-1 self-end text-[15px] leading-snug font-medium text-ink">{row.name}</p>
+          <p className="col-start-2 row-start-2 self-start text-sm text-muted-foreground">{row.date}</p>
+          <p className="col-start-3 row-span-2 row-start-1 text-[13px] text-ink-soft max-[359px]:col-start-2 max-[359px]:row-span-1 max-[359px]:row-start-3">{row.away}</p>
         </li>
       ))}
     </ul>

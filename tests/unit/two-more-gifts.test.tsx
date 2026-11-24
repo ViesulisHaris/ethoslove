@@ -65,10 +65,14 @@ describe("the two more gifts card", () => {
       expect(html).toContain("Valentine's Day 14 February in 12 weeks");
       expect(html).toContain(`Both gifts Separately ${apart} ${price}`);
       expect(html).toContain(`Add both for ${price}`);
-      expect(html).toContain("Not used? Your money back, for 30 days");
       expect(html).toContain("Any template, with everything in it");
-      expect(html).toContain("Set to open at midnight on their day");
-      expect(html).toContain("Paid once. They wait on your account.");
+      // "Can": nothing is scheduled until the buyer makes each gift.
+      expect(html).toContain("Can open at midnight on their day");
+      expect(html).not.toContain("Set to open");
+      // The 30-day refund is said once, in the foot beside Terms.
+      expect(html).toContain("Paid once. They wait on your account. A gift you haven't used can be refunded for 30 days. Terms");
+      expect(html.match(/30 days/g)).toHaveLength(1);
+      expect(html).not.toContain("money back");
       // Nothing that isn't true on this branch yet (the started gift is the next area).
       expect(html).not.toContain("photos already in");
       expect(html).not.toMatch(/!|unforgettable|perfect for/i);
@@ -79,7 +83,9 @@ describe("the two more gifts card", () => {
     const html = text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={days} name="Mia" onBought={() => {}} />, "es"));
     expect(html).toContain("Que nadie caiga en el olvido.");
     expect(html).toContain("Hoy te has acordado. Lo próximo:");
-    expect(html).toContain("¿No lo usas? 30 días para el reembolso");
+    expect(html).toContain("Puede abrirse a medianoche, justo en su día");
+    expect(html).not.toContain("¿No lo usas?");
+    expect(html.match(/30 días/g)).toHaveLength(1);
     expect(html).toContain("Cualquier plantilla, con todo incluido");
     expect(html).not.toMatch(/listo/);
     expect(html).toContain("Navidad 25 de diciembre en 4 semanas");
@@ -103,10 +109,13 @@ describe("the two more gifts card", () => {
     expect(html).toContain("They wait on your account and never expire.");
   });
 
-  it("the Terms link is a whole tap target with a focus ring", () => {
+  it("the Terms link is a whole tap target with a focus ring, without stretching the line it sits on", () => {
     const html = intl(<Offer offer={offer} days={days} name="Mia" onBought={() => {}} />);
     const link = html.match(/<a href="\/legal\/terms"[^>]*>/)?.[0] ?? "";
-    expect(link).toContain("min-h-11");
+    // 13 px text plus 2 x 14 px of pseudo-element: at least 44 px tall, and the line box keeps its height.
+    expect(link).toContain("after:-inset-y-3.5");
+    expect(link).toContain("relative");
+    expect(link).not.toMatch(/min-h-|inline-flex/);
     expect(link).toContain("focus-visible:outline-2");
   });
 
@@ -120,7 +129,7 @@ describe("the two more gifts card", () => {
     const withBirthday = nextDays(new Date("2026-11-24T00:00:00.000Z"), [{ occasion: "birthday", month: 12, day: 10, recipientName: "Mia" }], null);
     const html = text(intl(<Bought days={withBirthday} name="Mia" />));
     expect(html).toContain("Mia's birthday 10 December in 2 weeks");
-    expect(html).toContain("Start the one for Mia's birthday");
+    expect(html).toContain("Start the one for Mia's birthday now");
     expect(html).not.toMatch(/Start the Mia's/);
   });
 });
@@ -132,11 +141,26 @@ describe("a day named inside a sentence, per kind, in both languages", () => {
     // day, en startOne, es startOne, en leftOne, es leftOne, en make, es make
     [day("christmas"), "Start the Christmas one now", "Empezar ya el de Navidad", "One left, ready for Christmas.", "Te queda uno para Navidad.", "Make the Christmas one", "Hacer el de Navidad"],
     [day("valentines"), "Start the Valentine's one now", "Empezar ya el de San Valentín", "One left, ready for Valentine's Day.", "Te queda uno para San Valentín.", "Make the Valentine's one", "Hacer el de San Valentín"],
-    [day("birthday", "Mia"), "Start the one for Mia's birthday", "Empezar ya el del cumpleaños de Mia", "One left, ready for Mia's birthday.", "Te queda uno para el cumpleaños de Mia.", "Make the one for Mia's birthday", "Hacer el del cumpleaños de Mia"],
+    [day("birthday", "Mia"), "Start the one for Mia's birthday now", "Empezar ya el del cumpleaños de Mia", "One left, ready for Mia's birthday.", "Te queda uno para el cumpleaños de Mia.", "Make the one for Mia's birthday", "Hacer el del cumpleaños de Mia"],
     [day("birthday"), "Start the birthday one now", "Empezar ya el del cumpleaños", "One left, ready for their birthday.", "Te queda uno para su cumpleaños.", "Make the birthday one", "Hacer el del cumpleaños"],
     [day("anniversary"), "Start the anniversary one now", "Empezar ya el del aniversario", "One left, ready for your anniversary.", "Te queda uno para vuestro aniversario.", "Make the anniversary one", "Hacer el del aniversario"],
     [day("other", "Mia"), "Start the one for Mia now", "Empezar ya el de Mia", "One left, ready for Mia's day.", "Te queda uno para el día de Mia.", "Make the one for Mia", "Hacer el de Mia"],
   ];
+
+  it("every start button is worded the same way: the day, then now", () => {
+    const en = t("en", "editor.share.pair");
+    const es = t("es", "editor.share.pair");
+    for (const [d] of cases) expect(en("startOne", dayArgs(d))).toMatch(/^Start .* now$/);
+    for (const [d] of cases) expect(es("startOne", dayArgs(d))).toMatch(/^Empezar ya /);
+    expect(en("startAny")).toBe("Start one now");
+    expect(es("startAny")).toBe("Empezar uno ya");
+  });
+
+  it("the gifts page strip's heading starts with a capital", () => {
+    expect(t("en", "dashboard.ready")("count", { count: 2 })).toBe("Gifts ready to make");
+    expect(t("en", "dashboard.ready")("count", { count: 1 })).toBe("Gift ready to make");
+    expect(t("es", "dashboard.ready")("count", { count: 2 })).toBe("Regalos pagados por hacer");
+  });
   for (const [d, enStart, esStart, enLeft, esLeft, enMake, esMake] of cases) {
     it(`${d.kind}${d.name ? " (named)" : ""}`, () => {
       expect(t("en", "editor.share.pair")("startOne", dayArgs(d))).toBe(enStart);
