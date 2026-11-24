@@ -217,7 +217,7 @@ test.describe("the account page's Ethos for Two section", () => {
     await page.goto("/for-two/preview?state=monthly");
     await page.getByTestId("membership-switch-yearly").click();
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toContainText(`You'll pay €25.00 today: €29.99 for a year, minus €4.99 for the rest of this month. It then renews every year on ${longDate(periodEnd)} until you cancel.`);
+    await expect(dialog).toContainText(`You’ll pay €25.00 today: €29.99 for a year, minus €4.99 for the rest of this month. It then renews every year on ${longDate(periodEnd)} until you cancel.`);
     await dialog.getByRole("button", { name: "Switch and pay €25.00" }).click();
     await expect(dialog).toContainText("The payment didn’t go through, so nothing has changed.");
     await expect(dialog.getByRole("button", { name: "Update card" })).toBeVisible();

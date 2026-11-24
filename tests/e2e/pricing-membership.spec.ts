@@ -38,7 +38,7 @@ test.describe("Ethos for Two, sold as a subscription", () => {
     await expect(page.getByTestId("plan-yearly")).toContainText("Save 50%");
 
     const offer = page.getByTestId("membership-offer");
-    await expect(hiddenAbove(offer.getByText("That's €2.50 a month · save 50% on monthly"))).toHaveCount(0);
+    await expect(hiddenAbove(offer.getByText("That’s €2.50 a month · save 50% on monthly"))).toHaveCount(0);
     await expect(hiddenAbove(offer.getByText("€29.99 today, then every year until you cancel. We’ll remind you a week before each renewal."))).toHaveCount(0);
     await expect(offer.getByText("One payment covers both of you · cancel any time")).toBeVisible();
     await expect(page.getByTestId("buy-membership")).toHaveText("Get Ethos for Two");
@@ -57,7 +57,7 @@ test.describe("Ethos for Two, sold as a subscription", () => {
     await expect(page.getByTestId("plan-monthly")).toHaveAttribute("aria-checked", "true");
     await expect(hiddenAbove(offer.getByText("Billed monthly · cancel any time"))).toHaveCount(0);
     await expect(hiddenAbove(offer.getByText("€4.99 today, then every month until you cancel. Cancel any time from your account."))).toHaveCount(0);
-    await expect(hiddenAbove(offer.getByText("That's €2.50 a month · save 50% on monthly"))).toHaveCount(1);
+    await expect(hiddenAbove(offer.getByText("That’s €2.50 a month · save 50% on monthly"))).toHaveCount(1);
     expect(await buttonTop()).toBe(before);
 
     // A radio group: the arrow keys move the choice and the focus with it.

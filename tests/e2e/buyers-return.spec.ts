@@ -316,7 +316,7 @@ test.describe("the routes behind them", () => {
     test(`${path} with a forged token shows a page and acts on nothing`, async ({ page, request }) => {
       const response = await page.goto(`${path}?t=5f0c6f7e-3a55-4d2b-9a57-0e8a3f1b2c4d.forged&l=en`);
       expect([404, 503]).toContain(response?.status());
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This link doesn't work\.|Something went wrong\./);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This link doesn’t work\.|Something went wrong\./);
       await expect(page.getByRole("button")).toHaveCount(0);
       const oneClick = await request.post(`${path}?t=forged`, { form: { "List-Unsubscribe": "One-Click" } });
       expect([404, 503]).toContain(oneClick.status());

@@ -69,7 +69,7 @@ test.describe("two more gifts under the link", () => {
     await expect(card).toContainText("Nobody likes to be forgotten.");
     await expect(card).toContainText("You remembered today. Next up:");
     await expect(card).toContainText("Christmas");
-    await expect(card).toContainText("Valentine's Day");
+    await expect(card).toContainText("Valentine’s Day");
     await expect(card.getByTestId("pair-price")).toHaveText("€5");
     await expect(card).toContainText("Separately €19.98");
     const add = card.getByTestId("pair-add");
@@ -167,20 +167,20 @@ test.describe("two more gifts under the link", () => {
     // The moment the card is there, its rows are the final ones.
     const rows = page.getByTestId("pair-days").locator("li");
     await expect(rows).toHaveCount(2);
-    await expect(rows.nth(0)).toContainText("Mia's birthday");
-    await expect(rows.nth(1)).toContainText("Valentine's Day");
+    await expect(rows.nth(0)).toContainText("Mia’s birthday");
+    await expect(rows.nth(1)).toContainText("Valentine’s Day");
     const before = await page.getByTestId("pair-add").boundingBox();
     await page.waitForTimeout(1000);
     expect(await page.getByTestId("pair-add").boundingBox()).toEqual(before);
     await expect(rows).toHaveCount(2);
-    await expect(rows.nth(0)).toContainText("Mia's birthday");
+    await expect(rows.nth(0)).toContainText("Mia’s birthday");
   });
 
   for (const [when, rows] of [
-    ["2026-12-20T10:00:00", ["Christmas in 5 days", "Valentine's Day in 8 weeks"]],
-    ["2026-12-24T10:00:00", ["Christmas in 1 day", "Valentine's Day in 7 weeks"]],
+    ["2026-12-20T10:00:00", ["Christmas in 5 days", "Valentine’s Day in 8 weeks"]],
+    ["2026-12-24T10:00:00", ["Christmas in 1 day", "Valentine’s Day in 7 weeks"]],
     // Christmas is more than 183 days off: one row, and the card is otherwise as it is.
-    ["2027-02-10T10:00:00", ["Valentine's Day in 4 days"]],
+    ["2027-02-10T10:00:00", ["Valentine’s Day in 4 days"]],
   ] as const) {
     test(`in the busiest week (${when.slice(0, 10)}) the near day comes first, and no day a year away is named`, async ({ page }) => {
       await page.clock.setFixedTime(new Date(when));
