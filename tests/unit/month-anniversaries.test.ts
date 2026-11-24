@@ -62,6 +62,10 @@ const unnumbered = (s: string) => s.toLowerCase().replace(NUMBER_WORDS, "#").rep
 const all = () => MONTHS.flatMap((n) => GIFT_LOCALES.map((locale) => ({ n, locale, guide: MONTH_GUIDES[n][locale] })));
 
 describe("anniversary gifts by month", () => {
+  it("there are 24 months, 1 to 24", () => {
+    expect([...MONTHS]).toEqual(Array.from({ length: 24 }, (_, i) => i + 1));
+  });
+
   it("the months have addresses that are theirs alone", () => {
     for (const n of MONTHS) {
       expect(monthFromSlug(monthSlug(n)), String(n)).toBe(n);
