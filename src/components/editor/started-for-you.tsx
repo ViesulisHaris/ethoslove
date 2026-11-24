@@ -30,7 +30,6 @@ export function StartedForYou({
   onUse,
   onDismiss,
   noPhotos = false,
-  holdHeight,
 }: {
   state: StartedState;
   onChangePhotos: () => void;
@@ -39,8 +38,6 @@ export function StartedForYou({
   onDismiss: () => void;
   /** A free note, where photos are the paid step: the card never asks for them. */
   noPhotos?: boolean;
-  /** An offer that replaced a pending card already on screen keeps that card's height, so the form under it stays where it is. */
-  holdHeight?: number;
 }) {
   const t = useTranslations("editor.started");
   const photos = useEditor((s) => s.data.photos);
@@ -71,11 +68,10 @@ export function StartedForYou({
   if (state.kind === "offer") {
     return (
       // Clear of "How it works", which floats over the top of the form on a phone.
-      <div
-        className="mt-6 mb-8 flex flex-col justify-center rounded-[24px] bg-card px-5 py-4 ring-1 ring-black/5 md:mt-0"
-        style={holdHeight ? { minHeight: holdHeight } : undefined}
-        data-testid="started-offer"
-      >
+      // Its own height, always: an offer that replaces a pending card is shorter, and the form under it
+      // moves up once, as the card changes, and never again (remind-N3-2: held at the pending card's
+      // height it was a mostly empty box).
+      <div className="mt-6 mb-8 rounded-[24px] bg-card px-5 py-4 ring-1 ring-black/5 md:mt-0" data-testid="started-offer">
         <p className="text-[15px] leading-snug">{t(state.from.mode === "photos" ? "offer" : "offerNames", { name: state.from.name })}</p>
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
           <button

@@ -144,8 +144,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   const reinit = useRef<() => Promise<void>>(async () => {});
   // `done`: the start with its photos already on this device, when it came after the form showed and
   // was only offered: "Use them" puts those in rather than fetching every photo again.
-  // `hold`: the height of the pending card an offer replaced on screen, kept so the form never moves up.
-  const [started, setStarted] = useState<{ state: StartedState; start: PreparedStart; done?: StartSeed; hold?: number } | null>(null);
+  const [started, setStarted] = useState<{ state: StartedState; start: PreparedStart; done?: StartSeed } | null>(null);
   // While a start is on its way, the form waits behind its skeleton, so "Started for you." and the
   // names and photos arrive with it rather than pushing it down once it is read. Never for long:
   // START_WAIT_MS after the start begins (beginStart) the form shows; a start that comes after goes
@@ -228,11 +227,8 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     // Something went into the form while the photos came (only possible once it showed, late): the
     // start is offered, with its photos kept for "Use them". An empty form takes it in place.
     if (draftHasContent(now.data)) {
-      // The pending card was on screen above what they typed: the offer takes its height, so the
-      // field they are typing in does not jump up under their fingers.
-      const shown = document.querySelector<HTMLElement>('[data-testid="started-pending"]');
-      const hold = shown ? shown.getBoundingClientRect().height : undefined;
-      if (done.from.mode !== "name") setStarted({ state: { kind: "offer", from: start.from }, start, done, hold });
+      // The offer takes its own, shorter height: the form under it moves up once, now, and not again.
+      if (done.from.mode !== "name") setStarted({ state: { kind: "offer", from: start.from }, start, done });
       return;
     }
     await applySeed(done.seed);
@@ -492,7 +488,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
-            {ready && !starting && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={dismissStart} noPhotos={startPhotoLimit(manifest) === 0} holdHeight={started.hold} /> : null}
+            {ready && !starting && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={dismissStart} noPhotos={startPhotoLimit(manifest) === 0} /> : null}
             {ready && mod && !starting ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>

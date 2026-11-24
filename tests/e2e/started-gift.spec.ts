@@ -6,6 +6,49 @@ import { needPreviews } from "./server-state";
  * development-only `?start=demo`: the template's own demo names and photos stand in for the last gift
  * for that person. A production build ignores it, so these skip there.
  */
+/**
+ * remind-N3-2: the reader types while the photos are still coming. The pending card gives way to the
+ * one-line offer at the offer's own height (no blank band above or below its words), the field they
+ * typed in moves up once, by the difference, at that moment, and stays put after it.
+ */
+async function typedDuringWait(page: import("@playwright/test").Page, path: string) {
+  await page.route("**/demo/photos/**", async (route) => {
+    if (route.request().resourceType() !== "fetch") return route.continue();
+    await new Promise((r) => setTimeout(r, 9000));
+    await route.continue();
+  });
+  await page.goto(path);
+  const pending = page.getByTestId("started-pending");
+  await expect(pending).toBeVisible({ timeout: 30_000 });
+  const held = (await pending.boundingBox())!;
+  const input = page.locator('[data-tour="form"] input').first();
+  await input.fill("Sam");
+  const before = (await input.boundingBox())!;
+  const offer = page.getByTestId("started-offer");
+  await expect(offer).toBeVisible({ timeout: 30_000 });
+  await expect(pending).toHaveCount(0);
+  const card = (await offer.boundingBox())!;
+  // Its own height: shorter than the card it replaced, and its words and buttons fill it, with only
+  // its padding (16 px top and bottom) around them.
+  expect(card.height).toBeLessThan(held.height - 40);
+  const fill = await offer.evaluate((el) => {
+    const box = el.getBoundingClientRect();
+    const kids = [...el.children].map((c) => c.getBoundingClientRect());
+    return { top: kids[0].top - box.top, bottom: box.bottom - kids[kids.length - 1].bottom, minHeight: getComputedStyle(el).minHeight };
+  });
+  expect(fill.top).toBeLessThan(18);
+  expect(fill.bottom).toBeLessThan(18);
+  expect(["0px", "auto"]).toContain(fill.minHeight);
+  // Moved once, by exactly what the card lost, as the card changed…
+  const moved = (await input.boundingBox())!;
+  expect(Math.abs(before.y - moved.y - (held.height - card.height))).toBeLessThan(1);
+  // …and never again.
+  await page.waitForTimeout(3000);
+  expect(Math.abs((await input.boundingBox())!.y - moved.y)).toBeLessThan(1);
+  expect(Math.abs((await offer.boundingBox())!.height - card.height)).toBeLessThan(1);
+  await expect(input).toHaveValue("Sam");
+}
+
 test.describe("a gift started from the last one", () => {
   test.beforeEach(async ({ request }) => needPreviews(request));
 
@@ -99,21 +142,19 @@ test.describe("a gift started from the last one", () => {
       expect(Math.abs(((await input.boundingBox())?.y ?? 0) - (before?.y ?? -1))).toBeLessThan(1);
     });
 
-    test("typing while the photos come: the offer keeps the card's height, so the field does not jump", async ({ page }) => {
-      await slowPhotos(page);
-      await page.goto("/create/our-timeline?start=demo&ref=email-reminder-1");
-      const pending = page.getByTestId("started-pending");
-      await expect(pending).toBeVisible({ timeout: 30_000 });
-      const held = await pending.boundingBox();
-      const input = page.locator('[data-tour="form"] input').first();
-      await input.fill("Sam");
-      const before = await input.boundingBox();
-      const offer = page.getByTestId("started-offer");
-      await expect(offer).toBeVisible({ timeout: 30_000 });
-      await expect(pending).toHaveCount(0);
-      expect(Math.abs(((await offer.boundingBox())?.height ?? 0) - (held?.height ?? -1))).toBeLessThan(1);
-      expect(Math.abs(((await input.boundingBox())?.y ?? 0) - (before?.y ?? -1))).toBeLessThan(1);
-      await expect(input).toHaveValue("Sam");
+    test("typing while the photos come: the offer takes its own height, and the field moves once, when the card changes, and never again", async ({ page }) => {
+      await typedDuringWait(page, "/create/our-timeline?start=demo&ref=email-reminder-1");
+    });
+
+    test("and in Spanish", async ({ page }) => {
+      await typedDuringWait(page, "/es/create/our-timeline?start=demo&ref=email-reminder-1");
+    });
+  });
+
+  test.describe("on a desktop, the offer after typing is its own height too", () => {
+    test.use({ viewport: { width: 1280, height: 900 } });
+    test("in English", async ({ page }) => {
+      await typedDuringWait(page, "/create/our-timeline?start=demo&ref=email-reminder-1");
     });
   });
 
