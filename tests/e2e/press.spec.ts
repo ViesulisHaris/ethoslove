@@ -96,8 +96,12 @@ test.describe("with figures in (the sample)", () => {
     await expect(cards).toHaveCount(5);
     await expect(cards.locator("[data-card-title]")).toHaveText(["The Letter", "Bouquet", "Jar of Reasons", "Scratch Card", "Constellations"]);
     await expect(cards.locator("[data-share]")).toHaveText(["32%", "11%", "8%", "6%", "5%"]);
-    // The bare percentages say what they are a share of, in the section's own line.
+    // The bare percentages say what they are a share of, in the section's own line for the eye and
+    // after each share for a screen reader; the cover is for the eye, so the link is not heard tagline first.
     await expect(page.locator("section:has(#press-most-made)")).toContainText("Under each, its share of every card made.");
+    await expect(cards.first().locator("img")).toHaveAttribute("alt", "");
+    await expect(cards.first().locator("a")).toHaveAccessibleName("The Letter 32% of cards made");
+    await expect(cards.nth(1).locator("a")).toHaveAccessibleName("Bouquet 11% of cards made");
     const hrefs = await cards.locator("a").evaluateAll((links) => links.map((a) => a.getAttribute("href")));
     expect(hrefs).toEqual(["the-letter", "bouquet", "jar-of-reasons", "scratch-card", "constellations"].map((s) => `/templates/${s}`));
     await row.scrollIntoViewIfNeeded();
@@ -115,7 +119,8 @@ test.describe("with figures in (the sample)", () => {
     expect(ld).toContain('"@type":"Organization"');
     expect(ld).toContain('"alternateName":["Ethos Love","Tryethos"]');
     expect(ld).toContain('"@type":"WebPage"');
-    expect(ld).toContain('"dateModified":"2026-11-20"');
+    // The later of the words' day and the figures' day, as the sitemap's lastmod is (pressModified).
+    expect(ld).toContain('"dateModified":"2026-11-24"');
     expect(ld).toContain('"@type":"BreadcrumbList"');
     expect(ld).not.toContain("Dataset");
   });
@@ -174,10 +179,44 @@ test.describe("with figures in (the sample)", () => {
     const text = await page.locator("[data-page-theme]").innerText();
     for (const english of ["cards made", "Write to us", "Most made"]) expect(text).not.toContain(english);
     await expect(page.locator("a[download]")).toHaveText("Descargar el icono");
-    // The company's name with the quotation marks of Spanish type, and the name said as a sentence.
-    await expect(page.locator("section:has(#press-article)")).toContainText("SIA «MIGLAI»");
+    // The company's name as the footer writes it, and the name said as a sentence.
+    await expect(page.locator("section:has(#press-article)")).toContainText("SIA MIGLAI");
+    await expect(page.locator("footer")).toContainText("SIA MIGLAI");
     await expect(page.locator("section:has(#press-article)")).toContainText("El nombre es Ethos; tryethos.io es su dirección.");
-    await expect(page.locator("#press-article")).toHaveText("Cómo se escribe el nombre y qué imágenes usar");
+    await expect(page.locator("#press-article")).toHaveText("Cómo se escribe el nombre");
+  });
+
+  test("V8 the five shares sit on one line on a desk, even when a name wraps, in body type", async ({ page, isMobile }) => {
+    test.skip(isMobile, "one card to a screen on a phone");
+    for (const width of [1440, 1024, 700]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const where of ["/press", "/es/press"]) {
+        await page.goto(where);
+        const shares = page.locator("#press-most-made [data-share]");
+        const tops = await shares.evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)));
+        expect(new Set(tops).size, `${where} at ${width}: ${tops.join(", ")}`).toBe(1);
+        expect(await shares.first().evaluate((el) => getComputedStyle(el).letterSpacing), where).toMatch(/^(normal|0px)$/);
+      }
+    }
+  });
+
+  test("V9 a short link's target reaches past its word by the same on each side", async ({ page }) => {
+    await page.goto("/press");
+    const links = page.locator("#contact ul a, section:has(#press-article) a.underline");
+    expect(await links.count()).toBeGreaterThanOrEqual(6);
+    for (const box of await links.evaluateAll((els) =>
+      els.map((a) => {
+        const range = document.createRange();
+        range.selectNodeContents(a);
+        const word = range.getBoundingClientRect();
+        const link = a.getBoundingClientRect();
+        return { text: a.textContent, left: word.left - link.left, right: link.right - word.right, width: link.width, height: link.height };
+      }),
+    )) {
+      expect(Math.abs(box.left - box.right), `${box.text}: ${box.left} left, ${box.right} right`).toBeLessThanOrEqual(1);
+      expect(box.width, box.text ?? "").toBeGreaterThanOrEqual(44);
+      expect(box.height, box.text ?? "").toBeGreaterThanOrEqual(44);
+    }
   });
 
   test("V7 by keyboard alone", async ({ page, isMobile }) => {

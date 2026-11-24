@@ -2,9 +2,10 @@
 --
 -- READ-ONLY. One statement, a single SELECT: it writes nothing, creates nothing and calls no
 -- function of ours. Run it in the Supabase SQL editor (the editor shows the result of the last
--- statement only, which is why it is one statement) and copy the one cell it returns into
--- src/content/press-numbers.ts, key for key. Then follow "When the numbers arrive" in
--- docs/marketing/growth-build/PLAN-partners.md.
+-- statement only, which is why it is one statement). Then, in src/content/press-numbers.ts, as
+-- "When the numbers arrive" in docs/marketing/growth-build/PLAN-partners.md (Appendix C) says:
+-- set every key the one cell returns EXCEPT "teamAccounts" (a check, not a figure: the snapshot
+-- has no such key); set "countries" by hand (see below) or to null; and set "ready" to true.
 --
 -- BEFORE RUNNING: put the team's own sign-in addresses in `team` below, in lower case. Do not
 -- commit them: this file is committed with the placeholder. The result's "teamAccounts" says how

@@ -114,9 +114,18 @@ function count(value: number, locale: PressLocale): string {
   return `${new Intl.NumberFormat(intlLocale(locale)).format(shown)}${shown < value ? "+" : ""}`;
 }
 
+/**
+ * A whole number of hundredths (or tenths, at `scale` 10) of part/of, rounded down. Multiplied
+ * before it is divided: (29 / 100) * 100 is 28.999999999999996 in floating point, which would
+ * floor an exact 29% to 28%; 2900 / 100 is exactly 29.
+ */
+export function floorRatio(part: number, of: number, scale: number): number {
+  return of > 0 ? Math.floor((part * scale) / of) : 0;
+}
+
 /** A share in whole per cent, rounded down. */
 function share(part: number, of: number, locale: PressLocale): string {
-  const whole = of > 0 ? Math.floor((part / of) * 100) : 0;
+  const whole = floorRatio(part, of, 100);
   return new Intl.NumberFormat(intlLocale(locale), { style: "percent", maximumFractionDigits: 0 }).format(whole / 100);
 }
 
@@ -127,7 +136,7 @@ function share(part: number, of: number, locale: PressLocale): string {
  */
 export function pressFigures(numbers: PressNumbers, locale: PressLocale): PressFigure[] {
   const n = numbers;
-  const each = n.cardsOpened > 0 ? Math.floor((n.opens / n.cardsOpened) * 10) / 10 : 0;
+  const each = floorRatio(n.opens, n.cardsOpened, 10) / 10;
   const figures: PressFigure[] = [
     { id: "cardsMade", value: count(n.cardsMade, locale) },
     { id: "cardsOpened", value: count(n.cardsOpened, locale) },
@@ -151,6 +160,16 @@ export function pressReminder(numbers: PressNumbers, locale: PressLocale): { val
 /** The five templates, in the snapshot's order, each with its share of all cards made. */
 export function pressTemplates(numbers: PressNumbers, locale: PressLocale): { slug: string; share: string }[] {
   return numbers.topTemplates.map(({ slug, made }) => ({ slug, share: share(made, numbers.cardsMade, locale) }));
+}
+
+/**
+ * The day the page last changed: the later of the day its words changed (`wordsUpdated`) and the
+ * day its figures were counted. The sitemap's lastmod and the JSON-LD's dateModified both use it,
+ * so they never disagree.
+ */
+export function pressModified(numbers: PressNumbers, wordsUpdated: string): string {
+  // Both are YYYY-MM-DD, so comparing the strings compares the days.
+  return wordsUpdated > numbers.asOf ? wordsUpdated : numbers.asOf;
 }
 
 /** The day the figures were counted, written out: "20 November 2026", "20 de noviembre de 2026". */

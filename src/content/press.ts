@@ -1,4 +1,5 @@
 import { aboutCopy } from "@/content/about";
+import { LEGAL_ENTITY } from "@/content/legal";
 import type { PressFigureId, PressLocale } from "@/lib/press/figures";
 
 /**
@@ -12,7 +13,7 @@ import type { PressFigureId, PressLocale } from "@/lib/press/figures";
  */
 export const PRESS_PATH = "/press";
 /** The day these words last changed, for the sitemap (content/page-dates.ts, once the page is on). */
-export const PRESS_UPDATED = "2026-11-23";
+export const PRESS_UPDATED = "2026-11-24";
 
 /**
  * What the owner has not decided yet, each a promise or a choice the page makes on the owner's
@@ -43,7 +44,7 @@ export type PressCopy = {
     asOf: string;
     figures: Record<PressFigureId, Figure>;
   };
-  made: { label: string; heading: string; line: string };
+  made: { label: string; heading: string; line: string; shareOf: string };
   article: {
     label: string;
     heading: string;
@@ -60,10 +61,10 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     nav: "Press",
     metaTitle: "Ethos in numbers: figures and pictures for the press",
     metaDescription:
-      "How many cards people have made with Ethos, how often they are opened and which templates lead, counted from our own database. With pictures to use and an address to write to.",
+      "How many cards people have made with Ethos, how often they are opened and which templates lead, counted from our own database, and where to write to us.",
     h1: "Ethos in numbers",
     sentence:
-      "Ethos is a website for making a personal card that opens on a phone, with photos, words and music, sent as a link or a printed QR code.",
+      "A website for making a personal card that opens on a phone, with photos, words and music, sent as a link or a printed QR code.",
     write: "Write to us",
     mailSubject: "Press",
     sample: "Sample figures, not real ones",
@@ -79,11 +80,11 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         cardsOpened: {
           label: "cards opened",
-          counts: "Not counting the ten minutes after it was sent or last edited.",
+          counts: "Not counting the ten minutes after each was sent or last edited.",
         },
         opensEach: {
           label: "opens per opened card",
-          counts: "The same visitor within a day counts once.",
+          counts: "The same visitor counts once in 24 hours.",
         },
         openedAgain: {
           label: "opened more than once",
@@ -91,7 +92,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         onPhone: {
           label: "of opens are on a phone",
-          counts: "Of opens whose device we know; iPhones, older iPads and Android.",
+          counts: "Of opens whose device we know. Older iPads count as phones.",
         },
         countries: {
           label: "countries",
@@ -103,10 +104,11 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
       label: "Most made",
       heading: "The five cards people make most",
       line: "Under each, its share of every card made.",
+      shareOf: "of cards made",
     },
     article: {
       label: "For your article",
-      heading: "How to write the name, and pictures to use",
+      heading: "How to write the name",
       checks: [
         "The name is {name}; {domain} is its address.",
         "Made in Riga by {company}, registered in Latvia in March 2026.",
@@ -125,7 +127,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         {
           q: "What counts as an open?",
-          a: "Each time a card's link is opened; the same visitor within 24 hours counts once. We leave out the ten minutes after a card is sent or last edited, when it is mostly the sender checking it, and for a card edited after its first open, the ten minutes after that open too. So the figures err low. A signed-in sender's own look is not recorded at all.",
+          a: "Each time a card's link is opened; the same visitor within 24 hours counts once. We leave out the ten minutes after a card is sent or last edited, when it is mostly the sender checking it, and for a card edited after its first open, the ten minutes after that open too. So the figures err low. A signed-in sender's own look is not recorded at all. The count of gifts opened on our home and About pages takes every recorded open, so it runs higher.",
         },
         {
           q: "May I use the numbers and the pictures?",
@@ -148,10 +150,10 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     nav: "Prensa",
     metaTitle: "Ethos en cifras: números e imágenes para la prensa",
     metaDescription:
-      "Cuántas tarjetas se han hecho con Ethos, cuántas veces se abren y qué plantillas van primero, contado en nuestra propia base de datos. Con imágenes para usar y una dirección a la que escribir.",
+      "Cuántas tarjetas se han hecho con Ethos, cuántas veces se abren y qué plantillas van primero, contado en nuestra base de datos, y adónde escribirnos.",
     h1: "Ethos en cifras",
     sentence:
-      "Ethos es una web para hacer una tarjeta personal que se abre en el móvil, con fotos, palabras y música, enviada como enlace o código QR impreso.",
+      "Una web para hacer una tarjeta personal que se abre en el móvil, con fotos, palabras y música, enviada como enlace o código QR impreso.",
     write: "Escríbenos",
     mailSubject: "Prensa",
     sample: "Cifras de muestra, no reales",
@@ -171,7 +173,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         opensEach: {
           label: "aperturas por tarjeta abierta",
-          counts: "Una misma persona cuenta una vez al día.",
+          counts: "Una misma persona cuenta una vez cada 24 horas.",
         },
         openedAgain: {
           label: "abiertas más de una vez",
@@ -179,7 +181,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
         },
         onPhone: {
           label: "de las aperturas son desde el móvil",
-          counts: "De las aperturas con dispositivo conocido; iPad antiguos incluidos.",
+          counts: "De las aperturas con dispositivo conocido. Los iPad antiguos cuentan como móvil.",
         },
         countries: {
           label: "países",
@@ -191,10 +193,11 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
       label: "Las favoritas",
       heading: "Las cinco tarjetas que más se hacen",
       line: "Debajo, su parte de todas las tarjetas hechas.",
+      shareOf: "de las tarjetas hechas",
     },
     article: {
       label: "Para tu artículo",
-      heading: "Cómo se escribe el nombre y qué imágenes usar",
+      heading: "Cómo se escribe el nombre",
       checks: [
         "El nombre es {name}; {domain} es su dirección.",
         "Hecho en Riga por {company}, registrada en Letonia en marzo de 2026.",
@@ -209,15 +212,15 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
       faq: [
         {
           q: "¿Qué cuenta como una tarjeta hecha?",
-          a: "Una tarjeta que alguien terminó y publicó, de modo que tiene un enlace que se abre. No se cuentan los borradores ni las tarjetas que hacemos para probar la web. Una tarjeta que su autor ha borrado ya no está en nuestra base de datos, ni en la cuenta.",
+          a: "Una tarjeta que alguien terminó y publicó, de modo que tiene un enlace que se abre. No se cuentan los borradores ni las tarjetas que hacemos para probar la web. Una tarjeta que su autor borra sale de la base de datos y de la cuenta.",
         },
         {
           q: "¿Qué cuenta como una apertura?",
-          a: "Cada vez que se abre el enlace de una tarjeta; la misma persona en 24 horas cuenta una vez. No contamos los diez minutos tras enviarla o editarla por última vez, cuando casi siempre es quien la envía comprobándola, ni, si se editó después de abrirse, los diez minutos tras esa primera apertura. Así que las cifras se quedan cortas. Cuando quien la envía la mira con su sesión iniciada, no se registra.",
+          a: "Cada vez que se abre el enlace de una tarjeta; la misma persona en 24 horas cuenta una vez. No contamos los diez minutos tras enviarla o editarla por última vez, cuando casi siempre es quien la envía comprobándola, ni, si se editó después de abrirse, los diez minutos tras esa primera apertura. Las cifras se quedan cortas. Cuando quien la envía la mira con su sesión iniciada, no se registra. La cifra de la portada y de Sobre Ethos suma todas las aperturas registradas, así que es más alta.",
         },
         {
           q: "¿Puedo usar las cifras y las imágenes?",
-          a: "Sí. Cita cualquier cifra con su fecha. El póster de la página de cada plantilla puede ilustrar un artículo sobre Ethos; escríbenos si necesitas archivos más grandes. Ninguna cifra nombra ni describe a un cliente.",
+          a: "Sí. Cita cualquier cifra con su fecha. El póster de la página de cada plantilla puede ilustrar un artículo sobre Ethos; escríbenos para archivos más grandes. Ninguna cifra nombra ni describe a un cliente.",
         },
         {
           q: "¿Puedo probar una plantilla de pago?",
@@ -240,7 +243,11 @@ export function pressFounderLine(locale: PressLocale): string {
   return subtitle.slice(0, subtitle.indexOf(".") + 1);
 }
 
-/** The company's name with its quotation marks set as type, not typed: SIA “MIGLAI”, and in Spanish SIA «MIGLAI». */
-export function pressCompany(name: string, locale: PressLocale): string {
-  return name.replace(/"([^"]*)"/g, locale === "es" ? "«$1»" : "“$1”");
+/**
+ * The company's name as the site footer writes it on every page ("SIA MIGLAI, Latvia"), so the
+ * press page, which shows both, writes it one way. The registered form with its quotation marks
+ * (LEGAL_ENTITY.name) stays on the legal documents.
+ */
+export function pressCompany(): string {
+  return `SIA ${LEGAL_ENTITY.shortName}`;
 }

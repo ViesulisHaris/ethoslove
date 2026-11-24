@@ -3,7 +3,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BRAND } from "@/config/brand";
 import { ABOUT_FOUNDED, aboutCopy } from "@/content/about";
-import { PRESS_COPY, PRESS_OWNER_PENDING, pressCompany, pressFounderLine } from "@/content/press";
+import { PRESS_COPY, PRESS_OWNER_PENDING, PRESS_UPDATED, pressCompany, pressFounderLine } from "@/content/press";
 import { LEGAL_ENTITY } from "@/content/legal";
 import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
@@ -12,7 +12,7 @@ import { pressBrief, pressNav, pressUpdated, shownPress } from "@/lib/press/show
 import { PRESS_PLACEMENTS } from "@/components/press/placements";
 import { ART_IDS, pageArt } from "@/content/page-art";
 import { mentionsSpain } from "@/lib/cities/cities";
-import { PRESS_COUNTS, REMINDER_OCCASIONS, pressDate, pressFigures, pressLive, pressProblems, pressReminder, pressTemplates, type PressNumbers } from "@/lib/press/figures";
+import { PRESS_COUNTS, REMINDER_OCCASIONS, floorRatio, pressDate, pressFigures, pressLive, pressModified, pressProblems, pressReminder, pressTemplates, type PressNumbers } from "@/lib/press/figures";
 
 import { fillerIn } from "./filler";
 
@@ -124,6 +124,31 @@ describe("press figures: how they are written", () => {
     expect(reminder({ total: 840, birthday: 10, anniversary: 5, valentines: 1 })).toMatchObject({ occasion: "birthday" });
   });
 
+  it("F6 an exact share is never floored one below itself by floating point (29/100 is 29%, not 28%)", () => {
+    const pct = (part: number, of: number) => byId(whole({ cardsOpened: of, openedAgain: part, cardsMade: Math.max(of, PRESS_SAMPLE.cardsMade), opens: Math.max(of, PRESS_SAMPLE.opens) }), "en").openedAgain;
+    expect(pct(29, 100)).toBe("29%");
+    expect(pct(57, 100)).toBe("57%");
+    expect(pct(58, 100)).toBe("58%");
+    // Every exact whole per cent with a denominator up to 2000 (the deep test found 80 of 8,400 wrong).
+    let wrong = 0;
+    for (let of = 1; of <= 2000; of++) for (let p = 0; p <= 100; p++) if ((p * of) % 100 === 0 && floorRatio((p * of) / 100, of, 100) !== p) wrong++;
+    expect(wrong).toBe(0);
+    // Still rounded down when it is not exact, and the average the same way in tenths.
+    expect(floorRatio(2, 3, 100)).toBe(66);
+    expect(floorRatio(29, 10, 10)).toBe(29);
+    expect(floorRatio(1, 0, 100)).toBe(0);
+    const templates = pressTemplates(whole({ cardsMade: 100, cardsOpened: 90, openedAgain: 50, topTemplates: [{ slug: "the-letter", made: 29 }, { slug: "bouquet", made: 20 }, { slug: "jar-of-reasons", made: 10 }, { slug: "scratch-card", made: 5 }, { slug: "constellations", made: 1 }] }), "en");
+    expect(templates[0]!.share).toBe("29%");
+  });
+
+  it("F7 the page's JSON-LD date and the sitemap's are the same day: the later of the words and the figures", () => {
+    expect(pressModified(whole({ asOf: "2026-11-20" }), "2026-11-24")).toBe("2026-11-24");
+    expect(pressModified(whole({ asOf: "2026-12-01" }), "2026-11-24")).toBe("2026-12-01");
+    const page = read("src/app/[currency]/[locale]/(marketing)/press/page.tsx");
+    expect(page).toContain("dateModified: pressModified(numbers, PRESS_UPDATED)");
+    expect(read("src/lib/press/shown.ts")).toContain("pressModified(numbers, PRESS_UPDATED)");
+  });
+
   it("F4 the five templates come out in the snapshot's order, each with its share of all cards", () => {
     expect(pressTemplates(PRESS_SAMPLE, "en")).toEqual([
       { slug: "the-letter", share: "32%" },
@@ -162,6 +187,14 @@ describe("press query", () => {
 
 describe("press query: what an open is", () => {
   const sql = () => read("scripts/press-numbers.sql").replace(/--[^\n]*/g, "");
+
+  it("Q5 the query's header says what to copy as the plan's Appendix C does: every key but teamAccounts, then countries and ready", () => {
+    const header = read("scripts/press-numbers.sql").split(/\r?\nwith\r?\n/)[0]!;
+    expect(header).not.toMatch(/key for key/);
+    expect(header).toMatch(/EXCEPT "teamAccounts"/);
+    expect(header).toMatch(/"countries"/);
+    expect(header).toMatch(/"ready" to true/);
+  });
 
   it("Q3 the sender's look is the ten minutes after the last publish, and after the first open only for a card edited after it", () => {
     const body = sql().replace(/\s+/g, " ");
@@ -230,7 +263,8 @@ describe("press words", () => {
       c.article.checks.forEach((check, i) => most(check, 14, `check ${i}`));
       most(c.method.faq.map((f) => f.a).join(" "), CLOSED_BLOCK_WORDS, "the four answers");
       expect(c.metaTitle.length, `${locale} metaTitle`).toBeLessThanOrEqual(70);
-      expect(c.metaDescription.length, `${locale} metaDescription`).toBeLessThanOrEqual(200);
+      // Search results cut a description past about 155 characters (blog-posts, cities and date-kinds hold the same).
+      expect(c.metaDescription.length, `${locale} metaDescription`).toBeLessThanOrEqual(155);
     }
   });
 
@@ -253,10 +287,16 @@ describe("press words", () => {
     // The name is a sentence that says which word to print, and the company's quotation marks are set as type.
     expect(PRESS_COPY.en.article.checks[0]).toBe("The name is {name}; {domain} is its address.");
     expect(PRESS_COPY.es.article.checks[0]).toBe("El nombre es {name}; {domain} es su dirección.");
+    // The company is written as the footer on the same page writes it, one way.
     expect(LEGAL_ENTITY.name).toBe('SIA "MIGLAI"');
-    expect(pressCompany(LEGAL_ENTITY.name, "en")).toBe("SIA “MIGLAI”");
-    expect(pressCompany(LEGAL_ENTITY.name, "es")).toBe("SIA «MIGLAI»");
-    expect(PRESS_COPY.es.article.heading).toBe("Cómo se escribe el nombre y qué imágenes usar");
+    expect(pressCompany()).toBe("SIA MIGLAI");
+    for (const locale of ["en", "es"] as const) {
+      const rights = JSON.parse(read(`messages/${locale}.json`)).footer.rights as string;
+      expect(rights, locale).toContain(`${pressCompany()},`);
+    }
+    // The band offers no pictures yet (no wordmark, the posters wait on the owner), so its heading promises none.
+    expect(PRESS_COPY.en.article.heading).toBe("How to write the name");
+    expect(PRESS_COPY.es.article.heading).toBe("Cómo se escribe el nombre");
   });
 
   it("C5 every figure says what it counts, and the words match the query's rule", () => {
@@ -283,6 +323,27 @@ describe("press words", () => {
     // The app icon is not called a logo.
     expect(en.article.logo).not.toMatch(/logo/i);
     expect(PRESS_COPY.es.article.logo).not.toMatch(/logo/i);
+  });
+
+  it("C6 the lines the deep test read as wrong stay right", () => {
+    const en = PRESS_COPY.en;
+    const es = PRESS_COPY.es;
+    // The hero does not say Ethos three times in three lines.
+    for (const locale of ["en", "es"] as const) expect(PRESS_COPY[locale].sentence, locale).not.toMatch(/^Ethos/);
+    // "it" with a plural label had nothing to refer to.
+    expect(en.numbers.figures.cardsOpened.counts).toMatch(/after each was sent/);
+    // A visitor counts once in a rolling 24 hours (record_gift_view), not once a calendar day.
+    expect(es.numbers.figures.opensEach.counts).toMatch(/24 horas/);
+    expect(en.numbers.figures.opensEach.counts).toMatch(/24 hours/);
+    // No semicolon before a list, and iPads are said to count as phones.
+    for (const locale of ["en", "es"] as const) expect(PRESS_COPY[locale].numbers.figures.onPhone.counts, locale).not.toContain(";");
+    expect(en.numbers.figures.onPhone.counts).toMatch(/Older iPads count as phones/);
+    // The live count on the home and About pages is every recorded open; the answer says why it is higher.
+    expect(en.method.faq[1]!.a).toMatch(/home and About pages.*every recorded open.*higher/);
+    expect(es.method.faq[1]!.a).toMatch(/portada y de Sobre Ethos.*todas las aperturas registradas.*más alta/);
+    // A screen reader hears what the bare per cent under a template is a share of.
+    expect(en.made.shareOf).toBe("of cards made");
+    expect(PRESS_UPDATED >= "2026-11-24").toBe(true);
   });
 
   it("C4 no filler, no shouting, nothing about Spain, never a voucher's name", () => {

@@ -3,7 +3,7 @@ import { PRESS_NUMBERS } from "@/content/press-numbers";
 import { PRESS_SAMPLE } from "@/content/press-sample";
 import { localizedUrl } from "@/lib/seo";
 import { getManifest } from "@/templates/manifests";
-import { pressDate, pressFigures, pressLive, pressReminder, type PressLocale, type PressNumbers, type ReminderOccasion } from "./figures";
+import { pressDate, pressFigures, pressLive, pressModified, pressReminder, type PressLocale, type PressNumbers, type ReminderOccasion } from "./figures";
 
 const REMINDER_DAY: Record<ReminderOccasion, string> = { birthday: "a birthday", anniversary: "an anniversary", valentines: "Valentine's Day" };
 
@@ -29,9 +29,7 @@ export function pressNav(locale: PressLocale, numbers: PressNumbers = PRESS_NUMB
 
 /** The page's date for the sitemap: the later of its words' day and its figures' day; undefined while it is off. */
 export function pressUpdated(numbers: PressNumbers = PRESS_NUMBERS): string | undefined {
-  if (!pressLive(numbers)) return undefined;
-  // Both are YYYY-MM-DD, so comparing the strings compares the days.
-  return PRESS_UPDATED > numbers.asOf ? PRESS_UPDATED : numbers.asOf;
+  return pressLive(numbers) ? pressModified(numbers, PRESS_UPDATED) : undefined;
 }
 
 /** The figures as lines of /llms.txt (English), or none while the page is off. */

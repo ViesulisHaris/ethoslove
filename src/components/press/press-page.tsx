@@ -25,9 +25,13 @@ import { PRESS_FOOT_ART, PRESS_NUMBERS_ART } from "./placements";
 const THEME = "press";
 const FLOWERS = DEFAULT_PAGE_THEME.flowers;
 
-/** A quiet link in a row: underlined, and a thumb's target each way (a one-word link is narrower than 44px without min-w-11). */
+/**
+ * A quiet link in a row: underlined, and a thumb's target each way. The target reaches past the
+ * word by the same 8px on both sides (px-2 taken back by -mx-2), so the row's gaps stay even; a
+ * word narrower than 28px ("Etsy" is about 30) still gets 44px, centred, never padded on one side.
+ */
 export const PRESS_LINK =
-  "inline-flex min-h-11 min-w-11 items-center text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink active:text-page-accent";
+  "-mx-2 inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink active:text-page-accent";
 /** The page's one filled button (a gift page's "Make this gift"). */
 export const PRESS_BUTTON =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px motion-reduce:transition-none";
@@ -148,7 +152,7 @@ export function PressFigures({ label, heading, line, figures, asOf, day }: { lab
  * phone. Each cover is drawn whole, in the shape it is recorded in (13:20), so no title on it is cut;
  * its place in the list stands before its name, never over the picture.
  */
-export function PressMostMade({ label, heading, line, cards, locale }: { label: string; heading: string; line: string; cards: { manifest: TemplateManifest; share: string }[]; locale: "en" | "es" }) {
+export function PressMostMade({ label, heading, line, shareOf, cards, locale }: { label: string; heading: string; line: string; shareOf: string; cards: { manifest: TemplateManifest; share: string }[]; locale: "en" | "es" }) {
   const row = "press-most-made";
   return (
     <section className="relative" aria-labelledby="press-made">
@@ -158,9 +162,12 @@ export function PressMostMade({ label, heading, line, cards, locale }: { label: 
           <ol id={row} className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-1 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-5 sm:gap-x-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-x-5">
             {cards.map(({ manifest: m, share }, i) => (
               <li key={m.slug} data-card data-pick className="relative w-[78%] shrink-0 snap-start sm:w-auto">
-                <Link href={`/templates/${m.slug}`} className="group block rounded-[1.25rem]">
+                {/* A column to the row's full height, the share at its foot: a name that wraps never pushes its share below the others.
+                    Heard as "The Letter 32% of cards made": the bare per cent says what it is a share of, with no words added to the page. */}
+                <Link href={`/templates/${m.slug}`} aria-label={`${m.name[locale]} ${share} ${shareOf}`} className="group flex h-full flex-col rounded-[1.25rem]">
                   <span style={{ aspectRatio: COVER_RATIO }} className="relative block overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift group-active:translate-y-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
-                    <Image src={m.thumbnail.poster} alt={m.tagline[locale]} fill sizes="(min-width: 1280px) 150px, (min-width: 640px) 18vw, 90vw" className="object-cover" />
+                    {/* The name says what the link is; the cover is for the eye. */}
+                    <Image src={m.thumbnail.poster} alt="" fill sizes="(min-width: 1280px) 150px, (min-width: 640px) 18vw, 90vw" className="object-cover" />
                   </span>
                   <span className="mt-3.5 flex items-baseline gap-2 font-display text-[1.0625rem] leading-tight">
                     {/* The list is an <ol>, which says the order; the number is for the eye. */}
@@ -171,7 +178,7 @@ export function PressMostMade({ label, heading, line, cards, locale }: { label: 
                       {m.name[locale]}
                     </span>
                   </span>
-                  <span data-share className="mt-1.5 block text-page-label text-page-body">
+                  <span data-share className="mt-auto block pt-1.5 text-sm text-page-body tabular-nums">
                     {share}
                   </span>
                 </Link>

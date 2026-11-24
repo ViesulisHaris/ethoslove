@@ -5,9 +5,8 @@ import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { ABOUT_PATH, ABOUT_PROFILES } from "@/content/about";
-import { LEGAL_ENTITY } from "@/content/legal";
-import { PRESS_COPY, PRESS_PATH, pressCompany, pressFounderLine } from "@/content/press";
-import { pressDate, pressFigures, pressTemplates, type PressLocale } from "@/lib/press/figures";
+import { PRESS_COPY, PRESS_PATH, PRESS_UPDATED, pressCompany, pressFounderLine } from "@/content/press";
+import { pressDate, pressFigures, pressModified, pressTemplates, type PressLocale } from "@/lib/press/figures";
 import { shownPress } from "@/lib/press/shown";
 import { breadcrumbNode, localizedUrl, organizationNode, pageMetadata } from "@/lib/seo";
 import { getManifest, listManifests } from "@/templates/manifests";
@@ -52,14 +51,14 @@ export default async function PressRoute({ params }: Props) {
   const lead = cards[0]?.manifest;
   const second = cards[1]?.manifest ?? lead;
   if (!lead || !second) notFound();
-  const fill = (s: string) => s.replace("{name}", BRAND.name).replace("{domain}", BRAND.domain).replace("{company}", pressCompany(LEGAL_ENTITY.name, l)).replace("{count}", String(listManifests().length));
+  const fill = (s: string) => s.replace("{name}", BRAND.name).replace("{domain}", BRAND.domain).replace("{company}", pressCompany()).replace("{count}", String(listManifests().length));
 
   return (
     <>
       <JsonLd
         nodes={[
           organizationNode(),
-          { "@type": "WebPage", "@id": `${url}#page`, url, name: copy.h1, description: copy.metaDescription, inLanguage: l, dateModified: numbers.asOf, isPartOf: { "@id": `${SITE.url}/#website` }, about: { "@id": `${SITE.url}/#organization` } },
+          { "@type": "WebPage", "@id": `${url}#page`, url, name: copy.h1, description: copy.metaDescription, inLanguage: l, dateModified: pressModified(numbers, PRESS_UPDATED), isPartOf: { "@id": `${SITE.url}/#website` }, about: { "@id": `${SITE.url}/#organization` } },
           breadcrumbNode([
             { name: SITE.name, url: localizedUrl(locale) },
             { name: copy.h1, url },
@@ -74,7 +73,7 @@ export default async function PressRoute({ params }: Props) {
           </a>
         </PressHero>
         <PressFigures label={copy.numbers.label} heading={copy.numbers.heading} line={copy.numbers.line} figures={figures} asOf={copy.numbers.asOf.replace("{date}", pressDate(numbers.asOf, l))} day={numbers.asOf} />
-        <PressMostMade label={copy.made.label} heading={copy.made.heading} line={copy.made.line} cards={cards} locale={l} />
+        <PressMostMade label={copy.made.label} heading={copy.made.heading} line={copy.made.line} shareOf={copy.made.shareOf} cards={cards} locale={l} />
         <PressArticle label={copy.article.label} heading={copy.article.heading} checks={copy.article.checks.map(fill)} poster={second.thumbnail.poster}>
           {/* The app icon (a heart on cream), the one mark public/ holds: there is no wordmark file yet, so it is not called a logo. */}
           <a href="/icons/icon-512.png" download="ethos-app-icon.png" className={PRESS_LINK}>
