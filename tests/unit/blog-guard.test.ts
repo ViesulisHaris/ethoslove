@@ -43,6 +43,15 @@ describe("blog guard", () => {
     for (const source of attempts) expect(postProblem(source)).not.toBeNull();
   });
 
+  it("refuses a post that names Spain or a Spanish city, and lets \"Spanish\" through", () => {
+    // The owner's rule for the whole site: the routine writes posts nobody reads first, so the gate holds it.
+    const withText = (text: string) => sample.replace(/("title"|title): "[^"]*"/, `$1: "${text}"`);
+    expect(withText("A weekend in Madrid"), "the sample has a title").not.toBe(sample);
+    expect(postProblem(withText("A weekend in Madrid"))).toMatch(/Madrid/);
+    expect(postProblem(withText("Regalos desde España"))).toMatch(/España/);
+    expect(postProblem(withText("Written in English and Spanish"))).toBeNull();
+  });
+
   it("allows only the import and POSTS lines in the index", () => {
     expect(indexLineProblem('import { post as openWhenLetterIdeas } from "./posts/open-when-letter-ideas";')).toBeNull();
     expect(indexLineProblem("const POSTS: BlogPost[] = [openWhenLetterIdeas, longDistanceBirthdayIdeas, halloweenIdeasForCouples];")).toBeNull();

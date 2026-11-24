@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-relationship-tips",
   published: "2026-11-18",
+  updated: "2026-11-24",
   occasion: "long-distance",
   templates: ["halfway", "midnight-countdown", "passport"],
   content: {
@@ -242,14 +243,14 @@ export const post: BlogPost = {
           type: "table",
           head: ["Diferencia horaria", "Por ejemplo", "Un ritmo que suele aguantar"],
           rows: [
-            ["Hasta 3 horas", "Madrid y Londres, Madrid y Canarias", "Una llamada casi todas las noches, a una hora que vaya bien a los dos, y mensajes durante el día."],
-            ["De 4 a 8 horas", "Madrid y Ciudad de México (7 u 8, según la época)", "Una llamada larga dos o tres noches por semana, a la hora que marque el reloj que va por delante; notas de voz los demás días."],
-            ["9 horas o más", "Madrid y Los Ángeles (9, casi todo el año)", "Una llamada corta cuando uno se despierta y el otro se va a dormir, una llamada larga el fin de semana y mensajes escritos para leer después."],
+            ["Hasta 3 horas", "Lisboa y Londres, Lisboa y Berlín", "Una llamada casi todas las noches, a una hora que vaya bien a los dos, y mensajes durante el día."],
+            ["De 4 a 8 horas", "Lisboa y Ciudad de México (6 o 7, según la época)", "Una llamada larga dos o tres noches por semana, a la hora que marque el reloj que va por delante; notas de voz los demás días."],
+            ["9 horas o más", "Lisboa y Sídney (de 9 a 11, según la época)", "Una llamada corta cuando uno se despierta y el otro se va a dormir, una llamada larga el fin de semana y mensajes escritos para leer después."],
           ],
         },
         {
           type: "p",
-          text: "Fíjate en la fila del medio. Con una persona en Madrid y otra en Ciudad de México, en invierno, si llamáis a las tres de la tarde en México, a la hora de comer, en Madrid son las diez de la noche: bien un par de veces por semana, demasiado tarde para Madrid si es a diario. Los otros días, una nota de voz que mandas en Madrid a la hora de comer le llega a primera hora de la mañana. Para ver en qué horas estáis despiertos los dos, pon vuestras dos ciudades en nuestra [página para parejas a distancia](/long-distance), gratis.",
+          text: "Fíjate en la fila del medio. Con una persona en Lisboa y otra en Ciudad de México, en invierno, si llamáis a las cuatro de la tarde en México, a la hora de comer, en Lisboa son las diez de la noche: bien un par de veces por semana, demasiado tarde para Lisboa si es a diario. Los otros días, una nota de voz que mandas en Lisboa a la una, a la hora de comer, le llega a las siete de la mañana. Para ver en qué horas estáis despiertos los dos, pon vuestras dos ciudades en nuestra [página para parejas a distancia](/long-distance), gratis.",
         },
         {
           type: "p",

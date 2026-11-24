@@ -12,6 +12,8 @@
  *     function, call, template string or other import can hide in it, since it runs at build time;
  *   - the post index changes only by an `import { post as … } from "./posts/…"` line and its
  *     `const POSTS` line;
+ *   - a post never names Spain or a Spanish city (the owner's rule for the whole site; "Spanish", the
+ *     language, is fine);
  *   - images are images, docs are Markdown or JSON;
  *   - every commit is the team's author, or Vercel won't deploy it.
  *
@@ -21,6 +23,13 @@ import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
 export const TEAM_AUTHOR = "adulis2014@gmail.com";
+
+/**
+ * Nothing on the site names Spain or a Spanish city (the owner's rule; tests/unit/cities.test.ts holds the pages
+ * to it). A post's example cities come from elsewhere: Lisbon for Europe (docs/blog/VOICE.md). "Spanish", the
+ * language, is not on the list: posts rightly say "in English and Spanish".
+ */
+export const SPAIN_WORDS = /\b(spain|españa|espana|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary islands)\b/i;
 
 const POST_PATH = /^src\/content\/blog\/posts\/[a-z0-9-]+\.ts$/;
 const INDEX_PATH = "src/content/blog/index.ts";
@@ -44,6 +53,11 @@ export function postProblem(source) {
   const body = lines.slice(header.length).trim();
   if (!body.startsWith("export const post: BlogPost = {") || !body.endsWith("};")) return "isn't a single `export const post: BlogPost = { … };`";
   const literal = body.slice("export const post: BlogPost = ".length, -1);
+  // What the post says, read before the strings are blanked.
+  for (const [text] of literal.matchAll(/"(?:[^"\\\n]|\\.)*"/g)) {
+    const named = SPAIN_WORDS.exec(text);
+    if (named) return `names Spain or a Spanish city: ${named[0]}`;
+  }
   // Blank the strings. A post uses double quotes; anything else that quotes is suspect.
   const blanked = literal.replace(/"(?:[^"\\\n]|\\.)*"/g, '""');
   if (/[`']/.test(blanked)) return "has a template string or a single-quoted string";

@@ -10,6 +10,7 @@ import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount }
 import type { BlogContent, BlogPost } from "@/content/blog/types";
 import { TEMPLATE_SLUGS } from "@/templates/manifests";
 import { FILLER } from "./filler";
+import { SPAIN_WORDS } from "../../scripts/blog-guard.mjs";
 
 /**
  * What a post must be before it goes live. A post is written by the daily routine
@@ -239,4 +240,21 @@ describe("blog posts", () => {
       }
     });
   }
+});
+
+describe("blog posts and the owner's rule", () => {
+  // Nothing on the site names Spain or a Spanish city. The Publish blog workflow runs this file on every merge from the
+  // mirror, so a new post that names one does not go live either. "Spanish", the language, is allowed (SPAIN_WORDS).
+  it("no post names Spain or a Spanish city, in either language", () => {
+    const named: string[] = [];
+    const walk = (value: unknown, where: string) => {
+      if (typeof value === "string") {
+        const hit = SPAIN_WORDS.exec(value);
+        if (hit) named.push(`${where}: ${hit[0]}`);
+      } else if (Array.isArray(value)) value.forEach((v) => walk(v, where));
+      else if (value && typeof value === "object") for (const v of Object.values(value)) walk(v, where);
+    };
+    for (const post of BLOG_POSTS) for (const locale of ["en", "es"] as const) walk(post.content[locale], `${post.slug} (${locale})`);
+    expect(named).toEqual([]);
+  });
 });
