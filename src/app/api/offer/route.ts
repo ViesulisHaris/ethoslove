@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { PERSONAL_PRICE_COOKIE, activePersonalPrice } from "@/lib/commerce/personal-price";
-import { PERSONAL_PRICE } from "@/lib/pricing/products";
+import { PERSONAL_PRICE, personalPriceAmounts } from "@/lib/pricing/products";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 
@@ -25,7 +25,8 @@ export async function GET(request: NextRequest) {
     return none;
   }
   return NextResponse.json(
-    { active: true, endsAt: price.endsAt, amounts: PERSONAL_PRICE.amounts, onto: PERSONAL_PRICE.onto },
+    // The amount per product: an offer email's is one price for any gift, the monthly idea's differs.
+    { active: true, kind: price.kind, endsAt: price.endsAt, amounts: personalPriceAmounts(price.kind), onto: PERSONAL_PRICE.onto },
     { headers: { "cache-control": "no-store" } },
   );
 }

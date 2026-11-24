@@ -95,6 +95,7 @@ describe("reading a session back", () => {
       plan: null,
       personalPrice: null,
       personalPriceOff: null,
+      personalPriceKind: null,
     });
     // A personal price comes back with what it took off (lib/commerce/personal-price.ts).
     const personal = metadata(

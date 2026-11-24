@@ -4220,6 +4220,7 @@
     "policyLink": "What changed",
     "offer": "Your personal price: any gift for {price}, until {ends}.",
     "offerLink": "Choose a gift",
+    "ideaOffer": "Your one-time price: one gift from {price}, until {ends}.",
     "close": "Close"
   }
 }

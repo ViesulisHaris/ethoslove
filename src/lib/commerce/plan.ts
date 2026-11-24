@@ -4,6 +4,8 @@ import {
   EVERY_TEMPLATE,
   PERSONAL_PRICE,
   PRODUCTS,
+  personalPriceAmount,
+  type PersonalPriceKind,
   SECOND_GIFT,
   bumpAmount,
   extrasAmount,
@@ -78,7 +80,7 @@ export type CheckoutContext = {
   /** The buyer's running membership, else a subscription Stripe is still collecting; null for a guest. */
   membership?: MembershipContext | null;
   /** The personal price the request's cookie holds, checked and not spent (lib/commerce/personal-price.ts); null without one. */
-  personalPrice?: { id: string } | null;
+  personalPrice?: { id: string; kind?: PersonalPriceKind } | null;
   /** Group cards are sold only while groupGiftsEnabled() (lib/group/flag.ts); absent or false, product "group" is refused. */
   groupOnSale?: boolean;
   /**
@@ -125,7 +127,7 @@ export type CheckoutPlan = {
   /** A subscription is only ever Ethos for Two; everything else, the pass included, is paid once. */
   billing: "one_time" | "subscription";
   /** The personal price charged (its link's account id) and how much it took off the catalogue price; null at full price. */
-  personalPrice: { id: string; discount: number } | null;
+  personalPrice: { id: string; discount: number; kind: PersonalPriceKind } | null;
 };
 
 export type PlanError = { error: string; status: number; needed?: number };
@@ -249,9 +251,6 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     if (ctx.ownedForever.includes(EVERY_TEMPLATE)) return fail("already_owned", 409);
   }
 
-  // Never with the bump or a second gift: the price is for one gift.
-  const personal = req.personalPrice && ctx.personalPrice ? ctx.personalPrice : null;
-  if (personal && (bump || second !== null)) return fail("personal_price_unavailable", 400);
   // "Make it special" for someone who already paid for a note with photos is the difference.
   const listed =
     product === "upgrade"
@@ -261,7 +260,14 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
         : product === "group"
           ? groupAmount(currency, heldNow, slugs[0])
           : catalogue.amounts[currency];
-  const charged = personal ? Math.min(listed, PERSONAL_PRICE.amounts[currency]) : listed;
+  // A personal price: an offer email's (one price for any gift) or the first monthly idea email's
+  // (its own per product). Never with the bump or a second gift: the price is for one gift. Only a
+  // price lower than the one they would pay anyway is shown, charged or spent.
+  const kind: PersonalPriceKind = ctx.personalPrice?.kind ?? "offer";
+  const offered = personalPriceAmount(kind, product, currency);
+  if (req.personalPrice && ctx.personalPrice && (bump || second !== null)) return fail("personal_price_unavailable", 400);
+  const personal = req.personalPrice && ctx.personalPrice && offered !== null && offered < listed ? ctx.personalPrice : null;
+  const charged = personal && offered !== null ? offered : listed;
   const lines: PlanLine[] = [{ key: product, amount: charged }];
   // The bump takes the order to exactly Everything's price.
   if (bump) lines.push({ key: "bump", amount: bumpAmount(product, currency) });
@@ -284,7 +290,7 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     unlocks,
     plan: product === "pass" ? "yearly" : null,
     billing: "one_time",
-    personalPrice: personal ? { id: personal.id, discount: listed - charged } : null,
+    personalPrice: personal ? { id: personal.id, discount: listed - charged, kind } : null,
   };
 }
 

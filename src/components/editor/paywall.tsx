@@ -126,7 +126,9 @@ export function Paywall({
   const { price: personal, forget: forgetPersonal } = usePersonalPrice();
   // "Make it special" is the difference for an account that already paid for a note with photos.
   const listedForTemplate = forTemplate === "extras" ? extrasAmount(currency, ownedRows, slug) : PRODUCTS[forTemplate].amounts[currency];
-  const personalFor = personal !== null && personal.onto.includes(forTemplate) ? Math.min(listedForTemplate, personal.amounts[currency]) : null;
+  // Only a price lower than the one they would pay anyway is shown (or charged, lib/commerce/plan.ts).
+  const offered = personal !== null && personal.onto.includes(forTemplate) ? personal.amounts[forTemplate][currency] : null;
+  const personalFor = offered !== null && offered < listedForTemplate ? offered : null;
   const forTemplateAmount = personalFor ?? listedForTemplate;
   // Null until the sender picks a row: the default can change when the upgrade quote arrives.
   const [plan, setPlan] = useState<PaywallPlan | null>(null);

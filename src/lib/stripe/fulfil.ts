@@ -19,6 +19,7 @@ import {
   groupRows,
   type Currency,
   type MembershipPlan,
+  type PersonalPriceKind,
   type ProductId,
 } from "@/lib/pricing/products";
 import { PACK_NAMES, isPackId, type PackId } from "@/lib/games/packs";
@@ -127,6 +128,8 @@ export type Sold = {
   personalPrice: string | null;
   /** What the personal price took off the catalogue price, in minor units; null at full price. */
   personalPriceOff: number | null;
+  /** Which personal price it was: an offer email's, or the first monthly idea email's; null without one. */
+  personalPriceKind: PersonalPriceKind | null;
 };
 
 /**
@@ -168,6 +171,7 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
     plan,
     personalPrice: m.personal_price || null,
     personalPriceOff: Number.parseInt(m.personal_price_off ?? "", 10) > 0 ? Number.parseInt(m.personal_price_off!, 10) : null,
+    personalPriceKind: m.personal_price ? (m.personal_price_kind === "monthly" ? "monthly" : "offer") : null,
   };
 }
 
@@ -244,7 +248,7 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
   if ("reason" in buyer) return { ok: false, reason: buyer.reason };
   const { userId, claimed } = buyer;
   // Paid at a personal price: that link has bought its one gift (again, harmlessly, on a retry).
-  if (sold.personalPrice) await spendPersonalPrice(sold.personalPrice);
+  if (sold.personalPrice) await spendPersonalPrice(sold.personalPrice, sold.personalPriceKind ?? "offer");
   const now = Date.now();
   const result: Fulfilment = { ok: true, userId, ...(buyer.guest ? { email: buyer.email ?? undefined, createdUser: buyer.createdUser } : {}) };
   const consent = agreedConsent(session, sold);

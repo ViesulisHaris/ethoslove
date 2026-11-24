@@ -9,7 +9,7 @@ import type { Currency, ProductId } from "@/lib/pricing/products";
  * page makes the request. It ends by itself at its time, and `forget` drops it at once (checkout
  * said it has ended or been used).
  */
-export type PersonalPrice = { endsAt: number; amounts: Record<Currency, number>; onto: readonly ProductId[] };
+export type PersonalPrice = { kind: "offer" | "monthly"; endsAt: number; amounts: Record<"single" | "extras", Record<Currency, number>>; onto: readonly ProductId[] };
 
 const COOKIE = "ethos_offer";
 
@@ -20,8 +20,10 @@ const listeners = new Set<() => void>();
 function ask(): Promise<PersonalPrice | null> {
   answer ??= fetch("/api/offer", { cache: "no-store", credentials: "same-origin" })
     .then((res) => (res.ok ? res.json() : null))
-    .then((json: { active?: boolean; endsAt?: number; amounts?: Record<Currency, number>; onto?: ProductId[] } | null) =>
-      json?.active && typeof json.endsAt === "number" && json.amounts && json.onto ? { endsAt: json.endsAt, amounts: json.amounts, onto: json.onto } : null,
+    .then((json: { active?: boolean; kind?: string; endsAt?: number; amounts?: Record<"single" | "extras", Record<Currency, number>>; onto?: ProductId[] } | null) =>
+      json?.active && typeof json.endsAt === "number" && json.amounts?.single && json.amounts.extras && json.onto
+        ? { kind: json.kind === "monthly" ? ("monthly" as const) : ("offer" as const), endsAt: json.endsAt, amounts: json.amounts, onto: json.onto }
+        : null,
     )
     .catch(() => null);
   return answer;

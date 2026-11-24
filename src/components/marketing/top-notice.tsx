@@ -42,7 +42,11 @@ export function TopNotice() {
     <div className="pointer-events-none fixed inset-x-0 top-[calc(var(--header-h,76px)+0.25rem)] z-30 flex justify-center px-4" data-testid="top-notice">
       <div role="status" className="pointer-events-auto flex max-w-xl items-center gap-2 rounded-2xl bg-forest py-1.5 pr-1.5 pl-4 text-sm text-cream shadow-lift">
         <p className="min-w-0">
-          {price ? t("offer", { price: formatAmount(price.amounts[currency], currency, locale), ends: personalPriceEnds(price.endsAt, locale, currency) }) : t("policy")}{" "}
+          {price
+            ? price.kind === "monthly"
+              ? t("ideaOffer", { price: formatAmount(Math.min(price.amounts.single[currency], price.amounts.extras[currency]), currency, locale), ends: personalPriceEnds(price.endsAt, locale, currency) })
+              : t("offer", { price: formatAmount(price.amounts.single[currency], currency, locale), ends: personalPriceEnds(price.endsAt, locale, currency) })
+            : t("policy")}{" "}
           <Link href={price ? "/templates" : "/legal/privacy"} className="whitespace-nowrap text-cream underline underline-offset-2">
             {price ? t("offerLink") : t("policyLink")}
           </Link>

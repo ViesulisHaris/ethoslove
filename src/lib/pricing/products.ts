@@ -142,6 +142,40 @@ export const PERSONAL_PRICE = {
   onto: ["single", "extras"] as readonly ProductId[],
 } as const;
 
+/** Which personal price a link carries: an offer email's, or the first monthly idea email's. */
+export type PersonalPriceKind = "offer" | "monthly";
+
+/**
+ * The monthly idea's one-time price (lib/lifecycle/monthly-idea.ts): about a third off one gift, a
+ * premium template or "Make it special", in the first monthly idea email only, once per account ever.
+ * The owner's setting, 20 Nov 2026. Never with the bump, the offer email's price or two more gifts.
+ */
+export const MONTHLY_PRICE = {
+  amounts: { single: { usd: 799, eur: 699, gbp: 599 }, extras: { usd: 649, eur: 549, gbp: 449 } } as Record<TemplateProduct, Record<Currency, number>>,
+  onto: ["single", "extras"] as readonly ProductId[],
+} as const;
+
+/** What each product costs at a personal price of this kind (an offer email's is one price for either). */
+export function personalPriceAmounts(kind: PersonalPriceKind): Record<TemplateProduct, Record<Currency, number>> {
+  return kind === "monthly" ? MONTHLY_PRICE.amounts : { single: PERSONAL_PRICE.amounts, extras: PERSONAL_PRICE.amounts };
+}
+
+/** The amount for one product, or null where the price doesn't apply. */
+export function personalPriceAmount(kind: PersonalPriceKind, product: ProductId, currency: Currency): number | null {
+  if (product !== "single" && product !== "extras") return null;
+  return personalPriceAmounts(kind)[product][currency];
+}
+
+/**
+ * True when a price already held is never dearer than an incoming one, in every product and currency,
+ * so opening the second link would only take something away.
+ */
+export function heldIsCheaper(held: PersonalPriceKind, incoming: PersonalPriceKind): boolean {
+  const a = personalPriceAmounts(held);
+  const b = personalPriceAmounts(incoming);
+  return (["single", "extras"] as const).every((product) => (["usd", "eur", "gbp"] as const).every((currency) => a[product][currency] <= b[product][currency]));
+}
+
 /** What the bump costs on top of `base`: Everything's price minus the base line's (€24.99 − €9.99 = €15.00). */
 export function bumpAmount(base: ProductId, currency: Currency): number {
   return PRODUCTS.everything.amounts[currency] - PRODUCTS[base].amounts[currency];
