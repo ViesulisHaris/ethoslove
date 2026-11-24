@@ -25,6 +25,7 @@ export const PRESS_OWNER_PENDING: readonly string[] = [
   "method.faq[2]: may an article use the posters of the template pages?",
   "method.faq[3]: does every writer who asks get a free code for a paid template (each one made by hand)?",
   "contact: is the press address support@secuora.xyz, or one on the brand's own domain?",
+  "logo: is the 512 px app icon enough as the logo, or is a wordmark file (PNG and SVG) needed first?",
 ];
 
 type Figure = { label: string; counts: string };

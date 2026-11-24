@@ -39,7 +39,14 @@ describe("press figures: the gate", () => {
 
   it("G7 the snapshot is not switched on while the owner still has a decision to make about the page", () => {
     if (PRESS_NUMBERS.ready) expect(PRESS_OWNER_PENDING).toEqual([]);
-    for (const p of PRESS_OWNER_PENDING) expect(p).toMatch(/^(method\.faq\[\d\]|contact): /);
+    for (const p of PRESS_OWNER_PENDING) expect(p).toMatch(/^(method\.faq\[\d\]|contact|logo): /);
+  });
+
+  it("G7b the logo question stays open while the page offers only the app icon (no wordmark file)", () => {
+    // The page's logo link is the app icon ("Download the app icon"). Until a wordmark exists the
+    // owner has to say whether that is enough, so the question must hold the switch (G7).
+    const wordmark = ["public/press/wordmark.svg", "public/press/wordmark.png"].some((f) => fs.existsSync(path.join(ROOT, f)));
+    if (!wordmark) expect(PRESS_OWNER_PENDING.some((p) => p.startsWith("logo: "))).toBe(true);
   });
 
   it("G2 a snapshot switched on with any figure at 0 is refused, and says which", () => {
