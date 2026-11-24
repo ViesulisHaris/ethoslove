@@ -58,6 +58,8 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/tools/love-language-quiz/page": ["templates"],
   "(editor)/layout": ["tour", "editor", "auth", "lifecycle", "money", "occasions", "pickers", "offerEmails"],
   "(app)/layout": ["account", "dashboard", "lifecycle", "money", "membership", "savedDates", "support"],
+  // Development only: the editor's share screen with The Tree Tag's row (the real one needs a published gift).
+  "(app)/print-preview/share/page": ["editor", "auth", "offerEmails", "pickers"],
   "(auth)/layout": ["auth", "support"],
   "(gift)/demo/[slug]/page": ["templates"],
 } as const satisfies Record<string, readonly string[]>;

@@ -80,6 +80,14 @@ test.describe("The Tree Tag", () => {
     await expect(page.locator("aside[data-app-hide]")).toBeHidden();
   });
 
+  test("on a 375 px phone the tags stand in one column, with nothing off the side", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await open(page, "/print-preview?shape=tree-tag");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
+    const [a, b] = await page.getByTestId("tree-tag").evaluateAll((tags) => tags.slice(0, 2).map((t) => t.getBoundingClientRect().left));
+    expect(a).toBeCloseTo(b, 0);
+  });
+
   test("prints on one page of A4 and one of Letter", async ({ page, browserName }, info) => {
     test.skip(browserName !== "chromium", "page.pdf is Chromium's");
     await open(page, "/print-preview?shape=tree-tag");
@@ -99,6 +107,36 @@ test.describe("The Tree Tag", () => {
     await expect(first.getByText("de Leo")).toBeVisible();
     await expect(page.getByRole("button", { name: "Imprimir la etiqueta" })).toBeVisible();
     await expect(page.getByText("Imprime cuatro etiquetas por página.", { exact: false })).toBeVisible();
+  });
+
+  test("the share screen offers it under the QR card while it is given, with the code's design in the link", async ({ page }) => {
+    await page.clock.setFixedTime(new Date("2026-12-20T22:00:00Z"));
+    await page.goto("/print-preview/share");
+    const row = page.getByTestId("tree-tag-row");
+    await expect(row).toBeVisible();
+    await expect(row.getByText("With every gift made by 20 December")).toBeVisible();
+    await expect(row.getByText("The Tree Tag", { exact: true })).toBeVisible();
+    const link = row.getByRole("link", { name: "Print The Tree Tag" });
+    await expect(link).toHaveAttribute("href", /\/dashboard\/gift\/[0-9a-f-]+\/print\?shape=tree-tag&dots=rounded&/);
+    // It sits under the QR card's own buttons, and its button is a 44 px target.
+    const print = (await page.getByRole("link", { name: "Print-ready card" }).boundingBox())!;
+    expect((await row.boundingBox())!.y).toBeGreaterThan(print.y);
+    expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    // The code's design travels with it, as it does to the print card.
+    await page.getByRole("radio", { name: "Square" }).click();
+    await expect(link).toHaveAttribute("href", /shape=tree-tag&dots=square&/);
+  });
+
+  test("the share screen offers nothing after the last day, or for a free gift", async ({ page }) => {
+    await page.clock.setFixedTime(new Date("2026-12-21T12:00:01Z"));
+    await page.goto("/print-preview/share");
+    await expect(page.getByRole("link", { name: "Print-ready card" })).toBeVisible();
+    await expect(page.getByTestId("tree-tag-row")).toHaveCount(0);
+
+    await page.clock.setFixedTime(new Date("2026-12-10T12:00:00Z"));
+    await page.goto("/print-preview/share?paid=0");
+    await expect(page.getByRole("link", { name: "Print-ready card" })).toBeVisible();
+    await expect(page.getByTestId("tree-tag-row")).toHaveCount(0);
   });
 
   test("the card prints as it did before the tag: the same words, every part in the same place", async ({ page }, info) => {

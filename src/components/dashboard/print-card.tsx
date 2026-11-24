@@ -96,6 +96,7 @@ const CARD_STYLE = `
  * never moves the code. Only `.tag…` selectors, an @page that comes after the card's, and, in print,
  * the dashboard's sidebar and top bar put away (a printer's page is wide enough for the sidebar) and
  * the screen-high minimums dropped (a page exactly one screen high spilled onto a blank second page).
+ * On a phone's screen the tags stand in one column, so nothing runs off the side; print is unchanged.
  */
 const TAG_STYLE = `
 .tag-sheet{background:white;width:210mm;padding:14mm 0 16mm;display:grid;grid-template-columns:repeat(2,74mm);grid-auto-rows:105mm;gap:8mm 10mm;justify-content:center;align-content:start;box-shadow:0 20px 50px -20px rgba(0,0,0,.35)}
@@ -111,8 +112,9 @@ const TAG_STYLE = `
 .tag-line{margin-top:3mm;height:7mm;max-width:52mm;font-size:7.5pt;line-height:1.3;letter-spacing:.16em;text-transform:uppercase;color:#6f665f;overflow:hidden;overflow-wrap:anywhere}
 .tag-from{margin-top:2.5mm;max-width:38mm;font-family:var(--font-display),Georgia,serif;font-style:italic;font-size:11pt;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tag-tree{position:absolute;right:3.5mm;bottom:3mm;width:14mm;height:14mm;object-fit:contain}
+@media screen and (max-width:820px){.tag-sheet{width:100%;grid-template-columns:74mm;padding:8mm 0}}
 @page{size:auto;margin:0}
-@media print{.tag-sheet{box-shadow:none;width:100%}aside[data-app-hide],header[data-app-hide]{display:none !important}.print-root:has(.tag-sheet),.min-h-dvh:has(.tag-sheet){min-height:0 !important}}
+@media print{.tag-sheet{box-shadow:none;width:100%}aside[data-app-hide],header[data-app-hide]{display:none !important}.print-root:has(.tag-sheet),.min-h-dvh:has(.tag-sheet){min-height:0 !important}html:has(.tag-sheet),body:has(.tag-sheet),.min-h-dvh:has(.tag-sheet){background:#fff !important}}
 `;
 
 /** What the print page draws: the A6 card (two to a page), or The Tree Tag (four to a page, a holiday extra). */
