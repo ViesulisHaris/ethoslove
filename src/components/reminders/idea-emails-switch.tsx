@@ -40,14 +40,19 @@ export function IdeaEmailsSwitch({ initialOn }: { initialOn: boolean }) {
 
   return (
     <>
-      <section className="mt-6 flex items-center gap-3 rounded-2xl border border-border bg-card py-2 pr-2 pl-5" data-testid="idea-emails">
-        <div className="min-w-0 flex-1 py-1">
+      {/* On a phone the button sits under the words, and the line under the title keeps two lines'
+          room, so turning it off or on never moves what is below the row. */}
+      <section
+        className="mt-6 flex flex-col items-start gap-2 rounded-2xl border border-border bg-card px-5 py-3 sm:flex-row sm:items-center sm:gap-3 sm:py-2 sm:pr-2"
+        data-testid="idea-emails"
+      >
+        <div className="w-full min-w-0 py-1 sm:w-auto sm:flex-1">
           <p className="font-medium">{t("pageTitle")}</p>
-          <p className="text-sm text-muted-foreground" aria-live="polite">
+          <p className="min-h-10 text-sm text-muted-foreground sm:min-h-0" aria-live="polite">
             {on ? t("pageOn") : t("pageOff")}
           </p>
         </div>
-        <Button variant="ghost" className="h-11 shrink-0 rounded-full px-4" disabled={busy} onClick={() => void toggle()}>
+        <Button variant="outline" className="h-11 shrink-0 rounded-full px-5" disabled={busy} aria-busy={busy || undefined} onClick={() => void toggle()}>
           {busy ? <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden /> : null}
           <span>{on ? t("turnOff") : t("turnOn")}</span>
         </Button>

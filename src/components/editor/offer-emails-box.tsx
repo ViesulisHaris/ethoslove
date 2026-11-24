@@ -65,9 +65,10 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
     }
   };
 
+  // The line keeps its words until the server has answered, as the account page's row does: it never
+  // says "Off" for a stop that wasn't saved.
   const switchIdea = async (off: boolean) => {
     setIdeaBusy(true);
-    setIdeaOff(off);
     try {
       const res = await fetch("/api/monthly-idea", {
         method: "POST",
@@ -76,9 +77,9 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
         body: JSON.stringify({ on: !off }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      setIdeaOff(off);
       track(off ? "idea_emails_off" : "idea_emails_on", { where: "share" });
     } catch {
-      setIdeaOff(!off);
       toast.error(t("failed"));
     } finally {
       setIdeaBusy(false);
@@ -93,6 +94,7 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
           <button
             type="button"
             disabled={ideaBusy}
+            aria-busy={ideaBusy || undefined}
             onClick={() => void switchIdea(!ideaOff)}
             className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-ink underline underline-offset-4 hover:text-coral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:opacity-70 disabled:opacity-50"
             data-testid="idea-off"
