@@ -18,7 +18,9 @@ if the audience records no language, send the English one to everyone.
 first send falls between 24 November and the end of 20 December anywhere on earth (`src/lib/lifecycle/holiday-extras.ts`:
 the first instant after is 21 December 12:00 UTC). It is decided at a send and stamped on the gift: a gift made
 after gets no tag, a gift begun before 24 November and sent again gets none, and a gift that has it keeps it after
-any edit. A gift begun inside the days, first sent free and sent again once paid (by the 20th), gets it then.
+any edit. A gift begun inside the days, first sent free and sent again once paid (by the 20th), gets it then; a
+gift sent free and never sent again gets none, even if its sender buys the template later. A copy of a gift
+(Duplicate in the dashboard) is a new gift: it gets the tag only if its own first send, paid, is by the 20th.
 Free gifts (the free Letter or note, a free reply, a creator-campaign gift) get no tag, so both e-mails say "paid".
 The tag is offered on the share screen and the gift's page until the end of 25 December. Send the last-day
 e-mail on the morning of the 20th so "tonight" is true where the reader is.
@@ -26,9 +28,17 @@ e-mail on the morning of the 20th so "tonight" is true where the reader is.
 **It ships switched off.** Nothing is stamped or offered until `NEXT_PUBLIC_TREE_TAG=1` is set in Vercel
 (Production) and the site is redeployed; switch it on before the offer e-mail goes out, as soon as the owner
 approves the offer. Paid gifts begun and sent while it was off are still offered the tag once it is on (worked out
-from when the draft began and when it was last sent). The one gap: a draft begun **before** 24 November and first
+from when the draft began, when it was last sent, and whether that send was paid), and keep it if they are
+edited and sent again after the 20th. The one gap: a draft begun **before** 24 November and first
 sent between then and the switch going on gets no tag, because the site keeps no first-send time. Unset, the live
 site works exactly as before.
+
+**Said before paying.** While the tag is given (switch on, 24 November to the end of the 20th), the pay panel in
+the editor carries one line: "Made by 20 December, it comes with The Tree Tag to print and hang on the tree." The
+occasion page the e-mail opens does not mention it.
+
+**The pictures' codes** open the home page in the e-mail's language (`/` or `/es`) with `?ref=email-xmas-tag`, so a
+scan of the picture is counted apart from the button's clicks.
 
 ## Before either e-mail is sent
 

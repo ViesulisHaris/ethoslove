@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { personalPriceEnds, usePersonalPrice } from "@/components/pricing/use-personal-price";
 import { useInApp } from "@/lib/app/use-bridge";
+import { extraOnOffer } from "@/lib/lifecycle/holiday-extras";
 import {
   bumpOffered,
   defaultPaywallPlan,
@@ -179,6 +180,8 @@ export function Paywall({
       : null;
 
   const planAmount = chosen === forTemplate ? forTemplateAmount : all.amount;
+  // Read once, when the panel opens: the sheet is never rendered on the server.
+  const [treeTag] = useState(() => extraOnOffer() === "tree-tag");
   const showBump = !personalOn && bumpOffered(chosen, all);
   const bumpOn = showBump && bump;
   const suggestions = secondSuggestions(slug, ownedElsewhere.map((m) => m.slug));
@@ -465,6 +468,14 @@ export function Paywall({
       {ownedElsewhere.length ? (
         <p className="mt-3 text-sm text-ink-soft">
           {t("ownedElsewhere", { templates: ownedElsewhere.map((m) => m.name[locale]).join(", ") })}
+        </p>
+      ) : null}
+      {/* The Christmas e-mail's bonus, said once where it is paid for (lib/lifecycle/holiday-extras.ts): only while it is given. */}
+      {treeTag ? (
+        <p className="mt-3 flex items-center gap-2.5 text-sm text-ink" data-testid="pay-tree-tag">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/art/occasions/christmas.webp" alt="" width={24} height={24} className="size-6 shrink-0" />
+          <span>{tm("treeTag")}</span>
         </p>
       ) : null}
 

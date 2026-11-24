@@ -25,8 +25,10 @@ const S = {
       for: "For",
       scan: "Scan on Christmas morning",
       from: "from",
+      title: "The Tree Tag",
       print: "Print The Tree Tag",
-      hint: "Prints four tags per page. Cut along the lines, punch the hole, and tie it to the tree.",
+      drawing: "Drawing the code…",
+      hint: "Prints four tags per page. Cut along the lines, punch the holes, and tie them to the tree.",
       adjust: "Adjust the tag",
       name: "Their name",
       sender: "From",
@@ -49,10 +51,12 @@ const S = {
     qrAlt: "Código QR del regalo",
     tag: {
       for: "Para",
-      scan: "Escanéame la mañana de Navidad",
+      scan: "Escanear la mañana de Navidad",
       from: "de",
+      title: "La etiqueta del árbol",
       print: "Imprimir la etiqueta",
-      hint: "Imprime cuatro etiquetas por página. Recorta por las líneas, perfora el agujero y átala al árbol.",
+      drawing: "Dibujando el código…",
+      hint: "Imprime cuatro etiquetas por página. Recorta por las líneas, perfora los agujeros y átalas al árbol.",
       adjust: "Ajusta la etiqueta",
       name: "Para quién",
       sender: "De",
@@ -114,6 +118,13 @@ const TAG_STYLE = `
 .tag-line{margin-top:3mm;height:7mm;max-width:52mm;font-size:7.5pt;line-height:1.3;letter-spacing:.16em;text-transform:uppercase;color:#6f665f;overflow:hidden;overflow-wrap:anywhere}
 .tag-from{margin-top:2.5mm;height:9.5mm;width:38mm;font-family:var(--font-display),Georgia,serif;font-style:italic;line-height:1.2;overflow:hidden}
 .tag-from span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.tag-root .toolbar>button{min-height:44px}
+.tag-root .toolbar>button:disabled{opacity:.6;cursor:progress}
+.tag-root .toolbar>button:focus-visible,.tag-root .papers button:focus-visible{outline:2px solid #1A1614;outline-offset:2px}
+.tag-root .papers button{min-height:44px;padding:0 14px}
+.tag-root .check{min-height:44px;cursor:pointer}
+.tag-root .check input{width:20px;height:20px;margin:0;accent-color:#1A1614}
+.tag-from span[dir=rtl] bdi{padding-inline-start:.25em}
 .tag-tree{position:absolute;right:3.5mm;bottom:3mm;width:14mm;height:14mm;object-fit:contain}
 @media screen and (max-width:820px){.tag-sheet{width:100%;grid-template-columns:74mm;padding:8mm 0}}
 @page{size:auto;margin:0}
@@ -122,6 +133,9 @@ const TAG_STYLE = `
 
 /** What the print page draws: the A6 card (two to a page), or The Tree Tag (four to a page, a holiday extra). */
 export type PrintShape = "card" | "tree-tag";
+
+/** The scripts written right to left, tested on a sender's first letter. */
+const RTL_SCRIPT = /[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u;
 
 /** The card stocks: all light, so the code on them always scans. */
 const PAPERS = { cream: "#FAF7F2", white: "#FFFFFF", blush: "#FBE3E8", sage: "#E8EFE4" } as const;
@@ -195,8 +209,13 @@ export function PrintCard({ url, recipientName, senderName, accent, locale, bran
     // Two lines at most in a box of fixed height, so "Grandma and Grandpa Johnson" prints whole, and so
     // does the longest the field takes (40 characters, "Grandma Rosalind and Grandpa Bartholomew").
     const fromSize = from.length > 32 ? "8pt" : from.length > 24 ? "9pt" : "11pt";
-    const one = (
-      <div className="tag" data-testid="tree-tag">
+    // A sender written right to left makes the line run right to left, so "from" is read first and a
+    // name that wraps continues on the next line instead of landing on both sides of "from". The name
+    // is isolated (<bdi>), so a trailing number or bracket stays with it.
+    const fromRtl = RTL_SCRIPT.test(from.match(/\p{L}/u)?.[0] ?? "");
+    // Four of the same tag: a screen reader reads the first, the other three are only paper.
+    const one = (copy: number) => (
+      <div className="tag" data-testid="tree-tag" key={copy} aria-hidden={copy > 0 ? true : undefined}>
         <svg className="tag-edge" viewBox="0 0 74 105" aria-hidden="true">
           <polygon points="12,0.15 62,0.15 73.85,12 73.85,104.85 0.15,104.85 0.15,12" fill={background} stroke="#B5AA9B" strokeWidth="0.25" strokeDasharray="1.6 1.1" />
           <circle cx="37" cy="9" r="3" fill="#FFFFFF" stroke="#B5AA9B" strokeWidth="0.3" />
@@ -217,8 +236,8 @@ export function PrintCard({ url, recipientName, senderName, accent, locale, bran
           <p className="tag-line">{message}</p>
           <p className="tag-from" translate="no" style={{ fontSize: fromSize }}>
             {from ? (
-              <span>
-                {t.tag.from} {from}
+              <span dir={fromRtl ? "rtl" : undefined}>
+                {t.tag.from} <bdi>{from}</bdi>
               </span>
             ) : null}
           </p>
@@ -228,13 +247,15 @@ export function PrintCard({ url, recipientName, senderName, accent, locale, bran
       </div>
     );
     return (
-      <div className="print-root">
+      <div className="print-root tag-root">
         <style>{CARD_STYLE}</style>
         <style>{TAG_STYLE}</style>
+        <h1 className="sr-only">{t.tag.title}</h1>
         <div className="toolbar">
-          <button type="button" onClick={() => window.print()}>
-            <Printer size={16} />
-            {t.tag.print}
+          {/* Not before the code is drawn: printed early, the four tags would have nothing to scan. */}
+          <button type="button" onClick={() => window.print()} disabled={!code} aria-busy={!code}>
+            <Printer size={16} aria-hidden="true" />
+            {code ? t.tag.print : t.tag.drawing}
           </button>
           <span>{t.tag.hint}</span>
         </div>
@@ -269,10 +290,7 @@ export function PrintCard({ url, recipientName, senderName, accent, locale, bran
           </label>
         </div>
         <div className="tag-sheet" data-testid="tree-tag-sheet">
-          {one}
-          {one}
-          {one}
-          {one}
+          {[0, 1, 2, 3].map(one)}
         </div>
       </div>
     );

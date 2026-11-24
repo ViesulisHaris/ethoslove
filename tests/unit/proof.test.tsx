@@ -216,6 +216,34 @@ describe("the pay panel", () => {
     // A guest's account needs no sign-up, and nothing there says "password" beside a gift that has one.
     expect(pay({ guest: true })).toContain("nothing to sign up for");
   });
+
+  describe("The Tree Tag, said before paying", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+      vi.unstubAllEnvs();
+    });
+    const at = (iso: string, on: string | undefined) => {
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(new Date(iso));
+      vi.stubEnv("NEXT_PUBLIC_TREE_TAG", on);
+    };
+
+    it("is one quiet line in the panel while the tag is given, in both languages and both layouts", () => {
+      at("2026-12-10T10:00:00Z", "1");
+      expect(pay()).toContain("Made by 20 December, it comes with The Tree Tag to print and hang on the tree.");
+      expect(pay({ manifest: letter, note: { photos: 2, longLetter: false } }, "es")).toContain("Hecho hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.");
+      expect(pay().match(/data-testid="pay-tree-tag"/g)).toHaveLength(1);
+    });
+
+    it("says nothing with the switch off, before 24 November, or once the 20th has ended everywhere", () => {
+      at("2026-12-10T10:00:00Z", undefined);
+      expect(pay()).not.toContain('data-testid="pay-tree-tag"');
+      at("2026-11-23T23:59:59Z", "1");
+      expect(pay()).not.toContain('data-testid="pay-tree-tag"');
+      at("2026-12-21T12:00:00Z", "1");
+      expect(pay()).not.toContain('data-testid="pay-tree-tag"');
+    });
+  });
 });
 
 describe("the pricing cards' words", () => {

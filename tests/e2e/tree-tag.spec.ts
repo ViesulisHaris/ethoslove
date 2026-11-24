@@ -38,7 +38,57 @@ test.describe("The Tree Tag", () => {
     await expect(first.getByText("Mia", { exact: true })).toBeVisible();
     await expect(first.getByText("Scan on Christmas morning")).toBeVisible();
     await expect(first.getByText("from Leo")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Print The Tree Tag" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Print The Tree Tag" })).toBeEnabled();
+  });
+
+  test("is named for what it prints, and read once, not four times", async ({ page }) => {
+    await open(page, "/print-preview?shape=tree-tag");
+    await expect(page).toHaveTitle("The Tree Tag · Ethos");
+    await expect(page.getByRole("heading", { level: 1, name: "The Tree Tag" })).toBeAttached();
+    await expect(page.getByRole("img", { name: "QR code for the gift" })).toHaveCount(1);
+    await expect(page.getByTestId("tree-tag")).toHaveCount(4);
+  });
+
+  test("on a phone every control in the toolbar is a 44 px target", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await open(page, "/print-preview?shape=tree-tag");
+    const heights = [
+      (await page.getByRole("button", { name: "Print The Tree Tag" }).boundingBox())!.height,
+      ...(await page.locator(".papers button").evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height))),
+      (await page.locator(".check").boundingBox())!.height,
+    ];
+    expect(heights).toHaveLength(6);
+    for (const height of heights) expect(height).toBeGreaterThan(43.5);
+  });
+
+  test("a sender in a right-to-left script is read 'from' first, not with 'from' in the middle of a wrapped name", async ({ page }) => {
+    // Where "from" sits on its line against the name's words there: on a right-to-left line it is the rightmost.
+    const fromPlace = () =>
+      page
+        .getByTestId("tree-tag")
+        .first()
+        .locator(".tag-from span")
+        .evaluate((span) => {
+          const range = document.createRange();
+          range.setStart(span.firstChild!, 0);
+          range.setEnd(span.firstChild!, span.firstChild!.textContent!.length);
+          const word = range.getBoundingClientRect();
+          const name = document.createRange();
+          name.selectNodeContents(span.querySelector("bdi")!);
+          const pieces = [...name.getClientRects()].filter((r) => Math.abs(r.top - word.top) < 2);
+          return { dir: span.getAttribute("dir"), lines: Math.round(span.getBoundingClientRect().height / word.height), pieces: pieces.length, left: pieces.filter((r) => r.right <= word.left + 1).length, right: pieces.filter((r) => r.left >= word.right - 1).length };
+        });
+    const arabic = "فاطمة الزهراء وعائلتها الكبيرة";
+    await open(page, `/print-preview?shape=tree-tag&sender=${encodeURIComponent(arabic)}`);
+    await expect(page.locator(".tag-from bdi").first()).toHaveText(arabic);
+    const rtl = await fromPlace();
+    // Two lines: "from" and the name's first words on the first, read from the right; the rest under them.
+    expect(rtl).toMatchObject({ dir: "rtl", lines: 2, right: 0 });
+    expect(rtl.left).toBe(rtl.pieces);
+    expect(rtl.pieces).toBeGreaterThan(0);
+    // A name in a left-to-right script is unchanged: "from" leads on the left.
+    await open(page, `/print-preview?shape=tree-tag&sender=${encodeURIComponent("Grandma Rose and Grandpa Peter")}`);
+    expect(await fromPlace()).toMatchObject({ dir: null, left: 0 });
   });
 
   test("the code is at least 34 mm wide, and a 40-character name stays in its tag without moving it", async ({ page }) => {
@@ -103,7 +153,7 @@ test.describe("The Tree Tag", () => {
     const first = page.getByTestId("tree-tag").first();
     await expect(first.getByText("Para", { exact: true })).toBeVisible();
     await expect(first.getByText("Lucía", { exact: true })).toBeVisible();
-    await expect(first.getByText("Escanéame la mañana de Navidad")).toBeVisible();
+    await expect(first.getByText("Escanear la mañana de Navidad")).toBeVisible();
     await expect(first.getByText("de Leo")).toBeVisible();
     await expect(page.getByRole("button", { name: "Imprimir la etiqueta" })).toBeVisible();
     await expect(page.getByText("Imprime cuatro etiquetas por página.", { exact: false })).toBeVisible();

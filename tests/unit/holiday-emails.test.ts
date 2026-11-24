@@ -26,9 +26,22 @@ describe.each(FILES)("%s", (file) => {
   });
 
   it("says 'paid' in the label over the tag only, never in the lines a reader reads first", () => {
-    const text = html.replace(/<[^>]+>/g, "\n");
+    const text = html.replace(/<[^>]+>/g, "\n").replace(/&nbsp;/g, " ");
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
     const paid = lines.filter((l) => /\bpaid\b|de pago/i.test(l));
     expect(paid).toEqual([file.endsWith(".es.html") ? "Con cada regalo de pago hecho hasta el 20 de diciembre" : "With every paid gift made by 20 December"]);
+  });
+
+  it("keeps the label's date on one line", () => {
+    expect(html).toContain(file.endsWith(".es.html") ? ">Con cada regalo de pago hecho hasta el 20&nbsp;de&nbsp;diciembre<" : ">With every paid gift made by 20&nbsp;December<");
+  });
+
+  it("speaks of making the gift by the 20th, never of ordering it or of any day this month", () => {
+    expect(html).not.toMatch(/\bOrder\b|\bEncarga|any day this month|cualquier día de este mes/);
+  });
+
+  it("says the tag's line in one voice, as the tag prints it, and unsubscribes in the impersonal form", () => {
+    expect(html).not.toContain("Escanéame");
+    if (file.endsWith(".es.html")) expect(html).toContain(">Darse de baja<");
   });
 });

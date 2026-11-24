@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extraFor, HOLIDAY_EXTRAS, holidayExtraAtPublish, holidayExtrasOn, sentWithExtra, showsExtra, stampedExtra, withoutHolidayExtra } from "@/lib/lifecycle/holiday-extras";
+import { extraFor, extraOnOffer, HOLIDAY_EXTRAS, holidayExtraAtPublish, holidayExtrasOn, sentWithExtra, showsExtra, stampedExtra, withoutHolidayExtra } from "@/lib/lifecycle/holiday-extras";
 
 /** A gift first published at this instant. */
 const made = (at: string, paid = true) => extraFor({ madeAt: at, paid });
@@ -155,6 +155,13 @@ describe("where it is shown", () => {
     expect(sentWithExtra({ ...sentFree, watermark: null })).toBeNull();
     // The same gift sent paid on the same day did come with it.
     expect(sentWithExtra({ ...sentFree, watermark: false })).toBe("tree-tag");
+  });
+
+  it("is said before paying only inside the days and with the switch on", () => {
+    expect(extraOnOffer(at("2026-12-20T23:00:00Z"), true)).toBe("tree-tag");
+    expect(extraOnOffer(at("2026-12-21T12:00:00Z"), true)).toBeNull();
+    expect(extraOnOffer(at(second("2026-11-24T00:00:00Z", -1)), true)).toBeNull();
+    expect(extraOnOffer(at("2026-12-10T10:00:00Z"), false)).toBeNull();
   });
 
   it("reads a stamp it knows and nothing else", () => {

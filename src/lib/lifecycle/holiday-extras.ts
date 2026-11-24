@@ -45,6 +45,15 @@ export function extraFor(gift: { madeAt: string | number | null; paid: boolean }
   return null;
 }
 
+/**
+ * The extra a gift paid for now would come with, to say so before paying (the paywall): inside the
+ * extra's days and with the switch on. Whether the gift is then sent inside the days is the publish's
+ * to decide (holidayExtraAtPublish); the line says "made by 20 December" for that.
+ */
+export function extraOnOffer(now: number = Date.now(), on: boolean = holidayExtrasOn()): HolidayExtra | null {
+  return on ? extraFor({ madeAt: now, paid: true }) : null;
+}
+
 /** The stamp a gift's stored data carries, read without trusting its shape. */
 export function stampedExtra(data: unknown): HolidayExtra | null {
   const value = data && typeof data === "object" ? (data as { holidayExtra?: unknown }).holidayExtra : undefined;
