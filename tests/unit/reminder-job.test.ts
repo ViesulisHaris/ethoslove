@@ -204,7 +204,7 @@ describe("the three e-mails before a day", () => {
     const early = run(fake, "2027-02-24");
     expect(await early.result).toEqual({ sent: 1, failed: 0, deferred: 0, mode: "old" });
     expect(early.sent).toEqual([]);
-    expect(early.old).toEqual([{ to: "leo@icloud.test", locale: "en", recipientName: "Mia", occasion: "anniversary", date: "5 March", avoid: "museum", removeUrl: `remove/${R}` }]);
+    expect(early.old).toEqual([{ to: "leo@icloud.test", locale: "en", recipientName: "Mia", occasion: "anniversary", date: "5 March", avoid: "museum", removeUrl: `remove/${R}`, onceKey: `reminder-old/${R}:2027` }]);
     expect(fake.rows("reminders")[0].last_sent_year).toBe(2027);
     expect((await run(fake, "2027-02-24").result).sent).toBe(0);
     expect(warn).toHaveBeenCalledTimes(2);

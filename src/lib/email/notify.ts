@@ -368,6 +368,7 @@ export async function sendReminderEmail({
   removeUrl,
   ref = "email-reminder",
   staged,
+  onceKey,
 }: {
   to: string;
   locale: L;
@@ -382,6 +383,11 @@ export async function sendReminderEmail({
    * it has always been: a kept gift's reminder, and the job on a database without migration 0025.
    */
   staged?: StagedReminderSend;
+  /**
+   * Resend's idempotency key for the one e-mail (a reminder and its year): the morning job runs five
+   * times, and a send that failed in a way that may still have gone is not sent again within the day.
+   */
+  onceKey?: string;
 }): Promise<boolean> {
   if (staged) return sendStagedReminder({ to, locale, recipientName, occasion, date, removeUrl, ...staged });
   return safely("reminder", async () =>
@@ -398,6 +404,7 @@ export async function sendReminderEmail({
         removeUrl,
       }),
       headers: unsubscribeHeaders(removeUrl),
+      ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
 }
@@ -467,25 +474,27 @@ export async function sendKeepLink({ to, locale, giftUrl, days, sender = "", sto
  * `stopUrl` are signed links (api/monthsaries/yes and /stop). The stop link is also the one-click
  * unsubscribe a mail app offers.
  */
-export async function sendMonthsaryCheckIn({ to, locale, partnerName, date, yesUrl, stopUrl }: { to: string; locale: L; partnerName: string; date: string; yesUrl: string; stopUrl: string }): Promise<boolean> {
+export async function sendMonthsaryCheckIn({ to, locale, partnerName, date, yesUrl, stopUrl, onceKey }: { to: string; locale: L; partnerName: string; date: string; yesUrl: string; stopUrl: string; onceKey?: string }): Promise<boolean> {
   return safely("monthsary check-in", async () =>
     deliver("monthsary check-in", {
       to,
       subject: monthsaryCheckInHeading(locale, partnerName),
       react: MonthsaryCheckInEmail({ locale, partnerName, date, yesUrl, stopUrl }),
       headers: unsubscribeHeaders(stopUrl),
+      ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
 }
 
 /** On a monthsary the buyer said yes to: one small template, a different one each month. */
-export async function sendMonthsaryReminder({ to, locale, partnerName, months, stopUrl }: { to: string; locale: L; partnerName: string; months: number; stopUrl: string }): Promise<boolean> {
+export async function sendMonthsaryReminder({ to, locale, partnerName, months, stopUrl, onceKey }: { to: string; locale: L; partnerName: string; months: number; stopUrl: string; onceKey?: string }): Promise<boolean> {
   return safely("monthsary reminder", async () =>
     deliver("monthsary reminder", {
       to,
       subject: monthsaryHeading(locale, partnerName, months),
       react: MonthsaryReminderEmail({ locale, partnerName, months, idea: emailIdea(suggestTemplate("monthsary", { turn: months }), locale, "email-monthsary"), stopUrl }),
       headers: unsubscribeHeaders(stopUrl),
+      ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
 }

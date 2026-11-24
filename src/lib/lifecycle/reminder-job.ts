@@ -83,7 +83,8 @@ export type StagedReminderEmail = {
   onceKey: string;
 } & PaidLine;
 
-export type OldReminderEmail = { to: string; locale: "en" | "es"; recipientName: string; occasion: ReminderOccasion; date: string; avoid: string | null; removeUrl: string };
+/** `onceKey`: Resend's idempotency key, one e-mail per reminder and year, as the three e-mails have. */
+export type OldReminderEmail = { to: string; locale: "en" | "es"; recipientName: string; occasion: ReminderOccasion; date: string; avoid: string | null; removeUrl: string; onceKey: string };
 
 export type ReminderLinks = { openUrl: string; moreUrl: string; skipUrl: string; removeUrl: string };
 
@@ -231,6 +232,7 @@ async function sendOld(run: ReminderRun, limit: number): Promise<Omit<ReminderRu
         // The template the reminder was saved with is only skipped: the suggestion is a new one.
         avoid: r.template_slug,
         removeUrl: await run.removeUrl(r, locale),
+        onceKey: `reminder-old/${r.id}:${due.year}`,
       });
       if (ok) sent += 1;
       else {

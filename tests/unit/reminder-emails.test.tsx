@@ -208,4 +208,12 @@ describe("the one e-mail as before", () => {
     expect(state.sent[0].subject).toBe("Leo's birthday is on 5 March");
     expect(state.sent[0].idempotencyKey).toBeUndefined();
   });
+
+  it("goes once a day on Resend's side when the job names it: five morning runs never send it twice", async () => {
+    state.sent = [];
+    await notify.sendReminderEmail({ to: "a@b.test", locale: "en", recipientName: "Leo", occasion: "birthday", date: "5 March", removeUrl: "https://ethos.test/off", ref: "keep", onceKey: "kept-reminder/k:2027" });
+    await notify.sendMonthsaryCheckIn({ to: "a@b.test", locale: "en", partnerName: "Ana", date: "3 November", yesUrl: "https://ethos.test/yes", stopUrl: "https://ethos.test/stop", onceKey: "monthsary-checkin/m:2026-11-03" });
+    await notify.sendMonthsaryReminder({ to: "a@b.test", locale: "en", partnerName: "Ana", months: 8, stopUrl: "https://ethos.test/stop", onceKey: "monthsary-reminder/m:2026-11-03" });
+    expect(state.sent.map((m) => m.idempotencyKey)).toEqual(["kept-reminder/k:2027", "monthsary-checkin/m:2026-11-03", "monthsary-reminder/m:2026-11-03"]);
+  });
 });
