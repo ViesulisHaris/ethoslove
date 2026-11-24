@@ -164,7 +164,8 @@ test.describe("the share screen's reminder card", () => {
     await expect(birthday).toContainText("Ana's birthday");
     await expect(birthday).toContainText("from this gift");
     await expect(birthday).toContainText("12 March");
-    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Your anniversary");
+    // Named, so a gift for a mother never files the sender's own anniversary under her name.
+    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Your anniversary with Ana");
     await expect(card.getByTestId("remind-field-anniversary")).toContainText("Pick the day");
     await expect(card).toContainText("Three short emails before each day: 7 days, 2 days and the day before. They stop once your gift is made.");
     // The other rows wait behind "Add another day".
@@ -204,12 +205,12 @@ test.describe("the share screen's reminder card", () => {
     const save = card.getByTestId("remind-save-dates");
     // Valentine's Day is neither of the two days: both start empty.
     await expect(save).toBeDisabled();
-    await pickDay(page, card.getByRole("button", { name: "Your anniversary", exact: true }), "March", 5);
+    await pickDay(page, card.getByRole("button", { name: "Your anniversary with Ana", exact: true }), "March", 5);
     await pickDay(page, card.getByRole("button", { name: "Ana's birthday", exact: true }), "November", 30);
     await expect(save).toBeEnabled();
     await save.click();
     await expect(card.getByTestId("remind-saved")).toContainText("Saved. Your first email comes on");
-    await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary · 5 March");
+    await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary with Ana · 5 March");
     await expect(card.getByTestId("remind-saved")).toContainText("Ana's birthday · 30 November");
     expect(reminders).toEqual([
       { recipientName: "Ana", occasion: "birthday", month: 11, day: 30, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false },
@@ -245,7 +246,7 @@ test.describe("the share screen's reminder card", () => {
     await expect(page.getByTestId("remind-row-monthly")).toContainText("Day 3 of each month");
     // Saving now sends only the birthday.
     await page.getByTestId("remind-save-dates").click();
-    await expect(page.getByTestId("remind-saved")).toContainText("Your anniversary · 9 June");
+    await expect(page.getByTestId("remind-saved")).toContainText("Your anniversary with Ana · 9 June");
     expect(reminders).toHaveLength(1);
     expect(reminders[0]).toMatchObject({ occasion: "birthday" });
   });
@@ -265,11 +266,13 @@ test.describe("the share screen's reminder card", () => {
     await expect(birthday.getByTestId("remind-locked-birthday")).toHaveText(/Mia's birthday:\s*30 November\s*Added/);
     // No picker to change it with: the reminders page is where it changes.
     await expect(birthday.getByRole("button")).toHaveCount(0);
+    // And it is drawn as text, not as a field that a tap would do nothing on.
+    expect(await birthday.getByTestId("remind-locked-birthday").evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe("0px");
     await expect(birthday.getByRole("link", { name: "Mia's birthday: change it on your reminders page" })).toHaveAttribute("href", "/account/reminders");
-    await pickDay(page, card.getByRole("button", { name: "Your anniversary", exact: true }), "June", 12);
+    await pickDay(page, card.getByRole("button", { name: "Your anniversary with Mia", exact: true }), "June", 12);
     await card.getByTestId("remind-save-dates").click();
     await expect(card.getByTestId("remind-saved")).toContainText("Mia's birthday · 30 November");
-    await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary · 12 June");
+    await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary with Mia · 12 June");
     expect(reminders).toEqual([{ recipientName: "Mia", occasion: "anniversary", month: 6, day: 12, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false }]);
   });
 
@@ -456,7 +459,7 @@ test.describe("the share screen's reminder card", () => {
     const card = page.getByTestId("remind-card");
     await expect(card.getByTestId("remind-field-birthday").getByText("Added")).toBeVisible();
     const anniversary = day(200);
-    await pickDay(page, card.getByRole("button", { name: "Your anniversary", exact: true }), new Intl.DateTimeFormat("en-GB", { month: "long" }).format(anniversary), anniversary.getDate());
+    await pickDay(page, card.getByRole("button", { name: "Your anniversary with Ana", exact: true }), new Intl.DateTimeFormat("en-GB", { month: "long" }).format(anniversary), anniversary.getDate());
     await card.getByTestId("remind-save-dates").click();
     await expect(card.getByTestId("remind-saved")).toContainText("Saved. Your next email comes on");
   });

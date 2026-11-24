@@ -376,13 +376,13 @@ export function RemindNextYear({ data }: { data: GiftData }) {
                         {t("edit")}
                       </Link>
                     </span>
-                    <p className="flex h-11 min-w-0 items-center gap-2.5 rounded-xl border border-border bg-paper px-3 text-base font-normal" data-testid={`remind-locked-${f}`}>
-                      <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
+                    {/* Plain text, not a field: nothing here takes a tap but "Change" above. Same height as the picker, so nothing moves when it is saved. */}
+                    <p className="flex h-11 min-w-0 items-center gap-3 text-base font-normal" data-testid={`remind-locked-${f}`}>
                       <span className="min-w-0 truncate">
                         <span className="sr-only">{fieldLabel(f)}: </span>
                         {formatMonthDay(savedDay, locale)}
                       </span>
-                      <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-moss">
+                      <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-moss">
                         <Check className="size-4" aria-hidden />
                         {t("added")}
                       </span>
@@ -645,7 +645,8 @@ type T = (key: string, values?: Record<string, string | number>) => string;
 /** "Ana's birthday", "Your anniversary", "Valentine's Day", "A day for Ana": what a row is about. */
 function nextLabel(t: T, occasion: ReminderOccasion, name: string): string {
   if (occasion === "valentines") return t("occasions.valentines");
-  if (occasion === "anniversary") return t("rows.anniversary");
+  // "Your anniversary with Mum" reads wrong at once, so a gift for a mother never files the sender's own anniversary under her name.
+  if (occasion === "anniversary") return name ? t("rows.anniversary", { name }) : t("rows.anniversaryNoName");
   return name ? t(`rows.${occasion}`, { name }) : t(`rows.${occasion}NoName`);
 }
 
