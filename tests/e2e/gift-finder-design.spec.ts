@@ -177,7 +177,8 @@ test("a question fits the first screen of a phone: every first answer at 375×66
       expect(at375.heading.top, where).toBeGreaterThan(0);
       // The heading is three lines at most, and every first answer is on the screen without scrolling.
       expect(at375.h1Lines, where).toBeLessThanOrEqual(3);
-      expect(at375.cards.length, where).toBe(query ? 7 : 8);
+      // Eight either way: seven people and "Not sure", or seven occasions and "Not sure" (walk-agreed-1, 29a919e0).
+      expect(at375.cards.length, where).toBe(8);
       for (const bottom of at375.cards) expect(bottom, `${where} at 375×667`).toBeLessThanOrEqual(667);
 
       await page.setViewportSize({ width: 320, height: 568 });
