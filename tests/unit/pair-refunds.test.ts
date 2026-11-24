@@ -2,6 +2,8 @@ import type Stripe from "stripe";
 import { describe, expect, it, vi } from "vitest";
 import type { Db } from "@/lib/commerce/db";
 import { grantGifts, readyGifts, spendGift } from "@/lib/commerce/gift-credits";
+import { upgradeAmount, type PaidPurchase } from "@/lib/commerce/pricing";
+import { PRODUCTS } from "@/lib/pricing/products";
 import { revokePurchase } from "@/lib/commerce/revoke";
 import { grantForever } from "@/lib/commerce/unlocks";
 import { handleStripeEvent, type StripeEventDeps } from "@/lib/stripe/events";
@@ -83,11 +85,27 @@ describe("refunds of two more gifts", () => {
     expect(fake.rows("gift_credits").filter((r) => r.revoked_at)).toHaveLength(1);
   });
 
-  it("by less than half: a goodwill gesture, nothing changes", async () => {
+  it("by less than half: a goodwill gesture, no gift goes", async () => {
     const fake = seed();
     await bought(fake);
     await handleStripeEvent(event("charge.refunded", refund(100)), deps(fake.db));
     expect(await readyGifts(fake.db, "u1")).toBe(2);
+  });
+
+  it("partly refunded: only what was kept counts towards the upgrade, and the same event again changes nothing", async () => {
+    const fake = seed();
+    await bought(fake);
+    const quote = () => upgradeAmount("eur", fake.rows("purchases") as unknown as PaidPurchase[]);
+    expect(quote()).toBe(PRODUCTS.everything.amounts.eur - 999 - 500);
+    await handleStripeEvent(event("charge.refunded", refund(250)), deps(fake.db));
+    expect(fake.rows("purchases").find((p) => p.id === PAIR)?.amount).toBe(250);
+    expect(quote()).toBe(PRODUCTS.everything.amounts.eur - 999 - 250);
+    await handleStripeEvent(event("charge.refunded", refund(250)), deps(fake.db));
+    expect(fake.rows("purchases").find((p) => p.id === PAIR)?.amount).toBe(250);
+    await handleStripeEvent(event("charge.refunded", refund(300)), deps(fake.db));
+    expect(quote()).toBe(PRODUCTS.everything.amounts.eur - 999 - 200);
+    // The single bought before keeps its full credit.
+    expect(fake.rows("purchases").find((p) => p.id === "s1")?.amount).toBe(999);
   });
 
   it("a dispute takes it all, and a won dispute brings back the gifts, the template and the gift made with it", async () => {

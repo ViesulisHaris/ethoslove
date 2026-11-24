@@ -15,7 +15,7 @@ import { DayRows } from "@/components/pricing/day-rows";
 import { useNextDays } from "./pair-used";
 import type { Entitlements, PairOffer } from "@/components/pricing/entitlements";
 import { startCheckout, startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
-import { walletHere, type Wallet } from "@/components/pricing/wallet";
+import { googlePayReady, walletHere, type Wallet } from "@/components/pricing/wallet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -129,7 +129,12 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
     if (!inView || walletState !== "waiting") return;
     let live = true;
     const timer = window.setTimeout(() => live && setWalletState((s) => (s === "waiting" ? "none" : s)), WALLET_WAIT_MS);
-    void startOneTapCheckout(request, { waiver: false }).then((result) => {
+    // Google Pay is only a guess from the browser's name: Stripe confirms it before a session is made.
+    const ready = wallet === "google" && key ? googlePayReady(key, locale, offer.amount, offer.currency) : Promise.resolve(true);
+    void ready.then(async (here) => {
+      if (!live) return;
+      if (!here) return setWalletState("none");
+      const result = await startOneTapCheckout(request, { waiver: false });
       if (!live) return;
       if ("clientSecret" in result) setSecret(result);
       else setWalletState("none");
@@ -255,7 +260,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
                 </span>
               ) : null}
             </div>
-            <p className={cn("mt-3 text-center", paying && "hidden")}>
+            {/* Hidden while paying but keeping its line, so the card keeps its height. */}
+            <p className={cn("mt-3 text-center", paying && "invisible")}>
               <button
                 type="button"
                 onClick={() => void payByCard()}
@@ -275,7 +281,13 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         )}
       </div>
 
-      <p className={cn("text-center text-[13px] text-pretty text-muted-foreground", useWallet && !paying ? "mt-2" : "mt-4")} data-testid="pair-foot">
+      {/* A card that began with the wallet block (pill 48 + 12 + "Pay by card instead" 44, foot 8 below)
+          and ends on the card button (48, foot 16 below) keeps the 48 px it gave up under its foot:
+          on an Android phone without Google Pay, nothing below the card moves when the button swaps. */}
+      <p
+        className={cn("text-center text-[13px] text-pretty text-muted-foreground", useWallet ? "mt-2" : "mt-4", wallet !== null && !useWallet && "pb-12")}
+        data-testid="pair-foot"
+      >
         {t("foot")} {t("notice")}{" "}
         {/* The 44 px tap target is a pseudo-element around the word, so the line it sits on keeps its height. */}
         {/* A new tab, so the link above stays on this screen (it is only ever drawn here, after a publish). */}

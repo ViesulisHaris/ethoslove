@@ -270,6 +270,12 @@ async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<E
   }
   if (purchase.product === "pair") {
     if (charge.amount_refunded * 2 >= charge.amount) await revokeOneUnusedOf(deps.db, purchase.id, deps.now);
+    // The purchase stays paid, so it keeps counting towards the upgrade (lib/commerce/pricing.ts):
+    // only for what was kept. amount_refunded is the charge's running total, so the same event again
+    // writes the same number.
+    const kept = Math.max(0, charge.amount - charge.amount_refunded);
+    const { error } = await deps.db.from("purchases").update({ amount: kept }).eq("id", purchase.id);
+    if (error) throw new Error(`pair amount not lowered after a refund: ${error.message}`);
     return ok();
   }
   if (purchase.product !== "pass" && purchase.product !== "membership") return ok();

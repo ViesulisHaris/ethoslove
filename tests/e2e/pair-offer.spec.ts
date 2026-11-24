@@ -184,9 +184,29 @@ test.describe("two more gifts under the link", () => {
     await expect.poll(() => asked.length).toBe(1);
     expect(asked[0]).toMatchObject({ product: "pair", currency: "eur", oneTap: true });
     expect(asked[0]).not.toHaveProperty("waiver");
-    // Stripe's button can't load here: after four seconds the card button, silently.
+    const height = (await page.getByTestId("pair-offer").boundingBox())!.height;
+    // Stripe's button can't load here: after four seconds the card button, silently, in the same height.
     await expect(page.getByTestId("pair-add")).toBeVisible({ timeout: 8000 });
     expect(asked).toHaveLength(1);
+    expect((await page.getByTestId("pair-offer").boundingBox())!.height).toBe(height);
+  });
+
+  test.describe("on an Android phone in Chrome", () => {
+    test.use({ userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" });
+    test.skip(!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, "the wallet is only tried with a publishable key (run with the placeholder one)");
+
+    test("without Google Pay confirmed: no wallet session is made, and nothing below the card moves when the card button takes over", async ({ page }) => {
+      // Stripe.js can't load here (held, then refused), as on a phone where Stripe can't answer: Google Pay is never confirmed.
+      const { asked } = await open(page, "/share-preview", { stripeDelayMs: 2500 });
+      await expect(page.getByTestId("pair-wallet-holding")).toBeVisible();
+      const card = page.getByTestId("pair-offer");
+      const qr = page.getByText("QR card");
+      const before = { card: (await card.boundingBox())!.height, qr: (await qr.boundingBox())!.y };
+      await expect(page.getByTestId("pair-add")).toBeVisible({ timeout: 8000 });
+      expect((await card.boundingBox())!.height).toBe(before.card);
+      expect((await qr.boundingBox())!.y).toBe(before.qr);
+      expect(asked.filter((b) => b.oneTap)).toHaveLength(0);
+    });
   });
 
   test("paying, declined and bought", async ({ page }) => {

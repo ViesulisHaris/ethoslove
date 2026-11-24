@@ -25,6 +25,25 @@ export function walletHere(): Wallet | null {
   return null;
 }
 
+/**
+ * Whether Google Pay really has a card here, asked of Stripe.js without making a Checkout Session:
+ * walletHere() says "google" for every Android Chrome, Google Pay set up or not, and a card that
+ * asked for a session on that guess alone made one (and a pending purchase row) for every Android
+ * visitor who saw it. False when Stripe.js can't load or answer. The country is the account's own
+ * (Latvia, content/legal.ts); it doesn't change the answer.
+ */
+export async function googlePayReady(key: string, locale: "en" | "es", amount: number, currency: string): Promise<boolean> {
+  try {
+    const stripe = await stripeFor(key, locale);
+    if (!stripe) return false;
+    const request = stripe.paymentRequest({ country: "LV", currency, total: { label: "Ethos", amount }, disableWallets: ["link", "applePay", "browserCard"] });
+    const can = await request.canMakePayment();
+    return Boolean(can?.googlePay);
+  } catch {
+    return false;
+  }
+}
+
 // Stripe.js loads only when a wallet button is about to be drawn: nothing of Stripe's runs before.
 // One promise for the page, whichever button asks first.
 let stripePromise: Promise<StripeJs | null> | null = null;
