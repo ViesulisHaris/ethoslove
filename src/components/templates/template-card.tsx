@@ -42,7 +42,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
   // A premium template is bought as one; a free template that has no free version any more
   // (lib/gift/free-tier.ts) costs its "make it special".
   const free = sendsFree(manifest);
-  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, locale);
+  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier, manifest.features)].amounts[currency], currency, locale);
   /** The first row on a phone and on a laptop: painted immediately, never faded in, never lazy. */
   const above = index < 4;
 

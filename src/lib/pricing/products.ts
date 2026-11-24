@@ -9,6 +9,9 @@
  * Prices, no trials), and while STRIPE_SUBSCRIPTIONS_ENABLED is off it is sold as the one-time
  * yearly pass instead.
  */
+import { soldAsGroup } from "@/lib/gift/free-tier";
+import type { TemplateManifest } from "@/templates/types";
+
 export type ProductId = "single" | "pick3" | "everything" | "extras" | "photos" | "pass" | "membership" | "pack" | "giftcard" | "upgrade" | "group";
 export type MembershipPlan = "monthly" | "yearly";
 /** The three template plans the pricing page shows as cards. */
@@ -85,10 +88,18 @@ export const PRODUCTS: Record<ProductId, Product> = {
  * template's price reads the product from here (the gallery's card, the template's own page and its
  * structured data, the ad landing page, the gift finder), so no two of them can name different
  * prices: the finder once showed the "single" price under Constellations, which sells at "extras".
+ *
+ * Given the template's features as well, a premium template that cannot be sent without notes from
+ * other people (`soldAsGroup`, lib/gift/free-tier.ts: the Advent Calendar) is sold as the group card,
+ * and every card, page and pick prices it so. The pay panel's own plan (components/pricing/offers.ts)
+ * asks with the tier alone and never gets "group": a group card is paid for from its own panel.
  */
 export type TemplateProduct = "single" | "extras";
-export function templateProduct(tier: "free" | "premium"): TemplateProduct {
-  return tier === "free" ? "extras" : "single";
+export function templateProduct(tier: "free" | "premium"): TemplateProduct;
+export function templateProduct(tier: "free" | "premium", features: TemplateManifest["features"]): TemplateProduct | "group";
+export function templateProduct(tier: "free" | "premium", features?: TemplateManifest["features"]): TemplateProduct | "group" {
+  if (tier === "free") return "extras";
+  return features && soldAsGroup({ features }) ? "group" : "single";
 }
 
 /**

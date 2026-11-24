@@ -53,7 +53,7 @@ export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badg
   // As the older card prices it: a premium template is bought as one, and a free template with no
   // free version left (lib/gift/free-tier.ts) costs its "make it special".
   const free = sendsFree(manifest);
-  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, locale);
+  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier, manifest.features)].amounts[currency], currency, locale);
   const above = index < 4;
   const crop = cn(CROP[manifest.slug] ?? "object-top", posterFit(manifest.thumbnail.poster));
 

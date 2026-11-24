@@ -121,7 +121,7 @@ export function GiftFinder({
   ui: FinderUi;
   /** "Free", and what each kind of paid gift costs here ("$11.99", "$8.99"): the mark under a pick's name is its own (FinderPick.product). */
   freeLabel: string;
-  prices: Record<TemplateProduct, string>;
+  prices: Record<TemplateProduct | "group", string>;
   locale: GiftLocale;
   /** The day the page was rendered, for what is in season (lib/gift/finder.ts, occasionsFor). */
   today: FinderDay;

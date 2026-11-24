@@ -63,7 +63,7 @@ export default async function GiftFinderPage({ params }: Props) {
   const count = listManifests().length;
   const currency = chargedCurrency(shown);
   // A pick's price is its own: most are sold as one template, and a free template with no free version left as "Make it special".
-  const prices = { single: formatAmount(PRODUCTS.single.amounts[currency], currency, l), extras: formatAmount(PRODUCTS.extras.amounts[currency], currency, l) };
+  const prices = { single: formatAmount(PRODUCTS.single.amounts[currency], currency, l), extras: formatAmount(PRODUCTS.extras.amounts[currency], currency, l), group: formatAmount(PRODUCTS.group.amounts[currency], currency, l) };
   const theme = DEFAULT_PAGE_THEME;
   const today = new Date().toISOString().slice(0, 10);
   const browse = copy.browse.replace("{count}", String(count));

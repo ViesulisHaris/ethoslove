@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { templateOfferAmount, templateProductNode } from "@/lib/seo";
-import { sendsFree } from "@/lib/gift/free-tier";
+import { sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
 import { PRODUCTS, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 
@@ -47,7 +47,8 @@ describe("a template's price in its Product data", () => {
           const amount = templateOfferAmount(m, currency);
           // The page's badge says "Free" exactly when sendsFree does (templates/[slug]/page.tsx), and its price line is the same product's amount.
           expect(amount === 0, `${m.slug} with share "${share}"`).toBe(sendsFree(m));
-          if (amount > 0) expect(amount).toBe(PRODUCTS[m.tier === "free" ? "extras" : "single"].amounts[currency]);
+          // A premium template that cannot go out without other people's notes (the Advent Calendar) is sold only as the group card.
+          if (amount > 0) expect(amount, m.slug).toBe(PRODUCTS[m.tier === "free" ? "extras" : soldAsGroup(m) ? "group" : "single"].amounts[currency]);
           expect(offer(m.slug, currency).price).toBe(amount === 0 ? "0" : (amount / 100).toFixed(2));
         }
     }

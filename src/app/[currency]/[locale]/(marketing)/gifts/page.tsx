@@ -197,7 +197,7 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                           {m.name[l]}
                         </Link>
                         {", "}
-                        {sendsFree(m) ? t("templates.priceFree") : t("templates.priceOnce", { price: formatAmount(PRODUCTS[templateProduct(m.tier)].amounts[charged], charged, locale) })}
+                        {sendsFree(m) ? t("templates.priceFree") : t("templates.priceOnce", { price: formatAmount(PRODUCTS[templateProduct(m.tier, m.features)].amounts[charged], charged, locale) })}
                         {". "}
                         {m.tagline[l]}{" "}
                         <Link href={`/create/${m.slug}`} className="text-page-ink underline decoration-page-line underline-offset-4">

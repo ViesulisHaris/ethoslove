@@ -196,7 +196,7 @@ export function appNode(locale: Locale, shown: Currency, description: string, pl
 export function templateOfferAmount(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">, currency: Currency): number {
   if (sendsFree(manifest)) return 0;
   if (soldAsGroup(manifest)) return PRODUCTS.group.amounts[currency];
-  return PRODUCTS[templateProduct(manifest.tier)].amounts[currency];
+  return PRODUCTS[templateProduct(manifest.tier, manifest.features)].amounts[currency];
 }
 
 /**
