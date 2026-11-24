@@ -1,6 +1,8 @@
 "use client";
 
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useSyncExternalStore } from "react";
+
+const noStore = () => () => {};
 
 /**
  * Puts an attribute on <html> or <body> for as long as this is on the page, so the stylesheet can
@@ -25,6 +27,10 @@ export function DocumentMark({ on, name, value = "" }: { on: "html" | "body"; na
       if (el.getAttribute(name) === value) el.removeAttribute(name);
     };
   }, [on, name, value]);
+  // The script is for the server's HTML only. Drawn by a move between pages it would never run (the
+  // effect above does its work there), and React warns of a script tag rendered in the browser.
+  const fromServer = useSyncExternalStore(noStore, () => false, () => true);
+  if (!fromServer) return null;
   const target = on === "html" ? "document.documentElement" : "document.body";
   return <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `${target}.setAttribute(${JSON.stringify(name)},${JSON.stringify(value).replace(/</g, "\\u003c")})` }} />;
 }
