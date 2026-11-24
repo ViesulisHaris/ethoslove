@@ -74,6 +74,49 @@ test.describe("a gift started from the last one", () => {
     await expect(page.locator('[data-tour="form"] input').first()).toHaveValue("");
   });
 
+  test.describe("on a phone, the card that holds the place is the height of the one that comes", () => {
+    test.use({ viewport: { width: 375, height: 812 } });
+    const slowPhotos = async (page: import("@playwright/test").Page) =>
+      page.route("**/demo/photos/**", async (route) => {
+        if (route.request().resourceType() !== "fetch") return route.continue();
+        await new Promise((r) => setTimeout(r, 9000));
+        await route.continue();
+      });
+
+    test("in Spanish, where the spinner once wrapped 'Empezar de cero' onto a line of its own", async ({ page }) => {
+      await slowPhotos(page);
+      await page.goto("/es/create/our-timeline?start=demo&ref=email-reminder-1");
+      const pending = page.getByTestId("started-pending");
+      await expect(pending).toBeVisible({ timeout: 30_000 });
+      await expect(pending.getByRole("button", { name: "Cambiar las fotos" })).toBeDisabled();
+      const held = await pending.boundingBox();
+      const input = page.locator('[data-tour="form"] input').first();
+      const before = await input.boundingBox();
+      const done = page.getByTestId("started-for-you");
+      await expect(done).toBeVisible({ timeout: 30_000 });
+      const landed = await done.boundingBox();
+      expect(Math.abs((landed?.height ?? 0) - (held?.height ?? -1))).toBeLessThan(1);
+      expect(Math.abs(((await input.boundingBox())?.y ?? 0) - (before?.y ?? -1))).toBeLessThan(1);
+    });
+
+    test("typing while the photos come: the offer keeps the card's height, so the field does not jump", async ({ page }) => {
+      await slowPhotos(page);
+      await page.goto("/create/our-timeline?start=demo&ref=email-reminder-1");
+      const pending = page.getByTestId("started-pending");
+      await expect(pending).toBeVisible({ timeout: 30_000 });
+      const held = await pending.boundingBox();
+      const input = page.locator('[data-tour="form"] input').first();
+      await input.fill("Sam");
+      const before = await input.boundingBox();
+      const offer = page.getByTestId("started-offer");
+      await expect(offer).toBeVisible({ timeout: 30_000 });
+      await expect(pending).toHaveCount(0);
+      expect(Math.abs(((await offer.boundingBox())?.height ?? 0) - (held?.height ?? -1))).toBeLessThan(1);
+      expect(Math.abs(((await input.boundingBox())?.y ?? 0) - (before?.y ?? -1))).toBeLessThan(1);
+      await expect(input).toHaveValue("Sam");
+    });
+  });
+
   test("on a free note the card asks for words only: photos are its paid step", async ({ page }) => {
     await page.goto("/create/the-letter?start=demo");
     const card = page.getByTestId("started-for-you");

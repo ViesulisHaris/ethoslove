@@ -30,6 +30,7 @@ export function StartedForYou({
   onUse,
   onDismiss,
   noPhotos = false,
+  holdHeight,
 }: {
   state: StartedState;
   onChangePhotos: () => void;
@@ -38,6 +39,8 @@ export function StartedForYou({
   onDismiss: () => void;
   /** A free note, where photos are the paid step: the card never asks for them. */
   noPhotos?: boolean;
+  /** An offer that replaced a pending card already on screen keeps that card's height, so the form under it stays where it is. */
+  holdHeight?: number;
 }) {
   const t = useTranslations("editor.started");
   const photos = useEditor((s) => s.data.photos);
@@ -68,7 +71,11 @@ export function StartedForYou({
   if (state.kind === "offer") {
     return (
       // Clear of "How it works", which floats over the top of the form on a phone.
-      <div className="mt-6 mb-8 rounded-[24px] bg-card px-5 py-4 ring-1 ring-black/5 md:mt-0" data-testid="started-offer">
+      <div
+        className="mt-6 mb-8 flex flex-col justify-center rounded-[24px] bg-card px-5 py-4 ring-1 ring-black/5 md:mt-0"
+        style={holdHeight ? { minHeight: holdHeight } : undefined}
+        data-testid="started-offer"
+      >
         <p className="text-[15px] leading-snug">{t(state.from.mode === "photos" ? "offer" : "offerNames", { name: state.from.name })}</p>
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
           <button
@@ -171,9 +178,13 @@ function PendingCard({ from, noPhotos, onEmpty, busy }: { from: StartedFrom; noP
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
         {withPhotos ? (
-          <button type="button" disabled className="inline-flex h-11 items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-semibold opacity-60">
-            <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden />
-            {t("change")}
+          // The spinner sits over the label, never beside it: a wider button would wrap "Start empty"
+          // onto a line of its own (it did in Spanish) and the card would shrink when the photos land.
+          <button type="button" disabled aria-label={t("change")} className="relative inline-flex h-11 items-center rounded-full border border-ink/15 px-5 text-sm font-semibold opacity-60" data-testid="started-pending-change">
+            <span className="invisible" aria-hidden>
+              {t("change")}
+            </span>
+            <Loader2 className="absolute inset-0 m-auto size-4 animate-spin motion-reduce:animate-none" aria-hidden />
           </button>
         ) : null}
         <button
