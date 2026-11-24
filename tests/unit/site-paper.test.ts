@@ -47,6 +47,13 @@ describe("the site's paper", () => {
     expect(left).toEqual([]);
   });
 
+  it("puts no white badge on a trip's photo: the kind and the budget wear the card's colour (fix round 5)", () => {
+    const card = sources.find((s) => s.path.endsWith("components/trips/trip-card.tsx"));
+    expect(card).toBeDefined();
+    expect(card!.text).not.toMatch(/(?<![\w:-])bg-white/);
+    expect(card!.text.match(/rounded-full bg-card\/95/g)?.length).toBe(2);
+  });
+
   it("tears every edge in the paper's own colours: a torn edge never takes a colour written by hand for its two sides", () => {
     // `from` and `to` are the grounds of the sections above and below, and those are tokens. A hex
     // here was the foot of the old pink hero, left as a 28px pink strip on three pages. (`fibre`
