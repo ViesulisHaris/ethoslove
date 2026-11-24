@@ -88,7 +88,7 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <BookTheTrip data={data} />
 
       {authed ? <RemindNextYear data={data} /> : null}
-      <AnniversaryDates templateSlug={data.templateSlug} />
+      <AnniversaryDates templateSlug={data.templateSlug} authed={authed} />
 
       {/* The yes our offer emails need, asked of the account that just sent a gift; not inside the iPhone app. */}
       {authed ? (

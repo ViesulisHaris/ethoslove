@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { distanceKm } from "@/lib/dates/geo";
 import { findAirport } from "@/lib/trips/airports";
 import { estimateFlight } from "@/lib/trips/flights";
-import { lengthFits, matchTrips, topMatches, type MatchLength, type MatchTrip, type MatchWish } from "@/lib/trips/match";
+import { lengthFits, matchTrips, metWishes, topMatches, type MatchLength, type MatchTrip, type MatchWish } from "@/lib/trips/match";
 import { TRIP_KINDS, TRIPS } from "@/lib/trips/presets";
 
 const TABLE: MatchTrip[] = TRIPS.map(({ id, kind, days, budget, bestMonths, flyTo }) => ({ id, kind, days, budget, bestMonths, flyTo }));
@@ -158,5 +158,31 @@ describe("the trip matcher", () => {
             if (picks[0].relaxed.length === 0) expect(summary.kind).not.toBe("none");
             expect(summary.kind === "all").toBe(picks.every((p) => p.relaxed.length === 0));
           }
+  });
+});
+
+describe("why a pick fits", () => {
+  it("names the wishes asked for and met, in the sentence's order, and nothing left at any", () => {
+    expect(metWishes({}, { relaxed: [] })).toEqual([]);
+    expect(metWishes({ kind: "city", length: "weekend" }, { relaxed: [] })).toEqual(["length", "kind"]);
+    expect(metWishes({ length: "week", budget: 1, kind: "city" }, { relaxed: ["length"] })).toEqual(["budget", "kind"]);
+    expect(metWishes({ length: "week", kind: "city" }, { relaxed: ["length", "kind"] })).toEqual([]);
+  });
+
+  it("every pick of every wish has something true to say", () => {
+    const LENGTHS: (MatchLength | undefined)[] = [undefined, "weekend", "mid", "week"];
+    for (const length of LENGTHS)
+      for (const budget of [undefined, 1, 2] as const)
+        for (const kind of [undefined, ...TRIP_KINDS]) {
+          const wish: MatchWish = { ...(length ? { length } : {}), ...(budget ? { budget } : {}), ...(kind ? { kind } : {}) };
+          for (const pick of topMatches(wish, TRIPS, 11).picks) {
+            const trip = TRIPS.find((t) => t.id === pick.id)!;
+            for (const w of metWishes(wish, pick)) {
+              if (w === "length") expect(lengthFits(trip.days, wish.length!)).toBe(true);
+              if (w === "budget") expect(trip.budget).toBeLessThanOrEqual(wish.budget!);
+              if (w === "kind") expect(trip.kind).toBe(wish.kind);
+            }
+          }
+        }
   });
 });

@@ -13,7 +13,11 @@ import { CITIES, type City } from "@/templates/_shared/places";
 export const NOWHERE_KM = 400;
 /** Countries never named as the place to meet: neither their cities nor their airports (the owner's rule). */
 export const NEVER_SUGGESTED: ReadonlySet<string> = new Set(["ES"]);
-/** Nearer than this to one of the two towns, the "halfway city" is that town: nothing we know lies between them. */
+/**
+ * Nearer than this to one of the two towns, the "halfway city" is that town. That says nothing
+ * about what lies between them (the city table is short: Brno is not in it), only that the table
+ * has no better answer, so the page names no city then.
+ */
 export const OWN_TOWN_KM = 30;
 
 export type Halfway = {
@@ -37,5 +41,9 @@ export function halfwayBetween(a: LatLng, b: LatLng, cities: readonly City[] = C
 /** The halfway city as the page's language says it ("Múnich"). The city table is in English. */
 export const halfwayCityName = (city: Pick<City, "name">, locale: "en" | "es"): string => (locale === "es" ? ES_CITY_NAMES[city.name] : undefined) ?? city.name;
 
-/** The halfway city is one of their own towns (Prague and Vienna: the nearest city to the middle is Vienna). */
+/**
+ * The nearest city the table knows to the middle is one of their own towns (Prague and Vienna: by
+ * the table's coordinates it is Vienna; a geocoded Prague can tip it to Prague). Neither is an
+ * answer to "where is halfway", so the pages say how far each travels and name no city.
+ */
 export const isOwnTown = (h: Halfway): boolean => Boolean(h.near && h.km > 2 * OWN_TOWN_KM && (h.near.kmFromA < OWN_TOWN_KM || h.near.kmFromB < OWN_TOWN_KM));

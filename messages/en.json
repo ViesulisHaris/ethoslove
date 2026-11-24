@@ -2390,7 +2390,7 @@
     "meet": {
       "title": "Meet in the middle",
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
-      "tool": "The halfway finder alone, with a link you can send",
+      "tool": "Just the halfway finder, with a link to send",
       "you": "Where you are",
       "them": "Where they are",
       "hint": "Pick both towns and we'll do the math.",
@@ -2443,7 +2443,7 @@
       "shareTextBare": "Here is where halfway is.",
       "manual": "Copy this link",
       "same": "That's the same place twice.",
-      "noCity": "No big city lies between you. The nearest to halfway is {city}."
+      "close": "Halfway falls between your two towns. Take turns visiting, or meet somewhere on the way."
     },
     "virtual": {
       "eyebrow": "Dates for two screens",
@@ -2452,8 +2452,7 @@
       "openMap": "Open the map"
     },
     "play": {
-      "title": "Or play a round, each on your own phone.",
-      "today": "Today's question"
+      "title": "Or play a round, each on your own phone."
     },
     "gifts": {
       "eyebrow": "Gifts for the distance",
@@ -2539,7 +2538,15 @@
       "air": "About {time} in the air from {city}.",
       "airTrain": "About {time} in the air from {city}. A train might be nicer.",
       "home": "It starts where you are. No flight to find.",
-      "inSeason": "In season now"
+      "inSeason": "In season now",
+    "fits": "Fits {list}.",
+    "fit": {
+      "budget1": "a budget of €150 a day",
+      "budget2": "a budget of €300 a day"
+    },
+    "closest": "The nearest to what you asked.",
+    "fitsSeason": "Now is one of its best months.",
+    "fitsOpen": "You left every choice open."
     },
     "filter": {
       "label": "Kind of trip",
@@ -3360,7 +3367,8 @@
     },
     "dates": {
       "line": "Planning the day too?",
-      "link": "Date ideas for an anniversary"
+      "link": "Date ideas for an anniversary",
+      "newTab": "opens in a new tab"
     },
     "page": {
       "title": "Reminders",

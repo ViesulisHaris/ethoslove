@@ -31,7 +31,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
   const t = await getTranslations("ldr");
   const lang = locale === "es" ? "es" : "en";
   const tg = await getTranslations("games");
-  const gameTitle = { draw: tg("draw.title"), rather: tg("rather.title"), today: t("play.today") };
+  const gameTitle = { draw: tg("draw.title"), rather: tg("rather.title") };
   // Most central first, as the occasion page orders them: built for distance before merely suited to it.
   const gifts = listManifests()
     .filter((m) => m.occasions.includes("long-distance"))
@@ -107,7 +107,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
           </ul>
           {/* The games that play across a call, as the games' own cards: a picture and a name. */}
           <h3 className="mt-14 font-display text-[26px] leading-tight text-forest">{t("play.title")}</h3>
-          <ul className="mt-6 grid max-w-2xl grid-cols-3 gap-3 sm:gap-6" data-testid="ldr-games">
+          <ul className="mt-6 grid max-w-[27.5rem] grid-cols-2 gap-3 sm:gap-6" data-testid="ldr-games">
             {LDR_GAMES.map((g) => (
               <li key={g.id}>
                 <Link href={g.href} className="group block rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-rose/50 focus-visible:ring-offset-4 focus-visible:ring-offset-paper">

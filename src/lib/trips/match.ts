@@ -97,6 +97,15 @@ export function matchTrips(wish: MatchWish, trips: readonly MatchTrip[], month: 
   return ranked.map((r) => r.pick);
 }
 
+/**
+ * The wishes a pick meets, said as the page's "why it fits": the ones they asked for (not left at
+ * "any") that this trip does not miss, in the sentence's order.
+ */
+export function metWishes(wish: MatchWish, pick: Pick<MatchPick, "relaxed">): Relaxed[] {
+  const asked: Relaxed[] = [...(wish.length ? (["length"] as const) : []), ...(wish.budget ? (["budget"] as const) : []), ...(wish.kind ? (["kind"] as const) : [])];
+  return asked.filter((w) => !pick.relaxed.includes(w));
+}
+
 /** The best few, and how well the best of them fit: all, some, or none (and which wishes gave way). */
 export function topMatches(wish: MatchWish, trips: readonly MatchTrip[], month: number, count: number = MATCH_COUNT): { picks: MatchPick[]; summary: MatchSummary } {
   const all = matchTrips(wish, trips, month);

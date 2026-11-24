@@ -31,7 +31,8 @@ export default async function ReminderCardPreviewPage({ params, searchParams }: 
     <ClientMessages scope="(marketing)/reminders/preview/page" locale={locale}>
       <div className="mx-auto w-full max-w-lg px-4 pt-24 pb-16 sm:px-6">
         <RemindNextYear data={data} />
-        <AnniversaryDates templateSlug={data.templateSlug} />
+        {/* The card above is the signed-in sender's, so the line under it is shown as they see it. */}
+        <AnniversaryDates templateSlug={data.templateSlug} authed />
       </div>
     </ClientMessages>
   );

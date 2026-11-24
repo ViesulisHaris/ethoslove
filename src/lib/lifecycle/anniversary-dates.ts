@@ -1,12 +1,14 @@
-import { getManifest } from "@/templates/manifests";
-import { reminderOccasionFor } from "./reminders";
-
-/** "Pack your bags" (lib/trips/trip-gift.ts, TRIP_GIFT_SLUG). Written out: that module brings the trips with it, and this one runs in the editor. */
-const TRIP_GIFT = "pack-your-bags";
+/**
+ * The templates made for an anniversary, said by name. A gift carries no occasion of its own, and a
+ * template's first occasion is too wide a rule: "anniversary" leads thirteen manifests, The Letter
+ * among them (most gifts, apologies included) and Museum (mother's and father's day too). So the
+ * line goes only where the template is about a couple's years. The owner chooses who joins.
+ */
+export const ANNIVERSARY_LED: ReadonlySet<string> = new Set(["our-timeline"]);
 
 /**
- * Whether the share screen offers date ideas under the reminders: a gift whose template is an
- * anniversary one, by the reminder card's own rule (its first occasion), so the line and the row
- * above it ("Your anniversary") agree. Not the trip gift: its screen already has the trip to book.
+ * Whether the share screen offers date ideas under the reminders: an anniversary template, to a
+ * sender who is signed in (the line sits under the reminders card, which only they see). Never the
+ * trip gift ("Pack your bags"): its screen already has the trip to book.
  */
-export const showsAnniversaryDates = (templateSlug: string): boolean => templateSlug !== TRIP_GIFT && reminderOccasionFor(getManifest(templateSlug)?.occasions) === "anniversary";
+export const showsAnniversaryDates = (templateSlug: string, authed: boolean): boolean => authed && ANNIVERSARY_LED.has(templateSlug);

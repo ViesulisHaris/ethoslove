@@ -202,10 +202,13 @@ test.describe("a trip, in search and in their hands", () => {
 
   test("Send this trip to them: the share sheet where there is one, a copied link where there is not", async ({ page, context, isMobile }) => {
     await catchShares(page);
+    const shareEvents = await countEvents(page);
     await page.goto("/trips/lisbon-slow-weekend#plan");
     await page.getByTestId("share-trip").click();
     await expect.poll(async () => (await lastShare(page))?.url ?? "").toMatch(/\/trips\/lisbon-slow-weekend$/);
     expect((await lastShare(page))?.text).toBe("Shall we? Lisbon, slowly");
+    // The sheet cannot say whether it was sent, so it is counted as opened, never as a share.
+    await expect.poll(async () => (await shareEvents()).filter((e) => e.name === "trip_shared").map((e) => e.data)).toEqual([{ trip: "lisbon-slow-weekend", how: "share_opened" }]);
     if (isMobile) return;
 
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
@@ -217,6 +220,18 @@ test.describe("a trip, in search and in their hands", () => {
     await expect(copy.getByTestId("share-trip")).toContainText("Link copied");
     expect(await copy.evaluate(() => navigator.clipboard.readText())).toMatch(/\/trips\/lisbon-slow-weekend$/);
     await expect.poll(async () => (await events()).filter((e) => e.name === "trip_shared").map((e) => e.data)).toEqual([{ trip: "lisbon-slow-weekend", how: "copy" }]);
+  });
+
+  test("Send this trip to them shows where the keyboard is", async ({ page, isMobile }) => {
+    test.skip(isMobile, "a phone has no Tab key");
+    await page.goto("/trips/lisbon-slow-weekend");
+    const share = page.getByTestId("share-trip");
+    await share.scrollIntoViewIfNeeded();
+    await share.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(share).toBeFocused();
+    expect(await share.evaluate((el) => el.matches(":focus-visible") && getComputedStyle(el).outlineStyle !== "none")).toBe(true);
   });
 
   test("a stop that is one of our cities links to its date ideas, once a city", async ({ page }) => {

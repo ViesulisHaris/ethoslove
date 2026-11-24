@@ -12,7 +12,7 @@ import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
 import { TRIP_SEO } from "@/content/trip-seo";
 import { GAMES } from "@/lib/games/catalogue";
 import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
-import { showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
+import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
 import { halfwayBetween, halfwayCityName, isOwnTown } from "@/lib/ldr/halfway";
@@ -258,10 +258,15 @@ const MESSAGES = { en, es } as const;
 
 describe("the share screen's line to date ideas", () => {
   it("date ideas are offered after an anniversary gift, and only then", () => {
-    for (const slug of ["our-timeline", "museum", "the-letter"]) expect(showsAnniversaryDates(slug), slug).toBe(true);
-    // A birthday's, a Valentine's first, long distance first, the trip gift, and no template at all.
-    for (const slug of ["birthday-cinema", "bouquet", "halfway", "pack-your-bags", "nope"]) expect(showsAnniversaryDates(slug), slug).toBe(false);
-    expect(TRIP_GIFT_SLUG).toBe("pack-your-bags");
+    expect(showsAnniversaryDates("our-timeline", true)).toBe(true);
+    // A guest never sees the reminders the line sits under, so not the line either.
+    expect(showsAnniversaryDates("our-timeline", false)).toBe(false);
+    // The Letter (apologies too) and Museum (mother's and father's day) list anniversary first and are
+    // still not anniversary gifts; nor a birthday's, a Valentine's, long distance's, the trip gift, or none.
+    for (const slug of ["the-letter", "museum", "garden", "birthday-cinema", "bouquet", "halfway", "pack-your-bags", "nope"]) expect(showsAnniversaryDates(slug, true), slug).toBe(false);
+    expect(ANNIVERSARY_LED.has(TRIP_GIFT_SLUG)).toBe(false);
+    // Every name on the list is a template that lists anniversary among its occasions.
+    for (const slug of ANNIVERSARY_LED) expect(getManifest(slug)?.occasions, slug).toContain("anniversary");
   });
 });
 
@@ -337,11 +342,14 @@ describe("the rooms' pages", () => {
     expect(ROOMS_LIVE <= new Date().toISOString().slice(0, 10)).toBe(true);
   });
 
-  it("the games for a call are three, two of them from the games' own shelf", () => {
-    expect(LDR_GAMES.map((g) => g.href)).toEqual(["/games/draw", "/games/rather", "/games/today"]);
-    for (const g of LDR_GAMES.slice(0, 2)) {
+  it("the games for a call come from the games' own shelf, and each one's page exists", () => {
+    expect(LDR_GAMES.map((g) => g.href)).toEqual(["/games/draw", "/games/rather"]);
+    for (const g of LDR_GAMES) {
       const shelf = GAMES.find((x) => x.href === g.href)!;
       expect([g.rank, g.suit, g.sticker]).toEqual([shelf.rank, shelf.suit, shelf.sticker]);
+      // A link to a page that is not there is a 404 on the live room (it happened with /games/today).
+      const page = path.join(process.cwd(), "src/app/[currency]/[locale]/(marketing)", g.href, "page.tsx");
+      expect(fs.existsSync(page), page).toBe(true);
     }
   });
 });

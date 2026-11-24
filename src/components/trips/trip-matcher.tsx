@@ -10,7 +10,7 @@ import { track } from "@/lib/analytics/track";
 import { cityName, type Airport } from "@/lib/trips/airports";
 import { formatFlightTime } from "@/lib/trips/flights";
 import { readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
-import { MATCH_LENGTHS, topMatches, type MatchLength, type MatchTrip, type MatchWish } from "@/lib/trips/match";
+import { MATCH_LENGTHS, metWishes, topMatches, type MatchLength, type MatchPick, type MatchTrip, type MatchWish } from "@/lib/trips/match";
 import type { TripKind } from "@/lib/trips/presets";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { AirportBox } from "./airport-box";
@@ -44,6 +44,9 @@ const KINDS: readonly Kind[] = ["any", "city", "road", "islands", "train"];
 const SELECT =
   "mx-1 inline-block h-11 max-w-full cursor-pointer appearance-none truncate rounded-full border border-page-line bg-page-raised px-4 align-middle font-sans text-[1rem] leading-normal font-medium text-page-accent field-sizing-content transition-colors hover:border-page-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink";
 
+/** After the first ask, a change is counted once the choices have stood this long: one event per settled ask, not one per select. */
+export const REFINE_MS = 1500;
+
 const wishOf = (from: Airport | null, length: Length, budget: Budget, kind: Kind): MatchWish => ({
   from,
   ...(length !== "any" ? { length } : {}),
@@ -70,6 +73,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   // server's page and the browser's agree. Null until then, and nothing is shown.
   const [month, setMonth] = useState<number | null>(null);
   const summaryRef = useRef<HTMLHeadingElement>(null);
+  const refineTimer = useRef<number | undefined>(undefined);
 
   // A frame after mount, so the first render in the browser is the same as the server's.
   useEffect(() => {
@@ -91,14 +95,30 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
     if (row) row.scrollLeft = 0;
   }, [shownIds]);
 
-  // Counted: which wishes, and whether an airport was given. Never which airport.
-  const count = (next: MatchWish) => track("trip_match", { length: next.length ?? "any", budget: next.budget ?? 0, kind: next.kind ?? "any", hasOrigin: Boolean(next.from) });
-  // After the first tap a change re-ranks at once, and is counted as a new ask.
+  // Counted: which wishes, and whether an airport was given. Never which airport. The first ask is
+  // counted at its tap; after it a change re-ranks at once but is counted only once the choices have
+  // settled, marked "refined", so one person turning the selects makes one more event, not five.
+  const count = (next: MatchWish, refined = false) =>
+    track("trip_match", { length: next.length ?? "any", budget: next.budget ?? 0, kind: next.kind ?? "any", hasOrigin: Boolean(next.from), ...(refined ? { refined: true } : {}) });
   const changed = (next: MatchWish) => {
-    if (month !== null) count(next);
+    if (month === null) return;
+    window.clearTimeout(refineTimer.current);
+    refineTimer.current = window.setTimeout(() => count(next, true), REFINE_MS);
+  };
+  useEffect(() => () => window.clearTimeout(refineTimer.current), []);
+
+  // Why a pick fits: the wishes it meets, else that it is the nearest, else the season; then the
+  // hours in the air when there is an airport.
+  const fitLine = (pick: MatchPick) => {
+    const met = metWishes(wish, pick);
+    const said = met.map((w) => (w === "length" ? t(`length.${wish.length!}`) : w === "budget" ? t(`fit.budget${wish.budget!}`) : t(`kind.${wish.kind!}`)));
+    if (said.length) return t("fits", { list: new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(said) });
+    if (pick.relaxed.length) return t("closest");
+    return pick.inSeason ? t("fitsSeason") : t("fitsOpen");
   };
 
   const go = () => {
+    window.clearTimeout(refineTimer.current);
     setMonth(new Date().getMonth() + 1);
     count(wish);
     requestAnimationFrame(() => summaryRef.current?.focus());
@@ -227,7 +247,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
           >
             {result.picks.map((pick, i) => {
               const trip = byId.get(pick.id)!;
-              const why = !from ? null : pick.home ? t("home") : pick.airMinutes ? t(pick.train ? "airTrain" : "air", { time: formatFlightTime(pick.airMinutes), city: cityName(from, locale) }) : null;
+              const air = !from ? null : pick.home ? t("home") : pick.airMinutes ? t(pick.train ? "airTrain" : "air", { time: formatFlightTime(pick.airMinutes), city: cityName(from, locale) }) : null;
               return (
                 <li key={pick.id} data-card data-pick data-trip={pick.id} className="group/pick flex w-full shrink-0 snap-start flex-col sm:w-auto">
                   <Link href={`/trips/${pick.id}`} onClick={() => track("trip_match_pick", { trip: pick.id, to: "page" })} className="group block rounded-[1.25rem] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-page-ink">
@@ -248,7 +268,9 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
                           className="absolute inset-0 size-full object-cover"
                         />
                       ) : null}
-                      <span className="absolute bottom-3 left-3 inline-flex h-8 items-center rounded-full bg-black/45 px-3 text-[0.875rem] font-medium text-white backdrop-blur-sm">{pick.inSeason ? t("inSeason") : trip.best}</span>
+                      <span data-season className="absolute right-3 bottom-3 left-3 w-fit rounded-2xl bg-black/45 px-3 py-1.5 text-[0.875rem] leading-snug font-medium text-white backdrop-blur-sm">
+                        {pick.inSeason ? `${t("inSeason")} · ${trip.best}` : trip.best}
+                      </span>
                     </span>
                     <span className="mt-3.5 block font-display text-xl leading-tight text-page-ink">{trip.title}</span>
                   </Link>
@@ -256,11 +278,10 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
                     {trip.facts} · <span aria-hidden="true">{trip.budgetMark}</span>
                     <span className="sr-only">{trip.budgetWords}</span>
                   </p>
-                  {why ? (
-                    <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body">
-                      {why}
-                    </p>
-                  ) : null}
+                  <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body">
+                    <span data-fit>{fitLine(pick)}</span>
+                    {air ? <span data-air> {air}</span> : null}
+                  </p>
                   <SurpriseLink
                     slug={giftSlug}
                     fields={trip.gift}

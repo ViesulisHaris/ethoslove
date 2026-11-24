@@ -13,7 +13,10 @@ import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear, type Ways
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 
 export type WayKey = "gift" | "dates" | "trip";
-type Way = { key: WayKey; href: string; title: string; image: string | null; style?: CSSProperties; seed?: () => void; /** Where the picture is held in its square: the gift's tall poster by its top, where the distance is. */ focus?: string };
+type Way = { key: WayKey; href: string; title: string; image: string | null; style?: CSSProperties; seed?: () => void; /** Where the picture is held in its square. */ focus?: string };
+
+/** The Halfway poster's square, below its sample distance and above its button. */
+export const GIFT_POSTER_FOCUS = "object-[50%_61%]";
 
 const TO = { gift: "halfway_gift", dates: "dates", trip: "trip" } as const;
 
@@ -55,7 +58,9 @@ export function WaysOn({
     href: both ? `/create/${HALFWAY_GIFT_SLUG}` : `/templates/${HALFWAY_GIFT_SLUG}`,
     title: t("gift.title"),
     image: data.giftPoster,
-    focus: "object-top",
+    // The poster (1170 x 1800) opens on its own "6,863 km between you", which under the couple's real
+    // answer reads as theirs: the square is held below it (y 384 to 1554), on the map of the two towns.
+    focus: GIFT_POSTER_FOCUS,
     seed: both ? () => saveGiftSeed({ slug: HALFWAY_GIFT_SLUG, fields: halfwayGiftFields(both.a, both.b, near ? t("note", { city }) : undefined) }) : undefined,
   });
 
@@ -66,7 +71,10 @@ export function WaysOn({
       if (page) return { key: "dates", href: `/dates/${page.slug}`, title: t("dates.in", { city: page.name }), image: page.image };
       return { key: "dates", href: `/dates?lat=${near.city.lat}&lng=${near.city.lng}&q=${encodeURIComponent(city)}`, title: t("dates.in", { city }), image: data.datesImage };
     }
-    // No city to name (open sea, their own town, a country never named): date ideas where the other one is.
+    // Halfway falls in a country never named: no town is echoed either (a typed town there would be
+    // named after all), only date ideas near either of them.
+    if (halfway?.unnamed) return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
+    // No city to name (open sea, their own town): date ideas where the other one is.
     return { key: "dates", href: `/dates?lat=${both.b.lat}&lng=${both.b.lng}&q=${encodeURIComponent(both.b.name)}`, title: t("dates.near", { town: both.b.name }), image: data.datesImage };
   };
 

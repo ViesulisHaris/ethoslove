@@ -90,13 +90,15 @@ export function HalfwayFinder({ ways }: { ways: WaysData }) {
         {tt("forYou", { km: number(near.kmFromA) })} · {tt("forThem", { km: number(near.kmFromB) })}
       </p>
     </>
-  ) : own && result.near ? (
+  ) : own ? (
     <>
       {label}
       <p data-halfway-city className={HEADING}>
         {t("eachWay", { km: number(result.km / 2) })}
       </p>
-      <p className={SUB}>{tt("noCity", { city: halfwayCityName(result.near.city, locale) })}</p>
+      {/* No claim about what lies between them: the city table is short (no Brno), and the nearest
+          city it knows is one of their own towns, which is no answer. */}
+      <p className={SUB}>{tt("close")}</p>
     </>
   ) : result.unnamed ? (
     <>

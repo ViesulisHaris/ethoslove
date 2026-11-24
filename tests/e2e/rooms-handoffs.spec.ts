@@ -47,20 +47,15 @@ test.describe("long distance, joined up", () => {
     await expect(trip).toHaveAttribute("href", "/trips");
   });
 
-  test("three games to play on the call", async ({ page, request }) => {
+  test("two games to play on the call, and every one of them opens", async ({ page, request }) => {
     await page.goto("/long-distance");
     const games = page.getByTestId("ldr-games").getByRole("link");
-    await expect(games).toHaveCount(3);
+    await expect(games).toHaveCount(2);
     await expect(games.nth(0)).toHaveAccessibleName("Draw it, guess it");
     await expect(games.nth(0)).toHaveAttribute("href", "/games/draw");
     await expect(games.nth(1)).toHaveAccessibleName("Would you rather?");
     await expect(games.nth(1)).toHaveAttribute("href", "/games/rather");
-    await expect(games.nth(2)).toHaveAccessibleName("Today's question");
-    // /games/today is built by the games area of the growth build: here only its address is held.
-    await expect(games.nth(2)).toHaveAttribute("href", "/games/today");
-    for (const href of ["/games/draw", "/games/rather"]) expect((await request.get(href)).status(), href).toBe(200);
-    await page.goto("/es/long-distance");
-    await expect(page.getByTestId("ldr-games")).toContainText("La pregunta de hoy");
+    for (const href of await games.evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""))) expect((await request.get(href)).status(), href).toBe(200);
   });
 
   test("the page says where it sits, and leads to the tool", async ({ page }) => {
@@ -79,19 +74,20 @@ test.describe("the share screen after an anniversary gift", () => {
   test("one line under the reminders leads to date ideas", async ({ page }) => {
     await page.goto("/reminders/preview?template=our-timeline&name=Ana");
     const line = page.getByTestId("anniversary-dates");
-    await expect(line).toHaveText("Planning the day too? Date ideas for an anniversary");
+    await expect(line).toHaveText("Planning the day too? Date ideas for an anniversary (opens in a new tab)");
+    await expect(line.getByRole("link")).toHaveAccessibleName("Date ideas for an anniversary (opens in a new tab)");
     const link = line.getByRole("link");
     await expect(link).toHaveAttribute("href", "/dates");
     await expect(link).toHaveAttribute("target", "_blank");
     // It comes after the reminder card.
     expect(await page.evaluate(() => { const card = document.querySelector('[data-testid="remind-card"]'); const line = document.querySelector('[data-testid="anniversary-dates"]'); return Boolean(card && line && card.compareDocumentPosition(line) & Node.DOCUMENT_POSITION_FOLLOWING); })).toBe(true);
-    for (const template of ["birthday-cinema", "bouquet", "pack-your-bags"]) {
+    for (const template of ["birthday-cinema", "bouquet", "pack-your-bags", "the-letter", "museum"]) {
       await page.goto(`/reminders/preview?template=${template}&name=Ana`);
       await expect(page.getByTestId("remind-card")).toBeVisible();
       await expect(page.getByTestId("anniversary-dates"), template).toHaveCount(0);
     }
     await page.goto("/es/reminders/preview?template=our-timeline&name=Ana");
-    await expect(page.getByTestId("anniversary-dates")).toHaveText("¿Planeando también el día? Ideas de citas para un aniversario");
+    await expect(page.getByTestId("anniversary-dates")).toHaveText("¿Preparáis también el día? Ideas de citas para un aniversario (se abre en otra pestaña)");
     await expect(page.getByTestId("anniversary-dates").getByRole("link")).toHaveAttribute("href", "/es/dates");
   });
 

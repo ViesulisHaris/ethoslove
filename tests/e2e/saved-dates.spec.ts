@@ -255,6 +255,10 @@ test("a trip just saved offers the surprise; one found saved does not", async ({
   await expect(next).toContainText("It's in My dates. Keep it a secret?");
   const surprise = next.getByRole("link", { name: "Make it a surprise" });
   await expect(surprise).toHaveAttribute("href", "#surprise");
+  // It shows where the keyboard is, as every control must.
+  await page.keyboard.press("Shift");
+  await surprise.focus();
+  expect(await surprise.evaluate((el) => el.matches(":focus-visible") && getComputedStyle(el).outlineStyle !== "none")).toBe(true);
   await surprise.click();
   await expect(page.locator("#surprise")).toBeInViewport();
   await page.getByTestId("trip-saved").getByRole("button", { name: "Remove" }).click();

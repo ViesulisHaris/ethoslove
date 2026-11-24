@@ -67,6 +67,17 @@ test.describe("halfway between two cities", () => {
       await img.scrollIntoViewIfNeeded();
       await expect.poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     }
+    // The gift's poster is held below its own sample "6,863 km between you" (its top 21%), which
+    // under the couple's real answer would read as theirs.
+    const poster = way(page, "gift").locator("img");
+    const shownFrom = await poster.evaluate((el) => {
+      const img = el as HTMLImageElement;
+      const scale = img.clientWidth / img.naturalWidth;
+      const slack = img.naturalHeight * scale - img.clientHeight;
+      const y = parseFloat(getComputedStyle(img).objectPosition.split(" ")[1]) / 100;
+      return (slack * y) / scale / img.naturalHeight;
+    });
+    expect(shownFrom).toBeGreaterThan(0.21);
     await both(page, "Riga", "Lisbon");
     await expect(way(page, "gift")).toHaveAttribute("href", "/create/halfway");
     await expect(way(page, "dates")).toContainText("Date ideas in Luxembourg");
@@ -156,12 +167,16 @@ test.describe("halfway between two cities", () => {
     await expect(page.locator("[data-halfway-result]")).toContainText("How far each of you would travel to meet exactly halfway.");
     expect(await page.locator("[data-halfway-tool]").innerText()).not.toMatch(/Bilbao|Madrid|Spain|España/i);
     for (const text of await ways(page).allInnerTexts()) expect(text).not.toMatch(/Bilbao|Madrid|Spain|España/i);
-    await expect(way(page, "dates")).toContainText("Date ideas near Paris");
+    // Halfway in a country never named: no typed town is echoed on the card either.
+    await expect(way(page, "dates")).toContainText("Date ideas near either of you");
+    await expect(way(page, "dates")).toHaveAttribute("href", "/dates");
 
     await page.goto(TOOL);
     await both(page, "Prague", "Vienna");
     await expect(page.locator("[data-halfway-city]")).toHaveText(/12[56] km each/);
-    await expect(page.locator("[data-halfway-result]")).toContainText(/No big city lies between you\. The nearest to halfway is (Vienna|Prague)\./);
+    await expect(page.locator("[data-halfway-result]")).toContainText("Halfway falls between your two towns.");
+    // Nothing claims what lies between them (Brno does), and neither of their own towns is named as halfway.
+    expect(await page.locator("[data-halfway-result]").innerText()).not.toMatch(/Prague|Vienna|No big city|nearest/i);
   });
 
   test("in Spanish, all of it", async ({ page }) => {
@@ -174,7 +189,7 @@ test.describe("halfway between two cities", () => {
     await expect(page.locator("[data-halfway-each]")).toHaveText(/km para ti · .* km para la otra persona/);
     await expect(way(page, "dates")).toContainText("Ideas para una cita en Múnich");
     await expect(way(page, "dates")).toHaveAttribute("href", "/es/dates/munich");
-    await expect(way(page, "gift")).toContainText("Hazle el regalo A medio camino");
+    await expect(way(page, "gift")).toContainText("Hazle el regalo «A medio camino»");
     await expect(page.getByRole("button", { name: "Envíaselo" })).toBeVisible();
   });
 

@@ -24,17 +24,17 @@ export type HalfwayToolCopy = {
 export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
   en: {
     title: "Halfway Between Two Cities: Find Where to Meet in the Middle",
-    description: "Type two towns and get the city halfway between them, how far each of you travels, and a link to send. Free, no account, anywhere in the world.",
+    description: "Type two towns and get the city halfway between them, how far each of you travels, and a link to send. Measured along the earth's curve, not a flat map.",
     label: "Halfway finder",
     h1: "Halfway between two cities",
     line: "Two towns in, the city in the middle out, by the earth's curve.",
     questionsLabel: "Questions",
     questionsHeading: "How halfway is worked out",
-    questionsLine: "Four things people ask before they book.",
+    questionsLine: "Why it isn't the middle of the map, and what changes by road.",
     faq: [
       {
         q: "How do you find the halfway point between two cities?",
-        a: "We take the two towns' coordinates and find the midpoint along the great circle, the shortest path over the earth's surface. Then we name the nearest city we know to that point, as long as one lies within 400 km, and tell you how far it is from each of you.",
+        a: "We take the two towns' coordinates and find the midpoint along the great circle, the shortest path over the earth's surface. Then we name the nearest city we know to that point, as long as one lies within 400 km and it is not one of your own two towns, and tell you how far it is from each of you.",
       },
       {
         q: "Why isn't it the middle of the map?",
@@ -59,17 +59,17 @@ export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
   },
   es: {
     title: "A medio camino entre dos ciudades: calculad dónde quedar",
-    description: "Escribid dos ciudades y sale la que queda a medio camino, cuánto viaja cada uno y un enlace para enviar. Gratis, sin cuenta y para cualquier lugar del mundo.",
+    description: "Escribid dos ciudades y sale la que queda a medio camino, cuánto viaja cada uno y un enlace para enviar. Medido sobre la curva de la Tierra, no sobre un mapa plano.",
     label: "Punto medio",
     h1: "A medio camino entre dos ciudades",
     line: "Entran dos ciudades y sale la del medio, siguiendo la curva de la Tierra.",
     questionsLabel: "Preguntas",
     questionsHeading: "Cómo se calcula el punto medio",
-    questionsLine: "Cuatro dudas antes de reservar.",
+    questionsLine: "Por qué no es el centro del mapa y qué cambia por carretera.",
     faq: [
       {
         q: "¿Cómo se calcula el punto medio entre dos ciudades?",
-        a: "Tomamos las coordenadas de las dos ciudades y buscamos el punto medio a lo largo del círculo máximo, el camino más corto sobre la superficie de la Tierra. Después nombramos la ciudad que conocemos más cercana a ese punto, siempre que haya una a menos de 400 km, y os decimos a qué distancia queda de cada uno.",
+        a: "Tomamos las coordenadas de las dos ciudades y buscamos el punto medio a lo largo del círculo máximo, el camino más corto sobre la superficie de la Tierra. Después nombramos la ciudad que conocemos más cercana a ese punto, siempre que haya una a menos de 400 km y no sea una de vuestras dos ciudades, y os decimos a qué distancia queda de cada uno.",
       },
       {
         q: "¿Por qué no es el centro del mapa?",

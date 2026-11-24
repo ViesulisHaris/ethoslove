@@ -22,7 +22,9 @@ export function ShareTripButton({ tripId, title, className }: { tripId: string; 
     url.search = "";
     url.hash = "";
     if (await shareLink({ url: url.href, title, text: t("text", { title }) })) {
-      track("trip_shared", { trip: tripId, how: "share" });
+      // shareLink is true when the sheet opened, sent or closed alike (neither the browser's nor the
+      // app's says which), so this counts the sheet opening, and is named so.
+      track("trip_shared", { trip: tripId, how: "share_opened" });
       return;
     }
     try {

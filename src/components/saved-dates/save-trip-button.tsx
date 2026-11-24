@@ -133,7 +133,7 @@ export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: s
       {done?.id ? (
         <p role="status" data-testid="trip-saved-next" className="basis-full text-[14px] leading-snug text-forest/75">
           {t("save.trip.then")}{" "}
-          <a href="#surprise" onClick={() => track("room_handoff", { from: "saved_trip", to: "surprise" })} className="-my-3 inline-flex min-h-11 items-center font-semibold text-rose-deep underline underline-offset-4">
+          <a href="#surprise" onClick={() => track("room_handoff", { from: "saved_trip", to: "surprise" })} className="-my-3 inline-flex min-h-11 items-center rounded-sm font-semibold text-rose-deep underline underline-offset-4 transition-[color,scale] hover:text-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:scale-[0.98] motion-reduce:transition-none">
             {t("save.trip.thenCta")}
           </a>
         </p>

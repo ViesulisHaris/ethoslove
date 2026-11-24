@@ -59,7 +59,9 @@ test.describe("where should we go together", () => {
     }
     await expect(picks(page).first()).toContainText(/3 days · city break/i);
     await expect(picks(page).first()).toContainText("Best Mar–Jun, Sept–Oct");
-    await expect(page.locator("#match [data-why]")).toHaveCount(0);
+    // Each says why it fits, even with no airport and every choice left open; never a flight time then.
+    await expect(picks(page).locator("[data-fit]")).toHaveText(["You left every choice open.", "You left every choice open.", "You left every choice open."]);
+    await expect(page.locator("#match [data-air]")).toHaveCount(0);
     // No money beside a trip but its band for spending there (€€, and for a screen reader the band's
     // own words, "about €150–300 a day for two", which is not a fare): never a price for a flight.
     const shown = await page.locator("[data-match-result]").evaluate((el) => {
@@ -78,9 +80,9 @@ test.describe("where should we go together", () => {
     await pickAirport(page, "Rig", /Riga · RIX/);
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(names(page)).toHaveText(["The Baltic coast, Riga to Tallinn", "A hygge weekend in Copenhagen", "Prague to Vienna by train"]);
-    await expect(picks(page).nth(0).locator("[data-why]")).toHaveText("It starts where you are. No flight to find.");
-    await expect(picks(page).nth(1).locator("[data-why]")).toHaveText("About 1 h 30 min in the air from Riga.");
-    await expect(picks(page).nth(2).locator("[data-why]")).toHaveText("About 1 h 50 min in the air from Riga.");
+    await expect(picks(page).nth(0).locator("[data-air]")).toHaveText("It starts where you are. No flight to find.");
+    await expect(picks(page).nth(1).locator("[data-air]")).toHaveText("About 1 h 30 min in the air from Riga.");
+    await expect(picks(page).nth(2).locator("[data-air]")).toHaveText("About 1 h 50 min in the air from Riga.");
   });
 
   test("under 600 km it says a train might be nicer", async ({ page }) => {
@@ -88,7 +90,7 @@ test.describe("where should we go together", () => {
     await pickAirport(page, "Lond", /London · LHR/);
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(names(page).first()).toHaveText("Paris without the clichés");
-    await expect(picks(page).first().locator("[data-why]")).toHaveText("About 1 h in the air from London. A train might be nicer.");
+    await expect(picks(page).first().locator("[data-air]")).toHaveText("About 1 h in the air from London. A train might be nicer.");
   });
 
   test("the airport is remembered, and can be left out again", async ({ page }) => {
@@ -103,7 +105,7 @@ test.describe("where should we go together", () => {
     await expect(page.locator("#match")).toContainText("Optional. Without it we skip the flight times.");
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(picks(page)).toHaveCount(3);
-    await expect(page.locator("#match [data-why]")).toHaveCount(0);
+    await expect(page.locator("#match [data-air]")).toHaveCount(0);
     await page.reload();
     await expect(box).toHaveValue("Riga");
   });
@@ -114,6 +116,8 @@ test.describe("where should we go together", () => {
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(summary(page)).toHaveText("One trip fits all of that. The rest come close.");
     await expect(names(page).first()).toHaveText("The Baltic coast, Riga to Tallinn");
+    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Fits a week.");
+    await expect(picks(page).nth(1).locator("[data-fit]")).toHaveText("The nearest to what you asked.");
   });
 
   test("when nothing fits it lets one wish go and says which", async ({ page }) => {
@@ -123,6 +127,7 @@ test.describe("where should we go together", () => {
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(summary(page)).toHaveText("Nothing fits all of that, so we let go of the length.");
     await expect(names(page).first()).toHaveText("Paris without the clichés");
+    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Fits a city break.");
 
     await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "islands" });
     await page.getByRole("combobox", { name: "How long" }).selectOption({ label: "a weekend" });
@@ -165,15 +170,18 @@ test.describe("where should we go together", () => {
 
   test("in Spanish, all of it", async ({ page }) => {
     await open(page, "/es/trips");
-    await expect(page.getByRole("heading", { level: 2, name: "¿Adónde vamos juntos?" })).toBeVisible();
-    expect(await sentence(page)).toBe("Tenemos los días que hagan falta, sin tope de gasto, y nos apetece cualquier tipo de viaje.");
+    await expect(page.getByRole("heading", { level: 2, name: "¿Adónde nos vamos los dos?" })).toBeVisible();
+    expect(await sentence(page)).toBe("Tenemos los días que hagan falta, sin tope de gasto, y buscamos cualquier tipo de viaje.");
     await page.getByRole("button", { name: "Ver nuestros tres viajes" }).click();
     await expect(summary(page)).toHaveText("Tres viajes que encajan.");
     await pickAirport(page, "Rig", /Riga · RIX/, "Salimos de");
-    await expect(picks(page).first().locator("[data-why]")).toHaveText("Empieza donde estáis. No hay vuelo que buscar.");
+    await expect(picks(page).first().locator("[data-air]")).toHaveText("Empieza donde estáis. No hay vuelo que buscar.");
     await page.getByRole("combobox", { name: "Cuánto tiempo" }).selectOption({ label: "una semana" });
     await page.getByRole("combobox", { name: "Tipo de viaje" }).selectOption({ label: "una escapada urbana" });
-    await expect(summary(page)).toHaveText("Nada encaja con todo, así que hemos soltado la duración.");
+    await expect(summary(page)).toHaveText("Nada encaja con todo, así que hemos dejado de lado la duración.");
+    await expect(picks(page).first().locator("[data-fit]")).toHaveText("Encaja con una escapada urbana.");
+    await page.getByRole("combobox", { name: "Tipo de viaje" }).selectOption({ label: "unas islas" });
+    expect(await sentence(page)).toBe("Tenemos una semana, sin tope de gasto, y buscamos unas islas.");
   });
 
   test("by keyboard alone", async ({ page, isMobile }) => {
@@ -206,8 +214,16 @@ test.describe("where should we go together", () => {
     expect((await events()).filter((e) => e.name.startsWith("trip_"))).toEqual([]);
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect.poll(async () => (await events()).filter((e) => e.name === "trip_match").map((e) => e.data)).toEqual([{ length: "any", budget: 0, kind: "any", hasOrigin: true }]);
+    // Three changes in a row are one settled ask, counted once and marked as refined.
+    await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "islands" });
+    await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "any kind of trip" });
     await page.getByRole("combobox", { name: "How long" }).selectOption({ label: "a week" });
-    await expect.poll(async () => (await events()).filter((e) => e.name === "trip_match").map((e) => e.data?.length)).toEqual(["any", "week"]);
+    await expect.poll(async () => (await events()).filter((e) => e.name === "trip_match").map((e) => e.data), { timeout: 8000 }).toEqual([
+      { length: "any", budget: 0, kind: "any", hasOrigin: true },
+      { length: "week", budget: 0, kind: "any", hasOrigin: true, refined: true },
+    ]);
+    await page.waitForTimeout(2000);
+    expect((await events()).filter((e) => e.name === "trip_match")).toHaveLength(2);
     await clickInPlace(picks(page).first().locator("a[href^='/trips/']"));
     await expect.poll(async () => (await events()).filter((e) => e.name === "trip_match_pick").map((e) => e.data)).toEqual([{ trip: "baltic-coast", to: "page" }]);
     expect(JSON.stringify(await events())).not.toMatch(/Riga|RIX/);
