@@ -40,6 +40,8 @@ export const reminderInput = z
      * other days, and get this year's email whenever there is still time for it.
      */
     forThisGift: z.boolean().default(true),
+    /** The page's currency, so a reminder's e-mails can say a price in it (stored once migration 0025 is in). */
+    currency: z.enum(["usd", "eur", "gbp"]).optional(),
   })
   .refine((r) => isRealDay(r), { message: "not_a_day", path: ["day"] });
 export type ReminderInput = z.input<typeof reminderInput>;

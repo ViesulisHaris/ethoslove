@@ -1598,7 +1598,7 @@
       "everythingWithPass": "Every template, while Ethos for Two runs",
       "more": "More",
       "reminders": "Birthday and anniversary reminders",
-      "remindersBlurb": "An email nine days before, with time to make something.",
+      "remindersBlurb": "Three emails before each day, with time to make something.",
       "redeem": "Redeem a gift card",
       "redeemBlurb": "Someone gave you a code? It goes here.",
       "withdraw": "Withdraw from a purchase",
@@ -3329,7 +3329,14 @@
   "lifecycle": {
     "remind": {
       "title": "Want a nudge before the next one?",
-      "blurb": "One email nine days before each day you add; for the monthly one, a check the day before. Nothing else.",
+      "blurb": "Three emails before each day you add: 7 days, 2 days and the day before, until your gift for it is made. For the monthly one, a check the day before. Nothing else.",
+      "datesTitle": "Never be late for their day.",
+      "datesWhy": "We'll email you 7 days before, with your photos already in a new gift.",
+      "fromGift": "from this gift",
+      "remindMe": "Remind me",
+      "datesSmall": "Three short emails before each day: 7 days, 2 days and the day before. They stop once your gift is made.",
+      "another": "Add another day",
+      "savedFirst": "Saved. Your first email comes on {date}.",
       "save": "Remind me",
       "saving": "Saving…",
       "failed": "That didn't save. Try again in a moment.",
@@ -3444,7 +3451,7 @@
     },
     "page": {
       "title": "Reminders",
-      "subtitle": "The days you asked us to remember: we email you nine days before, once a year. And the day before your monthsary, if you asked for it.",
+      "subtitle": "The days you asked us to remember: three emails before each one, 7 days, 2 days and the day before, until your gift for it is made or you say “not this year”. And the day before your monthsary, if you asked for it.",
       "empty": "No reminders yet. After you publish a gift, you can ask us to remind you next year.",
       "remove": "Remove",
       "removeLabel": "Remove the reminder: {what}",

@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth/get-user";
 import type { Tables } from "@/lib/supabase/types";
 import { MAX_REMINDERS, initialLastSentYear, type Reminder } from "@/lib/lifecycle/reminders";
 import { reminderInput } from "@/lib/lifecycle/reminder-input";
+import { isMissingColumn } from "@/lib/commerce/db";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -62,6 +63,8 @@ export async function POST(request: NextRequest) {
   if (countError) return NextResponse.json({ error: "unavailable" }, { status: 503 });
   if ((count ?? 0) >= MAX_REMINDERS) return NextResponse.json({ error: "too_many", max: MAX_REMINDERS }, { status: 409 });
 
+  // Only the gift's own occasion skips this year: it is the day the gift was just made for.
+  const skipYear = r.forThisGift ? initialLastSentYear({ month: r.month, day: r.day }, new Date(), r.giftDay) : null;
   const row = {
     user_id: userId,
     recipient_name: r.recipientName,
@@ -70,11 +73,15 @@ export async function POST(request: NextRequest) {
     day: r.day,
     locale: r.locale,
     template_slug: r.templateSlug ?? null,
-    // Only the gift's own occasion skips this year: it is the day the gift was just made for.
-    last_sent_year: r.forThisGift ? initialLastSentYear({ month: r.month, day: r.day }, new Date(), r.giftDay) : null,
+    last_sent_year: skipYear,
   };
+  // Migration 0025: that year is done (all three e-mails), and the page's currency is kept for the
+  // prices. Without the migration the row is saved as before, without them.
+  const staged = { ...row, ...(skipYear !== null ? { last_stage: 3 } : {}), ...(r.currency ? { currency: r.currency } : {}) };
   // ignoreDuplicates: a request that raced this one to the same row wins, and this one reads it back.
-  const inserted = await db.from("reminders").upsert(row, { onConflict: "user_id,recipient_name,occasion,month,day", ignoreDuplicates: true }).select(COLUMNS).maybeSingle();
+  const save = (values: typeof row) => db.from("reminders").upsert(values, { onConflict: "user_id,recipient_name,occasion,month,day", ignoreDuplicates: true }).select(COLUMNS).maybeSingle();
+  let inserted = await save(staged);
+  if (inserted.error && isMissingColumn(inserted.error)) inserted = await save(row);
   if (inserted.error) return NextResponse.json({ error: "unavailable" }, { status: 503 });
   if (inserted.data) return NextResponse.json({ reminder: toReminder(inserted.data), created: true }, { status: 201, headers: PRIVATE });
   const again = await db.from("reminders").select(COLUMNS).eq("recipient_name", r.recipientName).eq("occasion", r.occasion).eq("month", r.month).eq("day", r.day).maybeSingle();

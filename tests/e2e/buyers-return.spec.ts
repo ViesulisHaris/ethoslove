@@ -146,22 +146,59 @@ test.describe("the share screen's reminder card", () => {
     await expect(page.getByRole("radio", { name: month, exact: true })).toHaveCount(0);
   }
 
-  test("holds this gift's day next year and the other days, none of them added until tapped", async ({ page }) => {
+  test("asks for two days, fills in the one the gift tells, and adds nothing until 'Remind me'", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
     const card = page.getByTestId("remind-card");
-    await expect(card).toContainText("Want a nudge before the next one?");
-    await expect(card.getByTestId("remind-row-next")).toContainText("Ana's birthday");
-    await expect(card.getByTestId("remind-row-next")).toContainText("next year");
-    // The gift's own occasion isn't offered twice.
-    await expect(card.getByTestId("remind-row-birthday")).toHaveCount(0);
-    await expect(card.getByTestId("remind-row-anniversary")).toContainText("Your anniversary");
+    await expect(card).toContainText("Never be late for their day.");
+    await expect(card).toContainText("We'll email you 7 days before, with your photos already in a new gift.");
+    const birthday = card.getByTestId("remind-field-birthday");
+    await expect(birthday).toContainText("Ana's birthday");
+    await expect(birthday).toContainText("from this gift");
+    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Your anniversary");
+    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Pick the day");
+    await expect(card).toContainText("Three short emails before each day: 7 days, 2 days and the day before. They stop once your gift is made.");
+    // The other rows wait behind "Add another day".
+    await expect(card.getByTestId("remind-row-valentines")).toHaveCount(0);
+    await card.getByTestId("remind-another").click();
     await expect(card.getByTestId("remind-row-valentines")).toContainText("Valentine's Day");
     await expect(card.getByTestId("remind-row-monthly")).toContainText("Every month too");
     await expect(card.getByTestId("remind-row-someone")).toContainText("Someone else");
+    // A birthday gift's own day is a field, not a row as well.
+    await expect(card.getByTestId("remind-row-next")).toHaveCount(0);
     await expect(card.getByText("Added")).toHaveCount(0);
-    await expect(card.getByRole("checkbox", { checked: true })).toHaveCount(0);
     expect(reminders).toHaveLength(0);
+  });
+
+  test("'Remind me' is off until a day is in, then saves each day once", async ({ page }) => {
+    const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
+    await page.goto("/reminders/preview?template=bouquet&name=Ana");
+    const card = page.getByTestId("remind-card");
+    const save = card.getByTestId("remind-save-dates");
+    // Valentine's Day is neither of the two days: both start empty.
+    await expect(save).toBeDisabled();
+    await pickDay(page, card.getByRole("button", { name: "Your anniversary", exact: true }), "March", 5);
+    await pickDay(page, card.getByRole("button", { name: "Ana's birthday", exact: true }), "November", 30);
+    await expect(save).toBeEnabled();
+    await save.click();
+    await expect(card.getByTestId("remind-saved")).toContainText("Saved. Your first email comes on");
+    await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary · 5 March");
+    await expect(card.getByTestId("remind-saved")).toContainText("Ana's birthday · 30 November");
+    expect(reminders).toEqual([
+      { recipientName: "Ana", occasion: "birthday", month: 11, day: 30, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false },
+      { recipientName: "Ana", occasion: "anniversary", month: 3, day: 5, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false },
+    ]);
+  });
+
+  test("the day the gift tells is saved as this gift's", async ({ page }) => {
+    const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
+    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    const card = page.getByTestId("remind-card");
+    await card.getByTestId("remind-save-dates").click();
+    await expect(card.getByTestId("remind-saved")).toBeVisible();
+    expect(reminders).toHaveLength(1);
+    expect(reminders[0]).toMatchObject({ recipientName: "Ana", occasion: "birthday", templateSlug: "birthday-cinema", currency: "eur" });
+    expect(reminders[0]).not.toHaveProperty("forThisGift");
   });
 
   test("a day the account already has for them shows as added, and isn't asked for again", async ({ page }) => {
@@ -173,27 +210,34 @@ test.describe("the share screen's reminder card", () => {
     );
     await page.route("**/api/monthsaries", (route) => (route.request().method() === "GET" ? route.fulfill({ json: { monthsaries: [{ id: "m1", partnerName: "Ana", since: "2025-04-03", locale: "en" }] } }) : route.fallback()));
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    const anniversary = page.getByTestId("remind-field-anniversary");
+    await expect(anniversary).toContainText("9 June");
+    await expect(anniversary.getByText("Added")).toBeVisible();
+    await page.getByTestId("remind-another").click();
     await expect(page.getByTestId("remind-row-valentines").getByText("Added")).toBeVisible();
-    await expect(page.getByTestId("remind-row-anniversary")).toContainText("9 June");
-    await expect(page.getByTestId("remind-row-anniversary").getByText("Added")).toBeVisible();
     await expect(page.getByTestId("remind-row-monthly")).toContainText("Day 3 of each month");
-    await expect(page.getByTestId("remind-row-next").getByText("Added")).toHaveCount(0);
-    expect(reminders).toHaveLength(0);
+    // Saving now sends only the birthday.
+    await page.getByTestId("remind-save-dates").click();
+    await expect(page.getByTestId("remind-saved")).toContainText("Your anniversary · 9 June");
+    expect(reminders).toHaveLength(1);
+    expect(reminders[0]).toMatchObject({ occasion: "birthday" });
   });
 
   test("Valentine's Day is one tap, as another day than the gift's", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.getByTestId("remind-another").click();
     const row = page.getByTestId("remind-row-valentines");
     await row.getByRole("button", { name: "Remind me: Valentine's Day" }).click();
     await expect(row.getByText("Added")).toBeVisible();
-    expect(reminders).toEqual([{ recipientName: "Ana", occasion: "valentines", month: 2, day: 14, locale: "en", templateSlug: "birthday-cinema", forThisGift: false }]);
+    expect(reminders).toEqual([{ recipientName: "Ana", occasion: "valentines", month: 2, day: 14, locale: "en", currency: "eur", templateSlug: "birthday-cinema", forThisGift: false }]);
     await expect(page.getByRole("link", { name: "All your reminders" })).toBeVisible();
   });
 
-  test("this gift's own day is one tap too, and skips this year when it's the day just made for", async ({ page }) => {
+  test("a Valentine's gift's own day is one tap behind 'Add another day', and skips this year when it's the day just made for", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
+    await page.getByTestId("remind-another").click();
     await page.getByTestId("remind-row-next").getByRole("button", { name: "Remind me: Valentine's Day" }).click();
     await expect(page.getByTestId("remind-row-next").getByText("Added")).toBeVisible();
     expect(reminders).toHaveLength(1);
@@ -201,25 +245,23 @@ test.describe("the share screen's reminder card", () => {
     expect(reminders[0]).not.toHaveProperty("forThisGift");
   });
 
-  test("a birthday waits for its day: nothing is saved on a guessed date", async ({ page }) => {
+  test("a gift with no name asks whose days they are first", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=bouquet&name=Ana");
-    const row = page.getByTestId("remind-row-birthday");
-    await expect(row).toContainText("Pick the day");
-    await row.getByRole("button", { name: "Remind me: Ana's birthday" }).click();
-    const save = row.getByTestId("remind-save-birthday");
+    await page.goto("/reminders/preview?template=birthday-cinema&name=");
+    const card = page.getByTestId("remind-card");
+    const save = card.getByTestId("remind-save-dates");
     await expect(save).toBeDisabled();
-    await pickDay(page, row.getByRole("button", { name: "Date", exact: true }), "March", 14);
+    await card.getByTestId("remind-name").fill("Ana");
     await expect(save).toBeEnabled();
     await save.click();
-    await expect(row.getByText("Added")).toBeVisible();
-    await expect(row).toContainText("14 March");
-    expect(reminders).toEqual([{ recipientName: "Ana", occasion: "birthday", month: 3, day: 14, locale: "en", templateSlug: "bouquet", forThisGift: false }]);
+    await expect(card.getByTestId("remind-saved")).toBeVisible();
+    expect(reminders[0]).toMatchObject({ recipientName: "Ana", occasion: "birthday" });
   });
 
   test("someone else: a name and a day, and then another", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
+    await page.getByTestId("remind-another").click();
     const row = page.getByTestId("remind-row-someone");
     await row.getByRole("button", { name: "Remind me: Someone else" }).click();
     const save = row.getByTestId("remind-save-someone");
@@ -230,7 +272,7 @@ test.describe("the share screen's reminder card", () => {
     await expect(row).toContainText("Mum · Birthday · 4 May");
     await expect(row).toContainText("Someone else too");
     // Someone else's day has nothing to do with this gift's template.
-    expect(reminders).toEqual([{ recipientName: "Mum", occasion: "birthday", month: 5, day: 4, locale: "en", forThisGift: false }]);
+    expect(reminders).toEqual([{ recipientName: "Mum", occasion: "birthday", month: 5, day: 4, locale: "en", currency: "eur", forThisGift: false }]);
     await row.getByRole("button", { name: "Remind me: Someone else" }).click();
     await row.getByLabel("Who it's for").fill("Sam");
     await pickDay(page, row.getByRole("button", { name: "Date", exact: true }), "July", 9);
@@ -242,6 +284,7 @@ test.describe("the share screen's reminder card", () => {
   test("every month: a day that has come, a check the day before, nothing ever sent to the partner", async ({ page }) => {
     const monthly = await answer(page, "**/api/monthsaries", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
+    await page.getByTestId("remind-another").click();
     const row = page.getByTestId("remind-row-monthly");
     await row.getByRole("button", { name: "Remind me: Every month too" }).click();
     await expect(row).toContainText("The day before each one, we'll ask if it's still on, and only remind you if you say yes. Nothing is ever sent to Ana.");
@@ -279,21 +322,23 @@ test.describe("the share screen's reminder card", () => {
   test("says when the account already has fifty reminders", async ({ page }) => {
     await answer(page, "**/api/reminders", { status: 409, body: { error: "too_many", max: 50 } });
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
-    const row = page.getByTestId("remind-row-valentines");
-    await row.getByRole("button", { name: "Remind me: Valentine's Day" }).click();
-    await expect(row.getByRole("alert")).toHaveText("You already have 50 reminders. Remove one on your account page to add this one.");
+    const card = page.getByTestId("remind-card");
+    await card.getByTestId("remind-save-dates").click();
+    await expect(card.getByRole("alert")).toHaveText("You already have 50 reminders. Remove one on your account page to add this one.");
   });
 
   test("in Spanish", async ({ page }) => {
-    await page.goto("/es/reminders/preview?template=bouquet&name=Ana");
+    await page.goto("/es/reminders/preview?template=birthday-cinema&name=Ana");
     const card = page.getByTestId("remind-card");
-    await expect(card).toContainText("¿Te avisamos antes de la próxima fecha?");
-    await expect(card.getByTestId("remind-row-birthday")).toContainText("El cumpleaños de Ana");
-    await expect(card.getByTestId("remind-row-anniversary")).toContainText("Vuestro aniversario");
+    await expect(card).toContainText("Que no se te pase su día.");
+    await expect(card.getByTestId("remind-field-birthday")).toContainText("El cumpleaños de Ana");
+    await expect(card.getByTestId("remind-field-birthday")).toContainText("de este regalo");
+    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Vuestro aniversario");
+    await expect(card.getByTestId("remind-save-dates")).toHaveText("Recuérdamelo");
+    await card.getByTestId("remind-another").click();
     await expect(card.getByTestId("remind-row-monthly")).toContainText("Y cada mes");
     await expect(card.getByTestId("remind-row-monthly")).toContainText("A Ana no le enviamos nada.");
     await expect(card.getByTestId("remind-row-someone")).toContainText("Otra persona");
-    await expect(card.getByTestId("remind-row-next")).toContainText("el año que viene");
   });
 });
 

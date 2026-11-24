@@ -1598,7 +1598,7 @@
       "everythingWithPass": "Todas las plantillas, mientras dure Ethos for Two",
       "more": "Más",
       "reminders": "Avisos de cumpleaños y aniversarios",
-      "remindersBlurb": "Un email nueve días antes, con tiempo para hacer algo.",
+      "remindersBlurb": "Tres correos antes de cada día, con tiempo para hacer algo.",
       "redeem": "Canjear una tarjeta regalo",
       "redeemBlurb": "¿Te han regalado un código? Va aquí.",
       "withdraw": "Desistir de una compra",
@@ -3329,7 +3329,14 @@
   "lifecycle": {
     "remind": {
       "title": "¿Te avisamos antes de la próxima fecha?",
-      "blurb": "Un correo nueve días antes de cada fecha que añadas; para la de cada mes, una pregunta el día antes. Nada más.",
+      "blurb": "Tres correos antes de cada fecha que añadas: 7 días, 2 días y la víspera, hasta que hagas el regalo. Para la de cada mes, una pregunta el día antes. Nada más.",
+      "datesTitle": "Que no se te pase su día.",
+      "datesWhy": "Te escribimos 7 días antes, con tus fotos ya puestas en un regalo nuevo.",
+      "fromGift": "de este regalo",
+      "remindMe": "Recuérdamelo",
+      "datesSmall": "Tres correos cortos antes de cada día: 7 días, 2 días y la víspera. Paran en cuanto haces el regalo.",
+      "another": "Añadir otro día",
+      "savedFirst": "Guardado. El primer correo te llega el {date}.",
       "save": "Recuérdamelo",
       "saving": "Guardando…",
       "failed": "No se ha guardado. Prueba otra vez en un momento.",
@@ -3444,7 +3451,7 @@
     },
     "page": {
       "title": "Recordatorios",
-      "subtitle": "Las fechas que nos has pedido recordar: te escribimos nueve días antes, una vez al año. Y el día antes de vuestro mesiversario, si lo has pedido.",
+      "subtitle": "Las fechas que nos has pedido recordar: tres correos antes de cada una, 7 días, 2 días y la víspera, hasta que hagas el regalo o digas «este año no». Y el día antes de vuestro mesiversario, si lo has pedido.",
       "empty": "Aún no tienes recordatorios. Cuando publiques un regalo, puedes pedirnos que te lo recordemos el año que viene.",
       "remove": "Quitar",
       "removeLabel": "Quitar el recordatorio: {what}",
