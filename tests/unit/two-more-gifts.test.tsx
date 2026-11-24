@@ -67,9 +67,9 @@ describe("the two more gifts card", () => {
     vi.useFakeTimers({ now: new Date(2026, 10, 24, 12) });
     try {
       const html = text(intl(<TwoMoreGifts data={gift} ent={ent(offer)} afterPayment left={0} saved={birthday} />));
-      expect(html).toContain("Mia's birthday 10 December in 2 weeks");
+      expect(html).toContain("Mia’s birthday 10 December in 2 weeks");
       // A Christmas gift (frosted-window): the other row is Valentine's Day, not this Christmas.
-      expect(html).toContain("Valentine's Day 14 February in 12 weeks");
+      expect(html).toContain("Valentine’s Day 14 February in 12 weeks");
       expect(html).not.toContain("Christmas 25 December in 4 weeks");
     } finally {
       vi.useRealTimers();
@@ -82,7 +82,7 @@ describe("the two more gifts card", () => {
       expect(html).toContain("Nobody likes to be forgotten.");
       expect(html).toContain("You remembered today. Next up:");
       expect(html).toContain("Christmas 25 December in 4 weeks");
-      expect(html).toContain("Valentine's Day 14 February in 12 weeks");
+      expect(html).toContain("Valentine’s Day 14 February in 12 weeks");
       expect(html).toContain(`Both gifts Separately ${apart} ${price}`);
       expect(html).toContain(`Add both for ${price}`);
       expect(html).toContain("Any template, with everything in it");
@@ -167,7 +167,7 @@ describe("the two more gifts card", () => {
   it("names a saved birthday with the person's name", () => {
     const withBirthday = nextDays(new Date("2026-11-24T00:00:00.000Z"), [{ occasion: "birthday", month: 12, day: 10, recipientName: "Mia" }], null);
     const html = text(intl(<Bought days={withBirthday} name="Mia" />));
-    expect(html).toContain("Mia's birthday 10 December in 2 weeks");
+    expect(html).toContain("Mia’s birthday 10 December in 2 weeks");
     expect(html).toContain("Start the one for Mia's birthday now");
     expect(html).not.toMatch(/Start the Mia's/);
   });
@@ -181,7 +181,7 @@ describe("the two more gifts card", () => {
     expect(one).toHaveLength(1);
     const offer = intl(<Offer offer={{ amount: 500, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />);
     expect(offer.match(/<li /g)?.length).toBe(3); // one day row + the two ticks
-    expect(text(offer)).toContain("Valentine's Day 14 February in 4 days");
+    expect(text(offer)).toContain("Valentine’s Day 14 February in 4 days");
     expect(text(offer)).toContain("Add both for €5");
     expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />, "es"))).toContain("San Valentín 14 de febrero en 4 días");
     const bought = text(intl(<Bought days={one} name="Mia" />));
