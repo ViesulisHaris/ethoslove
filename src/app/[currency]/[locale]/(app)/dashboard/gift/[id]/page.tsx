@@ -5,13 +5,14 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { getGiftDetail } from "@/lib/gift/dashboard";
+import { getGiftDetail, holidayExtraOf } from "@/lib/gift/dashboard";
 import { getManifest } from "@/templates/manifests";
 import { SITE } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { OpensChart } from "@/components/dashboard/opens-chart";
 import { ReactionList } from "@/components/dashboard/reaction-list";
 import { ShareBox } from "@/components/dashboard/share-box";
+import { TreeTagRow } from "@/components/editor/tree-tag-row";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/dashboard/gift/[id]">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -30,6 +31,9 @@ export default async function GiftDetailPage({ params }: PageProps<"/[currency]/
   const data = gift.data as unknown as Partial<GiftData>;
   const manifest = getManifest(gift.template_slug);
   const url = `${SITE.url}${SITE.giftPath}/${gift.short_id}`;
+  // The Tree Tag, for a gift out in the world that came with it (lib/lifecycle/holiday-extras.ts).
+  const treeTag = user && gift.status !== "draft" && (await holidayExtraOf(user.id, gift)) === "tree-tag";
+  const tTag = await getTranslations("editor.share.treeTag");
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
@@ -62,10 +66,22 @@ export default async function GiftDetailPage({ params }: PageProps<"/[currency]/
           <h2 className="font-display text-xl">{t("opensOverTime")}</h2>
           <OpensChart views={views} locale={locale} />
         </section>
-        <section className="rounded-2xl border border-border bg-card p-5">
-          <h2 className="font-display text-xl">{t("share")}</h2>
-          {gift.status !== "draft" ? <ShareBox url={url} /> : <p className="mt-2 text-sm text-muted-foreground">{t("draftShare")}</p>}
-        </section>
+        {/* The share card fills its grid row beside the chart, as it did before the tag sat under it. */}
+        <div className="flex flex-col gap-4">
+          <section className="flex-1 rounded-2xl border border-border bg-card p-5">
+            <h2 className="font-display text-xl">{t("share")}</h2>
+            {gift.status !== "draft" ? <ShareBox url={url} /> : <p className="mt-2 text-sm text-muted-foreground">{t("draftShare")}</p>}
+          </section>
+          {treeTag ? (
+            <TreeTagRow
+              href={`/dashboard/gift/${gift.id}/print?shape=tree-tag`}
+              words={{ title: tTag("title"), line: tTag("line"), print: tTag("print"), label: tTag("label") }}
+              place="dashboard"
+              className="mt-0"
+              rememberFor={gift.id}
+            />
+          ) : null}
+        </div>
       </div>
 
       <section className="mt-8 rounded-2xl border border-border bg-card p-5">

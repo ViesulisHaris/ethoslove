@@ -216,6 +216,59 @@ describe("the pay panel", () => {
     // A guest's account needs no sign-up, and nothing there says "password" beside a gift that has one.
     expect(pay({ guest: true })).toContain("nothing to sign up for");
   });
+
+  describe("The Tree Tag, said before paying", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+      vi.unstubAllEnvs();
+    });
+    const at = (iso: string, on: string | undefined) => {
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(new Date(iso));
+      vi.stubEnv("NEXT_PUBLIC_TREE_TAG", on);
+    };
+
+    it("is one quiet line in the panel while the tag is given, in both languages and both layouts", () => {
+      at("2026-12-10T10:00:00Z", "1");
+      expect(pay()).toContain("Send it by 20 December and it comes with The Tree Tag to print and hang on the tree.");
+      expect(pay({ manifest: letter, note: { photos: 2, longLetter: false } }, "es")).toContain("Si lo envías hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.");
+      expect(pay().match(/data-testid="pay-tree-tag"/g)).toHaveLength(1);
+    });
+
+    it("beside 'A note with your photos', which leaves the template locked, names what the pay button buys, and the row itself says 'without'", () => {
+      at("2026-12-10T10:00:00Z", "1");
+      const keepRow = { price: "€3.99", max: 4, busy: false, onPay: () => {} };
+      const html = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow });
+      expect(html).toContain('data-testid="more-note-photos"');
+      const line = html.match(/data-testid="pay-tree-tag"[\s\S]*?<span>([^<]*)<\/span>/)?.[1] ?? "";
+      expect(line).toBe("Pay for The Letter and send it by 20 December, and it comes with The Tree Tag.");
+      // Short, and no word the panel uses nowhere else; nothing that points at a row hidden in the closed disclosure.
+      expect(line.split(/\s+/).length).toBeLessThanOrEqual(18);
+      expect(line).not.toMatch(/unlock|note with your photos/i);
+      expect(html).toContain("Up to 4 photos in the short note, without The Tree Tag.");
+      expect(html).not.toContain("Send it by 20 December and it comes with");
+      const es = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow }, "es");
+      expect(es).toContain("Paga «La carta» y envía el regalo hasta el 20 de diciembre: viene con la etiqueta del árbol.");
+      expect(es).toContain("Hasta 4 fotos en la nota corta, sin la etiqueta del árbol.");
+    });
+
+    it("leaves the note-with-photos row as it was while the tag is not given", () => {
+      at("2026-12-22T10:00:00Z", "1");
+      const keepRow = { price: "€3.99", max: 4, busy: false, onPay: () => {} };
+      const html = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow });
+      expect(html).toContain("Up to 4 photos in the short note. The 500 characters");
+      expect(html).not.toContain("Tree Tag");
+    });
+
+    it("says nothing with the switch off, before 24 November, or once the 20th has ended everywhere", () => {
+      at("2026-12-10T10:00:00Z", undefined);
+      expect(pay()).not.toContain('data-testid="pay-tree-tag"');
+      at("2026-11-23T23:59:59Z", "1");
+      expect(pay()).not.toContain('data-testid="pay-tree-tag"');
+      at("2026-12-21T12:00:00Z", "1");
+      expect(pay()).not.toContain('data-testid="pay-tree-tag"');
+    });
+  });
 });
 
 describe("the pricing cards' words", () => {

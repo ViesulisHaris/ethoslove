@@ -725,6 +725,12 @@
       "shareText": "I made you something. Open it with your sound on 💌 {url}",
       "qrTitle": "QR card",
       "qrBlurb": "Print it, tuck it in a card, stick it on the fridge.",
+      "treeTag": {
+        "title": "The Tree Tag",
+        "line": "Print it and hang it on the tree. They scan it on Christmas morning.",
+        "print": "Print The Tree Tag",
+        "label": "Comes with this gift"
+      },
       "dashboard": "See it in your gifts",
       "another": "Make another"
     },
@@ -1480,6 +1486,7 @@
       "seeFree": "The free note",
       "moreNotePhotos": "A note with your photos",
       "moreNotePhotosBlurb": "Up to {n} photos in the short note. The 500 characters and the Ethos footer stay.",
+      "moreNotePhotosBlurbNoTag": "Up to {n} photos in the short note, without The Tree Tag. The 500 characters and the Ethos footer stay.",
       "upgrade": "Everything for the difference",
       "upgradeBlurb": "Every template, forever. What you’ve already paid counts towards {full}.",
       "pick3": "Or pick any three for {price}",
@@ -1491,6 +1498,8 @@
       "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it’s this template’s normal price.",
+      "treeTag": "Send it by 20 December and it comes with The Tree Tag to print and hang on the tree.",
+      "treeTagUnlock": "Pay for {template} and send it by 20 December, and it comes with The Tree Tag.",
       "personalPrice": "Your personal price from our email, until {ends}."
     },
     "etsy": {

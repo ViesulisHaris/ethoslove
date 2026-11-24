@@ -5,6 +5,7 @@ import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { GIFTS_BUCKET, REACTIONS_BUCKET, isStoragePath, storageObjectKey } from "./assets";
 import type { Tables } from "@/lib/supabase/types";
 import { UNSENT_DAYS, unsentTemplates } from "@/lib/commerce/unsent";
+import { showsExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 
 export type DashboardGift = Tables<"gifts"> & {
   stats: { opens: number; uniqueViewers: number; avgWatchPct: number; reactions: number; lastOpenedAt: string | null };
@@ -75,6 +76,25 @@ export async function getGiftDetail(userId: string, giftId: string) {
     reactions: (reactions ?? []).map((r) => ({ ...r, audioUrl: r.audio_path ? (audioMap[r.audio_path] ?? null) : null })) as ReactionRow[],
     views: views ?? [],
   };
+}
+
+/**
+ * The holiday extra this gift came with (lib/lifecycle/holiday-extras.ts), or null: the stamp a publish
+ * left (or, sent paid while the switch was off, what its row says: sentWithExtra), on a gift that is
+ * out, while the build gives extras, and while the owner still holds the unlock it was paid with (a
+ * refunded gift keeps its stamp but is offered nothing). The unlock is asked only of a gift that has the
+ * extra, so the dashboard's other gifts cost nothing.
+ */
+export async function holidayExtraOf(
+  userId: string,
+  gift: Pick<Tables<"gifts">, "template_slug" | "status" | "data" | "created_at" | "published_at" | "watermark">,
+): Promise<HolidayExtra | null> {
+  const extra = showsExtra(gift);
+  if (!extra) return null;
+  const supabase = await getSupabaseServerClient();
+  if (!supabase) return null;
+  const { data: unlocked } = await supabase.rpc("has_template_unlock", { p_user: userId, p_slug: gift.template_slug });
+  return unlocked ? extra : null;
 }
 
 /**

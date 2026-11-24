@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { personalPriceEnds, usePersonalPrice } from "@/components/pricing/use-personal-price";
 import { useInApp } from "@/lib/app/use-bridge";
+import { extraOnOffer } from "@/lib/lifecycle/holiday-extras";
 import {
   bumpOffered,
   defaultPaywallPlan,
@@ -179,6 +180,8 @@ export function Paywall({
       : null;
 
   const planAmount = chosen === forTemplate ? forTemplateAmount : all.amount;
+  // Read once, when the panel opens: the sheet is never rendered on the server.
+  const [treeTag] = useState(() => extraOnOffer() === "tree-tag");
   const showBump = !personalOn && bumpOffered(chosen, all);
   const bumpOn = showBump && bump;
   const suggestions = secondSuggestions(slug, ownedElsewhere.map((m) => m.slug));
@@ -467,6 +470,16 @@ export function Paywall({
           {t("ownedElsewhere", { templates: ownedElsewhere.map((m) => m.name[locale]).join(", ") })}
         </p>
       ) : null}
+      {/* The Christmas e-mail's bonus, said once where it is paid for (lib/lifecycle/holiday-extras.ts): only while it is given. */}
+      {treeTag ? (
+        <p className="mt-3 flex items-center gap-2.5 text-sm text-ink" data-testid="pay-tree-tag">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/art/occasions/christmas.webp" alt="" width={24} height={24} className="size-6 shrink-0" />
+          {/* "A note with your photos" (keepRow) is paid but leaves the template locked, so it gets no tag:
+              this line names what the pay button buys, and the row's own blurb says "without" where it is seen. */}
+          <span>{keepRow ? tm("treeTagUnlock", { template: manifest.name[locale] }) : tm("treeTag")}</span>
+        </p>
+      ) : null}
 
       {panel ? null : chooser}
 
@@ -520,7 +533,7 @@ export function Paywall({
                       <span className="min-w-0 font-medium">{tm("moreNotePhotos")}</span>
                       <span className="shrink-0 font-semibold">{keepRow.price}</span>
                     </span>
-                    <span className="block text-xs text-muted-foreground">{tm("moreNotePhotosBlurb", { n: keepRow.max })}</span>
+                    <span className="block text-xs text-muted-foreground">{tm(treeTag ? "moreNotePhotosBlurbNoTag" : "moreNotePhotosBlurb", { n: keepRow.max })}</span>
                   </span>
                 </button>
               ) : null}

@@ -1,0 +1,106 @@
+{
+  "en": {
+    "text": "Ethos\n\nMia,\n\nLeo made you something.\n\nPOINT YOUR CAMERA AT THIS\n\ntryethos.io/g/prev2ew3k\n\nOpen it with your sound on",
+    "cards": 2,
+    "parts": {
+      "card": [
+        396.8,
+        559.4
+      ],
+      "head": [
+        165.8,
+        41.8,
+        65.2,
+        28
+      ],
+      "name": [
+        170.7,
+        103.8,
+        55.5,
+        30.8
+      ],
+      "line": [
+        111.4,
+        142.1,
+        174,
+        22
+      ],
+      "qr": [
+        111.5,
+        190.6,
+        173.8,
+        173.8
+      ],
+      "cta": [
+        96.8,
+        379.5,
+        203.2,
+        16
+      ],
+      "url": [
+        126.8,
+        403.1,
+        143.3,
+        17
+      ],
+      "sound": [
+        4,
+        512.9,
+        388.8,
+        16
+      ]
+    }
+  },
+  "es": {
+    "text": "Ethos\n\nMia,\n\nLeo te ha hecho algo.\n\nAPUNTA TU CÁMARA AQUÍ\n\ntryethos.io/g/prev2ew3k\n\nÁbrelo con el sonido activado",
+    "cards": 2,
+    "parts": {
+      "card": [
+        396.8,
+        559.4
+      ],
+      "head": [
+        165.8,
+        41.8,
+        65.2,
+        28
+      ],
+      "name": [
+        170.7,
+        103.8,
+        55.5,
+        30.8
+      ],
+      "line": [
+        126.3,
+        142.1,
+        144.3,
+        22
+      ],
+      "qr": [
+        111.5,
+        190.6,
+        173.8,
+        173.8
+      ],
+      "cta": [
+        109.8,
+        379.5,
+        177.3,
+        16
+      ],
+      "url": [
+        126.8,
+        403.1,
+        143.3,
+        17
+      ],
+      "sound": [
+        4,
+        512.9,
+        388.8,
+        16
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Car, Check, Copy, ExternalLink, MessageCircle, Plane, Share2, Star, Ticket } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -9,18 +9,33 @@ import { SITE } from "@/config/site";
 import { useEditor } from "@/lib/editor/store";
 import { track } from "@/lib/analytics/track";
 import { tripLinks } from "@/lib/lifecycle/trip-links";
+import { rememberQrDesign } from "@/lib/qr/remember";
+import type { HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import { PARTNER_NAMES, type PartnerId, type PartnerPlacement } from "@/lib/trips/partners";
 import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
+import { TreeTagRow } from "./tree-tag-row";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
 
-export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null }) {
+export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayExtra = null }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null; holidayExtra?: HolidayExtra | null }) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
+  // What the publish says this gift is offered (lib/lifecycle/holiday-extras.ts): the stamp its first
+  // publish left, the one the dashboard and the print page read, never worked out again here.
+  const treeTag = holidayExtra === "tree-tag";
+  const [designQuery, setDesignQuery] = useState("");
+  // Kept in this browser too, so the dashboard's Tree Tag link prints the same code later (lib/qr/remember.ts).
+  const onDesignChange = useCallback(
+    (query: string) => {
+      setDesignQuery(query);
+      if (treeTag && giftId) rememberQrDesign(giftId, query);
+    },
+    [treeTag, giftId],
+  );
   // Publishing needs an account, so this is always true here; the reminder is saved to it.
   const authed = useEditor((s) => s.authed);
   const [copied, setCopied] = useState(false);
@@ -82,6 +97,17 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
         {t("instagram")}: {t("instagramHint")}
       </p>
 
+      {/* The paid bonus the Christmas e-mail sells, right under the ways to send: below the QR designer
+          it sat four phone screens down. The code's design still travels with it once one is chosen. */}
+      {treeTag && giftId ? (
+        <TreeTagRow
+          href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
+          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), label: t("treeTag.label") }}
+          place="share"
+          className="mt-6"
+        />
+      ) : null}
+
       <EtsyReview template={data.templateSlug} />
 
       <BookTheTrip data={data} />
@@ -98,7 +124,7 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <section className="mt-8">
         <p className="font-display text-xl">{t("qrTitle")}</p>
         <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
-        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} />
+        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} onDesignChange={onDesignChange} />
       </section>
 
       {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}

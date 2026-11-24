@@ -182,6 +182,11 @@ export const giftDataBaseSchema = z.object({
     .max(CONTRIBUTION_LIMITS.max)
     .refine((items) => new Set(items.map((item) => item.key)).size === items.length, "duplicate_key")
     .optional(),
+  /**
+   * The holiday extra this gift came with (lib/lifecycle/holiday-extras.ts): decided by the server at
+   * the first publish and kept by it after. Client-supplied values are ignored.
+   */
+  holidayExtra: z.literal("tree-tag").optional(),
   fields: z.record(z.string(), z.unknown()).default({}),
 });
 

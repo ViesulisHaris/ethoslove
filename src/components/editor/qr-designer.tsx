@@ -33,7 +33,7 @@ function save(href: string, name: string) {
   a.click();
 }
 
-export function QrDesigner({ url, photos, accent, giftId, recipientName = "" }: { url: string; photos: GiftPhoto[]; accent: string; giftId: string | null; recipientName?: string }) {
+export function QrDesigner({ url, photos, accent, giftId, recipientName = "", onDesignChange }: { url: string; photos: GiftPhoto[]; accent: string; giftId: string | null; recipientName?: string; onDesignChange?: (query: string) => void }) {
   const t = useTranslations("editor.qr");
   const qrRef = useRef<QRCodeStyling | null>(null);
   const [frame, setFrame] = useState<QrFrame>("none");
@@ -101,7 +101,12 @@ export function QrDesigner({ url, photos, accent, giftId, recipientName = "" }: 
     }
   };
 
-  const printHref = giftId ? `/dashboard/gift/${giftId}/print?${qrDesignQuery({ dots, colour, gradient, centre, photo: photo?.id ?? "", size: centreSize, label })}` : null;
+  const designQuery = qrDesignQuery({ dots, colour, gradient, centre, photo: photo?.id ?? "", size: centreSize, label });
+  const printHref = giftId ? `/dashboard/gift/${giftId}/print?${designQuery}` : null;
+  // The Tree Tag's print link (share-screen.tsx) draws the same code as this one.
+  useEffect(() => {
+    onDesignChange?.(designQuery);
+  }, [designQuery, onDesignChange]);
 
   return (
     <div className="grid gap-5">
