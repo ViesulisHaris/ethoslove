@@ -1546,6 +1546,16 @@ html[data-overlay-open] body {
   display: block;
 }
 
+/* /dates before its app has loaded (dates/dates-explorer.tsx): the loading state, or, when the page's */
+/* first script found no town to open on, the empty state the HTML also carries.                     */
+[data-dates-early],
+[data-dates-empty] [data-dates-wait] {
+  display: none;
+}
+[data-dates-empty] [data-dates-early] {
+  display: grid;
+}
+
 /* The phone's "Make a gift" bar (marketing/sticky-cta.tsx): slides up once the hero has scrolled away. */
 .sticky-cta {
   transition:

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentProps } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from "react";
 import { AnimatePresence, motion, MotionConfig, useIsPresent } from "motion/react";
 import { ArrowRight, CloudOff, List, Map as MapIcon, Sparkles, Sunset } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -69,6 +69,12 @@ const FADE_OUT = { opacity: 0, transition: { duration: 0.2, ease: QUINT } } as c
 const LIST_OUT = { opacity: 0, transition: { duration: 0.26, ease: QUINT } } as const;
 
 const noop = () => () => undefined;
+/**
+ * On <html> once the page's first script knows the page will open on its empty state (no town in the
+ * link, none kept, and none in the connection's guess): the HTML's copy of the empty state is shown
+ * in place of the loading one until the app takes over (globals.css). Taken away once it has.
+ */
+const DATES_EMPTY_MARK = "data-dates-empty";
 /** The empty state's picture's `sizes`, which the page's HTML also fetches it by (lib/dates/early.ts). */
 const EMPTY_HERO_SIZES = heroSizes("(min-width: 1024px) 560px");
 const desktopQuery = "(min-width: 1024px)";
@@ -131,6 +137,11 @@ export function DatesExplorer() {
   const [where, setWhere] = useState<Where | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [status, setStatus] = useState<"starting" | "empty" | "loading" | "ready" | "error">("starting");
+  // The early empty state has done its job once the app has decided what to show.
+  useEffect(() => {
+    if (status !== "starting") document.documentElement.removeAttribute(DATES_EMPTY_MARK);
+  }, [status]);
+  useEffect(() => () => document.documentElement.removeAttribute(DATES_EMPTY_MARK), []);
   const [places, setPlaces] = useState<Place[]>([]);
   const [rare, setRare] = useState<Place[]>([]);
   const [sights, setSights] = useState<Sight[]>([]);
@@ -764,50 +775,53 @@ export function DatesExplorer() {
   };
   const whereLabels ={ label: t("where.label"), placeholder: t("where.placeholder"), nearMe: t("where.nearMe"), searching: t("where.searching"), nothing: t("where.nothing"), failed: t("where.failed") };
 
+  // The empty state, as a function: the page's HTML also carries a copy (`early`), shown before the
+  // app has loaded when the page's first script finds there is no town to open on (lib/dates/early.ts).
+  // At least a screen tall and centred in it on a desktop: on a big monitor it sat in the top 40%
+  // of a page that is always a screen tall (for the map), over blank paper.
+  // One column by name on a phone: a grid's unnamed column is as wide as its widest item's
+  // shortest line, which was the search box (383px in a 350px page), and the page scrolled sideways.
+  const emptyView = (early: boolean) => (
+    <section data-dates-early={early ? "" : undefined} className="container-x grid grid-cols-1 items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
+      <div>
+        <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
+        {/* The HTML's copy is not a second heading for the page: the loading state has the h1. */}
+        {early ? <p className="mt-4 display-hero text-forest">{t("empty.title")}</p> : <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>}
+        {/* Sent here by an idea's "Plan it near you": it is named, so the visitor knows it is carried. */}
+        <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{idea && !early ? t("empty.subIdea", { idea: idea.title[locale] }) : t("empty.sub")}</p>
+        <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus={!early} size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
+        {!early && (notice || townMissing) ? (
+          <p role="status" className="mt-3 text-sm text-destructive">
+            {notice ?? t("where.nothing")}
+          </p>
+        ) : null}
+        <p className="mt-9 text-[12px] font-medium tracking-[0.2em] text-forest/65 uppercase">{t("empty.or")}</p>
+        <ul className="mt-4 flex max-w-xl flex-wrap gap-2">
+          {STARTER_CITIES.map((city) => {
+            // The name the page's language uses, for the chip and for the heading and link it leads to.
+            const name = starterName(city, locale);
+            return (
+              <li key={city.name}>
+                <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-card px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper">
+                  {name}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
+        <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={EMPTY_HERO_SIZES} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
+        <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-card px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
+      </div>
+    </section>
+  );
+
   // The script that starts the search from the HTML only belongs in the server's HTML (and the
   // hydration that matches it); rendered afterwards, React would only complain it cannot run.
-  if (!isClient || status === "starting") return <ExplorerSkeleton locale={locale} early={!isClient} />;
+  if (!isClient || status === "starting") return <ExplorerSkeleton locale={locale} early={!isClient} empty={emptyView(true)} />;
 
-  if (status === "empty" || !where) {
-    return (
-      // At least a screen tall and centred in it on a desktop: on a big monitor it sat in the top 40%
-      // of a page that is always a screen tall (for the map), over blank paper.
-      // One column by name on a phone: a grid's unnamed column is as wide as its widest item's
-      // shortest line, which was the search box (383px in a 350px page), and the page scrolled sideways.
-      <section className="container-x grid grid-cols-1 items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
-        <div>
-          <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
-          <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
-          {/* Sent here by an idea's "Plan it near you": it is named, so the visitor knows it is carried. */}
-          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{idea ? t("empty.subIdea", { idea: idea.title[locale] }) : t("empty.sub")}</p>
-          <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
-          {notice || townMissing ? (
-            <p role="status" className="mt-3 text-sm text-destructive">
-              {notice ?? t("where.nothing")}
-            </p>
-          ) : null}
-          <p className="mt-9 text-[12px] font-medium tracking-[0.2em] text-forest/65 uppercase">{t("empty.or")}</p>
-          <ul className="mt-4 flex max-w-xl flex-wrap gap-2">
-            {STARTER_CITIES.map((city) => {
-              // The name the page's language uses, for the chip and for the heading and link it leads to.
-              const name = starterName(city, locale);
-              return (
-                <li key={city.name}>
-                  <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-card px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper">
-                    {name}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
-          <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={EMPTY_HERO_SIZES} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-card px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
-        </div>
-      </section>
-    );
-  }
+  if (status === "empty" || !where) return emptyView(false);
 
   const showMap = isDesktop || view === "map";
   const mountMap = isDesktop || mapOpened;
@@ -1303,11 +1317,12 @@ export function DatesExplorer() {
  * the town from the link into the heading (lib/dates/early.ts). The heading's text is theirs from
  * then on, so hydration is told to leave it as it finds it.
  */
-function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boolean }) {
+function ExplorerSkeleton({ locale, early, empty }: { locale: "en" | "es"; early: boolean; empty: ReactNode }) {
   const t = useTranslations("dates");
   const budget = [t("ideas.budget.0"), t("ideas.budget.1"), t("ideas.budget.2"), t("ideas.budget.3")] as [string, string, string, string];
   return (
-    <div className="lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
+    <>
+    <div data-dates-wait className="lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
       <div className="px-5 pt-7 pb-32 sm:px-8 lg:px-6 lg:pt-[calc(var(--header-h)+1.25rem)]">
         <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
         <h1 id={TITLE_ID} suppressHydrationWarning className="mt-2 display-lg text-forest">
@@ -1315,7 +1330,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
         </h1>
         {/* The server's copy of earlyStart and the browser's are compiled separately and need not match
             to the character; the one that runs is the server's, so hydration isn't to compare them. */}
-        {early ? <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: earlyScript({ key: EARLY_KEY, whereKey: WHERE_KEY, locale, radius: snapSearch({ lat: 0, lng: 0 }, DEFAULT_RADIUS_M).radiusM, headingId: TITLE_ID, titleIn: t.raw("titleIn") as string, warm: [MAPLIBRE_URL, MAPLIBRE_SHARED_URL, MAP_STYLE_URL], emptyArt: { srcSet: heroSrcSet(HERO_ART.dates), sizes: EMPTY_HERO_SIZES } }) }} /> : null}
+        {early ? <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: earlyScript({ key: EARLY_KEY, whereKey: WHERE_KEY, locale, radius: snapSearch({ lat: 0, lng: 0 }, DEFAULT_RADIUS_M).radiusM, headingId: TITLE_ID, titleIn: t.raw("titleIn") as string, warm: [MAPLIBRE_URL, MAPLIBRE_SHARED_URL, MAP_STYLE_URL], emptyArt: { srcSet: heroSrcSet(HERO_ART.dates), sizes: EMPTY_HERO_SIZES }, emptyMark: DATES_EMPTY_MARK }) }} /> : null}
         <div className="mt-5 flex flex-wrap gap-2" aria-hidden="true">
           <div className="h-12 min-w-[230px] flex-1 animate-pulse rounded-full bg-white/70" />
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
@@ -1351,5 +1366,8 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
       {/* The map's own paper, so the map fades in over the same colour instead of a lighter one. */}
       <div className="hidden h-dvh lg:block" style={{ background: MAP_PAPER }} />
     </div>
+    {/* The empty state, unseen unless the page's first script found no town to open on (DATES_EMPTY_MARK). */}
+    {empty}
+    </>
   );
 }

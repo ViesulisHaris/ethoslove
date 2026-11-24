@@ -64,6 +64,8 @@ export type EarlyOptions = {
    * once the app has loaded and drawn it: it is that page's largest picture.
    */
   emptyArt?: { srcSet: string; sizes: string };
+  /** The attribute put on <html> then, so the HTML's copy of the empty state is shown at once. */
+  emptyMark?: string;
 };
 
 /**
@@ -118,12 +120,16 @@ export function earlyStart(o: EarlyOptions): void {
       if (!lookUp) {
         ask("/api/dates/here");
         const art = o.emptyArt;
-        if (art) {
+        const mark = o.emptyMark;
+        if (art || mark) {
           // A copy of the answer is read here; the explorer reads the parked one itself.
           parked["/api/dates/here"].response
             .then((res) => res.clone().json())
             .then((json: { place?: unknown }) => {
               if (json && json.place) return;
+              // Named by an idea's link, the empty state says so, which only the app can: it waits for it.
+              if (mark && !params.get("idea")) document.documentElement.setAttribute(mark, "");
+              if (!art) return;
               const link = document.createElement("link");
               link.rel = "preload";
               link.as = "image";
