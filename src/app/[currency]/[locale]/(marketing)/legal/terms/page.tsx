@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { localeAlternates } from "@/lib/seo";
 import { LEGAL_DOCS, LEGAL_UPDATED, legalDocs } from "@/content/legal";
+import { ideaMode } from "@/lib/lifecycle/monthly-idea";
 import { groupGiftsEnabled } from "@/lib/group/flag";
 import { LegalDocument } from "@/components/marketing/legal-document";
 
@@ -16,5 +17,5 @@ export default async function TermsPage({ params }: PageProps<"/[currency]/[loca
   setRequestLocale(locale);
   const t = await getTranslations("legal");
   // What it says about group cards is there only while they are on sale (content/legal.ts).
-  return <LegalDocument doc={legalDocs(groupGiftsEnabled()).terms[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: LEGAL_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
+  return <LegalDocument doc={legalDocs(groupGiftsEnabled(), ideaMode()).terms[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: LEGAL_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
 }
