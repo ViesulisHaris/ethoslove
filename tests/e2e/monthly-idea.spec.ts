@@ -144,9 +144,12 @@ test.describe("the free version's Terms box", () => {
     await page.goto("/monthly-idea/preview?part=terms");
     const send = page.getByTestId("terms-send");
     await expect(send).toHaveAttribute("aria-disabled", "true");
-    await send.click();
-    const nudge = page.getByRole("alert");
+    // Playwright waits for an aria-disabled button to be enabled; a finger doesn't, and that tap is the point.
+    await send.click({ force: true });
+    // The page's own alert, not Next's route announcer (also role="alert", always empty here).
+    const nudge = page.getByRole("alert").filter({ hasText: /\S/ });
     await expect(nudge).toHaveText("Tick the box to send the free version.");
+    await expect(nudge).toHaveAttribute("id", "free-terms-nudge");
     await expect(page.getByTestId("free-terms-box")).toBeFocused();
     await expect(page.getByTestId("terms-sent")).toHaveCount(0);
     await page.getByTestId("free-terms-box").check();
@@ -219,7 +222,7 @@ test.describe("the account page's row", () => {
     await page.goto("/monthly-idea/preview?part=account");
     const row = page.getByTestId("idea-emails");
     await row.getByRole("button", { name: "Stop them" }).click();
-    await expect(page.getByRole("alert")).toHaveText("Couldn’t save that. Try again in a moment.");
+    await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toHaveText("Couldn’t save that. Try again in a moment.");
     await expect(row).toContainText("By email, for a year after your last gift.");
   });
 });

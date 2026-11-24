@@ -5,6 +5,7 @@ import { ClientMessages } from "@/i18n/client-messages";
 import { ideaMode } from "@/lib/lifecycle/monthly-idea";
 import { OfferEmailsBox } from "@/components/editor/offer-emails-box";
 import { IdeaWhereNote } from "@/components/editor/idea-where-note";
+import { IdeaEmailsSwitch } from "@/components/reminders/idea-emails-switch";
 import { TermsPreview } from "./terms-preview";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -16,7 +17,8 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
  * screenshots and the e2e tests, which can't publish a gift (that needs an account, and the dev
  * server's database is production). ?part=share (the line on the share screen; ?notice=0 without it,
  * &box=idea for the offers box that names the idea), terms (the free version's Terms box over a send
- * button), where (the line under the sign-in form). Its buttons talk to the real routes, which a test
+ * button), where (the line under the sign-in form), account (the row on /account/reminders;
+ * ?state=off for it off). Its buttons talk to the real routes, which a test
  * answers itself. `data-idea-mode` is the server's setting, so a test can see what it runs against.
  * NODE_ENV is inlined at build: in production this page is a 404.
  */
@@ -34,6 +36,7 @@ export default async function MonthlyIdeaPreviewPage({ params, searchParams }: P
       <div className="mx-auto w-full max-w-lg bg-paper px-4 pt-24 pb-16 sm:px-6" data-idea-mode={ideaMode()}>
         {part === "share" ? <OfferEmailsBox ideaNotice={one(query.notice) === "0" ? null : t("ideaLine")} ideaBox={one(query.box) === "idea"} /> : null}
         {part === "terms" ? <TermsPreview /> : null}
+        {part === "account" ? <IdeaEmailsSwitch initialOn={one(query.state) !== "off"} /> : null}
         {part === "where" ? (
           <section className="mt-7 rounded-xl border border-line bg-card p-5" data-testid="publish-sign-in">
             <p className="font-display text-xl">{tSheet("signInTitle")}</p>
