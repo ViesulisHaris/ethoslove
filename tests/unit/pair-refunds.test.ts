@@ -106,4 +106,16 @@ describe("refunds of two more gifts", () => {
     expect(fake.rows("template_unlocks").find((r) => r.template_slug === "bouquet")?.purchase_id).toBe(PAIR);
     expect(status(fake, "g-bouquet")).toBe("live");
   });
+
+  it("half refunded, then disputed and won: the gift the refund took stays gone", async () => {
+    const fake = seed();
+    await bought(fake, ["bouquet"]);
+    await handleStripeEvent(event("charge.refunded", refund(250)), deps(fake.db));
+    await handleStripeEvent(event("charge.dispute.created", { id: "dp_1", object: "dispute", payment_intent: "pi_p", charge: "ch_p", status: "needs_response" }), deps(fake.db));
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    await handleStripeEvent(event("charge.dispute.closed", { id: "dp_1", object: "dispute", payment_intent: "pi_p", charge: "ch_p", status: "won" }), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(0);
+    expect(slugs(fake)).toEqual(["bouquet", "vinyl"]);
+    expect(status(fake, "g-bouquet")).toBe("live");
+  });
 });

@@ -542,6 +542,20 @@ describe("fulfilment of two more gifts", () => {
     expect(mail.notifyReceipt).toHaveBeenCalledTimes(1);
   });
 
+  it("closes the account's other open checkouts for two more gifts once one is paid, so it can't be paid twice", async () => {
+    usePairDb();
+    const stripe = new FakeStripe(() => NOW);
+    state.stripe = stripe.client;
+    stripe.sessions.cs_test_1 = { id: "cs_test_1", status: "complete", ui_mode: "hosted" };
+    stripe.sessions.cs_wallet = { id: "cs_wallet", status: "open", ui_mode: "elements" };
+    fake.tables.purchases[0].stripe_session_id = "cs_test_1";
+    fake.tables.purchases[0].created_at = new Date(NOW - 60_000).toISOString();
+    fake.tables.purchases.push({ id: "p-wallet", user_id: "u1", product: "pair", kind: "pair", status: "pending", amount: 500, currency: "eur", template_slugs: [], stripe_session_id: "cs_wallet", created_at: new Date(NOW - 120_000).toISOString() });
+    expect(await fulfilCheckoutSession(session(pairMeta(), { amount_total: 500 }))).toEqual({ ok: true, userId: "u1" });
+    expect(stripe.sessions.cs_wallet.status).toBe("expired");
+    expect(stripe.calls.filter((c) => c.method === "checkout.sessions.expire").map((c) => c.args[0])).toEqual(["cs_wallet"]);
+  });
+
   it("refuses a guest's session: it is only ever sold signed in", async () => {
     usePairDb();
     const meta = { ...pairMeta(), user_id: "", guest: "1" };
