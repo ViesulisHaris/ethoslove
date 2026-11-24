@@ -88,6 +88,17 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayEx
         {t("instagram")}: {t("instagramHint")}
       </p>
 
+      {/* The paid bonus the Christmas e-mail sells, right under the ways to send: below the QR designer
+          it sat four phone screens down. The code's design still travels with it once one is chosen. */}
+      {treeTag && giftId ? (
+        <TreeTagRow
+          href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
+          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), label: t("treeTag.label") }}
+          place="share"
+          className="mt-6"
+        />
+      ) : null}
+
       <EtsyReview template={data.templateSlug} />
 
       <BookTheTrip data={data} />
@@ -106,14 +117,6 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayEx
         <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
         <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} onDesignChange={setDesignQuery} />
       </section>
-
-      {treeTag && giftId ? (
-        <TreeTagRow
-          href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
-          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), label: t("treeTag.label") }}
-          place="share"
-        />
-      ) : null}
 
       {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}
       <div className="mt-8 flex flex-col gap-2" data-app-hide>

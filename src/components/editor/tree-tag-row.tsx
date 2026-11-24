@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
 export type TreeTagWords = { title: string; line: string; print: string; label: string };
 
 /**
- * The Tree Tag, offered once, where the gift is shared: on the share screen under the QR card, and on
+ * The Tree Tag, offered once, where the gift is shared: on the share screen under the ways to send it
+ * (above the QR card, so it is seen without scrolling), and on
  * the gift's page in the dashboard. Only for a gift that came with it (lib/lifecycle/holiday-extras.ts);
  * the print page asks again. The words come in as props, so the dashboard (a server page) and the
  * editor (its own messages) both hand over theirs. Never inside the iPhone app.
