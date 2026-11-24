@@ -24,7 +24,7 @@ const migrations = readdirSync(DIR)
 
 describe("migrations from 0008 on", () => {
   it("are all found", () => {
-    expect(migrations.map((m) => m.file)).toEqual(expect.arrayContaining(["0009_commerce.sql", "0010_reminders.sql", "0011_privacy_fixes.sql", "0012_consent.sql", "0013_app_store.sql"]));
+    expect(migrations.map((m) => m.file)).toEqual(expect.arrayContaining(["0009_commerce.sql", "0010_reminders.sql", "0011_privacy_fixes.sql", "0012_consent.sql", "0013_app_store.sql", "0022_monthly_ideas.sql"]));
   });
 
   for (const { file, sql } of migrations) {
@@ -117,5 +117,26 @@ describe("0025: three e-mails before each reminded day", () => {
   it("marks every reminder with a year recorded as done for that year, and touches no other", () => {
     expect(sql).toContain("update public.reminders set last_stage = 3 where last_sent_year is not null and last_stage = 0;");
     expect(sql.match(/update /g)).toHaveLength(1);
+  });
+});
+
+describe("0022: the monthly idea", () => {
+  const sql = migrations.find((m) => m.file === "0022_monthly_ideas.sql")!.sql;
+
+  it("is found", () => {
+    expect(sql).toContain("create table if not exists public.monthly_ideas");
+  });
+
+  it("lets the owner read their own row and nothing else: the server writes", () => {
+    expect(sql.match(/create policy/g)).toHaveLength(1);
+    expect(sql).toMatch(/create policy "monthly_ideas: owner reads" on public\.monthly_ideas\s+for select to authenticated\s+using \(\(select auth\.uid\(\)\) = user_id\)/);
+    expect(sql).toContain("revoke all on public.monthly_ideas from anon, authenticated");
+    expect(sql).toContain("grant select on public.monthly_ideas to authenticated");
+    expect(sql).not.toMatch(/grant (insert|update|delete|all)/);
+  });
+
+  it("keeps one row per account, gone with the account, and knows the three ways in", () => {
+    expect(sql).toMatch(/user_id\s+uuid primary key references public\.profiles \(id\) on delete cascade/);
+    expect(sql).toContain("check (basis in ('notice', 'box', 'terms'))");
   });
 });

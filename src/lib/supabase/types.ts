@@ -935,6 +935,29 @@ export interface Database {
         Update: { wording?: string; source?: string; locale?: string; created_at?: string };
         Relationships: [];
       };
+      /** The monthly idea email's one row per account (0022). The server writes; the owner reads their own. */
+      monthly_ideas: {
+        Row: {
+          user_id: string;
+          /** YYYY-MM-DD: the day the account last sent a gift (UTC). */
+          since: string;
+          /** Generated from `since`. */
+          since_day: number;
+          template_slug: string | null;
+          locale: "en" | "es";
+          basis: "notice" | "box" | "terms";
+          wording: string;
+          handled_for: string | null;
+          last_sent_on: string | null;
+          price_sent_at: string | null;
+          price_used_at: string | null;
+          off_at: string | null;
+          created_at: string;
+        };
+        Insert: { user_id: string; since: string; template_slug?: string | null; locale?: "en" | "es"; basis: "notice" | "box" | "terms"; wording: string; handled_for?: string | null; last_sent_on?: string | null; price_sent_at?: string | null; price_used_at?: string | null; off_at?: string | null; created_at?: string };
+        Update: { since?: string; template_slug?: string | null; locale?: "en" | "es"; basis?: "notice" | "box" | "terms"; wording?: string; handled_for?: string | null; last_sent_on?: string | null; price_sent_at?: string | null; price_used_at?: string | null; off_at?: string | null };
+        Relationships: [];
+      };
       /** A gift card's name and note between checkout and fulfilment, never sent to Stripe (0012). Service role only. */
       gift_card_details: {
         Row: { purchase_id: string; recipient_name: string | null; note: string | null; created_at: string };
