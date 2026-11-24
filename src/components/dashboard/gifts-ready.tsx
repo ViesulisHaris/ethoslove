@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { DayRows } from "@/components/pricing/day-rows";
 import { formatMonthDay } from "@/lib/lifecycle/reminders";
-import { dayAway, dayName, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
+import { dayAway, dayArgs, dayName, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
 
 /**
  * The gifts page's strip for an account with gifts ready (two more gifts): how many, the next two
@@ -17,7 +17,7 @@ export async function GiftsReady({ count, days }: { count: number; days: NextDay
   const remind = await getTranslations("lifecycle.remind");
   const locale = (await getLocale()) === "es" ? "es" : "en";
   const first = days[0];
-  const make = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("make", { day: dayName(first, pair, remind) }) } : { href: "/templates", label: t("makeAny") };
+  const make = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("make", dayArgs(first)) } : { href: "/templates", label: t("makeAny") };
   return (
     <section className="mt-10 max-w-xl rounded-2xl border border-ink bg-card p-5" data-testid="gifts-ready">
       <div className="flex items-center gap-4">

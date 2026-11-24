@@ -11,7 +11,7 @@ test.skip(!!process.env.CI, "the share preview page exists only on a development
 const OFFER = { eur: { amount: 500, currency: "eur" }, usd: { amount: 600, currency: "usd" }, gbp: { amount: 400, currency: "gbp" } } as const;
 const COUNTRY_CURRENCY: Record<string, keyof typeof OFFER> = { US: "usd", GB: "gbp", DE: "eur" };
 
-type Setup = { ready?: number; offer?: boolean; reminders?: unknown[]; remindersDelayMs?: number; wallet?: boolean; stripeDelayMs?: number };
+type Setup = { ready?: number; offer?: boolean; reminders?: unknown[]; remindersDelayMs?: number; wallet?: boolean; stripeDelayMs?: number; entitlementsDelayMs?: number };
 
 /**
  * Signs the browser in as far as the page can tell (a session cookie's name), and answers what the
@@ -33,6 +33,7 @@ async function open(page: Page, path: string, setup: Setup = {}) {
     await route.abort().catch(() => {});
   });
   await page.route("**/api/entitlements*", async (route) => {
+    if (setup.entitlementsDelayMs) await new Promise((r) => setTimeout(r, setup.entitlementsDelayMs));
     const country = route.request().headers()["x-vercel-ip-country"] ?? "DE";
     const offer = setup.offer === false ? null : OFFER[COUNTRY_CURRENCY[country] ?? "eur"];
     await route.fulfill({ json: { signedIn: true, templates: ["coquette"], packs: [], pass: null, membership: null, savedDatesLimit: 3, upgrade: null, giftsReady: setup.ready ?? 0, pairOffer: offer } });
@@ -91,6 +92,19 @@ test.describe("two more gifts under the link", () => {
     expect(await add.boundingBox()).toEqual(before);
   });
 
+  test("the card is in the share screen's first frame: nothing under the link moves when it comes", async ({ page }) => {
+    // The account's answer is slow; the screen waits for it (the publish sheet loads it while open),
+    // so the moment the link's screen is there, the card is too, and the rest sits where it stays.
+    await open(page, "/share-preview", { entitlementsDelayMs: 1500 });
+    const hint = page.getByText("Instagram:");
+    await expect(hint).toBeVisible();
+    await expect(page.getByTestId("pair-offer")).toHaveCount(1);
+    const qr = page.getByText("QR card");
+    const before = await qr.boundingBox();
+    await page.waitForTimeout(1500);
+    expect(await qr.boundingBox()).toEqual(before);
+  });
+
   test("a saved anniversary for this person comes in as a row", async ({ page }) => {
     await open(page, "/share-preview?occasion=birthday", { reminders: [{ id: "r1", recipientName: "Mia", occasion: "anniversary", month: 1, day: 9, locale: "en", templateSlug: null }] });
     await expect(page.getByTestId("pair-days")).toContainText("Your anniversary");
@@ -99,7 +113,8 @@ test.describe("two more gifts under the link", () => {
   test("in Spanish", async ({ page }) => {
     await open(page, "/es/share-preview");
     const card = page.getByTestId("pair-offer");
-    await expect(card).toContainText("A nadie le gusta que se olviden.");
+    await expect(card).toContainText("A nadie le gusta caer en el olvido.");
+    await expect(card).toContainText("Hoy te has acordado. Lo próximo:");
     await expect(card).toContainText("Navidad");
     await expect(card.getByTestId("pair-add")).toHaveText("Añadir los dos por 5 €");
   });

@@ -10,10 +10,10 @@ import { env } from "@/lib/env";
 import { track } from "@/lib/analytics/track";
 import { formatAmount, formatRound, pairApart } from "@/lib/pricing/products";
 import { REMINDER_NAME_MAX, formatMonthDay, reminderDateFor, reminderOccasionFor, type Reminder } from "@/lib/lifecycle/reminders";
-import { dayAway, dayName, localToday, nextDays, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
+import { dayAway, dayArgs, dayName, localToday, nextDays, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
 import { DayRows } from "@/components/pricing/day-rows";
 import { getManifest } from "@/templates/manifests";
-import { useEntitlements, type PairOffer } from "@/components/pricing/entitlements";
+import type { Entitlements, PairOffer } from "@/components/pricing/entitlements";
 import { startCheckout, startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { walletHere, type Wallet } from "@/components/pricing/wallet";
 import { Button } from "@/components/ui/button";
@@ -28,19 +28,33 @@ const WALLET_WAIT_MS = 4000;
 type Pay = "idle" | "paying" | "declined";
 
 /**
- * "Nobody likes to be forgotten.": two more gifts, offered on the share screen right under the link
- * of a gift just paid for (docs/marketing/growth-build/DESIGN-after-payment.md). The server decides
- * who sees it (/api/entitlements `pairOffer`, lib/commerce/gift-credits.ts pairAllowed); this only
- * draws what it says, and nothing at all, no frame and no space, when it says no. A gift sent with
- * one of the two shows the quiet "This was one of your gifts" instead.
+ * What the share screen is handed to draw the card with, all of it known before the screen's first
+ * frame (the publish sheet loads it while the sheet is open), so the card is either there from the
+ * start or never: nothing under the link moves when it arrives.
  */
-export function TwoMoreGifts({ data, usedGift = false, preview }: { data: GiftData; usedGift?: boolean; preview?: PairPreviewState }) {
-  const { data: ent } = useEntitlements();
+export type PairOnShare = {
+  /** /api/entitlements, read while the sheet was open: `pairOffer` says this account may buy them. */
+  ent: Entitlements | null;
+  /** This publish followed a payment for this gift (back from checkout, the gift's own purchase paid in the last day, something in it paid). */
+  afterPayment: boolean;
+  /** With `usedGift`: gifts ready left after this one. */
+  left: number;
+};
+
+/**
+ * "Nobody likes to be forgotten.": two more gifts, offered on the share screen right under the link
+ * of a gift just paid for (docs/marketing/growth-build/DESIGN-after-payment.md 2). Who may buy them
+ * is the server's (`pairOffer`, lib/commerce/gift-credits.ts pairAllowed); when is the sheet's:
+ * only after a payment for this very gift (`afterPayment`), never after a free note, a free reply or
+ * a gift on a template already owned. Otherwise nothing at all, no frame and no space. A gift sent
+ * with one of the two shows the quiet "This was one of your gifts" instead.
+ */
+export function TwoMoreGifts({ data, ent, afterPayment, left, usedGift = false, preview }: PairOnShare & { data: GiftData; usedGift?: boolean; preview?: PairPreviewState }) {
   const [bought, setBought] = useState(preview === "bought");
   const days = useNextDays(data);
-  if (usedGift && ent) return <UsedOne left={ent.giftsReady} days={days} name={data.recipientName} />;
+  if (usedGift) return <UsedOne left={left} days={days} name={data.recipientName} />;
   if (bought) return <Bought days={days} name={data.recipientName} />;
-  if (!ent?.pairOffer) return null;
+  if (!afterPayment || !ent?.pairOffer) return null;
   return <Offer offer={ent.pairOffer} days={days} name={data.recipientName} onBought={() => setBought(true)} initialPay={preview === "paying" || preview === "declined" ? preview : "idle"} />;
 }
 
@@ -280,7 +294,11 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
       <p className={cn("text-center text-[13px] text-muted-foreground", useWallet && !paying ? "mt-2" : "mt-4")}>{t("foot")}</p>
       <p className="mt-1 text-center text-[13px] text-muted-foreground">
         {t("notice")}{" "}
-        <Link href="/legal/terms" target="_blank" className="underline underline-offset-2 hover:text-ink">
+        <Link
+          href="/legal/terms"
+          target="_blank"
+          className="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
           {t("terms")}
         </Link>
       </p>
@@ -291,9 +309,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
 /** Picture a7: paid. The two days again, and the first one to start now. */
 export function Bought({ days, name }: { days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
-  const named = useDayName(name);
   const first = days[0];
-  const start = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("startOne", { day: named(first) }) } : { href: "/templates", label: t("startAny") };
+  const start = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("startOne", dayArgs(first, name)) } : { href: "/templates", label: t("startAny") };
   return (
     <section className="mt-7 rounded-2xl border border-border bg-card p-5" data-testid="pair-bought" aria-live="polite">
       <div className="flex items-start gap-3">
@@ -315,14 +332,13 @@ export function Bought({ days, name }: { days: NextDay[]; name: string }) {
 /** Picture a8: this gift went out on one of the two. */
 export function UsedOne({ left, days, name }: { left: number; days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
-  const named = useDayName(name);
   const next = days[0];
   return (
     <section className="mt-7 flex items-start gap-3 rounded-2xl border border-border bg-card p-5" data-testid="pair-used">
       <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-moss" />
       <div className="min-w-0">
         <p className="text-base font-medium text-ink">{t("usedOne")}</p>
-        <p className="mt-1 text-[15px] text-ink-soft">{left > 0 && next ? t("leftOne", { day: named(next) }) : t("leftNone")}</p>
+        <p className="mt-1 text-[15px] text-ink-soft">{left > 0 ? t("leftOne", next ? dayArgs(next, name) : { kind: "other", name: "" }) : t("leftNone")}</p>
       </div>
     </section>
   );

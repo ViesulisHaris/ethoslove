@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { GiftData } from "@/lib/gift/schema";
 import { useEditor } from "@/lib/editor/store";
 import dynamic from "next/dynamic";
 import type { PairPreviewState } from "./two-more-gifts";
 import { AlreadyPaid } from "./already-paid";
+import type { ShareScreenPair } from "./share-screen";
+import { fetchEntitlements } from "@/components/pricing/entitlements";
 
 // In the editor the share screen only ever draws in the browser (after a publish); so it does here.
 const ShareScreen = dynamic(() => import("./share-screen").then((m) => m.ShareScreen), { ssr: false });
@@ -23,6 +25,19 @@ export function SharePreview({ locale, occasion, used, state, paid }: { locale: 
   const t = useTranslations("editor.publishSheet");
   // The editor's store is what says the sender is signed in: set once, before the screen draws.
   useState(() => useEditor.setState({ authed: true, userId: "00000000-0000-4000-8000-000000000001" }));
+  // As the publish sheet does: the card's code and the account's answer first, then the screen, with
+  // the card in its first frame. Here the gift was always just paid for; ?used=1 sent on a gift ready.
+  const [pair, setPair] = useState<ShareScreenPair | null>(null);
+  useEffect(() => {
+    if (paid) return;
+    let live = true;
+    void Promise.all([fetchEntitlements(), import("./two-more-gifts")]).then(([ent, mod]) => {
+      if (live) setPair({ Card: mod.TwoMoreGifts, ent, afterPayment: !used, left: ent?.giftsReady ?? 0 });
+    });
+    return () => {
+      live = false;
+    };
+  }, [paid, used]);
   const data = {
     version: 1,
     templateSlug: TEMPLATE_FOR[occasion] ?? "coquette",
@@ -48,9 +63,10 @@ export function SharePreview({ locale, occasion, used, state, paid }: { locale: 
         <AlreadyPaid ready={paid} thumbs={["/demo/photos/p1.webp", "/demo/photos/p2.webp", "/demo/photos/p3.webp", "/demo/photos/p4.webp"]} photos={4} name="Mia" opensWhen={null} busy={false} onSend={() => {}} onPayInstead={() => {}} />
       </div>
     );
+  if (!pair) return <div className="mx-auto min-h-dvh w-full bg-paper sm:max-w-lg" />;
   return (
     <div className="mx-auto min-h-dvh w-full bg-paper sm:max-w-lg" data-testid="share-preview">
-      <ShareScreen shortId="k3m9xq" status="live" data={data} giftId={null} usedGift={used} pairPreview={state} />
+      <ShareScreen shortId="k3m9xq" status="live" data={data} giftId={null} usedGift={used} pair={pair} pairPreview={state} />
     </div>
   );
 }

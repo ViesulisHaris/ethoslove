@@ -5,6 +5,37 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+/** When a scheduled gift opens, in words: "5 March" and whether it is at midnight, or "5 March at 09:30". */
+export type Opening = { midnight: boolean; when: string };
+
+/**
+ * When a scheduled gift opens, as the schedule itself has it: in the schedule's own timezone (the
+ * one the sender picked, not this phone's), with the year only when it isn't this one. At 00:00 it
+ * is "at midnight on 5 March" (the sheet's `opensMidnight`), as the pictures say it.
+ */
+export function openingOf(unlockAt: string, timeZone: string, locale: "en" | "es", now = new Date()): Opening | null {
+  const at = new Date(unlockAt);
+  if (Number.isNaN(at.getTime())) return null;
+  let zone: string | undefined = timeZone;
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: zone }).format(at);
+  } catch {
+    zone = undefined;
+  }
+  const part = (date: Date, type: Intl.DateTimeFormatPartTypes) =>
+    new Intl.DateTimeFormat("en-GB", { timeZone: zone, year: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(date).find((p) => p.type === type)?.value;
+  const midnight = part(at, "hour") === "00" && part(at, "minute") === "00";
+  const sameYear = part(at, "year") === part(now, "year");
+  const words = new Intl.DateTimeFormat(locale === "es" ? "es" : "en-GB", {
+    timeZone: zone,
+    day: "numeric",
+    month: "long",
+    ...(sameYear ? {} : { year: "numeric" }),
+    ...(midnight ? {} : { hour: "numeric", minute: "2-digit" }),
+  });
+  return { midnight, when: words.format(at) };
+}
+
 /**
  * "It's already paid for.": the publish sheet's panel in place of the pay panel when the account has
  * a gift ready (two more gifts, lib/commerce/gift-credits.ts). Its button sends this gift on one of
@@ -27,8 +58,8 @@ export function AlreadyPaid({
   thumbs: string[];
   photos: number;
   name: string;
-  /** When a scheduled gift opens, already in words; null when it goes out at once. */
-  opensWhen: string | null;
+  /** When a scheduled gift opens (openingOf); null when it goes out at once. */
+  opensWhen: Opening | null;
   busy: boolean;
   onSend: () => void;
   onPayInstead: () => void;
@@ -49,14 +80,14 @@ export function AlreadyPaid({
       <p className="mt-2 text-base" data-testid="already-paid-count">
         {ready > 1 ? (
           <>
-            <span className="font-semibold">{t("oneOfTwo")}</span> <span className="text-ink-soft">{t("oneLeft")}</span>
+            <span className="font-semibold">{t("oneOfTwo", { count: ready })}</span> <span className="text-ink-soft">{t("oneLeft", { left: ready - 1 })}</span>
           </>
         ) : (
           <span className="font-semibold">{t("last")}</span>
         )}
       </p>
       <ul className="mt-3 grid gap-1.5 text-sm text-ink">
-        {[opensWhen ? t("opens", { when: opensWhen }) : t("arrives"), t("forGood")].map((text) => (
+        {[opensWhen ? (opensWhen.midnight ? t("opensMidnight", { date: opensWhen.when }) : t("opens", { when: opensWhen.when })) : t("arrives"), t("forGood")].map((text) => (
           <li key={text} className="flex items-start gap-2">
             <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
             <span>{text}</span>
