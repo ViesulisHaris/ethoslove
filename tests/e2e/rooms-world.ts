@@ -76,12 +76,30 @@ export const TOWNS: Record<string, Town> = {
   Rome: { lat: 41.9028, lng: 12.4964, offset: 3600, country: "Italy" },
   Prague: { lat: 50.0755, lng: 14.4378, offset: 3600, country: "Czechia" },
   Vienna: { lat: 48.2082, lng: 16.3738, offset: 3600, country: "Austria" },
+  Austin: { lat: 30.2672, lng: -97.7431, offset: -21600, country: "United States" },
+  Denver: { lat: 39.7392, lng: -104.9903, offset: -25200, country: "United States" },
 };
 
-/** The place search answers with the town typed, and the weather with the nearest town's clock. */
-export async function mockTowns(page: Page, towns: Record<string, Town> = TOWNS) {
+/** What the map says lies at a halfway point (lib/places/photon-reverse.ts), as /api/places answers it. */
+export type Spot = { kind: "town"; name: string; region?: string; countryCode?: string; lat: number; lng: number } | { kind: "none" } | { kind: "sea" };
+
+/**
+ * The place search answers with the town typed; the map's look at a halfway point with `spot(lat,
+ * lng)` (by default nothing to say: open country), or a 504 when it returns null; and the weather
+ * with the nearest town's clock. Every point the map is asked about is kept in `asked`.
+ */
+export async function mockTowns(page: Page, towns: Record<string, Town> = TOWNS, spot: (lat: number, lng: number) => Spot | null = () => ({ kind: "none" })) {
+  const asked: { lat: number; lng: number }[] = [];
   await page.route("**/api/places*", (route) => {
-    const q = new URL(route.request().url()).searchParams.get("q") ?? "";
+    const params = new URL(route.request().url()).searchParams;
+    if (params.has("lat")) {
+      const lat = Number(params.get("lat"));
+      const lng = Number(params.get("lng"));
+      asked.push({ lat, lng });
+      const found = spot(lat, lng);
+      return found ? route.fulfill({ json: { spot: found } }) : route.fulfill({ status: 504, json: { error: "unavailable" } });
+    }
+    const q = params.get("q") ?? "";
     const town = towns[q];
     return route.fulfill({ json: { results: town ? [{ name: q, kind: "city", lat: town.lat, lng: town.lng, country: town.country }] : [] } });
   });
@@ -92,6 +110,7 @@ export async function mockTowns(page: Page, towns: Record<string, Town> = TOWNS)
     const nearest = Object.values(towns).reduce((best, t) => (Math.hypot(t.lat - lat, t.lng - lng) < Math.hypot(best.lat - lat, best.lng - lng) ? t : best));
     return route.fulfill({ json: { days: [], utcOffsetSeconds: nearest.offset, timezone: "x" } });
   });
+  return asked;
 }
 
 /** Types a town into a where box and takes the first answer (as affiliate.spec.ts does). */

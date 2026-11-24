@@ -278,7 +278,7 @@ test.describe("Halfway: the editor", () => {
     await page.goto("/create/halfway");
     await expect(page.getByText("0 / 4")).toBeVisible({ timeout: 30_000 });
     await page.getByRole("button", { name: "Add a place" }).click();
-    const stop = placeSearch(page, "Where you've met in the middle 1");
+    const stop = placeSearch(page, "Where you’ve met in the middle 1");
     await expect(stop).toBeFocused();
     await stop.fill("Reykj");
     await page.getByRole("option", { name: /Reykjavik/ }).click();

@@ -122,7 +122,9 @@ test.describe("the trips room", () => {
     await expect(days).toHaveCount(7);
     await expect(days.first()).toContainText("Day 1");
     await expect(days.first()).toContainText("House of the Blackheads");
-    await expect(page.getByRole("link", { name: "Date spots here" }).first()).toHaveAttribute("href", /\/dates\?lat=56\.9496&lng=24\.1052&q=Riga/);
+    // Riga is one of our cities: its stop leads to its own page. A stop that is not leads to the map of date spots around it.
+    await expect(page.getByTestId("trip-stops").locator(":scope > li").first().getByRole("link")).toHaveAttribute("href", "/dates/riga");
+    await expect(page.getByRole("link", { name: "Date spots here" }).first()).toHaveAttribute("href", /\/dates\?lat=57\.\d+&lng=24\.\d+&q=Sigulda/);
     // The flight search starts with the trip's airport already in "To".
     await expect(page.getByTestId("flight-finder").getByRole("combobox", { name: "To" })).toHaveValue("Riga");
     noErrors();
@@ -222,6 +224,30 @@ test.describe("a trip, in search and in their hands", () => {
     await expect.poll(async () => (await events()).filter((e) => e.name === "trip_shared").map((e) => e.data)).toEqual([{ trip: "lisbon-slow-weekend", how: "copy" }]);
   });
 
+  test("with no clipboard, the link is written out under its own label", async ({ page }) => {
+    await noShare(page);
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "clipboard", { value: { writeText: () => Promise.reject(new Error("denied")) }, configurable: true });
+    });
+    await page.goto("/trips/lisbon-slow-weekend");
+    await page.getByTestId("share-trip").click();
+    const field = page.getByLabel("Copy this link");
+    await expect(field).toBeVisible();
+    await expect(field).toHaveValue(/\/trips\/lisbon-slow-weekend$/);
+    await expect(page.getByText("Copy this link", { exact: true })).toBeVisible();
+  });
+
+  test("on a desk, saving and sending a trip sit together: the share never wraps alone", async ({ page, isMobile }) => {
+    test.skip(isMobile, "a desk's width");
+    for (const width of [1024, 1280, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/trips/lisbon-slow-weekend");
+      const share = await page.getByTestId("share-trip").boundingBox();
+      const save = await page.getByRole("button", { name: /Save trip/ }).boundingBox();
+      expect(Math.abs((share?.y ?? 0) - (save?.y ?? -100)), `at ${width}`).toBeLessThan(2);
+    }
+  });
+
   test("Send this trip to them shows where the keyboard is", async ({ page, isMobile }) => {
     test.skip(isMobile, "a phone has no Tab key");
     await page.goto("/trips/lisbon-slow-weekend");
@@ -240,10 +266,13 @@ test.describe("a trip, in search and in their hands", () => {
     await expect(cities).toHaveCount(2);
     await expect(page.getByRole("link", { name: "Date ideas in Riga" })).toHaveAttribute("href", "/dates/riga");
     await expect(page.getByRole("link", { name: "Date ideas in Tallinn" })).toHaveAttribute("href", "/dates/tallinn");
-    await expect(page.getByRole("link", { name: "Date spots here" })).toHaveCount(5);
+    // One link a stop, never the same place twice: the city's page where there is one, else the map.
+    await expect(page.getByRole("link", { name: "Date spots here" })).toHaveCount(3);
+    for (const stop of await page.getByTestId("trip-stops").locator(":scope > li").all()) await expect(stop.getByRole("link")).toHaveCount(1);
     await page.goto("/trips/lisbon-slow-weekend");
     await expect(page.getByTestId("stop-city")).toHaveCount(1);
     await expect(page.getByTestId("trip-stops").locator("li").first().getByTestId("stop-city")).toHaveText("Date ideas in Lisbon");
+    await expect(page.getByTestId("trip-stops").locator("li").first().getByRole("link", { name: "Date spots here" })).toHaveCount(0);
     await page.goto("/trips/amalfi-coast");
     await expect(page.getByTestId("stop-city")).toHaveCount(0);
     await page.goto("/es/trips/baltic-coast");

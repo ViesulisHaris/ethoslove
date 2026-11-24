@@ -2400,8 +2400,13 @@
       "halfwayExact": "Almost exactly halfway between you.",
       "halfwayNear": "The nearest city to your halfway point, {km} km from it.",
       "datesThere": "Date ideas in {city}",
-      "nowhere": "Open water, more or less",
-      "nowhereSub": "Halfway between you is nowhere to land. One of you is getting on a plane.",
+      "sea": "Open water",
+      "seaSub": "Halfway between you is out at sea. One of you is getting on a plane.",
+      "noTown": "No town near halfway",
+      "noTownSub": "The middle is open country, with no town close to it.",
+      "finding": "Finding the town nearest halfway…",
+      "failed": "We couldn't name the town nearest halfway just now.",
+      "onMap": "See halfway on a map",
       "clocks": "Clocks",
       "sameTime": "Same time, both ends",
       "ahead": "{name} is {hours} h ahead",
@@ -2413,8 +2418,10 @@
       "clocksUnavailable": "We couldn't get the local times just now. The rest still adds up.",
       "flightsTo": "Flights to {city}",
       "flightsBetween": "Flights between you",
-      "eachWay": "{km} km each",
-      "eachWaySub": "How far each of you would travel to meet exactly halfway."
+      "eachWay": "{distance} each",
+      "eachWaySub": "How far each of you would travel to meet exactly halfway.",
+      "km": "{n, plural, other {# km}}",
+      "mi": "{n, plural, one {# mile} other {# miles}}"
     },
     "ways": {
       "label": "What next",
@@ -2435,15 +2442,20 @@
       "note": "Halfway is {city}. Meet me there?"
     },
     "tool": {
-      "forYou": "{km} km for you",
-      "forThem": "{km} km for them",
+      "forYou": "{distance} for you",
+      "forThem": "{distance} for them",
+      "off": "{distance} from the exact middle.",
+      "offIn": "{region}, {distance} from the exact middle.",
+      "exactIn": "{region}, almost exactly halfway between you.",
+      "osm": "Town names © OpenStreetMap",
       "share": "Send them this",
       "copied": "Link copied",
       "shareText": "Halfway between us is {city}.",
       "shareTextBare": "Here is where halfway is.",
       "manual": "Copy this link",
       "same": "That's the same place twice.",
-      "close": "Halfway falls between your two towns. Take turns visiting, or meet somewhere on the way."
+      "broken": "That link's towns couldn't be read. Type them again and we'll do the math.",
+      "close": "No town lies nearer the middle than your own two, so take turns visiting."
     },
     "virtual": {
       "eyebrow": "Dates for two screens",
@@ -2486,7 +2498,7 @@
   },
   "trips": {
     "meta": {
-      "title": "Couples trip ideas: {count} ready-made itineraries for two",
+      "title": "Couples trip ideas: {count} itineraries for two",
       "description": "Couples trip ideas, planned day by day: twelve trips for two, from weekend city breaks to a week on the road. Say where you fly from and we pick three."
     },
     "eyebrow": "Trips for two",
@@ -2504,7 +2516,7 @@
       "from": "Leaving from",
       "fromHint": "Optional. Without it we skip the flight times.",
       "clearFrom": "Leave the airport out",
-      "sentence": "We have <length></length>, <budget></budget>, and we'd like <kind></kind>.",
+      "sentence": "We have <length>,</length> <budget>,</budget> and we'd like <kind>.</kind>",
       "lengthLabel": "How long",
       "budgetLabel": "Budget there",
       "kindLabel": "Kind of trip",
@@ -2515,8 +2527,8 @@
         "week": "a week"
       },
       "budget": {
-        "1": "about €150 a day for two at most",
-        "2": "about €300 a day for two at most",
+        "1": "about {money} a day for two at most",
+        "2": "about {money} a day for two at most",
         "any": "no ceiling on spending"
       },
       "kind": {
@@ -2530,6 +2542,7 @@
       "allFit": "Three trips that fit.",
       "someFit": "{count, plural, one {One trip fits} other {# trips fit}} all of that. The rest come close.",
       "letGo": "Nothing fits all of that, so we let go of {wishes}.",
+      "closestAll": "Nothing fits all of that. These three come closest.",
       "wish": {
         "length": "the length",
         "budget": "the budget",
@@ -2539,14 +2552,20 @@
       "airTrain": "About {time} in the air from {city}. A train might be nicer.",
       "home": "It starts where you are. No flight to find.",
       "inSeason": "In season now",
-    "fits": "Fits {list}.",
-    "fit": {
-      "budget1": "a budget of €150 a day",
-      "budget2": "a budget of €300 a day"
-    },
-    "closest": "The nearest to what you asked.",
-    "fitsSeason": "Now is one of its best months.",
-    "fitsOpen": "You left every choice open."
+      "fits": "Fits {list}.",
+      "fit": {
+        "budget": "a budget of {money} a day",
+        "kind": {
+          "city": "a city break",
+          "road": "a road trip",
+          "islands": "an island trip",
+          "train": "a train journey"
+        }
+      },
+      "closest": "The nearest to what you asked.",
+      "allBut": "Fits all but {wishes}.",
+      "fitsLater": "Its season starts in {month}.",
+      "fitsSeason": "Now is one of its best months."
     },
     "filter": {
       "label": "Kind of trip",

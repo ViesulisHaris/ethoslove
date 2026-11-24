@@ -35,7 +35,12 @@ export type MatchPick = {
   /** The trip starts at the airport they leave from. */
   home: boolean;
 };
-export type MatchSummary = { kind: "all" } | { kind: "some"; count: number } | { kind: "none"; letGo: Relaxed[] };
+/**
+ * How well the best few fit: all of them; some; none, each letting go of the same wishes (said);
+ * or none, each letting go of different ones ("closest"), where naming the first card's would be
+ * untrue of the other two.
+ */
+export type MatchSummary = { kind: "all" } | { kind: "some"; count: number } | { kind: "none"; letGo: Relaxed[] } | { kind: "closest" };
 export const MATCH_COUNT = 3;
 /** Nearer than this, the origin is the trip's own town. */
 export const HOME_KM = 30;
@@ -111,7 +116,18 @@ export function topMatches(wish: MatchWish, trips: readonly MatchTrip[], month: 
   const all = matchTrips(wish, trips, month);
   const picks = all.slice(0, count);
   const exact = all.filter((p) => p.relaxed.length === 0).length;
+  const letGo = picks[0]?.relaxed ?? [];
+  const same = picks.every((p) => p.relaxed.join() === letGo.join());
   const summary: MatchSummary =
-    exact >= picks.length ? { kind: "all" } : exact >= 1 ? { kind: "some", count: exact } : { kind: "none", letGo: picks[0]?.relaxed ?? [] };
+    exact >= picks.length ? { kind: "all" } : exact >= 1 ? { kind: "some", count: exact } : same ? { kind: "none", letGo } : { kind: "closest" };
   return { picks, summary };
+}
+
+/** The first of a trip's best months after `month` (1–12), going round the year; null if it has none. */
+export function nextBestMonth(bestMonths: readonly number[], month: number): number | null {
+  for (let step = 1; step <= 12; step++) {
+    const m = ((month - 1 + step) % 12) + 1;
+    if (bestMonths.includes(m)) return m;
+  }
+  return null;
 }

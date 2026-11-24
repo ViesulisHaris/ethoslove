@@ -105,22 +105,25 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
               </li>
             ))}
           </ul>
-          {/* The games that play across a call, as the games' own cards: a picture and a name. */}
-          <h3 className="mt-14 font-display text-[26px] leading-tight text-forest">{t("play.title")}</h3>
-          <ul className="mt-6 grid max-w-[27.5rem] grid-cols-2 gap-3 sm:gap-6" data-testid="ldr-games">
-            {LDR_GAMES.map((g) => (
-              <li key={g.id}>
-                <Link href={g.href} className="group block rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-rose/50 focus-visible:ring-offset-4 focus-visible:ring-offset-paper">
-                  <PlayingCard rank={g.rank} suit={g.suit} radius={20} className="aspect-[5/7] w-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5 motion-reduce:transition-none" faceClassName="items-center justify-center">
-                    <span aria-hidden="true" className="block w-[58%]">
-                      <Sticker id={g.sticker} />
-                    </span>
-                  </PlayingCard>
-                  <span className="mt-3 block font-display text-[17px] leading-tight text-forest sm:text-[20px]">{gameTitle[g.id]}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* The games that play across a call, as the games' own cards: a picture and a name. Two of
+              them, so on a desk the line sits at the left and the pair at the right, as a spread. */}
+          <div className="mt-14 lg:grid lg:grid-cols-[minmax(0,1fr)_27.5rem] lg:items-center lg:gap-16">
+            <h3 className="font-display text-[26px] leading-tight text-forest lg:max-w-[14ch] lg:text-[34px] lg:leading-[1.08]">{t("play.title")}</h3>
+            <ul className="mt-6 grid max-w-[27.5rem] grid-cols-2 gap-3 sm:gap-6 lg:mt-0" data-testid="ldr-games">
+              {LDR_GAMES.map((g) => (
+                <li key={g.id}>
+                  <Link href={g.href} className="group block rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-rose/50 focus-visible:ring-offset-4 focus-visible:ring-offset-paper">
+                    <PlayingCard rank={g.rank} suit={g.suit} radius={20} className="aspect-[5/7] w-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5 motion-reduce:transition-none" faceClassName="items-center justify-center">
+                      <span aria-hidden="true" className="block w-[58%]">
+                        <Sticker id={g.sticker} />
+                      </span>
+                    </PlayingCard>
+                    <span className="mt-3 block font-display text-[17px] leading-tight text-forest sm:text-[20px]">{gameTitle[g.id]}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 

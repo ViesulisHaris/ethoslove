@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { distanceKm } from "@/lib/dates/geo";
 import { findAirport } from "@/lib/trips/airports";
 import { estimateFlight } from "@/lib/trips/flights";
-import { lengthFits, matchTrips, metWishes, topMatches, type MatchLength, type MatchTrip, type MatchWish } from "@/lib/trips/match";
+import { lengthFits, matchTrips, metWishes, nextBestMonth, topMatches, type MatchLength, type MatchTrip, type MatchWish } from "@/lib/trips/match";
+import { MATCH_KINDS, readMatchLink, writeMatchLink } from "@/lib/trips/match-link";
 import { TRIP_KINDS, TRIPS } from "@/lib/trips/presets";
 
 const TABLE: MatchTrip[] = TRIPS.map(({ id, kind, days, budget, bestMonths, flyTo }) => ({ id, kind, days, budget, bestMonths, flyTo }));
@@ -85,12 +86,33 @@ describe("the trip matcher", () => {
     expect(topMatches(wish, TABLE, 11).summary).toEqual({ kind: "none", letGo: ["length"] });
   });
 
-  it("when two wishes must give way it says both", () => {
+  it("when the three let go of different wishes it names none of them, only that these come closest", () => {
     const wish: MatchWish = { kind: "islands", length: "weekend", budget: 1 };
     const { picks, summary } = topMatches(wish, TABLE, 11);
     expect(picks[0].id).toBe("santorini-naxos");
     expect(picks[0].relaxed).toEqual(["length", "budget"]);
-    expect(summary).toEqual({ kind: "none", letGo: ["length", "budget"] });
+    // The other two keep the length and the budget and miss the kind: "we let go of the length and
+    // the budget" would be untrue of them.
+    expect(picks.slice(1).every((p) => p.relaxed.join() !== picks[0].relaxed.join())).toBe(true);
+    expect(summary).toEqual({ kind: "closest" });
+  });
+
+  it("a wish let go of is named only when all three let go of it", () => {
+    const lengths: (MatchLength | undefined)[] = [undefined, "weekend", "mid", "week"];
+    for (const length of lengths)
+      for (const budget of [undefined, 1, 2] as const)
+        for (const kind of [undefined, ...TRIP_KINDS]) {
+          const { picks, summary } = topMatches({ length, budget, kind }, TABLE, 11);
+          if (summary.kind === "none") for (const p of picks) expect(p.relaxed).toEqual(summary.letGo);
+          if (summary.kind === "closest") expect(new Set(picks.map((p) => p.relaxed.join())).size).toBeGreaterThan(1);
+        }
+  });
+
+  it("a trip's season, when it is not now, starts with the first of its best months after this one", () => {
+    expect(nextBestMonth([3, 4, 5, 6, 9, 10], 11)).toBe(3);
+    expect(nextBestMonth([3, 4, 5, 6, 9, 10], 6)).toBe(9);
+    expect(nextBestMonth([12], 12)).toBe(12);
+    expect(nextBestMonth([], 5)).toBeNull();
   });
 
   it("a train trip for a weekend is the train trip, a little long", () => {
@@ -184,5 +206,25 @@ describe("why a pick fits", () => {
             }
           }
         }
+  });
+});
+
+describe("the matcher's answer in the address", () => {
+  it("carries the wishes and the airport, and reads back the same", () => {
+    const riga = air("Riga");
+    const search = writeMatchLink(new URLSearchParams("utm_source=x"), { from: riga, length: "week", budget: 1, kind: "islands" });
+    expect(search.toString()).toBe("utm_source=x&match=1&len=week&budget=1&kind=islands&from=Riga%7ERIX");
+    expect(readMatchLink(search)).toEqual({ from: riga, length: "week", budget: 1, kind: "islands" });
+    // Every choice left open is still an answer.
+    expect(readMatchLink(writeMatchLink(new URLSearchParams(), { from: null, length: null, budget: null, kind: null }))).toEqual({ from: null, length: null, budget: null, kind: null });
+  });
+
+  it("no answer without match=1, and a wish it cannot read is left open", () => {
+    expect(readMatchLink(new URLSearchParams("len=week"))).toBeNull();
+    expect(readMatchLink(new URLSearchParams("match=1&len=fortnight&budget=9&kind=cruise&from=Atlantis~XXX"))).toEqual({ from: null, length: null, budget: null, kind: null });
+  });
+
+  it("the kinds it knows are the trips' kinds", () => {
+    expect([...MATCH_KINDS].sort()).toEqual([...TRIP_KINDS].sort());
   });
 });

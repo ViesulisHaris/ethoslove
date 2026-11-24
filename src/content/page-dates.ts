@@ -56,7 +56,7 @@ export const DATES_LIVE = "2026-11-23";
  * title and links, long distance's ways on and games, and the halfway finder's own page. NOT LIVE
  * YET: this is the day the work was finished. Whoever ships it sets this to that day.
  */
-export const ROOMS_LIVE = "2026-11-23";
+export const ROOMS_LIVE = "2026-11-24";
 
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.

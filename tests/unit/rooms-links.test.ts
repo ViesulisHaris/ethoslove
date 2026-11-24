@@ -15,7 +15,8 @@ import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
 import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
-import { halfwayBetween, halfwayCityName, isOwnTown } from "@/lib/ldr/halfway";
+import { halfwayAnswer, halfwayBetween, halfwayCityName, isOwnTown, mapLink, needsMap, readsMiles } from "@/lib/ldr/halfway";
+import { fairKm, pickSpot } from "@/lib/places/photon-reverse";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
 import { waysData } from "@/lib/ldr/ways-data";
@@ -45,7 +46,8 @@ describe("a trip in search", () => {
     for (const [id, seo] of Object.entries(TRIP_SEO))
       for (const l of LOCALES) {
         expect(seo.title[l].length, `${id} ${l} title: ${seo.title[l]}`).toBeGreaterThanOrEqual(30);
-        expect(seo.title[l].length, `${id} ${l} title: ${seo.title[l]}`).toBeLessThanOrEqual(60);
+        // With the site's " · Ethos" tail, at most 60: about where Google cuts a title.
+        expect(`${seo.title[l]} · Ethos`.length, `${id} ${l} title: ${seo.title[l]}`).toBeLessThanOrEqual(60);
         expect(seo.description[l].length, `${id} ${l} description`).toBeGreaterThanOrEqual(110);
         expect(seo.description[l].length, `${id} ${l} description`).toBeLessThanOrEqual(160);
       }
@@ -70,7 +72,7 @@ describe("a trip in search", () => {
     expect(es.trips.meta.title.startsWith("Ideas de viajes en pareja")).toBe(true);
     for (const m of [en, es]) {
       expect(m.trips.meta.title).toContain("{count}");
-      expect(m.trips.meta.title.replace("{count}", "12").length).toBeLessThanOrEqual(60);
+      expect(`${m.trips.meta.title.replace("{count}", "12")} · Ethos`.length).toBeLessThanOrEqual(60);
       expect(m.trips.meta.description.length).toBeLessThanOrEqual(160);
     }
     // The descriptions say the number in words: change them with the shelf.
@@ -160,6 +162,99 @@ describe("halfway between two towns", () => {
     expect(halfwayCityName({ name: "Munich" }, "es")).toBe("Múnich");
     expect(halfwayCityName({ name: "Toronto" }, "es")).toBe("Toronto");
     expect(halfwayCityName({ name: "Munich" }, "en")).toBe("Munich");
+  });
+});
+
+describe("the halfway answer, table and map together", () => {
+  const AUSTIN = { name: "Austin", lat: 30.27, lng: -97.74 };
+  const DENVER = { name: "Denver", lat: 39.74, lng: -104.99 };
+  const BOSTON = { name: "Boston", lat: 42.36, lng: -71.06 };
+  const NEW_YORK = { name: "New York", lat: 40.71, lng: -74.01 };
+  const CHICAGO = { name: "Chicago", lat: 41.88, lng: -87.63 };
+  /** A Photon answer of one place. */
+  const photon = (name: string, lat: number, lng: number, extra: Record<string, string> = {}) => ({ features: [{ geometry: { coordinates: [lng, lat] }, properties: { name, ...extra } }] });
+  const EMPTY = { features: [] };
+
+  it("a city in the table near the middle is named without asking the map", () => {
+    const h = halfwayBetween(town("Riga"), town("Lisbon"));
+    expect(needsMap(h)).toBe(false);
+    expect(halfwayAnswer(h, town("Riga"), town("Lisbon"), undefined, "en")).toMatchObject({ kind: "city", name: "Luxembourg", fromMap: false });
+    expect(halfwayAnswer(halfwayBetween(town("Berlin"), town("Rome")), town("Berlin"), town("Rome"), undefined, "es")).toMatchObject({ kind: "city", name: "Múnich" });
+  });
+
+  it("dry land far from any city in the table is never called the sea (Austin and Denver)", () => {
+    const h = halfwayBetween(AUSTIN, DENVER);
+    expect(needsMap(h)).toBe(true);
+    // While the map is asked, and when it cannot be: how far each, and no claim about the place.
+    expect(halfwayAnswer(h, AUSTIN, DENVER, undefined, "en").kind).toBe("pending");
+    expect(halfwayAnswer(h, AUSTIN, DENVER, null, "en").kind).toBe("failed");
+    // Land with no town near: said as such.
+    expect(halfwayAnswer(h, AUSTIN, DENVER, { kind: "none" }, "en").kind).toBe("none");
+    // The map's town is named, with its state and how far for each.
+    const named = halfwayAnswer(h, AUSTIN, DENVER, { kind: "town", name: "Amarillo", region: "Texas", countryCode: "US", lat: 35.21, lng: -101.84 }, "en");
+    expect(named).toMatchObject({ kind: "city", name: "Amarillo", region: "Texas", fromMap: true });
+    if (named.kind !== "city") throw new Error("named");
+    near(named.offKm, 65, 3);
+    near(named.kmFromA, 670, 5);
+    near(named.kmFromB, 575, 5);
+  });
+
+  it("their own towns as the table's nearest city send the question to the map (Boston and New York)", () => {
+    const h = halfwayBetween(BOSTON, NEW_YORK);
+    expect(needsMap(h)).toBe(true);
+    expect(halfwayAnswer(h, BOSTON, NEW_YORK, { kind: "town", name: "Middletown", region: "Connecticut", lat: 41.56, lng: -72.65 }, "en")).toMatchObject({ kind: "city", name: "Middletown" });
+    // The map finds only one of their own towns: nothing between them to name.
+    expect(halfwayAnswer(h, BOSTON, NEW_YORK, { kind: "town", name: "Boston", lat: 42.36, lng: -71.06 }, "en").kind).toBe("between");
+  });
+
+  it("a table city far off the middle is not the answer (New York and Chicago are not met in Toronto)", () => {
+    const h = halfwayBetween(NEW_YORK, CHICAGO);
+    expect(needsMap(h)).toBe(true);
+    expect(halfwayAnswer(h, NEW_YORK, CHICAGO, { kind: "none" }, "en").kind).toBe("none");
+  });
+
+  it("the open sea is said only when the map has nothing there", () => {
+    const h = halfwayBetween(town("New York"), town("London"));
+    expect(needsMap(h)).toBe(true);
+    expect(halfwayAnswer(h, town("New York"), town("London"), { kind: "sea" }, "en").kind).toBe("sea");
+  });
+
+  it("a town the map finds in Spain is never named", () => {
+    const h = halfwayBetween(AUSTIN, DENVER);
+    expect(halfwayAnswer(h, AUSTIN, DENVER, { kind: "town", name: "Somewhere", countryCode: "ES", lat: 35, lng: -101.5 }, "en").kind).toBe("unnamed");
+    expect(halfwayAnswer(halfwayBetween(town("Lisbon"), town("Paris")), town("Lisbon"), town("Paris"), undefined, "en").kind).toBe("unnamed");
+  });
+
+  it("the map's answer: a city near enough to be fair, else a town, then the sea only with nothing mapped near", () => {
+    const at = { lat: 35.06, lng: -101.15 };
+    const amarillo = photon("Amarillo", 35.21, -101.84, { state: "Texas", countrycode: "us" });
+    const claude = photon("Claude", 35.11, -101.36);
+    // Austin and Denver, 621 km each: Amarillo, 64 km off the middle, is fair.
+    expect(pickSpot(at, 621, amarillo, claude, null)).toMatchObject({ kind: "town", name: "Amarillo", region: "Texas", countryCode: "US" });
+    // On a 117 km journey a city 64 km off is not halfway: the town by the middle is.
+    expect(pickSpot(at, 117, amarillo, claude, null)).toMatchObject({ kind: "town", name: "Claude" });
+    // With no town that near, the city still beats saying nothing.
+    expect(pickSpot(at, 117, amarillo, EMPTY, null)).toMatchObject({ kind: "town", name: "Amarillo" });
+    expect(pickSpot(at, 621, EMPTY, claude, null)).toMatchObject({ kind: "town", name: "Claude" });
+    // Nothing named, and not yet asked whether anything is mapped there.
+    expect(pickSpot(at, 621, EMPTY, EMPTY, null)).toBeNull();
+    expect(pickSpot(at, 621, EMPTY, EMPTY, photon("County Road 14", 34.99, -101.38))).toEqual({ kind: "none" });
+    expect(pickSpot({ lat: 45, lng: -40 }, 2780, EMPTY, EMPTY, EMPTY)).toEqual({ kind: "sea" });
+    // A place beyond the radius asked for is not taken, and a malformed one is dropped.
+    expect(pickSpot(at, 621, photon("Far", 40, -101.5), EMPTY, EMPTY)).toEqual({ kind: "sea" });
+    expect(pickSpot(at, 621, { features: [{ properties: { name: "x" } }, null] }, EMPTY, EMPTY)).toEqual({ kind: "sea" });
+    expect(fairKm(117)).toBe(40);
+    expect(fairKm(621)).toBe(100);
+    expect(fairKm(280)).toBe(70);
+  });
+
+  it("distances are in miles for visitors from the United States and the United Kingdom", () => {
+    for (const where of ["US", "en-US", "GB", "en-GB", "PR"]) expect(readsMiles(where), where).toBe(true);
+    for (const where of ["LV", "en", "es-ES", "es-MX", "", null, undefined]) expect(readsMiles(where), String(where)).toBe(false);
+  });
+
+  it("a halfway with no town to name can be seen on a map", () => {
+    expect(mapLink({ lat: 35.123456, lng: -101.5 })).toBe("https://www.openstreetmap.org/?mlat=35.1235&mlon=-101.5#map=8/35.1235/-101.5");
   });
 });
 

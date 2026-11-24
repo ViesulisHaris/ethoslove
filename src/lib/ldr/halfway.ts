@@ -1,6 +1,7 @@
-import { halfwayPlace } from "@/lib/dates/apart";
+import { halfwayPlace, nearestCity } from "@/lib/dates/apart";
 import { ES_CITY_NAMES } from "@/lib/dates/cities";
 import { distanceKm, midpoint, type LatLng } from "@/lib/dates/geo";
+import type { Spot } from "@/lib/places/photon-reverse";
 import { CITIES, type City } from "@/templates/_shared/places";
 
 /**
@@ -9,8 +10,14 @@ import { CITIES, type City } from "@/templates/_shared/places";
  * know to that point, and how far that city is from each of them.
  */
 
-/** Further than this from any city we know, the halfway point is somewhere nobody can meet: open sea, or a lot of forest. */
+/** Further than this from any city in the table, the table has nothing to say about the halfway point. */
 export const NOWHERE_KM = 400;
+/**
+ * Nearer than this to the middle, a city in the table is named outright (Luxembourg for Riga and
+ * Lisbon, 139 km off). Further, the map is asked for the town nearest the middle: the table has only
+ * sixteen cities in the United States, and Toronto is no answer for New York and Chicago.
+ */
+export const TABLE_NAME_KM = 150;
 /** Countries never named as the place to meet: neither their cities nor their airports (the owner's rule). */
 export const NEVER_SUGGESTED: ReadonlySet<string> = new Set(["ES"]);
 /**
@@ -28,6 +35,8 @@ export type Halfway = {
   near: { city: City; km: number; kmFromA: number; kmFromB: number } | null;
   /** The nearest city is in a country the site never names: say how far each travels instead. */
   unnamed: boolean;
+  /** How far the nearest city in the table is from the middle, whether it is named or not. */
+  nearestKm: number | null;
 };
 
 export function halfwayBetween(a: LatLng, b: LatLng, cities: readonly City[] = CITIES): Halfway {
@@ -35,7 +44,7 @@ export function halfwayBetween(a: LatLng, b: LatLng, cities: readonly City[] = C
   const middle = midpoint(a, b);
   const place = halfwayPlace(middle, cities, { maxKm: NOWHERE_KM, neverNamed: NEVER_SUGGESTED });
   const near = typeof place === "string" ? null : { ...place, kmFromA: distanceKm(a, place.city), kmFromB: distanceKm(b, place.city) };
-  return { km, middle, near, unnamed: place === "unnamed" };
+  return { km, middle, near, unnamed: place === "unnamed", nearestKm: nearestCity(middle, cities)?.km ?? null };
 }
 
 /** The halfway city as the page's language says it ("Múnich"). The city table is in English. */
@@ -47,3 +56,69 @@ export const halfwayCityName = (city: Pick<City, "name">, locale: "en" | "es"): 
  * answer to "where is halfway", so the pages say how far each travels and name no city.
  */
 export const isOwnTown = (h: Halfway): boolean => Boolean(h.near && h.km > 2 * OWN_TOWN_KM && (h.near.kmFromA < OWN_TOWN_KM || h.near.kmFromB < OWN_TOWN_KM));
+
+/**
+ * The answer a page shows for halfway, once the table and (when it was asked) the map have spoken:
+ * - `city`: a place to name, from the table or the map, how far off the middle and from each of them;
+ * - `unnamed`: the middle is in a country never named (the owner's rule);
+ * - `between`: no town lies nearer the middle than their own two;
+ * - `pending`: the map is being asked; `failed`: it could not be;
+ * - `none`: land, with no town near the middle; `sea`: nothing mapped near it at all.
+ * Every kind but `same` and `city` says how far each travels to meet exactly halfway.
+ */
+export type HalfwayAnswer =
+  | { kind: "same" }
+  | { kind: "city"; name: string; region?: string; lat: number; lng: number; offKm: number; kmFromA: number; kmFromB: number; fromMap: boolean }
+  | { kind: "unnamed" | "between" | "pending" | "failed" | "none" | "sea"; eachKm: number; middle: LatLng };
+
+/** The map's answer for a middle: being asked (`undefined`), could not be asked (`null`), or what it found. */
+export type SpotState = Spot | null | undefined;
+
+/** The table's nearest city is in a country never named, and near enough to be the answer. */
+const tableUnnamed = (h: Halfway): boolean => h.unnamed && h.nearestKm !== null && h.nearestKm <= TABLE_NAME_KM;
+
+/** Whether the table's answer needs the map: no table city near enough to name, or only one of their own towns. */
+export const needsMap = (h: Halfway): boolean => h.km >= 1 && !tableUnnamed(h) && (!h.near || h.near.km > TABLE_NAME_KM || isOwnTown(h));
+
+export function halfwayAnswer(h: Halfway, a: LatLng, b: LatLng, spot: SpotState, locale: "en" | "es"): HalfwayAnswer {
+  if (h.km < 1) return { kind: "same" };
+  const each = { eachKm: h.km / 2, middle: h.middle };
+  if (tableUnnamed(h)) return { kind: "unnamed", ...each };
+  if (!needsMap(h) && h.near) {
+    const { city, km, kmFromA, kmFromB } = h.near;
+    return { kind: "city", name: halfwayCityName(city, locale), lat: city.lat, lng: city.lng, offKm: km, kmFromA, kmFromB, fromMap: false };
+  }
+  if (spot === undefined) return { kind: "pending", ...each };
+  if (spot === null) return { kind: "failed", ...each };
+  if (spot.kind === "town") {
+    if (spot.countryCode && NEVER_SUGGESTED.has(spot.countryCode)) return { kind: "unnamed", ...each };
+    const kmFromA = distanceKm(a, spot);
+    const kmFromB = distanceKm(b, spot);
+    // The nearest town to the middle is one of their own: there is nothing between them to name.
+    if (kmFromA < OWN_TOWN_KM || kmFromB < OWN_TOWN_KM) return { kind: "between", ...each };
+    return { kind: "city", name: spot.name, ...(spot.region ? { region: spot.region } : {}), lat: spot.lat, lng: spot.lng, offKm: distanceKm(h.middle, spot), kmFromA, kmFromB, fromMap: true };
+  }
+  if (spot.kind === "sea") return { kind: "sea", ...each };
+  return { kind: isOwnTown(h) ? "between" : "none", ...each };
+}
+
+/** The place a halfway answer names, as the ways on need it, or null. */
+export const answerPlace = (answer: HalfwayAnswer | null): { name: string; lat: number; lng: number } | null =>
+  answer?.kind === "city" ? { name: answer.name, lat: answer.lat, lng: answer.lng } : null;
+
+/** Countries whose people measure a trip in miles: the United States (and its territories), the United Kingdom, Liberia, Myanmar. */
+const MILES = new Set(["US", "PR", "GU", "VI", "AS", "MP", "UM", "GB", "IM", "JE", "GG", "LR", "MM"]);
+
+/** Whether a visitor from this country ("US", or a language tag's region, "en-US") reads distances in miles. */
+export function readsMiles(countryOrLocale: string | null | undefined): boolean {
+  const v = (countryOrLocale ?? "").toUpperCase();
+  const region = v.includes("-") ? v.slice(v.lastIndexOf("-") + 1) : v;
+  return MILES.has(region);
+}
+
+/** An OpenStreetMap link to a point, for a halfway with no town to name. */
+export const mapLink = (point: LatLng): string => {
+  const lat = Math.round(point.lat * 1e4) / 1e4;
+  const lng = Math.round(point.lng * 1e4) / 1e4;
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=8/${lat}/${lng}`;
+};

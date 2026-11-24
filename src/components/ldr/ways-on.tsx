@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 
 import type { CSSProperties } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics/track";
 import { saveGiftSeed } from "@/lib/editor/gift-seed";
-import { halfwayCityName, isOwnTown, type Halfway } from "@/lib/ldr/halfway";
+import { answerPlace, type HalfwayAnswer } from "@/lib/ldr/halfway";
 import type { Town } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear, type WaysData } from "@/lib/ldr/ways";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
@@ -30,7 +30,7 @@ const TO = { gift: "halfway_gift", dates: "dates", trip: "trip" } as const;
 export function WaysOn({
   a,
   b,
-  halfway,
+  answer,
   data,
   ways,
   from,
@@ -39,7 +39,7 @@ export function WaysOn({
 }: {
   a: Town | null;
   b: Town | null;
-  halfway: Halfway | null;
+  answer: HalfwayAnswer | null;
   data: WaysData;
   ways: readonly WayKey[];
   from: "halfway_tool" | "long_distance";
@@ -47,11 +47,10 @@ export function WaysOn({
   className?: string;
 }) {
   const t = useTranslations("ldr.ways");
-  const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
   const both = a && b ? { a, b } : null;
-  // Their own town is not a place to meet "halfway": it is named on the answer, not offered here.
-  const near = halfway?.near && !isOwnTown(halfway) ? halfway.near : null;
-  const city = near ? halfwayCityName(near.city, locale) : "";
+  // The place the answer names (the table's city or the map's town), already in the page's language.
+  const near = answerPlace(answer);
+  const city = near?.name ?? "";
 
   const gift = (): Way => ({
     key: "gift",
@@ -67,19 +66,19 @@ export function WaysOn({
   const dates = (): Way => {
     if (!both) return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
     if (near) {
-      const page = cityPageNear(near.city, data.cities);
+      const page = cityPageNear(near, data.cities);
       if (page) return { key: "dates", href: `/dates/${page.slug}`, title: t("dates.in", { city: page.name }), image: page.image };
-      return { key: "dates", href: `/dates?lat=${near.city.lat}&lng=${near.city.lng}&q=${encodeURIComponent(city)}`, title: t("dates.in", { city }), image: data.datesImage };
+      return { key: "dates", href: `/dates?lat=${near.lat}&lng=${near.lng}&q=${encodeURIComponent(city)}`, title: t("dates.in", { city }), image: data.datesImage };
     }
     // Halfway falls in a country never named: no town is echoed either (a typed town there would be
     // named after all), only date ideas near either of them.
-    if (halfway?.unnamed) return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
-    // No city to name (open sea, their own town): date ideas where the other one is.
+    if (answer?.kind === "unnamed") return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
+    // No place to name (open sea, open country, their own towns, the map not answering yet): date ideas where the other one is.
     return { key: "dates", href: `/dates?lat=${both.b.lat}&lng=${both.b.lng}&q=${encodeURIComponent(both.b.name)}`, title: t("dates.near", { town: both.b.name }), image: data.datesImage };
   };
 
   const trip = (): Way => {
-    const found = both ? tripNear([near?.city, both.a, both.b], data.trips) : null;
+    const found = both ? tripNear([near, both.a, both.b], data.trips) : null;
     if (found) return { key: "trip", href: `/trips/${found.id}`, title: found.title, image: found.image, style: { background: `linear-gradient(160deg, ${found.art.from} 0%, ${found.art.to} 100%)` } };
     const first = data.trips[0];
     return { key: "trip", href: "/trips", title: t("trip.any"), image: first?.image ?? null, style: first ? { background: `linear-gradient(160deg, ${first.art.from} 0%, ${first.art.to} 100%)` } : undefined };

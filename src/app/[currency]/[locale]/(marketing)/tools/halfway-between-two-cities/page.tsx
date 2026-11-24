@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Plus } from "lucide-react";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -7,6 +8,8 @@ import { SITE } from "@/config/site";
 import { HALFWAY_TOOL, HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
 import { HALFWAY_ART, HALFWAY_FOOT_ART, ROOMS_THEME } from "@/content/rooms-art";
 import { pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { readsMiles } from "@/lib/ldr/halfway";
+import { readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { waysData } from "@/lib/ldr/ways-data";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
@@ -37,10 +40,22 @@ const PLUS = "size-4 shrink-0 text-page-body transition-transform duration-200 g
  * Halfway between two cities: the long-distance room's halfway calculation on a page of its own,
  * laid out as the gift finder is (DESIGN-LESS-TEXT.md): the words and one line on the left, the
  * tool and its three ways on at the right, then a band with four closed questions and a row of
- * quiet links. Static: the page never reads its query; a link's towns are read in the browser.
+ * quiet links. A link's two towns are read here, so a shared link opens on its answer in the first
+ * paint (and one that cannot be read says so); the page is rendered per request for that. Miles or
+ * kilometres follow the visitor's country, as Vercel names it (the browser's language without it).
  */
-export default async function HalfwayToolPage({ params }: Props) {
+export default async function HalfwayToolPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const query = await searchParams;
+  const search = new URLSearchParams();
+  for (const key of ["a", "b"] as const) {
+    const value = query[key];
+    if (typeof value === "string") search.set(key, value);
+  }
+  const initial = readHalfwayLink(search);
+  const broken = !initial && (search.has("a") || search.has("b"));
+  const head = await headers();
+  const miles = readsMiles(head.get("x-vercel-ip-country") ?? head.get("accept-language")?.split(",")[0]);
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";
   const copy = HALFWAY_TOOL[l];
@@ -65,7 +80,7 @@ export default async function HalfwayToolPage({ params }: Props) {
           <div className={cn(SPREAD, "gap-y-6 pt-3 pb-24 sm:gap-y-9 sm:pt-10 lg:min-h-[40rem] lg:content-start lg:items-start lg:pt-14 lg:pb-32")}>
             <Intro level={1} id="halfway-title" label={copy.label} heading={copy.h1} line={copy.line} />
             <div className="min-w-0 lg:pt-7">
-              <HalfwayFinder ways={waysData(l)} />
+              <HalfwayFinder ways={waysData(l)} initial={initial} broken={broken} miles={miles} />
             </div>
           </div>
         </section>

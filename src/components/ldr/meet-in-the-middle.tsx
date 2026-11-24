@@ -7,13 +7,14 @@ import { Link } from "@/i18n/navigation";
 import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
-import { halfwayBetween, halfwayCityName, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { answerPlace, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
 import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
 import { flightLinks, weekendAhead, type FlightSite } from "@/lib/trips/flights";
 import { WhereBox, type Where } from "@/components/dates/where-box";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { setTheirTown } from "./plan-visit-link";
+import { useHalfway } from "./use-halfway";
 import { WaysOn } from "./ways-on";
 
 /**
@@ -76,6 +77,7 @@ function useZone(place: Where | null): ZoneAnswer {
 export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   const t = useTranslations("ldr.meet");
   const tw2 = useTranslations("ldr.ways");
+  const tt = useTranslations("ldr.tool");
   const tw = useTranslations("dates.where");
   const tf = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
@@ -89,8 +91,9 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   const zoneA = useZone(a);
   const zoneB = useZone(b);
 
-  // The same calculation as the halfway finder's own page (lib/ldr/halfway.ts).
-  const result = useMemo(() => (a && b ? halfwayBetween(a, b) : null), [a, b]);
+  // The same calculation as the halfway finder's own page (lib/ldr/halfway.ts, use-halfway.ts).
+  const { result, answer } = useHalfway(a, b, locale);
+  const place = useMemo(() => answerPlace(answer), [answer]);
   // Each of them flying to the airport nearest halfway; or, when halfway has no airport of its
   // own (or is one of their home towns), one of them flying to the other. One seat each way.
   const flights = useMemo(() => {
@@ -105,15 +108,16 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
     const fromB = nearestAirport(b)?.airport;
     // Both home to the same airport: close enough that no flight is the answer.
     if (!fromA || !fromB || fromA.iata === fromB.iata) return null;
-    const halfway = result.near ? nearestAirport(result.near.city)?.airport : undefined;
+    const halfway = place ? nearestAirport(place)?.airport : undefined;
     // The site never suggests somewhere in Spain (the owner's rule), so a halfway airport there
     // gives way to the flight between them. Their own home airports are theirs to name.
     const suggestable = halfway && !NEVER_SUGGESTED.has(halfway.country) ? halfway : undefined;
     if (suggestable && fromA.iata !== suggestable.iata && fromB.iata !== suggestable.iata) return { to: suggestable, hops: [hop(fromA, suggestable), hop(fromB, suggestable)] };
     return { to: null, hops: [hop(fromA, fromB)] };
-  }, [a, b, result, locale, today]);
-  // The city table is in English; a Spanish page says "Ciudad de México", and so does the link to its dates.
-  const halfwayName = result?.near ? halfwayCityName(result.near.city, locale) : "";
+  }, [a, b, result, place, locale, today]);
+  // The answer's name is already in the page's language: a Spanish page says "Ciudad de México", and so does the link to its dates.
+  const halfwayName = place?.name ?? "";
+  const each = answer && answer.kind !== "same" && answer.kind !== "city" ? t("eachWay", { distance: t("km", { n: Math.round(answer.eachKm) }) }) : "";
   const ahead = zoneA && zoneB ? hoursAhead(zoneA.offset, zoneB.offset) : null;
   const windows = zoneA && zoneB ? awakeOverlap(zoneA.offset, zoneB.offset) : null;
   const number = (n: number) => Math.round(n).toLocaleString(locale === "es" ? "es-ES" : "en-GB");
@@ -158,25 +162,44 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
               <MoveHorizontal aria-hidden="true" className="size-4" />
               {t("halfway")}
             </p>
-            {result.near ? (
+            {answer?.kind === "city" && place ? (
               <>
                 <p className="mt-3 font-display text-[32px] leading-[1.05] text-forest">{halfwayName}</p>
-                <p className="mt-1.5 text-[14px] text-forest/65">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
-                <Link href={`/dates?lat=${result.near.city.lat}&lng=${result.near.city.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                <p className="mt-1.5 text-[14px] text-forest/65">{answer.offKm < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(answer.offKm) })}</p>
+                <Link href={`/dates?lat=${place.lat}&lng=${place.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: halfwayName })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>
-            ) : (
+            ) : answer && answer.kind !== "city" && answer.kind !== "same" ? (
               <>
-                <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{result.unnamed ? t("eachWay", { km: number(result.km / 2) }) : t("nowhere")}</p>
-                <p className="mt-1.5 text-[14px] leading-snug text-forest/65">{result.unnamed ? t("eachWaySub") : t("nowhereSub")}</p>
+                {/* Never "open water" without the map saying so: only `sea` is. Land with no town near is said as such. */}
+                <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{answer.kind === "sea" ? t("sea") : answer.kind === "none" ? t("noTown") : each}</p>
+                <p className="mt-1.5 text-[14px] leading-snug text-forest/65" aria-busy={answer.kind === "pending" || undefined}>
+                  {answer.kind === "sea"
+                    ? `${each}. ${t("seaSub")}`
+                    : answer.kind === "none"
+                      ? `${each}. ${t("noTownSub")}`
+                      : answer.kind === "between"
+                        ? tt("close")
+                        : answer.kind === "pending"
+                          ? t("finding")
+                          : answer.kind === "failed"
+                            ? t("failed")
+                            : t("eachWaySub")}
+                </p>
+                {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" ? (
+                  <a href={mapLink(answer.middle)} target="_blank" rel="noopener noreferrer" className="mt-2 mr-5 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                    {t("onMap")}
+                    <ArrowUpRight aria-hidden="true" className="size-4" />
+                  </a>
+                ) : null}
                 <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: b.name })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>
-            )}
+            ) : null}
           </div>
 
           <div className="rounded-[24px] bg-blush-paper p-5">
@@ -240,7 +263,7 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
       {result && a && b ? (
         <div className="mt-6" data-testid="meet-ways">
           <p className="text-page-label text-page-body">{tw2("label")}</p>
-          <WaysOn className="mt-3" a={a} b={b} halfway={result} data={ways} ways={["gift", "trip"]} from="long_distance" rowId="meet-ways-row" />
+          <WaysOn className="mt-3" a={a} b={b} answer={answer} data={ways} ways={["gift", "trip"]} from="long_distance" rowId="meet-ways-row" />
         </div>
       ) : null}
     </div>

@@ -142,9 +142,12 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <Plane aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("detail.jump.flights")}
                 </a>
-                {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
-                <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)} />
-                <ShareTripButton tripId={trip.id} title={trip.title[l]} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-[background-color,scale] hover:bg-blush-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:scale-[0.98] motion-reduce:transition-none" />
+                {/* Keeping it and sending it go together: where the four don't fit one row, these two wrap as a pair, never the share alone. */}
+                <div className="flex flex-wrap gap-2.5">
+                  {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
+                  <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)} />
+                  <ShareTripButton tripId={trip.id} title={trip.title[l]} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-[background-color,scale] hover:bg-blush-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:scale-[0.98] motion-reduce:transition-none" />
+                </div>
               </div>
             </div>
           </div>
@@ -187,20 +190,22 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                         <span className="text-[12.5px] font-semibold text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
                       </div>
                       <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
+                      {/* One link a stop: the city's own date ideas where it is one of ours, else the map of date spots around it. */}
                       <div className="-mb-2.5 flex flex-wrap gap-x-5">
-                        <Link
-                          href={`/dates?lat=${s.lat}&lng=${s.lng}&q=${encodeURIComponent(stopName(s, l))}`}
-                          className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline"
-                        >
-                          {t("detail.route.datesHere")}
-                          <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                        </Link>
                         {stopCities[i] ? (
                           <Link href={`/dates/${stopCities[i].slug}`} data-testid="stop-city" className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                             {t("detail.route.cityDates", { city: cityPageName(stopCities[i], l) })}
                             <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                           </Link>
-                        ) : null}
+                        ) : (
+                          <Link
+                            href={`/dates?lat=${s.lat}&lng=${s.lng}&q=${encodeURIComponent(stopName(s, l))}`}
+                            className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline"
+                          >
+                            {t("detail.route.datesHere")}
+                            <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>

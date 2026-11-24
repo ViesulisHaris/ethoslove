@@ -10,7 +10,10 @@ import { track } from "@/lib/analytics/track";
 import { cityName, type Airport } from "@/lib/trips/airports";
 import { formatFlightTime } from "@/lib/trips/flights";
 import { readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
-import { MATCH_LENGTHS, metWishes, topMatches, type MatchLength, type MatchPick, type MatchTrip, type MatchWish } from "@/lib/trips/match";
+import { MATCH_LENGTHS, metWishes, nextBestMonth, topMatches, type MatchLength, type MatchPick, type MatchTrip, type MatchWish } from "@/lib/trips/match";
+import { MATCH_KINDS, readMatchLink, writeMatchLink, type MatchState } from "@/lib/trips/match-link";
+import { useCurrency } from "@/lib/pricing/use-currency";
+import type { Currency } from "@/lib/pricing/products";
 import type { TripKind } from "@/lib/trips/presets";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { AirportBox } from "./airport-box";
@@ -38,14 +41,33 @@ type Kind = TripKind | "any";
 
 const LENGTHS: readonly Length[] = ["any", ...MATCH_LENGTHS];
 const BUDGETS: readonly Budget[] = ["any", "1", "2"];
-const KINDS: readonly Kind[] = ["any", "city", "road", "islands", "train"];
+const KINDS: readonly Kind[] = ["any", ...MATCH_KINDS];
 
-/** A choice set into the sentence: a rose word in a pill, as wide as what it says, never wider than the line. */
+/**
+ * A budget band's ceiling a day for two, in the page's money: the €150 and €300 of the trips' own
+ * bands (lib/trips/presets.ts), said in round dollars and pounds near what they come to.
+ */
+const BUDGET_MONEY: Record<Currency, Record<1 | 2, number>> = { eur: { 1: 150, 2: 300 }, usd: { 1: 175, 2: 350 }, gbp: { 1: 130, 2: 260 } };
+
+/**
+ * A choice set into the sentence: a rose word in a pill, as wide as what it says, never wider than
+ * the line. No margin: the sentence's own spaces stand either side, and the comma or full stop after
+ * it sits in the same unbreakable run (the message wraps it in the choice's tag).
+ */
 const SELECT =
-  "mx-1 inline-block h-11 max-w-full cursor-pointer appearance-none truncate rounded-full border border-page-line bg-page-raised px-4 align-middle font-sans text-[1rem] leading-normal font-medium text-page-accent field-sizing-content transition-colors hover:border-page-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink";
+  "inline-block h-11 max-w-full cursor-pointer appearance-none truncate rounded-full border border-page-line bg-page-raised px-4 align-middle font-sans text-[1rem] leading-normal font-medium text-page-accent field-sizing-content transition-colors hover:border-page-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink";
 
 /** After the first ask, a change is counted once the choices have stood this long: one event per settled ask, not one per select. */
 export const REFINE_MS = 1500;
+
+/**
+ * False until a matcher has mounted in this page load. The first mount is a hydration, which must
+ * render what the server did, so it reads the address a frame later; a mount after that (Back from a
+ * trip, inside the app) reads it at once, so the three are there before the browser puts the scroll back.
+ */
+let mountedBefore = false;
+const readAddress = (): MatchState | null => readMatchLink(new URLSearchParams(window.location.search));
+const thisMonth = () => new Date().getMonth() + 1;
 
 const wishOf = (from: Airport | null, length: Length, budget: Budget, kind: Kind): MatchWish => ({
   from,
@@ -65,24 +87,59 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   const tf = useTranslations("trips.flights");
   const ts = useTranslations("trips.detail.surprise");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
-  const [from, setFrom] = useState<Airport | null>(null);
-  const [length, setLength] = useState<Length>("any");
-  const [budget, setBudget] = useState<Budget>("any");
-  const [kind, setKind] = useState<Kind>("any");
-  // The month the ranking is for: read when the button is pressed, never while rendering, so the
-  // server's page and the browser's agree. Null until then, and nothing is shown.
-  const [month, setMonth] = useState<number | null>(null);
+  const currency = useCurrency();
+  // The answer in the address, read at once on a mount after the first (see mountedBefore).
+  const [linked] = useState(() => (mountedBefore ? readAddress() : null));
+  const [from, setFrom] = useState<Airport | null>(linked?.from ?? null);
+  const [length, setLength] = useState<Length>(linked?.length ?? "any");
+  const [budget, setBudget] = useState<Budget>(linked?.budget ? (String(linked.budget) as Budget) : "any");
+  const [kind, setKind] = useState<Kind>(linked?.kind ?? "any");
+  // The month the ranking is for: read when the button is pressed (or the address carries an answer),
+  // never while hydrating, so the server's page and the browser's agree. Null until then, and nothing is shown.
+  const [month, setMonth] = useState<number | null>(() => (linked ? thisMonth() : null));
   const summaryRef = useRef<HTMLHeadingElement>(null);
+  const goRef = useRef<HTMLButtonElement>(null);
+  const firstMount = useRef(!mountedBefore);
   const refineTimer = useRef<number | undefined>(undefined);
 
-  // A frame after mount, so the first render in the browser is the same as the server's.
+  // A frame after the first mount, so its first render is the same as the server's: the answer the
+  // address carries, else the airport they last flew from.
   useEffect(() => {
+    mountedBefore = true;
+    if (linked) return;
     const frame = requestAnimationFrame(() => {
+      const fromAddress = firstMount.current ? readAddress() : null;
+      if (fromAddress) {
+        setFrom(fromAddress.from);
+        setLength(fromAddress.length ?? "any");
+        setBudget(fromAddress.budget ? (String(fromAddress.budget) as Budget) : "any");
+        setKind(fromAddress.kind ?? "any");
+        setMonth(thisMonth());
+        return;
+      }
       const last = readLastFrom();
       if (last) setFrom((current) => current ?? last);
     });
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [linked]);
+
+  // Once there is an answer, the address carries it: a reload, or Back from a trip, opens on the same three.
+  useEffect(() => {
+    if (month === null) return;
+    const url = new URL(window.location.href);
+    const state: MatchState = { from, length: length === "any" ? null : length, budget: budget === "any" ? null : (Number(budget) as 1 | 2), kind: kind === "any" ? null : kind };
+    const search = writeMatchLink(url.searchParams, state).toString();
+    if (url.search === `?${search}`) return;
+    window.history.replaceState(window.history.state, "", `${url.pathname}?${search}${url.hash}`);
+  }, [month, from, length, budget, kind]);
+
+  const money = (band: 1 | 2) =>
+    new Intl.NumberFormat(locale === "es" ? "es-ES" : currency === "gbp" ? "en-GB" : currency === "usd" ? "en-US" : "en-IE", {
+      style: "currency",
+      currency: currency.toUpperCase(),
+      maximumFractionDigits: 0,
+    }).format(BUDGET_MONEY[currency][band]);
+  const monthName = (m: number) => new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2026, m - 1, 15)));
 
   const wish = wishOf(from, length, budget, kind);
   const result = useMemo(() => (month === null ? null : topMatches(wishOf(from, length, budget, kind), trips, month)), [from, length, budget, kind, trips, month]);
@@ -107,21 +164,34 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   };
   useEffect(() => () => window.clearTimeout(refineTimer.current), []);
 
-  // Why a pick fits: the wishes it meets, else that it is the nearest, else the season; then the
-  // hours in the air when there is an airport.
-  const fitLine = (pick: MatchPick) => {
+  const list = (items: string[]) => new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(items);
+  // Why a pick fits: the wishes it meets (and which it lets go of), else that it is the nearest; with
+  // every choice left open, its own season: now, or the month it starts. Then the hours in the air
+  // when there is an airport.
+  const fitLine = (pick: MatchPick, trip: MatcherTrip) => {
     const met = metWishes(wish, pick);
-    const said = met.map((w) => (w === "length" ? t(`length.${wish.length!}`) : w === "budget" ? t(`fit.budget${wish.budget!}`) : t(`kind.${wish.kind!}`)));
-    if (said.length) return t("fits", { list: new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(said) });
+    // Where the heading already names what all three let go of, each card says what it keeps instead.
+    if (met.length && pick.relaxed.length && result?.summary.kind !== "none") return t("allBut", { wishes: list(pick.relaxed.map((w) => t(`wish.${w}`))) });
+    if (met.length)
+      return t("fits", {
+        list: list(met.map((w) => (w === "length" ? t(`length.${wish.length!}`) : w === "budget" ? t("fit.budget", { money: money(wish.budget!) }) : t(`fit.kind.${wish.kind!}`)))),
+      });
     if (pick.relaxed.length) return t("closest");
-    return pick.inSeason ? t("fitsSeason") : t("fitsOpen");
+    if (pick.inSeason || month === null) return t("fitsSeason");
+    const next = nextBestMonth(trip.bestMonths, month);
+    return next ? t("fitsLater", { month: monthName(next) }) : t("fitsSeason");
   };
 
   const go = () => {
     window.clearTimeout(refineTimer.current);
-    setMonth(new Date().getMonth() + 1);
+    setMonth(thisMonth());
     count(wish);
-    requestAnimationFrame(() => summaryRef.current?.focus());
+    // To the answer's heading, unless they have already moved on (to the airport box, say): taking
+    // the focus from a box being typed in settled it on whatever had been typed.
+    requestAnimationFrame(() => {
+      const at = document.activeElement;
+      if (!at || at === document.body || at === goRef.current) summaryRef.current?.focus();
+    });
   };
 
   const summary = result?.summary;
@@ -131,7 +201,9 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
       ? t("allFit")
       : summary.kind === "some"
         ? t("someFit", { count: summary.count })
-        : t("letGo", { wishes: new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(summary.letGo.map((w) => t(`wish.${w}`))) });
+        : summary.kind === "closest"
+          ? t("closestAll")
+          : t("letGo", { wishes: list(summary.letGo.map((w) => t(`wish.${w}`))) });
 
   return (
     <div data-trip-matcher>
@@ -169,59 +241,68 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
 
       <p data-match-sentence className="mt-4 font-display text-[1.375rem] leading-[3.25rem] text-page-ink sm:text-2xl sm:leading-[3.5rem]">
         {t.rich("sentence", {
-          length: () => (
-            <select
-              aria-label={t("lengthLabel")}
-              value={length}
-              onChange={(e) => {
-                const v = e.target.value as Length;
-                setLength(v);
-                changed(wishOf(from, v, budget, kind));
-              }}
-              className={SELECT}
-            >
-              {LENGTHS.map((v) => (
-                <option key={v} value={v}>
-                  {t(`length.${v}`)}
-                </option>
-              ))}
-            </select>
+          length: (after) => (
+            <span className="whitespace-nowrap">
+              <select
+                aria-label={t("lengthLabel")}
+                value={length}
+                onChange={(e) => {
+                  const v = e.target.value as Length;
+                  setLength(v);
+                  changed(wishOf(from, v, budget, kind));
+                }}
+                className={SELECT}
+              >
+                {LENGTHS.map((v) => (
+                  <option key={v} value={v}>
+                    {t(`length.${v}`)}
+                  </option>
+                ))}
+              </select>
+              {after}
+            </span>
           ),
-          budget: () => (
-            <select
-              aria-label={t("budgetLabel")}
-              value={budget}
-              onChange={(e) => {
-                const v = e.target.value as Budget;
-                setBudget(v);
-                changed(wishOf(from, length, v, kind));
-              }}
-              className={SELECT}
-            >
-              {BUDGETS.map((v) => (
-                <option key={v} value={v}>
-                  {t(`budget.${v}`)}
-                </option>
-              ))}
-            </select>
+          budget: (after) => (
+            <span className="whitespace-nowrap">
+              <select
+                aria-label={t("budgetLabel")}
+                value={budget}
+                onChange={(e) => {
+                  const v = e.target.value as Budget;
+                  setBudget(v);
+                  changed(wishOf(from, length, v, kind));
+                }}
+                className={SELECT}
+              >
+                {BUDGETS.map((v) => (
+                  <option key={v} value={v}>
+                    {v === "any" ? t("budget.any") : t(`budget.${v}`, { money: money(Number(v) as 1 | 2) })}
+                  </option>
+                ))}
+              </select>
+              {after}
+            </span>
           ),
-          kind: () => (
-            <select
-              aria-label={t("kindLabel")}
-              value={kind}
-              onChange={(e) => {
-                const v = e.target.value as Kind;
-                setKind(v);
-                changed(wishOf(from, length, budget, v));
-              }}
-              className={SELECT}
-            >
-              {KINDS.map((v) => (
-                <option key={v} value={v}>
-                  {t(`kind.${v}`)}
-                </option>
-              ))}
-            </select>
+          kind: (after) => (
+            <span className="whitespace-nowrap">
+              <select
+                aria-label={t("kindLabel")}
+                value={kind}
+                onChange={(e) => {
+                  const v = e.target.value as Kind;
+                  setKind(v);
+                  changed(wishOf(from, length, budget, v));
+                }}
+                className={SELECT}
+              >
+                {KINDS.map((v) => (
+                  <option key={v} value={v}>
+                    {t(`kind.${v}`)}
+                  </option>
+                ))}
+              </select>
+              {after}
+            </span>
           ),
         })}
       </p>
@@ -229,6 +310,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
       <button
         type="button"
         data-match-go
+        ref={goRef}
         onClick={go}
         className="mt-5 inline-flex h-12 items-center gap-1.5 rounded-full bg-page-accent px-6 text-[0.9375rem] font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,scale] duration-200 hover:bg-page-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink active:scale-[0.98] motion-reduce:transition-none"
       >
@@ -279,7 +361,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
                     <span className="sr-only">{trip.budgetWords}</span>
                   </p>
                   <p data-why className="mt-2.5 text-[0.9375rem] leading-relaxed text-page-body">
-                    <span data-fit>{fitLine(pick)}</span>
+                    <span data-fit>{fitLine(pick, trip)}</span>
                     {air ? <span data-air> {air}</span> : null}
                   </p>
                   <SurpriseLink

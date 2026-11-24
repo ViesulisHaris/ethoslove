@@ -44,7 +44,13 @@ export function ShareTripButton({ tripId, title, className }: { tripId: string; 
         {copied ? <Check aria-hidden="true" className="size-4 text-rose-deep" /> : <Send aria-hidden="true" className="size-4 text-rose-deep" />}
         <span aria-live="polite">{copied ? t("copied") : t("cta")}</span>
       </button>
-      {manual ? <input readOnly value={manual} aria-label={t("manual")} onFocus={(e) => e.currentTarget.select()} className="h-11 basis-full rounded-xl border border-line bg-paper px-3 text-sm text-forest" /> : null}
+      {/* No clipboard: the link written out under its own label, to copy by hand. */}
+      {manual ? (
+        <label className="flex basis-full flex-col gap-1.5 text-[13px] font-semibold text-forest/70">
+          {t("manual")}
+          <input readOnly value={manual} onFocus={(e) => e.currentTarget.select()} className="h-11 rounded-xl border border-line bg-paper px-3 text-sm font-normal text-forest" />
+        </label>
+      ) : null}
     </>
   );
 }

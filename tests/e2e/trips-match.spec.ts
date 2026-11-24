@@ -59,8 +59,9 @@ test.describe("where should we go together", () => {
     }
     await expect(picks(page).first()).toContainText(/3 days · city break/i);
     await expect(picks(page).first()).toContainText("Best Mar–Jun, Sept–Oct");
-    // Each says why it fits, even with no airport and every choice left open; never a flight time then.
-    await expect(picks(page).locator("[data-fit]")).toHaveText(["You left every choice open.", "You left every choice open.", "You left every choice open."]);
+    // Each says something of its own, even with no airport and every choice left open (in mid
+    // November none is in season: when its season starts); never a flight time then.
+    await expect(picks(page).locator("[data-fit]")).toHaveText(["Its season starts in March.", "Its season starts in May.", "Its season starts in April."]);
     await expect(page.locator("#match [data-air]")).toHaveCount(0);
     // No money beside a trip but its band for spending there (€€, and for a screen reader the band's
     // own words, "about €150–300 a day for two", which is not a fare): never a price for a flight.
@@ -106,7 +107,12 @@ test.describe("where should we go together", () => {
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(picks(page)).toHaveCount(3);
     await expect(page.locator("#match [data-air]")).toHaveCount(0);
+    // The answer in the address was asked with no airport, and a reload keeps it so.
     await page.reload();
+    await expect(picks(page)).toHaveCount(3);
+    await expect(box).toHaveValue("");
+    // A fresh visit starts from the airport they last flew from.
+    await page.goto("/trips");
     await expect(box).toHaveValue("Riga");
   });
 
@@ -132,8 +138,65 @@ test.describe("where should we go together", () => {
     await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "islands" });
     await page.getByRole("combobox", { name: "How long" }).selectOption({ label: "a weekend" });
     await page.getByRole("combobox", { name: "Budget there" }).selectOption({ label: "about €150 a day for two at most" });
-    await expect(summary(page)).toHaveText("Nothing fits all of that, so we let go of the length and the budget.");
+    // The three let go of different wishes, so none is named in the heading; each card says its own.
+    await expect(summary(page)).toHaveText("Nothing fits all of that. These three come closest.");
     await expect(names(page).first()).toHaveText("Santorini and Naxos");
+    await expect(picks(page).nth(0).locator("[data-fit]")).toHaveText("Fits all but the length and the budget.");
+    await expect(picks(page).nth(1).locator("[data-fit]")).toHaveText("Fits all but the budget and the kind of trip.");
+  });
+
+  test("the commas and the full stop stay with their choices", async ({ page }) => {
+    await open(page);
+    const sentenceBox = page.locator("[data-match-sentence]");
+    for (const select of await sentenceBox.locator("select").all()) {
+      const gap = await select.evaluate((el) => {
+        const after = el.nextSibling;
+        if (!after || after.nodeType !== Node.TEXT_NODE) return null;
+        const range = document.createRange();
+        range.setStart(after, 0);
+        range.setEnd(after, 1);
+        return range.getBoundingClientRect().left - el.getBoundingClientRect().right;
+      });
+      expect(gap).not.toBeNull();
+      expect(gap!).toBeLessThan(3);
+    }
+  });
+
+  test("the answer stays in the address: Back from a trip, or a reload, opens on the same three", async ({ page }) => {
+    await open(page);
+    await pickAirport(page, "Rig", /Riga · RIX/);
+    await page.getByRole("combobox", { name: "Kind of trip" }).selectOption({ label: "islands" });
+    await page.getByRole("combobox", { name: "Budget there" }).selectOption({ label: "about €150 a day for two at most" });
+    await page.getByRole("button", { name: "Show our three trips" }).click();
+    await expect(page).toHaveURL(/\/trips\?match=1&budget=1&kind=islands&from=Riga%7ERIX$/);
+    const shown = await names(page).allInnerTexts();
+    expect(shown).toHaveLength(3);
+
+    await picks(page).first().locator("a[href^='/trips/']").click();
+    await page.waitForURL(/\/trips\/santorini-naxos$/);
+    await page.goBack();
+    await expect(names(page)).toHaveText(shown);
+    await expect(page.getByRole("combobox", { name: "Kind of trip" })).toHaveValue("islands");
+    await expect(page.locator("#match").getByRole("combobox", { name: "Leaving from" })).toHaveValue("Riga");
+    // Back where they were, on the three, not on an empty matcher.
+    await expect.poll(() => page.locator("[data-match-result]").evaluate((el) => el.getBoundingClientRect().top < window.innerHeight)).toBe(true);
+
+    await page.reload();
+    await expect(names(page)).toHaveText(shown);
+    await expect(page.getByRole("combobox", { name: "Budget there" })).toHaveValue("1");
+  });
+
+  test("typing an airport straight after Show is never cut short", async ({ page }) => {
+    await open(page);
+    await page.getByRole("button", { name: "Show our three trips" }).click();
+    const box = page.locator("#match").getByRole("combobox", { name: "Leaving from" });
+    await box.fill("Rig");
+    // The answer's heading takes the focus only from the button, never from a box being typed in.
+    await page.waitForTimeout(200);
+    await expect(box).toBeFocused();
+    await expect(box).toHaveValue("Rig");
+    await page.getByRole("option", { name: /Riga · RIX/ }).first().click();
+    await expect(box).toHaveValue("Riga");
   });
 
   test("after the first tap a change re-ranks at once, and the focus stays where it was", async ({ page }) => {

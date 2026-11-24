@@ -2400,8 +2400,13 @@
       "halfwayExact": "Casi exactamente a medio camino entre los dos.",
       "halfwayNear": "La ciudad más cercana a vuestro punto medio, a {km} km de él.",
       "datesThere": "Ideas para una cita en {city}",
-      "nowhere": "Mar abierto, más o menos",
-      "nowhereSub": "A medio camino entre los dos no hay donde aterrizar. A uno le toca coger un avión.",
+      "sea": "Mar abierto",
+      "seaSub": "A medio camino entre los dos solo hay mar. A uno le toca coger un avión.",
+      "noTown": "Ninguna ciudad cerca del punto medio",
+      "noTownSub": "El punto medio cae en pleno campo, sin ninguna ciudad cerca.",
+      "finding": "Buscando la ciudad más cercana al punto medio…",
+      "failed": "Ahora mismo no podemos decir qué ciudad queda más cerca del punto medio.",
+      "onMap": "Ver el punto medio en un mapa",
       "clocks": "Relojes",
       "sameTime": "La misma hora en los dos lados",
       "ahead": "{name} va {hours} h por delante",
@@ -2413,8 +2418,10 @@
       "clocksUnavailable": "Ahora mismo no podemos saber la hora de cada sitio. El resto de las cuentas sigue valiendo.",
       "flightsTo": "Vuelos a {city}",
       "flightsBetween": "Vuelos entre vosotros",
-      "eachWay": "{km} km cada uno",
-      "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino."
+      "eachWay": "{distance} cada uno",
+      "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino.",
+      "km": "{n, plural, other {# km}}",
+      "mi": "{n, plural, one {# milla} other {# millas}}"
     },
     "ways": {
       "label": "Y ahora qué",
@@ -2435,15 +2442,20 @@
       "note": "A medio camino está {city}. ¿Nos vemos allí?"
     },
     "tool": {
-      "forYou": "{km} km para ti",
-      "forThem": "{km} km para la otra persona",
+      "forYou": "{distance} para ti",
+      "forThem": "{distance} para la otra persona",
+      "off": "A {distance} del punto medio exacto.",
+      "offIn": "{region}, a {distance} del punto medio exacto.",
+      "exactIn": "{region}, casi justo a medio camino entre los dos.",
+      "osm": "Nombres de ciudades © OpenStreetMap",
       "share": "Envíaselo",
       "copied": "Enlace copiado",
       "shareText": "A medio camino entre los dos está {city}.",
       "shareTextBare": "Mira dónde queda la mitad del camino.",
       "manual": "Copia este enlace",
       "same": "Es el mismo sitio dos veces.",
-      "close": "El punto medio cae entre vuestras dos ciudades. Turnaos para visitaros, o quedad en algún sitio por el camino."
+      "broken": "No hemos podido leer las ciudades de ese enlace. Escribidlas otra vez y hacemos las cuentas.",
+      "close": "Ninguna ciudad queda más cerca del punto medio que las vuestras, así que turnaos para visitaros."
     },
     "virtual": {
       "eyebrow": "Citas para dos pantallas",
@@ -2486,7 +2498,7 @@
   },
   "trips": {
     "meta": {
-      "title": "Ideas de viajes en pareja: {count} itinerarios ya planeados",
+      "title": "Ideas de viajes en pareja: {count} itinerarios",
       "description": "Ideas de viajes en pareja, planeadas día a día: doce viajes para dos, de escapadas de fin de semana a una semana en coche. Decid de dónde salís y elegimos tres."
     },
     "eyebrow": "Viajes para dos",
@@ -2504,7 +2516,7 @@
       "from": "Salimos de",
       "fromHint": "Opcional. Sin él, nos saltamos las horas de vuelo.",
       "clearFrom": "Quitar el aeropuerto",
-      "sentence": "Tenemos <length></length>, <budget></budget>, y buscamos <kind></kind>.",
+      "sentence": "Tenemos <length>,</length> <budget>,</budget> y buscamos <kind>.</kind>",
       "lengthLabel": "Cuánto tiempo",
       "budgetLabel": "Presupuesto allí",
       "kindLabel": "Tipo de viaje",
@@ -2515,8 +2527,8 @@
         "week": "una semana"
       },
       "budget": {
-        "1": "unos 150 € al día para dos como mucho",
-        "2": "unos 300 € al día para dos como mucho",
+        "1": "unos {money} al día para dos como mucho",
+        "2": "unos {money} al día para dos como mucho",
         "any": "sin tope de gasto"
       },
       "kind": {
@@ -2530,6 +2542,7 @@
       "allFit": "Tres viajes que encajan.",
       "someFit": "{count, plural, one {Un viaje encaja} other {# viajes encajan}} con todo. Los demás se acercan.",
       "letGo": "Nada encaja con todo, así que hemos dejado de lado {wishes}.",
+      "closestAll": "Nada encaja con todo. Estos tres son los que más se acercan.",
       "wish": {
         "length": "la duración",
         "budget": "el presupuesto",
@@ -2539,14 +2552,20 @@
       "airTrain": "Alrededor de {time} de vuelo desde {city}. Quizá os compense más el tren.",
       "home": "Empieza donde estáis. No hay vuelo que buscar.",
       "inSeason": "En temporada ahora",
-    "fits": "Encaja con {list}.",
-    "fit": {
-      "budget1": "un presupuesto de 150 € al día",
-      "budget2": "un presupuesto de 300 € al día"
-    },
-    "closest": "Lo más cercano a lo que pedís.",
-    "fitsSeason": "Ahora es uno de sus mejores meses.",
-    "fitsOpen": "Lo habéis dejado todo abierto."
+      "fits": "Encaja con {list}.",
+      "fit": {
+        "budget": "un presupuesto de {money} al día",
+        "kind": {
+          "city": "una escapada urbana",
+          "road": "un viaje en coche",
+          "islands": "un viaje por islas",
+          "train": "un viaje en tren"
+        }
+      },
+      "closest": "Lo más cercano a lo que pedís.",
+      "allBut": "Encaja con todo menos {wishes}.",
+      "fitsLater": "Su temporada empieza en {month}.",
+      "fitsSeason": "Ahora es uno de sus mejores meses."
     },
     "filter": {
       "label": "Tipo de viaje",

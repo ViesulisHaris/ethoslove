@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { catchShares, clickInPlace, countEvents, lastShare, mockTowns, noShare, typeTown, watchErrors } from "./rooms-world";
+import { catchShares, clickInPlace, countEvents, lastShare, mockTowns, noShare, TOWNS, typeTown, watchErrors, type Spot } from "./rooms-world";
 
 /**
  * The halfway finder's own page (/tools/halfway-between-two-cities): two towns in, the halfway city
@@ -25,9 +25,15 @@ const jsonLd = (page: Page) =>
     }),
   );
 
+/** The map's answer for every point it is asked about, in place of the default (open country). */
+const mapSays = (page: Page, spot: (lat: number, lng: number) => Spot | null) => mockTowns(page, TOWNS, spot);
+
 test.beforeEach(async ({ page }) => {
   await mockTowns(page);
 });
+
+// Kilometres: a visitor from Ireland (the browser's language stands in for Vercel's country). Miles are their own test below.
+test.use({ locale: "en-IE" });
 
 test.describe("halfway between two cities", () => {
   test("the page is there in both languages, titled with its search", async ({ page }) => {
@@ -50,7 +56,7 @@ test.describe("halfway between two cities", () => {
     await page.goto(TOOL);
     await both(page, "Riga", "Lisbon");
     await expect(page.locator("[data-halfway-city]")).toHaveText("Luxembourg");
-    await expect(page.locator("[data-halfway-result]")).toContainText(/The nearest city to your halfway point, 13\d km from it\./);
+    await expect(page.locator("[data-halfway-result]")).toContainText(/13\d km from the exact middle\./);
     await expect(page.locator("[data-halfway-each]")).toHaveText(/^1,4[34]\d km for you · 1,71\d km for them$/);
   });
 
@@ -124,6 +130,11 @@ test.describe("halfway between two cities", () => {
     // Each town to two decimals. Lisbon is the place search's own pick: the offline table's centre (38.71…).
     expect(link).toMatch(new RegExp(`${TOOL}\\?a=Riga~56\\.95~24\\.11&b=Lisbon~38\\.7\\d~-9\\.14$`));
 
+    // The answer is in the page the server sends: no empty box first, then the answer.
+    const html = await (await page.request.get(link)).text();
+    expect(html).toContain("data-halfway-city");
+    expect(html).toContain("Luxembourg");
+
     const opened = await context.newPage();
     const asked: string[] = [];
     opened.on("request", (r) => {
@@ -144,22 +155,69 @@ test.describe("halfway between two cities", () => {
     await expect.poll(async () => (await lastShare(shared))?.text).toBe("Halfway between us is Luxembourg.");
   });
 
-  test("a link that is not two towns opens the empty tool", async ({ page }) => {
+  test("the answer stays in the address: a reload opens on it again", async ({ page }) => {
+    await page.goto(TOOL);
+    await both(page, "Riga", "Lisbon");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Luxembourg");
+    await expect(page).toHaveURL(/\?a=Riga~56\.95~24\.11&b=Lisbon~38\.7\d~-9\.14$/);
+    await page.reload();
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Luxembourg");
+    await expect(page.getByRole("combobox", { name: "Where you are" })).toHaveValue("Riga");
+  });
+
+  test("a link that is not two towns says so, and opens the empty tool", async ({ page }) => {
     const noErrors = watchErrors(page);
     for (const query of ["?a=x&b=y", "?a=Riga~91~0&b=Lisbon~38.72~-9.14", "?a=Riga~56.95~24.11"]) {
       await page.goto(`${TOOL}${query}`);
-      await expect(page.locator("[data-halfway-result]")).toContainText("Pick both towns and we'll do the math.");
+      await expect(page.locator("[data-halfway-result]")).toContainText("That link's towns couldn't be read. Type them again and we'll do the math.");
       await expect(page.getByRole("combobox", { name: "Where you are" })).toHaveValue("");
       await expect(page.getByRole("combobox", { name: "Where they are" })).toHaveValue("");
     }
+    await page.goto(TOOL);
+    await expect(page.locator("[data-halfway-result]")).toContainText("Pick both towns and we'll do the math.");
     noErrors();
   });
 
+  test("dry land is never called the sea: a town on the map is named, and open country is said as such", async ({ page }) => {
+    // Austin and Denver: halfway is the Texas panhandle, 400 km and more from any city in the table.
+    const asked = await mapSays(page, () => ({ kind: "none" }));
+    await page.goto(TOOL);
+    await both(page, "Austin", "Denver");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("No town near halfway");
+    await expect(page.locator("[data-halfway-result]")).toContainText(/62\d km each\. The middle is open country, with no town close to it\./);
+    await expect(page.locator("[data-halfway-result]")).not.toContainText(/water|sea\b|land/i);
+    await expect(page.locator("[data-halfway-map]")).toHaveAttribute("href", /^https:\/\/www\.openstreetmap\.org\/\?mlat=35\.\d+&mlon=-101\.\d+/);
+    // Only the middle is asked about, never a town.
+    expect(asked.length).toBeGreaterThan(0);
+    for (const point of asked) {
+      expect(Math.abs(point.lat - 35.2)).toBeLessThan(0.6);
+      expect(Math.abs(point.lng + 101.6)).toBeLessThan(0.6);
+    }
+
+    await mapSays(page, () => ({ kind: "town", name: "Amarillo", region: "Texas", countryCode: "US", lat: 35.2073, lng: -101.8371 }));
+    await page.goto(TOOL);
+    await both(page, "Austin", "Denver");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Amarillo");
+    await expect(page.locator("[data-halfway-result]")).toContainText(/Texas, 6\d km from the exact middle\./);
+    await expect(page.locator("[data-halfway-each]")).toHaveText(/^6[67]\d km for you · 57\d km for them$/);
+    await expect(page.getByRole("link", { name: "Town names © OpenStreetMap" })).toHaveAttribute("href", "https://www.openstreetmap.org/copyright");
+    await expect(way(page, "dates")).toContainText("Date ideas in Amarillo");
+
+    // The map cannot be asked: how far each, and the spot on a map; no claim about what is there.
+    await mapSays(page, () => null);
+    await page.goto(TOOL);
+    await both(page, "Austin", "Denver");
+    await expect(page.locator("[data-halfway-city]")).toHaveText(/62\d km each/);
+    await expect(page.locator("[data-halfway-result]")).toContainText("We couldn't name the town nearest halfway just now.");
+    await expect(page.locator("[data-halfway-map]")).toBeVisible();
+  });
+
   test("open sea is said, a place in Spain is never named, and their own town is not called halfway", async ({ page }) => {
+    await mapSays(page, () => ({ kind: "sea" }));
     await page.goto(TOOL);
     await both(page, "New York", "London");
-    await expect(page.locator("[data-halfway-city]")).toHaveText("Open water, more or less");
-    await expect(page.locator("[data-halfway-result]")).toContainText(/2,78\d km each/);
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Open water");
+    await expect(page.locator("[data-halfway-result]")).toContainText(/2,78\d km each\. Halfway between you is out at sea\./);
 
     await page.goto(TOOL);
     await both(page, "Lisbon", "Paris");
@@ -171,12 +229,18 @@ test.describe("halfway between two cities", () => {
     await expect(way(page, "dates")).toContainText("Date ideas near either of you");
     await expect(way(page, "dates")).toHaveAttribute("href", "/dates");
 
+    // Prague and Vienna: the table's nearest city is Vienna itself, so the map is asked what lies between.
+    await mapSays(page, () => ({ kind: "town", name: "Jihlava", region: "Vysočina", countryCode: "CZ", lat: 49.3961, lng: 15.5912 }));
+    await page.goto(TOOL);
+    await both(page, "Prague", "Vienna");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Jihlava");
+    // The map finds only one of their own towns: no town is named, and the line says why.
+    await mapSays(page, () => ({ kind: "town", name: "Vienna", countryCode: "AT", lat: 48.2082, lng: 16.3738 }));
     await page.goto(TOOL);
     await both(page, "Prague", "Vienna");
     await expect(page.locator("[data-halfway-city]")).toHaveText(/12[56] km each/);
-    await expect(page.locator("[data-halfway-result]")).toContainText("Halfway falls between your two towns.");
-    // Nothing claims what lies between them (Brno does), and neither of their own towns is named as halfway.
-    expect(await page.locator("[data-halfway-result]").innerText()).not.toMatch(/Prague|Vienna|No big city|nearest/i);
+    await expect(page.locator("[data-halfway-result]")).toContainText("No town lies nearer the middle than your own two, so take turns visiting.");
+    expect(await page.locator("[data-halfway-city]").innerText()).not.toMatch(/Prague|Vienna/i);
   });
 
   test("in Spanish, all of it", async ({ page }) => {
@@ -220,5 +284,18 @@ test.describe("halfway between two cities", () => {
         { from: "halfway_tool", to: "trip" },
       ]);
     expect(JSON.stringify(await events())).not.toMatch(/Riga|Lisbon|Luxembourg/);
+  });
+});
+
+test.describe("in miles, for a visitor from the United States", () => {
+  test.use({ locale: "en-US" });
+
+  test("every distance is in miles", async ({ page }) => {
+    await page.goto(TOOL);
+    await both(page, "Riga", "Lisbon");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Luxembourg");
+    await expect(page.locator("[data-halfway-result]")).toContainText(/8\d miles from the exact middle\./);
+    await expect(page.locator("[data-halfway-each]")).toHaveText(/^89\d miles for you · 1,06\d miles for them$/);
+    await expect(page.locator("[data-halfway-tool]")).not.toContainText(" km");
   });
 });
