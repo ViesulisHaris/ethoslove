@@ -177,15 +177,23 @@ test.describe("two more gifts under the link", () => {
   });
 
   for (const [when, rows] of [
-    ["2026-12-20T10:00:00", ["Valentine's Day", "Christmas"]],
-    ["2027-02-10T10:00:00", ["Christmas", "Valentine's Day"]],
+    ["2026-12-20T10:00:00", ["Christmas in 5 days", "Valentine's Day in 8 weeks"]],
+    ["2026-12-24T10:00:00", ["Christmas in 1 day", "Valentine's Day in 7 weeks"]],
+    // Christmas is more than 183 days off: one row, and the card is otherwise as it is.
+    ["2027-02-10T10:00:00", ["Valentine's Day in 4 days"]],
   ] as const) {
-    test(`in the busiest week (${when.slice(0, 10)}) the card still names two days`, async ({ page }) => {
+    test(`in the busiest week (${when.slice(0, 10)}) the near day comes first, and no day a year away is named`, async ({ page }) => {
       await page.clock.setFixedTime(new Date(when));
       await open(page, "/share-preview?occasion=birthday");
       const days = page.getByTestId("pair-days").locator("li");
-      await expect(days).toHaveCount(2);
-      for (const [i, name] of rows.entries()) await expect(days.nth(i)).toContainText(name);
+      await expect(days).toHaveCount(rows.length);
+      for (const [i, row] of rows.entries()) {
+        const [name, away] = row.split(/ (?=in \d)/);
+        await expect(days.nth(i)).toContainText(name);
+        await expect(days.nth(i)).toContainText(away);
+      }
+      await expect(page.getByTestId("pair-offer")).not.toContainText("months");
+      await expect(page.getByTestId("pair-add")).toHaveText("Add both for €5");
     });
   }
 

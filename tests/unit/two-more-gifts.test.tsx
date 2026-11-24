@@ -167,6 +167,26 @@ describe("the two more gifts card", () => {
     expect(html).toContain("Start the one for Mia's birthday now");
     expect(html).not.toMatch(/Start the Mia's/);
   });
+
+  it("reads right with a day tomorrow, and with a single day, in both languages", () => {
+    const eve = nextDays(new Date("2026-12-24T00:00:00.000Z"), [], null);
+    expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />))).toContain("Christmas 25 December in 1 day");
+    expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />, "es"))).toContain("Navidad 25 de diciembre en 1 día");
+    // 10 February: Valentine's Day alone. One row; the product is still two gifts.
+    const one = nextDays(new Date("2027-02-10T00:00:00.000Z"), [], null);
+    expect(one).toHaveLength(1);
+    const offer = intl(<Offer offer={{ amount: 500, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />);
+    expect(offer.match(/<li /g)?.length).toBe(3); // one day row + the two ticks
+    expect(text(offer)).toContain("Valentine's Day 14 February in 4 days");
+    expect(text(offer)).toContain("Add both for €5");
+    expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />, "es"))).toContain("San Valentín 14 de febrero en 4 días");
+    const bought = text(intl(<Bought days={one} name="Mia" />));
+    expect(bought).toContain("Two gifts are ready.");
+    expect(bought).toContain("Start the Valentine's one now");
+    expect(text(intl(<Bought days={one} name="Mia" />, "es"))).toContain("Empezar ya el de San Valentín");
+    expect(text(intl(<UsedOne left={1} days={one} name="Mia" />))).toContain("One left, ready for Valentine's Day.");
+    expect(text(intl(<UsedOne left={1} days={one} name="Mia" />, "es"))).toContain("Te queda uno para San Valentín.");
+  });
 });
 
 describe("a day named inside a sentence, per kind, in both languages", () => {

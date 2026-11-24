@@ -10,8 +10,11 @@ export type NextDayKind = "christmas" | "valentines" | "birthday" | "anniversary
 /** `name`: whose day a saved birthday or other day is (the reminder's name); absent for Christmas and Valentine's Day. */
 export type NextDay = { kind: NextDayKind; month: number; day: number; daysAway: number; name?: string };
 
-/** A day fewer than this many days away is too close to make a gift for: the year after's is named. */
-export const NEXT_DAY_MIN = 8;
+/**
+ * The farthest a day may be and still be named beside another. A gift here is made in ten minutes
+ * and arrives at once, so a near day is the best reason to buy and a day a year away is none.
+ */
+export const NEXT_DAY_MAX = 183;
 
 const CHRISTMAS: MonthDay = { month: 12, day: 25 };
 const VALENTINES: MonthDay = { month: 2, day: 14 };
@@ -37,11 +40,11 @@ function comingFor(kind: NextDayKind, date: MonthDay, today: Date, made: { kind:
 }
 
 /**
- * At most two days, soonest first: the days saved for this recipient (`saved`, already only theirs),
- * Christmas and Valentine's Day (once, if it is also saved), each at its next coming. A coming fewer
- * than NEXT_DAY_MIN days away is passed over, and so is the coming of the occasion this gift was made
- * for (`made`): the card then names the one after it. Christmas and Valentine's Day are always
- * candidates, so there are always two days.
+ * At most two days, soonest first, among the days saved for this recipient (`saved`, already only
+ * theirs) and Christmas and Valentine's Day (once, if it is also saved), each at its next coming from
+ * tomorrow on: today never counts, nor does the coming of the occasion this gift was made for
+ * (`made`; the one after it stands in). Only days at most NEXT_DAY_MAX days away are named; when none
+ * is, the single nearest day, whatever its distance. So there is always one day, often two.
  */
 export function nextDays(
   today: Date,
@@ -61,13 +64,15 @@ export function nextDays(
     if (seen.has(key)) continue;
     seen.add(key);
     let coming = comingFor(kind, date, today, madeFor);
-    // Too close to make a gift for: the year after's instead, so Christmas week and Valentine's week
-    // still name two days ("Both gifts" beside a single row read wrong in the busiest weeks).
-    if (daysBetween(today, coming) < NEXT_DAY_MIN) coming = occurrenceIn(coming.getUTCFullYear() + 1, date);
+    // Today itself never counts: the year after's instead (and that one is too far to be named
+    // beside a near day, below).
+    if (daysBetween(today, coming) < 1) coming = occurrenceIn(coming.getUTCFullYear() + 1, date);
     const daysAway = daysBetween(today, coming);
     days.push({ kind, month: date.month, day: date.day, daysAway, ...(name ? { name } : {}) });
   }
-  return days.sort((a, b) => a.daysAway - b.daysAway).slice(0, 2);
+  days.sort((a, b) => a.daysAway - b.daysAway);
+  const near = days.filter((d) => d.daysAway <= NEXT_DAY_MAX);
+  return near.length ? near.slice(0, 2) : days.slice(0, 1);
 }
 
 export type Distance = { unit: "days" | "weeks" | "months"; count: number };
