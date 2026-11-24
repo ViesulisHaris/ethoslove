@@ -126,8 +126,8 @@ New or changed, in Vercel for Production (and Preview for testing):
 | `STRIPE_AUTOMATIC_TAX` | `true` (after Stripe Tax is set up) |
 | `STRIPE_WEBHOOK_SECRET` | the endpoint's signing secret (unchanged if the endpoint is reused) |
 | `CRON_SECRET` | long random string; every `/api/cron/*` fails closed without it |
-| `MONTHLY_IDEA_EMAILS` | leave unset (off) until migration `0022_monthly_ideas.sql` is applied and the Terms and privacy text are approved. `optin`, `buyers` or `all`: who gets one gift idea a month for a year after their last gift (`src/lib/lifecycle/monthly-idea.ts`); `all` also puts the Terms box on a free gift's send screen. Changing it needs no deploy |
-| `MONTHLY_IDEA_PAUSE_UNTIL` | optional `YYYY-MM-DD`: the monthly idea's cron sends nothing before that day |
+| `MONTHLY_IDEA_EMAILS` | leave unset (off) until migration `0022_monthly_ideas.sql` is applied and the Terms and privacy text are approved. `optin`, `buyers` or `all`: who gets one gift idea a month for a year after their last gift (`src/lib/lifecycle/monthly-idea.ts`); `all` also puts the Terms box on a free gift's send screen. Vercel reads a changed value only from the next deployment: after changing it, Redeploy the latest production deployment (no code change needed) |
+| `MONTHLY_IDEA_PAUSE_UNTIL` | optional `YYYY-MM-DD`: the monthly idea's cron sends nothing before that day. Like every variable, it takes effect on the next deployment, so set it and Redeploy (for example straight after a Mailchimp send) |
 | `VIEWER_HASH_SECRET` | long random string that signs reminder-removal and unsubscribe links and seals the free-reply token in "send one back" links. It falls back to the service key, but then rotating that key voids every open reply link, so set it |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier). Without them rate limits and "one recovery email per address a week" are per serverless instance only |
 | `STRIPE_PRODUCT_EXTRAS`, `_PASS`, `_PACK`, `_GIFTCARD`, `_UPGRADE`, `_BUMP` | optional, reporting only (docs/STRIPE.md §2). The existing `STRIPE_PRODUCT_SINGLE/PICK3/EVERYTHING` keep working the same way |
