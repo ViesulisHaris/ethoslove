@@ -2044,7 +2044,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Regalos sorpresa",
       hero: {
         line: "Una sorpresa necesita su momento. Aquí cada regalo trae el suyo.",
-        sentence: "Una capa que se rasca, un reloj que se acaba, pistas antes de un destino, una galleta partida, una bola agitada: cada regalo esconde la noticia hasta que actúan.",
+        sentence: "Una capa que se rasca, un reloj que llega a cero, una galleta partida: cada regalo guarda la noticia hasta que actúan.",
       },
       ideasTitle: "Siete revelaciones, cada una distinta",
       craft: "Que la sorpresa siga siéndolo",
