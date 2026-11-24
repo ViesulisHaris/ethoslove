@@ -1364,6 +1364,7 @@
       "seeFree": "The free note",
       "moreNotePhotos": "A note with your photos",
       "moreNotePhotosBlurb": "Up to {n} photos in the short note. The 500 characters and the Ethos footer stay.",
+      "moreNotePhotosBlurbNoTag": "Up to {n} photos in the short note, without The Tree Tag. The 500 characters and the Ethos footer stay.",
       "upgrade": "Everything for the difference",
       "upgradeBlurb": "Every template, forever. What you've already paid counts towards {full}.",
       "pick3": "Or pick any three for {price}",
@@ -1376,7 +1377,7 @@
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
       "treeTag": "Send it by 20 December and it comes with The Tree Tag to print and hang on the tree.",
-      "treeTagUnlock": "Unlock the template and send it by 20 December, and it comes with The Tree Tag to print and hang on the tree. A note with your photos comes without it.",
+      "treeTagUnlock": "Pay for {template} and send it by 20 December, and it comes with The Tree Tag.",
       "personalPrice": "Your personal price from our email, until {ends}."
     },
     "etsy": {

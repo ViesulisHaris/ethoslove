@@ -185,6 +185,10 @@ test.describe("The Tree Tag", () => {
     // The code's design travels with it, as it does to the print card.
     await page.getByRole("radio", { name: "Square" }).click();
     await expect(link).toHaveAttribute("href", /shape=tree-tag&dots=square&/);
+    // And it is kept in this browser for that gift, so the dashboard's Tree Tag link (TreeTagRow
+    // rememberFor) prints the same code later (lib/qr/remember.ts; tests/unit/qr-remember.test.ts).
+    const giftId = (await link.getAttribute("href"))!.match(/\/dashboard\/gift\/([0-9a-f-]+)\/print/)![1];
+    await expect.poll(() => page.evaluate((id) => localStorage.getItem(`ethos.qr-design.${id}`), giftId)).toMatch(/^dots=square&/);
   });
 
   test("the share screen offers nothing for a gift the publish did not stamp", async ({ page }) => {

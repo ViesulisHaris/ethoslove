@@ -235,14 +235,29 @@ describe("the pay panel", () => {
       expect(pay().match(/data-testid="pay-tree-tag"/g)).toHaveLength(1);
     });
 
-    it("beside 'A note with your photos', which leaves the template locked, says the tag comes with the unlock only", () => {
+    it("beside 'A note with your photos', which leaves the template locked, names what the pay button buys, and the row itself says 'without'", () => {
       at("2026-12-10T10:00:00Z", "1");
       const keepRow = { price: "€3.99", max: 4, busy: false, onPay: () => {} };
       const html = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow });
       expect(html).toContain('data-testid="more-note-photos"');
-      expect(html).toContain("Unlock the template and send it by 20 December, and it comes with The Tree Tag to print and hang on the tree. A note with your photos comes without it.");
+      const line = html.match(/data-testid="pay-tree-tag"[\s\S]*?<span>([^<]*)<\/span>/)?.[1] ?? "";
+      expect(line).toBe("Pay for The Letter and send it by 20 December, and it comes with The Tree Tag.");
+      // Short, and no word the panel uses nowhere else; nothing that points at a row hidden in the closed disclosure.
+      expect(line.split(/\s+/).length).toBeLessThanOrEqual(18);
+      expect(line).not.toMatch(/unlock|note with your photos/i);
+      expect(html).toContain("Up to 4 photos in the short note, without The Tree Tag.");
       expect(html).not.toContain("Send it by 20 December and it comes with");
-      expect(pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow }, "es")).toContain("Si desbloqueas la plantilla y lo envías hasta el 20 de diciembre");
+      const es = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow }, "es");
+      expect(es).toContain("Paga La carta y envía el regalo hasta el 20 de diciembre: viene con la etiqueta del árbol.");
+      expect(es).toContain("Hasta 4 fotos en la nota corta, sin la etiqueta del árbol.");
+    });
+
+    it("leaves the note-with-photos row as it was while the tag is not given", () => {
+      at("2026-12-22T10:00:00Z", "1");
+      const keepRow = { price: "€3.99", max: 4, busy: false, onPay: () => {} };
+      const html = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow });
+      expect(html).toContain("Up to 4 photos in the short note. The 500 characters");
+      expect(html).not.toContain("Tree Tag");
     });
 
     it("says nothing with the switch off, before 24 November, or once the 20th has ended everywhere", () => {

@@ -78,6 +78,7 @@ export default async function GiftDetailPage({ params }: PageProps<"/[currency]/
               words={{ title: tTag("title"), line: tTag("line"), print: tTag("print"), label: tTag("label") }}
               place="dashboard"
               className="mt-0"
+              rememberFor={gift.id}
             />
           ) : null}
         </div>

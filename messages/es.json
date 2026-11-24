@@ -1364,6 +1364,7 @@
       "seeFree": "La nota gratis",
       "moreNotePhotos": "Una nota con tus fotos",
       "moreNotePhotosBlurb": "Hasta {n} fotos en la nota corta. Los 500 caracteres y el pie de Ethos se quedan.",
+      "moreNotePhotosBlurbNoTag": "Hasta {n} fotos en la nota corta, sin la etiqueta del árbol. Los 500 caracteres y el pie de Ethos se quedan.",
       "upgrade": "Todo por la diferencia",
       "upgradeBlurb": "Todas las plantillas, para siempre. Lo que ya has pagado se resta de los {full}.",
       "pick3": "O elige las tres que quieras por {price}",
@@ -1376,7 +1377,7 @@
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
       "treeTag": "Si lo envías hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.",
-      "treeTagUnlock": "Si desbloqueas la plantilla y lo envías hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar. Una nota con tus fotos va sin ella.",
+      "treeTagUnlock": "Paga {template} y envía el regalo hasta el 20 de diciembre: viene con la etiqueta del árbol.",
       "personalPrice": "Tu precio personal de nuestro correo, hasta el {ends}."
     },
     "etsy": {
