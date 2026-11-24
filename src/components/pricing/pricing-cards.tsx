@@ -19,6 +19,7 @@ import { startCheckout, useCheckoutError } from "./checkout";
 import { everythingPlan } from "./offers";
 import { useUpgradeQuote } from "./upgrade-quote";
 import { useRegisterChoice } from "./pricing-choice";
+import { pricingGifts } from "./free-gifts";
 import {
   Dialog,
   DialogContent,
@@ -96,6 +97,9 @@ export function PricingCards({
 
   const needed = picking ? PRODUCTS[picking].picks : 0;
   const premium = manifests.filter((m) => m.tier === "premium").length;
+  // /pricing counts as the gallery does: every gift that cannot go out free (lib/gift/free-tier.ts), so
+  // with the free note live Constellations is one of them (PLAN-pricing.md, addendum of 24 Nov 2026).
+  const paid = pricingGifts(manifests).paid.length;
 
   return (
     <>
@@ -125,10 +129,11 @@ export function PricingCards({
                   picked ? "ring-rose/30" : "ring-ink/[0.07]",
                 )}
               >
-                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-                  <h3 className="font-display text-[1.625rem] leading-tight text-ink">{t(`page.cards.${id}.name`)}</h3>
-                  {picked ? <span className="rounded-full bg-rose/10 px-3 py-1 text-page-label text-rose-ink">{t("bestValue")}</span> : null}
-                </div>
+                {/* The pill sits on the card's top edge, out of the flow, so the three names and prices stand level at every width. */}
+                {picked ? (
+                  <span className="absolute -top-3 left-6 rounded-full bg-card px-3 py-1 text-page-label text-rose-ink ring-1 ring-rose/30 sm:left-7">{t("bestValue")}</span>
+                ) : null}
+                <h3 className="font-display text-[1.625rem] leading-tight text-ink">{t(`page.cards.${id}.name`)}</h3>
                 {/* The note drops under the price when a narrow phone can't hold both on one line. */}
                 <div className="mt-5 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
                   <span className="font-display text-[clamp(2.5rem,11vw,3rem)] leading-none tracking-tight text-ink tabular-nums" data-testid={`price-${id}`}>
@@ -148,7 +153,7 @@ export function PricingCards({
                 ) : (
                   <p className="mt-3 text-[0.9375rem] leading-snug text-ink-soft">
                     {id === "everything"
-                      ? t("page.cards.everything.line", { n: premium, price: formatAmount(Math.round(p.amounts[currency] / Math.max(premium, 1)), currency, locale) })
+                      ? t("page.cards.everything.line", { n: paid, price: formatAmount(Math.round(p.amounts[currency] / Math.max(paid, 1)), currency, locale) })
                       : t(`page.cards.${id}.line`)}
                   </p>
                 )}

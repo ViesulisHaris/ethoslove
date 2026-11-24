@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PRODUCTS, formatAmount, type Currency } from "@/lib/pricing/products";
 import { BEST_SELLERS } from "@/lib/gift/finder";
-import { sendsFree } from "@/lib/gift/free-tier";
 import { artSrcSet, pageArt, slotStyle } from "@/content/page-art";
 import type { TemplateManifest } from "@/templates/types";
 import { Link } from "@/i18n/navigation";
@@ -13,6 +12,7 @@ import { HERO_ART } from "@/components/templates/page/placements";
 import { HERO_BUTTON, HERO_BUTTON_QUIET } from "@/components/templates/page/hero-art";
 import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
 import { ChooseButton } from "./pricing-choice";
+import { headLine, pricingGifts } from "./free-gifts";
 
 /**
  * The site's flowers, as the pages built from a gift's page have them (spread/sections.tsx, SITE_FLOWERS). Not imported
@@ -35,14 +35,28 @@ const PHONE_SIZES = "(min-width: 1280px) 560px, (min-width: 1024px) 44vw, 92vw";
  * and the button is the "One gift" card's own (PricingChoice): it opens the same picker with that
  * gift chosen, as the card would.
  */
-export async function PriceHead({ currency, manifests, template }: { currency: Currency; manifests: TemplateManifest[]; template?: string }) {
+export async function PriceHead({
+  currency,
+  manifests,
+  template,
+  subscriptions,
+}: {
+  currency: Currency;
+  manifests: TemplateManifest[];
+  template?: string;
+  /** Ethos for Two sold as a renewing plan: the band below then sells a subscription, so the head doesn't say there is none. */
+  subscriptions: boolean;
+}) {
   const t = await getTranslations("pricing.page");
   const locale = (await getLocale()) === "es" ? "es" : "en";
   // Only a paid gift is bought with "One gift": a free one's unlock is "Make it special", sold in its editor.
   const named = manifests.find((m) => m.slug === template && m.tier === "premium");
-  const cover = named ?? manifests.find((m) => (BEST_SELLERS as readonly string[]).includes(m.slug) && m.tier === "premium") ?? manifests[0];
-  const free = manifests.filter((m) => sendsFree(m));
-  const line = free.length === 1 ? t("lineOne", { name: free[0].name[locale] }) : free.length === 2 ? t("lineTwo") : t("lineNone");
+  // The best sellers in their own order: the first of them that is bought as one gift.
+  const bestSeller = BEST_SELLERS.map((slug) => manifests.find((m) => m.slug === slug && m.tier === "premium")).find(Boolean);
+  const cover = named ?? bestSeller ?? manifests[0];
+  // What is free, as the gallery counts it; "No subscription." only while the band sells none (free-gifts.ts).
+  const head = headLine(pricingGifts(manifests).free, subscriptions);
+  const line = head ? t(head.key, head.name ? { name: head.name.name[locale] } : undefined) : null;
   const art = pageArt("hero-flatlay", SITE_FLOWERS);
   const screen = art.slots.screen;
 
@@ -55,7 +69,7 @@ export async function PriceHead({ currency, manifests, template }: { currency: C
           <h1 id="price-title" className="mt-4 max-w-[13em] font-display text-[2.25rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.75rem,5vw,4rem)]">
             {named ? t("titleTemplate", { name: named.name[locale] }) : t("title")}
           </h1>
-          <p className="mt-3 font-display text-[clamp(1.25rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4">{line}</p>
+          {line ? <p className="mt-3 font-display text-[clamp(1.25rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4">{line}</p> : null}
 
           <p className="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:mt-9">
             <span data-testid="head-price" className="font-display text-[3.5rem] leading-none tracking-[-0.03em] text-page-ink tabular-nums sm:text-[4.25rem]">

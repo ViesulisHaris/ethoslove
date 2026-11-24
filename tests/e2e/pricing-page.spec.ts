@@ -2,6 +2,8 @@ import { expect, test, type APIRequestContext, type Page } from "@playwright/tes
 import { PRODUCTS, formatAmount, type Currency } from "../../src/lib/pricing/products";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
+import { listManifests } from "../../src/templates/manifests";
+import { pricingGifts, withFreeAnswer } from "../../src/components/pricing/free-gifts";
 import { measure, settle } from "./page-measure";
 
 /**
@@ -203,9 +205,12 @@ for (const prefix of ["", "/es"]) {
   test(`${prefix}/pricing: every question and answer is in the HTML, and in the structured data`, async ({ request }) => {
     const html = await (await request.get(`${prefix}/pricing?subscriptions=off`)).text();
     const text = html.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-    const faq = (prefix ? es : en).pricing.faq as { q: string; a: string; id?: string }[];
+    const messages = prefix ? es : en;
+    const faq = messages.pricing.faq as { q: string; a: string; id?: string }[];
     // While gift cards are off their question is not asked, and with the switch off the pass's answers are the ones given.
-    const asked = faq.filter((item) => item.id !== "giftcard" && item.id !== "subscriptions");
+    // With the free note for everyone, the free tier's answer is the one written for the note.
+    const note = pricingGifts(listManifests(), Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) || 0).note;
+    const asked = withFreeAnswer(faq, note, messages.pricing.faqFreeNote).filter((item) => item.id !== "giftcard" && item.id !== "subscriptions");
     expect(asked.length).toBeGreaterThan(10);
     const ld = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join("\n");
     for (const item of asked) {
@@ -225,8 +230,18 @@ for (const prefix of ["", "/es"]) {
         probe.style.backgroundColor = "var(--color-dusk)";
         document.body.append(probe);
         const dusk = getComputedStyle(probe).backgroundColor;
+        // The whole dusk family, as a fill or inside a gradient (bg-dusk-sky paints its sky as a background-image).
+        const tones = ["--color-dusk", "--color-dusk-deep", "--color-dusk-raised", "--brand-dusk-glow"].map((token) => {
+          probe.style.backgroundColor = `var(${token})`;
+          return getComputedStyle(probe).backgroundColor;
+        });
         probe.remove();
-        return [...document.querySelectorAll("body *")].filter((el) => getComputedStyle(el).backgroundColor === dusk).map((el) => `${el.tagName}.${String(el.className).slice(0, 60)}`);
+        return [...document.querySelectorAll("body *")]
+          .filter((el) => {
+            const style = getComputedStyle(el);
+            return style.backgroundColor === dusk || tones.some((tone) => style.backgroundImage.includes(tone));
+          })
+          .map((el) => `${el.tagName}.${String(el.className).slice(0, 60)}`);
       });
       expect(navy).toEqual([]);
     }
@@ -251,3 +266,37 @@ test("the anchors other pages link to still land", async ({ page }) => {
   await page.goto("/pricing#for-two");
   await expect(page.locator("#for-two")).toBeInViewport();
 });
+
+/**
+ * The owner's addendum (24 Nov 2026): no count and no name on the page may disagree with the gallery. This runs
+ * at whatever free-note setting the server has; run it once with NEXT_PUBLIC_FREE_NOTE_SHARE=1 (live) and once
+ * without. tests/unit/pricing-free-gifts.test.ts holds the words for both settings in one run.
+ */
+for (const prefix of ["", "/es"]) {
+  test(`${prefix}/pricing: every count is the paid list's length, and only free gifts are called free`, async ({ page }) => {
+    const lang = prefix ? "es" : "en";
+    const manifests = listManifests();
+    const { free, paid } = pricingGifts(manifests, Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) || 0);
+    await page.goto(`${prefix}/pricing?subscriptions=off`);
+
+    // Everything counts the gifts that cannot go out free, as the gallery does.
+    const everything = page.locator("[data-plan=everything]");
+    await expect(everything).toContainText(new RegExp(`\\b${paid.length} (paid gifts|regalos de pago)`));
+
+    // The head's italic line, the table's free column, the includes row and the free tier's answer: each gift they name is free.
+    await page.locator("[data-includes] summary").click();
+    await page.locator("details[data-compare] summary").click();
+    const freeQuestion = (prefix ? es : en).pricing.faq.find((item) => "id" in item && item.id === "free")!.q;
+    await page.getByText(freeQuestion, { exact: true }).click();
+    const said = [
+      await page.locator("[data-price-head] p.italic").innerText(),
+      await page.locator("[data-includes]").innerText(),
+      await page.locator("details[data-compare]").innerText(),
+      await page.locator("details", { hasText: freeQuestion }).innerText(),
+    ].join("\n");
+    const sold = paid.filter((m) => new RegExp(`(^|[^\\p{L}])${m.name[lang]}($|[^\\p{L}])`, "u").test(said)).map((m) => m.slug);
+    // The includes row names gifts only where it says what is free, so a paid gift named anywhere in these is a contradiction.
+    expect(sold).toEqual([]);
+    for (const m of free) expect(said).toContain(m.name[lang]);
+  });
+}

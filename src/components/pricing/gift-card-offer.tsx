@@ -1,17 +1,15 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ArrowRight, Check, Gift, Loader2, PenLine } from "lucide-react";
+import { ArrowRight, Loader2, PenLine } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics/track";
-import { GIFT_CARD_MONTHS, PRODUCTS, formatAmount, type Currency } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount, type Currency } from "@/lib/pricing/products";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { startCheckout, useCheckoutError } from "./checkout";
 import { GIFT_CARD_NAME_MAX, GIFT_CARD_NOTE_MAX, giftCardTouch } from "./offers";
-
-const FEATURES = ["templates", "forever", "valid"] as const;
 
 /**
  * "Give Everything": the Everything unlock bought for somebody else, as a code. The buyer gets the
@@ -50,30 +48,46 @@ export function GiftCardOffer({
     showCheckoutError(result.error);
   };
 
-  const field = "w-full rounded-2xl border border-forest/15 bg-white/80 px-4 text-base text-forest outline-none placeholder:text-forest/40 focus:border-forest";
+  const field = "w-full rounded-2xl border border-ink/15 bg-paper px-4 text-base text-ink outline-none placeholder:text-ink-soft/70 focus:border-ink focus-visible:ring-2 focus-visible:ring-rose/30";
+  const quietLink = "inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline focus-visible:text-ink focus-visible:underline";
 
+  // In the dress of "Make it special" beside it (the gallery card's paper, PLAN-pricing.md 2): its name and
+  // price, one line, the button. What it holds, how long a code lasts and when it is emailed are in "What
+  // each one includes" over the two cards; the name and the note stay one tap away, as before.
   return (
-    <article data-testid="giftcard-card" className={cn("relative flex flex-col overflow-hidden rounded-[28px] bg-blush-paper p-6 ring-1 ring-rose/15 sm:p-8", className)}>
-      <span className="pointer-events-none absolute -right-6 -bottom-8 text-rose/10" aria-hidden="true">
-        <Gift className="size-40" strokeWidth={1.25} />
-      </span>
-      <p className="relative text-eyebrow text-rose-ink">{t("eyebrow")}</p>
-      <h2 className="relative mt-3 font-display text-[32px] leading-[1.05] text-forest sm:text-[38px]">{t("title")}</h2>
-      <p className="relative mt-5 font-display text-[3.2rem] leading-none tracking-tight text-forest">{formatAmount(PRODUCTS.giftcard.amounts[currency], currency, locale)}</p>
-      <p className="relative mt-3 text-[15px] text-forest/75">{t("blurb")}</p>
-      <ul className="relative mt-6 grid gap-2.5">
-        {FEATURES.map((k) => (
-          <li key={k} className="flex items-start gap-2.5 text-[15px] text-forest/85">
-            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-rose" />
-            {t(`features.${k}`, { months: GIFT_CARD_MONTHS })}
-          </li>
-        ))}
-      </ul>
+    <article
+      data-testid="giftcard-card"
+      className={cn(
+        "relative flex flex-col gap-4 rounded-[28px] bg-card p-6 shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] sm:px-7",
+        className,
+      )}
+    >
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <h3 className="font-display text-[1.5rem] leading-tight text-ink">{t("title")}</h3>
+            <span className="font-display text-[1.75rem] leading-none tracking-tight text-ink tabular-nums" data-testid="price-giftcard">
+              {formatAmount(PRODUCTS.giftcard.amounts[currency], currency, locale)}
+            </span>
+          </div>
+          <p className="mt-2 max-w-xl text-[0.9375rem] leading-snug text-ink-soft">{tPricing("page.giftCardLine")}</p>
+        </div>
+        <button
+          type="button"
+          onClick={buy}
+          disabled={busy}
+          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-ink/20 px-6 text-[15px] font-semibold text-ink transition-[background-color,border-color,scale] duration-200 hover:border-ink/45 hover:bg-paper active:scale-[0.98] active:bg-paper-deep disabled:pointer-events-none disabled:opacity-60 sm:self-center"
+          data-testid="buy-giftcard"
+        >
+          {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+          {t("cta")}
+        </button>
+      </div>
 
       {personal ? (
-        <div className="relative mt-6 grid gap-3" data-testid="giftcard-personal">
+        <div className="grid gap-3 sm:grid-cols-2" data-testid="giftcard-personal">
           <div>
-            <label htmlFor={`${id}-name`} className="text-sm font-medium text-forest">
+            <label htmlFor={`${id}-name`} className="text-sm font-medium text-ink">
               {t("nameLabel")}
             </label>
             <input
@@ -86,8 +100,8 @@ export function GiftCardOffer({
               className={cn(field, "mt-1.5 h-11")}
             />
           </div>
-          <div>
-            <label htmlFor={`${id}-note`} className="text-sm font-medium text-forest">
+          <div className="sm:col-span-2">
+            <label htmlFor={`${id}-note`} className="text-sm font-medium text-ink">
               {t("noteLabel")}
             </label>
             <textarea
@@ -100,34 +114,19 @@ export function GiftCardOffer({
               placeholder={t("notePlaceholder")}
               className={cn(field, "mt-1.5 resize-none py-3")}
             />
-            <p className="mt-1 text-[13px] text-forest/65">{t("noteHelp")}</p>
+            <p className="mt-1 text-sm text-ink-soft">{t("noteHelp")}</p>
           </div>
         </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setPersonal(true)}
-          className="relative mt-5 inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-medium text-forest/75 underline-offset-4 hover:text-forest hover:underline"
-          data-testid="giftcard-personal-toggle"
-        >
-          <PenLine aria-hidden="true" className="size-3.5" />
-          {t("personalise")}
-        </button>
-      )}
+      ) : null}
 
-      <div className="relative mt-auto pt-7">
-        <button
-          type="button"
-          onClick={buy}
-          disabled={busy}
-          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-forest bg-transparent px-6 text-[15px] font-semibold text-forest transition-colors hover:bg-forest hover:text-cream active:scale-[0.98] disabled:opacity-60"
-          data-testid="buy-giftcard"
-        >
-          {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-          {t("cta")}
-        </button>
-        <p className="mt-3 text-[13px] text-forest/65">{t("note")}</p>
-        <Link href="/redeem" className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-rose-ink underline-offset-4 hover:underline">
+      <div className="-my-1 flex flex-wrap items-center gap-x-6">
+        {personal ? null : (
+          <button type="button" onClick={() => setPersonal(true)} className={quietLink} data-testid="giftcard-personal-toggle">
+            <PenLine aria-hidden="true" className="size-3.5" />
+            {t("personalise")}
+          </button>
+        )}
+        <Link href="/redeem" className={quietLink}>
           {t("redeem")}
           <ArrowRight aria-hidden="true" className="size-3.5" />
         </Link>

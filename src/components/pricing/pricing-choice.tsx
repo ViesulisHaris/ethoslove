@@ -44,7 +44,7 @@ export function ChooseButton({ product, className, children }: { product: PlanId
   const context = useContext(PricingChoiceContext);
   const busy = context?.busy ?? false;
   return (
-    <button type="button" data-testid={`head-buy-${product}`} onClick={() => context?.choose.current?.(product)} disabled={busy} className={cn(className, "disabled:opacity-70")}>
+    <button type="button" data-testid={`head-buy-${product}`} onClick={() => context?.choose.current?.(product)} disabled={busy} className={cn(className, "disabled:pointer-events-none disabled:opacity-70")}>
       {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
       {children}
     </button>

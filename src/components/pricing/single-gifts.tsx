@@ -1,14 +1,13 @@
 import { ArrowRight, Plus } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { PRODUCTS, PRODUCT_ORDER, formatAmount, type Currency } from "@/lib/pricing/products";
+import { GIFT_CARD_MONTHS, PRODUCTS, PRODUCT_ORDER, formatAmount, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
-import { noteForEveryone } from "@/lib/gift/free-tier";
 import { QUESTION_PLUS, QUESTION_ROW } from "@/components/templates/page/sections";
 import { Intro } from "@/components/templates/page/spread";
 import { GiftCardOffer } from "./gift-card-offer";
 import { PricingCards } from "./pricing-cards";
+import { pricingGifts } from "./free-gifts";
 
 /**
  * The three ways to pay for gifts (`#gifts`, which /digital-cards and the editor link to), on the
@@ -43,10 +42,13 @@ export async function SingleGifts({
   const t = await getTranslations("membership.single");
   const tPricing = await getTranslations("pricing");
   const locale = (await getLocale()) === "es" ? "es" : "en";
-  const free = manifests.filter((m) => m.tier === "free");
+  const tCard = await getTranslations("money.giftcard");
+  // The gifts that go out free, as the gallery has them (PLAN-pricing.md, addendum of 24 Nov 2026): with the
+  // free note live that is The Letter alone, and Constellations, sold whole at this card's price, is not
+  // named here as a free gift whose extras it sells.
+  const { free, note: short } = pricingGifts(manifests);
   const letter = free.find((m) => m.slug === "the-letter") ?? free[0];
   const names = new Intl.ListFormat(locale, { type: "conjunction" }).format(free.map((m) => m.name[locale]));
-  const short = noteForEveryone();
 
   return (
     <section id="gifts" className="relative scroll-mt-[calc(var(--header-h)+1rem)]" aria-labelledby="gifts-title">
@@ -68,7 +70,7 @@ export async function SingleGifts({
                   <h3 className="font-display text-[1.25rem] leading-tight text-page-ink">{tPricing(`page.cards.${id}.name`)}</h3>
                   <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-page-body">{tPricing(`plans.${id}.blurb`)}</p>
                   <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-[0.9375rem] leading-snug text-page-body marker:text-page-line">
-                    {(tPricing.raw(`plans.${id}.features`) as string[]).map((line) => (
+                    {(tPricing.raw(`page.cards.${id}.includes`) as string[]).map((line) => (
                       <li key={line}>{line}</li>
                     ))}
                     <li>{tPricing("oneTime")}</li>
@@ -79,10 +81,15 @@ export async function SingleGifts({
               <p className="text-[0.9375rem] leading-relaxed text-page-body md:col-span-3">
                 <span className="text-page-ink">{t("special.name")}.</span> {t(short ? "special.blurbShort" : "special.blurb", { names })} {t("special.note")}
               </p>
+              {giftCards ? (
+                <p className="text-[0.9375rem] leading-relaxed text-page-body md:col-span-3">
+                  <span className="text-page-ink">{tCard("title")}.</span> {tCard("blurb")} {tCard("features.valid", { months: GIFT_CARD_MONTHS })}. {tCard("note")}
+                </p>
+              ) : null}
             </div>
           </details>
 
-          <div className={cn("mt-6 grid gap-4", giftCards && "lg:grid-cols-2")}>
+          <div className="mt-6 grid gap-4">
             {letter ? (
               <article
                 className="relative flex flex-col gap-4 rounded-[28px] bg-card p-6 shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] sm:flex-row sm:items-center sm:gap-6 sm:px-7"

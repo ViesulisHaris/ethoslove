@@ -11,7 +11,7 @@ import { MembershipHero } from "@/components/pricing/membership-hero";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { SingleGifts } from "@/components/pricing/single-gifts";
 import { initialPlan, pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
-import { sendsFree } from "@/lib/gift/free-tier";
+import { pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
 import { PriceHead } from "@/components/pricing/price-head";
 import { PricingChoice } from "@/components/pricing/pricing-choice";
 
@@ -54,14 +54,17 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
   const subscriptions = subscriptionsOn(query);
   // A question about something not on sale (the gift card while it's off, the answer for the other
   // way Ethos for Two can be sold) isn't asked here.
-  const faq = pricingFaq(t.raw("faq") as FaqItem[], { giftCards, subscriptions });
+  const manifests = listManifests();
+  // Free and paid as the gallery has them (lib/gift/free-tier.ts): the free tier's answer, the table's
+  // free column and every name on the page follow the same list, whichever way the free note is set.
+  const gifts = pricingGifts(manifests);
+  const faq = withFreeAnswer(pricingFaq(t.raw("faq") as FaqItem[], { giftCards, subscriptions }), gifts.note, t("faqFreeNote"));
   // A slug that isn't a template would sit in the picker unseen, taking one of the three places.
   const qTemplate = one(query.template);
   const template = qTemplate && isTemplateSlug(qTemplate) ? qTemplate : undefined;
   const returnTo = one(query.return);
   const qPlan = one(query.plan);
   const renewAsked = one(query.renew) === "pass";
-  const manifests = listManifests();
 
   // Someone who came for the membership: its band is scrolled to and marked, and the table opened.
   const highlight = renewAsked || FROM.includes(one(query.from) ?? "") || qPlan === "monthly" || qPlan === "yearly";
@@ -84,7 +87,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
           playing hero phone and its share of the messages, which this page does not draw. */}
       <div data-page-theme="pricing" className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <PricingChoice>
-          <PriceHead currency={currency} manifests={manifests} template={template} />
+          <PriceHead currency={currency} manifests={manifests} template={template} subscriptions={subscriptions} />
           <SingleGifts
             currency={currency}
             manifests={manifests}
@@ -109,7 +112,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
             <MembershipCompare
               currency={currency}
               subscriptions={subscriptions}
-              freeTemplates={manifests.filter((m) => sendsFree(m)).map((m) => m.name[lang])}
+              freeTemplates={gifts.free.map((m) => m.name[lang])}
               templateCount={manifests.length}
               open={highlight}
             />

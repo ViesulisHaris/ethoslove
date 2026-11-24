@@ -174,7 +174,7 @@ export function MembershipOffer({
           onClick={buy}
           disabled={busy}
           data-testid="buy-membership"
-          className={cn("inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-cream px-7 text-[16px] font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-[background-color,translate,scale] duration-200 hover:bg-paper active:scale-[0.98] disabled:opacity-70 pointer-fine:hover:-translate-y-px", busy && "opacity-80")}
+          className={cn("inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-cream px-7 text-[16px] font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-[background-color,translate,scale] duration-200 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-cream active:scale-[0.98] disabled:pointer-events-none disabled:opacity-70 pointer-fine:hover:-translate-y-px", busy && "opacity-80")}
         >
           {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
           {state.kind === "renew" ? t("renewCta") : subscriptions ? t("cta") : t("passCta")}
