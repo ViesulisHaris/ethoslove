@@ -63,7 +63,7 @@ const SENTENCE: Record<Occasion, { en: (w: string) => string; es: (w: string) =>
   birthday: { en: (w) => `Mia's birthday is ${w}.`, es: (w) => `El cumpleaños de Mia es ${w}.` },
   anniversary: { en: (w) => `Your anniversary with Mia is ${w}.`, es: (w) => `Tu aniversario con Mia es ${w}.` },
   valentines: { en: (w) => `Valentine's Day is ${w}.`, es: (w) => `San Valentín es ${w}.` },
-  other: { en: (w) => `A day for Mia is ${w}.`, es: (w) => `El día de Mia es ${w}.` },
+  other: { en: (w) => `Mia's day is ${w}.`, es: (w) => `El día de Mia es ${w}.` },
 };
 const TWO_DAYS: Record<Occasion, { en: string; es: string }> = {
   birthday: { en: "Two days until Mia's birthday", es: "Faltan dos días para el cumpleaños de Mia" },
@@ -90,7 +90,7 @@ describe("the three e-mails' headings, subjects and bodies", () => {
         const third = await staged(3, occasion, locale);
         expect(third.text).toContain(
           locale === "es"
-            ? `${s("mañana")} Tu regalo son unos diez minutos y llega en cuanto lo envías. O prográmalo para medianoche.`
+            ? `${s("mañana")} Hacer tu regalo lleva unos diez minutos y llega en cuanto lo envías. O prográmalo para medianoche.`
             : `${s("tomorrow")} Your gift takes about ten minutes and arrives the moment you send it. Or set it to open at midnight.`,
         );
         expect(third.text).toContain(locale === "es" ? "Hacerlo ahora" : "Make it now");
@@ -106,9 +106,9 @@ describe("the three e-mails' headings, subjects and bodies", () => {
       "That's 5 March. Your gift is started, with Mia's name already in. It takes about ten minutes, and it can open at midnight on the day.",
     );
     expect((await staged(1, "birthday", "es")).text).toContain(
-      "Es el 5 de marzo. Tu regalo ya está empezado: los dos nombres y tus fotos ya están puestos. Son unos diez minutos, y puede abrirse a medianoche de ese día.",
+      "Es el 5 de marzo. Tu regalo ya está empezado: los dos nombres y tus fotos ya están puestos. Te lleva unos diez minutos, y puede abrirse a medianoche de ese día.",
     );
-    expect((await staged(1, "birthday", "es", { started: "name" })).text).toContain("Es el 5 de marzo. Tu regalo ya está empezado, con el nombre de Mia puesto.");
+    expect((await staged(1, "birthday", "es", { started: "name" })).text).toContain("Es el 5 de marzo. Tu regalo ya está empezado, con el nombre de Mia ya escrito. Te lleva unos diez minutos");
     expect((await staged(2, "anniversary", "en")).text).toContain(
       "Your gift for Mia is still waiting, with both names and your photos in. Make it tonight and set it to open at midnight on Friday.",
     );
@@ -123,20 +123,25 @@ describe("the three e-mails' headings, subjects and bodies", () => {
     const first = await staged(1, "anniversary", "en");
     expect(first.text).toContain("Open my gift");
     expect(first.html).toContain("https://ethos.test/p.jpg");
-    expect(first.text).toContain("Rather make something else? Every gift keeps your photos.");
+    expect(first.text).toContain("Rather make something else? Every photo gift keeps yours.");
+    // With no photos to keep, it says nothing about them.
+    const nameOnly = await staged(1, "anniversary", "en", { started: "name" });
+    expect(nameOnly.text).toContain("Rather make something else? See every gift.");
+    expect(nameOnly.text).not.toContain("keeps");
+    expect((await staged(1, "anniversary", "es", { started: "name" })).text).toContain("¿Prefieres otro? Mira todos los regalos.");
     expect(first.html).toContain(links.moreUrl.replace(/&/g, "&amp;"));
     const second = await staged(2, "anniversary", "en");
     expect(second.text).toContain("Finish my gift");
     expect(second.html).not.toContain("https://ethos.test/p.jpg");
-    expect(second.text).not.toContain("Every gift");
-    expect((await staged(1, "anniversary", "es")).text).toContain("¿Prefieres otro? Todos los regalos conservan tus fotos.");
+    expect(second.text).not.toContain("Every photo gift");
+    expect((await staged(1, "anniversary", "es")).text).toContain("¿Prefieres otro? Todos los regalos con fotos conservan las tuyas.");
     expect((await staged(2, "anniversary", "es")).text).toContain("Terminar mi regalo");
     expect((await staged(1, "anniversary", "es")).text).toContain("Abrir mi regalo");
   });
 
   it("puts one quiet line under the button: a gift ready, the prices, or nothing", async () => {
-    expect((await staged(2, "birthday", "en", { paid: "ready" })).text).toContain("Already paid for: it's one of your gifts ready.");
-    expect((await staged(2, "birthday", "es", { paid: "ready" })).text).toContain("Ya está pagado: es uno de tus regalos listos.");
+    expect((await staged(2, "birthday", "en", { paid: "ready" })).text).toContain("Already paid for: it uses one of the gifts you have ready.");
+    expect((await staged(2, "birthday", "es", { paid: "ready" })).text).toContain("Ya está pagado: usa uno de los regalos que tienes listos.");
     const price = await staged(1, "birthday", "en", { paid: "price", prices: { single: "€9.99", three: "€14.99" } });
     expect(price.text).toContain("One gift is €9.99. Or this one and your next two for €14.99.");
     expect((await staged(1, "birthday", "es", { paid: "price", prices: { single: "9,99 €", three: "14,99 €" } })).text).toContain("Un regalo cuesta 9,99 €. O este y los dos siguientes por 14,99 €.");

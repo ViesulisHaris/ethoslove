@@ -4,6 +4,8 @@ import { nanoid } from "nanoid";
 import type { GiftData, GiftPhoto } from "@/lib/gift/schema";
 import { isStoragePath } from "@/lib/gift/assets";
 import { loadGiftForEdit, reminderNameFor, signAssetUrls } from "@/app/actions/gift";
+import { NOTE_TEMPLATES } from "@/lib/gift/free-tier";
+import type { TemplateManifest } from "@/templates/types";
 import { putBlob } from "./blob-store";
 import type { StartRef } from "./start-ref";
 
@@ -23,6 +25,16 @@ import type { StartRef } from "./start-ref";
 /** "photos": both names and photos came; "names": both names, no photos; "name": only theirs (no gift for them yet). */
 export type StartedFrom = { name: string; photos: number; mode: "photos" | "names" | "name" };
 export type StartSeed = { seed: Pick<GiftData, "recipientName"> & Partial<Pick<GiftData, "senderName" | "photos">>; from: StartedFrom };
+
+/**
+ * Pure: how many photos a start may bring into `manifest`: as many as it holds, except none into a
+ * free note (The Letter, Constellations), where photos are what makes it a paid gift. Nobody is
+ * handed a paid gift without asking for one; the names still come.
+ */
+export function startPhotoLimit(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">): number {
+  if (manifest.tier === "free" && NOTE_TEMPLATES.includes(manifest.slug)) return 0;
+  return manifest.features.photos.max;
+}
 
 /** Pure: what a new gift takes from an old one's data (photos still at their stored addresses). */
 export function seedFromGift(data: unknown, maxPhotos: number): { recipientName: string; senderName: string; photos: GiftPhoto[] } | null {

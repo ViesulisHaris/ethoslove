@@ -27,7 +27,9 @@ vi.mock("@/lib/editor/blob-store", () => ({
 const editor = vi.hoisted(() => ({ state: { data: { photos: [] as { id: string; url: string }[], recipientName: "", senderName: "" }, status: "draft" } }));
 vi.mock("@/lib/editor/store", () => ({ useEditor: (pick: (s: unknown) => unknown) => pick(editor.state) }));
 
-const { draftHasContent, seedFromGift, startSeed } = await import("@/lib/editor/start-from-gift");
+const { draftHasContent, seedFromGift, startPhotoLimit, startSeed } = await import("@/lib/editor/start-from-gift");
+const { getManifest } = await import("@/templates/manifests");
+const { suggestTemplate } = await import("@/lib/lifecycle/suggest");
 const { StartedForYou } = await import("@/components/editor/started-for-you");
 
 const GIFT = "33333333-3333-4333-8333-333333333333";
@@ -55,6 +57,20 @@ describe("what a started gift takes from the last one", () => {
     expect(seedFromGift({ ...old, photos: [] }, 6)).toEqual({ recipientName: "Mia", senderName: "Leo", photos: [] });
     expect(seedFromGift({ ...old, recipientName: "  " }, 6)).toBeNull();
     expect(seedFromGift(null, 6)).toBeNull();
+  });
+
+  it("never puts photos into a free note, which would make it a paid gift; the names still come", () => {
+    expect(startPhotoLimit(getManifest("the-letter")!)).toBe(0);
+    expect(startPhotoLimit(getManifest("constellations")!)).toBe(0);
+    expect(startPhotoLimit(getManifest("museum")!)).toBe(20);
+    expect(seedFromGift(old, startPhotoLimit(getManifest("the-letter")!))).toEqual({ recipientName: "Mia", senderName: "Leo", photos: [] });
+  });
+
+  it("starts the reminder e-mails' gifts on paid templates only", () => {
+    expect(suggestTemplate("other").slug).toBe("the-letter");
+    expect(suggestTemplate("other", { paid: true }).slug).toBe("jar-of-reasons");
+    expect(suggestTemplate("other", { paid: true, avoid: "jar-of-reasons" }).slug).toBe("paper-crane");
+    for (const kind of ["birthday", "anniversary", "valentines", "other"] as const) expect(suggestTemplate(kind, { paid: true }).tier).toBe("premium");
   });
 
   it("knows a draft that already holds something", () => {
@@ -115,7 +131,7 @@ describe("the card on top of a started gift", () => {
     const html = draw({ kind: "started", from: { name: "Mia", photos: 6, mode: "photos" } });
     expect(html).toContain("+2");
     expect(html).toContain("Started for you.");
-    expect(html).toContain("Both names and the 6 photos from your last gift for Mia are in. Change anything, or swap them all.");
+    expect(html).toContain("Both names and the 6 photos from your last gift for Mia are in. Change anything, or swap the photos out.");
     expect(html).toContain("Change the photos");
     expect(html).toContain("Start empty");
     expect(draw({ kind: "started", from: { name: "Mia", photos: 6, mode: "photos" } }, "es")).toContain("Los dos nombres y las 6 fotos de tu último regalo para Mia ya están puestos.");

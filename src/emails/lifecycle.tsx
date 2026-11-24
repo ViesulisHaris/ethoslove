@@ -244,7 +244,7 @@ export function stagedSentence(occasion: ReminderOccasion, locale: L, name: stri
   if (occasion === "birthday") return `${name}'s birthday is ${when}.`;
   if (occasion === "anniversary") return `Your anniversary with ${name} is ${when}.`;
   if (occasion === "valentines") return `Valentine's Day is ${when}.`;
-  return `A day for ${name} is ${when}.`;
+  return `${name}'s day is ${when}.`;
 }
 
 export function stagedReminderHeading(stage: ReminderStage, occasion: ReminderOccasion, locale: L, name: string, when: string): string {
@@ -273,14 +273,14 @@ function stagedBody(props: ReminderEmailProps & { stage: ReminderStage }): strin
   if (stage === 3) {
     const opening = stagedSentence(occasion, locale, name, es ? "mañana" : "tomorrow");
     return es
-      ? `${opening} Tu regalo son unos diez minutos y llega en cuanto lo envías. O prográmalo para medianoche.`
+      ? `${opening} Hacer tu regalo lleva unos diez minutos y llega en cuanto lo envías. O prográmalo para medianoche.`
       : `${opening} Your gift takes about ten minutes and arrives the moment you send it. Or set it to open at midnight.`;
   }
   if (stage === 1) {
     if (es)
       return started === "photos"
-        ? `Es el ${date}. Tu regalo ya está empezado: los dos nombres y tus fotos ya están puestos. Son unos diez minutos, y puede abrirse a medianoche de ese día.`
-        : `Es el ${date}. Tu regalo ya está empezado, con el nombre de ${name} puesto. Son unos diez minutos, y puede abrirse a medianoche de ese día.`;
+        ? `Es el ${date}. Tu regalo ya está empezado: los dos nombres y tus fotos ya están puestos. Te lleva unos diez minutos, y puede abrirse a medianoche de ese día.`
+        : `Es el ${date}. Tu regalo ya está empezado, con el nombre de ${name} ya escrito. Te lleva unos diez minutos, y puede abrirse a medianoche de ese día.`;
     return started === "photos"
       ? `That's ${date}. Your gift is started: both names and your photos are already in. It takes about ten minutes, and it can open at midnight on the day.`
       : `That's ${date}. Your gift is started, with ${name}'s name already in. It takes about ten minutes, and it can open at midnight on the day.`;
@@ -329,7 +329,7 @@ function StagedReminderEmail(props: ReminderEmailProps & { stage: ReminderStage 
       {stage === 1 ? <Idea name={idea.name} tagline={idea.tagline} href={openUrl} poster={idea.poster} /> : null}
       <CtaButton href={openUrl} label={STAGE_BUTTON[stage][locale]} />
       {paid === "ready" ? (
-        <Quiet>{es ? "Ya está pagado: es uno de tus regalos listos." : "Already paid for: it's one of your gifts ready."}</Quiet>
+        <Quiet>{es ? "Ya está pagado: usa uno de los regalos que tienes listos." : "Already paid for: it uses one of the gifts you have ready."}</Quiet>
       ) : paid ? (
         <Quiet>
           {es ? `Un regalo cuesta ${paid.single}.` : `One gift is ${paid.single}.`}
@@ -341,11 +341,17 @@ function StagedReminderEmail(props: ReminderEmailProps & { stage: ReminderStage 
           ) : null}
         </Quiet>
       ) : null}
-      {stage === 1 ? (
+      {/* Every template the gallery offers that holds photos takes them; a free note doesn't (lib/editor/start-from-gift.ts startPhotoLimit). */}
+      {stage === 1 && props.started === "photos" ? (
         <Quiet>
           {es ? "¿Prefieres otro? " : "Rather make something else? "}
-          <InlineLink href={moreUrl}>{es ? "Todos los regalos" : "Every gift"}</InlineLink>
-          {es ? " conservan tus fotos." : " keeps your photos."}
+          <InlineLink href={moreUrl}>{es ? "Todos los regalos con fotos" : "Every photo gift"}</InlineLink>
+          {es ? " conservan las tuyas." : " keeps yours."}
+        </Quiet>
+      ) : stage === 1 ? (
+        <Quiet>
+          {es ? "¿Prefieres otro? " : "Rather make something else? "}
+          <InlineLink href={moreUrl}>{es ? "Mira todos los regalos" : "See every gift"}</InlineLink>.
         </Quiet>
       ) : null}
     </EmailLayout>

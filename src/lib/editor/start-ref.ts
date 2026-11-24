@@ -22,6 +22,16 @@ export function parseStartRef(value: string | null | undefined): StartRef | null
 
 export const startRefValue = (ref: StartRef): string => (ref.kind === "gift" ? ref.id : `r-${ref.id}`);
 
+/**
+ * Whether the editor opening with this address and these cookies has a start to read: a gift or a
+ * reminder in `?start=` or the cookie, for a reader who is signed in (or, in development, the demo).
+ */
+export function startPending(search: string, cookies: string, signedIn: boolean): boolean {
+  const asked = new URLSearchParams(search).get(START_PARAM);
+  if (process.env.NODE_ENV === "development" && asked === "demo") return true;
+  return signedIn && parseStartRef(asked ?? readCookie(cookies, START_COOKIE)) !== null;
+}
+
 /** The value of a cookie in `document.cookie`, or null. */
 export function readCookie(cookies: string, name: string): string | null {
   for (const part of cookies.split(";")) {

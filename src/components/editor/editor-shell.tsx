@@ -35,8 +35,8 @@ import { FormSkeleton } from "./form-skeleton";
 import { loadUrlSeed } from "./url-seed";
 import { MoveOffer, MovedNote } from "./move-offer";
 import { StartedForYou, type StartedState } from "./started-for-you";
-import { START_COOKIE, START_PARAM, parseStartRef, readCookie } from "@/lib/editor/start-ref";
-import { draftHasContent, finishStart, prepareDemo, prepareStart, type PreparedStart, type StartSeed } from "@/lib/editor/start-from-gift";
+import { START_COOKIE, START_PARAM, parseStartRef, readCookie, startPending } from "@/lib/editor/start-ref";
+import { draftHasContent, finishStart, prepareDemo, prepareStart, startPhotoLimit, type PreparedStart, type StartSeed } from "@/lib/editor/start-from-gift";
 import { clearLocalDraft, readLocalDraft, writeLocalDraft } from "@/lib/editor/persistence";
 import type { EditorDraft } from "@/lib/editor/types";
 
@@ -58,6 +58,8 @@ export type EditorShellProps = {
  * then the layout switches later and this has to switch with it, or a tablet would draw no preview.
  */
 const WIDE = "(min-width: 48rem)";
+/** The longest the form waits behind its skeleton for a start (lib/editor/start-from-gift.ts) to come in. */
+const START_WAIT_MS = 6000;
 const subscribeWide = (onChange: () => void) => {
   const query = window.matchMedia(WIDE);
   query.addEventListener("change", onChange);
@@ -137,6 +139,19 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   // A gift a reminder e-mail started (lib/editor/start-from-gift.ts): what came in, or what could.
   const reinit = useRef<() => Promise<void>>(async () => {});
   const [started, setStarted] = useState<{ state: StartedState; start: PreparedStart } | null>(null);
+  // While a start is on its way, the form waits behind its skeleton, so "Started for you." and the
+  // names and photos arrive with it rather than pushing it down once it is read. Never for long:
+  // past START_WAIT_MS the form shows, and a start that comes after is only offered.
+  const [starting, setStarting] = useState(() => typeof window !== "undefined" && !remote && startPending(window.location.search, document.cookie, Boolean(user)));
+  const late = useRef(false);
+  useEffect(() => {
+    if (!starting) return;
+    const timer = window.setTimeout(() => {
+      late.current = true;
+      setStarting(false);
+    }, START_WAIT_MS);
+    return () => window.clearTimeout(timer);
+  }, [starting]);
 
   /** The draft of this template's page with the start's names (and photos, when it brings any) in it, opened again. */
   const applySeed = async (seed: StartSeed["seed"]) => {
@@ -174,7 +189,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     const isDemo = process.env.NODE_ENV === "development" && asked === "demo";
     const ref = asked ? parseStartRef(asked) : parseStartRef(cookie);
     if (!isDemo && (!ref || !user)) return;
-    const max = manifest.features.photos.max;
+    const max = startPhotoLimit(manifest);
     const start = isDemo ? prepareDemo(demo, max) : await prepareStart(ref!, max).catch(() => null);
     if (!start || useEditor.getState().slug !== slug) return;
     const offer = () => {
@@ -185,7 +200,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     const done = await finishStart(start);
     const now = useEditor.getState();
     if (now.slug !== slug) return;
-    if (draftHasContent(now.data)) return offer();
+    if (draftHasContent(now.data) || late.current) return offer();
     await applySeed(done.seed);
     if (done.from.mode !== "name") setStarted({ state: { kind: "started", from: done.from }, start });
   };
@@ -265,7 +280,13 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         .then(() => {
           // A reminder e-mail's "Open my gift" (?start=, or the cookie the gallery way round): a new
           // gift started from their last one for that person, in this browser, signed in.
-          if (active && !remote && !asReply) void beginStart(m.demoData[locale === "es" ? "es" : "en"]);
+          if (active && !remote && !asReply)
+            void beginStart(m.demoData[locale === "es" ? "es" : "en"])
+              .catch(() => undefined)
+              .finally(() => {
+                if (active) setStarting(false);
+              });
+          else if (active) setStarting(false);
           return undefined;
         })
         .then(() => {
@@ -428,8 +449,8 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
-            {ready && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={() => setStarted(null)} /> : null}
-            {ready && mod ? (
+            {ready && !starting && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={() => setStarted(null)} /> : null}
+            {ready && mod && !starting ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>
                   {mod.leadFields ? (
