@@ -121,7 +121,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Song dedication gift",
       title: "Vinyl Record Gift: Dedicate a Song with Photos",
-      description: "A vinyl record that spins their song: they drop the needle and your photos and message play along. A song dedication for anniversaries, Valentine's and long distance.",
+      description: "A vinyl record that spins their song: they drop the needle and your photos and message play along. A song dedication for anniversaries, Valentine’s and long distance.",
       howTo: "How to dedicate a song on a vinyl record",
     },
     es: {
@@ -149,7 +149,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Personalized newspaper front page",
       title: "Personalized Newspaper Front Page About Them",
-      description: "Put them on the front page: your headline, their photos and the stories only you know, as a newspaper made online. For a birthday, a graduation or Father's Day.",
+      description: "Put them on the front page: your headline, their photos and the stories only you know, as a newspaper made online. For a birthday, a graduation or Father’s Day.",
       howTo: "How to make a personalized front page",
     },
     es: {
@@ -191,7 +191,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Personalized arcade game",
       title: "Arcade Game Gift: Catch Hearts, Unlock Photos",
-      description: "A little arcade game made for them: catch the hearts to unlock your photos one by one, then read your message. A playful digital gift for a birthday or Valentine's.",
+      description: "A little arcade game made for them: catch the hearts to unlock your photos one by one, then read your message. A playful digital gift for a birthday or Valentine’s.",
       howTo: "How to make a personalized arcade game",
     },
     es: {
@@ -219,7 +219,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Digital flower",
       title: "Digital Flower That Blooms with Your Message",
-      description: "They hold the screen and a flower opens petal by petal to show your photos and message. A digital flower for Valentine's, Mother's Day or an apology.",
+      description: "They hold the screen and a flower opens petal by petal to show your photos and message. A digital flower for Valentine’s, Mother’s Day or an apology.",
       howTo: "How to send a digital flower",
     },
     es: {
@@ -247,7 +247,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Cute digital card",
       title: "Kawaii Gift: A Cute Digital Card with a Plushie",
-      description: "Bows, blush and a plushie who's happy to see them, holding your photos, your message and a song. A cute digital card for a birthday, Valentine's or just because.",
+      description: "Bows, blush and a plushie who’s happy to see them, holding your photos, your message and a song. A cute digital card for a birthday, Valentine’s or just because.",
       howTo: "How to make a cute kawaii card",
     },
     es: {
@@ -261,7 +261,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Digital Christmas letter",
       title: "Fireside: A Cozy Digital Christmas Letter",
-      description: "A candle, a blanket and a letter by the window, with your photos and a song: a warm digital Christmas gift for someone you won't see this year.",
+      description: "A candle, a blanket and a letter by the window, with your photos and a song: a warm digital Christmas gift for someone you won’t see this year.",
       howTo: "How to send a Christmas letter by the fire",
     },
     es: {
@@ -317,7 +317,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Digital garden gift",
       title: "Digital Garden Gift: Flowers That Bloom on Scroll",
-      description: "A garden that blooms as they scroll, with your photos, a video and your words between the flowers. A digital gift for an anniversary, Valentine's or Mother's Day.",
+      description: "A garden that blooms as they scroll, with your photos, a video and your words between the flowers. A digital gift for an anniversary, Valentine’s or Mother’s Day.",
       howTo: "How to grow a digital garden gift",
     },
     es: {
@@ -345,7 +345,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Family recipe gift",
       title: "Recipe Box: Her Recipes as a Digital Gift",
-      description: "Her recipes, card by card, in a recipe box with your photos and a note: a digital keepsake for Mother's Day, her birthday or a family cookbook.",
+      description: "Her recipes, card by card, in a recipe box with your photos and a note: a digital keepsake for Mother’s Day, her birthday or a family cookbook.",
       howTo: "How to make a family recipe box",
     },
     es: {
@@ -387,7 +387,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Wedding toast gift",
       title: "The Toast: A Digital Wedding Toast to Clink",
-      description: "Tilt to pour, knock to clink, and your speech begins with your photos and a song: a digital toast for a wedding, an anniversary or Valentine's.",
+      description: "Tilt to pour, knock to clink, and your speech begins with your photos and a song: a digital toast for a wedding, an anniversary or Valentine’s.",
       howTo: "How to make a digital toast",
     },
     es: {
@@ -527,7 +527,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Surprise trip reveal",
       title: "Surprise Trip Reveal on a Departures Board",
-      description: "Tell them where you're going on an airport departures board that flips to your destination, with your photos and a song. A surprise trip reveal they'll replay.",
+      description: "Tell them where you’re going on an airport departures board that flips to your destination, with your photos and a song. A surprise trip reveal they’ll replay.",
       howTo: "How to reveal a surprise trip",
     },
     es: {
@@ -583,7 +583,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Virtual music box",
       title: "Virtual Music Box with Your Song and Photos",
-      description: "Wind the key: the lid opens, a ballerina turns to the tune and your photos appear in the mirror. A virtual music box for an anniversary or Mother's Day.",
+      description: "Wind the key: the lid opens, a ballerina turns to the tune and your photos appear in the mirror. A virtual music box for an anniversary or Mother’s Day.",
       howTo: "How to make a virtual music box",
     },
     es: {
@@ -736,7 +736,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   cauldron: {
     en: {
       keyword: "Halloween love potion",
-      title: "Witch's Brew: A Halloween Love Potion Gift",
+      title: "Witch’s Brew: A Halloween Love Potion Gift",
       description: "Drop three things you love into the cauldron and the potion does the rest, with your photos and message. A playful Halloween gift for two.",
       howTo: "How to brew a Halloween love potion",
     },

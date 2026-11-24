@@ -57,7 +57,7 @@ describe("what a place is, for a couple", () => {
   });
 });
 
-describe("an idea's stops", () => {
+describe("an idea’s stops", () => {
   const golf = ideaById("mini-golf-and-milkshakes")!;
 
   it("prefer a first stop with the next one a walk away", () => {

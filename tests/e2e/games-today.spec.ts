@@ -193,7 +193,7 @@ test("T5: a link from an earlier day still opens on the pair it was sent with, a
   await expect(card(two.page, "a")).toContainText(old.a.en);
   // Marked as that day's, not as today's: the label over the question, and the page's heading and line too.
   await expect(two.page.locator("[data-today] > p").first()).toHaveText(/^From Ana, .+$/);
-  await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("That day's would you rather question");
+  await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("That day’s would you rather question");
   await expect(two.page.locator("#today-title + p")).toHaveText(/^Everyone got this one that day\./);  await card(two.page, "b").click();
   await expect(phase(two.page)).toHaveAttribute("data-phase", "reveal");
   await expect(two.page.locator("[data-today] > p").first()).toHaveText(/^Both answers, .+$/);
@@ -204,7 +204,7 @@ test("T5: a link from an earlier day still opens on the pair it was sent with, a
   await expect(phase(two.page)).toHaveAttribute("data-phase", "ask");
   await expect(phase(two.page)).toHaveAttribute("data-day", String(later));
   await expect(card(two.page, "a")).toContainText(dailyPair(later).a.en);
-  await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("Today's would you rather question");
+  await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("Today’s would you rather question");
   expect(new URL(two.page.url()).hash).toBe("");
   await two.context.close();
 });
@@ -224,7 +224,7 @@ test("T6: a broken or hostile link falls back to today's question and shows noth
     }
     await expect(ph, hash).toHaveAttribute("data-phase", "ask");
     await expect(ph, hash).toHaveAttribute("data-day", String(today()));
-    await expect(two.page.getByText("That link didn't arrive whole")).toBeVisible();
+    await expect(two.page.getByText("That link didn’t arrive whole")).toBeVisible();
   }
   await two.context.close();
 });
@@ -439,7 +439,7 @@ test("T22: with no name, the share text speaks for the sender instead of naming 
   await ok.page.locator("[data-today] input").fill("");
   await ok.page.locator("[data-send]").click();
   const shared = await ok.page.evaluate(() => (window as unknown as { __shared: { text: string }[] }).__shared);
-  expect(shared[0].text).toMatch(/^I've answered today's would you rather\./);
+  expect(shared[0].text).toMatch(/^I’ve answered today’s would you rather\./);
   expect(shared[0].text).not.toMatch(/Someone|Somebody/);
   await ok.context.close();
 });

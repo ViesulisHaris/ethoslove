@@ -312,14 +312,14 @@ describe("the sender's no", () => {
     const token = await signToken("reaction-private", "11111111-1111-4111-8111-111111111111", SECRET);
     expect((await linkPage("GET", token)).text).toContain("Keep this reaction private?");
     expect(fake.rows("reactions")[0].sender_withheld_at).toBeNull();
-    expect((await linkPage("POST", token)).text).toContain("It's private.");
+    expect((await linkPage("POST", token)).text).toContain("It’s private.");
     expect(fake.rows("reactions")[0].sender_withheld_at).not.toBeNull();
     // Already on the site: gone on the next visit, never served from a cache.
     expect(state.cleared).toEqual([
       ["tag", "proof-reactions", { expire: 0 }],
       ["path", "/[currency]/[locale]/gifts", "page"],
     ]);
-    expect((await linkPage("GET", token)).text).toContain("It's private.");
+    expect((await linkPage("GET", token)).text).toContain("It’s private.");
     expect((await linkPage("POST", `11111111-1111-4111-8111-111111111111.${"A".repeat(43)}`)).status).toBe(404);
   });
 });

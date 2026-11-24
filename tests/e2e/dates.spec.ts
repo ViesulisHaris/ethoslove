@@ -279,7 +279,7 @@ test.describe("a plan in a link", () => {
   test("opens as an invitation that cannot be edited, and can be kept", async ({ page }) => {
     await mockWorld(page);
     await page.goto(`/plan#p=${encoded}`);
-    await expect(page.getByText("You're invited")).toBeVisible();
+    await expect(page.getByText("You’re invited")).toBeVisible();
     await expect(page.getByText("For Maya, from Marco")).toBeVisible();
     await expect(page.getByText("Wear something you can walk in 💚")).toBeVisible();
     await expect(page.getByText("two scoops, no sharing")).toBeVisible();
@@ -300,7 +300,7 @@ test.describe("a plan in a link", () => {
   test("a mangled link says so, and an empty plan points at the map", async ({ page }) => {
     await mockWorld(page);
     await page.goto("/plan#p=bm90LWEtcGxhbg");
-    await expect(page.getByRole("heading", { level: 1, name: "That link didn't survive the trip" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "That link didn’t survive the trip" })).toBeVisible();
     await page.goto("/plan");
     await expect(page.getByRole("heading", { level: 1, name: "Nothing planned yet" })).toBeVisible();
     await page.getByRole("link", { name: "Find a date" }).click();
@@ -420,7 +420,7 @@ test.describe("the other rooms", () => {
     await them.press("Enter");
     await expect(page.getByText(/^2,7\d\d km$/)).toBeVisible();
     await expect(page.getByText("Madrid is 1 h behind")).toBeVisible();
-    await expect(page.getByText("You're both awake 09:00–23:00, your time.")).toBeVisible();
+    await expect(page.getByText("You’re both awake 09:00–23:00, your time.")).toBeVisible();
     await expect(page.getByRole("link", { name: /^Date ideas in / })).toHaveAttribute("href", /\/dates\?lat=/);
     await expect(page.getByRole("heading", { level: 3, name: "Same recipe, two kitchens" })).toBeVisible();
   });
@@ -516,7 +516,7 @@ test.describe("games on one phone", () => {
     await expect(page.getByRole("heading", { name: "Maya, truth or dare?" })).toBeVisible();
     await page.getByRole("button", { name: "Dare", exact: true }).click();
     await expect(page.getByText("For Maya")).toBeVisible();
-    await page.getByRole("button", { name: /Done\. Marco's turn/ }).click();
+    await page.getByRole("button", { name: /Done\. Marco’s turn/ }).click();
     await expect(page.getByRole("heading", { name: "Marco, truth or dare?" })).toBeVisible();
   });
 
@@ -526,7 +526,7 @@ test.describe("games on one phone", () => {
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
     await page.getByRole("button", { name: "Start" }).click();
-    await expect(page.getByText("Maya's turn")).toBeVisible();
+    await expect(page.getByText("Maya’s turn")).toBeVisible();
     await expect(page.getByRole("button", { name: /^Card \d+, face down$/ })).toHaveCount(16);
 
     // Play it like a person with a perfect memory: remember every face seen, take a known pair when there is one.

@@ -154,7 +154,7 @@ test.describe("opening a saved date", () => {
       return { status: 200, body: list({ member: true, quota: { used: 0, limit: null }, partner: person("Ben") }) };
     });
     await page.goto(`/plan#s=${ID}`);
-    await expect(page.getByTestId("saved-plan")).toContainText("Ben's date, shared with you.");
+    await expect(page.getByTestId("saved-plan")).toContainText("Ben’s date, shared with you.");
     await page.getByRole("textbox").last().fill("Bring a jacket for the viewpoint");
     await expect.poll(() => asked.filter((a) => a.method === "PATCH").length, { timeout: 8000 }).toBe(1);
     const patch = asked.find((a) => a.method === "PATCH")!.body as { baseVersion: number; data: { note?: string } };

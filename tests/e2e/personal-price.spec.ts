@@ -46,7 +46,7 @@ test.describe("the two-hour notice that the policy changed", () => {
     await page.clock.install({ time: new Date("2026-11-20T08:30:00Z") });
     await page.goto("/templates");
     const notice = page.getByTestId("top-notice");
-    await expect(notice).toContainText("We've updated our Privacy Policy and Terms.");
+    await expect(notice).toContainText("We’ve updated our Privacy Policy and Terms.");
     await expect(notice.getByRole("link", { name: "What changed" })).toHaveAttribute("href", "/legal/privacy");
     await notice.getByRole("button", { name: "Close" }).click();
     await expect(notice).toHaveCount(0);

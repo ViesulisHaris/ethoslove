@@ -295,7 +295,7 @@ test("an iPhone in Safari: the first question on one screen, the picks one card 
     expect(first.overflow).toBeLessThanOrEqual(0);
     expect(first.below).toBe(0);
     await page.getByRole("button", { name: "My girlfriend", exact: true }).tap();
-    await expect(page.getByRole("heading", { level: 2, name: "What's the occasion?" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: "What’s the occasion?" })).toBeVisible();
     await page.getByRole("button", { name: "Anniversary", exact: true }).tap();
     await expect(page.locator("#finder-row > li")).toHaveCount(3);
     const m = await page.evaluate(() => {

@@ -252,7 +252,7 @@ describe("topics", () => {
     expect(res.json.handoff).toBe(false);
     expect(answer).not.toHaveBeenCalled();
     const chat = await store.load(res.json.chatId as string);
-    expect(chat?.transcript.map((e) => e.text)).toEqual(["I paid but can't find my gift", res.json.reply]);
+    expect(chat?.transcript.map((e) => e.text)).toEqual(["I paid but can’t find my gift", res.json.reply]);
     expect(chat?.totals.costMicros).toBe(0);
   });
 

@@ -37,15 +37,15 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     title: { en: "First Date Ideas: {count} That Are Easy to Say Yes To", es: "Ideas para una primera cita: {count} fáciles de aceptar" },
     description: { en: "Nine first date ideas you can leave after an hour, most with something to do besides talk. The planner fills the one you pick with real places nearby.", es: "Nueve ideas para una primera cita de la que podéis iros al cabo de una hora. El planificador llena la que elijáis de sitios reales cerca." },
     heading: { en: "First date ideas that are easy to say yes to", es: "Ideas para una primera cita a las que es fácil decir que sí" },
-    line: { en: "Short, public, and easy to leave if it isn't working.", es: "Corta, en público, y fácil de dejar si no funciona." },
+    line: { en: "Short, public, and easy to leave if it isn’t working.", es: "Corta, en público, y fácil de dejar si no funciona." },
     sentence: { en: "Most of these nine give your hands something to do, all of them give you something to talk about after, and none traps you at a table for hours.", es: "Casi todas dan algo que hacer a las manos, las nueve dan de qué hablar después y ninguna os deja horas atrapados en una mesa." },
     hero: "gallery-hop",
     fits: {
       "bookshop-and-coffee": { en: "Twenty minutes apart is a breather for both of you, and the book each picked starts the conversation.", es: "Veinte minutos por separado son un respiro para los dos, y el libro que elija cada uno abre la conversación." },
       "ice-cream-walk": { en: "An hour and a half, side by side, which is easier than face to face across a table.", es: "Hora y media, caminando lado a lado, que es más fácil que mirarse desde los dos lados de una mesa." },
-      "gallery-hop": { en: "Free to walk into and easy to leave; if it's going well, the café is the next stop.", es: "Entrar es gratis e irse es fácil; si va bien, la siguiente parada es el café." },
+      "gallery-hop": { en: "Free to walk into and easy to leave; if it’s going well, the café is the next stop.", es: "Entrar es gratis e irse es fácil; si va bien, la siguiente parada es el café." },
       "mini-golf-and-milkshakes": { en: "A putter gives your hands a job, and the scorecard gives you something to tease each other about.", es: "El palo da trabajo a las manos, y la tarjeta de puntos, motivo para picaros." },
-      "bowling-night": { en: "There is always somebody's turn to watch, so a quiet moment never feels like one.", es: "Siempre hay un turno que mirar, así que un silencio nunca parece un silencio." },
+      "bowling-night": { en: "There is always somebody’s turn to watch, so a quiet moment never feels like one.", es: "Siempre hay un turno que mirar, así que un silencio nunca parece un silencio." },
       "arcade-night": { en: "Air hockey breaks the ice faster than any question about what you do for work.", es: "El air hockey rompe el hielo antes que cualquier pregunta sobre el trabajo." },
       "museum-then-wine": { en: "One hour among things to point at, then a drink only if you both want the second half.", es: "Una hora entre cosas que señalar, y la copa de después solo si os apetece la segunda parte." },
       "garden-afternoon": { en: "Daylight, open air and a bench when the talk gets good. Nobody has to commit to dinner.", es: "Luz de día, aire libre y un banco para cuando la charla se ponga buena. Nadie se compromete a cenar." },
@@ -76,14 +76,14 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       "bowling-night": { en: "Bumpers are allowed, score is kept, and every gutter ball costs a truth.", es: "Se permiten las barreras, se lleva la cuenta y cada bola fuera cuesta una verdad." },
       "arcade-night": { en: "A pocket of coins goes a long way, and the worse the prize, the better the story.", es: "Un puñado de monedas da para mucho, y cuanto peor es el premio, mejor es la historia." },
       "escape-room-debrief": { en: "Sixty minutes on the same side, which is rarer on a date than it should be.", es: "Sesenta minutos en el mismo bando, algo más raro en una cita de lo que debería." },
-      "karaoke-duet": { en: "A private booth means only one person hears you, and it's the right person.", es: "En una sala privada solo os oye una persona, y es la que importa." },
+      "karaoke-duet": { en: "A private booth means only one person hears you, and it’s the right person.", es: "En una sala privada solo os oye una persona, y es la que importa." },
       "climbing-first-timers": { en: "You hold the rope while the other climbs, so trust arrives faster than usual.", es: "Uno sujeta la cuerda mientras el otro sube, así que la confianza llega antes de lo normal." },
       "boats-on-the-water": { en: "An hour of going in circles, with one of you narrating like a nature documentary.", es: "Una hora dando vueltas, con uno de los dos narrando como en un documental de naturaleza." },
       "skating-and-hot-chocolate": { en: "Holding hands is how you stay upright, so nobody has to make the first move.", es: "Ir de la mano es la forma de no caerse, así que nadie tiene que dar el primer paso." },
     },
     faq: [
       {
-        q: { en: "What is a fun date that isn't dinner?", es: "¿Qué cita divertida no es una cena?" },
+        q: { en: "What is a fun date that isn’t dinner?", es: "¿Qué cita divertida no es una cena?" },
         a: { en: "Any of these eight. Each starts with something to play, from mini golf to an escape room, and ends with a drink, a bite or a dessert, so dinner stops being the plan.", es: "Cualquiera de estas ocho. Todas empiezan con algo a lo que jugar, del minigolf a un escape room, y acaban con algo de beber, de picar o un postre: la cena deja de ser el plan." },
       },
       {
@@ -113,12 +113,12 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
     },
     faq: [
       {
-        q: { en: "What are free date ideas that don't feel cheap?", es: "¿Qué citas gratis no parecen de saldo?" },
+        q: { en: "What are free date ideas that don’t feel cheap?", es: "¿Qué citas gratis no parecen de saldo?" },
         a: { en: "The four at the top: a gallery hop, a picnic at golden hour, a sunrise and an afternoon in a garden. What makes them a date is the twist each one comes with, not what was spent.", es: "Las cuatro primeras: una ruta de galerías, un pícnic a la hora dorada, un amanecer y una tarde en un jardín. Lo que las convierte en cita es el giro que trae cada una, no lo gastado." },
       },
       {
         q: { en: "How do I plan a cheap date tonight?", es: "¿Cómo planeo una cita barata para hoy?" },
-        a: { en: "Set the planner's budget to “free” or “pocket change at most” and say where you are. It picks an idea that fits the forecast and the hour, and tells you when nothing that cheap fits.", es: "Poned el presupuesto del planificador en «gratis» o «gastando solo calderilla» y decid dónde estáis. Elige una idea que encaje con la previsión y con la hora, y avisa cuando no hay nada tan barato." },
+        a: { en: "Set the planner’s budget to “free” or “pocket change at most” and say where you are. It picks an idea that fits the forecast and the hour, and tells you when nothing that cheap fits.", es: "Poned el presupuesto del planificador en «gratis» o «gastando solo calderilla» y decid dónde estáis. Elige una idea que encaje con la previsión y con la hora, y avisa cuando no hay nada tan barato." },
       },
     ],
   },
@@ -150,7 +150,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       },
       {
         q: { en: "What is a romantic date at night?", es: "¿Qué cita romántica hay para la noche?" },
-        a: { en: "Looking up: a planetarium if the sky is against you, the darkest viewpoint in town if it isn't. The planner starts it an hour after sunset, and never before nine.", es: "Mirar hacia arriba: un planetario si el cielo no acompaña, el mirador más oscuro de la ciudad si sí. El planificador la empieza una hora después de la puesta de sol, y nunca antes de las nueve." },
+        a: { en: "Looking up: a planetarium if the sky is against you, the darkest viewpoint in town if it isn’t. The planner starts it an hour after sunset, and never before nine.", es: "Mirar hacia arriba: un planetario si el cielo no acompaña, el mirador más oscuro de la ciudad si sí. El planificador la empieza una hora después de la puesta de sol, y nunca antes de las nueve." },
       },
     ],
   },
@@ -168,7 +168,7 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       "escape-room-debrief": { en: "Four heads find the clues that two walk past, and the debrief is twice as loud.", es: "Cuatro cabezas ven las pistas que dos pasan de largo, y el comentario de después, a cuatro voces." },
       "mini-golf-and-milkshakes": { en: "Four scorecards, one loser, and a round of milkshakes on them.", es: "Cuatro tarjetas de puntos, alguien pierde y paga una ronda de batidos." },
       "karaoke-duet": { en: "Two duets and an audience of two that has to clap.", es: "Dos duetos y un público de dos que tiene que aplaudir." },
-      "arcade-night": { en: "Pool four people's tickets and argue about who takes the prize home.", es: "Juntad los tickets de los cuatro y discutid quién se lleva el premio a casa." },
+      "arcade-night": { en: "Pool four people’s tickets and argue about who takes the prize home.", es: "Juntad los tickets de los cuatro y discutid quién se lleva el premio a casa." },
       "boats-on-the-water": { en: "Two boats make it a race, however badly both are rowed.", es: "Con dos barcas ya es una carrera, por mal que se reme en cada una." },
       "pasta-and-a-slow-walk": { en: "A table for four where each couple orders for the other one. No vetoes.", es: "Una mesa para cuatro en la que cada pareja pide por la otra. Sin vetos." },
       "golden-hour-picnic": { en: "Everybody brings one thing the others have never tried, so the blanket fills up fast.", es: "Cada cual lleva algo que los demás no hayan probado, y la manta se llena enseguida." },
@@ -187,22 +187,22 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
   winter: {
     nav: { en: "Winter", es: "Invierno" },
     phrase: { en: "Winter Date Ideas", es: "Ideas para una cita en invierno" },
-    title: { en: "Winter Date Ideas: {count} for When It's Dark by Five", es: "Ideas para una cita en invierno: {count} para días cortos" },
+    title: { en: "Winter Date Ideas: {count} for When It’s Dark by Five", es: "Ideas para una cita en invierno: {count} para días cortos" },
     description: { en: "Nine winter date ideas for cold days and long nights: skating and hot chocolate, a spa evening, a planetarium, a film. Seven of them are indoors.", es: "Nueve ideas para una cita en invierno: patinar y chocolate caliente, una tarde de spa, un planetario, una peli y un postre. Siete son a cubierto." },
-    heading: { en: "Winter date ideas for when it's dark by five", es: "Ideas para una cita en invierno, cuando anochece a las cinco" },
+    heading: { en: "Winter date ideas for when it’s dark by five", es: "Ideas para una cita en invierno, cuando anochece a las cinco" },
     line: { en: "Skate first, then thaw out over a hot chocolate.", es: "Primero a patinar, y después a descongelarse con un chocolate caliente." },
     sentence: { en: "Nine dates that suit short days: one on the ice, one under the stars, and seven indoors where the coats come off.", es: "Nueve citas para días cortos: una sobre hielo, una bajo las estrellas y siete a cubierto, donde sobran los abrigos." },
     hero: "spa-evening",
     fits: {
       "skating-and-hot-chocolate": { en: "The one date that is better cold: a rink, mittens, and whoever falls first buys the hot chocolate.", es: "La única cita que mejora con frío: una pista, manoplas, y quien se caiga primero paga el chocolate." },
-      "spa-evening": { en: "Warm water while it's freezing outside, and not one word about work.", es: "Agua caliente mientras fuera hiela, y ni una palabra de trabajo." },
+      "spa-evening": { en: "Warm water while it’s freezing outside, and not one word about work.", es: "Agua caliente mientras fuera hiela, y ni una palabra de trabajo." },
       "cinema-and-late-dessert": { en: "Two hours in the warm, then a dessert somewhere still open after the credits.", es: "Dos horas al calor, y luego un postre en algún sitio que siga abierto al salir." },
       "stars-and-planets": { en: "Long nights mean the stars are out early. A planetarium is the warm version.", es: "Con noches largas, las estrellas salen pronto. El planetario es la versión con calefacción." },
       "bookshop-and-coffee": { en: "A bookshop is a warm room that is free to walk into, and the coffee after is the excuse to stay.", es: "Una librería es una sala cálida en la que se entra gratis, y el café de después, la excusa para quedarse." },
       "museum-then-wine": { en: "One hour indoors, out of the wind, then a glass of something nearby.", es: "Una hora a cubierto, sin viento, y luego una copa cerca." },
       "theatre-night": { en: "Winter is the season for dressing up, and the intermission drink is part of it.", es: "El invierno es la temporada de arreglarse, y la copa del descanso forma parte." },
       "bowling-night": { en: "Warm, loud and under a roof, with a plate of fries between turns.", es: "Calor, ruido y techo, con un plato de patatas entre turno y turno." },
-      "climbing-first-timers": { en: "An indoor wall warms you up faster than any café, and dinner is on whoever says “I can't” first.", es: "Un rocódromo calienta antes que cualquier café, y la cena la paga quien diga primero «no puedo»." },
+      "climbing-first-timers": { en: "An indoor wall warms you up faster than any café, and dinner is on whoever says “I can’t” first.", es: "Un rocódromo calienta antes que cualquier café, y la cena la paga quien diga primero «no puedo»." },
     },
     faq: [
       {
@@ -231,12 +231,12 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       "cinema-and-late-dessert": { en: "The back row, shared popcorn, and with luck the rain has stopped by the credits.", es: "La última fila, palomitas a medias y, con suerte, al salir ya no llueve." },
       "bowling-night": { en: "Loud, bright and dry, and every gutter ball costs a truth.", es: "Ruido, luz y techo, y cada bola fuera cuesta una verdad." },
       "arcade-night": { en: "A pocket of coins outlasts most showers.", es: "Un puñado de monedas dura más que casi cualquier chaparrón." },
-      "escape-room-debrief": { en: "Locked in for sixty minutes is no hardship when it's pouring outside.", es: "Estar encerrados sesenta minutos no es ningún castigo si fuera diluvia." },
-      "climbing-first-timers": { en: "A beginner's wall, chalky hands and a roof over all of it.", es: "Una pared para principiantes, manos con magnesio y un techo encima de todo." },
-      "skating-and-hot-chocolate": { en: "An indoor rink doesn't care about the forecast, and falling over warms you up.", es: "A una pista cubierta le da igual la previsión, y caerse hace entrar en calor." },
+      "escape-room-debrief": { en: "Locked in for sixty minutes is no hardship when it’s pouring outside.", es: "Estar encerrados sesenta minutos no es ningún castigo si fuera diluvia." },
+      "climbing-first-timers": { en: "A beginner’s wall, chalky hands and a roof over all of it.", es: "Una pared para principiantes, manos con magnesio y un techo encima de todo." },
+      "skating-and-hot-chocolate": { en: "An indoor rink doesn’t care about the forecast, and falling over warms you up.", es: "A una pista cubierta le da igual la previsión, y caerse hace entrar en calor." },
       "karaoke-duet": { en: "A private booth, one duet, and nobody outside can hear either of you.", es: "Una sala privada, un dueto, y fuera nadie os oye a ninguno de los dos." },
       "spa-evening": { en: "You were going to get wet anyway. Warm water, no phones.", es: "Os ibais a mojar de todas formas. Agua caliente y sin móviles." },
-      "theatre-night": { en: "Coats at the coat check, a drink at intermission, and the weather is somebody else's problem.", es: "Los abrigos en el guardarropa, una copa en el descanso y el tiempo ya es problema de otro." },
+      "theatre-night": { en: "Coats at the coat check, a drink at intermission, and the weather is somebody else’s problem.", es: "Los abrigos en el guardarropa, una copa en el descanso y el tiempo ya es problema de otro." },
     },
     faq: [
       {
@@ -365,7 +365,7 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
 export const DATE_KIND_SHARED_FAQ: { q: L; a: L }[] = [
   {
     q: { en: "Do we need an account to plan one?", es: "¿Hace falta una cuenta para planear una?" },
-    a: { en: "No. The planner fills an idea's stops with real places and keeps the plan in your browser. You send it as a link; an account only matters if you want it saved on every device.", es: "No. El planificador rellena las paradas de una idea con sitios reales y guarda el plan en vuestro navegador. Se envía como enlace; la cuenta solo hace falta si lo queréis guardado en todos los dispositivos." },
+    a: { en: "No. The planner fills an idea’s stops with real places and keeps the plan in your browser. You send it as a link; an account only matters if you want it saved on every device.", es: "No. El planificador rellena las paradas de una idea con sitios reales y guarda el plan en vuestro navegador. Se envía como enlace; la cuenta solo hace falta si lo queréis guardado en todos los dispositivos." },
   },
   {
     q: { en: "Where do the places come from?", es: "¿De dónde salen los sitios?" },

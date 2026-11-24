@@ -51,7 +51,7 @@ describe("the digital gift guide on /gifts", () => {
   });
 });
 
-describe("gift ideas by who it's for", () => {
+describe("gift ideas by who it’s for", () => {
   it("round-trips its path segment", () => {
     for (const r of RECIPIENTS) expect(recipientFromSlug(recipientSlug(r))).toBe(r);
     expect(recipientFromSlug("for-nobody")).toBeNull();

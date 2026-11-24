@@ -3,7 +3,7 @@ import { needPreviews } from "./server-state";
 
 /**
  * Reasons for a buyer to come back: "every template for the difference" on the success page, and
- * the share screen's reminder card (their birthday, your anniversary, Valentine's Day, someone else,
+ * the share screen's reminder card (their birthday, your anniversary, Valentine’s Day, someone else,
  * every month). Both are drawn from the development-only previews (a real success page needs a
  * finished Stripe checkout, a real share screen a published gift, and the dev server's database is
  * production), so on a production build these skip. Every button talks to the real route, which each
@@ -29,10 +29,10 @@ test.describe("every template for the difference, on the success page", () => {
   test("says what was paid counts, in one offer with one button, under the way back to the gift", async ({ page }) => {
     await page.goto("/checkout/success/preview?state=single");
     const card = page.getByTestId("upgrade-after");
-    await expect(card).toContainText("That's one occasion sorted.");
+    await expect(card).toContainText("That’s one occasion sorted.");
     await expect(card).toContainText("And their birthday, your anniversary, ");
     await expect(card).toContainText("every template, forever, for €15.00 more.");
-    await expect(card.getByTestId("upgrade-after-credit")).toHaveText("You've already paid €9.99 of the €24.99.");
+    await expect(card.getByTestId("upgrade-after-credit")).toHaveText("You’ve already paid €9.99 of the €24.99.");
     await expect(card.getByRole("button")).toHaveCount(1);
     await expect(card.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €15.00 more");
     // Credit, never a discount, and no deadline: none is set.
@@ -45,7 +45,7 @@ test.describe("every template for the difference, on the success page", () => {
   test("names the occasion only when the template leaves no doubt", async ({ page }) => {
     await page.goto("/checkout/success/preview?state=birthday");
     const card = page.getByTestId("upgrade-after");
-    await expect(card).toContainText("Their birthday's sorted.");
+    await expect(card).toContainText("Their birthday’s sorted.");
     await expect(card).not.toContainText("And their birthday");
     await expect(card).toContainText("And your anniversary, ");
   });
@@ -53,18 +53,18 @@ test.describe("every template for the difference, on the success page", () => {
   test("after a pick three or make it special, what each of them paid", async ({ page }) => {
     await page.goto("/checkout/success/preview?state=pick3");
     await expect(page.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €10.00 more");
-    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You've already paid €14.99 of the €24.99.");
+    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You’ve already paid €14.99 of the €24.99.");
     await page.goto("/checkout/success/preview?state=extras");
     await expect(page.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €17.50 more");
-    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You've already paid €7.49 of the €24.99.");
+    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You’ve already paid €7.49 of the €24.99.");
   });
 
   test("counts earlier purchases too, and says when a real deadline is set", async ({ page }) => {
     await page.goto("/checkout/success/preview?state=earlier");
-    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("What you've paid so far counts towards the €24.99.");
+    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("What you’ve paid so far counts towards the €24.99.");
     await expect(page.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €4.99 more");
     await page.goto("/checkout/success/preview?state=until");
-    await expect(page.getByTestId("upgrade-after-credit")).toContainText("You've already paid €9.99 of the €24.99, and that counts until ");
+    await expect(page.getByTestId("upgrade-after-credit")).toContainText("You’ve already paid €9.99 of the €24.99, and that counts until ");
   });
 
   test("in Spanish", async ({ page }) => {
@@ -129,7 +129,7 @@ test.describe("every template for the difference, on the success page", () => {
     await answer(page, "**/api/money/upgrade/after-checkout", { status: 409, body: { error: "already_owned" } });
     await page.goto("/checkout/success/preview?state=single");
     await page.getByTestId("upgrade-after-buy").click();
-    await expect(page.getByText("That's already on your account. Nothing to pay.")).toBeVisible();
+    await expect(page.getByText("That’s already on your account. Nothing to pay.")).toBeVisible();
     await expect(page.getByTestId("upgrade-after")).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Back to your gift" })).toBeVisible();
   });
@@ -151,12 +151,12 @@ test.describe("the share screen's reminder card", () => {
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
     const card = page.getByTestId("remind-card");
     await expect(card).toContainText("Want a nudge before the next one?");
-    await expect(card.getByTestId("remind-row-next")).toContainText("Ana's birthday");
+    await expect(card.getByTestId("remind-row-next")).toContainText("Ana’s birthday");
     await expect(card.getByTestId("remind-row-next")).toContainText("next year");
     // The gift's own occasion isn't offered twice.
     await expect(card.getByTestId("remind-row-birthday")).toHaveCount(0);
     await expect(card.getByTestId("remind-row-anniversary")).toContainText("Your anniversary");
-    await expect(card.getByTestId("remind-row-valentines")).toContainText("Valentine's Day");
+    await expect(card.getByTestId("remind-row-valentines")).toContainText("Valentine’s Day");
     await expect(card.getByTestId("remind-row-monthly")).toContainText("Every month too");
     await expect(card.getByTestId("remind-row-someone")).toContainText("Someone else");
     await expect(card.getByText("Added")).toHaveCount(0);
@@ -181,11 +181,11 @@ test.describe("the share screen's reminder card", () => {
     expect(reminders).toHaveLength(0);
   });
 
-  test("Valentine's Day is one tap, as another day than the gift's", async ({ page }) => {
+  test("Valentine’s Day is one tap, as another day than the gift's", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
     const row = page.getByTestId("remind-row-valentines");
-    await row.getByRole("button", { name: "Remind me: Valentine's Day" }).click();
+    await row.getByRole("button", { name: "Remind me: Valentine’s Day" }).click();
     await expect(row.getByText("Added")).toBeVisible();
     expect(reminders).toEqual([{ recipientName: "Ana", occasion: "valentines", month: 2, day: 14, locale: "en", templateSlug: "birthday-cinema", forThisGift: false }]);
     await expect(page.getByRole("link", { name: "All your reminders" })).toBeVisible();
@@ -194,7 +194,7 @@ test.describe("the share screen's reminder card", () => {
   test("this gift's own day is one tap too, and skips this year when it's the day just made for", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
-    await page.getByTestId("remind-row-next").getByRole("button", { name: "Remind me: Valentine's Day" }).click();
+    await page.getByTestId("remind-row-next").getByRole("button", { name: "Remind me: Valentine’s Day" }).click();
     await expect(page.getByTestId("remind-row-next").getByText("Added")).toBeVisible();
     expect(reminders).toHaveLength(1);
     expect(reminders[0]).toMatchObject({ recipientName: "Ana", occasion: "valentines", month: 2, day: 14, templateSlug: "bouquet" });
@@ -206,7 +206,7 @@ test.describe("the share screen's reminder card", () => {
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
     const row = page.getByTestId("remind-row-birthday");
     await expect(row).toContainText("Pick the day");
-    await row.getByRole("button", { name: "Remind me: Ana's birthday" }).click();
+    await row.getByRole("button", { name: "Remind me: Ana’s birthday" }).click();
     const save = row.getByTestId("remind-save-birthday");
     await expect(save).toBeDisabled();
     await pickDay(page, row.getByRole("button", { name: "Date", exact: true }), "March", 14);
@@ -224,7 +224,7 @@ test.describe("the share screen's reminder card", () => {
     await row.getByRole("button", { name: "Remind me: Someone else" }).click();
     const save = row.getByTestId("remind-save-someone");
     await expect(save).toBeDisabled();
-    await row.getByLabel("Who it's for").fill("Mum");
+    await row.getByLabel("Who it’s for").fill("Mum");
     await pickDay(page, row.getByRole("button", { name: "Date", exact: true }), "May", 4);
     await save.click();
     await expect(row).toContainText("Mum · Birthday · 4 May");
@@ -232,7 +232,7 @@ test.describe("the share screen's reminder card", () => {
     // Someone else's day has nothing to do with this gift's template.
     expect(reminders).toEqual([{ recipientName: "Mum", occasion: "birthday", month: 5, day: 4, locale: "en", forThisGift: false }]);
     await row.getByRole("button", { name: "Remind me: Someone else" }).click();
-    await row.getByLabel("Who it's for").fill("Sam");
+    await row.getByLabel("Who it’s for").fill("Sam");
     await pickDay(page, row.getByRole("button", { name: "Date", exact: true }), "July", 9);
     await row.getByTestId("remind-save-someone").click();
     await expect(row).toContainText("Sam · Birthday · 9 July");
@@ -244,7 +244,7 @@ test.describe("the share screen's reminder card", () => {
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
     const row = page.getByTestId("remind-row-monthly");
     await row.getByRole("button", { name: "Remind me: Every month too" }).click();
-    await expect(row).toContainText("The day before each one, we'll ask if it's still on, and only remind you if you say yes. Nothing is ever sent to Ana.");
+    await expect(row).toContainText("The day before each one, we’ll ask if it’s still on, and only remind you if you say yes. Nothing is ever sent to Ana.");
     const save = row.getByTestId("remind-save-monthly");
     await expect(save).toBeDisabled();
     // Tomorrow's day this year hasn't come yet.
@@ -266,10 +266,10 @@ test.describe("the share screen's reminder card", () => {
       await expect(year).toContainText(String(value));
     };
     await chooseYear(thisYear);
-    await expect(row.getByText("That day hasn't come yet.")).toBeVisible();
+    await expect(row.getByText("That day hasn’t come yet.")).toBeVisible();
     await expect(save).toBeDisabled();
     await chooseYear(thisYear - 1);
-    await expect(row.getByText("That day hasn't come yet.")).toHaveCount(0);
+    await expect(row.getByText("That day hasn’t come yet.")).toHaveCount(0);
     await save.click();
     await expect(row.getByText("Added")).toBeVisible();
     const day = `${String(tomorrow.getMonth() + 1).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`;
@@ -280,7 +280,7 @@ test.describe("the share screen's reminder card", () => {
     await answer(page, "**/api/reminders", { status: 409, body: { error: "too_many", max: 50 } });
     await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
     const row = page.getByTestId("remind-row-valentines");
-    await row.getByRole("button", { name: "Remind me: Valentine's Day" }).click();
+    await row.getByRole("button", { name: "Remind me: Valentine’s Day" }).click();
     await expect(row.getByRole("alert")).toHaveText("You already have 50 reminders. Remove one on your account page to add this one.");
   });
 

@@ -28,7 +28,7 @@ const words = (text: string) => text.trim().split(/\s+/).length;
 const OCCASION_NAMES: Record<string, string> = {
   birthday: "Birthday",
   anniversary: "Anniversary",
-  valentines: "Valentine's Day",
+  valentines: "Valentine’s Day",
   christmas: "Christmas",
   "long-distance": "Long distance",
   apology: "Saying sorry",
@@ -37,8 +37,8 @@ const OCCASION_NAMES: Record<string, string> = {
   graduation: "Graduation",
   halloween: "Halloween",
   thanksgiving: "Thanksgiving",
-  "mothers-day": "Mother's Day",
-  "fathers-day": "Father's Day",
+  "mothers-day": "Mother’s Day",
+  "fathers-day": "Father’s Day",
 };
 
 test.describe("the gift finder", () => {
@@ -49,11 +49,11 @@ test.describe("the gift finder", () => {
     await expect(question(page, "Who is it for?")).toBeVisible();
 
     await answer(page, "My mom").click();
-    await expect(question(page, "What's the occasion?")).toBeVisible();
+    await expect(question(page, "What’s the occasion?")).toBeVisible();
     await expect(page.getByText("2 of 2", { exact: true })).toBeVisible();
     expect(search(page)).toBe("?for=mom");
     // The next question has the focus, for a keyboard and a screen reader.
-    await expect(question(page, "What's the occasion?")).toBeFocused();
+    await expect(question(page, "What’s the occasion?")).toBeFocused();
 
     await answer(page, "Birthday").click();
     // The second tap is the last: no third question, straight to the picks.
@@ -110,10 +110,10 @@ test.describe("the gift finder", () => {
   test("Back, a reload and a pasted address each land on the same state", async ({ page, context }) => {
     await page.goto("/gifts/finder");
     await answer(page, "My girlfriend").click();
-    await expect(question(page, "What's the occasion?")).toBeVisible();
+    await expect(question(page, "What’s the occasion?")).toBeVisible();
     // A reload on the second question is still the second question.
     await page.reload();
-    await expect(question(page, "What's the occasion?")).toBeVisible();
+    await expect(question(page, "What’s the occasion?")).toBeVisible();
     await expect(question(page, "Who is it for?")).toHaveCount(0);
     await answer(page, "Anniversary").click();
     await expect(question(page, "Three gifts that fit")).toBeVisible();
@@ -126,7 +126,7 @@ test.describe("the gift finder", () => {
 
     // Back steps back one question at a time, and forward again.
     await page.goBack();
-    await expect(question(page, "What's the occasion?")).toBeVisible();
+    await expect(question(page, "What’s the occasion?")).toBeVisible();
     expect(search(page)).toBe("?for=girlfriend");
     await page.goBack();
     await expect(question(page, "Who is it for?")).toBeVisible();
@@ -212,7 +212,7 @@ test.describe("the gift finder", () => {
 
     // The occasion the same way. One that waits behind "More occasions" is shown, and marked, when it is the answer.
     await page.getByRole("button", { name: "Anniversary Change: What's the occasion?" }).click();
-    await expect(question(page, "What's the occasion?")).toBeFocused();
+    await expect(question(page, "What’s the occasion?")).toBeFocused();
     await expect(page.locator('[data-answer][aria-current="true"]')).toHaveText("Anniversary");
     await page.goto("/gifts/finder?for=girlfriend&occasion=wedding&ask=occasion");
     await expect(page.locator('[data-answer][aria-current="true"]')).toHaveText("Wedding");
@@ -274,7 +274,7 @@ test.describe("the gift finder", () => {
     await page.goto("/gifts/finder?ask=occasion");
     await expect(question(page, "Who is it for?")).toBeVisible();
     await page.goto("/gifts/finder?for=mom&ask=for");
-    await expect(question(page, "What's the occasion?")).toBeVisible();
+    await expect(question(page, "What’s the occasion?")).toBeVisible();
 
     await page.goto("/gifts/finder?for=wife&occasion=apology&more=banana&ask=nothing");
     await expect(picks(page)).toHaveCount(3);
@@ -282,7 +282,7 @@ test.describe("the gift finder", () => {
 
   test("“Not sure” on both questions still ends on three gifts", async ({ page }) => {
     await page.goto("/gifts/finder");
-    for (const heading of ["Who is it for?", "What's the occasion?"]) {
+    for (const heading of ["Who is it for?", "What’s the occasion?"]) {
       await expect(question(page, heading)).toBeVisible();
       await answer(page, "Not sure").click();
     }
@@ -308,7 +308,7 @@ test.describe("the gift finder", () => {
     // In the same grid, under the six, with "Not sure" still the last card; the address has not changed.
     await expect(cards).toHaveText([...first.map((o) => OCCASION_NAMES[o]), ...more.map((o) => OCCASION_NAMES[o]), "Not sure"]);
     expect(search(page)).toBe("?for=someone");
-    await expect(question(page, "What's the occasion?")).toBeVisible();
+    await expect(question(page, "What’s the occasion?")).toBeVisible();
     await answer(page, "Halloween").click();
     await expect(picks(page)).toHaveCount(3);
     const halloween = await names(page);
@@ -317,10 +317,10 @@ test.describe("the gift finder", () => {
     expect(made).toEqual(expect.arrayContaining(["Trick or Treat", "Haunted House", "Bat Swarm"]));
     for (const name of halloween) expect(made).toContain(name);
 
-    // A mother is asked about Mother's Day, and never up front about Valentine's.
+    // A mother is asked about Mother’s Day, and never up front about Valentine's.
     await page.goto("/gifts/finder?for=mom");
-    await expect(answer(page, "Mother's Day")).toBeVisible();
-    await expect(answer(page, "Valentine's Day")).toHaveCount(0);
+    await expect(answer(page, "Mother’s Day")).toBeVisible();
+    await expect(answer(page, "Valentine’s Day")).toHaveCount(0);
 
     // The same person at Christmas: Christmas gifts lead, and not one Halloween gift, however many they ask to see.
     await page.goto("/gifts/finder?for=someone&occasion=christmas&more=20");
@@ -616,7 +616,7 @@ test.describe("the gift finder", () => {
     await page.keyboard.press("Tab");
     await expect(answer(page, "My boyfriend")).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(question(page, "What's the occasion?")).toBeFocused();
+    await expect(question(page, "What’s the occasion?")).toBeFocused();
     expect(search(page)).toBe("?for=boyfriend");
     await page.keyboard.press("Tab");
     const first = OCCASION_NAMES[occasionsFor("boyfriend", TODAY).first[0]];

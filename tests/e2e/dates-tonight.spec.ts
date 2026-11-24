@@ -210,7 +210,7 @@ test.describe("plan our date tonight", () => {
     await page.goto("/dates/london");
     await planButton(page).click();
     const band = page.locator("#tonight");
-    await expect(band).toContainText("We couldn't load the places just now.");
+    await expect(band).toContainText("We couldn’t load the places just now.");
     const map = band.getByRole("link", { name: "Open the map" });
     await expect(map).toHaveAttribute("href", /\/dates\?lat=.*&q=London/);
     down = false;
@@ -225,7 +225,7 @@ test.describe("plan our date tonight", () => {
     await openLisbon(page);
     await planButton(page).click();
     const band = page.locator("[data-tonight]");
-    await expect(band).toContainText("It's too late to start one tonight.");
+    await expect(band).toContainText("It’s too late to start one tonight.");
     await band.getByRole("button", { name: "Plan tomorrow" }).click();
     await expect(result(page).getByRole("heading")).toBeVisible();
     expect(await sentence(page)).toContain("tomorrow");

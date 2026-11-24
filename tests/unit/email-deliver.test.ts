@@ -44,7 +44,7 @@ describe("a lifecycle email, sent", () => {
     expect(state.sent).toBe(0);
   });
 
-  it("doesn't count as sent when Resend refuses it, so the claim is released for a later try", async () => {
+  it("doesn’t count as sent when Resend refuses it, so the claim is released for a later try", async () => {
     state.email = "ana@gmail.com";
     expect(await sendMembershipPaymentProblem(row, args)).toBe(false);
     expect(state.sent).toBe(1);

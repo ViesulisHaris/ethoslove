@@ -32,11 +32,11 @@ export type TogetherGuide = {
 export const TOGETHER_GUIDE: Record<GiftLocale, TogetherGuide> = {
   en: {
     title: "How Long Have We Been Together? Free Calculator",
-    description: "Count the days you've been together, to the second, and see the date of every milestone ahead: 100 days, 1,000 days, your next monthiversary and anniversary.",
+    description: "Count the days you’ve been together, to the second, and see the date of every milestone ahead: 100 days, 1,000 days, your next monthiversary and anniversary.",
     eyebrow: "Free calculator",
     h1: "How long have we been together?",
     intro:
-      "Put in the day you got together. You'll see how long it's been, down to the second, and the date of every milestone still ahead: 100 days, 1,000 days, the next monthiversary and the next anniversary.",
+      "Put in the day you got together. You’ll see how long it’s been, down to the second, and the date of every milestone still ahead: 100 days, 1,000 days, the next monthiversary and the next anniversary.",
     milestonesTitle: "The days worth marking",
     milestones: [
       {
@@ -62,12 +62,12 @@ export const TOGETHER_GUIDE: Record<GiftLocale, TogetherGuide> = {
     faqTitle: "Questions",
     faq: [
       {
-        q: "How do you count how long you've been together?",
+        q: "How do you count how long you’ve been together?",
         a: "Count the calendar days from the day you got together to today: the day itself is zero and the next day is one. This calculator counts from midnight on your date in your own time zone, and its months follow the calendar, so 31 January to the last day of February is one month.",
       },
       {
         q: "Does the first day count?",
-        a: "It depends who's counting. Most calculators start at zero, so you reach 100 days a hundred days after you got together. Couples in South Korea count the first day as day 1, so their 100th day comes a day sooner. The box above switches between the two.",
+        a: "It depends who’s counting. Most calculators start at zero, so you reach 100 days a hundred days after you got together. Couples in South Korea count the first day as day 1, so their 100th day comes a day sooner. The box above switches between the two.",
       },
       {
         q: "When is our 100-day anniversary?",
@@ -79,7 +79,7 @@ export const TOGETHER_GUIDE: Record<GiftLocale, TogetherGuide> = {
       },
       {
         q: "We got together on 29 February. When is our anniversary?",
-        a: "On 29 February in leap years. In the other three this calculator puts it on 28 February, so it stays in February, though some couples prefer 1 March. Your day counts, like 100 and 1,000 days, don't change.",
+        a: "On 29 February in leap years. In the other three this calculator puts it on 28 February, so it stays in February, though some couples prefer 1 March. Your day counts, like 100 and 1,000 days, don’t change.",
       },
       {
         q: "How long is 1,000 days?",

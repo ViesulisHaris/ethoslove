@@ -11,7 +11,7 @@ const KINDS = [
   { kind: "cheap", phrase: "Cheap Date Ideas", es: "Ideas para una cita barata", count: 8, heading: "Cheap date ideas, and four that are free" },
   { kind: "romantic", phrase: "Romantic Date Ideas", es: "Ideas para una cita romántica", count: 10, heading: "Romantic date ideas that slow the evening down" },
   { kind: "double-date", phrase: "Double Date Ideas", es: "Ideas para una cita doble", count: 8, heading: "Double date ideas that work better with four" },
-  { kind: "winter", phrase: "Winter Date Ideas", es: "Ideas para una cita en invierno", count: 9, heading: "Winter date ideas for when it's dark by five" },
+  { kind: "winter", phrase: "Winter Date Ideas", es: "Ideas para una cita en invierno", count: 9, heading: "Winter date ideas for when it’s dark by five" },
   { kind: "rainy-day", phrase: "Rainy Day Date Ideas", es: "Ideas para una cita con lluvia", count: 12, heading: "Rainy day date ideas that never needed the sun" },
 ] as const;
 

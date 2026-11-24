@@ -44,23 +44,23 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
     eyebrow: "Digital gifts",
     title: "What is a digital gift?",
     definition:
-      "A digital gift is a present you send as a link instead of in a box: a love letter, a bouquet, a scrapbook or a small game, made from your photos, your words and a song, and opened on their phone. It arrives the second you send it, nothing ships, and it's still there next year.",
+      "A digital gift is a present you send as a link instead of in a box: a love letter, a bouquet, a scrapbook or a small game, made from your photos, your words and a song, and opened on their phone. It arrives the second you send it, nothing ships, and it’s still there next year.",
     notACard:
-      "It isn't a gift card. A gift card is money with a design on it; a digital gift is the thing itself, made by you for one person. Ethos has 54 of them to start from, every one with a live demo, and one is free.",
+      "It isn’t a gift card. A gift card is money with a design on it; a digital gift is the thing itself, made by you for one person. Ethos has 54 of them to start from, every one with a live demo, and one is free.",
     ideasTitle: `${DIGITAL_GIFT_IDEAS.length} digital gift ideas`,
     ideasLead: "Each one is a template you can open, try and make in about ten minutes.",
     groups: GROUPS.map((g) => ({ title: GROUP_TITLES.en[g.key], templates: g.templates })),
-    byWho: "Digital gift ideas by who it's for",
+    byWho: "Digital gift ideas by who it’s for",
     byKind: "Digital gift ideas by kind",
     cards: "What a digital card is",
     faq: [
       {
         q: "What is a good digital gift?",
-        a: "One made for one person: their name, your photos, your words and a song that means something to you both. A love letter or a jar of reasons says the most; a bouquet or a music box looks the part; a little game or a meme card is for someone who'd rather laugh.",
+        a: "One made for one person: their name, your photos, your words and a song that means something to you both. A love letter or a jar of reasons says the most; a bouquet or a music box looks the part; a little game or a meme card is for someone who’d rather laugh.",
       },
       {
         q: "Can you send a digital gift for free?",
-        a: "Yes. The Letter is free as a short note: up to 500 characters, with music, a countdown and a hidden surprise. You make it, publish it and send the link: nobody pays and there's nothing to install. Photos, a longer letter and the other templates are a one-time payment.",
+        a: "Yes. The Letter is free as a short note: up to 500 characters, with music, a countdown and a hidden surprise. You make it, publish it and send the link: nobody pays and there’s nothing to install. Photos, a longer letter and the other templates are a one-time payment.",
       },
       {
         q: "How do you send a digital gift?",
@@ -68,7 +68,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
       },
       {
         q: "Is a digital gift the same as an e-gift card?",
-        a: "No. An e-gift card is store credit sent by email. A digital gift is the present itself, something you made that they open, watch and keep. If they'd really rather have money, send a gift card; if you want them to feel something, make one of these.",
+        a: "No. An e-gift card is store credit sent by email. A digital gift is the present itself, something you made that they open, watch and keep. If they’d really rather have money, send a gift card; if you want them to feel something, make one of these.",
       },
       {
         q: "Do digital gifts expire?",

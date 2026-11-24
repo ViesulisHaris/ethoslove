@@ -11,7 +11,7 @@ import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
  * One kind of apostrophe and one kind of quotation mark on a gift's page. The page sets its words
  * large and in a display face, where a typewriter's straight ' next to a curly ’ shows: the deep
  * test of 21 Nov 2026 found them mixed at heading size, and the confirming test of 22 Nov 2026
- * found the one that was left, "Links don't expire", in an answer every English page shares.
+ * found the one that was left, "Links don’t expire", in an answer every English page shares.
  * So every word the page can show is read here, wherever it is kept: the page's own lines in
  * messages/*.json, each gift's name, tagline and description, its steps, its cards and questions,
  * and the names its editor gives its fields and their choices.

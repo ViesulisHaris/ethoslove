@@ -43,8 +43,8 @@ test.describe("the pricing page", () => {
     const offer = page.getByTestId("membership-offer");
     await expect(offer).toContainText("€29.99");
     await expect(offer).toContainText("for a year");
-    await expect(offer).toContainText("Paid once · it doesn't renew by itself");
-    await expect(offer).toContainText("One payment for 365 days. We'll email you two weeks before it ends.");
+    await expect(offer).toContainText("Paid once · it doesn’t renew by itself");
+    await expect(offer).toContainText("One payment for 365 days. We’ll email you two weeks before it ends.");
     await expect(page.getByTestId("buy-membership")).toHaveText("Get a year of Ethos for Two");
 
     await expect(page.getByTestId("price-single")).toHaveText("€9.99");
@@ -201,7 +201,7 @@ test.describe("the paywall in the publish sheet", () => {
       locale: "en",
       source: expect.objectContaining({ landing: "/create/bouquet" }),
     });
-    await expect(page.getByText("Couldn't open checkout. Please try again.")).toBeVisible();
+    await expect(page.getByText("Couldn’t open checkout. Please try again.")).toBeVisible();
     await expect(panel.getByTestId("pay-single")).toBeEnabled();
   });
 
@@ -330,7 +330,7 @@ test.describe("joining a pass", () => {
 test.describe("after checkout", () => {
   test("a success page without a session says it couldn't confirm, and isn't indexed", async ({ page }) => {
     await page.goto("/checkout/success");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("We couldn't confirm that.");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("We couldn’t confirm that.");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   });
 });

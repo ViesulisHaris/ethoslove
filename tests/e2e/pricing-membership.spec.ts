@@ -39,7 +39,7 @@ test.describe("Ethos for Two, sold as a subscription", () => {
 
     const offer = page.getByTestId("membership-offer");
     await expect(hiddenAbove(offer.getByText("That's €2.50 a month · save 50% on monthly"))).toHaveCount(0);
-    await expect(hiddenAbove(offer.getByText("€29.99 today, then every year until you cancel. We'll remind you a week before each renewal."))).toHaveCount(0);
+    await expect(hiddenAbove(offer.getByText("€29.99 today, then every year until you cancel. We’ll remind you a week before each renewal."))).toHaveCount(0);
     await expect(offer.getByText("One payment covers both of you · cancel any time")).toBeVisible();
     await expect(page.getByTestId("buy-membership")).toHaveText("Get Ethos for Two");
     await expect(page.getByTestId("membership-hero").getByRole("listitem")).toHaveCount(6 + 3);
@@ -111,8 +111,8 @@ test.describe("Ethos for Two, sold as a one-year pass (the switch off)", () => {
     const offer = page.getByTestId("membership-offer");
     await expect(offer).toContainText("€29.99");
     await expect(offer).toContainText("for a year");
-    await expect(offer).toContainText("Paid once · it doesn't renew by itself");
-    await expect(offer).toContainText("One payment for 365 days. We'll email you two weeks before it ends.");
+    await expect(offer).toContainText("Paid once · it doesn’t renew by itself");
+    await expect(offer).toContainText("One payment for 365 days. We’ll email you two weeks before it ends.");
     await expect(offer).not.toContainText("a month");
     await page.getByTestId("buy-membership").click();
     await expect.poll(() => asked.length).toBe(1);
