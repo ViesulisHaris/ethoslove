@@ -165,6 +165,22 @@ describe("a gift made for the person stops the e-mails", () => {
     expect(settledBy([birthday], "Mia", new Date("2026-11-01T10:00:00Z"), { occasions: ["christmas"], unlockAt: "2026-12-28T05:00:00.000Z" })).toEqual([{ id: "bd", year: 2026 }]);
   });
 
+  it("settles nothing of another day for a gift counting down to a day of its own", () => {
+    const scrapbook = ["anniversary", "birthday", "just-because", "long-distance"] as const;
+    const birthday = row({ id: "bd", recipient_name: "Mia", occasion: "birthday", month: 12, day: 28, last_sent_year: null, last_stage: 0 });
+    const published = new Date("2026-12-20T10:00:00Z");
+    // A Scrapbook counting down to 25 December, made on the 20th: her birthday on the 28th still gets its e-mails.
+    expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: "2026-12-25" })).toEqual([]);
+    // Counting down to the birthday itself (or a day off, for the time zones): the birthday's, however early.
+    expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: "2026-12-28" })).toEqual([{ id: "bd", year: 2026 }]);
+    expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: "2026-12-27" })).toEqual([{ id: "bd", year: 2026 }]);
+    expect(settledBy([birthday], "Mia", new Date("2026-10-01T10:00:00Z"), { occasions: scrapbook, countsDownTo: "2026-12-28" })).toEqual([{ id: "bd", year: 2026 }]);
+    // Last year's gift republished, still counting down to last year's day: not this year's.
+    expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: "2025-12-28" })).toEqual([]);
+    // No countdown: the nearest day in the window, as before.
+    expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: null })).toEqual([{ id: "bd", year: 2026 }]);
+  });
+
   it("writes them done for the year on the account's rows only", async () => {
     const other = row({ id: "z", user_id: "99999999-9999-4999-8999-999999999999", recipient_name: "Mia", last_sent_year: null, last_stage: 0 });
     const fake = new FakeDb({ reminders: [...reminders, other] });

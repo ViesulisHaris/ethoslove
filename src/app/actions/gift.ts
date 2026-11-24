@@ -26,6 +26,7 @@ import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCamp
 import { countCampaignGift } from "@/lib/commerce/campaign";
 import { readyGifts, spendGift } from "@/lib/commerce/gift-credits";
 import { markMadeFor } from "@/lib/lifecycle/reminder-done";
+import { countdownDay } from "@/lib/lifecycle/reminders";
 import { after } from "next/server";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
@@ -316,6 +317,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
       wasOutSince: gift.status === "live" || gift.status === "scheduled" ? gift.published_at : null,
       // A Christmas gift for Mia is not her birthday's: only a reminder of an occasion this template is for.
       occasions: manifest.occasions,
+      // A gift counting down to 25 December is that day's, never a birthday's on the 28th.
+      countsDownTo: countdownDay(data.countdown),
     });
   try {
     after(madeFor);
