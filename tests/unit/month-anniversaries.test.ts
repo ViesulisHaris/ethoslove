@@ -1,0 +1,285 @@
+import { describe, expect, it } from "vitest";
+import sitemap from "@/app/sitemap";
+import { BLOG_POSTS, getPost, postLocales } from "@/content/blog";
+import { isGiftGuide } from "@/content/gift-guides";
+import { handLine, kindCardLine } from "@/content/idea-cards";
+import { MONTHS, MONTH_GUIDES, monthBandPhoto, monthFromSlug, monthNeighbours, monthPost, monthRef, monthSlug } from "@/content/month-anniversaries";
+import { pageUpdated } from "@/content/page-dates";
+import { recipientFromSlug } from "@/content/recipients";
+import { REF_PATTERN } from "@/lib/attribution/ref";
+import { DATE_KINDS } from "@/lib/dates/date-kinds";
+import { fieldLimit } from "@/lib/gift/field-limit";
+import { GIFT_LOCALES, type GiftLocale } from "@/lib/gift/schema";
+import { pageMetadata } from "@/lib/seo";
+import { getManifest } from "@/templates/manifests";
+
+/**
+ * The anniversary gifts by month (content/month-anniversaries.ts), held to the limits, the fields
+ * and the house rules of the gift pages by kind beside them (tests/unit/gift-guides.test.ts), and to
+ * the brief's own rule: every month is written, none is a sentence with the number swapped.
+ */
+
+const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
+const sentences = (s: string) => s.trim().split(/(?<=[.?!…])\s+/);
+
+/** Every string under a value. */
+function strings(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(strings);
+  if (value && typeof value === "object") return Object.values(value).flatMap(strings);
+  return [];
+}
+
+/** The owner's rule: nothing on the site mentions Spain or its cities (tests/unit/cities.test.ts has the same list). */
+const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary|palma)\b/i;
+/** A price written by hand: a currency sign beside a number. Prices come from PRODUCTS, never from copy. */
+const TYPED_PRICE = /[€$£]\s?\d|\d\s?[€$£]/;
+
+/** The longest run of words two texts share, in words (as in tests/unit/gift-guides.test.ts). */
+function sharedRun(a: string, b: string): number {
+  const tokens = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
+  const [x, y] = [tokens(a), tokens(b)];
+  let best = 0;
+  let row = new Array<number>(y.length + 1).fill(0);
+  for (let i = 1; i <= x.length; i++) {
+    const next = new Array<number>(y.length + 1).fill(0);
+    for (let j = 1; j <= y.length; j++) {
+      if (x[i - 1] === y[j - 1]) {
+        next[j] = row[j - 1] + 1;
+        if (next[j] > best) best = next[j];
+      }
+    }
+    row = next;
+  }
+  return best;
+}
+const SHARED_RUN_MAX = 9;
+
+/** A sentence with its month taken out: what is left must differ from every other month's. */
+const NUMBER_WORDS = /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty-\w+|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|diecisiete|dieciocho|diecinueve|veinte|veinti\w+|primer|primero|primera|segundo|segunda|tercer|tercero|cuarto|quinto|sexto|séptimo|octavo|noveno|décimo)\b/gi;
+const unnumbered = (s: string) => s.toLowerCase().replace(NUMBER_WORDS, "#").replace(/\s+/g, " ").trim();
+
+const all = () => MONTHS.flatMap((n) => GIFT_LOCALES.map((locale) => ({ n, locale, guide: MONTH_GUIDES[n][locale] })));
+
+describe("anniversary gifts by month", () => {
+  it("the months have addresses that are theirs alone", () => {
+    for (const n of MONTHS) {
+      expect(monthFromSlug(monthSlug(n)), String(n)).toBe(n);
+      expect(isGiftGuide(monthSlug(n)), String(n)).toBe(false);
+      expect(recipientFromSlug(monthSlug(n)), String(n)).toBeNull();
+      expect(monthRef(n), String(n)).toMatch(REF_PATTERN);
+    }
+    for (const slug of ["0-month-anniversary", "25-month-anniversary", "03-month-anniversary", "3-month", "for-boyfriend", "last-minute"]) expect(monthFromSlug(slug), slug).toBeNull();
+  });
+
+  for (const { n, locale, guide } of all()) {
+    const twin = MONTH_GUIDES[n][locale === "en" ? "es" : "en"];
+
+    it(`month ${n} (${locale}) is a whole page`, () => {
+      expect(guide.title.length, guide.title).toBeLessThanOrEqual(65);
+      if (locale === "es") expect(`${guide.title} · Ethos`.length, guide.title).toBeLessThanOrEqual(60);
+      expect(guide.description.length, guide.description).toBeLessThanOrEqual(160);
+      if (locale === "en") expect(guide.h1).toBe(`${n} month anniversary gifts`);
+      else {
+        expect(guide.h1).toContain(`${n} mes`);
+        expect(guide.h1).toContain("de novios");
+      }
+      expect(words(guide.hero.line), guide.hero.line).toBeLessThanOrEqual(16);
+      expect(words(guide.hero.sentence), guide.hero.sentence).toBeLessThanOrEqual(30);
+      for (const s of [guide.hero.line, guide.hero.sentence]) expect(s.trim(), s).toMatch(/[.?…]$/);
+      expect(words(guide.ideasTitle), guide.ideasTitle).toBeLessThanOrEqual(9);
+      expect(guide.stage).toHaveLength(2);
+      for (const p of guide.stage) {
+        expect(words(p), p.slice(0, 40)).toBeGreaterThanOrEqual(40);
+        expect(words(p), p.slice(0, 40)).toBeLessThanOrEqual(90);
+      }
+      expect(words(guide.stage.join(" "))).toBeLessThanOrEqual(180);
+      expect(guide.faq).toHaveLength(3);
+      expect(twin.faq.length).toBe(guide.faq.length);
+      for (const f of guide.faq) {
+        expect(f.q.trim().endsWith("?"), f.q).toBe(true);
+        if (locale === "es") expect(f.q.trim().startsWith("¿"), f.q).toBe(true);
+        expect(words(f.a), f.q).toBeGreaterThanOrEqual(15);
+      }
+    });
+
+    it(`month ${n} (${locale}) lists five or six gifts that can be made, each with a line that fits`, async () => {
+      expect(guide.ideas.length).toBeGreaterThanOrEqual(5);
+      expect(guide.ideas.length).toBeLessThanOrEqual(6);
+      expect(twin.ideas.map((i) => i.template)).toEqual(guide.ideas.map((i) => i.template));
+      expect(twin.ideas.map((i) => i.line.field)).toEqual(guide.ideas.map((i) => i.line.field));
+      expect(new Set(guide.ideas.map((i) => i.template)).size).toBe(guide.ideas.length);
+      for (const idea of guide.ideas) {
+        const at = `${idea.template} (month ${n}, ${locale})`;
+        expect(getManifest(idea.template), at).not.toBeNull();
+        expect(words(idea.heading), at).toBeGreaterThanOrEqual(3);
+        expect(words(idea.heading), at).toBeLessThanOrEqual(9);
+        expect(words(idea.body), at).toBeGreaterThanOrEqual(40);
+        expect(words(idea.body), at).toBeLessThanOrEqual(90);
+        const line = kindCardLine(idea);
+        expect(words(line), `${at}: “${line}”`).toBeGreaterThanOrEqual(6);
+        expect(words(line), `${at}: “${line}”`).toBeLessThanOrEqual(18);
+        const limit = await fieldLimit(idea.template, idea.line.field);
+        expect(limit, `${at}: ${idea.line.field} is not a text field`).not.toBeNull();
+        expect(idea.line.text.length, `${at}: “${idea.line.text}”`).toBeLessThanOrEqual(limit!);
+        expect(words(idea.line.where), at).toBeGreaterThanOrEqual(2);
+        expect(handLine(idea.line.text).trim(), at).not.toMatch(/[,;]$/);
+      }
+    });
+
+    it(`month ${n} (${locale}) keeps to the house rules`, () => {
+      for (const s of strings(guide)) {
+        expect(s, s).not.toMatch(SPAIN);
+        expect(s, s).not.toMatch(TYPED_PRICE);
+        expect(s, s).not.toContain("—");
+        expect(s, s).not.toContain("!");
+        expect(s.toLowerCase(), s).not.toContain("digital gift card");
+      }
+      // The posts own the day ("ideas"); the page is the gift.
+      expect(guide.h1.toLowerCase()).not.toMatch(/\bideas\b/);
+      expect(guide.title.toLowerCase()).not.toMatch(/\bideas\b/);
+    });
+
+    it(`month ${n} (${locale}) says free only of The Letter's short note`, () => {
+      const free = locale === "en" ? /\bfree\b/i : /\bgratis\b|gratuit/i;
+      for (const idea of guide.ideas) {
+        const said = [idea.heading, idea.brief ?? "", idea.body].some((s) => free.test(s));
+        if (said) expect(idea.template === "the-letter" && idea.line.field === "freeNote", `${idea.template} (month ${n}, ${locale})`).toBe(true);
+        if (idea.template === "constellations") for (const s of strings(idea)) expect(s, s).not.toMatch(free);
+      }
+    });
+
+    it(`month ${n} (${locale}) promises a song, a clip, a countdown or a hidden surprise only on a gift that draws one`, () => {
+      for (const idea of guide.ideas) {
+        const m = getManifest(idea.template)!;
+        const own = [idea.heading, idea.brief ?? "", idea.body].join(" ");
+        const at = `${idea.template} (month ${n}, ${locale})`;
+        if (!m.features.music) expect(own, at).not.toMatch(locale === "en" ? /\bsongs?\b/i : /\bcanci(ón|ones)\b/i);
+        if (!m.features.video) expect(own, at).not.toMatch(locale === "en" ? /\b(video|clip)s?\b/i : /\bv[ií]deos?\b|\bclips?\b/i);
+        if (idea.template === "unwrapped") expect(own, at).not.toMatch(/countdown|cuenta atrás/i);
+        if (idea.template === "unwrapped" || idea.template === "pack-your-bags") expect(own, at).not.toMatch(/hidden surprise|sorpresa final|sorpresa oculta/i);
+      }
+    });
+
+    it(`month ${n} (${locale}): the date idea leads to a kind page of the Dates room that exists`, () => {
+      expect(DATE_KINDS, guide.date.kind).toContain(guide.date.kind);
+      expect(guide.date.kind).not.toBe("winter");
+      expect(twin.date.kind).toBe(guide.date.kind);
+      expect(words(guide.date.title), guide.date.title).toBeLessThanOrEqual(9);
+      expect(words(guide.date.line), guide.date.line).toBeLessThanOrEqual(14);
+      expect(sentences(guide.date.line), guide.date.line).toHaveLength(1);
+    });
+  }
+
+  it("the gift in a month's phone has a film, and no two months open on the same gift", () => {
+    const first = MONTHS.map((n) => MONTH_GUIDES[n].en.ideas[0].template);
+    for (const slug of first) expect(getManifest(slug)?.thumbnail.webm, slug).toBeTruthy();
+    expect(new Set(first).size).toBe(first.length);
+  });
+
+  it("no two months open the same way", () => {
+    const clashes: string[] = [];
+    for (const locale of GIFT_LOCALES) {
+      const parts = (n: number) => {
+        const g = MONTH_GUIDES[n][locale];
+        return { "hero line": g.hero.line, "hero sentence": g.hero.sentence, "ideas title": g.ideasTitle, "date title": g.date.title, "opening of the stage": sentences(g.stage[0])[0] };
+      };
+      for (let i = 0; i < MONTHS.length; i++) {
+        for (let j = i + 1; j < MONTHS.length; j++) {
+          const [a, b] = [MONTHS[i], MONTHS[j]];
+          const [pa, pb] = [parts(a), parts(b)];
+          for (const key of Object.keys(pa) as (keyof typeof pa)[]) if (unnumbered(pa[key]) === unnumbered(pb[key])) clashes.push(`${locale}: months ${a} and ${b} share the ${key}`);
+          const [ga, gb] = [MONTH_GUIDES[a][locale], MONTH_GUIDES[b][locale]];
+          for (const [name, x, y] of [["hero sentence", ga.hero.sentence, gb.hero.sentence], ["stage", ga.stage[0], gb.stage[0]], ["stage", ga.stage[1], gb.stage[1]]] as const) {
+            const run = sharedRun(x, y);
+            if (run > SHARED_RUN_MAX) clashes.push(`${locale}: months ${a} and ${b} share ${run} words in a row in the ${name}`);
+          }
+        }
+      }
+    }
+    expect(clashes).toEqual([]);
+  });
+
+  it("no two months have the same first three gifts", () => {
+    const firsts = MONTHS.map((n) => MONTH_GUIDES[n].en.ideas.slice(0, 3).map((i) => i.template).sort().join("+"));
+    expect(new Set(firsts).size).toBe(firsts.length);
+  });
+
+  it("no gift is leaned on", () => {
+    const uses = new Map<string, number>();
+    for (const n of MONTHS) for (const idea of MONTH_GUIDES[n].en.ideas) uses.set(idea.template, (uses.get(idea.template) ?? 0) + 1);
+    for (const [slug, count] of uses) expect(count, slug).toBeLessThanOrEqual(6);
+    if (MONTHS.length === 24) expect(uses.size).toBeGreaterThanOrEqual(20);
+  });
+
+  it("a gift is described afresh on every month that lists it", () => {
+    const reused: string[] = [];
+    for (const locale of GIFT_LOCALES) {
+      const bodies = new Map<string, { n: number; body: string }[]>();
+      for (const n of MONTHS) for (const idea of MONTH_GUIDES[n][locale].ideas) bodies.set(idea.template, [...(bodies.get(idea.template) ?? []), { n, body: idea.body }]);
+      for (const [template, uses] of bodies) {
+        for (let i = 0; i < uses.length; i++) {
+          for (let j = i + 1; j < uses.length; j++) {
+            const run = sharedRun(uses[i].body, uses[j].body);
+            if (run > SHARED_RUN_MAX) reused.push(`${template} (${locale}): months ${uses[i].n} and ${uses[j].n} share ${run} words in a row`);
+          }
+        }
+      }
+    }
+    expect(reused).toEqual([]);
+  });
+
+  it("the questions are the month's own", () => {
+    for (const locale of GIFT_LOCALES) {
+      const asked = MONTHS.flatMap((n) => MONTH_GUIDES[n][locale].faq.map((f) => f.q.trim().toLowerCase()));
+      expect(asked.filter((q, i) => asked.indexOf(q) !== i), locale).toEqual([]);
+    }
+  });
+
+  it.skipIf(!MONTHS.includes(12) || !MONTHS.includes(24))("twelve months is paper and twenty-four is cotton, in both languages", () => {
+    expect(strings(MONTH_GUIDES[12].en).join(" ")).toMatch(/paper/i);
+    expect(strings(MONTH_GUIDES[12].es).join(" ")).toMatch(/papel/i);
+    expect(strings(MONTH_GUIDES[24].en).join(" ")).toMatch(/cotton/i);
+    expect(strings(MONTH_GUIDES[24].es).join(" ")).toMatch(/algodón/i);
+  });
+
+  it("the page is the gift and the post is the day", () => {
+    for (const post of BLOG_POSTS) {
+      for (const locale of postLocales(post)) {
+        const content = post.content[locale]!;
+        for (const n of MONTHS) {
+          const guide = MONTH_GUIDES[n][locale];
+          expect(guide.h1.toLowerCase(), `${post.slug} (${locale})`).not.toBe(content.keyword.toLowerCase());
+          expect(guide.title, `${post.slug} (${locale})`).not.toBe(content.title);
+        }
+      }
+    }
+    for (const n of MONTHS) expect(getPost(monthPost(n)), String(n)).not.toBeNull();
+  });
+
+  it("are in the sitemap in both languages with a date, sit beside the right months, and no two bands look alike", () => {
+    const urls = sitemap().map((p) => new URL(p.url).pathname);
+    const pairs = new Set<string>();
+    for (const n of MONTHS) {
+      const path = `/gifts/${monthSlug(n)}`;
+      expect(urls, path).toContain(path);
+      expect(urls, path).toContain(`/es${path}`);
+      expect(pageUpdated(path), path).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      for (const locale of GIFT_LOCALES) {
+        const guide = MONTH_GUIDES[n][locale as GiftLocale];
+        const m = pageMetadata({ locale, path, title: guide.title, description: guide.description });
+        const shown = typeof m.title === "string" ? `${m.title} · Ethos` : (m.title as { absolute: string }).absolute;
+        expect(shown.length, shown).toBeLessThanOrEqual(70);
+      }
+      const near = monthNeighbours(n);
+      expect(near, String(n)).not.toContain(n);
+      expect(near.length).toBeLessThanOrEqual(4);
+      for (const m of near) expect(MONTHS, String(m)).toContain(m);
+      if (MONTHS.includes(n - 1)) expect(near, String(n)).toContain(n - 1);
+      if (MONTHS.includes(n + 1)) expect(near, String(n)).toContain(n + 1);
+      if (MONTHS.includes(n + 1)) expect(monthBandPhoto(n).src, String(n)).not.toBe(monthBandPhoto(n + 1).src);
+      pairs.add(`${monthBandPhoto(n).src}+${MONTH_GUIDES[n].en.ideas[1].template}`);
+    }
+    expect(pairs.size).toBe(MONTHS.length);
+  });
+});

@@ -9,6 +9,7 @@ import { pricingGifts } from "@/components/pricing/free-gifts";
 import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, FINDER_LINK, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { MONTHS, MONTH_GUIDES, monthSlug } from "@/content/month-anniversaries";
 import { OCCASION_IDEAS } from "@/content/occasion-ideas";
 import { pageUpdated } from "@/content/page-dates";
 import { recipientFromSlug } from "@/content/recipients";
@@ -288,6 +289,7 @@ describe("gift pages by kind", () => {
       const add = (where: string, template: string, body: string) => bodies.set(template, [...(bodies.get(template) ?? []), { where, body }]);
       for (const slug of GIFT_GUIDE_SLUGS) for (const idea of GIFT_GUIDES[slug][locale].ideas) add(`/gifts/${slug}`, idea.template, idea.body);
       for (const [occasion, lists] of Object.entries(OCCASION_IDEAS)) for (const idea of lists[locale].items) add(`/occasions/${occasion}`, idea.template, idea.body);
+      for (const n of MONTHS) for (const idea of MONTH_GUIDES[n][locale].ideas) add(`/gifts/${monthSlug(n)}`, idea.template, idea.body);
       for (const [template, uses] of bodies) {
         for (let i = 0; i < uses.length; i++) {
           for (let j = i + 1; j < uses.length; j++) {

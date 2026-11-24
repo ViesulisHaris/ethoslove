@@ -29,6 +29,14 @@ import { pressUpdated } from "@/lib/press/shown";
 const GROWTH_PAGES_DAY = "2026-11-23";
 
 /**
+ * The day the growth build's "gifts2" area last changed what its pages say: the 24 anniversary
+ * gifts by month (/gifts/<n>-month-anniversary), five more gift pages by kind, every /gifts page
+ * gaining those neighbours in its last section, and the occasion pages, /gifts and the front page
+ * folded to 300 words on show. NOT LIVE YET: set it to the day it ships.
+ */
+export const GIFTS2_DAY = "2026-11-24";
+
+/**
  * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
  * finder. NOT LIVE YET: this is the day the work was finished. Set it to the day it ships; every
  * page it changed reads its date from here. The template pages take GUIDES_LIVE below: who each
@@ -91,8 +99,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/": FINDER_LIVE,
   // The gift pages by kind (content/gift-guides.ts) and /digital-cards are new, and /gifts and every
   // /gifts/for-* page gained their links.
-  "/gifts": GROWTH_PAGES_DAY,
-  "/gifts/*": GROWTH_PAGES_DAY,
+  "/gifts": GIFTS2_DAY,
+  "/gifts/*": GIFTS2_DAY,
   "/gifts/finder": FINDER_LIVE,
   "/digital-cards": GROWTH_PAGES_DAY,
   // With the finder the gallery links to it; then the gallery itself was redrawn.
