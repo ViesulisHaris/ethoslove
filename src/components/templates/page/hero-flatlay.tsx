@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { COVER_RATIO, COVER_SHAPE } from "./cover-in-screen";
-import dynamic from "next/dynamic";
 import { loadTemplate } from "@/templates/registry";
 
 /**
@@ -17,8 +16,21 @@ import { loadTemplate } from "@/templates/registry";
  * and an occasion's page loaded, for a phone most visitors never pick up. A finger or a pointer
  * arriving on "Try the live demo" fetches it, and the gift's own code with it (warmDemo).
  */
-const importPreview = () => import("@/components/templates/template-phone-preview");
-const TemplatePhonePreview = dynamic(() => importPreview().then((m) => m.TemplatePhonePreview), { ssr: false });
+type PhonePreview = typeof import("@/components/templates/template-phone-preview").TemplatePhonePreview;
+let previewLoad: Promise<PhonePreview> | null = null;
+/**
+ * One fetch shared by every phone on the page, forgotten when it fails, so the next tap fetches it
+ * again: a lazy component (next/dynamic) keeps its first failure, and a phone picked up offline
+ * stayed unplayable once the connection was back.
+ */
+const importPreview = () =>
+  (previewLoad ??= import("@/components/templates/template-phone-preview").then(
+    (m) => m.TemplatePhonePreview,
+    (error: unknown) => {
+      previewLoad = null;
+      throw error;
+    },
+  ));
 const warmDemo = (slug: string) => {
   void importPreview().catch(() => undefined);
   void loadTemplate(slug).catch(() => undefined);
@@ -137,6 +149,7 @@ export function HeroFlatlay({
 }) {
   const t = useTranslations("templates");
   const [live, setLive] = useState(false);
+  const [Preview, setPreview] = useState<PhonePreview | null>(null);
   /** The film as its pause button needs to know it: not showing, running, or stopped by the visitor. */
   const [filmState, setFilmState] = useState<"off" | "playing" | "paused">("off");
   const film = useRef<HTMLVideoElement>(null);
@@ -161,11 +174,12 @@ export function HeroFlatlay({
   // is partly off it: the foot of a gift, where most keep their first button, was under the fold,
   // and scrolled down, the close button sat level with the header (the test of 21 Nov 2026). So
   // the page moves just far enough to show the whole phone under the header, and not at all when
-  // it is already in view. Worked out from where it ends up, not from its box while it turns.
+  // it is already in view. Worked out from where it ends up, not from its box while it turns, and
+  // once the phone's code has come (importPreview): before that the box has no height to show.
   useEffect(() => {
     const phone = upright.current;
     const ground = phone?.offsetParent;
-    if (!live || !phone || !ground) return;
+    if (!live || !Preview || !phone || !ground) return;
     const header = parseFloat(getComputedStyle(phone).getPropertyValue("--header-h")) || 0;
     // Under the header, with the close button that sits half above the phone's corner; a finger's width at the foot.
     const head = header + 28;
@@ -176,7 +190,7 @@ export function HeroFlatlay({
     const fits = phone.offsetHeight + head + foot <= window.innerHeight;
     const by = top < head || !fits ? top - head : bottom > window.innerHeight - foot ? bottom - (window.innerHeight - foot) : 0;
     if (Math.abs(by) > 1) window.scrollBy({ top: by, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  }, [live]);
+  }, [live, Preview]);
 
   // A gift running: the consent strip and the help button are fixed to the foot of the screen,
   // which is where gifts keep their first controls, and stand down for `data-gift-running` on
@@ -200,6 +214,11 @@ export function HeroFlatlay({
     let on = true;
     loadTemplate(slug).then(
       (found) => on && !found && setLive(false),
+      () => on && setLive(false),
+    );
+    // The phone's own code (see importPreview) goes the same way.
+    importPreview().then(
+      (component) => on && setPreview(() => component),
       () => on && setLive(false),
     );
     return () => {
@@ -462,7 +481,7 @@ export function HeroFlatlay({
           className="hero-lift absolute left-1/2 z-10 outline-none"
           style={{ top: `calc(${width} * ${up})`, "--lift-turn": `${art.turn}deg` } as CSSProperties}
         >
-          <TemplatePhonePreview slug={slug} locale={locale} autoStart width={lifted} />
+          {Preview ? <Preview slug={slug} locale={locale} autoStart width={lifted} /> : null}
           {/* On the phone's top corner, half off it: clear of the gift's own controls, which keep inside the screen. */}
           <button type="button" data-close-demo onClick={() => setLive(false)} aria-label={t("closeDemo")} className="group/close absolute -top-4 -right-4 z-10 grid size-11 place-items-center rounded-full">
             <span className="grid size-9 place-items-center rounded-full border border-page-line bg-page-raised text-page-ink shadow-page-lift transition-[background-color,scale] duration-200 group-hover/close:bg-page-ground group-active/close:scale-95">
