@@ -166,7 +166,7 @@ describe("the three e-mails before a day", () => {
 
   it("works on a database without migration 0025: one e-mail nine days before, as before", async () => {
     const fake = world([reminder()], {}, { missingColumns: { reminders: ["last_stage", "currency"] } });
-    fake.tables.reminders = fake.tables.reminders.map(({ last_stage: _s, currency: _c, ...row }) => row);
+    fake.tables.reminders = fake.tables.reminders.map((row) => Object.fromEntries(Object.entries(row).filter(([column]) => column !== "last_stage" && column !== "currency")));
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const early = run(fake, "2027-02-24");
     expect(await early.result).toEqual({ sent: 1, failed: 0, deferred: 0, mode: "old" });

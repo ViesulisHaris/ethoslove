@@ -814,7 +814,7 @@
     },
     "started": {
       "title": "Started for you.",
-      "withPhotos": "Both names and the {count, plural, one {photo} other {# photos}} from your last gift for {name} are in. Change anything, or swap them all.",
+      "withPhotos": "Both names and {count, plural, one {the photo} other {the # photos}} from your last gift for {name} are in. Change anything, or swap them all.",
       "namesOnly": "Both names are in. Add your photos and your words.",
       "change": "Change the photos",
       "empty": "Start empty",
