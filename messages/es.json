@@ -657,7 +657,7 @@
       "dashboard": "Verlo en mis regalos",
       "another": "Hacer otro",
       "pair": {
-        "title": "A nadie le gusta caer en el olvido.",
+        "title": "Que nadie caiga en el olvido.",
         "next": "Hoy te has acordado. Lo próximo:",
         "christmas": "Navidad",
         "inDays": "en {count, plural, one {# día} other {# días}}",
@@ -667,7 +667,7 @@
         "apart": "Por separado {price}",
         "tickAny": "Cualquier plantilla, con todo incluido",
         "tickMidnight": "Que se abra a medianoche, justo en su día",
-        "tickBack": "¿No lo usas? Te devolvemos el dinero durante 30 días",
+        "tickBack": "¿No lo usas? 30 días para el reembolso",
         "add": "Añadir los dos por {price}",
         "byCard": "Pagar con tarjeta",
         "paying": "Un momento…",

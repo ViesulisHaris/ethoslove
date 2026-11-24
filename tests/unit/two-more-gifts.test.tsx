@@ -77,9 +77,9 @@ describe("the two more gifts card", () => {
 
   it("in Spanish, with the price after the number", () => {
     const html = text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={days} name="Mia" onBought={() => {}} />, "es"));
-    expect(html).toContain("A nadie le gusta caer en el olvido.");
+    expect(html).toContain("Que nadie caiga en el olvido.");
     expect(html).toContain("Hoy te has acordado. Lo próximo:");
-    expect(html).toContain("¿No lo usas? Te devolvemos el dinero durante 30 días");
+    expect(html).toContain("¿No lo usas? 30 días para el reembolso");
     expect(html).toContain("Cualquier plantilla, con todo incluido");
     expect(html).not.toMatch(/listo/);
     expect(html).toContain("Navidad 25 de diciembre en 4 semanas");

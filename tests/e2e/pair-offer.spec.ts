@@ -113,10 +113,13 @@ test.describe("two more gifts under the link", () => {
   test("in Spanish", async ({ page }) => {
     await open(page, "/es/share-preview");
     const card = page.getByTestId("pair-offer");
-    await expect(card).toContainText("A nadie le gusta caer en el olvido.");
+    await expect(card).toContainText("Que nadie caiga en el olvido.");
     await expect(card).toContainText("Hoy te has acordado. Lo próximo:");
     await expect(card).toContainText("Navidad");
     await expect(card.getByTestId("pair-add")).toHaveText("Añadir los dos por 5 €");
+    // The Spanish card is taller (the Instagram line wraps): its button is still on the first screen.
+    const box = await card.getByTestId("pair-add").boundingBox();
+    expect(box && box.y + box.height).toBeLessThanOrEqual(844);
   });
 
   for (const [country, price] of [["US", "$6"], ["GB", "£4"], ["DE", "€5"]] as const) {
