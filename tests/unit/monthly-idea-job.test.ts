@@ -28,7 +28,7 @@ const facts = (over: Partial<IdeaFacts> = {}): IdeaFacts => ({ email: "sam@mail.
 type Row = { user_id: string; since: string; template_slug: string | null; locale: "en" | "es"; basis: "notice" | "box" | "terms"; handled_for: string | null; last_sent_on: string | null; price_sent_at: string | null; off_at?: string | null };
 const row = (over: Partial<Row> = {}): Row => ({ user_id: OWNER, since: "2026-10-20", template_slug: "bouquet", locale: "en", basis: "notice", handled_for: null, last_sent_on: null, price_sent_at: null, off_at: null, ...over });
 
-function memoryStore(rows: Row[], known: (r: Row) => IdeaFacts = () => facts()) {
+function memoryStore(rows: Row[], known: (r: Row) => IdeaFacts = () => facts(), { priceFails = false, sentFails = false } = {}) {
   let fetched = 0;
   const store: Store = {
     async due(window) {
@@ -52,13 +52,21 @@ function memoryStore(rows: Row[], known: (r: Row) => IdeaFacts = () => facts()) 
       r.handled_for = date;
       return true;
     },
-    async release(id, previous) {
-      rows.find((x) => x.user_id === id)!.handled_for = previous;
-    },
-    async sent(id, on, withPrice, when) {
+    async release(id, previous, unprice) {
       const r = rows.find((x) => x.user_id === id)!;
-      r.last_sent_on = on;
-      if (withPrice) r.price_sent_at = when.toISOString();
+      r.handled_for = previous;
+      if (unprice) r.price_sent_at = null;
+    },
+    async priced(id, when) {
+      if (priceFails) return false;
+      const r = rows.find((x) => x.user_id === id)!;
+      if (r.price_sent_at !== null) return false;
+      r.price_sent_at = when.toISOString();
+      return true;
+    },
+    async sent(id, on) {
+      if (sentFails) return;
+      rows.find((x) => x.user_id === id)!.last_sent_on = on;
     },
   };
   return { store, rows, fetched: () => fetched };
@@ -165,6 +173,23 @@ describe("the morning job", () => {
     expect(noLink.mail[0].ideaUrl).toMatch(/^https?:\/\/[^/]+\/create\/snow-globe\?ref=email-monthly$/);
     expect(unsigned.rows[0].price_sent_at).toBeNull();
 
+    // The price is marked before the email goes: a lost write after sending can't leave the link at
+    // the usual price, and a mark that can't be written sends the email without the price.
+    const lost = memoryStore([row({ since: "2026-11-20" })], undefined, { sentFails: true });
+    const lostRun = job(lost.store, at("2026-12-20"));
+    await lostRun.run();
+    expect(lostRun.mail[0].priceUntil).toBe("27 December");
+    expect(lost.rows[0].price_sent_at).toEqual(expect.any(String));
+    const unmarked = memoryStore([row({ since: "2026-11-20" })], undefined, { priceFails: true });
+    const unmarkedRun = job(unmarked.store, at("2026-12-20"));
+    await unmarkedRun.run();
+    expect(unmarkedRun.mail[0].priceUntil).toBeUndefined();
+    expect(unmarkedRun.mail[0].ideaUrl).toMatch(/\/create\/snow-globe\?ref=email-monthly$/);
+    // A failed email gives the price mark back with the month.
+    const failed = memoryStore([row({ since: "2026-11-20" })]);
+    await job(failed.store, at("2026-12-20"), { send: async () => false }).run();
+    expect(failed.rows[0]).toMatchObject({ price_sent_at: null, handled_for: null });
+
     const holding = memoryStore([row({ since: "2026-11-20" })], () => facts({ holdsGift: true }));
     const ready = job(holding.store, at("2026-12-20"));
     await ready.run();
@@ -242,6 +267,11 @@ describe("the store, on the database", () => {
     expect(known.get(OWNER)).toEqual({ email: "sam@mail.com", optedOut: false, hasMonthsary: false, reminderDays: [{ month: 12, day: 1 }], savedDateDays: ["2026-11-28"], boxYes: false, customer: true, ownsEverything: false, holdsGift: false });
     expect(await store.claim(OWNER, "2026-11-20")).toBe(true);
     expect(await store.claim(OWNER, "2026-11-20")).toBe(false);
+    // The price is marked once; giving the month back takes the mark with it.
+    expect(await store.priced(OWNER, at("2026-11-20"))).toBe(true);
+    expect(await store.priced(OWNER, at("2026-11-20"))).toBe(false);
+    await store.release(OWNER, null, true);
+    expect(await store.priced(OWNER, at("2026-11-20"))).toBe(true);
     db.failNext("email_optouts", "select", "down");
     await expect(store.facts(due, at("2026-11-20"))).rejects.toThrow(/opt-outs/);
   });

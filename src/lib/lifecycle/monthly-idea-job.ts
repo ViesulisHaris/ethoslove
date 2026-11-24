@@ -28,9 +28,16 @@ export interface IdeaStore {
   facts(rows: Row[], today: Date): Promise<Map<string, IdeaFacts>>;
   /** True when this run took the month (nobody had). */
   claim(userId: string, date: Ymd): Promise<boolean>;
-  release(userId: string, previous: Ymd | null): Promise<void>;
-  /** After an email went: last_sent_on, and price_sent_at when it carried the price. */
-  sent(userId: string, on: Ymd, withPrice: boolean, at: Date): Promise<void>;
+  /** Gives the month back after a failed email, and the price mark with it when `unprice` (it was set for that email). */
+  release(userId: string, previous: Ymd | null, unprice?: boolean): Promise<void>;
+  /**
+   * Marks the price as sent (price_sent_at) before the email that carries it goes: the link opens at
+   * that price only once this is stored (lib/commerce/personal-price.ts monthlyPriceOpen), so an email
+   * whose mark couldn't be written goes without the price. True when it was stored.
+   */
+  priced(userId: string, at: Date): Promise<boolean>;
+  /** After an email went: last_sent_on. */
+  sent(userId: string, on: Ymd): Promise<void>;
 }
 
 export type IdeaRun = {
@@ -83,6 +90,7 @@ export async function sendMonthlyIdeas(run: IdeaRun): Promise<{ sent: number; sk
     let withPrice = decision.withPrice && !(await run.priceSpent(row.user_id));
     const links = await run.links(row, manifest.slug, withPrice, priceEndsAt(today));
     if (!links.priceUrl || !links.priceMoreUrl) withPrice = false;
+    if (withPrice && !(await run.store.priced(row.user_id, run.now))) withPrice = false;
     const ideaUrl = withPrice ? links.priceUrl! : pageUrl(locale, suggestionPath(manifest.slug, IDEA_REF));
     const moreUrl = withPrice
       ? links.priceMoreUrl!
@@ -102,10 +110,10 @@ export async function sendMonthlyIdeas(run: IdeaRun): Promise<{ sent: number; sk
       onceKey: `monthly-idea/${row.user_id}/${month!.date}`,
     });
     if (ok) {
-      await run.store.sent(row.user_id, ymdOf(today), withPrice, run.now);
+      await run.store.sent(row.user_id, ymdOf(today));
       counts.sent += 1;
     } else {
-      await run.store.release(row.user_id, previous);
+      await run.store.release(row.user_id, previous, withPrice);
       counts.failed += 1;
     }
     await run.pause();
@@ -232,14 +240,20 @@ export function supabaseIdeaStore(db: SupabaseClient<Database>): IdeaStore {
         .maybeSingle();
       return !error && Boolean(data);
     },
-    async release(userId, previous) {
-      await db.from("monthly_ideas").update({ handled_for: previous }).eq("user_id", userId);
-    },
-    async sent(userId, on, withPrice, at) {
-      const { error } = await db
+    async release(userId, previous, unprice) {
+      await db
         .from("monthly_ideas")
-        .update({ last_sent_on: on, ...(withPrice ? { price_sent_at: at.toISOString() } : {}) })
+        .update({ handled_for: previous, ...(unprice ? { price_sent_at: null } : {}) })
         .eq("user_id", userId);
+    },
+    async priced(userId, at) {
+      const { data, error } = await db.from("monthly_ideas").update({ price_sent_at: at.toISOString() }).eq("user_id", userId).is("price_sent_at", null).select("user_id").maybeSingle();
+      if (error) console.error("[monthly-idea] couldn't mark the price", error.message);
+      return !error && Boolean(data);
+    },
+    async sent(userId, on) {
+      // The month is claimed already, so a lost write here never sends twice, and the price is marked already.
+      const { error } = await db.from("monthly_ideas").update({ last_sent_on: on }).eq("user_id", userId);
       if (error) console.error("[monthly-idea] couldn't record a sent email", error.message);
     },
   };
