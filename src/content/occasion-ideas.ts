@@ -282,7 +282,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "recipe-box",
           heading: "Su receta, con ella como ingredientes",
-          body: "Una ficha de receta sobre la encimera, y la receta es ella. Inclina el móvil y cada ingrediente cae en el bol mientras se escribe en la ficha, seis como máximo. Mídela: «dos tazas de preguntar si he comido», «una pizca de tener razón con el abrigo», «un domingo entero, regalado». Y escribe tú la línea de debajo del título: «Sale una como ella. Da para todos.»",
+          body: "Una ficha de receta sobre la encimera, y la receta es ella. Ella inclina el móvil y cada ingrediente cae en el bol mientras se escribe en la ficha, seis como máximo. Mídela: «dos tazas de preguntar si he comido», «una pizca de tener razón con el abrigo», «un domingo entero, regalado». Y escribe tú la línea de debajo del título: «Sale una como ella. Da para todos.»",
         },
         {
           template: "bouquet",
@@ -291,7 +291,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "jar-of-reasons",
-          heading: "Una nota por cada año siendo tu madre",
+          heading: "Una nota por cada año que es tu madre",
           body: "Un frasco de notas dobladas que salen de una en una al agitar el móvil. Escribe una por cada uno de esos años, y que cada nota sea algo que hizo, no algo que es: «Fingiste que la tostada quemada te gustaba así.» Ponle al frasco su propia etiqueta, «34 cosas que hiciste y que vi», y empieza por tu foto más antigua: las fotos van con las primeras notas, en orden.",
         },
         {
@@ -307,7 +307,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "garden",
           heading: "Un jardín para quien te enseñó sus plantas",
-          body: "Empuja una verja y baja por una página que crece al deslizar: brotes, un prado, tus fotos en una celosía y un invernadero con tu carta sobre la mesa. Elige qué crece en los parterres (rosas, peonías, girasoles o flores silvestres) y quién la acompaña: una mariposa, una abeja o un gato. En el cartel de la verja caben 24 caracteres: «Cuidado con las peonías».",
+          body: "Ella empuja una verja y baja por una página que crece al deslizar: brotes, un prado, tus fotos en una celosía y un invernadero con tu carta sobre la mesa. Elige qué crece en los parterres (rosas, peonías, girasoles o flores silvestres) y quién la acompaña: una mariposa, una abeja o un gato. En el cartel de la verja caben 24 caracteres: «Cuidado con las peonías».",
         },
         {
           template: "popup-card",
@@ -317,7 +317,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "keepsake",
           heading: "Un relicario con el mes en que naciste",
-          body: "Rompe un sello de lacre y encuentra una caja de cosas que alguien guardó. Decide qué dos fotos van primero, porque tienen sitio fijo: la primera queda bajo flores secas, arriba del todo, y la segunda va dentro de un relicario de oro que se abre con un toque. Graba dentro el mes en que llegaste, «desde marzo, 1994», y que la palabra arrancada de un libro sea suya: «Casa». Debajo van otras siete fotos, prensadas como páginas.",
+          body: "Ella rompe un sello de lacre y encuentra una caja de cosas que alguien guardó. Decide qué dos fotos van primero, porque tienen sitio fijo: la primera queda bajo flores secas, arriba del todo, y la segunda va dentro de un relicario de oro que se abre con un toque. Graba dentro el mes en que llegaste, «desde marzo, 1994», y que la palabra arrancada de un libro sea suya: «Casa». Debajo van otras siete fotos, prensadas como páginas.",
         },
         {
           template: "bloom",
@@ -445,7 +445,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "scratch-card",
           heading: "Para rascar: una visita, un partido, un nieto",
-          body: "Para el año en que el regalo es un anuncio. Rasca unas cuantas tarjetas, cada una con su foto y su pie, y la última lo dice en letras grandes: «Dos entradas. El sábado. Conduces tú.» Imprime una frase sobre la capa que se rasca para que la portada no cuente nada, hasta 30 caracteres: «Rasca con una moneda, como tú».",
+          body: "Para el año en que el regalo es un anuncio. Él rasca unas cuantas tarjetas, cada una con su foto y su pie, y la última lo dice en letras grandes: «Dos entradas. El sábado. Conduces tú.» Imprime una frase sobre la capa que se rasca para que la portada no cuente nada, hasta 30 caracteres: «Rasca con moneda, como siempre».",
         },
       ],
     },
@@ -518,9 +518,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       items: [
         {
           template: "cap-toss",
-          heading: "Grita, y el birrete sale volando",
-          brief: "Grita al móvil y el birrete sale disparado, más alto cuanto más fuerte.",
-          body: "Hecha para el día en sí. Un birrete espera en su pedestal, con toda la promoción detrás; grita al móvil y sale disparado, más alto cuanto más fuerte. Luego cae un diploma, y al tirar de la cinta se abre con tu carta. Pon el año y la carrera en la pancarta y, después de «Se le concede por», escribe lo que hizo de verdad: «acabar el trabajo de fin de grado y una mudanza el mismo mes».",
+          heading: "Gritan, y el birrete sale volando",
+          brief: "Gritan al móvil y el birrete sale disparado, más alto cuanto más fuerte.",
+          body: "Hecha para el día en sí. Un birrete espera en su pedestal, con toda la promoción detrás; gritan al móvil y sale disparado, más alto cuanto más fuerte. Luego cae un diploma, y al tirar de la cinta se abre con tu carta. Pon el año y la carrera en la pancarta y, después de «Se le concede por», escribe lo que hizo de verdad: «acabar el trabajo de fin de grado y una mudanza el mismo mes».",
         },
         {
           template: "our-timeline",
@@ -674,7 +674,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "Para quien se casa contigo, una hora antes",
-          body: "Escrita la noche anterior y leída a solas, con un sello que romper. En la nota gratis caben 500 caracteres, que dan para una promesa y una broma. Despídete con «Nos vemos delante. Yo soy quien llora,». Una nota gratis sale cuando la mandas, así que dale el enlace a alguien de confianza y dile el minuto; programarla tú viene con «Hazlo especial».",
+          body: "Escrita la noche anterior y leída a solas, con un sello que romper. En la nota gratis caben 500 caracteres, que dan para una promesa y una broma. Despídete con «Nos vemos en el altar. Yo soy quien llora,». Una nota gratis sale cuando la mandas, así que dale el enlace a alguien de confianza y dile el minuto; programarla tú viene con «Hazlo especial».",
         },
         {
           template: "keepsake",
@@ -769,8 +769,8 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "halfway",
           heading: "Un avión de papel que cruza la distancia real",
-          brief: "Sopla al móvil y un avión de papel recorre la distancia real entre los dos.",
-          body: "Una postal con un mapa: tu ciudad en una isla, la suya en la otra y, en grande, la distancia real entre los dos. Sopla al móvil y un avión de papel la recorre por la línea de puntos mientras bajan los kilómetros. Añade los sitios donde os habéis encontrado a medio camino, hasta cuatro, y una frase para el punto medio: «Por aquí debajo está el área de servicio donde nos despedimos.»",
+          brief: "Al soplar al móvil, un avión de papel recorre la distancia real entre los dos.",
+          body: "Una postal con un mapa: tu ciudad en una isla, la suya en la otra y, en grande, la distancia real entre los dos. Al soplar al móvil, un avión de papel la recorre por la línea de puntos mientras bajan los kilómetros. Añade los sitios donde os habéis encontrado a medio camino, hasta cuatro, y una frase para el punto medio: «Por aquí debajo está el área de servicio donde nos despedimos.»",
         },
         {
           template: "passport",
@@ -807,13 +807,13 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "pack-your-bags",
           heading: "La próxima visita, anunciada por sorpresa",
-          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en «Destino» y la tuya en «Salida». Irá metiendo tus pistas en la maleta, «mi peor jersey, a petición tuya», «hambre», «la llave que me diste», sin saber adónde va, hasta que el panel de salidas deletrea su propia ciudad. Pon en el billete la llegada de verdad: «vie. 12 dic., 19:40».",
+          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en «Destino» y la tuya en «Salida». Irá metiendo tus pistas en la maleta, «mi peor jersey, a petición tuya», «hambre», «la llave que me diste», sin saber adónde va, hasta que el panel de salidas deletree su propia ciudad. Pon en el billete la llegada de verdad: «vie. 12 dic., 19:40».",
         },
         {
           template: "paper-crane",
           heading: "Una grulla para la noche de la llamada cortada",
-          brief: "Dobla una hoja de papel pliegue a pliegue, con una frase tuya en cada doblez.",
-          body: "Una hoja de papel que dobla manteniendo pulsado cada pliegue, de tres a seis, con una frase tuya en cada doblez: «Odio más el retardo de la llamada que la distancia.» «Digo buenas noches dos veces para que una llegue.» Cuando ya es una grulla sopla al móvil y sale volando, y tu carta se queda en la mesa.",
+          brief: "Va doblando una hoja de papel pliegue a pliegue, con una frase tuya en cada doblez.",
+          body: "Una hoja de papel que dobla manteniendo pulsado cada pliegue, de tres a seis, con una frase tuya en cada doblez: «Odio más el retardo de la llamada que la distancia.» «Digo buenas noches dos veces para que una llegue.» Cuando ya es una grulla, al soplar al móvil sale volando, y tu carta se queda en la mesa.",
         },
         {
           template: "scrapbook",
@@ -888,7 +888,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "paper-crane",
           heading: "Seis pliegues para seis cosas que debiste decir",
-          body: "Dobla una hoja de papel manteniendo pulsado cada pliegue. Si suelta antes de tiempo, se abre otra vez. No se puede hacer con prisa, y una disculpa tampoco. Cada pliegue enseña una frase, de tres a seis: «Te interrumpí, y tenías razón.» La que queda en la mesa cuando la grulla se va es tu última palabra: «La próxima vez escucho primero.»",
+          body: "Va doblando una hoja de papel manteniendo pulsado cada pliegue. Si suelta antes de tiempo, se abre otra vez. No se puede hacer con prisa, y una disculpa tampoco. Cada pliegue enseña una frase, de tres a seis: «Te interrumpí, y tenías razón.» La que queda en la mesa cuando la grulla se va es tu última palabra: «La próxima vez escucho primero.»",
         },
         {
           template: "text-thread",
@@ -1040,8 +1040,8 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "favorite-person",
           heading: "Una página que dice quién es para ti",
-          brief: "Levanta un papel de seda con su nombre, y debajo hay una página de álbum en acuarela.",
-          body: "Levanta una hoja de papel de seda con su nombre y debajo hay una página de álbum en acuarela: tus fotos en polaroids, perlas, flor de cerezo, un lazo de raso y, en el centro, una nota rasgada con 22 caracteres tuyos. «mi persona favorita» cabe. «lo mejor de mi día» también. Cada toque en la página dibuja un corazón.",
+          brief: "Levantan un papel de seda con su nombre, y debajo hay una página de álbum en acuarela.",
+          body: "Levantan una hoja de papel de seda con su nombre y debajo hay una página de álbum en acuarela: tus fotos en polaroids, perlas, flor de cerezo, un lazo de raso y, en el centro, una nota rasgada con 22 caracteres tuyos. «mi persona favorita» cabe. «lo mejor de mi día» también. Cada toque en la página dibuja un corazón.",
         },
         {
           template: "the-council",
@@ -1116,12 +1116,12 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "wishbone",
           heading: "Una espoleta que solo gana uno de los dos",
-          body: "Una espoleta en un plato, con una etiqueta en cada punta. Tira de su lado con el dedo hasta que se parte, y tú decides antes a quién le toca la mitad grande. El deseo que sale en la tarjeta es tuyo, 120 caracteres: «Que el año que viene sea en casa, y que tu madre traiga la tarta.» Acción de Gracias es el cuarto jueves de noviembre en Estados Unidos y el segundo lunes de octubre en Canadá.",
+          body: "Una espoleta en un plato, con una etiqueta en cada punta. Tiran de su lado con el dedo hasta que se parte, y tú decides antes a quién le toca la mitad grande. El deseo que sale en la tarjeta es tuyo, 120 caracteres: «Que el año que viene sea en casa, y que tu madre traiga la tarta.» Acción de Gracias es el cuarto jueves de noviembre en Estados Unidos y el segundo lunes de octubre en Canadá.",
         },
         {
           template: "light-the-candles",
           heading: "Cinco velas, cinco cosas de este año",
-          body: "Una mesa al anochecer con cinco velas apagadas. Lleva la llama de mecha en mecha con el dedo, y cada vela que prende escribe con luz algo por lo que das las gracias: «la noche que condujiste cuatro horas por mi voz», «cada táper que preparaste sin que lo pidiera». Sesenta caracteres cada una. Ordénalas de menor a mayor, y la quinta vela es la que se recuerda.",
+          body: "Una mesa al anochecer con cinco velas apagadas. Llevan la llama de mecha en mecha con el dedo, y cada vela que prende escribe con luz algo por lo que das las gracias: «la noche que condujiste cuatro horas porque me notaste rara», «cada táper que preparaste sin que lo pidiera». Sesenta caracteres cada una. Ordénalas de menor a mayor, y la quinta vela es la que se recuerda.",
         },
         {
           template: "recipe-box",
@@ -1131,7 +1131,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-toast",
           heading: "Un brindis para quien no pudo coger el avión",
-          body: "Dos copas sobre lino y un menú entre ellas. Inclina el móvil para servir, lo toca una vez para chocar las copas, y del menú sale lo que habrías dicho de pie. Primera frase: «Por quienes estáis en la mesa, y por quien está en la pantalla.» Pon la casa en el menú, «En casa de la tía Jo, mesa de los niños», y llena las copas con algo sin alcohol si es la norma.",
+          body: "Dos copas sobre lino y un menú entre ellas. Inclinan el móvil para servir, lo tocan una vez para chocar las copas, y del menú sale lo que habrías dicho de pie. Primera frase: «Por quienes estáis en la mesa, y por quien está en la pantalla.» Pon la casa en el menú, «En casa de la tía Jo, mesa de los niños», y llena las copas con algo sin alcohol si es la norma.",
         },
         {
           template: "jar-of-reasons",
@@ -1146,7 +1146,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "fireside",
           heading: "Para quien este año no vuelve a casa",
-          body: "Una cabaña al anochecer, con hojas cayendo tras la ventana, o nieve si se parece más. Enciende la vela, la habitación se vuelve dorada y de la manta sale una carta, con tus fotos colgadas de un hilo con pinzas. Átale una etiqueta a la vela, 24 caracteres, «tu silla sigue guardada», y elige qué hay en la taza: cacao, té o café.",
+          body: "Una cabaña al anochecer, con hojas cayendo tras la ventana, o nieve si se parece más. Encienden la vela, la habitación se vuelve dorada y de la manta sale una carta, con tus fotos colgadas de un hilo con pinzas. Átale una etiqueta a la vela, 24 caracteres, «tu silla sigue guardada», y elige qué hay en la taza: cacao, té o café.",
         },
         {
           template: "front-page",

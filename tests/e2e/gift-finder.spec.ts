@@ -764,8 +764,8 @@ test.describe("Christmas gifts on a boyfriend's and a girlfriend's page", () => 
       // One line of at most fourteen words, and one button, which opens the finder on this answer.
       expect(words(await row.locator("h2 + p").innerText()), path).toBeLessThanOrEqual(14);
       await expect(row.getByRole("link", { name: es ? "Ver más regalos de Navidad" : "See more Christmas gifts" }), path).toHaveAttribute("href", `${es ? "/es" : ""}/gifts/finder?for=${who}&occasion=christmas`);
-      // The page's own list of ideas is still under it, whole.
-      await expect(page.locator("main ol > li").first(), path).toBeVisible();
+      // The page's own ideas are still under it (fix round 4: as picture cards, as the pages by kind have them).
+      await expect(page.locator("main [data-cards] [data-card]").first(), path).toBeAttached();
       // On a phone the four are one row, one card to a screen, with four dots.
       if (isMobile) {
         const seen = await row.locator("li").evaluateAll((cards) => cards.filter((card) => { const r = card.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; }).length);

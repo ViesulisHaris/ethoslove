@@ -36,7 +36,7 @@ export const GALLERY_LINES: Record<string, Record<GiftLocale, string>> = {
   "music-box": { en: "Wind the key and the lid opens.", es: "Dale cuerda y la tapa se abre." },
   seance: { en: "A spirit spells out your message.", es: "Un espíritu deletrea tu mensaje." },
   "bat-swarm": { en: "Bats spell their name on the moon.", es: "Murciélagos escriben su nombre en la luna." },
-  cauldron: { en: "Three things you love, one potion.", es: "Tres cosas que quieres, una poción." },
+  cauldron: { en: "Three things you love, one potion.", es: "Tres cosas que te encantan, una poción." },
   "jack-o-lantern": { en: "A pumpkin carved with their name.", es: "Una calabaza tallada con su nombre." },
   "haunted-house": { en: "Your photos in the lit windows.", es: "Tus fotos en las ventanas encendidas." },
   "nice-list": { en: "Good deeds, crimes, then a verdict.", es: "Buenas obras, fechorías y cae el sello." },

@@ -38,7 +38,7 @@ export const TEMPLATE_LEADS: Record<string, Partial<Record<GiftLocale, string>>>
   },
   "recipe-box": {
     en: "The recipe for her, on a card on the kitchen counter. She tilts the phone to pour in each ingredient you wrote, and the card becomes your letter.",
-    es: "La receta de ella, en una ficha sobre la encimera. Inclina el móvil para echar cada ingrediente que escribiste, y la ficha se convierte en tu carta.",
+    es: "La receta de ella, en una ficha sobre la encimera. Ella inclina el móvil para echar cada ingrediente que escribiste, y la ficha se convierte en tu carta.",
   },
   scrapbook: {
     es: "Un álbum que se abre como uno de verdad. Letras recortadas forman el título y tus fotos caen en la página como polaroids que se revelan.",
@@ -88,7 +88,7 @@ export const SCENE_LEADS: Record<string, Partial<Record<GiftLocale, string>>> = 
   },
   "jack-o-lantern": {
     en: "The eyes, the nose and the grin drop out piece by piece, and the face glows through the cuts. Underneath, your letter, your photos as candlelit polaroids and your song.",
-    es: "Los trozos caen uno a uno y la cara brilla por los cortes. Debajo, tu carta, tus fotos y vuestra canción.",
+    es: "Los ojos, la nariz y la sonrisa caen uno a uno y la cara brilla por los cortes. Debajo, tu carta, tus fotos y vuestra canción.",
   },
   picnic: {
     es: "Salen fresas, limonada rosa, tulipanes y vuestras fotos, y al final una nota doblada con tu carta dentro.",

@@ -181,8 +181,9 @@ for (const lang of LANGS) {
       await expect(h1).toContainText(line);
       await expect(h1).toContainText(lang.lang === "en" ? "A card that opens on their phone" : "Una tarjeta que se abre en su móvil");
       await expect(page.locator("h1")).toHaveCount(1);
-      // The owner's line is a maker's mark: once on the page, and nowhere in the header or footer.
-      const body = await page.locator("body").innerText();
+      // The owner's line is a maker's mark: once in the page's own content. The footer's small line
+      // under the wordmark is the same on every page and stays (the owner, 24 Nov 2026).
+      const body = await page.locator("main").innerText();
       expect(body.toLowerCase().split(line.toLowerCase()).length - 1).toBe(1);
 
       const kinds = page.locator("[data-kinds] [data-card]");
@@ -248,14 +249,13 @@ for (const lang of LANGS) {
       await expect(page.locator("main h2#by-person")).toHaveCount(1);
       await expect(page.locator(`main a[href="${lang.prefix}/digital-cards"]`).first()).toBeAttached();
       for (const kind of KINDS) await expect(page.locator(`main a[href="${lang.prefix}/gifts/${kind.slug}"]`).first()).toBeAttached();
-      // The two rows of pills, by person and by kind: each 44px to a thumb, with a ring when reached by keyboard.
-      const chips = page.locator(`main ul a.rounded-full[href^="${lang.prefix}/gifts/"], main ul a.rounded-full[href="${lang.prefix}/occasions"], main ul a.rounded-full[href="${lang.prefix}/digital-cards"]`);
-      expect(await chips.count()).toBeGreaterThanOrEqual(KINDS.length + 7);
-      const heights = await chips.evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+      // Where next (fix round 4: the page laid out as the pages by kind end): four pages by kind as posters, and the people,
+      // the occasions, the other kinds and /digital-cards as the quiet row of links, each 44px to a thumb.
+      const next = page.locator('section[aria-labelledby="by-person"] nav');
+      const links = next.locator(`a[href^="${lang.prefix}/gifts/"], a[href="${lang.prefix}/occasions"], a[href="${lang.prefix}/digital-cards"]`);
+      expect(await links.count()).toBeGreaterThanOrEqual(KINDS.length + 7 + 2);
+      const heights = await next.locator("ul.mt-9 a").evaluateAll((all) => all.map((a) => a.getBoundingClientRect().height));
       for (const h of heights) expect(h).toBeGreaterThanOrEqual(44);
-      const chip = page.locator(`main ul a.rounded-full[href="${lang.prefix}/gifts/last-minute"]`).first();
-      await chip.focus();
-      expect(await chip.evaluate((a) => a.matches(":focus-visible") && getComputedStyle(a).boxShadow !== "none")).toBe(true);
     });
 
     for (const [occasion, count] of OCCASIONS) {

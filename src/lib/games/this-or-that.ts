@@ -21,7 +21,7 @@ export const THIS_PAIRS: ThisPair[] = [
   { id: "window", a: { en: "Window open at night", es: "Ventana abierta de noche" }, b: { en: "Window shut", es: "Ventana cerrada" } },
   { id: "film-talk", a: { en: "Talk through the film", es: "Comentar la peli" }, b: { en: "Not a word until the credits", es: "Ni una palabra hasta los créditos" } },
   { id: "asleep-film", a: { en: "Wake me for the ending", es: "Despiértame para el final" }, b: { en: "Let me sleep through it", es: "Déjame dormir" } },
-  { id: "rewatch", a: { en: "A film we know by heart", es: "Una peli que nos sabemos" }, b: { en: "A film neither has seen", es: "Una que nadie ha visto" } },
+  { id: "rewatch", a: { en: "A film we know by heart", es: "Una peli que nos sabemos" }, b: { en: "A film neither has seen", es: "Una que no hemos visto ninguno" } },
   { id: "board", a: { en: "Play to win", es: "Jugar a ganar" }, b: { en: "Let you win", es: "Dejarte ganar" } },
   { id: "music-cook", a: { en: "Music while we cook", es: "Música mientras cocinamos" }, b: { en: "Talking while we cook", es: "Charla mientras cocinamos" } },
   { id: "bath", a: { en: "A long bath", es: "Un baño largo" }, b: { en: "A fast shower", es: "Una ducha rápida" } },

@@ -102,7 +102,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         q: { en: "Does spelling count?", es: "¿Cuenta la ortografía?" },
         a: {
           en: "Yes, but accents, capitals and a stray “a” or “the” don't cost the point. A guess counts in either of the site's two languages.",
-          es: "Sí, pero las tildes, las mayúsculas o un “el” o “una” de más no quitan el punto. Vale adivinar en cualquiera de los dos idiomas de la web.",
+          es: "Sí, pero las tildes, las mayúsculas o un «el» o «una» de más no quitan el punto. Vale adivinar en cualquiera de los dos idiomas de la web.",
         },
       },
       {

@@ -148,7 +148,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         lead: `Hay ${f.count} tarjetas, ordenadas aquí por lo que hacen al abrirse. De cada tipo se enseña una, y todas tienen una demo completa: mírala antes de hacer la tuya.`,
         also: "Del mismo tipo:",
         watch: "Verla",
-        make: "Hacer esta",
+        make: "Crear esta",
         full: "Este tipo, entero",
         items: kinds([
           {
@@ -202,7 +202,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       },
       cost: {
         label: "Precios",
-        line: "Pago único, sin suscripción. La carta es gratis como nota corta.",
+        line: "Pago único, sin suscripción. La carta, gratis como nota corta.",
         shown: [3, 4, 5],
         includes: "Qué incluye cada precio",
         heading: "Cuánto cuesta una tarjeta digital",

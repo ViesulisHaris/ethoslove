@@ -119,33 +119,6 @@
       "eyebrow": "See the reaction",
       "title": "The link goes out. The reply comes back.",
       "blurb": "At the end of every gift there is a reaction button: an emoji, a note, or a 20-second voice message, delivered straight to you.",
-      "cards": [
-        {
-          "from": "Marco",
-          "to": "Ana",
-          "sent": "I made you something. Open it with sound on.",
-          "reply": "I'm at work and crying in the stairwell. Three years. THREE.",
-          "emoji": "😭",
-          "time": "22:41"
-        },
-        {
-          "from": "Lucas",
-          "to": "Sofía",
-          "sent": "Look up. Well, look at your phone.",
-          "reply": "You put the tent night in there. I found all six. Fourteen days.",
-          "emoji": "🥹",
-          "time": "07:12"
-        },
-        {
-          "from": "Dani",
-          "to": "Mamá",
-          "sent": "Feliz día, ma. Tap the seal.",
-          "reply": "Quién te enseñó a hacer esto?? Lo vi cuatro veces ya.",
-          "emoji": "❤️",
-          "time": "09:58"
-        }
-      ],
-      "placeholderNote": "Sample reactions. Real ones replace these as they come in.",
       "realNote": "Real reactions, shared by the people who got the gifts. Names left out.",
       "realLabel": "A real reaction",
       "opened": "{count} Ethos gifts opened so far.",
@@ -3697,6 +3670,7 @@
     "makeLead": "Make the one in the phone",
     "watch": "Watch it",
     "ideaInFull": "The idea in full",
+    "giftPage": "About this gift",
     "readNext": "Read next",
     "byKind": "Gift ideas by kind",
     "guideTitle": "How to make it land",
