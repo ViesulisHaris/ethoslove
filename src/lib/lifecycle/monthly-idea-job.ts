@@ -177,7 +177,7 @@ export function supabaseIdeaStore(db: SupabaseClient<Database>): IdeaStore {
           }
         }
       }
-      const has = (data: { user_id: string }[] | null, id: string) => (data ?? []).some((r) => r.user_id === id);
+      const has = (data: { user_id: string | null }[] | null, id: string) => (data ?? []).some((r) => r.user_id === id);
       for (const id of ids) {
         const hash = keys.get(id);
         out.set(id, {
