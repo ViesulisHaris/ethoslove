@@ -7,11 +7,31 @@
  * checkout refuses the product: in the gallery it would be a gift nobody could send. So it stays out
  * of every list a visitor's page is made from (TEMPLATE_MANIFESTS and TEMPLATE_SLUGS in ./manifests,
  * LOADER_SLUGS in ./registry, SCHEMA_SLUGS in ./schemas: the gallery, the sitemap, the occasion
- * pages, the app's catalogue, the llms brief, checkout), exactly as the reference template does, and
- * like it is found by its slug under `next dev` only, where it is built, tested and looked at.
+ * pages, the app's catalogue, the llms brief, checkout, and every table that reads this switch),
+ * exactly as the reference template does, and like it is found by its slug under `next dev` only,
+ * where it is built, tested and looked at.
  *
- * Setting this to true is what puts it on the site. Do it in the same deploy that sets
- * GROUP_GIFTS_ENABLED (docs/GROUP.md, "Going live", step 3), never before: the first template in
- * the gallery with `features.group` is also what lets that variable turn group cards on.
+ * Two things must both hold for it to be in them, and this is the one place they are put together:
+ *
+ * 1. ADVENT_CALENDAR_SHIPS below: the code's half, the owner's decision (24 Nov 2026: on, with this
+ *    release).
+ * 2. GROUP_GIFTS_ENABLED is "true" for the build. It is the same server variable that turns group
+ *    cards on (lib/group/flag.ts); next.config.ts copies it into the build (`env`), so the browser's
+ *    lists and the server's agree. Setting or clearing it in Vercel takes a redeploy, as any variable
+ *    does: until then the running deployment keeps the state it was built with, calendar and group
+ *    cards together, never one without the other.
+ *
+ * So with the code's half on and the variable off the site is exactly as it was before the calendar
+ * existed, and the variable alone (with the template in the gallery, which is what makes
+ * groupGiftsEnabled() true) puts the calendar on sale together with group cards. Apply migration
+ * 0023 before setting the variable (docs/GROUP.md, "Going live").
  */
-export const ADVENT_CALENDAR_LIVE: boolean = false;
+export const ADVENT_CALENDAR_SHIPS: boolean = true;
+
+/** The rule, on its own so a test can play all four states. */
+export function adventCalendarLive(ships: boolean, groupGiftsEnabled: string | undefined): boolean {
+  return ships && groupGiftsEnabled === "true";
+}
+
+/** In the gallery, and in every list and table that reads this, exactly when both halves hold. */
+export const ADVENT_CALENDAR_LIVE: boolean = adventCalendarLive(ADVENT_CALENDAR_SHIPS, process.env.GROUP_GIFTS_ENABLED);

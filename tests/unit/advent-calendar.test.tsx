@@ -701,6 +701,42 @@ describe("held back until group cards are on sale", () => {
     expect(TEMPLATE_MANIFESTS.some((m) => m.slug === SLUG)).toBe(live);
   });
 
+  it("ships with this release, and is live only once GROUP_GIFTS_ENABLED is on as well: one rule, in one place", async () => {
+    const held = await vi.importActual<typeof import("@/templates/held")>("@/templates/held");
+    // The owner's decision of 24 Nov 2026: the code's half is on.
+    expect(held.ADVENT_CALENDAR_SHIPS).toBe(true);
+    // Both off; the code on and the variable off (or anything but exactly "true"); both on; the variable alone.
+    expect(held.adventCalendarLive(false, undefined)).toBe(false);
+    for (const off of [undefined, "", "false", "1", "TRUE"]) expect(held.adventCalendarLive(true, off), String(off)).toBe(false);
+    expect(held.adventCalendarLive(true, "true")).toBe(true);
+    expect(held.adventCalendarLive(false, "true")).toBe(false);
+    // next.config.ts hands the build the server's variable, as "true" or nothing, in server and browser code alike.
+    const config = readFileSync("next.config.ts", "utf8");
+    expect(config).toContain('env: { GROUP_GIFTS_ENABLED: process.env.GROUP_GIFTS_ENABLED === "true" ? "true" : "" }');
+  });
+
+  for (const [variable, live] of [[undefined, false], ["true", true]] as const) {
+    it(`the real switch with GROUP_GIFTS_ENABLED ${variable ?? "unset"}: the calendar is ${live ? "in" : "in none of"} the gallery's lists, and group cards can${live ? "" : "not"} be turned on`, async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      if (variable) vi.stubEnv("GROUP_GIFTS_ENABLED", variable);
+      else vi.stubEnv("GROUP_GIFTS_ENABLED", "");
+      vi.resetModules();
+      const held = await import("@/templates/held");
+      const manifests = await import("@/templates/manifests");
+      const registry = await import("@/templates/registry");
+      const flag = await import("@/lib/group/flag");
+      const sitemap = (await import("@/app/sitemap")).default;
+      expect(held.ADVENT_CALENDAR_LIVE).toBe(live);
+      expect(manifests.TEMPLATE_SLUGS.includes(SLUG)).toBe(live);
+      expect(registry.LOADER_SLUGS.includes(SLUG)).toBe(live);
+      expect(manifests.getManifest(SLUG) !== null).toBe(live);
+      expect(sitemap().some((page) => page.url.includes(`/templates/${SLUG}`))).toBe(live);
+      expect(flag.groupGiftsEnabled({ GROUP_GIFTS_ENABLED: variable })).toBe(live);
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }, 30_000);
+  }
+
   it("held, a production build has no trace of it: no list, no page, no search entry, and group cards cannot be turned on", async () => {
     const it = await found("production", false);
     expect(it.manifest).toBeNull();
@@ -824,7 +860,9 @@ describe("the words waiting for its page", () => {
     for (const table of [held.themes, held.steps, held.guides]) expect(Object.hasOwn(table, SLUG)).toBe(false);
     const doc = readFileSync("docs/GROUP.md", "utf8");
     expect(doc).toMatch(/^4\. Its page's own words\./m);
-    expect(doc).toContain('do the four things listed under "The first template"');
+    // Going live is the variable and the migration (the release of 24 Nov 2026 ships the code's half on).
+    expect(doc).toContain("Set `GROUP_GIFTS_ENABLED=true` in Vercel (Production) and redeploy");
+    expect(doc).toContain("`ADVENT_CALENDAR_SHIPS`");
   });
 
   it("six idea cards in each language: a title of six words, one line of sixteen, and a line that fits the field it is for", () => {

@@ -16,6 +16,10 @@ const supabaseHost = (() => {
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The group cards switch as the build saw it, in server and browser code alike: the Advent Calendar
+  // is in the gallery's lists only when it is on (src/templates/held.ts), and those lists are read in
+  // the browser too. A plain "true" or "", nothing secret. flag.ts still reads the server's own value.
+  env: { GROUP_GIFTS_ENABLED: process.env.GROUP_GIFTS_ENABLED === "true" ? "true" : "" },
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [60, 75, 90],

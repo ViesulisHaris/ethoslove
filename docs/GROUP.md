@@ -130,7 +130,12 @@ itself.
   the veil before a note's card has arrived, do nothing (a fast double tap used to take a note out
   and put it back unseen).
 
-**Held back.** `ADVENT_CALENDAR_LIVE` in `src/templates/held.ts` is `false`. While it is, the
+**Held back until group cards are on (since 24 Nov 2026).** `ADVENT_CALENDAR_LIVE` in
+`src/templates/held.ts` is one rule in one place: the code's half, `ADVENT_CALENDAR_SHIPS` (the
+owner turned it on for the release of 24 Nov 2026), and `GROUP_GIFTS_ENABLED` exactly `"true"` for
+the build (`next.config.ts` copies it into the build's `env`, so the browser's lists agree with the
+server's; changing it in Vercel takes a redeploy, which keeps the calendar and group cards together
+in every deployment). While it is false, the
 template is in none of the lists (`TEMPLATE_MANIFESTS`, `TEMPLATE_SLUGS`, `LOADER_SLUGS`,
 `SCHEMA_SLUGS`), so the gallery, the occasion pages, the sitemap, the app's catalogue, the llms
 brief and checkout never see it, it has no page, no search entry and no date, and
@@ -139,16 +144,16 @@ slug under `next dev` only: `/demo/advent-calendar`, `/create/advent-calendar` a
 `/create/advent-calendar?group=on`. Its pictures are static files under `/art/advent-calendar/` and
 `/templates/advent-calendar/`: they are in the deploy, and nothing links to them.
 
-Setting it to `true` puts the template in every list at once, with its page
-(`/templates/advent-calendar`), its entry in `src/content/template-seo.ts` and its date in
-`src/content/page-dates.ts` (set that date to the day itself). `tests/unit/advent-calendar.test.tsx`
-plays both states. Four things do not follow from the switch and are done by hand with it:
+When it is true the template is in every list at once, with its page
+(`/templates/advent-calendar`), its entry in `src/content/template-seo.ts`, its date in
+`src/content/page-dates.ts` (`GUIDES_LIVE`), its gallery line, its finder entry and its film start,
+and the legal pages' date moves to the group paragraphs' (`LEGAL_UPDATED`).
+`tests/unit/advent-calendar.test.tsx` plays every state. Since the integration of 24 Nov 2026 the
+tests that pinned "nothing on sale" (`group-contract`, `group-flag`, `templates.spec.ts`'s `HELD`,
+`advent-calendar.spec.ts`'s skip) follow the switch, so nothing is edited by hand on the day:
 
-1. `tests/unit/group-contract.test.ts` has a test named "no template in the gallery declares it yet:
-   nothing is on sale". It is true until that day and fails on it: change it to name the Advent
-   Calendar.
-2. `tests/e2e/templates.spec.ts`: move `advent-calendar` from `HELD` into the list. The file's own
-   spec, `tests/e2e/advent-calendar.spec.ts`, skips itself under `CI`: take that line out.
+1. (done: the tests follow the switch)
+2. (done)
 3. Where it stands in a list is the owner's call. Its `sortOrder` is 9, the newest gifts' own, so it
    stands among them and does not lead every list (a card that needs three other people and costs
    twice what one gift does, ahead of all of them, should be decided, not happen). To put it under
@@ -424,20 +429,20 @@ covers them in one place.
 
 In this order, each step leaving the site as it was until the last:
 
-1. Deploy with the switch off (this branch).
+1. Deploy the release (since 24 Nov 2026 it carries `ADVENT_CALENDAR_SHIPS = true`). With the
+   variable unset the site is as it was: no calendar anywhere, no group cards.
 2. Apply `supabase/migrations/0023_group_gifts.sql` by hand. Check: both tables exist with row-level
    security on, the `contributions` bucket is private, `group_photo_orphans` is executable by
-   `service_role` only.
-3. Put the Advent Calendar in the gallery: set `ADVENT_CALENDAR_LIVE` to `true`
-   (`src/templates/held.ts`) and do the four things listed under "The first template". Its `min`
-   is 3, so it cannot be sent while group cards are off (see "Off, a template made for group cards
-   is an ordinary template"): this step and step 6 go out in one deploy. Any later template that
-   declares `features.group` and keeps the contract above needs no switch of its own.
-4. Read the group paragraphs of the terms and the privacy policy (`GROUP` in `src/content/legal.ts`;
-   they appear only when the switch is on). Set `LEGAL_UPDATED` there to that day: the pages'
-   "last updated" line and their dates in the sitemap both read it.
-5. Optionally make a Stripe Product and set `STRIPE_PRODUCT_GROUP` (reporting only).
-6. Set `GROUP_GIFTS_ENABLED=true` in Vercel and redeploy.
+   `service_role` only. It only adds; nothing a visitor sees changes.
+3. Read the group paragraphs of the terms and the privacy policy (`GROUP` in `src/content/legal.ts`;
+   they appear only when group cards are on, and `LEGAL_UPDATED` then reads their own date).
+4. Optionally make a Stripe Product and set `STRIPE_PRODUCT_GROUP` (reporting only).
+5. Set `GROUP_GIFTS_ENABLED=true` in Vercel (Production) and redeploy. The calendar and group cards
+   go on together in that deployment, never one without the other. Never before step 2: with the
+   variable on and no tables, the calendar would be in the gallery and its panel could not start.
+
+To take it back down: clear the variable and redeploy. A draft that already holds notes then
+behaves as "Off, a template made for group cards is an ordinary template" describes.
 
 **One thing left to the owner: `robots.txt`.** It tells crawlers to stay off `/g/` and says nothing
 of `/c/`, and this branch leaves it so on purpose. The page at `/c/<token>` answers every crawler

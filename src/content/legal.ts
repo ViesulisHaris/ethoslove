@@ -1,3 +1,4 @@
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { CONTRIBUTION_LIMITS, type GiftLocale } from "@/lib/gift/schema";
 import { GROUP_RETENTION } from "@/lib/group/limits";
 import { BRAND } from "@/config/brand";
@@ -17,7 +18,12 @@ export const LEGAL_ENTITY = {
   registeredAt: "27 March 2026",
 } as const;
 
-export const LEGAL_UPDATED = "2026-11-20";
+/**
+ * The day the documents a visitor reads were last changed. With group cards on (the Advent Calendar
+ * in the gallery and GROUP_GIFTS_ENABLED, src/templates/held.ts) the terms and the privacy policy
+ * carry the group paragraphs below, last written on 24 Nov 2026; without them they are as on 20 Nov.
+ */
+export const LEGAL_UPDATED = ADVENT_CALENDAR_LIVE ? "2026-11-24" : "2026-11-20";
 
 /**
  * The box every buyer ticks on Stripe's checkout page, word for word without its link. Terms s.9
@@ -81,7 +87,7 @@ const CHARGED = {
  * of the documents only when `legalDocs(true)` is asked for, which the two pages do with the same
  * switch the rest of the site reads (groupGiftsEnabled). Switched off, both documents are word for
  * word what they were. Each paragraph goes into an existing section, so no section is renumbered.
- * On the day the switch goes on, set LEGAL_UPDATED to that day (docs/GROUP.md, "Going live").
+ * LEGAL_UPDATED follows the same switch (above).
  */
 const GROUP_STEP = { en: inEach((c) => PRODUCTS.group.amounts[c] - PRODUCTS.single.amounts[c], "en"), es: inEach((c) => PRODUCTS.group.amounts[c] - PRODUCTS.single.amounts[c], "es") };
 const GROUP = {
