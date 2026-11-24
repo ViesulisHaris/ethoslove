@@ -187,7 +187,7 @@ export function chargedAmount(session: Stripe.Checkout.Session, fallback: number
  */
 export function agreedConsent(
   session: Pick<Stripe.Checkout.Session, "consent" | "currency" | "currency_conversion" | "metadata">,
-  sold: Pick<Sold, "product" | "locale" | "plan">,
+  sold: Pick<Sold, "product" | "locale" | "plan"> & Partial<Pick<Sold, "pair">>,
 ): string | null {
   const onStripe = session.consent?.terms_of_service === "accepted";
   // Two more gifts paid with the wallet button had a notice beside it, no box: a notice binds nobody,
@@ -196,7 +196,7 @@ export function agreedConsent(
   if (!onStripe && !onPaySheet) return null;
   // A membership's box quotes its price, in the currency the catalogue priced it in.
   const currency = (session.currency_conversion?.source_currency ?? session.currency ?? "eur") as Currency;
-  return consentSentence(sold.product, sold.locale, { plan: sold.plan, currency: CHARGED_CURRENCIES.includes(currency) ? currency : "eur" });
+  return consentSentence(sold.product, sold.locale, { plan: sold.plan, currency: CHARGED_CURRENCIES.includes(currency) ? currency : "eur", pair: sold.pair });
 }
 
 /** The unlock rows a template or pack purchase grants its buyer for good. Null when the metadata doesn't add up. */

@@ -132,7 +132,8 @@ export async function POST(request: NextRequest) {
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
   // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.
-  if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product))) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
+  // A gift with two more is paid on Stripe's page only, where its box says what both keep.
+  if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product) || plan.pair)) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   // Two more gifts have no box to tick: the 30-day line beside their wallet button is a notice (lib/stripe/line-items.ts).
   if (body.oneTap && !body.waiver && plan.product !== "pair") return NextResponse.json({ error: "consent_required" }, { status: 400 });
   // The offer card asks for a wallet session each time it comes into view: one still open for the
@@ -199,7 +200,7 @@ export async function POST(request: NextRequest) {
     // The one-tap session has no tickbox of Stripe's to fall back from: the box was ours, and ticked.
     session = body.oneTap
       ? await stripe.checkout.sessions.create(plan.product === "pair" ? oneTapSessionParams(params, { notice: "shown_at_payment" }) : oneTapSessionParams(params))
-      : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
+      : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency, pair: plan.pair }) });
   } catch (e) {
     // The code and parameter only: Stripe's message can quote what was sent, the buyer's email included.
     const err = e as Partial<Stripe.errors.StripeError>;

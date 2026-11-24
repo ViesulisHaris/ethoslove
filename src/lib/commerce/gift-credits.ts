@@ -82,6 +82,30 @@ export async function revokeOneUnusedOf(db: Db, purchaseId: string, now: number)
 }
 
 /**
+ * Part of the money back on a gift paid with two more (kind "with_pair"): as many of its unused gifts
+ * go as the refund pays for, `target` in all, counting any taken by an earlier part of the same
+ * refund. A charge.refunded event comes again for each refund on the charge, with the total so far,
+ * so the same total takes nothing more. Returns how many went this time.
+ */
+export async function revokeUnusedUpTo(db: Db, purchaseId: string, target: number, now: number): Promise<number> {
+  const { data, error } = await db.from("gift_credits").select("id, spent_slug, revoked_at, n").eq("purchase_id", purchaseId).order("n");
+  if (error) {
+    if (isMissingTable(error)) return 0;
+    throw new Error(`gift credits not read: ${error.message}`);
+  }
+  const rows = data ?? [];
+  const need = target - rows.filter((row) => row.revoked_at !== null).length;
+  const unused = [...rows].reverse().filter((row) => row.spent_slug === null && row.revoked_at === null).slice(0, Math.max(0, need));
+  let taken = 0;
+  for (const row of unused) {
+    const { data: hit, error: failed } = await db.from("gift_credits").update({ revoked_at: iso(now) }).eq("id", row.id).is("revoked_at", null).select("id");
+    if (failed) throw new Error(`gift credit not revoked: ${failed.message}`);
+    taken += (hit ?? []).length;
+  }
+  return taken;
+}
+
+/**
  * A dispute decided in our favour: the purchase's gifts count again. Returns the templates the used
  * ones were spent on, so their unlock rows can be granted again (lib/commerce/revoke.ts).
  */

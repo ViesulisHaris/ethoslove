@@ -340,6 +340,22 @@ describe("the Checkout Session for two more gifts", () => {
     expect(consentSentence("single", "en")).toBe("I ask Ethos to unlock my purchase straight away, before the 14-day cancellation period ends, and I understand that once it's unlocked I lose my right to cancel.");
   });
 
+  it("a gift paid with two more: the box says both what the unlock gives up and what the two keep, before paying", () => {
+    const withPair = plan({ product: "single", templateSlugs: ["bouquet"], addPair: true }, { ...guest, addPair: { onSale: true, ready: 0 } });
+    expect(withPair).toMatchObject({ kind: "with_pair", pair: true });
+    const params = sessionParams(withPair, options);
+    const box = (params.custom_text?.terms_of_service_acceptance as { message: string }).message;
+    expect(box).toContain(consentSentence("single", "en"));
+    expect(box).toContain("I understand that I can cancel the two more gifts within 30 days for a refund of any I haven't used, and that a gift I've used can no longer be cancelled.");
+    expect(consentSentence("extras", "es", { pair: true })).toContain("Entiendo que puedo desistir de los dos regalos más en un plazo de 30 días");
+    expect(withdrawalNotice("single", "en", "https://ethos.test", { pair: true })).toContain("The two more gifts are added to your account: one you haven't used can be refunded for 30 days.");
+    expect(withdrawalNotice("single", "es", "https://ethos.test", { pair: true })).toContain("30 días");
+    // Without the two, every sentence is what it was; a pair flag means nothing on another product.
+    expect(consentSentence("single", "en", { pair: false })).toBe(consentSentence("single", "en"));
+    expect(consentSentence("membership", "en", { pair: true })).toBe(consentSentence("membership", "en"));
+    expect(withdrawalNotice("single", "en", "https://ethos.test")).not.toContain("two more");
+  });
+
   it("is a one-tap session marked 'shown_at_payment', where the pay sheet's are 'pay_sheet' as before", () => {
     const pairTap = oneTapSessionParams(sessionParams(plan({ product: "pair" }, buyer), signedIn), { notice: "shown_at_payment" });
     expect(pairTap).toMatchObject({ ui_mode: "elements", metadata: { withdrawal_notice: "shown_at_payment", product: "pair" } });

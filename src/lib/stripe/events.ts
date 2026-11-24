@@ -3,7 +3,8 @@ import { missingMembershipColumns, type Db } from "@/lib/commerce/db";
 import { applySubscriptionState, rowBySubscription, switchToMonthlyNow, type SendEnded } from "@/lib/commerce/memberships";
 import type { Pass } from "@/lib/commerce/passes";
 import { restorePurchase, revokePurchase, withdrawPurchase } from "@/lib/commerce/revoke";
-import { revokeOneUnusedOf } from "@/lib/commerce/gift-credits";
+import { revokeOneUnusedOf, revokeUnusedUpTo } from "@/lib/commerce/gift-credits";
+import { PAIR_GIFTS, PRODUCTS, type Currency } from "@/lib/pricing/products";
 import type { Fulfilment } from "./fulfil";
 import {
   cancelSubscriptionNow,
@@ -236,7 +237,7 @@ async function onInvoiceUnpaid(event: Stripe.Invoice, kind: "failed" | "action_r
   return ok();
 }
 
-type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null };
+type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null; kind?: string | null };
 
 /**
  * The purchase a charge paid for, or null when it isn't ours. A lookup that fails throws (Stripe
@@ -259,6 +260,8 @@ const cancelWith = (deps: StripeEventDeps) => async (subscriptionId: string) => 
  * "requested by customer" of an Ethos for Two payment is a withdrawal within the 14 days: the owner
  * refunds what's left after the days used, and the membership ends for both. Half or more of two
  * more gifts refunded is one unused gift given back (the 30-day promise, terms): one gift ready goes.
+ * On a gift paid with two more (kind "with_pair"), the money back is measured against the two's own
+ * line: half of it takes one unused gift, all of it both, and the template unlock stays.
  * Any other partial refund is a goodwill gesture and changes nothing.
  */
 async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<EventOutcome> {
@@ -270,6 +273,16 @@ async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<E
   }
   if (purchase.product === "pair") {
     if (charge.amount_refunded * 2 >= charge.amount) await revokeOneUnusedOf(deps.db, purchase.id, deps.now);
+    return ok();
+  }
+  if (purchase.kind === "with_pair") {
+    const currency = charge.currency?.toLowerCase() as Currency;
+    const line = PRODUCTS.pair.amounts[currency];
+    if (line) {
+      // Each gift is half the line: €2.50 back is one, €5 both.
+      const gifts = Math.min(PAIR_GIFTS, Math.floor((charge.amount_refunded * PAIR_GIFTS) / line));
+      if (gifts > 0) await revokeUnusedUpTo(deps.db, purchase.id, gifts, deps.now);
+    }
     return ok();
   }
   if (purchase.product !== "pass" && purchase.product !== "membership") return ok();

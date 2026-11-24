@@ -90,6 +90,39 @@ describe("refunds of two more gifts", () => {
     expect(await readyGifts(fake.db, "u1")).toBe(2);
   });
 
+  it("on a gift paid with two more: part of the two's line back takes that many unused gifts, and the gift's own unlock stays", async () => {
+    const fake = seed();
+    fake.tables.purchases.push({ id: "wp", user_id: "u1", product: "single", status: "paid", amount: 1499, currency: "eur", template_slugs: ["museum"], kind: "with_pair", membership_id: null, stripe_payment_intent_id: "pi_wp" });
+    await grantForever(fake.db, "u1", ["museum"], "wp");
+    await grantGifts(fake.db, "u1", "wp", 2);
+    const partly = (amountRefunded: number) => ({ id: "ch_wp", object: "charge", payment_intent: "pi_wp", amount: 1499, currency: "eur", amount_refunded: amountRefunded, refunded: false });
+    // Less than one gift's half of the line: a goodwill gesture.
+    await handleStripeEvent(event("charge.refunded", partly(200)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(2);
+    // €2.50: one gift.
+    await handleStripeEvent(event("charge.refunded", partly(250)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(1);
+    // The same event again takes no more.
+    await handleStripeEvent(event("charge.refunded", partly(250)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(1);
+    // The whole €5 by now: the other one too.
+    await handleStripeEvent(event("charge.refunded", partly(500)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(0);
+    expect(slugs(fake)).toContain("museum");
+    expect(fake.rows("purchases").find((p) => p.id === "wp")?.status).toBe("paid");
+  });
+
+  it("on a gift paid with two more, all five back at once takes both, a used one stays used", async () => {
+    const fake = seed();
+    fake.tables.purchases.push({ id: "wp", user_id: "u1", product: "single", status: "paid", amount: 1799, currency: "usd", template_slugs: ["museum"], kind: "with_pair", membership_id: null, stripe_payment_intent_id: "pi_wp" });
+    await grantGifts(fake.db, "u1", "wp", 2);
+    expect(await spendGift(fake.db, "u1", "bouquet")).toBe("spent");
+    await handleStripeEvent(event("charge.refunded", { id: "ch_wp", object: "charge", payment_intent: "pi_wp", amount: 1799, currency: "usd", amount_refunded: 600, refunded: false }), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(0);
+    expect(fake.rows("gift_credits").filter((r) => r.purchase_id === "wp" && r.revoked_at)).toHaveLength(1);
+    expect(slugs(fake)).toContain("bouquet");
+  });
+
   it("a dispute takes it all, and a won dispute brings back the gifts, the template and the gift made with it", async () => {
     const fake = seed();
     await bought(fake, ["bouquet"]);

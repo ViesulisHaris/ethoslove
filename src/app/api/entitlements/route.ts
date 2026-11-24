@@ -25,9 +25,11 @@ export async function GET(request: NextRequest) {
   const user = await getCurrentUser();
   if (!supabase || !user) {
     // A guest may add two more gifts to the gift they pay for, while they are on sale and their table
-    // is there (counting no one's gifts ready reads null without it).
-    const admin = getSupabaseAdminClient();
-    const addPair = pairOnSale() && admin !== null && (await readyGifts(admin, NO_ONE)) !== null;
+    // is there (counting no one's gifts ready reads null without it). Only the pay panel of a reader a
+    // reminder e-mail brought asks (`?addPair=1`): every other guest read stays free of the database.
+    const asked = request.nextUrl.searchParams.get("addPair") === "1";
+    const admin = asked && pairOnSale() ? getSupabaseAdminClient() : null;
+    const addPair = admin !== null && (await readyGifts(admin, NO_ONE)) !== null;
     return NextResponse.json({ ...SIGNED_OUT, addPair }, { headers: NO_STORE });
   }
   const locale = request.nextUrl.searchParams.get("locale") === "es" ? "es" : "en";

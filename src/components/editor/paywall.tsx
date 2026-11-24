@@ -136,6 +136,8 @@ export function Paywall({
   const personalOn = personalFor !== null && chosen === forTemplate;
   const [bump, setBump] = useState(false);
   const [paying, setPaying] = useState(false);
+  // Which button the spinner belongs on: the pay button, or "Or this one and your next two".
+  const [payingPair, setPayingPair] = useState(false);
   // Taps that land together are one checkout, not one each.
   const going = useRef(false);
   const showCheckoutError = useCheckoutError();
@@ -189,7 +191,7 @@ export function Paywall({
   useEffect(() => {
     if (!fromReminder) return;
     let live = true;
-    void fetch("/api/entitlements", { cache: "no-store" })
+    void fetch("/api/entitlements?addPair=1", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((ent: { addPair?: unknown } | null) => {
         if (live && ent?.addPair === true) setAddPair(true);
@@ -227,7 +229,8 @@ export function Paywall({
     going.current = true;
     setPaying(true);
     const withPair = options.withPair === true && pairOn;
-    track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
+    setPayingPair(withPair);
+    track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, ...(withPair ? { pair: true } : {}) });
     if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
     if (keepArm) {
       track(keepArm === "keep" ? "letter_pay_keep" : "letter_pay_plain", { guest });
@@ -457,8 +460,8 @@ export function Paywall({
         onClick={() => void pay()}
         data-testid="pay-single"
       >
-        {paying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-        <span>{paying ? t("paying") : t("payButton", { price: money(total) })}</span>
+        {paying && !payingPair ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+        <span>{paying && !payingPair ? t("paying") : t("payButton", { price: money(total) })}</span>
       </Button>
       <OneTapPay
         request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) }}
@@ -474,7 +477,8 @@ export function Paywall({
           onClick={() => void pay({ withPair: true })}
           data-testid="pay-with-pair"
         >
-          {t("three", { price: money(withPairTotal) })}
+          {paying && payingPair ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+          <span>{paying && payingPair ? t("paying") : t("three", { price: money(withPairTotal) })}</span>
         </Button>
       ) : null}
       {panel ? (
