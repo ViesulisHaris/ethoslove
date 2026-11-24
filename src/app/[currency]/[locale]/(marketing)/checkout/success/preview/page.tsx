@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { BackToGift, UpgradeAfterPurchase } from "@/components/pricing/upgrade-after-purchase";
 import { isUpgradePreviewState, previewUpgrade } from "@/components/pricing/upgrade-preview-fixtures";
+import { PairSuccessButtons } from "../pair-success";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -13,7 +14,8 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
 /**
  * Development only: the success page after a single, a pick three or "make it special", with the
- * upgrade card in each of its states (?state=single|pick3|extras|birthday|earlier|until,
+ * upgrade card in each of its states (?state=single|pick3|extras|birthday|earlier|until; ?state=pair
+ * for the ending after two more gifts, which has no card,
  * ?currency=eur|usd|gbp, ?guest=1 for a guest's way back to the gift, and ?auto=<ms> for that way
  * back going by itself), for screenshots and the e2e tests, which never finish a real checkout (the
  * dev server's database is production). The card's button talks to the real route, which a test
@@ -25,6 +27,7 @@ export default async function UpgradePreviewPage({ params, searchParams }: PageP
   setRequestLocale(locale);
   const query = await searchParams;
   const state = one(query.state) ?? "single";
+  if (state === "pair") return <PairPreview />;
   if (!isUpgradePreviewState(state)) notFound();
   const upgrade = previewUpgrade(state, one(query.currency));
   const t = await getTranslations("checkout");
@@ -50,6 +53,21 @@ export default async function UpgradePreviewPage({ params, searchParams }: PageP
         </Button>
       )}
       {upgrade ? <UpgradeAfterPurchase sessionId={sessionId} returnTo={returnTo} upgrade={upgrade} /> : null}
+    </div>
+  );
+}
+
+/** The real page's ending for a paid pair, as it draws it. */
+async function PairPreview() {
+  const tp = await getTranslations("editor.share.pair");
+  return (
+    <div className="container-narrow flex flex-col items-center py-24 text-center">
+      <div className="grid size-16 place-items-center rounded-full bg-moss/10">
+        <Check aria-hidden="true" className="size-7 text-moss" />
+      </div>
+      <h1 className="mt-6 display-lg">{tp("readyTitle")}</h1>
+      <p className="mt-3 max-w-md text-muted-foreground">{tp("readyLine")}</p>
+      <PairSuccessButtons />
     </div>
   );
 }

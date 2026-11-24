@@ -5,7 +5,7 @@ import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { checkoutSourceInput, checkoutSourceRow, saveCheckoutSource } from "@/lib/attribution/checkout-source";
 import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
-import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, pairOnSale, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
 import { RETURN_PATH, membershipSessionParams, metadataRef, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
@@ -19,6 +19,7 @@ import { siteOrigin } from "@/lib/commerce/db";
 import { readBuyer } from "@/lib/commerce/buyer";
 import { creditedCreator } from "@/lib/commerce/creators";
 import { saveGiftCardDetails } from "@/lib/commerce/gift-cards";
+import { readyGifts, settlePairSessions } from "@/lib/commerce/gift-credits";
 import { planCheckout } from "@/lib/commerce/plan";
 import { PERSONAL_PRICE_COOKIE, activePersonalPrice } from "@/lib/commerce/personal-price";
 
@@ -104,20 +105,35 @@ export async function POST(request: NextRequest) {
   const currency: Currency = body.currency && CHARGED_CURRENCIES.includes(body.currency) ? body.currency : visitorCurrency(request.headers);
 
   const now = Date.now();
-  const [creatorCode, owned, membership, personalPrice] = await Promise.all([
+  const pairAsked = product === "pair";
+  const [creatorCode, owned, membership, personalPrice, ready] = await Promise.all([
     creditedCreator(admin, body.ref, user?.email),
     readBuyer(admin, userId),
-    userId && (product === "membership" || product === "pass") ? membershipContextOf(admin, userId, now) : null,
+    userId && (product === "membership" || product === "pass" || pairAsked) ? membershipContextOf(admin, userId, now) : null,
     body.personalPrice ? activePersonalPrice(request.cookies.get(PERSONAL_PRICE_COOKIE)?.value, now) : null,
+    // Two more gifts: how many the buyer has ready (null before migration 0024).
+    userId && pairAsked ? readyGifts(admin, userId) : null,
   ]);
+  // Two more gifts are sold by one rule (lib/commerce/gift-credits.ts pairAllowed), on what the server read.
+  const pair = pairAsked
+    ? { onSale: pairOnSale(), ready, memberRunning: Boolean(membership?.running), paidProducts: owned.purchases.map((p) => p.product) }
+    : undefined;
   const plan = planCheckout(
     { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan, personalPrice: body.personalPrice },
-    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, groupOnSale: groupGiftsEnabled(), ...owned },
+    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, groupOnSale: groupGiftsEnabled(), ...owned, ...(pair ? { pair } : {}) },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
   // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.
   if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product))) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
-  if (body.oneTap && !body.waiver) return NextResponse.json({ error: "consent_required" }, { status: 400 });
+  // Two more gifts have no box to tick: the 30-day line beside their wallet button is a notice (lib/stripe/line-items.ts).
+  if (body.oneTap && !body.waiver && plan.product !== "pair") return NextResponse.json({ error: "consent_required" }, { status: 400 });
+  // The offer card asks for a wallet session each time it comes into view: one still open of the same
+  // kind and price is answered again instead of a new purchase row each time, and every other open
+  // one is closed first, so only one checkout for two more gifts can ever be paid.
+  if (plan.product === "pair" && user) {
+    const open = await settlePairSessions(stripe, admin, user.id, now, { amount: plan.total, currency, oneTap: Boolean(body.oneTap) });
+    if (open) return NextResponse.json(body.oneTap ? { clientSecret: open.client_secret, sessionId: open.id } : { url: open.url });
+  }
 
   let purchaseId: string;
   if (user) {
@@ -175,7 +191,7 @@ export async function POST(request: NextRequest) {
   try {
     // The one-tap session has no tickbox of Stripe's to fall back from: the box was ours, and ticked.
     session = body.oneTap
-      ? await stripe.checkout.sessions.create(oneTapSessionParams(params))
+      ? await stripe.checkout.sessions.create(plan.product === "pair" ? oneTapSessionParams(params, { notice: "shown_at_payment" }) : oneTapSessionParams(params))
       : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
   } catch (e) {
     // The code and parameter only: Stripe's message can quote what was sent, the buyer's email included.
@@ -185,8 +201,13 @@ export async function POST(request: NextRequest) {
   }
   if (user) await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
   // Where the buyer came from, stored once the buyer has their answer: it can't slow or fail checkout.
-  const source = checkoutSourceRow(purchaseId, body.source, metadataRef(body.ref), now);
+  // Not for the wallet session two more gifts make when their card is only seen: nobody has tapped
+  // anything yet, and counting it as a checkout started would lower the checkout-to-paid rate
+  // (/api/internal/sales, docs/marketing/META-ADS.md). "Pay by card instead" is a tap, and counts.
+  const seenNotTapped = plan.product === "pair" && Boolean(body.oneTap);
+  const source = seenNotTapped ? null : checkoutSourceRow(purchaseId, body.source, metadataRef(body.ref), now);
   if (source) after(() => saveCheckoutSource(admin, source));
-  if (body.oneTap) return NextResponse.json({ clientSecret: session.client_secret });
+  if (body.oneTap) return NextResponse.json(plan.product === "pair" ? { clientSecret: session.client_secret, sessionId: session.id } : { clientSecret: session.client_secret });
   return NextResponse.json({ url: session.url });
 }
+

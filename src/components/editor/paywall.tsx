@@ -11,8 +11,8 @@ import { freeTestEvent, track } from "@/lib/analytics/track";
 import { rememberPayClick, type PayArm } from "@/lib/editor/pay-sheet-split";
 import { rememberLetterClick, type KeepArm } from "@/lib/editor/keep-split";
 import { adTrack } from "@/lib/analytics/ads";
-import { PRODUCTS, SECOND_GIFT, bumpAmount, extrasAmount, formatAmount, type Currency } from "@/lib/pricing/products";
-import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
+import { PRODUCTS, bumpAmount, extrasAmount, formatAmount, type Currency } from "@/lib/pricing/products";
+import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
@@ -27,8 +27,6 @@ import {
   payTotal,
   pick3Href,
   pick3Offered,
-  secondOffered,
-  secondSuggestions,
   templatePlan,
   type PaywallPlan,
   type UpgradeQuote,
@@ -43,7 +41,7 @@ const OneTapPay = dynamic(() => import("./one-tap-pay").then((m) => m.OneTapPay)
  * The paywall inside the publish sheet, for guests and signed-in senders alike. It opens with what
  * the gift is for (their face when it opens, or a real reaction to one when the site has one it may
  * show), then what each paid part does for them. Two rows to choose between (this template, or every
- * template), the add-ons below them in one group, unticked (every template, or a second gift), the pay
+ * template), the add-on below them, unticked (every other template), the pay
  * button, then one-tap Apple Pay / Google Pay where the phone has it. Every amount comes from the catalogue, and is what checkout
  * charges: there are no codes or discounts to apply on the way.
  */
@@ -137,9 +135,6 @@ export function Paywall({
   // The personal price is for this one gift: no add-ons with it.
   const personalOn = personalFor !== null && chosen === forTemplate;
   const [bump, setBump] = useState(false);
-  // The second gift: off until ticked; its template is the first suggestion until another is picked.
-  const [secondOn, setSecondOn] = useState(false);
-  const [secondPick, setSecondPick] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
   // Taps that land together are one checkout, not one each.
   const going = useRef(false);
@@ -184,11 +179,10 @@ export function Paywall({
   const [treeTag] = useState(() => extraOnOffer() === "tree-tag");
   const showBump = !personalOn && bumpOffered(chosen, all);
   const bumpOn = showBump && bump;
-  const suggestions = secondSuggestions(slug, ownedElsewhere.map((m) => m.slug));
-  const pick = secondPick && suggestions.includes(secondPick) ? secondPick : (suggestions[0] ?? null);
-  const showSecond = !personalOn && secondOffered(chosen, bumpOn) && pick !== null;
-  const second = showSecond && secondOn ? pick : null;
-  const total = payTotal(chosen, planAmount, bumpOn, currency, second !== null);
+  // "A second gift" is no longer offered here: two more gifts are, after payment, on the share
+  // screen (components/editor/two-more-gifts.tsx). Checkout still takes one from a page opened before.
+  const second: string | null = null;
+  const total = payTotal(chosen, planAmount, bumpOn, currency);
 
   useEffect(() => {
     if (manifest.tier === "free") track("extras_offer_shown", { template: slug, guest });
@@ -313,8 +307,8 @@ export function Paywall({
           </Link>
         ) : null}
 
-        {showBump || showSecond ? (
-          // The add-ons, one group: unticked, always (EU law, and the only honest way to offer them).
+        {showBump ? (
+          // The add-on: unticked, always (EU law, and the only honest way to offer it).
           <div className="mt-2 divide-y divide-dashed divide-line overflow-hidden rounded-lg border border-dashed border-line">
             {showBump ? (
               <label className={cn("flex cursor-pointer items-start gap-3 px-3 py-3 transition-colors", bump ? "bg-coral/5" : "hover:bg-ink/[0.03]")} data-testid="bump">
@@ -324,8 +318,6 @@ export function Paywall({
                   disabled={paying}
                   onChange={(e) => {
                     setBump(e.target.checked);
-                    // Every template includes the second gift: one or the other.
-                    if (e.target.checked) setSecondOn(false);
                     track("bump_toggled", { template: slug, on: e.target.checked, product: chosen });
                   }}
                   className="size-5 shrink-0 accent-coral"
@@ -338,46 +330,6 @@ export function Paywall({
                   <span className="block text-xs text-muted-foreground">{tm("bumpBlurb")}</span>
                 </span>
               </label>
-            ) : null}
-            {showSecond ? (
-              <div className={cn("px-3 py-3 transition-colors", secondOn ? "bg-coral/5" : "hover:bg-ink/[0.03]")} data-testid="second">
-                <label className="flex cursor-pointer items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={secondOn}
-                    disabled={paying}
-                    onChange={(e) => {
-                      setSecondOn(e.target.checked);
-                      track("second_toggled", { template: slug, on: e.target.checked, pick: pick ?? "" });
-                    }}
-                    className="size-5 shrink-0 accent-coral"
-                  />
-                  <span className="min-w-0 flex-1">
-                    <span className="flex items-baseline justify-between gap-3 text-sm leading-5">
-                      <span className="min-w-0 font-medium">{tm("second")}</span>
-                      <span className="shrink-0 font-semibold">{tm("secondPrice", { price: money(SECOND_GIFT.amounts[currency]) })}</span>
-                    </span>
-                    <span className="block text-xs text-muted-foreground">{tm("secondBlurb")}</span>
-                  </span>
-                </label>
-                {secondOn ? (
-                  <div role="radiogroup" aria-label={tm("secondPick")} className="mt-2.5 flex flex-wrap gap-1.5 pl-8" data-testid="second-pick">
-                    {suggestions.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        role="radio"
-                        aria-checked={pick === s}
-                        disabled={paying}
-                        onClick={() => setSecondPick(s)}
-                        className={cn("min-h-9 rounded-full border px-3 text-xs font-medium transition-colors", pick === s ? "border-coral bg-coral text-paper" : "border-line bg-card hover:border-ink/40")}
-                      >
-                        {getManifest(s)?.name[locale] ?? s}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
             ) : null}
           </div>
         ) : null}

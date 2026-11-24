@@ -11,7 +11,18 @@ import { hasSessionCookie } from "@/lib/supabase/session-cookie";
  * (the games, /pricing, /redeem, /for-two/join) to read four fields.
  */
 export type PassInfo = { endsAt: string; isOwner: boolean; partnerJoined: boolean; inviteUrl?: string };
-export type Entitlements = { signedIn: boolean; templates: string[]; packs: string[]; pass: PassInfo | null; membership: MembershipSummary | null };
+export type PairOffer = { amount: number; currency: "usd" | "eur" | "gbp" };
+export type Entitlements = {
+  signedIn: boolean;
+  templates: string[];
+  packs: string[];
+  pass: PassInfo | null;
+  membership: MembershipSummary | null;
+  /** Gifts ready from two more gifts; 0 when the answer has none (an older answer, the iPhone app's). */
+  giftsReady: number;
+  /** Two more gifts, offered at this price; null when not offered or not said. */
+  pairOffer: PairOffer | null;
+};
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 /** A list of strings, or an empty one: one bad entry voids the list rather than being skipped. */
@@ -61,13 +72,29 @@ export function parseMembership(value: unknown): MembershipSummary | null {
   };
 }
 
+function parsePairOffer(value: unknown): PairOffer | null {
+  if (!isRecord(value)) return null;
+  const { amount, currency } = value;
+  if (typeof amount !== "number" || !Number.isInteger(amount) || amount <= 0 || !oneOf(currency, ["usd", "eur", "gbp"] as const)) return null;
+  return { amount, currency };
+}
+
 /** Only `signedIn` is required; every other field falls back to "nothing" on its own. */
 export function parseEntitlements(value: unknown): Entitlements | null {
   if (!isRecord(value) || typeof value.signedIn !== "boolean") return null;
-  return { signedIn: value.signedIn, templates: strings(value.templates), packs: strings(value.packs), pass: parsePass(value.pass), membership: parseMembership(value.membership) };
+  const ready = typeof value.giftsReady === "number" && Number.isInteger(value.giftsReady) && value.giftsReady > 0 ? value.giftsReady : 0;
+  return {
+    signedIn: value.signedIn,
+    templates: strings(value.templates),
+    packs: strings(value.packs),
+    pass: parsePass(value.pass),
+    membership: parseMembership(value.membership),
+    giftsReady: ready,
+    pairOffer: parsePairOffer(value.pairOffer),
+  };
 }
 
-const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null };
+const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null, giftsReady: 0, pairOffer: null };
 
 export async function fetchEntitlements(): Promise<Entitlements | null> {
   // No session cookie, no session: answered here, so a signed-out visitor sees the sign-in at once.

@@ -251,7 +251,14 @@
     "opensTotal": "{n} opens in the last 30 days",
     "showTable": "Show as table",
     "showChart": "Show as chart",
-    "day": "Day"
+    "day": "Day",
+    "ready": {
+      "count": "{count, plural, one {Gift ready to make} other {Gifts ready to make}}",
+      "countSr": "{count, plural, one {# gift ready to make} other {# gifts ready to make}}",
+      "line": "Paid for. Any gift you like.",
+      "make": "{kind, select, christmas {Make the Christmas one} valentines {Make the Valentine's one} birthday {Make the one for {name}'s birthday} birthdayNoName {Make the birthday one} anniversary {Make the anniversary one} day {Make the one for {name}} other {Make a gift}}",
+      "makeAny": "Make a gift"
+    }
   },
   "account": {
     "title": "Account",
@@ -601,7 +608,20 @@
         "network": "The connection dropped. Try again, or remove it to send the gift without it.",
         "remove": "Remove"
       },
-      "campaign": "Free with the creator campaign: {left} of {limit} free gifts left. The Ethos footer stays on."
+      "campaign": "Free with the creator campaign: {left} of {limit} free gifts left. The Ethos footer stays on.",
+      "paid": {
+        "title": "It's already paid for.",
+        "oneOfTwo": "{count, plural, =2 {One of your two gifts.} =3 {One of your three gifts.} =4 {One of your four gifts.} other {One of your # gifts.}}",
+        "oneLeft": "{left, plural, =1 {One left after this.} =2 {Two left after this.} =3 {Three left after this.} other {# left after this.}}",
+        "last": "Your last gift ready.",
+        "arrives": "Arrives the moment you send it",
+        "opens": "Opens on {when}",
+        "opensMidnight": "Opens at midnight on {date}",
+        "forGood": "Yours for good, with everything in it",
+        "send": "Send to {name}",
+        "sendNoName": "Send it",
+        "payInstead": "Pay for this one instead"
+      }
     },
     "group": {
       "priceLine": "Group cards on {template} cost {price}. You pay once, when you send your first one.",
@@ -732,7 +752,35 @@
         "label": "Comes with this gift"
       },
       "dashboard": "See it in your gifts",
-      "another": "Make another"
+      "another": "Make another",
+      "pair": {
+        "title": "Nobody likes to be forgotten.",
+        "next": "You remembered today. Next up:",
+        "christmas": "Christmas",
+        "inDays": "in {count, plural, one {# day} other {# days}}",
+        "inWeeks": "in {count, plural, one {# week} other {# weeks}}",
+        "inMonths": "in {count, plural, one {# month} other {# months}}",
+        "both": "Both gifts",
+        "apart": "Separately {price}",
+        "tickAny": "Any template, with everything in it",
+        "tickMidnight": "Can open at midnight on their day",
+        "add": "Add both for {price}",
+        "byCard": "Pay by card instead",
+        "paying": "One moment…",
+        "foot": "Paid once. They wait on your account.",
+        "notice": "A gift you haven't used can be refunded for 30 days.",
+        "terms": "Terms",
+        "newTab": "(opens in a new tab)",
+        "declined": "That payment didn't go through, and nothing was charged. Try again, or pay by card.",
+        "readyTitle": "Two gifts are ready.",
+        "readyLine": "Paid for. Nobody gets forgotten.",
+        "startOne": "{kind, select, christmas {Start the Christmas one now} valentines {Start the Valentine's one now} birthday {Start the one for {name}'s birthday now} birthdayNoName {Start the birthday one now} anniversary {Start the anniversary one now} day {Start the one for {name} now} other {Start one now}}",
+        "startAny": "Start one now",
+        "readyStay": "They wait on your account and never expire.",
+        "usedOne": "This one was already paid for. Nothing to pay.",
+        "leftOne": "{kind, select, christmas {One left, ready for Christmas.} valentines {One left, ready for Valentine's Day.} birthday {One left, ready for {name}'s birthday.} birthdayNoName {One left, ready for their birthday.} anniversary {One left, ready for your anniversary.} day {One left, ready for {name}'s day.} other {One left, ready when you need it.}}",
+        "leftNone": "That was your last gift ready."
+      }
     },
     "qr": {
       "frame": "Frame",
@@ -1475,7 +1523,7 @@
       "noteCompare": "Premium templates are {premium}. This one is {price}.",
       "noteOnce": "once, no subscription",
       "oneHeadline": "{template} for {name}",
-      "oneMore": "More options: every template, three templates, a second gift",
+      "oneMore": "More options: every template, three templates",
       "noteCheckPhotos": "{count, plural, one {Your photo in it} other {All # of your photos}}",
       "noteCheckLetter": "Your whole letter, every word",
       "noteCheckFooter": "No Ethos footer: it’s all from you",
@@ -1611,7 +1659,8 @@
       },
       "redirecting": "Taking you back to your gift…",
       "toAccount": "Go to your account",
-      "toGift": "Back to your gift"
+      "toGift": "Back to your gift",
+      "toGifts": "See your gifts"
     },
     "after": {
       "eyebrow": "Every template, forever",

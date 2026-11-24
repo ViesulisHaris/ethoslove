@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Stripe from "stripe";
 import { planCheckout, type CheckoutContext, type CheckoutPlan, type CheckoutRequest } from "@/lib/commerce/plan";
-import { CHECKOUT_BRANDING, RETURN_PATH, TAX_CODE, consentSentence, consentText, metadataRef, sessionParams, withdrawalNotice, type SessionOptions } from "@/lib/stripe/line-items";
+import { CHECKOUT_BRANDING, RETURN_PATH, TAX_CODE, consentSentence, consentText, metadataRef, oneTapSessionParams, sessionParams, withdrawalNotice, type SessionOptions } from "@/lib/stripe/line-items";
 import { createCheckoutSession, isTermsOfServiceError, resetPromotionsMemo, withoutTermsConsent } from "@/lib/stripe/create-session";
 
 const guest: CheckoutContext = { signedIn: false, ownedForever: [], purchases: [], creatorCode: null, giftCardsOnSale: true };
@@ -300,5 +300,51 @@ describe("creating the session without ever failing a sale over something option
     expect(again.create).toHaveBeenCalledTimes(2);
     const network = stripeWith(new Error("ECONNRESET"));
     await expect(createCheckoutSession(network.stripe, params, { withdrawalNotice: notice })).rejects.toThrow("ECONNRESET");
+  });
+});
+
+describe("the Checkout Session for two more gifts", () => {
+  const buyer: CheckoutContext = {
+    signedIn: true,
+    ownedForever: ["vinyl"],
+    purchases: [{ product: "single", amount: 999, currency: "eur", status: "paid" }],
+    creatorCode: null,
+    giftCardsOnSale: false,
+    pair: { onSale: true, ready: 0, memberRunning: false, paidProducts: ["single"] },
+  };
+  const signedIn = { ...options, userId: "22222222-2222-4222-8222-222222222222", email: "a@b.test", returnTo: "/dashboard" };
+
+  it("is one line at its price, described in the buyer's language", () => {
+    const en = sessionParams(plan({ product: "pair" }, buyer), signedIn);
+    expect(en.line_items).toEqual([
+      { quantity: 1, price_data: { currency: "eur", unit_amount: 500, tax_behavior: "inclusive", product_data: { name: "Ethos: two more gifts", tax_code: TAX_CODE, description: "Two gifts, any you like, whenever you like" } } },
+    ]);
+    const es = sessionParams(plan({ product: "pair", currency: "usd" }, buyer), { ...signedIn, locale: "es" });
+    expect(es.line_items?.[0].price_data).toMatchObject({ currency: "usd", unit_amount: 600, product_data: { name: "Ethos: dos regalos más", description: "Dos regalos, los que quieras, cuando quieras" } });
+  });
+
+  it("carries Ethos's metadata and no customer, no saved card (R10)", () => {
+    const params = sessionParams(plan({ product: "pair" }, buyer), signedIn);
+    expect(params.metadata).toMatchObject({ app: "ethos", product: "pair", kind: "pair", template_slugs: "", guest: "0" });
+    for (const key of ["customer", "customer_creation", "invoice_creation"] as const) expect(params[key]).toBeUndefined();
+    expect(params.payment_intent_data).toEqual({ statement_descriptor_suffix: "ETHOS" });
+    expect(JSON.stringify(params.custom_text)).toContain(consentSentence("pair", "en").replace(/'/g, "'"));
+  });
+
+  it("states the 30 days in its own sentence and notice, in both languages", () => {
+    expect(consentSentence("pair", "en")).toBe("I understand that I can cancel within 30 days for a refund of any of these gifts I haven't used, and that a gift I've used can no longer be cancelled.");
+    expect(consentSentence("pair", "es")).toBe("Entiendo que puedo desistir en un plazo de 30 días, con el reembolso de los regalos que no haya usado, y que un regalo ya usado no se puede cancelar.");
+    expect(withdrawalNotice("pair", "en", "https://ethos.test")).toBe("Two gifts are added to your account. A gift you haven't used can be refunded for 30 days; once you've used one it can't be cancelled. Terms: https://ethos.test/legal/terms");
+    expect(withdrawalNotice("pair", "es", "https://ethos.test")).toContain("30 días");
+    // Every other product's sentence is what it was.
+    expect(consentSentence("single", "en")).toBe("I ask Ethos to unlock my purchase straight away, before the 14-day cancellation period ends, and I understand that once it's unlocked I lose my right to cancel.");
+  });
+
+  it("is a one-tap session marked 'shown_at_payment', where the pay sheet's are 'pay_sheet' as before", () => {
+    const pairTap = oneTapSessionParams(sessionParams(plan({ product: "pair" }, buyer), signedIn), { notice: "shown_at_payment" });
+    expect(pairTap).toMatchObject({ ui_mode: "elements", metadata: { withdrawal_notice: "shown_at_payment", product: "pair" } });
+    for (const key of ["success_url", "cancel_url", "custom_text", "consent_collection", "after_expiration", "branding_settings", "locale", "customer", "customer_creation"] as const) expect(pairTap[key]).toBeUndefined();
+    const single = oneTapSessionParams(sessionParams(plan({ product: "single", templateSlugs: ["vinyl"] }), options));
+    expect(single.metadata?.withdrawal_notice).toBe("pay_sheet");
   });
 });

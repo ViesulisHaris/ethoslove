@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Plus } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -9,6 +10,31 @@ import { Button } from "@/components/ui/button";
 import { NotConnected } from "@/components/app/not-connected";
 import { GiftCard } from "@/components/dashboard/gift-card";
 import { UnsentGift } from "@/components/dashboard/unsent-gift";
+import { GiftsReady } from "@/components/dashboard/gifts-ready";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { readyGifts } from "@/lib/commerce/gift-credits";
+import { nextDays, todayIn, type NextDay } from "@/lib/lifecycle/next-days";
+import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
+
+/**
+ * Gifts ready (two more gifts) and the next two days the account knows of, read with the visitor's
+ * own session: nothing when there are none, or before migration 0024 (readyGifts reads null). The
+ * days are counted from the visitor's own date (their timezone, as Vercel tells it), as the share
+ * screen's card counts them in the browser.
+ */
+async function visitorToday(): Promise<Date> {
+  return todayIn((await headers()).get("x-vercel-ip-timezone"));
+}
+
+async function readyStrip(userId: string): Promise<{ count: number; days: NextDay[] }> {
+  const db = await getSupabaseServerClient();
+  if (!db) return { count: 0, days: [] };
+  const count = (await readyGifts(db, userId)) ?? 0;
+  if (count === 0) return { count, days: [] };
+  const { data } = await db.from("reminders").select("recipient_name, occasion, month, day").eq("user_id", userId);
+  const saved = (data ?? []).map((r) => ({ recipientName: r.recipient_name, occasion: r.occasion as ReminderOccasion, month: r.month, day: r.day }));
+  return { count, days: nextDays(await visitorToday(), saved, null) };
+}
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/dashboard">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -21,9 +47,13 @@ export default async function DashboardPage({ params, searchParams }: PageProps<
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
   const user = await getCurrentUser();
-  const [gifts, paidUnsent] = user ? await Promise.all([listMyGifts(user.id), listPaidUnsent(user.id)]) : [[], []];
-  // Development only (NODE_ENV is inlined at build): ?unsent=<template> draws the card without a purchase.
-  const preview = process.env.NODE_ENV === "development" ? (await searchParams).unsent : undefined;
+  const [gifts, paidUnsent, ready] = user ? await Promise.all([listMyGifts(user.id), listPaidUnsent(user.id), readyStrip(user.id)]) : [[], [], { count: 0, days: [] }];
+  // Development only (NODE_ENV is inlined at build): ?unsent=<template> draws the card without a
+  // purchase, and ?ready=<n> the strip of gifts ready without any.
+  const query = process.env.NODE_ENV === "development" ? await searchParams : {};
+  const preview = query.unsent;
+  const readyPreview = Number(typeof query.ready === "string" ? query.ready : NaN);
+  const strip = Number.isInteger(readyPreview) && readyPreview > 0 ? { count: readyPreview, days: nextDays(await visitorToday(), [], null) } : ready;
   const unsent = typeof preview === "string" && preview ? [preview] : paidUnsent;
 
   return (
@@ -41,6 +71,8 @@ export default async function DashboardPage({ params, searchParams }: PageProps<
         </Button>
       </div>
       {!isConfigured.supabase ? <NotConnected /> : null}
+      {/* Gifts already paid for and not made yet: above the list, where the next one starts. */}
+      <GiftsReady count={strip.count} days={strip.days} />
       {/* Paid for, not sent yet: first, and in place of "you haven't made a gift yet". */}
       {unsent.length > 0 ? (
         <div className="mt-10 grid gap-4">

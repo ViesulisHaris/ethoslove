@@ -37,11 +37,14 @@ export async function startCheckout(body: CheckoutRequest, shown?: { total?: num
  * as startCheckout's, sent once the withdrawal box there is ticked, and answered with the session's
  * client secret instead of a link to Stripe's page. The ad pixels hear of it when a button is used.
  */
-export async function startOneTapCheckout(body: CheckoutRequest): Promise<{ clientSecret: string } | { error: string }> {
+export async function startOneTapCheckout(body: CheckoutRequest, options: { waiver?: boolean } = {}): Promise<{ clientSecret: string; sessionId?: string } | { error: string }> {
   const ads = adCheckoutFields();
-  const result = await postJson("/api/stripe/checkout", { ...body, ref: body.ref ?? currentRef(), source: currentSource(), ...(ads ? { ads } : {}), oneTap: true, waiver: true });
+  // Two more gifts have no box to tick (`waiver: false`): the 30-day line beside their button is a notice.
+  const waiver = options.waiver === false ? {} : { waiver: true };
+  const result = await postJson("/api/stripe/checkout", { ...body, ref: body.ref ?? currentRef(), source: currentSource(), ...(ads ? { ads } : {}), oneTap: true, ...waiver });
   const secret = result.json.clientSecret;
-  if (typeof secret === "string" && secret.length > 0) return { clientSecret: secret };
+  const sessionId = result.json.sessionId;
+  if (typeof secret === "string" && secret.length > 0) return { clientSecret: secret, ...(typeof sessionId === "string" ? { sessionId } : {}) };
   return { error: errorOf(result) ?? (result.status === 0 ? "network" : "checkout") };
 }
 

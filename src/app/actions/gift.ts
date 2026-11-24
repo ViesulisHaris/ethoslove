@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
-import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
+import { decidePublish, liveEditNeedsUnlock, mayUseGiftReady } from "@/lib/gift/publish";
 import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
 import { EVERY_GROUP, groupUnlock, photosUnlock } from "@/lib/pricing/products";
 import { groupGiftsEnabled } from "@/lib/group/flag";
@@ -29,6 +29,7 @@ import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/f
 import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
 import { countCampaignGift } from "@/lib/commerce/campaign";
 import { holidayExtraAtPublish, showsExtra, stampedExtra, withoutHolidayExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
+import { paidForGiftRecently, readyGifts, spendGift } from "@/lib/commerce/gift-credits";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -259,10 +260,12 @@ const publishInput = z.object({
   schedule: z.object({ unlockAt: z.iso.datetime({ offset: true }), timezone: z.string().min(1) }).optional(),
   // "Send one back" from a paid premium gift: the signed token that makes this reply free.
   replyToken: z.string().max(400).optional(),
+  // "It's already paid for": send this one with a gift ready from two more gifts (lib/commerce/gift-credits.ts).
+  useGift: z.boolean().optional(),
 });
 
 /** `takenBack`: the keys of notes left out of a group card because they were taken back or removed since the editor last looked (there only when there are any). */
-export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; holidayExtra: HolidayExtra | null; takenBack?: string[] }>> {
+export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; holidayExtra: HolidayExtra | null; takenBack?: string[]; usedGift?: true }>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
   const input = publishInput.safeParse(raw);
@@ -318,15 +321,31 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   const photos = !unlocked && sellsNotePhotos(manifest) && data.freeTier === "note" && data.photos.length > 0 ? await holdsNotePhotos(ctx, gift.template_slug) : false;
   // A group card: only looked up for a gift that carries contributions on a template made for them.
   const group = isGroupCard(gift.template_slug, data) ? await holdsGroup(ctx, gift.template_slug) : false;
-  const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos, group }, {
+  const rules = {
     removeWatermark: input.data.removeWatermark,
     schedule: Boolean(input.data.schedule),
     password: Boolean(input.data.password),
     freeReply: reply?.free === true,
     campaign,
-  });
+  };
+  let decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos, group }, rules);
   // A free gift from before the note, published again once the note is for everyone: no new photos without the unlock.
-  if (decision.ok && live && !unlocked && oldFreeGiftAddsPhotos(manifest, { stored: gift.free_tier, photos: gift.held_photos }, data.photos)) return { ok: false, error: "payment_required" };
+  const oldGiftNeedsUnlock = decision.ok && live && !unlocked && oldFreeGiftAddsPhotos(manifest, { stored: gift.free_tier, photos: gift.held_photos }, data.photos);
+  // "It's already paid for": a gift ready is used only where it is what makes this publish possible
+  // (mayUseGiftReady). Using it writes the template's unlock row, so from here on the template is the
+  // sender's own, exactly as after a purchase: the footer, the extras and the password all read it.
+  let usedGift = false;
+  const needsPayment = (!decision.ok && decision.reason === "payment_required") || oldGiftNeedsUnlock;
+  const asUnlocked = input.data.useGift && needsPayment ? decidePublish(manifest, data, { unlocked: true, photos, group }, rules) : null;
+  if (mayUseGiftReady({ useGift: input.data.useGift === true, unlocked: Boolean(unlocked), freeReply: reply?.free === true, campaign, needsPayment, asUnlocked }) && asUnlocked) {
+    // Checked before the gift is used, not only after: a publish refused for its files must not cost one.
+    if (!mediaUrlsAllowed(data) || !(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
+    if ((await spendGift(writer, ctx.user.id, gift.template_slug)) === "spent") {
+      decision = asUnlocked;
+      usedGift = true;
+    }
+  }
+  if (oldGiftNeedsUnlock && !usedGift) return { ok: false, error: "payment_required" };
   // A token that doesn't hold (used already, or not for this gift) says so, so the sheet can explain the price.
   if (!decision.ok) return { ok: false, error: decision.reason === "payment_required" && reply && !reply.free && reply.reason ? reply.reason : decision.reason, problems: decision.problems };
   // Media only from the sender's uploads, the demo and library files and Apple previews (lib/gift/media-urls.ts).
@@ -339,7 +358,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   const holidayExtra = holidayExtraAtPublish(
     { publishedBefore: gift.published_at !== null, stored: { holidayExtra: gift.stored_extra }, createdAt: gift.created_at, publishedAt: gift.published_at, watermark: gift.watermark },
     Date.now(),
-    Boolean(unlocked),
+    // A gift sent with a gift ready (two more gifts) is paid for: its template is the sender's from this publish on.
+    Boolean(unlocked) || usedGift,
   );
   const status = scheduled ? "scheduled" : "live";
   // Taken before the gift goes live, so two replies published with one token can't both be free.
@@ -393,7 +413,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     gift.id,
     scheduled ? new Intl.DateTimeFormat(data.locale, { dateStyle: "long", timeStyle: "short", timeZone: input.data.schedule?.timezone }).format(new Date(input.data.schedule!.unlockAt)) : undefined,
   ).catch(() => {});
-  return { ok: true, data: { shortId: row?.short_id ?? "", status, holidayExtra: unlocked ? showsExtra({ status, data: { holidayExtra } }) : null, ...(current.dropped.length ? { takenBack: current.dropped } : {}) } };
+  return { ok: true, data: { shortId: row?.short_id ?? "", status, holidayExtra: unlocked || usedGift ? showsExtra({ status, data: { holidayExtra } }) : null, ...(current.dropped.length ? { takenBack: current.dropped } : {}), ...(usedGift ? { usedGift: true as const } : {}) } };
 }
 
 /** Owner-only signed URLs so the editor can preview assets already in Storage. */
@@ -443,17 +463,24 @@ export type CampaignEntitlement = { left: number; endsAt: string | null };
  * Does the current user own this template (or Everything)? False when signed out. `campaign` is set
  * when they don't, but a running creator-campaign grant lets them publish a new gift in it free.
  */
-export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null }> {
+export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null; giftsReady: number; paidJustNow: boolean }> {
   const ctx = await requireContext();
-  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null };
-  // `owned` lets the editor say which template the buyer already paid for instead of a bare paywall.
-  const [{ data }, { data: unlocks }] = await Promise.all([
+  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null, giftsReady: 0, paidJustNow: false };
+  // `owned` lets the editor say which template the buyer already paid for instead of a bare paywall,
+  // and `giftsReady` lets it send this one with a gift already paid for (two more gifts).
+  const [{ data }, { data: unlocks }, ready] = await Promise.all([
     ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: templateSlug }),
-    ctx.supabase.from("template_unlocks").select("template_slug").eq("user_id", ctx.user.id),
+    ctx.supabase.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", ctx.user.id),
+    readyGifts(ctx.supabase, ctx.user.id),
   ]);
   const grant = parseCampaignGrant(ctx.user.app_metadata);
   const campaign = !data && campaignCoversNewGift(grant, templateSlug, Date.now()) && grant ? { left: campaignGiftsLeft(grant), endsAt: grant.endsAt } : null;
-  return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug), campaign };
+  // Whether this gift was paid for just now: only then does its share screen offer two more gifts.
+  const rows = unlocks ?? [];
+  const paidIds = [...new Set(rows.filter((u) => u.purchase_id && (u.template_slug === templateSlug || u.template_slug === photosUnlock(templateSlug))).map((u) => u.purchase_id as string))];
+  const { data: paid } = paidIds.length ? await ctx.supabase.from("purchases").select("id, product, status, created_at").in("id", paidIds).eq("status", "paid") : { data: [] };
+  const paidJustNow = paidForGiftRecently(rows, paid ?? [], templateSlug, Date.now());
+  return { unlocked: Boolean(data), owned: rows.map((u) => u.template_slug), campaign, giftsReady: ready ?? 0, paidJustNow };
 }
 
 /**

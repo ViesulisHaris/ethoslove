@@ -153,6 +153,8 @@ export function RemindNextYear({ data }: { data: GiftData }) {
       if (!res.ok) return setRow(row, "failed"), false;
       setRow(row, "saved");
       track("reminder_saved", { occasion: body.occasion, template: data.templateSlug, row });
+      // The "two more gifts" card above names the next days: it reads them again.
+      window.dispatchEvent(new Event("ethos:reminder-saved"));
       return true;
     } catch {
       setRow(row, "failed");

@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { Stripe as StripeJs } from "@stripe/stripe-js";
-import { loadStripe } from "@stripe/stripe-js/pure";
 import { CheckoutElementsProvider, ExpressCheckoutElement, useCheckoutElements } from "@stripe/react-stripe-js/checkout";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { env } from "@/lib/env";
@@ -16,38 +14,17 @@ import { consentSentence } from "@/lib/stripe/line-items";
 import { startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import type { CheckoutRequest } from "@/components/pricing/offers";
 import { Link } from "@/i18n/navigation";
+import { stripeFor, walletHere, type Wallet } from "@/components/pricing/wallet";
 
-type Wallet = "apple" | "google";
-
-/**
- * The wallet this browser can pay with, as far as the page can tell without loading Stripe: Apple
- * Pay where Safari says it can, Google Pay in Chrome on Android. Never inside Instagram's or
- * Facebook's own browser: Apple Pay is switched off there, and so is Google Pay in an Android web
- * view, so the buttons would never come. Stripe makes the final call once its button loads.
- */
-export function walletHere(): Wallet | null {
-  const w = window as Window & { ApplePaySession?: { canMakePayments?: () => boolean } };
-  try {
-    if (w.ApplePaySession?.canMakePayments?.()) return "apple";
-  } catch {
-    // Some web views define it and then refuse the call.
-  }
-  const ua = navigator.userAgent;
-  if (/Android/i.test(ua) && /Chrome\//.test(ua) && !/; wv\)|FBAN|FBAV|FB_IAB|Instagram|Line\//.test(ua)) return "google";
-  return null;
-}
+// Moved beside stripeFor (components/pricing/wallet.ts) so the share screen's card can ask too.
+export { walletHere };
 
 /** Offered to everyone once NEXT_PUBLIC_ONE_TAP is "on"; before that, only on an editor opened with ?onetap=1. */
 function offered(): boolean {
   return env.oneTap || new URLSearchParams(window.location.search).get("onetap") === "1";
 }
 
-// Stripe.js loads only once someone ticks the box: nothing of Stripe's runs on the pay sheet before.
-let stripePromise: Promise<StripeJs | null> | null = null;
-function stripeFor(key: string, locale: GiftLocale): Promise<StripeJs | null> {
-  stripePromise ??= loadStripe(key, { locale });
-  return stripePromise;
-}
+// Stripe.js (stripeFor) loads only once someone ticks the box: nothing of Stripe's runs on the pay sheet before.
 
 type Sale = { template: string; product: string; bump: boolean; second: boolean; reply: boolean; guest: boolean; total: number; category: string; currency: string; letterArm?: "note" | "classic" | null; payArm?: PayArm | null; keepArm?: KeepArm | null };
 

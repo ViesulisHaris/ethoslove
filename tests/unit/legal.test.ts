@@ -24,7 +24,7 @@ describe("legal documents", () => {
       // /legal/withdraw links to it as #s9.
       expect(LEGAL_DOCS.terms[locale].sections[8].heading).toMatch(/^9\. .*(withdrawal|desistimiento)/);
       const s9 = withdrawal(LEGAL_DOCS.terms[locale]);
-      for (const product of ["single", "extras", "pack", "upgrade", "pass", "giftcard"] as const) expect(s9).toContain(consentSentence(product, locale));
+      for (const product of ["single", "extras", "pack", "upgrade", "pass", "giftcard", "pair"] as const) expect(s9).toContain(consentSentence(product, locale));
       // A membership's box states its own price and renewal, so each plan's is quoted.
       for (const plan of ["monthly", "yearly"] as const) expect(s9).toContain(consentSentence("membership", locale, { plan }));
     }
@@ -37,6 +37,17 @@ describe("legal documents", () => {
     expect(withdrawal(LEGAL_DOCS.terms.es)).toContain("ese aviso no te obliga: conservas el derecho a desistir durante 14 días");
     expect(WITHDRAW_DOCS.en.sections[0].paragraphs.join("\n")).toContain("Stripe's page couldn't show it");
     expect(WITHDRAW_DOCS.es.sections[0].paragraphs.join("\n")).toContain("la página de Stripe no pudo mostrarla");
+  });
+
+  // Two more gifts paid with Apple Pay or Google Pay on our page tick nothing: a used one can't be
+  // said to be beyond cancelling for them, in section 6 or 9.
+  it("keep the 14 days for two more gifts bought with the wallet, even once used", () => {
+    const en = all(LEGAL_DOCS.terms.en);
+    const es = all(LEGAL_DOCS.terms.es);
+    expect(en).toContain("Bought with Apple Pay or Google Pay on our page, there is no box to tick, so you keep the 14-day right to withdraw in section 9 even for a gift you have used");
+    expect(withdrawal(LEGAL_DOCS.terms.en)).toContain("you keep the 14-day right to withdraw, even for a gift you have used");
+    expect(es).toContain("conservas el derecho de desistimiento de 14 días de la sección 9 aunque ya hayas usado un regalo");
+    expect(withdrawal(LEGAL_DOCS.terms.es)).toContain("conservas el derecho de desistimiento de 14 días, aunque ya hayas usado un regalo");
   });
 
   it("pay creators the programme's own numbers", () => {

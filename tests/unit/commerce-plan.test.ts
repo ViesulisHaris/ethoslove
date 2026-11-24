@@ -212,3 +212,52 @@ describe("checkout plan: Ethos for Two", () => {
         expect(planCheckout(req({ product: "membership", plan: "monthly" }), { ...on, membership: member({ status, running }) })).toMatchObject({ ok: false, error: "payment_issue", status: 409 });
   });
 });
+
+describe("checkout plan: two more gifts", () => {
+  const buyer: CheckoutContext = {
+    signedIn: true,
+    ownedForever: ["vinyl"],
+    purchases: [{ product: "single", amount: 999, currency: "eur", status: "paid" }],
+    creatorCode: null,
+    giftCardsOnSale: false,
+    pair: { onSale: true, ready: 0, memberRunning: false, paidProducts: ["single"] },
+  };
+  const pair = (r: Partial<CheckoutRequest> = {}) => req({ product: "pair", ...r });
+
+  it("charges the catalogue's €5 / $6 / £4 as one line, granting no unlock row", () => {
+    for (const [currency, amount] of [["eur", 500], ["usd", 600], ["gbp", 400]] as const) {
+      const plan = ok(planCheckout(pair({ currency }), buyer));
+      expect(plan).toMatchObject({ product: "pair", kind: "pair", currency, total: amount, lines: [{ key: "pair", amount }], unlocks: [], templateSlugs: [], billing: "one_time", bump: false, second: null, personalPrice: null });
+    }
+  });
+
+  it("refuses anything added to it", () => {
+    expect(planCheckout(pair({ addEverything: true }), buyer)).toMatchObject({ ok: false, error: "bump_not_available", status: 400 });
+    expect(planCheckout(pair({ secondSlug: "bouquet" }), buyer)).toMatchObject({ ok: false, error: "second_not_available", status: 400 });
+    expect(planCheckout(pair({ personalPrice: true }), { ...buyer, personalPrice: { id: "x" } })).toMatchObject({ ok: false, error: "personal_price_unavailable", status: 400 });
+  });
+
+  it("is not on sale while switched off, or without its table, or without the server's look-up", () => {
+    expect(planCheckout(pair(), { ...buyer, pair: { ...buyer.pair!, onSale: false } })).toMatchObject({ ok: false, error: "not_on_sale", status: 400 });
+    expect(planCheckout(pair(), { ...buyer, pair: { ...buyer.pair!, ready: null } })).toMatchObject({ ok: false, error: "not_on_sale", status: 400 });
+    expect(planCheckout(pair(), { ...buyer, pair: undefined })).toMatchObject({ ok: false, error: "not_on_sale", status: 400 });
+  });
+
+  it("needs an account", () => {
+    expect(planCheckout(pair(), { ...guest, pair: { onSale: true, ready: null, memberRunning: false, paidProducts: [] } })).toMatchObject({ ok: false, error: "sign_in_required", status: 401 });
+    expect(planCheckout(pair(), { ...guest, pair: { onSale: true, ready: 0, memberRunning: false, paidProducts: [] } })).toMatchObject({ ok: false, error: "sign_in_required", status: 401 });
+  });
+
+  it("is not sold twice while gifts are ready", () => {
+    expect(planCheckout(pair(), { ...buyer, pair: { ...buyer.pair!, ready: 2 } })).toMatchObject({ ok: false, error: "pair_ready", status: 409 });
+  });
+
+  it("is not sold to someone who holds every template or has Ethos for Two", () => {
+    expect(planCheckout(pair(), { ...buyer, ownedForever: ["*"] })).toMatchObject({ ok: false, error: "already_owned", status: 409 });
+    expect(planCheckout(pair(), { ...buyer, pair: { ...buyer.pair!, memberRunning: true } })).toMatchObject({ ok: false, error: "already_owned", status: 409 });
+  });
+
+  it("is a buyer's price only", () => {
+    expect(planCheckout(pair(), { ...buyer, pair: { ...buyer.pair!, paidProducts: [] } })).toMatchObject({ ok: false, error: "pair_needs_purchase", status: 403 });
+  });
+});

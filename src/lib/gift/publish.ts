@@ -61,6 +61,28 @@ export function decidePublish(
 }
 
 /**
+ * Whether a gift ready (two more gifts, lib/commerce/gift-credits.ts) may be used on this publish,
+ * in the order the server decides it (app/actions/gift.ts publishGift): only when the sender asked
+ * (`useGift`), the template isn't theirs already, no free reply and no campaign grant covers it,
+ * publishing would otherwise need payment, and the same gift with the template unlocked would go out
+ * (`asUnlocked`). So a gift ready is never spent on a gift that is free anyway, already unlocked, or
+ * still unfinished (a missing name, too many photos): those are refused or sent as before.
+ */
+export function mayUseGiftReady(input: {
+  useGift: boolean;
+  unlocked: boolean;
+  freeReply: boolean;
+  campaign: boolean;
+  /** Publishing as things stand needs payment (decidePublish's payment_required, or the old-gift rule). */
+  needsPayment: boolean;
+  /** decidePublish's answer for the same gift with the template unlocked. */
+  asUnlocked: PublishDecision | null;
+}): boolean {
+  if (!input.useGift || input.unlocked || input.freeReply || input.campaign) return false;
+  return input.needsPayment && input.asUnlocked?.ok === true;
+}
+
+/**
  * decidePublish's answer with one more rule on top: once the note is for everyone, a free gift from
  * before it that is given a new photo needs the unlock (oldFreeGiftAddsPhotos, ./free-tier). The
  * server refuses that edit; the publish sheet uses this so it shows the pay panel instead of an error.

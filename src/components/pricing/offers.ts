@@ -3,7 +3,6 @@ import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import type { PublishDecision } from "@/lib/gift/publish";
 import type { MembershipSummary } from "@/lib/membership/types";
 import { BUMP, PRODUCTS, SECOND_GIFT, bumpAmount, templateProduct, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
-import { getManifest } from "@/templates/manifests";
 import { membershipState, needsPayment } from "@/components/membership/status";
 
 /**
@@ -151,14 +150,6 @@ export function secondOffered(plan: PaywallPlan, bumpOn: boolean): boolean {
   return SECOND_GIFT.onto.includes(plan) && !bumpOn;
 }
 
-/** The best-selling premium templates, in order: the second gift's suggestions. */
-export const SECOND_SUGGESTIONS = ["bouquet", "xoxo", "popup-card", "birthday-cinema", "coquette", "digicam"] as const;
-
-/** Three suggestions for the second gift: best sellers, never this gift's own template or one already owned. */
-export function secondSuggestions(slug: string, owned: string[] = []): string[] {
-  return SECOND_SUGGESTIONS.filter((s) => s !== slug && !owned.includes(s) && getManifest(s)?.tier === "premium").slice(0, 3);
-}
-
 /**
  * What the pay button says: the plan, plus the bump when it is shown and ticked (then Everything's
  * price), or plus the second gift when that is.
@@ -229,9 +220,13 @@ export function publishAsksForMoney(sheet: {
   wouldNeedPayment: boolean;
   /** lib/gift/publish.ts's rule for a signed-in sender; null until their entitlement is known. */
   decision: PublishDecision | null;
+  /** The sheet sends this gift on a gift already paid for ("It's already paid for." in place of the pay panel). */
+  giftReady?: boolean;
 }): boolean {
   // A guest pays on the website only: inside the app they sign in first, and are asked after.
   if (!sheet.authed) return sheet.supabaseConfigured && !sheet.inApp && sheet.paymentsEnabled && sheet.wouldNeedPayment;
+  // The decision still says payment_required, but nothing is asked for: the gift is already paid.
+  if (sheet.giftReady) return false;
   return sheet.decision !== null && !sheet.decision.ok && sheet.decision.reason === "payment_required" && (sheet.paymentsEnabled || sheet.inApp);
 }
 
@@ -378,10 +373,11 @@ export function purchaseOutcome(sold: { product: ProductId; bump: boolean }): Pu
 /**
  * Whether a finished checkout is one the success page follows with "every template for the
  * difference": a single, a pick three or "make it special" (what counts towards the upgrade), and
- * not one that already took the bump, which made it Everything.
+ * not one that already took the bump, which made it Everything. Two more gifts count towards the
+ * upgrade but are bought on the share screen, and their success page has its own ending.
  */
 export function upgradesAfter(sold: { product: ProductId; bump: boolean }): boolean {
-  return (UPGRADE_CREDITED as readonly string[]).includes(sold.product) && !sold.bump;
+  return (UPGRADE_CREDITED as readonly string[]).includes(sold.product) && sold.product !== "pair" && !sold.bump;
 }
 
 /**

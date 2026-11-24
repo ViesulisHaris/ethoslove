@@ -20,8 +20,43 @@ import { QrDesigner } from "./qr-designer";
 import { TreeTagRow } from "./tree-tag-row";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
+import type { PairOnShare, PairPreviewState, TwoMoreGifts } from "./two-more-gifts";
+import { UsedGiftLine } from "./pair-used";
 
-export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayExtra = null }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null; holidayExtra?: HolidayExtra | null }) {
+/**
+ * Two more gifts under the link: the card's own code (imported by the publish sheet while it is open,
+ * so none of it weighs on the editor) and what it draws from, both in hand before this screen's first
+ * frame. Absent: no card, and nothing reserved for one.
+ */
+export type ShareScreenPair = PairOnShare & { Card: typeof TwoMoreGifts };
+
+export function ShareScreen({
+  shortId,
+  status,
+  unlockAt,
+  data,
+  giftId,
+  usedGift = false,
+  usedLeft = 0,
+  pair,
+  pairPreview,
+  holidayExtra = null,
+}: {
+  shortId: string;
+  status: "live" | "scheduled";
+  unlockAt?: string;
+  data: GiftData;
+  giftId: string | null;
+  /** This gift went out on a gift ready (two more gifts): the card under the link says so. */
+  usedGift?: boolean;
+  /** With `usedGift`: gifts ready left after this one. */
+  usedLeft?: number;
+  pair?: ShareScreenPair | null;
+  /** Development page only: the state the two more gifts card opens in. */
+  pairPreview?: PairPreviewState;
+  /** What the publish says this gift is offered (lib/lifecycle/holiday-extras.ts). */
+  holidayExtra?: HolidayExtra | null;
+}) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
   // What the publish says this gift is offered (lib/lifecycle/holiday-extras.ts): the stamp its first
@@ -39,6 +74,7 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayEx
   // Publishing needs an account, so this is always true here; the reminder is saved to it.
   const authed = useEditor((s) => s.authed);
   const [copied, setCopied] = useState(false);
+  const [etsy] = useEtsyMode();
   const origin = typeof window !== "undefined" ? window.location.origin : SITE.url;
   const url = `${origin}${SITE.giftPath}/${shortId}`;
   const text = t("shareText", { url });
@@ -97,15 +133,16 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayEx
         {t("instagram")}: {t("instagramHint")}
       </p>
 
-      {/* The paid bonus the Christmas e-mail sells, right under the ways to send: below the QR designer
-          it sat four phone screens down. The code's design still travels with it once one is chosen. */}
-      {treeTag && giftId ? (
-        <TreeTagRow
-          href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
-          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), label: t("treeTag.label") }}
-          place="share"
-          className="mt-6"
-        />
+      {/* Under the link, never in its way; not for an Etsy buyer, nor inside the iPhone app (the App Store sells there). */}
+      {/* A gift sent on a gift ready says so without waiting for the card's own code to load. */}
+      {authed && !etsy && usedGift ? (
+        <div data-app-hide>
+          <UsedGiftLine data={data} left={usedLeft} saved={pair?.saved} />
+        </div>
+      ) : authed && !etsy && pair ? (
+        <div data-app-hide>
+          <pair.Card data={data} ent={pair.ent} afterPayment={pair.afterPayment} left={pair.left} saved={pair.saved} preview={pairPreview} />
+        </div>
       ) : null}
 
       <EtsyReview template={data.templateSlug} />
@@ -126,6 +163,15 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayEx
         <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
         <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} onDesignChange={onDesignChange} />
       </section>
+      {/* The paid bonus the Christmas e-mail sells, under the code it prints: the design chosen above travels with it. */}
+      {treeTag && giftId ? (
+        <TreeTagRow
+          href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
+          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), label: t("treeTag.label") }}
+          place="share"
+          className="mt-6"
+        />
+      ) : null}
 
       {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}
       <div className="mt-8 flex flex-col gap-2" data-app-hide>

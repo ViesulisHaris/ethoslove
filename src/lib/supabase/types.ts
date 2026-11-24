@@ -322,6 +322,33 @@ export interface Database {
         Update: { purchase_id?: string | null };
         Relationships: [];
       };
+      /** Gifts ready from "two more gifts" (0024): one row each, used on publish (lib/commerce/gift-credits.ts). */
+      gift_credits: {
+        Row: {
+          id: string;
+          user_id: string;
+          purchase_id: string;
+          n: number;
+          spent_slug: string | null;
+          spent_at: string | null;
+          revoked_at: string | null;
+          revoked_for: "refund" | "dispute" | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          purchase_id: string;
+          n: number;
+          spent_slug?: string | null;
+          spent_at?: string | null;
+          revoked_at?: string | null;
+          revoked_for?: "refund" | "dispute" | null;
+          created_at?: string;
+        };
+        Update: { spent_slug?: string | null; spent_at?: string | null; revoked_at?: string | null; revoked_for?: "refund" | "dispute" | null };
+        Relationships: [];
+      };
       /** The membership table (0009 as the pass, 0014 for subscriptions): see docs/MEMBERSHIP.md 1.2. */
       couple_passes: {
         Row: {
@@ -942,6 +969,8 @@ export interface Database {
     Functions: {
       place_rating_summary: { Args: { ids: string[] }; Returns: { place_id: string; stars: number; reviews: number; cost: number | null }[] };
       has_template_unlock: { Args: { p_user: string; p_slug: string }; Returns: boolean };
+      /** Uses one gift ready on a template the account doesn't hold (0024): the gift's id, or null. Service role only. */
+      spend_gift_credit: { Args: { p_user: string; p_slug: string }; Returns: string | null };
       gift_storage_refs: { Args: Record<string, never>; Returns: { path: string }[] };
       storage_orphans: { Args: { p_limit?: number }; Returns: { name: string; bytes: number }[] };
       purge_stale_drafts: { Args: { p_days?: number }; Returns: number };

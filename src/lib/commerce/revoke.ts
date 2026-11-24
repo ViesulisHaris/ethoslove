@@ -1,5 +1,6 @@
 import { unique, type Db } from "./db";
 import { voidUnredeemedCards } from "./gift-cards";
+import { restoreGiftsOf, revokeGiftsOf } from "./gift-credits";
 import { endMembershipNow, membershipOfPurchase, paysLatestPeriod } from "./memberships";
 import { regrantRunningPasses } from "./passes";
 import { foreverRowsOfPurchase, grantForever, regrantFromOtherPurchases, relockGifts, republishGifts, revokeUnlocksOf } from "./unlocks";
@@ -42,6 +43,9 @@ export async function revokePurchase(db: Db, purchase: RevokedPurchase, now: num
     }
   }
   if (purchase.product === "giftcard") await voidUnredeemedCards(db, purchase.id, now);
+  // Two more gifts: none of them counts any more. The unlock rows the used ones wrote point at this
+  // purchase, so the generic part below takes those templates back and relocks what went out with them.
+  if (purchase.product === "pair") await revokeGiftsOf(db, purchase.id, now, options.mode === "dispute" ? "dispute" : "refund");
   // A buyer who deleted their account has no user_id left (0011); whoever held the rows still counts.
   const affected = unique([...(purchase.user_id ? [purchase.user_id] : []), ...(await revokeUnlocksOf(db, purchase.id))]);
   // A second payment for the same template still covers it: only what nothing else paid for goes.
@@ -60,11 +64,25 @@ export async function revokePurchase(db: Db, purchase: RevokedPurchase, now: num
  */
 export async function restorePurchase(db: Db, purchase: RestoredPurchase, now: number): Promise<{ restored: boolean; gifts: number }> {
   if (!purchase.user_id || purchase.status !== "refunded") return { restored: false, gifts: 0 };
+  if (purchase.product === "pair") return restorePair(db, { ...purchase, user_id: purchase.user_id }, now);
   const rows = foreverRowsOfPurchase(purchase);
   if (rows.length === 0) return { restored: false, gifts: 0 };
   const { error } = await db.from("purchases").update({ status: "paid" }).eq("id", purchase.id).eq("status", "refunded");
   if (error) throw new Error(`restore failed: ${error.message}`);
   const granted = await grantForever(db, purchase.user_id, rows, purchase.id);
+  if (granted.error) throw new Error(`restore failed: ${granted.error}`);
+  return { restored: true, gifts: await republishGifts(db, purchase.user_id, now) };
+}
+
+/**
+ * Two more gifts after a won dispute: the purchase is paid again, its gifts count again, the
+ * templates the used ones went on are the buyer's again, and what the dispute unpublished goes back.
+ */
+async function restorePair(db: Db, purchase: RestoredPurchase & { user_id: string }, now: number): Promise<{ restored: boolean; gifts: number }> {
+  const { error } = await db.from("purchases").update({ status: "paid" }).eq("id", purchase.id).eq("status", "refunded");
+  if (error) throw new Error(`restore failed: ${error.message}`);
+  const used = await restoreGiftsOf(db, purchase.id);
+  const granted = await grantForever(db, purchase.user_id, used, purchase.id);
   if (granted.error) throw new Error(`restore failed: ${granted.error}`);
   return { restored: true, gifts: await republishGifts(db, purchase.user_id, now) };
 }

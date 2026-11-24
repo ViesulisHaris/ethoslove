@@ -8,6 +8,7 @@ import {
   BUMP,
   CHARGED_CURRENCIES,
   EVERY_TEMPLATE,
+  PAIR_GIFTS,
   PRODUCTS,
   SECOND_GIFT,
   formatAmount,
@@ -26,6 +27,7 @@ import { notifyReceipt, notifyWelcome, sendGiftCardEmail, sendMembershipWelcome,
 import { iso, inviteUrl, localePath, redeemUrl, siteOrigin, type Locale } from "@/lib/commerce/db";
 import { upgradeOffer } from "@/lib/commerce/entitlements";
 import { deleteGiftCardDetails, giftCardDetails, issueGiftCard } from "@/lib/commerce/gift-cards";
+import { grantGifts, settlePairSessions } from "@/lib/commerce/gift-credits";
 import { spendPersonalPrice } from "@/lib/commerce/personal-price";
 import { startSubscriptionMembership } from "@/lib/commerce/memberships";
 import { startPass } from "@/lib/commerce/passes";
@@ -63,6 +65,7 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
     giftcard: "Gift card: Give Everything",
     upgrade: "Upgrade to Everything",
     group: "A group card",
+    pair: "Two more gifts",
   },
   es: {
     single: "Una plantilla",
@@ -76,6 +79,7 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
     giftcard: "Tarjeta regalo: Regálalo todo",
     upgrade: "Pasar a Todo",
     group: "Una tarjeta en grupo",
+    pair: "Dos regalos más",
   },
 };
 
@@ -87,6 +91,7 @@ const RECEIPT_LINES = {
     group: (template: string) => `Group cards on ${template}`,
     pass: "Every gift template and every game pack, for both of you",
     giftcard: "A gift card code for Everything, forever (sent in its own email)",
+    pair: "Two gifts, ready to make whenever you like",
   },
   es: {
     withBump: (label: string) => `${label} + todas las demás plantillas`,
@@ -95,6 +100,7 @@ const RECEIPT_LINES = {
     group: (template: string) => `Tarjetas en grupo con ${template}`,
     pass: "Todas las plantillas de regalo y todos los packs de juegos, para los dos",
     giftcard: "Un código de tarjeta regalo para «Todo», para siempre (te llega en otro correo)",
+    pair: "Dos regalos, listos para cuando quieras",
   },
 } satisfies Record<Locale, unknown>;
 
@@ -183,7 +189,9 @@ export function agreedConsent(
   sold: Pick<Sold, "product" | "locale" | "plan">,
 ): string | null {
   const onStripe = session.consent?.terms_of_service === "accepted";
-  const onPaySheet = session.metadata?.withdrawal_notice === "pay_sheet" && sellsInOneTap(sold.product);
+  // Two more gifts paid with the wallet button had a notice beside it, no box: a notice binds nobody,
+  // so nothing is recorded as agreed (the Terms say so). Paid on Stripe's page, its box counts.
+  const onPaySheet = session.metadata?.withdrawal_notice === "pay_sheet" && sellsInOneTap(sold.product) && sold.product !== "pair";
   if (!onStripe && !onPaySheet) return null;
   // A membership's box quotes its price, in the currency the catalogue priced it in.
   const currency = (session.currency_conversion?.source_currency ?? session.currency ?? "eur") as Currency;
@@ -192,7 +200,7 @@ export function agreedConsent(
 
 /** The unlock rows a template or pack purchase grants its buyer for good. Null when the metadata doesn't add up. */
 export function foreverRowsFor(sold: Sold): string[] | null {
-  if (sold.product === "pass" || sold.product === "membership" || sold.product === "giftcard") return [];
+  if (sold.product === "pass" || sold.product === "membership" || sold.product === "giftcard" || sold.product === "pair") return [];
   // A group card: group cards on its template, and the template itself unless the buyer already held
   // it when they paid (kind "group_addon", written by checkout into the session's metadata).
   if (sold.product === "group") return sold.slugs.length === 1 ? groupRows(sold.slugs[0], sold.kind) : null;
@@ -223,6 +231,8 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
   if (!sold) return { ok: false, reason: "bad_metadata" };
   const rows = foreverRowsFor(sold);
   if (!rows) return { ok: false, reason: "bad_metadata" };
+  // Two more gifts are only ever sold signed in (lib/commerce/gift-credits.ts pairAllowed).
+  if (sold.product === "pair" && session.metadata?.guest === "1") return { ok: false, reason: "bad_metadata" };
 
   const buyer = session.metadata?.guest === "1" ? await claimGuest(admin, session, sold) : await claimSignedIn(admin, session, sold);
   if ("reason" in buyer) return { ok: false, reason: buyer.reason };
@@ -265,6 +275,15 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
         ...(issued.card.note ? { note: issued.card.note } : {}),
       });
     unlockNames = [lines.giftcard];
+  } else if (sold.product === "pair") {
+    // Keyed by (purchase, n): the webhook and the success page both run this, and two rows stay two.
+    const granted = await grantGifts(admin, userId, sold.purchaseId, PAIR_GIFTS);
+    if (granted.error) return { ok: false, reason: granted.error };
+    // Paid: any other checkout for two more gifts still open on the account (the card's wallet
+    // session beside Stripe's page, another currency) is closed, so it can't be paid as well.
+    const stripe = getStripe();
+    if (stripe) await settlePairSessions(stripe, admin, userId, now).catch((e) => console.error("[pair] open sessions not closed", e instanceof Error ? e.message : e));
+    unlockNames = [lines.pair];
   } else {
     const granted = await grantForever(admin, userId, rows, sold.purchaseId);
     if (granted.error) return { ok: false, reason: granted.error };
@@ -289,7 +308,10 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
         ? { until }
         : sold.product === "giftcard"
           ? { giftCard: true }
-          : UPGRADE_CREDITED.some((p) => p === sold.product) && !sold.bump
+          : // Two more gifts: what is on the account and the 30 days, never "yours, forever", and no upgrade line.
+            sold.product === "pair"
+            ? { pair: true }
+            : UPGRADE_CREDITED.some((p) => p === sold.product) && !sold.bump
             ? await receiptUpgrade(admin, userId, buyer.currency, buyer.locale)
             : undefined;
     // The receipt repeats the sentence they ticked, word for word: the confirmation on a durable

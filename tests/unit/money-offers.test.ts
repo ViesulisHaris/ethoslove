@@ -31,7 +31,6 @@ import {
   replyTokenFrom,
   resumePath,
   secondOffered,
-  secondSuggestions,
   safeReturnPath,
   templatePlan,
 } from "@/components/pricing/offers";
@@ -150,12 +149,6 @@ describe("the paywall's offer", () => {
     for (const plan of ["extras", "everything", "upgrade"] as const) expect(secondOffered(plan, false)).toBe(false);
   });
 
-  it("suggests three best sellers for the second gift, never this one or one already owned", () => {
-    expect(secondSuggestions("vinyl")).toEqual(["bouquet", "xoxo", "popup-card"]);
-    expect(secondSuggestions("bouquet")).toEqual(["xoxo", "popup-card", "birthday-cinema"]);
-    expect(secondSuggestions("bouquet", ["xoxo"])).toEqual(["popup-card", "birthday-cinema", "coquette"]);
-  });
-
   it("adds the second gift to the pay button and the checkout body only when it is ticked", () => {
     for (const currency of ["eur", "usd", "gbp"] as const) {
       const single = PRODUCTS.single.amounts[currency];
@@ -240,6 +233,15 @@ describe("the publish sheet's “One payment, no subscription”", () => {
     expect(signedIn(decidePublish(premium, ready, { unlocked: false }, { ...none, freeReply: true }))).toBe(false);
     // A template they own already, extras and all.
     expect(signedIn(decidePublish(premium, ready, { unlocked: true }, { ...none, removeWatermark: true }))).toBe(false);
+  });
+
+  it("is not said when the gift goes out on a gift already paid for (It's already paid for. in place of the pay panel)", () => {
+    // The decision still says payment_required: the sheet draws AlreadyPaid, not the paywall.
+    const decision = decidePublish(premium, ready, { unlocked: false }, none);
+    expect(publishAsksForMoney({ ...web, authed: true, wouldNeedPayment: true, decision, giftReady: true })).toBe(false);
+    expect(publishAsksForMoney({ ...web, authed: true, wouldNeedPayment: true, decision, giftReady: false })).toBe(true);
+    // A guest has no gifts ready to use: the flag never hides their paywall's line.
+    expect(publishAsksForMoney({ ...web, authed: false, wouldNeedPayment: true, decision: null, giftReady: true })).toBe(true);
   });
 
   it("is not said before there is a price to show", () => {
@@ -473,11 +475,23 @@ describe("GET /api/entitlements, as the pages read it", () => {
       packs: ["*", "deep"],
       pass: { endsAt: "2027-09-23T00:00:00.000Z", isOwner: true, partnerJoined: false, inviteUrl: "https://tryethos.io/for-two/join?code=abcdefgh23" },
       membership: member(),
+      giftsReady: 2,
+      pairOffer: null,
     };
     expect(parseEntitlements(body)).toEqual(body);
-    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null, membership: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null });
+    // Answers from before two more gifts (and the iPhone app's) say nothing of them: none ready, none offered.
+    const none = { giftsReady: 0, pairOffer: null };
+    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null, membership: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null, ...none });
     // The iPhone app's current build and older answers carry no membership: read as none.
-    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null });
+    expect(parseEntitlements({ signedIn: false, templates: [], packs: [], pass: null })).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null, ...none });
+  });
+
+  it("reads the offer of two more gifts only when its price and currency are whole", () => {
+    const base = { signedIn: true, templates: ["vinyl"], packs: [], pass: null, membership: null };
+    expect(parseEntitlements({ ...base, giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } })).toMatchObject({ giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } });
+    for (const pairOffer of [{ amount: "500", currency: "eur" }, { amount: 500, currency: "chf" }, { amount: -1, currency: "eur" }, { amount: 4.5, currency: "eur" }, "yes", null])
+      expect(parseEntitlements({ ...base, pairOffer })?.pairOffer).toBeNull();
+    for (const giftsReady of [-1, "2", 1.5, null]) expect(parseEntitlements({ ...base, giftsReady })?.giftsReady).toBe(0);
   });
 
   it("reads a malformed field as nothing rather than breaking the page", () => {
@@ -487,6 +501,8 @@ describe("GET /api/entitlements, as the pages read it", () => {
       packs: [],
       pass: null,
       membership: null,
+      giftsReady: 0,
+      pairOffer: null,
     });
     expect(parseEntitlements({ templates: [] })).toBeNull();
     expect(parseEntitlements(null)).toBeNull();

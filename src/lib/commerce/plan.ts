@@ -23,6 +23,7 @@ import type { MembershipProvider, MembershipStatus } from "@/lib/membership/type
 import { sellsNotePhotos } from "@/lib/gift/free-tier";
 import { getManifest, isTemplateSlug } from "@/templates/manifests";
 import { upgradeAmount, type PaidPurchase } from "./pricing";
+import { pairAllowed, type PairRefusal } from "./gift-credits";
 
 /**
  * purchases.kind: the product, "bump" for a single or extras with every other template added,
@@ -80,6 +81,11 @@ export type CheckoutContext = {
    * only `ownedForever` counts.
    */
   heldNow?: string[];
+  /**
+   * Two more gifts (product "pair"): what pairAllowed needs, looked up only for that product. Absent,
+   * the product is refused as not on sale.
+   */
+  pair?: { onSale: boolean; ready: number | null; memberRunning: boolean; paidProducts: string[] };
 };
 
 export type PlanLine = { key: ProductId | "bump" | "second"; amount: number };
@@ -132,6 +138,7 @@ function alreadyCovered(owned: string[], unlock: string): boolean {
  */
 export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok: true } & CheckoutPlan) | ({ ok: false } & PlanError) {
   const { currency } = req;
+  if (req.product === "pair") return planPair(req, ctx);
   // A personal price is for one gift (PERSONAL_PRICE.onto), and only while it still holds.
   if (req.personalPrice) {
     if (!PERSONAL_PRICE.onto.includes(req.product)) return fail("personal_price_unavailable", 400);
@@ -250,6 +257,46 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     plan: product === "pass" ? "yearly" : null,
     billing: "one_time",
     personalPrice: personal ? { id: personal.id, discount: listed - charged } : null,
+  };
+}
+
+const PAIR_STATUS: Record<PairRefusal, number> = { not_on_sale: 400, sign_in_required: 401, pair_ready: 409, already_owned: 409, pair_needs_purchase: 403 };
+
+/**
+ * Two more gifts: one line at the catalogue price, nothing added to it, and only for whom
+ * pairAllowed says (lib/commerce/gift-credits.ts). It grants gifts ready, not unlock rows.
+ */
+function planPair(req: CheckoutRequest, ctx: CheckoutContext): ({ ok: true } & CheckoutPlan) | ({ ok: false } & PlanError) {
+  if (req.addEverything) return fail("bump_not_available", 400);
+  if (req.secondSlug !== undefined) return fail("second_not_available", 400);
+  if (req.personalPrice) return fail("personal_price_unavailable", 400);
+  const pair = ctx.pair;
+  const allowed = pairAllowed({
+    onSale: pair?.onSale === true,
+    signedIn: ctx.signedIn,
+    ready: pair ? pair.ready : null,
+    ownedForever: ctx.ownedForever,
+    memberRunning: pair?.memberRunning === true,
+    paidProducts: pair?.paidProducts ?? [],
+  });
+  if (!allowed.ok) return fail(allowed.error, PAIR_STATUS[allowed.error]);
+  const amount = PRODUCTS.pair.amounts[req.currency];
+  return {
+    ok: true,
+    product: "pair",
+    kind: "pair",
+    currency: req.currency,
+    templateSlugs: [],
+    packId: null,
+    bump: false,
+    second: null,
+    lines: [{ key: "pair", amount }],
+    total: amount,
+    creatorCode: ctx.creatorCode,
+    unlocks: [],
+    plan: null,
+    billing: "one_time",
+    personalPrice: null,
   };
 }
 

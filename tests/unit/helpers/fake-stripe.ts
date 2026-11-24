@@ -36,6 +36,8 @@ export class FakeStripe {
   customers: Record<string, Obj> = {};
   refunds: Record<string, Obj[]> = {};
   paymentIntents: Record<string, Obj> = {};
+  /** Checkout Sessions made, by id, as retrieve and expire see them. */
+  sessions: Record<string, Obj> = {};
   calls: { method: string; args: unknown[] }[] = [];
   /** What the next plan switch does: switch, or wait on a payment that failed or needs the bank. */
   switchOutcome: "switched" | "payment_failed" | "requires_action" = "switched";
@@ -216,8 +218,24 @@ export class FakeStripe {
             this.record("checkout.sessions.create", [params]);
             const n = this.calls.filter((c) => c.method === "checkout.sessions.create").length;
             // An embedded (ui_mode "elements") session has no page to go to, only a secret for Stripe.js.
-            if (params.ui_mode === "elements") return { id: `cs_test_${n}`, object: "checkout.session", url: null, client_secret: `cs_test_${n}_secret_test`, mode: params.mode, metadata: params.metadata };
-            return { id: `cs_test_${n}`, object: "checkout.session", url: `https://checkout.stripe.test/c/cs_test_${n}`, mode: params.mode, metadata: params.metadata };
+            const session =
+              params.ui_mode === "elements"
+                ? { id: `cs_test_${n}`, object: "checkout.session", url: null, client_secret: `cs_test_${n}_secret_test`, mode: params.mode, metadata: params.metadata }
+                : { id: `cs_test_${n}`, object: "checkout.session", url: `https://checkout.stripe.test/c/cs_test_${n}`, mode: params.mode, metadata: params.metadata };
+            // Kept, open, so a later retrieve finds it as Stripe would.
+            this.sessions[session.id] = { ...session, status: "open", ui_mode: params.ui_mode ?? "hosted", payment_status: "unpaid" };
+            return session;
+          },
+          retrieve: async (id: string) => {
+            this.record("checkout.sessions.retrieve", [id]);
+            const session = this.sessions[id];
+            if (!session) throw Object.assign(new Error(`No such checkout.session: ${id}`), { type: "StripeInvalidRequestError" });
+            return { ...session };
+          },
+          expire: async (id: string) => {
+            this.record("checkout.sessions.expire", [id]);
+            if (this.sessions[id]) this.sessions[id].status = "expired";
+            return { ...this.sessions[id] };
           },
         },
       },

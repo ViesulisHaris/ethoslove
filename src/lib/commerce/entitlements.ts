@@ -1,11 +1,12 @@
 import { PACK_IDS } from "@/lib/games/packs";
-import { EVERY_PACK, EVERY_TEMPLATE, FREE_SAVED_DATES, type Currency } from "@/lib/pricing/products";
+import { EVERY_PACK, EVERY_TEMPLATE, FREE_SAVED_DATES, PRODUCTS, pairOnSale, type Currency } from "@/lib/pricing/products";
 import type { MembershipSummary } from "@/lib/membership/types";
 import type { Pass } from "./passes";
 import { currentMembership, personOf, summariseMembership, type Person } from "./memberships";
 import { PURCHASE_CREDIT_COLUMNS, creditEndsAt, creditedPurchases, upgradeAmount, type CreditOptions, type PaidPurchase } from "./pricing";
 import { MissingMigrationError, inviteUrl, type Db, type Locale } from "./db";
 import { splitUnlocks } from "./unlocks";
+import { pairAllowed, readyGifts } from "./gift-credits";
 
 /** GET /api/entitlements (contract C3), plus the buyer's upgrade price when there is one to offer. */
 export type Entitlements = {
@@ -22,6 +23,10 @@ export type Entitlements = {
   savedDatesLimit: number | null;
   /** "Upgrade to Everything for the difference", for a buyer who paid for singles, pick-threes or extras. */
   upgrade: UpgradeOffer | null;
+  /** Gifts ready from two more gifts (lib/commerce/gift-credits.ts): 0 without any, or before migration 0024. */
+  giftsReady: number;
+  /** Two more gifts, at this price, when pairAllowed says this account may buy them; null otherwise. */
+  pairOffer: { amount: number; currency: Currency } | null;
 };
 
 /**
@@ -32,7 +37,7 @@ export type UpgradeOffer = { amount: number; currency: Currency; creditUntil?: s
 
 export type PassSummary = { endsAt: string; isOwner: boolean; partnerJoined: boolean; inviteUrl?: string };
 
-export const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: FREE_SAVED_DATES, upgrade: null };
+export const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: FREE_SAVED_DATES, upgrade: null, giftsReady: 0, pairOffer: null };
 
 /**
  * The old `pass` field, from the membership, for app builds that only know the pass: any running
@@ -123,11 +128,12 @@ export function upgradeOffer(ownedForever: string[], purchases: PaidPurchase[], 
  * error.
  */
 export async function readEntitlements(db: Db, userId: string, options: { locale: Locale; currency: Currency; now: number; names?: Db | null }): Promise<Entitlements> {
-  const [unlocks, owned, joined, purchases] = await Promise.all([
+  const [unlocks, owned, joined, purchases, ready] = await Promise.all([
     db.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
     db.from("couple_passes").select("*").eq("owner_user_id", userId),
     db.from("couple_passes").select("*").eq("partner_user_id", userId),
     db.from("purchases").select(PURCHASE_CREDIT_COLUMNS).eq("user_id", userId).eq("status", "paid"),
+    readyGifts(db, userId),
   ]);
   const rows = unlocks.data ?? [];
   const passes = asAfter0014([...(owned.data ?? []), ...(joined.data ?? [])].filter((pass, i, all) => all.findIndex((other) => other.id === pass.id) === i));
@@ -149,5 +155,16 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     membership,
     savedDatesLimit: membership?.running ? null : FREE_SAVED_DATES,
     upgrade: upgradeOffer(forever, purchases.data ?? [], options.currency),
+    giftsReady: ready ?? 0,
+    pairOffer: pairAllowed({
+      onSale: pairOnSale(),
+      signedIn: true,
+      ready,
+      ownedForever: forever,
+      memberRunning: membership?.running === true,
+      paidProducts: (purchases.data ?? []).map((p) => p.product),
+    }).ok
+      ? { amount: PRODUCTS.pair.amounts[options.currency], currency: options.currency }
+      : null,
   };
 }

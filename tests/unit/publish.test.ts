@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decidePublish, fieldMustHaves, fieldProblems, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
+import { decidePublish, fieldMustHaves, fieldProblems, liveEditNeedsUnlock, mayUseGiftReady, premiumExtras, readinessProblems } from "@/lib/gift/publish";
 import { manifest as letter } from "@/templates/the-letter/manifest";
 import { fieldsSchema as letterSchema } from "@/templates/the-letter/schema";
 import { fieldsSchema as cookieSchema } from "@/templates/fortune-cookie/schema";
@@ -132,5 +132,46 @@ describe("a template's own fields", () => {
     }
     // Each of these now shows its must-have in the checklist and can't be paid for until it's met.
     expect(blocked.sort()).toEqual(["fortune-cookie", "jar-of-reasons", "paper-crane", "picnic", "text-thread"]);
+  });
+});
+
+describe("mayUseGiftReady: when a gift from two more gifts is used on a publish", () => {
+  const paid = { useGift: true, unlocked: false, freeReply: false, campaign: false, needsPayment: true, asUnlocked: { ok: true as const, watermark: false, isPremium: true } };
+
+  it("is used only when asked, needed, and enough", () => {
+    expect(mayUseGiftReady(paid)).toBe(true);
+    expect(mayUseGiftReady({ ...paid, useGift: false })).toBe(false);
+  });
+
+  it("is never used on a template already held, or on a gift that would go out free", () => {
+    expect(mayUseGiftReady({ ...paid, unlocked: true })).toBe(false);
+    expect(mayUseGiftReady({ ...paid, needsPayment: false })).toBe(false);
+  });
+
+  it("is never used where a free reply or a creator's grant covers the gift", () => {
+    expect(mayUseGiftReady({ ...paid, freeReply: true })).toBe(false);
+    expect(mayUseGiftReady({ ...paid, campaign: true })).toBe(false);
+  });
+
+  it("is never used when the gift still couldn't go out unlocked (a missing name, too many photos)", () => {
+    expect(mayUseGiftReady({ ...paid, asUnlocked: { ok: false, reason: "not_ready", problems: ["recipientName"] } })).toBe(false);
+    expect(mayUseGiftReady({ ...paid, asUnlocked: null })).toBe(false);
+  });
+
+  it("covers what decidePublish asks payment for, in its own order", () => {
+    // A premium template, finished: payment needed, and unlocked it goes out without the footer.
+    const asIs = decidePublish(premium, base, { unlocked: false }, none);
+    const asUnlocked = decidePublish(premium, base, { unlocked: true }, none);
+    expect(asIs).toEqual({ ok: false, reason: "payment_required" });
+    expect(mayUseGiftReady({ ...paid, needsPayment: !asIs.ok && asIs.reason === "payment_required", asUnlocked })).toBe(true);
+    // The same gift without a name: not ready either way, so no gift is used.
+    const unnamed = { ...base, recipientName: "" };
+    const notReady = decidePublish(premium, unnamed, { unlocked: false }, none);
+    expect(notReady).toMatchObject({ ok: false, reason: "not_ready" });
+    expect(mayUseGiftReady({ ...paid, needsPayment: !notReady.ok && notReady.reason === "payment_required", asUnlocked: decidePublish(premium, unnamed, { unlocked: true }, none) })).toBe(false);
+    // A free template with nothing paid in it: free, so nothing is used.
+    const free = decidePublish(letter, base, { unlocked: false }, none);
+    expect(free.ok).toBe(true);
+    expect(mayUseGiftReady({ ...paid, needsPayment: !free.ok })).toBe(false);
   });
 });

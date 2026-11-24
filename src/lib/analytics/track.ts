@@ -32,6 +32,13 @@ export type FunnelEvent =
   | "one_tap_button_shown"
   | "one_tap_unavailable"
   | "one_tap_cancelled"
+  // Two more gifts on the share screen (components/editor/two-more-gifts.tsx) and a gift ready used at publish.
+  | "pair_offer_shown"
+  | "pair_wallet_shown"
+  | "pair_clicked"
+  | "pair_paid"
+  | "pair_declined"
+  | "gift_ready_used"
   | "letter_started_note"
   | "letter_started_classic"
   | "letter_sheet_note"
