@@ -67,6 +67,8 @@ test.describe("the template gallery", () => {
     await sort.selectOption("new");
     await expect(page).toHaveURL(/[?&]sort=new/);
     await expect(page.locator("[data-shelf]")).toHaveCount(1);
+    // The cards follow a press a moment after the select and the address (useDeferredValue, template-gallery.tsx).
+    await expect(page.locator("[data-shelf] h3").first()).toHaveText("Gingerbread House");
     const newest = await page.locator("[data-shelf] h3").allTextContents();
     // The catalogue is listed in the order its gifts were added: the last one in is the first one shown.
     expect(newest[0]).toBe("Gingerbread House");
@@ -80,6 +82,7 @@ test.describe("the template gallery", () => {
     await expect(page.locator("[data-shelf] header p").first()).toHaveText(`${newest.length} gifts`);
     await sort.selectOption("az");
     await expect(page).toHaveURL(/[?&]sort=az/);
+    await expect(page.locator("[data-shelf] h3").first()).not.toHaveText("Gingerbread House");
     const names = await page.locator("[data-shelf] h3").allTextContents();
     // By name without its article: The Letter is under L, between Kawaii and Light the Candles.
     expect(names).toEqual([...names].sort((a, b) => filedUnder(a, "en").localeCompare(filedUnder(b, "en"), "en", { sensitivity: "base" })));
