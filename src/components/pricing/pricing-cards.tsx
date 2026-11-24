@@ -60,7 +60,8 @@ export function PricingCards({
   const locale = useLocale() as GiftLocale;
   const [picking, setPicking] = useState<PlanId | null>(openPick3 && paymentsEnabled ? "pick3" : null);
   const [chosen, setChosen] = useState<string[]>(preselect ? [preselect] : []);
-  const [busy, setBusy] = useState(false);
+  // The card whose checkout is starting: its button alone shows the spinner, every buy button waits.
+  const [busy, setBusy] = useState<PlanId | null>(null);
   // One answer for this set of cards: shown under Everything's button and under the picker's, the
   // two places a checkout starts from here.
   const showCheckoutError = useCheckoutError();
@@ -69,13 +70,13 @@ export function PricingCards({
   const upgrade = useUpgradeQuote(currency, paymentsEnabled);
   const all = everythingPlan(currency, upgrade);
 
-  const start = async (product: PlanId | "upgrade", slugs: string[]) => {
+  const start = async (card: PlanId, product: PlanId | "upgrade", slugs: string[]) => {
     // Guests pay first; the account is created from the email Stripe collects.
-    setBusy(true);
+    setBusy(card);
     track("pay_clicked", { product, source: "pricing" });
     const result = await startCheckout({ product, templateSlugs: slugs, currency, returnTo, locale });
     if ("url" in result) return void window.location.assign(result.url);
-    setBusy(false);
+    setBusy(null);
     showCheckoutError(result.error);
   };
 
@@ -87,7 +88,7 @@ export function PricingCards({
       toast(t("comingSoon"));
       return;
     }
-    if (product === "everything") return void start(all.plan, []);
+    if (product === "everything") return void start("everything", all.plan, []);
     setChosen(preselect && pickable(product).some((m) => m.slug === preselect) ? [preselect] : []);
     setPicking(product);
   };
@@ -95,10 +96,18 @@ export function PricingCards({
   // The pricing page's head presses "One gift" with this same handler (pricing-choice.tsx).
   useRegisterChoice(choose, busy);
 
+  // The picker lists the gift the buyer came with first, so the one already ticked is in sight (the
+  // order is fixed while it is open: ticking another never moves a row).
+  const rows = (product: PlanId | null) => {
+    const list = pickable(product);
+    const first = list.find((m) => m.slug === preselect);
+    return first ? [first, ...list.filter((m) => m !== first)] : list;
+  };
+
   const needed = picking ? PRODUCTS[picking].picks : 0;
-  const premium = manifests.filter((m) => m.tier === "premium").length;
-  // /pricing counts as the gallery does: every gift that cannot go out free (lib/gift/free-tier.ts), so
-  // with the free note live Constellations is one of them (PLAN-pricing.md, addendum of 24 Nov 2026).
+  // Every count of gifts here is the gallery's: every gift that cannot go out free (lib/gift/free-tier.ts),
+  // so with the free note live Constellations is one of them (PLAN-pricing.md, addendum of 24 Nov 2026).
+  // The home page's teaser counts the same way, so /pricing and the front page never give two numbers.
   const paid = pricingGifts(manifests).paid.length;
 
   return (
@@ -168,13 +177,14 @@ export function PricingCards({
                 <button
                   type="button"
                   onClick={() => choose(id)}
-                  disabled={busy}
+                  disabled={busy !== null}
+                  aria-busy={busy === id}
                   className={cn(
                     "mt-auto flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-semibold transition-[background-color,border-color,scale] duration-200 active:scale-[0.98] disabled:opacity-60",
                     picked ? "btn-rose" : "border border-ink/20 text-ink hover:border-ink/45 hover:bg-paper active:bg-paper-deep",
                   )}
                 >
-                  {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+                  {busy === id ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
                   <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`plans.${id}.cta`)}</span>
                 </button>
               </article>
@@ -228,10 +238,10 @@ export function PricingCards({
                 <p className={cn("mt-1.5 text-sm font-medium", dominant ? "text-blush" : "text-coral")} data-testid="pricing-upgrade">
                   {tPlans("upgradeNote", { full: formatAmount(p.amounts[currency], currency, locale) })}
                 </p>
-              ) : id === "everything" && premium > 0 ? (
+              ) : id === "everything" && paid > 0 ? (
                 // What "everything" means, in the unit people compare it to: one gift.
                 <p className={cn("mt-1.5 text-sm font-medium", dominant ? "text-blush" : "text-coral")}>
-                  {t("perTemplate", { n: premium, price: formatAmount(Math.round(p.amounts[currency] / premium), currency, locale) })}
+                  {t("perTemplate", { n: paid, price: formatAmount(Math.round(p.amounts[currency] / paid), currency, locale) })}
                 </p>
               ) : null}
               <ul className={cn("flex flex-col text-sm", quiet ? "mt-5 mb-7 gap-2 sm:mt-6 sm:gap-2.5" : "mt-6 gap-2.5")}>
@@ -250,7 +260,8 @@ export function PricingCards({
               <button
                 type="button"
                 onClick={() => choose(id)}
-                disabled={busy}
+                disabled={busy !== null}
+                aria-busy={busy === id}
                 className={cn(
                   "flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform active:scale-[0.98]",
                   // Quiet: pinned to the card's foot, so the three buttons line up side by side.
@@ -262,7 +273,7 @@ export function PricingCards({
                       : "border border-ink bg-transparent text-ink hover:bg-ink hover:text-paper",
                 )}
               >
-                {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+                {busy === id ? <Loader2 className="size-4 animate-spin" /> : null}
                 <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`plans.${id}.cta`)}</span>
               </button>
               {dominant ? (
@@ -282,42 +293,51 @@ export function PricingCards({
             </DialogTitle>
             <DialogDescription>{t("pick.blurb")}</DialogDescription>
           </DialogHeader>
-          <ul className="grid max-h-[50dvh] gap-2 overflow-y-auto">
-            {pickable(picking).map((m) => {
+          <ul className={cn("grid max-h-[50dvh] overflow-y-auto", quiet ? "-mx-1 gap-2.5 px-1 py-1" : "gap-2")}>
+            {rows(picking).map((m) => {
               const on = chosen.includes(m.slug);
               return (
                 <li key={m.slug}>
                   <button
                     type="button"
+                    aria-pressed={on}
                     onClick={() =>
                       setChosen((c) =>
                         on ? c.filter((s) => s !== m.slug) : c.length < needed ? [...c, m.slug] : c,
                       )
                     }
                     className={cn(
-                      "flex w-full items-center gap-3 rounded-lg border p-3 text-left",
-                      on ? "border-ink bg-ink/5" : "border-line",
+                      "flex w-full items-center gap-3 text-left",
+                      quiet
+                        ? // The gallery card's paper: a soft ring, the rose one when ticked.
+                          cn(
+                            "min-h-[4.5rem] rounded-[20px] bg-card p-2.5 pr-4 ring-1 transition-[box-shadow,background-color,scale] duration-200 hover:ring-ink/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100",
+                            on ? "ring-2 ring-rose/60 hover:ring-rose/60" : "ring-ink/[0.08]",
+                          )
+                        : cn("rounded-lg border p-3", on ? "border-ink bg-ink/5" : "border-line"),
                     )}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={m.thumbnail.poster}
                       alt=""
-                      className="h-14 w-10 rounded-md object-cover"
+                      className={quiet ? "h-14 w-10 shrink-0 rounded-[10px] object-cover" : "h-14 w-10 rounded-md object-cover"}
                     />
-                    <span className="flex-1">
-                      <span className="block font-medium">{m.name[locale]}</span>
-                      <span className="block text-xs text-muted-foreground">
+                    <span className="min-w-0 flex-1">
+                      <span className={quiet ? "block font-display text-[1.125rem] leading-tight text-ink" : "block font-medium"}>{m.name[locale]}</span>
+                      <span className={quiet ? "mt-0.5 block text-[0.875rem] leading-snug text-ink-soft" : "block text-xs text-muted-foreground"}>
                         {m.tagline[locale]}
                       </span>
                     </span>
                     <span
+                      aria-hidden="true"
                       className={cn(
-                        "grid size-5 place-items-center rounded-full border",
-                        on ? "border-coral bg-coral text-paper" : "border-border",
+                        "grid shrink-0 place-items-center rounded-full border",
+                        quiet ? "size-6" : "size-5",
+                        on ? (quiet ? "border-rose bg-rose text-paper" : "border-coral bg-coral text-paper") : "border-border",
                       )}
                     >
-                      {on ? <Check className="size-3" /> : null}
+                      {on ? <Check className={quiet ? "size-3.5" : "size-3"} strokeWidth={2.4} /> : null}
                     </span>
                   </button>
                 </li>
@@ -326,11 +346,15 @@ export function PricingCards({
           </ul>
           <button
             type="button"
-            disabled={chosen.length !== needed || busy}
-            onClick={() => picking && start(picking, chosen)}
-            className="flex h-12 items-center justify-center gap-2 rounded-full bg-coral text-[15px] font-semibold text-paper shadow-glow disabled:opacity-50"
+            disabled={chosen.length !== needed || busy !== null}
+            aria-busy={busy !== null && busy === picking}
+            onClick={() => picking && start(picking, picking, chosen)}
+            className={cn(
+              "flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold disabled:opacity-50",
+              quiet ? "btn-rose focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose" : "bg-coral text-paper shadow-glow",
+            )}
           >
-            {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+            {busy !== null && busy === picking ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
             <span>{t("pick.continue", { n: chosen.length, total: needed })}</span>
           </button>
         </DialogContent>

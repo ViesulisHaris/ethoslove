@@ -7,7 +7,7 @@ import { QUESTION_PLUS, QUESTION_ROW } from "@/components/templates/page/section
 import { Intro } from "@/components/templates/page/spread";
 import { GiftCardOffer } from "./gift-card-offer";
 import { PricingCards } from "./pricing-cards";
-import { pricingGifts } from "./free-gifts";
+import { pricingGifts, specialGifts } from "./free-gifts";
 
 /**
  * The three ways to pay for gifts (`#gifts`, which /digital-cards and the editor link to), on the
@@ -48,7 +48,12 @@ export async function SingleGifts({
   // named here as a free gift whose extras it sells.
   const { free, note: short } = pricingGifts(manifests);
   const letter = free.find((m) => m.slug === "the-letter") ?? free[0];
-  const names = new Intl.ListFormat(locale, { type: "conjunction" }).format(free.map((m) => m.name[locale]));
+  const list = (gifts: TemplateManifest[]) => new Intl.ListFormat(locale, { type: "conjunction" }).format(gifts.map((m) => m.name[locale]));
+  const names = list(free);
+  // A free template that cannot go out free (Constellations with the note live) is counted as paid, and the
+  // "One gift" picker can't sell it: this card names it, at the one price it is sold at.
+  const { sold } = specialGifts(manifests);
+  const opens = [...(letter ? [letter] : []), ...sold];
 
   return (
     <section id="gifts" className="relative scroll-mt-[calc(var(--header-h)+1rem)]" aria-labelledby="gifts-title">
@@ -90,7 +95,7 @@ export async function SingleGifts({
           </details>
 
           <div className="mt-6 grid gap-4">
-            {letter ? (
+            {opens.length ? (
               <article
                 className="relative flex flex-col gap-4 rounded-[28px] bg-card p-6 shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] sm:flex-row sm:items-center sm:gap-6 sm:px-7"
                 data-testid="special-card"
@@ -102,15 +107,22 @@ export async function SingleGifts({
                       {formatAmount(PRODUCTS.extras.amounts[currency], currency, locale)}
                     </span>
                   </div>
-                  <p className="mt-2 max-w-xl text-[0.9375rem] leading-snug text-ink-soft">{tPricing("page.specialLine")}</p>
+                  <p className="mt-2 max-w-xl text-[0.9375rem] leading-snug text-ink-soft">
+                    {sold.length && letter ? tPricing("page.specialLineSold", { free: letter.name[locale], sold: list(sold) }) : tPricing("page.specialLine")}
+                  </p>
                 </div>
-                <Link
-                  href={`/create/${letter.slug}`}
-                  className="inline-flex h-12 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-ink/20 px-6 text-[15px] font-semibold text-ink transition-[background-color,border-color,scale] duration-200 hover:border-ink/45 hover:bg-paper active:scale-[0.98] active:bg-paper-deep sm:self-center"
-                >
-                  {t("special.cta", { name: letter.name[locale] })}
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
+                <div className="flex shrink-0 flex-wrap gap-2.5 self-start sm:flex-col sm:self-center">
+                  {opens.map((m) => (
+                    <Link
+                      key={m.slug}
+                      href={`/create/${m.slug}`}
+                      className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-ink/20 px-6 text-[15px] font-semibold text-ink transition-[background-color,border-color,scale] duration-200 hover:border-ink/45 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose active:scale-[0.98] active:bg-paper-deep"
+                    >
+                      {t("special.cta", { name: m.name[locale] })}
+                      <ArrowRight aria-hidden="true" className="size-4" />
+                    </Link>
+                  ))}
+                </div>
               </article>
             ) : null}
             {giftCards ? <GiftCardOffer currency={currency} paymentsEnabled={paymentsEnabled} /> : null}

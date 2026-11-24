@@ -19,6 +19,21 @@ export function pricingGifts<T extends Sendable>(manifests: readonly T[], share:
 }
 
 /**
+ * What "Make it special" sells on /pricing, split as the page names it: `free`, the free gifts whose
+ * extras it adds (The Letter), and `sold`, the free templates that cannot go out free under the
+ * setting (Constellations with the free note live), which it sells whole at the same price. The
+ * "One gift" picker lists premium templates only (checkout refuses a single for a free one), so
+ * without `sold` named on that card a gift the page counts as paid would have no price on it.
+ */
+export function specialGifts<T extends Sendable>(manifests: readonly T[], share: number = noteShare()): { free: T[]; sold: T[] } {
+  const templates = manifests.filter((m) => m.tier === "free");
+  return {
+    free: templates.filter((m) => sendsFree(m, share)),
+    sold: templates.filter((m) => !sendsFree(m, share)),
+  };
+}
+
+/**
  * The questions with the free tier's answer as the setting has it: with the note for everyone, the
  * answer written for the note (`pricing.faqFreeNote`) stands in for the one that lists two full free
  * templates. The page and its structured data read the same list.

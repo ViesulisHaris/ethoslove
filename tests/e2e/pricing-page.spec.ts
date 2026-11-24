@@ -3,7 +3,7 @@ import { PRODUCTS, formatAmount, type Currency } from "../../src/lib/pricing/pro
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { listManifests } from "../../src/templates/manifests";
-import { pricingGifts, withFreeAnswer } from "../../src/components/pricing/free-gifts";
+import { pricingGifts, specialGifts, withFreeAnswer } from "../../src/components/pricing/free-gifts";
 import { measure, settle } from "./page-measure";
 
 /**
@@ -149,6 +149,70 @@ for (const country of COUNTRIES) {
     });
   });
 }
+
+test("with a gift named, the head sells that gift: no line about what is free, no link away to it", async ({ page }) => {
+  await page.goto("/pricing?template=bouquet");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Unlock Bouquet");
+  await expect(page.locator("[data-price-head] p.italic")).toHaveCount(0);
+  await expect(page.locator("[data-price-head]").getByRole("link", { name: "See what is free" })).toHaveCount(0);
+  await expect(page.getByTestId("head-buy-single")).toBeVisible();
+  // Without one, both are there.
+  await page.goto("/pricing");
+  await expect(page.locator("[data-price-head] p.italic")).toHaveCount(1);
+  await expect(page.locator("[data-price-head]").getByRole("link", { name: "See what is free" })).toBeVisible();
+});
+
+test("every gift the page counts as paid can be bought from a card on it", async ({ page }) => {
+  const manifests = listManifests();
+  const share = Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) || 0;
+  const { paid } = pricingGifts(manifests, share);
+  const { sold } = specialGifts(manifests, share);
+  await page.goto("/pricing");
+  const special = page.getByTestId("special-card");
+  // Make it special opens The Letter, and every free template sold whole at its price (Constellations, with the note live).
+  await expect(special.getByRole("link", { name: "Open The Letter" })).toHaveAttribute("href", "/create/the-letter");
+  for (const m of sold) await expect(special.getByRole("link", { name: `Open ${m.name.en}` })).toHaveAttribute("href", `/create/${m.slug}`);
+  // The One gift picker sells the rest, if payments are open on this server.
+  await page.getByRole("button", { name: "Unlock one" }).click();
+  test.skip(await paymentsOff(page), "payments are off on this server (no Stripe key): the picker does not open");
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("heading", { name: "Choose 1" })).toBeVisible();
+  const listed = new Set(await dialog.locator("li button").evaluateAll((rows) => rows.map((row) => row.querySelector(".block")?.textContent ?? "")));
+  const soldSlugs = new Set(sold.map((m) => m.slug));
+  for (const m of paid) expect(listed.has(m.name.en) || soldSlugs.has(m.slug), `${m.slug} is counted as paid but no card sells it`).toBe(true);
+});
+
+test("the picker shows the gift the buyer came with first, ticked", async ({ page }) => {
+  await page.goto("/pricing?template=bouquet&plan=pick3");
+  const dialog = page.getByRole("dialog");
+  test.skip((await dialog.count()) === 0, "payments are off on this server (no Stripe key): the picker does not open");
+  await expect(dialog.getByRole("heading", { name: "Choose 3" })).toBeVisible();
+  const first = dialog.locator("li button").first();
+  await expect(first).toHaveAccessibleName(/^Bouquet/);
+  await expect(first).toHaveAttribute("aria-pressed", "true");
+  await expect(first).toBeInViewport();
+});
+
+test("a press shows its spinner on its own button; the others only wait", async ({ page }) => {
+  let release: () => void = () => {};
+  const held = new Promise<void>((resolve) => (release = resolve));
+  await page.route("**/api/stripe/checkout", async (route) => {
+    await held;
+    await route.fulfill({ status: 429, contentType: "application/json", body: JSON.stringify({ error: "rate_limited" }) });
+  });
+  await page.goto("/pricing");
+  const card = (plan: string) => page.locator(`[data-plan=${plan}] button`);
+  await card("everything").click();
+  test.skip(await paymentsOff(page), "payments are off on this server (no Stripe key)");
+  await expect(card("everything").locator(".animate-spin")).toHaveCount(1);
+  for (const plan of ["single", "pick3"]) {
+    await expect(card(plan)).toBeDisabled();
+    await expect(card(plan).locator(".animate-spin")).toHaveCount(0);
+  }
+  release();
+  await expect(card("pick3")).toBeEnabled();
+  await expect(card("everything").locator(".animate-spin")).toHaveCount(0);
+});
 
 test("a free template or one that does not exist leaves the head as it is", async ({ page }) => {
   for (const slug of ["the-letter", "not-a-template"]) {

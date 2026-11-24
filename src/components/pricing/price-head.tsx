@@ -55,7 +55,8 @@ export async function PriceHead({
   const bestSeller = BEST_SELLERS.map((slug) => manifests.find((m) => m.slug === slug && m.tier === "premium")).find(Boolean);
   const cover = named ?? bestSeller ?? manifests[0];
   // What is free, as the gallery counts it; "No subscription." only while the band sells none (free-gifts.ts).
-  const head = headLine(pricingGifts(manifests).free, subscriptions);
+  // With a gift named, the buyer came to pay for it: no line about what is free, and no link away to it.
+  const head = named ? null : headLine(pricingGifts(manifests).free, subscriptions);
   const line = head ? t(head.key, head.name ? { name: head.name.name[locale] } : undefined) : null;
   const art = pageArt("hero-flatlay", SITE_FLOWERS);
   const screen = art.slots.screen;
@@ -90,9 +91,11 @@ export async function PriceHead({
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
             )}
-            <Link href="/templates?tier=free" className={HERO_BUTTON_QUIET}>
-              {t("seeFree")}
-            </Link>
+            {named ? null : (
+              <Link href="/templates?tier=free" className={HERO_BUTTON_QUIET}>
+                {t("seeFree")}
+              </Link>
+            )}
           </div>
         </div>
 

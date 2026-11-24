@@ -1069,7 +1069,7 @@
     "bestValue": "Mejor valor",
     "priority": "Incluye soporte prioritario",
     "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en una plantilla gratis.",
-    "freeNoteShort": "Una Carta gratis es una nota corta: hasta 500 caracteres, nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y el pie «Hecho con Ethos». Las fotos, la carta entera, vídeos, mensajes de voz, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en La carta.",
+    "freeNoteShort": "Una Carta gratis es una nota corta: hasta 500 caracteres, nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y el pie «Hecho con Ethos». Las fotos, la carta entera, vídeos, mensajes de voz, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en La carta. Unas fotos solas vienen con «Una nota con tus fotos», en el editor.",
     "comingSoon": "Los pagos se abren pronto. Las plantillas gratis ya se pueden publicar.",
     "plans": {
       "single": {
@@ -1105,7 +1105,7 @@
           "Haz tantos regalos como quieras, para siempre",
           "Tu voz diciéndolo, o tu vídeo",
           "Hasta 20 fotos, y sin la marca de Ethos",
-          "Se abre a medianoche en su día, y solo esa persona puede abrirlo",
+          "Se abre a medianoche en su día y solo esa persona puede abrirlo",
           "Acceso anticipado a plantillas nuevas"
         ]
       }
@@ -1219,8 +1219,8 @@
         "a": "Plantillas, «Hazlo especial» y packs de juegos: al pagar nos pides que desbloqueemos tu compra de inmediato y marcas que así pierdes el derecho de desistimiento de 14 días. Si un regalo no se abre o no se reproduce bien en su móvil y no podemos arreglarlo, avísanos en un plazo de 30 días y te devolvemos el dinero. Ethos for Two es distinto: es un servicio, así que puedes desistir en un plazo de 14 días y te devolvemos lo que pagaste, menos los días ya disfrutados. Tarjetas regalo: si cambias de opinión en un plazo de 14 días y el código no se ha canjeado, te devolvemos el importe íntegro. «Desistir de una compra», al pie de cada página, explica cómo."
       }
     ],
-    "faqFreeNote": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: La carta, como una nota corta de hasta 500 caracteres, tantas veces como quieras, con nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y un pequeño pie «Hecho con Ethos». Las fotos, la carta entera, los vídeos, los mensajes de voz, una sorpresa dentro, quitar el pie, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two.",
-    "perTemplate": "Las {n} plantillas premium · {price} cada una",
+    "faqFreeNote": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: La carta, como una nota corta de hasta 500 caracteres, tantas veces como quieras, con nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y un pequeño pie «Hecho con Ethos». Las fotos, la carta entera, los vídeos, los mensajes de voz, una sorpresa dentro, quitar el pie, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two. Unas fotos solas vienen con «Una nota con tus fotos», en el editor.",
+    "perTemplate": "Las {n} plantillas de pago · {price} cada una",
     "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
     "separately": "{price} por separado",
     "page": {
@@ -1243,27 +1243,27 @@
           "name": "Un regalo",
           "line": "Cualquiera de los regalos de pago.",
           "ticks": [
-            "Tu voz, y sin pie",
+            "Tu voz y sin marca de Ethos",
             "Se abre en su día, solo para esa persona"
           ],
           "includes": [
             "Un regalo de pago cualquiera, tuyo para siempre",
             "Hazlo tantas veces como quieras",
-            "Un mensaje de voz tuyo, y un vídeo si el regalo lo admite",
-            "Todas las fotos que admite el regalo, y sin pie",
+            "Un mensaje de voz tuyo y un vídeo si el regalo lo admite",
+            "Todas las fotos que admite el regalo, sin la marca de Ethos al final",
             "Se abre a medianoche en su día",
             "Solo esa persona puede abrirlo"
           ]
         },
         "pick3": {
           "name": "Elige tres",
-          "line": "Tres, gratis o de pago.",
+          "line": "Tres regalos cualesquiera.",
           "ticks": [
-            "Todo lo de Un regalo"
+            "Lo mismo que un regalo, tres veces"
           ],
           "includes": [
-            "Tres regalos cualesquiera, gratis o de pago, para siempre",
-            "Todo lo de Un regalo, en cada uno",
+            "Tres regalos cualesquiera, tuyos para siempre",
+            "Lo mismo que un regalo, en cada uno de los tres",
             "Un solo pago para los tres"
           ]
         },
@@ -1277,15 +1277,16 @@
           "includes": [
             "Todos los regalos, los de ahora y los que vengan",
             "Haz tantos como quieras, para siempre",
-            "Un mensaje de voz tuyo, y un vídeo si el regalo lo admite",
-            "Todas las fotos que admite cada regalo, y sin pie",
-            "Se abre a medianoche en su día, y solo esa persona puede abrirlo",
+            "Un mensaje de voz tuyo y un vídeo si el regalo lo admite",
+            "Todas las fotos que admite cada regalo, sin la marca de Ethos al final",
+            "Se abre a medianoche en su día y solo esa persona puede abrirlo",
             "Acceso anticipado a regalos nuevos"
           ]
         }
       },
       "includes": "Qué incluye cada uno",
-      "specialLine": "Fotos, vídeo y sin pie en un regalo gratis.",
+      "specialLine": "Fotos, vídeo y sin marca de Ethos en un regalo gratis.",
+      "specialLineSold": "Fotos, vídeo y sin marca de Ethos en {free}. {sold}, al mismo precio.",
       "giftCardLine": "Todos los regalos, para otra persona, en un código.",
       "giftCardNote": "Añadir una nota",
       "faqForTwo": "Preguntas sobre Ethos for Two",

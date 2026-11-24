@@ -1069,7 +1069,7 @@
     "bestValue": "Best value",
     "priority": "Includes priority support",
     "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
-    "freeNoteShort": "A free Letter is a short note: up to 500 characters, our music library or a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on The Letter.",
+    "freeNoteShort": "A free Letter is a short note: up to 500 characters, our music library or a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on The Letter. A few photos alone come with “A note with your photos”, in the editor.",
     "comingSoon": "Payments open soon. Free templates publish today.",
     "plans": {
       "single": {
@@ -1219,8 +1219,8 @@
         "a": "Templates, “Make it special” and game packs: at checkout you ask us to unlock your purchase straight away and tick that you then lose the 14-day right to cancel. If a gift won't open or play properly on their phone and we can't fix it, tell us within 30 days and you get your money back. Ethos for Two is different: it's a service, so you can withdraw within 14 days and we refund what you paid, less the days you've used. Gift cards: change your mind within 14 days, before the code is redeemed, and we refund you in full. “Withdraw from a purchase”, at the foot of every page, says how."
       }
     ],
-    "faqFreeNote": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: The Letter, as a short note of up to 500 characters, as many as you like, with our music library or a 30-second preview of a real song they can tap to hear, and a small “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside, no footer, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two.",
-    "perTemplate": "All {n} premium templates · {price} each",
+    "faqFreeNote": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: The Letter, as a short note of up to 500 characters, as many as you like, with our music library or a 30-second preview of a real song they can tap to hear, and a small “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside, no footer, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two. A few photos alone come with “A note with your photos”, in the editor.",
+    "perTemplate": "All {n} paid templates · {price} each",
     "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe",
     "separately": "{price} separately",
     "page": {
@@ -1243,27 +1243,27 @@
           "name": "One gift",
           "line": "Any one of the paid gifts.",
           "ticks": [
-            "Your voice, and no footer",
+            "Your voice, and no Ethos mark",
             "Opens on their day, only for them"
           ],
           "includes": [
             "Any one paid gift, yours for good",
             "Make it as often as you like",
             "A voice message from you, and a video where the gift takes one",
-            "Every photo the gift holds, and no footer",
+            "Every photo the gift holds, and no Ethos mark at the end",
             "Opens at midnight on their day",
             "Only they can open it"
           ]
         },
         "pick3": {
           "name": "Pick three",
-          "line": "Any three, free or paid.",
+          "line": "Any three gifts.",
           "ticks": [
-            "All that One gift has"
+            "The same as One gift, three times"
           ],
           "includes": [
-            "Any three gifts, free or paid, for good",
-            "All that One gift has, on each of them",
+            "Any three gifts, yours for good",
+            "The same as One gift, on each of the three",
             "Pay once for all three"
           ]
         },
@@ -1278,14 +1278,15 @@
             "Every gift, now and to come",
             "Make as many as you like, for good",
             "A voice message from you, and a video where a gift takes one",
-            "Every photo each gift holds, and no footer",
+            "Every photo each gift holds, and no Ethos mark at the end",
             "Opens at midnight on their day, and only they can open it",
             "First access to new gifts"
           ]
         }
       },
       "includes": "What each one includes",
-      "specialLine": "Photos, video and no footer on a free gift.",
+      "specialLine": "Photos, video and no Ethos mark on a free gift.",
+      "specialLineSold": "Photos, video and no Ethos mark on {free}. {sold}, at the same price.",
       "giftCardLine": "Every gift, for someone else, as a code.",
       "giftCardNote": "Add a note",
       "faqForTwo": "Questions about Ethos for Two",

@@ -4,7 +4,7 @@ import es from "../../messages/es.json";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { listManifests } from "@/templates/manifests";
 import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
-import { headLine, pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
+import { headLine, pricingGifts, specialGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
 
 /**
  * /pricing must not say two things about one gift (PLAN-pricing.md, the owner's addendum of 24 Nov 2026):
@@ -77,6 +77,22 @@ for (const { share, label } of SETTINGS) {
       });
     }
 
+    it("every gift the page counts as paid has a price on a card: One gift's picker or Make it special", () => {
+      // The One gift picker lists premium templates (checkout refuses a single for a free one); Make it
+      // special opens The Letter and every free template that cannot go out free (pricing-cards.tsx, single-gifts.tsx).
+      const special = specialGifts(manifests, share);
+      const onSale = new Set([...manifests.filter((m) => m.tier === "premium"), ...special.sold].map((m) => m.slug));
+      for (const m of paid) expect(onSale.has(m.slug), `${m.slug} is counted as paid, yet no card on /pricing sells it`).toBe(true);
+      // Make it special names a gift once, under its one price: what it sells whole is never also called free.
+      for (const m of special.sold) expect(sendsFree(m, share)).toBe(false);
+      for (const m of special.free) expect(sendsFree(m, share)).toBe(true);
+      expect(special.sold.map((m) => m.slug)).toEqual(share === 1 ? ["constellations"] : []);
+      for (const messages of [en, es]) {
+        expect(messages.pricing.page.specialLineSold).toContain("{free}");
+        expect(messages.pricing.page.specialLineSold).toContain("{sold}");
+      }
+    });
+
     it("the Everything card counts the paid list, and says paid, not premium", () => {
       for (const messages of [en, es]) {
         const line = messages.pricing.page.cards.everything.line;
@@ -97,6 +113,24 @@ describe("/pricing's own words", () => {
       for (const item of messages.pricing.faq) expect(item.a, item.q).not.toMatch(/premium/i);
       expect(messages.pricing.faqFreeNote).not.toMatch(/premium/i);
     }
+  });
+
+  it("say what goes, in words a newcomer reads: no footer, no foot, no card pointing at another", () => {
+    for (const [messages, banned] of [
+      [en, /footer|All that One gift has|free or paid/i],
+      [es, /pie|Todo lo de Un regalo|gratis o de pago|, y /],
+    ] as const) {
+      const cards = messages.pricing.page.cards;
+      const shown = [...cards.single.ticks, ...cards.pick3.ticks, ...cards.everything.ticks, cards.single.line, cards.pick3.line, ...cards.single.includes, ...cards.pick3.includes, ...cards.everything.includes, messages.pricing.page.specialLine, messages.pricing.page.specialLineSold];
+      for (const line of shown) expect(line).not.toMatch(banned);
+    }
+  });
+
+  it("the free tier's words name the note with photos the editor sells", () => {
+    expect(en.pricing.freeNoteShort).toContain(en.money.paywall.moreNotePhotos);
+    expect(en.pricing.faqFreeNote).toContain(en.money.paywall.moreNotePhotos);
+    expect(es.pricing.freeNoteShort).toContain(es.money.paywall.moreNotePhotos);
+    expect(es.pricing.faqFreeNote).toContain(es.money.paywall.moreNotePhotos);
   });
 
   it("the free tier's answer is replaced only with the note for everyone", () => {
