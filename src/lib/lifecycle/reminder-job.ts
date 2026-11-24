@@ -7,7 +7,7 @@ import { readyGifts } from "@/lib/commerce/gift-credits";
 import { EVERY_TEMPLATE, PRODUCTS, hasUnlock, templateProduct, type Currency } from "@/lib/pricing/products";
 import { suggestTemplate } from "./suggest";
 import { lastGiftFor, type LastGift } from "./last-gift";
-import { dueDates, dueStages, formatMonthDay, needsSending, needsStage, weekdayName, whenWords, type DueDate, type ReminderOccasion, type Stage } from "./reminders";
+import { dueDates, dueStages, formatMonthDay, occurrenceIn, needsSending, needsStage, weekdayName, whenWords, type DueDate, type ReminderOccasion, type Stage } from "./reminders";
 
 /**
  * "Remind me", the buyers' part of the morning job (api/cron/reminders): three e-mails before each
@@ -21,7 +21,7 @@ import { dueDates, dueStages, formatMonthDay, needsSending, needsStage, weekdayN
  * before: one e-mail nine days before, today's words, last_sent_year alone. Never a 503 for that.
  */
 
-type Row = Pick<Tables<"reminders">, "id" | "user_id" | "recipient_name" | "occasion" | "locale" | "template_slug" | "last_sent_year">;
+type Row = Pick<Tables<"reminders">, "id" | "user_id" | "recipient_name" | "occasion" | "month" | "day" | "locale" | "template_slug" | "last_sent_year">;
 export type StageRow = Row & Pick<Tables<"reminders">, "last_stage" | "currency">;
 type Prior = { last_sent_year: number | null; last_stage: number };
 
@@ -102,6 +102,15 @@ export type ReminderRun = {
 };
 
 export type ReminderRunResult = { sent: number; failed: number; deferred: number; mode: "stages" | "old" };
+
+/**
+ * Until when "Open my gift" signs its reader in (Unix seconds): the end of the day after the
+ * occasion, in UTC, the year the e-mail is about. After that it asks them to sign in.
+ */
+export function openLinkUntil(row: Pick<Tables<"reminders">, "month" | "day">, year: number): number {
+  const on = occurrenceIn(year, { month: row.month, day: row.day });
+  return Math.floor(on.getTime() / 1000) + 2 * 86_400 - 1;
+}
 
 /** Per date per run; anything left over is picked up by the next run (stage 1's catch-up), as before. */
 export const REMINDER_BATCH = 200;
@@ -234,7 +243,7 @@ async function sendOld(run: ReminderRun, limit: number): Promise<Omit<ReminderRu
   return { sent, failed, deferred };
 }
 
-const BASE = "id, user_id, recipient_name, occasion, locale, template_slug, last_sent_year";
+const BASE = "id, user_id, recipient_name, occasion, month, day, locale, template_slug, last_sent_year";
 
 /**
  * The claim's condition: nothing went for the year, or a lower stage did (never a year written

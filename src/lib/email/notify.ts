@@ -8,6 +8,7 @@ import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { getManifest } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { suggestTemplate, suggestionPath } from "@/lib/lifecycle/suggest";
+import type { PaidLine, StagedReminderEmail } from "@/lib/lifecycle/reminder-job";
 import { optedOut } from "./optouts";
 import { isUndeliverable, sendEmail } from "./send";
 import { pageUrl, siteUrl } from "./urls";
@@ -26,6 +27,8 @@ import {
   publishReminderSubject,
   recoveryHeading,
   reminderHeading,
+  stagedReminderSubject,
+  type ReminderPaid,
   type EmailIdea,
 } from "@/emails/lifecycle";
 import { MembershipEndedEmail, MembershipPaymentEmail, MembershipRenewalEmail, MembershipWelcomeEmail, membershipSubject } from "@/emails/membership";
@@ -364,6 +367,7 @@ export async function sendReminderEmail({
   avoid,
   removeUrl,
   ref = "email-reminder",
+  staged,
 }: {
   to: string;
   locale: L;
@@ -373,7 +377,13 @@ export async function sendReminderEmail({
   avoid?: string | null;
   removeUrl: string;
   ref?: string;
+  /**
+   * One of the three e-mails before a day (lib/lifecycle/reminder-job.ts). Absent, the one e-mail as
+   * it has always been: a kept gift's reminder, and the job on a database without migration 0025.
+   */
+  staged?: StagedReminderSend;
 }): Promise<boolean> {
+  if (staged) return sendStagedReminder({ to, locale, recipientName, occasion, date, removeUrl, ...staged });
   return safely("reminder", async () =>
     deliver("reminder", {
       to,
@@ -390,6 +400,48 @@ export async function sendReminderEmail({
       headers: unsubscribeHeaders(removeUrl),
     }),
   );
+}
+
+/** What the three e-mails add to a reminder: the stage and its words, the started gift, the price line and the links. */
+export type StagedReminderSend = Pick<StagedReminderEmail, "stage" | "when" | "weekday" | "started" | "templateSlug" | "openUrl" | "moreUrl" | "skipUrl" | "onceKey"> & PaidLine;
+
+/** The price line's figures, in the e-mail's language: "€9.99" / "9,99 €". */
+export function reminderPrices(paid: PaidLine, locale: L): ReminderPaid {
+  if (paid.paid !== "price") return paid;
+  const { single, three, currency } = paid.prices;
+  return { paid: "price", prices: { single: formatAmount(single, currency, locale), three: three === null ? null : formatAmount(three, currency, locale) } };
+}
+
+async function sendStagedReminder(email: StagedReminderSend & { to: string; locale: L; recipientName: string; occasion: ReminderOccasion; date: string; removeUrl: string }): Promise<boolean> {
+  return safely("reminder", async () => {
+    const manifest = getManifest(email.templateSlug);
+    if (!manifest) return false;
+    const { locale } = email;
+    // The suggested template's own cover and words, never anything from a gift; its link opens the started gift.
+    const idea = { ...emailIdea(manifest, locale, `email-reminder-${email.stage}`), url: email.openUrl };
+    return deliver("reminder", {
+      to: email.to,
+      subject: stagedReminderSubject(email.stage, email.occasion, locale, email.recipientName, email.when),
+      react: ReminderEmail({
+        locale,
+        recipientName: email.recipientName,
+        occasion: email.occasion,
+        date: email.date,
+        idea,
+        moreUrl: email.moreUrl,
+        removeUrl: email.removeUrl,
+        stage: email.stage,
+        when: email.when,
+        weekday: email.weekday,
+        started: email.started,
+        openUrl: email.openUrl,
+        skipUrl: email.skipUrl,
+        ...reminderPrices(email, locale),
+      }),
+      headers: unsubscribeHeaders(email.removeUrl),
+      idempotencyKey: email.onceKey,
+    });
+  });
 }
 
 /**
