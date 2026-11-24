@@ -333,6 +333,18 @@ export async function signAssetUrls(paths: string[]): Promise<ActionResult<Recor
   return { ok: true, data: out };
 }
 
+/**
+ * The name on one of the caller's own reminders, for a gift a reminder e-mail starts when no gift was
+ * made for that person yet (lib/editor/start-from-gift.ts). Nothing of anyone else's.
+ */
+export async function reminderNameFor(reminderId: string): Promise<ActionResult<{ name: string }>> {
+  const ctx = await requireContext();
+  if (!ctx.ok) return { ok: false, error: ctx.error };
+  if (!/^[0-9a-f-]{36}$/i.test(reminderId)) return { ok: false, error: "not_found" };
+  const { data } = await ctx.supabase.from("reminders").select("recipient_name").eq("id", reminderId).eq("user_id", ctx.user.id).maybeSingle();
+  return data ? { ok: true, data: { name: data.recipient_name } } : { ok: false, error: "not_found" };
+}
+
 /** Loads an existing gift (owner) for editing. */
 export async function loadGiftForEdit(giftId: string): Promise<ActionResult<{ id: string; shortId: string; templateSlug: string; status: string; data: unknown; unlockAt: string | null; timezone: string | null; hasPassword: boolean }>> {
   const ctx = await requireContext();

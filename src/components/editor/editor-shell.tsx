@@ -34,6 +34,11 @@ import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
 import { loadUrlSeed } from "./url-seed";
 import { MoveOffer, MovedNote } from "./move-offer";
+import { StartedForYou, type StartedState } from "./started-for-you";
+import { START_COOKIE, START_PARAM, parseStartRef, readCookie } from "@/lib/editor/start-ref";
+import { draftHasContent, finishStart, prepareDemo, prepareStart, type PreparedStart, type StartSeed } from "@/lib/editor/start-from-gift";
+import { clearLocalDraft, readLocalDraft, writeLocalDraft } from "@/lib/editor/persistence";
+import type { EditorDraft } from "@/lib/editor/types";
 
 export type EditorShellProps = {
   slug: string;
@@ -129,6 +134,83 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     countRecipientEditorOpened(new URLSearchParams(window.location.search), slug);
   }, [slug]);
 
+  // A gift a reminder e-mail started (lib/editor/start-from-gift.ts): what came in, or what could.
+  const reinit = useRef<() => Promise<void>>(async () => {});
+  const [started, setStarted] = useState<{ state: StartedState; start: PreparedStart } | null>(null);
+
+  /** The draft of this template's page with the start's names (and photos, when it brings any) in it, opened again. */
+  const applySeed = async (seed: StartSeed["seed"]) => {
+    const s = useEditor.getState();
+    s.flushLocal();
+    const base: EditorDraft = readLocalDraft(slug) ?? {
+      version: 1,
+      slug,
+      data: s.data,
+      giftId: s.giftId,
+      shortId: s.shortId,
+      status: "draft",
+      schedule: s.schedule,
+      password: s.password,
+      removeWatermark: s.removeWatermark,
+      updatedAt: Date.now(),
+    };
+    const data = { ...base.data, recipientName: seed.recipientName, ...(seed.senderName ? { senderName: seed.senderName } : {}), ...(seed.photos ? { photos: seed.photos } : {}) };
+    writeLocalDraft(slug, JSON.stringify({ ...base, data, updatedAt: Date.now() }));
+    await reinit.current();
+  };
+
+  const beginStart = async (demo: unknown) => {
+    const params = new URLSearchParams(window.location.search);
+    const asked = params.get(START_PARAM);
+    const cookie = readCookie(document.cookie, START_COOKIE);
+    // Used once: the address wins over the cookie, and both are cleared so a reload starts nothing again.
+    if (cookie) document.cookie = `${START_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
+    if (asked) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete(START_PARAM);
+      window.history.replaceState(window.history.state, "", url.toString());
+    }
+    // Development only: the template's own demo, to see the card without an account.
+    const isDemo = process.env.NODE_ENV === "development" && asked === "demo";
+    const ref = asked ? parseStartRef(asked) : parseStartRef(cookie);
+    if (!isDemo && (!ref || !user)) return;
+    const max = manifest.features.photos.max;
+    const start = isDemo ? prepareDemo(demo, max) : await prepareStart(ref!, max).catch(() => null);
+    if (!start || useEditor.getState().slug !== slug) return;
+    const offer = () => {
+      if (start.from.mode !== "name") setStarted({ state: { kind: "offer", from: start.from }, start });
+    };
+    // A draft they are already working on is never written over: the start is offered instead.
+    if (draftHasContent(useEditor.getState().data)) return offer();
+    const done = await finishStart(start);
+    const now = useEditor.getState();
+    if (now.slug !== slug) return;
+    if (draftHasContent(now.data)) return offer();
+    await applySeed(done.seed);
+    if (done.from.mode !== "name") setStarted({ state: { kind: "started", from: done.from }, start });
+  };
+
+  const takeStart = async () => {
+    if (!started) return;
+    const done = await finishStart(started.start);
+    await applySeed(done.seed);
+    setStarted({ state: { kind: "started", from: done.from }, start: started.start });
+  };
+
+  const startEmpty = async () => {
+    clearLocalDraft(slug);
+    await reinit.current();
+    setStarted(null);
+  };
+
+  const showPhotos = () => {
+    const section = document.getElementById("editor-photos");
+    if (!section) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    section.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    section.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+  };
+
   // Load the template module (schema + field meta), then hydrate the store. A seed in the address
   // (?seed=trip:…, ?unwrap=…: the iPhone app, or a link) is read alongside it.
   useEffect(() => {
@@ -164,18 +246,27 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       // A date or a trip chosen to go inside this gift ("Wrap it in a gift" on /plan, a trip's page).
       const unwrap = seed?.unwrap ? seedUnwrap(giftUnwrapSchema, seed.unwrap) : null;
       if (unwrap) initial.unwrap = unwrap;
+      const asReply = !remote && opensAsReply(window.location.search);
+      const initArgs = {
+        slug,
+        manifest,
+        initial,
+        authed: Boolean(user),
+        userId: user?.id ?? null,
+        remote,
+        // A reply keeps its own draft: a gift of this template for someone else, in another tab
+        // or later in this one, is a different gift and never writes over it.
+        reply: asReply,
+      };
+      reinit.current = () => useEditor.getState().init(initArgs);
       void useEditor
         .getState()
-        .init({
-          slug,
-          manifest,
-          initial,
-          authed: Boolean(user),
-          userId: user?.id ?? null,
-          remote,
-          // A reply keeps its own draft: a gift of this template for someone else, in another tab
-          // or later in this one, is a different gift and never writes over it.
-          reply: !remote && opensAsReply(window.location.search),
+        .init(initArgs)
+        .then(() => {
+          // A reminder e-mail's "Open my gift" (?start=, or the cookie the gallery way round): a new
+          // gift started from their last one for that person, in this browser, signed in.
+          if (active && !remote && !asReply) void beginStart(m.demoData[locale === "es" ? "es" : "en"]);
+          return undefined;
         })
         .then(() => {
           // init() puts a draft left in this browser in place of `initial`. They have just asked
@@ -337,6 +428,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
+            {ready && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={() => setStarted(null)} /> : null}
             {ready && mod ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>

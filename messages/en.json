@@ -810,6 +810,17 @@
       "dismiss": "Not now",
       "moved": "Moved over from {name}, with your words, photos and song.",
       "back": "Back to {name}"
+    },
+    "started": {
+      "title": "Started for you.",
+      "withPhotos": "Both names and the {count, plural, one {photo} other {# photos}} from your last gift for {name} are in. Change anything, or swap them all.",
+      "namesOnly": "Both names are in. Add your photos and your words.",
+      "change": "Change the photos",
+      "empty": "Start empty",
+      "offer": "Use the names and photos from your last gift for {name}?",
+      "use": "Use them",
+      "no": "No thanks",
+      "thumbs": "The photos from your last gift"
     }
   },
   "gift": {
