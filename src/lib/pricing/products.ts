@@ -9,7 +9,7 @@
  * Prices, no trials), and while STRIPE_SUBSCRIPTIONS_ENABLED is off it is sold as the one-time
  * yearly pass instead.
  */
-export type ProductId = "single" | "pick3" | "everything" | "extras" | "photos" | "pass" | "membership" | "pack" | "giftcard" | "upgrade";
+export type ProductId = "single" | "pick3" | "everything" | "extras" | "photos" | "pass" | "membership" | "pack" | "giftcard" | "upgrade" | "group";
 export type MembershipPlan = "monthly" | "yearly";
 /** The three template plans the pricing page shows as cards. */
 export type PlanId = "single" | "pick3" | "everything";
@@ -71,6 +71,11 @@ export const PRODUCTS: Record<ProductId, Product> = {
   pack: { id: "pack", picks: 0, amounts: { usd: 299, eur: 299, gbp: 249 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PACK", name: { en: "Ethos: game pack", es: "Ethos: pack de juegos" } },
   giftcard: { id: "giftcard", picks: 0, amounts: { usd: 2999, eur: 2499, gbp: 2199 }, highlight: false, envProductKey: "STRIPE_PRODUCT_GIFTCARD", name: { en: "Ethos gift card: Give Everything", es: "Tarjeta regalo Ethos: Regálalo todo" } },
   upgrade: { id: "upgrade", picks: 0, amounts: { usd: 499, eur: 499, gbp: 499 }, highlight: false, envProductKey: "STRIPE_PRODUCT_UPGRADE", name: { en: "Ethos: upgrade to every template, forever", es: "Ethos: pasa a todas las plantillas, para siempre" } },
+  // A group card (src/lib/group): group cards on one template, for good, with up to 25 people adding a
+  // note to each. The amount includes that template; whoever already holds the template pays the
+  // difference (groupAmount). Paid when the first one is sent, by the sender only: nobody invited ever
+  // pays. Sold only while groupGiftsEnabled() (lib/group/flag.ts), which checkout checks.
+  group: { id: "group", picks: 1, amounts: { usd: 2399, eur: 1999, gbp: 1799 }, highlight: false, envProductKey: "STRIPE_PRODUCT_GROUP", name: { en: "Ethos: a group card", es: "Ethos: una tarjeta en grupo" } },
 };
 
 /**
@@ -213,13 +218,17 @@ export function chargedCurrency(value: string | null | undefined): Currency {
 }
 
 /**
- * Unlock rows are template slugs, "*" for every template, "pack:<id>" / "pack:*" for game packs, and
- * "photos:<slug>" for a note with photos on that template (the "photos" product).
+ * Unlock rows are template slugs, "*" for every template, "pack:<id>" / "pack:*" for game packs,
+ * "photos:<slug>" for a note with photos on that template (the "photos" product), and
+ * "group:<slug>" for group cards on that template (the "group" product).
  */
 export const EVERY_TEMPLATE = "*";
 export const EVERY_PACK = "pack:*";
 export const packUnlock = (packId: string) => `pack:${packId}`;
 export const photosUnlock = (templateSlug: string) => `photos:${templateSlug}`;
+export const groupUnlock = (templateSlug: string) => `group:${templateSlug}`;
+/** Group cards on every template. Nothing sells it: it is only ever granted by hand. */
+export const EVERY_GROUP = "group:*";
 
 /**
  * Which template_unlocks rows a paid product grants its buyer. "everything" (and an upgrade) is the
@@ -237,7 +246,10 @@ export function unlocksFor(product: ProductId, chosenSlugs: string[], options: {
   }
   const unique = Array.from(new Set(chosenSlugs.filter(Boolean)));
   if (unique.length !== PRODUCTS[product].picks) throw new Error(`product ${product} needs exactly ${PRODUCTS[product].picks} template(s)`);
-  // A note with photos is its own row: it never stands in for the template's unlock.
+  // A note with photos is its own row: it never stands in for the template's unlock. So is a group
+  // card; the template's row that a full-price group purchase also grants is added by checkout and
+  // fulfilment, which know whether the buyer already held it (lib/commerce/plan.ts).
+  if (product === "group") return unique.map(groupUnlock);
   return product === "photos" ? unique.map(photosUnlock) : unique;
 }
 
@@ -262,6 +274,29 @@ export function hasPhotosUnlock(unlockSlugs: string[], templateSlug: string): bo
 export function extrasAmount(currency: Currency, unlockSlugs: string[], templateSlug: string): number {
   const paidForPhotos = unlockSlugs.includes(photosUnlock(templateSlug)) && !hasUnlock(unlockSlugs, templateSlug);
   return PRODUCTS.extras.amounts[currency] - (paidForPhotos ? PRODUCTS.photos.amounts[currency] : 0);
+}
+
+/**
+ * True when the user's unlock rows let them send group cards on this template: its own "group:"
+ * row, or "group:*". Everything's "*" does not: it covers templates, and a group card is sold apart.
+ */
+export function hasGroupUnlock(unlockSlugs: string[], templateSlug: string): boolean {
+  return unlockSlugs.includes(EVERY_GROUP) || unlockSlugs.includes(groupUnlock(templateSlug));
+}
+
+/**
+ * What group cards on a template cost this buyer: the catalogue price, which includes the
+ * template, less a single template's price when they already hold that template (their own row,
+ * Everything, or a running membership). Checkout charges this and the editor shows it before the
+ * link exists, both from here.
+ */
+export function groupAmount(currency: Currency, heldRows: string[], templateSlug: string): number {
+  return PRODUCTS.group.amounts[currency] - (hasUnlock(heldRows, templateSlug) ? PRODUCTS.single.amounts[currency] : 0);
+}
+
+/** The unlock rows a group purchase grants: group cards on the template, and the template itself unless it was the step up. */
+export function groupRows(templateSlug: string, kind: string | null | undefined): string[] {
+  return [groupUnlock(templateSlug), ...(kind === "group_addon" ? [] : [templateSlug])];
 }
 
 /** True when unlock rows ("pack:<id>" / "pack:*") cover a game pack. */

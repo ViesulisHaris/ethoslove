@@ -19,6 +19,26 @@ export function pickMessages(all: AbstractIntlMessages, paths: readonly string[]
   return out;
 }
 
+/** `all` without what is under each dotted path; a branch left with nothing in it goes too. */
+export function omitMessages(all: AbstractIntlMessages, paths: readonly string[]): AbstractIntlMessages {
+  let out = all;
+  for (const path of paths) out = without(out, path.split("."));
+  return out;
+}
+
+function without(node: AbstractIntlMessages, keys: readonly string[]): AbstractIntlMessages {
+  const [key, ...rest] = keys;
+  const under = node[key];
+  if (under === undefined) return node;
+  const others = { ...node };
+  delete others[key];
+  if (rest.length === 0) return others;
+  // A path that goes on past a line names nothing.
+  if (typeof under !== "object") return node;
+  const left = without(under, rest);
+  return Object.keys(left).length > 0 ? { ...node, [key]: left } : others;
+}
+
 /** `extra` laid over `base`, branch by branch: a nested provider adds to what's above it. */
 export function mergeMessages(base: AbstractIntlMessages, extra: AbstractIntlMessages): AbstractIntlMessages {
   const out: AbstractIntlMessages = { ...base };

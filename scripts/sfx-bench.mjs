@@ -65,6 +65,11 @@ const SCENES = {
   snap: [2, [[0, "snap", []]]],
   crackle: [2.5, [[0, "crackle", [{ ms: 600, strain: 1 }]]]],
   tear: [2.5, [0, 0.7, 1.4].map((t) => [t, "tear", [320]])],
+  // The Advent Calendar: doors opened one after another, at the level the gift plays them.
+  hatch: [3, [[0, "hatch", []]]],
+  "hatch-doors": [5, [0, 1, 2, 3].map((i) => [i * 0.9, "hatch", [0.33]])],
+  envelope: [2, [[0, "envelope", []]]],
+  ting: [6, [0, 1, 2, 3].map((i) => [i * 1.1, "ting", [i]])],
 };
 
 /**
@@ -99,6 +104,9 @@ const TARGETS = {
   snap: ["snap", -13],
   crackle: ["crackle", -22],
   tear: ["tear", -17],
+  hatch: ["hatch", -13],
+  envelope: ["envelope", -17],
+  ting: ["ting", -15],
 };
 
 /* ------------------------------------------------------------------ bundle the effects for the page */

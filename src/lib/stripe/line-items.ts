@@ -72,8 +72,18 @@ export function upgradeLineDescription(currency: Currency, locale: Locale): stri
   return locale === "es" ? `Todas las plantillas cuestan ${full}, y lo que ya has pagado se resta.` : `Every template is ${full}, and what you've already paid counts towards it.`;
 }
 
+/**
+ * What Stripe's page says under a group card bought by someone who already has its template, so the
+ * lower price is read as what it is: the template they hold taken off, never a discount.
+ */
+export function groupAddonLineDescription(currency: Currency, locale: Locale, templateName: string): string {
+  const full = formatAmount(PRODUCTS.group.amounts[currency], currency, locale);
+  return locale === "es" ? `${templateName}. Una tarjeta en grupo cuesta ${full}; la plantilla, que ya tienes, se descuenta.` : `${templateName}. A group card is ${full}; the template, which you already have, is taken off.`;
+}
+
 function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | undefined {
   if (line.key === "bump") return undefined;
+  if (line.key === "group" && plan.kind === "group_addon") return groupAddonLineDescription(plan.currency, locale, getManifest(plan.templateSlugs[0])?.name[locale] ?? plan.templateSlugs[0]);
   // The second gift says which template it is.
   if (line.key === "second") return plan.second ? (getManifest(plan.second)?.name[locale] ?? plan.second) : undefined;
   if (line.key === "upgrade") return upgradeLineDescription(plan.currency, locale);
@@ -321,9 +331,12 @@ export function sessionParams(plan: CheckoutPlan, options: SessionOptions): Stri
   };
 }
 
-/** One-time products the one-tap buttons sell: those whose tickbox is the plain "unlock it now" sentence. */
+/**
+ * One-time products the one-tap buttons sell: those whose tickbox is the plain "unlock it now"
+ * sentence. A group card is not among them yet: it is bought from its own panel, through Stripe's page.
+ */
 export function sellsInOneTap(product: CheckoutPlan["product"]): boolean {
-  return product !== "membership" && product !== "pass" && product !== "giftcard";
+  return product !== "membership" && product !== "pass" && product !== "giftcard" && product !== "group";
 }
 
 /**

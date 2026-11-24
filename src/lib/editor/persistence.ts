@@ -47,6 +47,10 @@ export function serializeForLocal(draft: EditorDraft, assetRefs: Record<string, 
       : undefined,
     // Saved as its object URL, a voice message didn't survive a reload.
     voiceNote: draft.data.voiceNote ? { ...draft.data.voiceNote, url: byUrl[draft.data.voiceNote.url] ?? draft.data.voiceNote.url } : undefined,
+    // A group card's notes: each photo is one of the gift's stored files, kept as its path ("c<key>" is its asset).
+    ...(draft.data.contributions
+      ? { contributions: draft.data.contributions.map((item) => (item.photo ? { ...item, photo: { ...item.photo, url: assetRefs[`c${item.key}`] ?? byUrl[item.photo.url] ?? item.photo.url } } : item)) }
+      : {}),
   };
   return JSON.stringify({ ...draft, data });
 }

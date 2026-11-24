@@ -16,6 +16,12 @@ export async function needSubscriptions(request: APIRequestContext, wanted: "on"
   test.skip(on !== (wanted === "on"), `this server sells Ethos for Two ${on ? "as a subscription" : "as the one-time year"} and ignores ?subscriptions=${wanted} (a production build)`);
 }
 
+/** Skips the running test where the development-only group card previews are a 404 (a production build). */
+export async function needGroupPreviews(request: APIRequestContext) {
+  const status = (await request.get("/group-preview/contribute")).status();
+  test.skip(status === 404, "/group-preview is development-only: a production build answers 404");
+}
+
 /** Skips the running test where the development-only previews are a 404 (a production build). */
 export async function needPreviews(request: APIRequestContext) {
   const status = (await request.get("/for-two/preview?state=none")).status();

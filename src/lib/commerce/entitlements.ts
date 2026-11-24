@@ -49,7 +49,24 @@ export function passFromMembership(membership: MembershipSummary | null): PassSu
 }
 
 export function templatesFromRows(rows: string[]): string[] {
-  return rows.filter((row) => !row.startsWith("pack:"));
+  return rows.filter((row) => !row.startsWith("pack:") && !row.startsWith("group:"));
+}
+
+/** Templates the account may send group cards on ("*" for every one), from its "group:" rows. */
+export function groupsFromRows(rows: string[]): string[] {
+  return rows.filter((row) => row.startsWith("group:")).map((row) => row.slice("group:".length));
+}
+
+/**
+ * What the account page lists under "Your templates", from the account's unlock rows: each template
+ * once (lent by a running membership or held for good), and the templates it may send group cards
+ * on. A row is one or the other, never both: a "group:<slug>" row is not a template called that.
+ */
+export function accountUnlocks(forever: string[], lent: string[]): { templates: { slug: string; lent: boolean }[]; groups: string[] } {
+  return {
+    templates: [...templatesFromRows(forever).map((slug) => ({ slug, lent: false })), ...templatesFromRows(lent).map((slug) => ({ slug, lent: true }))],
+    groups: [...new Set(groupsFromRows([...forever, ...lent]))],
+  };
 }
 
 export function packsFromRows(rows: string[]): string[] {

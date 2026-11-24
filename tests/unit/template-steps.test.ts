@@ -96,6 +96,8 @@ describe("the three steps of a gift's page", () => {
     for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) {
       const schema = await loadFieldsSchema(slug);
       const own = schema instanceof z.ZodObject ? Object.keys(schema.shape) : [];
+      // A group card's notes (`contributions`) are a field only of a template made for group cards (docs/GROUP.md).
+      const fields = getManifest(slug)?.features.group ? [...shared, "contributions"] : shared;
       for (const step of row.steps) {
         if (step.picture !== "note") {
           if (step.quote) off.push(`${slug}: “${step.en}” is not a note and quotes a field`);
@@ -103,7 +105,7 @@ describe("the three steps of a gift's page", () => {
         }
         if (!step.quote) off.push(`${slug}: “${step.en}” names no field`);
         for (const alt of typeof step.quote === "string" ? [step.quote] : (step.quote ?? []))
-          for (const field of alt.split("+")) if (!(field.startsWith("fields.") ? own.includes(field.slice("fields.".length)) : shared.includes(field))) off.push(`${slug}: “${step.en}” quotes ${field}, which this gift does not have`);
+          for (const field of alt.split("+")) if (!(field.startsWith("fields.") ? own.includes(field.slice("fields.".length)) : fields.includes(field))) off.push(`${slug}: “${step.en}” quotes ${field}, which this gift does not have`);
       }
     }
     expect(off).toEqual([]);

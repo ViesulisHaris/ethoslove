@@ -1,4 +1,5 @@
-import type { GiftLocale } from "@/lib/gift/schema";
+import { CONTRIBUTION_LIMITS, type GiftLocale } from "@/lib/gift/schema";
+import { GROUP_RETENTION } from "@/lib/group/limits";
 import { BRAND } from "@/config/brand";
 import { CHARGED_CURRENCIES, FREE_SAVED_DATES, PRODUCTS, SECOND_GIFT, formatAmount, membershipAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
@@ -74,7 +75,60 @@ const CHARGED = {
       : "Cobramos en euros.",
 };
 
-const termsEn: LegalDoc = {
+/**
+ * A group card (src/lib/group), in the terms and the privacy policy. Group cards ship switched off,
+ * and a document must not describe, or price, something nobody can buy: these paragraphs are part
+ * of the documents only when `legalDocs(true)` is asked for, which the two pages do with the same
+ * switch the rest of the site reads (groupGiftsEnabled). Switched off, both documents are word for
+ * word what they were. Each paragraph goes into an existing section, so no section is renumbered.
+ * On the day the switch goes on, set LEGAL_UPDATED to that day (docs/GROUP.md, "Going live").
+ */
+const GROUP_STEP = { en: inEach((c) => PRODUCTS.group.amounts[c] - PRODUCTS.single.amounts[c], "en"), es: inEach((c) => PRODUCTS.group.amounts[c] - PRODUCTS.single.amounts[c], "es") };
+const GROUP = {
+  en: {
+    /** Terms 3, Your content. */
+    content:
+      "Group cards. When you invite people to add to a group card, what they write and the photo they add reach you first: nothing goes into the card until you add it, and you can take it out again. Whatever you add is part of your gift from then on, so this section applies to it like the rest: you choose what goes in, and you answer for it. A person who adds a note keeps their rights in it and gives us the same licence, to show it to you and, once you've added it, to whoever opens the card. They can take the note back, from the page they wrote it on, until the card is sent; after that they can ask us to remove it (section 13).",
+    /** Terms 6, the price list's last item. */
+    price: `; a group card ${P.en("group")}`,
+    /** Terms 6, what it is and what it costs. */
+    sold: `Group cards. A group card is a gift that people you invite add a note and a photo to, through a link, on a template made for it. Unlocking group cards on one template costs ${P.en("group")}, paid once, when you send your first one, and includes that template. If you already have the template, you pay ${GROUP_STEP.en}. The price is shown before you invite anyone. Up to ${CONTRIBUTION_LIMITS.max} people can add to one card. It has no end date, and neither “Everything” nor Ethos for Two includes it. The people you invite never pay, and we never collect or hold money from them or for you.`,
+    /** Terms 13, reporting. */
+    report:
+      "Group cards. A note or a photo that someone added to a group card can be reported in the same way. The card has a “Report a note” link at its end, the page where people add their note has “Report this page”, and whoever is putting the card together sees “Report” beside each note they are sent.",
+    /** Privacy 1. */
+    data: "People who add to a group card. If someone sends you a group card's link, you can add your name, a note and, where the card takes them, one photo. You need no account. We store what you add, the notice you agreed to, word for word, and when. Your photo is re-encoded on our servers before it is stored, which removes the location and device details a phone saves in a picture. The person who invited you sees what you added and decides whether it goes into the card; if it does, whoever opens the card sees it. Other people who add a note never see yours before then. If you ask to be emailed the finished card, we also store your email address, a one-way hash of it and the sentence you agreed to. We send one email asking you to confirm the address, which names nobody, and nothing else until you do; then, if your note is in the card, one email with the card's link once it is sent, and we delete your address as that email goes. If your note isn't in the card, no second email comes, and the address is deleted with the note. The confirmation email has a link to never be emailed again, which puts the hash of the address on our unsubscribe list. We don't store your IP address with any of this. Until the card is sent you can take your note back from the page you wrote it on, in the same browser: that browser keeps a random key for each note you added, in its own storage for that page, and sends it to us only when you take the note back. If you have cleared the browser's storage, or once the card is sent, write to us with the card's link. If you start a group card, we also store what you typed for that page: your name as they know you, who the card is for, and the line on what to write.",
+    /** Privacy 8, legal bases. */
+    basis:
+      "Group cards: showing what you add to the person who invited you and, if they add it, to whoever opens the card, and emailing you the finished card: your consent (Art. 6(1)(a)), given with the box and the notice above the button and, for the email, confirmed from your inbox. You can withdraw it by taking your note back or by writing to us; withdrawing doesn't affect what happened before.",
+    /**
+     * Privacy 11, how long. The numbers are GROUP_RETENTION's (lib/group/limits.ts); legal.test.ts
+     * holds the two together. "Within 7 days" is the promise (`sentPromiseDays`); the daily job
+     * deletes a day sooner than that (`afterSentDays`), so the sentence is true at any hour.
+     */
+    kept: `Group cards: a note the person putting the card together turned down or removed, or its writer took back, loses its words, its photo and its address after 24 hours. An email address that was never confirmed: seven days. A confirmed one: deleted as its one email is sent. Every note sent to a card, used or not, is deleted from our records, with any photo still waiting, within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent; if the card was scheduled, a note whose writer confirmed an address is kept until the card opens and that email has gone. For a card that is never sent: ${GROUP_RETENTION.afterClosedDays} days after the date its link was due to close, even if the person putting the card together closed it sooner. What was added to the card is part of the gift from then on, and is kept as the gift is.`,
+    /** Privacy 13, after what the export holds. */
+    export: " If you have started group cards, the file also lists them and the notes people sent you, without anyone's email address.",
+    /** Privacy 14, children. */
+    children: "To add a note to a group card you must confirm that you are 16 or older. Don't add photos of children who aren't yours: the person putting the card together decides what goes in, and anyone with the card's link can open it.",
+  },
+  es: {
+    content:
+      "Tarjetas en grupo. Cuando invitas a otras personas a añadir algo a una tarjeta en grupo, lo que escriben y la foto que añaden te llegan primero a ti: nada entra en la tarjeta hasta que tú lo añades, y puedes volver a quitarlo. Lo que añades pasa a formar parte de tu regalo, así que esta sección se le aplica como al resto: tú eliges lo que entra y respondes de ello. Quien añade una nota conserva sus derechos sobre ella y nos da la misma licencia, para mostrártela a ti y, una vez la hayas añadido, a quien abra la tarjeta. Puede retirar su nota, desde la página en la que la escribió, hasta que la tarjeta se envíe; después puede pedirnos que la quitemos (sección 13).",
+    price: `; una tarjeta en grupo, ${P.es("group")}`,
+    sold: `Tarjetas en grupo. Una tarjeta en grupo es un regalo al que las personas que invitas añaden una nota y una foto, mediante un enlace, en una plantilla hecha para ello. Desbloquear las tarjetas en grupo en una plantilla cuesta ${P.es("group")}, en un solo pago, cuando envías la primera, e incluye esa plantilla. Si ya tienes la plantilla, pagas ${GROUP_STEP.es}. El precio se muestra antes de que invites a nadie. En una tarjeta pueden participar hasta ${CONTRIBUTION_LIMITS.max} personas. No tiene fecha de caducidad, y ni «Todo» ni Ethos for Two la incluyen. Las personas a las que invitas no pagan nunca, y nunca recogemos ni guardamos dinero suyo ni para ti.`,
+    report:
+      "Tarjetas en grupo. Una nota o una foto que alguien haya añadido a una tarjeta en grupo se puede denunciar de la misma manera. La tarjeta tiene al final el enlace «Avisar de una nota», la página en la que se añaden las notas tiene «Denunciar esta página», y quien prepara la tarjeta ve «Denunciar» junto a cada nota que recibe.",
+    data: "Quienes añaden algo a una tarjeta en grupo. Si alguien te envía el enlace de una tarjeta en grupo, puedes añadir tu nombre, una nota y, si la tarjeta las admite, una foto. No necesitas cuenta. Guardamos lo que añades, el aviso que aceptaste, palabra por palabra, y cuándo. Tu foto se vuelve a codificar en nuestros servidores antes de guardarla, lo que elimina la ubicación y los datos del dispositivo que un móvil guarda en una imagen. Quien te invitó ve lo que has añadido y decide si entra en la tarjeta; si entra, lo verá quien la abra. Las demás personas que añaden una nota no ven la tuya antes de eso. Si pides que te enviemos la tarjeta terminada, guardamos también tu correo, un hash irreversible de él y la frase que aceptaste. Enviamos un correo para que confirmes la dirección, que no nombra a nadie, y nada más hasta que lo hagas; después, si tu nota va en la tarjeta, un correo con su enlace cuando se envíe, y borramos tu dirección al salir ese correo. Si tu nota no va en la tarjeta, no llega un segundo correo y la dirección se borra con la nota. El correo de confirmación tiene un enlace para que no te escribamos nunca más, que añade el hash de la dirección a nuestra lista de bajas. No guardamos tu dirección IP con nada de esto. Hasta que la tarjeta se envíe puedes retirar tu nota desde la página en la que la escribiste, en el mismo navegador: ese navegador guarda una clave aleatoria por cada nota que añadiste, en su propio almacenamiento para esa página, y solo nos la envía cuando retiras la nota. Si has borrado el almacenamiento del navegador, o una vez enviada la tarjeta, escríbenos con el enlace de la tarjeta. Si eres tú quien empieza una tarjeta en grupo, guardamos también lo que escribes para esa página: tu nombre, tal como te conocen, para quién es la tarjeta y la línea que dice qué escribir.",
+    basis:
+      "Tarjetas en grupo: mostrar lo que añades a quien te invitó y, si lo añade, a quien abra la tarjeta, y enviarte por correo la tarjeta terminada: tu consentimiento (art. 6.1.a), dado con la casilla y el aviso que hay sobre el botón y, para el correo, confirmado desde tu bandeja de entrada. Puedes retirarlo retirando tu nota o escribiéndonos; retirarlo no afecta a lo ya hecho.",
+    kept: `Tarjetas en grupo: una nota que quien prepara la tarjeta rechazó o quitó, o que retiró quien la escribió, pierde su texto, su foto y su dirección a las 24 horas. Una dirección de correo sin confirmar: siete días. Una confirmada: se borra al enviarse su único correo. Todas las notas enviadas a una tarjeta, se usen o no, se borran de nuestros registros, con las fotos que sigan en espera, en los ${GROUP_RETENTION.sentPromiseDays} días siguientes al envío de la tarjeta; si la tarjeta estaba programada, la nota de quien confirmó una dirección se conserva hasta que la tarjeta se abre y ese correo ha salido. Si la tarjeta no llega a enviarse: ${GROUP_RETENTION.afterClosedDays} días después de la fecha en que su enlace debía cerrarse, aunque quien prepara la tarjeta lo cerrase antes. Lo que se añadió a la tarjeta forma parte del regalo desde ese momento y se conserva como el regalo.`,
+    export: " Si has empezado tarjetas en grupo, el archivo también las incluye, con las notas que te enviaron, sin el correo de nadie.",
+    children: "Para añadir una nota a una tarjeta en grupo debes confirmar que tienes 16 años o más. No añadas fotos de menores que no estén a tu cargo: quien prepara la tarjeta decide lo que entra, y cualquiera que tenga su enlace puede abrirla.",
+  },
+} as const;
+
+const termsEn = (g: boolean): LegalDoc => ({
   title: "Terms of Service",
   intro: `These terms govern your use of ${B} (the “Service”), operated by ${E.name}, registration number ${E.regNo}, VAT ${E.vat}, ${E.address} (“we”, “us”). They cover every part of the Service: gifts and everything we sell for them, Ethos for Two, the Dates map, plans, trips and the dates you save, reviews, games, reminders, our emails and the creator program. By using the Service, creating an account, publishing a gift, posting a review or making a purchase, you agree to them. Our Privacy Policy explains how we handle personal data. If you don't agree, please don't use the Service.`,
   sections: [
@@ -101,6 +155,7 @@ const termsEn: LegalDoc = {
         "You confirm that you own Your Content or have permission to use it, including any music you upload, and that it doesn't infringe anyone's copyright or other rights, or their privacy. Where Your Content shows or names other people, you're responsible for having their permission, and you shouldn't include more of their personal details than a personal gift needs.",
         "Library music in the editor belongs to us and may be used only inside gifts made on the Service. You can also add a song from Apple Music's catalog to any gift, free: the gift shows it beside a “Listen on Apple Music” link to the full song and the credit “Preview courtesy of Apple Music”, and its 30-second preview plays only when the person viewing the gift taps it, once. We don't sell songs or previews. Previews, covers and songs belong to Apple and the rights holders, and song links point to YouTube, Spotify or Apple Music: they play from those services under their terms and may stop working if a provider removes them.",
         "The optional writing helper uses an AI model to suggest drafts from the details you give it. Drafts can be wrong or unsuitable, so read them before you use them. Whatever you publish is Your Content and your responsibility.",
+        ...(g ? [GROUP.en.content] : []),
       ],
     },
     {
@@ -127,10 +182,11 @@ const termsEn: LegalDoc = {
       heading: "6. What we sell: prices and payment",
       paragraphs: [
         "Everything we sell is paid once, except Ethos for Two, a subscription that renews until you cancel it (section 7). At times we sell Ethos for Two as a one-year pass instead, paid once: our pricing page and Stripe's checkout page always say which one you're buying. Nothing else renews or charges you again unless you choose to buy it again.",
-        `Our prices, VAT included: one template ${P.en("single")}; three templates of your choice ${P.en("pick3")}; “Everything” ${P.en("everything")}; “Make it special” ${P.en("extras")}; a note with photos ${P.en("photos")}; Ethos for Two ${M.en("monthly")} a month or ${M.en("yearly")} a year, or, as a one-year pass, ${P.en("pass")} for 365 days; a game pack ${P.en("pack")}.`,
+        `Our prices, VAT included: one template ${P.en("single")}; three templates of your choice ${P.en("pick3")}; “Everything” ${P.en("everything")}; “Make it special” ${P.en("extras")}; a note with photos ${P.en("photos")}; Ethos for Two ${M.en("monthly")} a month or ${M.en("yearly")} a year, or, as a one-year pass, ${P.en("pass")} for 365 days; a game pack ${P.en("pack")}${g ? GROUP.en.price : ""}.`,
         "Unlocks: one template, three templates of your choice, or “Everything”, which covers every gift template, including the ones we add later, for as long as we offer gift templates. An unlock covers the templates it names, with all their paid extras and no footer. “Everything” covers gift templates only: it doesn't include game packs, Ethos for Two or anything else we sell separately.",
         "“Make it special”: for The Letter or Constellations, it unlocks that template's paid parts (photos, a longer letter, video, voice messages, scheduling, a password and no footer), exactly as an unlock of that template would.",
         "A note with photos: for The Letter, it lets the short free note carry up to five of your photos. It unlocks nothing else: the note keeps its length limit and the Ethos footer. It has no end date either. If you later buy “Make it special” for the same template, what you paid for the note with photos comes off its price. We may offer it to some visitors and not others while we try it out.",
+        ...(g ? [GROUP.en.sold] : []),
         "Game packs: extra rounds and cards for our games, each bought on its own. Ethos for Two: a membership for two people, monthly or yearly, with unlimited saved dates and trips shared between you, every gift template and every game pack, for as long as it runs (section 7). Gift cards: not on sale at the moment (section 8).",
         "Unlocks, “Make it special” and game packs have no end date: they stay on your account for as long as your account exists and we run the Service. They are personal to your account and can't be transferred.",
         "Adding every template at checkout. When you buy one template or “Make it special”, we may offer a box to add every other template for the difference between that price and the price of “Everything”, so that in total you pay exactly the price of “Everything”. It is never ticked for you. If you tick it, your purchase is “Everything”.",
@@ -216,6 +272,7 @@ const termsEn: LegalDoc = {
       paragraphs: [
         `Point of contact. Our single point of contact under the EU Digital Services Act, for users as well as for authorities, the European Commission and the European Board for Digital Services, is ${E.email}. You can write to us in English, Spanish or Latvian.`,
         `Reporting content. If you believe a gift, review, reaction or anything else on the Service is illegal or breaks these terms, email ${E.email} with: the link to the gift, or to the place and the review concerned; why you believe it is illegal or breaks our rules; your name and email address (not needed if you are reporting child sexual abuse material); and a statement that you believe in good faith that your report is accurate and complete. Rights holders can send copyright notices the same way.`,
+        ...(g ? [GROUP.en.report] : []),
         "What happens next. We confirm that we've received your report, review the content without undue delay, carefully and objectively, and tell you what we decided and how you can challenge it. Decisions are made by a person, not by an automated system. If content suggests a threat to someone's life or safety, we inform the authorities.",
         "If we act on your content or account. We don't review gifts or reviews before they're published, and we have no general obligation to monitor them. If we remove or restrict your content, or suspend or close your account, we'll tell you (if we have your email address) what we did and for how long, why (the law or the rule in these terms), whether it followed a report, and how you can challenge it, unless the law stops us.",
         `Challenging a decision. Within six months you can ask us to review any moderation decision, whether you posted the content or reported it, by replying to our message or writing to ${E.email}. We'll look at it again, reverse it if it was wrong and tell you the result. You can also go to court. We may stop handling reports from someone who repeatedly sends clearly unfounded ones, and suspend accounts that repeatedly post clearly illegal content.`,
@@ -268,9 +325,9 @@ const termsEn: LegalDoc = {
       paragraphs: [`${E.name} · Reg. no. ${E.regNo} · VAT ${E.vat} · ${E.address} · ${E.email}`],
     },
   ],
-};
+});
 
-const termsEs: LegalDoc = {
+const termsEs = (g: boolean): LegalDoc => ({
   title: "Términos del servicio",
   intro: `Estos términos regulan el uso de ${B} (el «Servicio»), operado por ${E.name}, número de registro ${E.regNo}, IVA ${E.vat}, ${E.address.replace("Latvia", "Letonia")} («nosotros»). Cubren todas las partes del Servicio: los regalos y todo lo que vendemos para ellos, Ethos for Two, el mapa de Citas, los planes, los viajes y las citas que guardas, las reseñas, los juegos, los recordatorios, nuestros correos y el programa de creadores. Al usar el Servicio, crear una cuenta, publicar un regalo o una reseña, o realizar una compra, los aceptas. Nuestra Política de privacidad explica cómo tratamos los datos personales. Si no estás de acuerdo, por favor no uses el Servicio.`,
   sections: [
@@ -297,6 +354,7 @@ const termsEs: LegalDoc = {
         "Confirmas que eres titular de Tu Contenido o tienes permiso para usarlo, incluida cualquier música que subas, y que no vulnera los derechos de autor ni otros derechos de nadie, ni su privacidad. Si Tu Contenido muestra o menciona a otras personas, eres responsable de contar con su permiso, y no debes incluir más datos suyos de los que necesita un regalo personal.",
         "La música de biblioteca del editor es nuestra y solo puede usarse dentro de los regalos creados en el Servicio. También puedes añadir gratis a cualquier regalo una canción del catálogo de Apple Music: el regalo la muestra junto a un enlace «Escúchala en Apple Music» a la canción completa y el crédito «Avance por cortesía de Apple Music», y su avance de 30 segundos solo suena cuando quien ve el regalo lo toca, y una sola vez. No vendemos canciones ni avances. Los avances, las portadas y las canciones pertenecen a Apple y a los titulares de los derechos, y los enlaces a canciones llevan a YouTube, Spotify o Apple Music: se reproducen desde esos servicios según sus condiciones y pueden dejar de funcionar si el proveedor los retira.",
         "El asistente de escritura opcional usa un modelo de IA para proponerte borradores a partir de los datos que le das. Los borradores pueden ser incorrectos o inadecuados, así que léelos antes de usarlos. Lo que publiques es Tu Contenido y es responsabilidad tuya.",
+        ...(g ? [GROUP.es.content] : []),
       ],
     },
     {
@@ -323,10 +381,11 @@ const termsEs: LegalDoc = {
       heading: "6. Qué vendemos: precios y pago",
       paragraphs: [
         "Todo lo que vendemos se paga una sola vez, salvo Ethos for Two, una suscripción que se renueva hasta que la cancelas (sección 7). En algunos periodos vendemos Ethos for Two como un pase de un año, en un solo pago: nuestra página de precios y la página de pago de Stripe siempre indican cuál de los dos estás comprando. Nada más se renueva ni se te vuelve a cobrar salvo que decidas comprarlo de nuevo.",
-        `Nuestros precios, con el IVA incluido: una plantilla, ${P.es("single")}; tres plantillas a tu elección, ${P.es("pick3")}; «Todo», ${P.es("everything")}; «Hazlo especial», ${P.es("extras")}; una nota con fotos, ${P.es("photos")}; Ethos for Two, ${M.es("monthly")} al mes o ${M.es("yearly")} al año o, como pase de un año, ${P.es("pass")} por 365 días; un pack de juegos, ${P.es("pack")}.`,
+        `Nuestros precios, con el IVA incluido: una plantilla, ${P.es("single")}; tres plantillas a tu elección, ${P.es("pick3")}; «Todo», ${P.es("everything")}; «Hazlo especial», ${P.es("extras")}; una nota con fotos, ${P.es("photos")}; Ethos for Two, ${M.es("monthly")} al mes o ${M.es("yearly")} al año o, como pase de un año, ${P.es("pass")} por 365 días; un pack de juegos, ${P.es("pack")}${g ? GROUP.es.price : ""}.`,
         "Desbloqueos: una plantilla, tres plantillas a tu elección o «Todo», que incluye todas las plantillas de regalo, también las que añadamos más adelante, mientras ofrezcamos plantillas de regalo. Cada desbloqueo cubre las plantillas indicadas, con todos sus extras de pago y sin el pie. «Todo» cubre solo las plantillas de regalo: no incluye los packs de juegos, Ethos for Two ni nada más que vendamos por separado.",
         "«Hazlo especial»: para La carta o Constelaciones, desbloquea las partes de pago de esa plantilla (las fotos, una carta más larga, vídeo, mensajes de voz, la programación, una contraseña y quitar el pie), igual que lo haría un desbloqueo de esa plantilla.",
         "Una nota con fotos: para La carta, permite que la nota corta gratuita lleve hasta cinco de tus fotos. No desbloquea nada más: la nota mantiene su límite de longitud y el pie de Ethos. Tampoco caduca. Si más adelante compras «Hazlo especial» para la misma plantilla, lo que pagaste por la nota con fotos se descuenta de su precio. Puede que la ofrezcamos a unos visitantes y a otros no mientras la probamos.",
+        ...(g ? [GROUP.es.sold] : []),
         "Packs de juegos: rondas y cartas extra para nuestros juegos; cada pack se compra por separado. Ethos for Two: una suscripción para dos personas, mensual o anual, con citas y viajes guardados sin límite y compartidos entre los dos, todas las plantillas de regalo y todos los packs de juegos, mientras esté activa (sección 7). Tarjetas regalo: ahora mismo no están a la venta (sección 8).",
         "Los desbloqueos, «Hazlo especial» y los packs de juegos no caducan: permanecen en tu cuenta mientras exista tu cuenta y mantengamos el Servicio. Son personales e intransferibles.",
         "Añadir todas las plantillas al pagar. Cuando compras una plantilla o «Hazlo especial», puede que te ofrezcamos una casilla para añadir todas las demás plantillas por la diferencia entre ese precio y el de «Todo», de modo que en total pagues exactamente el precio de «Todo». Nunca está marcada de antemano. Si la marcas, tu compra es «Todo».",
@@ -412,6 +471,7 @@ const termsEs: LegalDoc = {
       paragraphs: [
         `Punto de contacto. Nuestro punto único de contacto según el Reglamento de Servicios Digitales de la UE, tanto para usuarios como para las autoridades, la Comisión Europea y la Junta Europea de Servicios Digitales, es ${E.email}. Puedes escribirnos en inglés, español o letón.`,
         `Cómo denunciar contenido. Si crees que un regalo, una reseña, una reacción o cualquier otro contenido del Servicio es ilegal o incumple estos términos, escribe a ${E.email} indicando: el enlace al regalo, o al sitio y la reseña en cuestión; por qué crees que es ilegal o incumple nuestras normas; tu nombre y tu correo (no hacen falta si denuncias material de abuso sexual infantil); y una declaración de que crees de buena fe que tu denuncia es exacta y completa. Los titulares de derechos pueden enviar por la misma vía sus avisos sobre derechos de autor.`,
+        ...(g ? [GROUP.es.report] : []),
         "Qué pasa después. Te confirmamos que hemos recibido la denuncia, revisamos el contenido sin demoras indebidas, con diligencia y objetividad, y te comunicamos lo que hemos decidido y cómo puedes impugnarlo. Las decisiones las toma una persona, no un sistema automatizado. Si un contenido hace pensar que la vida o la seguridad de alguien corre peligro, avisamos a las autoridades.",
         "Si actuamos sobre tu contenido o tu cuenta. No revisamos los regalos ni las reseñas antes de que se publiquen y no tenemos una obligación general de supervisarlos. Si retiramos o limitamos tu contenido, o suspendemos o cerramos tu cuenta, te diremos (si tenemos tu correo) qué hemos hecho y durante cuánto tiempo, por qué (la ley o la norma de estos términos), si fue a raíz de una denuncia y cómo puedes impugnarlo, salvo que la ley nos lo impida.",
         `Cómo impugnar una decisión. En un plazo de seis meses puedes pedirnos que revisemos cualquier decisión de moderación, tanto si publicaste el contenido como si lo denunciaste, respondiendo a nuestro mensaje o escribiendo a ${E.email}. Lo volveremos a estudiar, lo corregiremos si nos equivocamos y te diremos el resultado. También puedes acudir a los tribunales. Podemos dejar de tramitar las denuncias de quien envíe repetidamente denuncias manifiestamente infundadas y suspender las cuentas que publiquen repetidamente contenido manifiestamente ilegal.`,
@@ -464,9 +524,9 @@ const termsEs: LegalDoc = {
       paragraphs: [`${E.name} · N.º de registro ${E.regNo} · IVA ${E.vat} · ${E.address.replace("Latvia", "Letonia")} · ${E.email}`],
     },
   ],
-};
+});
 
-const privacyEn: LegalDoc = {
+const privacyEn = (g: boolean): LegalDoc => ({
   title: "Privacy Policy",
   intro: `${E.name} (“we”), registration number ${E.regNo}, ${E.address}, is the controller of the personal data processed through ${B}: the website, gifts, purchases (Ethos for Two and gift cards included), the Dates map, plans, trips and saved dates, reviews, games, reminders, the waitlist, the creator program and our emails. This policy explains what we collect, why, who else is involved, how long we keep it, and your rights under the General Data Protection Regulation (GDPR). Questions and requests: ${E.email}.`,
   sections: [
@@ -487,6 +547,7 @@ const privacyEn: LegalDoc = {
         "The checkout reminder: only if you ask for it and then leave without paying, we send you one email with a link back to that checkout. You ask by ticking the box on Stripe's checkout page agreeing to hear from us, where Stripe shows one. It is never ticked for you, and you can pay without ticking it. It is one email, not a series: at most one to an address in any week, however many checkouts are left unpaid, and none if you've paid since. It has an unsubscribe link (your mail app may also show its own unsubscribe button); if you use it, we keep a one-way hash of your address (not the address itself) on a list we check before sending it, and ticking the box again on a later checkout doesn't take you off it.",
         "Offers inside our emails: a receipt for single templates, three templates or “Make it special” may say what “Everything” would now cost you, and the emails about a first opening or a reaction may suggest a template for your next gift. If your address is on the unsubscribe list, we leave these out; to be added without a checkout reminder, reply to any of our emails or write to us.",
         "Offer emails: emails that are only an offer, such as early access to a sale or a personal price for your next gift (Terms, section 6). We send them if you tick the box asking for them on the screen you send a gift from (it is never ticked for you), and to customers whose billing address, given when they paid us, is in the United States. For the box, we record that you ticked it, the sentence itself, when, and your language. A personal price's link names your account by its random ID and says when the price ends; once you open it, your browser keeps it in a cookie until then (section 12). We send offer emails through Mailchimp, which receives your email address, your language and the links in each email. Every offer email has a link to unsubscribe; unsubscribing, or unticking the box, stops them. Apart from these, the emails above and the one launch email to people on the Ethos for Two waitlist (section 6), we send no other emails and no newsletters.",
+        ...(g ? [GROUP.en.data] : []),
       ],
     },
     {
@@ -547,6 +608,7 @@ const privacyEn: LegalDoc = {
         "To provide what you ask for (accounts and sign-in; creating, hosting and delivering gifts; passing reactions and view statistics to senders; purchases, Ethos for Two and gift cards; saved dates, and sharing them with your partner; service emails; reminders you ask for; reviews; game rooms; the writing helper; the Dates features; and, if you're a creator, running the program and paying you): performance of our contract with you (Art. 6(1)(b) GDPR). Where we have no contract with you, for example when you open a gift someone sent you, our legitimate interest, and the sender's, in delivering the gift and its reactions (Art. 6(1)(f)).",
         "To keep the Service secure and working, prevent fraud and abuse, keep reviews genuine, enforce our terms, fix errors, measure use with cookieless analytics, see which pages and links lead to purchases, mention related offers in the service emails we send you anyway, send offer emails to our customers in the United States, and establish or defend legal claims: our legitimate interests (Art. 6(1)(f)). You can object to this (section 13), and to offer emails at any time with the unsubscribe link in each one.",
         "Microsoft Clarity, the Meta and TikTok pixels and the purchase reports to them, keeping your first visit in your browser, the waitlist and checkout reminder emails, the offer emails you ask for, the emails about a gift you keep, and showing your reaction on our site: your consent (Art. 6(1)(a)), given in our cookie banner, on the waitlist form, with the box on Stripe's checkout page, with the box for offer emails, on the page “Keep this gift” opens (and confirmed by email), or with the box when you send a reaction. You can withdraw it at any time (for emails, with the unsubscribe link; for a reaction, by writing to us); withdrawing doesn't affect what happened before.",
+        ...(g ? [GROUP.en.basis] : []),
         "To meet legal obligations, such as accounting and tax rules (which is why purchase records and creators' payouts are kept) and consumer law (which is why we keep the record of your request to unlock a purchase straight away), and to handle reports and orders under the Digital Services Act: Art. 6(1)(c).",
       ],
     },
@@ -571,6 +633,7 @@ const privacyEn: LegalDoc = {
         "Your account: until you delete it. Drafts saved to your account: deleted automatically after 7 days without edits (90 days for a gift unpublished because its payment was refunded or reversed). Uploaded files that no gift uses: deleted after 24 hours; once a gift has been opened, older versions of its files that it no longer uses are deleted too.",
         "Published and scheduled gifts, their files, view records and reactions: until you delete the gift or your account. Deleting removes the files from storage and the records from our database straight away; copies in routine backups expire within 30 days.",
         "Reviews, and saved dates and trips: until you delete them or your account. Waitlist: until we've sent the launch email (then deleted within three months), until you ask us to remove you, or at most 24 months after you joined if it hasn't launched. Reminders: until you remove them or delete your account. A kept gift: an address never confirmed, seven days; a confirmed one, with its reminders, until you unsubscribe or the gift is deleted. Offer emails: the record of your yes until you untick the box, unsubscribe or delete your account. The unsubscribe list: the hash of your address, for as long as we send the checkout reminder, offers inside our emails, offer emails or emails about kept gifts.",
+        ...(g ? [GROUP.en.kept] : []),
         "Purchases: accounting and tax law require us to keep a record of every sale (generally for five years in Latvia, and up to ten years for VAT records). When you delete your account, your purchases stay in our database for that long, but no longer linked to you: what was bought, when, the amount, the creator's code if there was one, where the visit that led to it came from (section 7), the record of your request to unlock it straight away, a gift card's details and Stripe's identifiers. Ethos for Two's records (its plan, its dates and a record of each payment) are kept the same way, and so is the customer record Stripe keeps for a subscription, which is then deleted. Creator program: for as long as you take part, then for as long as accounting and tax law requires for the commissions we paid.",
         "Logs and security: rate-limit counters, up to 1 hour; hosting logs and error reports, up to 30 days; sign-in and security records, up to 12 months. Microsoft keeps Clarity data for the periods it sets, currently up to 13 months; Meta and TikTok keep what the pixels and the purchase reports send them for the periods their own policies set. Data stored in your browser (section 12) stays until it expires or you clear it.",
       ],
@@ -586,7 +649,7 @@ const privacyEn: LegalDoc = {
     {
       heading: "13. Your rights",
       paragraphs: [
-        `You have the right to access your data and get a copy, to have it corrected or erased, to restrict its use, to data portability, to object to processing based on our legitimate interests, and to withdraw consent at any time. Your account page lets you download your data (account, gifts, purchases, unlocks, Ethos for Two, saved dates and trips, gift cards you bought, reminders, views, reactions, reviews and waitlist sign-up, as a JSON file) and delete your account, and your reminders page lists and removes your reminders; for anything else, write to ${E.email}.`,
+        `You have the right to access your data and get a copy, to have it corrected or erased, to restrict its use, to data portability, to object to processing based on our legitimate interests, and to withdraw consent at any time. Your account page lets you download your data (account, gifts, purchases, unlocks, Ethos for Two, saved dates and trips, gift cards you bought, reminders, views, reactions, reviews and waitlist sign-up, as a JSON file) and delete your account, and your reminders page lists and removes your reminders; for anything else, write to ${E.email}.${g ? GROUP.en.export : ""}`,
         "We answer within one month, or within three months for complex requests, in which case we'll tell you why. It's free, and we may ask you to confirm your identity first. We don't make decisions about you based solely on automated processing that have legal or similarly significant effects.",
         "You can complain to the Latvian Data State Inspectorate (Datu valsts inspekcija, dvi.gov.lv) or to the supervisory authority where you live or work. We'd welcome the chance to help first.",
         "Recipients who want a reaction or view record removed can write to us with the gift link; we'll remove it and tell the sender it was withdrawn. If a gift or review contains information about you that you want taken down, you can also report it as section 13 of our Terms of Service explains.",
@@ -596,6 +659,7 @@ const privacyEn: LegalDoc = {
       heading: "14. Children",
       paragraphs: [
         "The Service isn't directed at children. You must be at least 16 to create an account, post a review or buy, and we don't knowingly collect data from younger children; if we learn that an account belongs to someone under 16, we delete it. Photos and names of children may appear in gifts made by their family: the sender is responsible for having the right to share them, should include only what the gift needs, and should leave out anything that could identify or locate a child to strangers, such as a school or an address. Remember that anyone with the link can open a gift.",
+        ...(g ? [GROUP.en.children] : []),
       ],
     },
     {
@@ -609,9 +673,9 @@ const privacyEn: LegalDoc = {
       paragraphs: [`We'll post updates here and email account holders about material changes. Contact: ${E.name}, ${E.address}, ${E.email}.`],
     },
   ],
-};
+});
 
-const privacyEs: LegalDoc = {
+const privacyEs = (g: boolean): LegalDoc => ({
   title: "Política de privacidad",
   intro: `${E.name} («nosotros»), número de registro ${E.regNo}, ${E.address.replace("Latvia", "Letonia")}, es el responsable del tratamiento de los datos personales que se recogen a través de ${B}: la web, los regalos, las compras (incluidos Ethos for Two y las tarjetas regalo), el mapa de Citas, los planes, los viajes y las citas guardadas, las reseñas, los juegos, los recordatorios, la lista de espera, el programa de creadores y nuestros correos. Esta política explica qué recogemos, para qué, quién más interviene, cuánto tiempo lo conservamos y los derechos que tienes según el Reglamento General de Protección de Datos (RGPD). Preguntas y solicitudes: ${E.email}.`,
   sections: [
@@ -632,6 +696,7 @@ const privacyEs: LegalDoc = {
         "El aviso de un pago sin terminar: solo si lo pides y después te vas sin pagar, te enviamos un correo con un enlace para volver a ese pago. Lo pides marcando, donde Stripe la muestra, la casilla de su página de pago aceptando recibir correos nuestros. Nunca viene marcada, y puedes pagar sin marcarla. Es un solo correo, no una serie: como mucho uno por dirección a la semana, aunque dejes varios pagos sin terminar, y ninguno si ya has pagado. Incluye un enlace para darte de baja (puede que tu app de correo también muestre su propio botón para darte de baja); si lo usas, guardamos un hash unidireccional de tu dirección (no la dirección) en una lista que consultamos antes de enviarlo, y volver a marcar la casilla en otro pago no te saca de ella.",
         "Ofertas dentro de nuestros correos: el recibo de plantillas sueltas, de tres plantillas o de «Hazlo especial» puede indicar lo que te costaría ahora «Todo», y los correos de la primera apertura o de una reacción pueden proponerte una plantilla para tu próximo regalo. Si tu dirección está en la lista de bajas, las quitamos; para entrar en ella sin haber recibido un aviso de pago sin terminar, responde a cualquiera de nuestros correos o escríbenos.",
         "Correos de ofertas: correos que solo traen una oferta, como el acceso anticipado a unas rebajas o un precio personal para tu próximo regalo (Términos, sección 6). Los enviamos si marcas la casilla que los pide en la pantalla desde la que envías un regalo (nunca viene marcada), y a los clientes cuya dirección de facturación, dada al pagarnos, está en Estados Unidos. De la casilla guardamos que la marcaste, la frase misma, cuándo y tu idioma. El enlace de un precio personal nombra tu cuenta por su ID aleatorio y dice cuándo termina el precio; cuando lo abres, tu navegador lo guarda en una cookie hasta entonces (sección 12). Enviamos los correos de ofertas a través de Mailchimp, que recibe tu dirección de correo, tu idioma y los enlaces de cada correo. Cada correo de ofertas incluye un enlace para darte de baja; darte de baja, o desmarcar la casilla, los detiene. Aparte de estos, los correos de arriba y el único correo de lanzamiento para quienes se apuntaron a la lista de espera de Ethos for Two (sección 6), no enviamos ningún otro correo ni boletines.",
+        ...(g ? [GROUP.es.data] : []),
       ],
     },
     {
@@ -692,6 +757,7 @@ const privacyEs: LegalDoc = {
         "Para darte lo que pides (cuentas e inicio de sesión; crear, alojar y entregar regalos; hacer llegar las reacciones y las estadísticas de visualización a los remitentes; compras, Ethos for Two y tarjetas regalo; las citas guardadas y compartirlas con tu pareja; correos del servicio; los recordatorios que pides; reseñas; salas de juego; el asistente de escritura; las funciones de Citas; y, si eres creador, gestionar el programa y pagarte): la ejecución de nuestro contrato contigo (art. 6.1.b RGPD). Cuando no tenemos un contrato contigo, por ejemplo cuando abres un regalo que te han enviado, nuestro interés legítimo, y el del remitente, en entregar el regalo y sus reacciones (art. 6.1.f).",
         "Para mantener el Servicio seguro y en funcionamiento, prevenir el fraude y los abusos, que las reseñas sean auténticas, hacer cumplir nuestros términos, corregir errores, medir el uso con analítica sin cookies, ver qué páginas y enlaces llevan a compras, mencionar ofertas relacionadas en los correos del servicio que te enviamos de todos modos, enviar correos de ofertas a nuestros clientes en Estados Unidos y formular o defender reclamaciones: nuestros intereses legítimos (art. 6.1.f). Puedes oponerte (sección 13), y a los correos de ofertas en cualquier momento con el enlace para darte de baja de cada uno.",
         "Microsoft Clarity, los píxeles de Meta y de TikTok y los avisos de compra que les enviamos, guardar tu primera visita en tu navegador, la lista de espera, los avisos de pagos sin terminar, los correos de ofertas que pides, los correos sobre un regalo que guardas y mostrar tu reacción en nuestra web: tu consentimiento (art. 6.1.a), dado en nuestro aviso de cookies, en el formulario de la lista de espera, con la casilla de la página de pago de Stripe, con la casilla de los correos de ofertas, en la página que abre «Guardar este regalo» (y confirmado por correo) o con la casilla al enviar una reacción. Puedes retirarlo en cualquier momento (en los correos, con el enlace para darte de baja; en una reacción, escribiéndonos); retirarlo no afecta a lo ya hecho.",
+        ...(g ? [GROUP.es.basis] : []),
         "Para cumplir obligaciones legales, como las normas contables y fiscales (por eso se conservan los registros de compras y de pagos a creadores) y la normativa de consumo (por eso conservamos el registro de tu solicitud de desbloquear una compra de inmediato), y tramitar denuncias y órdenes según el Reglamento de Servicios Digitales: art. 6.1.c.",
       ],
     },
@@ -716,6 +782,7 @@ const privacyEs: LegalDoc = {
         "Tu cuenta: hasta que la eliminas. Borradores guardados en tu cuenta: se borran automáticamente tras 7 días sin editarse (90 días si es un regalo despublicado porque su pago se reembolsó o se revirtió). Archivos subidos que ningún regalo usa: se borran a las 24 horas; cuando un regalo ya se ha abierto, también se borran las versiones anteriores de sus archivos que ya no usa.",
         "Regalos publicados y programados, sus archivos, los registros de visualización y las reacciones: hasta que borras el regalo o tu cuenta. Al borrarlos, los archivos se eliminan del almacenamiento y los registros de nuestra base de datos en ese momento; las copias de seguridad rutinarias caducan en un plazo de 30 días.",
         "Reseñas, y citas y viajes guardados: hasta que los borras o eliminas tu cuenta. Lista de espera: hasta que enviemos el correo del lanzamiento (después la borramos en un plazo de tres meses), hasta que nos pidas que te borremos o, como máximo, 24 meses después de apuntarte si no se ha lanzado. Recordatorios: hasta que los quitas o eliminas tu cuenta. Un regalo guardado: una dirección sin confirmar, siete días; una confirmada, con sus avisos, hasta que te das de baja o se borra el regalo. Correos de ofertas: el registro de tu sí, hasta que desmarcas la casilla, te das de baja o eliminas tu cuenta. La lista de bajas: el hash de tu dirección, mientras enviemos avisos de pagos sin terminar, ofertas dentro de nuestros correos, correos de ofertas o correos sobre regalos guardados.",
+        ...(g ? [GROUP.es.kept] : []),
         "Compras: la normativa contable y fiscal nos obliga a conservar un registro de cada venta (en general, cinco años en Letonia y hasta diez años para los registros del IVA). Si eliminas tu cuenta, tus compras se quedan en nuestra base de datos durante ese tiempo, pero ya sin vincularse a ti: qué se compró, cuándo, el importe, el código del creador si lo hubo, de dónde vino la visita que llevó a ella (sección 7), el registro de tu solicitud de desbloquearla de inmediato, los datos de una tarjeta regalo y los identificadores de Stripe. Los registros de Ethos for Two (su plan, sus fechas y un registro de cada pago) se conservan igual, y también la ficha de cliente que Stripe guarda para una suscripción, que después se borra. Programa de creadores: mientras participes y, después, durante el tiempo que exija la normativa contable y fiscal para las comisiones que te pagamos.",
         "Registros y seguridad: contadores de límite de uso, hasta 1 hora; registros del alojamiento e informes de errores, hasta 30 días; registros de inicio de sesión y de seguridad, hasta 12 meses. Microsoft conserva los datos de Clarity durante los plazos que fija, actualmente hasta 13 meses; Meta y TikTok conservan lo que les envían los píxeles y los avisos de compra durante los plazos que fijan sus propias políticas. Lo que se guarda en tu navegador (sección 12) permanece hasta que caduca o lo borras.",
       ],
@@ -731,7 +798,7 @@ const privacyEs: LegalDoc = {
     {
       heading: "13. Tus derechos",
       paragraphs: [
-        `Tienes derecho a acceder a tus datos y obtener una copia, a rectificarlos o suprimirlos, a limitar su tratamiento, a la portabilidad, a oponerte al tratamiento basado en nuestros intereses legítimos y a retirar tu consentimiento en cualquier momento. En la página de tu cuenta puedes descargar tus datos (cuenta, regalos, compras, desbloqueos, Ethos for Two, citas y viajes guardados, tarjetas regalo que has comprado, recordatorios, visualizaciones, reacciones, reseñas y la inscripción en la lista de espera, en un archivo JSON) y eliminar tu cuenta, y en la de recordatorios puedes verlos y quitarlos; para todo lo demás, escribe a ${E.email}.`,
+        `Tienes derecho a acceder a tus datos y obtener una copia, a rectificarlos o suprimirlos, a limitar su tratamiento, a la portabilidad, a oponerte al tratamiento basado en nuestros intereses legítimos y a retirar tu consentimiento en cualquier momento. En la página de tu cuenta puedes descargar tus datos (cuenta, regalos, compras, desbloqueos, Ethos for Two, citas y viajes guardados, tarjetas regalo que has comprado, recordatorios, visualizaciones, reacciones, reseñas y la inscripción en la lista de espera, en un archivo JSON) y eliminar tu cuenta, y en la de recordatorios puedes verlos y quitarlos; para todo lo demás, escribe a ${E.email}.${g ? GROUP.es.export : ""}`,
         "Respondemos en el plazo de un mes, o de tres meses en solicitudes complejas, en cuyo caso te explicaremos por qué. Es gratuito, y puede que antes te pidamos que confirmes tu identidad. No tomamos decisiones sobre ti basadas únicamente en tratamientos automatizados que produzcan efectos jurídicos o te afecten de forma similarmente significativa.",
         "Puedes presentar una reclamación ante la Inspección Estatal de Datos de Letonia (Datu valsts inspekcija, dvi.gov.lv) o ante la autoridad de control del lugar donde vives o trabajas. Nos gustaría tener antes la oportunidad de ayudarte.",
         "Los destinatarios que quieran que se elimine una reacción o un registro de visualización pueden escribirnos con el enlace del regalo; lo eliminaremos e informaremos al remitente de que se ha retirado. Si un regalo o una reseña contiene información sobre ti que quieres que se retire, también puedes denunciarlo como explica la sección 13 de nuestros Términos del servicio.",
@@ -741,6 +808,7 @@ const privacyEs: LegalDoc = {
       heading: "14. Menores",
       paragraphs: [
         "El Servicio no está dirigido a menores. Debes tener al menos 16 años para crear una cuenta, publicar una reseña o comprar, y no recogemos a sabiendas datos de menores de esa edad; si sabemos que una cuenta pertenece a alguien menor de 16 años, la eliminamos. En los regalos que hace su familia pueden aparecer fotos y nombres de menores: el remitente es responsable de tener derecho a compartirlos, debe incluir solo lo que el regalo necesita y evitar cualquier dato que permita a desconocidos identificar o localizar a un menor, como su colegio o su dirección. Recuerda que cualquiera que tenga el enlace puede abrir un regalo.",
+        ...(g ? [GROUP.es.children] : []),
       ],
     },
     {
@@ -754,12 +822,19 @@ const privacyEs: LegalDoc = {
       paragraphs: [`Publicaremos las actualizaciones aquí y avisaremos por correo a los titulares de cuentas de los cambios relevantes. Contacto: ${E.name}, ${E.address.replace("Latvia", "Letonia")}, ${E.email}.`],
     },
   ],
-};
+});
 
-export const LEGAL_DOCS: Record<"terms" | "privacy", Record<GiftLocale, LegalDoc>> = {
-  terms: { en: termsEn, es: termsEs },
-  privacy: { en: privacyEn, es: privacyEs },
-};
+/**
+ * The terms and the privacy policy. `group` adds what they say about group cards (GROUP above): the
+ * pages pass groupGiftsEnabled(), so the paragraphs appear on the day group cards go on sale and
+ * not before.
+ */
+export function legalDocs(group: boolean): Record<"terms" | "privacy", Record<GiftLocale, LegalDoc>> {
+  return { terms: { en: termsEn(group), es: termsEs(group) }, privacy: { en: privacyEn(group), es: privacyEs(group) } };
+}
+
+/** As they read while group cards are switched off, which is how they read today. */
+export const LEGAL_DOCS = legalDocs(false);
 
 /**
  * "Withdraw from a purchase" (/legal/withdraw), linked from the footer and the account page: the

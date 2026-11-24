@@ -577,6 +577,141 @@ export interface Database {
         };
         Relationships: [];
       };
+      /** A group card's link and what its page says (0023, src/lib/group). Service role only. */
+      gift_groups: {
+        Row: {
+          id: string;
+          gift_id: string;
+          user_id: string;
+          template_slug: string;
+          locale: "en" | "es";
+          from_name: string;
+          for_name: string;
+          prompt: string | null;
+          /** SHA-256 of the link's token; the token itself is never stored. */
+          token_sha256: string;
+          token_version: number;
+          report_ref: string;
+          max_entries: number;
+          note_max: number;
+          takes_photos: boolean;
+          created_at: string;
+          closes_at: string;
+          closed_at: string | null;
+          sent_at: string | null;
+          nudged_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          gift_id: string;
+          user_id: string;
+          template_slug: string;
+          locale?: "en" | "es";
+          from_name: string;
+          for_name: string;
+          prompt?: string | null;
+          token_sha256: string;
+          token_version?: number;
+          report_ref: string;
+          max_entries?: number;
+          note_max?: number;
+          takes_photos?: boolean;
+          created_at?: string;
+          closes_at?: string;
+          closed_at?: string | null;
+          sent_at?: string | null;
+          nudged_at?: string | null;
+        };
+        Update: {
+          from_name?: string;
+          for_name?: string;
+          prompt?: string | null;
+          token_sha256?: string;
+          token_version?: number;
+          closes_at?: string;
+          closed_at?: string | null;
+          sent_at?: string | null;
+          nudged_at?: string | null;
+        };
+        Relationships: [];
+      };
+      /** What one person added at a group card's link, for its sender to approve (0023). Service role only. */
+      gift_contributions: {
+        Row: {
+          id: string;
+          group_id: string;
+          status: "pending" | "approved" | "rejected" | "removed" | "withdrawn";
+          name: string | null;
+          note: string | null;
+          photo_path: string | null;
+          photo_width: number | null;
+          photo_height: number | null;
+          /** What the gift's own data calls it, once approved. */
+          item_key: string | null;
+          /** Whether it was approved with its photo; null until approved. */
+          with_photo: boolean | null;
+          email: string | null;
+          email_sha256: string | null;
+          email_consent: string | null;
+          email_consent_at: string | null;
+          confirm_sent_at: string | null;
+          email_confirmed_at: string | null;
+          emailed_at: string | null;
+          /** The notice they accepted, word for word. */
+          agreed: string;
+          withdraw_sha256: string | null;
+          report_ref: string;
+          created_at: string;
+          decided_at: string | null;
+          scrubbed_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          group_id: string;
+          status?: "pending" | "approved" | "rejected" | "removed" | "withdrawn";
+          name?: string | null;
+          note?: string | null;
+          photo_path?: string | null;
+          photo_width?: number | null;
+          photo_height?: number | null;
+          item_key?: string | null;
+          with_photo?: boolean | null;
+          email?: string | null;
+          email_sha256?: string | null;
+          email_consent?: string | null;
+          email_consent_at?: string | null;
+          confirm_sent_at?: string | null;
+          email_confirmed_at?: string | null;
+          emailed_at?: string | null;
+          agreed: string;
+          withdraw_sha256?: string | null;
+          report_ref: string;
+          created_at?: string;
+          decided_at?: string | null;
+          scrubbed_at?: string | null;
+        };
+        Update: {
+          status?: "pending" | "approved" | "rejected" | "removed" | "withdrawn";
+          name?: string | null;
+          note?: string | null;
+          photo_path?: string | null;
+          photo_width?: number | null;
+          photo_height?: number | null;
+          item_key?: string | null;
+          with_photo?: boolean | null;
+          email?: string | null;
+          email_sha256?: string | null;
+          email_consent?: string | null;
+          email_consent_at?: string | null;
+          confirm_sent_at?: string | null;
+          email_confirmed_at?: string | null;
+          emailed_at?: string | null;
+          withdraw_sha256?: string | null;
+          decided_at?: string | null;
+          scrubbed_at?: string | null;
+        };
+        Relationships: [];
+      };
       /** Recipients who asked to be emailed a gift's link (0017). Service role only. */
       gift_keeps: {
         Row: {
@@ -816,6 +951,8 @@ export interface Database {
       support_count: { Args: { p_key: string; p_add: number; p_window_seconds: number }; Returns: number };
       /** Deletes help chats untouched for p_days and expired counters (0020). Service role only. */
       forget_support_chats: { Args: { p_days?: number }; Returns: number };
+      /** Files in the contributions bucket that no contribution points at, over a day old (0023). Service role only. */
+      group_photo_orphans: { Args: { p_limit?: number }; Returns: { name: string }[] };
       /** Gifts opened and opens counted, for the numbers on the site (0017). Service role only. */
       proof_numbers: { Args: Record<string, never>; Returns: Json };
       get_public_gift: { Args: { p_short_id: string; p_password?: string | null }; Returns: Json };

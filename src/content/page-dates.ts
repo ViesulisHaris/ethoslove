@@ -1,6 +1,7 @@
 import { ABOUT_PATH, ABOUT_UPDATED } from "@/content/about";
 import { LEGAL_UPDATED } from "@/content/legal";
 import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 
 /**
  * When each page's own words last changed, for the sitemap's <lastmod>. Search engines believe
@@ -107,6 +108,9 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/templates/jar-of-reasons": GUIDES_LIVE,
   "/templates/our-timeline": GUIDES_LIVE,
   "/templates/scrapbook": GUIDES_LIVE,
+  // The Advent Calendar's page exists from the day its template is put in the gallery (src/templates/held.ts).
+  // Set this to that day in the same change: a date ahead of the day it is read on fails the crawl test.
+  ...(ADVENT_CALENDAR_LIVE ? { "/templates/advent-calendar": "2026-11-22" } : {}),
   // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
   // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
   "/occasions/*": GALLERY_LIVE,

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { routing, type Locale } from "@/i18n/routing";
-import { sendsFree } from "@/lib/gift/free-tier";
+import { sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
 import { PRODUCTS, PRODUCT_ORDER, templateProduct, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 
@@ -191,10 +191,11 @@ export function appNode(locale: Locale, shown: Currency, description: string, pl
  * What it costs to send one gift of a template, as its own page says it: nothing while the template
  * can go out free (lib/gift/free-tier.ts), "Make it special" for a free template that no longer can
  * (Constellations since 19 Nov 2026, when the free version became the short note), and one template
- * for a premium one.
+ * for a premium one; a template sold only as a group card is offered at a group card's price.
  */
 export function templateOfferAmount(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">, currency: Currency): number {
   if (sendsFree(manifest)) return 0;
+  if (soldAsGroup(manifest)) return PRODUCTS.group.amounts[currency];
   return PRODUCTS[templateProduct(manifest.tier)].amounts[currency];
 }
 

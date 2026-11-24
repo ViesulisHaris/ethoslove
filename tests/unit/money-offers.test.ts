@@ -20,6 +20,8 @@ import {
   membershipRequest,
   payTotal,
   paywallRequest,
+  groupOnSheet,
+  guestPaysOnSheet,
   pick3Href,
   pick3Offered,
   pricingFaq,
@@ -193,6 +195,29 @@ describe("the publish sheet's “One payment, no subscription”", () => {
     publishAsksForMoney({ ...web, ...over, authed: true, wouldNeedPayment: false, decision });
   const guest = (wouldNeedPayment: boolean, over: Partial<typeof web> = {}) =>
     publishAsksForMoney({ ...web, ...over, authed: false, wouldNeedPayment, decision: null });
+
+  it("a signed-out sender pays as a guest for anything paid, except a group card, which is sent from an account", () => {
+    expect(guestPaysOnSheet({ wouldNeedPayment: true, paymentsEnabled: true, groupDraft: false })).toBe(true);
+    // Nothing paid in the gift, or a server that takes no payments: the sign-in step, as before.
+    expect(guestPaysOnSheet({ wouldNeedPayment: false, paymentsEnabled: true, groupDraft: false })).toBe(false);
+    expect(guestPaysOnSheet({ wouldNeedPayment: true, paymentsEnabled: false, groupDraft: false })).toBe(false);
+    // A draft holding a group's notes: the guest panel's "Pay 9.99 and send" would not send it.
+    expect(guestPaysOnSheet({ wouldNeedPayment: true, paymentsEnabled: true, groupDraft: true })).toBe(false);
+  });
+
+  it("a group card's own lines and pay panel are on the send screen only while group cards are on: off, their words are not in the page", () => {
+    // An ordinary draft: nothing of a group card's, on or off.
+    expect(groupOnSheet({ groupEnabled: true, groupDraft: false, needsGroup: false })).toEqual({ signIn: null, pay: null });
+    expect(groupOnSheet({ groupEnabled: false, groupDraft: false, needsGroup: false })).toEqual({ signIn: null, pay: null });
+    // On, a draft that holds notes: the line that says a card is sent from an account, and its own price once signed in.
+    expect(groupOnSheet({ groupEnabled: true, groupDraft: true, needsGroup: false })).toEqual({ signIn: "group", pay: null });
+    expect(groupOnSheet({ groupEnabled: true, groupDraft: true, needsGroup: true })).toEqual({ signIn: "group", pay: "panel" });
+    // Off, the same draft: the plain sign-in line, and no panel with a price nobody can pay.
+    expect(groupOnSheet({ groupEnabled: false, groupDraft: true, needsGroup: false })).toEqual({ signIn: "plain", pay: null });
+    expect(groupOnSheet({ groupEnabled: false, groupDraft: true, needsGroup: true })).toEqual({ signIn: "plain", pay: "not_on_sale" });
+    // Signed out it is still never the guest's pay panel, on or off: that would take money and not send it.
+    expect(guestPaysOnSheet({ wouldNeedPayment: true, paymentsEnabled: true, groupDraft: true })).toBe(false);
+  });
 
   it("is said wherever the sheet asks for money: the paywall, make it special, the upgrade, the app's unlock", () => {
     // A premium template (the paywall, with the upgrade row when earlier purchases count).

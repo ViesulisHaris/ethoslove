@@ -166,6 +166,25 @@ export const JINGLE: readonly Overtone[] = [
 /** The pitches of a strap of sleigh bells: no two alike, all between 2 and 4 kHz. */
 export const JINGLE_HZ = [2380, 2710, 3080, 3460] as const;
 
+/**
+ * A door the size of a matchbox on a painted wooden house, and the catch that holds it shut: thin wood, so it
+ * is dry and light, and all of it above 500 Hz where a phone can play it.
+ */
+export const HATCH_MODES: readonly Mode[] = [
+  { hz: 560, q: 8, gain: 0.8 },
+  { hz: 940, q: 9, gain: 1 },
+  { hz: 1480, q: 8, gain: 0.9 },
+  { hz: 2300, q: 7, gain: 0.55 },
+  { hz: 3400, q: 6, gain: 0.3 },
+];
+
+/**
+ * How one of those doors opens, in seconds from the tap: the catch lets go at once, the leaf takes `swing` to
+ * come round, the hinge is heard from `creakAt` for `creak` (the middle of the swing, where the leaf is quickest),
+ * and the leaf taps to a stop as the swing ends. The Advent Calendar draws its doors by the same numbers.
+ */
+export const HATCH = { swing: 0.56, creakAt: 0.1, creak: 0.3 } as const;
+
 /** The hollow of a small bottle when the cork has just left it. */
 export const BOTTLE_MODES: readonly Mode[] = [
   { hz: 330, q: 14, gain: 1 },

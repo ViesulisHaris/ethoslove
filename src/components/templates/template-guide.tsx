@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { templateGuideFaq } from "@/content/template-guides";
 import type { TemplateManifest } from "@/templates/types";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { noteForEveryone, sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
 
 /**
  * The questions a template page answers, in the words of the page's own facts: what it costs comes
@@ -13,10 +13,12 @@ import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 export async function templateFaq(manifest: TemplateManifest, locale: GiftLocale, price: string) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
   const name = manifest.name[locale];
+  const group = await getTranslations({ locale, namespace: "templates.group" });
   return [
     sendsFree(manifest)
       ? { q: t("faqFreeQ"), a: t(noteForEveryone() ? "faqFreeAShort" : "faqFreeA", { name, price }) }
-      : { q: t("faqPaidQ"), a: t("faqPaidA", { name, price }) },
+      : // sold only as a group card: not "with no account", and not the price of one template
+        { q: t("faqPaidQ"), a: soldAsGroup(manifest) ? group("faqA", { name, price }) : t("faqPaidA", { name, price }) },
     { q: t("faqOpenQ"), a: t("faqOpenA") },
     { q: t("faqEditQ"), a: t("faqEditA") },
     ...templateGuideFaq(manifest.slug, locale),

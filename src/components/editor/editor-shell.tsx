@@ -45,7 +45,15 @@ export type EditorShellProps = {
   paymentsEnabled: boolean;
   /** A real reaction the pay panel may open with (lib/proof), or null. */
   reaction?: ShownReaction | null;
+  /**
+   * Group cards are switched on (groupGiftsEnabled, lib/group/flag.ts: server-side only, so it comes
+   * down as a prop). The panel is drawn only with this and on a template that declares `features.group`,
+   * and the send screen shows a group card's own lines and price only with it.
+   */
+  groupEnabled?: boolean;
 };
+
+type GroupSectionComponent = typeof import("./sections/group").GroupSection;
 
 /**
  * Tailwind's md: from here up the preview sits beside the form; below it (a phone) it is a tab of its
@@ -86,7 +94,7 @@ function blankGift(manifest: TemplateManifest, locale: GiftLocale, mod: Template
   };
 }
 
-export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null }: EditorShellProps) {
+export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null, groupEnabled = false }: EditorShellProps) {
   const locale = useLocale() as GiftLocale;
   const search = useSearchParams();
   const [mod, setMod] = useState<TemplateModule | null>(null);
@@ -121,6 +129,31 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   useEffect(() => {
     if (ready && dirty) clearReplySeed();
   }, [ready, dirty]);
+
+  // A group card's panel has a script of its own, fetched only by an editor that draws it (group
+  // cards on, a template made for them): no other editor's scripts hold the panel, or the emails it
+  // writes to report a note (lib/group/report.ts). It is asked for at once, beside the template, and
+  // the form waits for it so nothing under it moves when it comes. A script that can't be fetched
+  // leaves the form as it is without the panel; the next load asks again.
+  const drawsGroup = groupEnabled && Boolean(manifest.features.group);
+  const [groupScript, setGroupScript] = useState<{ Section: GroupSectionComponent | null } | null>(null);
+  useEffect(() => {
+    if (!drawsGroup) return;
+    let active = true;
+    import("./sections/group").then(
+      (m) => {
+        if (active) setGroupScript({ Section: m.GroupSection });
+      },
+      () => {
+        if (active) setGroupScript({ Section: null });
+      },
+    );
+    return () => {
+      active = false;
+    };
+  }, [drawsGroup]);
+  const GroupSection = drawsGroup ? (groupScript?.Section ?? null) : null;
+  const formReady = ready && Boolean(mod) && (!drawsGroup || groupScript !== null);
 
   useEffect(() => {
     track("editor_opened", { template: slug });
@@ -302,7 +335,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   const movedFrom = from && from !== slug ? getManifest(from) : undefined;
 
   // Inside the iPhone app: the app's loading screen goes once the form is up, and its bar takes the name.
-  useNativeReady("editor", templateName, ready && Boolean(mod));
+  useNativeReady("editor", templateName, formReady);
   // The app signed in or out while this page was open (it hands the page a session of its own): the
   // editor re-reads it from the cookies, as it does for a sign-in made in another tab.
   useNativeEvents((event) => {
@@ -337,7 +370,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
-            {ready && mod ? (
+            {formReady && mod ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>
                   {mod.leadFields ? (
@@ -347,9 +380,10 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                     </div>
                   ) : null}
                 </WhoSection>
-                <WordsSection aiEnabled={aiEnabled} />
+                <WordsSection aiEnabled={aiEnabled} groupCard={drawsGroup} />
+                {GroupSection ? <GroupSection manifest={manifest} /> : null}
                 {manifest.tier === "free" ? <MoveOffer manifest={manifest} /> : null}
-                <UnwrapSection manifest={manifest} />
+                <UnwrapSection manifest={manifest} groupCard={drawsGroup} />
                 <PhotosSection manifest={manifest} />
                 {manifest.features.music ? <MusicSection /> : null}
                 {manifest.features.video ? <VideoSection /> : null}
@@ -391,6 +425,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         paymentsEnabled={paymentsEnabled}
         resume={resumePublish}
         reaction={reaction}
+        groupEnabled={groupEnabled}
       />
     </div>
   );

@@ -38,3 +38,53 @@ describe("end screen and the free-tier badge", () => {
     expect(renderToStaticMarkup(<EndScreen data={data} onMakeOne={() => {}} />)).not.toContain("Made with Ethos");
   });
 });
+
+describe("end screen on a group card", () => {
+  const note = { key: "abcdefghij", name: "Mum", note: "Forty is nothing. Ring me." };
+  const card = { ...data, templateSlug: "group-reference", contributions: [note] } as unknown as GiftData;
+  const hrefOf = (html: string) => /<a href="(mailto:[^"]+)"[^>]*data-testid="report-note"/.exec(html)?.[1].replace(/&#x27;/g, "'").replace(/&amp;/g, "&") ?? "";
+
+  it("no gift without notes from a group has a Report link: every gift sent so far is unchanged", () => {
+    for (const gift of [data, { ...data, contributions: [] } as unknown as GiftData]) {
+      const html = renderToStaticMarkup(
+        <ReplyModeContext.Provider value>
+          <EndScreen data={gift} onMakeOne={() => {}} onReplay={() => {}} />
+        </ReplyModeContext.Provider>,
+      );
+      expect(html).not.toContain("report-note");
+      expect(html).not.toContain("mailto:");
+    }
+  });
+
+  it("a card with notes carries one small Report link, an email to a person", () => {
+    const html = renderToStaticMarkup(<EndScreen data={card} tone="light" onMakeOne={() => {}} />);
+    expect(html.match(/data-testid="report-note"/g)).toHaveLength(1);
+    expect(html).toContain("Report a note");
+    const href = hrefOf(html);
+    expect(href.startsWith("mailto:")).toBe(true);
+    expect(decodeURIComponent(href)).toContain("The card's link:");
+    expect(decodeURIComponent(href)).toContain("The name on the note:");
+  });
+
+  it("its address carries nothing of the gift: no id, no link, no name, no words from a note", () => {
+    const loud = { ...card, senderName: "Tom", recipientName: "Nora", shortId: "card234ab", contributions: [{ ...note, name: "Okonkwo" }] } as unknown as GiftData;
+    const href = decodeURIComponent(hrefOf(renderToStaticMarkup(<EndScreen data={loud} onMakeOne={() => {}} />)));
+    for (const secret of ["Tom", "Nora", "Okonkwo", "Forty", "abcdefghij", "card234ab", "group-reference", "/g/"]) expect(href).not.toContain(secret);
+  });
+
+  it("speaks the gift's language", () => {
+    const html = renderToStaticMarkup(<EndScreen data={{ ...card, locale: "es" } as GiftData} onMakeOne={() => {}} />);
+    expect(html).toContain("Avisar de una nota");
+    expect(html).not.toContain("Denunciar");
+    expect(decodeURIComponent(hrefOf(html))).toContain("El enlace de la tarjeta:");
+  });
+
+  it("adds no button, form, price or script to the screen", () => {
+    const without = renderToStaticMarkup(<EndScreen data={data} onMakeOne={() => {}} onReplay={() => {}} />);
+    const withNotes = renderToStaticMarkup(<EndScreen data={card} onMakeOne={() => {}} onReplay={() => {}} />);
+    const count = (html: string, tag: string) => html.split(`<${tag}`).length - 1;
+    for (const tag of ["button", "form", "input", "script", "img"]) expect(count(withNotes, tag), tag).toBe(count(without, tag));
+    expect(count(withNotes, "a")).toBe(count(without, "a") + 1);
+    expect(withNotes).not.toMatch(/[$€£]\s?\d/);
+  });
+});

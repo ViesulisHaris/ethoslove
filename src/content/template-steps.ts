@@ -1,4 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 
 /**
  * How each gift is made, in three steps that are that gift's own (the owner, 21 Nov 2026: "change
@@ -525,6 +526,20 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
   },
+  // Only while it is in the gallery (src/templates/held.ts). Its second step quotes `contributions`, the group's
+  // notes, which only a template with `features.group` has: its card shows the first signer's name.
+  ...(ADVENT_CALENDAR_LIVE
+    ? {
+        "advent-calendar": {
+          line: { en: "They open twenty-four doors and find a note from each of you.", es: "Abren veinticuatro puertas y encuentran una nota de cada persona." },
+          steps: [
+            { picture: "note", quote: "message", en: "Write your letter", es: "Escribe tu carta" },
+            { picture: "note", quote: "contributions", en: "Invite people to sign", es: "Invita a todos a firmar" },
+            { picture: "phone", en: "Send the card", es: "Envía la tarjeta" },
+          ],
+        },
+      }
+    : {}),
 };
 
 /** A template's three steps, or null for one added before its row was written (the page then falls back to the shared three). */

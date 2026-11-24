@@ -2,11 +2,15 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
 import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
 import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
-import { photosUnlock } from "@/lib/pricing/products";
+import { EVERY_GROUP, groupUnlock, photosUnlock } from "@/lib/pricing/products";
+import { groupGiftsEnabled } from "@/lib/group/flag";
+import { GroupUnavailableError, forgetGroupPhotos, keysOutOfCard, markGroupSent } from "@/lib/group/store";
+import { sendSignedGiftEmails } from "@/lib/group/signed-email";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { giftStoragePaths } from "@/lib/gift/storage-paths";
@@ -59,6 +63,55 @@ async function holdsNotePhotos(ctx: SignedIn, templateSlug: string): Promise<boo
   return Boolean(data);
 }
 
+/**
+ * Whether the account holds group cards for a template: its own "group:<slug>" row, or "group:*"
+ * (granted by hand). Read from the rows themselves, never through has_template_unlock, which says yes
+ * for Everything's "*": Everything is templates, and a group card is sold apart.
+ */
+async function holdsGroup(ctx: SignedIn, templateSlug: string): Promise<boolean> {
+  const { data } = await ctx.supabase.from("template_unlocks").select("template_slug").eq("user_id", ctx.user.id).in("template_slug", [groupUnlock(templateSlug), EVERY_GROUP]);
+  return (data?.length ?? 0) > 0;
+}
+
+/** A group card: a gift on a template made for one, carrying at least one note other people added. */
+function isGroupCard(templateSlug: string, data: { contributions?: unknown }): boolean {
+  return Boolean(getManifest(templateSlug)?.features.group) && Array.isArray(data.contributions) && data.contributions.length > 0;
+}
+
+/**
+ * A group card as recipients may be shown it: without any note its writer has taken back, or its
+ * sender removed or turned down (on this device or another). The editor takes such a note out of its
+ * own copy when its panel next reads the group, but that copy can be behind, and what goes out is
+ * decided here: the note is dropped before anything is stored, and `dropped` says which, so the
+ * editor can take them out of what it shows. Only looked up for a gift that carries notes, on a
+ * template made for them, while group cards are on: any other gift sends no statement here.
+ *
+ * A database without the group tables has no notes to have been taken back, so the card goes as it
+ * is. Any other failure refuses the save rather than risk sending a note someone withdrew.
+ */
+async function withoutNotesTakenBack<T extends { contributions?: { key: string }[] }>(writer: SignedIn["supabase"], giftId: string, templateSlug: string, data: T): Promise<{ ok: true; data: T; dropped: string[] } | { ok: false }> {
+  if (!data.contributions?.length || !getManifest(templateSlug)?.features.group || !groupGiftsEnabled()) return { ok: true, data, dropped: [] };
+  try {
+    const out = await keysOutOfCard(writer, giftId);
+    const dropped = data.contributions.filter((item) => out.has(item.key)).map((item) => item.key);
+    if (dropped.length === 0) return { ok: true, data, dropped };
+    return { ok: true, data: { ...data, contributions: data.contributions.filter((item) => !out.has(item.key)) }, dropped };
+  } catch (error) {
+    if (error instanceof GroupUnavailableError) return { ok: true, data, dropped: [] };
+    console.error(`[group] notes taken back not read: ${(error as Error).message}`);
+    return { ok: false };
+  }
+}
+
+/** Work that must not hold up the answer (emails): run once it has gone, or at once where there is no request to wait for. */
+function later(task: () => Promise<unknown>) {
+  try {
+    after(task);
+  } catch {
+    void task();
+  }
+}
+
 async function ownsAssets(ctx: SignedIn, data: unknown): Promise<boolean> {
   const giftIds = new Set<string>();
   for (const path of giftStoragePaths(data)) {
@@ -69,6 +122,17 @@ async function ownsAssets(ctx: SignedIn, data: unknown): Promise<boolean> {
   if (giftIds.size === 0) return true;
   const { data: owned, error } = await ctx.supabase.from("gifts").select("id").eq("user_id", ctx.user.id).in("id", [...giftIds]);
   return !error && (owned?.length ?? 0) === giftIds.size;
+}
+
+/**
+ * A group card's notes stay only on a template made for them (`features.group`, src/lib/group): on
+ * any other, whatever the request carried under `contributions` is taken off before it is stored.
+ */
+function onlyGroupTemplates<T extends { contributions?: unknown }>(templateSlug: string, data: T): T {
+  if (data.contributions === undefined || getManifest(templateSlug)?.features.group) return data;
+  const rest = { ...data };
+  delete rest.contributions;
+  return rest;
 }
 
 /** Creates the draft row a gift needs before assets can be uploaded to Storage. */
@@ -116,11 +180,15 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
   // So does the free version a gift that is already out is held to (lib/gift/free-tier.ts): an edit
   // can't move a note back to the roomier rules. A draft still says it for itself.
-  const data = { ...loose.data, templateSlug: row.template_slug, ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }) };
-  const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
+  const typed = onlyGroupTemplates(row.template_slug, { ...loose.data, templateSlug: row.template_slug, ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }) });
 
   if (row.status === "draft") {
-    const { error } = await ctx.supabase.from("gifts").update(patch).eq("id", input.data.giftId).eq("user_id", ctx.user.id).eq("status", "draft");
+    const { error } = await ctx.supabase
+      .from("gifts")
+      .update({ data: typed as unknown as Json, locale: typed.locale ?? "en" })
+      .eq("id", input.data.giftId)
+      .eq("user_id", ctx.user.id)
+      .eq("status", "draft");
     if (error) return { ok: false, error: error.message };
     return { ok: true, data: { savedAt: new Date().toISOString() } };
   }
@@ -128,6 +196,14 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // A live or scheduled gift is what recipients see: edits to it are held to the publish rules.
   const manifest = getManifest(row.template_slug);
   if (!manifest) return { ok: false, error: "unknown_template" };
+  // A note taken back, or removed on another device, never reaches a card that is out.
+  const writer = recipientFacingWriter();
+  const current = writer ? await withoutNotesTakenBack(writer, input.data.giftId, row.template_slug, typed) : { ok: true as const, data: typed, dropped: [] };
+  if (!current.ok) return { ok: false, error: "group_unavailable" };
+  const data = current.data;
+  const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
+  // A group card that is out stays one only while its group unlock is held (a refund takes it away).
+  if (isGroupCard(row.template_slug, data) && !(await holdsGroup(ctx, row.template_slug))) return { ok: false, error: "payment_required" };
   const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [], unwrap: data.unwrap, message: data.message, freeTier: data.freeTier };
   const flags = { hasSchedule: row.unlock_at !== null, hasPassword: row.password_hash !== null, watermark: row.watermark };
   // And once the note is for everyone, a free gift from before it takes no new photos without the
@@ -148,10 +224,9 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
         return { ok: false, error: "payment_required" };
     }
   }
-  if (!mediaUrlsAllowed({ photos: data.photos ?? [], video: data.video, voiceNote: data.voiceNote, music: data.music }, { local: true })) return { ok: false, error: "invalid_assets" };
+  if (!mediaUrlsAllowed({ photos: data.photos ?? [], video: data.video, voiceNote: data.voiceNote, music: data.music, contributions: data.contributions }, { local: true })) return { ok: false, error: "invalid_assets" };
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
-  const writer = recipientFacingWriter();
   if (!writer) return { ok: false, error: "not_configured" };
   // Recipients see a live edit at once, so it is stored complete, as publishing stores a gift: a
   // setting it left out (a cleared number box saves none) or a choice the template can't take goes
@@ -179,7 +254,8 @@ const publishInput = z.object({
   replyToken: z.string().max(400).optional(),
 });
 
-export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled" }>> {
+/** `takenBack`: the keys of notes left out of a group card because they were taken back or removed since the editor last looked (there only when there are any). */
+export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; takenBack?: string[] }>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
   const input = publishInput.safeParse(raw);
@@ -203,15 +279,20 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   // and the free version it is held to is the server's to say too (freeTierAtPublish): a gift already
   // out keeps its own, and a first publish takes the draft's word only while the test is running.
   const live = gift.status !== "draft";
-  const data: GiftData = {
+  const asSent: GiftData = onlyGroupTemplates(gift.template_slug, {
     ...(parsed.data as GiftData),
     templateSlug: gift.template_slug,
     freeTier: NOTE_TEMPLATES.includes(gift.template_slug) ? freeTierAtPublish((parsed.data as GiftData).freeTier, { live, stored: gift.free_tier }) : undefined,
-  };
+  });
 
   const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: gift.template_slug });
   const writer = recipientFacingWriter();
   if (!writer) return { ok: false, error: "not_configured" };
+  // A note taken back, or removed on another device, since the editor last looked never goes out:
+  // it is dropped here, before the card is judged ready, paid for or stored.
+  const current = await withoutNotesTakenBack(writer, gift.id, gift.template_slug, asSent);
+  if (!current.ok) return { ok: false, error: "group_unavailable" };
+  const data = current.data;
   // A reply to a paid premium gift goes out free, footer on (lib/commerce/free-reply.ts). Only
   // looked at when nothing the sender owns already covers the template.
   const reply =
@@ -228,7 +309,9 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   // A note with photos: only looked up for a note that carries photos and has no unlock behind it.
   const photos = !unlocked && sellsNotePhotos(manifest) && data.freeTier === "note" && data.photos.length > 0 ? await holdsNotePhotos(ctx, gift.template_slug) : false;
-  const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos }, {
+  // A group card: only looked up for a gift that carries contributions on a template made for them.
+  const group = isGroupCard(gift.template_slug, data) ? await holdsGroup(ctx, gift.template_slug) : false;
+  const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos, group }, {
     removeWatermark: input.data.removeWatermark,
     schedule: Boolean(input.data.schedule),
     password: Boolean(input.data.password),
@@ -280,13 +363,23 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   // Counted at publish, so a gift deleted afterwards doesn't hand its slot back.
   if (campaign && firstPublish) await countCampaignGift(writer, ctx.user.id).catch(() => {});
 
+  // A group card that has gone out takes no more notes: its link closes. Only where group cards are
+  // on and the template is one; a failure here never undoes a publish that has happened.
+  if (manifest.features.group && groupGiftsEnabled()) {
+    await markGroupSent(writer, gift.id, Date.now()).catch((e) => console.error(`[group] sent not recorded: ${(e as Error).message}`));
+    // "Here's the card you signed", to whoever asked for it and confirmed: now if it is live; a
+    // scheduled card sends it when it unlocks (lib/gift/promote.ts and the daily job).
+    // They go one after another, up to one a note, so they are sent once the sender has their answer.
+    if (status === "live") later(() => sendSignedGiftEmails(writer, gift.id, Date.now()).catch((e) => console.error(`[group] signed emails not sent: ${(e as Error).message}`)));
+  }
+
   const { data: row } = await ctx.supabase.from("gifts").select("short_id").eq("id", gift.id).single();
   revalidatePath("/dashboard");
   void notifyPublished(
     gift.id,
     scheduled ? new Intl.DateTimeFormat(data.locale, { dateStyle: "long", timeStyle: "short", timeZone: input.data.schedule?.timezone }).format(new Date(input.data.schedule!.unlockAt)) : undefined,
   ).catch(() => {});
-  return { ok: true, data: { shortId: row?.short_id ?? "", status } };
+  return { ok: true, data: { shortId: row?.short_id ?? "", status, ...(current.dropped.length ? { takenBack: current.dropped } : {}) } };
 }
 
 /** Owner-only signed URLs so the editor can preview assets already in Storage. */
@@ -382,6 +475,10 @@ export async function deleteGift(giftId: string): Promise<ActionResult<null>> {
   if (!gift) return { ok: false, error: "not_found" };
   const cleanup = await deleteGiftStorage(gift.id);
   if (cleanup.errors.length) return { ok: false, error: "storage_cleanup_failed" };
+  // A group card's waiting photos go with it. Its rows cascade from the gift; the files are removed
+  // here as well as can be, and whatever is missed the daily job finds within a day. Only while
+  // group cards are on, and never a reason to keep a gift someone asked to delete.
+  if (groupGiftsEnabled()) await forgetGroupPhotos({ giftId: gift.id }).catch(() => {});
   const { error } = await ctx.supabase.from("gifts").delete().eq("id", giftId).eq("user_id", ctx.user.id);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/dashboard");

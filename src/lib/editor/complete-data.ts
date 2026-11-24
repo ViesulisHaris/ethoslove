@@ -2,6 +2,7 @@ import { COVER_IDS, FONT_PAIRINGS, GIFT_LOCALES, HEX_COLOR, type GiftData, type 
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 const isPhoto = (p: unknown): p is GiftPhoto => isObject(p) && typeof p.id === "string" && typeof p.url === "string";
+const isContribution = (c: unknown): boolean => isObject(c) && typeof c.key === "string" && typeof c.name === "string" && typeof c.note === "string" && (c.photo === undefined || (isObject(c.photo) && typeof c.photo.url === "string"));
 const oneOf = <T extends string>(options: readonly T[], value: unknown): value is T =>
   typeof value === "string" && (options as readonly string[]).includes(value);
 
@@ -45,6 +46,11 @@ export function completeGiftData(blank: GiftData, stored: unknown): GiftData {
   };
   if ("cover" in s && !oneOf(COVER_IDS, s.cover)) delete done.cover;
   if ("freeTier" in s && s.freeTier !== "note") delete done.freeTier;
+  // A group card's notes are a list, each with its key, name and words; anything else is not kept.
+  if ("contributions" in s) {
+    if (Array.isArray(s.contributions)) done.contributions = s.contributions.filter(isContribution);
+    else delete done.contributions;
+  }
   for (const key of EXTRAS) if (key in s && !isObject(s[key])) delete done[key];
   return done as GiftData;
 }

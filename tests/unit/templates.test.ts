@@ -125,7 +125,9 @@ describe("what a page that lists templates is allowed to reach", () => {
     const code = (f: string) => readFileSync(new URL(`../../src/templates/${f}`, import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
     const source = code("manifests.ts");
     expect(source).not.toMatch(/\bimport\s*\(/);
-    for (const [, spec] of source.matchAll(/from "([^"]+)"/g)) expect(spec, spec).toMatch(/\/manifest$|^\.\/types$|^@\/config\/occasions$/);
+    for (const [, spec] of source.matchAll(/from "([^"]+)"/g)) expect(spec, spec).toMatch(/\/manifest$|^\.\/types$|^\.\/held$|^@\/config\/occasions$/);
+    // ./held is one constant (whether a template that is built is in the gallery yet) and imports nothing.
+    expect(code("held.ts")).not.toMatch(/import|require/);
     const schemas = code("schemas.ts");
     for (const [, spec] of schemas.matchAll(/import\("([^"]+)"\)/g)) expect(spec, spec).toMatch(/\/schema$/);
   });

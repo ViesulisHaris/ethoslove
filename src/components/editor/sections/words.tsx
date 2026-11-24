@@ -16,7 +16,11 @@ import { EmojiPicker } from "../emoji-picker";
 import { WritingHelper } from "../writing-helper";
 import { useNoteRules } from "../use-note-rules";
 
-export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
+/**
+ * `groupCard`: the card is a group card (group cards on, and a template made for them). Its letter is the sender's, beside
+ * everyone else's notes, and the placeholder for a couple's letter ("a moment only the two of you remember") read wrong there.
+ */
+export function WordsSection({ aiEnabled, groupCard = false }: { aiEnabled: boolean; groupCard?: boolean }) {
   const t = useTranslations("editor");
   const data = useEditor((s) => s.data);
   const patch = useEditor((s) => s.patch);
@@ -100,7 +104,7 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
             value={data.message}
             maxLength={LIMITS.messageMaxChars}
             onChange={(e) => patch({ message: e.target.value })}
-            placeholder={t("fields.messagePlaceholder")}
+            placeholder={groupCard ? t("group.messagePlaceholder") : t("fields.messagePlaceholder")}
             rows={9}
             className="min-h-[13rem] resize-y rounded-none border-0 bg-transparent px-3.5 py-3 text-base leading-relaxed md:text-[15px] shadow-none focus-visible:ring-0"
           />

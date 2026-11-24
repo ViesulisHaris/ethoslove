@@ -58,7 +58,8 @@ export function errorCode(error: ErrorLike | null | undefined): string {
 export function scrubStack(stack: string): string {
   return stack
     .replace(/(\bhttps?:\/\/[^\s?#)]+)[?#][^\s:)]*/g, "$1")
-    .replace(/(\/(?:(?:en|es)\/)?g\/)[A-Za-z0-9_-]+/g, "$1[shortId]");
+    .replace(/(\/(?:(?:en|es)\/)?g\/)[A-Za-z0-9_-]+/g, "$1[shortId]")
+    .replace(/(\/(?:(?:en|es)\/)?c\/)[A-Za-z0-9_-]{22}(?![A-Za-z0-9_-])/g, "$1[token]");
 }
 
 export function buildClientErrorReport(
@@ -108,7 +109,12 @@ export function isOwnError(input: { message?: string; filename?: string; stack?:
 
 /** A gift's link is its key; the log only needs to know it was a gift. */
 export function redactGiftPath(path: string): string {
-  return path.replace(/^((?:\/(?:en|es))?\/g\/)[^/]+/, "$1[shortId]");
+  return redactGroupPath(path.replace(/^((?:\/(?:en|es))?\/g\/)[^/]+/, "$1[shortId]"));
+}
+
+/** A group card's link opens its page for whoever holds it: no log ever gets the token, from any kind of error. */
+export function redactGroupPath(path: string): string {
+  return path.replace(/^((?:\/(?:en|es))?\/c\/)[^/]+/, "$1[token]");
 }
 
 /** One report per error per page load: React can render a boundary more than once for the same crash. */
@@ -118,7 +124,7 @@ export function reportClientError(error: ErrorLike | null | undefined, where: Cl
   if (typeof window === "undefined") return;
   const uncaught = where === "window" || where === "promise";
   const report = buildClientErrorReport(error, where, {
-    path: uncaught ? redactGiftPath(window.location.pathname) : window.location.pathname,
+    path: uncaught ? redactGiftPath(window.location.pathname) : redactGroupPath(window.location.pathname),
     template,
     build: process.env.NEXT_DEPLOYMENT_ID || undefined,
     translated: pageIsTranslated(),

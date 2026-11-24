@@ -85,6 +85,7 @@ export function serverConsent(): Consent | null {
  * - `/g/…`   someone's private letter, opened at a private link, with their photos in it.
  * - `/checkout/…`  carries `?session_id=cs_…`, a Stripe checkout session.
  * - `/dashboard/…`, `/account`  signed-in pages, with gift ids in the path.
+ * - `/c/…`   a group card's link: its token opens the page where people add their note.
  * - `/games/today`  a sent question rides in the hash (`#q=…`) with a first name and an answer in it.
  *   Being here also keeps the cookie banner (and the tour that waits for it) off this page, through
  *   hidesConsentBanner: on purpose, since nothing on it would use the answer (no recorder, no pixel)
@@ -93,7 +94,7 @@ export function serverConsent(): Consent | null {
  * What is left is the whole public funnel — the pages, the templates, the editor — which is
  * where the questions actually are.
  */
-const OFF_LIMITS = ["/g", "/checkout", "/dashboard", "/account", "/games/today"];
+const OFF_LIMITS = ["/g", "/checkout", "/dashboard", "/account", "/c", "/games/today"];
 
 /**
  * Takes the path with or without a locale prefix, since callers get it from either router. While a

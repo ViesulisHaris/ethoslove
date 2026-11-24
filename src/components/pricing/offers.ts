@@ -185,6 +185,35 @@ export function pick3Href(slug: string, returnTo: string): string {
 }
 
 /**
+ * Whether a signed-out sender is shown the pay panel on the send screen and pays as a guest, or is
+ * asked to sign in first. A guest pays for whatever in the gift is paid, where payments are on,
+ * with one exception: a group card (a draft that holds notes on a template made for them). Its
+ * price is not the guest panel's: that panel sells the template, or Everything, and neither sends a
+ * card with notes in it, so "Pay and send" there took the money and then asked for more. A group
+ * card belongs to an account anyway (its notes and its link hang off one), so the sender signs in
+ * and is shown the group card's own price.
+ */
+export function guestPaysOnSheet(sheet: { wouldNeedPayment: boolean; paymentsEnabled: boolean; groupDraft: boolean }): boolean {
+  return sheet.wouldNeedPayment && sheet.paymentsEnabled && !sheet.groupDraft;
+}
+
+/**
+ * What the send screen says of a group card, for a draft that holds a group's notes on a template
+ * made for them. With group cards on: the sign-in line that says a card is sent from an account,
+ * and for a signed-in sender who has not paid for it, the card's own pay panel. With them off the
+ * product is not on sale and its words are not in the page (src/i18n/client-namespaces.ts,
+ * GROUP_WORDS), so the screen reads none of them: the sign-in line is the plain one, and where the
+ * pay panel would be is the sentence checkout itself answers for something not on sale. Never the
+ * usual pay panel either way: its prices do not send a card with notes in it.
+ */
+export function groupOnSheet(sheet: { groupEnabled: boolean; groupDraft: boolean; needsGroup: boolean }): { signIn: "group" | "plain" | null; pay: "panel" | "not_on_sale" | null } {
+  return {
+    signIn: sheet.groupDraft ? (sheet.groupEnabled ? "group" : "plain") : null,
+    pay: sheet.needsGroup ? (sheet.groupEnabled ? "panel" : "not_on_sale") : null,
+  };
+}
+
+/**
  * Whether the publish sheet is asking for money, the only time it may promise "One payment, no
  * subscription": a guest shown the paywall (or the sign-in that names the price on the way to it),
  * or a signed-in sender whose gift needs an unlock they can pay for here (Stripe, or the App Store's

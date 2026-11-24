@@ -1,6 +1,7 @@
 import { keepShare } from "@/lib/editor/keep-split";
 import { noteForEveryone } from "@/lib/gift/free-tier";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 
 /**
  * More for the template pages that searches have started to find (Search Console, 9 Nov 2026): the
@@ -5502,6 +5503,41 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       faq: [],
     },
   },
+  // Only while it is in the gallery (src/templates/held.ts), like its entry in content/template-seo.ts.
+  ...(ADVENT_CALENDAR_LIVE
+    ? {
+        "advent-calendar": {
+          en: {
+            ideas: {
+              title: "Who to make a digital advent calendar for",
+              items: [
+                { heading: "Someone spending Christmas away", how: "Ask everyone at home for one line and let the doors hand them over.", borrow: { field: "message", line: "We are keeping your chair." } },
+                { heading: "From the whole office", how: "Share one link with the team. You choose which notes go in.", borrow: { field: "title", line: "Merry Christmas from all of floor 3" } },
+                { heading: "For a teacher, from the class", how: "Up to twenty-four families can add a line and a photo of their own.", borrow: { field: "title", line: "Thank you, Miss Carter" } },
+                { heading: "From all the grandchildren", how: "They get a door each, and the star window is left for your own letter.", borrow: { field: "caption", line: "All seven of them, for once in one frame" } },
+                { heading: "A friend having a hard December", how: "Each note is 140 characters at most, so nobody has to write a speech.", borrow: { field: "message", line: "No advice in here. Just us." } },
+                { heading: "Counting down to coming home", how: "The countdown to the day they land shows after your letter.", borrow: { field: "countdown.label", line: "Until you walk through arrivals" } },
+              ],
+            },
+            faq: [],
+          },
+          es: {
+            ideas: {
+              title: "Para quién hacer un calendario de Adviento digital",
+              items: [
+                { heading: "Alguien que pasa la Navidad lejos", how: "Pide una línea a cada persona de casa y deja que las puertas las vayan entregando.", borrow: { field: "message", line: "Te guardamos la silla." } },
+                { heading: "De toda la oficina", how: "Comparte un enlace con el equipo. Tú decides qué notas entran.", borrow: { field: "title", line: "Feliz Navidad de toda la planta 3" } },
+                { heading: "Para la profe, de la clase", how: "Hasta veinticuatro familias pueden añadir una línea y una foto.", borrow: { field: "title", line: "Gracias, profe" } },
+                { heading: "De todos los nietos", how: "Cada cual tiene su puerta, y la ventana de la estrella queda para tu carta.", borrow: { field: "caption", line: "Los siete, por una vez en la misma foto" } },
+                { heading: "Para quien tiene un diciembre difícil", how: "Ninguna nota pasa de 140 caracteres, así nadie tiene que escribir un discurso.", borrow: { field: "message", line: "Aquí no hay consejos. Solo estamos nosotros." } },
+                { heading: "La cuenta atrás hasta la vuelta", how: "La cuenta atrás hasta el día que aterriza sale después de tu carta.", borrow: { field: "countdown.label", line: "Hasta que cruces la puerta de llegadas" } },
+              ],
+            },
+            faq: [],
+          },
+        },
+      }
+    : {}),
 };
 
 /** A template's extra guide in a locale, if it has one. */

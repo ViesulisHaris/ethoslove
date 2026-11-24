@@ -61,6 +61,9 @@ import { manifest as lightTheCandles } from "./light-the-candles/manifest";
 import { manifest as frostedWindow } from "./frosted-window/manifest";
 import { manifest as unwrapped } from "./unwrapped/manifest";
 import { manifest as niceList } from "./nice-list/manifest";
+import { manifest as adventCalendar } from "./advent-calendar/manifest";
+import { manifest as groupReference } from "./_group-reference/manifest";
+import { ADVENT_CALENDAR_LIVE } from "./held";
 
 /**
  * What a template is — its names, occasions, tier, poster — and nothing it runs.
@@ -72,16 +75,31 @@ import { manifest as niceList } from "./nice-list/manifest";
  * on the homepage, pricing and the gallery, for gifts nobody had opened. Import from here unless
  * you are about to render a template.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, digicam, photoBooth, picnic, musicBox, spookySeason, darkRomance, favoritePerson, onRepeat, evergreen, beMyBoo, fallForYou, autumnReel, seance, batSwarm, cauldron, jackOLantern, hauntedHouse, niceList, unwrapped, wishbone, frostedWindow, lightTheCandles, stringTheLights, gingerbreadHouse];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, digicam, photoBooth, picnic, musicBox, spookySeason, darkRomance, favoritePerson, onRepeat, evergreen, beMyBoo, fallForYou, autumnReel, seance, batSwarm, cauldron, jackOLantern, hauntedHouse, niceList, unwrapped, wishbone, frostedWindow, lightTheCandles, stringTheLights, gingerbreadHouse, ...(ADVENT_CALENDAR_LIVE ? [adventCalendar] : [])];
 
 export const TEMPLATE_SLUGS = TEMPLATE_MANIFESTS.map((m) => m.slug);
+
+/**
+ * Templates that exist for development only. One so far: the reference template for group cards
+ * (./_group-reference), which proves the engine before a gallery template takes contributions.
+ * It is in none of the lists (TEMPLATE_MANIFESTS and TEMPLATE_SLUGS here, LOADER_SLUGS in ./registry,
+ * SCHEMA_SLUGS in ./schemas), so the gallery, the sitemap, the app's catalogue, the llms brief and
+ * checkout never see it: `isTemplateSlug` is false for it, and checkout refuses a slug that isn't
+ * one. Only the three lookups by slug (getManifest, loadTemplate, loadFieldsSchema) find it, and
+ * only under `next dev`. NODE_ENV is inlined at build, so in production this list is empty; under
+ * vitest it is "test", and the unit tests import the template's files directly.
+ *
+ * And one more while it is held back: the Advent Calendar, until ADVENT_CALENDAR_LIVE (./held) puts
+ * it in the lists above.
+ */
+const DEV_MANIFESTS: readonly TemplateManifest[] = process.env.NODE_ENV === "development" ? [groupReference, ...(ADVENT_CALENDAR_LIVE ? [] : [adventCalendar])] : [];
 
 export function isTemplateSlug(slug: string): boolean {
   return TEMPLATE_SLUGS.includes(slug);
 }
 
 export function getManifest(slug: string): TemplateManifest | null {
-  return TEMPLATE_MANIFESTS.find((m) => m.slug === slug) ?? null;
+  return TEMPLATE_MANIFESTS.find((m) => m.slug === slug) ?? DEV_MANIFESTS.find((m) => m.slug === slug) ?? null;
 }
 
 /**

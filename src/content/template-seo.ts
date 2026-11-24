@@ -1,4 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 
 /**
  * What each template page is found by: the words people type for the thing the template is, in
@@ -872,6 +873,26 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       howTo: "Cómo enviar una casita de jengibre virtual",
     },
   },
+  // Held back with its template until group cards are on sale (src/templates/held.ts): an entry for a
+  // template that is in no list would be an entry for a page that does not exist.
+  ...(ADVENT_CALENDAR_LIVE
+    ? {
+        "advent-calendar": {
+          en: {
+            keyword: "Digital advent calendar",
+            title: "Advent Calendar: A Digital One Signed by Everyone",
+            description: "A digital advent calendar for one person, from all of you: 24 doors, a note or a sweet behind each, your own letter behind the star. A group Christmas card.",
+            howTo: "How to send a digital advent calendar",
+          },
+          es: {
+            keyword: "Calendario de Adviento digital",
+            title: "Calendario de Adviento: uno digital firmado por todos",
+            description: "Un calendario de Adviento digital para una persona, de parte de todos: 24 puertas, una nota o un dulce tras cada una y tu carta tras la estrella.",
+            howTo: "Cómo enviar un calendario de Adviento digital",
+          },
+        },
+      }
+    : {}),
 };
 
 export function templateSeo(slug: string, locale: GiftLocale): TemplateSeo | null {

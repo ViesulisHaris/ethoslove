@@ -23,6 +23,7 @@ use **Import .env** on that page; tick Production and Preview. Otherwise copy th
 | `RESEND_API_KEY` | Resend → API keys (emails are skipped and logged until this exists) |
 | `CRON_SECRET` | any long random string; protects every `/api/cron/*` route |
 | `VIEWER_HASH_SECRET` | long random string that signs email links (reminder removal, unsubscribe) and seals the free-reply token in a gift's "send one back" link. The service key is used when it's unset, but then rotating that key voids every open reply link, so set it |
+| `GROUP_GIFTS_ENABLED` | leave unset: group cards stay off. `true` turns them on only once a gallery template is made for them and migration `0023_group_gifts.sql` is applied; the order is in docs/GROUP.md, "Going live". Unset, every `/api/group/*` route and `/c/<token>` is a 404 and nothing reads the group tables |
 | `GIFT_CARDS_ENABLED` | leave unset: gift cards stay off sale until VAT on vouchers is settled. `true` shows the card on `/pricing` and lets checkout sell it; `/redeem` works either way |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier): rate limits and "one recovery email per address a week" only hold across serverless instances with it |
 | `NEXT_PUBLIC_PRICE_CURRENCIES` | unset: euros for everyone, as today. `eur,usd,gbp` (the owners' call, docs/marketing/LOCAL-PRICES.md): dollars in the US, pounds in the UK, euros everywhere else; each page is built once per currency and the terms say so. Inlined at build, so a change needs a redeploy |

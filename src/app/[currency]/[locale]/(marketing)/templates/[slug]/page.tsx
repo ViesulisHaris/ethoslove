@@ -31,7 +31,7 @@ import { includedRows } from "@/components/templates/page/included";
 import { heroKeyword, heroWords } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
 import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
-import { NOTE_TEMPLATES, noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { NOTE_TEMPLATES, noteForEveryone, sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { DocumentMark } from "@/components/shared/document-mark";
 
@@ -77,8 +77,10 @@ export default async function TemplateDetailPage({
   // A premium template is bought as one; a free one only ever costs its "make it special" extras.
   // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
   const free = sendsFree(manifest);
+  // A template that needs notes to be sent is sold only as a group card, at a group card's price.
+  const group = soldAsGroup(manifest);
   const price = formatAmount(
-    PRODUCTS[templateProduct(manifest.tier)].amounts[currency],
+    PRODUCTS[manifest.tier !== "free" && group ? "group" : templateProduct(manifest.tier)].amounts[currency],
     currency,
     l,
   );
@@ -189,7 +191,11 @@ export default async function TemplateDetailPage({
                   </Link>
                 </div>
                 <p className="mt-4 max-w-[31rem] text-sm leading-relaxed text-page-body">
-                  {free ? t(noteForEveryone() ? "templates.pagePriceNote" : "templates.pagePriceFree", { price }) : t("templates.pagePricePaid", { price })}
+                  {free
+                    ? t(noteForEveryone() ? "templates.pagePriceNote" : "templates.pagePriceFree", { price })
+                    : group
+                      ? t("templates.group.detailPrice", { price })
+                      : t("templates.pagePricePaid", { price })}
                 </p>
                 {manifest.slug === "the-letter" ? (
                   // The Letter has a page in Portuguese (content/pt-letter.ts). One quiet line under the price, in

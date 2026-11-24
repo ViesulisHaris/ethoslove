@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { localeAlternates } from "@/lib/seo";
-import { LEGAL_DOCS, LEGAL_UPDATED } from "@/content/legal";
+import { LEGAL_DOCS, LEGAL_UPDATED, legalDocs } from "@/content/legal";
+import { groupGiftsEnabled } from "@/lib/group/flag";
 import { LegalDocument } from "@/components/marketing/legal-document";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/legal/terms">, "searchParams">): Promise<Metadata> {
@@ -14,5 +15,6 @@ export default async function TermsPage({ params }: PageProps<"/[currency]/[loca
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("legal");
-  return <LegalDocument doc={LEGAL_DOCS.terms[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: LEGAL_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
+  // What it says about group cards is there only while they are on sale (content/legal.ts).
+  return <LegalDocument doc={legalDocs(groupGiftsEnabled()).terms[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: LEGAL_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
 }

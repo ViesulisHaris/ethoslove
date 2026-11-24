@@ -124,6 +124,20 @@ export type FunnelEvent =
   // "Keep this gift": the end screen's tap (the template), and the keep page sent (how many reminders were asked for). No ids, no addresses.
   | "keep_tapped"
   | "keep_requested"
+  // A group card. At its link: a note added (whether it has a photo, whether an address was left) and
+  // one taken back. In the editor: the invite step opened, the link made and copied, a note added to
+  // the gift (with its photo or not) or removed, and the pay panel shown and tapped (the template,
+  // and whether it was the step up). No ids, no names, no words anyone wrote.
+  | "group_note_added"
+  | "group_note_withdrawn"
+  | "group_invite_tap"
+  | "group_link_created"
+  | "group_link_shared"
+  | "group_page_edited"
+  | "group_note_approved"
+  | "group_note_removed"
+  | "group_pay_shown"
+  | "group_pay_tap"
   // The love language quiz: begun, finished (which language came first, nothing else), its link sent, and a gift opened from a result.
   | "quiz_started"
   | "quiz_finished"

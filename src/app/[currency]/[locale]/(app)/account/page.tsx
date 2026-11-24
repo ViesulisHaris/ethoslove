@@ -7,7 +7,7 @@ import { getCurrentUser } from "@/lib/auth/get-user";
 import { listMyPurchases } from "@/lib/gift/dashboard";
 import { EVERY_PACK, EVERY_TEMPLATE, chargedCurrency, formatAmount, isProductId, subscriptionsEnabled, type Currency } from "@/lib/pricing/products";
 import { PACK_NAMES, isPackId } from "@/lib/games/packs";
-import { upgradeOffer } from "@/lib/commerce/entitlements";
+import { accountUnlocks, upgradeOffer } from "@/lib/commerce/entitlements";
 import { readMembership } from "@/lib/commerce/memberships";
 import { passesOf } from "@/lib/commerce/passes";
 import { splitUnlocks } from "@/lib/commerce/unlocks";
@@ -72,11 +72,14 @@ export default async function AccountPage({ params }: PageProps<"/[currency]/[lo
   // What deleting the account does to a subscription they pay for (lib/auth/delete-account.ts).
   const billed = membership?.isOwner && membership.provider === "stripe_subscription" ? "stripe" : membership?.isOwner && membership.provider === "app_store" ? "app_store" : null;
 
-  const templateChips = [...forever.map((slug) => ({ slug, lent: false })), ...lent.map((slug) => ({ slug, lent: true }))]
-    .filter(({ slug }) => !slug.startsWith("pack:"))
-    .map(({ slug, lent: viaPass }) =>
-      slug === EVERY_TEMPLATE ? (viaPass ? tm("account.everythingWithPass") : t("everything")) : (getManifest(slug)?.name[l] ?? slug),
-    );
+  // Templates, then the ones group cards were bought on (a "group:<slug>" row is not a template by that name).
+  // Their two names live in this page's own namespace, which only a signed-in account's pages are
+  // sent: in "money.account" they went out in the source of /pricing and /gifts while switched off.
+  const held = accountUnlocks(forever, lent);
+  const templateChips = [
+    ...held.templates.map(({ slug, lent: viaPass }) => (slug === EVERY_TEMPLATE ? (viaPass ? tm("account.everythingWithPass") : t("everything")) : (getManifest(slug)?.name[l] ?? slug))),
+    ...held.groups.map((slug) => (slug === "*" ? t("groupEvery") : t("groupOn", { template: getManifest(slug)?.name[l] ?? slug }))),
+  ];
   const packName = (row: string) => {
     const id = row.slice("pack:".length);
     return isPackId(id) ? PACK_NAMES[id][lang] : null;

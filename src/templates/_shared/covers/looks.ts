@@ -494,6 +494,7 @@ export function defaultCoverFor(slug: string): CoverId {
     case "frosted-window":
     case "unwrapped":
     case "nice-list":
+    case "advent-calendar":
       return "classic"; // each opens with its own envelope, book, diary, gate, camera, booth, basket, box or invitation
     case "kawaii":
       return "gingham";

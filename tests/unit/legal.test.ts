@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { LEGAL_DOCS, WITHDRAW_DOCS, type LegalDoc } from "@/content/legal";
+import { LEGAL_DOCS, WITHDRAW_DOCS, legalDocs, type LegalDoc } from "@/content/legal";
+import { CONTRIBUTION_LIMITS } from "@/lib/gift/schema";
+import { GROUP_RETENTION } from "@/lib/group/limits";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
-import { FREE_SAVED_DATES, PRODUCTS, formatAmount, membershipAmount } from "@/lib/pricing/products";
+import { FREE_SAVED_DATES, PRODUCTS, formatAmount, groupAmount, membershipAmount } from "@/lib/pricing/products";
 import { consentSentence } from "@/lib/stripe/line-items";
 
 const all = (doc: LegalDoc) => [doc.intro, ...doc.sections.flatMap((s) => [s.heading, ...s.paragraphs])].join("\n");
@@ -97,5 +99,124 @@ describe("legal documents", () => {
     expect(all(LEGAL_DOCS.privacy.en)).not.toMatch(/no other marketing emails/i);
     expect(all(LEGAL_DOCS.privacy.es)).not.toMatch(/ningún otro correo comercial/i);
     expect(all(LEGAL_DOCS.privacy.en)).toContain("The checkout reminder");
+  });
+});
+
+// Group cards ship switched off (lib/group/flag.ts). The terms and the privacy policy describe them,
+// and quote their price, only while they are on sale: legalDocs(true). Switched off they are the
+// documents they always were.
+describe("legal documents and group cards", () => {
+  const off = legalDocs(false);
+  const on = legalDocs(true);
+  const eur = (amount: number, locale: "en" | "es") => formatAmount(amount, "eur", locale);
+
+  it("switched off, neither document mentions a group card, and the pages' default is that", () => {
+    expect(LEGAL_DOCS).toEqual(off);
+    for (const kind of ["terms", "privacy"] as const) for (const locale of ["en", "es"] as const) expect(all(off[kind][locale])).not.toMatch(/group card|tarjetas? en grupo/i);
+  });
+
+  it("switched on, only adds: every paragraph that was there is still there, in the same section, and no section is renumbered", () => {
+    for (const kind of ["terms", "privacy"] as const)
+      for (const locale of ["en", "es"] as const) {
+        const before = off[kind][locale];
+        const after = on[kind][locale];
+        expect(after.sections.map((s) => s.heading)).toEqual(before.sections.map((s) => s.heading));
+        expect(after.intro).toBe(before.intro);
+        before.sections.forEach((section, i) => {
+          for (const paragraph of section.paragraphs) {
+            // Two sentences grow at their end (the price list, what the export holds); the rest are untouched.
+            const kept = after.sections[i].paragraphs.some((p) => p === paragraph || p.startsWith(paragraph.slice(0, -1)));
+            expect(kept, `${kind} ${locale} ${section.heading}: ${paragraph.slice(0, 50)}`).toBe(true);
+          }
+        });
+      }
+  });
+
+  it("says the same in English and Spanish, section by section", () => {
+    for (const kind of ["terms", "privacy"] as const) expect(on[kind].es.sections.map((s) => s.paragraphs.length)).toEqual(on[kind].en.sections.map((s) => s.paragraphs.length));
+  });
+
+  it("quotes the catalogue's price, and the step up as the difference from one template", () => {
+    const step = PRODUCTS.group.amounts.eur - PRODUCTS.single.amounts.eur;
+    const en = section(on.terms.en, 6);
+    expect(en).toContain(`; a group card ${eur(PRODUCTS.group.amounts.eur, "en")}`);
+    expect(en).toContain(`Unlocking group cards on one template costs ${eur(PRODUCTS.group.amounts.eur, "en")}`);
+    expect(en).toContain(`If you already have the template, you pay ${eur(step, "en")}`);
+    const es = section(on.terms.es, 6);
+    expect(es).toContain(`; una tarjeta en grupo, ${eur(PRODUCTS.group.amounts.eur, "es")}`);
+    expect(es).toContain(`Si ya tienes la plantilla, pagas ${eur(step, "es")}`);
+    // The step up is what checkout charges someone who holds the template (groupAmount), to the cent.
+    for (const currency of ["eur", "usd", "gbp"] as const) expect(groupAmount(currency, ["some-template"], "some-template")).toBe(PRODUCTS.group.amounts[currency] - PRODUCTS.single.amounts[currency]);
+  });
+
+  it("says who never pays, what it is not part of, and how many can sign", () => {
+    const en = section(on.terms.en, 6);
+    expect(en).toContain(`Up to ${CONTRIBUTION_LIMITS.max} people can add to one card.`);
+    expect(en).toContain("neither “Everything” nor Ethos for Two includes it");
+    expect(en).toContain("The people you invite never pay, and we never collect or hold money from them or for you.");
+    const es = section(on.terms.es, 6);
+    expect(es).toContain(`hasta ${CONTRIBUTION_LIMITS.max} personas`);
+    expect(es).toContain("ni «Todo» ni Ethos for Two la incluyen");
+    expect(es).toContain("Las personas a las que invitas no pagan nunca");
+  });
+
+  it("the sender chooses what goes in and answers for it, and a note can be reported where the screens say", () => {
+    expect(section(on.terms.en, 3)).toContain("you choose what goes in, and you answer for it");
+    expect(section(on.terms.es, 3)).toContain("tú eliges lo que entra y respondes de ello");
+    // The three links, by the words the screens use.
+    expect(section(on.terms.en, 13)).toContain("“Report a note”");
+    expect(section(on.terms.en, 13)).toContain("“Report this page”");
+    expect(section(on.terms.es, 13)).toContain("«Avisar de una nota»");
+    expect(section(on.terms.es, 13)).toContain("«Denunciar esta página»");
+  });
+
+  it("the privacy policy keeps the daily job's own numbers", () => {
+    const en = section(on.privacy.en, 11);
+    const es = section(on.privacy.es, 11);
+    expect(en).toContain(`after ${GROUP_RETENTION.undoHours} hours`);
+    expect(es).toContain(`a las ${GROUP_RETENTION.undoHours} horas`);
+    expect(GROUP_RETENTION.unconfirmedDays).toBe(7);
+    expect(en).toContain("never confirmed: seven days");
+    expect(es).toContain("sin confirmar: siete días");
+    // "Within 7 days" is what everyone who adds a note agreed to; the job, which runs once a day,
+    // deletes a day inside it so that the sentence holds at any hour.
+    expect(en).toContain(`within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent`);
+    expect(es).toContain(`en los ${GROUP_RETENTION.sentPromiseDays} días siguientes al envío de la tarjeta`);
+    expect(GROUP_RETENTION.afterSentDays).toBeLessThan(GROUP_RETENTION.sentPromiseDays);
+    // Counted from the day the link was due to close, which is what the job counts from, not from the day the sender closed it by hand.
+    expect(en).toContain(`${GROUP_RETENTION.afterClosedDays} days after the date its link was due to close, even if the person putting the card together closed it sooner`);
+    expect(es).toContain(`${GROUP_RETENTION.afterClosedDays} días después de la fecha en que su enlace debía cerrarse, aunque quien prepara la tarjeta lo cerrase antes`);
+    for (const text of [en, es]) expect(text).not.toMatch(/stops taking notes|deje de admitir notas/);
+  });
+
+  it("promises the finished card only to someone whose note is in it, and says how a note is taken back and when it can't be", () => {
+    const en = section(on.privacy.en, 1);
+    const es = section(on.privacy.es, 1);
+    expect(en).toContain("then, if your note is in the card, one email with the card's link once it is sent");
+    expect(en).toContain("If your note isn't in the card, no second email comes, and the address is deleted with the note.");
+    expect(es).toContain("después, si tu nota va en la tarjeta, un correo con su enlace cuando se envíe");
+    expect(es).toContain("Si tu nota no va en la tarjeta, no llega un segundo correo y la dirección se borra con la nota.");
+    // The key the page keeps is in the browser's storage (it outlives the tab), and the policy says so.
+    expect(en).toContain("that browser keeps a random key for each note you added, in its own storage for that page");
+    expect(en).toContain("If you have cleared the browser's storage, or once the card is sent, write to us with the card's link.");
+    expect(es).toContain("ese navegador guarda una clave aleatoria por cada nota que añadiste, en su propio almacenamiento para esa página");
+    expect(es).toContain("Si has borrado el almacenamiento del navegador, o una vez enviada la tarjeta, escríbenos con el enlace de la tarjeta.");
+  });
+
+  it("says what a contributor is asked for, that no IP address is kept, and that the address goes with its one email", () => {
+    const en = section(on.privacy.en, 1);
+    expect(en).toContain("You need no account.");
+    expect(en).toContain("We don't store your IP address with any of this.");
+    expect(en).toContain("we delete your address as that email goes");
+    expect(section(on.privacy.en, 13)).toContain("without anyone's email address");
+    expect(section(on.privacy.en, 14)).toContain("you must confirm that you are 16 or older");
+    const es = section(on.privacy.es, 1);
+    expect(es).toContain("No necesitas cuenta.");
+    expect(es).toContain("No guardamos tu dirección IP con nada de esto.");
+    expect(section(on.privacy.es, 14)).toContain("debes confirmar que tienes 16 años o más");
+  });
+
+  it("names no country or city the business isn't in, and promises nothing the filler list bans", () => {
+    for (const kind of ["terms", "privacy"] as const) for (const locale of ["en", "es"] as const) expect(all(on[kind][locale])).not.toMatch(/Spain|España|Madrid|unforgettable|inolvidable|perfect for/i);
   });
 });

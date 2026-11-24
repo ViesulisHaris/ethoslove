@@ -15,7 +15,7 @@ import { FreeNoteOption } from "./free-note-option";
 import { pickPaySheet, type PayArm } from "@/lib/editor/pay-sheet-split";
 import { canKeepPhotos, pickKeep, rememberLetterClick, type KeepArm } from "@/lib/editor/keep-split";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
-import { PRODUCTS, extrasAmount, formatAmount, photosUnlock } from "@/lib/pricing/products";
+import { PRODUCTS, extrasAmount, formatAmount, hasGroupUnlock, photosUnlock } from "@/lib/pricing/products";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { getManifest } from "@/templates/manifests";
@@ -33,13 +33,14 @@ import {
 } from "@/components/ui/sheet";
 import { AuthForm } from "@/components/auth/auth-form";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
-import { publishAsksForMoney, replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
+import { groupOnSheet, guestPaysOnSheet, publishAsksForMoney, replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
 import { fetchUpgradeQuote } from "@/components/pricing/upgrade-quote";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/config/site";
 import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
+import { GroupPayPanel } from "./group-pay-panel";
 import { ShareScreen } from "./share-screen";
 import { humanize } from "./template-fields";
 
@@ -53,6 +54,7 @@ export function PublishSheet({
   paymentsEnabled,
   resume = false,
   reaction = null,
+  groupEnabled = false,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -66,9 +68,16 @@ export function PublishSheet({
   paymentsEnabled: boolean;
   /** A real reaction (approved, its writer agreed: lib/proof) the pay panel may open with. */
   reaction?: ShownReaction | null;
+  /**
+   * Group cards are on (the editor's own prop, from the server). A group card's lines on this
+   * screen, and its pay panel, are drawn only with it: off, their words are not sent to the browser
+   * (src/i18n/client-namespaces.ts, GROUP_WORDS) and the product is not on sale.
+   */
+  groupEnabled?: boolean;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tCommon = useTranslations("common");
+  const tCheckout = useTranslations("money.checkoutErrors");
   const locale = useLocale() as GiftLocale;
   const state = useEditor();
   const search = useSearchParams();
@@ -222,11 +231,16 @@ export function PublishSheet({
   const decision =
     entitlement && serialized
       ? withOldGiftRule(
-          decidePublish(manifest, serialized, { unlocked: entitlement.unlocked, photos: photosOwned }, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }),
+          decidePublish(manifest, serialized, { unlocked: entitlement.unlocked, photos: photosOwned, group: hasGroupUnlock(ownedRows, slug) }, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }),
           addsToOldGift,
           entitlement.unlocked,
         )
       : null;
+  // A group card (a gift carrying notes on a template made for them) that the account hasn't paid
+  // for yet: the send screen shows the group card's own price instead of the usual panel.
+  const needsGroup = Boolean(decision && !decision.ok && decision.reason === "payment_required" && decision.needs === "group");
+  // The template's own rules for a group's notes, for the checklist; none while group cards are off.
+  const groupRules = groupEnabled ? manifest.features.group : undefined;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -358,6 +372,8 @@ export function PublishSheet({
       setRefusedFields([...new Set(refused.map((path) => path.split(".")[1]).filter(Boolean))]);
       return;
     }
+    // Notes left out of a group card because they were taken back since this editor last looked: out of its copy too.
+    for (const key of result.data.takenBack ?? []) useEditor.getState().removeContribution(key);
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
     // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
@@ -428,7 +444,13 @@ export function PublishSheet({
     addsToOldGift ||
     (serialized ? premiumExtras(serialized, { note, photosOwned }).length > 0 : false);
 
-  const guestCanPay = wouldNeedPayment && paymentsEnabled;
+  // A draft that holds a group's notes, on a template made for them: signed out, it gets the sign-in
+  // step and never the guest pay panel, whose prices don't send it (components/pricing/offers.ts).
+  // Whether group cards are on or off: the server asks for the group card's own unlock either way.
+  const groupDraft = Boolean(manifest.features.group && (serialized?.contributions?.length ?? 0) > 0);
+  const guestCanPay = guestPaysOnSheet({ wouldNeedPayment, paymentsEnabled, groupDraft });
+  // Which of a group card's own parts this screen draws: none of them while group cards are off.
+  const groupShown = groupOnSheet({ groupEnabled, groupDraft, needsGroup });
   // The "keep" version: the note with and without their photos, the extra row among the options,
   // and what the step that takes the photos out offers.
   const compareOffer =
@@ -544,6 +566,12 @@ export function PublishSheet({
                         : t(`problems.${key}`, { min: manifest.features.photos.min });
                     return <ChecklistItem key={key} bad={bad} spinning={key === "uploadsPending" && !stuck} label={label} />;
                   })}
+                {/* A group card: the template's own number of notes, and anything about them that stops it going out. */}
+                {groupRules
+                  ? (["contributionsMin", "contributionsMax", "contributionNote"] as const)
+                      .filter((key) => problems.includes(key) || (key === "contributionsMin" && groupRules.min > 0))
+                      .map((key) => <ChecklistItem key={key} bad={problems.includes(key)} label={t(`problems.${key}`, { min: groupRules.min, max: key === "contributionNote" ? groupRules.noteMax : groupRules.max })} />)
+                  : null}
               </ul>
               {state.authed && showStuck ? (
                 <div className="mt-3 rounded-2xl border border-coral/40 bg-coral/5 p-3" role="alert" data-testid="failed-uploads">
@@ -612,21 +640,33 @@ export function PublishSheet({
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
             {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
-              <section className="mt-7 rounded-xl border border-line bg-card p-5">
+              <section className="mt-7 rounded-xl border border-line bg-card p-5" data-testid="publish-sign-in">
                 <p className="font-display text-xl">{t("signInTitle")}</p>
                 <p className="mt-1 mb-4 text-sm text-muted-foreground">
-                  {wouldNeedPayment && paymentsEnabled
-                    ? t("signInBlurbPaid", { price: priceHint })
-                    : freeReply
-                      ? t("signInBlurbFreeReply")
-                      : t("signInBlurb")}
+                  {groupShown.signIn === "group"
+                    ? t("signInBlurbGroup")
+                    : groupShown.signIn === "plain"
+                      ? t("signInBlurb")
+                      : wouldNeedPayment && paymentsEnabled
+                        ? t("signInBlurbPaid", { price: priceHint })
+                        : freeReply
+                          ? t("signInBlurbFreeReply")
+                          : t("signInBlurb")}
                 </p>
                 {/* The card has its own title and blurb: no second "Welcome back" to a first-time guest (walk-make-8). */}
                 <AuthForm mode="login" next={next} compact bare />
               </section>
             ) : null}
 
-            {state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+            {state.authed && groupShown.pay === "panel" ? (
+              <GroupPayPanel manifest={manifest} currency={currency} locale={locale} ownedRows={ownedRows} returnTo={next} paymentsEnabled={paymentsEnabled} inApp={inApp} />
+            ) : state.authed && groupShown.pay === "not_on_sale" ? (
+              // A draft that holds a group's notes, opened while group cards are off: there is nothing
+              // to buy, so no price and no button, only what checkout itself would answer.
+              <Notice tone="info" className="mt-7" data-testid="group-not-on-sale">
+                {tCheckout("notOnSale")}
+              </Notice>
+            ) : state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
               paymentsEnabled || inApp ? (
                 <Paywall
                   manifest={manifest}
@@ -656,7 +696,7 @@ export function PublishSheet({
                 </Notice>
               )
             ) : null}
-            {noteOffer && noteFree && state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+            {noteOffer && noteFree && state.authed && !needsGroup && decision && !decision.ok && decision.reason === "payment_required" ? (
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
 
@@ -706,7 +746,7 @@ export function PublishSheet({
                     : t("publishNow")}
               </span>
             </Button>
-            {asksForMoney ? (
+            {asksForMoney && groupShown.pay !== "not_on_sale" ? (
               <p className="mt-3 text-center text-xs text-muted-foreground" data-testid="no-subscription">
                 {tCommon("noSubscription")}
               </p>
@@ -748,13 +788,16 @@ function Notice({
   tone,
   className,
   children,
+  "data-testid": testId,
 }: {
   tone: "warn" | "info";
   className?: string;
   children: React.ReactNode;
+  "data-testid"?: string;
 }) {
   return (
     <div
+      data-testid={testId}
       className={cn(
         "rounded-xl border p-3.5 text-sm",
         tone === "warn"

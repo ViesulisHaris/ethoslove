@@ -395,6 +395,7 @@ class Fake {
 const MOST_SECONDS: Record<keyof typeof EFFECTS, number> = {
   thunder: 5, creak: 1.6, scrape: 1.4, tink: 1.5, whoosh: 1.7, flutter: 2, bubbles: 0.9, splash: 1.4, boil: 3, cork: 0.5, sparkle: 2, glow: 2.6, ignite: 2, carve: 1.3, thunk: 1.4, chime: 4, knock: 0.9,
   flap: 0.8, rattle: 0.5, jingle: 1.6, scribble: 0.9, stamp: 0.6, rustle: 1.6, snap: 0.4, crackle: 0.9, tear: 1,
+  hatch: 1.1, envelope: 0.7, ting: 2,
 };
 /** How each is played by the gifts that play it with a timing. */
 const ARGS: Partial<Record<keyof typeof EFFECTS, unknown[]>> = {
@@ -414,6 +415,10 @@ const ARGS: Partial<Record<keyof typeof EFFECTS, unknown[]>> = {
   rustle: [{ ms: 1200 }],
   crackle: [{ ms: 600, strain: 1 }],
   tear: [320],
+  // as the Advent Calendar plays them: quiet, because twenty-four doors are opened one after another
+  hatch: [0.33],
+  envelope: [0.35],
+  ting: [2, 0.3],
 };
 
 describe("every night sound, built against a recording stand-in", () => {

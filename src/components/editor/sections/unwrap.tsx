@@ -21,14 +21,26 @@ import type { TemplateManifest } from "@/templates/types";
 import { Field, SectionHeader } from "../field";
 
 /**
+ * The lines a group card says its own way; the rest are the same for everyone. ("included" too: the Spanish badge agrees
+ * with the section's noun, "Incluido" with "Un regalo", "Incluida" with "Una sorpresa".)
+ */
+const GROUP_KEYS: ReadonlySet<string> = new Set(["addPlan", "addPlanHelp", "noPlan", "planLink", "addTripHelp", "included"]);
+
+/**
  * "A surprise inside" (GiftData.unwrap): a planned date or a trip, wrapped as a present at the end
  * of the gift. Usually it arrives already attached ("Wrap it in a gift" on /plan or a trip's page);
  * here it can be seen, dated, taken off, or added from the plan this browser keeps or one of the
  * preset trips. Included with a premium template; "Make it special" on the two free ones.
+ *
+ * `groupCard`: a group card (group cards on, and a template made for them). It is from the whole office or the whole
+ * family, and "Plan a date" and "trips for two" talked to a couple: its own words (editor.group.unwrap, in GROUP_WORDS, so
+ * sent only when group cards are on) say the same things to a group. What it can carry is the same.
  */
-export function UnwrapSection({ manifest }: { manifest: TemplateManifest }) {
-  const t = useTranslations("editor.unwrap");
-  const tS = useTranslations("editor.sections.unwrap");
+export function UnwrapSection({ manifest, groupCard = false }: { manifest: TemplateManifest; groupCard?: boolean }) {
+  const tE = useTranslations("editor");
+  const t = (key: "addPlan" | "addPlanHelp" | "noPlan" | "planLink" | "addTripHelp" | "included" | "special" | "pickTrip" | "cancel" | "wrapping" | "addTrip" | "specialNote") =>
+    groupCard && GROUP_KEYS.has(key) ? tE(`group.unwrap.${key}`) : tE(`unwrap.${key}`);
+  const tS = (key: "n" | "title" | "blurb") => (groupCard && key !== "n" ? tE(`group.unwrap.${key}`) : tE(`sections.unwrap.${key}`));
   const ui = useLocale() === "es" ? "es" : "en";
   const unwrap = useEditor((s) => s.data.unwrap);
   const giftLocale = useEditor((s) => s.data.locale);
@@ -93,7 +105,7 @@ export function UnwrapSection({ manifest }: { manifest: TemplateManifest }) {
       <SectionHeader n={tS("n")} title={tS("title")} blurb={tS("blurb")} badge={badge} />
 
       {unwrap ? (
-        <Attached unwrap={unwrap} locale={ui} onChange={(next) => patch({ unwrap: next })} onRemove={() => patch({ unwrap: undefined })} />
+        <Attached unwrap={unwrap} locale={ui} groupCard={groupCard} onChange={(next) => patch({ unwrap: next })} onRemove={() => patch({ unwrap: undefined })} />
       ) : trips ? (
         <div className="rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center justify-between gap-3 px-1 pb-3">
@@ -167,8 +179,9 @@ function withDay<K extends "date" | "depart" | "back">(unwrap: GiftUnwrap, key: 
 /** A trip's two days from the range picker, each set or cleared as the date inputs did it. */
 const withTripDays = (unwrap: GiftUnwrap, range: DateRange): GiftUnwrap => withDay(withDay(unwrap, "depart", range.start), "back", range.end);
 
-function Attached({ unwrap, locale, onChange, onRemove }: { unwrap: GiftUnwrap; locale: GiftLocale; onChange: (next: GiftUnwrap) => void; onRemove: () => void }) {
+function Attached({ unwrap, locale, groupCard, onChange, onRemove }: { unwrap: GiftUnwrap; locale: GiftLocale; groupCard: boolean; onChange: (next: GiftUnwrap) => void; onRemove: () => void }) {
   const t = useTranslations("editor.unwrap");
+  const tE = useTranslations("editor");
   const tp = useTranslations("pickers");
   const today = useToday();
   const card = useRef<HTMLDivElement>(null);
@@ -199,7 +212,7 @@ function Attached({ unwrap, locale, onChange, onRemove }: { unwrap: GiftUnwrap; 
   const picture = unwrap.image ?? unwrap.stops.find((s) => s.image)?.image ?? art?.src ?? null;
   const trip = unwrap.kind === "trip" ? unwrap.trip : undefined;
   const nights = trip ? tripNights(trip) : null;
-  const facts = [unwrap.kind === "trip" ? t("trip") : t("date"), unwrap.stops.length > 0 ? t("stops", { count: unwrap.stops.length }) : null, nights ? t("nights", { count: nights }) : null].filter(Boolean).join(" · ");
+  const facts = [unwrap.kind === "trip" ? t("trip") : groupCard ? tE("group.unwrap.date") : t("date"), unwrap.stops.length > 0 ? t("stops", { count: unwrap.stops.length }) : null, nights ? t("nights", { count: nights }) : null].filter(Boolean).join(" · ");
   const day = unwrap.kind === "date" ? (unwrapDay(unwrap, locale) ?? t("noDay")) : trip ? `${trip.from ? `${trip.from} → ` : ""}${trip.to}` : null;
 
   return (

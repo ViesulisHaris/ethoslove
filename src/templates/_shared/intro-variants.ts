@@ -110,6 +110,7 @@ const BY_SLUG: Record<string, IntroVariant> = {
   "frosted-window": "starlight",
   unwrapped: "paper",
   "nice-list": "paper",
+  "advent-calendar": "starlight",
 };
 
 export function introVariantFor(slug: string, manifest?: TemplateManifest): IntroVariant {
