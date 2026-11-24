@@ -158,12 +158,7 @@ export function ShareScreen({
         </div>
       ) : null}
 
-      <section className="mt-8">
-        <p className="font-display text-xl">{t("qrTitle")}</p>
-        <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
-        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} onDesignChange={onDesignChange} />
-      </section>
-      {/* The paid bonus the Christmas e-mail sells, under the code it prints: the design chosen above travels with it. */}
+      {/* The paid bonus the Christmas e-mail sells, just above the QR card: in reach on a phone (below the designer it sat four screens down), and the design chosen below travels with it. */}
       {treeTag && giftId ? (
         <TreeTagRow
           href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
@@ -173,6 +168,11 @@ export function ShareScreen({
         />
       ) : null}
 
+      <section className="mt-8">
+        <p className="font-display text-xl">{t("qrTitle")}</p>
+        <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
+        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} onDesignChange={onDesignChange} />
+      </section>
       {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}
       <div className="mt-8 flex flex-col gap-2" data-app-hide>
         <Button asChild variant="outline" className="h-11 rounded-full">
