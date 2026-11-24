@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { devices, expect, test, type Page } from "@playwright/test";
 
 /**
  * Two more gifts on the share screen ("Nobody likes to be forgotten."), on the development page
@@ -28,7 +28,8 @@ async function open(page: Page, path: string, setup: Setup = {}) {
   });
   const base = new URL(test.info().project.use.baseURL ?? "http://localhost:3000");
   await page.context().addCookies([{ name: "sb-placeholder-auth-token", value: "x", domain: base.hostname, path: "/" }]);
-  if (setup.wallet) await page.addInitScript(() => Object.assign(window, { ApplePaySession: { canMakePayments: () => true } }));
+  // Defined, not assigned: WebKit has an ApplePaySession of its own, which an assignment may not replace.
+  if (setup.wallet) await page.addInitScript(() => Object.defineProperty(window, "ApplePaySession", { value: { canMakePayments: () => true }, configurable: true, writable: true }));
   await page.route("**/js.stripe.com/**", async (route) => {
     // Stripe.js never loads here; held a while first when a test wants to see the wait.
     if (setup.stripeDelayMs) await new Promise((r) => setTimeout(r, setup.stripeDelayMs));
@@ -84,6 +85,44 @@ test.describe("two more gifts under the link", () => {
     await expect(page.getByText("Too many tries. Wait a minute and try again.")).toBeVisible();
     await expect(add).toBeEnabled();
     expect(errors.filter((e) => !/Failed to load resource|ERR_FAILED|stripe/i.test(e))).toEqual([]);
+  });
+
+  test("the pay control is on the first screen of an iPhone 13 in WebKit (664 px seen), in English and Spanish, with a wallet and without", async ({ playwright, baseURL }, info) => {
+    test.skip(info.project.name !== "desktop-chrome", "WebKit is launched here by hand: once is enough");
+    test.setTimeout(120_000);
+    const browser = await playwright.webkit.launch();
+    try {
+      for (const locale of ["en", "es"] as const)
+        for (const wallet of [false, true]) {
+          const context = await browser.newContext({
+            ...devices["iPhone 13"],
+            baseURL,
+            storageState: { cookies: [], origins: [{ origin: new URL(baseURL!).origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] },
+          });
+          const page = await context.newPage();
+          await open(page, `${locale === "es" ? "/es" : ""}/share-preview`, { wallet, stripeDelayMs: 7000 });
+          // With a wallet: its pill, or the card button in the same place once four seconds have gone by
+          // (a slow first load of the page in WebKit can take that long).
+          const control = wallet ? page.getByTestId("pair-wallet").or(page.getByTestId("pair-add")).first() : page.getByTestId("pair-add");
+          await expect(control).toBeVisible();
+          if (wallet) await expect(page.getByTestId("pair-by-card").or(page.getByTestId("pair-add"))).toHaveCount(1);
+          await page.evaluate(() => document.fonts.ready);
+          const seen = await page.evaluate(() => ({ height: window.innerHeight, scrolled: window.scrollY }));
+          expect(seen).toEqual({ height: 664, scrolled: 0 });
+          const box = (await control.boundingBox())!;
+          expect(box.height).toBe(48);
+          expect(box.y + box.height, `${locale} ${wallet ? "wallet" : "card"}`).toBeLessThanOrEqual(seen.height);
+          // The day rows are one line each where they fit ("Christmas · 25 December"); the "next" line is still read aloud.
+          await expect(page.getByTestId("pair-offer")).toContainText(locale === "es" ? "Hoy te has acordado. Lo próximo:" : "You remembered today. Next up:");
+          await expect(page.getByTestId("pair-offer").getByText(locale === "es" ? "Hoy te has acordado. Lo próximo:" : "You remembered today. Next up:")).toHaveCSS("position", "absolute");
+          const row = (await page.getByTestId("pair-days").locator("li").first().boundingBox())!;
+          expect(row.height).toBeLessThanOrEqual(42);
+          expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+          await context.close();
+        }
+    } finally {
+      await browser.close();
+    }
   });
 
   test("nothing moves when the saved days answer", async ({ page }) => {
@@ -298,8 +337,23 @@ test.describe("two more gifts under the link", () => {
     expect(hit).toBeGreaterThanOrEqual(44);
   });
 
-  test("on a 320 px phone the day rows keep the name on one line and the distance goes under the date", async ({ page }) => {
+  test("on a short 320 px phone (640 px) the name and date share a line, the distance goes under them, and nothing leaves the screen", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
+    await open(page, "/es/share-preview");
+    const row = page.getByTestId("pair-days").locator("li").nth(1);
+    const name = (await row.getByText("San Valentín", { exact: true }).boundingBox())!;
+    const date = (await row.getByText("14 de febrero", { exact: true }).boundingBox())!;
+    const away = (await row.getByText(/^en \d+ semanas$/).boundingBox())!;
+    expect(name.height).toBeLessThan(22);
+    expect(date.x).toBeGreaterThan(name.x + name.width - 1);
+    expect(Math.abs(date.y - name.y)).toBeLessThan(4);
+    expect(away.y).toBeGreaterThan(name.y + name.height - 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  });
+
+  test("on a 320 px phone the day rows keep the name on one line and the distance goes under the date", async ({ page }) => {
+    // Tall enough not to be a short screen: there the rows are one line each (the test above).
+    await page.setViewportSize({ width: 320, height: 800 });
     await open(page, "/es/share-preview");
     const row = page.getByTestId("pair-days").locator("li").nth(1);
     await expect(row).toContainText("San Valentín");

@@ -74,12 +74,13 @@ function useDayName(name: string) {
   return (day: Pick<NextDay, "kind" | "name">) => dayName(day, t, r, name);
 }
 
-function Days({ days, name }: { days: NextDay[]; name: string }) {
+function Days({ days, name, short = false }: { days: NextDay[]; name: string; short?: boolean }) {
   const t = useTranslations("editor.share.pair");
   const locale = useLocale() === "es" ? "es" : "en";
   const named = useDayName(name);
   return (
     <DayRows
+      short={short}
       rows={days.map((d) => ({ key: `${d.kind}-${d.month}-${d.day}-${d.name ?? ""}`, icon: occasionIcon(d.kind), name: named(d), date: formatMonthDay(d, locale), away: dayAway(d.daysAway, t) }))}
     />
   );
@@ -210,10 +211,14 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   const paying = pay === "paying";
 
   return (
-    <section ref={cardRef} className="mt-7 rounded-2xl border border-ink bg-card p-5" data-testid="pair-offer">
+    // On a short screen (max-height 760 px: an iPhone 13 shows 664 px) the rows are one line each and
+    // the "next" line is left to screen readers, so the pay control is on the first screen. Spanish
+    // ("San Valentín · 14 de febrero" takes two lines at 390 px) still missed by 2 px: the card's top
+    // margin is 20 px there, not 28.
+    <section ref={cardRef} className="mt-7 rounded-2xl [@media(max-height:760px)]:mt-5 border border-ink bg-card p-5" data-testid="pair-offer">
       <h3 className="font-display text-2xl leading-tight text-balance text-ink">{t("title")}</h3>
-      <p className="mt-1.5 text-[15px] text-ink-soft">{t("next")}</p>
-      <Days days={days} name={name} />
+      <p className="mt-1.5 text-[15px] text-ink-soft [@media(max-height:760px)]:sr-only">{t("next")}</p>
+      <Days days={days} name={name} short />
 
       <div className="mt-4 flex items-end justify-between gap-4">
         <div>
@@ -224,16 +229,6 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
           {price}
         </p>
       </div>
-
-      <ul className="mt-4 space-y-2">
-        {/* The 30-day refund is said once, in the foot beside Terms. */}
-        {(["tickAny", "tickMidnight"] as const).map((key) => (
-          <li key={key} className="flex items-start gap-2.5 text-sm text-ink">
-            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
-            <span className="text-pretty">{t(key)}</span>
-          </li>
-        ))}
-      </ul>
 
       {pay === "declined" ? (
         <p role="alert" className="mt-5 flex items-start gap-2.5 rounded-xl border border-coral/40 bg-coral/10 p-3.5 text-[15px] text-ink" data-testid="pair-declined">
@@ -284,8 +279,19 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         )}
       </div>
 
+      {/* Under the pay control, so it is on the first screen of a short phone. */}
+      <ul className="mt-4 space-y-2">
+        {/* The 30-day refund is said once, in the foot beside Terms. */}
+        {(["tickAny", "tickMidnight"] as const).map((key) => (
+          <li key={key} className="flex items-start gap-2.5 text-sm text-ink">
+            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
+            <span className="text-pretty">{t(key)}</span>
+          </li>
+        ))}
+      </ul>
+
       <p
-        className={cn("text-center text-[13px] text-pretty text-muted-foreground", wallet !== null ? "mt-2" : "mt-4")}
+        className="mt-4 text-center text-[13px] text-pretty text-muted-foreground"
         data-testid="pair-foot"
       >
         {t("foot")} {t("notice")}{" "}
