@@ -1,0 +1,3 @@
+# The HEIC decoder is vendored byte for byte (scripts/heic-worker.mjs, tests/unit/heic-worker.test.ts):
+# a Windows checkout with core.autocrlf must not turn its line ends into CRLF.
+public/workers/*.js text eol=lf
