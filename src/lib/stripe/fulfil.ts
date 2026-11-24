@@ -26,7 +26,7 @@ import { notifyReceipt, notifyWelcome, sendGiftCardEmail, sendMembershipWelcome,
 import { iso, inviteUrl, localePath, redeemUrl, siteOrigin, type Locale } from "@/lib/commerce/db";
 import { upgradeOffer } from "@/lib/commerce/entitlements";
 import { deleteGiftCardDetails, giftCardDetails, issueGiftCard } from "@/lib/commerce/gift-cards";
-import { grantGifts } from "@/lib/commerce/gift-credits";
+import { grantGifts, settlePairSessions } from "@/lib/commerce/gift-credits";
 import { spendPersonalPrice } from "@/lib/commerce/personal-price";
 import { startSubscriptionMembership } from "@/lib/commerce/memberships";
 import { startPass } from "@/lib/commerce/passes";
@@ -277,6 +277,10 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
     // Keyed by (purchase, n): the webhook and the success page both run this, and two rows stay two.
     const granted = await grantGifts(admin, userId, sold.purchaseId, PAIR_GIFTS);
     if (granted.error) return { ok: false, reason: granted.error };
+    // Paid: any other checkout for two more gifts still open on the account (the card's wallet
+    // session beside Stripe's page, another currency) is closed, so it can't be paid as well.
+    const stripe = getStripe();
+    if (stripe) await settlePairSessions(stripe, admin, userId, now).catch((e) => console.error("[pair] open sessions not closed", e instanceof Error ? e.message : e));
     unlockNames = [lines.pair];
   } else {
     const granted = await grantForever(admin, userId, rows, sold.purchaseId);

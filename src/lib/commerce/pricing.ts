@@ -14,7 +14,9 @@ export function creditIn(amount: number, from: string, to: Currency): number {
 
 /**
  * What counts towards "upgrade to Everything for the difference". What two more gifts cost counts
- * too, as a Pick three's does: they are two of the gifts Everything would have covered.
+ * too, as a Pick three's does: they are two of the gifts Everything would have covered. A pair
+ * partly refunded stays paid with its amount lowered to what was kept (lib/stripe/events.ts
+ * onRefund), so only that counts.
  */
 export const UPGRADE_CREDITED = ["single", "pick3", "extras", "photos", "pair"] as const;
 

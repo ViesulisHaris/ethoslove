@@ -317,10 +317,10 @@ describe("the Checkout Session for two more gifts", () => {
   it("is one line at its price, described in the buyer's language", () => {
     const en = sessionParams(plan({ product: "pair" }, buyer), signedIn);
     expect(en.line_items).toEqual([
-      { quantity: 1, price_data: { currency: "eur", unit_amount: 500, tax_behavior: "inclusive", product_data: { name: "Ethos: two more gifts", tax_code: TAX_CODE, description: "Two gifts, any you like, whenever you like" } } },
+      { quantity: 1, price_data: { currency: "eur", unit_amount: 799, tax_behavior: "inclusive", product_data: { name: "Ethos: two more gifts", tax_code: TAX_CODE, description: "Two gifts, any you like, whenever you like" } } },
     ]);
     const es = sessionParams(plan({ product: "pair", currency: "usd" }, buyer), { ...signedIn, locale: "es" });
-    expect(es.line_items?.[0].price_data).toMatchObject({ currency: "usd", unit_amount: 600, product_data: { name: "Ethos: dos regalos más", description: "Dos regalos, los que quieras, cuando quieras" } });
+    expect(es.line_items?.[0].price_data).toMatchObject({ currency: "usd", unit_amount: 899, product_data: { name: "Ethos: dos regalos más", description: "Dos regalos, los que quieras, cuando quieras" } });
   });
 
   it("carries Ethos's metadata and no customer, no saved card (R10)", () => {

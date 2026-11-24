@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import dynamic from "next/dynamic";
 import { Car, Check, Copy, ExternalLink, MessageCircle, Plane, Share2, Star, Ticket } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -18,10 +17,15 @@ import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
-import type { PairPreviewState } from "./two-more-gifts";
+import type { PairOnShare, PairPreviewState, TwoMoreGifts } from "./two-more-gifts";
+import { UsedGiftLine } from "./pair-used";
 
-// Two more gifts: loaded after the link is on screen, in the browser only, so none of it weighs on the editor.
-const TwoMoreGifts = dynamic(() => import("./two-more-gifts").then((m) => m.TwoMoreGifts), { ssr: false });
+/**
+ * Two more gifts under the link: the card's own code (imported by the publish sheet while it is open,
+ * so none of it weighs on the editor) and what it draws from, both in hand before this screen's first
+ * frame. Absent: no card, and nothing reserved for one.
+ */
+export type ShareScreenPair = PairOnShare & { Card: typeof TwoMoreGifts };
 
 export function ShareScreen({
   shortId,
@@ -30,6 +34,8 @@ export function ShareScreen({
   data,
   giftId,
   usedGift = false,
+  usedLeft = 0,
+  pair,
   pairPreview,
 }: {
   shortId: string;
@@ -39,6 +45,9 @@ export function ShareScreen({
   giftId: string | null;
   /** This gift went out on a gift ready (two more gifts): the card under the link says so. */
   usedGift?: boolean;
+  /** With `usedGift`: gifts ready left after this one. */
+  usedLeft?: number;
+  pair?: ShareScreenPair | null;
   /** Development page only: the state the two more gifts card opens in. */
   pairPreview?: PairPreviewState;
 }) {
@@ -107,9 +116,14 @@ export function ShareScreen({
       </p>
 
       {/* Under the link, never in its way; not for an Etsy buyer, nor inside the iPhone app (the App Store sells there). */}
-      {authed && !etsy ? (
+      {/* A gift sent on a gift ready says so without waiting for the card's own code to load. */}
+      {authed && !etsy && usedGift ? (
         <div data-app-hide>
-          <TwoMoreGifts data={data} usedGift={usedGift} preview={pairPreview} />
+          <UsedGiftLine data={data} left={usedLeft} saved={pair?.saved} />
+        </div>
+      ) : authed && !etsy && pair ? (
+        <div data-app-hide>
+          <pair.Card data={data} ent={pair.ent} afterPayment={pair.afterPayment} left={pair.left} saved={pair.saved} preview={pairPreview} />
         </div>
       ) : null}
 

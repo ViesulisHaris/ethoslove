@@ -50,6 +50,17 @@ describe("legal documents", () => {
     expect(es).toContain(pair.es);
   });
 
+  // Two more gifts paid with Apple Pay or Google Pay on our page tick nothing: a used one can't be
+  // said to be beyond cancelling for them, in section 6 or 9.
+  it("keep the 14 days for two more gifts bought with the wallet, even once used", () => {
+    const en = all(LEGAL_DOCS.terms.en);
+    const es = all(LEGAL_DOCS.terms.es);
+    expect(en).toContain("Bought with Apple Pay or Google Pay on our page, there is no box to tick, so you keep the 14-day right to withdraw in section 9 even for a gift you have used");
+    expect(withdrawal(LEGAL_DOCS.terms.en)).toContain("you keep the 14-day right to withdraw, even for a gift you have used");
+    expect(es).toContain("conservas el derecho de desistimiento de 14 días de la sección 9 aunque ya hayas usado un regalo");
+    expect(withdrawal(LEGAL_DOCS.terms.es)).toContain("conservas el derecho de desistimiento de 14 días, aunque ya hayas usado un regalo");
+  });
+
   it("pay creators the programme's own numbers", () => {
     expect(all(LEGAL_DOCS.terms.en)).toContain(`${CREATOR_COMMISSION_PCT}% of what we receive`);
     expect(all(LEGAL_DOCS.terms.en)).toContain(`passes €${CREATOR_PAYOUT_MIN_EUR}`);

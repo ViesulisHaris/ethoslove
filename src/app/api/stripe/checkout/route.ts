@@ -18,7 +18,7 @@ import { siteOrigin } from "@/lib/commerce/db";
 import { readBuyer } from "@/lib/commerce/buyer";
 import { creditedCreator } from "@/lib/commerce/creators";
 import { saveGiftCardDetails } from "@/lib/commerce/gift-cards";
-import { readyGifts } from "@/lib/commerce/gift-credits";
+import { readyGifts, settlePairSessions } from "@/lib/commerce/gift-credits";
 import { planCheckout } from "@/lib/commerce/plan";
 import { PERSONAL_PRICE_COOKIE, activePersonalPrice } from "@/lib/commerce/personal-price";
 
@@ -136,10 +136,11 @@ export async function POST(request: NextRequest) {
   if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product) || plan.pair)) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   // Two more gifts have no box to tick: the 30-day line beside their wallet button is a notice (lib/stripe/line-items.ts).
   if (body.oneTap && !body.waiver && plan.product !== "pair") return NextResponse.json({ error: "consent_required" }, { status: 400 });
-  // The offer card asks for a wallet session each time it comes into view: one still open for the
-  // same price is answered again instead of a new purchase row each time.
+  // The offer card asks for a wallet session each time it comes into view: one still open of the same
+  // kind and price is answered again instead of a new purchase row each time, and every other open
+  // one is closed first, so only one checkout for two more gifts can ever be paid.
   if (plan.product === "pair" && user) {
-    const open = await openPairSession(stripe, admin, user.id, plan.total, currency, Boolean(body.oneTap), now);
+    const open = await settlePairSessions(stripe, admin, user.id, now, { amount: plan.total, currency, oneTap: Boolean(body.oneTap) });
     if (open) return NextResponse.json(body.oneTap ? { clientSecret: open.client_secret, sessionId: open.id } : { url: open.url });
   }
 
@@ -209,38 +210,13 @@ export async function POST(request: NextRequest) {
   }
   if (user) await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
   // Where the buyer came from, stored once the buyer has their answer: it can't slow or fail checkout.
-  const source = checkoutSourceRow(purchaseId, body.source, metadataRef(body.ref), now);
+  // Not for the wallet session two more gifts make when their card is only seen: nobody has tapped
+  // anything yet, and counting it as a checkout started would lower the checkout-to-paid rate
+  // (/api/internal/sales, docs/marketing/META-ADS.md). "Pay by card instead" is a tap, and counts.
+  const seenNotTapped = plan.product === "pair" && Boolean(body.oneTap);
+  const source = seenNotTapped ? null : checkoutSourceRow(purchaseId, body.source, metadataRef(body.ref), now);
   if (source) after(() => saveCheckoutSource(admin, source));
   if (body.oneTap) return NextResponse.json(plan.product === "pair" ? { clientSecret: session.client_secret, sessionId: session.id } : { clientSecret: session.client_secret });
   return NextResponse.json({ url: session.url });
 }
 
-/** How long an open checkout for two more gifts is gone back to rather than replaced. */
-const PAIR_REUSE_MS = 12 * 60 * 60 * 1000;
-
-/**
- * The buyer's newest checkout for two more gifts that is still open at this price and of the same
- * kind (a wallet session, or Stripe's page), made in the last 12 hours: null when there is none.
- * As openUpgradeCheckout does for the upgrade (lib/commerce/after-checkout.ts), so a card that asks
- * for a session each time it is seen doesn't pile up purchase rows, and only one can be paid.
- */
-async function openPairSession(stripe: Stripe, admin: NonNullable<ReturnType<typeof getSupabaseAdminClient>>, userId: string, amount: number, currency: Currency, oneTap: boolean, now: number): Promise<Stripe.Checkout.Session | null> {
-  const { data } = await admin
-    .from("purchases")
-    .select("stripe_session_id, amount, currency, created_at")
-    .eq("user_id", userId)
-    .eq("product", "pair")
-    .eq("status", "pending")
-    .gte("created_at", new Date(now - PAIR_REUSE_MS).toISOString())
-    .order("created_at", { ascending: false })
-    .limit(3);
-  for (const row of data ?? []) {
-    if (!row.stripe_session_id || row.amount !== amount || row.currency !== currency) continue;
-    const session = await stripe.checkout.sessions.retrieve(row.stripe_session_id).catch(() => null);
-    if (session?.status !== "open") continue;
-    const elements = String(session.ui_mode) === "elements";
-    if (elements !== oneTap) continue;
-    if (oneTap ? session.client_secret : session.url) return session;
-  }
-  return null;
-}

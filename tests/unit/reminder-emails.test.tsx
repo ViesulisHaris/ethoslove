@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@react-email/render";
+import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
 
 /**
  * The three e-mails before a saved day (PLAN-remind 3), rendered to HTML and read as text, and the one
@@ -37,6 +38,11 @@ const text = (html: string) =>
 
 const idea = { name: "Museum", tagline: "A tagline.", url: "https://ethos.test/create/museum?ref=email-reminder", poster: "https://ethos.test/p.jpg" };
 const links = { openUrl: "https://ethos.test/api/reminders/open?t=o&s=1&l=en", moreUrl: "https://ethos.test/api/reminders/open?t=o&s=1&l=en&to=templates", skipUrl: "https://ethos.test/api/reminders/skip?t=s&l=en", removeUrl: "https://ethos.test/api/reminders/remove?t=r&l=en" };
+/** A single, and a single with the next two (the pair), in euros: the catalogue's, never typed. */
+const ONE = PRODUCTS.single.amounts.eur;
+const THREE = ONE + PRODUCTS.pair.amounts.eur;
+// As `text` reads it: the no-break space Intl puts before "€" in Spanish is a plain one there.
+const eur = (minor: number, locale: "en" | "es") => formatAmount(minor, "eur", locale).replace(/\s/g, " ");
 const WHEN = { 1: { en: "next Friday", es: "el viernes que viene" }, 2: { en: "this Friday", es: "este viernes" }, 3: { en: "tomorrow", es: "mañana" } } as const;
 
 async function staged(stage: 1 | 2 | 3, occasion: Occasion, locale: "en" | "es", over: Record<string, unknown> = {}) {
@@ -142,10 +148,10 @@ describe("the three e-mails' headings, subjects and bodies", () => {
   it("puts one quiet line under the button: a gift ready, the prices, or nothing", async () => {
     expect((await staged(2, "birthday", "en", { paid: "ready" })).text).toContain("Already paid for: it uses one of the gifts you have ready.");
     expect((await staged(2, "birthday", "es", { paid: "ready" })).text).toContain("Ya está pagado: usa uno de los regalos que tienes listos.");
-    const price = await staged(1, "birthday", "en", { paid: "price", prices: { single: "€9.99", three: "€14.99" } });
-    expect(price.text).toContain("One gift is €9.99. Or this one and your next two for €14.99.");
-    expect((await staged(1, "birthday", "es", { paid: "price", prices: { single: "9,99 €", three: "14,99 €" } })).text).toContain("Un regalo cuesta 9,99 €. O este y los dos siguientes por 14,99 €.");
-    expect((await staged(1, "birthday", "en", { paid: "price", prices: { single: "€9.99", three: null } })).text).toContain("One gift is €9.99.");
+    const price = await staged(1, "birthday", "en", { paid: "price", prices: { single: eur(ONE, "en"), three: eur(THREE, "en") } });
+    expect(price.text).toContain(`One gift is ${eur(ONE, "en")}. Or this one and your next two for ${eur(THREE, "en")}.`);
+    expect((await staged(1, "birthday", "es", { paid: "price", prices: { single: eur(ONE, "es"), three: eur(THREE, "es") } })).text).toContain(`Un regalo cuesta ${eur(ONE, "es")}. O este y los dos siguientes por ${eur(THREE, "es")}.`);
+    expect((await staged(1, "birthday", "en", { paid: "price", prices: { single: eur(ONE, "en"), three: null } })).text).toContain(`One gift is ${eur(ONE, "en")}.`);
     const none = await staged(1, "birthday", "en", { paid: "none" });
     expect(none.text).not.toMatch(/€|\$|£|Already paid/);
   });
@@ -178,7 +184,7 @@ describe("sending", () => {
       occasion: "birthday",
       date: "5 de marzo",
       removeUrl: links.removeUrl,
-      staged: { stage: 1, when: "el viernes que viene", weekday: "viernes", started: "photos", templateSlug: "balloons", openUrl: links.openUrl, moreUrl: links.moreUrl, skipUrl: links.skipUrl, onceKey: "reminder/r:2027:1", paid: "price", prices: { single: 999, three: 1499, currency: "eur" } },
+      staged: { stage: 1, when: "el viernes que viene", weekday: "viernes", started: "photos", templateSlug: "balloons", openUrl: links.openUrl, moreUrl: links.moreUrl, skipUrl: links.skipUrl, onceKey: "reminder/r:2027:1", paid: "price", prices: { single: ONE, three: THREE, currency: "eur" } },
     });
     expect(ok).toBe(true);
     const [mail] = state.sent;
@@ -186,7 +192,7 @@ describe("sending", () => {
     expect(mail.idempotencyKey).toBe("reminder/r:2027:1");
     expect(mail.headers?.["List-Unsubscribe"]).toBe(`<${links.removeUrl}>`);
     const body = text(await render(mail.react));
-    expect(body).toContain("Un regalo cuesta 9,99 €. O este y los dos siguientes por 14,99 €.");
+    expect(body).toContain(`Un regalo cuesta ${eur(ONE, "es")}. O este y los dos siguientes por ${eur(THREE, "es")}.`);
     // The suggested template's own cover and name, opening the started gift.
     expect(await render(mail.react)).toContain(links.openUrl.replace(/&/g, "&amp;"));
   });

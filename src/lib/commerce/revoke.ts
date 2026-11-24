@@ -46,7 +46,7 @@ export async function revokePurchase(db: Db, purchase: RevokedPurchase, now: num
   // Two more gifts: none of them counts any more. The unlock rows the used ones wrote point at this
   // purchase, so the generic part below takes those templates back and relocks what went out with them.
   // A gift bought with two more added ("with_pair", from a reminder e-mail) takes them back the same way.
-  if (purchase.product === "pair" || purchase.kind === "with_pair") await revokeGiftsOf(db, purchase.id, now);
+  if (purchase.product === "pair" || purchase.kind === "with_pair") await revokeGiftsOf(db, purchase.id, now, options.mode === "dispute" ? "dispute" : "refund");
   // A buyer who deleted their account has no user_id left (0011); whoever held the rows still counts.
   const affected = unique([...(purchase.user_id ? [purchase.user_id] : []), ...(await revokeUnlocksOf(db, purchase.id))]);
   // A second payment for the same template still covers it: only what nothing else paid for goes.

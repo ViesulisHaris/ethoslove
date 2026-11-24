@@ -58,14 +58,24 @@ describe("email templates", () => {
 describe("the receipt for two more gifts", () => {
   const text = (html: string) => html.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/<!-- -->/g, "");
   it("says the two gifts are on the account and repeats the 30 days, never 'yours, forever'", async () => {
-    const en = text(await render(ReceiptEmail({ locale: "en", productLabel: "Two more gifts", amountLabel: "€5.00", unlocks: ["Two gifts, ready to make whenever you like"], dashboardUrl: "https://x", pair: true })));
+    const en = text(await render(ReceiptEmail({ locale: "en", productLabel: "Two more gifts", amountLabel: "€7.99", unlocks: ["Two gifts, ready to make whenever you like"], dashboardUrl: "https://x", pair: true })));
     expect(en).toContain("Two gifts are ready on your account");
     expect(en).toContain("On your account: Two gifts, ready to make whenever you like");
-    expect(en).toContain("A gift you haven't used can be refunded for 30 days");
     expect(en).not.toContain("forever");
     expect(en).not.toContain("Unlocked:");
-    expect(en).not.toContain("14-day");
-    const es = text(await render(ReceiptEmail({ locale: "es", productLabel: "Dos regalos más", amountLabel: "5,00 €", unlocks: ["Dos regalos, listos para cuando quieras"], dashboardUrl: "https://x", pair: true, consent: consentSentence("pair", "es") })));
+    // Paid with the wallet, nothing ticked: the 14 days stay whole, even for a gift used, and the
+    // receipt never says a used one can't be cancelled (terms s.6, s.9).
+    expect(en).toContain("You paid without ticking a box, so you keep the 14-day right to cancel, even for a gift you've used");
+    expect(en).toContain("a gift you haven't used can still be refunded until 30 days");
+    expect(en).not.toContain("can't be cancelled");
+    const esWallet = text(await render(ReceiptEmail({ locale: "es", productLabel: "Dos regalos más", amountLabel: "7,99 €", unlocks: ["Dos regalos, listos para cuando quieras"], dashboardUrl: "https://x", pair: true })));
+    expect(esWallet).toContain("conservas el derecho de desistimiento de 14 días, aunque ya hayas usado un regalo");
+    expect(esWallet).not.toContain("no se puede cancelar");
+    // Ticked on Stripe's page: the sentence, and the 30 days for an unused one.
+    const enTicked = text(await render(ReceiptEmail({ locale: "en", productLabel: "Two more gifts", amountLabel: "€7.99", unlocks: [], dashboardUrl: "https://x", pair: true, consent: consentSentence("pair", "en") })));
+    expect(enTicked).toContain("A gift you haven't used can be refunded for 30 days");
+    expect(enTicked).not.toContain("14-day");
+    const es =text(await render(ReceiptEmail({ locale: "es", productLabel: "Dos regalos más", amountLabel: "7,99 €", unlocks: ["Dos regalos, listos para cuando quieras"], dashboardUrl: "https://x", pair: true, consent: consentSentence("pair", "es") })));
     expect(es).toContain("Tienes dos regalos listos en tu cuenta");
     expect(es).toContain(`Al pagar marcaste: «${consentSentence("pair", "es")}»`);
     expect(es).toContain("se reembolsa durante 30 días");

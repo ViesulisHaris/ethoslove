@@ -98,11 +98,13 @@ export default async function CheckoutSuccessPage({
   const outcome = sold && paid ? purchaseOutcome(sold) : "gift";
   // Two more gifts (bought on the share screen): their own ending, with nothing that leaves by itself.
   const pair = paid && sold?.product === "pair";
-  // A page about to leave for the editor by itself shows no upgrade card: it would be on screen for
-  // under a second (CONTINUE_AFTER_MS), and holding the page for it kept gifts unsent. A buyer who
-  // stays here (a purchase from /pricing) is still offered it, as before.
+  // A page about to leave for the editor by itself draws no upgrade card: it would be on screen for
+  // under a second (CONTINUE_AFTER_MS). Only the card goes: whether there is an offer still decides
+  // the way back exactly as before (a guest with one signs in by request, SignInWhileHere and
+  // BackToGift, not through the one-time link). A buyer who stays here (a purchase from /pricing) is
+  // still offered it, as before.
   const toEditor = returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo);
-  if (state === "paid" && toEditor) upgrade = null;
+  const upgradeCard = state === "paid" && toEditor ? null : upgrade;
   // Where "Continue" leads: through the one-time sign-in when there is one, then back.
   const continueHref = signInUrl ?? returnTo;
 
@@ -283,11 +285,11 @@ export default async function CheckoutSuccessPage({
           )}
         </Button>
       )}
-      {upgrade && typeof session_id === "string" ? (
+      {upgradeCard && typeof session_id === "string" ? (
         <UpgradeAfterPurchase
           sessionId={session_id}
           returnTo={returnTo}
-          upgrade={{ ...upgrade.offer, full: upgrade.full, paid: upgrade.paid, earlier: upgrade.earlier, sorted: upgrade.sorted, ahead: upgrade.ahead }}
+          upgrade={{ ...upgradeCard.offer, full: upgradeCard.full, paid: upgradeCard.paid, earlier: upgradeCard.earlier, sorted: upgradeCard.sorted, ahead: upgradeCard.ahead }}
         />
       ) : null}
     </div>

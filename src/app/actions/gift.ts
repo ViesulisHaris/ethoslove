@@ -24,7 +24,7 @@ import { notifyPublished } from "@/lib/email/notify";
 import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
 import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
 import { countCampaignGift } from "@/lib/commerce/campaign";
-import { readyGifts, spendGift } from "@/lib/commerce/gift-credits";
+import { paidForGiftRecently, readyGifts, spendGift } from "@/lib/commerce/gift-credits";
 import { markMadeFor } from "@/lib/lifecycle/reminder-done";
 import { countdownDay } from "@/lib/lifecycle/reminders";
 import { after } from "next/server";
@@ -394,19 +394,24 @@ export type CampaignEntitlement = { left: number; endsAt: string | null };
  * Does the current user own this template (or Everything)? False when signed out. `campaign` is set
  * when they don't, but a running creator-campaign grant lets them publish a new gift in it free.
  */
-export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null; giftsReady: number }> {
+export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null; giftsReady: number; paidJustNow: boolean }> {
   const ctx = await requireContext();
-  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null, giftsReady: 0 };
+  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null, giftsReady: 0, paidJustNow: false };
   // `owned` lets the editor say which template the buyer already paid for instead of a bare paywall,
   // and `giftsReady` lets it send this one with a gift already paid for (two more gifts).
   const [{ data }, { data: unlocks }, ready] = await Promise.all([
     ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: templateSlug }),
-    ctx.supabase.from("template_unlocks").select("template_slug").eq("user_id", ctx.user.id),
+    ctx.supabase.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", ctx.user.id),
     readyGifts(ctx.supabase, ctx.user.id),
   ]);
   const grant = parseCampaignGrant(ctx.user.app_metadata);
   const campaign = !data && campaignCoversNewGift(grant, templateSlug, Date.now()) && grant ? { left: campaignGiftsLeft(grant), endsAt: grant.endsAt } : null;
-  return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug), campaign, giftsReady: ready ?? 0 };
+  // Whether this gift was paid for just now: only then does its share screen offer two more gifts.
+  const rows = unlocks ?? [];
+  const paidIds = [...new Set(rows.filter((u) => u.purchase_id && (u.template_slug === templateSlug || u.template_slug === photosUnlock(templateSlug))).map((u) => u.purchase_id as string))];
+  const { data: paid } = paidIds.length ? await ctx.supabase.from("purchases").select("id, product, status, created_at").in("id", paidIds).eq("status", "paid") : { data: [] };
+  const paidJustNow = paidForGiftRecently(rows, paid ?? [], templateSlug, Date.now());
+  return { unlocked: Boolean(data), owned: rows.map((u) => u.template_slug), campaign, giftsReady: ready ?? 0, paidJustNow };
 }
 
 /** Dashboard: duplicate a gift as a new draft (assets are shared by reference until edited). */

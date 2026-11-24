@@ -210,6 +210,15 @@ describe("the publish sheet's “One payment, no subscription”", () => {
     expect(signedIn(decidePublish(premium, ready, { unlocked: true }, { ...none, removeWatermark: true }))).toBe(false);
   });
 
+  it("is not said when the gift goes out on a gift already paid for (It's already paid for. in place of the pay panel)", () => {
+    // The decision still says payment_required: the sheet draws AlreadyPaid, not the paywall.
+    const decision = decidePublish(premium, ready, { unlocked: false }, none);
+    expect(publishAsksForMoney({ ...web, authed: true, wouldNeedPayment: true, decision, giftReady: true })).toBe(false);
+    expect(publishAsksForMoney({ ...web, authed: true, wouldNeedPayment: true, decision, giftReady: false })).toBe(true);
+    // A guest has no gifts ready to use: the flag never hides their paywall's line.
+    expect(publishAsksForMoney({ ...web, authed: false, wouldNeedPayment: true, decision: null, giftReady: true })).toBe(true);
+  });
+
   it("is not said before there is a price to show", () => {
     // Their entitlement is still loading, or the gift is missing a name.
     expect(signedIn(null)).toBe(false);
@@ -454,7 +463,7 @@ describe("GET /api/entitlements, as the pages read it", () => {
 
   it("reads the offer of two more gifts only when its price and currency are whole", () => {
     const base = { signedIn: true, templates: ["vinyl"], packs: [], pass: null, membership: null };
-    expect(parseEntitlements({ ...base, giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } })).toMatchObject({ giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } });
+    expect(parseEntitlements({ ...base, giftsReady: 0, pairOffer: { amount: 799, currency: "eur" } })).toMatchObject({ giftsReady: 0, pairOffer: { amount: 799, currency: "eur" } });
     for (const pairOffer of [{ amount: "500", currency: "eur" }, { amount: 500, currency: "chf" }, { amount: -1, currency: "eur" }, { amount: 4.5, currency: "eur" }, "yes", null])
       expect(parseEntitlements({ ...base, pairOffer })?.pairOffer).toBeNull();
     for (const giftsReady of [-1, "2", 1.5, null]) expect(parseEntitlements({ ...base, giftsReady })?.giftsReady).toBe(0);

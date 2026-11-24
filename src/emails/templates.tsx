@@ -115,11 +115,18 @@ export function GiftUnlockedEmail({ locale, recipientName, url }: { locale: L; r
  */
 function consentLine(es: boolean, kind: "giftcard" | "pass" | "pair" | "other", consent: string | undefined): string {
   // Two more gifts: an unused one is refunded for 30 days, ticked or not (the owner's promise, terms).
+  // Only a ticked box ends the right to withdraw a used one: bought with the wallet on our page,
+  // nothing was ticked, so the 14 days stay whole, used or not (terms s.6 and s.9).
   if (kind === "pair") {
-    const back = es
-      ? "Un regalo que no hayas usado se reembolsa durante 30 días: responde a este correo. Uno que ya hayas usado no se puede cancelar."
-      : "A gift you haven't used can be refunded for 30 days: reply to this email. Once you've used one, it can't be cancelled.";
-    return consent ? `${es ? `Al pagar marcaste: «${consent}»` : `At checkout you ticked: “${consent}”`} ${back}` : back;
+    if (consent) {
+      const back = es
+        ? "Un regalo que no hayas usado se reembolsa durante 30 días: responde a este correo. Uno que ya hayas usado no se puede cancelar."
+        : "A gift you haven't used can be refunded for 30 days: reply to this email. Once you've used one, it can't be cancelled.";
+      return `${es ? `Al pagar marcaste: «${consent}»` : `At checkout you ticked: “${consent}”`} ${back}`;
+    }
+    return es
+      ? "Pagaste sin marcar ninguna casilla, así que conservas el derecho de desistimiento de 14 días, aunque ya hayas usado un regalo: para ejercerlo, responde a este correo en los 14 días siguientes a la compra. Después, un regalo que no hayas usado se sigue reembolsando hasta los 30 días."
+      : "You paid without ticking a box, so you keep the 14-day right to cancel, even for a gift you've used: to use it, reply to this email within 14 days of buying. After that, a gift you haven't used can still be refunded until 30 days.";
   }
   if (consent) {
     const ticked = es ? `Al pagar marcaste: «${consent}»` : `At checkout you ticked: “${consent}”`;

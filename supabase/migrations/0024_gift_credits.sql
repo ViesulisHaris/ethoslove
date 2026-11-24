@@ -6,8 +6,9 @@
 -- so the template is theirs for good like any other unlock, and a refund of that purchase takes it
 -- back the way it takes back any unlock (src/lib/commerce/revoke.ts).
 --
--- A gift ready never expires. revoked_at is set when the money went back (a refund, a dispute); a
--- won dispute clears it again. The site reads this table only through src/lib/commerce/gift-credits.ts,
+-- A gift ready never expires. revoked_at is set when the money went back, and revoked_for says why:
+-- 'refund' (a refund, whole or half) or 'dispute'. A won dispute gives back only what the dispute
+-- took, never a gift whose money a refund had already returned. The site reads this table only through src/lib/commerce/gift-credits.ts,
 -- and works without it: until this file is applied, nothing is offered and checkout refuses "pair".
 --
 -- Additive: one new table and one new function; nothing the live site reads is touched. Safe to run
@@ -25,8 +26,10 @@ create table if not exists public.gift_credits (
   spent_slug text,
   spent_at timestamptz,
   revoked_at timestamptz,
+  revoked_for text check (revoked_for in ('refund', 'dispute')),
   created_at timestamptz not null default now(),
   constraint gift_credits_spent_whole check ((spent_slug is null) = (spent_at is null)),
+  constraint gift_credits_revoked_whole check ((revoked_at is null) = (revoked_for is null)),
   unique (purchase_id, n)
 );
 create index if not exists gift_credits_ready_idx on public.gift_credits (user_id) where spent_slug is null and revoked_at is null;

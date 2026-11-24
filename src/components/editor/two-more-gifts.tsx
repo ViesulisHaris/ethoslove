@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -9,13 +9,13 @@ import type { GiftData } from "@/lib/gift/schema";
 import { env } from "@/lib/env";
 import { track } from "@/lib/analytics/track";
 import { formatAmount, formatRound, pairApart } from "@/lib/pricing/products";
-import { REMINDER_NAME_MAX, formatMonthDay, reminderDateFor, reminderOccasionFor, type Reminder } from "@/lib/lifecycle/reminders";
-import { dayAway, dayName, localToday, nextDays, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
+import { formatMonthDay, type Reminder } from "@/lib/lifecycle/reminders";
+import { dayAway, dayArgs, dayName, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
 import { DayRows } from "@/components/pricing/day-rows";
-import { getManifest } from "@/templates/manifests";
-import { useEntitlements, type PairOffer } from "@/components/pricing/entitlements";
+import { useNextDays } from "./pair-used";
+import type { Entitlements, PairOffer } from "@/components/pricing/entitlements";
 import { startCheckout, startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
-import { walletHere, type Wallet } from "@/components/pricing/wallet";
+import { googlePayReady, walletHere, type Wallet } from "@/components/pricing/wallet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -28,68 +28,54 @@ const WALLET_WAIT_MS = 4000;
 type Pay = "idle" | "paying" | "declined";
 
 /**
- * "Nobody likes to be forgotten.": two more gifts, offered on the share screen right under the link
- * of a gift just paid for (docs/marketing/growth-build/DESIGN-after-payment.md). The server decides
- * who sees it (/api/entitlements `pairOffer`, lib/commerce/gift-credits.ts pairAllowed); this only
- * draws what it says, and nothing at all, no frame and no space, when it says no. A gift sent with
- * one of the two shows the quiet "This was one of your gifts" instead.
+ * What the share screen is handed to draw the card with, all of it known before the screen's first
+ * frame (the publish sheet loads it while the sheet is open), so the card is either there from the
+ * start or never: nothing under the link moves when it arrives.
  */
-export function TwoMoreGifts({ data, usedGift = false, preview }: { data: GiftData; usedGift?: boolean; preview?: PairPreviewState }) {
-  const { data: ent } = useEntitlements();
+export type PairOnShare = {
+  /** /api/entitlements, read while the sheet was open: `pairOffer` says this account may buy them. */
+  ent: Entitlements | null;
+  /** This publish followed a payment for this gift (back from checkout, the gift's own purchase paid in the last day, something in it paid). */
+  afterPayment: boolean;
+  /** Gifts ready left after this one, when it went out on one (the share screen's UsedGiftLine). */
+  left: number;
+  /** The account's saved days (GET /api/reminders), read while the sheet was open; null when they weren't. */
+  saved?: Reminder[] | null;
+};
+
+/**
+ * "Nobody likes to be forgotten.": two more gifts, offered on the share screen right under the link
+ * of a gift just paid for (docs/marketing/growth-build/DESIGN-after-payment.md 2). Who may buy them
+ * is the server's (`pairOffer`, lib/commerce/gift-credits.ts pairAllowed); when is the sheet's:
+ * only after a payment for this very gift (`afterPayment`), never after a free note, a free reply or
+ * a gift on a template already owned. Otherwise nothing at all, no frame and no space, and nothing
+ * asked of the server. A gift sent with one of the two gets the quiet line of pair-used.tsx instead,
+ * drawn by the share screen itself.
+ */
+export function TwoMoreGifts({ data, ent, afterPayment, saved, preview }: PairOnShare & { data: GiftData; preview?: PairPreviewState }) {
   const [bought, setBought] = useState(preview === "bought");
-  const days = useNextDays(data);
-  if (usedGift && ent) return <UsedOne left={ent.giftsReady} days={days} name={data.recipientName} />;
+  const offered = afterPayment && Boolean(ent?.pairOffer);
+  const days = useNextDays(data, saved, bought || offered);
   if (bought) return <Bought days={days} name={data.recipientName} />;
-  if (!ent?.pairOffer) return null;
-  return <Offer offer={ent.pairOffer} days={days} name={data.recipientName} onBought={() => setBought(true)} initialPay={preview === "paying" || preview === "declined" ? preview : "idle"} />;
+  if (!offered || !ent?.pairOffer) return null;
+  return (
+    <Offer
+      offer={ent.pairOffer}
+      days={days}
+      name={data.recipientName}
+      onBought={() => setBought(true)}
+      initialPay={preview === "paying" || preview === "declined" ? preview : "idle"}
+      previewWallet={preview === "wallet"}
+    />
+  );
 }
 
 /**
  * A state the development page (app/.../(editor)/share-preview) can open the card in, for pictures
- * and browser tests: paying, declined and bought only ever follow a real wallet payment otherwise.
+ * and browser tests: paying, declined and bought only ever follow a real wallet payment otherwise,
+ * and "wallet" draws a stand-in for Stripe's wallet button arriving (Stripe.js never loads in tests).
  */
-export type PairPreviewState = "paying" | "declined" | "bought";
-
-/**
- * The next two days for this recipient: Christmas and Valentine's Day until the account's saved days
- * answer, then those too (GET /api/reminders, as the reminder card reads it), and again each time
- * the reminder card below saves one ("ethos:reminder-saved").
- */
-function useNextDays(data: GiftData): NextDay[] {
-  const [made] = useState(() => {
-    const occasions = getManifest(data.templateSlug)?.occasions;
-    if (occasions?.[0] === "christmas") return { occasion: "christmas" as const, month: 12, day: 25 };
-    const occasion = reminderOccasionFor(occasions);
-    return { occasion, ...reminderDateFor(occasion, data.countdown, new Date()) };
-  });
-  const [saved, setSaved] = useState<Reminder[]>([]);
-  const who = data.recipientName.trim().slice(0, REMINDER_NAME_MAX).toLowerCase();
-  const read = useCallback(() => {
-    if (!who) return () => {};
-    let live = true;
-    fetch("/api/reminders", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((body: { reminders?: Reminder[] } | null) => {
-        if (!live || !body?.reminders) return;
-        setSaved(body.reminders.filter((r) => r.recipientName.trim().toLowerCase() === who));
-      })
-      .catch(() => {});
-    return () => {
-      live = false;
-    };
-  }, [who]);
-  useEffect(() => {
-    const stop = read();
-    const again = () => void read();
-    window.addEventListener("ethos:reminder-saved", again);
-    return () => {
-      stop();
-      window.removeEventListener("ethos:reminder-saved", again);
-    };
-  }, [read]);
-  // Recomputed only when what it reads changes, so the rows never move unless the days really differ.
-  return useMemo(() => nextDays(localToday(), saved, made), [saved, made]);
-}
+export type PairPreviewState = "paying" | "declined" | "bought" | "wallet";
 
 /** A day's name as the reminder card says it: "Mia's birthday", "Your anniversary", "Valentine's Day". */
 function useDayName(name: string) {
@@ -98,19 +84,35 @@ function useDayName(name: string) {
   return (day: Pick<NextDay, "kind" | "name">) => dayName(day, t, r, name);
 }
 
-function Days({ days, name }: { days: NextDay[]; name: string }) {
+function Days({ days, name, short = false }: { days: NextDay[]; name: string; short?: boolean }) {
   const t = useTranslations("editor.share.pair");
   const locale = useLocale() === "es" ? "es" : "en";
   const named = useDayName(name);
   return (
     <DayRows
+      short={short}
       rows={days.map((d) => ({ key: `${d.kind}-${d.month}-${d.day}-${d.name ?? ""}`, icon: occasionIcon(d.kind), name: named(d), date: formatMonthDay(d, locale), away: dayAway(d.daysAway, t) }))}
     />
   );
 }
 
 /** Exported for the unit tests (tests/unit/two-more-gifts.test.tsx), like the two below. */
-export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { offer: PairOffer; days: NextDay[]; name: string; onBought: () => void; initialPay?: Pay }) {
+export function Offer({
+  offer,
+  days,
+  name,
+  onBought,
+  initialPay = "idle",
+  previewWallet = false,
+}: {
+  offer: PairOffer;
+  days: NextDay[];
+  name: string;
+  onBought: () => void;
+  initialPay?: Pay;
+  /** The development page's "a wallet arrives": a black stand-in button 2.5 s after view, no Stripe, no session. */
+  previewWallet?: boolean;
+}) {
   const t = useTranslations("editor.share.pair");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
   const showCheckoutError = useCheckoutError();
@@ -120,11 +122,13 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   // Which way to pay: the wallet's own button where there is one (and a key to draw it with), else
   // the card button. The wallet falls back to the card button, silently, when it can't be drawn.
   const key = env.stripePublishableKey;
-  const [wallet] = useState<Wallet | null>(() => (key && typeof window !== "undefined" ? walletHere() : null));
+  const [wallet] = useState<Wallet | null>(() => (previewWallet ? "apple" : key && typeof window !== "undefined" ? walletHere() : null));
   const [walletState, setWalletState] = useState<"waiting" | "ready" | "none">(wallet ? "waiting" : "none");
   const [secret, setSecret] = useState<{ clientSecret: string; sessionId?: string } | null>(null);
   const [pay, setPay] = useState<Pay>(initialPay);
   const [cardBusy, setCardBusy] = useState(false);
+  // Set before the await, so taps in the same tick ask once (state would still read false for them).
+  const cardAsked = useRef(false);
   const cardRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -149,9 +153,18 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
 
   useEffect(() => {
     if (!inView || walletState !== "waiting") return;
+    if (previewWallet) {
+      const shown = window.setTimeout(() => setWalletState("ready"), 2500);
+      return () => window.clearTimeout(shown);
+    }
     let live = true;
     const timer = window.setTimeout(() => live && setWalletState((s) => (s === "waiting" ? "none" : s)), WALLET_WAIT_MS);
-    void startOneTapCheckout(request, { waiver: false }).then((result) => {
+    // Google Pay is only a guess from the browser's name: Stripe confirms it before a session is made.
+    const ready = wallet === "google" && key ? googlePayReady(key, locale, offer.amount, offer.currency) : Promise.resolve(true);
+    void ready.then(async (here) => {
+      if (!live) return;
+      if (!here) return setWalletState("none");
+      const result = await startOneTapCheckout(request, { waiver: false });
       if (!live) return;
       if ("clientSecret" in result) setSecret(result);
       else setWalletState("none");
@@ -165,19 +178,38 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   }, [inView, walletState === "waiting"]);
 
   const payByCard = async () => {
-    if (cardBusy) return;
+    if (cardAsked.current) return;
+    cardAsked.current = true;
     setCardBusy(true);
     setPay("paying");
+    // Asking for Stripe's page closes the wallet session this card holds (one checkout open at a
+    // time, settlePairSessions), so its button would fail from here on, after a refusal or a Back
+    // from Stripe alike: the card button takes its place for good.
+    setWalletState("none");
+    setSecret(null);
     track("pair_clicked", { how: "card" });
     const result = await startCheckout(request, { total: offer.amount, category: "pair" });
     if ("url" in result) {
       window.location.assign(result.url);
       return;
     }
+    cardAsked.current = false;
     setCardBusy(false);
     setPay("idle");
     showCheckoutError(result.error);
   };
+
+  // Back from Stripe's page: the browser restores this page as it was left, mid-"One moment…".
+  useEffect(() => {
+    const back = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      cardAsked.current = false;
+      setCardBusy(false);
+      setPay((p) => (p === "paying" ? "idle" : p));
+    };
+    window.addEventListener("pageshow", back);
+    return () => window.removeEventListener("pageshow", back);
+  }, []);
 
   const events = useMemo(
     () => ({
@@ -208,10 +240,14 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   const paying = pay === "paying";
 
   return (
-    <section ref={cardRef} className="mt-7 rounded-2xl border border-ink bg-card p-5" data-testid="pair-offer">
+    // On a short screen (max-height 760 px: an iPhone 13 shows 664 px) the rows are one line each and
+    // the "next" line is left to screen readers, so the pay control is on the first screen. Spanish
+    // ("San Valentín · 14 de febrero" takes two lines at 390 px) still missed by 2 px: the card's top
+    // margin is 20 px there, not 28.
+    <section ref={cardRef} className="mt-7 rounded-2xl [@media(max-height:760px)]:mt-5 border border-ink bg-card p-5" data-testid="pair-offer">
       <h3 className="font-display text-2xl leading-tight text-balance text-ink">{t("title")}</h3>
-      <p className="mt-1.5 text-[15px] text-ink-soft">{t("next")}</p>
-      <Days days={days} name={name} />
+      <p className="mt-1.5 text-[15px] text-ink-soft [@media(max-height:760px)]:sr-only">{t("next")}</p>
+      <Days days={days} name={name} short />
 
       <div className="mt-4 flex items-end justify-between gap-4">
         <div>
@@ -223,15 +259,6 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         </p>
       </div>
 
-      <ul className="mt-4 space-y-2">
-        {(["tickAny", "tickMidnight", "tickBack"] as const).map((key) => (
-          <li key={key} className="flex items-start gap-2.5 text-sm text-ink">
-            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
-            <span>{t(key)}</span>
-          </li>
-        ))}
-      </ul>
-
       {pay === "declined" ? (
         <p role="alert" className="mt-5 flex items-start gap-2.5 rounded-xl border border-coral/40 bg-coral/10 p-3.5 text-[15px] text-ink" data-testid="pair-declined">
           <AlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-coral" />
@@ -239,13 +266,20 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
         </p>
       ) : null}
 
-      <div className="mt-5">
+      {/* Two fixed slots, in every state, so nothing is blank and nothing moves when the wallet answers:
+          one (48 px) the wallet's button, its holding pill or the card button; two (44 px) "Pay by card
+          instead" beside a wallet, else the "Paid once." line in the same place. */}
+      <div className="mt-5" data-testid="pair-pay">
         {useWallet ? (
           <>
             {/* The wallet's own button, with a black pill holding its place while it comes, so nothing moves.
                 It stays mounted while it pays: the wallet's confirmation runs inside it. */}
             <div className="relative h-12" data-testid="pair-wallet">
-              {secret && key ? <PairWallet clientSecret={secret.clientSecret} publishableKey={key} locale={locale} events={events} /> : null}
+              {previewWallet ? (
+                walletState === "ready" ? <span className="block h-12 rounded-full bg-black" data-testid="pair-wallet-standin" /> : null
+              ) : secret && key ? (
+                <PairWallet clientSecret={secret.clientSecret} publishableKey={key} locale={locale} events={events} />
+              ) : null}
               {paying ? (
                 <span role="status" className="absolute inset-0 flex items-center justify-center gap-2 rounded-full bg-primary/55 text-base font-medium text-primary-foreground" data-testid="pair-paying">
                   <Loader2 aria-hidden="true" className="size-4 animate-spin motion-reduce:animate-none" />
@@ -257,7 +291,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
                 </span>
               ) : null}
             </div>
-            <p className={cn("mt-3 text-center", paying && "hidden")}>
+            {/* Hidden while paying but keeping its slot, so the card keeps its height. */}
+            <p className={cn("mt-1 flex h-11 items-center justify-center", paying && "invisible")} data-testid="pair-slot-two">
               <button
                 type="button"
                 onClick={() => void payByCard()}
@@ -275,15 +310,51 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
             <span>{paying ? t("paying") : t("add", { price })}</span>
           </Button>
         )}
+        {useWallet ? null : (
+          <p className="mt-1 flex h-11 items-center justify-center text-center text-sm text-ink-soft" data-testid="pair-slot-two">
+            {t("foot")}
+          </p>
+        )}
       </div>
 
-      <p className={cn("text-center text-[13px] text-muted-foreground", useWallet && !paying ? "mt-2" : "mt-4")}>{t("foot")}</p>
-      <p className="mt-1 text-center text-[13px] text-muted-foreground">
-        {t("notice")}{" "}
-        <Link href="/legal/terms" target="_blank" className="underline underline-offset-2 hover:text-ink">
-          {t("terms")}
-        </Link>
-      </p>
+      {/* Under the pay control, so it is on the first screen of a short phone. */}
+      <ul className="mt-4 space-y-2">
+        {/* The 30-day refund is said once, in the foot beside Terms. */}
+        {(["tickAny", "tickMidnight"] as const).map((key) => (
+          <li key={key} className="flex items-start gap-2.5 text-sm text-ink">
+            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
+            <span className="text-pretty">{t(key)}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* The small line: with a wallet, "Paid once." first (as the second slot holds "Pay by card
+          instead"); without one, the notice and Terms only. A card that may show a wallet keeps the
+          longer line's height for good, through an unseen copy in the same grid cell, so the card's
+          height is the same before and after the wallet answers; the line seen is drawn anew (key)
+          when it changes, so no text inside it counts as moved. */}
+      <div className="mt-4 grid text-center text-[13px] text-pretty text-muted-foreground" data-testid="pair-foot">
+        {wallet !== null ? (
+          <p aria-hidden="true" className="invisible col-start-1 row-start-1">
+            {t("foot")} {t("notice")} {t("terms")}
+          </p>
+        ) : null}
+        <p key={useWallet ? "wallet" : "card"} className="col-start-1 row-start-1">
+          {useWallet ? `${t("foot")} ` : null}
+          {t("notice")}{" "}
+          {/* The 44 px tap target is a pseudo-element around the word, so the line it sits on keeps its height. */}
+          {/* A new tab, so the link above stays on this screen (it is only ever drawn here, after a publish). */}
+          <Link
+            href="/legal/terms"
+            target="_blank"
+            rel="noopener"
+            className="relative underline underline-offset-2 after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-[''] hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            {t("terms")}
+            <span className="sr-only"> {t("newTab")}</span>
+          </Link>
+        </p>
+      </div>
     </section>
   );
 }
@@ -291,9 +362,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
 /** Picture a7: paid. The two days again, and the first one to start now. */
 export function Bought({ days, name }: { days: NextDay[]; name: string }) {
   const t = useTranslations("editor.share.pair");
-  const named = useDayName(name);
   const first = days[0];
-  const start = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("startOne", { day: named(first) }) } : { href: "/templates", label: t("startAny") };
+  const start = first && first.kind !== "other" ? { href: occasionPath(first.kind), label: t("startOne", dayArgs(first, name)) } : { href: "/templates", label: t("startAny") };
   return (
     <section className="mt-7 rounded-2xl border border-border bg-card p-5" data-testid="pair-bought" aria-live="polite">
       <div className="flex items-start gap-3">
@@ -304,7 +374,8 @@ export function Bought({ days, name }: { days: NextDay[]; name: string }) {
         </div>
       </div>
       <Days days={days} name={name} />
-      <Button asChild variant="outline" className="mt-5 h-12 w-full rounded-full text-base">
+      {/* Wraps rather than running past the pill: "Start the one for {name}'s birthday now" at 320 px, or with a long name. */}
+      <Button asChild variant="outline" className="mt-5 h-auto min-h-12 w-full rounded-full py-3 text-center text-base whitespace-normal [overflow-wrap:anywhere]">
         <Link href={start.href}>{start.label}</Link>
       </Button>
       <p className="mt-3 text-center text-sm text-muted-foreground">{t("readyStay")}</p>
@@ -312,18 +383,4 @@ export function Bought({ days, name }: { days: NextDay[]; name: string }) {
   );
 }
 
-/** Picture a8: this gift went out on one of the two. */
-export function UsedOne({ left, days, name }: { left: number; days: NextDay[]; name: string }) {
-  const t = useTranslations("editor.share.pair");
-  const named = useDayName(name);
-  const next = days[0];
-  return (
-    <section className="mt-7 flex items-start gap-3 rounded-2xl border border-border bg-card p-5" data-testid="pair-used">
-      <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-moss" />
-      <div className="min-w-0">
-        <p className="text-base font-medium text-ink">{t("usedOne")}</p>
-        <p className="mt-1 text-[15px] text-ink-soft">{left > 0 && next ? t("leftOne", { day: named(next) }) : t("leftNone")}</p>
-      </div>
-    </section>
-  );
-}
+export { UsedOne } from "./pair-used";

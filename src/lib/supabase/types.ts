@@ -332,6 +332,7 @@ export interface Database {
           spent_slug: string | null;
           spent_at: string | null;
           revoked_at: string | null;
+          revoked_for: "refund" | "dispute" | null;
           created_at: string;
         };
         Insert: {
@@ -342,9 +343,10 @@ export interface Database {
           spent_slug?: string | null;
           spent_at?: string | null;
           revoked_at?: string | null;
+          revoked_for?: "refund" | "dispute" | null;
           created_at?: string;
         };
-        Update: { spent_slug?: string | null; spent_at?: string | null; revoked_at?: string | null };
+        Update: { spent_slug?: string | null; spent_at?: string | null; revoked_at?: string | null; revoked_for?: "refund" | "dispute" | null };
         Relationships: [];
       };
       /** The membership table (0009 as the pass, 0014 for subscriptions): see docs/MEMBERSHIP.md 1.2. */

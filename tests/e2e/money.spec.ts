@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { PRODUCTS, formatAmount } from "../../src/lib/pricing/products";
 
 /**
  * What a visitor sees when paying: the pricing page, the paywall in the publish sheet, and the pages
@@ -233,7 +234,8 @@ test.describe("the paywall in the publish sheet", () => {
     );
     const panel = await openSheet(page, "/create/bouquet?ref=email-reminder-1");
     const three = panel.getByTestId("pay-with-pair");
-    await expect(three).toHaveText("Or this one and your next two gifts: €14.99");
+    // A single plus the pair, both from the catalogue.
+    await expect(three).toHaveText(`Or this one and your next two gifts: ${formatAmount(PRODUCTS.single.amounts.eur + PRODUCTS.pair.amounts.eur, "eur", "en")}`);
     // One offer of three at a time: "pick any three" waits while this one shows.
     await expect(panel.getByTestId("pick3-link")).toHaveCount(0);
     // The panel's one price is unchanged.

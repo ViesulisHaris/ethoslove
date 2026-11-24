@@ -40,8 +40,10 @@ import { SITE } from "@/config/site";
 import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
-import { AlreadyPaid } from "./already-paid";
-import { ShareScreen } from "./share-screen";
+import { AlreadyPaid, openingOf } from "./already-paid";
+import { ShareScreen, type ShareScreenPair } from "./share-screen";
+import { fetchEntitlements } from "@/components/pricing/entitlements";
+import { fetchSavedReminders } from "./pair-used";
 import { humanize } from "./template-fields";
 
 export function PublishSheet({
@@ -74,7 +76,7 @@ export function PublishSheet({
   const state = useEditor();
   const search = useSearchParams();
   const [fetchedEntitlement, setFetchedEntitlement] = useState<Awaited<ReturnType<typeof getEntitlement>> | null>(null);
-  const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [], campaign: null, giftsReady: 0 };
+  const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [], campaign: null, giftsReady: 0, paidJustNow: false };
   const [busy, setBusy] = useState(false);
   const [upgrade, setUpgrade] = useState<UpgradeQuote | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
@@ -102,6 +104,10 @@ export function PublishSheet({
     shortId: string;
     status: "live" | "scheduled";
     usedGift?: true;
+    /** With `usedGift`: gifts ready left after this one. */
+    usedLeft: number;
+    /** Two more gifts under the link, as it stood when the gift went out (never drawn later: nothing moves). */
+    pair: ShareScreenPair | null;
   } | null>(null);
   // "Pay for this one instead": the sender would rather keep their gift ready, or it went meanwhile.
   const [payInstead, setPayInstead] = useState(false);
@@ -370,7 +376,18 @@ export function PublishSheet({
       return;
     }
     state.markPublished(result.data.shortId, result.data.status);
-    setPublished(result.data);
+    // Two more gifts: offered only when this publish followed a payment for this very gift (back from
+    // checkout, its own purchase paid in the last day, something in it paid for), drawn from what was
+    // loaded while the sheet was open, or not at all.
+    // A gift sent on a gift ready gets its line whether or not that load finished (pair-used.tsx).
+    const loaded = pairLoaded.current;
+    const afterPayment = resume && entitlement?.paidJustNow === true && premiumKeys.length > 0 && !result.data.usedGift;
+    const usedLeft = Math.max(0, (entitlement?.giftsReady ?? 1) - 1);
+    setPublished({
+      ...result.data,
+      usedLeft,
+      pair: loaded ? { ...loaded, afterPayment, left: usedLeft } : null,
+    });
     if (result.data.usedGift) track("gift_ready_used", { template: slug, left: Math.max(0, (entitlement?.giftsReady ?? 1) - 1) });
     // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
     // (lib/attribution/recipient.ts). `state` is this render's, so it still says what the gift was
@@ -444,10 +461,29 @@ export function PublishSheet({
   // A gift ready (two more gifts) sends this one with nothing to pay, in place of the pay panel; never
   // inside the iPhone app, where the App Store sells. A free reply or a creator's grant covers it already.
   const useGiftReady = state.authed && !inApp && !payInstead && !freeReply && !campaign && (entitlement?.giftsReady ?? 0) > 0;
-  const opensWhen =
-    state.schedule.enabled && state.schedule.unlockAt
-      ? new Intl.DateTimeFormat(locale, { dateStyle: "long", timeStyle: "short" }).format(new Date(state.schedule.unlockAt))
-      : null;
+  // Two more gifts: the card's code and the account's answer are loaded while the sheet is open, for
+  // a sender back from paying or about to send on a gift ready, so the share screen has the card in
+  // its first frame or never (it sits under the link: arriving later, it would push everything down).
+  const pairWanted = open && state.authed && !inApp && (resume || useGiftReady);
+  const [pairCard, setPairCard] = useState<Pick<ShareScreenPair, "Card" | "ent" | "saved"> | null>(null);
+  const pairLoaded = useRef<Pick<ShareScreenPair, "Card" | "ent" | "saved"> | null>(null);
+  useEffect(() => {
+    pairLoaded.current = pairCard;
+  }, [pairCard]);
+  useEffect(() => {
+    if (!pairWanted || pairCard) return;
+    let live = true;
+    // The saved days too, so the card's rows are right in its first frame and never redrawn.
+    void Promise.all([fetchEntitlements(), fetchSavedReminders(), import("./two-more-gifts")])
+      .then(([ent, saved, mod]) => {
+        if (live) setPairCard({ Card: mod.TwoMoreGifts, ent, saved });
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [pairWanted, pairCard]);
+  const opensWhen = state.schedule.enabled && state.schedule.unlockAt ? openingOf(state.schedule.unlockAt, state.schedule.timezone, locale === "es" ? "es" : "en") : null;
   // The "keep" version: the note with and without their photos, the extra row among the options,
   // and what the step that takes the photos out offers.
   const compareOffer =
@@ -470,7 +506,7 @@ export function PublishSheet({
     if (keepArm) track(keepArm === "keep" ? "letter_confirm_keep" : "letter_confirm_plain", { guest: !state.authed });
   };
   // "One payment, no subscription" under a free publish read as if sending it cost something.
-  const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision });
+  const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision, giftReady: useGiftReady });
   // Guests can't upload before they have an account; those uploads run right after payment.
   const guestProblems = problems.filter((p) => p !== "uploadsPending");
   // The simpler panel folds a finished checklist into one line; anything still missing opens it again.
@@ -513,6 +549,8 @@ export function PublishSheet({
             data={state.data}
             giftId={state.giftId}
             usedGift={published.usedGift === true}
+            usedLeft={published.usedLeft}
+            pair={published.pair}
           />
         ) : (
           <div className="px-4 pt-8 pb-10 min-[360px]:px-5 sm:px-8">

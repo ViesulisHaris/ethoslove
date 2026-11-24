@@ -193,9 +193,13 @@ export function publishAsksForMoney(sheet: {
   wouldNeedPayment: boolean;
   /** lib/gift/publish.ts's rule for a signed-in sender; null until their entitlement is known. */
   decision: PublishDecision | null;
+  /** The sheet sends this gift on a gift already paid for ("It's already paid for." in place of the pay panel). */
+  giftReady?: boolean;
 }): boolean {
   // A guest pays on the website only: inside the app they sign in first, and are asked after.
   if (!sheet.authed) return sheet.supabaseConfigured && !sheet.inApp && sheet.paymentsEnabled && sheet.wouldNeedPayment;
+  // The decision still says payment_required, but nothing is asked for: the gift is already paid.
+  if (sheet.giftReady) return false;
   return sheet.decision !== null && !sheet.decision.ok && sheet.decision.reason === "payment_required" && (sheet.paymentsEnabled || sheet.inApp);
 }
 

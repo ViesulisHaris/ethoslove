@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { planCheckout, type CheckoutContext, type CheckoutRequest } from "@/lib/commerce/plan";
+import { PRODUCTS } from "@/lib/pricing/products";
 
 const guest: CheckoutContext = { signedIn: false, ownedForever: [], purchases: [], creatorCode: null, giftCardsOnSale: true };
 const req = (r: Partial<CheckoutRequest> & Pick<CheckoutRequest, "product">): CheckoutRequest => ({ templateSlugs: [], currency: "eur", ...r });
@@ -224,8 +225,8 @@ describe("checkout plan: two more gifts", () => {
   };
   const pair = (r: Partial<CheckoutRequest> = {}) => req({ product: "pair", ...r });
 
-  it("charges the catalogue's €5 / $6 / £4 as one line, granting no unlock row", () => {
-    for (const [currency, amount] of [["eur", 500], ["usd", 600], ["gbp", 400]] as const) {
+  it("charges the catalogue's €7.99 / $8.99 / £6.99 as one line, granting no unlock row", () => {
+    for (const [currency, amount] of [["eur", 799], ["usd", 899], ["gbp", 699]] as const) {
       const plan = ok(planCheckout(pair({ currency }), buyer));
       expect(plan).toMatchObject({ product: "pair", kind: "pair", currency, total: amount, lines: [{ key: "pair", amount }], unlocks: [], templateSlugs: [], billing: "one_time", bump: false, second: null, personalPrice: null });
     }
@@ -265,12 +266,14 @@ describe("checkout plan: two more gifts", () => {
 describe("checkout plan: a gift with two more, from a reminder e-mail", () => {
   const ctx: CheckoutContext = { ...guest, addPair: { onSale: true, ready: 0 } };
 
-  it("adds the pair's own line to a single or 'Make it special', so the three cost Pick three's price", () => {
+  it("adds the pair's own line to a single or 'Make it special': the gift's price plus the pair's, from the catalogue", () => {
     const single = ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true }), ctx));
-    expect(single).toMatchObject({ product: "single", kind: "with_pair", pair: true, unlocks: ["vinyl"], lines: [{ key: "single", amount: 999 }, { key: "pair", amount: 500 }], total: 1499 });
-    expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, currency: "usd" }), ctx)).total).toBe(1799);
-    expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, currency: "gbp" }), ctx)).total).toBe(1299);
-    expect(ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"], addPair: true }), ctx))).toMatchObject({ kind: "with_pair", total: 1249 });
+    const { single: one, pair, extras } = { single: PRODUCTS.single.amounts, pair: PRODUCTS.pair.amounts, extras: PRODUCTS.extras.amounts };
+    expect(single).toMatchObject({ product: "single", kind: "with_pair", pair: true, unlocks: ["vinyl"], lines: [{ key: "single", amount: one.eur }, { key: "pair", amount: pair.eur }], total: one.eur + pair.eur });
+    for (const currency of ["usd", "gbp"] as const) {
+      expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, currency }), ctx)).total).toBe(one[currency] + pair[currency]);
+    }
+    expect(ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"], addPair: true }), ctx))).toMatchObject({ kind: "with_pair", total: extras.eur + pair.eur });
   });
 
   it("leaves every other request exactly as it was", () => {

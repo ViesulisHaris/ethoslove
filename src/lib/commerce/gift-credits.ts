@@ -1,4 +1,5 @@
-import { EVERY_TEMPLATE, PAIR_GIFTS } from "@/lib/pricing/products";
+import type Stripe from "stripe";
+import { EVERY_TEMPLATE, PAIR_GIFTS, photosUnlock, type Currency } from "@/lib/pricing/products";
 import { iso, type Db } from "./db";
 
 /**
@@ -53,11 +54,12 @@ export async function spendGift(admin: Db, userId: string, slug: string): Promis
 }
 
 /**
- * A refund or a dispute of the whole purchase: every gift of it, used or not, stops counting. The
- * unlock rows the used ones wrote point at the same purchase, so revokeUnlocksOf takes those.
+ * A refund or a dispute of the whole purchase: every gift of it, used or not, stops counting, marked
+ * with why (`reason`), so a won dispute gives back only its own. The unlock rows the used ones wrote
+ * point at the same purchase, so revokeUnlocksOf takes those.
  */
-export async function revokeGiftsOf(db: Db, purchaseId: string, now: number): Promise<void> {
-  const { error } = await db.from("gift_credits").update({ revoked_at: iso(now) }).eq("purchase_id", purchaseId).is("revoked_at", null);
+export async function revokeGiftsOf(db: Db, purchaseId: string, now: number, reason: "refund" | "dispute" = "refund"): Promise<void> {
+  const { error } = await db.from("gift_credits").update({ revoked_at: iso(now), revoked_for: reason }).eq("purchase_id", purchaseId).is("revoked_at", null);
   if (error && !isMissingTable(error)) throw new Error(`gift credits not revoked: ${error.message}`);
 }
 
@@ -76,7 +78,7 @@ export async function revokeOneUnusedOf(db: Db, purchaseId: string, now: number)
   if (rows.some((row) => row.revoked_at !== null)) return false;
   const unused = [...rows].reverse().find((row) => row.spent_slug === null);
   if (!unused) return false;
-  const { data: taken, error: failed } = await db.from("gift_credits").update({ revoked_at: iso(now) }).eq("id", unused.id).is("revoked_at", null).select("id");
+  const { data: taken, error: failed } = await db.from("gift_credits").update({ revoked_at: iso(now), revoked_for: "refund" }).eq("id", unused.id).is("revoked_at", null).select("id");
   if (failed) throw new Error(`gift credit not revoked: ${failed.message}`);
   return (taken ?? []).length > 0;
 }
@@ -98,7 +100,7 @@ export async function revokeUnusedUpTo(db: Db, purchaseId: string, target: numbe
   const unused = [...rows].reverse().filter((row) => row.spent_slug === null && row.revoked_at === null).slice(0, Math.max(0, need));
   let taken = 0;
   for (const row of unused) {
-    const { data: hit, error: failed } = await db.from("gift_credits").update({ revoked_at: iso(now) }).eq("id", row.id).is("revoked_at", null).select("id");
+    const { data: hit, error: failed } = await db.from("gift_credits").update({ revoked_at: iso(now), revoked_for: "refund" }).eq("id", row.id).is("revoked_at", null).select("id");
     if (failed) throw new Error(`gift credit not revoked: ${failed.message}`);
     taken += (hit ?? []).length;
   }
@@ -106,11 +108,12 @@ export async function revokeUnusedUpTo(db: Db, purchaseId: string, target: numbe
 }
 
 /**
- * A dispute decided in our favour: the purchase's gifts count again. Returns the templates the used
- * ones were spent on, so their unlock rows can be granted again (lib/commerce/revoke.ts).
+ * A dispute decided in our favour: the gifts the dispute took count again; one a half refund had
+ * already given back stays gone, since that money stays refunded. Returns the templates the restored
+ * used ones were spent on, so their unlock rows can be granted again (lib/commerce/revoke.ts).
  */
 export async function restoreGiftsOf(db: Db, purchaseId: string): Promise<string[]> {
-  const { data, error } = await db.from("gift_credits").update({ revoked_at: null }).eq("purchase_id", purchaseId).select("spent_slug");
+  const { data, error } = await db.from("gift_credits").update({ revoked_at: null, revoked_for: null }).eq("purchase_id", purchaseId).eq("revoked_for", "dispute").select("spent_slug");
   if (error) {
     if (isMissingTable(error)) return [];
     throw new Error(`gift credits not restored: ${error.message}`);
@@ -118,8 +121,83 @@ export async function restoreGiftsOf(db: Db, purchaseId: string): Promise<string
   return (data ?? []).map((row) => row.spent_slug).filter((slug): slug is string => typeof slug === "string" && slug.length > 0);
 }
 
+/** How long an open checkout for two more gifts is gone back to rather than replaced. */
+export const PAIR_REUSE_MS = 12 * 60 * 60 * 1000;
+/** Stripe closes a Checkout Session after a day: pending rows older than that hold nothing open. */
+const PAIR_OPEN_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Keeps at most one checkout for two more gifts open on an account, so two can never both be paid
+ * (two charges, four gifts): the wallet session the card makes when it is seen, the Stripe page of
+ * "Pay by card instead", one in another currency. With `want`, the newest still-open session of that
+ * kind (a wallet's, or Stripe's page) at that price, made in the last 12 hours, is kept and returned;
+ * every other open one is closed. Without it (fulfilment of a paid one), all of them are closed.
+ * Null: nothing to go back to, and nothing open is left. As openUpgradeCheckout does for the upgrade
+ * (lib/commerce/after-checkout.ts).
+ */
+export async function settlePairSessions(
+  stripe: Stripe,
+  db: Db,
+  userId: string,
+  now: number,
+  want?: { amount: number; currency: Currency; oneTap: boolean },
+): Promise<Stripe.Checkout.Session | null> {
+  const { data } = await db
+    .from("purchases")
+    .select("stripe_session_id, amount, currency, created_at")
+    .eq("user_id", userId)
+    .eq("product", "pair")
+    .eq("status", "pending")
+    .gte("created_at", iso(now - PAIR_OPEN_MS))
+    .order("created_at", { ascending: false })
+    .limit(10);
+  let kept: Stripe.Checkout.Session | null = null;
+  for (const row of data ?? []) {
+    if (!row.stripe_session_id) continue;
+    const session = await stripe.checkout.sessions.retrieve(row.stripe_session_id).catch(() => null);
+    if (session?.status !== "open") continue;
+    const madeAt = row.created_at ? Date.parse(row.created_at) : Number.NaN;
+    const fits =
+      want &&
+      !kept &&
+      row.amount === want.amount &&
+      row.currency === want.currency &&
+      now - madeAt <= PAIR_REUSE_MS &&
+      (String(session.ui_mode) === "elements") === want.oneTap &&
+      Boolean(want.oneTap ? session.client_secret : session.url);
+    if (fits) kept = session;
+    else await stripe.checkout.sessions.expire(session.id).catch(() => null);
+  }
+  return kept;
+}
+
 /** The products whose buyers may be offered two more gifts: someone who has just paid for one. */
 export const PAIR_AFTER = ["single", "extras", "photos", "pick3"] as const;
+
+/** How long after paying for a gift its share screen may still offer two more gifts. */
+export const PAIR_OFFER_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Whether this template's gift was paid for just now: one of the account's unlock rows for it (the
+ * template's own, or its note with photos) points at a paid purchase of PAIR_AFTER made within
+ * PAIR_OFFER_WINDOW_MS. The offer card is for "someone who has just paid for this gift"
+ * (DESIGN-after-payment.md 2): never after a free note, a free reply, a gift on a template bought
+ * weeks ago, or one sent on a gift ready (its row points at the pair, which isn't in PAIR_AFTER).
+ * Pure: getEntitlement (app/actions/gift.ts) reads the rows.
+ */
+export function paidForGiftRecently(
+  unlocks: { template_slug: string; purchase_id: string | null }[],
+  purchases: { id: string; product: string; status: string; created_at: string | null }[],
+  slug: string,
+  now: number,
+): boolean {
+  const ids = new Set(unlocks.filter((u) => u.purchase_id && (u.template_slug === slug || u.template_slug === photosUnlock(slug))).map((u) => u.purchase_id));
+  return purchases.some((p) => {
+    if (!ids.has(p.id) || p.status !== "paid" || !(PAIR_AFTER as readonly string[]).includes(p.product)) return false;
+    const at = p.created_at ? Date.parse(p.created_at) : Number.NaN;
+    return Number.isFinite(at) && now - at >= 0 && now - at <= PAIR_OFFER_WINDOW_MS;
+  });
+}
 
 export type PairRefusal = "not_on_sale" | "sign_in_required" | "pair_ready" | "already_owned" | "pair_needs_purchase";
 

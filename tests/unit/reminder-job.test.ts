@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { FakeDb } from "./helpers/fake-db";
+import { PRODUCTS } from "@/lib/pricing/products";
+
+/** The price line's figures: a gift's own price, and that plus the pair (the catalogue's, never typed). */
+const SINGLE = PRODUCTS.single.amounts;
+const EXTRAS = PRODUCTS.extras.amounts;
+const PAIR = PRODUCTS.pair.amounts;
 
 vi.mock("server-only", () => ({}));
 
@@ -186,7 +192,7 @@ describe("the three e-mails before a day", () => {
   it("suggests a paid template for a day of someone else's, never the free note", async () => {
     const mum = run(world([reminder({ recipient_name: "Mum", occasion: "other", template_slug: null, currency: "eur" })]), "2027-02-26");
     await mum.result;
-    expect(mum.sent[0]).toMatchObject({ templateSlug: "jar-of-reasons", paid: "price", prices: { single: 999, three: 1499, currency: "eur" } });
+    expect(mum.sent[0]).toMatchObject({ templateSlug: "jar-of-reasons", paid: "price", prices: { single: SINGLE.eur, three: SINGLE.eur + PAIR.eur, currency: "eur" } });
   });
 
   it("sends a 29 February birthday's e-mails on the 28th's days in a common year", async () => {
@@ -239,11 +245,11 @@ describe("what each e-mail says it holds", () => {
 
     const saved = run(world([reminder({ currency: "eur" })]), "2027-02-26");
     await saved.result;
-    expect(saved.sent[0]).toMatchObject({ paid: "price", prices: { single: 999, three: 1499, currency: "eur" } });
+    expect(saved.sent[0]).toMatchObject({ paid: "price", prices: { single: SINGLE.eur, three: SINGLE.eur + PAIR.eur, currency: "eur" } });
 
     const bought = run(world([reminder()], { purchases: [{ id: "p1", user_id: USER, status: "paid", currency: "usd", created_at: "2026-11-01" }] }), "2027-02-26");
     await bought.result;
-    expect(bought.sent[0]).toMatchObject({ paid: "price", prices: { single: 1199, three: 1799, currency: "usd" } });
+    expect(bought.sent[0]).toMatchObject({ paid: "price", prices: { single: SINGLE.usd, three: SINGLE.usd + PAIR.usd, currency: "usd" } });
 
     const unknown = run(world(), "2027-02-26");
     await unknown.result;
@@ -256,8 +262,8 @@ describe("what each e-mail says it holds", () => {
 
   it("prices a free template as 'Make it special', and names no three while two more gifts aren't on sale", () => {
     const facts = { ready: 0, owned: [], currency: null };
-    expect(paidLine(facts, "eur", "the-letter", "free", true)).toEqual({ paid: "price", prices: { single: 749, three: 1249, currency: "eur" } });
-    expect(paidLine(facts, "gbp", "museum", "premium", false)).toEqual({ paid: "price", prices: { single: 899, three: null, currency: "gbp" } });
+    expect(paidLine(facts, "eur", "the-letter", "free", true)).toEqual({ paid: "price", prices: { single: EXTRAS.eur, three: EXTRAS.eur + PAIR.eur, currency: "eur" } });
+    expect(paidLine(facts, "gbp", "museum", "premium", false)).toEqual({ paid: "price", prices: { single: SINGLE.gbp, three: null, currency: "gbp" } });
     expect(paidLine({ ...facts, owned: ["museum"] }, "gbp", "museum", "premium", true)).toEqual({ paid: "none" });
     expect(paidLine({ ...facts, ready: null }, null, "museum", "premium", true)).toEqual({ paid: "none" });
   });
