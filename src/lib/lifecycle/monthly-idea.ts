@@ -114,6 +114,20 @@ export function nearReminderEmail(dates: readonly MonthDay[], today: Date, quiet
   return false;
 }
 
+/**
+ * The same for the members' saved dates (lib/saved-dates/reminders.ts, "Remind us the day before"):
+ * each is one day, not a yearly date, and its e-mail goes the day before it.
+ */
+export function nearSavedDateEmail(days: readonly Ymd[], today: Date, quiet = IDEA_QUIET_DAYS): boolean {
+  const day = utcDay(today).getTime();
+  return days.some((ymd) => {
+    const d = parseYmd(ymd);
+    if (!d) return false;
+    const emailDay = Date.UTC(d.year, d.month - 1, d.day) - DAY_MS;
+    return Math.abs(emailDay - day) <= quiet * DAY_MS;
+  });
+}
+
 /** The same address check as lib/email/send.ts (server-only there); tests/unit/monthly-idea.test.ts holds the two equal. */
 export const RESERVED = /@(?:[^@]+\.)?(?:example\.(?:com|org|net)|[^@]+\.(?:test|invalid|localhost|example))$/i;
 
@@ -126,6 +140,8 @@ export type IdeaFacts = {
   hasMonthsary: boolean;
   /** The account's reminders, and keep_reminders of confirmed keeps at this address. */
   reminderDays: MonthDay[];
+  /** Saved dates with "Remind us the day before" on, theirs or their partner's, while a membership runs (YYYY-MM-DD). */
+  savedDateDays: Ymd[];
   /** An offer_emails row. */
   boxYes: boolean;
   /** A paid purchase made on the site. */
@@ -139,9 +155,11 @@ export type IdeaSkip = "no_email" | "undeliverable" | "opted_out" | "monthsary" 
 
 /** Whether a row's basis is let through by the setting (the table in PLAN-monthly.md step 2). */
 function permitted(basis: IdeaBasis, facts: IdeaFacts, mode: IdeaMode): boolean {
-  if (mode === "all") return true;
   if (mode === "off") return false;
+  // A "box" row's only yes is the offers box that named it: unticking that box (which deletes the
+  // offer_emails row) withdraws it in every setting, "all" included.
   if (basis === "box") return facts.boxYes;
+  if (mode === "all") return true;
   if (basis === "notice") return mode === "buyers" && facts.customer;
   return false;
 }
@@ -158,7 +176,7 @@ export function ideaDecision(
   if (RESERVED.test(email)) return { send: false, reason: "undeliverable" };
   if (facts.optedOut) return { send: false, reason: "opted_out" };
   if (facts.hasMonthsary) return { send: false, reason: "monthsary" };
-  if (nearReminderEmail(facts.reminderDays, today)) return { send: false, reason: "near_reminder" };
+  if (nearReminderEmail(facts.reminderDays, today) || nearSavedDateEmail(facts.savedDateDays, today)) return { send: false, reason: "near_reminder" };
   if (!permitted(row.basis, facts, mode)) return { send: false, reason: "not_permitted" };
   const withPrice = row.lastSentOn === null && row.priceSentAt === null && !facts.ownsEverything && !facts.holdsGift;
   return { send: true, withPrice };

@@ -23,7 +23,7 @@ const { FakeDb } = await import("./helpers/fake-db");
 
 const OWNER = "55555555-5555-4555-8555-555555555555";
 const at = (ymd: string) => new Date(`${ymd}T08:00:00Z`);
-const facts = (over: Partial<IdeaFacts> = {}): IdeaFacts => ({ email: "sam@mail.com", optedOut: false, hasMonthsary: false, reminderDays: [], boxYes: false, customer: false, ownsEverything: false, holdsGift: false, ...over });
+const facts = (over: Partial<IdeaFacts> = {}): IdeaFacts => ({ email: "sam@mail.com", optedOut: false, hasMonthsary: false, reminderDays: [], savedDateDays: [], boxYes: false, customer: false, ownsEverything: false, holdsGift: false, ...over });
 
 type Row = { user_id: string; since: string; template_slug: string | null; locale: "en" | "es"; basis: "notice" | "box" | "terms"; handled_for: string | null; last_sent_on: string | null; price_sent_at: string | null; off_at?: string | null };
 const row = (over: Partial<Row> = {}): Row => ({ user_id: OWNER, since: "2026-10-20", template_slug: "bouquet", locale: "en", basis: "notice", handled_for: null, last_sent_on: null, price_sent_at: null, off_at: null, ...over });
@@ -130,6 +130,14 @@ describe("the morning job", () => {
     expect((await job(m.store, at("2026-12-20")).run()).sent).toBe(1);
   });
 
+  it("J3c a saved date the member asked to be reminded of keeps the month quiet too", async () => {
+    // Saved for 30 November: its e-mail goes on 29 November, 9 days after the 20th.
+    const m = memoryStore([row()], () => facts({ savedDateDays: ["2026-11-30"] }));
+    expect(await job(m.store, at("2026-11-20")).run()).toEqual({ sent: 0, skipped: 1, failed: 0, deferred: 0 });
+    const far = memoryStore([row()], () => facts({ savedDateDays: ["2026-12-06"] }));
+    expect((await job(far.store, at("2026-11-20")).run()).sent).toBe(1);
+  });
+
   it("J4 stops starting emails when time is up", async () => {
     const { store, rows } = memoryStore([row(), row({ user_id: "66666666-6666-4666-8666-666666666666" })]);
     const late = job(store, at("2026-11-20"), { inTime: () => false });
@@ -197,17 +205,27 @@ describe("the store, on the database", () => {
       template_unlocks: [],
       email_optouts: [],
       gift_keeps: [],
+      // A running membership with a partner; the partner saved a date with "Remind us the day before".
+      couple_passes: [
+        { id: "c1", owner_user_id: "88888888-8888-4888-8888-888888888888", partner_user_id: OWNER, starts_at: "2026-01-01T00:00:00Z", ends_at: "2999-01-01T00:00:00Z" },
+        { id: "c2", owner_user_id: OWNER, partner_user_id: null, starts_at: "2020-01-01T00:00:00Z", ends_at: "2021-01-01T00:00:00Z" },
+      ],
+      saved_dates: [
+        { id: "d1", owner_user_id: "88888888-8888-4888-8888-888888888888", day: "2026-11-28", remind: true },
+        { id: "d2", owner_user_id: "88888888-8888-4888-8888-888888888888", day: "2026-11-29", remind: false },
+        { id: "d3", owner_user_id: OWNER, day: "2027-03-01", remind: true },
+      ],
     });
     const store = supabaseIdeaStore(db.db as never);
     const { ideaWindow } = await import("@/lib/lifecycle/monthly-idea");
     const due = await store.due(ideaWindow(at("2026-11-20")), 100);
     expect(due.map((r) => r.user_id)).toEqual([OWNER]);
-    const known = await store.facts(due);
-    expect(known.get(OWNER)).toEqual({ email: "sam@mail.com", optedOut: false, hasMonthsary: false, reminderDays: [{ month: 12, day: 1 }], boxYes: false, customer: true, ownsEverything: false, holdsGift: false });
+    const known = await store.facts(due, at("2026-11-20"));
+    expect(known.get(OWNER)).toEqual({ email: "sam@mail.com", optedOut: false, hasMonthsary: false, reminderDays: [{ month: 12, day: 1 }], savedDateDays: ["2026-11-28"], boxYes: false, customer: true, ownsEverything: false, holdsGift: false });
     expect(await store.claim(OWNER, "2026-11-20")).toBe(true);
     expect(await store.claim(OWNER, "2026-11-20")).toBe(false);
     db.failNext("email_optouts", "select", "down");
-    await expect(store.facts(due)).rejects.toThrow(/opt-outs/);
+    await expect(store.facts(due, at("2026-11-20"))).rejects.toThrow(/opt-outs/);
   });
 });
 

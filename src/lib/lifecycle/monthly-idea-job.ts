@@ -8,7 +8,7 @@ import { isMissingTable } from "@/lib/commerce/gift-credits";
 import { emailKey } from "./links";
 import { formatMonthDay, type MonthDay } from "./reminders";
 import { parseYmd, ymdOf, type Ymd } from "./monthsaries";
-import { IDEA_REF, ideaDecision, ideaDue, ideaWindow, priceEndsAt, priceLastDay, type IdeaFacts, type IdeaMode } from "./monthly-idea";
+import { IDEA_QUIET_DAYS, IDEA_REF, ideaDecision, ideaDue, ideaWindow, priceEndsAt, priceLastDay, type IdeaFacts, type IdeaMode } from "./monthly-idea";
 import { seasonFor, seasonTemplate, suggestionPath } from "./suggest";
 
 /**
@@ -25,7 +25,7 @@ export interface IdeaStore {
   /** Rows that may be due: day of the month in `days`, not stopped, `since` between the two days, not handled since `handledBefore`; least recently handled first. */
   due(window: ReturnType<typeof ideaWindow>, limit: number): Promise<Row[]>;
   /** Everything the decision needs, for a batch of rows at once. Throws if any lookup fails. */
-  facts(rows: Row[]): Promise<Map<string, IdeaFacts>>;
+  facts(rows: Row[], today: Date): Promise<Map<string, IdeaFacts>>;
   /** True when this run took the month (nobody had). */
   claim(userId: string, date: Ymd): Promise<boolean>;
   release(userId: string, previous: Ymd | null): Promise<void>;
@@ -49,6 +49,7 @@ export type IdeaRun = {
 
 export const IDEA_BATCH = 100;
 
+const DAY_MS = 86_400_000;
 const utcDay = (d: Date) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 
 export async function sendMonthlyIdeas(run: IdeaRun): Promise<{ sent: number; skipped: number; failed: number; deferred: number }> {
@@ -57,7 +58,7 @@ export async function sendMonthlyIdeas(run: IdeaRun): Promise<{ sent: number; sk
   const counts = { sent: 0, skipped: 0, failed: 0, deferred: 0 };
   const due = rows.map((row) => ({ row, month: ideaDue({ since: row.since, handledFor: row.handled_for }, today) })).filter((d) => d.month !== null);
   if (due.length === 0) return counts;
-  const facts = await run.store.facts(due.map((d) => d.row));
+  const facts = await run.store.facts(due.map((d) => d.row), today);
   for (const { row, month } of due) {
     if (!run.inTime()) {
       counts.deferred += 1;
@@ -131,7 +132,7 @@ export function supabaseIdeaStore(db: SupabaseClient<Database>): IdeaStore {
       fail("due", error);
       return data ?? [];
     },
-    async facts(rows) {
+    async facts(rows, today) {
       const ids = [...new Set(rows.map((r) => r.user_id))];
       const out = new Map<string, IdeaFacts>();
       if (ids.length === 0) return out;
@@ -177,6 +178,31 @@ export function supabaseIdeaStore(db: SupabaseClient<Database>): IdeaStore {
           }
         }
       }
+      // "Remind us the day before" (lib/saved-dates/reminders.ts): members' saved dates with reminders
+      // on, their own and their partner's, since the e-mail goes to both. Only a running membership
+      // sends them, so only one counts; only dates whose e-mail lands within the quiet days of today.
+      const nowIso = new Date().toISOString();
+      const [asOwner, asPartner] = await Promise.all([
+        db.from("couple_passes").select("owner_user_id, partner_user_id").in("owner_user_id", ids).lte("starts_at", nowIso).gt("ends_at", nowIso),
+        db.from("couple_passes").select("owner_user_id, partner_user_id").in("partner_user_id", ids).lte("starts_at", nowIso).gt("ends_at", nowIso),
+      ]);
+      fail("memberships", asOwner.error);
+      fail("memberships", asPartner.error);
+      const couple = new Map<string, Set<string>>();
+      for (const pass of [...(asOwner.data ?? []), ...(asPartner.data ?? [])]) {
+        const pair = [pass.owner_user_id, pass.partner_user_id].filter((p): p is string => Boolean(p));
+        for (const id of pair) if (ids.includes(id)) couple.set(id, new Set([...(couple.get(id) ?? []), ...pair]));
+      }
+      const savedBy = new Map<string, Ymd[]>();
+      const people = [...new Set([...couple.values()].flatMap((s) => [...s]))];
+      if (people.length > 0) {
+        const from = ymdOf(new Date(today.getTime() - (IDEA_QUIET_DAYS + 1) * DAY_MS));
+        const to = ymdOf(new Date(today.getTime() + (IDEA_QUIET_DAYS + 2) * DAY_MS));
+        const saved = await db.from("saved_dates").select("owner_user_id, day").in("owner_user_id", people).eq("remind", true).gte("day", from).lte("day", to);
+        fail("saved dates", saved.error);
+        for (const d of saved.data ?? []) if (d.day) savedBy.set(d.owner_user_id, [...(savedBy.get(d.owner_user_id) ?? []), d.day]);
+      }
+
       const has = (data: { user_id: string | null }[] | null, id: string) => (data ?? []).some((r) => r.user_id === id);
       for (const id of ids) {
         const hash = keys.get(id);
@@ -185,6 +211,7 @@ export function supabaseIdeaStore(db: SupabaseClient<Database>): IdeaStore {
           optedOut: hash ? optedOut.has(hash) : false,
           hasMonthsary: has(monthsaries.data, id),
           reminderDays: [...(reminders.data ?? []).filter((r) => r.user_id === id).map((r) => ({ month: r.month, day: r.day })), ...(hash ? (keepDays.get(hash) ?? []) : [])],
+          savedDateDays: [...(couple.get(id) ?? [])].flatMap((p) => savedBy.get(p) ?? []),
           boxYes: has(offers.data, id),
           customer: has(purchases.data, id),
           ownsEverything: has(unlocks.data, id),

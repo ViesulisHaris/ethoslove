@@ -264,7 +264,21 @@ describe("the monthly idea in the documents", () => {
       expect(en.p1).toContain("The monthly idea:");
       expect(en.p1).toContain("it has no tracking pixel");
       expect(en.p1).toContain("your gifts stay online");
-      expect(en.p8).toContain("send the monthly idea to people who have sent a gift");
+      // The legitimate-interest basis is claimed only for whom the setting sends it to without a box:
+      // everyone in "all", customers in "buyers", nobody in "optin" (consent, the box, covers it).
+      if (mode === "all") expect(en.p8).toContain("send the monthly idea to people who have sent a gift");
+      else if (mode === "buyers") expect(en.p8).toContain("send the monthly idea to customers who have sent a gift");
+      else expect(en.p8).not.toMatch(/send the monthly idea to/);
+      expect(en.p8).toContain("where the box you ticked names it, the monthly idea");
+      if (mode === "optin") expect(es.p8).not.toMatch(/enviar la idea del mes a/);
+      // The send screen's sentence says what that setting really shows: a button only where the line
+      // with "Don't send these" is drawn after a send (offer-emails-box.tsx ideaNotice), else the box.
+      if (mode === "optin") {
+        expect(en.t5).not.toMatch(/button/);
+        expect(en.t5).toContain("unticking it there turns it off");
+        expect(es.t5).not.toMatch(/botón/);
+      } else expect(en.t5).toContain("with a button");
+      if (mode === "buyers") expect(en.t5).toContain("unticking the box turns it off too");
       expect(en.p11).toContain("The monthly idea: its record, until you delete your account");
       expect(en.p12).toContain("from one of our emails, until that price ends");
       expect(en.p13).toContain("reminders, the monthly idea, views");
@@ -273,7 +287,8 @@ describe("the monthly idea in the documents", () => {
       expect(es.t6).toContain("El primer correo de la idea del mes (sección 5) puede traer uno");
       expect(es.p1).toContain("La idea del mes:");
       expect(es.p1).toContain("tus regalos siguen en línea");
-      expect(es.p8).toContain("enviar la idea del mes a quienes han enviado un regalo");
+      if (mode === "all") expect(es.p8).toContain("enviar la idea del mes a quienes han enviado un regalo");
+      if (mode === "buyers") expect(es.p8).toContain("enviar la idea del mes a los clientes que han enviado un regalo");
       expect(es.p11).toContain("La idea del mes: su registro");
       expect(es.p12).toContain("desde uno de nuestros correos, hasta que");
       expect(es.p13).toContain("recordatorios, la idea del mes, visualizaciones");

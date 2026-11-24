@@ -843,7 +843,7 @@ const privacyEs = (g: boolean): LegalDoc => ({
  * is reworded and a change no longer finds its place, it throws, so tests/unit/legal.test.ts fails
  * instead of a document silently missing a part.
  */
-type IdeaEdit = { doc: "terms" | "privacy"; section: number; only?: "all" } & (
+type IdeaEdit = { doc: "terms" | "privacy"; section: number; only?: readonly LegalIdeaMode[] } & (
   | { find: string; after: string }
   | { find: string; replace: string }
   | { paragraphAfter: string; text: string }
@@ -855,8 +855,8 @@ export type LegalIdeaMode = "optin" | "buyers" | "all";
 
 /**
  * Who gets it, as the opening of the two paragraphs that describe it: everyone who sends a gift
- * ("all", the owner's choice), only people who have bought from us ("buyers"), or only those who
- * ticked the offers box that names it ("optin"). Every other sentence is the same in each.
+ * ("all", the owner's choice); people who have bought from us, and anyone who ticks the offers box
+ * where it mentions this email ("buyers"); or only those who tick that box ("optin").
  */
 const IDEA_WHO: Record<LegalIdeaMode, Record<GiftLocale, { terms: string; privacy: string }>> = {
   all: {
@@ -864,12 +864,42 @@ const IDEA_WHO: Record<LegalIdeaMode, Record<GiftLocale, { terms: string; privac
     es: { terms: "Después de enviar un regalo, te enviamos por correo", privacy: "después de enviar un regalo, te enviamos por correo" },
   },
   buyers: {
-    en: { terms: "Once you have bought from us, after you send a gift, we email you", privacy: "once you have bought from us, after you send a gift, we email you" },
-    es: { terms: "Si nos has comprado algo, después de enviar un regalo te enviamos por correo", privacy: "si nos has comprado algo, después de enviar un regalo te enviamos por correo" },
+    en: {
+      terms: "If you have bought from us, or you tick the box for offer emails where it mentions this email, then after you send a gift we email you",
+      privacy: "if you have bought from us, or you tick the box for offer emails where it mentions this email, then after you send a gift we email you",
+    },
+    es: {
+      terms: "Si nos has comprado algo, o marcas la casilla de los correos de ofertas donde se menciona este correo, después de enviar un regalo te enviamos por correo",
+      privacy: "si nos has comprado algo, o marcas la casilla de los correos de ofertas donde se menciona este correo, después de enviar un regalo te enviamos por correo",
+    },
   },
   optin: {
-    en: { terms: "If the box for offer emails you tick names it, we also email you", privacy: "if the box for offer emails you tick names it, we also email you" },
-    es: { terms: "Si la casilla de los correos de ofertas que marcas la nombra, también te enviamos por correo", privacy: "si la casilla de los correos de ofertas que marcas la nombra, también te enviamos por correo" },
+    en: { terms: "If you tick the box for offer emails and it mentions this email, we also send you", privacy: "if you tick the box for offer emails and it mentions this email, we also send you" },
+    es: {
+      terms: "Si marcas la casilla de los correos de ofertas y en ella se menciona este correo, también te enviamos",
+      privacy: "si marcas la casilla de los correos de ofertas y en ella se menciona este correo, también te enviamos",
+    },
+  },
+};
+
+/**
+ * How the screen a gift is sent from tells them, and how they turn it off there, as each setting
+ * really does it: the line with "Don't send these" after a send that starts it ("all", and a buyer's
+ * send in "buyers"), or the offers box itself, whose untick stops it (lib/lifecycle/monthly-idea.ts
+ * permitted reads the box in every setting).
+ */
+const IDEA_TOLD: Record<LegalIdeaMode, Record<GiftLocale, string>> = {
+  all: {
+    en: "We tell you so on the screen you send the gift from, with a button to turn it off there.",
+    es: "Te lo decimos en la pantalla desde la que envías el regalo, con un botón para desactivarlo allí mismo.",
+  },
+  buyers: {
+    en: "We tell you so on the screen you send the gift from, with a button there to turn it off; if it came with the box, unticking the box turns it off too.",
+    es: "Te lo decimos en la pantalla desde la que envías el regalo, con un botón para desactivarlo allí mismo; si llegó con la casilla, desmarcarla también lo desactiva.",
+  },
+  optin: {
+    en: "The box says so on the screen you send the gift from, and unticking it there turns it off.",
+    es: "La casilla lo dice en la pantalla desde la que envías el regalo, y desmarcarla allí lo desactiva.",
   },
 };
 
@@ -878,7 +908,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
     {
       doc: "terms",
       section: 1,
-      only: "all",
+      only: ["all"],
       find: "(up to 500 characters, without photos).",
       after:
         " The free version comes with one email a month from us, with a gift idea, for a year after your last gift; you can stop it in any of those emails or on your account's reminders page, and stopping it never takes down a gift you've sent (section 5).",
@@ -887,7 +917,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       doc: "terms",
       section: 5,
       paragraphAfter: "If you ask us to remind you of a date",
-      text: "{who} one gift idea a month, for a year after your last gift, on about the day of the month you sent it. We tell you so on the screen you send the gift from, with a button to turn it off there.{free} You can stop these emails with the link in any of them or on your account's reminders page; they stay off if you send another gift, and nothing happens to the gifts you've sent.",
+      text: "{who} one gift idea a month, for a year after your last gift, on about the day of the month you sent it. {told}{free} You can stop these emails with the link in any of them or on your account's reminders page; they stay off if you send another gift, and nothing happens to the gifts you've sent.",
     },
     {
       doc: "terms",
@@ -905,8 +935,16 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
     {
       doc: "privacy",
       section: 8,
+      only: ["all"],
       find: "send offer emails to our customers in the United States",
       after: ", send the monthly idea to people who have sent a gift (they are told when they send it, and can turn it off there or in any email)",
+    },
+    {
+      doc: "privacy",
+      section: 8,
+      only: ["buyers"],
+      find: "send offer emails to our customers in the United States",
+      after: ", send the monthly idea to customers who have sent a gift (they are told when they send it, and can turn it off there or in any email)",
     },
     { doc: "privacy", section: 8, find: "and to offer emails at any time with the unsubscribe link in each one.", replace: "and to offer emails and the monthly idea at any time with the link in each one." },
     { doc: "privacy", section: 8, find: "the offer emails you ask for", replace: "the offer emails you ask for and, where the box you ticked names it, the monthly idea" },
@@ -924,7 +962,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
     {
       doc: "terms",
       section: 1,
-      only: "all",
+      only: ["all"],
       find: "(hasta 500 caracteres, sin fotos).",
       after:
         " La versión gratuita incluye un correo nuestro al mes, con una idea de regalo, durante un año desde tu último regalo; puedes dejar de recibirlo desde cualquiera de esos correos o desde la página de recordatorios de tu cuenta, y dejar de recibirlo nunca retira un regalo que ya has enviado (sección 5).",
@@ -933,7 +971,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       doc: "terms",
       section: 5,
       paragraphAfter: "Si nos pides que te recordemos una fecha",
-      text: "{who} una idea de regalo al mes, durante un año desde tu último regalo, más o menos el día del mes en que lo enviaste. Te lo decimos en la pantalla desde la que envías el regalo, con un botón para desactivarlo allí mismo.{free} Puedes dejar de recibir estos correos con el enlace de cualquiera de ellos o desde la página de recordatorios de tu cuenta; siguen desactivados aunque envíes otro regalo, y a los regalos que has enviado no les pasa nada.",
+      text: "{who} una idea de regalo al mes, durante un año desde tu último regalo, más o menos el día del mes en que lo enviaste. {told}{free} Puedes dejar de recibir estos correos con el enlace de cualquiera de ellos o desde la página de recordatorios de tu cuenta; siguen desactivados aunque envíes otro regalo, y a los regalos que has enviado no les pasa nada.",
     },
     {
       doc: "terms",
@@ -951,8 +989,16 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
     {
       doc: "privacy",
       section: 8,
+      only: ["all"],
       find: "enviar correos de ofertas a nuestros clientes en Estados Unidos",
       after: ", enviar la idea del mes a quienes han enviado un regalo (se les avisa al enviarlo y pueden desactivarla allí o en cualquier correo)",
+    },
+    {
+      doc: "privacy",
+      section: 8,
+      only: ["buyers"],
+      find: "enviar correos de ofertas a nuestros clientes en Estados Unidos",
+      after: ", enviar la idea del mes a los clientes que han enviado un regalo (se les avisa al enviarlo y pueden desactivarla allí o en cualquier correo)",
     },
     {
       doc: "privacy",
@@ -975,15 +1021,16 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
 
 /** In "all" only: the free version is sent by ticking the Terms box. */
 const IDEA_FREE: Record<GiftLocale, string> = {
-  en: " To send the free version, you tick a box accepting these terms, which say so.",
-  es: " Para enviar la versión gratuita, marcas una casilla en la que aceptas estos términos, que lo dicen.",
+  en: " To send the free version, you tick a box to accept these terms, this paragraph included.",
+  es: " Para enviar la versión gratuita, marcas una casilla con la que aceptas estos términos, este párrafo incluido.",
 };
 
 /** The document with the monthly idea's changes made (IDEA_LEGAL) for `mode`. Throws when one finds no place. */
 function withIdea(doc: LegalDoc, kind: "terms" | "privacy", locale: GiftLocale, mode: LegalIdeaMode): LegalDoc {
   const sections = doc.sections.map((s) => ({ ...s, paragraphs: [...s.paragraphs] }));
-  const fill = (text: string) => text.replace("{who}", IDEA_WHO[mode][locale][kind]).replace("{free}", mode === "all" ? IDEA_FREE[locale] : "");
-  for (const edit of IDEA_LEGAL[locale].filter((e) => e.doc === kind && (!e.only || e.only === mode))) {
+  const fill = (text: string) =>
+    text.replace("{who}", IDEA_WHO[mode][locale][kind]).replace("{told}", IDEA_TOLD[mode][locale]).replace("{free}", mode === "all" ? IDEA_FREE[locale] : "");
+  for (const edit of IDEA_LEGAL[locale].filter((e) => e.doc === kind && (!e.only || e.only.includes(mode)))) {
     const section = sections.find((s) => s.heading.startsWith(`${edit.section}. `));
     if (!section) throw new Error(`monthly idea: no section ${edit.section} in the ${locale} ${kind}`);
     const where = (needle: string) => {

@@ -13,6 +13,7 @@ import {
   ideaSince,
   ideaWindow,
   nearReminderEmail,
+  nearSavedDateEmail,
   priceEndsAt,
   priceLastDay,
   termsRequired,
@@ -30,6 +31,7 @@ const facts = (over: Partial<IdeaFacts> = {}): IdeaFacts => ({
   optedOut: false,
   hasMonthsary: false,
   reminderDays: [],
+  savedDateDays: [],
   boxYes: false,
   customer: false,
   ownsEverything: false,
@@ -139,6 +141,18 @@ describe("who gets it", () => {
     expect(ideaDecision(fresh(), facts({ optedOut: true, hasMonthsary: true, reminderDays: [{ month: 12, day: 1 }] }), "all", day("2026-11-24"))).toEqual({ send: false, reason: "opted_out" });
   });
 
+  it("U11b a saved date with \"Remind us the day before\" counts too, on both sides of the fourteen days", () => {
+    // Saved for 5 December: its e-mail goes on 4 December.
+    const saved = ["2026-12-05"];
+    expect(nearSavedDateEmail(saved, day("2026-11-20"))).toBe(true); // 14 days before the e-mail
+    expect(nearSavedDateEmail(saved, day("2026-11-19"))).toBe(false); // 15
+    expect(nearSavedDateEmail(saved, day("2026-12-18"))).toBe(true); // 14 days after it
+    expect(nearSavedDateEmail(saved, day("2026-12-19"))).toBe(false); // 15
+    expect(nearSavedDateEmail(["not a day"], day("2026-12-04"))).toBe(false);
+    expect(ideaDecision(fresh(), facts({ savedDateDays: saved }), "all", day("2026-11-24"))).toEqual({ send: false, reason: "near_reminder" });
+    expect(ideaDecision(fresh(), facts({ savedDateDays: saved }), "all", day("2026-11-19")).send).toBe(true);
+  });
+
   it("U12 each mode lets through only its own rows", () => {
     const today = day("2026-11-24");
     const sends = (basis: IdeaBasis, mode: IdeaMode, over: Partial<IdeaFacts>) => ideaDecision(fresh(basis), facts(over), mode, today).send;
@@ -152,7 +166,9 @@ describe("who gets it", () => {
         expect(sends("notice", "buyers", f)).toBe(customer);
         expect(sends("box", "buyers", f)).toBe(boxYes);
         expect(sends("terms", "buyers", f)).toBe(false);
-        for (const basis of ["notice", "box", "terms"] as const) expect(sends(basis, "all", f)).toBe(true);
+        for (const basis of ["notice", "terms"] as const) expect(sends(basis, "all", f)).toBe(true);
+        // A box row whose box was unticked has withdrawn its yes, in "all" too.
+        expect(sends("box", "all", f)).toBe(boxYes);
       }
   });
 
