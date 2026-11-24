@@ -141,9 +141,38 @@ class Query implements PromiseLike<Result> {
     this.filters.push((row) => operator === "is" && value === null && !isNull(row[column]));
     return this;
   }
-  /** PostgREST's or=(a.op.v,b.op.v): any of them, for is.null, eq, neq, lt(e) and gt(e). */
+  /** PostgREST's or=(a.op.v,b.op.v): any of them, for is.null, eq, neq, lt(e) and gt(e), and and(…) groups of them. */
   or(expression: string) {
-    const tests = expression.split(",").map((part) => {
+    this.filters.push(this.anyOf(expression));
+    return this;
+  }
+  /** The top-level parts of a PostgREST list, keeping and(…) groups whole. */
+  private static parts(expression: string): string[] {
+    const out: string[] = [];
+    let depth = 0;
+    let current = "";
+    for (const ch of expression) {
+      if (ch === "(") depth += 1;
+      if (ch === ")") depth -= 1;
+      if (ch === "," && depth === 0) {
+        out.push(current);
+        current = "";
+      } else current += ch;
+    }
+    out.push(current);
+    return out;
+  }
+  private anyOf(expression: string): (row: Row) => boolean {
+    const tests = Query.parts(expression).map((part) => this.condition(part));
+    return (row) => tests.some((t) => t(row));
+  }
+  private condition(part: string): (row: Row) => boolean {
+    const group = /^and\((.*)\)$/.exec(part);
+    if (group) {
+      const all = Query.parts(group[1]).map((p) => this.condition(p));
+      return (row) => all.every((t) => t(row));
+    }
+    {
       const [column, op, ...rest] = part.split(".");
       const raw = rest.join(".");
       const value = raw === "null" ? null : Number.isNaN(Number(raw)) ? raw : Number(raw);
@@ -160,9 +189,7 @@ class Query implements PromiseLike<Result> {
         if (op === "gte") return (v as number) >= (value as number);
         throw new Error(`fake or(): ${op} not supported`);
       };
-    });
-    this.filters.push((row) => tests.some((t) => t(row)));
-    return this;
+    }
   }
   is(column: string, value: null) {
     this.used.push(column);
