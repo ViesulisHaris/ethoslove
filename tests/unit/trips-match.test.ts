@@ -3,7 +3,7 @@ import { distanceKm } from "@/lib/dates/geo";
 import { findAirport } from "@/lib/trips/airports";
 import { estimateFlight } from "@/lib/trips/flights";
 import { lengthFits, matchTrips, metWishes, nextBestMonth, topMatches, type MatchLength, type MatchTrip, type MatchWish } from "@/lib/trips/match";
-import { MATCH_KINDS, readMatchLink, writeMatchLink } from "@/lib/trips/match-link";
+import { keepFrom, keptFrom, MATCH_FROM_STATE, MATCH_KINDS, readMatchLink, writeMatchLink } from "@/lib/trips/match-link";
 import { TRIP_KINDS, TRIPS } from "@/lib/trips/presets";
 
 const TABLE: MatchTrip[] = TRIPS.map(({ id, kind, days, budget, bestMonths, flyTo }) => ({ id, kind, days, budget, bestMonths, flyTo }));
@@ -216,13 +216,29 @@ describe("why a pick fits", () => {
 });
 
 describe("the matcher's answer in the address", () => {
-  it("carries the wishes and the airport, and reads back the same", () => {
+  it("carries the wishes, never the airport, and reads back the same", () => {
     const riga = air("Riga");
     const search = writeMatchLink(new URLSearchParams("utm_source=x"), { from: riga, length: "week", budget: 1, kind: "islands" });
-    expect(search.toString()).toBe("utm_source=x&match=1&len=week&budget=1&kind=islands&from=Riga%7ERIX");
-    expect(readMatchLink(search)).toEqual({ from: riga, length: "week", budget: 1, kind: "islands" });
+    // Where they fly from says where they live: an address reaches server logs, so it stays out.
+    expect(search.toString()).toBe("utm_source=x&match=1&len=week&budget=1&kind=islands");
+    expect(readMatchLink(search)).toEqual({ from: null, length: "week", budget: 1, kind: "islands" });
+    // A link from before, with the airport in it, is still read, and the airport is dropped when it is written again.
+    const old = new URLSearchParams("match=1&kind=islands&from=Riga~RIX");
+    expect(readMatchLink(old)?.from).toEqual(riga);
+    expect(writeMatchLink(old, { from: riga, length: null, budget: null, kind: "islands" }).toString()).toBe("match=1&kind=islands");
     // Every choice left open is still an answer.
     expect(readMatchLink(writeMatchLink(new URLSearchParams(), { from: null, length: null, budget: null, kind: null }))).toEqual({ from: null, length: null, budget: null, kind: null });
+  });
+
+  it("the airport is kept in the history entry's state, beside whatever else is there", () => {
+    const riga = air("Riga");
+    const state = keepFrom({ __NA: true, other: 1 }, riga);
+    expect(state).toEqual({ __NA: true, other: 1, [MATCH_FROM_STATE]: { city: "Riga", iata: "RIX" } });
+    expect(keptFrom(state)).toEqual(riga);
+    expect(keepFrom(state, null)).toEqual({ __NA: true, other: 1 });
+    expect(keptFrom(null)).toBeNull();
+    expect(keptFrom({ [MATCH_FROM_STATE]: { city: "Atlantis", iata: "XXX" } })).toBeNull();
+    expect(keptFrom({ [MATCH_FROM_STATE]: "Riga" })).toBeNull();
   });
 
   it("no answer without match=1, and a wish it cannot read is left open", () => {

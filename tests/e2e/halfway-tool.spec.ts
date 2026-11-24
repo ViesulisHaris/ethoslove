@@ -79,12 +79,24 @@ test.describe("halfway between two cities", () => {
     await expect(page.locator("[data-halfway-tool]")).not.toContainText("Luxembourg");
   });
 
-  test("'almost exactly halfway' is said only when the two journeys are even", async ({ page }) => {
-    // Dallas and Houston: Madisonville is 33 km off the middle, but 219 km for one and 142 for the other.
-    await mapSays(page, () => ({ kind: "town", name: "Madisonville", region: "Texas", countryCode: "US", lat: 30.9499, lng: -95.9116 }));
+  test("a town from the map is named only when it is fair to both, and 'almost exactly' only when even", async ({ page }) => {
+    // Dallas and Houston: Madisonville is 39 km off the middle, but 220 km for one and 142 for the other.
+    const MADISONVILLE = { name: "Madisonville", region: "Texas", countryCode: "US", lat: 30.9499, lng: -95.9116 };
+    await mapSays(page, () => ({ kind: "town", ...MADISONVILLE }));
     await page.goto(TOOL);
     await both(page, "Dallas", "Houston");
-    await expect(page.locator("[data-halfway-city]")).toHaveText("Madisonville");
+    // No other town found: how far each, why no town, and the middle on a map.
+    await expect(page.locator("[data-halfway-result]")).toHaveAttribute("data-answer", "uneven");
+    await expect(page.locator("[data-halfway-city]")).toHaveText(/^18\d km each$/);
+    await expect(page.locator("[data-halfway-result]")).toContainText("The towns near the middle are all much nearer one of you than the other.");
+    await expect(page.locator("[data-halfway-map]")).toBeVisible();
+    await expect(page.locator("[data-halfway-tool]")).not.toContainText("Madisonville");
+
+    // Buffalo, 162 km against 200: fair to both, so it is named, but not "almost exactly".
+    await mapSays(page, () => ({ kind: "town", ...MADISONVILLE, also: [{ name: "Buffalo", region: "Texas", countryCode: "US", lat: 31.4635, lng: -96.058 }] }));
+    await page.goto(TOOL);
+    await both(page, "Dallas", "Houston");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Buffalo");
     await expect(page.locator("[data-halfway-result]")).toContainText(/Texas, \d+ km from the exact middle\./);
     await expect(page.locator("[data-halfway-result]")).not.toContainText(/exactly halfway/);
   });
@@ -323,11 +335,14 @@ test.describe("halfway between two cities", () => {
     await expect(page.getByRole("button", { name: "Envíaselo" })).toBeVisible();
 
     // A town from the map is the name the map gives in English (Photon has no Spanish; with no
-    // language it answered 恵那市 for Tokyo and Osaka): the Spanish page asks just as the English one does.
-    await mapSays(page, () => ({ kind: "town", name: "Ena", region: "Gifu Prefecture", countryCode: "JP", lat: 35.4497, lng: 137.4127 }));
+    // language it answered 恵那市 for Tokyo and Osaka): the Spanish page asks just as the English one
+    // does. Its region is the map's English (Texas, Gifu Prefecture), so the page names the country, in Spanish.
+    await mapSays(page, () => ({ kind: "town", name: "Amarillo", region: "Texas", countryCode: "US", lat: 35.2073, lng: -101.8371 }));
     await page.goto(`/es${TOOL}`);
     await both(page, "Austin", "Denver", true);
-    await expect(page.locator("[data-halfway-city]")).toHaveText("Ena");
+    await expect(page.locator("[data-halfway-city]")).toHaveText("Amarillo");
+    await expect(page.locator("[data-halfway-result]")).toContainText(/^.*Estados Unidos, a \d+ km del punto medio exacto\./);
+    await expect(page.locator("[data-halfway-result]")).not.toContainText("Texas");
     expect(asked.length).toBeGreaterThan(0);
     for (const url of asked) expect(new URL(url).searchParams.has("lang"), url).toBe(false);
   });

@@ -15,7 +15,7 @@ import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
 import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
-import { halfwayAnswer, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, tableFair } from "@/lib/ldr/halfway";
+import { echoTheirs, halfwayAnswer, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
 import { fairKm, pickSpot, spotAt } from "@/lib/places/photon-reverse";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
@@ -298,7 +298,57 @@ describe("the halfway answer, table and map together", () => {
   it("a halfway with no town to name can be seen on a map", () => {
     expect(mapLink({ lat: 35.123456, lng: -101.5 })).toBe("https://www.openstreetmap.org/?mlat=35.1235&mlon=-101.5#map=8/35.1235/-101.5");
   });
+
+  describe("a town from the map is as fair to both as a city from the table (Dallas and Houston)", () => {
+    const DALLAS = { name: "Dallas", lat: 32.78, lng: -96.8 };
+    const HOUSTON = { name: "Houston", lat: 29.76, lng: -95.37 };
+    const MADISONVILLE = { name: "Madisonville", region: "Texas", countryCode: "US", lat: 30.95, lng: -95.91 };
+    const CENTERVILLE = { name: "Centerville", region: "Texas", countryCode: "US", lat: 31.26, lng: -95.98 };
+    const h = halfwayBetween(DALLAS, HOUSTON);
+
+    it("the nearest town to the middle is passed over when one of them travels much further", () => {
+      expect(needsMap(h)).toBe(true);
+      const off = halfwayAnswer(h, DALLAS, HOUSTON, { kind: "town", ...MADISONVILLE }, "en");
+      // 219 km against 142: never "halfway", and no other town was found, so how far each, and the map.
+      expect(off.kind).toBe("uneven");
+    });
+
+    it("another town the map found near the middle is named when it is even", () => {
+      const answer = halfwayAnswer(h, DALLAS, HOUSTON, { kind: "town", ...MADISONVILLE, also: [CENTERVILLE] }, "en");
+      expect(answer).toMatchObject({ kind: "city", name: "Centerville", region: "Texas", fromMap: true });
+      if (answer.kind !== "city") throw new Error("named");
+      expect(Math.abs(answer.kmFromA - answer.kmFromB)).toBeLessThanOrEqual(fairKm(h.km / 2));
+    });
+
+    it("the map hands the page every town near the middle, in order, for it to choose from", () => {
+      // Centerville nearer the middle than Madisonville; Crockett beyond the 50 km asked for towns.
+      const towns = { features: [...photonFeature("Madisonville", 30.95, -95.91), ...photonFeature("Crockett", 31.32, -95.46), ...photonFeature("Centerville", 31.26, -95.98)] };
+      const spot = pickSpot(h.middle, h.km / 2, EMPTY, towns, null);
+      expect(spot).toEqual({ kind: "town", name: "Centerville", lat: 31.26, lng: -95.98, also: [{ name: "Madisonville", lat: 30.95, lng: -95.91 }] });
+    });
+  });
+
+  it("a Spanish page names the map town's country in Spanish, never the map's English region", () => {
+    const h = halfwayBetween(AUSTIN, DENVER);
+    const amarillo = { kind: "town" as const, name: "Amarillo", region: "Texas", countryCode: "US", lat: 35.21, lng: -101.84 };
+    expect(halfwayAnswer(h, AUSTIN, DENVER, amarillo, "en")).toMatchObject({ region: "Texas" });
+    expect(halfwayAnswer(h, AUSTIN, DENVER, amarillo, "es")).toMatchObject({ region: "Estados Unidos" });
+    expect(regionFor({ region: "Great East", countryCode: "FR" }, "es")).toBe("Francia");
+    expect(regionFor({ region: "Gifu Prefecture", countryCode: "JP" }, "es")).toBe("Japón");
+    expect(regionFor({ region: "Tver Oblast" }, "es")).toBeUndefined();
+    expect(regionFor({ region: "Tver Oblast", countryCode: "RU" }, "en")).toBe("Tver Oblast");
+  });
+
+  it("their own town is offered for dates only once the answer is known to name nothing it should not", () => {
+    const each = { eachKm: 250, middle: { lat: 41, lng: -2 } };
+    for (const kind of ["pending", "failed", "unnamed"] as const) expect(echoTheirs({ kind, ...each }), kind).toBe(false);
+    for (const kind of ["none", "sea", "between", "uneven"] as const) expect(echoTheirs({ kind, ...each }), kind).toBe(true);
+    expect(echoTheirs(null)).toBe(false);
+  });
 });
+
+/** Photon features of one place, to put several in one answer. */
+const photonFeature = (name: string, lat: number, lng: number) => [{ geometry: { coordinates: [lng, lat] }, properties: { name } }];
 
 describe("the halfway finder's link", () => {
   const riga = town("Riga");
@@ -447,6 +497,14 @@ describe("the rooms' pages", () => {
       for (const [key, text] of titles) expect(words(text), `${l} ${key}: ${text}`).toBeLessThanOrEqual(9);
       for (const { q, a } of HALFWAY_TOOL[l].faq) expect(words(a), `${l} ${q}`).toBeLessThanOrEqual(180);
       expect(m.ldr.ways.note.replace("{city}", "x".repeat(60)).length, `${l} ldr.ways.note`).toBeLessThanOrEqual(120);
+      // Long distance's title with the site's " · Ethos" fits Google's cut of about 60 letters.
+      expect(`${m.ldr.meta.title} · Ethos`.length, `${l} ldr.meta.title`).toBeLessThanOrEqual(60);
+      // The FAQ says what the code does: a big city is named only when it is fair to both (tableFair), not "within 150 km".
+      const how = HALFWAY_TOOL[l].faq[0].a;
+      expect(how, l).not.toMatch(/150/);
+      expect(how, l).toMatch(l === "en" ? /about as far from each of you/ : /distancia parecida de los dos/);
+      // The budget is said in words: no sum in any one currency.
+      for (const v of ["1", "2", "any"] as const) expect(m.trips.match.budget[v], `${l} budget ${v}`).not.toMatch(/[€$£]|\{money\}|\d/);
     }
   });
 

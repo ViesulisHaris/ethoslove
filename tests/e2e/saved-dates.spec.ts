@@ -245,7 +245,7 @@ test("a trip saved signed in is a toggle", async ({ page }) => {
   expect(asked.some((a) => a.method === "DELETE" && a.url.endsWith(ID))).toBe(true);
 });
 
-test("a trip just saved offers the surprise; one found saved does not", async ({ page, context }) => {
+test("a trip just saved offers the surprise; one found saved does not", async ({ page, context, isMobile }) => {
   await signIn(page);
   const trip = savedDate({ kind: "trip", tripId: "lisbon-slow-weekend", data: { v: 1, tripId: "lisbon-slow-weekend" } });
   await api(page, ({ method }) => (method === "POST" ? { status: 201, body: { savedDate: trip } } : method === "DELETE" ? { status: 200, body: { ok: true } } : { status: 200, body: list() }));
@@ -253,6 +253,13 @@ test("a trip just saved offers the surprise; one found saved does not", async ({
   await page.getByTestId("save-trip").click();
   const next = page.getByTestId("trip-saved-next");
   await expect(next).toContainText("It's in My dates. Keep it a secret?");
+  // The line stands below Save and Send, never between them: the two stay side by side.
+  const saved = await page.getByTestId("trip-saved").boundingBox();
+  const send = await page.getByRole("button", { name: "Send this trip to them" }).boundingBox();
+  const line = await next.boundingBox();
+  // On a phone the pair itself wraps (Saved, Remove and Send are wider than the screen); on a desk it is one row.
+  if (!isMobile) expect(Math.abs(saved!.y - send!.y), "Save and Send on one row").toBeLessThan(2);
+  expect(line!.y, "the line below the pair").toBeGreaterThanOrEqual(send!.y + send!.height);
   const surprise = next.getByRole("link", { name: "Make it a surprise" });
   await expect(surprise).toHaveAttribute("href", "#surprise");
   // It shows where the keyboard is, as every control must.

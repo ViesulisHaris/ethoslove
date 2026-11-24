@@ -40,6 +40,19 @@ test.describe("long distance, joined up", () => {
     noErrors();
   });
 
+  test("while the map is asked, or when it cannot be, no typed town is echoed (Madrid and Barcelona)", async ({ page }) => {
+    const SPAIN = { Madrid: { lat: 40.4168, lng: -3.7038, offset: 3600, country: "Spain" }, Barcelona: { lat: 41.3874, lng: 2.1686, offset: 3600, country: "Spain" } };
+    await mockTowns(page, { ...TOWNS, ...SPAIN }, () => null);
+    await page.goto("/long-distance");
+    await typeTown(page, "Where you are", "Madrid");
+    await typeTown(page, "Where they are", "Barcelona");
+    const datesLink = page.getByRole("link", { name: "Date ideas near either of you" });
+    await expect(datesLink).toBeVisible();
+    await expect(datesLink).toHaveAttribute("href", "/dates");
+    // No date link names either town (the flight between their own airports is theirs to name, as before).
+    await expect(page.locator("a[href^='/dates']").filter({ hasText: /Barcelona|Madrid/ })).toHaveCount(0);
+  });
+
   test("the halfway card says a map town's region, and in miles where people read miles", async ({ page }) => {
     await mockTowns(page, TOWNS, () => ({ kind: "town", name: "Warren", region: "Ohio", countryCode: "US", lat: 41.2376, lng: -80.8184 }));
     await page.goto("/long-distance");

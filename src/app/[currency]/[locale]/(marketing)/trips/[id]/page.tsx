@@ -142,12 +142,11 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <Plane aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("detail.jump.flights")}
                 </a>
-                {/* Keeping it and sending it go together: where the four don't fit one row, these two wrap as a pair, never the share alone. */}
-                <div className="flex flex-wrap gap-2.5">
-                  {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
-                  <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)} />
+                {/* Keeping it and sending it go together: where the four don't fit one row, these two wrap as a pair, never the share alone. A failed save, or the line after one, comes below the pair. */}
+                {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
+                <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)}>
                   <ShareTripButton tripId={trip.id} title={trip.title[l]} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-[background-color,scale] hover:bg-blush-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:scale-[0.98] motion-reduce:transition-none" />
-                </div>
+                </SaveTripButton>
               </div>
             </div>
           </div>

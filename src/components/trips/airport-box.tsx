@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { PlaneLanding, PlaneTakeoff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cityName, findAirport, suggestAirports, type Airport } from "@/lib/trips/airports";
@@ -30,6 +30,7 @@ export function AirportBox({ label, placeholder, nothing, value, locale, directi
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const box = useRef<HTMLDivElement>(null);
+  const input = useRef<HTMLInputElement>(null);
   const Icon = direction === "from" ? PlaneTakeoff : PlaneLanding;
 
   // Picked from outside (swapped, remembered, prefilled): show its name.
@@ -37,6 +38,17 @@ export function AirportBox({ label, placeholder, nothing, value, locale, directi
     setShown(named);
     setText(named);
   }
+
+  // A town typed before the page's script arrived (a slow phone): the box shows it, but the state
+  // says "" and the next render would wipe it. Taken up as the query once, as if typed now.
+  useLayoutEffect(() => {
+    const typed = input.current?.value ?? "";
+    if (!typed.trim() || typed === text) return;
+    setText(typed);
+    if (document.activeElement === input.current) setOpen(true);
+    // Only the first render's value is compared: later ones are the state's own.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const query = text.trim();
   const results = useMemo(() => (query.length >= 2 && query !== named ? suggestAirports(query, SUGGESTIONS) : []), [query, named]);
@@ -73,6 +85,7 @@ export function AirportBox({ label, placeholder, nothing, value, locale, directi
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="text-[12px] leading-none font-semibold tracking-wide text-forest/65 uppercase">{label}</span>
           <input
+            ref={input}
             type="text"
             role="combobox"
             aria-label={label}

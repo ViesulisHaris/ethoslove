@@ -19,12 +19,23 @@ export const TOWN_KM = 50;
 export const LAND_KM = 40;
 export const FAIR_KM = 40;
 
+/** A named place the map found near the middle. */
+export type Place = { name: string; region?: string; countryCode?: string; lat: number; lng: number };
+
+/** How many other named places a town answer carries, in the same order of preference. */
+export const ALSO_MAX = 6;
+
+/**
+ * `also`: the other named places near the middle, in the same order of preference. The middle is
+ * all the map is told (never their towns), so it cannot know which town is as far from each of
+ * them; the page picks the first of these that is (halfwayAnswer).
+ */
 export type Spot =
-  | { kind: "town"; name: string; region?: string; countryCode?: string; lat: number; lng: number }
+  | ({ kind: "town"; also?: Place[] } & Place)
   | { kind: "none" }
   | { kind: "sea" };
 
-type Found = { name: string; region?: string; countryCode?: string; lat: number; lng: number };
+type Found = Place;
 
 const text = (value: unknown, max: number) =>
   typeof value === "string" && value.trim() ? value.trim().slice(0, max) : undefined;
@@ -51,14 +62,13 @@ export function photonPlaces(json: unknown): Found[] {
   return out;
 }
 
-const nearest = (point: LatLng, places: Found[], maxKm: number): Found | null => {
-  let best: { place: Found; km: number } | null = null;
-  for (const place of places) {
-    const km = distanceKm(point, place);
-    if (km <= maxKm && (!best || km < best.km)) best = { place, km };
-  }
-  return best?.place ?? null;
-};
+/** The places within maxKm of the point, nearest first. */
+const within = (point: LatLng, places: Found[], maxKm: number): Found[] =>
+  places
+    .map((place) => ({ place, km: distanceKm(point, place) }))
+    .filter((p) => p.km <= maxKm)
+    .sort((x, y) => x.km - y.km)
+    .map((p) => p.place);
 
 /** How far off the middle a city may be and still be "halfway", for a journey of `eachKm` each. */
 export const fairKm = (eachKm: number): number => Math.min(CITY_KM, Math.max(FAIR_KM, eachKm / 4));
@@ -69,8 +79,12 @@ export const fairKm = (eachKm: number): number => Math.min(CITY_KM, Math.max(FAI
  */
 export function pickSpot(point: LatLng, eachKm: number, cities: unknown, towns: unknown, anything: unknown | null): Spot | null {
   const cityList = photonPlaces(cities);
-  const found = nearest(point, cityList, fairKm(eachKm)) ?? nearest(point, photonPlaces(towns), TOWN_KM) ?? nearest(point, cityList, CITY_KM);
-  if (found) return { kind: "town", ...found };
+  // In order of preference: a city fair to both, the nearest towns, any city near enough; each place once.
+  const ranked: Found[] = [];
+  for (const place of [...within(point, cityList, fairKm(eachKm)), ...within(point, photonPlaces(towns), TOWN_KM), ...within(point, cityList, CITY_KM)])
+    if (!ranked.some((p) => p.name === place.name && p.lat === place.lat && p.lng === place.lng)) ranked.push(place);
+  const [found, ...rest] = ranked;
+  if (found) return { kind: "town", ...found, ...(rest.length ? { also: rest.slice(0, ALSO_MAX) } : {}) };
   if (anything === null) return null;
   return photonPlaces(anything).some((p) => distanceKm(point, p) <= LAND_KM) ? { kind: "none" } : { kind: "sea" };
 }

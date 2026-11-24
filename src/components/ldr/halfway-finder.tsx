@@ -160,15 +160,17 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
             ? `${each}. ${t("noTownSub")}`
             : answer.kind === "between"
               ? tt("close")
-              : answer.kind === "unnamed"
-                ? t("eachWaySub")
-                : answer.kind === "pending"
-                  ? live
-                    ? t("finding")
-                    : t("eachWaySub")
-                  : t("failed")}
+              : answer.kind === "uneven"
+                ? tt("uneven")
+                : answer.kind === "unnamed"
+                  ? t("eachWaySub")
+                  : answer.kind === "pending"
+                    ? live
+                      ? t("finding")
+                      : t("eachWaySub")
+                    : t("failed")}
       </p>
-      {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" ? (
+      {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" || answer.kind === "uneven" ? (
         <a href={mapLink(answer.middle)} target="_blank" rel="noopener noreferrer" data-halfway-map className={QUIET}>
           {t("onMap")}
           <ArrowUpRight aria-hidden="true" className="size-4" />

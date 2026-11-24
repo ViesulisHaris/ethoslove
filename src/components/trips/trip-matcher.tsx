@@ -11,7 +11,7 @@ import { cityName, type Airport } from "@/lib/trips/airports";
 import { formatFlightTime } from "@/lib/trips/flights";
 import { clearLastFrom, onLastFromPicked, readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
 import { MATCH_LENGTHS, metWishes, nextBestMonth, topMatches, type MatchLength, type MatchPick, type MatchTrip, type MatchWish } from "@/lib/trips/match";
-import { MATCH_KINDS, readMatchLink, writeMatchLink, type MatchState } from "@/lib/trips/match-link";
+import { keepFrom, keptFrom, MATCH_KINDS, readMatchLink, writeMatchLink, type MatchState } from "@/lib/trips/match-link";
 import type { TripKind } from "@/lib/trips/presets";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { AirportBox } from "./airport-box";
@@ -42,13 +42,6 @@ const BUDGETS: readonly Budget[] = ["any", "1", "2"];
 const KINDS: readonly Kind[] = ["any", ...MATCH_KINDS];
 
 /**
- * A budget band's ceiling a day for two: the €150 and €300 of the trips' own bands
- * (lib/trips/presets.ts), in euros on every page. Each card says its band in euros (the trips are
- * all in the euro's Europe), so a sentence in dollars above "€150–300" would be two currencies at once.
- */
-const BUDGET_EUR: Record<1 | 2, number> = { 1: 150, 2: 300 };
-
-/**
  * A choice set into the sentence: a rose word in a pill, as wide as what it says, never wider than
  * the line. No margin: the sentence's own spaces stand either side, and the comma or full stop after
  * it sits in the same unbreakable run (the message wraps it in the choice's tag).
@@ -65,7 +58,11 @@ export const REFINE_MS = 1500;
  * trip, inside the app) reads it at once, so the three are there before the browser puts the scroll back.
  */
 let mountedBefore = false;
-const readAddress = (): MatchState | null => readMatchLink(new URLSearchParams(window.location.search));
+/** The answer in the address, with the airport this history entry keeps (never in the address itself). */
+const readAddress = (): MatchState | null => {
+  const state = readMatchLink(new URLSearchParams(window.location.search));
+  return state ? { ...state, from: state.from ?? keptFrom(window.history.state) } : null;
+};
 const noop = () => () => {};
 const isLength = (v: string): v is Length => (LENGTHS as readonly string[]).includes(v);
 const isBudget = (v: string): v is Budget => (BUDGETS as readonly string[]).includes(v);
@@ -99,6 +96,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   // The month the ranking is for: read when the button is pressed (or the address carries an answer),
   // never while hydrating, so the server's page and the browser's agree. Null until then, and nothing is shown.
   const [month, setMonth] = useState<number | null>(() => (linked ? thisMonth() : null));
+  const rootRef = useRef<HTMLDivElement>(null);
   const summaryRef = useRef<HTMLHeadingElement>(null);
   const goRef = useRef<HTMLButtonElement>(null);
   const lengthRef = useRef<HTMLSelectElement>(null);
@@ -140,7 +138,9 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
         setMonth(thisMonth());
         return;
       }
-      const last = readLastFrom();
+      // Never over a town typed into the box before the script arrived (AirportBox takes it up as its query).
+      const typing = Boolean(rootRef.current?.querySelector<HTMLInputElement>("input[role=combobox]")?.value.trim());
+      const last = typing ? null : readLastFrom();
       if (last) setFrom((current) => current ?? last);
     });
     return () => cancelAnimationFrame(frame);
@@ -149,17 +149,18 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
   // The hero's flight search on /trips has its own "From": an airport picked there is this one's too.
   useEffect(() => onLastFromPicked((a) => setFrom(a)), []);
 
-  // Once there is an answer, the address carries it: a reload, or Back from a trip, opens on the same three.
+  // Once there is an answer, the address carries the wishes and the history entry keeps the airport:
+  // a reload, or Back from a trip, opens on the same three.
   useEffect(() => {
     if (month === null) return;
     const url = new URL(window.location.href);
     const state: MatchState = { from, length: length === "any" ? null : length, budget: budget === "any" ? null : (Number(budget) as 1 | 2), kind: kind === "any" ? null : kind };
     const search = writeMatchLink(url.searchParams, state).toString();
-    if (url.search === `?${search}`) return;
-    window.history.replaceState(window.history.state, "", `${url.pathname}?${search}${url.hash}`);
+    const kept = keptFrom(window.history.state);
+    if (url.search === `?${search}` && kept?.iata === from?.iata && kept?.city === from?.city) return;
+    window.history.replaceState(keepFrom(window.history.state, from), "", `${url.pathname}?${search}${url.hash}`);
   }, [month, from, length, budget, kind]);
 
-  const money = (band: 1 | 2) => new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-IE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(BUDGET_EUR[band]);
   const monthName = (m: number) => new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2026, m - 1, 15)));
 
   const wish = wishOf(from, length, budget, kind);
@@ -232,7 +233,7 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
           : t("letGo", { wishes: list(summary.letGo.map((w) => t(`wish.${w}`))) });
 
   return (
-    <div data-trip-matcher>
+    <div ref={rootRef} data-trip-matcher>
       <div className="max-w-md">
         <AirportBox
           direction="from"
@@ -304,9 +305,10 @@ export function TripMatcher({ trips, giftSlug }: { trips: MatcherTrip[]; giftSlu
                 }}
                 className={SELECT}
               >
+                {/* The trips' own bands (lib/trips/presets.ts) in words, not a sum: in euros it reads wrong to a visitor paying in dollars, and in dollars it would be a guess. */}
                 {BUDGETS.map((v) => (
                   <option key={v} value={v}>
-                    {v === "any" ? t("budget.any") : t(`budget.${v}`, { money: money(Number(v) as 1 | 2) })}
+                    {t(`budget.${v}`)}
                   </option>
                 ))}
               </select>

@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics/track";
 import { saveGiftSeed } from "@/lib/editor/gift-seed";
-import { answerPlace, type HalfwayAnswer } from "@/lib/ldr/halfway";
+import { answerPlace, echoTheirs, type HalfwayAnswer } from "@/lib/ldr/halfway";
 import type { Town } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear, type WaysData } from "@/lib/ldr/ways";
 import { IdeasDots } from "@/components/templates/page/ideas-dots";
@@ -80,9 +80,9 @@ export function WaysOn({
       if (page) return { key: "dates", href: `/dates/${page.slug}`, title: t("dates.in", { city: page.name }), image: page.image };
       return { key: "dates", href: `/dates?lat=${near.lat}&lng=${near.lng}&q=${encodeURIComponent(city)}`, title: t("dates.in", { city }), image: data.datesImage };
     }
-    // Halfway falls in a country never named: no town is echoed either (a typed town there would be
-    // named after all), only date ideas near either of them.
-    if (answer?.kind === "unnamed") return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
+    // Halfway falls in a country never named, or the map has not said yet (or could not): no town is
+    // echoed (a typed town there would be named after all), only date ideas near either of them.
+    if (!echoTheirs(answer)) return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
     // No place to name (open sea, open country, their own towns, the map not answering yet): date ideas where the other one is.
     return { key: "dates", href: `/dates?lat=${both.b.lat}&lng=${both.b.lng}&q=${encodeURIComponent(both.b.name)}`, title: t("dates.near", { town: both.b.name }), image: data.datesImage };
   };

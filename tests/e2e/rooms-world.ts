@@ -85,7 +85,8 @@ export const TOWNS: Record<string, Town> = {
 };
 
 /** What the map says lies at a halfway point (lib/places/photon-reverse.ts), as /api/places answers it. */
-export type Spot = { kind: "town"; name: string; region?: string; countryCode?: string; lat: number; lng: number } | { kind: "none" } | { kind: "sea" };
+type Place = { name: string; region?: string; countryCode?: string; lat: number; lng: number };
+export type Spot = ({ kind: "town"; also?: Place[] } & Place) | { kind: "none" } | { kind: "sea" };
 
 /**
  * The place search answers with the town typed; the map's look at a halfway point with `spot(lat,

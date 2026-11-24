@@ -2380,7 +2380,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "Long-Distance Relationship Ideas: Dates, Gifts, Time Zones",
+      "title": "Long-Distance Relationship Ideas: Dates and Gifts",
       "description": "Free tools for a long-distance relationship: the city halfway between you, the hours you're both awake, date ideas for two screens and instant gifts."
     },
     "eyebrow": "Long distance",
@@ -2455,7 +2455,8 @@
       "manual": "Copy this link",
       "same": "That's the same place twice.",
       "broken": "That link's towns couldn't be read. Type them again and we'll do the math.",
-      "close": "No town lies nearer the middle than your own two, so take turns visiting."
+      "close": "No town lies nearer the middle than your own two, so take turns visiting.",
+      "uneven": "The towns near the middle are all much nearer one of you than the other."
     },
     "virtual": {
       "eyebrow": "Dates for two screens",
@@ -2527,8 +2528,8 @@
         "week": "a week"
       },
       "budget": {
-        "1": "up to {money} a day for two",
-        "2": "up to {money} a day for two",
+        "1": "a modest budget",
+        "2": "a comfortable budget",
         "any": "no ceiling on spending"
       },
       "kind": {

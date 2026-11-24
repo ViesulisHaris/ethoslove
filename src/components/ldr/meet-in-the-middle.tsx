@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
-import { answerPlace, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { answerPlace, echoTheirs, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
@@ -196,20 +196,23 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
                       ? `${each}. ${t("noTownSub")}`
                       : answer.kind === "between"
                         ? tt("close")
-                        : answer.kind === "pending"
-                          ? t("finding")
-                          : answer.kind === "failed"
-                            ? t("failed")
-                            : t("eachWaySub")}
+                        : answer.kind === "uneven"
+                          ? tt("uneven")
+                          : answer.kind === "pending"
+                            ? t("finding")
+                            : answer.kind === "failed"
+                              ? t("failed")
+                              : t("eachWaySub")}
                 </p>
-                {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" ? (
+                {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" || answer.kind === "uneven" ? (
                   <a href={mapLink(answer.middle)} target="_blank" rel="noopener noreferrer" className="mt-2 mr-5 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                     {t("onMap")}
                     <ArrowUpRight aria-hidden="true" className="size-4" />
                   </a>
                 ) : null}
-                <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
-                  {t("datesThere", { city: b.name })}
+                {/* Their town is echoed only once the answer is known not to fall where the site names nothing: never while the map is asked, after it failed, or when halfway is in such a country. */}
+                <Link href={echoTheirs(answer) ? `/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}` : "/dates"} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                  {echoTheirs(answer) ? t("datesThere", { city: b.name }) : tw2("dates.any")}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>

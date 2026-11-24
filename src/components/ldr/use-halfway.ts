@@ -62,6 +62,9 @@ export function useHalfway(
         const res = await fetch(`/api/places?lat=${lat}&lng=${lng}&each=${each}`, { signal: controller.signal });
         const json = res.ok ? ((await res.json()) as { spot?: Spot }) : null;
         spot = json?.spot && ["town", "none", "sea"].includes(json.spot.kind) ? json.spot : null;
+        // The other towns near the middle, each whole or left out: halfwayAnswer measures each one.
+        if (spot?.kind === "town" && spot.also !== undefined)
+          spot = { ...spot, also: Array.isArray(spot.also) ? spot.also.filter((p) => typeof p?.name === "string" && Number.isFinite(p.lat) && Number.isFinite(p.lng)) : [] };
       } catch {
         if (controller.signal.aborted) return;
       }

@@ -1,7 +1,7 @@
 import { halfwayPlace, nearestCity } from "@/lib/dates/apart";
 import { ES_CITY_NAMES } from "@/lib/dates/cities";
 import { distanceKm, midpoint, type LatLng } from "@/lib/dates/geo";
-import { fairKm, type Spot } from "@/lib/places/photon-reverse";
+import { fairKm, type Place, type Spot } from "@/lib/places/photon-reverse";
 import { CITIES, type City } from "@/templates/_shared/places";
 
 /**
@@ -64,13 +64,14 @@ export const isOwnTown = (h: Halfway): boolean => Boolean(h.near && h.km > 2 * O
  * - `unnamed`: the middle is in a country never named (the owner's rule);
  * - `between`: no town lies nearer the middle than their own two;
  * - `pending`: the map is being asked; `failed`: it could not be;
- * - `none`: land, with no town near the middle; `sea`: nothing mapped near it at all.
+ * - `none`: land, with no town near the middle; `sea`: nothing mapped near it at all;
+ * - `uneven`: towns near the middle, but none about as far from each of them.
  * Every kind but `same` and `city` says how far each travels to meet exactly halfway.
  */
 export type HalfwayAnswer =
   | { kind: "same" }
   | { kind: "city"; name: string; region?: string; lat: number; lng: number; offKm: number; kmFromA: number; kmFromB: number; fromMap: boolean }
-  | { kind: "unnamed" | "between" | "pending" | "failed" | "none" | "sea"; eachKm: number; middle: LatLng };
+  | { kind: "unnamed" | "between" | "pending" | "failed" | "none" | "sea" | "uneven"; eachKm: number; middle: LatLng };
 
 /** The map's answer for a middle: being asked (`undefined`), could not be asked (`null`), or what it found. */
 export type SpotState = Spot | null | undefined;
@@ -102,6 +103,21 @@ export const needsMap = (h: Halfway): boolean => h.km >= 1 && !tableUnnamed(h) &
  */
 export const isEven = (kmFromA: number, kmFromB: number): boolean => Math.abs(kmFromA - kmFromB) <= Math.max(8, 0.05 * (kmFromA + kmFromB));
 
+/**
+ * The region line under a town from the map. The map's regions are in English (Great East, Gifu
+ * Prefecture, Tver Oblast), so a Spanish page names the country instead, in Spanish (Francia, Japón).
+ */
+export function regionFor(place: Pick<Place, "region" | "countryCode">, locale: "en" | "es"): string | undefined {
+  if (locale === "en") return place.region;
+  if (!place.countryCode) return undefined;
+  try {
+    const name = new Intl.DisplayNames(["es"], { type: "region" }).of(place.countryCode);
+    return name && name !== place.countryCode ? name : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function halfwayAnswer(h: Halfway, a: LatLng, b: LatLng, spot: SpotState, locale: "en" | "es"): HalfwayAnswer {
   if (h.km < 1) return { kind: "same" };
   const each = { eachKm: h.km / 2, middle: h.middle };
@@ -114,15 +130,34 @@ export function halfwayAnswer(h: Halfway, a: LatLng, b: LatLng, spot: SpotState,
   if (spot === null) return { kind: "failed", ...each };
   if (spot.kind === "town") {
     if (spot.countryCode && NEVER_SUGGESTED.has(spot.countryCode)) return { kind: "unnamed", ...each };
-    const kmFromA = distanceKm(a, spot);
-    const kmFromB = distanceKm(b, spot);
     // The nearest town to the middle is one of their own: there is nothing between them to name.
-    if (kmFromA < OWN_TOWN_KM || kmFromB < OWN_TOWN_KM) return { kind: "between", ...each };
-    return { kind: "city", name: spot.name, ...(spot.region ? { region: spot.region } : {}), lat: spot.lat, lng: spot.lng, offKm: distanceKm(h.middle, spot), kmFromA, kmFromB, fromMap: true };
+    if (distanceKm(a, spot) < OWN_TOWN_KM || distanceKm(b, spot) < OWN_TOWN_KM) return { kind: "between", ...each };
+    // The first place the map found that is as fair to both as a table city must be (tableFair): two
+    // journeys no further apart than fairKm. Madisonville is near the middle of Dallas and Houston,
+    // but 219 km from one and 142 from the other, so it is passed over for one that is even.
+    const fair = fairKm(h.km / 2);
+    for (const place of [spot, ...(spot.also ?? [])]) {
+      if (place.countryCode && NEVER_SUGGESTED.has(place.countryCode)) continue;
+      const kmFromA = distanceKm(a, place);
+      const kmFromB = distanceKm(b, place);
+      if (kmFromA < OWN_TOWN_KM || kmFromB < OWN_TOWN_KM || Math.abs(kmFromA - kmFromB) > fair) continue;
+      const region = regionFor(place, locale);
+      return { kind: "city", name: place.name, ...(region ? { region } : {}), lat: place.lat, lng: place.lng, offKm: distanceKm(h.middle, place), kmFromA, kmFromB, fromMap: true };
+    }
+    return { kind: "uneven", ...each };
   }
   if (spot.kind === "sea") return { kind: "sea", ...each };
   return { kind: isOwnTown(h) ? "between" : "none", ...each };
 }
+
+/**
+ * Whether a page may offer date ideas in their own town when halfway names no place. Not while the
+ * map is being asked or could not be, nor when halfway is in a country never named: Madrid and
+ * Barcelona would otherwise read "Date ideas near Barcelona" until the map answered, or for good
+ * when it failed.
+ */
+export const echoTheirs = (answer: HalfwayAnswer | null): boolean =>
+  Boolean(answer && answer.kind !== "unnamed" && answer.kind !== "pending" && answer.kind !== "failed");
 
 /** The place a halfway answer names, as the ways on need it, or null. */
 export const answerPlace = (answer: HalfwayAnswer | null): { name: string; lat: number; lng: number } | null =>

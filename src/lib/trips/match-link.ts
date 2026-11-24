@@ -7,8 +7,10 @@ export const MATCH_KINDS: readonly TripKind[] = ["city", "road", "islands", "tra
 
 /**
  * The matcher's answer in the address, so a reload or Back from a trip opens on the same three:
- * `match=1`, then each wish that is not "any" (`len`, `budget`, `kind`) and the airport they leave
- * from as its city and code ("Riga~RIX": Osaka and Kyoto share an airport). Nothing else.
+ * `match=1`, then each wish that is not "any" (`len`, `budget`, `kind`). Nothing else: the airport
+ * they leave from says where they live, and an address reaches server logs and, with consent,
+ * Clarity, so it is kept in the history entry's state instead (keptFrom), as the halfway tool keeps
+ * its towns. A link from before still has `from` ("Riga~RIX"): it is read, never written.
  */
 export type MatchState = {
   from: Airport | null;
@@ -26,7 +28,24 @@ export function writeMatchLink(search: URLSearchParams, state: MatchState): URLS
   if (state.length) out.set("len", state.length);
   if (state.budget) out.set("budget", String(state.budget));
   if (state.kind) out.set("kind", state.kind);
-  if (state.from) out.set("from", `${state.from.city}~${state.from.iata}`);
+  return out;
+}
+
+/** Where the airport is kept in a history entry's state. */
+export const MATCH_FROM_STATE = "ethosMatchFrom";
+
+/** The airport this history entry keeps, or null. Read against the table, so only a real airport comes back. */
+export function keptFrom(state: unknown): Airport | null {
+  const kept = (state as Record<string, unknown> | null)?.[MATCH_FROM_STATE] as { city?: unknown; iata?: unknown } | undefined;
+  if (!kept || typeof kept.city !== "string" || typeof kept.iata !== "string") return null;
+  return AIRPORTS.find((a) => a.city === kept.city && a.iata === kept.iata) ?? null;
+}
+
+/** A history state that keeps this airport (or none), everything else in it left as it was. */
+export function keepFrom(state: unknown, from: Airport | null): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...((state as Record<string, unknown> | null) ?? {}) };
+  if (from) out[MATCH_FROM_STATE] = { city: from.city, iata: from.iata };
+  else delete out[MATCH_FROM_STATE];
   return out;
 }
 

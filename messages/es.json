@@ -2380,7 +2380,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "Relación a distancia: ideas, citas, regalos y husos horarios",
+      "title": "Relación a distancia: ideas de citas y regalos",
       "description": "Herramientas gratis para una relación a distancia: la ciudad a medio camino, las horas en que estáis despiertos, citas para dos pantallas y regalos al instante."
     },
     "eyebrow": "A distancia",
@@ -2455,7 +2455,8 @@
       "manual": "Copia este enlace",
       "same": "Es el mismo sitio dos veces.",
       "broken": "No hemos podido leer las ciudades de ese enlace. Escribidlas otra vez y hacemos las cuentas.",
-      "close": "Ninguna ciudad queda más cerca del punto medio que las vuestras, así que turnaos para visitaros."
+      "close": "Ninguna ciudad queda más cerca del punto medio que las vuestras, así que turnaos para visitaros.",
+      "uneven": "Los pueblos cerca del punto medio quedan todos mucho más cerca de uno de los dos."
     },
     "virtual": {
       "eyebrow": "Citas para dos pantallas",
@@ -2527,8 +2528,8 @@
         "week": "una semana"
       },
       "budget": {
-        "1": "hasta {money} al día para dos",
-        "2": "hasta {money} al día para dos",
+        "1": "un presupuesto modesto",
+        "2": "un presupuesto holgado",
         "any": "sin tope de gasto"
       },
       "kind": {

@@ -34,7 +34,7 @@ export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
     faq: [
       {
         q: "How do you find the halfway point between two cities?",
-        a: "We take the two towns' coordinates and find the midpoint along the great circle, the shortest path over the earth's surface. Then we name a place there: a big city if one lies within 150 km, otherwise the nearest city or town on OpenStreetMap, and tell you how far it is from each of you.",
+        a: "We take the two towns' coordinates and find the midpoint along the great circle, the shortest path over the earth's surface. Then we name a place there: a big city if one lies close to the middle and about as far from each of you, otherwise the nearest town on OpenStreetMap that is, and tell you how far it is from each of you.",
       },
       {
         q: "Why isn't it the middle of the map?",
@@ -69,7 +69,7 @@ export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
     faq: [
       {
         q: "¿Cómo se calcula el punto medio entre dos ciudades?",
-        a: "Tomamos las coordenadas de las dos ciudades y buscamos el punto medio a lo largo del círculo máximo, el camino más corto sobre la superficie de la Tierra. Después nombramos un sitio allí: una gran ciudad si hay una a menos de 150 km o, si no, la ciudad o el pueblo más cercano en OpenStreetMap, y os decimos a qué distancia queda de cada uno.",
+        a: "Tomamos las coordenadas de las dos ciudades y buscamos el punto medio a lo largo del círculo máximo, el camino más corto sobre la superficie de la Tierra. Después nombramos un sitio allí: una gran ciudad si hay una cerca del punto medio y a una distancia parecida de los dos o, si no, el pueblo más cercano en OpenStreetMap que lo cumpla, y os decimos a qué distancia queda de cada uno.",
       },
       {
         q: "¿Por qué no es el centro del mapa?",
