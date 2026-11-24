@@ -1230,10 +1230,10 @@
     "title": "Las citas, gratis. Los regalos, un solo pago.",
     "subtitle": "El mapa, los planes y las herramientas a distancia son gratis, para siempre. Las plantillas de regalo se desbloquean con un solo pago y se quedan contigo.",
     "oneTime": "Un solo pago. Tuyo para siempre.",
-    "bestValue": "Mejor valor",
+    "bestValue": "La mejor opción",
     "priority": "Incluye soporte prioritario",
-    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en una plantilla gratis.",
-    "freeNoteShort": "Una Carta gratis es una nota corta: hasta 500 caracteres, nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y el pie «Hecho con Ethos». Las fotos, la carta entera, vídeos, mensajes de voz, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en La carta o Constelaciones.",
+    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y la pequeña marca «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar la marca de Ethos, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en una plantilla gratis.",
+    "freeNoteShort": "La carta gratis es una nota corta: hasta 500 caracteres, nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y la pequeña marca «Hecho con Ethos». Las fotos, la carta entera, vídeos, mensajes de voz, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar la marca de Ethos, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en «La carta». Unas fotos solas vienen con «Una nota con tus fotos», en el editor.",
     "comingSoon": "Los pagos se abren pronto. Las plantillas gratis ya se pueden publicar.",
     "plans": {
       "single": {
@@ -1269,7 +1269,7 @@
           "Haz tantos regalos como quieras, para siempre",
           "Tu voz diciéndolo, o tu vídeo",
           "Hasta 20 fotos, y sin la marca de Ethos",
-          "Se abre a medianoche en su día, y solo esa persona puede abrirlo",
+          "Se abre a medianoche en su día y solo esa persona puede abrirlo",
           "Acceso anticipado a plantillas nuevas"
         ]
       }
@@ -1279,13 +1279,8 @@
       "blurb": "Puedes cambiar tu elección hasta que pagues.",
       "continue": "Continuar ({n}/{total})"
     },
-    "faqEyebrow": "Preguntas",
     "faqTitle": "Preguntas frecuentes",
     "faqHelp": "¿Otra cosa? Escríbenos a <email>{address}</email> y te responde una persona.",
-    "faqGroups": {
-      "forTwo": "Ethos for Two",
-      "rest": "Regalos, juegos y pagos"
-    },
     "faq": [
       {
         "id": "subscriptions",
@@ -1346,12 +1341,13 @@
         "a": "Sí, en un plazo de 14 días desde la compra, sin dar explicaciones: usa «Desistir de una compra», al pie de cada página, o responde al recibo. Como pediste que tu año empezara de inmediato, te devolvemos lo que pagaste menos los días que ya habéis disfrutado."
       },
       {
-        "q": "¿Qué incluye exactamente el plan gratis?",
-        "a": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta, con un pequeño pie «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, una sorpresa dentro, quitar el pie, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two."
+        "id": "free",
+        "q": "¿Qué es gratis?",
+        "a": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta, con una pequeña marca «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, una sorpresa dentro, quitar la marca de Ethos, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two."
       },
       {
         "q": "¿Puedo probar una plantilla antes de pagar?",
-        "a": "Todas las plantillas tienen una demo completa en vivo, y el editor es gratis con vista previa en directo. Solo pagas cuando publicas algo que necesita una función premium."
+        "a": "Todas las plantillas tienen una demo completa en vivo, y el editor es gratis con vista previa en directo. Solo pagas cuando publicas algo que necesita una función de pago."
       },
       {
         "id": "giftcard",
@@ -1364,11 +1360,11 @@
       },
       {
         "q": "¿Pueden devolverme uno?",
-        "a": "Sí. Quien recibe un regalo que has pagado puede devolverte uno con la misma plantilla, gratis, con el pequeño pie «Hecho con Ethos». Si quiere extras o quitar el pie, paga el precio normal."
+        "a": "Sí. Quien recibe un regalo que has pagado puede devolverte uno con la misma plantilla, gratis, con la pequeña marca «Hecho con Ethos». Si quiere extras o quitar la marca de Ethos, paga el precio normal."
       },
       {
         "q": "¿Hay algún código de descuento?",
-        "a": "No. El precio de esta página es el mismo para todo el mundo y no tenemos códigos de descuento. A los creadores que comparten Ethos les pagamos una comisión a través de su propio enlace; nunca cambia lo que pagas tú."
+        "a": "No, no tenemos códigos de descuento. A los creadores que comparten Ethos les pagamos una comisión a través de su propio enlace; nunca cambia lo que pagas tú."
       },
       {
         "q": "¿Caducan los enlaces?",
@@ -1380,16 +1376,100 @@
       },
       {
         "q": "¿Qué monedas y métodos de pago?",
-        "a": "Los precios están en euros, con el IVA incluido cuando corresponde, y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay, Google Pay y otros métodos, a través de Stripe."
+        "id": "currency",
+        "a": "Pagas en la moneda en la que ves los precios, con el IVA incluido cuando corresponde, y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay, Google Pay y otros métodos, a través de Stripe."
       },
       {
         "q": "¿Reembolsos?",
         "a": "Plantillas, «Hazlo especial» y packs de juegos: al pagar nos pides que desbloqueemos tu compra de inmediato y marcas que así pierdes el derecho de desistimiento de 14 días. Si un regalo no se abre o no se reproduce bien en su móvil y no podemos arreglarlo, avísanos en un plazo de 30 días y te devolvemos el dinero. Ethos for Two es distinto: es un servicio, así que puedes desistir en un plazo de 14 días y te devolvemos lo que pagaste, menos los días ya disfrutados. Tarjetas regalo: si cambias de opinión en un plazo de 14 días y el código no se ha canjeado, te devolvemos el importe íntegro. «Desistir de una compra», al pie de cada página, explica cómo."
       }
     ],
-    "perTemplate": "Las {n} plantillas premium · {price} cada una",
+    "faqFreeNote": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: La carta, como una nota corta de hasta 500 caracteres, tantas veces como quieras, con nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y una pequeña marca «Hecho con Ethos». Las fotos, la carta entera, los vídeos, los mensajes de voz, una sorpresa dentro, quitar la marca de Ethos, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two. Unas fotos solas vienen con «Una nota con tus fotos», en el editor.",
+    "faqCurrency": "Los precios están en {currency, select, usd {dólares estadounidenses} gbp {libras esterlinas} other {euros}}, con el IVA incluido cuando corresponde, y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay, Google Pay y otros métodos, a través de Stripe.",
+    "perTemplate": "Las {n} plantillas de pago · {price} cada una",
     "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
-    "separately": "{price} por separado"
+    "separately": "{price} por separado",
+    "page": {
+      "pick3Separately": "{price} los tres sueltos",
+      "label": "Precios",
+      "title": "Un regalo, un solo pago.",
+      "titleTemplate": "Desbloquea {name}",
+      "lineOne": "Sin suscripción. {name} es gratis.",
+      "lineTwo": "Sin suscripción. Dos son gratis.",
+      "lineNone": "Sin suscripción.",
+      "lineOneSubs": "{name} es gratis.",
+      "lineTwoSubs": "Dos son gratis.",
+      "priceNote": "por regalo, tuyo para siempre",
+      "make": "Crear un regalo",
+      "seeFree": "Ver lo que es gratis",
+      "buyTemplate": "Desbloquear este regalo",
+      "giftsLabel": "Tres maneras",
+      "giftsHeading": "Uno, tres o todos.",
+      "cards": {
+        "single": {
+          "name": "Un regalo",
+          "cta": "Desbloquear uno",
+          "line": "Cualquiera de los regalos de pago.",
+          "ticks": [
+            "Tu voz y sin marca de Ethos",
+            "Se abre en su día, solo para esa persona"
+          ],
+          "includes": [
+            "Un regalo de pago cualquiera, tuyo para siempre",
+            "Hazlo tantas veces como quieras",
+            "Un mensaje de voz tuyo y un vídeo si el regalo lo admite",
+            "Todas las fotos que admite el regalo, sin la marca de Ethos al final",
+            "Se abre a medianoche en su día",
+            "Solo esa persona puede abrirlo"
+          ]
+        },
+        "pick3": {
+          "name": "Elige tres",
+          "cta": "Elegir tres",
+          "line": "Tres regalos cualesquiera.",
+          "ticks": [
+            "Lo mismo que un regalo, tres veces"
+          ],
+          "includes": [
+            "Tres regalos cualesquiera, tuyos para siempre",
+            "Lo mismo que un regalo, en cada uno de los tres",
+            "Un solo pago para los tres"
+          ]
+        },
+        "everything": {
+          "name": "Todo",
+          "cta": "Desbloquear todo",
+          "line": "{n} regalos de pago · {price} cada uno",
+          "ticks": [
+            "También los nuevos",
+            "Haz tantos como quieras"
+          ],
+          "includes": [
+            "Todos los regalos, los de ahora y los que vengan",
+            "Haz tantos como quieras, para siempre",
+            "Un mensaje de voz tuyo y un vídeo si el regalo lo admite",
+            "Todas las fotos que admite cada regalo, sin la marca de Ethos al final",
+            "Se abre a medianoche en su día y solo esa persona puede abrirlo",
+            "Acceso anticipado a regalos nuevos"
+          ]
+        }
+      },
+      "includes": "Qué incluye cada uno",
+      "specialLine": "Fotos, vídeo y sin marca de Ethos en un regalo gratis.",
+      "specialLineSold": "Fotos, vídeo y sin marca de Ethos en «{free}». «{sold}» cuesta lo mismo, con fotos.",
+      "giftCardLine": "Todos los regalos, para otra persona, en un código.",
+      "giftCardNote": "Añadir una nota",
+      "faqForTwo": "Preguntas sobre Ethos for Two",
+      "forTwoLine": "Una suscripción os cubre a los dos.",
+      "forTwoLinePass": "Un solo pago os cubre a los dos durante un año.",
+      "forTwoTicks": [
+        "Citas y viajes guardados, sin límite",
+        "Planeados juntos en los dos móviles",
+        "Cada regalo y cada pack de juegos"
+      ],
+      "compareOpen": "Lo gratis y Ethos for Two, comparados",
+      "faqLabel": "Dudas"
+    }
   },
   "legal": {
     "terms": "Términos del servicio",
@@ -1627,18 +1707,13 @@
       "withSecond": "{product}, más un segundo regalo"
     },
     "giftcard": {
-      "eyebrow": "Tarjeta regalo",
       "title": "Regálalo todo",
       "blurb": "Todas las plantillas, para siempre, para otra persona. Recibes un código para dárselo, y lo canjea en su propia cuenta.",
       "features": {
-        "templates": "Todas las plantillas, actuales y futuras",
-        "forever": "Suyas para siempre, sin suscripción",
         "valid": "Canjeable durante {months} meses"
       },
       "cta": "Comprar una tarjeta regalo",
       "note": "Te enviamos el código por email en cuanto pagas.",
-      "redeem": "¿Tienes un código? Canjéalo",
-      "personalise": "Añade su nombre y una nota",
       "nameLabel": "Para quién es",
       "noteLabel": "Una nota para acompañarla",
       "notePlaceholder": "Feliz cumpleaños. Hazme algo bonito.",
@@ -3202,7 +3277,7 @@
       "unitMonth": "al mes",
       "unitYear": "al año",
       "unitPass": "por un año",
-      "yearlyNote": "Salen a {price} al mes · ahorras un {pct} % frente al plan mensual",
+      "yearlyNote": "Salen a {price} al mes · ahorras un {pct} %",
       "monthlyNote": "Se cobra cada mes · cancela cuando quieras",
       "cta": "Conseguir Ethos for Two",
       "termsMonthly": "{price} hoy y después cada mes hasta que canceles. Cancela cuando quieras desde tu cuenta.",
@@ -3212,14 +3287,6 @@
       "passTerms": "Un solo pago por 365 días. Te escribiremos dos semanas antes de que termine.",
       "renewCta": "Renovar otro año",
       "renewNote": "Al renovar se suma un año desde el día en que termina el tuyo, así que renovar antes no te hace perder nada.",
-      "covers": "Un solo pago os cubre a los dos",
-      "coversCancel": "Un solo pago os cubre a los dos · cancela cuando quieras",
-      "trust": {
-        "stripe": "Pago seguro con Stripe",
-        "wallets": "Tarjeta, Apple Pay o Google Pay",
-        "cancel": "Cancela en dos toques",
-        "once": "Sin renovaciones ni sorpresas"
-      },
       "art": {
         "myDates": "Mis citas",
         "shared": "Compartidas con {name}",
@@ -3231,7 +3298,7 @@
         "date": "Cita",
         "trip": "Viaje",
         "polaroid": "Sábado, 20:00",
-        "templates": "Todas las plantillas",
+        "templates": "Todos los regalos",
         "packs": "Todos los packs",
         "cities": {
           "paris": "París",
@@ -3240,13 +3307,7 @@
       }
     },
     "features": {
-      "title": "Qué incluye",
-      "saved": "Citas y viajes guardados, sin límite",
-      "shared": "Planeados juntos, compartidos y editables desde vuestros dos móviles",
-      "templates": "Todas las plantillas de regalo, con todos los extras",
-      "packs": "Todos los packs de juegos, para un sofá o dos móviles",
-      "reminders": "Un aviso el día antes de cada cita",
-      "maps": "Una cita entera, abierta en Apple Maps o Google Maps"
+      "title": "Qué incluye"
     },
     "member": {
       "title": "Tienes Ethos for Two",
@@ -3265,8 +3326,7 @@
       "fix": "Actualizar la tarjeta"
     },
     "compare": {
-      "eyebrow": "Gratis y For Two",
-      "title": "Lo que es gratis y lo que añade For Two",
+      "title": "Lo que es gratis y lo que añade Ethos for Two",
       "sub": "Buscar una cita, planearla y enviarla sigue siendo gratis para todo el mundo, sin cuenta.",
       "feature": "Qué incluye",
       "free": "Gratis",
@@ -3301,16 +3361,12 @@
       "noAccount": "Buscar una cita"
     },
     "single": {
-      "eyebrow": "Un solo pago",
-      "title": "O compra un regalo suelto",
-      "sub": "Pagas una vez y es tuyo para siempre. Sin suscripción.",
       "special": {
-        "eyebrow": "Para una plantilla gratis",
         "name": "Hazlo especial",
-        "blurb": "Para {names}: vídeo, mensajes de voz, 20 fotos, programación, contraseña y sin pie, en esa plantilla para siempre.",
-        "blurbShort": "Para {names}: tus fotos, la carta entera, vídeo, mensajes de voz, programación, contraseña y sin pie, en esa plantilla para siempre.",
+        "blurb": "Para {names}: vídeo, mensajes de voz, 20 fotos, programación, contraseña y sin la marca de Ethos, en esa plantilla para siempre.",
+        "blurbShort": "Para {names}: tus fotos, la carta entera, vídeo, mensajes de voz, programación, contraseña y sin la marca de Ethos, en esa plantilla para siempre.",
         "note": "Se compra en el editor, al publicar.",
-        "cta": "Abrir {name}"
+        "cta": "Abrir «{name}»"
       }
     },
     "account": {

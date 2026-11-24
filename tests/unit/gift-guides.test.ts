@@ -5,6 +5,7 @@ import sitemap from "@/app/sitemap";
 import { isOccasion } from "@/config/occasions";
 import { LIMITS } from "@/config/site";
 import { getPost, postLocales } from "@/content/blog";
+import { pricingGifts } from "@/components/pricing/free-gifts";
 import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, FINDER_LINK, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
@@ -416,7 +417,7 @@ describe("gift pages by kind", () => {
 
 describe("/digital-cards", () => {
   // Markers instead of prices: any price left in the copy would then be one typed by hand.
-  const facts: DigitalCardsFacts = { single: "<single>", pick3: "<pick3>", everything: "<everything>", extras: "<extras>", photos: "<photos>", notePhotos: 5, count: listManifests().length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
+  const facts: DigitalCardsFacts = { single: "<single>", pick3: "<pick3>", everything: "<everything>", extras: "<extras>", photos: "<photos>", notePhotos: 5, count: listManifests().length, paid: pricingGifts(listManifests(), 1).paid.length, ideas: DIGITAL_GIFT_IDEAS.length, finder: finderIsBuilt() };
 
   it("carries the owner's line exactly, once, as its eyebrow", () => {
     expect(digitalCardsCopy("en", facts).eyebrow).toBe("Digital cards by Tryethos");
@@ -450,7 +451,9 @@ describe("/digital-cards", () => {
       const copy = digitalCardsCopy(locale, facts);
       expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<photos>", "<extras>", "<single>", "<pick3>", "<everything>"]);
       // Beside "One card", the whole set is counted: "Every card" read as a price per card (the deep test of 23 Nov 2026).
-      expect(copy.cost.rows.at(-1)!.label).toContain(String(facts.count));
+      // And counted as /pricing's Everything card counts it ("All 60 paid gifts"), one tap away: the paid list, not every template.
+      expect(copy.cost.rows.at(-1)!.label).toContain(String(facts.paid));
+      expect(copy.cost.rows.at(-1)!.label).not.toContain(String(facts.count));
       for (const s of strings(copy)) expect(s, s).not.toMatch(TYPED_PRICE);
       expect(strings(copy).join(" ")).toContain(String(facts.count));
     }
@@ -533,7 +536,7 @@ describe("llms.txt", () => {
     }
     const cards = text.split("\n").find((l) => l.includes(`${DIGITAL_CARDS_PATH})`));
     expect(cards).toBeDefined();
-    expect(cards).toContain(digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: listManifests().length, ideas: 0, finder: false }).description);
+    expect(cards).toContain(digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: listManifests().length, paid: 0, ideas: 0, finder: false }).description);
     // No price is typed into that line: prices have a section of their own, read from the code.
     expect(cards).not.toMatch(/[€$£]\s?\d/);
   });

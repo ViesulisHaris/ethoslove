@@ -1,22 +1,27 @@
-"use client";
-
-import { ArrowRight, Sparkles } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
-import { PRODUCTS, formatAmount, type Currency } from "@/lib/pricing/products";
+import { ArrowRight, Plus } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
+import { GIFT_CARD_MONTHS, PRODUCTS, PRODUCT_ORDER, formatAmount, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
-import { TornEdge } from "@/components/marketing/home/cutouts";
+import { QUESTION_PLUS, QUESTION_ROW } from "@/components/templates/page/sections";
+import { Intro } from "@/components/templates/page/spread";
 import { GiftCardOffer } from "./gift-card-offer";
 import { PricingCards } from "./pricing-cards";
-import { noteForEveryone } from "@/lib/gift/free-tier";
+import { pricingGifts, specialGifts } from "./free-gifts";
 
 /**
- * The one-time gifts, under Ethos for Two and quieter than it: the three template plans (the same
- * cards as /gifts, in their lighter dress), "Make it special" for a free template, and the gift card
- * while it's on sale. The links from the editor (?template=, ?plan=pick3, ?return=) still land here.
+ * The three ways to pay for gifts (`#gifts`, which /digital-cards and the editor link to), on the
+ * paper: the section's label and heading, then the three cards (One gift, Pick three, Everything)
+ * in the gallery card's dress, the one line about checkout, a closed row that holds every line the
+ * cards used to list, and "Make it special" for a free template as a slim card of the same paper.
+ * The gift card stands beside it while it is on sale. The links from the editor (?template=,
+ * ?plan=pick3, ?return=) still land here and do what they did: PricingCards is unchanged in what
+ * it sends.
+ *
+ * From 1280px the heading's column stands at the left of the cards, as a spread; under that it
+ * stands over them, so three cards still fit side by side from 768px.
  */
-export function SingleGifts({
+export async function SingleGifts({
   currency,
   manifests,
   paymentsEnabled,
@@ -34,58 +39,96 @@ export function SingleGifts({
   openPick3: boolean;
   returnTo?: string;
 }) {
-  const t = useTranslations("membership.single");
-  const tPricing = useTranslations("pricing");
-  const locale = useLocale() === "es" ? "es" : "en";
-  const free = manifests.filter((m) => m.tier === "free");
+  const t = await getTranslations("membership.single");
+  const tPricing = await getTranslations("pricing");
+  const locale = (await getLocale()) === "es" ? "es" : "en";
+  const tCard = await getTranslations("money.giftcard");
+  // The gifts that go out free, as the gallery has them (PLAN-pricing.md, addendum of 24 Nov 2026): with the
+  // free note live that is The Letter alone, and Constellations, sold whole at this card's price, is not
+  // named here as a free gift whose extras it sells.
+  const { free, note: short } = pricingGifts(manifests);
   const letter = free.find((m) => m.slug === "the-letter") ?? free[0];
-  const names = new Intl.ListFormat(locale, { type: "conjunction" }).format(free.map((m) => m.name[locale]));
+  const list = (gifts: TemplateManifest[]) => new Intl.ListFormat(locale, { type: "conjunction" }).format(gifts.map((m) => m.name[locale]));
+  const names = list(free);
+  // A free template that cannot go out free (Constellations with the note live) is counted as paid, and the
+  // "One gift" picker can't sell it: this card names it, at the one price it is sold at.
+  const { sold } = specialGifts(manifests);
+  const opens = [...(letter ? [letter] : []), ...sold];
 
   return (
-    <section id="gifts" className="relative bg-blush-paper pb-20 lg:pb-28" aria-labelledby="gifts-title">
-      <TornEdge from="var(--brand-paper)" to="var(--color-blush-paper)" />
-      <div className="container-x pt-14 lg:pt-20">
-        <div className="grid gap-4 lg:grid-cols-12 lg:items-end" data-reveal>
-          <div className="lg:col-span-7">
-            <p className="text-eyebrow text-rose-ink">{t("eyebrow")}</p>
-            <h2 id="gifts-title" className="mt-4 display-lg text-forest">
-              {t("title")}
-            </h2>
-          </div>
-          <p className="max-w-md text-[17px] leading-relaxed text-ink-soft lg:col-span-5 lg:justify-self-end lg:pb-1">{t("sub")}</p>
-        </div>
+    <section id="gifts" className="relative scroll-mt-[calc(var(--header-h)+1rem)]" aria-labelledby="gifts-title">
+      <div className="container-x relative grid gap-y-9 pt-10 pb-20 sm:pt-14 lg:pt-8 lg:pb-24 xl:grid-cols-[17.5rem_minmax(0,1fr)] xl:gap-x-16">
+        <Intro id="gifts-title" label={tPricing("page.giftsLabel")} heading={tPricing("page.giftsHeading")} />
 
-        <div className="mt-10">
+        <div className="min-w-0">
           <PricingCards currency={currency} manifests={manifests} authed={false} paymentsEnabled={paymentsEnabled} preselect={preselect} openPick3={openPick3} returnTo={returnTo} quiet />
-        </div>
 
-        <div className={cn("mt-5 grid gap-5", giftCards && "lg:grid-cols-2")}>
-          {letter ? (
-            <article className="relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-line bg-card p-6 sm:flex-row sm:items-center sm:p-8" data-testid="special-card" data-reveal>
-              <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-2 text-eyebrow text-rose-ink">
-                  <Sparkles aria-hidden="true" className="size-3.5" />
-                  {t("special.eyebrow")}
+          {/* Every line the three cards listed before the page was remade, closed: nothing a buyer could read is gone. */}
+          <details data-includes className="group mt-6 border-y border-page-line">
+            <summary className={QUESTION_ROW}>
+              {tPricing("page.includes")}
+              <Plus aria-hidden="true" className={QUESTION_PLUS} strokeWidth={1.6} />
+            </summary>
+            <div data-reveal className="grid gap-6 pb-6 md:grid-cols-3">
+              {PRODUCT_ORDER.map((id) => (
+                <div key={id}>
+                  <h3 className="font-display text-[1.25rem] leading-tight text-page-ink">{tPricing(`page.cards.${id}.name`)}</h3>
+                  <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-page-body">{tPricing(`plans.${id}.blurb`)}</p>
+                  <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-[0.9375rem] leading-snug text-page-body marker:text-page-line">
+                    {(tPricing.raw(`page.cards.${id}.includes`) as string[]).map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                    <li>{tPricing("oneTime")}</li>
+                  </ul>
+                </div>
+              ))}
+              <p className="text-[0.9375rem] leading-relaxed text-page-body md:col-span-3">{tPricing(short ? "freeNoteShort" : "freeNote")}</p>
+              <p className="text-[0.9375rem] leading-relaxed text-page-body md:col-span-3">
+                <span className="text-page-ink">{t("special.name")}.</span> {t(short ? "special.blurbShort" : "special.blurb", { names })} {t("special.note")}
+              </p>
+              {giftCards ? (
+                <p className="text-[0.9375rem] leading-relaxed text-page-body md:col-span-3">
+                  <span className="text-page-ink">{tCard("title")}.</span> {tCard("blurb")} {tCard("features.valid", { months: GIFT_CARD_MONTHS })}. {tCard("note")}
                 </p>
-                <h3 className="mt-3 font-display text-[1.75rem] leading-tight text-forest">{t("special.name")}</h3>
-                <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-soft">{t(noteForEveryone() ? "special.blurbShort" : "special.blurb", { names })}</p>
-                <p className="mt-2 text-[13px] text-muted-foreground">{t("special.note")}</p>
-              </div>
-              <div className="flex shrink-0 flex-col gap-3 sm:items-end">
-                <span className="font-display text-[2.6rem] leading-none tracking-tight text-forest" data-testid="price-extras">
-                  {formatAmount(PRODUCTS.extras.amounts[currency], currency, locale)}
-                </span>
-                <Link href={`/create/${letter.slug}`} className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-ink px-6 text-[15px] font-semibold text-ink transition-colors hover:bg-ink hover:text-paper">
-                  {t("special.cta", { name: letter.name[locale] })}
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-              </div>
-            </article>
-          ) : null}
-          {giftCards ? <GiftCardOffer currency={currency} paymentsEnabled={paymentsEnabled} /> : null}
-        </div>
+              ) : null}
+            </div>
+          </details>
 
-        <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-muted-foreground">{tPricing(noteForEveryone() ? "freeNoteShort" : "freeNote")}</p>
+          <div className="mt-6 grid gap-4">
+            {opens.length ? (
+              <article
+                className="relative flex flex-col gap-4 rounded-[28px] bg-card p-6 shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] sm:flex-row sm:items-center sm:gap-6 sm:px-7"
+                data-testid="special-card"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    <h3 className="font-display text-[1.5rem] leading-tight text-ink">{t("special.name")}</h3>
+                    <span className="font-display text-[1.75rem] leading-none tracking-tight text-ink tabular-nums" data-testid="price-extras">
+                      {formatAmount(PRODUCTS.extras.amounts[currency], currency, locale)}
+                    </span>
+                  </div>
+                  <p className="mt-2 max-w-xl text-[0.9375rem] leading-snug text-ink-soft">
+                    {sold.length && letter ? tPricing("page.specialLineSold", { free: letter.name[locale], sold: list(sold) }) : tPricing("page.specialLine")}
+                  </p>
+                </div>
+                {/* One column at every width, so the buttons stand at one width (a phone's row wrapped them at two). */}
+                <div className="flex shrink-0 flex-col gap-2.5 self-stretch sm:self-center">
+                  {opens.map((m) => (
+                    <Link
+                      key={m.slug}
+                      href={`/create/${m.slug}`}
+                      className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-ink/20 px-6 text-[15px] font-semibold text-ink transition-[background-color,border-color,scale] duration-200 hover:border-ink/45 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose active:scale-[0.98] active:bg-paper-deep"
+                    >
+                      {t("special.cta", { name: m.name[locale] })}
+                      <ArrowRight aria-hidden="true" className="size-4" />
+                    </Link>
+                  ))}
+                </div>
+              </article>
+            ) : null}
+            {giftCards ? <GiftCardOffer currency={currency} paymentsEnabled={paymentsEnabled} /> : null}
+          </div>
+        </div>
       </div>
     </section>
   );

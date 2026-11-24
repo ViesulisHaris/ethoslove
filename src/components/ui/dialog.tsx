@@ -73,10 +73,10 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
-            {/* Drawn at 28px so it never crowds the title, answering taps across 44px (the ::after). */}
+            {/* Drawn at 28px so it never crowds the title, answering taps across 44px: the ::after reaches 9px past the 26px inside its border. */}
             <Button
               variant="ghost"
-              className="absolute top-2 right-2 after:absolute after:-inset-2"
+              className="absolute top-2 right-2 after:absolute after:-inset-[9px]"
               size="icon-sm"
             >
               <XIcon

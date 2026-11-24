@@ -98,7 +98,23 @@ export const GROUP_WORDS = {
 
 export type ClientScope = keyof typeof CLIENT_NAMESPACES;
 
-/** What <ClientMessages scope="…"> sends to the browser: the scope's share of the catalogue, less a group card's words. */
+/**
+ * Branches a scope sends that its own pages never read in the browser, cut back out of what it sends.
+ * /pricing shares the `pricing` namespace with the /gifts teaser, whose full dress alone reads the old
+ * card names, buttons, lists and blurbs ("One template", "Unlock one", "One premium template", "no footer");
+ * on /pricing the quiet cards read `pricing.page.cards` instead, and the blurbs are read on the server only
+ * (the closed "What each one includes" row), so the whole `pricing.plans` branch stays out of its payload.
+ */
+export const CLIENT_OMIT: Partial<Record<ClientScope, readonly string[]>> = {
+  "(marketing)/pricing/layout": [
+    "pricing.plans",
+    "pricing.perTemplate",
+    "pricing.oneTime",
+    "pricing.priority",
+  ],
+};
+
+/** What <ClientMessages scope="…"> sends to the browser: the scope's share of the catalogue, less a group card's words and what the scope's own pages never read (CLIENT_OMIT). */
 export function messagesForScope(all: AbstractIntlMessages, scope: ClientScope): AbstractIntlMessages {
-  return omitMessages(pickMessages(all, CLIENT_NAMESPACES[scope]), [...GROUP_WORDS.browser, ...GROUP_WORDS.server]);
+  return omitMessages(pickMessages(all, CLIENT_NAMESPACES[scope]), [...GROUP_WORDS.browser, ...GROUP_WORDS.server, ...(CLIENT_OMIT[scope] ?? [])]);
 }

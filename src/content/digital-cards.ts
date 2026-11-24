@@ -37,10 +37,11 @@ export function finderIsBuilt(): boolean {
 /**
  * What the page needs from the code: prices as the visitor's currency writes them (`photos` is "a
  * note with your photos", PRODUCTS.photos, and `notePhotos` how many it holds, NOTE_PHOTOS_MAX),
- * two counts (`count` is how many templates there are, `ideas` how many ideas /gifts lists), and
+ * three counts (`count` is how many templates there are, `paid` how many of them cannot go out free,
+ * counted as /pricing and the gallery count them, `ideas` how many ideas /gifts lists), and
  * whether the finder's page exists to be linked to.
  */
-export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; photos: string; notePhotos: number; count: number; ideas: number; finder: boolean };
+export type DigitalCardsFacts = { single: string; pick3: string; everything: string; extras: string; photos: string; notePhotos: number; count: number; paid: number; ideas: number; finder: boolean };
 
 export type CardKind = {
   /**
@@ -202,7 +203,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       },
       cost: {
         label: "Precios",
-        line: "Pago único, sin suscripción. La carta, gratis como nota corta.",
+        line: "Pago único, sin suscripción. La carta, gratis como nota.",
         shown: [3, 4, 5],
         includes: "Qué incluye cada precio",
         heading: "Cuánto cuesta una tarjeta digital",
@@ -213,7 +214,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." },
           { label: "Una tarjeta", price: f.single, note: "Una plantilla, para siempre: haz con ella todas las tarjetas que quieras." },
           { label: "Tres tarjetas", price: f.pick3, note: "Tres plantillas, las que tú elijas." },
-          { label: `Las ${f.count} tarjetas`, price: f.everything, note: "Todas, y las que vayan llegando." },
+          { label: `${f.paid} tarjetas de pago`, price: f.everything, note: "Y las que vayan llegando." },
         ],
         more: "Ver todos los precios",
       },
@@ -362,7 +363,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." },
         { label: "One card", price: f.single, note: "One template, for good: make as many cards from it as you like." },
         { label: "Three cards", price: f.pick3, note: "Three templates of your choosing." },
-        { label: `All ${f.count} cards`, price: f.everything, note: "All of them, and the ones still to come." },
+        { label: `All ${f.paid} paid cards`, price: f.everything, note: "All of them, and the ones still to come." },
       ],
       more: "See full pricing",
     },

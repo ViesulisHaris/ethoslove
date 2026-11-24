@@ -1232,8 +1232,8 @@
     "oneTime": "One payment. Yours for good.",
     "bestValue": "Best value",
     "priority": "Includes priority support",
-    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
-    "freeNoteShort": "A free Letter is a short note: up to 500 characters, our music library or a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on The Letter or Constellations.",
+    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the small “Made with Ethos” mark. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no Ethos mark, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
+    "freeNoteShort": "A free Letter is a short note: up to 500 characters, our music library or a 30-second preview of a real song they can tap to hear, and the small “Made with Ethos” mark. Photos, the full letter, video clips, voice messages, a surprise inside (a date or a trip, wrapped at the end), no Ethos mark, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on The Letter. A few photos alone come with “A note with your photos”, in the editor.",
     "comingSoon": "Payments open soon. Free templates publish today.",
     "plans": {
       "single": {
@@ -1279,13 +1279,8 @@
       "blurb": "You can change a pick until you pay.",
       "continue": "Continue ({n}/{total})"
     },
-    "faqEyebrow": "Questions",
     "faqTitle": "Questions people ask",
     "faqHelp": "Something else? Write to <email>{address}</email> and a person answers.",
-    "faqGroups": {
-      "forTwo": "Ethos for Two",
-      "rest": "Gifts, games and paying"
-    },
     "faq": [
       {
         "id": "subscriptions",
@@ -1346,12 +1341,13 @@
         "a": "Yes, within 14 days of buying, without giving a reason: use “Withdraw from a purchase” at the foot of every page, or reply to your receipt. Because you asked for your year to start straight away, we refund what you paid minus the days you’ve already used."
       },
       {
-        "q": "What does the free tier actually include?",
-        "a": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise, with a small “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside, no footer, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two."
+        "id": "free",
+        "q": "What is free?",
+        "a": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise, with a small “Made with Ethos” mark. Video clips, voice messages, up to 20 photos, a surprise inside, no Ethos mark, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two."
       },
       {
         "q": "Can I try a template before paying?",
-        "a": "Every template has a full live demo, and the editor is free to use with a live preview. You only pay when you publish something that needs a premium feature."
+        "a": "Every template has a full live demo, and the editor is free to use with a live preview. You only pay when you publish something that needs a paid feature."
       },
       {
         "id": "giftcard",
@@ -1364,11 +1360,11 @@
       },
       {
         "q": "Can they send one back?",
-        "a": "Yes. Whoever receives a gift you paid for can send you one back in the same template, free, with the small “Made with Ethos” footer. If they want extras or no footer on it, they pay the normal price."
+        "a": "Yes. Whoever receives a gift you paid for can send you one back in the same template, free, with the small “Made with Ethos” mark. If they want extras or no Ethos mark on it, they pay the normal price."
       },
       {
         "q": "Is there a discount code?",
-        "a": "No. The price on this page is the price for everyone, and we don’t run discount codes. Creators who share Ethos are paid a commission by us through their own link; it never changes what you pay."
+        "a": "No, we don’t run discount codes. Creators who share Ethos are paid a commission by us through their own link; it never changes what you pay."
       },
       {
         "q": "Do gift links expire?",
@@ -1380,16 +1376,100 @@
       },
       {
         "q": "Which currencies and payment methods?",
-        "a": "Prices are in euros, VAT included where it applies, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay, Google Pay and other methods, through Stripe."
+        "id": "currency",
+        "a": "You pay in the currency the prices are shown in, VAT included where it applies, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay, Google Pay and other methods, through Stripe."
       },
       {
         "q": "Refunds?",
         "a": "Templates, “Make it special” and game packs: at checkout you ask us to unlock your purchase straight away and tick that you then lose the 14-day right to cancel. If a gift won’t open or play properly on their phone and we can’t fix it, tell us within 30 days and you get your money back. Ethos for Two is different: it’s a service, so you can withdraw within 14 days and we refund what you paid, less the days you’ve used. Gift cards: change your mind within 14 days, before the code is redeemed, and we refund you in full. “Withdraw from a purchase”, at the foot of every page, says how."
       }
     ],
-    "perTemplate": "All {n} premium templates · {price} each",
+    "faqFreeNote": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: The Letter, as a short note of up to 500 characters, as many as you like, with our music library or a 30-second preview of a real song they can tap to hear, and a small “Made with Ethos” mark. Photos, the full letter, video clips, voice messages, a surprise inside, no Ethos mark, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two. A few photos alone come with “A note with your photos”, in the editor.",
+    "faqCurrency": "Prices are in {currency, select, usd {US dollars} gbp {pounds sterling} other {euros}}, VAT included where it applies, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay, Google Pay and other methods, through Stripe.",
+    "perTemplate": "All {n} paid templates · {price} each",
     "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe",
-    "separately": "{price} separately"
+    "separately": "{price} separately",
+    "page": {
+      "pick3Separately": "{price} for three paid ones",
+      "label": "Pricing",
+      "title": "One gift, paid once.",
+      "titleTemplate": "Unlock {name}",
+      "lineOne": "No subscription. {name} is free.",
+      "lineTwo": "No subscription. Two are free.",
+      "lineNone": "No subscription.",
+      "lineOneSubs": "{name} is free.",
+      "lineTwoSubs": "Two are free.",
+      "priceNote": "for one gift, yours for good",
+      "make": "Make a gift",
+      "seeFree": "See what is free",
+      "buyTemplate": "Unlock this gift",
+      "giftsLabel": "Three ways",
+      "giftsHeading": "One, three, or every one.",
+      "cards": {
+        "single": {
+          "name": "One gift",
+          "cta": "Unlock one",
+          "line": "Any one of the paid gifts.",
+          "ticks": [
+            "Your voice, no Ethos mark",
+            "Opens on their day, only for them"
+          ],
+          "includes": [
+            "Any one paid gift, yours for good",
+            "Make it as often as you like",
+            "A voice message from you, and a video where the gift takes one",
+            "Every photo the gift holds, and no Ethos mark at the end",
+            "Opens at midnight on their day",
+            "Only they can open it"
+          ]
+        },
+        "pick3": {
+          "name": "Pick three",
+          "cta": "Pick three",
+          "line": "Any three gifts.",
+          "ticks": [
+            "The same as One gift, three times"
+          ],
+          "includes": [
+            "Any three gifts, yours for good",
+            "The same as One gift, on each of the three",
+            "Pay once for all three"
+          ]
+        },
+        "everything": {
+          "name": "Everything",
+          "cta": "Unlock everything",
+          "line": "All {n} paid gifts · {price} each",
+          "ticks": [
+            "Every new gift too",
+            "Make as many as you like"
+          ],
+          "includes": [
+            "Every gift, now and to come",
+            "Make as many as you like, for good",
+            "A voice message from you, and a video where a gift takes one",
+            "Every photo each gift holds, and no Ethos mark at the end",
+            "Opens at midnight on their day, and only they can open it",
+            "First access to new gifts"
+          ]
+        }
+      },
+      "includes": "What each one includes",
+      "specialLine": "Photos, video and no Ethos mark on a free gift.",
+      "specialLineSold": "Photos, video and no Ethos mark on {free}. {sold} costs the same, photos and all.",
+      "giftCardLine": "Every gift, for someone else, as a code.",
+      "giftCardNote": "Add a note",
+      "faqForTwo": "Questions about Ethos for Two",
+      "forTwoLine": "One membership covers you both.",
+      "forTwoLinePass": "One payment covers you both, for a year.",
+      "forTwoTicks": [
+        "Unlimited saved dates and trips",
+        "Planned together on both phones",
+        "Every gift and every game pack"
+      ],
+      "compareOpen": "Free and Ethos for Two, side by side",
+      "faqLabel": "Before you pay"
+    }
   },
   "legal": {
     "terms": "Terms of Service",
@@ -1627,18 +1707,13 @@
       "withSecond": "{product}, plus a second gift"
     },
     "giftcard": {
-      "eyebrow": "A gift card",
       "title": "Give Everything",
       "blurb": "Every template, forever, for someone else. You get a code to pass on; they redeem it on their own account.",
       "features": {
-        "templates": "Every template, now and future",
-        "forever": "Theirs for good, no subscription",
         "valid": "Redeem within {months} months"
       },
       "cta": "Buy a gift card",
       "note": "We email you the code as soon as you’ve paid.",
-      "redeem": "Got a code? Redeem it",
-      "personalise": "Add their name and a note",
       "nameLabel": "Who it’s for",
       "noteLabel": "A note to go with it",
       "notePlaceholder": "Happy birthday. Make me something.",
@@ -3212,14 +3287,6 @@
       "passTerms": "One payment for 365 days. We’ll email you two weeks before it ends.",
       "renewCta": "Renew for another year",
       "renewNote": "Renewing adds a year from the day yours ends, so renewing early loses nothing.",
-      "covers": "One payment covers both of you",
-      "coversCancel": "One payment covers both of you · cancel any time",
-      "trust": {
-        "stripe": "Secure checkout by Stripe",
-        "wallets": "Card, Apple Pay or Google Pay",
-        "cancel": "Cancel in two taps",
-        "once": "No renewal, no surprise"
-      },
       "art": {
         "myDates": "My dates",
         "shared": "Shared with {name}",
@@ -3231,7 +3298,7 @@
         "date": "Date",
         "trip": "Trip",
         "polaroid": "Saturday, 8 pm",
-        "templates": "Every template",
+        "templates": "Every gift",
         "packs": "Every pack",
         "cities": {
           "paris": "Paris",
@@ -3240,13 +3307,7 @@
       }
     },
     "features": {
-      "title": "What’s in it",
-      "saved": "Unlimited saved dates and trips",
-      "shared": "Planned together, shared and editable on both your phones",
-      "templates": "Every gift template, with every extra",
-      "packs": "Every game pack, for one sofa or two phones",
-      "reminders": "A reminder the day before each date",
-      "maps": "Open a whole date in Apple or Google Maps"
+      "title": "What’s in it"
     },
     "member": {
       "title": "You have Ethos for Two",
@@ -3265,7 +3326,6 @@
       "fix": "Update your card"
     },
     "compare": {
-      "eyebrow": "Free and For Two",
       "title": "What’s free, and what For Two adds",
       "sub": "Finding a date, planning it and sending it stays free for everyone, with no account.",
       "feature": "What you get",
@@ -3301,14 +3361,10 @@
       "noAccount": "Find a date"
     },
     "single": {
-      "eyebrow": "Paid once",
-      "title": "Or buy a single gift",
-      "sub": "Pay once and it’s yours for good. No subscription.",
       "special": {
-        "eyebrow": "For a free template",
         "name": "Make it special",
-        "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no footer, on that template for good.",
-        "blurbShort": "For {names}: your photos, the full letter, video, voice messages, scheduling, a password and no footer, on that template for good.",
+        "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no Ethos mark, on that template for good.",
+        "blurbShort": "For {names}: your photos, the full letter, video, voice messages, scheduling, a password and no Ethos mark, on that template for good.",
         "note": "Sold in the editor, when you publish.",
         "cta": "Open {name}"
       }

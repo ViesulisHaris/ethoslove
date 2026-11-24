@@ -16,6 +16,7 @@ import { getManifest, listManifests } from "@/templates/manifests";
 import { CARDS_ART, PRICES_ART, STEPS_ART } from "@/components/marketing/spread/placements";
 import { IdeaCards, MoreRow, QUIET_LINK, QuestionsSpread, SITE_FLOWERS, SiteHero, SitePage, Spread, WhereNext, type IdeaCard } from "@/components/marketing/spread/sections";
 import { JsonLd } from "@/components/shared/json-ld";
+import { pricingGifts } from "@/components/pricing/free-gifts";
 import { ArtLayer } from "@/components/templates/page/art";
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
 import { Band, BandWords, ExperienceFlatlay, HowToSend, Intro, templateSamples } from "@/components/templates/page/sections";
@@ -34,6 +35,8 @@ function facts(currency: Currency, locale: string): DigitalCardsFacts {
     photos: price("photos"),
     notePhotos: NOTE_PHOTOS_MAX,
     count: listManifests().length,
+    // Everything's row counts as /pricing's Everything card does ("All 60 paid gifts"), one tap away through "See full pricing".
+    paid: pricingGifts(listManifests()).paid.length,
     ideas: DIGITAL_GIFT_IDEAS.length,
     finder: finderIsBuilt(),
   };

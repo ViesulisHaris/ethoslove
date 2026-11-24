@@ -183,7 +183,8 @@ for (const prefix of ["", "/es"]) {
   });
 }
 
-for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversary-website", "/occasions/mothers-day", "/gifts/for-boyfriend", "/es/gifts/for-mom", "/gifts"]) {
+// /pricing since its remake of 24 Nov 2026 (PLAN-pricing.md): the same ruler at every size, in both languages.
+for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversary-website", "/occasions/mothers-day", "/gifts/for-boyfriend", "/es/gifts/for-mom", "/gifts", "/pricing", "/es/pricing"]) {
   for (const [width, height] of SIZES) {
     test(`${path} at ${width}×${height}: no sideways scroll, no flower under words, nothing too small to press`, async ({ page }) => {
       await page.setViewportSize({ width, height });

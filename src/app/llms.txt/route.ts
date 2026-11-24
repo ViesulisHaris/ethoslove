@@ -33,7 +33,7 @@ export function GET() {
   const about = aboutCopy("en", { templates: manifests.length, single: "" });
   const aboutSaid = (id: string, from = 0) => (about.sections.find((section) => section.id === id)?.paragraphs ?? []).slice(from).map((p) => `- ${p}`);
   // /digital-cards, by its own name, heading and description: none of the three reads a price, so none is given here (prices are in "Pricing" below).
-  const cards = digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: manifests.length, ideas: 0, finder: false });
+  const cards = digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: manifests.length, paid: 0, ideas: 0, finder: false });
 
   const lines = [
     ...briefIntro(),

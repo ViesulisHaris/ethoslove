@@ -1,28 +1,21 @@
-import { BellRing, Bookmark, Gamepad2, Gift, Route, UsersRound, type LucideIcon } from "lucide-react";
+import { Check } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ideaImage } from "@/lib/dates/art";
 import { ideaById } from "@/lib/dates/ideas";
 import { TRIPS, tripImageSm } from "@/lib/trips/presets";
 import type { Currency, MembershipPlan } from "@/lib/pricing/products";
-import { Cutout, TornEdge } from "@/components/marketing/home/cutouts";
+import { Cutout, FloralFrame } from "@/components/marketing/home/cutouts";
 import { PlayingCard, type BackTone } from "@/components/games/cards";
 import { PhoneFrame } from "@/components/shared/phone-frame";
 import { MembershipOffer } from "./membership-offer";
 import { SealMark } from "./seal-mark";
 
-const FEATURES: { key: "saved" | "shared" | "templates" | "packs" | "reminders" | "maps"; Icon: LucideIcon }[] = [
-  { key: "saved", Icon: Bookmark },
-  { key: "shared", Icon: UsersRound },
-  { key: "templates", Icon: Gift },
-  { key: "packs", Icon: Gamepad2 },
-  { key: "reminders", Icon: BellRing },
-  { key: "maps", Icon: Route },
-];
-
 /**
- * Ethos for Two, as the top of /pricing: it is the offer the page is for. Its own colours (dusk,
- * docs/MEMBERSHIP.md 4.1) so it reads as a different thing from the rose of the one-time gifts
- * below it, and it pulls itself up under the floating header like the other heroes.
+ * Ethos for Two on /pricing (remade 24 Nov 2026, PLAN-pricing.md 3): one band in the site's own dark,
+ * the wine of the front page's closing band, with the lilies at its edges, after the single gifts.
+ * A spread: at the left the seal, the label, the heading, one line, three ticks and the offer (the
+ * plan, the price, the button and what happens); at the right the collage of what the membership
+ * is. The rest of what it holds is in the table under it.
  *
  * Server-rendered: the words, the list and the collage cost the phone nothing; only the offer
  * itself (the plan, the price, the button, who is signed in) is a client island.
@@ -44,28 +37,42 @@ export async function MembershipHero({
   renewAsked?: boolean;
 }) {
   const t = await getTranslations("membership");
+  // Three short ticks; all six things it holds are rows of the table under the band.
+  const tPage = await getTranslations("pricing.page");
+  const ticks = tPage.raw("forTwoTicks") as string[];
 
   return (
     <section
       id="for-two"
       data-testid="membership-hero"
-      className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-dusk-sky pt-[var(--header-h)] text-cream"
+      aria-labelledby="for-two-title"
+      // On the dark band the page's ink is cream: the themed page's focus ring (globals.css, unlayered, so it beats
+      // any focus-visible:outline-* utility) is drawn in var(--page-ink), wine on wine here (pricing-C15).
+      className="relative isolate scroll-mt-[var(--header-h)] overflow-hidden bg-forest text-cream [--page-ink:var(--color-cream)]"
     >
-      {/* A band of stars over the top edge, round the floating header, where no words sit. */}
-      <div aria-hidden="true" className="dusk-stars absolute inset-x-0 top-0 h-36 [mask-image:linear-gradient(180deg,#000_45%,transparent)]" />
-      <div aria-hidden="true" className="grain-overlay opacity-[0.14] mix-blend-overlay" />
-      <div className="relative container-x grid items-start gap-x-8 gap-y-10 pt-10 pb-14 sm:pt-14 sm:pb-20 lg:grid-cols-12 lg:gap-y-8 lg:pt-16 lg:pb-28 xl:gap-x-12">
-        <div className="lg:col-span-6 lg:row-span-2">
-          <p className="flex items-center gap-2.5 text-eyebrow text-starlight">
+      <FloralFrame frame="forTwo" ground="dark" />
+      <div className="relative container-x grid items-center gap-x-10 gap-y-12 py-20 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:py-28 xl:gap-x-16">
+        <div className="min-w-0 lg:max-w-[33rem]">
+          <p className="flex items-center gap-2.5 text-page-label text-cream/75">
             <SealMark className="size-7" />
             {t("hero.eyebrow")}
           </p>
-          <h1 className="mt-5 max-w-[12em] font-display text-[clamp(2.5rem,6.4vw,4.4rem)] leading-[1] tracking-[-0.03em] text-balance text-cream lg:text-[clamp(2.75rem,4.7vw,4.4rem)]">
-            {t.rich("hero.title", { em: (chunks) => <em className="text-starlight">{chunks}</em> })}
-          </h1>
-          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-moonlight/80 sm:text-lg">{subscriptions ? t("hero.sub") : t("hero.subPass")}</p>
+          <h2 id="for-two-title" className="mt-5 max-w-[13em] font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.02] tracking-[-0.028em] text-balance text-cream">
+            {t.rich("hero.title", { em: (chunks) => <em>{chunks}</em> })}
+          </h2>
+          {/* The band's one line (PLAN-pricing.md 3): the head of the paragraph it had, said as the plan on sale has it. */}
+          <p className="mt-4 font-display text-[clamp(1.25rem,2vw,1.6rem)] leading-snug text-cream/80 italic sm:mt-5">{tPage(subscriptions ? "forTwoLine" : "forTwoLinePass")}</p>
+          <h3 className="sr-only">{t("features.title")}</h3>
+          <ul className="mt-6 flex flex-col gap-2.5 sm:mt-7">
+            {ticks.map((tick) => (
+              <li key={tick} className="flex items-start gap-2.5 text-[0.9375rem] leading-snug text-cream/90">
+                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-starlight" strokeWidth={2.2} />
+                <span>{tick}</span>
+              </li>
+            ))}
+          </ul>
 
-          <div className="mt-8 max-w-xl">
+          <div className="mt-8 max-w-[30rem]">
             <MembershipOffer
               currency={currency}
               paymentsEnabled={paymentsEnabled}
@@ -77,26 +84,10 @@ export async function MembershipHero({
           </div>
         </div>
 
-        {/* On a phone the list follows the button; on a wide screen it captions the picture above it. */}
-        <div className="lg:col-span-6 lg:col-start-7 lg:row-start-2 lg:pl-4">
-          <h2 className="sr-only">{t("features.title")}</h2>
-          <ul className="grid max-w-xl gap-x-6 gap-y-3.5 sm:grid-cols-2">
-            {FEATURES.map(({ key, Icon }) => (
-              <li key={key} className="flex items-start gap-3 text-[15px] leading-snug text-cream/90">
-                <span className="grid size-7 shrink-0 place-items-center rounded-full bg-starlight/12 ring-1 ring-starlight/25">
-                  <Icon aria-hidden="true" className="size-3.5 text-starlight" />
-                </span>
-                <span className="pt-1">{t(`features.${key}`)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:col-span-6 lg:col-start-7 lg:row-start-1">
+        <div className="min-w-0">
           <MembershipArt />
         </div>
       </div>
-      <TornEdge from="transparent" to="var(--brand-paper)" fibre="color-mix(in oklab, var(--brand-moonlight) 35%, transparent)" />
     </section>
   );
 }
@@ -119,16 +110,16 @@ async function MembershipArt() {
   const picnic = ideaById("golden-hour-picnic");
   const museum = ideaById("museum-then-wine");
   const lisbon = TRIPS.find((trip) => trip.id === "lisbon-slow-weekend");
+  // The trip second: the third card runs off the phone's foot under the packs and the paper couple, and the one
+  // card that shows a trip is saved too must be in sight (the deep test of 24 Nov 2026, D7).
   const cards = [
     { image: ideaImage("golden-hour-picnic"), title: picnic?.title[locale] ?? "", meta: `${t("cities.paris")} · ${t("saturday")}`, count: t("stops", { n: 4 }), trip: false, from: true },
-    { image: ideaImage("museum-then-wine"), title: museum?.title[locale] ?? "", meta: `${t("cities.rome")} · ${t("friday")}`, count: t("stops", { n: 3 }), trip: false, from: false },
     { image: lisbon?.image ? tripImageSm(lisbon.image) : ideaImage("pasta-and-a-slow-walk"), title: lisbon?.title[locale] ?? "", meta: t("trip"), count: t("days", { n: lisbon?.days ?? 3 }), trip: true, from: false },
+    { image: ideaImage("museum-then-wine"), title: museum?.title[locale] ?? "", meta: `${t("cities.rome")} · ${t("friday")}`, count: t("stops", { n: 3 }), trip: false, from: false },
   ];
 
   return (
-    <div aria-hidden="true" className="relative mx-auto aspect-[20/21] w-full max-w-[600px] select-none [container-type:inline-size]">
-      {/* The stars live round the picture, never behind words: a dot beside a word reads as a full stop. */}
-      <div className="dusk-stars absolute -top-[14cqw] -right-[24cqw] -bottom-[12cqw] -left-[6cqw] [mask-image:radial-gradient(closest-side,#000_62%,transparent)]" />
+    <div aria-hidden="true" data-flatlay="for-two" className="relative mx-auto aspect-[20/21] w-full max-w-[600px] select-none [container-type:inline-size]">
       {/* the night out, as a polaroid */}
       <figure className="absolute top-[7cqw] left-[1cqw] w-[45cqw] -rotate-[7deg] rounded-[1.2cqw] bg-photo-paper p-[2cqw] pb-[1.4cqw] shadow-dusk-photo">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -168,7 +159,7 @@ async function MembershipArt() {
               </div>
               <span className="flex shrink-0 -space-x-[0.9cqw]">
                 <span className="grid size-[5cqw] place-items-center rounded-full bg-horizon text-[2.1cqw] font-bold text-dusk-deep ring-[0.4cqw] ring-paper">A</span>
-                <span className="grid size-[5cqw] place-items-center rounded-full bg-dusk text-[2.1cqw] font-bold text-starlight ring-[0.4cqw] ring-paper">S</span>
+                <span className="grid size-[5cqw] place-items-center rounded-full bg-forest text-[2.1cqw] font-bold text-starlight ring-[0.4cqw] ring-paper">S</span>
               </span>
             </div>
             <ul className="mt-[2.4cqw] grid gap-[2.2cqw]">
@@ -179,7 +170,7 @@ async function MembershipArt() {
                     <img src={card.image} alt="" width={800} height={600} loading="lazy" decoding="async" className="aspect-[16/10] w-full rounded-[2cqw] object-cover" />
                     <span className="absolute top-[1.2cqw] left-[1.2cqw] rounded-full bg-white/90 px-[1.3cqw] py-[0.4cqw] text-[1.6cqw] font-semibold text-forest">{card.trip ? t("trip") : t("date")}</span>
                     {card.from ? (
-                      <span className="absolute top-[1.1cqw] right-[1.1cqw] grid size-[4.2cqw] place-items-center rounded-full bg-dusk text-[1.8cqw] font-bold text-starlight ring-[0.35cqw] ring-white">S</span>
+                      <span className="absolute top-[1.1cqw] right-[1.1cqw] grid size-[4.2cqw] place-items-center rounded-full bg-forest text-[1.8cqw] font-bold text-starlight ring-[0.35cqw] ring-white">S</span>
                     ) : null}
                   </div>
                   <p className="mt-[1cqw] truncate text-[2.1cqw] leading-tight font-semibold">{card.title}</p>

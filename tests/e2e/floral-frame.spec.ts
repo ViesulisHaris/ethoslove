@@ -10,7 +10,7 @@ import { expect, test } from "@playwright/test";
  * A render is mostly air round a flower, so the flower is taken as the middle 60% of its picture,
  * clipped to the frame it is drawn in. A piece hidden at a width is not drawn and is not counted.
  */
-const PAGES = ["/", "/es", "/gifts", "/es/gifts", "/trips", "/trips/amalfi-coast", "/dates/amsterdam", "/creators", "/long-distance"];
+const PAGES = ["/", "/es", "/gifts", "/es/gifts", "/trips", "/trips/amalfi-coast", "/dates/amsterdam", "/creators", "/long-distance", "/pricing", "/es/pricing"];
 const SIZES: [number, number][] = [
   [320, 568],
   [375, 812],

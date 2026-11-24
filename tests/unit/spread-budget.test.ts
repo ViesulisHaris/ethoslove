@@ -349,7 +349,7 @@ describe("the text budget of an occasion's idea list", () => {
 });
 
 describe("the text budget of /digital-cards", () => {
-  const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", photos: "€3.99", notePhotos: 5, count: listManifests().length, ideas: 30, finder: true };
+  const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", photos: "€3.99", notePhotos: 5, count: listManifests().length, paid: listManifests().length - 1, ideas: 30, finder: true };
 
   it("keeps the hero, the cards, the band and the prices to a line each", () => {
     const over: string[] = [];
@@ -471,7 +471,7 @@ describe("the loose art of these pages", () => {
  * kind and with “…” and ‘…’ on the occasion lists.
  */
 describe("the type of these pages' words", () => {
-  const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", photos: "€3.99", notePhotos: 5, count: 61, ideas: 30, finder: true };
+  const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", photos: "€3.99", notePhotos: 5, count: 61, paid: 60, ideas: 30, finder: true };
   const strings = (value: unknown): string[] => (typeof value === "string" ? [value] : value && typeof value === "object" ? Object.values(value).flatMap(strings) : []);
   const all = (l: (typeof LOCALES)[number]) => [...GIFT_GUIDE_SLUGS.flatMap((slug) => strings(GIFT_GUIDES[slug][l])), ...OCCASIONS.flatMap((occasion) => strings(OCCASION_GUIDES[occasion][l])), ...strings(digitalCardsCopy(l, facts))];
 
