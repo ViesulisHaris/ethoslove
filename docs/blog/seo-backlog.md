@@ -142,6 +142,11 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   18 Nov): a line under the "Meet in the middle" tool ("a call rhythm for your time difference"),
   in both languages ("Cómo llevar una relación a distancia"). The blog hub,
   virtual-date-ideas-long-distance, links it already.
+- [ ] **Long distance group: link /blog/long-distance-relationship-games from /long-distance**
+  (the hub, TOPIC-GROUPS.md rule 3; "long distance relationship games" 1,000, KD 0, published
+  24 Nov): a line beside the two-phone games ("games for any night, time zones included"), in both
+  languages ("Juegos para jugar a distancia con tu pareja"). The blog hub,
+  virtual-date-ideas-long-distance, links it already. /games could link it too.
 - [ ] **Love letters group: link /blog/paragraphs-for-him from /templates/the-letter**
   (the hub, TOPIC-GROUPS.md rule 3; "paragraphs for him" 1,900, KD 0, published 18 Nov): a line
   beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,
