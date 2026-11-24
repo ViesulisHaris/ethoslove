@@ -23,7 +23,7 @@ import { CityLinks } from "@/components/cities/city-links";
 import { CityPlaceList } from "@/components/cities/city-places";
 import { TonightIsland } from "@/components/dates/tonight/tonight-island";
 import { CITY_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
-import { CITY_KIND_PAGES } from "@/lib/dates/date-kinds";
+import { kindsOfCity } from "@/lib/cities/kind-pairs";
 
 /**
  * Built on the first visit and kept for a week, then rebuilt in the background: the places change
@@ -84,7 +84,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const ideaStops = cityIdeaStops(ideas, around);
   const passing = tripsThrough(city.slug);
   // Its pages by kind of date, only New York's and London's (lib/dates/date-kinds.ts).
-  const kindPages = CITY_KIND_PAGES.filter((p) => p.city === city.slug);
+  const kindPages = kindsOfCity(city.slug).filter((kind) => CITY_KIND_COPY[`${city.slug}/${kind}`]).map((kind) => ({ city: city.slug, kind }));
 
   return (
     <>

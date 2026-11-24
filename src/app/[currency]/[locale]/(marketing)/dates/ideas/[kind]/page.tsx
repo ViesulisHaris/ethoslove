@@ -8,7 +8,8 @@ import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI, KIN
 import { CITY_PAGES, cityName, getCity } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode } from "@/lib/cities/copy";
 import { ideaImage } from "@/lib/dates/art";
-import { DATE_KINDS, getDateKind, isCityKindPage, kindIdeas } from "@/lib/dates/date-kinds";
+import { DATE_KINDS, getDateKind, kindIdeas } from "@/lib/dates/date-kinds";
+import { isCityKindPair } from "@/lib/cities/kind-pairs";
 import { ideaById } from "@/lib/dates/ideas";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -97,7 +98,7 @@ export default async function DateKindPage({ params }: Props) {
           <ul className="flex flex-wrap gap-x-6 leading-8">
             {cities.map((city) => (
               <li key={city.slug}>
-                {isCityKindPage(city.slug, kind) ? (
+                {isCityKindPair(city.slug, kind) && CITY_KIND_COPY[`${city.slug}/${kind}`] ? (
                   <Link href={`/dates/${city.slug}/${kind}`} className={QUIET_ROW_LINK}>
                     {CITY_KIND_COPY[`${city.slug}/${kind}`].heading[l]}
                   </Link>

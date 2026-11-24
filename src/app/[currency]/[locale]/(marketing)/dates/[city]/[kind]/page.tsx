@@ -12,7 +12,8 @@ import { kindPlaces } from "@/lib/cities/kind-places";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M } from "@/lib/cities/places";
 import { ideaImageInCity } from "@/lib/dates/art";
-import { CITY_KIND_PAGES, getDateKind, isCityKindPage, kindIdeas } from "@/lib/dates/date-kinds";
+import { getDateKind, kindIdeas } from "@/lib/dates/date-kinds";
+import { isCityKindPair, kindsOfCity } from "@/lib/cities/kind-pairs";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -27,7 +28,7 @@ import { TonightIsland } from "@/components/dates/tonight/tonight-island";
 
 /**
  * Like its city's page it reads the map's tiles, so it is built on the first visit and kept a
- * week, never at build time. Only four pairs exist (lib/dates/date-kinds.ts, CITY_KIND_PAGES):
+ * week, never at build time. Only the pairs the data holds exist (lib/cities/kind-pairs.ts):
  * every other city and kind is a 404.
  */
 export const revalidate = 604800;
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: Omit<Props, "searchParams">):
   const { locale, city: citySlug, kind: kindSlug } = await params;
   const city = getCity(citySlug);
   const kind = getDateKind(kindSlug);
-  if (!city || !kind || !isCityKindPage(city.slug, kind)) return {};
+  if (!city || !kind || !isCityKindPair(city.slug, kind) || !CITY_KIND_COPY[`${city.slug}/${kind}`]) return {};
   const l = locale === "es" ? "es" : "en";
   const pair = CITY_KIND_COPY[`${city.slug}/${kind}`];
   return pageMetadata({ locale, path: `/dates/${city.slug}/${kind}`, title: pair.title[l], description: pair.description[l] });
@@ -62,7 +63,7 @@ export default async function CityKindPage({ params }: Props) {
   const { locale, city: citySlug, kind: kindSlug } = await params;
   const city = getCity(citySlug);
   const kind = getDateKind(kindSlug);
-  if (!city || !kind || !isCityKindPage(city.slug, kind)) notFound();
+  if (!city || !kind || !isCityKindPair(city.slug, kind) || !CITY_KIND_COPY[`${city.slug}/${kind}`]) notFound();
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";
   const td = await getTranslations("dates");
@@ -79,7 +80,8 @@ export default async function CityKindPage({ params }: Props) {
   const hero = ideaById(pair.hero ?? copy.hero)!;
   const faq = [...copy.faq, ...DATE_KIND_SHARED_FAQ].map((x) => ({ q: x.q[l], a: x.a[l] }));
   const km = (CITY_RADIUS_M / 1000).toLocaleString(l);
-  const other = CITY_KIND_PAGES.find((p) => p.city === city.slug && p.kind !== kind);
+  const otherKind = kindsOfCity(city.slug).find((k) => k !== kind && CITY_KIND_COPY[`${city.slug}/${k}`]);
+  const other = otherKind ? { kind: otherKind } : undefined;
   const placesWords = kind === "cheap" ? { label: ui.freePlacesLabel, heading: ui.freePlacesHeading, line: ui.freePlacesLine } : { label: ui.meetLabel, heading: ui.meetHeading, line: ui.meetLine };
 
   return (

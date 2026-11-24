@@ -19,7 +19,8 @@ import { SITE } from "@/config/site";
 import sitemap from "@/app/sitemap";
 import { KIND_PLACES, kindPlaces, leftOff } from "@/lib/cities/kind-places";
 import { guessCost } from "@/lib/dates/cost";
-import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
+import { DATE_KINDS } from "@/lib/dates/date-kinds";
+import { CITY_KIND_PAIRS } from "@/lib/cities/kind-pairs";
 import { rankPlaces } from "@/lib/dates/rank";
 
 /** The owner's rule: nothing on the site mentions Spain or its cities. */
@@ -484,18 +485,17 @@ describe("a kind of date inside a city", () => {
           const title = t("meta.title", { city: cityName(c, l), ideas: ideasForCity(c).length, places });
           expect(branded(title).length, title).toBeLessThanOrEqual(70);
         }
-      for (const { city: c, kind } of CITY_KIND_PAGES) {
-        const { title, description } = CITY_KIND_COPY[`${c}/${kind}`];
+      for (const { title, description } of Object.values(CITY_KIND_COPY)) {
         expect(title[l].length, title[l]).toBeLessThanOrEqual(60);
         expect(description[l].length, description[l]).toBeLessThanOrEqual(155);
       }
     }
   });
 
-  it("C6 the sitemap lists the seven kinds, the four pairs and every city, each in both languages", () => {
+  it("C6 the sitemap lists the ten kinds, every pair the data holds and every city, each in both languages", () => {
     const urls = sitemap().map((p) => new URL(p.url).pathname);
     for (const kind of DATE_KINDS) for (const prefix of ["", "/es"]) expect(urls, kind).toContain(`${prefix}/dates/ideas/${kind}`);
-    for (const { city: c, kind } of CITY_KIND_PAGES) for (const prefix of ["", "/es"]) expect(urls).toContain(`${prefix}/dates/${c}/${kind}`);
+    for (const { city: c, kind } of CITY_KIND_PAIRS) for (const prefix of ["", "/es"]) expect(urls).toContain(`${prefix}/dates/${c}/${kind}`);
     for (const prefix of ["", "/es"]) expect(urls.filter((u) => CITY_SLUGS.some((s) => u === `${prefix}/dates/${s}`))).toHaveLength(CITY_SLUGS.length);
     expect(urls.some((u) => u.endsWith("/dates/ideas/at-home"))).toBe(false);
   });

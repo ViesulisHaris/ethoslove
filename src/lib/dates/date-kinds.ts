@@ -38,12 +38,3 @@ export const fitsKind = (idea: Pick<DateIdea, "id">, kind: DateKind): boolean =>
 /** The kinds with a page. */
 export const DATE_KINDS: DateKind[] = DATE_KIND_IDS.filter((kind) => kindIdeas(kind).length >= MIN_KIND_IDEAS);
 export const getDateKind = (slug: string): DateKind | undefined => DATE_KINDS.find((kind) => kind === slug);
-
-/** A kind inside a city, only where it is searched (SEO-PICTURE.md section 5). Every other pair is a 404. */
-export const CITY_KIND_PAGES = [
-  { city: "new-york", kind: "cheap" },
-  { city: "new-york", kind: "first-date" },
-  { city: "london", kind: "first-date" },
-  { city: "london", kind: "cheap" },
-] as const satisfies readonly { city: string; kind: DateKind }[];
-export const isCityKindPage = (city: string, kind: string): boolean => CITY_KIND_PAGES.some((p) => p.city === city && p.kind === kind);

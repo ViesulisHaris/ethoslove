@@ -4,6 +4,7 @@ import { PRESS_PATH } from "@/content/press";
 import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
 import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { pressUpdated } from "@/lib/press/shown";
+import { CITY_KIND_PAIRS } from "@/lib/cities/kind-pairs";
 
 /**
  * When each page's own words last changed, for the sitemap's <lastmod>. Search engines believe
@@ -62,7 +63,7 @@ export const GALLERY_LIVE = "2026-11-22";
  * page, the pages by kind, the new cities. NOT LIVE YET: this is the day the work was finished. Set it
  * to the day it ships (a date ahead of the page is the kind search engines stop believing).
  */
-export const DATES_LIVE = "2026-11-25";
+export const DATES_LIVE = "2026-11-24";
 
 /**
  * The day the games of the growth build go live: today's question, the games' new end screen, how
@@ -151,10 +152,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/dates": DATES_LIVE,
   "/dates/*": DATES_LIVE,
   "/dates/ideas/*": DATES_LIVE,
-  "/dates/new-york/cheap": DATES_LIVE,
-  "/dates/new-york/first-date": DATES_LIVE,
-  "/dates/london/first-date": DATES_LIVE,
-  "/dates/london/cheap": DATES_LIVE,
+  ...Object.fromEntries(CITY_KIND_PAIRS.map((p) => [`/dates/${p.city}/${p.kind}`, DATES_LIVE])),
   "/trips": ROOMS_LIVE,
   "/trips/*": ROOMS_LIVE,
   "/games": GAMES_LIVE,

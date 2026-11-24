@@ -7,8 +7,9 @@ import nextConfig from "../../next.config";
 import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } from "@/content/date-kinds";
 import { ART_IDS } from "@/content/page-art";
 import { DATE_CARDS_ART, DATE_FOOT_ART, DATE_HERO_ART, DATE_PLACEMENTS } from "@/components/dates/page/placements";
-import { CITY_SLUGS, getCity, mentionsSpain } from "@/lib/cities/cities";
-import { CHEAP_FREE, CITY_KIND_PAGES, DATE_KIND_IDS, DATE_KINDS, getDateKind, isCityKindPage, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS, type DateKind } from "@/lib/dates/date-kinds";
+import { mentionsSpain } from "@/lib/cities/cities";
+import { isCityKindPair } from "@/lib/cities/kind-pairs";
+import { CHEAP_FREE, DATE_KIND_IDS, DATE_KINDS, getDateKind, KIND_IDEAS, kindIdeas, MIN_KIND_IDEAS, type DateKind } from "@/lib/dates/date-kinds";
 import { ideaImage, ideaImageInCity } from "@/lib/dates/art";
 import { IDEAS, ideaById, ideaPicture } from "@/lib/dates/ideas";
 
@@ -16,6 +17,8 @@ const words = (text: string): number => text.trim().split(/\s+/).length;
 const strings = (v: unknown): string[] => (typeof v === "string" ? [v] : v && typeof v === "object" ? Object.values(v).flatMap(strings) : []);
 const LOCALES = ["en", "es"] as const;
 const COUNT_WORD: Record<number, { en: string; es: string }> = { 8: { en: "eight", es: "ocho" }, 9: { en: "nine", es: "nueve" }, 10: { en: "ten", es: "diez" }, 12: { en: "twelve", es: "doce" } };
+/** The hand-written pairs: the four that had pages before every pair the data holds did. */
+const WRITTEN = Object.keys(CITY_KIND_COPY).map((key) => ({ city: key.split("/")[0], kind: key.split("/")[1] as DateKind }));
 const sorted = (ids: readonly string[]): string[] => [...ids].sort();
 
 describe("the kinds of date", () => {
@@ -61,23 +64,6 @@ describe("the kinds of date", () => {
     expect(getDateKind("at-home")).toBeUndefined();
     expect(getDateKind("nope")).toBeUndefined();
     for (const kind of DATE_KINDS) expect(kindIdeas(kind).length, kind).toBeGreaterThanOrEqual(MIN_KIND_IDEAS);
-  });
-
-  it("K7 a kind inside a city is four pairs of a city and a kind that both have pages, and no kind, nor \"ideas\", is a city's slug", () => {
-    expect(CITY_KIND_PAGES).toEqual([
-      { city: "new-york", kind: "cheap" },
-      { city: "new-york", kind: "first-date" },
-      { city: "london", kind: "first-date" },
-      { city: "london", kind: "cheap" },
-    ]);
-    for (const { city, kind } of CITY_KIND_PAGES) {
-      expect(getCity(city), city).toBeDefined();
-      expect(getDateKind(kind), kind).toBe(kind);
-      expect(isCityKindPage(city, kind)).toBe(true);
-    }
-    expect(isCityKindPage("paris", "cheap")).toBe(false);
-    expect(isCityKindPage("london", "fun")).toBe(false);
-    for (const slug of [...DATE_KIND_IDS, "ideas"]) expect(CITY_SLUGS, slug).not.toContain(slug);
   });
 
   it("K21 no kind is another's twin: two kinds share fewer than seven in ten of their ideas", () => {
@@ -171,7 +157,7 @@ describe("the kinds of date", () => {
   it("K18 a city-by-kind page never leads with a picture of somewhere else: no outdoor skyline under a city's name", () => {
     // The picnic's skyline has spires that are neither London's nor New York's.
     const OUTDOOR_SKYLINE = ["golden-hour-picnic"];
-    for (const { city, kind } of CITY_KIND_PAGES) {
+    for (const { city, kind } of WRITTEN) {
       const hero = CITY_KIND_COPY[`${city}/${kind}`].hero ?? DATE_KIND_COPY[kind]!.hero;
       expect(OUTDOOR_SKYLINE, `${city}/${kind}`).not.toContain(hero);
       expect(KIND_IDEAS[kind], `${city}/${kind}`).toContain(hero);
@@ -181,7 +167,7 @@ describe("the kinds of date", () => {
 
   it("K18b no card under a city's name shows another city's skyline, and every picture shown is a file (dates-D6)", () => {
     const skyline = ideaImage("golden-hour-picnic");
-    for (const { city, kind } of CITY_KIND_PAGES) {
+    for (const { city, kind } of WRITTEN) {
       const shown = kindIdeas(kind).map((idea) => ideaImageInCity(idea.id));
       expect(shown, `${city}/${kind}`).not.toContain(skyline);
       expect(new Set(shown).size, `${city}/${kind}`).toBe(shown.length);
@@ -197,7 +183,7 @@ describe("the kinds of date", () => {
     // The rows a page shows: the cheap page has two (the free four, then the rest), every other kind one.
     const firsts = (kind: DateKind): string[] => (kind === "cheap" ? [CHEAP_FREE[0], KIND_IDEAS.cheap.find((id) => !CHEAP_FREE.includes(id))!] : [KIND_IDEAS[kind][0]]);
     for (const kind of DATE_KINDS) expect(firsts(kind), kind).not.toContain(DATE_KIND_COPY[kind]!.hero);
-    for (const { city, kind } of CITY_KIND_PAGES) expect(firsts(kind), `${city}/${kind}`).not.toContain(CITY_KIND_COPY[`${city}/${kind}`].hero ?? DATE_KIND_COPY[kind]!.hero);
+    for (const { city, kind } of WRITTEN) expect(firsts(kind), `${city}/${kind}`).not.toContain(CITY_KIND_COPY[`${city}/${kind}`].hero ?? DATE_KIND_COPY[kind]!.hero);
   });
 
   it("K20 the first-date words never claim every idea keeps your hands busy: the gallery, the museum and the garden do not (dates-D5)", () => {
@@ -213,8 +199,8 @@ describe("the kinds of date", () => {
     expect(DATE_KIND_COPY.fun!.faq.map((f) => f.a.en).join(" ")).toContain("Six of the eight");
   });
 
-  it("K13 the four city-by-kind pages have their words in both languages, within the same limits", () => {
-    expect(Object.keys(CITY_KIND_COPY).sort()).toEqual(CITY_KIND_PAGES.map((p) => `${p.city}/${p.kind}`).sort());
+  it("K13 the four hand-written city-by-kind pages are pairs, and have their words in both languages, within the same limits", () => {
+    for (const { city, kind } of WRITTEN) expect(isCityKindPair(city, kind), `${city}/${kind}`).toBe(true);
     for (const [key, copy] of Object.entries(CITY_KIND_COPY)) {
       for (const l of LOCALES) {
         expect(copy.title[l].length, `${key} ${l}`).toBeLessThanOrEqual(60);

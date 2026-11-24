@@ -40,7 +40,7 @@ const TRAIT_SCORE: Record<CityTrait, (idea: DateIdea) => number> = {
 export const isLiftedBy = (idea: DateIdea, trait: CityTrait): boolean => TRAIT_SCORE[trait](idea) >= 2;
 
 /** A beach date is nonsense a long way from one; everything else can be found or reached anywhere. */
-const fitsCity = (idea: DateIdea, traits: CityTrait[]) => !leadsWith(idea, ["beach"]) || traits.includes("coastal");
+export const fitsCity = (idea: DateIdea, traits: CityTrait[]) => !leadsWith(idea, ["beach"]) || traits.includes("coastal");
 
 export function cityIdeaScore(idea: DateIdea, city: Pick<City, "traits" | "picks">): number {
   const traits = city.traits.reduce((sum, trait) => sum + TRAIT_SCORE[trait](idea), 0);
