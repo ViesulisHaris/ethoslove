@@ -24,7 +24,7 @@ import { notifyPublished } from "@/lib/email/notify";
 import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
 import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
 import { countCampaignGift } from "@/lib/commerce/campaign";
-import { holidayExtraAtPublish, showsExtra, stampedExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
+import { holidayExtraAtPublish, showsExtra, stampedExtra, withoutHolidayExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -117,12 +117,13 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
   // So does the free version a gift that is already out is held to (lib/gift/free-tier.ts): an edit
   // can't move a note back to the roomier rules. A draft still says it for itself.
-  // The holiday extra is the server's too (lib/lifecycle/holiday-extras.ts): whatever the row holds, never the browser's word.
+  // The holiday extra is the server's too (lib/lifecycle/holiday-extras.ts): whatever the row holds, never the browser's word;
+  // a draft holds none (a copy of a stamped gift is decided at its own first send).
   const data = {
     ...loose.data,
     templateSlug: row.template_slug,
     ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }),
-    holidayExtra: stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined,
+    holidayExtra: row.status === "draft" ? undefined : (stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined),
   };
   const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
 
@@ -194,7 +195,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const { data: gift, error: giftError } = await ctx.supabase
     .from("gifts")
-    .select("id, template_slug, user_id, status, created_at, published_at, free_tier:data->>freeTier, held_photos:data->photos, stored_extra:data->>holidayExtra")
+    .select("id, template_slug, user_id, status, created_at, published_at, watermark, free_tier:data->>freeTier, held_photos:data->photos, stored_extra:data->>holidayExtra")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -253,7 +254,11 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();
   // The holiday extra is decided at a publish and kept after; a gift sent before without it can still
   // get it if it was begun inside the days (lib/lifecycle/holiday-extras.ts).
-  const holidayExtra = holidayExtraAtPublish({ publishedBefore: gift.published_at !== null, stored: { holidayExtra: gift.stored_extra }, createdAt: gift.created_at }, Date.now(), Boolean(unlocked));
+  const holidayExtra = holidayExtraAtPublish(
+    { publishedBefore: gift.published_at !== null, stored: { holidayExtra: gift.stored_extra }, createdAt: gift.created_at, publishedAt: gift.published_at, watermark: gift.watermark },
+    Date.now(),
+    Boolean(unlocked),
+  );
   const status = scheduled ? "scheduled" : "live";
   // Taken before the gift goes live, so two replies published with one token can't both be free.
   const claimed = reply?.free && !reply.held ? reply.originalGiftId : null;
@@ -359,7 +364,10 @@ export async function getEntitlement(templateSlug: string): Promise<{ unlocked: 
   return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug), campaign };
 }
 
-/** Dashboard: duplicate a gift as a new draft (assets are shared by reference until edited). */
+/**
+ * Dashboard: duplicate a gift as a new draft (assets are shared by reference until edited). The copy
+ * leaves the holiday extra behind: it is a new gift, decided at its own first send.
+ */
 export async function duplicateGift(giftId: string): Promise<ActionResult<{ giftId: string }>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
@@ -368,7 +376,7 @@ export async function duplicateGift(giftId: string): Promise<ActionResult<{ gift
   for (let attempt = 0; attempt < 4; attempt++) {
     const { data, error } = await ctx.supabase
       .from("gifts")
-      .insert({ short_id: generateShortId(), user_id: ctx.user.id, template_slug: source.template_slug, locale: source.locale, data: source.data })
+      .insert({ short_id: generateShortId(), user_id: ctx.user.id, template_slug: source.template_slug, locale: source.locale, data: withoutHolidayExtra(source.data) })
       .select("id")
       .single();
     if (!error && data) {
