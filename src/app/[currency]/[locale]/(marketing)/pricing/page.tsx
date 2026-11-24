@@ -5,12 +5,13 @@ import { CHARGED_CURRENCIES, chargedCurrency, giftCardsOnSale, subscriptionsEnab
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { stripeReady } from "@/lib/stripe/server";
 import { isTemplateSlug, listManifests } from "@/templates/manifests";
+import { noteShare } from "@/lib/gift/free-tier";
 import { JsonLd } from "@/components/shared/json-ld";
 import { MembershipCompare } from "@/components/pricing/membership-compare";
 import { MembershipHero } from "@/components/pricing/membership-hero";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { SingleGifts } from "@/components/pricing/single-gifts";
-import { initialPlan, pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
+import { initialPlan, pricingFaq, safeReturnPath, withCurrencyAnswer, type FaqItem } from "@/components/pricing/offers";
 import { pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
 import { PriceHead } from "@/components/pricing/price-head";
 import { PricingChoice } from "@/components/pricing/pricing-choice";
@@ -58,7 +59,11 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
   // Free and paid as the gallery has them (lib/gift/free-tier.ts): the free tier's answer, the table's
   // free column and every name on the page follow the same list, whichever way the free note is set.
   const gifts = pricingGifts(manifests);
-  const faq = withFreeAnswer(pricingFaq(t.raw("faq") as FaqItem[], { giftCards, subscriptions }), gifts.note, t("faqFreeNote"));
+  // The currency question is answered in the currency the page charges in: a US visitor reads dollars under dollar prices.
+  const faq = withCurrencyAnswer(
+    withFreeAnswer(pricingFaq(t.raw("faq") as FaqItem[], { giftCards, subscriptions }), gifts.note, t("faqFreeNote")),
+    t("faqCurrency", { currency }),
+  );
   // A slug that isn't a template would sit in the picker unseen, taking one of the three places.
   const qTemplate = one(query.template);
   const template = qTemplate && isTemplateSlug(qTemplate) ? qTemplate : undefined;
@@ -85,7 +90,8 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
       />
       {/* SitePage's wrapper (components/marketing/spread/sections.tsx), written out: importing that module would bring the
           playing hero phone and its share of the messages, which this page does not draw. */}
-      <div data-page-theme="pricing" className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
+      {/* data-note-share: the free-note setting this server builds with, so the e2e tests check the page against it, not against their own shell. */}
+      <div data-page-theme="pricing" data-note-share={noteShare()} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <PricingChoice>
           <PriceHead currency={currency} manifests={manifests} template={template} subscriptions={subscriptions} />
           <SingleGifts

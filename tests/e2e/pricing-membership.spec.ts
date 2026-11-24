@@ -83,7 +83,7 @@ test.describe("Ethos for Two, sold as a subscription", () => {
   test("the comparison is a real table: free next to Ethos for Two, with the catalogue's prices", async ({ page }) => {
     await page.goto("/pricing?subscriptions=on");
     // Closed behind one row since the remake (open for whoever arrives with ?plan=, ?renew= or ?from=).
-    await page.getByText("Compare free and Ethos for Two, line by line").click();
+    await page.getByText("Free and Ethos for Two, side by side").click();
     const table = page.getByTestId("membership-compare");
     await expect(table.getByRole("columnheader", { name: "Free" })).toBeVisible();
     await expect(table.getByRole("columnheader", { name: "Ethos for Two" })).toBeVisible();
@@ -129,7 +129,7 @@ test.describe("Ethos for Two, sold as a one-year pass (the switch off)", () => {
 
   test("the table and the questions talk about the pass", async ({ page }) => {
     await page.goto("/pricing?subscriptions=off");
-    await page.getByText("Compare free and Ethos for Two, line by line").click();
+    await page.getByText("Free and Ethos for Two, side by side").click();
     await expect(page.getByTestId("membership-compare").getByRole("row", { name: /^Price/ })).toContainText("€29.99 for a year, paid once, for two");
     await page.getByText("Questions about Ethos for Two").click();
     await expect(page.locator("summary").getByText("Can I change my mind after buying?", { exact: true })).toBeVisible();

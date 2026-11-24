@@ -4,7 +4,10 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { listManifests } from "../../src/templates/manifests";
 import { pricingGifts, specialGifts, withFreeAnswer } from "../../src/components/pricing/free-gifts";
+import { withCurrencyAnswer } from "../../src/components/pricing/offers";
+import { createTranslator } from "next-intl";
 import { measure, settle } from "./page-measure";
+import { serverNoteShare } from "./server-settings";
 
 /**
  * /pricing remade in the site's new look (docs/marketing/growth-build/PLAN-pricing.md, 24 Nov 2026): a
@@ -86,6 +89,17 @@ for (const country of COUNTRIES) {
       await expect(page.getByTestId("price-pick3")).toHaveText(money(PRODUCTS.pick3.amounts[currency]));
       await expect(page.getByTestId("price-everything")).toHaveText(money(PRODUCTS.everything.amounts[currency]));
       await expect(page.getByTestId("price-extras")).toHaveText(money(PRODUCTS.extras.amounts[currency]));
+
+      // The currency question answers in the currency the page charges in, on the page and in its structured
+      // data (pricing-D1: a US visitor under dollar prices read "Prices are in euros").
+      const name = { usd: "US dollars", gbp: "pounds sterling", eur: "euros" }[currency];
+      const answer = page.getByTestId("pricing-faq-rest").locator("details", { hasText: "Which currencies and payment methods?" });
+      await expect(answer).toContainText(`Prices are in ${name},`, { useInnerText: false });
+      const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
+      expect(ld.join("\n")).toContain(`Prices are in ${name},`);
+      for (const other of Object.values({ usd: "US dollars", gbp: "pounds sterling", eur: "euros" }).filter((n) => n !== name)) {
+        expect(ld.join("\n")).not.toContain(`Prices are in ${other}`);
+      }
     });
 
     test("each of the four buy buttons sends what it sent before the remake", async ({ page, request }) => {
@@ -162,9 +176,9 @@ test("with a gift named, the head sells that gift: no line about what is free, n
   await expect(page.locator("[data-price-head]").getByRole("link", { name: "See what is free" })).toBeVisible();
 });
 
-test("every gift the page counts as paid can be bought from a card on it", async ({ page }) => {
+test("every gift the page counts as paid can be bought from a card on it", async ({ page, request }) => {
   const manifests = listManifests();
-  const share = Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) || 0;
+  const share = await serverNoteShare(request);
   const { paid } = pricingGifts(manifests, share);
   const { sold } = specialGifts(manifests, share);
   await page.goto("/pricing");
@@ -267,14 +281,16 @@ for (const prefix of ["", "/es"]) {
   });
 
   test(`${prefix}/pricing: every question and answer is in the HTML, and in the structured data`, async ({ request }) => {
-    const html = await (await request.get(`${prefix}/pricing?subscriptions=off`)).text();
+    const html = await (await request.get(`${prefix}/pricing?subscriptions=off`, { headers: { "x-vercel-ip-country": "LV" } })).text();
     const text = html.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
     const messages = prefix ? es : en;
     const faq = messages.pricing.faq as { q: string; a: string; id?: string }[];
     // While gift cards are off their question is not asked, and with the switch off the pass's answers are the ones given.
     // With the free note for everyone, the free tier's answer is the one written for the note.
-    const note = pricingGifts(listManifests(), Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) || 0).note;
-    const asked = withFreeAnswer(faq, note, messages.pricing.faqFreeNote).filter((item) => item.id !== "giftcard" && item.id !== "subscriptions");
+    const note = pricingGifts(listManifests(), await serverNoteShare(request)).note;
+    // The request comes from Latvia (below): the currency answer is said in euros, whatever the build sells.
+    const said = createTranslator({ locale: prefix ? "es" : "en", messages })("pricing.faqCurrency", { currency: "eur" });
+    const asked = withCurrencyAnswer(withFreeAnswer(faq, note, messages.pricing.faqFreeNote), said).filter((item) => item.id !== "giftcard" && item.id !== "subscriptions");
     expect(asked.length).toBeGreaterThan(10);
     const ld = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join("\n");
     for (const item of asked) {
@@ -337,10 +353,10 @@ test("the anchors other pages link to still land", async ({ page }) => {
  * without. tests/unit/pricing-free-gifts.test.ts holds the words for both settings in one run.
  */
 for (const prefix of ["", "/es"]) {
-  test(`${prefix}/pricing: every count is the paid list's length, and only free gifts are called free`, async ({ page }) => {
+  test(`${prefix}/pricing: every count is the paid list's length, and only free gifts are called free`, async ({ page, request }) => {
     const lang = prefix ? "es" : "en";
     const manifests = listManifests();
-    const { free, paid } = pricingGifts(manifests, Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) || 0);
+    const { free, paid } = pricingGifts(manifests, await serverNoteShare(request));
     await page.goto(`${prefix}/pricing?subscriptions=off`);
 
     // Everything counts the gifts that cannot go out free, as the gallery does.
@@ -364,3 +380,110 @@ for (const prefix of ["", "/es"]) {
     for (const m of free) expect(said).toContain(m.name[lang]);
   });
 }
+
+/** The deep test of 24 Nov 2026 (reports/pricing-deep.md): the picker, the way back, the head's button, a phone's spacing. */
+
+test("closing the picker hands focus back to the button that opened it (pricing-D3)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/pricing?template=bouquet");
+  for (const [opener, close] of [
+    [page.locator("[data-plan=single] button"), "Escape"],
+    [page.locator("[data-plan=pick3] button"), "button"],
+    [page.getByTestId("head-buy-single"), "Escape"],
+  ] as const) {
+    await expect(opener).toBeEnabled();
+    await opener.focus();
+    await page.keyboard.press("Enter");
+    const dialog = page.getByRole("dialog");
+    test.skip((await dialog.count()) === 0 && (await paymentsOff(page)), "payments are off on this server (no Stripe key): the picker does not open");
+    await expect(dialog).toBeVisible();
+    if (close === "Escape") await page.keyboard.press("Escape");
+    else await dialog.getByRole("button", { name: "Close" }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(opener).toBeFocused();
+  }
+});
+
+test("the picker's X answers a tap across 44px, though it is drawn at 28 (pricing-D4)", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/pricing");
+  await page.getByRole("button", { name: "Unlock one" }).click();
+  test.skip(await paymentsOff(page), "payments are off on this server (no Stripe key): the picker does not open");
+  const close = page.getByRole("dialog").getByRole("button", { name: "Close" });
+  const box = (await close.boundingBox())!;
+  // The four corners of a 44px square centred on the drawn button land on it (its ::after), not on the sheet.
+  const hits = await page.evaluate(({ x, y, w, h }) => {
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+    return [[-21, -21], [21, -21], [-21, 21], [21, 21]].map(([dx, dy]) => Boolean(document.elementFromPoint(cx + dx, cy + dy)?.closest("[data-slot=dialog-close]")));
+  }, { x: box.x, y: box.y, w: box.width, h: box.height });
+  expect(hits).toEqual([true, true, true, true]);
+});
+
+test("the editor's pick-three link opens the picker once: back from checkout shows the page (pricing-D5)", async ({ page }) => {
+  await page.route("**/api/stripe/checkout", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ url: "/about" }) }));
+  await page.goto(`/pricing?template=bouquet&plan=pick3&${FROM_EDITOR}`);
+  const dialog = page.getByRole("dialog");
+  test.skip((await dialog.count()) === 0 && (await paymentsOff(page)), "payments are off on this server (no Stripe key): the picker does not open");
+  await expect(dialog.getByRole("heading", { name: "Choose 3" })).toBeVisible();
+  // The address keeps the gift and the way back, and loses the order to open the picker.
+  await expect.poll(() => new URL(page.url()).searchParams.has("plan")).toBe(false);
+  expect(new URL(page.url()).searchParams.get("template")).toBe("bouquet");
+  expect(new URL(page.url()).searchParams.get("return")).toBe("/create/bouquet?resume=publish");
+  await page.keyboard.press("Escape");
+  // One gift through the head's button, to "checkout" (answered with /about), then Back.
+  await page.getByTestId("head-buy-single").click();
+  await dialog.getByRole("button", { name: "Continue (1/1)" }).click();
+  await page.waitForURL("**/about");
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Unlock Bouquet");
+  await expect(page.getByTestId("head-buy-single")).toBeEnabled();
+  await expect(dialog).toHaveCount(0);
+});
+
+test("the head's buy button waits, drawn as waiting, until it can open the picker (pricing-D6)", async ({ page, request }) => {
+  // In the server's HTML, before any script runs, it is disabled and busy: a tap then is not lost without a sign.
+  const html = await (await request.get("/pricing?template=bouquet")).text();
+  const button = html.match(/<button[^>]*data-testid="head-buy-single"[^>]*>/)?.[0] ?? "";
+  expect(button).toContain('disabled=""');
+  expect(button).toContain('aria-busy="true"');
+  // Hydrated, it is ready, and a press opens the picker (or says payments are not open).
+  await page.goto("/pricing?template=bouquet");
+  const head = page.getByTestId("head-buy-single");
+  await expect(head).toHaveAttribute("data-ready", "");
+  await expect(head).toBeEnabled();
+  await expect(head).toHaveAttribute("aria-busy", "false");
+  await head.click();
+  if (!(await paymentsOff(page))) await expect(page.getByRole("dialog").getByRole("heading", { name: "Choose 1" })).toBeVisible();
+});
+
+for (const prefix of ["", "/es"]) {
+  test(`${prefix}/pricing on a phone: the Best value pill stands clear, and Make it special's buttons share a width (pricing-D7)`, async ({ page }) => {
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto(`${prefix}/pricing`);
+      const pick3 = (await page.locator("[data-plan=pick3]").boundingBox())!;
+      const pill = (await page.locator("[data-plan=everything] > span").first().boundingBox())!;
+      expect(pill.y - (pick3.y + pick3.height), `${width}: the pill nearly touches Pick three`).toBeGreaterThanOrEqual(12);
+      const widths = await page.getByTestId("special-card").getByRole("link").evaluateAll((links) => links.map((l) => Math.round(l.getBoundingClientRect().width)));
+      expect(new Set(widths).size, `${width}: ${widths.join(", ")}`).toBe(1);
+    }
+  });
+}
+
+test("the header's language button shows its focus ring to a keyboard (pricing-D10)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/pricing");
+  const button = page.locator("header").getByRole("button", { name: /^Language/ });
+  // Reach it by keyboard, so :focus-visible holds.
+  for (let i = 0; i < 30 && !(await button.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
+  await expect(button).toBeFocused();
+  // The ring is drawn round the pill inside the 44px target, not on the target itself.
+  const ring = await button.evaluate((el) => {
+    const pill = el.firstElementChild as HTMLElement;
+    const style = getComputedStyle(pill);
+    return { style: style.outlineStyle, width: parseFloat(style.outlineWidth) };
+  });
+  expect(ring.style).toBe("solid");
+  expect(ring.width).toBeGreaterThanOrEqual(2);
+});

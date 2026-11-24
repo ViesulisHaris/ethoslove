@@ -111,7 +111,8 @@ export async function SingleGifts({
                     {sold.length && letter ? tPricing("page.specialLineSold", { free: letter.name[locale], sold: list(sold) }) : tPricing("page.specialLine")}
                   </p>
                 </div>
-                <div className="flex shrink-0 flex-wrap gap-2.5 self-start sm:flex-col sm:self-center">
+                {/* One column at every width, so the buttons stand at one width (a phone's row wrapped them at two). */}
+                <div className="flex shrink-0 flex-col gap-2.5 self-stretch sm:self-center">
                   {opens.map((m) => (
                     <Link
                       key={m.slug}

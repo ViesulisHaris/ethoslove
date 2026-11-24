@@ -1,5 +1,6 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
 import sharp from "sharp";
+import { serverNoteShare } from "./server-settings";
 import { templateFilmStart } from "../../src/content/template-film-starts";
 import { TEMPLATE_SLUGS } from "../../src/templates/manifests";
 import { measure, settle } from "./page-measure";
@@ -493,9 +494,9 @@ test("“The experience” is about the gift beside it, and “More like this”
  *
  * (stop any dev server on the port first: the switches are read when the server builds a page).
  */
-const NOTE_FOR_EVERYONE = process.env.NEXT_PUBLIC_FREE_NOTE_SHARE === "1";
-
-test("The Letter's page never lists under “Free” what the free note does not have", async ({ page }) => {
+test("The Letter's page never lists under “Free” what the free note does not have", async ({ page, request }) => {
+  // The server's setting, as its own page prints it: the shell running the tests may not have the variable.
+  const NOTE_FOR_EVERYONE = (await serverNoteShare(request)) >= 1;
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const [path, special, included, chars] of [
     ["/templates/the-letter", /with “make it special”/i, /what.s included/i, /the free note holds 500 characters/i],

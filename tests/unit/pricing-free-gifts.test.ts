@@ -3,7 +3,8 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { listManifests } from "@/templates/manifests";
-import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
+import { pricingFaq, withCurrencyAnswer, type FaqItem } from "@/components/pricing/offers";
+import { createTranslator } from "next-intl";
 import { headLine, pricingGifts, specialGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
 
 /**
@@ -137,5 +138,56 @@ describe("/pricing's own words", () => {
     const faq = [{ id: "free", q: "q", a: "two templates" }, { q: "other", a: "x" }];
     expect(withFreeAnswer(faq, false, "note")).toEqual(faq);
     expect(withFreeAnswer(faq, true, "note")).toEqual([{ id: "free", q: "q", a: "note" }, { q: "other", a: "x" }]);
+  });
+});
+
+/** The words of /pricing after the deep test of 24 Nov 2026 (reports/pricing-deep.md, D1, D2 and D8). */
+describe("what /pricing says about money and the Ethos mark", () => {
+  const CURRENCY = {
+    en: { usd: "US dollars", gbp: "pounds sterling", eur: "euros" },
+    es: { usd: "dólares estadounidenses", gbp: "libras esterlinas", eur: "euros" },
+  } as const;
+
+  it("answers the currency question in the visitor's currency, and the catalogue's own answer names none (D1)", () => {
+    for (const [locale, messages] of [["en", en], ["es", es]] as const) {
+      const t = createTranslator({ locale, messages });
+      const faq = messages.pricing.faq as FaqItem[];
+      const item = faq.find((f) => f.id === "currency");
+      expect(item, `${locale}: the currency question is marked`).toBeTruthy();
+      // Read without a currency (the home and /gifts questions, /llms.txt), the answer names none.
+      expect(item!.a).not.toMatch(/euro|dollar|pound|dólar|libra/i);
+      for (const currency of ["usd", "gbp", "eur"] as const) {
+        const said = withCurrencyAnswer(faq, t("pricing.faqCurrency", { currency })).find((f) => f.id === "currency")!.a;
+        expect(said).toContain(CURRENCY[locale][currency]);
+        for (const [other, name] of Object.entries(CURRENCY[locale])) if (other !== currency && name !== CURRENCY[locale][currency]) expect(said).not.toContain(name);
+      }
+    }
+  });
+
+  it("does not promise one price for everyone: the upgrade and the personal price differ (D2)", () => {
+    for (const messages of [en, es]) {
+      const discount = (messages.pricing.faq as FaqItem[]).find((f) => /discount|descuento/.test(f.q))!;
+      expect(discount.a).not.toMatch(/for everyone|para todo el mundo|para todos/i);
+    }
+  });
+
+  it("calls the small mark a mark, never a footer or a «pie», on everything the page shows (D8)", () => {
+    const shown = (messages: typeof en | typeof es) =>
+      JSON.stringify([
+        messages.pricing.page,
+        messages.pricing.freeNote,
+        messages.pricing.freeNoteShort,
+        messages.pricing.faqFreeNote,
+        messages.pricing.faq,
+        messages.membership.single,
+        messages.membership.compare,
+        messages.membership.hero,
+      ]);
+    expect(shown(en)).not.toMatch(/footer/i);
+    // «al pie de cada página» (at the foot of every page) is where the withdrawal link is, not the mark.
+    expect(shown(es)).not.toMatch(/\b(el|un|sin|pequeño) pie\b/i);
+    // Gifts, not templates, in the band's collage; Ethos for Two by its whole name in Spanish.
+    expect(en.membership.hero.art.templates).toBe("Every gift");
+    expect(es.membership.compare.title).toContain("Ethos for Two");
   });
 });

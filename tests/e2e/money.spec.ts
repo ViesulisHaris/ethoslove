@@ -53,7 +53,7 @@ test.describe("the pricing page", () => {
     await expect(page.getByTestId("price-pick3")).toHaveText("€14.99");
     await expect(page.getByTestId("price-everything")).toHaveText("€24.99");
     await expect(page.getByTestId("price-extras")).toHaveText("€7.49");
-    await expect(page.getByText("€29.97 separately")).toBeVisible();
+    await expect(page.getByText("€29.97 for three paid gifts separately")).toBeVisible();
 
     await expect(page.getByTestId("giftcard-card")).toHaveCount(0);
     await expect(page.getByTestId("creator-code-toggle")).toHaveCount(0);

@@ -105,10 +105,12 @@ async function MembershipArt() {
   const picnic = ideaById("golden-hour-picnic");
   const museum = ideaById("museum-then-wine");
   const lisbon = TRIPS.find((trip) => trip.id === "lisbon-slow-weekend");
+  // The trip second: the third card runs off the phone's foot under the packs and the paper couple, and the one
+  // card that shows a trip is saved too must be in sight (the deep test of 24 Nov 2026, D7).
   const cards = [
     { image: ideaImage("golden-hour-picnic"), title: picnic?.title[locale] ?? "", meta: `${t("cities.paris")} · ${t("saturday")}`, count: t("stops", { n: 4 }), trip: false, from: true },
-    { image: ideaImage("museum-then-wine"), title: museum?.title[locale] ?? "", meta: `${t("cities.rome")} · ${t("friday")}`, count: t("stops", { n: 3 }), trip: false, from: false },
     { image: lisbon?.image ? tripImageSm(lisbon.image) : ideaImage("pasta-and-a-slow-walk"), title: lisbon?.title[locale] ?? "", meta: t("trip"), count: t("days", { n: lisbon?.days ?? 3 }), trip: true, from: false },
+    { image: ideaImage("museum-then-wine"), title: museum?.title[locale] ?? "", meta: `${t("cities.rome")} · ${t("friday")}`, count: t("stops", { n: 3 }), trip: false, from: false },
   ];
 
   return (

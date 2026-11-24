@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -60,6 +60,20 @@ export function PricingCards({
   const locale = useLocale() as GiftLocale;
   const [picking, setPicking] = useState<PlanId | null>(openPick3 && paymentsEnabled ? "pick3" : null);
   const [chosen, setChosen] = useState<string[]>(preselect ? [preselect] : []);
+  // The button that opened the picker (a card's, or the head's): focus goes back to it when the picker
+  // closes. Opened from state, the dialog has no trigger of its own to hand focus back to.
+  const opener = useRef<HTMLElement | null>(null);
+
+  // The editor's "pick any three" link (?plan=pick3) opens the picker once: the address loses `plan`
+  // (keeping the gift and the way back), so coming back from checkout, or a reload, shows the page,
+  // not "Choose 3" again over it.
+  useEffect(() => {
+    if (!openPick3) return;
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has("plan")) return;
+    url.searchParams.delete("plan");
+    window.history.replaceState(window.history.state, "", url);
+  }, [openPick3]);
   // The card whose checkout is starting: its button alone shows the spinner, every buy button waits.
   const [busy, setBusy] = useState<PlanId | null>(null);
   // One answer for this set of cards: shown under Everything's button and under the picker's, the
@@ -83,12 +97,13 @@ export function PricingCards({
   // "One template" is a premium one: a free template's unlock is "Make it special", sold in its
   // editor at its own, lower price (checkout refuses a single for one). Three may mix both.
   const pickable = (product: PlanId | null) => (product === "single" ? manifests.filter((m) => m.tier === "premium") : manifests);
-  const choose = (product: PlanId) => {
+  const choose = (product: PlanId, from?: HTMLElement | null) => {
     if (!paymentsEnabled) {
       toast(t("comingSoon"));
       return;
     }
     if (product === "everything") return void start("everything", all.plan, []);
+    opener.current = from ?? null;
     setChosen(preselect && pickable(product).some((m) => m.slug === preselect) ? [preselect] : []);
     setPicking(product);
   };
@@ -117,7 +132,7 @@ export function PricingCards({
        * widest card's unbreakable content (the price and its "separately" note), which pushed the
        * cards 26px past a 320px screen in Spanish and let the page scroll sideways.
        */}
-      <div className={cn("grid grid-cols-1 items-stretch", quiet ? "gap-4 md:grid-cols-3 xl:gap-5" : "gap-5 lg:grid-cols-3")} data-authed={authed}>
+      <div className={cn("grid grid-cols-1 items-stretch", quiet ? "gap-7 md:grid-cols-3 md:gap-4 xl:gap-5" : "gap-5 lg:grid-cols-3")} data-authed={authed}>
         {PRODUCT_ORDER.map((id) => {
           const p = PRODUCTS[id];
           const dominant = p.highlight && !quiet;
@@ -152,7 +167,8 @@ export function PricingCards({
                     // The line below says the same in words, for a screen reader that reads no strikethrough.
                     <s aria-hidden="true" className="text-[0.9375rem] text-ink-soft">{formatAmount(p.amounts[currency], currency, locale)}</s>
                   ) : p.compareAt ? (
-                    <span className="text-[0.9375rem] text-ink-soft">{t("separately", { price: formatAmount(p.compareAt[currency], currency, locale) })}</span>
+                    // The sum is three paid gifts: three that take in The Letter would cost less.
+                    <span className="text-[0.9375rem] text-ink-soft">{t(id === "pick3" ? "page.pick3Separately" : "separately", { price: formatAmount(p.compareAt[currency], currency, locale) })}</span>
                   ) : null}
                 </div>
                 {upgrading ? (
@@ -160,7 +176,7 @@ export function PricingCards({
                     {tPlans("upgradeNote", { full: formatAmount(p.amounts[currency], currency, locale) })}
                   </p>
                 ) : (
-                  <p className="mt-3 text-[0.9375rem] leading-snug text-ink-soft">
+                  <p className="mt-3 text-[0.9375rem] leading-snug text-balance text-ink-soft">
                     {id === "everything"
                       ? t("page.cards.everything.line", { n: paid, price: formatAmount(Math.round(p.amounts[currency] / Math.max(paid, 1)), currency, locale) })
                       : t(`page.cards.${id}.line`)}
@@ -176,7 +192,7 @@ export function PricingCards({
                 </ul>
                 <button
                   type="button"
-                  onClick={() => choose(id)}
+                  onClick={(event) => choose(id, event.currentTarget)}
                   disabled={busy !== null}
                   aria-busy={busy === id}
                   className={cn(
@@ -259,7 +275,7 @@ export function PricingCards({
               </ul>
               <button
                 type="button"
-                onClick={() => choose(id)}
+                onClick={(event) => choose(id, event.currentTarget)}
                 disabled={busy !== null}
                 aria-busy={busy === id}
                 className={cn(
@@ -286,7 +302,16 @@ export function PricingCards({
       <p className={quiet ? "mt-4 text-sm leading-relaxed text-ink-soft" : "mt-5 text-center text-[13px] text-muted-foreground"}>{t("checkoutNote")}</p>
 
       <Dialog open={picking !== null} onOpenChange={(v) => !v && setPicking(null)}>
-        <DialogContent closeLabel={tCommon("close")} className="sm:max-w-lg">
+        <DialogContent
+          closeLabel={tCommon("close")}
+          className="sm:max-w-lg"
+          onCloseAutoFocus={(event) => {
+            const back = opener.current;
+            if (!back?.isConnected) return;
+            event.preventDefault();
+            back.focus({ preventScroll: true });
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">
               {t("pick.title", { n: needed })}
