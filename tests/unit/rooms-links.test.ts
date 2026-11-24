@@ -16,7 +16,7 @@ import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/annivers
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
 import { nearestAirport } from "@/lib/trips/airports";
-import { echoTheirs, halfwayAnswer, inNeverNamed, namesAirport, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
+import { echoTheirs, halfwayAnswer, inNeverNamed, namesAirport, planTheirs, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
 import { fairKm, pickSpot, spotAt } from "@/lib/places/photon-reverse";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
@@ -376,6 +376,20 @@ describe("the halfway answer, table and map together", () => {
     expect(namesAirport(bod, { lat: 43.3183, lng: -1.9812 })).toBe(false);
     expect(namesAirport(nearestAirport({ lat: 40.4168, lng: -3.7038 })!.airport, { lat: 40.4168, lng: -3.7038 })).toBe(false);
     expect(namesAirport(nearestAirport({ lat: 48.2082, lng: 16.3738 })!.airport, { lat: 48.2082, lng: 16.3738 })).toBe(true);
+  });
+
+  it("Plan the next visit keeps a town that may be named while the map is asked or after it failed, and drops one in Spain (Prague and Vienna, Madrid and Barcelona)", () => {
+    const each = { eachKm: 125, middle: { lat: 48.9, lng: 15.5 } };
+    const vienna = { lat: 48.2082, lng: 16.3738 };
+    const barcelona = { lat: 41.3874, lng: 2.1686 };
+    for (const answer of [null, { kind: "pending" as const, ...each }, { kind: "failed" as const, ...each }]) {
+      expect(planTheirs(answer, vienna), answer?.kind ?? "none yet").toBe(true);
+      expect(planTheirs(answer, barcelona), answer?.kind ?? "none yet").toBe(false);
+    }
+    // Once the answer is known, the dates link's rule: nothing where halfway is never named.
+    expect(planTheirs({ kind: "unnamed", ...each }, vienna)).toBe(false);
+    expect(planTheirs({ kind: "none", ...each }, vienna)).toBe(true);
+    expect(planTheirs({ kind: "uneven", ...each }, barcelona)).toBe(false);
   });
 });
 

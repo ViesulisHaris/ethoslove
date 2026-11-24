@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
-import { answerPlace, echoTheirs, inNeverNamed, isEven, mapLink, namesAirport, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { answerPlace, echoTheirs, isEven, mapLink, namesAirport, NEVER_SUGGESTED, planTheirs } from "@/lib/ldr/halfway";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
@@ -98,12 +98,11 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   // The same calculation as the halfway finder's own page (lib/ldr/halfway.ts, use-halfway.ts).
   const { result, answer } = useHalfway(a, b, locale);
   const place = useMemo(() => answerPlace(answer), [answer]);
-  // Their town goes to "Plan the next visit" further down only when it may be echoed (the same rule
-  // as the dates link here): never while the map is asked or failed, when halfway falls where the
-  // site names nothing, or when their town is there itself. Before the other town is in, there is no
-  // halfway to wait for: their town goes there unless it is in such a country.
+  // Their town goes to "Plan the next visit" further down unless it is in a country the site never
+  // names, or the answer is known and falls where the site names nothing (the dates link's rule).
+  // While the map is asked, or when it failed, a town that may be named still goes.
   const echo = echoTheirs(answer, b);
-  const planTown = b && (a ? echo : !inNeverNamed(b)) ? b : null;
+  const planTown = b && planTheirs(a ? answer : null, b) ? b : null;
   useEffect(() => {
     setTheirTown(planTown);
   }, [planTown]);

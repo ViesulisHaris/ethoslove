@@ -182,6 +182,15 @@ export const echoTheirs = (answer: HalfwayAnswer | null, town?: LatLng | null): 
 export const namesAirport = (airport: { country: string }, town?: LatLng | null): boolean =>
   !NEVER_SUGGESTED.has(airport.country) && !(town && inNeverNamed(town));
 
+/**
+ * Whether "Plan the next visit" may carry their town. Once the answer is known, by the dates link's
+ * own rule (`echoTheirs`). Before it is (no other town yet, the map still asked, or the map failed),
+ * nothing says halfway is somewhere never named: their town goes unless it is in such a country
+ * itself. A failed map drops Barcelona, never Vienna.
+ */
+export const planTheirs = (answer: HalfwayAnswer | null, town: LatLng): boolean =>
+  !answer || answer.kind === "pending" || answer.kind === "failed" ? !inNeverNamed(town) : echoTheirs(answer, town);
+
 /** The place a halfway answer names, as the ways on need it, or null. */
 export const answerPlace = (answer: HalfwayAnswer | null): { name: string; lat: number; lng: number } | null =>
   answer?.kind === "city" ? { name: answer.name, lat: answer.lat, lng: answer.lng } : null;
