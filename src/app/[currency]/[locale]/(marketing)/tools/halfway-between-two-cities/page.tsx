@@ -7,13 +7,14 @@ import { ClientMessages } from "@/i18n/client-messages";
 import { SITE } from "@/config/site";
 import { HALFWAY_TOOL, HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
 import { HALFWAY_ART, HALFWAY_FOOT_ART, ROOMS_THEME } from "@/content/rooms-art";
-import { pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { readsMiles } from "@/lib/ldr/halfway";
 import { readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { waysData } from "@/lib/ldr/ways-data";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { HalfwayFinder } from "@/components/ldr/halfway-finder";
+import { DocumentMark } from "@/components/shared/document-mark";
 import { JsonLd } from "@/components/shared/json-ld";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
 import { Intro, SPREAD } from "@/components/templates/page/spread";
@@ -74,6 +75,7 @@ export default async function HalfwayToolPage({ params, searchParams }: Props) {
       />
       {/* The footer, the header's button and the ground behind them take the page's colours while it is open. */}
       <style>{pageThemeChromeCss(THEME, theme)}</style>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={THEME} />
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="halfway-title">
           <ArtLayer items={HALFWAY_ART} flowers={theme.flowers} />

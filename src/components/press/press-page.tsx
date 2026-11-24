@@ -4,7 +4,8 @@ import { Check, Plus } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { SAMPLE_PHOTO, artSrcSet, pageArt, slotStyle } from "@/content/page-art";
-import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { DEFAULT_PAGE_THEME, PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { DocumentMark } from "@/components/shared/document-mark";
 import type { TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
@@ -40,6 +41,7 @@ export function PressPage({ children }: { children: ReactNode }) {
   return (
     <>
       <style>{pageThemeChromeCss(THEME, DEFAULT_PAGE_THEME)}</style>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={THEME} />
       <div data-page-theme={THEME} style={pageThemeStyle(DEFAULT_PAGE_THEME)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         {children}
       </div>
