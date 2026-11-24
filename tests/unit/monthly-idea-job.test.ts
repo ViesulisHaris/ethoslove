@@ -187,6 +187,24 @@ describe("the morning job", () => {
     await run.run();
     expect(run.mail[0]).toMatchObject({ season: "november", templateSlug: "fall-for-you", onceKey: `monthly-idea/${OWNER}/2026-11-24` });
   });
+
+  it("J7b a send caught up after the day its words name takes the next row's words and idea", async () => {
+    // Due 13 February, sent on the 15th: "It's on 14 February" would be false.
+    const late = memoryStore([row({ since: "2027-01-13", last_sent_on: "2027-01-13", template_slug: "the-letter" })]);
+    const run = job(late.store, at("2027-02-15"));
+    await run.run();
+    expect(run.mail[0]).toMatchObject({ season: "feb-anniversary", templateSlug: "our-timeline", onceKey: `monthly-idea/${OWNER}/2027-02-13` });
+    // The same date sent on time keeps Valentine's Day.
+    const onTime = memoryStore([row({ since: "2027-01-13", last_sent_on: "2027-01-13", template_slug: "the-letter" })]);
+    const run2 = job(onTime.store, at("2027-02-13"));
+    await run2.run();
+    expect(run2.mail[0]).toMatchObject({ season: "valentines", templateSlug: "bouquet" });
+    // Christmas due 24 December, sent the 26th.
+    const xmas = memoryStore([row({ since: "2026-11-24", last_sent_on: "2026-11-24", template_slug: "the-letter" })]);
+    const run3 = job(xmas.store, at("2026-12-26"));
+    await run3.run();
+    expect(run3.mail[0]).toMatchObject({ season: "year-end", templateSlug: "unwrapped" });
+  });
 });
 
 describe("the store, on the database", () => {

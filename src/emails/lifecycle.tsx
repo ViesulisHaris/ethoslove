@@ -423,60 +423,60 @@ export function MonthsaryReminderEmail({ locale, partnerName, months, idea, stop
  */
 export const IDEA_COPY: Record<SeasonId, Record<L, { heading: string; body: string; preview: string }>> = {
   "jan-birthday": {
-    en: { heading: "A birthday coming up?", body: "January birthdays come right after everyone has spent their ideas on December. If one is close, here is one idea:", preview: "One idea for a January birthday." },
-    es: { heading: "¿Se acerca un cumpleaños?", body: "Los cumpleaños de enero llegan cuando todo el mundo ha gastado ya sus ideas en diciembre. Si hay uno cerca, aquí va una idea:", preview: "Una idea para un cumpleaños de enero." },
+    en: { heading: "A birthday coming up?", body: "January birthdays come right after everyone has spent their ideas on December. If there's one close to you, this could be it:", preview: "One idea for a January birthday." },
+    es: { heading: "¿Se acerca un cumpleaños?", body: "Los cumpleaños de enero llegan cuando ya se han gastado todas las ideas en diciembre. Si tienes uno cerca, esta idea te puede servir:", preview: "Una idea para un cumpleaños de enero." },
   },
   valentines: {
-    en: { heading: "Anyone in mind for Valentine's Day?", body: "It's on 14 February. A gift made today can wait until then: schedule it, and it opens that morning. One idea:", preview: "It's on 14 February. One idea." },
-    es: { heading: "¿Alguien en mente para San Valentín?", body: "Es el 14 de febrero. Un regalo hecho hoy puede esperar hasta entonces: prográmalo y se abrirá esa mañana. Una idea:", preview: "Es el 14 de febrero. Una idea." },
+    en: { heading: "Anyone in mind for Valentine's Day?", body: "It's on 14 February. Make the gift today, schedule it for that morning, and it waits until then.", preview: "It's on 14 February. One idea." },
+    es: { heading: "¿Tienes a alguien en mente para San Valentín?", body: "Es el 14 de febrero. Haz el regalo hoy, prográmalo para esa mañana y esperará hasta entonces.", preview: "Es el 14 de febrero. Una idea." },
   },
   "feb-anniversary": {
-    en: { heading: "An anniversary coming up?", body: "Any anniversary counts: a first date, a wedding, the day you moved in. If one is close, here is one idea:", preview: "One idea for an anniversary." },
-    es: { heading: "¿Se acerca un aniversario?", body: "Cualquier aniversario cuenta: una primera cita, una boda, el día de la mudanza. Si hay uno cerca, aquí va una idea:", preview: "Una idea para un aniversario." },
+    en: { heading: "An anniversary coming up?", body: "Any anniversary counts: a first date, a wedding, the day you moved in. For whichever is next:", preview: "One idea for an anniversary." },
+    es: { heading: "¿Se acerca un aniversario?", body: "Cualquier aniversario cuenta: una primera cita, una boda, el día que os fuisteis a vivir juntos. Para el próximo:", preview: "Una idea para un aniversario." },
   },
   march: {
-    en: { heading: "Whose birthday is next?", body: "Someone in the family, a friend, someone at work. Whoever is next, here is one idea:", preview: "Whoever is next, one idea." },
-    es: { heading: "¿De quién es el próximo cumpleaños?", body: "Alguien de la familia, del grupo de amigos, del trabajo. Sea quien sea, aquí va una idea:", preview: "Sea quien sea, una idea." },
+    en: { heading: "Whose birthday is next?", body: "Someone in the family, a friend, someone at work. Whoever it is, start here:", preview: "Whoever is next, one idea." },
+    es: { heading: "¿De quién es el próximo cumpleaños?", body: "Alguien de la familia, del grupo de amigos, del trabajo. Sea quien sea, empieza por aquí:", preview: "Sea quien sea, una idea." },
   },
   april: {
-    en: { heading: "Someone who'd love a surprise?", body: "It doesn't need a date. A gift that arrives on an ordinary Tuesday is a surprise by itself. One idea:", preview: "No date needed. One idea." },
-    es: { heading: "¿Alguien a quien le haría ilusión una sorpresa?", body: "No hace falta una fecha. Un regalo que llega un martes cualquiera ya es una sorpresa. Una idea:", preview: "No hace falta fecha. Una idea." },
+    en: { heading: "Is Mother's Day coming up where you are?", body: "In much of the world it falls in May, and a gift made now can wait for the day.", preview: "In much of the world it's in May. One idea." },
+    es: { heading: "¿Se acerca el Día de la Madre?", body: "En muchos países cae en mayo, y un regalo hecho ahora puede esperar hasta ese día.", preview: "En muchos países es en mayo. Una idea." },
   },
   may: {
-    en: { heading: "A birthday, an anniversary, a thank-you?", body: "One of them is probably in your calendar already. Here is one idea for it:", preview: "One idea for whichever comes first." },
-    es: { heading: "¿Un cumpleaños, un aniversario, un gracias?", body: "Seguro que alguno ya está en tu calendario. Aquí va una idea:", preview: "Una idea para el que llegue antes." },
+    en: { heading: "Anything to celebrate this month?", body: "A birthday, an anniversary, someone who has earned a thank-you. If one is on your calendar, this is a good place to start:", preview: "One idea for whatever comes first." },
+    es: { heading: "¿Algo que celebrar este mes?", body: "Un cumpleaños, un aniversario, alguien que se ha ganado que le des las gracias. Si tienes algo en el calendario, puedes empezar por aquí:", preview: "Una idea para lo primero que llegue." },
   },
   june: {
-    en: { heading: "A wedding, a graduation, an anniversary?", body: "June has plenty of them. If one is coming up for someone close to you, here is one idea:", preview: "June has plenty of them. One idea." },
-    es: { heading: "¿Una boda, una graduación, un aniversario?", body: "Junio viene lleno de ellos. Si se acerca el de alguien cercano, aquí va una idea:", preview: "Junio viene lleno de ellos. Una idea." },
+    en: { heading: "A wedding or a graduation this month?", body: "June is full of them. If someone you love has one, try this:", preview: "June is full of them. One idea." },
+    es: { heading: "¿Una boda o una graduación este mes?", body: "Junio está lleno de ellas. Si alguien a quien quieres celebra una, prueba con esto:", preview: "Junio está lleno de ellas. Una idea." },
   },
   july: {
-    en: { heading: "Someone far away right now?", body: "A gift opens wherever they are, as soon as you send the link. One idea:", preview: "It opens wherever they are. One idea." },
-    es: { heading: "¿Alguien que está lejos ahora mismo?", body: "Un regalo se abre allí donde esté, en cuanto envías el enlace. Una idea:", preview: "Se abre allí donde esté. Una idea." },
+    en: { heading: "Someone far away right now?", body: "A gift opens wherever they are, the moment you send the link.", preview: "It opens wherever they are. One idea." },
+    es: { heading: "¿Alguien que está lejos ahora mismo?", body: "Un regalo se abre allí donde esté, en cuanto le envías el enlace.", preview: "Se abre allí donde esté. Una idea." },
   },
   august: {
-    en: { heading: "A birthday coming up soon?", body: "The photos are probably in your phone already. Here is one idea for them:", preview: "The photos are already in your phone. One idea." },
-    es: { heading: "¿Hay un cumpleaños a la vista?", body: "Las fotos seguramente ya están en tu móvil. Aquí va una idea para ellas:", preview: "Las fotos ya están en tu móvil. Una idea." },
+    en: { heading: "Got a birthday in the next few weeks?", body: "The photos are probably on your phone already. This one puts them to use:", preview: "The photos are already on your phone. One idea." },
+    es: { heading: "¿Algún cumpleaños en las próximas semanas?", body: "Seguramente las fotos ya están en tu móvil. Con esto les das uso:", preview: "Las fotos ya están en tu móvil. Una idea." },
   },
   september: {
-    en: { heading: "Is an anniversary close?", body: "Find a photo from each year. Here is one idea for what to do with them:", preview: "A photo from each year, and one idea." },
-    es: { heading: "¿Hay un aniversario cerca?", body: "Busca una foto de cada año. Aquí va una idea para qué hacer con ellas:", preview: "Una foto de cada año, y una idea." },
+    en: { heading: "Is an anniversary close?", body: "Find a photo from each year you've had together. Here's somewhere to put them:", preview: "A photo from each year, and one idea." },
+    es: { heading: "¿Hay un aniversario cerca?", body: "Busca una foto de cada año que lleváis juntos. Aquí tienes dónde ponerlas:", preview: "Una foto de cada año, y una idea." },
   },
   october: {
-    en: { heading: "Anyone in mind for Halloween?", body: "It's on 31 October. A gift doesn't have to be scary to belong to it. One idea:", preview: "It's on 31 October. One idea." },
-    es: { heading: "¿Alguien en mente para Halloween?", body: "Es el 31 de octubre. Un regalo no tiene que dar miedo para ser de Halloween. Una idea:", preview: "Es el 31 de octubre. Una idea." },
+    en: { heading: "Anyone in mind for Halloween?", body: "It's on 31 October, and a gift doesn't have to be scary to belong to it.", preview: "It's on 31 October. One idea." },
+    es: { heading: "¿Tienes a alguien en mente para Halloween?", body: "Es el 31 de octubre, y un regalo no tiene que dar miedo para ser de Halloween.", preview: "Es el 31 de octubre. Una idea." },
   },
   november: {
-    en: { heading: "Someone to thank this month?", body: "A thank-you is easier to write than it sounds: say what they did, and what it changed. One idea:", preview: "Say what they did, and what it changed." },
-    es: { heading: "¿Alguien a quien dar las gracias este mes?", body: "Dar las gracias es más fácil de lo que parece: di qué hizo y qué cambió. Una idea:", preview: "Di qué hizo y qué cambió." },
+    en: { heading: "Someone to thank this month?", body: "A thank-you is easier to write than it sounds: say what they did, and what it changed.", preview: "Say what they did, and what it changed." },
+    es: { heading: "¿Alguien a quien darle las gracias este mes?", body: "Dar las gracias es más fácil de lo que parece: di qué hizo y qué cambió.", preview: "Di qué hizo y qué cambió." },
   },
   christmas: {
-    en: { heading: "Anyone to surprise this Christmas?", body: "Christmas is on 25 December, and December birthdays tend to get lost behind it. If someone's day is coming up, here is one idea:", preview: "Christmas is on 25 December. One idea." },
-    es: { heading: "¿Alguien a quien sorprender estas Navidades?", body: "Navidad es el 25 de diciembre, y los cumpleaños de diciembre suelen quedar a su sombra. Si se acerca el día de alguien, aquí va una idea:", preview: "Navidad es el 25 de diciembre. Una idea." },
+    en: { heading: "Something for the two of you this Christmas?", body: "Christmas is on 25 December. Whatever you make now can be scheduled for that morning.", preview: "Christmas is on 25 December. One idea." },
+    es: { heading: "¿Algo para los dos estas Navidades?", body: "Navidad es el 25 de diciembre. Lo que hagas ahora puedes programarlo para esa misma mañana.", preview: "Navidad es el 25 de diciembre. Una idea." },
   },
   "year-end": {
-    en: { heading: "Someone to thank before the year ends?", body: "The year is nearly over. If someone made it better, here is one idea for telling them:", preview: "One idea, before the year ends." },
-    es: { heading: "¿Un último gracias antes de fin de año?", body: "El año está a punto de acabar. Si alguien lo ha hecho mejor, aquí va una idea para decírselo:", preview: "Una idea, antes de que acabe el año." },
+    en: { heading: "What did your year together add up to?", body: "Before it's over: the voice notes, the trips, the nights someone stole the blanket. A way to look back at it together:", preview: "Your year, before it's over." },
+    es: { heading: "¿Cómo ha sido vuestro año juntos?", body: "Antes de que acabe: los audios, los viajes, las noches que alguien se quedó con la manta. Una forma de repasarlo juntos:", preview: "Vuestro año, antes de que acabe." },
   },
 };
 

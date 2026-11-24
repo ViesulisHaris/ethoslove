@@ -48,7 +48,15 @@ export function suggestionPath(slug: string, ref: string): string {
 export const SEASON_IDS = ["jan-birthday", "valentines", "feb-anniversary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "christmas", "year-end"] as const;
 export type SeasonId = (typeof SEASON_IDS)[number];
 /** One row of the monthly idea's year: it runs from `from` ([month, day]) to the day before the next row's. */
-export type SeasonIdea = { id: SeasonId; from: readonly [number, number]; idea: string; alternate: string; more: Occasion | "templates" };
+export type SeasonIdea = {
+  id: SeasonId;
+  from: readonly [number, number];
+  idea: string;
+  alternate: string;
+  more: Occasion | "templates";
+  /** Its words name the day the row ends on (14 February, 31 October, 25 December, the end of the year): sent after it, they are false. */
+  dated?: true;
+};
 
 /**
  * The monthly idea's year (lib/lifecycle/monthly-idea.ts), in calendar order. Each row names one
@@ -60,7 +68,7 @@ export const SEASON_IDEAS: readonly SeasonIdea[] = [
   // Balloons was the plan's alternate here, but its tagline says every balloon hides a photo and two
   // or three hold only confetti (balloons/Template.tsx, `empties`). Scratch Card's line is true.
   { id: "jan-birthday", from: [1, 1], idea: "birthday-cinema", alternate: "scratch-card", more: "birthday" },
-  { id: "valentines", from: [1, 15], idea: "bouquet", alternate: "xoxo", more: "valentines" },
+  { id: "valentines", from: [1, 15], idea: "bouquet", alternate: "xoxo", more: "valentines", dated: true },
   { id: "feb-anniversary", from: [2, 14], idea: "our-timeline", alternate: "vinyl", more: "anniversary" },
   { id: "march", from: [3, 1], idea: "popup-card", alternate: "party-animals", more: "birthday" },
   { id: "april", from: [4, 1], idea: "recipe-box", alternate: "garden", more: "mothers-day" },
@@ -69,18 +77,31 @@ export const SEASON_IDEAS: readonly SeasonIdea[] = [
   { id: "july", from: [7, 1], idea: "passport", alternate: "picnic", more: "long-distance" },
   { id: "august", from: [8, 1], idea: "digicam", alternate: "scrapbook", more: "birthday" },
   { id: "september", from: [9, 1], idea: "museum", alternate: "photo-booth", more: "anniversary" },
-  { id: "october", from: [10, 1], idea: "spooky-season", alternate: "be-my-boo", more: "halloween" },
+  { id: "october", from: [10, 1], idea: "spooky-season", alternate: "be-my-boo", more: "halloween", dated: true },
   { id: "november", from: [11, 1], idea: "jar-of-reasons", alternate: "fall-for-you", more: "templates" },
-  { id: "christmas", from: [11, 25], idea: "snow-globe", alternate: "string-the-lights", more: "christmas" },
-  { id: "year-end", from: [12, 25], idea: "unwrapped", alternate: "midnight-countdown", more: "templates" },
+  { id: "christmas", from: [11, 25], idea: "snow-globe", alternate: "string-the-lights", more: "christmas", dated: true },
+  { id: "year-end", from: [12, 25], idea: "unwrapped", alternate: "scrapbook", more: "templates", dated: true },
 ];
 
-/** The row a monthly date falls in. Chosen by the date the email is for, never by the day it is sent. */
+/** The row a monthly date falls in. */
 export function seasonFor(date: Date): SeasonIdea {
   const key = (date.getUTCMonth() + 1) * 100 + date.getUTCDate();
   let found = SEASON_IDEAS[0];
   for (const row of SEASON_IDEAS) if (row.from[0] * 100 + row.from[1] <= key) found = row;
   return found;
+}
+
+/**
+ * The row for an email due on `due` and sent on `sent` (a run that caught up a day or two late). It
+ * is the due date's row, so a late send never repeats last month's idea; but a row whose words name
+ * the day it ends on (`dated`) is false once that day has passed ("It's on 14 February" on the 15th),
+ * and then it is the next row. The next email is due 28 days or more later, past that row's end, so
+ * no idea comes twice running.
+ */
+export function seasonForSend(due: Date, sent: Date): SeasonIdea {
+  const row = seasonFor(due);
+  if (!row.dated || seasonFor(sent).id === row.id) return row;
+  return SEASON_IDEAS[(SEASON_IDEAS.indexOf(row) + 1) % SEASON_IDEAS.length];
 }
 
 /** The row's template, or its alternate when the idea is the template of their last gift. */

@@ -79,7 +79,7 @@ test.describe("the share screen's line", () => {
     await page.goto("/es/monthly-idea/preview?part=share");
     const notice = page.getByTestId("idea-notice");
     await expect(notice).toContainText("A partir del mes que viene te enviaremos una idea de regalo al mes durante un año.");
-    await notice.getByRole("button", { name: "No enviármelas" }).click();
+    await notice.getByRole("button", { name: "No quiero recibirlas" }).click();
     await expect(notice).toContainText("Desactivado. No te las enviaremos.");
     await expect(notice.getByRole("button")).toHaveText("Deshacer");
   });

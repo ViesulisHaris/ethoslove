@@ -77,7 +77,7 @@ describe("the monthly idea email", () => {
         expect(copy.heading.endsWith("?"), copy.heading).toBe(true);
         if (locale === "es") expect(copy.heading.startsWith("¿"), copy.heading).toBe(true);
         expect(words(copy.body), copy.body).toBeLessThanOrEqual(30);
-        expect(copy.body.endsWith(":"), copy.body).toBe(true);
+        expect(/[:.]$/.test(copy.body), copy.body).toBe(true);
         for (const line of [copy.heading, copy.body, copy.preview]) {
           expect(line).not.toMatch(/\d\s?[$€£]|[$€£]\s?\d|!|—/);
           expect(fillerIn(line, locale), line).toEqual([]);

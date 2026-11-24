@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { OCCASIONS } from "@/config/occasions";
 import { getManifest } from "@/templates/manifests";
-import { SEASON_IDEAS, seasonFor, seasonTemplate } from "@/lib/lifecycle/suggest";
+import { SEASON_IDEAS, seasonFor, seasonForSend, seasonTemplate } from "@/lib/lifecycle/suggest";
 import { monthsaryIn } from "@/lib/lifecycle/monthsaries";
 
 const on = (month: number, day: number, year = 2027) => new Date(Date.UTC(year, month - 1, day));
@@ -52,5 +52,33 @@ describe("the monthly idea's year", () => {
       expect(seasonTemplate(row, "the-letter").slug).toBe(row.idea);
       expect(ideas.has(row.alternate), row.alternate).toBe(false);
     }
+  });
+it("S6 a late send never says a day that has passed, and never repeats an idea", () => {
+    const id = (due: Date, sent: Date) => seasonForSend(due, sent).id;
+    // On time, or late but still before the day: the due date's row.
+    expect(id(on(2, 13), on(2, 13))).toBe("valentines");
+    expect(id(on(10, 31), on(10, 31))).toBe("october");
+    expect(id(on(12, 24), on(12, 24))).toBe("christmas");
+    expect(id(on(2, 11), on(2, 13))).toBe("valentines");
+    // Past 14 February, 31 October, 25 December or the year's end: the next row's words and idea.
+    expect(id(on(2, 13), on(2, 15))).toBe("feb-anniversary");
+    expect(id(on(10, 31), on(11, 2))).toBe("november");
+    expect(id(on(12, 24), on(12, 26))).toBe("year-end");
+    expect(id(on(12, 31, 2026), on(1, 2))).toBe("jan-birthday");
+    // A row that names no day stays the due date's, even across a row's end.
+    expect(id(on(1, 14), on(1, 16))).toBe("jan-birthday");
+    expect(id(on(11, 24), on(11, 26))).toBe("november");
+    // Twelve monthly dates sent up to two days late still carry twelve different ideas.
+    for (let month = 1; month <= 12; month++)
+      for (let day = 1; day <= 31; day++)
+        for (const late of [0, 1, 2]) {
+          const since = { year: 2026, month, day };
+          const ideas = Array.from({ length: 12 }, (_, i) => {
+            const m = month + i + 1;
+            const due = monthsaryIn(since, 2026 + Math.floor((m - 1) / 12), ((m - 1) % 12) + 1);
+            return seasonForSend(due, new Date(due.getTime() + late * 86_400_000)).idea;
+          });
+          expect(new Set(ideas).size, `${month}/${day} +${late}: ${ideas.join(", ")}`).toBe(12);
+        }
   });
 });

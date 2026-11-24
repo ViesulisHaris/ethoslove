@@ -9,7 +9,7 @@ import { emailKey } from "./links";
 import { formatMonthDay, type MonthDay } from "./reminders";
 import { parseYmd, ymdOf, type Ymd } from "./monthsaries";
 import { IDEA_QUIET_DAYS, IDEA_REF, ideaDecision, ideaDue, ideaWindow, priceEndsAt, priceLastDay, type IdeaFacts, type IdeaMode } from "./monthly-idea";
-import { seasonFor, seasonTemplate, suggestionPath } from "./suggest";
+import { seasonForSend, seasonTemplate, suggestionPath } from "./suggest";
 
 /**
  * The monthly idea's morning job (api/cron/monthly-idea): for each account whose monthly date is
@@ -76,7 +76,8 @@ export async function sendMonthlyIdeas(run: IdeaRun): Promise<{ sent: number; sk
       continue;
     }
     const dueDay = parseYmd(month!.date)!;
-    const season = seasonFor(new Date(Date.UTC(dueDay.year, dueDay.month - 1, dueDay.day)));
+    // The due date's row; a dated one whose day has passed by a late send gives way to the next (suggest.ts).
+    const season = seasonForSend(new Date(Date.UTC(dueDay.year, dueDay.month - 1, dueDay.day)), today);
     const manifest = seasonTemplate(season, row.template_slug);
     const locale = row.locale === "es" ? "es" : "en";
     let withPrice = decision.withPrice && !(await run.priceSpent(row.user_id));
