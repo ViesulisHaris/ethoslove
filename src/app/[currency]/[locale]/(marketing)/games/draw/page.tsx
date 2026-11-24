@@ -21,8 +21,8 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
   return (
     <GameTable>
       <DrawGame />
-      {/* The words are text for anyone reading the page, but not under the board while one is being drawn: the guesser would only have to scroll. */}
-      <QuestionList id="draw-words" className="[body:has([data-draw-round])_&]:hidden" title={t("listTitle", { count: DRAW_WORDS.length })} intro={t("listIntro")} groups={[{ items: DRAW_WORDS.map((w) => w.word[l]) }]} />
+      {/* The words are text for anyone reading the page, but not under the board while one is being drawn: the guesser would only have to scroll. The round is this list's sibling, so no :has() is needed. */}
+      <QuestionList id="draw-words" className="[[data-draw-round]~&]:hidden" title={t("listTitle", { count: DRAW_WORDS.length })} intro={t("listIntro")} groups={[{ items: DRAW_WORDS.map((w) => w.word[l]) }]} />
       <GameNotes game="draw" locale={locale} />
     </GameTable>
   );

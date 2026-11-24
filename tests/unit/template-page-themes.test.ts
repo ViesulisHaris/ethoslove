@@ -87,9 +87,9 @@ describe("template page themes", () => {
     expect(vars["--page-on-accent"]).toBe(ON_ACCENT);
     expect(Object.keys(vars)).toHaveLength(10);
     const css = pageThemeChromeCss("the-letter", t);
-    expect(css.startsWith('body:has([data-page-theme="the-letter"]){')).toBe(true);
+    expect(css.startsWith('body[data-page-theme-on="the-letter"]{')).toBe(true);
     expect(css).toContain("--page-footer:#2d0e18");
     // Nothing a palette holds can close the rule or open another.
-    for (const [slug, theme] of ALL) expect(pageThemeChromeCss(slug, theme)).toMatch(/^body:has\(\[data-page-theme="[a-z()-]+"\]\)\{[-a-z0-9#:;]+\}$/);
+    for (const [slug, theme] of ALL) expect(pageThemeChromeCss(slug, theme)).toMatch(/^body\[data-page-theme-on="[a-z()-]+"\]\{[-a-z0-9#:;]+\}$/);
   });
 });

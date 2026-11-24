@@ -11,6 +11,7 @@ import { TemplatePhonePreview } from "@/components/templates/template-phone-prev
 import { PRODUCTS, chargedCurrency, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { DocumentMark } from "@/components/shared/document-mark";
 
 /*
  * Where a paid ad lands: the gift the ad showed, playing, on the first screen, and one button.
@@ -164,6 +165,7 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
        * read and settles above the footer at the end instead of covering its last row. The cookie
        * strip docks just above it (data-bottom-dock, globals.css).
        */}
+      <DocumentMark on="html" name="data-bottom-dock-on" />
       <div
         data-bottom-dock
         className="sticky bottom-0 z-40 border-t border-line bg-paper px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"

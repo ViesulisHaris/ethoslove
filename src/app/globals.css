@@ -497,18 +497,18 @@
   outline-color: var(--page-ink);
 }
 
-/* Outside the wrapper, while a themed page is open. */
-body:has([data-page-theme]) {
+/* Outside the wrapper, while a themed page is open: the page marks <body> (shared/document-mark.tsx). */
+body[data-page-theme-on] {
   background-color: var(--page-ground);
 }
-body:has([data-page-theme]) [data-site-footer] {
+body[data-page-theme-on] [data-site-footer] {
   background-color: var(--page-footer);
   color: color-mix(in oklab, var(--page-footer-text) 30%, #fff);
 }
-body:has([data-page-theme]) [data-site-footer] :is(a, p, button):not(:hover) {
+body[data-page-theme-on] [data-site-footer] :is(a, p, button):not(:hover) {
   color: var(--page-footer-text);
 }
-body:has([data-page-theme]) .site-header .btn-rose {
+body[data-page-theme-on] .site-header .btn-rose {
   background-image: none;
   background-color: var(--page-accent);
   color: var(--page-on-accent);
@@ -533,7 +533,7 @@ body:has([data-page-theme]) .site-header .btn-rose {
   mix-blend-mode: luminosity;
 }
 @media (min-width: 64rem) {
-  body:has([data-page-theme]) [data-footer-flower] {
+  body[data-page-theme-on] [data-footer-flower] {
     display: block;
   }
 }
@@ -974,8 +974,9 @@ body:has([data-page-theme]) .site-header .btn-rose {
  * 2. The names the app's dark shell also sets (.dark): pinned only outside it, so a gift shown in
  *    the dark shell reads the shell's dark values, as it did.
  * 3. The whole document on a gift route: a toast there is drawn by the root layout, outside
- *    [data-gift-page]. A rule of its own, because a browser without :has() drops a whole rule over
- *    one selector it cannot read, and rules 1 and 2 must hold there too.
+ *    [data-gift-page]. The gift layout marks <html> with `data-gift-route` for it (it was
+ *    `:root:has([data-gift-page])`, which made every change on any page cost a look over all of
+ *    it: shared/document-mark.tsx). A rule of its own, as it always was.
  */
 .gift-root,
 [data-gift-page] {
@@ -1021,7 +1022,7 @@ body:has([data-page-theme]) .site-header .btn-rose {
   --sidebar-primary: var(--brand-coral);
   --sidebar-border: var(--brand-line);
 }
-:root:has([data-gift-page]) {
+:root[data-gift-route] {
   --brand-paper: #fdf7f3;
   --brand-paper-deep: #f7ebe5;
   --brand-line: #ecdcd6;
@@ -1071,17 +1072,17 @@ body:has([data-page-theme]) .site-header .btn-rose {
  * any of this). The app shell keeps its own dark mode; the marketing pages are left as they were.
  */
 .gift-root,
-:root:has([data-gift-page]) {
+:root[data-gift-route] {
   color-scheme: only light;
 }
 
 /*
  * A page with its own button docked at the bottom of the screen (the ad landing, /try/…) marks it
- * `data-bottom-dock`. The cookie strip, which docks in the same place, then sits just above it:
+ * `data-bottom-dock`, and <html> with `data-bottom-dock-on` (shared/document-mark.tsx). The cookie strip, which docks in the same place, then sits just above it:
  * the dock already keeps clear of the home bar, so the strip needs only a small gap of its own.
  * The height is the dock's: 5.5rem of price line and button, and its bottom padding.
  */
-:root:has([data-bottom-dock]) {
+:root[data-bottom-dock-on] {
   --bottom-dock: calc(5.5rem + max(0.75rem, env(safe-area-inset-bottom)));
   --bottom-dock-pad: 0.5rem;
 }

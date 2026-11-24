@@ -4,7 +4,7 @@ import { ArrowRight, Play, Plus } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
+import { DEFAULT_PAGE_THEME, PAGE_THEME_MARK } from "@/content/template-page-themes";
 import { templateFilmStart } from "@/content/template-film-starts";
 import type { TemplateManifest } from "@/templates/types";
 import { ArtLayer } from "@/components/templates/page/art";
@@ -17,6 +17,7 @@ import { CopyLine } from "./copy-line";
 import { KeepCards } from "./keep-cards";
 import { LevelCards } from "./level-cards";
 import { HERO_ART, NEXT_ART } from "./placements";
+import { DocumentMark } from "@/components/shared/document-mark";
 
 /**
  * The pages built from a gift's page (docs/marketing/growth-build/DESIGN-LESS-TEXT.md, "built from
@@ -41,9 +42,12 @@ export const SITE_FLOWERS = DEFAULT_PAGE_THEME.flowers;
  */
 export function SitePage({ name, under = true, children }: { name: string; under?: boolean; children: ReactNode }) {
   return (
-    <div data-page-theme={name} className={cn("relative isolate", under && "-mt-[var(--header-h)] pt-[var(--header-h)]")}>
-      {children}
-    </div>
+    <>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={name} />
+      <div data-page-theme={name} className={cn("relative isolate", under && "-mt-[var(--header-h)] pt-[var(--header-h)]")}>
+        {children}
+      </div>
+    </>
   );
 }
 

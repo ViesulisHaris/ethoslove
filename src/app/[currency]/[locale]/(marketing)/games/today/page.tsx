@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { TODAY_FAQ } from "@/content/game-pages";
-import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { DEFAULT_PAGE_THEME, PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { RATHER_PAIRS } from "@/lib/games/content";
 import { DAILY_PAIRS, dayOf } from "@/lib/games/daily";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -16,6 +16,7 @@ import { TodayQuestion } from "@/components/games/today/today-question";
 import { TodaySteps } from "@/components/games/today/today-steps";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
 import { Intro, SPREAD } from "@/components/templates/page/spread";
+import { DocumentMark } from "@/components/shared/document-mark";
 
 type Props = PageProps<"/[currency]/[locale]/games/today">;
 
@@ -73,6 +74,7 @@ export default async function TodayPage({ params }: Props) {
         ]}
       />
       <style>{pageThemeChromeCss(THEME, theme)}</style>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={THEME} />
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="today-title">
           {/* On a phone on its side the question stands in the right column, where the petal lies: the corner is left bare there. */}

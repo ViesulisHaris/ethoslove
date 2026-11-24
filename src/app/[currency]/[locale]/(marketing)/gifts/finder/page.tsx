@@ -6,7 +6,7 @@ import { OCCASIONS } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import { FINDER_COPY, FINDER_PATH, finderPicks } from "@/content/finder";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
-import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { DEFAULT_PAGE_THEME, PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { finderWaitScript } from "@/lib/gift/finder";
 import { HydrationScript } from "@/components/shared/hydration-script";
 import type { GiftLocale } from "@/lib/gift/schema";
@@ -19,6 +19,7 @@ import { GiftFinder } from "@/components/templates/gift-finder";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
 import { FINDER_ART, FINDER_FOOT_ART } from "@/components/templates/page/placements";
 import { Intro, SPREAD } from "@/components/templates/page/spread";
+import { DocumentMark } from "@/components/shared/document-mark";
 
 type Props = PageProps<"/[currency]/[locale]/gifts/finder">;
 
@@ -80,6 +81,7 @@ export default async function GiftFinderPage({ params }: Props) {
       />
       {/* The footer, the header's button and the ground behind them take the page's colours while it is open. */}
       <style>{pageThemeChromeCss(THEME, theme)}</style>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={THEME} />
       {/* -mt/pt: the page's ground runs up under the floating header, as a gift's page does. */}
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="finder-title">

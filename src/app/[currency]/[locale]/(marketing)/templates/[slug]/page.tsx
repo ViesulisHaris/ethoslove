@@ -15,7 +15,7 @@ import {
 } from "@/lib/seo";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { templateGuide } from "@/content/template-guides";
-import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
+import { PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
 import { templateFilmStart } from "@/content/template-film-starts";
 import { sceneLead, templateLead } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
@@ -33,6 +33,7 @@ import { HERO_ART } from "@/components/templates/page/placements";
 import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
 import { NOTE_TEMPLATES, noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount, templateProduct } from "@/lib/pricing/products";
+import { DocumentMark } from "@/components/shared/document-mark";
 
 export function generateStaticParams() {
   return TEMPLATE_SLUGS.map((slug) => ({ slug }));
@@ -124,6 +125,7 @@ export default async function TemplateDetailPage({
       />
       {/* The footer, the header's button and the ground behind them take the page's colours while it is open. */}
       <style>{pageThemeChromeCss(manifest.slug, theme)}</style>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={manifest.slug} />
       {/* -mt/pt: the page's ground runs up under the floating header, as the homepage's hero does. */}
       <div data-page-theme={manifest.slug} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         {/* (1) The hero. */}

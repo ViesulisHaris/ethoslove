@@ -168,14 +168,20 @@ export function pageThemeStyle(theme: PageTheme): CSSProperties {
 
 /**
  * The same variables for what sits outside the wrapper while the page is open: the site's footer,
- * the header's button, the ground behind it all. `key` is the wrapper's data-page-theme value. A
- * browser without :has() shows the site's own footer and header, and the page itself still themed.
+ * the header's button, the ground behind it all. `key` is the wrapper's data-page-theme value, which
+ * the page also puts on <body> as PAGE_THEME_MARK (components/shared/document-mark.tsx): a
+ * `body:has([data-page-theme])` made every change anywhere on the page cost a look over all of it.
+ */
+export const PAGE_THEME_MARK = "data-page-theme-on";
+
+/**
+ * The chrome's colours for one theme, as a rule for the page to carry in a <style>.
  */
 export function pageThemeChromeCss(key: string, theme: PageTheme): string {
   const vars = Object.entries(pageThemeVars(theme))
     .map(([name, value]) => `${name}:${value}`)
     .join(";");
-  return `body:has([data-page-theme="${key}"]){${vars}}`;
+  return `body[${PAGE_THEME_MARK}="${key}"]{${vars}}`;
 }
 
 // --- contrast, for the test and for anyone picking a palette ---

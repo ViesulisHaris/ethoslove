@@ -116,7 +116,8 @@ const root = workOut(merge(rules("@theme inline")), workOut(merge([...rules(":ro
 
 const always = rules(".gift-root, [data-gift-page]").filter((decls) => "--brand-paper" in decls);
 const light = rules(":root:not(.dark) .gift-root, :root:not(.dark) [data-gift-page]");
-const route = rules(":root:has([data-gift-page])").filter((decls) => "--brand-paper" in decls);
+// The gift layout marks <html> on a gift route (shared/document-mark.tsx); it was `:root:has([data-gift-page])`.
+const route = rules(":root[data-gift-route]").filter((decls) => "--brand-paper" in decls);
 
 describe("a gift keeps the paper it was drawn with", () => {
   it("finds the three rules of the pin", () => {

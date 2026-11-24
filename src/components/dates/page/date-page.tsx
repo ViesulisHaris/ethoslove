@@ -1,12 +1,13 @@
 import type { ReactNode } from "react";
 import { Plus } from "lucide-react";
-import { DEFAULT_PAGE_THEME, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
+import { DEFAULT_PAGE_THEME, PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { cn } from "@/lib/utils";
 import { EagerImg } from "@/components/shared/eager-img";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
 import type { PlacedArt } from "@/components/templates/page/placements";
 import { Intro, SPREAD } from "@/components/templates/page/spread";
 import { DATE_FOOT_ART, DATE_HERO_ART } from "./placements";
+import { DocumentMark } from "@/components/shared/document-mark";
 
 /**
  * The pieces of a dates page (a page by kind, a city-by-kind page), assembled from the gift page's
@@ -27,6 +28,7 @@ export function DatePage({ children }: { children: ReactNode }) {
   return (
     <>
       <style>{pageThemeChromeCss(THEME, DEFAULT_PAGE_THEME)}</style>
+      <DocumentMark on="body" name={PAGE_THEME_MARK} value={THEME} />
       <div data-page-theme={THEME} style={pageThemeStyle(DEFAULT_PAGE_THEME)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         {children}
       </div>
