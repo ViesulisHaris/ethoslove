@@ -121,7 +121,8 @@ test.describe("The Tree Tag", () => {
     // It sits under the QR card's own buttons, and its button is a 44 px target.
     const print = (await page.getByRole("link", { name: "Print-ready card" }).boundingBox())!;
     expect((await row.boundingBox())!.y).toBeGreaterThan(print.y);
-    expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    // h-11, 44 px; a phone's fractional pixel ratio reads it as 43.9998.
+    expect((await link.boundingBox())!.height).toBeGreaterThan(43.5);
     // The code's design travels with it, as it does to the print card.
     await page.getByRole("radio", { name: "Square" }).click();
     await expect(link).toHaveAttribute("href", /shape=tree-tag&dots=square&/);
