@@ -180,7 +180,7 @@ describe("every occasion's idea list", () => {
 
 describe("an occasion page's headings", () => {
   it("use the typographic apostrophe, as the idea titles under them do", async () => {
-    // "Digital Mother's Day gifts" (straight) sat over "Mother’s Day …" (typographic) on the same page (the deep test of
+    // "Digital Mother’s Day gifts" (straight) sat over "Mother’s Day …" (typographic) on the same page (the deep test of
     // 23 Nov 2026). The h1 is messages seo.occasion.<occasion>.title.
     const { default: en } = await import("../../messages/en.json");
     const titles = Object.entries((en as { seo: { occasion: Record<string, { title: string }> } }).seo.occasion).map(([k, v]) => `${k}: ${v.title}`);

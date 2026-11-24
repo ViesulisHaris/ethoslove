@@ -143,7 +143,7 @@ describe("the pricing page's hero and the account page agree", () => {
     expect(text(html)).toContain("Your first payment is being confirmed");
     expect(html).toContain('data-testid="membership-processing"');
     expect(html).not.toContain('data-testid="membership-past-due"');
-    expect(text(html)).not.toMatch(/couldn't take|failed|paused|Update card/i);
+    expect(text(html)).not.toMatch(/couldn[’']t take|failed|paused|Update card/i);
     expect(html).not.toContain('data-testid="membership-cancel"');
     expect(html).not.toContain('data-testid="membership-switch-yearly"');
     // Nobody can join a membership that doesn't run yet.
@@ -154,24 +154,24 @@ describe("the pricing page's hero and the account page agree", () => {
     expect(heroLine(en, "pastDueInGrace")).toBe("Payment failed: update your card by {date}");
     const html = panel(CASES.pastDueInGrace.summary);
     const day = new Intl.DateTimeFormat("en", { dateStyle: "long" }).format(new Date(GRACE_END));
-    expect(text(html)).toContain(`We couldn't take your last payment. Update your card by ${day} to keep Ethos for Two.`);
+    expect(text(html)).toContain(`We couldn’t take your last payment. Update your card by ${day} to keep Ethos for Two.`);
     expect(text(html)).toContain("Update card");
     expect(html).toContain('data-testid="membership-cancel"');
     expect(html).not.toContain('data-testid="membership-switch-yearly"');
   });
 
   it("a renewal past its grace is paused on both", () => {
-    expect(heroLine(en, "pastDueAfterGrace")).toBe("Paused: your last payment didn't go through");
+    expect(heroLine(en, "pastDueAfterGrace")).toBe("Paused: your last payment didn’t go through");
     const html = panel(CASES.pastDueAfterGrace.summary);
     expect(text(html)).toContain("Ethos for Two is paused until the payment goes through.");
     expect(text(html)).toContain("Update card");
   });
 
   it("an App Store renewal Apple can't collect is fixed in iOS on both: no card of ours, no billing buttons", () => {
-    expect(heroLine(en, "appStorePastDue")).toMatch(/^Apple couldn't take your last payment/);
+    expect(heroLine(en, "appStorePastDue")).toMatch(/^Apple couldn’t take your last payment/);
     const html = panel(CASES.appStorePastDue.summary);
     expect(text(html)).toContain("Through the App Store");
-    expect(text(html)).toContain("Apple couldn't take your last payment. Update your payment method in your iPhone's Settings");
+    expect(text(html)).toContain("Apple couldn’t take your last payment. Update your payment method in your iPhone’s Settings");
     expect(text(html)).not.toContain("Update card");
     expect(html).not.toContain('data-testid="membership-billing"');
     expect(html).not.toContain('data-testid="membership-cancel"');
@@ -211,7 +211,7 @@ describe("the pricing page's hero and the account page agree", () => {
 
   it("a partner is in on it, can leave, and sees no billing", () => {
     const html = panel(CASES.partner.summary);
-    expect(text(html)).toContain("You're in on Alex's Ethos for Two");
+    expect(text(html)).toContain("You’re in on Alex’s Ethos for Two");
     expect(text(html)).toContain("For as long as it runs.");
     expect(html).toContain('data-testid="membership-leave"');
     expect(html).not.toContain('data-testid="membership-billing"');

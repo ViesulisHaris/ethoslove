@@ -157,7 +157,7 @@ export function aboutCopy(locale: GiftLocale, facts: { templates: number; single
         id: "company",
         heading: "The company behind it",
         paragraphs: [
-          `Ethos is made and run by ${E.name}, a limited company registered in Latvia, in the European Union, on ${REGISTERED.en}. Its registration number is ${E.regNo} and its VAT number is ${E.vat}; Latvia's Enterprise Register is public, so anyone can check them.`,
+          `Ethos is made and run by ${E.name}, a limited company registered in Latvia, in the European Union, on ${REGISTERED.en}. Its registration number is ${E.regNo} and its VAT number is ${E.vat}; Latvia’s Enterprise Register is public, so anyone can check them.`,
           "The site itself is made in Riga.",
         ],
       },
@@ -166,7 +166,7 @@ export function aboutCopy(locale: GiftLocale, facts: { templates: number; single
         heading: "How paying works",
         paragraphs: [
           `Some gifts can be sent free in a shorter version. A premium template costs ${facts.single}, paid once: the price is shown before you pay, and there is no subscription to cancel. The one subscription we sell, Ethos for Two, is optional and says so on its own page.`,
-          "You pay on Stripe's checkout page, with a card, Apple Pay or Google Pay. Payments are processed by Stripe; we never see or store your full card details.",
+          "You pay on Stripe’s checkout page, with a card, Apple Pay or Google Pay. Payments are processed by Stripe; we never see or store your full card details.",
           "Our templates are also sold in our Etsy shop, TryEthos. There Etsy takes the payment, under its own terms.",
         ],
         links: [{ href: "/pricing", label: "Pricing" }],
@@ -175,7 +175,7 @@ export function aboutCopy(locale: GiftLocale, facts: { templates: number; single
         id: "guarantee",
         heading: "If something goes wrong",
         paragraphs: [
-          "If a gift you paid for won't open or play properly on the recipient's phone or computer and we can't fix it, tell us within 30 days of buying and we refund you in full. We also refund a duplicate purchase.",
+          "If a gift you paid for won’t open or play properly on the recipient’s phone or computer and we can’t fix it, tell us within 30 days of buying and we refund you in full. We also refund a duplicate purchase.",
           "If you live in the EU or the UK you also have the right to withdraw from some purchases within 14 days. The Terms of Service say exactly when, and the “Withdraw from a purchase” page starts it in one step.",
         ],
         links: [
@@ -195,7 +195,7 @@ export function aboutCopy(locale: GiftLocale, facts: { templates: number; single
       {
         id: "contact",
         heading: "Reaching us",
-        paragraphs: [`Write to ${E.email} about anything: a gift that won't open, a payment, your data. For a complaint we aim to reply within 14 days.`],
+        paragraphs: [`Write to ${E.email} about anything: a gift that won’t open, a payment, your data. For a complaint we aim to reply within 14 days.`],
       },
     ],
     company: { heading: "Company details", regNo: "Reg. no.", vat: "VAT", address: "Registered address", registered: "Registered on", email: "Email" },

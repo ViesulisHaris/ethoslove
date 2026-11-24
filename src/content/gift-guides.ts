@@ -373,7 +373,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "A letter with you in it",
           brief: "The letter writes itself out, and the clip arrives last on a postcard of its own.",
           body: "The envelope opens, the letter writes itself out, the photos drop as polaroids, and the clip arrives last on a postcard of its own. Write the letter as the reasons and keep the video for the part that is better heard: a promise, an apology, the song you can’t sing. On The Letter, video comes with “Make it special”.",
-          line: { field: "signOff", where: "The sign-off", text: "Now play the video. I practised." },
+          line: { field: "signOff", where: "The sign-off", text: "Now play the video. I practiced." },
         },
         {
           template: "vinyl",
@@ -1194,7 +1194,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "our-timeline",
           heading: "Your story as a road, one stop a year",
-          body: "The closest thing to the “our story” site people picture. A road draws itself as they scroll and stops at each photo, labelled in your words: the first message, the first trip, the keys. Two to twenty stops. After the last one comes a closing line, a countdown if you set one, and your letter. Aim the countdown at tonight’s dinner or at next year’s date.",
+          body: "The closest thing to the “our story” site people picture. A road draws itself as they scroll and stops at each photo, labeled in your words: the first message, the first trip, the keys. Two to twenty stops. After the last one comes a closing line, a countdown if you set one, and your letter. Aim the countdown at tonight’s dinner or at next year’s date.",
           line: { field: "ending", where: "The closing line, above the countdown", text: "Year four starts here. Same seats?" },
         },
         {

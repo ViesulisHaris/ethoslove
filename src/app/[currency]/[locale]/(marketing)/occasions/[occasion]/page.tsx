@@ -6,8 +6,9 @@ import { OCCASIONS, isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
-import { forCards, getManifest, listManifests } from "@/templates/manifests";
+import { forCards, listManifests } from "@/templates/manifests";
 import { OCCASION_GUIDES } from "@/content/occasions";
+import { occasionTemplates } from "@/content/occasion-templates";
 import { JsonLd } from "@/components/shared/json-ld";
 import { OccasionGuide, OccasionIdeas } from "@/components/marketing/occasion-guide";
 import { SitePage } from "@/components/marketing/spread/sections";
@@ -46,13 +47,8 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
   const t = await getTranslations();
   const title = t(`seo.occasion.${occasion}.title`);
   const guide = OCCASION_GUIDES[occasion][locale as Locale];
-  // The cards: the gifts made for this occasion, best fit first, and after them every gift the page's
-  // own ideas name. The Christmas page recommended twelve gifts and its grid knew seven: idea 03 said
-  // "The Letter · Free" while "Free" answered that none of this occasion's gifts are free (the user
-  // walk of 23 Nov 2026). An idea's gift is on the page, so it is in the list and in the filter.
-  const tagged = listManifests({ occasion });
-  const named = (guide.ideas?.items ?? []).map((idea) => getManifest(idea.template)).filter((m): m is NonNullable<typeof m> => m != null && !tagged.some((x) => x.slug === m.slug));
-  const templates = [...tagged, ...named.filter((m, i) => named.findIndex((x) => x.slug === m.slug) === i)];
+  // The cards: the gifts made for this occasion, and every gift the page's own ideas name (content/occasion-templates.ts).
+  const templates = occasionTemplates(occasion, locale as Locale);
   // What "Free" shows when nothing on this page can be sent free.
   const alsoFree = listManifests({ tier: "free" }).filter((m) => sendsFree(m) && !templates.some((x) => x.slug === m.slug));
   return (

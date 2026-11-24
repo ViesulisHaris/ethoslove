@@ -27,7 +27,7 @@ test("a free account at its limit: three of three, and the way to more is a 44px
 
 test("shared with the partner: their date says whose it is, and there's no limit to show", async ({ page }) => {
   await page.goto("/for-two/preview/my-dates?state=member");
-  await expect(page.getByText("Dates and trips you've saved, shared with Ben.")).toBeVisible();
+  await expect(page.getByText("Dates and trips you’ve saved, shared with Ben.")).toBeVisible();
   await expect(page.getByTestId("saved-quota")).toHaveCount(0);
   await expect(page.getByTestId("saved-grid").getByRole("listitem")).toHaveCount(4);
   await expect(page.getByTestId("saved-grid")).toContainText("From Ben");

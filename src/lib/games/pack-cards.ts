@@ -123,7 +123,7 @@ const DISTANCE_RATHER: RatherPair[] = [
 const SPICY_TRUTHS: L[] = [
   { en: "When exactly did you first want to kiss me?", es: "¿En qué momento exacto te entraron ganas de besarme por primera vez?" },
   { en: "What do I wear that you find unfairly distracting?", es: "¿Qué ropa mía te distrae tanto que no es justo?" },
-  { en: "What's the most attractive thing I do without realising?", es: "¿Qué es lo más atractivo que hago sin darme cuenta?" },
+  { en: "What's the most attractive thing I do without realizing?", es: "¿Qué es lo más atractivo que hago sin darme cuenta?" },
   { en: "Describe our best kiss so far. Take your time.", es: "Describe nuestro mejor beso hasta ahora. Sin prisa." },
   { en: "What's a compliment about me you've been saving?", es: "¿Qué piropo sobre mí te has estado guardando?" },
   { en: "Where's the most inconvenient place you've caught yourself thinking about me?", es: "¿Cuál es el sitio más inoportuno en el que te has pillado pensando en mí?" },
@@ -147,7 +147,7 @@ const SPICY_DARES: L[] = [
   { en: "Send me a flirty text right now, even though I'm right here.", es: "Mándame un mensaje coqueto ahora mismo, aunque me tengas al lado." },
   { en: "Give me your best chat-up line. If it works, you get a kiss.", es: "Suéltame tu mejor frase para ligar. Si funciona, te ganas un beso." },
   { en: "Close your eyes and let me surprise you with a kiss. No peeking.", es: "Cierra los ojos y deja que te sorprenda con un beso. Sin mirar." },
-  { en: "Tell me your favourite memory of us, in a whisper.", es: "Cuéntame en susurros tu recuerdo favorito de lo nuestro." },
+  { en: "Tell me your favorite memory of us, in a whisper.", es: "Cuéntame en susurros tu recuerdo favorito de lo nuestro." },
   { en: "Sing me one line of a love song without looking away.", es: "Cántame un verso de una canción de amor sin dejar de mirarme." },
   { en: "Pull me close and tell me what you're thinking. The real version.", es: "Acércame a ti y dime lo que estás pensando. La versión de verdad." },
 ];

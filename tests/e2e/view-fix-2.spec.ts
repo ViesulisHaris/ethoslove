@@ -79,7 +79,7 @@ test.describe("make-8 and make-2 in the publish sheet", () => {
     const sheet = page.getByRole("dialog");
     await expect(sheet.getByText("Sign in to publish")).toBeVisible();
     await expect(sheet.getByText("Welcome back")).toHaveCount(0);
-    await expect(sheet.getByText("We'll email you a link. No password to remember.")).toHaveCount(0);
+    await expect(sheet.getByText("We’ll email you a link. No password to remember.")).toHaveCount(0);
     await expect(sheet.getByRole("button", { name: /^(Publish now|Schedule)/ })).toBeHidden();
 
     await sheet.locator("#email").fill("ana@gmail.con");

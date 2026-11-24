@@ -15,8 +15,9 @@ export function TripCard({ trip, title, blurb, labels }: { trip: Trip; title: st
     >
       <span className="relative block">
         <TripArt trip={trip} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" className="aspect-[4/3]" imageClassName="transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.05]" />
-        <span className="absolute top-3.5 left-3.5 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-rose-deep shadow-soft backdrop-blur">{labels.kind}</span>
-        <span className="absolute top-3.5 right-3.5 rounded-full bg-white/92 px-3 py-1.5 font-mono text-[12px] font-medium text-forest shadow-soft backdrop-blur" title={labels.budget}>
+        {/* The card's own cream, not white (the owner: nothing on the paper pure white). Over any photo the text stays above 4.5:1: 4.9 at worst, the rose on a black photo through 5% of it. */}
+        <span className="absolute top-3.5 left-3.5 rounded-full bg-card/95 px-3 py-1.5 text-[12px] font-semibold text-rose-deep shadow-soft backdrop-blur">{labels.kind}</span>
+        <span className="absolute top-3.5 right-3.5 rounded-full bg-card/95 px-3 py-1.5 font-mono text-[12px] font-medium text-forest shadow-soft backdrop-blur" title={labels.budget}>
           <span aria-hidden="true">{budgetMark(trip.budget)}</span>
           <span className="sr-only">{labels.budget}</span>
         </span>

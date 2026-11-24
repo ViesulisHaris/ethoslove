@@ -163,7 +163,7 @@ describe("love language quiz: the page", () => {
       expect(g.credit).toContain("Gary Chapman");
       expect(g.credit).toMatch(/1992/);
     }
-    expect(LOVE_QUIZ.en.credit).toMatch(/isn't connected/);
+    expect(LOVE_QUIZ.en.credit).toMatch(/isn’t connected/);
     expect(LOVE_QUIZ.es.credit).toMatch(/no tiene relación/);
   });
 

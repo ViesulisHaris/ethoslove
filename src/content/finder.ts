@@ -499,7 +499,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "El birrete sale volando cuando se le grita al móvil, más alto cuanto más fuerte el grito. Después cae un diploma que se desenrolla y es tu carta.",
       },
       sentimental: {
-        en: "Write the diploma's line: what it is really awarded for, in 90 characters, not the official wording. Their photos are taped to it like a yearbook.",
+        en: "Write the diploma’s line: what it is really awarded for, in 90 characters, not the official wording. Their photos are taped to it like a yearbook.",
         es: "Escribe la línea del diploma: por qué se concede de verdad, en 90 caracteres, y no la fórmula oficial. Sus fotos van pegadas como en un anuario.",
       },
     },
@@ -561,7 +561,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Una tarjeta de papel que se abre como una de verdad. Una tarta de tres pisos se levanta del pliegue; las velas se encienden con un toque y se apagan soplando al móvil.",
       },
       sentimental: {
-        en: "Your letter is inside the lid in handwriting, with your photos on clothespins behind it. Give their age and it goes on the cake's topper.",
+        en: "Your letter is inside the lid in handwriting, with your photos on clothespins behind it. Give their age and it goes on the cake’s topper.",
         es: "Tu carta está dentro de la tapa, escrita a mano, con tus fotos sujetas con pinzas detrás. Si pones su edad, aparece en el adorno de la tarta.",
       },
       mom: {
@@ -692,7 +692,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Una cámara de bolsillo de 2006. Se enciende, se pasan hasta doce fotos con la fecha naranja en la esquina, y el disparador imprime el carrete entero en una tira.",
       },
       sentimental: {
-        en: "Set the date stamp to the day it happened and caption each shot; captions show in the screen's pixel type. Your letter prints out after the strip.",
+        en: "Set the date stamp to the day it happened and caption each shot; captions show in the screen’s pixel type. Your letter prints out after the strip.",
         es: "Pon en la fecha de las fotos el día en que pasó y escribe un pie para cada una; salen con la letra pixelada de la pantalla. Tu carta se imprime después de la tira.",
       },
       "best-friend": {
@@ -816,7 +816,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Tu foto es la portada del álbum y su nombre, el artista. Al darle al play, cada foto que añades se convierte en una canción de la playlist.",
       },
       sentimental: {
-        en: "Your captions are the song titles, so caption each photo with where it was or what was playing. The playlist's own name takes 24 characters.",
+        en: "Your captions are the song titles, so caption each photo with where it was or what was playing. The playlist’s own name takes 24 characters.",
         es: "Los pies de foto son los títulos de las canciones: pon en cada uno dónde fue o qué sonaba. El nombre de la playlist admite 24 caracteres.",
       },
     },
@@ -1379,12 +1379,12 @@ export const FINDER_PATH = "/gifts/finder";
 export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
   en: {
     title: "Gift Finder: Which Digital Gift Should You Send?",
-    description: "Not sure which digital gift to send? Tap who it's for and the occasion, and get three gifts to watch and make. No account, no email.",
+    description: "Not sure which digital gift to send? Tap who it’s for and the occasion, and get three gifts to watch and make. No account, no email.",
     eyebrow: "Gift finder",
     h1: "Which digital gift should you send?",
     line: "Two taps, and you get three gifts to watch and make.",
     ui: {
-      questions: { for: "Who is it for?", occasion: "What's the occasion?" },
+      questions: { for: "Who is it for?", occasion: "What’s the occasion?" },
       stepOf: "{n} of 2",
       people: {
         girlfriend: "My girlfriend",
@@ -1410,7 +1410,7 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       occasions: {
         birthday: "Birthday",
         anniversary: "Anniversary",
-        valentines: "Valentine's Day",
+        valentines: "Valentine’s Day",
         christmas: "Christmas",
         "long-distance": "Long distance",
         apology: "Saying sorry",
@@ -1419,8 +1419,8 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
         graduation: "Graduation",
         halloween: "Halloween",
         thanksgiving: "Thanksgiving",
-        "mothers-day": "Mother's Day",
-        "fathers-day": "Father's Day",
+        "mothers-day": "Mother’s Day",
+        "fathers-day": "Father’s Day",
       },
       anyOccasion: "Any occasion",
       feels: { romantic: "Romantic", funny: "Funny", sentimental: "Sentimental", unusual: "Unusual" },
@@ -1461,8 +1461,8 @@ export const FINDER_COPY: Record<GiftLocale, FinderCopy> = {
       title: "How the finder picks",
       paragraphs: [
         "Each of the {count} gifts is tagged by hand with the people it suits and the feeling it carries, read off its own design. A collage of lipstick kisses is offered for a partner and never for your mom.",
-        "The occasion counts most, then who it's for. A gift made for the day you chose comes before one that merely suits it, and when two tie, the one more people make goes first. A feeling chosen over the results puts the gifts with that feeling first.",
-        "Seasonal gifts stay in their season: a Halloween porch or a Christmas window shows up only when you ask for that day, and \"Not sure\" about the occasion sets aside every gift made for a single day. Your answers sit in the page's address, so a result can be sent to someone or reopened later.",
+        "The occasion counts most, then who it’s for. A gift made for the day you chose comes before one that merely suits it, and when two tie, the one more people make goes first. A feeling chosen over the results puts the gifts with that feeling first.",
+        "Seasonal gifts stay in their season: a Halloween porch or a Christmas window shows up only when you ask for that day, and \"Not sure\" about the occasion sets aside every gift made for a single day. Your answers sit in the page’s address, so a result can be sent to someone or reopened later.",
       ],
       byDay: "Or start from the day:",
     },

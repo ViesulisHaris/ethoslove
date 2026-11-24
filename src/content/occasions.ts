@@ -283,7 +283,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
             template: "halfway",
             heading: "The distance you’ve already covered",
             brief: "For a long-distance anniversary: they close the distance between your homes by blowing into the phone.",
-            body: "For a long-distance anniversary: a postcard map with your homes on two islands and the distance between them, which they close by blowing into the phone. Halfway along, a line of yours pops up: “Halfway. This is where we ate the worst sandwich of 2022.” Add up to four places you’ve met in the middle; they’re stamped on the postcard and counted, so the total is how far you’ve travelled to be together.",
+            body: "For a long-distance anniversary: a postcard map with your homes on two islands and the distance between them, which they close by blowing into the phone. Halfway along, a line of yours pops up: “Halfway. This is where we ate the worst sandwich of 2022.” Add up to four places you’ve met in the middle; they’re stamped on the postcard and counted, so the total is how far you’ve traveled to be together.",
           },
           {
             template: "keepsake",
@@ -328,7 +328,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       sections: [
         {
           heading: "What to write",
-          body: "Don’t summarise the relationship. Pick three moments and put them in order: the first one, a hard one you got through, and something from last month. Say what each one taught you about them. That is an anniversary letter, and it beats anything on a shelf. The Letter is free; Our Timeline draws the years as a road.",
+          body: "Don’t summarize the relationship. Pick three moments and put them in order: the first one, a hard one you got through, and something from last month. Say what each one taught you about them. That is an anniversary letter, and it beats anything on a shelf. The Letter is free; Our Timeline draws the years as a road.",
         },
         {
           heading: "What to add",
@@ -835,7 +835,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "our-timeline",
             heading: "The year as a road, month by month",
-            brief: "A road that draws itself through your year, each photo labelled with its month.",
+            brief: "A road that draws itself through your year, each photo labeled with its month.",
             body: "Every photo gets a label of up to 40 characters, and a month with a note says more than a date: “March: no heating, all month”, “July: the wedding we nearly missed”. The road draws itself as they scroll and ends on a countdown, so point it at the next thing you’ve planned together.",
           },
           {
@@ -1244,7 +1244,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "One photo, maybe two, from a good day — not as a bargaining chip, as a reminder of what you’re apologising for the sake of. No song is fine here, or something quiet from the library. Paper Crane has them fold the page crease by crease, one line per fold, which takes patience; Bloom opens slowly, which suits the tone.",
+          body: "One photo, maybe two, from a good day — not as a bargaining chip, as a reminder of what you’re apologizing for the sake of. No song is fine here, or something quiet from the library. Paper Crane has them fold the page crease by crease, one line per fold, which takes patience; Bloom opens slowly, which suits the tone.",
         },
         {
           heading: "When to send it",

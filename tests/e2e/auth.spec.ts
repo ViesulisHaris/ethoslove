@@ -41,7 +41,7 @@ test.describe("a sign-in link that failed", () => {
 });
 
 /**
- * A build without Supabase keys, like CI's, shows "Auth isn't connected yet" where the form would
+ * A build without Supabase keys, like CI's, shows "Auth isn’t connected yet" where the form would
  * be: there is no sign-in to test, so these skip. Anywhere with keys, they run. It waits for one or
  * the other, since the form only appears once the page is running in the browser, and a page with
  * neither still fails: only that note skips, never a form that has gone missing.

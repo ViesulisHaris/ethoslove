@@ -85,7 +85,7 @@ test.describe("the pricing page, signed in", () => {
   test("a partner is in on it, and isn't sold their own", async ({ page }) => {
     await answerEntitlements(page, member({ isOwner: false, partnerJoined: true, partner: { name: "Alex", initial: "A" }, inviteUrl: undefined, manage: null }));
     await page.goto("/pricing?subscriptions=on");
-    await expect(page.getByTestId("membership-member")).toContainText("You're in on your partner's Ethos for Two");
+    await expect(page.getByTestId("membership-member")).toContainText("You’re in on your partner’s Ethos for Two");
     await expect(page.getByTestId("buy-membership")).toHaveCount(0);
   });
 
@@ -116,7 +116,7 @@ test.describe("the pricing page, signed in", () => {
   test("an App Store renewal Apple can't collect is fixed in the iPhone's Settings, not with a card here", async ({ page }) => {
     await answerEntitlements(page, member({ provider: "app_store", manage: "app_store", status: "past_due", renews: false, endsAt: iso(4), canSwitchToYearly: false }));
     await page.goto("/pricing?subscriptions=on");
-    await expect(page.getByTestId("membership-member-line")).toHaveText(`Apple couldn't take your last payment: update it in your iPhone's Settings by ${longDate(iso(4))}`);
+    await expect(page.getByTestId("membership-member-line")).toHaveText(`Apple couldn’t take your last payment: update it in your iPhone’s Settings by ${longDate(iso(4))}`);
     await expect(page.getByTestId("membership-member").getByRole("link", { name: "Manage" })).toBeVisible();
   });
 
@@ -219,7 +219,7 @@ test.describe("the account page's Ethos for Two section", () => {
     const dialog = page.getByRole("dialog");
     await expect(dialog).toContainText(`You'll pay €25.00 today: €29.99 for a year, minus €4.99 for the rest of this month. It then renews every year on ${longDate(periodEnd)} until you cancel.`);
     await dialog.getByRole("button", { name: "Switch and pay €25.00" }).click();
-    await expect(dialog).toContainText("The payment didn't go through, so nothing has changed.");
+    await expect(dialog).toContainText("The payment didn’t go through, so nothing has changed.");
     await expect(dialog.getByRole("button", { name: "Update card" })).toBeVisible();
     expect(asked.map((body) => body.action)).toEqual(["preview_yearly", "switch_to_yearly"]);
   });
@@ -233,7 +233,7 @@ test.describe("the account page's Ethos for Two section", () => {
     await page.route("https://billing.stripe.com/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<title>Stripe</title>" }));
     await page.goto("/for-two/preview?state=past-due");
     const warning = page.getByTestId("membership-past-due");
-    await expect(warning).toContainText(`We couldn't take your last payment. Update your card by ${longDate(iso(5))} to keep Ethos for Two.`);
+    await expect(warning).toContainText(`We couldn’t take your last payment. Update your card by ${longDate(iso(5))} to keep Ethos for Two.`);
     await expect(page.getByTestId("membership-status")).toHaveText("Monthly · €4.99 a month");
     // Nothing to switch while a payment is owed; cancelling stays one tap away.
     await expect(page.getByTestId("membership-switch-yearly")).toHaveCount(0);
@@ -260,13 +260,13 @@ test.describe("the account page's Ethos for Two section", () => {
   test("an App Store member is sent to the iPhone's Settings, with no billing buttons of ours", async ({ page }) => {
     await page.goto("/for-two/preview?state=app-store-billing");
     await expect(page.getByTestId("membership-status")).toHaveText("Through the App Store");
-    await expect(page.getByTestId("membership-past-due")).toContainText("Apple couldn't take your last payment. Update your payment method in your iPhone's Settings");
+    await expect(page.getByTestId("membership-past-due")).toContainText("Apple couldn’t take your last payment. Update your payment method in your iPhone’s Settings");
     await expect(page.getByRole("button", { name: "Update card" })).toHaveCount(0);
     await expect(page.getByTestId("membership-billing")).toHaveCount(0);
 
     await page.goto("/for-two/preview?state=app-store");
     await expect(page.getByTestId("membership-status")).toHaveText(`Through the App Store · renews on ${longDate(iso(18))}`);
-    await expect(page.getByTestId("account-membership")).toContainText("Manage it in your iPhone's Settings → your name → Subscriptions.");
+    await expect(page.getByTestId("account-membership")).toContainText("Manage it in your iPhone’s Settings → your name → Subscriptions.");
   });
 
   test("a pass runs its year; in its last month, while the pass is sold, it offers the next year", async ({ page }) => {
@@ -283,11 +283,11 @@ test.describe("the account page's Ethos for Two section", () => {
   test("a partner can leave, after one confirm, and is then offered their own", async ({ page }) => {
     const asked = await answerMembership(page, { leave: { status: 200, body: { ok: true, membership: null } } });
     await page.goto("/for-two/preview?state=partner");
-    await expect(page.getByTestId("membership-status")).toHaveText("You're in on Alex's Ethos for Two");
+    await expect(page.getByTestId("membership-status")).toHaveText("You’re in on Alex’s Ethos for Two");
     await expect(page.getByTestId("membership-billing")).toHaveCount(0);
     await page.getByTestId("membership-leave").click();
     const dialog = page.getByRole("dialog");
-    await expect(dialog.getByRole("heading", { name: "Leave Alex's Ethos for Two?" })).toBeVisible();
+    await expect(dialog.getByRole("heading", { name: "Leave Alex’s Ethos for Two?" })).toBeVisible();
     await dialog.getByRole("button", { name: "Leave", exact: true }).click();
     await expect.poll(() => asked).toEqual([{ action: "leave", locale: "en" }]);
     await expect(page.getByTestId("account-membership-none")).toBeVisible();
@@ -340,7 +340,7 @@ test.describe("joining a partner's Ethos for Two, signed in", () => {
     await page.getByTestId("join-submit").click();
     await expect.poll(() => asked).toEqual([{ code: "abcdefghij" }]);
     const done = page.getByTestId("join-done");
-    await expect(done).toContainText("You're in.");
+    await expect(done).toContainText("You’re in.");
     await expect(done).toContainText("for as long as it runs.");
     await expect(done.getByRole("link", { name: "See my dates" })).toHaveAttribute("href", "/my-dates");
   });

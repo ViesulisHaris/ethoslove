@@ -277,7 +277,7 @@ describe("answering the check-in from the email", () => {
     vi.setSystemTime(Date.parse("2026-11-03T15:00:00Z"));
     const token = await signToken("monthsary-yes", `${OWNER}:2026-11-03`, SECRET);
     const done = await linkPage(yesRoute, "yes", "POST", token);
-    expect(done.text).toContain("Here's a small idea.");
+    expect(done.text).toContain("Here’s a small idea.");
     expect(done.text).toMatch(/\/create\/[a-z-]+\?ref=email-monthsary/);
     expect(fake.rows("monthsaries")[0]).toMatchObject({ confirmed_for: "2026-11-03", reminded_for: "2026-11-03" });
   });
@@ -306,7 +306,7 @@ describe("answering the check-in from the email", () => {
     expect(asked.text).toContain("Stop the monthly emails?");
     expect(fake.rows("monthsaries")).toHaveLength(2);
     const done = await linkPage(stopRoute, "stop", "POST", token);
-    expect(done.text).toContain("You won't get these again.");
+    expect(done.text).toContain("You won’t get these again.");
     expect(fake.rows("monthsaries").map((r) => r.user_id)).toEqual(["someone-else"]);
     // Once stopped, the same link says so again, and a yes from before says they're stopped, and does nothing.
     expect((await linkPage(stopRoute, "stop", "GET", token)).text).toContain("Stopped.");
@@ -321,7 +321,7 @@ describe("answering the check-in from the email", () => {
     // Turned on again: a new row, with a new id.
     fake.rows("monthsaries").push({ id: "77777777-7777-4777-8777-777777777777", user_id: OWNER, partner_name: "Ana", since: "2026-04-04", locale: "en", checkin_for: null, confirmed_for: null, reminded_for: null });
     expect((await linkPage(stopRoute, "stop", "GET", token)).text).toContain("Stop the monthly emails?");
-    expect((await linkPage(stopRoute, "stop", "POST", token)).text).toContain("You won't get these again.");
+    expect((await linkPage(stopRoute, "stop", "POST", token)).text).toContain("You won’t get these again.");
     expect(fake.rows("monthsaries").map((r) => r.user_id)).toEqual(["someone-else"]);
   });
 

@@ -29,8 +29,8 @@ test.describe("games on two phones", () => {
     await maya.getByLabel("Your name").fill("Maya");
     await maya.getByRole("button", { name: "Make a room" }).click();
     const status = maya.getByRole("status");
-    await expect(status).toContainText(/Waiting for them|couldn't open/, { timeout: 20_000 });
-    test.skip((await status.textContent())?.includes("couldn't open") ?? false, "no realtime in this build: no Supabase keys, as on CI");
+    await expect(status).toContainText(/Waiting for them|couldn’t open/, { timeout: 20_000 });
+    test.skip((await status.textContent())?.includes("couldn’t open") ?? false, "no realtime in this build: no Supabase keys, as on CI");
     const code = ((await maya.getByLabel(/^Room code /).textContent()) ?? "").trim();
     expect(code).toMatch(/^[A-Z]{4}$/);
 
@@ -95,8 +95,8 @@ test.describe("games on two phones", () => {
     await maya.getByLabel("Your name").fill("Maya");
     await maya.getByRole("button", { name: "Make a room" }).click();
     const status = maya.getByRole("status");
-    await expect(status).toContainText(/Waiting for them|couldn't open/, { timeout: 20_000 });
-    test.skip((await status.textContent())?.includes("couldn't open") ?? false, "no realtime in this build: no Supabase keys, as on CI");
+    await expect(status).toContainText(/Waiting for them|couldn’t open/, { timeout: 20_000 });
+    test.skip((await status.textContent())?.includes("couldn’t open") ?? false, "no realtime in this build: no Supabase keys, as on CI");
     const code = ((await maya.getByLabel(/^Room code /).textContent()) ?? "").trim();
 
     const marco = await phone(browser, baseURL);

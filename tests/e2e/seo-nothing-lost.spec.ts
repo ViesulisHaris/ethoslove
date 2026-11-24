@@ -14,7 +14,7 @@ import { listManifests } from "../../src/templates/manifests";
 /**
  * The occasion pages, /gifts and the pages by person were made short to the eye (fix round 4, 24 Nov
  * 2026: the owner, "so google doesnt rewoke our things"): what a search engine reads must all still be
- * there. For each of the 21 pages in both languages, from the HTML the server sends, with no script
+ * there. For each of the 21 pages in both languages (22 with /occasions, fix round 5), from the HTML the server sends, with no script
  * run: one h1 with the page's heading, its title, description, canonical and hreflang links, its
  * structured data with the same items, every link the page had, and every sentence of the page's own
  * text, in the page's language. A sentence the eye no longer sees is inside a closed <details>, never
@@ -161,6 +161,17 @@ for (const { prefix, l, m } of LANGS) {
         expect(node(page, "BreadcrumbList")?.itemListElement?.length, path).toBe(3);
       });
     }
+
+    // /occasions, remade as picture tiles in fix round 5: the description that stood under the heading is in a closed row.
+    test("/occasions", async ({ request }) => {
+      const path = `${prefix}/occasions`;
+      const page = await load(request, path);
+      expectHead(page, path, m.seo.occasionsTitle, m.seo.occasionsDescription);
+      expectText(page, path, [m.occasions.title, m.seo.occasionsTitle, m.seo.occasionsDescription, ...OCCASIONS.map((o) => m.occasions[o])]);
+      expect(inDetails(page, m.seo.occasionsDescription), `${path}: the description not in a <details>`).toBe(true);
+      expectLinks(page, path, [...OCCASIONS.map((o) => `${prefix}/occasions/${o}`), `${prefix}/templates`]);
+      expect(node(page, "BreadcrumbList")?.itemListElement?.length, path).toBe(2);
+    });
 
     test("/gifts", async ({ request }) => {
       const path = `${prefix}/gifts`;

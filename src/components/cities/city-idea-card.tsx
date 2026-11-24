@@ -34,12 +34,12 @@ export function CityIdeaCard({ idea, locale, city, href, stops, isPick, labels, 
           <img src={ideaImageInCity(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
         )}
         {isPick ? (
-          <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-rose-deep shadow-soft backdrop-blur">
+          <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full bg-card/95 px-3 py-1.5 text-[12px] font-semibold text-rose-deep shadow-soft backdrop-blur">
             <Sparkles aria-hidden="true" className="size-3.5" />
             {labels.pick}
           </span>
         ) : null}
-        <span className="absolute bottom-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-forest shadow-soft backdrop-blur">
+        <span className="absolute bottom-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full bg-card/95 px-3 py-1.5 text-[12px] font-semibold text-forest shadow-soft backdrop-blur">
           <Clock3 aria-hidden="true" className="size-3.5 text-rose-deep" />
           {labels.hours}
           <span aria-hidden="true" className="text-forest/35">

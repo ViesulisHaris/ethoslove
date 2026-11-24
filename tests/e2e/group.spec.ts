@@ -662,9 +662,9 @@ test.describe("the sender's group card panel", () => {
   test("the names for the page come filled in from the gift, and both are needed", async ({ page }) => {
     await page.goto(`${PANEL}?state=setup`);
     await expect(page.getByLabel("Your name, as they know you")).toHaveValue("Tom");
-    await expect(page.getByLabel("Who it's for")).toHaveValue("Nora");
+    await expect(page.getByLabel("Who it’s for")).toHaveValue("Nora");
     await expect(page.getByLabel("What should they write?")).toHaveAttribute("maxlength", "140");
-    await page.getByLabel("Who it's for").fill("   ");
+    await page.getByLabel("Who it’s for").fill("   ");
     await page.getByTestId("group-create").click();
     await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("Add both names first.");
   });
@@ -710,7 +710,7 @@ test.describe("the sender's group card panel", () => {
     // A note with a photo offers it, ticked; one without does not.
     await expect(first.getByTestId("group-with-photo")).toHaveCount(0);
     await expect(page.getByTestId("group-waiting-entry").nth(1).getByTestId("group-with-photo")).toBeChecked();
-    await expect(page.getByTestId("group-decided-entry")).toContainText("Uncle Rob's note was removed.");
+    await expect(page.getByTestId("group-decided-entry")).toContainText("Uncle Rob’s note was removed.");
     await expect(page.getByTestId("group-active")).not.toContainText(/@|€|\$|£/);
     // Each note can be reported to a person, quoting its own reference.
     const report = decodeURIComponent((await first.getByTestId("group-report").getAttribute("href")) ?? "");
@@ -870,13 +870,13 @@ test.describe("the panel talking to the routes", () => {
     expect(urls.filter((url) => url.includes(GIFT_ID))).toEqual([]);
   });
 
-  test("says so when group cards can't be started, and lets them try again", async ({ page }) => {
+  test("says so when group cards can’t be started, and lets them try again", async ({ page }) => {
     await answer(page, "**/api/group/find", { status: 200, body: { group: null } });
     await answer(page, "**/api/group", { status: 503, body: { error: "unavailable" } });
     await page.goto(`${PANEL}?state=setup&live=1`);
     await page.getByTestId("group-invite").click();
     await page.getByTestId("group-create").click();
-    await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("Group cards can't be started right now. Try again later.");
+    await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("Group cards can’t be started right now. Try again later.");
     await expect(page.getByTestId("group-create")).toBeEnabled();
   });
 
@@ -907,7 +907,7 @@ test.describe("the panel talking to the routes", () => {
 
     await page.getByTestId("group-remove-item").click();
     await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (0 of 25)");
-    await expect(page.getByTestId("group-decided-entry")).toContainText("Gran's note was removed.");
+    await expect(page.getByTestId("group-decided-entry")).toContainText("Gran’s note was removed.");
     await page.getByTestId("group-undo").click();
     await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (1)");
     expect(decided.map((request) => (request.postDataJSON() as { action: string }).action)).toEqual(["approve", "remove", "restore"]);
@@ -941,7 +941,7 @@ test.describe("the panel talking to the routes", () => {
     entries = [waitingEntry({ status: "withdrawn", key: item.key, photo: null })];
     await page.evaluate(() => window.dispatchEvent(new Event("focus")));
     await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (0 of 25)");
-    await expect(page.getByTestId("group-took-back")).toHaveText("Gran took their note back, so it's out of the card.");
+    await expect(page.getByTestId("group-took-back")).toHaveText("Gran took their note back, so it’s out of the card.");
   });
 
   test("the link's controls: close, keep open, and a new link only after saying yes", async ({ page }) => {
@@ -1086,7 +1086,7 @@ test.describe("a group card's pay panel", () => {
 
   test("inside the iPhone app it sells nothing and says where to finish", async ({ page }) => {
     await page.goto("/group-preview/pay?inapp=1");
-    await expect(page.getByTestId("group-pay-in-app")).toHaveText("Group cards aren't sold in the app. Finish this one on tryethos.io.");
+    await expect(page.getByTestId("group-pay-in-app")).toHaveText("Group cards aren’t sold in the app. Finish this one on tryethos.io.");
     await expect(page.getByTestId("group-pay-button")).toHaveCount(0);
   });
 
@@ -1673,15 +1673,15 @@ test.describe("the sender's panel, used the way people use it", () => {
     await page.getByTestId("group-edit-page").click();
     const form = page.getByTestId("group-page-form");
     await expect(form.getByLabel("Your name, as they know you")).toHaveValue("Tom");
-    await expect(form.getByLabel("Who it's for")).toHaveValue("Noar");
+    await expect(form.getByLabel("Who it’s for")).toHaveValue("Noar");
     await expect(form.getByLabel("What should they write?")).toHaveValue("One line only you would know");
     // Both names are still needed.
-    await form.getByLabel("Who it's for").fill("  ");
+    await form.getByLabel("Who it’s for").fill("  ");
     await page.getByTestId("group-page-save").click();
     await expect(form.getByRole("alert")).toHaveText("Add both names first.");
     expect(patches).toHaveLength(0);
 
-    await form.getByLabel("Who it's for").fill("Nora");
+    await form.getByLabel("Who it’s for").fill("Nora");
     await form.getByLabel("What should they write?").fill("");
     await page.getByTestId("group-page-save").click();
     await expect(page.getByTestId("group-page-form")).toHaveCount(0);
@@ -1700,10 +1700,10 @@ test.describe("the sender's panel, used the way people use it", () => {
     await page.goto(`${PANEL}?state=active&live=1`);
     await page.getByTestId("group-edit-page").click();
     const form = page.getByTestId("group-page-form");
-    await form.getByLabel("Who it's for").fill("Norah");
+    await form.getByLabel("Who it’s for").fill("Norah");
     await page.getByTestId("group-page-save").click();
-    await expect(form.getByRole("alert")).toHaveText("The page couldn't be changed. Try again in a moment.");
-    await expect(form.getByLabel("Who it's for")).toHaveValue("Norah");
+    await expect(form.getByRole("alert")).toHaveText("The page couldn’t be changed. Try again in a moment.");
+    await expect(form.getByLabel("Who it’s for")).toHaveValue("Norah");
     await expect(page.getByTestId("group-page-save")).toBeEnabled();
     await form.getByRole("button", { name: "Cancel" }).click();
     await expect(page.getByTestId("group-page-words")).toContainText("for Nora.");
@@ -1796,7 +1796,7 @@ test.describe("the send screen for a draft that holds a group's notes, signed ou
     await expect(sheet.getByTestId("publish-checklist")).toBeAttached();
     test.skip((await sheet.getByText("Publishing needs Supabase").count()) > 0, "this server has no accounts: run it with the placeholder settings in docs/GROUP.md (Tests) to see the send screen's sign-in step");
     // The line about a group card is not in the page while they are off; the screen never reads it.
-    await expect(sheet.getByTestId("publish-sign-in")).toContainText("Your draft is saved on this device. Sign in and we'll pick up right here.");
+    await expect(sheet.getByTestId("publish-sign-in")).toContainText("Your draft is saved on this device. Sign in and we’ll pick up right here.");
     await expect(sheet).not.toContainText(/group card|signInBlurbGroup|editor\./i);
     await expect(sheet.getByTestId("pay-panel")).toHaveCount(0);
     await expect(sheet.getByTestId("group-pay")).toHaveCount(0);
@@ -2193,7 +2193,7 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
     await page.getByTestId("group-reject").focus();
     await page.keyboard.press("Enter");
     await expect(page.getByTestId("group-undo")).toBeFocused();
-    await expect(page.getByTestId("group-undo")).toHaveAccessibleDescription("Gran's note was removed.");
+    await expect(page.getByTestId("group-undo")).toHaveAccessibleDescription("Gran’s note was removed.");
     // Brought back: on its "Add to the card".
     await page.keyboard.press("Enter");
     await expect(page.getByTestId("group-add")).toBeFocused();
@@ -2233,7 +2233,7 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
       let fail = true;
       const asked = await answer(page, "**/api/group/find", () => (fail ? { status, body: { error: status === 429 ? "rate_limited" : "failed" } } : { status: 200, body: { group: serverGroup({}, [waitingEntry()]) } }));
       await page.goto(`${PANEL}?state=active&live=1`);
-      await expect(page.getByTestId("group-load-error")).toHaveText("Couldn't load your group card. Trying again…");
+      await expect(page.getByTestId("group-load-error")).toHaveText("Couldn’t load your group card. Trying again…");
       await expect(page.getByTestId("group-intro")).toHaveCount(0);
       await expect(page.getByTestId("group-invite")).toHaveCount(0);
       await expect(page.getByTestId("group-price-line")).toHaveCount(0);
@@ -2250,7 +2250,7 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
   test("a session that ended says so instead of offering a new group, and a card the server says has none still gets the price and 'Invite people'", async ({ page }) => {
     const asked = await answer(page, "**/api/group/find", { status: 401, body: { error: "unauthenticated" } });
     await page.goto(`${PANEL}?state=active&live=1`);
-    await expect(page.getByTestId("group-load-error")).toHaveText("You've been signed out. Reload the page and sign in again.");
+    await expect(page.getByTestId("group-load-error")).toHaveText("You’ve been signed out. Reload the page and sign in again.");
     await expect(page.getByTestId("group-invite")).toHaveCount(0);
     // Asking again can't change that, so it is not asked every five seconds (a failure that might pass is: see the test above).
     const first = asked.length;
@@ -2270,14 +2270,14 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
     await page.goto(`${PANEL}?state=intro&live=1`);
     await page.getByTestId("group-invite").click();
     await page.locator("#group-prompt").fill("Tell us on smith-wedding.com what you remember");
-    await expect(page.getByTestId("group-page-links")).toHaveText("The page can't carry a web address. Take it out and try again.");
+    await expect(page.getByTestId("group-page-links")).toHaveText("The page can’t carry a web address. Take it out and try again.");
     await expect(page.getByTestId("group-create")).toBeDisabled();
     expect(made).toHaveLength(0);
     // Whatever the form lets through and the server still refuses is said in the same words, never "try again in a moment".
     await page.locator("#group-prompt").fill("What you remember of that summer");
     await expect(page.getByTestId("group-page-links")).toHaveCount(0);
     await page.getByTestId("group-create").click();
-    await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("The page can't carry a web address. Take it out and try again.");
+    await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("The page can’t carry a web address. Take it out and try again.");
 
     await page.unroute("**/api/group/find");
     await answer(page, "**/api/group/find", { status: 200, body: { group: serverGroup() } });
@@ -2289,7 +2289,7 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
     await expect(page.getByTestId("group-page-save")).toBeDisabled();
     await page.locator("#group-for").fill("Nora");
     await page.getByTestId("group-page-save").click();
-    await expect(page.getByTestId("group-page-form").getByRole("alert")).toHaveText("The page can't carry a web address. Take it out and try again.");
+    await expect(page.getByTestId("group-page-form").getByRole("alert")).toHaveText("The page can’t carry a web address. Take it out and try again.");
   });
 
   test("Undo is offered only while it can work: not on a note past its day, and one that runs out while the panel is open says why and goes", async ({ page }) => {
@@ -2299,11 +2299,11 @@ test.describe("the sender's panel, with a keyboard and when the server says no",
     await answer(page, `**/api/group/${GROUP_ID}/entries/*`, { status: 410, body: { error: "gone" } });
     await page.goto(`${PANEL}?state=active&live=1`);
     await expect(page.getByTestId("group-decided-entry")).toHaveCount(1);
-    await expect(page.getByTestId("group-decided-entry")).toContainText("Aunt Jo's note was removed.");
+    await expect(page.getByTestId("group-decided-entry")).toContainText("Aunt Jo’s note was removed.");
     await expect(page.getByText("Uncle Rob")).toHaveCount(0);
 
     await page.getByTestId("group-undo").click();
-    await expect(page.getByTestId("group-error")).toHaveText("That note can't come back: its words were deleted a day after it was removed.");
+    await expect(page.getByTestId("group-error")).toHaveText("That note can’t come back: its words were deleted a day after it was removed.");
     await expect(page.getByTestId("group-decided-entry")).toHaveCount(0);
     await expect(page.getByTestId("group-undo")).toHaveCount(0);
     await expect(page.getByText("Try again in a moment")).toHaveCount(0);

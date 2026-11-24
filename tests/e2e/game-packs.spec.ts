@@ -50,7 +50,7 @@ test.describe("the packs shelf", () => {
     // buyer came from (ref, source: purchase attribution, 14 Nov). No amount ever travels.
     await expect.poll(() => asked).toMatchObject({ product: "pack", packId: "distance", returnTo: "/games/deck?pack=distance", locale: "en", currency: "eur" });
     expect(asked).not.toHaveProperty("amount");
-    await expect(page.getByText("Couldn't open checkout. Please try again.")).toBeVisible();
+    await expect(page.getByText("Couldn’t open checkout. Please try again.")).toBeVisible();
   });
 
   test("asks for the 18+ tap before anything from After dark is shown", async ({ page }) => {
@@ -63,7 +63,7 @@ test.describe("the packs shelf", () => {
     await sheet.getByRole("button", { name: "Not now" }).click();
     await expect(sheet).toBeHidden();
     await dark.click();
-    await page.getByRole("button", { name: "I'm 18 or over" }).click();
+    await page.getByRole("button", { name: "I’m 18 or over" }).click();
     await expect(page.getByRole("dialog").getByRole("heading", { name: "After dark" })).toBeVisible();
     await page.keyboard.press("Escape");
     // Remembered for the tab: straight to what's inside the second time.
@@ -102,7 +102,7 @@ test.describe("the end of every game", () => {
     await startOnePhone(page, "/games/dare");
     await page.getByRole("button", { name: "Truth", exact: true }).click();
     await page.getByRole("button", { name: /^Done\./ }).click();
-    await page.getByRole("button", { name: "We're done for tonight" }).click();
+    await page.getByRole("button", { name: "We’re done for tonight" }).click();
     await expect(page.getByRole("heading", { name: "1 truth and 0 dares later." })).toBeVisible();
     await expect(page.getByRole("navigation", { name: "What next" })).toBeVisible();
   });
@@ -111,7 +111,7 @@ test.describe("the end of every game", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await startOnePhone(page, "/games/roulette");
     await page.getByRole("button", { name: "Spin", exact: true }).click();
-    await page.getByRole("button", { name: "That's everything settled" }).click();
+    await page.getByRole("button", { name: "That’s everything settled" }).click();
     await expect(page.getByRole("heading", { name: "Settled. No appeals." })).toBeVisible();
     await expect(page.getByRole("navigation", { name: "What next" }).getByRole("link", { name: /Make them a gift/ })).toBeVisible();
   });

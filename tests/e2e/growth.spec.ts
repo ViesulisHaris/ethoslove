@@ -124,7 +124,7 @@ test.describe("the creator programme", () => {
     await expect(page.getByText("#ad", { exact: false }).first()).toBeVisible();
     // Link only: no code, no follower discount, and the creator's own purchases don't count.
     await expect(page.getByText("tryethos.io/?ref=c-maya").first()).toBeVisible();
-    await expect(page.getByText("Your own purchases don't count", { exact: false })).toBeVisible();
+    await expect(page.getByText("Your own purchases don’t count", { exact: false })).toBeVisible();
     await expect(page.getByText("% off", { exact: false })).toHaveCount(0);
     const apply = page.locator("main").getByRole("link", { name: "Apply by email" }).first();
     await expect(apply).toHaveAttribute("href", /^mailto:[^?]+\?subject=Creator%20program%20application&body=/);

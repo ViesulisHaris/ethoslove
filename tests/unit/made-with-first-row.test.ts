@@ -88,3 +88,19 @@ describe("the page a gift sends its recipient to opens with the gift they got", 
     expect(page).toContain('href={`/templates${linkQuery}`}');
   });
 });
+
+// The owner: "Premium" on gifts "makes it look like not an impulse buy anymore and seems expensive" (fix round 5).
+describe("the page's words", () => {
+  it("name no shelf, label or pill Premium, in either language", () => {
+    for (const lang of ["en", "es"]) {
+      const words = JSON.parse(readFileSync(`messages/${lang}.json`, "utf8")).madeWith;
+      // What is shown, not the keys the code reads (the shelf's key stays "premium").
+      const shown: string[] = [];
+      const walk = (o: unknown) => (typeof o === "string" ? shown.push(o) : o && typeof o === "object" && Object.values(o).forEach(walk));
+      walk(words);
+      expect(shown.filter((s) => /premium/i.test(s)), lang).toEqual([]);
+    }
+    const page = readFileSync("src/app/[currency]/[locale]/(marketing)/made-with-ethos/page.tsx", "utf8");
+    expect(page).not.toMatch(/common\.premium|>\s*Premium\s*</);
+  });
+});

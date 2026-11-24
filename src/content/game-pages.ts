@@ -15,7 +15,7 @@ export type GamePage = {
 const SAVED: GameFaq = {
   q: { en: "Is anything saved?", es: "¿Se guarda algo?" },
   a: {
-    en: "No account, and nothing kept on our side. A game is remembered only in your browser's tab, so a reload carries on, and it is gone when the tab closes.",
+    en: "No account, and nothing kept on our side. A game is remembered only in your browser’s tab, so a reload carries on, and it is gone when the tab closes.",
     es: "Sin cuenta y sin nada guardado por nuestra parte. La partida se recuerda solo en la pestaña de tu navegador, para que una recarga siga donde estabais, y desaparece al cerrarla.",
   },
 };
@@ -50,7 +50,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
           es: "8 preguntas, sacadas de las 40 de la baraja gratis, cada una con cuatro respuestas. Unos diez minutos.",
         },
       },
-      twoPhones("Each answers on their own screen, so nobody sees the other's pick.", "Cada cual responde en su pantalla, así que nadie ve lo que elige la otra persona."),
+      twoPhones("Each answers on their own screen, so nobody sees the other’s pick.", "Cada cual responde en su pantalla, así que nadie ve lo que elige la otra persona."),
       SAVED,
     ],
     posts: ["questions-for-couples", "questions-to-ask-your-partner"],
@@ -92,7 +92,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
     },
     faq: [
       {
-        q: { en: "Does it work when we're apart?", es: "¿Funciona si estamos lejos?" },
+        q: { en: "Does it work when we’re apart?", es: "¿Funciona si estamos lejos?" },
         a: {
           en: "Yes. On two phones the drawing appears on the other screen as it is drawn, so it plays on a call from anywhere.",
           es: "Sí. En dos móviles el dibujo aparece en la otra pantalla mientras se hace, así que se juega en una llamada desde donde sea.",
@@ -101,7 +101,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "Does spelling count?", es: "¿Cuenta la ortografía?" },
         a: {
-          en: "Yes, but accents, capitals and a stray “a” or “the” don't cost the point. A guess counts in either of the site's two languages.",
+          en: "Yes, but accents, capitals and a stray “a” or “the” don’t cost the point. A guess counts in either of the site’s two languages.",
           es: "Sí, pero las tildes, las mayúsculas o un «el» o «una» de más no quitan el punto. Vale adivinar en cualquiera de los dos idiomas de la web.",
         },
       },
@@ -148,7 +148,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: SAVED.q,
         a: {
-          en: "No account, and nothing kept on our side. The board survives a reload in this tab; your photos don't, so pick them again.",
+          en: "No account, and nothing kept on our side. The board survives a reload in this tab; your photos don’t, so pick them again.",
           es: "Sin cuenta y sin nada guardado por nuestra parte. El tablero aguanta una recarga en esta pestaña; las fotos no, así que volved a elegirlas.",
         },
       },
@@ -167,7 +167,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "Which deck first?", es: "¿Con qué baraja empezar?" },
         a: {
-          en: "Light for the sofa, Closer for later in the evening, and Far apart for a call when you're in different places.",
+          en: "Light for the sofa, Closer for later in the evening, and Far apart for a call when you’re in different places.",
           es: "Ligeras para el sofá, Más cerca para más tarde, y A distancia para una llamada cuando estáis lejos.",
         },
       },
@@ -186,14 +186,14 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "How soft is the soft edition?", es: "¿Cómo de suave es la versión suave?" },
         a: {
-          en: "Speeches, impressions, a slow dance, a kiss on the hand. Nothing you couldn't do with the neighbours in.",
+          en: "Speeches, impressions, a slow dance, a kiss on the hand. Nothing you couldn’t do with the neighbors in.",
           es: "Discursos, imitaciones, un baile lento, un beso en la mano. Nada que no pudierais hacer con los vecinos en casa.",
         },
       },
       {
         q: { en: "How long is a game?", es: "¿Cuánto dura una partida?" },
         a: {
-          en: "12 truths and 12 dares, drawn fresh from the 50 of each in the list above. It ends when both piles run out, or when you say you're done for the night.",
+          en: "12 truths and 12 dares, drawn fresh from the 50 of each in the list above. It ends when both piles run out, or when you say you’re done for the night.",
           es: "12 verdades y 12 retos, sacados cada vez de los 50 de cada tipo de la lista de arriba. Termina cuando se acaban los dos montones o cuando decís que ya está por esta noche.",
         },
       },
@@ -213,7 +213,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
         "Put in both your names: the wheel is the two of you, half each.",
         "Spin. It picks one of 8 chores and lands on one of you.",
         "Spin again for the next one, as many times as you like.",
-        "When it's all decided, settle it: the last six spins are the verdict.",
+        "When it’s all decided, settle it: the last six spins are the verdict.",
       ],
       es: [
         "Poned vuestros nombres: la ruleta es vuestra, mitad y mitad.",
@@ -271,7 +271,7 @@ export const TODAY_FAQ: GameFaq[] = [
   {
     q: { en: "Is it the same question for everyone?", es: "¿Es la misma pregunta para todo el mundo?" },
     a: {
-      en: "Yes. A new pair comes at midnight UTC, picked from {count} of the free deck's questions, and none comes back until every one has had its day.",
+      en: "Yes. A new pair comes at midnight UTC, picked from {count} of the free deck’s questions, and none comes back until every one has had its day.",
       es: "Sí. Cada día a medianoche UTC llega una pareja nueva, sacada de {count} de las preguntas de la baraja gratis, y ninguna se repite hasta que todas han tenido su día.",
     },
   },
@@ -292,7 +292,7 @@ export const TODAY_FAQ: GameFaq[] = [
   {
     q: { en: "What if they open it tomorrow?", es: "¿Y si lo abre mañana?" },
     a: {
-      en: "It still opens on the question you answered, and the reveal works the same. After it, a link leads to that day's new question.",
+      en: "It still opens on the question you answered, and the reveal works the same. After it, a link leads to that day’s new question.",
       es: "Se sigue abriendo en la pregunta que respondiste y las dos respuestas se ven igual. Después, un enlace lleva a la pregunta nueva de ese día.",
     },
   },

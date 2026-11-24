@@ -443,7 +443,7 @@ describe("date ideas", () => {
     expect(isDoable(ideaById("bowling-night")!, nearby)).toBe(false);
   });
 
-  it("fills an idea's stops with real places a walk apart, preferring the kind it was written for", () => {
+  it("fills an idea’s stops with real places a walk apart, preferring the kind it was written for", () => {
     const idea = ideaById("bookshop-and-coffee")!;
     const far = place({ id: "node/far", kind: "cafe", lat: LISBON.lat + 0.05, score: 99 });
     const near = place({ id: "node/near", kind: "dessert", lat: LISBON.lat + 0.002, score: 40 });

@@ -50,12 +50,12 @@ export type QuizQuestion = { prompt: { en: string; es: string }; a: Side; b: Sid
  */
 export const QUESTIONS: readonly QuizQuestion[] = [
   {
-    prompt: { en: "You've had a rough week. What helps more?", es: "Has tenido una semana dura. ¿Qué te ayuda más?" },
+    prompt: { en: "You’ve had a rough week. What helps more?", es: "Has tenido una semana dura. ¿Qué te ayuda más?" },
     a: { lang: "words", en: "They tell you, in so many words, what they admire about how you handled it.", es: "Que te diga, con todas las letras, lo que admira de cómo lo has llevado." },
     b: { lang: "time", en: "They clear their evening, and you do nothing much, together.", es: "Que se deje la tarde libre y la paséis sin hacer gran cosa, los dos." },
   },
   {
-    prompt: { en: "They're back from a trip. What do you hope for at the door?", es: "Vuelve de un viaje. ¿Qué esperas en la puerta?" },
+    prompt: { en: "They’re back from a trip. What do you hope for at the door?", es: "Vuelve de un viaje. ¿Qué esperas en la puerta?" },
     a: { lang: "gifts", en: "Something from the airport that made them think of you.", es: "Algo del aeropuerto que le hizo pensar en ti." },
     b: { lang: "touch", en: "A hug that goes on a bit too long.", es: "Un abrazo que dura un poco más de la cuenta." },
   },
@@ -65,58 +65,58 @@ export const QUESTIONS: readonly QuizQuestion[] = [
     b: { lang: "words", en: "A voice message for the commute: three things they love about you.", es: "Un audio para el camino al trabajo: tres cosas que le encantan de ti." },
   },
   {
-    prompt: { en: "It's your birthday. Which would mean more?", es: "Es tu cumpleaños. ¿Qué significaría más?" },
+    prompt: { en: "It’s your birthday. Which would mean more?", es: "Es tu cumpleaños. ¿Qué significaría más?" },
     a: { lang: "time", en: "A whole day planned around the two of you, phones in a drawer.", es: "Un día entero pensado para los dos, con los móviles en un cajón." },
-    b: { lang: "gifts", en: "A present that's exactly the thing you mentioned once, in passing.", es: "Un regalo que es justo eso que mencionaste una vez, de pasada." },
+    b: { lang: "gifts", en: "A present that’s exactly the thing you mentioned once, in passing.", es: "Un regalo que es justo eso que mencionaste una vez, de pasada." },
   },
   {
     prompt: { en: "A long day for both of you. What do you want now?", es: "Un día larguísimo para los dos. ¿Qué te apetece ahora?" },
     a: { lang: "touch", en: "To fall asleep on the sofa with your head on their shoulder.", es: "Dormirte en el sofá con la cabeza sobre su hombro." },
-    b: { lang: "service", en: "For them to make dinner so you don't have to.", es: "Que haga la cena para que tú no tengas que hacerla." },
+    b: { lang: "service", en: "For them to make dinner so you don’t have to.", es: "Que haga la cena para que tú no tengas que hacerla." },
   },
   {
     prompt: { en: "After an argument, what puts it right?", es: "Después de una discusión, ¿qué lo arregla?" },
-    a: { lang: "words", en: "They say sorry first, out loud, even though it's awkward.", es: "Que dé el primer paso y pida perdón en voz alta, aunque cueste." },
+    a: { lang: "words", en: "They say sorry first, out loud, even though it’s awkward.", es: "Que dé el primer paso y pida perdón en voz alta, aunque cueste." },
     b: { lang: "gifts", en: "They come home with your favorite thing from the bakery.", es: "Que vuelva a casa con tu dulce favorito de la panadería." },
   },
   {
-    prompt: { en: "Saturday's free. Which sounds better?", es: "El sábado está libre. ¿Qué suena mejor?" },
+    prompt: { en: "Saturday’s free. Which sounds better?", es: "El sábado está libre. ¿Qué suena mejor?" },
     a: { lang: "time", en: "A long walk somewhere new, just talking.", es: "Un paseo largo por un sitio nuevo, solo hablando." },
     b: { lang: "service", en: "They wash your car and fill it up while you sleep in.", es: "Que te lave el coche y le ponga gasolina mientras duermes hasta tarde." },
   },
   {
     prompt: { en: "Which would you keep forever?", es: "¿Qué guardarías para siempre?" },
     a: { lang: "gifts", en: "The keyring they bought you on your first trip together.", es: "El llavero que te compró en vuestro primer viaje." },
-    b: { lang: "words", en: "The message they sent the night it all started, which you've never deleted.", es: "El mensaje que te mandó la noche en que empezó todo, y que nunca has borrado." },
+    b: { lang: "words", en: "The message they sent the night it all started, which you’ve never deleted.", es: "El mensaje que te mandó la noche en que empezó todo, y que nunca has borrado." },
   },
   {
     prompt: { en: "A night in. What matters more?", es: "Noche en casa. ¿Qué importa más?" },
     a: { lang: "touch", en: "Being wrapped up together under one blanket.", es: "Compartir manta, muy cerca." },
-    b: { lang: "time", en: "That they're actually there with you, not half on their phone.", es: "Que esté contigo de verdad, no a medias con el móvil." },
+    b: { lang: "time", en: "That they’re actually there with you, not half on their phone.", es: "Que esté contigo de verdad, no a medias con el móvil." },
   },
   {
     prompt: { en: "They want to surprise you. Which would you pick?", es: "Quiere darte una sorpresa. ¿Cuál eliges?" },
-    a: { lang: "service", en: "They finally fix the thing you've been putting off for weeks.", es: "Que por fin arregle eso que llevas semanas posponiendo." },
+    a: { lang: "service", en: "They finally fix the thing you’ve been putting off for weeks.", es: "Que por fin arregle eso que llevas semanas posponiendo." },
     b: { lang: "gifts", en: "They hide a small present where only you will find it.", es: "Que esconda un regalito donde solo tú lo vayas a encontrar." },
   },
   {
-    prompt: { en: "You're nervous before something big. What steadies you?", es: "Tienes nervios antes de algo importante. ¿Qué te calma?" },
-    a: { lang: "words", en: "A message: “You've got this, and here's why.”", es: "Un mensaje: «Puedes con esto, y te digo por qué»." },
+    prompt: { en: "You’re nervous before something big. What steadies you?", es: "Tienes nervios antes de algo importante. ¿Qué te calma?" },
+    a: { lang: "words", en: "A message: “You’ve got this, and here’s why.”", es: "Un mensaje: «Puedes con esto, y te digo por qué»." },
     b: { lang: "touch", en: "Their hand on the back of your neck before you walk in.", es: "Su mano en tu nuca justo antes de entrar." },
   },
   {
-    prompt: { en: "It's an ordinary Tuesday. Which would you rather?", es: "Un martes cualquiera. ¿Qué prefieres?" },
+    prompt: { en: "It’s an ordinary Tuesday. Which would you rather?", es: "Un martes cualquiera. ¿Qué prefieres?" },
     a: { lang: "gifts", en: "Flowers, for no reason at all.", es: "Flores, sin ningún motivo." },
     b: { lang: "time", en: "They ask you out to dinner tonight, just the two of you.", es: "Que te proponga cenar fuera esta noche, solo los dos." },
   },
   {
-    prompt: { en: "You're in bed with a fever. What do you want most?", es: "Estás en la cama con fiebre. ¿Qué quieres más?" },
+    prompt: { en: "You’re in bed with a fever. What do you want most?", es: "Estás en la cama con fiebre. ¿Qué quieres más?" },
     a: { lang: "service", en: "Soup on the bedside table before you thought to ask.", es: "Una sopa en la mesilla antes de que se te ocurra pedirla." },
     b: { lang: "touch", en: "Them lying next to you, even if they catch it.", es: "Que se tumbe a tu lado, aunque se contagie." },
   },
   {
-    prompt: { en: "You're apart for a week. What gets you through?", es: "Una semana sin veros. ¿Qué te ayuda a llevarla?" },
-    a: { lang: "time", en: "A long call every night, even when there's nothing to report.", es: "Una llamada larga cada noche, aunque no haya nada que contar." },
+    prompt: { en: "You’re apart for a week. What gets you through?", es: "Una semana sin veros. ¿Qué te ayuda a llevarla?" },
+    a: { lang: "time", en: "A long call every night, even when there’s nothing to report.", es: "Una llamada larga cada noche, aunque no haya nada que contar." },
     b: { lang: "words", en: "Messages through the day saying they miss you, and what they miss.", es: "Mensajes a lo largo del día diciendo que te echa de menos, y qué echa de menos." },
   },
   {
@@ -125,7 +125,7 @@ export const QUESTIONS: readonly QuizQuestion[] = [
     b: { lang: "service", en: "Them giving up a Saturday to help you move.", es: "Que dedicara un sábado entero a ayudarte con la mudanza." },
   },
   {
-    prompt: { en: "You're out with friends. Which means more?", es: "Estáis con amigos. ¿Qué significa más?" },
+    prompt: { en: "You’re out with friends. Which means more?", es: "Estáis con amigos. ¿Qué significa más?" },
     a: { lang: "touch", en: "Their arm around you while everyone talks.", es: "Su brazo rodeándote mientras todos hablan." },
     b: { lang: "words", en: "Hearing them tell everyone how proud they are of you.", es: "Que presuma de ti delante de todos." },
   },
@@ -135,7 +135,7 @@ export const QUESTIONS: readonly QuizQuestion[] = [
     b: { lang: "touch", en: "Their knee against yours under the table all night.", es: "Su rodilla contra la tuya bajo la mesa toda la noche." },
   },
   {
-    prompt: { en: "They have a free afternoon. You'd rather they…", es: "Tiene la tarde libre. Prefieres que…" },
+    prompt: { en: "They have a free afternoon. You’d rather they…", es: "Tiene la tarde libre. Prefieres que…" },
     a: { lang: "service", en: "…did the big grocery run, so the fridge is full for the week.", es: "…haga la compra grande y deje la nevera llena para toda la semana." },
     b: { lang: "time", en: "…came to find you so you could spend it together.", es: "…venga a buscarte para pasarla contigo." },
   },
@@ -146,13 +146,13 @@ export const QUESTIONS: readonly QuizQuestion[] = [
   },
   {
     prompt: { en: "You finally see each other after weeks apart. What do you want?", es: "Por fin os veis después de semanas. ¿Qué quieres?" },
-    a: { lang: "touch", en: "Not letting go of each other's hand all day.", es: "No soltaros de la mano en todo el día." },
-    b: { lang: "gifts", en: "A present they've been saving for this moment.", es: "Un regalo que ha guardado para este momento." },
+    a: { lang: "touch", en: "Not letting go of each other’s hand all day.", es: "No soltaros de la mano en todo el día." },
+    b: { lang: "gifts", en: "A present they’ve been saving for this moment.", es: "Un regalo que ha guardado para este momento." },
   },
   {
     prompt: { en: "Which would you rather get for the holidays?", es: "¿Qué prefieres para estas fiestas?" },
     a: { lang: "time", en: "A promise: every Sunday morning in December belongs to the two of you.", es: "Una promesa: todos los domingos por la mañana de diciembre son para los dos." },
-    b: { lang: "gifts", en: "A mug from a flea market that's just so you.", es: "Una taza de un mercadillo que es muy tú." },
+    b: { lang: "gifts", en: "A mug from a flea market that’s just so you.", es: "Una taza de un mercadillo que es muy tú." },
   },
   {
     prompt: { en: "Which feels more like being looked after?", es: "¿Qué se parece más a que te cuiden?" },
@@ -165,7 +165,7 @@ export const QUESTIONS: readonly QuizQuestion[] = [
     b: { lang: "time", en: "A calendar invite: “Saturday. All day. Us.”", es: "Una invitación en el calendario: «Sábado. Todo el día. Los dos»." },
   },
   {
-    prompt: { en: "You've pulled off something big. How do you want it celebrated?", es: "Has conseguido algo importante. ¿Cómo quieres celebrarlo?" },
+    prompt: { en: "You’ve pulled off something big. How do you want it celebrated?", es: "Has conseguido algo importante. ¿Cómo quieres celebrarlo?" },
     a: { lang: "gifts", en: "A present to mark it, wrapped and waiting when you get home.", es: "Con un regalo para celebrarlo, envuelto y esperándote en casa." },
     b: { lang: "words", en: "A toast, in front of everyone, about how hard you worked for it.", es: "Con un brindis, delante de todos, sobre lo mucho que te lo has currado." },
   },
@@ -176,28 +176,28 @@ export const QUESTIONS: readonly QuizQuestion[] = [
   },
   {
     prompt: { en: "Which would you miss more if it stopped?", es: "¿Qué echarías más de menos si se acabara?" },
-    a: { lang: "time", en: "Your one evening a week that's just for the two of you.", es: "Vuestra noche de la semana que es solo para los dos." },
+    a: { lang: "time", en: "Your one evening a week that’s just for the two of you.", es: "Vuestra noche de la semana que es solo para los dos." },
     b: { lang: "touch", en: "The kiss before either of you leaves the house.", es: "El beso antes de que cualquiera de los dos salga de casa." },
   },
   {
     prompt: { en: "After a bad day, what helps first?", es: "Después de un mal día, ¿qué ayuda primero?" },
-    a: { lang: "words", en: "They listen, then tell you why you're not the problem.", es: "Que te escuche y después te diga por qué el problema no eres tú." },
+    a: { lang: "words", en: "They listen, then tell you why you’re not the problem.", es: "Que te escuche y después te diga por qué el problema no eres tú." },
     b: { lang: "touch", en: "Being held without having to explain anything.", es: "Que te abrace sin que tengas que explicar nada." },
   },
   {
-    prompt: { en: "A vacation's coming up. What do you hope for?", es: "Se acercan unas vacaciones. ¿Qué esperas?" },
-    a: { lang: "service", en: "They handle every booking, ticket and transfer, so you don't have to think.", es: "Que se ocupe de cada reserva, billete y traslado para que tú no tengas que pensar." },
+    prompt: { en: "A vacation’s coming up. What do you hope for?", es: "Se acercan unas vacaciones. ¿Qué esperas?" },
+    a: { lang: "service", en: "They handle every booking, ticket and transfer, so you don’t have to think.", es: "Que se ocupe de cada reserva, billete y traslado para que tú no tengas que pensar." },
     b: { lang: "time", en: "A whole week of them looking at you, not at their inbox.", es: "Una semana entera mirándote a ti, no a su correo." },
   },
   {
-    prompt: { en: "Valentine's Day. Which would you rather?", es: "San Valentín. ¿Qué prefieres?" },
+    prompt: { en: "Valentine’s Day. Which would you rather?", es: "San Valentín. ¿Qué prefieres?" },
     a: { lang: "touch", en: "A slow dance in the kitchen.", es: "Un baile lento en la cocina." },
     b: { lang: "gifts", en: "Something they made or tracked down, just for you.", es: "Algo que hizo o que buscó hasta encontrarlo, solo para ti." },
   },
   {
     prompt: { en: "Which sounds more like love to you?", es: "¿Qué te suena más a amor?" },
-    a: { lang: "service", en: "“Don't worry about it. I already did it.”", es: "«No te preocupes. Ya está hecho»." },
-    b: { lang: "words", en: "“I'm proud of you. I should say it more.”", es: "«Me encanta cómo eres. Debería decírtelo más»." },
+    a: { lang: "service", en: "“Don’t worry about it. I already did it.”", es: "«No te preocupes. Ya está hecho»." },
+    b: { lang: "words", en: "“I’m proud of you. I should say it more.”", es: "«Me encanta cómo eres. Debería decírtelo más»." },
   },
 ];
 
@@ -290,9 +290,9 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
     eyebrow: "Free quiz",
     h1: "Love language quiz",
     intro:
-      "Thirty quick choices, each between two things that feel like love. You'll get your love language and how all five rank for you. Then send the link to your partner: once they've answered, you'll both see where you match and where you don't.",
+      "Thirty quick choices, each between two things that feel like love. You’ll get your love language and how all five rank for you. Then send the link to your partner: once they’ve answered, you’ll both see where you match and where you don’t.",
     credit:
-      "The five love languages come from Gary Chapman's 1992 book The 5 Love Languages. This quiz and its questions are our own, and Ethos isn't connected to Dr. Chapman or his publisher.",
+      "The five love languages come from Gary Chapman’s 1992 book The 5 Love Languages. This quiz and its questions are our own, and Ethos isn’t connected to Dr. Chapman or his publisher.",
     languagesTitle: "The five love languages, in plain words",
     languagesIntro: "Most people want all five. The quiz shows which one wins when you have to choose.",
     giftsTitle: "A gift in each language",
@@ -301,7 +301,7 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
     faq: [
       {
         q: "What are the five love languages?",
-        a: "Words of affirmation, quality time, receiving gifts, acts of service and physical touch: five ways people give and notice love, named by Gary Chapman in his 1992 book. Most people want all five. What differs is which one they reach for first, and which they'd miss most if it stopped.",
+        a: "Words of affirmation, quality time, receiving gifts, acts of service and physical touch: five ways people give and notice love, named by Gary Chapman in his 1992 book. Most people want all five. What differs is which one they reach for first, and which they’d miss most if it stopped.",
       },
       {
         q: "How does this love language quiz work?",
@@ -309,11 +309,11 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
       },
       {
         q: "Is this the official love language quiz?",
-        a: "No. The official quiz is on 5lovelanguages.com, the site of Gary Chapman's book. This one is ours: we wrote the questions, it's free, it doesn't ask for an email, and it's made for comparing results with a partner.",
+        a: "No. The official quiz is on 5lovelanguages.com, the site of Gary Chapman’s book. This one is ours: we wrote the questions, it’s free, it doesn’t ask for an email, and it’s made for comparing results with a partner.",
       },
       {
         q: "How do we compare our results as a couple?",
-        a: "When you finish, send your partner the link. It opens the quiz for them with your result tucked inside, and when they finish, you both see your five side by side, what each of you needs from the other, and a link to send back. On the same phone? Tap “Your partner's turn, on this phone” instead.",
+        a: "When you finish, send your partner the link. It opens the quiz for them with your result tucked inside, and when they finish, you both see your five side by side, what each of you needs from the other, and a link to send back. On the same phone? Tap “Your partner’s turn, on this phone” instead.",
       },
       {
         q: "Can you have more than one love language?",
@@ -321,7 +321,7 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
       },
       {
         q: "What if our love languages are different?",
-        a: "That's the usual case. Chapman's own observation is that people give love the way they'd like to get it. If yours is quality time and theirs is acts of service, your evening plans and the shelf they finally put up are both love; each of you just hears one of them better.",
+        a: "That’s the usual case. Chapman’s own observation is that people give love the way they’d like to get it. If yours is quality time and theirs is acts of service, your evening plans and the shelf they finally put up are both love; each of you just hears one of them better.",
       },
       {
         q: "Are love languages backed by research?",
@@ -336,24 +336,24 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
     languages: {
       words: {
         name: "Words of affirmation",
-        line: "You feel loved when it's said out loud, or written down.",
-        body: "Hearing it is what makes it real for you: a thank-you that names the actual thing, a “proud of you” you didn't have to fish for, a message that could only be about you. Words land harder the other way too, and one careless line in an argument can stay with you for weeks.",
-        lands: ["A compliment that says exactly what, and why", "A note left where you'll find it hours later", "Being praised in front of other people", "Thanks for the effort nobody else noticed"],
+        line: "You feel loved when it’s said out loud, or written down.",
+        body: "Hearing it is what makes it real for you: a thank-you that names the actual thing, a “proud of you” you didn’t have to fish for, a message that could only be about you. Words land harder the other way too, and one careless line in an argument can stay with you for weeks.",
+        lands: ["A compliment that says exactly what, and why", "A note left where you’ll find it hours later", "Being praised in front of other people", "Thanks for the effort nobody else noticed"],
         misses: "Silence. Doing everything right and never saying any of it.",
         gift: "The Letter: your words in handwriting, under a wax seal they break with a tap. Free to make.",
       },
       time: {
         name: "Quality time",
-        line: "You feel loved when you have someone's whole attention.",
+        line: "You feel loved when you have someone’s whole attention.",
         body: "Twenty minutes with both phones in a drawer beats a whole weekend side by side on separate screens. You can tell when someone is half-listening, and a canceled plan stings more than the plan itself was worth.",
         lands: ["Plans for the two of you, in the calendar and kept", "A question that shows they listened last time", "Phones face down at dinner", "Coming along on an errand, just for the company"],
         misses: "“Mm-hm” from behind a screen. Rescheduling, again.",
-        gift: "Picnic: a basket they unpack one tap at a time, each thing tagged with a line from you. Attach a date you've planned on Ethos and it comes out of the basket too.",
+        gift: "Picnic: a basket they unpack one tap at a time, each thing tagged with a line from you. Attach a date you’ve planned on Ethos and it comes out of the basket too.",
       },
       gifts: {
         name: "Receiving gifts",
         line: "You feel loved when something shows they were thinking of you.",
-        body: "What counts is the evidence: they saw something, thought of you and carried it home. A ticket stub from the gig you couldn't make, a bar of the chocolate you mentioned once. A forgotten birthday, or a present that could have been for anyone, lands harder on you than on most.",
+        body: "What counts is the evidence: they saw something, thought of you and carried it home. A ticket stub from the gig you couldn’t make, a bar of the chocolate you mentioned once. A forgotten birthday, or a present that could have been for anyone, lands harder on you than on most.",
         lands: ["Something small brought back from any trip", "A present that remembers a passing comment", "Flowers for no occasion", "Wrapping that took effort, even on something tiny"],
         misses: "A forgotten date. A gift card that says nobody gave it much thought.",
         gift: "Bouquet: they watch it come together stem by stem, every flower picked by you, and it never wilts.",
@@ -361,17 +361,17 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
       service: {
         name: "Acts of service",
         line: "You feel loved when someone makes your load lighter.",
-        body: "Love, for you, looks like a job done without being asked: the trash taken out, the form filled in, the car booked in for its service. You notice who does what, help that comes with a sigh or a lecture doesn't count, and one job done beats three promised.",
-        lands: ["A chore done before you noticed it needed doing", "Taking over the admin you've been dreading", "Breakfast made on a morning you're running late", "“I'll handle it”, and then they do"],
+        body: "Love, for you, looks like a job done without being asked: the trash taken out, the form filled in, the car booked in for its service. You notice who does what, help that comes with a sigh or a lecture doesn’t count, and one job done beats three promised.",
+        lands: ["A chore done before you noticed it needed doing", "Taking over the admin you’ve been dreading", "Breakfast made on a morning you’re running late", "“I’ll handle it”, and then they do"],
         misses: "Offers of help that never happen. Being left with all of it.",
-        gift: "Scratch Card: cards they rub open one by one, each with one of your photos and a line under it. Make every line a job you'll do for them, and save the biggest for the last card.",
+        gift: "Scratch Card: cards they rub open one by one, each with one of your photos and a line under it. Make every line a job you’ll do for them, and save the biggest for the last card.",
       },
       touch: {
         name: "Physical touch",
         line: "You feel loved when someone reaches for you.",
         body: "A hand on your back in a crowd, their head on your shoulder on the train: small, constant contact is how you know things are fine between you. Distance is hardest on you, and so is someone keeping to the far side of the bed after an argument.",
         lands: ["Reaching for your hand without thinking", "A hug that lasts longer than hello", "Sitting close on the sofa, not at opposite ends", "A kiss hello and goodbye, every time"],
-        misses: "Being kept at arm's length. Weeks apart with no date to see each other.",
+        misses: "Being kept at arm’s length. Weeks apart with no date to see each other.",
         gift: "XOXO: an envelope sealed with a lipstick kiss, and wherever they tap, another kiss lands. Apart for now? Midnight Countdown counts down to the minute you see each other.",
       },
     },
@@ -391,12 +391,12 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
       landsTitle: "What lands",
       missesTitle: "What misses",
       shareTitle: "Now find out theirs",
-      shareBody: "Send your partner the link. Once they've answered, you'll both see your results side by side.",
-      nameLabel: "Your first name, so they know it's you",
+      shareBody: "Send your partner the link. Once they’ve answered, you’ll both see your results side by side.",
+      nameLabel: "Your first name, so they know it’s you",
       share: "Send to your partner",
       copy: "Copy the link",
       copied: "Link copied",
-      samePhone: "Your partner's turn, on this phone",
+      samePhone: "Your partner’s turn, on this phone",
       retake: "Take it again",
       giftTitle: "The gift that speaks it",
       see: "See it",
@@ -408,8 +408,8 @@ export const LOVE_QUIZ: Record<GiftLocale, LoveQuizGuide> = {
       firstFor: "First for {name}",
       forYou: "you",
       sameTop: "You both put {language} first. That makes it easy to get right, and just as easy to stop doing once it feels taken care of.",
-      differentTop: "Your first choices differ, as most couples' do. People often give love the way they'd like to get it, so each of you may be saying it in the language the other hears less.",
-      theirTopYourLast: "First for {name}, last for you: {language}. That's what is most likely to slip, because it's what you'd think of least.",
+      differentTop: "Your first choices differ, as most couples' do. People often give love the way they’d like to get it, so each of you may be saying it in the language the other hears less.",
+      theirTopYourLast: "First for {name}, last for you: {language}. That’s what is most likely to slip, because it’s what you’d think of least.",
       yourTopTheirLast: "First for you, last for {name}: {language}. Say so out loud, because it may not occur to them on their own.",
       needsTitle: "What {name} needs from you",
       yourNeedsTitle: "What you need from {name}",

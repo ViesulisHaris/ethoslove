@@ -183,7 +183,7 @@ describe("what the partner buttons say", () => {
   });
 
   it("never claim we don't sell flights any more", () => {
-    expect(en.trips.flights.smallPrint).not.toMatch(/don't sell/i);
+    expect(en.trips.flights.smallPrint).not.toMatch(/don[’']t sell/i);
     expect(es.trips.flights.smallPrint).not.toMatch(/no vendemos/i);
   });
 

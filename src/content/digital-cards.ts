@@ -287,7 +287,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       heading: "Three things with nearly the same name",
       rows: [
         { term: "A digital card", is: "Opens in the browser and does something: unfolds, lights up, counts down. You make it for one person, from a template." },
-        { term: "An e-card", is: "A picture or a short animation that arrives by email, chosen from a catalogue and signed with your name." },
+        { term: "An e-card", is: "A picture or a short animation that arrives by email, chosen from a catalog and signed with your name." },
         { term: "A digital gift card", is: "A voucher: credit to spend in one shop, sent as a code. Useful, and a different thing. Nothing on this page is one." },
       ],
     },

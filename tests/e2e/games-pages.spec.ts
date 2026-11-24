@@ -83,7 +83,7 @@ test("E3: truth or dare and the roulette end on their own two games", async ({ p
   await startOnePhone(page, "/games/dare");
   await page.getByRole("button", { name: "Truth", exact: true }).click();
   await page.getByRole("button", { name: /^Done\./ }).click();
-  await page.getByRole("button", { name: "We're done for tonight" }).click();
+  await page.getByRole("button", { name: "We’re done for tonight" }).click();
   let end = page.getByRole("navigation", { name: "What next" });
   await expect(end.locator("[data-next-game]")).toHaveCount(2);
   await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/games/deck");
@@ -91,7 +91,7 @@ test("E3: truth or dare and the roulette end on their own two games", async ({ p
 
   await startOnePhone(page, "/games/roulette");
   await page.getByRole("button", { name: "Spin", exact: true }).click();
-  await page.getByRole("button", { name: "That's everything settled" }).click();
+  await page.getByRole("button", { name: "That’s everything settled" }).click();
   end = page.getByRole("navigation", { name: "What next" });
   await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/games/memory");
   await expect(end.locator("[data-next-game]").nth(1)).toHaveAttribute("href", "/games/rather");
