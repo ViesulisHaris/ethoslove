@@ -542,6 +542,10 @@ export interface Database {
           locale: "en" | "es";
           template_slug: string | null;
           last_sent_year: number | null;
+          /** 0025: which of the year's three e-mails went last (0 none, 1 to 3). Missing before 0025. */
+          last_stage: number;
+          /** 0025: the currency the page was in when it was saved. Missing before 0025. */
+          currency: "usd" | "eur" | "gbp" | null;
           created_at: string;
         };
         Insert: {
@@ -554,6 +558,8 @@ export interface Database {
           locale?: "en" | "es";
           template_slug?: string | null;
           last_sent_year?: number | null;
+          last_stage?: number;
+          currency?: "usd" | "eur" | "gbp" | null;
           created_at?: string;
         };
         Update: {
@@ -564,6 +570,8 @@ export interface Database {
           locale?: "en" | "es";
           template_slug?: string | null;
           last_sent_year?: number | null;
+          last_stage?: number;
+          currency?: "usd" | "eur" | "gbp" | null;
         };
         Relationships: [];
       };

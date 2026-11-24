@@ -107,12 +107,33 @@ class Query implements PromiseLike<Result> {
 
   private counting = false;
   private headOnly = false;
+  private projection: string[] | null = null;
+
+  /** PostgREST's `alias:column->key` (JSON) and `alias:column->>key` (text), and plain columns. */
+  private project(row: Row): Row {
+    if (!this.projection) return row;
+    const out: Row = {};
+    for (const column of this.projection) {
+      const path = /^(\w+):(\w+)(->>?)(\w+)$/.exec(column);
+      if (!path) {
+        out[column] = row[column];
+        continue;
+      }
+      const [, alias, source, arrow, key] = path;
+      const json = row[source];
+      const value = json && typeof json === "object" && !Array.isArray(json) ? (json as Row)[key] : undefined;
+      out[alias] = value === undefined ? null : arrow === "->>" && typeof value !== "string" ? JSON.stringify(value) : value;
+    }
+    return out;
+  }
 
   select(columns?: string, options: { count?: "exact"; head?: boolean } = {}) {
     if (this.op !== "select") this.returning = true;
     this.counting = options.count === "exact";
     this.headOnly = Boolean(options.head);
-    if (columns) this.used.push(...columns.split(",").map((c) => c.trim()).filter((c) => c && c !== "*" && !c.includes("(")));
+    if (columns) this.used.push(...columns.split(",").map((c) => c.trim()).filter((c) => c && c !== "*" && !c.includes("(") && !c.includes("->")));
+    // A select list that reads into a JSON column (`name:data->>recipientName`) is answered with only what it names.
+    if (columns?.includes("->")) this.projection = columns.split(",").map((c) => c.trim()).filter(Boolean);
     return this;
   }
   insert(rows: Row | Row[]) {
@@ -166,9 +187,38 @@ class Query implements PromiseLike<Result> {
     this.filters.push((row) => operator === "is" && value === null && !isNull(row[column]));
     return this;
   }
-  /** PostgREST's or=(a.op.v,b.op.v): any of them, for is.null, eq, neq, lt(e) and gt(e). */
+  /** PostgREST's or=(a.op.v,b.op.v): any of them, for is.null, eq, neq, lt(e) and gt(e), and and(…) groups of them. */
   or(expression: string) {
-    const tests = expression.split(",").map((part) => {
+    this.filters.push(this.anyOf(expression));
+    return this;
+  }
+  /** The top-level parts of a PostgREST list, keeping and(…) groups whole. */
+  private static parts(expression: string): string[] {
+    const out: string[] = [];
+    let depth = 0;
+    let current = "";
+    for (const ch of expression) {
+      if (ch === "(") depth += 1;
+      if (ch === ")") depth -= 1;
+      if (ch === "," && depth === 0) {
+        out.push(current);
+        current = "";
+      } else current += ch;
+    }
+    out.push(current);
+    return out;
+  }
+  private anyOf(expression: string): (row: Row) => boolean {
+    const tests = Query.parts(expression).map((part) => this.condition(part));
+    return (row) => tests.some((t) => t(row));
+  }
+  private condition(part: string): (row: Row) => boolean {
+    const group = /^and\((.*)\)$/.exec(part);
+    if (group) {
+      const all = Query.parts(group[1]).map((p) => this.condition(p));
+      return (row) => all.every((t) => t(row));
+    }
+    {
       const [column, op, ...rest] = part.split(".");
       const raw = rest.join(".");
       const value = raw === "null" ? null : Number.isNaN(Number(raw)) ? raw : Number(raw);
@@ -185,9 +235,7 @@ class Query implements PromiseLike<Result> {
         if (op === "gte") return (v as number) >= (value as number);
         throw new Error(`fake or(): ${op} not supported`);
       };
-    });
-    this.filters.push((row) => tests.some((t) => t(row)));
-    return this;
+    }
   }
   is(column: string, value: null) {
     this.used.push(column);
@@ -312,7 +360,7 @@ class Query implements PromiseLike<Result> {
       }
       if (this.max !== null || this.offset) rows = rows.slice(this.offset, this.max === null ? undefined : this.offset + this.max);
       if (this.counting) return { data: this.headOnly ? null : rows.map((row) => ({ ...row })), error: null, count: rows.length };
-      return this.shape(rows);
+      return this.shape(rows.map((row) => this.project(row)));
     }
 
     if (this.op === "insert" || this.op === "upsert") {

@@ -90,7 +90,7 @@ export async function sendDateReminders(run: ReminderRun): Promise<{ sent: numbe
       const person = id ? people.get(id) : undefined;
       if (!person) continue;
       tried += 1;
-      const ok = await run.send({ to: person.email, locale: person.locale, ...reminderContent(row, person.locale), ...(await run.links(row, person.locale)) });
+      const ok = await run.send({ to: person.email, locale: person.locale, ...reminderContent(row, person.locale), ...(await run.links(row, person.locale)), onceKey: `saved-date/${row.id}:${day}:${id}` });
       if (ok) delivered += 1;
       await run.pause();
     }

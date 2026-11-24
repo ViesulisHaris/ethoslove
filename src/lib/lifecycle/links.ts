@@ -10,6 +10,8 @@
 
 export type TokenPurpose =
   | "reminder-remove"
+  | "reminder-skip"
+  | "reminder-open"
   | "email-optout"
   | "saved-date-reminder-off"
   | "monthsary-yes"
@@ -27,6 +29,12 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 const VALUE: Record<TokenPurpose, RegExp> = {
   "reminder-remove": UUID,
+  // "Not this year", in the three e-mails before a day: the reminder's id and the occasion's year, so
+  // an old e-mail can't silence a later year.
+  "reminder-skip": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{4}$/,
+  // "Open my gift", in the same e-mails: the reminder's id and when the link stops signing anyone in
+  // (Unix seconds, the end of the day after the occasion), as the publish reminder's link does.
+  "reminder-open": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{10}$/,
   "email-optout": /^[0-9a-f]{64}$/,
   // "Turn off reminders for this date", in the day-before email of a saved date: its row's id.
   "saved-date-reminder-off": UUID,

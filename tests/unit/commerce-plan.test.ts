@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { planCheckout, type CheckoutContext, type CheckoutRequest } from "@/lib/commerce/plan";
+import { PRODUCTS } from "@/lib/pricing/products";
 
 const guest: CheckoutContext = { signedIn: false, ownedForever: [], purchases: [], creatorCode: null, giftCardsOnSale: true };
 const req = (r: Partial<CheckoutRequest> & Pick<CheckoutRequest, "product">): CheckoutRequest => ({ templateSlugs: [], currency: "eur", ...r });
@@ -259,5 +260,43 @@ describe("checkout plan: two more gifts", () => {
 
   it("is a buyer's price only", () => {
     expect(planCheckout(pair(), { ...buyer, pair: { ...buyer.pair!, paidProducts: [] } })).toMatchObject({ ok: false, error: "pair_needs_purchase", status: 403 });
+  });
+});
+
+describe("checkout plan: a gift with two more, from a reminder e-mail", () => {
+  const ctx: CheckoutContext = { ...guest, addPair: { onSale: true, ready: 0 } };
+
+  it("adds the pair's own line to a single or 'Make it special': the gift's price plus the pair's, from the catalogue", () => {
+    const single = ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true }), ctx));
+    const { single: one, pair, extras } = { single: PRODUCTS.single.amounts, pair: PRODUCTS.pair.amounts, extras: PRODUCTS.extras.amounts };
+    expect(single).toMatchObject({ product: "single", kind: "with_pair", pair: true, unlocks: ["vinyl"], lines: [{ key: "single", amount: one.eur }, { key: "pair", amount: pair.eur }], total: one.eur + pair.eur });
+    for (const currency of ["usd", "gbp"] as const) {
+      expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, currency }), ctx)).total).toBe(one[currency] + pair[currency]);
+    }
+    expect(ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"], addPair: true }), ctx))).toMatchObject({ kind: "with_pair", total: extras.eur + pair.eur });
+  });
+
+  it("leaves every other request exactly as it was", () => {
+    const plain = ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"] }), ctx));
+    expect(plain).toMatchObject({ kind: "single", lines: [{ key: "single", amount: 999 }], total: 999 });
+    expect(plain).not.toHaveProperty("pair");
+  });
+
+  it("never rides with anything else, or on any other product", () => {
+    expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, addEverything: true }), ctx)).toMatchObject({ ok: false, error: "pair_not_available", status: 400 });
+    expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, secondSlug: "bouquet" }), ctx)).toMatchObject({ ok: false, error: "pair_not_available" });
+    expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addPair: true, personalPrice: true }), { ...ctx, personalPrice: { id: "x" } })).toMatchObject({ ok: false, error: "pair_not_available" });
+    for (const product of ["pick3", "everything", "photos", "pass", "pack", "giftcard", "membership"] as const)
+      expect(planCheckout(req({ product, templateSlugs: product === "pick3" ? ["vinyl", "bloom", "museum"] : ["the-letter"], packId: "deep", plan: "yearly", addPair: true }), ctx)).toMatchObject({ ok: false, error: "pair_not_available" });
+    expect(planCheckout(req({ product: "pair", addPair: true }), { ...ctx, signedIn: true, pair: { onSale: true, ready: 0, memberRunning: false, paidProducts: ["single"] } })).toMatchObject({ ok: false, error: "pair_not_available" });
+  });
+
+  it("only while on sale and its table is there, never with gifts ready or every template held", () => {
+    const single = req({ product: "single", templateSlugs: ["vinyl"], addPair: true });
+    expect(planCheckout(single, guest)).toMatchObject({ ok: false, error: "not_on_sale", status: 400 });
+    expect(planCheckout(single, { ...ctx, addPair: { onSale: false, ready: 0 } })).toMatchObject({ ok: false, error: "not_on_sale" });
+    expect(planCheckout(single, { ...ctx, addPair: { onSale: true, ready: null } })).toMatchObject({ ok: false, error: "not_on_sale" });
+    expect(planCheckout(single, { ...ctx, addPair: { onSale: true, ready: 1 } })).toMatchObject({ ok: false, error: "pair_ready", status: 409 });
+    expect(planCheckout(single, { ...ctx, signedIn: true, ownedForever: ["*"] })).toMatchObject({ ok: false, error: "already_owned", status: 409 });
   });
 });

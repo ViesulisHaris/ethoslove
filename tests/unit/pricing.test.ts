@@ -41,7 +41,8 @@ describe("pricing catalogue", () => {
       upgrade: [499, 499, 499],
       // A group card, its template included (the owner's price, 21 Nov 2026); switched off until it has a template.
       group: [1999, 2399, 1799],
-      // Two more gifts, after a paid gift: the owner's price, under a single (tests/unit/pair-product.test.ts).
+      // Two more gifts, after a paid gift or added at payment by a reader a reminder e-mail brought:
+      // the owner's price, under a single (tests/unit/pair-product.test.ts).
       pair: [799, 899, 699],
     });
     // The bump takes a single or "make it special" to exactly Everything's price.

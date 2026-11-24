@@ -22,6 +22,7 @@ export function EmailLayout({
   cta,
   footer,
   footerLink,
+  footerLinks,
   lang = "en",
 }: {
   preview: string;
@@ -30,6 +31,8 @@ export function EmailLayout({
   cta?: { label: string; href: string };
   footer: string;
   footerLink?: { label: string; href: string };
+  /** More than one way out (the reminders' "Not this year" and "Remove this reminder"), set apart by dots. */
+  footerLinks?: { label: string; href: string }[];
   lang?: "en" | "es";
 }) {
   return (
@@ -56,7 +59,15 @@ export function EmailLayout({
                   {footerLink.label}
                 </Link>
               </>
-            ) : null}{" "}
+            ) : null}
+            {footerLinks?.map((link, i) => (
+              <span key={link.href}>
+                {i === 0 ? " " : " · "}
+                <Link href={link.href} style={{ color: muted, textDecoration: "underline" }}>
+                  {link.label}
+                </Link>
+              </span>
+            ))}{" "}
             · <Link href={EMAIL_BRAND.site} style={{ color: muted }}>{EMAIL_BRAND.site.replace(/^https?:\/\//, "")}</Link>
           </Text>
         </Container>

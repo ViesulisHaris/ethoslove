@@ -177,7 +177,9 @@ export type EmailIdea = { name: string; tagline: string; url: string; poster: st
  * reminder can be for someone no gift was made for). With no name (a kept gift signed with a pet
  * name), it speaks of "the sender" and "them".
  */
-export function ReminderEmail({ locale, recipientName, occasion, date, idea, moreUrl, removeUrl }: { locale: L; recipientName: string; occasion: ReminderOccasion; date: string; idea: EmailIdea; moreUrl: string; removeUrl: string }) {
+export function ReminderEmail(props: ReminderEmailProps) {
+  if (props.stage) return <StagedReminderEmail {...props} stage={props.stage} />;
+  const { locale, recipientName, occasion, date, idea, moreUrl, removeUrl } = props;
   const es = locale === "es";
   const heading = reminderHeading(occasion, locale, recipientName, date);
   return (
@@ -200,6 +202,158 @@ export function ReminderEmail({ locale, recipientName, occasion, date, idea, mor
         <InlineLink href={moreUrl}>{es ? "Todas las plantillas" : "Every template"}</InlineLink>.
       </Quiet>
       <Quiet>{es ? "Pediste este recordatorio en Ethos. Llega una vez al año." : "You asked Ethos for this reminder. It comes once a year."}</Quiet>
+    </EmailLayout>
+  );
+}
+
+/**
+ * The three e-mails before a saved day (lib/lifecycle/reminder-job.ts): `stage` 1 seven days before,
+ * 2 two days before, 3 the day before. Without `stage`, the one e-mail as it has always been (a
+ * kept gift's reminder, or the job on a database without migration 0025), word for word.
+ */
+export type ReminderStage = 1 | 2 | 3;
+export type ReminderPaid = { paid: "ready" } | { paid: "price"; prices: { single: string; three: string | null } } | { paid: "none" };
+export type ReminderEmailProps = {
+  locale: L;
+  recipientName: string;
+  occasion: ReminderOccasion;
+  date: string;
+  idea: EmailIdea;
+  moreUrl: string;
+  removeUrl: string;
+  stage?: ReminderStage;
+  /** "next Friday", "this Friday", "tomorrow" (whenWords). */
+  when?: string;
+  /** "Friday": the day the gift can open at midnight on. */
+  weekday?: string;
+  /** What the opened gift already holds: their photos and both names, or the name alone. */
+  started?: "photos" | "name";
+  /** "Open my gift" and the price line's link: the open route (api/reminders/open). */
+  openUrl?: string;
+  skipUrl?: string;
+} & Partial<ReminderPaid>;
+
+/** "Mia's birthday is next Friday." The occasion's sentence, with `when` in it. */
+export function stagedSentence(occasion: ReminderOccasion, locale: L, name: string, when: string): string {
+  if (locale === "es") {
+    if (occasion === "birthday") return `El cumpleaños de ${name} es ${when}.`;
+    if (occasion === "anniversary") return `Tu aniversario con ${name} es ${when}.`;
+    if (occasion === "valentines") return `San Valentín es ${when}.`;
+    return `El día de ${name} es ${when}.`;
+  }
+  if (occasion === "birthday") return `${name}'s birthday is ${when}.`;
+  if (occasion === "anniversary") return `Your anniversary with ${name} is ${when}.`;
+  if (occasion === "valentines") return `Valentine's Day is ${when}.`;
+  return `${name}'s day is ${when}.`;
+}
+
+export function stagedReminderHeading(stage: ReminderStage, occasion: ReminderOccasion, locale: L, name: string, when: string): string {
+  if (stage === 3) return locale === "es" ? "Aún estás a tiempo." : "It's not too late.";
+  return stagedSentence(occasion, locale, name, when);
+}
+
+export function stagedReminderSubject(stage: ReminderStage, occasion: ReminderOccasion, locale: L, name: string, when: string): string {
+  if (stage === 1) return stagedSentence(occasion, locale, name, when).replace(/\.$/, "");
+  if (stage === 3) return stagedSentence(occasion, locale, name, locale === "es" ? "mañana" : "tomorrow").replace(/\.$/, "");
+  if (locale === "es") {
+    if (occasion === "birthday") return `Faltan dos días para el cumpleaños de ${name}`;
+    if (occasion === "anniversary") return "Faltan dos días para tu aniversario";
+    if (occasion === "valentines") return "Faltan dos días para San Valentín";
+    return `Faltan dos días para el día de ${name}`;
+  }
+  if (occasion === "birthday") return `Two days until ${name}'s birthday`;
+  if (occasion === "anniversary") return "Two days until your anniversary";
+  if (occasion === "valentines") return "Two days until Valentine's Day";
+  return `Two days until ${name}'s day`;
+}
+
+function stagedBody(props: ReminderEmailProps & { stage: ReminderStage }): string {
+  const { stage, locale, recipientName: name, occasion, date, started = "name", weekday = "" } = props;
+  const es = locale === "es";
+  if (stage === 3) {
+    const opening = stagedSentence(occasion, locale, name, es ? "mañana" : "tomorrow");
+    return es
+      ? `${opening} Hacer tu regalo lleva unos diez minutos y llega en cuanto lo envías. O prográmalo para medianoche.`
+      : `${opening} Your gift takes about ten minutes and arrives the moment you send it. Or set it to open at midnight.`;
+  }
+  if (stage === 1) {
+    if (es)
+      return started === "photos"
+        ? `Es el ${date}. Tu regalo ya está empezado: los dos nombres y tus fotos ya están puestos. Te lleva unos diez minutos, y puede abrirse a medianoche de ese día.`
+        : `Es el ${date}. Tu regalo ya está empezado, con el nombre de ${name} ya escrito. Te lleva unos diez minutos, y puede abrirse a medianoche de ese día.`;
+    return started === "photos"
+      ? `That's ${date}. Your gift is started: both names and your photos are already in. It takes about ten minutes, and it can open at midnight on the day.`
+      : `That's ${date}. Your gift is started, with ${name}'s name already in. It takes about ten minutes, and it can open at midnight on the day.`;
+  }
+  // "for {name}" only when there is a name to say.
+  const forName = name ? (es ? ` para ${name}` : ` for ${name}`) : "";
+  if (es)
+    return started === "photos"
+      ? `Tu regalo${forName} sigue esperando, con los dos nombres y tus fotos puestos. Hazlo esta noche y prográmalo para que se abra a medianoche del ${weekday}.`
+      : `Tu regalo${forName} sigue esperando. Hazlo esta noche y prográmalo para que se abra a medianoche del ${weekday}.`;
+  return started === "photos"
+    ? `Your gift${forName} is still waiting, with both names and your photos in. Make it tonight and set it to open at midnight on ${weekday}.`
+    : `Your gift${forName} is still waiting. Make it tonight and set it to open at midnight on ${weekday}.`;
+}
+
+const STAGE_BUTTON: Record<ReminderStage, Record<L, string>> = {
+  1: { en: "Open my gift", es: "Abrir mi regalo" },
+  2: { en: "Finish my gift", es: "Terminar mi regalo" },
+  3: { en: "Make it now", es: "Hacerlo ahora" },
+};
+
+/**
+ * One of the three e-mails before a day. It may say the gift is started with their photos (the
+ * owner's order of 24 Nov 2026), and only when it is (the job checks there is a gift for that name
+ * with photos): it never carries a photo, a word or a title from any gift. The one picture is the
+ * suggested template's own cover, in the first e-mail. Under the button, at most one line about
+ * money: a gift ready, or the template's own price and three for the pair's on top.
+ */
+function StagedReminderEmail(props: ReminderEmailProps & { stage: ReminderStage }) {
+  const { stage, locale, recipientName, occasion, idea, moreUrl, removeUrl, skipUrl, when = "", openUrl = idea.url } = props;
+  const es = locale === "es";
+  const heading = stagedReminderHeading(stage, occasion, locale, recipientName, when);
+  const paid = props.paid === "ready" ? "ready" : props.paid === "price" && props.prices ? props.prices : null;
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={stage === 3 ? stagedSentence(occasion, locale, recipientName, es ? "mañana" : "tomorrow") : heading}
+      heading={heading}
+      footer={es ? "Le pediste a Ethos que te recordara este día: tres correos, que paran en cuanto haces el regalo." : "You asked Ethos to remind you of this day: three emails, which stop once your gift is made."}
+      footerLinks={[
+        ...(skipUrl ? [{ label: es ? "Este año no" : "Not this year", href: skipUrl }] : []),
+        { label: es ? "Quitar este recordatorio" : "Remove this reminder", href: removeUrl },
+      ]}
+    >
+      <P>{stagedBody(props)}</P>
+      {stage === 1 ? <Idea name={idea.name} tagline={idea.tagline} href={openUrl} poster={idea.poster} /> : null}
+      <CtaButton href={openUrl} label={STAGE_BUTTON[stage][locale]} />
+      {paid === "ready" ? (
+        <Quiet>{es ? "Ya está pagado: usa uno de los regalos que tienes listos." : "Already paid for: it uses one of the gifts you have ready."}</Quiet>
+      ) : paid ? (
+        <Quiet>
+          {es ? `Un regalo cuesta ${paid.single}.` : `One gift is ${paid.single}.`}
+          {paid.three ? (
+            <>
+              {es ? " O " : " Or "}
+              <InlineLink href={openUrl}>{es ? `este y los dos siguientes por ${paid.three}` : `this one and your next two for ${paid.three}`}</InlineLink>.
+            </>
+          ) : null}
+        </Quiet>
+      ) : null}
+      {/* Every template the gallery offers that holds photos takes them; a free note doesn't (lib/editor/start-from-gift.ts startPhotoLimit). */}
+      {stage === 1 && props.started === "photos" ? (
+        <Quiet>
+          {es ? "¿Prefieres otro? " : "Rather make something else? "}
+          <InlineLink href={moreUrl}>{es ? "Todos los regalos con fotos" : "Every photo gift"}</InlineLink>
+          {es ? " conservan las tuyas." : " keeps yours."}
+        </Quiet>
+      ) : stage === 1 ? (
+        <Quiet>
+          {es ? "¿Prefieres otro? " : "Rather make something else? "}
+          <InlineLink href={moreUrl}>{es ? "Mira todos los regalos" : "See every gift"}</InlineLink>.
+        </Quiet>
+      ) : null}
     </EmailLayout>
   );
 }

@@ -564,6 +564,7 @@
       "payIncludes": "En este regalo: {features}",
       "payBlurb": "Pagas una vez y esta plantilla es tuya para siempre.",
       "payButton": "Pagar {price} y enviar",
+      "three": "O este y tus dos próximos regalos: {price}",
       "appUnlock": "Desbloquear y enviar",
       "appUnlockNote": "A través del App Store: a continuación verás las opciones y los precios.",
       "appUnlockFailed": "No se ha completado. Vuelve a intentarlo o retómalo más tarde: tu borrador está guardado.",
@@ -908,6 +909,20 @@
       "dismiss": "Ahora no",
       "moved": "Viene de {name}, con tus palabras, tus fotos y tu canción.",
       "back": "Volver a {name}"
+    },
+    "started": {
+      "title": "Ya lo tienes empezado.",
+      "withPhotos": "Los dos nombres y {count, plural, one {la foto} other {las # fotos}} de tu último regalo para {name} ya están puestos. Cambia lo que quieras.",
+      "putting": "Trayendo los dos nombres y {count, plural, one {la foto} other {las # fotos}} de tu último regalo para {name}.",
+      "namesOnly": "Los dos nombres ya están puestos. Añade tus fotos y tus palabras.",
+      "namesWords": "Los dos nombres ya están puestos. Añade tus palabras.",
+      "change": "Cambiar las fotos",
+      "empty": "Empezar de cero",
+      "offer": "¿Usar los nombres y las fotos de tu último regalo para {name}?",
+      "offerNames": "¿Usar los dos nombres de tu último regalo para {name}?",
+      "use": "Usarlos",
+      "no": "No, gracias",
+      "thumbs": "Las fotos de tu último regalo"
     }
   },
   "gift": {
@@ -1694,7 +1709,7 @@
       "everythingWithPass": "Todas las plantillas, mientras dure Ethos for Two",
       "more": "Más",
       "reminders": "Avisos de cumpleaños y aniversarios",
-      "remindersBlurb": "Un email nueve días antes, con tiempo para hacer algo.",
+      "remindersBlurb": "Tres correos antes de cada día, con tiempo para hacer algo.",
       "redeem": "Canjear una tarjeta regalo",
       "redeemBlurb": "¿Te han regalado un código? Va aquí.",
       "withdraw": "Desistir de una compra",
@@ -3425,12 +3440,22 @@
   "lifecycle": {
     "remind": {
       "title": "¿Te avisamos antes de la próxima fecha?",
-      "blurb": "Un correo nueve días antes de cada fecha que añadas; para la de cada mes, una pregunta el día antes. Nada más.",
+      "blurb": "Tres correos antes de cada fecha que añadas: 7 días, 2 días y la víspera, hasta que hagas el regalo. Para la de cada mes, una pregunta el día antes. Nada más.",
+      "datesTitle": "Que no se te pase su día.",
+      "datesWhy": "Te escribimos 7 días antes, con tus fotos ya puestas en un regalo nuevo.",
+      "datesWhyNames": "Te escribimos 7 días antes, con los dos nombres ya puestos en un regalo nuevo.",
+      "fromGift": "de este regalo",
+      "remindMe": "Recuérdamelo",
+      "datesSmall": "Tres correos cortos antes de cada día: 7 días, 2 días y la víspera. Paran en cuanto haces el regalo.",
+      "another": "Añadir otro día",
+      "savedFirst": "Guardado. El primer correo te llega el {date}.",
+      "savedNext": "Guardado. El próximo correo te llega el {date}.",
       "save": "Recuérdamelo",
       "saving": "Guardando…",
       "failed": "No se ha guardado. Prueba otra vez en un momento.",
       "tooMany": "Ya tienes {max} recordatorios. Quita alguno en la página de tu cuenta para añadir este.",
       "edit": "Cambiar",
+      "changeOnPage": "{what}: cámbialo en tus recordatorios",
       "done": "Listo",
       "name": "Para quién",
       "occasion": "Ocasión",
@@ -3446,7 +3471,8 @@
       "rows": {
         "birthday": "El cumpleaños de {name}",
         "birthdayNoName": "Su cumpleaños",
-        "anniversary": "Vuestro aniversario",
+        "anniversary": "Tu aniversario con {name}",
+        "anniversaryNoName": "Vuestro aniversario",
         "other": "Un día para {name}",
         "otherNoName": "Otra fecha",
         "monthly": "Y cada mes",
@@ -3549,7 +3575,7 @@
     },
     "page": {
       "title": "Recordatorios",
-      "subtitle": "Las fechas que nos has pedido recordar: te escribimos nueve días antes, una vez al año. Y el día antes de vuestro mesiversario, si lo has pedido.",
+      "subtitle": "Tres correos antes de cada fecha: 7 días, 2 días y la víspera. Y el día antes de vuestro mesiversario, si lo has pedido.",
       "empty": "Aún no tienes recordatorios. Cuando publiques un regalo, puedes pedirnos que te lo recordemos el año que viene.",
       "remove": "Quitar",
       "removeLabel": "Quitar el recordatorio: {what}",
@@ -3562,10 +3588,27 @@
     },
     "remove": {
       "title": "¿Quitar este recordatorio?",
-      "body": "Dejarás de recibir el correo anual sobre {name}.",
+      "body": {
+        "birthday": "Dejarás de recibir los correos antes del cumpleaños de {name}.",
+        "anniversary": "Dejarás de recibir los correos antes de vuestro aniversario.",
+        "valentines": "Dejarás de recibir los correos antes de San Valentín.",
+        "other": "Dejarás de recibir los correos antes del día de {name}."
+      },
       "confirm": "Quitarlo",
       "doneTitle": "Recordatorio quitado.",
       "doneBody": "Ese recordatorio ya no existe. Puedes crear otro cuando hagas un regalo."
+    },
+    "skip": {
+      "title": "Este año no",
+      "body": {
+        "birthday": "¿Dejamos de escribirte sobre el cumpleaños de {name} hasta el año que viene?",
+        "anniversary": "¿Dejamos de escribirte sobre vuestro aniversario hasta el año que viene?",
+        "valentines": "¿Dejamos de escribirte sobre San Valentín hasta el año que viene?",
+        "other": "¿Dejamos de escribirte sobre el día de {name} hasta el año que viene?"
+      },
+      "confirm": "Sí, este año no",
+      "doneTitle": "Hecho. Hasta el año que viene.",
+      "doneBody": "Nada más sobre este día hasta el año que viene. El recordatorio sigue en tu cuenta."
     },
     "unsubscribe": {
       "title": "¿Darte de baja?",

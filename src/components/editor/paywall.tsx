@@ -16,6 +16,7 @@ import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
+import { currentRef } from "@/lib/attribution/ref";
 import { personalPriceEnds, usePersonalPrice } from "@/components/pricing/use-personal-price";
 import { useInApp } from "@/lib/app/use-bridge";
 import { extraOnOffer } from "@/lib/lifecycle/holiday-extras";
@@ -136,6 +137,8 @@ export function Paywall({
   const personalOn = personalFor !== null && chosen === forTemplate;
   const [bump, setBump] = useState(false);
   const [paying, setPaying] = useState(false);
+  // Which button the spinner belongs on: the pay button, or "Or this one and your next two".
+  const [payingPair, setPayingPair] = useState(false);
   // Taps that land together are one checkout, not one each.
   const going = useRef(false);
   const showCheckoutError = useCheckoutError();
@@ -183,6 +186,26 @@ export function Paywall({
   // screen (components/editor/two-more-gifts.tsx). Checkout still takes one from a page opened before.
   const second: string | null = null;
   const total = payTotal(chosen, planAmount, bumpOn, currency);
+  // "Or this one and your next two": this gift with two more, for a reader a reminder e-mail brought
+  // here, on this gift's own price only. Everyone else's panel is exactly as it was.
+  const [fromReminder] = useState(() => currentRef()?.startsWith("email-reminder") === true);
+  // Asked of the server only for such a reader (/api/entitlements `addPair`): nobody else's panel waits on it.
+  const [addPair, setAddPair] = useState(false);
+  useEffect(() => {
+    if (!fromReminder) return;
+    let live = true;
+    void fetch("/api/entitlements?addPair=1", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((ent: { addPair?: unknown } | null) => {
+        if (live && ent?.addPair === true) setAddPair(true);
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [fromReminder]);
+  const pairOn = addPair && fromReminder && chosen === forTemplate && !personalOn && !bumpOn;
+  const withPairTotal = forTemplateAmount + PRODUCTS.pair.amounts[currency];
 
   useEffect(() => {
     if (manifest.tier === "free") track("extras_offer_shown", { template: slug, guest });
@@ -204,11 +227,13 @@ export function Paywall({
     return <AppUnlock manifest={manifest} locale={locale} features={features} freeReply={freeReply} ownedElsewhere={ownedElsewhere} blocked={blocked} onUnlock={onAppUnlock} />;
   if (etsy && !freeReply) return <EtsyClaim slug={slug} locale={locale} guest={guest} returnTo={returnTo} blocked={blocked} onLeave={() => setEtsy(false)} />;
 
-  const pay = async () => {
+  const pay = async (options: { withPair?: boolean } = {}) => {
     if (going.current) return;
     going.current = true;
     setPaying(true);
-    track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
+    const withPair = options.withPair === true && pairOn;
+    setPayingPair(withPair);
+    track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, ...(withPair ? { pair: true } : {}) });
     if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
     if (keepArm) {
       track(keepArm === "keep" ? "letter_pay_keep" : "letter_pay_plain", { guest });
@@ -219,8 +244,8 @@ export function Paywall({
       rememberPayClick(payArm);
     }
     const result = await startCheckout(
-      { ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) },
-      { total, category: manifest.tier },
+      { ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}), ...(withPair ? { addPair: true } : {}) },
+      { total: withPair ? withPairTotal : total, category: manifest.tier },
     );
     if ("url" in result) {
       window.location.assign(result.url);
@@ -294,9 +319,10 @@ export function Paywall({
           })}
         </div>
 
-        {pick3Offered(manifest.tier, currency, all) ? (
+        {pick3Offered(manifest.tier, currency, all) && !pairOn ? (
           // Three templates is the better deal for anyone with more than one occasion coming; the
-          // choosing happens on the pricing page, with this one already picked.
+          // choosing happens on the pricing page, with this one already picked. Not beside "Or this
+          // one and your next two gifts": two offers of three side by side read as one muddle.
           <Link
             href={pick3Href(slug, returnTo)}
             className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline"
@@ -445,11 +471,11 @@ export function Paywall({
       <Button
         className="mt-4 h-12 w-full rounded-full text-base"
         disabled={paying || blocked}
-        onClick={pay}
+        onClick={() => void pay()}
         data-testid="pay-single"
       >
-        {paying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-        <span>{paying ? t("paying") : t("payButton", { price: money(total) })}</span>
+        {paying && !payingPair ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+        <span>{paying && !payingPair ? t("paying") : t("payButton", { price: money(total) })}</span>
       </Button>
       <OneTapPay
         request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) }}
@@ -457,6 +483,18 @@ export function Paywall({
         disabled={paying || blocked}
         sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm, payArm, keepArm }}
       />
+      {pairOn ? (
+        <Button
+          variant="outline"
+          className="mt-3 h-11 w-full rounded-full text-[15px]"
+          disabled={paying || blocked}
+          onClick={() => void pay({ withPair: true })}
+          data-testid="pay-with-pair"
+        >
+          {paying && payingPair ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+          <span>{paying && payingPair ? t("paying") : t("three", { price: money(withPairTotal) })}</span>
+        </Button>
+      ) : null}
       {panel ? (
         <>
           {note ? (

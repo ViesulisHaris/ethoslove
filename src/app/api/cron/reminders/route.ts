@@ -2,7 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { isConfigured } from "@/lib/env";
 import { linkSecret, signToken } from "@/lib/lifecycle/links";
-import { dueDates, formatMonthDay, needsSending } from "@/lib/lifecycle/reminders";
+import { openLinkUntil, sendReminders, supabaseReminderJobStore } from "@/lib/lifecycle/reminder-job";
+import { pairOnSale } from "@/lib/pricing/products";
 import { sendMonthsaries, supabaseMonthsaryStore } from "@/lib/lifecycle/monthsary-job";
 import { sendMonthsaryCheckIn, sendMonthsaryReminder, sendReminderEmail } from "@/lib/email/notify";
 import { sendDateReminder } from "@/lib/email/saved-dates";
@@ -13,21 +14,26 @@ import { sendKeptReminders } from "@/lib/keep/reminder-job";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-/** Per date per run; anything left over is picked up by tomorrow's catch-up (lib/lifecycle/reminders.ts). */
-const BATCH = 200;
 /** Stop starting new emails well inside maxDuration. */
 const BUDGET_MS = 45_000;
+/**
+ * The yearly reminders stop here, so the monthsaries, kept gifts and saved dates after them always
+ * get time. What is left of a busy day's reminders goes on the next run: the job runs every hour from
+ * 07:00 to 11:00 UTC (vercel.json, REMINDER_RUN_HOURS), and each e-mail is claimed, so a later run
+ * sends only what an earlier one didn't.
+ */
+const YEARLY_BUDGET_MS = 30_000;
 /** Resend's default limit is two requests a second per team; one email at a time, spaced, stays under it. */
 const SEND_GAP_MS = 500;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /**
- * "Remind me next year": every morning, the reminders whose day is nine days away (and the two
- * days before that, for runs that were missed) get their email. 29 February is sent for on the 28th
- * in other years. Each reminder is claimed before its email goes (last_sent_year = the occasion's
- * year), so two runs at once can't both send it; if the email fails, the claim is given back and
- * the next run tries again. Then the monthsaries (the day-before check-ins, and the reminders that
+ * "Remind me": every morning (five runs, 07:00 to 11:00 UTC), the three e-mails before each saved day, seven days, two days and the
+ * day before (lib/lifecycle/reminder-job.ts; before migration 0025, the one e-mail nine days
+ * before). 29 February is sent for on the 28th in other years. Each e-mail is claimed before it goes,
+ * so two runs at once can't both send it; if it fails, the claim is given back and the next run tries
+ * again. Then the monthsaries (the day-before check-ins, and the reminders that
  * got a yes: lib/lifecycle/monthsary-job.ts), the days recipients who kept a gift asked about (and
  * the deletion of keeps never confirmed: lib/keep/reminder-job.ts), and, in the time left, members'
  * saved dates that are tomorrow.
@@ -43,60 +49,44 @@ export async function GET(request: NextRequest) {
   if (!isConfigured.resend || !linkKey) return NextResponse.json({ ok: true, skipped: "email_not_configured" });
 
   const started = Date.now();
-  let sent = 0;
-  let failed = 0;
-  let deferred = 0;
 
-  for (const due of dueDates(new Date())) {
-    const { data: rows, error } = await admin
-      .from("reminders")
-      .select("id, user_id, recipient_name, occasion, locale, template_slug, last_sent_year")
-      .eq("month", due.month)
-      .in("day", due.days)
-      .or(`last_sent_year.is.null,last_sent_year.lt.${due.year}`)
-      .order("created_at", { ascending: true })
-      .limit(BATCH);
-    if (error) {
-      console.error("[cron/reminders] query failed", error.message);
-      return NextResponse.json({ error: "unavailable", sent, failed }, { status: 503 });
-    }
-    if (!rows?.length) continue;
-
-    const owners = [...new Set(rows.map((r) => r.user_id))];
-    const { data: profiles } = await admin.from("profiles").select("id, email").in("id", owners);
-    const emails = new Map((profiles ?? []).map((p) => [p.id, p.email]));
-
-    for (const r of rows) {
-      if (Date.now() - started > BUDGET_MS) {
-        deferred += 1;
-        continue;
-      }
-      const to = emails.get(r.user_id);
-      if (!to || !needsSending(r.last_sent_year, due.year)) continue;
-      const claim = await admin.from("reminders").update({ last_sent_year: due.year }).eq("id", r.id).or(`last_sent_year.is.null,last_sent_year.lt.${due.year}`).select("id").maybeSingle();
-      if (claim.error || !claim.data) continue;
-
-      const locale = r.locale === "es" ? "es" : "en";
-      const token = await signToken("reminder-remove", r.id, linkKey);
-      const ok = await sendReminderEmail({
-        to,
-        locale,
-        recipientName: r.recipient_name,
-        occasion: r.occasion,
-        // The day it falls on this year: the 28th for a 29 February birthday in a common year.
-        date: formatMonthDay({ month: due.date.getUTCMonth() + 1, day: due.date.getUTCDate() }, locale),
-        // The template the reminder was saved with is only skipped: the suggestion is a new one.
-        avoid: r.template_slug,
-        removeUrl: `${siteUrl()}/api/reminders/remove?t=${token}&l=${locale}`,
-      });
-      if (ok) sent += 1;
-      else {
-        failed += 1;
-        await admin.from("reminders").update({ last_sent_year: r.last_sent_year }).eq("id", r.id);
-      }
-      await sleep(SEND_GAP_MS);
-    }
+  // The three e-mails before each saved day (lib/lifecycle/reminder-job.ts), or, before migration
+  // 0025, the one e-mail as it always was. A database that can't be read answers 503, as before.
+  let yearly: Awaited<ReturnType<typeof sendReminders>>;
+  try {
+    yearly = await sendReminders({
+      store: supabaseReminderJobStore(admin),
+      send: (email) =>
+        sendReminderEmail({
+          to: email.to,
+          locale: email.locale,
+          recipientName: email.recipientName,
+          occasion: email.occasion,
+          date: email.date,
+          removeUrl: email.removeUrl,
+          staged: email,
+        }),
+      sendOld: (email) => sendReminderEmail(email),
+      links: async (row, stage, year, locale) => {
+        const open = `${siteUrl()}/api/reminders/open?t=${await signToken("reminder-open", `${row.id}:${openLinkUntil(row, year)}`, linkKey)}&s=${stage}&l=${locale}`;
+        return {
+          openUrl: open,
+          moreUrl: `${open}&to=templates`,
+          skipUrl: `${siteUrl()}/api/reminders/skip?t=${await signToken("reminder-skip", `${row.id}:${year}`, linkKey)}&l=${locale}`,
+          removeUrl: `${siteUrl()}/api/reminders/remove?t=${await signToken("reminder-remove", row.id, linkKey)}&l=${locale}`,
+        };
+      },
+      removeUrl: async (row, locale) => `${siteUrl()}/api/reminders/remove?t=${await signToken("reminder-remove", row.id, linkKey)}&l=${locale}`,
+      pairOnSale: pairOnSale(),
+      now: new Date(),
+      inTime: () => Date.now() - started <= YEARLY_BUDGET_MS,
+      pause: () => sleep(SEND_GAP_MS),
+    });
+  } catch (error) {
+    console.error("[cron/reminders] query failed", (error as Error).message);
+    return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
+  const { sent, failed, deferred } = yearly;
 
   // Then the monthsaries. Like the saved dates below, a failure is logged and reported, and never
   // takes back what the yearly reminders sent.
@@ -155,5 +145,5 @@ export async function GET(request: NextRequest) {
     dates = { error: "unavailable" };
   }
 
-  return NextResponse.json({ ok: true, sent, failed, deferred, monthly, kept, dates });
+  return NextResponse.json({ ok: true, sent, failed, deferred, mode: yearly.mode, monthly, kept, dates });
 }

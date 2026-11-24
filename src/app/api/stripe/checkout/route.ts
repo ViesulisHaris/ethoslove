@@ -26,6 +26,9 @@ import { PERSONAL_PRICE_COOKIE, activePersonalPrice } from "@/lib/commerce/perso
 export const runtime = "nodejs";
 export const maxDuration = 10;
 
+/** An id no account has: counting a guest's gifts ready (none) still tells whether their table is there. */
+const NO_ONE = "00000000-0000-4000-8000-000000000000";
+
 const input = z.object({
   product: z.string(),
   // Ethos for Two: { product: "membership", plan }. Whether that is a subscription or the one-time
@@ -71,6 +74,9 @@ const input = z.object({
   // The pay sheet showed a personal price (lib/commerce/personal-price.ts) and asks for it. The price
   // itself comes from the cookie the offer email's link set, checked here, never from the page.
   personalPrice: z.literal(true).optional(),
+  // "Or this one and your next two": two more gifts added to this gift, offered on the pay panel only
+  // to a reader who came from a reminder e-mail (lib/commerce/plan.ts decides whether it may be).
+  addPair: z.literal(true).optional(),
 });
 
 /**
@@ -114,17 +120,21 @@ export async function POST(request: NextRequest) {
     // Two more gifts: how many the buyer has ready (null before migration 0024).
     userId && pairAsked ? readyGifts(admin, userId) : null,
   ]);
+  // Two more gifts added to a gift: on sale, and how many the buyer has ready. A guest has none, but
+  // the count is still read (for no one) so a database without their table refuses it.
+  const addPair = body.addPair ? { onSale: pairOnSale(), ready: await readyGifts(admin, userId ?? NO_ONE) } : undefined;
   // Two more gifts are sold by one rule (lib/commerce/gift-credits.ts pairAllowed), on what the server read.
   const pair = pairAsked
     ? { onSale: pairOnSale(), ready, memberRunning: Boolean(membership?.running), paidProducts: owned.purchases.map((p) => p.product) }
     : undefined;
   const plan = planCheckout(
-    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan, personalPrice: body.personalPrice },
-    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, groupOnSale: groupGiftsEnabled(), ...owned, ...(pair ? { pair } : {}) },
+    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan, personalPrice: body.personalPrice, addPair: body.addPair },
+    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, groupOnSale: groupGiftsEnabled(), ...owned, ...(pair ? { pair } : {}), ...(addPair ? { addPair } : {}) },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
   // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.
-  if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product))) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
+  // A gift with two more is paid on Stripe's page only, where its box says what both keep.
+  if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product) || plan.pair)) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   // Two more gifts have no box to tick: the 30-day line beside their wallet button is a notice (lib/stripe/line-items.ts).
   if (body.oneTap && !body.waiver && plan.product !== "pair") return NextResponse.json({ error: "consent_required" }, { status: 400 });
   // The offer card asks for a wallet session each time it comes into view: one still open of the same
@@ -192,7 +202,7 @@ export async function POST(request: NextRequest) {
     // The one-tap session has no tickbox of Stripe's to fall back from: the box was ours, and ticked.
     session = body.oneTap
       ? await stripe.checkout.sessions.create(plan.product === "pair" ? oneTapSessionParams(params, { notice: "shown_at_payment" }) : oneTapSessionParams(params))
-      : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
+      : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency, pair: plan.pair }) });
   } catch (e) {
     // The code and parameter only: Stripe's message can quote what was sent, the buyer's email included.
     const err = e as Partial<Stripe.errors.StripeError>;

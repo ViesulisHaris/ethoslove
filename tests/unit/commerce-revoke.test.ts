@@ -191,3 +191,48 @@ describe("a chargeback decided in our favour", () => {
     expect(fake.rows("template_unlocks")).toEqual([]);
   });
 });
+
+describe("a gift bought with two more (kind with_pair)", () => {
+  const credits = (fake: FakeDb) => fake.rows("gift_credits").map((r) => [r.n, r.spent_slug ?? null, r.revoked_at ? "revoked" : "ok"]);
+  const seed = () =>
+    new FakeDb(
+      {
+        purchases: [{ ...purchase("w1", "u1", "single"), kind: "with_pair", template_slugs: ["vinyl"] }],
+        gift_credits: [
+          { id: "c1", user_id: "u1", purchase_id: "w1", n: 1, spent_slug: "bloom", spent_at: iso(NOW), revoked_at: null },
+          { id: "c2", user_id: "u1", purchase_id: "w1", n: 2, spent_slug: null, spent_at: null, revoked_at: null },
+        ],
+      },
+      NOW,
+    );
+
+  it("a refund or a dispute takes the template and both gifts back, with the template a used one went on", async () => {
+    const fake = seed();
+    await grantForever(fake.db, "u1", ["vinyl", "bloom"], "w1");
+    await revokePurchase(fake.db, { id: "w1", user_id: "u1", product: "single", kind: "with_pair" }, NOW, { mode: "dispute" });
+    expect(slugs(fake, "u1")).toEqual([]);
+    expect(credits(fake)).toEqual([
+      [1, "bloom", "revoked"],
+      [2, null, "revoked"],
+    ]);
+  });
+
+  it("a won dispute gives back the template, both gifts and the template the used one went on", async () => {
+    const fake = seed();
+    await grantForever(fake.db, "u1", ["vinyl", "bloom"], "w1");
+    await revokePurchase(fake.db, { id: "w1", user_id: "u1", product: "single", kind: "with_pair" }, NOW, { mode: "dispute" });
+    const done = await restorePurchase(fake.db, { id: "w1", user_id: "u1", product: "single", status: "refunded", template_slugs: ["vinyl"], kind: "with_pair" }, NOW);
+    expect(done.restored).toBe(true);
+    expect(slugs(fake, "u1")).toEqual(["bloom", "vinyl"]);
+    expect(credits(fake)).toEqual([
+      [1, "bloom", "ok"],
+      [2, null, "ok"],
+    ]);
+  });
+
+  it("a plain single's refund touches no gift ready", async () => {
+    const fake = new FakeDb({ purchases: [purchase("s1", "u1", "single")], gift_credits: [{ id: "c9", user_id: "u1", purchase_id: "p9", n: 1, spent_slug: null, spent_at: null, revoked_at: null }] }, NOW);
+    await revokePurchase(fake.db, { id: "s1", user_id: "u1", product: "single" }, NOW);
+    expect(fake.rows("gift_credits")[0].revoked_at).toBeNull();
+  });
+});

@@ -197,7 +197,7 @@ describe("the morning job", () => {
     const { store, rows } = memoryStore([row()]);
     const first = job(store, at("2026-11-02"));
     expect(await first.run()).toEqual({ checkIns: 1, reminders: 0, failed: 0, deferred: 0 });
-    expect(first.mail).toEqual([{ kind: "checkin", args: { to: "buyer@example.com", locale: "en", partnerName: "Ana", date: "3 November", yesUrl: `https://ethos.test/yes/${ID}/2026-11-03`, stopUrl: `https://ethos.test/stop/${ID}` } }]);
+    expect(first.mail).toEqual([{ kind: "checkin", args: { to: "buyer@example.com", locale: "en", partnerName: "Ana", date: "3 November", yesUrl: `https://ethos.test/yes/${ID}/2026-11-03`, stopUrl: `https://ethos.test/stop/${ID}`, onceKey: `monthsary-checkin/${ID}:2026-11-03` } }]);
     expect(rows[0].checkin_for).toBe("2026-11-03");
     // Run twice the same morning: still one email.
     const again = job(store, at("2026-11-02"));
@@ -208,7 +208,7 @@ describe("the morning job", () => {
     const { store, rows } = memoryStore([row({ checkin_for: "2026-11-03", confirmed_for: "2026-11-03" })]);
     const day = job(store, at("2026-11-03"));
     expect(await day.run()).toEqual({ checkIns: 0, reminders: 1, failed: 0, deferred: 0 });
-    expect(day.mail[0]).toEqual({ kind: "remind", args: { to: "buyer@example.com", locale: "en", partnerName: "Ana", months: 8, stopUrl: `https://ethos.test/stop/${ID}` } });
+    expect(day.mail[0]).toEqual({ kind: "remind", args: { to: "buyer@example.com", locale: "en", partnerName: "Ana", months: 8, stopUrl: `https://ethos.test/stop/${ID}`, onceKey: `monthsary-reminder/${ID}:2026-11-03` } });
     expect(rows[0].reminded_for).toBe("2026-11-03");
   });
 

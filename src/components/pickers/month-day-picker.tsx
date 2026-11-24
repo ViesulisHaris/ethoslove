@@ -22,6 +22,8 @@ type Props = {
   placeholder?: string;
   id?: string;
   className?: string;
+  /** Shown at the field's end in place of its chevron: "from this gift", on a day the gift itself told. */
+  adornment?: React.ReactNode;
 };
 
 /** Two rows of six: the card has to fit under a field on a phone, with the days below. */
@@ -36,7 +38,7 @@ const DAY_COLUMNS = 7;
  * the person knows (their birthday): then nothing is chosen until they choose it, never today by
  * default, and the day is picked after its month.
  */
-export function MonthDayPicker({ value, onChange, label, locale, placeholder, id, className }: Props) {
+export function MonthDayPicker({ value, onChange, label, locale, placeholder, id, className, adornment }: Props) {
   const t = useTranslations("pickers");
   const uid = useId();
   const [open, setOpen] = useState(false);
@@ -104,7 +106,7 @@ export function MonthDayPicker({ value, onChange, label, locale, placeholder, id
         >
           <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
           <span className={cn("min-w-0 truncate", !value && "text-muted-foreground")}>{shown}</span>
-          <ChevronDown aria-hidden="true" className={FIELD_CHEVRON} />
+          {adornment ? <span className="ml-auto flex shrink-0 items-center">{adornment}</span> : <ChevronDown aria-hidden="true" className={FIELD_CHEVRON} />}
         </button>
       }
     >

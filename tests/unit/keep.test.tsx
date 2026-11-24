@@ -480,7 +480,7 @@ describe("the morning job for kept gifts", () => {
     seedKeep("aaaa", true, 30, [{ occasion: "birthday", month: 10, day: 31 }]);
     const mail: Record<string, unknown>[] = [];
     expect(await run(async (m) => (mail.push(m), true))).toEqual({ sent: 1, failed: 0, deferred: 0, purged: 0 });
-    expect(mail).toEqual([{ to: "aaaa@example.test", locale: "en", recipientName: "Mia", occasion: "birthday", date: "31 October", removeUrl: "https://ethos.test/api/keep/reminder-off?t=aaaa-r0&l=en", ref: KEEP_REF }]);
+    expect(mail).toEqual([{ to: "aaaa@example.test", locale: "en", recipientName: "Mia", occasion: "birthday", date: "31 October", removeUrl: "https://ethos.test/api/keep/reminder-off?t=aaaa-r0&l=en", ref: KEEP_REF, onceKey: "kept-reminder/aaaa-r0:2026" }]);
     expect(fake.rows("keep_reminders")[0].last_sent_year).toBe(2026);
     expect(await run(async (m) => (mail.push(m), true))).toMatchObject({ sent: 0 });
     expect(mail).toHaveLength(1);

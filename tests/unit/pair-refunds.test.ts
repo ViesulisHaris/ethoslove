@@ -92,6 +92,60 @@ describe("refunds of two more gifts", () => {
     expect(await readyGifts(fake.db, "u1")).toBe(2);
   });
 
+  it("on a gift paid with two more: part of the two's line back takes that many unused gifts, and the gift's own unlock stays", async () => {
+    const fake = seed();
+    const line = PRODUCTS.pair.amounts.eur;
+    const total = PRODUCTS.single.amounts.eur + line;
+    fake.tables.purchases.push({ id: "wp", user_id: "u1", product: "single", status: "paid", amount: total, currency: "eur", template_slugs: ["museum"], kind: "with_pair", membership_id: null, stripe_payment_intent_id: "pi_wp" });
+    await grantForever(fake.db, "u1", ["museum"], "wp");
+    await grantGifts(fake.db, "u1", "wp", 2);
+    const partly = (amountRefunded: number) => ({ id: "ch_wp", object: "charge", payment_intent: "pi_wp", amount: total, currency: "eur", amount_refunded: amountRefunded, refunded: false });
+    // Less than one gift's half of the line: a goodwill gesture.
+    await handleStripeEvent(event("charge.refunded", partly(Math.ceil(line / 2) - 1)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(2);
+    // Half the line: one gift.
+    await handleStripeEvent(event("charge.refunded", partly(Math.ceil(line / 2))), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(1);
+    // The same event again takes no more.
+    await handleStripeEvent(event("charge.refunded", partly(Math.ceil(line / 2))), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(1);
+    // The whole line by now: the other one too.
+    await handleStripeEvent(event("charge.refunded", partly(line)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(0);
+    expect(slugs(fake)).toContain("museum");
+    expect(fake.rows("purchases").find((p) => p.id === "wp")?.status).toBe("paid");
+    expect(fake.rows("gift_credits").filter((r) => r.purchase_id === "wp").map((r) => r.revoked_for)).toEqual(["refund", "refund"]);
+  });
+
+  it("on a gift paid with two more, the whole line back at once takes both, a used one stays used", async () => {
+    const fake = seed();
+    const line = PRODUCTS.pair.amounts.usd;
+    const total = PRODUCTS.single.amounts.usd + line;
+    fake.tables.purchases.push({ id: "wp", user_id: "u1", product: "single", status: "paid", amount: total, currency: "usd", template_slugs: ["museum"], kind: "with_pair", membership_id: null, stripe_payment_intent_id: "pi_wp" });
+    await grantGifts(fake.db, "u1", "wp", 2);
+    expect(await spendGift(fake.db, "u1", "bouquet")).toBe("spent");
+    await handleStripeEvent(event("charge.refunded", { id: "ch_wp", object: "charge", payment_intent: "pi_wp", amount: total, currency: "usd", amount_refunded: line, refunded: false }), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(0);
+    expect(fake.rows("gift_credits").filter((r) => r.purchase_id === "wp" && r.revoked_at)).toHaveLength(1);
+    expect(slugs(fake)).toContain("bouquet");
+  });
+
+  it("on a gift paid with two more that Adaptive Pricing charged in złoty: the share refunded is measured in the euros the row keeps", async () => {
+    const fake = seed();
+    const line = PRODUCTS.pair.amounts.eur;
+    const total = PRODUCTS.single.amounts.eur + line;
+    fake.tables.purchases.push({ id: "wp", user_id: "u1", product: "single", status: "paid", amount: total, currency: "eur", template_slugs: ["museum"], kind: "with_pair", membership_id: null, stripe_payment_intent_id: "pi_wp" });
+    await grantGifts(fake.db, "u1", "wp", 2);
+    const pln = 7800;
+    const partly = (amountRefunded: number) => ({ id: "ch_wp", object: "charge", payment_intent: "pi_wp", amount: pln, currency: "pln", amount_refunded: amountRefunded, refunded: false });
+    // A little under half the pair's share of the złoty: nothing.
+    await handleStripeEvent(event("charge.refunded", partly(Math.floor((pln * line) / total / 2) - 20)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(2);
+    // The pair's whole share: both.
+    await handleStripeEvent(event("charge.refunded", partly(Math.ceil((pln * line) / total) + 1)), deps(fake.db));
+    expect(await readyGifts(fake.db, "u1")).toBe(0);
+  });
+
   it("partly refunded: only what was kept counts towards the upgrade, and the same event again changes nothing", async () => {
     const fake = seed();
     await bought(fake);

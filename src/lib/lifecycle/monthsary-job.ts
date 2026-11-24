@@ -27,8 +27,9 @@ export interface MonthsaryStore {
 
 export type MonthsaryRun = {
   store: MonthsaryStore;
-  checkIn: (args: { to: string; locale: "en" | "es"; partnerName: string; date: string; yesUrl: string; stopUrl: string }) => Promise<boolean>;
-  remind: (args: { to: string; locale: "en" | "es"; partnerName: string; months: number; stopUrl: string }) => Promise<boolean>;
+  /** `onceKey`: Resend's idempotency key, one e-mail per monthsary and day, so a later run the same morning never sends it twice. */
+  checkIn: (args: { to: string; locale: "en" | "es"; partnerName: string; date: string; yesUrl: string; stopUrl: string; onceKey: string }) => Promise<boolean>;
+  remind: (args: { to: string; locale: "en" | "es"; partnerName: string; months: number; stopUrl: string; onceKey: string }) => Promise<boolean>;
   /** The signed links a row's emails carry. */
   links: (row: Row, date: Ymd) => Promise<{ yesUrl: string; stopUrl: string }>;
   now: Date;
@@ -63,7 +64,7 @@ export async function sendMonthsaries(run: MonthsaryRun): Promise<{ checkIns: nu
     const before = { checkin: row.checkin_for, reminder: row.reminded_for };
     if (work.remind && (await run.store.claim(row.id, "reminder", work.remind.date))) {
       const { stopUrl } = await run.links(row, work.remind.date);
-      if (await run.remind({ to, locale, partnerName: row.partner_name, months: work.remind.months, stopUrl })) reminders += 1;
+      if (await run.remind({ to, locale, partnerName: row.partner_name, months: work.remind.months, stopUrl, onceKey: `monthsary-reminder/${row.id}:${work.remind.date}` })) reminders += 1;
       else {
         failed += 1;
         await run.store.release(row.id, "reminder", before.reminder);
@@ -73,7 +74,7 @@ export async function sendMonthsaries(run: MonthsaryRun): Promise<{ checkIns: nu
     if (work.checkIn && (await run.store.claim(row.id, "checkin", work.checkIn.date))) {
       const day = parseYmd(work.checkIn.date)!;
       const links = await run.links(row, work.checkIn.date);
-      if (await run.checkIn({ to, locale, partnerName: row.partner_name, date: formatMonthDay(day, locale), ...links })) checkIns += 1;
+      if (await run.checkIn({ to, locale, partnerName: row.partner_name, date: formatMonthDay(day, locale), ...links, onceKey: `monthsary-checkin/${row.id}:${work.checkIn.date}` })) checkIns += 1;
       else {
         failed += 1;
         await run.store.release(row.id, "checkin", before.checkin);

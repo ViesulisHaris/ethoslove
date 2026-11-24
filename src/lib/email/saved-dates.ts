@@ -17,6 +17,8 @@ export type DateReminder = {
   openUrl: string;
   /** The signed "turn off reminders for this date" link; also what a mail app's unsubscribe button POSTs to. */
   offUrl: string;
+  /** Resend's idempotency key: one e-mail per saved date, day and person. */
+  onceKey?: string;
 };
 
 /**
@@ -32,6 +34,7 @@ export async function sendDateReminder(reminder: DateReminder): Promise<boolean>
       react: DateReminderEmail(reminder),
       // RFC 8058 one-click: the mail app POSTs to the link itself, which turns the reminder off.
       headers: { "List-Unsubscribe": `<${reminder.offUrl}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+      ...(reminder.onceKey ? { idempotencyKey: reminder.onceKey } : {}),
     });
     if (!result.ok) console.error(`[email] date reminder not sent: ${result.error}`);
     return result.ok && !result.skipped;

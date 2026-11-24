@@ -69,7 +69,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
   };
 
   return (
-    <section>
+    <section id="editor-photos" className="scroll-mt-20">
       <SectionHeader n={tSections("n")} title={tSections("title")} blurb={tSections("blurb")} />
 
       <div

@@ -87,6 +87,7 @@ const RECEIPT_LINES = {
   en: {
     withBump: (label: string) => `${label} + every other template`,
     withSecond: (label: string) => `${label} + a second gift`,
+    withPair: (label: string) => `${label} + two more gifts`,
     everyTemplate: "All templates, current and future",
     group: (template: string) => `Group cards on ${template}`,
     pass: "Every gift template and every game pack, for both of you",
@@ -96,6 +97,7 @@ const RECEIPT_LINES = {
   es: {
     withBump: (label: string) => `${label} + todas las demás plantillas`,
     withSecond: (label: string) => `${label} + un segundo regalo`,
+    withPair: (label: string) => `${label} + dos regalos más`,
     everyTemplate: "Todas las plantillas, las de ahora y las que vengan",
     group: (template: string) => `Tarjetas en grupo con ${template}`,
     pass: "Todas las plantillas de regalo y todos los packs de juegos, para los dos",
@@ -113,6 +115,8 @@ export type Sold = {
   bump: boolean;
   /** The second gift's template (metadata `second`), only ever on a single; null otherwise. */
   second: string | null;
+  /** Two more gifts added to a single or "Make it special" (metadata `pair`, kind "with_pair"). */
+  pair: boolean;
   kind: string;
   creatorCode: string | null;
   ref: string | null;
@@ -148,6 +152,7 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
   if (product === "membership" && !plan) return null;
   const bump = m.bump === "1" && BUMP.onto.includes(product);
   const second = SECOND_GIFT.onto.includes(product) && !bump && isTemplateSlug(m.second) ? m.second : null;
+  const pair = m.pair === "1" && (product === "single" || product === "extras") && !bump && !second;
   return {
     purchaseId,
     product,
@@ -155,7 +160,8 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
     packId,
     bump,
     second,
-    kind: m.kind || (bump ? "bump" : second ? "second" : product),
+    pair,
+    kind: m.kind || (bump ? "bump" : second ? "second" : pair ? "with_pair" : product),
     creatorCode: m.creator_code || null,
     ref: m.ref || null,
     locale: m.locale === "es" ? "es" : "en",
@@ -186,7 +192,7 @@ export function chargedAmount(session: Stripe.Checkout.Session, fallback: number
  */
 export function agreedConsent(
   session: Pick<Stripe.Checkout.Session, "consent" | "currency" | "currency_conversion" | "metadata">,
-  sold: Pick<Sold, "product" | "locale" | "plan">,
+  sold: Pick<Sold, "product" | "locale" | "plan"> & Partial<Pick<Sold, "pair">>,
 ): string | null {
   const onStripe = session.consent?.terms_of_service === "accepted";
   // Two more gifts paid with the wallet button had a notice beside it, no box: a notice binds nobody,
@@ -195,7 +201,7 @@ export function agreedConsent(
   if (!onStripe && !onPaySheet) return null;
   // A membership's box quotes its price, in the currency the catalogue priced it in.
   const currency = (session.currency_conversion?.source_currency ?? session.currency ?? "eur") as Currency;
-  return consentSentence(sold.product, sold.locale, { plan: sold.plan, currency: CHARGED_CURRENCIES.includes(currency) ? currency : "eur" });
+  return consentSentence(sold.product, sold.locale, { plan: sold.plan, currency: CHARGED_CURRENCIES.includes(currency) ? currency : "eur", pair: sold.pair });
 }
 
 /** The unlock rows a template or pack purchase grants its buyer for good. Null when the metadata doesn't add up. */
@@ -296,11 +302,23 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
             ? lines.group(getManifest(row.slice("group:".length))?.name[buyer.locale] ?? row.slice("group:".length))
             : (getManifest(row)?.name[buyer.locale] ?? row),
     );
+    // Two more gifts paid with this one: after the template's unlock, keyed by (purchase, n) like the pair's own.
+    if (sold.pair) {
+      const gifts = await grantGifts(admin, userId, sold.purchaseId, PAIR_GIFTS);
+      if (gifts.error) return { ok: false, reason: gifts.error };
+      unlockNames.push(lines.pair);
+    }
   }
 
   if (buyer.guest && buyer.createdUser) void notifyWelcome(buyer.email!, sold.locale).catch(() => {});
   if (claimed) {
-    const label = sold.bump ? lines.withBump(LABELS[buyer.locale][sold.product]) : sold.second ? lines.withSecond(LABELS[buyer.locale][sold.product]) : LABELS[buyer.locale][sold.product];
+    const label = sold.bump
+      ? lines.withBump(LABELS[buyer.locale][sold.product])
+      : sold.second
+        ? lines.withSecond(LABELS[buyer.locale][sold.product])
+        : sold.pair
+          ? lines.withPair(LABELS[buyer.locale][sold.product])
+          : LABELS[buyer.locale][sold.product];
     // A pass lasts a year: `until` stops the receipt saying "yours, forever". A gift card keeps its
     // 14-day right to cancel until the code is redeemed, so its receipt must not say it's gone.
     const extra =
@@ -311,7 +329,10 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
           : // Two more gifts: what is on the account and the 30 days, never "yours, forever", and no upgrade line.
             sold.product === "pair"
             ? { pair: true }
-            : UPGRADE_CREDITED.some((p) => p === sold.product) && !sold.bump
+            : // A gift with two more: the gift is theirs for good, and the receipt adds the 30 days on the two.
+              sold.pair
+              ? { withPair: true }
+              : UPGRADE_CREDITED.some((p) => p === sold.product) && !sold.bump
             ? await receiptUpgrade(admin, userId, buyer.currency, buyer.locale)
             : undefined;
     // The receipt repeats the sentence they ticked, word for word: the confirmation on a durable

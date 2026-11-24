@@ -130,7 +130,19 @@ export function lineItems(plan: CheckoutPlan, options: Pick<SessionOptions, "loc
 const termsUrl = (locale: Locale, origin: string) => (locale === "es" ? `${origin}/es/legal/terms` : `${origin}/legal/terms`);
 
 /** Which plan and currency a membership's sentences quote; the price always comes from the catalogue. */
-export type ConsentOptions = { plan?: MembershipPlan | null; currency?: Currency };
+/** `pair`: a gift paid with two more in the same payment (kind "with_pair"): the box says both what the unlock gives up and what the two keep. */
+export type ConsentOptions = { plan?: MembershipPlan | null; currency?: Currency; pair?: boolean };
+
+/** The two more gifts' own terms, after a single's or "Make it special"'s, when they are in the same payment. */
+const WITH_PAIR_SENTENCE = {
+  en: "I understand that I can cancel the two more gifts within 30 days for a refund of any I haven't used, and that a gift I've used can no longer be cancelled.",
+  es: "Entiendo que puedo desistir de los dos regalos más en un plazo de 30 días, con el reembolso de los que no haya usado, y que un regalo ya usado no se puede cancelar.",
+} as const;
+const WITH_PAIR_NOTICE = {
+  en: "The two more gifts are added to your account: one you haven't used can be refunded for 30 days.",
+  es: "Los dos regalos más se añaden a tu cuenta: uno que no hayas usado se reembolsa durante 30 días.",
+} as const;
+const sellsWithPair = (product: CheckoutPlan["product"], options: ConsentOptions) => options.pair === true && (product === "single" || product === "extras");
 
 const price = (plan: MembershipPlan, currency: Currency | undefined, locale: Locale) => formatAmount(membershipAmount(plan, currency ?? "eur"), currency ?? "eur", locale);
 
@@ -154,6 +166,11 @@ const price = (plan: MembershipPlan, currency: Currency | undefined, locale: Loc
  * This is the plain sentence, which fulfilment stores on the purchase as what was agreed to.
  */
 export function consentSentence(product: CheckoutPlan["product"], locale: Locale, options: ConsentOptions = {}): string {
+  const sentence = productConsentSentence(product, locale, options);
+  return sellsWithPair(product, options) ? `${sentence} ${WITH_PAIR_SENTENCE[locale === "es" ? "es" : "en"]}` : sentence;
+}
+
+function productConsentSentence(product: CheckoutPlan["product"], locale: Locale, options: ConsentOptions): string {
   const plan = options.plan ?? "yearly";
   if (locale === "es") {
     const withdrawal = "Entiendo que aún puedo desistir en un plazo de 14 días y que, en ese caso, solo pagaría la parte correspondiente a los días ya disfrutados.";
@@ -206,6 +223,11 @@ export function renewalNotice(plan: MembershipPlan, currency: Currency, locale: 
  */
 export function withdrawalNotice(product: CheckoutPlan["product"], locale: Locale, origin: string, options: ConsentOptions = {}): string {
   const terms = termsUrl(locale, origin);
+  if (sellsWithPair(product, options)) {
+    return locale === "es"
+      ? `Al pagar, pides que tu compra se desbloquee al instante y aceptas que, una vez desbloqueada, pierdes el derecho de desistimiento de 14 días. ${WITH_PAIR_NOTICE.es} Términos: ${terms}`
+      : `By paying, you ask for your purchase to be unlocked straight away and accept that, once it is, you lose the 14-day right to cancel. ${WITH_PAIR_NOTICE.en} Terms: ${terms}`;
+  }
   const plan = options.plan ?? "yearly";
   const currency = options.currency ?? "eur";
   if (locale === "es") {
@@ -275,6 +297,8 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     kind: plan.kind,
     ...(plan.bump ? { bump: "1" } : {}),
     ...(plan.second ? { second: plan.second } : {}),
+    // Two more gifts added to the gift: fulfilment puts them on the account after its unlock.
+    ...(plan.pair ? { pair: "1" } : {}),
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     // A personal price (lib/commerce/personal-price.ts): which link it was, so fulfilment spends it,
@@ -331,7 +355,7 @@ export function sessionParams(plan: CheckoutPlan, options: SessionOptions): Stri
     metadata: sessionMetadata(plan, options),
     allow_promotion_codes: false,
     consent_collection: { promotions: "auto", terms_of_service: "required" },
-    custom_text: { terms_of_service_acceptance: { message: consentText(plan.product, options.locale, options.origin) } },
+    custom_text: { terms_of_service_acceptance: { message: consentText(plan.product, options.locale, options.origin, { pair: plan.pair }) } },
     after_expiration: { recovery: { enabled: true, allow_promotion_codes: false } },
     branding_settings: CHECKOUT_BRANDING,
     // Shared Stripe account: make the charge recognisable on statements.

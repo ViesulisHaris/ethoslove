@@ -105,3 +105,17 @@ describe("0013: App Store purchases", () => {
     expect(sql).not.toMatch(/purchases_store_tx_idx[^;]*where/);
   });
 });
+
+describe("0025: three e-mails before each reminded day", () => {
+  const sql = migrations.find((m) => m.file === "0025_reminder_stages.sql")!.sql;
+
+  it("adds the stage with a default, so the live site's inserts still work, and the currency as nullable", () => {
+    expect(sql).toContain("alter table public.reminders add column if not exists last_stage smallint not null default 0 check (last_stage between 0 and 3);");
+    expect(sql).toContain("alter table public.reminders add column if not exists currency text check (currency in ('usd', 'eur', 'gbp'));");
+  });
+
+  it("marks every reminder with a year recorded as done for that year, and touches no other", () => {
+    expect(sql).toContain("update public.reminders set last_stage = 3 where last_sent_year is not null and last_stage = 0;");
+    expect(sql.match(/update /g)).toHaveLength(1);
+  });
+});

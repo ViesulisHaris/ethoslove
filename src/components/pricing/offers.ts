@@ -33,6 +33,8 @@ export type CheckoutRequest = {
   giftCard?: { recipientName?: string; note?: string };
   /** The pay sheet showed a personal price from an offer email and asks checkout for it (lib/commerce/personal-price.ts). */
   personalPrice?: boolean;
+  /** Two more gifts added to this gift ("Or this one and your next two"), for a reader a reminder e-mail brought. */
+  addPair?: boolean;
 };
 
 export type CheckoutResult = { url: string } | { error: string };

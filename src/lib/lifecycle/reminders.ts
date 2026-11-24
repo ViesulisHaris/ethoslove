@@ -102,10 +102,120 @@ export function dueDates(today: Date, lead = LEAD_DAYS, catchUp = CATCH_UP_DAYS)
 /** Whether a reminder still needs this year's email. */
 export const needsSending = (lastSentYear: number | null, year: number): boolean => lastSentYear === null || lastSentYear < year;
 
+/**
+ * Three e-mails before each day (migration 0025): stage 1 seven days before, stage 2 two days before,
+ * stage 3 the day before. A reminder remembers the occasion's year and the stage that went last
+ * (last_sent_year, last_stage); stage 3 of a year, or a gift made, or "Not this year", is done for it.
+ */
+export type Stage = 1 | 2 | 3;
+export const STAGES: readonly Stage[] = [1, 2, 3];
+export const STAGE_DAYS: Record<Stage, number> = { 1: 7, 2: 2, 3: 1 };
+/** Only the first e-mail catches up on a missed run (at 6 and 5 days): "tomorrow" is only true on its day. */
+export const STAGE_CATCH_UP = 2;
+/** Where the year is done: the last of the three went, or nothing more is to go. */
+export const DONE_STAGE: Stage = 3;
+
+export type DueStage = { stage: Stage; due: DueDate; daysAway: number };
+
+function dueOn(start: Date, ahead: number): DueDate {
+  const date = addDays(start, ahead);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const leapDayMovesHere = month === 2 && day === 28 && !isLeapYear(year);
+  return { year, month, days: leapDayMovesHere ? [28, 29] : [day], date };
+}
+
+/**
+ * The days whose e-mails the morning job sends on `today`, and which e-mail each gets: stage 1 for
+ * the day 7, 6 and 5 days away (the last two for runs that were missed), stage 2 for the day exactly 2
+ * away, stage 3 for the day exactly 1 away. 29 February is sent for on the 28th in other years.
+ */
+export function dueStages(today: Date): DueStage[] {
+  const start = utcDay(today);
+  const out: DueStage[] = [];
+  for (const stage of STAGES) {
+    const lead = STAGE_DAYS[stage];
+    const from = stage === 1 ? lead - STAGE_CATCH_UP : lead;
+    for (let ahead = lead; ahead >= from; ahead--) out.push({ stage, due: dueOn(start, ahead), daysAway: ahead });
+  }
+  return out;
+}
+
+/**
+ * Whether a reminder still needs this stage's e-mail for the occasion's `year`: nothing went for that
+ * year, or a lower stage did. A year with stage 0 is done: only the code before 0025 (one e-mail, or a
+ * reminder made with the gift for that day) writes a year without a stage, and both mean done.
+ */
+export function needsStage(row: { last_sent_year: number | null; last_stage: number }, year: number, stage: Stage): boolean {
+  if (row.last_sent_year === null || row.last_sent_year < year) return true;
+  if (row.last_sent_year > year) return false;
+  return row.last_stage > 0 && row.last_stage < stage;
+}
+
+/** The occasion's weekday in the e-mail's language: "Friday", "viernes". */
+export function weekdayName(date: Date, locale: "en" | "es"): string {
+  return new Intl.DateTimeFormat(locale === "es" ? "es" : "en-GB", { weekday: "long", timeZone: "UTC" }).format(date);
+}
+
+/**
+ * When the day is, in words that stay true on a late run: "next Friday" exactly a week away, "this
+ * Friday" two to six days away, "tomorrow" the day before.
+ */
+export function whenWords(daysAway: number, date: Date, locale: "en" | "es"): string {
+  if (daysAway <= 1) return locale === "es" ? "mañana" : "tomorrow";
+  const weekday = weekdayName(date, locale);
+  if (locale === "es") return daysAway >= 7 ? `el ${weekday} que viene` : `este ${weekday}`;
+  return daysAway >= 7 ? `next ${weekday}` : `this ${weekday}`;
+}
+
+/**
+ * The morning job's runs, in UTC hours (vercel.json: "0 7-11 * * *"). Several a morning, so a busy
+ * day's e-mails that one run's time can't hold go on a later run the same day: the claim makes the
+ * extra runs safe. tests/unit/reminders.test.ts holds this to vercel.json.
+ */
+export const REMINDER_RUN_HOURS = { first: 7, last: 11 } as const;
+
+/** A day saved, with what already went for it (GET /api/reminders): nothing, or a year and its stage. */
+export type SavedDay = MonthDay & { sentYear?: number | null; sentStage?: number | null };
+
+/**
+ * The day the first e-mail of a saved set will come, for the card's "Your first email comes on…".
+ * It asks the job itself (dueStages, needsStage) day by day from the first run still to come: today's
+ * while the morning's last run is ahead, otherwise tomorrow's. So a day saved too late for this year's
+ * e-mails (tomorrow, after the morning) answers with next year's first one, and a day done for its
+ * year (saved with the gift made for it, or its e-mails already gone) too. Null for none.
+ */
+export function firstEmailDate(saved: SavedDay[], now: Date): Date | null {
+  const days = saved.filter(isRealDay);
+  if (days.length === 0) return null;
+  // Before the last run's hour, that run still reads the rows saved now.
+  const start = addDays(utcDay(now), now.getUTCHours() < REMINDER_RUN_HOURS.last ? 0 : 1);
+  // Two years and a week cover a day just missed and done for next year as well.
+  for (let ahead = 0; ahead <= 2 * 366 + STAGE_DAYS[1]; ahead++) {
+    const run = addDays(start, ahead);
+    for (const { stage, due } of dueStages(run)) {
+      const hit = days.some((d) => d.month === due.month && due.days.includes(d.day) && needsStage({ last_sent_year: d.sentYear ?? null, last_stage: d.sentStage ?? 0 }, due.year, stage));
+      if (hit) return run;
+    }
+  }
+  return null;
+}
+
 /** The gift's templates' occasion, as a reminder knows it: the first one that recurs on a date. */
 export function reminderOccasionFor(occasions: readonly Occasion[] | undefined): ReminderOccasion {
   const first = occasions?.[0];
   return first === "birthday" || first === "anniversary" || first === "valentines" ? first : "other";
+}
+
+/**
+ * The one occasion a template is for, when it is for only one (besides "just because"): only then is
+ * the day its gift counts down to that occasion's. A scrapbook counting down to 25 December is not an
+ * anniversary because anniversaries come first in its list. Null for a template of several occasions.
+ */
+export function soleReminderOccasion(occasions: readonly Occasion[] | undefined): ReminderOccasion | null {
+  const own = (occasions ?? []).filter((o) => o !== "just-because");
+  return own.length === 1 ? reminderOccasionFor(own) : null;
 }
 
 /** The day a gift counts down to, in its own timezone (UTC when that can't be read), as YYYY-MM-DD. */
@@ -139,5 +249,27 @@ export function formatMonthDay({ month, day }: MonthDay, locale: "en" | "es"): s
   return new Intl.DateTimeFormat(locale === "es" ? "es" : "en-GB", { day: "numeric", month: "long", timeZone: "UTC" }).format(date);
 }
 
+/**
+ * When an e-mail comes ("17 November", "17 November 2027"): the year only when it isn't this one, so a
+ * day done for this year never reads as a day just gone or as today.
+ */
+export function formatEmailDate(at: Date, now: Date, locale: "en" | "es"): string {
+  const day = formatMonthDay({ month: at.getUTCMonth() + 1, day: at.getUTCDate() }, locale);
+  const year = at.getUTCFullYear();
+  if (year === now.getUTCFullYear()) return day;
+  return locale === "es" ? `${day} de ${year}` : `${day} ${year}`;
+}
+
 /** A reminder as the API returns it. */
-export type Reminder = { id: string; recipientName: string; occasion: ReminderOccasion; month: number; day: number; locale: "en" | "es"; templateSlug: string | null };
+export type Reminder = {
+  id: string;
+  recipientName: string;
+  occasion: ReminderOccasion;
+  month: number;
+  day: number;
+  locale: "en" | "es";
+  templateSlug: string | null;
+  /** The occasion's year the last e-mail went for (or the gift was made for), and which of its three; absent where not read. */
+  sentYear?: number | null;
+  sentStage?: number;
+};

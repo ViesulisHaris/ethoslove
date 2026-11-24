@@ -564,6 +564,7 @@
       "payIncludes": "In this gift: {features}",
       "payBlurb": "Pay once and this template is yours for good.",
       "payButton": "Pay {price} and send",
+      "three": "Or this one and your next two gifts: {price}",
       "appUnlock": "Unlock and send",
       "appUnlockNote": "Through the App Store: you’ll see the options and prices next.",
       "appUnlockFailed": "That didn’t go through. Try again, or come back to it later: your draft is saved.",
@@ -908,6 +909,20 @@
       "dismiss": "Not now",
       "moved": "Moved over from {name}, with your words, photos and song.",
       "back": "Back to {name}"
+    },
+    "started": {
+      "title": "Started for you.",
+      "withPhotos": "Both names and {count, plural, one {the photo} other {the # photos}} from your last gift for {name} are in. Change anything you like.",
+      "putting": "Bringing in both names and {count, plural, one {the photo} other {the # photos}} from your last gift for {name}.",
+      "namesOnly": "Both names are in. Add your photos and your words.",
+      "namesWords": "Both names are in. Add your words.",
+      "change": "Change the photos",
+      "empty": "Start empty",
+      "offer": "Use the names and photos from your last gift for {name}?",
+      "offerNames": "Use both names from your last gift for {name}?",
+      "use": "Use them",
+      "no": "No thanks",
+      "thumbs": "The photos from your last gift"
     }
   },
   "gift": {
@@ -1694,7 +1709,7 @@
       "everythingWithPass": "Every template, while Ethos for Two runs",
       "more": "More",
       "reminders": "Birthday and anniversary reminders",
-      "remindersBlurb": "An email nine days before, with time to make something.",
+      "remindersBlurb": "Three emails before each day, with time to make something.",
       "redeem": "Redeem a gift card",
       "redeemBlurb": "Someone gave you a code? It goes here.",
       "withdraw": "Withdraw from a purchase",
@@ -3425,12 +3440,22 @@
   "lifecycle": {
     "remind": {
       "title": "Want a nudge before the next one?",
-      "blurb": "One email nine days before each day you add; for the monthly one, a check the day before. Nothing else.",
+      "blurb": "Three emails before each day you add: 7 days, 2 days and the day before, until your gift for it is made. For the monthly one, a check the day before. Nothing else.",
+      "datesTitle": "Never be late for their day.",
+      "datesWhy": "We'll email you 7 days before, with your photos already in a new gift.",
+      "datesWhyNames": "We'll email you 7 days before, with both names already in a new gift.",
+      "fromGift": "from this gift",
+      "remindMe": "Remind me",
+      "datesSmall": "Three short emails before each day: 7 days, 2 days and the day before. They stop once your gift is made.",
+      "another": "Add another day",
+      "savedFirst": "Saved. Your first email comes on {date}.",
+      "savedNext": "Saved. Your next email comes on {date}.",
       "save": "Remind me",
       "saving": "Saving…",
       "failed": "That didn’t save. Try again in a moment.",
       "tooMany": "You already have {max} reminders. Remove one on your account page to add this one.",
       "edit": "Change",
+      "changeOnPage": "{what}: change it on your reminders page",
       "done": "Done",
       "name": "Who it’s for",
       "occasion": "Occasion",
@@ -3446,7 +3471,8 @@
       "rows": {
         "birthday": "{name}’s birthday",
         "birthdayNoName": "Their birthday",
-        "anniversary": "Your anniversary",
+        "anniversary": "Your anniversary with {name}",
+        "anniversaryNoName": "Your anniversary",
         "other": "A day for {name}",
         "otherNoName": "Another day",
         "monthly": "Every month too",
@@ -3549,7 +3575,7 @@
     },
     "page": {
       "title": "Reminders",
-      "subtitle": "The days you asked us to remember: we email you nine days before, once a year. And the day before your monthsary, if you asked for it.",
+      "subtitle": "Three emails before each day: 7 days, 2 days and the day before. And the day before your monthsary, if you asked.",
       "empty": "No reminders yet. After you publish a gift, you can ask us to remind you next year.",
       "remove": "Remove",
       "removeLabel": "Remove the reminder: {what}",
@@ -3562,10 +3588,27 @@
     },
     "remove": {
       "title": "Remove this reminder?",
-      "body": "You won’t get the yearly email about {name} any more.",
+      "body": {
+        "birthday": "You won’t get the emails before {name}’s birthday any more.",
+        "anniversary": "You won’t get the emails before your anniversary any more.",
+        "valentines": "You won’t get the emails before Valentine’s Day any more.",
+        "other": "You won’t get the emails before {name}’s day any more."
+      },
       "confirm": "Remove it",
       "doneTitle": "Removed.",
       "doneBody": "That reminder is gone. You can set a new one whenever you make a gift."
+    },
+    "skip": {
+      "title": "Not this year",
+      "body": {
+        "birthday": "Stop the emails about {name}'s birthday until next year?",
+        "anniversary": "Stop the emails about your anniversary until next year?",
+        "valentines": "Stop the emails about Valentine's Day until next year?",
+        "other": "Stop the emails about {name}'s day until next year?"
+      },
+      "confirm": "Yes, not this year",
+      "doneTitle": "Done. See you next year.",
+      "doneBody": "Nothing more about this day until next year. The reminder stays on your account."
     },
     "unsubscribe": {
       "title": "Unsubscribe?",

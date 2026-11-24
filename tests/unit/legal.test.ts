@@ -39,6 +39,19 @@ describe("legal documents", () => {
     expect(WITHDRAW_DOCS.es.sections[0].paragraphs.join("\n")).toContain("la página de Stripe no pudo mostrarla");
   });
 
+  // A reader from a reminder e-mail may pay a gift with the next two in one payment (kind "with_pair").
+  it("cover the two more gifts bought with a gift from a reminder e-mail, and what of that payment is refunded", () => {
+    const en = all(LEGAL_DOCS.terms.en);
+    const es = all(LEGAL_DOCS.terms.es);
+    const pair = { en: formatAmount(PRODUCTS.pair.amounts.eur, "eur", "en"), es: formatAmount(PRODUCTS.pair.amounts.eur, "eur", "es") };
+    expect(en).toContain("When you come from one of our reminder emails, we may instead offer them with the gift itself, in the same payment");
+    expect(en).toContain("Bought with a gift in the same payment, it is the two's part of that payment");
+    expect(en).toContain(pair.en);
+    expect(es).toContain("Si llegas desde uno de nuestros correos de recordatorio, puede que te los ofrezcamos con el propio regalo, en el mismo pago");
+    expect(es).toContain("Si los compraste con un regalo en el mismo pago, lo que se devuelve así es la parte de los dos");
+    expect(es).toContain(pair.es);
+  });
+
   // Two more gifts paid with Apple Pay or Google Pay on our page tick nothing: a used one can't be
   // said to be beyond cancelling for them, in section 6 or 9.
   it("keep the 14 days for two more gifts bought with the wallet, even once used", () => {

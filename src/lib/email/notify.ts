@@ -8,6 +8,7 @@ import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { getManifest } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { suggestTemplate, suggestionPath } from "@/lib/lifecycle/suggest";
+import type { PaidLine, StagedReminderEmail } from "@/lib/lifecycle/reminder-job";
 import { optedOut } from "./optouts";
 import { isUndeliverable, sendEmail } from "./send";
 import { pageUrl, siteUrl } from "./urls";
@@ -26,6 +27,8 @@ import {
   publishReminderSubject,
   recoveryHeading,
   reminderHeading,
+  stagedReminderSubject,
+  type ReminderPaid,
   type EmailIdea,
 } from "@/emails/lifecycle";
 import { MembershipEndedEmail, MembershipPaymentEmail, MembershipRenewalEmail, MembershipWelcomeEmail, membershipSubject } from "@/emails/membership";
@@ -140,7 +143,7 @@ export async function notifyUnlocked(giftId: string) {
  * cancel is gone (it lasts until the code is redeemed). `extra.consent` is the withdrawal sentence the
  * buyer ticked, as recorded on the purchase, which the receipt quotes.
  */
-export async function notifyReceipt(userId: string, productLabel: string, amountLabel: string, unlocks: string[], extra?: { until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; consent?: string }) {
+export async function notifyReceipt(userId: string, productLabel: string, amountLabel: string, unlocks: string[], extra?: { until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; pair?: boolean; withPair?: boolean; consent?: string }) {
   const admin = getSupabaseAdminClient();
   if (!admin) return;
   const { data: profile } = await admin.from("profiles").select("email, locale").eq("id", userId).single();
@@ -148,7 +151,7 @@ export async function notifyReceipt(userId: string, productLabel: string, amount
   const locale: L = profile.locale === "es" ? "es" : "en";
   const until = extra?.until ? emailDate(extra.until, locale) : undefined;
   const upgrade = extra?.upgrade && !(await optedOut(admin, await emailKey(profile.email))) ? extra.upgrade : undefined;
-  return sendEmail({ to: profile.email, subject: locale === "es" ? `Recibo de Ethos: ${productLabel}` : `Your Ethos receipt: ${productLabel}`, react: ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl: `${siteUrl()}/account`, until, upgrade, giftCard: extra?.giftCard, pair: extra?.pair, consent: extra?.consent }) });
+  return sendEmail({ to: profile.email, subject: locale === "es" ? `Recibo de Ethos: ${productLabel}` : `Your Ethos receipt: ${productLabel}`, react: ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl: `${siteUrl()}/account`, until, upgrade, giftCard: extra?.giftCard, pair: extra?.pair, withPair: extra?.withPair, consent: extra?.consent }) });
 }
 
 // Lifecycle emails (contract C6). Each returns whether an email went out, and none of them throws:
@@ -365,6 +368,8 @@ export async function sendReminderEmail({
   avoid,
   removeUrl,
   ref = "email-reminder",
+  staged,
+  onceKey,
 }: {
   to: string;
   locale: L;
@@ -374,7 +379,18 @@ export async function sendReminderEmail({
   avoid?: string | null;
   removeUrl: string;
   ref?: string;
+  /**
+   * One of the three e-mails before a day (lib/lifecycle/reminder-job.ts). Absent, the one e-mail as
+   * it has always been: a kept gift's reminder, and the job on a database without migration 0025.
+   */
+  staged?: StagedReminderSend;
+  /**
+   * Resend's idempotency key for the one e-mail (a reminder and its year): the morning job runs five
+   * times, and a send that failed in a way that may still have gone is not sent again within the day.
+   */
+  onceKey?: string;
 }): Promise<boolean> {
+  if (staged) return sendStagedReminder({ to, locale, recipientName, occasion, date, removeUrl, ...staged });
   return safely("reminder", async () =>
     deliver("reminder", {
       to,
@@ -389,8 +405,51 @@ export async function sendReminderEmail({
         removeUrl,
       }),
       headers: unsubscribeHeaders(removeUrl),
+      ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
+}
+
+/** What the three e-mails add to a reminder: the stage and its words, the started gift, the price line and the links. */
+export type StagedReminderSend = Pick<StagedReminderEmail, "stage" | "when" | "weekday" | "started" | "templateSlug" | "openUrl" | "moreUrl" | "skipUrl" | "onceKey"> & PaidLine;
+
+/** The price line's figures, in the e-mail's language: "€9.99" / "9,99 €". */
+export function reminderPrices(paid: PaidLine, locale: L): ReminderPaid {
+  if (paid.paid !== "price") return paid;
+  const { single, three, currency } = paid.prices;
+  return { paid: "price", prices: { single: formatAmount(single, currency, locale), three: three === null ? null : formatAmount(three, currency, locale) } };
+}
+
+async function sendStagedReminder(email: StagedReminderSend & { to: string; locale: L; recipientName: string; occasion: ReminderOccasion; date: string; removeUrl: string }): Promise<boolean> {
+  return safely("reminder", async () => {
+    const manifest = getManifest(email.templateSlug);
+    if (!manifest) return false;
+    const { locale } = email;
+    // The suggested template's own cover and words, never anything from a gift; its link opens the started gift.
+    const idea = { ...emailIdea(manifest, locale, `email-reminder-${email.stage}`), url: email.openUrl };
+    return deliver("reminder", {
+      to: email.to,
+      subject: stagedReminderSubject(email.stage, email.occasion, locale, email.recipientName, email.when),
+      react: ReminderEmail({
+        locale,
+        recipientName: email.recipientName,
+        occasion: email.occasion,
+        date: email.date,
+        idea,
+        moreUrl: email.moreUrl,
+        removeUrl: email.removeUrl,
+        stage: email.stage,
+        when: email.when,
+        weekday: email.weekday,
+        started: email.started,
+        openUrl: email.openUrl,
+        skipUrl: email.skipUrl,
+        ...reminderPrices(email, locale),
+      }),
+      headers: unsubscribeHeaders(email.removeUrl),
+      idempotencyKey: email.onceKey,
+    });
+  });
 }
 
 /**
@@ -446,25 +505,27 @@ export async function sendGroupNudge({ to, locale, count, forName, unsubscribeUr
  * `stopUrl` are signed links (api/monthsaries/yes and /stop). The stop link is also the one-click
  * unsubscribe a mail app offers.
  */
-export async function sendMonthsaryCheckIn({ to, locale, partnerName, date, yesUrl, stopUrl }: { to: string; locale: L; partnerName: string; date: string; yesUrl: string; stopUrl: string }): Promise<boolean> {
+export async function sendMonthsaryCheckIn({ to, locale, partnerName, date, yesUrl, stopUrl, onceKey }: { to: string; locale: L; partnerName: string; date: string; yesUrl: string; stopUrl: string; onceKey?: string }): Promise<boolean> {
   return safely("monthsary check-in", async () =>
     deliver("monthsary check-in", {
       to,
       subject: monthsaryCheckInHeading(locale, partnerName),
       react: MonthsaryCheckInEmail({ locale, partnerName, date, yesUrl, stopUrl }),
       headers: unsubscribeHeaders(stopUrl),
+      ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
 }
 
 /** On a monthsary the buyer said yes to: one small template, a different one each month. */
-export async function sendMonthsaryReminder({ to, locale, partnerName, months, stopUrl }: { to: string; locale: L; partnerName: string; months: number; stopUrl: string }): Promise<boolean> {
+export async function sendMonthsaryReminder({ to, locale, partnerName, months, stopUrl, onceKey }: { to: string; locale: L; partnerName: string; months: number; stopUrl: string; onceKey?: string }): Promise<boolean> {
   return safely("monthsary reminder", async () =>
     deliver("monthsary reminder", {
       to,
       subject: monthsaryHeading(locale, partnerName, months),
       react: MonthsaryReminderEmail({ locale, partnerName, months, idea: emailIdea(suggestTemplate("monthsary", { turn: months }), locale, "email-monthsary"), stopUrl }),
       headers: unsubscribeHeaders(stopUrl),
+      ...(onceKey ? { idempotencyKey: onceKey } : {}),
     }),
   );
 }

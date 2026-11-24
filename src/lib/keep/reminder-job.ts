@@ -19,6 +19,8 @@ export type KeptReminderEmail = {
   date: string;
   removeUrl: string;
   ref: string;
+  /** Resend's idempotency key: one e-mail per kept reminder and year. */
+  onceKey: string;
 };
 
 /**
@@ -80,6 +82,7 @@ export async function sendKeptReminders(run: {
         date: formatMonthDay({ month: due.date.getUTCMonth() + 1, day: due.date.getUTCDate() }, locale),
         removeUrl: await run.removeUrl(r.id, locale),
         ref: KEEP_REF,
+        onceKey: `kept-reminder/${r.id}:${due.year}`,
       });
       if (ok) sent += 1;
       else {

@@ -27,6 +27,12 @@ export type Entitlements = {
   giftsReady: number;
   /** Two more gifts, at this price, when pairAllowed says this account may buy them; null otherwise. */
   pairOffer: { amount: number; currency: Currency } | null;
+  /**
+   * Whether two more gifts may be added to a gift at payment ("Or this one and your next two", shown
+   * only to a reader a reminder e-mail brought): on sale, none ready, not every template, no Ethos for
+   * Two running. Checkout decides again (lib/commerce/plan.ts); this only says whether to offer it.
+   */
+  addPair: boolean;
 };
 
 /**
@@ -37,7 +43,7 @@ export type UpgradeOffer = { amount: number; currency: Currency; creditUntil?: s
 
 export type PassSummary = { endsAt: string; isOwner: boolean; partnerJoined: boolean; inviteUrl?: string };
 
-export const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: FREE_SAVED_DATES, upgrade: null, giftsReady: 0, pairOffer: null };
+export const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: FREE_SAVED_DATES, upgrade: null, giftsReady: 0, pairOffer: null, addPair: false };
 
 /**
  * The old `pass` field, from the membership, for app builds that only know the pass: any running
@@ -166,5 +172,6 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     }).ok
       ? { amount: PRODUCTS.pair.amounts[options.currency], currency: options.currency }
       : null,
+    addPair: pairOnSale() && ready === 0 && !forever.includes(EVERY_TEMPLATE) && membership?.running !== true,
   };
 }

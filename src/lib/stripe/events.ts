@@ -3,7 +3,8 @@ import { missingMembershipColumns, type Db } from "@/lib/commerce/db";
 import { applySubscriptionState, rowBySubscription, switchToMonthlyNow, type SendEnded } from "@/lib/commerce/memberships";
 import type { Pass } from "@/lib/commerce/passes";
 import { restorePurchase, revokePurchase, withdrawPurchase } from "@/lib/commerce/revoke";
-import { revokeOneUnusedOf } from "@/lib/commerce/gift-credits";
+import { revokeOneUnusedOf, revokeUnusedUpTo } from "@/lib/commerce/gift-credits";
+import { PAIR_GIFTS, PRODUCTS } from "@/lib/pricing/products";
 import type { Fulfilment } from "./fulfil";
 import {
   cancelSubscriptionNow,
@@ -236,7 +237,7 @@ async function onInvoiceUnpaid(event: Stripe.Invoice, kind: "failed" | "action_r
   return ok();
 }
 
-type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null; currency?: string | null };
+type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null; kind?: string | null; currency?: string | null; amount?: number | null };
 
 /**
  * The purchase a charge paid for, or null when it isn't ours. A lookup that fails throws (Stripe
@@ -245,7 +246,7 @@ type Purchase = { id: string; user_id: string | null; product: string; membershi
  */
 async function purchaseByPaymentIntent(db: Db, paymentIntent: string | null): Promise<Purchase | null> {
   if (!paymentIntent) return null;
-  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id, currency").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
+  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id, kind, currency, amount").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
   const missing = missingMembershipColumns(error, "a refund or a dispute reads purchases.membership_id");
   if (missing) throw missing;
   if (error) throw new Error(`purchase lookup failed: ${error.message}`);
@@ -259,6 +260,8 @@ const cancelWith = (deps: StripeEventDeps) => async (subscriptionId: string) => 
  * "requested by customer" of an Ethos for Two payment is a withdrawal within the 14 days: the owner
  * refunds what's left after the days used, and the membership ends for both. Half or more of two
  * more gifts refunded is one unused gift given back (the 30-day promise, terms): one gift ready goes.
+ * On a gift paid with two more (kind "with_pair"), the money back is measured against the two's own
+ * line: half of it takes one unused gift, all of it both, and the template unlock stays.
  * Any other partial refund is a goodwill gesture and changes nothing.
  */
 async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<EventOutcome> {
@@ -277,6 +280,15 @@ async function onRefund(charge: Stripe.Charge, deps: StripeEventDeps): Promise<E
     if (kept === null) return retry("pair refund: the checkout session it was paid with was not found");
     const { error } = await deps.db.from("purchases").update({ amount: kept }).eq("id", purchase.id);
     if (error) throw new Error(`pair amount not lowered after a refund: ${error.message}`);
+    return ok();
+  }
+  if (purchase.kind === "with_pair") {
+    const back = withPairBack(charge, purchase);
+    if (back) {
+      // Each gift is half the pair's line: €4 back of €7.99 is one, all of it both.
+      const gifts = Math.min(PAIR_GIFTS, Math.floor((back.refunded * PAIR_GIFTS) / back.line));
+      if (gifts > 0) await revokeUnusedUpTo(deps.db, purchase.id, gifts, deps.now);
+    }
     return ok();
   }
   if (purchase.product !== "pass" && purchase.product !== "membership") return ok();
@@ -305,6 +317,24 @@ async function pairKept(charge: Stripe.Charge, purchase: Purchase, deps: StripeE
   const paid = session.currency_conversion?.source_currency ? session.currency_conversion.amount_total : session.amount_total;
   if (paid == null) return null;
   return Math.round((paid * left) / charge.amount);
+}
+
+/**
+ * How much of a gift paid with two more came back, against the pair's own line, both in the catalogue's
+ * currency. When Adaptive Pricing charged another currency (a €17.98 payment as złoty), the share of the
+ * charge refunded is applied to what the row says the catalogue charged (fulfil.ts chargedAmount), as
+ * pairKept does for two more gifts bought alone. Null when neither currency has a pair price.
+ */
+function withPairBack(charge: Stripe.Charge, purchase: Purchase): { refunded: number; line: number } | null {
+  const chargeCurrency = charge.currency?.toLowerCase();
+  const rowCurrency = purchase.currency?.toLowerCase();
+  const prices = PRODUCTS.pair.amounts as Partial<Record<string, number>>;
+  const rowLine = rowCurrency ? prices[rowCurrency] : undefined;
+  if (rowLine && chargeCurrency && rowCurrency !== chargeCurrency && typeof purchase.amount === "number" && charge.amount > 0) {
+    return { refunded: Math.round((purchase.amount * charge.amount_refunded) / charge.amount), line: rowLine };
+  }
+  const line = chargeCurrency ? prices[chargeCurrency] : undefined;
+  return line ? { refunded: charge.amount_refunded, line } : null;
 }
 
 /** A chargeback takes the money back, so it takes the unlock back too, and ends a membership for both. */

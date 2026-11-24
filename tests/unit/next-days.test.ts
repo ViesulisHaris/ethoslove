@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { distance, localToday, nextDays, occasionIcon, occasionPath, todayIn } from "@/lib/lifecycle/next-days";
+import { createTranslator } from "next-intl";
+import { dayName, distance, localToday, nextDays, occasionIcon, occasionPath, todayIn } from "@/lib/lifecycle/next-days";
+import en from "../../messages/en.json";
 
 /** The two days the "two more gifts" card names (lib/lifecycle/next-days.ts), on fixed dates. */
 const day = (iso: string) => new Date(`${iso}T00:00:00.000Z`);
@@ -118,5 +120,17 @@ describe("distance, paths and pictures", () => {
     expect(todayIn("Europe/Madrid", now).toISOString()).toBe("2026-11-25T00:00:00.000Z");
     expect(todayIn(null, now).toISOString()).toBe("2026-11-25T00:00:00.000Z");
     expect(todayIn("Not/AZone", now).toISOString()).toBe("2026-11-25T00:00:00.000Z");
+  });
+});
+
+describe("dayName", () => {
+  type Words = (key: string, values?: Record<string, string | number>) => string;
+  const remind = createTranslator({ locale: "en", messages: en, namespace: "lifecycle.remind" }) as unknown as Words;
+  const pair = createTranslator({ locale: "en", messages: en, namespace: "editor.share.pair" }) as unknown as Words;
+  it("names whose anniversary it is, so a gift for a mother never reads as the sender's own anniversary with her", () => {
+    expect(dayName({ kind: "anniversary", name: "Mia" }, pair, remind)).toBe("Your anniversary with Mia");
+    expect(dayName({ kind: "anniversary" }, pair, remind, "Ana")).toBe("Your anniversary with Ana");
+    expect(dayName({ kind: "anniversary" }, pair, remind)).toBe("Your anniversary");
+    expect(dayName({ kind: "birthday", name: "Mia" }, pair, remind)).toBe("Mia's birthday");
   });
 });

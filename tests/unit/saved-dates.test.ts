@@ -616,7 +616,7 @@ describe("the reminder the day before (members only)", () => {
   function run(rows: Row[], options: { members?: string[]; partners?: Record<string, string>; failFor?: string[]; budget?: number; batch?: number } = {}) {
     const claimed: string[] = [];
     const released: string[] = [];
-    const sent: { to: string; locale: string; title: string | null }[] = [];
+    const sent: { to: string; locale: string; title: string | null; onceKey?: string }[] = [];
     let asked: { day: string; limit: number } | null = null;
     let left = options.budget ?? Infinity;
     const people: Record<string, { email: string; locale: "en" | "es" }> = { [ANA]: { email: "ana@example.com", locale: "en" }, [BEN]: { email: "ben@example.com", locale: "es" }, [CARA]: { email: "cara@example.com", locale: "en" } };
@@ -641,7 +641,7 @@ describe("the reminder the day before (members only)", () => {
           people: async (ids) => new Map(ids.filter((id) => people[id]).map((id) => [id, people[id]])),
         },
         send: async (reminder) => {
-          sent.push({ to: reminder.to, locale: reminder.locale, title: reminder.title });
+          sent.push({ to: reminder.to, locale: reminder.locale, title: reminder.title, onceKey: reminder.onceKey });
           return !(options.failFor ?? []).includes(reminder.to);
         },
         links: async (r, locale) => ({ openUrl: `https://tryethos.io/${locale}/plan#s=${r.id}`, offUrl: "https://tryethos.io/off" }),
@@ -665,8 +665,9 @@ describe("the reminder the day before (members only)", () => {
     expect(await r.result).toEqual({ sent: 1, failed: 0, deferred: 0, skipped: 0 });
     expect(r.claimed).toEqual(["r1"]);
     expect(r.sent).toEqual([
-      { to: "ana@example.com", locale: "en", title: "Our evening" },
-      { to: "ben@example.com", locale: "es", title: "Our evening" },
+      // Each once per date, day and person on Resend's side too: the morning job runs five times.
+      { to: "ana@example.com", locale: "en", title: "Our evening", onceKey: `saved-date/r1:2026-09-26:${ANA}` },
+      { to: "ben@example.com", locale: "es", title: "Our evening", onceKey: `saved-date/r1:2026-09-26:${BEN}` },
     ]);
   });
 

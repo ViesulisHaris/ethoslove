@@ -98,8 +98,8 @@ type Words = (key: string, values?: Record<string, string | number>) => string;
 export function dayName(day: Pick<NextDay, "kind" | "name">, pair: Words, remind: Words, fallback = ""): string {
   if (day.kind === "christmas") return pair("christmas");
   if (day.kind === "valentines") return remind("occasions.valentines");
-  if (day.kind === "anniversary") return remind("rows.anniversary");
   const who = (day.name ?? fallback).trim();
+  if (day.kind === "anniversary") return who ? remind("rows.anniversary", { name: who }) : remind("rows.anniversaryNoName");
   return who ? remind(`rows.${day.kind}`, { name: who }) : remind(`rows.${day.kind}NoName`);
 }
 

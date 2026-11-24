@@ -30,6 +30,10 @@ import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCamp
 import { countCampaignGift } from "@/lib/commerce/campaign";
 import { holidayExtraAtPublish, showsExtra, stampedExtra, withoutHolidayExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 import { paidForGiftRecently, readyGifts, spendGift } from "@/lib/commerce/gift-credits";
+import { markMadeFor } from "@/lib/lifecycle/reminder-done";
+import { countdownDay } from "@/lib/lifecycle/reminders";
+import { cookies } from "next/headers";
+import { REMINDER_COOKIE, parseReminderCookie } from "@/lib/editor/start-ref";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -413,6 +417,28 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     gift.id,
     scheduled ? new Intl.DateTimeFormat(data.locale, { dateStyle: "long", timeStyle: "short", timeZone: input.data.schedule?.timezone }).format(new Date(input.data.schedule!.unlockAt)) : undefined,
   ).catch(() => {});
+  // The e-mails before this person's day stop once their gift is made (lib/lifecycle/reminder-done.ts).
+  // After the answer, and never able to fail the publish.
+  // A scheduled gift counts for the day it opens on; an edit of one already out counts from when it first went.
+  // A gift made after "Open my gift" in a reminder's e-mail is that reminder's (api/reminders/open).
+  const forReminder = await cookies()
+    .then((jar) => parseReminderCookie(jar.get(REMINDER_COOKIE)?.value))
+    .catch(() => null);
+  const madeFor = () =>
+    markMadeFor(getSupabaseAdminClient() ?? ctx.supabase, ctx.user.id, data.recipientName, new Date(), {
+      unlockAt: scheduled ? input.data.schedule!.unlockAt : null,
+      wasOutSince: gift.status === "live" || gift.status === "scheduled" ? gift.published_at : null,
+      // A Christmas gift for Mia is not her birthday's: only a reminder of an occasion this template is for.
+      occasions: manifest.occasions,
+      // A gift counting down to 25 December is that day's, never a birthday's on the 28th.
+      countsDownTo: countdownDay(data.countdown),
+      forReminder,
+    });
+  try {
+    after(madeFor);
+  } catch {
+    void madeFor();
+  }
   return { ok: true, data: { shortId: row?.short_id ?? "", status, holidayExtra: unlocked || usedGift ? showsExtra({ status, data: { holidayExtra } }) : null, ...(current.dropped.length ? { takenBack: current.dropped } : {}), ...(usedGift ? { usedGift: true as const } : {}) } };
 }
 
@@ -429,6 +455,18 @@ export async function signAssetUrls(paths: string[]): Promise<ActionResult<Recor
     if (row.signedUrl) out[paths[i]] = row.signedUrl;
   });
   return { ok: true, data: out };
+}
+
+/**
+ * The name on one of the caller's own reminders, for a gift a reminder e-mail starts when no gift was
+ * made for that person yet (lib/editor/start-from-gift.ts). Nothing of anyone else's.
+ */
+export async function reminderNameFor(reminderId: string): Promise<ActionResult<{ name: string }>> {
+  const ctx = await requireContext();
+  if (!ctx.ok) return { ok: false, error: ctx.error };
+  if (!/^[0-9a-f-]{36}$/i.test(reminderId)) return { ok: false, error: "not_found" };
+  const { data } = await ctx.supabase.from("reminders").select("recipient_name").eq("id", reminderId).eq("user_id", ctx.user.id).maybeSingle();
+  return data ? { ok: true, data: { name: data.recipient_name } } : { ok: false, error: "not_found" };
 }
 
 /** Loads an existing gift (owner) for editing. */
