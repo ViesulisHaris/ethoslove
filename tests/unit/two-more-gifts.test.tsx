@@ -23,6 +23,7 @@ vi.mock("@/i18n/navigation", () => ({
 vi.mock("sonner", () => ({ toast: Object.assign(() => undefined, { error: () => undefined }) }));
 
 const { Offer, Bought, UsedOne, TwoMoreGifts } = await import("@/components/editor/two-more-gifts");
+const { UsedGiftLine } = await import("@/components/editor/pair-used");
 const { AlreadyPaid, openingOf } = await import("@/components/editor/already-paid");
 
 const intl = (node: React.ReactNode, locale: "en" | "es" = "en") =>
@@ -50,10 +51,29 @@ describe("the two more gifts card", () => {
     expect(intl(<TwoMoreGifts data={gift} ent={ent(offer)} afterPayment left={0} />)).toContain('data-testid="pair-offer"');
   });
 
-  it("a gift sent on one of the two says so, whatever the offer", () => {
-    const html = text(intl(<TwoMoreGifts data={gift} ent={ent(null, 1)} afterPayment={false} left={1} usedGift />));
-    expect(html).toContain("This was one of your gifts. Nothing to pay.");
-    expect(html).toContain("One left, ready for");
+  it("a gift sent on one of the two says so, with or without the card's code and the account's answer", () => {
+    // The share screen draws this line itself (pair-used.tsx), never through the offer card.
+    for (const saved of [null, []]) {
+      const html = text(intl(<UsedGiftLine data={gift} left={1} saved={saved} />));
+      expect(html).toContain("This one was already paid for. Nothing to pay.");
+      expect(html).toContain("One left, ready for");
+    }
+    expect(text(intl(<UsedGiftLine data={gift} left={1} saved={null} />, "es"))).toContain("Este ya estaba pagado: era uno de tus regalos. No hay nada que pagar.");
+  });
+
+  it("the day rows come from the saved days handed in, so they are right in the first frame", () => {
+    // Drawn as the server would draw it: no effect has run, nothing has been fetched.
+    const birthday = [{ id: "r1", recipientName: "Mia", occasion: "birthday" as const, month: 12, day: 10, locale: "en" as const, templateSlug: null }];
+    vi.useFakeTimers({ now: new Date(2026, 10, 24, 12) });
+    try {
+      const html = text(intl(<TwoMoreGifts data={gift} ent={ent(offer)} afterPayment left={0} saved={birthday} />));
+      expect(html).toContain("Mia's birthday 10 December in 2 weeks");
+      // A Christmas gift (frosted-window): the other row is Valentine's Day, not this Christmas.
+      expect(html).toContain("Valentine's Day 14 February in 12 weeks");
+      expect(html).not.toContain("Christmas 25 December in 4 weeks");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("names the two days and the price, in English, for each currency", () => {
@@ -117,11 +137,26 @@ describe("the two more gifts card", () => {
     expect(link).toContain("relative");
     expect(link).not.toMatch(/min-h-|inline-flex/);
     expect(link).toContain("focus-visible:outline-2");
+    // It opens a new tab (the share screen must stay), and says so.
+    expect(text(html)).toContain("Terms (opens in a new tab)");
+    expect(text(intl(<Offer offer={offer} days={days} name="Mia" onBought={() => {}} />, "es"))).toContain("Términos (se abre en otra pestaña)");
+  });
+
+  it("buttons that carry a name wrap inside their pill rather than running past it", () => {
+    const long = "Maximiliana Alexandra de la Cruz Fernán";
+    const withBirthday = nextDays(new Date("2026-11-24T00:00:00.000Z"), [{ occasion: "birthday", month: 12, day: 10, recipientName: long }], null);
+    const start = intl(<Bought days={withBirthday} name={long} />).match(/<a href="\/occasions\/birthday"[^>]*>/)?.[0] ?? "";
+    const send = intl(<AlreadyPaid ready={2} thumbs={[]} photos={0} name={long} opensWhen={null} busy={false} onSend={() => {}} onPayInstead={() => {}} />).match(/<button[^>]*already-paid-send[^>]*>/)?.[0] ?? "";
+    for (const tag of [start, send]) {
+      expect(tag).toContain("whitespace-normal");
+      expect(tag).toContain("min-h-12");
+      expect(tag).toContain("h-auto");
+    }
   });
 
   it("after a gift sent with one of them: one left for the next day, or none", () => {
     const valentines = days.slice(1);
-    expect(text(intl(<UsedOne left={1} days={valentines} name="Mia" />))).toContain("This was one of your gifts. Nothing to pay. One left, ready for Valentine's Day.");
+    expect(text(intl(<UsedOne left={1} days={valentines} name="Mia" />))).toContain("This one was already paid for. Nothing to pay. One left, ready for Valentine's Day.");
     expect(text(intl(<UsedOne left={0} days={valentines} name="Mia" />))).toContain("That was your last gift ready.");
   });
 
@@ -156,10 +191,13 @@ describe("a day named inside a sentence, per kind, in both languages", () => {
     expect(es("startAny")).toBe("Empezar uno ya");
   });
 
-  it("the gifts page strip's heading starts with a capital", () => {
+  it("the gifts page strip's heading starts with a capital, and is read aloud as one sentence", () => {
     expect(t("en", "dashboard.ready")("count", { count: 2 })).toBe("Gifts ready to make");
     expect(t("en", "dashboard.ready")("count", { count: 1 })).toBe("Gift ready to make");
-    expect(t("es", "dashboard.ready")("count", { count: 2 })).toBe("Regalos pagados por hacer");
+    expect(t("es", "dashboard.ready")("count", { count: 2 })).toBe("Regalos ya pagados, por hacer");
+    expect(t("en", "dashboard.ready")("countSr", { count: 2 })).toBe("2 gifts ready to make");
+    expect(t("es", "dashboard.ready")("countSr", { count: 2 })).toBe("Te quedan 2 regalos ya pagados por hacer");
+    expect(t("es", "dashboard.ready")("line")).not.toMatch(/pagad/);
   });
   for (const [d, enStart, esStart, enLeft, esLeft, enMake, esMake] of cases) {
     it(`${d.kind}${d.name ? " (named)" : ""}`, () => {
@@ -178,7 +216,7 @@ describe("a day named inside a sentence, per kind, in both languages", () => {
     expect(text(intl(<Bought days={anniversary} name="Mia" />, "es"))).toContain("Empezar ya el del aniversario");
     expect(text(intl(<UsedOne left={1} days={anniversary} name="Mia" />))).toContain("One left, ready for your anniversary.");
     expect(text(intl(<UsedOne left={1} days={anniversary} name="Mia" />, "es"))).toContain("Te queda uno para vuestro aniversario.");
-    expect(text(intl(<UsedOne left={0} days={anniversary} name="Mia" />, "es"))).toContain("Este iba con uno de tus regalos. No hay nada que pagar. Era el último que te quedaba.");
+    expect(text(intl(<UsedOne left={0} days={anniversary} name="Mia" />, "es"))).toContain("Este ya estaba pagado: era uno de tus regalos. No hay nada que pagar. Era el último que te quedaba.");
   });
 });
 
@@ -206,9 +244,11 @@ describe("It's already paid for.", () => {
     expect(draw(2)).toContain("It's already paid for. One of your two gifts. One left after this.");
     expect(draw(1)).toContain("Your last gift ready.");
     expect(draw(1)).not.toContain("One of your two gifts");
-    expect(draw(3)).toContain("One of your three gifts. 2 left after this.");
-    expect(draw(4)).toContain("One of your four gifts. 3 left after this.");
-    expect(draw(3, null, "es")).toContain("Uno de tus tres regalos. Te quedan 2 más.");
+    // Numbers in words throughout, never half in digits.
+    expect(draw(3)).toContain("One of your three gifts. Two left after this.");
+    expect(draw(4)).toContain("One of your four gifts. Three left after this.");
+    expect(draw(3, null, "es")).toContain("Uno de tus tres regalos. Después de este te quedan dos.");
+    expect(draw(4, null, "es")).toContain("Uno de tus cuatro regalos. Después de este te quedan tres.");
     expect(draw(1, null, "es")).toContain("Es el último que te queda.");
   });
 
@@ -220,7 +260,7 @@ describe("It's already paid for.", () => {
     expect(draw(2)).toContain("Yours for good, with everything in it");
     expect(draw(2)).toContain("Send to Mia");
     expect(draw(2)).toContain("Pay for this one instead");
-    expect(draw(2, null, "es")).toContain("Ya está pagado. Uno de tus dos regalos. Te queda otro.");
+    expect(draw(2, null, "es")).toContain("Ya está pagado. Uno de tus dos regalos. Después de este te queda otro.");
     expect(draw(2, null, "es")).toContain("Enviar a Mia");
   });
 

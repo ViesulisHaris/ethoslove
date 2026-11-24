@@ -43,6 +43,7 @@ import { Paywall } from "./paywall";
 import { AlreadyPaid, openingOf } from "./already-paid";
 import { ShareScreen, type ShareScreenPair } from "./share-screen";
 import { fetchEntitlements } from "@/components/pricing/entitlements";
+import { fetchSavedReminders } from "./pair-used";
 import { humanize } from "./template-fields";
 
 export function PublishSheet({
@@ -103,6 +104,8 @@ export function PublishSheet({
     shortId: string;
     status: "live" | "scheduled";
     usedGift?: true;
+    /** With `usedGift`: gifts ready left after this one. */
+    usedLeft: number;
     /** Two more gifts under the link, as it stood when the gift went out (never drawn later: nothing moves). */
     pair: ShareScreenPair | null;
   } | null>(null);
@@ -376,11 +379,14 @@ export function PublishSheet({
     // Two more gifts: offered only when this publish followed a payment for this very gift (back from
     // checkout, its own purchase paid in the last day, something in it paid for), drawn from what was
     // loaded while the sheet was open, or not at all.
+    // A gift sent on a gift ready gets its line whether or not that load finished (pair-used.tsx).
     const loaded = pairLoaded.current;
     const afterPayment = resume && entitlement?.paidJustNow === true && premiumKeys.length > 0 && !result.data.usedGift;
+    const usedLeft = Math.max(0, (entitlement?.giftsReady ?? 1) - 1);
     setPublished({
       ...result.data,
-      pair: loaded ? { ...loaded, afterPayment, left: Math.max(0, (entitlement?.giftsReady ?? 1) - 1) } : null,
+      usedLeft,
+      pair: loaded ? { ...loaded, afterPayment, left: usedLeft } : null,
     });
     if (result.data.usedGift) track("gift_ready_used", { template: slug, left: Math.max(0, (entitlement?.giftsReady ?? 1) - 1) });
     // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
@@ -459,17 +465,18 @@ export function PublishSheet({
   // a sender back from paying or about to send on a gift ready, so the share screen has the card in
   // its first frame or never (it sits under the link: arriving later, it would push everything down).
   const pairWanted = open && state.authed && !inApp && (resume || useGiftReady);
-  const [pairCard, setPairCard] = useState<Pick<ShareScreenPair, "Card" | "ent"> | null>(null);
-  const pairLoaded = useRef<Pick<ShareScreenPair, "Card" | "ent"> | null>(null);
+  const [pairCard, setPairCard] = useState<Pick<ShareScreenPair, "Card" | "ent" | "saved"> | null>(null);
+  const pairLoaded = useRef<Pick<ShareScreenPair, "Card" | "ent" | "saved"> | null>(null);
   useEffect(() => {
     pairLoaded.current = pairCard;
   }, [pairCard]);
   useEffect(() => {
     if (!pairWanted || pairCard) return;
     let live = true;
-    void Promise.all([fetchEntitlements(), import("./two-more-gifts")])
-      .then(([ent, mod]) => {
-        if (live) setPairCard({ Card: mod.TwoMoreGifts, ent });
+    // The saved days too, so the card's rows are right in its first frame and never redrawn.
+    void Promise.all([fetchEntitlements(), fetchSavedReminders(), import("./two-more-gifts")])
+      .then(([ent, saved, mod]) => {
+        if (live) setPairCard({ Card: mod.TwoMoreGifts, ent, saved });
       })
       .catch(() => {});
     return () => {
@@ -542,6 +549,7 @@ export function PublishSheet({
             data={state.data}
             giftId={state.giftId}
             usedGift={published.usedGift === true}
+            usedLeft={published.usedLeft}
             pair={published.pair}
           />
         ) : (

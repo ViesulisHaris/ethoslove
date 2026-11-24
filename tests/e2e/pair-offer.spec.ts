@@ -13,6 +13,8 @@ const COUNTRY_CURRENCY: Record<string, keyof typeof OFFER> = { US: "usd", GB: "g
 
 type Setup = { ready?: number; offer?: boolean; reminders?: unknown[]; remindersDelayMs?: number; wallet?: boolean; stripeDelayMs?: number; entitlementsDelayMs?: number };
 
+const MIA_BIRTHDAY = (month: number, day: number) => [{ id: "r1", recipientName: "Mia", occasion: "birthday", month, day, locale: "en", templateSlug: null }];
+
 /**
  * Signs the browser in as far as the page can tell (a session cookie's name), and answers what the
  * card asks: the entitlements (the offer in the currency the visitor's country gets), the saved
@@ -54,6 +56,8 @@ async function open(page: Page, path: string, setup: Setup = {}) {
 }
 
 const noAmounts = (body: Record<string, unknown>) => Object.keys(body).filter((k) => /amount|price|total|waiver/i.test(k));
+/** The card's own checkout requests: on an Android phone (mobile-chrome) the wallet's session is asked for on view too. */
+const byCard = (asked: Record<string, unknown>[]) => asked.filter((body) => !body.oneTap);
 
 test.describe("two more gifts under the link", () => {
   test.use({ viewport: { width: 390, height: 844 } });
@@ -73,10 +77,9 @@ test.describe("two more gifts under the link", () => {
     expect(box && box.y + box.height).toBeLessThanOrEqual(844);
 
     await add.click();
-    await expect.poll(() => asked.length).toBe(1);
-    expect(asked[0]).toMatchObject({ product: "pair", currency: "eur", locale: "en", returnTo: "/dashboard" });
-    expect(asked[0]).not.toHaveProperty("oneTap");
-    expect(noAmounts(asked[0])).toEqual([]);
+    await expect.poll(() => byCard(asked).length).toBe(1);
+    expect(byCard(asked)[0]).toMatchObject({ product: "pair", currency: "eur", locale: "en", returnTo: "/dashboard" });
+    for (const body of asked) expect(noAmounts(body)).toEqual([]);
     // Refused (here: too many tries): said, and the button is back.
     await expect(page.getByText("Too many tries. Wait a minute and try again.")).toBeVisible();
     await expect(add).toBeEnabled();
@@ -104,6 +107,48 @@ test.describe("two more gifts under the link", () => {
     await page.waitForTimeout(1500);
     expect(await qr.boundingBox()).toEqual(before);
   });
+
+  test("three taps in one go ask for one checkout", async ({ page }) => {
+    const { asked } = await open(page, "/share-preview");
+    const add = page.getByTestId("pair-add");
+    await expect(add).toBeEnabled();
+    await add.evaluate((el: HTMLElement) => {
+      el.click();
+      el.click();
+      el.click();
+    });
+    await expect.poll(() => byCard(asked).length).toBe(1);
+    await page.waitForTimeout(800);
+    expect(byCard(asked)).toHaveLength(1);
+  });
+
+  test("a saved birthday that answers late is a row in the card's first frame: no row is added or swapped", async ({ page }) => {
+    await open(page, "/share-preview?occasion=christmas", { remindersDelayMs: 1500, reminders: MIA_BIRTHDAY(1, 20) });
+    await expect(page.getByTestId("pair-offer")).toBeVisible();
+    // The moment the card is there, its rows are the final ones.
+    const rows = page.getByTestId("pair-days").locator("li");
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0)).toContainText("Mia's birthday");
+    await expect(rows.nth(1)).toContainText("Valentine's Day");
+    const before = await page.getByTestId("pair-add").boundingBox();
+    await page.waitForTimeout(1000);
+    expect(await page.getByTestId("pair-add").boundingBox()).toEqual(before);
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0)).toContainText("Mia's birthday");
+  });
+
+  for (const [when, rows] of [
+    ["2026-12-20T10:00:00", ["Valentine's Day", "Christmas"]],
+    ["2027-02-10T10:00:00", ["Christmas", "Valentine's Day"]],
+  ] as const) {
+    test(`in the busiest week (${when.slice(0, 10)}) the card still names two days`, async ({ page }) => {
+      await page.clock.setFixedTime(new Date(when));
+      await open(page, "/share-preview?occasion=birthday");
+      const days = page.getByTestId("pair-days").locator("li");
+      await expect(days).toHaveCount(2);
+      for (const [i, name] of rows.entries()) await expect(days.nth(i)).toContainText(name);
+    });
+  }
 
   test("a saved anniversary for this person comes in as a row", async ({ page }) => {
     await open(page, "/share-preview?occasion=birthday", { reminders: [{ id: "r1", recipientName: "Mia", occasion: "anniversary", month: 1, day: 9, locale: "en", templateSlug: null }] });
@@ -157,6 +202,46 @@ test.describe("two more gifts under the link", () => {
     await expect(bought.getByRole("link", { name: "Start the Christmas one now" })).toHaveAttribute("href", /\/occasions\/christmas$/);
   });
 
+  test("with Apple Pay here, paying by card instead leaves the card button, not a wallet button whose session was closed", async ({ page }) => {
+    const { asked } = await open(page, "/share-preview", { wallet: true, stripeDelayMs: 7000 });
+    await expect(page.getByTestId("pair-wallet-holding")).toBeVisible();
+    await expect.poll(() => asked.filter((b) => b.oneTap).length).toBe(1);
+    await page.getByTestId("pair-by-card").click();
+    await expect(page.getByText("Too many tries. Wait a minute and try again.")).toBeVisible();
+    // Asking for Stripe's page closed the wallet's session: from here on, the card button only.
+    await expect(page.getByTestId("pair-wallet")).toHaveCount(0);
+    await expect(page.getByTestId("pair-add")).toBeEnabled();
+    expect(asked.filter((b) => b.oneTap)).toHaveLength(1);
+  });
+
+  test("on a 320 px phone the bought card's start button keeps its words inside the pill", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    for (const [path, label] of [
+      ["/share-preview?state=bought&occasion=christmas", "Start the one for Mia's birthday now"],
+      ["/es/share-preview?state=bought&occasion=christmas", "Empezar ya el del cumpleaños de Mia"],
+    ] as const) {
+      await page.clock.setFixedTime(new Date("2026-11-24T10:00:00"));
+      await open(page, path, { reminders: MIA_BIRTHDAY(12, 10) });
+      const start = page.getByTestId("pair-bought").getByRole("link");
+      await expect(start).toHaveText(label);
+      expect(await start.evaluate((a) => a.scrollWidth <= a.clientWidth)).toBe(true);
+      const box = (await start.boundingBox())!;
+      expect(box.x + box.width).toBeLessThanOrEqual(320);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+    }
+  });
+
+  test("a 40-character name keeps 'Send to …' inside a 375 px screen", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const long = "Maximiliana Alexandra de la Cruz Fernán";
+    await open(page, `/share-preview?paid=2&name=${encodeURIComponent(long)}`);
+    const send = page.getByTestId("already-paid-send");
+    await expect(send).toContainText(long);
+    const box = (await send.boundingBox())!;
+    expect(box.x + box.width).toBeLessThanOrEqual(375);
+    expect(await send.evaluate((b) => b.scrollWidth <= b.clientWidth)).toBe(true);
+  });
+
   test("the foot's lines are evenly spaced, and Terms is still a 44 px tap target", async ({ page }) => {
     await open(page, "/share-preview");
     const foot = page.getByTestId("pair-foot");
@@ -193,7 +278,7 @@ test.describe("two more gifts under the link", () => {
 
   test("a gift sent on one of the two says so; a sender with no offer sees no card at all", async ({ page }) => {
     await open(page, "/share-preview?used=1", { ready: 1, offer: false });
-    await expect(page.getByTestId("pair-used")).toContainText("This was one of your gifts. Nothing to pay.");
+    await expect(page.getByTestId("pair-used")).toContainText("This one was already paid for. Nothing to pay.");
     await expect(page.getByTestId("pair-used")).toContainText("One left, ready for Christmas.");
     await open(page, "/share-preview", { offer: false });
     await expect(page.getByText("Instagram:")).toBeVisible();

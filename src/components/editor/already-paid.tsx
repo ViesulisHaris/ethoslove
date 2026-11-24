@@ -94,7 +94,8 @@ export function AlreadyPaid({
           </li>
         ))}
       </ul>
-      <Button type="button" onClick={onSend} disabled={busy} className="mt-5 h-12 w-full rounded-full text-base" data-testid="already-paid-send">
+      {/* Wraps rather than running past the pill: a name may be 40 characters long. */}
+      <Button type="button" onClick={onSend} disabled={busy} className="mt-5 h-auto min-h-12 w-full rounded-full py-3 text-center text-base whitespace-normal [overflow-wrap:anywhere]" data-testid="already-paid-send">
         {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin motion-reduce:animate-none" /> : null}
         <span>{name ? t("send", { name }) : t("sendNoName")}</span>
       </Button>

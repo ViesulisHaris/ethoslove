@@ -1,5 +1,4 @@
 import { SKIP_WINDOW_DAYS, nextOccurrence, occurrenceIn, type MonthDay, type Reminder, type ReminderOccasion } from "./reminders";
-
 /**
  * The two days the "two more gifts" card names after a paid gift ("Nobody likes to be forgotten. You
  * remembered today. Next up: Christmas, in 4 weeks; Valentine's Day, in 12 weeks"). Pure, so the
@@ -11,7 +10,7 @@ export type NextDayKind = "christmas" | "valentines" | "birthday" | "anniversary
 /** `name`: whose day a saved birthday or other day is (the reminder's name); absent for Christmas and Valentine's Day. */
 export type NextDay = { kind: NextDayKind; month: number; day: number; daysAway: number; name?: string };
 
-/** A day fewer than this many days away is too close to make a gift for: it is left out. */
+/** A day fewer than this many days away is too close to make a gift for: the year after's is named. */
 export const NEXT_DAY_MIN = 8;
 
 const CHRISTMAS: MonthDay = { month: 12, day: 25 };
@@ -39,9 +38,10 @@ function comingFor(kind: NextDayKind, date: MonthDay, today: Date, made: { kind:
 
 /**
  * At most two days, soonest first: the days saved for this recipient (`saved`, already only theirs),
- * Christmas and Valentine's Day (once, if it is also saved), each at its next coming. A day fewer than
- * NEXT_DAY_MIN days away is left out, and so is the coming of the occasion this gift was made for
- * (`made`): the card then names the one after it.
+ * Christmas and Valentine's Day (once, if it is also saved), each at its next coming. A coming fewer
+ * than NEXT_DAY_MIN days away is passed over, and so is the coming of the occasion this gift was made
+ * for (`made`): the card then names the one after it. Christmas and Valentine's Day are always
+ * candidates, so there are always two days.
  */
 export function nextDays(
   today: Date,
@@ -60,9 +60,11 @@ export function nextDays(
     const key = `${kind}:${date.month}-${date.day}:${name ?? ""}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    const coming = comingFor(kind, date, today, madeFor);
+    let coming = comingFor(kind, date, today, madeFor);
+    // Too close to make a gift for: the year after's instead, so Christmas week and Valentine's week
+    // still name two days ("Both gifts" beside a single row read wrong in the busiest weeks).
+    if (daysBetween(today, coming) < NEXT_DAY_MIN) coming = occurrenceIn(coming.getUTCFullYear() + 1, date);
     const daysAway = daysBetween(today, coming);
-    if (daysAway < NEXT_DAY_MIN) continue;
     days.push({ kind, month: date.month, day: date.day, daysAway, ...(name ? { name } : {}) });
   }
   return days.sort((a, b) => a.daysAway - b.daysAway).slice(0, 2);

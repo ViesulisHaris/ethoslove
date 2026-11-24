@@ -18,6 +18,7 @@ import { QrDesigner } from "./qr-designer";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
 import type { PairOnShare, PairPreviewState, TwoMoreGifts } from "./two-more-gifts";
+import { UsedGiftLine } from "./pair-used";
 
 /**
  * Two more gifts under the link: the card's own code (imported by the publish sheet while it is open,
@@ -33,6 +34,7 @@ export function ShareScreen({
   data,
   giftId,
   usedGift = false,
+  usedLeft = 0,
   pair,
   pairPreview,
 }: {
@@ -43,6 +45,8 @@ export function ShareScreen({
   giftId: string | null;
   /** This gift went out on a gift ready (two more gifts): the card under the link says so. */
   usedGift?: boolean;
+  /** With `usedGift`: gifts ready left after this one. */
+  usedLeft?: number;
   pair?: ShareScreenPair | null;
   /** Development page only: the state the two more gifts card opens in. */
   pairPreview?: PairPreviewState;
@@ -112,9 +116,14 @@ export function ShareScreen({
       </p>
 
       {/* Under the link, never in its way; not for an Etsy buyer, nor inside the iPhone app (the App Store sells there). */}
-      {authed && !etsy && pair ? (
+      {/* A gift sent on a gift ready says so without waiting for the card's own code to load. */}
+      {authed && !etsy && usedGift ? (
         <div data-app-hide>
-          <pair.Card data={data} ent={pair.ent} afterPayment={pair.afterPayment} left={pair.left} usedGift={usedGift} preview={pairPreview} />
+          <UsedGiftLine data={data} left={usedLeft} saved={pair?.saved} />
+        </div>
+      ) : authed && !etsy && pair ? (
+        <div data-app-hide>
+          <pair.Card data={data} ent={pair.ent} afterPayment={pair.afterPayment} left={pair.left} saved={pair.saved} preview={pairPreview} />
         </div>
       ) : null}
 

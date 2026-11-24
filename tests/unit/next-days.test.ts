@@ -49,10 +49,18 @@ describe("nextDays", () => {
     expect(days[1]).toMatchObject({ kind: "birthday", month: 2, day: 29, daysAway: 27 });
   });
 
-  it("takes a day exactly 8 days away, and leaves out one 7 days away", () => {
+  it("takes a day exactly 8 days away, and names the year after's for one 7 days away", () => {
     expect(nextDays(day("2026-12-17"), [], null)[0]).toMatchObject({ kind: "christmas", daysAway: 8 });
-    expect(nextDays(day("2026-12-18"), [], null).map((d) => d.kind)).not.toContain("christmas");
-    expect(nextDays(day("2026-12-18"), [], null)[0]).toMatchObject({ kind: "valentines" });
+    expect(shown(nextDays(day("2026-12-18"), [], null))).toEqual(["valentines 2-14 in 8 weeks", "christmas 12-25 in 12 months"]);
+  });
+
+  it("names two days in Christmas week and Valentine's week, the busiest weeks", () => {
+    expect(shown(nextDays(day("2026-12-20"), [], null))).toEqual(["valentines 2-14 in 8 weeks", "christmas 12-25 in 12 months"]);
+    expect(shown(nextDays(day("2027-02-10"), [], null))).toEqual(["christmas 12-25 in 10 months", "valentines 2-14 in 12 months"]);
+    // A saved day still comes first when it is nearer than the year-after ones.
+    expect(nextDays(day("2026-12-20"), [saved("birthday", 3, 5)], null).map((d) => d.kind)).toEqual(["valentines", "birthday"]);
+    // A saved birthday three days off is not named for this year; its next year's coming waits its turn.
+    expect(nextDays(day("2026-12-20"), [saved("birthday", 12, 23)], null).map((d) => d.kind)).toEqual(["valentines", "birthday"]);
   });
 
   it("is at most two days, soonest first", () => {

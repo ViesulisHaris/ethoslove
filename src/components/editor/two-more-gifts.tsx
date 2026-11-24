@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -9,10 +9,10 @@ import type { GiftData } from "@/lib/gift/schema";
 import { env } from "@/lib/env";
 import { track } from "@/lib/analytics/track";
 import { formatAmount, formatRound, pairApart } from "@/lib/pricing/products";
-import { REMINDER_NAME_MAX, formatMonthDay, reminderDateFor, reminderOccasionFor, type Reminder } from "@/lib/lifecycle/reminders";
-import { dayAway, dayArgs, dayName, localToday, nextDays, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
+import { formatMonthDay, type Reminder } from "@/lib/lifecycle/reminders";
+import { dayAway, dayArgs, dayName, occasionIcon, occasionPath, type NextDay } from "@/lib/lifecycle/next-days";
 import { DayRows } from "@/components/pricing/day-rows";
-import { getManifest } from "@/templates/manifests";
+import { useNextDays } from "./pair-used";
 import type { Entitlements, PairOffer } from "@/components/pricing/entitlements";
 import { startCheckout, startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { walletHere, type Wallet } from "@/components/pricing/wallet";
@@ -37,8 +37,10 @@ export type PairOnShare = {
   ent: Entitlements | null;
   /** This publish followed a payment for this gift (back from checkout, the gift's own purchase paid in the last day, something in it paid). */
   afterPayment: boolean;
-  /** With `usedGift`: gifts ready left after this one. */
+  /** Gifts ready left after this one, when it went out on one (the share screen's UsedGiftLine). */
   left: number;
+  /** The account's saved days (GET /api/reminders), read while the sheet was open; null when they weren't. */
+  saved?: Reminder[] | null;
 };
 
 /**
@@ -46,15 +48,16 @@ export type PairOnShare = {
  * of a gift just paid for (docs/marketing/growth-build/DESIGN-after-payment.md 2). Who may buy them
  * is the server's (`pairOffer`, lib/commerce/gift-credits.ts pairAllowed); when is the sheet's:
  * only after a payment for this very gift (`afterPayment`), never after a free note, a free reply or
- * a gift on a template already owned. Otherwise nothing at all, no frame and no space. A gift sent
- * with one of the two shows the quiet "This was one of your gifts" instead.
+ * a gift on a template already owned. Otherwise nothing at all, no frame and no space, and nothing
+ * asked of the server. A gift sent with one of the two gets the quiet line of pair-used.tsx instead,
+ * drawn by the share screen itself.
  */
-export function TwoMoreGifts({ data, ent, afterPayment, left, usedGift = false, preview }: PairOnShare & { data: GiftData; usedGift?: boolean; preview?: PairPreviewState }) {
+export function TwoMoreGifts({ data, ent, afterPayment, saved, preview }: PairOnShare & { data: GiftData; preview?: PairPreviewState }) {
   const [bought, setBought] = useState(preview === "bought");
-  const days = useNextDays(data);
-  if (usedGift) return <UsedOne left={left} days={days} name={data.recipientName} />;
+  const offered = afterPayment && Boolean(ent?.pairOffer);
+  const days = useNextDays(data, saved, bought || offered);
   if (bought) return <Bought days={days} name={data.recipientName} />;
-  if (!afterPayment || !ent?.pairOffer) return null;
+  if (!offered || !ent?.pairOffer) return null;
   return <Offer offer={ent.pairOffer} days={days} name={data.recipientName} onBought={() => setBought(true)} initialPay={preview === "paying" || preview === "declined" ? preview : "idle"} />;
 }
 
@@ -63,47 +66,6 @@ export function TwoMoreGifts({ data, ent, afterPayment, left, usedGift = false, 
  * and browser tests: paying, declined and bought only ever follow a real wallet payment otherwise.
  */
 export type PairPreviewState = "paying" | "declined" | "bought";
-
-/**
- * The next two days for this recipient: Christmas and Valentine's Day until the account's saved days
- * answer, then those too (GET /api/reminders, as the reminder card reads it), and again each time
- * the reminder card below saves one ("ethos:reminder-saved").
- */
-function useNextDays(data: GiftData): NextDay[] {
-  const [made] = useState(() => {
-    const occasions = getManifest(data.templateSlug)?.occasions;
-    if (occasions?.[0] === "christmas") return { occasion: "christmas" as const, month: 12, day: 25 };
-    const occasion = reminderOccasionFor(occasions);
-    return { occasion, ...reminderDateFor(occasion, data.countdown, new Date()) };
-  });
-  const [saved, setSaved] = useState<Reminder[]>([]);
-  const who = data.recipientName.trim().slice(0, REMINDER_NAME_MAX).toLowerCase();
-  const read = useCallback(() => {
-    if (!who) return () => {};
-    let live = true;
-    fetch("/api/reminders", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((body: { reminders?: Reminder[] } | null) => {
-        if (!live || !body?.reminders) return;
-        setSaved(body.reminders.filter((r) => r.recipientName.trim().toLowerCase() === who));
-      })
-      .catch(() => {});
-    return () => {
-      live = false;
-    };
-  }, [who]);
-  useEffect(() => {
-    const stop = read();
-    const again = () => void read();
-    window.addEventListener("ethos:reminder-saved", again);
-    return () => {
-      stop();
-      window.removeEventListener("ethos:reminder-saved", again);
-    };
-  }, [read]);
-  // Recomputed only when what it reads changes, so the rows never move unless the days really differ.
-  return useMemo(() => nextDays(localToday(), saved, made), [saved, made]);
-}
 
 /** A day's name as the reminder card says it: "Mia's birthday", "Your anniversary", "Valentine's Day". */
 function useDayName(name: string) {
@@ -139,6 +101,8 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   const [secret, setSecret] = useState<{ clientSecret: string; sessionId?: string } | null>(null);
   const [pay, setPay] = useState<Pay>(initialPay);
   const [cardBusy, setCardBusy] = useState(false);
+  // Set before the await, so taps in the same tick ask once (state would still read false for them).
+  const cardAsked = useRef(false);
   const cardRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -179,19 +143,38 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
   }, [inView, walletState === "waiting"]);
 
   const payByCard = async () => {
-    if (cardBusy) return;
+    if (cardAsked.current) return;
+    cardAsked.current = true;
     setCardBusy(true);
     setPay("paying");
+    // Asking for Stripe's page closes the wallet session this card holds (one checkout open at a
+    // time, settlePairSessions), so its button would fail from here on, after a refusal or a Back
+    // from Stripe alike: the card button takes its place for good.
+    setWalletState("none");
+    setSecret(null);
     track("pair_clicked", { how: "card" });
     const result = await startCheckout(request, { total: offer.amount, category: "pair" });
     if ("url" in result) {
       window.location.assign(result.url);
       return;
     }
+    cardAsked.current = false;
     setCardBusy(false);
     setPay("idle");
     showCheckoutError(result.error);
   };
+
+  // Back from Stripe's page: the browser restores this page as it was left, mid-"One moment…".
+  useEffect(() => {
+    const back = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      cardAsked.current = false;
+      setCardBusy(false);
+      setPay((p) => (p === "paying" ? "idle" : p));
+    };
+    window.addEventListener("pageshow", back);
+    return () => window.removeEventListener("pageshow", back);
+  }, []);
 
   const events = useMemo(
     () => ({
@@ -295,12 +278,15 @@ export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { of
       <p className={cn("text-center text-[13px] text-pretty text-muted-foreground", useWallet && !paying ? "mt-2" : "mt-4")} data-testid="pair-foot">
         {t("foot")} {t("notice")}{" "}
         {/* The 44 px tap target is a pseudo-element around the word, so the line it sits on keeps its height. */}
+        {/* A new tab, so the link above stays on this screen (it is only ever drawn here, after a publish). */}
         <Link
           href="/legal/terms"
           target="_blank"
+          rel="noopener"
           className="relative underline underline-offset-2 after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-[''] hover:text-ink focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           {t("terms")}
+          <span className="sr-only"> {t("newTab")}</span>
         </Link>
       </p>
     </section>
@@ -322,7 +308,8 @@ export function Bought({ days, name }: { days: NextDay[]; name: string }) {
         </div>
       </div>
       <Days days={days} name={name} />
-      <Button asChild variant="outline" className="mt-5 h-12 w-full rounded-full text-base">
+      {/* Wraps rather than running past the pill: "Start the one for {name}'s birthday now" at 320 px, or with a long name. */}
+      <Button asChild variant="outline" className="mt-5 h-auto min-h-12 w-full rounded-full py-3 text-center text-base whitespace-normal [overflow-wrap:anywhere]">
         <Link href={start.href}>{start.label}</Link>
       </Button>
       <p className="mt-3 text-center text-sm text-muted-foreground">{t("readyStay")}</p>
@@ -330,17 +317,4 @@ export function Bought({ days, name }: { days: NextDay[]; name: string }) {
   );
 }
 
-/** Picture a8: this gift went out on one of the two. */
-export function UsedOne({ left, days, name }: { left: number; days: NextDay[]; name: string }) {
-  const t = useTranslations("editor.share.pair");
-  const next = days[0];
-  return (
-    <section className="mt-7 flex items-start gap-3 rounded-2xl border border-border bg-card p-5" data-testid="pair-used">
-      <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-moss" />
-      <div className="min-w-0">
-        <p className="text-base font-medium text-ink">{t("usedOne")}</p>
-        <p className="mt-1 text-[15px] text-ink-soft">{left > 0 ? t("leftOne", next ? dayArgs(next, name) : { kind: "other", name: "" }) : t("leftNone")}</p>
-      </div>
-    </section>
-  );
-}
+export { UsedOne } from "./pair-used";

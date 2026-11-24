@@ -25,10 +25,12 @@ export async function GiftsReady({ count, days }: { count: number; days: NextDay
           {count}
         </span>
         <div className="min-w-0">
-          <p className="font-display text-2xl leading-tight text-ink">
-            <span className="sr-only">{count} </span>
-            {t("count", { count })}
-          </p>
+          {/* A heading of its own on the gifts page; read aloud as one sentence ("2 gifts ready to
+              make"), while the eye reads the number in the circle and the words beside it. */}
+          <h2 className="font-display text-2xl leading-tight font-normal text-ink">
+            <span className="sr-only">{t("countSr", { count })}</span>
+            <span aria-hidden="true">{t("count", { count })}</span>
+          </h2>
           <p className="mt-0.5 text-[15px] text-ink-soft">{t("line")}</p>
         </div>
       </div>
@@ -37,7 +39,8 @@ export async function GiftsReady({ count, days }: { count: number; days: NextDay
           rows={days.map((d) => ({ key: `${d.kind}-${d.month}-${d.day}-${d.name ?? ""}`, icon: occasionIcon(d.kind), name: dayName(d, pair, remind), date: formatMonthDay(d, locale), away: dayAway(d.daysAway, pair) }))}
         />
       ) : null}
-      <Button asChild className="mt-5 h-12 w-full rounded-full text-base">
+      {/* Wraps rather than running past the pill: a day's name can carry a 40-character name. */}
+      <Button asChild className="mt-5 h-auto min-h-12 w-full rounded-full py-3 text-center text-base whitespace-normal [overflow-wrap:anywhere]">
         <Link href={make.href}>{make.label}</Link>
       </Button>
     </section>

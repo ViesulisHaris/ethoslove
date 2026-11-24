@@ -281,6 +281,7 @@
     "day": "Day",
     "ready": {
       "count": "{count, plural, one {Gift ready to make} other {Gifts ready to make}}",
+      "countSr": "{count, plural, one {# gift ready to make} other {# gifts ready to make}}",
       "line": "Paid for. Any gift you like.",
       "make": "{kind, select, christmas {Make the Christmas one} valentines {Make the Valentine's one} birthday {Make the one for {name}'s birthday} birthdayNoName {Make the birthday one} anniversary {Make the anniversary one} day {Make the one for {name}} other {Make a gift}}",
       "makeAny": "Make a gift"
@@ -627,7 +628,7 @@
       "paid": {
         "title": "It's already paid for.",
         "oneOfTwo": "{count, plural, =2 {One of your two gifts.} =3 {One of your three gifts.} =4 {One of your four gifts.} other {One of your # gifts.}}",
-        "oneLeft": "{left, plural, one {One left after this.} other {# left after this.}}",
+        "oneLeft": "{left, plural, =1 {One left after this.} =2 {Two left after this.} =3 {Three left after this.} other {# left after this.}}",
         "last": "Your last gift ready.",
         "arrives": "Arrives the moment you send it",
         "opens": "Opens on {when}",
@@ -673,13 +674,14 @@
         "foot": "Paid once. They wait on your account.",
         "notice": "A gift you haven't used can be refunded for 30 days.",
         "terms": "Terms",
+        "newTab": "(opens in a new tab)",
         "declined": "That payment didn't go through, and nothing was charged. Try again, or pay by card.",
         "readyTitle": "Two gifts are ready.",
         "readyLine": "Paid for. Nobody gets forgotten.",
         "startOne": "{kind, select, christmas {Start the Christmas one now} valentines {Start the Valentine's one now} birthday {Start the one for {name}'s birthday now} birthdayNoName {Start the birthday one now} anniversary {Start the anniversary one now} day {Start the one for {name} now} other {Start one now}}",
         "startAny": "Start one now",
         "readyStay": "They wait on your account and never expire.",
-        "usedOne": "This was one of your gifts. Nothing to pay.",
+        "usedOne": "This one was already paid for. Nothing to pay.",
         "leftOne": "{kind, select, christmas {One left, ready for Christmas.} valentines {One left, ready for Valentine's Day.} birthday {One left, ready for {name}'s birthday.} birthdayNoName {One left, ready for their birthday.} anniversary {One left, ready for your anniversary.} day {One left, ready for {name}'s day.} other {One left, ready when you need it.}}",
         "leftNone": "That was your last gift ready."
       }
