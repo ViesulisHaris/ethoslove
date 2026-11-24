@@ -9,7 +9,7 @@ import { pricingGifts } from "@/components/pricing/free-gifts";
 import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, FINDER_LINK, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
-import { MONTHS, MONTH_GUIDES, monthSlug } from "@/content/month-anniversaries";
+import { MONTHS, MONTH_GUIDES, monthFromSlug, monthSlug } from "@/content/month-anniversaries";
 import { OCCASION_IDEAS } from "@/content/occasion-ideas";
 import { pageUpdated } from "@/content/page-dates";
 import { recipientFromSlug } from "@/content/recipients";
@@ -54,14 +54,14 @@ function resolves(href: string, locale: "en" | "es"): boolean {
   if (anchor !== undefined && !(path === "/gifts" && readFileSync(join(process.cwd(), "src/components/marketing/digital-gift-guide.tsx"), "utf8").includes(`id="${anchor}"`))) return false;
   const [, section, slug, ...rest] = path.split("/");
   if (rest.length > 0) return false;
-  if (!slug) return ["gifts", "occasions", "templates", "pricing", DIGITAL_CARDS_PATH.slice(1)].includes(section);
+  if (!slug) return ["gifts", "occasions", "templates", "pricing", "long-distance", DIGITAL_CARDS_PATH.slice(1)].includes(section);
   if (section === "blog") {
     const post = getPost(slug);
     return Boolean(post) && postLocales(post!).includes(locale);
   }
   if (section === "occasions") return isOccasion(slug);
   if (section === "templates") return getManifest(slug) !== null;
-  if (section === "gifts") return (slug === "finder" && FINDER_BUILT) || isGiftGuide(slug) || recipientFromSlug(slug) !== null;
+  if (section === "gifts") return (slug === "finder" && FINDER_BUILT) || isGiftGuide(slug) || recipientFromSlug(slug) !== null || monthFromSlug(slug) !== null;
   return false;
 }
 
@@ -521,8 +521,93 @@ describe("/digital-cards", () => {
   });
 });
 
+describe("the second round of pages by kind (24 Nov 2026)", () => {
+  const all = (slug: GiftGuideSlug, locale: "en" | "es") => strings(GIFT_GUIDES[slug][locale]);
+
+  it("the two apology pages are two pages", () => {
+    for (const locale of GIFT_LOCALES) {
+      const [him, her] = [GIFT_GUIDES["apology-for-him"][locale], GIFT_GUIDES["apology-for-her"][locale]];
+      expect(him.hero.line).not.toBe(her.hero.line);
+      expect(him.hero.sentence).not.toBe(her.hero.sentence);
+      expect(him.craft).not.toBe(her.craft);
+      expect(him.ideasTitle).not.toBe(her.ideasTitle);
+      for (const idea of him.ideas) expect(her.ideas.map((i) => i.heading), idea.heading).not.toContain(idea.heading);
+      for (const f of him.faq) expect(her.faq.map((g) => g.q), f.q).not.toContain(f.q);
+      const reused: string[] = [];
+      for (const a of all("apology-for-him", locale)) for (const b of all("apology-for-her", locale)) if (sharedRun(a, b) > SHARED_RUN_MAX) reused.push(`${locale}: “${a.slice(0, 50)}” / “${b.slice(0, 50)}”`);
+      expect(reused).toEqual([]);
+      const common = him.ideas.filter((i) => her.ideas.some((j) => j.template === i.template));
+      expect(common.length, locale).toBeLessThanOrEqual(1);
+      expect(him.film ?? him.ideas[0].template).not.toBe(her.film ?? her.ideas[0].template);
+    }
+    // Spanish never genders the person the gift is for: the search phrase names "novio" or "novia" in the h1, the
+    // title, the label and the description only. The related links are the names of other pages (the two posts are
+    // "Cómo pedirle perdón a tu novio" and the like), not sentences about this one.
+    for (const slug of ["apology-for-him", "apology-for-her"] as const) {
+      const { h1, title, label, description, related, ...rest } = GIFT_GUIDES[slug].es;
+      void h1;
+      void title;
+      void label;
+      void description;
+      void related;
+      for (const s of strings(rest)) expect(s, `${slug}: ${s}`).not.toMatch(/\bnovi[oa]s?\b/i);
+    }
+  });
+
+  it("the surprise page lists only gifts with a reveal of their own, and sends people to the editor for the day and hour", () => {
+    const allowed = ["scratch-card", "midnight-countdown", "pack-your-bags", "the-letter", "fortune-cookie", "snow-globe", "jar-of-reasons"];
+    for (const locale of GIFT_LOCALES) {
+      const guide = GIFT_GUIDES.surprise[locale];
+      for (const idea of guide.ideas) expect(allowed, idea.template).toContain(idea.template);
+      const bags = guide.ideas.find((i) => i.template === "pack-your-bags")!;
+      expect(`${bags.heading} ${bags.brief ?? ""} ${bags.body}`).not.toMatch(/hidden surprise|sorpresa final|sorpresa oculta/i);
+      const messages = locale === "en" ? en : es;
+      expect(guide.faq.some((f) => f.a.includes(messages.editor.sections.extras.title) && f.a.includes(messages.editor.extras.schedule)), locale).toBe(true);
+    }
+  });
+
+  it("the care package page says nothing is posted and names the printed card as the dashboard names it", () => {
+    expect(existsSync(join(process.cwd(), "src/components/dashboard/print-card.tsx"))).toBe(true);
+    for (const locale of GIFT_LOCALES) {
+      const guide = GIFT_GUIDES["long-distance-care-package"][locale];
+      const messages = locale === "en" ? en : es;
+      const text = strings(guide).join(" ");
+      expect(text, locale).toContain(messages.editor.qr.printCard);
+      expect(text, locale).toContain(messages.dashboard.qrCard);
+      expect(`${guide.hero.sentence} ${guide.lead[0]}`, locale).toMatch(locale === "en" ? /post|ship|mail/i : /envía|correo|paquete/i);
+    }
+  });
+
+  it("each new page links to the pages that own the searches beside it", () => {
+    const hrefs = (slug: GiftGuideSlug) => GIFT_GUIDES[slug].en.related.map((r) => r.href);
+    for (const [slug, other] of [["apology-for-him", "apology-for-her"], ["apology-for-her", "apology-for-him"]] as const) {
+      for (const href of ["/occasions/apology", "/blog/how-to-apologize-to-your-boyfriend", "/blog/sorry-message-for-girlfriend", `/gifts/${other}`]) expect(hrefs(slug), slug).toContain(href);
+    }
+    for (const href of ["/blog/how-to-surprise-your-girlfriend", "/blog/midnight-birthday-surprise-ideas", "/blog/surprise-trip-reveal-ideas"]) expect(hrefs("surprise")).toContain(href);
+    for (const href of ["/occasions/long-distance", "/blog/long-distance-relationship-gifts", "/long-distance"]) expect(hrefs("long-distance-care-package")).toContain(href);
+    for (const href of ["/gifts/photo-album", "/occasions/anniversary"]) expect(hrefs("memory-book")).toContain(href);
+  });
+
+  it("the memory book and the photo album are two pages", () => {
+    const bag = (s: string) => new Set(s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean));
+    const overlap = (a: string, b: string) => {
+      const [x, y] = [bag(a), bag(b)];
+      return [...x].filter((w) => y.has(w)).length / new Set([...x, ...y]).size;
+    };
+    for (const locale of GIFT_LOCALES) {
+      const [book, album] = [GIFT_GUIDES["memory-book"][locale], GIFT_GUIDES["photo-album"][locale]];
+      const shared = book.ideas.filter((i) => album.ideas.some((j) => j.template === i.template));
+      expect(shared.length, locale).toBeLessThanOrEqual(2);
+      for (const f of book.faq) expect(album.faq.map((g) => g.q), f.q).not.toContain(f.q);
+      expect(overlap(book.h1, album.h1), locale).toBeLessThan(0.6);
+      expect(overlap(book.title, album.title), locale).toBeLessThan(0.6);
+      expect(book.film ?? book.ideas[0].template).not.toBe(album.film ?? album.ideas[0].template);
+    }
+  });
+});
+
 describe("llms.txt", () => {
-  it("lists the six gift pages by kind and /digital-cards, as it lists the pages by person", async () => {
+  it("lists every gift page by kind and /digital-cards, as it lists the pages by person", async () => {
     // It listed the seven for-* pages only (the review of 22 Nov 2026), and assistants are a measured source of visitors.
     const { GET } = await import("@/app/llms.txt/route");
     const text = await GET().text();

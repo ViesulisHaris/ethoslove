@@ -10,7 +10,7 @@ import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateOfferAmoun
 import { chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
 import { getPost, postLocales } from "@/content/blog";
 import { TOGETHER_PATH } from "@/content/together-guide";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDE_BAND_COVERS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
 import { MONTHS, MONTH_GUIDES, monthBandPhoto, monthFromSlug, monthNeighbours, monthPost, monthRef, monthSlug } from "@/content/month-anniversaries";
 import { handLine, kindCardLine, kindIdeaIsFree, openingLine } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
@@ -308,8 +308,8 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
             <IdeaCards id={`ideas-${kind}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), free: t("free"), full: t("ideaInFull"), copy: t("copyLine"), copied: t("copiedLine") }} />
           </Spread>
 
-          {/* The polaroid on the band's phone holds this page's own photo, not the one every page had (content/gift-guides.ts). */}
-          <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={guideBandPhoto(kind)} />}>
+          {/* The polaroid on the band's phone holds this page's own photo, and the phone's screen its own cover where it has one: together they tell one band from another (content/gift-guides.ts). */}
+          <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={guideBandPhoto(kind)} poster={getManifest(GUIDE_BAND_COVERS[kind] ?? "")?.thumbnail.poster} />}>
             <p className="text-page-label text-page-body">{t("craftLabel")}</p>
             {/* Each page's own heading: what its three how-tos are about (content/gift-guides.ts, `craft`). */}
             <h2 id="kind-guide" className="mt-4 display-xl text-balance text-page-ink">
