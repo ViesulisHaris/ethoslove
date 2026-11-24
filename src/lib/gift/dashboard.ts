@@ -5,7 +5,7 @@ import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { GIFTS_BUCKET, REACTIONS_BUCKET, isStoragePath, storageObjectKey } from "./assets";
 import type { Tables } from "@/lib/supabase/types";
 import { UNSENT_DAYS, unsentTemplates } from "@/lib/commerce/unsent";
-import { extraFor, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
+import { showsExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 
 export type DashboardGift = Tables<"gifts"> & {
   stats: { opens: number; uniqueViewers: number; avgWatchPct: number; reactions: number; lastOpenedAt: string | null };
@@ -79,16 +79,18 @@ export async function getGiftDetail(userId: string, giftId: string) {
 }
 
 /**
- * The holiday extra this gift came with (lib/lifecycle/holiday-extras.ts), or null. Paid is what the
- * publish check reads: the owner holds an unlock for the gift's template. Asked only of a gift that
- * was published, so the dashboard's other gifts cost nothing.
+ * The holiday extra this gift came with (lib/lifecycle/holiday-extras.ts), or null: the stamp its first
+ * publish left, on a gift that is out, while the build gives extras, and while the owner still holds the
+ * unlock it was paid with (a refunded gift keeps its stamp but is offered nothing). Asked only of a gift
+ * that carries the stamp, so the dashboard's other gifts cost nothing.
  */
-export async function holidayExtraOf(userId: string, gift: Pick<Tables<"gifts">, "template_slug" | "created_at" | "published_at">): Promise<HolidayExtra | null> {
-  if (!gift.published_at || !extraFor({ createdAt: gift.created_at, publishedAt: gift.published_at, paid: true })) return null;
+export async function holidayExtraOf(userId: string, gift: Pick<Tables<"gifts">, "template_slug" | "status" | "data">): Promise<HolidayExtra | null> {
+  const extra = showsExtra(gift);
+  if (!extra) return null;
   const supabase = await getSupabaseServerClient();
   if (!supabase) return null;
   const { data: unlocked } = await supabase.rpc("has_template_unlock", { p_user: userId, p_slug: gift.template_slug });
-  return extraFor({ createdAt: gift.created_at, publishedAt: gift.published_at, paid: Boolean(unlocked) });
+  return unlocked ? extra : null;
 }
 
 /**

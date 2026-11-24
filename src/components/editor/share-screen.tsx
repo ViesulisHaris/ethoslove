@@ -9,7 +9,7 @@ import { SITE } from "@/config/site";
 import { useEditor } from "@/lib/editor/store";
 import { track } from "@/lib/analytics/track";
 import { tripLinks } from "@/lib/lifecycle/trip-links";
-import { extraFor } from "@/lib/lifecycle/holiday-extras";
+import type { HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import { PARTNER_NAMES, type PartnerId, type PartnerPlacement } from "@/lib/trips/partners";
 import { Button } from "@/components/ui/button";
@@ -20,12 +20,12 @@ import { TreeTagRow } from "./tree-tag-row";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
 
-export function ShareScreen({ shortId, status, unlockAt, data, giftId, paid = false }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null; paid?: boolean }) {
+export function ShareScreen({ shortId, status, unlockAt, data, giftId, holidayExtra = null }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null; holidayExtra?: HolidayExtra | null }) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
-  // Published this moment, so "made" is now (lib/lifecycle/holiday-extras.ts); read once.
-  const [publishedAt] = useState(() => new Date().toISOString());
-  const treeTag = extraFor({ createdAt: null, publishedAt, paid }) === "tree-tag";
+  // What the publish says this gift is offered (lib/lifecycle/holiday-extras.ts): the stamp its first
+  // publish left, the one the dashboard and the print page read, never worked out again here.
+  const treeTag = holidayExtra === "tree-tag";
   const [designQuery, setDesignQuery] = useState("");
   // Publishing needs an account, so this is always true here; the reminder is saved to it.
   const authed = useEditor((s) => s.authed);
@@ -110,7 +110,7 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId, paid = fa
       {treeTag && giftId ? (
         <TreeTagRow
           href={`/dashboard/gift/${giftId}/print?shape=tree-tag${designQuery ? `&${designQuery}` : ""}`}
-          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), until: t("treeTag.until") }}
+          words={{ title: t("treeTag.title"), line: t("treeTag.line"), print: t("treeTag.print"), label: t("treeTag.label") }}
           place="share"
         />
       ) : null}

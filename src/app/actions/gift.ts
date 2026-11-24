@@ -24,6 +24,7 @@ import { notifyPublished } from "@/lib/email/notify";
 import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
 import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
 import { countCampaignGift } from "@/lib/commerce/campaign";
+import { holidayExtraAtPublish, showsExtra, stampedExtra, type HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -106,7 +107,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
 
   const { data: row } = await ctx.supabase
     .from("gifts")
-    .select("status, template_slug, unlock_at, password_hash, watermark, free_tier:data->>freeTier, held_photos:data->photos")
+    .select("status, template_slug, unlock_at, password_hash, watermark, free_tier:data->>freeTier, held_photos:data->photos, stored_extra:data->>holidayExtra")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -116,7 +117,13 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
   // So does the free version a gift that is already out is held to (lib/gift/free-tier.ts): an edit
   // can't move a note back to the roomier rules. A draft still says it for itself.
-  const data = { ...loose.data, templateSlug: row.template_slug, ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }) };
+  // The holiday extra is the server's too (lib/lifecycle/holiday-extras.ts): whatever the row holds, never the browser's word.
+  const data = {
+    ...loose.data,
+    templateSlug: row.template_slug,
+    ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }),
+    holidayExtra: stampedExtra({ holidayExtra: row.stored_extra }) ?? undefined,
+  };
   const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
 
   if (row.status === "draft") {
@@ -179,7 +186,7 @@ const publishInput = z.object({
   replyToken: z.string().max(400).optional(),
 });
 
-export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled" }>> {
+export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; holidayExtra: HolidayExtra | null }>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
   const input = publishInput.safeParse(raw);
@@ -187,7 +194,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const { data: gift, error: giftError } = await ctx.supabase
     .from("gifts")
-    .select("id, template_slug, user_id, status, free_tier:data->>freeTier, held_photos:data->photos")
+    .select("id, template_slug, user_id, status, published_at, free_tier:data->>freeTier, held_photos:data->photos, stored_extra:data->>holidayExtra")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -244,6 +251,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();
+  // The holiday extra is decided once, at the gift's first publish, and kept after (lib/lifecycle/holiday-extras.ts).
+  const holidayExtra = holidayExtraAtPublish({ publishedBefore: gift.published_at !== null, stored: { holidayExtra: gift.stored_extra } }, Date.now(), Boolean(unlocked));
   const status = scheduled ? "scheduled" : "live";
   // Taken before the gift goes live, so two replies published with one token can't both be free.
   const claimed = reply?.free && !reply.held ? reply.originalGiftId : null;
@@ -260,7 +269,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   const { error: updateError } = await writer
     .from("gifts")
     .update({
-      data: { ...data, watermark: decision.watermark } as unknown as Json,
+      data: { ...data, watermark: decision.watermark, holidayExtra } as unknown as Json,
       status,
       is_premium: decision.isPremium,
       watermark: decision.watermark,
@@ -286,7 +295,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     gift.id,
     scheduled ? new Intl.DateTimeFormat(data.locale, { dateStyle: "long", timeStyle: "short", timeZone: input.data.schedule?.timezone }).format(new Date(input.data.schedule!.unlockAt)) : undefined,
   ).catch(() => {});
-  return { ok: true, data: { shortId: row?.short_id ?? "", status } };
+  return { ok: true, data: { shortId: row?.short_id ?? "", status, holidayExtra: unlocked ? showsExtra({ status, data: { holidayExtra } }) : null } };
 }
 
 /** Owner-only signed URLs so the editor can preview assets already in Storage. */

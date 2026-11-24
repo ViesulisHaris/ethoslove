@@ -41,6 +41,7 @@ import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
 import { ShareScreen } from "./share-screen";
+import type { HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 import { humanize } from "./template-fields";
 
 export function PublishSheet({
@@ -100,6 +101,7 @@ export function PublishSheet({
   const [published, setPublished] = useState<{
     shortId: string;
     status: "live" | "scheduled";
+    holidayExtra: HolidayExtra | null;
   } | null>(null);
 
   // Opening the sheet kicks uploads + a fresh entitlement check.
@@ -493,7 +495,7 @@ export function PublishSheet({
             unlockAt={state.schedule.enabled ? state.schedule.unlockAt : undefined}
             data={state.data}
             giftId={state.giftId}
-            paid={Boolean(fetchedEntitlement?.unlocked)}
+            holidayExtra={published.holidayExtra}
           />
         ) : (
           <div className="px-4 pt-8 pb-10 min-[360px]:px-5 sm:px-8">
