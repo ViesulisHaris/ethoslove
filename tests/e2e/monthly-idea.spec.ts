@@ -192,7 +192,9 @@ test.describe("where the address is given", () => {
     const found = await mode(page);
     test.skip(found !== "all" && found !== "buyers", `needs MONTHLY_IDEA_EMAILS=all or buyers; this server runs with "${found}"`);
     const paid = await openEditorSheet(page, "/create/bouquet");
-    await expect(paid.getByTestId("pay-panel").getByTestId("idea-where")).toBeVisible();
+    // The guest's pay panel needs Stripe; a server without it asks a guest to sign in instead.
+    if ((await paid.getByTestId("pay-panel").count()) > 0) await expect(paid.getByTestId("pay-panel").getByTestId("idea-where")).toBeVisible();
+    else await expect(paid.getByTestId("publish-sign-in").getByTestId("idea-where")).toHaveCount(found === "all" ? 1 : 0);
     const free = await openEditorSheet(page, "/create/the-letter");
     const signIn = free.getByTestId("publish-sign-in");
     await expect(signIn).toBeVisible();
