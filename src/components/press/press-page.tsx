@@ -9,7 +9,6 @@ import type { TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
 import { COVER_RATIO, COVER_SHAPE, CoverInScreen } from "@/components/templates/page/cover-in-screen";
-import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import { Intro, SPREAD } from "@/components/templates/page/spread";
 import { PRESS_FOOT_ART, PRESS_NUMBERS_ART } from "./placements";
 
@@ -58,14 +57,22 @@ export function PressHero({ maker, heading, line, sentence, poster, posterAlt, c
     <section className="relative" aria-labelledby="press-title">
       <div className={cn("container-x relative grid items-center gap-y-6 pt-5 pb-14 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-x-14 lg:pt-14 lg:pb-20 xl:grid-cols-[minmax(0,1fr)_minmax(0,34rem)]", "sm:landscape:[@media(max-height:520px)]:grid-cols-[minmax(0,1fr)_minmax(0,15rem)] sm:landscape:[@media(max-height:520px)]:gap-x-8 sm:landscape:[@media(max-height:520px)]:pt-3 sm:landscape:[@media(max-height:520px)]:pb-10")}>
         <div className="lg:max-w-[33rem]">
-          {/* The maker's mark, as the brief places it: over the heading, not in it. */}
-          <p data-maker className="text-page-label text-page-body">
+          {/* The maker's mark, as the brief places it: over the heading, not in it.
+              On a phone the mark, the heading and the italic line each keep one height whichever
+              face draws them, so nothing under them moves when the fonts arrive on a slow network:
+              the label's stand-in face is about a quarter wider than JetBrains Mono and the italic's
+              a few per cent wider than Newsreader's, enough to wrap a line that the real face keeps
+              whole. Two lines are kept for the mark (set at their foot, the space falls above it)
+              and the italic line, and the heading is a size that fits one line in both faces. */}
+          <p data-maker className="text-page-label text-page-body max-sm:flex max-sm:min-h-[2lh] max-sm:items-end">
             {maker}
           </p>
-          <h1 id="press-title" className={cn("mt-3 font-display text-[2.5rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink sm:text-[clamp(2.75rem,5vw,4.25rem)]", "sm:landscape:[@media(max-height:520px)]:mt-2 sm:landscape:[@media(max-height:520px)]:text-[2.5rem]")}>
+          <h1 id="press-title" className={cn("mt-3 font-display text-[2.5rem] leading-[1.02] tracking-[-0.028em] text-balance text-page-ink max-[359px]:text-[2.25rem] sm:text-[clamp(2.75rem,5vw,4.25rem)]", "sm:landscape:[@media(max-height:520px)]:mt-2 sm:landscape:[@media(max-height:520px)]:text-[2.5rem]")}>
             {heading}
           </h1>
-          <p className="mt-3 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic sm:mt-4">{line}</p>
+          <p data-hero-line className="mt-3 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic max-sm:min-h-[2lh] sm:mt-4">
+            {line}
+          </p>
           <p className={cn("mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6", "sm:landscape:[@media(max-height:520px)]:mt-3")}>{sentence}</p>
           <div className={cn("mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap", "sm:landscape:[@media(max-height:520px)]:mt-5")}>{children}</div>
         </div>
@@ -148,9 +155,10 @@ export function PressFigures({ label, heading, line, figures, asOf, day }: { lab
 }
 
 /**
- * (3) The five most-made templates: five covers in a row on a desk, one to a screen with dots on a
- * phone. Each cover is drawn whole, in the shape it is recorded in (13:20), so no title on it is cut;
- * its place in the list stands before its name, never over the picture.
+ * (3) The five most-made templates: five covers in a row from `sm`; on a phone a still list, each
+ * row a small cover beside its place, name and share, so all five are seen at once with nothing to
+ * swipe and no dots (DESIGN-LESS-TEXT.md). Each cover is drawn whole, in the shape it is recorded in
+ * (13:20), so no title on it is cut; its place in the list stands before its name, never over the picture.
  */
 export function PressMostMade({ label, heading, line, shareOf, cards, locale }: { label: string; heading: string; line: string; shareOf: string; cards: { manifest: TemplateManifest; share: string }[]; locale: "en" | "es" }) {
   const row = "press-most-made";
@@ -159,33 +167,34 @@ export function PressMostMade({ label, heading, line, shareOf, cards, locale }: 
       <div className={cn(SPREAD, "pt-6 pb-16 sm:pb-20 lg:pt-10 lg:pb-28")}>
         <Intro id="press-made" label={label} heading={heading} line={line} />
         <div className="min-w-0 lg:pt-7">
-          <ol id={row} className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-1 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-5 sm:gap-x-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-x-5">
+          <ol id={row} className="flex flex-col gap-3 pt-1 sm:grid sm:grid-cols-5 sm:gap-x-3 lg:gap-x-5">
             {cards.map(({ manifest: m, share }, i) => (
-              <li key={m.slug} data-card data-pick className="relative w-[78%] shrink-0 snap-start sm:w-auto">
-                {/* A column to the row's full height, the share at its foot: a name that wraps never pushes its share below the others.
+              <li key={m.slug} data-card data-pick className="relative">
+                {/* On a desk a column to the row's full height, the share at its foot: a name that wraps never pushes its share below the others.
                     Heard as "The Letter 32% of cards made": the bare per cent says what it is a share of, with no words added to the page. */}
-                <Link href={`/templates/${m.slug}`} aria-label={`${m.name[locale]} ${share} ${shareOf}`} className="group flex h-full flex-col rounded-[1.25rem]">
-                  <span style={{ aspectRatio: COVER_RATIO }} className="relative block overflow-hidden rounded-[1.25rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift group-active:translate-y-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+                <Link href={`/templates/${m.slug}`} aria-label={`${m.name[locale]} ${share} ${shareOf}`} className="group flex items-center gap-4 rounded-[0.875rem] sm:h-full sm:flex-col sm:items-stretch sm:gap-0 sm:rounded-[1.25rem]">
+                  <span style={{ aspectRatio: COVER_RATIO }} className="relative block w-[4.75rem] shrink-0 overflow-hidden rounded-[0.875rem] bg-page-band shadow-page-card transition-[translate,box-shadow] duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1 group-hover:shadow-page-lift group-active:translate-y-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 sm:w-auto sm:rounded-[1.25rem]">
                     {/* The name says what the link is; the cover is for the eye. */}
-                    <Image src={m.thumbnail.poster} alt="" fill sizes="(min-width: 1280px) 150px, (min-width: 640px) 18vw, 90vw" className="object-cover" />
+                    <Image src={m.thumbnail.poster} alt="" fill sizes="(min-width: 1280px) 150px, (min-width: 640px) 18vw, 76px" className="object-cover" />
                   </span>
-                  <span className="mt-3.5 flex items-baseline gap-2 font-display text-[1.0625rem] leading-tight">
-                    {/* The list is an <ol>, which says the order; the number is for the eye. */}
-                    <span aria-hidden="true" className="text-page-body tabular-nums">
-                      {i + 1}
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="flex items-baseline gap-2 font-display text-[1.125rem] leading-tight sm:mt-3.5 sm:text-[1.0625rem]">
+                      {/* The list is an <ol>, which says the order; the number is for the eye. */}
+                      <span aria-hidden="true" className="text-page-body tabular-nums">
+                        {i + 1}
+                      </span>
+                      <span data-card-title className="block text-page-ink">
+                        {m.name[locale]}
+                      </span>
                     </span>
-                    <span data-card-title className="block text-page-ink">
-                      {m.name[locale]}
+                    <span data-share className="block pt-1.5 text-sm text-page-body tabular-nums sm:mt-auto">
+                      {share}
                     </span>
-                  </span>
-                  <span data-share className="mt-auto block pt-1.5 text-sm text-page-body tabular-nums">
-                    {share}
                   </span>
                 </Link>
               </li>
             ))}
           </ol>
-          <IdeasDots target={row} count={cards.length} className="mt-3 sm:hidden" />
         </div>
       </div>
     </section>

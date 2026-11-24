@@ -142,7 +142,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     contact: {
       label: "Contact",
       heading: "Your questions reach the team in Riga",
-      line: "Questions, a quote, a card to try: one address.",
+      line: "Questions, a quote, a figure to check: one address.",
       about: "About Ethos",
     },
   },
@@ -231,7 +231,7 @@ export const PRESS_COPY: Record<PressLocale, PressCopy> = {
     contact: {
       label: "Contacto",
       heading: "Te responde el equipo de Riga",
-      line: "Preguntas, declaraciones o una tarjeta de prueba: una dirección.",
+      line: "Preguntas, declaraciones o una cifra que comprobar: una dirección.",
       about: "Sobre Ethos",
     },
   },

@@ -248,6 +248,20 @@ describe("press words", () => {
     }
   });
 
+  it("C9 a promise the owner has not decided is made in its own pending question only, so deleting that question takes the promise with it", () => {
+    // The free code for writers (method.faq[3]) and the poster right (method.faq[2]) are listed in
+    // PRESS_OWNER_PENDING. No other string on the page may repeat either, or a refusal that deletes
+    // the question would leave the promise standing elsewhere (contact.line once said "a card to try").
+    // ("probar" and a bare "pruebas" are left out: the page says we make cards to test the site,
+    // "nuestras pruebas"; a QR code, the way a card is sent, is no promise.)
+    const promises = [/\b(try|trial|free|posters?)\b|(?<!QR )\bcodes?\b/i, /de prueba|gratis|p[oó]ster|c[oó]digos?(?! QR)/i];
+    for (const locale of ["en", "es"] as const) {
+      const c = PRESS_COPY[locale];
+      const others = strings({ ...c, method: { ...c.method, faq: c.method.faq.filter((_, i) => i !== 2 && i !== 3) } }, locale);
+      for (const s of others) for (const p of promises) expect(s.text, s.where).not.toMatch(p);
+    }
+  });
+
   it("C2 the words fit the page", () => {
     for (const locale of ["en", "es"] as const) {
       const c: Copy = PRESS_COPY[locale];

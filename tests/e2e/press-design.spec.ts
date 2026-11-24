@@ -103,7 +103,7 @@ test("D2 the first screen says what the page is: the brand line, the heading, th
   }
 });
 
-test("D3 on a phone the figures are a list and the gifts one card to a screen with dots; on a desk the figures are unboxed columns under hairlines and the gifts a row", async ({ page }) => {
+test("D3 on a phone the figures are a list and the five gifts a still list, all whole, nothing to swipe and no dots; on a desk the figures are unboxed columns under hairlines and the gifts a row", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await open(page, "/press");
   const phone = await page.evaluate(() => ({
@@ -113,16 +113,23 @@ test("D3 on a phone the figures are a list and the gifts one card to a screen wi
       const r = el.getBoundingClientRect();
       return r.left >= 0 && r.right <= innerWidth;
     }),
+    cardLefts: [...document.querySelectorAll("[data-card]")].map((el) => Math.round(el.getBoundingClientRect().left)),
+    cardTops: [...document.querySelectorAll("[data-card]")].map((el) => Math.round(el.getBoundingClientRect().top)),
+    sideways: (() => {
+      const row = document.getElementById("press-most-made")!;
+      const cs = getComputedStyle(row);
+      return { overflow: cs.overflowX, snap: cs.scrollSnapType, wider: row.scrollWidth > row.clientWidth };
+    })(),
   }));
   for (const bg of phone.backgrounds) expect(bg).toBe("rgba(0, 0, 0, 0)");
   // Two short figures to a row: six make three rows, not a column of six.
   expect(new Set(phone.lefts).size).toBe(2);
-  expect(phone.whole).toEqual([true, false, false, false, false]);
-  const dots = page.locator("[data-dots] > *");
-  await expect(dots).toHaveCount(5);
-  await expect(dots.first()).toHaveAttribute("data-on", /.*/);
-  await page.locator("#press-most-made").evaluate((row) => row.scrollTo({ left: row.scrollWidth, behavior: "instant" }));
-  await expect(dots.last()).toHaveAttribute("data-on", /.*/);
+  // No swipe carousel and no dots (DESIGN-LESS-TEXT.md): five rows down the page, each whole.
+  expect(phone.whole).toEqual([true, true, true, true, true]);
+  expect(new Set(phone.cardLefts).size).toBe(1);
+  for (let i = 1; i < phone.cardTops.length; i++) expect(phone.cardTops[i]!).toBeGreaterThan(phone.cardTops[i - 1]!);
+  expect(phone.sideways).toEqual({ overflow: "visible", snap: "none", wider: false });
+  await expect(page.locator("[data-dots]")).toHaveCount(0);
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await open(page, "/press");
@@ -148,7 +155,7 @@ test("D3 on a phone the figures are a list and the gifts one card to a screen wi
   expect(desk.tops).toHaveLength(6);
   expect(desk.tops[5]).toBe(desk.tops[3]);
   expect(new Set(desk.cardTops).size).toBe(1);
-  await expect(page.locator("[data-dots]")).toBeHidden();
+  await expect(page.locator("[data-dots]")).toHaveCount(0);
 });
 
 test("D4 the page is whole, and the same height, when no picture arrives", async ({ page }) => {
@@ -264,4 +271,27 @@ test("D7 the page's largest picture loads at once, every cover of the most made 
     return { button: inView(document.querySelector('[data-page-theme] a[href^="mailto:"]')), picture: flatlay.top < innerHeight && flatlay.bottom > 0 && flatlay.left > innerWidth / 2 };
   });
   expect(first).toEqual({ button: true, picture: true });
+});
+
+test("D9 on a phone the hero's words keep their heights whether the fonts have arrived or not, so nothing moves when they swap in", async ({ browser }) => {
+  test.setTimeout(120_000);
+  // Each face is measured twice: once with every font file refused (the stand-in faces next/font
+  // declares) and once with the real ones. On a slow phone the swap from the first to the second
+  // moved the button and the sentence (CLS 0.024 on slow 3G); the heights must be the same.
+  const heights = async (where: string, width: number, block: boolean) => {
+    const context = await browser.newContext({ viewport: { width, height: 812 } });
+    const page = await context.newPage();
+    if (block) await page.route(/\.woff2?(\?|$)/, (route) => route.abort());
+    await page.goto(where);
+    await expect(page.locator("#press-title")).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    const parts = await page.locator("#press-title").evaluate((h1) => [...h1.parentElement!.children].map((el) => `${el.tagName} ${Math.round(el.getBoundingClientRect().height)}`));
+    await context.close();
+    return parts;
+  };
+  for (const where of ["/press", "/es/press"]) {
+    for (const width of [320, 360, 375, 390, 414, 430]) {
+      expect(await heights(where, width, true), `${where} ${width}`).toEqual(await heights(where, width, false));
+    }
+  }
 });
