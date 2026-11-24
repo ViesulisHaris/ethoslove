@@ -34,6 +34,9 @@ import { markMadeFor } from "@/lib/lifecycle/reminder-done";
 import { countdownDay } from "@/lib/lifecycle/reminders";
 import { cookies } from "next/headers";
 import { REMINDER_COOKIE, parseReminderCookie } from "@/lib/editor/start-ref";
+import { enrolDecision, ideaMode, ideaSince, termsRequired, type IdeaAccount } from "@/lib/lifecycle/monthly-idea";
+import { enrolForIdeas, readIdeaAccount } from "@/lib/lifecycle/monthly-idea-enrol";
+import { isUndeliverable } from "@/lib/email/send";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -266,10 +269,16 @@ const publishInput = z.object({
   replyToken: z.string().max(400).optional(),
   // "It's already paid for": send this one with a gift ready from two more gifts (lib/commerce/gift-credits.ts).
   useGift: z.boolean().optional(),
+  // Sent from the iPhone app or in Etsy mode: the monthly idea's notice could not be shown there.
+  quiet: z.boolean().optional(),
+  // The free version's Terms box was ticked (lib/lifecycle/monthly-idea.ts termsRequired).
+  acceptFreeTerms: z.boolean().optional(),
 });
 
 /** `takenBack`: the keys of notes left out of a group card because they were taken back or removed since the editor last looked (there only when there are any). */
-export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; holidayExtra: HolidayExtra | null; takenBack?: string[]; usedGift?: true }>> {
+export async function publishGift(
+  raw: unknown,
+): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled"; holidayExtra: HolidayExtra | null; takenBack?: string[]; usedGift?: true; ideaNotice?: string }>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
   const input = publishInput.safeParse(raw);
@@ -366,6 +375,23 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     Boolean(unlocked) || usedGift,
   );
   const status = scheduled ? "scheduled" : "live";
+  // The monthly idea (lib/lifecycle/monthly-idea.ts). With the setting off, nothing below reads or
+  // writes anything, and the answer has exactly the keys it had before. A lookup that fails leaves
+  // `account` null: the gift goes out as it always did, with no Terms box and no enrolment.
+  const mode = ideaMode();
+  let account: IdeaAccount | null = null;
+  if (mode === "buyers" || mode === "all") account = await readIdeaAccount(writer, ctx.user.id).catch(() => null);
+  const ideaInput = account && {
+    mode,
+    firstPublish,
+    freeReply: reply?.free === true,
+    campaign,
+    quiet: input.data.quiet === true,
+    // Paid for: its template is theirs, its photos were bought, or a gift ready paid for it.
+    paidSend: Boolean(unlocked) || photos || usedGift,
+    account,
+  };
+  if (ideaInput && termsRequired(ideaInput) && !input.data.acceptFreeTerms) return { ok: false, error: "terms_required" };
   // Taken before the gift goes live, so two replies published with one token can't both be free.
   const claimed = reply?.free && !reply.held ? reply.originalGiftId : null;
   if (claimed && !(await claimFreeReply(writer, claimed, gift.id))) return { ok: false, error: "reply_used" };
@@ -400,6 +426,22 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   // Counted at publish, so a gift deleted afterwards doesn't hand its slot back.
   if (campaign && firstPublish) await countCampaignGift(writer, ctx.user.id).catch(() => {});
+
+  // The monthly idea starts with this gift, or moves to its day; the share screen says so.
+  let ideaNotice: string | null = null;
+  if (ideaInput) {
+    const email = ctx.user.email ?? "";
+    const enrol = enrolDecision({ ...ideaInput, deliverable: Boolean(email) && !isUndeliverable(email), acceptedTerms: input.data.acceptFreeTerms === true });
+    if (enrol.enrol)
+      ideaNotice = await enrolForIdeas(writer, {
+        userId: ctx.user.id,
+        basis: enrol.basis,
+        fresh: enrol.fresh,
+        since: ideaSince(new Date(), scheduled ? input.data.schedule!.unlockAt : null),
+        templateSlug: gift.template_slug,
+        locale: data.locale === "es" ? "es" : "en",
+      }).catch(() => null);
+  }
 
   // A group card that has gone out takes no more notes: its link closes. Only where group cards are
   // on and the template is one; a failure here never undoes a publish that has happened.
@@ -441,7 +483,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   } catch {
     void madeFor();
   }
-  return { ok: true, data: { shortId: row?.short_id ?? "", status, holidayExtra: unlocked || usedGift ? showsExtra({ status, data: { holidayExtra } }) : null, ...(current.dropped.length ? { takenBack: current.dropped } : {}), ...(usedGift ? { usedGift: true as const } : {}) } };
+  return { ok: true, data: { shortId: row?.short_id ?? "", status, holidayExtra: unlocked || usedGift ? showsExtra({ status, data: { holidayExtra } }) : null, ...(current.dropped.length ? { takenBack: current.dropped } : {}), ...(usedGift ? { usedGift: true as const } : {}), ...(ideaNotice ? { ideaNotice } : {}) } };
 }
 
 /** Owner-only signed URLs so the editor can preview assets already in Storage. */

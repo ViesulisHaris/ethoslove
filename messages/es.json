@@ -4213,7 +4213,15 @@
     "saved": "Hecho. Te enviaremos nuestras ofertas.",
     "removed": "Hecho. Sin correos de ofertas.",
     "failed": "No se ha podido guardar. Inténtalo de nuevo en un momento.",
-    "how": "Cómo usamos tu correo"
+    "how": "Cómo usamos tu correo",
+    "ideaLine": "A partir del mes que viene te enviaremos una idea de regalo al mes durante un año.",
+    "ideaOff": "No enviármelas",
+    "ideaOffDone": "Desactivado. No te las enviaremos.",
+    "ideaUndo": "Deshacer",
+    "boxIdea": "Enviadme por correo las ofertas de Ethos y una idea de regalo al mes. Puedo darme de baja cuando quiera.",
+    "ideaTerms": "Acepto los <terms>Términos</terms>: la versión gratuita incluye una idea de regalo al mes por correo, que puedo dejar de recibir desde cualquier correo o desde mi cuenta.",
+    "ideaTermsNeeded": "Marca la casilla para enviar la versión gratuita.",
+    "ideaWhere": "Después de enviar un regalo, te enviaremos una idea de regalo al mes durante un año. Puedes dejar de recibirlas desde cualquier correo."
   },
   "notice": {
     "policy": "Hemos actualizado nuestra Política de privacidad y nuestros Términos.",
