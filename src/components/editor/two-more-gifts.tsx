@@ -34,15 +34,21 @@ type Pay = "idle" | "paying" | "declined";
  * draws what it says, and nothing at all, no frame and no space, when it says no. A gift sent with
  * one of the two shows the quiet "This was one of your gifts" instead.
  */
-export function TwoMoreGifts({ data, usedGift = false }: { data: GiftData; usedGift?: boolean }) {
+export function TwoMoreGifts({ data, usedGift = false, preview }: { data: GiftData; usedGift?: boolean; preview?: PairPreviewState }) {
   const { data: ent } = useEntitlements();
-  const [bought, setBought] = useState(false);
+  const [bought, setBought] = useState(preview === "bought");
   const days = useNextDays(data);
   if (usedGift && ent) return <UsedOne left={ent.giftsReady} days={days} name={data.recipientName} />;
   if (bought) return <Bought days={days} name={data.recipientName} />;
   if (!ent?.pairOffer) return null;
-  return <Offer offer={ent.pairOffer} days={days} name={data.recipientName} onBought={() => setBought(true)} />;
+  return <Offer offer={ent.pairOffer} days={days} name={data.recipientName} onBought={() => setBought(true)} initialPay={preview === "paying" || preview === "declined" ? preview : "idle"} />;
 }
+
+/**
+ * A state the development page (app/.../(editor)/share-preview) can open the card in, for pictures
+ * and browser tests: paying, declined and bought only ever follow a real wallet payment otherwise.
+ */
+export type PairPreviewState = "paying" | "declined" | "bought";
 
 /**
  * The next two days for this recipient: Christmas and Valentine's Day until the account's saved days
@@ -104,7 +110,7 @@ function Days({ days, name }: { days: NextDay[]; name: string }) {
 }
 
 /** Exported for the unit tests (tests/unit/two-more-gifts.test.tsx), like the two below. */
-export function Offer({ offer, days, name, onBought }: { offer: PairOffer; days: NextDay[]; name: string; onBought: () => void }) {
+export function Offer({ offer, days, name, onBought, initialPay = "idle" }: { offer: PairOffer; days: NextDay[]; name: string; onBought: () => void; initialPay?: Pay }) {
   const t = useTranslations("editor.share.pair");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
   const showCheckoutError = useCheckoutError();
@@ -117,7 +123,7 @@ export function Offer({ offer, days, name, onBought }: { offer: PairOffer; days:
   const [wallet] = useState<Wallet | null>(() => (key && typeof window !== "undefined" ? walletHere() : null));
   const [walletState, setWalletState] = useState<"waiting" | "ready" | "none">(wallet ? "waiting" : "none");
   const [secret, setSecret] = useState<{ clientSecret: string; sessionId?: string } | null>(null);
-  const [pay, setPay] = useState<Pay>("idle");
+  const [pay, setPay] = useState<Pay>(initialPay);
   const [cardBusy, setCardBusy] = useState(false);
   const cardRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);

@@ -13,7 +13,8 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
  * and the e2e tests, which have no account to publish from (the dev server has no database): its
  * requests (/api/entitlements, /api/reminders, /api/stripe/checkout, /api/money/pair/confirm) are
  * the test's to answer. ?occasion=christmas|birthday|anniversary picks the gift's template,
- * ?used=1 says it went out on a gift ready. Spanish under /es. NODE_ENV is inlined at build: in
+ * ?used=1 says it went out on a gift ready, ?state=paying|declined|bought opens the card in that
+ * state. Spanish under /es. NODE_ENV is inlined at build: in
  * production this page is a 404.
  */
 export default async function SharePreviewPage({ params, searchParams }: PageProps<"/[currency]/[locale]/share-preview">) {
@@ -21,5 +22,13 @@ export default async function SharePreviewPage({ params, searchParams }: PagePro
   const { locale } = await params;
   setRequestLocale(locale);
   const query = await searchParams;
-  return <SharePreview locale={locale === "es" ? "es" : "en"} occasion={one(query.occasion) ?? ""} used={one(query.used) === "1"} />;
+  const state = one(query.state);
+  return (
+    <SharePreview
+      locale={locale === "es" ? "es" : "en"}
+      occasion={one(query.occasion) ?? ""}
+      used={one(query.used) === "1"}
+      state={state === "paying" || state === "declined" || state === "bought" ? state : undefined}
+    />
+  );
 }

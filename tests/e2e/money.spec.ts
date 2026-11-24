@@ -178,6 +178,14 @@ test.describe("the paywall in the publish sheet", () => {
     await expect(panel.getByTestId("guarantee")).toHaveCount(0);
   });
 
+  test("no longer offers a second gift: two more gifts come after payment instead", async ({ page }) => {
+    const panel = await openSheet(page, "/create/bouquet");
+    await expect(panel.getByTestId("pay-single")).toBeVisible();
+    await expect(panel.getByTestId("second")).toHaveCount(0);
+    await expect(panel.getByTestId("second-pick")).toHaveCount(0);
+    await expect(panel).not.toContainText(/a second gift/i);
+  });
+
   test("has no checkout-reminder box anywhere near the pay button", async ({ page }) => {
     const panel = await openSheet(page, "/create/bouquet");
     await expect(panel.getByTestId("pay-single")).toBeVisible();

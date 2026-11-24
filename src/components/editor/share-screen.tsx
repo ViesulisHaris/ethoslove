@@ -18,6 +18,7 @@ import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
 import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
+import type { PairPreviewState } from "./two-more-gifts";
 
 // Two more gifts: loaded after the link is on screen, in the browser only, so none of it weighs on the editor.
 const TwoMoreGifts = dynamic(() => import("./two-more-gifts").then((m) => m.TwoMoreGifts), { ssr: false });
@@ -29,6 +30,7 @@ export function ShareScreen({
   data,
   giftId,
   usedGift = false,
+  pairPreview,
 }: {
   shortId: string;
   status: "live" | "scheduled";
@@ -37,6 +39,8 @@ export function ShareScreen({
   giftId: string | null;
   /** This gift went out on a gift ready (two more gifts): the card under the link says so. */
   usedGift?: boolean;
+  /** Development page only: the state the two more gifts card opens in. */
+  pairPreview?: PairPreviewState;
 }) {
   const t = useTranslations("editor.share");
   const locale = useLocale();
@@ -105,7 +109,7 @@ export function ShareScreen({
       {/* Under the link, never in its way; not for an Etsy buyer, nor inside the iPhone app (the App Store sells there). */}
       {authed && !etsy ? (
         <div data-app-hide>
-          <TwoMoreGifts data={data} usedGift={usedGift} />
+          <TwoMoreGifts data={data} usedGift={usedGift} preview={pairPreview} />
         </div>
       ) : null}
 
