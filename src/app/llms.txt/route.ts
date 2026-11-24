@@ -14,6 +14,7 @@ import { templateSeo } from "@/content/template-seo";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { DATE_KINDS } from "@/lib/dates/date-kinds";
 import { briefFaq, briefHowGifts, briefIntro, briefPricing } from "@/lib/llms/brief";
+import { pressBrief } from "@/lib/press/shown";
 import { FREE_SAVED_DATES } from "@/lib/pricing/products";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
@@ -95,6 +96,8 @@ export function GET() {
     ...aboutSaid("contact"),
     `- [About Ethos](${localizedUrl("en", ABOUT_PATH)})`,
     "",
+    // Ethos in numbers, once its real figures are in (lib/press/shown.ts); nothing before.
+    ...pressBrief(),
     ...briefFaq(),
     "## Links",
     "",

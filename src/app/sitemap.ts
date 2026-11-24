@@ -6,6 +6,7 @@ import { BLOG_POSTS, postLocales, postModified } from "@/content/blog";
 import { pageUpdated } from "@/content/page-dates";
 import { ABOUT_PATH } from "@/content/about";
 import { FINDER_PATH } from "@/content/finder";
+import { PRESS_PATH } from "@/content/press";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { TOGETHER_PATH } from "@/content/together-guide";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
@@ -16,6 +17,7 @@ import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
 import { GAMES } from "@/lib/games/catalogue";
+import { pressNav } from "@/lib/press/shown";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
 import { getManifest, listManifests } from "@/templates/manifests";
@@ -70,6 +72,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
     { path: "/creators", priority: 0.5, changeFrequency: "monthly" },
     { path: ABOUT_PATH, priority: 0.5, changeFrequency: "yearly" },
+    // Ethos in numbers: listed only once its real figures are in (content/press-numbers.ts).
+    ...(pressNav("en") ? [{ path: PRESS_PATH, priority: 0.5, changeFrequency: "monthly" } satisfies Page] : []),
     { path: PT_LETTER_PATH, priority: 0.7, changeFrequency: "monthly", language: PT_LETTER_LANG },
     ...listManifests().map((m): Page => ({ path: `/templates/${m.slug}`, priority: 0.8, changeFrequency: "monthly", images: [`${SITE.url}${m.thumbnail.poster}`] })),
     ...OCCASIONS.map((o): Page => ({ path: `/occasions/${o}`, priority: 0.8, changeFrequency: "monthly" })),
