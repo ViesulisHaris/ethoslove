@@ -79,8 +79,8 @@ export function TopPicks({ picks, locale, labels, selectedId, onOpen, onHover }:
             >
               <span className="relative block">
                 <PlaceThumb place={p} eager width={CARD_W} className="aspect-[4/3] w-full" />
-                <span className="absolute top-2.5 left-2.5 grid h-7 min-w-7 place-items-center rounded-full bg-white/95 px-2 text-[12px] font-bold text-forest shadow-soft">#{p.rank}</span>
-                <CostChip cost={p.cost} locale={locale} className="absolute top-2.5 right-2.5 bg-white/95 shadow-soft" />
+                <span className="absolute top-2.5 left-2.5 grid h-7 min-w-7 place-items-center rounded-full bg-card/95 px-2 text-[12px] font-bold text-forest shadow-soft">#{p.rank}</span>
+                <CostChip cost={p.cost} locale={locale} className="absolute top-2.5 right-2.5 bg-card/95 shadow-soft" />
               </span>
               <span className="block p-3">
                 <span className="block text-[11.5px] font-semibold" style={{ color: GROUPS[p.group].ink }}>

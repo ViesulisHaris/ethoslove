@@ -90,7 +90,7 @@ export async function GameNotes({ game, locale }: { game: GameKey; locale: strin
                   >
                     {post.poster ? (
                       <span className="relative block aspect-[4/5] w-20 shrink-0 overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 sm:w-full">
-                        <Image src={post.poster} alt="" fill sizes="(min-width: 640px) 280px, 80px" quality={70} className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none" />
+                        <Image src={post.poster} alt="" fill sizes="(min-width: 640px) 280px, 80px" quality={75} className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none" />
                       </span>
                     ) : null}
                     <span className="font-display text-[19px] leading-snug text-balance text-cream underline decoration-transparent underline-offset-4 transition-colors group-hover:decoration-cream/50">{post.title}</span>
