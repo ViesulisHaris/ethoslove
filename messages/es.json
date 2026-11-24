@@ -610,9 +610,9 @@
       "qrBlurb": "Imprímela, métela en una tarjeta, pégala en la nevera.",
       "treeTag": {
         "title": "La etiqueta del árbol",
-        "line": "Una etiqueta para imprimir y colgar del árbol. La escanean la mañana de Navidad y se abre tu regalo.",
+        "line": "Imprímela, cuélgala del árbol y que la escaneen la mañana de Navidad.",
         "print": "Imprimir la etiqueta",
-        "until": "Con cada regalo hecho hasta el 20 de diciembre"
+        "label": "Viene con este regalo"
       },
       "dashboard": "Verlo en mis regalos",
       "another": "Hacer otro"

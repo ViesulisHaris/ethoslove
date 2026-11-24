@@ -66,16 +66,18 @@ export default async function GiftDetailPage({ params }: PageProps<"/[currency]/
           <h2 className="font-display text-xl">{t("opensOverTime")}</h2>
           <OpensChart views={views} locale={locale} />
         </section>
-        <div>
-          <section className="rounded-2xl border border-border bg-card p-5">
+        {/* The share card fills its grid row beside the chart, as it did before the tag sat under it. */}
+        <div className="flex flex-col gap-4">
+          <section className="flex-1 rounded-2xl border border-border bg-card p-5">
             <h2 className="font-display text-xl">{t("share")}</h2>
             {gift.status !== "draft" ? <ShareBox url={url} /> : <p className="mt-2 text-sm text-muted-foreground">{t("draftShare")}</p>}
           </section>
           {treeTag ? (
             <TreeTagRow
               href={`/dashboard/gift/${gift.id}/print?shape=tree-tag`}
-              words={{ title: tTag("title"), line: tTag("line"), print: tTag("print"), until: tTag("until") }}
+              words={{ title: tTag("title"), line: tTag("line"), print: tTag("print"), label: tTag("label") }}
               place="dashboard"
+              className="mt-0"
             />
           ) : null}
         </div>

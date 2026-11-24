@@ -109,13 +109,13 @@ test.describe("The Tree Tag", () => {
     await expect(page.getByText("Imprime cuatro etiquetas por página.", { exact: false })).toBeVisible();
   });
 
-  test("the share screen offers it under the QR card while it is given, with the code's design in the link", async ({ page }) => {
-    await page.clock.setFixedTime(new Date("2026-12-20T22:00:00Z"));
+  test("the share screen offers it under the QR card when the publish stamped it, with the code's design in the link", async ({ page }) => {
     await page.goto("/print-preview/share");
     const row = page.getByTestId("tree-tag-row");
     await expect(row).toBeVisible();
-    await expect(row.getByText("With every gift made by 20 December")).toBeVisible();
+    await expect(row.getByText("Comes with this gift")).toBeVisible();
     await expect(row.getByText("The Tree Tag", { exact: true })).toBeVisible();
+    await expect(row.getByText("Print it, hang it on the tree, they scan it on Christmas morning.")).toBeVisible();
     const link = row.getByRole("link", { name: "Print The Tree Tag" });
     await expect(link).toHaveAttribute("href", /\/dashboard\/gift\/[0-9a-f-]+\/print\?shape=tree-tag&dots=rounded&/);
     // It sits under the QR card's own buttons, and its button is a 44 px target.
@@ -128,16 +128,42 @@ test.describe("The Tree Tag", () => {
     await expect(link).toHaveAttribute("href", /shape=tree-tag&dots=square&/);
   });
 
-  test("the share screen offers nothing after the last day, or for a free gift", async ({ page }) => {
-    await page.clock.setFixedTime(new Date("2026-12-21T12:00:01Z"));
-    await page.goto("/print-preview/share");
+  test("the share screen offers nothing for a gift the publish did not stamp", async ({ page }) => {
+    // Which gifts are stamped (the days, paid, a first send, the switch) is held by tests/unit/holiday-extras.test.ts.
+    await page.goto("/print-preview/share?extra=0");
     await expect(page.getByRole("link", { name: "Print-ready card" })).toBeVisible();
     await expect(page.getByTestId("tree-tag-row")).toHaveCount(0);
+  });
 
-    await page.clock.setFixedTime(new Date("2026-12-10T12:00:00Z"));
-    await page.goto("/print-preview/share?paid=0");
-    await expect(page.getByRole("link", { name: "Print-ready card" })).toBeVisible();
-    await expect(page.getByTestId("tree-tag-row")).toHaveCount(0);
+  test("a long sender prints whole on two lines, and can be changed, without moving the code", async ({ page }) => {
+    const codeTop = async () => page.getByTestId("tree-tag").first().evaluate((tag) => tag.querySelector(".tag-qr img")!.getBoundingClientRect().top - tag.getBoundingClientRect().top);
+    await open(page, "/print-preview?shape=tree-tag");
+    const top = await codeTop();
+    const fromBox = async () => (await page.getByTestId("tree-tag").first().locator(".tag-from").boundingBox())!;
+    const height = (await fromBox()).height;
+
+    const long = "Grandma Rose and Grandpa Peter"; // 30 characters
+    expect(long).toHaveLength(30);
+    await open(page, `/print-preview?shape=tree-tag&sender=${encodeURIComponent(long)}`);
+    const from = page.getByTestId("tree-tag").first().locator(".tag-from span");
+    await expect(from).toHaveText(`from ${long}`);
+    // Nothing cut off: every letter fits its two lines, and the box keeps its height.
+    expect(await from.evaluate((el) => el.scrollHeight <= el.clientHeight + 1 && el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+    expect((await fromBox()).height).toBeCloseTo(height, 1);
+    expect(await codeTop()).toBeCloseTo(top, 1);
+    // Clear of the tree in the corner.
+    const tree = (await page.getByTestId("tree-tag").first().locator(".tag-tree").boundingBox())!;
+    const box = await fromBox();
+    expect(box.x + box.width <= tree.x || box.y + box.height <= tree.y).toBe(true);
+
+    // The toolbar changes who it is from, on every tag.
+    await page.getByRole("textbox", { name: "From" }).fill("Mum and Dad");
+    await expect(page.locator(".tag-from span")).toHaveText(Array(4).fill("from Mum and Dad"));
+  });
+
+  test("the line under the code is the label the QR designer gave the code, when it gave one", async ({ page }) => {
+    await open(page, "/print-preview?shape=tree-tag&label=Open%20me%20first");
+    await expect(page.getByTestId("tree-tag").first().locator(".tag-line")).toHaveText("Open me first");
   });
 
   test("the card prints as it did before the tag: the same words, every part in the same place", async ({ page }, info) => {
