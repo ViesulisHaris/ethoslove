@@ -4,6 +4,7 @@
     { "path": "/api/cron/reminders", "schedule": "0 7-11 * * *" },
     { "path": "/api/cron/passes", "schedule": "0 6 * * *" },
     { "path": "/api/cron/etsy", "schedule": "0 5 * * *" },
-    { "path": "/api/cron/publish-reminders", "schedule": "*/5 * * * *" }
+    { "path": "/api/cron/publish-reminders", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/monthly-idea", "schedule": "40 7-13 * * *" }
   ]
 }
