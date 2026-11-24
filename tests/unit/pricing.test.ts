@@ -39,6 +39,8 @@ describe("pricing catalogue", () => {
       pack: [299, 299, 249],
       giftcard: [2499, 2999, 2199],
       upgrade: [499, 499, 499],
+      // Two more gifts, after a paid gift: Pick three minus a single (tests/unit/pair-product.test.ts).
+      pair: [500, 600, 400],
     });
     // The bump takes a single or "make it special" to exactly Everything's price.
     expect([bumpAmount("single", "eur"), bumpAmount("single", "usd"), bumpAmount("single", "gbp")]).toEqual([1500, 1800, 1300]);

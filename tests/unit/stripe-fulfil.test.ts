@@ -521,11 +521,11 @@ describe("fulfilment of two more gifts", () => {
     pair: { onSale: true, ready: 0, memberRunning: false, paidProducts: ["single"] },
   };
   const pairMeta = (extra: Partial<SessionOptions> = {}) => metadata({ product: "pair" }, { userId: "u1", ...extra }, buyer).meta;
-  const seed = () =>
+  const usePairDb = () =>
     useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "pair", kind: "pair", status: "pending", amount: 500, currency: "eur", template_slugs: [] }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
 
   it("puts two gifts ready on the account, grants no template, and sends a receipt that says so", async () => {
-    seed();
+    usePairDb();
     expect(await fulfilCheckoutSession(session(pairMeta(), { amount_total: 500 }))).toEqual({ ok: true, userId: "u1" });
     expect(fake.rows("purchases")[0]).toMatchObject({ status: "paid", amount: 500 });
     expect(fake.rows("gift_credits")).toEqual([expect.objectContaining({ user_id: "u1", purchase_id: PURCHASE, n: 1 }), expect.objectContaining({ user_id: "u1", purchase_id: PURCHASE, n: 2 })]);
@@ -535,7 +535,7 @@ describe("fulfilment of two more gifts", () => {
   });
 
   it("leaves two, not four, when the webhook and the page both run it", async () => {
-    seed();
+    usePairDb();
     await fulfilCheckoutSession(session(pairMeta(), { amount_total: 500 }));
     await fulfilCheckoutSession(session(pairMeta(), { amount_total: 500 }));
     expect(fake.rows("gift_credits")).toHaveLength(2);
@@ -543,24 +543,24 @@ describe("fulfilment of two more gifts", () => {
   });
 
   it("refuses a guest's session: it is only ever sold signed in", async () => {
-    seed();
+    usePairDb();
     const meta = { ...pairMeta(), user_id: "", guest: "1" };
     expect(await fulfilCheckoutSession(session(meta, { amount_total: 500 }))).toEqual({ ok: false, reason: "bad_metadata" });
     expect(fake.rows("gift_credits")).toEqual([]);
   });
 
   it("leaves nothing behind for a payment that didn't go through", async () => {
-    seed();
+    usePairDb();
     expect(await fulfilCheckoutSession(session(pairMeta(), { payment_status: "unpaid" }))).toEqual({ ok: false, reason: "unpaid" });
     expect(fake.rows("gift_credits")).toEqual([]);
     expect(fake.rows("purchases")[0].status).toBe("pending");
   });
 
   it("records the sentence only when Stripe's box was ticked; the wallet's notice binds nobody", async () => {
-    seed();
+    usePairDb();
     await fulfilCheckoutSession(session({ ...pairMeta(), withdrawal_notice: "shown_at_payment" }, { consent: null, amount_total: 500, ui_mode: "elements" }));
     expect(fake.rows("purchases")[0].terms_consent ?? null).toBeNull();
-    seed();
+    usePairDb();
     await fulfilCheckoutSession(session(pairMeta(), { consent: { terms_of_service: "accepted", promotions: null }, amount_total: 500 }));
     expect(fake.rows("purchases")[0].terms_consent).toBe(consentSentence("pair", "en"));
     expect(mail.notifyReceipt).toHaveBeenLastCalledWith("u1", "Two more gifts", "€5.00", ["Two gifts, ready to make whenever you like"], { pair: true, consent: consentSentence("pair", "en") });
