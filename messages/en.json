@@ -2665,6 +2665,8 @@
       "clocksUnavailable": "We couldn’t get the local times just now. The rest still adds up.",
       "flightsTo": "Flights to {city}",
       "flightsBetween": "Flights between you",
+      "airportYours": "Your airport",
+      "airportTheirs": "Their airport",
       "eachWay": "{distance} each",
       "eachWaySub": "How far each of you would travel to meet exactly halfway.",
       "km": "{n, plural, other {# km}}",

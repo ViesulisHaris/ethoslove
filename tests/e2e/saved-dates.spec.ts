@@ -252,7 +252,7 @@ test("a trip just saved offers the surprise; one found saved does not", async ({
   await page.goto("/trips/lisbon-slow-weekend");
   await page.getByTestId("save-trip").click();
   const next = page.getByTestId("trip-saved-next");
-  await expect(next).toContainText("It's in My dates. Keep it a secret?");
+  await expect(next).toContainText("It’s in My dates. Keep it a secret?");
   // The line stands below Save and Send, never between them: the two stay side by side.
   const saved = await page.getByTestId("trip-saved").boundingBox();
   const send = await page.getByRole("button", { name: "Send this trip to them" }).boundingBox();
