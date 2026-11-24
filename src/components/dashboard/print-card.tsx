@@ -54,7 +54,7 @@ const S = {
       print: "Imprimir la etiqueta",
       hint: "Imprime cuatro etiquetas por página. Recorta por las líneas, perfora el agujero y átala al árbol.",
       adjust: "Ajusta la etiqueta",
-      name: "Su nombre",
+      name: "Para quién",
       sender: "De",
       message: "Línea bajo el código",
       tree: "Mostrar el árbol",
@@ -133,8 +133,9 @@ export function PrintCard({ url, recipientName, senderName, accent, locale, bran
   const qrRef = useRef<QRCodeStyling | null>(null);
   const [paper, setPaper] = useState<Paper>("cream");
   const [name, setName] = useState(tag ? recipientName : recipientName ? `${recipientName},` : "");
-  // The tag's line under the code is the label the QR designer gave the code, when it gave one.
-  const [message, setMessage] = useState(tag ? design.label.trim() || t.tag.scan : `${senderName} ${t.line}`.trim());
+  // The tag's line under the code is always the instruction: the QR designer's label is usually the
+  // name ("for Mia ♡"), which the tag already carries above the code. The toolbar can still change it.
+  const [message, setMessage] = useState(tag ? t.tag.scan : `${senderName} ${t.line}`.trim());
   const [sender, setSender] = useState(senderName);
   const [showUrl, setShowUrl] = useState(true);
   const [showTree, setShowTree] = useState(true);
@@ -191,8 +192,9 @@ export function PrintCard({ url, recipientName, senderName, accent, locale, bran
     const tagName = name.trim();
     const tagNameSize = tagName.length > 28 ? "11pt" : tagName.length > 17 ? "13pt" : tagName.length > 11 ? "16pt" : "20pt";
     const from = sender.trim();
-    // Two lines at most in a box of fixed height, so "Grandma and Grandpa Johnson" prints whole.
-    const fromSize = from.length > 24 ? "9pt" : "11pt";
+    // Two lines at most in a box of fixed height, so "Grandma and Grandpa Johnson" prints whole, and so
+    // does the longest the field takes (40 characters, "Grandma Rosalind and Grandpa Bartholomew").
+    const fromSize = from.length > 32 ? "8pt" : from.length > 24 ? "9pt" : "11pt";
     const one = (
       <div className="tag" data-testid="tree-tag">
         <svg className="tag-edge" viewBox="0 0 74 105" aria-hidden="true">
