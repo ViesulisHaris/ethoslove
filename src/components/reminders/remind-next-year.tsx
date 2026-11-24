@@ -439,7 +439,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
                 sub={
                   <>
                     {/* The day the gift counts down to, until it is changed, says where it came from. */}
-                    {formatMonthDay(nextDate, locale)} · {initial.told && nextDate.month === initial.month && nextDate.day === initial.day ? t("fromGift") : t("nextYear")}
+                    {formatMonthDay(nextDate, locale)} ·&nbsp;<span className="whitespace-nowrap">{initial.told && nextDate.month === initial.month && nextDate.day === initial.day ? t("fromGift") : t("nextYear")}</span>
                     {status.next !== "saved" ? (
                       <button type="button" onClick={() => setEditing(!editing)} aria-expanded={editing} className="ml-1.5 inline-flex min-h-11 items-center underline underline-offset-4 hover:text-ink">
                         {editing ? t("done") : t("edit")}
