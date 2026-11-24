@@ -155,7 +155,8 @@
     "openings": {
       "eyebrow": "Aperturas",
       "title": "Elige cómo se abre.",
-      "blurb": "Lo primero que ven es una portada con su nombre. Elige la que se parezca a esa persona; el regalo espera debajo.",
+      "blurb": "Lo primero que ven es una portada con su nombre.",
+      "more": "Elige la que se parezca a esa persona; el regalo espera debajo.",
       "preview": "Ver"
     }
   },
@@ -4092,6 +4093,7 @@
     "faqTitle": "Preguntas frecuentes",
     "more": "Ideas de regalo para otra persona",
     "occasions": "Por ocasión",
+    "allGuides": "Todas las guías de regalo",
     "christmas": {
       "label": "Navidad",
       "heading": {

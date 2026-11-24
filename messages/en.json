@@ -155,7 +155,8 @@
     "openings": {
       "eyebrow": "Openings",
       "title": "Choose how it opens.",
-      "blurb": "The first thing they see is a cover with their name on it. Pick the one that feels like them; the gift is waiting underneath.",
+      "blurb": "The first thing they see is a cover with their name on it.",
+      "more": "Pick the one that feels like them; the gift is waiting underneath.",
       "preview": "Preview"
     }
   },
@@ -4092,6 +4093,7 @@
     "faqTitle": "Questions people ask",
     "more": "Gift ideas for someone else",
     "occasions": "By occasion",
+    "allGuides": "Every gift guide",
     "christmas": {
       "label": "Christmas",
       "heading": {

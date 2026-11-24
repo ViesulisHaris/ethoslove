@@ -22,14 +22,6 @@ const OCCASION_PAGES = ["/occasions/mothers-day", "/occasions/christmas", "/occa
  * season and one without. They open on the hero as the kind pages do, with the first idea's gift in the phone.
  */
 const PERSON_PAGES = ["/gifts/for-boyfriend", "/gifts/for-mom"];
-/**
- * /gifts, laid out the same way in fix round 4. It is over the 300 words: its thirty ideas are thirty cards in five
- * groups (the brief: "the items as cards grouped as they are now"), about 180 words of names and titles alone, and
- * the covers' row, the steps and the occasions add about 170. This holds it where the round left it (592 at
- * 1440×900, 643 in Spanish) so it cannot grow back towards the 3,040 it had; what would bring it to 300 is the
- * owner's to choose (fewer idea cards shown, or the covers' row folded), docs/marketing/growth-build/reports/view-fix-4.md.
- */
-const HUB_WORDS = 760;
 
 /** The owner's list of screens: phones, tablets, laptops, a wide desk, a phone on its side, a short laptop. */
 const SIZES: [number, number][] = [
@@ -160,7 +152,9 @@ for (const prefix of ["", "/es"]) {
     });
   }
 
-  test(`${prefix}/gifts: the hero, the ideas as cards in their groups, everything long closed, no flower under words`, async ({ page }) => {
+    // Since the gifts2 area (BRIEF-gifts2.md, 3) /gifts reads in 300 words: the first group of ideas is on show, the
+    // other four are closed rows that open in place, and the collection, the steps and the occasions are closed rows.
+    test(`${prefix}/gifts: one group of ideas on show and the rest folded, within 300 words, no flower under words`, async ({ page }) => {
     test.slow();
     for (const [width, height] of [[1440, 900], [375, 812]] as const) {
       await page.setViewportSize({ width, height });
@@ -169,16 +163,25 @@ for (const prefix of ["", "/es"]) {
       const m = await measure(page);
       expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
-      expect(m.count, `${width}: words on the page (HUB_WORDS says why it is over 300)`).toBeLessThanOrEqual(HUB_WORDS);
+      expect(m.count, `${width}: words on the page`).toBeLessThanOrEqual(300);
       expect(m.smallest, `${width}: a sentence under 14px`).toBeGreaterThanOrEqual(14);
       expect(m.small, `${width}: too small for a thumb`).toEqual([]);
       if (width >= 1024) await expect(page.locator("[data-flatlay=hero]")).toBeInViewport();
-      // Five groups of idea cards, thirty in all, each with its poster once swiped to.
+      // Five sets of idea cards and thirty cards in the HTML; the first set on show, the other four in closed rows.
       const sets = await cardSets(page);
       expect(sets.length, `${width}: groups of ideas`).toBe(5);
       expect(sets.flatMap((set) => set.cards).length).toBe(30);
+      const folded = await page.locator("details:not([open]) [data-cards]").evaluateAll((els) => els.map((el) => el.id));
+      expect(sets.filter((set) => !folded.includes(set.id)).length, `${width}: sets on show`).toBe(1);
+      // The first group, as content/digital-gifts.ts sorts the thirty (eight in it today).
+      expect(sets[0].cards.length).toBeGreaterThanOrEqual(5);
+      await expect(page.locator("[data-idea-group]:not([open])")).toHaveCount(4);
+      // Opened, the second set's cards get their pictures.
+      await page.locator("[data-idea-group] > summary").nth(0).click();
+      await expect(page.locator("[data-idea-group]").nth(0)).toHaveAttribute("open", "");
       await swipeThrough(page);
-      await expect.poll(async () => (await cardSets(page)).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 30_000 }).toEqual([]);
+      await expect.poll(async () => (await cardSets(page)).slice(0, 2).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 30_000 }).toEqual([]);
+      await page.locator("[data-idea-group] > summary").nth(0).click();
     }
     await expect(page.locator("h1")).toHaveCount(1);
   });
@@ -194,12 +197,14 @@ for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversa
       const m = await measure(page);
       expect(m.overflow, "the page scrolls sideways").toBeLessThanOrEqual(0);
       expect(m.overlaps, "a piece of the art lies under words").toEqual([]);
-      expect(m.count).toBeLessThanOrEqual(path === "/gifts" ? HUB_WORDS : 300);
+      expect(m.count).toBeLessThanOrEqual(300);
       expect(m.smallest).toBeGreaterThanOrEqual(14);
       expect(m.smallestLabel).toBeGreaterThanOrEqual(12);
       expect(m.small).toEqual([]);
       // Under 640px a set of cards is one row with one card to a screen; from 640px it is a grid with every card on the page.
-      for (const set of await cardSets(page)) {
+      // A set inside a closed row (the other groups on /gifts) is not on the screen at all, so it is not held to this.
+      const folded = await page.locator("details:not([open]) [data-cards]").evaluateAll((els) => els.map((el) => el.id));
+      for (const set of (await cardSets(page)).filter((s) => !folded.includes(s.id))) {
         if (width < 640) {
           expect(set.scrolls, `${set.id} is not a row to swipe`).toBe(true);
           expect(set.dots, `${set.id}: a dot for each card`).toBe(set.cards.length);

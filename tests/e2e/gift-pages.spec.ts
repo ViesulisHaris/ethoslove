@@ -252,8 +252,10 @@ for (const lang of LANGS) {
       // Where next (fix round 4: the page laid out as the pages by kind end): four pages by kind as posters, and the people,
       // the occasions, the other kinds and /digital-cards as the quiet row of links, each 44px to a thumb.
       const next = page.locator('section[aria-labelledby="by-person"] nav');
+      // Since the gifts2 area the kinds past the four posters are named in the closed row "Every gift guide" (in main, not on show).
       const links = next.locator(`a[href^="${lang.prefix}/gifts/"], a[href="${lang.prefix}/occasions"], a[href="${lang.prefix}/digital-cards"]`);
-      expect(await links.count()).toBeGreaterThanOrEqual(KINDS.length + 7 + 2);
+      expect(await links.count()).toBeGreaterThanOrEqual(4 + 7 + 2);
+      expect(await next.locator("ul.mt-9 a").count()).toBeGreaterThanOrEqual(9);
       const heights = await next.locator("ul.mt-9 a").evaluateAll((all) => all.map((a) => a.getBoundingClientRect().height));
       for (const h of heights) expect(h).toBeGreaterThanOrEqual(44);
     });
