@@ -149,11 +149,15 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   // names and photos arrive with it rather than pushing it down once it is read. Never for long:
   // START_WAIT_MS after the start begins (beginStart) the form shows; a start that comes after goes
   // in all the same while the form is still empty, and is only offered once something is in it.
+  // Once the start is read (its names and how many photos), the card holds its place as "pending"
+  // above the form, so photos that land after the wait never push the form down.
   const [starting, setStarting] = useState(() => typeof window !== "undefined" && !remote && startPending(window.location.search, document.cookie, Boolean(user)));
   // A gift's id never stays in the address (it would reach a page-view event): it is read into this
   // at the first render and taken out of the address before anything else runs.
   const [startAsked] = useState(() => (typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(START_PARAM)));
   const startTaken = useRef(false);
+  // "Start empty" while the photos are still coming: what arrives after is put away, not put in.
+  const startDropped = useRef(false);
   useLayoutEffect(() => {
     if (!new URLSearchParams(window.location.search).has(START_PARAM)) return;
     const url = new URL(window.location.href);
@@ -210,10 +214,16 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     };
     // A draft they are already working on is never written over: the start is offered instead.
     if (draftHasContent(useEditor.getState().data)) return offer();
+    // Its place above the form, kept from now: shown only if the wait ends before the photos land.
+    if (start.from.mode !== "name") setStarted({ state: { kind: "pending", from: start.from }, start });
     const done = await finishStart(start);
     if (clock.current !== null) window.clearTimeout(clock.current);
     const now = useEditor.getState();
     if (now.slug !== slug) return;
+    if (startDropped.current) {
+      for (const photo of done.seed.photos ?? []) if (photo.url.startsWith("idb:")) void deleteBlob(photo.url.slice(4)).catch(() => undefined);
+      return;
+    }
     // Something went into the form while the photos came (only possible once it showed, late): the
     // start is offered, with its photos kept for "Use them". An empty form takes it in place.
     if (draftHasContent(now.data)) {
@@ -221,7 +231,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       return;
     }
     await applySeed(done.seed);
-    if (done.from.mode !== "name") setStarted({ state: { kind: "started", from: done.from }, start });
+    setStarted(done.from.mode !== "name" ? { state: { kind: "started", from: done.from }, start } : null);
   };
 
   const takeStart = async () => {
@@ -240,6 +250,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   };
 
   const startEmpty = async () => {
+    if (started?.state.kind === "pending") startDropped.current = true;
     clearLocalDraft(slug);
     await reinit.current();
     setStarted(null);

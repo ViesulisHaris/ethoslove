@@ -10,7 +10,11 @@ import type { StartedFrom } from "@/lib/editor/start-from-gift";
 /** The started gift as the reader last left it: when their own hand changes the names or the photos, the card has done its job. */
 const signature = (s: { recipientName: string; senderName: string; photos: { id: string }[] }) => JSON.stringify([s.recipientName, s.senderName, s.photos.map((p) => p.id)]);
 
-export type StartedState = { kind: "started"; from: StartedFrom } | { kind: "offer"; from: StartedFrom };
+/**
+ * "pending": the start is read but its photos are still on their way after the form showed. The card
+ * holds its place, drawn as the started card will be, so nothing moves when they arrive.
+ */
+export type StartedState = { kind: "started"; from: StartedFrom } | { kind: "offer"; from: StartedFrom } | { kind: "pending"; from: StartedFrom };
 
 /**
  * Above the form of a gift a reminder e-mail started (api/reminders/open, lib/editor/start-from-gift):
@@ -84,6 +88,8 @@ export function StartedForYou({
     );
   }
 
+  if (state.kind === "pending") return <PendingCard from={state.from} noPhotos={noPhotos} onEmpty={() => void run("empty", onEmpty)} busy={busy === "empty"} />;
+
   const shown = photos.slice(0, 4);
   const more = photos.length - shown.length;
   return (
@@ -124,6 +130,59 @@ export function StartedForYou({
           className="inline-flex min-h-11 items-center gap-2 text-sm text-ink-soft underline underline-offset-4 hover:text-ink focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none disabled:opacity-60"
         >
           {busy === "empty" ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+          {t("empty")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The started card while its photos are still coming: the same frame, the same thumbnails (as soft
+ * squares), the same lines and the same buttons, so the form under it never moves when they land.
+ * The finished sentence is laid under the "Bringing in…" one, invisible, to hold its exact height.
+ */
+function PendingCard({ from, noPhotos, onEmpty, busy }: { from: StartedFrom; noPhotos: boolean; onEmpty: () => void; busy: boolean }) {
+  const t = useTranslations("editor.started");
+  const withPhotos = from.mode === "photos" && from.photos > 0;
+  const shown = withPhotos ? Math.min(from.photos, 4) : 0;
+  const more = withPhotos ? from.photos - shown : 0;
+  const finished = withPhotos ? t("withPhotos", { count: from.photos, name: from.name }) : noPhotos ? t("namesWords") : t("namesOnly");
+  return (
+    <div className="mt-6 mb-8 rounded-[24px] bg-card p-5 ring-1 ring-black/5 sm:p-6 md:mt-0" data-testid="started-pending" aria-busy="true">
+      {shown > 0 ? (
+        <ul className="mb-4 flex items-center" aria-hidden>
+          {Array.from({ length: shown }, (_, i) => (
+            <li key={i} className={i === 0 ? "" : "-ml-2.5"} style={{ zIndex: shown - i }}>
+              <span className="block size-12 animate-pulse rounded-xl bg-muted ring-2 ring-card motion-reduce:animate-none sm:size-14" />
+            </li>
+          ))}
+          {more > 0 ? <li className="-ml-2.5 grid size-12 place-items-center rounded-xl bg-accent text-sm font-semibold ring-2 ring-card sm:size-14">+{more}</li> : null}
+        </ul>
+      ) : null}
+      <h2 className="font-display text-[1.65rem] leading-tight">{t("title")}</h2>
+      <p className="mt-1.5 grid text-sm leading-relaxed text-muted-foreground">
+        <span className="col-start-1 row-start-1" role="status">
+          {withPhotos ? t("putting", { count: from.photos, name: from.name }) : finished}
+        </span>
+        <span className="invisible col-start-1 row-start-1" aria-hidden>
+          {finished}
+        </span>
+      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+        {withPhotos ? (
+          <button type="button" disabled className="inline-flex h-11 items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-semibold opacity-60">
+            <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden />
+            {t("change")}
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={onEmpty}
+          disabled={busy}
+          className="inline-flex min-h-11 items-center gap-2 text-sm text-ink-soft underline underline-offset-4 hover:text-ink focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none disabled:opacity-60"
+        >
+          {busy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
           {t("empty")}
         </button>
       </div>

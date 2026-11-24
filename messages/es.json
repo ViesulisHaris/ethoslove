@@ -815,6 +815,7 @@
     "started": {
       "title": "Ya lo tienes empezado.",
       "withPhotos": "Los dos nombres y {count, plural, one {la foto} other {las # fotos}} de tu último regalo para {name} ya están puestos. Cambia lo que quieras.",
+      "putting": "Trayendo los dos nombres y {count, plural, one {la foto} other {las # fotos}} de tu último regalo para {name}.",
       "namesOnly": "Los dos nombres ya están puestos. Añade tus fotos y tus palabras.",
       "namesWords": "Los dos nombres ya están puestos. Añade tus palabras.",
       "change": "Cambiar las fotos",
@@ -3363,7 +3364,8 @@
       "rows": {
         "birthday": "El cumpleaños de {name}",
         "birthdayNoName": "Su cumpleaños",
-        "anniversary": "Vuestro aniversario",
+        "anniversary": "Tu aniversario con {name}",
+        "anniversaryNoName": "Vuestro aniversario",
         "other": "Un día para {name}",
         "otherNoName": "Otra fecha",
         "monthly": "Y cada mes",

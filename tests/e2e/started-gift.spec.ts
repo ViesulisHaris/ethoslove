@@ -25,15 +25,53 @@ test.describe("a gift started from the last one", () => {
       await new Promise((r) => setTimeout(r, 9000));
       await route.continue();
     });
+    await page.addInitScript(() => {
+      const w = window as unknown as { __shift: number };
+      w.__shift = 0;
+      // Shifts of the form column only: the preview beside it on a desktop redraws with the names, as it should.
+      const inForm = (node: Node | null) => node instanceof Element && node.closest('[data-tour="form"], [data-testid^="started"]') !== null;
+      new PerformanceObserver((list) => {
+        for (const e of list.getEntries() as unknown as { value: number; hadRecentInput: boolean; sources: { node: Node | null }[] }[])
+          if (!e.hadRecentInput && e.sources.some((s) => inForm(s.node))) w.__shift += e.value;
+      }).observe({ type: "layout-shift", buffered: true });
+    });
     await page.goto("/create/scrapbook?start=demo");
-    // The form shows once the wait is up, still empty.
-    await expect(page.locator('[data-tour="form"]')).toBeVisible({ timeout: 30_000 });
+    // The form shows once the wait is up, still empty, under the card's place held for the photos.
+    const form = page.locator('[data-tour="form"]');
+    await expect(form).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("started-pending")).toBeVisible();
     await expect(page.getByTestId("started-for-you")).toHaveCount(0);
+    const before = await form.locator("input").first().boundingBox();
+    const shiftBefore = await page.evaluate(() => (window as unknown as { __shift: number }).__shift);
     // Then the start goes into the empty form in place: no "Use them" to tap, no second download.
     await expect(page.getByTestId("started-for-you")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("started-pending")).toHaveCount(0);
     await expect(page.getByTestId("started-offer")).toHaveCount(0);
+    // And the form did not move when they landed.
+    const after = await form.locator("input").first().boundingBox();
+    expect(Math.abs((after?.y ?? 0) - (before?.y ?? -1))).toBeLessThan(1);
+    expect(await page.evaluate(() => (window as unknown as { __shift: number }).__shift)).toBeLessThan(shiftBefore + 0.01);
     expect(fetched.length).toBeGreaterThan(0);
     expect(new Set(fetched).size).toBe(fetched.length);
+  });
+
+  test("'Start empty' while the photos are still coming keeps the form empty when they land", async ({ page }) => {
+    await page.route("**/demo/photos/**", async (route) => {
+      if (route.request().resourceType() !== "fetch") return route.continue();
+      await new Promise((r) => setTimeout(r, 9000));
+      await route.continue();
+    });
+    await page.goto("/create/our-timeline?start=demo&ref=email-reminder-1");
+    const pending = page.getByTestId("started-pending");
+    await expect(pending).toBeVisible({ timeout: 30_000 });
+    await expect(pending.getByRole("button", { name: "Change the photos" })).toBeDisabled();
+    await pending.getByRole("button", { name: "Start empty" }).click();
+    await expect(pending).toHaveCount(0);
+    // Well after the photos would have landed: nothing came in, no card came back.
+    await page.waitForTimeout(10_000);
+    await expect(page.getByTestId("started-for-you")).toHaveCount(0);
+    await expect(page.getByTestId("started-offer")).toHaveCount(0);
+    await expect(page.locator('[data-tour="form"] input').first()).toHaveValue("");
   });
 
   test("on a free note the card asks for words only: photos are its paid step", async ({ page }) => {
