@@ -139,7 +139,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/long-distance": "2026-11-13",
   "/tools/how-long-have-we-been-together": "2026-11-09",
   "/tools/love-language-quiz": "2026-11-15",
-  "/pricing": "2026-11-24",
+  "/pricing": "2026-11-23",
   // The date the legal pages print at the top.
   "/legal/*": LEGAL_UPDATED,
   [ABOUT_PATH]: ABOUT_UPDATED,

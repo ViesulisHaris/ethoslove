@@ -12,7 +12,6 @@ import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { SingleGifts } from "@/components/pricing/single-gifts";
 import { initialPlan, pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
 import { sendsFree } from "@/lib/gift/free-tier";
-import { SitePage } from "@/components/marketing/spread/sections";
 import { PriceHead } from "@/components/pricing/price-head";
 import { PricingChoice } from "@/components/pricing/pricing-choice";
 
@@ -69,7 +68,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
 
   // The page, top to foot (docs/marketing/growth-build/PLAN-pricing.md, 24 Nov 2026): a gift's price first, the
   // three ways to pay for gifts, Ethos for Two in its band, the questions with the table as their first closed row. The site's
-  // paper and layout (SitePage), the gift pages' parts.
+  // paper and layout (SitePage's wrapper), the gift pages' parts.
   return (
     <>
       <JsonLd
@@ -81,7 +80,9 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
           ]),
         ]}
       />
-      <SitePage name="pricing">
+      {/* SitePage's wrapper (components/marketing/spread/sections.tsx), written out: importing that module would bring the
+          playing hero phone and its share of the messages, which this page does not draw. */}
+      <div data-page-theme="pricing" className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <PricingChoice>
           <PriceHead currency={currency} manifests={manifests} template={template} />
           <SingleGifts
@@ -114,7 +115,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
             />
           }
         />
-      </SitePage>
+      </div>
     </>
   );
 }

@@ -7,13 +7,18 @@ import { artSrcSet, pageArt, slotStyle } from "@/content/page-art";
 import type { TemplateManifest } from "@/templates/types";
 import { Link } from "@/i18n/navigation";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
-import { SITE_FLOWERS } from "@/components/marketing/spread/sections";
 import { ArtLayer } from "@/components/templates/page/art";
 import { CoverInScreen } from "@/components/templates/page/cover-in-screen";
 import { HERO_ART } from "@/components/templates/page/placements";
-import { HERO_BUTTON } from "@/components/templates/page/hero-art";
-import { QUIET_LINK } from "@/components/marketing/spread/sections";
+import { HERO_BUTTON, HERO_BUTTON_QUIET } from "@/components/templates/page/hero-art";
+import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
 import { ChooseButton } from "./pricing-choice";
+
+/**
+ * The site's flowers, as the pages built from a gift's page have them (spread/sections.tsx, SITE_FLOWERS). Not imported
+ * from there: that module brings the playing hero phone, whose messages this page would then have to send.
+ */
+const SITE_FLOWERS = DEFAULT_PAGE_THEME.flowers;
 
 /** The picture's width as the browser picks its file: half the column on a desk, the screen on a phone. */
 const PHONE_SIZES = "(min-width: 1280px) 560px, (min-width: 1024px) 44vw, 92vw";
@@ -71,7 +76,7 @@ export async function PriceHead({ currency, manifests, template }: { currency: C
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
             )}
-            <Link href="/templates?tier=free" className={QUIET_LINK}>
+            <Link href="/templates?tier=free" className={HERO_BUTTON_QUIET}>
               {t("seeFree")}
             </Link>
           </div>
