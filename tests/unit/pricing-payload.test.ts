@@ -34,13 +34,11 @@ describe("what /pricing sends to the browser", () => {
     const sent = omitMessages(pickMessages(messages as unknown as AbstractIntlMessages, CLIENT_NAMESPACES[SCOPE]), CLIENT_OMIT[SCOPE] ?? []);
     const text = JSON.stringify(sent);
 
-    it(`${lang}: none of the old card lists, blurbs or per-template line`, () => {
-      const pricing = (sent as { pricing: { plans: Record<string, Record<string, unknown>> } & Record<string, unknown> }).pricing;
-      for (const id of ["single", "pick3", "everything"]) {
-        expect(pricing.plans[id].features, id).toBeUndefined();
-        expect(pricing.plans[id].blurb, id).toBeUndefined();
-        expect(pricing.plans[id].name, id).toBeDefined();
-      }
+    it(`${lang}: none of the old card names, buttons, lists, blurbs or per-template line`, () => {
+      const pricing = (sent as { pricing: Record<string, unknown> }).pricing;
+      // The teaser's names and buttons ("Una plantilla", "Desbloquear una") went out unseen (pricing-N2-1).
+      expect(pricing.plans).toBeUndefined();
+      expect(text).not.toMatch(lang === "es" ? /Una plantilla|Desbloquear una/ : /One template/);
       for (const key of ["perTemplate", "oneTime", "priority"]) expect(pricing[key], key).toBeUndefined();
       // The cards, the picker and the head still get theirs.
       expect(pricing.page).toBeDefined();
@@ -65,11 +63,11 @@ describe("what /pricing sends to the browser", () => {
     const cards = read("src/components/pricing/pricing-cards.tsx");
     const quiet = cards.slice(cards.indexOf("if (quiet) {"), cards.indexOf("const features = t.raw("));
     expect(quiet.length).toBeGreaterThan(100);
-    expect(quiet).not.toMatch(/plans\.\$\{id\}\.(features|blurb)|"perTemplate"|"oneTime"|"priority"/);
+    expect(quiet).not.toMatch(/`plans.|"perTemplate"|"oneTime"|"priority"/);
     for (const file of ["gift-card-offer.tsx", "membership-offer.tsx", "plan-toggle.tsx", "price-head.tsx", "pricing-choice.tsx"]) {
       const src = read(`src/components/pricing/${file}`);
       if (!src.startsWith('"use client"')) continue;
-      expect(src, file).not.toMatch(/\.(features|blurb)`|"perTemplate"|"oneTime"|"priority"/);
+      expect(src, file).not.toMatch(/`plans.|\.(features|blurb)`|"perTemplate"|"oneTime"|"priority"/);
     }
   });
 });

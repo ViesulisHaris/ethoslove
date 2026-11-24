@@ -205,7 +205,7 @@ export function PricingCards({
               </article>
             );
           }
-          // The /gifts teaser's full dress alone reads these; /pricing does not send them (client-namespaces.ts, CLIENT_OMIT).
+          // The /gifts teaser's full dress alone reads the plans branch; /pricing does not send it (client-namespaces.ts, CLIENT_OMIT).
           const features = t.raw(`plans.${id}.features`) as string[];
           return (
             <article
