@@ -15,7 +15,7 @@ import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
 import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
-import { echoTheirs, halfwayAnswer, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
+import { echoTheirs, halfwayAnswer, inNeverNamed, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
 import { fairKm, pickSpot, spotAt } from "@/lib/places/photon-reverse";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
@@ -344,6 +344,23 @@ describe("the halfway answer, table and map together", () => {
     for (const kind of ["pending", "failed", "unnamed"] as const) expect(echoTheirs({ kind, ...each }), kind).toBe(false);
     for (const kind of ["none", "sea", "between", "uneven"] as const) expect(echoTheirs({ kind, ...each }), kind).toBe(true);
     expect(echoTheirs(null)).toBe(false);
+  });
+
+  it("a typed town in a country never named is never echoed, whatever the answer (Nantes and Bilbao are uneven)", () => {
+    const each = { eachKm: 160, middle: { lat: 43.6, lng: -1.2 } };
+    const bilbao = { lat: 43.263, lng: -2.935 };
+    const sanSebastian = { lat: 43.3183, lng: -1.9812 };
+    const bordeaux = { lat: 44.8378, lng: -0.5792 };
+    expect(inNeverNamed(bilbao)).toBe(true);
+    expect(inNeverNamed(sanSebastian)).toBe(true);
+    expect(inNeverNamed(bordeaux)).toBe(false);
+    expect(inNeverNamed({ lat: 48.8566, lng: 2.3522 })).toBe(false);
+    for (const kind of ["none", "sea", "between", "uneven"] as const) {
+      expect(echoTheirs({ kind, ...each }, bilbao), kind).toBe(false);
+      expect(echoTheirs({ kind, ...each }, bordeaux), kind).toBe(true);
+    }
+    const city = { kind: "city" as const, name: "Mont-de-Marsan", lat: 43.89, lng: -0.5, offKm: 20, kmFromA: 80, kmFromB: 80, fromMap: true };
+    expect(echoTheirs(city, bilbao)).toBe(false);
   });
 });
 

@@ -51,6 +51,24 @@ test.describe("long distance, joined up", () => {
     await expect(datesLink).toHaveAttribute("href", "/dates");
     // No date link names either town (the flight between their own airports is theirs to name, as before).
     await expect(page.locator("a[href^='/dates']").filter({ hasText: /Barcelona|Madrid/ })).toHaveCount(0);
+    // Nor in the address of "Plan the next visit" further down (it was /dates?…&q=Barcelona).
+    await expect(page.locator("[data-plan-visit]")).toHaveAttribute("href", "/dates");
+  });
+
+  test("their town in Spain is echoed nowhere, though halfway is in France (Nantes and Bilbao, uneven)", async ({ page }) => {
+    const TWO = { Nantes: { lat: 47.2184, lng: -1.5536, offset: 3600, country: "France" }, Bilbao: { lat: 43.263, lng: -2.935, offset: 3600, country: "Spain" } };
+    await mockTowns(page, { ...TOWNS, ...TWO }, () => ({ kind: "town", name: "Arcachon", region: "Nouvelle-Aquitaine", countryCode: "FR", lat: 44.6586, lng: -1.1689 }));
+    await page.goto("/long-distance");
+    // Not one of the built-in cities: its row comes from the (mocked) place search, so wait for it.
+    const you = page.getByRole("combobox", { name: "Where you are" });
+    await you.fill("Nantes");
+    await page.getByRole("option", { name: /^Nantes/ }).click();
+    await typeTown(page, "Where they are", "Bilbao");
+    await expect(page.getByText("The towns near the middle are all much nearer one of you than the other.")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Date ideas near either of you" })).toHaveAttribute("href", "/dates");
+    // Only the flight between their own airports names it, as their own (as before).
+    await expect(page.locator("a[href^='/dates'][href*='Bilbao']")).toHaveCount(0);
+    await expect(page.locator("[data-plan-visit]")).toHaveAttribute("href", "/dates");
   });
 
   test("the halfway card says a map town's region, and in miles where people read miles", async ({ page }) => {

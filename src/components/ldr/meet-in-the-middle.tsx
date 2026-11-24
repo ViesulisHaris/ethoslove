@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
-import { answerPlace, echoTheirs, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { answerPlace, echoTheirs, inNeverNamed, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
@@ -98,6 +98,16 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   // The same calculation as the halfway finder's own page (lib/ldr/halfway.ts, use-halfway.ts).
   const { result, answer } = useHalfway(a, b, locale);
   const place = useMemo(() => answerPlace(answer), [answer]);
+  // Their town goes to "Plan the next visit" further down only when it may be echoed (the same rule
+  // as the dates link here): never while the map is asked or failed, when halfway falls where the
+  // site names nothing, or when their town is there itself. Before the other town is in, there is no
+  // halfway to wait for: their town goes there unless it is in such a country.
+  const echo = echoTheirs(answer, b);
+  const planTown = b && (a ? echo : !inNeverNamed(b)) ? b : null;
+  useEffect(() => {
+    setTheirTown(planTown);
+  }, [planTown]);
+  useEffect(() => () => setTheirTown(null), []);
   // Each of them flying to the airport nearest halfway; or, when halfway has no airport of its
   // own (or is one of their home towns), one of them flying to the other. One seat each way.
   const flights = useMemo(() => {
@@ -142,10 +152,7 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
             value={b}
             locale={locale}
             labels={{ ...labels, label: t("them") }}
-            onPick={(where) => {
-              setB(where);
-              setTheirTown(where);
-            }}
+            onPick={setB}
             className={TOWN_BOX}
           />
         </div>
@@ -210,9 +217,9 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
                     <ArrowUpRight aria-hidden="true" className="size-4" />
                   </a>
                 ) : null}
-                {/* Their town is echoed only once the answer is known not to fall where the site names nothing: never while the map is asked, after it failed, or when halfway is in such a country. */}
-                <Link href={echoTheirs(answer) ? `/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}` : "/dates"} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
-                  {echoTheirs(answer) ? t("datesThere", { city: b.name }) : tw2("dates.any")}
+                {/* Their town is echoed only once the answer is known not to fall where the site names nothing: never while the map is asked, after it failed, or when halfway or their town is in such a country. */}
+                <Link href={echo ? `/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}` : "/dates"} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                  {echo ? t("datesThere", { city: b.name }) : tw2("dates.any")}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>

@@ -317,6 +317,21 @@ test.describe("halfway between two cities", () => {
     expect(await page.locator("[data-halfway-city]").innerText()).not.toMatch(/Prague|Vienna/i);
   });
 
+  test("a typed town in Spain is never echoed, even when halfway is in France (Nantes and Bilbao, uneven)", async ({ page }) => {
+    // Every town the map finds near the middle is much nearer Nantes: the answer is "uneven".
+    await mapSays(page, () => ({ kind: "town", name: "Arcachon", region: "Nouvelle-Aquitaine", countryCode: "FR", lat: 44.6586, lng: -1.1689 }));
+    for (const [prefix, any, uneven] of [
+      ["", "Date ideas near either of you", "The towns near the middle are all much nearer one of you than the other."],
+      ["/es", "Ideas de citas cerca de cualquiera de los dos", "Los pueblos cerca del punto medio quedan todos mucho más cerca de uno de los dos."],
+    ] as const) {
+      await page.goto(`${prefix}${TOOL}?a=Nantes~47.22~-1.55&b=Bilbao~43.26~-2.94`);
+      await expect(page.locator("[data-halfway-result]")).toContainText(uneven);
+      await expect(way(page, "dates")).toHaveAttribute("href", `${prefix}/dates`);
+      await expect(way(page, "dates")).toContainText(any);
+      for (const text of await ways(page).allInnerTexts()) expect(text).not.toMatch(/Bilbao/i);
+    }
+  });
+
   test("in Spanish, all of it", async ({ page }) => {
     const asked: string[] = [];
     page.on("request", (r) => {

@@ -81,8 +81,9 @@ export function WaysOn({
       return { key: "dates", href: `/dates?lat=${near.lat}&lng=${near.lng}&q=${encodeURIComponent(city)}`, title: t("dates.in", { city }), image: data.datesImage };
     }
     // Halfway falls in a country never named, or the map has not said yet (or could not): no town is
-    // echoed (a typed town there would be named after all), only date ideas near either of them.
-    if (!echoTheirs(answer)) return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
+    // echoed (a typed town there would be named after all), only date ideas near either of them. The
+    // same when their own town is in such a country (Nantes and Bilbao).
+    if (!echoTheirs(answer, both.b)) return { key: "dates", href: "/dates", title: t("dates.any"), image: data.datesImage };
     // No place to name (open sea, open country, their own towns, the map not answering yet): date ideas where the other one is.
     return { key: "dates", href: `/dates?lat=${both.b.lat}&lng=${both.b.lng}&q=${encodeURIComponent(both.b.name)}`, title: t("dates.near", { town: both.b.name }), image: data.datesImage };
   };

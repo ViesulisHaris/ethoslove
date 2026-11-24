@@ -151,13 +151,28 @@ export function halfwayAnswer(h: Halfway, a: LatLng, b: LatLng, spot: SpotState,
 }
 
 /**
- * Whether a page may offer date ideas in their own town when halfway names no place. Not while the
- * map is being asked or could not be, nor when halfway is in a country never named: Madrid and
- * Barcelona would otherwise read "Date ideas near Barcelona" until the map answered, or for good
- * when it failed.
+ * Nearer than this to a city of the table in a country never named, a typed town is taken to be in
+ * that country too (the table has eight such cities, Bilbao among them; San Sebastián is 80 km off
+ * it). A French town this near the border is only offered the dates near either of them.
  */
-export const echoTheirs = (answer: HalfwayAnswer | null): boolean =>
-  Boolean(answer && answer.kind !== "unnamed" && answer.kind !== "pending" && answer.kind !== "failed");
+export const NEVER_NAMED_NEAR_KM = 120;
+
+/** Whether a typed town is, or is near, a city in a country the site never names. */
+export function inNeverNamed(point: LatLng, cities: readonly City[] = CITIES): boolean {
+  const near = nearestCity(point, cities);
+  return Boolean(near && near.km <= NEVER_NAMED_NEAR_KM && NEVER_SUGGESTED.has(near.city.country));
+}
+
+/**
+ * Whether a page may offer date ideas in their own town (`town`, the one it would echo) when halfway
+ * names no place. Not while the map is being asked or could not be, nor when halfway is in a country
+ * never named: Madrid and Barcelona would otherwise read "Date ideas near Barcelona" until the map
+ * answered, or for good when it failed. Nor when the town itself is in such a country, whatever the
+ * answer: Nantes and Bilbao are `uneven` (the towns near the middle are all much nearer one of
+ * them), and "Date ideas near Bilbao" would name it.
+ */
+export const echoTheirs = (answer: HalfwayAnswer | null, town?: LatLng | null): boolean =>
+  Boolean(answer && answer.kind !== "unnamed" && answer.kind !== "pending" && answer.kind !== "failed" && !(town && inNeverNamed(town)));
 
 /** The place a halfway answer names, as the ways on need it, or null. */
 export const answerPlace = (answer: HalfwayAnswer | null): { name: string; lat: number; lng: number } | null =>

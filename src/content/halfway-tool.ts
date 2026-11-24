@@ -34,7 +34,7 @@ export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
     faq: [
       {
         q: "How do you find the halfway point between two cities?",
-        a: "We take the two towns' coordinates and find the midpoint along the great circle, the shortest path over the earth's surface. Then we name a place there: a big city if one lies close to the middle and about as far from each of you, otherwise the nearest town on OpenStreetMap that is, and tell you how far it is from each of you.",
+        a: "We take the two towns' coordinates and find the midpoint along the great circle, the shortest path over the earth's surface. Then we name a place there: a big city if one lies close to the middle and about as far from each of you, or else the nearest town on OpenStreetMap that fits. Then we tell you how far it is from each of you.",
       },
       {
         q: "Why isn't it the middle of the map?",
@@ -46,7 +46,7 @@ export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
       },
       {
         q: "What if halfway is in the sea?",
-        a: "If nothing on the map lies within 40 km of the middle, we call it open water and tell you how far each of you would travel. On land with no town nearby we say that instead, with a link to the spot on a map.",
+        a: "If nothing on the map lies within 40 km of the middle, we call it open water and tell you how far each of you would travel. On land with no town nearby we say that instead, with a link to the spot on a map. When every town near the middle is much nearer one of you, we name none and say how far each of you travels.",
       },
     ],
     moreLabel: "More for the distance",
@@ -81,7 +81,7 @@ export const HALFWAY_TOOL: Record<"en" | "es", HalfwayToolCopy> = {
       },
       {
         q: "¿Y si el punto medio cae en el mar?",
-        a: "Si en el mapa no hay nada a menos de 40 km del punto medio, decimos que es mar abierto y lo que recorre cada uno. Si es tierra sin ninguna ciudad cerca, os lo decimos así, con un enlace al punto en un mapa.",
+        a: "Si en el mapa no hay nada a menos de 40 km del punto medio, decimos que es mar abierto y lo que recorre cada uno. Si es tierra sin ninguna ciudad cerca, os lo decimos así, con un enlace al punto en un mapa. Y si todos los pueblos cerca del medio quedan mucho más cerca de uno de los dos, no nombramos ninguno y os decimos lo que recorre cada uno.",
       },
     ],
     moreLabel: "Más para la distancia",
