@@ -148,7 +148,7 @@ test.describe("the share screen's reminder card", () => {
 
   test("asks for two days, fills in the one the gift tells, and adds nothing until 'Remind me'", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana&photos=3");
     const card = page.getByTestId("remind-card");
     await expect(card).toContainText("Never be late for their day.");
     await expect(card).toContainText("We'll email you 7 days before, with your photos already in a new gift.");
@@ -168,6 +168,24 @@ test.describe("the share screen's reminder card", () => {
     await expect(card.getByTestId("remind-row-next")).toHaveCount(0);
     await expect(card.getByText("Added")).toHaveCount(0);
     expect(reminders).toHaveLength(0);
+  });
+
+  test("promises photos only for a gift that has some: a note without them gets both names", async ({ page }) => {
+    await page.goto("/reminders/preview?template=the-letter&name=Ana");
+    await expect(page.getByTestId("remind-card")).toContainText("We'll email you 7 days before, with both names already in a new gift.");
+    await expect(page.getByTestId("remind-card")).not.toContainText("your photos");
+    await page.goto("/es/reminders/preview?template=the-letter&name=Ana");
+    await expect(page.getByTestId("remind-card")).toContainText("Te escribimos 7 días antes, con los dos nombres ya puestos en un regalo nuevo.");
+  });
+
+  test("'Remind me' moves focus to the saved line, which says when the first e-mail comes", async ({ page }) => {
+    await answer(page, "**/api/reminders", { status: 201, body: {} });
+    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    const card = page.getByTestId("remind-card");
+    await card.getByTestId("remind-save-dates").click();
+    const saved = card.getByTestId("remind-saved");
+    await expect(saved).toContainText("Saved. Your first email comes on");
+    await expect(saved).toBeFocused();
   });
 
   test("'Remind me' is off until a day is in, then saves each day once", async ({ page }) => {

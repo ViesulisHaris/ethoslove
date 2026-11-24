@@ -32,7 +32,8 @@ export function SharePreview({ locale, occasion, used, state, paid }: { locale: 
     senderName: "Leo",
     message: "Hi",
     messageStyle: "typewriter",
-    photos: [],
+    // A gift of this kind holds photos (coquette needs one): the reminder card promises them only then.
+    photos: [1, 2, 3, 4].map((n) => ({ id: `p${n}`, url: `/demo/photos/p${n}.webp`, width: 1200, height: 1600 })),
     accentColor: "#B23A2E",
     fontPairing: "editorial",
     showReactionCta: true,
