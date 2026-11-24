@@ -261,13 +261,15 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
           ? groupAmount(currency, heldNow, slugs[0])
           : catalogue.amounts[currency];
   // A personal price: an offer email's (one price for any gift) or the first monthly idea email's
-  // (its own per product). Never with the bump or a second gift: the price is for one gift. Only a
-  // price lower than the one they would pay anyway is shown, charged or spent.
+  // (its own per product). Never with the bump or a second gift: the price is for one gift. An offer
+  // email's works as it always has (charged at most the listed price, and spent). The monthly one is
+  // shown, charged and spent only where it is lower than the price they would pay anyway.
   const kind: PersonalPriceKind = ctx.personalPrice?.kind ?? "offer";
   const offered = personalPriceAmount(kind, product, currency);
   if (req.personalPrice && ctx.personalPrice && (bump || second !== null)) return fail("personal_price_unavailable", 400);
-  const personal = req.personalPrice && ctx.personalPrice && offered !== null && offered < listed ? ctx.personalPrice : null;
-  const charged = personal && offered !== null ? offered : listed;
+  const applies = offered !== null && (kind === "offer" || offered < listed);
+  const personal = req.personalPrice && ctx.personalPrice && applies ? ctx.personalPrice : null;
+  const charged = personal && offered !== null ? Math.min(listed, offered) : listed;
   const lines: PlanLine[] = [{ key: product, amount: charged }];
   // The bump takes the order to exactly Everything's price.
   if (bump) lines.push({ key: "bump", amount: bumpAmount(product, currency) });

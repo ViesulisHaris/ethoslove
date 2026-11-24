@@ -24,9 +24,13 @@ export async function GET(request: NextRequest) {
     none.cookies.delete(PERSONAL_PRICE_COOKIE);
     return none;
   }
+  // An offer email's answer is word for word what it was before the monthly idea (one amount per
+  // currency), so a page loaded before a deploy reads it as it always did. Only the monthly idea's
+  // price, which exists only while that setting is on, says its kind and an amount per product.
   return NextResponse.json(
-    // The amount per product: an offer email's is one price for any gift, the monthly idea's differs.
-    { active: true, kind: price.kind, endsAt: price.endsAt, amounts: personalPriceAmounts(price.kind), onto: PERSONAL_PRICE.onto },
+    price.kind === "monthly"
+      ? { active: true, kind: "monthly", endsAt: price.endsAt, amounts: personalPriceAmounts("monthly"), onto: PERSONAL_PRICE.onto }
+      : { active: true, endsAt: price.endsAt, amounts: PERSONAL_PRICE.amounts, onto: PERSONAL_PRICE.onto },
     { headers: { "cache-control": "no-store" } },
   );
 }

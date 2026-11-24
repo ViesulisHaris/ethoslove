@@ -20,11 +20,16 @@ const listeners = new Set<() => void>();
 function ask(): Promise<PersonalPrice | null> {
   answer ??= fetch("/api/offer", { cache: "no-store", credentials: "same-origin" })
     .then((res) => (res.ok ? res.json() : null))
-    .then((json: { active?: boolean; kind?: string; endsAt?: number; amounts?: Record<"single" | "extras", Record<Currency, number>>; onto?: ProductId[] } | null) =>
-      json?.active && typeof json.endsAt === "number" && json.amounts?.single && json.amounts.extras && json.onto
-        ? { kind: json.kind === "monthly" ? ("monthly" as const) : ("offer" as const), endsAt: json.endsAt, amounts: json.amounts, onto: json.onto }
-        : null,
-    )
+    .then((json: { active?: boolean; kind?: string; endsAt?: number; amounts?: Record<string, unknown>; onto?: ProductId[] } | null): PersonalPrice | null => {
+      if (!json?.active || typeof json.endsAt !== "number" || !json.amounts || !json.onto) return null;
+      // The monthly idea's price has an amount per product; an offer email's (as before) one amount for either.
+      if (json.kind === "monthly") {
+        const amounts = json.amounts as PersonalPrice["amounts"];
+        return amounts.single && amounts.extras ? { kind: "monthly", endsAt: json.endsAt, amounts, onto: json.onto } : null;
+      }
+      const flat = json.amounts as Record<Currency, number>;
+      return typeof flat.usd === "number" ? { kind: "offer", endsAt: json.endsAt, amounts: { single: flat, extras: flat }, onto: json.onto } : null;
+    })
     .catch(() => null);
   return answer;
 }

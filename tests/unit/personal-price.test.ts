@@ -9,7 +9,8 @@ import { planCheckout, type CheckoutContext, type CheckoutRequest } from "@/lib/
 import { checkoutErrorKey } from "@/components/pricing/offers";
 import { activePersonalPrice, monthlyPriceToken, personalPriceToken, readPersonalPrice, spendPersonalPrice } from "@/lib/commerce/personal-price";
 import { signToken } from "@/lib/lifecycle/links";
-import { PRODUCTS, heldIsCheaper } from "@/lib/pricing/products";
+import { NextRequest } from "next/server";
+import { PERSONAL_PRICE, PRODUCTS, heldIsCheaper } from "@/lib/pricing/products";
 import { sessionMetadata, type SessionOptions } from "@/lib/stripe/line-items";
 import { readSession } from "@/lib/stripe/fulfil";
 import { FakeDb } from "./helpers/fake-db";
@@ -207,13 +208,26 @@ describe("the monthly idea's one-time price", () => {
     expect((await call(monthlyLink)).cookies.get("ethos_offer")?.value).toBe(monthlyLink);
   });
 
-  it("P5 nothing is shown or spent when the usual price is already lower", () => {
+  it("P5 the monthly price is neither shown nor spent when the usual price is already lower; an offer email's works as before", () => {
     const photosHolder = { ownedForever: ["photos:the-letter"] };
-    for (const ctx of [{ ...holding, ...photosHolder }, { ...monthly, ...photosHolder }]) {
-      const extras = ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"], personalPrice: true }), ctx));
-      expect(extras.total).toBe(400);
-      expect(extras.personalPrice).toBeNull();
-    }
+    const extras = ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"], personalPrice: true }), { ...monthly, ...photosHolder }));
+    expect(extras.total).toBe(400);
+    expect(extras.personalPrice).toBeNull();
+    // An offer email's price, as on growth/merge: charged at most the listed price, and spent with it.
+    const offer = ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"], personalPrice: true }), { ...holding, ...photosHolder }));
+    expect(offer.total).toBe(400);
+    expect(offer.personalPrice).toEqual({ id: ID, discount: 0, kind: "offer" });
+  });
+
+  it("P5b /api/offer answers an offer email's price in the shape it always had, and only the monthly one with its kind", async () => {
+    vi.stubEnv("PERSONAL_PRICE_SECRET", SECRET);
+    const route = await import("@/app/api/offer/route");
+    const now = Date.now();
+    const offerToken = await personalPriceToken(ID, now + 3_600_000, SECRET);
+    const res = await route.GET(new NextRequest("https://ethos.test/api/offer", { headers: { cookie: `ethos_offer=${encodeURIComponent(offerToken)}` } }));
+    const body = await res.json();
+    expect(body).toEqual({ active: true, endsAt: Math.floor((now + 3_600_000) / 1000) * 1000, amounts: PERSONAL_PRICE.amounts, onto: PERSONAL_PRICE.onto });
+    vi.unstubAllEnvs();
   });
 
   it("P6 checkout tells fulfilment which kind it was, and an offer email's session is as before", () => {
