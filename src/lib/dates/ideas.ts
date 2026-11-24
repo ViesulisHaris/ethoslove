@@ -207,7 +207,7 @@ export const IDEAS: DateIdea[] = [
     id: "ice-cream-walk",
     title: { en: "Ice cream and nowhere to be", es: "Helado y ningún sitio al que ir" },
     blurb: { en: "Two scoops each and a park to get lost in.", es: "Dos bolas cada uno y un parque en el que perderse." },
-    twist: { en: "Order the flavour you think the other one will pick. Swap if you're wrong.", es: "Pedid el sabor que creéis que elegirá el otro. Si falláis, se cambia." },
+    twist: { en: "Order the flavor you think the other one will pick. Swap if you're wrong.", es: "Pedid el sabor que creéis que elegirá el otro. Si falláis, se cambia." },
     stops: [["dessert"], ["park", "garden", "viewpoint"]],
     needsDry: true,
     goodInRain: false,
@@ -291,7 +291,7 @@ export const IDEAS: DateIdea[] = [
   },
   {
     id: "theatre-night",
-    title: { en: "Dress up for the theatre", es: "Vestíos para el teatro" },
+    title: { en: "Dress up for the theater", es: "Vestíos para el teatro" },
     blurb: { en: "A reason to wear the good outfit, and a drink at the interval.", es: "Una excusa para ponerse lo bueno y una copa en el descanso." },
     twist: { en: "Guess the ending at the interval. Write it down. Loser buys the nightcap.", es: "Apostad el final en el descanso. Por escrito. Quien falle paga la última copa." },
     stops: [["theatre"], ["bar", "restaurant"]],

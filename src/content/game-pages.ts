@@ -186,7 +186,7 @@ export const GAME_PAGES: Record<GameKey, GamePage> = {
       {
         q: { en: "How soft is the soft edition?", es: "¿Cómo de suave es la versión suave?" },
         a: {
-          en: "Speeches, impressions, a slow dance, a kiss on the hand. Nothing you couldn’t do with the neighbours in.",
+          en: "Speeches, impressions, a slow dance, a kiss on the hand. Nothing you couldn’t do with the neighbors in.",
           es: "Discursos, imitaciones, un baile lento, un beso en la mano. Nada que no pudierais hacer con los vecinos en casa.",
         },
       },

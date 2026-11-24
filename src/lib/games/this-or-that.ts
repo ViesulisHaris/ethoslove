@@ -27,7 +27,7 @@ export const THIS_PAIRS: ThisPair[] = [
   { id: "bath", a: { en: "A long bath", es: "Un baño largo" }, b: { en: "A fast shower", es: "Una ducha rápida" } },
   { id: "sunday", a: { en: "A Sunday with a plan", es: "Un domingo con plan" }, b: { en: "A Sunday with none", es: "Un domingo sin plan" } },
   { id: "guests", a: { en: "Friends round tonight", es: "Amigos en casa esta noche" }, b: { en: "Just us tonight", es: "Solo tú y yo esta noche" } },
-  { id: "pyjamas", a: { en: "Pyjamas by eight", es: "Pijama a las ocho" }, b: { en: "Dressed till bedtime", es: "Ropa de calle hasta dormir" } },
+  { id: "pyjamas", a: { en: "Pajamas by eight", es: "Pijama a las ocho" }, b: { en: "Dressed till bedtime", es: "Ropa de calle hasta dormir" } },
   { id: "dessert", a: { en: "Share one dessert", es: "Compartir un postre" }, b: { en: "Order two", es: "Pedir dos" } },
   { id: "last-bite", a: { en: "The last bite is yours", es: "El último bocado es tuyo" }, b: { en: "The last bite is mine", es: "El último bocado es mío" } },
   { id: "good-morning", a: { en: "A good morning text", es: "Un mensaje de buenos días" }, b: { en: "A goodnight call", es: "Una llamada de buenas noches" } },

@@ -23,7 +23,7 @@ export const VIRTUAL_DATES: VirtualDate[] = [
   {
     id: "walk-me-round",
     title: { en: "Walk me round your day", es: "Enséñame tu día andando" },
-    blurb: { en: "A video walk through your actual neighbourhood: the coffee place, the shortcut, the dog you always say hello to.", es: "Un paseo en vídeo por tu barrio de verdad: el sitio del café, el atajo, el perro al que siempre saludas." },
+    blurb: { en: "A video walk through your actual neighborhood: the coffee place, the shortcut, the dog you always say hello to.", es: "Un paseo en vídeo por tu barrio de verdad: el sitio del café, el atajo, el perro al que siempre saludas." },
     twist: { en: "End at the spot you'll take them first when they visit.", es: "Acaba en el sitio al que le llevarás primero cuando venga." },
     art: { sticker: "leaf", from: "#ECE6D3", to: "#DDD3B6" },
   },
@@ -44,7 +44,7 @@ export const VIRTUAL_DATES: VirtualDate[] = [
   {
     id: "museum-from-bed",
     title: { en: "A museum, from bed", es: "Un museo, desde la cama" },
-    blurb: { en: "Half the great museums have a virtual tour. Share a screen and wander in your pyjamas.", es: "Medio mundo de museos tiene visita virtual. Compartid pantalla y paseaos en pijama." },
+    blurb: { en: "Half the great museums have a virtual tour. Share a screen and wander in your pajamas.", es: "Medio mundo de museos tiene visita virtual. Compartid pantalla y paseaos en pijama." },
     twist: { en: "Each choose the piece you'd hang in the flat you'll share one day.", es: "Elegid cada uno la obra que colgaríais en el piso que compartiréis algún día." },
     art: { sticker: "butterfly", from: "#F2E0E3", to: "#E7CAD3" },
   },

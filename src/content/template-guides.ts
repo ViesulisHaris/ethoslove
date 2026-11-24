@@ -890,7 +890,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "With evidence",
             how: "Up to six photos go in as exhibits.",
-            borrow: { field: "caption", line: "Exhibit B: the empty biscuit tin" },
+            borrow: { field: "caption", line: "Exhibit B: the empty cookie jar" },
           },
           {
             heading: "Saying sorry",
@@ -1755,7 +1755,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "For a child",
             how: "Keep the crimes small and the good deeds real.",
-            borrow: { field: "fields.nice", line: "shared the last biscuit, once" },
+            borrow: { field: "fields.nice", line: "shared the last cookie, once" },
           },
           {
             heading: "For a brother or sister",
@@ -2905,7 +2905,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Their birthday",
             how: "Leave “It’s their birthday” on: the camera wishes them one when it turns on.",
-            borrow: { field: "fields.headline", line: "birthday behaviour only" },
+            borrow: { field: "fields.headline", line: "birthday behavior only" },
           },
           {
             heading: "A year of you two",

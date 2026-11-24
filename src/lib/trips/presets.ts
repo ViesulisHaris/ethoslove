@@ -272,7 +272,7 @@ export const TRIPS: Trip[] = [
     stops: [
       { name: "Florence", es: "Florencia", lat: 43.7731, lng: 11.2555, nights: 2, note: { en: "Book the Uffizi or the Accademia ahead, not both: one museum a day is plenty for two.", es: "Reservad los Uffizi o la Accademia, no los dos: un museo al día es suficiente para dos." } },
       { name: "Greve in Chianti", lat: 43.5823, lng: 11.3169, nights: 1, note: { en: "A triangular piazza, a famous butcher, and wine cellars in every direction.", es: "Una plaza triangular, una carnicería famosa y bodegas en todas direcciones." } },
-      { name: "Siena", lat: 43.3184, lng: 11.3316, nights: 1, note: { en: "Sleep inside the walls and leave the car outside them; the centre is closed to traffic.", es: "Dormid dentro de las murallas y dejad el coche fuera: el centro está cerrado al tráfico." } },
+      { name: "Siena", lat: 43.3184, lng: 11.3316, nights: 1, note: { en: "Sleep inside the walls and leave the car outside them; the center is closed to traffic.", es: "Dormid dentro de las murallas y dejad el coche fuera: el centro está cerrado al tráfico." } },
       { name: "Pienza", lat: 43.0765, lng: 11.6789, nights: 0, note: { en: "The whole town takes an hour. Buy pecorino, then lean on the walls over the Val d'Orcia.", es: "El pueblo entero se ve en una hora. Comprad pecorino y asomaos a la muralla sobre el Val d'Orcia." } },
       { name: "Montepulciano", lat: 43.0927, lng: 11.781, nights: 1, note: { en: "Steep, red-brick, and full of wine cellars dug into the hill.", es: "Empinado, de ladrillo rojo y lleno de bodegas excavadas en la colina." } },
     ],
@@ -498,9 +498,9 @@ export const TRIPS: Trip[] = [
     flyTo: "EDI",
     stops: [
       { name: "Edinburgh", es: "Edimburgo", lat: 55.9489, lng: -3.1954, nights: 1, note: { en: "Walk the Old Town the first evening; collect the car on your way out the next morning.", es: "Recorred la ciudad vieja la primera tarde y recoged el coche al salir, a la mañana siguiente." } },
-      { name: "Pitlochry", lat: 56.7036, lng: -3.7355, nights: 1, note: { en: "A Victorian spa town with a salmon ladder and a theatre by the river.", es: "Un pueblo balneario victoriano con una escala para salmones y un teatro junto al río." } },
+      { name: "Pitlochry", lat: 56.7036, lng: -3.7355, nights: 1, note: { en: "A Victorian spa town with a salmon ladder and a theater by the river.", es: "Un pueblo balneario victoriano con una escala para salmones y un teatro junto al río." } },
       { name: "Glencoe", lat: 56.6828, lng: -5.1015, nights: 1, note: { en: "The most dramatic valley in Scotland, with the saddest story. Stay in the village, not on the main road.", es: "El valle más espectacular de Escocia, con la historia más triste. Dormid en el pueblo, no en la carretera principal." } },
-      { name: "Portree", lat: 57.4131, lng: -6.1944, nights: 2, note: { en: "A harbour of painted houses, good fish, and the base for the north of Skye.", es: "Un puerto de casas pintadas, buen pescado y la base para el norte de Skye." } },
+      { name: "Portree", lat: 57.4131, lng: -6.1944, nights: 2, note: { en: "A harbor of painted houses, good fish, and the base for the north of Skye.", es: "Un puerto de casas pintadas, buen pescado y la base para el norte de Skye." } },
       { name: "Inverness", lat: 57.4764, lng: -4.2256, nights: 0, note: { en: "Fly home from here, or take the train south through the mountains.", es: "Volved en avión desde aquí, o en tren hacia el sur entre montañas." } },
     ],
     plan: [
@@ -566,7 +566,7 @@ export const TRIPS: Trip[] = [
             "North past Fort William, with a detour to the Glenfinnan Viaduct.",
             "Eilean Donan Castle on its island, best from the lay-by across the loch.",
             "Over the bridge to Skye and on to Portree.",
-            "Evening: fish and chips on the harbour wall, or scallops at a table inside if the wind is up.",
+            "Evening: fish and chips on the harbor wall, or scallops at a table inside if the wind is up.",
           ],
           es: [
             "Hacia el norte pasando Fort William, con un desvío hasta el viaducto de Glenfinnan.",
@@ -584,7 +584,7 @@ export const TRIPS: Trip[] = [
             "An early walk up to the Old Man of Storr, before the car park fills: about two hours there and back.",
             "Kilt Rock's waterfall dropping straight into the sea, and lunch in Staffin.",
             "The Quiraing loop in the afternoon: the strangest landscape in Britain.",
-            "Evening: a dram by the fire in Portree, and the harbour at last light, which in June is nearly midnight.",
+            "Evening: a dram by the fire in Portree, and the harbor at last light, which in June is nearly midnight.",
           ],
           es: [
             "Temprano, la subida al Old Man of Storr, antes de que se llene el aparcamiento: unas dos horas ida y vuelta.",
@@ -642,8 +642,8 @@ export const TRIPS: Trip[] = [
         items: {
           en: [
             "Collect the car at Keflavík and stop at a geothermal lagoon on the way in; book a time.",
-            "A hot dog from the stand by the harbour, the one with the queue.",
-            "Up Hallgrímskirkja's tower for the coloured roofs, then Laugavegur for wool jumpers.",
+            "A hot dog from the stand by the harbor, the one with the queue.",
+            "Up Hallgrímskirkja's tower for the colored roofs, then Laugavegur for wool sweaters.",
             "Evening: lamb or Arctic char for dinner, then the shore path to the Sun Voyager sculpture in the late light.",
           ],
           es: [
@@ -697,7 +697,7 @@ export const TRIPS: Trip[] = [
           en: [
             "Sleep in. This is the spare day: if the weather is bad, it's a café and a book.",
             "Walk up to the church above the village for the view of the Reynisdrangar sea stacks.",
-            "A wool jumper each from the knitting factory shop in the village.",
+            "A wool sweater each from the knitting factory shop in the village.",
             "Evening: the village pool's hot tubs, where the locals talk about the weather, then dinner overlooking the beach.",
           ],
           es: [
@@ -862,7 +862,7 @@ export const TRIPS: Trip[] = [
         items: {
           en: [
             "Two hours to Tallinn. Leave the car at the hotel and walk into the old town.",
-            "Up to Toompea, to the viewing platforms over the red roofs and the harbour.",
+            "Up to Toompea, to the viewing platforms over the red roofs and the harbor.",
             "The wooden houses of Kalamaja, and lunch in the Telliskivi Creative City.",
             "Evening: a candlelit dinner in the old town, and Town Hall Square at midnight, when it still isn't quite dark.",
           ],
@@ -880,8 +880,8 @@ export const TRIPS: Trip[] = [
         items: {
           en: [
             "Kadriorg Park and its pink palace, which Peter the Great built for his wife.",
-            "Coffee by the sea at Pirita, or a seafront sauna by the old harbour.",
-            "Drop the car at Tallinn airport, ten minutes from the centre. A one-way rental costs a little more; it's worth it.",
+            "Coffee by the sea at Pirita, or a seafront sauna by the old harbor.",
+            "Drop the car at Tallinn airport, ten minutes from the center. A one-way rental costs a little more; it's worth it.",
           ],
           es: [
             "El parque de Kadriorg y su palacio rosa, que Pedro el Grande construyó para su mujer.",
@@ -918,7 +918,7 @@ export const TRIPS: Trip[] = [
         items: {
           en: [
             "Old Town Square for the astronomical clock on the hour, then lose the crowd in the lanes behind the Týn Church.",
-            "Lunch in a beer hall: goulash, dumplings and half a litre of pilsner.",
+            "Lunch in a beer hall: goulash, dumplings and half a liter of pilsner.",
             "The beer garden in Letná Park in the afternoon, with all the bridges lined up below.",
             "Evening: a concert in one of the churches of Malá Strana, then the Charles Bridge after dark.",
           ],
@@ -1036,7 +1036,7 @@ export const TRIPS: Trip[] = [
     flyTo: "JTR",
     stops: [
       { name: "Oia", lat: 36.4622, lng: 25.3757, nights: 2, note: { en: "Stay on the caldera side, and watch the sunset from your own terrace instead of the castle wall.", es: "Alojaos en el lado de la caldera y ved el atardecer desde vuestra terraza, no desde la muralla del castillo." } },
-      { name: "Naxos Town", es: "Naxos (la Chora)", lat: 37.1051, lng: 25.3767, nights: 3, note: { en: "About two hours by ferry. Stay near the old castle quarter, above the harbour.", es: "Unas dos horas en ferry. Alojaos cerca del barrio del castillo, sobre el puerto." } },
+      { name: "Naxos Town", es: "Naxos (la Chora)", lat: 37.1051, lng: 25.3767, nights: 3, note: { en: "About two hours by ferry. Stay near the old castle quarter, above the harbor.", es: "Unas dos horas en ferry. Alojaos cerca del barrio del castillo, sobre el puerto." } },
       { name: "Apeiranthos", lat: 37.0718, lng: 25.5196, nights: 0, note: { en: "A marble village high in the middle of the island; go by hire car or scooter.", es: "Un pueblo de mármol en lo alto, en el centro de la isla; id en coche de alquiler o en moto." } },
     ],
     plan: [
@@ -1083,7 +1083,7 @@ export const TRIPS: Trip[] = [
           en: [
             "The morning ferry from Athinios; sit on the top deck and watch the caldera shrink behind you.",
             "Check in near the Kastro and wander its marble lanes.",
-            "Lunch at a harbour taverna: Naxos potatoes, graviera cheese and island lamb.",
+            "Lunch at a harbor taverna: Naxos potatoes, graviera cheese and island lamb.",
             "Evening: sunset at the Portara, the huge marble doorway of a temple that was never finished.",
           ],
           es: [
@@ -1155,7 +1155,7 @@ export const TRIPS: Trip[] = [
     kind: "city",
     title: { en: "A hygge weekend in Copenhagen", es: "Un fin de semana hygge en Copenhague" },
     blurb: {
-      en: "Candles in every window, cinnamon buns, a harbour clean enough to swim in, and a museum by the sea that is worth the train on its own. Rent bikes on the first morning; the city is built for them.",
+      en: "Candles in every window, cinnamon buns, a harbor clean enough to swim in, and a museum by the sea that is worth the train on its own. Rent bikes on the first morning; the city is built for them.",
       es: "Velas en cada ventana, rollos de canela, un puerto tan limpio que se puede nadar y un museo junto al mar que ya justifica el tren. Alquilad bicis la primera mañana: la ciudad está hecha para ellas.",
     },
     days: 3,
@@ -1170,10 +1170,10 @@ export const TRIPS: Trip[] = [
     plan: [
       {
         day: 1,
-        title: { en: "Harbour and canals", es: "Puerto y canales" },
+        title: { en: "Harbor and canals", es: "Puerto y canales" },
         items: {
           en: [
-            "Rent two bikes and ride the harbour, past the Opera, to the Royal Library's Black Diamond.",
+            "Rent two bikes and ride the harbor, past the Opera, to the Royal Library's Black Diamond.",
             "Cinnamon buns and coffee at a bakery in Christianshavn.",
             "Climb the outside spiral of the Church of Our Saviour, for the whole city from the top.",
             "Evening: dinner in the old Meatpacking District, Kødbyen, then a candlelit drink in a basement bar.",
@@ -1194,7 +1194,7 @@ export const TRIPS: Trip[] = [
             "The train from Central Station to Humlebæk, forty minutes up the coast.",
             "The Louisiana Museum of Modern Art: Giacometti's figures, Kusama's room of lights, and the sculpture lawn over the Øresund.",
             "Lunch on the museum café's terrace, looking at Sweden across the water.",
-            "Evening: back in town, a swim at the Islands Brygge harbour bath in summer or Tivoli's lights in December, then a wine bar.",
+            "Evening: back in town, a swim at the Islands Brygge harbor bath in summer or Tivoli's lights in December, then a wine bar.",
           ],
           es: [
             "El tren desde la Estación Central hasta Humlebæk: cuarenta minutos por la costa.",
@@ -1325,8 +1325,8 @@ export const TRIPS: Trip[] = [
           en: [
             "Half an hour west to Sagres and its fortress on the headland, where the wind never stops.",
             "A surf lesson for two at Praia do Tonel, or watch from the rocks.",
-            "Grilled fish for lunch at the harbour, where the boats come in.",
-            "Evening: Cabo de São Vicente at sunset. Bring a jumper and a blanket, and buy the 'last sausage before America' from the stand.",
+            "Grilled fish for lunch at the harbor, where the boats come in.",
+            "Evening: Cabo de São Vicente at sunset. Bring a sweater and a blanket, and buy the 'last sausage before America' from the stand.",
           ],
           es: [
             "Media hora al oeste hasta Sagres y su fortaleza sobre el cabo, donde el viento no para nunca.",
@@ -1370,9 +1370,9 @@ export const TRIPS: Trip[] = [
     flyTo: "AMS",
     stops: [
       { name: "Jordaan", lat: 52.3754, lng: 4.8811, nights: 2, note: { en: "Narrow canals, old brown cafés and the Saturday market at the Noordermarkt: the place to stay.", es: "Canales estrechos, cafés de toda la vida y el mercado del sábado en el Noordermarkt: el sitio donde alojarse." } },
-      { name: "Vondelpark", lat: 52.3572, lng: 4.8641, nights: 0, note: { en: "The city's park. Ride through it, and stop at the open-air theatre in summer.", es: "El parque de la ciudad. Cruzadlo en bici y parad en el teatro al aire libre si es verano." } },
+      { name: "Vondelpark", lat: 52.3572, lng: 4.8641, nights: 0, note: { en: "The city's park. Ride through it, and stop at the open-air theater in summer.", es: "El parque de la ciudad. Cruzadlo en bici y parad en el teatro al aire libre si es verano." } },
       { name: "NDSM, Noord", lat: 52.4004, lng: 4.893, nights: 0, note: { en: "A free ferry from behind Central Station to an old shipyard full of studios and waterside bars.", es: "Un ferry gratis desde detrás de la Estación Central hasta un antiguo astillero lleno de talleres y bares junto al agua." } },
-      { name: "Durgerdam", lat: 52.3779, lng: 4.9905, nights: 0, note: { en: "A row of wooden houses along the dike, an easy half-hour ride from the centre.", es: "Una hilera de casas de madera sobre el dique, a media hora fácil en bici desde el centro." } },
+      { name: "Durgerdam", lat: 52.3779, lng: 4.9905, nights: 0, note: { en: "A row of wooden houses along the dike, an easy half-hour ride from the center.", es: "Una hilera de casas de madera sobre el dique, a media hora fácil en bici desde el centro." } },
     ],
     plan: [
       {

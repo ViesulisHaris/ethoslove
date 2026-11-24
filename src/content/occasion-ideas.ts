@@ -465,7 +465,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
           template: "our-timeline",
           heading: "First day to last, on one road",
           brief: "From day one to the gown, each photo gets a stop on a road that draws itself.",
-          body: "The photo outside the building on day one, the awkward middle, the library at 2 a.m., the gown. Each gets a stop on a road that draws itself as they scroll, under a label you write: “Sept 2023: the wrong lecture hall”, “Year two: the flat with the mould”. Add a countdown and it sits under the closing line: aim it at the first day of whatever comes next.",
+          body: "The photo outside the building on day one, the awkward middle, the library at 2 a.m., the gown. Each gets a stop on a road that draws itself as they scroll, under a label you write: “Sept 2023: the wrong lecture hall”, “Year two: the apartment with the mold”. Add a countdown and it sits under the closing line: aim it at the first day of whatever comes next.",
         },
         {
           template: "front-page",
@@ -598,7 +598,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "our-timeline",
           heading: "How they got here, seen from the outside",
-          brief: "Their story as their friends watched it: your photos along a road, labelled in your words.",
+          brief: "Their story as their friends watched it: your photos along a road, labeled in your words.",
           body: "The couple know their story. They don’t know it the way their friends watched it. Pin your photos of them along a road, with labels in your words: “2017: the wrong table at Sam’s birthday”, “2019: ‘we’re just friends’, part four”. Two to twenty stops. Add a countdown to their first anniversary and it will still be counting when they open it again.",
         },
         {
@@ -742,7 +742,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "pack-your-bags",
           heading: "The next visit, sprung as a surprise",
-          body: "Book the trip to them, then tell them like this. Set “Going to” as their own city and “Leaving from” as yours. They pack your clues, “my worst jumper, by request”, “an appetite”, “the key you gave me”, with no idea where the case is headed, until the departures board spells out their own town. Put the real arrival on the ticket: “Fri 12 Dec, 19:40”.",
+          body: "Book the trip to them, then tell them like this. Set “Going to” as their own city and “Leaving from” as yours. They pack your clues, “my worst sweater, by request”, “an appetite”, “the key you gave me”, with no idea where the case is headed, until the departures board spells out their own town. Put the real arrival on the ticket: “Fri 12 Dec, 19:40”.",
         },
         {
           template: "paper-crane",
@@ -979,7 +979,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-council",
           heading: "A hearing about nothing in particular",
-          body: "Five cats convene to consider the case of someone who has done nothing wrong. Charge: “being suspiciously nice to come home to”. Findings: “leaves the last biscuit, every time”, “laughs before the punchline”. The gavel falls three times and the stamp says Certified icon. Your letter is the full ruling, so it can be two lines long.",
+          body: "Five cats convene to consider the case of someone who has done nothing wrong. Charge: “being suspiciously nice to come home to”. Findings: “leaves the last cookie, every time”, “laughs before the punchline”. The gavel falls three times and the stamp says Certified icon. Your letter is the full ruling, so it can be two lines long.",
         },
         {
           template: "arcade",
@@ -991,7 +991,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
           template: "scratch-card",
           heading: "A small plan, under foil",
           brief: "Three cards with a photo each, and on the last a plan for tonight.",
-          body: "It doesn’t have to be a proposal. Three cards with a photo each, and on the last one a plan for tonight in big letters: “Friday is cancelled. We’re getting noodles.” Print your own words on the foil, “scratch for dinner”, and send it at four in the afternoon, when the day is at its longest.",
+          body: "It doesn’t have to be a proposal. Three cards with a photo each, and on the last one a plan for tonight in big letters: “Friday is canceled. We’re getting noodles.” Print your own words on the foil, “scratch for dinner”, and send it at four in the afternoon, when the day is at its longest.",
         },
       ],
     },

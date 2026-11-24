@@ -60,7 +60,7 @@ export const KINDS: Record<PlaceKind, KindInfo> = {
   museum: { group: "culture", label: { en: "Museum", es: "Museo" }, indoor: true, free: false },
   gallery: { group: "culture", label: { en: "Gallery", es: "Galería" }, indoor: true, free: true },
   cinema: { group: "culture", label: { en: "Cinema", es: "Cine" }, indoor: true, free: false },
-  theatre: { group: "culture", label: { en: "Theatre", es: "Teatro" }, indoor: true, free: false },
+  theatre: { group: "culture", label: { en: "Theater", es: "Teatro" }, indoor: true, free: false },
   planetarium: { group: "culture", label: { en: "Planetarium", es: "Planetario" }, indoor: true, free: false },
   bookshop: { group: "culture", label: { en: "Bookshop", es: "Librería" }, indoor: true, free: true },
   landmark: { group: "culture", label: { en: "Landmark", es: "Lugar emblemático" }, indoor: false, free: true },

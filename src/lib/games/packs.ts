@@ -72,7 +72,7 @@ export const PACKS: Record<PackId, PackInfo> = {
     cards: 40,
     adult: true,
     samples: [
-      { en: "What's the most attractive thing I do without realising?", es: "¿Qué es lo más atractivo que hago sin darme cuenta?" },
+      { en: "What's the most attractive thing I do without realizing?", es: "¿Qué es lo más atractivo que hago sin darme cuenta?" },
       { en: "Give me three kisses: one sweet, one silly, one that means business.", es: "Dame tres besos: uno tierno, uno tonto y uno que vaya en serio." },
       { en: "What's a compliment about me you've been saving?", es: "¿Qué piropo sobre mí te has estado guardando?" },
     ],
