@@ -433,7 +433,7 @@ describe("POST /api/stripe/checkout: two more gifts", () => {
     state.user = { id: U1, email: "u1@x.co" };
   });
 
-  it("opens Stripe's page at €5 for a buyer, with a pending purchase row", async () => {
+  it("opens Stripe's page at €7.99 for a buyer, with a pending purchase row", async () => {
     const res = await post(pair);
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ url: "https://checkout.stripe.test/c/cs_test_1" });
@@ -441,7 +441,7 @@ describe("POST /api/stripe/checkout: two more gifts", () => {
     expect(params).toMatchObject({ mode: "payment", metadata: { app: "ethos", product: "pair", kind: "pair", user_id: U1, guest: "0", withdrawal_notice: "tickbox" } });
     for (const key of ["customer", "customer_creation", "invoice_creation"]) expect(params, key).not.toHaveProperty(key);
     expect(keysOf(params)).not.toContain("setup_future_usage");
-    expect(fake.rows("purchases").find((p) => p.product === "pair")).toMatchObject({ product: "pair", kind: "pair", amount: 500, currency: "eur", status: "pending", template_slugs: [], stripe_session_id: "cs_test_1" });
+    expect(fake.rows("purchases").find((p) => p.product === "pair")).toMatchObject({ product: "pair", kind: "pair", amount: 799, currency: "eur", status: "pending", template_slugs: [], stripe_session_id: "cs_test_1" });
   });
 
   it("makes a wallet session with no box to tick, and answers its secret and id", async () => {

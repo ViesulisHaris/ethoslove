@@ -224,8 +224,8 @@ describe("checkout plan: two more gifts", () => {
   };
   const pair = (r: Partial<CheckoutRequest> = {}) => req({ product: "pair", ...r });
 
-  it("charges the catalogue's €5 / $6 / £4 as one line, granting no unlock row", () => {
-    for (const [currency, amount] of [["eur", 500], ["usd", 600], ["gbp", 400]] as const) {
+  it("charges the catalogue's €7.99 / $8.99 / £6.99 as one line, granting no unlock row", () => {
+    for (const [currency, amount] of [["eur", 799], ["usd", 899], ["gbp", 699]] as const) {
       const plan = ok(planCheckout(pair({ currency }), buyer));
       expect(plan).toMatchObject({ product: "pair", kind: "pair", currency, total: amount, lines: [{ key: "pair", amount }], unlocks: [], templateSlugs: [], billing: "one_time", bump: false, second: null, personalPrice: null });
     }

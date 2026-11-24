@@ -4,15 +4,18 @@ import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 
 /**
  * Two more gifts, offered on the share screen right after a paid gift (docs/marketing/growth-build/
- * PLAN-pair.md). Its price is Pick three's minus a single in every currency, so three gifts always
- * cost what the pricing page says three cost, and "Separately" is twice a single, worked out.
+ * PLAN-pair.md). Its price is the owner's (24 Nov 2026): €7.99 / $8.99 / £6.99, less than one single
+ * in every currency, and "Separately" is twice a single, worked out.
  */
 const CURRENCIES: Currency[] = ["usd", "eur", "gbp"];
 
 describe("two more gifts in the catalogue", () => {
-  it("costs exactly Pick three minus a single, in every currency", () => {
-    for (const c of CURRENCIES) expect(PRODUCTS.pair.amounts[c]).toBe(PRODUCTS.pick3.amounts[c] - PRODUCTS.single.amounts[c]);
-    expect(PRODUCTS.pair.amounts).toEqual({ usd: 600, eur: 500, gbp: 400 });
+  it("costs €7.99 / $8.99 / £6.99, less than one single in every currency", () => {
+    expect(PRODUCTS.pair.amounts).toEqual({ usd: 899, eur: 799, gbp: 699 });
+    for (const c of CURRENCIES) expect(PRODUCTS.pair.amounts[c]).toBeLessThan(PRODUCTS.single.amounts[c]);
+    expect([formatRound(799, "eur", "en"), formatRound(899, "usd", "en"), formatRound(699, "gbp", "en"), formatRound(799, "eur", "es").replace(/\s/g, " ")]).toEqual(["€7.99", "$8.99", "£6.99", "7,99 €"]);
+    // Pick three is untouched: the pair no longer follows it.
+    expect(PRODUCTS.pick3.amounts).toEqual({ usd: 1799, eur: 1499, gbp: 1299 });
   });
 
   it("is two gifts, and 'separately' is twice a single", () => {

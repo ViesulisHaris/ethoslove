@@ -75,9 +75,9 @@ export const PRODUCTS: Record<ProductId, Product> = {
   giftcard: { id: "giftcard", picks: 0, amounts: { usd: 2999, eur: 2499, gbp: 2199 }, highlight: false, envProductKey: "STRIPE_PRODUCT_GIFTCARD", name: { en: "Ethos gift card: Give Everything", es: "Tarjeta regalo Ethos: Regálalo todo" } },
   // Two more gifts, offered on the share screen right after a paid gift (components/editor/two-more-gifts.tsx):
   // two gifts ready on the account, each spent on publishing a template the buyer doesn't hold
-  // (lib/commerce/gift-credits.ts). Its price is Pick three's minus a single, so three gifts always cost
-  // what the pricing page says three cost. It grants no unlock row itself, like a gift card.
-  pair: { id: "pair", picks: 0, amounts: { usd: 600, eur: 500, gbp: 400 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PAIR", name: { en: "Ethos: two more gifts", es: "Ethos: dos regalos más" } },
+  // (lib/commerce/gift-credits.ts). Its price is the owner's (24 Nov 2026), less than one single in
+  // every currency. It grants no unlock row itself, like a gift card.
+  pair: { id: "pair", picks: 0, amounts: { usd: 899, eur: 799, gbp: 699 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PAIR", name: { en: "Ethos: two more gifts", es: "Ethos: dos regalos más" } },
   upgrade: { id: "upgrade", picks: 0, amounts: { usd: 499, eur: 499, gbp: 499 }, highlight: false, envProductKey: "STRIPE_PRODUCT_UPGRADE", name: { en: "Ethos: upgrade to every template, forever", es: "Ethos: pasa a todas las plantillas, para siempre" } },
   // A group card (src/lib/group): group cards on one template, for good, with up to 25 people adding a
   // note to each. The amount includes that template; whoever already holds the template pays the

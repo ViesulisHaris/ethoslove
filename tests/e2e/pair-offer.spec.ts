@@ -8,7 +8,7 @@ import { devices, expect, test, type Page } from "@playwright/test";
  */
 test.skip(!!process.env.CI, "the share preview page exists only on a development server");
 
-const OFFER = { eur: { amount: 500, currency: "eur" }, usd: { amount: 600, currency: "usd" }, gbp: { amount: 400, currency: "gbp" } } as const;
+const OFFER = { eur: { amount: 799, currency: "eur" }, usd: { amount: 899, currency: "usd" }, gbp: { amount: 699, currency: "gbp" } } as const;
 const COUNTRY_CURRENCY: Record<string, keyof typeof OFFER> = { US: "usd", GB: "gbp", DE: "eur" };
 
 type Setup = { ready?: number; offer?: boolean; reminders?: unknown[]; remindersDelayMs?: number; wallet?: boolean; stripeDelayMs?: number; entitlementsDelayMs?: number };
@@ -70,10 +70,10 @@ test.describe("two more gifts under the link", () => {
     await expect(card).toContainText("You remembered today. Next up:");
     await expect(card).toContainText("Christmas");
     await expect(card).toContainText("Valentine’s Day");
-    await expect(card.getByTestId("pair-price")).toHaveText("€5");
+    await expect(card.getByTestId("pair-price")).toHaveText("€7.99");
     await expect(card).toContainText("Separately €19.98");
     const add = card.getByTestId("pair-add");
-    await expect(add).toHaveText("Add both for €5");
+    await expect(add).toHaveText("Add both for €7.99");
     const box = await add.boundingBox();
     expect(box && box.y + box.height).toBeLessThanOrEqual(844);
 
@@ -193,7 +193,7 @@ test.describe("two more gifts under the link", () => {
         await expect(days.nth(i)).toContainText(away);
       }
       await expect(page.getByTestId("pair-offer")).not.toContainText("months");
-      await expect(page.getByTestId("pair-add")).toHaveText("Add both for €5");
+      await expect(page.getByTestId("pair-add")).toHaveText("Add both for €7.99");
     });
   }
 
@@ -208,13 +208,39 @@ test.describe("two more gifts under the link", () => {
     await expect(card).toContainText("Que nadie caiga en el olvido.");
     await expect(card).toContainText("Hoy te has acordado. Lo próximo:");
     await expect(card).toContainText("Navidad");
-    await expect(card.getByTestId("pair-add")).toHaveText("Añadir los dos por 5 €");
+    await expect(card.getByTestId("pair-add")).toHaveText("Añadir los dos por 7,99 €");
     // The Spanish card is taller (the Instagram line wraps): its button is still on the first screen.
     const box = await card.getByTestId("pair-add").boundingBox();
     expect(box && box.y + box.height).toBeLessThanOrEqual(844);
   });
 
-  for (const [country, price] of [["US", "$6"], ["GB", "£4"], ["DE", "€5"]] as const) {
+  test("the price with its cents fits beside 'Both gifts' at 320 and 390 px, and the button is one line at 320", async ({ page }) => {
+    // English first: once /es is visited the locale cookie would send /share-preview to Spanish.
+    for (const [path, price, add] of [
+      ["/share-preview", "€7.99", "Add both for €7.99"],
+      ["/es/share-preview", "7,99 €", "Añadir los dos por 7,99 €"],
+    ] as const)
+      for (const width of [320, 390]) {
+        await page.setViewportSize({ width, height: 844 });
+        await open(page, path);
+        const priceEl = page.getByTestId("pair-price");
+        await expect(priceEl).toHaveText(price);
+        const priceBox = (await priceEl.boundingBox())!;
+        const label = (await page.getByTestId("pair-offer").getByText(path.startsWith("/es") ? "Por separado" : "Separately", { exact: false }).boundingBox())!;
+        // Beside, not under: on the same row, to the right of the words, inside the card, on one line.
+        expect(priceBox.x, `${width} ${path}`).toBeGreaterThan(label.x + label.width);
+        expect(priceBox.height).toBeLessThan(40);
+        const card = (await page.getByTestId("pair-offer").boundingBox())!;
+        expect(priceBox.x + priceBox.width).toBeLessThanOrEqual(card.x + card.width);
+        const button = page.getByTestId("pair-add");
+        await expect(button).toHaveText(add);
+        if (width === 320) expect((await button.boundingBox())!.height).toBe(48);
+        expect(await button.locator("span").evaluate((s) => s.getClientRects().length)).toBe(1);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      }
+  });
+
+  for (const [country, price] of [["US", "$8.99"], ["GB", "£6.99"], ["DE", "€7.99"]] as const) {
     test.describe(`a visitor from ${country}`, () => {
       test.use({ extraHTTPHeaders: { "x-vercel-ip-country": country } });
       test(`is shown ${price}`, async ({ page }) => {

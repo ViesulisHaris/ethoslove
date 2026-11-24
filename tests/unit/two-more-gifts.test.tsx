@@ -38,7 +38,7 @@ const days = nextDays(new Date("2026-11-24T00:00:00.000Z"), [], null);
 const gift = { templateSlug: "frosted-window", recipientName: "Mia", locale: "en", photos: [] } as unknown as GiftData;
 
 describe("the two more gifts card", () => {
-  const offer = { amount: 500, currency: "eur" as const };
+  const offer = { amount: 799, currency: "eur" as const };
   const ent = (pairOffer: typeof offer | null, giftsReady = 0) => ({ signedIn: true, templates: [], packs: [], pass: null, membership: null, giftsReady, pairOffer });
 
   it("draws nothing at all when the server doesn't offer it", () => {
@@ -77,8 +77,8 @@ describe("the two more gifts card", () => {
   });
 
   it("names the two days and the price, in English, for each currency", () => {
-    for (const [currency, price, apart] of [["eur", "€5", "€19.98"], ["usd", "$6", "$23.98"], ["gbp", "£4", "£17.98"]] as const) {
-      const html = text(intl(<Offer offer={{ amount: { eur: 500, usd: 600, gbp: 400 }[currency], currency }} days={days} name="Mia" onBought={() => {}} />));
+    for (const [currency, price, apart] of [["eur", "€7.99", "€19.98"], ["usd", "$8.99", "$23.98"], ["gbp", "£6.99", "£17.98"]] as const) {
+      const html = text(intl(<Offer offer={{ amount: { eur: 799, usd: 899, gbp: 699 }[currency], currency }} days={days} name="Mia" onBought={() => {}} />));
       expect(html).toContain("Nobody likes to be forgotten.");
       expect(html).toContain("You remembered today. Next up:");
       expect(html).toContain("Christmas 25 December in 4 weeks");
@@ -104,7 +104,7 @@ describe("the two more gifts card", () => {
   });
 
   it("in Spanish, with the price after the number", () => {
-    const html = text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={days} name="Mia" onBought={() => {}} />, "es"));
+    const html = text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={days} name="Mia" onBought={() => {}} />, "es"));
     expect(html).toContain("Que nadie caiga en el olvido.");
     expect(html).toContain("Hoy te has acordado. Lo próximo:");
     expect(html).toContain("Puede abrirse a medianoche, justo en su día");
@@ -115,11 +115,11 @@ describe("the two more gifts card", () => {
     expect(html).toContain("Navidad 25 de diciembre en 4 semanas");
     expect(html).toContain("San Valentín 14 de febrero en 12 semanas");
     expect(html).toContain("Por separado 19,98 €");
-    expect(html).toContain("Añadir los dos por 5 €");
+    expect(html).toContain("Añadir los dos por 7,99 €");
   });
 
   it("without a wallet here, draws the card button, never Stripe's", () => {
-    const html = intl(<Offer offer={{ amount: 500, currency: "eur" }} days={days} name="Mia" onBought={() => {}} />);
+    const html = intl(<Offer offer={{ amount: 799, currency: "eur" }} days={days} name="Mia" onBought={() => {}} />);
     expect(html).toContain('data-testid="pair-add"');
     expect(html).not.toContain('data-testid="pair-wallet"');
   });
@@ -174,16 +174,16 @@ describe("the two more gifts card", () => {
 
   it("reads right with a day tomorrow, and with a single day, in both languages", () => {
     const eve = nextDays(new Date("2026-12-24T00:00:00.000Z"), [], null);
-    expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />))).toContain("Christmas 25 December in 1 day");
-    expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />, "es"))).toContain("Navidad 25 de diciembre en 1 día");
+    expect(text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />))).toContain("Christmas 25 December in 1 day");
+    expect(text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />, "es"))).toContain("Navidad 25 de diciembre en 1 día");
     // 10 February: Valentine's Day alone. One row; the product is still two gifts.
     const one = nextDays(new Date("2027-02-10T00:00:00.000Z"), [], null);
     expect(one).toHaveLength(1);
-    const offer = intl(<Offer offer={{ amount: 500, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />);
+    const offer = intl(<Offer offer={{ amount: 799, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />);
     expect(offer.match(/<li /g)?.length).toBe(3); // one day row + the two ticks
     expect(text(offer)).toContain("Valentine’s Day 14 February in 4 days");
-    expect(text(offer)).toContain("Add both for €5");
-    expect(text(intl(<Offer offer={{ amount: 500, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />, "es"))).toContain("San Valentín 14 de febrero en 4 días");
+    expect(text(offer)).toContain("Add both for €7.99");
+    expect(text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />, "es"))).toContain("San Valentín 14 de febrero en 4 días");
     const bought = text(intl(<Bought days={one} name="Mia" />));
     expect(bought).toContain("Two gifts are ready.");
     expect(bought).toContain("Start the Valentine's one now");

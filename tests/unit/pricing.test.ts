@@ -41,8 +41,8 @@ describe("pricing catalogue", () => {
       upgrade: [499, 499, 499],
       // A group card, its template included (the owner's price, 21 Nov 2026); switched off until it has a template.
       group: [1999, 2399, 1799],
-      // Two more gifts, after a paid gift: Pick three minus a single (tests/unit/pair-product.test.ts).
-      pair: [500, 600, 400],
+      // Two more gifts, after a paid gift: the owner's price, under a single (tests/unit/pair-product.test.ts).
+      pair: [799, 899, 699],
     });
     // The bump takes a single or "make it special" to exactly Everything's price.
     expect([bumpAmount("single", "eur"), bumpAmount("single", "usd"), bumpAmount("single", "gbp")]).toEqual([1500, 1800, 1300]);
