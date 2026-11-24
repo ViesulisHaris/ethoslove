@@ -4099,6 +4099,16 @@
       "line": "Made tonight, opened on their phone on Christmas morning.",
       "more": "See more Christmas gifts"
     },
+    "month": {
+      "dateLabel": "A date for it",
+      "dateLink": "See date ideas like this",
+      "moreAbout": "More about this month",
+      "nextLabel": "Other months",
+      "nextHeading": "The month before, the month after",
+      "year": "Anniversary gift ideas",
+      "counter": "Count your months together",
+      "byMonth": "Anniversary gifts by month"
+    },
     "footerTitle": "Gift ideas"
   },
   "together": {

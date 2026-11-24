@@ -4099,6 +4099,16 @@
       "line": "Se crea esta noche y se abre en su móvil la mañana de Navidad.",
       "more": "Ver más regalos de Navidad"
     },
+    "month": {
+      "dateLabel": "Una cita para ese día",
+      "dateLink": "Ver citas como esta",
+      "moreAbout": "Más sobre este mes",
+      "nextLabel": "Otros meses",
+      "nextHeading": "El mes anterior y el siguiente",
+      "year": "Ideas de regalo de aniversario",
+      "counter": "Contad vuestros meses juntos",
+      "byMonth": "Regalos de aniversario por meses"
+    },
     "footerTitle": "Ideas de regalo"
   },
   "together": {
