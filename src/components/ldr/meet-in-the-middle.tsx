@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
 import { round } from "@/lib/dates/geo";
-import { answerPlace, echoTheirs, inNeverNamed, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { answerPlace, echoTheirs, inNeverNamed, isEven, mapLink, namesAirport, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
@@ -28,7 +28,7 @@ type Zone = { offset: number; name: string };
 /** A town's time zone: `undefined` while it is being asked for, `null` when it could not be. */
 type ZoneAnswer = Zone | null | undefined;
 /** One flight: on Aviasales, which pays us, and the same search on Google Flights to compare. */
-type Hop = { from: Airport; to: Airport; aviasales: string; google: string };
+type Hop = { from: Airport; to: Airport; fromName: string; toName: string; aviasales: string; google: string };
 
 const noop = () => () => {};
 const localDay = () => toYmd(new Date());
@@ -113,22 +113,26 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   const flights = useMemo(() => {
     if (!a || !b || !result) return null;
     const dates = today ? weekendAhead(today) : null;
-    const hop = (from: Airport, to: Airport): Hop => {
-      const links = flightLinks({ from, to, depart: dates?.depart, back: dates?.back, adults: 1, locale });
-      const url = (site: FlightSite) => links.find((l) => l.id === site)?.url ?? "";
-      return { from, to, aviasales: url("aviasales"), google: url("google") };
-    };
     const fromA = nearestAirport(a)?.airport;
     const fromB = nearestAirport(b)?.airport;
     // Both home to the same airport: close enough that no flight is the answer.
     if (!fromA || !fromB || fromA.iata === fromB.iata) return null;
+    // A home airport by its city, unless it or the town typed for it is in a country the site never
+    // names (the dates links' rule): then only whose airport it is. Halfway's airport is never in one (below).
+    const said = (airport: Airport) =>
+      airport === fromA ? (namesAirport(airport, a) ? cityName(airport, locale) : t("airportYours")) : airport === fromB ? (namesAirport(airport, b) ? cityName(airport, locale) : t("airportTheirs")) : cityName(airport, locale);
+    const hop = (from: Airport, to: Airport): Hop => {
+      const links = flightLinks({ from, to, depart: dates?.depart, back: dates?.back, adults: 1, locale });
+      const url = (site: FlightSite) => links.find((l) => l.id === site)?.url ?? "";
+      return { from, to, fromName: said(from), toName: said(to), aviasales: url("aviasales"), google: url("google") };
+    };
     const halfway = place ? nearestAirport(place)?.airport : undefined;
     // The site never suggests somewhere in Spain (the owner's rule), so a halfway airport there
-    // gives way to the flight between them. Their own home airports are theirs to name.
+    // gives way to the flight between them.
     const suggestable = halfway && !NEVER_SUGGESTED.has(halfway.country) ? halfway : undefined;
     if (suggestable && fromA.iata !== suggestable.iata && fromB.iata !== suggestable.iata) return { to: suggestable, hops: [hop(fromA, suggestable), hop(fromB, suggestable)] };
     return { to: null, hops: [hop(fromA, fromB)] };
-  }, [a, b, result, place, locale, today]);
+  }, [a, b, result, place, locale, today, t]);
   // The answer's name is already in the page's language: a Spanish page says "Ciudad de México", and so does the link to its dates.
   const halfwayName = place?.name ?? "";
   const distance = (km: number) => (miles ? t("mi", { n: Math.max(1, Math.round(milesOf(km))) }) : t("km", { n: Math.max(1, Math.round(km)) }));
@@ -261,7 +265,7 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
               {flights.hops.map((f) => (
                 <div key={f.from.iata} className="flex flex-wrap items-center gap-2 sm:justify-end">
                   <PartnerLink partner="aviasales" placement="meet_middle" href={f.aviasales} className="group inline-flex min-h-11 items-center gap-1.5 rounded-full bg-card px-4 text-[14px] font-semibold text-forest ring-1 ring-forest/10 transition-colors hover:bg-paper-deep">
-                    {cityName(f.from, locale)} → {cityName(f.to, locale)}
+                    {f.fromName} → {f.toName}
                     <span className="font-medium text-forest/65">· Aviasales</span>
                     <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     <span className="sr-only">({tf("newTab")})</span>
@@ -270,7 +274,7 @@ export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
                     Google Flights
                     <ArrowUpRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     <span className="sr-only">
-                      ({cityName(f.from, locale)} → {cityName(f.to, locale)}, {tf("newTab")})
+                      ({f.fromName} → {f.toName}, {tf("newTab")})
                     </span>
                   </a>
                 </div>

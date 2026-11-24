@@ -174,6 +174,14 @@ export function inNeverNamed(point: LatLng, cities: readonly City[] = CITIES): b
 export const echoTheirs = (answer: HalfwayAnswer | null, town?: LatLng | null): boolean =>
   Boolean(answer && answer.kind !== "unnamed" && answer.kind !== "pending" && answer.kind !== "failed" && !(town && inNeverNamed(town)));
 
+/**
+ * Whether the flights row may print a home airport's city (`town` is the town typed for it). Not when
+ * the airport or the town is in a country never named: Bordeaux and Bilbao would read "Bordeaux →
+ * Bilbao"; the row says "Their airport" instead.
+ */
+export const namesAirport = (airport: { country: string }, town?: LatLng | null): boolean =>
+  !NEVER_SUGGESTED.has(airport.country) && !(town && inNeverNamed(town));
+
 /** The place a halfway answer names, as the ways on need it, or null. */
 export const answerPlace = (answer: HalfwayAnswer | null): { name: string; lat: number; lng: number } | null =>
   answer?.kind === "city" ? { name: answer.name, lat: answer.lat, lng: answer.lng } : null;

@@ -2664,6 +2664,8 @@
       "clocksUnavailable": "Ahora mismo no podemos saber la hora de cada sitio. El resto de las cuentas sigue valiendo.",
       "flightsTo": "Vuelos a {city}",
       "flightsBetween": "Vuelos entre vosotros",
+      "airportYours": "Tu aeropuerto",
+      "airportTheirs": "El aeropuerto de la otra persona",
       "eachWay": "{distance} cada uno",
       "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino.",
       "km": "{n, plural, other {# km}}",

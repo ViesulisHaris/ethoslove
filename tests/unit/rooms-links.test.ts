@@ -15,7 +15,8 @@ import { CITY_PAGES, mentionsSpain } from "@/lib/cities/cities";
 import { ANNIVERSARY_LED, showsAnniversaryDates } from "@/lib/lifecycle/anniversary-dates";
 import { LDR_GAMES } from "@/lib/ldr/games";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
-import { echoTheirs, halfwayAnswer, inNeverNamed, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
+import { nearestAirport } from "@/lib/trips/airports";
+import { echoTheirs, halfwayAnswer, inNeverNamed, namesAirport, halfwayBetween, halfwayCityName, isEven, isOwnTown, mapLink, needsMap, readsMiles, regionFor, tableFair } from "@/lib/ldr/halfway";
 import { fairKm, pickSpot, spotAt } from "@/lib/places/photon-reverse";
 import { halfwayQuery, readHalfwayLink } from "@/lib/ldr/halfway-link";
 import { cityPageNear, HALFWAY_GIFT_SLUG, halfwayGiftFields, tripNear } from "@/lib/ldr/ways";
@@ -361,6 +362,20 @@ describe("the halfway answer, table and map together", () => {
     }
     const city = { kind: "city" as const, name: "Mont-de-Marsan", lat: 43.89, lng: -0.5, offKm: 20, kmFromA: 80, kmFromB: 80, fromMap: true };
     expect(echoTheirs(city, bilbao)).toBe(false);
+  });
+
+  it("the flights row names a home airport only where the dates links may name its town (Bordeaux and Bilbao)", () => {
+    const bilbao = { lat: 43.263, lng: -2.935 };
+    const bordeaux = { lat: 44.8378, lng: -0.5792 };
+    const bio = nearestAirport(bilbao)!.airport;
+    const bod = nearestAirport(bordeaux)!.airport;
+    expect(namesAirport(bio, bilbao)).toBe(false);
+    expect(namesAirport(bod, bordeaux)).toBe(true);
+    // Either half is enough: a Spanish airport for a French town, or a French one for a town near the border.
+    expect(namesAirport(bio, bordeaux)).toBe(false);
+    expect(namesAirport(bod, { lat: 43.3183, lng: -1.9812 })).toBe(false);
+    expect(namesAirport(nearestAirport({ lat: 40.4168, lng: -3.7038 })!.airport, { lat: 40.4168, lng: -3.7038 })).toBe(false);
+    expect(namesAirport(nearestAirport({ lat: 48.2082, lng: 16.3738 })!.airport, { lat: 48.2082, lng: 16.3738 })).toBe(true);
   });
 });
 
