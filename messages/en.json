@@ -2600,7 +2600,6 @@
       "title": "An evening with a shape to it.",
       "blurb": "Pick one and we fill it with real places near you.",
       "all": "All {count} ideas, on the map",
-      "hours": "{hours} h",
       "previous": "Earlier ideas",
       "next": "More ideas"
     },
@@ -2622,7 +2621,6 @@
     },
     "closing": {
       "title": "Make them something they will keep.",
-      "blurb": "Ten minutes now, and it is in their hands tonight.",
       "dates": "Find a date",
       "gifts": "Make a gift"
     }

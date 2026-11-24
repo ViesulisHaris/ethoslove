@@ -2600,7 +2600,6 @@
       "title": "Una noche con plan.",
       "blurb": "Elige una y la llenamos de sitios reales cerca de ti.",
       "all": "Las {count} ideas, en el mapa",
-      "hours": "{hours} h",
       "previous": "Ideas anteriores",
       "next": "Más ideas"
     },
@@ -2622,7 +2621,6 @@
     },
     "closing": {
       "title": "Hazle algo que vaya a guardar.",
-      "blurb": "Diez minutos ahora, y esta noche lo tiene en sus manos.",
       "dates": "Buscar una cita",
       "gifts": "Crear un regalo"
     }

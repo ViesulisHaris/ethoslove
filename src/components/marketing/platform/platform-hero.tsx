@@ -177,7 +177,7 @@ async function GiftFirst() {
           <Cutout id="bow-gingham" className="absolute -top-8 -right-3 w-24 rotate-[14deg] drop-shadow-[0_10px_16px_rgba(120,50,70,0.3)] sm:w-28" />
         </div>
 
-        <div className="relative -mt-10 ml-2 w-[214px] rotate-[-4deg] rounded-md bg-card p-4 text-ink shadow-[0_26px_50px_-22px_rgba(120,20,60,0.55)] sm:ml-6 sm:w-[240px] sm:p-5">
+        <div data-picture className="relative -mt-10 ml-2 w-[214px] rotate-[-4deg] rounded-md bg-card p-4 text-ink shadow-[0_26px_50px_-22px_rgba(120,20,60,0.55)] sm:ml-6 sm:w-[240px] sm:p-5">
           <p className="text-[11px] font-medium tracking-[0.18em] text-rose-deep uppercase">{t("card.eyebrow")}</p>
           <p className="mt-1.5 font-hand text-[1.6rem] leading-none text-rose-deep">{t("card.names")}</p>
           <p className="mt-3 flex items-center gap-2 text-[12.5px] text-ink-soft">

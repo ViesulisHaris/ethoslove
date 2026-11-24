@@ -96,7 +96,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
   // With the finder: Gifts lead the rooms, and the front page, /gifts and the gallery link to it.
-  "/": FINDER_LIVE,
+  "/": GIFTS2_DAY,
   // The gift pages by kind (content/gift-guides.ts) and /digital-cards are new, and /gifts and every
   // /gifts/for-* page gained their links.
   "/gifts": GIFTS2_DAY,
