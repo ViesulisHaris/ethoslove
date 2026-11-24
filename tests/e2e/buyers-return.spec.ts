@@ -404,7 +404,7 @@ test.describe("the share screen's reminder card", () => {
     await expect(card).toContainText("Que no se te pase su día.");
     await expect(card.getByTestId("remind-field-birthday")).toContainText("El cumpleaños de Ana");
     await expect(card.getByTestId("remind-field-birthday")).toContainText("de este regalo");
-    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Vuestro aniversario");
+    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Tu aniversario con Ana");
     await expect(card.getByTestId("remind-save-dates")).toHaveText("Recuérdamelo");
     await card.getByTestId("remind-another").click();
     await expect(card.getByTestId("remind-row-monthly")).toContainText("Y cada mes");
