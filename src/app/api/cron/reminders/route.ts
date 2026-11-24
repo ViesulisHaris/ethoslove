@@ -16,13 +16,20 @@ export const maxDuration = 60;
 
 /** Stop starting new emails well inside maxDuration. */
 const BUDGET_MS = 45_000;
+/**
+ * The yearly reminders stop here, so the monthsaries, kept gifts and saved dates after them always
+ * get time. What is left of a busy day's reminders goes on the next run: the job runs every hour from
+ * 07:00 to 11:00 UTC (vercel.json, REMINDER_RUN_HOURS), and each e-mail is claimed, so a later run
+ * sends only what an earlier one didn't.
+ */
+const YEARLY_BUDGET_MS = 30_000;
 /** Resend's default limit is two requests a second per team; one email at a time, spaced, stays under it. */
 const SEND_GAP_MS = 500;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /**
- * "Remind me": every morning, the three e-mails before each saved day, seven days, two days and the
+ * "Remind me": every morning (five runs, 07:00 to 11:00 UTC), the three e-mails before each saved day, seven days, two days and the
  * day before (lib/lifecycle/reminder-job.ts; before migration 0025, the one e-mail nine days
  * before). 29 February is sent for on the 28th in other years. Each e-mail is claimed before it goes,
  * so two runs at once can't both send it; if it fails, the claim is given back and the next run tries
@@ -72,7 +79,7 @@ export async function GET(request: NextRequest) {
       removeUrl: async (row, locale) => `${siteUrl()}/api/reminders/remove?t=${await signToken("reminder-remove", row.id, linkKey)}&l=${locale}`,
       pairOnSale: pairOnSale(),
       now: new Date(),
-      inTime: () => Date.now() - started <= BUDGET_MS,
+      inTime: () => Date.now() - started <= YEARLY_BUDGET_MS,
       pause: () => sleep(SEND_GAP_MS),
     });
   } catch (error) {

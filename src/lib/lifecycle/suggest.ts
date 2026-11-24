@@ -27,10 +27,14 @@ export const IDEAS: Record<SuggestFor, readonly string[]> = {
 /**
  * The template to suggest: the first idea for `kind` that isn't `avoid` (the template last used),
  * or, with `turn`, the idea after it in a round (a monthsary's count), so it isn't the same one
- * every month.
+ * every month. With `paid`, only premium ones: the three reminder e-mails start a gift with the
+ * photos in it, say it can open at midnight and quote a price, none of which is true of a free note.
  */
-export function suggestTemplate(kind: SuggestFor, options: { avoid?: string | null; turn?: number } = {}): TemplateManifest {
-  const ideas = IDEAS[kind].filter((slug) => slug !== options.avoid).map(getManifest).filter((m): m is TemplateManifest => m !== null);
+export function suggestTemplate(kind: SuggestFor, options: { avoid?: string | null; turn?: number; paid?: boolean } = {}): TemplateManifest {
+  const ideas = IDEAS[kind]
+    .filter((slug) => slug !== options.avoid)
+    .map(getManifest)
+    .filter((m): m is TemplateManifest => m !== null && (!options.paid || m.tier === "premium"));
   const pool = ideas.length > 0 ? ideas : [getManifest(IDEAS[kind][0])!];
   return pool[Math.abs(options.turn ?? 0) % pool.length];
 }

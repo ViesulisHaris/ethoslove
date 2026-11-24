@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   LEAD_DAYS,
+  REMINDER_RUN_HOURS,
   STAGE_CATCH_UP,
   STAGE_DAYS,
   countdownDay,
@@ -217,11 +220,41 @@ describe("three e-mails before each day", () => {
     expect(at([{ month: 2, day: 25 }])).toBe("2027-02-19");
     // Three or four days away: the first is the two-days-before one.
     expect(at([{ month: 2, day: 23 }])).toBe("2027-02-21");
-    // Tomorrow: today's run. Today itself: next year's.
+    // Tomorrow: the morning's last run (11:00 UTC) is still to come. Today itself: next year's.
     expect(at([{ month: 2, day: 20 }])).toBe("2027-02-19");
     expect(at([{ month: 2, day: 19 }])).toBe("2028-02-12");
-    // Saved with the gift made for it: done for this year, so next year's.
-    expect(at([{ month: 3, day: 5, doneYear: 2027 }])).toBe("2028-02-27");
+    // Saved with the gift made for it: done for this year, so next year's. The code before 0025 wrote a year with no stage: done too.
+    expect(at([{ month: 3, day: 5, sentYear: 2027, sentStage: 3 }])).toBe("2028-02-27");
+    expect(at([{ month: 3, day: 5, sentYear: 2027, sentStage: 0 }])).toBe("2028-02-27");
     expect(at([])).toBeNull();
+  });
+
+  it("counts from tomorrow once the morning's runs are over, as the job will", () => {
+    const evening = new Date("2027-02-19T15:00:00Z");
+    const at = (saved: Parameters<typeof firstEmailDate>[0], now = evening) => {
+      const d = firstEmailDate(saved, now);
+      return d ? day(d) : null;
+    };
+    // Tomorrow: the day-before e-mail was this morning's, so nothing this year: next year's first.
+    expect(at([{ month: 2, day: 20 }])).toBe("2028-02-13");
+    // Five days away: tomorrow it is four, too late for the first; the two-days-before one is the first.
+    expect(at([{ month: 2, day: 24 }])).toBe("2027-02-22");
+    // Six days away: tomorrow's run still catches the first up.
+    expect(at([{ month: 2, day: 25 }])).toBe("2027-02-20");
+    // Two days away: the day before.
+    expect(at([{ month: 2, day: 21 }])).toBe("2027-02-20");
+    // Seven days away: the first on the next run, tomorrow.
+    expect(at([{ month: 2, day: 26 }])).toBe("2027-02-20");
+    // The last run's hour itself is over; the hour before it isn't.
+    expect(at([{ month: 2, day: 20 }], new Date("2027-02-19T11:00:00Z"))).toBe("2028-02-13");
+    expect(at([{ month: 2, day: 20 }], new Date("2027-02-19T10:59:00Z"))).toBe("2027-02-19");
+    // A day whose first e-mail went: the second is next.
+    expect(at([{ month: 3, day: 5, sentYear: 2027, sentStage: 1 }], new Date("2027-02-26T15:00:00Z"))).toBe("2027-03-03");
+  });
+
+  it("names the job's last run hour as vercel.json schedules it", () => {
+    const vercel = JSON.parse(readFileSync(join(process.cwd(), "vercel.json"), "utf8")) as { crons: { path: string; schedule: string }[] };
+    const schedule = vercel.crons.find((c) => c.path === "/api/cron/reminders")?.schedule;
+    expect(schedule).toBe(`0 ${REMINDER_RUN_HOURS.first}-${REMINDER_RUN_HOURS.last} * * *`);
   });
 });

@@ -173,7 +173,7 @@ async function sendStages(run: ReminderRun, limit: number): Promise<ReminderRunR
       touched.add(r.id);
 
       const locale = r.locale === "es" ? "es" : "en";
-      const suggested = suggestTemplate(r.occasion, { avoid: r.template_slug });
+      const suggested = suggestTemplate(r.occasion, { avoid: r.template_slug, paid: true });
       const [account, from] = await Promise.all([factsOf(r.user_id), startedFor(r.user_id, r.recipient_name)]);
       const links = await run.links(r, stage, due.year, locale);
       const ok = await run.send({

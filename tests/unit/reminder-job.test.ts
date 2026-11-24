@@ -156,6 +156,39 @@ describe("the three e-mails before a day", () => {
     expect((await run(fake, "2027-02-27").result).sent).toBe(1);
   });
 
+  it("sends a busy day's e-mails over the morning's runs: what one run's time can't hold, the next sends, once each", async () => {
+    // Valentine's Day: 250 reminders all due their day-before e-mail on 13 February, and time for 90 a run.
+    const rows = Array.from({ length: 250 }, (_, i) =>
+      reminder({
+        id: `aaaaaaaa-aaaa-4aaa-8aaa-${String(i).padStart(12, "0")}`,
+        occasion: "valentines",
+        month: 2,
+        day: 14,
+        last_sent_year: 2027,
+        last_stage: 2,
+        created_at: `2026-11-01T00:${String(Math.floor(i / 60)).padStart(2, "0")}:${String(i % 60).padStart(2, "0")}.000Z`,
+      }),
+    );
+    const fake = world(rows);
+    const budget = (n: number) => () => n-- > 0;
+    const first = run(fake, "2027-02-13", { inTime: budget(90) });
+    expect(await first.result).toEqual({ sent: 90, failed: 0, deferred: 110, mode: "stages" });
+    expect(first.sent.every((e) => e.stage === 3)).toBe(true);
+    // The 08:00 run, the same day.
+    const second = run(fake, "2027-02-13", { inTime: budget(500) });
+    expect(await second.result).toEqual({ sent: 160, failed: 0, deferred: 0, mode: "stages" });
+    expect(new Set([...first.sent, ...second.sent].map((e) => e.onceKey)).size).toBe(250);
+    expect(fake.rows("reminders").every((r) => r.last_stage === 3)).toBe(true);
+    // A third run finds nothing left.
+    expect((await run(fake, "2027-02-13").result).sent).toBe(0);
+  });
+
+  it("suggests a paid template for a day of someone else's, never the free note", async () => {
+    const mum = run(world([reminder({ recipient_name: "Mum", occasion: "other", template_slug: null, currency: "eur" })]), "2027-02-26");
+    await mum.result;
+    expect(mum.sent[0]).toMatchObject({ templateSlug: "jar-of-reasons", paid: "price", prices: { single: 999, three: 1499, currency: "eur" } });
+  });
+
   it("sends a 29 February birthday's e-mails on the 28th's days in a common year", async () => {
     const fake = world([reminder({ occasion: "birthday", month: 2, day: 29 })]);
     const first = run(fake, "2027-02-21");

@@ -32,6 +32,33 @@ describe("saving a reminder from the card", () => {
     expect(anniversary).not.toHaveProperty("last_stage");
   });
 
+  it("lists each day with what already went for it, so the card can say when the first e-mail really comes", async () => {
+    fake = new FakeDb({
+      reminders: [
+        { id: "r1", user_id: "11111111-1111-4111-8111-111111111111", recipient_name: "Mia", occasion: "birthday", month: 3, day: 5, locale: "en", template_slug: null, last_sent_year: 2027, last_stage: 1 },
+        { id: "r2", user_id: "11111111-1111-4111-8111-111111111111", recipient_name: "Mia", occasion: "anniversary", month: 6, day: 1, locale: "en", template_slug: null, last_sent_year: null, last_stage: 0 },
+      ],
+    });
+    state.db = fake.db;
+    const listed = (await (await route.GET()).json()) as { reminders: { id: string; sentYear: number | null; sentStage?: number }[] };
+    expect(listed.reminders.map((r) => [r.id, r.sentYear, r.sentStage]).sort()).toEqual([
+      ["r1", 2027, 1],
+      ["r2", null, 0],
+    ]);
+    // Saving a day already there answers with what went for it.
+    const again = (await (await post({ recipientName: "mia", occasion: "birthday", month: 3, day: 5 })).json()) as { reminder: { sentYear: number; sentStage: number }; created: boolean };
+    expect(again).toMatchObject({ created: false, reminder: { sentYear: 2027, sentStage: 1 } });
+  });
+
+  it("lists every day on a database without migration 0025, the stage left out", async () => {
+    fake = new FakeDb({ reminders: [{ id: "r1", user_id: "11111111-1111-4111-8111-111111111111", recipient_name: "Mia", occasion: "birthday", month: 3, day: 5, locale: "en", template_slug: null, last_sent_year: 2027 }] }, undefined, { missingColumns: { reminders: ["last_stage", "currency"] } });
+    state.db = fake.db;
+    const listed = (await (await route.GET()).json()) as { reminders: Record<string, unknown>[] };
+    expect(listed.reminders).toHaveLength(1);
+    expect(listed.reminders[0]).toMatchObject({ id: "r1", sentYear: 2027 });
+    expect(listed.reminders[0]).not.toHaveProperty("sentStage");
+  });
+
   it("refuses a currency the site doesn't charge", async () => {
     expect((await post({ recipientName: "Mia", occasion: "birthday", month: 3, day: 5, currency: "jpy" })).status).toBe(400);
   });

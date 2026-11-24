@@ -170,28 +170,36 @@ export function whenWords(daysAway: number, date: Date, locale: "en" | "es"): st
 }
 
 /**
- * The day the first e-mail of a saved set will come, for the card's "Your first email comes on…":
- * the soonest of the days not done for their year (`doneYear`: the year a reminder saved with the gift
- * already counts as done, initialLastSentYear), less the lead of the first stage still to come. A
- * day too near for stage 1 gets stage 2 or 3; one that is today comes round next year. Null for none.
+ * The morning job's runs, in UTC hours (vercel.json: "0 7-11 * * *"). Several a morning, so a busy
+ * day's e-mails that one run's time can't hold go on a later run the same day: the claim makes the
+ * extra runs safe. tests/unit/reminders.test.ts holds this to vercel.json.
  */
-export function firstEmailDate(saved: (MonthDay & { doneYear?: number | null })[], today: Date): Date | null {
-  const start = utcDay(today);
-  let first: Date | null = null;
-  for (const item of saved) {
-    if (!isRealDay(item)) continue;
-    let next = nextOccurrence(item, start);
-    let away = Math.round((next.getTime() - start.getTime()) / DAY_MS);
-    // Done for this year, or nothing left to send for it: the next year's first e-mail.
-    if ((item.doneYear != null && item.doneYear >= next.getUTCFullYear()) || away < 1) {
-      next = occurrenceIn(next.getUTCFullYear() + 1, item);
-      away = Math.round((next.getTime() - start.getTime()) / DAY_MS);
+export const REMINDER_RUN_HOURS = { first: 7, last: 11 } as const;
+
+/** A day saved, with what already went for it (GET /api/reminders): nothing, or a year and its stage. */
+export type SavedDay = MonthDay & { sentYear?: number | null; sentStage?: number | null };
+
+/**
+ * The day the first e-mail of a saved set will come, for the card's "Your first email comes on…".
+ * It asks the job itself (dueStages, needsStage) day by day from the first run still to come: today's
+ * while the morning's last run is ahead, otherwise tomorrow's. So a day saved too late for this year's
+ * e-mails (tomorrow, after the morning) answers with next year's first one, and a day done for its
+ * year (saved with the gift made for it, or its e-mails already gone) too. Null for none.
+ */
+export function firstEmailDate(saved: SavedDay[], now: Date): Date | null {
+  const days = saved.filter(isRealDay);
+  if (days.length === 0) return null;
+  // Before the last run's hour, that run still reads the rows saved now.
+  const start = addDays(utcDay(now), now.getUTCHours() < REMINDER_RUN_HOURS.last ? 0 : 1);
+  // Two years and a week cover a day just missed and done for next year as well.
+  for (let ahead = 0; ahead <= 2 * 366 + STAGE_DAYS[1]; ahead++) {
+    const run = addDays(start, ahead);
+    for (const { stage, due } of dueStages(run)) {
+      const hit = days.some((d) => d.month === due.month && due.days.includes(d.day) && needsStage({ last_sent_year: d.sentYear ?? null, last_stage: d.sentStage ?? 0 }, due.year, stage));
+      if (hit) return run;
     }
-    const stage = STAGES.find((s) => away >= STAGE_DAYS[s] - (s === 1 ? STAGE_CATCH_UP : 0)) ?? DONE_STAGE;
-    const at = addDays(next, -Math.min(STAGE_DAYS[stage], away));
-    if (!first || at.getTime() < first.getTime()) first = at;
   }
-  return first;
+  return null;
 }
 
 /** The gift's templates' occasion, as a reminder knows it: the first one that recurs on a date. */
@@ -232,4 +240,15 @@ export function formatMonthDay({ month, day }: MonthDay, locale: "en" | "es"): s
 }
 
 /** A reminder as the API returns it. */
-export type Reminder = { id: string; recipientName: string; occasion: ReminderOccasion; month: number; day: number; locale: "en" | "es"; templateSlug: string | null };
+export type Reminder = {
+  id: string;
+  recipientName: string;
+  occasion: ReminderOccasion;
+  month: number;
+  day: number;
+  locale: "en" | "es";
+  templateSlug: string | null;
+  /** The occasion's year the last e-mail went for (or the gift was made for), and which of its three; absent where not read. */
+  sentYear?: number | null;
+  sentStage?: number;
+};

@@ -17,13 +17,12 @@ export const sameName = (a: string, b: string): boolean => a.trim().toLocaleLowe
 
 export type LastGift = { id: string; photos: number };
 
-/** Pure: the newest of `gifts` (newest first) whose recipient is `name`. */
-export function pickLastGift(gifts: { id: string; data: unknown }[], name: string): LastGift | null {
+/** Pure: the newest of `gifts` (newest first, each with only its recipient's name and photos) whose recipient is `name`. */
+export function pickLastGift(gifts: { id: string; name: unknown; photos: unknown }[], name: string): LastGift | null {
   if (!name.trim()) return null;
   for (const gift of gifts) {
-    const data = (gift.data ?? {}) as { recipientName?: unknown; photos?: unknown };
-    if (typeof data.recipientName !== "string" || !sameName(data.recipientName, name)) continue;
-    const photos = Array.isArray(data.photos) ? data.photos.filter((p) => p && typeof (p as { url?: unknown }).url === "string").length : 0;
+    if (typeof gift.name !== "string" || !sameName(gift.name, name)) continue;
+    const photos = Array.isArray(gift.photos) ? gift.photos.filter((p) => p && typeof (p as { url?: unknown }).url === "string").length : 0;
     return { id: gift.id, photos };
   }
   return null;
@@ -31,9 +30,10 @@ export function pickLastGift(gifts: { id: string; data: unknown }[], name: strin
 
 export async function lastGiftFor(admin: Db, userId: string, recipientName: string): Promise<LastGift | null> {
   if (!recipientName.trim()) return null;
+  // Only the two fields it needs out of each gift's data: the morning job reads this for every e-mail.
   const { data, error } = await admin
     .from("gifts")
-    .select("id, data, updated_at")
+    .select("id, name:data->>recipientName, photos:data->photos")
     .eq("user_id", userId)
     .in("status", ["live", "scheduled"])
     .order("updated_at", { ascending: false })
@@ -42,5 +42,5 @@ export async function lastGiftFor(admin: Db, userId: string, recipientName: stri
     console.error("[reminders] last gift not read", error.message);
     return null;
   }
-  return pickLastGift(data ?? [], recipientName);
+  return pickLastGift((data ?? []) as { id: string; name: unknown; photos: unknown }[], recipientName);
 }

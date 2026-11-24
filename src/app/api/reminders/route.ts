@@ -10,12 +10,35 @@ import { isMissingColumn } from "@/lib/commerce/db";
 export const runtime = "nodejs";
 export const maxDuration = 10;
 
-const COLUMNS = "id, recipient_name, occasion, month, day, locale, template_slug";
+const COLUMNS = "id, recipient_name, occasion, month, day, locale, template_slug, last_sent_year";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const PRIVATE = { "cache-control": "private, no-store" };
 
-type Listed = Pick<Tables<"reminders">, "id" | "recipient_name" | "occasion" | "month" | "day" | "locale" | "template_slug">;
-const toReminder = (r: Listed): Reminder => ({ id: r.id, recipientName: r.recipient_name, occasion: r.occasion, month: r.month, day: r.day, locale: r.locale, templateSlug: r.template_slug });
+type Listed = Pick<Tables<"reminders">, "id" | "recipient_name" | "occasion" | "month" | "day" | "locale" | "template_slug" | "last_sent_year">;
+/** With what already went for it: the year, and (after migration 0025) which of its three e-mails. */
+const toReminder = (r: Listed, sentStage?: number): Reminder => ({
+  id: r.id,
+  recipientName: r.recipient_name,
+  occasion: r.occasion,
+  month: r.month,
+  day: r.day,
+  locale: r.locale,
+  templateSlug: r.template_slug,
+  sentYear: r.last_sent_year,
+  ...(sentStage !== undefined ? { sentStage } : {}),
+});
+
+/**
+ * Which of the year's three e-mails went last, by id. Read on its own so that a database without
+ * migration 0025 still lists everything: then nothing is known, and a year with no stage reads as
+ * that year done, as the code before 0025 wrote it.
+ */
+async function stagesOf(db: NonNullable<Awaited<ReturnType<typeof signedIn>>>["db"], ids: string[]): Promise<Map<string, number>> {
+  if (ids.length === 0) return new Map();
+  const { data, error } = await db.from("reminders").select("id, last_stage").in("id", ids);
+  if (error || !data) return new Map();
+  return new Map(data.map((r) => [r.id, r.last_stage]));
+}
 
 /** Every query goes through the signed-in person's own client: row-level security decides what is theirs. */
 async function signedIn() {
@@ -30,7 +53,8 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
   const { data, error } = await session.db.from("reminders").select(COLUMNS).order("month").order("day").limit(MAX_REMINDERS);
   if (error) return NextResponse.json({ error: "unavailable" }, { status: 503 });
-  return NextResponse.json({ reminders: (data ?? []).map(toReminder) }, { headers: PRIVATE });
+  const stages = await stagesOf(session.db, (data ?? []).map((r) => r.id));
+  return NextResponse.json({ reminders: (data ?? []).map((r) => toReminder(r, stages.get(r.id))) }, { headers: PRIVATE });
 }
 
 /**
@@ -57,7 +81,7 @@ export async function POST(request: NextRequest) {
   if (sameDay.error) return NextResponse.json({ error: "unavailable" }, { status: 503 });
   const name = r.recipientName.toLocaleLowerCase();
   const existing = sameDay.data?.find((x) => x.recipient_name.toLocaleLowerCase() === name);
-  if (existing) return NextResponse.json({ reminder: toReminder(existing), created: false }, { headers: PRIVATE });
+  if (existing) return NextResponse.json({ reminder: toReminder(existing, (await stagesOf(db, [existing.id])).get(existing.id)), created: false }, { headers: PRIVATE });
 
   const { count, error: countError } = await db.from("reminders").select("id", { count: "exact", head: true });
   if (countError) return NextResponse.json({ error: "unavailable" }, { status: 503 });
@@ -81,12 +105,16 @@ export async function POST(request: NextRequest) {
   // ignoreDuplicates: a request that raced this one to the same row wins, and this one reads it back.
   const save = (values: typeof row) => db.from("reminders").upsert(values, { onConflict: "user_id,recipient_name,occasion,month,day", ignoreDuplicates: true }).select(COLUMNS).maybeSingle();
   let inserted = await save(staged);
-  if (inserted.error && isMissingColumn(inserted.error)) inserted = await save(row);
+  let withStage = true;
+  if (inserted.error && isMissingColumn(inserted.error)) {
+    inserted = await save(row);
+    withStage = false;
+  }
   if (inserted.error) return NextResponse.json({ error: "unavailable" }, { status: 503 });
-  if (inserted.data) return NextResponse.json({ reminder: toReminder(inserted.data), created: true }, { status: 201, headers: PRIVATE });
+  if (inserted.data) return NextResponse.json({ reminder: toReminder(inserted.data, withStage ? (skipYear !== null ? 3 : 0) : undefined), created: true }, { status: 201, headers: PRIVATE });
   const again = await db.from("reminders").select(COLUMNS).eq("recipient_name", r.recipientName).eq("occasion", r.occasion).eq("month", r.month).eq("day", r.day).maybeSingle();
   if (again.error || !again.data) return NextResponse.json({ error: "unavailable" }, { status: 503 });
-  return NextResponse.json({ reminder: toReminder(again.data), created: false }, { headers: PRIVATE });
+  return NextResponse.json({ reminder: toReminder(again.data, (await stagesOf(db, [again.data.id])).get(again.data.id)), created: false }, { headers: PRIVATE });
 }
 
 /** Take one of the signed-in person's reminders away: `?id=`. */

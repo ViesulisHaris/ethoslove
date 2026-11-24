@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
   const next =
     url.searchParams.get("to") === "templates"
       ? `${lang}/templates?ref=${ref}`
-      : `${lang}/create/${suggestTemplate(reminder.occasion, { avoid: reminder.template_slug }).slug}?${START_PARAM}=${startRefValue(start)}&ref=${ref}`;
+      : `${lang}/create/${suggestTemplate(reminder.occasion, { avoid: reminder.template_slug, paid: true }).slug}?${START_PARAM}=${startRefValue(start)}&ref=${ref}`;
   // Kept for the gallery's way round: whichever gift they pick starts from the same names and photos.
   const withStart = (response: NextResponse) => {
     response.cookies.set(START_COOKIE, startRefValue(start), { maxAge: START_COOKIE_SECONDS, sameSite: "lax", path: "/", httpOnly: false, secure: process.env.NODE_ENV === "production" });
