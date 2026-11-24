@@ -701,10 +701,10 @@ describe("held back until group cards are on sale", () => {
     expect(TEMPLATE_MANIFESTS.some((m) => m.slug === SLUG)).toBe(live);
   });
 
-  it("ships with this release, and is live only once GROUP_GIFTS_ENABLED is on as well: one rule, in one place", async () => {
+  it("is held back from this release, and would be live only with GROUP_GIFTS_ENABLED on as well: one rule, in one place", async () => {
     const held = await vi.importActual<typeof import("@/templates/held")>("@/templates/held");
-    // The owner's decision of 24 Nov 2026: the code's half is on.
-    expect(held.ADVENT_CALENDAR_SHIPS).toBe(true);
+    // The owner's decision of 24 Nov 2026: held back for a release of its own, so the code's half is off.
+    expect(held.ADVENT_CALENDAR_SHIPS).toBe(false);
     // Both off; the code on and the variable off (or anything but exactly "true"); both on; the variable alone.
     expect(held.adventCalendarLive(false, undefined)).toBe(false);
     for (const off of [undefined, "", "false", "1", "TRUE"]) expect(held.adventCalendarLive(true, off), String(off)).toBe(false);
@@ -715,7 +715,8 @@ describe("held back until group cards are on sale", () => {
     expect(config).toContain('env: { GROUP_GIFTS_ENABLED: process.env.GROUP_GIFTS_ENABLED === "true" ? "true" : "" }');
   });
 
-  for (const [variable, live] of [[undefined, false], ["true", true]] as const) {
+  // Held back (ADVENT_CALENDAR_SHIPS false): with the variable unset or set, the calendar is in no list and group cards stay off.
+  for (const [variable, live] of [[undefined, false], ["true", false]] as const) {
     it(`the real switch with GROUP_GIFTS_ENABLED ${variable ?? "unset"}: the calendar is ${live ? "in" : "in none of"} the gallery's lists, and group cards can${live ? "" : "not"} be turned on`, async () => {
       vi.stubEnv("NODE_ENV", "production");
       if (variable) vi.stubEnv("GROUP_GIFTS_ENABLED", variable);

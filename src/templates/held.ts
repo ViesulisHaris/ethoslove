@@ -13,7 +13,7 @@
  *
  * Two things must both hold for it to be in them, and this is the one place they are put together:
  *
- * 1. ADVENT_CALENDAR_SHIPS below: the code's half, the owner's decision (24 Nov 2026: on, with this
+ * 1. ADVENT_CALENDAR_SHIPS below: the code's half, the owner's decision (24 Nov 2026: first on, then held back for its own
  *    release).
  * 2. GROUP_GIFTS_ENABLED is "true" for the build. It is the same server variable that turns group
  *    cards on (lib/group/flag.ts); next.config.ts copies it into the build (`env`), so the browser's
@@ -26,7 +26,8 @@
  * groupGiftsEnabled() true) puts the calendar on sale together with group cards. Apply migration
  * 0023 before setting the variable (docs/GROUP.md, "Going live").
  */
-export const ADVENT_CALENDAR_SHIPS: boolean = true;
+// Held back by the owner, 24 Nov 2026: its own release.
+export const ADVENT_CALENDAR_SHIPS: boolean = false;
 
 /** The rule, on its own so a test can play all four states. */
 export function adventCalendarLive(ships: boolean, groupGiftsEnabled: string | undefined): boolean {

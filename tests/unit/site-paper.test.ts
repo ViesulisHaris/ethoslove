@@ -68,7 +68,8 @@ describe("the site's paper", () => {
         for (const [, expression] of tag.matchAll(/\b(?:from|to)=\{([^}]*)\}/g)) for (const [, value] of expression.matchAll(/"([^"]*)"/g)) if (/^(#|rgb|hsl|oklch|oklab|color-mix)/i.test(value)) byHand.push(`${path}: "${value}"`);
       }
     }
-    expect(tears).toBeGreaterThan(8);
+    // The scan finds the site's torn edges (eight once /occasions and /pricing were remade, 24 Nov 2026), then holds each one.
+    expect(tears).toBeGreaterThanOrEqual(8);
     expect(byHand).toEqual([]);
   });
 });

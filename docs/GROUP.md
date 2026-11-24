@@ -132,7 +132,7 @@ itself.
 
 **Held back until group cards are on (since 24 Nov 2026).** `ADVENT_CALENDAR_LIVE` in
 `src/templates/held.ts` is one rule in one place: the code's half, `ADVENT_CALENDAR_SHIPS` (the
-owner turned it on for the release of 24 Nov 2026), and `GROUP_GIFTS_ENABLED` exactly `"true"` for
+owner held it back on 24 Nov 2026 for a release of its own: it is `false`), and `GROUP_GIFTS_ENABLED` exactly `"true"` for
 the build (`next.config.ts` copies it into the build's `env`, so the browser's lists agree with the
 server's; changing it in Vercel takes a redeploy, which keeps the calendar and group cards together
 in every deployment). While it is false, the
@@ -429,7 +429,7 @@ covers them in one place.
 
 In this order, each step leaving the site as it was until the last:
 
-1. Deploy the release (since 24 Nov 2026 it carries `ADVENT_CALENDAR_SHIPS = true`). With the
+1. Set `ADVENT_CALENDAR_SHIPS` to `true` in `src/templates/held.ts` (held back by the owner on 24 Nov 2026) and deploy. With the
    variable unset the site is as it was: no calendar anywhere, no group cards.
 2. Apply `supabase/migrations/0023_group_gifts.sql` by hand. Check: both tables exist with row-level
    security on, the `contributions` bucket is private, `group_photo_orphans` is executable by
