@@ -161,7 +161,7 @@ test.describe("the share screen's reminder card", () => {
     await expect(card).toContainText("Never be late for their day.");
     await expect(card).toContainText("We'll email you 7 days before, with your photos already in a new gift.");
     const birthday = card.getByTestId("remind-field-birthday");
-    await expect(birthday).toContainText("Ana's birthday");
+    await expect(birthday).toContainText("Ana’s birthday");
     await expect(birthday).toContainText("from this gift");
     await expect(birthday).toContainText("12 March");
     // Named, so a gift for a mother never files the sender's own anniversary under her name.
@@ -171,7 +171,7 @@ test.describe("the share screen's reminder card", () => {
     // The other rows wait behind "Add another day".
     await expect(card.getByTestId("remind-row-valentines")).toHaveCount(0);
     await card.getByTestId("remind-another").click();
-    await expect(card.getByTestId("remind-row-valentines")).toContainText("Valentine's Day");
+    await expect(card.getByTestId("remind-row-valentines")).toContainText("Valentine’s Day");
     await expect(card.getByTestId("remind-row-monthly")).toContainText("Every month too");
     await expect(card.getByTestId("remind-row-someone")).toContainText("Someone else");
     // A birthday gift's own day is a field, not a row as well.
@@ -206,12 +206,12 @@ test.describe("the share screen's reminder card", () => {
     // Valentine's Day is neither of the two days: both start empty.
     await expect(save).toBeDisabled();
     await pickDay(page, card.getByRole("button", { name: "Your anniversary with Ana", exact: true }), "March", 5);
-    await pickDay(page, card.getByRole("button", { name: "Ana's birthday", exact: true }), "November", 30);
+    await pickDay(page, card.getByRole("button", { name: "Ana’s birthday", exact: true }), "November", 30);
     await expect(save).toBeEnabled();
     await save.click();
     await expect(card.getByTestId("remind-saved")).toContainText("Saved. Your first email comes on");
     await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary with Ana · 5 March");
-    await expect(card.getByTestId("remind-saved")).toContainText("Ana's birthday · 30 November");
+    await expect(card.getByTestId("remind-saved")).toContainText("Ana’s birthday · 30 November");
     expect(reminders).toEqual([
       { recipientName: "Ana", occasion: "birthday", month: 11, day: 30, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false },
       { recipientName: "Ana", occasion: "anniversary", month: 3, day: 5, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false },
@@ -263,15 +263,15 @@ test.describe("the share screen's reminder card", () => {
     // The card's question is a heading.
     await expect(card.getByRole("heading", { name: "Never be late for their day." })).toBeVisible();
     const birthday = card.getByTestId("remind-field-birthday");
-    await expect(birthday.getByTestId("remind-locked-birthday")).toHaveText(/Mia's birthday:\s*30 November\s*Added/);
+    await expect(birthday.getByTestId("remind-locked-birthday")).toHaveText(/Mia’s birthday:\s*30 November\s*Added/);
     // No picker to change it with: the reminders page is where it changes.
     await expect(birthday.getByRole("button")).toHaveCount(0);
     // And it is drawn as text, not as a field that a tap would do nothing on.
     expect(await birthday.getByTestId("remind-locked-birthday").evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe("0px");
-    await expect(birthday.getByRole("link", { name: "Mia's birthday: change it on your reminders page" })).toHaveAttribute("href", "/account/reminders");
+    await expect(birthday.getByRole("link", { name: "Mia’s birthday: change it on your reminders page" })).toHaveAttribute("href", "/account/reminders");
     await pickDay(page, card.getByRole("button", { name: "Your anniversary with Mia", exact: true }), "June", 12);
     await card.getByTestId("remind-save-dates").click();
-    await expect(card.getByTestId("remind-saved")).toContainText("Mia's birthday · 30 November");
+    await expect(card.getByTestId("remind-saved")).toContainText("Mia’s birthday · 30 November");
     await expect(card.getByTestId("remind-saved")).toContainText("Your anniversary with Mia · 12 June");
     expect(reminders).toEqual([{ recipientName: "Mia", occasion: "anniversary", month: 6, day: 12, locale: "en", currency: "eur", templateSlug: "bouquet", forThisGift: false }]);
   });
@@ -309,7 +309,7 @@ test.describe("the share screen's reminder card", () => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
     await page.goto("/reminders/preview?template=bouquet&name=Ana");
     await page.getByTestId("remind-another").click();
-    await page.getByTestId("remind-row-next").getByRole("button", { name: "Remind me: Valentine's Day" }).click();
+    await page.getByTestId("remind-row-next").getByRole("button", { name: "Remind me: Valentine’s Day" }).click();
     await expect(page.getByTestId("remind-row-next").getByText("Added")).toBeVisible();
     expect(reminders).toHaveLength(1);
     expect(reminders[0]).toMatchObject({ recipientName: "Ana", occasion: "valentines", month: 2, day: 14, templateSlug: "bouquet" });

@@ -12,7 +12,7 @@ test.describe("links from emails", () => {
       const response = await page.goto(`${path}?t=5f0c6f7e-3a55-4d2b-9a57-0e8a3f1b2c4d.forged&l=en`);
       // 404 for a token we didn't make; 503 on a server without the secret to check it with.
       expect([404, 503]).toContain(response?.status());
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This link doesn't work\.|Something went wrong\./);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This link doesn’t work\.|Something went wrong\./);
       await expect(page.getByRole("button")).toHaveCount(0);
       await expect(page.getByRole("link", { name: "Go to Ethos" })).toBeVisible();
       // What a mail app's one-click unsubscribe sends: refused the same way.
