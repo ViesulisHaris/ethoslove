@@ -3789,7 +3789,7 @@
       "blurbElse": "No payment, and no account until you send it. A free gift carries a small “Made with Ethos” footer."
     },
     "premium": {
-      "eyebrow": "Premium",
+      "eyebrow": "Paid once to send",
       "title": "Free to try, pay once to send",
       "blurb": "Make the whole gift first, for free. If you send it, you pay once, and it goes without the footer."
     }
