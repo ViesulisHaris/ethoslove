@@ -1,12 +1,11 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ArrowRight, Loader2, PenLine } from "lucide-react";
+import { Loader2, PenLine } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics/track";
 import { PRODUCTS, formatAmount, type Currency } from "@/lib/pricing/products";
-import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { startCheckout, useCheckoutError } from "./checkout";
 import { GIFT_CARD_NAME_MAX, GIFT_CARD_NOTE_MAX, giftCardTouch } from "./offers";
@@ -53,7 +52,8 @@ export function GiftCardOffer({
 
   // In the dress of "Make it special" beside it (the gallery card's paper, PLAN-pricing.md 2): its name and
   // price, one line, the button. What it holds, how long a code lasts and when it is emailed are in "What
-  // each one includes" over the two cards; the name and the note stay one tap away, as before.
+  // each one includes" over the two cards; the name and the note stay one tap away, as before. A code is
+  // redeemed from the footer's "Redeem a gift card".
   return (
     <article
       data-testid="giftcard-card"
@@ -119,18 +119,12 @@ export function GiftCardOffer({
         </div>
       ) : null}
 
-      <div className="-my-1 flex flex-wrap items-center gap-x-6">
-        {personal ? null : (
-          <button type="button" onClick={() => setPersonal(true)} className={quietLink} data-testid="giftcard-personal-toggle">
-            <PenLine aria-hidden="true" className="size-3.5" />
-            {t("personalise")}
-          </button>
-        )}
-        <Link href="/redeem" className={quietLink}>
-          {t("redeem")}
-          <ArrowRight aria-hidden="true" className="size-3.5" />
-        </Link>
-      </div>
+      {personal ? null : (
+        <button type="button" onClick={() => setPersonal(true)} className={cn(quietLink, "-my-1 self-start")} data-testid="giftcard-personal-toggle">
+          <PenLine aria-hidden="true" className="size-3.5" />
+          {tPricing("page.giftCardNote")}
+        </button>
+      )}
     </article>
   );
 }

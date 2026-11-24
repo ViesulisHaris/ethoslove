@@ -1286,7 +1286,8 @@
       },
       "includes": "What each one includes",
       "specialLine": "Photos, video and no footer on a free gift.",
-      "giftCardLine": "Every gift, for someone else, sent as a code.",
+      "giftCardLine": "Every gift, for someone else, as a code.",
+      "giftCardNote": "Add a note",
       "faqForTwo": "Questions about Ethos for Two",
       "forTwoTicks": [
         "Unlimited saved dates and trips",
@@ -1529,18 +1530,13 @@
       "withSecond": "{product}, plus a second gift"
     },
     "giftcard": {
-      "eyebrow": "A gift card",
       "title": "Give Everything",
       "blurb": "Every template, forever, for someone else. You get a code to pass on; they redeem it on their own account.",
       "features": {
-        "templates": "Every template, now and future",
-        "forever": "Theirs for good, no subscription",
         "valid": "Redeem within {months} months"
       },
       "cta": "Buy a gift card",
       "note": "We email you the code as soon as you've paid.",
-      "redeem": "Got a code? Redeem it",
-      "personalise": "Add their name and a note",
       "nameLabel": "Who it's for",
       "noteLabel": "A note to go with it",
       "notePlaceholder": "Happy birthday. Make me something.",

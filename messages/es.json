@@ -1287,6 +1287,7 @@
       "includes": "Qué incluye cada uno",
       "specialLine": "Fotos, vídeo y sin pie en un regalo gratis.",
       "giftCardLine": "Todos los regalos, para otra persona, en un código.",
+      "giftCardNote": "Añadir una nota",
       "faqForTwo": "Preguntas sobre Ethos for Two",
       "forTwoTicks": [
         "Citas y viajes guardados, sin límite",
@@ -1529,18 +1530,13 @@
       "withSecond": "{product}, más un segundo regalo"
     },
     "giftcard": {
-      "eyebrow": "Tarjeta regalo",
       "title": "Regálalo todo",
       "blurb": "Todas las plantillas, para siempre, para otra persona. Recibes un código para dárselo, y lo canjea en su propia cuenta.",
       "features": {
-        "templates": "Todas las plantillas, actuales y futuras",
-        "forever": "Suyas para siempre, sin suscripción",
         "valid": "Canjeable durante {months} meses"
       },
       "cta": "Comprar una tarjeta regalo",
       "note": "Te enviamos el código por email en cuanto pagas.",
-      "redeem": "¿Tienes un código? Canjéalo",
-      "personalise": "Añade su nombre y una nota",
       "nameLabel": "Para quién es",
       "noteLabel": "Una nota para acompañarla",
       "notePlaceholder": "Feliz cumpleaños. Hazme algo bonito.",
