@@ -361,7 +361,8 @@ for (const lang of LANGS) {
         expect(await watches.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(slugs.map((slug) => `${lang.prefix}/demo/${slug}`));
         const lines = page.locator("[data-cards] [data-line]");
         await expect(lines).toHaveCount(guide.ideas.length);
-        for (const text of await lines.evaluateAll((els) => els.map((el) => el.textContent ?? ""))) expect(text.trim().length).toBeGreaterThan(5);
+        // Keepsake's line is its one word ("stay" in month 8), so a month's line is held to being there, not to a length.
+        for (const text of await lines.evaluateAll((els) => els.map((el) => el.textContent ?? ""))) expect(text.trim().length).toBeGreaterThan(2);
         const first = page.locator("[data-cards] [data-card]").first();
         await first.locator("summary").first().scrollIntoViewIfNeeded();
         await expect(first.locator("[data-line]")).toBeHidden();
