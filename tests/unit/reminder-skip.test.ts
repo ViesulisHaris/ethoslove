@@ -201,6 +201,48 @@ describe("a gift made for the person stops the e-mails", () => {
     expect(settledBy([{ ...birthday, last_stage: 3 }], "Mia", published, { forReminder: "bd" })).toEqual([]);
   });
 
+  // remind-N3-1: the cookie stays ten days after "Open my gift"; a second gift for her in that time
+  // still stops its own day's e-mails.
+  describe("while the e-mail's cookie is still there", () => {
+    const scrapbook = ["anniversary", "birthday", "just-because", "long-distance"] as const;
+    // Mia's birthday on 28 December (its e-mail sent the cookie) and a day of her own on Christmas.
+    const birthday = row({ id: "bd", recipient_name: "Mia", occasion: "birthday", month: 12, day: 28, last_sent_year: 2026, last_stage: 1 });
+    const christmas = row({ id: "xm", recipient_name: "Mia", occasion: "other", month: 12, day: 25, last_sent_year: null, last_stage: 0 });
+    const published = new Date("2026-12-22T10:00:00Z");
+
+    it("a gift from the e-mail settles that e-mail's reminder", () => {
+      expect(settledBy([birthday, christmas], "Mia", published, { occasions: scrapbook, forReminder: "bd" })).toEqual([{ id: "bd", year: 2026 }]);
+    });
+
+    it("a second gift for another near day settles that day, once the e-mail's own reminder is done", () => {
+      const done = { ...birthday, last_stage: 3 };
+      // A Christmas gift counting down to the 25th, published on the 22nd with the birthday's cookie.
+      expect(settledBy([done, christmas], "Mia", published, { occasions: ["christmas"], countsDownTo: "2026-12-25", forReminder: "bd" })).toEqual([{ id: "xm", year: 2026 }]);
+      // With no countdown: the nearest day in the window, by the usual rules.
+      expect(settledBy([done, christmas], "Mia", published, { occasions: ["christmas"], forReminder: "bd" })).toEqual([{ id: "xm", year: 2026 }]);
+      // Through the database as the publish calls it: the Christmas reminder is written done, the birthday stays as it was.
+      const fake = new FakeDb({ reminders: [{ ...done, user_id: USER }, { ...christmas, user_id: USER }] });
+      return markMadeFor(fake.db as never, USER, "Mia", published, { occasions: ["christmas"], countsDownTo: "2026-12-25", forReminder: "bd" }).then((count) => {
+        expect(count).toBe(1);
+        expect(Object.fromEntries(fake.rows("reminders").map((r) => [r.id, [r.last_sent_year, r.last_stage]]))).toEqual({ bd: [2026, 3], xm: [2026, 3] });
+      });
+    });
+
+    it("a gift not from an e-mail settles the near day as before", () => {
+      expect(settledBy([birthday, christmas], "Mia", published, { occasions: ["christmas"], countsDownTo: "2026-12-25" })).toEqual([{ id: "xm", year: 2026 }]);
+      expect(settledBy([birthday], "Mia", published, { occasions: scrapbook })).toEqual([{ id: "bd", year: 2026 }]);
+    });
+
+    it("settles nothing for a day far away, with or without the cookie", () => {
+      const far = row({ id: "fa", recipient_name: "Mia", occasion: "anniversary", month: 2, day: 20, last_sent_year: null, last_stage: 0 });
+      const done = { ...birthday, last_stage: 3 };
+      expect(settledBy([done, far], "Mia", published, { occasions: scrapbook, forReminder: "bd" })).toEqual([]);
+      expect(settledBy([far], "Mia", published, { occasions: scrapbook })).toEqual([]);
+      // The cookie of a reminder far off: the usual rules, and the far day is still not this gift's.
+      expect(settledBy([far, christmas], "Mia", published, { occasions: ["christmas"], forReminder: "fa" })).toEqual([{ id: "xm", year: 2026 }]);
+    });
+  });
+
   it("writes them done for the year on the account's rows only", async () => {
     const other = row({ id: "z", user_id: "99999999-9999-4999-8999-999999999999", recipient_name: "Mia", last_sent_year: null, last_stage: 0 });
     const fake = new FakeDb({ reminders: [...reminders, other] });
