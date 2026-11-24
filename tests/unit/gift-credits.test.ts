@@ -150,7 +150,7 @@ describe("settlePairSessions: one open checkout for two more gifts at a time", (
   const setup = () => {
     const stripe = new FakeStripe(() => NOW);
     const fake = new FakeDb({ purchases: [] }, NOW);
-    const open = (id: string, uiMode: "elements" | "hosted", amount = 500, currency = "eur", ageMs = HOUR) => {
+    const open = (id: string, uiMode: "elements" | "hosted", amount = 799, currency = "eur", ageMs = HOUR) => {
       stripe.sessions[id] = { id, object: "checkout.session", status: "open", ui_mode: uiMode, client_secret: uiMode === "elements" ? `${id}_secret` : null, url: uiMode === "hosted" ? `https://checkout.stripe.test/c/${id}` : null };
       fake.tables.purchases.push({ id: `p-${id}`, user_id: "u1", product: "pair", status: "pending", amount, currency, stripe_session_id: id, created_at: new Date(NOW - ageMs).toISOString() });
     };
@@ -160,10 +160,10 @@ describe("settlePairSessions: one open checkout for two more gifts at a time", (
 
   it("keeps the wallet session to go back to, and closes the Stripe page and the other currency's", async () => {
     const { stripe, fake, open } = setup();
-    open("cs_wallet", "elements", 500, "eur", 2 * HOUR);
-    open("cs_page", "hosted", 500, "eur", HOUR);
-    open("cs_usd", "elements", 600, "usd", 30 * 60_000);
-    const kept = await settlePairSessions(stripe.client, fake.db, "u1", NOW, { amount: 500, currency: "eur", oneTap: true });
+    open("cs_wallet", "elements", 799, "eur", 2 * HOUR);
+    open("cs_page", "hosted", 799, "eur", HOUR);
+    open("cs_usd", "elements", 899, "usd", 30 * 60_000);
+    const kept = await settlePairSessions(stripe.client, fake.db, "u1", NOW, { amount: 799, currency: "eur", oneTap: true });
     expect(kept?.id).toBe("cs_wallet");
     expect(expired(stripe).sort()).toEqual(["cs_page", "cs_usd"]);
   });
@@ -171,15 +171,15 @@ describe("settlePairSessions: one open checkout for two more gifts at a time", (
   it("a card request after a wallet session closes the wallet's before a new one is made", async () => {
     const { stripe, fake, open } = setup();
     open("cs_wallet", "elements");
-    expect(await settlePairSessions(stripe.client, fake.db, "u1", NOW, { amount: 500, currency: "eur", oneTap: false })).toBeNull();
+    expect(await settlePairSessions(stripe.client, fake.db, "u1", NOW, { amount: 799, currency: "eur", oneTap: false })).toBeNull();
     expect(expired(stripe)).toEqual(["cs_wallet"]);
     expect(stripe.sessions.cs_wallet.status).toBe("expired");
   });
 
   it("goes back only to one made in the last 12 hours, and closes an older one", async () => {
     const { stripe, fake, open } = setup();
-    open("cs_old", "elements", 500, "eur", 13 * HOUR);
-    expect(await settlePairSessions(stripe.client, fake.db, "u1", NOW, { amount: 500, currency: "eur", oneTap: true })).toBeNull();
+    open("cs_old", "elements", 799, "eur", 13 * HOUR);
+    expect(await settlePairSessions(stripe.client, fake.db, "u1", NOW, { amount: 799, currency: "eur", oneTap: true })).toBeNull();
     expect(expired(stripe)).toEqual(["cs_old"]);
   });
 
@@ -188,7 +188,7 @@ describe("settlePairSessions: one open checkout for two more gifts at a time", (
     open("cs_wallet", "elements");
     open("cs_page", "hosted");
     stripe.sessions.cs_page.status = "complete";
-    fake.tables.purchases.push({ id: "p-other", user_id: "u2", product: "pair", status: "pending", amount: 500, currency: "eur", stripe_session_id: "cs_other", created_at: new Date(NOW - HOUR).toISOString() });
+    fake.tables.purchases.push({ id: "p-other", user_id: "u2", product: "pair", status: "pending", amount: 799, currency: "eur", stripe_session_id: "cs_other", created_at: new Date(NOW - HOUR).toISOString() });
     stripe.sessions.cs_other = { id: "cs_other", status: "open", ui_mode: "elements" };
     expect(await settlePairSessions(stripe.client, fake.db, "u1", NOW)).toBeNull();
     expect(expired(stripe)).toEqual(["cs_wallet"]);

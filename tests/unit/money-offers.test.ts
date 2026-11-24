@@ -463,7 +463,7 @@ describe("GET /api/entitlements, as the pages read it", () => {
 
   it("reads the offer of two more gifts only when its price and currency are whole", () => {
     const base = { signedIn: true, templates: ["vinyl"], packs: [], pass: null, membership: null };
-    expect(parseEntitlements({ ...base, giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } })).toMatchObject({ giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } });
+    expect(parseEntitlements({ ...base, giftsReady: 0, pairOffer: { amount: 799, currency: "eur" } })).toMatchObject({ giftsReady: 0, pairOffer: { amount: 799, currency: "eur" } });
     for (const pairOffer of [{ amount: "500", currency: "eur" }, { amount: 500, currency: "chf" }, { amount: -1, currency: "eur" }, { amount: 4.5, currency: "eur" }, "yes", null])
       expect(parseEntitlements({ ...base, pairOffer })?.pairOffer).toBeNull();
     for (const giftsReady of [-1, "2", 1.5, null]) expect(parseEntitlements({ ...base, giftsReady })?.giftsReady).toBe(0);

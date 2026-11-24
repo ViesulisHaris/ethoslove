@@ -17,9 +17,9 @@ describe("entitlements: two more gifts", () => {
   it("offers them, at the visitor's price, to someone who just paid for a gift", async () => {
     vi.stubEnv("GIFT_PAIR_ENABLED", "true");
     const fake = new FakeDb({ purchases: [paid("single")] }, NOW);
-    expect(await read(fake)).toMatchObject({ giftsReady: 0, pairOffer: { amount: 500, currency: "eur" } });
-    expect((await read(fake, "usd")).pairOffer).toEqual({ amount: 600, currency: "usd" });
-    expect((await read(fake, "gbp")).pairOffer).toEqual({ amount: 400, currency: "gbp" });
+    expect(await read(fake)).toMatchObject({ giftsReady: 0, pairOffer: { amount: 799, currency: "eur" } });
+    expect((await read(fake, "usd")).pairOffer).toEqual({ amount: 899, currency: "usd" });
+    expect((await read(fake, "gbp")).pairOffer).toEqual({ amount: 699, currency: "gbp" });
   });
 
   it("counts the gifts ready, and then offers nothing more", async () => {

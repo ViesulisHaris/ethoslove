@@ -67,7 +67,7 @@ charged by construction, and no Stripe Price has to be kept in step with it. The
 | Game pack                               | `pack`       | €2.99  |
 | Gift card "Give Everything"             | `giftcard`   | €24.99, only while `GIFT_CARDS_ENABLED=true` |
 | Upgrade to Everything                   | `upgrade`    | €24.99 minus what was paid, at least €4.99 |
-| Two more gifts, offered on the share screen after a paid gift | `pair` | €5 ($6, £4), only while `GIFT_PAIR_ENABLED=true` and migration 0024 is applied |
+| Two more gifts, offered on the share screen after a paid gift | `pair` | €7.99 ($8.99, £6.99), only while `GIFT_PAIR_ENABLED=true` and migration 0024 is applied |
 
 There are no discounts and no codes. Every Ethos session and its recovery set
 `allow_promotion_codes: false`: the account is shared, and other businesses' codes (LAUNCH40,
