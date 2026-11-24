@@ -471,7 +471,7 @@ test.describe("games on one phone", () => {
     await page.getByRole("group", { name: /What will Marco say/ }).getByRole("button").nth(1).click();
     await page.getByRole("button", { name: "Lock it in" }).click();
     await expect(page.getByRole("heading", { name: "Hand the phone to Marco" })).toBeVisible();
-    await page.getByRole("button", { name: "I'm Marco, go" }).click();
+    await page.getByRole("button", { name: "I’m Marco, go" }).click();
     await expect(page.getByText("Question 1 of 8 · Marco")).toBeVisible();
     await page.getByRole("group", { name: "Your answer" }).getByRole("button").nth(1).click();
     await page.getByRole("group", { name: /What will Maya say/ }).getByRole("button").nth(0).click();
@@ -493,11 +493,11 @@ test.describe("games on one phone", () => {
     for (let round = 1; round <= 10; round++) {
       await expect(page.getByText(`${round} of 10 · Maya`)).toBeVisible();
       await page.getByTestId("choice-a").click();
-      await page.getByRole("button", { name: "I'm Marco, go" }).click();
+      await page.getByRole("button", { name: "I’m Marco, go" }).click();
       await page.getByTestId(round === 1 ? "choice-b" : "choice-a").click();
       await expect(page.getByRole("heading", { name: round === 1 ? "Not the same." : "Same!" })).toBeVisible();
       await page.getByRole("button", { name: round < 10 ? "Next one" : "See the results" }).click();
-      if (round < 10) await page.getByRole("button", { name: "I'm Maya, go" }).click();
+      if (round < 10) await page.getByRole("button", { name: "I’m Maya, go" }).click();
     }
     await expect(page.getByText("You agreed on 9 of 10.")).toBeVisible();
   });
@@ -595,7 +595,7 @@ test.describe("games on one phone", () => {
     await page.getByLabel("Their name").fill("Marco");
     await page.getByRole("button", { name: "Start" }).click();
     await expect(page.getByRole("heading", { name: "Pass the phone to Maya" })).toBeVisible();
-    await page.getByRole("button", { name: "I'm Maya, go" }).click();
+    await page.getByRole("button", { name: "I’m Maya, go" }).click();
     await expect(page.getByText("Maya, your word")).toBeVisible();
     // The word is shown in private, and is gone from the screen once the drawing starts.
     const word = ((await page.getByTestId("peek-word").textContent()) ?? "").trim();

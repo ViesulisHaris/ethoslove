@@ -427,7 +427,7 @@ test.describe("plan our date tonight", () => {
   test("E17 an idea's 'Plan it near you' is named on the where screen", async ({ page }) => {
     await mockWorld(page);
     await page.goto("/dates?idea=gallery-hop");
-    await expect(page.getByText("Say where you are and we'll plan “Gallery hop” with real places there.")).toBeVisible();
+    await expect(page.getByText("Say where you are and we’ll plan “Gallery hop” with real places there.")).toBeVisible();
     await page.goto("/es/dates?idea=gallery-hop");
     await expect(page.getByText("Decid dónde estáis y planeamos «Ruta de galerías» con sitios reales de allí.")).toBeVisible();
   });

@@ -38,10 +38,10 @@ async function startOnePhone(page: Page, path: string) {
 export async function playRather(page: Page) {
   for (let round = 1; round <= 10; round++) {
     await page.getByTestId("choice-a").click();
-    await page.getByRole("button", { name: /^I'm Marco, go$/ }).click();
+    await page.getByRole("button", { name: /^I’m Marco, go$/ }).click();
     await page.getByTestId("choice-b").click();
     await page.getByRole("button", { name: round < 10 ? "Next one" : "See the results" }).click();
-    if (round < 10) await page.getByRole("button", { name: /^I'm Maya, go$/ }).click();
+    if (round < 10) await page.getByRole("button", { name: /^I’m Maya, go$/ }).click();
   }
 }
 
