@@ -10,6 +10,7 @@ import { BLANK_IMAGE, mediaUrlsAllowed, withoutForeignMedia } from "@/lib/gift/m
 import { giftStoragePaths } from "@/lib/gift/storage-paths";
 import { completeGiftData } from "@/lib/editor/complete-data";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { manifest as letter } from "@/templates/the-letter/manifest";
 import type { TemplateManifest } from "@/templates/types";
 
@@ -75,8 +76,9 @@ describe("what a template that takes contributions declares", () => {
     }
   });
 
-  it("no template in the gallery declares it yet: nothing is on sale", () => {
-    expect(TEMPLATE_MANIFESTS.filter((manifest) => manifest.features.group).map((manifest) => manifest.slug)).toEqual([]);
+  it("no template in the gallery declares it until the Advent Calendar is put there, and then only it", () => {
+    // While it is held back (src/templates/held.ts) nothing is on sale; its switch is the one thing that changes this.
+    expect(TEMPLATE_MANIFESTS.filter((manifest) => manifest.features.group).map((manifest) => manifest.slug)).toEqual(ADVENT_CALENDAR_LIVE ? ["advent-calendar"] : []);
   });
 });
 

@@ -693,8 +693,12 @@ describe("held back until group cards are on sale", () => {
     };
   }
 
-  it("the switch itself is off", async () => {
-    expect((await vi.importActual<typeof import("@/templates/held")>("@/templates/held")).ADVENT_CALENDAR_LIVE).toBe(false);
+  // The real switch, as the tree has it. The tests around these play both states with it mocked; these
+  // two hold the tree itself to the state it is in, so turning it on is the one line in held.ts.
+  it("the switch itself is a plain true or false, and the gallery's own list follows it", async () => {
+    const live = (await vi.importActual<typeof import("@/templates/held")>("@/templates/held")).ADVENT_CALENDAR_LIVE;
+    expect(typeof live).toBe("boolean");
+    expect(TEMPLATE_MANIFESTS.some((m) => m.slug === SLUG)).toBe(live);
   });
 
   it("held, a production build has no trace of it: no list, no page, no search entry, and group cards cannot be turned on", async () => {
@@ -721,7 +725,13 @@ describe("held back until group cards are on sale", () => {
     expect(it.inSitemap).toBe(false);
   }, 30_000);
 
-  it("held, checkout refuses it: nobody can be sold it", () => {
+  it("held, checkout refuses it: nobody can be sold it; in the gallery, its group card only while group cards are on", async () => {
+    const live = (await vi.importActual<typeof import("@/templates/held")>("@/templates/held")).ADVENT_CALENDAR_LIVE;
+    if (live) {
+      expect(planCheckout({ product: "group", templateSlugs: [SLUG], currency: "eur" } as never, ctx)).toMatchObject({ ok: false });
+      expect(planCheckout({ product: "group", templateSlugs: [SLUG], currency: "eur" } as never, { ...ctx, groupOnSale: true })).toMatchObject({ ok: true });
+      return;
+    }
     expect(planCheckout({ product: "single", templateSlugs: [SLUG], currency: "eur" }, ctx)).toMatchObject({ ok: false });
     expect(planCheckout({ product: "group", templateSlugs: [SLUG], currency: "eur" } as never, ctx)).toMatchObject({ ok: false });
   });

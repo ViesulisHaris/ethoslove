@@ -4,6 +4,7 @@ import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { CLOSED_BLOCK_WORDS, TAGLINE_WORDS, closedBlockLinks, fitSentences, heroKeyword, heroLead, heroWords } from "@/components/templates/page/lead";
 import { suitedRecipients } from "@/content/finder";
 import { SCENE_LEADS, TEMPLATE_LEADS, sceneLead, templateLead } from "@/content/template-leads";
@@ -134,7 +135,10 @@ describe("the text budget of a gift's page", () => {
       }
     }
     // The seventeen the two tests named, and no other: a new gift with a long tagline shows up here to be read.
+    // The Advent Calendar, read on 24 Nov 2026, is the eighteenth while it is in the gallery: “An advent house of
+    // twenty-four doors on the mantelpiece.” over “Behind each one is a note from someone you invited, or a sweet.”
     expect(split.sort()).toEqual([
+      ...(ADVENT_CALENDAR_LIVE ? ["advent-calendar"] : []),
       "autumn-reel",
       "be-my-boo",
       "digicam",

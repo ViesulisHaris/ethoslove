@@ -3,6 +3,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { FINDER_PARTNERS, FINDER_RECIPIENTS, rankGifts, shortReason, type FinderFeel, type FinderGift, type FinderReasons, type FinderRecipient, type FinderStep } from "@/lib/gift/finder";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { templateProduct, type TemplateProduct } from "@/lib/pricing/products";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { RECIPIENTS, RECIPIENT_GUIDES, type Recipient } from "./recipients";
 import { templateFilmStart } from "./template-film-starts";
@@ -1055,6 +1056,29 @@ export const FINDER_FITS: Record<string, FinderFit> = {
       },
     },
   },
+  // Only while it is in the gallery (src/templates/held.ts). It cannot go out without notes from at
+  // least three other people (features.group.min), which the finder never asks about: never the
+  // first pick, and every sentence opens with that.
+  ...(ADVENT_CALENDAR_LIVE
+    ? {
+        "advent-calendar": {
+          for: EVERYONE,
+          feels: ["sentimental"],
+          only: CHRISTMAS,
+          conditional: true,
+          why: {
+            base: {
+              en: "With three people or more to sign it, each note waits behind one of twenty-four doors, and a door nobody wrote behind holds a sweet.",
+              es: "Con tres personas o más que la firmen, cada nota espera tras una de veinticuatro puertas, y donde nadie escribió hay un dulce.",
+            },
+            sentimental: {
+              en: "With the people who love them signing too, each note arrives in a sealed envelope with its writer's name, and a photo if they added one. The star window holds your letter.",
+              es: "Con la firma de toda su gente, cada nota llega en un sobre cerrado con el nombre de quien la escribió, y su foto si la añadió. La ventana de la estrella guarda tu carta.",
+            },
+          },
+        } satisfies FinderFit,
+      }
+    : {}),
 };
 
 
@@ -1209,6 +1233,14 @@ export const FINDER_SHORT: Record<string, Partial<Record<FinderRecipient | Finde
     romantic: { en: "Five thanks, each small and exact: \"the coffee you bring me before I ask\".", es: "Que las cinco velas digan cosas pequeñas y exactas." },
   },
   "gingerbread-house": { base: { es: "Quien la recibe la decora a su gusto, con gominolas, caramelos y estrellas." } },
+  ...(ADVENT_CALENDAR_LIVE
+    ? {
+        "advent-calendar": {
+          base: { en: "With three people or more to sign it, each note waits behind a door.", es: "Con tres personas o más que la firmen, cada nota espera tras una puerta." },
+          sentimental: { en: "Each note arrives in a sealed envelope with its writer's name.", es: "Cada nota llega en un sobre cerrado con el nombre de quien la escribió." },
+        },
+      }
+    : {}),
 };
 
 /** A sentence's line under a pick: the one written for it, or what the rule makes of the sentence. Null means it needs one written. */
@@ -1250,7 +1282,8 @@ export function finderGifts(): (FinderGift & { why: FinderReasons<Words> })[] {
  * the second it really begins (content/template-film-starts.ts). `free` and `product` are the mark
  * under its name, as the gallery's card works it out: "Free" while it can go out free, else the
  * price of what it is sold as (a premium template as one template; Constellations, a free template
- * with no free version left, as "Make it special").
+ * with no free version left, as "Make it special"; one that cannot go out without other people's
+ * notes, the Advent Calendar, as the group card).
  */
 export type FinderPick = FinderGift & {
   name: string;
@@ -1258,7 +1291,7 @@ export type FinderPick = FinderGift & {
   film?: string;
   filmFrom: number;
   free: boolean;
-  product: TemplateProduct;
+  product: TemplateProduct | "group";
   why: FinderReasons<string>;
   line: FinderReasons<string>;
 };
@@ -1270,7 +1303,7 @@ export function finderPicks(locale: GiftLocale): FinderPick[] {
     const words = Object.fromEntries(Object.entries(why).map(([key, value]) => [key, value[locale]])) as FinderReasons<string>;
     // A sentence the rule cannot cut and nobody wrote a line for shows whole: the unit test fails before that ships.
     const line = Object.fromEntries(Object.entries(words).map(([key, sentence]) => [key, shortLine(gift.slug, key, locale, sentence) ?? sentence])) as FinderReasons<string>;
-    return { ...gift, name: m.name[locale], poster: m.thumbnail.poster, film: m.thumbnail.webm, filmFrom: templateFilmStart(gift.slug), free: sendsFree(m), product: templateProduct(m.tier), why: words, line };
+    return { ...gift, name: m.name[locale], poster: m.thumbnail.poster, film: m.thumbnail.webm, filmFrom: templateFilmStart(gift.slug), free: sendsFree(m), product: templateProduct(m.tier, m.features), why: words, line };
   });
 }
 

@@ -1,3 +1,5 @@
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
+
 /**
  * Where each gift's preview film really begins (public/templates/<slug>/preview.webm), in seconds.
  *
@@ -18,6 +20,8 @@
  * every film to a row.
  */
 export const TEMPLATE_FILM_STARTS: Record<string, number> = {
+  // Only while it is in the gallery (src/templates/held.ts).
+  ...(ADVENT_CALENDAR_LIVE ? { "advent-calendar": 4.5 } : {}),
   arcade: 2.7,
   "autumn-reel": 2.5,
   balloons: 1.3,

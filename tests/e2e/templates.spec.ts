@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ADVENT_CALENDAR_LIVE } from "../../src/templates/held";
 
 test.describe("template engine", () => {
   test("gallery lists both launch templates with live demos", async ({ page }) => {
@@ -89,10 +90,10 @@ test.describe("who a template suits", () => {
 
 /**
  * Built and held back until group cards are on sale (src/templates/held.ts): found by its slug under
- * `next dev` only, so a run against a production build (CI) has no such demo to open. Move it into
- * the list below when ADVENT_CALENDAR_LIVE is set.
+ * `next dev` only, so a run against a production build (CI) has no such demo to open. Once
+ * ADVENT_CALENDAR_LIVE is set it is in the gallery and every build has it.
  */
-const HELD = process.env.CI ? [] : ["advent-calendar"];
+const HELD = ADVENT_CALENDAR_LIVE || !process.env.CI ? ["advent-calendar"] : [];
 
 test.describe("later batch demos", () => {
   for (const slug of ["birthday-cinema", "jar-of-reasons", "scratch-card", "midnight-countdown", "our-timeline", "vinyl", "museum", "front-page", "fortune-cookie", "text-thread", "arcade", "passport", "bloom", "bouquet", "kawaii", "fireside", "trick-or-treat", "scrapbook", "halfway", "garden", "snow-globe", "recipe-box", "cap-toss", "paper-crane", "the-toast", "balloons", "popup-card", "sketchbook", "party-animals", "the-council", "sticker-bomb", "coquette", "xoxo", "keepsake", "pack-your-bags", "digicam", "photo-booth", "picnic", "music-box", "spooky-season", "dark-romance", "favorite-person", "on-repeat", "evergreen", "seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house", "nice-list", "unwrapped", "wishbone", "frosted-window", "light-the-candles", "string-the-lights", "gingerbread-house", ...HELD]) {

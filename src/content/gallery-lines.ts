@@ -1,4 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 
 /**
  * The one line under a gift's name on its card in the gallery (components/templates/gallery-card.tsx).
@@ -46,6 +47,8 @@ export const GALLERY_LINES: Record<string, Record<GiftLocale, string>> = {
   "light-the-candles": { en: "Five candles, five thank-yous.", es: "Cinco velas, cinco gracias." },
   "string-the-lights": { en: "Hang the lights, throw the switch.", es: "Cuelga las luces y dale al interruptor." },
   "gingerbread-house": { en: "Stick on the sweets, pipe the icing.", es: "Pega los dulces y pon el glaseado." },
+  // Only while it is in the gallery (src/templates/held.ts).
+  ...(ADVENT_CALENDAR_LIVE ? { "advent-calendar": { en: "Behind each door, a note or a sweet.", es: "Tras cada puerta, una nota o un dulce." } } : {}),
   "the-letter": { en: "A wax-sealed envelope, opened by hand.", es: "Un sobre lacrado que se abre a mano." },
   "birthday-cinema": { en: "Curtains, candles, confetti.", es: "Telón, velas, confeti." },
   scrapbook: { en: "Polaroids, washi tape, a torn note.", es: "Polaroids, cinta washi, una nota rasgada." },

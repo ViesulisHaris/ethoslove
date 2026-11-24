@@ -1,4 +1,5 @@
 import { devices, expect, test, webkit, type Browser, type Locator, type Page } from "@playwright/test";
+import { ADVENT_CALENDAR_LIVE } from "../../src/templates/held";
 
 /**
  * The Advent Calendar, the first group card (docs/GROUP.md), played as whoever gets it plays it:
@@ -16,7 +17,7 @@ import { devices, expect, test, webkit, type Browser, type Locator, type Page } 
  * photos, need the demo page's test switch as the template sweep does: the same command with
  * NEXT_PUBLIC_E2E=1 in front. Without it they say so and skip.
  */
-test.skip(!!process.env.CI, "held back: found by its slug under `next dev` only");
+test.skip(!ADVENT_CALENDAR_LIVE && !!process.env.CI, "held back: found by its slug under `next dev` only");
 
 const SLUG = "advent-calendar";
 const E2E = process.env.NEXT_PUBLIC_E2E === "1";

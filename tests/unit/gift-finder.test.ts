@@ -7,6 +7,7 @@ import { OCCASIONS, type Occasion } from "@/config/occasions";
 import { FINDER_COPY, FINDER_FITS, FINDER_SHORT, christmasPicks, finderGifts, finderPicks, shortLine, suitedRecipients } from "@/content/finder";
 import { RECIPIENTS, RECIPIENT_GUIDES } from "@/content/recipients";
 import { sendsFree } from "@/lib/gift/free-tier";
+import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { PRODUCTS, templateProduct, type Currency } from "@/lib/pricing/products";
 import { templateOfferAmount } from "@/lib/seo";
 import {
@@ -745,7 +746,8 @@ describe("the picks", () => {
 
   it("never leads with a gift that needs something nobody was asked about", () => {
     // Pack Your Bags reveals a trip. The finder never asks whether the present is one, so it may be offered, never first.
-    expect(GIFTS.filter((g) => g.conditional).map((g) => g.slug)).toEqual(["pack-your-bags"]);
+    // The Advent Calendar cannot go out without notes from three people or more, which nobody is asked about either.
+    expect(GIFTS.filter((g) => g.conditional).map((g) => g.slug)).toEqual(ADVENT_CALENDAR_LIVE ? ["pack-your-bags", "advent-calendar"] : ["pack-your-bags"]);
     let offered = 0;
     for (const answers of COMBINATIONS) {
       const ranked = rankGifts(GIFTS, answers);
@@ -757,6 +759,10 @@ describe("the picks", () => {
     for (const words of Object.values(FINDER_FITS["pack-your-bags"].why)) {
       expect(words!.en).toMatch(/^For when the gift is a trip/);
       expect(words!.es).toMatch(/^Para cuando el regalo es un viaje/);
+    }
+    for (const words of Object.values(FINDER_FITS["advent-calendar"]?.why ?? {})) {
+      expect(words!.en).toMatch(/^With (three people or more to sign it|the people who love them signing too),/);
+      expect(words!.es).toMatch(/^Con (tres personas o más que la firmen|la firma de toda su gente),/);
     }
     // The rule itself: the best template that needs nothing steps ahead, and the rest keep their order.
     const gift = (slug: string, feels: FinderFeel[], conditional?: boolean): FinderGift => ({ slug, occasions: [], sortOrder: 1, for: ["someone"], feels, conditional });
@@ -952,7 +958,7 @@ describe("the price under a pick", () => {
         const where = `${pick.slug} with the note share at “${share}”`;
         // "Free" exactly when the gallery says so, and otherwise the product the gallery's card prices it as.
         expect(pick.free, where).toBe(sendsFree(manifest));
-        expect(pick.product, where).toBe(templateProduct(manifest.tier));
+        expect(pick.product, where).toBe(templateProduct(manifest.tier, manifest.features));
         for (const currency of CURRENCIES) {
           // What the finder prints (components/templates/gift-finder.tsx): nothing for a free gift, else its own product's price.
           const shown = pick.free ? 0 : PRODUCTS[pick.product].amounts[currency];
