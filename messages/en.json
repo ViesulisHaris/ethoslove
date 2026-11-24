@@ -1226,7 +1226,7 @@
     "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe",
     "separately": "{price} separately",
     "page": {
-      "pick3Separately": "{price} for three paid gifts separately",
+      "pick3Separately": "{price} for three paid ones",
       "label": "Pricing",
       "title": "One gift, paid once.",
       "titleTemplate": "Unlock {name}",
