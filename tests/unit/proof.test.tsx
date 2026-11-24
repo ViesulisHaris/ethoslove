@@ -248,7 +248,7 @@ describe("the pay panel", () => {
       expect(html).toContain("Up to 4 photos in the short note, without The Tree Tag.");
       expect(html).not.toContain("Send it by 20 December and it comes with");
       const es = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow }, "es");
-      expect(es).toContain("Paga La carta y envía el regalo hasta el 20 de diciembre: viene con la etiqueta del árbol.");
+      expect(es).toContain("Paga «La carta» y envía el regalo hasta el 20 de diciembre: viene con la etiqueta del árbol.");
       expect(es).toContain("Hasta 4 fotos en la nota corta, sin la etiqueta del árbol.");
     });
 
