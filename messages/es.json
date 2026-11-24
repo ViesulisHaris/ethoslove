@@ -175,6 +175,7 @@
     "explore": "Explorar",
     "digitalGifts": "Regalos digitales",
     "togetherCounter": "Contador de días juntos",
+    "halfwayFinder": "A medio camino entre dos ciudades",
     "loveQuiz": "Test de los lenguajes del amor"
   },
   "auth": {
@@ -2061,6 +2062,7 @@
       "cta": "Entradas en {city}",
       "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más."
     },
+    "trip": "Un viaje que pasa por aquí",
     "gift": {
       "eyebrow": "Antes de la cita",
       "title": "Pídele una cita como se merece.",
@@ -2624,7 +2626,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "Relación a distancia: ideas, citas y un punto a medio camino",
+      "title": "Relación a distancia: ideas de citas y regalos",
       "description": "Herramientas gratis para una relación a distancia: la ciudad a medio camino, las horas en que estáis despiertos, citas para dos pantallas y regalos al instante."
     },
     "eyebrow": "A distancia",
@@ -2632,19 +2634,25 @@
     "h1b": "estar lejos.",
     "sub": "Unas cuantas herramientas pequeñas para los meses entre visita y visita: dónde quedar, cuándo estáis los dos despiertos y qué hacer en una llamada además de repasar el día.",
     "meet": {
-      "title": "Quedad a medio camino",
+      "title": "Entre vuestras dos ciudades",
       "sub": "Entran dos ciudades. Sale cuánto os separa, la ciudad a medio camino y las horas del día en que estáis los dos despiertos.",
+      "tool": "Solo el punto medio, con un enlace para enviar",
       "you": "Dónde estás tú",
       "them": "Dónde está la otra persona",
       "hint": "Elige las dos ciudades y hacemos las cuentas.",
       "apart": "Distancia",
       "miles": "{miles} millas, en línea de vuelo",
+      "kmFlown": "{km} km, en línea de vuelo",
       "halfway": "A medio camino",
       "halfwayExact": "Casi exactamente a medio camino entre los dos.",
-      "halfwayNear": "La ciudad más cercana a vuestro punto medio, a {km} km de él.",
       "datesThere": "Ideas para una cita en {city}",
-      "nowhere": "Mar abierto, más o menos",
-      "nowhereSub": "A medio camino entre los dos no hay donde aterrizar. A uno le toca coger un avión.",
+      "sea": "Mar abierto",
+      "seaSub": "A medio camino entre los dos solo hay mar. A uno le toca coger un avión.",
+      "noTown": "Ningún pueblo cerca",
+      "noTownSub": "El punto medio cae en pleno campo, sin ninguna ciudad cerca.",
+      "finding": "Buscando la ciudad más cercana al punto medio…",
+      "failed": "Ahora mismo no podemos decir qué ciudad queda más cerca del punto medio.",
+      "onMap": "Ver el punto medio en un mapa",
       "clocks": "Relojes",
       "sameTime": "La misma hora en los dos lados",
       "ahead": "{name} va {hours} h por delante",
@@ -2656,14 +2664,54 @@
       "clocksUnavailable": "Ahora mismo no podemos saber la hora de cada sitio. El resto de las cuentas sigue valiendo.",
       "flightsTo": "Vuelos a {city}",
       "flightsBetween": "Vuelos entre vosotros",
-      "eachWay": "{km} km cada uno",
-      "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino."
+      "eachWay": "{distance} cada uno",
+      "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino.",
+      "km": "{n, plural, other {# km}}",
+      "mi": "{n, plural, one {# milla} other {# millas}}"
+    },
+    "ways": {
+      "label": "Y ahora qué",
+      "gift": {
+        "label": "El regalo",
+        "title": "Hazle el regalo «A medio camino»"
+      },
+      "dates": {
+        "label": "Una cita allí",
+        "in": "Ideas para una cita en {city}",
+        "near": "Ideas para una cita cerca de {town}",
+        "any": "Ideas de citas cerca de cualquiera de los dos"
+      },
+      "trip": {
+        "label": "La próxima visita",
+        "any": "Viajes para dos, planeados día a día"
+      },
+      "note": "A medio camino está {city}. ¿Nos vemos allí?"
+    },
+    "tool": {
+      "forYou": "{distance} para ti",
+      "forThem": "{distance} para la otra persona",
+      "off": "A {distance} del punto medio exacto.",
+      "offIn": "{region}, a {distance} del punto medio exacto.",
+      "exactIn": "{region}, casi justo a medio camino entre los dos.",
+      "osm": "Nombres de ciudades © OpenStreetMap",
+      "share": "Envíaselo",
+      "copied": "Enlace copiado",
+      "shareText": "A medio camino entre los dos está {city}.",
+      "shareTextBare": "Mira dónde queda la mitad del camino.",
+      "manual": "Copia este enlace",
+      "same": "Es el mismo sitio dos veces.",
+      "broken": "No hemos podido leer las ciudades de ese enlace. Escribidlas otra vez y hacemos las cuentas.",
+      "close": "Ninguna ciudad queda más cerca del punto medio que las vuestras, así que turnaos para visitaros.",
+      "uneven": "Los pueblos cerca del punto medio quedan todos mucho más cerca de uno de los dos."
     },
     "virtual": {
       "eyebrow": "Citas para dos pantallas",
       "title": "Algo que hacer durante la llamada.",
       "twist": "El giro:",
       "openMap": "Abrir el mapa"
+    },
+    "play": {
+      "title": "O echad una partida, cada uno con su móvil."
     },
     "gifts": {
       "eyebrow": "Regalos para la distancia",
@@ -2697,8 +2745,8 @@
   },
   "trips": {
     "meta": {
-      "title": "Viajes en pareja: itinerarios hechos y buscador de vuelos gratis",
-      "description": "Doce viajes en pareja, planeados día a día: en coche, escapadas urbanas, islas y en tren. Y un buscador de vuelos gratis que abre Aviasales, Google Flights, Skyscanner y Kayak con todo ya puesto."
+      "title": "Ideas de viajes en pareja: {count} itinerarios",
+      "description": "Ideas de viajes en pareja, planeadas día a día: doce viajes para dos, de escapadas de fin de semana a una semana en coche. Decid de dónde salís y elegimos tres."
     },
     "eyebrow": "Viajes para dos",
     "h1a": "Escapaos",
@@ -2707,6 +2755,55 @@
     "finder": {
       "title": "Buscar vuelos",
       "sub": "Para dos, en las fechas que queráis. Nosotros abrimos la búsqueda; reserváis con ellos."
+    },
+    "match": {
+      "label": "Adónde",
+      "title": "¿Adónde nos escapamos?",
+      "line": "Tres respuestas y un aeropuerto. Elegimos tres de los {count}.",
+      "from": "Salimos de",
+      "fromHint": "Opcional. Sin él, nos saltamos las horas de vuelo.",
+      "clearFrom": "Quitar el aeropuerto",
+      "sentence": "Tenemos <length>,</length> <budget>,</budget> y buscamos <kind>.</kind>",
+      "lengthLabel": "Cuánto tiempo",
+      "budgetLabel": "Presupuesto allí",
+      "kindLabel": "Tipo de viaje",
+      "length": {
+        "any": "los días que hagan falta",
+        "weekend": "un fin de semana",
+        "mid": "de cuatro a seis días",
+        "week": "una semana"
+      },
+      "budget": {
+        "1": "un presupuesto modesto",
+        "2": "un presupuesto holgado",
+        "any": "sin tope de gasto"
+      },
+      "kind": {
+        "any": "cualquier tipo de viaje",
+        "city": "una escapada urbana",
+        "road": "un viaje en coche",
+        "islands": "unas islas",
+        "train": "un viaje en tren"
+      },
+      "go": "Ver nuestros tres viajes",
+      "allFit": "Tres viajes que encajan.",
+      "someFit": "{count, plural, one {Un viaje encaja} other {# viajes encajan}} con todo. Los demás se acercan.",
+      "letGo": "Nada encaja con todo, así que hemos dejado de lado {wishes}.",
+      "closestAll": "Nada encaja con todo. Estos tres son los que más se acercan.",
+      "wish": {
+        "length": "la duración",
+        "budget": "el presupuesto",
+        "kind": "el tipo de viaje"
+      },
+      "air": "Alrededor de {time} de vuelo desde {city}.",
+      "airTrain": "Alrededor de {time} de vuelo desde {city}. Quizá os compense más el tren.",
+      "home": "Empieza donde estáis. No hay vuelo que buscar.",
+      "inSeason": "En temporada ahora",
+      "fitsAll": "Encaja con todo.",
+      "closest": "Lo más cercano a lo que pedís.",
+      "allBut": "Encaja con todo menos {wishes}.",
+      "fitsLater": "Su temporada empieza en {month}.",
+      "fitsSeason": "Ahora es uno de sus mejores meses."
     },
     "filter": {
       "label": "Tipo de viaje",
@@ -2752,6 +2849,12 @@
       "jump": {
         "flights": "Buscar vuelos"
       },
+      "share": {
+        "cta": "Envíale este viaje",
+        "copied": "Enlace copiado",
+        "text": "¿Nos vamos? {title}",
+        "manual": "Copia este enlace"
+      },
       "route": {
         "eyebrow": "La ruta",
         "title": "Por dónde vais",
@@ -2760,6 +2863,7 @@
         "unavailable": "El mapa no ha podido cargarse aquí. Tenéis todas las paradas en la lista.",
         "nights": "{count, plural, =0 {De paso} one {# noche} other {# noches}}",
         "datesHere": "Sitios para una cita aquí",
+        "cityDates": "Ideas para una cita en {city}",
         "gestureMobile": "Usa dos dedos para mover el mapa",
         "gestureWindows": "Mantén Ctrl y usa la rueda para hacer zoom",
         "gestureMac": "Mantén ⌘ y usa la rueda para hacer zoom",
@@ -3629,6 +3733,11 @@
       "car": "Alquilar un coche",
       "disclosure": "Enlaces de afiliado: si reservas a través de ellos, puede que ganemos una comisión. A ti no te cuesta nada más. La reserva la haces con cada web, según sus condiciones."
     },
+    "dates": {
+      "line": "¿Preparáis también el día?",
+      "link": "Una noche de aniversario, hora a hora",
+      "newTab": "se abre en otra pestaña"
+    },
     "page": {
       "title": "Recordatorios",
       "subtitle": "Tres correos antes de cada fecha: 7 días, 2 días y la víspera. Y el día antes de vuestro mesiversario, si lo has pedido.",
@@ -3803,6 +3912,8 @@
         "removeLabel": "Quitar {title} de Mis citas",
         "byPartner": "Guardado por {name}",
         "failed": "El viaje no se ha guardado. Prueba otra vez.",
+        "then": "Ya está en Mis citas. ¿Y si es un secreto?",
+        "thenCta": "Que sea una sorpresa",
         "signIn": {
           "title": "Inicia sesión para guardar este viaje",
           "sub": "Irá a Mis citas y se guardará solo cuando vuelvas."

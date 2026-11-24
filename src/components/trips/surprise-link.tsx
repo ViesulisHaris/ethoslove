@@ -11,7 +11,7 @@ import { fromFields, readLastFrom } from "@/lib/trips/last-from";
 import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { CHIP_PHOTO_WIDTH, gatherPhotos, stopPlaces, withStopPhotos } from "@/components/gifts/unwrap-photos";
 
-type Props = { slug: string; fields: Record<string, unknown>; className?: string; children: ReactNode };
+type Props = { slug: string; fields: Record<string, unknown>; className?: string; /** Called once the trip is left for the editor (for counting where the tap came from). */ onPick?: () => void; children: ReactNode };
 
 /**
  * A plain link to the gift editor that leaves the trip behind for it first: the destination, the
@@ -19,11 +19,12 @@ type Props = { slug: string; fields: Record<string, unknown>; className?: string
  * browser knows. Written just before the click navigates, so it is always this trip's. A road
  * trip already starts where its road does (tripGiftFields), and their home airport isn't that.
  */
-export function SurpriseLink({ slug, fields, className, children }: Props) {
+export function SurpriseLink({ slug, fields, className, onPick, children }: Props) {
   const locale = useLocale() === "es" ? "es" : "en";
   const remember = () => {
     const from = fields.trip === "road" ? null : readLastFrom();
     saveGiftSeed({ slug, fields: from ? { ...fields, ...fromFields(from, locale) } : fields });
+    onPick?.();
   };
   return (
     <Link href={`/create/${slug}`} onClick={remember} className={className} data-testid="make-surprise">

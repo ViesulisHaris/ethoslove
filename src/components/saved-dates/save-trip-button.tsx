@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -14,15 +14,20 @@ import { SignInDialog } from "./sign-in-dialog";
 import { SavedDatesUpsell } from "./upsell-sheet";
 import { useSavedAccount, useSignedInWhile } from "./use-saved-account";
 
-const PILL = "inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper disabled:opacity-60";
+const PAIR = "flex flex-wrap gap-2.5";
+const PILL ="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper disabled:opacity-60";
 
 /**
  * "Save trip", in a trip's hero: a toggle that keeps the trip in My dates, beside the dates they
  * save. The same rules as saving a date: a visitor signs in first (and it saves itself once they
  * are back), and a free account past its saves is shown what Ethos for Two adds. The trip's name
  * isn't stored with it: My dates and the reminder show it in whoever's reading language.
+ *
+ * `children` (the trip's "Send this trip to them") stands beside it as a pair that wraps together;
+ * a failed save, or the line after a save, comes below the pair on a row of its own, so neither
+ * ever splits the two.
  */
-export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: string; title: string; monthly: boolean; currency: Currency }) {
+export function SaveTripButton({ tripId, title, monthly, currency, children }: { tripId: string; title: string; monthly: boolean; currency: Currency; children?: ReactNode }) {
   const t = useTranslations("savedDates");
   const account = useSavedAccount("trip");
   const [busy, setBusy] = useState(false);
@@ -97,36 +102,48 @@ export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: s
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn]);
 
-  // Saving is off right now (0015 not applied, the database down): no button that can only fail.
-  if (account.status === "unavailable") return null;
+  // Saving is off right now (0015 not applied, the database down): no button that can only fail. Its partner stays.
+  if (account.status === "unavailable") return <div className={PAIR}>{children}</div>;
 
   return (
     <>
-      {savedId ? (
-        <div className="inline-flex items-center gap-1" data-testid="trip-saved">
-          <Link href="/my-dates" className={PILL}>
+      <div className={PAIR}>
+        {savedId ? (
+          <div className="inline-flex items-center gap-1" data-testid="trip-saved">
+            <Link href="/my-dates" className={PILL}>
+              <BookmarkCheck aria-hidden="true" className="size-4 text-rose-deep" />
+              {t("save.trip.saved")}
+            </Link>
+            <button type="button" onClick={() => void remove()} disabled={busy} aria-label={t("save.trip.removeLabel", { title })} className="inline-flex h-12 items-center rounded-full px-4 text-[14px] font-semibold text-forest/70 underline-offset-4 transition-colors hover:text-forest hover:underline disabled:opacity-60">
+              {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : t("save.trip.remove")}
+            </button>
+          </div>
+        ) : theirs ? (
+          // Their partner's: shared already, and only its owner removes it.
+          <Link href="/my-dates" className={PILL} data-testid="trip-saved">
             <BookmarkCheck aria-hidden="true" className="size-4 text-rose-deep" />
-            {t("save.trip.saved")}
+            {theirs.owner.name ? t("save.trip.byPartner", { name: theirs.owner.name }) : t("save.trip.saved")}
           </Link>
-          <button type="button" onClick={() => void remove()} disabled={busy} aria-label={t("save.trip.removeLabel", { title })} className="inline-flex h-12 items-center rounded-full px-4 text-[14px] font-semibold text-forest/70 underline-offset-4 transition-colors hover:text-forest hover:underline disabled:opacity-60">
-            {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : t("save.trip.remove")}
+        ) : (
+          <button type="button" onClick={() => void save()} disabled={busy} className={PILL} data-testid="save-trip">
+            {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Bookmark aria-hidden="true" className="size-4 text-rose-deep" />}
+            {t("save.trip.cta")}
           </button>
-        </div>
-      ) : theirs ? (
-        // Their partner's: shared already, and only its owner removes it.
-        <Link href="/my-dates" className={PILL} data-testid="trip-saved">
-          <BookmarkCheck aria-hidden="true" className="size-4 text-rose-deep" />
-          {theirs.owner.name ? t("save.trip.byPartner", { name: theirs.owner.name }) : t("save.trip.saved")}
-        </Link>
-      ) : (
-        <button type="button" onClick={() => void save()} disabled={busy} className={PILL} data-testid="save-trip">
-          {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Bookmark aria-hidden="true" className="size-4 text-rose-deep" />}
-          {t("save.trip.cta")}
-        </button>
-      )}
+        )}
+        {children}
+      </div>
       {error ? (
         <p role="alert" className="basis-full text-[13px] leading-snug text-destructive">
           {error === "network" || error === "invalid_input" ? t("save.trip.failed") : t(`errors.${error}`)}
+        </p>
+      ) : null}
+      {/* Saved here, on this visit (also the save that makes itself after signing in): the trip page's own way on, once. A trip found already saved shows none, and removing it takes the line away. */}
+      {done?.id ? (
+        <p role="status" data-testid="trip-saved-next" className="basis-full text-[14px] leading-snug text-forest/75">
+          {t("save.trip.then")}{" "}
+          <a href="#surprise" onClick={() => track("room_handoff", { from: "saved_trip", to: "surprise" })} className="-my-3 inline-flex min-h-11 items-center rounded-sm font-semibold text-rose-deep underline underline-offset-4 transition-[color,scale] hover:text-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:scale-[0.98] motion-reduce:transition-none">
+            {t("save.trip.thenCta")}
+          </a>
         </p>
       ) : null}
       <SavedDatesUpsell open={upsell} onOpenChange={setUpsell} reason="limit" monthly={monthly} currency={currency} />

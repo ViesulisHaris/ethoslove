@@ -4,27 +4,25 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { ArrowRight, ArrowUpRight, Clock3, MoveHorizontal, Plane } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { awakeOverlap, clockOf, halfwayPlace, hoursAhead, milesOf } from "@/lib/dates/apart";
+import { awakeOverlap, clockOf, hoursAhead, milesOf } from "@/lib/dates/apart";
 import { toYmd } from "@/lib/dates/calendar";
-import { ES_CITY_NAMES } from "@/lib/dates/cities";
-import { distanceKm, midpoint, round } from "@/lib/dates/geo";
+import { round } from "@/lib/dates/geo";
+import { answerPlace, echoTheirs, inNeverNamed, isEven, mapLink, NEVER_SUGGESTED } from "@/lib/ldr/halfway";
+import { useCurrency } from "@/lib/pricing/use-currency";
+import type { WaysData } from "@/lib/ldr/ways";
 import { cityName, nearestAirport, type Airport } from "@/lib/trips/airports";
 import { flightLinks, weekendAhead, type FlightSite } from "@/lib/trips/flights";
-import { CITIES } from "@/templates/_shared/places";
 import { WhereBox, type Where } from "@/components/dates/where-box";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { setTheirTown } from "./plan-visit-link";
+import { useHalfway } from "./use-halfway";
+import { WaysOn } from "./ways-on";
 
 /**
  * The town boxes' field and its list on the card's cream, not pure white (walk-rooms-5). WhereBox is
  * the Dates page's own, which this round leaves as it is, so the colour is set from here.
  */
 const TOWN_BOX = "[&>div:first-child]:bg-card [&>ul]:bg-card";
-
-/** Further than this from any city we know, the halfway point is somewhere nobody can meet: open sea, or a lot of forest. */
-const NOWHERE_KM = 400;
-/** Countries never named as the place to meet: neither their cities nor their airports. */
-const NEVER_SUGGESTED = new Set(["ES"]);
 
 type Zone = { offset: number; name: string };
 /** A town's time zone: `undefined` while it is being asked for, `null` when it could not be. */
@@ -77,12 +75,17 @@ function useZone(place: Where | null): ZoneAnswer {
  * day when both of them are awake. Offsets come from the forecast service, which knows each
  * town's time zone today, daylight saving included.
  */
-export function MeetInTheMiddle() {
+export function MeetInTheMiddle({ ways }: { ways: WaysData }) {
   const t = useTranslations("ldr.meet");
+  const tw2 = useTranslations("ldr.ways");
+  const tt = useTranslations("ldr.tool");
   const tw = useTranslations("dates.where");
   const tf = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale = useLocale() === "es" ? "es" : "en";
+  // Miles where people read miles, as the halfway finder does. This page is built ahead, with no
+  // visitor's country, so the money they are shown stands in for it: dollars and pounds read miles.
+  const miles = useCurrency() !== "eur";
   // Aviasales only searches with a date, so each flight is for a long weekend three weeks out, from
   // the visitor's own today; they change it there.
   const today = useSyncExternalStore(noop, localDay, () => undefined);
@@ -92,13 +95,19 @@ export function MeetInTheMiddle() {
   const zoneA = useZone(a);
   const zoneB = useZone(b);
 
-  const result = useMemo(() => {
-    if (!a || !b) return null;
-    const km = distanceKm(a, b);
-    const middle = midpoint(a, b);
-    const place = halfwayPlace(middle, CITIES, { maxKm: NOWHERE_KM, neverNamed: NEVER_SUGGESTED });
-    return { km, middle, near: typeof place === "string" ? null : place, unnamed: place === "unnamed" };
-  }, [a, b]);
+  // The same calculation as the halfway finder's own page (lib/ldr/halfway.ts, use-halfway.ts).
+  const { result, answer } = useHalfway(a, b, locale);
+  const place = useMemo(() => answerPlace(answer), [answer]);
+  // Their town goes to "Plan the next visit" further down only when it may be echoed (the same rule
+  // as the dates link here): never while the map is asked or failed, when halfway falls where the
+  // site names nothing, or when their town is there itself. Before the other town is in, there is no
+  // halfway to wait for: their town goes there unless it is in such a country.
+  const echo = echoTheirs(answer, b);
+  const planTown = b && (a ? echo : !inNeverNamed(b)) ? b : null;
+  useEffect(() => {
+    setTheirTown(planTown);
+  }, [planTown]);
+  useEffect(() => () => setTheirTown(null), []);
   // Each of them flying to the airport nearest halfway; or, when halfway has no airport of its
   // own (or is one of their home towns), one of them flying to the other. One seat each way.
   const flights = useMemo(() => {
@@ -113,15 +122,17 @@ export function MeetInTheMiddle() {
     const fromB = nearestAirport(b)?.airport;
     // Both home to the same airport: close enough that no flight is the answer.
     if (!fromA || !fromB || fromA.iata === fromB.iata) return null;
-    const halfway = result.near ? nearestAirport(result.near.city)?.airport : undefined;
+    const halfway = place ? nearestAirport(place)?.airport : undefined;
     // The site never suggests somewhere in Spain (the owner's rule), so a halfway airport there
     // gives way to the flight between them. Their own home airports are theirs to name.
     const suggestable = halfway && !NEVER_SUGGESTED.has(halfway.country) ? halfway : undefined;
     if (suggestable && fromA.iata !== suggestable.iata && fromB.iata !== suggestable.iata) return { to: suggestable, hops: [hop(fromA, suggestable), hop(fromB, suggestable)] };
     return { to: null, hops: [hop(fromA, fromB)] };
-  }, [a, b, result, locale, today]);
-  // The city table is in English; a Spanish page says "Ciudad de México", and so does the link to its dates.
-  const halfwayName = result?.near ? (locale === "es" ? ES_CITY_NAMES[result.near.city.name] : undefined) ?? result.near.city.name : "";
+  }, [a, b, result, place, locale, today]);
+  // The answer's name is already in the page's language: a Spanish page says "Ciudad de México", and so does the link to its dates.
+  const halfwayName = place?.name ?? "";
+  const distance = (km: number) => (miles ? t("mi", { n: Math.max(1, Math.round(milesOf(km))) }) : t("km", { n: Math.max(1, Math.round(km)) }));
+  const each = answer && answer.kind !== "same" && answer.kind !== "city" ? t("eachWay", { distance: distance(answer.eachKm) }) : "";
   const ahead = zoneA && zoneB ? hoursAhead(zoneA.offset, zoneB.offset) : null;
   const windows = zoneA && zoneB ? awakeOverlap(zoneA.offset, zoneB.offset) : null;
   const number = (n: number) => Math.round(n).toLocaleString(locale === "es" ? "es-ES" : "en-GB");
@@ -141,10 +152,7 @@ export function MeetInTheMiddle() {
             value={b}
             locale={locale}
             labels={{ ...labels, label: t("them") }}
-            onPick={(where) => {
-              setB(where);
-              setTheirTown(where);
-            }}
+            onPick={setB}
             className={TOWN_BOX}
           />
         </div>
@@ -157,8 +165,8 @@ export function MeetInTheMiddle() {
               <Plane aria-hidden="true" className="size-4" />
               {t("apart")}
             </p>
-            <p className="mt-3 font-display text-[40px] leading-none text-forest tabular-nums">{number(result.km)} km</p>
-            <p className="mt-1.5 text-[14px] text-forest/65">{t("miles", { miles: number(milesOf(result.km)) })}</p>
+            <p className="mt-3 font-display text-[40px] leading-none text-forest tabular-nums">{miles ? t("mi", { n: Math.round(milesOf(result.km)) }) : `${number(result.km)} km`}</p>
+            <p className="mt-1.5 text-[14px] text-forest/65">{miles ? t("kmFlown", { km: number(result.km) }) : t("miles", { miles: number(milesOf(result.km)) })}</p>
           </div>
 
           <div className="rounded-[24px] bg-blush-paper p-5">
@@ -166,25 +174,56 @@ export function MeetInTheMiddle() {
               <MoveHorizontal aria-hidden="true" className="size-4" />
               {t("halfway")}
             </p>
-            {result.near ? (
+            {answer?.kind === "city" && place ? (
               <>
                 <p className="mt-3 font-display text-[32px] leading-[1.05] text-forest">{halfwayName}</p>
-                <p className="mt-1.5 text-[14px] text-forest/65">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
-                <Link href={`/dates?lat=${result.near.city.lat}&lng=${result.near.city.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                {/* As the halfway finder says it: the region of a town from the map (Warren: Ohio, not Michigan), and "almost exactly" only when the two journeys are. */}
+                <p className="mt-1.5 text-[14px] text-forest/65">
+                  {isEven(answer.kmFromA, answer.kmFromB)
+                    ? answer.region
+                      ? tt("exactIn", { region: answer.region })
+                      : t("halfwayExact")
+                    : answer.region
+                      ? tt("offIn", { region: answer.region, distance: distance(answer.offKm) })
+                      : tt("off", { distance: distance(answer.offKm) })}
+                </p>
+                <Link href={`/dates?lat=${place.lat}&lng=${place.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: halfwayName })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>
-            ) : (
+            ) : answer && answer.kind !== "city" && answer.kind !== "same" ? (
               <>
-                <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{result.unnamed ? t("eachWay", { km: number(result.km / 2) }) : t("nowhere")}</p>
-                <p className="mt-1.5 text-[14px] leading-snug text-forest/65">{result.unnamed ? t("eachWaySub") : t("nowhereSub")}</p>
-                <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
-                  {t("datesThere", { city: b.name })}
+                {/* Never "open water" without the map saying so: only `sea` is. Land with no town near is said as such. */}
+                <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{answer.kind === "sea" ? t("sea") : answer.kind === "none" ? t("noTown") : each}</p>
+                <p className="mt-1.5 text-[14px] leading-snug text-forest/65" aria-busy={answer.kind === "pending" || undefined}>
+                  {answer.kind === "sea"
+                    ? `${each}. ${t("seaSub")}`
+                    : answer.kind === "none"
+                      ? `${each}. ${t("noTownSub")}`
+                      : answer.kind === "between"
+                        ? tt("close")
+                        : answer.kind === "uneven"
+                          ? tt("uneven")
+                          : answer.kind === "pending"
+                            ? t("finding")
+                            : answer.kind === "failed"
+                              ? t("failed")
+                              : t("eachWaySub")}
+                </p>
+                {answer.kind === "none" || answer.kind === "sea" || answer.kind === "failed" || answer.kind === "uneven" ? (
+                  <a href={mapLink(answer.middle)} target="_blank" rel="noopener noreferrer" className="mt-2 mr-5 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                    {t("onMap")}
+                    <ArrowUpRight aria-hidden="true" className="size-4" />
+                  </a>
+                ) : null}
+                {/* Their town is echoed only once the answer is known not to fall where the site names nothing: never while the map is asked, after it failed, or when halfway or their town is in such a country. */}
+                <Link href={echo ? `/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}` : "/dates"} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                  {echo ? t("datesThere", { city: b.name }) : tw2("dates.any")}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>
-            )}
+            ) : null}
           </div>
 
           <div className="rounded-[24px] bg-blush-paper p-5">
@@ -241,6 +280,14 @@ export function MeetInTheMiddle() {
           <p className="mt-3 text-[12px] leading-snug text-forest/65">
             {ta("meet.via")} {ta("disclosure")}
           </p>
+        </div>
+      ) : null}
+
+      {/* After the answer, the ways on: the gift made of this distance, and a trip for the next visit. The dates in the halfway city are the link the card above already has. */}
+      {result && a && b ? (
+        <div className="mt-6" data-testid="meet-ways">
+          <p className="text-page-label text-page-body">{tw2("label")}</p>
+          <WaysOn className="mt-3" a={a} b={b} answer={answer} data={ways} ways={["gift", "trip"]} from="long_distance" rowId="meet-ways-row" />
         </div>
       ) : null}
     </div>

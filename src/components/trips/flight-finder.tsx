@@ -8,7 +8,7 @@ import { toYmd } from "@/lib/dates/calendar";
 import { distanceKm } from "@/lib/dates/geo";
 import { findAirport, type Airport } from "@/lib/trips/airports";
 import { estimateFlight, flightLinks, formatFlightTime, MAX_ADULTS, MIN_ADULTS, trainHint, weekendAhead } from "@/lib/trips/flights";
-import { readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
+import { onLastFromPicked, readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
 import { PARTNER_NAMES, type PartnerPlacement } from "@/lib/trips/partners";
 import { AirportBox } from "./airport-box";
 import { DateRangePicker, type DateRangeLabels } from "./date-range-picker";
@@ -20,6 +20,8 @@ type Props = {
   to?: string;
   /** Where the finder sits, for counting which spot's Aviasales button gets pressed. */
   placement?: PartnerPlacement;
+  /** The preset trip whose page the link is on (its id, like a template's slug). */
+  trip?: string;
   className?: string;
 };
 
@@ -34,7 +36,7 @@ const localDay = () => toYmd(new Date());
  * Google Flights, Skyscanner or Kayak, already filled in, and the fares are whatever they say. It
  * lays itself out by its own width, so it sits in a hero card or across a page.
  */
-export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", className }: Props) {
+export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, className }: Props) {
   const t = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
@@ -58,6 +60,12 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
       if (last) setFrom((current) => current ?? last);
     });
     return () => cancelAnimationFrame(frame);
+  }, [fromCode]);
+
+  // On /trips the matcher has its own "Leaving from": an airport picked there is this one's too.
+  useEffect(() => {
+    if (fromCode) return;
+    return onLastFromPicked((a) => setFrom(a));
   }, [fromCode]);
 
   const pickFrom = (a: Airport) => {
@@ -156,7 +164,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
             );
             const press = "group transition-[transform,filter,background-color] active:scale-[0.98]";
             return link.partner ? (
-              <PartnerLink key={link.id} partner={link.partner} placement={placement} href={link.url} className={cn(BUTTON, press, "btn-rose hover:brightness-110 @md:col-span-3")}>
+              <PartnerLink key={link.id} partner={link.partner} placement={placement} trip={trip} href={link.url} className={cn(BUTTON, press, "btn-rose hover:brightness-110 @md:col-span-3")}>
                 {content}
               </PartnerLink>
             ) : (

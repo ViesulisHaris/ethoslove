@@ -7,6 +7,8 @@ import type { PartnerId, PartnerPlacement } from "@/lib/trips/partners";
 type Props = {
   partner: PartnerId;
   placement: PartnerPlacement;
+  /** The preset trip whose page the link is on (its id, like a template's slug). */
+  trip?: string;
   href: string;
   className?: string;
   "aria-label"?: string;
@@ -20,9 +22,9 @@ type Props = {
  * ourselves (the partner id is in the link, so nothing is lost). The click is counted by partner
  * and by where the button sat, never by who pressed it.
  */
-export function PartnerLink({ partner, placement, href, className, children, ...rest }: Props) {
+export function PartnerLink({ partner, placement, trip, href, className, children, ...rest }: Props) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer sponsored" onClick={() => track("affiliate_click", { partner, placement })} className={className} {...rest}>
+    <a href={href} target="_blank" rel="noopener noreferrer sponsored" onClick={() => track("affiliate_click", { partner, placement, ...(trip ? { trip } : {}) })} className={className} {...rest}>
       {children}
     </a>
   );

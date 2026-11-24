@@ -99,7 +99,7 @@ export const post: BlogPost = {
         {
           type: "tip",
           title: "Meet in the middle now and then",
-          text: "If one of you always travels, try a weekend halfway. Our free [long distance planner](/long-distance) finds the city halfway between your two towns, when there's one to land in, and links to flights there.",
+          text: "If one of you always travels, try a weekend halfway. Our free [halfway finder](/tools/halfway-between-two-cities) names the town halfway between yours and how far it is for each of you, and the [long distance planner](/long-distance) links to flights there.",
         },
         { type: "h2", text: "Money: splitting the cost of seeing each other" },
         {
@@ -292,7 +292,7 @@ export const post: BlogPost = {
         {
           type: "tip",
           title: "Quedad a medio camino de vez en cuando",
-          text: "Si siempre viaja el mismo, probad un fin de semana a mitad de camino. Nuestra [página para parejas a distancia](/long-distance) busca la ciudad que queda a medio camino entre las vuestras, si hay alguna donde aterrizar, y te lleva a buscar vuelos hasta allí.",
+          text: "Si siempre viaja el mismo, probad un fin de semana a mitad de camino. Nuestro [buscador del punto medio](/tools/halfway-between-two-cities) te dice qué ciudad queda a medio camino entre las vuestras y cuánto le toca recorrer a cada uno, y la [página para parejas a distancia](/long-distance) te lleva a buscar vuelos hasta allí.",
         },
         { type: "h2", text: "El dinero: cómo repartir lo que cuesta veros" },
         {

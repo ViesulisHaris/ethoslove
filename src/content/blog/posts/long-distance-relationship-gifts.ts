@@ -34,7 +34,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "There's a reason the small daily kind works. In [John Gottman's study of newlyweds](https://www.gottman.com/blog/777-rule-marriage/), the couples who stayed together turned toward each other's small bids for attention 86 percent of the time, and the couples who divorced 33 percent. A good long distance gift is a bid you can send: a small, repeated \"I'm here\". For what to do together on the calls in between, see our [long distance date ideas](/blog/virtual-date-ideas-long-distance), and the free [long-distance tools](/long-distance) show the city halfway between you and the hours you're both awake.",
+          text: "There's a reason the small daily kind works. In [John Gottman's study of newlyweds](https://www.gottman.com/blog/777-rule-marriage/), the couples who stayed together turned toward each other's small bids for attention 86 percent of the time, and the couples who divorced 33 percent. A good long distance gift is a bid you can send: a small, repeated \"I'm here\". For what to do together on the calls in between, see our [long distance date ideas](/blog/virtual-date-ideas-long-distance). The free [halfway finder](/tools/halfway-between-two-cities) shows the town halfway between you, and the [long-distance tools](/long-distance) the hours you're both awake.",
         },
         { type: "h2", text: "Gifts that make the distance smaller every day" },
         {
@@ -202,7 +202,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Hay un motivo por el que lo pequeño y diario funciona. En [el estudio de John Gottman con recién casados](https://www.gottman.com/blog/777-rule-marriage/), las parejas que siguieron juntas respondían a los pequeños gestos con los que el otro pedía atención el 86 % de las veces, y las que se divorciaron, el 33 %. Un buen regalo a distancia es uno de esos gestos, pero por correo: un \"aquí estoy\" pequeño y repetido. Para saber qué hacer juntos en las llamadas de entre medias, mira nuestras [ideas de citas a distancia](/blog/virtual-date-ideas-long-distance), y las [herramientas para relaciones a distancia](/long-distance), gratis, te dicen qué ciudad queda a medio camino y a qué horas estáis despiertos los dos.",
+          text: "Hay un motivo por el que lo pequeño y diario funciona. En [el estudio de John Gottman con recién casados](https://www.gottman.com/blog/777-rule-marriage/), las parejas que siguieron juntas respondían a los pequeños gestos con los que el otro pedía atención el 86 % de las veces, y las que se divorciaron, el 33 %. Un buen regalo a distancia es uno de esos gestos, pero por correo: un \"aquí estoy\" pequeño y repetido. Para saber qué hacer juntos en las llamadas de entre medias, mira nuestras [ideas de citas a distancia](/blog/virtual-date-ideas-long-distance). El [buscador del punto medio](/tools/halfway-between-two-cities), gratis, te dice qué ciudad queda a medio camino, y las [herramientas para relaciones a distancia](/long-distance), a qué horas estáis despiertos los dos.",
         },
         { type: "h2", text: "Regalos que acortan la distancia cada día" },
         {

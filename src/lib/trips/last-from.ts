@@ -18,10 +18,31 @@ export function readLastFrom(): Airport | null {
   }
 }
 
+/** Said to every airport box on the page when one of them picks an airport: the page has one airport they leave from. */
+const PICKED = "ethos:trips:from-picked";
+
 export function saveLastFrom(airport: Airport): void {
   try {
     window.localStorage.setItem(KEY, JSON.stringify({ city: airport.city, iata: airport.iata }));
   } catch {}
+  window.dispatchEvent(new CustomEvent<Airport>(PICKED, { detail: airport }));
+}
+
+/** Forgets the airport ("Leave the airport out"): the next visit, and another tab, open without it. */
+export function clearLastFrom(): void {
+  try {
+    window.localStorage.removeItem(KEY);
+  } catch {}
+}
+
+/**
+ * Hears an airport picked in another box on this page (the hero's flight search, the matcher), so the
+ * two "from" boxes on /trips say the same airport: pick in one and the other follows.
+ */
+export function onLastFromPicked(listen: (airport: Airport) => void): () => void {
+  const handler = (e: Event) => listen((e as CustomEvent<Airport>).detail);
+  window.addEventListener(PICKED, handler);
+  return () => window.removeEventListener(PICKED, handler);
 }
 
 /**

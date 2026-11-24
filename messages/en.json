@@ -175,6 +175,7 @@
     "explore": "Explore",
     "digitalGifts": "Digital gifts",
     "togetherCounter": "Days together counter",
+    "halfwayFinder": "Halfway between two cities",
     "loveQuiz": "Love language quiz"
   },
   "auth": {
@@ -2061,6 +2062,7 @@
       "cta": "Tickets in {city}",
       "disclosure": "Partner link: if you book through it, we may earn a commission. It costs you nothing extra."
     },
+    "trip": "A trip that passes through here",
     "gift": {
       "eyebrow": "Before the date",
       "title": "Ask them out properly.",
@@ -2624,7 +2626,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "Long-Distance Relationship Ideas: Meet Halfway, Dates, Gifts",
+      "title": "Long-Distance Relationship Ideas: Dates and Gifts",
       "description": "Free tools for a long-distance relationship: the city halfway between you, the hours you’re both awake, date ideas for two screens and instant gifts."
     },
     "eyebrow": "Long distance",
@@ -2632,19 +2634,25 @@
     "h1b": "the same as far.",
     "sub": "A few small tools for the months between visits: where to meet, when you’re both awake, and what to do on a call besides recap your day.",
     "meet": {
-      "title": "Meet in the middle",
+      "title": "Between your two towns",
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you’re both awake.",
+      "tool": "Just the halfway finder, with a link to send",
       "you": "Where you are",
       "them": "Where they are",
       "hint": "Pick both towns and we’ll do the math.",
       "apart": "Apart",
       "miles": "{miles} miles, as the plane flies",
+      "kmFlown": "{km} km, as the plane flies",
       "halfway": "Halfway",
       "halfwayExact": "Almost exactly halfway between you.",
-      "halfwayNear": "The nearest city to your halfway point, {km} km from it.",
       "datesThere": "Date ideas in {city}",
-      "nowhere": "Open water, more or less",
-      "nowhereSub": "Halfway between you is nowhere to land. One of you is getting on a plane.",
+      "sea": "Open water",
+      "seaSub": "Halfway between you is out at sea. One of you is getting on a plane.",
+      "noTown": "No town near halfway",
+      "noTownSub": "The middle is open country, with no town close to it.",
+      "finding": "Finding the town nearest halfway…",
+      "failed": "We couldn't name the town nearest halfway just now.",
+      "onMap": "See halfway on a map",
       "clocks": "Clocks",
       "sameTime": "Same time, both ends",
       "ahead": "{name} is {hours} h ahead",
@@ -2656,14 +2664,54 @@
       "clocksUnavailable": "We couldn’t get the local times just now. The rest still adds up.",
       "flightsTo": "Flights to {city}",
       "flightsBetween": "Flights between you",
-      "eachWay": "{km} km each",
-      "eachWaySub": "How far each of you would travel to meet exactly halfway."
+      "eachWay": "{distance} each",
+      "eachWaySub": "How far each of you would travel to meet exactly halfway.",
+      "km": "{n, plural, other {# km}}",
+      "mi": "{n, plural, one {# mile} other {# miles}}"
+    },
+    "ways": {
+      "label": "What next",
+      "gift": {
+        "label": "The gift",
+        "title": "Make them the Halfway gift"
+      },
+      "dates": {
+        "label": "A date there",
+        "in": "Date ideas in {city}",
+        "near": "Date ideas near {town}",
+        "any": "Date ideas near either of you"
+      },
+      "trip": {
+        "label": "The next visit",
+        "any": "Trips for two, planned day by day"
+      },
+      "note": "Halfway is {city}. Meet me there?"
+    },
+    "tool": {
+      "forYou": "{distance} for you",
+      "forThem": "{distance} for them",
+      "off": "{distance} from the exact middle.",
+      "offIn": "{region}, {distance} from the exact middle.",
+      "exactIn": "{region}, almost exactly halfway between you.",
+      "osm": "Town names © OpenStreetMap",
+      "share": "Send them this",
+      "copied": "Link copied",
+      "shareText": "Halfway between us is {city}.",
+      "shareTextBare": "Here is where halfway is.",
+      "manual": "Copy this link",
+      "same": "That's the same place twice.",
+      "broken": "That link's towns couldn't be read. Type them again and we'll do the math.",
+      "close": "No town lies nearer the middle than your own two, so take turns visiting.",
+      "uneven": "The towns near the middle are all much nearer one of you than the other."
     },
     "virtual": {
       "eyebrow": "Dates for two screens",
       "title": "Something to do on the call.",
       "twist": "The twist:",
       "openMap": "Open the map"
+    },
+    "play": {
+      "title": "Or play a round, each on your own phone."
     },
     "gifts": {
       "eyebrow": "Gifts for the distance",
@@ -2697,8 +2745,8 @@
   },
   "trips": {
     "meta": {
-      "title": "Trips for two: ready-made itineraries and a free flight search",
-      "description": "Twelve trips for couples, planned day by day: road trips, city breaks, islands and trains. Plus a free flight search that opens Aviasales, Google Flights, Skyscanner and Kayak already filled in."
+      "title": "Couples trip ideas: {count} itineraries for two",
+      "description": "Couples trip ideas, planned day by day: twelve trips for two, from weekend city breaks to a week on the road. Say where you fly from and we pick three."
     },
     "eyebrow": "Trips for two",
     "h1a": "Go somewhere",
@@ -2707,6 +2755,55 @@
     "finder": {
       "title": "Find flights",
       "sub": "For two, on any dates. We open the search; you book with them."
+    },
+    "match": {
+      "label": "Where to",
+      "title": "Where should we go together?",
+      "line": "Three answers and an airport. We pick three of the {count}.",
+      "from": "Leaving from",
+      "fromHint": "Optional. Without it we skip the flight times.",
+      "clearFrom": "Leave the airport out",
+      "sentence": "We have <length>,</length> <budget>,</budget> and we'd like <kind>.</kind>",
+      "lengthLabel": "How long",
+      "budgetLabel": "Budget there",
+      "kindLabel": "Kind of trip",
+      "length": {
+        "any": "any number of days",
+        "weekend": "a weekend",
+        "mid": "four to six days",
+        "week": "a week"
+      },
+      "budget": {
+        "1": "a modest budget",
+        "2": "a comfortable budget",
+        "any": "no ceiling on spending"
+      },
+      "kind": {
+        "any": "any kind of trip",
+        "city": "a city break",
+        "road": "a road trip",
+        "islands": "islands",
+        "train": "a train journey"
+      },
+      "go": "Show our three trips",
+      "allFit": "Three trips that fit.",
+      "someFit": "{count, plural, one {One trip fits} other {# trips fit}} all of that. The rest come close.",
+      "letGo": "Nothing fits all of that, so we let go of {wishes}.",
+      "closestAll": "Nothing fits all of that. These three come closest.",
+      "wish": {
+        "length": "the length",
+        "budget": "the budget",
+        "kind": "the kind of trip"
+      },
+      "air": "About {time} in the air from {city}.",
+      "airTrain": "About {time} in the air from {city}. A train might be nicer.",
+      "home": "It starts where you are. No flight to find.",
+      "inSeason": "In season now",
+      "fitsAll": "Fits all of it.",
+      "closest": "The nearest to what you asked.",
+      "allBut": "Fits all but {wishes}.",
+      "fitsLater": "Its season starts in {month}.",
+      "fitsSeason": "Now is one of its best months."
     },
     "filter": {
       "label": "Kind of trip",
@@ -2752,6 +2849,12 @@
       "jump": {
         "flights": "Find flights"
       },
+      "share": {
+        "cta": "Send this trip to them",
+        "copied": "Link copied",
+        "text": "Shall we? {title}",
+        "manual": "Copy this link"
+      },
       "route": {
         "eyebrow": "The route",
         "title": "Where you’ll go",
@@ -2760,6 +2863,7 @@
         "unavailable": "The map couldn’t load here. Every stop is in the list.",
         "nights": "{count, plural, =0 {On the way} one {# night} other {# nights}}",
         "datesHere": "Date spots here",
+        "cityDates": "Date ideas in {city}",
         "gestureMobile": "Use two fingers to move the map",
         "gestureWindows": "Hold Ctrl and scroll to zoom the map",
         "gestureMac": "Hold ⌘ and scroll to zoom the map",
@@ -3629,6 +3733,11 @@
       "car": "Hire a car",
       "disclosure": "Partner links: if you book, we may earn a commission, at no extra cost to you. The booking is with the partner, under its terms."
     },
+    "dates": {
+      "line": "Planning the day too?",
+      "link": "An anniversary evening, planned hour by hour",
+      "newTab": "opens in a new tab"
+    },
     "page": {
       "title": "Reminders",
       "subtitle": "Three emails before each day: 7 days, 2 days and the day before. And the day before your monthsary, if you asked.",
@@ -3803,6 +3912,8 @@
         "removeLabel": "Remove {title} from My dates",
         "byPartner": "Saved by {name}",
         "failed": "The trip didn’t save. Try again.",
+        "then": "It’s in My dates. Keep it a secret?",
+        "thenCta": "Make it a surprise",
         "signIn": {
           "title": "Sign in to save this trip",
           "sub": "It goes in My dates, and saves itself once you’re back."

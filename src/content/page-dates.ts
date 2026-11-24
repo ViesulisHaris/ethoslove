@@ -69,6 +69,13 @@ export const DATES_LIVE = "2026-11-23";
  */
 export const GAMES_LIVE = "2026-11-23";
 
+/**
+ * The day the rooms of the growth build go live: the trips room's title and its matcher, each trip's
+ * title and links, long distance's ways on and games, and the halfway finder's own page. NOT LIVE
+ * YET: this is the day the work was finished. Whoever ships it sets this to that day.
+ */
+export const ROOMS_LIVE = "2026-11-24";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
@@ -140,10 +147,13 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/dates/new-york/first-date": DATES_LIVE,
   "/dates/london/first-date": DATES_LIVE,
   "/dates/london/cheap": DATES_LIVE,
+  "/trips": ROOMS_LIVE,
+  "/trips/*": ROOMS_LIVE,
   "/games": GAMES_LIVE,
   "/games/*": GAMES_LIVE,
-  "/long-distance": "2026-11-13",
+  "/long-distance": ROOMS_LIVE,
   "/tools/how-long-have-we-been-together": "2026-11-09",
+  "/tools/halfway-between-two-cities": ROOMS_LIVE,
   "/tools/love-language-quiz": "2026-11-15",
   "/pricing": "2026-11-24",
   // The date the legal pages print at the top.

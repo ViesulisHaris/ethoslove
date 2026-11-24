@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { ClientMessages } from "@/i18n/client-messages";
 import { giftDataBaseSchema, type GiftData } from "@/lib/gift/schema";
 import { isTemplateSlug } from "@/templates/manifests";
+import { AnniversaryDates } from "@/components/reminders/anniversary-dates";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -40,6 +41,8 @@ export default async function ReminderCardPreviewPage({ params, searchParams }: 
     <ClientMessages scope="(marketing)/reminders/preview/page" locale={locale}>
       <div className="mx-auto w-full max-w-lg px-4 pt-24 pb-16 sm:px-6">
         <RemindNextYear data={data} />
+        {/* The card above is the signed-in sender's, so the line under it is shown as they see it. */}
+        <AnniversaryDates templateSlug={data.templateSlug} authed />
       </div>
     </ClientMessages>
   );

@@ -9,6 +9,7 @@ import { FINDER_PATH } from "@/content/finder";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { TOGETHER_PATH } from "@/content/together-guide";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
+import { HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
@@ -60,6 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/long-distance", priority: 0.8, changeFrequency: "monthly" },
     { path: TOGETHER_PATH, priority: 0.7, changeFrequency: "monthly" },
     { path: LOVE_QUIZ_PATH, priority: 0.8, changeFrequency: "monthly" },
+    { path: HALFWAY_TOOL_PATH, priority: 0.8, changeFrequency: "monthly" },
     { path: "/games", priority: 0.7, changeFrequency: "monthly" },
     { path: "/games/today", priority: 0.7, changeFrequency: "daily" },
     ...GAMES.map((g): Page => ({ path: g.href, priority: 0.6, changeFrequency: "monthly" })),

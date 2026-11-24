@@ -67,8 +67,9 @@ Travelpayouts gives each programme one short link, and `?u=<any page on the part
 the visitor there with our id attached; `partners.ts` has the three and the reasons nothing else
 (no script, no cookie of ours) is needed. Every partner link goes through `PartnerLink`
 (`src/components/trips/partner-link.tsx`): `target="_blank"`, `rel="noopener noreferrer sponsored"`,
-and `track("affiliate_click", { partner, placement })`. The comparison links (Google Flights,
-Skyscanner, Kayak) are not partners and keep `rel="noopener noreferrer"` with no event.
+and `track("affiliate_click", { partner, placement })`. On a trip's own page the event also carries
+`trip`, the preset's id. The comparison links (Google Flights, Skyscanner, Kayak) are not partners
+and keep `rel="noopener noreferrer"` with no event.
 
 | Where | Partner | Placement | What |
 |---|---|---|---|

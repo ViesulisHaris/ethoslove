@@ -59,6 +59,8 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/tools/how-long-have-we-been-together/page": ["together", "templates"],
   // The love language quiz: its own words come as props; the gift cards under it read these.
   "(marketing)/tools/love-language-quiz/page": ["templates"],
+  // The halfway finder: the two town boxes and the answer are the long-distance room's own words.
+  "(marketing)/tools/halfway-between-two-cities/page": ["ldr", "dates.where"],
   "(editor)/layout": ["tour", "editor", "auth", "lifecycle", "money", "occasions", "pickers", "offerEmails"],
   "(app)/layout": ["account", "dashboard", "lifecycle", "money", "membership", "savedDates", "support"],
   "(auth)/layout": ["auth", "support"],

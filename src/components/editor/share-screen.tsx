@@ -15,6 +15,7 @@ import { isInApp, shareLink } from "@/lib/app/bridge";
 import { PARTNER_NAMES, type PartnerId, type PartnerPlacement } from "@/lib/trips/partners";
 import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
+import { AnniversaryDates } from "@/components/reminders/anniversary-dates";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
 import { TreeTagRow } from "./tree-tag-row";
@@ -150,6 +151,7 @@ export function ShareScreen({
       <BookTheTrip data={data} />
 
       {authed ? <RemindNextYear data={data} /> : null}
+      <AnniversaryDates templateSlug={data.templateSlug} authed={authed} />
 
       {/* The yes our offer emails need, asked of the account that just sent a gift; not inside the iPhone app. */}
       {authed ? (

@@ -7,16 +7,20 @@ import { SITE } from "@/config/site";
 import { chargedCurrency, subscriptionsEnabled } from "@/lib/pricing/products";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { shareCardPath } from "@/lib/share/links";
+import { cityName as cityPageName } from "@/lib/cities/cities";
 import { cityName, findAirport } from "@/lib/trips/airports";
+import { tripStopCities } from "@/lib/trips/cities";
 import { monthRanges } from "@/lib/trips/months";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { budgetMark, getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
+import { TRIP_SEO } from "@/content/trip-seo";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { PartnerLink } from "@/components/trips/partner-link";
+import { ShareTripButton } from "@/components/trips/share-trip-button";
 import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link";
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
@@ -35,7 +39,9 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
   if (!trip) return {};
   const l = locale === "es" ? "es" : "en";
   // The trip's own picture on its link preview (app/og/share.jpg), not the site's general card.
-  return pageMetadata({ locale, path: `/trips/${trip.id}`, title: trip.title[l], description: trip.blurb[l], image: shareCardPath({ kind: "trip", locale: l, trip: trip.id }) });
+  // What a search shows is the searched pattern ("3 days in Lisbon for two"); the page keeps the trip's own name as its h1.
+  const seo = TRIP_SEO[trip.id];
+  return pageMetadata({ locale, path: `/trips/${trip.id}`, title: seo?.title[l] ?? trip.title[l], description: seo?.description[l] ?? trip.blurb[l], image: shareCardPath({ kind: "trip", locale: l, trip: trip.id }) });
 }
 
 /** One trip: the picture and the facts, the route on a map, the plan day by day, tickets for its sights, flights (and a car for a road trip), and the gift it can become. */
@@ -51,6 +57,8 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   const gift = tripGiftFields(trip, l);
   const url = localizedUrl(locale, `/trips/${trip.id}`);
   const stops = trip.stops.map((s) => ({ name: stopName(s, l), lat: s.lat, lng: s.lng }));
+  // A stop in one of the cities with a dates page links to it, once a city (lib/trips/cities.ts).
+  const stopCities = tripStopCities(trip);
   const tickets = tripTickets(trip.id).map((ticket) => {
     const stop = trip.stops.find((s) => s.name === ticket.stop);
     return { name: ticket.name[l], where: stop ? stopName(stop, l) : null, url: tiqetsSearch(ticket.query, l) };
@@ -134,8 +142,11 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <Plane aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("detail.jump.flights")}
                 </a>
+                {/* Keeping it and sending it go together: where the four don't fit one row, these two wrap as a pair, never the share alone. A failed save, or the line after one, comes below the pair. */}
                 {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
-                <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)} />
+                <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)}>
+                  <ShareTripButton tripId={trip.id} title={trip.title[l]} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-[background-color,scale] hover:bg-blush-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:scale-[0.98] motion-reduce:transition-none" />
+                </SaveTripButton>
               </div>
             </div>
           </div>
@@ -178,13 +189,23 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                         <span className="text-[12.5px] font-semibold text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
                       </div>
                       <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
-                      <Link
-                        href={`/dates?lat=${s.lat}&lng=${s.lng}&q=${encodeURIComponent(stopName(s, l))}`}
-                        className="group -mb-2.5 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline"
-                      >
-                        {t("detail.route.datesHere")}
-                        <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                      </Link>
+                      {/* One link a stop: the city's own date ideas where it is one of ours, else the map of date spots around it. */}
+                      <div className="-mb-2.5 flex flex-wrap gap-x-5">
+                        {stopCities[i] ? (
+                          <Link href={`/dates/${stopCities[i].slug}`} data-testid="stop-city" className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                            {t("detail.route.cityDates", { city: cityPageName(stopCities[i], l) })}
+                            <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/dates?lat=${s.lat}&lng=${s.lng}&q=${encodeURIComponent(stopName(s, l))}`}
+                            className="group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline"
+                          >
+                            {t("detail.route.datesHere")}
+                            <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -243,6 +264,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <PartnerLink
                     partner="tiqets"
                     placement="trip_tickets"
+                    trip={trip.id}
                     href={ticket.url}
                     aria-label={ta("tickets.label", { name: ticket.name })}
                     className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-card p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper"
@@ -279,7 +301,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   {ta("car.title")}
                 </h3>
                 <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{ta("car.sub")}</p>
-                <PartnerLink partner="autoeurope" placement="trip_car" href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-card px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper">
+                <PartnerLink partner="autoeurope" placement="trip_car" trip={trip.id} href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-card px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper">
                   {ta("car.cta")}
                   <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   <span className="sr-only">({ta("newTab")})</span>
@@ -291,7 +313,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
             ) : null}
           </div>
           <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
-            <FlightFinder to={trip.flyTo} placement="trip_flights" />
+            <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} />
           </div>
         </div>
       </section>
