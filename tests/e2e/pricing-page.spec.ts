@@ -435,8 +435,9 @@ test("the editor's pick-three link opens the picker once: back from checkout sho
   await page.getByTestId("head-buy-single").click();
   await dialog.getByRole("button", { name: "Continue (1/1)" }).click();
   await page.waitForURL("**/about");
-  await page.goBack();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Unlock Bouquet");
+  await page.goBack({ timeout: 30_000 });
+  expect(new URL(page.url()).searchParams.has("plan")).toBe(false);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Unlock Bouquet", { timeout: 15_000 });
   await expect(page.getByTestId("head-buy-single")).toBeEnabled();
   await expect(dialog).toHaveCount(0);
 });
