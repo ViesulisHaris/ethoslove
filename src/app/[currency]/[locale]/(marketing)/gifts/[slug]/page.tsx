@@ -81,6 +81,12 @@ export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[
 const RECIPIENT_BAND_PHOTO = { src: DEMO_PHOTOS.p1.url, width: DEMO_PHOTOS.p1.width, height: DEMO_PHOTOS.p1.height } as const;
 
 /** The first sentence of a page's opening: the hero's one line. The whole opening is kept under "More about". */
+/**
+ * A list of four questions or fewer ends level with the lily that the last section lays up across its edge: the
+ * extra room at the foot (the pages by person have it too) keeps the flower off the heading beside the list.
+ */
+const SHORT_QUESTIONS = "pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-60";
+
 const firstSentence = (text: string) => text.trim().split(/(?<=[.!?])\s+/)[0] ?? text;
 
 /**
@@ -323,7 +329,7 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
             </div>
           </Band>
 
-          <QuestionsSpread id="kind-questions" name={`faq-${kind}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq}>
+          <QuestionsSpread id="kind-questions" name={`faq-${kind}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq} className={guide.faq.length < 5 ? SHORT_QUESTIONS : undefined}>
             <MoreRow summary={t("moreAbout")}>
               {guide.lead.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
@@ -443,7 +449,7 @@ async function MonthPage({ month, locale, currency }: { month: number; locale: G
             </Link>
           </Band>
 
-          <QuestionsSpread id="month-questions" name={`faq-month-${month}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq}>
+          <QuestionsSpread id="month-questions" name={`faq-month-${month}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq} className={SHORT_QUESTIONS}>
             <MoreRow summary={t("month.moreAbout")}>
               {guide.stage.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
