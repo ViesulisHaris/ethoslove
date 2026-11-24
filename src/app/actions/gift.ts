@@ -192,7 +192,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const { data: gift, error: giftError } = await ctx.supabase
     .from("gifts")
-    .select("id, template_slug, user_id, status, free_tier:data->>freeTier, held_photos:data->photos")
+    .select("id, template_slug, user_id, status, published_at, free_tier:data->>freeTier, held_photos:data->photos")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -309,7 +309,12 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   ).catch(() => {});
   // The e-mails before this person's day stop once their gift is made (lib/lifecycle/reminder-done.ts).
   // After the answer, and never able to fail the publish.
-  const madeFor = () => markMadeFor(getSupabaseAdminClient() ?? ctx.supabase, ctx.user.id, data.recipientName, new Date());
+  // A scheduled gift counts for the day it opens on; an edit of one already out counts from when it first went.
+  const madeFor = () =>
+    markMadeFor(getSupabaseAdminClient() ?? ctx.supabase, ctx.user.id, data.recipientName, new Date(), {
+      unlockAt: scheduled ? input.data.schedule!.unlockAt : null,
+      wasOutSince: gift.status === "live" || gift.status === "scheduled" ? gift.published_at : null,
+    });
   try {
     after(madeFor);
   } catch {

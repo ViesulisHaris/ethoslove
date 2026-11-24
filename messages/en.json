@@ -814,7 +814,7 @@
     },
     "started": {
       "title": "Started for you.",
-      "withPhotos": "Both names and {count, plural, one {the photo} other {the # photos}} from your last gift for {name} are in. Change anything, or swap them all.",
+      "withPhotos": "Both names and {count, plural, one {the photo} other {the # photos}} from your last gift for {name} are in. Change anything, or swap the photos out.",
       "namesOnly": "Both names are in. Add your photos and your words.",
       "change": "Change the photos",
       "empty": "Start empty",
@@ -3333,6 +3333,7 @@
       "blurb": "Three emails before each day you add: 7 days, 2 days and the day before, until your gift for it is made. For the monthly one, a check the day before. Nothing else.",
       "datesTitle": "Never be late for their day.",
       "datesWhy": "We'll email you 7 days before, with your photos already in a new gift.",
+      "datesWhyNames": "We'll email you 7 days before, with both names already in a new gift.",
       "fromGift": "from this gift",
       "remindMe": "Remind me",
       "datesSmall": "Three short emails before each day: 7 days, 2 days and the day before. They stop once your gift is made.",
@@ -3452,7 +3453,7 @@
     },
     "page": {
       "title": "Reminders",
-      "subtitle": "The days you asked us to remember: three emails before each one, 7 days, 2 days and the day before, until your gift for it is made or you say “not this year”. And the day before your monthsary, if you asked for it.",
+      "subtitle": "Three emails before each day: 7 days, 2 days and the day before. And the day before your monthsary, if you asked.",
       "empty": "No reminders yet. After you publish a gift, you can ask us to remind you next year.",
       "remove": "Remove",
       "removeLabel": "Remove the reminder: {what}",
@@ -3472,7 +3473,7 @@
     },
     "skip": {
       "title": "Not this year",
-      "body": "No more emails about {name}'s day this year. We'll be back next year.",
+      "body": "Stop the emails about {name}'s day until next year?",
       "confirm": "Yes, not this year",
       "doneTitle": "Done. See you next year.",
       "doneBody": "Nothing more about this day until next year. The reminder stays on your account."

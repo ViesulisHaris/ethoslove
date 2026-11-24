@@ -62,11 +62,11 @@ describe("'Not this year' from the e-mail", () => {
   it("asks first, in the reminder's language, and changes nothing on a GET", async () => {
     const asked = await page("GET", `${ID}:${YEAR}`);
     expect(asked.status).toBe(200);
-    expect(asked.text).toContain("No more emails about Mia&#39;s day this year. We&#39;ll be back next year.");
+    expect(asked.text).toContain("Stop the emails about Mia&#39;s day until next year?");
     expect(asked.text).toContain("Yes, not this year");
     expect(fake.rows("reminders")[0]).toMatchObject({ last_sent_year: YEAR, last_stage: 1 });
     fake.tables.reminders[0].locale = "es";
-    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("No te escribimos más este año sobre el día de Mia.");
+    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("¿Dejamos de escribirte sobre el día de Mia hasta el año que viene?");
   });
 
   it("marks the reminder done for that year on the POST, and the next year's still come", async () => {
@@ -110,6 +110,23 @@ describe("a gift made for the person stops the e-mails", () => {
     ]);
     // Across the new year.
     expect(settledBy([row({ id: "x", month: 1, day: 3, last_sent_year: null, last_stage: 0 })], "Mia", new Date("2026-12-28T10:00:00Z"))).toEqual([{ id: "x", year: 2027 }]);
+  });
+
+  it("counts a gift scheduled to open on the day however far ahead it was made, and not an edit of one already out", () => {
+    const far = new Date("2027-01-10T15:00:00Z");
+    // Made in January for 5 March, set to open at midnight in New York (05:00 UTC) or in Tokyo (15:00 UTC the day before).
+    expect(settledBy(reminders, "Mia", far, { unlockAt: "2027-03-05T05:00:00.000Z" })).toEqual([{ id: "a", year: 2027 }]);
+    expect(settledBy(reminders, "Mia", far, { unlockAt: "2027-03-04T15:00:00.000Z" })).toEqual([{ id: "a", year: 2027 }]);
+    // Scheduled for another day, or not at all: too far for the window, nothing.
+    expect(settledBy(reminders, "Mia", far, { unlockAt: "2027-02-20T05:00:00.000Z" })).toEqual([]);
+    expect(settledBy(reminders, "Mia", far)).toEqual([]);
+    // Last year's gift for Mia edited inside the window: it was out long before, so it wasn't made for this day.
+    expect(settledBy(reminders, "Mia", now, { wasOutSince: "2026-03-01T10:00:00.000Z" })).toEqual([]);
+    // One that first went out a few days ago and is edited now still counts.
+    expect(settledBy(reminders, "Mia", now, { wasOutSince: "2027-02-26T10:00:00.000Z" })).toEqual([
+      { id: "a", year: 2027 },
+      { id: "b", year: 2027 },
+    ]);
   });
 
   it("writes them done for the year on the account's rows only", async () => {

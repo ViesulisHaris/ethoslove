@@ -31,6 +31,9 @@ import { MonthDayPicker } from "@/components/pickers/month-day-picker";
 type Status = "idle" | "saving" | "saved" | "failed" | "tooMany";
 /** The rows behind "Add another day": this gift's occasion next year, then the other days to add. */
 type RowId = "next" | "birthday" | "anniversary" | "valentines" | "monthly" | "someone";
+/** What already went for a saved day (GET and POST /api/reminders): the year and its stage. */
+type Sent = { sentYear: number | null; sentStage: number };
+const NOTHING_SENT: Sent = { sentYear: null, sentStage: 0 };
 /** The card's two days, asked for on the card itself. */
 type Field = "birthday" | "anniversary";
 const FIELDS: readonly Field[] = ["birthday", "anniversary"];
@@ -72,7 +75,12 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   // Still the day the gift told: "from this gift" until it is changed.
   const [fromGift, setFromGift] = useState(giftField !== null);
   // Saved this time, in the order saved, for "Saved. Your first email comes on…".
-  const [savedNow, setSavedNow] = useState<{ field: Field; date: MonthDay; doneYear: number | null }[]>([]);
+  const [savedNow, setSavedNow] = useState<{ field: Field; date: MonthDay; sent: Sent }[]>([]);
+  // What already went for the days the account had before this card: a day done for this year says next year's date.
+  const [foundSent, setFoundSent] = useState<Partial<Record<Field, Sent>>>({});
+  // "Remind me" replaces the form (and its focused button) with the saved line: focus follows it there.
+  const savedLine = useRef<HTMLDivElement>(null);
+  const focusSaved = useRef(false);
   const [more, setMore] = useState(false);
 
   // The rows behind "Add another day".
@@ -113,6 +121,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
       const mine = ((listed?.reminders ?? []) as Reminder[]).filter((r) => same(r.recipientName));
       const found: Partial<Record<RowId, Status>> = {};
       const foundDays: Partial<Record<Field, MonthDay>> = {};
+      const sentDays: Partial<Record<Field, Sent>> = {};
       // This gift's occasion, when it is not one of the two days, on whatever day the account has it.
       if (!giftField) {
         const first = mine.find((r) => r.occasion === initial.occasion && (initial.occasion !== "other" || (r.month === initial.month && r.day === initial.day)));
@@ -126,7 +135,10 @@ export function RemindNextYear({ data }: { data: GiftData }) {
         const hit = mine.find((r) => r.occasion === row);
         if (!hit) continue;
         found[row] = "saved";
-        if (row !== "valentines") foundDays[row] = { month: hit.month, day: hit.day };
+        if (row !== "valentines") {
+          foundDays[row] = { month: hit.month, day: hit.day };
+          sentDays[row] = { sentYear: hit.sentYear ?? null, sentStage: hit.sentStage ?? 0 };
+        }
       }
       const together = ((monthly?.monthsaries ?? []) as MonthsaryView[]).find((m) => same(m.partnerName));
       const sinceDate = together ? parseYmd(together.since) : null;
@@ -136,6 +148,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
       }
       // A day already saved replaces the one the gift suggested: that is the day the e-mails are for.
       setFields((f) => ({ ...f, ...foundDays }));
+      setFoundSent(sentDays);
       if (giftField && foundDays[giftField]) setFromGift(false);
       setStatus((s) => ({ ...found, ...s }));
     });
@@ -148,7 +161,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   const busy = Object.values(status).includes("saving");
 
   /** POST /api/reminders. `forThisGift` only for the gift's own day: this year's e-mails are skipped there when the day is near. */
-  const post = async (body: { recipientName: string; occasion: ReminderOccasion; date: MonthDay; forThisGift: boolean; someone?: boolean }): Promise<"saved" | "tooMany" | "failed"> => {
+  const post = async (body: { recipientName: string; occasion: ReminderOccasion; date: MonthDay; forThisGift: boolean; someone?: boolean }, onSaved?: (reminder: Reminder | null) => void): Promise<"saved" | "tooMany" | "failed"> => {
     try {
       const res = await fetch("/api/reminders", {
         method: "POST",
@@ -169,6 +182,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
       });
       if (res.status === 409) return "tooMany";
       if (!res.ok) return "failed";
+      onSaved?.(((await res.json().catch(() => null)) as { reminder?: Reminder } | null)?.reminder ?? null);
       track("reminder_saved", { occasion: body.occasion, template: data.templateSlug, row: body.someone ? "someone" : body.occasion });
       // The "two more gifts" card above names the next days: it reads them again.
       window.dispatchEvent(new Event("ethos:reminder-saved"));
@@ -194,15 +208,19 @@ export function RemindNextYear({ data }: { data: GiftData }) {
     for (const field of todo) {
       const date = fields[field]!;
       const forThisGift = field === giftField;
-      const result = await post({ recipientName: who, occasion: field, date, forThisGift });
+      const answer: { reminder: Reminder | null } = { reminder: null };
+      const result = await post({ recipientName: who, occasion: field, date, forThisGift }, (r) => (answer.reminder = r));
       if (result !== "saved") {
         worst = result;
         continue;
       }
-      setRow(field, "saved");
+      // What the server holds (a day already on the account keeps what went for it); before it says, what this save wrote.
       const doneYear = forThisGift ? initialLastSentYear(date, new Date(), countdownDay(data.countdown)) : null;
-      setSavedNow((list) => [...list.filter((s) => s.field !== field), { field, date, doneYear }]);
+      const sent: Sent = answer.reminder && answer.reminder.sentYear !== undefined ? { sentYear: answer.reminder.sentYear, sentStage: answer.reminder.sentStage ?? 0 } : doneYear !== null ? { sentYear: doneYear, sentStage: 3 } : NOTHING_SENT;
+      setRow(field, "saved");
+      setSavedNow((list) => [...list.filter((s) => s.field !== field), { field, date, sent }]);
     }
+    if (worst === "saved") focusSaved.current = true;
     setRow("dates", worst);
   };
 
@@ -255,11 +273,18 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   // Both days in: the card says when the first e-mail comes, and lists them.
   const bothSaved = FIELDS.every((f) => status[f] === "saved");
   const datesDone = savedNow.length > 0 && FIELDS.every((f) => status[f] === "saved" || !fields[f]) ? true : bothSaved;
+  const now = new Date();
   const savedDays = FIELDS.filter((f) => status[f] === "saved" && fields[f])
-    .map((f) => ({ field: f, date: fields[f]!, doneYear: savedNow.find((s) => s.field === f)?.doneYear ?? null }))
+    .map((f) => ({ field: f, date: fields[f]!, sent: savedNow.find((s) => s.field === f)?.sent ?? foundSent[f] ?? NOTHING_SENT }))
+    .map((s) => ({ ...s, firstAt: firstEmailDate([{ ...s.date, ...s.sent }], now) }))
     // Soonest e-mails first: a day done for this year (the gift was just made for it) comes round next year.
-    .sort((a, b) => (firstEmailDate([{ ...a.date, doneYear: a.doneYear }], new Date())?.getTime() ?? 0) - (firstEmailDate([{ ...b.date, doneYear: b.doneYear }], new Date())?.getTime() ?? 0));
-  const first = firstEmailDate(savedDays.map((s) => ({ ...s.date, doneYear: s.doneYear })), new Date());
+    .sort((a, b) => (a.firstAt?.getTime() ?? 0) - (b.firstAt?.getTime() ?? 0));
+  const first = savedDays[0]?.firstAt ?? null;
+  useEffect(() => {
+    if (!datesDone || !focusSaved.current) return;
+    focusSaved.current = false;
+    savedLine.current?.focus({ preventScroll: true });
+  }, [datesDone]);
   const fieldLabel = (f: Field) => nextLabel(t, f, who);
   const filled = FIELDS.some((f) => fields[f] && status[f] !== "saved");
 
@@ -275,7 +300,7 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   return (
     <section className="mt-8 rounded-2xl border border-border bg-card p-5" data-testid="remind-card">
       {datesDone ? (
-        <div className="flex items-start gap-3" role="status" data-testid="remind-saved">
+        <div ref={savedLine} tabIndex={-1} className="flex items-start gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-coral" role="status" data-testid="remind-saved">
           <Check className="mt-1 size-5 shrink-0 text-moss" aria-hidden />
           <div className="min-w-0">
             <p className="text-[17px] leading-snug font-medium">{first ? t("savedFirst", { date: formatMonthDay({ month: first.getUTCMonth() + 1, day: first.getUTCDate() }, locale) }) : t("added")}</p>
@@ -294,7 +319,8 @@ export function RemindNextYear({ data }: { data: GiftData }) {
             <BellRing className="mt-1 size-5 shrink-0 text-coral" aria-hidden />
             <div className="min-w-0">
               <p className="font-display text-xl">{t("datesTitle")}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{t("datesWhy")}</p>
+              {/* "your photos" only when this gift has some: a free note has none, and the next gift would start with the names alone. */}
+              <p className="mt-1 text-sm text-muted-foreground">{data.photos.length > 0 ? t("datesWhy") : t("datesWhyNames")}</p>
             </div>
           </div>
 
