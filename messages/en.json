@@ -3446,10 +3446,17 @@
     },
     "remove": {
       "title": "Remove this reminder?",
-      "body": "You won't get the yearly email about {name} any more.",
+      "body": "You won't get the emails before {name}'s day any more.",
       "confirm": "Remove it",
       "doneTitle": "Removed.",
       "doneBody": "That reminder is gone. You can set a new one whenever you make a gift."
+    },
+    "skip": {
+      "title": "Not this year",
+      "body": "No more emails about {name}'s day this year. We'll be back next year.",
+      "confirm": "Yes, not this year",
+      "doneTitle": "Done. See you next year.",
+      "doneBody": "Nothing more about this day until next year. The reminder stays on your account."
     },
     "unsubscribe": {
       "title": "Unsubscribe?",

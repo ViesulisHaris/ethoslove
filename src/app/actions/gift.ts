@@ -25,6 +25,8 @@ import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/f
 import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
 import { countCampaignGift } from "@/lib/commerce/campaign";
 import { readyGifts, spendGift } from "@/lib/commerce/gift-credits";
+import { markMadeFor } from "@/lib/lifecycle/reminder-done";
+import { after } from "next/server";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -305,6 +307,14 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     gift.id,
     scheduled ? new Intl.DateTimeFormat(data.locale, { dateStyle: "long", timeStyle: "short", timeZone: input.data.schedule?.timezone }).format(new Date(input.data.schedule!.unlockAt)) : undefined,
   ).catch(() => {});
+  // The e-mails before this person's day stop once their gift is made (lib/lifecycle/reminder-done.ts).
+  // After the answer, and never able to fail the publish.
+  const madeFor = () => markMadeFor(getSupabaseAdminClient() ?? ctx.supabase, ctx.user.id, data.recipientName, new Date());
+  try {
+    after(madeFor);
+  } catch {
+    void madeFor();
+  }
   return { ok: true, data: { shortId: row?.short_id ?? "", status, ...(usedGift ? { usedGift: true as const } : {}) } };
 }
 

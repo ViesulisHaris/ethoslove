@@ -3446,10 +3446,17 @@
     },
     "remove": {
       "title": "¿Quitar este recordatorio?",
-      "body": "Dejarás de recibir el correo anual sobre {name}.",
+      "body": "Dejarás de recibir los correos antes del día de {name}.",
       "confirm": "Quitarlo",
       "doneTitle": "Recordatorio quitado.",
       "doneBody": "Ese recordatorio ya no existe. Puedes crear otro cuando hagas un regalo."
+    },
+    "skip": {
+      "title": "Este año no",
+      "body": "No te escribimos más este año sobre el día de {name}. Volvemos el año que viene.",
+      "confirm": "Sí, este año no",
+      "doneTitle": "Hecho. Hasta el año que viene.",
+      "doneBody": "Nada más sobre este día hasta el año que viene. El recordatorio sigue en tu cuenta."
     },
     "unsubscribe": {
       "title": "¿Darte de baja?",
