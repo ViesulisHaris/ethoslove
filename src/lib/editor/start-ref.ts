@@ -8,6 +8,20 @@ export const START_COOKIE = "ethos_start_from";
 /** Two hours: long enough to look through the gallery first, gone before the day is out. */
 export const START_COOKIE_SECONDS = 2 * 60 * 60;
 export const START_PARAM = "start";
+/**
+ * Which reminder an e-mail's "Open my gift" came from, for the publish (app/actions/gift.ts): a gift
+ * made from that reminder stops its e-mails whatever its countdown says (lib/lifecycle/reminder-done.ts).
+ * Server-only (httpOnly), a reminder's id and nothing else, and only for as long as a gift made now
+ * can still be that day's.
+ */
+export const REMINDER_COOKIE = "ethos_reminder_for";
+export const REMINDER_COOKIE_SECONDS = 10 * 24 * 60 * 60;
+
+/** A reminder's id as the cookie holds it, or null. */
+export function parseReminderCookie(value: string | null | undefined): string | null {
+  const id = (value ?? "").trim().toLowerCase();
+  return new RegExp(`^${UUID}$`).test(id) ? id : null;
+}
 
 const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 const PATTERN = new RegExp(`^(r-)?(${UUID})$`);

@@ -28,6 +28,8 @@ import { readyGifts, spendGift } from "@/lib/commerce/gift-credits";
 import { markMadeFor } from "@/lib/lifecycle/reminder-done";
 import { countdownDay } from "@/lib/lifecycle/reminders";
 import { after } from "next/server";
+import { cookies } from "next/headers";
+import { REMINDER_COOKIE, parseReminderCookie } from "@/lib/editor/start-ref";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -311,6 +313,10 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   // The e-mails before this person's day stop once their gift is made (lib/lifecycle/reminder-done.ts).
   // After the answer, and never able to fail the publish.
   // A scheduled gift counts for the day it opens on; an edit of one already out counts from when it first went.
+  // A gift made after "Open my gift" in a reminder's e-mail is that reminder's (api/reminders/open).
+  const forReminder = await cookies()
+    .then((jar) => parseReminderCookie(jar.get(REMINDER_COOKIE)?.value))
+    .catch(() => null);
   const madeFor = () =>
     markMadeFor(getSupabaseAdminClient() ?? ctx.supabase, ctx.user.id, data.recipientName, new Date(), {
       unlockAt: scheduled ? input.data.schedule!.unlockAt : null,
@@ -319,6 +325,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
       occasions: manifest.occasions,
       // A gift counting down to 25 December is that day's, never a birthday's on the 28th.
       countsDownTo: countdownDay(data.countdown),
+      forReminder,
     });
   try {
     after(madeFor);

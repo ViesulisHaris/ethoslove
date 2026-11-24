@@ -42,7 +42,7 @@ async function open(until: number, query = "", headers: Record<string, string> =
   const t = await signToken("reminder-open", `${R}:${until}`, SECRET);
   const res = await route.GET(new NextRequest(`https://ethos.test/api/reminders/open?t=${t}&s=2${query}`, { headers }));
   const location = res.headers.get("location");
-  return { status: res.status, to: location ? decodeURIComponent(location.replace("https://ethos.test", "")) : null, cookie: res.headers.get("set-cookie") };
+  return { status: res.status, to: location ? decodeURIComponent(location.replace("https://ethos.test", "")) : null, cookie: res.headers.getSetCookie().find((c) => c.startsWith("ethos_start_from=")) ?? null, reminder: res.headers.getSetCookie().find((c) => c.startsWith("ethos_reminder_for=")) ?? null };
 }
 
 const live = { id: GIFT, user_id: USER, status: "live", updated_at: "2026-10-01", data: { recipientName: "mia", photos: [{ id: "p", url: "gifts/x/p.jpg" }] } };
@@ -68,6 +68,12 @@ describe("'Open my gift' from a reminder e-mail", () => {
     expect(out.cookie).toMatch(/SameSite=lax/i);
     expect(out.cookie).toMatch(/Path=\//);
     expect(out.cookie).not.toMatch(/HttpOnly/i);
+    // Which reminder it is, for the publish only: a gift made from here stops this reminder's e-mails
+    // whatever it counts down to. Server-only, and only while a gift made now can still be that day's.
+    expect(out.reminder).toContain(`ethos_reminder_for=${R}`);
+    expect(out.reminder).toMatch(/HttpOnly/i);
+    expect(out.reminder).toMatch(/Max-Age=864000/);
+    expect(out.reminder).toMatch(/SameSite=lax/i);
     expect(state.links).toEqual([]);
   });
 

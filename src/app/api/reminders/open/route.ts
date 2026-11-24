@@ -7,7 +7,7 @@ import { clientIp } from "@/lib/request-ip";
 import { isPageNavigation } from "@/lib/auth/navigation";
 import { suggestTemplate } from "@/lib/lifecycle/suggest";
 import { lastGiftFor } from "@/lib/lifecycle/last-gift";
-import { START_COOKIE, START_COOKIE_SECONDS, startRefValue, type StartRef } from "@/lib/editor/start-ref";
+import { REMINDER_COOKIE, REMINDER_COOKIE_SECONDS, START_COOKIE, START_COOKIE_SECONDS, startRefValue, type StartRef } from "@/lib/editor/start-ref";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -53,6 +53,8 @@ export async function GET(request: NextRequest) {
   // The start, for the editor this opens or whichever gift they pick in the gallery.
   const withStart = (response: NextResponse) => {
     response.cookies.set(START_COOKIE, startRefValue(start), { maxAge: START_COOKIE_SECONDS, sameSite: "lax", path: "/", httpOnly: false, secure: process.env.NODE_ENV === "production" });
+    // Which reminder this is, for the publish: the gift made from here is that day's, whatever it counts down to.
+    response.cookies.set(REMINDER_COOKIE, reminderId, { maxAge: REMINDER_COOKIE_SECONDS, sameSite: "lax", path: "/", httpOnly: true, secure: process.env.NODE_ENV === "production" });
     return response;
   };
   const signIn = () => withStart(to(`${lang}/login?next=${encodeURIComponent(next)}`));

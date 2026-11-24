@@ -17,6 +17,10 @@ import { DONE_STAGE, nextOccurrence, occurrenceIn, type ReminderOccasion } from 
  * Further out, a gift is not for that day, and the e-mails still come, unless it is scheduled to open
  * on that day (within a day either side, for the time zones), however far ahead it was made.
  * Republishing a gift that was already out before the window (an edit of last year's) makes nothing.
+ * A gift made after "Open my gift" in a reminder's e-mail (`forReminder`) is that reminder's while its
+ * day is in the window, whatever the gift counts down to ("Until I land" two days before her birthday)
+ * and whatever its template's occasions; it then settles that reminder alone, besides any day it is
+ * scheduled to open on (not one it merely counts down to).
  */
 export const MADE_FOR_WINDOW_DAYS = 10;
 
@@ -32,6 +36,8 @@ export type MadeGift = {
   occasions?: readonly Occasion[];
   /** The day the gift counts down to (countdownDay, YYYY-MM-DD), if it has a countdown. */
   countsDownTo?: string | null;
+  /** The reminder whose e-mail started this gift (the cookie api/reminders/open sets), if any. */
+  forReminder?: string | null;
 };
 
 /** The occasions that are a reminder's own; any other (Christmas, Mother's Day…) is a reminder's "other" day. */
@@ -71,8 +77,23 @@ export function settledBy(
   // Scheduled to open on a day: that day's, whatever the template. Otherwise only the nearest day in the window.
   const onTheDay: { id: string; year: number }[] = [];
   const near: { id: string; year: number; at: number }[] = [];
+  // Started from a reminder's e-mail: that reminder, and any day the gift is scheduled to open on.
+  let fromItsEmail = false;
+  const itsOwn: { id: string; year: number }[] = [];
   for (const row of rows) {
     if (!sameName(row.recipient_name, name)) continue;
+    if (gift.forReminder && row.id === gift.forReminder) {
+      const day = nextOccurrence({ month: row.month, day: row.day }, now);
+      const year = day.getUTCFullYear();
+      const inWindow = day.getTime() - today <= MADE_FOR_WINDOW_DAYS * DAY_MS;
+      const anEdit = Number.isFinite(wasOut) && wasOut < day.getTime() - MADE_FOR_WINDOW_DAYS * DAY_MS;
+      const settled = row.last_sent_year !== null && (row.last_sent_year > year || (row.last_sent_year === year && row.last_stage === DONE_STAGE));
+      if (inWindow && !anEdit) {
+        fromItsEmail = true;
+        if (!settled) itsOwn.push({ id: row.id, year });
+        continue;
+      }
+    }
     // Counting down to this day (within a day, for the time zones) and not to one already gone: this day's.
     const countedTo = countsTo ? openedOn(row, countsTo) : null;
     const scheduledFor = openedOn(row, gift.unlockAt) ?? (countedTo && countedTo.getTime() >= today - DAY_MS ? countedTo : null);
@@ -87,9 +108,13 @@ export function settledBy(
     }
     const year = next.getUTCFullYear();
     if (row.last_sent_year !== null && (row.last_sent_year > year || (row.last_sent_year === year && row.last_stage === DONE_STAGE))) continue;
+    if (scheduledFor && openedOn(row, gift.unlockAt)) itsOwn.push({ id: row.id, year });
     if (scheduledFor) onTheDay.push({ id: row.id, year });
     else near.push({ id: row.id, year, at: next.getTime() });
   }
+  // Started from a reminder's e-mail: that reminder is the one it is for, not whichever day is nearest
+  // or happens to be the day it counts down to.
+  if (fromItsEmail) return itsOwn;
   const nearest = Math.min(...near.map((n) => n.at));
   return [...onTheDay, ...near.filter((n) => n.at === nearest).map(({ id, year }) => ({ id, year }))];
 }

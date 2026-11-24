@@ -181,6 +181,26 @@ describe("a gift made for the person stops the e-mails", () => {
     expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: null })).toEqual([{ id: "bd", year: 2026 }]);
   });
 
+  it("settles the reminder whose e-mail started the gift, whatever the gift counts down to", () => {
+    const scrapbook = ["anniversary", "birthday", "just-because", "long-distance"] as const;
+    const birthday = row({ id: "bd", recipient_name: "Mia", occasion: "birthday", month: 12, day: 28, last_sent_year: 2026, last_stage: 1 });
+    const anniversary = row({ id: "an", recipient_name: "Mia", occasion: "anniversary", month: 12, day: 24, last_sent_year: null, last_stage: 0 });
+    const published = new Date("2026-12-22T10:00:00Z");
+    // Without the e-mail it came from, "Until I land" on the 24th is that day's: the birthday e-mails still go.
+    expect(settledBy([birthday], "Mia", published, { occasions: scrapbook, countsDownTo: "2026-12-24" })).toEqual([]);
+    // Made from the birthday's e-mail: the birthday's, and only the birthday's, though the anniversary is nearer and counted down to.
+    expect(settledBy([birthday, anniversary], "Mia", published, { occasions: scrapbook, countsDownTo: "2026-12-24", forReminder: "bd" })).toEqual([{ id: "bd", year: 2026 }]);
+    // Whatever its template is for.
+    expect(settledBy([birthday], "Mia", published, { occasions: ["christmas"], forReminder: "bd" })).toEqual([{ id: "bd", year: 2026 }]);
+    // A gift for someone else, made while the cookie is still there: not this reminder's.
+    expect(settledBy([birthday], "Leo", published, { forReminder: "bd" })).toEqual([]);
+    // Too late (the day is gone: next year's is far off) or an edit of last year's gift: the usual rules.
+    expect(settledBy([birthday], "Mia", new Date("2026-12-29T10:00:00Z"), { forReminder: "bd" })).toEqual([]);
+    expect(settledBy([birthday], "Mia", published, { forReminder: "bd", wasOutSince: "2025-12-20T10:00:00.000Z", countsDownTo: "2026-12-24" })).toEqual([]);
+    // Already done for the year: nothing to write.
+    expect(settledBy([{ ...birthday, last_stage: 3 }], "Mia", published, { forReminder: "bd" })).toEqual([]);
+  });
+
   it("writes them done for the year on the account's rows only", async () => {
     const other = row({ id: "z", user_id: "99999999-9999-4999-8999-999999999999", recipient_name: "Mia", last_sent_year: null, last_stage: 0 });
     const fake = new FakeDb({ reminders: [...reminders, other] });
