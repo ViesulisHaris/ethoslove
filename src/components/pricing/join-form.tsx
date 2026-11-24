@@ -141,7 +141,7 @@ export function JoinForm({ initialCode }: { initialCode: string | null }) {
         <section className="rounded-[28px] border border-line bg-card p-6 sm:p-8" data-testid="join-sign-in">
           <h2 className="font-display text-2xl">{t("signInTitle")}</h2>
           <p className="mt-1 mb-5 text-sm text-muted-foreground">{t("signInBlurb")}</p>
-          <AuthForm mode="login" next={`/for-two/join${code ? `?code=${encodeURIComponent(code)}` : ""}`} compact />
+          <AuthForm mode="login" next={`/for-two/join${code ? `?code=${encodeURIComponent(code)}` : ""}`} compact bare />
         </section>
       )}
     </div>

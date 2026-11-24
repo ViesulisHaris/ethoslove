@@ -80,6 +80,35 @@ export function scorePlace(tags: Record<string, string>, kind: PlaceKind, km: nu
   return Math.round(score);
 }
 
+/**
+ * A place's own name, or "" when the map gives none or only says what it is: a viewpoint mapped
+ * with the name "Viewpoint" (or "Mirador") has no more of a name than one mapped with none.
+ */
+function ownNameOf(tags: Record<string, string>, kind: PlaceKind, kindLabel: (kind: PlaceKind) => string): string {
+  const name = (tags.name ?? "").trim();
+  return onlyItsKind(name, kind) || plainWord(name) === plainWord(kindLabel(kind)) ? "" : name;
+}
+
+/** True when a name is only the word for its kind, in either language ("Viewpoint", "mirador"). */
+export function onlyItsKind(name: string, kind: PlaceKind): boolean {
+  const said = plainWord(name);
+  const { label } = KINDS[kind];
+  return said === plainWord(label.en) || said === plainWord(label.es);
+}
+
+/** Lower case, without accents: "Cafe" is "Café". */
+const plainWord = (word: string) => word.trim().normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase();
+
+/**
+ * The places worth a pin on the map or a spot among the top picks: the ones with a name of their
+ * own. "Viewpoint", "Viewpoint", "Viewpoint" on the map said nothing (walk-rooms-12); a nameless
+ * place still fills an idea's stop and stays in the list. `keep` is the place open now, which
+ * keeps its pin whatever its name.
+ */
+export function pinnable<T extends Pick<Place, "id" | "named">>(places: readonly T[], keep?: string | null): T[] {
+  return places.filter((p) => p.named || p.id === keep);
+}
+
 /** Turns an Overpass answer into places: named, deduplicated, ranked, nearest-and-best first. */
 export function parseOverpass(json: unknown, center: LatLng, radiusM: number, kindLabel: (kind: PlaceKind) => string): Place[] {
   const elements = (json as { elements?: Element[] } | null)?.elements;
@@ -94,7 +123,7 @@ export function parseOverpass(json: unknown, center: LatLng, radiusM: number, ki
     const kind = kindOf(tags);
     if (!kind) continue;
     const info = KINDS[kind];
-    const ownName = (tags.name ?? "").trim();
+    const ownName = ownNameOf(tags, kind, kindLabel);
     if (!ownName && !info.nameless) continue;
     // The same café is often mapped twice, as a point and as the building round it.
     const key = `${kind}|${ownName.toLowerCase() || `${lat.toFixed(4)},${lng.toFixed(4)}`}`;

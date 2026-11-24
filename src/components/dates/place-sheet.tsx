@@ -236,7 +236,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         if (info.offset.y > FLING_PX || info.velocity.y > FLING_SPEED) onClose();
         else animate(y, 0, { type: "spring", bounce: 0, visualDuration: 0.3, velocity: info.velocity.y });
       }}
-      className={cn("max-h-[80dvh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-18px_50px_-20px_rgba(60,20,35,0.45)] ring-1 ring-forest/5 lg:max-h-[min(640px,calc(100dvh-var(--header-h)-48px))] lg:rounded-[28px] lg:shadow-lift", className)}
+      className={cn("max-h-[80dvh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-card p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-18px_50px_-20px_rgba(60,20,35,0.45)] ring-1 ring-forest/5 lg:max-h-[min(640px,calc(100dvh-var(--header-h)-48px))] lg:rounded-[28px] lg:shadow-lift", className)}
     >
       {/* Pinned to the top of the sheet as it scrolls, so it can always be put away: the close
           button used to scroll off with the photo, and on a phone a handle to drag it down. Zero
@@ -278,7 +278,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           <h2 ref={heading} tabIndex={-1} id="place-sheet-name" className="font-display text-[24px] leading-[1.08] text-forest outline-none">
             {place.name}
           </h2>
-          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
+          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
             {place.rating?.reviews ? (
               <>
                 <Stars value={place.rating.stars} locale={locale} />
@@ -313,7 +313,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         <ul className="mt-3.5 flex flex-wrap gap-1.5">
           {oddity ? (
             <li>
-              <QuirkBadge quirk={oddity} locale={locale} className="h-[26px] bg-rose-mist px-2.5 text-[12px] text-rose-ink" />
+              <QuirkBadge quirk={oddity} locale={locale} className="h-[26px] bg-blush-paper px-2.5 text-[12px] text-rose-ink" />
             </li>
           ) : null}
           {info.free ? <li className="rounded-full bg-moss-soft px-2.5 py-1 text-[12px] font-semibold text-moss">{labels.free}</li> : null}
@@ -346,8 +346,8 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
 
       {/* On a phone the sheet is short and the photo, the hours and the blurb come first, so the one
           thing to do here waits at the bottom of the sheet (on a white band) until it scrolls into place. */}
-      <div className="mt-3 pt-2 max-lg:sticky max-lg:bottom-0 max-lg:z-[5] max-lg:-mx-5 max-lg:bg-white max-lg:px-5 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-        <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-rose-soft text-rose-ink" : "btn-rose")}>
+      <div className="mt-3 pt-2 max-lg:sticky max-lg:bottom-0 max-lg:z-[5] max-lg:-mx-5 max-lg:bg-card max-lg:px-5 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+        <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-blush-paper text-rose-ink" : "btn-rose")}>
           {inPlan ? <Check aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
           {inPlan ? labels.remove : labels.add}
         </button>
@@ -389,7 +389,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         </button>
       </div>
       {tickets ? (
-        <p className="mt-2 px-1 text-[12px] leading-snug text-forest/60">
+        <p className="mt-2 px-1 text-[12px] leading-snug text-forest/65">
           {ta("tickets.via")} {ta("disclosure")}
         </p>
       ) : null}
@@ -402,7 +402,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
               <a key={r.source} href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-full bg-forest/[0.05] px-3.5 lg:h-10 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/10">
                 <Star aria-hidden="true" className="size-3.5 fill-star text-star" />
                 {formatStars(r.stars, locale)}
-                <span className="font-medium text-forest/60">
+                <span className="font-medium text-forest/65">
                   {SOURCE_NAMES[r.source]} · {labels.reviewsCount(r.reviews)}
                 </span>
               </a>

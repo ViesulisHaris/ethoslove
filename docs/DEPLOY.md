@@ -52,7 +52,7 @@ Authentication → URL configuration:
 
 Developers → Webhooks → Add endpoint → `https://<your-domain>/api/stripe/webhook` with the
 events `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
-`checkout.session.expired`, `charge.refunded` and `charge.dispute.created`. Paste the signing
+`checkout.session.expired`, `charge.refunded`, `charge.dispute.created` and `charge.dispute.closed`. Paste the signing
 secret into `STRIPE_WEBHOOK_SECRET` and redeploy. Full detail in `docs/STRIPE.md`; the launch
 checklist is `docs/LAUNCH.md`.
 

@@ -73,19 +73,19 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
               <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
               {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 7.2em is Newsreader's 12ch. */}
               <h1 className="mt-5 max-w-[7.2em] display-hero text-balance">
-                {t("h1a")} <em className="text-rose">{t("h1b")}</em>
+                {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>
-            <div className="rounded-[32px] bg-white p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
+            <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
               <h2 className="font-display text-[26px] leading-tight text-forest">{t("finder.title")}</h2>
-              <p className="mt-1 text-[14.5px] leading-snug text-forest/60">{t("finder.sub")}</p>
+              <p className="mt-1 text-[14.5px] leading-snug text-forest/65">{t("finder.sub")}</p>
               <FlightFinder className="mt-5" />
             </div>
           </div>
         </div>
       </section>
-      <TornEdge from="#FFE9EC" to="var(--brand-paper)" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-paper)" />
 
       <section id="trips" className="bg-paper py-16 lg:py-24">
         <div className="container-x">
@@ -102,7 +102,7 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
       <section className="bg-paper pb-20 lg:pb-28">
         <div className="container-x">
           <div data-reveal className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">
-            <FloralFrame frame="band" ground="dark" className="-z-10" />
+            <FloralFrame frame="card" ground="dark" className="-z-10" />
             <div className="relative max-w-2xl">
               <p className="text-eyebrow text-blush">{t("gift.eyebrow")}</p>
               <h2 className="display-xl mt-4 text-cream">{t("gift.title")}</h2>

@@ -59,10 +59,10 @@ export function UnusualShelf({ picks, found, locale, labels, selectedId, onOpen,
           <p className="mt-1 text-[14px] text-forest/65">{labels.sub}</p>
         </div>
         <div className="hidden shrink-0 gap-1.5 pb-0.5 lg:flex">
-          <button type="button" aria-label={labels.previous} disabled={edges.start} onClick={() => scroll(-1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-rose-mist disabled:opacity-35">
+          <button type="button" aria-label={labels.previous} disabled={edges.start} onClick={() => scroll(-1)} className="grid size-9 place-items-center rounded-full bg-card text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-blush-paper disabled:opacity-35">
             <ChevronLeft className="size-4" />
           </button>
-          <button type="button" aria-label={labels.next} disabled={edges.end} onClick={() => scroll(1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-rose-mist disabled:opacity-35">
+          <button type="button" aria-label={labels.next} disabled={edges.end} onClick={() => scroll(1)} className="grid size-9 place-items-center rounded-full bg-card text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-blush-paper disabled:opacity-35">
             <ChevronRight className="size-4" />
           </button>
         </div>
@@ -78,7 +78,7 @@ export function UnusualShelf({ picks, found, locale, labels, selectedId, onOpen,
                 onClick={() => onOpen(p.id)}
                 onPointerEnter={() => onHover(p.id)}
                 onPointerLeave={() => onHover(null)}
-                className={cn("group block w-full overflow-hidden rounded-[22px] bg-white text-left shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 hover:shadow-lift", selectedId === p.id && "ring-2 ring-rose")}
+                className={cn("group block w-full overflow-hidden rounded-[22px] bg-card text-left shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 hover:shadow-lift", selectedId === p.id && "ring-2 ring-rose")}
               >
                 <span className="relative block">
                   {/* With no photograph, the kind's tile carries the quirk's own glyph: a telescope, a key.

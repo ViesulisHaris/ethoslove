@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
@@ -20,10 +20,12 @@ const GiftRenderer = dynamic(
   () => import("@/templates/_shared/GiftRenderer").then((m) => m.GiftRenderer),
   { ssr: false },
 );
-import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
+import { posterFit } from "./poster-fit";
+import { useHoverFilm } from "./use-hover-film";
 
 /**
  * Gallery card. Poster at rest, the captured preview video plays on hover,
@@ -37,24 +39,19 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
   const locale = useLocale() as GiftLocale;
   const t = useTranslations();
   const [live, setLive] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const currency = useCurrency();
   // A premium template is bought as one; a free template that has no free version any more
   // (lib/gift/free-tier.ts) costs its "make it special".
   const free = sendsFree(manifest);
-  const price = formatAmount(PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency], currency, locale);
+  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, locale);
   /** The first row on a phone and on a laptop: painted immediately, never faded in, never lazy. */
   const above = index < 4;
 
-  const play = () => {
-    const v = videoRef.current;
-    // A phone fires mouseenter on tap too, and the looping preview then played on, off screen,
-    // after the page had scrolled on; the preview is for a pointer resting on a card.
-    if (!v || live || !window.matchMedia("(hover: hover)").matches) return;
-    v.currentTime = 0;
-    v.play().catch(() => {});
-  };
-  const pause = () => videoRef.current?.pause();
+  // A phone fires mouseenter on tap too, and the looping preview then played on, off screen,
+  // after the page had scrolled on; the preview is for a pointer resting on a card. It starts past
+  // the recording's opening and the poster stays until it is really playing, and the film gets its
+  // address on the first hover, not in the HTML (use-hover-film.ts).
+  const { ref: videoRef, play, pause, loop } = useHoverFilm(manifest.slug, () => !live && window.matchMedia("(hover: hover)").matches, manifest.thumbnail.webm);
 
   return (
     <motion.article
@@ -65,7 +62,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
       whileInView={above ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ type: "spring", stiffness: 120, damping: 20, delay: (index % 3) * 0.06 }}
-      className="group flex flex-col"
+      className="group flex h-full flex-col"
     >
       <div
         // A soft neutral behind the poster, not `bg-night`: until the browser has rasterised a
@@ -102,18 +99,18 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
               quality={75}
               priority={above}
               decoding={above ? "sync" : "async"}
-              className="object-cover"
+              className={cn("object-cover", posterFit(manifest.thumbnail.poster))}
             />
             {manifest.thumbnail.webm ? (
               <video
                 ref={videoRef}
-                src={manifest.thumbnail.webm}
                 muted
-                loop
+                loop={loop}
                 playsInline
                 preload="none"
                 aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                data-card-film
+                className={cn("absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 data-on:opacity-100", posterFit(manifest.thumbnail.poster))}
               />
             ) : null}
             <button
@@ -132,14 +129,12 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
             </button>
           </>
         )}
-        <span
-          className={cn(
-            "pointer-events-none absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur",
-            free ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream",
-          )}
-        >
-          {free ? t("common.free") : t("common.premium")}
-        </span>
+        {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". A gift that costs something says nothing here; the one that is free says so. */}
+        {free ? (
+          <span data-card-free className="pointer-events-none absolute top-3 left-3 rounded-full bg-cream/90 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-forest backdrop-blur">
+            {t("common.free")}
+          </span>
+        ) : null}
         {/* A word in the badge's place (the footer page's "The one you got"); off once the demo runs, like the badge. */}
         {marker && !live ? (
           <span className="pointer-events-none absolute top-3 right-3 rounded-full bg-coral px-2.5 py-1 text-[11px] font-semibold tracking-wide text-paper shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]">{marker}</span>
@@ -156,7 +151,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
           </span>
         ) : null}
       </div>
-      <div className="mt-4 px-0.5">
+      <div className="mt-4 flex flex-1 flex-col px-0.5">
         <div className="flex items-baseline justify-between gap-3">
           <div className="flex min-w-0 items-baseline gap-3">
             <span className="text-mono-meta shrink-0 text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
@@ -164,8 +159,9 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
           </div>
           <span className="text-mono-meta shrink-0 text-ink-soft">{free ? t("templates.priceFree") : t("templates.priceOnce", { price })}</span>
         </div>
-        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{manifest.tagline[locale]}</p>
-        <div className="mt-3 flex items-center gap-4">
+        {/* Never cut ("…", walk-front-15): three lines' room, a longer tagline takes a fourth, and the buttons below sit level along a row of cards whatever their lines do (the card fills its row's height, the buttons keep to its foot). */}
+        <p data-card-line className="mt-1 min-h-[3lh] text-sm text-muted-foreground">{manifest.tagline[locale]}</p>
+        <div className="mt-auto flex items-center gap-4 pt-3">
           <Link href={`/create/${manifest.slug}${linkQuery}`} className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-forest px-4 text-sm font-medium text-cream transition-colors hover:bg-forest-raised sm:flex-none">
             {t("templates.makeThis")}
             <ArrowRight className="size-3.5" />

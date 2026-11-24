@@ -80,7 +80,7 @@ describe("gift ideas by who it's for", () => {
       girlfriend: ["girlfriend", "novia"],
       husband: ["husband", "marido"],
       wife: ["wife", "esposa"],
-      "best-friend": ["best friend", "mejor amiga"],
+      "best-friend": ["best friend", "mejor amigo o amiga"],
       mom: ["mom", "mamá"],
       dad: ["dad", "papá"],
     };
@@ -91,6 +91,24 @@ describe("gift ideas by who it's for", () => {
         expect(g.title.toLowerCase(), `${r} ${l}`).toContain(words[r][i]);
       });
     }
+  });
+
+  it("calls no idea free but The Letter's short note", () => {
+    // Constellations is made of photos, and photos are paid since 19 Nov 2026 (lib/gift/free-tier.ts): the boyfriend's
+    // page still ended its idea "Free, and quietly romantic." (the test of 23 Nov 2026).
+    const free = /\bfree\b|\bgratis\b/i;
+    const said: string[] = [];
+    for (const r of RECIPIENTS)
+      for (const l of LOCALES)
+        for (const idea of RECIPIENT_GUIDES[r][l].ideas) {
+          if (idea.template === "the-letter") {
+            // Where the Letter is called free, it is as a short note, never with photos in the same breath.
+            if (free.test(idea.body) && !/short note|nota corta/i.test(idea.body)) said.push(`${r} ${l} the-letter: free, with no "short note"`);
+            continue;
+          }
+          if (free.test(`${idea.heading} ${idea.body}`)) said.push(`${r} ${l} ${idea.template}: ${idea.body}`);
+        }
+    expect(said).toEqual([]);
   });
 });
 
@@ -121,7 +139,8 @@ describe("template guides", () => {
       for (const l of LOCALES) {
         const g = guide[l];
         expect(new Set(g.ideas.items.map((i) => i.heading)).size, `${slug} ${l} headings repeat`).toBe(g.ideas.items.length);
-        for (const idea of g.ideas.items) expect(words(idea.body), `${slug} ${l}: ${idea.heading}`).toBeGreaterThanOrEqual(25);
+        // An idea is a card since 21 Nov 2026 (tests/unit/text-budget.test.ts holds its lengths); it still has to say what to do.
+        for (const idea of g.ideas.items) expect(words(idea.how), `${slug} ${l}: ${idea.heading}`).toBeGreaterThanOrEqual(5);
         for (const f of g.faq) {
           expect(f.q.trim().endsWith("?"), f.q).toBe(true);
           if (l === "es") expect(f.q.trim().startsWith("¿"), f.q).toBe(true);

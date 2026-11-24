@@ -102,7 +102,7 @@ function RatherPlay({ session, room, deal, closed, onChangePlayers }: { session:
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </div>
-        <GameEnd guest={session.mode === "two" && !session.host} />
+        <GameEnd game="rather" phones={session.mode === "two" ? 2 : 1} guest={session.mode === "two" && !session.host} />
       </section>
     );
   }
@@ -127,7 +127,7 @@ function RatherPlay({ session, room, deal, closed, onChangePlayers }: { session:
             const side = state.picks[p][pair.id];
             return (
               <RevealCard key={p} delay={flipAt(p)} rank={side === 0 ? "A" : "B"} suit={side === 0 ? "heart" : "spade"} tone={side === 0 ? "blush" : "lilac"} back={p === 0 ? "rose" : "lilac"} backLabel={<span className="rounded-full bg-cream/95 px-3 py-1 text-[13px] font-semibold text-forest">{session.names[p]}</span>} className="min-h-[170px]" faceClassName="items-center justify-center px-8 py-8">
-                <span className="text-[12px] font-semibold tracking-[0.16em] text-forest/55 uppercase">{session.names[p]}</span>
+                <span className="text-[12px] font-semibold tracking-[0.16em] text-forest/65 uppercase">{session.names[p]}</span>
                 <span className="mt-2 font-display text-[24px] leading-tight">{(side === 0 ? pair.a : pair.b)[locale]}</span>
               </RevealCard>
             );

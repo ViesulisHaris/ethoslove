@@ -70,6 +70,13 @@ function sourceFiles(dir: string): string[] {
   });
 }
 
+// Every file under src/ and scripts/, read once for the three scans below. Read three times over,
+// the scans ran 5 to 12 s each on a loaded machine and failed at vitest's 5 s default.
+let tree: { file: string; text: string }[] | undefined;
+const sourceTree = () =>
+  (tree ??= [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].map((file) => ({ file, text: readFileSync(file, "utf8") })));
+const SCAN_TIMEOUT = 30_000;
+
 let fake: FakeDb;
 let stripe: FakeStripe;
 beforeEach(() => {
@@ -85,9 +92,9 @@ beforeEach(() => {
 
 describe("R1: Ethos never writes the other business's user-id key", () => {
   it("appears nowhere in src/ or scripts/", () => {
-    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => readFileSync(file, "utf8").includes(FORBIDDEN));
+    const offenders = sourceTree().filter(({ text }) => text.includes(FORBIDDEN)).map(({ file }) => file);
     expect(offenders).toEqual([]);
-  });
+  }, SCAN_TIMEOUT);
 });
 
 describe("a membership's Checkout Session (R2, R3, R6, R7, R8)", () => {
@@ -146,24 +153,21 @@ describe("R6, R8: no trial, coupon or promotion code is ever written, anywhere",
     // allow_promotion_codes is how a session says "no codes"; nothing else about them may appear.
     const forbidden = /\b(trial_period_days|trial_end|trial_settings|trial_from_plan|coupon|promotion_code|discounts)\s*:/;
     // Code only: a comment may well say there are none.
-    const code = (file: string) =>
-      readFileSync(file, "utf8")
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/(^|[^:])\/\/.*$/gm, "$1");
-    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => forbidden.test(code(file)));
+    const code = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
+    const offenders = sourceTree().filter(({ text }) => forbidden.test(code(text))).map(({ file }) => file);
     expect(offenders).toEqual([]);
-    expect(forbidden.test(code(join(process.cwd(), "src/lib/commerce/plan.ts")))).toBe(false);
+    expect(forbidden.test(code(readFileSync(join(process.cwd(), "src/lib/commerce/plan.ts"), "utf8")))).toBe(false);
     expect(forbidden.test("{ trial_period_days: 7 }")).toBe(true);
-  });
+  }, SCAN_TIMEOUT);
 });
 
 describe("R9: an Ethos kind is a product name, never the other business's credit packs", () => {
   const CREDIT_PACKS = "ai" + "_credits";
 
   it("appears nowhere in src/ or scripts/", () => {
-    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => readFileSync(file, "utf8").includes(CREDIT_PACKS));
+    const offenders = sourceTree().filter(({ text }) => text.includes(CREDIT_PACKS)).map(({ file }) => file);
     expect(offenders).toEqual([]);
-  });
+  }, SCAN_TIMEOUT);
 
   it("every product's session, one-time or subscription, carries a catalogue kind", () => {
     const paid = listManifests().filter((m) => m.tier !== "free").map((m) => m.slug);

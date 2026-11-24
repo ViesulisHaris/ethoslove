@@ -102,7 +102,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           <p className="mt-3 text-[12.5px] font-semibold text-forest/70">{labels.cost}</p>
           <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label={labels.cost}>
             {COST_IDS.map((c) => (
-              <button key={c} type="button" aria-pressed={cost === c} onClick={() => setCost(cost === c ? null : c)} className={cn("h-11 rounded-full px-3 text-[13px] font-semibold lg:h-10", cost === c ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10")}>
+              <button key={c} type="button" aria-pressed={cost === c} onClick={() => setCost(cost === c ? null : c)} className={cn("h-11 rounded-full px-3 text-[13px] font-semibold lg:h-10", cost === c ? "bg-forest text-cream" : "bg-card text-forest/75 ring-1 ring-forest/10")}>
                 {COST_LABELS[c][locale]}
               </button>
             ))}
@@ -110,17 +110,17 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           <p className="mt-3 text-[12.5px] font-semibold text-forest/70">{labels.wentAs}</p>
           <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label={labels.wentAs}>
             {WENT_AS_IDS.map((w) => (
-              <button key={w} type="button" aria-pressed={wentAs === w} onClick={() => setWentAs(wentAs === w ? null : w)} className={cn("h-11 rounded-full px-3 text-[13px] font-semibold lg:h-10", wentAs === w ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10")}>
+              <button key={w} type="button" aria-pressed={wentAs === w} onClick={() => setWentAs(wentAs === w ? null : w)} className={cn("h-11 rounded-full px-3 text-[13px] font-semibold lg:h-10", wentAs === w ? "bg-forest text-cream" : "bg-card text-forest/75 ring-1 ring-forest/10")}>
                 {WENT_AS_LABELS[w][locale]}
               </button>
             ))}
           </div>
           <label className="mt-3 block">
             <span className="text-[12.5px] font-semibold text-forest/70">{labels.body}</span>
-            <textarea value={body} maxLength={400} rows={3} onChange={(e) => setBody(e.target.value)} placeholder={labels.bodyPlaceholder} className="mt-1.5 w-full resize-none rounded-2xl border border-forest/15 bg-white px-3.5 py-2.5 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]" />
+            <textarea value={body} maxLength={400} rows={3} onChange={(e) => setBody(e.target.value)} placeholder={labels.bodyPlaceholder} className="mt-1.5 w-full resize-none rounded-2xl border border-forest/15 bg-card px-3.5 py-2.5 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]" />
           </label>
           {state === "unauthenticated" ? (
-            <p className="mt-3 rounded-2xl bg-white p-3.5 text-[13.5px] leading-snug text-forest/75">
+            <p className="mt-3 rounded-2xl bg-card p-3.5 text-[13.5px] leading-snug text-forest/75">
               {labels.signInBlurb}{" "}
               <Link href={{ pathname: "/login", query: { next: loginNext } }} className="inline-flex items-center gap-1 font-semibold text-rose-deep underline-offset-4 hover:underline">
                 <LogIn aria-hidden="true" className="size-3.5" />
@@ -161,8 +161,8 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
       ) : reviews.length > 0 ? (
         <ul className="mt-4 space-y-3">
           {reviews.map((r) => (
-            <li key={r.id} className={cn("rounded-2xl p-3.5 ring-1 ring-forest/5", r.mine ? "bg-blush-paper" : "bg-white")}>
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
+            <li key={r.id} className={cn("rounded-2xl p-3.5 ring-1 ring-forest/5", r.mine ? "bg-blush-paper" : "bg-card")}>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
                 <Stars value={r.stars} size="xs" locale={locale} />
                 <span className="font-semibold text-forest">{r.name}</span>
                 <span>· {labels.when(r.createdAt)}</span>

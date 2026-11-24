@@ -9,6 +9,7 @@ import { listManifests } from "@/templates/manifests";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
 import { MeetInTheMiddle } from "@/components/ldr/meet-in-the-middle";
+import { PlanVisitLink } from "@/components/ldr/plan-visit-link";
 import { EagerImg } from "@/components/shared/eager-img";
 import { TemplateCard } from "@/components/templates/template-card";
 
@@ -40,7 +41,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
               <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
               {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 8.4em is Newsreader's 14ch. */}
               <h1 className="mt-5 max-w-[8.4em] display-hero text-balance">
-                {t("h1a")} <em className="text-rose">{t("h1b")}</em>
+                {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>
@@ -48,7 +49,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
               {/* Through EagerImg: drawn here it was a preload hint in this page's RSC payload, which the
                   header's prefetch of /long-distance added to every other page it was open on. */}
               <EagerImg src={HERO_ART.ldr} srcSet={heroSrcSet(HERO_ART.ldr)} sizes={heroSizes("(min-width: 1024px) 460px")} alt="" width={1800} height={1350} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-              <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-white px-4 py-2.5 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift">{t("polaroid")}</span>
+              <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-card px-4 py-2.5 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift">{t("polaroid")}</span>
             </div>
           </div>
           <div className="mt-12">
@@ -60,7 +61,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
           </div>
         </div>
       </section>
-      <TornEdge from="#FFE9EC" to="var(--brand-paper)" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-paper)" />
 
       <section className="bg-paper py-20 lg:py-28">
         <div className="container-x">
@@ -78,6 +79,16 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
                 <p className="relative mt-4 border-t border-forest/10 pt-3 text-[13.5px] leading-snug text-forest/70">
                   <span className="font-semibold text-forest">{t("virtual.twist")}</span> {v.twist[lang]}
                 </p>
+                {v.id === "plan-the-visit" ? (
+                  // The one idea that is a place on the site: the whole card opens Dates, on their town once the box above has it (walk-rooms-14).
+                  <PlanVisitLink label={`${v.title[lang]}: ${t("virtual.openMap")}`} className="group absolute inset-0 z-10 flex items-end rounded-[26px] p-5 outline-none focus-visible:ring-2 focus-visible:ring-rose/50">
+                    <span aria-hidden="true" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 group-hover:underline">
+                      {t("virtual.openMap")}
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </PlanVisitLink>
+                ) : null}
+                {v.id === "plan-the-visit" ? <span aria-hidden="true" className="h-9" /> : null}
               </li>
             ))}
           </ul>

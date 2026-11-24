@@ -12,7 +12,7 @@ import { IDEAS, VIBE_IDS, VIBE_KINDS, VIBES } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, KIND_IDS, KINDS } from "@/lib/dates/kinds";
 import { WENT_AS_IDS, WENT_AS_LABELS } from "@/lib/dates/reviews";
 import { TICKETS } from "@/lib/dates/ticketed";
-import { GAMES } from "@/lib/games/catalogue";
+import { HAND_GAMES } from "@/lib/games/catalogue";
 import { PACK_IDS, PACKS } from "@/lib/games/packs";
 import { AIRPORTS } from "@/lib/trips/airports";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
@@ -87,7 +87,7 @@ function content() {
       sortOrder: m.sortOrder,
     })),
     occasions: OCCASIONS.map((id) => ({ id, emoji: OCCASION_META[id].emoji, label: both((m) => m.occasions[id]) })),
-    games: GAMES.map((game) => ({
+    games: HAND_GAMES.map((game) => ({
       key: game.key,
       path: game.href,
       rank: game.rank,

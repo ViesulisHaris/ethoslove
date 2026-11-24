@@ -37,6 +37,86 @@ test.describe("the front page by arrival link", () => {
   });
 });
 
+test.describe("gifts come first in the rooms", () => {
+  test("the header, the menu and the doors all start with Gifts", async ({ page, isMobile }) => {
+    await page.goto("/");
+    // The four doors on the page: Gifts is the first of them.
+    const doors = page.locator("section", { has: page.locator("h2", { hasText: "Whatever kind of couple you are this week." }) }).locator("ul > li > a");
+    await expect(doors).toHaveCount(4);
+    // The Gifts door opens the gallery itself, where a gift is chosen (the owner, 23 Nov 2026: "when i click gifts i want to see this page. the chooser").
+    expect(await doors.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/templates", "/dates", "/long-distance", "/games"]);
+    // And the footer's list of what there is to explore.
+    const explore = page.locator("footer ul").first().locator("a");
+    expect((await explore.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).slice(0, 4)).toEqual(["/gifts", "/templates", "/dates", "/trips"]);
+
+    const order = ["/templates", "/dates", "/trips", "/long-distance", "/games", "/pricing"];
+    if (isMobile) {
+      await page.getByRole("button", { name: "Open menu" }).click();
+      const rooms = page.getByRole("navigation", { name: "Menu" }).getByRole("link");
+      await expect(rooms).toHaveCount(order.length);
+      expect(await rooms.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(order);
+    } else {
+      const rooms = page.getByRole("navigation", { name: "Main" }).locator("a");
+      expect(await rooms.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(order);
+    }
+  });
+});
+
+test.describe("the category line, set like a maker's mark", () => {
+  test("is the first line a visitor reads on the front page, over the headline, and the page still says what it is found by", async ({ page }) => {
+    // It left the hero once for the search phrase, and the owner asked where it had gone (23 Nov 2026).
+    // The headline's second line is asked for in the same visit: after /es the site remembers the language, and "/" is Spanish too.
+    for (const [path, found, line, second] of [["/", "digital gift", "Digital cards by Tryethos", "Make them a gift"], ["/es", "regalo digital", "Tarjetas digitales de Tryethos", "Hazle un regalo"]] as const) {
+      await page.goto(path);
+      const h1 = page.getByRole("heading", { level: 1 });
+      await expect(h1, path).toContainText(second);
+      const mark = h1.locator("[data-brand-line]");
+      await expect(mark, path).toHaveText(line);
+      await expect(mark, path).toBeInViewport();
+      // It stands above the headline's own words, not after them.
+      expect((await mark.boundingBox())!.y, path).toBeLessThan((await h1.locator("em").boundingBox())!.y);
+      // The words the page is found by are in the sentence under the headline.
+      await expect(page.locator("main").getByText(found).first(), path).toBeVisible();
+      // Twice on the front page and no more: over the headline and under the footer's wordmark.
+      await expect(page.getByText(line), path).toHaveCount(2);
+      await expect(page.locator("footer").getByText(line), path).toBeVisible();
+    }
+  });
+
+  test("is over the headline of a Dates link's hero too (walk-front-6)", async ({ page }) => {
+    for (const [path, line, second] of [["/?ref=dates-test", "Digital cards by Tryethos", "Find the date."], ["/es?ref=dates-test", "Tarjetas digitales de Tryethos", ""]] as const) {
+      await page.goto(path);
+      const h1 = page.getByRole("heading", { level: 1 });
+      if (second) await expect(h1, path).toContainText(second);
+      await expect(h1.locator("[data-brand-line]"), path).toHaveText(line);
+      expect((await h1.locator("[data-brand-line]").boundingBox())!.y, path).toBeLessThan((await h1.locator("em").boundingBox())!.y);
+      await expect(page.getByText(line), path).toHaveCount(2);
+    }
+  });
+
+  test("is one small line under the footer's wordmark on an ordinary page, and nowhere else on it", async ({ page }) => {
+    for (const [path, line] of [["/pricing", "Digital cards by Tryethos"], ["/es/templates/bouquet", "Tarjetas digitales de Tryethos"]] as const) {
+      await page.goto(path);
+      await expect(page.getByText(line), path).toHaveCount(1);
+      await expect(page.locator("footer").getByText(line), path).toBeVisible();
+      // Not in the header, and not in the page's title.
+      await expect(page.locator("header").getByText(line), path).toHaveCount(0);
+      expect(await page.title(), path).not.toMatch(/Tryethos|Digital cards|Tarjetas digitales/);
+    }
+  });
+
+  test("is in what machines read: the Organization's slogan and the first words of /llms.txt", async ({ page, request }) => {
+    await page.goto("/");
+    const data = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("");
+    expect(data).toContain('"slogan":"Digital cards by Tryethos"');
+    expect(data).toMatch(/"alternateName":\["[^"]+","Tryethos"\]/);
+    const llms = await (await request.get("/llms.txt")).text();
+    expect(llms.split("\n").slice(0, 3)).toEqual(["# Ethos", "", expect.stringMatching(/^> Digital cards by Tryethos\. /)]);
+    // The share card's site name is still the brand alone.
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "Ethos");
+  });
+});
+
 test.describe("the creator programme", () => {
   test("says the deal and applies by email with the subject filled in", async ({ page }) => {
     await page.goto("/creators");
@@ -47,7 +127,7 @@ test.describe("the creator programme", () => {
     await expect(page.getByText("Your own purchases don't count", { exact: false })).toBeVisible();
     await expect(page.getByText("% off", { exact: false })).toHaveCount(0);
     const apply = page.locator("main").getByRole("link", { name: "Apply by email" }).first();
-    await expect(apply).toHaveAttribute("href", /^mailto:[^?]+\?subject=Creator%20programme%20application&body=/);
+    await expect(apply).toHaveAttribute("href", /^mailto:[^?]+\?subject=Creator%20program%20application&body=/);
   });
 
   test("in Spanish", async ({ page }) => {

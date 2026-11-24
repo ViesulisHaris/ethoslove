@@ -108,7 +108,8 @@ const nextConfig: NextConfig = {
     // names carry no version, and a redrawn picture goes out under the same one.
     // Files only: `/dates/:path*` would also match the city pages /dates/<city>, and `/trips/:path*` the trips.
     {
-      source: "/dates/:dir(ideas|hero|kinds)/:file",
+      // Files only, by their extension: `/dates/ideas/:file` also matched the page /dates/ideas/first-date.
+      source: "/dates/:dir(ideas|hero|kinds)/:file([^/]+\\.webp)",
       headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=31536000" }],
     },
     {
@@ -137,6 +138,18 @@ const nextConfig: NextConfig = {
       // as its referrer, so no analytics there, Meta's pixel included, can read the id from it. After
       // the rule above on purpose: for the same header, the later rule wins.
       source: "/:locale(es)?/checkout/:path*",
+      headers: [{ key: "Referrer-Policy", value: "strict-origin" }],
+    },
+    {
+      // A gift's address is private: whoever holds it can open the gift. Under the site-wide policy a
+      // page of ours opened from a gift (the "Made with Ethos" badge and the end screen's "or make one
+      // for someone else" both open /made-with-ethos, a marketing page where Clarity and the Meta
+      // pixel run after a yes to cookies) was handed the gift's whole address as its referrer. From a
+      // gift, and from its keep page, every page gets the origin and no more, as with the checkout
+      // above; the site's own attribution only ever kept the host. After the `/(.*)` rule on purpose.
+      // /gift-preview is the development-only stand-in for a gift page (a 404 in production), so the
+      // browser tests see the same policy a real gift has.
+      source: "/:locale(es)?/:gift(g|gift-preview)/:path*",
       headers: [{ key: "Referrer-Policy", value: "strict-origin" }],
     },
     {

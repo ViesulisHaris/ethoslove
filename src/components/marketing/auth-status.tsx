@@ -45,7 +45,7 @@ export function AuthStatus({ onNavigate, block, tone = "light" }: { onNavigate?:
   const quiet = cn(
     "inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap transition-[background-color,color,scale] duration-200 active:scale-[0.98]",
     block
-      ? "h-12 bg-white text-[15px] text-forest ring-1 ring-forest/10 hover:bg-white/70"
+      ? "h-12 bg-card text-[15px] text-forest ring-1 ring-forest/10 hover:bg-card/70"
       : cn("h-11 px-3.5 text-[14.5px]", dark ? "text-cream/85 hover:bg-white/10 hover:text-cream" : "text-forest/75 hover:bg-rose-mist hover:text-forest"),
   );
 

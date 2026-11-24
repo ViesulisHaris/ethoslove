@@ -103,7 +103,7 @@ export function MoveOffer({ manifest }: { manifest: TemplateManifest }) {
               className="group flex min-w-0 flex-col text-left disabled:cursor-wait"
             >
               <span className="relative block aspect-[390/600] w-full overflow-hidden rounded-2xl bg-ink/10 shadow-[0_18px_36px_-24px_rgba(23,19,15,0.6)] ring-1 ring-black/5 transition-transform duration-300 group-hover:-translate-y-0.5 group-active:scale-[0.98]">
-                <Image src={m.thumbnail.poster} alt="" fill sizes="(min-width: 768px) 130px, 30vw" quality={70} className="object-cover" />
+                <Image src={m.thumbnail.poster} alt="" fill sizes="(min-width: 768px) 130px, 30vw" quality={75} className="object-cover" />
                 {moving === m.slug ? (
                   <span className="absolute inset-0 grid place-items-center bg-ink/45 text-white">
                     <Loader2 className="size-5 animate-spin" />

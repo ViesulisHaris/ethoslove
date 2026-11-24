@@ -4,7 +4,7 @@ import es from "../../messages/es.json";
 import { routing } from "@/i18n/routing";
 import { TRIP_GIFT_SLUG } from "@/lib/trips/trip-gift";
 import { roomForPath, TOUR_ROOMS } from "@/lib/tour/room";
-import { canShow, playableSteps, stepAfter, TOURS, TRIP_GIFT_LINK, type TourStep } from "@/lib/tour/steps";
+import { canShow, firstStep, playableSteps, stepAfter, TOURS, TRIP_GIFT_LINK, type TourStep } from "@/lib/tour/steps";
 import { isCovered } from "@/lib/tour/dom";
 import { cardWidth, EDGE, GAP, glide, placeCard, scrollBand, scrollNeeded, spotlight, spotRadius, SPOT_PAD, type Box } from "@/lib/tour/geometry";
 
@@ -89,6 +89,19 @@ describe("step filtering", () => {
     expect(stepAfter(steps, 2, -1, present(["a", "c"]))).toBe(0);
     expect(stepAfter(steps, 2, 1, present(["a", "c"]))).toBe(-1);
     expect(stepAfter(steps, 0, -1, present(["a", "b", "c", "d"]))).toBe(-1);
+  });
+
+  it("opens on the first step not already done, and on the last if every one is", () => {
+    expect(firstStep(steps, present([]))).toBe(0);
+    expect(firstStep(steps, present(["a"]))).toBe(1);
+    expect(firstStep(steps, present(["a", "b", "c", "d"]))).toBe(3);
+  });
+
+  it("Dates: picking the town is done once there are places to show (walk-rooms-10)", () => {
+    const where = TOURS.dates.steps[0];
+    expect(where.id).toBe("where");
+    expect(where.doneWhen).toContain('[data-tour="places"]');
+    expect(TOURS.dates.ready.some((sel) => sel.startsWith('[data-tour="places"]'))).toBe(true);
   });
 });
 

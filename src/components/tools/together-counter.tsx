@@ -103,7 +103,7 @@ export function TogetherCounter() {
             <p className="mt-3 text-lg text-forest/80">{phrase}</p>
           </div>
           {/* Not tabular-nums: in Schibsted Grotesk that gives the thousands commas a whole digit's width ("23 , 995"). */}
-          <p className="mt-2 text-[13.5px] text-forest/55">{t("live", { hours: number.format(Math.floor(seconds / 3600)), minutes: number.format(Math.floor(seconds / 60)), seconds: number.format(seconds) })}</p>
+          <p className="mt-2 text-[13.5px] text-forest/65">{t("live", { hours: number.format(Math.floor(seconds / 3600)), minutes: number.format(Math.floor(seconds / 60)), seconds: number.format(seconds) })}</p>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2">
             <MilestoneList title={t("next")} items={ahead} label={label} when={when} showDay={showDay} highlight />
@@ -167,13 +167,13 @@ export function TogetherCounter() {
 function MilestoneList({ title, items, label, when, showDay, highlight = false }: { title: string; items: Milestone[]; label: (x: Milestone) => string; when: (x: Milestone) => string; showDay: (d: Day) => string; highlight?: boolean }) {
   return (
     <div>
-      <h3 className="text-[12px] font-semibold tracking-[0.18em] text-forest/55 uppercase">{title}</h3>
+      <h3 className="text-[12px] font-semibold tracking-[0.18em] text-forest/65 uppercase">{title}</h3>
       <ul className="mt-3 divide-y divide-forest/10">
         {items.map((x) => (
           <li key={`${x.kind}-${x.count}`} className="flex items-baseline justify-between gap-4 py-3">
             <span>
               <span className={`block font-display text-xl leading-tight ${highlight ? "text-forest" : "text-forest/70"}`}>{label(x)}</span>
-              <span className="mt-0.5 block text-[13.5px] text-forest/55">{showDay(x.on)}</span>
+              <span className="mt-0.5 block text-[13.5px] text-forest/65">{showDay(x.on)}</span>
             </span>
             <span className={`shrink-0 text-[13.5px] font-medium ${highlight ? "text-rose-deep" : "text-forest/45"}`}>{when(x)}</span>
           </li>

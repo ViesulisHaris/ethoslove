@@ -13,7 +13,7 @@ import type { useRoom } from "./use-room";
 
 export type { Entry, Mode, Session };
 
-const NAMES_KEY = "ethos.games.names";
+export const NAMES_KEY = "ethos.games.names";
 /** How long a guest waits for the room's maker before being told the room may be gone. */
 const NO_HOST_MS = 8000;
 const input = "h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none placeholder:text-forest/40 focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]";
@@ -261,7 +261,7 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
                 ) : null}
                 {ready && !host && hostPeer ? (
                   <>
-                    <p className="mt-3 text-[13.5px] text-forest/55">{t("two.hostStarts", { name: hostPeer.name || t("someone") })}</p>
+                    <p className="mt-3 text-[13.5px] text-forest/65">{t("two.hostStarts", { name: hostPeer.name || t("someone") })}</p>
                     <GuestAutoStart room={room} hostId={hostPeer.id} onTaken={() => setTaken(true)} onStart={(first) => onStart({ mode: "two", code: entry?.code ?? null, host: false, names: [hostPeer.name || t("someone"), entry?.name ?? names[0].trim()], peer: hostPeer.id, first })} />
                   </>
                 ) : null}

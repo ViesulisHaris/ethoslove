@@ -55,10 +55,10 @@ export function UnwrapSection({ manifest, groupCard = false }: { manifest: Templ
     if (busy || plan.stops.length === 0) return;
     setBusy("plan");
     try {
-      const [{ planUnwrap }, { ideaById }] = await Promise.all([import("@/lib/dates/plan-gift"), import("@/lib/dates/ideas")]);
+      const [{ planUnwrap }, { plannedIdea }] = await Promise.all([import("@/lib/dates/plan-gift"), import("@/lib/dates/ideas")]);
       const photos = await gatherPhotos(plan.stops.filter((s) => s.named !== false).map((s) => ({ id: s.id, name: s.name, lat: s.lat, lng: s.lng })));
       const link = `${giftLocale === "es" ? "/es" : ""}/plan#p=${encodePlan(plan)}`;
-      patch({ unwrap: planUnwrap(plan, giftLocale, { photos, link, title: ideaById(plan.idea)?.title[giftLocale] }) });
+      patch({ unwrap: planUnwrap(plan, giftLocale, { photos, link, title: plannedIdea(plan)?.title[giftLocale] }) });
     } finally {
       setBusy(null);
     }

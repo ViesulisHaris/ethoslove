@@ -233,7 +233,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Digital bouquet maker",
       title: "Digital Bouquet Maker: Virtual Flowers with a Note",
-      description: "Build a digital bouquet stem by stem: roses, peonies, tulips or sunflowers in your colours, wrapped, with a card inside for your message. Flowers that never wilt.",
+      description: "Build a digital bouquet stem by stem: roses, peonies, tulips or sunflowers in your colors, wrapped, with a card inside for your message. Flowers that never wilt.",
       howTo: "How to make a digital bouquet",
     },
     es: {
@@ -260,7 +260,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   fireside: {
     en: {
       keyword: "Digital Christmas letter",
-      title: "Fireside: A Cosy Digital Christmas Letter",
+      title: "Fireside: A Cozy Digital Christmas Letter",
       description: "A candle, a blanket and a letter by the window, with your photos and a song: a warm digital Christmas gift for someone you won't see this year.",
       howTo: "How to send a Christmas letter by the fire",
     },
@@ -596,15 +596,15 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "spooky-season": {
     en: {
       keyword: "Spooky season gift",
-      title: "Spooky Season Gift: A Cosy Halloween Collage",
-      description: "Blow the leaves away: a cosy Halloween collage of black cats, pumpkins, film and your photos, with your song. A spooky season gift for your person.",
-      howTo: "How to make a spooky season collage",
+      title: "Spooky Season Gift: A Cozy Halloween Collage",
+      description: "Blow the leaves away: a cozy Halloween collage of black cats, pumpkins, film and your photos, with your song. A spooky season gift for your person.",
+      howTo: "How to make a Spooky Season collage",
     },
     es: {
       keyword: "Regalo spooky season",
       title: "Regalo spooky season: collage de Halloween",
       description: "Sopla las hojas: un collage de Halloween con gatos negros, calabazas, carrete y vuestras fotos, con vuestra canción. Un regalo spooky season.",
-      howTo: "Cómo hacer un collage spooky season",
+      howTo: "Cómo hacer un collage Spooky Season",
     },
   },
   "dark-romance": {
@@ -624,8 +624,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "favorite-person": {
     en: {
       keyword: "Favorite person gift",
-      title: "Favorite Person Gift: A Watercolour Scrapbook",
-      description: "Lift the tissue paper: a watercolour scrapbook of your photos, pearls and pressed flowers, for your favorite person. A digital gift for no reason at all.",
+      title: "Favorite Person Gift: A Watercolor Scrapbook",
+      description: "Lift the tissue paper: a watercolor scrapbook of your photos, pearls and pressed flowers, for your favorite person. A digital gift for no reason at all.",
       howTo: "How to make a gift for your favorite person",
     },
     es: {
@@ -668,21 +668,21 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       keyword: "Be my boo card",
       title: "Be My Boo: A Cute Halloween Card with Photos",
       description: "Tap the ghost: a cute Halloween collage of your photos, pumpkins, bats and a black cat, with your message. Ask them to be your boo.",
-      howTo: "How to make a be my boo card",
+      howTo: "How to make a Be My Boo card",
     },
     es: {
       keyword: "Tarjeta be my boo",
       title: "Be My Boo: tarjeta de Halloween con tus fotos",
       description: "Toca el fantasma: un collage de Halloween con vuestras fotos, calabazas, murciélagos y un gato negro, con tu mensaje. Pídele que sea tu boo.",
-      howTo: "Cómo hacer una tarjeta be my boo",
+      howTo: "Cómo hacer una tarjeta Be My Boo",
     },
   },
   "fall-for-you": {
     en: {
       keyword: "Autumn love gift",
-      title: "Fall for You: A Cosy Autumn Love Collage",
+      title: "Fall for You: A Cozy Autumn Love Collage",
       description: "Light the candle: a gingham collage of your photos, real leaves and their name in letter blocks, with your song. An autumn gift for the one you fell for.",
-      howTo: "How to make a fall for you collage",
+      howTo: "How to make a Fall for You collage",
     },
     es: {
       keyword: "Regalo de amor de otoño",
@@ -765,13 +765,13 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
     en: {
       keyword: "Haunted house gift",
       title: "Haunted House: A Spooky Gift with Your Photos",
-      description: "Open the gate in the storm: every lit window holds a photo, and the door holds your letter. A haunted house Halloween gift they explore.",
+      description: "Open the gate in the storm: your photos wait behind lit windows, and your letter behind the door. A haunted house Halloween gift they explore.",
       howTo: "How to build a haunted house gift",
     },
     es: {
       keyword: "Casa encantada de regalo",
       title: "La casa encantada: un regalo de Halloween con fotos",
-      description: "Abre la verja en plena tormenta: cada ventana encendida guarda una foto y la puerta guarda tu carta. Una casa encantada para Halloween.",
+      description: "Abre la verja en plena tormenta: tus fotos esperan tras ventanas encendidas y tu carta tras la puerta. Una casa encantada para Halloween.",
       howTo: "Cómo hacer una casa encantada de regalo",
     },
   },

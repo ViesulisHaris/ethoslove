@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Share, X } from "lucide-react";
 
@@ -13,14 +13,37 @@ const S = {
   es: { tip: "Tenlo en tu móvil: toca Compartir y luego «Añadir a pantalla de inicio».", close: "Cerrar" },
 };
 
-/** iOS Safari only — the one browser with no install prompt of its own. */
-export function HomeScreenTip({ locale, onReplay }: { locale: "en" | "es"; onReplay?: () => void }) {
-  const isIosSafari = typeof navigator !== "undefined" && /iPhone|iPad/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent) && !window.matchMedia("(display-mode: standalone)").matches;
-  const [open, setOpen] = useState(isIosSafari);
+/**
+ * The end is seen before the tip comes, and the tip goes by itself: at the top of the screen it lay
+ * over the last words of the gifts that end there (String the Lights' sign, "Fin. Por ahora.").
+ */
+export const TIP_AFTER_MS = 5000;
+export const TIP_FOR_MS = 12000;
+
+/**
+ * iOS Safari only — the one browser with no install prompt of its own.
+ *
+ * `held` while something modal is over the gift (the reaction sheet): the tip comes about when a
+ * recipient opens that sheet, and in WebKit it drew undimmed beside the sheet with its close button
+ * still under a finger. It stands down while held, and comes back when the sheet closes if its time
+ * is not up.
+ */
+export function HomeScreenTip({ locale, onReplay, held = false }: { locale: "en" | "es"; onReplay?: () => void; held?: boolean }) {
+  const [open, setOpen] = useState(false);
   void onReplay;
+  useEffect(() => {
+    const isIosSafari = /iPhone|iPad/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent) && !window.matchMedia("(display-mode: standalone)").matches;
+    if (!isIosSafari) return;
+    const show = window.setTimeout(() => setOpen(true), TIP_AFTER_MS);
+    const hide = window.setTimeout(() => setOpen(false), TIP_AFTER_MS + TIP_FOR_MS);
+    return () => {
+      window.clearTimeout(show);
+      window.clearTimeout(hide);
+    };
+  }, []);
   return (
     <AnimatePresence>
-      {open ? (
+      {open && !held ? (
         // At the top, left of the sound button: at the bottom it sat over the end screen's buttons on
         // the templates that end at the foot of the screen.
         <motion.div initial={{ y: -60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -60, opacity: 0 }} className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-16 left-4 z-[75] flex items-center gap-3 rounded-2xl bg-white/95 p-3 text-sm text-ink shadow-lift backdrop-blur">

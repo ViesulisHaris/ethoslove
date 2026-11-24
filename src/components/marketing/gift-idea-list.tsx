@@ -8,11 +8,19 @@ import { getManifest } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { sendsFree } from "@/lib/gift/free-tier";
 
+/**
+ * A line to borrow: something to type into one of the template's own fields, short enough to fit
+ * it. `field` is that field's key in the template's schema, or one of the three lib/gift/field-limit.ts
+ * knows for every gift ("message", "caption", and "freeNote" for a free Letter's short note), which is
+ * how tests/unit/gift-guides.test.ts proves the line fits.
+ */
+export type BorrowedLine = { field: string; where: string; text: string };
+
 /** One gift idea: a template, and what it is for this person or this day. */
 export type GiftIdea = { template: string; heading: string; body: string };
 
 /** The ideas whose template still exists, each with its manifest. */
-export function withManifests(ideas: readonly GiftIdea[]): (GiftIdea & { manifest: TemplateManifest })[] {
+export function withManifests<T extends GiftIdea>(ideas: readonly T[]): (T & { manifest: TemplateManifest })[] {
   return ideas.flatMap((idea) => {
     const manifest = getManifest(idea.template);
     return manifest ? [{ ...idea, manifest }] : [];
@@ -20,21 +28,12 @@ export function withManifests(ideas: readonly GiftIdea[]): (GiftIdea & { manifes
 }
 
 /**
- * A numbered list of gift ideas, as on the gift-idea and occasion pages: the template's poster, what
- * it is for them, and a way into the editor. Two columns on a wide screen. Each idea is an h2 where the
- * list is the page, an h3 under a heading of its own.
+ * A numbered list of gift ideas, as on the /gifts/for-* pages: the template's poster, what it is
+ * for them, and a way into the editor. Two columns on a wide screen. Each idea is an h2 where the
+ * list is the page, an h3 under a heading of its own. The gift pages by kind and the occasion
+ * lists show their ideas as picture cards instead (components/marketing/spread).
  */
-export async function GiftIdeaList({
-  ideas,
-  locale,
-  heading: Heading = "h3",
-  className,
-}: {
-  ideas: (GiftIdea & { manifest: TemplateManifest })[];
-  locale: GiftLocale;
-  heading?: "h2" | "h3";
-  className?: string;
-}) {
+export async function GiftIdeaList({ ideas, locale, heading: Heading = "h3", className }: { ideas: (GiftIdea & { manifest: TemplateManifest })[]; locale: GiftLocale; heading?: "h2" | "h3"; className?: string }) {
   const t = await getTranslations("recipients");
   return (
     <ol className={cn("grid gap-x-12 lg:grid-cols-2", className)}>
@@ -55,10 +54,16 @@ export async function GiftIdeaList({
               </Link>
             </Heading>
             <p className="mt-2.5 leading-relaxed text-ink-soft">{idea.body}</p>
-            <Link href={`/create/${idea.template}`} className="mt-3 inline-flex min-h-10 items-center gap-1.5 text-sm font-semibold text-coral underline-offset-4 hover:underline">
-              {t("make")}
-              <ArrowRight aria-hidden="true" className="size-4" />
-            </Link>
+            <div className="mt-3 flex flex-wrap items-center gap-x-5">
+              <Link
+                href={`/create/${idea.template}`}
+                data-testid="idea-make"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-sm font-semibold text-coral underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 active:text-coral-deep"
+              >
+                {t("make")}
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </Link>
+            </div>
           </div>
         </li>
       ))}

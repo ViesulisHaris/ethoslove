@@ -89,7 +89,7 @@ export async function MembershipCompare({
         </div>
 
         {/* overflow-clip, not hidden: hidden would make this box the sticky heads' scroller and pin them to nothing. */}
-        <div className="mx-auto mt-10 max-w-4xl overflow-clip rounded-[28px] bg-white shadow-lift ring-1 ring-forest/5 sm:mt-12" data-reveal style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
+        <div className="mx-auto mt-10 max-w-4xl overflow-clip rounded-[28px] bg-card shadow-lift ring-1 ring-forest/5 sm:mt-12" data-reveal style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
           {/* Separate borders, not collapsed: a collapsed one is painted over the table's white, not the cell's dusk. */}
           <table className="w-full table-fixed border-separate border-spacing-0 text-left" data-testid="membership-compare">
             <caption className="sr-only">{t("title")}</caption>
@@ -100,10 +100,10 @@ export async function MembershipCompare({
             </colgroup>
             <thead>
               <tr>
-                <th scope="col" className="sticky top-0 z-10 bg-white px-3.5 py-4 align-bottom text-eyebrow font-medium text-ink-soft sm:px-7 sm:py-5">
+                <th scope="col" className="sticky top-0 z-10 bg-card px-3.5 py-4 align-bottom shadow-[inset_0_-1px_0_var(--color-line)] text-eyebrow font-medium text-ink-soft sm:px-7 sm:py-5">
                   {t("feature")}
                 </th>
-                <th scope="col" className="sticky top-0 z-10 bg-white px-2 py-4 text-center align-bottom sm:px-4 sm:py-5">
+                <th scope="col" className="sticky top-0 z-10 bg-card px-2 py-4 text-center align-bottom shadow-[inset_0_-1px_0_var(--color-line)] sm:px-4 sm:py-5">
                   <span className="font-display text-[19px] text-forest sm:text-[22px]">{t("free")}</span>
                 </th>
                 <th scope="col" className="sticky top-0 z-10 bg-dusk px-2 py-4 text-center align-bottom text-cream sm:px-4 sm:py-5">

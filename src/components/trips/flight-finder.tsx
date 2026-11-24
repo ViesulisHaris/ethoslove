@@ -109,7 +109,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
           onClick={swap}
           aria-label={t("swap")}
           title={t("swap")}
-          className="col-start-2 row-span-2 row-start-1 grid size-11 place-items-center rounded-full border border-forest/10 bg-white text-rose-deep shadow-soft transition-transform hover:bg-rose-mist active:scale-95 @md:row-span-1"
+          className="col-start-2 row-span-2 row-start-1 grid size-11 place-items-center rounded-full border border-forest/10 bg-card text-rose-deep shadow-soft transition-transform hover:bg-blush-paper active:scale-95 @md:row-span-1"
         >
           <ArrowLeftRight aria-hidden="true" className="size-[18px] rotate-90 @md:rotate-0" />
         </button>
@@ -130,15 +130,15 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
           allowOneWay
           alignTo={dateRow}
         />
-        <div className="col-span-2 flex h-14 items-center justify-between gap-1 rounded-2xl border border-forest/15 bg-white px-1.5 @xl:col-span-1">
-          <button type="button" onClick={() => setAdults((n) => Math.max(MIN_ADULTS, n - 1))} disabled={adults <= MIN_ADULTS} aria-label={t("fewer")} className="grid size-11 place-items-center rounded-xl text-forest hover:bg-rose-mist disabled:opacity-35 disabled:hover:bg-transparent">
+        <div className="col-span-2 flex h-14 items-center justify-between gap-1 rounded-2xl border border-forest/15 bg-card px-1.5 @xl:col-span-1">
+          <button type="button" onClick={() => setAdults((n) => Math.max(MIN_ADULTS, n - 1))} disabled={adults <= MIN_ADULTS} aria-label={t("fewer")} className="grid size-11 place-items-center rounded-xl text-forest hover:bg-blush-paper disabled:opacity-35 disabled:hover:bg-transparent">
             <Minus aria-hidden="true" className="size-4" />
           </button>
           <span className="flex items-center gap-2 px-1 text-[15px] font-medium whitespace-nowrap text-forest" aria-live="polite">
             <Users aria-hidden="true" className="size-4 text-rose-deep" />
             {t("travellers", { count: adults })}
           </span>
-          <button type="button" onClick={() => setAdults((n) => Math.min(MAX_ADULTS, n + 1))} disabled={adults >= MAX_ADULTS} aria-label={t("more")} className="grid size-11 place-items-center rounded-xl text-forest hover:bg-rose-mist disabled:opacity-35 disabled:hover:bg-transparent">
+          <button type="button" onClick={() => setAdults((n) => Math.min(MAX_ADULTS, n + 1))} disabled={adults >= MAX_ADULTS} aria-label={t("more")} className="grid size-11 place-items-center rounded-xl text-forest hover:bg-blush-paper disabled:opacity-35 disabled:hover:bg-transparent">
             <Plus aria-hidden="true" className="size-4" />
           </button>
         </div>
@@ -160,7 +160,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
                 {content}
               </PartnerLink>
             ) : (
-              <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className={cn(BUTTON, press, "bg-white text-forest ring-1 ring-forest/15 hover:bg-rose-mist")}>
+              <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className={cn(BUTTON, press, "bg-card text-forest ring-1 ring-forest/15 hover:bg-blush-paper")}>
                 {content}
               </a>
             );
@@ -198,7 +198,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
           <p>{t("pick")}</p>
         )}
       </div>
-      <p className="mt-2 text-[12.5px] leading-snug text-forest/60">{t("smallPrint")}</p>
+      <p className="mt-2 text-[12.5px] leading-snug text-forest/65">{t("smallPrint")}</p>
     </div>
   );
 }

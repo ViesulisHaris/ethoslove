@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo";
 import { GameTable } from "@/components/games/cards";
+import { GameNotes } from "@/components/games/page/game-notes";
 import { RatherGame } from "@/components/games/rather-game";
 import { QuestionList, eitherOr } from "@/components/games/question-list";
 import { RATHER_PAIRS } from "@/lib/games/content";
@@ -26,6 +27,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
         intro={t("listIntro")}
         groups={[{ items: RATHER_PAIRS.map((p) => eitherOr(p.a[l], p.b[l], l)) }]}
       />
+      <GameNotes game="rather" locale={locale} />
     </GameTable>
   );
 }

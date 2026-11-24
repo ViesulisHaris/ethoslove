@@ -13,6 +13,13 @@ import { flightLinks, weekendAhead, type FlightSite } from "@/lib/trips/flights"
 import { CITIES } from "@/templates/_shared/places";
 import { WhereBox, type Where } from "@/components/dates/where-box";
 import { PartnerLink } from "@/components/trips/partner-link";
+import { setTheirTown } from "./plan-visit-link";
+
+/**
+ * The town boxes' field and its list on the card's cream, not pure white (walk-rooms-5). WhereBox is
+ * the Dates page's own, which this round leaves as it is, so the colour is set from here.
+ */
+const TOWN_BOX = "[&>div:first-child]:bg-card [&>ul]:bg-card";
 
 /** Further than this from any city we know, the halfway point is somewhere nobody can meet: open sea, or a lot of forest. */
 const NOWHERE_KM = 400;
@@ -121,16 +128,25 @@ export function MeetInTheMiddle() {
   const hours = (h: number) => String(Math.abs(h)).replace(".5", "½");
 
   return (
-    <div className="rounded-[32px] bg-white p-5 shadow-lift ring-1 ring-forest/5 sm:p-8">
+    <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-8">
       <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
         <div>
-          <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("you")}</p>
-          <WhereBox value={a} locale={locale} labels={{ ...labels, label: t("you") }} onPick={setA} />
+          <p className="mb-1.5 text-[12.5px] font-medium text-forest/65">{t("you")}</p>
+          <WhereBox value={a} locale={locale} labels={{ ...labels, label: t("you") }} onPick={setA} className={TOWN_BOX} />
         </div>
         <MoveHorizontal aria-hidden="true" className="mx-auto mb-3.5 hidden size-5 text-rose-deep sm:block" />
         <div>
-          <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("them")}</p>
-          <WhereBox value={b} locale={locale} labels={{ ...labels, label: t("them") }} onPick={setB} />
+          <p className="mb-1.5 text-[12.5px] font-medium text-forest/65">{t("them")}</p>
+          <WhereBox
+            value={b}
+            locale={locale}
+            labels={{ ...labels, label: t("them") }}
+            onPick={(where) => {
+              setB(where);
+              setTheirTown(where);
+            }}
+            className={TOWN_BOX}
+          />
         </div>
       </div>
 
@@ -142,7 +158,7 @@ export function MeetInTheMiddle() {
               {t("apart")}
             </p>
             <p className="mt-3 font-display text-[40px] leading-none text-forest tabular-nums">{number(result.km)} km</p>
-            <p className="mt-1.5 text-[14px] text-forest/60">{t("miles", { miles: number(milesOf(result.km)) })}</p>
+            <p className="mt-1.5 text-[14px] text-forest/65">{t("miles", { miles: number(milesOf(result.km)) })}</p>
           </div>
 
           <div className="rounded-[24px] bg-blush-paper p-5">
@@ -153,7 +169,7 @@ export function MeetInTheMiddle() {
             {result.near ? (
               <>
                 <p className="mt-3 font-display text-[32px] leading-[1.05] text-forest">{halfwayName}</p>
-                <p className="mt-1.5 text-[14px] text-forest/60">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
+                <p className="mt-1.5 text-[14px] text-forest/65">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
                 <Link href={`/dates?lat=${result.near.city.lat}&lng=${result.near.city.lng}&q=${encodeURIComponent(halfwayName)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: halfwayName })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -162,7 +178,7 @@ export function MeetInTheMiddle() {
             ) : (
               <>
                 <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{result.unnamed ? t("eachWay", { km: number(result.km / 2) }) : t("nowhere")}</p>
-                <p className="mt-1.5 text-[14px] leading-snug text-forest/60">{result.unnamed ? t("eachWaySub") : t("nowhereSub")}</p>
+                <p className="mt-1.5 text-[14px] leading-snug text-forest/65">{result.unnamed ? t("eachWaySub") : t("nowhereSub")}</p>
                 <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: b.name })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -205,7 +221,7 @@ export function MeetInTheMiddle() {
             <div className="flex flex-col gap-2">
               {flights.hops.map((f) => (
                 <div key={f.from.iata} className="flex flex-wrap items-center gap-2 sm:justify-end">
-                  <PartnerLink partner="aviasales" placement="meet_middle" href={f.aviasales} className="group inline-flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-[14px] font-semibold text-forest ring-1 ring-forest/10 transition-colors hover:bg-rose-mist">
+                  <PartnerLink partner="aviasales" placement="meet_middle" href={f.aviasales} className="group inline-flex min-h-11 items-center gap-1.5 rounded-full bg-card px-4 text-[14px] font-semibold text-forest ring-1 ring-forest/10 transition-colors hover:bg-paper-deep">
                     {cityName(f.from, locale)} → {cityName(f.to, locale)}
                     <span className="font-medium text-forest/65">· Aviasales</span>
                     <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -222,7 +238,7 @@ export function MeetInTheMiddle() {
               ))}
             </div>
           </div>
-          <p className="mt-3 text-[12px] leading-snug text-forest/60">
+          <p className="mt-3 text-[12px] leading-snug text-forest/65">
             {ta("meet.via")} {ta("disclosure")}
           </p>
         </div>

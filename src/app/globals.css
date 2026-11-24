@@ -8,14 +8,27 @@
 /* Brand tokens — the only place raw colours live.                     */
 /* ------------------------------------------------------------------ */
 :root {
-  /* Warm paper, plum ink, one rose accent. Everything else is a tint of these.
+  /* Cream paper, plum ink, one rose accent. Everything else is a tint of these.
+     The paper was a near-white (#fdf7f3) until 22 Nov 2026; beside a gift's page it read as plain
+     white, and the owner asked for the gift pages' cream on the whole site. A gift itself keeps
+     the paper it was drawn with: see .gift-root below.
      (The accent keeps its old name, "coral"; it is a raspberry rose now, 4.6:1 under white type.) */
-  --brand-paper: #fdf7f3;
-  --brand-paper-deep: #f7ebe5;
+  --brand-paper: #f3e1d5;
+  --brand-paper-deep: #e8cfc1;
   --brand-ink: #24121b;
   --brand-ink-soft: #5d4652;
-  --brand-coral: #d6336c;
-  --brand-coral-deep: #b0245a;
+  /* The rose is a shade deeper than it was (#d6336c) since the paper turned cream on 22 Nov 2026:
+     on the cream the old rose read at 3.6:1 as text, and the paper's colour on a rose button the
+     same. This one is 4.5:1 both ways on the paper (5.2 on a card), and it is the middle of the rose
+     button's own gradient. Where it is not enough, by the numbers: on the blush sections it is 4.4
+     and on the deeper paper 3.9, so small type there takes the deeper shade (5.6 and 4.9); on the
+     dark sections neither is for type (3.1 and 2.4), which is blush or cream there.
+     Type in the wine at part strength (text-forest/…) is 5.1:1 on the paper at 65% and 4.3 at 60%:
+     a label that has to be read is 65% or more (tests/unit/site-paper.test.ts). */
+  --brand-coral: #bd2a5e;
+  --brand-coral-deep: #a31f52;
+  --brand-rose-ui: #bd2a5e;
+  --brand-rose-ui-deep: #a31f52;
   --brand-rose: #f9d5de;
   --brand-rose-soft: #fdeef2;
   --brand-gold: #c9923a;
@@ -23,20 +36,22 @@
   --brand-moss: #2e6b4e;
   --brand-night: #14110e;
   --brand-night-raised: #1e1a16;
-  --brand-line: #ecdcd6;
+  --brand-line: #e3cbbd;
+  /* The blush sections (a hero's ground under its flowers, the ideas band): the paper with a little rose in it. */
+  --brand-blush-paper: #f6ddd3;
 
   /* shadcn semantic tokens mapped onto the brand */
   --background: var(--brand-paper);
   --foreground: var(--brand-ink);
-  --card: #fffaf7;
+  --card: #fbf1e9;
   --card-foreground: var(--brand-ink);
-  --popover: #fffaf7;
+  --popover: #fbf1e9;
   --popover-foreground: var(--brand-ink);
   --primary: var(--brand-coral);
   --primary-foreground: #fbf6ee;
   --secondary: var(--brand-paper-deep);
   --secondary-foreground: var(--brand-ink);
-  --muted: #f6eae5;
+  --muted: #ecd8cb;
   --muted-foreground: #6e5963;
   --accent: var(--brand-rose-soft);
   --accent-foreground: var(--brand-ink);
@@ -253,8 +268,16 @@
 /* ------------------------------------------------------------------ */
 /* Utilities                                                           */
 /* ------------------------------------------------------------------ */
+/* The layout is viewport-fit=cover: on a phone on its side the notch takes the left or right edge,
+   so the gutter is never less than the screen's own safe inset there. */
 @utility container-x {
-  @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  @apply mx-auto w-full max-w-7xl;
+  --gutter-x: 1.25rem;
+  padding-left: max(var(--gutter-x), env(safe-area-inset-left));
+  padding-right: max(var(--gutter-x), env(safe-area-inset-right));
+  @variant sm {
+    --gutter-x: 2rem;
+  }
 }
 @utility container-narrow {
   @apply mx-auto w-full max-w-3xl px-5 sm:px-8;
@@ -310,6 +333,18 @@
 }
 @utility grain {
   position: relative;
+}
+/*
+ * The ground of the owner's gallery mock-up (22 Nov 2026): the paper with light in it. A paler
+ * pool where the heading stands, a breath of rose off the right edge and the lower left, and the
+ * paper's own grain over it (.grain-overlay, as a child). For a page's head or a whole section.
+ */
+@utility paper-ground {
+  background-color: var(--brand-paper);
+  background-image:
+    radial-gradient(56% 62% at 26% 8%, rgb(255 246 238 / 0.85) 0%, rgb(255 246 238 / 0) 70%),
+    radial-gradient(42% 52% at 100% 34%, rgb(226 190 170 / 0.5) 0%, rgb(226 190 170 / 0) 72%),
+    radial-gradient(46% 44% at 0% 100%, rgb(238 200 190 / 0.45) 0%, rgb(238 200 190 / 0) 72%);
 }
 @utility grain-overlay {
   pointer-events: none;
@@ -368,18 +403,224 @@
 
   /* The couples' side: one rose in five weights, the amber of a star, and the greens and lilac
      the rooms use. Components use these names, never a hex, so the palette is one block here. */
-  --color-rose: #d6336c;
-  --color-rose-deep: #b0245a;
+  --color-rose: var(--brand-rose-ui);
+  --color-rose-deep: var(--brand-rose-ui-deep);
   --color-rose-ink: #8f1f47;
   --color-rose-soft: #ffe8ef;
   --color-rose-tint: #ffd6e2;
   --color-rose-mist: #fff0f4;
-  --color-blush-paper: #fff5f2;
+  --color-blush-paper: var(--brand-blush-paper);
   --color-star: #e0962a;
   --color-star-empty: #e9c0cb;
   --color-moss-soft: #dcebdf;
   --color-lilac: #4b3f9a;
   --color-lilac-soft: #e6e0f8;
+}
+
+/* ------------------------------------------------------------------ */
+/* A gift's page in the gift's own colours. The palette is a row of     */
+/* content/template-page-themes.ts; the page writes it as these          */
+/* variables on its wrapper ([data-page-theme]) and, through a rule of   */
+/* its own, on <body> while it is open, so the footer, the header's      */
+/* button and the ground behind them follow. The names are the page's    */
+/* own on purpose: a gift playing inside the page reads --brand-* and    */
+/* --foreground, and must not change colour with the page around it.     */
+/* Here are the defaults (the site's paper, ink and rose), the utilities */
+/* (bg-page-ground, text-page-ink …) and what is worked out from a       */
+/* palette. To put the whole site in one palette, set these on :root.    */
+/* ------------------------------------------------------------------ */
+:root {
+  --page-ground: var(--brand-paper);
+  --page-raised: #fbf1e9;
+  --page-band: var(--brand-paper-deep);
+  --page-ink: var(--brand-ink);
+  --page-body: var(--brand-ink-soft);
+  --page-accent: var(--brand-coral-deep);
+  --page-on-accent: #fffaf5;
+  --page-badge: #e3bfc9;
+  --page-footer: #2a0f1f;
+  --page-footer-text: #d9c6cd;
+}
+:root,
+[data-page-theme] {
+  /* A hairline, a pressed accent and a shadow, each made from the palette it sits in. The shadow is
+     tinted with the footer's colour, the deepest of every palette, so it darkens a night ground too. */
+  --page-line: color-mix(in oklab, var(--page-ink) 14%, var(--page-ground));
+  --page-accent-hover: color-mix(in oklab, var(--page-accent) 84%, var(--page-ink));
+  --page-shade: color-mix(in oklab, var(--page-footer) 42%, transparent);
+  --page-shade-soft: color-mix(in oklab, var(--page-footer) 20%, transparent);
+}
+
+@theme inline {
+  --color-page-ground: var(--page-ground);
+  --color-page-raised: var(--page-raised);
+  --color-page-band: var(--page-band);
+  --color-page-ink: var(--page-ink);
+  --color-page-body: var(--page-body);
+  --color-page-accent: var(--page-accent);
+  --color-page-accent-hover: var(--page-accent-hover);
+  --color-page-on-accent: var(--page-on-accent);
+  --color-page-badge: var(--page-badge);
+  --color-page-line: var(--page-line);
+  --shadow-page-card: 0 1px 0 color-mix(in oklab, var(--page-raised) 70%, transparent) inset, 0 18px 40px -26px var(--page-shade);
+  --shadow-page-lift: 0 2px 4px var(--page-shade-soft), 0 34px 60px -28px var(--page-shade);
+}
+
+/* The small label over a heading: the mono, spaced out like a printed index. */
+@utility text-page-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+[data-page-theme] {
+  background-color: var(--page-ground);
+  color: var(--page-ink);
+  /* Flowers spill off the page's sides; they must never make it scroll sideways. `clip`, not
+     `hidden`: it leaves the page's own vertical overflow alone, so a bloom can still lie across the
+     edge between two sections. */
+  overflow-x: clip;
+}
+/* Safari before 16 has no `clip`: there the page hides its sideways overflow the older way. */
+@supports not (overflow-x: clip) {
+  [data-page-theme] {
+    overflow-x: hidden;
+  }
+}
+[data-page-theme] ::selection {
+  background: color-mix(in oklab, var(--page-accent) 26%, transparent);
+}
+[data-page-theme] :focus-visible {
+  outline-color: var(--page-ink);
+}
+
+/* Outside the wrapper, while a themed page is open. */
+body:has([data-page-theme]) {
+  background-color: var(--page-ground);
+}
+body:has([data-page-theme]) [data-site-footer] {
+  background-color: var(--page-footer);
+  color: color-mix(in oklab, var(--page-footer-text) 30%, #fff);
+}
+body:has([data-page-theme]) [data-site-footer] :is(a, p, button):not(:hover) {
+  color: var(--page-footer-text);
+}
+body:has([data-page-theme]) .site-header .btn-rose {
+  background-image: none;
+  background-color: var(--page-accent);
+  color: var(--page-on-accent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 14px 30px -16px var(--page-accent);
+}
+/* The footer's one flower is the page art's (content/page-art.ts): faint, in the corner, there only
+   on a themed page and only where the corner is not the links' (a phone's is). Lazy and not
+   displayed anywhere else, so no other page fetches it. */
+[data-footer-flower] {
+  display: none;
+  position: absolute;
+  /* Half of it, leaning in from the right edge beside the last column: the corners are the footer's
+     own words (the language switch, the year), and it must not lie under them. */
+  /* As much of it shows as the page has margin for, and a little more: a sliver on a laptop, half on a wide desk. */
+  width: clamp(15rem, 23vw, 22rem);
+  right: calc(clamp(3.5rem, (100vw - 80rem) / 2 + 6.5rem, 12rem) - clamp(15rem, 23vw, 22rem));
+  top: 3.5rem;
+  rotate: -8deg;
+  pointer-events: none;
+  /* The render is a wine silhouette, made for The Letter's wine footer. Each gift's footer has its
+     own deep colour, so only the lily's light and shade are kept and the colour is the footer's. */
+  mix-blend-mode: luminosity;
+}
+@media (min-width: 64rem) {
+  body:has([data-page-theme]) [data-footer-flower] {
+    display: block;
+  }
+}
+
+/* The gift's cover and film in the lying phone's screen (hero-flatlay.tsx): drawn whole, at the
+   screen's width, over a soft copy of themselves that fills the taller screen. The picture's top
+   and bottom edges fade into that copy, so no line crosses the phone where one meets the other. */
+[data-page-theme] .hero-cover {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 3.5%, #000 96.5%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 3.5%, #000 96.5%, transparent);
+}
+
+/* The hero's phone, picked up to be played (components/templates/page/hero-flatlay.tsx): the live
+   gift comes up over the lying phone from that phone's own turn, and ends upright and still. Its
+   height is held to the screen's (--lift-vh: the part of it a phone's address bar leaves free,
+   where the browser can say). */
+[data-page-theme] {
+  --lift-vh: 100vh;
+}
+@supports (height: 100dvh) {
+  [data-page-theme] {
+    --lift-vh: 100dvh;
+  }
+}
+[data-page-theme] .hero-lift {
+  translate: -50% -50%;
+}
+/* Only a start is drawn (`from`), so nothing has to be held once it is over: `both` kept the
+   phone on a layer of its own for as long as it was up. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-page-theme] .hero-lift {
+    animation: hero-lift 0.7s var(--ease-out-quint) backwards;
+  }
+}
+/* The picked-up phone's soft shadow. The frame's own is a box-shadow blurred by 80px
+   (components/shared/phone-frame.tsx), which Android Chrome paints in squares: at 2.625 device
+   pixels to a pixel the squares showed, and the shadow stopped on a straight line under the phone
+   (the deep test of 21 Nov 2026; "shadows never cut off" is the owner's rule for the art). So here
+   the same shadow is drawn with gradients, which have no squares: the frame's shadow box (24px in
+   from each side, 30px down), each of its four edges a ramp along the blur's own curve (a
+   Gaussian of 40px, laid out to two and a half of them, where it is nothing), multiplied together
+   by the mask. It ends on nothing at every side, inside this layer's own box. Where a browser
+   cannot multiply masks the frame keeps its box-shadow. */
+@supports (mask-composite: intersect) or (-webkit-mask-composite: source-in) {
+  [data-page-theme] .hero-lift [data-phone-body] {
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.06);
+  }
+  [data-page-theme] .hero-lift::before {
+    --ramp: transparent 0, rgb(0 0 0 / 0.023) 20px, rgb(0 0 0 / 0.067) 40px, rgb(0 0 0 / 0.159) 60px, rgb(0 0 0 / 0.309) 80px, rgb(0 0 0 / 0.5) 100px, rgb(0 0 0 / 0.691) 120px, rgb(0 0 0 / 0.841) 140px, rgb(0 0 0 / 0.933) 160px,
+      rgb(0 0 0 / 0.977) 180px, #000 200px;
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -46px -76px -106px;
+    /* The colour stops 3px short of the layer's own box on every side. The phone is centred by a
+       share of its width, so the layer's sides fall between two pixels, and Chromium cut the mask
+       off at the last whole pixel: the half pixel beyond it was painted with no mask at all, a
+       straight column up to 24 levels darker than the page down the whole height of the layer,
+       on each side (the confirming test of 22 Nov 2026). Three pixels in, the ramp is 0.4% and
+       the colour ends on nothing; there is no paint left where the mask is not. */
+    background: linear-gradient(rgb(26 22 20 / 0.55), rgb(26 22 20 / 0.55)) center / calc(100% - 6px) calc(100% - 6px) no-repeat;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to right, var(--ramp)), linear-gradient(to left, var(--ramp)), linear-gradient(to bottom, var(--ramp)), linear-gradient(to top, var(--ramp));
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, var(--ramp)), linear-gradient(to left, var(--ramp)), linear-gradient(to bottom, var(--ramp)), linear-gradient(to top, var(--ramp));
+    mask-composite: intersect;
+  }
+}
+@keyframes hero-lift {
+  from {
+    opacity: 0;
+    rotate: var(--lift-turn, -12deg);
+    scale: 0.9;
+  }
+}
+
+/* A question's answer opens softly (the page's <details>). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-page-theme] details[open] > [data-reveal] {
+    animation: page-reveal 0.32s var(--ease-out-quint) both;
+  }
+}
+@keyframes page-reveal {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -594,14 +835,15 @@
 }
 /* Before the script has placed the pill, the room you are in carries the rose itself. */
 .nav-rooms:not([data-armed]) a[aria-current="page"] {
-  background: var(--color-rose-soft);
+  background: var(--color-blush-paper);
 }
 .nav-lit > i {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  background: var(--color-rose-soft);
+  /* The warm blush of the paper, as the phone menu marks its current room: the cool rose it was is the old palette's. */
+  background: var(--color-blush-paper);
   transition:
     translate 0.3s var(--ease-out-quint),
     scale 0.3s var(--ease-out-quint);
@@ -716,6 +958,108 @@
  */
 .gift-root {
   --u: min(1cqw, calc(1cqh * 0.6));
+}
+
+/*
+ * A gift keeps the paper it was drawn with. The site's paper became cream on 22 Nov 2026; a gift
+ * that asks for the site's paper, card or line by name (a button on Birthday Cinema does) must look
+ * to whoever opens it exactly as it did, in the editor's preview, in a demo and at its own link:
+ * the gift itself, and the page round it on the gift routes (its dark ground and what is written on it).
+ *
+ * Three rules, and tests/unit/gift-paper.test.ts holds them to the live site's values:
+ * 1. The colours themselves, and every name that is worked out from one of them. A name declared
+ *    on :root as var(--brand-…) is worked out there and handed down finished, so pinning --brand-line
+ *    alone left --border the cream's line inside a gift (the reaction sheet's recorder at /g/ draws
+ *    with it). Each such name is therefore said again here, to be worked out from the pinned colours.
+ * 2. The names the app's dark shell also sets (.dark): pinned only outside it, so a gift shown in
+ *    the dark shell reads the shell's dark values, as it did.
+ * 3. The whole document on a gift route: a toast there is drawn by the root layout, outside
+ *    [data-gift-page]. A rule of its own, because a browser without :has() drops a whole rule over
+ *    one selector it cannot read, and rules 1 and 2 must hold there too.
+ */
+.gift-root,
+[data-gift-page] {
+  --brand-paper: #fdf7f3;
+  --brand-paper-deep: #f7ebe5;
+  --brand-line: #ecdcd6;
+  --brand-blush-paper: #fff5f2;
+  --brand-coral: #d6336c;
+  --brand-coral-deep: #b0245a;
+  --brand-rose-ui: #d6336c;
+  --brand-rose-ui-deep: #b0245a;
+  --chart-1: var(--brand-coral);
+  --color-paper: var(--brand-paper);
+  --color-paper-deep: var(--brand-paper-deep);
+  --color-line: var(--brand-line);
+  --color-blush-paper: var(--brand-blush-paper);
+  --color-coral: var(--brand-coral);
+  --color-coral-deep: var(--brand-coral-deep);
+  --color-rose: var(--brand-rose-ui);
+  --color-rose-deep: var(--brand-rose-ui-deep);
+  --color-chart-1: var(--chart-1);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-border: var(--sidebar-border);
+}
+:root:not(.dark) .gift-root,
+:root:not(.dark) [data-gift-page] {
+  --background: var(--brand-paper);
+  --card: #fffaf7;
+  --popover: #fffaf7;
+  --primary: var(--brand-coral);
+  --secondary: var(--brand-paper-deep);
+  --muted: #f6eae5;
+  --border: var(--brand-line);
+  --input: var(--brand-line);
+  --sidebar-primary: var(--brand-coral);
+  --sidebar-border: var(--brand-line);
+}
+:root:has([data-gift-page]) {
+  --brand-paper: #fdf7f3;
+  --brand-paper-deep: #f7ebe5;
+  --brand-line: #ecdcd6;
+  --brand-blush-paper: #fff5f2;
+  --brand-coral: #d6336c;
+  --brand-coral-deep: #b0245a;
+  --brand-rose-ui: #d6336c;
+  --brand-rose-ui-deep: #b0245a;
+  --chart-1: var(--brand-coral);
+  --color-paper: var(--brand-paper);
+  --color-paper-deep: var(--brand-paper-deep);
+  --color-line: var(--brand-line);
+  --color-blush-paper: var(--brand-blush-paper);
+  --color-coral: var(--brand-coral);
+  --color-coral-deep: var(--brand-coral-deep);
+  --color-rose: var(--brand-rose-ui);
+  --color-rose-deep: var(--brand-rose-ui-deep);
+  --color-chart-1: var(--chart-1);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-border: var(--sidebar-border);
+  --background: var(--brand-paper);
+  --card: #fffaf7;
+  --popover: #fffaf7;
+  --primary: var(--brand-coral);
+  --secondary: var(--brand-paper-deep);
+  --muted: #f6eae5;
+  --border: var(--brand-line);
+  --input: var(--brand-line);
+  --sidebar-primary: var(--brand-coral);
+  --sidebar-border: var(--brand-line);
 }
 
 /*
@@ -1117,23 +1461,33 @@
   animation: deal-in 0.55s var(--ease-out-quint) backwards;
 }
 
+/* Today's question still loading a second after it was drawn: its answer cards dim (today-question.tsx). */
+@keyframes today-wait {
+  to {
+    opacity: 0.55;
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Sections that fade up into view (components/motion/reveal-root).    */
 /* Armed only once the observer has run, so nothing is ever hidden     */
 /* without the script that shows it; reduced motion only fades.        */
+/* Never what a <details> opens to: that is shown by whoever opens it, */
+/* and the observer does not watch it (a card opened near the foot of  */
+/* the screen stayed at opacity 0 until the page was scrolled).        */
 /* ------------------------------------------------------------------ */
-.reveal-ready [data-reveal]:not(.is-in) {
+.reveal-ready [data-reveal]:not(.is-in):not(details *) {
   opacity: 0;
   translate: 0 22px;
 }
-.reveal-ready [data-reveal] {
+.reveal-ready [data-reveal]:not(details *) {
   transition:
     opacity 0.7s var(--ease-out-quint),
     translate 0.8s var(--ease-out-quint);
   transition-delay: var(--reveal-delay, 0ms);
 }
 @media (prefers-reduced-motion: reduce) {
-  .reveal-ready [data-reveal]:not(.is-in) {
+  .reveal-ready [data-reveal]:not(.is-in):not(details *) {
     translate: none;
   }
 }
@@ -1162,6 +1516,10 @@
    call to action, the tour, the consent strip, links back to the site, and anything that would sell
    outside the App Store. Nothing changes for a browser, which never has the attribute. */
 html[data-app] [data-app-hide] {
+  display: none !important;
+}
+/* And the other way round: something drawn only inside the app, where a web link would not land. */
+html:not([data-app]) [data-app-only] {
   display: none !important;
 }
 /* The floating header's room at the top of a page (the marketing layout's --header-h), gone with it. */

@@ -25,6 +25,18 @@ export const BRAND = {
     etsy: "https://www.etsy.com/shop/TryEthos",
     pinterest: "https://www.pinterest.com/tryethosgifts/",
   },
+  /**
+   * What Ethos makes, in the owner's words (20 Nov 2026), set like a maker's mark: the small line
+   * over the front page's headline, one under the footer's wordmark, on the card a shared link
+   * shows, and for machines (the Organization's slogan, the first words of /llms.txt). Never a
+   * banner and never in a page title. It left the front page once, for the phrase the page is found
+   * by, and the owner asked where it had gone (23 Nov 2026): it stays. English never says "digital
+   * gift card", which means a voucher. Read it from here and nowhere else.
+   */
+  categoryLine: {
+    en: "Digital cards by Tryethos",
+    es: "Tarjetas digitales de Tryethos",
+  },
   /** Shown on free-tier gifts. Keep it short; it is the viral hook. */
   watermark: {
     en: "Made with Ethos",

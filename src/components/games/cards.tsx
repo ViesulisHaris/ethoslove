@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Sticker, type StickerId } from "@/templates/_shared/covers/stickers";
 import { AppReady } from "@/components/app/app-ready";
+import { BRAND_ROSE, BRAND_ROSE_DEEP } from "@/config/brand-colours";
 
 /**
  * The games' deck: cards that look like cards. A cream face with a thin inner frame and the rank
@@ -12,7 +13,7 @@ export type SuitName = "heart" | "diamond" | "club" | "spade";
 const RED: SuitName[] = ["heart", "diamond"];
 
 export function Suit({ suit, className, color }: { suit: SuitName; className?: string; color?: string }) {
-  const fill = color ?? (RED.includes(suit) ? "#D6336C" : "#2A0F1F");
+  const fill = color ?? (RED.includes(suit) ? BRAND_ROSE : "#2A0F1F");
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill={fill}>
       {suit === "heart" ? <path d="M12 21.2s-7.7-4.7-9.8-9.4C.7 8.4 2.7 4.3 6.6 4.3c2.1 0 3.6 1.1 5.4 3.2 1.8-2.1 3.3-3.2 5.4-3.2 3.9 0 5.9 4.1 4.4 7.5C19.7 16.5 12 21.2 12 21.2Z" /> : null}
@@ -32,7 +33,7 @@ export function Suit({ suit, className, color }: { suit: SuitName; className?: s
 
 export type BackTone = "rose" | "lilac" | "ocean" | "wine" | "gold";
 const BACKS: Record<BackTone, [string, string]> = {
-  rose: ["#D6336C", "#A61E52"],
+  rose: [BRAND_ROSE, BRAND_ROSE_DEEP],
   lilac: ["#5B4FB0", "#3B3187"],
   ocean: ["#2F7FA8", "#1E5876"],
   wine: ["#7A2A52", "#431630"],

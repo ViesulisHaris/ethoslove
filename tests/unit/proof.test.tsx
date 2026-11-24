@@ -47,7 +47,7 @@ vi.mock("next-intl/server", () => ({
   },
 }));
 
-const { Reactions } = await import("@/components/marketing/home/reactions");
+const { ProofLine, Reactions } = await import("@/components/marketing/home/reactions");
 const { Paywall } = await import("@/components/editor/paywall");
 const reactRoute = await import("@/app/api/gift/[shortId]/react/route");
 const privateRoute = await import("@/app/api/reactions/private/route");
@@ -150,14 +150,17 @@ describe("the home page's reactions section", () => {
     { emoji: "❤️", text: "Best thing anyone's made me." },
   ];
 
-  it("shows the samples, said to be samples, until real ones are approved", () => {
-    const html = intl(<Reactions />);
-    expect(html).toContain("Sample reactions.");
-    expect(html).toContain("Marco");
-    expect(html).not.toContain('data-testid="proof-numbers"');
+  it("draws nothing until real ones are approved: no made-up reactions, in either language", () => {
+    for (const locale of ["en", "es"] as const) expect(intl(<Reactions real={[]} numbers={{ opened: 14_000, more: true, opensEach: 3.3 }} />, locale)).toBe("");
+    // And the sample threads are gone from the messages: nothing can draw them again.
+    for (const messages of [en, es]) {
+      const reactions = (messages as { home: { reactions: Record<string, unknown> } }).home.reactions;
+      expect(reactions.cards).toBeUndefined();
+      expect(reactions.placeholderNote).toBeUndefined();
+    }
   });
 
-  it("then the real ones instead: emoji and words only, as text, and no sample names", () => {
+  it("shows the real ones: emoji and words only, as text, and no sample names", () => {
     const html = intl(<Reactions real={real} />);
     expect(html).toContain("Real reactions, shared by the people who got the gifts. Names left out.");
     expect(html.match(/A real reaction/g)).toHaveLength(3);
@@ -167,9 +170,11 @@ describe("the home page's reactions section", () => {
   });
 
   it("says the count, rounded down, in the reader's language", () => {
-    expect(intl(<Reactions numbers={{ opened: 14_000, more: true, opensEach: 3.3 }} />)).toContain("14,000+ Ethos gifts opened so far, 3.3 times each on average.");
-    expect(intl(<Reactions numbers={{ opened: 14_000, more: true, opensEach: null }} />)).toContain("14,000+ Ethos gifts opened so far.");
-    expect(intl(<Reactions numbers={{ opened: 14_000, more: true, opensEach: 3.3 }} />, "es")).toContain("14.000+ regalos de Ethos abiertos hasta ahora, 3,3 veces cada uno de media.");
+    expect(intl(<Reactions real={real} numbers={{ opened: 14_000, more: true, opensEach: 3.3 }} />)).toContain("14,000+ Ethos gifts opened so far, 3.3 times each on average.");
+    expect(intl(<Reactions real={real} numbers={{ opened: 14_000, more: true, opensEach: null }} />)).toContain("14,000+ Ethos gifts opened so far.");
+    expect(intl(<Reactions real={real} numbers={{ opened: 14_000, more: true, opensEach: 3.3 }} />, "es")).toContain("14.000+ regalos de Ethos abiertos hasta ahora, 3,3 veces cada uno de media.");
+    // With no reactions to show, the count alone, as one line (/gifts).
+    expect(intl(<ProofLine numbers={{ opened: 14_000, more: true, opensEach: null }} />)).toContain("14,000+ Ethos gifts opened so far.");
   });
 });
 
@@ -191,7 +196,8 @@ describe("the pay panel", () => {
     const html = pay();
     expect(html.match(/role="radio"/g)).toHaveLength(2);
     expect(html.match(/data-testid="pay-single"/g)).toHaveLength(1);
-    expect(html).toContain('data-testid="guarantee"');
+    // The refund guarantee lives in the terms, not under the pay button.
+    expect(html).not.toContain('data-testid="guarantee"');
   });
 
   it("opens with a real reaction instead, when the site has one it may show, and still within budget", () => {

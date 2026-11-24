@@ -8,7 +8,7 @@ import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
 import { Button } from "@/components/ui/button";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
-import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, chargedCurrency, formatAmount, templateProduct } from "@/lib/pricing/products";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 
@@ -53,12 +53,11 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
   const t = await getTranslations("adLanding");
   const tt = await getTranslations("templates");
   const tr = await getTranslations("home.reactions");
-  const tm = await getTranslations("money.paywall");
   const currency = chargedCurrency(shown);
   // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
   const free = sendsFree(manifest);
   // A premium template is bought as one; a free one only ever costs its "make it special" extras.
-  const price = formatAmount(PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency], currency, l);
+  const price = formatAmount(PRODUCTS[templateProduct(manifest.tier)].amounts[currency], currency, l);
   const hook = `hooks.${slug}` as const;
   // Real reactions only, and only with three of them: no samples on a page that asks for money.
   const [numbers, reactions] = await Promise.all([proofNumbers(), shownReactions(3, l === "es" ? "es" : "en")]);
@@ -128,7 +127,6 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
               </li>
             ))}
           </ol>
-          {free ? null : <p className="mt-5 text-sm text-ink-soft">{tm("guarantee")}</p>}
 
           {reactions.length >= 3 ? (
             <>

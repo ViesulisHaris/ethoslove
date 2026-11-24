@@ -1,0 +1,1450 @@
+{
+ "base": "/art/pages/",
+ "about": "pieces[id][colourway] (or .plain where a piece has no flowers in it): file, w, h, bytes at 2x, and x1 the same at 1x. An empty place in a piece (screen, photo, card) has box [w, h], the size of what a page lays into it; matrix, the CSS transform that takes that box (transform-origin 0 0, at the picture's top left corner) onto the place in the file's own pixels; corners (top left, top right, bottom right, bottom left) in those pixels; radius, the place's corner radius in box pixels; fill, the colour it is in the picture. For a picture shown at another width, scale the matrix by shown width / w. bezel is a second picture of the same size to lay over what was put in the screen.",
+ "colourways": {
+  "ivory": {
+   "ground": "#f1e3d3"
+  },
+  "blush": {
+   "ground": "#f6e3e0"
+  },
+  "wine": {
+   "ground": "#f3e2dc"
+  },
+  "moonlight": {
+   "ground": "#e6e6ef"
+  },
+  "plain": {
+   "ground": "#f1e3d3"
+  }
+ },
+ "pieces": {
+  "experience-flatlay": {
+   "blush": {
+    "file": "experience-flatlay-blush.webp",
+    "w": 1800,
+    "h": 1793,
+    "bytes": 237396,
+    "x1": {
+     "file": "experience-flatlay-blush-1x.webp",
+     "w": 900,
+     "h": 897,
+     "bytes": 123834
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       529.886,
+       416.639
+      ],
+      [
+       1034.191,
+       277.107
+      ],
+      [
+       1347.166,
+       1306.827
+      ],
+      [
+       842.862,
+       1446.359
+      ]
+     ],
+     "matrix": "matrix(1.29309, -0.35777, 0.37082, 1.22005, 529.886, 416.639)",
+     "x1": {
+      "corners": [
+       [
+        264.943,
+        208.319
+       ],
+       [
+        517.095,
+        138.554
+       ],
+       [
+        673.583,
+        653.413
+       ],
+       [
+        421.431,
+        723.179
+       ]
+      ],
+      "matrix": "matrix(0.64654, -0.17888, 0.18541, 0.61002, 264.943, 208.319)"
+     }
+    },
+    "photo": {
+     "box": [
+      400,
+      400
+     ],
+     "radius": 2.74,
+     "fill": "#3d2f29",
+     "corners": [
+      [
+       1358.326,
+       551.628
+      ],
+      [
+       1703.339,
+       602.978
+      ],
+      [
+       1648.694,
+       927.183
+      ],
+      [
+       1303.681,
+       875.834
+      ]
+     ],
+     "matrix": "matrix(0.86253, 0.12837, -0.13661, 0.81051, 1358.326, 551.628)",
+     "x1": {
+      "corners": [
+       [
+        679.163,
+        275.814
+       ],
+       [
+        851.669,
+        301.489
+       ],
+       [
+        824.347,
+        463.592
+       ],
+       [
+        651.841,
+        437.917
+       ]
+      ],
+      "matrix": "matrix(0.43126, 0.06419, -0.06831, 0.40526, 679.163, 275.814)"
+     }
+    },
+    "bezel": {
+     "file": "experience-flatlay-blush-bezel.webp",
+     "w": 1800,
+     "h": 1793,
+     "bytes": 75294,
+     "x1": {
+      "file": "experience-flatlay-blush-bezel-1x.webp",
+      "w": 900,
+      "h": 897,
+      "bytes": 28094
+     }
+    }
+   },
+   "ivory": {
+    "file": "experience-flatlay-ivory.webp",
+    "w": 1800,
+    "h": 1793,
+    "bytes": 238802,
+    "x1": {
+     "file": "experience-flatlay-ivory-1x.webp",
+     "w": 900,
+     "h": 897,
+     "bytes": 124534
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       529.886,
+       416.639
+      ],
+      [
+       1034.191,
+       277.107
+      ],
+      [
+       1347.166,
+       1306.827
+      ],
+      [
+       842.862,
+       1446.359
+      ]
+     ],
+     "matrix": "matrix(1.29309, -0.35777, 0.37082, 1.22005, 529.886, 416.639)",
+     "x1": {
+      "corners": [
+       [
+        264.943,
+        208.319
+       ],
+       [
+        517.095,
+        138.554
+       ],
+       [
+        673.583,
+        653.413
+       ],
+       [
+        421.431,
+        723.179
+       ]
+      ],
+      "matrix": "matrix(0.64654, -0.17888, 0.18541, 0.61002, 264.943, 208.319)"
+     }
+    },
+    "photo": {
+     "box": [
+      400,
+      400
+     ],
+     "radius": 2.74,
+     "fill": "#3d2f29",
+     "corners": [
+      [
+       1358.326,
+       551.628
+      ],
+      [
+       1703.339,
+       602.978
+      ],
+      [
+       1648.694,
+       927.183
+      ],
+      [
+       1303.681,
+       875.834
+      ]
+     ],
+     "matrix": "matrix(0.86253, 0.12837, -0.13661, 0.81051, 1358.326, 551.628)",
+     "x1": {
+      "corners": [
+       [
+        679.163,
+        275.814
+       ],
+       [
+        851.669,
+        301.489
+       ],
+       [
+        824.347,
+        463.592
+       ],
+       [
+        651.841,
+        437.917
+       ]
+      ],
+      "matrix": "matrix(0.43126, 0.06419, -0.06831, 0.40526, 679.163, 275.814)"
+     }
+    },
+    "bezel": {
+     "file": "experience-flatlay-ivory-bezel.webp",
+     "w": 1800,
+     "h": 1793,
+     "bytes": 75694,
+     "x1": {
+      "file": "experience-flatlay-ivory-bezel-1x.webp",
+      "w": 900,
+      "h": 897,
+      "bytes": 28258
+     }
+    }
+   },
+   "moonlight": {
+    "file": "experience-flatlay-moonlight.webp",
+    "w": 1800,
+    "h": 1793,
+    "bytes": 240102,
+    "x1": {
+     "file": "experience-flatlay-moonlight-1x.webp",
+     "w": 900,
+     "h": 897,
+     "bytes": 118506
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       529.886,
+       416.639
+      ],
+      [
+       1034.191,
+       277.107
+      ],
+      [
+       1347.166,
+       1306.827
+      ],
+      [
+       842.862,
+       1446.359
+      ]
+     ],
+     "matrix": "matrix(1.29309, -0.35777, 0.37082, 1.22005, 529.886, 416.639)",
+     "x1": {
+      "corners": [
+       [
+        264.943,
+        208.319
+       ],
+       [
+        517.095,
+        138.554
+       ],
+       [
+        673.583,
+        653.413
+       ],
+       [
+        421.431,
+        723.179
+       ]
+      ],
+      "matrix": "matrix(0.64654, -0.17888, 0.18541, 0.61002, 264.943, 208.319)"
+     }
+    },
+    "photo": {
+     "box": [
+      400,
+      400
+     ],
+     "radius": 2.74,
+     "fill": "#3d2f29",
+     "corners": [
+      [
+       1358.326,
+       551.628
+      ],
+      [
+       1703.339,
+       602.978
+      ],
+      [
+       1648.694,
+       927.183
+      ],
+      [
+       1303.681,
+       875.834
+      ]
+     ],
+     "matrix": "matrix(0.86253, 0.12837, -0.13661, 0.81051, 1358.326, 551.628)",
+     "x1": {
+      "corners": [
+       [
+        679.163,
+        275.814
+       ],
+       [
+        851.669,
+        301.489
+       ],
+       [
+        824.347,
+        463.592
+       ],
+       [
+        651.841,
+        437.917
+       ]
+      ],
+      "matrix": "matrix(0.43126, 0.06419, -0.06831, 0.40526, 679.163, 275.814)"
+     }
+    },
+    "bezel": {
+     "file": "experience-flatlay-moonlight-bezel.webp",
+     "w": 1800,
+     "h": 1793,
+     "bytes": 72990,
+     "x1": {
+      "file": "experience-flatlay-moonlight-bezel-1x.webp",
+      "w": 900,
+      "h": 897,
+      "bytes": 26792
+     }
+    }
+   },
+   "wine": {
+    "file": "experience-flatlay-wine.webp",
+    "w": 1800,
+    "h": 1793,
+    "bytes": 246314,
+    "x1": {
+     "file": "experience-flatlay-wine-1x.webp",
+     "w": 900,
+     "h": 897,
+     "bytes": 127798
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       529.886,
+       416.639
+      ],
+      [
+       1034.191,
+       277.107
+      ],
+      [
+       1347.166,
+       1306.827
+      ],
+      [
+       842.862,
+       1446.359
+      ]
+     ],
+     "matrix": "matrix(1.29309, -0.35777, 0.37082, 1.22005, 529.886, 416.639)",
+     "x1": {
+      "corners": [
+       [
+        264.943,
+        208.319
+       ],
+       [
+        517.095,
+        138.554
+       ],
+       [
+        673.583,
+        653.413
+       ],
+       [
+        421.431,
+        723.179
+       ]
+      ],
+      "matrix": "matrix(0.64654, -0.17888, 0.18541, 0.61002, 264.943, 208.319)"
+     }
+    },
+    "photo": {
+     "box": [
+      400,
+      400
+     ],
+     "radius": 2.74,
+     "fill": "#3d2f29",
+     "corners": [
+      [
+       1358.326,
+       551.628
+      ],
+      [
+       1703.339,
+       602.978
+      ],
+      [
+       1648.694,
+       927.183
+      ],
+      [
+       1303.681,
+       875.834
+      ]
+     ],
+     "matrix": "matrix(0.86253, 0.12837, -0.13661, 0.81051, 1358.326, 551.628)",
+     "x1": {
+      "corners": [
+       [
+        679.163,
+        275.814
+       ],
+       [
+        851.669,
+        301.489
+       ],
+       [
+        824.347,
+        463.592
+       ],
+       [
+        651.841,
+        437.917
+       ]
+      ],
+      "matrix": "matrix(0.43126, 0.06419, -0.06831, 0.40526, 679.163, 275.814)"
+     }
+    },
+    "bezel": {
+     "file": "experience-flatlay-wine-bezel.webp",
+     "w": 1800,
+     "h": 1793,
+     "bytes": 75490,
+     "x1": {
+      "file": "experience-flatlay-wine-bezel-1x.webp",
+      "w": 900,
+      "h": 897,
+      "bytes": 27930
+     }
+    }
+   }
+  },
+  "hero-flatlay": {
+   "blush": {
+    "file": "hero-flatlay-blush.webp",
+    "w": 1229,
+    "h": 1400,
+    "bytes": 210788,
+    "x1": {
+     "file": "hero-flatlay-blush-1x.webp",
+     "w": 615,
+     "h": 700,
+     "bytes": 84170
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       329.502,
+       369.712
+      ],
+      [
+       676.262,
+       285.984
+      ],
+      [
+       863.383,
+       993.999
+      ],
+      [
+       516.624,
+       1077.726
+      ]
+     ],
+     "matrix": "matrix(0.88913, -0.21469, 0.22171, 0.83888, 329.502, 369.712)",
+     "x1": {
+      "corners": [
+       [
+        164.751,
+        184.856
+       ],
+       [
+        338.131,
+        142.992
+       ],
+       [
+        431.692,
+        497
+       ],
+       [
+        258.312,
+        538.863
+       ]
+      ],
+      "matrix": "matrix(0.44456, -0.10734, 0.11085, 0.41944, 164.751, 184.856)"
+     }
+    },
+    "bezel": {
+     "file": "hero-flatlay-blush-bezel.webp",
+     "w": 1229,
+     "h": 1400,
+     "bytes": 46076,
+     "x1": {
+      "file": "hero-flatlay-blush-bezel-1x.webp",
+      "w": 615,
+      "h": 700,
+      "bytes": 17742
+     }
+    }
+   },
+   "ivory": {
+    "file": "hero-flatlay-ivory.webp",
+    "w": 1229,
+    "h": 1400,
+    "bytes": 210134,
+    "x1": {
+     "file": "hero-flatlay-ivory-1x.webp",
+     "w": 615,
+     "h": 700,
+     "bytes": 84678
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       329.502,
+       369.712
+      ],
+      [
+       676.262,
+       285.984
+      ],
+      [
+       863.383,
+       993.999
+      ],
+      [
+       516.624,
+       1077.726
+      ]
+     ],
+     "matrix": "matrix(0.88913, -0.21469, 0.22171, 0.83888, 329.502, 369.712)",
+     "x1": {
+      "corners": [
+       [
+        164.751,
+        184.856
+       ],
+       [
+        338.131,
+        142.992
+       ],
+       [
+        431.692,
+        497
+       ],
+       [
+        258.312,
+        538.863
+       ]
+      ],
+      "matrix": "matrix(0.44456, -0.10734, 0.11085, 0.41944, 164.751, 184.856)"
+     }
+    },
+    "bezel": {
+     "file": "hero-flatlay-ivory-bezel.webp",
+     "w": 1229,
+     "h": 1400,
+     "bytes": 46412,
+     "x1": {
+      "file": "hero-flatlay-ivory-bezel-1x.webp",
+      "w": 615,
+      "h": 700,
+      "bytes": 17892
+     }
+    }
+   },
+   "moonlight": {
+    "file": "hero-flatlay-moonlight.webp",
+    "w": 1229,
+    "h": 1400,
+    "bytes": 200902,
+    "x1": {
+     "file": "hero-flatlay-moonlight-1x.webp",
+     "w": 615,
+     "h": 700,
+     "bytes": 80778
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       329.502,
+       369.712
+      ],
+      [
+       676.262,
+       285.984
+      ],
+      [
+       863.383,
+       993.999
+      ],
+      [
+       516.624,
+       1077.726
+      ]
+     ],
+     "matrix": "matrix(0.88913, -0.21469, 0.22171, 0.83888, 329.502, 369.712)",
+     "x1": {
+      "corners": [
+       [
+        164.751,
+        184.856
+       ],
+       [
+        338.131,
+        142.992
+       ],
+       [
+        431.692,
+        497
+       ],
+       [
+        258.312,
+        538.863
+       ]
+      ],
+      "matrix": "matrix(0.44456, -0.10734, 0.11085, 0.41944, 164.751, 184.856)"
+     }
+    },
+    "bezel": {
+     "file": "hero-flatlay-moonlight-bezel.webp",
+     "w": 1229,
+     "h": 1400,
+     "bytes": 44326,
+     "x1": {
+      "file": "hero-flatlay-moonlight-bezel-1x.webp",
+      "w": 615,
+      "h": 700,
+      "bytes": 16618
+     }
+    }
+   },
+   "wine": {
+    "file": "hero-flatlay-wine.webp",
+    "w": 1229,
+    "h": 1400,
+    "bytes": 220460,
+    "x1": {
+     "file": "hero-flatlay-wine-1x.webp",
+     "w": 615,
+     "h": 700,
+     "bytes": 87332
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       329.502,
+       369.712
+      ],
+      [
+       676.262,
+       285.984
+      ],
+      [
+       863.383,
+       993.999
+      ],
+      [
+       516.624,
+       1077.726
+      ]
+     ],
+     "matrix": "matrix(0.88913, -0.21469, 0.22171, 0.83888, 329.502, 369.712)",
+     "x1": {
+      "corners": [
+       [
+        164.751,
+        184.856
+       ],
+       [
+        338.131,
+        142.992
+       ],
+       [
+        431.692,
+        497
+       ],
+       [
+        258.312,
+        538.863
+       ]
+      ],
+      "matrix": "matrix(0.44456, -0.10734, 0.11085, 0.41944, 164.751, 184.856)"
+     }
+    },
+    "bezel": {
+     "file": "hero-flatlay-wine-bezel.webp",
+     "w": 1229,
+     "h": 1400,
+     "bytes": 45720,
+     "x1": {
+      "file": "hero-flatlay-wine-bezel-1x.webp",
+      "w": 615,
+      "h": 700,
+      "bytes": 17592
+     }
+    }
+   }
+  },
+  "leaf-1": {
+   "plain": {
+    "file": "leaf-1.webp",
+    "w": 700,
+    "h": 398,
+    "bytes": 31482,
+    "x1": {
+     "file": "leaf-1-1x.webp",
+     "w": 350,
+     "h": 199,
+     "bytes": 13068
+    }
+   }
+  },
+  "leaf-2": {
+   "plain": {
+    "file": "leaf-2.webp",
+    "w": 700,
+    "h": 260,
+    "bytes": 29580,
+    "x1": {
+     "file": "leaf-2-1x.webp",
+     "w": 350,
+     "h": 130,
+     "bytes": 11922
+    }
+   }
+  },
+  "lily-open": {
+   "blush": {
+    "file": "lily-open-blush.webp",
+    "w": 900,
+    "h": 604,
+    "bytes": 57762,
+    "x1": {
+     "file": "lily-open-blush-1x.webp",
+     "w": 450,
+     "h": 302,
+     "bytes": 24518
+    }
+   },
+   "ivory": {
+    "file": "lily-open-ivory.webp",
+    "w": 900,
+    "h": 604,
+    "bytes": 57726,
+    "x1": {
+     "file": "lily-open-ivory-1x.webp",
+     "w": 450,
+     "h": 302,
+     "bytes": 24532
+    }
+   },
+   "moonlight": {
+    "file": "lily-open-moonlight.webp",
+    "w": 900,
+    "h": 604,
+    "bytes": 53074,
+    "x1": {
+     "file": "lily-open-moonlight-1x.webp",
+     "w": 450,
+     "h": 302,
+     "bytes": 22358
+    }
+   },
+   "wine": {
+    "file": "lily-open-wine.webp",
+    "w": 900,
+    "h": 604,
+    "bytes": 61990,
+    "x1": {
+     "file": "lily-open-wine-1x.webp",
+     "w": 450,
+     "h": 302,
+     "bytes": 25320
+    }
+   }
+  },
+  "lily-side": {
+   "blush": {
+    "file": "lily-side-blush.webp",
+    "w": 900,
+    "h": 726,
+    "bytes": 58622,
+    "x1": {
+     "file": "lily-side-blush-1x.webp",
+     "w": 450,
+     "h": 363,
+     "bytes": 26080
+    }
+   },
+   "ivory": {
+    "file": "lily-side-ivory.webp",
+    "w": 900,
+    "h": 726,
+    "bytes": 58754,
+    "x1": {
+     "file": "lily-side-ivory-1x.webp",
+     "w": 450,
+     "h": 363,
+     "bytes": 26260
+    }
+   },
+   "moonlight": {
+    "file": "lily-side-moonlight.webp",
+    "w": 900,
+    "h": 726,
+    "bytes": 53264,
+    "x1": {
+     "file": "lily-side-moonlight-1x.webp",
+     "w": 450,
+     "h": 363,
+     "bytes": 24854
+    }
+   },
+   "wine": {
+    "file": "lily-side-wine.webp",
+    "w": 900,
+    "h": 726,
+    "bytes": 61408,
+    "x1": {
+     "file": "lily-side-wine-1x.webp",
+     "w": 450,
+     "h": 363,
+     "bytes": 26220
+    }
+   }
+  },
+  "lily-stem-tall": {
+   "blush": {
+    "file": "lily-stem-tall-blush.webp",
+    "w": 1144,
+    "h": 1600,
+    "bytes": 216184,
+    "x1": {
+     "file": "lily-stem-tall-blush-1x.webp",
+     "w": 572,
+     "h": 800,
+     "bytes": 88130
+    }
+   },
+   "ivory": {
+    "file": "lily-stem-tall-ivory.webp",
+    "w": 1144,
+    "h": 1600,
+    "bytes": 217332,
+    "x1": {
+     "file": "lily-stem-tall-ivory-1x.webp",
+     "w": 572,
+     "h": 800,
+     "bytes": 87902
+    }
+   },
+   "moonlight": {
+    "file": "lily-stem-tall-moonlight.webp",
+    "w": 1144,
+    "h": 1600,
+    "bytes": 208740,
+    "x1": {
+     "file": "lily-stem-tall-moonlight-1x.webp",
+     "w": 572,
+     "h": 800,
+     "bytes": 85492
+    }
+   },
+   "wine": {
+    "file": "lily-stem-tall-wine.webp",
+    "w": 1144,
+    "h": 1600,
+    "bytes": 223254,
+    "x1": {
+     "file": "lily-stem-tall-wine-1x.webp",
+     "w": 572,
+     "h": 800,
+     "bytes": 90264
+    }
+   }
+  },
+  "lily-three-quarter": {
+   "blush": {
+    "file": "lily-three-quarter-blush.webp",
+    "w": 900,
+    "h": 771,
+    "bytes": 64860,
+    "x1": {
+     "file": "lily-three-quarter-blush-1x.webp",
+     "w": 450,
+     "h": 386,
+     "bytes": 27442
+    }
+   },
+   "ivory": {
+    "file": "lily-three-quarter-ivory.webp",
+    "w": 900,
+    "h": 771,
+    "bytes": 65328,
+    "x1": {
+     "file": "lily-three-quarter-ivory-1x.webp",
+     "w": 450,
+     "h": 386,
+     "bytes": 27550
+    }
+   },
+   "moonlight": {
+    "file": "lily-three-quarter-moonlight.webp",
+    "w": 900,
+    "h": 771,
+    "bytes": 60728,
+    "x1": {
+     "file": "lily-three-quarter-moonlight-1x.webp",
+     "w": 450,
+     "h": 386,
+     "bytes": 25900
+    }
+   },
+   "wine": {
+    "file": "lily-three-quarter-wine.webp",
+    "w": 900,
+    "h": 771,
+    "bytes": 69892,
+    "x1": {
+     "file": "lily-three-quarter-wine-1x.webp",
+     "w": 450,
+     "h": 386,
+     "bytes": 28936
+    }
+   }
+  },
+  "petal-1": {
+   "blush": {
+    "file": "petal-1-blush.webp",
+    "w": 360,
+    "h": 256,
+    "bytes": 13658,
+    "x1": {
+     "file": "petal-1-blush-1x.webp",
+     "w": 180,
+     "h": 128,
+     "bytes": 5840
+    }
+   },
+   "ivory": {
+    "file": "petal-1-ivory.webp",
+    "w": 360,
+    "h": 256,
+    "bytes": 14126,
+    "x1": {
+     "file": "petal-1-ivory-1x.webp",
+     "w": 180,
+     "h": 128,
+     "bytes": 5970
+    }
+   },
+   "moonlight": {
+    "file": "petal-1-moonlight.webp",
+    "w": 360,
+    "h": 256,
+    "bytes": 12434,
+    "x1": {
+     "file": "petal-1-moonlight-1x.webp",
+     "w": 180,
+     "h": 128,
+     "bytes": 5276
+    }
+   },
+   "wine": {
+    "file": "petal-1-wine.webp",
+    "w": 360,
+    "h": 256,
+    "bytes": 15288,
+    "x1": {
+     "file": "petal-1-wine-1x.webp",
+     "w": 180,
+     "h": 128,
+     "bytes": 6176
+    }
+   }
+  },
+  "petal-2": {
+   "blush": {
+    "file": "petal-2-blush.webp",
+    "w": 360,
+    "h": 271,
+    "bytes": 12630,
+    "x1": {
+     "file": "petal-2-blush-1x.webp",
+     "w": 180,
+     "h": 136,
+     "bytes": 5632
+    }
+   },
+   "ivory": {
+    "file": "petal-2-ivory.webp",
+    "w": 360,
+    "h": 271,
+    "bytes": 12808,
+    "x1": {
+     "file": "petal-2-ivory-1x.webp",
+     "w": 180,
+     "h": 136,
+     "bytes": 5786
+    }
+   },
+   "moonlight": {
+    "file": "petal-2-moonlight.webp",
+    "w": 360,
+    "h": 271,
+    "bytes": 11470,
+    "x1": {
+     "file": "petal-2-moonlight-1x.webp",
+     "w": 180,
+     "h": 136,
+     "bytes": 5292
+    }
+   },
+   "wine": {
+    "file": "petal-2-wine.webp",
+    "w": 360,
+    "h": 271,
+    "bytes": 14152,
+    "x1": {
+     "file": "petal-2-wine-1x.webp",
+     "w": 180,
+     "h": 136,
+     "bytes": 6118
+    }
+   }
+  },
+  "petal-3": {
+   "blush": {
+    "file": "petal-3-blush.webp",
+    "w": 360,
+    "h": 264,
+    "bytes": 12280,
+    "x1": {
+     "file": "petal-3-blush-1x.webp",
+     "w": 180,
+     "h": 132,
+     "bytes": 5412
+    }
+   },
+   "ivory": {
+    "file": "petal-3-ivory.webp",
+    "w": 360,
+    "h": 264,
+    "bytes": 12480,
+    "x1": {
+     "file": "petal-3-ivory-1x.webp",
+     "w": 180,
+     "h": 132,
+     "bytes": 5548
+    }
+   },
+   "moonlight": {
+    "file": "petal-3-moonlight.webp",
+    "w": 360,
+    "h": 264,
+    "bytes": 11288,
+    "x1": {
+     "file": "petal-3-moonlight-1x.webp",
+     "w": 180,
+     "h": 132,
+     "bytes": 4986
+    }
+   },
+   "wine": {
+    "file": "petal-3-wine.webp",
+    "w": 360,
+    "h": 264,
+    "bytes": 13218,
+    "x1": {
+     "file": "petal-3-wine-1x.webp",
+     "w": 180,
+     "h": 132,
+     "bytes": 5684
+    }
+   }
+  },
+  "petal-4": {
+   "blush": {
+    "file": "petal-4-blush.webp",
+    "w": 360,
+    "h": 211,
+    "bytes": 12792,
+    "x1": {
+     "file": "petal-4-blush-1x.webp",
+     "w": 180,
+     "h": 106,
+     "bytes": 5526
+    }
+   },
+   "ivory": {
+    "file": "petal-4-ivory.webp",
+    "w": 360,
+    "h": 211,
+    "bytes": 12950,
+    "x1": {
+     "file": "petal-4-ivory-1x.webp",
+     "w": 180,
+     "h": 106,
+     "bytes": 5646
+    }
+   },
+   "moonlight": {
+    "file": "petal-4-moonlight.webp",
+    "w": 360,
+    "h": 211,
+    "bytes": 11320,
+    "x1": {
+     "file": "petal-4-moonlight-1x.webp",
+     "w": 180,
+     "h": 106,
+     "bytes": 5052
+    }
+   },
+   "wine": {
+    "file": "petal-4-wine.webp",
+    "w": 360,
+    "h": 211,
+    "bytes": 14274,
+    "x1": {
+     "file": "petal-4-wine-1x.webp",
+     "w": 180,
+     "h": 106,
+     "bytes": 5878
+    }
+   }
+  },
+  "step-note": {
+   "plain": {
+    "file": "step-note.webp",
+    "w": 480,
+    "h": 350,
+    "bytes": 20470,
+    "x1": {
+     "file": "step-note-1x.webp",
+     "w": 240,
+     "h": 175,
+     "bytes": 9098
+    },
+    "card": {
+     "box": [
+      300,
+      186
+     ],
+     "radius": 0,
+     "fill": "#fce2c4",
+     "corners": [
+      [
+       63.164,
+       37.893
+      ],
+      [
+       348.603,
+       70.827
+      ],
+      [
+       326.864,
+       237.198
+      ],
+      [
+       41.425,
+       204.265
+      ]
+     ],
+     "matrix": "matrix(0.95146, 0.10978, -0.11688, 0.89447, 63.164, 37.893)",
+     "x1": {
+      "corners": [
+       [
+        31.582,
+        18.946
+       ],
+       [
+        174.301,
+        35.413
+       ],
+       [
+        163.432,
+        118.599
+       ],
+       [
+        20.713,
+        102.132
+       ]
+      ],
+      "matrix": "matrix(0.47573, 0.05489, -0.05844, 0.44724, 31.582, 18.946)"
+     }
+    }
+   }
+  },
+  "step-photo": {
+   "plain": {
+    "file": "step-photo.webp",
+    "w": 447,
+    "h": 480,
+    "bytes": 17328,
+    "x1": {
+     "file": "step-photo-1x.webp",
+     "w": 224,
+     "h": 240,
+     "bytes": 8676
+    },
+    "photo": {
+     "box": [
+      400,
+      400
+     ],
+     "radius": 2.74,
+     "fill": "#3d2f29",
+     "corners": [
+      [
+       75.073,
+       25.625
+      ],
+      [
+       392.236,
+       62.22
+      ],
+      [
+       353.294,
+       361.197
+      ],
+      [
+       36.132,
+       324.603
+      ]
+     ],
+     "matrix": "matrix(0.79291, 0.09149, -0.09735, 0.74745, 75.073, 25.625)",
+     "x1": {
+      "corners": [
+       [
+        37.537,
+        12.813
+       ],
+       [
+        196.118,
+        31.11
+       ],
+       [
+        176.647,
+        180.599
+       ],
+       [
+        18.066,
+        162.302
+       ]
+      ],
+      "matrix": "matrix(0.39645, 0.04574, -0.04868, 0.37372, 37.537, 12.813)"
+     }
+    }
+   }
+  },
+  "step-send": {
+   "plain": {
+    "file": "step-send.webp",
+    "w": 281,
+    "h": 480,
+    "bytes": 19536,
+    "x1": {
+     "file": "step-send-1x.webp",
+     "w": 141,
+     "h": 240,
+     "bytes": 8514
+    }
+   }
+  },
+  "lily-footer": {
+   "plain": {
+    "file": "lily-footer.webp",
+    "w": 900,
+    "h": 628,
+    "bytes": 28702,
+    "x1": {
+     "file": "lily-footer-1x.webp",
+     "w": 450,
+     "h": 314,
+     "bytes": 13740
+    },
+    "ground": "#2d0e18"
+   }
+  },
+  "step-phone": {
+   "plain": {
+    "file": "step-phone.webp",
+    "w": 281,
+    "h": 480,
+    "bytes": 14982,
+    "x1": {
+     "file": "step-phone-1x.webp",
+     "w": 141,
+     "h": 240,
+     "bytes": 6502
+    },
+    "screen": {
+     "box": [
+      390,
+      844
+     ],
+     "radius": 53.03,
+     "fill": "#0b0908",
+     "corners": [
+      [
+       50.656,
+       9.23
+      ],
+      [
+       259.665,
+       26.413
+      ],
+      [
+       220.092,
+       451.451
+      ],
+      [
+       11.084,
+       434.268
+      ]
+     ],
+     "matrix": "matrix(0.53592, 0.04406, -0.04689, 0.5036, 50.656, 9.23)",
+     "x1": {
+      "corners": [
+       [
+        25.328,
+        4.615
+       ],
+       [
+        129.832,
+        13.206
+       ],
+       [
+        110.046,
+        225.725
+       ],
+       [
+        5.542,
+        217.134
+       ]
+      ],
+      "matrix": "matrix(0.26796, 0.02203, -0.02344, 0.2518, 25.328, 4.615)"
+     }
+    },
+    "bezel": {
+     "file": "step-phone-bezel.webp",
+     "w": 281,
+     "h": 480,
+     "bytes": 18802,
+     "x1": {
+      "file": "step-phone-bezel-1x.webp",
+      "w": 141,
+      "h": 240,
+      "bytes": 7890
+     }
+    }
+   }
+  }
+ }
+}

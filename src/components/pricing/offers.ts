@@ -2,7 +2,7 @@ import { INVITE_CODE_PATTERN } from "@/lib/commerce/codes";
 import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import type { PublishDecision } from "@/lib/gift/publish";
 import type { MembershipSummary } from "@/lib/membership/types";
-import { BUMP, PRODUCTS, SECOND_GIFT, bumpAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
+import { BUMP, PRODUCTS, SECOND_GIFT, bumpAmount, templateProduct, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
 import { getManifest } from "@/templates/manifests";
 import { membershipState, needsPayment } from "@/components/membership/status";
 
@@ -102,7 +102,7 @@ export type PaywallPlan = TemplatePlan | EverythingPlan;
 export type UpgradeQuote = { amount: number; currency: Currency };
 
 export function templatePlan(tier: "free" | "premium"): TemplatePlan {
-  return tier === "free" ? "extras" : "single";
+  return templateProduct(tier);
 }
 
 /**

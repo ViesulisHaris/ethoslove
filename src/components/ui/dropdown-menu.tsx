@@ -75,7 +75,7 @@ function DropdownMenuGroup({
 
 /** A row's icon: forest, a little quiet, unless the row gives it a colour of its own. */
 const ROW_ICON =
-  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[18px] [&_svg:not([class*='text-'])]:text-forest/55 dark:[&_svg:not([class*='text-'])]:text-popover-foreground/60"
+  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[18px] [&_svg:not([class*='text-'])]:text-forest/65 dark:[&_svg:not([class*='text-'])]:text-popover-foreground/60"
 
 function DropdownMenuItem({
   className,

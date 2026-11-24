@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo";
 import { GameTable } from "@/components/games/cards";
+import { GameNotes } from "@/components/games/page/game-notes";
 import { Roulette } from "@/components/games/roulette";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/roulette">, "searchParams">): Promise<Metadata> {
@@ -16,6 +17,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
   return (
     <GameTable>
       <Roulette />
+      <GameNotes game="roulette" locale={locale} />
     </GameTable>
   );
 }

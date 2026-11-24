@@ -62,7 +62,7 @@ export function CampaignAccess({ templates }: { templates: CampaignTemplateCard[
 
   if (!loaded)
     return (
-      <div className="grid h-40 place-items-center rounded-[28px] bg-white shadow-soft ring-1 ring-forest/5" aria-busy="true">
+      <div className="grid h-40 place-items-center rounded-[28px] bg-card shadow-soft ring-1 ring-forest/5" aria-busy="true">
         <Loader2 aria-hidden="true" className="size-5 animate-spin text-forest/50" />
       </div>
     );
@@ -72,14 +72,14 @@ export function CampaignAccess({ templates }: { templates: CampaignTemplateCard[
       <section className="rounded-[28px] border border-line bg-card p-6 sm:p-8" data-testid="campaign-sign-in">
         <h2 className="font-display text-2xl">{t("signInTitle")}</h2>
         <p className="mt-1 mb-5 text-sm text-muted-foreground">{t("signInBlurb")}</p>
-        <AuthForm mode="login" next="/campaign" compact />
+        <AuthForm mode="login" next="/campaign" compact bare />
       </section>
     );
 
   const campaign = loaded.campaign;
   if (campaign?.state === "ended" || campaign?.state === "revoked")
     return (
-      <div className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-10" data-testid={`campaign-${campaign.state}`}>
+      <div className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-10" data-testid={`campaign-${campaign.state}`}>
         <h2 className="font-display text-3xl text-forest">{t(`${campaign.state}.title`)}</h2>
         <p className="mt-2 text-[15px] text-forest/70">{t(`${campaign.state}.detail`, { email: BRAND.supportEmail })}</p>
       </div>
@@ -91,7 +91,7 @@ export function CampaignAccess({ templates }: { templates: CampaignTemplateCard[
       : t("active.noEnd");
     return (
       <div className="grid gap-6" data-testid="campaign-active">
-        <div className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-8">
+        <div className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-8">
           <span className="grid size-12 place-items-center rounded-full bg-moss/10">
             <Check aria-hidden="true" className="size-5 text-moss" />
           </span>
@@ -103,7 +103,7 @@ export function CampaignAccess({ templates }: { templates: CampaignTemplateCard[
 
         <ul className="grid gap-4 sm:grid-cols-2">
           {templates.map((template) => (
-            <li key={template.slug} className="flex flex-col overflow-hidden rounded-[24px] bg-white shadow-soft ring-1 ring-forest/5">
+            <li key={template.slug} className="flex flex-col overflow-hidden rounded-[24px] bg-card shadow-soft ring-1 ring-forest/5">
               <div className="relative aspect-[390/480] bg-ink/10">
                 <Image src={template.poster} alt="" fill sizes="(min-width: 640px) 360px, 100vw" className="object-cover object-top" />
               </div>
@@ -139,7 +139,7 @@ export function CampaignAccess({ templates }: { templates: CampaignTemplateCard[
   }
 
   return (
-    <form onSubmit={unlock} className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-8" data-testid="campaign-form">
+    <form onSubmit={unlock} className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-8" data-testid="campaign-form">
       <label htmlFor={id} className="flex items-center gap-2 text-sm font-medium text-forest">
         <Lock aria-hidden="true" className="size-4" />
         {t("passwordLabel")}

@@ -383,7 +383,7 @@ export function LoveLanguageQuiz({
                     on ? "border-rose-deep bg-rose-soft" : "border-forest/15 bg-paper hover:border-forest/35 hover:bg-white",
                   )}
                 >
-                  <span aria-hidden="true" className={cn("grid size-8 shrink-0 place-items-center rounded-full border text-[13px] font-semibold", on ? "border-rose-deep bg-rose-deep text-cream" : "border-forest/20 text-forest/55")}>
+                  <span aria-hidden="true" className={cn("grid size-8 shrink-0 place-items-center rounded-full border text-[13px] font-semibold", on ? "border-rose-deep bg-rose-deep text-cream" : "border-forest/20 text-forest/65")}>
                     {on ? <Check className="size-4" /> : option === 0 ? "A" : "B"}
                   </span>
                   <span key={s.index} className="animate-content-in min-w-0">
@@ -395,7 +395,7 @@ export function LoveLanguageQuiz({
           </div>
         </fieldset>
         {s.note === "resumed" ? (
-          <p className="mt-5 text-[13.5px] text-forest/60">
+          <p className="mt-5 text-[13.5px] text-forest/65">
             {ui.resumed}{" "}
             <button type="button" onClick={restart} className="inline-flex min-h-11 items-center font-medium text-forest underline underline-offset-4">
               {ui.startOver}
@@ -515,13 +515,13 @@ export function LoveLanguageQuiz({
         )}
 
         <div className="mt-8">
-          <p className="text-[12px] font-semibold tracking-[0.18em] text-forest/55 uppercase">{ui.sharesNote}</p>
+          <p className="text-[12px] font-semibold tracking-[0.18em] text-forest/65 uppercase">{ui.sharesNote}</p>
           <ul className="mt-3 space-y-3.5">
             {ranked(mine).map((l) => (
               <li key={l}>
                 <div className="flex items-baseline justify-between gap-3">
                   <span className={cn("text-[15.5px]", top.includes(l) ? "font-semibold text-forest" : "text-forest/75")}>{nameOf(l)}</span>
-                  <span className="text-[14px] text-forest/60 tabular-nums">{pct[l]}%</span>
+                  <span className="text-[14px] text-forest/65 tabular-nums">{pct[l]}%</span>
                 </div>
                 <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-forest/[0.07]" aria-hidden="true">
                   <div className={cn("h-full rounded-full", top.includes(l) ? "bg-rose-deep" : "bg-forest/35")} style={{ width: `${pct[l]}%` }} />
@@ -568,11 +568,11 @@ export function LoveLanguageQuiz({
 function Bar({ label, pct, tone }: { label: string; pct: number; tone: "rose" | "forest" }) {
   return (
     <div className="mt-1.5 grid grid-cols-[minmax(0,5.5rem)_1fr_2.75rem] items-center gap-3">
-      <span className="truncate text-[13px] text-forest/60">{label}</span>
+      <span className="truncate text-[13px] text-forest/65">{label}</span>
       <span className="h-2.5 overflow-hidden rounded-full bg-forest/[0.07]" aria-hidden="true">
         <span className={cn("block h-full rounded-full", tone === "rose" ? "bg-rose-deep" : "bg-forest/70")} style={{ width: `${pct}%` }} />
       </span>
-      <span className="text-right text-[13px] text-forest/60 tabular-nums">{pct}%</span>
+      <span className="text-right text-[13px] text-forest/65 tabular-nums">{pct}%</span>
     </div>
   );
 }
@@ -581,7 +581,7 @@ function Lands({ title, items, misses, missesTitle }: { title: string; items: st
   return (
     <div className={cn("mt-6 grid gap-6", misses ? "sm:grid-cols-[1.4fr_1fr]" : "")}>
       <div>
-        <p className="text-[12px] font-semibold tracking-[0.18em] text-forest/55 uppercase">{title}</p>
+        <p className="text-[12px] font-semibold tracking-[0.18em] text-forest/65 uppercase">{title}</p>
         <ul className="mt-3 space-y-2.5">
           {items.map((item) => (
             <li key={item} className="flex gap-3 text-[15.5px] leading-snug text-forest/85">
@@ -593,7 +593,7 @@ function Lands({ title, items, misses, missesTitle }: { title: string; items: st
       </div>
       {misses && missesTitle ? (
         <div>
-          <p className="text-[12px] font-semibold tracking-[0.18em] text-forest/55 uppercase">{missesTitle}</p>
+          <p className="text-[12px] font-semibold tracking-[0.18em] text-forest/65 uppercase">{missesTitle}</p>
           <p className="mt-3 text-[15.5px] leading-snug text-forest/70">{misses}</p>
         </div>
       ) : null}

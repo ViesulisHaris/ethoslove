@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import type { TemplateEvent } from "@/templates/types";
@@ -10,8 +10,11 @@ import { ReactionSheet } from "./reaction-sheet";
 import { HomeScreenTip } from "./home-screen-tip";
 import { replyEditorHref, saveReplySeed } from "@/lib/editor/reply-seed";
 import { track } from "@/lib/analytics/track";
+import { whenOnline } from "./when-online";
 
 const VIEW_TTL_MS = 24 * 60 * 60 * 1000;
+/** How long "Send one back" stays busy waiting for the editor, or for a connection, before it wakes. */
+const WAKE_MS = 10_000;
 const PROGRESS_STEP = 25;
 
 type StoredView = { viewId: string; openedAt: number };
@@ -59,6 +62,24 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
   const viewed = useRef(false);
   const lastPct = useRef(0);
   const lastReportAt = useRef(0);
+  // "Send one back" has been tapped and the editor is on its way: the button says so and takes no
+  // second tap. The editor takes this page's place when it is up. If it has not come in ten seconds
+  // the button wakes, so a tap that led nowhere can be given again. That covers a request that
+  // hangs, and a phone that says it is offline: then nothing is asked for at all until it is back
+  // online (./when-online.ts), since a page asked for with no connection is the browser's error
+  // page in place of the gift. A network that answers nothing while calling itself online still
+  // ends there.
+  const [leaving, setLeaving] = useState(false);
+  const lastReplyTap = useRef(0);
+  const wake = useRef(0);
+  const giveUp = useRef(() => {});
+  useEffect(
+    () => () => {
+      window.clearTimeout(wake.current);
+      giveUp.current();
+    },
+    [],
+  );
 
   // Once per browser per day; a replay shows the cover again but is not a new view.
   const recordView = useCallback(() => {
@@ -106,6 +127,35 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
     [shortId],
   );
 
+  // "Send one back to {sender}": one door, two places to find it (the end screen, and under "Sent to
+  // {sender}." once a reaction has gone). The count says which, so the two can be told apart.
+  const sendOneBack = useCallback(
+    (from: "end" | "reaction") => {
+      // One tap, one reply: a second tap while the editor loads (it takes a moment on a slow phone)
+      // would count a second reply and open the editor twice. The clock catches the tap that lands
+      // before the button has been redrawn as busy.
+      const now = performance.now();
+      if (leaving || now - lastReplyTap.current < 1000) return;
+      lastReplyTap.current = now;
+      setLeaving(true);
+      window.clearTimeout(wake.current);
+      giveUp.current();
+      wake.current = window.setTimeout(() => setLeaving(false), WAKE_MS);
+      // Counted, and gone, only once there is a connection to go with: an offline tap that the
+      // wait gives up on started no reply.
+      giveUp.current = whenOnline(() => {
+        // The easiest gift to make is a reply: the same template, the names already swapped, and
+        // whatever else the template carries across (Halfway flips the two places).
+        saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
+        track("reply_started", { template: data.templateSlug, from });
+        // A paid premium gift's reply is free: the link carries the sealed token that proves it,
+        // never this gift's id.
+        router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
+      }, WAKE_MS);
+    },
+    [data, replyToken, router, leaving],
+  );
+
   return (
     // The whole gift page is the sender's, names and all: the browser's translator doesn't get to
     // reword it (see GiftRenderer).
@@ -119,23 +169,16 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
           replayKey={replayKey}
           onEvent={onEvent}
           onReact={data.showReactionCta ? () => setReactOpen(true) : undefined}
-          onMakeOne={() => {
-            // The easiest gift to make is a reply: the same template, the names already swapped, and
-            // whatever else the template carries across (Halfway flips the two places).
-            saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
-            track("reply_started", { template: data.templateSlug });
-            // A paid premium gift's reply is free: the link carries the sealed token that proves it,
-            // never this gift's id.
-            router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
-          }}
+          onMakeOne={() => sendOneBack("end")}
+          makeOnePending={leaving}
           replyMode
           keepHref={`/g/${shortId}/keep`}
           onCoverOpened={hasCover ? recordView : undefined}
         />
       ) : null}
       {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} /> : null}
-      <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} />
-      {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} /> : null}
+      <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} onSendOneBack={() => sendOneBack("reaction")} sendingBack={leaving} />
+      {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} held={reactOpen} /> : null}
     </div>
     </div>
   );

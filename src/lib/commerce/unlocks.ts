@@ -121,29 +121,66 @@ export async function relockGifts(db: Db, userId: string): Promise<void> {
   ]);
   const owned = (unlocks ?? []).map((u) => u.template_slug);
   for (const gift of gifts ?? []) {
-    const data = gift.data as unknown as GiftData;
-    // A group card with nothing paid for its group behind it goes back to draft, whatever else the
-    // account holds: its link stops opening until it is paid for again, or sent without its notes.
-    if (Array.isArray(data?.contributions) && data.contributions.length > 0 && !hasGroupUnlock(owned, gift.template_slug)) {
-      await db.from("gifts").update({ status: "draft" }).eq("id", gift.id);
+    if (!lacksUnlock(gift, owned)) {
+      if (hasUnlock(owned, gift.template_slug)) continue;
+      if (!gift.watermark)
+        await db
+          .from("gifts")
+          .update({ watermark: true, data: { ...(gift.data as unknown as GiftData), watermark: true } as unknown as Json })
+          .eq("id", gift.id);
       continue;
     }
-    if (hasUnlock(owned, gift.template_slug)) continue;
-    const manifest = getManifest(gift.template_slug);
-    const paidFeature =
-      manifest?.tier !== "free" ||
-      // A note with photos that is still paid for keeps its photos; one whose payment went back doesn't.
-      premiumExtras(
-        { ...data, photos: Array.isArray(data.photos) ? data.photos : [] },
-        { note: manifest ? noteRules(manifest, data) : false, photosOwned: hasPhotosUnlock(owned, gift.template_slug) },
-      ).length > 0 ||
-      gift.password_hash !== null ||
-      gift.unlock_at !== null;
-    if (paidFeature) await db.from("gifts").update({ status: "draft" }).eq("id", gift.id);
-    else if (!gift.watermark)
-      await db
-        .from("gifts")
-        .update({ watermark: true, data: { ...data, watermark: true } as unknown as Json })
-        .eq("id", gift.id);
+    await db.from("gifts").update({ status: "draft" }).eq("id", gift.id);
   }
+}
+
+type LockableGift = { template_slug: string; data: unknown; password_hash: string | null; unlock_at: string | null };
+
+/** Whether a gift uses something paid that none of `owned` covers: such a gift can't stay published. */
+function lacksUnlock(gift: LockableGift, owned: string[]): boolean {
+  const data = gift.data as unknown as GiftData;
+  // A group card with nothing paid for its group behind it goes back to draft, whatever else the
+  // account holds: its link stops opening until it is paid for again, or sent without its notes.
+  if (Array.isArray(data?.contributions) && data.contributions.length > 0 && !hasGroupUnlock(owned, gift.template_slug))
+    return true;
+  if (hasUnlock(owned, gift.template_slug)) return false;
+  const manifest = getManifest(gift.template_slug);
+  return (
+    manifest?.tier !== "free" ||
+    // A note with photos that is still paid for keeps its photos; one whose payment went back doesn't.
+    premiumExtras(
+      { ...data, photos: Array.isArray(data.photos) ? data.photos : [] },
+      { note: manifest ? noteRules(manifest, data) : false, photosOwned: hasPhotosUnlock(owned, gift.template_slug) },
+    ).length > 0 ||
+    gift.password_hash !== null ||
+    gift.unlock_at !== null
+  );
+}
+
+/**
+ * The way back from relockGifts, for a chargeback decided in our favour: drafts that had been
+ * published (a relock keeps published_at) and that the user's unlocks cover again go back to live,
+ * or to scheduled while their opening time is still ahead. Returns how many.
+ */
+export async function republishGifts(db: Db, userId: string, now: number): Promise<number> {
+  const [{ data: unlocks }, { data: gifts }] = await Promise.all([
+    db.from("template_unlocks").select("template_slug").eq("user_id", userId),
+    db
+      .from("gifts")
+      .select("id, template_slug, data, password_hash, unlock_at")
+      .eq("user_id", userId)
+      .eq("status", "draft")
+      .not("published_at", "is", null),
+  ]);
+  const owned = (unlocks ?? []).map((u) => u.template_slug);
+  let count = 0;
+  for (const gift of gifts ?? []) {
+    // Only a gift something paid for now covers: a draft for any other reason stays a draft.
+    const covered = hasUnlock(owned, gift.template_slug) || hasPhotosUnlock(owned, gift.template_slug);
+    if (!covered || lacksUnlock(gift, owned)) continue;
+    const status = gift.unlock_at && Date.parse(gift.unlock_at) > now ? "scheduled" : "live";
+    await db.from("gifts").update({ status }).eq("id", gift.id);
+    count += 1;
+  }
+  return count;
 }

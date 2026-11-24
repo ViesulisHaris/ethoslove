@@ -92,7 +92,7 @@ export function SavePlanPanel({
 
   if (!link)
     return (
-      <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5" data-testid="save-plan">
+      <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5" data-testid="save-plan">
         <h2 className="font-display text-[22px] text-forest">{t("save.title")}</h2>
         <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("save.sub")}</p>
         <button type="button" onClick={() => void save()} disabled={saving} className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-forest text-[14.5px] font-semibold text-cream transition-[transform,opacity] hover:-translate-y-0.5 disabled:opacity-60">
@@ -100,7 +100,7 @@ export function SavePlanPanel({
           {saving ? t("save.saving") : t("save.cta")}
         </button>
         {/* Past the limit (a membership ended with more saved): "your free saves are used", never "4 of 3". */}
-        {list && list.quota.limit !== null ? <p className="mt-3 text-center text-[12.5px] text-forest/60 tabular-nums">{list.quota.used >= list.quota.limit ? t("errors.limit_reached") : t("save.quota", { used: list.quota.used, limit: list.quota.limit })}</p> : null}
+        {list && list.quota.limit !== null ? <p className="mt-3 text-center text-[12.5px] text-forest/65 tabular-nums">{list.quota.used >= list.quota.limit ? t("errors.limit_reached") : t("save.quota", { used: list.quota.used, limit: list.quota.limit })}</p> : null}
         {error ? (
           <p role="alert" className="mt-3 text-[13px] leading-snug text-destructive">
             {t(`errors.${error}`)}
@@ -111,12 +111,12 @@ export function SavePlanPanel({
 
   const partner = list?.partner?.name ?? null;
   return (
-    <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5" data-testid="saved-plan">
+    <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5" data-testid="saved-plan">
       <p className="flex items-center gap-2 font-display text-[21px] leading-tight text-forest">
         <BookmarkCheck aria-hidden="true" className="size-5 shrink-0 text-rose-deep" />
         {link.mine ? t("save.saved") : t("save.partners", { name: link.ownerName ?? "…" })}
       </p>
-      <p role="status" aria-live="polite" className={cn("mt-1.5 flex items-center gap-1.5 text-[13.5px]", status === "offline" ? "font-semibold text-forest/80" : "text-forest/60")}>
+      <p role="status" aria-live="polite" className={cn("mt-1.5 flex items-center gap-1.5 text-[13.5px]", status === "offline" ? "font-semibold text-forest/80" : "text-forest/65")}>
         {status === "saving" ? <Loader2 aria-hidden="true" className="size-3.5 animate-spin" /> : status === "offline" ? <CloudOff aria-hidden="true" className="size-3.5 text-star" /> : null}
         {status === "saving" ? t("save.saving") : status === "offline" ? t("save.offline") : status === "pending" ? t("save.saving") : t("save.synced")}
       </p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo";
 import { GameTable } from "@/components/games/cards";
+import { GameNotes } from "@/components/games/page/game-notes";
 import { Dare } from "@/components/games/dare";
 import { QuestionList } from "@/components/games/question-list";
 import { DARES, TRUTHS } from "@/lib/games/content";
@@ -29,6 +30,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
           { name: t("listDares"), items: DARES.map((q) => q[l]) },
         ]}
       />
+      <GameNotes game="dare" locale={locale} />
     </GameTable>
   );
 }

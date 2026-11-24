@@ -111,39 +111,14 @@
       "all": "See all templates",
       "moreTitle": "More every month",
       "moreBlurb": "New templates land regularly. Everything buyers get every future one, forever.",
-      "count": "{n} templates, {free} free"
+      "count": "{n} templates, {free} free",
+      "previous": "Earlier gifts",
+      "next": "More gifts"
     },
     "reactions": {
       "eyebrow": "See the reaction",
       "title": "The link goes out. The reply comes back.",
       "blurb": "At the end of every gift there is a reaction button: an emoji, a note, or a 20-second voice message, delivered straight to you.",
-      "cards": [
-        {
-          "from": "Marco",
-          "to": "Ana",
-          "sent": "I made you something. Open it with sound on.",
-          "reply": "I'm at work and crying in the stairwell. Three years. THREE.",
-          "emoji": "😭",
-          "time": "22:41"
-        },
-        {
-          "from": "Lucas",
-          "to": "Sofía",
-          "sent": "Look up. Well, look at your phone.",
-          "reply": "You put the tent night in there. I found all six. Fourteen days.",
-          "emoji": "🥹",
-          "time": "07:12"
-        },
-        {
-          "from": "Dani",
-          "to": "Mamá",
-          "sent": "Feliz día, ma. Tap the seal.",
-          "reply": "Quién te enseñó a hacer esto?? Lo vi cuatro veces ya.",
-          "emoji": "❤️",
-          "time": "09:58"
-        }
-      ],
-      "placeholderNote": "Sample reactions. Real ones replace these as they come in.",
       "realNote": "Real reactions, shared by the people who got the gifts. Names left out.",
       "realLabel": "A real reaction",
       "opened": "{count} Ethos gifts opened so far.",
@@ -185,6 +160,7 @@
     }
   },
   "footer": {
+    "allOccasions": "All occasions",
     "about": "About",
     "blurb": "Gifts that open like a story.",
     "product": "Product",
@@ -227,7 +203,10 @@
     "verify": "Verify",
     "codeHint": "Handy when the link opens on another device.",
     "codeWrong": "That code didn't match. Check the newest email.",
-    "useAnotherEmail": "Use a different email"
+    "useAnotherEmail": "Use a different email",
+    "emailNoDot": "That address is missing its ending, like .com",
+    "emailDidYouMean": "Did you mean <take>{suggestion}</take>?",
+    "emailKeepTyped": "No, send it to {email}"
   },
   "dashboard": {
     "title": "My gifts",
@@ -351,7 +330,7 @@
       "look": {
         "n": "05",
         "title": "The look",
-        "blurb": "Accent colour, type, and this template's own details."
+        "blurb": "Accent color, type, and this template's own details."
       },
       "extras": {
         "n": "06",
@@ -396,7 +375,7 @@
       "keepWordsLine": "A free note would end at: “…{tail}”",
       "keepWordsPay": "Keep every word · {price}",
       "keepWordsOr": "or shorten it to {max} to send free",
-      "accentColor": "Accent colour",
+      "accentColor": "Accent color",
       "customColor": "Custom",
       "fontPairing": "Type pairing",
       "editorial": "Editorial",
@@ -456,6 +435,7 @@
       "startAt": "Start from",
       "previewPlay": "Preview",
       "previewStop": "Stop",
+      "moodAll": "All",
       "mood": {
         "warm": "Warm",
         "dreamy": "Dreamy",
@@ -758,10 +738,10 @@
       "dotsSquare": "Square",
       "dotsDots": "Dots",
       "dotsClassy": "Classy",
-      "colour": "Colour",
+      "colour": "Color",
       "background": "Background",
       "gradient": "Gradient",
-      "centre": "Centre",
+      "centre": "Center",
       "centreNone": "None",
       "centreLogo": "Ethos mark",
       "centrePhoto": "A photo",
@@ -784,7 +764,7 @@
       "blurb": "Give me a few real details and I'll draft three openings. Keep what's true, cut the rest.",
       "occasion": "Occasion",
       "relationship": "Who are they to you?",
-      "relationshipPlaceholder": "My partner of three years, my mum, my best friend…",
+      "relationshipPlaceholder": "My partner of three years, my mom, my best friend…",
       "facts": "Three real things",
       "factsHelp": "Specific moments beat adjectives: the trip, the joke, the habit. One per line.",
       "factsPlaceholder": "She hums when she cooks\nWe got lost in Lisbon on purpose\nShe always gives me the window seat",
@@ -932,7 +912,7 @@
       "invalid_input": "That doesn't look like an Etsy order number. It's the long number after \"Order #\".",
       "order_not_found": "We can't find that order in our Etsy shop. Check the number in Etsy's email.",
       "not_paid": "Etsy hasn't confirmed this payment yet. Try again in a few minutes.",
-      "refunded": "This order was cancelled or refunded on Etsy.",
+      "refunded": "This order was canceled or refunded on Etsy.",
       "rate_limited": "Too many tries. Wait a little while and try again.",
       "etsy_unavailable": "We can't reach Etsy right now. Try again in a minute.",
       "failed": "Something went wrong on our side. Try again, or message us on Etsy."
@@ -946,10 +926,16 @@
     "useTemplate": "Use this template",
     "openFullscreen": "Open full-screen demo",
     "backToGallery": "All templates",
+    "backTo": "Back to {name}",
+    "back": "Back",
     "replay": "Replay",
     "tryNote": "The editor is free to use with a live preview. You only pay to publish a premium template.",
     "includes": "Includes",
     "perfectFor": "Perfect for",
+    "finder": {
+      "ask": "Not sure which?",
+      "link": "Answer two questions"
+    },
     "featureMusic": "Background music",
     "featureCaptions": "Photo captions",
     "featureCountdown": "Countdown",
@@ -957,17 +943,35 @@
     "featureVideo": "Video clip",
     "photoRange": "{min}–{max} photos",
     "allTiers": "All",
+    "sort": {
+      "label": "Sort by:",
+      "popular": "Most popular",
+      "new": "Newest",
+      "az": "A to Z"
+    },
     "allOccasions": "All occasions",
+    "moreOccasions": "More",
+    "fewerOccasions": "Fewer",
     "noMatches": "No template matches that filter yet. Try another occasion.",
     "demoReactionToast": "In a real gift, this sends the sender your reaction. Coming in Phase 4.",
     "tryDemo": "Try the live demo",
+    "liveDemo": "{name}, the live demo",
+    "closeDemo": "Close the demo",
+    "pausePreview": "Pause the preview",
+    "playPreview": "Play the preview",
     "none": "No templates match that filter yet.",
     "noneFree": "None of this occasion's templates are free yet. These free ones work for any day.",
     "showAll": "Show all {count}",
     "previewHint": "This is the real template with sample data. Tap, scroll and explore.",
     "fullscreenDemo": "Open full-screen demo",
-    "included": "What's included",
+    "included": "What’s included",
+    "includedSpecial": "With “Make it special”",
+    "noteLead": {
+      "the-letter": "Tap to break the seal. The letter slides out and unfolds on a candle-lit desk, and your words appear in handwriting."
+    },
     "featurePhotos": "Up to {max} photos",
+    "featureFullLetter": "A letter of 4,000 characters",
+    "featureVoice": "A voice message",
     "style": {
       "cinematic": "Cinematic",
       "minimal": "Minimal",
@@ -977,6 +981,7 @@
       "3d": "3D"
     },
     "makeThis": "Make this gift",
+    "makeHero": "Make this gift",
     "priceOnce": "{price} once",
     "priceFree": "Free",
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
@@ -987,6 +992,9 @@
       "featureNotes": "Up to {max} notes from people you invite",
       "faqA": "Inviting people and collecting their notes costs nothing. Sending the card costs {price} once, from your account, and then group cards on {name} are yours to send again, with no subscription."
     },
+    "pagePriceNote": "Free as a short note. “Make it special” adds photos and more for {price}, paid once.",
+    "pagePriceFree": "Free to send. The extras cost {price}, paid once.",
+    "pagePricePaid": "Try it first, no account needed. {price} once when you send it.",
     "sections": {
       "popular": {
         "eyebrow": "Most popular",
@@ -997,6 +1005,22 @@
         "eyebrow": "New",
         "title": "Just arrived",
         "blurb": "A list checked twice, a year to unwrap, a snow globe, a frosted window, lights to hang and a gingerbread house. And two for the Thanksgiving table."
+      },
+      "tierFree": {
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
+        "title": "Free gifts"
+      },
+      "tierPremium": {
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
+        "title": "Premium gifts"
+      },
+      "sortedNew": {
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
+        "title": "Every gift, latest first"
+      },
+      "sortedAz": {
+        "eyebrow": "{count, plural, one {# gift} other {# gifts}}",
+        "title": "Every gift, by name"
       },
       "all": {
         "eyebrow": "The collection",
@@ -1011,15 +1035,34 @@
     "guide": {
       "eyebrow": "How to make one",
       "heading": "How to make {name}",
+      "howLine": "A live preview shows what they’ll see as you make it.",
       "step1Title": "Add your photos",
-      "step1Body": "{min, plural, =0 {Add up to {max} photos, or none at all.} other {Choose up to {max} photos.}} The preview shows exactly what they'll see while you go.",
-      "step1Music": "Add a song from the library, or the real one that's yours: thirty seconds of it wait at the end, a tap away.",
+      "step1Body": "{min, plural, =0 {Add up to {max} photos, or none at all.} other {Choose up to {max} photos.}} The preview shows exactly what they’ll see while you go.",
+      "step1Music": "Add a song from the library, or the real one that’s yours: thirty seconds of it wait at the end, a tap away.",
       "step2Title": "Write what you mean",
-      "step2Body": "Say the thing a card never has room for, in your own words: a memory, a joke only they'll get, what you'd tell a stranger about them. Give every photo a caption if you like.",
+      "step2Body": "Say the thing a card never has room for, in your own words: a memory, a joke only they’ll get, what you’d tell a stranger about them. Give every photo a caption if you like.",
       "step2Extras": "Add a countdown to the day and a surprise hidden at the very end.",
       "step3Title": "Send the link",
       "step3Body": "Publish it and send the link anywhere a link goes, or print its QR code and tuck it in a real card. It opens on any phone or laptop, with nothing to install.",
+      "ideasLabel": "What to write",
+      "ideasLine": "{count} ideas, each with a line to borrow.",
+      "experienceLabel": "The experience",
+      "experienceHeading": "More than a message",
+      "experienceBody": "No app, no account: your link opens {name} in their browser.",
+      "experienceOpens": "Opens on any phone or laptop",
+      "experiencePhotosNone": "Works without photos, or with up to {max}",
+      "experiencePhotosOne": "One photo is enough; it holds {max}",
+      "experiencePhotosMany": "Made from {min} to {max} of your photos",
+      "experienceNote": "The free note holds {chars} characters",
+      "experienceMic": "A finger does it too, where the microphone is off",
+      "experienceMotion": "A tap does it too, where the phone can’t feel a shake",
+      "experienceChoice": "{label}: {choices}",
+      "experienceChoiceMore": "{label}: {choices} and {count} more",
+      "experienceSong": "Carries the song you choose",
+      "experienceTouch": "Plays with a finger or a mouse",
+      "faqLabel": "Questions",
       "faqTitle": "Questions people ask",
+      "faqLine": "What it costs, how it opens, what you can change.",
       "faqFreeQ": "Is it free?",
       "faqFreeA": "Yes. {name} is one of the two free templates: up to 10 photos, music, a countdown and a hidden surprise, with a small “Made with Ethos” footer. A video, a voice message, 20 photos, no footer and scheduling come with “Make it special” for {price}, paid once.",
       "faqFreeAShort": "Yes, as a short note. {name} goes out free with up to 500 characters, music and a small “Made with Ethos” footer. Photos, a longer letter, a video, a voice message, no footer and scheduling come with “Make it special” for {price}, paid once.",
@@ -1028,14 +1071,60 @@
       "faqOpenQ": "How do they open it?",
       "faqOpenA": "With the link you send, in WhatsApp, iMessage, Instagram or an email, or by scanning its QR code with a phone camera. It opens in the browser on any phone or laptop: no app to install, no account to make.",
       "faqEditQ": "Can I change it after I send it?",
-      "faqEditA": "Yes. Edit it whenever you like and the change goes live at the same link. Links don't expire, so it opens again next year.",
-      "moreTitle": "More like this"
+      "faqEditA": "Yes. Edit it whenever you like and the change goes live at the same link. Links don’t expire, so it opens again next year.",
+      "moreTitle": "More like this",
+      "moreHeading": "More gifts to send",
+      "moreFor": {
+        "birthday": "More gifts for a birthday",
+        "anniversary": "More gifts for an anniversary",
+        "valentines": "More gifts for Valentine’s Day",
+        "wedding": "More gifts for a wedding",
+        "graduation": "More gifts for a graduation",
+        "christmas": "More gifts for Christmas",
+        "halloween": "More gifts for Halloween",
+        "thanksgiving": "More gifts for Thanksgiving",
+        "mothers-day": "More gifts for Mother’s Day",
+        "fathers-day": "More gifts for Father’s Day",
+        "apology": "More gifts to say sorry",
+        "long-distance": "More gifts for long distance",
+        "just-because": "More gifts for no reason at all"
+      },
+      "moreAbout": "More about {name}",
+      "madeFor": "Made for",
+      "suitsLead": "A gift for",
+      "suitsWho": {
+        "boyfriend": "your boyfriend",
+        "girlfriend": "your girlfriend",
+        "husband": "your husband",
+        "wife": "your wife",
+        "best-friend": "your best friend",
+        "mom": "your mom",
+        "dad": "your dad"
+      },
+      "madeForDay": {
+        "birthday": "a birthday",
+        "anniversary": "an anniversary",
+        "valentines": "Valentine’s Day",
+        "wedding": "a wedding",
+        "graduation": "a graduation",
+        "christmas": "Christmas",
+        "halloween": "Halloween",
+        "thanksgiving": "Thanksgiving",
+        "mothers-day": "Mother’s Day",
+        "fathers-day": "Father’s Day",
+        "apology": "saying sorry",
+        "long-distance": "someone far away",
+        "just-because": "no reason at all"
+      }
     }
   },
   "occasions": {
     "title": "Occasions",
     "for": "Digital gifts for {occasion}",
     "guideEyebrow": "How to make one",
+    "ideasLabel": "Ideas",
+    "ideasLine": "Open a card to see the idea.",
+    "guideLine": "What to write, what to add and when to send it.",
     "faqTitle": "Questions people ask",
     "birthday": "Birthday",
     "anniversary": "Anniversary",
@@ -1047,7 +1136,7 @@
     "thanksgiving": "Thanksgiving",
     "mothers-day": "Mother's Day",
     "fathers-day": "Father's Day",
-    "apology": "Apology",
+    "apology": "Saying sorry",
     "long-distance": "Long distance",
     "just-because": "Just because"
   },
@@ -1093,7 +1182,7 @@
       },
       "pick3": {
         "name": "Pick three",
-        "blurb": "Three days they'll remember: their birthday, your anniversary, and one for your mum.",
+        "blurb": "Three days they'll remember: their birthday, your anniversary, and one for your mom.",
         "cta": "Pick three",
         "features": [
           "Any three templates, forever",
@@ -1258,7 +1347,7 @@
     "dates": {
       "where": {
         "title": "Pick your town",
-        "body": "Type a town or a neighbourhood, or tap “Near me”. Every idea below is made of real places there."
+        "body": "Type a town or a neighborhood, or tap “Near me”. Every idea below is made of real places there."
       },
       "when": {
         "title": "Pick a day",
@@ -1335,7 +1424,8 @@
   "notFound": {
     "title": "This page wandered off",
     "detail": "The link may be broken, or the page may have moved.",
-    "home": "Back to the homepage"
+    "home": "Back to the homepage",
+    "metaTitle": "Page not found · Ethos"
   },
   "error": {
     "title": "Something broke on our side",
@@ -1357,7 +1447,7 @@
     },
     "error": {
       "title": "We couldn't confirm that.",
-      "detail": "If you were charged, your unlock will appear within a few minutes. Otherwise, try again from the pricing page."
+      "detail": "If you were charged, your unlock will appear within a few minutes. Otherwise, try again from <pricing>the pricing page</pricing>."
     },
     "signin": {
       "title": "Paid. Now sign in.",
@@ -1401,7 +1491,6 @@
       "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
-      "guarantee": "If it doesn't open on their phone, you get your money back.",
       "personalPrice": "Your personal price from our email, until {ends}."
     },
     "etsy": {
@@ -1424,7 +1513,7 @@
         "email_required": "Add your email, so your gift has an account to live in.",
         "order_not_found": "We can't find that order in our Etsy shop. Check the number on your Etsy receipt.",
         "not_paid": "Etsy hasn't confirmed this payment yet. Try again in a few minutes.",
-        "refunded": "This order was cancelled or refunded on Etsy, so it can't send a gift.",
+        "refunded": "This order was canceled or refunded on Etsy, so it can't send a gift.",
         "other_template": "This order is for {templates}. Open that one to send it.",
         "order_used": "This order has already sent a gift. If that wasn't you, message us on Etsy.",
         "rate_limited": "Too many tries. Wait a little while and try again.",
@@ -1644,7 +1733,7 @@
       "birthday": {
         "title": "Digital birthday gifts",
         "metaTitle": "Digital and Virtual Birthday Gifts: 12 Ideas to Send Today",
-        "description": "Make a digital birthday gift they'll open again and again: your photos, their favourite song and your words, animated and sent as a link or QR code. Free to start.",
+        "description": "Make a digital birthday gift they'll open again and again: your photos, their favorite song and your words, animated and sent as a link or QR code. Free to start.",
         "intro": "A birthday message that does more than sit in a chat. Blow out the candles in Birthday Cinema, crack open a Fortune Cookie or print a Front Page about them, with your photos and their song, and set it to open at midnight."
       },
       "anniversary": {
@@ -1677,12 +1766,12 @@
         "intro": "For the people you won't see this year, and the ones you will: a digital Christmas card that opens on Christmas morning wherever they are, with no shipping deadline to miss. Shake your photos into the snow in Snow Globe, or leave a letter by the fire in Fireside."
       },
       "mothers-day": {
-        "title": "Digital Mother's Day gifts",
-        "description": "Tell your mum what she means to you with a digital Mother's Day gift: old photos, her favourite song and a letter in your words, sent as a link she can keep.",
+        "title": "Digital Mother’s Day gifts",
+        "description": "Tell your mom what she means to you with a digital Mother's Day gift: old photos, her favorite song and a letter in your words, sent as a link she can keep.",
         "intro": "Find the old photos, pick the song she always sings along to, and write the things that are hard to say out loud. Give her a Bouquet that never wilts, or a Jar of Reasons to shake one out whenever she likes."
       },
       "fathers-day": {
-        "title": "Digital Father's Day gifts",
+        "title": "Digital Father’s Day gifts",
         "description": "A Father's Day gift he'll actually keep: photos through the years, a song he loves and a note from you, in an animated gift sent as a link.",
         "intro": "Skip another tie. Put the road trips, the lessons and the terrible jokes into a gift that opens on his phone: his own Front Page, or a Museum of the two of you."
       },
@@ -1718,13 +1807,13 @@
   },
   "cities": {
     "meta": {
-      "title": "Date ideas in {city}: {ideas} ideas and {places, plural, =0 {a map of real places} one {# real place} other {# real places}}",
-      "description": "{ideas} date ideas picked for what {city} is really like, with real cafés, parks and museums near the centre on a free map. No account needed."
+      "title": "Date ideas in {city}: {ideas} ideas and {places, plural, =0 {a map of places} one {# real place} other {# real places}}",
+      "description": "{ideas} date ideas picked for what {city} is really like, with real cafés, parks and museums near the center on a free map. No account needed."
     },
     "eyebrow": "Date ideas by city",
     "title": "Date ideas in {city}",
     "back": "All date ideas",
-    "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the centre for the stops.",
+    "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the center for the stops.",
     "leadNoPlaces": "{ideas} dates for {city}, in the order the city deserves. Open any of them on the map and it finds the places.",
     "cta": {
       "map": "Open the map in {city}",
@@ -1746,37 +1835,61 @@
       "winter": "Winters in {city} are properly cold, which is what ice rinks and hot chocolate are for.",
       "museums": "{city} has big museums and galleries worth an afternoon, so the culture ideas sit high.",
       "nightlife": "{city} stays up late, so the evening ideas get more room than usual.",
-      "parks": "There are big parks and gardens near the centre of {city}, so picnics and slow walks feature.",
+      "parks": "There are big parks and gardens near the center of {city}, so picnics and slow walks feature.",
       "views": "{city} has hills and lookouts, so a sunrise or a golden hour is worth the climb."
     },
     "notes": {
-      "london": "Most of London's big museums are free, so the museum date costs only the glass of something after. And with the West End so close, a night at the theatre is an easy yes.",
-      "manchester": "The centre is compact, so dinner, a film and a late dessert rarely need more than a walk between them.",
+      "london": "Most of London's big museums are free, so the museum date costs only the glass of something after. And with the West End so close, a night at the theater is an easy yes.",
+      "manchester": "The center is compact, so dinner, a film and a late dessert rarely need more than a walk between them.",
       "edinburgh": "Calton Hill is a short walk from Princes Street and costs nothing, which makes getting up for the sunrise an easy sell.",
       "dublin": "The National Gallery and the National Museum are free to walk into, which is exactly what a wet afternoon needs.",
-      "new-york": "Pick two stops in the same neighbourhood and walk between them: in New York, the streets are half the date.",
-      "los-angeles": "Distances are long here, so choose one neighbourhood and keep the date in it. The beach at sunset is worth the drive.",
+      "birmingham": "The canals run right through the center, with towpaths and waterside tables at Brindleyplace and Gas Street Basin: the long way home is along the water.",
+      "glasgow": "The big museums are free here, Kelvingrove and the Gallery of Modern Art among them, so a wet afternoon costs nothing but the coffee after.",
+      "bristol": "Brandon Hill is a short climb from the harbor, and Cabot Tower at the top is free to go up. It is the place for the golden hour.",
+      "leeds": "The Victorian arcades in the center keep you under glass between dinner and dessert. The Hyde Park Picture House, open since 1914, is still lit by gas lamps.",
+      "liverpool": "There is live music on Mathew Street, round the Cavern Club, most nights. Before it, the national museums by the waterfront are free for the afternoon.",
+      "new-york": "Pick two stops in the same neighborhood and walk between them: in New York, the streets are half the date.",
+      "los-angeles": "Distances are long here, so choose one neighborhood and keep the date in it. The beach at sunset is worth the drive.",
       "chicago": "The lakefront has sandy beaches a short ride from the Loop, so the beach date is closer than you'd think.",
-      "san-francisco": "Most neighbourhoods have a hilltop park within a steep walk, and they are the best seats in town for the golden hour.",
+      "san-francisco": "Most neighborhoods have a hilltop park within a steep walk, and they are the best seats in town for the golden hour.",
       "miami": "Midday heat is serious for much of the year, so the ideas for early mornings and evenings come first.",
-      "boston": "The centre is small and walkable, and the Public Garden, with its lagoon, sits right in the middle of it.",
+      "boston": "The center is small and walkable, and the Public Garden, with its lagoon, sits right in the middle of it.",
+      "dallas": "The Dallas Museum of Art is free to walk into, and Klyde Warren Park, built on a deck over the freeway, is across the street for the walk after.",
+      "kansas-city": "Barbecue is the dinner here, and it suits the twist: order for each other, no vetoes. On the first Friday of the month the Crossroads galleries stay open late.",
+      "houston": "The Museum District has nineteen museums around Hermann Park, and some never charge, the Menil Collection and the Contemporary Arts Museum among them. Go late in the day, when the heat lets up.",
+      "atlanta": "The BeltLine's Eastside Trail follows an old railway from Piedmont Park to Krog Street, past patios and places to stop. It is a walk made for an ice cream.",
+      "austin": "From spring to fall, over a million bats fly out from under the Congress Avenue Bridge at dusk, so a golden hour by Lady Bird Lake ends with a show.",
+      "denver": "City Park's lake has the view the city is known for: the skyline with the Rockies behind it. Bring the picnic an hour before sunset, and a jacket, even in summer.",
+      "milwaukee": "The art museum on the lakefront has wings: a sunshade that opens when the museum does and folds at closing, if the wind allows. See it, then find a beer nearby.",
+      "salt-lake-city": "Ensign Peak is a short, steep walk above the Capitol: about twenty minutes up, and at sunset the whole valley and the lake are below you.",
+      "san-antonio": "The River Walk runs a level below the streets, shaded by cypress trees, so the long way home after dinner is cooler than the street above.",
+      "columbus": "On the first Saturday of the month the Short North holds its Gallery Hop: the galleries along High Street stay open late and the street fills up.",
+      "orlando": "Lake Eola sits in the middle of downtown, with swan-shaped pedal boats to rent and a path around the water that takes about twenty minutes.",
+      "philadelphia": "Many of the city's small restaurants are BYOB: you bring the bottle, they bring the glasses. Dinner for two starts at the wine shop.",
+      "phoenix": "In the hot months the city gets up early: the trails are busy at sunrise and quiet by mid-morning. Do the same, and keep the afternoon for somewhere with air conditioning.",
+      "pittsburgh": "The Duquesne Incline, a cable railway from 1877, climbs Mount Washington for a few dollars. The view from the top is where the three rivers meet.",
+      "portland": "Powell's fills a whole city block with books, new and used on the same shelves, which makes “pick a book for each other” a long and happy job.",
+      "seattle": "It drizzles more often than it pours here, which is what the city's coffee shops and big independent bookshops are for. On a clear evening, Kerry Park has the skyline.",
+      "st-louis": "Forest Park holds the art museum, the history museum and the zoo, and all three are free. In winter its outdoor rink opens for skating.",
+      "nashville": "The honky-tonks on Lower Broadway have live bands from late morning to closing time and rarely charge at the door. The bands play for tips, so bring a few dollars in cash.",
+      "san-diego": "Balboa Park puts gardens and more than a dozen museums in one place, and the beaches are a short ride from it. Start in the park and finish at the sunset.",
       "toronto": "The islands are a short ferry ride from downtown, with beaches, paths and a view of the skyline back.",
       "vancouver": "Stanley Park and the seawall start at the edge of downtown, so an outdoor date needs no car.",
       "montreal": "Winters are long and cold, so ice rinks and hot chocolate aren't a novelty here: they're the season. For the view, walk up Mount Royal.",
-      "sydney": "The beaches, the harbour and its ferries are all part of the city, so the ideas by the water come first.",
+      "sydney": "The beaches, the harbor and its ferries are all part of the city, so the ideas by the water come first.",
       "melbourne": "Laneways, galleries and kitchens that stay open late: this is a city for an evening that runs longer than planned.",
       "auckland": "The weather can change in an afternoon here, so keep an indoor idea in your pocket for when it turns.",
       "paris": "A picnic by the river is a local habit, and some of the big museums stay open late one evening a week.",
       "amsterdam": "It rains a fair bit, and the city is full of small galleries and big museums for exactly those days.",
       "berlin": "Late nights are normal here, so the evening ideas can start later than you'd plan anywhere else.",
-      "munich": "The English Garden, one of the largest city parks anywhere, is a short walk from the centre.",
+      "munich": "The English Garden, one of the largest city parks anywhere, is a short walk from the center.",
       "vienna": "The coffee houses are made for staying: nobody will hurry you away from a table for two.",
-      "prague": "The old centre is at its quietest early in the morning, which is when the bridges belong to the two of you.",
-      "copenhagen": "Hiring a small boat for the canals and the harbour is a summer habit here, and nobody expects you to know how to sail.",
+      "prague": "The old center is at its quietest early in the morning, which is when the bridges belong to the two of you.",
+      "copenhagen": "Renting a small boat for the canals and the harbor is a summer habit here, and nobody expects you to know how to sail.",
       "stockholm": "The city is built on islands, so walking between two stops usually means walking along the water.",
-      "oslo": "The fjord starts at the edge of the centre, and the opera house roof is free to walk up for the view.",
+      "oslo": "The fjord starts at the edge of the center, and the opera house roof is free to walk up for the view.",
       "lisbon": "The miradouros, the city's lookout terraces, are free and made for the golden hour.",
-      "rome": "Gelato and a slow walk through the centre: a date the city has had a long time to perfect.",
+      "rome": "Gelato and a slow walk through the center: a date the city has had a long time to perfect.",
       "riga": "The Old Town is small enough to cross in a quarter of an hour, and the canal parks run right alongside it.",
       "tallinn": "The Old Town has viewing platforms over its rooftops, a short climb from the main square.",
       "singapore": "The heat is steady and afternoon downpours are common, so indoor and evening ideas sit near the top: eat late, then walk once the air cools.",
@@ -1784,10 +1897,10 @@
     },
     "places": {
       "eyebrow": "Real places",
-      "title": "Near the centre of {city}",
-      "sub": "The best-placed spots within {km} km of the centre, ranked the way the dates map ranks them. Tap one to see it on the map.",
+      "title": "Near the center of {city}",
+      "sub": "The best-placed spots within {km} km of the center, ranked the way the dates map ranks them. Tap one to see it on the map.",
       "counts": "What the map knows within {km} km",
-      "fromCentre": "{distance} from the centre",
+      "fromCentre": "{distance} from the center",
       "none": "We couldn't read the map for {city} just now. The ideas above still stand: open the map and it will find places for them."
     },
     "map": {
@@ -1819,13 +1932,14 @@
     "titleNear": "Date ideas near you",
     "empty": {
       "title": "Where are you two?",
-      "sub": "A town, a neighbourhood, or just where you are now. We'll find the dates hiding in it.",
+      "sub": "A town, a neighborhood, or just where you are now. We'll find the dates hiding in it.",
+      "subIdea": "Say where you are and we'll plan “{idea}” with real places there.",
       "or": "Or start somewhere",
       "note": "pick a street, any street"
     },
     "where": {
       "label": "Where",
-      "placeholder": "City or neighbourhood",
+      "placeholder": "City or neighborhood",
       "nearMe": "Near me",
       "searching": "Looking…",
       "nothing": "No town by that name. Try the nearest city.",
@@ -1875,6 +1989,81 @@
       "add": "Add this date to our plan",
       "added": "In your plan",
       "close": "Close this idea"
+    },
+    "tonight": {
+      "label": "The planner",
+      "inCity": "Where to go in {city}",
+      "sentence": "Plan <mood></mood> date <when></when>. <length></length>, <budget></budget>.",
+      "sentenceKind": "Plan one of these <when></when>. <length></length>, <budget></budget>.",
+      "lengthLabel": "How long",
+      "budgetLabel": "Budget",
+      "mood": {
+        "any": "any kind of",
+        "cozy": "a cozy",
+        "playful": "a playful",
+        "outdoorsy": "an outdoorsy",
+        "foodie": "a foodie",
+        "artsy": "an artsy",
+        "fancy": "a dressed-up"
+      },
+      "when": {
+        "tonight": "tonight",
+        "tomorrow": "tomorrow",
+        "weekend": "this weekend",
+        "day": "on {day}"
+      },
+      "length": {
+        "any": "Any length",
+        "short": "Up to 2 hours",
+        "medium": "2 to 3 hours",
+        "long": "3 hours or more"
+      },
+      "budget": {
+        "0": "free",
+        "1": "pocket change at most",
+        "2": "dinner money at most",
+        "3": "a treat is fine",
+        "any": "any budget"
+      },
+      "plan": "Plan it",
+      "finding": "Finding places…",
+      "whereFirst": "Say where first",
+      "open": "Open the plan",
+      "another": "Another",
+      "relaxed": {
+        "budget": "Nothing {wanted} fits {when} here. Expect to spend {cost}.",
+        "budgetWet": "Nothing {wanted} fits {when} in the rain here. Expect to spend {cost}.",
+        "length": "Nothing of that length fits; this one takes about {hours} h.",
+        "vibe": "Nothing in that mood fits {when}; this is the nearest."
+      },
+      "beyond": {
+        "budget": "This one costs more: expect to spend {cost}.",
+        "length": "This one runs to about {hours} h.",
+        "vibe": "This one is in a different mood."
+      },
+      "wanted": {
+        "0": "free",
+        "1": "for pocket change",
+        "2": "for dinner money"
+      },
+      "costs": {
+        "1": "pocket change, about a coffee each",
+        "2": "about what dinner out costs",
+        "3": "the price of a ticket each"
+      },
+      "freeIf": "Free if you bring your own food and drink. The stop marked optional is where you would buy it.",
+      "optional": "optional",
+      "none": "Nothing fits that here.",
+      "noneKind": "None of the ideas on this page fit {when} there.",
+      "movedTomorrow": "Nothing on this page can still be done tonight there, so this one is for tomorrow.",
+      "late": "It's too late to start one tonight.",
+      "tryTomorrow": "Plan tomorrow",
+      "openMap": "Open the map",
+      "noScript": "The planner needs JavaScript.",
+      "noScriptCities": "Real places, city by city",
+      "replace": "This replaces the plan you were making on this device.",
+      "replaceYes": "Replace it",
+      "replaceNo": "Keep mine"
     },
     "places": {
       "title": "Places for a date",
@@ -2075,10 +2264,9 @@
   },
   "growth": {
     "hero": {
-      "eyebrow": "Digital gifts, made by you",
       "h1a": "Make them a gift",
       "h1b": "they'll open again and again.",
-      "sub": "Your photos, your words and their song, turned into a gift that opens like a story. Ten minutes to make, sent as a link or a QR code.",
+      "sub": "Your photos, your words and their song, turned into a digital gift that opens like a story. Ten minutes to make, sent as a link or a QR code.",
       "cta": "Make a gift",
       "demo": "Watch one open",
       "note": "Free to start. No account until you publish.",
@@ -2105,10 +2293,10 @@
     },
     "creators": {
       "meta": {
-        "title": "Creator programme: {commission}% of every sale",
+        "title": "Creator program: {commission}% of every sale",
         "description": "Share your own Ethos link and earn {commission}% of every sale it brings, worked out after VAT and refunds. Paid monthly. No codes, no discounts, no cookies."
       },
-      "eyebrow": "Creator programme",
+      "eyebrow": "Creator program",
       "h1a": "Share Ethos.",
       "h1b": "Keep {commission}%.",
       "sub": "Post the gifts and dates you make with Ethos. Every sale that comes through your personal link earns you {commission}% of it, worked out after VAT and refunds.",
@@ -2131,7 +2319,7 @@
       "ticket": {
         "label": "Your link",
         "you": "of the sale, for you",
-        "paid": "and it's paid out every month"
+        "paid": "minimum payout, paid monthly"
       },
       "how": {
         "eyebrow": "How it works",
@@ -2190,7 +2378,7 @@
         "body": "Send us your handle, where you post and a link to a video of yours you love."
       },
       "mail": {
-        "subject": "Creator programme application",
+        "subject": "Creator program application",
         "body": "Hi Ethos,\n\nMy handle: \nWhere I post (TikTok, Instagram, YouTube…): \nFollowers, roughly: \nA video of mine I love: \n\n"
       }
     }
@@ -2235,51 +2423,53 @@
       "title": "Whatever kind of couple you are this week.",
       "dates": {
         "title": "Dates",
-        "blurb": "Ideas built from real places on a map of your town, matched to the weather and the sunset.",
+        "blurb": "Ideas built from real places on a map.",
         "cta": "Find a date"
       },
       "gifts": {
         "title": "Digital gifts",
-        "blurb": "A letter, a bouquet, a scratch card: made in minutes, opened on their phone, kept for good.",
+        "blurb": "Made in minutes, kept for good.",
         "cta": "Make a gift"
       },
       "ldr": {
         "title": "Long distance",
-        "blurb": "Meet in the middle, date across time zones, and send something that closes the gap.",
+        "blurb": "Meet in the middle, date across time zones.",
         "cta": "Close the distance"
       },
       "games": {
         "title": "Games",
-        "blurb": "Seven card games for two: on one phone on the sofa, or on two phones a continent apart.",
+        "blurb": "Eight card games for two.",
         "cta": "Play a game"
       }
     },
     "ideas": {
       "eyebrow": "Date ideas",
       "title": "An evening with a shape to it.",
-      "blurb": "Every idea is a small recipe: a couple of stops and a twist. Pick one and we fill it with real places near you.",
+      "blurb": "Pick one and we fill it with real places near you.",
       "all": "All {count} ideas, on the map",
-      "hours": "{hours} h"
+      "hours": "{hours} h",
+      "previous": "Earlier ideas",
+      "next": "More ideas"
     },
     "ldr": {
       "eyebrow": "Long distance",
       "titleA": "Apart is not",
       "titleB": "the same as far.",
-      "blurb": "Find the city halfway between you, plan the date for when you land, and keep the everyday going with things you can do on two screens.",
+      "blurb": "Find the city halfway between you, plan the date for when you land.",
       "cta": "Open the long-distance room",
       "halfway": "halfway",
       "cityA": "Riga",
       "cityB": "London"
     },
     "games": {
-      "eyebrow": "Games · seven to play now",
+      "eyebrow": "Games · eight to play now",
       "title": "Play for who does the dishes.",
-      "blurb": "Card games made for two people who like each other: guess each other's answers, find the pairs, spin for the dishes. No downloads, no accounts.",
+      "blurb": "Card games made for two people who like each other. No downloads, no accounts.",
       "cta": "Deal me in"
     },
     "closing": {
-      "title": "Saturday isn't going to plan itself.",
-      "blurb": "Two minutes now, and the weekend has a shape.",
+      "title": "Make them something they will keep.",
+      "blurb": "Ten minutes now, and it is in their hands tonight.",
       "dates": "Find a date",
       "gifts": "Make a gift"
     }
@@ -2298,7 +2488,7 @@
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
       "you": "Where you are",
       "them": "Where they are",
-      "hint": "Pick both towns and we'll do the maths.",
+      "hint": "Pick both towns and we'll do the math.",
       "apart": "Apart",
       "miles": "{miles} miles, as the plane flies",
       "halfway": "Halfway",
@@ -2324,7 +2514,8 @@
     "virtual": {
       "eyebrow": "Dates for two screens",
       "title": "Something to do on the call.",
-      "twist": "The twist:"
+      "twist": "The twist:",
+      "openMap": "Open the map"
     },
     "gifts": {
       "eyebrow": "Gifts for the distance",
@@ -2455,9 +2646,9 @@
       "depart": "Depart",
       "return": "Return",
       "optional": "optional",
-      "travellers": "{count, plural, one {# traveller} other {# travellers}}",
-      "fewer": "One fewer traveller",
-      "more": "One more traveller",
+      "travellers": "{count, plural, one {# traveler} other {# travelers}}",
+      "fewer": "One fewer traveler",
+      "more": "One more traveler",
       "nothing": "No airport by that name. Try the city, or its three-letter code.",
       "pick": "Pick both airports and the searches appear here.",
       "same": "That's the same airport at both ends.",
@@ -2490,8 +2681,8 @@
   },
   "games": {
     "meta": {
-      "title": "Couple Games Online: Seven Free Games for Two",
-      "description": "Couple games to play online, free: How well do you know me, Would you rather, truth or dare, question cards, Memory with your photos and more. No downloads."
+      "title": "Couple Games Online: Eight Free Games for Two",
+      "description": "Couple games to play online, free: Would you rather, This or that, How well do you know me, truth or dare, Memory with your photos and more. No downloads."
     },
     "h1a": "Couple games for",
     "h1b": "exactly two.",
@@ -2619,6 +2810,88 @@
       "listTitle": "{count} would you rather questions for couples",
       "listIntro": "Every question in the free deck, from easy ones for the sofa to the ones that start an argument worth screenshotting. Play them above on one phone or two, or read them out on a date."
     },
+    "today": {
+      "label": "Question of the day",
+      "h1": "Today's would you rather question",
+      "line": "Everyone gets the same one today. Find out which side your person takes.",
+      "h1Old": "That day's would you rather question",
+      "lineOld": "Everyone got this one that day. Find out which side your person takes.",
+      "seoTitle": "Would You Rather Question of the Day for Couples",
+      "seoDescription": "A new would you rather question every day, the same for everyone. Your partner picks before seeing your answer, then both show side by side. Free, no sign-up.",
+      "daily": "A new one every day",
+      "broken": "That link didn't arrive whole, so here is today's question.",
+      "from": "From {name}",
+      "fromOn": "From {name}, {date}",
+      "on": "The question of {date}",
+      "both": "Both answers",
+      "bothOn": "Both answers, {date}",
+      "invited": "{name} has answered. What would you pick?",
+      "prompt": "Which one would you take?",
+      "or": "or",
+      "change": "Changed your mind? Tap the other one.",
+      "resend": "Changed. Send it again so they get the new answer.",
+      "nameLabel": "Your first name",
+      "send": "Send it to them",
+      "copy": "Copy the link",
+      "copyAgain": "Copy the link again",
+      "copied": "Link copied. Paste it into your chat.",
+      "copyFallback": "Copy this link:",
+      "sent": "Sent. They pick without seeing yours, then can send theirs back.",
+      "sendBack": "Send yours back",
+      "sentBack": "Sent. {name} will see both answers.",
+      "own": "This is the link you sent. They pick without seeing yours.",
+      "match": "Same pick. Now each say why, and see if the reasons match too.",
+      "clash": "Different picks. You each get one sentence to win the other over.",
+      "you": "You",
+      "answers": "Both answers",
+      "wholeGame": "Play the whole game",
+      "todays": "See today's question",
+      "shareTitle": "Today's would you rather",
+      "shareText": "{name} answered today's would you rather. What would you pick?",
+      "shareTextAnon": "I've answered today's would you rather. What would you pick?",
+      "shareBackText": "{name} answered too. Open it to see both picks.",
+      "shareBackTextAnon": "I've answered too. Open it to see both picks.",
+      "how": {
+        "label": "How it works",
+        "heading": "One question, two phones",
+        "line": "Your name and answer ride in the link and never reach our server.",
+        "steps": {
+          "pick": "Tap the side you'd take",
+          "send": "Send them the link",
+          "see": "They choose blind, then both show"
+        }
+      },
+      "more": {
+        "label": "The whole game",
+        "heading": "{count} questions like this",
+        "line": "Ten in a row, on one phone passed across or on two.",
+        "play": "Play would you rather",
+        "all": "All the games",
+        "faq": "Questions"
+      }
+    },
+    "thisthat": {
+      "title": "This or that?",
+      "blurb": "Ten quick pairs. You both pick in secret, then see how many you matched. Play on one phone, or from two.",
+      "prompt": "This or that?",
+      "sofar": "Matched {same} of {total} so far",
+      "reveal": {
+        "match": "Same pick.",
+        "clash": "One each."
+      },
+      "end": {
+        "eyebrow": "Ten pairs later",
+        "twins": "You could order for each other.",
+        "balanced": "Enough in common, enough to argue about.",
+        "opposites": "Opposites. Somebody has to keep it interesting.",
+        "sub": "You matched on {same} of {total}. Ask about the ones you didn't.",
+        "again": "Play again"
+      },
+      "seoTitle": "This or That Questions for Couples: 120 to Play Now",
+      "seoDescription": "120 this or that questions for couples, written for two: pick in secret on one phone or two, then see how many you match. Free, no app, no sign-up.",
+      "listTitle": "{count} this or that questions for couples",
+      "listIntro": "Every pair in the game, to play above or read out across a table. Count to three and answer at the same time."
+    },
     "roulette": {
       "title": "Dishes roulette",
       "blurb": "A wheel of the two of you. Every spin settles one chore. The wheel's word is final.",
@@ -2638,7 +2911,7 @@
     },
     "dare": {
       "title": "Truth or dare, soft edition",
-      "blurb": "Nothing you'd regret in the morning. Mostly compliments and bad dancing. One phone, going round.",
+      "blurb": "Speeches, impressions, a slow dance. Nothing you couldn't do with the neighbours in. One phone, going round.",
       "turn": "{name}'s turn",
       "pick": "{name}, truth or dare?",
       "truth": "Truth",
@@ -2658,7 +2931,7 @@
       "seoTitle": "Truth or Dare Questions for Couples: Free Online Game",
       "seoDescription": "Truth or dare for couples, the soft edition: sweet truths and silly dares, nothing you'd regret in the morning. One phone, going round. Free.",
       "listTitle": "{count} truth or dare questions for couples",
-      "listIntro": "Every truth and every dare in the free game. Mostly compliments and bad dancing.",
+      "listIntro": "Every truth and every dare in the free game: small confessions, speeches, impressions, a slow dance.",
       "listTruths": "Truths",
       "listDares": "Dares"
     },
@@ -2669,13 +2942,31 @@
     },
     "hub": {
       "eyebrow": "Game night for two",
-      "sub": "Seven little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
+      "sub": "Eight little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
       "one": "Pass one phone",
       "two": "Or two phones, one link",
       "deal": "Deal me in",
       "pickTitle": "Pick a game",
       "pickSub": "Every one is quick, and every one ends with something to talk about.",
-      "minutes": "{n} min"
+      "minutes": "{n} min",
+      "todayTitle": "Today's question",
+      "todayPhones": "Two phones, one link",
+      "todayCta": "Answer today's",
+      "tiers": {
+        "free": {
+          "title": "Free",
+          "line": "All {count} games, start to finish. Nothing to sign up for or download."
+        },
+        "pack": {
+          "title": "A pack, {price}",
+          "line": "More cards for two or three of the games, yours for good."
+        },
+        "two": {
+          "title": "Ethos for Two",
+          "line": "Every pack and every gift template, for both of you."
+        },
+        "cta": "See Ethos for Two"
+      }
     },
     "memory": {
       "title": "Memory",
@@ -2751,19 +3042,30 @@
       },
       "imHere": "I'm {name}, go",
       "seoTitle": "Drawing Game for Couples, Live on Two Phones",
-      "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two."
+      "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two.",
+      "listTitle": "{count} words for a drawing game for two",
+      "listIntro": "Every word in the free game. Six are dealt each time, and you take turns drawing them with a finger."
     },
     "end": {
       "label": "What next",
       "gift": "Make them a gift",
       "giftBlurb": "A letter, your photos, your song: something they open on their phone.",
-      "another": "Play another game",
-      "anotherBlurb": "Seven on the table. None takes more than a quarter of an hour.",
+      "next": "Or play next",
+      "another": "Back to the games",
+      "today": "Send them today's question",
       "host": {
         "title": "Your turn to deal",
         "blurb": "Start your own room and send the link to anyone.",
         "cta": "Start a room"
       }
+    },
+    "notes": {
+      "label": "Before you deal",
+      "how": "How to play",
+      "faq": "Questions about this game",
+      "line": "The rules, how long it takes, and what is kept.",
+      "moreLabel": "Keep reading",
+      "more": "More like this"
     }
   },
   "packs": {
@@ -2809,7 +3111,6 @@
     },
     "hub": {
       "title": "Game packs",
-      "sub": "More cards for the same games, {price} each and yours for good. Or every pack and every gift template, for both of you, with Ethos for Two.",
       "cta": "See inside: {n} cards"
     }
   },
@@ -2983,8 +3284,8 @@
       "see": "See Ethos for Two",
       "inApp": "Manage your membership at tryethos.io/account",
       "done": {
-        "cancel": "Cancelled. You both keep everything until {date}.",
-        "cancelNow": "Cancelled. Nothing more will be charged.",
+        "cancel": "Canceled. You both keep everything until {date}.",
+        "cancelNow": "Canceled. Nothing more will be charged.",
         "resume": "It renews again.",
         "switchYearly": "You're on yearly now.",
         "switchMonthly": "It switches to monthly around {date}.",
@@ -3101,8 +3402,8 @@
       "monthlyNote": "The day before each one, we'll ask if it's still on, and only remind you if you say yes. Nothing is ever sent to {name}.",
       "sinceFuture": "That day hasn't come yet.",
       "monthlySave": "Remind me every month",
-      "someoneSub": "Mum, a best friend…",
-      "someonePlaceholder": "Mum",
+      "someoneSub": "Mom, a best friend…",
+      "someonePlaceholder": "Mom",
       "othersLabel": "Added",
       "occasions": {
         "birthday": "Birthday",
@@ -3474,16 +3775,18 @@
     }
   },
   "madeWith": {
-    "metaTitle": "Make one back",
-    "metaDescription": "Someone made you an Ethos gift. Make one back: two templates are free, and every other one is free to try.",
-    "eyebrow": "Made with Ethos",
+    "metaTitle": "Make one of your own",
+    "metaDescription": "Someone made you an Ethos gift. Make one of your own: every template is free to try.",
     "title": "Someone made you one of these.",
-    "subtitle": "Make one back — free to start.",
+    "subtitle": "Make one back. Free to start.",
+    "subtitleElse": "Make one for someone else. Free to start.",
     "yours": "The one you got",
+    "all": "See every template",
     "free": {
       "eyebrow": "Free",
       "title": "Free to make and send",
-      "blurb": "No payment, and no account until you send it. These carry the small “Made with Ethos” footer, like the one you got."
+      "blurb": "No payment, and no account until you send it. A free gift carries the small “Made with Ethos” footer, like the one you got.",
+      "blurbElse": "No payment, and no account until you send it. A free gift carries a small “Made with Ethos” footer."
     },
     "premium": {
       "eyebrow": "Premium",
@@ -3496,10 +3799,38 @@
     "breadcrumb": "Digital gifts",
     "free": "Free",
     "make": "Make this gift",
+    "makeLead": "Make the one in the phone",
+    "watch": "Watch it",
+    "ideaInFull": "The idea in full",
+    "giftPage": "About this gift",
+    "readNext": "Read next",
+    "byKind": "Gift ideas by kind",
     "guideTitle": "How to make it land",
+    "craftLabel": "Before you send",
+    "ideasTag": "{count} ideas",
+    "inPhone": "In the phone: {name}, {price} once. Tap it to play.",
+    "inPhoneFree": "In the phone: {name}, free as a short note. Tap it to play.",
+    "ideasLabel": "The ideas",
+    "ideasLine": "Open a card for a line to borrow.",
+    "borrowLabel": "A line to borrow",
+    "copyLine": "Copy",
+    "copiedLine": "Copied",
+    "faqLabel": "Questions",
+    "faqLine": "The short answers, before you start.",
+    "moreAbout": "More about these gifts",
+    "nextLabel": "Next",
     "faqTitle": "Questions people ask",
     "more": "Gift ideas for someone else",
     "occasions": "By occasion",
+    "christmas": {
+      "label": "Christmas",
+      "heading": {
+        "boyfriend": "Christmas gifts for your boyfriend",
+        "girlfriend": "Christmas gifts for your girlfriend"
+      },
+      "line": "Made tonight, opened on their phone on Christmas morning.",
+      "more": "See more Christmas gifts"
+    },
     "footerTitle": "Gift ideas"
   },
   "together": {

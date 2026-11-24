@@ -111,7 +111,7 @@ export function EtsyClaim({ slug, locale, guest, returnTo, blocked, onLeave }: {
       {signIn ? (
         <div data-testid="etsy-sign-in">
           <p className="mt-1.5 mb-5 text-sm text-ink-soft">{t("onAccount", { email })}</p>
-          <AuthForm mode="login" next={returnTo} email={email} compact />
+          <AuthForm mode="login" next={returnTo} email={email} compact bare />
         </div>
       ) : (
         <>

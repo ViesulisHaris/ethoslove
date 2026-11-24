@@ -5,10 +5,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
-import { ideaImage } from "@/lib/dates/art";
+import { ideaImageInCity } from "@/lib/dates/art";
 import { cityMapHref, cityName, getCity, nearbyCities, type City } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode, placeListNode, toldTraits } from "@/lib/cities/copy";
-import { cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
+import { cityIdeaScore, cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
+import { IDEAS } from "@/lib/dates/ideas";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M, topCityPlaces } from "@/lib/cities/places";
 import { tiqetsSearch } from "@/lib/trips/partners";
@@ -19,6 +20,9 @@ import { CityCta } from "@/components/cities/city-cta";
 import { CityIdeaCard } from "@/components/cities/city-idea-card";
 import { CityLinks } from "@/components/cities/city-links";
 import { CityPlaceList } from "@/components/cities/city-places";
+import { TonightIsland } from "@/components/dates/tonight/tonight-island";
+import { CITY_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
+import { CITY_KIND_PAGES } from "@/lib/dates/date-kinds";
 
 /**
  * Built on the first visit and kept for a week, then rebuilt in the background: the places change
@@ -77,6 +81,8 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const km = (CITY_RADIUS_M / 1000).toLocaleString(l);
   const told = toldTraits(city, ideas);
   const ideaStops = cityIdeaStops(ideas, around);
+  // Its pages by kind of date, only New York's and London's (lib/dates/date-kinds.ts).
+  const kindPages = CITY_KIND_PAGES.filter((p) => p.city === city.slug);
 
   return (
     <>
@@ -93,7 +99,10 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
       />
 
       <section className="relative isolate -mt-[var(--header-h)] bg-blush-paper pt-[var(--header-h)] text-forest">
-        <FloralFrame frame="band" ground="light" />
+        {/* As on a trip's page: the pieces at the foot lie whole inside the hero, and its ground runs
+            softly into the page's paper below instead of stepping (walk-rooms-3). */}
+        <FloralFrame frame="bandHero" ground="light" />
+        <div aria-hidden="true" data-hero-fade className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-paper" />
         <div className="relative container-x pt-6 pb-14 sm:pt-10 lg:pb-20">
           <Link href="/dates" className="group -ml-2 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
             <ArrowLeft aria-hidden="true" className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -105,7 +114,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                 <span key={idea.id} className="relative block aspect-[4/3] overflow-hidden rounded-[22px] shadow-[0_30px_60px_-34px_rgba(120,20,60,0.6)] ring-4 ring-white" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
                   {/* EagerImg, not <img>: /dates links to every city page, and each prefetch of one
                       would otherwise add these four pictures to /dates as preloads it never shows. */}
-                  <EagerImg src={ideaImage(idea.id)} alt="" width={960} height={720} loading="eager" fetchPriority={i === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 size-full object-cover" />
+                  <EagerImg src={ideaImageInCity(idea.id)} alt="" width={960} height={720} loading="eager" fetchPriority={i === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 size-full object-cover" />
                 </span>
               ))}
             </div>
@@ -120,13 +129,25 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                   <MapIcon aria-hidden="true" className="size-4" />
                   {t("cta.map", { city: name })}
                 </CityCta>
-                <CityCta href="/templates?ref=city" cta="gift" city={city.slug} className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-rose-mist">
+                <CityCta href="/templates?ref=city" cta="gift" city={city.slug} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
                   <Gift aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("cta.gift")}
                 </CityCta>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="tonight" aria-labelledby="tonight-title" className="scroll-mt-24 border-b border-line bg-paper py-10 lg:py-14">
+        <div className="container-x grid gap-y-4 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20">
+          <div>
+            <p className="text-page-label text-page-body">{td("tonight.label")}</p>
+            <h2 id="tonight-title" className="mt-3 display-md text-page-ink">
+              {td("tonight.inCity", { city: name })}
+            </h2>
+          </div>
+          <TonightIsland place={{ lat: city.lat, lng: city.lng, name }} boost={Object.fromEntries(IDEAS.map((idea) => [idea.id, cityIdeaScore(idea, city)]))} mapHref={mapHref} />
         </div>
       </section>
 
@@ -194,7 +215,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
             <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-forest/70">{t("places.none", { city: name })}</p>
           )}
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
+            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
               <div>
                 <h3 className="font-display text-[24px] leading-tight text-forest">{t("map.title", { city: name })}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{t("map.sub")}</p>
@@ -205,18 +226,18 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                 <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
               </CityCta>
             </div>
-            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
+            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
               <div>
                 <h3 className="font-display text-[24px] leading-tight text-forest">{t("tickets.title", { city: name })}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{t("tickets.sub")}</p>
               </div>
               <div>
                 {/* Searched by the English name in both languages, as the trips' ticket queries are, so the two pages send the same search. */}
-                <CityCta href={tiqetsSearch(city.name, l)} cta="tickets" city={city.slug} partner="tiqets" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-rose-mist">
+                <CityCta href={tiqetsSearch(city.name, l)} cta="tickets" city={city.slug} partner="tiqets" className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
                   <Ticket aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("tickets.cta", { city: name })}
                 </CityCta>
-                <p className="mt-3 text-[12.5px] leading-relaxed text-forest/55">{t("tickets.disclosure")}</p>
+                <p className="mt-3 text-[12.5px] leading-relaxed text-forest/65">{t("tickets.disclosure")}</p>
               </div>
             </div>
           </div>
@@ -226,7 +247,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
       <section className="bg-paper py-16 lg:py-24">
         <div className="container-x">
           <div className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">
-            <FloralFrame frame="band" ground="dark" className="-z-10" />
+            <FloralFrame frame="card" ground="dark" className="-z-10" />
             <div className="relative max-w-2xl">
               <p className="text-eyebrow text-blush">{t("gift.eyebrow")}</p>
               <h2 className="display-xl mt-4 text-cream">{t("gift.title")}</h2>
@@ -241,7 +262,21 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
               <p className="text-[13px] text-cream/55">{t("gift.note")}</p>
             </div>
           </div>
-          <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className="mt-12" />
+          {kindPages.length > 0 ? (
+            <nav aria-label={DATE_KIND_UI[l].inCityByKind.replace("{city}", name)} className="mt-12">
+              <h2 className="text-eyebrow text-forest/65">{DATE_KIND_UI[l].inCityByKind.replace("{city}", name)}</h2>
+              <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
+                {kindPages.map((p) => (
+                  <li key={p.kind} className="flex items-center">
+                    <Link href={`/dates/${city.slug}/${p.kind}`} className="inline-flex min-h-11 items-center px-1.5 text-[14px] font-medium text-forest/75 underline-offset-4 hover:text-rose-deep hover:underline">
+                      {CITY_KIND_COPY[`${city.slug}/${p.kind}`].heading[l]}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+          <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className={kindPages.length > 0 ? "mt-6" : "mt-12"} />
         </div>
       </section>
     </>

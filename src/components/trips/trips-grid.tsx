@@ -36,11 +36,11 @@ export function TripsGrid({ cards, filters, label, className }: Props) {
               onClick={() => setKind(f.value)}
               className={cn(
                 "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-[14.5px] font-semibold whitespace-nowrap transition-colors",
-                on ? "bg-forest text-cream" : "bg-white text-forest ring-1 ring-forest/12 hover:bg-rose-mist",
+                on ? "bg-forest text-cream" : "bg-card text-forest ring-1 ring-forest/12 hover:bg-blush-paper",
               )}
             >
               {f.label}
-              <span className={cn("rounded-full px-1.5 text-[12px] tabular-nums", on ? "bg-white/15 text-cream/85" : "bg-forest/[0.06] text-forest/55")}>{count}</span>
+              <span className={cn("rounded-full px-1.5 text-[12px] tabular-nums", on ? "bg-white/15 text-cream/85" : "bg-forest/[0.06] text-forest/65")}>{count}</span>
             </button>
           );
         })}

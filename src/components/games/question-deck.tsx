@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics/track";
 import { PlayingCard, type BackTone } from "./cards";
 import { GameEnd } from "./game-end";
 import { PackSheets, PackStatus } from "./pack-shelf";
@@ -111,7 +112,11 @@ export function QuestionDeck() {
           type="button"
           aria-label={`${eyebrow}. ${question} ${action}`}
           onClick={() => {
-            if (!done) return setAt((a) => ({ ...a, [key]: index + 1 }));
+            if (!done) {
+              // The first card turned of a round is a game begun: the question cards have no lobby.
+              if (index === 0) track("game_started", { game: "deck", phones: 1 });
+              return setAt((a) => ({ ...a, [key]: index + 1 }));
+            }
             setSeed((n) => n + 1);
             setAt((a) => ({ ...a, [key]: 0 }));
           }}
@@ -122,7 +127,7 @@ export function QuestionDeck() {
         </p>
       </div>
 
-      {done ? <GameEnd /> : null}
+      {done ? <GameEnd game="deck" /> : null}
 
       {shelf.ids.length > 0 ? (
         <div id="packs" className="mt-12 scroll-mt-28" data-tour="packs">

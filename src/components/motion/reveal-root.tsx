@@ -11,7 +11,13 @@ import { usePathname } from "@/i18n/navigation";
  * Nothing is hidden until this has run: the `reveal-ready` class it puts on <html> is what arms the
  * CSS, so with JavaScript off, or before hydration, every section is simply there. Heroes are never
  * marked, because the largest thing on the first screen has to paint at once.
+ *
+ * What a <details> opens to is never watched, and globals.css never hides it. It is not on the
+ * page until someone opens it, and then it has to be there at once: a gift page's cards and
+ * question rows mark their opened part with the same attribute for their own short fade, and this
+ * observer held one opened near the foot of the screen at opacity 0 until the visitor scrolled.
  */
+
 export function RevealRoot() {
   const pathname = usePathname();
 
@@ -30,7 +36,10 @@ export function RevealRoot() {
       // A little before it is fully on screen, so a fast scroll never lands on an empty band.
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
-    const watch = () => document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-in)").forEach((el) => seen.observe(el));
+    const watch = () =>
+      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-in)").forEach((el) => {
+        if (!el.closest("details")) seen.observe(el);
+      });
     // A frame after the new page's elements are in the document.
     const frame = requestAnimationFrame(watch);
     return () => {

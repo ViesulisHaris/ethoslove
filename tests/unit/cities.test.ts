@@ -13,6 +13,14 @@ import { GROUP_IDS, KINDS, type PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { tileAt, type PoiFeature } from "@/lib/dates/tiles";
 import { CITIES } from "@/templates/_shared/places";
+import { CITY_KIND_COPY, KIND_PAGE_CITIES } from "@/content/date-kinds";
+import { createTranslator } from "next-intl";
+import { SITE } from "@/config/site";
+import sitemap from "@/app/sitemap";
+import { KIND_PLACES, kindPlaces, leftOff } from "@/lib/cities/kind-places";
+import { guessCost } from "@/lib/dates/cost";
+import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
+import { rankPlaces } from "@/lib/dates/rank";
 
 /** The owner's rule: nothing on the site mentions Spain or its cities. */
 const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary|palma)\b/i;
@@ -24,10 +32,15 @@ const city = (slug: string): City => {
   return c;
 };
 
+/** The cities of Nov 2026 the offline table has no row for: each carries its own centre and country. */
+const OWN_CENTRE = ["kansas-city", "milwaukee", "salt-lake-city", "san-antonio", "columbus", "orlando", "phoenix", "pittsburgh", "portland", "st-louis", "nashville", "san-diego", "leeds", "liverpool"];
+/** The twenty-four cities added in Nov 2026 for the searches people make (SEO-PICTURE.md section 5). */
+const NEW_CITIES = ["birmingham", "glasgow", "bristol", "leeds", "liverpool", "dallas", "kansas-city", "houston", "atlanta", "austin", "denver", "milwaukee", "salt-lake-city", "san-antonio", "columbus", "orlando", "philadelphia", "phoenix", "pittsburgh", "portland", "seattle", "st-louis", "nashville", "san-diego"];
+
 describe("the city pages", () => {
-  it("are about thirty cities, each with its own lower-case, hyphenated English slug", () => {
-    expect(CITY_PAGES.length).toBeGreaterThanOrEqual(28);
-    expect(CITY_PAGES.length).toBeLessThanOrEqual(35);
+  it("are about fifty-five cities, each with its own lower-case, hyphenated English slug", () => {
+    expect(CITY_PAGES.length).toBeGreaterThanOrEqual(50);
+    expect(CITY_PAGES.length).toBeLessThanOrEqual(58);
     expect(new Set(CITY_SLUGS).size).toBe(CITY_SLUGS.length);
     for (const c of CITY_PAGES) {
       expect(c.slug, c.name).toMatch(/^[a-z]+(-[a-z]+)*$/);
@@ -43,13 +56,17 @@ describe("the city pages", () => {
     for (const c of CITY_PAGES) {
       expect(isLatLng(c.lat, c.lng), c.slug).toBe(true);
       const table = CITIES.find((t) => t.name === c.name);
-      expect(table, c.slug).toBeDefined();
-      expect(distanceKm(c, table!), c.slug).toBeLessThan(15);
+      if (table) expect(distanceKm(c, table), c.slug).toBeLessThan(15);
+      else expect(OWN_CENTRE, c.slug).toContain(c.slug);
     }
     // The table's Singapore is the middle of the island; the dates are round the bay.
     expect(distanceKm(city("singapore"), { lat: 1.2834, lng: 103.8607 })).toBeLessThan(2);
     // The dates map's own starting point wins over the table's town hall.
     expect(city("london")).toMatchObject({ lat: 51.5115, lng: -0.1235 });
+    for (const slug of OWN_CENTRE) {
+      expect(getCity(slug), slug).toBeDefined();
+      expect(CITIES.find((t) => t.name === city(slug).name), slug).toBeUndefined();
+    }
   });
 
   it("never includes a city in Spain, by country or by name", () => {
@@ -116,7 +133,7 @@ describe("the city pages", () => {
     const near = nearbyCities(city("london"));
     expect(near).toHaveLength(6);
     expect(near.map((c) => c.slug)).not.toContain("london");
-    expect(near[0].slug).toBe("manchester");
+    expect(near[0].slug).toBe("birmingham");
     const km = near.map((c) => distanceKm(city("london"), c));
     expect([...km].sort((a, b) => a - b)).toEqual(km);
   });
@@ -270,6 +287,11 @@ describe("the places on a city's page", () => {
     expect(topCityPlaces(places, 2, 5).map((p) => p.id)).toEqual(["node/r0", "node/r1"]);
   });
 
+  it("leaves off what the pages by kind leave off: a paved square filed as a park, a chain café (dates-N3-3)", () => {
+    const places = [place("node/ls", "park", 99, { name: "Leicester Square" }), place("node/sb", "cafe", 98, { name: "Starbucks" }), place("node/rs", "garden", 97, { name: "Russell Square" }), place("node/cafe", "cafe", 96, { name: "Monmouth Coffee" })];
+    expect(topCityPlaces(places, 10, 5).map((p) => p.id)).toEqual(["node/rs", "node/cafe"]);
+  });
+
   it("sends each idea to places the ideas above it haven't, while there are others of the kind a walk away", () => {
     const books = ideaById("bookshop-and-coffee")!;
     const gallery = ideaById("gallery-hop")!;
@@ -342,5 +364,139 @@ describe("the page's structured data", () => {
   it("lists the places as places with coordinates", () => {
     const node = placeListNode({ name: "Near the centre", url, places: [{ name: "Tate", lat: 51.5, lng: -0.1 }] });
     expect(node.itemListElement).toEqual([{ "@type": "ListItem", position: 1, item: { "@type": "Place", name: "Tate", geo: { "@type": "GeoCoordinates", latitude: 51.5, longitude: -0.1 } } }]);
+  });
+});
+
+describe("the cities added in Nov 2026", () => {
+  it("C1 every new city's note is its own: no two open alike, and each says something to use", () => {
+    for (const [locale, messages] of [["en", en], ["es", es]] as const) {
+      const notes = messages.cities.notes as Record<string, string>;
+      const openings = new Map<string, string>();
+      for (const slug of NEW_CITIES) {
+        const note = notes[slug];
+        expect(note, `${slug} ${locale}`).toBeTruthy();
+        expect(note.split(/\s+/).length, `${slug} ${locale}`).toBeGreaterThanOrEqual(14);
+        expect(mentionsSpain(note), `${slug} ${locale}`).toBe(false);
+        const opening = note.split(/\s+/).slice(0, 6).join(" ").toLowerCase();
+        expect(openings.get(opening), `${slug} ${locale} opens like ${openings.get(opening)}`).toBeUndefined();
+        openings.set(opening, slug);
+      }
+    }
+  });
+
+  it("C2 every city a page by kind links to has a page", () => {
+    for (const slug of KIND_PAGE_CITIES) expect(CITY_SLUGS, slug).toContain(slug);
+  });
+
+  it("C3 a city the offline table lacks carries its own centre and country, and Spanish has its own name for two of them", () => {
+    for (const slug of OWN_CENTRE) {
+      const c = city(slug);
+      expect(isLatLng(c.lat, c.lng), slug).toBe(true);
+      expect(c.country, slug).toMatch(/^[A-Z]{2}$/);
+    }
+    expect(cityName(city("philadelphia"), "es")).toBe("Filadelfia");
+    expect(cityName(city("st-louis"), "es")).toBe("San Luis");
+    expect(city("st-louis").slug).toMatch(/^[a-z]+(-[a-z]+)*$/);
+  });
+});
+
+describe("a kind of date inside a city", () => {
+  const fixture: Place[] = [
+    ...Array.from({ length: 5 }, (_, i) => place(`node/park${i}`, "park", 90 - i)),
+    place("node/gal1", "gallery", 85),
+    place("node/gal2", "gallery", 84, { name: "node/gal1" }),
+    place("node/book", "bookshop", 83),
+    place("node/view", "viewpoint", 82),
+    place("node/nameless", "garden", 99, { named: false }),
+    place("node/cafe1", "cafe", 81),
+    place("node/cafe2", "cafe", 80),
+    place("node/dessert", "dessert", 79),
+    place("node/rest", "restaurant", 95),
+    place("node/bar", "bar", 94),
+    place("node/garden", "garden", 70),
+  ];
+
+  it("C4 the free places of a city are named, usually cost nothing, and are a few of each kind at most", () => {
+    const free = kindPlaces("cheap", fixture);
+    expect(free.length).toBeGreaterThan(0);
+    expect(free.length).toBeLessThanOrEqual(KIND_PLACES);
+    for (const p of free) {
+      expect(guessCost(p), p.id).toBe(0);
+      expect(p.named, p.id).toBe(true);
+    }
+    expect(new Set(free.map((p) => p.name.trim().toLowerCase())).size).toBe(free.length);
+    const perKind = new Map<string, number>();
+    for (const p of free) perKind.set(p.kind, (perKind.get(p.kind) ?? 0) + 1);
+    for (const [kind, n] of perKind) expect(n, kind).toBeLessThanOrEqual(3);
+    const ranked = rankPlaces(fixture, {}).map((p) => p.id);
+    expect(free.map((p) => ranked.indexOf(p.id))).toEqual([...free.map((p) => ranked.indexOf(p.id))].sort((a, b) => a - b));
+  });
+
+  it("C4b a landmark is named on the free list only when it is notable (no sewer lamps, no private houses)", () => {
+    const withLandmarks = [...fixture, place("node/lamp", "landmark", 200, { name: "Sewer ventilation lamp" }), place("node/bridge", "landmark", 199, { name: "Old bridge", notable: true })];
+    const free = kindPlaces("cheap", withLandmarks).map((p) => p.id);
+    expect(free).not.toContain("node/lamp");
+    expect(free).toContain("node/bridge");
+  });
+
+  it("C5 where to meet is cafés, bookshops and galleries, as its heading says, and another kind has no list", () => {
+    const meet = kindPlaces("first-date", [...fixture, place("node/plain", "bookshop", 300, { name: "Books" })]);
+    expect(meet.length).toBeGreaterThan(0);
+    for (const p of meet) expect(["cafe", "bookshop", "gallery"], p.id).toContain(p.kind);
+    expect(meet.map((p) => p.id)).not.toContain("node/plain");
+    expect(kindPlaces("fun", fixture)).toEqual([]);
+  });
+
+  it("C5b neither list names a chain café, a gallery that charges, a sports ground or a square filed as a park (dates-D3)", () => {
+    const odd = [
+      place("node/courtauld", "gallery", 300, { name: "The Courtauld Gallery" }),
+      place("node/leicester", "park", 299, { name: "Leicester Square" }),
+      place("node/cage", "park", 298, { name: "West Fourth Street Courts" }),
+      place("node/sbux", "cafe", 297, { name: "Starbucks" }),
+      place("node/kft", "cafe", 296, { name: "Kung Fu Tea" }),
+      place("node/nero", "cafe", 295, { name: "Caffè Nero" }),
+      place("node/gails", "cafe", 294, { name: "GAIL’s Bakery" }),
+    ];
+    const kept = [place("node/wsp", "park", 293, { name: "Washington Square Park" }), place("node/russell", "garden", 292, { name: "Russell Square Gardens" }), place("node/kasmin", "gallery", 291, { name: "Paul Kasmin Gallery" }), place("node/own", "cafe", 290, { name: "Café Paulette" })];
+    const all = [...fixture, ...odd, ...kept];
+    const listed = [...kindPlaces("cheap", all, 40), ...kindPlaces("first-date", all, 40)].map((p) => p.id);
+    for (const p of odd) expect(listed, p.name).not.toContain(p.id);
+    for (const p of kept) expect(listed, p.name).toContain(p.id);
+  });
+
+  it("C5c a garden square and an independent café named after a Paul stay on; the Paul bakery and the paved squares do not (dates-N1-3)", () => {
+    for (const [name, kind] of [["Russell Square", "garden"], ["Soho Square", "park"], ["Paul Rothe & Son", "cafe"], ["Paulette", "cafe"]] as const) expect(leftOff({ name, kind }), name).toBe(false);
+    for (const [name, kind] of [["PAUL", "cafe"], ["Paul Bakery", "cafe"], ["Leicester Square", "park"], ["Trafalgar Square", "park"], ["Times Square", "park"]] as const) expect(leftOff({ name, kind }), name).toBe(true);
+    // A branch named after its street is still the bakery (dates-N2-2); a person called Paul still is not.
+    for (const name of ["Paul (Covent Garden)", "Paul - Covent Garden", "Paul – Marylebone", "Paul(Soho)", "Paul Bakery (Kensington)"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(true);
+    for (const name of ["Paul Smith Café", "Paul's Coffee", "Pauls - Corner Café"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(false);
+    // A double first name is a person too: the dash counts only with a space before it (dates-N3-2).
+    for (const name of ["Paul-Henri Café", "Paul–Émile", "Paul-Bakery"]) expect(leftOff({ name, kind: "cafe" }), name).toBe(false);
+  });
+
+  it("C5d every city title and city-by-kind title fits a search result with the brand on, in both languages (dates-D9)", () => {
+    // pageMetadata drops " · Ethos" from a title past seventy characters: fitting keeps it on every page alike.
+    const branded = (title: string) => `${title} · ${SITE.name}`;
+    for (const [l, messages] of [["en", en], ["es", es]] as const) {
+      const t = createTranslator({ locale: l, messages, namespace: "cities" });
+      for (const c of CITY_PAGES)
+        for (const places of [0, 1, PLACES_PER_CITY]) {
+          const title = t("meta.title", { city: cityName(c, l), ideas: ideasForCity(c).length, places });
+          expect(branded(title).length, title).toBeLessThanOrEqual(70);
+        }
+      for (const { city: c, kind } of CITY_KIND_PAGES) {
+        const { title, description } = CITY_KIND_COPY[`${c}/${kind}`];
+        expect(title[l].length, title[l]).toBeLessThanOrEqual(60);
+        expect(description[l].length, description[l]).toBeLessThanOrEqual(155);
+      }
+    }
+  });
+
+  it("C6 the sitemap lists the seven kinds, the four pairs and every city, each in both languages", () => {
+    const urls = sitemap().map((p) => new URL(p.url).pathname);
+    for (const kind of DATE_KINDS) for (const prefix of ["", "/es"]) expect(urls, kind).toContain(`${prefix}/dates/ideas/${kind}`);
+    for (const { city: c, kind } of CITY_KIND_PAGES) for (const prefix of ["", "/es"]) expect(urls).toContain(`${prefix}/dates/${c}/${kind}`);
+    for (const prefix of ["", "/es"]) expect(urls.filter((u) => CITY_SLUGS.some((s) => u === `${prefix}/dates/${s}`))).toHaveLength(CITY_SLUGS.length);
+    expect(urls.some((u) => u.endsWith("/dates/ideas/at-home"))).toBe(false);
   });
 });

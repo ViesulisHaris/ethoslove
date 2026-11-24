@@ -9,6 +9,16 @@ import type { PlaceKind } from "./kinds";
  */
 export const ideaImage = (id: string): string => `/dates/ideas/${id}.webp`;
 
+/**
+ * The ideas whose own picture shows a skyline that is one particular city's: the picnic looks over
+ * central-European spires. Under another city's name (a city page, a plan for a real town) it would
+ * read as that city, so it gets a picture that could be anywhere.
+ */
+export const SKYLINE_IDEAS: Readonly<Record<string, string>> = { "golden-hour-picnic": "/dates/kinds/park.webp" };
+
+/** An idea's picture where a real city is named: its own unless that shows somewhere else (SKYLINE_IDEAS). */
+export const ideaImageInCity = (id: string): string => SKYLINE_IDEAS[id] ?? ideaImage(id);
+
 const idea = (id: string) => `/dates/ideas/${id}.webp`;
 const kind = (id: string) => `/dates/kinds/${id}.webp`;
 

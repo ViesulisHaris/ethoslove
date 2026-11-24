@@ -18,7 +18,7 @@ const PROVIDERS: MapsProvider[] = ["google", "apple"];
 export function MapsMenu({ stops, member, onLocked, className }: { stops: LatLng[]; member: boolean; onLocked: () => void; className?: string }) {
   const t = useTranslations("savedDates.maps");
   if (stops.length < 2) return null;
-  const button = cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-5 text-[14.5px] font-semibold text-forest shadow-soft ring-1 ring-forest/10 transition-colors hover:bg-rose-mist", className);
+  const button = cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-card px-5 text-[14.5px] font-semibold text-forest shadow-soft ring-1 ring-forest/10 transition-colors hover:bg-blush-paper", className);
 
   if (!member)
     return (
@@ -42,7 +42,7 @@ export function MapsMenu({ stops, member, onLocked, className }: { stops: LatLng
         </button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content align="center" sideOffset={6} className="z-[70] min-w-[var(--radix-dropdown-menu-trigger-width)] rounded-2xl bg-white p-1.5 text-forest shadow-lift ring-1 ring-forest/10 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95">
+        <DropdownMenu.Content align="center" sideOffset={6} className="z-[70] min-w-[var(--radix-dropdown-menu-trigger-width)] rounded-2xl bg-card p-1.5 text-forest shadow-lift ring-1 ring-forest/10 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95">
           {PROVIDERS.map((provider) => (
             <DropdownMenu.Item key={provider} asChild>
               <a
@@ -50,7 +50,7 @@ export function MapsMenu({ stops, member, onLocked, className }: { stops: LatLng
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("maps_opened", { provider })}
-                className="flex min-h-11 cursor-pointer items-center rounded-xl px-3.5 text-[14.5px] font-semibold outline-none data-[highlighted]:bg-rose-mist"
+                className="flex min-h-11 cursor-pointer items-center rounded-xl px-3.5 text-[14.5px] font-semibold outline-none data-[highlighted]:bg-blush-paper"
               >
                 {t(provider)}
               </a>

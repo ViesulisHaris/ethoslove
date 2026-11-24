@@ -11,7 +11,7 @@ import { hidesConsentBanner } from "@/lib/analytics/consent";
 import { useConsent } from "@/lib/analytics/use-consent";
 import { useScrolledPast } from "@/hooks/use-scrolled-past";
 import type { TourRoom } from "@/lib/tour/room";
-import { playableSteps, TOURS, type TourStep } from "@/lib/tour/steps";
+import { firstStep, playableSteps, TOURS, type TourStep } from "@/lib/tour/steps";
 import { hasSeenTour, markTourSeen } from "@/lib/tour/seen";
 import { findTarget, isCovered, isTyping, otherDialogOpen } from "@/lib/tour/dom";
 import { Tour } from "./tour";
@@ -34,7 +34,7 @@ const INPUTS = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"] as co
  * `id` keys the tour. A replay started while the last one is still fading out is a new tour from
  * step one, not the old one (and its step index) brought back by AnimatePresence.
  */
-type Session = { id: number; steps: TourStep[] };
+type Session = { id: number; steps: TourStep[]; start: number };
 
 /** What the tour would light first. */
 function leadTarget(steps: readonly TourStep[]): HTMLElement | null {
@@ -93,7 +93,7 @@ export function TourRoot({ room, pathname }: { room: TourRoom; pathname: string 
       returnTo.current = from;
       markTourSeen(room);
       sessions.current += 1;
-      setSession({ id: sessions.current, steps });
+      setSession({ id: sessions.current, steps, start: firstStep(steps, (step) => (step.doneWhen ? findTarget(step.doneWhen) !== null : false)) });
       return true;
     },
     [config, room],
@@ -191,7 +191,7 @@ export function TourRoot({ room, pathname }: { room: TourRoom; pathname: string 
           </motion.div>
         ) : null}
       </AnimatePresence>
-      <AnimatePresence>{session ? <Tour key={session.id} room={room} steps={session.steps} topInset={config.topInset} onClose={close} /> : null}</AnimatePresence>
+      <AnimatePresence>{session ? <Tour key={session.id} room={room} steps={session.steps} start={session.start} topInset={config.topInset} onClose={close} /> : null}</AnimatePresence>
     </>,
     document.body,
   );

@@ -1,6 +1,6 @@
 import { distanceKm, type LatLng } from "./geo";
 import { KINDS, kindOfPoi, type PlaceKind } from "./kinds";
-import type { Place } from "./places";
+import { onlyItsKind, type Place } from "./places";
 import { isListeningClub } from "./unusual";
 
 /**
@@ -95,9 +95,11 @@ export function placesFromPois(features: PoiFeature[], tile: TileXY, center: Lat
   for (const f of features) {
     // A tile repeats what lies just over its edge, for drawing labels; the neighbour owns those.
     if (f.px < 0 || f.py < 0 || f.px >= f.extent || f.py >= f.extent) continue;
-    const name = localName(f.properties, locale);
-    const kind = kindOfPoi(f.properties.subclass) ?? (f.properties.subclass === "nightclub" && name && isListeningClub(name) ? "bar" : null);
+    const said = localName(f.properties, locale);
+    const kind = kindOfPoi(f.properties.subclass) ?? (f.properties.subclass === "nightclub" && said && isListeningClub(said) ? "bar" : null);
     if (!kind) continue;
+    // A name that only says what it is ("Viewpoint") is no name (walk-rooms-12).
+    const name = onlyItsKind(said, kind) ? "" : said;
     const id = osmIdOf(f.id);
     if (!id) continue;
     const info = KINDS[kind];

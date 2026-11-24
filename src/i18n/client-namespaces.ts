@@ -26,6 +26,9 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/layout": ["nav", "tour", "support", "notice"],
   "(marketing)/page": ["dates.where", "home.templates", "templates"],
   "(marketing)/gifts/page": ["home", "occasions", "templates", "pricing", "money.plans", "money.account", "money.checkoutErrors", "money.recovery"],
+  // The gift pages by kind and /digital-cards: the phone in their hero plays a gift (components/templates/page/hero-flatlay.tsx).
+  "(marketing)/gifts/[slug]/page": ["templates"],
+  "(marketing)/digital-cards/page": ["templates"],
   "(marketing)/pricing/layout": ["pricing", "membership", "money.plans", "money.account", "money.checkoutErrors", "money.recovery", "money.giftcard"],
   // Ethos for Two's success page only needs its own lines in the browser (the one still switching on),
   // and the upgrade card after a single, a pick three or "make it special" its own.

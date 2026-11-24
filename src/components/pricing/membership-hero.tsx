@@ -164,7 +164,7 @@ async function MembershipArt() {
             <div className="flex items-end justify-between gap-[1cqw]">
               <div className="min-w-0">
                 <p className="font-display text-[4.2cqw] leading-none">{t("myDates")}</p>
-                <p className="mt-[0.9cqw] truncate text-[1.9cqw] text-forest/60">{t("shared", { name: t("partner") })}</p>
+                <p className="mt-[0.9cqw] truncate text-[1.9cqw] text-forest/65">{t("shared", { name: t("partner") })}</p>
               </div>
               <span className="flex shrink-0 -space-x-[0.9cqw]">
                 <span className="grid size-[5cqw] place-items-center rounded-full bg-horizon text-[2.1cqw] font-bold text-dusk-deep ring-[0.4cqw] ring-paper">A</span>
@@ -183,7 +183,7 @@ async function MembershipArt() {
                     ) : null}
                   </div>
                   <p className="mt-[1cqw] truncate text-[2.1cqw] leading-tight font-semibold">{card.title}</p>
-                  <p className="mt-[0.3cqw] truncate text-[1.75cqw] leading-tight text-forest/60">
+                  <p className="mt-[0.3cqw] truncate text-[1.75cqw] leading-tight text-forest/65">
                     {card.meta} · {card.count}
                   </p>
                 </li>

@@ -20,7 +20,8 @@ const SCRIM = "0 0 0 200vmax rgba(42, 15, 31, 0.58)";
 const RING = "0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 7px rgba(214, 51, 108, 0.3)";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-type Props = { room: TourRoom; steps: readonly TourStep[]; topInset: number; onClose: () => void };
+/** : the step it opens on (one already done is passed over, lib/tour/steps.ts doneWhen). */
+type Props = { room: TourRoom; steps: readonly TourStep[]; start?: number; topInset: number; onClose: () => void };
 
 const viewport = () => ({ width: document.documentElement.clientWidth, height: window.innerHeight });
 const onScreen = (step: TourStep) => findTarget(step.targets) !== null;
@@ -33,11 +34,11 @@ const showable = (step: TourStep) => canShow(step, onScreen);
  * React render: the page scrolls under them, a list reflows, the phone rotates, and they stay put
  * on what they point at. They glide there rather than jump, unless motion is reduced.
  */
-export function Tour({ room, steps, topInset, onClose }: Props) {
+export function Tour({ room, steps, start = 0, topInset, onClose }: Props) {
   const t = useTranslations("tour");
   const reduced = useReducedMotion() ?? false;
   const present = useIsPresent();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(start);
   const step = steps[index];
   const isLast = index === steps.length - 1;
   const titleId = useId();
@@ -52,18 +53,26 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
   const corner = useRef(0);
   const insets = useRef<Insets>({ top: 0, bottom: 0 });
 
+  /** Where the page stood when the tour began: finished or skipped, the visitor goes back there (walk-rooms-10). */
+  const startedAt = useRef<number | null>(null);
+  const close = useCallback(() => {
+    const y = startedAt.current;
+    onClose();
+    if (y !== null && Math.abs(window.scrollY - y) > 1) window.scrollTo({ top: y, behavior: reduced ? "instant" : "smooth" });
+  }, [onClose, reduced]);
+
   const go = useCallback(
     (dir: 1 | -1) => {
       const to = stepAfter(steps, index, dir, showable);
       if (to !== -1) setIndex(to);
-      else if (dir === 1) onClose();
+      else if (dir === 1) close();
     },
-    [steps, index, onClose],
+    [steps, index, close],
   );
   const skip = useCallback(() => {
     track("tour_skipped", { room, step: step.id });
-    onClose();
-  }, [room, step.id, onClose]);
+    close();
+  }, [room, step.id, close]);
 
   useEffect(() => {
     track("tour_step", { room, step: step.id });
@@ -73,6 +82,8 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
   // decides how far to scroll.
   useLayoutEffect(() => {
     insets.current = safeInsets();
+    // Before the first step scrolls anything.
+    startedAt.current = window.scrollY;
   }, []);
 
   // Each step finds its target afresh (the page may have changed under the last one) and brings it
@@ -225,14 +236,14 @@ export function Tour({ room, steps, topInset, onClose }: Props) {
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: reduced ? 0 : 0.3, ease: EASE }}
-          className="relative overflow-hidden rounded-[26px] bg-white p-5 text-forest shadow-[0_1px_2px_rgba(60,20,40,0.08),0_30px_70px_-26px_rgba(42,15,31,0.6)] ring-1 ring-forest/5 sm:p-6"
+          className="relative overflow-hidden rounded-[26px] bg-card p-5 text-forest shadow-[0_1px_2px_rgba(60,20,40,0.08),0_30px_70px_-26px_rgba(42,15,31,0.6)] ring-1 ring-forest/5 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <p aria-hidden="true" className="text-[12px] font-semibold tracking-[0.18em] text-rose-deep uppercase tabular-nums">
               {counter}
             </p>
             {isLast ? null : (
-              <button type="button" onClick={skip} aria-label={t("skipLabel")} className="-my-2 -mr-2 h-11 rounded-full px-3 text-[13.5px] font-semibold text-forest/55 transition-colors hover:bg-forest/5 hover:text-forest outline-none focus-visible:ring-2 focus-visible:ring-rose/45 focus-visible:ring-offset-2">
+              <button type="button" onClick={skip} aria-label={t("skipLabel")} className="-my-2 -mr-2 h-11 rounded-full px-3 text-[13.5px] font-semibold text-forest/65 transition-colors hover:bg-forest/5 hover:text-forest outline-none focus-visible:ring-2 focus-visible:ring-rose/45 focus-visible:ring-offset-2">
                 {t("skip")}
               </button>
             )}

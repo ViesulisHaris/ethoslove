@@ -13,6 +13,11 @@ export type TourStep = {
   targets: readonly string[];
   /** With nothing on screen to point at, say it in the middle of the screen rather than skip it. */
   fallback?: "center";
+  /**
+   * Already done when one of these is on screen: the tour opens on the step after it (it stays in
+   * the tour, a Back away). The Dates tour opened on "Pick your town" over a town's results.
+   */
+  doneWhen?: readonly string[];
 };
 
 export type TourConfig = {
@@ -49,7 +54,8 @@ export const TOURS: Record<TourRoom, TourConfig> = {
     ready: ['[data-tour="places"][aria-busy="false"]'],
     topInset: MARKETING_BAR,
     steps: [
-      { id: "where", targets: ['[data-tour="where"]'] },
+      // The places list is only there once a town is picked: the tour then opens on the day.
+      { id: "where", targets: ['[data-tour="where"]'], doneWhen: ['[data-tour="places"]'] },
       { id: "when", targets: ['[data-tour="when"]'] },
       { id: "mood", targets: ['[data-tour="vibes"]'] },
       { id: "place", targets: [FIRST_PLACE] },
@@ -103,6 +109,12 @@ export function canShow(step: TourStep, isOnScreen: (step: TourStep) => boolean)
 /** The steps worth showing when the tour opens; the dots count these, not the whole list. */
 export function playableSteps(steps: readonly TourStep[], isOnScreen: (step: TourStep) => boolean): TourStep[] {
   return steps.filter((step) => canShow(step, isOnScreen));
+}
+
+/** The step a tour opens on: the first that is not already done (the last, if all of them are). */
+export function firstStep(steps: readonly TourStep[], isDone: (step: TourStep) => boolean): number {
+  const i = steps.findIndex((step) => !isDone(step));
+  return i === -1 ? Math.max(0, steps.length - 1) : i;
 }
 
 /**

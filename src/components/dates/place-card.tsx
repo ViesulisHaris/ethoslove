@@ -37,7 +37,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
       // held every card past the eighth back by the whole stagger, so a list read from its middle
       // went blank for a moment when it changed.
       style={{ animationDelay: `${index < STAGGERED ? index * STAGGER_MS : 0}ms` }}
-      className={cn("place-card-in group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", hovered && !selected && "-translate-y-0.5 shadow-lift ring-2 ring-rose/35", selected && "ring-2 ring-rose")}
+      className={cn("place-card-in group relative flex items-stretch gap-3.5 rounded-[22px] bg-card p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", hovered && !selected && "-translate-y-0.5 shadow-lift ring-2 ring-rose/35", selected && "ring-2 ring-rose")}
     >
       <PlaceThumb place={place} className="size-[92px] rounded-[16px] sm:size-[104px]" />
       <div className="flex min-w-0 flex-1 flex-col justify-center py-1">
@@ -63,7 +63,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
           <CostChip cost={place.cost} locale={locale} reported={place.rating?.cost !== null && place.rating?.cost !== undefined} />
           <span>{place.distanceKm <= WALK_KM ? labels.walk(walkingMinutes(place.distanceKm)) : formatDistance(place.distanceKm, locale)}</span>
           {/* Only what the name or the map says: "Karaoke" on a karaoke bar would say it twice. */}
-          {isTold(unusual) ? <QuirkBadge quirk={unusual.quirk} locale={locale} className="h-6 bg-rose-mist px-2 text-[11.5px] text-rose-ink" /> : null}
+          {isTold(unusual) ? <QuirkBadge quirk={unusual.quirk} locale={locale} className="h-6 bg-blush-paper px-2 text-[11.5px] text-rose-ink" /> : null}
           {real ? (
             <span className="inline-flex items-center gap-1 text-[11.5px] text-forest/65">
               <Camera aria-hidden="true" className="size-3" />

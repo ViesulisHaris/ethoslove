@@ -2,9 +2,16 @@
  * "Send one back": the names on the gift a recipient just watched travel to the editor, swapped,
  * so their reply opens with "To" and "From" already filled in. The gift's own template fields ride
  * along for templates that keep something in a reply (Halfway swaps its two places). Kept in
- * sessionStorage rather than the URL, and read once. The gift's id never goes in the link: a paid
- * premium gift's reply is free, and what proves it is a sealed token (replyEditorHref).
+ * sessionStorage rather than the URL. The gift's id never goes in the link: a paid premium gift's
+ * reply is free, and what proves it is a sealed token (replyEditorHref).
+ *
+ * The seed stays until the editor has something of its own to keep (clearReplySeed, on the reply's
+ * first change, when its draft is saved with the names in it). Read once and thrown away, a reload
+ * of the editor, or Back to the gift and Forward again, opened the reply with both names empty.
+ * It is this tab's only, and an hour old at most.
  */
+import { draftKey, replyDraftScope } from "./persistence";
+
 const KEY = "ethos:reply";
 const MAX_AGE_MS = 60 * 60 * 1000;
 const NAME_MAX = 40;
@@ -22,17 +29,59 @@ export function saveReplySeed(seed: ReplySeed): void {
   try {
     window.sessionStorage.setItem(KEY, JSON.stringify({ ...seed, savedAt: Date.now() }));
   } catch {}
+  dropOtherReplyDraft(seed);
 }
 
-/** The seed for this template when there is a fresh one. It is removed either way. */
-export function takeReplySeed(slug: string): ReplySeed | null {
+/**
+ * A reply keeps a draft of its own (store.ts pageScope), and a draft this device kept wins over the
+ * seed when the editor opens. One started for another gift of this template, addressed to someone
+ * else, is let go, so this reply opens with this gift's names. The same gift answered again (Back to
+ * the gift and Send one back once more) keeps what was typed, even when the names were edited in it:
+ * the draft is matched by the pair its seed carried (PAIR_KEY), never by the names as they stand.
+ * A signed-in sender's row stays on their dashboard either way.
+ */
+const PAIR_KEY = "ethos:reply-pair:";
+
+function dropOtherReplyDraft(seed: ReplySeed): void {
+  try {
+    const name = (n: string) => n.trim().slice(0, NAME_MAX);
+    const pair = { recipientName: name(seed.recipientName), senderName: name(seed.senderName) };
+    const key = draftKey(replyDraftScope(seed.slug));
+    const marker = PAIR_KEY + seed.slug;
+    const rawPair = window.localStorage.getItem(marker);
+    window.localStorage.setItem(marker, JSON.stringify(pair));
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return;
+    // The pair the draft was seeded with; a draft kept from before there was one is read by its names.
+    const was = (rawPair ? JSON.parse(rawPair) : (JSON.parse(raw) as { data?: unknown }).data) as
+      | { recipientName?: unknown; senderName?: unknown }
+      | undefined;
+    const same = was?.recipientName === pair.recipientName && was?.senderName === pair.senderName;
+    if (!same) window.localStorage.removeItem(key);
+  } catch {}
+}
+
+/** The reply has a draft of its own now, or was never one: the seed has done its work. */
+export function clearReplySeed(): void {
+  try {
+    window.sessionStorage.removeItem(KEY);
+  } catch {}
+}
+
+/**
+ * The seed for this template when there is a fresh one. A fresh one for this template is left where
+ * it is, for a reload (see above); one for another template, a stale one or a broken one is removed.
+ */
+export function readReplySeed(slug: string): ReplySeed | null {
   try {
     const raw = window.sessionStorage.getItem(KEY);
     if (!raw) return null;
-    window.sessionStorage.removeItem(KEY);
     const seed = JSON.parse(raw) as Partial<ReplySeed & { savedAt: number }>;
-    if (seed.slug !== slug || typeof seed.savedAt !== "number" || Date.now() - seed.savedAt > MAX_AGE_MS) return null;
-    if (typeof seed.recipientName !== "string" || typeof seed.senderName !== "string") return null;
+    const fresh = seed.slug === slug && typeof seed.savedAt === "number" && Date.now() - seed.savedAt <= MAX_AGE_MS;
+    if (!fresh || typeof seed.recipientName !== "string" || typeof seed.senderName !== "string") {
+      window.sessionStorage.removeItem(KEY);
+      return null;
+    }
     const fields =
       seed.fields && typeof seed.fields === "object" && !Array.isArray(seed.fields) && JSON.stringify(seed.fields).length <= FIELDS_MAX_CHARS
         ? seed.fields
@@ -44,12 +93,36 @@ export function takeReplySeed(slug: string): ReplySeed | null {
       ...(fields ? { fields } : {}),
     };
   } catch {
+    clearReplySeed();
     return null;
   }
 }
 
 /** Sales that start from a reply are counted under this ref (scripts/revenue-by-ref.mjs). */
 export const REPLY_REF = "reply";
+
+/** The editor was opened as a reply: "Send one back" (`?ref=reply`, and `&reply=` when it is free). */
+export function opensAsReply(search: string): boolean {
+  const params = new URLSearchParams(search);
+  return params.get("ref")?.trim().toLowerCase() === REPLY_REF || params.has("reply");
+}
+
+/**
+ * The seed for an editor that has just opened, given its address. Only a reply gets the swapped
+ * names. Kept in the tab for a reload, a seed was put on the next gift of the same template made
+ * there for someone else ("or make one for someone else", a plain /create/<slug>), addressed back to
+ * the person who sent the first one. That editor throws its template's seed away instead.
+ */
+export function replySeedForEditor(slug: string, search: string): ReplySeed | null {
+  if (opensAsReply(search)) return readReplySeed(slug);
+  try {
+    const raw = window.sessionStorage.getItem(KEY);
+    if (raw && (JSON.parse(raw) as { slug?: unknown }).slug === slug) clearReplySeed();
+  } catch {
+    clearReplySeed();
+  }
+  return null;
+}
 
 /**
  * The editor link for "send one back". When the gift answered is a paid premium one, the gift page

@@ -1,3 +1,4 @@
+import { ideaImageInCity } from "./art";
 import { distanceKm } from "./geo";
 import { KINDS, type PlaceKind } from "./kinds";
 import type { Place } from "./places";
@@ -25,9 +26,29 @@ export type DateIdea = {
   /** Better for rain: moved to the front when it is wet. */
   goodInRain: boolean;
   moment: Moment;
-  /** 0 free, 1 a coffee each, 2 dinner, 3 a treat. */
+  /**
+   * 0 free, 1 a coffee each, 2 dinner, 3 a treat: what it costs as its stops stand. An idea with
+   * the "free" vibe can also be done for nothing (the picnic from home, a flask), leaving out the
+   * stop that sells something: see canBeFree.
+   */
   budget: 0 | 1 | 2 | 3;
   minutes: number;
+  /**
+   * The latest it can still start when tonight begins after its own hour, "HH:MM". Only for a
+   * daytime idea whose places usually stay open into the evening (rinks, climbing walls, mini golf
+   * and ice cream on a long summer day); otherwise its moment decides (tonight.ts).
+   */
+  latestStart?: string;
+  /** Its stops on a wet day, when the dry ones would put it outdoors (the stars: a planetarium only). */
+  rainStops?: PlaceKind[][];
+  /**
+   * What it is called and shown as on a wet day, when its rain stops change what the evening is: the
+   * dinner that walks home past a viewpoint ends under a roof instead, and says so. `image` is a path
+   * under public/; without one the idea keeps its own picture.
+   */
+  rain?: { title: L; blurb: L; image?: string };
+  /** A picture other than its own (public/dates/ideas/<id>.webp): set by forTheDay on a wet day. */
+  image?: string;
   vibes: Vibe[];
   /** The drawn sticker on the card, and the two papers behind it. */
   art: { sticker: StickerId; from: string; to: string };
@@ -54,6 +75,13 @@ export const IDEAS: DateIdea[] = [
     blurb: { en: "A table for two, then a walk with no destination until somebody's feet hurt.", es: "Una mesa para dos y luego un paseo sin destino hasta que a alguien le duelan los pies." },
     twist: { en: "Order for each other. No vetoes.", es: "Pedid el uno por el otro. Sin vetos." },
     stops: [["restaurant"], ["viewpoint", "park", "garden"]],
+    // In the rain the long way home goes somewhere dry: pudding or a nightcap, never a viewpoint.
+    rainStops: [["restaurant"], ["dessert", "bar"]],
+    rain: {
+      title: { en: "Dinner, then dessert somewhere dry", es: "Cena, y el postre a cubierto" },
+      blurb: { en: "A table for two, then a second stop under a roof for dessert or one last drink.", es: "Una mesa para dos y luego otra parada bajo techo, para el postre o una última copa." },
+      image: "/dates/kinds/bar.webp",
+    },
     needsDry: false,
     goodInRain: false,
     moment: "evening",
@@ -101,6 +129,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 1,
     minutes: 150,
+    latestStart: "19:30",
     vibes: ["playful", "outdoorsy"],
     art: { sticker: "candy", from: "#D8EAF3", to: "#BFDDEB" },
   },
@@ -185,6 +214,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 1,
     minutes: 90,
+    latestStart: "20:00",
     vibes: ["cozy", "outdoorsy"],
     art: { sticker: "cherries", from: "#FFE0E6", to: "#FBC4D0" },
   },
@@ -241,6 +271,7 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 2,
     minutes: 180,
+    latestStart: "20:00",
     vibes: ["playful", "rainy"],
     art: { sticker: "leaf", from: "#E1EFD9", to: "#CBE3BE" },
   },
@@ -278,6 +309,7 @@ export const IDEAS: DateIdea[] = [
     blurb: { en: "A planetarium if the sky's against you, the darkest viewpoint in town if it isn't.", es: "Un planetario si el cielo no acompaña; el mirador más oscuro de la ciudad si sí." },
     twist: { en: "Name a star after the other. Make it official on a napkin.", es: "Ponedle a una estrella el nombre del otro. Hacedlo oficial en una servilleta." },
     stops: [["planetarium", "viewpoint"], ["cafe", "bar", "dessert"]],
+    rainStops: [["planetarium"], ["cafe", "bar", "dessert"]],
     needsDry: false,
     goodInRain: false,
     moment: "night",
@@ -325,12 +357,19 @@ export const IDEAS: DateIdea[] = [
     moment: "day",
     budget: 2,
     minutes: 120,
+    latestStart: "20:30",
     vibes: ["playful", "cozy"],
     art: { sticker: "snowflake", from: "#E0EEF8", to: "#C7DFF2" },
   },
 ];
 
 export const ideaById = (id: string | undefined): DateIdea | undefined => IDEAS.find((i) => i.id === id);
+
+/** A plan's idea as the plan was made (asPlanned): the wet night's title for a wet night's stops. */
+export function plannedIdea(plan: { idea?: string; stops: readonly { kind: PlaceKind }[] }): DateIdea | undefined {
+  const idea = ideaById(plan.idea);
+  return idea ? asPlanned(idea, plan.stops.map((s) => s.kind)) : undefined;
+}
 
 /** Stops closer together than this make a date you can walk. */
 const WALKABLE_KM = 1.6;
@@ -397,6 +436,41 @@ export function fitsVibe(place: { kind: PlaceKind; cost?: number }, vibe: Vibe):
   return place.cost === undefined ? KINDS[place.kind].free : place.cost === 0;
 }
 
+/** Whether an idea can be done for nothing: free as it stands, or with the "free" vibe, bringing your own instead of buying at the stop that sells it. */
+export const canBeFree = (idea: Pick<DateIdea, "budget" | "vibes">): boolean => idea.budget === 0 || idea.vibes.includes("free");
+
+/** The idea as it stands on the day: on a wet one, its rain stops when it has them (the stars move under a planetarium's dome). */
+export function forTheDay(idea: DateIdea, day: DayWeather | undefined): DateIdea {
+  if (!idea.rainStops || !day || !isWet(day)) return idea;
+  return inTheRain(idea, idea.rainStops);
+}
+
+/** Rain stops that change what the evening is bring its rain title, blurb and picture with them. */
+function inTheRain(idea: DateIdea, rainStops: PlaceKind[][]): DateIdea {
+  const { rain } = idea;
+  if (!rain) return { ...idea, stops: rainStops };
+  return { ...idea, stops: rainStops, title: rain.title, blurb: rain.blurb, ...(rain.image ? { image: rain.image } : {}) };
+}
+
+/**
+ * The idea as its plan was made, read from the plan's own stops: a plan with a stop only the wet
+ * night has (dessert where the dry one has a viewpoint) and none only the dry night has is the wet
+ * night's idea, title and all. /plan, the gift made from it and the saved date say what the card
+ * said, whatever the weather is by the time the plan is opened (dates-N3-1).
+ */
+export function asPlanned(idea: DateIdea, kinds: readonly PlaceKind[]): DateIdea {
+  const { rainStops } = idea;
+  if (!rainStops || !idea.rain) return idea;
+  const dry = new Set(idea.stops.flat());
+  const wet = new Set(rainStops.flat());
+  const wetOnly = kinds.some((k) => wet.has(k) && !dry.has(k));
+  const dryOnly = kinds.some((k) => dry.has(k) && !wet.has(k));
+  return wetOnly && !dryOnly ? inTheRain(idea, rainStops) : idea;
+}
+
+/** The picture a plan for a real place shows: the one its day gave it (forTheDay), else its own unless that shows another city. */
+export const ideaPicture = (idea: Pick<DateIdea, "id" | "image">): string => idea.image ?? ideaImageInCity(idea.id);
+
 /** True when every stop of an idea can be filled near here. */
 export const isDoable = (idea: DateIdea, places: Place[]): boolean => idea.stops.every((kinds) => places.some((p) => kinds.includes(p.kind)));
 
@@ -419,7 +493,7 @@ export const VIBES: Record<Vibe, L> = {
   outdoorsy: { en: "Outdoorsy", es: "Al aire libre" },
   foodie: { en: "Foodie", es: "Para comer bien" },
   artsy: { en: "Artsy", es: "Con arte" },
-  fancy: { en: "Dressed up", es: "De gala" },
+  fancy: { en: "Dressed up", es: "Para arreglarse" },
   free: { en: "Free", es: "Gratis" },
   rainy: { en: "Rainy day", es: "Día de lluvia" },
 };

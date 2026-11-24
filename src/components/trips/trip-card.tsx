@@ -11,7 +11,7 @@ export function TripCard({ trip, title, blurb, labels }: { trip: Trip; title: st
     <Link
       href={`/trips/${trip.id}`}
       data-testid="trip-card"
-      className="group relative flex h-full flex-col overflow-hidden rounded-[28px] bg-white shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift"
+      className="group relative flex h-full flex-col overflow-hidden rounded-[28px] bg-card shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift"
     >
       <span className="relative block">
         <TripArt trip={trip} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" className="aspect-[4/3]" imageClassName="transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.05]" />

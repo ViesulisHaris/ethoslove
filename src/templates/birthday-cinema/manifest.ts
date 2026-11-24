@@ -6,7 +6,7 @@ export const manifest: TemplateManifest = {
   tagline: { en: "Curtains, candles, confetti. Blow to make a wish.", es: "Telón, velas, confeti. Sopla y pide un deseo." },
   description: {
     en: "Red curtains part on a marquee with their name in lights. A cake with real flickering candles waits, they blow into the phone (or swipe) to put them out, confetti fires, and a film strip of your photos rolls.",
-    es: "Un telón rojo se abre sobre una marquesina con su nombre en luces. Espera una tarta con velas de llama real: soplan al teléfono (o deslizan) para apagarlas, salta el confeti y rueda una tira de película con tus fotos.",
+    es: "Un telón rojo se abre sobre una marquesina con su nombre en luces. Espera una tarta con velas de llama real: soplan al móvil (o deslizan) para apagarlas, salta el confeti y rueda una tira de película con tus fotos.",
   },
   occasions: ["birthday"],
   styles: ["cinematic", "playful"],

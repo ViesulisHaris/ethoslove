@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { ArrowRight, Check, Clock } from "lucide-react";
+import type { ReactNode } from "react";
+import { AlertCircle, ArrowRight, Check, Clock } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getStripe } from "@/lib/stripe/server";
@@ -134,7 +135,19 @@ export default async function CheckoutSuccessPage({
     if (processing) return { title: t("pending.title"), detail: tf("processing") };
     if (forTwoState?.kind === "arriving") return { title: tf("arriving.title"), detail: tf("arriving.detail") };
     if (forTwoState?.kind === "unreadable") return { title: tf("unreadable.title"), detail: tf("unreadable.detail") };
-    if (!paid) return { title: t(`${state}.title`), detail: t(`${state}.detail`) };
+    // Could not be read: "the pricing page" is a link there, not just words (walk-make-3).
+    if (state === "error")
+      return {
+        title: t("error.title"),
+        detail: t.rich("error.detail", {
+          pricing: (chunks) => (
+            <Link href="/pricing" className="font-medium text-foreground underline underline-offset-4">
+              {chunks}
+            </Link>
+          ),
+        }) as ReactNode,
+      };
+    if (!paid) return { title: t(`${state}.title`), detail: t(`${state}.detail`) as ReactNode };
     switch (outcome) {
       case "membership": {
         if (!membership?.renewsOn) return { title: tf("title"), detail: tf(invite ? "noDate" : "noDateEmailed") };
@@ -191,6 +204,11 @@ export default async function CheckoutSuccessPage({
         // Paid, and on its way or on the account page: the dusk seal, with the clock of a moment's wait.
         <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid={`membership-${forTwoState.kind}`}>
           <Clock aria-hidden="true" className="size-7 text-starlight" strokeWidth={2.4} />
+        </div>
+      ) : state === "error" ? (
+        // Not confirmed: a neutral alert mark, never the success tick over "We couldn't confirm that." (walk-make-3).
+        <div className="grid size-16 place-items-center rounded-full bg-gold/15" data-success-mark="alert">
+          <AlertCircle aria-hidden="true" className="size-7 text-gold-deep" />
         </div>
       ) : (
         <div className={state === "pending" || processing ? "grid size-16 place-items-center rounded-full bg-gold/15" : "grid size-16 place-items-center rounded-full bg-moss/10"}>

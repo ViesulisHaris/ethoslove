@@ -64,7 +64,7 @@ function Wheel({ names, onChangePlayers }: { names: [string, string]; onChangePl
   };
 
   const slice = 360 / SEGMENTS;
-  const gradient = `conic-gradient(${Array.from({ length: SEGMENTS }, (_, i) => `${i % 2 === 0 ? "#D6336C" : "#FFF6F0"} ${i * slice}deg ${(i + 1) * slice}deg`).join(", ")})`;
+  const gradient = `conic-gradient(${Array.from({ length: SEGMENTS }, (_, i) => `${i % 2 === 0 ? "var(--color-rose)" : "var(--color-cream)"} ${i * slice}deg ${(i + 1) * slice}deg`).join(", ")})`;
   const latest = results[0];
 
   if (settled) {
@@ -91,7 +91,7 @@ function Wheel({ names, onChangePlayers }: { names: [string, string]; onChangePl
             {tl("change")}
           </button>
         </div>
-        <GameEnd />
+        <GameEnd game="roulette" />
       </section>
     );
   }

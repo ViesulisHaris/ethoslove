@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { ideaImage } from "@/lib/dates/art";
 import { ideaHours } from "@/lib/dates/format";
 import { IDEAS } from "@/lib/dates/ideas";
+import { ScrollRow } from "@/components/marketing/scroll-row";
 
 const SHOWN = ["golden-hour-picnic", "bookshop-and-coffee", "mini-golf-and-milkshakes", "museum-then-wine", "sunrise-and-breakfast", "stars-and-planets", "cinema-and-late-dessert", "garden-afternoon"];
 
@@ -29,14 +30,19 @@ export async function IdeasTeaser() {
           </Link>
         </div>
       </div>
-      <ul className="scrollbar-none flex snap-x snap-proximity scroll-px-5 gap-4 overflow-x-auto px-5 pt-2 pb-6 sm:scroll-px-8 sm:px-8 lg:scroll-px-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]">
+      <ScrollRow
+        as="ul"
+        data-ideas-row
+        labels={{ previous: t("previous"), next: t("next") }}
+        className="scrollbar-none flex snap-x snap-proximity scroll-px-5 gap-4 overflow-x-auto px-5 pt-2 pb-6 sm:scroll-px-8 sm:px-8 lg:scroll-px-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]"
+      >
         {ideas.map((idea, i) => (
           <li key={idea.id} className="w-[256px] shrink-0 snap-start">
             <Link href={`/dates?idea=${idea.id}`} className="group relative flex h-[340px] flex-col justify-end overflow-hidden rounded-[28px] p-5 shadow-soft transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift" style={{ backgroundColor: idea.art.to, rotate: `${((i * 5) % 3) - 1}deg` }}>
               <img src={ideaImage(idea.id)} alt="" width={960} height={720} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.06]" />
               <span aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(36,10,24,0)_32%,rgba(36,10,24,0.6)_68%,rgba(36,10,24,0.9)_100%)]" />
               <span className="relative font-display text-[25px] leading-[1.05] text-white [text-shadow:0_1px_12px_rgba(30,5,18,0.5)]">{idea.title[locale]}</span>
-              <span className="relative mt-2 line-clamp-2 text-[13.5px] leading-snug text-white/85">{idea.blurb[locale]}</span>
+              <span data-idea-line className="relative mt-2 line-clamp-3 text-[13.5px] leading-snug text-white/85">{idea.blurb[locale]}</span>
               <span className="relative mt-3 flex items-center gap-1.5 text-[12px] font-medium text-white/80">
                 <Clock3 aria-hidden="true" className="size-3.5" />
                 {t("hours", { hours: ideaHours(idea.minutes, locale) })}
@@ -44,7 +50,7 @@ export async function IdeasTeaser() {
             </Link>
           </li>
         ))}
-      </ul>
+      </ScrollRow>
     </section>
   );
 }

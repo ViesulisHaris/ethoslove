@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { routing, type Locale } from "@/i18n/routing";
-import { PRODUCTS, PRODUCT_ORDER, type Currency } from "@/lib/pricing/products";
-import { soldAsGroup } from "@/lib/gift/free-tier";
+import { sendsFree, soldAsGroup } from "@/lib/gift/free-tier";
+import { PRODUCTS, PRODUCT_ORDER, templateProduct, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 
 type Node = Record<string, unknown>;
@@ -97,6 +97,8 @@ export function jsonLd(nodes: Node[]): string {
 }
 
 const ORGANIZATION_ID = `${SITE.url}/#organization`;
+/** The site's address as a name: how people who have seen tryethos.io ask for it. */
+const TRYETHOS = "Tryethos";
 const price = (minor: number) => (minor / 100).toFixed(2);
 
 /**
@@ -133,7 +135,9 @@ export function organizationNode(): Node {
     "@type": "Organization",
     "@id": ORGANIZATION_ID,
     name: BRAND.name,
-    alternateName: BRAND.legalName,
+    // "Tryethos" is the name people type and the one the category line signs with (config/brand.ts).
+    alternateName: [BRAND.legalName, TRYETHOS],
+    slogan: BRAND.categoryLine.en,
     url: SITE.url,
     logo: `${SITE.url}/icons/icon-512.png`,
     email: BRAND.supportEmail,
@@ -183,9 +187,27 @@ export function appNode(locale: Locale, shown: Currency, description: string, pl
   };
 }
 
-/** A template as a product: what it is, what it looks like, and what it costs to send one, in the page's currency. */
+/**
+ * What it costs to send one gift of a template, as its own page says it: nothing while the template
+ * can go out free (lib/gift/free-tier.ts), "Make it special" for a free template that no longer can
+ * (Constellations since 19 Nov 2026, when the free version became the short note), and one template
+ * for a premium one; a template sold only as a group card is offered at a group card's price.
+ */
+export function templateOfferAmount(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">, currency: Currency): number {
+  if (sendsFree(manifest)) return 0;
+  if (soldAsGroup(manifest)) return PRODUCTS.group.amounts[currency];
+  return PRODUCTS[templateProduct(manifest.tier)].amounts[currency];
+}
+
+/**
+ * A template as a product: what it is, what it looks like, and what it costs to send one, in the
+ * page's currency. The price is the one the page shows. It used to be 0 for every template whose
+ * `tier` is "free", so Constellations told search engines it cost nothing beside a visible
+ * "€7.49 once when you send it" (the deep test of 21 Nov 2026).
+ */
 export function templateProductNode(manifest: TemplateManifest, locale: Locale, currency: Currency, category: string): Node {
   const url = localizedUrl(locale, `/templates/${manifest.slug}`);
+  const amount = templateOfferAmount(manifest, currency);
   return {
     "@type": "Product",
     "@id": `${url}#product`,
@@ -197,8 +219,7 @@ export function templateProductNode(manifest: TemplateManifest, locale: Locale, 
     url,
     offers: {
       "@type": "Offer",
-      // a template sold only as a group card is offered at a group card's price
-      price: manifest.tier === "free" ? "0" : price(PRODUCTS[soldAsGroup(manifest) ? "group" : "single"].amounts[currency]),
+      price: amount === 0 ? "0" : price(amount),
       priceCurrency: currency.toUpperCase(),
       availability: "https://schema.org/InStock",
       url,

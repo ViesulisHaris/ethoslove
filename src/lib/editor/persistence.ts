@@ -10,6 +10,11 @@ export function draftKey(slug: string): string {
   return `${KEY_PREFIX}${slug}`;
 }
 
+/** The key under which a reply to a gift of this template keeps its draft (store.ts pageScope). */
+export function replyDraftScope(slug: string): string {
+  return `${slug}:reply`;
+}
+
 /**
  * What a draft saved on this device points at: the copy on this device while there is one, so the
  * preview still works after a reload, otherwise the file in Storage. Where each file already went
@@ -50,9 +55,10 @@ export function serializeForLocal(draft: EditorDraft, assetRefs: Record<string, 
   return JSON.stringify({ ...draft, data });
 }
 
-export function readLocalDraft(slug: string): EditorDraft | null {
+/** The draft saved under `key`, when it is one of template `slug` (the key itself, by default). */
+export function readLocalDraft(key: string, slug: string = key): EditorDraft | null {
   try {
-    const raw = localStorage.getItem(draftKey(slug));
+    const raw = localStorage.getItem(draftKey(key));
     if (!raw) return null;
     const parsed = JSON.parse(raw) as EditorDraft;
     if (parsed.version !== 1 || parsed.slug !== slug) return null;

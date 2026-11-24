@@ -7,7 +7,7 @@ import { Link, getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
-import { ideaById } from "@/lib/dates/ideas";
+import { plannedIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, stopName, type Plan } from "@/lib/dates/plan";
 import { planUnwrap } from "@/lib/dates/plan-gift";
@@ -19,6 +19,7 @@ import { rememberSaveAfterSignIn, writeLink } from "@/lib/saved-dates/link";
 import type { SyncNotice } from "@/lib/saved-dates/sync";
 import type { UpsellReason } from "@/lib/saved-dates/types";
 import { tiqetsSearch } from "@/lib/trips/partners";
+import { track } from "@/lib/analytics/track";
 import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { gatherPhotos } from "@/components/gifts/unwrap-photos";
 import { Cutout } from "@/components/marketing/home/cutouts";
@@ -52,7 +53,7 @@ const PREVIEW_KEYS = ["c", "t", "d"];
  * only: who it is for, who from and the notes stay after the `#`, where no server sees them.
  */
 function previewTitle(plan: Plan, locale: "en" | "es"): string | null {
-  const idea = ideaById(plan.idea);
+  const idea = plannedIdea(plan);
   if (idea) return idea.title[locale];
   const names = plan.stops.filter((s) => s.named !== false).map((s) => s.name);
   return names.length > 0 ? names.join(" · ") : null;
@@ -103,6 +104,14 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const readOnly = opened.state === "readOnly" ? opened.saved : null;
   const readOnlyPlan = useMemo(() => (readOnly ? readPlan(readOnly.data) : null), [readOnly]);
   const kept = keptHash === hash;
+  // Counted once per link, and never a link that does not hold a plan. A ref, not state: React's
+  // development double-run of effects must not count it twice.
+  const countedHash = useRef<string | null>(null);
+  useEffect(() => {
+    if (!shared || countedHash.current === hash) return;
+    countedHash.current = hash;
+    track("shared_plan_opened");
+  }, [shared, hash]);
   const broken = hash.startsWith("#p=") && !shared;
   const plan: Plan = readOnlyPlan ?? shared ?? own;
   const editable = !shared && !readOnlyPlan;
@@ -131,7 +140,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
 
   const forecast = forecastFor?.at === at ? forecastFor.forecast : null;
   const day = forecast?.days.find((d) => d.date === plan.date);
-  const idea = ideaById(plan.idea);
+  const idea = plannedIdea(plan);
   const past = Boolean(plan.date && plan.date < toYmd(new Date()));
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
   const ticketed = plan.stops.some((s) => sellsTickets(s));
@@ -164,6 +173,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(link());
+      track("plan_shared", { how: "copy" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     } catch {
@@ -174,6 +184,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     if (!navigator.share) return copy();
     try {
       await navigator.share({ title: t("shareTitle"), text: plan.to ? t("shareTextTo", { name: plan.to }) : t("shareText"), url: link() });
+      track("plan_shared", { how: "share" });
     } catch {
       // Closed the share sheet: nothing to do.
     }
@@ -239,12 +250,13 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   }
 
   return (
-    <section className="container-x grid gap-8 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
+    // A place name can be one long word (Llanfairpwllgwyngyll…): it wraps rather than widening the page.
+    <section className="container-x grid gap-8 py-10 [overflow-wrap:anywhere] sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
       <article className="relative rounded-[32px] bg-card p-6 shadow-lift ring-1 ring-forest/5 sm:p-10">
         <Cutout id="bow-gingham" className="absolute -top-7 right-6 w-20 rotate-12 drop-shadow-[0_10px_16px_rgba(120,50,70,0.25)] sm:w-24" />
         {readOnly ? (
           <div className="mb-6 flex items-start gap-3 rounded-2xl bg-forest/[0.04] px-4 py-3 ring-1 ring-forest/10" data-testid="saved-read-only">
-            <Lock aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/60" />
+            <Lock aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/65" />
             <p className="min-w-0 flex-1 text-[14px] leading-snug text-forest/75">
               <span className="font-semibold text-forest">{ts("readOnly.title")}</span> · {ts("readOnly.body", { limit: FREE_SAVED_DATES })}{" "}
               <button type="button" onClick={() => openUpsell("read_only")} className="-my-2 inline-flex min-h-11 items-center font-semibold text-rose-deep underline underline-offset-4">
@@ -262,12 +274,12 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         {editable ? (
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-[12.5px] font-medium text-forest/60">{t("to")}</span>
-              <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+              <span className="text-[12.5px] font-medium text-forest/65">{t("to")}</span>
+              <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-card px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
             <label className="block">
-              <span className="text-[12.5px] font-medium text-forest/60">{t("from")}</span>
-              <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+              <span className="text-[12.5px] font-medium text-forest/65">{t("from")}</span>
+              <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-card px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
           </div>
         ) : plan.to || plan.from ? (
@@ -306,7 +318,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-semibold" style={{ color: group.ink }}>
                   {editable ? (
                     // 16px: iPhone Safari zooms the whole page into any smaller field it focuses.
-                    <TimePicker label={t("timeFor", { name })} value={stop.time} onChange={(time) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time } : s)) }))} className="w-auto rounded-xl border-forest/15 bg-white pr-2.5 pl-3 text-forest md:text-base" />
+                    <TimePicker label={t("timeFor", { name })} value={stop.time} onChange={(time) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time } : s)) }))} className="w-auto rounded-xl border-forest/15 bg-card pr-2.5 pl-3 text-forest md:text-base" />
                   ) : stop.time ? (
                     <span className="text-[15px] text-forest tabular-nums">{stop.time}</span>
                   ) : null}
@@ -317,7 +329,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                   </span>
                 </div>
                 <h2 className="mt-1 font-display text-[23px] leading-tight text-forest">{name}</h2>
-                {stop.address ? <p className="text-[14px] text-forest/60">{stop.address}</p> : null}
+                {stop.address ? <p className="text-[14px] text-forest/65">{stop.address}</p> : null}
                 {editable ? (
                   <input value={stop.note ?? ""} maxLength={140} aria-label={t("noteFor", { name })} placeholder={t("stopNotePlaceholder")} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, note: e.target.value || undefined } : s)) }))} className="mt-2 h-11 w-full rounded-xl border border-dashed border-forest/20 bg-transparent px-3 text-[16px] text-ellipsis text-forest outline-none placeholder:text-forest/45 focus:border-rose/50" />
                 ) : stop.note ? (
@@ -354,20 +366,20 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
           })}
         </ol>
         {ticketed ? (
-          <p className="mt-4 text-[12px] leading-snug text-forest/60">
+          <p className="mt-4 text-[12px] leading-snug text-forest/65">
             {ta("tickets.via")} {ta("disclosure")}
           </p>
         ) : null}
 
         {editable ? (
           <label className="mt-8 block">
-            <span className="text-[12.5px] font-medium text-forest/60">{t("note")}</span>
-            <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-white px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+            <span className="text-[12.5px] font-medium text-forest/65">{t("note")}</span>
+            <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-card px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
           </label>
         ) : plan.note ? (
           <p className="mt-8 border-t border-dashed border-forest/15 pt-6 font-hand text-[1.7rem] leading-snug text-forest/85">{plan.note}</p>
         ) : null}
-        {idea && !editable ? <p className="mt-6 rounded-2xl bg-rose-soft p-4 text-[14.5px] leading-snug text-rose-ink"><span className="font-semibold">{t("twist")}</span> {idea.twist[locale]}</p> : null}
+        {idea && !editable ? <p className="mt-6 rounded-2xl bg-blush-paper p-4 text-[14.5px] leading-snug text-rose-ink"><span className="font-semibold">{t("twist")}</span> {idea.twist[locale]}</p> : null}
       </article>
 
       <aside className="space-y-4 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
@@ -377,7 +389,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         {editable ? <SavePlanPanel plan={own} defaultTitle={(idea?.title[locale] || own.where || ts("save.defaultTitle")).slice(0, 80)} link={savedLink} status={status} account={account} onUpsell={openUpsell} onSignIn={signInToSave} /> : null}
 
         {editable ? (
-          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+          <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <h2 className="font-display text-[22px] text-forest">{t("send.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("send.sub")}</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
@@ -393,9 +405,9 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             <p className="mt-3 text-[12px] leading-snug text-forest/65">{t("send.private")}</p>
           </div>
         ) : readOnly ? (
-          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+          <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <p className="flex items-center gap-2 font-display text-[22px] text-forest">
-              <Lock aria-hidden="true" className="size-5 text-forest/55" />
+              <Lock aria-hidden="true" className="size-5 text-forest/65" />
               {ts("readOnly.title")}
             </p>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{ts("readOnly.body", { limit: FREE_SAVED_DATES })}</p>
@@ -410,7 +422,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             </div>
           </div>
         ) : (
-          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+          <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
             <h2 className="font-display text-[22px] text-forest">{t("received.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("received.sub")}</p>
             <div className="mt-4 grid gap-2">
@@ -426,6 +438,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                   writeLink(null);
                   updateOwn(() => ({ ...EMPTY_PLAN, ...plan }));
                   setKeptHash(hash);
+                  track("shared_plan_kept");
                   // Kept, it is theirs: drop the link's copy from the address, so the page shows
                   // it as their own to edit, and a reload does not offer to keep it again.
                   // replaceState fires no hashchange, so the page is told by hand.

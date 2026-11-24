@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { GameTable } from "@/components/games/cards";
+import { GameNotes } from "@/components/games/page/game-notes";
 import { QuestionDeck } from "@/components/games/question-deck";
 import { QuestionList } from "@/components/games/question-list";
 import { DECKS, DECK_IDS } from "@/lib/games/questions";
@@ -48,6 +49,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
         intro={t("listIntro")}
         groups={DECK_IDS.map((id) => ({ name: DECKS[id].name[l], items: DECKS[id].cards.map((c) => c[l]) }))}
       />
+      <GameNotes game="deck" locale={locale} />
     </GameTable>
   );
 }

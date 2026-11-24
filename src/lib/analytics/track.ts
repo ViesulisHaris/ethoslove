@@ -74,8 +74,33 @@ export type FunnelEvent =
   | "etsy_review_click"
   | "affiliate_click"
   | "reminder_saved"
+  // "Send one back to {sender}": the template, and where it was tapped ("end": the end screen,
+  // "reaction": under "Sent to {sender}." after a reaction).
   | "reply_started"
+  // The recipient loop (lib/attribution/recipient.ts): taps on a real gift page (the "Made with
+  // Ethos" badge; "or make one for someone else" on the end screen), the editor opened by someone
+  // who came from a gift (which door: reply, g, watermark, gift-keep), and that gift sent for the
+  // first time (and whether it holds anything paid). Counts only: no ids, no names.
+  | "watermark_clicked"
+  | "make_own_clicked"
+  | "recipient_editor_opened"
+  | "recipient_gift_sent"
   | "pack_offer_shown"
+  // The games. A game begun and a game finished (which game, on one phone or two), a room made and a
+  // room joined (which game), and what was picked at the end of a game (the game, and "gift", "today",
+  // "host" or the next game's key). Then today's question (/games/today): the page seen, an answer
+  // tapped, the link sent (by the share sheet or as a copied link), a sent link opened, and both
+  // answers shown (whether they matched). Never a name, an answer, a room's code or a pair's id.
+  | "game_started"
+  | "game_finished"
+  | "room_made"
+  | "room_joined"
+  | "game_end_pick"
+  | "daily_seen"
+  | "daily_answered"
+  | "daily_shared"
+  | "daily_opened_shared"
+  | "daily_revealed"
   | "tour_step"
   | "tour_skipped"
   | "city_page_cta"
@@ -86,6 +111,16 @@ export type FunnelEvent =
   | "saved_date_saved"
   | "saved_date_upsell"
   | "maps_opened"
+  // Dates in one step (components/dates/tonight): a plan asked for (the mood, the budget ceiling and whether
+  // it was for tonight, tomorrow or another day: never where), and the next one asked for. Then the plan
+  // page: a plan sent (by the share sheet or as a copied link), a plan opened from somebody's link, and
+  // that plan kept. And a page of one kind of date seen (which kind). No ids, no places, no coordinates.
+  | "tonight_planned"
+  | "tonight_another"
+  | "plan_shared"
+  | "shared_plan_opened"
+  | "shared_plan_kept"
+  | "date_kind_view"
   // "Keep this gift": the end screen's tap (the template), and the keep page sent (how many reminders were asked for). No ids, no addresses.
   | "keep_tapped"
   | "keep_requested"
@@ -108,6 +143,16 @@ export type FunnelEvent =
   | "quiz_finished"
   | "quiz_shared"
   | "quiz_gift_click"
+  // The gift finder (/gifts/finder): the first answer, each question answered (which one, never what was
+  // said), a result shown (the three answers, each one of a fixed list), and a pick watched or made (the template).
+  | "finder_started"
+  | "finder_step"
+  | "finder_result"
+  | "finder_pick"
+  // A card in the gallery (/templates, /occasions/…): which of its two ways out was taken, the gift's
+  // own page or straight to the editor (the template and "page" or "make", nothing else). The card
+  // lost its "Try the live demo" on 22 Nov 2026; this is what says where its visitors go instead.
+  | "gallery_pick"
   // A visit that arrived with no referrer, only a tag in its address (lib/attribution/arrival.ts): from
   // ChatGPT, another assistant, a pin or an Instagram link. Named per source because Vercel's reports
   // count by event name; nothing else is sent.

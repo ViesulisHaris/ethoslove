@@ -111,39 +111,14 @@
       "all": "Ver todas las plantillas",
       "moreTitle": "Más cada mes",
       "moreBlurb": "Llegan plantillas nuevas con regularidad. Quien compra Todo recibe las futuras, para siempre.",
-      "count": "{n} plantillas, {free} gratis"
+      "count": "{n} plantillas, {free} gratis",
+      "previous": "Regalos anteriores",
+      "next": "Más regalos"
     },
     "reactions": {
       "eyebrow": "Mira la reacción",
       "title": "El enlace sale. La respuesta vuelve.",
       "blurb": "Al final de cada regalo hay un botón de reacción: un emoji, una nota o un mensaje de voz de 20 segundos, directo a ti.",
-      "cards": [
-        {
-          "from": "Marco",
-          "to": "Ana",
-          "sent": "Te he hecho algo. Ábrelo con el sonido.",
-          "reply": "Estoy en el trabajo llorando en las escaleras. Tres años. TRES.",
-          "emoji": "😭",
-          "time": "22:41"
-        },
-        {
-          "from": "Lucas",
-          "to": "Sofía",
-          "sent": "Mira arriba. Bueno, mira el móvil.",
-          "reply": "Metiste la noche de la tienda. Encontré las seis. Catorce días.",
-          "emoji": "🥹",
-          "time": "07:12"
-        },
-        {
-          "from": "Dani",
-          "to": "Mamá",
-          "sent": "Feliz día, ma. Toca el sello.",
-          "reply": "¿¿Quién te enseñó a hacer esto?? Ya lo vi cuatro veces.",
-          "emoji": "❤️",
-          "time": "09:58"
-        }
-      ],
-      "placeholderNote": "Reacciones de muestra. Las reales las sustituyen conforme llegan.",
       "realNote": "Reacciones reales, compartidas por quienes recibieron los regalos. Sin nombres.",
       "realLabel": "Una reacción real",
       "opened": "{count} regalos de Ethos abiertos hasta ahora.",
@@ -185,6 +160,7 @@
     }
   },
   "footer": {
+    "allOccasions": "Todas las ocasiones",
     "about": "Sobre Ethos",
     "blurb": "Regalos que se abren como una historia.",
     "product": "Producto",
@@ -227,7 +203,10 @@
     "verify": "Verificar",
     "codeHint": "Útil si el enlace se abre en otro dispositivo.",
     "codeWrong": "Ese código no coincide. Mira el correo más reciente.",
-    "useAnotherEmail": "Usar otro correo"
+    "useAnotherEmail": "Usar otro correo",
+    "emailNoDot": "A esa dirección le falta el final, como .com",
+    "emailDidYouMean": "¿Quisiste decir <take>{suggestion}</take>?",
+    "emailKeepTyped": "No, envíalo a {email}"
   },
   "dashboard": {
     "title": "Mis regalos",
@@ -456,6 +435,7 @@
       "startAt": "Empezar en",
       "previewPlay": "Escuchar",
       "previewStop": "Parar",
+      "moodAll": "Todas",
       "mood": {
         "warm": "Cálida",
         "dreamy": "Soñadora",
@@ -888,7 +868,7 @@
       "popup-card": "Una tarjeta de cumpleaños que se despliega en su móvil",
       "birthday-cinema": "¿No puedes estar en su cumpleaños? Envíale esto.",
       "bouquet": "Un ramo que florece en su móvil",
-      "xoxo": "Cuando un “te quiero” por mensaje no basta"
+      "xoxo": "Cuando un «te quiero» por mensaje no basta"
     },
     "description": "Prueba el regalo de verdad y crea el tuyo con su nombre, tus palabras y tus fotos.",
     "tapHint": "Es el regalo de verdad. Tócalo.",
@@ -946,10 +926,16 @@
     "useTemplate": "Usar esta plantilla",
     "openFullscreen": "Abrir demo a pantalla completa",
     "backToGallery": "Todas las plantillas",
+    "backTo": "Volver a {name}",
+    "back": "Volver",
     "replay": "Repetir",
     "tryNote": "El editor es gratis y tiene vista previa en vivo. Solo pagas para publicar una plantilla premium.",
     "includes": "Incluye",
     "perfectFor": "Perfecta para",
+    "finder": {
+      "ask": "¿No sabes cuál?",
+      "link": "Responde dos preguntas"
+    },
     "featureMusic": "Música de fondo",
     "featureCaptions": "Pies de foto",
     "featureCountdown": "Cuenta atrás",
@@ -957,17 +943,35 @@
     "featureVideo": "Clip de vídeo",
     "photoRange": "{min}–{max} fotos",
     "allTiers": "Todas",
+    "sort": {
+      "label": "Ordenar por:",
+      "popular": "Más populares",
+      "new": "Más nuevos",
+      "az": "De la A a la Z"
+    },
     "allOccasions": "Todas las ocasiones",
+    "moreOccasions": "Más",
+    "fewerOccasions": "Menos",
     "noMatches": "Ninguna plantilla coincide con ese filtro todavía. Prueba otra ocasión.",
     "demoReactionToast": "En un regalo real, esto le envía tu reacción al remitente. Llega en la fase 4.",
     "tryDemo": "Probar la demo en vivo",
+    "liveDemo": "{name}, la demo en vivo",
+    "closeDemo": "Cerrar la demo",
+    "pausePreview": "Pausar la vista previa",
+    "playPreview": "Reproducir la vista previa",
     "none": "Todavía no hay plantillas con ese filtro.",
     "noneFree": "Ninguna plantilla de esta ocasión es gratis todavía. Estas son gratis y sirven para cualquier día.",
     "showAll": "Ver las {count}",
     "previewHint": "Esta es la plantilla real con datos de ejemplo. Toca, desliza y explora.",
-    "fullscreenDemo": "Abrir demo a pantalla completa",
+    "fullscreenDemo": "Demo a pantalla completa",
     "included": "Qué incluye",
+    "includedSpecial": "Con «Hazlo especial»",
+    "noteLead": {
+      "the-letter": "Toca para romper el sello. La carta sale del sobre y se despliega sobre un escritorio a la luz de una vela, y tus palabras aparecen escritas a mano."
+    },
     "featurePhotos": "Hasta {max} fotos",
+    "featureFullLetter": "Una carta de 4.000 caracteres",
+    "featureVoice": "Un mensaje de voz",
     "style": {
       "cinematic": "Cinemática",
       "minimal": "Minimalista",
@@ -976,17 +980,21 @@
       "retro": "Retro",
       "3d": "3D"
     },
-    "makeThis": "Crear regalo",
+    "makeThis": "Crear este regalo",
+    "makeHero": "Crear regalo",
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
     "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
-    "detailPriceFreeShort": "Gratis como nota corta: hasta 500 caracteres y su canción. Las fotos, la carta entera, un vídeo, un mensaje de voz o una sorpresa dentro vienen con “Hazlo especial” por {price}, pagado una vez.",
+    "detailPriceFreeShort": "Gratis como nota corta: hasta 500 caracteres y su canción. Las fotos, la carta entera, un vídeo, un mensaje de voz o una sorpresa dentro vienen con «Hazlo especial» por {price}, pagado una vez.",
     "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
     "group": {
       "detailPrice": "Reunir las notas es gratis. {price} una sola vez al enviarla, y desde entonces las tarjetas en grupo con esta plantilla son tuyas. Para invitar a la gente tienes que iniciar sesión.",
       "featureNotes": "Hasta {max} notas de quienes invites",
       "faqA": "Invitar a la gente y reunir sus notas no cuesta nada. Enviar la tarjeta cuesta {price} una sola vez, desde tu cuenta, y después las tarjetas en grupo con {name} son tuyas para enviarlas otra vez, sin suscripción."
     },
+    "pagePriceNote": "Gratis como nota corta. «Hazlo especial» añade fotos y más por {price}, en un solo pago.",
+    "pagePriceFree": "Enviarlo es gratis. Los extras cuestan {price}, en un solo pago.",
+    "pagePricePaid": "Pruébalo antes, sin cuenta. {price} una sola vez, cuando lo envías.",
     "sections": {
       "popular": {
         "eyebrow": "Las más populares",
@@ -997,6 +1005,22 @@
         "eyebrow": "Novedades",
         "title": "Recién llegadas",
         "blurb": "Una lista repasada dos veces, un año que desenvolver, una bola de nieve, una ventana con escarcha, luces que colgar y una casa de jengibre. Y dos para la mesa de Acción de Gracias."
+      },
+      "tierFree": {
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Regalos gratis"
+      },
+      "tierPremium": {
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Regalos premium"
+      },
+      "sortedNew": {
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Todos, empezando por el más nuevo"
+      },
+      "sortedAz": {
+        "eyebrow": "{count, plural, one {# regalo} other {# regalos}}",
+        "title": "Todos, por nombre"
       },
       "all": {
         "eyebrow": "La colección",
@@ -1011,6 +1035,7 @@
     "guide": {
       "eyebrow": "Cómo hacerlo",
       "heading": "Cómo hacer {name}",
+      "howLine": "Una vista previa enseña lo que verán mientras lo haces.",
       "step1Title": "Añade tus fotos",
       "step1Body": "{min, plural, =0 {Añade hasta {max} fotos, o ninguna.} other {Elige hasta {max} fotos.}} La vista previa muestra exactamente lo que verán mientras lo haces.",
       "step1Music": "Pon una canción de la biblioteca, o la de verdad, la vuestra: treinta segundos esperan al final, a un toque.",
@@ -1019,23 +1044,87 @@
       "step2Extras": "Añade una cuenta atrás hasta el día y una sorpresa escondida al final.",
       "step3Title": "Envía el enlace",
       "step3Body": "Publícalo y envía el enlace por donde quieras, o imprime su código QR y mételo en una tarjeta de papel. Se abre en cualquier móvil u ordenador, sin instalar nada.",
+      "ideasLabel": "Qué escribir",
+      "ideasLine": "{count} ideas, cada una con una frase para copiar.",
+      "experienceLabel": "La experiencia",
+      "experienceHeading": "Más que un mensaje",
+      "experienceBody": "Sin app ni cuenta: tu enlace abre {name} en su navegador.",
+      "experienceOpens": "Se abre en cualquier móvil u ordenador",
+      "experiencePhotosNone": "Funciona sin fotos, o con hasta {max}",
+      "experiencePhotosOne": "Con una foto basta; caben {max}",
+      "experiencePhotosMany": "Se hace con entre {min} y {max} fotos tuyas",
+      "experienceNote": "La nota gratis admite {chars} caracteres",
+      "experienceMic": "También vale el dedo, si el micrófono está apagado",
+      "experienceMotion": "También vale un toque, si el móvil no nota el movimiento",
+      "experienceChoice": "{label}: {choices}",
+      "experienceChoiceMore": "{label}: {choices} y {count} más",
+      "experienceSong": "Lleva la canción que elijas",
+      "experienceTouch": "Se juega con el dedo o con el ratón",
+      "faqLabel": "Preguntas",
       "faqTitle": "Preguntas frecuentes",
+      "faqLine": "Cuánto cuesta, cómo se abre y qué puedes cambiar.",
       "faqFreeQ": "¿Es gratis?",
-      "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice “Hecho con Ethos”. Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
-      "faqFreeAShort": "Sí, como nota corta. {name} se envía gratis con hasta 500 caracteres, música y un pequeño pie que dice “Hecho con Ethos”. Las fotos, una carta más larga, vídeo, un mensaje de voz, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
+      "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice «Hecho con Ethos». Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con «Hazlo especial» por {price}, en un solo pago.",
+      "faqFreeAShort": "Sí, como nota corta. {name} se envía gratis con hasta 500 caracteres, música y un pequeño pie que dice «Hecho con Ethos». «Hazlo especial» añade fotos, una carta más larga, vídeo, un mensaje de voz y la programación, y quita el pie, por {price}, en un solo pago.",
       "faqPaidQ": "¿Cuánto cuesta?",
       "faqPaidA": "Hazlo y pruébalo entero antes, sin cuenta. Enviarlo cuesta {price} una sola vez, y después esa plantilla es tuya para usarla siempre, sin suscripción. La carta es gratis como nota corta.",
       "faqOpenQ": "¿Cómo lo abren?",
       "faqOpenA": "Con el enlace que les envías, por WhatsApp, iMessage, Instagram o email, o escaneando su código QR con la cámara del móvil. Se abre en el navegador de cualquier móvil u ordenador: sin app que instalar ni cuenta que crear.",
       "faqEditQ": "¿Puedo cambiarlo después de enviarlo?",
       "faqEditA": "Sí. Edítalo cuando quieras y el cambio sale en el mismo enlace. Los enlaces no caducan, así que se puede volver a abrir el año que viene.",
-      "moreTitle": "Más como este"
+      "moreTitle": "Más como este",
+      "moreHeading": "Más regalos para enviar",
+      "moreFor": {
+        "birthday": "Más regalos de cumpleaños",
+        "anniversary": "Más regalos de aniversario",
+        "valentines": "Más regalos de San Valentín",
+        "wedding": "Más regalos de boda",
+        "graduation": "Más regalos de graduación",
+        "christmas": "Más regalos de Navidad",
+        "halloween": "Más regalos de Halloween",
+        "thanksgiving": "Más regalos de Acción de Gracias",
+        "mothers-day": "Más regalos para el Día de la Madre",
+        "fathers-day": "Más regalos para el Día del Padre",
+        "apology": "Más regalos para pedir perdón",
+        "long-distance": "Más regalos a distancia",
+        "just-because": "Más regalos porque sí"
+      },
+      "moreAbout": "Más sobre {name}",
+      "madeFor": "Pensado para",
+      "suitsLead": "Un regalo para",
+      "suitsWho": {
+        "boyfriend": "tu novio",
+        "girlfriend": "tu novia",
+        "husband": "tu marido",
+        "wife": "tu esposa",
+        "best-friend": "tu mejor amigo o amiga",
+        "mom": "tu madre",
+        "dad": "tu padre"
+      },
+      "madeForDay": {
+        "birthday": "un cumpleaños",
+        "anniversary": "un aniversario",
+        "valentines": "San Valentín",
+        "wedding": "una boda",
+        "graduation": "una graduación",
+        "christmas": "Navidad",
+        "halloween": "Halloween",
+        "thanksgiving": "Acción de Gracias",
+        "mothers-day": "el Día de la Madre",
+        "fathers-day": "el Día del Padre",
+        "apology": "pedir perdón",
+        "long-distance": "quien está lejos",
+        "just-because": "porque sí"
+      }
     }
   },
   "occasions": {
     "title": "Ocasiones",
     "for": "Regalos digitales para {occasion}",
     "guideEyebrow": "Cómo hacerlo",
+    "ideasLabel": "Ideas",
+    "ideasLine": "Abre una tarjeta para ver la idea.",
+    "guideLine": "Qué escribir, qué añadir y cuándo enviarlo.",
     "faqTitle": "Preguntas frecuentes",
     "birthday": "Cumpleaños",
     "anniversary": "Aniversario",
@@ -1047,7 +1136,7 @@
     "thanksgiving": "Acción de Gracias",
     "mothers-day": "Día de la Madre",
     "fathers-day": "Día del Padre",
-    "apology": "Disculpa",
+    "apology": "Pedir perdón",
     "long-distance": "A distancia",
     "just-because": "Porque sí"
   },
@@ -1061,7 +1150,7 @@
     "updated": "Actualizado el",
     "contents": "En este artículo",
     "related": "Sigue leyendo",
-    "makeThis": "Hacer este regalo",
+    "makeThis": "Crear este regalo",
     "seeIt": "Ver la plantilla",
     "templateFree": "Plantilla gratis",
     "templatePremium": "Plantilla premium",
@@ -1266,7 +1355,7 @@
       },
       "mood": {
         "title": "¿Qué os apetece?",
-        "body": "Acogedor, divertido, de gala… Cada opción cambia las ideas y los sitios que aparecen."
+        "body": "Acogedor, divertido, para arreglarse… Cada opción cambia las ideas y los sitios que aparecen."
       },
       "place": {
         "title": "Échale un vistazo",
@@ -1335,7 +1424,8 @@
   "notFound": {
     "title": "Esta página se perdió",
     "detail": "Puede que el enlace esté roto o que la página se haya movido.",
-    "home": "Volver al inicio"
+    "home": "Volver al inicio",
+    "metaTitle": "Página no encontrada · Ethos"
   },
   "error": {
     "title": "Algo falló de nuestro lado",
@@ -1357,7 +1447,7 @@
     },
     "error": {
       "title": "No pudimos confirmarlo.",
-      "detail": "Si se te ha cobrado, el desbloqueo aparecerá en unos minutos. Si no, inténtalo de nuevo desde la página de precios."
+      "detail": "Si se te ha cobrado, el desbloqueo aparecerá en unos minutos. Si no, inténtalo de nuevo desde <pricing>la página de precios</pricing>."
     },
     "signin": {
       "title": "Pagado. Ahora inicia sesión.",
@@ -1401,7 +1491,6 @@
       "secondPick": "¿Cuál?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
-      "guarantee": "Si no se abre en su móvil, te devolvemos el dinero.",
       "personalPrice": "Tu precio personal de nuestro correo, hasta el {ends}."
     },
     "etsy": {
@@ -1718,7 +1807,7 @@
   },
   "cities": {
     "meta": {
-      "title": "Ideas para una cita en {city}: {ideas} planes y {places, plural, =0 {un mapa con sitios reales} one {# sitio real} other {# sitios reales}}",
+      "title": "{ideas} ideas para una cita en {city}, {places, plural, =0 {en un mapa} one {con # sitio real} other {con # sitios reales}}",
       "description": "{ideas} ideas para una cita pensadas para cómo es {city} de verdad, con cafeterías, parques y museos reales cerca del centro en un mapa gratis. Sin cuenta."
     },
     "eyebrow": "Ideas para una cita por ciudad",
@@ -1754,12 +1843,36 @@
       "manchester": "El centro es compacto: una cena, una peli y un postre tardío casi nunca necesitan más que un paseo entre uno y otro.",
       "edinburgh": "Calton Hill está a un paseo de Princes Street y no cuesta nada, así que madrugar para ver amanecer se vende solo.",
       "dublin": "La National Gallery y el National Museum son gratis, justo lo que pide una tarde de lluvia.",
+      "birmingham": "Los canales cruzan el centro, con caminos de sirga y mesas junto al agua en Brindleyplace y Gas Street Basin: el camino largo a casa va por la orilla.",
+      "glasgow": "Aquí los grandes museos son gratis, entre ellos Kelvingrove y la Galería de Arte Moderno, así que una tarde de lluvia no cuesta más que el café de después.",
+      "bristol": "Brandon Hill es una subida corta desde el puerto, y arriba está la Cabot Tower, a la que se sube gratis. Es el sitio para la hora dorada.",
+      "leeds": "Las galerías victorianas del centro os mantienen bajo cristal entre la cena y el postre. El Hyde Park Picture House, abierto desde 1914, sigue iluminado con lámparas de gas.",
+      "liverpool": "En Mathew Street, alrededor del Cavern Club, hay música en directo casi todas las noches. Antes, los museos nacionales del puerto son gratis para pasar la tarde.",
       "new-york": "Elegid dos paradas en el mismo barrio y caminad de una a otra: en Nueva York, las calles son media cita.",
       "los-angeles": "Aquí las distancias son largas, así que elegid un barrio y quedaos en él. La playa al atardecer sí merece el trayecto.",
       "chicago": "La orilla del lago tiene playas de arena a poca distancia del Loop, así que la cita en la playa está más cerca de lo que parece.",
       "san-francisco": "Casi todos los barrios tienen un parque en lo alto de una cuesta, y son los mejores asientos de la ciudad para la hora dorada.",
       "miami": "El calor del mediodía va en serio buena parte del año, así que primero van las ideas para primera hora y para la noche.",
       "boston": "El centro es pequeño y se recorre a pie, y el Public Garden, con su estanque, está justo en medio.",
+      "dallas": "El Museo de Arte de Dallas es de entrada libre, y enfrente está Klyde Warren Park, un parque construido sobre la autopista, para el paseo de después.",
+      "kansas-city": "Aquí se cena barbacoa, y le va bien el giro: pedid el uno por el otro, sin vetos. El primer viernes de cada mes, las galerías de Crossroads abren hasta tarde.",
+      "houston": "El Museum District reúne diecinueve museos alrededor de Hermann Park, y algunos no cobran nunca, como la Menil Collection y el Contemporary Arts Museum. Id a última hora, cuando afloja el calor.",
+      "atlanta": "El Eastside Trail del BeltLine sigue una antigua vía de tren desde Piedmont Park hasta Krog Street, entre terrazas y sitios donde parar. Es un paseo hecho para un helado.",
+      "austin": "De primavera a otoño, más de un millón de murciélagos sale al anochecer de debajo del puente de Congress Avenue: la hora dorada junto al lago Lady Bird acaba con espectáculo.",
+      "denver": "El lago de City Park tiene la vista por la que se conoce la ciudad: los rascacielos con las Rocosas detrás. Llevad el pícnic una hora antes de la puesta de sol, y una chaqueta, incluso en verano.",
+      "milwaukee": "El museo de arte, a la orilla del lago, tiene alas: un parasol que se abre con el museo y se pliega al cerrar, si el viento lo permite. Vedlo, y luego buscad una cerveza cerca.",
+      "salt-lake-city": "Ensign Peak es una subida corta y empinada por encima del Capitolio: unos veinte minutos, y al atardecer tenéis el valle entero y el lago a vuestros pies.",
+      "san-antonio": "El River Walk discurre un nivel por debajo de las calles, a la sombra de los cipreses, así que el camino largo a casa después de cenar es más fresco que la acera de arriba.",
+      "columbus": "El primer sábado de cada mes, el Short North celebra su Gallery Hop: las galerías de High Street abren hasta tarde y la calle se llena.",
+      "orlando": "El lago Eola está en pleno centro, con barcas de pedales en forma de cisne y un sendero alrededor del agua que se recorre en unos veinte minutos.",
+      "philadelphia": "Muchos de los restaurantes pequeños de la ciudad son BYOB: vosotros lleváis la botella y ellos ponen las copas. La cena para dos empieza en la tienda de vinos.",
+      "phoenix": "En los meses de calor la ciudad madruga: los senderos se llenan al amanecer y a media mañana ya están tranquilos. Haced lo mismo, y dejad la tarde para un sitio con aire acondicionado.",
+      "pittsburgh": "El Duquesne Incline, un funicular de 1877, sube al monte Washington por unos pocos dólares. Desde arriba se ve el punto donde se juntan los tres ríos.",
+      "portland": "Powell's ocupa una manzana entera de libros, nuevos y de segunda mano en los mismos estantes: «elegid un libro el uno para el otro» se convierte en un trabajo largo y feliz.",
+      "seattle": "Aquí llovizna más de lo que diluvia, y para eso están las cafeterías y las grandes librerías independientes de la ciudad. En una tarde despejada, Kerry Park tiene la vista de los rascacielos.",
+      "st-louis": "Forest Park reúne el museo de arte, el de historia y el zoo, y los tres son gratis. En invierno abre su pista de patinaje al aire libre.",
+      "nashville": "Los honky-tonks de Lower Broadway tienen música en directo desde última hora de la mañana hasta el cierre, y casi nunca cobran entrada. Los grupos tocan por propinas: llevad unos dólares en efectivo.",
+      "san-diego": "Balboa Park reúne jardines y más de una docena de museos en un mismo sitio, y las playas quedan a un trayecto corto. Empezad en el parque y acabad con la puesta de sol.",
       "toronto": "Las islas están a un trayecto corto en ferri desde el centro, con playas, caminos y vistas de los rascacielos.",
       "vancouver": "Stanley Park y el paseo marítimo empiezan donde acaba el centro, así que una cita al aire libre no necesita coche.",
       "montreal": "Los inviernos son largos y fríos, así que las pistas de hielo y el chocolate caliente no son una novedad: son la temporada. Para las vistas, subid al monte Royal.",
@@ -1820,6 +1933,7 @@
     "empty": {
       "title": "¿Dónde estáis?",
       "sub": "Una ciudad, un barrio o donde estés ahora mismo. Encontramos las citas que esconde.",
+      "subIdea": "Decid dónde estáis y planeamos «{idea}» con sitios reales de allí.",
       "or": "O empieza por aquí",
       "note": "elige una calle, la que sea"
     },
@@ -1875,6 +1989,81 @@
       "add": "Añadir esta cita a nuestro plan",
       "added": "En vuestro plan",
       "close": "Cerrar esta idea"
+    },
+    "tonight": {
+      "label": "El planificador",
+      "inCity": "Adónde ir en {city}",
+      "sentence": "Planead una cita <mood></mood> <when></when>. <length></length>, <budget></budget>.",
+      "sentenceKind": "Planead una de estas ideas para <when></when>. <length></length>, <budget></budget>.",
+      "lengthLabel": "Cuánto tiempo",
+      "budgetLabel": "Presupuesto",
+      "mood": {
+        "any": "de cualquier tipo",
+        "cozy": "acogedora",
+        "playful": "divertida",
+        "outdoorsy": "al aire libre",
+        "foodie": "para comer bien",
+        "artsy": "artística",
+        "fancy": "para arreglarse"
+      },
+      "when": {
+        "tonight": "esta noche",
+        "tomorrow": "mañana",
+        "weekend": "este finde",
+        "day": "el {day}"
+      },
+      "length": {
+        "any": "Cualquier duración",
+        "short": "Hasta 2 horas",
+        "medium": "De 2 a 3 horas",
+        "long": "3 horas o más"
+      },
+      "budget": {
+        "0": "gratis",
+        "1": "gastando solo calderilla",
+        "2": "como mucho lo que cuesta una cena",
+        "3": "sin mirar el precio",
+        "any": "con cualquier presupuesto"
+      },
+      "plan": "Planear",
+      "finding": "Buscando sitios…",
+      "whereFirst": "Decid primero dónde",
+      "open": "Abrir el plan",
+      "another": "Otra",
+      "relaxed": {
+        "budget": "No hay nada {wanted} para {when}; esta cuesta {cost}.",
+        "budgetWet": "Con lluvia no hay nada {wanted} para {when}; esta cuesta {cost}.",
+        "length": "Nada de esa duración encaja; esta dura unas {hours} h.",
+        "vibe": "Nada de ese estilo encaja {when}; esta es la más cercana."
+      },
+      "beyond": {
+        "budget": "Esta cuesta más: cuenta con {cost}.",
+        "length": "Esta dura unas {hours} h.",
+        "vibe": "Esta va por otro estilo."
+      },
+      "wanted": {
+        "0": "gratis",
+        "1": "tan barato",
+        "2": "por ese precio"
+      },
+      "costs": {
+        "1": "calderilla, un café por cabeza",
+        "2": "lo que una cena fuera",
+        "3": "lo que una entrada por cabeza"
+      },
+      "freeIf": "Gratis si lleváis vuestra comida y bebida. La parada marcada como opcional es donde la compraríais.",
+      "optional": "opcional",
+      "none": "Nada encaja con eso aquí.",
+      "noneKind": "Ninguna idea de esta página encaja {when} allí.",
+      "movedTomorrow": "Ninguna idea de esta página cabe ya esta noche allí, así que esta es para mañana.",
+      "late": "Ya es tarde para empezar una esta noche.",
+      "tryTomorrow": "Planear para mañana",
+      "openMap": "Abrir el mapa",
+      "noScript": "El planificador necesita JavaScript.",
+      "noScriptCities": "Sitios reales, ciudad a ciudad",
+      "replace": "Esto sustituye el plan que estabais haciendo en este dispositivo.",
+      "replaceYes": "Sustituirlo",
+      "replaceNo": "Seguir con el nuestro"
     },
     "places": {
       "title": "Sitios para una cita",
@@ -2075,10 +2264,9 @@
   },
   "growth": {
     "hero": {
-      "eyebrow": "Regalos digitales hechos por ti",
       "h1a": "Hazle un regalo",
       "h1b": "que abrirá una y otra vez.",
-      "sub": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Diez minutos para hacerlo; se envía como enlace o código QR.",
+      "sub": "Tus fotos, tus palabras y su canción, convertidas en un regalo digital que se abre como una historia. Diez minutos para hacerlo; se envía como enlace o código QR.",
       "cta": "Crear un regalo",
       "demo": "Ver cómo se abre",
       "note": "Empezar es gratis. Sin cuenta hasta que publicas.",
@@ -2131,7 +2319,7 @@
       "ticket": {
         "label": "Tu enlace",
         "you": "de la venta, para ti",
-        "paid": "y se paga cada mes"
+        "paid": "pago mínimo, cada mes"
       },
       "how": {
         "eyebrow": "Cómo funciona",
@@ -2235,51 +2423,53 @@
       "title": "Seáis la pareja que seáis esta semana.",
       "dates": {
         "title": "Citas",
-        "blurb": "Ideas hechas con sitios reales en un mapa de tu ciudad, según el tiempo y la puesta de sol.",
+        "blurb": "Ideas hechas con sitios reales en un mapa.",
         "cta": "Buscar una cita"
       },
       "gifts": {
         "title": "Regalos digitales",
-        "blurb": "Una carta, un ramo, un rasca: hecho en minutos, abierto en su móvil, guardado para siempre.",
+        "blurb": "Hecho en minutos, guardado para siempre.",
         "cta": "Crear un regalo"
       },
       "ldr": {
         "title": "A distancia",
-        "blurb": "Quedad a medio camino, tened citas entre husos horarios y enviad algo que acorte la distancia.",
+        "blurb": "Quedad a medio camino. Citas entre husos horarios.",
         "cta": "Acortar la distancia"
       },
       "games": {
         "title": "Juegos",
-        "blurb": "Siete juegos de cartas para dos: en un móvil en el sofá o en dos móviles a un continente de distancia.",
+        "blurb": "Ocho juegos de cartas para dos.",
         "cta": "Jugar"
       }
     },
     "ideas": {
       "eyebrow": "Ideas para citas",
-      "title": "Una noche con forma.",
-      "blurb": "Cada idea es una pequeña receta: un par de paradas y un giro. Elige una y la llenamos de sitios reales cerca de ti.",
+      "title": "Una noche con plan.",
+      "blurb": "Elige una y la llenamos de sitios reales cerca de ti.",
       "all": "Las {count} ideas, en el mapa",
-      "hours": "{hours} h"
+      "hours": "{hours} h",
+      "previous": "Ideas anteriores",
+      "next": "Más ideas"
     },
     "ldr": {
       "eyebrow": "A distancia",
       "titleA": "Estar separados no es",
       "titleB": "estar lejos.",
-      "blurb": "Encontrad la ciudad a medio camino, planead la cita para cuando aterricéis y mantened el día a día con cosas para hacer en dos pantallas.",
+      "blurb": "Encontrad la ciudad a medio camino, planead la cita para cuando aterricéis.",
       "cta": "Abrir la habitación a distancia",
       "halfway": "a medio camino",
       "cityA": "Riga",
       "cityB": "Londres"
     },
     "games": {
-      "eyebrow": "Juegos · siete para jugar ya",
+      "eyebrow": "Juegos · ocho para jugar ya",
       "title": "Jugaos quién friega los platos.",
-      "blurb": "Juegos de cartas para dos personas que se gustan: adivinad las respuestas del otro, encontrad las parejas, girad la ruleta de los platos. Sin descargas ni cuentas.",
+      "blurb": "Juegos de cartas para dos personas que se gustan. Sin descargas ni cuentas.",
       "cta": "Reparte"
     },
     "closing": {
-      "title": "El sábado no se va a planear solo.",
-      "blurb": "Dos minutos ahora y el finde ya tiene forma.",
+      "title": "Hazle algo que vaya a guardar.",
+      "blurb": "Diez minutos ahora, y esta noche lo tiene en sus manos.",
       "dates": "Buscar una cita",
       "gifts": "Crear un regalo"
     }
@@ -2324,7 +2514,8 @@
     "virtual": {
       "eyebrow": "Citas para dos pantallas",
       "title": "Algo que hacer durante la llamada.",
-      "twist": "El giro:"
+      "twist": "El giro:",
+      "openMap": "Abrir el mapa"
     },
     "gifts": {
       "eyebrow": "Regalos para la distancia",
@@ -2490,8 +2681,8 @@
   },
   "games": {
     "meta": {
-      "title": "Juegos para parejas online: siete juegos gratis para dos",
-      "description": "Juegos para parejas online y gratis: ¿Cuánto me conoces?, ¿Qué prefieres?, verdad o reto, cartas de preguntas, Memory con vuestras fotos y más. Sin descargas."
+      "title": "Juegos para parejas online: ocho juegos gratis para dos",
+      "description": "Juegos para parejas online y gratis: ¿Qué prefieres?, Esto o aquello, ¿Cuánto me conoces?, verdad o reto, Memory con vuestras fotos y más. Sin descargas."
     },
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
@@ -2619,6 +2810,88 @@
       "listTitle": "{count} preguntas de ¿qué prefieres? para parejas",
       "listIntro": "Todas las preguntas de la baraja gratis, desde las fáciles para el sofá hasta las que empiezan una discusión digna de captura. Jugadlas arriba en uno o dos móviles, o leedlas en voz alta en una cita."
     },
+    "today": {
+      "label": "Pregunta del día",
+      "h1": "¿Qué prefieres? La pregunta de hoy",
+      "line": "Hoy es la misma para todo el mundo. Descubre qué elegiría tu pareja.",
+      "h1Old": "¿Qué prefieres? La pregunta de ese día",
+      "lineOld": "Ese día fue la misma para todo el mundo. Descubre qué elegiría tu pareja.",
+      "seoTitle": "¿Qué prefieres? La pregunta del día para parejas",
+      "seoDescription": "Un ¿qué prefieres? nuevo cada día, el mismo para todo el mundo. Tu pareja elige antes de ver tu respuesta y luego salen las dos juntas. Gratis y sin registro.",
+      "daily": "Una nueva cada día",
+      "broken": "Ese enlace no llegó entero, así que aquí tienes la pregunta de hoy.",
+      "from": "De {name}",
+      "fromOn": "De {name}, {date}",
+      "on": "La pregunta del {date}",
+      "both": "Las dos respuestas",
+      "bothOn": "Las dos respuestas, {date}",
+      "invited": "{name} ya ha respondido. ¿Tú qué eliges?",
+      "prompt": "¿Con cuál te quedas?",
+      "or": "o",
+      "change": "¿Has cambiado de idea? Toca la otra.",
+      "resend": "Has cambiado de respuesta: vuelve a enviar el enlace para que le llegue la nueva.",
+      "nameLabel": "Tu nombre",
+      "send": "Envíasela",
+      "copy": "Copiar el enlace",
+      "copyAgain": "Copiar el enlace otra vez",
+      "copied": "Enlace copiado. Pégalo en vuestro chat.",
+      "copyFallback": "Copia este enlace:",
+      "sent": "Enviada. Elegirá sin ver tu respuesta y luego podrá mandarte la suya.",
+      "sendBack": "Devuélvele la tuya",
+      "sentBack": "Enviada. {name} verá las dos respuestas.",
+      "own": "Es el enlace que enviaste. Elegirá sin ver tu respuesta.",
+      "match": "Habéis elegido lo mismo. Ahora decid por qué, a ver si también coinciden los motivos.",
+      "clash": "Cada cual por su lado. Una frase por cabeza para convencer a la otra persona.",
+      "you": "Tú",
+      "answers": "Las dos respuestas",
+      "wholeGame": "Jugar la partida entera",
+      "todays": "Ver la pregunta de hoy",
+      "shareTitle": "El ¿qué prefieres? de hoy",
+      "shareText": "{name} ya ha respondido al ¿qué prefieres? de hoy. ¿Tú qué eliges?",
+      "shareTextAnon": "Ya he respondido al ¿qué prefieres? de hoy. ¿Tú qué eliges?",
+      "shareBackText": "{name} también ha respondido. Ábrelo y mira las dos respuestas.",
+      "shareBackTextAnon": "Yo también he respondido. Ábrelo y mira las dos respuestas.",
+      "how": {
+        "label": "Cómo funciona",
+        "heading": "Una pregunta, dos móviles",
+        "line": "Tu nombre y tu respuesta van en el enlace, nunca a nuestro servidor.",
+        "steps": {
+          "pick": "Toca la opción que prefieres",
+          "send": "Mándale el enlace",
+          "see": "Elige sin ver la tuya y luego salen las dos"
+        }
+      },
+      "more": {
+        "label": "La partida entera",
+        "heading": "{count} preguntas como esta",
+        "line": "Diez seguidas, en un móvil que os pasáis o en dos.",
+        "play": "Jugar a ¿qué prefieres?",
+        "all": "Todos los juegos",
+        "faq": "Preguntas"
+      }
+    },
+    "thisthat": {
+      "title": "¿Esto o aquello?",
+      "blurb": "Diez parejas rápidas. Elegís en secreto y luego veis en cuántas coincidís. En un móvil o en dos.",
+      "prompt": "¿Esto o aquello?",
+      "sofar": "Coincidís en {same} de {total} por ahora",
+      "reveal": {
+        "match": "Lo mismo.",
+        "clash": "Cada cual lo suyo."
+      },
+      "end": {
+        "eyebrow": "Diez parejas después",
+        "twins": "Podríais pedir por la otra persona sin preguntar.",
+        "balanced": "Lo justo en común y lo justo para discutir.",
+        "opposites": "Polos opuestos. Alguien tiene que darle interés.",
+        "sub": "Habéis coincidido en {same} de {total}. Preguntad por las demás.",
+        "again": "Jugar otra vez"
+      },
+      "seoTitle": "Preguntas de esto o aquello para parejas: 120 para jugar",
+      "seoDescription": "120 preguntas de esto o aquello para parejas: elegís en secreto en uno o dos móviles y veis en cuántas coincidís. Gratis, sin app y sin registro.",
+      "listTitle": "{count} preguntas de esto o aquello para parejas",
+      "listIntro": "Todas las parejas del juego, para jugarlas arriba o leerlas en voz alta. Contad hasta tres y responded a la vez."
+    },
     "roulette": {
       "title": "La ruleta de los platos",
       "blurb": "Una ruleta con vuestros nombres. Cada giro decide una tarea. Lo que diga la ruleta va a misa.",
@@ -2638,7 +2911,7 @@
     },
     "dare": {
       "title": "Verdad o reto, versión suave",
-      "blurb": "Nada de lo que arrepentirse por la mañana. Sobre todo piropos y bailar mal. Un móvil, por turnos.",
+      "blurb": "Discursos, imitaciones, un baile lento. Nada que no pudierais hacer con los vecinos en casa. Un móvil, por turnos.",
       "turn": "Turno de {name}",
       "pick": "{name}, ¿verdad o reto?",
       "truth": "Verdad",
@@ -2658,7 +2931,7 @@
       "seoTitle": "Verdad o reto para parejas: juego online gratis",
       "seoDescription": "Verdad o reto para parejas, versión suave: verdades tiernas y retos tontos, nada de lo que arrepentirse por la mañana. Un móvil, por turnos. Gratis.",
       "listTitle": "{count} preguntas de verdad o reto para parejas",
-      "listIntro": "Todas las verdades y todos los retos del juego gratis. Sobre todo piropos y bailar mal.",
+      "listIntro": "Todas las verdades y todos los retos del juego gratis: pequeñas confesiones, discursos, imitaciones, un baile lento.",
       "listTruths": "Verdades",
       "listDares": "Retos"
     },
@@ -2669,13 +2942,31 @@
     },
     "hub": {
       "eyebrow": "Noche de juegos para dos",
-      "sub": "Siete juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
+      "sub": "Ocho juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
       "one": "Pasaos un móvil",
       "two": "O dos móviles, un enlace",
       "deal": "Reparte",
       "pickTitle": "Elige un juego",
       "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
-      "minutes": "{n} min"
+      "minutes": "{n} min",
+      "todayTitle": "La pregunta de hoy",
+      "todayPhones": "Dos móviles, un enlace",
+      "todayCta": "Responder",
+      "tiers": {
+        "free": {
+          "title": "Gratis",
+          "line": "Los {count} juegos, completos. Sin registro y sin descargas."
+        },
+        "pack": {
+          "title": "Un pack, {price}",
+          "line": "Más cartas para dos o tres de los juegos, tuyas para siempre."
+        },
+        "two": {
+          "title": "Ethos for Two",
+          "line": "Todos los packs y todas las plantillas de regalo, para la pareja."
+        },
+        "cta": "Ver Ethos for Two"
+      }
     },
     "memory": {
       "title": "Memory",
@@ -2751,19 +3042,30 @@
       },
       "imHere": "Soy {name}, vamos",
       "seoTitle": "Juego de dibujar para parejas, en dos móviles",
-      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis."
+      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis.",
+      "listTitle": "{count} palabras para un juego de dibujar en pareja",
+      "listIntro": "Todas las palabras del juego gratis. Cada partida reparte seis y os turnáis para dibujarlas con el dedo."
     },
     "end": {
       "label": "¿Y ahora qué?",
       "gift": "Hazle un regalo",
       "giftBlurb": "Una carta, vuestras fotos, vuestra canción: algo que se abre en su móvil.",
-      "another": "Jugar a otro juego",
-      "anotherBlurb": "Hay siete en la mesa. Ninguno dura más de un cuarto de hora.",
+      "next": "O jugad a otro",
+      "another": "Volver a los juegos",
+      "today": "Mándale la pregunta de hoy",
       "host": {
         "title": "Te toca repartir",
         "blurb": "Crea tu propia sala y manda el enlace a quien quieras.",
         "cta": "Crear una sala"
       }
+    },
+    "notes": {
+      "label": "Antes de repartir",
+      "how": "Cómo se juega",
+      "faq": "Preguntas sobre este juego",
+      "line": "Las reglas, cuánto dura y qué se guarda.",
+      "moreLabel": "Para seguir leyendo",
+      "more": "Más como este"
     }
   },
   "packs": {
@@ -2809,7 +3111,6 @@
     },
     "hub": {
       "title": "Packs de juegos",
-      "sub": "Más cartas para los mismos juegos, a {price} cada uno y tuyos para siempre. O todos los packs y todas las plantillas de regalo, para los dos, con Ethos for Two.",
       "cta": "Ver qué trae: {n} cartas"
     }
   },
@@ -3474,16 +3775,18 @@
     }
   },
   "madeWith": {
-    "metaTitle": "Hazle uno tú también",
-    "metaDescription": "Alguien te ha hecho un regalo de Ethos. Hazle uno de vuelta: dos plantillas son gratis, y todas las demás se prueban gratis.",
-    "eyebrow": "Hecho con Ethos",
+    "metaTitle": "Haz el tuyo",
+    "metaDescription": "Alguien te ha hecho un regalo de Ethos. Haz el tuyo: todas las plantillas se prueban gratis.",
     "title": "Alguien te ha hecho uno de estos.",
     "subtitle": "Hazle uno tú también: empezar es gratis.",
+    "subtitleElse": "Hazle uno a otra persona: empezar es gratis.",
     "yours": "El que te llegó",
+    "all": "Ver todas las plantillas",
     "free": {
       "eyebrow": "Gratis",
       "title": "Gratis para hacer y enviar",
-      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Llevan la pequeña marca «Hecho con Ethos», como el que te llegó."
+      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Un regalo gratis lleva el pequeño pie «Hecho con Ethos», como el que te llegó.",
+      "blurbElse": "Sin pagar, y sin cuenta hasta que lo envíes. Un regalo gratis lleva un pequeño pie «Hecho con Ethos»."
     },
     "premium": {
       "eyebrow": "Premium",
@@ -3495,11 +3798,39 @@
     "eyebrow": "Ideas de regalo",
     "breadcrumb": "Regalos digitales",
     "free": "Gratis",
-    "make": "Hacer este regalo",
+    "make": "Crear este regalo",
+    "makeLead": "Crear el del móvil",
+    "watch": "Verlo",
+    "ideaInFull": "La idea completa",
+    "giftPage": "Sobre este regalo",
+    "readNext": "Sigue leyendo",
+    "byKind": "Ideas de regalo por tipo",
     "guideTitle": "Cómo acertar",
+    "craftLabel": "Antes de enviarlo",
+    "ideasTag": "{count} ideas",
+    "inPhone": "En el móvil: {name}, {price} una vez. Tócalo para verlo.",
+    "inPhoneFree": "En el móvil: {name}, gratis como nota corta. Tócalo para verlo.",
+    "ideasLabel": "Las ideas",
+    "ideasLine": "Abre una tarjeta y llévate una frase.",
+    "borrowLabel": "Una frase para llevarte",
+    "copyLine": "Copiar",
+    "copiedLine": "Copiada",
+    "faqLabel": "Preguntas",
+    "faqLine": "Las respuestas cortas, antes de empezar.",
+    "moreAbout": "Más sobre estos regalos",
+    "nextLabel": "Y después",
     "faqTitle": "Preguntas frecuentes",
     "more": "Ideas de regalo para otra persona",
     "occasions": "Por ocasión",
+    "christmas": {
+      "label": "Navidad",
+      "heading": {
+        "boyfriend": "Regalos de Navidad para tu novio",
+        "girlfriend": "Regalos de Navidad para tu novia"
+      },
+      "line": "Se crea esta noche y se abre en su móvil la mañana de Navidad.",
+      "more": "Ver más regalos de Navidad"
+    },
     "footerTitle": "Ideas de regalo"
   },
   "together": {

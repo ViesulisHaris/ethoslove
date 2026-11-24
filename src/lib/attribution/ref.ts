@@ -22,6 +22,16 @@ let current: string | undefined;
 
 const isAdRef = (ref: string): boolean => ref.startsWith("ad-");
 
+/**
+ * Refs our own pages put on a link into the editor, naming the tool on the site that sent the
+ * visitor there: the gift finder's "Make this gift" (`?ref=finder`). Such a ref says which step of
+ * the visit led to the gift, not where the visit came from, so it never replaces the link the
+ * visitor arrived through: someone who came from a TikTok bio (`tt-…`) or an ad (`ad-…`) and then
+ * used the finder is still counted to TikTok or the ad at checkout. With no arrival ref, the
+ * purchase is counted to the tool. (The `finder_pick` event counts the finder's use either way.)
+ */
+const ON_SITE_REFS: ReadonlySet<string> = new Set(["finder"]);
+
 function storage(): Storage | undefined {
   try {
     return typeof localStorage === "undefined" ? undefined : localStorage;
@@ -33,6 +43,7 @@ function storage(): Storage | undefined {
 export function rememberRef(search: string, now: number = Date.now()): void {
   const ref = new URLSearchParams(search).get("ref")?.trim().toLowerCase();
   if (!ref || !REF_PATTERN.test(ref)) return;
+  if (ON_SITE_REFS.has(ref) && currentRef(now)) return;
   current = ref;
   keepAdRef(now);
 }

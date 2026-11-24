@@ -15,46 +15,131 @@ import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
  * /x that has none of its own. A page without a date sends none, which is honest too. Blog posts
  * carry their own dates (content/blog).
  */
+/**
+ * The day the growth build's "pages" area last changed what its pages say: the six gift pages by
+ * kind, /digital-cards, the eight new idea lists, and the links /gifts, the /gifts/for-* pages,
+ * birthday and anniversary gained. None of it is live yet, so this is a date on a branch (22 Nov:
+ * the pages were laid out again with far fewer words on show, new titles for three of them, and
+ * every occasion's ideas as cards; 23 Nov: a page by kind names the price of the gift in its
+ * phone, the price list runs from the least to the most, and the Spanish Christmas letter's title
+ * changed). The day it ships, set this one line to that day.
+ */
+const GROWTH_PAGES_DAY = "2026-11-23";
+
+/**
+ * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
+ * finder. NOT LIVE YET: this is the day the work was finished. Set it to the day it ships; every
+ * page it changed reads its date from here. The template pages take GUIDES_LIVE below: who each
+ * suits now sits in the redesigned page's closed block, and ships with that page.
+ */
+export const FINDER_LIVE = "2026-11-22";
+
+/**
+ * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
+ * template pages gain what people make with them, lines to borrow and their own questions, and the
+ * bouquet page's Mother's Day line changes. With them goes every template's page as redesigned on
+ * 21 Nov 2026 (far fewer words on show, new lines beside each section, the steps written out only
+ * in a closed block), so every template page takes this date. They are not live yet, and a date
+ * that runs ahead of the page is the kind search engines stop believing: whoever ships them sets
+ * this to that day. It is the one line to set: tests/unit/crawl.test.ts reads it from here.
+ */
+export const GUIDES_LIVE = "2026-11-21";
+
+/**
+ * The day the redrawn gallery goes live: the gallery and every occasion's page show the same new
+ * cards (a gift's name, a line written for the card, its price, one link to its page and one to
+ * the editor, where each card had a longer line, a price and "Try the live demo"), and the row of
+ * occasions over them. Every page that draws the gallery takes this date, the seven occasions with
+ * a date of their own included. NOT LIVE YET: this is the day the work was finished. Whoever ships
+ * it sets this to that day (tests/unit/crawl.test.ts reads it from here).
+ */
+export const GALLERY_LIVE = "2026-11-22";
+
+/**
+ * The day the dates work of the growth build goes live: the planner on /dates and on every city's
+ * page, the pages by kind, the new cities. NOT LIVE YET: this is the day the work was finished. Set it
+ * to the day it ships (a date ahead of the page is the kind search engines stop believing).
+ */
+export const DATES_LIVE = "2026-11-23";
+
+/**
+ * The day the games of the growth build go live: today's question, the games' new end screen, how
+ * to play and the questions on every game's page, the hub's three tiers, and the new games.
+ * NOT LIVE YET: set it to the day they ship. Every games page reads its date from here.
+ */
+export const GAMES_LIVE = "2026-11-23";
+
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
-  "/": "2026-11-15",
-  "/gifts": "2026-11-13",
-  "/gifts/*": "2026-10-24",
-  // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
-  "/templates": "2026-11-11",
-  "/templates/*": "2026-10-25",
-  // Free templates show no price, so their last change was the search phrases of 24 Oct.
-  "/templates/the-letter": "2026-11-13",
-  "/templates/constellations": "2026-10-24",
-  "/templates/scratch-card": "2026-11-13",
-  "/templates/bouquet": "2026-11-09",
-  "/templates/fortune-cookie": "2026-11-13",
+  // With the finder: Gifts lead the rooms, and the front page, /gifts and the gallery link to it.
+  "/": FINDER_LIVE,
+  // The gift pages by kind (content/gift-guides.ts) and /digital-cards are new, and /gifts and every
+  // /gifts/for-* page gained their links.
+  "/gifts": GROWTH_PAGES_DAY,
+  "/gifts/*": GROWTH_PAGES_DAY,
+  "/gifts/finder": FINDER_LIVE,
+  "/digital-cards": GROWTH_PAGES_DAY,
+  // With the finder the gallery links to it; then the gallery itself was redrawn.
+  "/templates": GALLERY_LIVE,
+  "/templates/*": GUIDES_LIVE,
+  // The two free templates, then the three pages that had a guide before the growth build (13 Nov).
+  "/templates/the-letter": GUIDES_LIVE,
+  "/templates/constellations": GUIDES_LIVE,
+  "/templates/scratch-card": GUIDES_LIVE,
+  "/templates/bouquet": GUIDES_LIVE,
+  "/templates/fortune-cookie": GUIDES_LIVE,
   // A template launched after "/templates/*" was set needs its own date (crawl.test.ts checks).
-  "/templates/nice-list": "2026-11-11",
-  "/templates/unwrapped": "2026-11-11",
-  "/templates/wishbone": "2026-11-11",
-  // The second holiday batch, live on the night of 15 Nov (UTC).
-  "/templates/frosted-window": "2026-11-15",
-  "/templates/gingerbread-house": "2026-11-15",
-  "/templates/light-the-candles": "2026-11-15",
-  "/templates/string-the-lights": "2026-11-15",
+  "/templates/nice-list": GUIDES_LIVE,
+  "/templates/unwrapped": GUIDES_LIVE,
+  "/templates/wishbone": GUIDES_LIVE,
+  // The second holiday batch went live on the night of 15 Nov (UTC); their words last changed with their guides.
+  "/templates/frosted-window": GUIDES_LIVE,
+  "/templates/gingerbread-house": GUIDES_LIVE,
+  "/templates/light-the-candles": GUIDES_LIVE,
+  "/templates/string-the-lights": GUIDES_LIVE,
+  // The other nine templates with a guide. The eight above that already had a date moved to GUIDES_LIVE too.
+  "/templates/birthday-cinema": GUIDES_LIVE,
+  "/templates/xoxo": GUIDES_LIVE,
+  "/templates/the-council": GUIDES_LIVE,
+  "/templates/bloom": GUIDES_LIVE,
+  "/templates/halfway": GUIDES_LIVE,
+  "/templates/snow-globe": GUIDES_LIVE,
+  "/templates/jar-of-reasons": GUIDES_LIVE,
+  "/templates/our-timeline": GUIDES_LIVE,
+  "/templates/scrapbook": GUIDES_LIVE,
   // The Advent Calendar's page exists from the day its template is put in the gallery (src/templates/held.ts).
   // Set this to that day in the same change: a date ahead of the day it is read on fails the crawl test.
   ...(ADVENT_CALENDAR_LIVE ? { "/templates/advent-calendar": "2026-11-22" } : {}),
-  "/occasions/*": "2026-10-25",
-  "/occasions/birthday": "2026-11-13",
-  "/occasions/anniversary": "2026-11-13",
-  "/occasions/valentines": "2026-11-13",
-  "/occasions/christmas": "2026-11-13",
-  "/occasions/long-distance": "2026-11-13",
-  "/occasions/thanksgiving": "2026-11-11",
-  "/occasions/wedding": "2026-11-09",
-  "/games": "2026-11-13",
-  "/games/rather": "2026-10-24",
-  "/games/deck": "2026-11-13",
-  "/games/dare": "2026-11-13",
-  "/games/know": "2026-10-24",
+  // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
+  // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
+  "/occasions/*": GALLERY_LIVE,
+  // Eight occasions gained their idea lists (content/occasion-ideas.ts), and birthday and
+  // anniversary a row of links to the gift pages by kind.
+  "/occasions/birthday": GROWTH_PAGES_DAY,
+  "/occasions/anniversary": GROWTH_PAGES_DAY,
+  // Their twelve ideas are cards since 22 Nov, each a title and one line where there was a paragraph.
+  "/occasions/valentines": GROWTH_PAGES_DAY,
+  "/occasions/christmas": GROWTH_PAGES_DAY,
+  "/occasions/long-distance": GROWTH_PAGES_DAY,
+  "/occasions/thanksgiving": GROWTH_PAGES_DAY,
+  "/occasions/wedding": GROWTH_PAGES_DAY,
+  "/occasions/graduation": GROWTH_PAGES_DAY,
+  "/occasions/mothers-day": GROWTH_PAGES_DAY,
+  "/occasions/fathers-day": GROWTH_PAGES_DAY,
+  "/occasions/apology": GROWTH_PAGES_DAY,
+  "/occasions/just-because": GROWTH_PAGES_DAY,
+  // Its Spanish guide names the gift by its Spanish name since 23 Nov ("Truco o trato").
+  "/occasions/halloween": GROWTH_PAGES_DAY,
+  "/dates": DATES_LIVE,
+  "/dates/*": DATES_LIVE,
+  "/dates/ideas/*": DATES_LIVE,
+  "/dates/new-york/cheap": DATES_LIVE,
+  "/dates/new-york/first-date": DATES_LIVE,
+  "/dates/london/first-date": DATES_LIVE,
+  "/dates/london/cheap": DATES_LIVE,
+  "/games": GAMES_LIVE,
+  "/games/*": GAMES_LIVE,
   "/long-distance": "2026-11-13",
   "/tools/how-long-have-we-been-together": "2026-11-09",
   "/tools/love-language-quiz": "2026-11-15",

@@ -1,6 +1,7 @@
 import { isYmd } from "./calendar";
 import { distanceKm, type LatLng } from "./geo";
 import { KIND_IDS, KINDS, type PlaceKind } from "./kinds";
+import type { Place } from "./places";
 
 /**
  * A date, planned: a day, a handful of stops in order, and a line to the person it is for. It
@@ -167,6 +168,12 @@ export const PLAN_REACH_KM = 30;
 export const isFarFromPlan = (plan: Plan, at: LatLng): boolean => plan.stops.length > 0 && distanceKm(plan.stops[0], at) > PLAN_REACH_KM;
 
 export const removeStop = (plan: Plan, id: string): Plan => ({ ...plan, stops: plan.stops.filter((s) => s.id !== id) });
+
+/**
+ * A place as a stop of a plan. A place with no name of its own is kept as one (`named: false`), so the
+ * plan calls it by its kind in whichever language it is read in (stopName above).
+ */
+export const stopOf = (place: Pick<Place, "id" | "name" | "kind" | "lat" | "lng" | "address" | "named">, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}), ...(place.named ? {} : { named: false }) });
 
 /** Before this, a time is the small hours after the evening, not the morning before it: 00:30 comes after 23:00. */
 const NIGHT_ENDS_MIN = 5 * 60;

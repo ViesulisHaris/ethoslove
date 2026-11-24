@@ -5,7 +5,7 @@ import { cityName, type City } from "@/lib/cities/cities";
 export function CityLinks({ cities, locale, title, className }: { cities: City[]; locale: "en" | "es"; title: string; className?: string }) {
   return (
     <nav aria-label={title} className={className}>
-      <h2 className="text-[12px] font-semibold tracking-wide text-forest/55 uppercase">{title}</h2>
+      <h2 className="text-eyebrow text-forest/65">{title}</h2>
       {/* Pulled out by the links' own padding, so every wrapped row starts flush with the heading. */}
       <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
         {cities.map((city) => (

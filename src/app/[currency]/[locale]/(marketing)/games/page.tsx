@@ -25,6 +25,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
   const titles = Object.fromEntries(GAMES.map((g) => [g.key, t(`${g.key}.title`)])) as Record<GameKey, string>;
   const lang = locale === "es" ? "es" : "en";
   const list = new Intl.ListFormat(lang, { type: "conjunction" });
+  const price = formatAmount(PRODUCTS.pack.amounts[chargedCurrency(shown)], chargedCurrency(shown), locale);
 
   return (
     <GameTable>
@@ -52,7 +53,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
           </Link>
         </div>
 
-        <GameHand titles={titles} label={t("hub.pickTitle")} className="order-first lg:order-last" />
+        <GameHand titles={titles} games={GAMES} label={t("hub.pickTitle")} className="order-first lg:order-last" />
       </section>
 
       <section id="pick" className="container-x scroll-mt-28 pb-24">
@@ -64,15 +65,39 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
             games the last one sits in the middle of its row, not alone at the left of an empty one,
             and any count to come lays out the same way. Cards in a row still stretch to one height. */}
         <ul className="mt-8 flex flex-wrap justify-center gap-3 sm:mt-10 sm:gap-6">
+          {/* Today's question first: one would you rather a day, sent between two phones by a link. */}
+          <li data-reveal className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]">
+            <Link href="/games/today" data-today-card className="group block h-full rounded-[24px]">
+              <PlayingCard rank="★" suit="heart" radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
+                <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
+                  <Sticker id="sparkle" />
+                </span>
+                <span className="mt-3 block font-display text-[19px] leading-[1.08] sm:mt-4 sm:text-[26px]">{t("hub.todayTitle")}</span>
+                <span className="mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-5">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
+                    <Smartphone aria-hidden="true" className="size-3.5" />
+                    {t("hub.todayPhones")}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
+                    <Timer aria-hidden="true" className="size-3.5" />
+                    {t("hub.minutes", { n: 1 })}
+                  </span>
+                </span>
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[14px] font-semibold text-rose-deep sm:pt-6 sm:text-[14.5px]">
+                  {t("hub.todayCta")}
+                  <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </PlayingCard>
+            </Link>
+          </li>
           {GAMES.map((g, i) => (
-            <li key={g.key} data-reveal data-tour={g.phones === "two" ? "two-phones" : undefined} className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}>
+            <li key={g.key} data-reveal data-tour={g.phones === "two" ? "two-phones" : undefined} className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": `${((i + 1) % 3) * 80}ms` } as React.CSSProperties}>
               <Link href={g.href} className="group block h-full rounded-[24px]">
                 <PlayingCard rank={g.rank} suit={g.suit} radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
                   <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
                     <Sticker id={g.sticker} />
                   </span>
                   <span className="mt-3 block font-display text-[19px] leading-[1.08] sm:mt-4 sm:text-[26px]">{t(`${g.key}.title`)}</span>
-                  <span className="mt-2 hidden text-[14.5px] leading-relaxed text-forest/65 sm:block">{t(`${g.key}.blurb`)}</span>
                   <span className="mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-5">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/[0.06] px-2.5 py-1 text-[11.5px] font-semibold text-forest/70 sm:text-[12px]">
                       {g.phones === "two" ? <Smartphone aria-hidden="true" className="size-3.5" /> : <Users aria-hidden="true" className="size-3.5" />}
@@ -100,7 +125,23 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
         <h2 data-reveal className="display-lg text-cream">
           {tp("hub.title")}
         </h2>
-        <p className="mt-2 max-w-xl text-[15.5px] text-cream/60">{tp("hub.sub", { price: formatAmount(PRODUCTS.pack.amounts[chargedCurrency(shown)], chargedCurrency(shown), locale) })}</p>
+        {/* The three tiers, said once and only here, as the packs' own header: what is free, what a
+            pack is, what Ethos for Two adds. One box with hairlines, not three cards, as wide as the
+            three packs under it so its columns stand over theirs. */}
+        <ul data-tiers data-app-hide className="mt-6 grid divide-y divide-white/10 rounded-[24px] bg-white/[0.05] ring-1 ring-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {(["free", "pack", "two"] as const).map((tier) => (
+            <li key={tier} className="px-5 py-5 sm:px-7 sm:py-6">
+              <p className="font-display text-[21px] leading-tight text-cream">{t(`hub.tiers.${tier}.title`, { price })}</p>
+              <p className="mt-1.5 text-[14.5px] leading-relaxed text-cream/65">{t(`hub.tiers.${tier}.line`, { count: GAMES.length })}</p>
+              {tier === "two" ? (
+                <Link href="/pricing#for-two" className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-tint">
+                  {t("hub.tiers.cta")}
+                  <ArrowRight aria-hidden="true" className="size-4" />
+                </Link>
+              ) : null}
+            </li>
+          ))}
+        </ul>
         <ul className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-6" data-tour="packs">
           {PACK_IDS.map((id, i) => {
             const pack = PACKS[id];
@@ -110,7 +151,6 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
                   <PlayingCard faceDown back={pack.back} radius={12} className="aspect-[5/7] w-16 shrink-0 rotate-[-4deg] transition-transform duration-300 ease-(--ease-out-quint) group-hover:rotate-[-8deg] sm:w-20" backLabel={pack.adult ? <span className="rounded-full bg-cream/95 px-2 py-0.5 text-[11px] font-bold text-forest">18+</span> : undefined} />
                   <span className="min-w-0">
                     <span className="block font-display text-[22px] leading-tight text-cream sm:text-[25px]">{pack.name[lang]}</span>
-                    <span className="mt-1.5 block text-[14px] leading-relaxed text-cream/65">{pack.blurb[lang]}</span>
                     <span className="mt-2 block text-[12.5px] text-cream/45">{tp("sheet.plays", { games: list.format(pack.games.map((g) => tp(`games.${g}`))) })}</span>
                     <span className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-tint">
                       {tp("hub.cta", { n: pack.cards })}

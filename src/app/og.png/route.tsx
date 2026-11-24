@@ -10,10 +10,10 @@ const COPY = {
   es: { eyebrow: "PARA VOSOTROS DOS", headline: "Encuentra la cita. Quédate con la persona.", templateEyebrow: "UN REGALO DE ETHOS", line: "Ideas para citas cerca de ti, escapadas, juegos y regalos para dos." },
 } as const;
 
-/** The front page's own card (`?card=gift`): it leads with gifts, as the page does. */
+/** The front page's own card (`?card=gift`): it leads with gifts, as the page does, under the maker's mark the page itself opens with. */
 const GIFT_COPY = {
-  en: { eyebrow: "MADE BY YOU, OPENED ON THEIR PHONE", headline: "A gift they'll open again and again.", line: "Personal gifts, date ideas near you, trips and games for two." },
-  es: { eyebrow: "HECHO POR TI, ABIERTO EN SU MÓVIL", headline: "Un regalo que abrirá una y otra vez.", line: "Regalos personales, ideas para citas cerca de ti, escapadas y juegos para dos." },
+  en: { eyebrow: BRAND.categoryLine.en.toUpperCase(), headline: "A gift they'll open again and again.", line: "Personal gifts, date ideas near you, trips and games for two." },
+  es: { eyebrow: BRAND.categoryLine.es.toUpperCase(), headline: "Un regalo que abrirá una y otra vez.", line: "Regalos personales, ideas para citas cerca de ti, escapadas y juegos para dos." },
 } as const;
 
 // Same serif as the gift link card (see g/[shortId]/card.jpg).

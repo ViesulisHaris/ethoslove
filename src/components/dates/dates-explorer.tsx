@@ -8,25 +8,26 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
-import { formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
+import { addDays, formatDay, fromYmd, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES, starterName } from "@/lib/dates/cities";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { datesUrls, EARLY_KEY, earlyScript, HERE_URL, takeEarly } from "@/lib/dates/early";
 import { distanceKm, isLatLng, snapSearch, type LatLng } from "@/lib/dates/geo";
-import { fillStops, fitsVibe, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
+import { fillStops, fitsVibe, forTheDay, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
 import { MAP_PAPER } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
-import type { Place } from "@/lib/dates/places";
+import { pinnable, type Place } from "@/lib/dates/places";
 import { matchPhotos, type Sight } from "@/lib/dates/photos";
 import { pairsWith, rankPlaces, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
-import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, type Plan, type PlanStop } from "@/lib/dates/plan";
+import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, stopOf, type Plan } from "@/lib/dates/plan";
 import { mergePlaces } from "@/lib/dates/tiles";
 import { MIN_UNUSUAL, UNUSUAL_SHELF, unusualIndex, unusualPicks } from "@/lib/dates/unusual";
 import { suggestTimes } from "@/lib/dates/timing";
+import { placeNow } from "@/lib/dates/tonight";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
 import { readSharedPlace } from "@/lib/share/links";
@@ -47,8 +48,11 @@ import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
 import { WhereBox, type Where } from "./where-box";
-
-const WHERE_KEY = "ethos.dates.where.v1";
+import { TonightForm, type TonightWhen } from "./tonight/tonight-form";
+import { TonightProblem } from "./tonight/tonight-island";
+import { TonightResult } from "./tonight/tonight-result";
+import { useTonight } from "./tonight/use-tonight";
+import { clipName, WHERE_KEY, writeStoredWhere } from "@/lib/dates/where-store";
 const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
 /** Moving the map further than this from the named place stops calling it by that name. */
@@ -74,15 +78,13 @@ const layersIn = (state: unknown): number => {
   const n = (state as Record<string, unknown> | null)?.[LAYERS];
   return typeof n === "number" && n > 0 ? n : 0;
 };
+/** Whether the address bar still shows this path (null: not known yet). */
+const isAt = (path: string | null) => path !== null && window.location.pathname === path;
 const subscribeDesktop = (onChange: () => void) => {
   const mq = window.matchMedia(desktopQuery);
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 };
-
-// A place with no name of its own is kept as one (`named: false`), so the plan calls it by its kind
-// in whichever language it is read in, not in the one it was added in (plan.ts stopName).
-const toStop = (place: Place, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}), ...(place.named ? {} : { named: false }) });
 
 /**
  * One set of cards, or the skeletons. On its way out it is lifted from the flow where it stands
@@ -120,6 +122,9 @@ export function DatesExplorer() {
   const isDesktop = useSyncExternalStore(subscribeDesktop, () => window.matchMedia(desktopQuery).matches, () => false);
 
   const [today] = useState<Ymd>(() => toYmd(new Date()));
+  // The clock the planner's "today" is read from: set when the page opens and again at every tap,
+  // so a tab left open past midnight speaks of the new day after it plans for it.
+  const [clockAt, setClockAt] = useState(() => Date.now());
   const [date, setDate] = useState<Ymd>(() => thisWeekend(toYmd(new Date())));
   const [where, setWhere] = useState<Where | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
@@ -175,6 +180,12 @@ export function DatesExplorer() {
   const sightsKey = useRef("");
   const forecastAt = useRef<LatLng | null>(null);
   const searchedAt = useRef<LatLng | null>(null);
+  // The address this page opened at (/dates, /es/dates). Back can leave Dates while the explorer is
+  // still mounted for a moment: nothing is written onto an address that is not this one.
+  const datesPath = useRef<string | null>(null);
+  useEffect(() => {
+    datesPath.current = window.location.pathname;
+  }, []);
 
   const search = useCallback(
     async (center: LatLng, radiusM: number) => {
@@ -271,14 +282,10 @@ export function DatesExplorer() {
       setSelectedId(null);
       setSkip([]);
       setNotice(null);
-      try {
-        // With whether it can be named: a town they picked comes back next time as "Date ideas in
-        // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
-        // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
-        window.localStorage.setItem(WHERE_KEY, JSON.stringify({ ...place, share: options.share ?? true }));
-      } catch {
-        // No storage: it just will not be remembered.
-      }
+      // With whether it can be named: a town they picked comes back next time as "Date ideas in
+      // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
+      // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
+      writeStoredWhere({ ...place, share: options.share ?? true });
       void search(place, snapped.radiusM);
     },
     [search],
@@ -293,7 +300,7 @@ export function DatesExplorer() {
       const lng = Number(params.get("lng"));
       const wantedDate = params.get("date");
       const wantedIdea = params.get("idea");
-      let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: (params.get("q") ?? "").slice(0, 80), share: true } : null;
+      let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: clipName(params.get("q") ?? ""), share: true } : null;
       // A town named without coordinates (/dates?q=Lisboa, typed or pasted into a bio) is looked up
       // the way the where box would. None by that name is said, not swapped for last time's town;
       // a lookup that couldn't be made falls through to the usual start.
@@ -308,7 +315,7 @@ export function DatesExplorer() {
         try {
           const saved = JSON.parse(window.localStorage.getItem(WHERE_KEY) ?? "null") as (Where & { share?: unknown }) | null;
           // Saved before the share flag was: private, as they all were then.
-          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: saved.name.slice(0, 80), share: saved.share === true };
+          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: clipName(saved.name), share: saved.share === true };
         } catch {
           // Unreadable: ask again.
         }
@@ -342,7 +349,7 @@ export function DatesExplorer() {
   // The address bar follows a search for a named town, so it can be sent to someone. A search round
   // "near me" never goes in it: a link is forwarded without a thought for what is inside.
   useEffect(() => {
-    if (!where) return;
+    if (!where || !isAt(datesPath.current)) return;
     const params = new URLSearchParams();
     if (shareable) {
       params.set("lat", String(where.lat));
@@ -352,7 +359,7 @@ export function DatesExplorer() {
       if (ideaId) params.set("idea", ideaId);
     }
     const query = params.toString();
-    window.history.replaceState(window.history.state, "", query ? `?${query}` : window.location.pathname);
+    window.history.replaceState(window.history.state, "", query ? `${window.location.pathname}?${query}` : window.location.pathname);
     // `popped`: Back lands on an entry written before the last search on the map; write it again.
   }, [where, date, ideaId, shareable, popped]);
 
@@ -379,6 +386,8 @@ export function DatesExplorer() {
     // A reload on one of those entries opens with nothing on top: count from nothing.
     if (layersIn(window.history.state) > 0) window.history.replaceState({ ...window.history.state, [LAYERS]: 0 }, "");
     const onPop = (event: PopStateEvent) => {
+      // Back has left Dates: the page going away has nothing to write or close.
+      if (!isAt(datesPath.current)) return;
       const depth = layersIn(event.state);
       pushed.current = depth;
       setPopped((n) => n + 1);
@@ -441,10 +450,47 @@ export function DatesExplorer() {
   }, [ratingKey, loadRatings]);
 
   const day = forecast?.days.find((d) => d.date === date);
+  // The day at the place being looked at, once its forecast says what its clock is; the browser's until then.
+  const placeToday = placeNow(forecast, clockAt).date;
+  const tonightKeyOf = (d: Ymd) => (where ? `${where.lat},${where.lng}|${d}` : "");
+  const tonight = useTonight({
+    dayOf: (when, placeDay) => (when === "tonight" ? placeDay : when === "tomorrow" ? addDays(placeDay, 1) : date),
+    load: () => (all.length > 0 ? { places: all, forecast } : null),
+    whereName: where?.name && shareable ? where.name : undefined,
+    keyOf: tonightKeyOf,
+    currentKey: tonightKeyOf(date),
+  });
+  // The page's own day is offered too, when it is neither today nor tomorrow ("on Sat 28 Nov").
+  const pageDayIsOther = date !== placeToday && date !== addDays(placeToday, 1);
+  // The planner speaks of the page's day: the day pill and the weather card above it say the same
+  // day, and choosing another in the planner moves them with it (the weather card used to say
+  // Saturday over a planner that said tonight).
+  const tonightWhen: TonightWhen = date === placeToday ? "tonight" : date === addDays(placeToday, 1) ? "tomorrow" : "day";
+  // The page's day as the sentence says it: "on Sat" within the week, as short as "tonight", so the
+  // sentence keeps the height the page kept for it ("on Saturday" wrapped it to a third line on a phone).
+  const plannerDay = date > placeToday && date <= addDays(placeToday, 6) ? (fromYmd(date)?.toLocaleDateString(locale === "es" ? "es-ES" : "en-GB", { weekday: "short" }).replace(/\.$/, "") ?? date) : formatDay(date, locale, "short");
+  const chooseWhen = (when: TonightWhen) => {
+    const nowMs = Date.now();
+    setClockAt(nowMs);
+    const nowToday = placeNow(forecast, nowMs).date;
+    if (when !== "day") setDate(when === "tonight" ? nowToday : addDays(nowToday, 1));
+    tonight.setWhen(when);
+  };
+  const planTonight = (when = tonightWhen) => {
+    // The page follows the planner: its day, its weather card and its ideas become the day planned for.
+    // Today is read at the tap, the way the planner reads it: a tab left open past midnight has a new
+    // one, and the sentence reads its "tonight" from the same clock (clockAt), not the page's opening.
+    const nowMs = Date.now();
+    setClockAt(nowMs);
+    const nowToday = placeNow(forecast, nowMs).date;
+    setDate(when === "tonight" ? nowToday : when === "tomorrow" ? addDays(nowToday, 1) : date);
+    void tonight.plan(when);
+  };
   const ideas = useMemo(() => ideasFor(day, all, vibe ?? undefined), [day, all, vibe]);
   const doable = useMemo(() => (status === "ready" || all.length > 0 ? new Set(ideas.filter((i) => isDoable(i, all)).map((i) => i.id)) : null), [ideas, all, status]);
   const idea = ideaById(ideaId ?? undefined);
-  const stops = useMemo(() => (idea ? fillStops(idea, all, skip) : []), [idea, all, skip]);
+  // On a wet day an idea with rain stops is filled with them, as the planner does (the stars under a dome).
+  const stops = useMemo(() => (idea ? fillStops(forTheDay(idea, day), all, skip) : []), [idea, day, all, skip]);
   const times = useMemo(() => (idea ? suggestTimes(idea, day) : []), [idea, day]);
   const ranked = useMemo(() => rankPlaces(all, ratings, sort), [all, ratings, sort]);
   // A vibe chooses places as well as ideas: the kinds of place the mood is made of (ideas.ts
@@ -479,7 +525,8 @@ export function DatesExplorer() {
       .sort((a, b) => a.key - b.key)
       .map(({ p }) => p);
   }, [visible, listOrder]);
-  const picks = useMemo(() => topPicks(inVibe), [inVibe]);
+  // Only places with a name of their own: a row of "Viewpoint" picks says nothing (walk-rooms-12).
+  const picks = useMemo(() => topPicks(pinnable(inVibe)), [inVibe]);
   const listUp = status === "ready" || (status === "loading" && all.length > 0);
   const pickIds = useMemo(() => new Set(picks.map((p) => p.id)), [picks]);
   const oddPicks = useMemo(() => unusualPicks(inVibe, found, UNUSUAL_SHELF, pickIds), [inVibe, found, pickIds]);
@@ -500,6 +547,8 @@ export function DatesExplorer() {
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
   const oddCount = found.size;
   const selected = selectedId ? (ranked.find((p) => p.id === selectedId) ?? null) : null;
+  // The map pins the places with a name of their own, and the one open now (walk-rooms-12).
+  const pins = useMemo(() => pinnable(visible, selectedId), [visible, selectedId]);
   // A place opened over another (a pairing from inside the sheet) swaps what the sheet shows in
   // place, with a fade; only a sheet opening from nothing slides in. Worked out while rendering,
   // from the last render's choice (React's way to follow a change of state without an effect).
@@ -593,7 +642,7 @@ export function DatesExplorer() {
     return () => cancelAnimationFrame(frame);
   }, [linkedPlace, where, ranked, open]);
 
-  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
+  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: clipName(where.name) } : {}) }), [date, where, shareable]);
   const sayAboutPlan = useCallback((text: string) => setPlanNotice({ text, at: Date.now() }), []);
   // A plan saved to their account is saved again from here as stops go in and out (components/saved-dates).
   const syncNoticeText = useSyncNoticeText();
@@ -617,7 +666,7 @@ export function DatesExplorer() {
       const fresh = startsOver(place);
       if (fresh === null) return;
       if (!fresh && plan.stops.length >= MAX_STOPS) return sayAboutPlan(t("plan.full", { max: MAX_STOPS }));
-      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, toStop(place))));
+      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, stopOf(place))));
     },
     [plan.stops.length, planIds, startsOver, sayAboutPlan, stamp, t, updatePlan],
   );
@@ -625,7 +674,7 @@ export function DatesExplorer() {
   // didn't, nothing was said, and the button went on offering to add it.
   const addIdea = useCallback(() => {
     if (!idea) return;
-    const picked = stops.flatMap((s, i) => (s.place ? [toStop(s.place, times[i])] : []));
+    const picked = stops.flatMap((s, i) => (s.place ? [stopOf(s.place, times[i])] : []));
     if (picked.length === 0) return;
     const fresh = startsOver(picked[0]);
     if (fresh === null) return;
@@ -721,11 +770,14 @@ export function DatesExplorer() {
     return (
       // At least a screen tall and centred in it on a desktop: on a big monitor it sat in the top 40%
       // of a page that is always a screen tall (for the map), over blank paper.
-      <section className="container-x grid items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
+      // One column by name on a phone: a grid's unnamed column is as wide as its widest item's
+      // shortest line, which was the search box (383px in a 350px page), and the page scrolled sideways.
+      <section className="container-x grid grid-cols-1 items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
         <div>
           <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
           <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
-          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{t("empty.sub")}</p>
+          {/* Sent here by an idea's "Plan it near you": it is named, so the visitor knows it is carried. */}
+          <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{idea ? t("empty.subIdea", { idea: idea.title[locale] }) : t("empty.sub")}</p>
           <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
           {notice || townMissing ? (
             <p role="status" className="mt-3 text-sm text-destructive">
@@ -739,7 +791,7 @@ export function DatesExplorer() {
               const name = starterName(city, locale);
               return (
                 <li key={city.name}>
-                  <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-white px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist">
+                  <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-card px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper">
                     {name}
                   </button>
                 </li>
@@ -749,7 +801,7 @@ export function DatesExplorer() {
         </div>
         <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
           <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={heroSizes("(min-width: 1024px) 560px")} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-white px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
+          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-card px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
         </div>
       </section>
     );
@@ -871,7 +923,7 @@ export function DatesExplorer() {
         <div className="mt-4 flex items-center gap-3 rounded-[20px] bg-white/70 p-3.5 ring-1 ring-forest/5 backdrop-blur" aria-live="polite">
           {day ? (
             <>
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white shadow-soft">
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-card shadow-soft">
                 <WeatherGlyph condition={day.condition} className="size-6" />
               </span>
               <p className="min-w-0 flex-1 text-[14px] leading-snug text-forest/80">
@@ -891,7 +943,7 @@ export function DatesExplorer() {
             </>
           ) : (
             <>
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white shadow-soft">
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-card shadow-soft">
                 <CloudOff aria-hidden="true" className="size-5 text-forest/35" />
               </span>
               <p className="text-[14px] leading-snug text-forest/70">
@@ -902,6 +954,46 @@ export function DatesExplorer() {
             </>
           )}
         </div>
+
+        {/* One step: the mood, the day, the length and the budget in, one finished plan out (components/dates/tonight). */}
+        {status === "ready" && all.length === 0 ? null : (
+          <section aria-labelledby="tonight-title" className="mt-6" data-tonight>
+            <h2 id="tonight-title" className="text-page-label text-page-body">
+              {t("tonight.label")}
+            </h2>
+            <div className="mt-1">
+              <TonightForm
+                choice={tonight.choice}
+                when={tonightWhen}
+                whens={[
+                  { value: "tonight", label: t("tonight.when.tonight") },
+                  { value: "tomorrow", label: t("tonight.when.tomorrow") },
+                  ...(pageDayIsOther ? [{ value: "day" as const, label: t("tonight.when.day", { day: plannerDay }) }] : []),
+                ]}
+                busy={tonight.busy}
+                waiting={all.length === 0 ? t("tonight.finding") : undefined}
+                onChoice={tonight.setChoice}
+                onWhen={chooseWhen}
+                onPlan={() => planTonight()}
+              />
+            </div>
+            {/* The card is not in the live region: its heading takes focus, which already reads it out once. */}
+            {tonight.result ? <TonightResult {...tonight.result} confirming={tonight.confirming} onReplace={tonight.replace} onKeep={tonight.keep} locale={locale} onOpen={tonight.open} onAnother={tonight.another} /> : null}
+            <div role="status" aria-live="polite">
+              {!tonight.result && tonight.problem ? (
+                <TonightProblem
+                  problem={tonight.problem}
+                  offerTomorrow={tonight.problemWhen === "tonight"}
+                  onRetry={() => planTonight()}
+                  onTomorrow={() => {
+                    tonight.setWhen("tomorrow");
+                    planTonight("tomorrow");
+                  }}
+                />
+              ) : null}
+            </div>
+          </section>
+        )}
 
         {/* ideas */}
         <div className="mt-9">
@@ -916,7 +1008,7 @@ export function DatesExplorer() {
               // Wrapped on a desktop: a mouse wheel can't scroll a row sideways, and "Rainy day" was out of reach.
               <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("ideas.vibes")} data-tour="vibes">
                 {VIBE_IDS.map((v) => (
-                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => { setVibe(vibe === v ? null : v); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
+                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => { setVibe(vibe === v ? null : v); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-card text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
                     {VIBES[v][locale]}
                   </button>
                 ))}
@@ -939,7 +1031,7 @@ export function DatesExplorer() {
           <div ref={ideaBox} className="scroll-mt-[calc(var(--header-h)+12px)]">
             <IdeaPanel
               key={idea.id}
-              idea={idea}
+              idea={forTheDay(idea, day)}
               stops={stops}
               times={times}
               inPlan={ideaInPlan}
@@ -979,7 +1071,7 @@ export function DatesExplorer() {
             {COST_IDS.map((c) => {
               const on = costs.includes(c);
               return (
-                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-card text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
                   {COST_LABELS[c][locale]}
                 </button>
               );
@@ -987,7 +1079,7 @@ export function DatesExplorer() {
           </div>
         </div>
         <div className="scrollbar-none -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("places.filter")}>
-          <button type="button" aria-pressed={groups.length === 0 && !oddOnly} onClick={() => { if (groups.length > 0 || oddOnly) nextList(); setGroups([]); setOddOnly(false); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 && !oddOnly ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+          <button type="button" aria-pressed={groups.length === 0 && !oddOnly} onClick={() => { if (groups.length > 0 || oddOnly) nextList(); setGroups([]); setOddOnly(false); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 && !oddOnly ? "bg-forest text-cream" : "bg-card text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
             {t("places.all")}
           </button>
           {/* A category across the groups, the way Airbnb's "OMG!" is: a cellar bar, a rooftop, a planetarium. */}
@@ -1000,7 +1092,7 @@ export function DatesExplorer() {
               setShown(PAGE);
               nextList();
             }}
-            className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", oddOnly ? "bg-rose-deep text-white ring-transparent" : "bg-white text-rose-deep ring-forest/10 hover:bg-rose-mist")}
+            className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", oddOnly ? "bg-rose-deep text-white ring-transparent" : "bg-card text-rose-deep ring-forest/10 hover:bg-blush-paper")}
           >
             <Sparkles aria-hidden="true" className="size-4" />
             {t("unusual.chip")}
@@ -1018,7 +1110,7 @@ export function DatesExplorer() {
                   setShown(PAGE);
                   nextList();
                 }}
-                className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", on ? "text-white ring-transparent" : "bg-white ring-forest/10 hover:bg-forest/5")}
+                className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", on ? "text-white ring-transparent" : "bg-card ring-forest/10 hover:bg-forest/5")}
                 // The group's ink, not its pin colour: gold chip text on white, and white on a gold chip, read at 3.7:1.
                 style={on ? { background: GROUPS[g].ink } : { color: GROUPS[g].ink }}
               >
@@ -1038,18 +1130,18 @@ export function DatesExplorer() {
             ) : null}
           </AnimatePresence>
           {status === "error" && all.length === 0 ? (
-            <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
+            <div className="rounded-[20px] bg-card p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
               {t("places.error")}{" "}
               <button type="button" onClick={() => go(where, { share: shareable })} className="font-semibold text-rose-deep underline underline-offset-4">
                 {t("places.retry")}
               </button>
             </div>
           ) : null}
-          {status === "ready" && visible.length === 0 && all.length > 0 ? <p className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{t("places.noneInFilter")}</p> : null}
+          {status === "ready" && visible.length === 0 && all.length > 0 ? <p className="rounded-[20px] bg-card p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{t("places.noneInFilter")}</p> : null}
           {status === "ready" && all.length === 0 ? (
             // Nothing mapped here at all (the middle of the sea): "drag the map to the nearest town" was
             // no help on a blank blue phone map. The box above, or a city, in one tap.
-            <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
+            <div className="rounded-[20px] bg-card p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
               <p>{t("map.nothingHere")}</p>
               <ul className="mt-3.5 flex flex-wrap gap-2">
                 {STARTER_CITIES.map((city) => {
@@ -1062,7 +1154,7 @@ export function DatesExplorer() {
                           setOrigin(null);
                           go({ lat: city.lat, lng: city.lng, name });
                         }}
-                        className="h-11 rounded-full border border-rose/15 bg-white px-3.5 text-[13.5px] font-medium text-forest shadow-soft transition-colors hover:bg-rose-mist lg:h-10"
+                        className="h-11 rounded-full border border-rose/15 bg-card px-3.5 text-[13.5px] font-medium text-forest shadow-soft transition-colors hover:bg-blush-paper lg:h-10"
                       >
                         {name}
                       </button>
@@ -1094,7 +1186,7 @@ export function DatesExplorer() {
             </ListSet>
           </AnimatePresence>
           {visible.length > shown ? (
-            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-2 h-12 w-full rounded-full border border-forest/15 bg-white text-[14.5px] font-semibold text-forest hover:bg-forest/5">
+            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-2 h-12 w-full rounded-full border border-forest/15 bg-card text-[14.5px] font-semibold text-forest hover:bg-forest/5">
               {t("places.more", { count: Math.min(PAGE, visible.length - shown) })}
             </button>
           ) : null}
@@ -1108,7 +1200,7 @@ export function DatesExplorer() {
           <HoveredMap
             hover={hover}
             center={where}
-            places={visible}
+            places={pins}
             selected={selected}
             ratings={ratings}
             locale={locale}
@@ -1227,6 +1319,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
         </div>
         <div className="mt-4 h-[72px] animate-pulse rounded-[20px] bg-white/70" aria-hidden="true" />
+        <div className="mt-6 h-[11.75rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[10.75rem]" aria-hidden="true" />
         <div className="mt-9">
           <IdeaRail
             heading={
@@ -1238,7 +1331,7 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
             filters={
               <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" aria-hidden="true">
                 {VIBE_IDS.map((v) => (
-                  <span key={v} className="inline-flex h-11 shrink-0 items-center rounded-full bg-white px-3.5 text-[13px] font-semibold text-forest/75 ring-1 ring-forest/10 lg:h-10">
+                  <span key={v} className="inline-flex h-11 shrink-0 items-center rounded-full bg-card px-3.5 text-[13px] font-semibold text-forest/75 ring-1 ring-forest/10 lg:h-10">
                     {VIBES[v][locale]}
                   </span>
                 ))}

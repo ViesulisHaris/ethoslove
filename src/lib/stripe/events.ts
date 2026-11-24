@@ -2,7 +2,7 @@ import type Stripe from "stripe";
 import { missingMembershipColumns, type Db } from "@/lib/commerce/db";
 import { applySubscriptionState, rowBySubscription, switchToMonthlyNow, type SendEnded } from "@/lib/commerce/memberships";
 import type { Pass } from "@/lib/commerce/passes";
-import { revokePurchase, withdrawPurchase } from "@/lib/commerce/revoke";
+import { restorePurchase, revokePurchase, withdrawPurchase } from "@/lib/commerce/revoke";
 import type { Fulfilment } from "./fulfil";
 import {
   cancelSubscriptionNow,
@@ -78,6 +78,8 @@ export async function handleStripeEvent(event: Stripe.Event, deps: StripeEventDe
         return await onRefund(event.data.object, deps);
       case "charge.dispute.created":
         return await onDispute(event.data.object, deps);
+      case "charge.dispute.closed":
+        return await onDisputeClosed(event.data.object, deps);
       default:
         return ok("ignored");
     }
@@ -275,5 +277,31 @@ async function onDispute(dispute: Stripe.Dispute, deps: StripeEventDeps): Promis
   const purchase = await purchaseByPaymentIntent(deps.db, idOf(dispute.payment_intent as string | { id: string } | null));
   if (!purchase) return ok("foreign");
   await revokePurchase(deps.db, purchase, deps.now, { mode: "dispute", cancelSubscription: cancelWith(deps) });
+  return ok();
+}
+
+/**
+ * A chargeback decided in our favour ("won"): the money came back, so what the dispute took comes
+ * back too (lib/commerce/revoke.ts restorePurchase). Only when nothing of the charge was refunded
+ * meanwhile: a refund is the owner's decision and stands. Any other ending changes nothing.
+ */
+async function onDisputeClosed(dispute: Stripe.Dispute, deps: StripeEventDeps): Promise<EventOutcome> {
+  if (dispute.status !== "won") return ok("ignored");
+  const paymentIntent = idOf(dispute.payment_intent as string | { id: string } | null);
+  if (!paymentIntent) return ok("foreign");
+  const { data: purchase, error } = await deps.db
+    .from("purchases")
+    .select("id, user_id, product, status, template_slugs, kind")
+    .eq("stripe_payment_intent_id", paymentIntent)
+    .maybeSingle();
+  if (error) return retry(`purchase lookup failed: ${error.message}`);
+  if (!purchase) return ok("foreign");
+  const chargeId = idOf(dispute.charge as string | { id: string } | null);
+  if (chargeId) {
+    const charge = await deps.stripe.charges.retrieve(chargeId);
+    if (charge.amount_refunded > 0) return ok();
+  }
+  const done = await restorePurchase(deps.db, purchase, deps.now);
+  if (done.restored) console.info("[stripe] dispute won: restored", purchase.id, `${done.gifts} gift(s) live again`);
   return ok();
 }

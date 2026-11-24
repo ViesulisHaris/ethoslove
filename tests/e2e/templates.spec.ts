@@ -41,6 +41,52 @@ test.describe("template engine", () => {
   });
 });
 
+test.describe("who a template suits", () => {
+  // The sentence sits in the page's closed block under the questions ("More about …"), beside the
+  // days it is made for: the redesigned page shows no rows of chips. It is in the server's HTML
+  // whether or not the block is ever opened: found as elements, since a closed block's links have no role to be found by.
+  const suits = (page: import("@playwright/test").Page) => page.locator("details[data-more-about] [data-suits] a");
+
+  test("a couples' template names partners only, each linking to that person's gift ideas", async ({ page }) => {
+    await page.goto("/templates/xoxo");
+    const block = page.locator("details[data-more-about]");
+    // Closed until asked for: nothing of it is on the page a visitor first sees.
+    await expect(suits(page).first()).toBeHidden();
+    await block.locator("summary").click();
+    await expect(block.locator("[data-suits]")).toHaveText("A gift for your boyfriend, your girlfriend, your husband, your wife.");
+    await expect(suits(page)).toHaveText(["your boyfriend", "your girlfriend", "your husband", "your wife"]);
+    expect(await suits(page).evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts/for-boyfriend", "/gifts/for-girlfriend", "/gifts/for-husband", "/gifts/for-wife"]);
+    // It sits with the occasions, after them.
+    const days = await block.locator('a[href*="/occasions/"]').first().boundingBox();
+    const who = await suits(page).first().boundingBox();
+    expect(who!.y).toBeGreaterThan(days!.y);
+  });
+
+  test("one for a partner or a parent says so, and one for anyone lists everyone, in the server's HTML", async ({ page, isMobile }) => {
+    await page.route("**/*.js", (route) => route.abort());
+    await page.goto("/templates/keepsake");
+    await expect(suits(page)).toHaveText(["your boyfriend", "your girlfriend", "your husband", "your wife", "your mom", "your dad"]);
+    // Each person is a thumb's target once the block is open (a native <details> opens without scripts).
+    if (isMobile) {
+      await page.locator("details[data-more-about] summary").click();
+      const heights = await suits(page).evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+      expect(heights).toHaveLength(6);
+      for (const height of heights) expect(height).toBeGreaterThanOrEqual(43.5);
+    }
+    // Flowers and a recipe card are kept from nobody.
+    for (const slug of ["recipe-box", "bouquet"]) {
+      await page.goto(`/templates/${slug}`);
+      await expect(suits(page), slug).toHaveCount(7);
+    }
+    await page.goto("/templates/the-letter");
+    await expect(suits(page)).toHaveCount(7);
+    await page.goto("/es/templates/front-page");
+    await expect(page.locator("details[data-more-about] [data-suits]")).toContainText("Un regalo para tu novio");
+    await expect(suits(page).last()).toHaveText("tu padre");
+    await expect(suits(page).last()).toHaveAttribute("href", "/es/gifts/for-dad");
+  });
+});
+
 /**
  * Built and held back until group cards are on sale (src/templates/held.ts): found by its slug under
  * `next dev` only, so a run against a production build (CI) has no such demo to open. Move it into

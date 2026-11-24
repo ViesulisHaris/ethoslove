@@ -89,7 +89,7 @@ describe("the ticket's details", () => {
     expect(locate("Nowhere-on-sea", "43.1, 11.8")).toMatchObject({ lat: 43.1, lng: 11.8 });
   });
 
-  it("gives a distance only when both ends are known, through every stop it can place", () => {
+  it("gives a distance only when both ends and every stop are known", () => {
     const london = locate("London");
     const santorini = locate("Santorini");
     const oslo = locate("Oslo");
@@ -98,9 +98,27 @@ describe("the ticket's details", () => {
     expect(direct).toBeGreaterThan(2500);
     expect(direct).toBeLessThan(2700);
     expect(tripKm(london, [oslo], santorini)).toBeGreaterThan(direct + 1000);
-    expect(tripKm(london, [null], santorini)).toBe(direct);
+    // A stop it cannot place: no distance at all, rather than one that skips it.
+    expect(tripKm(london, [null], santorini)).toBeNull();
+    expect(tripKm(london, [oslo, null], santorini)).toBeNull();
     expect(tripKm(null, [], santorini)).toBeNull();
     expect(tripKm(london, [], null)).toBeNull();
+  });
+
+  it("keeps the demos' distances as they are, and prints none for a preset trip with a stop it cannot place", async () => {
+    const { demoData } = await import("@/templates/pack-your-bags/demo-data");
+    const { getTrip } = await import("@/lib/trips/presets");
+    const { tripGiftFields } = await import("@/lib/trips/trip-gift");
+    const km = (f: Record<string, unknown>) =>
+      tripKm(locate(f.fromCity as string, f.fromCoords as string | undefined), (f.stops as string[]).map((stop) => locate(stop)), locate(f.toCity as string, f.toCoords as string | undefined));
+    // The English demo flies London to Santorini (no stops): its line stays. The Spanish demo ends in
+    // Montepulciano, which the map cannot place, so it printed no distance before and prints none now.
+    expect(km(demoData.en.fields as unknown as Record<string, unknown>)).not.toBeNull();
+    expect(km(demoData.es.fields as unknown as Record<string, unknown>)).toBeNull();
+    for (const locale of ["en", "es"] as const) {
+      // Edinburgh to Inverness by Pitlochry, Glencoe and Portree: a stop the map cannot place, so no distance.
+      expect(km(tripGiftFields(getTrip("scottish-highlands")!, locale))).toBeNull();
+    }
   });
 
   it("estimates the time for each way of travelling, rounded to five minutes", () => {
