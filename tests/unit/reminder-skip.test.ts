@@ -103,10 +103,13 @@ describe("a gift made for the person stops the e-mails", () => {
     row({ id: "e", recipient_name: "Mia", occasion: "other", month: 3, day: 5, last_sent_year: 2027, last_stage: 3 }),
   ];
 
-  it("settles every reminder of that name whose day is at most ten days away, once", () => {
-    expect(settledBy(reminders, "MIA", now)).toEqual([
+  it("settles the nearest reminder of that name whose day is at most ten days away, once", () => {
+    // Mia's birthday (5 March) is nearer than the anniversary (8 March): a gift now is the birthday's.
+    expect(settledBy(reminders, "MIA", now)).toEqual([{ id: "a", year: 2027 }]);
+    // Two of hers on the same nearest day both are.
+    expect(settledBy([...reminders, row({ id: "f", recipient_name: "Mia", occasion: "valentines", month: 3, day: 5, last_sent_year: null, last_stage: 0 })], "Mia", now)).toEqual([
       { id: "a", year: 2027 },
-      { id: "b", year: 2027 },
+      { id: "f", year: 2027 },
     ]);
     // Across the new year.
     expect(settledBy([row({ id: "x", month: 1, day: 3, last_sent_year: null, last_stage: 0 })], "Mia", new Date("2026-12-28T10:00:00Z"))).toEqual([{ id: "x", year: 2027 }]);
@@ -123,18 +126,32 @@ describe("a gift made for the person stops the e-mails", () => {
     // Last year's gift for Mia edited inside the window: it was out long before, so it wasn't made for this day.
     expect(settledBy(reminders, "Mia", now, { wasOutSince: "2026-03-01T10:00:00.000Z" })).toEqual([]);
     // One that first went out a few days ago and is edited now still counts.
-    expect(settledBy(reminders, "Mia", now, { wasOutSince: "2027-02-26T10:00:00.000Z" })).toEqual([
-      { id: "a", year: 2027 },
-      { id: "b", year: 2027 },
-    ]);
+    expect(settledBy(reminders, "Mia", now, { wasOutSince: "2027-02-26T10:00:00.000Z" })).toEqual([{ id: "a", year: 2027 }]);
+  });
+
+  it("settles only a reminder of an occasion the gift's template is for", () => {
+    const xmas = new Date("2026-12-22T10:00:00Z");
+    const birthday = row({ id: "bd", recipient_name: "Mia", occasion: "birthday", month: 12, day: 28, last_sent_year: null, last_stage: 0 });
+    const ownDay = row({ id: "od", recipient_name: "Mia", occasion: "other", month: 12, day: 25, last_sent_year: null, last_stage: 0 });
+    // A Christmas gift (Frosted Window) for Mia: her own Christmas day, never her birthday on the 28th.
+    expect(settledBy([birthday, ownDay], "Mia", xmas, { occasions: ["christmas"] })).toEqual([{ id: "od", year: 2026 }]);
+    expect(settledBy([birthday], "Mia", xmas, { occasions: ["christmas"] })).toEqual([]);
+    // A birthday gift (Birthday Cinema) three days before an anniversary: the anniversary's e-mails still come.
+    const anniversary = row({ id: "an", recipient_name: "Mia", occasion: "anniversary", month: 3, day: 5, last_sent_year: null, last_stage: 0 });
+    expect(settledBy([anniversary], "Mia", new Date("2027-03-02T10:00:00Z"), { occasions: ["birthday"] })).toEqual([]);
+    // A template for both (Scrapbook) settles only the nearer of the two.
+    const bday = row({ id: "b2", recipient_name: "Mia", occasion: "birthday", month: 3, day: 9, last_sent_year: null, last_stage: 0 });
+    expect(settledBy([bday, anniversary], "Mia", new Date("2027-03-02T10:00:00Z"), { occasions: ["anniversary", "birthday", "just-because", "long-distance"] })).toEqual([{ id: "an", year: 2027 }]);
+    // Scheduled to open on the birthday itself: that is the birthday's gift, whatever the template.
+    expect(settledBy([birthday], "Mia", new Date("2026-11-01T10:00:00Z"), { occasions: ["christmas"], unlockAt: "2026-12-28T05:00:00.000Z" })).toEqual([{ id: "bd", year: 2026 }]);
   });
 
   it("writes them done for the year on the account's rows only", async () => {
     const other = row({ id: "z", user_id: "99999999-9999-4999-8999-999999999999", recipient_name: "Mia", last_sent_year: null, last_stage: 0 });
     const fake = new FakeDb({ reminders: [...reminders, other] });
-    expect(await markMadeFor(fake.db as never, USER, "Mia", now)).toBe(2);
+    expect(await markMadeFor(fake.db as never, USER, "Mia", now, { occasions: ["birthday", "anniversary"] })).toBe(1);
     const by = Object.fromEntries(fake.rows("reminders").map((r) => [r.id, [r.last_sent_year, r.last_stage]]));
-    expect(by).toEqual({ a: [2027, 3], b: [2027, 3], c: [null, 0], d: [null, 0], e: [2027, 3], z: [null, 0] });
+    expect(by).toEqual({ a: [2027, 3], b: [null, 0], c: [null, 0], d: [null, 0], e: [2027, 3], z: [null, 0] });
   });
 
   it("does nothing and throws nothing on a database without 0025", async () => {

@@ -314,6 +314,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     markMadeFor(getSupabaseAdminClient() ?? ctx.supabase, ctx.user.id, data.recipientName, new Date(), {
       unlockAt: scheduled ? input.data.schedule!.unlockAt : null,
       wasOutSince: gift.status === "live" || gift.status === "scheduled" ? gift.published_at : null,
+      // A Christmas gift for Mia is not her birthday's: only a reminder of an occasion this template is for.
+      occasions: manifest.occasions,
     });
   try {
     after(madeFor);

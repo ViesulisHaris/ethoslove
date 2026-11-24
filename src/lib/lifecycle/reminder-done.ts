@@ -2,13 +2,16 @@ import "server-only";
 
 import type { Db } from "@/lib/commerce/db";
 import { isMissingColumn } from "@/lib/commerce/db";
+import type { Occasion } from "@/config/occasions";
 import { sameName } from "./last-gift";
-import { DONE_STAGE, nextOccurrence, occurrenceIn } from "./reminders";
+import { DONE_STAGE, nextOccurrence, occurrenceIn, type ReminderOccasion } from "./reminders";
 
 /**
  * The e-mails before a day stop once the gift for it is made: a gift published or scheduled by the
  * account for someone of a reminder's name, while that person's day is at most this many days away,
- * marks every such reminder of theirs done for the year (last_sent_year = that year, last_stage = 3).
+ * marks that reminder done for the year (last_sent_year = that year, last_stage = 3), when the gift's
+ * template is one for that occasion (a Christmas gift is not a birthday's), and only the nearest such
+ * day (a birthday gift made three days before it is not also the anniversary's a week later).
  * Further out, a gift is not for that day, and the e-mails still come, unless it is scheduled to open
  * on that day (within a day either side, for the time zones), however far ahead it was made.
  * Republishing a gift that was already out before the window (an edit of last year's) makes nothing.
@@ -17,8 +20,22 @@ export const MADE_FOR_WINDOW_DAYS = 10;
 
 const DAY_MS = 86_400_000;
 
-/** What the publish knows of the gift: when it opens if scheduled, and when it was out before, if it was. */
-export type MadeGift = { unlockAt?: string | null; wasOutSince?: string | null };
+/**
+ * What the publish knows of the gift: when it opens if scheduled, when it was out before, if it was,
+ * and its template's occasions (manifest.occasions). Without occasions, every occasion counts.
+ */
+export type MadeGift = { unlockAt?: string | null; wasOutSince?: string | null; occasions?: readonly Occasion[] };
+
+/** The occasions that are a reminder's own; any other (Christmas, Mother's Day…) is a reminder's "other" day. */
+const OWN: readonly Occasion[] = ["birthday", "anniversary", "valentines"];
+
+/** Pure: whether a gift of a template for these occasions can be the gift for a reminder of this occasion. */
+export function giftFitsOccasion(occasion: ReminderOccasion | string, occasions: readonly Occasion[] | undefined): boolean {
+  if (!occasions) return true;
+  if (occasion === "birthday" || occasion === "anniversary" || occasion === "valentines") return occasions.includes(occasion);
+  // A day of their own ("other": Christmas, Mother's Day, the day they met): a template for some such day.
+  return occasions.some((o) => !OWN.includes(o) && o !== "just-because");
+}
 
 /** The occasion a gift scheduled for `unlockAt` opens on: that year's day within a day of it (time zones), or null. */
 function openedOn(row: { month: number; day: number }, unlockAt: string | null | undefined): Date | null {
@@ -33,10 +50,17 @@ function openedOn(row: { month: number; day: number }, unlockAt: string | null |
 }
 
 /** Pure: the reminders a gift made for `name` today settles, with the occasion's year each is done for. */
-export function settledBy(rows: { id: string; recipient_name: string; month: number; day: number; last_sent_year: number | null; last_stage: number }[], name: string, now: Date, gift: MadeGift = {}): { id: string; year: number }[] {
+export function settledBy(
+  rows: { id: string; recipient_name: string; occasion?: string | null; month: number; day: number; last_sent_year: number | null; last_stage: number }[],
+  name: string,
+  now: Date,
+  gift: MadeGift = {},
+): { id: string; year: number }[] {
   const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   const wasOut = gift.wasOutSince ? Date.parse(gift.wasOutSince) : Number.NaN;
-  const out: { id: string; year: number }[] = [];
+  // Scheduled to open on a day: that day's, whatever the template. Otherwise only the nearest day in the window.
+  const onTheDay: { id: string; year: number }[] = [];
+  const near: { id: string; year: number; at: number }[] = [];
   for (const row of rows) {
     if (!sameName(row.recipient_name, name)) continue;
     const scheduledFor = openedOn(row, gift.unlockAt);
@@ -45,12 +69,15 @@ export function settledBy(rows: { id: string; recipient_name: string; month: num
       if (next.getTime() - today > MADE_FOR_WINDOW_DAYS * DAY_MS) continue;
       // An edit of a gift already out before this day's window was not made for it.
       if (Number.isFinite(wasOut) && wasOut < next.getTime() - MADE_FOR_WINDOW_DAYS * DAY_MS) continue;
+      if (!giftFitsOccasion(row.occasion ?? "other", gift.occasions)) continue;
     }
     const year = next.getUTCFullYear();
     if (row.last_sent_year !== null && (row.last_sent_year > year || (row.last_sent_year === year && row.last_stage === DONE_STAGE))) continue;
-    out.push({ id: row.id, year });
+    if (scheduledFor) onTheDay.push({ id: row.id, year });
+    else near.push({ id: row.id, year, at: next.getTime() });
   }
-  return out;
+  const nearest = Math.min(...near.map((n) => n.at));
+  return [...onTheDay, ...near.filter((n) => n.at === nearest).map(({ id, year }) => ({ id, year }))];
 }
 
 /**
@@ -61,7 +88,7 @@ export function settledBy(rows: { id: string; recipient_name: string; month: num
 export async function markMadeFor(db: Db, userId: string, recipientName: string, now: Date, gift: MadeGift = {}): Promise<number> {
   if (!recipientName.trim()) return 0;
   try {
-    const { data, error } = await db.from("reminders").select("id, recipient_name, month, day, last_sent_year, last_stage").eq("user_id", userId);
+    const { data, error } = await db.from("reminders").select("id, recipient_name, occasion, month, day, last_sent_year, last_stage").eq("user_id", userId);
     if (error) {
       if (!isMissingColumn(error)) console.error("[reminders] made-for read failed", error.message);
       return 0;
