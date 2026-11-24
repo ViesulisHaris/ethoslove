@@ -120,6 +120,9 @@ test.describe("with the switch off, as it is live", () => {
     }
     for (const lang of ["", "/es"]) {
       await page.goto(`${lang}/no-such-page-anywhere`);
+      // Since growth/view the missing page names itself in the tab once it is alive (a <title> React
+      // puts in the head; the server's HTML still has the front page's): read the tab after that.
+      await expect(page).toHaveTitle(/not found|no encontrada/i);
       const missing = await page.title();
       expect(missing).not.toBe("");
       for (const address of [`${lang}/c/${TOKEN}`, `${lang}/c/x`]) {
