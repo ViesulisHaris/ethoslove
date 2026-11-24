@@ -21,6 +21,9 @@ async function open(page: Page, path: string) {
 const pdfPages = (pdf: Buffer) => (pdf.toString("latin1").match(/\/Type\s*\/Page(?![s\w])/g) ?? []).length;
 
 test.describe("The Tree Tag", () => {
+  // Development pages, and two PDF renders: held on the builders' machines, never in CI (as the plan asks).
+  test.skip(!!process.env.CI, "the Tree Tag's previews are development-only; these run locally");
+
   test.beforeEach(async ({ request }) => {
     const status = (await request.get("/print-preview")).status();
     test.skip(status === 404, "/print-preview is development-only: a production build answers 404");
@@ -56,8 +59,10 @@ test.describe("The Tree Tag", () => {
       (await page.getByRole("button", { name: "Print The Tree Tag" }).boundingBox())!.height,
       ...(await page.locator(".papers button").evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height))),
       (await page.locator(".check").boundingBox())!.height,
+      // The three text fields: their name, the line under the code, and who it is from.
+      ...(await page.locator(".adjust input[type=text]").evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height))),
     ];
-    expect(heights).toHaveLength(6);
+    expect(heights).toHaveLength(9);
     for (const height of heights) expect(height).toBeGreaterThan(43.5);
   });
 

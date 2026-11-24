@@ -25,15 +25,18 @@ describe.each(FILES)("%s", (file) => {
     }
   });
 
-  it("says 'paid' in the label over the tag only, never in the lines a reader reads first", () => {
+  // "Paid" was untrue: "a note with your photos" is paid, leaves the template locked, and gets no tag
+  // (lib/lifecycle/holiday-extras.ts decides on the unlock). The label says "unlocked", once, over the tag.
+  it("says 'unlocked' in the label over the tag only, and never 'paid'", () => {
     const text = html.replace(/<[^>]+>/g, "\n").replace(/&nbsp;/g, " ");
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-    const paid = lines.filter((l) => /\bpaid\b|de pago/i.test(l));
-    expect(paid).toEqual([file.endsWith(".es.html") ? "Con cada regalo de pago hecho hasta el 20 de diciembre" : "With every paid gift made by 20 December"]);
+    expect(lines.filter((l) => /\bpaid\b|de pago/i.test(l))).toEqual([]);
+    const unlocked = lines.filter((l) => /\bunlocked\b|desbloquead/i.test(l));
+    expect(unlocked).toEqual([file.endsWith(".es.html") ? "Con cada regalo desbloqueado hecho hasta el 20 de diciembre" : "With every unlocked gift made by 20 December"]);
   });
 
   it("keeps the label's date on one line", () => {
-    expect(html).toContain(file.endsWith(".es.html") ? ">Con cada regalo de pago hecho hasta el 20&nbsp;de&nbsp;diciembre<" : ">With every paid gift made by 20&nbsp;December<");
+    expect(html).toContain(file.endsWith(".es.html") ? ">Con cada regalo desbloqueado hecho hasta el 20&nbsp;de&nbsp;diciembre<" : ">With every unlocked gift made by 20&nbsp;December<");
   });
 
   it("speaks of making the gift by the 20th, never of ordering it or of any day this month", () => {

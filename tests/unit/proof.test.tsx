@@ -230,9 +230,19 @@ describe("the pay panel", () => {
 
     it("is one quiet line in the panel while the tag is given, in both languages and both layouts", () => {
       at("2026-12-10T10:00:00Z", "1");
-      expect(pay()).toContain("Made by 20 December, it comes with The Tree Tag to print and hang on the tree.");
-      expect(pay({ manifest: letter, note: { photos: 2, longLetter: false } }, "es")).toContain("Hecho hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.");
+      expect(pay()).toContain("Send it by 20 December and it comes with The Tree Tag to print and hang on the tree.");
+      expect(pay({ manifest: letter, note: { photos: 2, longLetter: false } }, "es")).toContain("Si lo envías hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.");
       expect(pay().match(/data-testid="pay-tree-tag"/g)).toHaveLength(1);
+    });
+
+    it("beside 'A note with your photos', which leaves the template locked, says the tag comes with the unlock only", () => {
+      at("2026-12-10T10:00:00Z", "1");
+      const keepRow = { price: "€3.99", max: 4, busy: false, onPay: () => {} };
+      const html = pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow });
+      expect(html).toContain('data-testid="more-note-photos"');
+      expect(html).toContain("Unlock the template and send it by 20 December, and it comes with The Tree Tag to print and hang on the tree. A note with your photos comes without it.");
+      expect(html).not.toContain("Send it by 20 December and it comes with");
+      expect(pay({ manifest: letter, note: { photos: 2, longLetter: false }, keepRow }, "es")).toContain("Si desbloqueas la plantilla y lo envías hasta el 20 de diciembre");
     });
 
     it("says nothing with the switch off, before 24 November, or once the 20th has ended everywhere", () => {

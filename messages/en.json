@@ -1375,7 +1375,8 @@
       "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
-      "treeTag": "Made by 20 December, it comes with The Tree Tag to print and hang on the tree.",
+      "treeTag": "Send it by 20 December and it comes with The Tree Tag to print and hang on the tree.",
+      "treeTagUnlock": "Unlock the template and send it by 20 December, and it comes with The Tree Tag to print and hang on the tree. A note with your photos comes without it.",
       "personalPrice": "Your personal price from our email, until {ends}."
     },
     "etsy": {

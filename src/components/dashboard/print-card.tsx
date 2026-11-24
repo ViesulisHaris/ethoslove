@@ -124,6 +124,7 @@ const TAG_STYLE = `
 .tag-root .papers button{min-height:44px;padding:0 14px}
 .tag-root .check{min-height:44px;cursor:pointer}
 .tag-root .check input{width:20px;height:20px;margin:0;accent-color:#1A1614}
+.tag-root .adjust input[type=text]{height:44px}
 .tag-from span[dir=rtl] bdi{padding-inline-start:.25em}
 .tag-tree{position:absolute;right:3.5mm;bottom:3mm;width:14mm;height:14mm;object-fit:contain}
 @media screen and (max-width:820px){.tag-sheet{width:100%;grid-template-columns:74mm;padding:8mm 0}}

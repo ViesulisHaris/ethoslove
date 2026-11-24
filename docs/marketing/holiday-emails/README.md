@@ -21,7 +21,9 @@ after gets no tag, a gift begun before 24 November and sent again gets none, and
 any edit. A gift begun inside the days, first sent free and sent again once paid (by the 20th), gets it then; a
 gift sent free and never sent again gets none, even if its sender buys the template later. A copy of a gift
 (Duplicate in the dashboard) is a new gift: it gets the tag only if its own first send, paid, is by the 20th.
-Free gifts (the free Letter or note, a free reply, a creator-campaign gift) get no tag, so both e-mails say "paid".
+Free gifts (the free Letter or note, a free reply, a creator-campaign gift) get no tag, and neither does "a note
+with your photos", which is paid but leaves the template locked; so both e-mails say "unlocked" (not "paid").
+Giving the tag to the note with photos too would be the owner's call.
 The tag is offered on the share screen and the gift's page until the end of 25 December. Send the last-day
 e-mail on the morning of the 20th so "tonight" is true where the reader is.
 
@@ -34,8 +36,10 @@ sent between then and the switch going on gets no tag, because the site keeps no
 site works exactly as before.
 
 **Said before paying.** While the tag is given (switch on, 24 November to the end of the 20th), the pay panel in
-the editor carries one line: "Made by 20 December, it comes with The Tree Tag to print and hang on the tree." The
-occasion page the e-mail opens does not mention it.
+the editor carries one line: "Send it by 20 December and it comes with The Tree Tag to print and hang on the tree."
+Where the same panel also offers "A note with your photos", the line says the tag comes with the unlocked template
+only: "Unlock the template and send it by 20 December, and it comes with The Tree Tag to print and hang on the
+tree. A note with your photos comes without it." The occasion page the e-mail opens does not mention it.
 
 **The pictures' codes** open the home page in the e-mail's language (`/` or `/es`) with `?ref=email-xmas-tag`, so a
 scan of the picture is counted apart from the button's clicks.
@@ -49,7 +53,11 @@ scan of the picture is counted apart from the button's clicks.
 3. The Tree Tag itself must be live and switched on (`NEXT_PUBLIC_TREE_TAG=1`, above), or the e-mail promises
    something the site does not give.
 4. A printed sheet has been scanned: print one A4 sheet on the cream paper and one on sage, hang one tag about
-   1 m away, and scan it with an iPhone camera and an Android camera. Not yet done.
+   1 m away, and scan it with an iPhone camera and an Android camera. **Not yet done, and not a pass until it
+   is**: on screen the default code (rounded dots, the gift's colour, the heart in the middle, 38 mm) reads in the
+   WeChat decoder on cream and sage, but OpenCV's decoder reads none of it, and no paper has been scanned. Record
+   the result (paper, phone, distance, read or not) in the review page. If a phone misses it, print the code with
+   square dots and no centre (the QR card's "Square" and "None" choices) and scan again.
 
 ## In Mailchimp
 

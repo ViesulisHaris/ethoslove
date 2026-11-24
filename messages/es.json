@@ -1375,7 +1375,8 @@
       "secondPick": "¿Cuál?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
-      "treeTag": "Hecho hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.",
+      "treeTag": "Si lo envías hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar.",
+      "treeTagUnlock": "Si desbloqueas la plantilla y lo envías hasta el 20 de diciembre, viene con la etiqueta del árbol para imprimir y colgar. Una nota con tus fotos va sin ella.",
       "personalPrice": "Tu precio personal de nuestro correo, hasta el {ends}."
     },
     "etsy": {

@@ -475,7 +475,8 @@ export function Paywall({
         <p className="mt-3 flex items-center gap-2.5 text-sm text-ink" data-testid="pay-tree-tag">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/art/occasions/christmas.webp" alt="" width={24} height={24} className="size-6 shrink-0" />
-          <span>{tm("treeTag")}</span>
+          {/* "A note with your photos" (keepRow) is paid but leaves the template locked, so it gets no tag: said here, beside it. */}
+          <span>{tm(keepRow ? "treeTagUnlock" : "treeTag")}</span>
         </p>
       ) : null}
 
