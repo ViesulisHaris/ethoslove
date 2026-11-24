@@ -3330,13 +3330,13 @@
   "lifecycle": {
     "remind": {
       "title": "¿Te avisamos antes de la próxima fecha?",
-      "blurb": "Tres correos antes de cada fecha que añadas: 7 días, 2 días y la víspera, hasta que hagas el regalo. Para la de cada mes, una pregunta el día antes. Nada más.",
+      "blurb": "Tres correos antes de cada fecha que añadas: 7 días, 2 días y la víspera, hasta que hagas el regalo. Para la de cada mes, una pregunta el día antes. Nada más.",
       "datesTitle": "Que no se te pase su día.",
-      "datesWhy": "Te escribimos 7 días antes, con tus fotos ya puestas en un regalo nuevo.",
-      "datesWhyNames": "Te escribimos 7 días antes, con los dos nombres ya puestos en un regalo nuevo.",
+      "datesWhy": "Te escribimos 7 días antes, con tus fotos ya puestas en un regalo nuevo.",
+      "datesWhyNames": "Te escribimos 7 días antes, con los dos nombres ya puestos en un regalo nuevo.",
       "fromGift": "de este regalo",
       "remindMe": "Recuérdamelo",
-      "datesSmall": "Tres correos cortos antes de cada día: 7 días, 2 días y la víspera. Paran en cuanto haces el regalo.",
+      "datesSmall": "Tres correos cortos antes de cada día: 7 días, 2 días y la víspera. Paran en cuanto haces el regalo.",
       "another": "Añadir otro día",
       "savedFirst": "Guardado. El primer correo te llega el {date}.",
       "savedNext": "Guardado. El próximo correo te llega el {date}.",
@@ -3454,7 +3454,7 @@
     },
     "page": {
       "title": "Recordatorios",
-      "subtitle": "Tres correos antes de cada fecha: 7 días, 2 días y la víspera. Y el día antes de vuestro mesiversario, si lo has pedido.",
+      "subtitle": "Tres correos antes de cada fecha: 7 días, 2 días y la víspera. Y el día antes de vuestro mesiversario, si lo has pedido.",
       "empty": "Aún no tienes recordatorios. Cuando publiques un regalo, puedes pedirnos que te lo recordemos el año que viene.",
       "remove": "Quitar",
       "removeLabel": "Quitar el recordatorio: {what}",
@@ -3467,14 +3467,24 @@
     },
     "remove": {
       "title": "¿Quitar este recordatorio?",
-      "body": "Dejarás de recibir los correos antes del día de {name}.",
+      "body": {
+        "birthday": "Dejarás de recibir los correos antes del cumpleaños de {name}.",
+        "anniversary": "Dejarás de recibir los correos antes de vuestro aniversario.",
+        "valentines": "Dejarás de recibir los correos antes de San Valentín.",
+        "other": "Dejarás de recibir los correos antes del día de {name}."
+      },
       "confirm": "Quitarlo",
       "doneTitle": "Recordatorio quitado.",
       "doneBody": "Ese recordatorio ya no existe. Puedes crear otro cuando hagas un regalo."
     },
     "skip": {
       "title": "Este año no",
-      "body": "¿Dejamos de escribirte sobre el día de {name} hasta el año que viene?",
+      "body": {
+        "birthday": "¿Dejamos de escribirte sobre el cumpleaños de {name} hasta el año que viene?",
+        "anniversary": "¿Dejamos de escribirte sobre vuestro aniversario hasta el año que viene?",
+        "valentines": "¿Dejamos de escribirte sobre San Valentín hasta el año que viene?",
+        "other": "¿Dejamos de escribirte sobre el día de {name} hasta el año que viene?"
+      },
       "confirm": "Sí, este año no",
       "doneTitle": "Hecho. Hasta el año que viene.",
       "doneBody": "Nada más sobre este día hasta el año que viene. El recordatorio sigue en tu cuenta."

@@ -20,6 +20,7 @@ vi.mock("next-intl/server", () => ({
 }));
 
 const route = await import("@/app/api/reminders/skip/route");
+const removeRoute = await import("@/app/api/reminders/remove/route");
 const { markMadeFor, settledBy } = await import("@/lib/lifecycle/reminder-done");
 
 const SECRET = "reminder-skip-test-secret";
@@ -62,11 +63,29 @@ describe("'Not this year' from the e-mail", () => {
   it("asks first, in the reminder's language, and changes nothing on a GET", async () => {
     const asked = await page("GET", `${ID}:${YEAR}`);
     expect(asked.status).toBe(200);
-    expect(asked.text).toContain("Stop the emails about Mia&#39;s day until next year?");
+    expect(asked.text).toContain("Stop the emails about Mia&#39;s birthday until next year?");
     expect(asked.text).toContain("Yes, not this year");
     expect(fake.rows("reminders")[0]).toMatchObject({ last_sent_year: YEAR, last_stage: 1 });
     fake.tables.reminders[0].locale = "es";
-    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("¿Dejamos de escribirte sobre el día de Mia hasta el año que viene?");
+    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("¿Dejamos de escribirte sobre el cumpleaños de Mia hasta el año que viene?");
+  });
+
+  it("names the occasion as the e-mails do: an anniversary is yours, a day of their own is theirs", async () => {
+    fake.tables.reminders[0].occasion = "anniversary";
+    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("Stop the emails about your anniversary until next year?");
+    fake.tables.reminders[0].locale = "es";
+    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("¿Dejamos de escribirte sobre vuestro aniversario hasta el año que viene?");
+    fake.tables.reminders[0].occasion = "other";
+    fake.tables.reminders[0].locale = "en";
+    expect((await page("GET", `${ID}:${YEAR}`)).text).toContain("Stop the emails about Mia&#39;s day until next year?");
+  });
+
+  it("and so does 'Remove this reminder'", async () => {
+    fake.tables.reminders[0].occasion = "anniversary";
+    const t = await signToken("reminder-remove", ID, SECRET);
+    const asked = await removeRoute.GET(new NextRequest(`https://ethos.test/api/reminders/remove?t=${t}&l=en`));
+    expect(await asked.text()).toContain("You won&#39;t get the emails before your anniversary any more.");
+    expect(fake.rows("reminders")).toHaveLength(1);
   });
 
   it("marks the reminder done for that year on the POST, and the next year's still come", async () => {

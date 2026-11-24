@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
   const asked = localeOf(request.nextUrl.searchParams.get("l"));
   const found = await resolve(request);
   if (found.state !== "ok") return problem(found.state, asked);
-  const { data, error } = await found.db.from("reminders").select("recipient_name, locale").eq("id", found.id).maybeSingle();
+  const { data, error } = await found.db.from("reminders").select("recipient_name, occasion, locale").eq("id", found.id).maybeSingle();
   if (error) return problem("unavailable", asked);
   if (!data) return problem("invalid", asked);
   const locale = localeOf(data.locale);
@@ -45,7 +45,8 @@ export async function GET(request: NextRequest) {
   return linkPage({
     locale,
     title: t("remove.title"),
-    body: t("remove.body", { name: data.recipient_name }),
+    // The occasion named as the e-mails name it: "your anniversary", not "Mia's day".
+    body: t(`remove.body.${bodyOccasion(data.occasion)}`, { name: data.recipient_name }),
     confirm: { label: t("remove.confirm"), action: `${request.nextUrl.pathname}${request.nextUrl.search}` },
     home: t("link.home"),
   });
@@ -62,3 +63,7 @@ export async function POST(request: NextRequest) {
   const t = await getTranslations({ locale, namespace: "lifecycle" });
   return linkPage({ locale, title: t("remove.doneTitle"), body: t("remove.doneBody"), home: t("link.home") });
 }
+
+/** The occasions the page has words for; anything else reads as their day. */
+const bodyOccasion = (occasion: string | null | undefined): "birthday" | "anniversary" | "valentines" | "other" =>
+  occasion === "birthday" || occasion === "anniversary" || occasion === "valentines" ? occasion : "other";
