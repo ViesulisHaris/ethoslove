@@ -84,7 +84,7 @@ describe("'Not this year' from the e-mail", () => {
     fake.tables.reminders[0].occasion = "anniversary";
     const t = await signToken("reminder-remove", ID, SECRET);
     const asked = await removeRoute.GET(new NextRequest(`https://ethos.test/api/reminders/remove?t=${t}&l=en`));
-    expect(await asked.text()).toContain("You won&#39;t get the emails before your anniversary any more.");
+    expect(await asked.text()).toContain("You won’t get the emails before your anniversary any more.");
     expect(fake.rows("reminders")).toHaveLength(1);
   });
 

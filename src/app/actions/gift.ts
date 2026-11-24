@@ -421,7 +421,9 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   // After the answer, and never able to fail the publish.
   // A scheduled gift counts for the day it opens on; an edit of one already out counts from when it first went.
   // A gift made after "Open my gift" in a reminder's e-mail is that reminder's (api/reminders/open).
-  const forReminder = await cookies()
+  // Read inside the promise: cookies() throws outside a request (a script, a test), and that must not fail a publish either.
+  const forReminder = await Promise.resolve()
+    .then(() => cookies())
     .then((jar) => parseReminderCookie(jar.get(REMINDER_COOKIE)?.value))
     .catch(() => null);
   const madeFor = () =>

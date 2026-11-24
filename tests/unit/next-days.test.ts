@@ -131,6 +131,6 @@ describe("dayName", () => {
     expect(dayName({ kind: "anniversary", name: "Mia" }, pair, remind)).toBe("Your anniversary with Mia");
     expect(dayName({ kind: "anniversary" }, pair, remind, "Ana")).toBe("Your anniversary with Ana");
     expect(dayName({ kind: "anniversary" }, pair, remind)).toBe("Your anniversary");
-    expect(dayName({ kind: "birthday", name: "Mia" }, pair, remind)).toBe("Mia's birthday");
+    expect(dayName({ kind: "birthday", name: "Mia" }, pair, remind)).toBe("Mia’s birthday");
   });
 });
