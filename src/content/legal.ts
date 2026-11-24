@@ -947,7 +947,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       after: ", send the monthly idea to customers who have sent a gift (they are told when they send it, and can turn it off there or in any email)",
     },
     { doc: "privacy", section: 8, find: "and to offer emails at any time with the unsubscribe link in each one.", replace: "and to offer emails and the monthly idea at any time with the link in each one." },
-    { doc: "privacy", section: 8, find: "the offer emails you ask for", replace: "the offer emails you ask for and, where the box you ticked names it, the monthly idea" },
+    { doc: "privacy", section: 8, find: "the offer emails you ask for", replace: "the offer emails you ask for and, where the box for offer emails you ticked names it, the monthly idea" },
     {
       doc: "privacy",
       section: 11,
@@ -1006,7 +1006,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       find: "y a los correos de ofertas en cualquier momento con el enlace para darte de baja de cada uno.",
       replace: "y a los correos de ofertas y a la idea del mes en cualquier momento con el enlace de cada correo.",
     },
-    { doc: "privacy", section: 8, find: "los correos de ofertas que pides", replace: "los correos de ofertas que pides y, si la casilla que marcaste la nombra, la idea del mes" },
+    { doc: "privacy", section: 8, find: "los correos de ofertas que pides", replace: "los correos de ofertas que pides y, si la casilla de los correos de ofertas que marcaste la nombra, la idea del mes" },
     {
       doc: "privacy",
       section: 11,

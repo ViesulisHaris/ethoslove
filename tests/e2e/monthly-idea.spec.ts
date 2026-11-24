@@ -104,6 +104,29 @@ test.describe("the share screen's line", () => {
     }
   });
 
+  test("B4b keeps its words until the server has answered, as the account row does", async ({ page }) => {
+    let release!: () => void;
+    const answered = new Promise<void>((resolve) => (release = resolve));
+    await page.route("**/api/monthly-idea", async (route) => {
+      if (route.request().method() !== "POST") return route.fulfill({ json: { state: "on" } });
+      await answered;
+      return route.fulfill({ json: { state: "off" } });
+    });
+    await page.goto("/monthly-idea/preview?part=share");
+    const notice = page.getByTestId("idea-notice");
+    await notice.getByRole("button", { name: "Don’t send these" }).click();
+    const button = notice.getByRole("button");
+    await expect(button).toHaveAttribute("aria-busy", "true");
+    await expect(button).toBeDisabled();
+    await expect(notice).toContainText("Starting next month");
+    await expect(notice).not.toContainText("Off. We won’t send them.");
+    await expect(button).toHaveText("Don’t send these");
+    release();
+    await expect(notice).toContainText("Off. We won’t send them.");
+    await expect(button).toHaveText("Undo");
+    await expect(button).not.toHaveAttribute("aria-busy");
+  });
+
   test("B5 a failed save puts it back and says so", async ({ page }) => {
     await answerSwitch(page, { fail: true });
     await page.goto("/monthly-idea/preview?part=share");
@@ -148,7 +171,8 @@ test.describe("the free version's Terms box", () => {
     await send.click({ force: true });
     // The page's own alert, not Next's route announcer (also role="alert", always empty here).
     const nudge = page.getByRole("alert").filter({ hasText: /\S/ });
-    await expect(nudge).toHaveText("Tick the box to send the free version.");
+    await expect(nudge).toHaveText("Tick the box to send it.");
+    await expect(page.getByTestId("free-terms")).toContainText("I accept the Terms: sending free comes with one gift idea a month by email");
     await expect(nudge).toHaveAttribute("id", "free-terms-nudge");
     await expect(page.getByTestId("free-terms-box")).toBeFocused();
     await expect(page.getByTestId("terms-sent")).toHaveCount(0);
@@ -218,6 +242,34 @@ test.describe("the account page's row", () => {
     await expect(row).toContainText("By email, for a year after your last gift.");
     await expect(row.getByRole("button", { name: "Stop them" })).not.toHaveAttribute("aria-pressed");
     expect(bodies).toEqual([{ on: false }, { on: true }]);
+  });
+
+  test("B11b on a phone, turning it off or on never changes the row's height", async ({ page }) => {
+    await answerSwitch(page);
+    for (const [lang, stop, back] of [
+      ["", "Stop them", "Turn them back on"],
+      ["/es", "Dejar de recibirlas", "Volver a activarlas"],
+    ] as const) {
+      for (const size of [
+        { width: 375, height: 812 },
+        { width: 320, height: 568 },
+        { width: 1280, height: 900 },
+      ]) {
+        await page.setViewportSize(size);
+        await page.goto(`${lang}/monthly-idea/preview?part=account`);
+        const row = page.getByTestId("idea-emails");
+        const on = (await row.boundingBox())!;
+        const button = row.getByRole("button", { name: stop });
+        expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+        await button.click();
+        await expect(row.getByRole("button", { name: back })).toBeVisible();
+        const off = (await row.boundingBox())!;
+        expect(off.height, `${lang || "en"} at ${size.width}px`).toBe(on.height);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+        // Drawn as a control: an outlined pill, not bare text.
+        expect(await row.getByRole("button").evaluate((el) => getComputedStyle(el).borderTopColor)).not.toBe("rgba(0, 0, 0, 0)");
+      }
+    }
   });
 
   test("B12 says when it couldn't save", async ({ page }) => {

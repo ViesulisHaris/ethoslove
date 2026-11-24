@@ -4221,8 +4221,8 @@
     "ideaOffDone": "Off. We won’t send them.",
     "ideaUndo": "Undo",
     "boxIdea": "Email me Ethos offers and one gift idea a month. I can unsubscribe any time.",
-    "ideaTerms": "I accept the <terms>Terms</terms>: the free version comes with one gift idea a month by email, which I can stop in any email or in my account.",
-    "ideaTermsNeeded": "Tick the box to send the free version.",
+    "ideaTerms": "I accept the <terms>Terms</terms>: sending free comes with one gift idea a month by email, which I can stop in any email or in my account.",
+    "ideaTermsNeeded": "Tick the box to send it.",
     "ideaWhere": "After you send a gift, we’ll email you one gift idea a month for a year. You can stop them in any email."
   },
   "notice": {

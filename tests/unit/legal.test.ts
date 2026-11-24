@@ -269,7 +269,12 @@ describe("the monthly idea in the documents", () => {
       if (mode === "all") expect(en.p8).toContain("send the monthly idea to people who have sent a gift");
       else if (mode === "buyers") expect(en.p8).toContain("send the monthly idea to customers who have sent a gift");
       else expect(en.p8).not.toMatch(/send the monthly idea to/);
-      expect(en.p8).toContain("where the box you ticked names it, the monthly idea");
+      // Consent covers the idea only through the offers box that names it; the Terms box a free sender
+      // ticks in "all" is not a consent to it (that sender is under the legitimate interest above), so
+      // the consent clause names its box and can't be read as the Terms box too.
+      expect(en.p8).toContain("where the box for offer emails you ticked names it, the monthly idea");
+      expect(es.p8).toContain("si la casilla de los correos de ofertas que marcaste la nombra, la idea del mes");
+      expect(en.p8).not.toContain("where the box you ticked names it");
       if (mode === "optin") expect(es.p8).not.toMatch(/enviar la idea del mes a/);
       // The send screen's sentence says what that setting really shows: a button only where the line
       // with "Don't send these" is drawn after a send (offer-emails-box.tsx ideaNotice), else the box.
