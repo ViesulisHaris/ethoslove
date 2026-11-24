@@ -216,6 +216,41 @@ for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversa
   }
 }
 
+/**
+ * /occasions (fix round 5): the gallery's head and the thirteen occasions as picture tiles, with the whole gallery as a
+ * fourteenth. Measured on its own part of the page (it has no [data-page-theme]): about 200 words at most, every tile
+ * with its picture, nothing too small, no flower under words, no sideways scroll, at every size, in both languages.
+ */
+for (const path of ["/occasions", "/es/occasions"]) {
+  for (const [width, height] of SIZES) {
+    test(`${path} at ${width}×${height}: picture tiles, within 200 words, no sideways scroll, no flower under words`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto(path);
+      await settle(page);
+      const m = await measure(page, "[data-occasions-index]");
+      expect(m.overflow, "the page scrolls sideways").toBeLessThanOrEqual(0);
+      // A tile is a solid card laid over the lilies, as the gallery's cards are, so art behind a tile's words is not seen: only words outside the tiles count.
+      const inTiles = await page.locator("[data-occasion-card] span").allTextContents();
+      const seen = m.overlaps.filter((o) => {
+        const words = o.slice(o.indexOf("“") + 1, o.lastIndexOf("”"));
+        return !inTiles.some((text) => text.trim().startsWith(words));
+      });
+      expect(seen, "a piece of the art lies under words").toEqual([]);
+      expect(m.count, "words on the page").toBeLessThanOrEqual(210);
+      expect(m.count, "words on the page").toBeGreaterThan(100);
+      expect(m.smallest).toBeGreaterThanOrEqual(14);
+      expect(m.small).toEqual([]);
+      const tiles = page.locator("[data-occasion-card]");
+      await expect(tiles).toHaveCount(14);
+      await expect
+        .poll(() => tiles.evaluateAll((all) => all.filter((a) => !(a.querySelector("img")!.complete && a.querySelector("img")!.naturalWidth > 0)).length), { message: "tiles with no picture" })
+        .toBe(0);
+      await expect(page.locator("[data-occasions-index] details")).not.toHaveAttribute("open", "");
+      await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    });
+  }
+}
+
 test("on the smallest phone the hero's button is on the first screen, in both languages", async ({ page }) => {
   // Fourteen pages are opened one after another: on a busy machine that outran thirty seconds with nothing wrong on any of them.
   test.slow();

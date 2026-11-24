@@ -15,13 +15,28 @@ import { GalleryArt } from "./gallery-art";
  *
  * -mt/pt: the ground starts at the top of the screen, under the floating header, as a gift's page does.
  */
-export function GalleryHead({ eyebrow, title, line, aside, children }: { eyebrow: string; title: string; line: string; aside?: ReactNode; children: ReactNode }) {
+export function GalleryHead({
+  eyebrow,
+  title,
+  line,
+  aside,
+  titleClassName = "max-w-5xl",
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  line: string;
+  aside?: ReactNode;
+  /** The heading's width: /occasions narrows it on a wide desk, where its Spanish heading ran under the lilies' petal. */
+  titleClassName?: string;
+  children: ReactNode;
+}) {
   return (
     <div className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
       <GalleryArt />
       <header data-gallery-head className="container-x pt-12 pb-9 sm:pt-16 sm:pb-11 lg:pt-14 lg:pb-8">
         <p className="text-eyebrow mb-5 text-ink-soft">{eyebrow}</p>
-        <h1 className="display-xl max-w-5xl">{title}</h1>
+        <h1 className={`display-xl ${titleClassName}`}>{title}</h1>
         <div className="mt-5 flex flex-wrap items-baseline gap-x-10 gap-y-6">
           <p className="max-w-2xl font-display text-xl leading-snug text-ink-soft italic sm:text-2xl">{line}</p>
           {aside}
