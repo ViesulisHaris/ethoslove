@@ -135,6 +135,9 @@ test.describe("every template for the difference, on the success page", () => {
   });
 });
 
+/** The day a birthday gift in these tests counts down to: the one day the card fills in by itself. */
+const GIFT_DAY = "2027-03-12";
+
 test.describe("the share screen's reminder card", () => {
   test.beforeEach(async ({ request }) => needPreviews(request));
 
@@ -148,13 +151,14 @@ test.describe("the share screen's reminder card", () => {
 
   test("asks for two days, fills in the one the gift tells, and adds nothing until 'Remind me'", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana&photos=3");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&photos=3&countdown=${GIFT_DAY}`);
     const card = page.getByTestId("remind-card");
     await expect(card).toContainText("Never be late for their day.");
     await expect(card).toContainText("We'll email you 7 days before, with your photos already in a new gift.");
     const birthday = card.getByTestId("remind-field-birthday");
     await expect(birthday).toContainText("Ana's birthday");
     await expect(birthday).toContainText("from this gift");
+    await expect(birthday).toContainText("12 March");
     await expect(card.getByTestId("remind-field-anniversary")).toContainText("Your anniversary");
     await expect(card.getByTestId("remind-field-anniversary")).toContainText("Pick the day");
     await expect(card).toContainText("Three short emails before each day: 7 days, 2 days and the day before. They stop once your gift is made.");
@@ -180,7 +184,7 @@ test.describe("the share screen's reminder card", () => {
 
   test("'Remind me' moves focus to the saved line, which says when the first e-mail comes", async ({ page }) => {
     await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
     const card = page.getByTestId("remind-card");
     await card.getByTestId("remind-save-dates").click();
     const saved = card.getByTestId("remind-saved");
@@ -210,7 +214,7 @@ test.describe("the share screen's reminder card", () => {
 
   test("the day the gift tells is saved as this gift's", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
     const card = page.getByTestId("remind-card");
     await card.getByTestId("remind-save-dates").click();
     await expect(card.getByTestId("remind-saved")).toBeVisible();
@@ -227,7 +231,7 @@ test.describe("the share screen's reminder card", () => {
         : route.fallback(),
     );
     await page.route("**/api/monthsaries", (route) => (route.request().method() === "GET" ? route.fulfill({ json: { monthsaries: [{ id: "m1", partnerName: "Ana", since: "2025-04-03", locale: "en" }] } }) : route.fallback()));
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
     const anniversary = page.getByTestId("remind-field-anniversary");
     await expect(anniversary).toContainText("9 June");
     await expect(anniversary.getByText("Added")).toBeVisible();
@@ -243,7 +247,7 @@ test.describe("the share screen's reminder card", () => {
 
   test("Valentine's Day is one tap, as another day than the gift's", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
     await page.getByTestId("remind-another").click();
     const row = page.getByTestId("remind-row-valentines");
     await row.getByRole("button", { name: "Remind me: Valentine's Day" }).click();
@@ -265,7 +269,7 @@ test.describe("the share screen's reminder card", () => {
 
   test("a gift with no name asks whose days they are first", async ({ page }) => {
     const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=&countdown=${GIFT_DAY}`);
     const card = page.getByTestId("remind-card");
     const save = card.getByTestId("remind-save-dates");
     await expect(save).toBeDisabled();
@@ -339,14 +343,14 @@ test.describe("the share screen's reminder card", () => {
 
   test("says when the account already has fifty reminders", async ({ page }) => {
     await answer(page, "**/api/reminders", { status: 409, body: { error: "too_many", max: 50 } });
-    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
     const card = page.getByTestId("remind-card");
     await card.getByTestId("remind-save-dates").click();
     await expect(card.getByRole("alert")).toHaveText("You already have 50 reminders. Remove one on your account page to add this one.");
   });
 
   test("in Spanish", async ({ page }) => {
-    await page.goto("/es/reminders/preview?template=birthday-cinema&name=Ana");
+    await page.goto(`/es/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
     const card = page.getByTestId("remind-card");
     await expect(card).toContainText("Que no se te pase su día.");
     await expect(card.getByTestId("remind-field-birthday")).toContainText("El cumpleaños de Ana");
@@ -357,6 +361,68 @@ test.describe("the share screen's reminder card", () => {
     await expect(card.getByTestId("remind-row-monthly")).toContainText("Y cada mes");
     await expect(card.getByTestId("remind-row-monthly")).toContainText("A Ana no le enviamos nada.");
     await expect(card.getByTestId("remind-row-someone")).toContainText("Otra persona");
+  });
+
+  test("a gift with no countdown tells no day: nothing is filled in or marked as from the gift", async ({ page }) => {
+    const reminders = await answer(page, "**/api/reminders", { status: 201, body: {} });
+    // The free Letter: its first occasion is the anniversary, and today is no one's anniversary by default.
+    await page.goto("/reminders/preview?template=the-letter&name=Ana");
+    const card = page.getByTestId("remind-card");
+    await expect(card.getByTestId("remind-field-anniversary")).toContainText("Pick the day");
+    await expect(card.getByTestId("remind-from-gift")).toHaveCount(0);
+    await expect(card.getByTestId("remind-save-dates")).toBeDisabled();
+    await page.goto("/reminders/preview?template=birthday-cinema&name=Ana");
+    await expect(card.getByTestId("remind-field-birthday")).toContainText("Pick the day");
+    await expect(card.getByTestId("remind-from-gift")).toHaveCount(0);
+    await expect(card.getByTestId("remind-save-dates")).toBeDisabled();
+    expect(reminders).toHaveLength(0);
+  });
+
+  test("a gift made for its own day says next year's first e-mail with its year", async ({ page }) => {
+    await answer(page, "**/api/reminders", { status: 201, body: {} });
+    const now = new Date();
+    const y = now.getUTCFullYear();
+    const m = now.getUTCMonth();
+    const d = now.getUTCDate();
+    test.skip(m === 1 && d === 29, "29 February comes round in four years");
+    const today = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    // The gift counts down to today: this year's e-mails are done, the first is next year's, 7 days before.
+    const at = new Date(Date.UTC(y + 1, m, d) - 7 * 86_400_000);
+    const words = `${at.getUTCDate()} ${new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "UTC" }).format(at)}${at.getUTCFullYear() !== y ? ` ${at.getUTCFullYear()}` : ""}`;
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${today}`);
+    const card = page.getByTestId("remind-card");
+    await card.getByTestId("remind-save-dates").click();
+    await expect(card.getByTestId("remind-saved")).toContainText(`Saved. Your first email comes on ${words}.`);
+  });
+
+  test("a day the account had, with an e-mail gone for it already, says its next e-mail, not its first", async ({ page }) => {
+    await answer(page, "**/api/reminders", { status: 201, body: {} });
+    const day = (n: number) => new Date(Date.now() + n * 86_400_000);
+    const birthday = day(10);
+    await page.route("**/api/reminders", (route) =>
+      route.request().method() === "GET"
+        ? route.fulfill({
+            json: { reminders: [{ id: "r1", recipientName: "Ana", occasion: "birthday", month: birthday.getUTCMonth() + 1, day: birthday.getUTCDate(), locale: "en", templateSlug: null, sentYear: birthday.getUTCFullYear(), sentStage: 1 }] },
+          })
+        : route.fallback(),
+    );
+    await page.goto(`/reminders/preview?template=birthday-cinema&name=Ana&countdown=${GIFT_DAY}`);
+    const card = page.getByTestId("remind-card");
+    await expect(card.getByTestId("remind-field-birthday").getByText("Added")).toBeVisible();
+    const anniversary = day(200);
+    await pickDay(page, card.getByRole("button", { name: "Your anniversary", exact: true }), new Intl.DateTimeFormat("en-GB", { month: "long" }).format(anniversary), anniversary.getDate());
+    await card.getByTestId("remind-save-dates").click();
+    await expect(card.getByTestId("remind-saved")).toContainText("Saved. Your next email comes on");
+  });
+
+  test("in Spanish on a phone, 'de este regalo' never cuts the date short", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/es/reminders/preview?template=birthday-cinema&name=Ana&countdown=2027-09-24");
+    const field = page.getByTestId("remind-field-birthday");
+    await expect(field).toContainText("de este regalo");
+    const date = field.getByRole("button").getByText("24 de septiembre", { exact: true });
+    await expect(date).toBeVisible();
+    expect(await date.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
   });
 });
 

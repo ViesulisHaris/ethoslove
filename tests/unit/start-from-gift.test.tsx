@@ -131,17 +131,20 @@ describe("the card on top of a started gift", () => {
     const html = draw({ kind: "started", from: { name: "Mia", photos: 6, mode: "photos" } });
     expect(html).toContain("+2");
     expect(html).toContain("Started for you.");
-    expect(html).toContain("Both names and the 6 photos from your last gift for Mia are in. Change anything, or swap the photos out.");
+    expect(html).toContain("Both names and the 6 photos from your last gift for Mia are in. Change anything you like.");
     expect(html).toContain("Change the photos");
     expect(html).toContain("Start empty");
-    expect(draw({ kind: "started", from: { name: "Mia", photos: 6, mode: "photos" } }, "es")).toContain("Los dos nombres y las 6 fotos de tu último regalo para Mia ya están puestos.");
+    // The line doesn't say again what the button under it says.
+    expect(draw({ kind: "started", from: { name: "Mia", photos: 6, mode: "photos" } }, "es")).toContain("Los dos nombres y las 6 fotos de tu último regalo para Mia ya están puestos. Cambia lo que quieras. Cambiar las fotos");
   });
 
-  it("says both names are in when no photos came", () => {
+  it("says both names are in when no photos came, and offers no photos to change", () => {
     editor.state = { data: { recipientName: "Mia", senderName: "Leo", photos: [] }, status: "draft" };
     const html = draw({ kind: "started", from: { name: "Mia", photos: 0, mode: "names" } });
     expect(html).toContain("Both names are in. Add your photos and your words.");
     expect(html).not.toContain("+");
+    expect(html).not.toContain("Change the photos");
+    expect(html).toContain("Start empty");
   });
 
   it("only offers, in one line, over a draft that already had something in it", () => {

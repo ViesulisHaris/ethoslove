@@ -10,6 +10,7 @@ import {
   dueDates,
   dueStages,
   firstEmailDate,
+  formatEmailDate,
   formatMonthDay,
   initialLastSentYear,
   isLeapYear,
@@ -102,6 +103,15 @@ describe("reminder dates", () => {
     expect(formatMonthDay({ month: 10, day: 3 }, "en")).toBe("3 October");
     expect(formatMonthDay({ month: 10, day: 3 }, "es")).toBe("3 de octubre");
     expect(formatMonthDay({ month: 2, day: 29 }, "en")).toBe("29 February");
+  });
+
+  it("says the year of an e-mail only when it isn't this one, so next year's never reads as a day gone", () => {
+    const now = utc("2026-11-24");
+    expect(formatEmailDate(utc("2026-11-28"), now, "en")).toBe("28 November");
+    expect(formatEmailDate(utc("2027-11-17"), now, "en")).toBe("17 November 2027");
+    expect(formatEmailDate(utc("2027-11-17"), now, "es")).toBe("17 de noviembre de 2027");
+    // Next week's, across the new year, says so too.
+    expect(formatEmailDate(utc("2027-01-02"), utc("2026-12-30"), "en")).toBe("2 January 2027");
   });
 });
 

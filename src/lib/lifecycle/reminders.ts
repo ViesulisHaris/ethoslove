@@ -239,6 +239,17 @@ export function formatMonthDay({ month, day }: MonthDay, locale: "en" | "es"): s
   return new Intl.DateTimeFormat(locale === "es" ? "es" : "en-GB", { day: "numeric", month: "long", timeZone: "UTC" }).format(date);
 }
 
+/**
+ * When an e-mail comes ("17 November", "17 November 2027"): the year only when it isn't this one, so a
+ * day done for this year never reads as a day just gone or as today.
+ */
+export function formatEmailDate(at: Date, now: Date, locale: "en" | "es"): string {
+  const day = formatMonthDay({ month: at.getUTCMonth() + 1, day: at.getUTCDate() }, locale);
+  const year = at.getUTCFullYear();
+  if (year === now.getUTCFullYear()) return day;
+  return locale === "es" ? `${day} de ${year}` : `${day} ${year}`;
+}
+
 /** A reminder as the API returns it. */
 export type Reminder = {
   id: string;

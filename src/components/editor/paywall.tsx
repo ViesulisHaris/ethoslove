@@ -316,9 +316,10 @@ export function Paywall({
           })}
         </div>
 
-        {pick3Offered(manifest.tier, currency, all) ? (
+        {pick3Offered(manifest.tier, currency, all) && !pairOn ? (
           // Three templates is the better deal for anyone with more than one occasion coming; the
-          // choosing happens on the pricing page, with this one already picked.
+          // choosing happens on the pricing page, with this one already picked. Not beside "Or this
+          // one and your next two gifts": two offers of three at the same price read as one muddle.
           <Link
             href={pick3Href(slug, returnTo)}
             className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline"

@@ -233,13 +233,16 @@ test.describe("the paywall in the publish sheet", () => {
     );
     const panel = await openSheet(page, "/create/bouquet?ref=email-reminder-1");
     const three = panel.getByTestId("pay-with-pair");
-    await expect(three).toHaveText("Or this one and your next two: €14.99");
+    await expect(three).toHaveText("Or this one and your next two gifts: €14.99");
+    // One offer of three at a time: "pick any three" waits while this one shows.
+    await expect(panel.getByTestId("pick3-link")).toHaveCount(0);
     // The panel's one price is unchanged.
     await expect(panel.getByTestId("pay-single")).toHaveText("Pay €9.99 and send");
     // Not beside the bump or Everything: it is this gift's own price with two more.
     await panel.getByTestId("bump").getByRole("checkbox").check();
     await expect(three).toHaveCount(0);
     await panel.getByTestId("bump").getByRole("checkbox").uncheck();
+    await expect(panel.getByTestId("pick3-link")).toHaveCount(0);
     await three.click();
     await expect.poll(() => asked.length).toBe(1);
     expect(asked[0]).toMatchObject({ product: "single", templateSlugs: ["bouquet"], addPair: true, currency: "eur", locale: "en", ref: "email-reminder-1" });

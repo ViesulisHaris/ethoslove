@@ -14,7 +14,7 @@ export type StartedState = { kind: "started"; from: StartedFrom } | { kind: "off
 
 /**
  * Above the form of a gift a reminder e-mail started (api/reminders/open, lib/editor/start-from-gift):
- * the photos that came in, what is already in, "Change the photos" and "Start empty". Over a draft that
+ * the photos that came in, what is already in, "Change the photos" (when some came) and "Start empty". Over a draft that
  * already had something in it, nothing is changed: one line offers the names and photos instead.
  * It goes once the reader changes the names or the photos themselves, or dismisses it, and never
  * shows on a gift that is already out.
@@ -92,13 +92,16 @@ export function StartedForYou({ state, onChangePhotos, onEmpty, onUse, onDismiss
         {state.from.mode === "photos" && photos.length > 0 ? t("withPhotos", { count: photos.length, name: state.from.name }) : t("namesOnly")}
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
-        <button
-          type="button"
-          onClick={onChangePhotos}
-          className="inline-flex h-11 items-center rounded-full border border-ink/15 px-5 text-sm font-semibold transition-colors hover:bg-ink/5 focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none active:scale-[0.98] motion-reduce:active:scale-100"
-        >
-          {t("change")}
-        </button>
+        {/* Only when photos came in: with none there is nothing to change, and on a free note the photos are a paid step. */}
+        {photos.length > 0 ? (
+          <button
+            type="button"
+            onClick={onChangePhotos}
+            className="inline-flex h-11 items-center rounded-full border border-ink/15 px-5 text-sm font-semibold transition-colors hover:bg-ink/5 focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none active:scale-[0.98] motion-reduce:active:scale-100"
+          >
+            {t("change")}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={() => void run("empty", onEmpty)}
