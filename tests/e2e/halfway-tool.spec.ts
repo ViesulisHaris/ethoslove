@@ -244,7 +244,7 @@ test.describe("halfway between two cities", () => {
       await expect(page.getByRole("combobox", { name: "Where they are" })).toHaveValue("");
     }
     await page.goto(TOOL);
-    await expect(page.locator("[data-halfway-result]")).toContainText("Pick both towns and we'll do the math.");
+    await expect(page.locator("[data-halfway-result]")).toContainText("Pick both towns and we’ll do the math.");
     noErrors();
   });
 
