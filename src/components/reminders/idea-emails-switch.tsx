@@ -12,7 +12,7 @@ import { track } from "@/lib/analytics/track";
  * anyone new. Drawn as one of the reminders list's rows.
  */
 export function IdeaEmailsSwitch({ initialOn }: { initialOn: boolean }) {
-  const t = useTranslations("lifecycle");
+  const t = useTranslations("lifecycle.idea");
   const [on, setOn] = useState(initialOn);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -42,19 +42,19 @@ export function IdeaEmailsSwitch({ initialOn }: { initialOn: boolean }) {
     <>
       <section className="mt-6 flex items-center gap-3 rounded-2xl border border-border bg-card py-2 pr-2 pl-5" data-testid="idea-emails">
         <div className="min-w-0 flex-1 py-1">
-          <p className="font-medium">{t("idea.pageTitle")}</p>
+          <p className="font-medium">{t("pageTitle")}</p>
           <p className="text-sm text-muted-foreground" aria-live="polite">
-            {on ? t("idea.pageOn") : t("idea.pageOff")}
+            {on ? t("pageOn") : t("pageOff")}
           </p>
         </div>
         <Button variant="ghost" className="h-11 shrink-0 rounded-full px-4" disabled={busy} aria-pressed={on} onClick={() => void toggle()}>
           {busy ? <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden /> : null}
-          <span>{on ? t("idea.turnOff") : t("idea.turnOn")}</span>
+          <span>{on ? t("turnOff") : t("turnOn")}</span>
         </Button>
       </section>
       {failed ? (
         <p className="mt-3 text-sm text-destructive" role="alert">
-          {t("idea.failed")}
+          {t("failed")}
         </p>
       ) : null}
     </>
