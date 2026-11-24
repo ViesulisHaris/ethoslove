@@ -1,4 +1,5 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
+import { OCCASIONS } from "../../src/config/occasions";
 import { measure, settle } from "./page-measure";
 
 /**
@@ -679,19 +680,45 @@ test("the hero says which gift its button makes, each page opens on a gift of it
   expect(listed).toEqual(titles);
 });
 
-// The rule is 300 words a page (DESIGN-LESS-TEXT.md). Under the gallery an occasion page keeps it; with the gallery
-// above it does not (anniversary 1,086, just-because 1,070, birthday 817 at 1440×900, the review of 22 Nov 2026),
-// and the test above measures only what this build laid out. The gallery is the live one, shared with /templates
-// and redrawn to the owner's own mock-up on another branch (growth/home), so whether an occasion page keeps it,
-// and in what shape, is the owner's to decide. Until then this stands here, not passing, so the gap is not hidden.
-test.fixme("an occasion page, its gallery included, is within 300 words", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  for (const path of ["/occasions/birthday", "/occasions/anniversary", "/occasions/christmas", "/occasions/mothers-day"]) {
-    await page.goto(path);
-    await settle(page);
-    expect((await measure(page, "main")).count, path).toBeLessThanOrEqual(300);
+// The rule is 300 words a page (DESIGN-LESS-TEXT.md), the gallery included. With every card on show an occasion page
+// had 520 to 745 (the review of 22 Nov 2026; anniversary 1,086 before the cards lost their paragraphs). Since the
+// gifts2 area (BRIEF-gifts2.md, 3) the gallery shows four gifts and keeps the rest in one closed row under them, the
+// occasion's own paragraph opens the guide's closed "More about" row, and the questions past the fourth are one more
+// closed row. Every card, sentence and answer is still in the HTML (seo-nothing-lost.spec.ts holds that).
+for (const prefix of ["", "/es"]) {
+  for (const occasion of OCCASIONS) {
+    test(`${prefix}/occasions/${occasion}: within 300 words with its gallery, four gifts on show and the rest one tap away`, async ({ page }) => {
+      test.slow();
+      for (const [width, height] of [[1440, 900], [375, 812]] as const) {
+        await page.setViewportSize({ width, height });
+        await page.goto(`${prefix}/occasions/${occasion}`);
+        await settle(page);
+        const m = await measure(page, "main");
+        expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
+        expect(m.count, `${width}: words on show`).toBeLessThanOrEqual(300);
+        // Art under words is read where this build laid the page out, under the gallery. The gallery's head has its own
+        // lily behind the All / Free / Premium pills on a desk, older than this work and shared with /templates.
+        expect((await measure(page)).overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
+        // The occasion's paragraph is in the page, inside the closed row, not on show.
+        await expect(page.locator("[data-occasion-intro]")).toBeAttached();
+        await expect(page.locator("[data-occasion-intro]")).toBeHidden();
+        const rest = page.locator("[data-gallery-rest]");
+        if ((await rest.count()) > 0) {
+          await expect(page.locator("#gallery article:visible, [data-shelf] article:visible").first()).toBeVisible();
+          expect(await page.locator("[data-shelf] article:visible").count(), `${width}: gifts on show`).toBe(4);
+          await expect(rest).not.toHaveAttribute("open", "");
+          const pill = rest.locator("> summary");
+          expect((await pill.boundingBox())!.height, `${width}: the pill`).toBeGreaterThanOrEqual(44);
+          const total = await page.locator("[data-shelf] article").count();
+          await pill.click();
+          await expect(rest).toHaveAttribute("open", "");
+          expect(await page.locator("[data-shelf] article:visible").count(), `${width}: every gift once opened`).toBe(total);
+          await expect(pill).toBeInViewport();
+        }
+      }
+    });
   }
-});
+}
 
 test("the pages are whole, and the same height, when no picture arrives", async ({ page }) => {
   for (const path of ["/digital-cards", "/gifts/photo-album"]) {

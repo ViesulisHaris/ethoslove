@@ -138,24 +138,26 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   ...(ADVENT_CALENDAR_LIVE ? { "/templates/advent-calendar": GUIDES_LIVE } : {}),
   // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
   // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
-  "/occasions/*": GALLERY_LIVE,
+  // Since the growth build's gifts2 area (GIFTS2_DAY) every occasion shows four gifts and folds the rest, the
+  // intro and the questions past the fourth, so every one of them changed that day.
+  "/occasions/*": GIFTS2_DAY,
   // Eight occasions gained their idea lists (content/occasion-ideas.ts), and birthday and
   // anniversary a row of links to the gift pages by kind.
-  "/occasions/birthday": GROWTH_PAGES_DAY,
-  "/occasions/anniversary": GROWTH_PAGES_DAY,
+  "/occasions/birthday": GIFTS2_DAY,
+  "/occasions/anniversary": GIFTS2_DAY,
   // Their twelve ideas are cards since 22 Nov, each a title and one line where there was a paragraph.
-  "/occasions/valentines": GROWTH_PAGES_DAY,
-  "/occasions/christmas": GROWTH_PAGES_DAY,
-  "/occasions/long-distance": GROWTH_PAGES_DAY,
-  "/occasions/thanksgiving": GROWTH_PAGES_DAY,
-  "/occasions/wedding": GROWTH_PAGES_DAY,
-  "/occasions/graduation": GROWTH_PAGES_DAY,
-  "/occasions/mothers-day": GROWTH_PAGES_DAY,
-  "/occasions/fathers-day": GROWTH_PAGES_DAY,
-  "/occasions/apology": GROWTH_PAGES_DAY,
-  "/occasions/just-because": GROWTH_PAGES_DAY,
+  "/occasions/valentines": GIFTS2_DAY,
+  "/occasions/christmas": GIFTS2_DAY,
+  "/occasions/long-distance": GIFTS2_DAY,
+  "/occasions/thanksgiving": GIFTS2_DAY,
+  "/occasions/wedding": GIFTS2_DAY,
+  "/occasions/graduation": GIFTS2_DAY,
+  "/occasions/mothers-day": GIFTS2_DAY,
+  "/occasions/fathers-day": GIFTS2_DAY,
+  "/occasions/apology": GIFTS2_DAY,
+  "/occasions/just-because": GIFTS2_DAY,
   // Its Spanish guide names the gift by its Spanish name since 23 Nov ("Truco o trato").
-  "/occasions/halloween": GROWTH_PAGES_DAY,
+  "/occasions/halloween": GIFTS2_DAY,
   "/dates": DATES_LIVE,
   "/dates/*": DATES_LIVE,
   "/dates/ideas/*": DATES_LIVE,

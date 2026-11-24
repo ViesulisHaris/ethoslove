@@ -68,8 +68,9 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
        * The gallery's own head (components/templates/gallery-head.tsx), so the row of occasions stands
        * at the same height here as on /templates and on every other occasion's page. Beside the italic
        * line, one quiet link to the ideas: they are what the page's search result promises ("12
-       * ideas"), and they lie under the whole gallery (the test of 23 Nov 2026). The occasion's own
-       * paragraph, which stood here in four lines, opens the part under the cards.
+       * ideas"), and they lie under the whole gallery (the test of 23 Nov 2026). The gallery shows four
+       * gifts and keeps the rest one tap away, and the occasion's own paragraph is the first thing in
+       * the guide's closed "More about" row, so the page reads in 300 words (BRIEF-gifts2.md, 3).
        */}
       <GalleryHead
         eyebrow={t("occasions.title")}
@@ -88,17 +89,12 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
           ) : undefined
         }
       >
-        <TemplateGallery manifests={forCards(templates)} occasion={occasion} alsoFree={forCards(alsoFree)} today={new Date().toISOString().slice(0, 10)} />
+        <TemplateGallery manifests={forCards(templates)} occasion={occasion} alsoFree={forCards(alsoFree)} today={new Date().toISOString().slice(0, 10)} fold={4} />
       </GalleryHead>
-      <div className="container-x pb-4">
-        <p data-occasion-intro className="max-w-2xl border-t border-line pt-10 text-lg leading-relaxed text-ink-soft">
-          {t(`seo.occasion.${occasion}.intro`)}
-        </p>
-      </div>
       {/* Below the gallery the page is laid out as a gift's own page is: the ideas as picture cards, then the guide and the questions as closed rows. */}
       <SitePage name={`occasion-${occasion}`} under={false}>
         <OccasionIdeas occasion={occasion} locale={locale as Locale} />
-        <OccasionGuide occasion={occasion} locale={locale as Locale} />
+        <OccasionGuide occasion={occasion} locale={locale as Locale} intro={t(`seo.occasion.${occasion}.intro`)} />
       </SitePage>
     </>
   );
