@@ -1,6 +1,9 @@
 import { devices, expect, test, webkit, type Page, type Request } from "@playwright/test";
 import { needGroupPreviews } from "./server-state";
 
+/** The server these specs run against has group cards on (GROUP_GIFTS_ENABLED, as the runner was given it). */
+const GROUP_ON = process.env.GROUP_GIFTS_ENABLED === "true";
+
 /**
  * Group cards. Nobody signs in and there is no database: the page at a card's link and the sender's
  * panel are drawn from their development-only previews (on a production build these skip), and
@@ -79,6 +82,7 @@ async function write(page: Page, name = "Gran", note = "Forty is nothing. Ring m
 }
 
 test.describe("with the switch off, as it is live", () => {
+  test.skip(GROUP_ON, "written for a server with group cards off, as the live site is: run it on one without GROUP_GIFTS_ENABLED");
   test("a group card's link is not there, and neither is any group route", async ({ request }) => {
     expect((await request.get(`/c/${TOKEN}`)).status()).toBe(404);
     expect((await request.get(`/es/c/${TOKEN}`)).status()).toBe(404);
@@ -791,7 +795,7 @@ test.describe("the sender's group card panel", () => {
     await page.getByTestId("group-edit").first().click();
     const form = page.getByTestId("group-note-form");
     await form.getByLabel("Note").fill("Photos from the day are on evil.com");
-    await expect(form.getByTestId("group-note-links")).toHaveText("A note can't carry a web address. Take it out to save it.");
+    await expect(form.getByTestId("group-note-links")).toHaveText("A note can’t carry a web address. Take it out to save it.");
     await expect(form.getByRole("button", { name: "Save" })).toBeDisabled();
     // A full stop with no space after it is not an address.
     await form.getByLabel("Note").fill("See you on the 12th.Me and Sam will bring the cake");
@@ -993,7 +997,7 @@ test.describe("the panel talking to the routes", () => {
     await answer(page, `**/api/group/${GROUP_ID}/entries/${ENTRY}`, { status: 502, body: { error: "photo_failed" } });
     await page.goto(`${PANEL}?state=active&live=1`);
     await page.getByTestId("group-add").click();
-    await expect(page.getByTestId("group-error")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(page.getByTestId("group-error")).toHaveText("That didn’t go through. Try again in a moment.");
     await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (1)");
     await expect(page.getByTestId("group-add")).toBeEnabled();
   });
@@ -1021,28 +1025,28 @@ test.describe("the panel talking to the routes", () => {
     // "Add to the card": the words are in the waiting note's own card, in view, with nothing scrolled.
     const waiting = page.getByTestId("group-waiting-entry");
     await waiting.getByTestId("group-add").click();
-    await expect(waiting.getByRole("alert")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(waiting.getByRole("alert")).toHaveText("That didn’t go through. Try again in a moment.");
     await expect(waiting.getByRole("alert")).toBeInViewport({ ratio: 1 });
     await expect(page.getByTestId("group-error")).toHaveCount(1);
 
     // "Undo" on a removed note: under its own line.
     const decided = page.getByTestId("group-decided-entry");
     await decided.getByTestId("group-undo").click();
-    await expect(decided.getByRole("alert")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(decided.getByRole("alert")).toHaveText("That didn’t go through. Try again in a moment.");
     await expect(decided.getByRole("alert")).toBeInViewport({ ratio: 1 });
     await expect(waiting.getByRole("alert")).toHaveCount(0);
 
     // Taking the seventh note out of the card: said in that note, which is where the thumb is.
     const seventh = page.getByTestId("group-item").nth(6);
     await seventh.getByTestId("group-remove-item").click();
-    await expect(seventh.getByRole("alert")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(seventh.getByRole("alert")).toHaveText("That didn’t go through. Try again in a moment.");
     await expect(seventh.getByRole("alert")).toBeInViewport({ ratio: 1 });
     await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (9 of 25)");
 
     // Closing the link: beside the link's own controls, at the foot.
     await page.getByTestId("group-close").click();
     const controls = page.getByTestId("group-link-controls");
-    await expect(controls.getByRole("alert")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(controls.getByRole("alert")).toHaveText("That didn’t go through. Try again in a moment.");
     await expect(controls.getByRole("alert")).toBeInViewport({ ratio: 1 });
     await expect(page.getByTestId("group-error")).toHaveCount(1);
   });
@@ -1177,6 +1181,7 @@ test.describe("the reference template and the editor", () => {
   });
 
   test("with the switch as it is live (off), the editor has no group card section at all", async ({ page }) => {
+    test.skip(GROUP_ON, "written for a server with group cards off, as the live site is: run it on one without GROUP_GIFTS_ENABLED");
     await page.goto("/create/group-reference");
     await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
     await expect(page.getByTestId("group-section")).toHaveCount(0);
@@ -1184,6 +1189,7 @@ test.describe("the reference template and the editor", () => {
   });
 
   test("off, the editor of a template made for group cards is sent none of the product's words and fetches no panel; on, it has both", async ({ page, request }) => {
+    test.skip(GROUP_ON, "written for a server with group cards off, as the live site is: run it on one without GROUP_GIFTS_ENABLED");
     // The reference template is itself called "Group card (reference)": its own name is not the product's words.
     const ownName = /Group card \(reference\)|Tarjeta en grupo \(referencia\)/g;
     for (const address of ["/create/group-reference?group=off", "/es/create/group-reference?group=off", "/create/group-reference"]) {
@@ -1549,6 +1555,7 @@ test.describe("the page at a link, used the way people use it", () => {
   });
 
   test("an address that opens no card: with group cards on it says to ask for a new link; off, it is the site's own 'not found'", async ({ page }) => {
+    test.skip(GROUP_ON, "written for a server with group cards off, as the live site is: run it on one without GROUP_GIFTS_ENABLED");
     // On: the one line, in the contribute page's dress, naming nobody.
     await page.goto(`${PREVIEW}?state=gone`);
     await expect(page.getByRole("heading", { name: "This link no longer works." })).toBeVisible();
