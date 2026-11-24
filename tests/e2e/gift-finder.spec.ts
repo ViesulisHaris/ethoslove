@@ -81,7 +81,7 @@ test.describe("the gift finder", () => {
 
     // The two answers are over the picks, each a button that asks its question again.
     await expect(page.getByRole("button", { name: "For my mom Change: Who is it for?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Birthday Change: What's the occasion?" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Birthday Change: What’s the occasion?" })).toBeVisible();
   });
 
   test("every answer is a card with a picture that loaded and its words, and no two cards of a question show the same gift", async ({ page }) => {
@@ -211,7 +211,7 @@ test.describe("the gift finder", () => {
     expect(await names(page)).toEqual(before);
 
     // The occasion the same way. One that waits behind "More occasions" is shown, and marked, when it is the answer.
-    await page.getByRole("button", { name: "Anniversary Change: What's the occasion?" }).click();
+    await page.getByRole("button", { name: "Anniversary Change: What’s the occasion?" }).click();
     await expect(question(page, "What’s the occasion?")).toBeFocused();
     await expect(page.locator('[data-answer][aria-current="true"]')).toHaveText("Anniversary");
     await page.goto("/gifts/finder?for=girlfriend&occasion=wedding&ask=occasion");
@@ -290,7 +290,7 @@ test.describe("the gift finder", () => {
     expect(search(page)).toBe("?for=any&occasion=any");
     expect(await names(page)).toEqual(["The Letter", "Bouquet", "Constellations"]);
     await expect(page.getByRole("button", { name: "For anyone Change: Who is it for?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Any occasion Change: What's the occasion?" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Any occasion Change: What’s the occasion?" })).toBeVisible();
   });
 
   test("the second question shows that person's six occasions, the season's first, and the rest open in place", async ({ page }) => {

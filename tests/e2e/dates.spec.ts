@@ -571,7 +571,7 @@ test.describe("games on one phone", () => {
       } else {
         turn = 1 - turn;
         if (!checkedMiss) {
-          await expect(page.getByText(`Not a pair. ${names[turn]}'s turn`)).toBeVisible();
+          await expect(page.getByText(`Not a pair. ${names[turn]}’s turn`)).toBeVisible();
           checkedMiss = true;
         }
       }
