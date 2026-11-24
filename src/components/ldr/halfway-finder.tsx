@@ -14,6 +14,8 @@ import { WaysOn } from "./ways-on";
 /** The town boxes' field and its list on the card's raised paper, as on the long-distance card. */
 const TOWN_BOX = "[&>div:first-child]:bg-page-ground [&>ul]:bg-page-raised";
 const HEADING = "mt-2 font-display text-[2.5rem] leading-none text-page-ink";
+/** A distance or a few words in place of a name: a step smaller on a phone, so the longest (Spanish "Ningún pueblo cerca") keeps to two lines. */
+const HEADING_WORDS = "mt-2 font-display text-[2rem] leading-none text-page-ink sm:text-[2.5rem]";
 const SUB = "mt-2 text-[0.9375rem] leading-relaxed text-page-body";
 const QUIET =
   "inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink";
@@ -148,7 +150,7 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
     <>
       {label}
       {/* Never "open water" unless the map found nothing there: land with no town near is said as such. */}
-      <p data-halfway-city className={HEADING}>
+      <p data-halfway-city className={HEADING_WORDS}>
         {answer.kind === "sea" ? t("sea") : answer.kind === "none" ? t("noTown") : each}
       </p>
       <p className={SUB} aria-busy={answer.kind === "pending" || undefined}>
@@ -189,7 +191,8 @@ export function HalfwayFinder({ ways, initial, broken, miles }: { ways: WaysData
             <WhereBox value={b} locale={locale} labels={{ ...labels, label: t("them") }} onPick={pick(setB)} className={TOWN_BOX} />
           </div>
         </div>
-        <div data-halfway-result data-answer={answer?.kind} aria-live="polite" className="mt-6 min-h-[14.5rem] sm:min-h-[11.5rem]">
+        {/* As tall as the tallest answer (a map town with its region and credit; in Spanish at 320, the failed and open-country ones), so nothing below moves when it arrives. */}
+        <div data-halfway-result data-answer={answer?.kind} aria-live="polite" className="mt-6 min-h-[17.25rem] sm:min-h-[14.25rem]">
           {answerView}
           {answer && answer.kind !== "same" ? (
             <div className="mt-4 flex flex-wrap items-center gap-3">

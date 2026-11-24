@@ -2402,7 +2402,7 @@
       "datesThere": "Ideas para una cita en {city}",
       "sea": "Mar abierto",
       "seaSub": "A medio camino entre los dos solo hay mar. A uno le toca coger un avión.",
-      "noTown": "Ninguna ciudad cerca del punto medio",
+      "noTown": "Ningún pueblo cerca",
       "noTownSub": "El punto medio cae en pleno campo, sin ninguna ciudad cerca.",
       "finding": "Buscando la ciudad más cercana al punto medio…",
       "failed": "Ahora mismo no podemos decir qué ciudad queda más cerca del punto medio.",
