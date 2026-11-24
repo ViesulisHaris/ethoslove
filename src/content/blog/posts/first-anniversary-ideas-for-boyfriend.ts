@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "first-anniversary-ideas-for-boyfriend",
   published: "2026-11-02",
+  updated: "2026-11-24",
   occasion: "anniversary",
   templates: ["our-timeline", "scrapbook", "the-letter"],
   content: {
@@ -99,7 +100,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Put the year in one place" },
         {
           type: "p",
-          text: "If you'd rather send the year than print it, a [digital gift](/gifts) opens on his phone from a link, with your photos and your song. These three are built for a year of photos, and the [anniversary](/occasions/anniversary) page has more for later years. If none of these suits him, the page of [digital gifts for your boyfriend](/gifts/for-boyfriend) has others.",
+          text: "If you'd rather send the year than print it, a [digital gift](/gifts) opens on his phone from a link, with your photos and your song. These three are built for a year of photos, and the [anniversary](/occasions/anniversary) page has more for later years. If none of these suits him, the page of [digital gifts for your boyfriend](/gifts/for-boyfriend) has others. For gifts sized to twelve months exactly, paper included, see [12 month anniversary gifts](/gifts/12-month-anniversary).",
         },
         {
           type: "template",
@@ -229,7 +230,7 @@ export const post: BlogPost = {
         { type: "h2", text: "El año entero en un solo sitio" },
         {
           type: "p",
-          text: "Si prefieres enviarle el año en vez de imprimirlo, un [regalo digital](/gifts) se abre en su móvil desde un enlace, con vuestras fotos y vuestra canción. Estos tres están pensados para un año de fotos, y la página de [aniversario](/occasions/anniversary) tiene más para los años siguientes. Si ninguno le pega, en la página de [regalos digitales para tu novio](/gifts/for-boyfriend) hay otros.",
+          text: "Si prefieres enviarle el año en vez de imprimirlo, un [regalo digital](/gifts) se abre en su móvil desde un enlace, con vuestras fotos y vuestra canción. Estos tres están pensados para un año de fotos, y la página de [aniversario](/occasions/anniversary) tiene más para los años siguientes. Si ninguno le pega, en la página de [regalos digitales para tu novio](/gifts/for-boyfriend) hay otros. Para regalos a la medida de doce meses, papel incluido, mira los [regalos para 12 meses de novios](/gifts/12-month-anniversary).",
         },
         {
           type: "template",

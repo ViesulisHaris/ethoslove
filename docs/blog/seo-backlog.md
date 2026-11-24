@@ -134,6 +134,12 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,
   how-to-write-a-love-letter, links it already.
 - [ ] **A free virtual hug page** (8,100, UK 1,300): people searching it want something to send.
+- [ ] **6 month anniversary: the gift search has its own page now (owner decides).** Since 17 Nov the
+  post 6-month-anniversary-ideas has "gift" in its title ("6 month anniversary gift and date ideas
+  that don't overdo it"), and the growth build added /gifts/6-month-anniversary ("6 month anniversary
+  gifts"), one of 24 month pages. One search, one page (TOPIC-GROUPS.md rule 5): once the page is
+  indexed, the post's title can go back to the day ("6 month anniversary ideas…"). The two link
+  each other already. Not done: the owner decides.
 - [x] (2026-11-13) **Blog link check (`tests/unit/blog-posts.test.ts`, `STATIC_PATHS`)**: add
   `/tools/how-long-have-we-been-together`, so posts can link the calculator. The SEO review of
   monthiversary-ideas (13 Nov) wanted it beside the 29th–31st rule, since the tool shows the next

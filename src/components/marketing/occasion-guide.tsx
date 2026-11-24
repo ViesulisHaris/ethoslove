@@ -3,6 +3,7 @@ import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { GIFT_GUIDES, GUIDES_FOR_OCCASION } from "@/content/gift-guides";
+import { MONTHS, MONTH_GUIDES, monthSlug } from "@/content/month-anniversaries";
 import { occasionCardLine, occasionSample, sampleHand } from "@/content/idea-cards";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { Link } from "@/i18n/navigation";
@@ -83,6 +84,20 @@ export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; 
       <MoreRow summary={tKinds("moreAbout")}>
         <p>{guide.lead}</p>
       </MoreRow>
+      {/* The anniversary gifts by month, 1 to 24 (content/month-anniversaries.ts): closed, so the page still reads in its 300 words. */}
+      {occasion === "anniversary" ? (
+        <MoreRow summary={tKinds("month.byMonth")}>
+          <ul className="flex flex-wrap gap-x-5">
+            {MONTHS.map((n) => (
+              <li key={n}>
+                <Link href={`/gifts/${monthSlug(n)}`} className={QUIET_LINK}>
+                  {MONTH_GUIDES[n][locale].label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </MoreRow>
+      ) : null}
       {kinds.length > 0 ? (
         <nav aria-label={tKinds("byKind")}>
           <ul className="flex flex-wrap gap-x-7 pt-3">

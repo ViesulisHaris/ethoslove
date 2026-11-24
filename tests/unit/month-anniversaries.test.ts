@@ -259,6 +259,11 @@ describe("anniversary gifts by month", () => {
       }
     }
     for (const n of MONTHS) expect(getPost(monthPost(n)), String(n)).not.toBeNull();
+    // And the posts link back, in each language they have.
+    for (const [slug, month] of [["monthiversary-ideas", 1], ["6-month-anniversary-ideas", 6], ["first-anniversary-ideas-for-boyfriend", 12]] as const) {
+      const post = getPost(slug)!;
+      for (const locale of postLocales(post)) expect(strings(post.content[locale]).join(" "), `${slug} (${locale})`).toContain(`(/gifts/${monthSlug(month)})`);
+    }
   });
 
   it("are in the sitemap in both languages with a date, sit beside the right months, and no two bands look alike", () => {
