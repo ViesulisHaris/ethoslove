@@ -79,12 +79,13 @@ export async function getGiftDetail(userId: string, giftId: string) {
 }
 
 /**
- * The holiday extra this gift came with (lib/lifecycle/holiday-extras.ts), or null: the stamp its first
- * publish left, on a gift that is out, while the build gives extras, and while the owner still holds the
- * unlock it was paid with (a refunded gift keeps its stamp but is offered nothing). Asked only of a gift
- * that carries the stamp, so the dashboard's other gifts cost nothing.
+ * The holiday extra this gift came with (lib/lifecycle/holiday-extras.ts), or null: the stamp a publish
+ * left (or, sent while the switch was off, its dates), on a gift that is out, while the build gives
+ * extras, and while the owner still holds the unlock it was paid with (a refunded gift keeps its stamp
+ * but is offered nothing). The unlock is asked only of a gift that has the extra, so the dashboard's
+ * other gifts cost nothing.
  */
-export async function holidayExtraOf(userId: string, gift: Pick<Tables<"gifts">, "template_slug" | "status" | "data">): Promise<HolidayExtra | null> {
+export async function holidayExtraOf(userId: string, gift: Pick<Tables<"gifts">, "template_slug" | "status" | "data" | "created_at" | "published_at">): Promise<HolidayExtra | null> {
   const extra = showsExtra(gift);
   if (!extra) return null;
   const supabase = await getSupabaseServerClient();

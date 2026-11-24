@@ -4,9 +4,10 @@
  *
  * "Made" is the gift's first publish. The gifts table keeps no first-publish time (`published_at` is
  * written again on every publish, `created_at` is when the draft began, which can be long before), so
- * the extra is decided once, at the first publish, and stamped on the gift's data
- * (`data.holidayExtra`, src/app/actions/gift.ts publishGift). The print page, the share screen and
- * the gift's dashboard page all read that stamp; none of them works the rule out again from dates.
+ * the extra is decided at a publish and stamped on the gift's data (`data.holidayExtra`,
+ * src/app/actions/gift.ts publishGift), and kept from then on. The print page, the share screen and
+ * the gift's dashboard page read that stamp; only a gift sent while the switch was off, with no stamp,
+ * is worked out from its two dates (showsExtra).
  *
  * "By 20 December" holds while it is still the 20th somewhere on earth: the 20th ends last at UTC-12,
  * at noon UTC on the 21st, so that instant is the first one *after* the days. The first instant is the
@@ -50,22 +51,52 @@ export function stampedExtra(data: unknown): HolidayExtra | null {
   return typeof value === "string" && IDS.includes(value) ? (value as HolidayExtra) : null;
 }
 
-/**
- * The stamp a publish writes. A gift's first publish (it has never been out: no `published_at`) is
- * decided now; any later publish, an edit sent again or a gift relocked and sent back out, keeps what
- * the row already holds and never decides again, so an old gift re-sent inside the days gets nothing
- * and a gift that has the extra keeps it. What the browser sends is never read.
- */
-export function holidayExtraAtPublish(row: { publishedBefore: boolean; stored: unknown }, now: number, paid: boolean, on: boolean = holidayExtrasOn()): HolidayExtra | undefined {
-  if (row.publishedBefore) return stampedExtra(row.stored) ?? undefined;
-  if (!on) return undefined;
-  return extraFor({ madeAt: now, paid }) ?? undefined;
+/** Whether a draft begun at `createdAt` was begun inside the extra's days (on or after its first day). */
+function begunInside(extra: HolidayExtra, createdAt: string | null | undefined): boolean {
+  const begun = createdAt ? Date.parse(createdAt) : NaN;
+  const days = HOLIDAY_EXTRAS.find((e) => e.id === extra);
+  return Boolean(days) && !Number.isNaN(begun) && begun >= Date.parse(days!.from);
 }
 
-/** Whether a gift shows its extra at `now`: it is out (not a draft), it carries the stamp, the extra is still offered, and the build gives extras. */
-export function showsExtra(gift: { status: string; data: unknown }, now: number = Date.now(), on: boolean = holidayExtrasOn()): HolidayExtra | null {
+/**
+ * The stamp a publish writes. A gift that has the extra keeps it, whatever happens after. A gift's
+ * first publish (it has never been out: no `published_at`) is decided now. A later publish of a gift
+ * with no stamp is decided now too, but only for a gift begun inside the days (`createdAt`): one sent
+ * free on 1 December and paid for and sent again on the 5th gets it, and so does one sent before the
+ * switch went on and sent again after; a gift from before 24 November re-sent inside the days does
+ * not. What the browser sends is never read.
+ */
+export function holidayExtraAtPublish(
+  row: { publishedBefore: boolean; stored: unknown; createdAt?: string | null },
+  now: number,
+  paid: boolean,
+  on: boolean = holidayExtrasOn(),
+): HolidayExtra | undefined {
+  const kept = stampedExtra(row.stored);
+  if (kept) return kept;
+  if (!on) return undefined;
+  const extra = extraFor({ madeAt: now, paid });
+  if (!extra) return undefined;
+  if (row.publishedBefore && !begunInside(extra, row.createdAt)) return undefined;
+  return extra;
+}
+
+/**
+ * Whether a gift shows its extra at `now`: it is out (not a draft), it has the extra, the extra is still
+ * offered, and the build gives extras. It has the extra when it carries the stamp, or, for a gift sent
+ * while the switch was off and not sent since, when it was begun inside the days (`created_at`) and last
+ * sent before they ended (`published_at`): its first send lies between the two, so inside the days.
+ * Whether it was paid is the caller's to ask (lib/gift/dashboard.ts holidayExtraOf).
+ */
+export function showsExtra(
+  gift: { status: string; data: unknown; created_at?: string | null; published_at?: string | null },
+  now: number = Date.now(),
+  on: boolean = holidayExtrasOn(),
+): HolidayExtra | null {
   if (!on || gift.status === "draft") return null;
   const stamp = stampedExtra(gift.data);
-  const extra = HOLIDAY_EXTRAS.find((e) => e.id === stamp);
+  const extra = stamp
+    ? HOLIDAY_EXTRAS.find((e) => e.id === stamp)
+    : HOLIDAY_EXTRAS.find((e) => begunInside(e.id, gift.created_at) && gift.published_at && Date.parse(gift.published_at) < Date.parse(e.until));
   return extra && now < Date.parse(extra.offeredUntil) ? extra.id : null;
 }

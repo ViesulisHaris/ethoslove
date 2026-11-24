@@ -194,7 +194,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const { data: gift, error: giftError } = await ctx.supabase
     .from("gifts")
-    .select("id, template_slug, user_id, status, published_at, free_tier:data->>freeTier, held_photos:data->photos, stored_extra:data->>holidayExtra")
+    .select("id, template_slug, user_id, status, created_at, published_at, free_tier:data->>freeTier, held_photos:data->photos, stored_extra:data->>holidayExtra")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -251,8 +251,9 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();
-  // The holiday extra is decided once, at the gift's first publish, and kept after (lib/lifecycle/holiday-extras.ts).
-  const holidayExtra = holidayExtraAtPublish({ publishedBefore: gift.published_at !== null, stored: { holidayExtra: gift.stored_extra } }, Date.now(), Boolean(unlocked));
+  // The holiday extra is decided at a publish and kept after; a gift sent before without it can still
+  // get it if it was begun inside the days (lib/lifecycle/holiday-extras.ts).
+  const holidayExtra = holidayExtraAtPublish({ publishedBefore: gift.published_at !== null, stored: { holidayExtra: gift.stored_extra }, createdAt: gift.created_at }, Date.now(), Boolean(unlocked));
   const status = scheduled ? "scheduled" : "live";
   // Taken before the gift goes live, so two replies published with one token can't both be free.
   const claimed = reply?.free && !reply.held ? reply.originalGiftId : null;

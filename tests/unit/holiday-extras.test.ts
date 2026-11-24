@@ -8,7 +8,7 @@ const at = (iso: string) => Date.parse(iso);
 
 /** The stamp a publish writes, with the switch on (the owner's NEXT_PUBLIC_TREE_TAG=1). */
 const firstPublish = (iso: string, paid = true) => holidayExtraAtPublish({ publishedBefore: false, stored: {} }, at(iso), paid, true);
-const publishAgain = (stored: unknown, iso: string, paid = true) => holidayExtraAtPublish({ publishedBefore: true, stored }, at(iso), paid, true);
+const publishAgain = (stored: unknown, iso: string, paid = true, createdAt: string | null = "2025-10-01T10:00:00Z") => holidayExtraAtPublish({ publishedBefore: true, stored, createdAt }, at(iso), paid, true);
 
 describe("the Tree Tag's days", () => {
   it("is one extra, from the start of 24 November to the end of the 20th anywhere on earth, offered until the 25th has ended", () => {
@@ -43,7 +43,29 @@ describe("the Tree Tag's days", () => {
   });
 });
 
-describe("decided once, at the first publish", () => {
+describe("decided at a publish, and kept", () => {
+  it("a gift begun inside the days, sent free and sent again once paid, gets it then (the e-mail's 'every paid gift')", () => {
+    expect(publishAgain({}, "2026-12-05T10:00:00Z", true, "2026-12-01T09:00:00Z")).toBe("tree-tag");
+    // Begun at the first instant of the days counts; a second before does not.
+    expect(publishAgain({}, "2026-12-05T10:00:00Z", true, "2026-11-24T00:00:00Z")).toBe("tree-tag");
+    expect(publishAgain({}, "2026-12-05T10:00:00Z", true, second("2026-11-24T00:00:00Z", -1))).toBeUndefined();
+  });
+
+  it("a gift sent while the switch was off and sent again after it went on gets it, inside the days", () => {
+    expect(publishAgain({}, "2026-12-10T10:00:00Z", true, "2026-11-26T09:00:00Z")).toBe("tree-tag");
+  });
+
+  it("sent again still unpaid, or after the last day, it still gets nothing", () => {
+    expect(publishAgain({}, "2026-12-05T10:00:00Z", false, "2026-12-01T09:00:00Z")).toBeUndefined();
+    expect(publishAgain({}, "2026-12-21T12:00:00Z", true, "2026-12-01T09:00:00Z")).toBeUndefined();
+  });
+
+  it("a gift sent before with no begin date known gets nothing", () => {
+    expect(publishAgain({}, "2026-12-05T10:00:00Z", true, null)).toBeUndefined();
+  });
+});
+
+describe("decided at the first publish", () => {
   it("a paid gift first published inside the days is stamped; a free one is not", () => {
     expect(firstPublish("2026-12-01T10:00:00Z")).toBe("tree-tag");
     expect(firstPublish("2026-12-01T10:00:00Z", false)).toBeUndefined();
@@ -92,6 +114,19 @@ describe("where it is shown", () => {
     expect(showsExtra(out, at("2026-12-01T10:00:00Z"), false)).toBeNull();
   });
 
+  it("a gift sent while the switch was off, with no stamp, has it when begun inside the days and last sent before they ended", () => {
+    const sentOff = { status: "live", data: {}, created_at: "2026-11-25T09:00:00Z", published_at: "2026-11-25T10:00:00Z" };
+    expect(showsExtra(sentOff, at("2026-12-01T10:00:00Z"), true)).toBe("tree-tag");
+    expect(showsExtra(sentOff, at("2026-12-01T10:00:00Z"), false)).toBeNull();
+    expect(showsExtra(sentOff, at("2026-12-26T12:00:00Z"), true)).toBeNull();
+    // Begun before the days: its first send may have been before them too.
+    expect(showsExtra({ ...sentOff, created_at: "2026-11-20T09:00:00Z" }, at("2026-12-01T10:00:00Z"), true)).toBeNull();
+    // Last sent after they ended: no telling when it was first sent.
+    expect(showsExtra({ ...sentOff, published_at: "2026-12-21T12:00:00Z" }, at("2026-12-22T10:00:00Z"), true)).toBeNull();
+    expect(showsExtra({ ...sentOff, published_at: null }, at("2026-12-01T10:00:00Z"), true)).toBeNull();
+    expect(showsExtra({ ...sentOff, status: "draft" }, at("2026-12-01T10:00:00Z"), true)).toBeNull();
+  });
+
   it("reads a stamp it knows and nothing else", () => {
     expect(stampedExtra({ holidayExtra: "tree-tag" })).toBe("tree-tag");
     expect(stampedExtra({ holidayExtra: "TREE-TAG" })).toBeNull();
@@ -112,7 +147,8 @@ describe("the publish and save actions keep the stamp the server's", async () =>
   const source = readFileSync("src/app/actions/gift.ts", "utf8");
 
   it("a publish writes the stamp holidayExtraAtPublish decides from the row, over anything the browser sent", () => {
-    expect(source).toMatch(/holidayExtraAtPublish\(\{ publishedBefore: gift\.published_at !== null, stored: \{ holidayExtra: gift\.stored_extra \} \}/);
+    expect(source).toMatch(/holidayExtraAtPublish\(\{ publishedBefore: gift\.published_at !== null, stored: \{ holidayExtra: gift\.stored_extra \}, createdAt: gift\.created_at \}/);
+    expect(source).toMatch(/select\("id, template_slug, user_id, status, created_at, published_at,/);
     expect(source).toContain("data: { ...data, watermark: decision.watermark, holidayExtra } as unknown as Json");
   });
 
