@@ -43,7 +43,7 @@ export const post: BlogPost = {
           rows: [
             ["2luv (2-luv.com)", "Building it and seeing the preview", "One payment to unlock and send, shown in your local currency. The price didn't load when we checked.", "Not stated"],
             ["AIskyla Gifting (aiskyla.com)", "Its gift boxes, letters, birthday surprises and other gifts: \"no app, no account and no payment\"", "Nothing listed; it calls itself \"a free and open platform\"", "Not stated"],
-            ["Ethos (tryethos.io)", "Two templates, The Letter and Constellations, with a small \"Made with Ethos\" footer", "$11.99 for one template, $17.99 for three, $29.99 for all, paid once. Extras on a free template: $8.99. [Pricing](/pricing)", "Meant to be permanent"],
+            ["Ethos (tryethos.io)", "Two templates, The Letter and Constellations, with a small \"Made with Ethos\" footer", "$11.99 for one template, $20.98 for three, $29.99 for all, paid once. Extras on a free template: $8.99. [Pricing](/pricing)", "Meant to be permanent"],
             ["gifft.me", "Its gift boxes and e-cards, with no subscription", "Nothing listed on the pages we read", "Not stated"],
             ["GiftFeels (giftfeels.com)", "Making and previewing a gift", "A one-time unlock for one gift, or Monthly for every gift while it's active. Amounts not shown.", "A one-time unlock adds \"90 more days on the link\""],
             ["GiftsQR (giftsqr.com)", "Building the page. It says there is no free preview link.", "Essential or Premium, paid once, priced by country. Amounts not shown.", "Essential: 30 days. Premium: lifetime."],
@@ -232,7 +232,7 @@ export const post: BlogPost = {
           rows: [
             ["2luv (2-luv.com)", "Crearlo y ver la vista previa", "Un pago para desbloquearlo y enviarlo, en tu moneda local. El precio no cargó cuando lo miramos.", "No lo indica"],
             ["AIskyla Gifting (aiskyla.com)", "Sus cajas regalo, cartas, sorpresas de cumpleaños y demás regalos: «sin app, sin cuenta y sin pagar»", "Nada a la vista; se presenta como «una plataforma gratuita y abierta»", "No lo indica"],
-            ["Ethos (tryethos.io)", "Dos plantillas, La carta y Constelaciones, con un pequeño pie «Hecho con Ethos»", "9,99 € una plantilla, 14,99 € tres, 24,99 € todas, en un solo pago. Extras en una plantilla gratis: 7,49 €. [Precios](/pricing)", "Pensado para ser permanente"],
+            ["Ethos (tryethos.io)", "Dos plantillas, La carta y Constelaciones, con un pequeño pie «Hecho con Ethos»", "9,99 € una plantilla, 17,98 € tres, 24,99 € todas, en un solo pago. Extras en una plantilla gratis: 7,49 €. [Precios](/pricing)", "Pensado para ser permanente"],
             ["gifft.me", "Sus cajas regalo y tarjetas digitales, sin suscripción", "Nada en las páginas que leímos", "No lo indica"],
             ["GiftFeels (giftfeels.com)", "Crear y previsualizar un regalo", "Un pago único por un regalo, o Monthly para todos los regalos mientras esté activo. Sin importes a la vista.", "Un pago único añade «90 días más al enlace»"],
             ["GiftsQR (giftsqr.com)", "Crear la página. Dice que no hay enlace de vista previa gratis.", "Essential o Premium, en un solo pago, con precio según el país. Sin importes a la vista.", "Essential: 30 días. Premium: para siempre."],

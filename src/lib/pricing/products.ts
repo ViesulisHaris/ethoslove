@@ -57,7 +57,7 @@ export function subscriptionsEnabled(env: Record<string, string | undefined> = p
 
 export const PRODUCTS: Record<ProductId, Product> = {
   single: { id: "single", picks: 1, amounts: { usd: 1199, eur: 999, gbp: 899 }, highlight: false, envProductKey: "STRIPE_PRODUCT_SINGLE", name: { en: "Ethos: one template, forever", es: "Ethos: una plantilla, para siempre" } },
-  pick3: { id: "pick3", picks: 3, amounts: { usd: 1799, eur: 1499, gbp: 1299 }, compareAt: { usd: 3597, eur: 2997, gbp: 2697 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PICK3", name: { en: "Ethos: three templates, forever", es: "Ethos: tres plantillas, para siempre" } },
+  pick3: { id: "pick3", picks: 3, amounts: { usd: 2098, eur: 1798, gbp: 1598 }, compareAt: { usd: 3597, eur: 2997, gbp: 2697 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PICK3", name: { en: "Ethos: three templates, forever", es: "Ethos: tres plantillas, para siempre" } },
   everything: { id: "everything", picks: Infinity, amounts: { usd: 2999, eur: 2499, gbp: 2199 }, highlight: true, envProductKey: "STRIPE_PRODUCT_EVERYTHING", name: { en: "Ethos: every template, forever", es: "Ethos: todas las plantillas, para siempre" } },
   // The Letter's and Constellations' paid extras (video, voice, 20 photos, scheduling, a password, no
   // footer), for that free template, forever. The song is free on every gift and not among them.

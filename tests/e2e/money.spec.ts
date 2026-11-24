@@ -51,7 +51,7 @@ test.describe("the pricing page", () => {
     await expect(page.getByTestId("buy-membership")).toHaveText("Get a year of Ethos for Two");
 
     await expect(page.getByTestId("price-single")).toHaveText("€9.99");
-    await expect(page.getByTestId("price-pick3")).toHaveText("€14.99");
+    await expect(page.getByTestId("price-pick3")).toHaveText("€17.98");
     await expect(page.getByTestId("price-everything")).toHaveText("€24.99");
     await expect(page.getByTestId("price-extras")).toHaveText("€7.49");
     await expect(page.getByText("€29.97 for three paid ones")).toBeVisible();
@@ -164,7 +164,7 @@ test.describe("the paywall in the publish sheet", () => {
     await expect(single).toHaveAttribute("aria-checked", "true");
     await expect(single).toContainText("€9.99");
     await expect(panel.getByTestId("plan-everything")).toContainText("€24.99");
-    await expect(panel.getByTestId("pick3-link")).toContainText("Or pick any three for €14.99");
+    await expect(panel.getByTestId("pick3-link")).toContainText("Or pick any three for €17.98");
 
     // EU law: the order bump is never pre-ticked.
     const bump = panel.getByTestId("bump").getByRole("checkbox");

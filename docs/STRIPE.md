@@ -57,7 +57,7 @@ charged by construction, and no Stripe Price has to be kept in step with it. The
 | Product                                 | Id           | EUR    |
 | --------------------------------------- | ------------ | ------ |
 | One template                            | `single`     | €9.99  |
-| Pick three                              | `pick3`      | €14.99 |
+| Pick three                              | `pick3`      | €17.98 ($20.98, £15.98): one single plus two more gifts |
 | Everything                              | `everything` | €24.99 |
 | Make it special (free templates only)   | `extras`     | €7.49  |
 | Every other template, added at checkout | bump         | Everything minus the line it rides on: +€15.00 on a single, +€17.50 on Make it special |

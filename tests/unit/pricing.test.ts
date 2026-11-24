@@ -29,7 +29,7 @@ describe("pricing catalogue", () => {
     const amounts = Object.fromEntries(Object.entries(PRODUCTS).map(([id, p]) => [id, [p.amounts.eur, p.amounts.usd, p.amounts.gbp]]));
     expect(amounts).toEqual({
       single: [999, 1199, 899],
-      pick3: [1499, 1799, 1299],
+      pick3: [1798, 2098, 1598],
       everything: [2499, 2999, 2199],
       extras: [749, 899, 649],
       photos: [399, 499, 349],

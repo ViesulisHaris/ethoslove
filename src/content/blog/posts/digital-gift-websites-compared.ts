@@ -33,7 +33,7 @@ export const post: BlogPost = {
           head: ["Site", "Price", "Free", "How long the link lasts"],
           rows: [
             ["Canva (canva.com)", "Free for individuals. Canva Pro is paid; the amount isn't on the pages we read.", "Designing an eCard from its templates with your own photos", "Not stated"],
-            ["Ethos (tryethos.io)", "$11.99 for one template, $17.99 for three, $29.99 for all, paid once. Photos and the full letter on The Letter: $8.99. [Pricing](/pricing)", "The Letter, as a short note of up to 500 characters with music and a small \"Made with Ethos\" footer", "Meant to be permanent"],
+            ["Ethos (tryethos.io)", "$11.99 for one template, $20.98 for three, $29.99 for all, paid once. Photos and the full letter on The Letter: $8.99. [Pricing](/pricing)", "The Letter, as a short note of up to 500 characters with music and a small \"Made with Ethos\" footer", "Meant to be permanent"],
             ["Forevermore (getforevermore.co)", "$10 Standard, $20 Premium, $30 Deluxe, per gift, paid once, plus tax where it applies", "Building the gift and watching it through before you pay", "Never expires"],
             ["gifft.me", "Free, no subscription", "Its gift boxes and e-cards", "Not stated"],
             ["GiftFeels (giftfeels.com)", "A one-time unlock for one gift, or Monthly for every gift. The amounts didn't load for us.", "Making and previewing a gift", "A one-time unlock adds \"90 more days on the link\""],
@@ -219,7 +219,7 @@ export const post: BlogPost = {
           head: ["Página", "Precio", "Gratis", "Cuánto dura el enlace"],
           rows: [
             ["Canva (canva.com)", "Gratis para particulares. Canva Pro es de pago; el importe no aparece en las páginas que leímos.", "Diseñar una tarjeta con sus plantillas y tus propias fotos", "No lo dice"],
-            ["Ethos (tryethos.io)", "9,99 € una plantilla, 14,99 € tres, 24,99 € todas, en un solo pago. Fotos y la carta completa en La carta: 7,49 €. [Precios](/pricing)", "La carta, como nota corta de hasta 500 caracteres, con música y un pequeño pie «Hecho con Ethos»", "Pensado para ser permanente"],
+            ["Ethos (tryethos.io)", "9,99 € una plantilla, 17,98 € tres, 24,99 € todas, en un solo pago. Fotos y la carta completa en La carta: 7,49 €. [Precios](/pricing)", "La carta, como nota corta de hasta 500 caracteres, con música y un pequeño pie «Hecho con Ethos»", "Pensado para ser permanente"],
             ["Forevermore (getforevermore.co)", "10 $ Standard, 20 $ Premium, 30 $ Deluxe, por regalo, en un solo pago, más impuestos donde se apliquen", "Crear el regalo y verlo entero antes de pagar", "No caduca"],
             ["gifft.me", "Gratis, sin suscripción", "Sus cajas sorpresa y sus tarjetas", "No lo dice"],
             ["GiftFeels (giftfeels.com)", "Un pago único por un regalo, o Monthly para todos. Los importes no nos cargaron.", "Hacer el regalo y verlo antes", "El pago único añade «90 días más al enlace»"],

@@ -14,9 +14,9 @@ fee.
 
 | Where they are | One template | Three | Everything | Make it special | Ethos for Two | Game pack |
 |---|---|---|---|---|---|---|
-| United States (and its territories) | **$11.99** | $17.99 | $29.99 | $8.99 | $5.99 a month / $34.99 a year | $2.99 |
-| United Kingdom (and IM, JE, GG) | **£8.99** | £12.99 | £21.99 | £6.49 | £4.49 / £25.99 | £2.49 |
-| Everywhere else, all of Europe included | **€9.99** | €14.99 | €24.99 | €7.49 | €4.99 / €29.99 | €2.99 |
+| United States (and its territories) | **$11.99** | $20.98 | $29.99 | $8.99 | $5.99 a month / $34.99 a year | $2.99 |
+| United Kingdom (and IM, JE, GG) | **£8.99** | £15.98 | £21.99 | £6.49 | £4.49 / £25.99 | £2.49 |
+| Everywhere else, all of Europe included | **€9.99** | €17.98 | €24.99 | €7.49 | €4.99 / €29.99 | €2.99 |
 
 These are the amounts already in `src/lib/pricing/products.ts`. The visitor's country picks the price
 everywhere a price appears: the editor's pay sheet (where the four ads land), template pages and the

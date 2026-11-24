@@ -38,7 +38,7 @@ export const post: BlogPost = {
           head: ["Site", "Price", "What you get free"],
           rows: [
             ["2luv (2-luv.com)", "One payment to unlock, shown in your local currency. The price didn't load when we checked.", "Building it and seeing the preview. You pay to send it."],
-            ["Ethos (tryethos.io)", "$11.99 for one template, $17.99 for three, $29.99 for all. The full Letter, with photos and the rest: $8.99. [Pricing](/pricing)", "The Letter as a short note: up to 500 characters and a song, with a small \"Made with Ethos\" footer."],
+            ["Ethos (tryethos.io)", "$11.99 for one template, $20.98 for three, $29.99 for all. The full Letter, with photos and the rest: $8.99. [Pricing](/pricing)", "The Letter as a short note: up to 500 characters and a song, with a small \"Made with Ethos\" footer."],
             ["gifft.me", "Free, per its home page.", "Its surprise gift boxes and e-cards."],
             ["Just Meant For You (justmeantforyou.com)", "Free plan. Premium is a monthly subscription, priced by region: it showed us €7.99 a month.", "One letter live at a time, with text, photos, a countdown, a Spotify song and a password. New pages expire after seven days unless Premium keeps them."],
             ["LetterHugs (letterhugs.com)", "One payment to send, no subscription. The amount didn't load when we checked.", "Unlimited drafts. You pay at the send step."],
@@ -250,7 +250,7 @@ export const post: BlogPost = {
           head: ["Página", "Precio", "Qué tienes gratis"],
           rows: [
             ["2luv (2-luv.com)", "Un pago para desbloquearla, en tu moneda local. El precio no cargó cuando lo miramos.", "Crearla y ver la vista previa. Pagas para enviarla."],
-            ["Ethos (tryethos.io)", "9,99 € una plantilla, 14,99 € tres, 24,99 € todas. La carta completa, con fotos y lo demás: 7,49 €. [Precios](/pricing)", "La carta como nota corta: hasta 500 caracteres y una canción, con un pequeño pie «Hecho con Ethos»."],
+            ["Ethos (tryethos.io)", "9,99 € una plantilla, 17,98 € tres, 24,99 € todas. La carta completa, con fotos y lo demás: 7,49 €. [Precios](/pricing)", "La carta como nota corta: hasta 500 caracteres y una canción, con un pequeño pie «Hecho con Ethos»."],
             ["gifft.me", "Gratis, según su portada.", "Sus cajas sorpresa y sus tarjetas digitales."],
             ["Just Meant For You (justmeantforyou.com)", "Plan gratis. Premium es una suscripción mensual con precio según la región: a nosotros nos mostró 7,99 € al mes.", "Una carta activa a la vez, con texto, fotos, cuenta atrás, una canción de Spotify y contraseña. Las páginas nuevas caducan a los siete días salvo que Premium las guarde."],
             ["LetterHugs (letterhugs.com)", "Un pago para enviarla, sin suscripción. El importe no cargó cuando lo miramos.", "Borradores ilimitados. Pagas al enviar."],

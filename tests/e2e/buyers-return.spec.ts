@@ -52,8 +52,8 @@ test.describe("every template for the difference, on the success page", () => {
 
   test("after a pick three or make it special, what each of them paid", async ({ page }) => {
     await page.goto("/checkout/success/preview?state=pick3");
-    await expect(page.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €10.00 more");
-    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You’ve already paid €14.99 of the €24.99.");
+    await expect(page.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €7.01 more");
+    await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You’ve already paid €17.98 of the €24.99.");
     await page.goto("/checkout/success/preview?state=extras");
     await expect(page.getByTestId("upgrade-after-buy")).toHaveText("Add every template for €17.50 more");
     await expect(page.getByTestId("upgrade-after-credit")).toHaveText("You’ve already paid €7.49 of the €24.99.");

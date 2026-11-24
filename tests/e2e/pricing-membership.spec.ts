@@ -144,7 +144,7 @@ test.describe("the single gifts under it", () => {
     await expect(dialog.getByRole("heading", { name: "Choose 3" })).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByTestId("price-single")).toHaveText("€9.99");
-    await expect(page.getByTestId("price-pick3")).toHaveText("€14.99");
+    await expect(page.getByTestId("price-pick3")).toHaveText("€17.98");
     await expect(page.getByTestId("price-everything")).toHaveText("€24.99");
     await expect(page.getByTestId("price-extras")).toHaveText("€7.49");
     await expect(page.getByTestId("special-card").getByRole("link", { name: "Open The Letter" })).toHaveAttribute("href", "/create/the-letter");

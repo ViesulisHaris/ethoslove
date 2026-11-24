@@ -13,7 +13,7 @@ function ok(r: ReturnType<typeof planCheckout>) {
 describe("checkout plan: prices come from the catalogue", () => {
   it("charges each product its catalogue price, with nothing taken from the request", () => {
     expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"] }), guest)).total).toBe(999);
-    expect(ok(planCheckout(req({ product: "pick3", templateSlugs: ["vinyl", "bloom", "museum"] }), guest)).total).toBe(1499);
+    expect(ok(planCheckout(req({ product: "pick3", templateSlugs: ["vinyl", "bloom", "museum"] }), guest)).total).toBe(1798);
     expect(ok(planCheckout(req({ product: "everything" }), guest)).total).toBe(2499);
     expect(ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"] }), guest)).total).toBe(749);
     expect(ok(planCheckout(req({ product: "pass" }), guest)).total).toBe(2999);
@@ -45,7 +45,7 @@ describe("checkout plan: prices come from the catalogue", () => {
     for (const slug of ["the-letter", "constellations"])
       expect(planCheckout(req({ product: "single", templateSlugs: [slug] }), guest)).toMatchObject({ ok: false, error: "single_premium_only", status: 400 });
     // Three templates are a bundle: a free one may be among them.
-    expect(ok(planCheckout(req({ product: "pick3", templateSlugs: ["vinyl", "bloom", "the-letter"] }), guest)).total).toBe(1499);
+    expect(ok(planCheckout(req({ product: "pick3", templateSlugs: ["vinyl", "bloom", "the-letter"] }), guest)).total).toBe(1798);
   });
   it("sells only the packs that exist", () => {
     expect(planCheckout(req({ product: "pack", packId: "nope" }), guest)).toMatchObject({ ok: false, error: "invalid_pack" });

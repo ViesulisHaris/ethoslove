@@ -14,8 +14,9 @@ describe("two more gifts in the catalogue", () => {
     expect(PRODUCTS.pair.amounts).toEqual({ usd: 899, eur: 799, gbp: 699 });
     for (const c of CURRENCIES) expect(PRODUCTS.pair.amounts[c]).toBeLessThan(PRODUCTS.single.amounts[c]);
     expect([formatRound(799, "eur", "en"), formatRound(899, "usd", "en"), formatRound(699, "gbp", "en"), formatRound(799, "eur", "es").replace(/\s/g, " ")]).toEqual(["€7.99", "$8.99", "£6.99", "7,99 €"]);
-    // Pick three is untouched: the pair no longer follows it.
-    expect(PRODUCTS.pick3.amounts).toEqual({ usd: 1799, eur: 1499, gbp: 1299 });
+    // Pick three follows the pair now (the owner, 24 Nov 2026): one single and two more gifts, three gifts either way.
+    expect(PRODUCTS.pick3.amounts).toEqual({ usd: 2098, eur: 1798, gbp: 1598 });
+    for (const c of CURRENCIES) expect(PRODUCTS.pick3.amounts[c]).toBe(PRODUCTS.single.amounts[c] + PRODUCTS.pair.amounts[c]);
   });
 
   it("is two gifts, and 'separately' is twice a single", () => {

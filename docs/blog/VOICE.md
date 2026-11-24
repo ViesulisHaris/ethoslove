@@ -59,7 +59,7 @@ Check these files before stating any fact. If a file disagrees with this list, t
   reader's country: US dollars in the US, pounds in the UK, euros elsewhere
   (`src/lib/pricing/products.ts`, checked 16 Nov 2026):
   - One template: $11.99 / £8.99 / €9.99.
-  - Pick three: $17.99 / £12.99 / €14.99.
+  - Pick three: $20.98 / £15.98 / €17.98.
   - Every template, now and future: $29.99 / £21.99 / €24.99.
   - Any unlock adds video clips, voice messages, up to 20 photos, a surprise inside (a date or a
     trip, wrapped at the end), scheduling and a password, with no footer.
