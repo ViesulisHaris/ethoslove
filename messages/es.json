@@ -3681,6 +3681,20 @@
       "stopDoneBody": "No volverás a recibirlos. Si algún día los quieres, puedes activarlos al hacer un regalo.",
       "manage": "Ver tus recordatorios"
     },
+    "idea": {
+      "stopTitle": "¿Dejar de recibir la idea del mes?",
+      "stopBody": "No más ideas de regalo por correo. Los regalos que has enviado siguen en línea, y los recordatorios que pediste siguen igual.",
+      "stopConfirm": "Sí, dejar de recibirlas",
+      "stopDoneTitle": "Hecho.",
+      "stopDoneBody": "No volverás a recibir la idea del mes. Puedes volver a activarla desde tu cuenta.",
+      "manage": "Tus recordatorios y correos",
+      "pageTitle": "Una idea de regalo al mes",
+      "pageOn": "Por correo, durante un año desde tu último regalo.",
+      "pageOff": "Desactivado. No te las enviaremos.",
+      "turnOff": "Dejar de recibirlas",
+      "turnOn": "Volver a activarlas",
+      "failed": "No se ha podido guardar. Inténtalo de nuevo en un momento."
+    },
     "keep": {
       "confirmTitle": "¿Te enviamos el enlace del regalo?",
       "confirmBody": "Te lo enviamos ahora a esta dirección, para que puedas abrir el regalo cuando quieras.",

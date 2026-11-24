@@ -30,12 +30,15 @@ const UNIQUE: Record<string, string[][]> = {
   gift_groups: [["id"], ["gift_id"], ["token_sha256"]],
   gift_contributions: [["id"], ["group_id", "item_key"]],
   gift_credits: [["id"], ["purchase_id", "n"]],
+  monthly_ideas: [["user_id"]],
+  offer_emails: [["user_id"]],
 };
 
 const DEFAULTS: Record<string, Row> = {
   purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null, store: null, store_product_id: null, store_transaction_id: null, store_environment: null, stripe_invoice_id: null, membership_id: null },
   template_unlocks: { purchase_id: null },
   gift_credits: { spent_slug: null, spent_at: null, revoked_at: null },
+  monthly_ideas: { template_slug: null, locale: "en", handled_for: null, last_sent_on: null, price_sent_at: null, price_used_at: null, off_at: null },
   gift_keeps: { locale: "en", requested: [], confirm_sent_at: null, confirmed_at: null },
   keep_reminders: { last_sent_year: null },
   couple_passes: {

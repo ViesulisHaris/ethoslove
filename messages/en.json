@@ -3681,6 +3681,20 @@
       "stopDoneBody": "You won’t get these again. If you ever want them back, you can turn them on when you make a gift.",
       "manage": "See your reminders"
     },
+    "idea": {
+      "stopTitle": "Stop the monthly idea?",
+      "stopBody": "No more gift ideas by email. The gifts you’ve sent stay online, and reminders you asked for stay as they are.",
+      "stopConfirm": "Stop them",
+      "stopDoneTitle": "Stopped.",
+      "stopDoneBody": "You won’t get the monthly idea again. You can turn it back on from your account.",
+      "manage": "Your reminders and emails",
+      "pageTitle": "One gift idea a month",
+      "pageOn": "By email, for a year after your last gift.",
+      "pageOff": "Off. We won’t send them.",
+      "turnOff": "Stop them",
+      "turnOn": "Turn them back on",
+      "failed": "Couldn’t save that. Try again in a moment."
+    },
     "keep": {
       "confirmTitle": "Email you the gift's link?",
       "confirmBody": "We'll send it to this address now, so you can open the gift again any time.",
