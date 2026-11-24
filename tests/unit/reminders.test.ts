@@ -1,13 +1,20 @@
 import { describe, expect, it } from "vitest";
 import {
   LEAD_DAYS,
+  STAGE_CATCH_UP,
+  STAGE_DAYS,
   countdownDay,
   dueDates,
+  dueStages,
+  firstEmailDate,
   formatMonthDay,
   initialLastSentYear,
   isLeapYear,
   isRealDay,
   needsSending,
+  needsStage,
+  weekdayName,
+  whenWords,
   nextOccurrence,
   occurrenceIn,
   reminderDateFor,
@@ -137,5 +144,84 @@ describe("reminder input", () => {
     expect(reminderInput.safeParse({ ...ok, templateSlug: "../etc" }).success).toBe(false);
     expect(reminderInput.safeParse({ ...ok, giftDay: "next week" }).success).toBe(false);
     expect(reminderInput.parse({ ...ok, giftDay: "2027-02-28" }).giftDay).toBe("2027-02-28");
+  });
+});
+
+describe("three e-mails before each day", () => {
+  const plan = (today: string) => dueStages(utc(today)).map((d) => `${d.stage}@${d.daysAway}:${day(d.due.date)}`);
+
+  it("sends stage 1 seven days before with two days of catch-up, stage 2 two days before, stage 3 the day before", () => {
+    expect(STAGE_DAYS).toEqual({ 1: 7, 2: 2, 3: 1 });
+    expect(STAGE_CATCH_UP).toBe(2);
+    expect(plan("2026-02-20")).toEqual(["1@7:2026-02-27", "1@6:2026-02-26", "1@5:2026-02-25", "2@2:2026-02-22", "3@1:2026-02-21"]);
+  });
+
+  it("names the occasion's year across the new year", () => {
+    const due = dueStages(utc("2026-12-28"));
+    expect(due.find((d) => d.stage === 1 && d.daysAway === 7)!.due).toMatchObject({ year: 2027, month: 1, days: [4] });
+    expect(due.find((d) => d.stage === 3)!.due).toMatchObject({ year: 2026, month: 12, days: [29] });
+  });
+
+  it("sends a 29 February day on the 28th in a common year, and on the 29th in a leap year", () => {
+    const common = dueStages(utc("2027-02-21"));
+    expect(common.find((d) => d.stage === 1 && d.daysAway === 7)!.due).toMatchObject({ year: 2027, month: 2, days: [28, 29] });
+    const commonEve = dueStages(utc("2027-02-27"));
+    expect(commonEve.find((d) => d.stage === 3)!.due).toMatchObject({ month: 2, days: [28, 29] });
+    const leap = dueStages(utc("2028-02-28"));
+    expect(leap.find((d) => d.stage === 3)!.due).toMatchObject({ year: 2028, month: 2, days: [29] });
+    expect(dueStages(utc("2028-02-27")).find((d) => d.stage === 3)!.due).toMatchObject({ month: 2, days: [28] });
+  });
+
+  it("needs a stage when nothing went this year or a lower one did, never a stage after a later one", () => {
+    const row = (last_sent_year: number | null, last_stage: number) => ({ last_sent_year, last_stage });
+    expect(needsStage(row(null, 0), 2027, 1)).toBe(true);
+    expect(needsStage(row(2026, 3), 2027, 1)).toBe(true);
+    expect(needsStage(row(2027, 1), 2027, 1)).toBe(false);
+    expect(needsStage(row(2027, 1), 2027, 2)).toBe(true);
+    expect(needsStage(row(2027, 1), 2027, 3)).toBe(true);
+    expect(needsStage(row(2027, 2), 2027, 2)).toBe(false);
+    expect(needsStage(row(2027, 2), 2027, 3)).toBe(true);
+    expect(needsStage(row(2027, 3), 2027, 1)).toBe(false);
+    expect(needsStage(row(2027, 3), 2027, 3)).toBe(false);
+    // Stage 3 went (or the gift was made): stage 1 late on a caught-up run never follows it.
+    expect(needsStage(row(2027, 2), 2027, 1)).toBe(false);
+    // A year written by the code before 0025 (its one e-mail, or the gift made for that day) is done.
+    expect(needsStage(row(2027, 0), 2027, 1)).toBe(false);
+    expect(needsStage(row(2027, 0), 2027, 3)).toBe(false);
+    expect(needsStage(row(2028, 3), 2027, 1)).toBe(false);
+  });
+
+  it("says when in words that stay true on a late run, in both languages", () => {
+    const friday = new Date(Date.UTC(2027, 2, 5));
+    expect(whenWords(7, friday, "en")).toBe("next Friday");
+    expect(whenWords(6, friday, "en")).toBe("this Friday");
+    expect(whenWords(5, friday, "en")).toBe("this Friday");
+    expect(whenWords(2, friday, "en")).toBe("this Friday");
+    expect(whenWords(1, friday, "en")).toBe("tomorrow");
+    expect(whenWords(7, friday, "es")).toBe("el viernes que viene");
+    expect(whenWords(2, friday, "es")).toBe("este viernes");
+    expect(whenWords(1, friday, "es")).toBe("mañana");
+    expect(weekdayName(friday, "en")).toBe("Friday");
+    expect(weekdayName(new Date(Date.UTC(2027, 2, 7)), "es")).toBe("domingo");
+  });
+
+  it("says when the first e-mail of the days just saved comes", () => {
+    const today = utc("2027-02-19");
+    const at = (saved: Parameters<typeof firstEmailDate>[0]) => {
+      const d = firstEmailDate(saved, today);
+      return d ? day(d) : null;
+    };
+    // Your anniversary on 5 March: seven days before. Mia's birthday on 24 November is later.
+    expect(at([{ month: 3, day: 5 }, { month: 11, day: 24 }])).toBe("2027-02-26");
+    // Five or six days away: the catch-up sends it on the next run, today.
+    expect(at([{ month: 2, day: 25 }])).toBe("2027-02-19");
+    // Three or four days away: the first is the two-days-before one.
+    expect(at([{ month: 2, day: 23 }])).toBe("2027-02-21");
+    // Tomorrow: today's run. Today itself: next year's.
+    expect(at([{ month: 2, day: 20 }])).toBe("2027-02-19");
+    expect(at([{ month: 2, day: 19 }])).toBe("2028-02-12");
+    // Saved with the gift made for it: done for this year, so next year's.
+    expect(at([{ month: 3, day: 5, doneYear: 2027 }])).toBe("2028-02-27");
+    expect(at([])).toBeNull();
   });
 });
