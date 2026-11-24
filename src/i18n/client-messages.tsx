@@ -1,6 +1,6 @@
 import { getMessages } from "next-intl/server";
-import { CLIENT_NAMESPACES, type ClientScope } from "./client-namespaces";
-import { pickMessages } from "./messages-subset";
+import { CLIENT_NAMESPACES, CLIENT_OMIT, type ClientScope } from "./client-namespaces";
+import { omitMessages, pickMessages } from "./messages-subset";
 import { MergeMessages } from "./merge-messages";
 
 /**
@@ -11,5 +11,5 @@ import { MergeMessages } from "./merge-messages";
  */
 export async function ClientMessages({ scope, locale, children }: { scope: ClientScope; locale: string; children: React.ReactNode }) {
   const all = await getMessages({ locale });
-  return <MergeMessages messages={pickMessages(all, CLIENT_NAMESPACES[scope])}>{children}</MergeMessages>;
+  return <MergeMessages messages={omitMessages(pickMessages(all, CLIENT_NAMESPACES[scope]), CLIENT_OMIT[scope] ?? [])}>{children}</MergeMessages>;
 }

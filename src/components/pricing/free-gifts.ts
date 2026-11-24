@@ -56,3 +56,11 @@ export function headLine<T>(free: readonly T[], subscriptions: boolean): { key: 
   if (free.length === 2) return { key: `lineTwo${subs}` as HeadLineKey };
   return subscriptions ? null : { key: "lineNone" };
 }
+
+/**
+ * The questions with the currency answer said in the visitor's currency (messages pricing.faqCurrency): the
+ * catalogue's own answer only says "the currency the prices are shown in", for the places that don't know it.
+ */
+export function withCurrencyAnswer<T extends { id?: string; a: string }>(faq: readonly T[], answer: string): T[] {
+  return faq.map((item) => (item.id === "currency" ? { ...item, a: answer } : item));
+}

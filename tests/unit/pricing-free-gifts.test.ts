@@ -3,9 +3,9 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { listManifests } from "@/templates/manifests";
-import { pricingFaq, withCurrencyAnswer, type FaqItem } from "@/components/pricing/offers";
+import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
 import { createTranslator } from "next-intl";
-import { headLine, pricingGifts, specialGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
+import { headLine, pricingGifts, specialGifts, withCurrencyAnswer, withFreeAnswer } from "@/components/pricing/free-gifts";
 
 /**
  * /pricing must not say two things about one gift (PLAN-pricing.md, the owner's addendum of 24 Nov 2026):

@@ -1244,6 +1244,7 @@
       "cards": {
         "single": {
           "name": "One gift",
+          "cta": "Unlock one",
           "line": "Any one of the paid gifts.",
           "ticks": [
             "Your voice, no Ethos mark",
@@ -1260,6 +1261,7 @@
         },
         "pick3": {
           "name": "Pick three",
+          "cta": "Pick three",
           "line": "Any three gifts.",
           "ticks": [
             "The same as One gift, three times"
@@ -1272,6 +1274,7 @@
         },
         "everything": {
           "name": "Everything",
+          "cta": "Unlock everything",
           "line": "All {n} paid gifts · {price} each",
           "ticks": [
             "Every new gift too",
@@ -1293,6 +1296,8 @@
       "giftCardLine": "Every gift, for someone else, as a code.",
       "giftCardNote": "Add a note",
       "faqForTwo": "Questions about Ethos for Two",
+      "forTwoLine": "One membership covers you both.",
+      "forTwoLinePass": "One payment covers you both, for a year.",
       "forTwoTicks": [
         "Unlimited saved dates and trips",
         "Planned together on both phones",

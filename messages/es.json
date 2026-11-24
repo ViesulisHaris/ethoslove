@@ -1226,7 +1226,7 @@
     "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
     "separately": "{price} por separado",
     "page": {
-      "pick3Separately": "{price} tres de pago, sueltos",
+      "pick3Separately": "{price} si compras tres por separado",
       "label": "Precios",
       "title": "Un regalo, un solo pago.",
       "titleTemplate": "Desbloquea {name}",
@@ -1244,6 +1244,7 @@
       "cards": {
         "single": {
           "name": "Un regalo",
+          "cta": "Desbloquear uno",
           "line": "Cualquiera de los regalos de pago.",
           "ticks": [
             "Tu voz y sin marca de Ethos",
@@ -1260,6 +1261,7 @@
         },
         "pick3": {
           "name": "Elige tres",
+          "cta": "Elegir tres",
           "line": "Tres regalos cualesquiera.",
           "ticks": [
             "Lo mismo que un regalo, tres veces"
@@ -1272,6 +1274,7 @@
         },
         "everything": {
           "name": "Todo",
+          "cta": "Desbloquear todo",
           "line": "{n} regalos de pago · {price} cada uno",
           "ticks": [
             "También los nuevos",
@@ -1293,6 +1296,8 @@
       "giftCardLine": "Todos los regalos, para otra persona, en un código.",
       "giftCardNote": "Añadir una nota",
       "faqForTwo": "Preguntas sobre Ethos for Two",
+      "forTwoLine": "Una sola suscripción os cubre a los dos.",
+      "forTwoLinePass": "Un solo pago os cubre a los dos durante un año.",
       "forTwoTicks": [
         "Citas y viajes guardados, sin límite",
         "Planeados juntos en los dos móviles",

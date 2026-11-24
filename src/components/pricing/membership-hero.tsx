@@ -38,14 +38,17 @@ export async function MembershipHero({
 }) {
   const t = await getTranslations("membership");
   // Three short ticks; all six things it holds are rows of the table under the band.
-  const ticks = (await getTranslations("pricing.page")).raw("forTwoTicks") as string[];
+  const tPage = await getTranslations("pricing.page");
+  const ticks = tPage.raw("forTwoTicks") as string[];
 
   return (
     <section
       id="for-two"
       data-testid="membership-hero"
       aria-labelledby="for-two-title"
-      className="relative isolate scroll-mt-[var(--header-h)] overflow-hidden bg-forest text-cream"
+      // On the dark band the page's ink is cream: the themed page's focus ring (globals.css, unlayered, so it beats
+      // any focus-visible:outline-* utility) is drawn in var(--page-ink), wine on wine here (pricing-C15).
+      className="relative isolate scroll-mt-[var(--header-h)] overflow-hidden bg-forest text-cream [--page-ink:var(--color-cream)]"
     >
       <FloralFrame frame="forTwo" ground="dark" />
       <div className="relative container-x grid items-center gap-x-10 gap-y-12 py-20 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:py-28 xl:gap-x-16">
@@ -57,6 +60,8 @@ export async function MembershipHero({
           <h2 id="for-two-title" className="mt-5 max-w-[13em] font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.02] tracking-[-0.028em] text-balance text-cream">
             {t.rich("hero.title", { em: (chunks) => <em>{chunks}</em> })}
           </h2>
+          {/* The band's one line (PLAN-pricing.md 3): the head of the paragraph it had, said as the plan on sale has it. */}
+          <p className="mt-4 font-display text-[clamp(1.25rem,2vw,1.6rem)] leading-snug text-cream/80 italic sm:mt-5">{tPage(subscriptions ? "forTwoLine" : "forTwoLinePass")}</p>
           <h3 className="sr-only">{t("features.title")}</h3>
           <ul className="mt-6 flex flex-col gap-2.5 sm:mt-7">
             {ticks.map((tick) => (

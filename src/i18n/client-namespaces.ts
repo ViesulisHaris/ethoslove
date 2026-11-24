@@ -63,3 +63,18 @@ export const CLIENT_NAMESPACES = {
 } as const satisfies Record<string, readonly string[]>;
 
 export type ClientScope = keyof typeof CLIENT_NAMESPACES;
+
+/**
+ * Branches a scope sends that its own pages never read in the browser, cut back out of what it sends.
+ * /pricing shares the `pricing` namespace with the /gifts teaser, whose full dress alone reads the old
+ * card lists and blurbs ("One premium template", "no footer"); on /pricing those words are read on the
+ * server only (the closed "What each one includes" row) or not at all, so they stay out of its payload.
+ */
+export const CLIENT_OMIT: Partial<Record<ClientScope, readonly string[]>> = {
+  "(marketing)/pricing/layout": [
+    ...(["single", "pick3", "everything"] as const).flatMap((id) => [`pricing.plans.${id}.features`, `pricing.plans.${id}.blurb`]),
+    "pricing.perTemplate",
+    "pricing.oneTime",
+    "pricing.priority",
+  ],
+};

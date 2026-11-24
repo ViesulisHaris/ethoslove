@@ -19,6 +19,21 @@ export function pickMessages(all: AbstractIntlMessages, paths: readonly string[]
   return out;
 }
 
+/** `messages` without the branch under each dotted path in `paths`; a path it doesn't have is skipped. */
+export function omitMessages(messages: AbstractIntlMessages, paths: readonly string[]): AbstractIntlMessages {
+  let out = messages;
+  for (const path of paths) out = omitOne(out, path.split("."));
+  return out;
+}
+
+function omitOne(node: AbstractIntlMessages, keys: string[]): AbstractIntlMessages {
+  const [key, ...rest] = keys;
+  if (!(key in node)) return node;
+  const { [key]: under, ...others } = node;
+  if (!rest.length) return others;
+  return typeof under === "object" ? { ...others, [key]: omitOne(under, rest) } : node;
+}
+
 /** `extra` laid over `base`, branch by branch: a nested provider adds to what's above it. */
 export function mergeMessages(base: AbstractIntlMessages, extra: AbstractIntlMessages): AbstractIntlMessages {
   const out: AbstractIntlMessages = { ...base };

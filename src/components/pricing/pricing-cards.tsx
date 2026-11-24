@@ -139,7 +139,6 @@ export function PricingCards({
           const picked = p.highlight && quiet;
           const upgrading = id === "everything" && all.plan === "upgrade";
           const amount = id === "everything" ? all.amount : p.amounts[currency];
-          const features = t.raw(`plans.${id}.features`) as string[];
           if (quiet) {
             // /pricing (remade 24 Nov 2026): the gallery card's paper, a name, the price, one line, at most three
             // ticks and the button. Every line the cards used to list is in "What each one includes" under them.
@@ -201,11 +200,13 @@ export function PricingCards({
                   )}
                 >
                   {busy === id ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-                  <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`plans.${id}.cta`)}</span>
+                  <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`page.cards.${id}.cta`)}</span>
                 </button>
               </article>
             );
           }
+          // The /gifts teaser's full dress alone reads these; /pricing does not send them (client-namespaces.ts, CLIENT_OMIT).
+          const features = t.raw(`plans.${id}.features`) as string[];
           return (
             <article
               key={id}

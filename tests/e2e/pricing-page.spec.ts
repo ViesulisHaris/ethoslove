@@ -3,8 +3,7 @@ import { PRODUCTS, formatAmount, type Currency } from "../../src/lib/pricing/pro
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { listManifests } from "../../src/templates/manifests";
-import { pricingGifts, specialGifts, withFreeAnswer } from "../../src/components/pricing/free-gifts";
-import { withCurrencyAnswer } from "../../src/components/pricing/offers";
+import { pricingGifts, specialGifts, withCurrencyAnswer, withFreeAnswer } from "../../src/components/pricing/free-gifts";
 import { createTranslator } from "next-intl";
 import { measure, settle } from "./page-measure";
 import { serverNoteShare } from "./server-settings";
@@ -488,3 +487,56 @@ test("the header's language button shows its focus ring to a keyboard (pricing-D
   expect(ring.style).toBe("solid");
   expect(ring.width).toBeGreaterThanOrEqual(2);
 });
+
+test("the band's buttons show a cream focus ring to a keyboard, not wine on wine (pricing-C15)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/pricing?subscriptions=on");
+  const band = page.getByTestId("membership-hero");
+  const buy = page.getByTestId("buy-membership");
+  // Reach the band by keyboard, so :focus-visible holds: Tab from a stand-in put just before it.
+  await band.evaluate((el) => {
+    const marker = document.createElement("button");
+    marker.dataset.testMarker = "";
+    el.before(marker);
+    marker.focus();
+  });
+  const seen: string[] = [];
+  for (let i = 0; i < 12 && !(await buy.evaluate((el) => el === document.activeElement)); i++) {
+    await page.keyboard.press("Tab");
+    const ring = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement;
+      if (!el.closest("[data-testid=membership-hero]") || !el.matches(":focus-visible")) return null;
+      return getComputedStyle(el).outlineColor;
+    });
+    if (ring) seen.push(ring);
+  }
+  await expect(buy).toBeFocused();
+  seen.push(await buy.evaluate((el) => getComputedStyle(el).outlineColor));
+  const ground = await band.evaluate((el) => getComputedStyle(el).backgroundColor);
+  const cream = await band.evaluate((el) => {
+    const probe = document.createElement("span");
+    probe.style.color = "var(--color-cream)";
+    el.append(probe);
+    const c = getComputedStyle(probe).color;
+    probe.remove();
+    return c;
+  });
+  // The plan toggle's two choices and the buy button, each drawn in cream on the wine.
+  expect(seen.length).toBeGreaterThanOrEqual(2);
+  for (const ring of seen) {
+    expect(ring).toBe(cream);
+    expect(ring).not.toBe(ground);
+  }
+  const style = await buy.evaluate((el) => ({ style: getComputedStyle(el).outlineStyle, offset: parseFloat(getComputedStyle(el).outlineOffset) }));
+  expect(style.style).toBe("solid");
+  expect(style.offset).toBeGreaterThan(0);
+});
+
+for (const [prefix, messages] of [["", en], ["/es", es]] as const) {
+  test(`${prefix}/pricing: the band has its one line, as the plan on sale has it (pricing-C10)`, async ({ page }) => {
+    for (const [subs, key] of [["on", "forTwoLine"], ["off", "forTwoLinePass"]] as const) {
+      await page.goto(`${prefix}/pricing?subscriptions=${subs}`);
+      await expect(page.getByTestId("membership-hero").getByText(messages.pricing.page[key], { exact: true })).toBeVisible();
+    }
+  });
+}

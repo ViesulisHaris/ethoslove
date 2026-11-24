@@ -11,8 +11,8 @@ import { MembershipCompare } from "@/components/pricing/membership-compare";
 import { MembershipHero } from "@/components/pricing/membership-hero";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { SingleGifts } from "@/components/pricing/single-gifts";
-import { initialPlan, pricingFaq, safeReturnPath, withCurrencyAnswer, type FaqItem } from "@/components/pricing/offers";
-import { pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
+import { initialPlan, pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
+import { pricingGifts, withCurrencyAnswer, withFreeAnswer } from "@/components/pricing/free-gifts";
 import { PriceHead } from "@/components/pricing/price-head";
 import { PricingChoice } from "@/components/pricing/pricing-choice";
 
