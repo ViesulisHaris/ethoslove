@@ -162,4 +162,28 @@ describe("the offers box", () => {
       expect(fake.rows("monthly_ideas")).toHaveLength(0);
     }
   });
+
+  it("R7 GET says which sentence the stored yes was to, only where the box can name the monthly idea", async () => {
+    const offers = await import("@/app/api/offer/emails/route");
+    const ME = "99999999-9999-4999-8999-999999999999";
+    state.user = { id: ME, email: "me@mail.com" };
+    const ask = async () => (await offers.GET()).json();
+    for (const [wording, idea] of [
+      [en.offerEmails.box, false],
+      [en.offerEmails.boxIdea, true],
+      [es.offerEmails.boxIdea, true],
+    ] as const) {
+      fake = new FakeDb({ offer_emails: [{ user_id: ME, wording, source: "send", locale: "en" }] });
+      state.db = fake.db;
+      process.env.MONTHLY_IDEA_EMAILS = "buyers";
+      expect(await ask()).toEqual({ on: true, idea });
+      // Off (and "all"), the answer is the one it always was.
+      process.env.MONTHLY_IDEA_EMAILS = "";
+      expect(await ask()).toEqual({ on: true });
+    }
+    fake = new FakeDb({ offer_emails: [] });
+    state.db = fake.db;
+    process.env.MONTHLY_IDEA_EMAILS = "optin";
+    expect(await ask()).toEqual({ on: false });
+  });
 });

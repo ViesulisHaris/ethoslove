@@ -47,7 +47,7 @@ export function IdeaEmailsSwitch({ initialOn }: { initialOn: boolean }) {
             {on ? t("pageOn") : t("pageOff")}
           </p>
         </div>
-        <Button variant="ghost" className="h-11 shrink-0 rounded-full px-4" disabled={busy} aria-pressed={on} onClick={() => void toggle()}>
+        <Button variant="ghost" className="h-11 shrink-0 rounded-full px-4" disabled={busy} onClick={() => void toggle()}>
           {busy ? <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden /> : null}
           <span>{on ? t("turnOff") : t("turnOn")}</span>
         </Button>

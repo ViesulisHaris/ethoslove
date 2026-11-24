@@ -28,8 +28,15 @@ export async function GET() {
   const user = await getCurrentUser();
   const admin = getSupabaseAdminClient();
   if (!user || !admin) return NextResponse.json({ on: false }, { headers: noStore });
-  const { data } = await admin.from("offer_emails").select("user_id").eq("user_id", user.id).maybeSingle();
-  return NextResponse.json({ on: Boolean(data) }, { headers: noStore });
+  const mode = ideaMode();
+  const boxNamesIdea = mode === "optin" || mode === "buyers";
+  const { data } = await admin.from("offer_emails").select(boxNamesIdea ? "user_id, wording" : "user_id").eq("user_id", user.id).maybeSingle();
+  if (!boxNamesIdea || !data) return NextResponse.json({ on: Boolean(data) }, { headers: noStore });
+  // Which sentence the stored yes was to: a yes to the plain offers sentence is shown next to that
+  // sentence, never next to the one that also names the monthly idea, which they never agreed to.
+  const wording = (data as { wording?: string | null }).wording ?? "";
+  const ideaWordings = await Promise.all((["en", "es"] as const).map(async (locale) => (await getTranslations({ locale, namespace: "offerEmails" }))("boxIdea")));
+  return NextResponse.json({ on: true, idea: ideaWordings.includes(wording) }, { headers: noStore });
 }
 
 export async function POST(request: NextRequest) {

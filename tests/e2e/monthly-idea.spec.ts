@@ -211,11 +211,12 @@ test.describe("the account page's row", () => {
     await row.getByRole("button", { name: "Stop them" }).click();
     await expect(row).toContainText("Off. We won’t send them.");
     const back = row.getByRole("button", { name: "Turn them back on" });
-    await expect(back).toHaveAttribute("aria-pressed", "false");
+    // The label says what the button does; no pressed state that would read "Stop them, selected".
+    await expect(back).not.toHaveAttribute("aria-pressed");
     expect(bodies).toEqual([{ on: false }]);
     await back.click();
     await expect(row).toContainText("By email, for a year after your last gift.");
-    await expect(row.getByRole("button", { name: "Stop them" })).toHaveAttribute("aria-pressed", "true");
+    await expect(row.getByRole("button", { name: "Stop them" })).not.toHaveAttribute("aria-pressed");
     expect(bodies).toEqual([{ on: false }, { on: true }]);
   });
 

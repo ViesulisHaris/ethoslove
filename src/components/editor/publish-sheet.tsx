@@ -143,10 +143,21 @@ export function PublishSheet({
     // Anything still waiting on this device goes up now, including files an earlier visit never sent.
     void state.ensureRemote().then(() => useEditor.getState().uploadPending());
     getEntitlement(slug).then(setFetchedEntitlement);
-    if (ideaMode === "all") void getIdeaHint(slug).then(setIdeaHintNow).catch(() => {});
     void fetchUpgradeQuote(currency).then(setUpgrade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, state.authed, slug]);
+  // The Terms box's hint, asked again whenever the entitlement is (back from Stripe the purchase may
+  // only now be paid, and then the gift is not a free one). A failed ask is "none": no box.
+  useEffect(() => {
+    if (!open || !state.authed || ideaMode !== "all") return;
+    let alive = true;
+    void getIdeaHint(slug)
+      .then((hint) => alive && setIdeaHintNow(hint))
+      .catch(() => alive && setIdeaHintNow("none"));
+    return () => {
+      alive = false;
+    };
+  }, [open, state.authed, slug, ideaMode, fetchedEntitlement]);
   // A gift held to the note's rules (lib/gift/free-tier.ts): its photos and a long letter are paid.
   // The Letter can still go out free as a short note; Constellations, made of photos, cannot.
   const note = noteRules(manifest, state.data);
@@ -372,7 +383,8 @@ export function PublishSheet({
   // The free version's Terms box (lib/lifecycle/monthly-idea.ts): only in the setting "all", for a
   // signed-in account the server says needs it, on a first send that is free and not a reply, a
   // campaign gift, the app or Etsy. Off, none of this draws anything or changes the button.
-  const needsTerms = ideaMode === "all" && state.authed && state.status === "draft" && Boolean(decision?.ok) && !freeReply && !campaign && !quiet && ideaHintNow === "box";
+  const needsTerms =
+    ideaMode === "all" && state.authed && state.status === "draft" && Boolean(decision?.ok) && !entitlement?.unlocked && !freeReply && !campaign && !quiet && ideaHintNow === "box";
   const [termsOn, setTermsOn] = useState(false);
   const [termsNudge, setTermsNudge] = useState(false);
   const termsRef = useRef<HTMLInputElement>(null);
@@ -415,7 +427,7 @@ export function PublishSheet({
           : undefined,
       ...(freeReply ? { replyToken } : {}),
       ...(useGift ? { useGift: true } : {}),
-      ...(quiet ? { quiet: true } : {}),
+      ...(quiet && ideaMode !== "off" ? { quiet: true } : {}),
       ...(needsTerms && termsOn ? { acceptFreeTerms: true } : {}),
     });
     setBusy(false);
@@ -428,8 +440,11 @@ export function PublishSheet({
     // The server says this send needs the box (its answer is newer than the sheet's hint): show it.
     if (!result.ok && result.error === "terms_required") {
       setError(null);
+      setTermsOn(false);
+      setIdeaHintNow("box");
       setTermsNudge(true);
-      void getIdeaHint(slug).then(setIdeaHintNow).catch(() => {});
+      // The box draws on this render: focus it on the next frame.
+      requestAnimationFrame(() => termsRef.current?.focus());
       return;
     }
     if (!result.ok) {
@@ -747,7 +762,7 @@ export function PublishSheet({
                 keepArm={keepArm}
                 keepRow={keepRow}
                 ownedRows={ownedRows}
-                ideaWhere={ideaMode === "all" || ideaMode === "buyers"}
+                ideaWhere={!quiet && (ideaMode === "all" || ideaMode === "buyers")}
               />
             ) : null}
             {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
@@ -769,7 +784,7 @@ export function PublishSheet({
                 </p>
                 {/* The card has its own title and blurb: no second "Welcome back" to a first-time guest (walk-make-8). */}
                 <AuthForm mode="login" next={next} compact bare />
-                {ideaMode === "all" || (ideaMode === "buyers" && wouldNeedPayment && paymentsEnabled) ? <IdeaWhereNote className="mt-3 text-center text-balance" /> : null}
+                {!quiet && (ideaMode === "all" || (ideaMode === "buyers" && wouldNeedPayment && paymentsEnabled)) ? <IdeaWhereNote className="mt-3 text-center text-balance" /> : null}
               </section>
             ) : null}
 
@@ -815,7 +830,7 @@ export function PublishSheet({
                   keepArm={keepArm}
                   keepRow={keepRow}
                   ownedRows={ownedRows}
-                  ideaWhere={ideaMode === "all" || ideaMode === "buyers"}
+                  ideaWhere={!quiet && (ideaMode === "all" || ideaMode === "buyers")}
                 />
               ) : (
                 <Notice tone="info" className="mt-7">

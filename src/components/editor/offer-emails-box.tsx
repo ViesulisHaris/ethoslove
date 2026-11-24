@@ -23,14 +23,19 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
   const [busy, setBusy] = useState(false);
   const [ideaOff, setIdeaOff] = useState(false);
   const [ideaBusy, setIdeaBusy] = useState(false);
-  const boxNamesIdea = ideaBox && !ideaNotice;
+  // A yes already stored to the plain offers sentence keeps that sentence beside its tick: the one
+  // naming the monthly idea is offered only to someone who hasn't said yes to the other (GET `idea`).
+  const [storedPlain, setStoredPlain] = useState(false);
+  const boxNamesIdea = ideaBox && !ideaNotice && !(on && storedPlain);
 
   useEffect(() => {
     let alive = true;
     fetch("/api/offer/emails", { cache: "no-store", credentials: "same-origin" })
       .then((res) => (res.ok ? res.json() : null))
-      .then((json: { on?: boolean } | null) => {
-        if (alive && json?.on) setOn(true);
+      .then((json: { on?: boolean; idea?: boolean } | null) => {
+        if (!alive || !json?.on) return;
+        setOn(true);
+        if (json.idea === false) setStoredPlain(true);
       })
       .catch(() => {});
     return () => {
@@ -49,6 +54,8 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
         body: JSON.stringify({ on: next, locale, ...(boxNamesIdea ? { idea: true } : {}) }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      // What is stored now is the sentence this tick was next to.
+      setStoredPlain(next && !boxNamesIdea);
       toast(t(next ? "saved" : "removed"));
     } catch {
       setOn(!next);

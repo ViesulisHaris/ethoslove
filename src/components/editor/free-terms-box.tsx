@@ -2,6 +2,7 @@
 
 import type { Ref } from "react";
 import { useTranslations } from "next-intl";
+import { AlertCircle } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
 /**
@@ -37,8 +38,10 @@ export function FreeTermsBox({ checked, onChange, nudge, inputRef }: { checked: 
         </span>
       </label>
       {nudge ? (
-        <p id="free-terms-nudge" role="alert" className="mt-2 ml-8 text-sm text-ink" data-testid="free-terms-nudge">
-          {t("ideaTermsNeeded")}
+        // Drawn like the sheet's other problems (the stuck-uploads card): the coral mark and a firmer line.
+        <p id="free-terms-nudge" role="alert" className="mt-2 ml-8 flex items-start gap-2 text-sm font-medium text-ink" data-testid="free-terms-nudge">
+          <AlertCircle aria-hidden className="mt-0.5 size-4 shrink-0 text-coral" />
+          <span>{t("ideaTermsNeeded")}</span>
         </p>
       ) : null}
     </div>
