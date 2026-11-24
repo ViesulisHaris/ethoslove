@@ -192,7 +192,8 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[cu
       suppressHydrationWarning
       className={`${sans.variable} ${sansItalic.variable} ${fraunces.variable} ${display.variable} ${mono.variable} ${caveat.variable} ${coverScript.variable} ${typewriter.variable} ${poster.variable} ${script.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col">
+      {/* Its attributes, like <html>'s, are set by the page's own inline scripts before React arrives (DocumentMark): a themed page's mark. */}
+      <body suppressHydrationWarning className="flex min-h-full flex-col">
         {/* First, so a visitor who has answered the cookie question never sees the strip drawn (cookie-consent.tsx). */}
         {isConfigured.cookieConsent ? <script dangerouslySetInnerHTML={{ __html: CONSENT_ANSWERED_SCRIPT }} /> : null}
         <RefCapture />
