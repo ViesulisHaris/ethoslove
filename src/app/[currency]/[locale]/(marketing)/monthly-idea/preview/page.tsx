@@ -43,7 +43,7 @@ export default async function MonthlyIdeaPreviewPage({ params, searchParams }: P
             <p className="mt-1 mb-4 text-sm text-muted-foreground">{tSheet("signInBlurb")}</p>
             {/* Where the sign-in form goes: it needs a database this preview doesn't have. */}
             <div aria-hidden className="h-24 rounded-lg bg-muted" />
-            <IdeaWhereNote className="mt-3" />
+            <IdeaWhereNote className="mt-3 text-center text-balance" />
           </section>
         ) : null}
       </div>

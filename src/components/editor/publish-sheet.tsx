@@ -769,7 +769,7 @@ export function PublishSheet({
                 </p>
                 {/* The card has its own title and blurb: no second "Welcome back" to a first-time guest (walk-make-8). */}
                 <AuthForm mode="login" next={next} compact bare />
-                {ideaMode === "all" || (ideaMode === "buyers" && wouldNeedPayment && paymentsEnabled) ? <IdeaWhereNote className="mt-3" /> : null}
+                {ideaMode === "all" || (ideaMode === "buyers" && wouldNeedPayment && paymentsEnabled) ? <IdeaWhereNote className="mt-3 text-center text-balance" /> : null}
               </section>
             ) : null}
 
