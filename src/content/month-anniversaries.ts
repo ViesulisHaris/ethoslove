@@ -60,10 +60,10 @@ const month1: Month = {
     ideasTitle: "Six that stay the right size",
     ideas: [
       {
-        template: "the-letter",
-        heading: "A note under a wax seal",
-        body: "The free version of The Letter is a short note: two names and 500 characters at most. A tap breaks the wax and the note writes itself out by hand, over a song if you choose one. One month is about that long: one thing you noticed, one thing you want to do again.",
-        line: { field: "freeNote", where: "The whole note", text: "One month. I wasn’t counting, and then I was. I liked the walk home from the ramen place more than the ramen, and I think you know that. No speech and no plans for next year. I’m glad it was you at that table. Same place Thursday?" },
+        template: "text-thread",
+        heading: "Your first month, as a chat of two",
+        body: "Text Thread plays your messages back one bubble at a time, with the typing dots between them. Two bubbles are the least it takes and forty the most. Open with the joke only the two of you get, and let the last bubble say the plain thing a text never quite does.",
+        line: { field: "lines", where: "The first bubble", text: "ok so it has been a month and I have notes" },
       },
       {
         template: "fortune-cookie",
@@ -72,10 +72,10 @@ const month1: Month = {
         line: { field: "fortunes", where: "One of the fortunes", text: "A month from now you will still be glad you said yes to the second date." },
       },
       {
-        template: "text-thread",
-        heading: "Your first month, as a chat of two",
-        body: "Text Thread plays your messages back one bubble at a time, with the typing dots between them. Two bubbles are the least it takes and forty the most. Open with the joke only the two of you get, and let the last bubble say the plain thing a text never quite does.",
-        line: { field: "lines", where: "The first bubble", text: "ok so it has been a month and I have notes" },
+        template: "the-letter",
+        heading: "A note under a wax seal",
+        body: "The free version of The Letter is a short note: two names and 500 characters at most. A tap breaks the wax and the note writes itself out by hand, over a song if you choose one. One month is about that long: one thing you noticed, one thing you want to do again.",
+        line: { field: "freeNote", where: "The whole note", text: "One month. I wasn’t counting, and then I was. I liked the walk home from the ramen place more than the ramen, and I think you know that. No speech and no plans for next year. I’m glad it was you at that table. Same place Thursday?" },
       },
       {
         template: "sticker-bomb",
@@ -120,10 +120,10 @@ const month1: Month = {
     ideasTitle: "Seis que no se pasan",
     ideas: [
       {
-        template: "the-letter",
-        heading: "Una nota bajo un sello de lacre",
-        body: "La versión gratis de La carta es una nota corta: dos nombres y 500 caracteres como mucho. Un toque rompe el lacre y la nota se escribe sola, a mano, sobre una canción si eliges una. Un mes da para eso: una cosa en la que te has fijado y otra que quieres repetir.",
-        line: { field: "freeNote", where: "La nota entera", text: "Un mes. No llevaba la cuenta, y de pronto sí. Me gustó más la vuelta a casa desde el ramen que el propio ramen, y creo que lo sabes. Sin discursos ni planes para el año que viene. Me alegro de que fueras tú en esa mesa. ¿El jueves en el mismo sitio?" },
+        template: "text-thread",
+        heading: "Vuestro primer mes, como un chat de dos",
+        body: "Hilo de mensajes reproduce tus mensajes burbuja a burbuja, con los puntitos de «escribiendo» entre una y otra. Hacen falta dos burbujas como mínimo y caben cuarenta. Empieza con la broma que solo entendéis vosotros y deja para la última burbuja eso tan sencillo que por mensaje nunca acaba de decirse.",
+        line: { field: "lines", where: "La primera burbuja", text: "vale, llevamos un mes y tengo apuntes" },
       },
       {
         template: "fortune-cookie",
@@ -132,10 +132,10 @@ const month1: Month = {
         line: { field: "fortunes", where: "Una de las fortunas", text: "Dentro de un mes seguirás alegrándote de haber dicho que sí a la segunda cita." },
       },
       {
-        template: "text-thread",
-        heading: "Vuestro primer mes, como un chat de dos",
-        body: "Hilo de mensajes reproduce tus mensajes burbuja a burbuja, con los puntitos de «escribiendo» entre una y otra. Hacen falta dos burbujas como mínimo y caben cuarenta. Empieza con la broma que solo entendéis vosotros y deja para la última burbuja eso tan sencillo que por mensaje nunca acaba de decirse.",
-        line: { field: "lines", where: "La primera burbuja", text: "vale, llevamos un mes y tengo apuntes" },
+        template: "the-letter",
+        heading: "Una nota bajo un sello de lacre",
+        body: "La versión gratis de La carta es una nota corta: dos nombres y 500 caracteres como mucho. Un toque rompe el lacre y la nota se escribe sola, a mano, sobre una canción si eliges una. Un mes da para eso: una cosa en la que te has fijado y otra que quieres repetir.",
+        line: { field: "freeNote", where: "La nota entera", text: "Un mes. No llevaba la cuenta, y de pronto sí. Me gustó más la vuelta a casa desde el ramen que el propio ramen, y creo que lo sabes. Sin discursos ni planes para el año que viene. Me alegro de que fueras tú en esa mesa. ¿El jueves en el mismo sitio?" },
       },
       {
         template: "sticker-bomb",
@@ -193,11 +193,11 @@ const month6: Month = {
         line: { field: "reasons", where: "One note in the jar", text: "You learned how I take my coffee in week two and never asked again." },
       },
       {
-        template: "our-timeline",
-        heading: "Six dated stops on one road",
-        brief: "A road down the page, one dated photo at each bend, one for each month.",
-        body: "Our Timeline draws a road down the page as they scroll, and pins a photo with its date at every bend. It needs two photos at least and holds twenty. At six months, give it one stop for each: the first date, the first trip, the evening you stopped pretending you were not keen.",
-        line: { field: "dates", where: "The date on a stop", text: "March 4, the night it rained" },
+        template: "scrapbook",
+        heading: "Cut-out letters for six months of pages",
+        brief: "Cut-out letters, polaroids that develop, a torn note and up to twelve photos.",
+        body: "Scrapbook opens like the real thing: cut-out letters for the title, your photos landing as polaroids that develop, a torn note in handwriting and a typed letter from you. Up to twelve photos fit, two a month. The one you would save from a fire goes on the first page.",
+        line: { field: "headline", where: "The cut-out title", text: "half a year of us" },
       },
       {
         template: "vinyl",
@@ -207,11 +207,11 @@ const month6: Month = {
         line: { field: "side", where: "The side label", text: "Months 1–6" },
       },
       {
-        template: "scrapbook",
-        heading: "Cut-out letters for six months of pages",
-        brief: "Cut-out letters, polaroids that develop, a torn note and up to twelve photos.",
-        body: "Scrapbook opens like the real thing: cut-out letters for the title, your photos landing as polaroids that develop, a torn note in handwriting and a typed letter from you. Up to twelve photos fit, two a month. The one you would save from a fire goes on the first page.",
-        line: { field: "headline", where: "The cut-out title", text: "half a year of us" },
+        template: "our-timeline",
+        heading: "Six dated stops on one road",
+        brief: "A road down the page, one dated photo at each bend, one for each month.",
+        body: "Our Timeline draws a road down the page as they scroll, and pins a photo with its date at every bend. It needs two photos at least and holds twenty. At six months, give it one stop for each: the first date, the first trip, the evening you stopped pretending you were not keen.",
+        line: { field: "dates", where: "The date on a stop", text: "March 4, the night it rained" },
       },
       {
         template: "midnight-countdown",
@@ -256,11 +256,11 @@ const month6: Month = {
         line: { field: "reasons", where: "Una nota del frasco", text: "En la segunda semana aprendiste cómo tomo el café y no volviste a preguntar." },
       },
       {
-        template: "our-timeline",
-        heading: "Seis paradas con fecha en un camino",
-        brief: "Un camino por la pantalla, una foto con fecha en cada curva, una por mes.",
-        body: "Nuestra línea del tiempo dibuja un camino mientras deslizan y clava una foto con su fecha en cada curva. Pide dos fotos como mínimo y admite veinte. A los seis meses, una parada por mes: la primera cita, la primera escapada, la noche en que dejasteis de disimular las ganas.",
-        line: { field: "dates", where: "La fecha de una parada", text: "4 de marzo, la noche que llovió" },
+        template: "scrapbook",
+        heading: "Letras recortadas para seis meses de páginas",
+        brief: "Letras recortadas, polaroids que se revelan, una nota rasgada y hasta doce fotos.",
+        body: "Álbum de recortes se abre como uno de verdad: letras recortadas para el título, tus fotos cayendo como polaroids que se revelan, una nota rasgada escrita a mano y una carta tuya a máquina. Caben hasta doce fotos, dos por mes. La que salvarías de un incendio va en la primera página.",
+        line: { field: "headline", where: "El título recortado", text: "medio año de nosotros" },
       },
       {
         template: "vinyl",
@@ -270,11 +270,11 @@ const month6: Month = {
         line: { field: "side", where: "La etiqueta de la cara", text: "Meses 1 a 6" },
       },
       {
-        template: "scrapbook",
-        heading: "Letras recortadas para seis meses de páginas",
-        brief: "Letras recortadas, polaroids que se revelan, una nota rasgada y hasta doce fotos.",
-        body: "Álbum de recortes se abre como uno de verdad: letras recortadas para el título, tus fotos cayendo como polaroids que se revelan, una nota rasgada escrita a mano y una carta tuya a máquina. Caben hasta doce fotos, dos por mes. La que salvarías de un incendio va en la primera página.",
-        line: { field: "headline", where: "El título recortado", text: "medio año de nosotros" },
+        template: "our-timeline",
+        heading: "Seis paradas con fecha en un camino",
+        brief: "Un camino por la pantalla, una foto con fecha en cada curva, una por mes.",
+        body: "Nuestra línea del tiempo dibuja un camino mientras deslizan y clava una foto con su fecha en cada curva. Pide dos fotos como mínimo y admite veinte. A los seis meses, una parada por mes: la primera cita, la primera escapada, la noche en que dejasteis de disimular las ganas.",
+        line: { field: "dates", where: "La fecha de una parada", text: "4 de marzo, la noche que llovió" },
       },
       {
         template: "midnight-countdown",
@@ -320,6 +320,19 @@ const month12: Month = {
     ideasTitle: "A year, on paper and on screen",
     ideas: [
       {
+        template: "unwrapped",
+        heading: "The year as a row of presents",
+        brief: "Presents torn open one by one, each with a number from your year inside.",
+        body: "Unwrapped turns your year into numbers: a row of wrapped presents, each torn open with a tap or a swipe to a figure that counts up, and a gold one at the end that prints the whole year as a receipt. Up to eight numbers, all written by you. Count small, true things: the coffees, the train times, the blanket.",
+        line: { field: "stats", where: "One of the numbers", text: "52 Sundays, 49 of them pancakes" },
+      },
+      {
+        template: "paper-crane",
+        heading: "Six folds of paper, a line in each",
+        body: "Paper Crane is the paper anniversary taken at its word. A sheet lies on a table; they press and hold each crease and it folds while they hold, and every fold that lands shows one line from you. Six folds, so two months a line. Once it is a crane it flies off and leaves your letter where it stood.",
+        line: { field: "lines", where: "The line on one fold", text: "January and February: you learned my coffee, I learned your silences." },
+      },
+      {
         template: "our-timeline",
         heading: "Twelve months of road, then one closing line",
         brief: "A year of photos on a road that draws itself as they scroll.",
@@ -332,19 +345,6 @@ const month12: Month = {
         brief: "Paper, a wax seal they break with a tap, and your words appearing by hand.",
         body: "If paper is the rule, The Letter keeps it most literally: paper, a wax seal they break with a tap, and your words appearing by hand as if someone were writing them. Begin with the person they were to you a year ago, close to a stranger, and let the letter walk to now. The first line takes sixty characters.",
         line: { field: "greeting", where: "The first line", text: "To the person who has put up with me for a year:" },
-      },
-      {
-        template: "paper-crane",
-        heading: "Six folds of paper, a line in each",
-        body: "Paper Crane is the paper anniversary taken at its word. A sheet lies on a table; they press and hold each crease and it folds while they hold, and every fold that lands shows one line from you. Six folds, so two months a line. Once it is a crane it flies off and leaves your letter where it stood.",
-        line: { field: "lines", where: "The line on one fold", text: "January and February: you learned my coffee, I learned your silences." },
-      },
-      {
-        template: "unwrapped",
-        heading: "The year as a row of presents",
-        brief: "Presents torn open one by one, each with a number from your year inside.",
-        body: "Unwrapped turns your year into numbers: a row of wrapped presents, each torn open with a tap or a swipe to a figure that counts up, and a gold one at the end that prints the whole year as a receipt. Up to eight numbers, all written by you. Count small, true things: the coffees, the train times, the blanket.",
-        line: { field: "stats", where: "One of the numbers", text: "52 Sundays, 49 of them pancakes" },
       },
       {
         template: "front-page",
@@ -384,6 +384,19 @@ const month12: Month = {
     ideasTitle: "Un año, en papel y en pantalla",
     ideas: [
       {
+        template: "unwrapped",
+        heading: "El año en una fila de regalos",
+        brief: "Regalos que se abren uno a uno, con un número de vuestro año dentro.",
+        body: "Nuestro año, desenvuelto convierte el año en números: una fila de regalos envueltos que se abren con un toque o deslizando, cada uno con una cifra que va subiendo, y uno dorado al final que imprime el año entero como un tique. Hasta ocho números, todos escritos por ti. Cuenta cosas pequeñas y ciertas: los cafés, los trenes, la manta.",
+        line: { field: "stats", where: "Uno de los números", text: "52 domingos, 49 con tortitas" },
+      },
+      {
+        template: "paper-crane",
+        heading: "Seis pliegues de papel, una frase en cada uno",
+        body: "Grulla de papel es el aniversario de papel tomado al pie de la letra. Una hoja espera sobre la mesa; mantienen pulsado cada pliegue y se dobla mientras no sueltan, y cada pliegue que sale bien muestra una frase tuya. Son seis pliegues, así que dos meses por frase. Cuando ya es una grulla, echa a volar y deja tu carta donde estaba.",
+        line: { field: "lines", where: "La frase de un pliegue", text: "Enero y febrero: aprendiste mi café y yo tus silencios." },
+      },
+      {
         template: "our-timeline",
         heading: "Doce meses de camino y una frase para cerrar",
         brief: "Un año de fotos en un camino que se dibuja mientras deslizan.",
@@ -396,19 +409,6 @@ const month12: Month = {
         brief: "Papel, un sello de lacre que se rompe con un toque y tus palabras apareciendo a mano.",
         body: "Si la regla es el papel, La carta la cumple sin rodeos: papel, un sello de lacre que se rompe con un toque y tus palabras apareciendo a mano, como si alguien las escribiera. Empieza por quien era esa persona para ti hace un año, casi alguien desconocido, y deja que la carta camine hasta hoy. La primera línea admite sesenta caracteres.",
         line: { field: "greeting", where: "La primera línea", text: "A quien lleva un año entero aguantándome:" },
-      },
-      {
-        template: "paper-crane",
-        heading: "Seis pliegues de papel, una frase en cada uno",
-        body: "Grulla de papel es el aniversario de papel tomado al pie de la letra. Una hoja espera sobre la mesa; mantienen pulsado cada pliegue y se dobla mientras no sueltan, y cada pliegue que sale bien muestra una frase tuya. Son seis pliegues, así que dos meses por frase. Cuando ya es una grulla, echa a volar y deja tu carta donde estaba.",
-        line: { field: "lines", where: "La frase de un pliegue", text: "Enero y febrero: aprendiste mi café y yo tus silencios." },
-      },
-      {
-        template: "unwrapped",
-        heading: "El año en una fila de regalos",
-        brief: "Regalos que se abren uno a uno, con un número de vuestro año dentro.",
-        body: "Nuestro año, desenvuelto convierte el año en números: una fila de regalos envueltos que se abren con un toque o deslizando, cada uno con una cifra que va subiendo, y uno dorado al final que imprime el año entero como un tique. Hasta ocho números, todos escritos por ti. Cuenta cosas pequeñas y ciertas: los cafés, los trenes, la manta.",
-        line: { field: "stats", where: "Uno de los números", text: "52 domingos, 49 con tortitas" },
       },
       {
         template: "front-page",

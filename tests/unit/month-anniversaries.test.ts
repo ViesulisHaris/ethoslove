@@ -194,6 +194,13 @@ describe("anniversary gifts by month", () => {
     expect(new Set(first).size).toBe(first.length);
   });
 
+  it("the gifts a month shows in its phone and its band don't name another length of time", () => {
+    // The phone plays the month's first gift and the band shows its second; both come with their own poster and demo,
+    // and these two say "three years" in them (The Letter: "Three years of you"; Our Timeline: "Three years, in order").
+    const sayYears = ["the-letter", "our-timeline"];
+    for (const n of MONTHS) for (const idea of MONTH_GUIDES[n].en.ideas.slice(0, 2)) expect(sayYears, `month ${n}: ${idea.template}`).not.toContain(idea.template);
+  });
+
   it("no two months open the same way", () => {
     const clashes: string[] = [];
     for (const locale of GIFT_LOCALES) {
