@@ -66,6 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: HALFWAY_TOOL_PATH, priority: 0.8, changeFrequency: "monthly" },
     { path: "/games", priority: 0.7, changeFrequency: "monthly" },
     { path: "/games/today", priority: 0.7, changeFrequency: "daily" },
+    { path: "/games/weekly", priority: 0.7, changeFrequency: "weekly" },
     ...GAMES.map((g): Page => ({ path: g.href, priority: 0.6, changeFrequency: "monthly" })),
     { path: "/templates", priority: 0.9, changeFrequency: "weekly" },
     { path: "/occasions", priority: 0.8, changeFrequency: "monthly" },

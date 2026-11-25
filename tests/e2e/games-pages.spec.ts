@@ -232,7 +232,7 @@ test("E12: This or that, a whole game on one phone, and its page", async ({ page
 
 test("E13: the hub deals every game, in the grid and in the hand on top", async ({ page }) => {
   await page.goto("/games");
-  await expect(page.locator("#pick > ul > li")).toHaveCount(GAMES.length + 1);
+  await expect(page.locator("#pick > ul > li")).toHaveCount(GAMES.length + 2);
   for (const g of GAMES) await expect(page.locator(`#pick a[href="${g.href}"]`), g.key).toHaveCount(1);
   // "Eight little card games": the hub's hand holds all eight (the app's catalogue and the home page's hand keep their seven).
   await expect(page.getByRole("list", { name: "Pick a game" }).getByRole("link")).toHaveCount(GAMES.length);

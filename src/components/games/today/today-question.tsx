@@ -41,13 +41,13 @@ type RouterState = { __NA?: boolean } & Record<string, unknown>;
  * A link made by Next's <Link> does nothing at all when the phone is offline (the page's code is
  * fetched first). Offline, it goes the old way, so the browser says it has no connection.
  */
-function plainWhenOffline(e: MouseEvent<HTMLAnchorElement>) {
+export function plainWhenOffline(e: MouseEvent<HTMLAnchorElement>) {
   if (navigator.onLine !== false) return;
   e.preventDefault();
   window.location.assign(e.currentTarget.href);
 }
 
-function rememberedNames(): [string, string] | null {
+export function rememberedNames(): [string, string] | null {
   try {
     const saved: unknown = JSON.parse(window.localStorage.getItem(NAMES_KEY) ?? "null");
     return Array.isArray(saved) && saved.length === 2 ? [cleanName(saved[0]), cleanName(saved[1])] : null;
@@ -57,11 +57,11 @@ function rememberedNames(): [string, string] | null {
 }
 
 // On a phone on its side the cards are shorter, so the question is on the first screen (the page's spread, page.tsx).
-const CARD =
+export const CARD =
   "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none [@media(orientation:landscape)_and_(max-height:520px)]:min-h-0 [@media(orientation:landscape)_and_(max-height:520px)]:pt-9 [@media(orientation:landscape)_and_(max-height:520px)]:pb-3 [@media(orientation:portrait)_and_(max-height:600px)]:min-h-0 [@media(orientation:portrait)_and_(max-height:600px)]:pt-9 [@media(orientation:portrait)_and_(max-height:600px)]:pb-4";
-const PRIMARY =
+export const PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
-const SECOND =
+export const SECOND =
   "inline-flex h-12 items-center justify-center rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
 
 /**
@@ -457,7 +457,7 @@ function After({ children }: { children: ReactNode }) {
 }
 
 /** The card's corner: A with the room's heart, B with its spade. */
-function Corner({ side }: { side: Side }) {
+export function Corner({ side }: { side: Side }) {
   return (
     <span aria-hidden="true" className="absolute top-4 left-5 flex items-center gap-1.5 text-page-label text-page-body">
       {side === 0 ? "A" : "B"}
