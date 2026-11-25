@@ -2381,9 +2381,9 @@ const month19: Month = {
       },
       {
         template: "kawaii",
-        heading: "A bear with one sure sentence",
+        heading: "A bunny with one sure sentence",
         brief: "A bunny, a bear or a kitten says one line, and your note is taped at one corner.",
-        body: "Nineteen months needs no reason, and Kawaii does not ask for one. Pick a bunny, a bear or a kitten; it says your line in a speech bubble, sixty characters, over a ribbon banner of twenty-four. Underneath, the message is in handwriting, on a note with tape at one corner. Keep the line plain and sure, and let the bear make it light.",
+        body: "Nineteen months needs no reason, and Kawaii does not ask for one. Pick a bunny, a bear or a kitten; it says your line in a speech bubble, sixty characters, over a ribbon banner of twenty-four. Underneath, the message is in handwriting, on a note with tape at one corner. Keep the line plain and sure, and let the plushie make it light.",
         line: { field: "greeting", where: "What the plushie says", text: "Nineteen months. No occasion. Still you." },
       },
       {
@@ -2439,9 +2439,9 @@ const month19: Month = {
       },
       {
         template: "kawaii",
-        heading: "Un oso con una frase segura",
+        heading: "Un conejito con una frase segura",
         brief: "Un conejito, un oso o un gatito dice una frase, y tu nota va pegada por una esquina.",
-        body: "Los diecinueve meses no necesitan motivo, y Kawaii no lo pide. Elige un conejito, un oso o un gatito; dice tu frase en un bocadillo de sesenta caracteres, sobre una cinta de veinticuatro. Debajo, el mensaje va con letra a mano, en una nota sujeta con cinta por una esquina. Que la frase sea clara y segura, y que el oso le quite peso.",
+        body: "Los diecinueve meses no necesitan motivo, y Kawaii no lo pide. Elige un conejito, un oso o un gatito; dice tu frase en un bocadillo de sesenta caracteres, sobre una cinta de veinticuatro. Debajo, el mensaje va con letra a mano, en una nota sujeta con cinta por una esquina. Que la frase sea clara y segura, y que el peluche le quite peso.",
         line: { field: "greeting", where: "Lo que dice el peluche", text: "Diecinueve meses. Sin motivo. Sigues siendo tú." },
       },
       {
