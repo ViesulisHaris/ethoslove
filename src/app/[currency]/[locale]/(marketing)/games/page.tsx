@@ -16,6 +16,13 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
   return pageMetadata({ locale, path: "/games", title: t("title"), description: t("description") });
 }
 
+/**
+ * The face of the two cards played by a link. Their call to action is longer than a game's "Play",
+ * and on a phone's half-width card it reached the bottom corner's rank and suit: there it sits
+ * above them (the pip is 3 from the edge and about 30 tall). From sm on the card is wide enough.
+ */
+const LINK_CARD_FACE = "items-center px-3 pt-9 pb-11 text-center sm:px-7 sm:pt-10 sm:pb-7";
+
 /** Game night: the games as a hand of cards, then each one laid out to pick, then the packs. */
 export default async function GamesPage({ params }: PageProps<"/[currency]/[locale]/games">) {
   const { currency: shown, locale } = await params;
@@ -60,14 +67,16 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
         <h2 data-reveal className="display-lg text-cream">
           {t("hub.pickTitle")}
         </h2>
-        {/* Rows that wrap and centre, each card as wide as a grid column would make it: with seven
-            games the last one sits in the middle of its row, not alone at the left of an empty one,
-            and any count to come lays out the same way. Cards in a row still stretch to one height. */}
+        {/* Rows that wrap and centre, each card as wide as a grid column would make it: a short last
+            row sits in the middle, not alone at the left of an empty one, and any count to come lays
+            out the same way. Cards in a row still stretch to one height. The two played by a link,
+            today's and this week's, are a row of their own above the eight games (two and three,
+            three, two on a desk), so no game is ever left alone in a last row. */}
         <ul className="mt-8 flex flex-wrap justify-center gap-3 sm:mt-10 sm:gap-6">
           {/* Today's question first: one would you rather a day, sent between two phones by a link. */}
           <li data-reveal className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]">
             <Link href="/games/today" data-today-card className="group block h-full rounded-[24px]">
-              <PlayingCard rank="★" suit="heart" radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
+              <PlayingCard rank="★" suit="heart" radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName={LINK_CARD_FACE}>
                 <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
                   <Sticker id="sparkle" />
                 </span>
@@ -92,7 +101,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
           {/* The weekly challenge beside it: three picks a week, sent the same way. */}
           <li data-reveal className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
             <Link href="/games/weekly" data-weekly-card className="group block h-full rounded-[24px]">
-              <PlayingCard rank="★" suit="spade" radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
+              <PlayingCard rank="★" suit="spade" radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName={LINK_CARD_FACE}>
                 <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
                   <Sticker id="star" />
                 </span>
@@ -114,8 +123,10 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
               </PlayingCard>
             </Link>
           </li>
+        </ul>
+        <ul className="mt-3 flex flex-wrap justify-center gap-3 sm:mt-6 sm:gap-6">
           {GAMES.map((g, i) => (
-            <li key={g.key} data-reveal data-tour={g.phones === "two" ? "two-phones" : undefined} className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": `${((i + 2) % 3) * 80}ms` } as React.CSSProperties}>
+            <li key={g.key} data-reveal data-tour={g.phones === "two" ? "two-phones" : undefined} className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]" style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}>
               <Link href={g.href} className="group block h-full rounded-[24px]">
                 <PlayingCard rank={g.rank} suit={g.suit} radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
                   <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">
