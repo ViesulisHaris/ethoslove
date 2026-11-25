@@ -152,7 +152,9 @@ export function LetterBox({
         {w.title}
       </h2>
       <p className={cn("mt-2 text-[0.9375rem] leading-relaxed", band ? "text-page-body" : "text-ink-soft")}>{w.line}</p>
-      <div className="mt-5 min-h-[6.75rem] sm:min-h-12">
+      {/* One area of fixed height holds the form (or the line that replaced it) and the status under it:
+          two rows of 48 px and two lines of status on a phone, one row and one line from 640 px. */}
+      <div className="mt-5 flex min-h-[10.25rem] flex-col sm:min-h-20">
         {done ? (
           <div className="flex flex-col items-start gap-1">
             <p className={cn("flex items-start gap-2 text-[0.9375rem] leading-relaxed", band ? "text-page-ink" : "text-ink")} data-testid="letter-done">
@@ -205,19 +207,19 @@ export function LetterBox({
             </button>
           </form>
         )}
+        <p
+          ref={status}
+          id={`letter-status-${where}`}
+          tabIndex={-1}
+          role={problem ? "alert" : "status"}
+          data-testid="letter-status"
+          className={cn("mt-2 text-sm leading-6 outline-none", !done && "min-h-12 sm:min-h-6", band ? "text-page-ink" : "text-ink")}
+        >
+          {statusLine}
+          {/* The line that replaced the form, read out where focus lands; shown once, above. */}
+          {done ? <span className="sr-only">{state === "on" ? w.on : w.asked}</span> : null}
+        </p>
       </div>
-      <p
-        ref={status}
-        id={`letter-status-${where}`}
-        tabIndex={-1}
-        role={problem ? "alert" : "status"}
-        data-testid="letter-status"
-        className={cn("mt-2 min-h-6 text-sm leading-6 outline-none", band ? "text-page-ink" : "text-ink")}
-      >
-        {statusLine}
-        {/* The line that replaced the form, read out where focus lands; shown once, above. */}
-        {done ? <span className="sr-only">{state === "on" ? w.on : w.asked}</span> : null}
-      </p>
       <Link
         href="/legal/privacy"
         className={cn(
