@@ -13,7 +13,7 @@ import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M } from "@/lib/cities/places";
 import { ideaImageInCity } from "@/lib/dates/art";
 import { getDateKind, type DateKind } from "@/lib/dates/date-kinds";
-import { pairCopy } from "@/lib/cities/kind-copy";
+import { pairCopy, pairSentence } from "@/lib/cities/kind-copy";
 import { isCityKindPair, kindsOfCity, pairIdeas } from "@/lib/cities/kind-pairs";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
@@ -68,12 +68,16 @@ export async function generateMetadata({ params }: Omit<Props, "searchParams">):
   const kind = getDateKind(kindSlug);
   if (!city || !kind || !isCityKindPair(city.slug, kind)) return {};
   const pair = pairCopy(city, kind, locale === "es" ? "es" : "en");
-  return pageMetadata({ locale, path: `/dates/${city.slug}/${kind}`, title: pair.title, description: pair.description });
+  const meta = pageMetadata({ locale, path: `/dates/${city.slug}/${kind}`, title: pair.title, description: pair.description });
+  // A pair with composed words is for the visitor who follows a link from its city: its cards, its
+  // questions and its kind's line are the kind's own, shared with every city, so it stays out of the
+  // index and the sitemap (dates2-C2). Only the pairs with words of their own are indexed.
+  return pair.indexed ? meta : { ...meta, robots: { index: false, follow: true } };
 }
 
 /**
  * One kind of date in one city, wherever the city's own list holds six of the kind's ideas
- * (lib/cities/kind-pairs.ts): the kind's ideas in the city's order, filled with that city's real
+ * (lib/cities/kind-pairs.ts); indexed only where it has words of its own (lib/cities/kind-copy.ts): the kind's ideas in the city's order, filled with that city's real
  * places, the planner set to the kind and the city, and that city's places for the kind, which the
  * city's own page does not list.
  */
@@ -96,6 +100,7 @@ export default async function CityKindPage({ params }: Props) {
   // "Featured" is a label and nothing else (lib/dates/featured.ts): the same places, in the same order.
   const featured = featuredNow(toYmd(new Date()));
   const stops = cityIdeaStops(ideas, markFeatured(found?.places ?? [], featured));
+  const sentence = pairSentence(city, kind, l, pair, stops.flatMap((s) => (s ? [s[0].name] : [])));
   const words = placesWords(ui, kind);
   const places = found && words ? markFeatured(kindPlaces(kind, found.places), featured) : [];
   const featuredLabel = td("featured.label");
@@ -125,7 +130,7 @@ export default async function CityKindPage({ params }: Props) {
           label={`${name} · ${ui.eyebrow}`}
           heading={pair.heading}
           line={pair.line}
-          sentence={pair.sentence}
+          sentence={sentence}
           picture={{ src: ideaImageInCity(hero.id), from: hero.art.from, to: hero.art.to }}
           note={hero.title[l]}
           back={

@@ -578,22 +578,28 @@ export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
 
 /**
  * The words of a city pair that has no hand-written ones (CITY_KIND_COPY), composed from the kind’s
- * and the city’s own data by src/lib/cities/kind-copy.ts. `{count}` is a numeral: the cards shown.
+ * and the city’s own data by src/lib/cities/kind-copy.ts. `{count}` is spelled out; `{first}` and
+ * `{last}` are the page’s first and last cards in the city’s order; `{places}` names real places the
+ * cards stop at, read from the map when the page is made. Such a page is not indexed (dates2-C2).
  */
-export const CITY_KIND_WORDS: Record<"en" | "es", { title: string; description: string; heading: string; sentence: string; pick: string }> = {
+export const CITY_KIND_WORDS: Record<"en" | "es", { title: string; description: string; heading: string; withPlaces: string; noPlaces: string; two: string; pick: string }> = {
   en: {
-    title: "{phrase} in {city}: {count} With Real Places",
-    description: "{count} {phraseLower} in {city}, each with real places near the center for its stops. The planner fits one to the day’s forecast.",
+    title: "{phrase} in {city}",
+    description: "{phraseSentence} in {city}, from “{first}” to “{last}”. The planner fits one to the day’s forecast.",
     heading: "{phraseSentence} in {city}",
-    sentence: "{count} {dates} for {city}, in the order the city deserves, with real places near the center for every stop.",
-    pick: "Especially good in {city}: {idea}.",
+    withPlaces: "In {city}, {count} {dates}, with stops at places such as {places}.",
+    noPlaces: "In {city}, {count} {dates}. Open one on the map and it finds the places.",
+    two: "{a} and {b}",
+    pick: "Especially good in {city}: “{idea}”.",
   },
   es: {
-    title: "{short} en {city}: {count} con sitios reales",
-    description: "{count} {phraseLower} en {city}, con sitios reales cerca del centro para cada parada. El planificador elige una según la previsión.",
-    heading: "{phrase} en {city}",
-    sentence: "{count} {dates} para {city}, en el orden que pide la ciudad, con sitios reales cerca del centro para cada parada.",
-    pick: "Especialmente buena en {city}: {idea}.",
+    title: "{short} en {city}",
+    description: "{short} en {city}, de «{first}» a «{last}». El planificador elige una según el tiempo.",
+    heading: "{short} en {city}",
+    withPlaces: "En {city}, {count} {dates}, con paradas en sitios como {places}.",
+    noPlaces: "En {city}, {count} {dates}. Abrid una en el mapa y os busca los sitios.",
+    two: "{a} y {b}",
+    pick: "Especialmente buena en {city}: «{idea}».",
   },
 };
 

@@ -74,3 +74,21 @@ export function pairHero(city: City, kind: DateKind, wanted: readonly string[]):
   const ok = (id: string) => ideas.includes(id) && id !== ideas[0] && !(id in SKYLINE_IDEAS);
   return [...wanted, ...ideas].find(ok) ?? ideas[1];
 }
+
+/**
+ * The city's own pick that a pair without hand-written words names under its heading and shows in
+ * its hero, so the line and the picture are one idea (dates2-T6): the first of `city.picks` that is
+ * on the page, is not its first card, is not a skyline, and that no kind before it in DATE_KINDS has
+ * already named in this city (one idea never heads two pages of a city, dates2-C12). Null when none is left.
+ */
+export function pairPick(city: City, kind: DateKind): DateIdea | null {
+  const named = new Set<string>();
+  for (const k of DATE_KINDS) {
+    if (!holds(city, k)) continue;
+    const ideas = pairIdeas(city, k);
+    const id = city.picks.find((pick) => ideas.some((idea) => idea.id === pick) && pick !== ideas[0].id && !(pick in SKYLINE_IDEAS) && !named.has(pick));
+    if (k === kind) return id ? ideas.find((idea) => idea.id === id)! : null;
+    if (id) named.add(id);
+  }
+  return null;
+}

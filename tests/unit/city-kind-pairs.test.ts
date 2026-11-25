@@ -3,11 +3,11 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CITY_KIND_COPY, DATE_KIND_COPY } from "@/content/date-kinds";
 import { CITY_PAGES, CITY_SLUGS, getCity } from "@/lib/cities/cities";
-import { citiesOfKind, CITY_KIND_PAIRS, CITY_KIND_PLACES, cityKindOwn, isCityKindPair, KIND_NEEDS_TRAIT, kindsOfCity, MIN_CITY_KIND_IDEAS, pairHero, pairIdeas } from "@/lib/cities/kind-pairs";
+import { citiesOfKind, CITY_KIND_PAIRS, CITY_KIND_PLACES, cityKindOwn, isCityKindPair, KIND_NEEDS_TRAIT, kindsOfCity, MIN_CITY_KIND_IDEAS, pairHero, pairIdeas, pairPick } from "@/lib/cities/kind-pairs";
 import { SKYLINE_IDEAS } from "@/lib/dates/art";
 import { DATE_KIND_IDS, DATE_KINDS, type DateKind } from "@/lib/dates/date-kinds";
 import { mentionsSpain } from "@/lib/cities/cities";
-import { pairCopy } from "@/lib/cities/kind-copy";
+import { pairCopy, pairSentence, WRITTEN_CITY_KIND_PAIRS } from "@/lib/cities/kind-copy";
 import sitemap from "@/app/sitemap";
 
 const words = (text: string): number => text.trim().split(/\s+/).filter(Boolean).length;
@@ -22,6 +22,8 @@ const traitHolds = (citySlug: string, kind: DateKind): boolean => {
   return !trait || getCity(citySlug)!.traits.includes(trait);
 };
 const heroOf = (citySlug: string, kind: DateKind): string => {
+  const pick = CITY_KIND_COPY[`${citySlug}/${kind}`] ? null : pairPick(getCity(citySlug)!, kind);
+  if (pick) return pick.id;
   const wanted = [CITY_KIND_COPY[`${citySlug}/${kind}`]?.hero, DATE_KIND_COPY[kind]!.hero].filter((x): x is string => !!x);
   return pairHero(getCity(citySlug)!, kind, wanted);
 };
@@ -107,14 +109,49 @@ describe("a kind of date inside a city", () => {
     for (const key of ["london/outdoor", "miami/winter", "phoenix/rainy-day"]) expect(isCityKindPair(key.split("/")[0], key.split("/")[1]), key).toBe(false);
   });
 
-  it("P8 the sitemap lists exactly the pairs, in both languages, and every kind's page", () => {
+  it("P8 the sitemap lists exactly the pairs with words of their own, in both languages, and every kind's page (dates2-C2)", () => {
     const paths = sitemap().map((p) => new URL(p.url).pathname);
-    const want = new Set(CITY_KIND_PAIRS.map((p) => `/dates/${p.city}/${p.kind}`));
+    const want = new Set(WRITTEN_CITY_KIND_PAIRS.map((p) => `/dates/${p.city}/${p.kind}`));
+    expect([...want].sort()).toEqual(Object.keys(CITY_KIND_COPY).map((k) => `/dates/${k}`).sort());
     for (const prefix of ["", "/es"]) {
       const listed = paths.filter((u) => u.startsWith(`${prefix}/dates/`)).map((u) => u.slice(prefix.length)).filter((u) => /^\/dates\/[a-z-]+\/[a-z-]+$/.test(u) && !u.startsWith("/dates/ideas/"));
       expect(new Set(listed), prefix || "en").toEqual(want);
       expect(listed.length, prefix || "en").toBe(want.size);
       for (const kind of DATE_KINDS) expect(paths, `${prefix}/dates/ideas/${kind}`).toContain(`${prefix}/dates/ideas/${kind}`);
+    }
+  });
+
+  it("P10 a composed pair is not indexed, and shares no sentence of its own with another page (dates2-C2, C4, C12, T6)", () => {
+    for (const l of ["en", "es"] as const) {
+      const seen = new Map<string, string>();
+      for (const { city: slug, kind } of CITY_KIND_PAIRS) {
+        const city = getCity(slug)!;
+        const copy = pairCopy(city, kind, l);
+        const at = `${slug}/${kind} ${l}`;
+        expect(copy.indexed, at).toBe(`${slug}/${kind}` in CITY_KIND_COPY);
+        if (copy.indexed) continue;
+        // Every page's title, description, heading and both sentences are its own.
+        const withPlaces = pairSentence(city, kind, l, copy, [`${slug} cafe`, `${slug} park`]);
+        for (const text of [copy.title, copy.description, copy.heading, copy.sentence, withPlaces]) {
+          expect(seen.get(text) ?? at, `${at} repeats ${seen.get(text)}: ${text}`).toBe(at);
+          seen.set(text, at);
+          // No promise about every stop, no stock phrase, no sentence that opens on a numeral.
+          expect(text, at).not.toMatch(/every stop|cada parada|for its stops|deserves|que pide|merece|With Real Places|con sitios reales/);
+          expect(text, at).not.toMatch(/^\d/);
+        }
+        expect(withPlaces, at).toContain(`${slug} cafe`);
+        // The line names the idea the hero shows.
+        const pick = pairPick(city, kind);
+        if (pick && copy.line.includes(pick.title[l])) expect(copy.hero, at).toBe(pick.id);
+        if (l === "es") expect(copy.line, at).not.toMatch(/: [A-ZÁÉÍÓÚ]/);
+      }
+    }
+  });
+
+  it("P11 one idea never heads two composed pages of the same city", () => {
+    for (const slug of CITY_SLUGS) {
+      const picks = kindsOfCity(slug).flatMap((kind) => pairPick(getCity(slug)!, kind)?.id ?? []);
+      expect(new Set(picks).size, `${slug}: ${picks}`).toBe(picks.length);
     }
   });
 

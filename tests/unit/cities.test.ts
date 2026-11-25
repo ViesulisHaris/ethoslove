@@ -542,10 +542,10 @@ describe("a kind of date inside a city", () => {
     }
   });
 
-  it("C6 the sitemap lists the ten kinds, every pair the data holds and every city, each in both languages", () => {
+  it("C6 the sitemap lists the ten kinds, the pairs with words of their own and every city, each in both languages", () => {
     const urls = sitemap().map((p) => new URL(p.url).pathname);
     for (const kind of DATE_KINDS) for (const prefix of ["", "/es"]) expect(urls, kind).toContain(`${prefix}/dates/ideas/${kind}`);
-    for (const { city: c, kind } of CITY_KIND_PAIRS) for (const prefix of ["", "/es"]) expect(urls).toContain(`${prefix}/dates/${c}/${kind}`);
+    for (const { city: c, kind } of CITY_KIND_PAIRS) for (const prefix of ["", "/es"]) expect(urls.includes(`${prefix}/dates/${c}/${kind}`), `${c}/${kind}`).toBe(`${c}/${kind}` in CITY_KIND_COPY);
     for (const prefix of ["", "/es"]) expect(urls.filter((u) => CITY_SLUGS.some((s) => u === `${prefix}/dates/${s}`))).toHaveLength(CITY_SLUGS.length);
     expect(urls.some((u) => u.endsWith("/dates/ideas/at-home"))).toBe(false);
   });

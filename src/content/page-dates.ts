@@ -4,7 +4,7 @@ import { PRESS_PATH } from "@/content/press";
 import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
 import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
 import { pressUpdated } from "@/lib/press/shown";
-import { CITY_KIND_PAIRS } from "@/lib/cities/kind-pairs";
+import { WRITTEN_CITY_KIND_PAIRS } from "@/lib/cities/kind-copy";
 
 /**
  * When each page's own words last changed, for the sitemap's <lastmod>. Search engines believe
@@ -152,7 +152,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/dates": DATES_LIVE,
   "/dates/*": DATES_LIVE,
   "/dates/ideas/*": DATES_LIVE,
-  ...Object.fromEntries(CITY_KIND_PAIRS.map((p) => [`/dates/${p.city}/${p.kind}`, DATES_LIVE])),
+  ...Object.fromEntries(WRITTEN_CITY_KIND_PAIRS.map((p) => [`/dates/${p.city}/${p.kind}`, DATES_LIVE])),
   "/trips": ROOMS_LIVE,
   "/trips/*": ROOMS_LIVE,
   "/games": GAMES_LIVE,

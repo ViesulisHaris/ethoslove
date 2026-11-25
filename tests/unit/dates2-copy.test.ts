@@ -6,6 +6,7 @@ import es from "../../messages/es.json";
 import { DATE_KIND_UI } from "@/content/date-kinds";
 import { FOR_VENUES, FOR_VENUES_PATH } from "@/content/for-venues";
 import { mentionsSpain } from "@/lib/cities/cities";
+import { IDEAS } from "@/lib/dates/ideas";
 import sitemap from "@/app/sitemap";
 import { fillerIn } from "./filler";
 
@@ -63,7 +64,8 @@ describe("dates2 copy", () => {
   it("X1 the new words fit the designed pages", () => {
     for (const l of LOCALES) {
       const lines: [string, string][] = [
-        ["cities.line", String(at(MESSAGES[l], "cities.line")).replace("{city}", "Salt Lake City")],
+        // The city's first card names the line (dates2-C14): the longest title any city could start with.
+        ["cities.line", String(at(MESSAGES[l], "cities.line")).replace("{first}", IDEAS.map((idea) => idea.title[l]).reduce((a, b) => (words(b) > words(a) ? b : a)))],
         ["cities.ideas.line", String(at(MESSAGES[l], "cities.ideas.line")).replace("{city}", "Salt Lake City")],
         ["cities.places.line", String(at(MESSAGES[l], "cities.places.line"))],
         ...PLACE_PREFIXES.map((p): [string, string] => [`${p}PlacesLine`, String((DATE_KIND_UI[l] as Record<string, unknown>)[`${p}PlacesLine`])]),
