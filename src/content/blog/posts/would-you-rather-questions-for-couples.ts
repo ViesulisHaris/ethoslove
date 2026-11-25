@@ -262,7 +262,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play it on one phone or two" },
         {
           type: "p",
-          text: "Reading from a list works. A game does the secret-pick part for you. Our free [Would you rather?](/games/rather) deals ten questions, you each pick without seeing the other's answer, and then it shows whether you agreed and keeps the score. Pass one phone back and forth on the sofa, or make a room and send the link, so you can play from two different cities. There's nothing to download and no sign-up.",
+          text: "Reading from a list works. A game does the secret-pick part for you. Our free [Would you rather?](/games/would-you-rather) deals ten questions, you each pick without seeing the other's answer, and then it shows whether you agreed and keeps the score. Pass one phone back and forth on the sofa, or make a room and send the link, so you can play from two different cities. There's nothing to download and no sign-up.",
         },
         {
           type: "p",
@@ -302,7 +302,7 @@ export const post: BlogPost = {
         },
         {
           q: "Can you play would you rather over text?",
-          a: "Yes, and it suits text well. Send the question with your own answer hidden, wait for theirs, then reveal yours and ask why. Three or four across a day is better than twenty in a row. For a proper round from two places at once, [Would you rather?](/games/rather) works on two phones from one link.",
+          a: "Yes, and it suits text well. Send the question with your own answer hidden, wait for theirs, then reveal yours and ask why. Three or four across a day is better than twenty in a row. For a proper round from two places at once, [Would you rather?](/games/would-you-rather) works on two phones from one link.",
         },
       ],
     },
@@ -562,7 +562,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Jugadlo en un móvil o en dos" },
         {
           type: "p",
-          text: "Leer de una lista funciona. Un juego se encarga por ti de la parte de elegir en secreto. Nuestro juego gratis [¿Qué prefieres?](/games/rather) reparte diez preguntas, cada uno elige sin ver la respuesta del otro, y luego enseña si habéis coincidido y lleva la cuenta. Pasaos el móvil en el sofá, o cread una sala y enviad el enlace para jugar cada uno desde su ciudad. No hay que descargar nada ni registrarse.",
+          text: "Leer de una lista funciona. Un juego se encarga por ti de la parte de elegir en secreto. Nuestro juego gratis [¿Qué prefieres?](/games/would-you-rather) reparte diez preguntas, cada uno elige sin ver la respuesta del otro, y luego enseña si habéis coincidido y lleva la cuenta. Pasaos el móvil en el sofá, o cread una sala y enviad el enlace para jugar cada uno desde su ciudad. No hay que descargar nada ni registrarse.",
         },
         {
           type: "p",
@@ -602,7 +602,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Se puede jugar a qué prefieres por mensaje?",
-          a: "Sí, y va muy bien por mensaje. Manda la pregunta sin decir tu respuesta, espera la suya, luego enseña la tuya y pregunta por qué. Tres o cuatro repartidas durante el día funcionan mejor que veinte seguidas. Para una ronda en condiciones desde dos sitios a la vez, [¿Qué prefieres?](/games/rather) funciona en dos móviles con un solo enlace.",
+          a: "Sí, y va muy bien por mensaje. Manda la pregunta sin decir tu respuesta, espera la suya, luego enseña la tuya y pregunta por qué. Tres o cuatro repartidas durante el día funcionan mejor que veinte seguidas. Para una ronda en condiciones desde dos sitios a la vez, [¿Qué prefieres?](/games/would-you-rather) funciona en dos móviles con un solo enlace.",
         },
       ],
     },

@@ -24,7 +24,7 @@ vi.mock("@/i18n/navigation", () => ({
       {children}
     </a>
   ),
-  usePathname: () => "/games/deck",
+  usePathname: () => "/games/questions-for-couples",
   useRouter: () => ({ push: () => undefined }),
 }));
 

@@ -428,7 +428,7 @@ export function TodayQuestion({ day }: { day: number }) {
               {t("copyAgain")}
             </button>
           ) : null}
-          <Link href="/games/rather" data-whole-game onClick={plainWhenOffline} className={canSend ? SECOND : PRIMARY}>
+          <Link href="/games/would-you-rather" data-whole-game onClick={plainWhenOffline} className={canSend ? SECOND : PRIMARY}>
             {t("wholeGame")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>

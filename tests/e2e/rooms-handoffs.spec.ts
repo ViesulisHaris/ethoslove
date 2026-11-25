@@ -115,9 +115,9 @@ test.describe("long distance, joined up", () => {
     const games = page.getByTestId("ldr-games").getByRole("link");
     await expect(games).toHaveCount(2);
     await expect(games.nth(0)).toHaveAccessibleName("Draw it, guess it");
-    await expect(games.nth(0)).toHaveAttribute("href", "/games/draw");
+    await expect(games.nth(0)).toHaveAttribute("href", "/games/drawing-game");
     await expect(games.nth(1)).toHaveAccessibleName("Would you rather?");
-    await expect(games.nth(1)).toHaveAttribute("href", "/games/rather");
+    await expect(games.nth(1)).toHaveAttribute("href", "/games/would-you-rather");
     for (const href of await games.evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""))) expect((await request.get(href)).status(), href).toBe(200);
   });
 

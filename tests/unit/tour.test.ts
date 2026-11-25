@@ -14,7 +14,7 @@ describe("roomForPath", () => {
       ["/dates", "dates"],
       ["/create/bloom", "editor"],
       ["/games", "games"],
-      ["/games/deck", "games"],
+      ["/games/questions-for-couples", "games"],
       ["/trips", "trips"],
       ["/trips/lisbon-long-weekend", "trips"],
     ];

@@ -105,7 +105,7 @@ export default async function TodayPage({ params }: Props) {
               <div className="min-w-0 lg:pt-7">
                 <ul className="flex flex-wrap gap-x-6 leading-8">
                   <li>
-                    <Link href="/games/rather" className={cn(QUIET_LINK, "font-medium")}>
+                    <Link href="/games/would-you-rather" className={cn(QUIET_LINK, "font-medium")}>
                       {t("more.play")}
                     </Link>
                   </li>

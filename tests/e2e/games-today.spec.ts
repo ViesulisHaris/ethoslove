@@ -115,7 +115,7 @@ for (const locale of ["", "/es"] as const) {
     await expect(cards.nth(1)).toContainText(words.you);
     await expect(cards.nth(1)).toContainText(pair.a[lang]);
     // Once, after the reveal: the whole game and the gift.
-    await expect(two.page.locator("[data-whole-game]")).toHaveAttribute("href", `${locale}/games/rather`);
+    await expect(two.page.locator("[data-whole-game]")).toHaveAttribute("href", `${locale}/games/would-you-rather`);
     await expect(two.page.locator('a[href*="/templates?ref=game-end"]')).toHaveCount(1);
     await expect(two.page.locator("[data-todays]")).toHaveCount(0);
     await two.page.locator("[data-today] input").fill("Sam");
@@ -363,7 +363,7 @@ test("T17: a link opened in a tab that had the page, then the whole game, then B
   await expect(phase(two.page)).toHaveAttribute("data-phase", "reveal");
   await two.page.locator("[data-whole-game]").click();
   // The first visit to the game compiles it on a dev server, which can take longer than five seconds.
-  await expect(two.page).toHaveURL(/\/games\/rather$/, { timeout: 30_000 });
+  await expect(two.page).toHaveURL(/\/games\/would-you-rather$/, { timeout: 30_000 });
   await expect(phase(two.page)).toHaveCount(0);
   await two.page.goBack();
   await expect(two.page).toHaveURL(/\/games\/today#q=/);

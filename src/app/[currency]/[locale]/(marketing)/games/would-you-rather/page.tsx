@@ -7,13 +7,13 @@ import { RatherGame } from "@/components/games/rather-game";
 import { QuestionList, eitherOr } from "@/components/games/question-list";
 import { RATHER_PAIRS } from "@/lib/games/content";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/rather">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/would-you-rather">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.rather" });
-  return pageMetadata({ locale, path: "/games/rather", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/would-you-rather", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/rather">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/would-you-rather">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";

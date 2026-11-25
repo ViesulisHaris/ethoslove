@@ -167,7 +167,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Some couples like a game to do the asking. Our free [question cards](/games/deck) have a deck of closer questions for later in the evening: pass the phone, read one out, both answer. For more questions you both answer, and six ways to play them, see our [questions for couples](/blog/questions-for-couples).",
+          text: "Some couples like a game to do the asking. Our free [question cards](/games/questions-for-couples) have a deck of closer questions for later in the evening: pass the phone, read one out, both answer. For more questions you both answer, and six ways to play them, see our [questions for couples](/blog/questions-for-couples).",
         },
         { type: "h2", text: "When he goes quiet, or makes a joke" },
         {
@@ -404,7 +404,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Hay parejas a las que les va mejor que pregunte un juego. Nuestras [cartas de preguntas](/games/deck) gratis tienen una baraja de preguntas más íntimas para la noche: os pasáis el móvil, uno lee una y contestáis los dos. Para más preguntas que respondéis los dos, y seis maneras de jugarlas, mira nuestras [preguntas para conocer a tu pareja](/blog/questions-for-couples).",
+          text: "Hay parejas a las que les va mejor que pregunte un juego. Nuestras [cartas de preguntas](/games/questions-for-couples) gratis tienen una baraja de preguntas más íntimas para la noche: os pasáis el móvil, uno lee una y contestáis los dos. Para más preguntas que respondéis los dos, y seis maneras de jugarlas, mira nuestras [preguntas para conocer a tu pareja](/blog/questions-for-couples).",
         },
         { type: "h2", text: "Si se queda callado, o lo convierte en broma" },
         {

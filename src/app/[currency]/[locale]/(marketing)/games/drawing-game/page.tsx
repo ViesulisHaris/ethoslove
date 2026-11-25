@@ -7,13 +7,13 @@ import { DrawGame } from "@/components/games/draw-game";
 import { QuestionList } from "@/components/games/question-list";
 import { DRAW_WORDS } from "@/lib/games/draw";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/draw">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/drawing-game">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.draw" });
-  return pageMetadata({ locale, path: "/games/draw", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/drawing-game", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/draw">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/drawing-game">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("games.draw");

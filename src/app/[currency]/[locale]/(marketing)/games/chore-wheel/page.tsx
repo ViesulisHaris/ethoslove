@@ -5,13 +5,13 @@ import { GameTable } from "@/components/games/cards";
 import { GameNotes } from "@/components/games/page/game-notes";
 import { Roulette } from "@/components/games/roulette";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/roulette">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/chore-wheel">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.roulette" });
-  return pageMetadata({ locale, path: "/games/roulette", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/chore-wheel", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/roulette">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/chore-wheel">) {
   const { locale } = await params;
   setRequestLocale(locale);
   return (

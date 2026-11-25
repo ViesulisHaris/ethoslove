@@ -9,13 +9,13 @@ import { QuestionDeck } from "@/components/games/question-deck";
 import { QuestionList } from "@/components/games/question-list";
 import { DECKS, DECK_IDS } from "@/lib/games/questions";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/deck">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/questions-for-couples">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.deck" });
-  return pageMetadata({ locale, path: "/games/deck", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/questions-for-couples", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/deck">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/questions-for-couples">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("games.deck");

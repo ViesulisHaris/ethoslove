@@ -7,13 +7,13 @@ import { KnowGame } from "@/components/games/know-game";
 import { QuestionList } from "@/components/games/question-list";
 import { KNOW_QUESTIONS } from "@/lib/games/content";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/know">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/how-well-do-you-know-me">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.know" });
-  return pageMetadata({ locale, path: "/games/know", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/how-well-do-you-know-me", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/know">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/how-well-do-you-know-me">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";

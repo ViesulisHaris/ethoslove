@@ -204,7 +204,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play it on one phone, or give them the dares" },
         {
           type: "p",
-          text: "A list makes you choose; a deck chooses for you, and that's fairer. Our free [truth or dare, soft edition](/games/dare) is a game for one phone you pass between you: it holds 50 truths and 50 dares, deals twelve of each per game in a fresh order every time, and says whose turn it is. It's the sweet-and-silly version, mostly compliments and bad dancing. For a lighter game with no dares at all, try [Would you rather?](/games/rather), and our [questions for couples](/blog/questions-for-couples) has six more games to play with questions.",
+          text: "A list makes you choose; a deck chooses for you, and that's fairer. Our free [truth or dare, soft edition](/games/truth-or-dare) is a game for one phone you pass between you: it holds 50 truths and 50 dares, deals twelve of each per game in a fresh order every time, and says whose turn it is. It's the sweet-and-silly version, mostly compliments and bad dancing. For a lighter game with no dares at all, try [Would you rather?](/games/would-you-rather), and our [questions for couples](/blog/questions-for-couples) has six more games to play with questions.",
         },
         {
           type: "p",
@@ -442,7 +442,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Jugad en un móvil, o regálale los retos" },
         {
           type: "p",
-          text: "Una lista te obliga a elegir; una baraja elige por ti, y eso es más justo. Nuestro [verdad o reto, versión suave](/games/dare) gratis es un juego para un móvil que os vais pasando: tiene 50 verdades y 50 retos, en cada partida reparte doce de cada tipo, en un orden nuevo, y dice a quién le toca. Es la versión tierna y tonta: sobre todo piropos y bailes malos. Para un juego más ligero sin retos, prueba [¿Qué prefieres?](/games/rather), y nuestras [preguntas para conocer a tu pareja](/blog/questions-for-couples) tienen seis juegos más con preguntas.",
+          text: "Una lista te obliga a elegir; una baraja elige por ti, y eso es más justo. Nuestro [verdad o reto, versión suave](/games/truth-or-dare) gratis es un juego para un móvil que os vais pasando: tiene 50 verdades y 50 retos, en cada partida reparte doce de cada tipo, en un orden nuevo, y dice a quién le toca. Es la versión tierna y tonta: sobre todo piropos y bailes malos. Para un juego más ligero sin retos, prueba [¿Qué prefieres?](/games/would-you-rather), y nuestras [preguntas para conocer a tu pareja](/blog/questions-for-couples) tienen seis juegos más con preguntas.",
         },
         {
           type: "p",

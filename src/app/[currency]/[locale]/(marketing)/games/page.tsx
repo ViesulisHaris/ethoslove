@@ -147,7 +147,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
             const pack = PACKS[id];
             return (
               <li key={id} data-reveal style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}>
-                <Link href="/games/deck#packs" className="group flex h-full items-start gap-4 rounded-[24px] bg-white/[0.06] p-4 ring-1 ring-white/10 transition-colors hover:bg-white/10 sm:flex-col sm:p-6">
+                <Link href="/games/questions-for-couples#packs" className="group flex h-full items-start gap-4 rounded-[24px] bg-white/[0.06] p-4 ring-1 ring-white/10 transition-colors hover:bg-white/10 sm:flex-col sm:p-6">
                   <PlayingCard faceDown back={pack.back} radius={12} className="aspect-[5/7] w-16 shrink-0 rotate-[-4deg] transition-transform duration-300 ease-(--ease-out-quint) group-hover:rotate-[-8deg] sm:w-20" backLabel={pack.adult ? <span className="rounded-full bg-cream/95 px-2 py-0.5 text-[11px] font-bold text-forest">18+</span> : undefined} />
                   <span className="min-w-0">
                     <span className="block font-display text-[22px] leading-tight text-cream sm:text-[25px]">{pack.name[lang]}</span>

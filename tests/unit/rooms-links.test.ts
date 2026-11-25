@@ -584,7 +584,7 @@ describe("the rooms' pages", () => {
   });
 
   it("the games for a call come from the games' own shelf, and each one's page exists", () => {
-    expect(LDR_GAMES.map((g) => g.href)).toEqual(["/games/draw", "/games/rather"]);
+    expect(LDR_GAMES.map((g) => g.href)).toEqual(["/games/drawing-game", "/games/would-you-rather"]);
     for (const g of LDR_GAMES) {
       const shelf = GAMES.find((x) => x.href === g.href)!;
       expect([g.rank, g.suit, g.sticker]).toEqual([shelf.rank, shelf.suit, shelf.sticker]);

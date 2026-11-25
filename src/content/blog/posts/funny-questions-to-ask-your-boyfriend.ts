@@ -205,7 +205,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play them as a game, or send them as a gift" },
         {
           type: "p",
-          text: "If reading from a list feels odd, let a game ask. Our free [Would you rather?](/games/rather) has you both pick in secret, then shows whether you agree, and [How well do you know me?](/games/know) has you answer for yourself and guess for him. Both work on one phone or from two, so you can play them on a call. The [question cards](/games/deck) have a light deck for the sofa. For 104 more dilemmas, see our [would you rather questions for couples](/blog/would-you-rather-questions-for-couples), and for the opposite mood, our [deep questions to ask your boyfriend](/blog/deep-questions-to-ask-your-boyfriend).",
+          text: "If reading from a list feels odd, let a game ask. Our free [Would you rather?](/games/would-you-rather) has you both pick in secret, then shows whether you agree, and [How well do you know me?](/games/how-well-do-you-know-me) has you answer for yourself and guess for him. Both work on one phone or from two, so you can play them on a call. The [question cards](/games/questions-for-couples) have a light deck for the sofa. For 104 more dilemmas, see our [would you rather questions for couples](/blog/would-you-rather-questions-for-couples), and for the opposite mood, our [deep questions to ask your boyfriend](/blog/deep-questions-to-ask-your-boyfriend).",
         },
         {
           type: "p",
@@ -452,7 +452,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Jugadlas, o mándaselas como regalo" },
         {
           type: "p",
-          text: "Si leer de una lista te resulta raro, deja que pregunte un juego. Nuestro juego gratis [¿Qué prefieres?](/games/rather) os hace elegir a los dos en secreto y luego enseña si coincidís, y en [¿Cuánto me conoces?](/games/know) cada uno contesta sobre sí mismo y adivina lo del otro. Los dos funcionan en un móvil o en dos, así que podéis jugar en una llamada. Las [cartas de preguntas](/games/deck) tienen una baraja ligera para el sofá. Para 104 dilemas más, mira nuestras [preguntas de qué prefieres para parejas](/blog/would-you-rather-questions-for-couples), y para cuando os pongáis serios, nuestras [preguntas profundas para tu novio](/blog/deep-questions-to-ask-your-boyfriend).",
+          text: "Si leer de una lista te resulta raro, deja que pregunte un juego. Nuestro juego gratis [¿Qué prefieres?](/games/would-you-rather) os hace elegir a los dos en secreto y luego enseña si coincidís, y en [¿Cuánto me conoces?](/games/how-well-do-you-know-me) cada uno contesta sobre sí mismo y adivina lo del otro. Los dos funcionan en un móvil o en dos, así que podéis jugar en una llamada. Las [cartas de preguntas](/games/questions-for-couples) tienen una baraja ligera para el sofá. Para 104 dilemas más, mira nuestras [preguntas de qué prefieres para parejas](/blog/would-you-rather-questions-for-couples), y para cuando os pongáis serios, nuestras [preguntas profundas para tu novio](/blog/deep-questions-to-ask-your-boyfriend).",
         },
         {
           type: "p",
