@@ -320,6 +320,14 @@ describe("the weekly challenge's words", () => {
     expect(saved.a.es).toMatch(/Este navegador guarda/);
   });
 
+  it("C7: in Spanish the weekly challenge is a «desafío», so «reto» keeps meaning the dare inside it", () => {
+    const w = es.games.weekly;
+    const challenge = [w.label, w.h1, w.h1Last, w.h1Older, w.broken, w.thisWeeks, w.shareTitle, es.games.hub.weeklyTitle, es.games.hub.weeklyCta, ...WEEKLY_FAQ.flatMap((f) => [f.q.es, f.a.es])];
+    for (const line of challenge) expect(line, line).not.toMatch(/\bretos?\b/i);
+    for (const line of [w.label, w.h1, w.h1Last, w.h1Older, es.games.hub.weeklyTitle]) expect(line, line).toMatch(/desafío/i);
+    expect(w.together.dare).toBe("Reto");
+  });
+
   it("C3: no filler, no exclamation marks, no em dashes; no streak, no points, no email", () => {
     for (const l of LOCALES) {
       expect(fillerIn(texts(l), l), l).toEqual([]);

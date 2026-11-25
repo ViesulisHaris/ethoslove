@@ -175,7 +175,7 @@ for (const locale of ["", "/es"] as const) {
     const near = [thisWeek(), thisWeek() - 1].map((w) => weeklyCards(weeklySet(w)));
     expect(near.some((c) => html.includes(c.picks[0].a[lang]) && html.includes(c.picks[0].b[lang]) && html.includes(c.ask[lang]) && html.includes(c.dare[lang]))).toBe(true);
     expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
-    expect(html).toContain(locale ? "El reto de esta semana para dos" : "This week’s challenge for two");
+    expect(html).toContain(locale ? "El desafío de esta semana para dos" : "This week’s challenge for two");
     expect(html).not.toContain("#w=");
   });
 
@@ -353,7 +353,7 @@ test("W11: on the hub, beside today's question", async ({ page }) => {
   await expect(second.locator('a[data-weekly-card][href="/games/weekly"]')).toContainText("This week’s challenge");
   await expect(page.getByText("Every one is quick")).toHaveCount(0);
   await page.goto("/es/games");
-  await expect(page.locator('a[data-weekly-card][href="/es/games/weekly"]')).toContainText("El reto de la semana");
+  await expect(page.locator('a[data-weekly-card][href="/es/games/weekly"]')).toContainText("El desafío de la semana");
 });
 
 test("W12: no banner and no recorder on the page", async ({ browser }) => {

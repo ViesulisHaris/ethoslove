@@ -301,10 +301,10 @@ export const TODAY_FAQ: GameFaq[] = [
 /** The questions under the weekly challenge (/games/weekly), shown closed and given to search engines as an FAQPage. "{count}" is the number of sets. Each answer is held to lib/games/weekly.ts and components/games/weekly/weekly-challenge.tsx. */
 export const WEEKLY_FAQ: GameFaq[] = [
   {
-    q: { en: "When does the challenge change?", es: "¿Cuándo cambia el reto?" },
+    q: { en: "When does the challenge change?", es: "¿Cuándo cambia el desafío?" },
     a: {
       en: "Every Monday at midnight UTC. There are {count} themed sets, each made of cards from the free games, and none comes back until every one has had its week.",
-      es: "Cada lunes a medianoche UTC. Hay {count} retos temáticos, hechos con cartas de los juegos gratis, y ninguno se repite hasta que todos han tenido su semana.",
+      es: "Cada lunes a medianoche UTC. Hay {count} desafíos temáticos, hechos con cartas de los juegos gratis, y ninguno se repite hasta que todos han tenido su semana.",
     },
   },
   {
@@ -325,7 +325,7 @@ export const WEEKLY_FAQ: GameFaq[] = [
     q: { en: "What if they open it next week?", es: "¿Y si lo abre la semana que viene?" },
     a: {
       en: "It still opens on the set you answered, marked as last week’s, and both sets of picks show the same way. After it, a link leads to the new week’s challenge.",
-      es: "Se sigue abriendo en el reto que respondiste, marcado como el de la semana pasada, y las elecciones se ven igual. Después, un enlace lleva al reto de la semana nueva.",
+      es: "Se sigue abriendo en el desafío que respondiste, marcado como el de la semana pasada, y las elecciones se ven igual. Después, un enlace lleva al desafío de la semana nueva.",
     },
   },
 ];
