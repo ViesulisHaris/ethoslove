@@ -184,9 +184,10 @@ test.describe("the pages by where you leave from", () => {
         });
         const first = await g.getByRole("link").first().evaluate((el) => {
           const r = el.getBoundingClientRect();
-          return { top: r.top, textLeft: r.left + parseFloat(getComputedStyle(el).paddingLeft) };
+          return { middle: r.top + r.height / 2, textLeft: r.left + parseFloat(getComputedStyle(el).paddingLeft) };
         });
-        expect(first.top, `${path} ${group}`).toBeGreaterThanOrEqual(label.bottom - 1);
+        // On the line under the label, not beside it.
+        expect(first.middle, `${path} ${group}`).toBeGreaterThan(label.bottom);
         expect(Math.abs(first.textLeft - label.textLeft), `${path} ${group}`).toBeLessThanOrEqual(1);
       }
     }
@@ -304,6 +305,8 @@ test.describe("a trip's page", () => {
 
   test("E10c an address ending in #flights, #stay, #tickets or #car lands on that row open", async ({ page }) => {
     for (const id of ["flights", "stay", "tickets", "car"]) {
+      // A fresh load each time: from one hash of the page to another is no navigation at all.
+      await page.goto("about:blank");
       await page.goto(`/trips/baltic-coast#${id}`);
       await expect(page.locator(`details#${id}`), id).toHaveAttribute("open", "");
     }
@@ -317,7 +320,7 @@ test.describe("a trip's page", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/es/trips/amalfi-coast");
     const runs = page.locator("dl > div").filter({ hasText: "Mejores meses" }).locator("dd > span");
-    await expect(runs).toHaveText([/^\s*mayo–jun\.,\s*$/, /^\s*sept\.–oct\.\s*$/]);
+    await expect(runs).toHaveText(["mayo–jun.", "sept.–oct."]);
     for (const box of await runs.evaluateAll((els) => els.map((el) => el.getClientRects().length))) expect(box).toBe(1);
   });
 
