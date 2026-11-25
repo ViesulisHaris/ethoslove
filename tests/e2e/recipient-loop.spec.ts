@@ -658,3 +658,121 @@ test.describe("the editor counts a recipient's arrival, and nobody else's", () =
     expect(await opened(page, "/create/the-letter?resume=publish&ref=reply")).toEqual([]);
   });
 });
+
+test.describe("a gift a recipient starts is counted once", () => {
+  // recipient_started (docs/marketing/LOOP-KPI.md): the first change to a new draft, in an editor
+  // opened through a door out of a gift. One true or false, nothing else, once per gift.
+  test.setTimeout(180_000);
+
+  const started = async (page: Page) => (await events(page)).filter((e) => e.name === "recipient_started");
+  const ready = (page: Page) => expect(page.locator("#recipientName")).toBeVisible({ timeout: 60_000 });
+  const type = (page: Page, text = "Ana") => page.locator("#recipientName").pressSequentially(text);
+
+  test("the first change to a reply sends one recipient_started, with one true and nothing else", async ({ page }) => {
+    await countEvents(page);
+    await page.goto("/create/the-letter?ref=reply");
+    await ready(page);
+    expect(await started(page)).toEqual([]);
+    await type(page);
+    await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: true } }]);
+    await page.locator("#senderName").pressSequentially("Leo");
+    await page.waitForTimeout(1000);
+    expect(await started(page)).toEqual([{ name: "recipient_started", data: { within7: true } }]);
+  });
+
+  test("a reload of the same draft does not count it again", async ({ page }) => {
+    await countEvents(page);
+    await page.goto("/create/the-letter?ref=reply");
+    await ready(page);
+    await type(page);
+    await expect.poll(async () => (await started(page)).length, { timeout: 15_000 }).toBe(1);
+    // The draft is kept on this device a moment after the change.
+    await page.waitForTimeout(1500);
+    await page.reload();
+    await ready(page);
+    await expect(page.locator("#recipientName")).toHaveValue("Ana");
+    await type(page, " M");
+    await page.waitForTimeout(1500);
+    expect(await started(page)).toEqual([]);
+  });
+
+  test("a kept gift's reminder is counted as later; a visitor from anywhere else is not counted", async ({ page, browser }) => {
+    await countEvents(page);
+    await page.goto("/create/the-letter?ref=gift-keep");
+    await ready(page);
+    await type(page);
+    await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: false } }]);
+
+    for (const address of ["/create/the-letter", "/create/the-letter?ref=tt-couple"]) {
+      const context = await browser.newContext();
+      const other = await context.newPage();
+      await countEvents(other);
+      await other.goto(address);
+      await ready(other);
+      await type(other);
+      await other.waitForTimeout(1500);
+      expect(await started(other), address).toEqual([]);
+      await context.close();
+    }
+  });
+
+  test("a sealed token asks the server, sends it the token alone, and takes its answer", async ({ page }) => {
+    const token = "A".repeat(64);
+    const asked: unknown[] = [];
+    await page.route("**/api/loop/started", (route) => {
+      asked.push(route.request().postDataJSON());
+      return route.fulfill({ json: { within7: false } });
+    });
+    await countEvents(page);
+    await page.goto(`/create/bouquet?ref=reply&reply=${token}`);
+    await ready(page);
+    // Asked as the new draft opens, before any change (loop2-C5), so the count needs no wait.
+    await expect.poll(() => asked.length, { timeout: 15_000 }).toBe(1);
+    await type(page);
+    await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: false } }]);
+    expect(asked).toEqual([{ reply: token }]);
+  });
+
+  // loop2-T1: /made-with-ethos offers several "Make this gift"; trying two used to count twice.
+  test("a second template tried in the same visit is the same recipient: counted once", async ({ page }) => {
+    await countEvents(page);
+    await page.goto("/create/the-letter?ref=g");
+    await ready(page);
+    await type(page);
+    await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: true } }]);
+    await page.goto("/create/constellations?ref=g");
+    await ready(page);
+    await type(page);
+    await page.waitForTimeout(1500);
+    expect(await started(page)).toEqual([]);
+  });
+
+  // loop2-C1: a demo's badge used to carry ?ref=watermark, so a visitor who tapped it and began a
+  // gift was counted as a recipient within seven days.
+  test("a demo's badge tags nobody: the editor reached through it counts no recipient", async ({ page }) => {
+    await countEvents(page);
+    await page.goto("/demo/the-letter", { waitUntil: "domcontentloaded" });
+    const badge = page.locator('a[href*="made-with-ethos"]').first();
+    await expect(badge).toHaveAttribute("href", "/made-with-ethos?template=the-letter", { timeout: 60_000 });
+    await page.goto("/made-with-ethos?template=the-letter");
+    const make = page.locator('a[href^="/create/"]').first();
+    await expect(make).toHaveAttribute("href", /^\/create\/[a-z0-9-]+$/);
+    await page.goto((await make.getAttribute("href"))!);
+    await ready(page);
+    await type(page);
+    await page.waitForTimeout(1500);
+    expect(await started(page)).toEqual([]);
+    expect((await events(page)).filter((e) => e.name === "recipient_editor_opened")).toEqual([]);
+  });
+
+  test("when the server can't answer, the door's answer is sent", async ({ page }) => {
+    await page.route("**/api/loop/started", (route) => route.fulfill({ status: 500, body: "boom" }));
+    await countEvents(page);
+    await page.goto(`/create/bouquet?ref=reply&reply=${"A".repeat(64)}`);
+    await ready(page);
+    await type(page);
+    await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: true } }]);
+    await page.waitForTimeout(1000);
+    expect(await started(page)).toHaveLength(1);
+  });
+});

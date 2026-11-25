@@ -1,6 +1,8 @@
 import { track } from "@/lib/analytics/track";
+import { isInApp } from "@/lib/app/bridge";
 import { recipientVia, type RecipientVia } from "./recipient";
 import { currentRef, REF_PATTERN } from "./ref";
+import { within7ByDoor } from "./recipient-started";
 
 /**
  * Counting the loop's last two steps, in the editor: it opened for someone who came from a gift,
@@ -44,4 +46,82 @@ export function countRecipientEditorOpened(search: Search, template: string): vo
 export function countRecipientGiftSent(search: Search, template: string, paid: boolean): void {
   const via = editorVia(search);
   if (via) track("recipient_gift_sent", { via, template, paid });
+}
+
+/** In this tab's memory once a visit's start is counted (sessionStorage: gone with the tab). Named in the privacy policy, section 12. */
+export const STARTED_NOTE = "ethos-recipient-started";
+
+function startedThisVisit(): boolean {
+  try {
+    return window.sessionStorage.getItem(STARTED_NOTE) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function noteStarted(): void {
+  try {
+    window.sessionStorage.setItem(STARTED_NOTE, "1");
+  } catch {
+    // No storage (a private window that refuses it, or no window at all): counted per gift instead.
+  }
+}
+
+/** Whether a start made now would be counted, and through which door. */
+function startDoor(search: Search): RecipientVia | null {
+  if (isInApp() || search.get("resume") === "publish" || startedThisVisit()) return null;
+  return editorVia(search);
+}
+
+/**
+ * Where a sealed token names the gift (a paid gift's "Send one back"): ask the server, once, whether
+ * that gift was first opened within seven days. The editor asks as soon as a new draft opens, so the
+ * answer is nearly always in hand by the first change and the count is sent straight away, not
+ * after a wait in which the page could be left. Null: nothing to ask; a null answer: no answer
+ * (no connection, a server that couldn't say, or none within 4 s).
+ */
+export function askStartedWithin7(search: Search, ask: typeof fetch = fetch): Promise<boolean | null> | null {
+  const token = search.get("reply")?.trim() ?? "";
+  if (!REPLY_TOKEN_SHAPE.test(token) || !startDoor(search)) return null;
+  return (async () => {
+    const stop = new AbortController();
+    const timer = setTimeout(() => stop.abort(), 4000);
+    try {
+      const res = await ask("/api/loop/started", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ reply: token }),
+        keepalive: true,
+        signal: stop.signal,
+      });
+      const said = (await res.json()) as { within7?: unknown } | null;
+      return typeof said?.within7 === "boolean" ? said.within7 : null;
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  })();
+}
+
+/**
+ * A recipient began a gift of their own: the first change to a new draft, in an editor opened
+ * through one of the doors out of a gift. Sent once per visit (a tab): someone who tries a second
+ * template from /made-with-ethos is still one recipient who started one. One answer: was that
+ * within seven days of the gift they came from being opened? The server says so when a sealed
+ * token names that gift (`asked`, from askStartedWithin7); otherwise the door does
+ * (./recipient-started.ts). Nothing is asked or counted inside the iPhone app.
+ */
+export async function countRecipientStarted(
+  search: Search,
+  ask: typeof fetch = fetch,
+  asked: Promise<boolean | null> | null = askStartedWithin7(search, ask),
+): Promise<void> {
+  const via = startDoor(search);
+  if (!via) return;
+  const said = asked ? await asked : null;
+  // Read again after the wait: another editor opened in this tab meanwhile may have counted.
+  if (startedThisVisit()) return;
+  noteStarted();
+  track("recipient_started", { within7: said ?? within7ByDoor(via) });
 }

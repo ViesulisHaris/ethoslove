@@ -202,13 +202,42 @@ export function giftCardsOnSale(env: Record<string, string | undefined> = proces
 export const PAIR_GIFTS = 2;
 
 /**
- * Two more gifts are sold only while GIFT_PAIR_ENABLED is "true", and only once migration
+ * Two more gifts are sold to everyone only while GIFT_PAIR_ENABLED is "true", and only once migration
  * 0024_gift_credits.sql has made the table they live in (lib/commerce/gift-credits.ts reads a
  * missing table as "not on sale"). Server-side only, like giftCardsOnSale: the browser reads false,
- * so the share screen only ever draws what /api/entitlements says.
+ * so the share screen only ever draws what /api/entitlements says. Per account: pairOnSaleFor below.
  */
 export function pairOnSale(env: Record<string, string | undefined> = process.env): boolean {
   return env.GIFT_PAIR_ENABLED === "true";
+}
+
+/** GIFT_PAIR_ENABLED as the three things it can mean: "true" on for everyone, "preview" for the listed accounts only, anything else off. */
+export type PairSale = "on" | "preview" | "off";
+
+export function pairSale(env: Record<string, string | undefined> = process.env): PairSale {
+  if (env.GIFT_PAIR_ENABLED === "true") return "on";
+  return env.GIFT_PAIR_ENABLED === "preview" ? "preview" : "off";
+}
+
+/** An address as it is compared: no spaces anywhere, lower case. */
+const bareEmail = (value: string): string => value.replace(/\s+/g, "").toLowerCase();
+
+/** GIFT_PAIR_PREVIEW_EMAILS: the accounts that see two more gifts while the switch says "preview". Server-side only. */
+export function pairPreviewEmails(env: Record<string, string | undefined> = process.env): string[] {
+  return (env.GIFT_PAIR_PREVIEW_EMAILS ?? "").split(",").map(bareEmail).filter(Boolean);
+}
+
+/**
+ * Whether two more gifts are on sale to the account with this e-mail: to everyone while the switch
+ * is "true", to nobody while it is unset, and in "preview" only to a signed-in account whose e-mail
+ * is listed. A guest (no e-mail) is never listed. The one function every caller asks; the browser
+ * reads false, as with pairOnSale.
+ */
+export function pairOnSaleFor(email: string | null | undefined, env: Record<string, string | undefined> = process.env): boolean {
+  const sale = pairSale(env);
+  if (sale !== "preview") return sale === "on";
+  const mine = email ? bareEmail(email) : "";
+  return mine !== "" && pairPreviewEmails(env).includes(mine);
 }
 
 /** What the two gifts would cost bought one at a time: twice a single, worked out, never typed. */

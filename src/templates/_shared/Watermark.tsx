@@ -27,8 +27,9 @@ import { GIFT_CONTROLS, coversControl } from "./watermark-spot";
  * the badge, and under it what Ethos makes (BRAND.categoryLine), in the end screen's own `tone`.
  * One link, a thumb tall. The floating badge stays the one line it was: its size is tuned.
  *
- * `counted`: on a real gift page a tap is counted (the template, nothing else). A demo shows the
- * badge too, and a tap there is a visitor's, not a recipient's.
+ * `counted`: on a real gift page a tap is counted (the template, nothing else), and the page it opens
+ * carries the recipient's tag on to the editor. A demo shows the badge too, and a tap there is a
+ * visitor's, not a recipient's: its link carries no tag, so nothing after it counts them as one.
  */
 export function Watermark({
   locale,
@@ -47,7 +48,7 @@ export function Watermark({
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const standDown = useControlUnder(ref, !inline);
-  const href = madeWithEthosHref(locale, WATERMARK_REF, slug);
+  const href = madeWithEthosHref(locale, counted ? WATERMARK_REF : null, slug);
   // Not counted with no connection: the new tab opens on the browser's error page, not on ours.
   const onClick = counted
     ? () => {

@@ -100,6 +100,9 @@ export type FunnelEvent =
   | "trip_match_pick"
   | "trip_shared"
   | "room_handoff"
+  // A visitor who allowed cookies saw a second room (gifts, dates, trips, long distance, games)
+  // within 30 days of another: once, and not again for 30 days. No property, no id (lib/analytics/rooms-marker.ts).
+  | "two_rooms_30d"
   | "reminder_saved"
   // "Send one back to {sender}": the template, and where it was tapped ("end": the end screen,
   // "reaction": under "Sent to {sender}." after a reaction).
@@ -112,6 +115,10 @@ export type FunnelEvent =
   | "make_own_clicked"
   | "recipient_editor_opened"
   | "recipient_gift_sent"
+  // A gift of their own begun by someone who came from a gift, once per gift (the first change to a
+  // new draft): whether that was within seven days of the gift they came from being opened. One
+  // true or false, nothing else (lib/attribution/recipient-loop.ts countRecipientStarted).
+  | "recipient_started"
   | "pack_offer_shown"
   // The games. A game begun and a game finished (which game, on one phone or two), a room made and a
   // room joined (which game), and what was picked at the end of a game (the game, and "gift", "today",

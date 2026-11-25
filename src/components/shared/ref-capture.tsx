@@ -11,13 +11,15 @@ import { keepAdRef, rememberRef } from "@/lib/attribution/ref";
 import { keepFreeTier } from "@/lib/editor/free-tier-split";
 import { keepPaySheet } from "@/lib/editor/pay-sheet-split";
 import { keepLetterKeep } from "@/lib/editor/keep-split";
+import { keepRooms } from "@/lib/analytics/rooms-marker";
 
 /**
  * Picks up `?ref=` on every navigation, including the client-side one from a gift's "make your own",
  * and a Meta or TikTok ad's click id (`?fbclid=`, `?ttclid=`) the same way. The first page of the
  * visit is taken down once, for the checkout's record of where the buyer came from
  * (lib/attribution/first-visit.ts). When the cookie choice changes, what is kept for a visitor who
- * said yes (an ad's ref, the first visit, which version of the free Letter they were shown) follows it.
+ * said yes (an ad's ref, the first visit, which version of the free Letter they were shown, the
+ * rooms they opened) follows it; the rooms entry is also dropped here once it is past 30 days.
  */
 export function RefCapture() {
   const pathname = usePathname();
@@ -27,6 +29,7 @@ export function RefCapture() {
   }, [pathname]);
   useEffect(() => {
     rememberVisit(window.location, document.referrer);
+    keepRooms();
     // An arrival the dashboard can't see otherwise (an assistant's answer, a pin, an Instagram link), counted once.
     const arrived = arrivalEvent(window.location, document.referrer);
     if (arrived) track(arrived);
@@ -39,6 +42,7 @@ export function RefCapture() {
         keepFreeTier();
         keepPaySheet();
         keepLetterKeep();
+        keepRooms();
       }),
     [],
   );

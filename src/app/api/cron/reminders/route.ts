@@ -3,7 +3,7 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { isConfigured } from "@/lib/env";
 import { linkSecret, signToken } from "@/lib/lifecycle/links";
 import { openLinkUntil, sendReminders, supabaseReminderJobStore } from "@/lib/lifecycle/reminder-job";
-import { pairOnSale } from "@/lib/pricing/products";
+import { pairOnSale, pairOnSaleFor } from "@/lib/pricing/products";
 import { sendMonthsaries, supabaseMonthsaryStore } from "@/lib/lifecycle/monthsary-job";
 import { sendMonthsaryCheckIn, sendMonthsaryReminder, sendReminderEmail } from "@/lib/email/notify";
 import { sendDateReminder } from "@/lib/email/saved-dates";
@@ -78,6 +78,7 @@ export async function GET(request: NextRequest) {
       },
       removeUrl: async (row, locale) => `${siteUrl()}/api/reminders/remove?t=${await signToken("reminder-remove", row.id, linkKey)}&l=${locale}`,
       pairOnSale: pairOnSale(),
+      pairOnSaleFor: (to) => pairOnSaleFor(to),
       now: new Date(),
       inTime: () => Date.now() - started <= YEARLY_BUDGET_MS,
       pause: () => sleep(SEND_GAP_MS),

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { pairOnSale, visitorCurrency } from "@/lib/pricing/products";
+import { pairOnSaleFor, visitorCurrency } from "@/lib/pricing/products";
 import { readyGifts } from "@/lib/commerce/gift-credits";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
@@ -28,13 +28,16 @@ export async function GET(request: NextRequest) {
     // is there (counting no one's gifts ready reads null without it). Only the pay panel of a reader a
     // reminder e-mail brought asks (`?addPair=1`): every other guest read stays free of the database.
     const asked = request.nextUrl.searchParams.get("addPair") === "1";
-    const admin = asked && pairOnSale() ? getSupabaseAdminClient() : null;
+    // A guest is never on the preview list: on for everyone, or not at all.
+    const admin = asked && pairOnSaleFor(null) ? getSupabaseAdminClient() : null;
     const addPair = admin !== null && (await readyGifts(admin, NO_ONE)) !== null;
     return NextResponse.json({ ...SIGNED_OUT, addPair }, { headers: NO_STORE });
   }
   const locale = request.nextUrl.searchParams.get("locale") === "es" ? "es" : "en";
   // The visitor's country, exactly as the proxy read it to pick the page's currency (src/proxy.ts).
   const currency = visitorCurrency(request.headers);
-  const body = await readEntitlements(supabase, user.id, { locale, currency, now: Date.now(), names: getSupabaseAdminClient() });
+  // Two more gifts: on for everyone, for nobody, or (preview) for the listed accounts only, by the
+  // address Supabase itself verified for this account.
+  const body = await readEntitlements(supabase, user.id, { locale, currency, now: Date.now(), names: getSupabaseAdminClient(), pairOnSale: pairOnSaleFor(user.email) });
   return NextResponse.json(body, { headers: NO_STORE });
 }

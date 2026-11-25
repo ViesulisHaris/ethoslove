@@ -5,6 +5,8 @@ import { GROUP_RETENTION } from "@/lib/group/limits";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
 import { FREE_SAVED_DATES, PRODUCTS, formatAmount, groupAmount, membershipAmount } from "@/lib/pricing/products";
 import { consentSentence } from "@/lib/stripe/line-items";
+import { ROOMS_KEY } from "@/lib/analytics/rooms-marker";
+import { STARTED_NOTE } from "@/lib/attribution/recipient-loop";
 
 const all = (doc: LegalDoc) => [doc.intro, ...doc.sections.flatMap((s) => [s.heading, ...s.paragraphs])].join("\n");
 const section = (doc: LegalDoc, n: number) => doc.sections.find((s) => s.heading.startsWith(`${n}. `))!.paragraphs.join("\n");
@@ -110,6 +112,46 @@ describe("legal documents", () => {
 
   it("name no country or city the business isn't in", () => {
     for (const doc of [LEGAL_DOCS.terms, LEGAL_DOCS.privacy, WITHDRAW_DOCS]) for (const locale of ["en", "es"] as const) expect(all(doc[locale])).not.toMatch(/Spain|España|Madrid/);
+  });
+
+  it("the privacy policy names the rooms entry, in both languages, beside the first visit's", () => {
+    const sentences = {
+      en: /We keep which sections of the site you opened[^.]*\./,
+      es: /Guardamos qué secciones de la web has abierto[^.]*\./,
+    };
+    for (const locale of ["en", "es"] as const) {
+      const text = all(LEGAL_DOCS.privacy[locale]);
+      expect(text).toContain(ROOMS_KEY);
+      const sentence = sentences[locale].exec(text)?.[0] ?? "";
+      expect(sentence).toContain("30");
+      expect(text.indexOf(ROOMS_KEY)).toBeGreaterThan(text.indexOf("ethos-first-visit"));
+      expect(text.indexOf(ROOMS_KEY)).toBeLessThan(text.indexOf("ethos-free-tier"));
+      expect(sentence).not.toMatch(/Spain|España|!/);
+    }
+    // loop2-C8: the rooms sentence said "also keep", right before the next one's "also keep".
+    expect(all(LEGAL_DOCS.privacy.en)).not.toContain("also keep, in your browser's storage (ethos-rooms");
+    expect(all(LEGAL_DOCS.privacy.es)).not.toContain("también, en el almacenamiento de tu navegador (ethos-rooms");
+    // loop2-D3: the sentence read as cut up (an aside between commas before its object), "more than
+    // one" had to reach back three clauses, "only that count is sent" was untrue (one signal is sent,
+    // nothing is counted on the device), and "a distancia" read as a loose adverb in a list of nouns.
+    const en = sentences.en.exec(all(LEGAL_DOCS.privacy.en))?.[0] ?? "";
+    const es = sentences.es.exec(all(LEGAL_DOCS.privacy.es))?.[0] ?? "";
+    expect(en).toContain("in your browser's storage (ethos-rooms, 30 days), so we can count how many visitors use more than one section;");
+    expect(en).toContain("only a signal that you used two is sent, never the list");
+    expect(en).not.toContain("only that count is sent");
+    expect(es).toContain("(regalos, citas, viajes, relaciones a distancia, juegos)");
+    expect(es).toContain("en el almacenamiento de tu navegador (ethos-rooms, 30 días), para contar cuántas personas usan más de una sección;");
+    expect(es).toContain("solo se envía un aviso de que has usado dos, nunca la lista");
+    expect(es).not.toContain("ese recuento");
+  });
+
+  // loop2-D2: the once-per-visit note is written for every recipient who starts a gift of their own
+  // (the badge, "make one for someone else", the kept-gift reminder), not only for a reply, and
+  // whatever the cookie answer is, so the policy names it and what it is for.
+  it("the privacy policy names the note that counts a recipient's own gift once, in both languages", () => {
+    expect(STARTED_NOTE).toBe("ethos-recipient-started");
+    expect(section(LEGAL_DOCS.privacy.en, 12)).toContain("a note, kept until you close the tab, that you started a gift of your own after receiving one, so it is counted only once");
+    expect(section(LEGAL_DOCS.privacy.es, 12)).toContain("una nota, hasta que cierras la pestaña, de que has empezado un regalo propio después de recibir uno, para contarlo una sola vez");
   });
 
   it("carry none of the dropped offers: discounts, codes and the paid song", () => {

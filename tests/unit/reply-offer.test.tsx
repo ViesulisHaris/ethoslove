@@ -262,11 +262,14 @@ describe("Send one back, once it has been tapped", () => {
 });
 
 describe("the maker's mark at the foot of a free gift", () => {
+  // A real gift page: the badge's tap is counted there, and only there does its link carry the tag.
   const endOf = (locale: "en" | "es", tone: "light" | "dark" = "dark") =>
     renderToStaticMarkup(
-      <GiftChromeContext.Provider value={{ watermarked: true }}>
-        <EndScreen data={gift("the-letter", locale)} tone={tone} onMakeOne={() => {}} />
-      </GiftChromeContext.Provider>,
+      <ReplyModeContext.Provider value>
+        <GiftChromeContext.Provider value={{ watermarked: true }}>
+          <EndScreen data={gift("the-letter", locale)} tone={tone} onMakeOne={() => {}} />
+        </GiftChromeContext.Provider>
+      </ReplyModeContext.Provider>,
     );
   const mark = (html: string) => /<a [^>]*href="[^"]*made-with-ethos\?ref=watermark[^"]*"[^>]*>.*?<\/a>/.exec(html)?.[0] ?? "";
 
@@ -333,20 +336,41 @@ describe("the maker's mark at the foot of a free gift", () => {
 
 describe("the free-tier badge", () => {
   it("opens the page made for whoever taps it, with the template the gift was made with", () => {
-    expect(renderToStaticMarkup(<Watermark locale="en" slug="the-letter" />)).toContain('href="/made-with-ethos?ref=watermark&amp;template=the-letter"');
-    expect(renderToStaticMarkup(<Watermark locale="es" slug="constellations" />)).toContain('href="/es/made-with-ethos?ref=watermark&amp;template=constellations"');
+    expect(renderToStaticMarkup(<Watermark locale="en" slug="the-letter" counted />)).toContain('href="/made-with-ethos?ref=watermark&amp;template=the-letter"');
+    expect(renderToStaticMarkup(<Watermark locale="es" slug="constellations" counted />)).toContain('href="/es/made-with-ethos?ref=watermark&amp;template=constellations"');
   });
 
   it("goes there without a template when it doesn't know it", () => {
-    expect(renderToStaticMarkup(<Watermark locale="en" />)).toContain('href="/made-with-ethos?ref=watermark"');
+    expect(renderToStaticMarkup(<Watermark locale="en" counted />)).toContain('href="/made-with-ethos?ref=watermark"');
   });
 
   it("carries the gift's template on the end screen too", () => {
     const html = renderToStaticMarkup(
+      <ReplyModeContext.Provider value>
+        <GiftChromeContext.Provider value={{ watermarked: true }}>
+          <EndScreen data={gift("the-letter")} onMakeOne={() => {}} />
+        </GiftChromeContext.Provider>
+      </ReplyModeContext.Provider>,
+    );
+    expect(html).toContain('href="/made-with-ethos?ref=watermark&amp;template=the-letter"');
+  });
+
+  // loop2-C1: a demo visitor who tapped the badge was counted as a recipient who started their own.
+  it("on a demo, opens the same page with no recipient's tag, floating or on the end screen", () => {
+    expect(renderToStaticMarkup(<Watermark locale="en" slug="the-letter" />)).toContain('href="/made-with-ethos?template=the-letter"');
+    expect(renderToStaticMarkup(<Watermark locale="es" slug="constellations" />)).toContain('href="/es/made-with-ethos?template=constellations"');
+    expect(renderToStaticMarkup(<Watermark locale="en" />)).toContain('href="/made-with-ethos"');
+    const demoEnd = renderToStaticMarkup(
       <GiftChromeContext.Provider value={{ watermarked: true }}>
         <EndScreen data={gift("the-letter")} onMakeOne={() => {}} />
       </GiftChromeContext.Provider>,
     );
-    expect(html).toContain('href="/made-with-ethos?ref=watermark&amp;template=the-letter"');
+    expect(demoEnd).toContain('href="/made-with-ethos?template=the-letter"');
+    expect(demoEnd).not.toMatch(/(\?|&amp;)ref=/);
+  });
+
+  it("is tagged on a gift page only: the renderer counts it where it is in reply mode, which every real gift is", () => {
+    expect(readFileSync("src/templates/_shared/GiftRenderer.tsx", "utf8")).toContain("<Watermark locale={resolved.locale} slug={slug} counted={replyMode} />");
+    expect(readFileSync("src/components/gift/gift-experience.tsx", "utf8")).toMatch(/<GiftRenderer[\s\S]*?\n\s+replyMode\n/);
   });
 });

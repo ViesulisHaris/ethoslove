@@ -16,7 +16,7 @@ import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
-import { countRecipientEditorOpened } from "@/lib/attribution/recipient-loop";
+import { askStartedWithin7, countRecipientEditorOpened, countRecipientStarted } from "@/lib/attribution/recipient-loop";
 import { OPEN_PUBLISH_EVENT } from "@/lib/editor/open-publish";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
@@ -143,6 +143,21 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   useEffect(() => {
     if (ready && dirty) clearReplySeed();
   }, [ready, dirty]);
+  // And the first change to a draft begun now, by someone who came from a gift, is that gift's
+  // recipient starting their own: counted once (docs/marketing/LOOP-KPI.md). A draft this device or
+  // the account already held was counted when it was begun. Where a sealed token names the gift, the
+  // server is asked as the draft opens, so its answer is in hand by the first change.
+  const fresh = useEditor((s) => s.fresh);
+  const startCounted = useRef(false);
+  const startAnswer = useRef<Promise<boolean | null> | null | undefined>(undefined);
+  useEffect(() => {
+    if (!ready || !fresh || startCounted.current) return;
+    const search = new URLSearchParams(window.location.search);
+    if (startAnswer.current === undefined) startAnswer.current = askStartedWithin7(search);
+    if (!dirty) return;
+    startCounted.current = true;
+    void countRecipientStarted(search, fetch, startAnswer.current);
+  }, [ready, dirty, fresh]);
 
   // A group card's panel has a script of its own, fetched only by an editor that draws it (group
   // cards on, a template made for them): no other editor's scripts hold the panel, or the emails it

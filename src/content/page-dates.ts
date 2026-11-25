@@ -1,5 +1,5 @@
 import { ABOUT_PATH, ABOUT_UPDATED } from "@/content/about";
-import { LEGAL_UPDATED } from "@/content/legal";
+import { LEGAL_UPDATED, PRIVACY_UPDATED } from "@/content/legal";
 import { PRESS_PATH } from "@/content/press";
 import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
 import { ADVENT_CALENDAR_LIVE } from "@/templates/held";
@@ -167,6 +167,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/pricing": "2026-11-24",
   // The date the legal pages print at the top.
   "/legal/*": LEGAL_UPDATED,
+  "/legal/privacy": PRIVACY_UPDATED,
   [ABOUT_PATH]: ABOUT_UPDATED,
   [PT_LETTER_PATH]: PT_LETTER_UPDATED,
   ...(PRESS_DATED ? { [PRESS_PATH]: PRESS_DATED } : {}),

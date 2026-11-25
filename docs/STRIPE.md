@@ -68,7 +68,7 @@ charged by construction, and no Stripe Price has to be kept in step with it. The
 | Gift card "Give Everything"             | `giftcard`   | €24.99, only while `GIFT_CARDS_ENABLED=true` |
 | Upgrade to Everything                   | `upgrade`    | €24.99 minus what was paid, at least €4.99 |
 | A group card: group cards on one template, the template included | `group` | €19.99 ($23.99, £17.99), or €10.00 ($12.00, £9.00) for someone who already holds the template. Only while group cards are on (docs/GROUP.md) |
-| Two more gifts, offered on the share screen after a paid gift | `pair` | €7.99 ($8.99, £6.99), only while `GIFT_PAIR_ENABLED=true` and migration 0024 is applied |
+| Two more gifts, offered on the share screen after a paid gift | `pair` | €7.99 ($8.99, £6.99), only while `GIFT_PAIR_ENABLED=true` (or `preview`, for the listed accounts) and migration 0024 is applied |
 
 There are no discounts and no codes. Every Ethos session and its recovery set
 `allow_promotion_codes: false`: the account is shared, and other businesses' codes (LAUNCH40,

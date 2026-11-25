@@ -12,6 +12,8 @@
  * uploads each page's HTML, records clicks and key presses, can open popunders, and weighs about
  * 220 KB. A private gift page must never run it.
  */
+
+import type { VisitedRoom } from "@/lib/analytics/rooms-marker";
 export type PartnerId = "aviasales" | "tiqets" | "autoeurope";
 
 const SHORT_LINKS: Record<PartnerId, string> = {
@@ -61,6 +63,23 @@ export function autoEuropeHire(page?: string): string {
 
 /** Where on the site a partner button sat, for the `affiliate_click` event: which spot earns, not who clicked. */
 export type PartnerPlacement = "trips_finder" | "trip_flights" | "trip_tickets" | "trip_car" | "place_sheet" | "plan" | "meet_middle" | "gift_share" | "city";
+
+/**
+ * The room each partner button sits in, so `affiliate_click` can be read per room from its
+ * `placement` alone (audit X3). Every placement is in exactly one room; a new one won't compile
+ * without its room.
+ */
+export const PLACEMENT_ROOM: Record<PartnerPlacement, VisitedRoom> = {
+  trips_finder: "trips",
+  trip_flights: "trips",
+  trip_tickets: "trips",
+  trip_car: "trips",
+  place_sheet: "dates",
+  plan: "dates",
+  city: "dates",
+  meet_middle: "longDistance",
+  gift_share: "gifts",
+};
 
 type L = { en: string; es: string };
 
