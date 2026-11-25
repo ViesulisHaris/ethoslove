@@ -292,7 +292,10 @@ describe("the weekly challenge's words", () => {
       expect(w.seoDescription.length).toBeLessThanOrEqual(160);
       for (const line of [w.line, w.together.line, w.more.line]) expect(words(line), line).toBeLessThanOrEqual(14);
     }
-    expect(en.games.weekly.seoTitle).toMatch(/play over text/i);
+    // The dares want one room (a hug, a slow dance), so the titles name what the page is and promise no game for texting or for long distance (games2-C3).
+    for (const m of [en, es]) expect(`${m.games.weekly.seoTitle} ${m.games.weekly.seoDescription}`).not.toMatch(/over text|by text|long[- ]distance|a distancia|por mensaje/i);
+    expect(en.games.weekly.seoTitle).toMatch(/couples/i);
+    expect(es.games.weekly.seoTitle).toMatch(/parejas/i);
   });
 
   it("C2: two to four questions under the challenge, in both languages, and they count the sets from the list", () => {
