@@ -61,7 +61,8 @@ describe("the games' addresses", () => {
     const block = config.slice(config.indexOf("GAME_MOVES.map"), config.indexOf("GAME_MOVES.map") + 400);
     expect(config).toContain('["", "/es", "/en"].flatMap');
     expect(block).toContain("source: `${prefix}/games/${from}`");
-    expect(block).toContain("/games/${to}`");
+    // An explicit /en keeps its /en, so the proxy sets the English cookie as it strips it (games2-T1).
+    expect(block).toContain("destination: `${prefix}/games/${to}`");
     expect(block).toContain("permanent: true");
   });
 

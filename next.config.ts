@@ -65,11 +65,12 @@ const nextConfig: NextConfig = {
     // Every address it had before still opens it, for good: a room's link, a pack's way back from the
     // checkout, a bookmark. Here, not in the proxy or the page: this runs before the currency segment
     // is added, keeps the query string by itself, and leaves the game pages built ahead. An explicit
-    // /en goes straight to the address without it, which is where next-intl would send it next.
+    // /en keeps its /en, so the proxy still sets the English cookie as it strips it: without that, a
+    // browser that had chosen Spanish before would be sent on to the Spanish page.
     ...["", "/es", "/en"].flatMap((prefix) =>
       GAME_MOVES.map(([from, to]) => ({
         source: `${prefix}/games/${from}`,
-        destination: `${prefix === "/en" ? "" : prefix}/games/${to}`,
+        destination: `${prefix}/games/${to}`,
         permanent: true,
       })),
     ),

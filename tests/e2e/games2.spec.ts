@@ -92,11 +92,23 @@ test.describe("the games' addresses", () => {
     }
   });
 
-  test("R2: an explicit /en goes straight to the new address, in one step", async ({ request }) => {
+  test("R2: an explicit /en keeps its /en, so the page opens in English even after Spanish was chosen", async ({ request, browser }) => {
     const old = await request.get("/en/games/know?mode=two", { maxRedirects: 0 });
     expect(old.status()).toBe(308);
-    expect(old.headers().location).toBe("/games/how-well-do-you-know-me?mode=two");
-    expect((await request.get("/games/how-well-do-you-know-me?mode=two", { maxRedirects: 0 })).status()).toBe(200);
+    expect(old.headers().location).toBe("/en/games/how-well-do-you-know-me?mode=two");
+    // The proxy then strips /en and sets the English cookie, as it does for every page.
+    const next = await request.get("/en/games/how-well-do-you-know-me?mode=two", { maxRedirects: 0, headers: { cookie: "ETHOS_LOCALE=es" } });
+    expect(next.headers().location).toBe("/games/how-well-do-you-know-me?mode=two");
+    expect(next.headers()["set-cookie"] ?? "").toMatch(/ETHOS_LOCALE=en/);
+    // In a browser that had visited the Spanish site first.
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto("/es/games/today");
+    await page.goto("/en/games/dare");
+    await expect(page).toHaveURL(/\/games\/truth-or-dare$/);
+    expect(new URL(page.url()).pathname).toBe("/games/truth-or-dare");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await context.close();
   });
 
   test("R3: in every currency", async ({ request }) => {
