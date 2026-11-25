@@ -71,7 +71,7 @@ function originPageWords(slug: string, l: "en" | "es"): number {
     const trip = getTrip(r.id)!;
     return [label(r), trip.title[l], t.best.replace("{months}", monthRanges(trip.bestMonths, l))];
   });
-  const foot = [ui.footLabel, ui.footHeading, ...TRIP_ORIGINS.filter((x) => x !== o).map((x) => x.name[l]), ...TRIP_IDEA_KINDS.map((k) => TRIP_IDEA_COPY[k].nav[l]), fill(ui.dates, { city }), fill(ui.all, { count: TRIPS.length }), ui.hoursSummary];
+  const foot = [ui.footLabel, ui.footHeading, ...TRIP_ORIGINS.filter((x) => x !== o).map((x) => x.name[l]), ui.byKind, ...TRIP_IDEA_KINDS.map((k) => TRIP_IDEA_COPY[k].nav[l]), fill(ui.dates, { city }), fill(ui.all, { count: TRIPS.length }), ui.hoursSummary];
   return count(t.detail.back, t.eyebrow, fill(ui.heading, { count: TRIPS.length, city }), TRIP_ORIGIN_COPY[slug].line[l], TRIP_ORIGIN_COPY[slug].sentence[l], ui.button, hero.title[l], ui.listLabel, ui.listHeading, ui.listLine, ...cards, fill(ui.rest, { rest: 6 }), ...foot);
 }
 

@@ -121,7 +121,8 @@ export async function OriginPage({ origin, locale }: { origin: TripOrigin; local
         </RoomSpread>
 
         <RoomFoot id="from-more" label={ui.footLabel} heading={ui.footHeading}>
-          <nav aria-label={ui.from}>
+          {/* The heading asks where they leave from, so only the other cities sit under it; the kinds, then the city's dates and all twelve, each on their own line below. */}
+          <nav aria-label={ui.from} data-testid="from-cities">
             <ul className="flex flex-wrap gap-x-6 leading-8">
               {TRIP_ORIGINS.filter((o) => o.slug !== origin.slug).map((o) => (
                 <li key={o.slug}>
@@ -130,6 +131,11 @@ export async function OriginPage({ origin, locale }: { origin: TripOrigin; local
                   </Link>
                 </li>
               ))}
+            </ul>
+          </nav>
+          <nav aria-label={ui.byKind} className="mt-6 border-t border-page-line pt-4">
+            <p className="text-page-label text-page-body">{ui.byKind}</p>
+            <ul className="mt-1 flex flex-wrap gap-x-6 leading-8">
               {TRIP_IDEA_KINDS.map((kind) => (
                 <li key={kind}>
                   <Link href={ideaPath(kind)} className={ROOM_ROW_LINK}>
@@ -137,18 +143,20 @@ export async function OriginPage({ origin, locale }: { origin: TripOrigin; local
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link href={`/dates/${origin.city}`} className={ROOM_ROW_LINK}>
-                  {fill(ui.dates, { city })}
-                </Link>
-              </li>
-              <li>
-                <Link href="/trips" className={`${ROOM_ROW_LINK} font-medium`}>
-                  {fill(ui.all, { count: TRIPS.length })}
-                </Link>
-              </li>
             </ul>
           </nav>
+          <ul className="mt-6 flex flex-wrap gap-x-6 border-t border-page-line pt-4 leading-8">
+            <li>
+              <Link href={`/dates/${origin.city}`} className={ROOM_ROW_LINK}>
+                {fill(ui.dates, { city })}
+              </Link>
+            </li>
+            <li>
+              <Link href="/trips" className={`${ROOM_ROW_LINK} font-medium`}>
+                {fill(ui.all, { count: TRIPS.length })}
+              </Link>
+            </li>
+          </ul>
           <div className="mt-8 border-t border-page-line">
             <MoreRow summary={ui.hoursSummary}>
               <p>{ui.hoursBody}</p>

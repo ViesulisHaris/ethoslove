@@ -209,6 +209,10 @@ test.describe("the pages by where you leave from", () => {
     for (const o of ORIGINS.filter((x) => x !== "berlin")) expect(all, o).toContain(`/trips/from-${o}`);
     for (const k of KINDS) expect(all, k).toContain(`/trips/ideas/${k}`);
     expect(all).toContain("/dates/berlin");
+    // Under "Leaving from somewhere else?" only the other cities.
+    const cities = await page.getByTestId("from-cities").getByRole("link").evaluateAll((els) => els.map((el) => el.getAttribute("href")));
+    expect(cities).toEqual(ORIGINS.filter((x) => x !== "berlin").map((x) => `/trips/from-${x}`));
+    await expect(main.getByRole("navigation", { name: "By kind" }).getByRole("link")).toHaveCount(2);
 
     await page.goto("/trips/ideas/road-trips");
     const fromKind = await page.locator("main a").evaluateAll((els) => els.map((el) => el.getAttribute("href")));
