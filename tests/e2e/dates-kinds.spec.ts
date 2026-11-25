@@ -134,7 +134,13 @@ test.describe("the pages by kind of date", () => {
     await expect(byKind.getByRole("link").first()).toHaveAttribute("href", "/dates/ideas/first-date");
 
     await page.goto("/dates/ideas/first-date");
-    for (const href of ["/dates/new-york/first-date", "/dates/london/first-date", "/dates/chicago/first-date"]) await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
+    // A city's own pair only where its words are written and it is indexed; any other city goes to its indexed city page (dates2-N1).
+    for (const href of ["/dates/new-york/first-date", "/dates/london/first-date", "/dates/chicago"]) await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
+    await expect(page.locator('a[href="/dates/chicago/first-date"]')).toHaveCount(0);
+    await page.goto("/dates/ideas/romantic");
+    for (const slug of ["new-york", "chicago", "london"]) await expect(page.locator(`a[href="/dates/${slug}"]`).first()).toBeVisible();
+    await expect(page.locator('a[href^="/dates/"][href$="/romantic"]:not([href^="/dates/ideas/"])')).toHaveCount(0);
+    await page.goto("/dates/ideas/first-date");
     await expect(page.getByRole("link", { name: "All 55 cities" })).toHaveAttribute("href", "/dates");
     const more = page.getByRole("navigation", { name: "More kinds of date" });
     await expect(more.getByRole("link")).toHaveCount(9);

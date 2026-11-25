@@ -9,7 +9,7 @@ import { CITY_PAGES, cityName, getCity } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode } from "@/lib/cities/copy";
 import { ideaImage } from "@/lib/dates/art";
 import { DATE_KINDS, getDateKind, kindIdeas } from "@/lib/dates/date-kinds";
-import { isCityKindPair } from "@/lib/cities/kind-pairs";
+import { isWrittenPair } from "@/lib/cities/kind-copy";
 import { ideaById } from "@/lib/dates/ideas";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -97,8 +97,9 @@ export default async function DateKindPage({ params }: Props) {
           <ul className="flex flex-wrap gap-x-6 leading-8">
             {cities.map((city) => (
               <li key={city.slug}>
-                {/* The city's name alone, under a heading that says what the links are: the page's 300 words (dates2). */}
-                <Link href={isCityKindPair(city.slug, kind) ? `/dates/${city.slug}/${kind}` : `/dates/${city.slug}`} className={QUIET_ROW_LINK}>
+                {/* The city's name alone, under a heading that says what the links are: the page's 300 words (dates2).
+                    A pair only when its words are written and it is indexed; else the city page, as the release linked (dates2-N1). */}
+                <Link href={isWrittenPair(city.slug, kind) ? `/dates/${city.slug}/${kind}` : `/dates/${city.slug}`} className={QUIET_ROW_LINK}>
                   {cityName(city, l)}
                 </Link>
               </li>
