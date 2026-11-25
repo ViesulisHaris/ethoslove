@@ -40,7 +40,7 @@ export const TONIGHT_BUTTON =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px aria-disabled:cursor-default aria-disabled:opacity-60 aria-disabled:active:scale-100 motion-reduce:transition-none";
 
 const SELECT =
-  "field-sizing-content h-11 max-w-full cursor-pointer appearance-none truncate rounded-none border-0 border-b border-page-ink/35 bg-transparent py-0 pr-7 pl-1 font-display text-[1.375rem] leading-none text-page-accent italic outline-offset-4 transition-colors hover:border-page-ink focus-visible:border-page-accent active:text-page-accent-hover disabled:cursor-default";
+  "field-sizing-content h-11 max-w-full cursor-pointer appearance-none truncate rounded-none border-0 border-b border-page-ink/35 bg-transparent py-0 pr-7 pl-1 font-display text-[1.375rem] leading-none max-[359px]:pr-5 max-[359px]:text-[1.25rem] text-page-accent italic outline-offset-4 transition-colors hover:border-page-ink focus-visible:border-page-accent active:text-page-accent-hover disabled:cursor-default";
 
 /**
  * A choice as the select shows it: with a no-break space after it (an ordinary one is trimmed). A
@@ -142,7 +142,9 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
 
   return (
     <div>
-      <p className="font-display text-[1.375rem] leading-[2.9rem] text-page-ink">
+      {/* Under 360 px (iPhone SE, small Androids) a size smaller, so two choices share a line and the
+          third sentence keeps to one in both languages (dates2-D8). The selects stay 44 px tall. */}
+      <p className="font-display text-[1.375rem] leading-[2.9rem] text-page-ink max-[359px]:text-[1.25rem]">
         {ofKind ? t.rich("tonight.sentenceKind", { when: parts.when, length: parts.length, budget: parts.budget }) : t.rich("tonight.sentence", parts)}{" "}
         {/* The third sentence on its own line, one line high whatever is chosen and whether or not the
             distance can be offered: its options are short enough for one line at 375 px in both languages

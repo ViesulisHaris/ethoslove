@@ -323,6 +323,33 @@ test.describe("dates2: the planner's two new controls", () => {
       await context.close();
     }
   });
+
+  test("G6b at 320 px the third sentence keeps to one line with any choice, in both languages (dates2-D8)", async ({ browser, isMobile }) => {
+    test.skip(isMobile, "sets its own screen size");
+    test.setTimeout(120_000);
+    for (const path of ["/dates/london", "/es/dates/london"]) {
+      const context = await browser.newContext({ viewport: { width: 320, height: 640 }, timezoneId: "Europe/Lisbon" });
+      const page = await context.newPage();
+      await mockWorld(page);
+      await holdTheDatabase(page);
+      await geolocation(page, "grant");
+      await page.goto(path);
+      const third = page.locator("span.block:has(select)").first();
+      const selects = third.locator("select");
+      await expect(selects).toHaveCount(2);
+      await expect(selects.first()).toBeEnabled();
+      for (const setting of ["", "indoors", "outdoors"])
+        for (const reach of ["", "10", "20", "30"]) {
+          await selects.nth(0).selectOption(setting);
+          await selects.nth(1).selectOption(reach);
+          const lines = await third.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el.parentElement!).lineHeight)));
+          expect(lines, `${path} ${setting || "any"} ${reach || "any"}`).toBe(1);
+        }
+      // Every choice is still a 44 px target.
+      for (const h of await page.locator("p:has(> span.block) select").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(h).toBeGreaterThanOrEqual(44);
+      await context.close();
+    }
+  });
 });
 
 test.describe("dates2: done dates on /plan", () => {
