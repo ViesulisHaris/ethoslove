@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Car, Gift, Moon, Plane, Ticket } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Car, Gift, Moon, Plus, Ticket } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
@@ -14,14 +14,17 @@ import { monthRanges } from "@/lib/trips/months";
 import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { getTrip, stopName, TRIPS } from "@/lib/trips/presets";
+import { stayPartnerId, tripStays } from "@/lib/trips/stay";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
 import { TRIP_SEO } from "@/content/trip-seo";
+import { heroLead } from "@/components/templates/page/lead";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { ShareTripButton } from "@/components/trips/share-trip-button";
+import { StayLink } from "@/components/trips/stay-link";
 import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link";
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
@@ -64,12 +67,17 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
     return { name: ticket.name[l], where: stop ? stopName(stop, l) : null, url: tiqetsSearch(ticket.query, l) };
   });
   const carHire = tripCarHire(trip);
+  // The hero says the blurb's opening sentences (DESIGN-LESS-TEXT: thirty words beside the picture); the rest waits in "More about this trip".
+  const { lead, rest } = heroLead(trip.blurb[l]);
+  // Each stop the trip sleeps in gets a place to stay; the partner id is read here, on the server, and handed down.
+  const stays = tripStays(trip);
+  const partnerId = stayPartnerId();
+  // Three facts: the kind is already said over the name.
   const facts = [
     { label: t("detail.facts.days"), value: t("days", { count: trip.days }) },
-    // The day costs in the currency this visitor is charged in, said as "about" (lib/trips/day-costs.ts).
-    { label: t("detail.facts.budget"), value: t(`budget.short.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, chargedCurrency(currency), l)), hint: t("budget.note") },
     { label: t("detail.facts.best"), value: monthRanges(trip.bestMonths, l) },
-    { label: t("detail.facts.kind"), value: t(`kind.${trip.kind}`) },
+    // The day costs in the currency this visitor is charged in, said as "about" (lib/trips/day-costs.ts). The longest value, so it spans the row where the boxes are narrow.
+    { label: t("detail.facts.budget"), value: t(`budget.short.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, chargedCurrency(currency), l)), hint: t("budget.note"), wide: true },
   ];
 
   return (
@@ -122,10 +130,10 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t(`kind.${trip.kind}`)}</p>
               {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 9.6em is Newsreader's 16ch. */}
               <h1 className="mt-4 max-w-[9.6em] font-display text-[clamp(2.5rem,5.6vw,4.5rem)] leading-[0.98] tracking-[-0.03em] text-balance">{trip.title[l]}</h1>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest/75">{trip.blurb[l]}</p>
-              <dl className="mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+              <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest/75">{lead || trip.blurb[l]}</p>
+              <dl className="mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
                 {facts.map((f) => (
-                  <div key={f.label} className="rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5" title={f.hint}>
+                  <div key={f.label} className={f.wide ? "col-span-2 rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5 sm:col-span-1 lg:col-span-2 xl:col-span-1" : "rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5"} title={f.hint}>
                     <dt className="text-[12px] font-semibold tracking-wide text-forest/50 uppercase">{f.label}</dt>
                     {/* The hint is described, not spoken as words in the page: a screen reader's hidden span is counted by the word test. */}
                     <dd className="mt-1 font-display text-[19px] leading-tight text-forest" aria-description={f.hint}>
@@ -138,10 +146,6 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                 <a href="#surprise" className="btn-rose inline-flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold transition-[filter] hover:brightness-110">
                   <Gift aria-hidden="true" className="size-4" />
                   {t("detail.surprise.cta")}
-                </a>
-                <a href="#flights" className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
-                  <Plane aria-hidden="true" className="size-4 text-rose-deep" />
-                  {t("detail.jump.flights")}
                 </a>
                 {/* Keeping it and sending it go together: where the four don't fit one row, these two wrap as a pair, never the share alone. A failed save, or the line after one, comes below the pair. */}
                 {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
@@ -180,16 +184,36 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               }}
             />
             <ol className="grid gap-3" data-testid="trip-stops">
-              {trip.stops.map((s, i) => (
+              {trip.stops.map((s, i) => {
+                const stay = stays.find((x) => x.stop === s.name);
+                return (
                 <li key={s.name} className="rounded-[24px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
                   <div className="flex items-start gap-3.5">
                     <span className="grid size-8 shrink-0 place-items-center rounded-full bg-rose text-[13px] font-bold text-white shadow-[0_6px_14px_-4px_rgba(90,20,45,0.55)]">{i + 1}</span>
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                        <h3 className="font-display text-[22px] leading-tight text-forest">{stopName(s, l)}</h3>
-                        <span className="text-[12.5px] font-semibold text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
-                      </div>
-                      <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
+                      {/* The note folds; the stop's one date link stays on show under it. */}
+                      <details className="group">
+                        <summary className="-mt-1.5 flex min-h-11 cursor-pointer list-none items-baseline justify-between gap-x-3 rounded-lg outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                          <h3 className="pt-1.5 font-display text-[22px] leading-tight text-forest">{stopName(s, l)}</h3>
+                          <span className="ml-auto text-[12.5px] font-semibold whitespace-nowrap text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
+                          <Plus aria-hidden="true" className="size-4 shrink-0 self-center text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                        </summary>
+                        <p className="mt-1 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
+                        {stay ? (
+                          <>
+                            <StayLink query={stay.query} lat={stay.lat} lng={stay.lng} nightsBefore={stay.nightsBefore} nights={stay.nights} partnerId={partnerId} trip={trip.id} className="group/stay inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
+                              {ta("stay.cta", { place: stopName(s, l) })}
+                              <ArrowUpRight aria-hidden="true" className="size-3.5 transition-transform group-hover/stay:translate-x-0.5 group-hover/stay:-translate-y-0.5" />
+                              <span className="sr-only">({ta("newTab")})</span>
+                            </StayLink>
+                            {partnerId ? (
+                              <p className="mt-1 text-[12.5px] leading-snug text-forest/65">
+                                {ta("stay.via")} {ta("disclosureBoth")}
+                              </p>
+                            ) : null}
+                          </>
+                        ) : null}
+                      </details>
                       {/* One link a stop: the city's own date ideas where it is one of ours, else the map of date spots around it. */}
                       <div className="-mb-2.5 flex flex-wrap gap-x-5">
                         {stopCities[i] ? (
@@ -210,9 +234,22 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     </div>
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ol>
           </div>
+          {rest ? (
+            <details data-trip-more className="group mt-6 max-w-3xl rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                {t("detail.about")}
+                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+              </summary>
+              <div className="grid gap-3 pb-5 text-[14.5px] leading-relaxed text-forest/70">
+                <p>{rest}</p>
+                <p>{t("budget.note")}</p>
+              </div>
+            </details>
+          ) : null}
         </div>
       </section>
 

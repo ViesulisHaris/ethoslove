@@ -2851,6 +2851,7 @@
     },
     "detail": {
       "back": "All trips",
+      "about": "More about this trip",
       "facts": {
         "days": "Length",
         "budget": "A day, for two",
