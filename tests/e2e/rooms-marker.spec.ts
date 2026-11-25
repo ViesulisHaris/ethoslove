@@ -11,7 +11,7 @@ import { countEvents, type Counted } from "./rooms-world";
 const ROOMS_KEY = "ethos-rooms";
 const today = () => Math.floor(Date.now() / 86_400_000);
 const allow = (page: Page) => page.addInitScript(() => localStorage.setItem("ethos-consent", "granted"));
-const kept = (page: Page) => page.evaluate(() => localStorage.getItem("ethos-rooms"));
+const kept = (page: Page) => page.evaluate((key) => localStorage.getItem(key), ROOMS_KEY);
 const parsed = async (page: Page) => JSON.parse((await kept(page)) ?? "null") as { seen: Record<string, number>; sent?: number } | null;
 const twoRooms = (events: Counted[]) => events.filter((e) => e.name === "two_rooms_30d");
 

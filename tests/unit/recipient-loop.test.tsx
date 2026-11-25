@@ -263,7 +263,7 @@ describe("after a reaction is sent", () => {
 });
 
 describe("recipient_started", () => {
-  const answering = (body: unknown, status = 200) => vi.fn(async (..._args: Parameters<typeof fetch>) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status }));
+  const answering = (body: unknown, status = 200) => vi.fn<typeof fetch>(async () => new Response(typeof body === "string" ? body : JSON.stringify(body), { status }));
   const all: [string, Record<string, unknown> | undefined][] = [];
   const keep = () => void all.push(...counted);
 
@@ -310,7 +310,7 @@ describe("recipient_started", () => {
     const failing = [
       answering({ within7: null }),
       answering("not json", 500),
-      vi.fn(async (..._args: Parameters<typeof fetch>): Promise<Response> => {
+      vi.fn<typeof fetch>(async () => {
         throw new TypeError("offline");
       }),
     ];

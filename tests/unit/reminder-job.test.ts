@@ -287,7 +287,7 @@ describe("the price line while two more gifts are in preview (GIFT_PAIR_ENABLED=
   });
 
   it("the function is asked with the address the e-mail goes to", async () => {
-    const ask = vi.fn((_to: string) => false);
+    const ask = vi.fn<(to: string) => boolean>(() => false);
     const { sent, result } = run(world([reminder({ currency: "eur" })]), "2027-02-26", { pairOnSale: false, pairOnSaleFor: ask });
     await result;
     expect(sent.length).toBeGreaterThan(0);
