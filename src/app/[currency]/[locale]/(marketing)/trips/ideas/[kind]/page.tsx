@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowDown, ArrowLeft } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ClientMessages } from "@/i18n/client-messages";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -63,7 +64,7 @@ export default async function TripIdeaPage({ params }: Props) {
   }));
 
   return (
-    <>
+    <ClientMessages scope="(marketing)/trips/ideas/[kind]/page" locale={locale}>
       <JsonLd
         nodes={[
           {
@@ -137,6 +138,6 @@ export default async function TripIdeaPage({ params }: Props) {
           </div>
         </RoomFoot>
       </RoomPage>
-    </>
+    </ClientMessages>
   );
 }

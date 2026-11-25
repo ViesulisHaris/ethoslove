@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Car, Gift, Moon, Plus, Ticket } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ClientMessages } from "@/i18n/client-messages";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { chargedCurrency, subscriptionsEnabled } from "@/lib/pricing/products";
@@ -58,7 +59,12 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   const origin = originOfParam(id);
   if (origin) {
     setRequestLocale(locale);
-    return <OriginPage origin={origin} locale={locale === "es" ? "es" : "en"} />;
+    // Only the origin pages are sent the gift page's words (src/i18n/client-namespaces.ts): a trip's own page draws none of its sections.
+    return (
+      <ClientMessages scope="(marketing)/trips/[id]/page" locale={locale}>
+        <OriginPage origin={origin} locale={locale === "es" ? "es" : "en"} />
+      </ClientMessages>
+    );
   }
   // An unknown from-… falls through to here and finds no trip: 404.
   const trip = getTrip(id);
@@ -208,7 +214,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                         <summary className="-mt-1.5 flex min-h-11 cursor-pointer list-none items-baseline justify-between gap-x-3 rounded-lg outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                           <h3 className="pt-1.5 font-display text-[22px] leading-tight text-forest">{stopName(s, l)}</h3>
                           <span className="ml-auto text-[12.5px] font-semibold whitespace-nowrap text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
-                          <Plus aria-hidden="true" className="size-4 shrink-0 self-center text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                          <Plus aria-hidden="true" className="size-4 shrink-0 self-center text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                         </summary>
                         <p className="mt-1 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
                         {stay ? (
@@ -254,7 +260,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
             <details data-trip-more className="group mt-6 max-w-3xl rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
               <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                 {t("detail.about")}
-                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
               </summary>
               <div className="grid gap-3 pb-5 text-[14.5px] leading-relaxed text-forest/70">
                 <p>{rest}</p>
@@ -283,7 +289,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                       <span className="block text-eyebrow text-rose-deep">{t("detail.plan.day", { n: day.day })}</span>
                       <h3 className="mt-1.5 font-display text-[24px] leading-[1.1] text-forest sm:text-[26px]">{day.title[l]}</h3>
                     </span>
-                    <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                    <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                   </summary>
                   <ul className="grid gap-3 pb-6 sm:pb-7">
                     {day.items[l].map((item) => {
@@ -319,7 +325,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
             <details id="flights" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
               <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                 {t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}
-                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
               </summary>
               <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} className="pb-5" />
             </details>
@@ -327,7 +333,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               <details id="tickets" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
                 <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                   {ta("tickets.title")}
-                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                 </summary>
                 <div className="pb-5">
                   <p className="max-w-xl text-[15px] leading-relaxed text-forest/70">{ta("tickets.sub")}</p>
@@ -367,7 +373,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     <Car aria-hidden="true" className="size-5 text-rose-deep" />
                     {ta("car.title")}
                   </span>
-                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                 </summary>
                 <div className="pb-5">
                   <p className="max-w-xl text-[15px] leading-relaxed text-forest/70">{ta("car.sub")}</p>

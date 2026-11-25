@@ -47,11 +47,11 @@ describe("the site's paper", () => {
     expect(left).toEqual([]);
   });
 
-  it("puts no white badge on a trip's photo: the kind and the budget wear the card's colour (fix round 5)", () => {
+  it("puts no white badge on a trip's photo: the kind wears the card's colour (fix round 5; the budget's badge went with trips2's cards of a picture and a name)", () => {
     const card = sources.find((s) => s.path.endsWith("components/trips/trip-card.tsx"));
     expect(card).toBeDefined();
     expect(card!.text).not.toMatch(/(?<![\w:-])bg-white/);
-    expect(card!.text.match(/rounded-full bg-card\/95/g)?.length).toBe(2);
+    expect(card!.text.match(/rounded-full bg-card\/95/g)?.length).toBe(1);
   });
 
   it("tears every edge in the paper's own colours: a torn edge never takes a colour written by hand for its two sides", () => {

@@ -91,7 +91,7 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
                 <details className="group relative">
                   <summary className="mt-20 flex min-h-11 cursor-pointer list-none items-end justify-between gap-3 rounded-lg outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                     <h3 className="font-display text-[23px] leading-[1.08] text-forest">{v.title[lang]}</h3>
-                    <Plus aria-hidden="true" className="mb-1 size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                    <Plus aria-hidden="true" className="mb-1 size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                   </summary>
                   <p className="mt-2.5 text-[14.5px] leading-relaxed text-forest/75">{v.blurb[lang]}</p>
                   <p className="mt-4 border-t border-forest/10 pt-3 text-[13.5px] leading-snug text-forest/70">

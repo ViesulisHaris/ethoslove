@@ -5,7 +5,7 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import sitemap from "@/app/sitemap";
 import { HALFWAY_TOOL, HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
-import { pageUpdated, ROOMS_LIVE } from "@/content/page-dates";
+import { pageUpdated, ROOMS_LIVE, TRIPS2_LIVE } from "@/content/page-dates";
 import { ART_IDS, artVariants } from "@/content/page-art";
 import { HALFWAY_ART, MATCH_ART, ROOMS_PLACEMENTS, ROOMS_THEME } from "@/content/rooms-art";
 import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
@@ -579,7 +579,10 @@ describe("the rooms' pages", () => {
       expect(entry, prefix + HALFWAY_TOOL_PATH).toBeDefined();
       expect(entry?.lastModified).toBe(ROOMS_LIVE);
     }
-    for (const path of ["/trips", "/trips/amalfi-coast", "/long-distance", HALFWAY_TOOL_PATH]) expect(pageUpdated(path), path).toBe(ROOMS_LIVE);
+    expect(pageUpdated(HALFWAY_TOOL_PATH), HALFWAY_TOOL_PATH).toBe(ROOMS_LIVE);
+    // The trips room's second pass (BRIEF-trips2.md) rewrote these pages' words: they carry its day now.
+    for (const path of ["/trips", "/trips/amalfi-coast", "/trips/from-london", "/trips/ideas/road-trips", "/long-distance"]) expect(pageUpdated(path), path).toBe(TRIPS2_LIVE);
+    expect(TRIPS2_LIVE <= new Date().toISOString().slice(0, 10)).toBe(true);
     expect(ROOMS_LIVE <= new Date().toISOString().slice(0, 10)).toBe(true);
   });
 
