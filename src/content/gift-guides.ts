@@ -83,7 +83,7 @@ export const GUIDE_BAND_COVERS: Partial<Record<GiftGuideSlug, string>> = {
   "apology-for-her": "bouquet",
   "long-distance-care-package": "passport",
   surprise: "midnight-countdown",
-  "memory-book": "front-page",
+  "memory-book": "museum",
 };
 
 /** That photo, as a picture on the page takes it. */

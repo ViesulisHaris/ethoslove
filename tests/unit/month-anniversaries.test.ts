@@ -194,11 +194,18 @@ describe("anniversary gifts by month", () => {
     expect(new Set(first).size).toBe(first.length);
   });
 
-  it("the gifts a month shows in its phone and its band don't name another length of time", () => {
-    // The phone plays the month's first gift and the band shows its second; both come with their own poster and demo,
-    // and these two say "three years" in them (The Letter: "Three years of you"; Our Timeline: "Three years, in order").
-    const sayYears = ["the-letter", "our-timeline"];
-    for (const n of MONTHS) for (const idea of MONTH_GUIDES[n].en.ideas.slice(0, 2)) expect(sayYears, `month ${n}: ${idea.template}`).not.toContain(idea.template);
+  it("the gifts a month shows in its phone and its band don't name another length of time or another occasion", () => {
+    // The phone plays the month's first gift (and the "Other months" row shows that gift's poster on the months either
+    // side); the band shows its second. Both come with their own poster and demo, and these say something else in them.
+    const sayOther: Record<string, string> = {
+      "the-letter": "Three years of you",
+      "our-timeline": "Three years, in order",
+      digicam: "HAPPY BIRTHDAY",
+      "paper-crane": "an apology: I wanted to win the argument more than I wanted to be kind",
+      "recipe-box": "a recipe card from Nora to Mum",
+      "front-page": "LOCAL WOMAN TURNS 30",
+    };
+    for (const n of MONTHS) for (const idea of MONTH_GUIDES[n].en.ideas.slice(0, 2)) expect(sayOther[idea.template], `month ${n}: ${idea.template}`).toBeUndefined();
   });
 
   it("no two months open the same way", () => {

@@ -8,7 +8,7 @@ import { getPost, postLocales } from "@/content/blog";
 import { pricingGifts } from "@/components/pricing/free-gifts";
 import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, FINDER_LINK, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, GUIDE_BAND_COVERS, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
 import { MONTHS, MONTH_GUIDES, monthFromSlug, monthSlug } from "@/content/month-anniversaries";
 import { OCCASION_IDEAS } from "@/content/occasion-ideas";
 import { pageUpdated } from "@/content/page-dates";
@@ -620,6 +620,18 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
     for (const href of ["/blog/how-to-surprise-your-girlfriend", "/blog/midnight-birthday-surprise-ideas", "/blog/surprise-trip-reveal-ideas"]) expect(hrefs("surprise")).toContain(href);
     for (const href of ["/occasions/long-distance", "/blog/long-distance-relationship-gifts", "/long-distance"]) expect(hrefs("long-distance-care-package")).toContain(href);
     for (const href of ["/gifts/photo-album", "/occasions/anniversary"]) expect(hrefs("memory-book")).toContain(href);
+  });
+
+  it("the gift in each new page's phone and band says nothing of another occasion", () => {
+    // These posters carry their demo's occasion: Digicam "HAPPY BIRTHDAY", Front Page "LOCAL WOMAN TURNS 30", Recipe Box
+    // a card for Mum, The Letter and Our Timeline "three years". Paper Crane's apology belongs on an apology page only.
+    const sayOther = ["digicam", "front-page", "recipe-box", "the-letter", "our-timeline", "paper-crane"];
+    for (const slug of ["apology-for-him", "apology-for-her", "long-distance-care-package", "surprise", "memory-book"] as const) {
+      const guide = GIFT_GUIDES[slug].en;
+      const shown = [guide.film ?? guide.ideas[0].template, GUIDE_BAND_COVERS[slug] ?? "the-letter"];
+      const allowed = slug.startsWith("apology") ? ["paper-crane"] : [];
+      for (const t of shown) if (!allowed.includes(t)) expect(sayOther, `${slug}: ${t}`).not.toContain(t);
+    }
   });
 
   it("the memory book and the photo album are two pages", () => {
