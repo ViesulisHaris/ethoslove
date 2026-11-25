@@ -26,14 +26,16 @@ const WITH_BOX = [
   "dates/[city]/page.tsx",
   "dates/[city]/[kind]/page.tsx",
   "dates/ideas/[kind]/page.tsx",
-  "trips/page.tsx",
-  "trips/[id]/page.tsx",
-  "long-distance/page.tsx",
   "blog/[slug]/page.tsx",
 ].map((f) => `${MARKETING}/${f}`);
 const LEFT_OFF: Record<string, string> = {
   [`${MARKETING}/games/page.tsx`]: "the Spanish games hub reaches 301 words with the box drawn, over the page's 300 (PLAN-letter step 8's rule)",
   [`${MARKETING}/plan/page.tsx`]: "an empty plan, as a new visitor sees it, is so short that the box would be in the first screen (BRIEF-letter.md 2: never in the first screen)",
+  // Each was already far over the 300 visible words before the box (letter-T11: 787, 603 and 496 in
+  // English); the brief says a page with no room goes without it, as /games does (letter-C7).
+  [`${MARKETING}/trips/page.tsx`]: "already over 300 visible words without the box",
+  [`${MARKETING}/trips/[id]/page.tsx`]: "already over 300 visible words without the box",
+  [`${MARKETING}/long-distance/page.tsx`]: "already over 300 visible words without the box",
 };
 
 describe("where the date letter's box is", () => {

@@ -18,7 +18,6 @@ import { PlanVisitLink } from "@/components/ldr/plan-visit-link";
 import { EagerImg } from "@/components/shared/eager-img";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateCard } from "@/components/templates/template-card";
-import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/long-distance">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -128,7 +127,6 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
         </div>
       </section>
 
-      <LetterSlot locale={locale} where="long-distance" />
       {gifts.length > 0 ? (
         <section className="border-t border-line bg-blush-paper py-20 lg:py-28">
           <div className="container-x">

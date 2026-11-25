@@ -71,9 +71,10 @@ async function pages(page: Page): Promise<string[]> {
     await page.goto("/blog");
     blogPost = (await page.locator('main a[href^="/blog/"]').first().getAttribute("href")) ?? "/blog";
   }
-  // Left off: /games (its Spanish hub reaches 301 words with the box; PLAN-letter step 8's rule) and
-  // /plan (empty, as a new visitor sees it, the page is so short the box would be in the first screen).
-  return ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", "/trips", "/trips/lisbon-slow-weekend", "/long-distance", blogPost];
+  // Left off: /games (its Spanish hub reaches 301 words with the box; PLAN-letter step 8's rule), /plan
+  // (empty, as a new visitor sees it, the page is so short the box would be in the first screen), and
+  // /trips, a trip and /long-distance (each already far over 300 words without it: letter-C7).
+  return ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", blogPost];
 }
 
 test("B1 (off) switched off, nothing of it exists", async ({ page, request }) => {
@@ -128,7 +129,7 @@ test("B3 (on) never where it must not be", async ({ page, request }) => {
   await needs("on", request);
   test.setTimeout(300_000);
   const { gets } = await answer(page);
-  for (const path of ["/", "/pricing", "/templates", "/templates/the-letter", "/demo/the-letter", "/create/the-letter", "/gifts", "/plan", "/games", "/games/today", "/games/weekly", "/games/truth-or-dare", "/login", "/legal/privacy"]) {
+  for (const path of ["/", "/pricing", "/templates", "/templates/the-letter", "/demo/the-letter", "/create/the-letter", "/gifts", "/plan", "/trips", "/trips/lisbon-slow-weekend", "/long-distance", "/games", "/games/today", "/games/weekly", "/games/truth-or-dare", "/login", "/legal/privacy"]) {
     await page.goto(path);
     await toEnd(page);
     expect(await page.locator("[data-letter-slot]").count(), path).toBe(0);
@@ -348,7 +349,10 @@ for (const size of [{ width: 1440, height: 900 }, { width: 375, height: 812 }]) 
       await needs("on", request);
       test.setTimeout(600_000);
       await page.setViewportSize(size);
-      for (const path of ["/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", "/dates/ideas/rainy-day", "/dates/ideas/first-date"]) {
+      // Every kind of page with the box. Not a blog post: an article is long-form under the blog's own
+      // rules (docs/blog/RUBRIC.md), well over 300 words with or without the box; B14's last test
+      // holds the box itself to twenty words there.
+      for (const path of ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", "/dates/ideas/rainy-day", "/dates/ideas/first-date"]) {
         await page.unrouteAll({ behavior: "ignoreErrors" });
         await answer(page);
         await page.goto(`${locale}${path}`);
