@@ -302,6 +302,11 @@ describe("anniversary gifts by month", () => {
     }
   });
 
+  it("Spanish names the month the way it is also searched, «mesario», once, on the first month", () => {
+    expect(strings(MONTH_GUIDES[1].es).join(" ")).toMatch(/\bmesario\b/);
+    expect(MONTHS.filter((n) => /\bmesario\b/.test(strings(MONTH_GUIDES[n].es).join(" ")))).toEqual([1]);
+  });
+
   it.skipIf(!MONTHS.includes(12) || !MONTHS.includes(24))("twelve months is paper and twenty-four is cotton, in both languages", () => {
     expect(strings(MONTH_GUIDES[12].en).join(" ")).toMatch(/paper/i);
     expect(strings(MONTH_GUIDES[12].es).join(" ")).toMatch(/papel/i);

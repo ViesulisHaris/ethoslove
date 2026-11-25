@@ -163,7 +163,7 @@ const month1: Month = {
       "Lo grabado, un año de fotos y la frase grande que todavía no ha dicho nadie pueden esperar a otro mes. Lo que no puede esperar es el día, si tu pareja lleva la cuenta: dejarlo pasar en silencio duele más que cualquier detalle pequeño. Una nota, una broma o un plan son la talla de cuatro semanas. Si te ha llevado diez minutos y se nota a quién va dirigido, basta.",
     ],
     faq: [
-      { q: "¿Un mes es demasiado pronto para un regalo de aniversario?", a: "No, si es pequeño. Un mes merece marcarse cuando los dos lo contáis, y una nota corta o el plan de la próxima cita lo marcan sin ponerse serios. Los recuerdos para guardar, a los seis meses." },
+      { q: "¿Un mes es demasiado pronto para un regalo de aniversario?", a: "No, si es pequeño. El primer mesario, como lo llaman en muchos sitios, merece marcarse cuando los dos lo contáis, y una nota corta o el plan de la próxima cita lo marcan sin ponerse serios. Los recuerdos para guardar, a los seis meses." },
       { q: "¿Qué se escribe al cumplir un mes?", a: "Una cosa en la que te has fijado y otra que quieres repetir. Con dos o tres frases sobra. Deja el futuro fuera, salvo que haya salido antes de su boca." },
       { q: "¿Cuál de estos es gratis?", a: "La carta, como nota corta de hasta 500 caracteres con una canción. Cada uno de los demás es un solo pago por esa plantilla, y puedes montar cualquiera en el editor antes de decidirte." },
     ],
