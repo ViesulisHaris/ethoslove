@@ -9,6 +9,8 @@ import { DatesExplorer } from "@/components/dates/dates-explorer";
 import { CityLinks } from "@/components/cities/city-links";
 import { KindLinks } from "@/components/dates/page/kind-links";
 import { DATE_KIND_UI } from "@/content/date-kinds";
+import { FOR_VENUES, FOR_VENUES_PATH } from "@/content/for-venues";
+import { Link } from "@/i18n/navigation";
 
 export async function generateMetadata({ params, searchParams }: PageProps<"/[currency]/[locale]/dates">): Promise<Metadata> {
   const { locale } = await params;
@@ -51,6 +53,12 @@ export default async function DatesPage({ params }: PageProps<"/[currency]/[loca
         <div className="container-x pt-8 pb-32 lg:pb-10">
           <KindLinks locale={locale === "es" ? "es" : "en"} title={DATE_KIND_UI[locale === "es" ? "es" : "en"].byKind} />
           <CityLinks cities={CITY_PAGES} locale={locale === "es" ? "es" : "en"} title={t("eyebrow")} className="pt-6" />
+          {/* The one way to the page for venues: quiet, at the very foot (BRIEF-dates2.md 5). Remove this line to unlink it. */}
+          <p className="-mx-1.5 pt-4">
+            <Link href={FOR_VENUES_PATH} className="inline-flex min-h-11 items-center px-1.5 text-[14px] font-medium text-forest/75 underline-offset-4 hover:text-rose-deep hover:underline">
+              {FOR_VENUES[locale === "es" ? "es" : "en"].label}
+            </Link>
+          </p>
         </div>
       </div>
     </div>
