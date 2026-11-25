@@ -3,7 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
-import { DATE_KIND_UI } from "@/content/date-kinds";
+import { CITY_KIND_NOUNS, DATE_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
 import { FOR_VENUES, FOR_VENUES_PATH } from "@/content/for-venues";
 import { mentionsSpain } from "@/lib/cities/cities";
 import { IDEAS } from "@/lib/dates/ideas";
@@ -114,6 +114,13 @@ describe("dates2 copy", () => {
     }
     expect(FOR_VENUES.en.sentence).toMatch(/never added/);
     expect(FOR_VENUES.es.sentence).toMatch(/Nunca se añade/);
+  });
+
+  it("X6 the planner's Spanish speaks to both of you, and night is not a calque (dates2-C7, C11)", () => {
+    const tonight = leaves(at(MESSAGES.es, "dates.tonight"), "dates.tonight");
+    for (const [k, v] of tonight) expect(v, k).not.toMatch(/\b(tu|tus|ti|mí)\b/);
+    expect(JSON.stringify(DATE_KIND_COPY.night)).not.toMatch(/noche de cita/i);
+    expect(JSON.stringify(CITY_KIND_NOUNS.night)).not.toMatch(/noches? de cita/i);
   });
 
   it("X4 the page for venues is not in the sitemap and names no price", async () => {

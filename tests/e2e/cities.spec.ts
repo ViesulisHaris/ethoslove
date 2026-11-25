@@ -98,7 +98,7 @@ const PAIRS = [
   { path: "london/first-date", city: "london", kind: "first-date", en: "First Date Ideas in London", es: "Primera cita en Londres", cards: 9 },
   { path: "london/cheap", city: "london", kind: "cheap", en: "Cheap Date Ideas in London", es: "Citas baratas en Londres", cards: 8 },
   { path: "chicago/romantic", city: "chicago", kind: "romantic", en: "Romantic Date Ideas in Chicago", es: "Citas románticas en Chicago", cards: 10 },
-  { path: "london/night", city: "london", kind: "night", en: "Date Night Ideas in London", es: "Noche de cita en Londres", cards: 9 },
+  { path: "london/night", city: "london", kind: "night", en: "Date Night Ideas in London", es: "Planes de noche en Londres", cards: 9 },
 ];
 
 test("X3 the hand-written city-by-kind pages and two composed ones are there in both languages", async ({ page }) => {

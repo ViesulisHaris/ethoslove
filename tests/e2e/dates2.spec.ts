@@ -482,7 +482,7 @@ test.describe("dates2: new pages", () => {
     test.setTimeout(120_000);
     const events = await catchEvents(page);
     const kinds = [
-      { kind: "night", en: "Date Night Ideas", es: "Ideas para una noche de cita", count: 9 },
+      { kind: "night", en: "Date Night Ideas", es: "Planes para una noche en pareja", count: 9 },
       { kind: "outdoor", en: "Outdoor Date Ideas", es: "Ideas para una cita al aire libre", count: 8 },
       { kind: "unique", en: "Unique Date Ideas", es: "Ideas para una cita diferente", count: 8 },
     ];

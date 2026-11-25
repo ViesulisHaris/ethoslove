@@ -2067,7 +2067,7 @@
       "sub": "Museos, visitas y lo que conviene reservar con antelación, con nuestro socio Tiqets.",
       "cta": "Entradas en {city}",
       "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más.",
-      "short": "Enlace de socio: puede que ganemos una comisión."
+      "short": "Enlace de afiliado: puede que ganemos una comisión."
     },
     "trip": "Un viaje que pasa por aquí",
     "gift": {
@@ -2168,12 +2168,12 @@
       },
       "reachLabel": "Distancia",
       "reach": {
-        "10": "a 10 minutos a pie de mí",
-        "20": "a 20 minutos a pie de mí",
-        "30": "a 30 minutos a pie de mí",
+        "10": "a 10 minutos andando",
+        "20": "a 20 minutos andando",
+        "30": "a 30 minutos andando",
         "any": "a cualquier distancia"
       },
-      "reachDenied": "No hemos podido obtener tu ubicación, así que la distancia no se aplica. Lo demás sigue igual.",
+      "reachDenied": "No hemos podido saber dónde estáis, así que la distancia no se aplica. Lo demás sigue igual.",
       "reachNone": "Este navegador no puede compartir la ubicación, así que la distancia no se aplica.",
       "mood": {
         "any": "de cualquier tipo",
@@ -2233,7 +2233,7 @@
       "optional": "opcional",
       "none": "Nada encaja con eso aquí.",
       "noneKind": "Ninguna idea de esta página encaja {when} allí.",
-      "noneNear": "No hay nada a {minutes} minutos de ti. Probad con un paseo más largo.",
+      "noneNear": "No hay nada a {minutes} minutos andando. Probad con un paseo más largo.",
       "movedTomorrow": "Ninguna idea de esta página cabe ya esta noche allí, así que esta es para mañana.",
       "wetIndoors": "Se espera lluvia {when}: esta es bajo techo.",
       "wetOutdoors": "Se espera lluvia {when}. Habéis pedido aire libre: llevad abrigo.",
