@@ -11,7 +11,7 @@ test.skip(!!process.env.CI, "the share preview page exists only on a development
 const OFFER = { eur: { amount: 799, currency: "eur" }, usd: { amount: 899, currency: "usd" }, gbp: { amount: 699, currency: "gbp" } } as const;
 const COUNTRY_CURRENCY: Record<string, keyof typeof OFFER> = { US: "usd", GB: "gbp", DE: "eur" };
 
-type Setup = { ready?: number; offer?: boolean; reminders?: unknown[]; remindersDelayMs?: number; wallet?: boolean; stripeDelayMs?: number; entitlementsDelayMs?: number };
+type Setup = { ready?: number; offer?: boolean; reminders?: unknown[]; remindersDelayMs?: number; wallet?: boolean; stripeDelayMs?: number; entitlementsDelayMs?: number; checkout?: { status: number; error: string } };
 
 const MIA_BIRTHDAY = (month: number, day: number) => [{ id: "r1", recipientName: "Mia", occasion: "birthday", month, day, locale: "en", templateSlug: null }];
 
@@ -50,7 +50,7 @@ async function open(page: Page, path: string, setup: Setup = {}) {
     const body = route.request().postDataJSON() as Record<string, unknown>;
     asked.push(body);
     if (body.oneTap) await route.fulfill({ json: { clientSecret: "cs_test_pairpairpairpair_secret_x", sessionId: "cs_test_pairpairpairpair" } });
-    else await route.fulfill({ status: 429, json: { error: "rate_limited" } });
+    else await route.fulfill(setup.checkout ? { status: setup.checkout.status, json: { error: setup.checkout.error } } : { status: 429, json: { error: "rate_limited" } });
   });
   await page.goto(path);
   return { asked, errors };
@@ -452,5 +452,56 @@ test.describe("two more gifts under the link", () => {
     await open(page, "/share-preview", { offer: false });
     await expect(page.getByText("Instagram:")).toBeVisible();
     await expect(page.getByTestId("pair-offer")).toHaveCount(0);
+  });
+});
+
+test.describe("while two more gifts are on for the listed accounts only (GIFT_PAIR_ENABLED=preview)", () => {
+  // The server decides who is listed (lib/pricing/products.ts pairOnSaleFor), and its decision is
+  // proved by tests/unit/pair-preview.test.ts against the real routes. Here the page is given each
+  // answer the server can give a listed or an unlisted account, every request held as above, and
+  // shows that the share screen draws exactly what it is told, with nothing reserved or left behind.
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("a listed account sees the card as everyone will: same words, same price, the button on the first screen", async ({ page }) => {
+    await open(page, "/share-preview");
+    const card = page.getByTestId("pair-offer");
+    await expect(card).toContainText("Nobody likes to be forgotten.");
+    await expect(card.getByTestId("pair-price")).toHaveText("€7.99");
+    const box = await card.getByTestId("pair-add").boundingBox();
+    expect(box && box.y + box.height).toBeLessThanOrEqual(844);
+    await open(page, "/es/share-preview");
+    await expect(page.getByTestId("pair-offer")).toBeVisible();
+  });
+
+  test("an unlisted account sees no card and no gap where it would be", async ({ page }) => {
+    const measure = async () => {
+      await open(page, "/share-preview", { offer: false });
+      const hint = page.getByText("Instagram:");
+      await expect(hint).toBeVisible();
+      // Long enough for the entitlements answer to have been drawn.
+      await page.waitForTimeout(1000);
+      await expect(page.getByTestId("pair-offer")).toHaveCount(0);
+      return page.evaluate(() => {
+        const hint = [...document.querySelectorAll("*")].find((el) => el.children.length === 0 && el.textContent?.includes("Instagram:"))!;
+        const block = hint.closest("p, div")!;
+        const next = block.nextElementSibling;
+        return { hintBottom: Math.round(block.getBoundingClientRect().bottom), nextTop: next ? Math.round(next.getBoundingClientRect().top) : null, height: document.documentElement.scrollHeight };
+      });
+    };
+    const first = await measure();
+    const second = await measure();
+    expect(second).toEqual(first);
+  });
+
+  test("taken off the list while the card is open: checkout says it isn't on sale, nothing is charged, the button comes back", async ({ page }) => {
+    const { asked } = await open(page, "/share-preview", { checkout: { status: 400, error: "not_on_sale" } });
+    const add = page.getByTestId("pair-offer").getByTestId("pair-add");
+    await add.click();
+    await expect(page.getByText("That isn’t on sale right now. Reload the page.")).toBeVisible();
+    await expect(add).toBeEnabled();
+    expect(page.url()).toMatch(/\/share-preview$/);
+    expect(byCard(asked)).toHaveLength(1);
+    expect(byCard(asked)[0]).toMatchObject({ product: "pair" });
+    for (const body of asked) expect(noAmounts(body)).toEqual([]);
   });
 });
