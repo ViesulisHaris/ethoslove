@@ -199,8 +199,9 @@ describe("the kinds of date", () => {
     expect(DATE_KIND_COPY.fun!.faq.map((f) => f.a.en).join(" ")).toContain("Six of the eight");
   });
 
-  it("K13 the four hand-written city-by-kind pages are pairs, and have their words in both languages, within the same limits", () => {
+  it("K13 the hand-written city-by-kind words all belong to pairs, and have their words in both languages, within the same limits", () => {
     for (const { city, kind } of WRITTEN) expect(isCityKindPair(city, kind), `${city}/${kind}`).toBe(true);
+    for (const key of Object.keys(CITY_KIND_COPY)) expect(isCityKindPair(key.split("/")[0], key.split("/")[1]), key).toBe(true);
     for (const [key, copy] of Object.entries(CITY_KIND_COPY)) {
       for (const l of LOCALES) {
         expect(copy.title[l].length, `${key} ${l}`).toBeLessThanOrEqual(60);

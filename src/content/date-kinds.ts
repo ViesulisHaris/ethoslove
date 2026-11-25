@@ -376,6 +376,27 @@ export type DateKindUi = {
   meetLabel: string;
   meetHeading: string;
   meetLine: string;
+  romanticPlacesLabel: string;
+  romanticPlacesHeading: string;
+  romanticPlacesLine: string;
+  nightPlacesLabel: string;
+  nightPlacesHeading: string;
+  nightPlacesLine: string;
+  outdoorPlacesLabel: string;
+  outdoorPlacesHeading: string;
+  outdoorPlacesLine: string;
+  rainyPlacesLabel: string;
+  rainyPlacesHeading: string;
+  rainyPlacesLine: string;
+  winterPlacesLabel: string;
+  winterPlacesHeading: string;
+  winterPlacesLine: string;
+  funPlacesLabel: string;
+  funPlacesHeading: string;
+  funPlacesLine: string;
+  uniquePlacesLabel: string;
+  uniquePlacesHeading: string;
+  uniquePlacesLine: string;
 };
 
 /** The words every page by kind shares. */
@@ -414,6 +435,27 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
     meetLabel: "Where to meet",
     meetHeading: "Cafés, bookshops and galleries near the center",
     meetLine: "Easy places to find each other, all within {km} km.",
+    romanticPlacesLabel: "With a view",
+    romanticPlacesHeading: "Views, gardens and parks near the center",
+    romanticPlacesLine: "Places to walk to after dinner, all within {km} km.",
+    nightPlacesLabel: "After dark",
+    nightPlacesHeading: "Bars, cinemas and theaters near the center",
+    nightPlacesLine: "Where an evening can start or end, all within {km} km.",
+    outdoorPlacesLabel: "Outside",
+    outdoorPlacesHeading: "Parks, gardens and lookouts near the center",
+    outdoorPlacesLine: "Open air the map knows within {km} km of the center.",
+    rainyPlacesLabel: "Under a roof",
+    rainyPlacesHeading: "Museums, galleries, cinemas and bookshops nearby",
+    rainyPlacesLine: "Dry places the map knows within {km} km of the center.",
+    winterPlacesLabel: "Somewhere warm",
+    winterPlacesHeading: "Cafés, museums and cinemas near the center",
+    winterPlacesLine: "Warm places the map knows within {km} km.",
+    funPlacesLabel: "To play",
+    funPlacesHeading: "Places with a game in them",
+    funPlacesLine: "What the map knows within {km} km; the planner finds more.",
+    uniquePlacesLabel: "Out of the ordinary",
+    uniquePlacesHeading: "Places with a story near the center",
+    uniquePlacesLine: "A cellar, a rooftop, a hidden bar: what the map’s names give away.",
   },
   es: {
     eyebrow: "Ideas para una cita",
@@ -449,6 +491,27 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
     meetLabel: "Dónde quedar",
     meetHeading: "Cafeterías, librerías y galerías cerca del centro",
     meetLine: "Sitios fáciles para encontrarse, todos a menos de {km} km.",
+    romanticPlacesLabel: "Con vistas",
+    romanticPlacesHeading: "Miradores, jardines y parques cerca del centro",
+    romanticPlacesLine: "Sitios a los que ir andando después de cenar, a menos de {km} km.",
+    nightPlacesLabel: "De noche",
+    nightPlacesHeading: "Bares, cines y teatros cerca del centro",
+    nightPlacesLine: "Donde puede empezar o acabar una noche, a menos de {km} km.",
+    outdoorPlacesLabel: "Al aire libre",
+    outdoorPlacesHeading: "Parques, jardines y miradores cerca del centro",
+    outdoorPlacesLine: "Aire libre que el mapa conoce a menos de {km} km del centro.",
+    rainyPlacesLabel: "Bajo techo",
+    rainyPlacesHeading: "Museos, galerías, cines y librerías cerca",
+    rainyPlacesLine: "Sitios secos que el mapa conoce a menos de {km} km del centro.",
+    winterPlacesLabel: "Al calor",
+    winterPlacesHeading: "Cafeterías, museos y cines cerca del centro",
+    winterPlacesLine: "Sitios calentitos que el mapa conoce a menos de {km} km.",
+    funPlacesLabel: "Para jugar",
+    funPlacesHeading: "Sitios con un juego dentro",
+    funPlacesLine: "Lo que el mapa conoce a menos de {km} km; el planificador encuentra más.",
+    uniquePlacesLabel: "Fuera de lo común",
+    uniquePlacesHeading: "Sitios con historia cerca del centro",
+    uniquePlacesLine: "Un sótano, una azotea, un bar escondido: lo que delatan los nombres del mapa.",
   },
 };
 
@@ -511,4 +574,39 @@ export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
     hero: "ice-cream-walk",
     sentence: { en: "Our eight cheap ideas with real places around Covent Garden, and the galleries, parks and bookshops nearby that are usually free.", es: "Nuestras ocho ideas baratas con sitios reales alrededor de Covent Garden, y las galerías, parques y librerías cercanos, que suelen ser gratis." },
   },
+};
+
+/**
+ * The words of a city pair that has no hand-written ones (CITY_KIND_COPY), composed from the kind’s
+ * and the city’s own data by src/lib/cities/kind-copy.ts. `{count}` is a numeral: the cards shown.
+ */
+export const CITY_KIND_WORDS: Record<"en" | "es", { title: string; description: string; heading: string; sentence: string; pick: string }> = {
+  en: {
+    title: "{phrase} in {city}: {count} With Real Places",
+    description: "{count} {phraseLower} in {city}, each with real places near the center for its stops. The planner fits one to the day’s forecast.",
+    heading: "{phraseSentence} in {city}",
+    sentence: "{count} {dates} for {city}, in the order the city deserves, with real places near the center for every stop.",
+    pick: "Especially good in {city}: {idea}.",
+  },
+  es: {
+    title: "{short} en {city}: {count} con sitios reales",
+    description: "{count} {phraseLower} en {city}, con sitios reales cerca del centro para cada parada. El planificador elige una según la previsión.",
+    heading: "{phrase} en {city}",
+    sentence: "{count} {dates} para {city}, en el orden que pide la ciudad, con sitios reales cerca del centro para cada parada.",
+    pick: "Especialmente buena en {city}: {idea}.",
+  },
+};
+
+/** What a pair’s sentence calls the kind’s dates, and how its Spanish title starts. */
+export const CITY_KIND_NOUNS: Record<Exclude<DateKind, "at-home">, { dates: L; short: string }> = {
+  "first-date": { dates: { en: "first dates", es: "primeras citas" }, short: "Primera cita" },
+  fun: { dates: { en: "fun dates", es: "citas divertidas" }, short: "Citas divertidas" },
+  cheap: { dates: { en: "cheap dates", es: "citas baratas" }, short: "Citas baratas" },
+  romantic: { dates: { en: "romantic dates", es: "citas románticas" }, short: "Citas románticas" },
+  "double-date": { dates: { en: "double dates", es: "citas dobles" }, short: "Citas dobles" },
+  winter: { dates: { en: "winter dates", es: "citas de invierno" }, short: "Citas de invierno" },
+  "rainy-day": { dates: { en: "rainy-day dates", es: "citas bajo techo" }, short: "Citas bajo techo" },
+  night: { dates: { en: "date nights", es: "noches de cita" }, short: "Noche de cita" },
+  outdoor: { dates: { en: "outdoor dates", es: "citas al aire libre" }, short: "Citas al aire libre" },
+  unique: { dates: { en: "unique dates", es: "citas diferentes" }, short: "Citas diferentes" },
 };

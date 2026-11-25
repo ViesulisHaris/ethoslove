@@ -6,6 +6,10 @@ import { CITY_PAGES, CITY_SLUGS, getCity } from "@/lib/cities/cities";
 import { citiesOfKind, CITY_KIND_PAIRS, CITY_KIND_PLACES, cityKindOwn, isCityKindPair, KIND_NEEDS_TRAIT, kindsOfCity, MIN_CITY_KIND_IDEAS, pairHero, pairIdeas } from "@/lib/cities/kind-pairs";
 import { SKYLINE_IDEAS } from "@/lib/dates/art";
 import { DATE_KIND_IDS, DATE_KINDS, type DateKind } from "@/lib/dates/date-kinds";
+import { mentionsSpain } from "@/lib/cities/cities";
+import { pairCopy } from "@/lib/cities/kind-copy";
+
+const words = (text: string): number => text.trim().split(/s+/).filter(Boolean).length;
 
 /** The rule of BRIEF-dates2.md 1, written again from the data: six of the kind's ideas in the city's own list, or six real places counted. */
 const holdsSix = (citySlug: string, kind: DateKind): boolean => {
@@ -66,6 +70,29 @@ describe("a kind of date inside a city", () => {
       expect(hero, `${city}/${kind}`).not.toBe(shown[0]);
       expect(Object.keys(SKYLINE_IDEAS), `${city}/${kind}`).not.toContain(hero);
       expect(existsSync(join(process.cwd(), "public", "dates", "ideas", `${hero}.webp`)), hero).toBe(true);
+    }
+  });
+
+  it("P6 the words of every pair fit, in both languages", () => {
+    for (const l of ["en", "es"] as const) {
+      const titles = new Set<string>();
+      for (const { city: slug, kind } of CITY_KIND_PAIRS) {
+        const copy = pairCopy(getCity(slug)!, kind, l);
+        const at = `${slug}/${kind} ${l}`;
+        expect(copy.title.length, `${at} title: ${copy.title}`).toBeLessThanOrEqual(60);
+        expect(copy.description.length, `${at} description`).toBeLessThanOrEqual(155);
+        expect(words(copy.line), `${at} line: ${copy.line}`).toBeLessThanOrEqual(14);
+        expect(words(copy.sentence), `${at} sentence`).toBeLessThanOrEqual(30);
+        for (const text of [copy.title, copy.description, copy.heading, copy.line, copy.sentence]) {
+          expect(text.trim().length, at).toBeGreaterThan(0);
+          expect(text, at).not.toContain("{");
+          expect(mentionsSpain(text), `${at}: ${text}`).toBe(false);
+        }
+        expect(copy.hero, at).toBe(heroOf(slug, kind));
+        if (slug === "new-york" && l === "en") expect(copy.title, at).toContain("NYC");
+        expect(titles.has(copy.title), `${at} title repeated: ${copy.title}`).toBe(false);
+        titles.add(copy.title);
+      }
     }
   });
 

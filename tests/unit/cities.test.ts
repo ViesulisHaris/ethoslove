@@ -17,7 +17,8 @@ import { CITY_KIND_COPY, KIND_PAGE_CITIES } from "@/content/date-kinds";
 import { createTranslator } from "next-intl";
 import { SITE } from "@/config/site";
 import sitemap from "@/app/sitemap";
-import { KIND_PLACES, kindPlaces, leftOff } from "@/lib/cities/kind-places";
+import { KIND_PLACE_KINDS, KIND_PLACES, kindPlaces, leftOff, MIN_KIND_PLACES } from "@/lib/cities/kind-places";
+import { isTold, unusualIndex } from "@/lib/dates/unusual";
 import { guessCost } from "@/lib/dates/cost";
 import { DATE_KINDS } from "@/lib/dates/date-kinds";
 import { CITY_KIND_PAIRS } from "@/lib/cities/kind-pairs";
@@ -446,6 +447,44 @@ describe("a kind of date inside a city", () => {
     for (const p of meet) expect(["cafe", "bookshop", "gallery"], p.id).toContain(p.kind);
     expect(meet.map((p) => p.id)).not.toContain("node/plain");
     expect(kindPlaces("fun", fixture)).toEqual([]);
+  });
+
+  it("C7 each kind’s list is its own kinds of place", () => {
+    const mixed: Place[] = [
+      ...fixture,
+      place("node/bar2", "bar", 93, { name: "The Lamb" }),
+      place("node/bar3", "bar", 92, { name: "Gordon’s" }),
+      place("node/cine", "cinema", 91, { name: "Prince Charles Cinema" }),
+      place("node/cine2", "cinema", 90, { name: "Curzon" }),
+      place("node/thea", "theatre", 89, { name: "Old Vic" }),
+      place("node/mus", "museum", 88, { name: "Sir John Soane’s Museum" }),
+      place("node/mus2", "museum", 87, { name: "Foundling Museum" }),
+      place("node/books2", "bookshop", 86, { name: "Daunt Books" }),
+      place("node/beach", "beach", 85, { name: "Long Beach" }),
+      place("node/bowl", "bowling", 84, { name: "All Star Lanes" }),
+      place("node/arc", "arcade", 83, { name: "Namco Funscape" }),
+      place("node/golf", "minigolf", 82, { name: "Puttshack" }),
+      place("node/cellar", "bar", 81, { name: "Cellar Bar" }),
+      place("node/roof", "bar", 80, { name: "Rooftop Bar" }),
+      place("node/speak", "bar", 79, { name: "Hidden Speakeasy" }),
+    ];
+    for (const kind of ["romantic", "night", "outdoor", "rainy-day", "winter", "fun"] as const) {
+      const list = kindPlaces(kind, mixed);
+      expect(list.length, kind).toBeGreaterThanOrEqual(MIN_KIND_PLACES);
+      for (const p of list) expect(KIND_PLACE_KINDS[kind], `${kind} ${p.id}`).toContain(p.kind);
+    }
+    const index = unusualIndex(mixed);
+    const unique = kindPlaces("unique", mixed);
+    for (const p of unique) expect(isTold(index.get(p.id)), p.name).toBe(true);
+    expect(unique.length, "unique").toBeGreaterThanOrEqual(MIN_KIND_PLACES);
+    expect(unique.map((p) => p.id)).not.toContain("node/thea");
+    expect(kindPlaces("double-date", mixed)).toEqual([]);
+  });
+
+  it("C8 a list under three names is no list", () => {
+    const two = [place("node/b1", "bar", 90, { name: "The Lamb" }), place("node/b2", "cinema", 89, { name: "Curzon" })];
+    expect(kindPlaces("night", two)).toEqual([]);
+    expect(kindPlaces("night", [...two, place("node/b3", "theatre", 88, { name: "Old Vic" })]).length).toBe(3);
   });
 
   it("C5b neither list names a chain café, a gallery that charges, a sports ground or a square filed as a park (dates-D3)", () => {
