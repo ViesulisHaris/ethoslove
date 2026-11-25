@@ -281,6 +281,17 @@ test.describe("a trip's page", () => {
     await expect(page.locator("details[data-trip-more]")).not.toContainText("not the flights");
   });
 
+  test("E10c an address ending in #flights, #stay, #tickets or #car lands on that row open", async ({ page }) => {
+    for (const id of ["flights", "stay", "tickets", "car"]) {
+      await page.goto(`/trips/baltic-coast#${id}`);
+      await expect(page.locator(`details#${id}`), id).toHaveAttribute("open", "");
+    }
+    await expect(page.getByTestId("flight-finder")).toBeHidden();
+    await page.evaluate(() => (window.location.hash = "#flights"));
+    await expect(page.locator("details#flights")).toHaveAttribute("open", "");
+    await expect(page.getByTestId("flight-finder")).toBeVisible();
+  });
+
   test("E11 each night's stop gets its own nights", async ({ page }) => {
     await page.goto("/trips/baltic-coast");
     const stays = page.getByTestId("trip-stay");

@@ -25,12 +25,16 @@ import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { OriginPage, originMetadata } from "@/components/trips/page/origin-page";
 import { FlightFinder } from "@/components/trips/flight-finder";
+import { OpenByHash } from "@/components/trips/open-by-hash";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { ShareTripButton } from "@/components/trips/share-trip-button";
 import { StayLink } from "@/components/trips/stay-link";
 import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link";
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
+
+/** The closed rows under "Before you go": an address ending in one of them lands on it open. */
+const BOOK_ROWS = ["flights", "stay", "tickets", "car"] as const;
 
 /** How the plan marks each day's date-night moment, so it can be drawn as one. */
 const EVENING = { en: "Evening:", es: "Por la noche:" } as const;
@@ -309,6 +313,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
           <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
             {t("detail.book.title")}
           </h2>
+          <OpenByHash ids={BOOK_ROWS} />
           <div className="mt-8 grid max-w-3xl gap-3">
             <details id="flights" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
               <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
