@@ -6,6 +6,7 @@ import type { Db } from "@/lib/commerce/db";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { groupGiftsEnabled } from "@/lib/group/flag";
 import { forgetGroupPhotos } from "@/lib/group/store";
+import { missingTable } from "@/lib/lifecycle/date-letter-store";
 import { getStripe } from "@/lib/stripe/server";
 import { cancelSubscriptionNow } from "@/lib/stripe/subscriptions";
 
@@ -25,7 +26,7 @@ async function cancelWithStripe(subscriptionId: string): Promise<void> {
  * keeps being charged, so if Stripe can't be reached nothing is deleted. The Stripe customer stays
  * (invoices, disputes). App Store subscriptions can only be cancelled in iOS: the page says so first.
  * Then every gift's files in storage (rows cascade, files don't), the photos waiting at its group
- * cards' links while those are switched on, then the auth user, whose rows cascade from there. Purchases outlive it without a user, as the accounts need (migration 0011).
+ * cards' links while those are switched on, then the auth user, whose rows cascade from there, and the date letter's row at the same address. Purchases outlive it without a user, as the accounts need (migration 0011).
  * Shared by the account page's server action and the iPhone app's POST /api/app/account/delete; the
  * caller has already decided who `userId` is. The storage step stops the deletion if it fails, so
  * nobody is left with files and no account.
@@ -73,7 +74,26 @@ export async function deleteAccountData(
   // Only while group cards are on; it can't fail, so it never keeps an account that asked to go.
   if (groupGiftsEnabled()) await forgetGroupPhotos({ userId }, admin as Db);
 
+  // The address, read before the user (and its profile) is gone, for the date letter's row below.
+  let address: string | null = null;
+  try {
+    const { data: profile } = await admin.from("profiles").select("email").eq("id", userId).maybeSingle();
+    address = profile?.email?.trim().toLowerCase() || null;
+  } catch {
+    address = null;
+  }
+
   const { error } = await admin.auth.admin.deleteUser(userId);
   if (error) return { ok: false, error: error.message };
+  // The date letter's row at the same address (0027): it names no account, so it doesn't cascade.
+  // It can never fail the deletion; before 0027 there is nothing to delete.
+  if (address) {
+    try {
+      const { error: letterError } = await admin.from("date_letter").delete().eq("email", address);
+      if (letterError && !missingTable(letterError)) console.error("[delete-account] date letter row not deleted", letterError.message);
+    } catch (e) {
+      console.error("[delete-account] date letter row not deleted", (e as Error).message);
+    }
+  }
   return { ok: true };
 }
