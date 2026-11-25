@@ -46,8 +46,9 @@ export default async function ForVenuesPage({ params }: PageProps<"/[currency]/[
         </a>
       </DateHero>
 
-      {/* Deep at its foot on a desk, as the questions spread is: the last band's lily lies across the edge. */}
-      <DateSpread id="what-title" label={copy.whatLabel} heading={copy.whatHeading} line={copy.whatLine} className="py-12 sm:py-16 lg:pt-20 lg:pb-44">
+      {/* Deep at its foot on a desk: the last band's lily lies across the edge into this space, and with
+          less than the questions spread's 11rem it reached the line beside the card (page-design D1). */}
+      <DateSpread id="what-title" label={copy.whatLabel} heading={copy.whatHeading} line={copy.whatLine} className="py-12 sm:py-16 lg:pt-20 lg:pb-64">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-12">
           <figure aria-label={copy.whatHeading} className="flex items-stretch gap-3.5 rounded-[22px] bg-page-raised p-2.5 shadow-page-card ring-1 ring-page-line">
             <span className="block size-[92px] shrink-0 overflow-hidden rounded-[16px] sm:size-[104px]" style={{ background: `linear-gradient(160deg, ${hero.art.from} 0%, ${hero.art.to} 100%)` }}>
@@ -55,7 +56,7 @@ export default async function ForVenuesPage({ params }: PageProps<"/[currency]/[
               <img src={ideaImage(hero.id)} alt="" width={208} height={208} loading="lazy" decoding="async" className="block size-full object-cover" />
             </span>
             <figcaption className="flex min-w-0 flex-1 flex-col justify-center py-1">
-              <span className="text-[12px] font-semibold text-page-body">{KINDS.restaurant.label[l]}</span>
+              <span className="text-sm font-semibold text-page-body">{KINDS.restaurant.label[l]}</span>
               <span className="mt-0.5 font-display text-[19px] leading-[1.12] text-page-ink">{copy.sample}</span>
               <FeaturedLabel label={td("featured.label")} className="mt-1.5 self-start" />
             </figcaption>
