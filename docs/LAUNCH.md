@@ -127,6 +127,7 @@ New or changed, in Vercel for Production (and Preview for testing):
 | `STRIPE_WEBHOOK_SECRET` | the endpoint's signing secret (unchanged if the endpoint is reused) |
 | `CRON_SECRET` | long random string; every `/api/cron/*` fails closed without it |
 | `MONTHLY_IDEA_EMAILS` | leave unset (off) until migration `0022_monthly_ideas.sql` is applied and the Terms and privacy text are approved. `optin`, `buyers` or `all`: who gets one gift idea a month for a year after their last gift (`src/lib/lifecycle/monthly-idea.ts`); `all` also puts the Terms box on a free gift's send screen. Vercel reads a changed value only from the next deployment: after changing it, Redeploy the latest production deployment (no code change needed) |
+| `DATE_LETTER` | leave unset (off). `on` shows the date letter's box and sends the letter on Thursdays (`src/lib/lifecycle/date-letter.ts`); needs migration `0027_date_letter.sql`; takes effect on the next deploy (the pages with the box are static): after changing it, Redeploy the latest production deployment |
 | `MONTHLY_IDEA_PAUSE_UNTIL` | optional `YYYY-MM-DD`: the monthly idea's cron sends nothing before that day. Like every variable, it takes effect on the next deployment, so set it and Redeploy (for example straight after a Mailchimp send) |
 | `VIEWER_HASH_SECRET` | long random string that signs reminder-removal and unsubscribe links and seals the free-reply token in "send one back" links. It falls back to the service key, but then rotating that key voids every open reply link, so set it |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier). Without them rate limits and "one recovery email per address a week" are per serverless instance only |
@@ -185,6 +186,7 @@ Full detail in `docs/STRIPE.md`. The checklist:
 | `/api/cron/reminders` | 07:00 | "Remind me next year" emails, nine days before, catching up two missed days |
 | `/api/cron/unlock` | 08:00 | scheduled gifts, storage retention (unchanged) |
 | `/api/cron/monthly-idea` | 07:40 to 13:40, hourly | the monthly idea, one email a month for a year after a gift; answers `skipped: "off"` until `MONTHLY_IDEA_EMAILS` is set |
+| `/api/cron/date-letter` | 08:10 to 15:50, at :10, :30 and :50 | the date letter: tidies the list every day, sends the week's letter Thursday to Sunday; answers `skipped: "off"` until `DATE_LETTER=on`, and `skipped: "no_table"` until migration 0027 is applied |
 
 Check the Vercel plan allows three daily crons. The reminder job sends at most ~90 emails a run
 (500 ms apart, inside 60 s); Resend's free tier is 100 emails a day and 3,000 a month in total, receipts

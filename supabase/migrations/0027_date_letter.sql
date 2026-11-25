@@ -1,5 +1,5 @@
 -- The date letter: one date idea a week by email, on Thursdays, to addresses that asked for it in
--- the box on the dates, plans, trips, long-distance, games and blog pages
+-- the box on the dates, trips, long-distance and blog pages
 -- (src/lib/lifecycle/date-letter.ts, src/components/date-letter/letter-box.tsx). Additive: one new
 -- table; nothing the live site reads is touched. Until it exists the box is not drawn
 -- (/api/date-letter answers { available: false }), asking answers "unavailable", and the job sends
