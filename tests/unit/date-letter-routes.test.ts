@@ -19,6 +19,11 @@ vi.mock("@/lib/rate-limit", () => ({
     return state.spent.get(key)! <= limit;
   },
 }));
+// Vercel's server event: what was sent, and the request it would have read its address from.
+const events = vi.hoisted(() => [] as { name: string; props: unknown; headers: Record<string, string> }[]);
+vi.mock("@vercel/analytics/server", () => ({
+  track: async (name: string, props: unknown, options: { headers: Record<string, string> }) => void events.push({ name, props, headers: options.headers }),
+}));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdminClient: () => state.db }));
 vi.mock("@/lib/supabase/server", () => ({ getSupabaseServerClient: async () => state.db }));
 vi.mock("@/lib/auth/get-user", () => ({ getCurrentUser: async () => state.user }));
@@ -238,6 +243,41 @@ describe("the date letter's routes", () => {
     fake.failNext("date_letter", "select");
     expect(await (await api.GET()).json()).toEqual({ available: true, email: "sam@mail.com", state: "none" });
     expect(rows()).toEqual(before);
+  });
+
+  it("R18 a press on the link page is counted, with no property, and its address holds no token (BRIEF 6, letter-C5)", async () => {
+    events.length = 0;
+    fake = new FakeDb({ date_letter: [letterRow()] }, NOW);
+    state.db = fake.db;
+    const confirm = await signToken("date-letter-confirm", ROW, SECRET);
+    const ask = await link(confirmRoute, "confirm", "GET", confirm);
+    const form = ask.html.match(/<form method="post" action="([^"]*)">(.*?)<button/)!;
+    expect(form[1]).toBe("/api/date-letter/confirm?l=en");
+    expect(form[2]).toContain(`<input type="hidden" name="t" value="${confirm}">`);
+    // The page's button: the token in the form's body.
+    const press = (kind: "confirm" | "stop", route: typeof confirmRoute | typeof stopRoute, token: string) =>
+      route.POST(new NextRequest(`https://ethos.test/api/date-letter/${kind}?l=en`, { method: "POST", body: new URLSearchParams({ t: token }), headers: { "x-real-ip": "10.8.8.8", "user-agent": "Mail/1.0", cookie: "sb=secret" } }));
+    expect(await (await press("confirm", confirmRoute, confirm)).text()).toContain("You’re in.");
+    expect(events).toEqual([{ name: "letter_confirmed", props: undefined, headers: { "user-agent": "Mail/1.0" } }]);
+    // Pressed again: already on, not counted twice.
+    await press("confirm", confirmRoute, confirm);
+    expect(events).toHaveLength(1);
+
+    const stop = await signToken("date-letter-stop", ROW, SECRET);
+    const stopAsk = await link(stopRoute, "stop", "GET", stop);
+    expect(stopAsk.html).toContain('action="/api/date-letter/stop?l=en"');
+    expect(await (await press("stop", stopRoute, stop)).text()).toContain("Stopped.");
+    expect(events.map((e) => e.name)).toEqual(["letter_confirmed", "letter_stopped"]);
+    expect(rows()[0].stopped_at).not.toBeNull();
+
+    // A mail app's one-click has the token in its address: honoured, not sent as an event.
+    fake = new FakeDb({ date_letter: [letterRow({ confirmed_at: new Date(NOW - HOUR).toISOString() })] }, NOW);
+    state.db = fake.db;
+    expect((await link(stopRoute, "stop", "POST", stop, { oneClick: true })).text).toContain("Stopped.");
+    expect(rows()[0].stopped_at).not.toBeNull();
+    expect(events).toHaveLength(2);
+    // A forged field is refused like a forged link.
+    expect((await press("stop", stopRoute, `${ROW}.forged`)).status).toBe(404);
   });
 
   it("R10 each link is its own kind", async () => {

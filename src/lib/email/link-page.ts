@@ -17,8 +17,11 @@ export type LinkPage = {
   locale: "en" | "es";
   title: string;
   body: string;
-  /** A button that POSTs to `action` (the page's own address, token included). */
-  confirm?: { label: string; action: string };
+  /**
+   * A button that POSTs to `action` (the page's own address, token included), with `fields` sent as
+   * hidden form fields: a route may move its token there to keep it out of the address it POSTs to.
+   */
+  confirm?: { label: string; action: string; fields?: Record<string, string> };
   /** A plain link onward, drawn as the button is (a page that has already acted: "Make it"). */
   next?: { label: string; href: string };
   home: string;
@@ -74,7 +77,7 @@ export function linkPageHtml({ locale, title, body, confirm, next, home }: Omit<
     <a class="brand" href="${escape(homeHref)}" aria-label="Ethos"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="${SEAL}" fill="var(--rose)"/><path d="${HEART}" fill="var(--seal-heart)" opacity="0.95"/></svg><span>Ethos</span></a>
     <h1>${escape(title)}</h1>
     <p>${escape(body)}</p>
-    ${confirm ? `<form method="post" action="${escape(confirm.action)}"><button type="submit">${escape(confirm.label)}</button></form>` : ""}
+    ${confirm ? `<form method="post" action="${escape(confirm.action)}">${Object.entries(confirm.fields ?? {}).map(([name, value]) => `<input type="hidden" name="${escape(name)}" value="${escape(value)}">`).join("")}<button type="submit">${escape(confirm.label)}</button></form>` : ""}
     ${next ? `<a class="next" href="${escape(next.href)}">${escape(next.label)}</a>` : ""}
   </div>
   <a class="home" href="${escape(homeHref)}">${escape(home)}</a>

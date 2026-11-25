@@ -7,6 +7,7 @@ import { linkSecret, verifyToken } from "@/lib/lifecycle/links";
 import { linkPage } from "@/lib/email/link-page";
 import { dateLetterOn } from "@/lib/lifecycle/date-letter-flag";
 import { stopLetter } from "@/lib/lifecycle/date-letter-store";
+import { letterEvent, letterToken } from "@/lib/lifecycle/date-letter-events";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -24,7 +25,7 @@ type L = "en" | "es";
 const localeOf = (v: string | null | undefined): L => (v === "es" ? "es" : "en");
 const notFound = () => NextResponse.json({ error: "not_found" }, { status: 404 });
 
-async function resolve(request: NextRequest) {
+async function resolve(request: NextRequest, token: string | null) {
   const secret = linkSecret();
   const admin = getSupabaseAdminClient();
   if (!secret || !admin) return { state: "unavailable" as const };
@@ -32,7 +33,7 @@ async function resolve(request: NextRequest) {
   // of its own servers for everyone at once, so a limit per connection would leave the 31st person in
   // a minute subscribed (monthly-D9). Only bad links count against a connection; a good one is limited
   // per row, which is all a repeat of it can touch.
-  const id = await verifyToken("date-letter-stop", request.nextUrl.searchParams.get("t"), secret);
+  const id = await verifyToken("date-letter-stop", token, secret);
   if (!id) {
     if (!(await rateLimit(`date-letter-stop-bad:${clientIp(request.headers)}`, { limit: 30, windowSeconds: 60 }))) return { state: "unavailable" as const };
     return { state: "invalid" as const };
@@ -56,7 +57,8 @@ async function problem(state: "invalid" | "unavailable", locale: L) {
 export async function GET(request: NextRequest) {
   if (!dateLetterOn()) return notFound();
   const asked = localeOf(request.nextUrl.searchParams.get("l"));
-  const found = await resolve(request);
+  const { token } = await letterToken(request);
+  const found = await resolve(request, token);
   if (found.state !== "ok") return problem(found.state, asked);
   const { data, error } = await found.db.from("date_letter").select("confirmed_at, stopped_at, locale").eq("id", found.id).maybeSingle();
   if (error) return problem("unavailable", asked);
@@ -69,7 +71,9 @@ export async function GET(request: NextRequest) {
     locale,
     title: t(notMe ? "letter.notMeTitle" : "letter.stopTitle"),
     body: t(notMe ? "letter.notMeBody" : "letter.stopBody"),
-    confirm: { label: t(notMe ? "letter.notMeConfirm" : "letter.stopConfirm"), action: `${request.nextUrl.pathname}${request.nextUrl.search}` },
+    // The token in a hidden field, as on the confirming page; a mail app's one-click POSTs to the
+    // e-mail's own address, token included, and is answered all the same.
+    confirm: { label: t(notMe ? "letter.notMeConfirm" : "letter.stopConfirm"), action: `${request.nextUrl.pathname}?l=${locale}`, fields: { t: token! } },
     home: t("link.home"),
   });
 }
@@ -77,9 +81,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   if (!dateLetterOn()) return notFound();
   const asked = localeOf(request.nextUrl.searchParams.get("l"));
-  const found = await resolve(request);
+  const { token, fromPage } = await letterToken(request);
+  const found = await resolve(request, token);
   if (found.state !== "ok") return problem(found.state, asked);
   const done = await stopLetter(found.db, found.id, Date.now()).catch(() => null);
   if (!done) return problem("unavailable", asked);
+  if (done.result === "stopped" && fromPage) await letterEvent("letter_stopped", request);
   return page(done.result === "gone" ? asked : done.locale, done.result === "not_me" ? "notMe" : "stopped");
 }
