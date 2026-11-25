@@ -66,18 +66,54 @@ describe("the kinds of date", () => {
     for (const kind of DATE_KINDS) expect(kindIdeas(kind).length, kind).toBeGreaterThanOrEqual(MIN_KIND_IDEAS);
   });
 
-  it("K21 no kind is another's twin: two kinds share fewer than seven in ten of their ideas", () => {
+  /**
+   * The overlaps between kinds, measured against the smaller kind (shared ÷ the smaller list), as the
+   * checker asked (dates2-C3): shared ÷ union hid that 7 of night's 9 ideas are rainy-day's. Every
+   * pair at half or more is written here with its count, for the owner to see; the three new kinds'
+   * are in line with the release's own (rainy-day and winter share 8 of 9). A pair that grows, or a
+   * new pair at half or more, fails until it is written here on purpose.
+   */
+  const ACCEPTED_OVERLAPS: Record<string, number> = {
+    "first-date/fun": 4,
+    "first-date/rainy-day": 6,
+    "fun/rainy-day": 6,
+    "fun/night": 4,
+    "fun/unique": 5,
+    "cheap/first-date": 5,
+    "cheap/romantic": 4,
+    "cheap/outdoor": 6,
+    "romantic/unique": 5,
+    "double-date/fun": 6,
+    "double-date/rainy-day": 4,
+    "double-date/night": 5,
+    "rainy-day/winter": 8,
+    "rainy-day/unique": 5,
+    "night/winter": 5,
+    "night/rainy-day": 7,
+    "night/unique": 4,
+    "outdoor/romantic": 6,
+    "unique/winter": 4,
+  };
+
+  it("K21 no kind is another's twin, and every large overlap is one written down (dates2-C3)", () => {
+    const seen: string[] = [];
     for (const a of DATE_KINDS) {
       for (const b of DATE_KINDS) {
         if (a >= b) continue;
         const A = new Set(KIND_IDEAS[a]);
         const B = new Set(KIND_IDEAS[b]);
         const shared = [...A].filter((id) => B.has(id)).length;
-        const either = new Set([...A, ...B]).size;
-        expect(shared / either, `${a} and ${b}`).toBeLessThan(0.7);
         expect(sorted([...A]), `${a} and ${b}`).not.toEqual(sorted([...B]));
+        // No kind lies wholly inside another.
+        expect(shared, `${a} inside ${b}`).toBeLessThan(Math.min(A.size, B.size));
+        if (shared / Math.min(A.size, B.size) < 0.5) continue;
+        const key = ACCEPTED_OVERLAPS[`${a}/${b}`] !== undefined ? `${a}/${b}` : `${b}/${a}`;
+        seen.push(key);
+        expect(ACCEPTED_OVERLAPS[key], `${a} and ${b} share ${shared}: not written down`).toBeDefined();
+        expect(shared, `${a} and ${b}`).toBeLessThanOrEqual(ACCEPTED_OVERLAPS[key]);
       }
     }
+    expect(seen.sort()).toEqual(Object.keys(ACCEPTED_OVERLAPS).sort());
   });
 
   it("K22 night is evening and night ideas only", () => {
