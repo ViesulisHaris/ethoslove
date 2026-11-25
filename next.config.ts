@@ -35,9 +35,13 @@ const nextConfig: NextConfig = {
   // Link-preview fetchers get a page's metadata in its <head> rather than streamed after it: a shared
   // plan's or place's preview tags read the query, so those pages render per request, and a fetcher
   // that stops at </head> saw no photograph. Next's own list (next/dist/shared/lib/router/utils/
-  // html-bots.js, which this replaces, so it is copied whole) plus the chat and social apps it lacks.
+  // html-bots.js, which this replaces, so it is copied whole) plus the chat and social apps it lacks,
+  // and Google's own search crawlers: Next leaves Googlebot out because it runs JavaScript, so /dates'
+  // title, canonical and hreflang reached it in the body (reports/seoaudit-audit.md, M2). `Googlebot`
+  // also takes Googlebot-Image, -Video and -News; `GoogleOther` its -Image and -Video. AdsBot-Google,
+  // Storebot-Google, Mediapartners-Google and Google-InspectionTool are already in the first two.
   htmlLimitedBots:
-    /[\w-]+-Google|Google-[\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight|TelegramBot|Viber|Snapchat|Pinterest|Mastodon|Bluesky|Cardyb|Embedly|Iframely|Signal/i,
+    /Googlebot|GoogleOther|[\w-]+-Google|Google-[\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight|TelegramBot|Viber|Snapchat|Pinterest|Mastodon|Bluesky|Cardyb|Embedly|Iframely|Signal/i,
   // A trip's link preview is drawn from its own picture, read from disk by the card's route
   // (app/og/share.jpg): public/ is served by the CDN and is not otherwise in the function.
   outputFileTracingIncludes: {
