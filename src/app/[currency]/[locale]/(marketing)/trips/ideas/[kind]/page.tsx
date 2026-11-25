@@ -6,6 +6,8 @@ import { ClientMessages } from "@/i18n/client-messages";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { shareCardPath } from "@/lib/share/links";
+import { IDEAS_CARD_PREFIX } from "@/lib/trips/room-card";
 import { getTripIdeaKind, ideaPath, ideaTrips, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
 import { originPath, TRIP_ORIGINS } from "@/lib/trips/origins";
 import { monthRanges } from "@/lib/trips/months";
@@ -32,7 +34,8 @@ export async function generateMetadata({ params }: Omit<Props, "searchParams">):
   if (!kind) return {};
   const l = locale === "es" ? "es" : "en";
   const copy = TRIP_IDEA_COPY[kind];
-  return pageMetadata({ locale, path: ideaPath(kind), title: fill(copy.title[l], { count: ideaTrips(kind).length }), description: copy.description[l] });
+  // Its own share card: the page's heading over its hero's photograph (lib/trips/room-card.ts), not the site's general one.
+  return pageMetadata({ locale, path: ideaPath(kind), title: fill(copy.title[l], { count: ideaTrips(kind).length }), description: copy.description[l], image: shareCardPath({ kind: "trips", locale: l, page: `${IDEAS_CARD_PREFIX}${kind}` }) });
 }
 
 /**

@@ -811,6 +811,21 @@ test("E25b the ideas for a call are rows beside their heading, not a grid of sti
   }
 });
 
+test("E30b a page by where you leave from, or by kind, is shared with its own card, not the site's", async ({ page }) => {
+  for (const path of ["/trips/from-london", "/es/trips/ideas/road-trips"]) {
+    await page.goto(path);
+    const image = await page.locator('meta[property="og:image"]').first().getAttribute("content");
+    expect(image, path).toMatch(/\/og\/share\.jpg\?k=trips&/);
+    expect(image, path).not.toMatch(/\/og\.png/);
+    const res = await page.request.get(new URL(image!).pathname + new URL(image!).search);
+    expect(res.status(), path).toBe(200);
+    expect(res.headers()["content-type"], path).toBe("image/jpeg");
+  }
+  // A key that is no page draws the plain card, and nothing written in the query is drawn.
+  const plain = await page.request.get("/og/share.jpg?k=trips&l=en&p=from-madrid&v=1");
+  expect(plain.status()).toBe(200);
+});
+
 test("E29 reduced motion: nothing turns or rises", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/trips/baltic-coast");

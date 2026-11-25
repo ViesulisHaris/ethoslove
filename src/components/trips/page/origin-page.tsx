@@ -4,9 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { shareCardPath } from "@/lib/share/links";
 import { formatFlightTime } from "@/lib/trips/flights";
 import { monthRanges } from "@/lib/trips/months";
-import { originCards, originPath, TRIP_ORIGINS, tripsFrom, type OriginTrip, type TripOrigin } from "@/lib/trips/origins";
+import { ORIGIN_PREFIX, originCards, originPath, TRIP_ORIGINS, tripsFrom, type OriginTrip, type TripOrigin } from "@/lib/trips/origins";
 import { getTrip, tripImageSm, TRIPS, tripSrcSet, type Trip } from "@/lib/trips/presets";
 import { fill, TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
 import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
@@ -25,7 +26,7 @@ export function originMetadata(origin: TripOrigin, locale: string): Metadata {
   const l = locale === "es" ? "es" : "en";
   const ui = TRIP_ORIGIN_UI[l];
   const city = origin.name[l];
-  return pageMetadata({ locale, path: originPath(origin), title: fill(ui.title[origin.phrase], { city }), description: TRIP_ORIGIN_COPY[origin.slug].description[l] });
+  return pageMetadata({ locale, path: originPath(origin), title: fill(ui.title[origin.phrase], { city }), description: TRIP_ORIGIN_COPY[origin.slug].description[l], image: shareCardPath({ kind: "trips", locale: l, page: `${ORIGIN_PREFIX}${origin.slug}` }) });
 }
 
 /** A trip's picture for a card or the hero: its own photograph, or its two colours where it has none yet. */
