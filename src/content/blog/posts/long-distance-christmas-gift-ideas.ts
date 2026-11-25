@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-christmas-gift-ideas",
   published: "2026-11-06",
+  updated: "2026-11-24",
   occasion: "christmas",
   templates: ["snow-globe", "fireside", "passport"],
   content: {
@@ -66,9 +67,9 @@ export const post: BlogPost = {
           type: "table",
           head: ["You", "Them", "Their 8:00 on the 25th is your…"],
           rows: [
-            ["New York", "Madrid", "2:00 on the 25th"],
+            ["New York", "Lisbon", "3:00 on the 25th"],
             ["London", "Chicago", "14:00 on the 25th"],
-            ["Madrid", "Mexico City", "15:00 on the 25th"],
+            ["Lisbon", "Mexico City", "14:00 on the 25th"],
             ["London", "Sydney", "21:00 on the 24th"],
           ],
         },
@@ -200,10 +201,10 @@ export const post: BlogPost = {
           type: "table",
           head: ["Tú", "Tu pareja", "Sus 8:00 del día 25 son tus…"],
           rows: [
-            ["Madrid", "Nueva York", "14:00 del 25"],
-            ["Madrid", "Ciudad de México", "15:00 del 25"],
-            ["Madrid", "Buenos Aires", "12:00 del 25"],
-            ["Madrid", "Sídney", "22:00 del 24"],
+            ["Lisboa", "Nueva York", "13:00 del 25"],
+            ["Lisboa", "Ciudad de México", "14:00 del 25"],
+            ["Lisboa", "Buenos Aires", "11:00 del 25"],
+            ["Lisboa", "Sídney", "21:00 del 24"],
           ],
         },
         {

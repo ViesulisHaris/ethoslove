@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-anniversary-ideas",
   published: "2026-11-03",
+  updated: "2026-11-24",
   occasion: "long-distance",
   templates: ["halfway", "passport", "constellations"],
   content: {
@@ -21,14 +22,14 @@ export const post: BlogPost = {
         { type: "h2", text: "First, decide when your anniversary starts" },
         {
           type: "p",
-          text: "When you live in different time zones, your anniversary begins at two different moments. Six hours apart, it starts for one of you while the other is still making dinner the night before. Decide early how you'll handle it, because it shapes everything else:",
+          text: "When you live in different time zones, your anniversary begins at two different moments. Five hours apart, it starts for one of you while the other is still making dinner the night before. Decide early how you'll handle it, because it shapes everything else:",
         },
         {
           type: "list",
           items: [
             "**Their midnight.** Whatever you send arrives as the date begins for them. Good if they're the one who cares about the exact day.",
-            "**One shared moment.** Pick an hour that's reasonable for both, say 8pm for one and 2pm for the other, and treat that as the start.",
-            "**Both.** A small message at each midnight, so the anniversary lasts thirty-odd hours. With a big gap, this is the nicest option and costs nothing.",
+            "**One shared moment.** Pick an hour that's reasonable for both, say 8pm for one and 3pm for the other, and treat that as the start.",
+            "**Both.** A small message at each midnight, so the anniversary lasts twenty-nine hours. With a big gap, this is the nicest option and costs nothing.",
           ],
         },
         {
@@ -82,20 +83,20 @@ export const post: BlogPost = {
           title: "If you're the one who travels",
           text: "A surprise visit on the anniversary is the classic, but only if someone at their end knows. Tell a friend or someone they live with, so they're at home and not away for the weekend when you arrive.",
         },
-        { type: "h2", text: "A sample anniversary day, six hours apart" },
+        { type: "h2", text: "A sample anniversary day, five hours apart" },
         {
           type: "p",
-          text: "Here's how it can run when one of you is in New York and the other in Madrid, with the anniversary on a Saturday. The gap is six hours for most of the year, but the US and Europe change their clocks on different weekends, so for a few weeks in March and one week at the end of October or the start of November it's five. Check a world clock for your date:",
+          text: "Here's how it can run when one of you is in New York and the other in Lisbon, with the anniversary on a Saturday. The gap is five hours for most of the year, but the US and Europe change their clocks on different weekends, so for a few weeks in March and one week at the end of October or the start of November it's four. Check a world clock for your date:",
         },
         {
           type: "table",
-          head: ["New York", "Madrid", "What happens"],
+          head: ["New York", "Lisbon", "What happens"],
           rows: [
-            ["Friday 6pm", "Midnight", "The anniversary starts in Madrid. A message or a gift arrives on the second."],
-            ["Midnight", "Saturday 6am", "The anniversary starts in New York. A second message is waiting when they wake up."],
-            ["Saturday 7am", "1pm", "Opening the box on a short call, with coffee at one end and lunch at the other."],
-            ["Saturday 3pm", "9pm", "The anniversary date: same meal, same film, letters read out."],
-            ["Saturday 4:30pm", "10:30pm", "Book the next visit together."],
+            ["Friday 7pm", "Midnight", "The anniversary starts in Lisbon. A message or a gift arrives on the second."],
+            ["Midnight", "Saturday 5am", "The anniversary starts in New York. A second message is waiting when they wake up."],
+            ["Saturday 8am", "1pm", "Opening the box on a short call, with coffee at one end and lunch at the other."],
+            ["Saturday 3pm", "8pm", "The anniversary date: same meal, same film, letters read out."],
+            ["Saturday 4:30pm", "9:30pm", "Book the next visit together."],
           ],
         },
         { type: "h2", text: "What to write in a long distance anniversary message" },
@@ -113,7 +114,7 @@ export const post: BlogPost = {
         },
         {
           type: "quote",
-          text: "This year we learned to say goodnight across six time zones and still mean it. I'm proud of us. Happy anniversary.",
+          text: "This year we learned to say goodnight across five time zones and still mean it. I'm proud of us. Happy anniversary.",
         },
         { type: "h2", text: "A gift that arrives when the day starts" },
         {
@@ -170,14 +171,14 @@ export const post: BlogPost = {
         { type: "h2", text: "Primero, decidid cuándo empieza vuestro aniversario" },
         {
           type: "p",
-          text: "Cuando vivís en zonas horarias distintas, vuestro aniversario empieza en dos momentos diferentes. Con seis horas de diferencia, empieza para uno mientras el otro todavía está preparando la cena la noche anterior. Decidid pronto cómo lo vais a hacer, porque condiciona todo lo demás:",
+          text: "Cuando vivís en zonas horarias distintas, vuestro aniversario empieza en dos momentos diferentes. Con cinco horas de diferencia, empieza para uno mientras el otro todavía está preparando la cena la noche anterior. Decidid pronto cómo lo vais a hacer, porque condiciona todo lo demás:",
         },
         {
           type: "list",
           items: [
             "**Su medianoche.** Lo que envíes llega justo cuando empieza la fecha para tu pareja. Bien si es quien más se fija en el día exacto.",
-            "**Un momento compartido.** Elegid una hora razonable para los dos, por ejemplo las 20:00 para uno y las 14:00 para el otro, y que ese sea el comienzo.",
-            "**Los dos.** Un mensaje pequeño en cada medianoche, para que el aniversario dure treinta y tantas horas. Con mucha diferencia, es la opción más bonita y no cuesta nada.",
+            "**Un momento compartido.** Elegid una hora razonable para los dos, por ejemplo las 20:00 para uno y las 15:00 para el otro, y que ese sea el comienzo.",
+            "**Los dos.** Un mensaje pequeño en cada medianoche, para que el aniversario dure veintinueve horas. Con mucha diferencia, es la opción más bonita y no cuesta nada.",
           ],
         },
         {
@@ -231,20 +232,20 @@ export const post: BlogPost = {
           title: "Si eres quien viaja",
           text: "Una visita sorpresa el día del aniversario es el clásico, pero solo si alguien lo sabe en su lado. Díselo a alguien de su entorno o a quien viva con tu pareja, para que esté en casa y no de fin de semana fuera cuando llegues.",
         },
-        { type: "h2", text: "Un día de aniversario de ejemplo, con seis horas de diferencia" },
+        { type: "h2", text: "Un día de aniversario de ejemplo, con cinco horas de diferencia" },
         {
           type: "p",
-          text: "Así puede ir si uno está en Madrid y el otro en Nueva York, con el aniversario en sábado. Casi todo el año se llevan seis horas, pero Estados Unidos y Europa cambian la hora en fines de semana distintos, así que unas semanas de marzo y una entre finales de octubre y principios de noviembre son cinco. Mirad un reloj mundial para vuestra fecha:",
+          text: "Así puede ir si uno está en Lisboa y el otro en Nueva York, con el aniversario en sábado. Casi todo el año se llevan cinco horas, pero Estados Unidos y Europa cambian la hora en fines de semana distintos, así que unas semanas de marzo y una entre finales de octubre y principios de noviembre son cuatro. Mirad un reloj mundial para vuestra fecha:",
         },
         {
           type: "table",
-          head: ["Madrid", "Nueva York", "Qué pasa"],
+          head: ["Lisboa", "Nueva York", "Qué pasa"],
           rows: [
-            ["Medianoche", "Viernes 18:00", "Empieza el aniversario en Madrid. Llega un mensaje o un regalo en punto."],
-            ["Sábado 6:00", "Medianoche", "Empieza el aniversario en Nueva York. Hay un segundo mensaje esperando cuando se despierte."],
-            ["Sábado 13:00", "Sábado 7:00", "Se abre la caja en una llamada corta, con la comida en un lado y el café en el otro."],
-            ["Sábado 21:00", "Sábado 15:00", "La cita de aniversario: la misma comida, la misma película, las cartas en voz alta."],
-            ["Sábado 22:30", "Sábado 16:30", "Reservad juntos la próxima visita."],
+            ["Medianoche", "Viernes 19:00", "Empieza el aniversario en Lisboa. Llega un mensaje o un regalo en punto."],
+            ["Sábado 5:00", "Medianoche", "Empieza el aniversario en Nueva York. Hay un segundo mensaje esperando cuando se despierte."],
+            ["Sábado 13:00", "Sábado 8:00", "Se abre la caja en una llamada corta, con la comida en un lado y el café en el otro."],
+            ["Sábado 20:00", "Sábado 15:00", "La cita de aniversario: la misma comida, la misma película, las cartas en voz alta."],
+            ["Sábado 21:30", "Sábado 16:30", "Reservad juntos la próxima visita."],
           ],
         },
         { type: "h2", text: "Qué escribir en un mensaje de aniversario a distancia" },
@@ -262,7 +263,7 @@ export const post: BlogPost = {
         },
         {
           type: "quote",
-          text: "Este año hemos aprendido a darnos las buenas noches con seis horas de diferencia y a decirlo en serio igualmente. Estoy orgullosa de nosotros. Feliz aniversario.",
+          text: "Este año hemos aprendido a darnos las buenas noches con cinco horas de diferencia y a decirlo en serio igualmente. Estoy orgullosa de nosotros. Feliz aniversario.",
         },
         { type: "h2", text: "Un regalo que llega cuando empieza el día" },
         {

@@ -126,6 +126,7 @@ test.describe("the trips room", () => {
     await expect(page.getByTestId("trip-stops").locator(":scope > li").first().getByRole("link")).toHaveAttribute("href", "/dates/riga");
     await expect(page.getByRole("link", { name: "Date spots here" }).first()).toHaveAttribute("href", /\/dates\?lat=57\.\d+&lng=24\.\d+&q=Sigulda/);
     // The flight search starts with the trip's airport already in "To".
+    await page.locator("#flights > summary").click();
     await expect(page.getByTestId("flight-finder").getByRole("combobox", { name: "To" })).toHaveValue("Riga");
     noErrors();
   });
@@ -133,7 +134,8 @@ test.describe("the trips room", () => {
   test("a trip's page sells tickets for its sights, and a car for a road trip", async ({ page }) => {
     const noErrors = watchErrors(page);
     await page.goto("/trips/baltic-coast");
-    await expect(page.getByRole("heading", { name: "Tickets for this trip" })).toBeVisible();
+    await expect(page.locator("#tickets > summary")).toHaveText(/Tickets for this trip/);
+    await page.locator("#tickets > summary").click();
     const tickets = page.getByTestId("trip-tickets").getByRole("link");
     await expect(tickets).toHaveCount(2);
     const blackheads = page.getByRole("link", { name: /House of the Blackheads/ });
@@ -143,14 +145,17 @@ test.describe("the trips room", () => {
     expect(landsOn(await blackheads.getAttribute("href"))).toBe("https://www.tiqets.com/en/search?q=House%20of%20the%20Black%20Heads");
     await expect(page.getByTestId("trip-tickets").locator("..")).toContainText("We may earn a commission");
 
+    await page.locator("#car > summary").click();
     const car = page.getByTestId("trip-car").getByRole("link", { name: /Auto Europe/ });
     await expect(car).toHaveAttribute("rel", "noopener noreferrer sponsored");
     expect(landsOn(await car.getAttribute("href"))).toBe("https://www.autoeurope.eu/");
 
     // Italy has Auto Europe's own page; a city trip has no car at all.
     await page.goto("/trips/tuscany-hill-towns");
+    await page.locator("#car > summary").click();
     expect(landsOn(await page.getByTestId("trip-car").getByRole("link").getAttribute("href"))).toBe("https://www.autoeurope.eu/car-rental-italy/");
     await page.goto("/trips/prague-krumlov-vienna");
+    await page.locator("#tickets > summary").click();
     await expect(page.getByTestId("trip-tickets").getByRole("link")).toHaveCount(4);
     await expect(page.getByTestId("trip-car")).toHaveCount(0);
     noErrors();
@@ -158,7 +163,8 @@ test.describe("the trips room", () => {
 
   test("in Spanish, the tickets search Tiqets in Spanish and the small print says so", async ({ page }) => {
     await page.goto("/es/trips/amsterdam-by-bike");
-    await expect(page.getByRole("heading", { name: "Entradas para este viaje" })).toBeVisible();
+    await expect(page.locator("#tickets > summary")).toHaveText(/Entradas para este viaje/);
+    await page.locator("#tickets > summary").click();
     const rijks = page.getByRole("link", { name: /Rijksmuseum/ });
     expect(landsOn(await rijks.getAttribute("href"))).toBe("https://www.tiqets.com/es/search?q=Rijksmuseum");
     await expect(page.getByTestId("flight-finder")).toContainText("Puede que ganemos una comisión");
@@ -282,6 +288,7 @@ test.describe("a trip, in search and in their hands", () => {
   test("a partner click on a trip's page says which trip; on the room's page it does not", async ({ page }) => {
     const events = await countEvents(page);
     await page.goto("/trips/baltic-coast");
+    await page.locator("#tickets > summary").click();
     await clickInPlace(page.getByRole("link", { name: /House of the Blackheads/ }));
     await expect.poll(async () => (await events()).filter((e) => e.name === "affiliate_click").map((e) => e.data)).toEqual([{ partner: "tiqets", placement: "trip_tickets", trip: "baltic-coast" }]);
 

@@ -153,7 +153,8 @@ Create `src/content/blog/posts/<slug>.ts` (one `export const post: BlogPost`) an
 - **Spanish** (`content.es`): the same post in natural Spanish from Spain (tú, vosotros, móvil), the
   way `messages/es.json` and `src/content/occasions.ts` are written. Localise, don't transliterate:
   the Spanish keyword is what a Spanish speaker types for the same thing. The same templates,
-  images and number of questions as the English.
+  images and number of questions as the English. Neither language names Spain or a Spanish city
+  (the guard refuses the post): for a European city in an example, use Lisbon.
 - **Links**:
   - At least three links in the text to pages on the site: `/templates/<slug>`,
     `/occasions/<occasion>`, `/pricing`, `/blog/<slug>`.

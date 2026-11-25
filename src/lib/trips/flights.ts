@@ -138,13 +138,16 @@ export const trainHint = (km: number): boolean => km < TRAIN_KM;
 /**
  * The dates every flight link starts with until they pick their own: the first Friday at least
  * three weeks after `today`, back on the Monday. `today` is the visitor's own "YYYY-MM-DD", so
- * this is only ever asked in the browser; a server's today can be a different day.
+ * this is only ever asked in the browser; a server's today can be a different day. On a trip's
+ * page `nights` is the trip's own, so the flight home is the day its plan ends and every place to
+ * stay falls between the two flights.
  */
-export function weekendAhead(today: string): { depart: string; back: string } | null {
+export function weekendAhead(today: string, nights: number = WEEKEND_NIGHTS): { depart: string; back: string } | null {
   if (!isYmd(today)) return null;
   const soonest = addDays(today, WEEKS_AHEAD * 7);
   const depart = addDays(soonest, (FRIDAY - weekdayOf(soonest) + 7) % 7);
-  return { depart, back: addDays(depart, WEEKEND_NIGHTS) };
+  const stay = Number.isInteger(nights) && nights > 0 ? nights : WEEKEND_NIGHTS;
+  return { depart, back: addDays(depart, stay) };
 }
 
 const DAY_MS = 86_400_000;

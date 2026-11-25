@@ -1,3 +1,4 @@
+import type { Currency } from "@/lib/pricing/products";
 import type { StickerId } from "@/templates/_shared/covers/stickers";
 
 type L = { en: string; es: string };
@@ -36,6 +37,12 @@ export type Trip = {
   budget: 1 | 2 | 3;
   /** The airport you'd fly into (IATA); it is in AIRPORTS. */
   flyTo: string;
+  /**
+   * Where the plan's last day flies home from, when that is not `flyTo` (IATA, in AIRPORTS): the
+   * Baltic coast ends in Tallinn, Prague to Vienna in Vienna, the Highlands in Inverness. On the
+   * trip's page the flight search is then one way out, and offers the flight home from here.
+   */
+  flyHome?: string;
   stops: TripStop[];
   plan: TripDay[];
   /** public/trips/<id>.webp (with a -sm twin), or null where there is no photograph yet. */
@@ -496,6 +503,7 @@ export const TRIPS: Trip[] = [
     bestMonths: [5, 6, 9],
     budget: 2,
     flyTo: "EDI",
+    flyHome: "INV",
     stops: [
       { name: "Edinburgh", es: "Edimburgo", lat: 55.9489, lng: -3.1954, nights: 1, note: { en: "Walk the Old Town the first evening; collect the car on your way out the next morning.", es: "Recorred la ciudad vieja la primera tarde y recoged el coche al salir, a la mañana siguiente." } },
       { name: "Pitlochry", lat: 56.7036, lng: -3.7355, nights: 1, note: { en: "A Victorian spa town with a salmon ladder and a theater by the river.", es: "Un pueblo balneario victoriano con una escala para salmones y un teatro junto al río." } },
@@ -751,13 +759,14 @@ export const TRIPS: Trip[] = [
     kind: "road",
     title: { en: "The Baltic coast, Riga to Tallinn", es: "La costa báltica, de Riga a Tallin" },
     blurb: {
-      en: "Where this site is made. Art nouveau Riga, castles in the Gauja valley, a beach town that smells of pine, and Tallinn's old town at the top. White nights in June, and quiet roads the whole way.",
-      es: "Donde se hace esta web. La Riga modernista, castillos en el valle del Gauja, un pueblo de playa que huele a pino y la ciudad vieja de Tallin al final. Noches blancas en junio y carreteras tranquilas todo el camino.",
+      en: "Art nouveau Riga, castles in the Gauja valley, a beach town that smells of pine, and Tallinn's old town at the top. White nights in June, and quiet roads the whole way. Riga is also where this site is made.",
+      es: "La Riga modernista, castillos en el valle del Gauja, un pueblo de playa con olor a pino y el casco antiguo de Tallin. Noches blancas en junio y carreteras tranquilas todo el camino. Riga es, además, donde se hace esta web.",
     },
     days: 7,
     bestMonths: [6, 7, 8],
     budget: 1,
     flyTo: "RIX",
+    flyHome: "TLL",
     stops: [
       { name: "Riga", lat: 56.9496, lng: 24.1052, nights: 2, note: { en: "Stay in the old town or the art nouveau quarter; everything is a walk away.", es: "Dormid en el casco antiguo o en el barrio modernista: todo queda a un paseo." } },
       { name: "Sigulda", lat: 57.1532, lng: 24.8541, nights: 1, note: { en: "Castles, caves and a cable car over the Gauja river, an hour from Riga.", es: "Castillos, cuevas y un teleférico sobre el río Gauja, a una hora de Riga." } },
@@ -906,6 +915,7 @@ export const TRIPS: Trip[] = [
     bestMonths: [4, 5, 6, 9, 10, 12],
     budget: 2,
     flyTo: "PRG",
+    flyHome: "VIE",
     stops: [
       { name: "Prague", es: "Praga", lat: 50.0874, lng: 14.421, nights: 2, note: { en: "Stay in Malá Strana, under the castle, and cross the Charles Bridge before breakfast.", es: "Alojaos en Malá Strana, bajo el castillo, y cruzad el Puente de Carlos antes de desayunar." } },
       { name: "Český Krumlov", lat: 48.8109, lng: 14.3148, nights: 1, note: { en: "About three hours by train, changing at České Budějovice. Stay the night to see it empty.", es: "Unas tres horas en tren, con cambio en České Budějovice. Quedaos a dormir para verlo vacío." } },
@@ -1445,5 +1455,5 @@ export const stopName = (stop: TripStop, locale: "en" | "es"): string => (locale
 export const tripImageSm = (path: string): string => path.replace(/\.webp$/, "-sm.webp");
 export const tripSrcSet = (path: string): string => `${tripImageSm(path)} 800w, ${path} 1600w`;
 
-/** €, €€ or €€€. */
-export const budgetMark = (budget: Trip["budget"]): string => "€".repeat(budget);
+/** €, €€ or €€€, in the sign of the page's currency ($$, ££). */
+export const budgetMark = (budget: Trip["budget"], currency: Currency = "eur"): string => ({ eur: "€", usd: "$", gbp: "£" })[currency].repeat(budget);

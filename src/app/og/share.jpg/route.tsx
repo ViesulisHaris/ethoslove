@@ -12,6 +12,7 @@ import { clientIp } from "@/lib/request-ip";
 import { coverCredit, fetchCover } from "@/lib/share/cover";
 import { readShareCard, type ShareCard } from "@/lib/share/links";
 import { getTrip } from "@/lib/trips/presets";
+import { roomCard } from "@/lib/trips/room-card";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -30,8 +31,8 @@ const BRIEFLY = "public, max-age=300, s-maxage=300";
 const FETCHES_PER_MINUTE = 120;
 
 const COPY = {
-  en: { plan: "A DATE PLAN", place: "A PLACE FOR A DATE", trip: "A TRIP FOR TWO", planTitle: "A date, planned", placeTitle: "A date idea", days: (n: number) => `${n} DAYS`, photo: "Photo" },
-  es: { plan: "UN PLAN PARA UNA CITA", place: "UN SITIO PARA UNA CITA", trip: "UN VIAJE PARA DOS", planTitle: "Una cita, planeada", placeTitle: "Una idea para una cita", days: (n: number) => `${n} DÍAS`, photo: "Foto" },
+  en: { plan: "A DATE PLAN", place: "A PLACE FOR A DATE", trip: "A TRIP FOR TWO", trips: "TRIPS FOR TWO", planTitle: "A date, planned", placeTitle: "A date idea", days: (n: number) => `${n} DAYS`, photo: "Photo" },
+  es: { plan: "UN PLAN PARA UNA CITA", place: "UN SITIO PARA UNA CITA", trip: "UN VIAJE PARA DOS", trips: "VIAJES PARA DOS", planTitle: "Una cita, planeada", placeTitle: "Una idea para una cita", days: (n: number) => `${n} DÍAS`, photo: "Foto" },
 } as const;
 
 // The image generator only knows the fonts it is handed. Both paths spelled out, as in app/og.png.
@@ -155,7 +156,7 @@ async function tripPhoto(image: string): Promise<Buffer | null> {
   }
 }
 
-function faceOf(card: Exclude<ShareCard, { kind: "trip" }>, credit: { credit?: string; licence?: string } | null, pictured: boolean): Face {
+function faceOf(card: Exclude<ShareCard, { kind: "trip" | "trips" }>, credit: { credit?: string; licence?: string } | null, pictured: boolean): Face {
   const copy = COPY[card.locale];
   const day = card.kind === "plan" && card.date ? formatDay(card.date, card.locale).toUpperCase() : null;
   const by = [credit?.credit, credit?.licence, "Wikimedia Commons"].filter(Boolean).join(" · ");
@@ -174,10 +175,16 @@ function faceOf(card: Exclude<ShareCard, { kind: "trip" }>, credit: { credit?: s
 export async function GET(request: NextRequest) {
   const card = readShareCard(request.nextUrl.searchParams);
 
-  if (card.kind === "trip") {
-    const trip = getTrip(card.trip);
+  if (card.kind === "trip" || card.kind === "trips") {
     const copy = COPY[card.locale];
-    const face: Face = trip ? { eyebrow: `${copy.trip} · ${copy.days(trip.days)}`, title: trip.title[card.locale], credit: null } : { eyebrow: copy.trip, title: BRAND.name, credit: null };
+    // A page by where you leave from or by kind: its own heading over its hero's photograph.
+    const room = card.kind === "trips" ? roomCard(card.page, card.locale) : null;
+    const trip = card.kind === "trip" ? getTrip(card.trip) : (room?.trip ?? null);
+    const face: Face = room
+      ? { eyebrow: copy.trips, title: room.title, credit: null }
+      : trip
+        ? { eyebrow: `${copy.trip} · ${copy.days(trip.days)}`, title: trip.title[card.locale], credit: null }
+        : { eyebrow: card.kind === "trips" ? copy.trips : copy.trip, title: BRAND.name, credit: null };
     const photo = trip?.image ? await tripPhoto(trip.image) : null;
     if (photo) {
       try {

@@ -62,9 +62,14 @@ describe("agreed-4: the front page says less", () => {
 });
 
 describe("agreed-3 and front-10: what the front page and the creators card say", () => {
+  // Since gifts2 (rule 3, 300 words a page) the closing is its heading and two buttons: the line under it went. The
+  // key stays in the message files, unread, so no branch merged beside this one loses it (the review of 25 Nov 2026, C18).
   it("the front page ends on a gift", () => {
-    expect(en.platform.closing).toMatchObject({ title: "Make them something they will keep.", blurb: "Ten minutes now, and it is in their hands tonight.", gifts: "Make a gift", dates: "Find a date" });
-    expect(es.platform.closing).toMatchObject({ title: "Hazle algo que vaya a guardar.", blurb: "Diez minutos ahora, y esta noche lo tiene en sus manos." });
+    expect(en.platform.closing).toMatchObject({ title: "Make them something they will keep.", gifts: "Make a gift", dates: "Find a date" });
+    expect(es.platform.closing).toMatchObject({ title: "Hazle algo que vaya a guardar." });
+    const bands = fs.readFileSync(path.join(process.cwd(), "src/components/marketing/platform/bands.tsx"), "utf8");
+    const closing = bands.slice(bands.indexOf('getTranslations("platform.closing")'));
+    expect(closing.slice(0, closing.indexOf("\n}\n"))).not.toMatch(/t\("blurb"\)/);
   });
 
   it("€20 is the payout's floor, not a monthly payment", () => {

@@ -459,14 +459,11 @@ test.describe("the front page's hero and close", () => {
     }
   });
 
-  test("front-8: the games band's two ways to play are labels, and the app card answers no pointer", async ({ page }) => {
+  // The two ways to play left the front page with the gifts2 area (BRIEF-gifts2.md, 3: the page reads in 300 words);
+  // /games names them. What stays of front-8 is the app card.
+  test("front-8: the app card answers no pointer", async ({ page }) => {
     await page.goto("/");
-    const ways = page.locator("[data-games-ways] > span");
-    await expect(ways).toHaveCount(2);
-    for (const style of await ways.evaluateAll((spans) => spans.map((s) => ({ radius: getComputedStyle(s).borderRadius, bg: getComputedStyle(s).backgroundColor })))) {
-      expect(style.radius).toBe("0px");
-      expect(style.bg).toBe("rgba(0, 0, 0, 0)");
-    }
+    await expect(page.locator("[data-games-ways]")).toHaveCount(0);
     const app = page.locator("[data-app-soon]").first();
     expect(await app.evaluate((p) => ({ cursor: getComputedStyle(p).cursor, events: getComputedStyle(p).pointerEvents, inControl: p.closest("a, button") !== null }))).toEqual({ cursor: "default", events: "none", inControl: false });
   });

@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { IdeasDots } from "@/components/templates/page/ideas-dots";
 import type { TripKind } from "@/lib/trips/presets";
 
 type Filter = TripKind | "all";
@@ -16,7 +17,9 @@ type Props = {
 
 /**
  * The shelf of trips with a row of chips over it. Filtering is instant and stays on the page: the
- * cards are all there already, so a chip only hides the ones that don't fit.
+ * cards are all there already, so a chip only hides the ones that don't fit. On a phone the cards
+ * are one row, one to a screen, with dots under it, as every set of cards is (DESIGN-LESS-TEXT,
+ * 22 Nov 2026); a new chip starts the row again at its first card.
  */
 export function TripsGrid({ cards, filters, label, className }: Props) {
   const [kind, setKind] = useState<Filter>("all");
@@ -45,11 +48,18 @@ export function TripsGrid({ cards, filters, label, className }: Props) {
           );
         })}
       </div>
-      <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <ul
+        id="trips-row"
+        key={kind}
+        className="-mx-5 mt-8 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3"
+      >
         {shown.map((c) => (
-          <li key={c.id}>{c.card}</li>
+          <li key={c.id} data-card className="w-full shrink-0 snap-start sm:w-auto">
+            {c.card}
+          </li>
         ))}
       </ul>
+      <IdeasDots key={`dots-${kind}`} target="trips-row" count={shown.length} className="mt-4 sm:hidden" />
     </div>
   );
 }

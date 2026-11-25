@@ -1,6 +1,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { MONTHS, MONTH_GUIDES, monthSlug } from "../../src/content/month-anniversaries";
 
 /**
  * The pages search asked for and the site did not have (20 Nov 2026): /digital-cards, the six gift
@@ -29,7 +30,7 @@ const LANGS = [
   { prefix: "/es", lang: "es", make: "Crear este regalo", makeLead: "Crear el del móvil", watch: "Verlo", faq: "Preguntas frecuentes", readNext: "Sigue leyendo" },
 ] as const;
 
-/** The six pages by kind: their h1 in each language, and how many ideas each lists. */
+/** The pages by kind: their h1 in each language, and how many ideas each lists. */
 const KINDS = [
   { slug: "last-minute", ideas: 8, h1: { en: "Last-minute gifts you can send today", es: "Regalos de última hora para enviar hoy" } },
   { slug: "video-message", ideas: 7, h1: { en: "Video message gifts", es: "Regalos con mensaje en vídeo" } },
@@ -37,6 +38,11 @@ const KINDS = [
   { slug: "virtual-birthday-cake", ideas: 5, h1: { en: "A virtual birthday cake they can blow out", es: "Una tarta de cumpleaños virtual para soplar desde su móvil" } },
   { slug: "photo-album", ideas: 8, h1: { en: "Interactive photo albums", es: "Álbumes de fotos interactivos" } },
   { slug: "anniversary-website", ideas: 7, h1: { en: "An anniversary website for your girlfriend or boyfriend", es: "Una página web de aniversario para tu novia o tu novio" } },
+  { slug: "apology-for-him", ideas: 6, h1: { en: "Apology gifts for him", es: "Regalos para pedirle perdón a tu novio" } },
+  { slug: "apology-for-her", ideas: 6, h1: { en: "Apology gifts for her", es: "Regalos para pedirle perdón a tu novia" } },
+  { slug: "long-distance-care-package", ideas: 6, h1: { en: "Long-distance care package ideas", es: "Ideas para una caja sorpresa a distancia" } },
+  { slug: "surprise", ideas: 7, h1: { en: "Surprise gifts you can send online", es: "Regalos sorpresa para enviar online" } },
+  { slug: "memory-book", ideas: 6, h1: { en: "A digital memory book for the two of you", es: "Un libro de recuerdos digital para los dos" } },
 ] as const;
 
 /** The occasions that gained an idea list, and how many ideas each has. */
@@ -252,8 +258,10 @@ for (const lang of LANGS) {
       // Where next (fix round 4: the page laid out as the pages by kind end): four pages by kind as posters, and the people,
       // the occasions, the other kinds and /digital-cards as the quiet row of links, each 44px to a thumb.
       const next = page.locator('section[aria-labelledby="by-person"] nav');
+      // Since the gifts2 area the kinds past the four posters are named in the closed row "Every gift guide" (in main, not on show).
       const links = next.locator(`a[href^="${lang.prefix}/gifts/"], a[href="${lang.prefix}/occasions"], a[href="${lang.prefix}/digital-cards"]`);
-      expect(await links.count()).toBeGreaterThanOrEqual(KINDS.length + 7 + 2);
+      expect(await links.count()).toBeGreaterThanOrEqual(4 + 7 + 2);
+      expect(await next.locator("ul.mt-9 a").count()).toBeGreaterThanOrEqual(9);
       const heights = await next.locator("ul.mt-9 a").evaluateAll((all) => all.map((a) => a.getBoundingClientRect().height));
       for (const h of heights) expect(h).toBeGreaterThanOrEqual(44);
     });
@@ -317,7 +325,7 @@ test("the gift pages keep their two families apart, and anything else is a 404",
     await expect(page.getByTestId("idea-watch")).toHaveCount(0);
     await expect(page.locator(`nav a[href$="/gifts/last-minute"]`).first()).toBeAttached();
   }
-  for (const path of ["/gifts/not-a-page", "/es/gifts/for-nobody", "/gifts/last-minute-ish"]) {
+  for (const path of ["/gifts/not-a-page", "/es/gifts/for-nobody", "/gifts/last-minute-ish", "/gifts/0-month-anniversary", "/gifts/25-month-anniversary", "/gifts/03-month-anniversary", "/es/gifts/3-months"]) {
     const response = await page.goto(path);
     expect(response?.status(), path).toBe(404);
   }
@@ -328,4 +336,122 @@ test("an occasion page points to the gift pages by kind beside it", async ({ pag
   for (const slug of ["interactive-birthday-card", "virtual-birthday-cake", "last-minute"]) await expect(page.locator(`nav a[href="/gifts/${slug}"]`).first()).toBeAttached();
   await page.goto("/es/occasions/anniversary");
   await expect(page.locator('nav a[href="/es/gifts/anniversary-website"]').first()).toBeAttached();
+});
+
+/**
+ * The anniversary gifts by month (content/month-anniversaries.ts): 24 pages through the same route as the pages by
+ * kind. Each is opened on a phone and on a desktop in both languages: its h1, gifts that are real templates with the
+ * month's ref, a line to borrow on each, a date that leads into the Dates room, the months beside it, and the
+ * answers in the HTML a crawler reads.
+ */
+for (const lang of LANGS) {
+  test.describe(`anniversary gifts by month${lang.prefix ? ` in ${lang.prefix}` : ""}`, () => {
+    for (const n of MONTHS) {
+      const guide = MONTH_GUIDES[n][lang.lang];
+      const path = `${lang.prefix}/gifts/${monthSlug(n)}`;
+      test(`/gifts/${monthSlug(n)}: its h1, gifts that are real templates, a line to borrow on each, a date and the months beside it`, async ({ page }) => {
+        const noErrors = watchErrors(page);
+        const response = await page.goto(path);
+        expect(response?.status()).toBe(200);
+        await expect(page.locator("html")).toHaveAttribute("lang", lang.lang);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(guide.h1);
+        await expect(page.locator("h1")).toHaveCount(1);
+        const slugs = await ideasCanBeMade(page, lang.prefix, guide.ideas.length, `gifts-month-${n}`);
+        const watches = page.getByTestId("idea-watch");
+        expect(await watches.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(slugs.map((slug) => `${lang.prefix}/demo/${slug}`));
+        const lines = page.locator("[data-cards] [data-line]");
+        await expect(lines).toHaveCount(guide.ideas.length);
+        // Keepsake's line is its one word ("stay" in month 8), so a month's line is held to being there, not to a length.
+        for (const text of await lines.evaluateAll((els) => els.map((el) => el.textContent ?? ""))) expect(text.trim().length).toBeGreaterThan(2);
+        const first = page.locator("[data-cards] [data-card]").first();
+        await first.locator("summary").first().scrollIntoViewIfNeeded();
+        await expect(first.locator("[data-line]")).toBeHidden();
+        await first.locator("summary").first().click();
+        await expect(first.locator("[data-line]")).toBeVisible();
+        await expect(first.getByTestId("idea-make")).toHaveText(lang.make);
+        await expect(page.locator("[data-cards] [data-card] details[data-idea-full]")).toHaveCount(guide.ideas.length);
+
+        const heroMake = page.getByTestId("hero-make");
+        await expect(heroMake).toHaveAttribute("href", `${lang.prefix}/create/${guide.ideas[0].template}?ref=gifts-month-${n}`);
+        await expect(heroMake).toHaveText(lang.makeLead);
+        const named = ((await heroMake.getAttribute("aria-label")) ?? "").slice(`${lang.makeLead}: `.length);
+        await expect(page.getByTestId("hero-note")).toContainText(named);
+
+        const date = page.getByTestId("month-date-link");
+        await expect(date).toHaveAttribute("href", `${lang.prefix}/dates/ideas/${guide.date.kind}`);
+        expect((await page.request.get(`${lang.prefix}/dates/ideas/${guide.date.kind}`)).status()).toBe(200);
+
+        await expect(page.getByRole("heading", { level: 2, name: lang.faq })).toBeVisible();
+        if (n > 1) await expect(page.locator(`nav a[href="${lang.prefix}/gifts/${monthSlug(n - 1)}"]`).first()).toBeAttached();
+        if (n < 24) await expect(page.locator(`nav a[href="${lang.prefix}/gifts/${monthSlug(n + 1)}"]`).first()).toBeAttached();
+        await expect(page.locator(`nav a[href="${path}"]`)).toHaveCount(0);
+        await expect(page.locator(`nav a[href="${lang.prefix}/occasions/anniversary"]`).first()).toBeAttached();
+        await readsClean(page);
+        noErrors();
+      });
+
+      test(`/gifts/${monthSlug(n)}: the answers are in the HTML`, async ({ request }) => {
+        await answersAreInTheHtml(request, path);
+      });
+    }
+
+    test("the month before and the month after work", async ({ page }) => {
+      await page.goto(`${lang.prefix}/gifts/${monthSlug(6)}`);
+      await page.locator(`nav a[href="${lang.prefix}/gifts/${monthSlug(7)}"]`).first().click();
+      await expect(page).toHaveURL(new RegExp(`${monthSlug(7)}$`));
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(MONTH_GUIDES[7][lang.lang].h1);
+      await page.locator(`nav a[href="${lang.prefix}/gifts/${monthSlug(6)}"]`).first().click();
+      await expect(page).toHaveURL(new RegExp(`${monthSlug(6)}$`));
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(MONTH_GUIDES[6][lang.lang].h1);
+      await page.goto(`${lang.prefix}/gifts/${monthSlug(1)}`);
+      await expect(page.locator('a[href$="/gifts/0-month-anniversary"]')).toHaveCount(0);
+      await page.goto(`${lang.prefix}/gifts/${monthSlug(24)}`);
+      await expect(page.locator('a[href$="/gifts/25-month-anniversary"]')).toHaveCount(0);
+    });
+
+    test("the anniversary page lists the 24 months in a closed row, and each opens", async ({ page }) => {
+      await page.goto(`${lang.prefix}/occasions/anniversary`);
+      const row = page.locator("details", { has: page.locator(`a[href="${lang.prefix}/gifts/${monthSlug(1)}"]`) });
+      await expect(row).toHaveCount(1);
+      await expect(row).not.toHaveAttribute("open", "");
+      await expect(row.locator('a[href*="-month-anniversary"]')).toHaveCount(24);
+      await row.locator("summary").click();
+      await row.locator(`a[href="${lang.prefix}/gifts/${monthSlug(9)}"]`).click();
+      await expect(page).toHaveURL(new RegExp(`${monthSlug(9)}$`));
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(MONTH_GUIDES[9][lang.lang].h1);
+    });
+
+    test("the months and the three posts link both ways", async ({ page }) => {
+      for (const [post, n] of [["monthiversary-ideas", 1], ["6-month-anniversary-ideas", 6], ["first-anniversary-ideas-for-boyfriend", 12]] as const) {
+        await page.goto(`${lang.prefix}/blog/${post}`);
+        await expect(page.locator(`a[href="${lang.prefix}/gifts/${monthSlug(n)}"]`).first(), post).toBeAttached();
+        await page.goto(`${lang.prefix}/gifts/${monthSlug(n)}`);
+        await expect(page.locator(`a[href="${lang.prefix}/blog/${post}"]`).first(), `month ${n}`).toBeAttached();
+      }
+    });
+  });
+}
+
+test.describe("from a month's page into the editor", () => {
+  for (const n of [1, 6, 12, 24]) {
+    test(`month ${n}: "Make this gift" opens that gift's editor with the month's ref`, async ({ page }) => {
+      test.slow();
+      await page.goto(`/gifts/${monthSlug(n)}`);
+      const card = page.locator("[data-cards] [data-card]").first();
+      await card.locator("summary").first().scrollIntoViewIfNeeded();
+      await card.locator("summary").first().click();
+      await card.getByTestId("idea-make").click();
+      await expect(page).toHaveURL(new RegExp(`/create/${MONTH_GUIDES[n].en.ideas[0].template}\\?ref=gifts-month-${n}$`), { timeout: 60_000 });
+      await expect(page.getByLabel("Their name")).toBeVisible({ timeout: 60_000 });
+    });
+  }
+});
+
+test("an occasion page points to the new pages by name beside it", async ({ page }) => {
+  await page.goto("/occasions/apology");
+  for (const slug of ["apology-for-him", "apology-for-her"]) await expect(page.locator(`nav a[href="/gifts/${slug}"]`).first()).toBeAttached();
+  await page.goto("/occasions/long-distance");
+  await expect(page.locator('nav a[href="/gifts/long-distance-care-package"]').first()).toBeAttached();
+  await page.goto("/occasions/anniversary");
+  await expect(page.locator('nav a[href="/gifts/memory-book"]').first()).toBeAttached();
 });

@@ -186,4 +186,20 @@ describe("an occasion page's headings", () => {
     const titles = Object.entries((en as { seo: { occasion: Record<string, { title: string }> } }).seo.occasion).map(([k, v]) => `${k}: ${v.title}`);
     expect(titles.filter((t) => t.includes("'"))).toEqual([]);
   });
+
+  it("the just-because page names both of its searches where a reader sees them: the heading and the line under it", async () => {
+    // BRIEF-gifts2.md: its title, h1 and first line name "just because gift" and "gift for no reason". The h1 is the
+    // occasion's title; the line under it is the occasion's own line, which only just-because has (occasions/[occasion]/page.tsx).
+    const { default: en } = await import("../../messages/en.json");
+    const { default: es } = await import("../../messages/es.json");
+    const [e, s] = [en.seo.occasion["just-because"], es.seo.occasion["just-because"]];
+    expect(e.title.toLowerCase()).toContain("just because gift");
+    expect(e.line.toLowerCase()).toContain("gift for no reason");
+    expect(e.metaTitle.toLowerCase()).toContain("no reason");
+    expect(s.title.toLowerCase()).toContain("regalos porque sí");
+    expect(s.line.toLowerCase()).toContain("regalo sin motivo");
+    // The number in the result's title counts the ideas on the page, and says so.
+    expect(e.metaTitle).toMatch(/\b11 Ideas\b/);
+    expect(s.metaTitle).toMatch(/\b11 ideas\b/);
+  });
 });

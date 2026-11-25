@@ -28,6 +28,22 @@ describe("universal links for the iPhone app", () => {
     expect(paths.some((p) => p.startsWith("/g") || p === "*" || p === "/*")).toBe(false);
   });
 
+  it("A1 the pages about trips that are not a trip stay on the web", () => {
+    // The app opens /trips/<id> on a trip; a page by origin or by kind is no trip, so it is left to the browser. The first match wins.
+    const components: { "/": string; exclude?: boolean }[] = aasa.applinks.details[0].components;
+    const at = (path: string) => components.findIndex((c) => c["/"] === path);
+    for (const [pattern, claim] of [
+      ["/trips/from-*", "/trips/*"],
+      ["/es/trips/from-*", "/es/trips/*"],
+      ["/trips/ideas/*", "/trips/*"],
+      ["/es/trips/ideas/*", "/es/trips/*"],
+    ]) {
+      expect(at(pattern), pattern).toBeGreaterThanOrEqual(0);
+      expect(components[at(pattern)].exclude, pattern).toBe(true);
+      expect(at(pattern), pattern).toBeLessThan(at(claim));
+    }
+  });
+
   it("let iCloud Keychain save and offer tryethos.io passwords in the same app", () => {
     // The app's entitlement is webcredentials:tryethos.io; iOS ignores it until this entry names the app.
     expect(aasa.webcredentials).toEqual({ apps: ["6STLVMDPXB.xyz.secuora.ethos"] });

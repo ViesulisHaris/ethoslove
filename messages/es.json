@@ -155,7 +155,8 @@
     "openings": {
       "eyebrow": "Aperturas",
       "title": "Elige cómo se abre.",
-      "blurb": "Lo primero que ven es una portada con su nombre. Elige la que se parezca a esa persona; el regalo espera debajo.",
+      "blurb": "Lo primero que verá es una portada con su nombre.",
+      "more": "Elige la que más se le parezca; el regalo espera debajo.",
       "preview": "Ver"
     }
   },
@@ -1032,6 +1033,7 @@
     "none": "Todavía no hay plantillas con ese filtro.",
     "noneFree": "Ninguna plantilla de esta ocasión es gratis todavía. Estas son gratis y sirven para cualquier día.",
     "showAll": "Ver las {count}",
+    "showFewer": "Ver menos",
     "previewHint": "Esta es la plantilla real con datos de ejemplo. Toca, desliza y explora.",
     "fullscreenDemo": "Demo a pantalla completa",
     "included": "Qué incluye",
@@ -1195,6 +1197,7 @@
     "ideasLabel": "Ideas",
     "ideasLine": "Abre una tarjeta para ver la idea.",
     "guideLine": "Qué escribir, qué añadir y cuándo enviarlo.",
+    "moreQuestions": "Más preguntas",
     "faqTitle": "Preguntas frecuentes",
     "birthday": "Cumpleaños",
     "anniversary": "Aniversario",
@@ -1947,8 +1950,10 @@
       },
       "just-because": {
         "title": "Regalos porque sí",
-        "description": "Sin ninguna ocasión: un pequeño regalo digital con tus fotos, una canción y unas palabras sinceras para decirle a alguien que piensas en esa persona.",
-        "intro": "Los mejores regalos no esperan a una fecha en el calendario. Haz uno en diez minutos y envíalo sin ningún motivo."
+        "metaTitle": "Regalos porque sí: 11 ideas sin motivo",
+        "description": "Un regalo porque sí es un regalo sin motivo, sin cumpleaños ni fecha. Once regalos digitales pequeños con tus fotos, una canción y unas palabras sinceras.",
+        "intro": "Un regalo porque sí es un regalo sin motivo, y justo por eso se nota. Haz uno en diez minutos y envíalo un martes cualquiera.",
+        "line": "Un regalo sin motivo, hecho en diez minutos y enviado un martes cualquiera."
       }
     },
     "blogTitle": "Ideas de regalos y guías para cartas de amor",
@@ -2694,7 +2699,7 @@
     "eyebrow": "A distancia",
     "h1a": "Estar separados no es",
     "h1b": "estar lejos.",
-    "sub": "Unas cuantas herramientas pequeñas para los meses entre visita y visita: dónde quedar, cuándo estáis los dos despiertos y qué hacer en una llamada además de repasar el día.",
+    "sub": "Dónde quedar, cuándo estáis los dos despiertos y qué hacer en una llamada.",
     "meet": {
       "title": "Entre vuestras dos ciudades",
       "sub": "Entran dos ciudades. Sale cuánto os separa, la ciudad a medio camino y las horas del día en que estáis los dos despiertos.",
@@ -2806,6 +2811,12 @@
       "cta": "Comparar coches en Auto Europe",
       "via": "Alquiler de coches en Auto Europe."
     },
+    "stay": {
+      "cta": "Buscar dónde dormir en {place}",
+      "title": "Dónde dormir",
+      "sub": "Cada una es para dos, con las noches del plan, desde el mismo viernes que la búsqueda de vuelos de arriba.",
+      "via": "Alojamiento a través de Stay22."
+    },
     "meet": {
       "via": "Cada vuelo se abre en Aviasales; Google Flights está ahí para comparar."
     }
@@ -2818,7 +2829,7 @@
     "eyebrow": "Viajes para dos",
     "h1a": "Escapaos",
     "h1b": "juntos.",
-    "sub": "Doce viajes que haríamos nosotros, planeados día a día, y un buscador que abre los precios en las webs que ya usáis. Sin gastos de gestión y sin cuenta.",
+    "sub": "Doce viajes planeados día a día y un buscador de vuelos sin comisiones.",
     "finder": {
       "title": "Buscar vuelos",
       "sub": "Para dos, en las fechas que queráis. Nosotros abrimos la búsqueda; reserváis con ellos."
@@ -2884,6 +2895,11 @@
       "eyebrow": "Viajes ya pensados",
       "title": "Elegid uno y hacedlo vuestro."
     },
+    "more": {
+      "nav": "Más formas de elegir viaje",
+      "from": "Desde",
+      "kinds": "Por tipo"
+    },
     "kind": {
       "road": "En coche",
       "city": "Escapada urbana",
@@ -2894,10 +2910,15 @@
     "stops": "{count, plural, one {# parada} other {# paradas}}",
     "best": "Mejor en {months}",
     "budget": {
-      "low": "Unos 150 € al día para dos, o menos",
-      "mid": "Unos 150–300 € al día para dos",
-      "high": "Más de 300 € al día para dos",
-      "note": "Lo que gastáis allí, sin contar los vuelos."
+      "low": "Unos {amount} al día para dos, o menos",
+      "mid": "Unos {range} al día para dos",
+      "high": "Más de {amount} al día para dos",
+      "note": "Lo que gastáis allí, sin contar los vuelos.",
+      "short": {
+        "low": "Unos {amount} o menos",
+        "mid": "Unos {range}",
+        "high": "Más de {amount}"
+      }
     },
     "gift": {
       "eyebrow": "O que sea un secreto",
@@ -2907,9 +2928,10 @@
     },
     "detail": {
       "back": "Todos los viajes",
+      "about": "Más sobre este viaje",
       "facts": {
         "days": "Duración",
-        "budget": "Presupuesto",
+        "budget": "Al día para dos, vuelos aparte",
         "best": "Mejores meses",
         "kind": "Tipo"
       },
@@ -2946,7 +2968,11 @@
       "flights": {
         "eyebrow": "Cómo llegar",
         "title": "Vuelos a {city}",
+        "homeTitle": "Vuelos de vuelta desde {city}",
         "sub": "Donde empieza este viaje. Poned desde dónde voláis, cambiad las fechas si queréis y elegid una web."
+      },
+      "book": {
+        "title": "Antes de salir"
       },
       "surprise": {
         "eyebrow": "Una sorpresa",
@@ -2975,6 +3001,10 @@
       "distance": "{km} km",
       "airTime": "alrededor de {time} de vuelo",
       "train": "Menos de 600 km: quizá os compense más el tren.",
+      "endsIn": "El plan acaba en {city}, así que aquí va solo el vuelo de ida.",
+      "homeFrom": "El vuelo de vuelta desde {city}, el último día del plan.",
+      "searchHome": "Buscar la vuelta desde {city}",
+      "searchOut": "Volver al vuelo de ida",
       "smallPrint": "Estos botones abren la búsqueda en cada web, y los precios son los suyos. Puede que ganemos una comisión si reserváis a través de alguno de estos enlaces. A vosotros no os cuesta nada más.",
       "picker": {
         "title": "Elegid las fechas",
@@ -4256,6 +4286,7 @@
     "faqTitle": "Preguntas frecuentes",
     "more": "Ideas de regalo para otra persona",
     "occasions": "Por ocasión",
+    "allGuides": "Todas las guías de regalo",
     "christmas": {
       "label": "Navidad",
       "heading": {
@@ -4264,6 +4295,16 @@
       },
       "line": "Se crea esta noche y se abre en su móvil la mañana de Navidad.",
       "more": "Ver más regalos de Navidad"
+    },
+    "month": {
+      "dateLabel": "Una cita para ese día",
+      "dateLink": "Ver citas como esta",
+      "moreAbout": "Más sobre este mes",
+      "nextLabel": "Otros meses",
+      "nextHeading": "El mes anterior y el siguiente",
+      "year": "Ideas de regalo de aniversario",
+      "counter": "Llevad la cuenta de vuestros meses",
+      "byMonth": "Regalos de aniversario por meses"
     },
     "footerTitle": "Ideas de regalo"
   },
