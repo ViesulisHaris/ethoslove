@@ -177,7 +177,8 @@ test.describe("the share screen's line", () => {
         await notice.getByRole("button", { name: stop }).click();
         await expect(notice).toContainText(done);
         const after = (await card.boundingBox())!;
-        expect(after.height, `${lang || "en"} at ${size.width}px`).toBe(before.height);
+        // Within a twentieth of a pixel: the browser's own rounding (234.99998 against 235), never a line.
+        expect(after.height, `${lang || "en"} at ${size.width}px`).toBeCloseTo(before.height, 1);
         // The unseen sentence is never read: the line's text is only the one shown.
         expect((await notice.locator("p").textContent())?.trim()).toBe(done);
       }
@@ -333,7 +334,8 @@ test.describe("the account page's row", () => {
         await button.click();
         await expect(row.getByRole("button", { name: back })).toBeVisible();
         const off = (await row.boundingBox())!;
-        expect(off.height, `${lang || "en"} at ${size.width}px`).toBe(on.height);
+        // Within a twentieth of a pixel: the browser's own rounding (129.99998 against 130), never a line.
+        expect(off.height, `${lang || "en"} at ${size.width}px`).toBeCloseTo(on.height, 1);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
         // Drawn as a control: an outlined pill, not bare text.
         expect(await row.getByRole("button").evaluate((el) => getComputedStyle(el).borderTopColor)).not.toBe("rgba(0, 0, 0, 0)");
