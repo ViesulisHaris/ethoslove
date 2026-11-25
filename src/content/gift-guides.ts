@@ -83,7 +83,7 @@ export const GUIDE_BAND_COVERS: Partial<Record<GiftGuideSlug, string>> = {
   "apology-for-her": "bouquet",
   "long-distance-care-package": "passport",
   surprise: "midnight-countdown",
-  "memory-book": "our-timeline",
+  "memory-book": "front-page",
 };
 
 /** That photo, as a picture on the page takes it. */
@@ -1772,7 +1772,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Long-distance care packages",
       hero: {
         line: "Fill the box with things to touch. Put the words in the link.",
-        sentence: "Ethos mails nothing: you post the box yourself, and the gift inside it is a link, printed as a QR card on top, so the gift is the first thing they scan.",
+        sentence: "Ethos mails nothing: you send the box yourself, and the gift inside is a link on a printed QR card, the first thing they scan.",
       },
       ideasTitle: "Seven gifts to lay on top of the box",
       craft: "Packing, posting and timing it",
@@ -1785,7 +1785,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "halfway",
           heading: "The distance in big numbers, with a note",
-          brief: "The real distance in big numbers, a note on what is halfway, and a countdown to your arrival if you want one.",
+          brief: "The real distance in big numbers, a note on what is halfway, and a countdown if you like.",
           body: "Halfway shows the real distance between your two cities in big numbers, with a note of 120 characters about what is halfway, and you can switch on a countdown to the second you arrive. In a care package it answers the question the box cannot: when. Put the date of the next visit on it, and photos taped beside the letter.",
           line: { field: "halfwayNote", where: "The halfway note", text: "Halfway is a train station I have never seen. In 19 days I will be past it." },
         },
@@ -1864,7 +1864,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Cajas sorpresa a distancia",
       hero: {
         line: "Llena la caja de cosas que tocar. Las palabras, en el enlace.",
-        sentence: "Ethos no envía nada por correo: el paquete lo mandas tú, y el regalo de dentro es un enlace impreso en una tarjeta QR encima, lo primero que escanean al abrir.",
+        sentence: "Ethos no envía nada por correo: el paquete lo mandas tú, y el regalo es un enlace en una tarjeta QR impresa, lo primero que se escanea.",
       },
       ideasTitle: "Siete regalos para poner encima de la caja",
       craft: "Preparar, enviar y elegir el momento",
@@ -1877,7 +1877,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "halfway",
           heading: "La distancia, en números grandes, con una nota",
-          brief: "La distancia real en números grandes, una nota sobre el punto medio y, si quieres, una cuenta atrás hasta tu llegada.",
+          brief: "La distancia real en números grandes, una nota sobre el punto medio y, si quieres, una cuenta atrás.",
           body: "A medio camino enseña la distancia real entre vuestras dos ciudades en números grandes, con una nota de 120 caracteres sobre lo que queda a mitad, y puedes activar una cuenta atrás hasta el segundo en que llegas. En una caja sorpresa responde a lo que la caja no puede: cuándo. Pon ahí la fecha de la próxima visita, y fotos pegadas junto a la carta.",
           line: { field: "halfwayNote", where: "La nota del punto medio", text: "A mitad hay una estación de tren que nunca he visto. En 19 días la habré pasado." },
         },
@@ -2148,29 +2148,16 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Memory books",
       hero: {
         line: "A memory book is mostly words. The photos only hold them in place.",
-        sentence: "These gifts are built around what you write, a title on a gallery, a date on a road, a recipe card, so the story carries and the pictures follow.",
+        sentence: "These gifts are built around what you write, a note in a jar, a chat you script, a front page, so the story carries and the pictures follow.",
       },
       ideasTitle: "Seven that tell it in words",
       craft: "What to write, chapter by chapter",
-      film: "museum",
+      film: "jar-of-reasons",
       lead: [
-        "An album is about the pictures; a memory book is about the story, and the story is in the words beside them. Each gift on this page puts writing first: a gallery whose plaques you title, a road whose stops you date, a chat you script, a recipe card for something you cook together. Photos help, and some of these need none at all.",
+        "An album is about the pictures; a memory book is about the story, and the story is in the words beside them. Each gift on this page puts writing first: notes in a jar, a chat you script, a front page, a recipe card for something you cook together, and further down a road and a gallery for when the photos have earned it. Photos help, and some of these need none at all.",
         "If what you want is a place for many photos, the photo album page is the better start. Here, a dozen good lines beat a hundred pictures. The Letter’s short note is the only free gift to start from, and it is not on this page; each gift here is a one-time payment for that template, built and previewed in full first.",
       ],
       ideas: [
-        {
-          template: "museum",
-          heading: "An exhibition, with your words on the plaques",
-          body: "Museum turns your story into a gallery visit: each photo framed, each plaque under it the caption you write for that photo, over the dates you set for the whole show. Two to twenty frames. Title the exhibition like a retrospective, sixty characters, and treat each plaque as a chapter heading; the wall text your message becomes is the book’s closing page.",
-          line: { field: "exhibition", where: "The exhibition’s name", text: "The Collected Works of Us, So Far" },
-        },
-        {
-          template: "our-timeline",
-          heading: "Chapters dated on a road",
-          brief: "A road of dated stops, each date written like a chapter title.",
-          body: "Our Timeline is a road that draws itself as they scroll, and each stop pins a photo and a date of forty characters. Write the dates as chapter titles rather than numbers: the rainy one, the one with the broken heater. The ending line, eighty characters, is where the book closes for now.",
-          line: { field: "dates", where: "The date on a stop", text: "The winter of the broken heater" },
-        },
         {
           template: "jar-of-reasons",
           heading: "The small ordinary things, one note each",
@@ -2178,11 +2165,11 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           line: { field: "reasons", where: "One note in the jar", text: "You hum the same three notes every time you open the fridge." },
         },
         {
-          template: "unwrapped",
-          heading: "Your story counted, present by present",
-          brief: "Presents opened one by one to numbers that tell your story.",
-          body: "Unwrapped tells a story in numbers: wrapped presents opened one by one to figures that count up, up to eight, each written by you, and a gold present that prints the lot as a receipt. Numbers make a surprising memory book. Count the things nobody would think to photograph.",
-          line: { field: "stats", where: "One of the numbers", text: "3 times we got lost on the same roundabout" },
+          template: "text-thread",
+          heading: "The chat, under the name you saved them as",
+          brief: "Your own messages replayed, under the name you saved them as the night you met.",
+          body: "Text Thread replays a conversation bubble by bubble, so it can tell a chapter in your own messages. The name at the top of the chat holds forty characters: put the name you saved them under the night you met, which is a story in itself, and replay the first exchange that mattered.",
+          line: { field: "contactName", where: "The name on the chat", text: "Ana (bookshop, do not text first)" },
         },
         {
           template: "front-page",
@@ -2192,6 +2179,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           line: { field: "headline", where: "The headline", text: "NIGHT BUS ENDS IN CONVERSATION THAT LASTS SEVEN HOURS" },
         },
         {
+          template: "unwrapped",
+          heading: "Your story counted, present by present",
+          brief: "Presents opened one by one to numbers that tell your story.",
+          body: "Unwrapped tells a story in numbers: wrapped presents opened one by one to figures that count up, up to eight, each written by you, and a gold present that prints the lot as a receipt. Numbers make a surprising memory book. Count the things nobody would think to photograph.",
+          line: { field: "stats", where: "One of the numbers", text: "3 times we got lost on the same roundabout" },
+        },
+        {
           template: "recipe-box",
           heading: "A recipe card for something you cook together",
           brief: "Your story written as a recipe for the dish you always cook together.",
@@ -2199,11 +2193,17 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           line: { field: "recipeName", where: "The recipe’s name", text: "Sunday Soup, the Version We Argue About" },
         },
         {
-          template: "text-thread",
-          heading: "The chat, under the name you saved them as",
-          brief: "Your own messages replayed, under the name you saved them as the night you met.",
-          body: "Text Thread replays a conversation bubble by bubble, so it can tell a chapter in your own messages. The name at the top of the chat holds forty characters: put the name you saved them under the night you met, which is a story in itself, and replay the first exchange that mattered.",
-          line: { field: "contactName", where: "The name on the chat", text: "Ana (bookshop, do not text first)" },
+          template: "our-timeline",
+          heading: "Chapters dated on a road",
+          brief: "A road of dated stops, each date written like a chapter title.",
+          body: "Our Timeline is a road that draws itself as they scroll, and each stop pins a photo and a date of forty characters. Write the dates as chapter titles rather than numbers: the rainy one, the one with the broken heater. The ending line, eighty characters, is where the book closes for now.",
+          line: { field: "dates", where: "The date on a stop", text: "The winter of the broken heater" },
+        },
+        {
+          template: "museum",
+          heading: "An exhibition, with your words on the plaques",
+          body: "Museum turns your story into a gallery visit: each photo framed, each plaque under it the caption you write for that photo, over the dates you set for the whole show. Two to twenty frames. Title the exhibition like a retrospective, sixty characters, and treat each plaque as a chapter heading; the wall text your message becomes is the book’s closing page.",
+          line: { field: "exhibition", where: "The exhibition’s name", text: "The Collected Works of Us, So Far" },
         },
       ],
       sections: [
@@ -2240,29 +2240,16 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Libros de recuerdos",
       hero: {
         line: "Un libro de recuerdos es sobre todo palabras. Las fotos solo las sujetan.",
-        sentence: "Estos regalos giran en torno a lo que escribes, el título de una galería, la fecha de un camino, una receta, para que la historia mande y las fotos acompañen.",
+        sentence: "Estos regalos giran en torno a lo que escribes, una nota en un frasco, un chat que escribes tú, una portada, para que la historia mande y las fotos acompañen.",
       },
       ideasTitle: "Siete que lo cuentan con palabras",
       craft: "Qué escribir, capítulo a capítulo",
-      film: "museum",
+      film: "jar-of-reasons",
       lead: [
-        "Un álbum va de fotos; un libro de recuerdos va de la historia, y la historia está en las palabras de al lado. Cada regalo de esta página pone primero lo escrito: una galería con placas que titulas tú, un camino con paradas que fechas, un chat que escribes, una receta de algo que cocináis juntos. Las fotos ayudan, y algunos no necesitan ninguna.",
+        "Un álbum va de fotos; un libro de recuerdos va de la historia, y la historia está en las palabras de al lado. Cada regalo de esta página pone primero lo escrito: notas en un frasco, un chat que escribes tú, una portada, la receta de algo que cocináis los dos y, más abajo, un camino y una galería para cuando las fotos se lo hayan ganado. Las fotos ayudan, y algunos no necesitan ninguna.",
         "Si lo que buscas es un sitio para muchas fotos, mejor empieza por la página del álbum de fotos. Aquí, una docena de frases buenas valen más que cien imágenes. La nota corta de La carta es el único regalo gratis para empezar, y no está en esta página; cada regalo de aquí es un solo pago por esa plantilla, montado y visto entero antes.",
       ],
       ideas: [
-        {
-          template: "museum",
-          heading: "Una exposición, con tus palabras en las placas",
-          body: "Museo convierte vuestra historia en una visita a una galería: cada foto enmarcada lleva debajo su placa, con tu pie de foto y, debajo, las fechas de toda la muestra. De dos a veinte cuadros. Titula la exposición como una retrospectiva, sesenta caracteres, y trata cada placa como el título de un capítulo; el texto de pared en que se convierte tu mensaje cierra el libro.",
-          line: { field: "exhibition", where: "El nombre de la exposición", text: "Obras completas de los dos, por ahora" },
-        },
-        {
-          template: "our-timeline",
-          heading: "Capítulos con fecha en un camino",
-          brief: "Un camino de paradas con fecha, cada fecha escrita como el título de un capítulo.",
-          body: "Nuestra línea del tiempo es un camino que se dibuja mientras deslizan, y cada parada clava una foto y una fecha de cuarenta caracteres. Escribe las fechas como títulos de capítulo y no como números: la de la lluvia, la de la calefacción rota. La frase final, de ochenta caracteres, es donde el libro se cierra por ahora.",
-          line: { field: "dates", where: "La fecha de una parada", text: "El invierno de la calefacción rota" },
-        },
         {
           template: "jar-of-reasons",
           heading: "Las cosas pequeñas, una nota cada una",
@@ -2270,11 +2257,11 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           line: { field: "reasons", where: "Una nota del frasco", text: "Tarareas las mismas tres notas cada vez que abres la nevera." },
         },
         {
-          template: "unwrapped",
-          heading: "Vuestra historia contada, regalo a regalo",
-          brief: "Regalos que se abren uno a uno con números que cuentan vuestra historia.",
-          body: "Nuestro año, desenvuelto cuenta una historia en números: regalos envueltos que se abren uno a uno con cifras que suben, hasta ocho, escritas por ti, y un regalo dorado que lo imprime todo como un tique. Los números hacen un libro de recuerdos sorprendente. Cuenta lo que a nadie se le ocurriría fotografiar.",
-          line: { field: "stats", where: "Uno de los números", text: "3 veces perdidos en la misma rotonda" },
+          template: "text-thread",
+          heading: "El chat, con el nombre con que le guardaste",
+          brief: "Vuestros mensajes repetidos, con el nombre con que le guardaste la noche que os conocisteis.",
+          body: "Hilo de mensajes repite una conversación burbuja a burbuja, así que puede contar un capítulo con vuestros propios mensajes. El nombre de arriba del chat admite cuarenta caracteres: pon el nombre con que le guardaste la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
+          line: { field: "contactName", where: "El nombre del chat", text: "Ana (librería, no escribir primero)" },
         },
         {
           template: "front-page",
@@ -2284,6 +2271,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           line: { field: "headline", where: "El titular", text: "UN AUTOBÚS NOCTURNO ACABA EN UNA CONVERSACIÓN DE SIETE HORAS" },
         },
         {
+          template: "unwrapped",
+          heading: "Vuestra historia contada, regalo a regalo",
+          brief: "Regalos que se abren uno a uno con números que cuentan vuestra historia.",
+          body: "Nuestro año, desenvuelto cuenta una historia en números: regalos envueltos que se abren uno a uno con cifras que suben, hasta ocho, escritas por ti, y un regalo dorado que lo imprime todo como un tique. Los números hacen un libro de recuerdos sorprendente. Cuenta lo que a nadie se le ocurriría fotografiar.",
+          line: { field: "stats", where: "Uno de los números", text: "3 veces perdidos en la misma rotonda" },
+        },
+        {
           template: "recipe-box",
           heading: "Una receta de algo que cocináis juntos",
           brief: "Vuestra historia escrita como la receta del plato que siempre cocináis juntos.",
@@ -2291,11 +2285,17 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           line: { field: "recipeName", where: "El nombre de la receta", text: "La sopa del domingo, versión discutida" },
         },
         {
-          template: "text-thread",
-          heading: "El chat, con el nombre con que le guardaste",
-          brief: "Vuestros mensajes repetidos, con el nombre con que le guardaste la noche que os conocisteis.",
-          body: "Hilo de mensajes repite una conversación burbuja a burbuja, así que puede contar un capítulo con vuestros propios mensajes. El nombre de arriba del chat admite cuarenta caracteres: pon el nombre con que le guardaste la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
-          line: { field: "contactName", where: "El nombre del chat", text: "Ana (librería, no escribir primero)" },
+          template: "our-timeline",
+          heading: "Capítulos con fecha en un camino",
+          brief: "Un camino de paradas con fecha, cada fecha escrita como el título de un capítulo.",
+          body: "Nuestra línea del tiempo es un camino que se dibuja mientras deslizan, y cada parada clava una foto y una fecha de cuarenta caracteres. Escribe las fechas como títulos de capítulo y no como números: la de la lluvia, la de la calefacción rota. La frase final, de ochenta caracteres, es donde el libro se cierra por ahora.",
+          line: { field: "dates", where: "La fecha de una parada", text: "El invierno de la calefacción rota" },
+        },
+        {
+          template: "museum",
+          heading: "Una exposición, con tus palabras en las placas",
+          body: "Museo convierte vuestra historia en una visita a una galería: cada foto enmarcada lleva debajo su placa, con tu pie de foto y, debajo, las fechas de toda la muestra. De dos a veinte cuadros. Titula la exposición como una retrospectiva, sesenta caracteres, y trata cada placa como el título de un capítulo; el texto de pared en que se convierte tu mensaje cierra el libro.",
+          line: { field: "exhibition", where: "El nombre de la exposición", text: "Obras completas de los dos, por ahora" },
         },
       ],
       sections: [
