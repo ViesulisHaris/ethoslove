@@ -6,7 +6,7 @@ import type { MonthDay } from "./reminders";
 
 /**
  * The date letter: one date idea a week by email, on Thursday, to an address that asked for it in
- * the box on the date pages and blog posts and then confirmed from
+ * the box on the date, trips and long-distance pages and blog posts and then confirmed from
  * its inbox. Every address gets the same idea in a week (src/content/date-letter.ts holds the year
  * of 52), in its own language. Never news about Ethos, never a price.
  *
