@@ -79,6 +79,12 @@ export function seeRoom(prev: RoomsMarker | null, room: VisitedRoom, today: numb
   return { marker: { seen, ...(keep !== undefined ? { sent: keep } : {}) }, send };
 }
 
+/** Nothing in an entry is within 30 days of today: every room it holds, and the last count, is older. */
+export function isStale(marker: RoomsMarker, today: number): boolean {
+  const days = [...Object.values(marker.seen), ...(marker.sent === undefined ? [] : [marker.sent])];
+  return days.every((day) => today - day > ROOMS_WINDOW_DAYS);
+}
+
 function storage(): Storage | undefined {
   try {
     return typeof localStorage === "undefined" ? undefined : localStorage;
@@ -109,5 +115,25 @@ export function noteRoomVisit(pathname: string, now: number = Date.now()): void 
     if (send) track("two_rooms_30d");
   } catch {
     // Private windows and blocked site data throw: nothing kept, nothing sent.
+  }
+}
+
+/**
+ * On every page of the site as it loads, and on every change of the cookie choice
+ * (components/shared/ref-capture.tsx), not only on the marketing pages: the entry is removed
+ * without a yes, wherever the "no" or "Stop cookies" was given, and once nothing in it is within
+ * 30 days, so it is never kept longer than the policy says for anyone who comes back. It reads one
+ * small entry (nearly always absent) and never writes one.
+ */
+export function keepRooms(now: number = Date.now()): void {
+  const store = storage();
+  if (!store) return;
+  try {
+    const raw = store.getItem(ROOMS_KEY);
+    if (raw === null) return;
+    const marker = parseMarker(raw);
+    if (getConsent() !== "granted" || !marker || isStale(marker, dayOf(now))) store.removeItem(ROOMS_KEY);
+  } catch {
+    // Blocked site data: there is nothing to remove.
   }
 }

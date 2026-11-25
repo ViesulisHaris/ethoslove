@@ -106,6 +106,28 @@ test.describe("which rooms a visitor used", () => {
     }
   });
 
+  // loop2-C4 and T3: a no given outside the marketing pages left the entry, and nothing ended it.
+  test("off the marketing pages too, a no removes the entry and one past 30 days is dropped; a recent one with a yes stays", async ({ page }) => {
+    const seed = (consent: string, entry: unknown) =>
+      page.evaluate(([c, key, value]) => {
+        localStorage.setItem("ethos-consent", c);
+        localStorage.setItem(key, value);
+      }, [consent, ROOMS_KEY, JSON.stringify(entry)] as const);
+    await visit(page, "/login");
+    await seed("denied", { seen: { gifts: today() } });
+    await visit(page, "/create/the-letter");
+    expect(await kept(page)).toBeNull();
+
+    await seed("granted", { seen: { gifts: today() - 31, dates: today() - 40 }, sent: today() - 31 });
+    await visit(page, "/login");
+    expect(await kept(page)).toBeNull();
+
+    const recent = { seen: { gifts: today() - 2 } };
+    await seed("granted", recent);
+    await visit(page, "/login");
+    expect(await parsed(page)).toEqual(recent);
+  });
+
   test("never on a gift, a demo, the editor or the account pages, and taking the yes back removes it", async ({ page, request }) => {
     const events = await countEvents(page);
     // The yes is given on a page that is in no room, so the pages below start from no entry.

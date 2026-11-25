@@ -191,6 +191,49 @@ describe("in the browser", () => {
     expect(counted).toEqual([]);
   });
 
+  // loop2-C4: a "no" given on the editor, a sign-in or an account page left the entry in place,
+  // because only the marketing pages' marker removed it.
+  it("a no given on any page removes the entry, through the code every page runs", async () => {
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit, setConsent, keepRooms } = await page();
+    noteRoomVisit("/templates", NOW);
+    keepRooms(NOW);
+    expect(store.getItem(ROOMS_KEY)).not.toBeNull();
+    setConsent("denied");
+    keepRooms(NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    // A no given on an earlier page load that never reached a marketing page: gone on the next load.
+    store.setItem(ROOMS_KEY, JSON.stringify({ seen: { gifts: dayOf(NOW) } }));
+    (await page()).keepRooms(NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    expect(counted).toEqual([]);
+    const capture = readFileSync("src/components/shared/ref-capture.tsx", "utf8");
+    expect(capture.match(/keepRooms\(\)/g)).toHaveLength(2);
+    expect(readFileSync("src/app/[currency]/[locale]/layout.tsx", "utf8")).toContain("<RefCapture");
+  });
+
+  // loop2-T3: an entry was pruned only when a room page was opened, so it could outlive "30 days".
+  it("an entry with nothing in the last 30 days is removed on any page; one with something is kept as it was", async () => {
+    store.setItem("ethos-consent", "granted");
+    const today = dayOf(NOW);
+    const cases: [RoomsMarker, boolean][] = [
+      [{ seen: { gifts: today - 31 } }, false],
+      [{ seen: { gifts: today - 40, dates: today - 31 }, sent: today - 31 }, false],
+      [{ seen: { gifts: today - 30 } }, true],
+      [{ seen: { gifts: today - 45 }, sent: today - 10 }, true],
+      [{ seen: {} }, false],
+    ];
+    for (const [entry, kept] of cases) {
+      store.setItem(ROOMS_KEY, JSON.stringify(entry));
+      (await page()).keepRooms(NOW);
+      expect(store.getItem(ROOMS_KEY), JSON.stringify(entry)).toBe(kept ? JSON.stringify(entry) : null);
+    }
+    store.setItem(ROOMS_KEY, "{broken");
+    (await page()).keepRooms(NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    expect(counted).toEqual([]);
+  });
+
   it("a page between rooms changes nothing", async () => {
     store.setItem("ethos-consent", "granted");
     const { noteRoomVisit } = await page();
