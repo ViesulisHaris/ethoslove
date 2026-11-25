@@ -15,7 +15,7 @@ export type TripIdeasUi = { listLine: string; footLabel: string; footHeading: st
 
 export const TRIP_IDEAS_UI: Record<"en" | "es", TripIdeasUi> = {
   en: { listLine: "Open one for its plan, its map and its flights.", footLabel: "More trips", footHeading: "Another way to choose", all: "All {count} trips", from: "Leaving from" },
-  es: { listLine: "Abrid uno para ver su plan, su mapa y sus vuelos.", footLabel: "Más viajes", footHeading: "Otra forma de elegir", all: "Los {count} viajes", from: "Salimos de" },
+  es: { listLine: "Abrid uno para ver su plan, su mapa y sus vuelos.", footLabel: "Más viajes", footHeading: "Otra forma de elegir", all: "Los {count} viajes", from: "Desde" },
 };
 
 export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line: L; sentence: L; listLabel: L; listHeading: L; whySummary: L; whyBody: L; hero: string; fits: Record<string, L> };
@@ -31,9 +31,9 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
     heading: { en: "Weekend getaways for two", es: "Escapadas de fin de semana para dos" },
     line: { en: "Four city breaks of three or four days each.", es: "Cuatro ciudades, de tres o cuatro días cada una." },
-    sentence: { en: "Each fits between a Friday and a Monday, is planned day by day, and needs no car.", es: "Cada una cabe entre un viernes y un lunes, está planeada día a día y no pide coche." },
+    sentence: { en: "Each fits between a Friday and a Monday, is planned day by day, and needs no car.", es: "Cada una cabe entre un viernes y un lunes, va planeada día a día y se hace sin coche." },
     listLabel: { en: "Three or four days", es: "Tres o cuatro días" },
-    listHeading: { en: "The {count} that fit a weekend", es: "Los {count} que caben en un fin de semana" },
+    listHeading: { en: "The {count} that fit a weekend", es: "Las {count} que caben en un fin de semana" },
     fits: {
       "lisbon-slow-weekend": { en: "Three days on foot, sleeping in Alfama.", es: "Tres días a pie, durmiendo en Alfama." },
       "paris-without-cliches": { en: "Four days, three nights by the Canal Saint-Martin.", es: "Cuatro días, tres noches junto al Canal Saint-Martin." },
@@ -56,7 +56,7 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
     heading: { en: "Road trips for two", es: "Viajes en coche para dos" },
     line: { en: "Six routes of six or seven days each.", es: "Seis rutas, de seis o siete días cada una." },
-    sentence: { en: "Each has its route on a map and every night’s stop named. Car hire is one tap from the trip’s page.", es: "Cada una tiene su ruta en el mapa y cada noche con su parada. El alquiler del coche está a un toque, en la página del viaje." },
+    sentence: { en: "Each has its route on a map and every night’s stop named. Car hire is one tap from the trip’s page.", es: "Cada ruta tiene su mapa y dice dónde dormir cada noche. El coche de alquiler se reserva desde la página del viaje." },
     listLabel: { en: "By car", es: "En coche" },
     listHeading: { en: "The {count} road trips", es: "Los {count} viajes en coche" },
     fits: {

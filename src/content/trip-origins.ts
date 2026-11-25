@@ -63,7 +63,7 @@ export const TRIP_ORIGIN_UI: Record<"en" | "es", TripOriginUi> = {
     button: "Ver los viajes",
     listLabel: "Por cercanía",
     listHeading: "Los seis más cercanos",
-    listLine: "Las horas son una estimación; el tren sale donde hay uno directo.",
+    listLine: "Las horas son aproximadas; solo nombramos el tren si hay uno directo.",
     rest: "Los otros {rest} viajes",
     air: "{time} de vuelo, aprox.",
     train: "Se llega en tren",
@@ -73,7 +73,7 @@ export const TRIP_ORIGIN_UI: Record<"en" | "es", TripOriginUi> = {
     all: "Los {count} viajes",
     dates: "Ideas para una cita en {city}",
     byKind: "Por tipo",
-    from: "Salimos de",
+    from: "Desde",
     hoursSummary: "Cómo contamos las horas",
     hoursBody:
       "El tiempo es la línea recta entre los dos aeropuertos a la velocidad de crucero de un avión, más unos 35 minutos de despegue y aterrizaje, redondeado a cinco minutos. Es solo tiempo de vuelo: una escala lo alarga. Nombramos el tren solo donde hay uno directo de unas cinco horas o menos. Aquí no hay precios porque no vendemos vuelos; la página de cada viaje abre la búsqueda en las webs que ya usáis.",

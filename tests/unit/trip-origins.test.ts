@@ -174,6 +174,12 @@ describe("the cities to leave from", () => {
     }
   });
 
+  it("O13 the Spanish labels speak to the two of them, not for the site", () => {
+    expect(TRIP_ORIGIN_UI.es.from).toBe("Desde");
+    expect(TRIP_ORIGIN_UI.es.listLine).not.toMatch(/el tren sale/);
+    for (const c of Object.values(TRIP_ORIGIN_COPY)) expect(`${c.line.es} ${c.sentence.es}`).not.toMatch(/\bsalimos\b|\bpide[n]? (coche|aeropuerto)\b/i);
+  });
+
   it("O12 each origin's page is its own: its six cards, its hero, no photograph twice", () => {
     const seqs = new Map<string, string>();
     const firstThree = new Map<string, string>();
