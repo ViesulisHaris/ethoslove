@@ -21,6 +21,7 @@ import * as GAME_PAGES from "@/content/game-pages";
 import { TRIP_SEO } from "@/content/trip-seo";
 import { HALFWAY_TOOL } from "@/content/halfway-tool";
 import { TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
+import { TRIP_IDEA_COPY, TRIP_IDEAS_UI } from "@/content/trip-ideas";
 import { PRESS_COPY } from "@/content/press";
 import { fillerIn } from "./filler";
 
@@ -63,6 +64,7 @@ const SOURCES: Record<string, unknown> = {
   "trip pages in search": TRIP_SEO,
   "halfway finder": HALFWAY_TOOL,
   "trips by origin": { TRIP_ORIGIN_UI, TRIP_ORIGIN_COPY },
+  "trips by kind": { TRIP_IDEAS_UI, TRIP_IDEA_COPY },
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),
 };
 
