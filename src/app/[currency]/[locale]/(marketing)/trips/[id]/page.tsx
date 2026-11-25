@@ -13,6 +13,7 @@ import { tripStopCities } from "@/lib/trips/cities";
 import { monthRanges } from "@/lib/trips/months";
 import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
+import { ORIGIN_PREFIX, originOfParam, TRIP_ORIGINS } from "@/lib/trips/origins";
 import { getTrip, stopName, TRIPS } from "@/lib/trips/presets";
 import { stayPartnerId, tripStays } from "@/lib/trips/stay";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
@@ -21,6 +22,7 @@ import { heroLead } from "@/components/templates/page/lead";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
+import { OriginPage, originMetadata } from "@/components/trips/page/origin-page";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { ShareTripButton } from "@/components/trips/share-trip-button";
@@ -32,12 +34,15 @@ import { TripMap } from "@/components/trips/trip-map";
 /** How the plan marks each day's date-night moment, so it can be drawn as one. */
 const EVENING = { en: "Evening:", es: "Por la noche:" } as const;
 
+/** The twelve trips, and the pages by where you leave from (/trips/from-<city>): a folder cannot be half a segment, so this route serves both. */
 export function generateStaticParams() {
-  return TRIPS.map((trip) => ({ id: trip.id }));
+  return [...TRIPS.map((trip) => ({ id: trip.id })), ...TRIP_ORIGINS.map((o) => ({ id: `${ORIGIN_PREFIX}${o.slug}` }))];
 }
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/trips/[id]">, "searchParams">): Promise<Metadata> {
   const { locale, id } = await params;
+  const origin = originOfParam(id);
+  if (origin) return originMetadata(origin, locale);
   const trip = getTrip(id);
   if (!trip) return {};
   const l = locale === "es" ? "es" : "en";
@@ -50,6 +55,12 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 /** One trip: the picture and the facts, the route on a map, the plan day by day, tickets for its sights, flights (and a car for a road trip), and the gift it can become. */
 export default async function TripPage({ params }: PageProps<"/[currency]/[locale]/trips/[id]">) {
   const { currency, locale, id } = await params;
+  const origin = originOfParam(id);
+  if (origin) {
+    setRequestLocale(locale);
+    return <OriginPage origin={origin} locale={locale === "es" ? "es" : "en"} />;
+  }
+  // An unknown from-… falls through to here and finds no trip: 404.
   const trip = getTrip(id);
   if (!trip) notFound();
   setRequestLocale(locale);

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { CITY_SLUGS } from "@/lib/cities/cities";
 import { findAirport } from "@/lib/trips/airports";
+import { estimateFlight } from "@/lib/trips/flights";
+import { fill, TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
 import { TRIPS } from "@/lib/trips/presets";
 import { ORIGIN_MAX, ORIGIN_MIN_TRIPS, reachable, TRIP_ORIGINS, tripsFrom, type TripOrigin } from "@/lib/trips/origins";
 
@@ -141,5 +144,56 @@ describe("the cities to leave from", () => {
     expect(minutes("riga", "copenhagen-hygge")).toBe(90);
     expect(minutes("riga", "prague-krumlov-vienna")).toBe(110);
     for (const id of ["lisbon-slow-weekend", "algarve-coast"]) expect(minutes("riga", id), id).toBeGreaterThan(270);
+  });
+
+  const words = (x: string) => x.trim().split(/\s+/).filter(Boolean).length;
+
+  it("O7 every origin has its own two sentences, in both languages, within the hero's limits", () => {
+    expect(Object.keys(TRIP_ORIGIN_COPY).sort()).toEqual(TRIP_ORIGINS.map((o) => o.slug).sort());
+    for (const l of ["en", "es"] as const) {
+      const seen = { line: new Set<string>(), sentence: new Set<string>() };
+      for (const o of TRIP_ORIGINS) {
+        const c = TRIP_ORIGIN_COPY[o.slug];
+        expect(words(c.line[l]), `${o.slug} ${l} line`).toBeLessThanOrEqual(16);
+        expect(words(c.sentence[l]), `${o.slug} ${l} sentence`).toBeLessThanOrEqual(30);
+        expect(c.line[l], `${o.slug} ${l}`).toMatch(/\.$/);
+        expect(c.sentence[l], `${o.slug} ${l}`).toMatch(/\.$/);
+        for (const k of ["line", "sentence"] as const) {
+          // Not the same paragraph with the city swapped.
+          const plain = c[k][l].split(o.name[l]).join("X");
+          expect(seen[k].has(plain), `${o.slug} ${l} ${k}`).toBe(false);
+          seen[k].add(plain);
+        }
+      }
+    }
+  });
+
+  it("O8 titles and descriptions fit a search result", () => {
+    const starts = { en: { weekend: "Weekend trips from", "city-breaks": "City breaks from" }, es: { weekend: "Escapadas desde", "city-breaks": "Escapadas urbanas desde" } };
+    const titles = new Set<string>();
+    for (const l of ["en", "es"] as const) {
+      for (const o of TRIP_ORIGINS) {
+        const title = fill(TRIP_ORIGIN_UI[l].title[o.phrase], { city: o.name[l] });
+        const description = fill(TRIP_ORIGIN_UI[l].description, { city: o.name[l], count: TRIPS.length });
+        expect(title.length, title).toBeLessThanOrEqual(60);
+        expect(title.startsWith(starts[l][o.phrase]), title).toBe(true);
+        expect(title).toContain(o.name[l]);
+        expect(description.length, description).toBeLessThanOrEqual(155);
+        titles.add(title);
+      }
+    }
+    expect(titles.size).toBe(TRIP_ORIGINS.length * 2);
+  });
+
+  it("O9 each origin's date ideas page exists", () => {
+    for (const o of TRIP_ORIGINS) expect(CITY_SLUGS, o.slug).toContain(o.city);
+  });
+
+  it("O10 the method's own numbers are the code's", () => {
+    expect(estimateFlight(0)).toBe(35);
+    expect(estimateFlight(1) % 5).toBe(0);
+    expect(TRIP_ORIGIN_UI.en.hoursBody).toContain("35 minutes");
+    expect(TRIP_ORIGIN_UI.en.hoursBody).toContain("five minutes");
+    expect(TRIP_ORIGIN_UI.es.hoursBody).toContain("35 minutos");
   });
 });

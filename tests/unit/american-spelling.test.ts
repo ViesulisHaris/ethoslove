@@ -20,6 +20,7 @@ const FILES = [
   "src/content/digital-cards.ts",
   "src/content/recipients.ts",
   "src/content/finder.ts",
+  "src/content/trip-origins.ts",
   "src/lib/dates/ideas.ts",
   "src/lib/dates/kinds.ts",
   "src/lib/dates/virtual.ts",
