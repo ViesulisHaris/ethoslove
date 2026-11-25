@@ -115,6 +115,9 @@ describe("the words on every page of the trips room", () => {
       expect(count(M[l].trips.sub), l).toBeLessThanOrEqual(14);
       expect(count(M[l].ldr.sub), l).toBeLessThanOrEqual(14);
     }
+    // A flight search, never flights: the site sells no travel (docs/MONETIZATION.md).
+    expect(M.en.trips.sub).toContain("a flight search");
+    expect(M.es.trips.sub).toContain("un buscador de vuelos");
   });
 
   it("W7 a card's name is a name", () => {
