@@ -157,7 +157,7 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
       es: "La costa báltica en coche empieza en el casco antiguo de Riga. Copenhague queda a 1 h 30 y Praga a menos de dos; Lisboa y el Algarve, a más de 4 h 30.",
     },
     hero: "baltic-coast",
-    line: { en: "The Baltic coast trip begins in Riga’s old town; of the twelve, its days cost least.", es: "La costa báltica sale del casco antiguo de Riga: los días más baratos de los doce." },
+    line: { en: "The Baltic coast trip begins in Riga’s old town, and no trip costs less a day.", es: "La costa báltica sale del casco antiguo de Riga: los días más baratos de los doce." },
     sentence: {
       en: "The shortest flights are to Copenhagen, an hour and a half, and Prague, under two. Lisbon and the Algarve take more than four and a half hours each way.",
       es: "Los vuelos más cortos son a Copenhague, hora y media, y a Praga, menos de dos. Lisboa y el Algarve pasan de cuatro horas y media por trayecto.",

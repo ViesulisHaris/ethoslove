@@ -2930,7 +2930,7 @@
       "distance": "{km} km",
       "airTime": "about {time} in the air",
       "train": "Under 600 km: a train might be nicer.",
-      "endsIn": "The plan ends in {city}, so this is the flight out alone.",
+      "endsIn": "The plan ends in {city}, so this searches only the flight out.",
       "homeFrom": "The flight home from {city}, on the plan’s last day.",
       "searchHome": "Search the flight home from {city}",
       "searchOut": "Back to the flight out",

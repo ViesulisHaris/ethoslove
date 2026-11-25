@@ -384,7 +384,7 @@ test.describe("a trip's page", () => {
     await page.goto("/trips/baltic-coast#flights");
     const finder = page.getByTestId("flight-finder");
     const leg = page.getByTestId("flight-leg");
-    await expect(leg).toContainText("The plan ends in Tallinn");
+    await expect(leg).toContainText("The plan ends in Tallinn, so this searches only the flight out.");
     await finder.getByRole("combobox", { name: "From" }).fill("Lond");
     await page.getByRole("option", { name: /London · LHR/ }).first().click();
     const kayak = finder.getByRole("link", { name: /Kayak/ });
