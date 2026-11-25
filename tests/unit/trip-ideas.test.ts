@@ -3,7 +3,7 @@ import { tripCarHire } from "@/lib/trips/partners";
 import { TRIPS } from "@/lib/trips/presets";
 import { builtIdeaKinds, IDEA_MIN_TRIPS, ideaTrips, TRIP_IDEA_CANDIDATES, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
 import { fill } from "@/content/trip-origins";
-import { TRIP_IDEA_COPY, TRIP_IDEAS_UI } from "@/content/trip-ideas";
+import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
 
 const ids = (kind: (typeof TRIP_IDEA_CANDIDATES)[number]) => ideaTrips(kind).map((t) => t.id);
 const words = (x: string) => x.trim().split(/\s+/).filter(Boolean).length;
