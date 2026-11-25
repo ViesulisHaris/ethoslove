@@ -371,6 +371,6 @@ describe("the free-tier badge", () => {
 
   it("is tagged on a gift page only: the renderer counts it where it is in reply mode, which every real gift is", () => {
     expect(readFileSync("src/templates/_shared/GiftRenderer.tsx", "utf8")).toContain("<Watermark locale={resolved.locale} slug={slug} counted={replyMode} />");
-    expect(readFileSync("src/components/gift/gift-experience.tsx", "utf8")).toMatch(/<GiftRenderer[\s\S]*?\n\s+replyMode\n/);
+    expect(readFileSync("src/components/gift/gift-experience.tsx", "utf8")).toMatch(/<GiftRenderer[\s\S]*?\n\s+replyMode\r?\n/);
   });
 });
