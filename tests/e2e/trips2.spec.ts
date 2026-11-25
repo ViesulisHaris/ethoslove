@@ -309,7 +309,7 @@ test.describe("a trip's page", () => {
     for (const name of ["Riga", "Sigulda", "Tallinn"]) await expect(page.getByRole("heading", { level: 3, name, exact: true })).toHaveCount(1);
     await expect(page.getByRole("heading", { level: 3, name: /^Day 2: / })).toHaveCount(1);
     expect(await page.locator("summary h3, summary [role=heading]").count()).toBe(0);
-    await expect(page.locator("dl")).toContainText("A day for two, no flights");
+    await expect(page.locator("dl")).toContainText("A day for two, flights aside");
     await expect(page.locator("[aria-description]")).toHaveCount(0);
     await page.locator("details[data-trip-more] > summary").click();
     await expect(page.locator("details[data-trip-more]")).not.toContainText("not the flights");
@@ -429,7 +429,7 @@ test.describe("a trip's page", () => {
         const expected = { usd: "About $165–330", gbp: "About £125–250", eur: "About €150–300" }[charged];
         const sign = { usd: "$", gbp: "£", eur: "€" }[charged];
         await page.goto("/trips/lisbon-slow-weekend");
-        const fact = page.locator("dl > div").filter({ hasText: "A day for two, no flights" }).locator("dd");
+        const fact = page.locator("dl > div").filter({ hasText: "A day for two, flights aside" }).locator("dd");
         await expect(fact).toHaveText(expected);
         if (charged !== "eur") expect(await page.locator("main").innerText()).not.toContain("€");
         await page.goto("/trips");
@@ -451,7 +451,7 @@ test.describe("a trip's page", () => {
       test("the costs read in Spanish", async ({ page, request }) => {
         const charged = (await chargedHere(request)).has(country.currency) ? country.currency : "eur";
         await page.goto("/es/trips/lisbon-slow-weekend");
-        const fact = page.locator("dl > div").filter({ hasText: "Al día para dos, sin vuelos" }).locator("dd");
+        const fact = page.locator("dl > div").filter({ hasText: "Al día para dos, vuelos aparte" }).locator("dd");
         expect(plain((await fact.textContent()) ?? "").trim()).toBe(charged === "usd" ? "Unos 165–330 $" : "Unos 150–300 €");
       });
     });
