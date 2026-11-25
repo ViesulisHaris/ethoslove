@@ -135,7 +135,8 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
         <DateHero
           label={t("eyebrow")}
           heading={t("title", { city: name })}
-          line={t("line", { ideas: ideas.length, first: ideas[0].title[l] })}
+          // The line names the idea in the picture beside it, so words and picture agree (dates2-D9).
+          line={t("line", { ideas: ideas.length, first: first.title[l] })}
           sentence={heroLead(t(`notes.${city.slug}`)).lead}
           picture={{ src: ideaImageInCity(first.id), from: first.art.from, to: first.art.to }}
           note={first.title[l]}

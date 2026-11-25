@@ -3,7 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
-import { CITY_KIND_NOUNS, DATE_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
+import { CITY_KIND_NOUNS, CITY_KIND_WORDS, DATE_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
 import { FOR_VENUES, FOR_VENUES_PATH } from "@/content/for-venues";
 import { mentionsSpain } from "@/lib/cities/cities";
 import { IDEAS } from "@/lib/dates/ideas";
@@ -130,5 +130,22 @@ describe("dates2 copy", () => {
     const page = readFileSync(path.join(process.cwd(), "src/app/[currency]/[locale]/(marketing)/dates/for-venues/page.tsx"), "utf8");
     expect(page).not.toMatch(/[€$£]\s?\d|\d\s?[€$£]/);
     expect(page).toContain("index: false");
+  });
+
+  it("X7 the words a native reader stopped at are gone (dates2-D9)", () => {
+    expect(FOR_VENUES.en.heading).toBe("A Featured label for your venue");
+    for (const l of LOCALES) {
+      // "Featured" is said by the heading and the card; the rules do not say it again.
+      for (const rule of FOR_VENUES[l].rules) expect(rule, l).not.toMatch(/Featured|Destacado|marked|marca/i);
+      expect(FOR_VENUES[l].heading, l).not.toMatch(/in words|con todas las letras/);
+    }
+    const page = readFileSync(path.join(process.cwd(), "src/app/[currency]/[locale]/(marketing)/dates/for-venues/page.tsx"), "utf8");
+    const hero = page.match(/HERO_IDEA = "([^"]+)"/)?.[1];
+    const sample = page.match(/SAMPLE_IDEA = "([^"]+)"/)?.[1];
+    expect(sample && hero && sample !== hero).toBe(true);
+    expect(DATE_KIND_COPY.night.sentence.en).not.toMatch(/its hour has passed/);
+    expect(DATE_KIND_COPY.outdoor.sentence.en).toMatch(/under the open sky/);
+    expect(JSON.stringify(CITY_KIND_WORDS)).not.toMatch(/such as|sitios como/);
+    expect(JSON.stringify(DATE_KIND_UI)).not.toMatch(/Open air the map knows|Aire libre que/);
   });
 });

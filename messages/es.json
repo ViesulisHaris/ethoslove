@@ -1961,7 +1961,7 @@
     },
     "eyebrow": "Ideas para una cita por ciudad",
     "title": "Ideas para una cita en {city}",
-    "line": "{ideas} citas; la primera, «{first}».",
+    "line": "{ideas} citas, entre ellas «{first}».",
     "back": "Todas las ideas",
     "lead": "{ideas} citas para {city}, en el orden que se merece la ciudad, con sitios reales cerca del centro para cada parada.",
     "leadNoPlaces": "{ideas} citas para {city}, en el orden que se merece la ciudad. Abre cualquiera en el mapa y te buscará los sitios.",

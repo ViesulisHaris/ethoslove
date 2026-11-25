@@ -100,7 +100,11 @@ export default async function CityKindPage({ params }: Props) {
   // "Featured" is a label and nothing else (lib/dates/featured.ts): the same places, in the same order.
   const featured = featuredNow(toYmd(new Date()));
   const stops = cityIdeaStops(ideas, markFeatured(found?.places ?? [], featured));
-  const sentence = pairSentence(city, kind, l, pair, stops.flatMap((s) => (s ? [s[0].name] : [])));
+  // The places the sentence names: stops that are of the page's own kind where there are any (a park
+  // on the outdoor page, not the chocolatier before it), else each card's first stop (dates2-D9).
+  const ofKind = new Set(kindPlaces(kind, found?.places ?? [], 200).map((p) => p.id));
+  const stopsOfKind = stops.flatMap((s) => s ?? []).filter((p) => ofKind.has(p.id));
+  const sentence = pairSentence(city, kind, l, pair, (stopsOfKind.length > 0 ? stopsOfKind : stops.flatMap((s) => (s ? [s[0]] : []))).map((p) => p.name));
   const words = placesWords(ui, kind);
   const places = found && words ? markFeatured(kindPlaces(kind, found.places), featured) : [];
   const featuredLabel = td("featured.label");

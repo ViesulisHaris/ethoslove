@@ -11,8 +11,10 @@ import { DateFoot, DateHero, DatePage, DateSpread } from "@/components/dates/pag
 import { FeaturedLabel } from "@/components/dates/featured-label";
 import { TONIGHT_BUTTON } from "@/components/dates/tonight/tonight-form";
 
-/** The picture of the hero and of the sample card: dinner, the date a venue is most often part of. */
+/** The hero's picture: dinner, the date a venue is most often part of. */
 const HERO_IDEA = "pasta-and-a-slow-walk";
+/** The sample card is a café with its own picture, not the hero's again beside it (dates2-D9). */
+const SAMPLE_IDEA = "bookshop-and-coffee";
 const mailto = (subject: string) => `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(subject)}`;
 
 export async function generateMetadata({ params }: PageProps<"/[currency]/[locale]/dates/for-venues">): Promise<Metadata> {
@@ -35,6 +37,7 @@ export default async function ForVenuesPage({ params }: PageProps<"/[currency]/[
   const copy = FOR_VENUES[l];
   const td = await getTranslations("dates");
   const hero = ideaById(HERO_IDEA)!;
+  const sample = ideaById(SAMPLE_IDEA)!;
   const href = mailto(copy.subject);
 
   return (
@@ -47,16 +50,17 @@ export default async function ForVenuesPage({ params }: PageProps<"/[currency]/[
       </DateHero>
 
       {/* Deep at its foot on a desk: the last band's lily lies across the edge into this space, and with
-          less than the questions spread's 11rem it reached the line beside the card (page-design D1). */}
+          less than the questions spread's 11rem it reached the line beside the card (page-design D1).
+          The band is the lily's room, not an empty gap (dates2-D9). */}
       <DateSpread id="what-title" label={copy.whatLabel} heading={copy.whatHeading} line={copy.whatLine} className="py-12 sm:py-16 lg:pt-20 lg:pb-64">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-12">
           <figure aria-label={copy.whatHeading} className="flex items-stretch gap-3.5 rounded-[22px] bg-page-raised p-2.5 shadow-page-card ring-1 ring-page-line">
-            <span className="block size-[92px] shrink-0 overflow-hidden rounded-[16px] sm:size-[104px]" style={{ background: `linear-gradient(160deg, ${hero.art.from} 0%, ${hero.art.to} 100%)` }}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- the file the hero above already loaded */}
-              <img src={ideaImage(hero.id)} alt="" width={208} height={208} loading="lazy" decoding="async" className="block size-full object-cover" />
+            <span className="block size-[92px] shrink-0 overflow-hidden rounded-[16px] sm:size-[104px]" style={{ background: `linear-gradient(160deg, ${sample.art.from} 0%, ${sample.art.to} 100%)` }}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- a small square, as the Dates list draws it */}
+              <img src={ideaImage(sample.id)} alt="" width={208} height={208} loading="lazy" decoding="async" className="block size-full object-cover" />
             </span>
             <figcaption className="flex min-w-0 flex-1 flex-col justify-center py-1">
-              <span className="text-sm font-semibold text-page-body">{KINDS.restaurant.label[l]}</span>
+              <span className="text-sm font-semibold text-page-body">{KINDS.cafe.label[l]}</span>
               <span className="mt-0.5 font-display text-[19px] leading-[1.12] text-page-ink">{copy.sample}</span>
               <FeaturedLabel label={td("featured.label")} className="mt-1.5 self-start" />
             </figcaption>

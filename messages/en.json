@@ -1961,7 +1961,7 @@
     },
     "eyebrow": "Date ideas by city",
     "title": "Date ideas in {city}",
-    "line": "{ideas} dates, starting with “{first}”.",
+    "line": "{ideas} dates, “{first}” among them.",
     "back": "All date ideas",
     "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the center for the stops.",
     "leadNoPlaces": "{ideas} dates for {city}, in the order the city deserves. Open any of them on the map and it finds the places.",

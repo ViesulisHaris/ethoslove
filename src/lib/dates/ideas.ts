@@ -248,7 +248,7 @@ export const IDEAS: DateIdea[] = [
   },
   {
     id: "beach-until-sunset",
-    title: { en: "Beach until the sun's gone", es: "Playa hasta que se vaya el sol" },
+    title: { en: "Beach until the sun’s gone", es: "Playa hasta que se vaya el sol" },
     blurb: { en: "Salt, a towel big enough for two, and dinner with sand still on your feet.", es: "Sal, una toalla para dos y cenar con arena todavía en los pies." },
     twist: { en: "Write something in the sand and let the tide take it.", es: "Escribid algo en la arena y que se lo lleve la marea." },
     stops: [["beach"], ["restaurant", "bar"]],
@@ -262,7 +262,7 @@ export const IDEAS: DateIdea[] = [
   },
   {
     id: "climbing-first-timers",
-    title: { en: "Climb something together", es: "Escalad algo juntos" },
+    title: { en: "Climb something together", es: "Escalad algo en pareja" },
     blurb: { en: "A beginner's wall, chalky hands, and one of you holding the other's rope.", es: "Una pared para principiantes, manos con magnesio y uno sujetando la cuerda del otro." },
     twist: { en: "Dinner's on whoever says 'I can't' first.", es: "Paga la cena quien diga primero «no puedo»." },
     stops: [["climbing"], ["restaurant", "cafe"]],
@@ -334,7 +334,7 @@ export const IDEAS: DateIdea[] = [
   },
   {
     id: "boats-on-the-water",
-    title: { en: "Hire a boat, row badly", es: "Alquilad una barca y remad fatal" },
+    title: { en: "Rent a boat, row badly", es: "Alquilad una barca y remad fatal" },
     blurb: { en: "An hour on the water going mostly in circles.", es: "Una hora en el agua dando, sobre todo, vueltas." },
     twist: { en: "Take turns rowing. The passenger narrates like a nature documentary.", es: "Remad por turnos. Quien no reme narra como en un documental." },
     stops: [["boats"], ["cafe", "dessert", "restaurant"]],
