@@ -8,6 +8,7 @@ import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { getTripIdeaKind, ideaPath, ideaTrips, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
 import { originPath, TRIP_ORIGINS } from "@/lib/trips/origins";
+import { monthRanges } from "@/lib/trips/months";
 import { getTrip, TRIPS } from "@/lib/trips/presets";
 import { TRIP_IDEA_COPY, TRIP_IDEAS_UI } from "@/content/trip-ideas";
 import { fill, TRIP_ORIGIN_UI } from "@/content/trip-origins";
@@ -58,7 +59,8 @@ export default async function TripIdeaPage({ params }: Props) {
     id: trip.id,
     href: `/trips/${trip.id}`,
     title: trip.title[l],
-    label: fill(ui.label, { days: t("days", { count: trip.days }), kind: t(`kind.${trip.kind}`) }),
+    // The best months: the kind is the page's, and the days are in the line under the name.
+    label: t("best", { months: monthRanges(trip.bestMonths, l) }),
     line: copy.fits[trip.id][l],
     ...tripPicture(trip),
   }));

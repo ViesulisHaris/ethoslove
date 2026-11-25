@@ -91,6 +91,15 @@ describe("the pages by kind of trip", () => {
     }
   });
 
+  it("K9 the cards' lines on a page do not start alike", () => {
+    for (const k of TRIP_IDEA_KINDS) {
+      for (const l of LANGS) {
+        const firsts = ideaTrips(k).map((t) => TRIP_IDEA_COPY[k].fits[t.id][l].split(/\s+/)[0].toLowerCase());
+        expect(new Set(firsts).size, `${k} ${l}: ${firsts.join(", ")}`).toBe(firsts.length);
+      }
+    }
+  });
+
   it("K7 the addresses are free", () => {
     const tripIds = TRIPS.map((t) => t.id);
     for (const k of TRIP_IDEA_CANDIDATES) expect(tripIds).not.toContain(k);

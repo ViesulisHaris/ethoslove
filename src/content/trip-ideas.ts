@@ -4,17 +4,18 @@ import type { TripIdeaKind } from "@/lib/trips/idea-kinds";
  * The words of the pages by kind of trip (`/trips/ideas/<kind>`, lib/trips/idea-kinds.ts).
  * `TRIP_IDEAS_UI` is what both pages say; `TRIP_IDEA_COPY` is each kind's own, with `fits`, the one
  * line of why for each trip on it (by trip id), each read against the trip's stops and plan in
- * lib/trips/presets.ts. `hero` is the trip whose photograph is in the hero: the last card,
+ * lib/trips/presets.ts; each starts its own way, since the card's label above it is the trip's best
+ * months, not its kind (the page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: the last card,
  * never one of the first two, so a phone never shows one photograph twice in a row. `{count}` is the
- * kind's number of trips, `{days}` and `{kind}` a card's. Spain Spanish, vosotros.
+ * kind's number of trips. Spain Spanish, vosotros.
  */
 type L = { en: string; es: string };
 
-export type TripIdeasUi = { listLine: string; label: string; footLabel: string; footHeading: string; all: string; from: string };
+export type TripIdeasUi = { listLine: string; footLabel: string; footHeading: string; all: string; from: string };
 
 export const TRIP_IDEAS_UI: Record<"en" | "es", TripIdeasUi> = {
-  en: { listLine: "Open one for its plan, its map and its flights.", label: "{days} · {kind}", footLabel: "More trips", footHeading: "Another way to choose", all: "All {count} trips", from: "Leaving from" },
-  es: { listLine: "Abrid uno para ver su plan, su mapa y sus vuelos.", label: "{days} · {kind}", footLabel: "Más viajes", footHeading: "Otra forma de elegir", all: "Los {count} viajes", from: "Salimos de" },
+  en: { listLine: "Open one for its plan, its map and its flights.", footLabel: "More trips", footHeading: "Another way to choose", all: "All {count} trips", from: "Leaving from" },
+  es: { listLine: "Abrid uno para ver su plan, su mapa y sus vuelos.", footLabel: "Más viajes", footHeading: "Otra forma de elegir", all: "Los {count} viajes", from: "Salimos de" },
 };
 
 export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line: L; sentence: L; listLabel: L; listHeading: L; whySummary: L; whyBody: L; hero: string; fits: Record<string, L> };
@@ -36,8 +37,8 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     fits: {
       "lisbon-slow-weekend": { en: "Three days on foot, sleeping in Alfama.", es: "Tres días a pie, durmiendo en Alfama." },
       "paris-without-cliches": { en: "Four days, three nights by the Canal Saint-Martin.", es: "Cuatro días, tres noches junto al Canal Saint-Martin." },
-      "copenhagen-hygge": { en: "Three days: the harbor by bike, then a day out by train.", es: "Tres días: el puerto en bici y una excursión en tren." },
-      "amsterdam-by-bike": { en: "Three days on two bikes, sleeping in the Jordaan.", es: "Tres días en dos bicis, durmiendo en el Jordaan." },
+      "copenhagen-hygge": { en: "The harbor by bike, then a day out by train to Humlebæk.", es: "El puerto en bici y un día en tren hasta Humlebæk." },
+      "amsterdam-by-bike": { en: "A bed in the Jordaan and two bikes for three days.", es: "Una cama en el Jordaan y dos bicis para tres días." },
     },
     whySummary: { en: "Why only these four", es: "Por qué solo estos cuatro" },
     whyBody: {
@@ -59,13 +60,13 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     listLabel: { en: "By car", es: "En coche" },
     listHeading: { en: "The {count} road trips", es: "Los {count} viajes en coche" },
     fits: {
-      "amalfi-coast": { en: "Six days from Naples to Ravello, with the car left in Positano.", es: "Seis días de Nápoles a Ravello, con el coche aparcado en Positano." },
-      "tuscany-hill-towns": { en: "Six days: Florence, Chianti, Siena and the Val d’Orcia.", es: "Seis días: Florencia, el Chianti, Siena y el Val d’Orcia." },
-      "scottish-highlands": { en: "Six days from Edinburgh to Inverness, two nights on Skye.", es: "Seis días de Edimburgo a Inverness, con dos noches en Skye." },
-      "iceland-south-coast": { en: "Six days along the south coast, as far as the glacier lagoon.", es: "Seis días por la costa sur, hasta la laguna glaciar." },
-      "baltic-coast": { en: "Seven days, Riga to Tallinn, with the lowest day costs here.", es: "Siete días de Riga a Tallin, el de menos gasto diario." },
+      "amalfi-coast": { en: "Naples to Ravello in six days, with the car left in Positano.", es: "Seis días de Nápoles a Ravello, y el coche aparcado en Positano." },
+      "tuscany-hill-towns": { en: "Florence, Chianti, Siena and the Val d’Orcia, over six days.", es: "Florencia, el Chianti, Siena y el Val d’Orcia, en seis días." },
+      "scottish-highlands": { en: "Edinburgh to Inverness, with two of the five nights on Skye.", es: "De Edimburgo a Inverness, con dos de las cinco noches en Skye." },
+      "iceland-south-coast": { en: "Along the south coast for six days, to the glacier lagoon.", es: "Por la costa sur durante seis días, hasta la laguna glaciar." },
+      "baltic-coast": { en: "A week from Riga to Tallinn, on the lowest day costs here.", es: "Una semana de Riga a Tallin, con el menor gasto diario." },
       // The plan's line said "west along the coast, from Faro to Sagres": the first day goes east, to Tavira.
-      "algarve-coast": { en: "Six days along the whole coast, from Tavira to Sagres.", es: "Seis días por toda la costa, de Tavira a Sagres." },
+      "algarve-coast": { en: "The whole coast, from Tavira in the east to windy Sagres.", es: "Toda la costa, desde Tavira, al este, hasta la ventosa Sagres." },
     },
     whySummary: { en: "Why these six", es: "Por qué estos seis" },
     whyBody: {
