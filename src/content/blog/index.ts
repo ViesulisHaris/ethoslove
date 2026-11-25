@@ -1,5 +1,7 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import type { Currency } from "@/lib/pricing/products";
 import type { BlogContent, BlogPost } from "./types";
+import { fillContent } from "./fill";
 import { post as virtualDateIdeasLongDistance } from "./posts/virtual-date-ideas-long-distance";
 import { post as howToSurpriseYourGirlfriend } from "./posts/how-to-surprise-your-girlfriend";
 import { post as firstAnniversaryIdeasForBoyfriend } from "./posts/first-anniversary-ideas-for-boyfriend";
@@ -88,10 +90,14 @@ export function postLocales(post: BlogPost): GiftLocale[] {
   return post.content.es ? ["en", "es"] : ["en"];
 }
 
-/** The post in a language, or in English when it hasn't been translated yet. */
-export function postContent(post: BlogPost, locale: string): { content: BlogContent; locale: GiftLocale; translated: boolean } {
-  if (locale === "es" && post.content.es) return { content: post.content.es, locale: "es", translated: true };
-  return { content: post.content.en, locale: "en", translated: locale === "en" };
+/**
+ * The post in a language, or in English when it hasn't been translated yet, with its facts about
+ * Ethos (prices, the template count, what is free) filled in from the code (./fill.ts): prices in
+ * `currency`, the page's, or in every charged currency where there is none.
+ */
+export function postContent(post: BlogPost, locale: string, currency?: Currency): { content: BlogContent; locale: GiftLocale; translated: boolean } {
+  if (locale === "es" && post.content.es) return { content: fillContent(post.content.es, "es", currency), locale: "es", translated: true };
+  return { content: fillContent(post.content.en, "en", currency), locale: "en", translated: locale === "en" };
 }
 
 /** The date a post last changed. */
