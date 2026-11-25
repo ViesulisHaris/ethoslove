@@ -255,8 +255,16 @@ describe("anniversary gifts by month", () => {
       // Stock phrases, counted over the whole series.
       const all = guides.map(({ g }) => strings(g).join(" ")).join(" ");
       const caps: [RegExp, number][] = locale === "en"
-        ? [[/\bmany couples\b/gi, 4], [/\bmost couples\b/gi, 4], [/\bordinary\b/gi, 6], [/\blands?\b/gi, 5], [/\breads as\b/gi, 4], [/\bspecific beats\b/gi, 1]]
-        : [[/\bmuchas parejas\b/gi, 4], [/\bcasi todas las parejas\b/gi, 4], [/\bDemasiado poco\b/g, 4], [/\bDemasiado a los\b/g, 4]];
+        ? [[/\bmany couples\b/gi, 4], [/\bmost couples\b/gi, 4], [/\bordinary\b/gi, 6], [/\blands?\b|\blanding\b/gi, 4], [/\breads as\b/gi, 4], [/\bspecific beats\b/gi, 1]]
+        : [[/\bmuchas parejas\b/gi, 4], [/\bcasi todas las parejas\b/gi, 4], [/\bDemasiado poco\b/g, 4], [/\bDemasiado a los\b/g, 4], [/\badmite [\wé]+ caracteres\b/gi, 10], [/\ba estas alturas\b/gi, 5], [/\bcuenta hacia (?!atrás)/gi, 0], [/\bse lee como\b/gi, 3], [/\bvíspera\b/gi, 0]];
+      // The tics the deep test counted after the rewrite (gifts2-D7): "lands" said of a feeling, "still" in every other line
+      // to borrow, coffee as the detail of choice.
+      if (locale === "en") {
+        caps.push([/\bstill\b/gi, 30], [/\b(coffee|tea)s?\b/gi, 8]);
+        const lines = guides.flatMap(({ g }) => g.ideas.map((i) => i.line.text));
+        const stillLines = lines.filter((t) => /\bstill\b/i.test(t)).length;
+        if (stillLines > 6) problems.push(`en: ${stillLines} lines to borrow say “still”`);
+      }
       if (locale === "en") caps.push([/\bToo little\b/g, 4], [/\bToo much at\b/g, 4]);
       for (const [re, max] of caps) {
         const count = all.match(re)?.length ?? 0;

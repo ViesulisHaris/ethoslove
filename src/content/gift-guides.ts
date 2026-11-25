@@ -1534,7 +1534,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "the-letter",
           heading: "Cinco frases bajo un sello de lacre",
           brief: "Cinco frases sinceras en una nota gratis bajo un sello de lacre.",
-          body: "La nota gratis de La carta admite 500 caracteres, que son unas cinco frases sinceras: lo que hiciste, lo que le costó, lo que entiendes ahora, lo que cambia y una línea que sea solo cariño. Rompe el sello y se escribe sola. No hace falta canción, aunque puede sonar una debajo.",
+          body: "La nota gratis de La carta tiene sitio para 500 caracteres, que son unas cinco frases sinceras: lo que hiciste, lo que le costó, lo que entiendes ahora, lo que cambia y una línea que sea solo cariño. Rompe el sello y se escribe sola. No hace falta canción, aunque puede sonar una debajo.",
           line: { field: "freeNote", where: "La nota entera", text: "Dije que era broma y no tuvo gracia, y a ti menos que a nadie. Tenía que haber parado la primera vez que te quedaste en silencio. Lo siento. A partir de ahora, si te callas, paro y te pregunto. Cena el viernes, eliges tú, y no vuelvo a sacarlo en broma." },
         },
         {
@@ -1685,7 +1685,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Pedir perdón a tu novia",
       hero: {
         line: "Casi todo el mundo piensa en flores. Haz que lleven el perdón.",
-        sentence: "La tarjeta de un ramo admite treinta caracteres, así que estos regalos dan más sitio a la disculpa: una grulla doblada, una carta, una flor que se abre despacio.",
+        sentence: "La tarjeta de un ramo da para treinta caracteres, así que estos regalos dan más sitio a la disculpa: una grulla doblada, una carta, una flor que se abre despacio.",
       },
       ideasTitle: "Seis que les ponen palabras a las flores",
       craft: "Más allá de la tarjeta",
@@ -1705,7 +1705,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "bouquet",
           heading: "Treinta caracteres en la tarjeta, bien usados",
           brief: "Las flores en sus colores, palabras sencillas en la tarjeta y la carta entera detrás.",
-          body: "Ramo hace bien lo de siempre: hasta 24 tallos en sus colores, blancos y rosa palo si el rojo sería demasiado, que se juntan en su pantalla de uno en uno. La tarjeta de entre los tallos admite treinta caracteres, lo justo para las palabras sencillas, y tu carta entera se abre desde ella con lo demás.",
+          body: "Ramo hace bien lo de siempre: hasta 24 tallos en sus colores, blancos y rosa palo si el rojo sería demasiado, que se juntan en su pantalla de uno en uno. La tarjeta de entre los tallos llega a treinta caracteres, lo justo para las palabras sencillas, y tu carta entera se abre desde ella con lo demás.",
           line: { field: "cardNote", where: "En la tarjeta del ramo", text: "Me equivoqué. Dentro, la carta" },
         },
         {
@@ -1778,7 +1778,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       craft: "Packing, mailing and timing it",
       film: "halfway",
       lead: [
-        "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. Ethos does not mail anything. What it adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
+        "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. What Ethos adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
         "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two postcard-size cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template.",
       ],
       ideas: [
@@ -1845,7 +1845,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
       ],
       faq: [
-        { q: "Does Ethos mail the care package?", a: "No. Ethos sends nothing by mail. You pack and mail the box yourself; Ethos makes the digital gift that goes with it, as a link and as a printed card with its QR code." },
+        { q: "Does Ethos mail the care package?", a: "No. You pack and mail the box yourself; Ethos makes the digital gift that goes with it, as a link and as a printed card with its QR code." },
         { q: "How do I put a digital gift inside a physical box?", a: "Publish the gift, then print its QR code as a Print-ready card from the share screen, or later under QR card in My gifts. It prints two postcard-size cards to a page; lay one on top of the box." },
         { q: "Can the gift open when the box arrives?", a: "Yes, on a paid gift: in the editor, under Extras, switch on “Schedule the reveal” and set the date, the hour and their time zone. Until then the card’s link shows a countdown." },
         { q: "What should I put in a long-distance care package?", a: "Something to eat from your side, something worn, something that smells of you, and one thing that only the two of you understand. Pack what weighs little and survives a week in transit." },
@@ -1870,7 +1870,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       craft: "Preparar, enviar y elegir el momento",
       film: "halfway",
       lead: [
-        "Una caja sorpresa es la parte de una relación a distancia que se puede tocar: algo de picar de tu lado, una camiseta que huele a casa, una vela, un libro con notas en los márgenes. Ethos no envía nada por correo. Lo que añade es lo que una caja no puede llevar, un regalo en su móvil, que imprimes como tarjetita con un código QR y pones encima.",
+        "Una caja sorpresa es la parte de una relación a distancia que se puede tocar: algo de picar de tu lado, una camiseta que huele a casa, una vela, un libro con notas en los márgenes. Lo que añade Ethos es lo que una caja no puede llevar, un regalo en su móvil, que imprimes como tarjetita con un código QR y pones encima.",
         "La tarjeta sale del propio regalo: una vez publicado, su código QR se imprime como Tarjeta lista para imprimir, y la misma tarjeta está en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página, en papel crema, blanco, rosa o salvia, con dos líneas tuyas. Un regalo de aquí es gratis, La carta como nota corta; cada uno de los demás es un solo pago por esa plantilla.",
       ],
       ideas: [
@@ -1904,14 +1904,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "Una cuenta atrás hasta el día que debería llegar",
-          body: "Los números de seguimiento son vagos; Cuenta atrás de medianoche no. Ponla en la tarde en que debe llegar el paquete, y el cielo se oscurece hacia ella; en el cero estallan los fuegos y se abren hasta veinte fotos. El titular sobre el reloj admite sesenta caracteres. Si la mensajería solo da un margen, ponla en el último día: mejor que el regalo espere a la caja que al revés.",
+          body: "Los números de seguimiento son vagos; Cuenta atrás de medianoche no. Ponla en la tarde en que debe llegar el paquete, y el cielo se oscurece hacia ella; en el cero estallan los fuegos y se abren hasta veinte fotos. El titular sobre el reloj tiene sitio para sesenta caracteres. Si la mensajería solo da un margen, ponla en el último día: mejor que el regalo espere a la caja que al revés.",
           line: { field: "headline", where: "Titular sobre el reloj", text: "Hasta que la caja llegue a tu felpudo" },
         },
         {
           template: "vinyl",
           heading: "Música para desempaquetar, en un disco",
           brief: "Vuestra canción en un tocadiscos, con una etiqueta que la llama música para abrir cajas.",
-          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara admite doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí cuando se abra.",
+          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara da para doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí cuando se abra.",
           line: { field: "side", where: "La etiqueta de la cara", text: "Para abrirla" },
         },
         {
@@ -1937,7 +1937,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
       ],
       faq: [
-        { q: "¿Ethos envía la caja?", a: "No. Ethos no envía nada por correo. La caja la preparas y la mandas tú; Ethos hace el regalo digital que va con ella, como enlace y como tarjeta impresa con su código QR." },
+        { q: "¿Ethos envía la caja?", a: "No. La caja la preparas y la mandas tú; Ethos hace el regalo digital que va con ella, como enlace y como tarjeta impresa con su código QR." },
         { q: "¿Cómo meto un regalo digital en una caja de verdad?", a: "Publica el regalo y luego imprime su código QR como Tarjeta lista para imprimir desde la pantalla de compartir, o más tarde en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página; pon una encima de la caja." },
         { q: "¿Puede abrirse el regalo cuando llegue la caja?", a: "Sí, en un regalo de pago: en el editor, en Extras, activa «Programar la apertura» y pon la fecha, la hora y su zona horaria. Hasta entonces el enlace de la tarjeta muestra una cuenta atrás." },
         { q: "¿Qué meto en una caja sorpresa a distancia?", a: "Algo de comer de tu lado, algo de ropa usada, algo que huela a ti y una cosa que solo entendáis vosotros. Elige lo que pese poco y aguante una semana de viaje en su envase." },
@@ -1992,7 +1992,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "the-letter",
           heading: "A sealed letter with a last message to tap",
           brief: "A wax seal, then a last message that opens with a tap, a hold or a shake.",
-          body: "The Letter has two reveals: a wax seal they break to read, and after your words a last message that opens with a tap, a hold or a shake, up to 600 characters. Put the surprise there and keep the letter itself calm, so it lands out of nowhere. The sign-off sits just above your name.",
+          body: "The Letter has two reveals: a wax seal they break to read, and after your words a last message that opens with a tap, a hold or a shake, up to 600 characters. Put the surprise there and keep the letter itself calm, so it comes out of nowhere. The sign-off sits just above your name.",
           line: { field: "signOff", where: "The sign-off", text: "Read to the end. There’s one more thing" },
         },
         {
@@ -2024,7 +2024,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Midnight, or the minute it matters",
-          body: "A surprise lands best at a time that means something: midnight on the day, the minute your train gets in, the hour you met. Midnight Countdown is built around that moment; for the other gifts, the schedule in the editor, which comes with a paid template, holds the whole gift back until the hour you choose, in their time zone.",
+          body: "A surprise works best at a time that means something: midnight on the day, the minute your train gets in, the hour you met. Midnight Countdown is built around that moment; for the other gifts, the schedule in the editor, which comes with a paid template, holds the whole gift back until the hour you choose, in their time zone.",
         },
         {
           heading: "What a surprise should not be",
@@ -2072,7 +2072,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "Un reloj que lo abre al segundo que elijas",
-          body: "Con Cuenta atrás de medianoche la revelación es el tiempo. Un reloj en marcha baja bajo un cielo que se oscurece; no se ve nada hasta el cero, y entonces salen los fuegos y se abren a la vez las fotos y tus palabras. Ponla a medianoche de su cumpleaños o al minuto en que aterrizas. La frase del cero admite sesenta caracteres.",
+          body: "Con Cuenta atrás de medianoche la revelación es el tiempo. Un reloj en marcha baja bajo un cielo que se oscurece; no se ve nada hasta el cero, y entonces salen los fuegos y se abren a la vez las fotos y tus palabras. Ponla a medianoche de su cumpleaños o al minuto en que aterrizas. La frase del cero llega a sesenta caracteres.",
           line: { field: "zeroLine", where: "La frase del cero", text: "Asómate. He llegado antes." },
         },
         {
@@ -2260,7 +2260,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "text-thread",
           heading: "El chat, con el nombre de su contacto",
           brief: "Vuestros mensajes repetidos, con el nombre que pusiste a su contacto la noche que os conocisteis.",
-          body: "Un capítulo puede contarse con vuestros propios mensajes: Hilo de mensajes repite una conversación burbuja a burbuja. El nombre de arriba del chat admite cuarenta caracteres: pon el que diste a su contacto la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
+          body: "Un capítulo puede contarse con vuestros propios mensajes: Hilo de mensajes repite una conversación burbuja a burbuja. El nombre de arriba del chat tiene sitio para cuarenta caracteres: pon el que diste a su contacto la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
           line: { field: "contactName", where: "El nombre del chat", text: "Ana (librería, no escribir primero)" },
         },
         {
