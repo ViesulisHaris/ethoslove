@@ -731,6 +731,24 @@ test.describe("a gift a recipient starts is counted once", () => {
     expect(asked).toEqual([{ reply: token }]);
   });
 
+  // loop2-C1: a demo's badge used to carry ?ref=watermark, so a visitor who tapped it and began a
+  // gift was counted as a recipient within seven days.
+  test("a demo's badge tags nobody: the editor reached through it counts no recipient", async ({ page }) => {
+    await countEvents(page);
+    await page.goto("/demo/the-letter", { waitUntil: "domcontentloaded" });
+    const badge = page.locator('a[href*="made-with-ethos"]').first();
+    await expect(badge).toHaveAttribute("href", "/made-with-ethos?template=the-letter", { timeout: 60_000 });
+    await page.goto("/made-with-ethos?template=the-letter");
+    const make = page.locator('a[href^="/create/"]').first();
+    await expect(make).toHaveAttribute("href", /^\/create\/[a-z0-9-]+$/);
+    await page.goto((await make.getAttribute("href"))!);
+    await ready(page);
+    await type(page);
+    await page.waitForTimeout(1500);
+    expect(await started(page)).toEqual([]);
+    expect((await events(page)).filter((e) => e.name === "recipient_editor_opened")).toEqual([]);
+  });
+
   test("when the server can't answer, the door's answer is sent", async ({ page }) => {
     await page.route("**/api/loop/started", (route) => route.fulfill({ status: 500, body: "boom" }));
     await countEvents(page);

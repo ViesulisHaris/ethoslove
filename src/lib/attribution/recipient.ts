@@ -26,7 +26,11 @@ export function recipientVia(ref: string | null | undefined): RecipientVia | nul
   return tag && (RECIPIENT_REFS as readonly string[]).includes(tag) ? (tag as RecipientVia) : null;
 }
 
-/** Where the page a recipient is sent to lives, in the gift's own language. */
-export function madeWithEthosHref(locale: "en" | "es", ref: typeof MAKE_OWN_REF | typeof WATERMARK_REF, slug?: string): string {
-  return `${locale === "es" ? "/es" : ""}/made-with-ethos?ref=${ref}${slug ? `&template=${encodeURIComponent(slug)}` : ""}`;
+/**
+ * Where the page a recipient is sent to lives, in the gift's own language. `ref` null: the same page
+ * for someone who is not a recipient (a demo's badge), whose taps and editors no recipient count reads.
+ */
+export function madeWithEthosHref(locale: "en" | "es", ref: typeof MAKE_OWN_REF | typeof WATERMARK_REF | null, slug?: string): string {
+  const query = [ref ? `ref=${ref}` : "", slug ? `template=${encodeURIComponent(slug)}` : ""].filter(Boolean).join("&");
+  return `${locale === "es" ? "/es" : ""}/made-with-ethos${query ? `?${query}` : ""}`;
 }

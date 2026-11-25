@@ -148,7 +148,10 @@ page does not split an event by a property, ask for the event to be named per an
   checkout's return path and the sign-in cookie (`auth_next`). That is the owner's call and was not
   built.
 - **Demos are left out on purpose.** A demo also shows the badge; a tap there is a visitor, not a
-  recipient, and fires nothing.
+  recipient. It fires no `watermark_clicked`, and its link opens `/made-with-ethos` with no `?ref=`,
+  so the editors and gifts that follow it are not counted as a recipient's either
+  (`recipient_editor_opened`, `recipient_started`, `recipient_gift_sent`). Until 25 Nov 2026 the
+  demo badge's link carried `?ref=watermark`, so those three counts held some demo visitors.
 
 ## A first week's reading, as a worked example
 

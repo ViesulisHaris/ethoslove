@@ -52,6 +52,9 @@ describe("which arrivals are a recipient's", () => {
     expect(madeWithEthosHref("en", MAKE_OWN_REF, "bouquet")).toBe("/made-with-ethos?ref=g&template=bouquet");
     expect(madeWithEthosHref("es", MAKE_OWN_REF, "the-letter")).toBe("/es/made-with-ethos?ref=g&template=the-letter");
     expect(madeWithEthosHref("en", WATERMARK_REF)).toBe("/made-with-ethos?ref=watermark");
+    // A demo's badge: the same page, no recipient's tag.
+    expect(madeWithEthosHref("en", null, "bouquet")).toBe("/made-with-ethos?template=bouquet");
+    expect(madeWithEthosHref("es", null)).toBe("/es/made-with-ethos");
   });
 });
 
