@@ -26,6 +26,8 @@ async function answerCheckout(page: Page) {
 
 /** A guest's Letter held to the short note, in the asked version, with this many photos. */
 async function letter(page: Page, keep: "on" | "off", options: { photos: number; message?: string }) {
+  // A visitor charged in euros, with or without the live site's currencies switch (with it, an en-US browser pays dollars).
+  await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "DE" });
   await page.goto(`/create/the-letter?free=note&keep=${keep}`);
   await expect(page.getByLabel("Their name")).toBeVisible({ timeout: 30_000 });
   const skip = page.getByRole("button", { name: /Skip/ });
@@ -57,7 +59,8 @@ test.describe("the Letter's send screen, keep version", () => {
 
     // Two small pictures in place of the row of photos.
     const compare = panel.getByTestId("pay-compare");
-    await expect(compare).toContainText("Here's what Maya will open.");
+    // The copy's apostrophes are curly (messages/en.json, pay.seeTitle).
+    await expect(compare).toContainText("Here’s what Maya will open.");
     await expect(compare).toContainText("With your 3 photos");
     await expect(compare).toContainText("The free note");
     await expect(panel.getByTestId("pay-note-photos")).toHaveCount(0);
@@ -93,7 +96,10 @@ test.describe("the Letter's send screen, keep version", () => {
     const row = panel.getByTestId("more-note-photos");
     await expect(row).toContainText("A note with your photos");
     await expect(row).toContainText("€3.99");
-    await expect(row).toContainText("Up to 5 photos in the short note.");
+    // While The Tree Tag is given (NEXT_PUBLIC_TREE_TAG=1, in its season) the panel says so in a line of its own, and
+    // this row, which leaves the template locked, says it comes without it. Read from the panel, not from this shell.
+    const treeTag = (await panel.getByTestId("pay-tree-tag").count()) > 0;
+    await expect(row).toContainText(treeTag ? "Up to 5 photos in the short note, without The Tree Tag. The 500 characters and the Ethos footer stay." : "Up to 5 photos in the short note. The 500 characters and the Ethos footer stay.");
     await row.click();
     await expect.poll(() => asked.length).toBe(1);
     expect(asked[0]).toMatchObject({ product: "photos", templateSlugs: ["the-letter"] });
