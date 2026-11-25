@@ -233,15 +233,37 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
 
           {/* The questions: what a digital gift is first, then the pricing page's own. Under them, the longer words. */}
           <QuestionsSpread id="questions" name="faq-gifts" label="FAQ" heading={t("pricing.faqTitle")} faq={guide.faq.slice(0, SHOWN_QUESTIONS)}>
-            {guide.faq.length > SHOWN_QUESTIONS ? (
-              <MoreRow summary={t("occasions.moreQuestions")}>
-                <div className="border-t border-page-line">
-                  {guide.faq.slice(SHOWN_QUESTIONS).map((f) => (
-                    <QuestionRow key={f.q} q={f.q} a={f.a} name="faq-gifts-more" />
-                  ))}
-                </div>
-              </MoreRow>
-            ) : null}
+            {/*
+             * "What is a digital gift?" is a question, so it opens from "More questions" with the other questions, not from
+             * among the rows named for what they hold (the deep test of 25 Nov 2026, D8).
+             */}
+            <MoreRow summary={t("occasions.moreQuestions")}>
+              <div className="border-t border-page-line">
+                <details name="faq-gifts-more" className="group border-b border-page-line">
+                  <summary className={QUESTION_ROW}>
+                    {guide.title}
+                    <Plus aria-hidden="true" className={QUESTION_PLUS} strokeWidth={1.6} />
+                  </summary>
+                  <div data-reveal className="flex max-w-2xl flex-col gap-3 pr-8 pb-5 text-[0.9375rem] leading-relaxed text-page-body">
+                    <p>{guide.definition}</p>
+                    <p>{guide.notACard}</p>
+                    <p>{t("home.openings.more")}</p>
+                    {/* What the old hero said under its phone, which played the same gift the hero's phone plays now. */}
+                    <p>{t("home.hero.caption")}</p>
+                    <ul className="flex flex-col gap-1.5">
+                      {(["free", "noAccount", "once", "langs"] as const).map((k) => (
+                        <li key={k}>
+                          <span className="text-page-ink">{t(`home.hero.facts.${k}.a`)}</span> {t(`home.hero.facts.${k}.b`)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
+                {guide.faq.slice(SHOWN_QUESTIONS).map((f) => (
+                  <QuestionRow key={f.q} q={f.q} a={f.a} name="faq-gifts-more" />
+                ))}
+              </div>
+            </MoreRow>
             {/*
              * The rows under the questions are named plainly, as rows to open ("How it works", "Pricing"), not with the
              * slogans the sections they came from had as headings, which now open them (the test of 25 Nov 2026, T7).
@@ -290,20 +312,6 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                     <Link href={`/gifts/${monthSlug(n)}`} className={QUIET_LINK}>
                       {MONTH_GUIDES[n][l].label}
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            </MoreRow>
-            <MoreRow summary={guide.title}>
-              <p>{guide.definition}</p>
-              <p>{guide.notACard}</p>
-              <p>{t("home.openings.more")}</p>
-              {/* What the old hero said under its phone, which played the same gift the hero's phone plays now. */}
-              <p>{t("home.hero.caption")}</p>
-              <ul className="flex flex-col gap-1.5">
-                {(["free", "noAccount", "once", "langs"] as const).map((k) => (
-                  <li key={k}>
-                    <span className="text-page-ink">{t(`home.hero.facts.${k}.a`)}</span> {t(`home.hero.facts.${k}.b`)}
                   </li>
                 ))}
               </ul>

@@ -174,6 +174,9 @@ for (const prefix of ["", "/es"]) {
       // The closed rows are named as rows to open, not as slogans: no row's name ends on a full stop (T7).
       const rows = await page.locator("main details > summary").evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
       expect(rows.filter((r) => /\.$/.test(r)), `${width}: rows named as sentences`).toEqual([]);
+      // And a question opens from "More questions", not from among the rows named for what they hold (D8).
+      const blocks = await page.locator("section[aria-labelledby=questions] [data-more-about] > summary").evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
+      expect(blocks.filter((r) => /\?$/.test(r)), `${width}: a question among the closed blocks`).toEqual([]);
       // Five sets of idea cards and thirty cards in the HTML; the first set on show, the other four in closed rows.
       const sets = await cardSets(page);
       expect(sets.length, `${width}: groups of ideas`).toBe(5);
