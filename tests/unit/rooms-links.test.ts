@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { countWord } from "@/lib/count-words";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import sitemap from "@/app/sitemap";
@@ -74,12 +75,16 @@ describe("a trip in search", () => {
     for (const m of [en, es]) {
       expect(m.trips.meta.title).toContain("{count}");
       expect(`${m.trips.meta.title.replace("{count}", "12")} · Ethos`.length).toBeLessThanOrEqual(60);
-      expect(m.trips.meta.description.length).toBeLessThanOrEqual(160);
     }
-    // The descriptions say the number in words: change them with the shelf.
-    expect(TRIPS.length).toBe(12);
-    expect(en.trips.meta.description).toContain("twelve");
-    expect(es.trips.meta.description).toContain("doce");
+    // The descriptions say the number in words, read from the shelf (lib/count-words.ts), and fit a search result.
+    for (const [lang, m] of [
+      ["en", en],
+      ["es", es],
+    ] as const) {
+      const description = m.trips.meta.description.replace("{trips}", countWord(TRIPS.length, lang));
+      expect(description).toContain(`${countWord(TRIPS.length, lang)} `);
+      expect(description.length).toBeLessThanOrEqual(160);
+    }
   });
 });
 

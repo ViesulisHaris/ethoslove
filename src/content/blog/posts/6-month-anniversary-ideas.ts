@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "6-month-anniversary-ideas",
   published: "2026-10-30",
-  updated: "2026-11-24",
+  updated: "2026-11-25",
   occasion: "anniversary",
   templates: ["jar-of-reasons", "our-timeline", "the-letter"],
   content: {
@@ -134,7 +134,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Keep the six months in one place" },
         {
           type: "p",
-          text: "Even a good card ends up in a drawer. A digital gift stays at one link they can open again. Jar of Reasons and Our Timeline are [premium](/pricing), and The Letter is free. If six reasons turn into sixty, our [list of 100 reasons why I love you](/blog/reasons-why-i-love-you) shows where to find the rest.",
+          text: "Even a good card ends up in a drawer. A digital gift stays at one link they can open again. Jar of Reasons and Our Timeline are [premium](/pricing), and The Letter is {free:the-letter}. If six reasons turn into sixty, our [list of 100 reasons why I love you](/blog/reasons-why-i-love-you) shows where to find the rest.",
         },
         {
           type: "template",
@@ -149,7 +149,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "They break a wax seal with a tap, the letter slides out, and your words write themselves by hand before your photos land as polaroids. Free, and enough for the three-line card above with room to spare.",
+          note: "They break a wax seal with a tap, the letter slides out, and your words write themselves by hand. The three-line card above fits with room to spare. {note:The free version is a short note with a song; your photos as polaroids come with \"Make it special\", paid once ([prices](/pricing)).|Your photos land as polaroids at the end, and it's free.}",
         },
       ],
       faq: [
@@ -306,7 +306,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Guarda los seis meses en un solo sitio" },
         {
           type: "p",
-          text: "Hasta la mejor tarjeta acaba en un cajón. Un regalo digital se queda en un enlace que tu pareja puede volver a abrir. Frasco de razones y Nuestra línea del tiempo son [premium](/pricing), y La carta es gratis. Si seis razones se convierten en sesenta, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) te ayudan a encontrar el resto.",
+          text: "Hasta la mejor tarjeta acaba en un cajón. Un regalo digital se queda en un enlace que tu pareja puede volver a abrir. Frasco de razones y Nuestra línea del tiempo son [premium](/pricing), y La carta es {free:the-letter}. Si seis razones se convierten en sesenta, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) te ayudan a encontrar el resto.",
         },
         {
           type: "template",
@@ -321,7 +321,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Tu pareja rompe el sello de lacre con un toque, la carta sale del sobre y tus palabras se escriben solas a mano antes de que caigan tus fotos como polaroids. Gratis, y de sobra para la tarjeta de tres frases de arriba.",
+          note: "Tu pareja rompe el sello de lacre con un toque, la carta sale del sobre y tus palabras se escriben solas a mano. La tarjeta de tres frases de arriba cabe de sobra. {note:La versión gratis es una nota corta con una canción; tus fotos como polaroids vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).|Al final caen tus fotos como polaroids, y es gratis.}",
         },
       ],
       faq: [

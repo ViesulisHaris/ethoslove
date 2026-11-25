@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "paragraphs-for-your-girlfriend",
   published: "2026-10-27",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "text-thread"],
   content: {
@@ -112,12 +113,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "And if you'd rather it arrived as something she opens rather than another message in the chat, send it as one of our [digital gifts for your girlfriend](/gifts/for-girlfriend): your paragraph, a couple of photos and the song you'd play her. The Letter is free; Text Thread is [premium](/pricing).",
+          text: "And if you'd rather it arrived as something she opens rather than another message in the chat, send it as one of our [digital gifts for your girlfriend](/gifts/for-girlfriend): your paragraph, a couple of photos and the song you'd play her. The Letter is {note:free as a short note, with photos paid once|free, photos and all}; Text Thread is [premium](/pricing).",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope she opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free, and made for exactly this kind of paragraph.",
+          note: "A wax-sealed envelope she opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Made for exactly this kind of paragraph. {note:The short note is free, up to 500 characters; photos and the full letter come with “Make it special”, paid once.|It's free, photos included.}",
         },
         {
           type: "template",
@@ -250,12 +251,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Y si prefieres que llegue como algo que abrir y no como otro mensaje en el chat, mándalo como uno de nuestros [regalos digitales para tu novia](/gifts/for-girlfriend): tu texto, un par de fotos y la canción que le pondrías. La carta es gratis; Hilo de mensajes es [premium](/pricing).",
+          text: "Y si prefieres que llegue como algo que abrir y no como otro mensaje en el chat, mándalo como uno de nuestros [regalos digitales para tu novia](/gifts/for-girlfriend): tu texto, un par de fotos y la canción que le pondrías. La carta es {note:gratis como nota corta, y las fotos se pagan una vez|gratis, fotos incluidas}; Hilo de mensajes es [premium](/pricing).",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis, y pensada justo para un texto así.",
+          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Pensada justo para un texto así. {note:La nota corta es gratis, hasta 500 caracteres; las fotos y la carta entera vienen con «Hazlo especial», de pago único.|Es gratis, con fotos incluidas.}",
         },
         {
           type: "template",

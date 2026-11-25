@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "open-when-letter-ideas",
   published: "2026-10-26",
-  updated: "2026-11-15",
+  updated: "2026-11-25",
   occasion: "long-distance",
   templates: ["the-letter", "fortune-cookie", "jar-of-reasons"],
   content: {
@@ -151,7 +151,7 @@ export const post: BlogPost = {
           type: "list",
           ordered: true,
           items: [
-            "**Make one gift per letter.** [The Letter](/templates/the-letter) is free as a short note, up to 500 characters with a song from the music library, and you can make as many as you like, each with its own message. Photos come with one payment that covers every Letter you make after it; the photo for the \"open when you miss me\" letter does the job the photo in the envelope would.",
+            "**Make one gift per letter.** [The Letter](/templates/the-letter) is {note:free as a short note, up to 500 characters with a song from the music library|free, the whole letter with up to 10 photos and a song from the music library}, and you can make as many as you like, each with its own message. {note:Photos come with one payment, “Make it special” ({price:extras}), that covers every Letter you make after it;|Put a photo in each;} the photo for the \"open when you miss me\" letter does the job the photo in the envelope would.",
             "**Send them in one message**, each link under its moment: \"Open when you can't sleep\", then the link. Ask them to pin it or save it in a note, so the set stays in one place like the box would.",
             "**Lock the dated ones.** A letter for their birthday or your anniversary can be scheduled to open at a set time in their time zone, midnight if you like. Open it early and they see a countdown instead of the letter, so nobody can peek. Scheduling, a voice message and a video come with “Make it special”, a one-time [paid extra](/pricing) for The Letter.",
           ],
@@ -159,7 +159,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free, and you can make one for every moment on your list.",
+          note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. You can make one for every moment on your list. {note:Each goes out free as a short note; the photos and the full letter come with “Make it special”, paid once.|Each one is free, photos included.}",
         },
         {
           type: "template",
@@ -195,7 +195,7 @@ export const post: BlogPost = {
         },
         {
           q: "Can you do open when letters online?",
-          a: "Yes. Make each letter as its own digital gift, send the links in one message with the moment above each, and ask them to keep it pinned. With [The Letter](/templates/the-letter) that's free. For letters tied to a date, scheduling, a one-time paid extra, keeps each one locked behind a countdown until the moment comes.",
+          a: "Yes. Make each letter as its own digital gift, send the links in one message with the moment above each, and ask them to keep it pinned. With [The Letter](/templates/the-letter) that's {note:free, as long as each one is a short note|free}. For letters tied to a date, scheduling, a one-time paid extra, keeps each one locked behind a countdown until the moment comes.",
         },
       ],
     },
@@ -343,7 +343,7 @@ export const post: BlogPost = {
           type: "list",
           ordered: true,
           items: [
-            "**Haz un regalo por carta.** [La carta](/templates/the-letter) es gratis como nota corta, de hasta 500 caracteres con una canción de la biblioteca de música, y puedes hacer tantas como quieras, cada una con su mensaje. Las fotos vienen con un solo pago que vale para todas las Cartas que hagas después; la foto de la carta de «ábrela cuando me eches de menos» hace lo mismo que la del sobre.",
+            "**Haz un regalo por carta.** [La carta](/templates/the-letter) es {note:gratis como nota corta, de hasta 500 caracteres con una canción de la biblioteca de música|gratis, la carta entera con hasta 10 fotos y una canción de la biblioteca de música}, y puedes hacer tantas como quieras, cada una con su mensaje. {note:Las fotos vienen con un solo pago, «Hazlo especial» ({price:extras}), que vale para todas las Cartas que hagas después;|Pon una foto en cada una;} la foto de la carta de «ábrela cuando me eches de menos» hace lo mismo que la del sobre.",
             "**Mándalas en un solo mensaje**, cada enlace debajo de su momento: «Ábrela cuando no puedas dormir» y el enlace. Pídele que lo fije o lo guarde en una nota, para que el conjunto esté en un sitio, como la caja.",
             "**Bloquea las que tienen fecha.** La carta de su cumpleaños o de vuestro aniversario se puede programar para que se abra a una hora concreta en su zona horaria, a medianoche si quieres. Si la abre antes, ve una cuenta atrás en vez de la carta, así que no hay forma de hacer trampa. La programación, un mensaje de voz y un vídeo vienen con «Hazlo especial», un [pago único](/pricing) para La carta.",
           ],
@@ -351,7 +351,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis, y puedes hacer una para cada momento de tu lista.",
+          note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Puedes hacer una para cada momento de tu lista. {note:Cada una sale gratis como nota corta; las fotos y la carta entera vienen con «Hazlo especial», de pago único.|Cada una es gratis, con fotos incluidas.}",
         },
         {
           type: "template",
@@ -387,7 +387,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Se pueden hacer cartas para abrir cuando online?",
-          a: "Sí. Haz cada carta como un regalo digital, manda los enlaces en un solo mensaje con el momento encima de cada uno y pídele que lo deje fijado. Con [La carta](/templates/the-letter) es gratis. Para las cartas con fecha, la programación, que se paga una sola vez, las deja cerradas tras una cuenta atrás hasta que llegue el momento.",
+          a: "Sí. Haz cada carta como un regalo digital, manda los enlaces en un solo mensaje con el momento encima de cada uno y pídele que lo deje fijado. Con [La carta](/templates/the-letter) es {note:gratis, siempre que cada una sea una nota corta|gratis}. Para las cartas con fecha, la programación, que se paga una sola vez, las deja cerradas tras una cuenta atrás hasta que llegue el momento.",
         },
       ],
     },

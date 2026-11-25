@@ -1,6 +1,7 @@
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { DateKind } from "@/lib/dates/date-kinds";
 import { DEMO_PHOTOS, type DemoPhotoId } from "@/templates/_shared/demo-photos";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 import type { GiftGuideIdea } from "./gift-guides";
 
 /**
@@ -16,9 +17,13 @@ import type { GiftGuideIdea } from "./gift-guides";
  * tests/unit/month-anniversaries.test.ts fails two months that open the same way. Each claim about
  * a gift was checked against its schema.ts and Template.tsx (and the checked fact sheet,
  * docs/marketing/growth-build/reports/guides-claims.md) on 24 Nov 2026; every line to borrow is
- * held to its field's limit by lib/gift/field-limit.ts. "Free" is said only of The Letter's short
- * note (lib/gift/free-tier.ts). No price is written here: the page reads it from PRODUCTS.
+ * held to its field's limit by lib/gift/field-limit.ts. "Free" is said only of The Letter, as
+ * lib/gift/free-tier.ts has it in both states of its switch (NOTE: the short note with the note for
+ * everyone, the whole letter with ten photos without it). No price is written here: the page reads it from PRODUCTS.
  */
+
+/** Whether the free Letter is the short note (the live site) or, without the switch, the whole letter with ten photos. Fixed at build time. */
+const NOTE = noteForEveryone();
 
 export type MonthGuide = {
   /** The search result's headline, before " · Ethos". */
@@ -74,7 +79,7 @@ const month1: Month = {
       {
         template: "the-letter",
         heading: "A note under a wax seal",
-        body: "The free version of The Letter is a short note: two names and 500 characters at most. A tap breaks the wax and the note writes itself out by hand, over a song if you choose one. One month is about that long: one thing you noticed, one thing you want to do again.",
+        body: NOTE ? "The free version of The Letter is a short note: two names and 500 characters at most. A tap breaks the wax and the note writes itself out by hand, over a song if you choose one. One month is about that long: one thing you noticed, one thing you want to do again." : "The free version of The Letter is the whole letter, with up to ten photos. A tap breaks the wax and the letter writes itself out by hand, over a song if you choose one. One month needs only a few lines of it: one thing you noticed, one thing you want to do again.",
         line: { field: "freeNote", where: "The whole note", text: "One month. I wasn’t counting, and then I was. I liked the walk home from the ramen place more than the ramen, and I think you know that. No speech and no plans for next year. I’m glad it was you at that table. Same place Thursday?" },
       },
       {
@@ -98,7 +103,7 @@ const month1: Month = {
     faq: [
       { q: "Is one month too soon for an anniversary gift?", a: "Not if it is small. A month is worth marking when both of you are counting it, and a short note or a plan for the next date marks it without making it heavy. Leave the keepsakes for six months." },
       { q: "What do you write after one month together?", a: "One thing you noticed about them and one thing you want to do again. Two or three sentences are plenty. Leave the future out of it unless they brought it up first." },
-      { q: "Which of these is free?", a: "The Letter, as a short note of up to 500 characters with a song. Each of the others is a one-time payment for that template, and you can build any of them in the editor before you decide." },
+      { q: "Which of these is free?", a: NOTE ? "The Letter, as a short note of up to 500 characters with a song. Each of the others is a one-time payment for that template, and you can build any of them in the editor before you decide." : "The Letter, with the whole letter, up to ten photos and a song. Each of the others is a one-time payment for that template, and you can build any of them in the editor before you decide." },
     ],
   },
   es: {
@@ -127,7 +132,7 @@ const month1: Month = {
       {
         template: "the-letter",
         heading: "Una nota bajo un sello de lacre",
-        body: "La versión gratis de La carta es una nota corta: dos nombres y 500 caracteres como mucho. Un toque rompe el lacre y la nota se escribe sola, a mano, sobre una canción si eliges una. Un mes da para eso: una cosa en la que te has fijado y otra que quieres repetir.",
+        body: NOTE ? "La versión gratis de La carta es una nota corta: dos nombres y 500 caracteres como mucho. Un toque rompe el lacre y la nota se escribe sola, a mano, sobre una canción si eliges una. Un mes da para eso: una cosa en la que te has fijado y otra que quieres repetir." : "La versión gratis de La carta es la carta completa, con hasta diez fotos. Un toque rompe el lacre y la carta se escribe sola, a mano, sobre una canción si eliges una. A un mes le bastan unas líneas: una cosa en la que te has fijado y otra que quieres repetir.",
         line: { field: "freeNote", where: "La nota entera", text: "Un mes. No llevaba la cuenta, y de pronto sí. Me gustó más la vuelta a casa desde el ramen que el propio ramen, y creo que lo sabes. Sin discursos ni planes para el año que viene. Me alegro de que fueras tú en esa mesa. ¿El jueves en el mismo sitio?" },
       },
       {
@@ -151,7 +156,7 @@ const month1: Month = {
     faq: [
       { q: "¿Un mes es demasiado pronto para un regalo de aniversario?", a: "No, si es pequeño. El primer mesario, como lo llaman en muchos sitios, merece marcarse cuando los dos lo contáis, y una nota corta o el plan de la próxima cita lo marcan sin ponerse serios. Los recuerdos para guardar, a los seis meses." },
       { q: "¿Qué se escribe al cumplir un mes?", a: "Una cosa en la que te has fijado y otra que quieres repetir. Con dos o tres frases sobra. Deja el futuro fuera, salvo que haya salido antes de su boca." },
-      { q: "¿Cuál de estos es gratis?", a: "La carta, como nota corta de hasta 500 caracteres con una canción. Cada uno de los demás es un solo pago por esa plantilla, y puedes montar cualquiera en el editor antes de decidirte." },
+      { q: "¿Cuál de estos es gratis?", a: NOTE ? "La carta, como nota corta de hasta 500 caracteres con una canción. Cada uno de los demás es un solo pago por esa plantilla, y puedes montar cualquiera en el editor antes de decidirte." : "La carta, completa y con hasta diez fotos y una canción. Cada uno de los demás es un solo pago por esa plantilla, y puedes montar cualquiera en el editor antes de decidirte." },
     ],
   },
 };

@@ -1,4 +1,5 @@
 import type { Currency } from "@/lib/pricing/products";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 
 /**
  * The Letter, told in Brazilian Portuguese: one page at /pt/carta-digital.
@@ -44,10 +45,14 @@ export type PtLetterCopy = {
 
 /** `price` is “Make it special” in the visitor's currency, from the catalogue; `currency` names it. */
 export function ptLetterCopy({ price, currency }: { price: string; currency: Currency }): PtLetterCopy {
-  const paidFor = "fotos, uma carta mais longa, um vídeo, uma mensagem de voz e agendamento para abrir na hora certa, sem o rodapé";
+  // What is free follows the free-note setting (lib/gift/free-tier.ts): the short note on the live site, the whole letter with photos when it is off.
+  const note = noteForEveryone();
+  const paidFor = note
+    ? "fotos, uma carta mais longa, um vídeo, uma mensagem de voz e agendamento para abrir na hora certa, sem o rodapé"
+    : "um vídeo, uma mensagem de voz, até 20 fotos e agendamento para abrir na hora certa, sem o rodapé";
   return {
     metaTitle: "Carta digital de amor: crie sua carta virtual com música",
-    metaDescription: "Carta virtual que abre como uma de verdade: lacre de cera, suas palavras e a música de vocês, enviada por link. Grátis como bilhete curto.",
+    metaDescription: `Carta virtual que abre como uma de verdade: lacre de cera, suas palavras e a música de vocês, enviada por link. ${note ? "Grátis como bilhete curto." : "Grátis, com fotos."}`,
     eyebrow: "Carta digital",
     title: "Carta digital de amor que abre como uma carta de verdade",
     subtitle:
@@ -76,7 +81,9 @@ export function ptLetterCopy({ price, currency }: { price: string; currency: Cur
     },
     pricing: {
       heading: "O que é grátis e o que é pago",
-      free: `Grátis: um bilhete de até ${PT_FREE_CHARS} caracteres, com música e um pequeno rodapé “Made with Ethos”.`,
+      free: note
+        ? `Grátis: um bilhete de até ${PT_FREE_CHARS} caracteres, com música e um pequeno rodapé “Made with Ethos”.`
+        : "Grátis: a carta inteira, até 10 fotos e música, com um pequeno rodapé “Made with Ethos”.",
       paid: `Com “Make it special”, por ${price}, pago uma única vez: ${paidFor}.`,
       once: `Não é assinatura. Você paga uma vez por presente, na página de pagamento do Stripe; a cobrança é feita em ${CURRENCY_NAME[currency]} e o seu banco converte para a sua moeda.`,
     },
@@ -97,7 +104,9 @@ export function ptLetterCopy({ price, currency }: { price: string; currency: Cur
       items: [
         {
           q: "A carta digital é grátis?",
-          a: `Sim, como um bilhete curto: até ${PT_FREE_CHARS} caracteres, com música e um pequeno rodapé “Made with Ethos”. Com “Make it special”, por ${price}, pago uma única vez, vêm ${paidFor}.`,
+          a: note
+            ? `Sim, como um bilhete curto: até ${PT_FREE_CHARS} caracteres, com música e um pequeno rodapé “Made with Ethos”. Com “Make it special”, por ${price}, pago uma única vez, vêm ${paidFor}.`
+            : `Sim: a carta inteira, até 10 fotos e música, com um pequeno rodapé “Made with Ethos”. Com “Make it special”, por ${price}, pago uma única vez, vêm ${paidFor}.`,
         },
         {
           q: "Como a pessoa abre a carta?",

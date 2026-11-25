@@ -15,7 +15,7 @@ import { templateSeo } from "@/content/template-seo";
 import { DATE_KIND_COPY } from "@/content/date-kinds";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { DATE_KINDS } from "@/lib/dates/date-kinds";
-import { briefFaq, briefHowGifts, briefIntro, briefPricing } from "@/lib/llms/brief";
+import { briefFaq, briefHowGifts, briefIntro, briefPricing, briefTemplatePrice } from "@/lib/llms/brief";
 import { pressBrief } from "@/lib/press/shown";
 import { FREE_SAVED_DATES } from "@/lib/pricing/products";
 import { localizedUrl } from "@/lib/seo";
@@ -23,6 +23,8 @@ import { TRIPS } from "@/lib/trips/presets";
 import { listManifests } from "@/templates/manifests";
 import en from "../../../messages/en.json";
 import { HALFWAY_TOOL_PATH } from "@/content/halfway-tool";
+import { countWord } from "@/lib/count-words";
+import { GAMES } from "@/lib/games/catalogue";
 
 export const dynamic = "force-static";
 
@@ -50,7 +52,7 @@ export function GET() {
     `- Date ideas by kind: ${DATE_KINDS.length} short lists (${DATE_KINDS.map((kind) => DATE_KIND_COPY[kind]!.nav.en.toLowerCase()).join(", ")}), each with a one-step planner that picks one for tonight from real places (for example ${localizedUrl("en", `/dates/ideas/${DATE_KINDS[0]}`)}).`,
     `- [Long distance](${localizedUrl("en", "/long-distance")}): for two towns, the distance between them, the city halfway along the great circle, how many hours apart their clocks are and when both people are awake; plus date ideas for two screens.`,
     `- [Halfway between two cities](${localizedUrl("en", HALFWAY_TOOL_PATH)}): type two towns and get the city halfway between them along the great circle, how far it is from each, and a link that carries the two towns. Free, no account.`,
-    `- [Games](${localizedUrl("en", "/games")}): eight card games for two. How well do you know me?, Would you rather?, This or that? and Draw it, guess it play on one phone passed back and forth or on two phones joined by a four-letter room code; Memory (dealt from stickers or the couple's own photos, which never leave the phone), question cards, truth or dare (soft edition) and a roulette for the chores play on one phone. Every game's page lists its questions or says how it is played. No downloads, no accounts. Optional game packs add more cards to four of them (see Pricing).`,
+    `- [Games](${localizedUrl("en", "/games")}): ${countWord(GAMES.length, "en")} card games for two. How well do you know me?, Would you rather?, This or that? and Draw it, guess it play on one phone passed back and forth or on two phones joined by a four-letter room code; Memory (dealt from stickers or the couple's own photos, which never leave the phone), question cards, truth or dare (soft edition) and a roulette for the chores play on one phone. Every game's page lists its questions or says how it is played. No downloads, no accounts. Optional game packs add more cards to four of them (see Pricing).`,
     `- [Would you rather question of the day](${localizedUrl("en", "/games/today")}): one would you rather question a day for couples, the same for everyone. Pick an answer and send it by link; the other person picks before seeing yours, and both answers show side by side. The name and the answer travel after the # of the link and are never sent to a server.`,
     `- [Weekly challenge for two](${localizedUrl("en", "/games/weekly")}): a new set every Monday, the same for everyone: three this-or-that picks answered apart and compared by a link, then one question and one dare to do together. The name and the picks travel after the # of the link and are never sent to a server.`,
     `- [Love language quiz](${localizedUrl("en", LOVE_QUIZ_PATH)}): a free love language quiz, in English and Spanish: 30 either/or questions, about 3 minutes, no email or account. It shows how the five love languages rank for the person taking it, then gives a link: the partner takes the same quiz and both see their results side by side, with what each needs from the other and a gift template that speaks each language. Answers stay in the browser. The five love languages are Gary Chapman's idea (The 5 Love Languages, 1992); the quiz and its questions are Ethos's own, not affiliated with him.`,
@@ -65,7 +67,7 @@ export function GET() {
     "",
     ...manifests.map(
       (m) =>
-        `- [${m.name.en}](${localizedUrl("en", `/templates/${m.slug}`)})${templateSeo(m.slug, "en") ? ` (${templateSeo(m.slug, "en")?.keyword.toLowerCase()})` : ""}: ${m.tagline.en} ${m.description.en} ${m.tier === "free" ? "Free." : "Premium."} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`,
+        `- [${m.name.en}](${localizedUrl("en", `/templates/${m.slug}`)})${templateSeo(m.slug, "en") ? ` (${templateSeo(m.slug, "en")?.keyword.toLowerCase()})` : ""}: ${m.tagline.en} ${m.description.en} ${briefTemplatePrice(m)} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`,
     ),
     "",
     "## Occasions",

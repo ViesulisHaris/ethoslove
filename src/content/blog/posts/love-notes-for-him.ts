@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "love-notes-for-him",
   published: "2026-11-19",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["jar-of-reasons", "the-letter"],
   content: {
@@ -208,7 +209,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A whole jar of love notes for him" },
         {
           type: "p",
-          text: "When you have more notes than spots to hide them, put them all in one place. A jar of folded notes is the classic for a birthday or an anniversary, and it works on a phone too: it's one of our [digital gifts for your boyfriend](/gifts/for-boyfriend). Jar of Reasons is a [premium template](/pricing); The Letter is free. For more ideas, see our [just because gifts](/occasions/just-because), or browse all the [digital gifts](/gifts).",
+          text: "When you have more notes than spots to hide them, put them all in one place. A jar of folded notes is the classic for a birthday or an anniversary, and it works on a phone too: it's one of our [digital gifts for your boyfriend](/gifts/for-boyfriend). Jar of Reasons is a [premium template](/pricing); The Letter is {note:free as a short note|free}. For more ideas, see our [just because gifts](/occasions/just-because), or browse all the [digital gifts](/gifts).",
         },
         {
           type: "template",
@@ -218,7 +219,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free, and the place for the note that turned out longer than a sticky note.",
+          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. The place for the note that turned out longer than a sticky note. {note:One of up to 500 characters goes free; the photos and anything longer come with \"Make it special\", paid once ([prices](/pricing)).|It goes out free, long letter and photos included.}",
         },
         {
           type: "p",
@@ -454,7 +455,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Un frasco entero de notas de amor para él" },
         {
           type: "p",
-          text: "Cuando tienes más notas que escondites, ponlas todas en el mismo sitio. Un frasco de notas dobladas es el clásico para un cumpleaños o un aniversario, y también funciona en el móvil: es uno de nuestros [regalos digitales para tu novio](/gifts/for-boyfriend). Frasco de razones es una [plantilla premium](/pricing); La carta es gratis. Para más ideas, mira nuestros [regalos porque sí](/occasions/just-because), o echa un vistazo a todos los [regalos digitales](/gifts).",
+          text: "Cuando tienes más notas que escondites, ponlas todas en el mismo sitio. Un frasco de notas dobladas es el clásico para un cumpleaños o un aniversario, y también funciona en el móvil: es uno de nuestros [regalos digitales para tu novio](/gifts/for-boyfriend). Frasco de razones es una [plantilla premium](/pricing); La carta es {note:gratis como nota corta|gratis}. Para más ideas, mira nuestros [regalos porque sí](/occasions/just-because), o echa un vistazo a todos los [regalos digitales](/gifts).",
         },
         {
           type: "template",
@@ -464,7 +465,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis, y el sitio para la nota que te ha salido más larga que un pósit.",
+          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. El sitio para la nota que te ha salido más larga que un pósit. {note:Una de hasta 500 caracteres se envía gratis; las fotos y lo que pase de ahí van con «Hazlo especial», de pago único ([precios](/pricing)).|Se envía gratis, con la carta larga y las fotos.}",
         },
         {
           type: "p",

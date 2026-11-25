@@ -35,7 +35,7 @@ blocks, plus at most two mentions in the text.
   memories, "I love you", nothing that sounds like a greeting card.
 - Readers are in the US, the UK and elsewhere, so wording works for all of them. Use "your mother"
   rather than mum or mom, and avoid uni/college, flat/apartment, miles/kilometres and prices in
-  one currency. To mention a price, give all three or link to `/pricing`.
+  one currency. To mention an Ethos price, write its token (below), never the figure.
 - Spanish is from Spain: tú, vosotros, móvil. It reads like `messages/es.json`, not like a
   translation.
 
@@ -49,25 +49,39 @@ Check these files before stating any fact. If a file disagrees with this list, t
   name, your message, photos and music. They get a link or a printable QR code, and the gift opens
   on their phone as a short interactive experience. There's no app to install, and it works in
   English and Spanish.
-- **Templates.** There are 61 (16 Nov 2026; count the folders in `src/templates`). Each has a name,
-  tagline and description in its manifest. Describe a template only by what its manifest says it
-  does.
-- **Free.** The Letter and Constellations are free (`pricing.freeNote` in `messages/en.json`):
-  - unlimited gifts
-  - up to 10 photos
-  - the music library, and a 30-second preview of a real song they can tap to hear
-  - a small "Made with Ethos" footer
-- **Premium.** Every other template is a one-time payment, never a subscription. Prices follow the
-  reader's country: US dollars in the US, pounds in the UK, euros elsewhere
-  (`src/lib/pricing/products.ts`, checked 16 Nov 2026):
-  - One template: $11.99 / £8.99 / €9.99.
-  - Pick three: $20.98 / £15.98 / €17.98.
-  - Every template, now and future: $29.99 / £21.99 / €24.99.
-  - Any unlock adds video clips, voice messages, up to 20 photos, a surprise inside (a date or a
-    trip, wrapped at the end), scheduling and a password, with no footer.
-- **Make it special.** The same extras for a free template (The Letter or Constellations), once:
-  $8.99 / £6.49 / €7.49. Ethos for Two and the game packs exist too: describe them only from
-  `pricing.faq` in `messages/en.json`.
+- **Never type a fact that the code holds.** A post is published from the mirror with nobody reading
+  it, and prices, the template count and what is free all change. Write these tokens instead; the page
+  fills them for each reader (`src/content/blog/fill.ts`), and `tests/unit/blog-posts.test.ts`, which
+  the publish workflow runs, fails a post that types one of them:
+  - an Ethos price: `{price:single}`, `{price:pick3}`, `{price:everything}`, `{price:extras}` ("Make
+    it special"), `{price:photos}`, `{price:pass}`, `{price:pack}`. The reader sees it in the currency
+    they pay in. Never "$11.99", "9,99 €" or "£8.99" for Ethos, in any language. Other makers' prices
+    in a comparison stay as you saw them.
+  - the number of templates: `{count:templates}`. Never "61 templates".
+  - which templates are free: `{free:names}` ("The Letter", or "The Letter and Constellations"), and
+    `{free:<slug>}` for "free" / "paid once" ("gratis" / "de pago único") said of one template.
+    Never "Two are free", "one is free", and never "Free." typed on a template card: the card prints
+    its own "Free" label exactly when the template goes out free.
+  - what the free gift holds: `{note:A|B}`, where A is true while the free gift is the short note (the
+    live site) and B while it isn't. Each side may hold links and the tokens above, never `|`, `{` or
+    `}`. Anything about photos, length or "500 characters" on the free Letter goes in one.
+- **Templates.** Each has a name, tagline and description in its manifest. Describe a template only
+  by what its manifest, `schema.ts` and `Template.tsx` say it does.
+- **Free, as the live site runs it** (`NEXT_PUBLIC_FREE_NOTE_SHARE=1`; `pricing.faqFreeNote` in
+  `messages/en.json`): The Letter goes out free as a short note of up to 500 characters, as many as
+  you like, with the music library or a 30-second preview of a real song and a small "Made with Ethos"
+  footer. No photos, no full letter. Photos, the full letter, video, voice, a surprise inside,
+  scheduling, a password and no footer come with "Make it special", paid once. Constellations is not
+  free: it is made of photos and sells whole at the "Make it special" price.
+- **Free, with the setting off** (`pricing.faq`, id `free`): The Letter and Constellations, the whole
+  letter, up to 10 photos, the music library, a countdown and a hidden final surprise, with the footer.
+  Every sentence about what is free must be true both ways: that is what `{note:A|B}` is for.
+- **Premium.** Every other template is a one-time payment, never a subscription: one template
+  `{price:single}`, pick three `{price:pick3}`, every template now and future `{price:everything}`
+  (`src/lib/pricing/products.ts`). Any unlock adds video clips, voice messages, up to 20 photos, a
+  surprise inside (a date or a trip, wrapped at the end), scheduling and a password, with no footer.
+- **Make it special.** The extras for a free template, once: `{price:extras}`. Ethos for Two and the
+  game packs exist too: describe them only from `pricing.faq` in `messages/en.json`.
 - **Scheduling.** A premium gift can unlock at a set time. You choose the time zone, so it can
   open at midnight where they are.
 - **After sending.** Links are meant to be permanent, and edits go live at the same link. The
@@ -92,8 +106,8 @@ Write it so that a reader who never picks Ethos still finds it the most useful p
   can't check says "not stated", never a guess. Every page you used goes in the post's review record
   (`docs/blog/reviews/<slug>.json`) as a `sources` list of `{ "maker", "url", "checked" }`.
 - **Ethos by the same rules.** Its row comes from the files above and the live /pricing page, in the
-  reader's currency (dollars in the English post, euros in the Spanish one), weak points included:
-  what costs extra and what it doesn't do.
+  reader's currency, which the `{price:…}` tokens give (dollars, pounds or euros, whatever the
+  post's language), weak points included: what costs extra and what it doesn't do.
 - **Fair.** Every maker gets the same columns, in an order a reader can check (price, or A to Z),
   not Ethos first. Say what each one does well and who it suits, and say plainly where another is
   the better pick.

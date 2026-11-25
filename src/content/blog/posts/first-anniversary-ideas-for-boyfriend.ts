@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "first-anniversary-ideas-for-boyfriend",
   published: "2026-11-02",
-  updated: "2026-11-24",
+  updated: "2026-11-25",
   occasion: "anniversary",
   templates: ["our-timeline", "scrapbook", "the-letter"],
   content: {
@@ -115,7 +115,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. The card you wrote above, inside a wax-sealed envelope he opens with a tap, with the photo from your first date as a polaroid below it.",
+          note: "The card you wrote above, inside a wax-sealed envelope he opens with a tap. {note:The card fits the free note; to put the photo from your first date below it as a polaroid, add \"Make it special\", paid once ([prices](/pricing)).|The photo from your first date goes below it as a polaroid, at no cost.}",
         },
       ],
       faq: [
@@ -245,7 +245,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. La tarjeta que has escrito arriba, dentro de un sobre lacrado que abre con un toque, con la foto de vuestra primera cita como polaroid debajo.",
+          note: "La tarjeta que has escrito arriba, dentro de un sobre lacrado que abre con un toque. {note:La tarjeta cabe en la nota gratis; para poner debajo la foto de vuestra primera cita como polaroid, añade «Hazlo especial», con un solo pago ([precios](/pricing)).|Debajo va la foto de vuestra primera cita como polaroid, sin coste.}",
         },
       ],
       faq: [

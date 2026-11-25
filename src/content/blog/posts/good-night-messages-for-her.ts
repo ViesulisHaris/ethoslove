@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "good-night-messages-for-her",
   published: "2026-11-12",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["text-thread", "constellations", "the-letter"],
   content: {
@@ -170,7 +171,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A good night she opens instead of reads" },
         {
           type: "p",
-          text: "Once in a while, on a night that matters, send a link instead of a line. Two of the templates below are free, and there are more [digital gifts for your girlfriend](/gifts/for-girlfriend) and [just because](/occasions/just-because) ideas.",
+          text: "Once in a while, on a night that matters, send a link instead of a line. From the templates below you can send {free:names} for free, and there are more [digital gifts for your girlfriend](/gifts/for-girlfriend) and [just because](/occasions/just-because) ideas.",
         },
         {
           type: "template",
@@ -180,12 +181,12 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Her sky is made of your photos, each star with a few words underneath. Once she's opened them all, lines join them into a heart or another shape you set, and then your message comes up. It takes three to twelve photos and is paid once.",
+          note: "Her sky is made of your photos, each star with a few words underneath. Once she's opened them all, lines join them into a heart or another shape you set, and then your message comes up. It takes three to twelve photos. {note:It's paid once, with \"Make it special\" ([prices](/pricing)).|It goes out free.}",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. For the long good night: your initial on the seal, one tap to open it, and the letter inside in handwriting, followed by your photos.",
+          note: "For the long good night: your initial on the seal, one tap to open it, and the letter inside in handwriting, followed by your photos. {note:The long letter and the photos come with \"Make it special\", paid once ([prices](/pricing)); the free one is a short note.|Free with the photos too.}",
         },
       ],
       faq: [
@@ -371,7 +372,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Unas buenas noches que se abren en vez de leerse" },
         {
           type: "p",
-          text: "De vez en cuando, una noche que importe, manda un enlace en vez de una frase. Dos de las plantillas de abajo son gratis, y tienes más [regalos digitales para tu novia](/gifts/for-girlfriend) e ideas [porque sí](/occasions/just-because).",
+          text: "De vez en cuando, una noche que importe, manda un enlace en vez de una frase. De las plantillas de abajo puedes enviar gratis {free:names}, y tienes más [regalos digitales para tu novia](/gifts/for-girlfriend) e ideas [porque sí](/occasions/just-because).",
         },
         {
           type: "template",
@@ -381,12 +382,12 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Las estrellas de su cielo son vuestras fotos, cada una con dos o tres palabras debajo. Cuando las ha abierto todas, unas líneas las unen en un corazón u otra figura que hayas elegido, y luego sale tu mensaje. Lleva entre tres y doce fotos y se paga una sola vez.",
+          note: "Las estrellas de su cielo son vuestras fotos, cada una con dos o tres palabras debajo. Cuando las ha abierto todas, unas líneas las unen en un corazón u otra figura que hayas elegido, y luego sale tu mensaje. Lleva entre tres y doce fotos. {note:Se paga una sola vez, con «Hazlo especial» ([precios](/pricing)).|Se envía gratis.}",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Para las buenas noches largas: tu inicial en el sello, un toque para abrirlo y dentro la carta escrita a mano, seguida de tus fotos.",
+          note: "Para las buenas noches largas: tu inicial en el sello, un toque para abrirlo y dentro la carta escrita a mano, seguida de tus fotos. {note:La carta larga y las fotos vienen con «Hazlo especial», con un solo pago ([precios](/pricing)); la gratis es una nota corta.|Gratis, también con las fotos.}",
         },
       ],
       faq: [

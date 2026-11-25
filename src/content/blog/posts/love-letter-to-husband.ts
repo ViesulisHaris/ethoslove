@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "love-letter-to-husband",
   published: "2026-11-07",
+  updated: "2026-11-25",
   occasion: "anniversary",
   templates: ["keepsake", "the-letter"],
   content: {
@@ -126,7 +127,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "One page with your words in handwriting, under a wax seal with your initial, and a few photos from the years dropping in as polaroids. Free, and enough for a letter that doesn't need anything around it.",
+          note: "One page with your words in handwriting, under a wax seal with your initial, and a few photos from the years dropping in as polaroids. Enough for a letter that doesn't need anything around it. {note:Sent free, it is a short note of up to 500 characters; for the photos and a longer page, add \"Make it special\", paid once ([prices](/pricing)).|It goes out free, photos and all.}",
         },
       ],
       faq: [
@@ -268,7 +269,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Una página con tus palabras escritas a mano, bajo un sello de lacre con tu inicial, y unas cuantas fotos de estos años que caen como polaroids. Gratis, y suficiente para una carta que no necesita nada alrededor.",
+          note: "Una página con tus palabras escritas a mano, bajo un sello de lacre con tu inicial, y unas cuantas fotos de estos años que caen como polaroids. Suficiente para una carta que no necesita nada alrededor. {note:Gratis se envía como nota corta de hasta 500 caracteres; para las fotos y una página más larga, añade «Hazlo especial», de pago único ([precios](/pricing)).|Se envía gratis, con fotos y todo.}",
         },
       ],
       faq: [

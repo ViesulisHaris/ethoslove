@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "good-night-messages-for-him",
   published: "2026-11-09",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["constellations", "text-thread", "the-letter"],
   content: {
@@ -172,7 +173,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "A dark sky where every star is one of your photos, with a caption under each. He taps his way from star to star, and when the last one is found they join into the shape you picked, with your good night message beneath. It takes three to twelve photos and is paid once.",
+          note: "A dark sky where every star is one of your photos, with a caption under each. He taps his way from star to star, and when the last one is found they join into the shape you picked, with your good night message beneath. It takes three to twelve photos{note: and is paid once with \"Make it special\" ({price:extras})|}.",
         },
         {
           type: "template",
@@ -182,7 +183,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "For the long good night message: an envelope with your initial pressed into the wax seal, your words set in a handwriting font, and your photos dropped in as polaroids. Free, and better read in bed than at a desk.",
+          note: "For the long good night message: an envelope with your initial pressed into the wax seal, your words set in a handwriting font, and your photos dropped in as polaroids. Better read in bed than at a desk. {note:The free version is a short note of up to 500 characters with a song; the photos and the long message come with \"Make it special\", paid once ([prices](/pricing)).|It goes out free with the whole letter and your photos.}",
         },
       ],
       faq: [
@@ -370,7 +371,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Un cielo oscuro en el que cada estrella es una de vuestras fotos, con un pie de foto debajo de cada una. Él va tocando de estrella en estrella y, cuando encuentra la última, se unen en la forma que elegiste, con tu mensaje de buenas noches debajo. Lleva entre tres y doce fotos y se paga una sola vez.",
+          note: "Un cielo oscuro en el que cada estrella es una de vuestras fotos, con un pie de foto debajo de cada una. Él va tocando de estrella en estrella y, cuando encuentra la última, se unen en la forma que elegiste, con tu mensaje de buenas noches debajo. Lleva entre tres y doce fotos{note: y se paga una sola vez con «Hazlo especial» ({price:extras})|}.",
         },
         {
           type: "template",
@@ -380,7 +381,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Para el mensaje largo de buenas noches: un sobre con tu inicial en el sello de lacre, tus palabras en una letra manuscrita y tus fotos como polaroids. Gratis, y se lee mejor en la cama que en una mesa.",
+          note: "Para el mensaje largo de buenas noches: un sobre con tu inicial en el sello de lacre, tus palabras en una letra manuscrita y tus fotos como polaroids. Se lee mejor en la cama que en una mesa. {note:La versión gratis es una nota corta de hasta 500 caracteres con una canción; las fotos y el mensaje largo vienen con «Hazlo especial», de pago único ([precios](/pricing)).|Sale gratis con la carta entera y tus fotos.}",
         },
       ],
       faq: [

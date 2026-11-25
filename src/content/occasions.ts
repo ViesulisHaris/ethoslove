@@ -1,5 +1,6 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 import { OCCASION_IDEAS, type OccasionIdeas } from "./occasion-ideas";
 
 /**
@@ -33,11 +34,11 @@ const phoneEs = {
 };
 const costEn = {
   q: "Does it cost anything?",
-  a: "The Letter is free as a short note: up to 500 characters, our music library and a real song they tap to hear, with a small “Made with Ethos” footer. Photos, a longer letter and every other template are a one-time payment for that template, forever — no subscription — and add video, voice messages, up to twenty photos, scheduling and a password.",
+  a: `${noteForEveryone() ? "The Letter is free as a short note: up to 500 characters, our music library" : "The Letter and Constellations are free: the whole letter, up to ten photos, our music library"} and a real song they tap to hear, with a small “Made with Ethos” footer. ${noteForEveryone() ? "Photos, a longer letter" : "“Make it special”"} and every other template are a one-time payment for that template, forever — no subscription — and add video, voice messages, up to twenty photos, scheduling and a password.`,
 };
 const costEs = {
   q: "¿Cuesta algo?",
-  a: "La carta es gratis como nota corta: hasta 500 caracteres, nuestra biblioteca de música y una canción de verdad que se escucha con un toque, con un pequeño pie que dice «Hecho con Ethos». Las fotos, una carta más larga y las demás plantillas son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, hasta veinte fotos, programación y contraseña.",
+  a: `${noteForEveryone() ? "La carta es gratis como nota corta: hasta 500 caracteres, nuestra biblioteca de música" : "La carta y Constelaciones son gratis: la carta completa, hasta diez fotos, nuestra biblioteca de música"} y una canción de verdad que se escucha con un toque, con un pequeño pie que dice «Hecho con Ethos». ${noteForEveryone() ? "Las fotos, una carta más larga" : "«Hazlo especial»"} y las demás plantillas son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, hasta veinte fotos, programación y contraseña.`,
 };
 const keepEn = {
   q: "Will it still be there next year?",
@@ -54,7 +55,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "A birthday gift they’ll open twice",
       lead: "Most birthday messages are a line in a group chat, read once and buried by lunch. This is the other kind: a page with their name on it, the photos you have of them, the song they can’t help singing, and the thing you actually mean — opened on their phone, whenever they like.",
       ideas: {
-        title: "12 digital birthday gift ideas",
+        get title() {
+          return `${this.items.length} digital birthday gift ideas`;
+        },
         items: [
           {
             template: "midnight-countdown",
@@ -152,7 +155,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de cumpleaños que abrirá dos veces",
       lead: "Casi todas las felicitaciones son una línea en un grupo, leída una vez y enterrada antes de comer. Esto es lo otro: una página con su nombre, las fotos que tienes de esa persona, la canción que no puede evitar cantar y lo que de verdad quieres decirle, abierto en su móvil cuando quiera.",
       ideas: {
-        title: "12 ideas de regalos digitales de cumpleaños",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales de cumpleaños`;
+        },
         items: [
           {
             template: "midnight-countdown",
@@ -253,13 +258,15 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "An anniversary gift made of your own story",
       lead: "An anniversary is the one day a year the two of you are the subject. Cards borrow other people’s words for it. This uses yours: the photos only you have, the song that’s yours, and a note about what these years have actually been like, opened on their phone and kept.",
       ideas: {
-        title: "12 digital anniversary gift ideas",
+        get title() {
+          return `${this.items.length} digital anniversary gift ideas`;
+        },
         items: [
           {
             template: "the-letter",
             heading: "Paper, the traditional first-anniversary gift",
-            brief: "Paper is the first-anniversary gift, and The Letter is the free template.",
-            body: "Paper is the gift for a first anniversary, on lists going back to Emily Post’s Etiquette in 1922, and The Letter is the free template. Choose kraft paper, press your initial into the wax, and open with the first message you ever sent them, word for word if you can find it. Then write what you’d send now.",
+            brief: `Paper is the first-anniversary gift, and The Letter is ${noteForEveryone() ? "the" : "a"} free template.`,
+            body: `Paper is the gift for a first anniversary, on lists going back to Emily Post’s Etiquette in 1922, and The Letter is ${noteForEveryone() ? "the" : "a"} free template. Choose kraft paper, press your initial into the wax, and open with the first message you ever sent them, word for word if you can find it. Then write what you’d send now.`,
           },
           {
             template: "text-thread",
@@ -332,7 +339,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Photos from across the years, in order, so the story reads as a story — up to ten on a free template, twenty on premium. The song from your wedding, your first road trip, or the one you argue about: any template can end on thirty seconds of the real recording, a tap away, and a premium one carries a video clip and a voice message too. Museum hangs the photos in rooms; Vinyl builds the whole gift around a record.",
+          body: `Photos from across the years, in order, so the story reads as a story — ${noteForEveryone() ? "up to twenty on a premium template or with “Make it special”" : "up to ten on a free template, twenty on premium"}. The song from your wedding, your first road trip, or the one you argue about: any template can end on thirty seconds of the real recording, a tap away, and a premium one carries a video clip and a voice message too. Museum hangs the photos in rooms; Vinyl builds the whole gift around a record.`,
         },
         {
           heading: "When to send it",
@@ -346,7 +353,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           q: "How many photos can I add?",
-          a: "Up to ten on a free template and twenty on a premium one. Put them in the order you want the story told; the template arranges them.",
+          a: `${noteForEveryone() ? "Up to twenty on a premium template or with “Make it special”: the free note takes none" : "Up to ten on a free template and twenty on a premium one"}. Put them in the order you want the story told; the template arranges them.`,
         },
         keepEn,
       ],
@@ -355,12 +362,14 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de aniversario hecho con vuestra historia",
       lead: "El aniversario es el único día del año en que el tema sois vosotros dos. Las tarjetas lo cuentan con palabras de otros. Esto usa las tuyas: las fotos que solo tienes tú, la canción que es vuestra y una nota sobre cómo han sido estos años de verdad, abierta en su móvil y guardada.",
       ideas: {
-        title: "12 ideas de regalos digitales de aniversario",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales de aniversario`;
+        },
         items: [
           {
             template: "the-letter",
             heading: "Bodas de papel: una carta",
-            body: "Al primer aniversario se le llama bodas de papel, y La carta es la plantilla gratuita. Elige papel kraft, imprime tu inicial en el lacre y empieza con el primer mensaje que le mandaste, palabra por palabra si lo encuentras. Luego escribe lo que le mandarías hoy.",
+            body: `Al primer aniversario se le llama bodas de papel, y La carta es ${noteForEveryone() ? "la" : "una"} plantilla gratuita. Elige papel kraft, imprime tu inicial en el lacre y empieza con el primer mensaje que le mandaste, palabra por palabra si lo encuentras. Luego escribe lo que le mandarías hoy.`,
           },
           {
             template: "text-thread",
@@ -432,7 +441,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de todos esos años, en orden, para que la historia se lea como una historia: hasta diez en una plantilla gratis, veinte en una premium. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museo cuelga las fotos en salas; Vinilo construye todo el regalo alrededor de un disco.",
+          body: `Fotos de todos esos años, en orden, para que la historia se lea como una historia: ${noteForEveryone() ? "hasta veinte en una plantilla premium o con «Hazlo especial»" : "hasta diez en una plantilla gratis, veinte en una premium"}. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museo cuelga las fotos en salas; Vinilo construye todo el regalo alrededor de un disco.`,
         },
         {
           heading: "Cuándo enviarlo",
@@ -446,7 +455,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           q: "¿Cuántas fotos puedo poner?",
-          a: "Hasta diez en una plantilla gratis y veinte en una premium. Ponlas en el orden en que quieras contar la historia; la plantilla las coloca.",
+          a: `${noteForEveryone() ? "Hasta veinte en una plantilla premium o con «Hazlo especial»: la nota gratis no lleva fotos" : "Hasta diez en una plantilla gratis y veinte en una premium"}. Ponlas en el orden en que quieras contar la historia; la plantilla las coloca.`,
         },
         keepEs,
       ],
@@ -458,7 +467,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "A Valentine’s gift that lasts past the evening",
       lead: "Flowers wilt, chocolates are gone by ten, and the card ends up in a drawer. A gift they open on their phone — a letter under a wax seal, a bouquet you picked stem by stem, a sky where every star is a photo of the two of you — is still there next February, and the one after.",
       ideas: {
-        title: "12 digital Valentine’s Day gift ideas",
+        get title() {
+          return `${this.items.length} digital Valentine’s Day gift ideas`;
+        },
         items: [
           {
             template: "the-letter",
@@ -557,12 +568,14 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de San Valentín que dura más que la noche",
       lead: "Las flores se marchitan, los bombones no llegan a las diez y la tarjeta acaba en un cajón. Un regalo que abre en su móvil, una carta con sello de lacre, un ramo que has elegido tallo a tallo, un cielo en el que cada estrella es una foto vuestra, sigue ahí el febrero que viene, y el otro.",
       ideas: {
-        title: "12 ideas de regalos digitales para San Valentín",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales para San Valentín`;
+        },
         items: [
           {
             template: "the-letter",
             heading: "Una carta, que es como empezó San Valentín",
-            body: "Se suele decir que la felicitación de San Valentín más antigua en inglés es una carta: en febrero de 1477, Margery Brews escribió a John Paston llamándole «mi muy amado Valentín», mientras sus familias regateaban la dote. La carta es la plantilla gratuita y su saludo se puede cambiar, así que empieza como ella y luego escribe lo que solo tú has notado este año.",
+            body: `Se suele decir que la felicitación de San Valentín más antigua en inglés es una carta: en febrero de 1477, Margery Brews escribió a John Paston llamándole «mi muy amado Valentín», mientras sus familias regateaban la dote. La carta es ${noteForEveryone() ? "la" : "una"} plantilla gratuita y su saludo se puede cambiar, así que empieza como ella y luego escribe lo que solo tú has notado este año.`,
           },
           {
             template: "photo-booth",
@@ -777,7 +790,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "A Christmas gift that can’t get lost in the post",
       lead: "For the people you won’t see this year and the ones you will. Nothing to ship, no deadline to miss: it opens on Christmas morning wherever they are, with your photos, a song for the day and the message you’d say if you were in the room.",
       ideas: {
-        title: "12 digital Christmas gift ideas",
+        get title() {
+          return `${this.items.length} digital Christmas gift ideas`;
+        },
         items: [
           {
             template: "snow-globe",
@@ -792,7 +807,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "A Christmas letter that isn’t a family newsletter",
-            body: "The free one, and the opposite of the round-up letter some families send: no promotions, no exam results, just them. Change the greeting from “Dear Sam,” to what you actually call them, press your initial into the wax, and leave the year’s highlights to the group chat. Write about one evening from this year, start to finish, and why it’s the one you’d keep.",
+            body: `${noteForEveryone() ? "The free one" : "A free one"}, and the opposite of the round-up letter some families send: no promotions, no exam results, just them. Change the greeting from “Dear Sam,” to what you actually call them, press your initial into the wax, and leave the year’s highlights to the group chat. Write about one evening from this year, start to finish, and why it’s the one you’d keep.`,
           },
           {
             template: "front-page",
@@ -892,7 +907,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de Navidad que no se pierde en el correo",
       lead: "Para los que no verás este año y para los que sí. Nada que enviar por correo, ninguna fecha límite: se abre la mañana de Navidad estén donde estén, con tus fotos, una canción para el día y el mensaje que dirías si estuvieras allí.",
       ideas: {
-        title: "12 ideas de regalos digitales de Navidad",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales de Navidad`;
+        },
         items: [
           {
             template: "snow-globe",
@@ -907,8 +924,8 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "Una carta, no una felicitación",
-            brief: "La gratuita: una felicitación se firma y acaba en una estantería, y una carta se guarda.",
-            body: "La gratuita. Una felicitación se firma y acaba en una estantería; una carta se guarda. Cambia el saludo por cómo le llamas de verdad, imprime tu inicial en el lacre y deja los resúmenes del año para el grupo de la familia: escribe sobre una sola tarde de este año, de principio a fin, y por qué es la que te quedarías.",
+            brief: `${noteForEveryone() ? "La gratuita" : "Una gratuita"}: una felicitación se firma y acaba en una estantería, y una carta se guarda.`,
+            body: `${noteForEveryone() ? "La gratuita" : "Una gratuita"}. Una felicitación se firma y acaba en una estantería; una carta se guarda. Cambia el saludo por cómo le llamas de verdad, imprime tu inicial en el lacre y deja los resúmenes del año para el grupo de la familia: escribe sobre una sola tarde de este año, de principio a fin, y por qué es la que te quedarías.`,
           },
           {
             template: "front-page",

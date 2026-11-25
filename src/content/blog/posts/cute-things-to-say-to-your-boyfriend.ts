@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "cute-things-to-say-to-your-boyfriend",
   published: "2026-10-25",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["text-thread", "jar-of-reasons", "the-letter"],
   content: {
@@ -210,12 +211,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Both are premium; [The Letter](/templates/the-letter) is free, if you'd rather put your favourite lines in one letter. You'll find more [digital gifts for your boyfriend](/gifts/for-boyfriend) alongside them, and every one opens on his phone from a link.",
+          text: "Both are premium; [The Letter](/templates/the-letter) is {free:the-letter}, if you'd rather put your favourite lines in one letter. You'll find more [digital gifts for your boyfriend](/gifts/for-boyfriend) alongside them, and every one opens on his phone from a link.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free.",
+          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk and your words appear in handwriting. {note:A few favourite lines fit the free note; for your photos as polaroids, add \"Make it special\", paid once ([prices](/pricing)).|Your photos drop in as polaroids, and none of it costs anything.}",
         },
       ],
       faq: [
@@ -441,12 +442,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Las dos son premium; [La carta](/templates/the-letter) es gratis, si prefieres poner tus frases favoritas en una sola carta. Tienes más [regalos digitales para tu novio](/gifts/for-boyfriend) junto a ellas, y todos se abren en su móvil desde un enlace.",
+          text: "Las dos son premium; [La carta](/templates/the-letter) es {free:the-letter}, si prefieres poner tus frases favoritas en una sola carta. Tienes más [regalos digitales para tu novio](/gifts/for-boyfriend) junto a ellas, y todos se abren en su móvil desde un enlace.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis.",
+          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela y tus palabras aparecen escritas a mano. {note:Unas cuantas frases favoritas caben en la nota gratis; para que tus fotos caigan como polaroids, añade «Hazlo especial», con un solo pago ([precios](/pricing)).|Tus fotos caen como polaroids, y nada de eso cuesta dinero.}",
         },
       ],
       faq: [

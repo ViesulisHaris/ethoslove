@@ -62,7 +62,8 @@ test.describe("The Letter's page in Portuguese", () => {
     // The button, and the picture beside it, both open the demo.
     for (const demo of await body.getByRole("link", { name: "Ver uma carta pronta", exact: true }).all()) await expect(demo).toHaveAttribute("href", "/demo/the-letter");
     expect(await body.getByRole("link", { name: "Ver uma carta pronta", exact: true }).count()).toBe(2);
-    await expect(body).toContainText("até 500 caracteres");
+    // What is free follows the server's free-note setting: the short note as live has it, the whole letter without it.
+    await expect(body).toContainText(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE === "1" ? "até 500 caracteres" : "a carta inteira");
     await expect(page).toHaveTitle(/Carta digital de amor: crie sua carta virtual com música/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/pt\/carta-digital$/);
     const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");

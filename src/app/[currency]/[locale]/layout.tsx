@@ -156,7 +156,8 @@ export async function generateMetadata({
       images: [{ url: ogImageUrl(locale), width: 1200, height: 630, alt: t("defaultTitle") }],
     },
     twitter: { card: "summary_large_image", site: SITE.twitterHandle, images: [ogImageUrl(locale)] },
-    robots: { index: true, follow: true },
+    // No default robots tag: indexable is what a crawler assumes, and a 404 carried this "index, follow" beside
+    // the "noindex" Next gives it (reports/seoaudit-audit.md, m4). A page that must stay out says noindex itself.
     // Absent until a token is set, which is correct: ownership proved by DNS needs no tag.
     verification: {
       ...(env.googleSiteVerification ? { google: env.googleSiteVerification } : {}),

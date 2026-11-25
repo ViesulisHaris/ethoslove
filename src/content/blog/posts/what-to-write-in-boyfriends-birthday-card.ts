@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "what-to-write-in-boyfriends-birthday-card",
   published: "2026-10-29",
-  updated: "2026-11-19",
+  updated: "2026-11-25",
   occasion: "birthday",
   templates: ["the-letter", "birthday-cinema"],
   content: {
@@ -190,12 +190,12 @@ export const post: BlogPost = {
         { type: "h2", text: "When the four lines turn into twenty" },
         {
           type: "p",
-          text: "Keep the card short and give the long version a place of its own; our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) helps with that part. A letter he opens on his phone has room for the memory you couldn't fit, and the photos that go with it. The Letter below is free and comes first on our list of [digital gifts for your boyfriend](/gifts/for-boyfriend); Birthday Cinema is [premium](/pricing), which lets you schedule it to open at midnight in his time zone. Our [birthday gifts page](/occasions/birthday) has more ideas for the day, and if he's far away this year, our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) sets out what to send and when.",
+          text: "Keep the card short and give the long version a place of its own; our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) helps with that part. A letter he opens on his phone has room for the memory you couldn't fit, and the photos that go with it. The Letter below is {note:free as a short note, with the photos and the long version paid once,|free, photos included,} and comes first on our list of [digital gifts for your boyfriend](/gifts/for-boyfriend); Birthday Cinema is [premium](/pricing), which lets you schedule it to open at midnight in his time zone. Our [birthday gifts page](/occasions/birthday) has more ideas for the day, and if he's far away this year, our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) sets out what to send and when.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A sealed envelope he opens with a tap, then your words in handwriting, with your photos dropping in below as polaroids. It's free, so use it for the long version: the four lines from the card, then the moment from this year told the way you'd tell it over dinner.",
+          note: "A sealed envelope he opens with a tap, then your words in handwriting, with your photos dropping in below as polaroids. Use it for the long version: the four lines from the card, then the moment from this year told the way you'd tell it over dinner. {note:The free short note holds 500 characters; the long version and the photos come with “Make it special”, paid once.|It's free.}",
         },
         {
           type: "template",
@@ -413,12 +413,12 @@ export const post: BlogPost = {
         { type: "h2", text: "Cuando las cuatro frases se convierten en veinte" },
         {
           type: "p",
-          text: "Deja la tarjeta corta y dale a la versión larga su propio sitio; nuestra guía de [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) te ayuda con esa parte. Una carta que abre en el móvil tiene espacio para el recuerdo que no cabía y para las fotos que lo acompañan. La carta de abajo es gratis y es la primera de nuestra lista de [regalos digitales para tu novio](/gifts/for-boyfriend); Cine de cumpleaños es [premium](/pricing), lo que te permite programarlo para que se abra a medianoche en su zona horaria. Nuestra página de [regalos de cumpleaños](/occasions/birthday) tiene más ideas para el día, y si este año está lejos, nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) explica qué mandar y cuándo.",
+          text: "Deja la tarjeta corta y dale a la versión larga su propio sitio; nuestra guía de [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) te ayuda con esa parte. Una carta que abre en el móvil tiene espacio para el recuerdo que no cabía y para las fotos que lo acompañan. La carta de abajo es {note:gratis como nota corta, con las fotos y la versión larga de pago único,|gratis, fotos incluidas,} y es la primera de nuestra lista de [regalos digitales para tu novio](/gifts/for-boyfriend); Cine de cumpleaños es [premium](/pricing), lo que te permite programarlo para que se abra a medianoche en su zona horaria. Nuestra página de [regalos de cumpleaños](/occasions/birthday) tiene más ideas para el día, y si este año está lejos, nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) explica qué mandar y cuándo.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque; dentro, tus palabras escritas a mano y, debajo, tus fotos cayendo como polaroids. Es gratis, así que úsala para la versión larga: las cuatro frases de la tarjeta y después el momento de este año contado como lo contarías en una cena.",
+          note: "Un sobre lacrado que abre con un toque; dentro, tus palabras escritas a mano y, debajo, tus fotos cayendo como polaroids. Úsala para la versión larga: las cuatro frases de la tarjeta y después el momento de este año contado como lo contarías en una cena. {note:La nota corta gratis admite 500 caracteres; la versión larga y las fotos vienen con «Hazlo especial», de pago único.|Es gratis.}",
         },
         {
           type: "template",

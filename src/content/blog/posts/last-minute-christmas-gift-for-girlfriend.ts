@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "last-minute-christmas-gift-for-girlfriend",
   published: "2026-11-09",
+  updated: "2026-11-25",
   occasion: "christmas",
   templates: ["snow-globe", "scratch-card", "the-letter"],
   content: {
@@ -141,7 +142,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. She taps a wax seal stamped with your initial, the letter unfolds in a handwriting font, and your photos follow as polaroids. Write it on Christmas Eve and send the link last thing at night; it'll be on her phone when she wakes.",
+          note: "She taps a wax seal stamped with your initial, the letter unfolds in a handwriting font, and your photos follow as polaroids. {note:The free version is a short note with a song; the photos need \"Make it special\", paid once ([prices](/pricing)).|It all goes out free, photos included.} Write it on Christmas Eve and send the link last thing at night; it'll be on her phone when she wakes.",
         },
       ],
       faq: [
@@ -298,7 +299,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Ella toca un sello de lacre con tu inicial, la carta se despliega con tus palabras escritas a mano y detrás llegan tus fotos como polaroids. Escríbela en Nochebuena y mándale el enlace antes de acostarte; por la mañana ya la tendrá en el móvil.",
+          note: "Ella toca un sello de lacre con tu inicial, la carta se despliega con tus palabras escritas a mano y detrás llegan tus fotos como polaroids. {note:La versión gratis es una nota corta con una canción; las fotos necesitan «Hazlo especial», de pago único ([precios](/pricing)).|Todo se envía gratis, fotos incluidas.} Escríbela en Nochebuena y mándale el enlace antes de acostarte; por la mañana ya la tendrá en el móvil.",
         },
       ],
       faq: [

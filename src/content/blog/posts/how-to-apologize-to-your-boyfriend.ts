@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "how-to-apologize-to-your-boyfriend",
   published: "2026-10-31",
-  updated: "2026-11-16",
+  updated: "2026-11-25",
   occasion: "apology",
   templates: ["paper-crane", "the-letter", "text-thread"],
   content: {
@@ -155,7 +155,7 @@ export const post: BlogPost = {
         { type: "h2", text: "When a gesture helps, and when it makes it worse" },
         {
           type: "p",
-          text: "A gesture comes after the words, never instead of them. Flowers with no apology look like you're trying to skip the conversation. A small gesture that shows you heard him (the food he loves, ordered in on the night you were meant to cook, or a written version of what you said) can land well once you've talked. If you'd rather he had the apology in writing, our [digital apology gifts](/occasions/apology) help you say it carefully. The Letter below is free; Paper Crane and Text Thread are [premium](/pricing).",
+          text: "A gesture comes after the words, never instead of them. Flowers with no apology look like you're trying to skip the conversation. A small gesture that shows you heard him (the food he loves, ordered in on the night you were meant to cook, or a written version of what you said) can land well once you've talked. If you'd rather he had the apology in writing, our [digital apology gifts](/occasions/apology) help you say it carefully. The Letter below is {note:free as a short note|free}; Paper Crane and Text Thread are [premium](/pricing).",
         },
         {
           type: "template",
@@ -165,7 +165,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. He breaks a wax seal with a tap and your words appear as if written by hand. Good for the big apology if you'd lose your nerve saying it out loud: write it, send it, then call.",
+          note: "He breaks a wax seal with a tap and your words appear as if written by hand. Good for the big apology if you'd lose your nerve saying it out loud: write it, send it, then call. {note:The free version holds up to 500 characters; a longer apology needs \"Make it special\", paid once ([prices](/pricing)).|The whole letter goes out free.}",
         },
         {
           type: "template",
@@ -348,7 +348,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cuándo ayuda un detalle y cuándo lo empeora" },
         {
           type: "p",
-          text: "El detalle va después de las palabras, nunca en su lugar. Unas flores sin disculpa parecen un intento de saltarte la conversación. Un detalle pequeño que demuestre que le escuchaste (pedirle a domicilio su comida favorita la noche en que te tocaba cocinar, o una versión escrita de lo que le dijiste) puede funcionar bien una vez que hayáis hablado. Si prefieres que tenga la disculpa por escrito, nuestros [regalos digitales para pedir perdón](/occasions/apology) te ayudan a decirlo con cuidado. La plantilla La carta, aquí abajo, es gratis; Grulla de papel e Hilo de mensajes son [premium](/pricing).",
+          text: "El detalle va después de las palabras, nunca en su lugar. Unas flores sin disculpa parecen un intento de saltarte la conversación. Un detalle pequeño que demuestre que le escuchaste (pedirle a domicilio su comida favorita la noche en que te tocaba cocinar, o una versión escrita de lo que le dijiste) puede funcionar bien una vez que hayáis hablado. Si prefieres que tenga la disculpa por escrito, nuestros [regalos digitales para pedir perdón](/occasions/apology) te ayudan a decirlo con cuidado. La plantilla La carta, aquí abajo, es {note:gratis como nota corta|gratis}; Grulla de papel e Hilo de mensajes son [premium](/pricing).",
         },
         {
           type: "template",
@@ -358,7 +358,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Él rompe un sello de lacre con un toque y tus palabras aparecen como escritas a mano. Buena para la disculpa grande si crees que te fallarían los nervios al decirla en voz alta: escríbela, mándala y luego llama.",
+          note: "Él rompe un sello de lacre con un toque y tus palabras aparecen como escritas a mano. Buena para la disculpa grande si crees que te fallarían los nervios al decirla en voz alta: escríbela, mándala y luego llama. {note:La versión gratis admite hasta 500 caracteres; una disculpa más larga necesita «Hazlo especial», de pago único ([precios](/pricing)).|La carta entera se envía gratis.}",
         },
         {
           type: "template",

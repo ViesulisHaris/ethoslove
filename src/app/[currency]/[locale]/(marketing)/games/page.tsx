@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { GAMES, type GameKey } from "@/lib/games/catalogue";
+import { countWord } from "@/lib/count-words";
 import { PACK_IDS, PACKS } from "@/lib/games/packs";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 import { Sticker } from "@/templates/_shared/covers/stickers";
@@ -13,7 +14,13 @@ import { GameHand } from "@/components/games/game-hand";
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.meta" });
-  return pageMetadata({ locale, path: "/games", title: t("title"), description: t("description") });
+  return pageMetadata({
+    locale,
+    path: "/games",
+    // The count as the title writes it: "Eight Free Games" in the English title case, "ocho juegos" in the Spanish.
+    title: t("title", { games: countWord(GAMES.length, locale, { capital: locale !== "es" }) }),
+    description: t("description"),
+  });
 }
 
 /**
@@ -43,7 +50,7 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
           <h1 className="mt-5 max-w-[7.2em] display-hero text-balance text-cream">
             {t("h1a")} <em className="text-rose-tint">{t("h1b")}</em>
           </h1>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream/70 sm:text-xl">{t("hub.sub")}</p>
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream/70 sm:text-xl">{t("hub.sub", { Games: countWord(GAMES.length, lang, { capital: true }) })}</p>
           <div className="mt-7 flex flex-wrap gap-2" data-tour="phones">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[13.5px] font-semibold text-cream ring-1 ring-white/15">
               <Users aria-hidden="true" className="size-4 text-rose-tint" />

@@ -1,9 +1,8 @@
 import { BRAND } from "@/config/brand";
-import { briefFaq, briefHowGifts, briefIntro, briefPricing } from "@/lib/llms/brief";
+import { briefFaq, briefHowGifts, briefIntro, briefPricing, briefTemplatePrice } from "@/lib/llms/brief";
 import { subscriptionsEnabled } from "@/lib/pricing/products";
 import { listManifests } from "@/templates/manifests";
 import en from "../../../messages/en.json";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 
 /**
  * The help chat's system prompt: its rules, then the guide it answers from. The guide is the same
@@ -102,7 +101,7 @@ function templateLines(): string[] {
   return [
     "## Templates",
     "",
-    ...listManifests().map((m) => `- ${m.name.en}: ${m.tagline.en} ${sendsFree(m) ? (noteForEveryone() ? "Free as a short note (up to 500 characters, no photos); photos and the full letter are paid once." : "Free.") : "Premium."} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`),
+    ...listManifests().map((m) => `- ${m.name.en}: ${m.tagline.en} ${briefTemplatePrice(m)} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`),
   ];
 }
 

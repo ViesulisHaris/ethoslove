@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { countWord } from "@/lib/count-words";
 import { GAME_PAGES, TODAY_FAQ } from "@/content/game-pages";
 import { getPost, postLocales } from "@/content/blog";
 import { GAMES } from "@/lib/games/catalogue";
@@ -153,12 +154,15 @@ describe("what every game's page says", () => {
       expect(m.games.thisthat.seoDescription.length).toBeLessThanOrEqual(160);
       expect(m.games.meta.description.length).toBeLessThanOrEqual(160);
     }
-    // The hub says how many games there are, in words, and nothing says seven any more.
-    const word = { en: ["seven", "eight", "nine"][GAMES.length - 7], es: ["siete", "ocho", "nueve"][GAMES.length - 7] };
-    expect(en.games.meta.title.toLowerCase()).toContain(word.en);
-    expect(en.games.hub.sub.toLowerCase()).toContain(word.en);
-    expect(es.games.meta.title.toLowerCase()).toContain(word.es);
-    expect(es.games.hub.sub.toLowerCase()).toContain(word.es);
+    // The hub says how many games there are, in words read from the catalogue (lib/count-words.ts), never typed.
+    for (const [lang, m] of [
+      ["en", en],
+      ["es", es],
+    ] as const) {
+      expect(m.games.meta.title).toContain("{games}");
+      expect(m.games.hub.sub).toContain("{Games}");
+      expect(m.games.meta.title.replace("{games}", countWord(GAMES.length, lang)).toLowerCase()).toContain(countWord(GAMES.length, lang));
+    }
     for (const m of [en, es]) expect(JSON.stringify({ games: m.games, platform: m.platform })).not.toMatch(/\b(seven|siete)\b/i);
   });
 
