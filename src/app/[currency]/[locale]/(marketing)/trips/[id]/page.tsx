@@ -24,6 +24,7 @@ import { ShareTripButton } from "@/components/trips/share-trip-button";
 import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link";
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<Trip["budget"], string>;
 /** How the plan marks each day's date-night moment, so it can be drawn as one. */
@@ -318,6 +319,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
         </div>
       </section>
 
+      <LetterSlot locale={l} where="trip" />
       <section id="surprise" className="scroll-mt-24 bg-paper pb-20 lg:pb-28">
         <div className="container-x">
           <div className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">

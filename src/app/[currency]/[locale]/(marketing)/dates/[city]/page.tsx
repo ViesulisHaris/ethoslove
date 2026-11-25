@@ -29,6 +29,7 @@ import { TonightIsland } from "@/components/dates/tonight/tonight-island";
 import { heroLead } from "@/components/templates/page/lead";
 import { DATE_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
 import { kindsOfCity } from "@/lib/cities/kind-pairs";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 /** How many of a city’s places are named on its page; the rest are in a closed list. */
 const SHOWN_PLACES = 6;
@@ -291,6 +292,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
             ) : null}
             <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className={kinds.length > 0 ? "mt-5" : undefined} titleClassName="text-page-label text-page-body" linkClassName={ROW_LINK} />
           </div>
+          <LetterSlot locale={l} where="date-city" variant="band" />
         </DateFoot>
       </DatePage>
     </>

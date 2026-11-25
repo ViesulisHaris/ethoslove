@@ -18,6 +18,7 @@ import { FlightFinder } from "@/components/trips/flight-finder";
 import { TripCard } from "@/components/trips/trip-card";
 import { TripMatcher, type MatcherTrip } from "@/components/trips/trip-matcher";
 import { TripsGrid } from "@/components/trips/trips-grid";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<Trip["budget"], string>;
 
@@ -132,6 +133,8 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
           <TripsGrid className="mt-8" cards={cards} filters={filters} label={t("filter.label")} />
         </div>
       </section>
+
+      <LetterSlot locale={locale} where="trips" />
 
       <section className="bg-paper pb-20 lg:pb-28">
         <div className="container-x">
