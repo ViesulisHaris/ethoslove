@@ -120,6 +120,22 @@ describe("the words on every page of the trips room", () => {
     expect(M.es.trips.sub).toContain("un buscador de vuelos");
   });
 
+  it("W8 a trip's hero line is about the trip, never about this site", () => {
+    for (const trip of TRIPS) {
+      for (const l of LANGS) {
+        const { lead } = tripLead(trip.blurb[l]);
+        expect(lead, `${trip.id} ${l}`).not.toMatch(/this site|esta web|ethos/i);
+        expect(count(lead), `${trip.id} ${l}`).toBeGreaterThanOrEqual(7);
+      }
+    }
+    const baltic = TRIPS.find((t) => t.id === "baltic-coast")!;
+    for (const l of LANGS) {
+      const { lead } = tripLead(baltic.blurb[l]);
+      expect(count(lead), l).toBeLessThanOrEqual(24);
+      for (const place of ["Riga", "Gauja", "Tallin"]) expect(lead, `${l} ${place}`).toContain(place);
+    }
+  });
+
   it("W7 a card's name is a name", () => {
     for (const trip of TRIPS) for (const l of LANGS) expect(count(trip.title[l]), `${trip.id} ${l}`).toBeLessThanOrEqual(9);
   });

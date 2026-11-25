@@ -752,8 +752,8 @@ export const TRIPS: Trip[] = [
     kind: "road",
     title: { en: "The Baltic coast, Riga to Tallinn", es: "La costa báltica, de Riga a Tallin" },
     blurb: {
-      en: "Where this site is made. Art nouveau Riga, castles in the Gauja valley, a beach town that smells of pine, and Tallinn's old town at the top. White nights in June, and quiet roads the whole way.",
-      es: "Donde se hace esta web. La Riga modernista, castillos en el valle del Gauja, un pueblo de playa que huele a pino y la ciudad vieja de Tallin al final. Noches blancas en junio y carreteras tranquilas todo el camino.",
+      en: "Art nouveau Riga, castles in the Gauja valley, a beach town that smells of pine, and Tallinn's old town at the top. White nights in June, and quiet roads the whole way. Riga is also where this site is made.",
+      es: "La Riga modernista, castillos en el valle del Gauja, un pueblo de playa con olor a pino y el casco antiguo de Tallin. Noches blancas en junio y carreteras tranquilas todo el camino. Riga es, además, donde se hace esta web.",
     },
     days: 7,
     bestMonths: [6, 7, 8],
