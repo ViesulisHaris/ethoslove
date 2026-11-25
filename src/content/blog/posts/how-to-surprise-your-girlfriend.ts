@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "how-to-surprise-your-girlfriend",
   published: "2026-11-01",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["bouquet", "jar-of-reasons", "the-letter"],
   content: {
@@ -156,7 +157,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. A tap on the wax seal opens it, the letter unfolds and your words write themselves out across the page, and your photos are waiting below as polaroids. Good for the surprise that is mostly just saying it. Stuck on the words? Start with [how to write a love letter](/blog/how-to-write-a-love-letter).",
+          note: "A tap on the wax seal opens it, the letter unfolds and your words write themselves out across the page, and your photos are waiting below as polaroids. {note:Sent free, it is a short note with a song; for the photos and the full letter, add \"Make it special\", paid once ([prices](/pricing)).|All of that goes out free.} Good for the surprise that is mostly just saying it. Stuck on the words? Start with [how to write a love letter](/blog/how-to-write-a-love-letter).",
         },
       ],
       faq: [
@@ -328,7 +329,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Con un toque en el lacre se abre, la carta se despliega y tus palabras se van escribiendo en la página, y debajo te esperan tus fotos como polaroids. Ideal para la sorpresa que consiste sobre todo en decirlo. ¿Te atascas con las palabras? Empieza por [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter).",
+          note: "Con un toque en el lacre se abre, la carta se despliega y tus palabras se van escribiendo en la página, y debajo te esperan tus fotos como polaroids. {note:Gratis es una nota corta con una canción; para las fotos y la carta entera, añade «Hazlo especial», de pago único ([precios](/pricing)).|Todo eso se envía gratis.} Ideal para la sorpresa que consiste sobre todo en decirlo. ¿Te atascas con las palabras? Empieza por [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter).",
         },
       ],
       faq: [

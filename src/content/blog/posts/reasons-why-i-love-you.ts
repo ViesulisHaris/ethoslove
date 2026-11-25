@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "reasons-why-i-love-you",
   published: "2026-10-24",
-  updated: "2026-11-15",
+  updated: "2026-11-25",
   occasion: "valentines",
   templates: ["jar-of-reasons", "the-letter"],
   content: {
@@ -286,12 +286,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Jar of Reasons is a [premium template](/pricing). If you'd rather write a letter, [The Letter](/templates/the-letter) is free: put your ten best reasons in it and add a few photos. Both are [digital gifts](/gifts) they open on their phone from a link, with nothing to install.",
+          text: "Jar of Reasons is a [premium template](/pricing). If you'd rather write a letter, put your ten best reasons in [The Letter](/templates/the-letter) and add a few photos. {note:It's free as a short note of up to 500 characters; the photos and the full letter come with “Make it special”, paid once.|It's free, photos included.} Both are [digital gifts](/gifts) they open on their phone from a link, with nothing to install.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free.",
+          note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. {note:Free as a note of up to 500 characters; photos are paid once.|Free, with your photos.}",
         },
         { type: "h2", text: "What to say when they ask \"Why do you love me?\"" },
         {
@@ -626,12 +626,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Frasco de razones es una [plantilla premium](/pricing). Si prefieres escribir una carta, [La carta](/templates/the-letter) es gratis: pon en ella tus diez mejores razones y añade unas fotos. Las dos son [regalos digitales](/gifts) que se abren en el móvil desde un enlace, sin instalar nada.",
+          text: "Frasco de razones es una [plantilla premium](/pricing). Si prefieres escribir una carta, pon tus diez mejores razones en [La carta](/templates/the-letter) y añade unas fotos. {note:Es gratis como nota corta de hasta 500 caracteres; las fotos y la carta entera vienen con «Hazlo especial», de pago único.|Es gratis, con fotos incluidas.} Las dos son [regalos digitales](/gifts) que se abren en el móvil desde un enlace, sin instalar nada.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis.",
+          note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. {note:Gratis como nota de hasta 500 caracteres; las fotos se pagan una vez.|Gratis, con tus fotos.}",
         },
         { type: "h2", text: "Qué decir cuando te pregunta «¿Por qué me quieres?»" },
         {

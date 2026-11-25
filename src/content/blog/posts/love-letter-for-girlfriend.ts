@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "love-letter-for-girlfriend",
   published: "2026-11-14",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "keepsake", "bouquet"],
   content: {
@@ -195,7 +196,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "She breaks a wax seal stamped with your initial and the paper opens out beside a lit candle. Your words appear in handwriting as she watches, and your photos scatter as polaroids. A short note without photos is free; the full letter with photos is paid once.",
+          note: "She breaks a wax seal stamped with your initial and the paper opens out beside a lit candle. Your words appear in handwriting as she watches, and your photos scatter as polaroids. {note:A short note without photos is free; the full letter with photos is paid once.|The full letter goes out free, photos included.}",
         },
         {
           type: "template",
@@ -424,7 +425,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Rompe un sello de lacre con tu inicial y el papel se abre junto a una vela encendida. Tus palabras aparecen escritas a mano mientras mira, y tus fotos se reparten como polaroids. Una nota corta sin fotos es gratis; la carta entera con fotos se paga una sola vez.",
+          note: "Rompe un sello de lacre con tu inicial y el papel se abre junto a una vela encendida. Tus palabras aparecen escritas a mano mientras mira, y tus fotos se reparten como polaroids. {note:Una nota corta sin fotos se envía gratis; la carta entera con fotos se paga una sola vez.|La carta entera se envía gratis, fotos incluidas.}",
         },
         {
           type: "template",

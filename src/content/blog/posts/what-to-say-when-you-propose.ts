@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "what-to-say-when-you-propose",
   published: "2026-11-15",
+  updated: "2026-11-25",
   occasion: "wedding",
   templates: ["scratch-card", "the-letter", "the-toast"],
   content: {
@@ -134,7 +135,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "For the long version, given after the yes: once they break the wax seal with your initial, your words write themselves out by hand beside a lit candle, and your photos follow as polaroids. It's free.",
+          note: "For the long version, given after the yes: once they break the wax seal with your initial, your words write themselves out by hand beside a lit candle, and your photos follow as polaroids. {note:Free as a short note; the long version and the photos come with “Make it special”, paid once.|It's free.}",
         },
         { type: "h2", text: "What not to say when you propose" },
         {
@@ -326,7 +327,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Para la versión larga, después del sí: en cuanto rompe el sello de lacre con tu inicial, tus palabras se van escribiendo a mano junto a una vela encendida, y detrás llegan tus fotos como polaroids. Es gratis.",
+          note: "Para la versión larga, después del sí: en cuanto rompe el sello de lacre con tu inicial, tus palabras se van escribiendo a mano junto a una vela encendida, y detrás llegan tus fotos como polaroids. {note:Gratis como nota corta; la versión larga y las fotos vienen con «Hazlo especial», de pago único.|Es gratis.}",
         },
         { type: "h2", text: "Qué no decir al pedir matrimonio" },
         {

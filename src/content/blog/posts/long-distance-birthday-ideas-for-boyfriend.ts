@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-birthday-ideas-for-boyfriend",
   published: "2026-10-17",
+  updated: "2026-11-25",
   occasion: "long-distance",
   templates: ["midnight-countdown", "birthday-cinema", "halfway"],
   content: {
@@ -47,7 +48,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you'd rather not use a [premium template](/pricing), [The Letter](/templates/the-letter) is free and opens like a sealed envelope. Free gifts can't be scheduled, though, so send that link yourself at his midnight, or schedule it as a message.",
+          text: "If you'd rather not use a [premium template](/pricing), [The Letter](/templates/the-letter) is {note:free as a short note|free} and opens like a sealed envelope. Free gifts can't be scheduled, though, so send that link yourself at his midnight, or schedule it as a message.",
         },
         { type: "h2", text: "During the day: small gifts to open" },
         {
@@ -197,7 +198,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si prefieres no usar una [plantilla premium](/pricing), [La carta](/templates/the-letter) es gratis y se abre como un sobre lacrado. Los regalos gratis no se pueden programar, así que ese enlace mándaselo tú a su medianoche, o prográmalo como mensaje.",
+          text: "Si prefieres no usar una [plantilla premium](/pricing), [La carta](/templates/the-letter) es {note:gratis como nota corta|gratis} y se abre como un sobre lacrado. Los regalos gratis no se pueden programar, así que ese enlace mándaselo tú a su medianoche, o prográmalo como mensaje.",
         },
         { type: "h2", text: "Durante el día: pequeños regalos que abrir" },
         {

@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "monthiversary-ideas",
   published: "2026-10-31",
-  updated: "2026-11-13",
+  updated: "2026-11-25",
   occasion: "anniversary",
   templates: ["fortune-cookie", "sticker-bomb", "the-letter"],
   content: {
@@ -113,7 +113,7 @@ export const post: BlogPost = {
         { type: "h2", text: "If you can't be together on the date" },
         {
           type: "p",
-          text: "Most of the table still works over a video call: swap songs and press play at the same moment for month three, or each order the same dessert for month four. Before the call, send something that takes a minute to open, like one of the three gifts below: The Letter is free, and the other two are [premium](/pricing). For the half-year and the year, when it deserves more than a minute, the [digital anniversary gifts](/occasions/anniversary) use your photos and your song; for any other day, browse all our [digital gifts](/gifts).",
+          text: "Most of the table still works over a video call: swap songs and press play at the same moment for month three, or each order the same dessert for month four. Before the call, send something that takes a minute to open, like one of the three gifts below: The Letter is {note:free as a short note|free}, and the other two are [premium](/pricing). For the half-year and the year, when it deserves more than a minute, the [digital anniversary gifts](/occasions/anniversary) use your photos and your song; for any other day, browse all our [digital gifts](/gifts).",
         },
         {
           type: "template",
@@ -128,7 +128,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "They break the wax seal with a tap and your letter writes itself out by hand. Free, and a good home for month ten's letter if you'd rather it lived on their phone than in a drawer: write it in month ten and send the link on the anniversary.",
+          note: "They break the wax seal with a tap and your letter writes itself out by hand. A good home for month ten's letter if you'd rather it lived on their phone than in a drawer: write it in month ten and send the link on the anniversary. {note:The free version is a short note of up to 500 characters; for the whole letter, add “Make it special”, paid once ([prices](/pricing)).|It's free, the whole letter included.}",
         },
       ],
       faq: [
@@ -264,7 +264,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Si no podéis estar juntos ese día" },
         {
           type: "p",
-          text: "Casi toda la tabla funciona por videollamada: para el tercer mes, intercambiad canciones y dadle al play a la vez; para el cuarto, pedid cada uno el mismo postre. Y antes de la llamada, mandad algo que se abra en un minuto, como uno de los tres regalos de abajo: La carta es gratis, y los otros dos son [premium](/pricing). Para el medio año y el año, cuando merece algo más que un minuto, los [regalos digitales de aniversario](/occasions/anniversary) llevan vuestras fotos y vuestra canción; para cualquier otro día, mira todos nuestros [regalos digitales](/gifts).",
+          text: "Casi toda la tabla funciona por videollamada: para el tercer mes, intercambiad canciones y dadle al play a la vez; para el cuarto, pedid cada uno el mismo postre. Y antes de la llamada, mandad algo que se abra en un minuto, como uno de los tres regalos de abajo: La carta es {note:gratis como nota corta|gratis}, y los otros dos son [premium](/pricing). Para el medio año y el año, cuando merece algo más que un minuto, los [regalos digitales de aniversario](/occasions/anniversary) llevan vuestras fotos y vuestra canción; para cualquier otro día, mira todos nuestros [regalos digitales](/gifts).",
         },
         {
           type: "template",
@@ -279,7 +279,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Le basta un toque para romper el lacre, y tu carta se escribe sola, a mano. Gratis, y un buen sitio para la carta del décimo mes si prefieres que viva en su móvil y no en un cajón: escríbela en el décimo mes y mándale el enlace en el aniversario.",
+          note: "Le basta un toque para romper el lacre, y tu carta se escribe sola, a mano. Un buen sitio para la carta del décimo mes si prefieres que viva en su móvil y no en un cajón: escríbela en el décimo mes y mándale el enlace en el aniversario. {note:La versión gratis es una nota corta de hasta 500 caracteres; para la carta entera, añade «Hazlo especial», de pago único ([precios](/pricing)).|Es gratis, con la carta entera.}",
         },
       ],
       faq: [

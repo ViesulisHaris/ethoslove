@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "the-5-love-languages",
   published: "2026-11-20",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "picnic", "bouquet"],
   content: {
@@ -134,12 +135,12 @@ export const post: BlogPost = {
         { type: "h2", text: "A gift in each love language" },
         {
           type: "p",
-          text: "Once you know theirs, you can make them something in it. A [digital gift](/gifts) from Ethos opens on their phone with your photos and your words, so it suits a birthday, an anniversary or [no reason at all](/occasions/just-because). Each language has a template that fits it: three are below, and for the other two, [Scratch Card](/templates/scratch-card) can hide a list of jobs you'll do for them (acts of service) and [XOXO](/templates/xoxo) is an envelope sealed with a lipstick kiss (physical touch). The Letter is free as a short note (up to 500 characters, no photos); the full letter and the others are a one-time unlock ([see pricing](/pricing)), and every template has a free demo.",
+          text: "Once you know theirs, you can make them something in it. A [digital gift](/gifts) from Ethos opens on their phone with your photos and your words, so it suits a birthday, an anniversary or [no reason at all](/occasions/just-because). Each language has a template that fits it: three are below, and for the other two, [Scratch Card](/templates/scratch-card) can hide a list of jobs you'll do for them (acts of service) and [XOXO](/templates/xoxo) is an envelope sealed with a lipstick kiss (physical touch). The Letter is {note:free as a short note (up to 500 characters, no photos); the full letter and the others are a one-time unlock|free, photos included; the others are a one-time unlock} ([see pricing](/pricing)). Every template has a free demo.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "For words of affirmation. They tap to break a wax seal, the letter unfolds on a candlelit desk, your words appear in handwriting and your photos drop in as polaroids. A short version, up to 500 characters and without the photos, is free; the full letter with photos is paid once.",
+          note: "For words of affirmation. They tap to break a wax seal, the letter unfolds on a candlelit desk, your words appear in handwriting and your photos drop in as polaroids. {note:A short version, up to 500 characters and without the photos, is free; the full letter with photos is paid once.|All of it is free, photos included.}",
         },
         {
           type: "template",
@@ -303,12 +304,12 @@ export const post: BlogPost = {
         { type: "h2", text: "Un regalo en cada lenguaje del amor" },
         {
           type: "p",
-          text: "Cuando sepas el suyo, puedes hacerle algo en ese lenguaje. Un [regalo digital](/gifts) de Ethos se abre en su móvil con tus fotos y tus palabras, así que vale para un cumpleaños, un aniversario o [porque sí](/occasions/just-because). Cada lenguaje tiene una plantilla que le va: tienes tres aquí abajo, y para los otros dos, [Rasca y gana](/templates/scratch-card) puede esconder una lista de tareas que harás por esa persona (actos de servicio) y [XOXO](/templates/xoxo) es un sobre sellado con un beso de pintalabios (contacto físico). La carta es gratis como nota corta (hasta 500 caracteres, sin fotos); la carta entera y las demás se desbloquean con un pago único ([mira los precios](/pricing)), y todas las plantillas tienen una demo gratis.",
+          text: "Cuando sepas el suyo, puedes hacerle algo en ese lenguaje. Un [regalo digital](/gifts) de Ethos se abre en su móvil con tus fotos y tus palabras, así que vale para un cumpleaños, un aniversario o [porque sí](/occasions/just-because). Cada lenguaje tiene una plantilla que le va: tienes tres aquí abajo, y para los otros dos, [Rasca y gana](/templates/scratch-card) puede esconder una lista de tareas que harás por esa persona (actos de servicio) y [XOXO](/templates/xoxo) es un sobre sellado con un beso de pintalabios (contacto físico). La carta es {note:gratis como nota corta (hasta 500 caracteres, sin fotos); la carta entera y las demás se desbloquean con un pago único|gratis, con fotos incluidas; las demás se desbloquean con un pago único} ([mira los precios](/pricing)). Todas las plantillas tienen una demo gratis.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Para las palabras de afirmación. Con un toque rompe el sello de lacre, la carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Una versión corta, de hasta 500 caracteres y sin las fotos, es gratis; la carta entera con fotos se paga una sola vez.",
+          note: "Para las palabras de afirmación. Con un toque rompe el sello de lacre, la carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. {note:Una versión corta, de hasta 500 caracteres y sin las fotos, es gratis; la carta entera con fotos se paga una sola vez.|Todo es gratis, fotos incluidas.}",
         },
         {
           type: "template",

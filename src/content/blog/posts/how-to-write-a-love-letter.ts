@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "how-to-write-a-love-letter",
   published: "2026-10-26",
-  updated: "2026-11-16",
+  updated: "2026-11-25",
   occasion: "valentines",
   templates: ["the-letter", "xoxo", "coquette"],
   content: {
@@ -195,7 +195,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free, and the closest thing to a letter on paper.",
+          note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. The closest thing to a letter on paper. {note:You can send a short version free, up to 500 characters with a song; the photos and the full letter are part of \"Make it special\", paid once ([prices](/pricing)).|The whole letter and your photos go out free.}",
         },
         {
           type: "template",
@@ -427,7 +427,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis, y lo más parecido a una carta en papel.",
+          note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Lo más parecido a una carta en papel. {note:Puedes enviar gratis una versión corta, de hasta 500 caracteres y con una canción; las fotos y la carta entera van con «Hazlo especial», de pago único ([precios](/pricing)).|La carta entera y tus fotos se envían gratis.}",
         },
         {
           type: "template",

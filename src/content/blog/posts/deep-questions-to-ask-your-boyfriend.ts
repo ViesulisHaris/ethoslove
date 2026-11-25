@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "deep-questions-to-ask-your-boyfriend",
   published: "2026-11-17",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["fortune-cookie", "the-letter"],
   content: {
@@ -213,7 +214,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Going first works in writing too. Answer three of these questions about yourself in a letter, then end with the one you want him to answer. The Letter opens from a wax-sealed envelope, your words appear in handwriting and your photos drop in as polaroids. It's free.",
+          note: "Going first works in writing too. Answer three of these questions about yourself in a letter, then end with the one you want him to answer. The Letter opens from a wax-sealed envelope and your words appear in handwriting. {note:Sent free it holds 500 characters, enough for short answers; photos come with \"Make it special\", paid once ([prices](/pricing)).|Your photos drop in as polaroids, and it's free.}",
         },
         {
           type: "p",
@@ -450,7 +451,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Contestar tú primero también funciona por escrito. Responde a tres de estas preguntas sobre ti en una carta, y termina con la que quieres que conteste él. La carta sale de un sobre lacrado, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Es gratis.",
+          note: "Contestar tú primero también funciona por escrito. Responde a tres de estas preguntas sobre ti en una carta, y termina con la que quieres que conteste él. La carta sale de un sobre lacrado y tus palabras aparecen escritas a mano. {note:Gratis caben 500 caracteres, lo justo para respuestas cortas; las fotos vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).|Tus fotos caen como polaroids, y es gratis.}",
         },
         {
           type: "p",

@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-relationship-gifts",
   published: "2026-11-16",
+  updated: "2026-11-25",
   occasion: "long-distance",
   templates: ["halfway", "passport", "midnight-countdown"],
   content: {
@@ -133,7 +134,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A digital gift for the days in between" },
         {
           type: "p",
-          text: "Not every gift needs a box. A [digital gift](/gifts) arrives the moment you send it, with your photos, a song and your words, and it doesn't wait in a customs queue. With a premium template you can schedule it to open at a time you choose in their time zone, such as 8:00 on the morning they fly. [The Letter](/templates/the-letter) is free and can carry a countdown to the day you land. The three below are made for the distance, and there are more in our [long-distance gifts](/occasions/long-distance), [gifts for your boyfriend](/gifts/for-boyfriend) and [gifts for your girlfriend](/gifts/for-girlfriend). Prices are on the [pricing page](/pricing).",
+          text: "Not every gift needs a box. A [digital gift](/gifts) arrives the moment you send it, with your photos, a song and your words, and it doesn't wait in a customs queue. With a premium template you can schedule it to open at a time you choose in their time zone, such as 8:00 on the morning they fly. [The Letter](/templates/the-letter) {note:goes out free as a short note, and \"Make it special\" adds a countdown to the day you land|is free and can carry a countdown to the day you land}. The three below are made for the distance, and there are more in our [long-distance gifts](/occasions/long-distance), [gifts for your boyfriend](/gifts/for-boyfriend) and [gifts for your girlfriend](/gifts/for-girlfriend). Prices are on the [pricing page](/pricing).",
         },
         {
           type: "template",
@@ -301,7 +302,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Un regalo digital o virtual para los días de entre medias" },
         {
           type: "p",
-          text: "No todos los regalos necesitan una caja. Un [regalo digital](/gifts) llega en cuanto lo envías, con tus fotos, una canción y tus palabras, y no se queda esperando en una aduana. Con una plantilla premium puedes programarlo para que se abra a la hora que elijas en su zona horaria, como las 8:00 de la mañana en que coge el avión. [La carta](/templates/the-letter) es gratis y puede llevar una cuenta atrás hasta el día en que aterrizas. Las tres de abajo están hechas para la distancia, y hay más en nuestros [regalos para relaciones a distancia](/occasions/long-distance), [regalos para tu novio](/gifts/for-boyfriend) y [regalos para tu novia](/gifts/for-girlfriend). Los precios están en la [página de precios](/pricing).",
+          text: "No todos los regalos necesitan una caja. Un [regalo digital](/gifts) llega en cuanto lo envías, con tus fotos, una canción y tus palabras, y no se queda esperando en una aduana. Con una plantilla premium puedes programarlo para que se abra a la hora que elijas en su zona horaria, como las 8:00 de la mañana en que coge el avión. [La carta](/templates/the-letter) {note:se envía gratis como nota corta, y «Hazlo especial» le añade una cuenta atrás hasta el día en que aterrizas|es gratis y puede llevar una cuenta atrás hasta el día en que aterrizas}. Las tres de abajo están hechas para la distancia, y hay más en nuestros [regalos para relaciones a distancia](/occasions/long-distance), [regalos para tu novio](/gifts/for-boyfriend) y [regalos para tu novia](/gifts/for-girlfriend). Los precios están en la [página de precios](/pricing).",
         },
         {
           type: "template",

@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "words-of-affirmation",
   published: "2026-11-15",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "jar-of-reasons"],
   content: {
@@ -201,7 +202,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "The one the quiz gives this language. A wax-sealed envelope they open with a tap; the letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free.",
+          note: "The one the quiz gives this language. A wax-sealed envelope they open with a tap; the letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. {note:Free as a short note of up to 500 characters, without the photos; the full letter is paid once.|Free, photos included.}",
         },
         {
           type: "template",
@@ -210,7 +211,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "The Letter is free; Jar of Reasons is a one-time unlock ([see pricing](/pricing)). Both are [digital gifts](/gifts) that open on their phone from a link, so you can send one tonight, without an occasion.",
+          text: "The Letter is {note:free as a short note|free}; Jar of Reasons is a one-time unlock ([see pricing](/pricing)). Both are [digital gifts](/gifts) that open on their phone from a link, so you can send one tonight, without an occasion.",
         },
       ],
       faq: [
@@ -435,7 +436,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "La que el test da a este lenguaje. Un sobre lacrado que se abre con un toque; la carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis.",
+          note: "La que el test da a este lenguaje. Un sobre lacrado que se abre con un toque; la carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. {note:Gratis como nota corta de hasta 500 caracteres, sin las fotos; la carta entera se paga una vez.|Gratis, con fotos incluidas.}",
         },
         {
           type: "template",
@@ -444,7 +445,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "La carta es gratis; Frasco de razones es un pago único ([mira los precios](/pricing)). Los dos son [regalos digitales](/gifts) que se abren en su móvil desde un enlace, así que puedes mandar uno esta misma noche, sin que haya ninguna ocasión.",
+          text: "La carta es {note:gratis como nota corta|gratis}; Frasco de razones es un pago único ([mira los precios](/pricing)). Los dos son [regalos digitales](/gifts) que se abren en su móvil desde un enlace, así que puedes mandar uno esta misma noche, sin que haya ninguna ocasión.",
         },
       ],
       faq: [

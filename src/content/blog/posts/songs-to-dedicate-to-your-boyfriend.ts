@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "songs-to-dedicate-to-your-boyfriend",
   published: "2026-11-08",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["vinyl", "the-letter"],
   content: {
@@ -117,7 +118,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "The free option: a letter he opens by breaking a wax seal. Add the real song and 30 seconds of it wait at the end of the letter for him to tap, with a link to the full track on Apple Music. Or let a track from the music library play underneath while he reads.",
+          note: "{note:Free as a short note:|The free option:} a letter he opens by breaking a wax seal. Add the real song and 30 seconds of it wait at the end of the letter for him to tap, with a link to the full track on Apple Music. Or let a track from the music library play underneath while he reads.",
         },
       ],
       faq: [
@@ -250,7 +251,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "La opción gratuita: una carta que abre rompiendo un sello de lacre. Añade la canción de verdad y treinta segundos le esperan al final de la carta, a un toque, con un enlace a la canción completa en Apple Music. O deja que suene debajo una pista de la biblioteca de música mientras lee.",
+          note: "{note:Gratis como nota corta:|La opción gratuita:} una carta que abre rompiendo un sello de lacre. Añade la canción de verdad y treinta segundos le esperan al final de la carta, a un toque, con un enlace a la canción completa en Apple Music. O deja que suene debajo una pista de la biblioteca de música mientras lee.",
         },
       ],
       faq: [
