@@ -208,7 +208,7 @@ export const post: BlogPost = {
         { type: "h3", text: "2. 21 questions" },
         {
           type: "p",
-          text: "Take turns asking until each of you has asked 21. The rule that makes it work: you answer honestly, and you answer before you ask your next one. Mix about five light questions, ten personal ones, and save the last six for the two of you, like round three above.",
+          text: "Take turns asking until each of you has asked 21. The rule that makes it work: you answer honestly, and you answer before you ask your next one. Mix about five light questions, ten personal ones, and save the last six for the two of you, like round three above. Our [21 questions for couples](/blog/21-questions-for-couples) has three ready sets of 21, from light to personal to the two of you, and how to play it over text.",
         },
         { type: "h3", text: "3. The 20 question game for couples" },
         {
@@ -480,7 +480,7 @@ export const post: BlogPost = {
         { type: "h3", text: "2. Las 21 preguntas" },
         {
           type: "p",
-          text: "Preguntaos por turnos hasta que cada uno haya hecho 21. La regla que lo hace funcionar: se responde con sinceridad, y se responde antes de hacer la siguiente. Mezclad unas cinco ligeras y diez personales, y guardad las seis últimas para vosotros dos, como en la tercera ronda.",
+          text: "Preguntaos por turnos hasta que cada uno haya hecho 21. La regla que lo hace funcionar: se responde con sinceridad, y se responde antes de hacer la siguiente. Mezclad unas cinco ligeras y diez personales, y guardad las seis últimas para vosotros dos, como en la tercera ronda. Nuestras [21 preguntas para parejas](/blog/21-questions-for-couples) traen tres rondas de 21, de lo ligero a lo personal y a vosotros dos, y cómo jugar por WhatsApp.",
         },
         { type: "h3", text: "3. El juego de las 20 preguntas para parejas" },
         {
