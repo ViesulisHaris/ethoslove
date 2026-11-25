@@ -255,8 +255,28 @@ test("W3: last week's link opens last week's set and says so", async ({ browser 
   expect(new URL(two.page.url()).hash).toBe("");
   await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("This week’s challenge for two");
   await expect(two.page.locator("#weekly-together + p")).toHaveText("For this week, once you have both answered. Out loud, not by text.");
-  await expect(two.page.locator("[data-five]")).toHaveCount(1);
+  // The server rendered its own week's five cards, not the set this browser's clock is in (games2-D1).
+  await expect(two.page.locator("[data-five]")).toHaveCount(0);
   await two.context.close();
+});
+
+test("W14: after the Monday turn, a page rendered before it never lists last week's five cards under this week's", async ({ browser }) => {
+  // The page the server renders now, opened by a browser whose clock is already in the next week: as a
+  // page rendered (or held by a cache) before the turn and read after it.
+  const server = thisWeek();
+  const next = await phone(browser);
+  await next.context.clock.setFixedTime(weekStart(server + 1) * DAY + 3_600_000);
+  await open(next.page, "/games/weekly");
+  await expect(weekly(next.page)).toHaveAttribute("data-set", weeklySet(server + 1).id);
+  await expect(next.page.locator("[data-together=ask]")).toContainText(weeklyCards(weeklySet(server + 1)).ask.en);
+  await expect(next.page.locator("[data-five]")).toHaveCount(0);
+  // In the server's own week the list is there, closed, and holds the week's five.
+  const same = await phone(browser);
+  await open(same.page, "/games/weekly");
+  await expect(weekly(same.page)).toHaveAttribute("data-set", weeklySet(server).id);
+  await expect(same.page.locator("[data-five] li")).toHaveCount(5);
+  await expect(same.page.locator("[data-five] li").last()).toHaveText(weeklyCards(weeklySet(server)).dare.en);
+  await Promise.all([next.context.close(), same.context.close()]);
 });
 
 test("W4: an older link names its week", async ({ browser }) => {

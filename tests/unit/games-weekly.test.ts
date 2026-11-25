@@ -9,6 +9,7 @@ import { THIS_PAIRS } from "@/lib/games/this-or-that";
 import { WEEKLY_EPOCH, WEEKLY_HASH_MAX, WEEKLY_MIRRORED, WEEKLY_SETS, decodeWeekly, encodeWeekly, picksFrom, picksText, sameCount, setById, weekOf, weekStart, weeklyAskGame, weeklyCards, weeklySentHere, weeklySet } from "@/lib/games/weekly";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
+import { showsServerSet } from "@/components/games/weekly/in-view";
 import { fillerIn } from "./filler";
 
 const N = WEEKLY_SETS.length;
@@ -354,5 +355,18 @@ describe("the weekly challenge's words", () => {
       expect(words(m.games.hub.weeklyCta)).toBeLessThanOrEqual(3);
       expect((m.games.hub as Record<string, unknown>).pickSub).toBeUndefined();
     }
+  });
+});
+
+describe("the page's words beside the challenge", () => {
+  it("V1: the server's five cards show only under the server's own set in its own week (games2-D1)", () => {
+    const S = weeklySet(WEEKLY_EPOCH + 3);
+    const next = weeklySet(WEEKLY_EPOCH + 4);
+    expect(showsServerSet({ when: "now", setId: null }, S.id)).toBe(true);
+    expect(showsServerSet({ when: "now", setId: S.id }, S.id)).toBe(true);
+    // A page rendered before the Monday turn, read after it: the challenge moved on to the new set.
+    expect(showsServerSet({ when: "now", setId: next.id }, S.id)).toBe(false);
+    expect(showsServerSet({ when: "last", setId: S.id }, S.id)).toBe(false);
+    expect(showsServerSet({ when: "older", setId: null }, S.id)).toBe(false);
   });
 });

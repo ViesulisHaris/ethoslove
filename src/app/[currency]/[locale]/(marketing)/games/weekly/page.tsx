@@ -138,7 +138,7 @@ export default async function WeeklyPage({ params }: Props) {
                     </details>
                   ))}
                   {/* All five of the week's cards as text, closed: the three picks are dealt one at a time above, and only the first is in the page until it is tapped. Gone while another week's set is in view, so it never sits under it unexplained. */}
-                  <NowOnly>
+                  <NowOnly setId={weeklySet(week).id}>
                     <details data-five className="group border-t border-page-line">
                       <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-body [&::-webkit-details-marker]:hidden">
                         {t("more.cards")}

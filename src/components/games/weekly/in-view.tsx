@@ -35,11 +35,17 @@ export const useWeekInView = (): InView =>
     () => NOW,
   );
 
-/** Shown only while the challenge shows this week's set: "this week's five cards" would sit under another week's set as a puzzle. */
-export function NowOnly({ children }: { children: ReactNode }) {
-  const { when } = useWeekInView();
-  return when === "now" ? <>{children}</> : null;
+/**
+ * Shown only while the challenge shows the set the server rendered (`setId`), in this week: "this
+ * week's five cards" would sit under another week's set as a puzzle. A page rendered before the
+ * Monday turn and read after it shows the new week's set above, so the server's list goes too.
+ */
+export function NowOnly({ setId, children }: { setId: string; children: ReactNode }) {
+  return showsServerSet(useWeekInView(), setId) ? <>{children}</> : null;
 }
+
+/** Whether what the challenge shows is the server's own set in this week (null: not read yet, so the server's). */
+export const showsServerSet = (view: InView, serverSetId: string): boolean => view.when === "now" && (view.setId === null || view.setId === serverSetId);
 
 /** This week's words, last week's, or an earlier week's, once the challenge shows a set from another week. */
 export function WhenText({ now, last, older }: { now: string; last: string; older: string }) {
