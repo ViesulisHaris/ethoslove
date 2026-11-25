@@ -7,8 +7,8 @@ import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import { cleanName, DAY_MS, dayOf } from "@/lib/games/daily";
-import { readSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
-import { decodeWeekly, encodeWeekly, picksFrom, picksText, sameCount, weekOf, weekStart, weeklyCards, weeklySentHere, weeklySet, type Side, type WeeklyLink, type WeeklyPicks, type WeeklySet } from "@/lib/games/weekly";
+import { deviceStorage, readSaved, removeSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
+import { decodeWeekly, encodeWeekly, picksFrom, picksText, sameCount, weekOf, weekStart, weeklyCards, weeklySentHere, weeklySet, type Side, type WeeklyLink, type WeeklyPicks, type WeeklySent, type WeeklySet } from "@/lib/games/weekly";
 import { cn } from "@/lib/utils";
 import { NAMES_KEY } from "../lobby";
 import { CARD, Corner, PRIMARY, SECOND, plainWhenOffline, rememberedNames } from "../today/today-question";
@@ -31,6 +31,26 @@ function reviveWeekly(raw: unknown): Kept | null {
   if (!(typeof w === "number" && Number.isInteger(w) && typeof i === "string" && typeof p === "string" && picksFrom(p) !== null)) return null;
   const sent = s && typeof s === "object" ? (s as Record<string, unknown>) : null;
   return sent && typeof sent.n === "string" && typeof sent.p === "string" && picksFrom(sent.p, 3) !== null ? { w, i, p, s: { n: sent.n, p: sent.p, ...(sent.r === 1 ? { r: 1 as const } : {}) } } : { w, i, p };
+}
+
+/**
+ * What the last link sent from this browser carried (lib/games/weekly.ts, WeeklySent), in the
+ * browser's own storage: a chat app opens a link tapped in it in a new tab, where the tab's memory
+ * above is empty. One record, replaced by each link sent, and dropped once its week is two weeks gone.
+ */
+const SENT = "ethos.games.weekly.sent";
+function readLastSent(thisWeek: number): WeeklySent | null {
+  const sent = readSaved(deviceStorage(), SENT, (raw): WeeklySent | null => {
+    if (!raw || typeof raw !== "object") return null;
+    const { week, setId, name, picks, reply } = raw as Record<string, unknown>;
+    if (!(typeof week === "number" && Number.isInteger(week) && typeof setId === "string" && typeof name === "string" && picksFrom(picks, 3) !== null)) return null;
+    return { week, setId, name, picks: picks as string, ...(reply === true ? { reply: true } : {}) };
+  });
+  if (sent && sent.week < thisWeek - 1) {
+    removeSaved(deviceStorage(), SENT);
+    return null;
+  }
+  return sent;
 }
 
 /** Next's own state for this page's history entry, which a hash change leaves out of the entry it adds (as in today-question.tsx). */
@@ -94,8 +114,15 @@ export function WeeklyChallenge({ week }: { week: number }) {
     const hash = window.location.hash;
     const asked = hash.startsWith("#w=");
     const decoded = asked ? decodeWeekly(hash, now) : null;
-    const kept = readSaved(tabStorage(), KEPT, reviveWeekly);
-    const own = !!decoded && weeklySentHere(decoded, kept?.s ? { week: kept.w, setId: kept.i, name: kept.s.n, picks: kept.s.p, reply: kept.s.r === 1 } : null);
+    const tabKept = readSaved(tabStorage(), KEPT, reviveWeekly);
+    const lastSent = readLastSent(now);
+    const ownHere = !!decoded && weeklySentHere(decoded, tabKept?.s ? { week: tabKept.w, setId: tabKept.i, name: tabKept.s.n, picks: tabKept.s.p, reply: tabKept.s.r === 1 } : null);
+    // A chat app opens a tapped link in a new tab, never in the one that sent it: the browser's own
+    // memory of the last link sent knows it there too, and this tab takes up the picks it carried.
+    const ownElsewhere = !!decoded && !ownHere && weeklySentHere(decoded, lastSent);
+    const own = ownHere || ownElsewhere;
+    const kept: Kept | null = ownElsewhere && lastSent && !decoded.to ? { w: lastSent.week, i: lastSent.setId, p: lastSent.picks, s: { n: lastSent.name, p: lastSent.picks } } : tabKept;
+    if (kept !== tabKept) writeSaved(tabStorage(), KEPT, kept);
     // The tab's own first link opens as the tab left it, the picks marked sent: never a reveal against itself.
     const link = own && !decoded.to ? null : decoded;
     const next: View = decoded ? { week: decoded.week, set: decoded.set, link, broken: false, own } : { week: now, set: weeklySet(now), link: null, broken: asked, own: false };
@@ -224,7 +251,9 @@ export function WeeklyChallenge({ week }: { week: number }) {
   /** A link went out: remember what it carried, so opening it again here is known as the tab's own. */
   const markSent = () => {
     const p = picksText(picks);
-    writeSaved(tabStorage(), KEPT, { w: view.week, i: view.set.id, p, s: { n: cleanName(name), p, ...(link && !link.to ? { r: 1 as const } : {}) } });
+    const reply = !!link && !link.to;
+    writeSaved(tabStorage(), KEPT, { w: view.week, i: view.set.id, p, s: { n: cleanName(name), p, ...(reply ? { r: 1 as const } : {}) } });
+    writeSaved(deviceStorage(), SENT, { week: view.week, setId: view.set.id, name: cleanName(name), picks: p, ...(reply ? { reply: true } : {}) } satisfies WeeklySent);
     setSent(true);
     setChanged(false);
     setView((v) => (v.own ? { ...v, own: false } : v));

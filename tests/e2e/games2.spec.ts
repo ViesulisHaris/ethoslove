@@ -315,6 +315,31 @@ test("W6: the tab's own link, opened again, is not a reveal against itself", asy
   await one.context.close();
 });
 
+test("W6b: the sender's own link opened in a new tab (as a chat app opens it) is theirs too, and a new tab without it starts fresh", async ({ browser }) => {
+  const one = await phone(browser);
+  await open(one.page, "/games/weekly");
+  await answer(one.page, ["b", "a", "b"]);
+  await one.page.locator("[data-weekly] input").fill("Ana");
+  await one.page.locator("[data-copy]").click();
+  const link = await copied(one.page);
+  // A new tab of the same browser: its own sessionStorage, the browser's localStorage (games2-D2).
+  const tab = await one.context.newPage();
+  await open(tab, link);
+  await expect(weekly(tab)).toHaveAttribute("data-phase", "sent");
+  await expect(tab.locator("[data-picks] li")).toHaveCount(3);
+  await expect(tab.getByRole("status")).toHaveText("This is the link you sent. They answer without seeing yours.");
+  expect(await events(tab)).toEqual([]);
+  // The same link in another person's browser is still an invitation.
+  const two = await phone(browser);
+  await open(two.page, link);
+  await expect(weekly(two.page)).toHaveAttribute("data-phase", "invited");
+  // And a new tab with no link begins at the first card.
+  const fresh = await one.context.newPage();
+  await open(fresh, "/games/weekly");
+  await expect(weekly(fresh)).toHaveAttribute("data-phase", "ask");
+  await Promise.all([one.context.close(), two.context.close()]);
+});
+
 test("W7: a reload keeps the picks; Back takes one off; Change them starts again", async ({ page }) => {
   await open(page, "/games/weekly");
   await answer(page, ["a", "b"]);

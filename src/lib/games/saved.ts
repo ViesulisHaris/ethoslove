@@ -24,7 +24,20 @@ export function tabStorage(): TabStore | null {
   }
 }
 
-export type SavedPart = "entry" | "session" | "state" | "play";
+/**
+ * The browser's own storage, kept past the tab: only for the little a game needs in a tab it did not
+ * start in (the names, and what the last link a person sent carried, so a chat app opening that link
+ * in a new tab knows it as theirs). It never leaves the phone either.
+ */
+export function deviceStorage(): TabStore | null {
+  try {
+    return typeof window === "undefined" ? null : window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+export type SavedPart ="entry" | "session" | "state" | "play";
 const PARTS: SavedPart[] = ["entry", "session", "state", "play"];
 export const savedKey = (game: string, part: SavedPart) => `ethos.games.${game}.${part}`;
 
