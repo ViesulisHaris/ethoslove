@@ -7,7 +7,7 @@ import { OCCASIONS, type Occasion } from "../../src/config/occasions";
 import { OCCASION_GUIDES } from "../../src/content/occasions";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "../../src/content/recipients";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "../../src/content/digital-gifts";
-import { GIFT_GUIDE_SLUGS } from "../../src/content/gift-guides";
+import { GIFT_GUIDE_SLUGS, GUIDES_IN_CLOSING_ROWS } from "../../src/content/gift-guides";
 import { templateSeo } from "../../src/content/template-seo";
 import { listManifests } from "../../src/templates/manifests";
 
@@ -153,7 +153,7 @@ for (const { prefix, l, m } of LANGS) {
           ...guide.ideas.flatMap((i) => [`${prefix}/templates/${i.template}`, `${prefix}/create/${i.template}`]),
           ...RECIPIENTS.filter((r) => r !== who).map((r) => `${prefix}/gifts/${recipientSlug(r)}`),
           `${prefix}/occasions`,
-          ...GIFT_GUIDE_SLUGS.map((s) => `${prefix}/gifts/${s}`),
+          ...GUIDES_IN_CLOSING_ROWS.map((s) => `${prefix}/gifts/${s}`),
         ]);
         const list = node(page, "ItemList")?.itemListElement ?? [];
         expect(list.map((i) => i.name), path).toEqual(guide.ideas.map((i) => i.heading));

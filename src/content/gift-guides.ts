@@ -33,6 +33,14 @@ export const GIFT_GUIDE_SLUGS = [
 ] as const;
 export type GiftGuideSlug = (typeof GIFT_GUIDE_SLUGS)[number];
 
+/**
+ * The pages by kind that the closing rows of /digital-cards and the pages by person show: the first six. The five
+ * added on 24 Nov 2026 (apology, care package, surprise, memory book) are linked from /gifts, their occasions and
+ * each other; named in these rows too, they pushed /digital-cards past 300 words and the last section's lily onto
+ * the questions' heading on the pages by person.
+ */
+export const GUIDES_IN_CLOSING_ROWS: readonly GiftGuideSlug[] = GIFT_GUIDE_SLUGS.slice(0, 6);
+
 export function isGiftGuide(slug: string): slug is GiftGuideSlug {
   return (GIFT_GUIDE_SLUGS as readonly string[]).includes(slug);
 }

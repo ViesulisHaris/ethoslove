@@ -10,7 +10,7 @@ import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateOfferAmoun
 import { chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
 import { getPost, postLocales } from "@/content/blog";
 import { TOGETHER_PATH } from "@/content/together-guide";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDE_BAND_COVERS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_IN_CLOSING_ROWS, GUIDE_BAND_COVERS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
 import { MONTHS, MONTH_GUIDES, monthBandPhoto, monthFromSlug, monthNeighbours, monthPost, monthRef, monthSlug } from "@/content/month-anniversaries";
 import { handLine, kindCardLine, kindIdeaIsFree, openingLine } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
@@ -80,13 +80,13 @@ export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[
 /** The photo on the band's phone of a page by person: the café table, which no page by kind has on its own band. */
 const RECIPIENT_BAND_PHOTO = { src: DEMO_PHOTOS.p1.url, width: DEMO_PHOTOS.p1.width, height: DEMO_PHOTOS.p1.height } as const;
 
-/** The first sentence of a page's opening: the hero's one line. The whole opening is kept under "More about". */
 /**
  * A list of four questions or fewer ends level with the lily that the last section lays up across its edge: the
  * extra room at the foot (the pages by person have it too) keeps the flower off the heading beside the list.
  */
 const SHORT_QUESTIONS = "pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-60";
 
+/** The first sentence of a page's opening: the hero's one line. The whole opening is kept under "More about". */
 const firstSentence = (text: string) => text.trim().split(/(?<=[.!?])\s+/)[0] ?? text;
 
 /**
@@ -119,7 +119,7 @@ async function RecipientPage({ recipient, locale, currency }: { recipient: Recip
     free: sendsFree(idea.manifest),
   }));
   // Where next: four pages by kind as posters; the other people, the occasions and the rest of the kinds by name.
-  const kinds = GIFT_GUIDE_SLUGS.flatMap((s) => {
+  const kinds = GUIDES_IN_CLOSING_ROWS.flatMap((s) => {
     const manifest = leadGift(s);
     return manifest ? [{ href: `/gifts/${s}`, label: GIFT_GUIDES[s][locale].label, manifest }] : [];
   });

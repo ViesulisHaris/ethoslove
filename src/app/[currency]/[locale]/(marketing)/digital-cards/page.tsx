@@ -10,7 +10,7 @@ import { PRODUCTS, chargedCurrency, formatAmount, type Currency } from "@/lib/pr
 import { NOTE_PHOTOS_MAX, sendsFree } from "@/lib/gift/free-tier";
 import { DIGITAL_CARDS_BAND_PHOTO, DIGITAL_CARDS_LEAD, DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, digitalCardsCopy, finderIsBuilt, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
+import { GIFT_GUIDES, GUIDES_IN_CLOSING_ROWS } from "@/content/gift-guides";
 import { templateGuide } from "@/content/template-guides";
 import { getManifest, listManifests } from "@/templates/manifests";
 import { CARDS_ART, PRICES_ART, STEPS_ART } from "@/components/marketing/spread/placements";
@@ -81,7 +81,7 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
     free: sendsFree(kind.manifest),
   }));
   // The pages by kind: four as posters, each shown by the gift it leads with, the rest by name.
-  const pages = GIFT_GUIDE_SLUGS.flatMap((slug) => {
+  const pages = GUIDES_IN_CLOSING_ROWS.flatMap((slug) => {
     const guide = GIFT_GUIDES[slug][l];
     const manifest = getManifest(GIFT_GUIDES[slug].en.film ?? guide.ideas[0].template);
     return manifest ? [{ href: `/gifts/${slug}`, label: guide.label, manifest }] : [];
