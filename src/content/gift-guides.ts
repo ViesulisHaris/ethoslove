@@ -1648,8 +1648,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "sticker-bomb",
           heading: "Label strips that take the blame",
-          brief: "Six label-maker strips under the stickers, small admissions from silly to real.",
-          body: "Small admissions add up. Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, six of them, twenty-eight characters each. For an apology, make the strips small admissions in order, from the silly to the real, and pick the pack called “The soft ones” so the stickers stay gentle.",
+          brief: "Label-maker strips under the stickers, small admissions from silly to real.",
+          body: "Small admissions add up. Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, twenty-eight characters each, six of them if you add one photo or none. For an apology, make the strips small admissions in order, from the silly to the real, and pick the pack called “The soft ones” so the stickers stay gentle.",
           line: { field: "labels", where: "One label-maker strip", text: "official over-reactor: me" },
         },
       ],
@@ -1733,8 +1733,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "sticker-bomb",
           heading: "Tiras de rotuladora que se echan la culpa",
-          brief: "Seis tiras de rotuladora bajo los stickers, pequeñas admisiones de la tonta a la real.",
-          body: "Las admisiones pequeñas suman. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora, seis en total, de veintiocho caracteres. Para pedir perdón, que las tiras sean pequeñas cosas que reconoces, en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
+          brief: "Tiras de rotuladora bajo los stickers, pequeñas admisiones de la tonta a la real.",
+          body: "Las admisiones pequeñas suman. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora de veintiocho caracteres, seis si añades una foto o ninguna. Para pedir perdón, que las tiras sean pequeñas cosas que reconoces, en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
           line: { field: "labels", where: "Una tira de rotuladora", text: "exagero, lo reconozco" },
         },
       ],

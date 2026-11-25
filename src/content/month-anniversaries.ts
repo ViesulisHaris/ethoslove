@@ -79,8 +79,8 @@ const month1: Month = {
       },
       {
         template: "sticker-bomb",
-        heading: "Six labels for the names you already use",
-        body: "A month in, you have a couple of nicknames and one running joke. Sticker Bomb gives them an empty page and a pack of stickers to slap down, and under every other sticker comes a strip from a label maker: six strips of 28 characters, in the order you wrote them. Those names fill the strips without trying.",
+        heading: "Label strips for the names you already use",
+        body: "A month in, you have a couple of nicknames and one running joke. Sticker Bomb gives them an empty page and a pack of stickers to slap down, and under every other sticker comes a strip from a label maker, 28 characters each, in the order you wrote them. Add one photo or none and all six strips show. Those names fill them without trying.",
         line: { field: "labels", where: "One label-maker strip", text: "One month, zero regrets" },
       },
       {
@@ -132,8 +132,8 @@ const month1: Month = {
       },
       {
         template: "sticker-bomb",
-        heading: "Seis etiquetas con los motes que ya usáis",
-        body: "Al mes ya tenéis un par de motes y una broma que se repite. Bomba de Stickers le da una página vacía y un montón de stickers para pegar, y debajo de uno de cada dos sale una tira de rotuladora: seis tiras de 28 caracteres, en el orden en que las escribiste. Con esos motes se llenan solas.",
+        heading: "Etiquetas con los motes que ya usáis",
+        body: "Al mes ya tenéis un par de motes y una broma que se repite. Bomba de Stickers le da una página vacía y un montón de stickers para pegar, y debajo de uno de cada dos sale una tira de rotuladora de 28 caracteres, en el orden en que las escribiste. Con una foto o ninguna salen las seis. Con esos motes se llenan solas.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "Un mes y cero dudas" },
       },
       {
@@ -791,8 +791,8 @@ const month4: Month = {
       {
         template: "sticker-bomb",
         heading: "Label strips for what the trip taught you",
-        brief: "Six label-maker strips under the stickers, each one a thing the trip taught you.",
-        body: "Who wakes first, who cannot read a map, who hogs the window seat: the weekend taught you things, and each can go on a label-maker strip. Sticker Bomb puts one under every other sticker they drop, up to six, in the order you wrote. Pick the Cats with opinions pack, if the strips are blunt.",
+        brief: "Label-maker strips under the stickers, each one a thing the trip taught you.",
+        body: "Who wakes first, who cannot read a map, who hogs the window seat: the weekend taught you things, and each can go on a label-maker strip. Sticker Bomb puts one under every other sticker they drop, up to six if you add one photo or none, in the order you wrote. Pick the Cats with opinions pack, if the strips are blunt.",
         line: { field: "labels", where: "One label-maker strip", text: "certified map reader (not)" },
       },
       {
@@ -848,8 +848,8 @@ const month4: Month = {
       {
         template: "sticker-bomb",
         heading: "Tiras de rotuladora con lo que enseñó el viaje",
-        brief: "Seis tiras de rotuladora bajo los stickers, cada una algo que os enseñó el viaje.",
-        body: "Quién se despierta antes, quién no sabe leer un mapa, quién se queda la ventanilla: el fin de semana os enseñó cosas, y cada una cabe en una tira de rotuladora. Bomba de Stickers pone una bajo uno de cada dos stickers, hasta seis, en el orden en que las escribiste. Elige el pack Gatos con opiniones si las tiras son directas.",
+        brief: "Tiras de rotuladora bajo los stickers, cada una algo que os enseñó el viaje.",
+        body: "Quién se despierta antes, quién no sabe leer un mapa, quién se queda la ventanilla: el fin de semana os enseñó cosas, y cada una cabe en una tira de rotuladora. Bomba de Stickers pone una bajo uno de cada dos stickers, hasta seis si añades una foto o ninguna, en el orden en que las escribiste. Elige el pack Gatos con opiniones si las tiras son directas.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "lee mapas (no es verdad)" },
       },
       {
@@ -1529,8 +1529,8 @@ const month11: Month = {
       {
         template: "sticker-bomb",
         heading: "Eleven months of nicknames, on label strips",
-        brief: "Six label-maker strips under the stickers, your nicknames for them in order, oldest first.",
-        body: "The label-maker strips in Sticker Bomb come out in the order you typed them, six at most, each twenty-eight characters, tucked under every other sticker they slap down. Eleven months gives you a history of nicknames: put them in order, oldest first, so the last strip is what you call them now.",
+        brief: "Label-maker strips under the stickers, your nicknames for them in order, oldest first.",
+        body: "The label-maker strips in Sticker Bomb come out in the order you typed them, six at most with one photo or none, each twenty-eight characters, tucked under every other sticker they slap down. Eleven months gives you a history of nicknames: put them in order, oldest first, so the last strip is what you call them now.",
         line: { field: "labels", where: "One label-maker strip", text: "formerly: the tall one" },
       },
       {
@@ -1587,8 +1587,8 @@ const month11: Month = {
       {
         template: "sticker-bomb",
         heading: "Once meses de motes, en tiras de rotuladora",
-        brief: "Seis tiras de rotuladora bajo los stickers, con sus motes en orden, del más antiguo al último.",
-        body: "Las tiras de rotuladora de Bomba de Stickers salen en el orden en que las escribiste, seis como mucho, de veintiocho caracteres, metidas bajo uno de cada dos stickers que se van pegando. Once meses dan para una historia de motes: ponlos en orden, del más antiguo al más nuevo, para que la última tira sea como le llamas ahora.",
+        brief: "Tiras de rotuladora bajo los stickers, con sus motes en orden, del más antiguo al último.",
+        body: "Las tiras de rotuladora de Bomba de Stickers salen en el orden en que las escribiste, seis como mucho con una foto o ninguna, de veintiocho caracteres, metidas bajo uno de cada dos stickers que se van pegando. Once meses dan para una historia de motes: ponlos en orden, del más antiguo al más nuevo, para que la última tira sea como le llamas ahora.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "alias número tres" },
       },
       {
@@ -1838,7 +1838,7 @@ const month14: Month = {
         template: "sticker-bomb",
         heading: "Etiquetas para lo que vive en las dos casas",
         brief: "Tiras de rotuladora bajo los stickers, cada una con una de las cosas compartidas.",
-        body: "Nombra lo compartido como lo haría una rotuladora. En Bomba de Stickers se van pegando stickers en una página en blanco, y cada dos stickers aparece debajo una tira de veintiocho caracteres, en el orden en que las escribiste. Con una foto o ninguna salen las seis tiras; con más fotos caben menos. Escribe el cepillo, la sartén, la llave de repuesto.",
+        body: "Nombra lo compartido como lo haría una rotuladora. En Bomba de Stickers se van pegando stickers en una página en blanco, y cada dos stickers aparece debajo una tira de veintiocho caracteres, una tras otra según las escribiste. Con una foto o ninguna se ven las seis tiras; con más fotos caben menos. Escribe el cepillo, la sartén, la llave de repuesto.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "llave de repuesto: tuya" },
       },
       {

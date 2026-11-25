@@ -21,6 +21,7 @@ import { pageMetadata } from "@/lib/seo";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { getManifest, listManifests } from "@/templates/manifests";
 import { resolvePlace } from "@/templates/_shared/places";
+import { planDrops } from "@/templates/sticker-bomb/plan";
 import { loadFieldsSchema } from "@/templates/schemas";
 import type { TemplateManifest } from "@/templates/types";
 import en from "../../messages/en.json";
@@ -690,6 +691,24 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
       }
     }
     expect(over).toEqual([]);
+  });
+
+  it("Sticker Bomb is promised six label strips only where the photos leave room for six (gifts2-N3)", () => {
+    // Photos take every other drop and a strip goes under every other sticker, so the strips that show depend on the photos.
+    const shown = (photos: number) => planDrops("chaos", photos, ["a", "b", "c", "d", "e", "f"], 1).filter((drop) => drop.kind === "meme" && drop.label).length;
+    expect([0, 1, 2, 3, 6].map(shown)).toEqual([6, 6, 5, 5, 3]);
+    const ideas = [
+      ...MONTHS.flatMap((n) => GIFT_LOCALES.flatMap((locale) => MONTH_GUIDES[n][locale].ideas.map((idea) => ({ at: `month ${n} (${locale})`, locale, idea })))),
+      ...GIFT_GUIDE_SLUGS.flatMap((slug) => GIFT_LOCALES.flatMap((locale) => GIFT_GUIDES[slug][locale].ideas.map((idea) => ({ at: `${slug} (${locale})`, locale, idea })))),
+    ].filter(({ idea }) => idea.template === "sticker-bomb");
+    expect(ideas.length).toBeGreaterThanOrEqual(10);
+    for (const { at, locale, idea } of ideas) {
+      const six = locale === "en" ? /\bsix\b.{0,40}\b(strips?|labels?)\b|\b(strips?|labels?)\b.{0,60}\bsix\b/i : /\bseis\b.{0,40}\b(tiras?|etiquetas?)\b|\b(tiras?|etiquetas?)\b.{0,60}\bseis\b/i;
+      const condition = locale === "en" ? /one photo or none/i : /una foto o ninguna/i;
+      // A heading or a card's short line has no room for the condition, so it names no number of strips.
+      for (const short of [idea.heading, idea.brief ?? ""]) expect(short, at).not.toMatch(six);
+      if (six.test(idea.body)) expect(idea.body, at).toMatch(condition);
+    }
   });
 
   it("the gift in each new page's phone and band says nothing of another occasion", () => {
