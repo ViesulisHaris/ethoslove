@@ -16,7 +16,7 @@ import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { ORIGIN_PREFIX, originOfParam, TRIP_ORIGINS } from "@/lib/trips/origins";
 import { getTrip, stopName, TRIPS } from "@/lib/trips/presets";
-import { stayPartnerId, tripStays } from "@/lib/trips/stay";
+import { stayPartnerId, tripNights, tripStays } from "@/lib/trips/stay";
 import { tripLead } from "@/lib/trips/trip-lead";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
 import { TRIP_SEO } from "@/content/trip-seo";
@@ -327,7 +327,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                 {t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}
                 <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
               </summary>
-              <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} className="pb-5" />
+              <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} nights={tripNights(trip)} className="pb-5" />
             </details>
             {tickets.length > 0 ? (
               <details id="tickets" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">

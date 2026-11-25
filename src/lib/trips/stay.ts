@@ -75,6 +75,9 @@ export const TRIP_STAYS: Record<string, Record<string, string>> = {
   "amsterdam-by-bike": { Jordaan: "Jordaan, Amsterdam" },
 };
 
+/** How many nights a trip sleeps away: the flight search on its page comes home after them. */
+export const tripNights = (trip: Pick<Trip, "stops">): number => trip.stops.reduce((n, s) => n + s.nights, 0);
+
 /** A trip's overnight stops, in route order, each with its query and where its nights fall. */
 export function tripStays(trip: Pick<Trip, "id" | "stops">): { stop: string; query: string; lat: number; lng: number; nightsBefore: number; nights: number }[] {
   const queries = TRIP_STAYS[trip.id] ?? {};

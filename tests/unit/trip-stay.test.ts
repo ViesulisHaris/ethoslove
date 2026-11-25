@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getTrip, TRIPS } from "@/lib/trips/presets";
-import { stayDates, stayLink, stayPartnerId, tripStays, TRIP_STAYS } from "@/lib/trips/stay";
+import { weekendAhead } from "@/lib/trips/flights";
+import { stayDates, stayLink, stayPartnerId, tripNights, tripStays, TRIP_STAYS } from "@/lib/trips/stay";
 
 // The same as tests/unit/trips.test.ts.
 const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary)\b/i;
@@ -72,5 +73,23 @@ describe("a place to stay at a trip's stop", () => {
 
   it("S8 no search names Spain", () => {
     for (const stops of Object.values(TRIP_STAYS)) for (const q of Object.values(stops)) expect(q).not.toMatch(SPAIN);
+  });
+  it("S9 every place to stay falls between the trip page's two flights", () => {
+    for (const today of ["2026-11-25", "2027-02-26", "2027-06-30"]) {
+      for (const trip of TRIPS) {
+        const nights = tripNights(trip);
+        expect(nights, trip.id).toBe(trip.days - 1);
+        const flights = weekendAhead(today, nights)!;
+        for (const stay of tripStays(trip)) {
+          const d = stayDates(flights.depart, stay.nightsBefore, stay.nights)!;
+          expect(d.checkin >= flights.depart, `${trip.id} ${stay.stop}`).toBe(true);
+          expect(d.checkout <= flights.back, `${trip.id} ${stay.stop} ${d.checkout} after ${flights.back}`).toBe(true);
+        }
+        expect(stayDates(flights.depart, 0, nights)!.checkout, trip.id).toBe(flights.back);
+      }
+    }
+    // Elsewhere the search is still a long weekend.
+    expect(weekendAhead("2026-09-23")).toEqual({ depart: "2026-10-16", back: "2026-10-19" });
+    expect(weekendAhead("2026-09-23", 0)).toEqual({ depart: "2026-10-16", back: "2026-10-19" });
   });
 });

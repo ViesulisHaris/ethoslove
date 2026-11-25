@@ -22,6 +22,8 @@ type Props = {
   placement?: PartnerPlacement;
   /** The preset trip whose page the link is on (its id, like a template's slug). */
   trip?: string;
+  /** On a trip's page, the trip's nights: the first dates come home the day the plan ends. A long weekend elsewhere. */
+  nights?: number;
   className?: string;
 };
 
@@ -36,7 +38,7 @@ const localDay = () => toYmd(new Date());
  * Google Flights, Skyscanner or Kayak, already filled in, and the fares are whatever they say. It
  * lays itself out by its own width, so it sits in a hero card or across a page.
  */
-export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, className }: Props) {
+export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, nights, className }: Props) {
   const t = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
@@ -50,7 +52,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
   // A search without dates finds no fares, so until they pick their own the dates are a long
   // weekend three weeks out. Worked out from the visitor's today, which the server doesn't know, so
   // the server's render and the first one in the browser both show empty boxes and agree.
-  const dates = picked ?? (today ? weekendAhead(today) : null) ?? { depart: "", back: "" };
+  const dates = picked ?? (today ? weekendAhead(today, nights) : null) ?? { depart: "", back: "" };
 
   // A frame after mount, so the first render in the browser is the same as the server's.
   useEffect(() => {
