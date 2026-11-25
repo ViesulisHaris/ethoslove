@@ -42,15 +42,10 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
     card: (
       <TripCard
         trip={trip}
-        currency={shown}
         title={trip.title[l]}
-        blurb={trip.blurb[l]}
         labels={{
           kind: t(`kind.${trip.kind}`),
           days: t("days", { count: trip.days }),
-          stops: t("stops", { count: trip.stops.length }),
-          best: t("best", { months: monthRanges(trip.bestMonths, l) }),
-          budget: t(`budget.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, shown, l)),
         }}
       />
     ),
@@ -105,7 +100,6 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             </div>
             <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
               <h2 className="font-display text-[26px] leading-tight text-forest">{t("finder.title")}</h2>
-              <p className="mt-1 text-[14.5px] leading-snug text-forest/65">{t("finder.sub")}</p>
               <FlightFinder className="mt-5" />
             </div>
           </div>
@@ -143,7 +137,6 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             <div className="relative max-w-2xl">
               <p className="text-eyebrow text-blush">{t("gift.eyebrow")}</p>
               <h2 className="display-xl mt-4 text-cream">{t("gift.title")}</h2>
-              <p className="mt-4 text-[16.5px] leading-relaxed text-cream/75">{t("gift.sub")}</p>
             </div>
             <div className="relative mt-8 flex shrink-0 flex-col items-start gap-4 lg:mt-0 lg:items-center">
               <span aria-hidden="true" className="hidden size-24 rotate-12 lg:block">
