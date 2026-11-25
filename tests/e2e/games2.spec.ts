@@ -5,7 +5,7 @@ import { dayOf } from "../../src/lib/games/daily";
 import { DRAW_WORDS } from "../../src/lib/games/draw";
 import { DECK_IDS, DECKS } from "../../src/lib/games/questions";
 import { THIS_PAIRS } from "../../src/lib/games/this-or-that";
-import { encodeWeekly, weekOf, weekStart, weeklyCards, weeklySet } from "../../src/lib/games/weekly";
+import { encodeWeekly, weekOf, weekStart, weeklyAskGame, weeklyCards, weeklySet } from "../../src/lib/games/weekly";
 import { measure, settle } from "./page-design";
 
 /**
@@ -243,6 +243,7 @@ test("W3: last week's link opens last week's set and says so", async ({ browser 
   await expect(two.page.locator("[data-when=last]")).toHaveText(`Last week: ${set.theme.en}`);
   await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("Last week’s challenge for two");
   await expect(two.page.locator("[data-together=ask]")).toContainText(weeklyCards(set).ask.en);
+  await expect(two.page.locator("[data-together=ask]")).toHaveAttribute("data-game", weeklyAskGame(set));
   await answer(two.page, ["a", "a", "a"]);
   await expect(weekly(two.page)).toHaveAttribute("data-phase", "reveal");
   await two.page.locator("[data-copy]").click();

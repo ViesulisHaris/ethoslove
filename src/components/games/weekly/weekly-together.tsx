@@ -2,7 +2,7 @@
 
 import { useLocale } from "next-intl";
 import { GAMES, type GameKey } from "@/lib/games/catalogue";
-import { setById, weeklyCards, weeklySet } from "@/lib/games/weekly";
+import { setById, weeklyAskGame, weeklyCards, weeklySet } from "@/lib/games/weekly";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { PlayingCard } from "../cards";
 import { useWeekInView } from "./in-view";
@@ -28,15 +28,17 @@ function ShelfCard({ game, tone, turn }: { game: GameKey; tone: "lilac" | "blush
 export function WeeklyTogether({ week, labels }: { week: number; labels: { ask: string; dare: string } }) {
   const locale = useLocale() === "es" ? "es" : "en";
   const { setId } = useWeekInView();
-  const cards = weeklyCards((setId ? setById(setId) : null) ?? weeklySet(week));
+  const set = (setId ? setById(setId) : null) ?? weeklySet(week);
+  const cards = weeklyCards(set);
   const rows = [
-    { key: "ask", label: labels.ask, line: cards.ask[locale], picture: <ShelfCard game="deck" tone="lilac" turn="-rotate-4" /> },
-    { key: "dare", label: labels.dare, line: cards.dare[locale], picture: <ShelfCard game="dare" tone="blush" turn="rotate-5" /> },
+    // A truth is truth or dare's card, not the question cards': its picture is that game's, the tone tells it from the dare beside it.
+    { key: "ask", label: labels.ask, line: cards.ask[locale], game: weeklyAskGame(set), picture: <ShelfCard game={weeklyAskGame(set)} tone="lilac" turn="-rotate-4" /> },
+    { key: "dare", label: labels.dare, line: cards.dare[locale], game: "dare" as GameKey, picture: <ShelfCard game="dare" tone="blush" turn="rotate-5" /> },
   ];
   return (
     <ul id="weekly-together-cards" className="grid gap-3 sm:grid-cols-2 sm:gap-4">
       {rows.map((row) => (
-        <li key={row.key} data-card data-together={row.key} className="flex items-center gap-4 rounded-[1.25rem] border border-page-line bg-page-raised py-4 pr-5 pl-4 shadow-page-card sm:flex-col sm:items-start sm:gap-5 sm:p-6">
+        <li key={row.key} data-card data-together={row.key} data-game={row.game} className="flex items-center gap-4 rounded-[1.25rem] border border-page-line bg-page-raised py-4 pr-5 pl-4 shadow-page-card sm:flex-col sm:items-start sm:gap-5 sm:p-6">
           <span aria-hidden="true" className="flex h-24 w-[4.5rem] shrink-0 items-center justify-center">
             {row.picture}
           </span>

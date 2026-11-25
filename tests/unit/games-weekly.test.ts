@@ -6,7 +6,7 @@ import { DARES, RATHER_PAIRS, TRUTHS } from "@/lib/games/content";
 import { DAILY_EPOCH, DAY_MS, dailyPair, dayIso, dayOf } from "@/lib/games/daily";
 import { DECKS } from "@/lib/games/questions";
 import { THIS_PAIRS } from "@/lib/games/this-or-that";
-import { WEEKLY_EPOCH, WEEKLY_HASH_MAX, WEEKLY_MIRRORED, WEEKLY_SETS, decodeWeekly, encodeWeekly, picksFrom, picksText, sameCount, setById, weekOf, weekStart, weeklyCards, weeklySentHere, weeklySet } from "@/lib/games/weekly";
+import { WEEKLY_EPOCH, WEEKLY_HASH_MAX, WEEKLY_MIRRORED, WEEKLY_SETS, decodeWeekly, encodeWeekly, picksFrom, picksText, sameCount, setById, weekOf, weekStart, weeklyAskGame, weeklyCards, weeklySentHere, weeklySet } from "@/lib/games/weekly";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { fillerIn } from "./filler";
@@ -167,6 +167,13 @@ describe("the weekly sets", () => {
         for (const side of [pair.a.en, pair.b.en, pair.a.es, pair.b.es]) expect(mine.has(norm(side)), `week ${w}, ${dayIso(d)}: "${side}"`).toBe(false);
       }
     }
+  });
+
+  it("S8: the question's picture is the game it comes from: a truth is truth or dare's, a deck's card the question cards'", () => {
+    for (const s of WEEKLY_SETS) expect(weeklyAskGame(s), s.id).toBe(s.ask[0] === "truth" ? "dare" : "deck");
+    expect(WEEKLY_SETS.some((s) => weeklyAskGame(s) === "dare")).toBe(true);
+    const together = readFileSync(join(process.cwd(), "src/components/games/weekly/weekly-together.tsx"), "utf8");
+    expect(together).toContain("<ShelfCard game={weeklyAskGame(set)}");
   });
 
   it("S7: the dares can be done outside a game, and nothing names a place in Spain", () => {

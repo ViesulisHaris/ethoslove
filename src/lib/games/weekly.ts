@@ -98,6 +98,9 @@ export function weeklyCards(of: WeeklySet): WeeklyCards {
   return { picks: [picks[0], picks[1], picks[2]], ask, dare };
 }
 
+/** The game a set's question comes from (its picture under the challenge): a truth is truth or dare's, any other the question cards'. */
+export const weeklyAskGame = (of: WeeklySet): "dare" | "deck" => (of.ask[0] === "truth" ? "dare" : "deck");
+
 /** The set of a week: the same for everyone, and none twice until the whole list has gone round. */
 export function weeklySet(week: number, sets: readonly WeeklySet[] = WEEKLY_SETS): WeeklySet {
   const n = sets.length;
