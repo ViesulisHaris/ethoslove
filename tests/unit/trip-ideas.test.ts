@@ -83,12 +83,22 @@ describe("the pages by kind of trip", () => {
     expect(TRIP_IDEA_COPY["road-trips"].title.en.startsWith("Road trips")).toBe(true);
   });
 
-  it("K8 the hero's photograph is not one of the first two cards", () => {
+  it("K8 the hero's photograph is no card on its page, and the hero's sentence names its trip", () => {
+    const heroes = TRIP_IDEA_KINDS.map((k) => TRIP_IDEA_COPY[k].hero);
+    expect(new Set(heroes).size).toBe(heroes.length);
     for (const k of TRIP_IDEA_KINDS) {
-      const list = ideaTrips(k).map((t) => t.id);
-      expect(list, k).toContain(TRIP_IDEA_COPY[k].hero);
-      expect(list.slice(0, 2), k).not.toContain(TRIP_IDEA_COPY[k].hero);
+      const hero = TRIPS.find((t) => t.id === TRIP_IDEA_COPY[k].hero);
+      expect(hero?.image, k).toBeTruthy();
+      expect(ideaTrips(k).map((t) => t.id), k).not.toContain(hero!.id);
+      // The sentence names the trip in the picture: its title's first place.
+      for (const l of LANGS) expect(TRIP_IDEA_COPY[k].sentence[l], `${k} ${l}`).toContain(hero!.title[l].replace(/^De /, "").split(" ")[0]);
     }
+    // What the sentences say of them: Prague's first two nights; a car on one day of the islands.
+    const prague = TRIPS.find((t) => t.id === "prague-krumlov-vienna")!;
+    expect([prague.kind, prague.stops[0].name, prague.stops[0].nights]).toEqual(["train", "Prague", 2]);
+    const islands = TRIPS.find((t) => t.id === "santorini-naxos")!;
+    expect(islands.kind).toBe("islands");
+    expect(islands.plan.flatMap((d) => d.items.en).filter((x) => /hire a car/i.test(x))).toHaveLength(1);
   });
 
   it("K9 the cards' lines on a page do not start alike", () => {

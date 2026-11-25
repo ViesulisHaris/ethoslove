@@ -5,8 +5,8 @@ import type { TripIdeaKind } from "@/lib/trips/idea-kinds";
  * `TRIP_IDEAS_UI` is what both pages say; `TRIP_IDEA_COPY` is each kind's own, with `fits`, the one
  * line of why for each trip on it (by trip id), each read against the trip's stops and plan in
  * lib/trips/presets.ts; each starts its own way, since the card's label above it is the trip's best
- * months, not its kind (the page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: the last card,
- * never one of the first two, so a phone never shows one photograph twice in a row. `{count}` is the
+ * months, not its kind (the page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: never one of the page's cards (so no
+ * photograph shows twice on a page), and always a trip the hero's sentence names. `{count}` is the
  * kind's number of trips. Spain Spanish, vosotros.
  */
 type L = { en: string; es: string };
@@ -22,7 +22,7 @@ export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line:
 
 export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
   "weekend-getaways": {
-    hero: "amsterdam-by-bike",
+    hero: "prague-krumlov-vienna",
     nav: { en: "Weekend getaways", es: "Escapadas de fin de semana" },
     title: { en: "Weekend getaways for couples: {count} city breaks in Europe", es: "Escapadas de fin de semana en pareja: {count} ciudades" },
     description: {
@@ -31,7 +31,8 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
     heading: { en: "Weekend getaways for two", es: "Escapadas de fin de semana para dos" },
     line: { en: "Four city breaks of three or four days each.", es: "Cuatro ciudades, de tres o cuatro días cada una." },
-    sentence: { en: "Each fits between a Friday and a Monday, is planned day by day, and needs no car.", es: "Cada una cabe entre un viernes y un lunes, va planeada día a día y se hace sin coche." },
+    // Prague's two nights: the train trip's first stop (presets.ts), so the hero's photograph is named here.
+    sentence: { en: "Each fits between a Friday and a Monday and needs no car. Prague makes one too: the train trip starts with two nights there.", es: "Cada una cabe entre un viernes y un lunes y se hace sin coche. Praga también da para una: el viaje en tren empieza con dos noches allí." },
     listLabel: { en: "Three or four days", es: "Tres o cuatro días" },
     listHeading: { en: "The {count} that fit a weekend", es: "Las {count} que caben en un fin de semana" },
     fits: {
@@ -47,7 +48,7 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
   },
   "road-trips": {
-    hero: "algarve-coast",
+    hero: "santorini-naxos",
     nav: { en: "Road trips", es: "Viajes en coche" },
     title: { en: "Road trips for couples in Europe: {count} routes by car", es: "Viajes en coche por Europa en pareja: {count} rutas" },
     description: {
@@ -56,7 +57,8 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
     heading: { en: "Road trips for two", es: "Viajes en coche para dos" },
     line: { en: "Six routes of six or seven days each.", es: "Seis rutas, de seis o siete días cada una." },
-    sentence: { en: "Each has its route on a map and every night’s stop named. Car hire is one tap from the trip’s page.", es: "Cada ruta tiene su mapa y dice dónde dormir cada noche. El coche de alquiler se reserva desde la página del viaje." },
+    // Santorini and Naxos: the bus and the ferry, and "hire a car or a scooter" for the day on Naxos (presets.ts).
+    sentence: { en: "Each has its route on a map and every night’s stop named. Rather not drive all week? Santorini and Naxos go by bus and ferry, with one day by car.", es: "Cada ruta tiene su mapa y dice dónde dormir cada noche. ¿Sin conducir toda la semana? Santorini y Naxos se recorren en autobús y ferry, con coche un día." },
     listLabel: { en: "By car", es: "En coche" },
     listHeading: { en: "The {count} road trips", es: "Los {count} viajes en coche" },
     fits: {

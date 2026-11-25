@@ -227,8 +227,16 @@ test.describe("the pages by kind of trip", () => {
     await expect(cards).toHaveCount(4);
     expect(await cards.evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).toEqual(["lisbon-slow-weekend", "paris-without-cliches", "copenhagen-hygge", "amsterdam-by-bike"]);
     await expect(cards.first().locator("p")).toHaveText("Three days on foot, sleeping in Alfama.");
-    // The hero's photograph is the last card's, not the first's.
-    await expect(page.locator("[data-line]")).toHaveText("Amsterdam by bike");
+    // The hero's photograph is a trip the hero names, and no card's.
+    await expect(page.locator("[data-line]")).toHaveText("Prague to Vienna by train");
+    for (const path of ["/trips/ideas/weekend-getaways", "/trips/ideas/road-trips"]) {
+      await page.goto(path);
+      const heroSrc = await page.locator("[data-line]").locator("xpath=..").locator("img").first().getAttribute("src");
+      const cardSrcs = await page.locator("#ideas-row img").evaluateAll((els) => els.map((el) => el.getAttribute("src") ?? ""));
+      const stem = (s: string | null) => (s ?? "").replace(/-sm\.webp$|\.webp$/, "");
+      expect(cardSrcs.map(stem), path).not.toContain(stem(heroSrc));
+    }
+    await page.goto("/trips/ideas/weekend-getaways");
     for (let i = 0; i < 4; i++) await expect(cards.nth(i).locator("p")).toHaveText(/\.$/);
     expect(listOf(await ldNodes(page), "ItemList")?.itemListElement).toHaveLength(4);
     const why = page.locator("details[data-more-about]");
