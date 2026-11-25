@@ -91,9 +91,11 @@ const PAIRS = [
   { path: "new-york/first-date", city: "new-york", kind: "first-date", en: "First Date Ideas in NYC", es: "Primera cita en Nueva York", cards: 9 },
   { path: "london/first-date", city: "london", kind: "first-date", en: "First Date Ideas in London", es: "Primera cita en Londres", cards: 9 },
   { path: "london/cheap", city: "london", kind: "cheap", en: "Cheap Date Ideas in London", es: "Citas baratas en Londres", cards: 8 },
+  { path: "chicago/romantic", city: "chicago", kind: "romantic", en: "Romantic Date Ideas in Chicago", es: "Citas románticas en Chicago", cards: 10 },
+  { path: "london/night", city: "london", kind: "night", en: "Date Night Ideas in London", es: "Noche de cita en Londres", cards: 9 },
 ];
 
-test("X3 the four city-by-kind pages are there in both languages", async ({ page }) => {
+test("X3 the hand-written city-by-kind pages and two composed ones are there in both languages", async ({ page }) => {
   test.setTimeout(240_000);
   const noErrors = watchErrors(page);
   for (const pair of PAIRS) {
@@ -115,15 +117,19 @@ test("X3 the four city-by-kind pages are there in both languages", async ({ page
   noErrors();
 });
 
-test("X4 every other pair is a 404", async ({ page }) => {
-  for (const path of ["/dates/paris/cheap", "/dates/london/fun", "/dates/new-york/rainy-day", "/dates/atlantis/cheap", "/dates/london/nope"]) expect((await page.goto(path))?.status(), path).toBe(404);
+test("X4 a pair the data does not hold is a 404", async ({ page }) => {
+  for (const path of ["/dates/london/outdoor", "/dates/miami/winter", "/dates/boston/night", "/dates/new-york/rainy-day", "/dates/atlantis/cheap", "/dates/london/nope"]) expect((await page.goto(path))?.status(), path).toBe(404);
 });
 
-test("X5 London's and New York's pages point at their two kinds, and no other city's does", async ({ page }) => {
+test("X5 a city's page points at exactly the pairs its data holds", async ({ page }) => {
+  // London: first date, fun, cheap, romantic, rainy day, date night, unique (tests/unit/city-kind-pairs.test.ts).
   await page.goto("/dates/london");
-  await expect(page.getByRole("navigation", { name: "In London, by kind" }).getByRole("link")).toHaveCount(2);
-  await page.goto("/dates/paris");
-  await expect(page.getByRole("navigation", { name: /by kind$/ })).toHaveCount(0);
+  const london = page.getByRole("navigation", { name: "In London, by kind" }).getByRole("link");
+  await expect(london).toHaveCount(7);
+  await expect(page.locator('a[href="/dates/london/night"]').first()).toBeAttached();
+  await expect(page.locator('a[href="/dates/london/outdoor"]')).toHaveCount(0);
+  await page.goto("/dates/miami");
+  await expect(page.getByRole("navigation", { name: "In Miami, by kind" }).getByRole("link")).toHaveCount(4);
 });
 
 test("X6 every city's page has the planner", async ({ page }) => {

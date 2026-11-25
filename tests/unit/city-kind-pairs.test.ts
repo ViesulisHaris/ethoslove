@@ -8,6 +8,7 @@ import { SKYLINE_IDEAS } from "@/lib/dates/art";
 import { DATE_KIND_IDS, DATE_KINDS, type DateKind } from "@/lib/dates/date-kinds";
 import { mentionsSpain } from "@/lib/cities/cities";
 import { pairCopy } from "@/lib/cities/kind-copy";
+import sitemap from "@/app/sitemap";
 
 const words = (text: string): number => text.trim().split(/s+/).filter(Boolean).length;
 
@@ -104,6 +105,17 @@ describe("a kind of date inside a city", () => {
     expect(CITY_KIND_PAIRS.length).toBeLessThanOrEqual(400);
     for (const key of ["new-york/cheap", "new-york/first-date", "london/first-date", "london/cheap"]) expect(isCityKindPair(key.split("/")[0], key.split("/")[1]), key).toBe(true);
     for (const key of ["london/outdoor", "miami/winter", "phoenix/rainy-day"]) expect(isCityKindPair(key.split("/")[0], key.split("/")[1]), key).toBe(false);
+  });
+
+  it("P8 the sitemap lists exactly the pairs, in both languages, and every kind's page", () => {
+    const paths = sitemap().map((p) => new URL(p.url).pathname);
+    const want = new Set(CITY_KIND_PAIRS.map((p) => `/dates/${p.city}/${p.kind}`));
+    for (const prefix of ["", "/es"]) {
+      const listed = paths.filter((u) => u.startsWith(`${prefix}/dates/`)).map((u) => u.slice(prefix.length)).filter((u) => /^\/dates\/[a-z-]+\/[a-z-]+$/.test(u) && !u.startsWith("/dates/ideas/"));
+      expect(new Set(listed), prefix || "en").toEqual(want);
+      expect(listed.length, prefix || "en").toBe(want.size);
+      for (const kind of DATE_KINDS) expect(paths, `${prefix}/dates/ideas/${kind}`).toContain(`${prefix}/dates/ideas/${kind}`);
+    }
   });
 
   it("P9 nothing links to a pair that is not there, and no city takes a name the dates pages use", () => {

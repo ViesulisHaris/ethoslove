@@ -130,14 +130,14 @@ test.describe("the pages by kind of date", () => {
   test("P6 the dates map links to every kind, and a kind links on to cities and to the other kinds", async ({ page }) => {
     await page.goto("/dates");
     const byKind = page.getByRole("navigation", { name: "Date ideas by kind" });
-    await expect(byKind.getByRole("link")).toHaveCount(7);
+    await expect(byKind.getByRole("link")).toHaveCount(10);
     await expect(byKind.getByRole("link").first()).toHaveAttribute("href", "/dates/ideas/first-date");
 
     await page.goto("/dates/ideas/first-date");
-    for (const href of ["/dates/new-york/first-date", "/dates/london/first-date", "/dates/chicago"]) await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
+    for (const href of ["/dates/new-york/first-date", "/dates/london/first-date", "/dates/chicago/first-date"]) await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
     await expect(page.getByRole("link", { name: "All 55 cities" })).toHaveAttribute("href", "/dates");
     const more = page.getByRole("navigation", { name: "More kinds of date" });
-    await expect(more.getByRole("link")).toHaveCount(6);
+    await expect(more.getByRole("link")).toHaveCount(9);
     await expect(more.locator('a[href="/dates/ideas/first-date"]')).toHaveCount(0);
   });
 

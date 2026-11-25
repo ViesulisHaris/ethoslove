@@ -7,13 +7,14 @@ import { DateIdeaCards, type DateCard, type DateCardLabels } from "./idea-cards"
 /**
  * A kind's ideas as picture cards, in the kind's own order: one section, or for `cheap` two (the
  * four that can cost nothing, "Free date ideas", then the four for pocket change). Shared by the
- * page by kind and the city-by-kind pages, which differ only in what a card holds.
+ * page by kind and the city-by-kind pages, which differ in what a card holds and, for a city, in
+ * which of the kind's ideas are shown and in what order (`ideas`).
  */
-export function KindIdeas({ kind, locale, card, labels }: { kind: DateKind; locale: "en" | "es"; card: (idea: DateIdea, index: number) => DateCard; labels: DateCardLabels }) {
+export function KindIdeas({ kind, locale, card, labels, ideas = kindIdeas(kind) }: { kind: DateKind; locale: "en" | "es"; card: (idea: DateIdea, index: number) => DateCard; labels: DateCardLabels; ideas?: DateIdea[] }) {
   const ui = DATE_KIND_UI[locale];
-  const ideas = kindIdeas(kind);
   const cards = ideas.map(card);
-  if (kind === "cheap") {
+  // The split says "these four" twice: it is true only when all eight are shown (a city pair may show fewer).
+  if (kind === "cheap" && ideas.length === kindIdeas("cheap").length) {
     const free = cards.filter((c) => CHEAP_FREE.includes(c.idea.id));
     const paid = cards.filter((c) => !CHEAP_FREE.includes(c.idea.id));
     return (

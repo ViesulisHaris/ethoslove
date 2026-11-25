@@ -4,11 +4,12 @@ import { ArrowDown } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
-import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI, KIND_PAGE_CITIES } from "@/content/date-kinds";
+import { DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI, KIND_PAGE_CITIES } from "@/content/date-kinds";
 import { CITY_PAGES, cityName, getCity } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode } from "@/lib/cities/copy";
 import { ideaImage } from "@/lib/dates/art";
 import { DATE_KINDS, getDateKind, kindIdeas } from "@/lib/dates/date-kinds";
+import { pairCopy } from "@/lib/cities/kind-copy";
 import { isCityKindPair } from "@/lib/cities/kind-pairs";
 import { ideaById } from "@/lib/dates/ideas";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -98,9 +99,9 @@ export default async function DateKindPage({ params }: Props) {
           <ul className="flex flex-wrap gap-x-6 leading-8">
             {cities.map((city) => (
               <li key={city.slug}>
-                {isCityKindPair(city.slug, kind) && CITY_KIND_COPY[`${city.slug}/${kind}`] ? (
+                {isCityKindPair(city.slug, kind) ? (
                   <Link href={`/dates/${city.slug}/${kind}`} className={QUIET_ROW_LINK}>
-                    {CITY_KIND_COPY[`${city.slug}/${kind}`].heading[l]}
+                    {pairCopy(city, kind, l).heading}
                   </Link>
                 ) : (
                   <Link href={`/dates/${city.slug}`} className={QUIET_ROW_LINK}>

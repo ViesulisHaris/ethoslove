@@ -22,7 +22,7 @@ import { CityIdeaCard } from "@/components/cities/city-idea-card";
 import { CityLinks } from "@/components/cities/city-links";
 import { CityPlaceList } from "@/components/cities/city-places";
 import { TonightIsland } from "@/components/dates/tonight/tonight-island";
-import { CITY_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
+import { DATE_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
 import { kindsOfCity } from "@/lib/cities/kind-pairs";
 
 /**
@@ -83,8 +83,8 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const told = toldTraits(city, ideas);
   const ideaStops = cityIdeaStops(ideas, around);
   const passing = tripsThrough(city.slug);
-  // Its pages by kind of date, only New York's and London's (lib/dates/date-kinds.ts).
-  const kindPages = kindsOfCity(city.slug).filter((kind) => CITY_KIND_COPY[`${city.slug}/${kind}`]).map((kind) => ({ city: city.slug, kind }));
+  // Its pages by kind of date: every pair its own list holds (lib/cities/kind-pairs.ts).
+  const kindPages = kindsOfCity(city.slug).map((kind) => ({ city: city.slug, kind }));
 
   return (
     <>
@@ -285,7 +285,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                 {kindPages.map((p) => (
                   <li key={p.kind} className="flex items-center">
                     <Link href={`/dates/${city.slug}/${p.kind}`} className="inline-flex min-h-11 items-center px-1.5 text-[14px] font-medium text-forest/75 underline-offset-4 hover:text-rose-deep hover:underline">
-                      {CITY_KIND_COPY[`${city.slug}/${p.kind}`].heading[l]}
+                      {DATE_KIND_COPY[p.kind]!.nav[l]}
                     </Link>
                   </li>
                 ))}
