@@ -82,7 +82,8 @@
       "facts": {
         "free": {
           "a": "02",
-          "b": "free templates"
+          "b": "free templates",
+          "bOne": "free template"
         },
         "noAccount": {
           "a": "00",
@@ -127,6 +128,7 @@
     "how": {
       "eyebrow": "How it works",
       "title": "Ten minutes, start to finish.",
+      "pickBody": "Try any of them full-screen first. {free, plural, =0 {Each one unlocks once and stays yours} =1 {{name} is free; the rest unlock once and stay yours} =2 {Two are free; the rest unlock once and stay yours} other {# are free; the rest unlock once and stay yours}}.",
       "steps": [
         {
           "title": "Pick a template",

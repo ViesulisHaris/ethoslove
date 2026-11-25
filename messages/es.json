@@ -82,7 +82,8 @@
       "facts": {
         "free": {
           "a": "02",
-          "b": "plantillas gratis"
+          "b": "plantillas gratis",
+          "bOne": "plantilla gratis"
         },
         "noAccount": {
           "a": "00",
@@ -127,6 +128,7 @@
     "how": {
       "eyebrow": "Cómo funciona",
       "title": "Diez minutos, de principio a fin.",
+      "pickBody": "Pruébalas todas a pantalla completa. {free, plural, =0 {Cada una se desbloquea una vez y es tuya} =1 {{name} es gratis; el resto se desbloquean una vez y son tuyas} =2 {Dos son gratis; el resto se desbloquean una vez y son tuyas} other {# son gratis; el resto se desbloquean una vez y son tuyas}}.",
       "steps": [
         {
           "title": "Elige una plantilla",

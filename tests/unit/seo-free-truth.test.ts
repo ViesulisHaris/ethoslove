@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { createTranslator } from "next-intl";
 import en from "../../messages/en.json";
+import es from "../../messages/es.json";
+import { DIGITAL_GIFT_GUIDE } from "@/content/digital-gifts";
+import { pricingGifts } from "@/components/pricing/free-gifts";
 import { briefFaq, briefTemplatePrice } from "@/lib/llms/brief";
-import { getManifest } from "@/templates/manifests";
+import { getManifest, listManifests } from "@/templates/manifests";
 
 /**
  * What the site says is free, outside /pricing (reports/seoaudit-audit.md, B1 and B2): /llms.txt, the
@@ -51,4 +55,31 @@ describe("a template's price line in /llms.txt", () => {
     expect(line).not.toMatch(/Free\./);
     expect(line).toContain('Paid once ("Make it special"');
   });
+});
+
+describe("/gifts says how many templates there are and how many are free from the catalogue (B3, B4, M1)", () => {
+  for (const share of ["1", ""]) {
+    it(`with the free note ${share ? "on" : "off"}`, () => {
+      vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", share);
+      const manifests = listManifests();
+      const { free } = pricingGifts(manifests);
+      expect(free.length).toBe(share ? 1 : 2);
+      // "What is a digital gift?": the gallery's count and the free count, not a typed 54.
+      expect(DIGITAL_GIFT_GUIDE.en.notACard).toContain(`Ethos has ${manifests.length} of them`);
+      expect(DIGITAL_GIFT_GUIDE.es.notACard).toContain(`Ethos tiene ${manifests.length} para empezar`);
+      expect(DIGITAL_GIFT_GUIDE.en.notACard).toMatch(share ? /and one is free\.$/ : /and two are free\.$/);
+      expect(DIGITAL_GIFT_GUIDE.es.notACard).toMatch(share ? /y uno es gratis\.$/ : /y dos son gratis\.$/);
+      // "How it works", step one, said from the same list.
+      for (const [lang, messages] of [
+        ["en", en],
+        ["es", es],
+      ] as const) {
+        const t = createTranslator({ locale: lang, messages });
+        const body = t("home.how.pickBody", { free: free.length, name: free[0].name[lang] });
+        if (share) expect(body).toContain(lang === "en" ? "The Letter is free;" : `${free[0].name.es} es gratis;`);
+        else expect(body).toContain(lang === "en" ? "Two are free;" : "Dos son gratis;");
+        expect(body).not.toMatch(/[{}]/);
+      }
+    });
+  }
 });
