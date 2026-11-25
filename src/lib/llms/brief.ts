@@ -14,6 +14,7 @@ import {
 import { localizedUrl } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { pricingFaq } from "@/components/pricing/offers";
+import { withFreeAnswer } from "@/components/pricing/free-gifts";
 import en from "../../../messages/en.json";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { keepShare } from "@/lib/editor/keep-split";
@@ -82,10 +83,20 @@ export function briefPricing(): string[] {
   ];
 }
 
+/**
+ * What a template costs, in the words /llms.txt and the help chat's guide both use: free only when
+ * `sendsFree` says so, and then as the free note when the note is for everyone. A free-tier template
+ * that cannot go out free (Constellations with the note on) is sold whole at "Make it special".
+ */
+export function briefTemplatePrice(m: Parameters<typeof sendsFree>[0]): string {
+  if (sendsFree(m)) return noteForEveryone() ? "Free as a short note (up to 500 characters, no photos); photos and the full letter are paid once." : "Free.";
+  return m.tier === "free" ? `Paid once ("Make it special", ${prices("extras")}).` : "Premium.";
+}
+
 export function briefFaq(): string[] {
   return [
     "## FAQ",
     "",
-    ...pricingFaq(en.pricing.faq, { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() }).flatMap((f) => [`### ${f.q}`, "", f.a, ""]),
+    ...withFreeAnswer(pricingFaq(en.pricing.faq, { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() }), noteForEveryone(), en.pricing.faqFreeNote).flatMap((f) => [`### ${f.q}`, "", f.a, ""]),
   ];
 }

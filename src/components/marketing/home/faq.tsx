@@ -2,13 +2,15 @@ import { getTranslations } from "next-intl/server";
 import { giftCardsOnSale, subscriptionsEnabled } from "@/lib/pricing/products";
 import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
 import { FaqList } from "@/components/shared/faq-list";
+import { pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
+import { listManifests } from "@/templates/manifests";
 
 /** The pricing questions, after any the page asks first (`lead`: /gifts leads with what a digital gift is). */
 export async function Faq({ lead = [] }: { lead?: { q: string; a: string }[] }) {
   const t = await getTranslations("pricing");
   // No question about the gift card while it isn't on sale (GIFT_CARDS_ENABLED), and Ethos for Two's
   // answers only for the way it is sold now (STRIPE_SUBSCRIPTIONS_ENABLED).
-  const faq = [...lead, ...pricingFaq(t.raw("faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() })];
+  const faq = [...lead, ...withFreeAnswer(pricingFaq(t.raw("faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() }), pricingGifts(listManifests()).note, t("faqFreeNote"))];
   return (
     <section className="border-b border-line py-20 lg:py-28">
       <div className="container-x grid gap-10 lg:grid-cols-12">

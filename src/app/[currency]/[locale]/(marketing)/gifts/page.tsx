@@ -17,6 +17,7 @@ import { templateSeo } from "@/content/template-seo";
 import { getManifest, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
+import { pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
 import { PricingCards } from "@/components/pricing/pricing-cards";
 import { Openings } from "@/components/marketing/home/openings";
 import { ProofLine, Reactions } from "@/components/marketing/home/reactions";
@@ -80,8 +81,10 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
   }));
   const steps = t.raw("home.how.steps") as { title: string; body: string }[];
   // What a digital gift is, asked in the list; the pricing page's own questions, which are that page's, in one closed row under it.
-  const pricingQuestions = pricingFaq(t.raw("pricing.faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() });
-  const free = manifests.filter((m) => sendsFree(m)).length;
+  // "What is free?" answered as /pricing answers it: with the free note on, the note's answer, not the one that lists two full templates.
+  const gifts = pricingGifts(manifests);
+  const pricingQuestions = withFreeAnswer(pricingFaq(t.raw("pricing.faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() }), gifts.note, t("pricing.faqFreeNote"));
+  const free = gifts.free.length;
   // Where next: four pages by kind as posters; the people, the occasions, the other kinds and what a digital card is by name.
   const kinds = GIFT_GUIDE_SLUGS.flatMap((slug) => {
     const manifest = getManifest(GIFT_GUIDES[slug].en.film ?? GIFT_GUIDES[slug].en.ideas[0].template);

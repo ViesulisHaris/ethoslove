@@ -14,7 +14,7 @@ import { templateSeo } from "@/content/template-seo";
 import { DATE_KIND_COPY } from "@/content/date-kinds";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { DATE_KINDS } from "@/lib/dates/date-kinds";
-import { briefFaq, briefHowGifts, briefIntro, briefPricing } from "@/lib/llms/brief";
+import { briefFaq, briefHowGifts, briefIntro, briefPricing, briefTemplatePrice } from "@/lib/llms/brief";
 import { pressBrief } from "@/lib/press/shown";
 import { FREE_SAVED_DATES } from "@/lib/pricing/products";
 import { localizedUrl } from "@/lib/seo";
@@ -64,7 +64,7 @@ export function GET() {
     "",
     ...manifests.map(
       (m) =>
-        `- [${m.name.en}](${localizedUrl("en", `/templates/${m.slug}`)})${templateSeo(m.slug, "en") ? ` (${templateSeo(m.slug, "en")?.keyword.toLowerCase()})` : ""}: ${m.tagline.en} ${m.description.en} ${m.tier === "free" ? "Free." : "Premium."} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`,
+        `- [${m.name.en}](${localizedUrl("en", `/templates/${m.slug}`)})${templateSeo(m.slug, "en") ? ` (${templateSeo(m.slug, "en")?.keyword.toLowerCase()})` : ""}: ${m.tagline.en} ${m.description.en} ${briefTemplatePrice(m)} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`,
     ),
     "",
     "## Occasions",
