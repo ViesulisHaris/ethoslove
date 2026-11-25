@@ -27,3 +27,13 @@ export async function needPreviews(request: APIRequestContext) {
   const status = (await request.get("/for-two/preview?state=none")).status();
   test.skip(status === 404, "/for-two/preview is development-only: a production build answers 404");
 }
+
+/**
+ * Skips the running test on a development server, for a test that only means something against a production build
+ * (`npm run start`): there each page has its own code, and under `next dev` the scripts are bundled differently. A
+ * development server draws the development-only previews; a production build answers them 404.
+ */
+export async function needProductionBuild(request: APIRequestContext) {
+  const status = (await request.get("/for-two/preview?state=none")).status();
+  test.skip(status !== 404, "meaningful against a production build only (npm run start): this is a development server");
+}
