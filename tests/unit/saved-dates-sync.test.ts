@@ -27,6 +27,7 @@ const saved = (p: Plan, over: Partial<SavedDate> = {}): SavedDate => ({
   city: "Lisbon",
   day: null,
   stopsCount: p.stops.length,
+  done: null,
   cover: null,
   ideaId: null,
   tripId: null,

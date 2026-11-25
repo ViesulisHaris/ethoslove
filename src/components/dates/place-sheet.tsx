@@ -2,11 +2,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Share2, Star, Sun, Ticket, X } from "lucide-react";
+import { Accessibility, CalendarCheck, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Share2, Star, Sun, Ticket, X } from "lucide-react";
 import { animate, motion, useDragControls, useMotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
 import { getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics/track";
+import { bookingLink, TABLE_KINDS } from "@/lib/dates/booking";
 import { formatDay, weekdayOf, type Ymd } from "@/lib/dates/calendar";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { cuisineWords } from "@/lib/dates/cuisines";
@@ -26,6 +28,8 @@ import type { WentAs } from "@/lib/supabase/types";
 import { tiqetsSearch } from "@/lib/trips/partners";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { CostChip } from "./cost-chip";
+import { FeaturedMark } from "./featured-label";
+import { heardVotes, votesOff } from "./use-done";
 import { GroupIcon } from "./group-icon";
 import { PairsWith } from "./pairs-with";
 import { Reviews, type ReviewsLabels } from "./reviews";
@@ -69,7 +73,16 @@ export type PlaceSheetLabels = {
   /** Before the place's name in the text a share sheet sends with the link. */
   shareText: string;
   reviews: ReviewsLabels;
+  /** "{n} couples liked this", from five yes votes up. */
+  liked: (n: number) => string;
+  /** "Book a table", where the map's entry has a booking page. */
+  book: string;
+  /** "Featured", for a place a venue pays to have marked. */
+  featured?: string;
 };
+
+/** A place a vote can be on: the map's own ids only. */
+const VOTE_PLACE = /^(node|way|relation)\/\d{1,15}$/;
 
 type Props = {
   place: Ranked;
@@ -170,6 +183,8 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   const oddity = quirk ?? details?.quirk;
   const query = encodeURIComponent(`${place.name} ${where}`.trim());
   // The details can say it is famous when the map's first answer didn't.
+  // A table, where the map's entry names a booking page: plain, unless a partner's id is set (booking.ts).
+  const booking = TABLE_KINDS.includes(place.kind) ? bookingLink(details?.booking) : null;
   const tickets = sellsTickets({ kind: place.kind, named: place.named, notable: place.notable || details?.notable }) ? tiqetsSearch(ticketQuery(place.name, where), locale) : null;
 
   // What Tripadvisor and Google say, when this install has their keys; an empty answer otherwise,
@@ -185,6 +200,26 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
     return () => ask.abort();
   }, [place.id, place.name, place.lat, place.lng, place.named]);
   const scores = elsewhere?.id === place.id ? elsewhere.ratings : [];
+
+  // "14 couples liked this": the yes votes on this place from five up (the route sends nothing under
+  // five, and nothing at all while the votes table is not there). Kept per place, as above.
+  const [liked, setLiked] = useState<{ id: string; n: number } | null>(null);
+  useEffect(() => {
+    if (!VOTE_PLACE.test(place.id) || votesOff()) return;
+    const ask = new AbortController();
+    const target = `place:${place.id}`;
+    fetch(`/api/dates/votes?t=${encodeURIComponent(target)}`, { signal: ask.signal })
+      .then((res) => (res.ok ? (res.json() as Promise<{ available?: unknown; liked?: Record<string, unknown> }>) : null))
+      .then((json) => {
+        // "Not available" is kept for the tab, as /plan keeps it: the next sheet asks nothing (dates2-C8).
+        heardVotes(json);
+        const n = json?.liked?.[target];
+        if (typeof n === "number") setLiked({ id: place.id, n });
+      })
+      .catch(() => undefined);
+    return () => ask.abort();
+  }, [place.id]);
+  const likedBy = liked?.id === place.id ? liked.n : null;
   // A place from the map has no address of its own; without one the links searched the bare name,
   // and three branches of Waterstones got the same links. The sheet's address, or at least the town.
   const lookUp = place.named ? linksFor({ ...place, address: address || where || undefined }).filter((l) => !scores.some((r) => r.source === l.source)) : [];
@@ -278,6 +313,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           <h2 ref={heading} tabIndex={-1} id="place-sheet-name" className="font-display text-[24px] leading-[1.08] text-forest outline-none">
             {place.name}
           </h2>
+          {labels.featured ? <FeaturedMark place={place} label={labels.featured} className="mt-1.5" /> : null}
           <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
             {place.rating?.reviews ? (
               <>
@@ -369,6 +405,20 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
             <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
           </a>
         ) : null}
+        {booking ? (
+          <a
+            href={booking.href}
+            target="_blank"
+            rel={booking.sponsored ? "noopener noreferrer sponsored" : "noopener noreferrer nofollow"}
+            onClick={() => track("booking_click", { paid: booking.sponsored })}
+            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5"
+          >
+            <CalendarCheck aria-hidden="true" className="size-4" />
+            {labels.book}
+            <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
+            <span className="sr-only">({ta("newTab")})</span>
+          </a>
+        ) : null}
         {tickets ? (
           <PartnerLink partner="tiqets" placement="place_sheet" href={tickets} className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
             <Ticket aria-hidden="true" className="size-4" />
@@ -393,6 +443,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           {ta("tickets.via")} {ta("disclosure")}
         </p>
       ) : null}
+      {booking?.sponsored ? <p className="mt-2 px-1 text-[12px] leading-snug text-forest/65">{ta("booking.via")}</p> : null}
 
       {scores.length > 0 || lookUp.length > 0 ? (
         <div className="mt-5">
@@ -416,7 +467,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           </div>
         </div>
       ) : null}
-      <Reviews rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
+      <Reviews liked={likedBy !== null ? labels.liked(likedBy) : undefined} rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
       <PairsWith from={place} picks={pairs} locale={locale} labels={{ title: labels.pairs, walk: labels.walkBetween }} onOpen={onOpenPlace} />
       <p className="mt-4 text-[11.5px] leading-snug text-forest/65">{labels.source}</p>
     </motion.aside>

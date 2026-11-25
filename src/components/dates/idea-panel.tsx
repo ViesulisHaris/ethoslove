@@ -9,7 +9,7 @@ import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { GroupIcon } from "./group-icon";
 
-export type IdeaPanelLabels = { twist: string; another: string; nothing: (kind: string) => string; walk: (minutes: number) => string; add: string; added: string; close: string; open: string };
+export type IdeaPanelLabels = { twist: string; another: string; nothing: (kind: string) => string; walk: (minutes: number) => string; add: string; added: string; close: string; open: string; featured?: string };
 
 type Props = {
   idea: DateIdea;
@@ -76,6 +76,7 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
                       <GroupIcon group={stop.place.group} className="size-3.5" />
                       {/* A place with no name is already called by its kind on the line below: "Viewpoint", twice. */}
                       {stop.place.named ? <span className="min-w-0 truncate">{KINDS[stop.place.kind].label[locale]}</span> : null}
+                      {labels.featured && stop.place.featured ? <span className="shrink-0 tracking-wide uppercase">· {labels.featured}</span> : null}
                     </span>
                     <span className="mt-0.5 block truncate text-[16px] font-semibold text-forest underline-offset-4 hover:underline">{stop.place.name}</span>
                     <span className="block text-[13px] text-forest/65">{formatDistance(stop.place.distanceKm, locale)}</span>

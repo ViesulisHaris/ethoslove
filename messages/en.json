@@ -1961,6 +1961,7 @@
     },
     "eyebrow": "Date ideas by city",
     "title": "Date ideas in {city}",
+    "line": "{ideas} dates, “{first}” among them.",
     "back": "All date ideas",
     "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the center for the stops.",
     "leadNoPlaces": "{ideas} dates for {city}, in the order the city deserves. Open any of them on the map and it finds the places.",
@@ -1972,6 +1973,9 @@
     "ideas": {
       "eyebrow": "The ideas",
       "title": "{count, plural, one {# date} other {# dates}} for {city}",
+      "line": "Open a card: the twist, and where in {city} to do it.",
+      "more": "{count} more ideas for {city}",
+      "why": "Why these come first in {city}",
       "inCity": "In {city}, try",
       "onMap": "See it on the map",
       "pick": "Especially good here"
@@ -2048,6 +2052,8 @@
       "eyebrow": "Real places",
       "title": "Near the center of {city}",
       "sub": "The best-placed spots within {km} km of the center, ranked the way the dates map ranks them. Tap one to see it on the map.",
+      "line": "The best-placed spots within {km} km. Tap one to see it on the map.",
+      "all": "All {count} places",
       "counts": "What the map knows within {km} km",
       "fromCentre": "{distance} from the center",
       "none": "We couldn’t read the map for {city} just now. The ideas above still stand: open the map and it will find places for them."
@@ -2060,7 +2066,8 @@
       "title": "Tickets in {city}",
       "sub": "Museums, tours and the things worth booking ahead, through our partner Tiqets.",
       "cta": "Tickets in {city}",
-      "disclosure": "Partner link: if you book through it, we may earn a commission. It costs you nothing extra."
+      "disclosure": "Partner link: if you book through it, we may earn a commission. It costs you nothing extra.",
+      "short": "Partner link: we may earn a commission."
     },
     "trip": "A trip that passes through here",
     "gift": {
@@ -2069,7 +2076,11 @@
       "sub": "Pick one of these ideas, then send the plan as a little page they open on their phone: a letter, a countdown, a ticket for two.",
       "note": "Opens the gift templates. Free to start."
     },
-    "nearby": "Date ideas in other cities"
+    "nearby": "Date ideas in other cities",
+    "more": {
+      "title": "More for {city}",
+      "byKind": "By kind"
+    }
   },
   "dates": {
     "meta": {
@@ -2143,10 +2154,28 @@
     "tonight": {
       "label": "The planner",
       "inCity": "Where to go in {city}",
-      "sentence": "Plan <mood></mood> date <when></when>. <length></length>, <budget></budget>.",
-      "sentenceKind": "Plan one of these <when></when>. <length></length>, <budget></budget>.",
+      "sentence": "Plan <mood></mood> date <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceKind": "Plan one of these <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceMore": "<setting>,</setting> <reach>.</reach>",
+      "sentenceMoreNoReach": "<setting>.</setting>",
       "lengthLabel": "How long",
       "budgetLabel": "Budget",
+      "settingLabel": "Indoors or outdoors",
+      "setting": {
+        "any": "In or out",
+        "indoors": "Indoors",
+        "outdoors": "Outdoors"
+      },
+      "reachLabel": "Distance",
+      "reach": {
+        "10": "10 min away",
+        "20": "20 min away",
+        "30": "30 min away",
+        "any": "any distance"
+      },
+      "reachDenied": "We couldn’t get your position, so distance is off. Nothing else changed.",
+      "reachNone": "This browser can’t share a position, so distance is off.",
+      "reachFar": "You’re more than a half-hour walk from these places, so distance is off.",
       "mood": {
         "any": "any kind of",
         "cozy": "a cozy",
@@ -2205,7 +2234,10 @@
       "optional": "optional",
       "none": "Nothing fits that here.",
       "noneKind": "None of the ideas on this page fit {when} there.",
+      "noneNear": "Nothing within {minutes} minutes of you fits. Try a longer walk.",
       "movedTomorrow": "Nothing on this page can still be done tonight there, so this one is for tomorrow.",
+      "wetIndoors": "Rain is likely {when}, so this one is under a roof.",
+      "wetOutdoors": "Rain is likely {when}. You asked for outdoors, so take a coat.",
       "late": "It’s too late to start one tonight.",
       "tryTomorrow": "Plan tomorrow",
       "openMap": "Open the map",
@@ -2258,7 +2290,12 @@
       "elsewhere": "On other sites",
       "share": "Share",
       "shareCopied": "Link copied",
-      "shareText": "A place for a date:"
+      "shareText": "A place for a date:",
+      "liked": "{n} couples said it was a good date",
+      "book": "Book a table"
+    },
+    "featured": {
+      "label": "Featured"
     },
     "map": {
       "label": "Map of places for a date",
@@ -2315,6 +2352,7 @@
       "count": "{n, plural, one {# review} other {# reviews}}",
       "summary": "{stars} from {n, plural, one {# review} other {# reviews}}",
       "none": "No reviews yet. Be the first couple to rate it.",
+      "noneWritten": "No written reviews yet.",
       "noneShort": "Not rated yet",
       "rate": "Rate it",
       "edit": "Edit yours",
@@ -2359,6 +2397,30 @@
     "rain": "{chance}% chance of rain",
     "sunset": "Sunset {time}",
     "past": "This one has already happened. We hope it was a good one.",
+    "done": {
+      "mark": "Mark as done",
+      "on": "Done on {day}",
+      "undo": "Not done after all",
+      "ask": "Was this a good date?",
+      "yes": "Yes",
+      "no": "No",
+      "thanks": "Noted. You can change it.",
+      "notSaved": "Not saved. Try again in a moment.",
+      "offline": "Not saved: no connection. Try again."
+    },
+    "log": {
+      "title": "Dates you’ve done",
+      "weeks": "{n} weeks in a row",
+      "year": "{n, plural, one {# date} other {# dates}} this year",
+      "good": "A good one",
+      "notGood": "Not this time",
+      "change": "Change",
+      "changeFor": "Change your answer for {title}",
+      "all": "Show all {count}",
+      "remove": "Take {title} off the list",
+      "gift": "{n} dates done. Add a photo of each and they make a timeline.",
+      "giftCta": "Start the gift"
+    },
     "walk": "{minutes} min walk",
     "timeFor": "Time at {name}",
     "noteFor": "A note for {name}",
@@ -2734,6 +2796,9 @@
       "eyebrow": "Book ahead",
       "title": "Tickets for this trip",
       "sub": "The things on this plan worth booking ahead: a time slot, a seat on a boat, a pass. Book before you go and skip the ticket desk."
+    },
+    "booking": {
+      "via": "Booking link: we may earn a commission if you book through it."
     },
     "car": {
       "title": "Hire a car",

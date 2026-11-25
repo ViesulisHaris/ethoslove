@@ -15,7 +15,8 @@ import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { CITY_SLUGS } from "@/lib/cities/cities";
-import { CITY_KIND_PAGES, DATE_KINDS } from "@/lib/dates/date-kinds";
+import { DATE_KINDS } from "@/lib/dates/date-kinds";
+import { WRITTEN_CITY_KIND_PAIRS } from "@/lib/cities/kind-copy";
 import { GAMES } from "@/lib/games/catalogue";
 import { pressNav } from "@/lib/press/shown";
 import { localizedUrl } from "@/lib/seo";
@@ -52,7 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/dates", priority: 0.9, changeFrequency: "weekly" },
     ...CITY_SLUGS.map((slug): Page => ({ path: `/dates/${slug}`, priority: 0.7, changeFrequency: "weekly" })),
     ...DATE_KINDS.map((kind): Page => ({ path: `/dates/ideas/${kind}`, priority: 0.8, changeFrequency: "monthly" })),
-    ...CITY_KIND_PAGES.map(({ city, kind }): Page => ({ path: `/dates/${city}/${kind}`, priority: 0.6, changeFrequency: "weekly" })),
+    ...WRITTEN_CITY_KIND_PAIRS.map(({ city, kind }): Page => ({ path: `/dates/${city}/${kind}`, priority: 0.6, changeFrequency: "weekly" })),
     { path: "/gifts", priority: 0.9, changeFrequency: "weekly" },
     { path: FINDER_PATH, priority: 0.8, changeFrequency: "monthly" },
     ...RECIPIENTS.map((r): Page => ({ path: `/gifts/${recipientSlug(r)}`, priority: 0.8, changeFrequency: "monthly" })),

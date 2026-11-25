@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, Lock, LogIn, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, Check, CircleCheck, Copy, Gift, Lock, LogIn, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,9 @@ import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { plannedIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, stopName, type Plan } from "@/lib/dates/plan";
+import { addDone, answerDone, answersAfterRemoval, doneFromPlan, doneFromSaved, doneTargets, logDay, mergeDone, removeDone, type DoneDate } from "@/lib/dates/done";
+import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, shareablePlan, stopName, type Plan } from "@/lib/dates/plan";
+import { type Vote } from "@/lib/dates/votes";
 import { planUnwrap } from "@/lib/dates/plan-gift";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
@@ -36,6 +38,8 @@ import { TimePicker } from "@/components/pickers/time-picker";
 import { GroupIcon } from "./group-icon";
 import { MapView } from "./map-view";
 import { firstCover } from "./share-cover";
+import { DoneLog, VotePills } from "./done-log";
+import { useDone, useVotes } from "./use-done";
 import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 
@@ -81,6 +85,9 @@ const NOTICE_MS = 5000;
  * `monthly` and `currency` are for the Ethos for Two sheet: this page is static, so the server's
  * switch comes in as a prop, read when the page was built.
  */
+/** How long after "Mark as done" a tap on "Not done after all" is taken as the same double tap. */
+const UNDO_GUARD_MS = 700;
+
 export function PlanView({ monthly = false, currency = "eur" }: { monthly?: boolean; currency?: Currency }) {
   const t = useTranslations("plan");
   const ts = useTranslations("savedDates");
@@ -150,13 +157,100 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const forecast = forecastFor?.at === at ? forecastFor.forecast : null;
   const day = forecast?.days.find((d) => d.date === plan.date);
   const idea = plannedIdea(plan);
-  const past = Boolean(plan.date && plan.date < toYmd(new Date()));
+  const today = toYmd(new Date());
+  const past = Boolean(plan.date && plan.date < today);
+  // The dates done (this browser's log, and an account's from its saved dates), and the vote on them.
+  const [done, updateDone] = useDone();
+  const entries = useMemo(() => mergeDone(done, doneFromSaved(account.list?.items ?? [], locale)), [done, account.list, locale]);
+  // The plan open above asks its own question: its row in the log only says the answer (dates2-T12).
+  const askedAbove = editable && plan.done ? (plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done, locale).id) : undefined;
+  // The plan's own date in the log, whose answer the question above shows (dates2-D3).
+  const planEntry = useMemo(() => (askedAbove && plan.done ? (entries.find((e) => e.id === askedAbove) ?? { ...doneFromPlan({ ...plan, date: plan.done }, plan.done, locale, savedLink?.id), id: askedAbove }) : undefined), [askedAbove, entries, plan, locale, savedLink?.id]);
+  const planTargets = useMemo(() => (planEntry ? doneTargets(planEntry) : []), [planEntry]);
+  const voteOn = useMemo(() => [...new Set([...planTargets, ...entries.flatMap(doneTargets)])].slice(0, 60), [planTargets, entries]);
+  const votes = useVotes(voteOn);
+  const planVote = planEntry?.vote;
+  // A tap the votes route did not keep: said in one line where it was made (dates2-D5).
+  const [notSaved, setNotSaved] = useState<{ id: string; offline: boolean } | null>(null);
+  /** One date's answer: kept on the date for the log, and sent for its places. Put back, with a word, when it is not kept. */
+  const answer = async (entry: DoneDate, next: Vote) => {
+    const before = entry.vote ?? null;
+    setNotSaved(null);
+    updateDone((list) => answerDone(list, entry, next));
+    if (await votes.cast(doneTargets(entry), next)) return;
+    updateDone((list) => answerDone(list, entry, before));
+    setNotSaved({ id: entry.id, offline: typeof navigator !== "undefined" && navigator.onLine === false });
+  };
+  /** A date taken off, or not done after all: its answer stops counting on its places (dates2-D6). */
+  const takeOff = (id: string) => {
+    const removed = entries.find((e) => e.id === id);
+    updateDone((list) => removeDone(list, id));
+    if (!removed) return;
+    for (const { vote, targets } of answersAfterRemoval(removed, entries)) void votes.cast(targets, vote);
+  };
+  // Where focus goes when the button pressed goes away (dates2-D4).
+  const focusNext = useRef<"mark" | "undo" | "after-log" | null>(null);
+  const markRef = useRef<HTMLButtonElement>(null);
+  const undoRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const next = focusNext.current;
+    focusNext.current = null;
+    if (next === "undo") undoRef.current?.focus();
+    else if (next === "mark") markRef.current?.focus();
+    else if (next === "after-log") {
+      // The log is gone with its last date: the next card's heading, else the page's own.
+      const el = document.getElementById("plan-send-title") ?? document.querySelector<HTMLElement>("main h1");
+      if (el && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+      el?.focus();
+    }
+  }, [plan.done, entries.length]);
+  // When "Mark as done" was pressed: "Not done after all" appears where it was on a phone, so a
+  // second tap of a quick double tap lands on it. Taps on it this soon after are the same press (dates2-T1).
+  const markedAt = useRef(-Infinity);
+  const markDone = () => {
+    const entry = doneFromPlan(plan, today, locale, savedLink?.id);
+    markedAt.current = performance.now();
+    focusNext.current = "undo";
+    updateDone((list) => addDone(list, entry));
+    // The entry's id is kept on the plan: a stop changed afterwards must not hide it from the undo (dates2-T2).
+    updateOwn((p) => ({ ...p, done: entry.day, doneId: entry.id }));
+    track("date_done");
+  };
+  const undoDone = () => {
+    if (performance.now() - markedAt.current < UNDO_GUARD_MS) return;
+    // A plan marked before the id was kept: its id as it would have been, from the stops as they stand.
+    const id = plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale).id;
+    focusNext.current = "mark";
+    setNotSaved(null);
+    takeOff(id);
+    updateOwn((p) => {
+      const next = { ...p };
+      delete next.done;
+      delete next.doneId;
+      return next;
+    });
+  };
+  const log = (className?: string) => (
+    <DoneLog
+      entries={entries}
+      today={today}
+      available={votes.available}
+      askedAbove={askedAbove}
+      notSaved={notSaved}
+      onAnswer={(entry, next) => void answer(entry, next)}
+      onRemove={(id) => {
+        if (entries.length === 1) focusNext.current = "after-log";
+        takeOff(id);
+      }}
+      className={className}
+    />
+  );
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
   const ticketed = plan.stops.some((s) => sellsTickets(s));
   // The canvas and the credits' (i) are named by MapLibre in English unless told otherwise.
   const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "", credits: t("mapCredits"), retry: t("mapRetry") }), [t]);
 
-  const sitePath = () => `${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
+  const sitePath = () => `${getPathname({ href: "/plan", locale })}#p=${encodePlan(shareablePlan(plan))}`;
   // Their own plan's cover for the link's preview, looked up while they look at it: the share sheet
   // has to open within the tap, so it cannot wait for Wikimedia then (share-cover.ts).
   const pictured = useMemo(() => (editable ? plan.stops.filter((s) => s.named !== false) : []), [editable, plan.stops]);
@@ -170,7 +264,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       live = false;
     };
   }, [coverKey, pictured]);
-  const link = () => `${window.location.origin}${planShareHref(getPathname({ href: "/plan", locale }), encodePlan(plan), { cover: cover?.key === coverKey ? cover.src : null, title: previewTitle(plan, locale), date: plan.date })}`;
+  const link = () => `${window.location.origin}${planShareHref(getPathname({ href: "/plan", locale }), encodePlan(shareablePlan(plan)), { cover: cover?.key === coverKey ? cover.src : null, title: previewTitle(plan, locale), date: plan.date })}`;
 
   // The stops' photographs are asked for as the chooser opens, so they are usually in by the time a gift is picked.
   const photos = useRef<Promise<Record<string, string | null>> | null>(null);
@@ -261,7 +355,14 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     );
   }
 
-  if (broken || plan.stops.length === 0) return emptyState(false);
+  if (broken || plan.stops.length === 0)
+    return (
+      <>
+        {emptyState(false)}
+        {/* No plan, but dates done: the log stays where they can find it, under "Nothing planned yet". */}
+        {!broken && entries.length > 0 ? <div className="container-narrow -mt-6 pb-16 sm:-mt-10 sm:pb-24">{log("mx-auto max-w-md")}</div> : null}
+      </>
+    );
 
   return (
     // A place name can be one long word (Llanfairpwllgwyngyll…): it wraps rather than widening the page.
@@ -315,7 +416,41 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             ) : null}
           </p>
         ) : null}
-        {past ? <p className="mt-4 text-[14px] text-forest/65">{t("past")}</p> : null}
+        {editable && plan.done ? (
+          <div className="mt-4" data-testid="plan-done">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[14.5px] text-forest/80">
+              <span className="inline-flex items-center gap-1.5 font-semibold text-forest">
+                <CircleCheck aria-hidden="true" className="size-4 text-moss" />
+                {t("done.on", { day: logDay(plan.done, locale) })}
+              </span>
+              <button ref={undoRef} type="button" onClick={undoDone} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-forest hover:underline">
+                {t("done.undo")}
+              </button>
+            </p>
+            {/* Its height is kept only while the site says whether it takes votes, so nothing jumps; nothing is kept when it does not (dates2-C19). */}
+            <div className={cn(votes.available === null && planTargets.length > 0 && "min-h-11")} aria-live="polite">
+              {votes.available === true && planTargets.length > 0 ? (
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <p id="plan-done-ask" className="text-[14.5px] font-semibold text-forest">
+                    {t("done.ask")}
+                  </p>
+                  <VotePills labelledBy="plan-done-ask" value={planVote} onVote={(next) => planEntry && void answer(planEntry, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
+                  {notSaved && notSaved.id === planEntry?.id ? <p className="text-[13.5px] text-forest/80">{t(notSaved.offline ? "done.offline" : "done.notSaved")}</p> : planVote ? <p className="text-[13.5px] text-forest/65">{t("done.thanks")}</p> : null}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <>
+            {past ? <p className="mt-4 text-[14px] text-forest/65">{t("past")}</p> : null}
+            {editable && (!plan.date || plan.date <= today) ? (
+              <button ref={markRef} type="button" onClick={markDone} className="mt-3 inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-4 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5 active:scale-[0.98] motion-reduce:transition-none">
+                <CircleCheck aria-hidden="true" className="size-4" />
+                {t("done.mark")}
+              </button>
+            ) : null}
+          </>
+        )}
 
         <ol className="mt-8">
           {plan.stops.map((stop, i) => {
@@ -402,9 +537,12 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
 
         {editable ? <SavePlanPanel plan={own} defaultTitle={(idea?.title[locale] || own.where || ts("save.defaultTitle")).slice(0, 80)} link={savedLink} status={status} account={account} onUpsell={openUpsell} onSignIn={signInToSave} /> : null}
 
+        {/* The dates done: the card after the save panel, only on their own plan. */}
+        {editable && entries.length > 0 ? log() : null}
+
         {editable ? (
           <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
-            <h2 className="font-display text-[22px] text-forest">{t("send.title")}</h2>
+            <h2 id="plan-send-title" tabIndex={-1} className="font-display text-[22px] text-forest outline-none">{t("send.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("send.sub")}</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button type="button" onClick={share} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-rose text-[14.5px] font-semibold text-white shadow-[0_16px_34px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">

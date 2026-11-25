@@ -1,0 +1,171 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { describe, expect, it } from "vitest";
+import { CITY_KIND_COPY, DATE_KIND_COPY } from "@/content/date-kinds";
+import { CITY_PAGES, CITY_SLUGS, getCity } from "@/lib/cities/cities";
+import { citiesOfKind, CITY_KIND_PAIRS, CITY_KIND_PLACES, cityKindOwn, isCityKindPair, KIND_NEEDS_TRAIT, kindsOfCity, MIN_CITY_KIND_IDEAS, pairHero, pairIdeas, pairPick } from "@/lib/cities/kind-pairs";
+import { SKYLINE_IDEAS } from "@/lib/dates/art";
+import { DATE_KIND_IDS, DATE_KINDS, type DateKind } from "@/lib/dates/date-kinds";
+import { mentionsSpain } from "@/lib/cities/cities";
+import { pairCopy, pairSentence, WRITTEN_CITY_KIND_PAIRS } from "@/lib/cities/kind-copy";
+import sitemap from "@/app/sitemap";
+
+const words = (text: string): number => text.trim().split(/\s+/).filter(Boolean).length;
+
+/** The rule of BRIEF-dates2.md 1, written again from the data: six of the kind's ideas in the city's own list, or six real places counted. */
+const holdsSix = (citySlug: string, kind: DateKind): boolean => {
+  const city = getCity(citySlug)!;
+  return cityKindOwn(city, kind).length >= MIN_CITY_KIND_IDEAS || (CITY_KIND_PLACES[`${citySlug}/${kind}`] ?? 0) >= MIN_CITY_KIND_IDEAS;
+};
+const traitHolds = (citySlug: string, kind: DateKind): boolean => {
+  const trait = KIND_NEEDS_TRAIT[kind];
+  return !trait || getCity(citySlug)!.traits.includes(trait);
+};
+const heroOf = (citySlug: string, kind: DateKind): string => {
+  const pick = CITY_KIND_COPY[`${citySlug}/${kind}`] ? null : pairPick(getCity(citySlug)!, kind);
+  if (pick) return pick.id;
+  const wanted = [CITY_KIND_COPY[`${citySlug}/${kind}`]?.hero, DATE_KIND_COPY[kind]!.hero].filter((x): x is string => !!x);
+  return pairHero(getCity(citySlug)!, kind, wanted);
+};
+
+describe("a kind of date inside a city", () => {
+  it("P1 every pair holds six", () => {
+    for (const { city, kind } of CITY_KIND_PAIRS) expect(holdsSix(city, kind), `${city}/${kind}`).toBe(true);
+  });
+
+  it("P2 and no other pair exists", () => {
+    for (const city of CITY_PAGES) {
+      for (const kind of DATE_KIND_IDS) {
+        const want = DATE_KINDS.includes(kind) && traitHolds(city.slug, kind) && holdsSix(city.slug, kind);
+        expect(isCityKindPair(city.slug, kind), `${city.slug}/${kind}`).toBe(want);
+      }
+    }
+    expect(isCityKindPair("atlantis", "cheap")).toBe(false);
+    expect(isCityKindPair("london", "picnics")).toBe(false);
+    for (const city of CITY_SLUGS) expect(isCityKindPair(city, "at-home"), city).toBe(false);
+  });
+
+  it("P3 the weather kinds follow the city's data", () => {
+    for (const { city, kind } of CITY_KIND_PAIRS) {
+      const traits = getCity(city)!.traits;
+      if (kind === "winter") expect(traits, city).toContain("winter");
+      if (kind === "rainy-day") expect(traits, city).toContain("rainy");
+    }
+  });
+
+  it("P4 no page shows fewer than six cards, the beach only on a coast, and the city's own ideas first", () => {
+    for (const { city: slug, kind } of CITY_KIND_PAIRS) {
+      const city = getCity(slug)!;
+      const shown = pairIdeas(city, kind);
+      expect(shown.length, `${slug}/${kind}`).toBeGreaterThanOrEqual(6);
+      if (shown.some((idea) => idea.id === "beach-until-sunset")) expect(city.traits, `${slug}/${kind}`).toContain("coastal");
+      const own = cityKindOwn(city, kind).map((idea) => idea.id);
+      expect(shown.slice(0, own.length).map((idea) => idea.id), `${slug}/${kind}`).toEqual(own);
+      expect(new Set(shown.map((idea) => idea.id)).size, `${slug}/${kind}`).toBe(shown.length);
+    }
+  });
+
+  it("P5 every page's picture is one of its ideas, never its first card, never a skyline, and is a file", () => {
+    for (const { city, kind } of CITY_KIND_PAIRS) {
+      const shown = pairIdeas(getCity(city)!, kind).map((idea) => idea.id);
+      const hero = heroOf(city, kind);
+      expect(shown, `${city}/${kind}`).toContain(hero);
+      expect(hero, `${city}/${kind}`).not.toBe(shown[0]);
+      expect(Object.keys(SKYLINE_IDEAS), `${city}/${kind}`).not.toContain(hero);
+      expect(existsSync(join(process.cwd(), "public", "dates", "ideas", `${hero}.webp`)), hero).toBe(true);
+    }
+  });
+
+  it("P6 the words of every pair fit, in both languages", () => {
+    for (const l of ["en", "es"] as const) {
+      const titles = new Set<string>();
+      for (const { city: slug, kind } of CITY_KIND_PAIRS) {
+        const copy = pairCopy(getCity(slug)!, kind, l);
+        const at = `${slug}/${kind} ${l}`;
+        expect(copy.title.length, `${at} title: ${copy.title}`).toBeLessThanOrEqual(60);
+        expect(copy.description.length, `${at} description`).toBeLessThanOrEqual(155);
+        expect(words(copy.line), `${at} line: ${copy.line}`).toBeLessThanOrEqual(14);
+        expect(words(copy.sentence), `${at} sentence`).toBeLessThanOrEqual(30);
+        for (const text of [copy.title, copy.description, copy.heading, copy.line, copy.sentence]) {
+          expect(text.trim().length, at).toBeGreaterThan(0);
+          expect(text, at).not.toContain("{");
+          expect(mentionsSpain(text), `${at}: ${text}`).toBe(false);
+        }
+        expect(copy.hero, at).toBe(heroOf(slug, kind));
+        if (slug === "new-york" && l === "en") expect(copy.title, at).toContain("NYC");
+        expect(titles.has(copy.title), `${at} title repeated: ${copy.title}`).toBe(false);
+        titles.add(copy.title);
+      }
+    }
+  });
+
+  it("P7 how many: a few hundred, the four searched ones among them, and the ones the data does not hold not", () => {
+    const byKind: Record<string, number> = {};
+    for (const { kind } of CITY_KIND_PAIRS) byKind[kind] = (byKind[kind] ?? 0) + 1;
+    console.log(`city pairs: ${CITY_KIND_PAIRS.length}`, byKind);
+    expect(CITY_KIND_PAIRS.length).toBeGreaterThanOrEqual(300);
+    expect(CITY_KIND_PAIRS.length).toBeLessThanOrEqual(400);
+    for (const key of ["new-york/cheap", "new-york/first-date", "london/first-date", "london/cheap"]) expect(isCityKindPair(key.split("/")[0], key.split("/")[1]), key).toBe(true);
+    for (const key of ["london/outdoor", "miami/winter", "phoenix/rainy-day"]) expect(isCityKindPair(key.split("/")[0], key.split("/")[1]), key).toBe(false);
+  });
+
+  it("P8 the sitemap lists exactly the pairs with words of their own, in both languages, and every kind's page (dates2-C2)", () => {
+    const paths = sitemap().map((p) => new URL(p.url).pathname);
+    const want = new Set(WRITTEN_CITY_KIND_PAIRS.map((p) => `/dates/${p.city}/${p.kind}`));
+    expect([...want].sort()).toEqual(Object.keys(CITY_KIND_COPY).map((k) => `/dates/${k}`).sort());
+    for (const prefix of ["", "/es"]) {
+      const listed = paths.filter((u) => u.startsWith(`${prefix}/dates/`)).map((u) => u.slice(prefix.length)).filter((u) => /^\/dates\/[a-z-]+\/[a-z-]+$/.test(u) && !u.startsWith("/dates/ideas/"));
+      expect(new Set(listed), prefix || "en").toEqual(want);
+      expect(listed.length, prefix || "en").toBe(want.size);
+      for (const kind of DATE_KINDS) expect(paths, `${prefix}/dates/ideas/${kind}`).toContain(`${prefix}/dates/ideas/${kind}`);
+    }
+  });
+
+  it("P10 a composed pair is not indexed, and shares no sentence of its own with another page (dates2-C2, C4, C12, T6)", () => {
+    for (const l of ["en", "es"] as const) {
+      const seen = new Map<string, string>();
+      for (const { city: slug, kind } of CITY_KIND_PAIRS) {
+        const city = getCity(slug)!;
+        const copy = pairCopy(city, kind, l);
+        const at = `${slug}/${kind} ${l}`;
+        expect(copy.indexed, at).toBe(`${slug}/${kind}` in CITY_KIND_COPY);
+        if (copy.indexed) continue;
+        // Every page's title, description, heading and both sentences are its own.
+        const withPlaces = pairSentence(city, kind, l, copy, [`${slug} cafe`, `${slug} park`]);
+        for (const text of [copy.title, copy.description, copy.heading, copy.sentence, withPlaces]) {
+          expect(seen.get(text) ?? at, `${at} repeats ${seen.get(text)}: ${text}`).toBe(at);
+          seen.set(text, at);
+          // No promise about every stop, no stock phrase, no sentence that opens on a numeral.
+          expect(text, at).not.toMatch(/every stop|cada parada|for its stops|deserves|que pide|merece|With Real Places|con sitios reales/);
+          expect(text, at).not.toMatch(/^\d/);
+        }
+        expect(withPlaces, at).toContain(`${slug} cafe`);
+        // The line names the idea the hero shows.
+        const pick = pairPick(city, kind);
+        if (pick && copy.line.includes(pick.title[l])) expect(copy.hero, at).toBe(pick.id);
+        if (l === "es") expect(copy.line, at).not.toMatch(/: [A-ZÁÉÍÓÚ]/);
+      }
+    }
+  });
+
+  it("P11 one idea never heads two composed pages of the same city", () => {
+    for (const slug of CITY_SLUGS) {
+      const picks = kindsOfCity(slug).flatMap((kind) => pairPick(getCity(slug)!, kind)?.id ?? []);
+      expect(new Set(picks).size, `${slug}: ${picks}`).toBe(picks.length);
+    }
+  });
+
+  it("P12 the one pair kept by a hand count is London's cheap page, written by hand and on the release, and nothing else (dates2-C17)", () => {
+    // London's own list holds five cheap ideas, one short of six; the page stands on six free places
+    // counted by hand on 25 Nov 2026 (PLAN-dates2.md, open question 1). It is the owner's to keep or drop.
+    expect(Object.keys(CITY_KIND_PLACES)).toEqual(["london/cheap"]);
+    expect(cityKindOwn(getCity("london")!, "cheap").length).toBeLessThan(MIN_CITY_KIND_IDEAS);
+    for (const key of Object.keys(CITY_KIND_PLACES)) expect(CITY_KIND_COPY[key], key).toBeDefined();
+  });
+
+  it("P9 nothing links to a pair that is not there, and no city takes a name the dates pages use", () => {
+    for (const slug of CITY_SLUGS) for (const kind of kindsOfCity(slug)) expect(isCityKindPair(slug, kind), `${slug}/${kind}`).toBe(true);
+    for (const kind of DATE_KINDS) for (const city of citiesOfKind(kind)) expect(isCityKindPair(city.slug, kind), `${city.slug}/${kind}`).toBe(true);
+    for (const slug of [...DATE_KIND_IDS, "ideas", "for-venues"]) expect(CITY_SLUGS, slug).not.toContain(slug);
+  });
+});

@@ -224,6 +224,13 @@ export interface Database {
         };
         Relationships: [];
       };
+      /** "Was this a good date?": two counters a place or an idea, no person (0026). Service role only. */
+      date_votes: {
+        Row: { target: string; yes: number; no: number; updated_at: string };
+        Insert: { target: string; yes?: number; no?: number; updated_at?: string };
+        Update: { target?: string; yes?: number; no?: number; updated_at?: string };
+        Relationships: [];
+      };
       waitlist: {
         Row: { email: string; product: string; locale: string | null; created_at: string };
         Insert: { email: string; product?: string; locale?: string | null; created_at?: string };
@@ -1000,6 +1007,8 @@ export interface Database {
     Functions: {
       place_rating_summary: { Args: { ids: string[] }; Returns: { place_id: string; stars: number; reviews: number; cost: number | null }[] };
       has_template_unlock: { Args: { p_user: string; p_slug: string }; Returns: boolean };
+      /** Adds one tap's yes/no changes to the date_votes counters, never under zero (0026). Service role only. */
+      date_votes_apply: { Args: { p_targets: string[]; p_yes: number[]; p_no: number[] }; Returns: undefined };
       /** Uses one gift ready on a template the account doesn't hold (0024): the gift's id, or null. Service role only. */
       spend_gift_credit: { Args: { p_user: string; p_slug: string }; Returns: string | null };
       gift_storage_refs: { Args: Record<string, never>; Returns: { path: string }[] };

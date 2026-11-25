@@ -27,6 +27,8 @@ export type ReviewsLabels = {
   report: string;
   summary: (stars: string, n: number) => string;
   none: string;
+  /** Said instead of `none` when couples have already said it was a good date: "be the first" would contradict them (dates2-N2). */
+  noneWritten: string;
   rate: string;
   edit: string;
   yourStars: string;
@@ -46,10 +48,10 @@ export type ReviewsLabels = {
   when: (iso: string) => string;
 };
 
-type Props = { rating?: Rating; reviews: PublicReview[] | undefined; locale: "en" | "es"; labels: ReviewsLabels; loginNext: string; onSubmit: (input: { stars: number; cost: Cost | null; wentAs: WentAs | null; body: string }) => Promise<"ok" | "unauthenticated" | "failed">; onDelete: () => Promise<boolean> };
+type Props = { /** "14 couples said it was a good date", from five yes votes up: said here, under the stars, so the two counts read apart. */ liked?: string; rating?: Rating; reviews: PublicReview[] | undefined; locale: "en" | "es"; labels: ReviewsLabels; loginNext: string; onSubmit: (input: { stars: number; cost: Cost | null; wentAs: WentAs | null; body: string }) => Promise<"ok" | "unauthenticated" | "failed">; onDelete: () => Promise<boolean> };
 
 /** What couples said about this place, and the form to add a line of your own. */
-export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, onDelete }: Props) {
+export function Reviews({ liked, rating, reviews, locale, labels, loginNext, onSubmit, onDelete }: Props) {
   const mine = reviews?.find((r) => r.mine);
   const [open, setOpen] = useState(false);
   const [stars, setStars] = useState(mine?.stars ?? 0);
@@ -79,7 +81,12 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           ) : reviews !== undefined && reviews.length === 0 ? (
             // Only once the list has answered: the stars behind the heading can still be on their way,
             // and "No reviews yet" over a list still loading was saying two things at once.
-            <p className="mt-1 text-[13.5px] text-forest/65">{labels.none}</p>
+            <p className="mt-1 text-[13.5px] text-forest/65">{liked ? labels.noneWritten : labels.none}</p>
+          ) : null}
+          {liked ? (
+            <p className="mt-1 text-[13.5px] font-semibold text-forest" data-testid="place-liked">
+              {liked}
+            </p>
           ) : null}
         </div>
         {!open ? (

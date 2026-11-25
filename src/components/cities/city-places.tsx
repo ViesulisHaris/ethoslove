@@ -11,7 +11,7 @@ type Props = {
   counts: GroupCounts;
   locale: "en" | "es";
   city: string;
-  labels: { counts: string; fromCentre: (distance: string) => string };
+  labels: { counts: string; fromCentre: (distance: string) => string; featured?: string };
 };
 
 /**
@@ -54,6 +54,7 @@ export function CityPlaceList({ places, counts, locale, city, labels }: Props) {
                     <span className="text-[15px] font-semibold text-forest underline-offset-4 group-hover:underline">{place.name}</span>
                     <span className="text-[13px] text-forest/65">
                       {KINDS[place.kind].label[locale]} · {labels.fromCentre(formatDistance(place.distanceKm, locale))}
+                      {labels.featured && place.featured ? <span className="tracking-wide uppercase"> · {labels.featured}</span> : null}
                     </span>
                   </CityCta>
                 </li>

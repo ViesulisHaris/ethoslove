@@ -1961,6 +1961,7 @@
     },
     "eyebrow": "Ideas para una cita por ciudad",
     "title": "Ideas para una cita en {city}",
+    "line": "{ideas} citas, entre ellas «{first}».",
     "back": "Todas las ideas",
     "lead": "{ideas} citas para {city}, en el orden que se merece la ciudad, con sitios reales cerca del centro para cada parada.",
     "leadNoPlaces": "{ideas} citas para {city}, en el orden que se merece la ciudad. Abre cualquiera en el mapa y te buscará los sitios.",
@@ -1972,6 +1973,9 @@
     "ideas": {
       "eyebrow": "Las ideas",
       "title": "{count, plural, one {# cita} other {# citas}} para {city}",
+      "line": "Abrid una tarjeta: el giro, y dónde hacerlo en {city}.",
+      "more": "{count} ideas más para {city}",
+      "why": "Por qué estas van primero en {city}",
       "inCity": "En {city}, probad",
       "onMap": "Verla en el mapa",
       "pick": "Aquí brilla"
@@ -2048,6 +2052,8 @@
       "eyebrow": "Sitios reales",
       "title": "Cerca del centro de {city}",
       "sub": "Los sitios mejor situados a menos de {km} km del centro, ordenados como los ordena el mapa de citas. Toca uno para verlo en el mapa.",
+      "line": "Los mejor situados a {km} km o menos. Tocad uno para verlo.",
+      "all": "Los {count} sitios",
       "counts": "Lo que conoce el mapa a menos de {km} km",
       "fromCentre": "a {distance} del centro",
       "none": "Ahora mismo no hemos podido leer el mapa de {city}. Las ideas de arriba siguen valiendo: abre el mapa y te buscará sitios para ellas."
@@ -2060,7 +2066,8 @@
       "title": "Entradas en {city}",
       "sub": "Museos, visitas y lo que conviene reservar con antelación, con nuestro socio Tiqets.",
       "cta": "Entradas en {city}",
-      "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más."
+      "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más.",
+      "short": "Enlace de afiliado: puede que ganemos una comisión."
     },
     "trip": "Un viaje que pasa por aquí",
     "gift": {
@@ -2069,7 +2076,11 @@
       "sub": "Elige una de estas ideas y mándale el plan en una pequeña página que abrirá en su móvil: una carta, una cuenta atrás, una entrada para dos.",
       "note": "Abre las plantillas de regalo. Empezar es gratis."
     },
-    "nearby": "Ideas para una cita en otras ciudades"
+    "nearby": "Ideas para una cita en otras ciudades",
+    "more": {
+      "title": "Más para {city}",
+      "byKind": "Por tipo"
+    }
   },
   "dates": {
     "meta": {
@@ -2143,10 +2154,28 @@
     "tonight": {
       "label": "El planificador",
       "inCity": "Adónde ir en {city}",
-      "sentence": "Planead una cita <mood></mood> <when></when>. <length></length>, <budget></budget>.",
-      "sentenceKind": "Planead una de estas ideas para <when></when>. <length></length>, <budget></budget>.",
+      "sentence": "Planead una cita <mood></mood> <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceKind": "Planead una de estas ideas para <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceMore": "<setting>,</setting> <reach>.</reach>",
+      "sentenceMoreNoReach": "<setting>.</setting>",
       "lengthLabel": "Cuánto tiempo",
       "budgetLabel": "Presupuesto",
+      "settingLabel": "Bajo techo o al aire libre",
+      "setting": {
+        "any": "Dentro o fuera",
+        "indoors": "Bajo techo",
+        "outdoors": "Al aire libre"
+      },
+      "reachLabel": "Distancia",
+      "reach": {
+        "10": "a 10 min",
+        "20": "a 20 min",
+        "30": "a 30 min",
+        "any": "cerca o lejos"
+      },
+      "reachDenied": "No hemos podido saber dónde estáis, así que la distancia no se aplica. Lo demás sigue igual.",
+      "reachNone": "Este navegador no puede compartir la ubicación, así que la distancia no se aplica.",
+      "reachFar": "Estáis a más de media hora andando de estos sitios, así que la distancia no se aplica.",
       "mood": {
         "any": "de cualquier tipo",
         "cozy": "acogedora",
@@ -2205,7 +2234,10 @@
       "optional": "opcional",
       "none": "Nada encaja con eso aquí.",
       "noneKind": "Ninguna idea de esta página encaja {when} allí.",
+      "noneNear": "No hay nada a {minutes} minutos andando. Probad con un paseo más largo.",
       "movedTomorrow": "Ninguna idea de esta página cabe ya esta noche allí, así que esta es para mañana.",
+      "wetIndoors": "Se espera lluvia {when}: esta es bajo techo.",
+      "wetOutdoors": "Se espera lluvia {when}. Habéis pedido aire libre: llevad abrigo.",
       "late": "Ya es tarde para empezar una esta noche.",
       "tryTomorrow": "Planear para mañana",
       "openMap": "Abrir el mapa",
@@ -2258,7 +2290,12 @@
       "elsewhere": "En otras webs",
       "share": "Compartir",
       "shareCopied": "Enlace copiado",
-      "shareText": "Un sitio para una cita:"
+      "shareText": "Un sitio para una cita:",
+      "liked": "{n} parejas dijeron que fue una buena cita",
+      "book": "Reservar mesa"
+    },
+    "featured": {
+      "label": "Destacado"
     },
     "map": {
       "label": "Mapa de sitios para una cita",
@@ -2315,6 +2352,7 @@
       "count": "{n, plural, one {# reseña} other {# reseñas}}",
       "summary": "{stars} de {n, plural, one {# reseña} other {# reseñas}}",
       "none": "Aún no hay reseñas. Sed la primera pareja en valorarlo.",
+      "noneWritten": "Aún no hay reseñas escritas.",
       "noneShort": "Sin valorar",
       "rate": "Valorar",
       "edit": "Editar la tuya",
@@ -2359,6 +2397,30 @@
     "rain": "{chance} % de probabilidad de lluvia",
     "sunset": "Puesta de sol {time}",
     "past": "Esta ya ha pasado. Ojalá fuera de las buenas.",
+    "done": {
+      "mark": "Marcar como hecha",
+      "on": "Hecha el {day}",
+      "undo": "Al final no fue",
+      "ask": "¿Fue una buena cita?",
+      "yes": "Sí",
+      "no": "No",
+      "thanks": "Anotado. Podéis cambiarlo.",
+      "notSaved": "No se ha guardado. Probad otra vez en un momento.",
+      "offline": "No se ha guardado: no hay conexión. Probad otra vez."
+    },
+    "log": {
+      "title": "Citas que ya habéis hecho",
+      "weeks": "{n} semanas seguidas",
+      "year": "{n, plural, one {# cita} other {# citas}} este año",
+      "good": "De las buenas",
+      "notGood": "Esta vez no",
+      "change": "Cambiar",
+      "changeFor": "Cambiar la respuesta de {title}",
+      "all": "Ver las {count}",
+      "remove": "Quitar {title} de la lista",
+      "gift": "{n} citas hechas. Con una foto de cada una, son una línea del tiempo.",
+      "giftCta": "Empezar el regalo"
+    },
     "walk": "{minutes} min a pie",
     "timeFor": "Hora en {name}",
     "noteFor": "Una nota para {name}",
@@ -2734,6 +2796,9 @@
       "eyebrow": "Reservad con antelación",
       "title": "Entradas para este viaje",
       "sub": "Lo que conviene reservar antes en este plan: una hora de entrada, un sitio en el barco, un pase. Reservad antes de ir y os ahorráis la taquilla."
+    },
+    "booking": {
+      "via": "Enlace de reserva: puede que ganemos una comisión si reserváis por él."
     },
     "car": {
       "title": "Alquilar un coche",

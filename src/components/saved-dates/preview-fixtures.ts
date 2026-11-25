@@ -28,6 +28,7 @@ function item(n: number, over: Partial<SavedDateSummary>, now: number): SavedDat
     city: "Lisbon",
     day: null,
     stopsCount: 3,
+    done: null,
     cover: null,
     ideaId: null,
     tripId: null,

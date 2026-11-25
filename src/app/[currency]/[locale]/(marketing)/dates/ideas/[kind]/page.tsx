@@ -4,11 +4,12 @@ import { ArrowDown } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
-import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI, KIND_PAGE_CITIES } from "@/content/date-kinds";
+import { DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI, KIND_PAGE_CITIES } from "@/content/date-kinds";
 import { CITY_PAGES, cityName, getCity } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode } from "@/lib/cities/copy";
 import { ideaImage } from "@/lib/dates/art";
-import { DATE_KINDS, getDateKind, isCityKindPage, kindIdeas } from "@/lib/dates/date-kinds";
+import { DATE_KINDS, getDateKind, kindIdeas } from "@/lib/dates/date-kinds";
+import { isWrittenPair } from "@/lib/cities/kind-copy";
 import { ideaById } from "@/lib/dates/ideas";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -50,7 +51,6 @@ export default async function DateKindPage({ params }: Props) {
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";
   const td = await getTranslations("dates");
-  const tc = await getTranslations("cities");
   const ui = DATE_KIND_UI[l];
   const url = localizedUrl(locale, `/dates/ideas/${kind}`);
   const ideas = kindIdeas(kind);
@@ -97,15 +97,11 @@ export default async function DateKindPage({ params }: Props) {
           <ul className="flex flex-wrap gap-x-6 leading-8">
             {cities.map((city) => (
               <li key={city.slug}>
-                {isCityKindPage(city.slug, kind) ? (
-                  <Link href={`/dates/${city.slug}/${kind}`} className={QUIET_ROW_LINK}>
-                    {CITY_KIND_COPY[`${city.slug}/${kind}`].heading[l]}
-                  </Link>
-                ) : (
-                  <Link href={`/dates/${city.slug}`} className={QUIET_ROW_LINK}>
-                    {tc("title", { city: cityName(city, l) })}
-                  </Link>
-                )}
+                {/* The city's name alone, under a heading that says what the links are: the page's 300 words (dates2).
+                    A pair only when its words are written and it is indexed; else the city page, as the release linked (dates2-N1). */}
+                <Link href={isWrittenPair(city.slug, kind) ? `/dates/${city.slug}/${kind}` : `/dates/${city.slug}`} className={QUIET_ROW_LINK}>
+                  {cityName(city, l)}
+                </Link>
               </li>
             ))}
             <li>

@@ -165,7 +165,7 @@ test.describe("plan our date tonight", () => {
     await mockWorld(page, { wet: true });
     await pinClock(page);
     await openLisbon(page, `/es/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisboa&date=${today()}`);
-    expect(await sentence(page)).toBe("Planead una cita de cualquier tipo esta noche. Cualquier duración, con cualquier presupuesto.");
+    expect(await sentence(page)).toBe("Planead una cita de cualquier tipo esta noche. Cualquier duración, con cualquier presupuesto. Dentro o fuera, cerca o lejos.");
     await expect(planButton(page, "Planear")).toBeVisible();
     await page.getByRole("combobox", { name: "Presupuesto" }).selectOption("0");
     await planButton(page, "Planear").click();
@@ -181,7 +181,7 @@ test.describe("plan our date tonight", () => {
     await openLisbon(page);
     const mood = page.getByRole("combobox", { name: "Mood" });
     await mood.focus();
-    for (const name of ["When", "How long", "Budget"]) {
+    for (const name of ["When", "How long", "Budget", "Indoors or outdoors", "Distance"]) {
       await page.keyboard.press("Tab");
       await expect(page.getByRole("combobox", { name })).toBeFocused();
     }
@@ -467,7 +467,7 @@ test.describe("plan our date tonight", () => {
     await page.goto("/dates/ideas/fun");
     const band = page.locator("#tonight");
     await expect(band.locator("p.font-display .sr-only")).toHaveCount(0);
-    for (const name of ["When", "How long", "Budget"]) await expect(band.getByRole("combobox", { name, exact: true })).toBeVisible();
+    for (const name of ["When", "How long", "Budget", "Indoors or outdoors", "Distance"]) await expect(band.getByRole("combobox", { name, exact: true })).toBeVisible();
     const where = band.getByRole("combobox", { name: "Where" });
     await where.focus();
     await expect(where).toBeFocused();

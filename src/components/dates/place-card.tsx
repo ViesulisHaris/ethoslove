@@ -9,13 +9,14 @@ import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import type { Ranked } from "@/lib/dates/rank";
 import { isTold, type Unusual } from "@/lib/dates/unusual";
 import { CostChip } from "./cost-chip";
+import { FeaturedMark } from "./featured-label";
 import { GroupIcon } from "./group-icon";
 import { usePhoto } from "./photo-store";
 import { PlaceThumb } from "./place-thumb";
 import { QuirkBadge } from "./quirk-icon";
 import { Stars } from "./stars";
 
-export type PlaceCardLabels = { add: string; remove: string; walk: (minutes: number) => string; free: string; photo: string; reviews: (n: number) => string; rank: (n: number, of: number, group: string) => string };
+export type PlaceCardLabels = { add: string; remove: string; walk: (minutes: number) => string; free: string; photo: string; reviews: (n: number) => string; rank: (n: number, of: number, group: string) => string; /** "Featured", for a place a venue pays to have marked. */ featured?: string };
 
 type Props = { place: Ranked; locale: "en" | "es"; labels: PlaceCardLabels; selected: boolean; inPlan: boolean; onOpen: () => void; onHover: (on: boolean) => void; onTogglePlan: () => void; /** Its pin is being pointed at on the map. */ hovered?: boolean; /** Place in the list, for the stagger as cards arrive. */ index?: number; /** What makes it out of the ordinary, if anything (unusual.ts). */ unusual?: Unusual };
 
@@ -48,6 +49,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
         <button type="button" onClick={onOpen} className="mt-0.5 text-left after:absolute after:inset-0 after:rounded-[22px]">
           <span className="line-clamp-2 font-display text-[19px] leading-[1.12] text-forest">{place.name}</span>
         </button>
+        {labels.featured ? <FeaturedMark place={place} label={labels.featured} className="mt-1 self-start" /> : null}
         <span className="mt-1 flex items-center gap-1.5 text-[12.5px] text-forest/65">
           {place.rating?.reviews ? (
             <>

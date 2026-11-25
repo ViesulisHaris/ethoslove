@@ -12,6 +12,8 @@ export type PlaceDetails = {
   /** The raw `opening_hours`, read per day by hours.ts. */
   hours?: string;
   website?: string;
+  /** Its own booking page, when the map's entry names one ("Book a table", lib/dates/booking.ts). */
+  booking?: string;
   phone?: string;
   cuisine: string[];
   outdoorSeating: boolean;
@@ -60,6 +62,7 @@ export function detailsFromTags(id: string, tags: Record<string, string | undefi
     address: address || line,
     hours: tags.opening_hours || undefined,
     website: safeUrl(tags.website ?? tags["contact:website"] ?? tags.url),
+    booking: safeUrl(tags["website:booking"] ?? tags["booking:website"] ?? tags["contact:booking"] ?? tags["reservation:url"]),
     phone: (tags.phone ?? tags["contact:phone"])?.slice(0, 40),
     cuisine: (tags.cuisine ?? "").split(";").map((c) => c.trim().replace(/_/g, " ")).filter(Boolean).slice(0, 3),
     outdoorSeating: tags.outdoor_seating === "yes",

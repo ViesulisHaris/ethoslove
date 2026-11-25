@@ -3,11 +3,23 @@ import type { DateKind } from "@/lib/dates/date-kinds";
 import type { PlaceKind } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { rankPlaces, type Ranked } from "@/lib/dates/rank";
+import { isTold, unusualIndex } from "@/lib/dates/unusual";
 
 /** How many places a city-by-kind page names, and how many of one kind at most. */
 // Six, not eight: with the page's ideas and questions, eight names took New York's cheap page past 300 words (dates-D8).
 export const KIND_PLACES = 6;
 const PER_KIND = 3;
+/** A list of fewer names than this is not a list: the section is left out (PLAN-dates2.md step 3). */
+export const MIN_KIND_PLACES = 3;
+/** The kinds of place each kind of date lists by name on its city pages. Cheap, first date and unique are chosen otherwise. */
+export const KIND_PLACE_KINDS: Partial<Record<DateKind, readonly PlaceKind[]>> = {
+  romantic: ["viewpoint", "garden", "park"],
+  night: ["bar", "cinema", "theatre"],
+  outdoor: ["park", "garden", "viewpoint", "beach"],
+  "rainy-day": ["museum", "gallery", "cinema", "bookshop"],
+  winter: ["cafe", "museum", "cinema", "theatre"],
+  fun: ["bowling", "arcade", "minigolf", "escape", "climbing", "skating", "karaoke", "boats"],
+};
 /** What the "where to meet" heading names: cafés, bookshops and galleries (a row of chocolatiers is not a place to meet). */
 const MEETING: readonly PlaceKind[] = ["cafe", "bookshop", "gallery"];
 /** A name that is only what the place is ("Books", "Gallery") says nothing a reader can find it by. */
@@ -62,13 +74,15 @@ export function leftOff(place: Pick<Place, "name" | "kind">): boolean {
  * The places of a city that belong to a kind of date, best first by the dates map's own ranking,
  * only places with a name on the door, one of any name, a few of each kind of place at most (the
  * shape of topCityPlaces in ./places.ts). `cheap`: the ones that usually cost nothing to walk into
- * (cost.ts). `first-date`: where to meet. Any other kind has no list.
+ * (cost.ts). `first-date`: where to meet. `unique`: the places whose name or tags tell a story
+ * (unusual.ts, strength over 1). The others: their kinds of place in KIND_PLACE_KINDS. Double date
+ * has no list. Fewer than MIN_KIND_PLACES names make no list either.
  */
 export function kindPlaces(kind: DateKind, places: Place[], count = KIND_PLACES): Ranked[] {
   // A "landmark" is whatever the map calls an attraction, a sewer lamp and a private house among them:
   // only one with an encyclopedia entry is worth naming on a page.
   const free = (p: Place) => guessCost(p) === 0 && (p.kind !== "landmark" || p.notable);
-  const fits = kind === "cheap" ? free : kind === "first-date" ? (p: Place) => MEETING.includes(p.kind) : null;
+  const fits = fitsKind(kind, places, free);
   if (!fits) return [];
   const names = new Set<string>();
   const taken = new Map<PlaceKind, number>();
@@ -81,5 +95,16 @@ export function kindPlaces(kind: DateKind, places: Place[], count = KIND_PLACES)
     taken.set(place.kind, (taken.get(place.kind) ?? 0) + 1);
     picked.push(place);
   }
-  return picked;
+  return picked.length >= MIN_KIND_PLACES ? picked : [];
+}
+
+function fitsKind(kind: DateKind, places: Place[], free: (p: Place) => boolean): ((p: Place) => boolean) | null {
+  if (kind === "cheap") return free;
+  if (kind === "first-date") return (p) => MEETING.includes(p.kind);
+  if (kind === "unique") {
+    const index = unusualIndex(places);
+    return (p) => isTold(index.get(p.id));
+  }
+  const kinds = KIND_PLACE_KINDS[kind];
+  return kinds ? (p) => kinds.includes(p.kind) : null;
 }

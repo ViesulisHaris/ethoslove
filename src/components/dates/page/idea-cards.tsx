@@ -18,19 +18,23 @@ export type DateCard = {
   /** Where "Plan it" goes. */
   href: string;
 };
-export type DateCardLabels = { twist: string; plan: string; hours: (idea: DateIdea) => string; budget: (idea: DateIdea) => string; inCity?: string };
+export type DateCardLabels = { twist: string; plan: string; hours: (idea: DateIdea) => string; budget: (idea: DateIdea) => string; inCity?: string; /** "Featured", for a stop a venue pays to have marked. */ featured?: string };
 
 /**
  * Date ideas as picture cards: closed, a card is the idea's picture and its title; opened, why it
  * fits this page, its twist in handwriting, its real stops on a city's page, and the way to plan
  * it. One opens at a time. On a phone the cards are one row, one to a screen, with dots under it;
  * from 640px a grid, two and then three across. A count that would leave one card alone on the
- * last row of three (four, ten) stays two across.
+ * last row of three (four, ten) stays two across. An odd count two across (seven, nine below a
+ * desk) ends on one card in the middle of its row rather than one alone at the left (dates2-T10).
  */
+/** The last card of an odd count, two across: centred, one column wide. Whole strings, for Tailwind to find. */
+const LONE_LAST_TWO_ACROSS = "sm:[&>li:last-child:nth-child(odd)]:col-span-2 sm:[&>li:last-child:nth-child(odd)]:mx-auto sm:[&>li:last-child:nth-child(odd)]:w-[calc(50%-0.625rem)]";
+const LONE_LAST_BELOW_DESK = "sm:max-lg:[&>li:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>li:last-child:nth-child(odd)]:mx-auto sm:max-lg:[&>li:last-child:nth-child(odd)]:w-[calc(50%-0.625rem)]";
 export function DateIdeaCards({ id, cards, locale, labels }: { id: string; cards: readonly DateCard[]; locale: "en" | "es"; labels: DateCardLabels }) {
   return (
     <div className="min-w-0">
-      <ul id={id} data-cards className={`-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0 sm:items-stretch sm:has-[details[open]]:items-start ${cards.length % 3 === 1 ? "" : "lg:grid-cols-3"}`}>
+      <ul id={id} data-cards className={`-mx-5 flex snap-x snap-mandatory scroll-px-5 items-start gap-5 overflow-x-auto px-5 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0 sm:items-stretch sm:has-[details[open]]:items-start ${cards.length % 3 === 1 ? LONE_LAST_TWO_ACROSS : `lg:grid-cols-3 ${LONE_LAST_BELOW_DESK}`}`}>
         {cards.map(({ idea, fit, stops, href, image }) => (
           <li key={idea.id} id={`idea-${idea.id}`} data-card data-pick className="w-full shrink-0 scroll-mt-24 snap-start sm:w-auto">
             <details name={`${id}-open`} className="group/card rounded-[1.25rem] border border-page-line bg-page-raised shadow-page-card transition-shadow duration-300 open:shadow-page-lift hover:shadow-page-lift motion-reduce:transition-none sm:h-full">
@@ -63,6 +67,7 @@ export function DateIdeaCards({ id, cards, locale, labels }: { id: string; cards
                           <span className="min-w-0">
                             <span className="font-medium">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
                             {place.named ? <span className="text-page-body"> · {KINDS[place.kind].label[locale]}</span> : null}
+                            {labels.featured && place.featured ? <span className="text-page-body tracking-wide uppercase"> · {labels.featured}</span> : null}
                           </span>
                         </li>
                       ))}

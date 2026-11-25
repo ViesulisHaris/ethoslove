@@ -30,6 +30,8 @@ export type SavedDateSummary = {
   version: number;
   createdAt: string;
   updatedAt: string;
+  /** The day a date's plan was marked done (Plan.done), or null; a trip never has one. */
+  done: string | null;
 };
 export type SavedDate = SavedDateSummary & { data: Plan | SavedTripData };
 export type SavedDatesList = {

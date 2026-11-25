@@ -30,7 +30,13 @@ const SIZES: [number, number][] = [
 ];
 const MAIN = ["/dates/ideas/first-date", "/es/dates/ideas/first-date"];
 // Every page the deep test counted at or near 300 (dates-D8) is held to it here.
-const MORE = ["/dates/ideas/rainy-day", "/es/dates/ideas/rainy-day", "/dates/ideas/cheap", "/es/dates/ideas/cheap", "/es/dates/ideas/romantic", "/dates/london/first-date", "/es/dates/london/first-date", "/dates/new-york/cheap", "/es/dates/new-york/cheap"];
+const MORE = ["/dates/ideas/rainy-day", "/es/dates/ideas/rainy-day", "/dates/ideas/cheap", "/es/dates/ideas/cheap", "/es/dates/ideas/romantic", "/dates/london/first-date", "/es/dates/london/first-date", "/dates/new-york/cheap", "/es/dates/new-york/cheap",
+  // dates2: the city pages on the designed spread, the three new kinds and three composed pairs.
+  "/dates/london", "/es/dates/london", "/dates/miami", "/es/dates/miami", "/dates/ideas/night", "/es/dates/ideas/night", "/dates/ideas/outdoor", "/es/dates/ideas/unique", "/dates/chicago/romantic", "/es/dates/chicago/romantic", "/dates/london/night", "/es/dates/denver/outdoor",
+  // dates2: the short page for venues (about a hundred words by design: its floor is 40, not 60).
+  "/dates/for-venues", "/es/dates/for-venues"];
+/** The word floor: a page this short on purpose is held to 40. */
+const floor = (where: string) => (where.endsWith("/for-venues") ? 40 : 60);
 
 test.skip(({ isMobile }) => isMobile, "sets its own screen sizes");
 
@@ -50,7 +56,7 @@ for (const [width, height] of SIZES) {
       expect(m.overlaps, `${where}: a piece of the art lies under words`).toEqual([]);
       expect(m.onCards, `${where}: a piece of the art lies on a card`).toEqual([]);
       expect(m.count, `${where}: words on the page`).toBeLessThanOrEqual(300);
-      expect(m.count, where).toBeGreaterThan(60);
+      expect(m.count, where).toBeGreaterThan(floor(where));
       expect(m.smallest, where).toBeGreaterThanOrEqual(14);
       expect(m.smallestLabel, where).toBeGreaterThanOrEqual(12);
       expect(m.small, `${where}: too small for a thumb`).toEqual([]);
@@ -134,6 +140,47 @@ test("D4 the page is whole, and the same height, when no picture arrives", async
     expect(Math.abs(without.height - withPictures.height), `${width}`).toBeLessThanOrEqual(2);
     expect(without.overflow).toBeLessThanOrEqual(0);
     for (const title of await page.locator("[data-card-title]").all()) expect(await title.evaluate((el) => el.getBoundingClientRect().height > 0 && (el.textContent ?? "").length > 0)).toBe(true);
+  }
+});
+
+test("D6 a city's page shows six cards and keeps ten folded", async ({ page }) => {
+  for (const [width, height] of [[1440, 900], [375, 812]] as const) {
+    await page.setViewportSize({ width, height });
+    for (const where of ["/dates/london", "/es/dates/london"]) {
+      await page.context().clearCookies();
+      await page.goto(where);
+      await expect(page.locator('[data-testid="city-ideas"] [data-card]'), `${where} ${width}`).toHaveCount(6);
+      const more = page.locator('details[name="city-more"]');
+      await expect(more).toHaveCount(1);
+      expect(await more.evaluate((d) => (d as HTMLDetailsElement).open)).toBe(false);
+      await expect(page.locator('[id^="idea-"]'), where).toHaveCount(16);
+    }
+  }
+});
+
+test("D7 the city page in an iPhone's Safari: nothing off the side, a card opens, the folded list opens", async ({ baseURL }) => {
+  test.setTimeout(120_000);
+  const browser = await webkit.launch();
+  try {
+    const origin = new URL(baseURL ?? "http://localhost:3000").origin;
+    const context = await browser.newContext({ ...devices["iPhone 13"], baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
+    const page = await context.newPage();
+    await page.goto("/dates/london");
+    await settle(page);
+    const m = await measure(page);
+    expect(m.overflow).toBeLessThanOrEqual(0);
+    expect(m.overlaps).toEqual([]);
+    const first = page.locator('[data-testid="city-ideas"] [data-card]').first();
+    await first.locator("summary").scrollIntoViewIfNeeded();
+    await first.locator("summary").tap();
+    await expect(first.locator("details > div > p").first()).toBeVisible();
+    const more = page.locator('details[name="city-more"]');
+    await more.locator("summary").scrollIntoViewIfNeeded();
+    await more.locator("summary").tap();
+    await expect(more.locator("li").first()).toBeVisible();
+    await context.close();
+  } finally {
+    await browser.close();
   }
 });
 

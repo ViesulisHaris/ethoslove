@@ -89,6 +89,8 @@ export type FunnelEvent =
   // "Print The Tree Tag" (lib/lifecycle/holiday-extras.ts): where it was tapped, "share" or "dashboard".
   | "tree_tag_print_opened"
   | "affiliate_click"
+  // A place's "Book a table" (dates2): { paid } only, true when a partner's id was added. Never the place.
+  | "booking_click"
   // Trips (components/trips/trip-matcher.tsx): a match asked for (the length, the budget ceiling and the
   // kind asked, and whether an airport was given: never which; a later change, once settled, carries
   // refined: true), a trip opened or made a surprise from a match (the trip, "page" or "surprise"), and
@@ -159,6 +161,11 @@ export type FunnelEvent =
   | "plan_shared"
   | "shared_plan_opened"
   | "shared_plan_kept"
+  // Done dates on /plan (dates2): a date marked done (nothing), a "Was this a good date?" answer ({ vote }
+  // only: never the place), and the one hand-over from three done dates to the timeline gift (nothing).
+  | "date_done"
+  | "date_vote"
+  | "done_dates_gift"
   | "date_kind_view"
   // "Keep this gift": the end screen's tap (the template), and the keep page sent (how many reminders were asked for). No ids, no addresses.
   | "keep_tapped"

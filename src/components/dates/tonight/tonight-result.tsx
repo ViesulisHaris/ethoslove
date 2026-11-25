@@ -9,7 +9,7 @@ import { ideaHours } from "@/lib/dates/format";
 import { canBeFree, ideaPicture } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
-import type { Relaxed, TonightPick } from "@/lib/dates/tonight";
+import type { Relaxed, TonightPick, TonightSetting } from "@/lib/dates/tonight";
 import { TONIGHT_BUTTON, type TonightWhen } from "./tonight-form";
 
 type Props = {
@@ -27,6 +27,8 @@ type Props = {
   restored?: boolean;
   /** Planned for tomorrow because none of the page's ideas could still be done tonight: the card says so first. */
   moved?: boolean;
+  /** Indoors or outdoors, as it was asked: on a wet day the card says what the rain means for this one. */
+  setting?: TonightSetting;
   /** The card is asking whether to replace the plan being made on this device. */
   confirming?: boolean;
   onReplace?: () => void;
@@ -44,7 +46,7 @@ const QUIET_BUTTON = "inline-flex min-h-11 min-w-11 items-center text-[0.9375rem
 const HEAVIEST: Relaxed[] = ["vibe", "budget", "length"];
 
 /** One finished plan: the idea's picture and title, its stops with their times, its twist, and the two ways on. */
-export function TonightResult({ pick, stops, times, wet, asked, when, date, restored, moved, confirming, onReplace, onKeep, locale, onOpen, onAnother, more }: Props) {
+export function TonightResult({ pick, stops, times, wet, asked, when, date, restored, moved, setting, confirming, onReplace, onKeep, locale, onOpen, onAnother, more }: Props) {
   const t = useTranslations("dates");
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -95,6 +97,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
       </span>
       <div className="p-5">
         {moved ? <p className="mb-2 text-[0.875rem] leading-snug text-page-body">{t("tonight.movedTomorrow")}</p> : null}
+        {wet && setting !== "indoors" ? <p className="mb-2 text-[0.875rem] leading-snug text-page-body">{t(setting === "outdoors" ? "tonight.wetOutdoors" : "tonight.wetIndoors", { when: whenLabel })}</p> : null}
         {said.map((line) => (
           <p key={line} className="mb-2 text-[0.875rem] leading-snug text-page-body">
             {line}
@@ -112,6 +115,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
                 <span className="min-w-0">
                   <span className="font-medium">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
                   {place.named ? <span className="text-page-body"> · {KINDS[place.kind].label[locale]}</span> : null}
+                  {place.featured ? <span className="text-page-body tracking-wide uppercase"> · {t("featured.label")}</span> : null}
                   {bringOwn && !KINDS[place.kind].free ? <span className="text-page-body"> · {t("tonight.optional")}</span> : null}
                 </span>
               </li>

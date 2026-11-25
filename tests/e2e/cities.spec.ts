@@ -16,8 +16,12 @@ test("a city's page names the city, lists its ideas and opens the map on it", as
   const response = await page.goto("/dates/london");
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle(/^Date ideas in London: 16 ideas/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Date ideas in London");
-  await expect(page.getByTestId("city-ideas").getByRole("listitem").filter({ has: page.locator("article") })).toHaveCount(16);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Date ideas in London$/);
+  // Sixteen ideas in the page: six as cards, ten in the closed list under them (dates2, a city on the designed spread).
+  await expect(page.locator('[id^="idea-"]')).toHaveCount(16);
+  await expect(page.locator('[data-testid="city-ideas"] [data-card]')).toHaveCount(6);
+  await expect(page.locator('details[name="city-more"]')).not.toHaveAttribute("open", /.*/);
+  await expect(page.locator('details[name="city-more"] [id^="idea-"]')).toHaveCount(10);
 
   const map = page.getByRole("link", { name: "Open the map in London" }).first();
   const href = new URL((await map.getAttribute("href")) ?? "", "http://x");
@@ -26,6 +30,7 @@ test("a city's page names the city, lists its ideas and opens the map on it", as
   expect(Number(href.searchParams.get("lat"))).toBeCloseTo(51.51, 1);
 
   const gift = page.getByRole("link", { name: "Make them a gift" });
+  await expect(gift).toHaveCount(1);
   await expect(gift).toHaveAttribute("href", "/templates?ref=city");
 
   const tickets = page.getByRole("link", { name: "Tickets in London" });
@@ -40,14 +45,14 @@ test("a city's page names the city, lists its ideas and opens the map on it", as
 
 test("the Spanish page speaks Spanish and names the city the Spanish way", async ({ page }) => {
   await page.goto("/es/dates/london");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ideas para una cita en Londres");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Ideas para una cita en Londres$/);
   await expect(page.getByRole("link", { name: "Abrir el mapa de Londres" }).first()).toBeVisible();
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", /\/dates\/london$/);
 });
 
 test("an idea's link opens the map on that city with the idea chosen", async ({ page }) => {
   await page.goto("/dates/sydney");
-  const first = page.getByTestId("city-ideas").getByRole("link", { name: "See it on the map" }).first();
+  const first = page.getByTestId("city-ideas").getByRole("link", { name: "See it on the map", includeHidden: true }).first();
   const href = new URL((await first.getAttribute("href")) ?? "", "http://x");
   expect(href.searchParams.get("q")).toBe("Sydney");
   expect(href.searchParams.get("idea")).toBeTruthy();
@@ -71,9 +76,10 @@ test("X1 a new city's page stands up like the others", async ({ page }) => {
   const noErrors = watchErrors(page);
   const response = await page.goto("/dates/nashville");
   expect(response?.status()).toBe(200);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Date ideas in Nashville");
-  await expect(page.getByTestId("city-ideas").getByRole("listitem").filter({ has: page.locator("article") })).toHaveCount(16);
-  await expect(page.getByText(/^The honky-tonks/)).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Date ideas in Nashville$/);
+  await expect(page.locator('[id^="idea-"]')).toHaveCount(16);
+  await expect(page.locator('[data-testid="city-ideas"] [data-card]')).toHaveCount(6);
+  await expect(page.getByText(/^The honky-tonks/).first()).toBeVisible();
   const map = page.getByRole("link", { name: "Open the map in Nashville" }).first();
   expect(new URL((await map.getAttribute("href")) ?? "", "http://x").searchParams.get("q")).toBe("Nashville");
   noErrors();
@@ -81,9 +87,9 @@ test("X1 a new city's page stands up like the others", async ({ page }) => {
 
 test("X2 the Spanish page of a new city says its name the Spanish way", async ({ page }) => {
   await page.goto("/es/dates/philadelphia");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ideas para una cita en Filadelfia");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Ideas para una cita en Filadelfia$/);
   await page.goto("/es/dates/st-louis");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ideas para una cita en San Luis");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Ideas para una cita en San Luis$/);
 });
 
 const PAIRS = [
@@ -91,9 +97,11 @@ const PAIRS = [
   { path: "new-york/first-date", city: "new-york", kind: "first-date", en: "First Date Ideas in NYC", es: "Primera cita en Nueva York", cards: 9 },
   { path: "london/first-date", city: "london", kind: "first-date", en: "First Date Ideas in London", es: "Primera cita en Londres", cards: 9 },
   { path: "london/cheap", city: "london", kind: "cheap", en: "Cheap Date Ideas in London", es: "Citas baratas en Londres", cards: 8 },
+  { path: "chicago/romantic", city: "chicago", kind: "romantic", en: "Romantic Date Ideas in Chicago", es: "Citas románticas en Chicago", cards: 10 },
+  { path: "london/night", city: "london", kind: "night", en: "Date Night Ideas in London", es: "Planes de noche en Londres", cards: 9 },
 ];
 
-test("X3 the four city-by-kind pages are there in both languages", async ({ page }) => {
+test("X3 the hand-written city-by-kind pages and two composed ones are there in both languages", async ({ page }) => {
   test.setTimeout(240_000);
   const noErrors = watchErrors(page);
   for (const pair of PAIRS) {
@@ -115,15 +123,19 @@ test("X3 the four city-by-kind pages are there in both languages", async ({ page
   noErrors();
 });
 
-test("X4 every other pair is a 404", async ({ page }) => {
-  for (const path of ["/dates/paris/cheap", "/dates/london/fun", "/dates/new-york/rainy-day", "/dates/atlantis/cheap", "/dates/london/nope"]) expect((await page.goto(path))?.status(), path).toBe(404);
+test("X4 a pair the data does not hold is a 404", async ({ page }) => {
+  for (const path of ["/dates/london/outdoor", "/dates/miami/winter", "/dates/boston/night", "/dates/new-york/rainy-day", "/dates/atlantis/cheap", "/dates/london/nope"]) expect((await page.goto(path))?.status(), path).toBe(404);
 });
 
-test("X5 London's and New York's pages point at their two kinds, and no other city's does", async ({ page }) => {
+test("X5 a city's page points at exactly the pairs its data holds", async ({ page }) => {
+  // London: first date, fun, cheap, romantic, rainy day, date night, unique (tests/unit/city-kind-pairs.test.ts).
   await page.goto("/dates/london");
-  await expect(page.getByRole("navigation", { name: "In London, by kind" }).getByRole("link")).toHaveCount(2);
-  await page.goto("/dates/paris");
-  await expect(page.getByRole("navigation", { name: /by kind$/ })).toHaveCount(0);
+  const london = page.getByRole("navigation", { name: "In London, by kind" }).getByRole("link");
+  await expect(london).toHaveCount(7);
+  await expect(page.locator('a[href="/dates/london/night"]').first()).toBeAttached();
+  await expect(page.locator('a[href="/dates/london/outdoor"]')).toHaveCount(0);
+  await page.goto("/dates/miami");
+  await expect(page.getByRole("navigation", { name: "In Miami, by kind" }).getByRole("link")).toHaveCount(4);
 });
 
 test("X6 every city's page has the planner", async ({ page }) => {

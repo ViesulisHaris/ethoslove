@@ -249,6 +249,97 @@ export const DATE_KIND_COPY: Partial<Record<DateKind, DateKindCopy>> = {
       },
     ],
   },
+  night: {
+    nav: { en: "Date night", es: "De noche" },
+    phrase: { en: "Date Night Ideas", es: "Planes para una noche en pareja" },
+    title: { en: "Date Night Ideas: {count} That Start at Seven or Later", es: "Planes para una noche en pareja: {count} desde las siete" },
+    description: { en: "Nine date night ideas for after work: dinner and a slow walk, a film, bowling, karaoke, the theater, the stars. The planner times each stop.", es: "Nueve planes para una noche en pareja: cena y paseo, una peli, bolos, karaoke, teatro o las estrellas. El planificador pone la hora de cada parada." },
+    heading: { en: "Date night ideas that start at seven or later", es: "Planes para una noche en pareja, de las siete en adelante" },
+    line: { en: "Seven start at seven. The other two wait until nine.", es: "Siete empiezan a las siete. Las otras dos esperan a las nueve." },
+    sentence: { en: "Nine evenings in two stops, each with a twist. Plan one tonight once its start time has passed and it starts in half an hour.", es: "Nueve noches en dos paradas, cada una con su giro. Si la planeáis para hoy cuando ya ha pasado su hora, empieza dentro de media hora." },
+    hero: "theatre-night",
+    fits: {
+      "pasta-and-a-slow-walk": { en: "You order for each other, so the menu is the first game. The long way home comes after.", es: "Pedís el uno por el otro: la carta ya es un juego. Después, a casa por el camino largo." },
+      "cinema-and-late-dessert": { en: "One picks the film, the other the seats, and the talking waits for dessert.", es: "Uno elige la peli; el otro, los asientos. La charla se guarda para el postre." },
+      "bowling-night": { en: "Every gutter ball costs a truth, every strike earns a dare.", es: "Cada bola fuera cuesta una verdad; cada pleno, un reto." },
+      "arcade-night": { en: "Coins, air hockey and a shelf prize, then a table nearby to argue about the score.", es: "Monedas, air hockey y un premio de estantería; después, una mesa cerca para discutir el marcador." },
+      "karaoke-duet": { en: "Starts at nine at the earliest, in a private booth. Each of you picks the other’s solo.", es: "Empieza a las nueve como pronto, en una sala privada. Cada uno elige el solo del otro." },
+      "escape-room-debrief": { en: "Locked in on the same side, then out for a drink. Nobody assigns blame before it arrives.", es: "Encerrados en el mismo bando y luego una copa. Nadie reparte culpas antes de que llegue." },
+      "theatre-night": { en: "The one to dress for. Write your guess at the ending down at intermission; the loser buys the nightcap.", es: "La de arreglarse. Apuntad en el descanso cómo creéis que acaba; quien falle paga la última copa." },
+      "stars-and-planets": { en: "It waits for dark: an hour after sunset, never before nine. If it rains, the planetarium.", es: "Espera a que oscurezca: una hora después de la puesta de sol, nunca antes de las nueve. Si llueve, el planetario." },
+      "spa-evening": { en: "Warm water and no phones, then dinner. Not one word about work.", es: "Agua caliente sin móviles y después la cena. Ni una palabra de trabajo." },
+    },
+    faq: [
+      {
+        q: { en: "What is a good date night idea that isn’t dinner and a film?", es: "¿Qué plan de noche no es cenar y ver una peli?" },
+        a: { en: "Seven of these nine. Bowling, the arcade, karaoke, an escape room, the theater, a spa and the stars all start with something to do. Dinner or a drink comes second, when there is something to talk about.", es: "Siete de estas nueve. Los bolos, los recreativos, el karaoke, un escape room, el teatro, un spa y las estrellas empiezan con algo que hacer. La cena o la copa van después, cuando ya hay de qué hablar." },
+      },
+      {
+        q: { en: "What time should a date night start?", es: "¿A qué hora empieza una noche en pareja?" },
+        a: { en: "Seven suits most of these: the planner starts the evening ideas at 7:00 and the two late ones at nine or an hour after sunset, whichever is later. For tonight, once that hour has passed, it starts half an hour from now.", es: "A las siete, casi todas: el planificador empieza las de tarde a las 19:00 y las dos más tardías a las nueve o una hora después de la puesta de sol, lo que llegue más tarde. Si es para hoy y esa hora ya ha pasado, empieza dentro de media hora." },
+      },
+    ],
+  },
+  outdoor: {
+    nav: { en: "Outdoor", es: "Al aire libre" },
+    phrase: { en: "Outdoor Date Ideas", es: "Ideas para una cita al aire libre" },
+    title: { en: "Outdoor Date Ideas: {count} for a Dry Day", es: "Ideas para una cita al aire libre: {count} para un día seco" },
+    description: { en: "Eight outdoor date ideas: a golden-hour picnic, a garden, a sunrise, a rowboat, mini golf, the beach. The planner keeps them for dry days.", es: "Ocho ideas para una cita al aire libre: pícnic a la hora dorada, jardín, amanecer, barca, minigolf o playa. El planificador las guarda para días secos." },
+    heading: { en: "Outdoor date ideas for a dry day", es: "Ideas para una cita al aire libre, para un día seco" },
+    line: { en: "Rain calls most of these off. The stars move to a planetarium.", es: "La lluvia cancela casi todas. Las estrellas pasan al planetario." },
+    sentence: { en: "Eight dates under the open sky, from a sunrise to a rowboat. Four follow the light, and the planner sets those by your day’s real sunrise or sunset.", es: "Ocho citas a cielo abierto, de un amanecer a una barca. Cuatro siguen la luz: el planificador las ajusta al amanecer o al atardecer de vuestro día." },
+    hero: "garden-afternoon",
+    fits: {
+      "golden-hour-picnic": { en: "You are at the view three quarters of an hour before sunset, with one thing each to try.", es: "Estáis en el mirador tres cuartos de hora antes de la puesta de sol, con algo nuevo que probar cada uno." },
+      "garden-afternoon": { en: "Slow paths and one bench. Find the plant that looks most like each of you.", es: "Caminos lentos y un banco. Buscad la planta que más se parezca a cada uno." },
+      "ice-cream-walk": { en: "The shortest one here, an hour and a half: two scoops each and a park to get lost in.", es: "La más corta de aquí, hora y media: dos bolas por cabeza y un parque en el que perderse." },
+      "sunrise-and-breakfast": { en: "It starts half an hour before sunrise, when the view has nobody in it. Coffee comes after.", es: "Empieza media hora antes del amanecer, cuando en el mirador no hay nadie. El café viene después." },
+      "boats-on-the-water": { en: "Whoever isn’t rowing narrates the circles like a nature documentary.", es: "Quien no rema narra las vueltas como en un documental de naturaleza." },
+      "mini-golf-and-milkshakes": { en: "Eighteen holes of trash talk in daylight, a very serious scorecard, and the loser buys dessert.", es: "Dieciocho hoyos de piques a la luz del día, una tarjeta muy seria, y quien pierda paga el postre." },
+      "beach-until-sunset": { en: "Sand first, then dinner with your shoes still off. Only where there is a coast.", es: "Primero arena y luego cenar todavía sin zapatos. Solo donde hay costa." },
+      "stars-and-planets": { en: "Outdoors after dark: the darkest viewpoint in town, an hour after sunset and never before nine.", es: "Al aire libre y de noche: el mirador más oscuro de la ciudad, una hora después de la puesta de sol." },
+    },
+    faq: [
+      {
+        q: { en: "What if it rains on the day?", es: "¿Y si llueve ese día?" },
+        a: { en: "The planner reads the forecast for the day you pick. On a wet one it leaves out the ones rain would spoil and moves the stars under a planetarium’s dome. Choose “Outdoors” yourself and it plans them anyway.", es: "El planificador lee la previsión del día que elijáis. Si viene lluvia, deja fuera las que el agua estropearía y lleva las estrellas a la cúpula de un planetario. Si elegís «Al aire libre», las planea igualmente." },
+      },
+      {
+        q: { en: "Which outdoor dates are free?", es: "¿Qué citas al aire libre son gratis?" },
+        a: { en: "The picnic, the sunrise and the garden cost nothing if you bring your own food and skip the café. The stars are free from a viewpoint. The rest cost a cone, a round of mini golf, an hour’s boat hire or a dinner.", es: "El pícnic, el amanecer y el jardín no cuestan nada si lleváis lo vuestro y os saltáis la cafetería. Las estrellas son gratis desde un mirador. Las demás cuestan un helado, una partida de minigolf, una hora de barca o una cena." },
+      },
+    ],
+  },
+  unique: {
+    nav: { en: "Unique", es: "Diferente" },
+    phrase: { en: "Unique Date Ideas", es: "Ideas para una cita diferente" },
+    title: { en: "Unique Date Ideas: {count} That Aren’t Dinner and a Film", es: "Ideas para una cita diferente: {count} sin cena ni peli" },
+    description: { en: "Eight unique date ideas: a sunrise with nobody around, an escape room, a climbing wall, karaoke, a rowboat, an ice rink, a spa. Each comes with a twist.", es: "Ocho ideas para una cita diferente: un amanecer sin nadie, un escape room, un rocódromo, karaoke, una barca, patinaje o un spa. Cada una, con su giro." },
+    heading: { en: "Unique date ideas that aren’t dinner and a film", es: "Ideas para una cita diferente, sin cena ni peli" },
+    line: { en: "Pick the one neither of you has done before.", es: "Elegid la que ninguno de los dos haya hecho nunca." },
+    sentence: { en: "Eight dates that start somewhere other than a table: on a wall, on ice, in a booth, on the water, or on a hill before the city wakes up.", es: "Ocho citas que no empiezan en una mesa: en una pared, sobre hielo, en una sala, en el agua o en un mirador antes de que despierte la ciudad." },
+    hero: "stars-and-planets",
+    fits: {
+      "sunrise-and-breakfast": { en: "The alarm goes off before the city does. Phones stay in pockets until the sun is fully up.", es: "La alarma suena antes que la ciudad. Los móviles, en el bolsillo hasta que el sol haya salido del todo." },
+      "escape-room-debrief": { en: "Sixty minutes to learn how you two work under pressure, with drinks after to recover.", es: "Sesenta minutos para ver cómo funcionáis bajo presión, y algo de beber después para recuperaros." },
+      "stars-and-planets": { en: "Name a star after each other and make it official on a napkin.", es: "Ponedle a una estrella el nombre del otro y hacedlo oficial en una servilleta." },
+      "climbing-first-timers": { en: "A beginner’s wall, and one of you holds the other’s rope. Dinner is on whoever says “I can’t” first.", es: "Una pared para principiantes, y uno sujeta la cuerda del otro. Paga la cena quien diga primero «no puedo»." },
+      "karaoke-duet": { en: "A private booth, one duet, and a solo each that the other one picked.", es: "Una sala privada, un dueto y un solo para cada uno, elegido por el otro." },
+      "boats-on-the-water": { en: "An hour of rowing in circles while the passenger narrates like a nature documentary.", es: "Una hora remando en círculos mientras quien no rema narra como en un documental." },
+      "skating-and-hot-chocolate": { en: "Holding hands is how you stay upright. Whoever falls first buys the hot chocolate.", es: "Ir de la mano es la forma de no caerse. Quien se caiga primero paga el chocolate." },
+      "spa-evening": { en: "Warm water, no phones, and one rule: not a single word about work.", es: "Agua caliente, sin móviles y una regla: ni una palabra de trabajo." },
+    },
+    faq: [
+      {
+        q: { en: "What is a unique date idea for a couple who have done everything?", es: "¿Qué cita diferente queda cuando ya lo habéis hecho todo?" },
+        a: { en: "Getting up for the sunrise. It starts half an hour before the sun, at a view with nobody in it, and ends with the first coffee of the day. Phones stay in pockets until the sun is fully up.", es: "Madrugar para ver amanecer. Empieza media hora antes de que salga el sol, en un mirador sin nadie, y acaba con el primer café del día. Los móviles se quedan en el bolsillo hasta que el sol haya salido del todo." },
+      },
+      {
+        q: { en: "Which of these work in the rain?", es: "¿Cuáles sirven con lluvia?" },
+        a: { en: "Five need no sky at all: the escape room, the climbing wall, karaoke, the ice rink and the spa. The stars move to a planetarium. The sunrise and the rowboat wait for a dry day.", es: "Cinco no necesitan cielo: el escape room, el rocódromo, el karaoke, la pista de hielo y el spa. Las estrellas se mudan a un planetario. El amanecer y la barca esperan a un día seco." },
+      },
+    ],
+  },
 };
 
 export type DateKindUi = {
@@ -285,6 +376,27 @@ export type DateKindUi = {
   meetLabel: string;
   meetHeading: string;
   meetLine: string;
+  romanticPlacesLabel: string;
+  romanticPlacesHeading: string;
+  romanticPlacesLine: string;
+  nightPlacesLabel: string;
+  nightPlacesHeading: string;
+  nightPlacesLine: string;
+  outdoorPlacesLabel: string;
+  outdoorPlacesHeading: string;
+  outdoorPlacesLine: string;
+  rainyPlacesLabel: string;
+  rainyPlacesHeading: string;
+  rainyPlacesLine: string;
+  winterPlacesLabel: string;
+  winterPlacesHeading: string;
+  winterPlacesLine: string;
+  funPlacesLabel: string;
+  funPlacesHeading: string;
+  funPlacesLine: string;
+  uniquePlacesLabel: string;
+  uniquePlacesHeading: string;
+  uniquePlacesLine: string;
 };
 
 /** The words every page by kind shares. */
@@ -323,6 +435,27 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
     meetLabel: "Where to meet",
     meetHeading: "Cafés, bookshops and galleries near the center",
     meetLine: "Easy places to find each other, all within {km} km.",
+    romanticPlacesLabel: "With a view",
+    romanticPlacesHeading: "Views, gardens and parks near the center",
+    romanticPlacesLine: "Places to walk to after dinner, all within {km} km.",
+    nightPlacesLabel: "After dark",
+    nightPlacesHeading: "Bars, cinemas and theaters near the center",
+    nightPlacesLine: "Where an evening can start or end, all within {km} km.",
+    outdoorPlacesLabel: "Outside",
+    outdoorPlacesHeading: "Parks, gardens and lookouts near the center",
+    outdoorPlacesLine: "Open-air spots within {km} km of the center.",
+    rainyPlacesLabel: "Under a roof",
+    rainyPlacesHeading: "Museums, galleries, cinemas and bookshops nearby",
+    rainyPlacesLine: "Dry places the map knows within {km} km of the center.",
+    winterPlacesLabel: "Somewhere warm",
+    winterPlacesHeading: "Cafés, museums and cinemas near the center",
+    winterPlacesLine: "Warm places the map knows within {km} km.",
+    funPlacesLabel: "To play",
+    funPlacesHeading: "Places with a game in them",
+    funPlacesLine: "What the map knows within {km} km; the planner finds more.",
+    uniquePlacesLabel: "Out of the ordinary",
+    uniquePlacesHeading: "Places with a story near the center",
+    uniquePlacesLine: "A cellar, a rooftop, a hidden bar: what the map’s names give away.",
   },
   es: {
     eyebrow: "Ideas para una cita",
@@ -358,6 +491,27 @@ export const DATE_KIND_UI: Record<"en" | "es", DateKindUi> = {
     meetLabel: "Dónde quedar",
     meetHeading: "Cafeterías, librerías y galerías cerca del centro",
     meetLine: "Sitios fáciles para encontrarse, todos a menos de {km} km.",
+    romanticPlacesLabel: "Con vistas",
+    romanticPlacesHeading: "Miradores, jardines y parques cerca del centro",
+    romanticPlacesLine: "Sitios a los que ir andando después de cenar, a menos de {km} km.",
+    nightPlacesLabel: "De noche",
+    nightPlacesHeading: "Bares, cines y teatros cerca del centro",
+    nightPlacesLine: "Donde puede empezar o acabar una noche, a menos de {km} km.",
+    outdoorPlacesLabel: "Al aire libre",
+    outdoorPlacesHeading: "Parques, jardines y miradores cerca del centro",
+    outdoorPlacesLine: "Sitios al aire libre a menos de {km} km del centro.",
+    rainyPlacesLabel: "Bajo techo",
+    rainyPlacesHeading: "Museos, galerías, cines y librerías cerca",
+    rainyPlacesLine: "Sitios secos que el mapa conoce a menos de {km} km del centro.",
+    winterPlacesLabel: "Al calor",
+    winterPlacesHeading: "Cafeterías, museos y cines cerca del centro",
+    winterPlacesLine: "Sitios calentitos que el mapa conoce a menos de {km} km.",
+    funPlacesLabel: "Para jugar",
+    funPlacesHeading: "Sitios con un juego dentro",
+    funPlacesLine: "Lo que el mapa conoce a menos de {km} km; el planificador encuentra más.",
+    uniquePlacesLabel: "Fuera de lo común",
+    uniquePlacesHeading: "Sitios con historia cerca del centro",
+    uniquePlacesLine: "Un sótano, una azotea, un bar escondido: lo que delatan los nombres del mapa.",
   },
 };
 
@@ -420,4 +574,45 @@ export const CITY_KIND_COPY: Record<string, CityKindCopy> = {
     hero: "ice-cream-walk",
     sentence: { en: "Our eight cheap ideas with real places around Covent Garden, and the galleries, parks and bookshops nearby that are usually free.", es: "Nuestras ocho ideas baratas con sitios reales alrededor de Covent Garden, y las galerías, parques y librerías cercanos, que suelen ser gratis." },
   },
+};
+
+/**
+ * The words of a city pair that has no hand-written ones (CITY_KIND_COPY), composed from the kind’s
+ * and the city’s own data by src/lib/cities/kind-copy.ts. `{count}` is spelled out; `{first}` and
+ * `{last}` are the page’s first and last cards in the city’s order; `{places}` names real places the
+ * cards stop at, read from the map when the page is made. Such a page is not indexed (dates2-C2).
+ */
+export const CITY_KIND_WORDS: Record<"en" | "es", { title: string; description: string; heading: string; withPlaces: string; noPlaces: string; two: string; pick: string }> = {
+  en: {
+    title: "{phrase} in {city}",
+    description: "{phraseSentence} in {city}, from “{first}” to “{last}”. The planner fits one to the day’s forecast.",
+    heading: "{phraseSentence} in {city}",
+    withPlaces: "In {city}, {count} {dates}. Among their stops: {places}.",
+    noPlaces: "In {city}, {count} {dates}. Open one on the map and it finds the places.",
+    two: "{a} and {b}",
+    pick: "Especially good in {city}: “{idea}”.",
+  },
+  es: {
+    title: "{short} en {city}",
+    description: "{short} en {city}, de «{first}» a «{last}». El planificador elige una según el tiempo.",
+    heading: "En {city}, {phraseLower}",
+    withPlaces: "En {city}, {count} {dates}. Entre sus paradas: {places}.",
+    noPlaces: "En {city}, {count} {dates}. Abrid una en el mapa y os busca los sitios.",
+    two: "{a} y {b}",
+    pick: "Especialmente buena en {city}: «{idea}».",
+  },
+};
+
+/** What a pair’s sentence calls the kind’s dates, and how its Spanish title starts. */
+export const CITY_KIND_NOUNS: Record<Exclude<DateKind, "at-home">, { dates: L; short: string }> = {
+  "first-date": { dates: { en: "first dates", es: "primeras citas" }, short: "Primera cita" },
+  fun: { dates: { en: "fun dates", es: "citas divertidas" }, short: "Citas divertidas" },
+  cheap: { dates: { en: "cheap dates", es: "citas baratas" }, short: "Citas baratas" },
+  romantic: { dates: { en: "romantic dates", es: "citas románticas" }, short: "Citas románticas" },
+  "double-date": { dates: { en: "double dates", es: "citas dobles" }, short: "Citas dobles" },
+  winter: { dates: { en: "winter dates", es: "citas de invierno" }, short: "Citas de invierno" },
+  "rainy-day": { dates: { en: "rainy-day dates", es: "citas bajo techo" }, short: "Citas bajo techo" },
+  night: { dates: { en: "date nights", es: "noches en pareja" }, short: "Planes de noche" },
+  outdoor: { dates: { en: "outdoor dates", es: "citas al aire libre" }, short: "Citas al aire libre" },
+  unique: { dates: { en: "unique dates", es: "citas diferentes" }, short: "Citas diferentes" },
 };

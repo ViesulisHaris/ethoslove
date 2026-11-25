@@ -13,6 +13,9 @@ const KINDS = [
   { kind: "double-date", phrase: "Double Date Ideas", es: "Ideas para una cita doble", count: 8, heading: "Double date ideas that work better with four" },
   { kind: "winter", phrase: "Winter Date Ideas", es: "Ideas para una cita en invierno", count: 9, heading: "Winter date ideas for when it’s dark by five" },
   { kind: "rainy-day", phrase: "Rainy Day Date Ideas", es: "Ideas para una cita con lluvia", count: 12, heading: "Rainy day date ideas that never needed the sun" },
+  { kind: "night", phrase: "Date Night Ideas", es: "Planes para una noche en pareja", count: 9, heading: "Date night ideas that start at seven or later" },
+  { kind: "outdoor", phrase: "Outdoor Date Ideas", es: "Ideas para una cita al aire libre", count: 8, heading: "Outdoor date ideas for a dry day" },
+  { kind: "unique", phrase: "Unique Date Ideas", es: "Ideas para una cita diferente", count: 8, heading: "Unique date ideas that aren’t dinner and a film" },
 ] as const;
 
 const FIRST_DATE_TITLES = ["Pick a book for each other", "Ice cream and nowhere to be", "Gallery hop", "Mini golf, loser buys dessert", "Bowling, bumpers optional", "Arcade night", "Museum, then a glass of something", "An afternoon in a garden", "Skate, fall, hot chocolate"];
@@ -49,7 +52,7 @@ async function catchEvents(page: Page) {
 }
 
 test.describe("the pages by kind of date", () => {
-  test("P1 each of the seven pages is there in both languages, titled with its search", async ({ page }) => {
+  test("P1 each of the ten pages is there in both languages, titled with its search", async ({ page }) => {
     test.setTimeout(180_000);
     const errors: Error[] = [];
     page.on("pageerror", (e) => errors.push(e));
@@ -127,14 +130,20 @@ test.describe("the pages by kind of date", () => {
   test("P6 the dates map links to every kind, and a kind links on to cities and to the other kinds", async ({ page }) => {
     await page.goto("/dates");
     const byKind = page.getByRole("navigation", { name: "Date ideas by kind" });
-    await expect(byKind.getByRole("link")).toHaveCount(7);
+    await expect(byKind.getByRole("link")).toHaveCount(10);
     await expect(byKind.getByRole("link").first()).toHaveAttribute("href", "/dates/ideas/first-date");
 
     await page.goto("/dates/ideas/first-date");
+    // A city's own pair only where its words are written and it is indexed; any other city goes to its indexed city page (dates2-N1).
     for (const href of ["/dates/new-york/first-date", "/dates/london/first-date", "/dates/chicago"]) await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
+    await expect(page.locator('a[href="/dates/chicago/first-date"]')).toHaveCount(0);
+    await page.goto("/dates/ideas/romantic");
+    for (const slug of ["new-york", "chicago", "london"]) await expect(page.locator(`a[href="/dates/${slug}"]`).first()).toBeVisible();
+    await expect(page.locator('a[href^="/dates/"][href$="/romantic"]:not([href^="/dates/ideas/"])')).toHaveCount(0);
+    await page.goto("/dates/ideas/first-date");
     await expect(page.getByRole("link", { name: "All 55 cities" })).toHaveAttribute("href", "/dates");
     const more = page.getByRole("navigation", { name: "More kinds of date" });
-    await expect(more.getByRole("link")).toHaveCount(6);
+    await expect(more.getByRole("link")).toHaveCount(9);
     await expect(more.locator('a[href="/dates/ideas/first-date"]')).toHaveCount(0);
   });
 

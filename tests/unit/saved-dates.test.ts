@@ -702,3 +702,19 @@ describe("the reminder the day before (members only)", () => {
     await expect(failing.due("2026-09-26", 200)).rejects.toThrow(/saved_dates_due does not exist/);
   });
 });
+
+describe("a saved date's list row (dates2)", () => {
+  it("S6 a list row carries the day its plan was done, and a trip never does", () => {
+    const base = { id: "00000000-0000-4000-9000-000000000001", owner_user_id: "me", kind: "date", title: "", city: "Lisbon", day: "2026-11-20", stops_count: 1, remind: false, reminded_for: null, version: 1, last_edited_by: null, created_at: "2026-11-20T10:00:00Z", updated_at: "2026-11-20T10:00:00Z" } as const;
+    const ctx = { viewerId: "me", member: false, partnerId: null, recent: new Set<string>(), people: new Map() };
+    const done = server.listShape({ ...base, data: { v: 1, done: "2026-11-20", stops: [stop(1)] } } as unknown as SavedRow);
+    expect(done.done).toBe("2026-11-20");
+    expect(server.summarise(done, ctx).done).toBe("2026-11-20");
+    const notYet = server.listShape({ ...base, data: { v: 1, stops: [stop(1)] } } as unknown as SavedRow);
+    expect(server.summarise(notYet, ctx).done).toBeNull();
+    const odd = server.listShape({ ...base, data: { v: 1, done: "yesterday", stops: [stop(1)] } } as unknown as SavedRow);
+    expect(server.summarise(odd, ctx).done).toBeNull();
+    const trip = server.listShape({ ...base, kind: "trip", data: { v: 1, tripId: "lisbon-slow-weekend", done: "2026-11-20" } } as unknown as SavedRow);
+    expect(server.summarise(trip, ctx).done).toBeNull();
+  });
+});

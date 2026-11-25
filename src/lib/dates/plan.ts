@@ -24,7 +24,12 @@ export type PlanStop = {
    */
   named?: false;
 };
-export type Plan = { v: 1; date?: string; where?: string; from?: string; to?: string; note?: string; idea?: string; stops: PlanStop[] };
+/**
+ * `done`: the day it happened (YYYY-MM-DD), once the person marked it done on /plan. `doneId`: the
+ * id its entry in the log was given then (lib/dates/done.ts), so "Not done after all" takes off that
+ * entry even after a stop was changed. Neither is ever in a link to share (shareablePlan).
+ */
+export type Plan = { v: 1; date?: string; where?: string; from?: string; to?: string; note?: string; idea?: string; done?: string; doneId?: string; stops: PlanStop[] };
 
 export const MAX_STOPS = 8;
 export const EMPTY_PLAN: Plan = { v: 1, stops: [] };
@@ -84,6 +89,9 @@ function readStop(value: unknown): PlanStop | null {
  */
 export const stopName = (stop: Pick<PlanStop, "name" | "kind" | "named">, locale: "en" | "es"): string => (stop.named === false ? KINDS[stop.kind].label[locale] : stop.name);
 
+/** A done date's id in the log: its day, then its stops' ids as they were (lib/dates/done.ts doneFromPlan). */
+const DONE_ID = /^\d{4}-\d{2}-\d{2}:[^\n]{0,189}$/;
+
 /** A plan, or null when any part of it is not one. */
 export function readPlan(value: unknown): Plan | null {
   if (!isFields(value) || value.v !== 1) return null;
@@ -94,7 +102,9 @@ export function readPlan(value: unknown): Plan | null {
   const to = text(value.to, 40);
   const note = text(value.note, 280);
   const idea = text(value.idea, 40);
-  if (date === BAD || where === BAD || from === BAD || to === BAD || note === BAD || idea === BAD) return null;
+  const done = value.done === undefined ? undefined : isYmd(value.done) ? value.done : BAD;
+  const doneId = value.doneId === undefined ? undefined : typeof value.doneId === "string" && DONE_ID.test(value.doneId) ? value.doneId : BAD;
+  if (date === BAD || where === BAD || from === BAD || to === BAD || note === BAD || idea === BAD || done === BAD || doneId === BAD) return null;
   if (!Array.isArray(stops) || stops.length > MAX_STOPS) return null;
   const read = stops.map(readStop);
   if (read.some((stop) => stop === null)) return null;
@@ -106,9 +116,20 @@ export function readPlan(value: unknown): Plan | null {
     ...(to !== undefined && { to }),
     ...(note !== undefined && { note }),
     ...(idea !== undefined && { idea }),
+    ...(done !== undefined && { done }),
+    ...(done !== undefined && doneId !== undefined && { doneId }),
     stops: read as PlanStop[],
   };
 }
+
+/** The plan as a link to share carries it: without the day it was done, which is the person's own. */
+export const shareablePlan = (plan: Plan): Plan => {
+  if (plan.done === undefined && plan.doneId === undefined) return plan;
+  const rest = { ...plan };
+  delete rest.done;
+  delete rest.doneId;
+  return rest;
+};
 
 /** Anything over this is not a plan somebody made by tapping eight places. */
 const MAX_ENCODED = 8000;
