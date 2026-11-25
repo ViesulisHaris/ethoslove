@@ -53,7 +53,7 @@ export function ArtWithSlot({ id, flowers, slot, shown, className, slotClassName
  */
 export function ArtLayer({ items, flowers, className }: { items: readonly PlacedArt[]; flowers: Flowers; className?: string }) {
   return (
-    <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0", className)}>
+    <div aria-hidden="true" data-art-layer="" className={cn("pointer-events-none absolute inset-0", className)}>
       {items.map((b, i) => {
         // The homepage's rule for where a piece lies and how wide. Its drop shadow is for cut-outs that have none of their own, so it is left out.
         const place = placementStyle(b, "transparent");

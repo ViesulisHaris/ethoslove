@@ -402,8 +402,19 @@ test.describe("the other rooms", () => {
 
   test("long distance: two towns in, the distance, halfway and the clocks out", async ({ page }) => {
     const towns: Record<string, { lat: number; lng: number; offset: number; country: string }> = { Riga: { lat: 56.9494, lng: 24.1052, offset: 10800, country: "Latvia" }, Madrid: { lat: 40.4168, lng: -3.7038, offset: 7200, country: "Spain" } };
+    // A visitor in Riga: euros, so kilometres, with or without the live site's currencies switch (with it, a
+    // browser that says only en-US is a dollar visitor, and the page reads miles: meet-in-the-middle.tsx).
+    await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "LV" });
+    const middles: string[] = [];
     await page.route("**/api/places*", (route) => {
-      const q = new URL(route.request().url()).searchParams.get("q") ?? "";
+      const asked = new URL(route.request().url()).searchParams;
+      // The map's nearest town to the middle (components/ldr/use-halfway.ts): the page sends only the middle and
+      // how far each travels, never either town. Riga and Madrid meet near Kaiserslautern.
+      if (asked.has("lat")) {
+        middles.push(`${asked.get("lat")},${asked.get("lng")}`);
+        return route.fulfill({ json: { spot: { kind: "town", name: "Kaiserslautern", countryCode: "DE", lat: 49.4447, lng: 7.769, also: [] } } });
+      }
+      const q = asked.get("q") ?? "";
       const town = towns[q];
       return route.fulfill({ json: { results: town ? [{ name: q, kind: "city", lat: town.lat, lng: town.lng, country: town.country }] : [] } });
     });
@@ -421,7 +432,10 @@ test.describe("the other rooms", () => {
     await expect(page.getByText(/^2,7\d\d km$/)).toBeVisible();
     await expect(page.getByText("Madrid is 1 h behind")).toBeVisible();
     await expect(page.getByText("You’re both awake 09:00–23:00, your time.")).toBeVisible();
-    await expect(page.getByRole("link", { name: /^Date ideas in / })).toHaveAttribute("href", /\/dates\?lat=/);
+    const ideas = page.getByRole("link", { name: "Date ideas in Kaiserslautern" });
+    await expect(ideas).toHaveAttribute("href", /\/dates\?lat=49\.44\d*&lng=7\.76\d*/);
+    expect(middles.length).toBeGreaterThanOrEqual(1);
+    expect(middles.every((m) => !/^(56\.9|40\.4)/.test(m)), "only the middle is sent, never a town").toBe(true);
     await expect(page.getByRole("heading", { level: 3, name: "Same recipe, two kitchens" })).toBeVisible();
   });
 

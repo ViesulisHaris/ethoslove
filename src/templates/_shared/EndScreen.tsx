@@ -185,7 +185,9 @@ export function EndScreen({
       ) : null}
 
       <p
-        className={cn("leading-tight italic", compact ? "text-[1.45rem]" : "text-[1.6rem]", heart && (compact ? "mt-3" : "mt-7"))}
+        // The line height after the size: tailwind-merge lets a later font size drop an earlier leading-*, and this line
+        // then stood 6.4 px taller than on the live site, the whole end with it (the final pass, 25 Nov 2026).
+        className={cn("italic", compact ? "text-[1.45rem]" : "text-[1.6rem]", "leading-tight", heart && (compact ? "mt-3" : "mt-7"))}
         style={{ fontFamily: "var(--gift-font-display)" }}
       >
         {giftString(locale, "theEnd")}

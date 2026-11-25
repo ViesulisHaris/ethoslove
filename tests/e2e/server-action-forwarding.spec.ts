@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext } from "@playwright/test";
+import { needProductionBuild } from "./server-state";
 
 /**
  * The editor's autosave can go off just after the person has left the editor (its store outlives the
@@ -31,6 +32,9 @@ async function postSave(request: APIRequestContext, page: string, id: string, or
 }
 
 test.describe("an editor save posted from another page", () => {
+  // The editor's scripts carry the autosave's reference the way this test reads it in a production build only: under
+  // `next dev` it is not found (the final pass of 25 Nov 2026: fails on a dev server, 2 of 2 pass against the build).
+  test.beforeEach(async ({ request }) => needProductionBuild(request));
   test("reaches the editor's code from the templates page and the dashboard", async ({ request, baseURL }) => {
     const id = await saveDraftId(request);
     const origin = new URL(baseURL!).origin;

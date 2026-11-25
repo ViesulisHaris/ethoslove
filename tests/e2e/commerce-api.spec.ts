@@ -12,7 +12,14 @@ test.describe("entitlements", () => {
     expect(response.status()).toBe(200);
     expect(response.headers()["cache-control"]).toContain("no-store");
     // Contract C3 as extended for Ethos for Two (docs/MEMBERSHIP.md 2.8): no membership, and the free saved-dates limit.
-    expect(await response.json()).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null, upgrade: null, savedDatesLimit: 3 });
+    // Two more gifts (the pair job): a visitor has no gifts ready and no offer, and adds none.
+    const visitor = { signedIn: false, templates: [], packs: [], pass: null, membership: null, upgrade: null, savedDatesLimit: 3, giftsReady: 0, pairOffer: null, addPair: false };
+    expect(await response.json()).toEqual(visitor);
+    // Only a reader a reminder e-mail brought asks about adding the pair; with no gift-credits table to read
+    // (placeholder keys, or the switch off) the answer is the same.
+    const asked = await request.get("/api/entitlements?addPair=1");
+    expect(asked.status()).toBe(200);
+    expect(await asked.json()).toEqual(visitor);
   });
 });
 

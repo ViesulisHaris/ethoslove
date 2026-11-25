@@ -32,7 +32,9 @@ const MAIN = ["/dates/ideas/first-date", "/es/dates/ideas/first-date"];
 // Every page the deep test counted at or near 300 (dates-D8) is held to it here.
 const MORE = ["/dates/ideas/rainy-day", "/es/dates/ideas/rainy-day", "/dates/ideas/cheap", "/es/dates/ideas/cheap", "/es/dates/ideas/romantic", "/dates/london/first-date", "/es/dates/london/first-date", "/dates/new-york/cheap", "/es/dates/new-york/cheap",
   // dates2: the city pages on the designed spread, the three new kinds and three composed pairs.
-  "/dates/london", "/es/dates/london", "/dates/miami", "/es/dates/miami", "/dates/ideas/night", "/es/dates/ideas/night", "/dates/ideas/outdoor", "/es/dates/ideas/unique", "/dates/chicago/romantic", "/es/dates/chicago/romantic", "/dates/london/night", "/es/dates/denver/outdoor",
+  "/dates/london", "/es/dates/london", "/dates/miami",
+  // A city a trip passes through: its "More for" row carries the trip's label too (final pass, 25 Nov 2026).
+  "/dates/riga", "/es/dates/riga", "/es/dates/miami", "/dates/ideas/night", "/es/dates/ideas/night", "/dates/ideas/outdoor", "/es/dates/ideas/unique", "/dates/chicago/romantic", "/es/dates/chicago/romantic", "/dates/london/night", "/es/dates/denver/outdoor",
   // dates2: the short page for venues (about a hundred words by design: its floor is 40, not 60).
   "/dates/for-venues", "/es/dates/for-venues"];
 /** The word floor: a page this short on purpose is held to 40. */
