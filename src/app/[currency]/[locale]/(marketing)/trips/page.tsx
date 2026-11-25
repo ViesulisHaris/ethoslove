@@ -10,6 +10,9 @@ import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { monthRanges } from "@/lib/trips/months";
 import { budgetMark, TRIP_KINDS, tripImageSm, TRIPS, tripSrcSet } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields } from "@/lib/trips/trip-gift";
+import { ideaPath, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
+import { originPath, TRIP_ORIGINS } from "@/lib/trips/origins";
+import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { MATCH_ART, ROOMS_THEME } from "@/content/rooms-art";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
@@ -127,6 +130,21 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             {t("grid.title")}
           </h2>
           <TripsGrid className="mt-8" cards={cards} filters={filters} label={t("filter.label")} />
+          {/* One quiet row to the pages by where you leave from and by kind, and each links back here. */}
+          <nav aria-label={t("more.nav")} data-testid="trips-more" className="mt-10 flex flex-wrap items-center gap-x-1 border-t border-line pt-5 text-[15px] text-forest/75">
+            <span className="mr-1.5">{t("more.from")}</span>
+            {TRIP_ORIGINS.map((o) => (
+              <Link key={o.slug} href={originPath(o)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
+                {o.name[l]}
+              </Link>
+            ))}
+            <span className="mr-1.5 ml-4">{t("more.kinds")}</span>
+            {TRIP_IDEA_KINDS.map((kind) => (
+              <Link key={kind} href={ideaPath(kind)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
+                {TRIP_IDEA_COPY[kind].nav[l]}
+              </Link>
+            ))}
+          </nav>
         </div>
       </section>
 

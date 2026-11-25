@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
+import sitemap from "@/app/sitemap";
 import { CITY_SLUGS } from "@/lib/cities/cities";
+import { ideaPath, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
 import { findAirport } from "@/lib/trips/airports";
 import { estimateFlight } from "@/lib/trips/flights";
 import { fill, TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
 import { TRIPS } from "@/lib/trips/presets";
-import { ORIGIN_MAX, ORIGIN_MIN_TRIPS, reachable, TRIP_ORIGINS, tripsFrom, type TripOrigin } from "@/lib/trips/origins";
+import { ORIGIN_MAX, ORIGIN_MIN_TRIPS, originPath, reachable, TRIP_ORIGINS, tripsFrom, type TripOrigin } from "@/lib/trips/origins";
 
 // The same as tests/unit/trips.test.ts.
 const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary)\b/i;
@@ -195,5 +197,18 @@ describe("the cities to leave from", () => {
     expect(TRIP_ORIGIN_UI.en.hoursBody).toContain("35 minutes");
     expect(TRIP_ORIGIN_UI.en.hoursBody).toContain("five minutes");
     expect(TRIP_ORIGIN_UI.es.hoursBody).toContain("35 minutos");
+  });
+
+  it("O11 the sitemap lists every origin and every kind in both languages, and nothing that is not a page", () => {
+    const entries = sitemap();
+    const paths = new Map(entries.map((e) => [new URL(e.url).pathname, e]));
+    for (const path of [...TRIP_ORIGINS.map(originPath), ...TRIP_IDEA_KINDS.map(ideaPath)]) {
+      for (const p of [path, `/es${path}`]) {
+        expect(paths.has(p), p).toBe(true);
+        expect(paths.get(p)?.lastModified, p).toBeTruthy();
+      }
+    }
+    const all = [...paths.keys()].join(" ");
+    for (const not of ["from-new-york", "romantic-city-breaks", "cheap-trips-in-europe"]) expect(all).not.toContain(not);
   });
 });

@@ -9,6 +9,8 @@ import { monthRanges } from "@/lib/trips/months";
 import { originPath, TRIP_ORIGINS, tripsFrom, type OriginTrip, type TripOrigin } from "@/lib/trips/origins";
 import { getTrip, tripImageSm, TRIPS, tripSrcSet, type Trip } from "@/lib/trips/presets";
 import { fill, TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
+import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
+import { ideaPath, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
 import { CARDS_ART } from "@/components/marketing/spread/placements";
 import { MoreRow } from "@/components/marketing/spread/sections";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -124,6 +126,13 @@ export async function OriginPage({ origin, locale }: { origin: TripOrigin; local
                 <li key={o.slug}>
                   <Link href={originPath(o)} className={ROOM_ROW_LINK}>
                     {o.name[l]}
+                  </Link>
+                </li>
+              ))}
+              {TRIP_IDEA_KINDS.map((kind) => (
+                <li key={kind}>
+                  <Link href={ideaPath(kind)} className={ROOM_ROW_LINK}>
+                    {TRIP_IDEA_COPY[kind].nav[l]}
                   </Link>
                 </li>
               ))}

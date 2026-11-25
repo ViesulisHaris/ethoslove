@@ -79,6 +79,14 @@ export const GAMES_LIVE = "2026-11-23";
 export const ROOMS_LIVE = "2026-11-24";
 
 /**
+ * The day the trips room's second pass goes live: /trips, every trip's page and /long-distance cut
+ * to 300 words, a trip's day costs in the visitor's currency and its places to stay, and the pages
+ * by where you leave from and by kind of trip. NOT LIVE YET: this is the day the work was finished.
+ * Whoever ships it sets this to that day.
+ */
+export const TRIPS2_LIVE = "2026-11-25";
+
+/**
  * Ethos in numbers is dated only once it is on (a date for a page that is in no sitemap fails
  * crawl.test.ts): the later of the day its words changed and the day its figures were counted.
  */
@@ -155,11 +163,12 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/dates/new-york/first-date": DATES_LIVE,
   "/dates/london/first-date": DATES_LIVE,
   "/dates/london/cheap": DATES_LIVE,
-  "/trips": ROOMS_LIVE,
-  "/trips/*": ROOMS_LIVE,
+  "/trips": TRIPS2_LIVE,
+  "/trips/*": TRIPS2_LIVE,
+  "/trips/ideas/*": TRIPS2_LIVE,
   "/games": GAMES_LIVE,
   "/games/*": GAMES_LIVE,
-  "/long-distance": ROOMS_LIVE,
+  "/long-distance": TRIPS2_LIVE,
   "/tools/how-long-have-we-been-together": "2026-11-09",
   "/tools/halfway-between-two-cities": ROOMS_LIVE,
   "/tools/love-language-quiz": "2026-11-15",

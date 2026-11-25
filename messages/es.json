@@ -2823,6 +2823,11 @@
       "eyebrow": "Viajes ya pensados",
       "title": "Elegid uno y hacedlo vuestro."
     },
+    "more": {
+      "nav": "Más formas de elegir viaje",
+      "from": "Salimos de",
+      "kinds": "Por tipo"
+    },
     "kind": {
       "road": "En coche",
       "city": "Escapada urbana",

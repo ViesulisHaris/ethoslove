@@ -2823,6 +2823,11 @@
       "eyebrow": "Ready-made trips",
       "title": "Pick one, then make it yours."
     },
+    "more": {
+      "nav": "More ways to choose a trip",
+      "from": "Leaving from",
+      "kinds": "By kind"
+    },
     "kind": {
       "road": "Road trip",
       "city": "City break",
