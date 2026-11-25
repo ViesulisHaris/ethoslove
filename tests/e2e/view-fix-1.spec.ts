@@ -44,6 +44,11 @@ async function hoverFilm(page: Page, card: string, slug: string) {
 }
 
 test.describe("front-3: a card's hover film skips the recording's opening", () => {
+  // A hover film starts on hover: where the device has none (a phone), nothing starts it, by design.
+  test.beforeEach(async ({ page }) => {
+    await page.goto("about:blank");
+    test.skip(!(await page.evaluate(() => matchMedia("(hover: hover)").matches)), "this device has no hover, so no hover film starts (a phone)");
+  });
   for (const slug of ["popup-card", "xoxo", "the-letter"]) {
     test(`gallery card, ${slug}`, async ({ page }) => {
       await page.goto("/templates");
