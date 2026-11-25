@@ -83,11 +83,62 @@ describe("the date letter's year", () => {
     for (const entry of LETTER_ENTRIES) {
       for (const locale of ["en", "es"] as const) {
         const w = letterWords(entry, locale);
-        for (const key of ["title", "blurb", "about", "cost", "twist", "say", "subject"] as const) expect(w[key], `week ${entry.week} ${locale} ${key}`).toBeTruthy();
-        expect(Boolean(w.fit), `week ${entry.week} ${locale} fit`).toBe(Boolean(entry.angle));
+        for (const key of ["title", "open", "about", "cost", "say", "subject"] as const) expect(w[key], `week ${entry.week} ${locale} ${key}`).toBeTruthy();
+        expect(Boolean(w.twist), `week ${entry.week} ${locale} twist`).toBe(entry.twist !== false);
         expect(w.gift).toBe(Boolean(entry.gift));
-        if (entry.angle === "cheap" && canBeFree(ideaById(entry.idea)!)) expect(w.cost).toBe(locale === "en" ? "It can cost nothing." : "Puede salir gratis.");
+        if (entry.free || (entry.angle === "cheap" && canBeFree(ideaById(entry.idea)!))) expect(w.cost).toBe(locale === "en" ? "It can cost nothing." : "Puede salir gratis.");
       }
     }
+  });
+
+  /** Each part of a letter a reader reads, in one language. */
+  const parts = (entry: (typeof LETTER_ENTRIES)[number], locale: "en" | "es") => {
+    const w = letterWords(entry, locale);
+    return { subject: w.subject, title: w.title, open: w.open, twist: w.twist ?? "", say: w.say, about: w.about, cost: w.cost };
+  };
+  const runs = (s: string, n: number) => {
+    const t = s.toLowerCase().replace(/[’']/g, "'").replace(/[^\p{L}\p{N}' ]+/gu, " ").split(/\s+/).filter(Boolean);
+    const out = new Set<string>();
+    for (let i = 0; i + n <= t.length; i++) out.add(t.slice(i, i + n).join(" "));
+    return out;
+  };
+
+  it("C9 no letter says the same thing twice: no two of its parts share a run of four words", () => {
+    const found: string[] = [];
+    for (const entry of LETTER_ENTRIES) {
+      for (const locale of ["en", "es"] as const) {
+        const p = parts(entry, locale);
+        // The subject repeats the title by design; every other pair is checked.
+        const keys = ["title", "open", "twist", "say"] as const;
+        for (let i = 0; i < keys.length; i++)
+          for (let j = i + 1; j < keys.length; j++) {
+            const a = runs(p[keys[i]], 4);
+            const shared = [...runs(p[keys[j]], 4)].filter((r) => a.has(r));
+            if (shared.length) found.push(`week ${entry.week} ${locale}: ${keys[i]} and ${keys[j]} share "${shared.join('", "')}"`);
+          }
+      }
+    }
+    expect(found).toEqual([]);
+  });
+
+  it("C10 every English word the letter prints is American", () => {
+    const british = /\b(bookshops?|rowing boats?|chips|interval|afterwards|colou?rs?|favourite|theatre|caf[eé]s?|centre|realise|travell?ing|neighbour|programme|holiday|queue|trousers|flat)\b/i;
+    for (const entry of LETTER_ENTRIES) for (const [key, line] of Object.entries(parts(entry, "en"))) expect(line, `week ${entry.week} ${key}`).not.toMatch(british);
+  });
+
+  it("C11 no Spanish word the letter prints genders the partner or the couple", () => {
+    const gendered = /\b(el otro|del otro|al otro|la otra persona|ninguno|nosotros|vosotros|juntos|cansados?|listos?|encerrados|uno de los dos|cada uno|compañeros?|novi[oa]s?|marido|espos[oa]|chic[oa]s?)\b/i;
+    for (const entry of LETTER_ENTRIES) for (const [key, line] of Object.entries(parts(entry, "es"))) expect(line, `week ${entry.week} ${key}`).not.toMatch(gendered);
+  });
+
+  it("C12 the line to say names no day before Friday: a letter goes on Thursday or Friday, never later", () => {
+    for (const { week, say } of LETTER_ENTRIES) {
+      expect(say.en, `week ${week}`).not.toMatch(/\b(Monday|Tuesday|Wednesday|Thursday|tonight|tomorrow)\b/i);
+      expect(say.es, `week ${week}`).not.toMatch(/\b(lunes|martes|miércoles|jueves|esta noche|mañana)\b/i);
+    }
+  });
+
+  it("C13 straight quotes from the site's words are set curly, as the letter's own lines are", () => {
+    for (const entry of LETTER_ENTRIES) for (const locale of ["en", "es"] as const) for (const [key, line] of Object.entries(parts(entry, locale))) expect(line, `week ${entry.week} ${locale} ${key}`).not.toMatch(/['"]/);
   });
 });

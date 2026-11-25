@@ -37,25 +37,25 @@ export function LetterConfirmEmail({ locale, confirmUrl, stopUrl }: { locale: L;
 
 /**
  * This week's date letter: one of the site's date ideas as a plan for the weekend (what it is, about
- * how long, about what it costs in words, the twist, a line to say), one button to plan it, and only
- * where a gift honestly fits the idea, one quiet line to wrap it in one. No picture but the mark, no
- * name, no amount, nothing that tracks. The stop link is the footer's, once, beside the mail app's
- * own unsubscribe button.
+ * how long, about what it costs in words, the twist unless the opening already says it, a line to say),
+ * one button to plan it, and only where a gift honestly fits the idea, one quiet line saying the plan
+ * can be wrapped in one. That line has no link of its own: a gift wraps a plan, and the plan is made
+ * behind the button (an empty /plan has nothing to wrap). No picture but the mark, no name, no amount,
+ * nothing that tracks. The stop link is the footer's, once, beside the mail app's own unsubscribe button.
  */
 export function DateLetterEmail({ locale, words, planUrl, giftUrl, stopUrl }: { locale: L; words: LetterWords; planUrl: string; giftUrl: string; stopUrl: string }) {
   const es = locale === "es";
   return (
     <EmailLayout
       lang={locale}
-      preview={words.blurb}
+      preview={words.open}
       heading={words.title}
       footer={es ? "Recibes esto porque pediste la carta de citas de Ethos." : "You’re getting this because you asked for the date letter on Ethos."}
       footerLink={{ label: es ? "Dejar de recibir estos correos" : "Stop these emails", href: stopUrl }}
     >
-      <P>{words.blurb}</P>
-      {words.fit ? <P>{words.fit}</P> : null}
+      <P>{words.open}</P>
       <Quiet>{`${words.about} ${words.cost}`}</Quiet>
-      <P>{`${es ? "El giro: " : "The twist: "}${words.twist}`}</P>
+      {words.twist ? <P>{`${es ? "El giro: " : "The twist: "}${words.twist}`}</P> : null}
       <P>{es ? `Qué decirle: «${words.say}»` : `What to say: “${words.say}”`}</P>
       <CtaButton href={planUrl} label={es ? "Planear esta cita" : "Plan this date"} />
       {words.gift ? (
