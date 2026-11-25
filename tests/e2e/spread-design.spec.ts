@@ -1,6 +1,8 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
 import { OCCASIONS } from "../../src/config/occasions";
 import { measure, settle } from "./page-measure";
+import en from "../../messages/en.json";
+import es from "../../messages/es.json";
 
 /**
  * /digital-cards, the gift pages by kind and the idea lists of the occasion pages, laid out as the
@@ -725,6 +727,8 @@ for (const prefix of ["", "/es"]) {
           const total = await page.locator("[data-shelf] article").count();
           await pill.click();
           await expect(rest).toHaveAttribute("open", "");
+          // Open, the pill's label says it closes the list again (the code review of 25 Nov 2026, C28).
+          await expect(pill).toHaveText(prefix ? es.templates.showFewer : en.templates.showFewer, { useInnerText: true });
           expect(await page.locator("[data-shelf] article:visible").count(), `${width}: every gift once opened`).toBe(total);
           await expect(pill).toBeInViewport();
         }

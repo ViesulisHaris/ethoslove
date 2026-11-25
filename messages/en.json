@@ -1033,6 +1033,7 @@
     "none": "No templates match that filter yet.",
     "noneFree": "None of this occasion’s templates are free yet. These free ones work for any day.",
     "showAll": "Show all {count}",
+    "showFewer": "Show fewer",
     "previewHint": "This is the real template with sample data. Tap, scroll and explore.",
     "fullscreenDemo": "Open full-screen demo",
     "included": "What’s included",

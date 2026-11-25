@@ -243,7 +243,9 @@ export function TemplateGallery({
                     {/* The rest of the occasion's gifts, closed: a native <details>, so it opens by keyboard and without JavaScript, and every card stays in the HTML. */}
                     <details data-gallery-rest className="group mt-10">
                       <summary className="mx-auto flex h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-ink/20 px-5 text-sm font-medium text-ink transition-colors hover:border-ink/40 focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none active:bg-secondary [&::-webkit-details-marker]:hidden">
-                        {t("templates.showAll", { count: shelf.items.length })}
+                        {/* Open, the pill says what it does now: the plus turns to a cross and the label to "Show fewer". */}
+                        <span className="group-open:hidden">{t("templates.showAll", { count: shelf.items.length })}</span>
+                        <span className="hidden group-open:inline">{t("templates.showFewer")}</span>
                         <Plus aria-hidden="true" className="size-4 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.8} />
                       </summary>
                       <div className={cn(GRID, "mt-10")}>
