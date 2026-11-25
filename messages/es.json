@@ -2289,7 +2289,12 @@
       "elsewhere": "En otras webs",
       "share": "Compartir",
       "shareCopied": "Enlace copiado",
-      "shareText": "Un sitio para una cita:"
+      "shareText": "Un sitio para una cita:",
+      "liked": "A {n} parejas les gustó",
+      "book": "Reservar mesa"
+    },
+    "featured": {
+      "label": "Destacado"
     },
     "map": {
       "label": "Mapa de sitios para una cita",
@@ -2785,6 +2790,9 @@
       "eyebrow": "Reservad con antelación",
       "title": "Entradas para este viaje",
       "sub": "Lo que conviene reservar antes en este plan: una hora de entrada, un sitio en el barco, un pase. Reservad antes de ir y os ahorráis la taquilla."
+    },
+    "booking": {
+      "via": "Enlace de reserva: puede que ganemos una comisión si reserváis por él."
     },
     "car": {
       "title": "Alquilar un coche",

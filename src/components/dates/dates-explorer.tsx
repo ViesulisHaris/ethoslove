@@ -881,6 +881,8 @@ export function DatesExplorer() {
         share: t("place.share"),
         shareCopied: t("place.shareCopied"),
         shareText: t("place.shareText"),
+        liked: (n) => t("place.liked", { n }),
+        book: t("place.book"),
         reviews: {
           title: t("reviews.title"),
           publicNote: t("reviews.publicNote"),

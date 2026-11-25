@@ -2289,7 +2289,12 @@
       "elsewhere": "On other sites",
       "share": "Share",
       "shareCopied": "Link copied",
-      "shareText": "A place for a date:"
+      "shareText": "A place for a date:",
+      "liked": "{n} couples liked this",
+      "book": "Book a table"
+    },
+    "featured": {
+      "label": "Featured"
     },
     "map": {
       "label": "Map of places for a date",
@@ -2785,6 +2790,9 @@
       "eyebrow": "Book ahead",
       "title": "Tickets for this trip",
       "sub": "The things on this plan worth booking ahead: a time slot, a seat on a boat, a pass. Book before you go and skip the ticket desk."
+    },
+    "booking": {
+      "via": "Booking link: we may earn a commission if you book through it."
     },
     "car": {
       "title": "Hire a car",

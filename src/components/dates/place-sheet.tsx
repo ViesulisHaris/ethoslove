@@ -69,7 +69,22 @@ export type PlaceSheetLabels = {
   /** Before the place's name in the text a share sheet sends with the link. */
   shareText: string;
   reviews: ReviewsLabels;
+  /** "{n} couples liked this", from five yes votes up. */
+  liked: (n: number) => string;
+  /** "Book a table", where the map's entry has a booking page. */
+  book: string;
 };
+
+/** A place a vote can be on: the map's own ids only. */
+const VOTE_PLACE = /^(node|way|relation)\/\d{1,15}$/;
+/** This tab already heard that the site takes no votes (components/dates/use-done.ts keeps it): ask nothing. */
+function votesOff(): boolean {
+  try {
+    return window.sessionStorage.getItem("ethos.dates.votes.available") === "0";
+  } catch {
+    return false;
+  }
+}
 
 type Props = {
   place: Ranked;
@@ -185,6 +200,24 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
     return () => ask.abort();
   }, [place.id, place.name, place.lat, place.lng, place.named]);
   const scores = elsewhere?.id === place.id ? elsewhere.ratings : [];
+
+  // "14 couples liked this": the yes votes on this place from five up (the route sends nothing under
+  // five, and nothing at all while the votes table is not there). Kept per place, as above.
+  const [liked, setLiked] = useState<{ id: string; n: number } | null>(null);
+  useEffect(() => {
+    if (!VOTE_PLACE.test(place.id) || votesOff()) return;
+    const ask = new AbortController();
+    const target = `place:${place.id}`;
+    fetch(`/api/dates/votes?t=${encodeURIComponent(target)}`, { signal: ask.signal })
+      .then((res) => (res.ok ? (res.json() as Promise<{ liked?: Record<string, unknown> }>) : null))
+      .then((json) => {
+        const n = json?.liked?.[target];
+        if (typeof n === "number") setLiked({ id: place.id, n });
+      })
+      .catch(() => undefined);
+    return () => ask.abort();
+  }, [place.id]);
+  const likedBy = liked?.id === place.id ? liked.n : null;
   // A place from the map has no address of its own; without one the links searched the bare name,
   // and three branches of Waterstones got the same links. The sheet's address, or at least the town.
   const lookUp = place.named ? linksFor({ ...place, address: address || where || undefined }).filter((l) => !scores.some((r) => r.source === l.source)) : [];
@@ -416,6 +449,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           </div>
         </div>
       ) : null}
+      {likedBy !== null ? <p className="mt-5 text-[13.5px] font-semibold text-forest" data-testid="place-liked">{labels.liked(likedBy)}</p> : null}
       <Reviews rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
       <PairsWith from={place} picks={pairs} locale={locale} labels={{ title: labels.pairs, walk: labels.walkBetween }} onOpen={onOpenPlace} />
       <p className="mt-4 text-[11.5px] leading-snug text-forest/65">{labels.source}</p>
