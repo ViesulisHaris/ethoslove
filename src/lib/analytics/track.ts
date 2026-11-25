@@ -93,6 +93,9 @@ export type FunnelEvent =
   | "trip_match_pick"
   | "trip_shared"
   | "room_handoff"
+  // A visitor who allowed cookies saw a second room (gifts, dates, trips, long distance, games)
+  // within 30 days of another: once, and not again for 30 days. No property, no id (lib/analytics/rooms-marker.ts).
+  | "two_rooms_30d"
   | "reminder_saved"
   // "Send one back to {sender}": the template, and where it was tapped ("end": the end screen,
   // "reaction": under "Sent to {sender}." after a reaction).

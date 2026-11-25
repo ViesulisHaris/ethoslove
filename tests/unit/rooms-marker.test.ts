@@ -1,6 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const counted = vi.hoisted(() => [] as unknown[][]);
+vi.mock("@/lib/analytics/track", () => ({ track: (...args: unknown[]) => void counted.push(args) }));
+
 import { ROOMS, roomOf } from "@/components/marketing/rooms";
-import { VISITED_ROOMS, parseMarker, seeRoom, visitedRoom, type RoomsMarker, type VisitedRoom } from "@/lib/analytics/rooms-marker";
+import { ROOMS_KEY, VISITED_ROOMS, dayOf, parseMarker, seeRoom, visitedRoom, type RoomsMarker, type VisitedRoom } from "@/lib/analytics/rooms-marker";
 
 /**
  * Visitors who use two or more rooms within 30 days (audit X3): which pages are in which room, and
@@ -99,5 +103,133 @@ describe("the rule", () => {
 
   it("a broken entry is no entry", () => {
     for (const raw of [null, "", "{not json", "[]", "null", '{"sent":3}']) expect(parseMarker(raw), String(raw)).toBeNull();
+  });
+});
+
+describe("in the browser", () => {
+  const NOW = Date.parse("2026-11-25T12:00:00.000Z");
+  const WINDOW = { dispatchEvent: () => true, addEventListener: () => {}, removeEventListener: () => {} };
+
+  function storage(refuse?: string) {
+    const items = new Map<string, string>();
+    return {
+      getItem: (key: string) => items.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        if (key === refuse) throw new DOMException("QuotaExceededError");
+        items.set(key, String(value));
+      },
+      removeItem: (key: string) => void items.delete(key),
+      clear: () => items.clear(),
+      items,
+    };
+  }
+  let store: ReturnType<typeof storage>;
+
+  /** A fresh page load: nothing in memory (consent is cached in its module), the same browser storage. */
+  async function page() {
+    vi.resetModules();
+    const consent = await import("@/lib/analytics/consent");
+    const marker = await import("@/lib/analytics/rooms-marker");
+    return { ...consent, ...marker };
+  }
+
+  beforeEach(() => {
+    counted.length = 0;
+    store = storage();
+    vi.stubGlobal("window", WINDOW);
+    vi.stubGlobal("localStorage", store);
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("without a yes nothing is kept and nothing is sent", async () => {
+    for (const answer of [null, "denied"]) {
+      store.clear();
+      if (answer) store.setItem("ethos-consent", answer);
+      const { noteRoomVisit } = await page();
+      noteRoomVisit("/templates", NOW);
+      noteRoomVisit("/dates", NOW);
+      expect(store.items.size).toBe(answer ? 1 : 0);
+      expect(store.getItem(ROOMS_KEY)).toBeNull();
+    }
+    expect(counted).toEqual([]);
+  });
+
+  it("with a yes the room and the day are kept, and nothing else", async () => {
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit } = await page();
+    noteRoomVisit("/templates", NOW);
+    const kept = JSON.parse(store.getItem(ROOMS_KEY)!);
+    expect(kept).toStrictEqual({ seen: { gifts: dayOf(NOW) } });
+    for (const key of Object.keys(kept)) expect(["seen", "sent"]).toContain(key);
+    expect(counted).toEqual([]);
+  });
+
+  it("a second room sends the count once", async () => {
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit } = await page();
+    noteRoomVisit("/templates", NOW);
+    noteRoomVisit("/es/dates/lisbon", NOW);
+    expect(counted).toEqual([["two_rooms_30d"]]);
+    // Another page load, a third room: still one.
+    (await page()).noteRoomVisit("/games", NOW + 60_000);
+    expect(counted).toEqual([["two_rooms_30d"]]);
+  });
+
+  it("a later yes starts from that page; taking it back removes the entry", async () => {
+    const { noteRoomVisit, setConsent } = await page();
+    noteRoomVisit("/templates", NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    setConsent("granted");
+    noteRoomVisit("/templates", NOW);
+    expect(parseMarker(store.getItem(ROOMS_KEY))).toStrictEqual({ seen: { gifts: dayOf(NOW) } });
+    setConsent("denied");
+    noteRoomVisit("/dates", NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    expect(counted).toEqual([]);
+  });
+
+  it("a page between rooms changes nothing", async () => {
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit } = await page();
+    for (const path of ["/pricing", "/", "/checkout/success"]) noteRoomVisit(path, NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    expect(counted).toEqual([]);
+  });
+
+  it("the event has no property and the entry holds no id", async () => {
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit } = await page();
+    noteRoomVisit("/templates", NOW);
+    noteRoomVisit("/es/dates/lisbon", NOW);
+    expect(counted).toHaveLength(1);
+    expect(counted[0]).toHaveLength(1);
+    expect(store.getItem(ROOMS_KEY)).toMatch(/^\{"seen":\{("(gifts|dates|trips|longDistance|games)":\d+,?)+\}(,"sent":\d+)?\}$/);
+  });
+
+  it("a browser that refuses to keep anything sends nothing and breaks nothing", async () => {
+    store = storage(ROOMS_KEY);
+    store.setItem("ethos-consent", "granted");
+    vi.stubGlobal("localStorage", store);
+    const refusing = await page();
+    expect(() => {
+      refusing.noteRoomVisit("/templates", NOW);
+      refusing.noteRoomVisit("/dates", NOW);
+    }).not.toThrow();
+    expect(counted).toEqual([]);
+
+    vi.stubGlobal("localStorage", undefined);
+    const none = await page();
+    expect(() => none.noteRoomVisit("/templates", NOW)).not.toThrow();
+    expect(counted).toEqual([]);
+  });
+
+  it("nothing inside the iPhone app", async () => {
+    vi.stubGlobal("window", { ...WINDOW, EthosNative: { version: 1, platform: "ios", locale: "en", signedIn: false, request: () => {} } });
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit } = await page();
+    noteRoomVisit("/templates", NOW);
+    noteRoomVisit("/dates", NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    expect(counted).toEqual([]);
   });
 });

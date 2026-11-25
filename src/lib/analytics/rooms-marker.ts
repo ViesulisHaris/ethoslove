@@ -1,11 +1,13 @@
-import { withoutLocale } from "./consent";
+import { isInApp } from "@/lib/app/bridge";
+import { getConsent, withoutLocale } from "./consent";
+import { track } from "./track";
 
 /**
  * Visitors who use two or more rooms within 30 days (audit X3), counted in the browser alone and
  * only for a visitor who allowed cookies: which rooms were seen and the day each was last seen, kept
  * under one key, and one event, `two_rooms_30d`, with no property, the first time a second room is
  * seen within 30 days of another. No id is made, kept or sent. The privacy policy names the entry
- * (section 12). This half is pure: no window, no storage.
+ * (section 12). The rule is pure (down to seeRoom); noteRoomVisit at the end is the browser's part.
  */
 
 /** The browser entry (localStorage), kept only for a visitor who allowed cookies. */
@@ -75,4 +77,37 @@ export function seeRoom(prev: RoomsMarker | null, room: VisitedRoom, today: numb
   seen[room] = today;
   const keep = send ? today : quiet ? sent : undefined;
   return { marker: { seen, ...(keep !== undefined ? { sent: keep } : {}) }, send };
+}
+
+function storage(): Storage | undefined {
+  try {
+    return typeof localStorage === "undefined" ? undefined : localStorage;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Called on every page of the marketing site and on every change of the cookie choice. Without a
+ * yes nothing is kept and nothing is sent, and anything kept earlier is removed. With one, the room
+ * this page is in is written down with today's day, and the count is sent when it is the second.
+ */
+export function noteRoomVisit(pathname: string, now: number = Date.now()): void {
+  const store = storage();
+  if (!store) return;
+  try {
+    if (getConsent() !== "granted") {
+      store.removeItem(ROOMS_KEY);
+      return;
+    }
+    if (isInApp()) return;
+    const room = visitedRoom(pathname);
+    if (!room) return;
+    const { marker, send } = seeRoom(parseMarker(store.getItem(ROOMS_KEY)), room, dayOf(now));
+    // Written first: if the browser refuses to keep it, nothing is sent, or every page would send again.
+    store.setItem(ROOMS_KEY, JSON.stringify(marker));
+    if (send) track("two_rooms_30d");
+  } catch {
+    // Private windows and blocked site data throw: nothing kept, nothing sent.
+  }
 }

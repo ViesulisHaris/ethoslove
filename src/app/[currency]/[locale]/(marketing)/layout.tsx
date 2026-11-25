@@ -6,6 +6,7 @@ import { StickyCta } from "@/components/marketing/sticky-cta";
 import { RevealRoot } from "@/components/motion/reveal-root";
 import { SiteMotion } from "@/components/motion/site-motion";
 import { TourMount } from "@/components/tour/tour-mount";
+import { RoomsSeen } from "@/components/shared/rooms-seen";
 import { TopNotice } from "@/components/marketing/top-notice";
 import { SupportLauncher } from "@/components/support/support-launcher";
 import { isConfigured } from "@/lib/env";
@@ -29,6 +30,7 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
         <RevealRoot />
         <SiteMotion />
         <TourMount />
+        <RoomsSeen />
         {isConfigured.supportChat ? <SupportLauncher /> : null}
       </div>
     </ClientMessages>
