@@ -95,6 +95,12 @@ export function answersAfterRemoval(removed: DoneDate, left: readonly DoneDate[]
   return [...groups].map(([vote, targets]) => ({ vote, targets }));
 }
 
+/** A log row's day, short, in the site's own English ("Wed, Nov 25") or Spanish ("mié, 25 nov") (dates2-D7). */
+export function logDay(day: Ymd, locale: "en" | "es"): string {
+  const d = fromYmd(day);
+  if (!d) return day;
+  return d.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", { weekday: "short", day: "numeric", month: "short" });
+}
 
 const str = (v: unknown, max: number): v is string => typeof v === "string" && v.length > 0 && v.length <= max;
 

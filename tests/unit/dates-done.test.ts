@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDone, answerDone, answersAfterRemoval, doneCount, doneFromPlan, doneFromSaved, GIFT_FROM, MAX_DONE, mergeDone, readDone, timelineLabels, type DoneDate } from "@/lib/dates/done";
+import { addDone, answerDone, answersAfterRemoval, doneCount, doneFromPlan, doneFromSaved, GIFT_FROM, logDay, MAX_DONE, mergeDone, readDone, timelineLabels, type DoneDate } from "@/lib/dates/done";
 import { addDays } from "@/lib/dates/calendar";
 import type { Plan } from "@/lib/dates/plan";
 import type { SavedDateSummary } from "@/lib/saved-dates/types";
@@ -146,4 +146,9 @@ describe("the dates you have done (dates2)", () => {
     expect(answersAfterRemoval({ ...removed, vote: undefined }, [older])).toEqual([]);
   });
 
+  it("D15 a log row's day is American in English and has no gap before its comma (dates2-D7)", () => {
+    expect(logDay("2026-11-25", "en")).toBe("Wed, Nov 25");
+    expect(logDay("2026-11-25", "es")).toMatch(/^mié,? 25 nov/);
+    expect(logDay("nope" as never, "en")).toBe("nope");
+  });
 });

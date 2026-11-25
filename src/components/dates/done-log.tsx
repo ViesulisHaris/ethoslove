@@ -5,8 +5,8 @@ import { Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
-import { formatDay, type Ymd } from "@/lib/dates/calendar";
-import { doneCount, doneTargets, GIFT_FROM, timelineLabels, TIMELINE_SLUG, type DoneDate } from "@/lib/dates/done";
+import type { Ymd } from "@/lib/dates/calendar";
+import { doneCount, doneTargets, GIFT_FROM, logDay, timelineLabels, TIMELINE_SLUG, type DoneDate } from "@/lib/dates/done";
 import type { Vote } from "@/lib/dates/votes";
 import { saveGiftSeed } from "@/lib/editor/gift-seed";
 import { cn } from "@/lib/utils";
@@ -81,8 +81,8 @@ export function DoneLog({
     return (
       <li key={entry.id} className="flex items-start gap-3 border-t border-forest/10 py-3 first:border-t-0">
         <div className="min-w-0 flex-1">
-          <p className="text-[12.5px] font-medium text-forest/65 tabular-nums">
-            {formatDay(entry.day, locale, "short")}
+          <p className="text-[12.5px] font-medium text-forest/65">
+            {logDay(entry.day, locale)}
             {entry.where ? ` · ${entry.where}` : ""}
           </p>
           <p className="mt-0.5 text-[15px] leading-snug font-semibold text-forest">{entry.title}</p>

@@ -9,7 +9,7 @@ import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { plannedIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import { addDone, answerDone, answersAfterRemoval, doneFromPlan, doneFromSaved, doneTargets, mergeDone, removeDone, type DoneDate } from "@/lib/dates/done";
+import { addDone, answerDone, answersAfterRemoval, doneFromPlan, doneFromSaved, doneTargets, logDay, mergeDone, removeDone, type DoneDate } from "@/lib/dates/done";
 import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, shareablePlan, stopName, type Plan } from "@/lib/dates/plan";
 import { type Vote } from "@/lib/dates/votes";
 import { planUnwrap } from "@/lib/dates/plan-gift";
@@ -400,7 +400,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[14.5px] text-forest/80">
               <span className="inline-flex items-center gap-1.5 font-semibold text-forest">
                 <CircleCheck aria-hidden="true" className="size-4 text-moss" />
-                {t("done.on", { day: formatDay(plan.done, locale, "short") })}
+                {t("done.on", { day: logDay(plan.done, locale) })}
               </span>
               <button type="button" onClick={undoDone} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-forest hover:underline">
                 {t("done.undo")}
