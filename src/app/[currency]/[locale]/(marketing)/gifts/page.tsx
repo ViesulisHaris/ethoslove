@@ -165,9 +165,12 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                   {t("home.templates.all")}
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
-                <Link href="/gifts/finder" className={QUIET_LINK}>
-                  {t("templates.finder.link")}
-                </Link>
+                <p className="text-[0.9375rem] text-page-body">
+                  {t("templates.finder.ask")}{" "}
+                  <Link href="/gifts/finder" className={QUIET_LINK}>
+                    {t("templates.finder.link")}
+                  </Link>
+                </p>
               </div>
             }
           >
@@ -191,12 +194,15 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                     </div>
                   </details>
                 ))}
-                {/* The ideas' own line stood under their heading; it opens this row now, so the page keeps to 300 words in Spanish too. */}
-                <MoreRow summary={t("home.templates.all")}>
+                {/*
+                 * The ideas' own line stood under their heading; it opens this row now, so the page keeps to 300 words in Spanish too.
+                 * The row is named as the occasion pages name their whole gallery ("Show all 61"): "See all templates" is the link
+                 * in the left column, and "Not sure which?" stays beside the finder's link there.
+                 */}
+                <MoreRow summary={t("templates.showAll", { count: manifests.length })}>
                   <p>{guide.ideasLead}</p>
                   <p>{t("home.templates.title")}</p>
                   <p>{t("home.templates.count", { n: manifests.length, free })}</p>
-                  <p>{t("templates.finder.ask")}</p>
                   <p>{t("home.templates.blurb")}</p>
                   <ul className="flex flex-col gap-3" data-testid="all-gifts">
                     {manifests.map((m) => (
