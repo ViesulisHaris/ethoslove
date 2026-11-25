@@ -173,7 +173,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               <dl className="mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
                 {facts.map((f) => (
                   <div key={f.label} className={f.wide ? "col-span-2 rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5 sm:col-span-1 lg:col-span-2 xl:col-span-1" : "rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5"}>
-                    <dt className="text-[12px] font-semibold tracking-wide text-forest/50 uppercase">{f.label}</dt>
+                    <dt className="text-[12px] font-semibold tracking-wide text-forest/65 uppercase">{f.label}</dt>
                     <dd className="mt-1 font-display text-[19px] leading-tight text-forest">{f.value}</dd>
                   </div>
                 ))}

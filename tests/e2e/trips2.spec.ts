@@ -310,6 +310,34 @@ test.describe("a trip's page", () => {
     await expect(page.getByRole("heading", { level: 3, name: /^Day 2: / })).toHaveCount(1);
     expect(await page.locator("summary h3, summary [role=heading]").count()).toBe(0);
     await expect(page.locator("dl")).toContainText("A day for two, flights aside");
+    // The label is the only place that says it, so it reads at AA: 4.5:1 for its 12 px, blended on its card.
+    const ratios = await page.locator("dl dt").evaluateAll((els) =>
+      els.map((el) => {
+        let bg = "";
+        for (let n: Element | null = el; n && !bg; n = n.parentElement) {
+          const c = getComputedStyle(n).backgroundColor;
+          if (c && c !== "transparent" && !/rgba\(0, 0, 0, 0\)/.test(c)) bg = c;
+        }
+        const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true })!;
+        const rgb = (fill: string[]) => {
+          ctx.clearRect(0, 0, 1, 1);
+          for (const f of fill) {
+            ctx.fillStyle = f;
+            ctx.fillRect(0, 0, 1, 1);
+          }
+          return [...ctx.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+        };
+        const lum = (c: number[]) => {
+          const [r, g, b] = c.map((v) => (v / 255 <= 0.04045 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4));
+          return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        };
+        const back = lum(rgb([bg || "#fff"]));
+        const text = lum(rgb([bg || "#fff", getComputedStyle(el).color]));
+        return (Math.max(back, text) + 0.05) / (Math.min(back, text) + 0.05);
+      }),
+    );
+    expect(ratios).toHaveLength(3);
+    for (const r of ratios) expect(r).toBeGreaterThanOrEqual(4.5);
     await expect(page.locator("[aria-description]")).toHaveCount(0);
     await page.locator("details[data-trip-more] > summary").click();
     await expect(page.locator("details[data-trip-more]")).not.toContainText("not the flights");
