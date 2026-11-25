@@ -60,7 +60,7 @@ export function autoEuropeHire(page?: string): string {
 }
 
 /** Where on the site a partner button sat, for the `affiliate_click` event: which spot earns, not who clicked. */
-export type PartnerPlacement = "trips_finder" | "trip_flights" | "trip_tickets" | "trip_car" | "place_sheet" | "plan" | "meet_middle" | "gift_share" | "city";
+export type PartnerPlacement = "trips_finder" | "trip_flights" | "trip_tickets" | "trip_car" | "place_sheet" | "plan" | "meet_middle" | "gift_share" | "city" | "trip_stay";
 
 type L = { en: string; es: string };
 

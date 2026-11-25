@@ -2741,6 +2741,10 @@
       "cta": "Comparar coches en Auto Europe",
       "via": "Alquiler de coches en Auto Europe."
     },
+    "stay": {
+      "cta": "Buscar dónde dormir en {place}",
+      "via": "Alojamiento a través de Stay22."
+    },
     "meet": {
       "via": "Cada vuelo se abre en Aviasales; Google Flights está ahí para comparar."
     }

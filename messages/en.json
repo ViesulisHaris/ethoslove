@@ -2741,6 +2741,10 @@
       "cta": "Compare cars on Auto Europe",
       "via": "Car hire through Auto Europe."
     },
+    "stay": {
+      "cta": "Find a place to stay in {place}",
+      "via": "Stays through Stay22."
+    },
     "meet": {
       "via": "Each flight opens on Aviasales; Google Flights is there to compare."
     }
