@@ -1341,3 +1341,6 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
 | 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
 | 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
+| 2026-11-25T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: free letter note refresh |
+| 2026-11-25T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: free letter note refresh |
+| 2026-11-25T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | seo: free letter note refresh |

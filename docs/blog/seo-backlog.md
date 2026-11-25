@@ -24,9 +24,9 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   `updated` and the panel apply; a few posts a run.
   - 2026-11-24: gifft-me-alternatives (its table still said two free templates and 10 free photos),
     christmas-message-for-boyfriend and christmas-message-for-girlfriend done, and VOICE.md's
-    "Free" list corrected (it still said The Letter and Constellations with 10 photos). Still to check,
-    Christmas posts first: christmas-proposal-ideas, last-minute-christmas-gift-for-girlfriend,
-    christmas-letter-to-boyfriend (not before 1 Dec), then anniversary-letter-to-boyfriend,
+    "Free" list corrected (it still said The Letter and Constellations with 10 photos).
+  - 2026-11-25: christmas-proposal-ideas and last-minute-christmas-gift-for-girlfriend done. Still to
+    check, Christmas first: christmas-letter-to-boyfriend (not before 1 Dec), then anniversary-letter-to-boyfriend,
     birthday-message-for-husband, cute-things-to-say-to-your-boyfriend, first-anniversary-ideas-for-boyfriend,
     good-morning-messages-for-her, good-night-messages-for-her, good-night-messages-for-him,
     how-to-apologize-to-your-boyfriend, how-to-surprise-your-girlfriend, last-minute-birthday-gift-for-boyfriend,

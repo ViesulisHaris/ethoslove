@@ -3,6 +3,29 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-25: the free Letter as a short note in christmas-proposal-ideas and last-minute-christmas-gift-for-girlfriend; a small-gift idea for "what is a small but thoughtful gift"
+- **Page:** /blog/christmas-proposal-ideas, /blog/last-minute-christmas-gift-for-girlfriend (and /es to match)
+- **Why:** First run of the day, a Wednesday (no weekly job; the ranks are a day old). The first open
+  backlog item, Christmas posts first: both posts' Letter cards still said "Free" with photos, untrue
+  since 19 Nov, a month before the day they're read for. DataForSEO (US): "christmas proposal ideas"
+  390 a month, KD 1; "last minute christmas gifts for her" 210, KD 11; "last minute christmas gift for
+  girlfriend" 70, KD 3. Search Console (28 days, brand left out): only "christmas proposal ideas at
+  home" at 25, 3 impressions; both posts are still waiting for their December. The gift post's top 10
+  is product lists with a popular-products block; People also ask includes "What is a small but
+  thoughtful gift?", which the post didn't answer.
+- **What changed:** Both Letter cards now say "Free as a short note: up to 500 characters and a song",
+  with the full letter (in the proposal post, the full speech) and photos under "Make it special", paid
+  once, linking /pricing; Spanish to match. The gift post gets one list item in both languages,
+  "Something small she'd never buy herself" (the better version of something she uses every day), from
+  the search reviewer. `updated` 2026-11-25 on both.
+- **Panel:** 10/10/10 after 1 round for christmas-proposal-ideas, 3 rounds for
+  last-minute-christmas-gift-for-girlfriend (round 1 asked for the small-gift item; round 2's editor
+  caught examples that contradicted its heading and the post's "What to skip")
+  (`docs/blog/reviews/refresh/<slug>-2026-11-25.json`)
+- **Cost:** $0.02 (two SERPs with People also ask, one keyword overview); balance $44.30
+- **Check on:** 2026-12-14 whether "christmas proposal ideas" and "last minute christmas gifts for her"
+  show for these posts as December searches peak
+
 ## 2026-11-24: the free Letter as a short note, corrected in gifft-me-alternatives and both Christmas message posts
 - **Page:** /blog/gifft-me-alternatives, /blog/christmas-message-for-boyfriend,
   /blog/christmas-message-for-girlfriend (and /es to match); `docs/blog/VOICE.md`
