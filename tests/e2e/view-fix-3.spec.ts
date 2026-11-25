@@ -51,26 +51,36 @@ test.describe("rooms-1: Back from a Dates search leaves no search on another pag
 
 test.describe("rooms-3: a city page's hero at 1440", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
-  test("its flowers lie whole inside it, and its ground fades into the page's", async ({ page }) => {
+  // The dates2 job (70a6cbad) rebuilt the city page on the pages by kind's spread: the hero is DateHero, laid on
+  // the page's own ground (no band of its own, so no edge to fade), its rendered art placed by DATE_HERO_ART and
+  // the rendered lily stem beside the planner just under it (DATE_CARDS_ART). The final pass of 25 Nov 2026
+  // looked at it beside a kind page and the front page: the flowers are there, drawn the new way.
+  test("its rendered flowers lie whole inside it, a lily is in the first view, and it has no ground of its own", async ({ page }) => {
     for (const path of ["/dates/london", "/es/dates/lisbon", "/dates/new-york"]) {
       await page.goto(path);
       const hero = page.locator("main section").first();
-      const frame = hero.locator("[data-floral-frame]");
-      await expect(frame).toHaveAttribute("data-floral-frame", "bandHero");
-      const out = await frame.evaluate((box) => {
+      await expect(hero.getByRole("heading", { level: 1 }), path).toBeVisible();
+      const layer = hero.locator(":scope > [data-art-layer]");
+      await expect(layer, path).toHaveCount(1);
+      const seen = await layer.evaluate((box) => {
         const band = box.getBoundingClientRect();
-        return [...box.querySelectorAll("img")]
-          .map((img) => ({ r: img.getBoundingClientRect(), shown: getComputedStyle(img).display !== "none" }))
-          .filter(({ r, shown }) => shown && r.left < band.left + band.width / 2 && r.bottom > band.bottom + 1)
-          .map(({ r }) => Math.round(r.bottom - band.bottom));
+        const shown = [...box.querySelectorAll<HTMLImageElement>("[data-decor] img")].filter((img) => getComputedStyle(img.parentElement!).display !== "none" && img.getClientRects().length > 0);
+        return {
+          rendered: shown.filter((img) => /\/art\/pages\/[a-z0-9-]+\.webp$/.test(img.currentSrc || img.src)).length,
+          // A piece on the left half that hangs out of the hero's foot would lie on the planner's words.
+          out: shown.map((img) => img.getBoundingClientRect()).filter((r) => r.left < band.left + band.width / 2 && r.bottom > band.bottom + 1).map((r) => Math.round(r.bottom - band.bottom)),
+        };
       });
-      expect(out, path).toEqual([]);
-      const gap = await hero.evaluate((section) => {
-        const fade = section.querySelector("[data-hero-fade]");
-        return fade ? Math.abs(section.getBoundingClientRect().bottom - fade.getBoundingClientRect().bottom) : null;
-      });
-      expect(gap, path).not.toBeNull();
-      expect(gap!, path).toBeLessThanOrEqual(1);
+      expect(seen.rendered, `${path}: the hero draws a rendered piece`).toBeGreaterThanOrEqual(1);
+      expect(seen.out, path).toEqual([]);
+      // The lily of the first view: a rendered lily drawn on the first screen.
+      const lilies = await page.locator('[data-art-layer] [data-decor^="lily"] img').evaluateAll((imgs) =>
+        (imgs as HTMLImageElement[]).filter((img) => getComputedStyle(img.parentElement!).display !== "none" && img.getClientRects().length > 0).map((img) => ({ src: img.currentSrc || img.src, top: img.getBoundingClientRect().top + window.scrollY })),
+      );
+      const firstView = lilies.filter((l) => l.top < 900 && /\/art\/pages\/lily-[a-z-]+(-1x)?\.webp$/.test(l.src));
+      expect(firstView.length, `${path}: a rendered lily in the first view`).toBeGreaterThanOrEqual(1);
+      const ground = await hero.evaluate((section) => getComputedStyle(section).backgroundColor);
+      expect(ground, `${path}: the hero lies on the page's ground`).toBe("rgba(0, 0, 0, 0)");
     }
   });
 });

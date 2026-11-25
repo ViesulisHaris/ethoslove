@@ -20,6 +20,8 @@ const SIZES: [number, number][] = [
   [1920, 1080],
 ];
 
+const FRAMES = "[data-floral-frame], [data-art-layer]";
+
 // One browser is enough for a layout that sets its own sizes; the phone project would only repeat it.
 test.skip(({ isMobile }) => isMobile, "sets its own screen sizes");
 
@@ -28,16 +30,18 @@ for (const path of PAGES) {
     test.setTimeout(120_000);
     await page.setViewportSize({ width: SIZES[0][0], height: SIZES[0][1] });
     await page.goto(path);
-    await expect(page.locator("[data-floral-frame]").first()).toBeAttached();
+    // A page laid out as a gift's page or the pages by kind (the city pages since dates2, 25 Nov 2026) draws its
+    // rendered flowers in an ArtLayer, not a FloralFrame: both are frames here, held to the same rule.
+    await expect(page.locator(FRAMES).first()).toBeAttached();
     await page.evaluate(() => document.fonts.ready);
     for (const [width, height] of SIZES) {
       await page.setViewportSize({ width, height });
       // Two frames: the layout of the new width, and the words set in it.
       await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => done(null)))));
-      const found = await page.evaluate(() => {
+      const found = await page.evaluate((frames) => {
         const hits: string[] = [];
         let pieces = 0;
-        for (const frame of document.querySelectorAll<HTMLElement>("[data-floral-frame]")) {
+        for (const frame of document.querySelectorAll<HTMLElement>(frames)) {
           const section = frame.parentElement!;
           const clip = frame.getBoundingClientRect();
           const lines: { box: DOMRect; text: string }[] = [];
@@ -47,12 +51,15 @@ for (const path of PAGES) {
             if (!owner || !node.textContent?.trim() || frame.contains(node) || owner.closest("[aria-hidden=true]")) continue;
             const style = getComputedStyle(owner);
             if (style.visibility === "hidden" || style.display === "none") continue;
+            // Words for a screen reader only (sr-only: clipped to a pixel) are drawn nowhere, though their range still has a line's box.
+            const own = owner.getBoundingClientRect();
+            if (own.width <= 1 || own.height <= 1) continue;
             const range = document.createRange();
             range.selectNodeContents(node);
             for (const box of range.getClientRects()) if (box.width > 2 && box.height > 2) lines.push({ box, text: node.textContent.trim().slice(0, 30) });
           }
           for (const img of frame.querySelectorAll("img")) {
-            if (getComputedStyle(img).display === "none") continue;
+            if (getComputedStyle(img).display === "none" || img.getClientRects().length === 0) continue;
             pieces += 1;
             const b = img.getBoundingClientRect();
             const flower = {
@@ -64,12 +71,12 @@ for (const path of PAGES) {
             if (flower.right <= flower.left || flower.bottom <= flower.top) continue;
             for (const { box, text } of lines) {
               const over = Math.max(0, Math.min(flower.right, box.right) - Math.max(flower.left, box.left)) * Math.max(0, Math.min(flower.bottom, box.bottom) - Math.max(flower.top, box.top));
-              if (over > 60) hits.push(`${frame.dataset.floralFrame}: ${img.getAttribute("src")!.split("/").pop()} over "${text}" (${Math.round(over)}px²)`);
+              if (over > 60) hits.push(`${frame.dataset.floralFrame ?? "art layer"}: ${img.getAttribute("src")!.split("/").pop()} over "${text}" (${Math.round(over)}px²)`);
             }
           }
         }
         return { hits: [...new Set(hits)], pieces, sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth };
-      });
+      }, FRAMES);
       expect(found.hits, `${path} at ${width}px`).toEqual([]);
       // The check is not passing on an empty page: a frame draws at least one flower at every width.
       expect(found.pieces, `${path} at ${width}px draws flowers`).toBeGreaterThan(0);
