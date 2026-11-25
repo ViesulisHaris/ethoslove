@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "digital-bouquet-makers-compared",
   published: "2026-11-20",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["bouquet", "garden"],
   content: {
@@ -40,7 +41,7 @@ export const post: BlogPost = {
             ["DigiBouquet (digibouquet.net)", "Free, with no subscription or payment", "All of it, with no account, login or email"],
             ["Digital Bouquet (digitalbouquet.org)", "Not stated on the pages we read", "Not stated"],
             ["E Greet (egreet.in)", "Free, with no subscription, watermark or hidden fees, per its FAQ", "All of it, with no app or registration"],
-            ["Ethos (tryethos.io)", "Bouquet is premium, paid once: $11.99 for one template, $20.98 for three, $29.99 for all. [Pricing](/pricing)", "A live demo of every template. Its free templates, The Letter and Constellations, aren't bouquets"],
+            ["Ethos (tryethos.io)", "Bouquet is premium, paid once: {price:single} for one template, {price:pick3} for three, {price:everything} for all. [Pricing](/pricing)", "A live demo of every template. What it sends free ({free:names}) isn't a bouquet"],
             ["My Digital Bouquet (mydigitalbouquet.com)", "Free", "All of it, with no account"],
             ["theBouquet (thebouquet.me)", "Free to send. A Supporter pass, paid once, adds the extras. The page offers a 3-Month Couples Pass; its price didn't show on the page we read", "The bouquet, a message card, a link and a QR code, with no account. A free bouquet disappears after 14 days"],
           ],
@@ -115,7 +116,7 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "Our site. It makes animated [digital gifts](/gifts) from 61 templates, and [Bouquet](/templates/bouquet) is one: you build it stem by stem, and they watch it come together one flower at a time, then open the card inside to find your letter, with up to six photos after it. Its weak points: there's no free bouquet, so it costs $11.99 where four of these makers are free and a fifth is free for 14 days; you need an account to send it, where five of the others say they don't ask for one; Bouquet has no video; and it works only in English and Spanish. Where it's strongest: it can open at a set time in the time zone you choose, you can fix the letter after sending at the same link, your voice can play at the end, and they can send a reaction back.",
+          text: "Our site. It makes animated [digital gifts](/gifts) from {count:templates} templates, and [Bouquet](/templates/bouquet) is one: you build it stem by stem, and they watch it come together one flower at a time, then open the card inside to find your letter, with up to six photos after it. Its weak points: there's no free bouquet, so it costs {price:single} where four of these makers are free and a fifth is free for 14 days; you need an account to send it, where five of the others say they don't ask for one; Bouquet has no video; and it works only in English and Spanish. Where it's strongest: it can open at a set time in the time zone you choose, you can fix the letter after sending at the same link, your voice can play at the end, and they can send a reaction back.",
         },
         {
           type: "template",
@@ -232,7 +233,7 @@ export const post: BlogPost = {
             ["DigiBouquet (digibouquet.net)", "Gratis, sin suscripción ni pagos", "Todo, sin cuenta, sin iniciar sesión y sin email"],
             ["Digital Bouquet (digitalbouquet.org)", "No lo indica en las páginas que leímos", "No lo indica"],
             ["E Greet (egreet.in)", "Gratis, sin suscripción, marca de agua ni costes ocultos, según sus preguntas frecuentes", "Todo, sin app y sin registrarte"],
-            ["Ethos (tryethos.io)", "Ramo es premium, de pago único: 9,99 € por una plantilla, 17,98 € por tres, 24,99 € por todas. [Precios](/pricing)", "Una demo de cada plantilla. Sus plantillas gratis, La carta y Constelaciones, no son ramos"],
+            ["Ethos (tryethos.io)", "Ramo es premium, de pago único: {price:single} por una plantilla, {price:pick3} por tres, {price:everything} por todas. [Precios](/pricing)", "Una demo de cada plantilla. Lo que manda gratis ({free:names}) no es un ramo"],
             ["My Digital Bouquet (mydigitalbouquet.com)", "Gratis", "Todo, sin cuenta"],
             ["theBouquet (thebouquet.me)", "Gratis para mandarlo. Un pase Supporter, de pago único, añade los extras. La página ofrece un pase de tres meses para parejas; su precio no salía en la página que leímos", "El ramo, una tarjeta con mensaje, un enlace y un código QR, sin cuenta. El ramo gratuito desaparece a los 14 días"],
           ],
@@ -307,7 +308,7 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "Nuestra web. Hace [regalos digitales](/gifts) animados con 61 plantillas, y [Ramo](/templates/bouquet) es una de ellas: lo montas tallo a tallo, la otra persona ve cómo se forma flor a flor y luego abre la tarjeta de dentro para leer tu carta, con hasta seis fotos después. Sus puntos flojos: no hay ramo gratis, así que cuesta 9,99 € cuando cuatro de estas páginas son gratis y una quinta lo es durante 14 días; para mandarlo hace falta una cuenta, y cinco de las otras dicen que no la piden; Ramo no admite vídeo; y solo funciona en español y en inglés. Donde más destaca: puede abrirse a una hora fijada en la zona horaria que elijas, puedes corregir la carta después de mandarla en el mismo enlace, tu voz puede sonar al final y la otra persona puede mandarte una reacción.",
+          text: "Nuestra web. Hace [regalos digitales](/gifts) animados con {count:templates} plantillas, y [Ramo](/templates/bouquet) es una de ellas: lo montas tallo a tallo, la otra persona ve cómo se forma flor a flor y luego abre la tarjeta de dentro para leer tu carta, con hasta seis fotos después. Sus puntos flojos: no hay ramo gratis, así que cuesta {price:single} cuando cuatro de estas páginas son gratis y una quinta lo es durante 14 días; para mandarlo hace falta una cuenta, y cinco de las otras dicen que no la piden; Ramo no admite vídeo; y solo funciona en español y en inglés. Donde más destaca: puede abrirse a una hora fijada en la zona horaria que elijas, puedes corregir la carta después de mandarla en el mismo enlace, tu voz puede sonar al final y la otra persona puede mandarte una reacción.",
         },
         {
           type: "template",
