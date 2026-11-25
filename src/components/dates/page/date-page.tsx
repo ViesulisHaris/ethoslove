@@ -41,7 +41,7 @@ export function DatePage({ children }: { children: ReactNode }) {
  * button on the left; on the right the idea's own picture, tilted a little, with its title written
  * on a slip at its corner. Below a desk the words come first and the picture after.
  */
-export function DateHero({ label, heading, line, sentence, picture, note, back, children }: { label: string; heading: string; line: string; sentence: string; picture: { src: string; from: string; to: string }; note: string; back?: ReactNode; children: ReactNode }) {
+export function DateHero({ label, heading, line, sentence, picture, note, back, children }: { label: string; heading: string; line: string; sentence: string; picture: { src: string; from: string; to: string }; /** The idea's title on a slip at the picture's corner; none where the picture is not one idea's. */ note?: string; back?: ReactNode; children: ReactNode }) {
   return (
     <section className="relative">
       <ArtLayer items={DATE_HERO_ART} flowers={DATE_FLOWERS} />
@@ -61,9 +61,11 @@ export function DateHero({ label, heading, line, sentence, picture, note, back, 
           <span className="block rotate-[1.5deg] overflow-hidden rounded-[2rem] shadow-page-lift ring-8 ring-page-raised" style={{ background: `linear-gradient(160deg, ${picture.from} 0%, ${picture.to} 100%)` }}>
             <EagerImg src={picture.src} alt="" width={960} height={720} loading="eager" fetchPriority="high" decoding="async" className="block aspect-[4/3] w-full object-cover" />
           </span>
-          <span data-line className="absolute -bottom-4 left-2 -rotate-[4deg] rounded-2xl bg-page-raised px-4 py-2.5 font-hand text-[1.45rem] leading-none text-page-accent shadow-page-card sm:-left-4">
-            {note}
-          </span>
+          {note ? (
+            <span data-line className="absolute -bottom-4 left-2 -rotate-[4deg] rounded-2xl bg-page-raised px-4 py-2.5 font-hand text-[1.45rem] leading-none text-page-accent shadow-page-card sm:-left-4">
+              {note}
+            </span>
+          ) : null}
         </div>
       </div>
     </section>

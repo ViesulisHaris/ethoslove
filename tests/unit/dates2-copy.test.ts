@@ -73,7 +73,7 @@ describe("dates2 copy", () => {
       ];
       for (const [where, text] of lines) expect(words(text), `${l} ${where}: ${text}`).toBeLessThanOrEqual(14);
       expect(words(FOR_VENUES[l].sentence), `${l} for-venues sentence`).toBeLessThanOrEqual(30);
-      for (const card of FOR_VENUES[l].cards) expect(words(card), `${l} card: ${card}`).toBeLessThanOrEqual(9);
+      for (const rule of FOR_VENUES[l].rules) expect(words(rule), `${l} rule: ${rule}`).toBeLessThanOrEqual(9);
       expect(FOR_VENUES[l].title.length).toBeLessThanOrEqual(60);
       expect(FOR_VENUES[l].description.length).toBeLessThanOrEqual(155);
     }
@@ -101,6 +101,17 @@ describe("dates2 copy", () => {
         expect(text, `${l} ${where}`).not.toMatch(/[!¡—]/);
       }
     }
+  });
+
+  it("X5 the page for venues promises only the label: a featured place is never put into a date (dates2-C1)", () => {
+    // lib/dates/featured.ts markFeatured only flags places already listed; it adds none.
+    const promises = [/puts your venue/i, /your venue[’']s name on/i, /pone el nombre/i, /wherever it is listed/i, /allí donde aparezca/i];
+    for (const l of LOCALES) {
+      const text = JSON.stringify(FOR_VENUES[l]);
+      for (const p of promises) expect(text, `${l}: ${p}`).not.toMatch(p);
+    }
+    expect(FOR_VENUES.en.sentence).toMatch(/never added/);
+    expect(FOR_VENUES.es.sentence).toMatch(/Nunca se añade/);
   });
 
   it("X4 the page for venues is not in the sitemap and names no price", async () => {
