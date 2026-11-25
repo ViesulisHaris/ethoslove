@@ -333,7 +333,16 @@ test.describe("a trip's page", () => {
       await expect(page.locator("h1"), hash).toHaveText(/Baltic/);
       await expect(page.locator("details#flights"), hash).not.toHaveAttribute("open", "");
     }
-    await page.evaluate(() => (window.location.hash = "%E0%A4%A"));
+    // Once the page listens (a good hash opens its row), a broken one after it throws nothing either.
+    // (Before hydration the router puts the loaded address back, so this is retried until it holds.)
+    await expect(async () => {
+      await page.evaluate(() => (window.location.hash = window.location.hash === "#stay" ? "#car" : "#stay"));
+      await expect(page.locator("details#stay")).toHaveAttribute("open", "", { timeout: 500 });
+    }).toPass();
+    for (const hash of ["#%E0", "#tickets%"]) {
+      await page.evaluate((h) => (window.location.hash = h), hash);
+      await expect.poll(() => page.evaluate(() => window.location.hash)).toBe(hash);
+    }
     await page.evaluate(() => (window.location.hash = "#tickets"));
     await expect(page.locator("details#tickets")).toHaveAttribute("open", "");
     expect(errors).toEqual([]);
