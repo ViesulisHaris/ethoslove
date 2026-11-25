@@ -43,7 +43,8 @@ export default async function ForVenuesPage({ params }: PageProps<"/[currency]/[
         </a>
       </DateHero>
 
-      <DateSpread id="what-title" label={copy.whatLabel} heading={copy.whatHeading} line={copy.whatLine}>
+      {/* Deep at its foot on a desk, as the questions spread is: the last band's lily lies across the edge into this space. */}
+      <DateSpread id="what-title" label={copy.whatLabel} heading={copy.whatHeading} line={copy.whatLine} className="py-12 sm:py-16 lg:pt-20 lg:pb-64">
         <p className="mb-5 flex flex-wrap items-center gap-2.5 text-[0.9375rem] text-page-body">
           {copy.looks}
           <FeaturedLabel label={td("featured.label")} />

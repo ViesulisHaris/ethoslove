@@ -61,7 +61,7 @@ export function DoneLog({ entries, today, votes, onRemove, className }: { entrie
         </div>
         {/* Only this browser's own entries can be taken off: an account's come back from its saved dates. */}
         {entry.id.startsWith("saved:") ? null : (
-          <button type="button" aria-label={t("log.remove", { title: entry.title })} onClick={() => onRemove(entry.id)} className="grid size-11 shrink-0 place-items-center rounded-full text-forest/55 transition-colors hover:bg-forest/5 hover:text-destructive">
+          <button type="button" aria-label={t("log.remove", { title: entry.title })} onClick={() => onRemove(entry.id)} className="grid size-11 shrink-0 place-items-center rounded-full text-forest/65 transition-colors hover:bg-forest/5 hover:text-destructive">
             <Trash2 aria-hidden="true" className="size-4" />
           </button>
         )}

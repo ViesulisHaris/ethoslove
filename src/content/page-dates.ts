@@ -63,7 +63,7 @@ export const GALLERY_LIVE = "2026-11-22";
  * page, the pages by kind, the new cities. NOT LIVE YET: this is the day the work was finished. Set it
  * to the day it ships (a date ahead of the page is the kind search engines stop believing).
  */
-export const DATES_LIVE = "2026-11-24";
+export const DATES_LIVE = "2026-11-25";
 
 /**
  * The day the games of the growth build go live: today's question, the games' new end screen, how
