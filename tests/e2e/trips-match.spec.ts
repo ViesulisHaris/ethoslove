@@ -48,6 +48,9 @@ test.describe("where should we go together", () => {
 
   test("one tap gives three trips, each a picture and a name, and never a fare", async ({ page }) => {
     const noErrors = watchErrors(page);
+    // The bands read in the page's currency; a visitor from a euro country, so the words below are
+    // euros wherever the site also charges dollars and pounds (trips2.spec.ts E12 holds those).
+    await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "LV" });
     await open(page);
     await page.getByRole("button", { name: "Show our three trips" }).click();
     await expect(summary(page)).toHaveText("Three trips that fit.");
