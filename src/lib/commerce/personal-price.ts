@@ -109,25 +109,39 @@ export async function spendPersonalPrice(id: string, kind: PersonalPriceKind = "
 }
 
 /**
- * Whether the account's monthly price is still there to use: its row says it was sent and not used.
- * No database, no row, or a failed read: no price.
+ * Whether the account's monthly price is still there to use: its row says it was sent and not used
+ * ("open"); no row, never sent or used ("closed"); no database or a failed read ("unknown"). Only
+ * "open" is a price: an unknown is never charged at it.
  */
-async function monthlyPriceOpen(id: string): Promise<boolean> {
+async function monthlyPriceState(id: string): Promise<"open" | "closed" | "unknown"> {
   const admin = getSupabaseAdminClient();
-  if (!admin) return false;
+  if (!admin) return "unknown";
   try {
     const { data, error } = await admin.from("monthly_ideas").select("price_sent_at, price_used_at").eq("user_id", id).maybeSingle();
-    return !error && Boolean(data?.price_sent_at) && !data?.price_used_at;
+    if (error) return "unknown";
+    return data?.price_sent_at && !data.price_used_at ? "open" : "closed";
   } catch {
-    return false;
+    return "unknown";
   }
+}
+
+/**
+ * The personal price the request's cookie holds, and when there is none, whether that is for good
+ * (`gone`: not ours, ended, spent, or the row says so) or only for now (the row couldn't be read). A
+ * caller that throws the cookie away does it only when it is gone (api/offer, monthly-D8).
+ */
+export async function personalPriceCheck(token: string | null | undefined, now: number = Date.now()): Promise<{ price: PersonalPrice } | { price: null; gone: boolean }> {
+  const price = await readPersonalPrice(token, now);
+  if (!price) return { price: null, gone: true };
+  if (await personalPriceUsed(price.id)) return { price: null, gone: true };
+  if (price.kind === "monthly") {
+    const state = await monthlyPriceState(price.id);
+    if (state !== "open") return { price: null, gone: state === "closed" };
+  }
+  return { price };
 }
 
 /** The personal price the request's cookie holds, if it is valid and not spent yet. */
 export async function activePersonalPrice(token: string | null | undefined, now: number = Date.now()): Promise<PersonalPrice | null> {
-  const price = await readPersonalPrice(token, now);
-  if (!price) return null;
-  if (await personalPriceUsed(price.id)) return null;
-  if (price.kind === "monthly" && !(await monthlyPriceOpen(price.id))) return null;
-  return price;
+  return (await personalPriceCheck(token, now)).price;
 }

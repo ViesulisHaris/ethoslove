@@ -230,6 +230,38 @@ describe("the monthly idea's one-time price", () => {
     vi.unstubAllEnvs();
   });
 
+  it("P5c /api/offer keeps the cookie when the account's row couldn't be read, and drops it once the price is gone (monthly-D8)", async () => {
+    const route = await import("@/app/api/offer/route");
+    // An account of its own: P3 spent OWNER's price in this process.
+    const owner3 = "0e5b1c2d-8faa-4c7a-8fac-5d3e8f6a7192";
+    db.state = new FakeDb({ monthly_ideas: [{ user_id: owner3, since: "2026-11-01", basis: "notice", wording: "x", price_sent_at: "2026-12-20T08:00:00Z", price_used_at: null, off_at: null }] });
+    const token = await monthlyPriceToken(owner3, Date.now() + 86_400_000, SECRET);
+    const ask = () => route.GET(new NextRequest("https://ethos.test/api/offer", { headers: { cookie: `ethos_offer=${encodeURIComponent(token)}` } }));
+    const dropped = (res: Response) => /ethos_offer=;/.test(res.headers.get("set-cookie") ?? "");
+    // The database down: no price on this page, but the cookie stays for the next one.
+    db.state!.failNext("monthly_ideas", "select", "down");
+    const down = await ask();
+    expect(await down.json()).toEqual({ active: false });
+    expect(dropped(down)).toBe(false);
+    // No database at all: no answer either, so nothing is thrown away.
+    const saved = db.state;
+    db.state = null;
+    expect(dropped(await ask())).toBe(false);
+    db.state = saved;
+    // Working: the price, and the cookie untouched.
+    const open = await ask();
+    expect(await open.json()).toMatchObject({ active: true, kind: "monthly" });
+    expect(dropped(open)).toBe(false);
+    // Used, per the row: gone for good, and so is the cookie.
+    db.state!.rows("monthly_ideas")[0].price_used_at = "2026-12-21T10:00:00Z";
+    const used = await ask();
+    expect(await used.json()).toEqual({ active: false });
+    expect(dropped(used)).toBe(true);
+    // A link that isn't ours: gone too.
+    const junk = await route.GET(new NextRequest("https://ethos.test/api/offer", { headers: { cookie: "ethos_offer=nope.nope" } }));
+    expect(dropped(junk)).toBe(true);
+  });
+
   it("P6 checkout tells fulfilment which kind it was, and an offer email's session is as before", () => {
     const options: SessionOptions = { purchaseId: "p1", userId: null, email: null, locale: "en", origin: "https://ethos.test", returnTo: "/", automaticTax: false, productIds: {} };
     const withMonthly = sessionMetadata(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], personalPrice: true }), monthly)), options);

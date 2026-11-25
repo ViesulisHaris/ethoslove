@@ -26,9 +26,16 @@ async function resolve(request: NextRequest) {
   const secret = linkSecret();
   const admin = getSupabaseAdminClient();
   if (!secret || !admin) return { state: "unavailable" as const };
-  if (!(await rateLimit(`monthly-idea-stop:${clientIp(request.headers)}`, { limit: 30, windowSeconds: 60 }))) return { state: "unavailable" as const };
+  // The token first, and the limits after it: a mail provider's one-click unsubscribe (RFC 8058)
+  // comes from a few of its own servers for everyone at once, so a limit per address would leave
+  // the 31st person in a minute subscribed (monthly-D9). Only bad links count against an address;
+  // a good one is limited per account, which is all a repeat of it can touch.
   const userId = await verifyToken("monthly-idea-stop", request.nextUrl.searchParams.get("t"), secret);
-  if (!userId) return { state: "invalid" as const };
+  if (!userId) {
+    if (!(await rateLimit(`monthly-idea-stop-bad:${clientIp(request.headers)}`, { limit: 30, windowSeconds: 60 }))) return { state: "unavailable" as const };
+    return { state: "invalid" as const };
+  }
+  if (!(await rateLimit(`monthly-idea-stop:${userId}`, { limit: 30, windowSeconds: 60 }))) return { state: "unavailable" as const };
   return { state: "ok" as const, userId, db: admin };
 }
 

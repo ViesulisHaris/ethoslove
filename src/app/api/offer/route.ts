@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { PERSONAL_PRICE_COOKIE, activePersonalPrice } from "@/lib/commerce/personal-price";
+import { PERSONAL_PRICE_COOKIE, personalPriceCheck } from "@/lib/commerce/personal-price";
 import { PERSONAL_PRICE, personalPriceAmounts } from "@/lib/pricing/products";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
@@ -18,10 +18,12 @@ export async function GET(request: NextRequest) {
   const token = request.cookies.get(PERSONAL_PRICE_COOKIE)?.value;
   if (!token) return none;
   if (!(await rateLimit(`offer:${clientIp(request.headers)}`, { limit: 60, windowSeconds: 600 }))) return none;
-  const price = await activePersonalPrice(token);
+  const check = await personalPriceCheck(token);
+  const price = check.price;
   if (!price) {
-    // Ended or spent: the cookie has nothing left to say.
-    none.cookies.delete(PERSONAL_PRICE_COOKIE);
+    // Ended or spent: the cookie has nothing left to say. A lookup that failed (the database slow or
+    // down) is no answer: the cookie stays, and the price shows again on a later page (monthly-D8).
+    if (check.gone) none.cookies.delete(PERSONAL_PRICE_COOKIE);
     return none;
   }
   // An offer email's answer is word for word what it was before the monthly idea (one amount per

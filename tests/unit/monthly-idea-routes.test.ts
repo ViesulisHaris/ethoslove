@@ -11,9 +11,16 @@ import { FakeDb } from "./helpers/fake-db";
  * The monthly idea's stop link and its signed-in switch (PLAN-monthly 4.1, R1-R6).
  * With MONTHLY_OUT set, the stop page's two states are written as HTML for the pictures.
  */
-const state = vi.hoisted(() => ({ db: null as unknown, user: null as { id: string; email: string } | null, mode: undefined as string | undefined }));
+const state = vi.hoisted(() => ({ db: null as unknown, user: null as { id: string; email: string } | null, mode: undefined as string | undefined, limits: [] as string[], spent: new Map<string, number>(), cap: Infinity }));
 vi.mock("server-only", () => ({}));
-vi.mock("@/lib/rate-limit", () => ({ rateLimit: async () => true }));
+// Records each limit's key and counts it; past `cap` uses of one key in a test, it refuses.
+vi.mock("@/lib/rate-limit", () => ({
+  rateLimit: async (key: string) => {
+    state.limits.push(key);
+    state.spent.set(key, (state.spent.get(key) ?? 0) + 1);
+    return state.spent.get(key)! <= state.cap;
+  },
+}));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdminClient: () => state.db }));
 vi.mock("@/lib/supabase/server", () => ({ getSupabaseServerClient: async () => state.db }));
 vi.mock("@/lib/auth/get-user", () => ({ getCurrentUser: async () => state.user }));
@@ -53,6 +60,9 @@ beforeEach(() => {
   fake = new FakeDb({ monthly_ideas: [row(), row({ user_id: OTHER })] });
   state.db = fake.db;
   state.user = null;
+  state.limits = [];
+  state.spent = new Map();
+  state.cap = Infinity;
 });
 afterEach(() => {
   delete process.env.MONTHLY_IDEA_EMAILS;
@@ -116,6 +126,31 @@ describe("the stop link", () => {
     fake.calls.length = 0;
     expect((await stopPage("POST", token)).text).toContain("Stopped.");
     expect(fake.calls.filter((c) => c.op === "update")).toHaveLength(0);
+  });
+});
+
+describe("the stop link from a mail provider's servers (monthly-D9)", () => {
+  it("R4b many people's one-click stops from one address all go through; only bad links count against it", async () => {
+    // Everyone's POST comes from the same provider address (no x-forwarded-for: one client IP).
+    state.cap = 30;
+    const people = Array.from({ length: 40 }, (_, i) => `88888888-8888-4888-8888-${String(i).padStart(12, "0")}`);
+    fake = new FakeDb({ monthly_ideas: people.map((user_id) => row({ user_id })) });
+    state.db = fake.db;
+    for (const id of people) expect((await stopPage("POST", await signToken("monthly-idea-stop", id, SECRET))).status).toBe(200);
+    expect(fake.rows("monthly_ideas").every((r) => r.off_at !== null)).toBe(true);
+    // Good links are limited per account, never per address.
+    expect(state.limits.filter((k) => k.startsWith("monthly-idea-stop:")).every((k) => people.some((id) => k.endsWith(id)))).toBe(true);
+    // A run of forged links from one address is still stopped.
+    const forged = `${OWNER}.${"A".repeat(43)}`;
+    const statuses: number[] = [];
+    for (let i = 0; i < 32; i++) statuses.push((await stopPage("POST", forged)).status);
+    expect(statuses.slice(0, 30).every((s) => s === 404)).toBe(true);
+    expect(statuses.slice(30)).toEqual([503, 503]);
+    // One account's own link, repeated past the limit, is refused without touching anyone else.
+    const mine = await signToken("monthly-idea-stop", people[0], SECRET);
+    for (let i = 0; i < 29; i++) await stopPage("POST", mine);
+    expect((await stopPage("POST", mine)).status).toBe(503);
+    expect((await stopPage("POST", await signToken("monthly-idea-stop", people[1], SECRET))).status).toBe(200);
   });
 });
 

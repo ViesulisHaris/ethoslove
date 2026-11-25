@@ -182,9 +182,16 @@ export function ideaDecision(
   return { send: true, withPrice };
 }
 
-/** When a price sent on `sentOn` stops working: the start of the eighth UTC day after it (ms). */
+/**
+ * How far west the day the email names is whole: UTC-8, the US Pacific coast. The email names a day
+ * ("until 2 December") and the site shows the end in the reader's own time, so it must not end before
+ * that day does where they are (monthly-D5); ending at midnight UTC ended it at 4 PM in California.
+ */
+export const IDEA_PRICE_WEST_HOURS = 8;
+
+/** When a price sent on `sentOn` stops working (ms): the end of the seventh day after it, as that day ends at UTC-8. */
 export function priceEndsAt(sentOn: Date): number {
-  return addDays(utcDay(sentOn), IDEA_PRICE_DAYS + 1).getTime();
+  return addDays(utcDay(sentOn), IDEA_PRICE_DAYS + 1).getTime() + IDEA_PRICE_WEST_HOURS * 3_600_000;
 }
 
 /** The last whole day it works, which is the day the email names: the seventh after `sentOn`. */

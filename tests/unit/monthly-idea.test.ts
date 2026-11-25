@@ -183,10 +183,17 @@ describe("who gets it", () => {
 
   it("U14 the price lasts seven whole days", () => {
     expect(ymdOf(priceLastDay(day("2026-12-20")))).toBe("2026-12-27");
-    expect(priceEndsAt(day("2026-12-20"))).toBe(Date.UTC(2026, 11, 28));
+    // The end of 27 December at UTC-8: midnight in California, 3 AM in New York, 8 AM in London.
+    expect(priceEndsAt(day("2026-12-20"))).toBe(Date.UTC(2026, 11, 28, 8));
+    // Nowhere from UTC-8 east does it end before the named day does there (monthly-D5).
+    for (const zone of ["America/Los_Angeles", "America/New_York", "Europe/London", "Europe/Riga", "Asia/Tokyo"]) {
+      const local = new Intl.DateTimeFormat("en-CA", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date(priceEndsAt(day("2026-12-20")) - 1));
+      const get = (t: string) => local.find((x) => x.type === t)!.value;
+      expect(`${get("year")}-${get("month")}-${get("day")}` >= "2026-12-27", zone).toBe(true);
+    }
     expect(ymdOf(priceLastDay(day("2026-11-28")))).toBe("2026-12-05");
     expect(ymdOf(priceLastDay(day("2026-12-29")))).toBe("2027-01-05");
-    expect(priceEndsAt(day("2026-12-29"))).toBe(Date.UTC(2027, 0, 6));
+    expect(priceEndsAt(day("2026-12-29"))).toBe(Date.UTC(2027, 0, 6, 8));
   });
 });
 
