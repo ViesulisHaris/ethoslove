@@ -11,6 +11,8 @@ import { hoursOf, ideaListNode, placeListNode, TOP_OF_LIST, toldTraits } from "@
 import { cityIdeaScore, cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
 import { IDEAS, type DateIdea } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
+import { toYmd } from "@/lib/dates/calendar";
+import { featuredNow, markFeatured } from "@/lib/dates/featured";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M, topCityPlaces } from "@/lib/cities/places";
 import { tiqetsSearch } from "@/lib/trips/partners";
@@ -53,8 +55,11 @@ export function generateStaticParams(): { city: string }[] {
 async function cityPage(city: City, l: "en" | "es") {
   const found = await loadCityPlaces(city.slug, l);
   const ideas = ideasForCity(city);
-  const places = found ? topCityPlaces(found.places) : [];
-  return { found, ideas, places };
+  // "Featured" is a label and nothing else (lib/dates/featured.ts): the same places, in the same order.
+  const featured = featuredNow(toYmd(new Date()));
+  const around = markFeatured(found?.places ?? [], featured);
+  const places = found ? markFeatured(topCityPlaces(found.places), featured) : [];
+  return { found, around, ideas, places };
 }
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/dates/[city]">, "searchParams">): Promise<Metadata> {
@@ -89,8 +94,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const td = await getTranslations("dates");
   const name = cityName(city, l);
   const url = localizedUrl(locale, `/dates/${city.slug}`);
-  const { found, ideas, places } = await cityPage(city, l);
-  const around = found?.places ?? [];
+  const { found, around, ideas, places } = await cityPage(city, l);
   const mapHref = cityMapHref(city, l);
   const km = (CITY_RADIUS_M / 1000).toLocaleString(l);
   const told = toldTraits(city, ideas);
@@ -111,6 +115,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
     inCity: t("ideas.inCity", { city: name }),
     hours: (idea: DateIdea) => td("ideas.hours", { hours: hoursOf(idea.minutes, l) }),
     budget: (idea: DateIdea) => td(`ideas.budget.${idea.budget}`),
+    featured: td("featured.label"),
   };
 
   return (
@@ -173,7 +178,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                       </p>
                       {stops && stops.length > 0 ? (
                         <p className="mt-1 text-sm text-page-body">
-                          {labels.inCity}: {stops.map((place) => (place.named ? place.name : KINDS[place.kind].label[l])).join(", ")}
+                          {labels.inCity}: {stops.map((place) => `${place.named ? place.name : KINDS[place.kind].label[l]}${place.featured ? ` (${labels.featured})` : ""}`).join(", ")}
                         </p>
                       ) : null}
                       <CityCta href={cityMapHref(city, l, idea.id)} cta="idea" city={city.slug} className="inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-page-accent underline-offset-4 hover:underline">
@@ -212,7 +217,10 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                   <li key={place.id} className="border-b border-page-line">
                     <CityCta href={pointHref(place, place.name)} cta="place" city={city.slug} className="flex min-h-11 flex-col justify-center py-2.5">
                       <span className="text-[0.9375rem] font-medium text-page-ink">{place.name}</span>
-                      <span className="text-sm text-page-body">{KINDS[place.kind].label[l]}</span>
+                      <span className="text-sm text-page-body">
+                        {KINDS[place.kind].label[l]}
+                        {place.featured ? <span className="tracking-wide uppercase"> · {labels.featured}</span> : null}
+                      </span>
                     </CityCta>
                   </li>
                 ))}
@@ -224,7 +232,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
                     <Plus aria-hidden="true" className={PLUS} strokeWidth={1.6} />
                   </summary>
                   <div className="pb-6">
-                    <CityPlaceList places={places} counts={found.counts} locale={l} city={city.slug} labels={{ counts: t("places.counts", { km }), fromCentre: (distance) => t("places.fromCentre", { distance }) }} />
+                    <CityPlaceList places={places} counts={found.counts} locale={l} city={city.slug} labels={{ counts: t("places.counts", { km }), fromCentre: (distance) => t("places.fromCentre", { distance }), featured: labels.featured }} />
                   </div>
                 </details>
               ) : null}

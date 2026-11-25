@@ -18,7 +18,7 @@ export type DateCard = {
   /** Where "Plan it" goes. */
   href: string;
 };
-export type DateCardLabels = { twist: string; plan: string; hours: (idea: DateIdea) => string; budget: (idea: DateIdea) => string; inCity?: string };
+export type DateCardLabels = { twist: string; plan: string; hours: (idea: DateIdea) => string; budget: (idea: DateIdea) => string; inCity?: string; /** "Featured", for a stop a venue pays to have marked. */ featured?: string };
 
 /**
  * Date ideas as picture cards: closed, a card is the idea's picture and its title; opened, why it
@@ -63,6 +63,7 @@ export function DateIdeaCards({ id, cards, locale, labels }: { id: string; cards
                           <span className="min-w-0">
                             <span className="font-medium">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
                             {place.named ? <span className="text-page-body"> · {KINDS[place.kind].label[locale]}</span> : null}
+                            {labels.featured && place.featured ? <span className="text-page-body tracking-wide uppercase"> · {labels.featured}</span> : null}
                           </span>
                         </li>
                       ))}

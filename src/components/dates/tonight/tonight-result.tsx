@@ -115,6 +115,7 @@ export function TonightResult({ pick, stops, times, wet, asked, when, date, rest
                 <span className="min-w-0">
                   <span className="font-medium">{place.named ? place.name : KINDS[place.kind].label[locale]}</span>
                   {place.named ? <span className="text-page-body"> · {KINDS[place.kind].label[locale]}</span> : null}
+                  {place.featured ? <span className="text-page-body tracking-wide uppercase"> · {t("featured.label")}</span> : null}
                   {bringOwn && !KINDS[place.kind].free ? <span className="text-page-body"> · {t("tonight.optional")}</span> : null}
                 </span>
               </li>

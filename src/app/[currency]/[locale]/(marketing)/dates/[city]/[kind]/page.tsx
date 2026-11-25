@@ -17,6 +17,8 @@ import { pairCopy } from "@/lib/cities/kind-copy";
 import { isCityKindPair, kindsOfCity, pairIdeas } from "@/lib/cities/kind-pairs";
 import { IDEAS, ideaById } from "@/lib/dates/ideas";
 import { KINDS } from "@/lib/dates/kinds";
+import { toYmd } from "@/lib/dates/calendar";
+import { featuredNow, markFeatured } from "@/lib/dates/featured";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
 import { DateFoot, DateHero, DatePage, DateQuestions, DateSpread, QUIET_ROW_LINK } from "@/components/dates/page/date-page";
@@ -91,9 +93,12 @@ export default async function CityKindPage({ params }: Props) {
   const url = localizedUrl(locale, `/dates/${city.slug}/${kind}`);
   const ideas = pairIdeas(city, kind);
   const found = await loadCityPlaces(city.slug, l);
-  const stops = cityIdeaStops(ideas, found?.places ?? []);
+  // "Featured" is a label and nothing else (lib/dates/featured.ts): the same places, in the same order.
+  const featured = featuredNow(toYmd(new Date()));
+  const stops = cityIdeaStops(ideas, markFeatured(found?.places ?? [], featured));
   const words = placesWords(ui, kind);
-  const places = found && words ? kindPlaces(kind, found.places) : [];
+  const places = found && words ? markFeatured(kindPlaces(kind, found.places), featured) : [];
+  const featuredLabel = td("featured.label");
   const hero = ideaById(pair.hero)!;
   const faq = [...copy.faq, ...DATE_KIND_SHARED_FAQ].map((x) => ({ q: x.q[l], a: x.a[l] }));
   const km = (CITY_RADIUS_M / 1000).toLocaleString(l);
@@ -145,7 +150,7 @@ export default async function CityKindPage({ params }: Props) {
           locale={l}
           ideas={ideas}
           card={(idea, i) => ({ idea, fit: copy.fits[idea.id][l], stops: stops[i], href: cityMapHref(city, l, idea.id), image: ideaImageInCity(idea.id) })}
-          labels={{ twist: ui.twist, plan: tc("ideas.onMap"), inCity: tc("ideas.inCity", { city: name }), hours: (idea) => td("ideas.hours", { hours: hoursOf(idea.minutes, l) }), budget: (idea) => td(`ideas.budget.${idea.budget}`) }}
+          labels={{ twist: ui.twist, plan: tc("ideas.onMap"), inCity: tc("ideas.inCity", { city: name }), hours: (idea) => td("ideas.hours", { hours: hoursOf(idea.minutes, l) }), budget: (idea) => td(`ideas.budget.${idea.budget}`), featured: featuredLabel }}
         />
 
         {places.length > 0 && words ? (
@@ -155,7 +160,10 @@ export default async function CityKindPage({ params }: Props) {
                 <li key={place.id} className="border-b border-page-line">
                   <a href={mapHref(place, place.name)} className="flex min-h-11 flex-col justify-center py-2.5">
                     <span className="text-[0.9375rem] font-medium text-page-ink">{place.name}</span>
-                    <span className="text-sm text-page-body">{KINDS[place.kind].label[l]}</span>
+                    <span className="text-sm text-page-body">
+                      {KINDS[place.kind].label[l]}
+                      {place.featured ? <span className="tracking-wide uppercase"> · {featuredLabel}</span> : null}
+                    </span>
                   </a>
                 </li>
               ))}

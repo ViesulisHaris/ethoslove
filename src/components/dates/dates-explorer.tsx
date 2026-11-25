@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { addDays, formatDay, fromYmd, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES, starterName } from "@/lib/dates/cities";
+import { featuredNow, markFeatured } from "@/lib/dates/featured";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { datesUrls, EARLY_KEY, earlyScript, HERE_URL, takeEarly } from "@/lib/dates/early";
@@ -442,8 +443,10 @@ export function DatesExplorer() {
       return sight ? { ...p, photo: sight.photo, about: sight.description, articleUrl: sight.articleUrl, notable: true, score: p.score + 6 } : p;
     });
     if (byPlace.size > 0) pictured.sort((a, b) => b.score - a.score || a.distanceKm - b.distanceKm || a.id.localeCompare(b.id));
-    return from ? pictured.map((p) => ({ ...p, distanceKm: Math.round(distanceKm(from, p) * 100) / 100 })) : pictured;
-  }, [places, rare, sights, origin, where]);
+    const near = from ? pictured.map((p) => ({ ...p, distanceKm: Math.round(distanceKm(from, p) * 100) / 100 })) : pictured;
+    // "Featured" is a label and nothing else: the same places, in the same order (lib/dates/featured.ts).
+    return markFeatured(near, featuredNow(today));
+  }, [places, rare, sights, origin, where, today]);
 
   const ratingKey = useMemo(() => all.map((p) => p.id).sort().join(","), [all]);
   const loadRatings = useCallback(async (key: string) => {
@@ -883,6 +886,7 @@ export function DatesExplorer() {
         shareText: t("place.shareText"),
         liked: (n) => t("place.liked", { n }),
         book: t("place.book"),
+        featured: t("featured.label"),
         reviews: {
           title: t("reviews.title"),
           publicNote: t("reviews.publicNote"),
@@ -1063,16 +1067,16 @@ export function DatesExplorer() {
               onHover={setHoveredId}
               onAdd={addIdea}
               onClose={() => setIdeaId(null)}
-              labels={{ twist: t("ideas.twist"), another: t("ideas.another"), nothing: (kind) => t("ideas.nothingFor", { kind }), walk: (m) => t("place.walkBetween", { minutes: m }), add: t("ideas.add"), added: t("ideas.added"), close: t("ideas.close"), open: t("place.open") }}
+              labels={{ twist: t("ideas.twist"), another: t("ideas.another"), nothing: (kind) => t("ideas.nothingFor", { kind }), walk: (m) => t("place.walkBetween", { minutes: m }), add: t("ideas.add"), added: t("ideas.added"), close: t("ideas.close"), open: t("place.open"), featured: t("featured.label") }}
             />
           </div>
         ) : null}
 
         {/* the best bets, as a shelf */}
-        {listUp && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next") }} /> : null}
+        {listUp && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next"), featured: t("featured.label") }} /> : null}
 
         {/* the places with a story, as a shelf of their own */}
-        {listUp && !idea ? <UnusualShelf picks={shelfPicks} found={found} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("unusual.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("unusual.sub"), reviews: (n) => t("reviews.count", { n }), walk: (m) => t("place.walk", { minutes: m }), previous: t("unusual.previous"), next: t("unusual.next") }} /> : null}
+        {listUp && !idea ? <UnusualShelf picks={shelfPicks} found={found} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("unusual.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("unusual.sub"), reviews: (n) => t("reviews.count", { n }), walk: (m) => t("place.walk", { minutes: m }), previous: t("unusual.previous"), next: t("unusual.next"), featured: t("featured.label") }} /> : null}
 
         {/* places */}
         <div className="mt-9 flex items-end justify-between gap-4">
@@ -1202,7 +1206,7 @@ export function DatesExplorer() {
               onHover={(on) => setHoveredId(on ? place.id : null)}
               onTogglePlan={() => togglePlan(place)}
               unusual={found.get(place.id)}
-              labels={{ add: t("place.add"), remove: t("place.remove"), walk: (m) => t("place.walk", { minutes: m }), free: t("place.free"), photo: t("place.photo"), reviews: (n) => t("reviews.count", { n }), rank: (n, of, group) => t("place.rank", { n, of, group }) }}
+              labels={{ add: t("place.add"), remove: t("place.remove"), walk: (m) => t("place.walk", { minutes: m }), free: t("place.free"), photo: t("place.photo"), reviews: (n) => t("reviews.count", { n }), rank: (n, of, group) => t("place.rank", { n, of, group }), featured: t("featured.label") }}
             />
           ))}
             </ListSet>

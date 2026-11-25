@@ -10,7 +10,7 @@ import { CostChip } from "./cost-chip";
 import { PlaceThumb } from "./place-thumb";
 import { Stars } from "./stars";
 
-export type TopPicksLabels = { title: string; sub: string; reviews: (n: number) => string; noReviews: string; previous: string; next: string };
+export type TopPicksLabels = { title: string; sub: string; reviews: (n: number) => string; noReviews: string; previous: string; next: string; featured?: string };
 
 /** A card's width, as its class says (w-[216px]): what its photograph is sized for. */
 const CARD_W = 216;
@@ -85,6 +85,8 @@ export function TopPicks({ picks, locale, labels, selectedId, onOpen, onHover }:
               <span className="block p-3">
                 <span className="block text-[11.5px] font-semibold" style={{ color: GROUPS[p.group].ink }}>
                   {KINDS[p.kind].label[locale]}
+                  {/* "Featured" in words on the kind's own line, so the shelf never grows a line for it. */}
+                  {labels.featured && p.featured ? <span className="tracking-wide uppercase"> · {labels.featured}</span> : null}
                 </span>
                 {/* One line, always: `block` beat line-clamp's display, so a long name took two lines and
                     the whole shelf grew by one when such a place came up, pushing the list down. */}

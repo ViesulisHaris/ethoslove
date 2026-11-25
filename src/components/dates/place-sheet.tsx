@@ -28,6 +28,7 @@ import type { WentAs } from "@/lib/supabase/types";
 import { tiqetsSearch } from "@/lib/trips/partners";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { CostChip } from "./cost-chip";
+import { FeaturedMark } from "./featured-label";
 import { GroupIcon } from "./group-icon";
 import { PairsWith } from "./pairs-with";
 import { Reviews, type ReviewsLabels } from "./reviews";
@@ -75,6 +76,8 @@ export type PlaceSheetLabels = {
   liked: (n: number) => string;
   /** "Book a table", where the map's entry has a booking page. */
   book: string;
+  /** "Featured", for a place a venue pays to have marked. */
+  featured?: string;
 };
 
 /** A place a vote can be on: the map's own ids only. */
@@ -315,6 +318,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           <h2 ref={heading} tabIndex={-1} id="place-sheet-name" className="font-display text-[24px] leading-[1.08] text-forest outline-none">
             {place.name}
           </h2>
+          {labels.featured ? <FeaturedMark place={place} label={labels.featured} className="mt-1.5" /> : null}
           <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
             {place.rating?.reviews ? (
               <>

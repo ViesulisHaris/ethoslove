@@ -34,6 +34,8 @@ export type Place = {
   articleUrl?: string;
   /** What its OpenStreetMap tags say makes it out of the ordinary (a cellar, a roof), when we had its tags. */
   quirk?: Quirk;
+  /** A venue pays for this label (lib/dates/featured.ts); it changes nothing else: never its rank, never a filter. */
+  featured?: true;
 };
 
 type Element = { type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
