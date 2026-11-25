@@ -155,6 +155,14 @@ describe("a kind of date inside a city", () => {
     }
   });
 
+  it("P12 the one pair kept by a hand count is London's cheap page, written by hand and on the release, and nothing else (dates2-C17)", () => {
+    // London's own list holds five cheap ideas, one short of six; the page stands on six free places
+    // counted by hand on 25 Nov 2026 (PLAN-dates2.md, open question 1). It is the owner's to keep or drop.
+    expect(Object.keys(CITY_KIND_PLACES)).toEqual(["london/cheap"]);
+    expect(cityKindOwn(getCity("london")!, "cheap").length).toBeLessThan(MIN_CITY_KIND_IDEAS);
+    for (const key of Object.keys(CITY_KIND_PLACES)) expect(CITY_KIND_COPY[key], key).toBeDefined();
+  });
+
   it("P9 nothing links to a pair that is not there, and no city takes a name the dates pages use", () => {
     for (const slug of CITY_SLUGS) for (const kind of kindsOfCity(slug)) expect(isCityKindPair(slug, kind), `${slug}/${kind}`).toBe(true);
     for (const kind of DATE_KINDS) for (const city of citiesOfKind(kind)) expect(isCityKindPair(city.slug, kind), `${city.slug}/${kind}`).toBe(true);
