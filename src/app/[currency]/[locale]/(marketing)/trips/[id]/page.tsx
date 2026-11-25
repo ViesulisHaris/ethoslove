@@ -23,6 +23,7 @@ import { TRIP_SEO } from "@/content/trip-seo";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
+import { SPREAD } from "@/components/templates/page/spread";
 import { OriginPage, originMetadata } from "@/components/trips/page/origin-page";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { OpenByHash } from "@/components/trips/open-by-hash";
@@ -271,15 +272,18 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
       </section>
 
       <section id="plan" className="scroll-mt-24 border-t border-line bg-blush-paper py-16 lg:py-24">
-        <div className="container-x">
-          <p data-reveal className="text-eyebrow text-rose-deep">
-            {t("detail.plan.eyebrow")}
-          </p>
-          <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
-            {t("detail.plan.title")}
-          </h2>
-          {/* One column: the first day open, the others a line each (DESIGN-LESS-TEXT, 300 words). No name on the rows: opening day 3 leaves day 1 open. data-reveal stays on the <li>, never inside what opens. */}
-          <ol className="mt-10 grid max-w-3xl gap-3" data-testid="trip-plan">
+        {/* On a desk the designed pages' spread (SPREAD): the label and the heading stay in view on the left while the rows run down the right, so the page is not a column with a blank half (the test of 25 Nov 2026). */}
+        <div className={SPREAD}>
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <p data-reveal className="text-eyebrow text-rose-deep">
+              {t("detail.plan.eyebrow")}
+            </p>
+            <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
+              {t("detail.plan.title")}
+            </h2>
+          </div>
+          {/* The first day open, the others a line each (DESIGN-LESS-TEXT, 300 words). No name on the rows: opening day 3 leaves day 1 open. data-reveal stays on the <li>, never inside what opens. */}
+          <ol className="grid min-w-0 gap-3 lg:pt-2" data-testid="trip-plan">
             {trip.plan.map((day, i) => (
               <li key={day.day} data-reveal style={{ "--reveal-delay": `${Math.min(i, 3) * 60}ms` } as React.CSSProperties} className="rounded-[28px] bg-card px-6 shadow-soft ring-1 ring-forest/5 sm:px-7">
                 {/* The day's heading outside the summary, which is read as a button (a heading inside it is lost). */}
@@ -317,15 +321,18 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
 
       {/* Flights, places to stay, tickets and the car: closed rows, each one tap away. The commission line stays inside its row, beside its links. */}
       <section id="book" className="scroll-mt-24 bg-paper py-16 lg:py-24">
-        <div className="container-x">
-          <p data-reveal className="text-eyebrow text-rose-deep">
-            {t("detail.flights.eyebrow")}
-          </p>
-          <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
-            {t("detail.book.title")}
-          </h2>
+        {/* On a desk the designed pages' spread (SPREAD): the label and the heading stay in view on the left while the rows run down the right, so the page is not a column with a blank half (the test of 25 Nov 2026). */}
+        <div className={SPREAD}>
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <p data-reveal className="text-eyebrow text-rose-deep">
+              {t("detail.flights.eyebrow")}
+            </p>
+            <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
+              {t("detail.book.title")}
+            </h2>
+          </div>
           <OpenByHash ids={BOOK_ROWS} />
-          <div className="mt-8 grid max-w-3xl gap-3">
+          <div className="grid min-w-0 gap-3 lg:pt-2">
             <details id="flights" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
               <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                 {t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}

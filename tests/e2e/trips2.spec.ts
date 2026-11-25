@@ -321,6 +321,17 @@ test.describe("a trip's page", () => {
     for (const box of await runs.evaluateAll((els) => els.map((el) => el.getClientRects().length))) expect(box).toBe(1);
   });
 
+  test("E10e on a desk the plan and Before you go are a spread: heading on the left, rows across the right", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/trips/baltic-coast");
+    for (const [section, rows] of [["#plan", '[data-testid="trip-plan"]'], ["#book", "#book details#flights"]] as const) {
+      const heading = (await page.locator(`${section} h2`).boundingBox())!;
+      const row = (await page.locator(rows).boundingBox())!;
+      expect(row.x, section).toBeGreaterThan(heading.x + heading.width - 1);
+      expect(row.x + row.width, section).toBeGreaterThan(1440 * 0.85);
+    }
+  });
+
   test("E11 each night's stop gets its own nights", async ({ page }) => {
     await page.goto("/trips/baltic-coast");
     const stays = page.getByTestId("trip-stay");
