@@ -59,8 +59,7 @@ const CONFIRM = "https://ethos.test/api/date-letter/confirm?t=00000000-0000-4000
 function letter(week: number, locale: L) {
   const words = letterWords(letterEntry(week), locale);
   const planUrl = pageUrl(locale, `/dates?idea=${words.id}&ref=${LETTER_REF}`);
-  const giftUrl = pageUrl(locale, `/plan?ref=${LETTER_REF}`);
-  return { words, planUrl, giftUrl, el: DateLetterEmail({ locale, words, planUrl, giftUrl, stopUrl: STOP }) };
+  return { words, planUrl, el: DateLetterEmail({ locale, words, planUrl, stopUrl: STOP }) };
 }
 
 describe("the date letter's e-mails", () => {
@@ -119,15 +118,19 @@ describe("the date letter's e-mails", () => {
     }
   });
 
-  it("E4 the gift line is only where the entry says", async () => {
+  it("E4 the gift line is only where the entry says, and it links nowhere: a gift wraps a plan, made behind the button", async () => {
     for (const entry of LETTER_ENTRIES) {
       for (const locale of ["en", "es"] as const) {
         const html = await render(letter(entry.week, locale).el);
         const read = body(html);
-        const line = locale === "es" ? "envolverlo en un regalo" : "wrap it in a gift";
+        const line = locale === "es" ? "envolver el plan en un regalo" : "wrap the plan in a gift";
         const where = `week ${entry.week} ${locale}`;
         expect(read.includes(line), where).toBe(Boolean(entry.gift));
-        expect(html.includes("/plan?ref=email-letter"), where).toBe(Boolean(entry.gift));
+        // An empty /plan has nothing to wrap (letter-T2): the only links are the button and the stop.
+        expect(html, where).not.toContain("/plan");
+        const { planUrl } = letter(entry.week, locale);
+        const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map(([, h]) => h.replace(/&amp;/g, "&"));
+        expect(hrefs.filter((h) => h !== planUrl && h !== STOP && h !== siteUrl()), where).toEqual([]);
         if (entry.gift) {
           const sentence = read.slice(read.indexOf(locale === "es" ? "Cuando esté" : "Once it’s"));
           expect(sentence, where).not.toMatch(/\d|price|offer|free|precio|oferta|gratis/i);
@@ -160,7 +163,7 @@ describe("the date letter's e-mails", () => {
     expect(letterSent.idempotencyKey).toBe("date-letter/x/2871");
     const html = await render(letterSent.react);
     expect(html).toContain(`${siteUrl()}/es/dates?idea=pasta-and-a-slow-walk&amp;ref=email-letter`);
-    expect(html).toContain(`${siteUrl()}/es/plan?ref=email-letter`);
+    expect(html).not.toContain("/plan");
 
     expect(await notify.sendLetterConfirm({ to: "sam@mail.com", locale: "en", confirmUrl: CONFIRM, stopUrl: STOP })).toBe(true);
     const confirm = state.sent[1];

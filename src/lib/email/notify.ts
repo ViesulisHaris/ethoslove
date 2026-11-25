@@ -590,11 +590,10 @@ export async function sendDateLetter({ to, locale, slot, stopUrl, onceKey }: { t
   return safely("date letter", async () => {
     const words = letterWords(letterEntry(slot), locale);
     const planUrl = pageUrl(locale, `/dates?idea=${words.id}&ref=${LETTER_REF}`);
-    const giftUrl = pageUrl(locale, `/plan?ref=${LETTER_REF}`);
     return deliver("date letter", {
       to,
       subject: words.subject,
-      react: DateLetterEmail({ locale, words, planUrl, giftUrl, stopUrl }),
+      react: DateLetterEmail({ locale, words, planUrl, stopUrl }),
       headers: unsubscribeHeaders(stopUrl),
       idempotencyKey: onceKey,
     });

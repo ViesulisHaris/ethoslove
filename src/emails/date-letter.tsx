@@ -43,7 +43,7 @@ export function LetterConfirmEmail({ locale, confirmUrl, stopUrl }: { locale: L;
  * behind the button (an empty /plan has nothing to wrap). No picture but the mark, no name, no amount,
  * nothing that tracks. The stop link is the footer's, once, beside the mail app's own unsubscribe button.
  */
-export function DateLetterEmail({ locale, words, planUrl, giftUrl, stopUrl }: { locale: L; words: LetterWords; planUrl: string; giftUrl: string; stopUrl: string }) {
+export function DateLetterEmail({ locale, words, planUrl, stopUrl }: { locale: L; words: LetterWords; planUrl: string; stopUrl: string }) {
   const es = locale === "es";
   return (
     <EmailLayout
@@ -60,9 +60,9 @@ export function DateLetterEmail({ locale, words, planUrl, giftUrl, stopUrl }: { 
       <CtaButton href={planUrl} label={es ? "Planear esta cita" : "Plan this date"} />
       {words.gift ? (
         <Quiet>
-          {es ? "Cuando esté en vuestro plan, puedes " : "Once it’s in your plan, you can "}
-          <InlineLink href={giftUrl}>{es ? "envolverlo en un regalo" : "wrap it in a gift"}</InlineLink>
-          {es ? " y enviarlo como invitación." : " and send that as the invitation."}
+          {es
+            ? "Cuando esté planeada, puedes envolver el plan en un regalo y enviarlo como invitación."
+            : "Once it’s planned, you can wrap the plan in a gift and send that as the invitation."}
         </Quiet>
       ) : null}
     </EmailLayout>
