@@ -91,8 +91,8 @@ function onlyLocal(seen: Request[]) {
 /** The where box remembered, so a page by kind plans in Lisbon without asking. */
 const rememberLisbon = (page: Page) => page.addInitScript(() => window.localStorage.setItem("ethos.dates.where.v1", JSON.stringify({ lat: 38.714, lng: -9.139, name: "Lisbon", share: true })));
 
-/** A geolocation that answers with ME, counting how often it was asked; or refuses; or is not there. */
-async function geolocation(page: Page, how: "grant" | "refuse" | "none") {
+/** A geolocation that answers with ME (or, "far", with New York), counting how often it was asked; or refuses; or is not there. */
+async function geolocation(page: Page, how: "grant" | "far" | "refuse" | "none") {
   await page.addInitScript(
     ({ how, me }) => {
       const w = window as unknown as { __asked: number };
@@ -112,7 +112,7 @@ async function geolocation(page: Page, how: "grant" | "refuse" | "none") {
       };
       Object.defineProperty(Navigator.prototype, "geolocation", { configurable: true, get: () => fake });
     },
-    { how, me: ME },
+    { how, me: how === "far" ? { latitude: 40.7128, longitude: -74.006 } : ME },
   );
 }
 const asked = (page: Page) => page.evaluate(() => (window as unknown as { __asked?: number }).__asked ?? 0);
@@ -243,6 +243,24 @@ test.describe("dates2: the planner's two new controls", () => {
     await expect(reach).toHaveValue("");
     await planButton(page).click();
     await expect(result(page).getByRole("heading")).toHaveText(plain ?? "");
+  });
+
+  test("G4b a position an ocean away: the distance goes back to any, says why, and the plan is the plain one (dates2-C6)", async ({ page }) => {
+    await mockWorld(page);
+    await holdTheDatabase(page);
+    await pinClock(page);
+    await geolocation(page, "far");
+    await openLisbon(page);
+    await planButton(page).click();
+    const plain = await result(page).getByRole("heading").textContent();
+    const reach = page.locator("[data-tonight]").getByRole("combobox", { name: "Distance" });
+    await reach.selectOption("30");
+    await expect.poll(() => asked(page)).toBeGreaterThan(0);
+    await planButton(page).click();
+    await expect(page.getByText("You’re more than a half-hour walk from these places, so distance is off.")).toBeVisible();
+    await expect(reach).toHaveValue("");
+    await expect(result(page).getByRole("heading")).toHaveText(plain ?? "");
+    await expect(page.getByText(/Try a longer walk/)).toHaveCount(0);
   });
 
   test("G5 position unavailable: no distance, and the button does not move", async ({ browser, isMobile }) => {

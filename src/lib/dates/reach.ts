@@ -15,6 +15,16 @@ export function withinReach<T extends { lat: number; lng: number }>(places: read
   return places.filter((p) => isLatLng(p.lat, p.lng) && distanceKm(from, p) <= km);
 }
 
+/**
+ * The places within the walk chosen, or null when the person stands nowhere near these places: not
+ * one lies within the longest walk on offer (someone in New York on London's page). A longer walk
+ * would not help them, so the planner turns the distance off and says why (dates2-C6).
+ */
+export function placesInReach<T extends { lat: number; lng: number }>(places: readonly T[], from: LatLng, minutes: ReachMinutes): T[] | null {
+  if (places.length > 0 && withinReach(places, from, REACH_MINUTES[REACH_MINUTES.length - 1]).length === 0) return null;
+  return withinReach(places, from, minutes);
+}
+
 /** The two choices the planner keeps between visits, and nothing else: never a position. */
 export const PICKER_KEY = "ethos.dates.picker.v1";
 export type StoredPicker = { setting?: "indoors" | "outdoors"; reach?: ReachMinutes };

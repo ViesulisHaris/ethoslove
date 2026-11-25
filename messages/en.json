@@ -2175,6 +2175,7 @@
       },
       "reachDenied": "We couldn’t get your position, so distance is off. Nothing else changed.",
       "reachNone": "This browser can’t share a position, so distance is off.",
+      "reachFar": "You’re more than a half-hour walk from these places, so distance is off.",
       "mood": {
         "any": "any kind of",
         "cozy": "a cozy",

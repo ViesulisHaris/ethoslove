@@ -9,7 +9,7 @@ import type { DateKind } from "@/lib/dates/date-kinds";
 import { fillStops } from "@/lib/dates/ideas";
 import type { LatLng } from "@/lib/dates/geo";
 import type { Place } from "@/lib/dates/places";
-import { loadPicker, savePicker, withinReach, type ReachMinutes } from "@/lib/dates/reach";
+import { loadPicker, placesInReach, savePicker, type ReachMinutes } from "@/lib/dates/reach";
 import { placeNow, placesFor, rankTonight, startFor, TONIGHT_ENDS_MIN, tonightPlan, tonightTimes, type TonightPick, type TonightSetting } from "@/lib/dates/tonight";
 import { isWet, type DayWeather, type Forecast } from "@/lib/dates/weather";
 import { writeLink } from "@/lib/saved-dates/link";
@@ -124,20 +124,22 @@ export function useTonight(options: Options) {
     if (kept.setting || kept.reach) setChoiceState((c) => ({ ...c, ...kept }));
   }, []);
 
+  /** Sets the distance back to "any" and says why in one line. */
+  const off = (notice: string): null => {
+    setReachNotice(notice);
+    setChoiceState((c) => {
+      const next = { ...c, reach: undefined };
+      savePicker({ setting: next.setting });
+      return next;
+    });
+    return null;
+  };
+
   /** The position for the distance choice: the host's own, else one already had on this page, else the browser's, once. Null when refused or unavailable, and the choice is then set back. */
   const locate = (): Promise<LatLng | null> => {
     const fromHost = latest.current.position?.() ?? null;
     if (fromHost) return Promise.resolve(fromHost);
     if (position.current) return Promise.resolve(position.current);
-    const off = (notice: string) => {
-      setReachNotice(notice);
-      setChoiceState((c) => {
-        const next = { ...c, reach: undefined };
-        savePicker({ setting: next.setting });
-        return next;
-      });
-      return null;
-    };
     if (!("geolocation" in navigator)) return Promise.resolve(off(t("tonight.reachNone")));
     return new Promise((resolve) => {
       navigator.geolocation.getCurrentPosition(
@@ -209,8 +211,12 @@ export function useTonight(options: Options) {
       const loaded = await latest.current.load();
       const o = latest.current;
       // This press is the press for a distance restored from last time.
-      const from = choice.reach !== undefined && loaded ? await locate() : null;
-      const data = loaded && from && choice.reach !== undefined ? { ...loaded, places: withinReach(loaded.places, from, choice.reach) } : loaded;
+      const located = choice.reach !== undefined && loaded ? await locate() : null;
+      const near = loaded && located && choice.reach !== undefined ? placesInReach(loaded.places, located, choice.reach) : null;
+      // Far from every place on the page: the distance is set back, said, and the plan made without it.
+      if (located && !near) off(t("tonight.reachFar"));
+      const from = near ? located : null;
+      const data = loaded && near ? { ...loaded, places: near } : loaded;
       if (choice.reach !== undefined && !from) wishes.choice = { ...choice, reach: undefined };
       const reach: ReachMinutes | undefined = from ? choice.reach : undefined;
       if (!data) {

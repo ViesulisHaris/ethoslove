@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { walkingMinutes } from "@/lib/dates/geo";
-import { PICKER_KEY, reachKm, readPicker, REACH_MINUTES, savePicker, withinReach } from "@/lib/dates/reach";
+import { PICKER_KEY, placesInReach, reachKm, readPicker, REACH_MINUTES, savePicker, withinReach } from "@/lib/dates/reach";
 
 const at = { lat: 38.714, lng: -9.139 };
 /** A point this many kilometres north of `at`. */
@@ -11,6 +11,17 @@ describe("a walk from where you stand (dates2)", () => {
 
   it("R1 the reach is walkingMinutes the other way round", () => {
     for (const m of REACH_MINUTES) expect(walkingMinutes(reachKm(m))).toBe(m);
+  });
+
+  it("R2b far from every place the distance is off, not a longer walk (dates2-C6)", () => {
+    const places = [{ id: "a", ...north(0.5) }, { id: "b", ...north(1.5) }];
+    // In the city: the walk chosen decides, and nothing within ten minutes is a real "none near".
+    expect(placesInReach(places, at, 10)!.map((p) => p.id)).toEqual(["a"]);
+    expect(placesInReach(places, north(-0.8), 10)).toEqual([]);
+    // An ocean away: null, whatever the walk.
+    for (const m of REACH_MINUTES) expect(placesInReach(places, { lat: 40.71, lng: -74.0 }, m)).toBeNull();
+    // No places loaded is not "far": the planner says what it says when there are none.
+    expect(placesInReach([], at, 10)).toEqual([]);
   });
 
   it("R2 a place is within reach by its distance, and never without coordinates", () => {

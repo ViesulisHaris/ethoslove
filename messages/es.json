@@ -2175,6 +2175,7 @@
       },
       "reachDenied": "No hemos podido saber dónde estáis, así que la distancia no se aplica. Lo demás sigue igual.",
       "reachNone": "Este navegador no puede compartir la ubicación, así que la distancia no se aplica.",
+      "reachFar": "Estáis a más de media hora andando de estos sitios, así que la distancia no se aplica.",
       "mood": {
         "any": "de cualquier tipo",
         "cozy": "acogedora",
