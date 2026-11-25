@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { serverNoteShare } from "./server-settings";
 import { needPreviews } from "./server-state";
 
 /**
@@ -112,7 +113,7 @@ test.describe("the page a free gift's footer opens", () => {
   // needn't have loaded (WebKit on Windows never fires "load" for them, on /templates too).
   const ready = { waitUntil: "domcontentloaded" } as const;
 
-  test("someone made you one of these: free templates first, premium after, the gift's own first among its kind", async ({ page }) => {
+  test("someone made you one of these: free templates first, premium after, the gift's own first among its kind", async ({ page, request }) => {
     await page.goto("/made-with-ethos?ref=watermark&template=constellations", ready);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Someone made you one of these.");
     await expect(page.getByText("Make one back. Free to start.")).toBeVisible();
@@ -121,23 +122,30 @@ test.describe("the page a free gift's footer opens", () => {
     await expect(shelves.nth(0)).toHaveAttribute("data-shelf", "free");
     await expect(shelves.nth(1)).toHaveAttribute("data-shelf", "premium");
     // With the free version as The Letter's short note (NEXT_PUBLIC_FREE_NOTE_SHARE=1, live since 19 Nov 2026)
-    // Constellations is paid, so it leads the premium shelf and the free one is The Letter alone. The spec follows
-    // the server's own setting, as gallery.spec.ts does (lib/gift/free-tier.ts, noteForEveryone).
-    const noteForEveryone = Number(process.env.NEXT_PUBLIC_FREE_NOTE_SHARE) >= 1;
-    const free = shelves.nth(0).getByRole("link", { name: /^Make this/ });
-    const theirs = shelves.nth(noteForEveryone ? 1 : 0).getByRole("link", { name: /^Make this/ });
+    // Constellations is paid: as the gift they got it stands in front of the free shelf, once, and the free shelf is
+    // The Letter alone. Without it Constellations is free and leads the free shelf. The spec follows the server's own
+    // setting, read from the server under test and not from this shell (server-settings.ts): the final pass of
+    // 25 Nov 2026 ran a server with the switch and a shell without it, and this test took the wrong side.
+    const noteForEveryone = (await serverNoteShare(request)) >= 1;
+    const theirs = (noteForEveryone ? page.locator("[data-lead]") : shelves.nth(0)).getByRole("link", { name: /^Make this/ });
     await expect(theirs.first()).toHaveAttribute("href", "/create/constellations?ref=watermark");
-    if (noteForEveryone) await expect(free.first()).toHaveAttribute("href", "/create/the-letter?ref=watermark");
+    await expect(page.locator("[data-lead]")).toHaveCount(noteForEveryone ? 1 : 0);
+    await expect(page.locator('[data-testid="made-with-ethos"] h3', { hasText: /^Constellations$/ })).toHaveCount(1);
+    // The free shelf is exactly what is free on this server.
+    await expect(shelves.nth(0).locator("h3")).toHaveText(noteForEveryone ? ["The Letter"] : ["Constellations", "The Letter"]);
     // Marked as the one they got, and only that one.
     await expect(page.getByText("The one you got", { exact: true })).toHaveCount(1);
   });
 
-  test("no straight-to-checkout path, and every card keeps the footer's tag on the way to the editor", async ({ page }) => {
+  test("no straight-to-checkout path, and every card keeps the footer's tag on the way to the editor", async ({ page, request }) => {
     await page.goto("/made-with-ethos?ref=watermark&template=bouquet", ready);
     const page_ = page.getByTestId("made-with-ethos");
     await expect(page_.getByRole("button", { name: /unlock|pay|buy|checkout/i })).toHaveCount(0);
     const makes = page_.getByRole("link", { name: /^Make this/ });
-    expect(await makes.count()).toBeGreaterThan(4);
+    // Bouquet leading, the free shelf (The Letter, and Constellations where the note is not for everyone), and a
+    // row of premium cards: two on a phone, more on a desk.
+    const freeShelf = (await serverNoteShare(request)) >= 1 ? 1 : 2;
+    expect(await makes.count()).toBeGreaterThanOrEqual(1 + freeShelf + 2);
     for (const href of await makes.evaluateAll((links) => links.map((a) => a.getAttribute("href")))) expect(href).toMatch(/^\/create\/[a-z0-9-]+\?ref=watermark$/);
     // The gift's premium template leads the page, in front of the free shelf, and is shown once.
     await expect(makes.first()).toHaveAttribute("href", "/create/bouquet?ref=watermark");

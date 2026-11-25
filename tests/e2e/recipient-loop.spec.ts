@@ -1,5 +1,6 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { asArrived, bring, endControls, playToEnd } from "./play-gift";
+import { serverNoteShare } from "./server-settings";
 
 /**
  * The person who receives a gift makes the next one: the end screen's "or make one for someone
@@ -517,7 +518,7 @@ test.describe("the page the badge and the new link open", () => {
       };
     });
 
-  test("opens with the gift they got, on the first screen, whether it was a free one or a paid one", async ({ page, isMobile }) => {
+  test("opens with the gift they got, on the first screen, whether it was a free one or a paid one", async ({ page, isMobile, request }) => {
     // A paid gift's template is not on the free shelf. It used to lead the premium shelf: a screen
     // and a half down (two and a half on a phone), under "Someone made you one of these." and a
     // picture of The Letter. It stands in front of the free shelf now, and nowhere else.
@@ -532,8 +533,10 @@ test.describe("the page the badge and the new link open", () => {
     expect(seen.sideways).toBe(false);
     await expect(page.locator('[data-shelf="premium"] h3', { hasText: /^Bouquet$/ })).toHaveCount(0);
     await expect(page.locator('[data-testid="made-with-ethos"] h3', { hasText: /^Bouquet$/ })).toHaveCount(1);
-    // The free templates come straight after it, each of them once.
-    await expect(page.locator('[data-shelf="free"] h3')).toHaveText(["The Letter", "Constellations"]);
+    // The free templates come straight after it, each of them once: The Letter, and Constellations only where the
+    // short note is not for everyone (on the live site's setting Constellations is sold; server-settings.ts).
+    const free = (await serverNoteShare(request)) >= 1 ? ["The Letter"] : ["The Letter", "Constellations"];
+    await expect(page.locator('[data-shelf="free"] h3')).toHaveText(free);
 
     // A free gift's template leads its own shelf, as before, and nothing stands in front of it.
     await page.goto("/made-with-ethos?ref=watermark&template=the-letter", ready);
@@ -554,12 +557,14 @@ test.describe("the page the badge and the new link open", () => {
     await expect(page.getByText("The one you got", { exact: true })).toHaveCount(0);
   });
 
-  test("the first row: their card under its own label, then the free shelf's words and cards, words first", async ({ page, isMobile }) => {
+  test("the first row: their card under its own label, then the free shelf's words and cards, words first", async ({ page, isMobile, request }) => {
+    // As many free cards as this server has free templates (The Letter; Constellations too without the live setting).
+    const freeCards = (await serverNoteShare(request)) >= 1 ? 1 : 2;
     for (const address of ["/made-with-ethos?ref=g&template=bouquet", "/made-with-ethos?ref=watermark&template=the-letter"]) {
       await page.goto(address, ready);
       const seen = await layout(page);
       const lead = address.includes("bouquet") ? 1 : 0;
-      expect(seen.cards).toHaveLength(lead + 2);
+      expect(seen.cards).toHaveLength(lead + freeCards);
       // The words never lie on a card.
       for (const card of seen.cards) expect(card.right <= seen.words.left || seen.words.right <= card.left || card.bottom <= seen.words.top || seen.words.bottom <= card.top, `${address}: the words clear of every card`).toBe(true);
       if (isMobile) {

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { serverNoteShare } from "./server-settings";
 
 /**
  * "A surprise inside": a planned date or a trip, wrapped as a present at the end of any gift. From
@@ -48,9 +49,13 @@ async function showPreview(page: Page, isMobile: boolean, name = "Preview") {
 }
 
 test.describe("a surprise inside", () => {
-  test("a plan goes into The Letter, and unwraps at the end with its stops and their pictures", async ({ page, isMobile }) => {
+  test("a plan goes into The Letter, and unwraps at the end with its stops and their pictures", async ({ page, isMobile, request }) => {
     // The editor, the template and the end of a typed letter: generous against a dev server.
     test.setTimeout(180_000);
+    // A visitor charged in euros, with or without the live site's currencies switch (with it, an en-US browser is charged dollars).
+    await page.setExtraHTTPHeaders({ "x-vercel-ip-country": "DE" });
+    // What is free follows the server's free-note setting: The Letter, and Constellations only where the short note is not for everyone.
+    const freeGifts = (await serverNoteShare(request)) >= 1 ? 1 : 2;
     const noErrors = watchErrors(page);
     await quietWorld(page);
     await withPlan(page);
@@ -65,7 +70,8 @@ test.describe("a surprise inside", () => {
     await expect(chooser.getByTestId("chooser-the-letter")).toContainText("The surprise inside: €7.49");
     await expect(chooser.getByTestId("chooser-vinyl")).toContainText("Surprise included");
     await chooser.getByRole("button", { name: "Free", exact: true }).click();
-    await expect(chooser.locator("[data-testid^=chooser-]")).toHaveCount(2);
+    await expect(chooser.locator("[data-testid^=chooser-]")).toHaveCount(freeGifts);
+    await expect(chooser.getByTestId("chooser-constellations")).toHaveCount(freeGifts === 2 ? 1 : 0);
     await chooser.getByTestId("chooser-the-letter").click();
 
     await page.waitForURL(/\/create\/the-letter/, { timeout: 60_000 });
