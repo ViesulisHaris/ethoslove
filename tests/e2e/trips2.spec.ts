@@ -316,7 +316,7 @@ test.describe("a trip's page", () => {
         const charged = (await chargedHere(request)).has(country.currency) ? country.currency : "eur";
         await page.goto("/es/trips/lisbon-slow-weekend");
         const fact = page.locator("dl > div").filter({ hasText: "Al día, para dos" }).locator("dd");
-        expect(plain((await fact.textContent()) ?? "").trim()).toBe(charged === "usd" ? "Unos 165–330 US$" : "Unos 150–300 €");
+        expect(plain((await fact.textContent()) ?? "").trim()).toBe(charged === "usd" ? "Unos 165–330 $" : "Unos 150–300 €");
       });
     });
   }

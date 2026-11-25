@@ -70,11 +70,14 @@ describe("a trip's day costs in the page's currency", () => {
     expect(sentence(2, "eur", "es")).toBe("Unos 150–300 € al día para dos");
     expect(sentence(3, "eur", "es")).toBe("Más de 300 € al día para dos");
     expect(sentence(2, "usd", "es")).toContain("165–330");
-    expect(sentence(2, "usd", "es")).toContain("US$");
+    // The narrow sign in Spanish too: never "US$" or "GBP" in running text.
+    expect(sentence(2, "usd", "es")).toBe("Unos 165–330 $ al día para dos");
+    expect(sentence(2, "gbp", "es")).toBe("Unos 125–250 £ al día para dos");
+    for (const c of CURRENCIES) for (const b of [1, 2, 3] as const) expect(sentence(b, c, "es")).not.toMatch(/US\$|GBP|USD|EUR/);
     // The short form on a trip's page.
     expect(sentence(2, "usd", "en", true)).toBe("About $165–330");
     expect(sentence(2, "eur", "es", true)).toBe("Unos 150–300 €");
-    expect(sentence(2, "usd", "es", true)).toBe("Unos 165–330 US$");
+    expect(sentence(2, "usd", "es", true)).toBe("Unos 165–330 $");
     for (const c of CURRENCIES) for (const b of [1, 2] as const) expect(sentence(b, c, "en", true)).toMatch(/^About /);
   });
 

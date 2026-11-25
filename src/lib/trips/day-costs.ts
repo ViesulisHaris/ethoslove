@@ -21,9 +21,13 @@ export function dayCost(eur: number, currency: Currency): number {
   return currency === "eur" ? eur : roundToFive(eur * DAY_COST_RATES[currency]);
 }
 
-/** "€150", "150 €", "$165", "165 US$", "£125", "125 GBP": whole units, the language's own order. */
+/**
+ * "€150", "150 €", "$165", "165 $", "£125", "125 £": whole units, the language's own order. The
+ * narrow sign, because Spanish would otherwise write "125 GBP" and "165 US$" in running text; the
+ * page's currency is the visitor's own, so "$" cannot be read as another dollar.
+ */
 export function dayCostText(amount: number, currency: Currency, locale: "en" | "es"): string {
-  return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+  return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), currencyDisplay: "narrowSymbol", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 }
 
 /** "€150–300", "150–300 €", "$165–330": one sign for the two ends, an en dash between. */
