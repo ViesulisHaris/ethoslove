@@ -1,9 +1,17 @@
 import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 
-const state = vi.hoisted(() => ({ db: null as unknown, allow: true }));
+const state = vi.hoisted(() => ({ db: null as unknown, allow: true, counts: new Map<string, number>() }));
 vi.mock("server-only", () => ({}));
-vi.mock("@/lib/rate-limit", () => ({ rateLimit: async () => state.allow }));
+// The limiter as it behaves in one process: a count per key, against that key's limit.
+vi.mock("@/lib/rate-limit", () => ({
+  rateLimit: async (key: string, { limit }: { limit: number }) => {
+    if (!state.allow) return false;
+    const n = (state.counts.get(key) ?? 0) + 1;
+    state.counts.set(key, n);
+    return n <= limit;
+  },
+}));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdminClient: () => state.db }));
 
 const route = await import("@/app/api/dates/votes/route");
@@ -21,7 +29,8 @@ function fakeDb({ rows = [], readError = null, rpcError = null }: { rows?: Rows;
 }
 
 const get = (t: string) => route.GET(new NextRequest(`https://ethos.test/api/dates/votes?t=${encodeURIComponent(t)}`));
-const post = (body: unknown) => route.POST(new NextRequest("https://ethos.test/api/dates/votes", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body) }));
+const post = (body: unknown, ip = "203.0.113.7") =>
+  route.POST(new NextRequest("https://ethos.test/api/dates/votes", { method: "POST", headers: { "x-forwarded-for": ip }, body: typeof body === "string" ? body : JSON.stringify(body) }));
 const GOOD = { changes: [{ target: "place:node/1", yes: 1, no: 0 }, { target: "idea:spa-evening", yes: 1, no: 0 }] };
 
 describe("the votes route, with the table missing and present (dates2)", () => {
@@ -29,6 +38,7 @@ describe("the votes route, with the table missing and present (dates2)", () => {
   beforeEach(() => {
     state.db = null;
     state.allow = true;
+    state.counts.clear();
     logged = vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => logged.mockRestore());
@@ -101,5 +111,38 @@ describe("the votes route, with the table missing and present (dates2)", () => {
     state.db = fakeDb({ rpcError: { code: "57014", message: "canceling statement due to statement timeout" } }).db;
     expect((await post(GOOD)).status).toBe(503);
     expect(logged).toHaveBeenCalledTimes(1);
+  });
+
+  it("A10 one address moves a place's counter once up and once down a month, however often it asks (dates2-C5)", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    const yes = { changes: [{ target: "place:node/9", yes: 1, no: 0 }] };
+    for (let i = 0; i < 5; i++) expect(await (await post(yes)).json()).toEqual({ ok: true });
+    expect(rpc).toHaveBeenCalledTimes(1);
+    // Wiping others' yes votes: one taken away, then nothing.
+    const wipe = { changes: [{ target: "place:node/9", yes: -1, no: 1 }] };
+    for (let i = 0; i < 5; i++) await post(wipe);
+    expect(rpc).toHaveBeenCalledTimes(2);
+    // Another address, or another place, is counted on its own.
+    await post(yes, "198.51.100.4");
+    await post({ changes: [{ target: "place:node/10", yes: 1, no: 0 }] });
+    expect(rpc).toHaveBeenCalledTimes(4);
+  });
+
+  it("A11 a person who answers yes and then changes to no is written both times", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    await post({ changes: [{ target: "place:node/1", yes: 1, no: 0 }, { target: "idea:spa-evening", yes: 1, no: 0 }] });
+    await post({ changes: [{ target: "place:node/1", yes: -1, no: 1 }, { target: "idea:spa-evening", yes: -1, no: 1 }] });
+    expect(rpc).toHaveBeenCalledTimes(2);
+    expect(rpc).toHaveBeenLastCalledWith("date_votes_apply", { p_targets: ["place:node/1", "idea:spa-evening"], p_yes: [-1, -1], p_no: [1, 1] });
+  });
+
+  it("A12 a tap mixing a spent change and a new one writes only the new one", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    await post({ changes: [{ target: "place:node/1", yes: 1, no: 0 }] });
+    await post({ changes: [{ target: "place:node/1", yes: 1, no: 0 }, { target: "place:node/2", yes: 1, no: 0 }] });
+    expect(rpc).toHaveBeenLastCalledWith("date_votes_apply", { p_targets: ["place:node/2"], p_yes: [1], p_no: [0] });
   });
 });
