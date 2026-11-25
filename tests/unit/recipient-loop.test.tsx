@@ -7,7 +7,7 @@ const counted: [string, Record<string, unknown> | undefined][] = [];
 vi.mock("@/lib/analytics/track", () => ({ track: (name: string, props?: Record<string, unknown>) => void counted.push([name, props]) }));
 
 import { MAKE_OWN_REF, RECIPIENT_REFS, WATERMARK_REF, madeWithEthosHref, recipientVia } from "@/lib/attribution/recipient";
-import { countRecipientEditorOpened, countRecipientGiftSent, countRecipientStarted, editorVia } from "@/lib/attribution/recipient-loop";
+import { askStartedWithin7, countRecipientEditorOpened, countRecipientGiftSent, countRecipientStarted, editorVia } from "@/lib/attribution/recipient-loop";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { REPLY_REF, replyEditorHref } from "@/lib/editor/reply-seed";
 import { ReactionSent } from "@/components/gift/reaction-sheet";
@@ -326,6 +326,38 @@ describe("recipient_started", () => {
     }
   });
 
+  // loop2-C5: the answer used to be asked for only on the first change, and the count sent after it
+  // came back (up to 4 s), so leaving the page in that wait lost the one exact count.
+  it("asks before the first change, so the count waits for an answer already asked for", async () => {
+    let answer!: (r: Response) => void;
+    const ask = vi.fn<typeof fetch>(() => new Promise<Response>((done) => (answer = done)));
+    const query = search(`ref=reply&reply=${TOKEN}`);
+    const asked = askStartedWithin7(query, ask);
+    expect(ask).toHaveBeenCalledTimes(1);
+    answer(new Response(JSON.stringify({ within7: false })));
+    await expect(asked).resolves.toBe(false);
+    const again = vi.fn<typeof fetch>();
+    await countRecipientStarted(query, again, asked);
+    expect(again).not.toHaveBeenCalled();
+    expect(counted).toEqual([["recipient_started", { within7: false }]]);
+    keep();
+  });
+
+  it("asks nothing where there is no token, or nothing would be counted", () => {
+    const ask = vi.fn<typeof fetch>();
+    for (const query of ["ref=g", "ref=tt-couple", `ref=tt-couple&reply=short`, `resume=publish&reply=${TOKEN}`])
+      expect(askStartedWithin7(search(query), ask)).toBeNull();
+    expect(ask).not.toHaveBeenCalled();
+  });
+
+  it("starts the question as a new draft opens and hands that same question to the count", () => {
+    const shell = readFileSync("src/components/editor/editor-shell.tsx", "utf8");
+    expect(shell).toContain("startAnswer.current = askStartedWithin7(search)");
+    expect(shell).toContain("countRecipientStarted(search, fetch, startAnswer.current)");
+    // Asked once the draft is known to be new, before (and whether or not) it is changed.
+    expect(shell.indexOf("askStartedWithin7(search)")).toBeLessThan(shell.indexOf("if (!dirty) return;"));
+  });
+
   it("carries no id: the event's data is exactly one boolean", () => {
     expect(all.length).toBeGreaterThanOrEqual(9);
     for (const [name, props] of all) {
@@ -340,7 +372,8 @@ describe("recipient_started", () => {
     const read = (file: string) => readFileSync(file, "utf8");
     const shell = read("src/components/editor/editor-shell.tsx");
     expect(shell.split("countRecipientStarted(")).toHaveLength(2);
-    expect(shell).toContain("!ready || !dirty || !fresh");
+    expect(shell).toContain("!ready || !fresh || startCounted.current");
+    expect(shell).toContain("if (!dirty) return;");
     expect(read("src/lib/editor/store.ts")).toContain("fresh: !remote && !local");
     expect(read("src/lib/analytics/track.ts")).toContain('| "recipient_started"');
     // Nothing on a gift page sends it.

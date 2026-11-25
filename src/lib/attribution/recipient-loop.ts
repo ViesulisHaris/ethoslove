@@ -48,20 +48,23 @@ export function countRecipientGiftSent(search: Search, template: string, paid: b
   if (via) track("recipient_gift_sent", { via, template, paid });
 }
 
+/** Whether a start made now would be counted, and through which door. */
+function startDoor(search: Search): RecipientVia | null {
+  if (isInApp() || search.get("resume") === "publish") return null;
+  return editorVia(search);
+}
+
 /**
- * A recipient began a gift of their own: the first change to a new draft, in an editor opened
- * through one of the doors out of a gift. Sent once, with one answer: was that within seven days of
- * the gift they came from being opened? The server says so when a sealed token names that gift
- * (a paid gift's "Send one back": /api/loop/started reads its first open); otherwise the door does
- * (./recipient-started.ts). Nothing is asked or counted inside the iPhone app.
+ * Where a sealed token names the gift (a paid gift's "Send one back"): ask the server, once, whether
+ * that gift was first opened within seven days. The editor asks as soon as a new draft opens, so the
+ * answer is nearly always in hand by the first change and the count is sent straight away, not
+ * after a wait in which the page could be left. Null: nothing to ask; a null answer: no answer
+ * (no connection, a server that couldn't say, or none within 4 s).
  */
-export async function countRecipientStarted(search: Search, ask: typeof fetch = fetch): Promise<void> {
-  if (isInApp() || search.get("resume") === "publish") return;
-  const via = editorVia(search);
-  if (!via) return;
-  let within7 = within7ByDoor(via);
+export function askStartedWithin7(search: Search, ask: typeof fetch = fetch): Promise<boolean | null> | null {
   const token = search.get("reply")?.trim() ?? "";
-  if (REPLY_TOKEN_SHAPE.test(token)) {
+  if (!REPLY_TOKEN_SHAPE.test(token) || !startDoor(search)) return null;
+  return (async () => {
     const stop = new AbortController();
     const timer = setTimeout(() => stop.abort(), 4000);
     try {
@@ -73,12 +76,28 @@ export async function countRecipientStarted(search: Search, ask: typeof fetch = 
         signal: stop.signal,
       });
       const said = (await res.json()) as { within7?: unknown } | null;
-      if (typeof said?.within7 === "boolean") within7 = said.within7;
+      return typeof said?.within7 === "boolean" ? said.within7 : null;
     } catch {
-      // No connection, or the server took too long: the door's answer stands.
+      return null;
     } finally {
       clearTimeout(timer);
     }
-  }
-  track("recipient_started", { within7 });
+  })();
+}
+
+/**
+ * A recipient began a gift of their own: the first change to a new draft, in an editor opened
+ * through one of the doors out of a gift. Sent once, with one answer: was that within seven days of
+ * the gift they came from being opened? The server says so when a sealed token names that gift (`asked`, from askStartedWithin7); otherwise the door does
+ * (./recipient-started.ts). Nothing is asked or counted inside the iPhone app.
+ */
+export async function countRecipientStarted(
+  search: Search,
+  ask: typeof fetch = fetch,
+  asked: Promise<boolean | null> | null = askStartedWithin7(search, ask),
+): Promise<void> {
+  const via = startDoor(search);
+  if (!via) return;
+  const said = asked ? await asked : null;
+  track("recipient_started", { within7: said ?? within7ByDoor(via) });
 }

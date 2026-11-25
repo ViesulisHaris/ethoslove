@@ -726,6 +726,8 @@ test.describe("a gift a recipient starts is counted once", () => {
     await countEvents(page);
     await page.goto(`/create/bouquet?ref=reply&reply=${token}`);
     await ready(page);
+    // Asked as the new draft opens, before any change (loop2-C5), so the count needs no wait.
+    await expect.poll(() => asked.length, { timeout: 15_000 }).toBe(1);
     await type(page);
     await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: false } }]);
     expect(asked).toEqual([{ reply: token }]);
