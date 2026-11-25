@@ -280,13 +280,13 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 | relationship day counter | 260 | 40 | 0 | – | same |
 | how long have we been together calculator | 140 | 30 | 6 | – | same |
 | days together counter | 70 | – | 0 | – | same |
-| questions to ask your boyfriend | 74,000 | 9,900 | 0 | – | new page needed (/games/deck has 96 cards titled 'questions to ask your partner') |
+| questions to ask your boyfriend | 74,000 | 9,900 | 0 | – | new page needed (/games/questions-for-couples has 96 cards titled 'questions to ask your partner') |
 | deep questions to ask your boyfriend | 4,400 | – | 8 | – | same |
 | questions to ask your girlfriend | 40,500 | – | 4 | – | new page needed |
-| would you rather questions for couples | 12,100 | 1,900 | 0 | – | /games/rather |
-| would you rather questions | 246,000 | – | 14 | – | /games/rather (stretch) |
-| truth or dare questions for couples | 4,400 | 880 | 0 | – | /games/dare |
-| how well do you know me quiz | 1,600 | 880 | 0 | – | /games/know |
+| would you rather questions for couples | 12,100 | 1,900 | 0 | – | /games/would-you-rather |
+| would you rather questions | 246,000 | – | 14 | – | /games/would-you-rather (stretch) |
+| truth or dare questions for couples | 4,400 | 880 | 0 | – | /games/truth-or-dare |
+| how well do you know me quiz | 1,600 | 880 | 0 | – | /games/how-well-do-you-know-me |
 | couple games online | 6,600 | 1,600 | 1 | – | /games |
 | love language quiz | 49,500 | – | 23 | – | /tools/love-language-quiz (built 13 Nov; the odds are under "Love language quiz") |
 
@@ -341,8 +341,8 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 | tarjeta de cumpleaños virtual | 70 | 0 | – | /es/templates/birthday-cinema |
 | felicitacion de cumpleaños | 49,500 | 0 | – | birthday templates (stretch) |
 | relacion a distancia | 480 | 0 | – | /es/long-distance |
-| preguntas para parejas | 1,600 | 0 | – | /es/games/deck |
-| preguntas para mi novio | 390 | 0 | – | /es/games/know |
+| preguntas para parejas | 1,600 | 0 | – | /es/games/questions-for-couples |
+| preguntas para mi novio | 390 | 0 | – | /es/games/how-well-do-you-know-me |
 | cosas bonitas para decirle a tu novio | 260 | 0 | – | ES post (its current target) |
 | canciones para dedicar a tu novio | 390 | 0 | – | ES post (its current target) |
 | regalos originales | 74,000 | 1 | – | /es/gifts (stretch, shopping results) |
@@ -367,9 +367,9 @@ and, where it says GSC, Search Console's average (4–10 Nov).
 | 5 | Scratch-card makers (scratch card maker 110 + 110, digital scratch card 70 + 50, virtual 10 + 30) | 380 | make or send | embeddable.co, a YouTube how-to, small makers, Etsy | /templates/scratch-card | 25, 40 and 50; GSC 10.6 for "scratch card maker" |
 | 6 | Digital gift for someone (for him 260 + 30, for her 70 + 20, for mom 50, for boyfriend 30, anniversary 30, online or virtual gift for boyfriend or girlfriend 30–40 each, and more) | 720 | make or send | Etsy, Pinterest, gifft.me, myheartcraft.com, Good Housekeeping | /gifts/for-* and /occasions/anniversary | 7 (digital anniversary gift), 30 (mom), 50 (husband), 53 (him), 71 (boyfriend), 86 (online gift for boyfriend) |
 | 7 | Virtual hug | 9,400 | send (Labs: informational) | attachedapp.com, Pinterest, Russell Stover; the AI Overview cites Giphy, Tenor, Reddit and YouTube | none yet: a free "send a hug" page | – |
-| 8 | Would you rather questions for couples | 14,000 | play | BuzzFeed, Candle (150 questions), Refinery29, Connected Couples (250+) | /games/rather (150 pairs) | not in the top 100 |
+| 8 | Would you rather questions for couples | 14,000 | play | BuzzFeed, Candle (150 questions), Refinery29, Connected Couples (250+) | /games/would-you-rather (150 pairs) | not in the top 100 |
 | 9 | Couple games online | 8,200 | play | couplegame.app #1; the AI Overview cites couples apps (Lovebae, Lovon, Connected Couples) | /games | not in the top 100 |
-| 10 | Truth or dare questions for couples | 5,280 | play | blog.xdares.com #1; the AI Overview cites no outside site | /games/dare | not in the top 100 |
+| 10 | Truth or dare questions for couples | 5,280 | play | blog.xdares.com #1; the AI Overview cites no outside site | /games/truth-or-dare | not in the top 100 |
 | 11 | Reasons why I love you (+ "things i love about you" 1,600, 5,400 in February) | 8,600 | read, then the jar | thesavvysparrow.com, Pinterest, old personal pages, Reddit: the weakest big top 10 here | blog: reasons-why-i-love-you + /templates/jar-of-reasons | not in the top 100 |
 | 12 | Long-distance date ideas ("date ideas for long distance" 5,400; "virtual date ideas" 1,600 + 140) | 7,140 | read (our core couples) | Reddit r/LongDistance, endlessdistances.com, Candle, Cozymeal | blog: virtual-date-ideas-long-distance | 96, for its own phrase (70 searches) |
 | 13 | Open when letters (3,600 + 880) | 4,480 | read, then make | Pinterest; the AI Overview cites three open-when makers | blog: open-when-letter-ideas | not in the top 100 |
@@ -821,8 +821,8 @@ taken these in, and re-ordering the queue is that routine's job.
 
 | # | Topic (English target) | US / mo | UK / mo | KD | Spanish side (Spain / mo) | Leads to |
 |--:|---|--:|--:|--:|---|---|
-| 1 | Questions to ask your boyfriend (+ "deep questions…" 4,400 in the body) | 74,000 | 9,900 | 0 | preguntas para mi novio (390) | /games/know, /games/deck |
-| 2 | Questions to ask your girlfriend | 40,500 | – | 4 | preguntas para parejas (1,600, broader) | /games/deck |
+| 1 | Questions to ask your boyfriend (+ "deep questions…" 4,400 in the body) | 74,000 | 9,900 | 0 | preguntas para mi novio (390) | /games/how-well-do-you-know-me, /games/questions-for-couples |
+| 2 | Questions to ask your girlfriend | 40,500 | – | 4 | preguntas para parejas (1,600, broader) | /games/questions-for-couples |
 | 3 | Virtual hug: ways to send one that lands | 8,100 | 1,300 | 0 | not measured | templates (a free hug page later) |
 | 4 | Love letter for girlfriend | 2,400 | 480 | 2 | carta de amor para mi novia (880) | /templates/the-letter |
 | 5 | Long distance relationship tips | 1,900 | – | 24 | relación a distancia (480) | /long-distance |
@@ -869,7 +869,7 @@ Proposals only; no site code was changed for this doc. Most of these are now und
 - **/long-distance** is titled "Long distance: meet halfway, date across time zones", which matches nothing
   people search. "Long-Distance Relationship Gifts and Date Ideas" would cover "gift for long distance
   love" (2,900) and "date ideas for long distance" (5,400).
-- **/games/deck** ("Questions to Ask Your Partner: Free Card Game"): the searched phrasing is "questions to
+- **/games/questions-for-couples** ("Questions to Ask Your Partner: Free Card Game"): the searched phrasing is "questions to
   ask your boyfriend" (74,000) and "…girlfriend" (40,500). Two list pages that open the deck would match it.
 - **/templates/the-letter**: add "online", "maker" or "template" ("love letter template" 880, "love letter
   generator" 390, "online love letter" 260).
