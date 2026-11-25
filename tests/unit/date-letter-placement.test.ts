@@ -51,10 +51,10 @@ describe("where the date letter's box is", () => {
     expect(readFileSync(join(ROOT, "src/components/date-letter/letter-box.tsx"), "utf8")).not.toContain("useTranslations");
   });
 
-  it("P2 the box adds at most twenty words, and says what comes", () => {
+  it("P2 the box adds at most twenty words, its field's visible label included, and says what comes", () => {
     for (const messages of [en, es]) {
       const w = messages.dateLetter;
-      const n = [w.title, w.line, w.send, w.privacy].join(" ").split(/\s+/).filter(Boolean).length;
+      const n = [w.title, w.line, w.emailLabel, w.send, w.privacy].join(" ").split(/\s+/).filter(Boolean).length;
       expect(n).toBeLessThanOrEqual(20);
     }
     expect(en.dateLetter.line).toBe("One date idea every Thursday. Stop any time.");

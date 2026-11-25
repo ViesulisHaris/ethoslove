@@ -137,7 +137,7 @@ test("B3 (on) never where it must not be", async ({ page, request }) => {
   expect(gets).toEqual([]);
 });
 
-test("B4 (on) no list, no box, no gap", async ({ page, request }) => {
+test("B4 (on) no list, no box, no gap; while it is asked, its place is held and nothing moves when it shows (letter-C12)", async ({ page, request }) => {
   await needs("on", request);
   const path = "/dates/ideas/cheap";
   const heightWith = async (get: Get | number | "hold") => {
@@ -149,12 +149,24 @@ test("B4 (on) no list, no box, no gap", async ({ page, request }) => {
     const slot = await page.locator("[data-letter-slot]").evaluate((el) => el.getBoundingClientRect().height);
     return { slot, page: await page.evaluate(() => document.documentElement.scrollHeight) };
   };
-  await page.setViewportSize({ width: 375, height: 812 });
-  const never = await heightWith("hold");
-  for (const get of [{ available: false, email: null, state: "none" } as Get, 503]) {
-    const seen = await heightWith(get);
-    expect(seen.slot, String(get)).toBe(0);
-    expect(seen.page, String(get)).toBe(never.page);
+  for (const size of [{ width: 375, height: 812 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(size);
+    // Never answered: held, unseen, out of reach.
+    const held = await heightWith("hold");
+    expect(held.slot, `${size.width} held`).toBeGreaterThan(200);
+    await expect(page.locator("[data-letter-wait]")).toHaveCSS("visibility", "hidden");
+    await expect(page.getByTestId("letter-box")).toHaveCount(0);
+    expect(await page.locator("[data-letter-wait] input").evaluate((el) => el.closest("[inert]") !== null)).toBe(true);
+    // Answered: the box shows in exactly that place.
+    const shown = await heightWith(NONE);
+    await expect(page.getByTestId("letter-box")).toBeVisible();
+    expect(Math.abs(shown.slot - held.slot), `${size.width}: the box's arrival`).toBeLessThanOrEqual(1);
+    expect(shown.page, `${size.width}: the page's height`).toBe(held.page);
+    // No list, or no answer: nothing at all.
+    for (const get of [{ available: false, email: null, state: "none" } as Get, 503]) {
+      const seen = await heightWith(get);
+      expect(seen.slot, `${size.width} ${JSON.stringify(get)}`).toBe(0);
+    }
   }
 });
 
@@ -177,7 +189,10 @@ test("B5 (on) asking", async ({ page, request }) => {
   expect(await page.evaluate(() => document.activeElement?.getAttribute("data-testid"))).toBe("letter-send");
   await expect(box.getByTestId("letter-done")).toHaveText("Check your inbox. One tap there and you’re in.");
   expect(posts).toEqual([{ email: "sam@mail.com", locale: "en", path: "/dates/ideas/cheap" }]);
-  expect(await page.evaluate(() => document.activeElement?.getAttribute("data-testid"))).toBe("letter-status");
+  // Focus is on the line itself, read once (letter-T12): no hidden copy of it anywhere in the box.
+  expect(await page.evaluate(() => document.activeElement?.getAttribute("data-testid"))).toBe("letter-done");
+  expect(await box.evaluate((el) => (el as HTMLElement).textContent!.split("Check your inbox.").length - 1)).toBe(1);
+  await expect(box.getByTestId("letter-status")).toHaveAttribute("role", "status");
 });
 
 test("B6 (on) in Spanish", async ({ page, request }) => {
@@ -185,7 +200,7 @@ test("B6 (on) in Spanish", async ({ page, request }) => {
   const { posts } = await answer(page);
   const box = await boxOn(page, "/es/dates/ideas/cheap");
   await expect(box).toContainText("La carta de citas");
-  await expect(box).toContainText("Una idea de cita cada jueves. Date de baja cuando quieras.");
+  await expect(box).toContainText("Una idea de cita cada jueves. Cancélala cuando quieras.");
   await expect(box.getByTestId("letter-send")).toHaveText("Envíame la carta");
   await box.getByTestId("letter-email").fill("sam@mail.com");
   await box.getByTestId("letter-send").click();
@@ -239,6 +254,15 @@ test("B9 (on) signed in, the address is there and still has to be pressed", asyn
   expect(posts).toHaveLength(1);
 });
 
+test("B9b (on) signed in with an address on the unsubscribe list, the box says so (letter-C6)", async ({ page, request }) => {
+  await needs("on", request);
+  await answer(page, { available: true, email: "sam@mail.com", state: "none" }, { json: { ok: true, state: "blocked" } });
+  const box = await boxOn(page, "/dates/ideas/cheap");
+  await box.getByTestId("letter-send").click();
+  await expect(box.getByTestId("letter-done")).toHaveText("This address is on our unsubscribe list. Write to us to change that.");
+  await expect(box.getByRole("button", { name: "Use another address" })).toBeVisible();
+});
+
 test("B10 (on) already on the list", async ({ page, request }) => {
   await needs("on", request);
   await answer(page, { available: true, email: "sam@mail.com", state: "on" });
@@ -252,7 +276,7 @@ test("B10 (on) already on the list", async ({ page, request }) => {
 test("B11 (dev) the box never changes height", async ({ page, request }) => {
   await needs("dev", request);
   test.setTimeout(240_000);
-  for (const width of [375, 1280]) {
+  for (const width of [320, 375, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     for (const variant of ["card", "band"]) {
       for (const locale of ["", "/es"]) {
@@ -261,12 +285,50 @@ test("B11 (dev) the box never changes height", async ({ page, request }) => {
           return page.getByTestId("letter-box").evaluate((el) => el.getBoundingClientRect().height);
         };
         const empty = await height("empty");
-        for (const state of ["sending", "asked", "on", "invalid", "limited", "failed"]) {
+        for (const state of ["sending", "asked", "on", "blocked", "invalid", "limited", "failed"]) {
           expect(Math.abs((await height(state)) - empty), `${width} ${variant} ${locale || "/en"} ${state}`).toBeLessThanOrEqual(1);
         }
       }
     }
   }
+});
+
+test("B17 (on) a corrected address loses its error as it is typed, and nothing moves (letter-T7)", async ({ page, request }) => {
+  await needs("on", request);
+  await answer(page);
+  const box = await boxOn(page, "/dates/ideas/cheap");
+  const height = () => box.evaluate((el) => el.getBoundingClientRect().height);
+  const before = await height();
+  await box.getByTestId("letter-email").fill("sam@mail");
+  await box.getByTestId("letter-send").click();
+  await expect(box.getByRole("alert")).toHaveText("Check the email address.");
+  await expect(box.getByTestId("letter-email")).toHaveAttribute("aria-invalid", "true");
+  await box.getByTestId("letter-email").pressSequentially(".com");
+  await expect(box.getByRole("alert")).toHaveCount(0);
+  await expect(box.getByTestId("letter-email")).not.toHaveAttribute("aria-invalid", "true");
+  await expect(box.getByTestId("letter-email")).toHaveValue("sam@mail.com");
+  expect(Math.abs((await height()) - before)).toBeLessThanOrEqual(1);
+});
+
+test("B18 (on) a reader who is already past the box when the page wakes still gets it (letter-T8)", async ({ page, request }) => {
+  await needs("on", request);
+  await page.setViewportSize({ width: 375, height: 812 });
+  const { gets } = await answer(page);
+  // 4,000 px of room after the page, and the reader already at its very end before the box can be
+  // watched: the box is far more than the observer's 800 px margin above the screen.
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      const room = document.createElement("style");
+      room.textContent = "body::after{content:'';display:block;height:4000px}";
+      document.head.append(room);
+      window.scrollTo(0, document.documentElement.scrollHeight);
+    });
+  });
+  await page.goto("/dates/ideas/cheap");
+  await expect.poll(() => gets.length, { timeout: 15_000 }).toBeGreaterThan(0);
+  const box = page.getByTestId("letter-box");
+  await expect(box).toHaveCount(1);
+  expect(await box.evaluate((el) => el.getBoundingClientRect().bottom)).toBeLessThan(-800);
 });
 
 test("B12 (on) by keyboard", async ({ page, request }) => {
@@ -282,6 +344,9 @@ test("B12 (on) by keyboard", async ({ page, request }) => {
   await page.keyboard.press("Tab");
   expect(await focused()).toBe("letter-email");
   expect(await ring()).toBe(true);
+  // A visible label, tied to the field (letter-C19).
+  await expect(box.getByLabel("Your email")).toBeFocused();
+  await expect(box.locator("label")).toBeVisible();
   await page.keyboard.press("Tab");
   expect(await focused()).toBe("letter-send");
   expect(await ring()).toBe(true);
@@ -293,9 +358,9 @@ test("B12 (on) by keyboard", async ({ page, request }) => {
   await page.keyboard.press("Enter");
   await expect(box.getByTestId("letter-done")).toBeVisible();
   expect(posts).toHaveLength(1);
-  // Focus is on the line that says so; "Use another address" is just before it.
-  expect(await focused()).toBe("letter-status");
-  await page.keyboard.press("Shift+Tab");
+  // Focus is on the line that says so; "Use another address" is just after it.
+  expect(await focused()).toBe("letter-done");
+  await page.keyboard.press("Tab");
   expect(await focused()).toBe("Use another address");
   await page.keyboard.press("Enter");
   await expect(box.getByTestId("letter-email")).toBeFocused();
@@ -359,7 +424,8 @@ for (const size of [{ width: 1440, height: 900 }, { width: 375, height: 812 }]) 
         await toEnd(page);
         await expect(page.getByTestId("letter-box")).toHaveCount(1);
         await settle(page);
-        const m = await measure(page);
+        // /dates is not built on a page theme: its words are counted in <main> (navigation and footer aside, as the rule says).
+        const m = await measure(page, (await page.locator("[data-page-theme]").count()) ? "[data-page-theme]" : "main");
         const where = `${locale}${path} ${size.width}`;
         expect(m.count, `${where}: words`).toBeLessThanOrEqual(300);
         expect(m.overlaps, where).toEqual([]);
