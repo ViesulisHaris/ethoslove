@@ -78,6 +78,15 @@ export const env = {
   /** TikTok Events Manager → Test events: while set, server events go there instead of counting. */
   tiktokTestEventCode: read("TIKTOK_TEST_EVENT_CODE"),
 
+  /**
+   * Google Ads: the account's tag id ("AW-…") and the label of its purchase conversion, written out
+   * literally for the same reason as `clarityId`. Both are needed: with either unset nothing of
+   * Google's loads and nothing is sent. Google has no server-side report here; only the buyer's
+   * browser tells it about a sale (lib/analytics/google.ts).
+   */
+  googleAdsId: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || undefined,
+  googleAdsPurchaseLabel: process.env.NEXT_PUBLIC_GOOGLE_ADS_PURCHASE_LABEL || undefined,
+
   sentryDsn: read("NEXT_PUBLIC_SENTRY_DSN"),
 
   anthropicApiKey: read("ANTHROPIC_API_KEY"),
@@ -126,8 +135,9 @@ export const isConfigured = {
   clarity: Boolean(env.clarityId),
   metaPixel: Boolean(env.metaPixelId),
   tiktokPixel: Boolean(env.tiktokPixelId),
+  googleAds: Boolean(env.googleAdsId && env.googleAdsPurchaseLabel),
   /** Whether anything on the site waits for the cookie banner's answer, so whether it asks at all. */
-  cookieConsent: Boolean(env.clarityId || env.metaPixelId || env.tiktokPixelId),
+  cookieConsent: Boolean(env.clarityId || env.metaPixelId || env.tiktokPixelId || (env.googleAdsId && env.googleAdsPurchaseLabel)),
   sentry: Boolean(env.sentryDsn),
   ai: Boolean(env.anthropicApiKey),
   /** The help chat answers (SUPPORT_CHAT_ENABLED=false switches it off; =true shows it without a key, for the UI). */

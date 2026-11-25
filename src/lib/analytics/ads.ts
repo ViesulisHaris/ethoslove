@@ -2,24 +2,26 @@ import { env } from "@/lib/env";
 import { isInApp } from "@/lib/app/bridge";
 import { currentFbc, currentTtclid } from "@/lib/attribution/click-ids";
 import { getConsent, isAdTrackingOff, isAdTrackingOffHere, type Consent } from "./consent";
+import { sendToGoogle } from "./google";
 import { sendToMeta } from "./meta";
 import { sendToTikTok } from "./tiktok";
 
 /**
- * The ad pixels' side of the site, Meta's (Facebook, Instagram) and TikTok's: which pages they may run
- * on, what each page reports, the sale handed from the success page to the next page, and what a
- * checkout tells our server so the webhook can report the sale itself (lib/ads). The component that
- * loads them is components/shared/ad-pixels.tsx; each pixel's own wiring is in ./meta.ts and ./tiktok.ts.
+ * The ad pixels' side of the site, Meta's (Facebook, Instagram), TikTok's and Google's: which pages
+ * they may run on, what each page reports, the sale handed from the success page to the next page, and
+ * what a checkout tells our server so the webhook can report the sale itself (lib/ads). The component
+ * that loads them is components/shared/ad-pixels.tsx; each one's own wiring is in ./meta.ts,
+ * ./tiktok.ts and ./google.ts.
  *
  * They run only while all four hold: the pixel's id is configured, the visitor said yes in the cookie
- * banner (which names advertising, Meta and TikTok), this is not the iPhone app (which promises no
- * tracking), and the page is not one whose address must stay ours (`isAdTrackingOff`). Every event goes
- * through `adTrack`, which checks.
+ * banner (which names advertising, Google, Meta and TikTok), this is not the iPhone app (which promises
+ * no tracking), and the page is not one whose address must stay ours (`isAdTrackingOff`). Every event
+ * goes through `adTrack`, which checks.
  *
- * What they report is what retargeting needs, per template: a template's page or editor opened
- * (ViewContent, with the template and its tier), the price seen (PaywallSeen), pay tapped
+ * What Meta and TikTok are told is what retargeting needs, per template: a template's page or editor
+ * opened (ViewContent, with the template and its tier), the price seen (PaywallSeen), pay tapped
  * (InitiateCheckout) and the sale (Purchase). "Opened a premium editor, didn't buy" is an audience
- * either ads manager can build from these.
+ * either ads manager can build from these. Google is told the sale and nothing else (./google.ts).
  */
 
 export type AdContent = { id: string; category?: string };
@@ -28,12 +30,13 @@ export type AdEvent =
   | { name: "PageView" }
   | { name: Exclude<AdEventName, "PageView">; contents: AdContent[]; value?: number; currency?: string; eventId?: string };
 
-export type AdPixelIds = { meta?: string; tiktok?: string };
+export type AdPixelIds = { meta?: string; tiktok?: string; google?: string };
 
-export const AD_PIXELS: AdPixelIds = { meta: env.metaPixelId, tiktok: env.tiktokPixelId };
+/** Google's is its tag id, and only with the purchase label beside it: the sale is all it is told. */
+export const AD_PIXELS: AdPixelIds = { meta: env.metaPixelId, tiktok: env.tiktokPixelId, google: env.googleAdsPurchaseLabel ? env.googleAdsId : undefined };
 
 export function pixelsMayRun(input: { ids: AdPixelIds; consent: Consent | null; pathname: string; inApp: boolean }): boolean {
-  return Boolean(input.ids.meta || input.ids.tiktok) && input.consent === "granted" && !input.inApp && !isAdTrackingOff(input.pathname);
+  return Boolean(input.ids.meta || input.ids.tiktok || input.ids.google) && input.consent === "granted" && !input.inApp && !isAdTrackingOff(input.pathname);
 }
 
 /** Set by the pixel component: loaded, consented and on a page they may run on. */
@@ -49,6 +52,7 @@ export function adTrack(event: AdEvent): void {
   if (!live || typeof window === "undefined" || isAdTrackingOffHere(window.location)) return;
   sendToMeta(event);
   sendToTikTok(event);
+  sendToGoogle(event);
 }
 
 /**
