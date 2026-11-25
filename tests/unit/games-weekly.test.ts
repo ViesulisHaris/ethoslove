@@ -177,6 +177,15 @@ describe("the weekly sets", () => {
     expect(together).toContain("<ShelfCard game={weeklyAskGame(set)}");
   });
 
+  it("S9: the cards a reader stopped at as off their theme stay out, and a pick names its object without its game's prompt (games2-D4)", () => {
+    const offTheme = ["What's the first thing we're doing when I land?", "Kiss me like it's the airport.", "What would you cook for me if I were ill?", "Give me a ten-second shoulder rub. Count out loud.", "Draw my portrait in 30 seconds, then show me."];
+    for (const s of WEEKLY_SETS) for (const line of [s.ask[1], s.dare]) expect(offTheme, s.id).not.toContain(line);
+    // On the weekly page the prompt is only "This or that?": the laundry and the music are named on the cards.
+    const pick = (id: string) => THIS_PAIRS.find((p) => p.id === id)!;
+    expect(pick("laundry").a).toEqual({ en: "Fold the laundry now", es: "Doblar la ropa ya" });
+    for (const side of [pick("road-music").a, pick("road-music").b]) expect(side.es).toMatch(/la música/);
+  });
+
   it("S7: the dares can be done outside a game, and nothing names a place in Spain", () => {
     for (const s of WEEKLY_SETS) expect(weeklyCards(s).dare.en, s.id).not.toMatch(/next turn|rest of the game/i);
     expect(JSON.stringify(WEEKLY_SETS)).not.toMatch(/Spain|España|Madrid|Barcelona|Valencia|Sevilla|Seville/);
