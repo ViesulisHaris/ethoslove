@@ -1,9 +1,11 @@
+import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const counted = vi.hoisted(() => [] as unknown[][]);
 vi.mock("@/lib/analytics/track", () => ({ track: (...args: unknown[]) => void counted.push(args) }));
 
 import { ROOMS, roomOf } from "@/components/marketing/rooms";
+import { PLACEMENT_ROOM } from "@/lib/trips/partners";
 import { ROOMS_KEY, VISITED_ROOMS, dayOf, parseMarker, seeRoom, visitedRoom, type RoomsMarker, type VisitedRoom } from "@/lib/analytics/rooms-marker";
 
 /**
@@ -231,5 +233,17 @@ describe("in the browser", () => {
     noteRoomVisit("/dates", NOW);
     expect(store.getItem(ROOMS_KEY)).toBeNull();
     expect(counted).toEqual([]);
+  });
+});
+
+describe("partner clicks per room", () => {
+  it("every partner button is in one room", () => {
+    expect(Object.keys(PLACEMENT_ROOM).sort()).toEqual(["city", "gift_share", "meet_middle", "place_sheet", "plan", "trip_car", "trip_flights", "trip_tickets", "trips_finder"]);
+    for (const room of Object.values(PLACEMENT_ROOM)) expect(VISITED_ROOMS).toContain(room);
+    for (const placement of ["trips_finder", "trip_flights", "trip_tickets", "trip_car"] as const) expect(PLACEMENT_ROOM[placement]).toBe("trips");
+  });
+
+  it("the click still carries the partner and the placement, and nothing new", () => {
+    expect(readFileSync("src/components/trips/partner-link.tsx", "utf8")).toContain('track("affiliate_click", { partner, placement, ...(trip ? { trip } : {}) })');
   });
 });
