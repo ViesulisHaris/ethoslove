@@ -733,6 +733,20 @@ test.describe("a gift a recipient starts is counted once", () => {
     expect(asked).toEqual([{ reply: token }]);
   });
 
+  // loop2-T1: /made-with-ethos offers several "Make this gift"; trying two used to count twice.
+  test("a second template tried in the same visit is the same recipient: counted once", async ({ page }) => {
+    await countEvents(page);
+    await page.goto("/create/the-letter?ref=g");
+    await ready(page);
+    await type(page);
+    await expect.poll(() => started(page), { timeout: 15_000 }).toEqual([{ name: "recipient_started", data: { within7: true } }]);
+    await page.goto("/create/constellations?ref=g");
+    await ready(page);
+    await type(page);
+    await page.waitForTimeout(1500);
+    expect(await started(page)).toEqual([]);
+  });
+
   // loop2-C1: a demo's badge used to carry ?ref=watermark, so a visitor who tapped it and began a
   // gift was counted as a recipient within seven days.
   test("a demo's badge tags nobody: the editor reached through it counts no recipient", async ({ page }) => {

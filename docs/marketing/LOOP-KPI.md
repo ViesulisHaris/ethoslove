@@ -101,8 +101,9 @@ What `within7` means, door by door:
 | "Send one back" on any other gift, "or make one for someone else", the badge | `true`. The tag lives in the tab's memory only, so the gift is being started in the same visit the gift was opened in. Not known: whether that gift was first opened more than seven days earlier and is being watched again. |
 | The reminder a kept gift sends (`gift-keep`) | `false`. It goes out nine days before a date, usually months after the gift. A gift kept less than a week before its reminder is counted on the wrong side. |
 
-What the number cannot say: the bottom counts gifts, the top counts gifts started, so one
-recipient who starts two is two; a recipient who comes back another day by typing the address is
+What the number cannot say: the bottom counts gifts, the top counts visits (a browser tab) in which
+a recipient started one, so trying two templates from `/made-with-ethos` is one, but the same
+person on a phone and then a laptop, or in two tabs, is two; a recipient who comes back another day by typing the address is
 nobody's (as before); a gift deleted since takes its opens with it, so read a week soon after it
 ends; a sender who looks at their own gift signed out is that gift's first open. If the Events
 page does not split an event by a property, ask for the event to be named per answer

@@ -7,7 +7,7 @@ const counted: [string, Record<string, unknown> | undefined][] = [];
 vi.mock("@/lib/analytics/track", () => ({ track: (name: string, props?: Record<string, unknown>) => void counted.push([name, props]) }));
 
 import { MAKE_OWN_REF, RECIPIENT_REFS, WATERMARK_REF, madeWithEthosHref, recipientVia } from "@/lib/attribution/recipient";
-import { askStartedWithin7, countRecipientEditorOpened, countRecipientGiftSent, countRecipientStarted, editorVia } from "@/lib/attribution/recipient-loop";
+import { STARTED_NOTE, askStartedWithin7, countRecipientEditorOpened, countRecipientGiftSent, countRecipientStarted, editorVia } from "@/lib/attribution/recipient-loop";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { REPLY_REF, replyEditorHref } from "@/lib/editor/reply-seed";
 import { ReactionSent } from "@/components/gift/reaction-sheet";
@@ -356,6 +356,33 @@ describe("recipient_started", () => {
     expect(shell).toContain("countRecipientStarted(search, fetch, startAnswer.current)");
     // Asked once the draft is known to be new, before (and whether or not) it is changed.
     expect(shell.indexOf("askStartedWithin7(search)")).toBeLessThan(shell.indexOf("if (!dirty) return;"));
+  });
+
+  // loop2-T1: a recipient who typed into two templates from /made-with-ethos was counted twice.
+  it("is sent once per visit: a second template in the same tab is the same recipient", async () => {
+    const notes = new Map<string, string>();
+    vi.stubGlobal("window", {
+      sessionStorage: { getItem: (k: string) => notes.get(k) ?? null, setItem: (k: string, v: string) => void notes.set(k, v) },
+    });
+    try {
+      const ask = answering({ within7: false });
+      await countRecipientStarted(search("ref=g"), ask);
+      await countRecipientStarted(search("ref=g"), ask);
+      await countRecipientStarted(search(`ref=reply&reply=${TOKEN}`), ask);
+      expect(counted).toEqual([["recipient_started", { within7: true }]]);
+      expect([...notes]).toEqual([[STARTED_NOTE, "1"]]);
+      // Nothing is asked once the visit is counted.
+      expect(askStartedWithin7(search(`ref=reply&reply=${TOKEN}`), ask)).toBeNull();
+      expect(ask).not.toHaveBeenCalled();
+      keep();
+      // A new tab (nothing noted) counts again.
+      notes.clear();
+      counted.length = 0;
+      await countRecipientStarted(search("ref=watermark"), ask);
+      expect(counted).toEqual([["recipient_started", { within7: true }]]);
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("carries no id: the event's data is exactly one boolean", () => {

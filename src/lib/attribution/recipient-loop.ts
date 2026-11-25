@@ -48,9 +48,28 @@ export function countRecipientGiftSent(search: Search, template: string, paid: b
   if (via) track("recipient_gift_sent", { via, template, paid });
 }
 
+/** In this tab's memory once a visit's start is counted (sessionStorage: gone with the tab). */
+export const STARTED_NOTE = "ethos-recipient-started";
+
+function startedThisVisit(): boolean {
+  try {
+    return window.sessionStorage.getItem(STARTED_NOTE) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function noteStarted(): void {
+  try {
+    window.sessionStorage.setItem(STARTED_NOTE, "1");
+  } catch {
+    // No storage (a private window that refuses it, or no window at all): counted per gift instead.
+  }
+}
+
 /** Whether a start made now would be counted, and through which door. */
 function startDoor(search: Search): RecipientVia | null {
-  if (isInApp() || search.get("resume") === "publish") return null;
+  if (isInApp() || search.get("resume") === "publish" || startedThisVisit()) return null;
   return editorVia(search);
 }
 
@@ -87,8 +106,10 @@ export function askStartedWithin7(search: Search, ask: typeof fetch = fetch): Pr
 
 /**
  * A recipient began a gift of their own: the first change to a new draft, in an editor opened
- * through one of the doors out of a gift. Sent once, with one answer: was that within seven days of
- * the gift they came from being opened? The server says so when a sealed token names that gift (`asked`, from askStartedWithin7); otherwise the door does
+ * through one of the doors out of a gift. Sent once per visit (a tab): someone who tries a second
+ * template from /made-with-ethos is still one recipient who started one. One answer: was that
+ * within seven days of the gift they came from being opened? The server says so when a sealed
+ * token names that gift (`asked`, from askStartedWithin7); otherwise the door does
  * (./recipient-started.ts). Nothing is asked or counted inside the iPhone app.
  */
 export async function countRecipientStarted(
@@ -99,5 +120,8 @@ export async function countRecipientStarted(
   const via = startDoor(search);
   if (!via) return;
   const said = asked ? await asked : null;
+  // Read again after the wait: another editor opened in this tab meanwhile may have counted.
+  if (startedThisVisit()) return;
+  noteStarted();
   track("recipient_started", { within7: said ?? within7ByDoor(via) });
 }
