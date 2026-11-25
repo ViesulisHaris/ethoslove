@@ -53,3 +53,21 @@ for (const [prefix, messages] of [["", en], ["/es", es]] as const) {
     }
   });
 }
+
+// A link made for Dates (?ref=dates…) opens the same page on the date ideas, with the strip of gifts after them
+// (lib/attribution/landing.ts homeHeroFor): it is held to the same ruler (the code review of 25 Nov 2026, C20).
+for (const prefix of ["", "/es"]) {
+  test(`${prefix || "/"}?ref=dates: the front page opened from a Dates link reads in 300 words, the strip of gifts aside`, async ({ page }) => {
+    test.slow();
+    for (const [width, height] of [[1440, 900], [375, 812]] as const) {
+      await page.setViewportSize({ width, height });
+      await page.goto(`${prefix || "/"}?ref=dates-test`);
+      await settle(page);
+      const all = await measure(page, "main");
+      const strip = await measure(page, "[data-template-strip]");
+      expect(strip.count, `${width}: the strip is on the page`).toBeGreaterThan(0);
+      expect(all.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
+      expect(all.count - strip.count, `${width}: words on show, the strip aside`).toBeLessThanOrEqual(300);
+    }
+  });
+}
