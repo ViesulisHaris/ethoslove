@@ -9,6 +9,7 @@ import { TRIP_COUNT } from "@/lib/trips/count";
 import { listManifests } from "@/templates/manifests";
 import { OCCASIONS } from "@/config/occasions";
 import { OCCASION_GUIDES } from "@/content/occasions";
+import { TRIP_ORIGIN_COPY } from "@/content/trip-origins";
 
 /**
  * Counts of templates, trips and games are read from the catalogue, never typed into the copy
@@ -83,6 +84,42 @@ describe("counts read from the catalogue", () => {
           if (/\d/.test(title)) expect(title, `${occasion} ${lang}`).toContain(`${ideas.items.length} `);
         }
       }
+  });
+
+  /*
+   * Two places from the jobs merged on 25 Nov 2026 say a count in words inside sentences written one by one: the pages
+   * by where you leave from ("three of the twelve trips", "the ten other trips", "all twelve") and the just-because
+   * page's search description ("Eleven small digital gifts"). Their words are kept as written; these checks fail the
+   * moment the list they count changes, so the sentence is rewritten then.
+   */
+  it("the pages by where you leave from count the trips the list holds", () => {
+    const texts = Object.values(TRIP_ORIGIN_COPY).flatMap((c) => [c.line, c.sentence, c.description].flatMap((x) => [["en", x.en], ["es", x.es]] as const));
+    const all = { en: countWord(TRIPS.length, "en"), es: countWord(TRIPS.length, "es") };
+    const others = { en: countWord(TRIPS.length - 2, "en"), es: countWord(TRIPS.length - 2, "es") };
+    // A number word near the size of the list, wherever it stands ("of the twelve", "all twelve", "los doce", "de doce").
+    const whole = /\b(?:eleven|twelve|thirteen|once|doce|trece)\b/giu;
+    // "ten more", "the ten other trips", "otros diez", "diez más": the list less the two the sentence names.
+    const rest = /\b(\p{L}+) (?:other trips|more planned)\b|\b(?:otros|y) (\p{L}+)(?: viajes| más)\b/giu;
+    let seen = 0;
+    for (const [lang, text] of texts) {
+      for (const m of text.matchAll(whole)) {
+        seen++;
+        expect(m[0].toLowerCase(), `${lang}: "${text}"`).toBe(all[lang]);
+      }
+      for (const m of text.matchAll(rest)) {
+        seen++;
+        expect((m[1] ?? m[2]).toLowerCase(), `${lang}: "${text}"`).toBe(others[lang]);
+      }
+    }
+    expect(seen).toBeGreaterThan(0);
+  });
+
+  it("the just-because page's search description counts its ideas", () => {
+    for (const lang of ["en", "es"] as const) {
+      const description = (lang === "es" ? es : en).seo.occasion["just-because"].description;
+      const n = OCCASION_GUIDES["just-because"][lang].ideas!.items.length;
+      expect(description, lang).toContain(`${countWord(n, lang, { capital: true })} ${lang === "es" ? "regalos" : "small"}`);
+    }
   });
 });
 
