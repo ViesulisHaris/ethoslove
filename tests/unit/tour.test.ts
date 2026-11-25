@@ -17,6 +17,7 @@ describe("roomForPath", () => {
       ["/games/deck", "games"],
       ["/trips", "trips"],
       ["/trips/lisbon-long-weekend", "trips"],
+      ["/trips/baltic-coast", "trips"],
     ];
     for (const [path, room] of cases) {
       expect(roomForPath(path), path).toBe(room);
@@ -26,7 +27,7 @@ describe("roomForPath", () => {
 
   it("never lands on a gift, a demo or a page without a tour", () => {
     // `/dates/<city>` is a static page for search engines, not the explorer the Dates tour walks through.
-    for (const path of ["/", "/g/abc123", "/g", "/demo/bloom", "/demo", "/pricing", "/templates", "/plan", "/datesx", "/dates/lisbon", "/es/dates/lisbon", "/long-distance", "/es", "/es/g/abc123", "/en/demo/bloom"]) {
+    for (const path of ["/", "/g/abc123", "/g", "/demo/bloom", "/demo", "/pricing", "/templates", "/plan", "/datesx", "/dates/lisbon", "/es/dates/lisbon", "/long-distance", "/es", "/es/g/abc123", "/en/demo/bloom", "/trips/from-london", "/es/trips/from-riga", "/trips/ideas/road-trips", "/es/trips/ideas/weekend-getaways"]) {
       expect(roomForPath(path), path).toBeNull();
     }
   });
@@ -59,6 +60,11 @@ describe("the tours", () => {
   it("never mention a country or city the site keeps out of its copy", () => {
     const text = JSON.stringify([en.tour, es.tour]);
     expect(text).not.toMatch(/spain|españa|madrid|barcelona|sevilla|valencia/i);
+  });
+
+  it("on a trip's page, wait for and point at the folded flights row, not only the open search", () => {
+    expect(TOURS.trips.ready).toContain("#flights > summary");
+    expect(TOURS.trips.steps.find((x) => x.id === "flights")?.targets).toContain("#flights > summary");
   });
 
   it("point at the trips page's own gift button", () => {
