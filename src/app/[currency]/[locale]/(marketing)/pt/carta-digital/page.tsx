@@ -14,7 +14,7 @@ import { PageHeader } from "@/components/shared/page-header";
 
 /** The template this page is about; its editor and demo are where the buttons lead. */
 const SLUG = "the-letter";
-/** One address whichever language the visitor's menus are in: the proxy serves it there in either, and sends /es/pt/carta-digital here. */
+/** One address whichever language the visitor's menus are in: /es/pt/carta-digital points here too. */
 const PAGE_URL = `${SITE.url}${PT_LETTER_PATH}`;
 
 export function generateMetadata(): Metadata {

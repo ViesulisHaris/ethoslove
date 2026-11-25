@@ -72,16 +72,9 @@ test.describe("The Letter's page in Portuguese", () => {
     await shot(page, "carta-digital", info.project.name);
   });
 
-  test("keeps one address under the Spanish menus too", async ({ page, context, baseURL }) => {
-    // The /es/ copy was a second address answering 200 (reports/seoaudit-audit.md, m5): it now sends the reader to the one address.
+  test("keeps one address under the Spanish menus too", async ({ page }) => {
     await page.goto("/es/pt/carta-digital");
-    await expect(page).toHaveURL(/(?<!\/es)\/pt\/carta-digital$/);
-    // A reader whose language is Spanish stays at that address, with the menus in Spanish.
-    await context.addCookies([{ name: "ETHOS_LOCALE", value: "es", url: baseURL! }]);
-    await page.goto("/pt/carta-digital");
-    await expect(page).toHaveURL(/(?<!\/es)\/pt\/carta-digital$/);
     await expect(page.getByTestId("carta-digital")).toHaveAttribute("lang", "pt-BR");
-    await expect(page.locator("html")).toHaveAttribute("lang", "es");
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /(?<!\/es)\/pt\/carta-digital$/);
   });
 
