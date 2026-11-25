@@ -105,6 +105,10 @@ export type FunnelEvent =
   | "make_own_clicked"
   | "recipient_editor_opened"
   | "recipient_gift_sent"
+  // A gift of their own begun by someone who came from a gift, once per gift (the first change to a
+  // new draft): whether that was within seven days of the gift they came from being opened. One
+  // true or false, nothing else (lib/attribution/recipient-loop.ts countRecipientStarted).
+  | "recipient_started"
   | "pack_offer_shown"
   // The games. A game begun and a game finished (which game, on one phone or two), a room made and a
   // room joined (which game), and what was picked at the end of a game (the game, and "gift", "today",

@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -6,7 +7,7 @@ const counted: [string, Record<string, unknown> | undefined][] = [];
 vi.mock("@/lib/analytics/track", () => ({ track: (name: string, props?: Record<string, unknown>) => void counted.push([name, props]) }));
 
 import { MAKE_OWN_REF, RECIPIENT_REFS, WATERMARK_REF, madeWithEthosHref, recipientVia } from "@/lib/attribution/recipient";
-import { countRecipientEditorOpened, countRecipientGiftSent, editorVia } from "@/lib/attribution/recipient-loop";
+import { countRecipientEditorOpened, countRecipientGiftSent, countRecipientStarted, editorVia } from "@/lib/attribution/recipient-loop";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { REPLY_REF, replyEditorHref } from "@/lib/editor/reply-seed";
 import { ReactionSent } from "@/components/gift/reaction-sheet";
@@ -258,5 +259,90 @@ describe("after a reaction is sent", () => {
     expect(html).toContain("Sent to Mia.");
     expect(html).not.toContain("Send one back");
     expect(html).not.toContain("<button");
+  });
+});
+
+describe("recipient_started", () => {
+  const answering = (body: unknown, status = 200) => vi.fn(async (..._args: Parameters<typeof fetch>) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status }));
+  const all: [string, Record<string, unknown> | undefined][] = [];
+  const keep = () => void all.push(...counted);
+
+  it("is one true or false, for each door", async () => {
+    const expected: Record<string, boolean> = { reply: true, g: true, watermark: true, "gift-keep": false };
+    for (const door of RECIPIENT_REFS) {
+      counted.length = 0;
+      const ask = answering({ within7: false });
+      await countRecipientStarted(search(`ref=${door}`), ask);
+      expect(counted).toEqual([["recipient_started", { within7: expected[door] }]]);
+      expect(ask).not.toHaveBeenCalled();
+      keep();
+    }
+  });
+
+  it("is not counted for a visitor who did not come from a gift, or for a gift coming back from sign-in or payment", async () => {
+    for (const query of ["", "ref=tt-couple", "resume=publish&ref=reply", `resume=publish&reply=${TOKEN}`]) {
+      const ask = answering({ within7: false });
+      await countRecipientStarted(search(query), ask);
+      expect(counted).toEqual([]);
+      expect(ask).not.toHaveBeenCalled();
+    }
+  });
+
+  it("asks the server when a sealed token names the gift, and takes its answer", async () => {
+    const ask = answering({ within7: false });
+    await countRecipientStarted(search(`ref=reply&reply=${TOKEN}`), ask);
+    expect(ask).toHaveBeenCalledTimes(1);
+    expect(counted).toEqual([["recipient_started", { within7: false }]]);
+    keep();
+  });
+
+  it("sends the server the token and nothing else", async () => {
+    const ask = answering({ within7: true });
+    await countRecipientStarted(search(`ref=reply&reply=${TOKEN}`), ask);
+    const [url, init] = ask.mock.calls[0];
+    expect(url).toBe("/api/loop/started");
+    expect(init?.method).toBe("POST");
+    expect(JSON.parse(String(init?.body))).toStrictEqual({ reply: TOKEN });
+    keep();
+  });
+
+  it("keeps the door's answer when the server can't say", async () => {
+    const failing = [
+      answering({ within7: null }),
+      answering("not json", 500),
+      vi.fn(async (..._args: Parameters<typeof fetch>): Promise<Response> => {
+        throw new TypeError("offline");
+      }),
+    ];
+    for (const ask of failing) {
+      counted.length = 0;
+      await countRecipientStarted(search(`ref=reply&reply=${TOKEN}`), ask);
+      expect(ask).toHaveBeenCalledTimes(1);
+      expect(counted).toEqual([["recipient_started", { within7: true }]]);
+      keep();
+    }
+  });
+
+  it("carries no id: the event's data is exactly one boolean", () => {
+    expect(all.length).toBeGreaterThanOrEqual(9);
+    for (const [name, props] of all) {
+      expect(name).toBe("recipient_started");
+      expect(Object.keys(props ?? {})).toEqual(["within7"]);
+      expect(typeof props?.within7).toBe("boolean");
+    }
+    expect(JSON.stringify(all)).not.toContain(TOKEN);
+  });
+
+  it("is wired once, behind a new draft's first change, and is in the list of events", () => {
+    const read = (file: string) => readFileSync(file, "utf8");
+    const shell = read("src/components/editor/editor-shell.tsx");
+    expect(shell.split("countRecipientStarted(")).toHaveLength(2);
+    expect(shell).toContain("!ready || !dirty || !fresh");
+    expect(read("src/lib/editor/store.ts")).toContain("fresh: !remote && !local");
+    expect(read("src/lib/analytics/track.ts")).toContain('| "recipient_started"');
+    // Nothing on a gift page sends it.
+    for (const dir of ["src/templates", "src/components/gift", "src/app/[currency]/[locale]/(gift)"])
+      for (const file of readdirSync(dir, { recursive: true, encoding: "utf8" }))
+        if (/\.(ts|tsx)$/.test(file)) expect(read(join(dir, file)), file).not.toContain("recipient_started");
   });
 });

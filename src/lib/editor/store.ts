@@ -55,6 +55,8 @@ export type EditorState = {
   save: SaveState;
   savedAt: number | null;
   dirty: boolean;
+  /** True for a draft begun in this page load: nothing of it was on this device or the server when the editor opened. */
+  fresh: boolean;
 
   init: (args: {
     slug: string;
@@ -424,6 +426,7 @@ export const useEditor = create<EditorState>((set, get) => {
     save: "idle",
     savedAt: null,
     dirty: false,
+    fresh: false,
 
     async init({ slug, manifest, initial, authed, userId, remote, reply = false }) {
       // The gift this editor had open is saved under its own key before the key moves on.
@@ -599,6 +602,7 @@ export const useEditor = create<EditorState>((set, get) => {
         hydrated: true,
         save: authed && giftId ? "saved" : local ? "offline" : "idle",
         dirty: false,
+        fresh: !remote && !local,
       });
       if (authed && giftId) void get().uploadPending();
     },

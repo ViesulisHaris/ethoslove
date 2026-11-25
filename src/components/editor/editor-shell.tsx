@@ -16,7 +16,7 @@ import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
-import { countRecipientEditorOpened } from "@/lib/attribution/recipient-loop";
+import { countRecipientEditorOpened, countRecipientStarted } from "@/lib/attribution/recipient-loop";
 import { OPEN_PUBLISH_EVENT } from "@/lib/editor/open-publish";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
@@ -140,6 +140,16 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   useEffect(() => {
     if (ready && dirty) clearReplySeed();
   }, [ready, dirty]);
+  // And the first change to a draft begun now, by someone who came from a gift, is that gift's
+  // recipient starting their own: counted once (docs/marketing/LOOP-KPI.md). A draft this device or
+  // the account already held was counted when it was begun.
+  const fresh = useEditor((s) => s.fresh);
+  const startCounted = useRef(false);
+  useEffect(() => {
+    if (!ready || !dirty || !fresh || startCounted.current) return;
+    startCounted.current = true;
+    void countRecipientStarted(new URLSearchParams(window.location.search));
+  }, [ready, dirty, fresh]);
 
   // A group card's panel has a script of its own, fetched only by an editor that draws it (group
   // cards on, a template made for them): no other editor's scripts hold the panel, or the emails it
