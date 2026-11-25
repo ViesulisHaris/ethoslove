@@ -290,8 +290,12 @@ describe("the date letter's cron", () => {
     expect((await call()).status).toBe(503);
     state.db = fake.db;
     state.resend = false;
-    expect(await (await call()).json()).toEqual({ ok: true, skipped: "email_not_configured" });
+    // Without e-mail the list is still tidied (letter-C16): the privacy policy's thirty days hold.
+    fake.rows("date_letter").push(letterRow({ id: "66666666-6666-4666-8666-666666666666", email: "old@mail.com", confirmed_at: null, asked_at: new Date(THU.getTime() - 31 * DAY).toISOString() }));
+    expect(await (await call()).json()).toEqual({ ok: true, skipped: "email_not_configured", purged: 1 });
+    expect(fake.rows("date_letter").map((r) => r.email)).toEqual(["sam@mail.com"]);
     state.resend = true;
+    forgetLetterProbe();
     // Before 0027.
     state.db = new FakeDb({}, THU.getTime(), { missingTables: ["date_letter"] }).db;
     expect(await (await call()).json()).toEqual({ ok: true, skipped: "no_table" });

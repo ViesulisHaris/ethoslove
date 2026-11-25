@@ -3,7 +3,7 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { isConfigured } from "@/lib/env";
 import { linkSecret, signToken } from "@/lib/lifecycle/links";
 import { dateLetterOn } from "@/lib/lifecycle/date-letter-flag";
-import { letterTableThere } from "@/lib/lifecycle/date-letter-store";
+import { letterTableThere, purgeLetter } from "@/lib/lifecycle/date-letter-store";
 import { sendDateLetters, supabaseLetterStore } from "@/lib/lifecycle/date-letter-job";
 import { ideaMode } from "@/lib/lifecycle/monthly-idea";
 import { sendDateLetter } from "@/lib/email/notify";
@@ -34,9 +34,16 @@ export async function GET(request: NextRequest) {
   const admin = getSupabaseAdminClient();
   if (!admin) return NextResponse.json({ error: "not_configured" }, { status: 503 });
   const linkKey = linkSecret();
-  // Nothing would be sent, and every claim would only be handed back.
-  if (!isConfigured.resend || !linkKey) return NextResponse.json({ ok: true, skipped: "email_not_configured" });
   if (!(await letterTableThere(admin))) return NextResponse.json({ ok: true, skipped: "no_table" });
+  // Nothing would be sent, and every claim would only be handed back. The list is still tidied: the
+  // privacy policy's thirty days don't wait for e-mail to be set up (letter-C16).
+  if (!isConfigured.resend || !linkKey) {
+    const purged = await purgeLetter(admin, Date.now()).catch((error: Error) => {
+      console.error("[cron/date-letter] purge failed", error.message);
+      return null;
+    });
+    return NextResponse.json({ ok: true, skipped: "email_not_configured", purged });
+  }
 
   const started = Date.now();
   let counts: Awaited<ReturnType<typeof sendDateLetters>>;
