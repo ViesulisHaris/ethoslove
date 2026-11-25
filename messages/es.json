@@ -2411,6 +2411,8 @@
       "year": "{n, plural, one {# cita} other {# citas}} este año",
       "good": "De las buenas",
       "notGood": "Esta vez no",
+      "change": "Cambiar",
+      "changeFor": "Cambiar la respuesta de {title}",
       "all": "Ver las {count}",
       "remove": "Quitar {title} de la lista",
       "gift": "{n} citas hechas: ya dan para una línea del tiempo.",

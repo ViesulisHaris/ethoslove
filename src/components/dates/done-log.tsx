@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -14,10 +15,14 @@ import type { Votes } from "./use-done";
 /** How many rows the card shows before "Show all". */
 const SHOWN = 5;
 
-/** Yes / No as two small pills: the chosen one filled. Shared by the plan's question and the log's rows. */
-export function VotePills({ value, onVote, labels, className }: { value: Vote | undefined; onVote: (next: Vote) => void; labels: { yes: string; no: string }; className?: string }) {
+/**
+ * Yes / No as two small pills: the chosen one filled. Shared by the plan's question and the log's
+ * rows. A group named by its question (`label`, or the element `labelledBy` points at), so a screen
+ * reader hears which date the Yes is about (dates2-C18).
+ */
+export function VotePills({ value, onVote, labels, label, labelledBy, className }: { value: Vote | undefined; onVote: (next: Vote) => void; labels: { yes: string; no: string }; label?: string; labelledBy?: string; className?: string }) {
   return (
-    <span className={cn("inline-flex gap-1.5", className)}>
+    <span role="group" aria-label={label} aria-labelledby={labelledBy} className={cn("inline-flex gap-1.5", className)}>
       {(["yes", "no"] as const).map((v) => (
         <button
           key={v}
@@ -41,13 +46,17 @@ export function VotePills({ value, onVote, labels, className }: { value: Vote | 
  * folded), each a day, a title, a town and the vote in words, and from three done dates one quiet
  * line that hands over to the timeline gift. Text only: no picture, no map, nothing to keep.
  */
-export function DoneLog({ entries, today, votes, onRemove, className }: { entries: DoneDate[]; today: Ymd; votes: Votes; onRemove: (id: string) => void; className?: string }) {
+export function DoneLog({ entries, today, votes, onRemove, askedAbove, className }: { entries: DoneDate[]; today: Ymd; votes: Votes; onRemove: (id: string) => void; /** The entry of the plan open above, whose question is asked there: its row only says the answer. */ askedAbove?: string; className?: string }) {
   const t = useTranslations("plan");
   const locale = useLocale() === "es" ? "es" : "en";
   const count = doneCount(entries, today);
+  // The rows whose answer is being changed: an answered row says it in words, and shows the pills again on "Change".
+  const [changing, setChanging] = useState<ReadonlySet<string>>(new Set());
   const row = (entry: DoneDate) => {
     const targets = voteTargets({ places: entry.places, idea: entry.idea });
     const vote = targets[0] ? votes.kept[targets[0]] : undefined;
+    const votable = targets.length > 0 && votes.available === true && entry.id !== askedAbove;
+    const pills = votable && (!vote || changing.has(entry.id));
     return (
       <li key={entry.id} className="flex items-start gap-3 border-t border-forest/10 py-3 first:border-t-0">
         <div className="min-w-0 flex-1">
@@ -56,8 +65,32 @@ export function DoneLog({ entries, today, votes, onRemove, className }: { entrie
             {entry.where ? ` · ${entry.where}` : ""}
           </p>
           <p className="mt-0.5 text-[15px] leading-snug font-semibold text-forest">{entry.title}</p>
-          {vote ? <p className="mt-0.5 text-[13.5px] text-forest/70">{vote === "yes" ? t("log.good") : t("log.notGood")}</p> : null}
-          {targets.length > 0 && votes.available === true ? <VotePills className="mt-2" value={vote} onVote={(next) => void votes.cast(targets, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} /> : null}
+          {vote && !pills ? (
+            <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[13.5px] text-forest/70">
+              {vote === "yes" ? t("log.good") : t("log.notGood")}
+              {votable ? (
+                <button type="button" aria-label={t("log.changeFor", { title: entry.title })} onClick={() => setChanging((s) => new Set(s).add(entry.id))} className="-my-3 inline-flex min-h-11 items-center px-1 font-semibold text-rose-deep underline-offset-4 hover:underline">
+                  {t("log.change")}
+                </button>
+              ) : null}
+            </p>
+          ) : null}
+          {pills ? (
+            <VotePills
+              className="mt-2"
+              label={`${t("done.ask")} ${entry.title}`}
+              value={vote}
+              onVote={(next) => {
+                void votes.cast(targets, next);
+                setChanging((s) => {
+                  const rest = new Set(s);
+                  rest.delete(entry.id);
+                  return rest;
+                });
+              }}
+              labels={{ yes: t("done.yes"), no: t("done.no") }}
+            />
+          ) : null}
         </div>
         {/* Only this browser's own entries can be taken off: an account's come back from its saved dates. */}
         {entry.id.startsWith("saved:") ? null : (

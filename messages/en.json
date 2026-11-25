@@ -2411,6 +2411,8 @@
       "year": "{n, plural, one {# date} other {# dates}} this year",
       "good": "A good one",
       "notGood": "Not this time",
+      "change": "Change",
+      "changeFor": "Change your answer for {title}",
       "all": "Show all {count}",
       "remove": "Take {title} off the list",
       "gift": "{n} dates done: enough for a timeline.",

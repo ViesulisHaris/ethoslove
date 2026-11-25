@@ -422,6 +422,9 @@ test.describe("dates2: done dates on /plan", () => {
     await page.waitForTimeout(300);
     expect(votes.posts.length).toBe(2);
     await expect(page.getByTestId("done-log")).toContainText("Not this time");
+    // Asked once on the screen: the plan's own row in the log says the answer and asks nothing (dates2-T12).
+    await expect(page.getByTestId("done-log").getByRole("button", { name: "Yes", exact: true })).toHaveCount(0);
+    await expect(done.getByRole("group", { name: "Was this a good date?" })).toBeVisible();
     // G17: what was counted.
     const counted = await events();
     expect(counted.filter((e) => e.name === "date_done")).toEqual([{ name: "date_done" }]);
@@ -444,7 +447,26 @@ test.describe("dates2: done dates on /plan", () => {
     expect(errors.filter((e) => !/Download the React DevTools|\[HMR\]|webpack/i.test(e))).toEqual([]);
   });
 
-  test("G9 the log and its one count", async ({ page }) => {
+  test("G8b in the log: a group named by its date, the answer in words, and Change to show the pills again (dates2-C18, T12)", async ({ page }) => {
+    const votes = await holdTheDatabase(page, { available: true, posts: [] });
+    await seedDone(page, [done(today(), "Gallery hop", ["node/105"]), done(addDays(today(), -7), "Bowling", ["node/106"])]);
+    await page.goto("/plan");
+    const log = page.getByTestId("done-log");
+    const group = log.getByRole("group", { name: "Was this a good date? Gallery hop" });
+    await expect(group).toBeVisible(PLAN_COMPILES);
+    await expect(log.getByRole("group")).toHaveCount(2);
+    await group.getByRole("button", { name: "Yes", exact: true }).click();
+    await expect.poll(() => votes.posts.length).toBe(1);
+    await expect(group).toHaveCount(0);
+    await expect(log).toContainText("A good one");
+    await log.getByRole("button", { name: "Change your answer for Gallery hop" }).click();
+    await expect(group.getByRole("button", { name: "Yes", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await group.getByRole("button", { name: "No", exact: true }).click();
+    await expect.poll(() => votes.posts.length).toBe(2);
+    await expect(log).toContainText("Not this time");
+  });
+
+    test("G9 the log and its one count", async ({ page }) => {
     await holdTheDatabase(page);
     const t = today();
     const year = t.slice(0, 4);

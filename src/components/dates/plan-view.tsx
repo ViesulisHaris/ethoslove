@@ -189,7 +189,9 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       return next;
     });
   };
-  const log = (className?: string) => <DoneLog entries={entries} today={today} votes={votes} onRemove={(id) => updateDone((list) => removeDone(list, id))} className={className} />;
+  // The plan open above asks its own question: its row in the log only says the answer (dates2-T12).
+  const askedAbove = editable && plan.done ? (plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done, locale).id) : undefined;
+  const log = (className?: string) => <DoneLog entries={entries} today={today} votes={votes} askedAbove={askedAbove} onRemove={(id) => updateDone((list) => removeDone(list, id))} className={className} />;
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
   const ticketed = plan.stops.some((s) => sellsTickets(s));
   // The canvas and the credits' (i) are named by MapLibre in English unless told otherwise.
@@ -372,12 +374,14 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                 {t("done.undo")}
               </button>
             </p>
-            {/* Its height is kept while the site says whether it takes votes, so nothing jumps; not drawn when it does not. */}
-            <div className="min-h-11" aria-live="polite">
+            {/* Its height is kept only while the site says whether it takes votes, so nothing jumps; nothing is kept when it does not (dates2-C19). */}
+            <div className={cn(votes.available === null && planTargets.length > 0 && "min-h-11")} aria-live="polite">
               {votes.available === true && planTargets.length > 0 ? (
                 <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <p className="text-[14.5px] font-semibold text-forest">{t("done.ask")}</p>
-                  <VotePills value={planVote} onVote={(next) => void votes.cast(planTargets, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
+                  <p id="plan-done-ask" className="text-[14.5px] font-semibold text-forest">
+                    {t("done.ask")}
+                  </p>
+                  <VotePills labelledBy="plan-done-ask" value={planVote} onVote={(next) => void votes.cast(planTargets, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
                   {planVote ? <p className="text-[13.5px] text-forest/65">{t("done.thanks")}</p> : null}
                 </div>
               ) : null}
