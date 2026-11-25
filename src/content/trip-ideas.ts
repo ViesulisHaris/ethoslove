@@ -6,9 +6,11 @@ import type { TripIdeaKind } from "@/lib/trips/idea-kinds";
  * line of why for each trip on it (by trip id), each read against the trip's stops and plan in
  * lib/trips/presets.ts; each starts its own way. The card's label above it is the trip's best months
  * alone (not "Best …" six times; `listLine`, each kind's own, says what they are), not its kind (the
- * page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: never one of the page's cards (so no
- * photograph shows twice on a page), and always a trip the hero's sentence names. `{count}` is the
- * kind's number of trips. Spain Spanish, vosotros.
+ * page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: one of the kind's own
+ * trips, so the picture agrees with the title, and taken out of the cards below it (so no photograph
+ * shows twice on a page); the hero's sentence names it and says its line of why, as its card would
+ * have. `{count}` in a title is the kind's number of trips, in `listHeading` the cards'. Spain
+ * Spanish, vosotros.
  */
 type L = { en: string; es: string };
 
@@ -23,7 +25,7 @@ export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line:
 
 export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
   "weekend-getaways": {
-    hero: "prague-krumlov-vienna",
+    hero: "copenhagen-hygge",
     nav: { en: "Weekend getaways", es: "Escapadas de fin de semana" },
     title: { en: "Weekend getaways for couples: {count} city breaks in Europe", es: "Escapadas de fin de semana en pareja: {count} ciudades" },
     description: {
@@ -32,15 +34,14 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
     heading: { en: "Weekend getaways for two", es: "Escapadas de fin de semana para dos" },
     line: { en: "Four city breaks of three or four days each.", es: "Cuatro escapadas urbanas, de tres o cuatro días." },
-    // Prague's two nights: the train trip's first stop (presets.ts), so the hero's photograph is named here.
-    sentence: { en: "Each fits between a Friday and a Monday and needs no car. Prague makes one too: the train trip starts with two nights there.", es: "Cada una cabe entre un viernes y un lunes y se hace sin coche. Praga también da para una: el viaje en tren empieza con dos noches allí." },
+    // Copenhagen's own line of why, as its card said it: the hero's photograph is named here.
+    sentence: { en: "Each fits between a Friday and a Monday and needs no car. Copenhagen’s is the harbor by bike, then a day out by train to Humlebæk.", es: "Cada una cabe entre un viernes y un lunes y se hace sin coche. La de Copenhague: el puerto en bici y un día en tren hasta Humlebæk." },
     listLabel: { en: "Three or four days", es: "Tres o cuatro días" },
-    listHeading: { en: "The {count} that fit a weekend", es: "Las {count} que caben en un fin de semana" },
+    listHeading: { en: "The other {count} that fit a weekend", es: "Las otras {count} que caben en un fin de semana" },
     listLine: { en: "Each with its best months; open one for its plan and flights.", es: "Cada una con sus mejores meses; abrid una para ver su plan." },
     fits: {
       "lisbon-slow-weekend": { en: "Three days on foot, sleeping in Alfama.", es: "Tres días a pie, durmiendo en Alfama." },
       "paris-without-cliches": { en: "Four days, three nights by the Canal Saint-Martin.", es: "Cuatro días, tres noches junto al Canal Saint-Martin." },
-      "copenhagen-hygge": { en: "The harbor by bike, then a day out by train to Humlebæk.", es: "El puerto en bici y un día en tren hasta Humlebæk." },
       "amsterdam-by-bike": { en: "A bed in the Jordaan and two bikes for three days.", es: "Una cama en el Jordaan y dos bicis para tres días." },
     },
     whySummary: { en: "Fitting one into a weekend", es: "Cómo encajarla en un fin de semana" },
@@ -50,7 +51,7 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
   },
   "road-trips": {
-    hero: "santorini-naxos",
+    hero: "scottish-highlands",
     nav: { en: "Road trips", es: "Viajes en coche" },
     title: { en: "Road trips for couples in Europe: {count} routes by car", es: "Viajes en coche por Europa en pareja: {count} rutas" },
     description: {
@@ -59,15 +60,14 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
     heading: { en: "Road trips for two", es: "Viajes en coche para dos" },
     line: { en: "Six routes of six or seven days each.", es: "Seis rutas, de seis o siete días cada una." },
-    // Santorini and Naxos: the bus and the ferry, and "hire a car or a scooter" for the day on Naxos (presets.ts).
-    sentence: { en: "Each has its route on a map and every night’s stop named. Rather not drive all week? Santorini and Naxos go by bus and ferry, with one day by car.", es: "Cada ruta tiene su mapa y dice dónde dormir cada noche. ¿Sin conducir toda la semana? Santorini y Naxos se recorren en autobús y ferry, con coche un día." },
+    // The Highlands' own line of why, as its card said it: the hero's photograph is named here.
+    sentence: { en: "Each has its route on a map and every night’s stop named. The Highlands run from Edinburgh to Inverness, with two of the five nights on Skye.", es: "Cada ruta tiene su mapa y dice dónde dormir cada noche. Las Highlands van de Edimburgo a Inverness, con dos de las cinco noches en Skye." },
     listLabel: { en: "By car", es: "En coche" },
-    listHeading: { en: "The {count} road trips", es: "Los {count} viajes en coche" },
+    listHeading: { en: "The other {count} road trips", es: "Los otros {count} viajes en coche" },
     listLine: { en: "Above each, the months to go. Open one for its route and car.", es: "Sobre cada uno, cuándo ir. Abrid uno para ver la ruta y el coche." },
     fits: {
       "amalfi-coast": { en: "Naples to Ravello in six days, with the car left in Positano.", es: "Seis días de Nápoles a Ravello, y el coche aparcado en Positano." },
       "tuscany-hill-towns": { en: "Florence, Chianti, Siena and the Val d’Orcia, over six days.", es: "Florencia, el Chianti, Siena y el Val d’Orcia, en seis días." },
-      "scottish-highlands": { en: "Edinburgh to Inverness, with two of the five nights on Skye.", es: "De Edimburgo a Inverness, con dos de las cinco noches en Skye." },
       "iceland-south-coast": { en: "Along the south coast for six days, to the glacier lagoon.", es: "Por la costa sur durante seis días, hasta la laguna glaciar." },
       "baltic-coast": { en: "Riga to Tallinn in a week, the cheapest days of the twelve.", es: "Una semana de Riga a Tallin, con el menor gasto diario." },
       // The plan's line said "west along the coast, from Faro to Sagres": the first day goes east, to Tavira.

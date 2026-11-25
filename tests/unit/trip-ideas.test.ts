@@ -24,9 +24,9 @@ describe("the pages by kind of trip", () => {
     expect(new Set(lists).size).toBe(lists.length);
   });
 
-  it("K3 each trip on a page has its one line of why, and no other trip has one", () => {
+  it("K3 each card on a page has its one line of why, and no other trip has one (the hero's is in its sentence)", () => {
     for (const k of TRIP_IDEA_KINDS) {
-      expect(Object.keys(TRIP_IDEA_COPY[k].fits).sort(), k).toEqual([...ids(k)].sort());
+      expect(Object.keys(TRIP_IDEA_COPY[k].fits).sort(), k).toEqual(ids(k).filter((id) => id !== TRIP_IDEA_COPY[k].hero).sort());
       for (const [id, line] of Object.entries(TRIP_IDEA_COPY[k].fits)) {
         for (const l of LANGS) {
           expect(words(line[l]), `${k} ${id} ${l}`).toBeLessThanOrEqual(12);
@@ -88,28 +88,35 @@ describe("the pages by kind of trip", () => {
     expect(TRIP_IDEA_COPY["road-trips"].title.en.startsWith("Road trips")).toBe(true);
   });
 
-  it("K8 the hero's photograph is no card on its page, and the hero's sentence names its trip", () => {
+  it("K8 the hero's photograph is one of the page's own trips (so it agrees with the title), no card, and named in the hero's sentence", () => {
     const heroes = TRIP_IDEA_KINDS.map((k) => TRIP_IDEA_COPY[k].hero);
     expect(new Set(heroes).size).toBe(heroes.length);
     for (const k of TRIP_IDEA_KINDS) {
       const hero = TRIPS.find((t) => t.id === TRIP_IDEA_COPY[k].hero);
       expect(hero?.image, k).toBeTruthy();
-      expect(ideaTrips(k).map((t) => t.id), k).not.toContain(hero!.id);
-      // The sentence names the trip in the picture: its title's first place.
-      for (const l of LANGS) expect(TRIP_IDEA_COPY[k].sentence[l], `${k} ${l}`).toContain(hero!.title[l].replace(/^De /, "").split(" ")[0]);
+      expect(ideaTrips(k).map((t) => t.id), k).toContain(hero!.id);
+      expect(Object.keys(TRIP_IDEA_COPY[k].fits), k).not.toContain(hero!.id);
+      // The sentence names the trip in the picture: a place in its title ("Copenhagen", "Highlands").
+      for (const l of LANGS) {
+        const places = hero!.title[l].split(" ").slice(1).filter((w) => /^\p{Lu}/u.test(w));
+        expect(places.length, `${k} ${l}`).toBeGreaterThan(0);
+        expect(places.some((p) => TRIP_IDEA_COPY[k].sentence[l].includes(p)), `${k} ${l}: ${places.join(", ")}`).toBe(true);
+      }
     }
-    // What the sentences say of them: Prague's first two nights; a car on one day of the islands.
-    const prague = TRIPS.find((t) => t.id === "prague-krumlov-vienna")!;
-    expect([prague.kind, prague.stops[0].name, prague.stops[0].nights]).toEqual(["train", "Prague", 2]);
-    const islands = TRIPS.find((t) => t.id === "santorini-naxos")!;
-    expect(islands.kind).toBe("islands");
-    expect(islands.plan.flatMap((d) => d.items.en).filter((x) => /hire a car/i.test(x))).toHaveLength(1);
+    // What the sentences say of them: Copenhagen's harbor by bike and the train to Humlebæk; the Highlands' five nights, two on Skye (Portree).
+    const copenhagen = TRIPS.find((t) => t.id === "copenhagen-hygge")!;
+    expect(copenhagen.plan.flatMap((d) => d.items.en).some((x) => /bikes and ride the harbor/.test(x))).toBe(true);
+    expect(copenhagen.plan.flatMap((d) => d.items.en).some((x) => /train .*Humlebæk/.test(x))).toBe(true);
+    const highlands = TRIPS.find((t) => t.id === "scottish-highlands")!;
+    expect([highlands.stops[0].name, highlands.stops.at(-1)!.name]).toEqual(["Edinburgh", "Inverness"]);
+    expect(highlands.stops.reduce((n, s) => n + s.nights, 0)).toBe(5);
+    expect(highlands.stops.find((s) => s.name === "Portree")?.nights).toBe(2);
   });
 
   it("K9 the cards' lines on a page do not start alike", () => {
     for (const k of TRIP_IDEA_KINDS) {
       for (const l of LANGS) {
-        const firsts = ideaTrips(k).map((t) => TRIP_IDEA_COPY[k].fits[t.id][l].split(/\s+/)[0].toLowerCase());
+        const firsts = ideaTrips(k).filter((t) => t.id !== TRIP_IDEA_COPY[k].hero).map((t) => TRIP_IDEA_COPY[k].fits[t.id][l].split(/\s+/)[0].toLowerCase());
         expect(new Set(firsts).size, `${k} ${l}: ${firsts.join(", ")}`).toBe(firsts.length);
       }
     }

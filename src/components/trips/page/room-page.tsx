@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { PAGE_THEME_MARK, pageThemeChromeCss, pageThemeStyle } from "@/content/template-page-themes";
 import { HALFWAY_FOOT_ART, ROOMS_THEME } from "@/content/rooms-art";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { DATE_HERO_ART } from "@/components/dates/page/placements";
 import { DocumentMark } from "@/components/shared/document-mark";
@@ -44,9 +45,31 @@ export function RoomPage({ children }: { children: ReactNode }) {
 /**
  * The first screen: the label and the heading in the h1, one italic line, one sentence and one
  * button on the left; on the right a trip's photograph, tilted a little, with its name written on a
- * slip at its corner. Below a desk the words come first and the picture after.
+ * slip at its corner. Below a desk the words come first and the picture after. With `href` (a page
+ * by kind, whose hero trip is no card) the photograph and its slip are one link to that trip.
  */
-export function RoomHero({ label, heading, line, sentence, picture, note, back, children }: { label: string; heading: string; line: string; sentence: string; picture: { src: string; srcSet?: string; from: string; to: string }; note: string; back?: ReactNode; children: ReactNode }) {
+export function RoomHero({ label, heading, line, sentence, picture, note, href, back, children }: { label: string; heading: string; line: string; sentence: string; picture: { src: string; srcSet?: string; from: string; to: string }; note: string; href?: string; back?: ReactNode; children: ReactNode }) {
+  const photo = (
+    <>
+      <span className="block rotate-[1.5deg] overflow-hidden rounded-[2rem] shadow-page-lift ring-8 ring-page-raised" style={{ background: `linear-gradient(160deg, ${picture.from} 0%, ${picture.to} 100%)` }}>
+        <EagerImg
+          src={picture.src}
+          srcSet={picture.srcSet}
+          sizes="(min-width: 1280px) 544px, (min-width: 1024px) 480px, 100vw"
+          alt=""
+          width={1600}
+          height={1200}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="block aspect-[4/3] w-full object-cover"
+        />
+      </span>
+      <span data-line className="absolute -bottom-4 left-2 -rotate-[4deg] rounded-2xl bg-page-raised px-4 py-2.5 font-hand text-[1.45rem] leading-none text-page-accent shadow-page-card decoration-1 underline-offset-4 group-hover:underline sm:-left-4">
+        {note}
+      </span>
+    </>
+  );
   return (
     <section className="relative">
       <ArtLayer items={DATE_HERO_ART} flowers={FLOWERS} />
@@ -62,25 +85,13 @@ export function RoomHero({ label, heading, line, sentence, picture, note, back, 
           <p className="mt-4 max-w-[31rem] text-base leading-relaxed text-page-body sm:mt-6">{sentence}</p>
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">{children}</div>
         </div>
-        <div className="relative mx-auto w-full max-w-[34rem]">
-          <span className="block rotate-[1.5deg] overflow-hidden rounded-[2rem] shadow-page-lift ring-8 ring-page-raised" style={{ background: `linear-gradient(160deg, ${picture.from} 0%, ${picture.to} 100%)` }}>
-            <EagerImg
-              src={picture.src}
-              srcSet={picture.srcSet}
-              sizes="(min-width: 1280px) 544px, (min-width: 1024px) 480px, 100vw"
-              alt=""
-              width={1600}
-              height={1200}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              className="block aspect-[4/3] w-full object-cover"
-            />
-          </span>
-          <span data-line className="absolute -bottom-4 left-2 -rotate-[4deg] rounded-2xl bg-page-raised px-4 py-2.5 font-hand text-[1.45rem] leading-none text-page-accent shadow-page-card sm:-left-4">
-            {note}
-          </span>
-        </div>
+        {href ? (
+          <Link href={href} className="group relative mx-auto block w-full max-w-[34rem] rounded-[2rem] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-page-ink">
+            {photo}
+          </Link>
+        ) : (
+          <div className="relative mx-auto w-full max-w-[34rem]">{photo}</div>
+        )}
       </div>
     </section>
   );

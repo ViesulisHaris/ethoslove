@@ -53,12 +53,12 @@ export default async function TripIdeaPage({ params }: Props) {
   const ui = TRIP_IDEAS_UI[l];
   const copy = TRIP_IDEA_COPY[kind];
   const trips = ideaTrips(kind);
-  const count = trips.length;
   const heading = copy.heading[l];
   const url = localizedUrl(locale, ideaPath(kind));
   const hero = getTrip(copy.hero)!;
   const heroPicture = tripPicture(hero);
-  const cards = trips.map((trip) => ({
+  // The hero is one of the kind's own trips (its photograph agrees with the title) and links to it; the cards are the others, so no photograph shows twice.
+  const cards = trips.filter((trip) => trip.id !== hero.id).map((trip) => ({
     id: trip.id,
     href: `/trips/${trip.id}`,
     title: trip.title[l],
@@ -92,6 +92,7 @@ export default async function TripIdeaPage({ params }: Props) {
           sentence={copy.sentence[l]}
           picture={{ src: hero.image ?? heroPicture.image ?? "", srcSet: heroPicture.srcSet ?? undefined, from: hero.art.from, to: hero.art.to }}
           note={hero.title[l]}
+          href={`/trips/${hero.id}`}
           back={
             <Link href="/trips" className={ROOM_BACK}>
               <ArrowLeft aria-hidden="true" className="size-4 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none" />
@@ -105,8 +106,8 @@ export default async function TripIdeaPage({ params }: Props) {
           </a>
         </RoomHero>
 
-        <RoomSpread id="ideas-title" sectionId="ideas-list" label={copy.listLabel[l]} heading={fill(copy.listHeading[l], { count })} line={copy.listLine[l]} art={CARDS_ART}>
-          <TripCards id="ideas-row" columns={kind === "weekend-getaways" ? 2 : 3} cards={cards} />
+        <RoomSpread id="ideas-title" sectionId="ideas-list" label={copy.listLabel[l]} heading={fill(copy.listHeading[l], { count: cards.length })} line={copy.listLine[l]} art={CARDS_ART}>
+          <TripCards id="ideas-row" columns={3} cards={cards} />
         </RoomSpread>
 
         <RoomFoot id="ideas-more" label={ui.footLabel} heading={ui.footHeading}>

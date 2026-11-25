@@ -228,11 +228,14 @@ test.describe("the pages by kind of trip", () => {
     await page.goto("/trips/ideas/weekend-getaways");
     await expect(page).toHaveTitle(/^Weekend getaways for couples: 4/);
     const cards = page.locator("#ideas-row > li");
-    await expect(cards).toHaveCount(4);
-    expect(await cards.evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).toEqual(["lisbon-slow-weekend", "paris-without-cliches", "copenhagen-hygge", "amsterdam-by-bike"]);
+    // The hero is one of the four weekend trips, a link to it, and the cards are the other three.
+    await expect(cards).toHaveCount(3);
+    expect(await cards.evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).toEqual(["lisbon-slow-weekend", "paris-without-cliches", "amsterdam-by-bike"]);
+    await expect(page.getByRole("heading", { level: 2, name: "The other 3 that fit a weekend" })).toBeVisible();
     await expect(cards.first().locator("p")).toHaveText("Three days on foot, sleeping in Alfama.");
     // The hero's photograph is a trip the hero names, and no card's.
-    await expect(page.locator("[data-line]")).toHaveText("Prague to Vienna by train");
+    await expect(page.locator("[data-line]")).toHaveText("A hygge weekend in Copenhagen");
+    await expect(page.getByRole("link", { name: "A hygge weekend in Copenhagen" })).toHaveAttribute("href", "/trips/copenhagen-hygge");
     for (const path of ["/trips/ideas/weekend-getaways", "/trips/ideas/road-trips"]) {
       await page.goto(path);
       const heroSrc = await page.locator("[data-line]").locator("xpath=..").locator("img").first().getAttribute("src");
@@ -241,7 +244,7 @@ test.describe("the pages by kind of trip", () => {
       expect(cardSrcs.map(stem), path).not.toContain(stem(heroSrc));
     }
     await page.goto("/trips/ideas/weekend-getaways");
-    for (let i = 0; i < 4; i++) await expect(cards.nth(i).locator("p")).toHaveText(/\.$/);
+    for (let i = 0; i < 3; i++) await expect(cards.nth(i).locator("p")).toHaveText(/\.$/);
     expect(listOf(await ldNodes(page), "ItemList")?.itemListElement).toHaveLength(4);
     const why = page.locator("details[data-more-about]");
     await expect(why).not.toHaveAttribute("open", "");
@@ -251,11 +254,20 @@ test.describe("the pages by kind of trip", () => {
   });
 
   test("E8 a page by kind: road trips, in both languages", async ({ page }) => {
+    // A page titled road trips opens on one (the Highlands' winding road), and its cards are the other five.
     await page.goto("/trips/ideas/road-trips");
-    await expect(page.locator("#ideas-row > li")).toHaveCount(6);
+    await expect(page).toHaveTitle(/^Road trips for couples in Europe: 6 routes/);
+    await expect(page.locator("[data-line]")).toHaveText("The Scottish Highlands");
+    await expect(page.getByRole("link", { name: "The Scottish Highlands" })).toHaveAttribute("href", "/trips/scottish-highlands");
+    await expect(page.locator("#ideas-row > li")).toHaveCount(5);
+    expect(await page.locator("#ideas-row > li").evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).not.toContain("scottish-highlands");
+    await expect(page.getByRole("heading", { level: 2, name: "The other 5 road trips" })).toBeVisible();
+    expect(listOf(await ldNodes(page), "ItemList")?.itemListElement).toHaveLength(6);
     await page.goto("/es/trips/ideas/road-trips");
     await expect(page).toHaveTitle(/^Viajes en coche por Europa/);
-    await expect(page.locator("#ideas-row > li")).toHaveCount(6);
+    await expect(page.locator("[data-line]")).toHaveText("Las Highlands escocesas");
+    await expect(page.locator("#ideas-row > li")).toHaveCount(5);
+    await expect(page.getByRole("heading", { level: 2, name: "Los otros 5 viajes en coche" })).toBeVisible();
   });
 
   test("E9 the kinds that are not pages are not pages", async ({ page }) => {
@@ -681,7 +693,7 @@ test.describe("300 words a page, and the designed pages' ruler", () => {
       await page.goto("/trips/from-london");
       await check("#from-row", 6, phone);
       await page.goto("/trips/ideas/weekend-getaways");
-      await check("#ideas-row", 4, phone);
+      await check("#ideas-row", 3, phone);
       await page.goto("/trips");
       await check("#trips-row", 12, phone);
     }
