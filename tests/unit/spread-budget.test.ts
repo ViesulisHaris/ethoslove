@@ -5,7 +5,7 @@ import { OCCASIONS } from "@/config/occasions";
 import { SPREAD_PLACEMENTS } from "@/components/marketing/spread/placements";
 import { CLOSED_BLOCK_WORDS } from "@/components/templates/page/lead";
 import { DIGITAL_CARDS_BAND_PHOTO, DIGITAL_CARDS_LEAD, digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDE_BAND_PHOTOS, guideBandPhoto } from "@/content/gift-guides";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDE_BAND_COVERS, GUIDE_BAND_PHOTOS, guideBandPhoto } from "@/content/gift-guides";
 import { CARD_LINE_MIN_WORDS, CARD_LINE_WORDS, CARD_TITLE_WORDS, HAND_LINE_WORDS, handLine, kindCardLine, kindIdeaIsFree, occasionCardLine, occasionSample, openingLine, sampleHand, sampleLines } from "@/content/idea-cards";
 import { sampleFieldsOf } from "@/content/occasion-ideas";
 import { OCCASION_GUIDES } from "@/content/occasions";
@@ -71,10 +71,18 @@ describe("the text budget of the gift pages by kind", () => {
     expect(new Set(leads).size, leads.join(", ")).toBe(leads.length);
   });
 
-  it("each page has a photo of its own in the polaroid of its band", () => {
+  it("no two bands show the same photo beside the same cover, and the first seven pages keep a photo each", () => {
     // Seven pages had two photos between them: the lead gift's first sample, the same hands and coffee on four pages.
+    // There are eight sample photos and twelve bands now, so the first six pages and /digital-cards keep a photo
+    // each, and over every page the photo and the cover in the phone's screen (The Letter's unless the page names
+    // one, content/gift-guides.ts GUIDE_BAND_COVERS) are a pair no other band shows.
+    const FIRST_SIX = ["last-minute", "video-message", "interactive-birthday-card", "virtual-birthday-cake", "photo-album", "anniversary-website"] as const;
+    const firstPhotos = [DIGITAL_CARDS_BAND_PHOTO.src, ...FIRST_SIX.map((slug) => guideBandPhoto(slug).src)];
+    expect(new Set(firstPhotos).size, firstPhotos.join(", ")).toBe(firstPhotos.length);
+    const pairs = [`${DIGITAL_CARDS_BAND_PHOTO.src}+the-letter`, ...GIFT_GUIDE_SLUGS.map((slug) => `${guideBandPhoto(slug).src}+${GUIDE_BAND_COVERS[slug] ?? "the-letter"}`)];
+    expect(new Set(pairs).size, pairs.join(", ")).toBe(pairs.length);
+    for (const cover of Object.values(GUIDE_BAND_COVERS)) expect(getManifest(cover!), cover).not.toBeNull();
     const photos = [DIGITAL_CARDS_BAND_PHOTO.src, ...GIFT_GUIDE_SLUGS.map((slug) => guideBandPhoto(slug).src)];
-    expect(new Set(photos).size, photos.join(", ")).toBe(photos.length);
     const samples = Object.values(DEMO_PHOTOS).map((photo) => photo.url as string);
     for (const photo of photos) expect(samples, photo).toContain(photo);
     for (const slug of GIFT_GUIDE_SLUGS) {
@@ -156,8 +164,9 @@ describe("the text budget of the gift pages by kind", () => {
       const letter = GIFT_GUIDES["video-message"][l].ideas.find((i) => i.template === "the-letter")!;
       expect(kindIdeaIsFree(letter, getManifest("the-letter")!), `video-message ${l}`).toBe(false);
     }
-    // The one free idea there is, in both languages: the five-minute note of the last-minute page.
-    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter"]);
+    // The free ideas there are, in both languages: the five-minute note of the last-minute page, the apology note of
+    // the page for him and the note for an empty box on the care package page.
+    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter", "apology-for-him en the-letter", "apology-for-him es the-letter", "long-distance-care-package en the-letter", "long-distance-care-package es the-letter"]);
   });
 
   it("an idea is a card: a title of at most nine words, one line, and one line of handwriting", () => {

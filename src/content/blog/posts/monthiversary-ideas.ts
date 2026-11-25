@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "monthiversary-ideas",
   published: "2026-10-31",
-  updated: "2026-11-13",
+  updated: "2026-11-24",
   occasion: "anniversary",
   templates: ["fortune-cookie", "sticker-bomb", "the-letter"],
   content: {
@@ -49,7 +49,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "The months are only an order to try them in. If month three is tomorrow and you're only starting now, take whichever row suits the week. Month six is the first real milestone and gets a fuller plan: our [6 month anniversary ideas](/blog/6-month-anniversary-ideas) sort the options by how much time you have.",
+          text: "The months are only an order to try them in. If month three is tomorrow and you're only starting now, take whichever row suits the week. Month six is the first real milestone and gets a fuller plan: our [6 month anniversary ideas](/blog/6-month-anniversary-ideas) sort the options by how much time you have. For a gift sized to each month, there is a page for every one, starting with [1 month anniversary gifts](/gifts/1-month-anniversary).",
         },
         { type: "h2", text: "1 month anniversary ideas for your first monthiversary" },
         {
@@ -200,7 +200,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Los meses son solo un orden para probarlas. Si mañana cumplís tres meses y es el primero que celebráis, elegid la fila que mejor os venga esa semana. El sexto mes es el primer hito de verdad y pide un plan más completo: nuestras [ideas para celebrar 6 meses de novios](/blog/6-month-anniversary-ideas) están ordenadas según el tiempo que tengas.",
+          text: "Los meses son solo un orden para probarlas. Si mañana cumplís tres meses y es el primero que celebráis, elegid la fila que mejor os venga esa semana. El sexto mes es el primer hito de verdad y pide un plan más completo: nuestras [ideas para celebrar 6 meses de novios](/blog/6-month-anniversary-ideas) están ordenadas según el tiempo que tengas. Para el regalo de cada mes hay una página por mes, empezando por los [regalos para 1 mes de novios](/gifts/1-month-anniversary).",
         },
         { type: "h2", text: "Vuestro primer mes: ideas para celebrarlo" },
         {

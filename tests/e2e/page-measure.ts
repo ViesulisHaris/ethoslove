@@ -46,7 +46,8 @@ export async function settle(page: Page) {
  * each picture is drawn to a canvas and, for every line of words, the pixels under it are read
  * (through the picture's own turn). A pixel that is more than a faint tail of shadow counts. What
  * is laid into a picture (a phone's screen, a line on the note card) is the picture's, not words.
- * The handwriting on the cards of "What to write" is counted by itself (`hand`): each card shows its
+ * Words drawn inside a picture of a gift (a cover's "For Ana", the faces of playing cards) are the picture's too:
+ * they carry `data-picture`. The handwriting on the cards of "What to write" is counted by itself (`hand`): each card shows its
  * line to borrow (the owner, 22 Nov 2026: "Yes, show it"), an example in the gift's own hand, and
  * it has its own limit so that the 300 words still measure what the page says about the gift.
  */
@@ -101,7 +102,7 @@ export async function measure(page: Page, within = "[data-page-theme]") {
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const text = node.textContent?.trim() ?? "";
       const parent = node.parentElement;
-      if (!text || !parent || !shown(parent) || parent.closest("[data-flatlay], style, script")) continue;
+      if (!text || !parent || !shown(parent) || parent.closest("[data-flatlay], [data-picture], style, script")) continue;
       // Words for a screen reader alone (a card's heading, .sr-only: a 1px box clipped to nothing) are not on show.
       const box = parent.getBoundingClientRect();
       if (box.width <= 1 && box.height <= 1) continue;

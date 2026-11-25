@@ -73,8 +73,9 @@ async function DatesFirst() {
         <AppSoon className="mt-8" />
       </div>
 
-      {/* what the answer turns into: the two of them, the map that got them there, the invitation that started it */}
-      <div className="relative mx-auto w-full max-w-[540px] lg:col-span-6 lg:justify-self-end" aria-hidden="true">
+      {/* what the answer turns into: the two of them, the map that got them there, the invitation that started it. A
+          picture, words and all (aria-hidden), and counted as one, like the gift hero's note card: tests/e2e/page-measure.ts. */}
+      <div data-picture className="relative mx-auto w-full max-w-[540px] lg:col-span-6 lg:justify-self-end" aria-hidden="true">
         <div className="relative ml-auto w-[80%]">
           {/* Through EagerImg: as a plain <img> here, every page that links home preloaded it (see eager-img.tsx). */}
           <EagerImg src={HERO_ART.home} srcSet={heroSrcSet(HERO_ART.home)} sizes="(min-width: 1024px) 432px, 80vw" alt="" width={1350} height={1800} fetchPriority="high" decoding="async" className="aspect-[3/4] w-full rounded-t-[999px] rounded-b-[40px] object-cover shadow-[0_50px_100px_-44px_rgba(120,20,60,0.65)] ring-[10px] ring-white" />
@@ -177,7 +178,7 @@ async function GiftFirst() {
           <Cutout id="bow-gingham" className="absolute -top-8 -right-3 w-24 rotate-[14deg] drop-shadow-[0_10px_16px_rgba(120,50,70,0.3)] sm:w-28" />
         </div>
 
-        <div className="relative -mt-10 ml-2 w-[214px] rotate-[-4deg] rounded-md bg-card p-4 text-ink shadow-[0_26px_50px_-22px_rgba(120,20,60,0.55)] sm:ml-6 sm:w-[240px] sm:p-5">
+        <div data-picture className="relative -mt-10 ml-2 w-[214px] rotate-[-4deg] rounded-md bg-card p-4 text-ink shadow-[0_26px_50px_-22px_rgba(120,20,60,0.55)] sm:ml-6 sm:w-[240px] sm:p-5">
           <p className="text-[11px] font-medium tracking-[0.18em] text-rose-deep uppercase">{t("card.eyebrow")}</p>
           <p className="mt-1.5 font-hand text-[1.6rem] leading-none text-rose-deep">{t("card.names")}</p>
           <p className="mt-3 flex items-center gap-2 text-[12.5px] text-ink-soft">

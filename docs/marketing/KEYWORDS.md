@@ -219,12 +219,12 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 |---|--:|--:|--:|---|---|
 | monthiversary | 1,300 | 170 | 0 | 8.2 (GSC 4–10 Nov) | blog: monthiversary-ideas |
 | happy monthiversary | 590 | 90 | 0 | – | blog: monthiversary-ideas (or a messages post) |
-| monthiversary gift | 70 | – | 0 | not in US top 20 (13 Nov) | blog: monthiversary-ideas |
+| monthiversary gift | 70 | – | 0 | not in US top 20 (13 Nov) | gift: /gifts/1-month-anniversary (and the 23 months after it); the day: blog monthiversary-ideas |
 | monthiversary gifts | 70 | – | 0 | – | blog: monthiversary-ideas |
 | happy monthiversary my love | 70 | – | 0 | – | blog: monthiversary-ideas |
 | monthiversary ideas | 10 | 10 | 0 | – | blog: monthiversary-ideas (its current target) |
 | monthsary gift | 30 | – | 0 | – | blog: monthiversary-ideas |
-| 1 month anniversary ideas | 260 | – | 0 | – | blog: monthiversary-ideas |
+| 1 month anniversary ideas | 260 | – | 0 | – | the day: blog monthiversary-ideas; gift: /gifts/1-month-anniversary |
 
 **Anniversary and other occasions**
 
@@ -235,7 +235,7 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 | anniversary gift ideas | 9,900 | 2,400 | 6 | – | /occasions/anniversary |
 | anniversary ideas | 8,100 | 1,300 | 4 | – | /occasions/anniversary + blog: anniversary-ideas-at-home |
 | what to write in an anniversary card | 880 | – | 3 | – | new blog post |
-| 6 month anniversary gift | 1,600 | 480 | 0 | – | blog: 6-month-anniversary-ideas |
+| 6 month anniversary gift | 1,600 | 480 | 0 | – | gift: /gifts/6-month-anniversary; the day: blog 6-month-anniversary-ideas |
 | 6 month anniversary ideas | 390 | – | 0 | – | blog: 6-month-anniversary-ideas (its current target) |
 | digital anniversary gift | 30 | – | 0 | 7.8 (GSC, 9 Nov) | /occasions/anniversary |
 | digital wedding gift | 10 | – | 29 | 6.9 (GSC, 9 Nov) | /occasions/wedding |

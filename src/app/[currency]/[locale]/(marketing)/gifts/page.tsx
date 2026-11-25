@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Plus } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { ClientMessages } from "@/i18n/client-messages";
@@ -12,6 +12,7 @@ import { stripeReady } from "@/lib/stripe/server";
 import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
+import { MONTHS, MONTH_GUIDES, monthSlug } from "@/content/month-anniversaries";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { templateSeo } from "@/content/template-seo";
 import { getManifest, listManifests } from "@/templates/manifests";
@@ -22,10 +23,10 @@ import { Openings } from "@/components/marketing/home/openings";
 import { ProofLine, Reactions } from "@/components/marketing/home/reactions";
 import { FinalCta } from "@/components/marketing/home/final-cta";
 import { TornEdge } from "@/components/marketing/home/cutouts";
-import { CARDS_ART, LIST_ART, STEPS_ART } from "@/components/marketing/spread/placements";
+import { CARDS_ART } from "@/components/marketing/spread/placements";
 import { IdeaCards, MoreRow, QUIET_LINK, QuestionsSpread, SiteHero, SitePage, Spread, WhereNext, type IdeaCard } from "@/components/marketing/spread/sections";
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
-import { POSTER_ROW, GiftPosterLink, QuestionRow } from "@/components/templates/page/sections";
+import { QUESTION_PLUS, QUESTION_ROW, QuestionRow } from "@/components/templates/page/sections";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 
@@ -34,6 +35,9 @@ export const revalidate = 3600;
 
 /** The gift whose film plays in the hero's phone: the one the page's hero always showed. */
 const HERO_GIFT = "bouquet";
+
+/** How many of the questions are on show; the rest are one closed row under them. */
+const SHOWN_QUESTIONS = 4;
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/gifts">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -44,9 +48,9 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 /**
  * Gifts: what was the whole site's front page before Dates arrived, and the page meant to be found
  * for "digital gift". Laid out as the gift pages by kind are (docs/marketing/growth-build/
- * DESIGN-LESS-TEXT.md): the hero with a gift playing in the phone, the thirty ideas as picture cards
- * in the groups they had, the covers, the three steps, the occasions, the questions and where to go
- * next. Everything the long page printed is still in the HTML, in closed <details>: each idea's line
+ * DESIGN-LESS-TEXT.md): the hero with a gift playing in the phone, the first group of ideas as picture
+ * cards and the other groups folded, the covers, the questions with the steps, the occasions and every
+ * gift guide folded under them, and where to go next. Everything the long page printed is still in the HTML, in closed <details>: each idea's line
  * inside its card, every template with its line, price and links under "the collection", the steps
  * in full, the prices, what a digital gift is, and the hero's four facts.
  */
@@ -87,10 +91,10 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
     const manifest = getManifest(GIFT_GUIDES[slug].en.film ?? GIFT_GUIDES[slug].en.ideas[0].template);
     return manifest ? [{ href: `/gifts/${slug}`, label: GIFT_GUIDES[slug][l].label, manifest }] : [];
   });
+  // The kinds past the four posters are named in the closed row "Every gift guide" above.
   const links = [
     ...RECIPIENTS.map((r) => ({ href: `/gifts/${recipientSlug(r)}`, label: RECIPIENT_GUIDES[r][l].label })),
     { href: "/occasions", label: t("recipients.occasions") },
-    ...kinds.slice(4).map(({ href, label }) => ({ href, label })),
     { href: DIGITAL_CARDS_PATH, label: guide.cards },
   ];
 
@@ -144,26 +148,17 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
             </Link>
           </SiteHero>
 
-          {/* The thirty ideas, in the groups they had: each a picture card that opens to the gift's line and the ways on. */}
-          <Spread id="ideas" label={guide.eyebrow} heading={guide.ideasTitle} line={guide.ideasLead} art={CARDS_ART} className="pt-4 pb-16 sm:pb-20 lg:pt-24 lg:pb-28">
-            <div className="flex min-w-0 flex-col gap-12">
-              {groups.map((group, i) => (
-                <div key={group.title} className="min-w-0">
-                  <h3 className="mb-5 text-page-label text-page-body">{group.title}</h3>
-                  <IdeaCards id={`ideas-${i + 1}`} cards={group.cards} locale={l} labels={ideaLabels} />
-                </div>
-              ))}
-            </div>
-          </Spread>
-
-          {/* The whole collection: four posters to look at, and every template, its line, its price and its two links, in one closed row. */}
+          {/*
+           * The thirty ideas, in the groups they had: the first group's six cards on show, the other four groups each a
+           * closed row that opens in place to its cards, and under them the whole collection, every template with its
+           * line, price and links, in one more closed row (BRIEF-gifts2.md, 3: the page reads in 300 words).
+           */}
           <Spread
-            id="collection"
-            label={t("home.templates.eyebrow")}
-            heading={t("home.templates.title")}
-            line={t("home.templates.count", { n: manifests.length, free })}
-            art={LIST_ART.filter((piece) => piece.art !== "leaf-2")}
-            className="pt-4 pb-16 sm:pb-20 lg:pb-24"
+            id="ideas"
+            label={guide.eyebrow}
+            heading={guide.ideasTitle}
+            art={CARDS_ART}
+            className="pt-4 pb-16 sm:pb-20 lg:pt-24 lg:pb-28"
             intro={
               <div className="mt-3 flex flex-col items-start">
                 <Link href="/templates" className={`${QUIET_LINK} gap-1.5`}>
@@ -179,16 +174,35 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
               </div>
             }
           >
-            <div className="min-w-0">
-              <ul className={POSTER_ROW}>
-                {manifests.slice(0, 4).map((m) => (
-                  <li key={m.slug}>
-                    <GiftPosterLink manifest={m} locale={l} />
-                  </li>
+            <div className="flex min-w-0 flex-col gap-10">
+              <div className="min-w-0">
+                <h3 className="mb-5 text-page-label text-page-body">{groups[0].title}</h3>
+                <IdeaCards id="ideas-1" cards={groups[0].cards} locale={l} labels={ideaLabels} />
+              </div>
+              <div className="border-t border-page-line">
+                {groups.slice(1).map((group, i) => (
+                  <details key={group.title} name="idea-groups" data-idea-group className="group border-b border-page-line">
+                    <summary className={QUESTION_ROW}>
+                      <span>
+                        {group.title}
+                        <span className="ml-3 text-page-label text-page-body">{t("recipients.ideasTag", { count: group.cards.length })}</span>
+                      </span>
+                      <Plus aria-hidden="true" className={QUESTION_PLUS} strokeWidth={1.6} />
+                    </summary>
+                    <div className="pt-2 pb-8">
+                      <IdeaCards id={`ideas-${i + 2}`} cards={group.cards} locale={l} labels={ideaLabels} />
+                    </div>
+                  </details>
                 ))}
-              </ul>
-              <div className="mt-8 border-t border-page-line">
-                <MoreRow summary={t("home.templates.all")}>
+                {/*
+                 * The ideas' own line stood under their heading; it opens this row now, so the page keeps to 300 words in Spanish too.
+                 * The row is named as the occasion pages name their whole gallery ("Show all 61"): "See all templates" is the link
+                 * in the left column, and "Not sure which?" stays beside the finder's link there.
+                 */}
+                <MoreRow summary={t("templates.showAll", { count: manifests.length })}>
+                  <p>{guide.ideasLead}</p>
+                  <p>{t("home.templates.title")}</p>
+                  <p>{t("home.templates.count", { n: manifests.length, free })}</p>
                   <p>{t("home.templates.blurb")}</p>
                   <ul className="flex flex-col gap-3" data-testid="all-gifts">
                     {manifests.map((m) => (
@@ -217,44 +231,93 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
           {/* Every cover a gift can open with, each a link to a live demo: the page's one dark band, as it was. */}
           <Openings locale={l} />
 
-          <Spread id="how" label={t("home.how.eyebrow")} heading={t("home.how.title")} art={STEPS_ART} className="pt-16 pb-10 sm:pt-20 lg:pt-24 lg:pb-14">
-            <ol className="border-t border-page-line">
-              {steps.map((step, i) => (
-                <li key={step.title}>
-                  <QuestionRow q={`${i + 1}. ${step.title}`} a={step.body} name="how" />
-                </li>
-              ))}
-            </ol>
-          </Spread>
-
-          <Spread id="occasions" label={t("home.occasions.eyebrow")} heading={t("home.occasions.title")} line={t("home.occasions.blurb")} className="pt-10 pb-10 lg:pt-14 lg:pb-14">
-            <ul className="grid grid-cols-2 gap-x-6 border-t border-page-line pt-3 sm:grid-cols-3">
-              {OCCASIONS.map((o) => (
-                <li key={o}>
-                  <Link href={`/occasions/${o}`} className={`${QUIET_LINK} min-w-11`}>
-                    {t(`occasions.${o}`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Spread>
-
           {/* The questions: what a digital gift is first, then the pricing page's own. Under them, the longer words. */}
-          <QuestionsSpread id="questions" name="faq-gifts" label="FAQ" heading={t("pricing.faqTitle")} faq={guide.faq}>
-            <MoreRow summary={guide.title}>
-              <p>{guide.definition}</p>
-              <p>{guide.notACard}</p>
-              {/* What the old hero said under its phone, which played the same gift the hero's phone plays now. */}
-              <p>{t("home.hero.caption")}</p>
-              <ul className="flex flex-col gap-1.5">
-                {(["free", "noAccount", "once", "langs"] as const).map((k) => (
-                  <li key={k}>
-                    <span className="text-page-ink">{t(`home.hero.facts.${k}.a`)}</span> {t(`home.hero.facts.${k}.b`)}
+          <QuestionsSpread id="questions" name="faq-gifts" label="FAQ" heading={t("pricing.faqTitle")} faq={guide.faq.slice(0, SHOWN_QUESTIONS)}>
+            {/*
+             * "What is a digital gift?" is a question, so it opens from "More questions" with the other questions, not from
+             * among the rows named for what they hold (the deep test of 25 Nov 2026, D8).
+             */}
+            <MoreRow summary={t("occasions.moreQuestions")}>
+              <div className="border-t border-page-line">
+                <details name="faq-gifts-more" className="group border-b border-page-line">
+                  <summary className={QUESTION_ROW}>
+                    {guide.title}
+                    <Plus aria-hidden="true" className={QUESTION_PLUS} strokeWidth={1.6} />
+                  </summary>
+                  <div data-reveal className="flex max-w-2xl flex-col gap-3 pr-8 pb-5 text-[0.9375rem] leading-relaxed text-page-body">
+                    <p>{guide.definition}</p>
+                    <p>{guide.notACard}</p>
+                    <p>{t("home.openings.more")}</p>
+                    {/* What the old hero said under its phone, which played the same gift the hero's phone plays now. */}
+                    <p>{t("home.hero.caption")}</p>
+                    <ul className="flex flex-col gap-1.5">
+                      {(["free", "noAccount", "once", "langs"] as const).map((k) => (
+                        <li key={k}>
+                          <span className="text-page-ink">{t(`home.hero.facts.${k}.a`)}</span> {t(`home.hero.facts.${k}.b`)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
+                {guide.faq.slice(SHOWN_QUESTIONS).map((f) => (
+                  <QuestionRow key={f.q} q={f.q} a={f.a} name="faq-gifts-more" />
+                ))}
+              </div>
+            </MoreRow>
+            {/*
+             * The rows under the questions are named plainly, as rows to open ("How it works", "Pricing"), not with the
+             * slogans the sections they came from had as headings, which now open them (the test of 25 Nov 2026, T7).
+             */}
+            {/* The three steps, which had a section of their own. */}
+            <MoreRow summary={t("home.how.eyebrow")}>
+              <p>{t("home.how.title")}</p>
+              <ol className="flex flex-col gap-3">
+                {steps.map((step, i) => (
+                  <li key={step.title}>
+                    <span className="text-page-ink">
+                      {i + 1}. {step.title}
+                    </span>{" "}
+                    {step.body}
+                  </li>
+                ))}
+              </ol>
+            </MoreRow>
+            {/* Every occasion (which had a section of their own), every gift page by kind and the twenty-four anniversary months, in one row. */}
+            <MoreRow summary={t("recipients.allGuides")}>
+              <p>{t("home.occasions.eyebrow")}</p>
+              <p>{t("home.occasions.title")}</p>
+              <p>{t("home.occasions.blurb")}</p>
+              <ul className="flex flex-wrap gap-x-5">
+                {OCCASIONS.map((o) => (
+                  <li key={o}>
+                    <Link href={`/occasions/${o}`} className={QUIET_LINK}>
+                      {t(`occasions.${o}`)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <ul className="flex flex-wrap gap-x-5">
+                {GIFT_GUIDE_SLUGS.map((slug) => (
+                  <li key={slug}>
+                    <Link href={`/gifts/${slug}`} className={QUIET_LINK}>
+                      {GIFT_GUIDES[slug][l].label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p>{t("recipients.month.byMonth")}</p>
+              <ul className="flex flex-wrap gap-x-5">
+                {MONTHS.map((n) => (
+                  <li key={n}>
+                    <Link href={`/gifts/${monthSlug(n)}`} className={QUIET_LINK}>
+                      {MONTH_GUIDES[n][l].label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </MoreRow>
-            <MoreRow summary={t("pricing.title")}>
+            <MoreRow summary={t("pricing.eyebrow")}>
+              <p>{t("pricing.title")}</p>
               <p>{t("pricing.subtitle")}</p>
               <PricingCards currency={charged} manifests={manifests} authed={false} paymentsEnabled={stripeReady()} />
               <dl className="flex flex-col gap-3">

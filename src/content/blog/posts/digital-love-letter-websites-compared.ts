@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "digital-love-letter-websites-compared",
   published: "2026-11-16",
-  updated: "2026-11-20",
+  updated: "2026-11-24",
   occasion: "just-because",
   templates: ["the-letter", "xoxo", "keepsake"],
   content: {
@@ -238,7 +238,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Van por orden alfabético. Los precios de las demás son los que nos mostró su web, en dólares estadounidenses salvo que nos mostrara otra moneda; varias cambian el precio según el país, así que a ti te puede salir otro. Los de Ethos van en euros, que es lo que verás desde España, México y cualquier país salvo Estados Unidos y el Reino Unido. Hemos dejado fuera los generadores de cartas con IA, que escriben el texto pero no envían nada, y las plantillas para imprimir y rellenar a mano. Cuando alguien pide una página así salen también otros nombres, como QLovy, LoveTale, WithLove, Tu Carta Eterna y Dedikame. No los comprobamos en su propia web para esta comparativa, así que no están en las tablas.",
+          text: "Van por orden alfabético. Los precios de las demás son los que nos mostró su web, en dólares estadounidenses salvo que nos mostrara otra moneda; varias cambian el precio según el país, así que a ti te puede salir otro. Los de Ethos van en euros, que es lo que verás desde cualquier país salvo Estados Unidos y el Reino Unido. Hemos dejado fuera los generadores de cartas con IA, que escriben el texto pero no envían nada, y las plantillas para imprimir y rellenar a mano. Cuando alguien pide una página así salen también otros nombres, como QLovy, LoveTale, WithLove, Tu Carta Eterna y Dedikame. No los comprobamos en su propia web para esta comparativa, así que no están en las tablas.",
         },
         {
           type: "p",

@@ -1,5 +1,8 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
+import { OCCASIONS } from "../../src/config/occasions";
 import { measure, settle } from "./page-measure";
+import en from "../../messages/en.json";
+import es from "../../messages/es.json";
 
 /**
  * /digital-cards, the gift pages by kind and the idea lists of the occasion pages, laid out as the
@@ -21,14 +24,6 @@ const OCCASION_PAGES = ["/occasions/mothers-day", "/occasions/christmas", "/occa
  * season and one without. They open on the hero as the kind pages do, with the first idea's gift in the phone.
  */
 const PERSON_PAGES = ["/gifts/for-boyfriend", "/gifts/for-mom"];
-/**
- * /gifts, laid out the same way in fix round 4. It is over the 300 words: its thirty ideas are thirty cards in five
- * groups (the brief: "the items as cards grouped as they are now"), about 180 words of names and titles alone, and
- * the covers' row, the steps and the occasions add about 170. This holds it where the round left it (592 at
- * 1440×900, 643 in Spanish) so it cannot grow back towards the 3,040 it had; what would bring it to 300 is the
- * owner's to choose (fewer idea cards shown, or the covers' row folded), docs/marketing/growth-build/reports/view-fix-4.md.
- */
-const HUB_WORDS = 760;
 
 /** The owner's list of screens: phones, tablets, laptops, a wide desk, a phone on its side, a short laptop. */
 const SIZES: [number, number][] = [
@@ -159,7 +154,9 @@ for (const prefix of ["", "/es"]) {
     });
   }
 
-  test(`${prefix}/gifts: the hero, the ideas as cards in their groups, everything long closed, no flower under words`, async ({ page }) => {
+    // Since the gifts2 area (BRIEF-gifts2.md, 3) /gifts reads in 300 words: the first group of ideas is on show, the
+    // other four are closed rows that open in place, and the collection, the steps and the occasions are closed rows.
+    test(`${prefix}/gifts: one group of ideas on show and the rest folded, within 300 words, no flower under words`, async ({ page }) => {
     test.slow();
     for (const [width, height] of [[1440, 900], [375, 812]] as const) {
       await page.setViewportSize({ width, height });
@@ -168,16 +165,33 @@ for (const prefix of ["", "/es"]) {
       const m = await measure(page);
       expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
-      expect(m.count, `${width}: words on the page (HUB_WORDS says why it is over 300)`).toBeLessThanOrEqual(HUB_WORDS);
+      expect(m.count, `${width}: words on the page`).toBeLessThanOrEqual(300);
+      // Room under the ruler, so the next line of copy does not break it (the test of 25 Nov 2026, T2: Spanish sat at 300).
+      expect(m.count, `${width}: words on the page, with room to spare`).toBeLessThanOrEqual(292);
       expect(m.smallest, `${width}: a sentence under 14px`).toBeGreaterThanOrEqual(14);
       expect(m.small, `${width}: too small for a thumb`).toEqual([]);
       if (width >= 1024) await expect(page.locator("[data-flatlay=hero]")).toBeInViewport();
-      // Five groups of idea cards, thirty in all, each with its poster once swiped to.
+      // The closed rows are named as rows to open, not as slogans: no row's name ends on a full stop (T7).
+      const rows = await page.locator("main details > summary").evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
+      expect(rows.filter((r) => /\.$/.test(r)), `${width}: rows named as sentences`).toEqual([]);
+      // And a question opens from "More questions", not from among the rows named for what they hold (D8).
+      const blocks = await page.locator("section[aria-labelledby=questions] [data-more-about] > summary").evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
+      expect(blocks.filter((r) => /\?$/.test(r)), `${width}: a question among the closed blocks`).toEqual([]);
+      // Five sets of idea cards and thirty cards in the HTML; the first set on show, the other four in closed rows.
       const sets = await cardSets(page);
       expect(sets.length, `${width}: groups of ideas`).toBe(5);
       expect(sets.flatMap((set) => set.cards).length).toBe(30);
+      const folded = await page.locator("details:not([open]) [data-cards]").evaluateAll((els) => els.map((el) => el.id));
+      expect(sets.filter((set) => !folded.includes(set.id)).length, `${width}: sets on show`).toBe(1);
+      // The first group, as content/digital-gifts.ts sorts the thirty (eight in it today).
+      expect(sets[0].cards.length).toBeGreaterThanOrEqual(5);
+      await expect(page.locator("[data-idea-group]:not([open])")).toHaveCount(4);
+      // Opened, the second set's cards get their pictures.
+      await page.locator("[data-idea-group] > summary").nth(0).click();
+      await expect(page.locator("[data-idea-group]").nth(0)).toHaveAttribute("open", "");
       await swipeThrough(page);
-      await expect.poll(async () => (await cardSets(page)).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 30_000 }).toEqual([]);
+      await expect.poll(async () => (await cardSets(page)).slice(0, 2).flatMap((set) => set.cards).filter((card) => !card.picture).map((card) => card.title), { message: `${width}: cards with no picture`, timeout: 30_000 }).toEqual([]);
+      await page.locator("[data-idea-group] > summary").nth(0).click();
     }
     await expect(page.locator("h1")).toHaveCount(1);
   });
@@ -193,12 +207,14 @@ for (const path of ["/digital-cards", "/gifts/last-minute", "/es/gifts/anniversa
       const m = await measure(page);
       expect(m.overflow, "the page scrolls sideways").toBeLessThanOrEqual(0);
       expect(m.overlaps, "a piece of the art lies under words").toEqual([]);
-      expect(m.count).toBeLessThanOrEqual(path === "/gifts" ? HUB_WORDS : 300);
+      expect(m.count).toBeLessThanOrEqual(300);
       expect(m.smallest).toBeGreaterThanOrEqual(14);
       expect(m.smallestLabel).toBeGreaterThanOrEqual(12);
       expect(m.small).toEqual([]);
       // Under 640px a set of cards is one row with one card to a screen; from 640px it is a grid with every card on the page.
-      for (const set of await cardSets(page)) {
+      // A set inside a closed row (the other groups on /gifts) is not on the screen at all, so it is not held to this.
+      const folded = await page.locator("details:not([open]) [data-cards]").evaluateAll((els) => els.map((el) => el.id));
+      for (const set of (await cardSets(page)).filter((s) => !folded.includes(s.id))) {
         if (width < 640) {
           expect(set.scrolls, `${set.id} is not a row to swipe`).toBe(true);
           expect(set.dots, `${set.id}: a dot for each card`).toBe(set.cards.length);
@@ -679,19 +695,50 @@ test("the hero says which gift its button makes, each page opens on a gift of it
   expect(listed).toEqual(titles);
 });
 
-// The rule is 300 words a page (DESIGN-LESS-TEXT.md). Under the gallery an occasion page keeps it; with the gallery
-// above it does not (anniversary 1,086, just-because 1,070, birthday 817 at 1440×900, the review of 22 Nov 2026),
-// and the test above measures only what this build laid out. The gallery is the live one, shared with /templates
-// and redrawn to the owner's own mock-up on another branch (growth/home), so whether an occasion page keeps it,
-// and in what shape, is the owner's to decide. Until then this stands here, not passing, so the gap is not hidden.
-test.fixme("an occasion page, its gallery included, is within 300 words", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  for (const path of ["/occasions/birthday", "/occasions/anniversary", "/occasions/christmas", "/occasions/mothers-day"]) {
-    await page.goto(path);
-    await settle(page);
-    expect((await measure(page, "main")).count, path).toBeLessThanOrEqual(300);
+// The rule is 300 words a page (DESIGN-LESS-TEXT.md), the gallery included. With every card on show an occasion page
+// had 520 to 745 (the review of 22 Nov 2026; anniversary 1,086 before the cards lost their paragraphs). Since the
+// gifts2 area (BRIEF-gifts2.md, 3) the gallery shows four gifts and keeps the rest in one closed row under them, the
+// occasion's own paragraph opens the guide's closed "More about" row, and the questions past the fourth are one more
+// closed row. Every card, sentence and answer is still in the HTML (seo-nothing-lost.spec.ts holds that).
+for (const prefix of ["", "/es"]) {
+  for (const occasion of OCCASIONS) {
+    test(`${prefix}/occasions/${occasion}: within 300 words with its gallery, four gifts on show and the rest one tap away`, async ({ page }) => {
+      test.slow();
+      for (const [width, height] of [[1440, 900], [375, 812]] as const) {
+        await page.setViewportSize({ width, height });
+        await page.goto(`${prefix}/occasions/${occasion}`);
+        await settle(page);
+        const m = await measure(page, "main");
+        expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
+        expect(m.count, `${width}: words on show`).toBeLessThanOrEqual(300);
+        // Art under words is read where this build laid the page out, under the gallery. The gallery's head has its own
+        // lily behind the All / Free / Premium pills on a desk, older than this work and shared with /templates.
+        expect((await measure(page)).overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
+        // The occasion's paragraph is in the page, inside the closed row, not on show.
+        await expect(page.locator("[data-occasion-intro]")).toBeAttached();
+        await expect(page.locator("[data-occasion-intro]")).toBeHidden();
+        const rest = page.locator("[data-gallery-rest]");
+        if ((await rest.count()) > 0) {
+          await expect(page.locator("#gallery article:visible, [data-shelf] article:visible").first()).toBeVisible();
+          expect(await page.locator("[data-shelf] article:visible").count(), `${width}: gifts on show`).toBe(4);
+          await expect(rest).not.toHaveAttribute("open", "");
+          const pill = rest.locator("> summary");
+          // h-11, 44 px, like the gallery's other pills; where the page lays it on a fractional pixel the box reads
+          // 43.9999, so the floor is the one tree-tag.spec.ts and templates.spec.ts use for the same class.
+          expect((await pill.boundingBox())!.height, `${width}: the pill`).toBeGreaterThan(43.5);
+          expect(await pill.evaluate((el) => getComputedStyle(el).height), `${width}: the pill's own height`).toBe("44px");
+          const total = await page.locator("[data-shelf] article").count();
+          await pill.click();
+          await expect(rest).toHaveAttribute("open", "");
+          // Open, the pill's label says it closes the list again (the code review of 25 Nov 2026, C28).
+          await expect(pill).toHaveText(prefix ? es.templates.showFewer : en.templates.showFewer, { useInnerText: true });
+          expect(await page.locator("[data-shelf] article:visible").count(), `${width}: every gift once opened`).toBe(total);
+          await expect(pill).toBeInViewport();
+        }
+      }
+    });
   }
-});
+}
 
 test("the pages are whole, and the same height, when no picture arrives", async ({ page }) => {
   for (const path of ["/digital-cards", "/gifts/photo-album"]) {

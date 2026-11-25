@@ -21,6 +21,8 @@ blocks, plus at most two mentions in the text.
   longer if you keep rewriting the message").
 - Concrete over general: what to write, what time to send it, what to have ready. Times and real
   examples beat adjectives.
+- A post never names Spain or a Spanish city, in either language (the owner's rule for the whole
+  site; `scripts/blog-guard.mjs` refuses it). For a European city in an example, use Lisbon.
 - "You" is the reader. The person they're giving to is him, her or them, as the keyword says.
 - Short sentences. No exclamation marks in the prose (sample lines may have them). No emoji. No
   "In this article we will", no recap at the end, and none of the filler in `tests/unit/filler.ts`,

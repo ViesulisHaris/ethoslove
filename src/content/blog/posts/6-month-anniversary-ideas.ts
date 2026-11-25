@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "6-month-anniversary-ideas",
   published: "2026-10-30",
-  updated: "2026-11-17",
+  updated: "2026-11-24",
   occasion: "anniversary",
   templates: ["jar-of-reasons", "our-timeline", "the-letter"],
   content: {
@@ -92,7 +92,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you'd rather send something than wrap it, our [digital anniversary gifts](/occasions/anniversary) are made from your own photos and song, and there are more [digital gifts](/gifts) for any other day.",
+          text: "If you'd rather send something than wrap it, our [digital anniversary gifts](/occasions/anniversary) are made from your own photos and song, and there are more [digital gifts](/gifts) for any other day. Six digital gifts sized for exactly this month, each with a line to borrow, are on the page of [6 month anniversary gifts](/gifts/6-month-anniversary).",
         },
         { type: "h2", text: "What to write in a 6 month anniversary card" },
         {
@@ -264,7 +264,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si prefieres mandar algo en vez de envolverlo, nuestros [regalos digitales de aniversario](/occasions/anniversary) se hacen con vuestras fotos y vuestra canción, y hay más [regalos digitales](/gifts) para cualquier otro día.",
+          text: "Si prefieres mandar algo en vez de envolverlo, nuestros [regalos digitales de aniversario](/occasions/anniversary) se hacen con vuestras fotos y vuestra canción, y hay más [regalos digitales](/gifts) para cualquier otro día. Seis regalos digitales pensados justo para este mes, cada uno con una frase lista, están en la página de [regalos para 6 meses de novios](/gifts/6-month-anniversary).",
         },
         { type: "h2", text: "Qué escribir en la tarjeta de los 6 meses" },
         {

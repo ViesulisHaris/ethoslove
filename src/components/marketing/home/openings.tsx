@@ -25,16 +25,17 @@ export async function Openings({ locale }: { locale: GiftLocale }) {
       </div>
       <div className="scrollbar-none relative mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 sm:px-8 lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]">
         {ids.map((id) => (
-          <Link key={id} href={`/demo/bouquet?cover=${id}`} className="group w-[200px] shrink-0 snap-start sm:w-[228px]">
+          <Link key={id} href={`/demo/bouquet?cover=${id}`} aria-label={`${t(`editor.covers.names.${id}`)}: ${t("home.openings.preview")}`} className="group w-[200px] shrink-0 snap-start sm:w-[228px]">
             {/* isolate: a cover stacks itself high for the gift page; here it must stay under the header. */}
-            <div className="relative isolate aspect-[390/640] overflow-hidden rounded-[28px] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.85)] ring-1 ring-white/10 transition-transform duration-500 ease-[var(--ease-out-quint)] [container-type:size] group-hover:-translate-y-1.5">
+            {/* The name on the cover ("For Ana") is part of the picture: data-picture keeps it out of the page's word count. */}
+            <div data-picture className="relative isolate aspect-[390/640] overflow-hidden rounded-[28px] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.85)] ring-1 ring-white/10 transition-transform duration-500 ease-[var(--ease-out-quint)] [container-type:size] group-hover:-translate-y-1.5">
               {/* The small copies of the cut-outs: a card is 228px wide at most (see thumbLook). */}
               <Cover look={thumbLook(COVER_LOOKS[id])} recipientName="Ana" locale={locale} still />
             </div>
             <div className="mt-4 flex items-center justify-between px-1">
               <span className="font-display text-xl">{t(`editor.covers.names.${id}`)}</span>
-              <span className="inline-flex items-center gap-1 text-sm text-cream/60 transition-colors group-hover:text-cream">
-                {t("home.openings.preview")}
+              {/* The word "Preview" went (the link is named above); the arrow stays as its sign. */}
+              <span aria-hidden="true" className="inline-flex items-center gap-1 text-sm text-cream/60 transition-colors group-hover:text-cream">
                 <ArrowUpRight className="size-3.5" />
               </span>
             </div>
