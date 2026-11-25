@@ -2893,6 +2893,9 @@
         "title": "Flights to {city}",
         "sub": "Where this trip starts. Add where you’re flying from, change the dates if you like, then pick a site."
       },
+      "book": {
+        "title": "Before you go"
+      },
       "surprise": {
         "eyebrow": "Make it a surprise",
         "title": "Don’t tell them where.",

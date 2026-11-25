@@ -261,97 +261,115 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
           <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
             {t("detail.plan.title")}
           </h2>
-          <ol className="mt-10 grid gap-5 lg:grid-cols-2" data-testid="trip-plan">
+          {/* One column: the first day open, the others a line each (DESIGN-LESS-TEXT, 300 words). No name on the rows: opening day 3 leaves day 1 open. data-reveal stays on the <li>, never inside what opens. */}
+          <ol className="mt-10 grid max-w-3xl gap-3" data-testid="trip-plan">
             {trip.plan.map((day, i) => (
-              <li key={day.day} data-reveal style={{ "--reveal-delay": `${(i % 2) * 80}ms` } as React.CSSProperties} className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
-                <p className="text-eyebrow text-rose-deep">{t("detail.plan.day", { n: day.day })}</p>
-                <h3 className="mt-2 font-display text-[26px] leading-[1.1] text-forest">{day.title[l]}</h3>
-                <ul className="mt-4 grid gap-3">
-                  {day.items[l].map((item) => {
-                    const evening = item.startsWith(EVENING[l]);
-                    return (
-                      <li key={item} className={evening ? "flex gap-3 rounded-2xl bg-blush-paper px-4 py-3 text-[15px] leading-relaxed text-forest" : "flex gap-3 text-[15px] leading-relaxed text-forest/80"}>
-                        {evening ? <Moon aria-hidden="true" className="mt-1 size-4 shrink-0 text-rose-deep" /> : <span aria-hidden="true" className="mt-[9px] size-1.5 shrink-0 rounded-full bg-rose" />}
-                        <span>
-                          {evening ? <strong className="font-semibold text-rose-ink">{EVENING[l]}</strong> : null}
-                          {evening ? item.slice(EVENING[l].length) : item}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
+              <li key={day.day} data-reveal style={{ "--reveal-delay": `${Math.min(i, 3) * 60}ms` } as React.CSSProperties} className="rounded-[28px] bg-card px-6 shadow-soft ring-1 ring-forest/5 sm:px-7">
+                <details open={i === 0} className="group">
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[28px] py-4 outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                    <span className="min-w-0">
+                      <span className="block text-eyebrow text-rose-deep">{t("detail.plan.day", { n: day.day })}</span>
+                      <h3 className="mt-1.5 font-display text-[24px] leading-[1.1] text-forest sm:text-[26px]">{day.title[l]}</h3>
+                    </span>
+                    <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                  </summary>
+                  <ul className="grid gap-3 pb-6 sm:pb-7">
+                    {day.items[l].map((item) => {
+                      const evening = item.startsWith(EVENING[l]);
+                      return (
+                        <li key={item} className={evening ? "flex gap-3 rounded-2xl bg-blush-paper px-4 py-3 text-[15px] leading-relaxed text-forest" : "flex gap-3 text-[15px] leading-relaxed text-forest/80"}>
+                          {evening ? <Moon aria-hidden="true" className="mt-1 size-4 shrink-0 text-rose-deep" /> : <span aria-hidden="true" className="mt-[9px] size-1.5 shrink-0 rounded-full bg-rose" />}
+                          <span>
+                            {evening ? <strong className="font-semibold text-rose-ink">{EVENING[l]}</strong> : null}
+                            {evening ? item.slice(EVENING[l].length) : item}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </details>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      {tickets.length > 0 ? (
-        <section id="tickets" className="scroll-mt-24 bg-paper pt-16 lg:pt-24">
-          <div className="container-x">
-            <p data-reveal className="text-eyebrow text-rose-deep">
-              {ta("tickets.eyebrow")}
-            </p>
-            <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
-              {ta("tickets.title")}
-            </h2>
-            <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-forest/70">{ta("tickets.sub")}</p>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-testid="trip-tickets">
-              {tickets.map((ticket) => (
-                <li key={ticket.url}>
-                  <PartnerLink
-                    partner="tiqets"
-                    placement="trip_tickets"
-                    trip={trip.id}
-                    href={ticket.url}
-                    aria-label={ta("tickets.label", { name: ticket.name })}
-                    className="group flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-card p-4 shadow-soft ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper"
-                  >
-                    <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-2xl bg-blush-paper text-rose-deep">
-                      <Ticket className="size-5" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block font-display text-[19px] leading-tight text-forest">{ticket.name}</span>
-                      {ticket.where ? <span className="mt-0.5 block text-[13px] text-forest/65">{ticket.where}</span> : null}
-                    </span>
-                    <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </PartnerLink>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
-              {ta("tickets.via")} {ta("disclosureBoth")}
-            </p>
-          </div>
-        </section>
-      ) : null}
-
-      <section id="flights" className="scroll-mt-24 bg-paper py-16 lg:py-24">
-        <div className="container-x grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start lg:gap-14">
-          <div>
-            <p className="text-eyebrow text-rose-deep">{t("detail.flights.eyebrow")}</p>
-            <h2 className="display-xl mt-4">{t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}</h2>
-            <p className="mt-4 max-w-md text-[16px] leading-relaxed text-forest/70">{t("detail.flights.sub")}</p>
-            {carHire ? (
-              <div className="mt-8 max-w-md rounded-[24px] bg-blush-paper p-5" data-testid="trip-car">
-                <h3 className="flex items-center gap-2 font-display text-[22px] leading-tight text-forest">
-                  <Car aria-hidden="true" className="size-5 text-rose-deep" />
-                  {ta("car.title")}
-                </h3>
-                <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/70">{ta("car.sub")}</p>
-                <PartnerLink partner="autoeurope" placement="trip_car" trip={trip.id} href={carHire} className="group mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-card px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush-paper">
-                  {ta("car.cta")}
-                  <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  <span className="sr-only">({ta("newTab")})</span>
-                </PartnerLink>
-                <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
-                  {ta("car.via")} {ta("disclosureBoth")}
-                </p>
-              </div>
+      {/* Flights, tickets and the car: three closed rows, each one tap away. The commission line stays inside its row, beside its links. */}
+      <section id="book" className="scroll-mt-24 bg-paper py-16 lg:py-24">
+        <div className="container-x">
+          <p data-reveal className="text-eyebrow text-rose-deep">
+            {t("detail.flights.eyebrow")}
+          </p>
+          <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
+            {t("detail.book.title")}
+          </h2>
+          <div className="mt-8 grid max-w-3xl gap-3">
+            <details id="flights" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                {t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}
+                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+              </summary>
+              <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} className="pb-5" />
+            </details>
+            {tickets.length > 0 ? (
+              <details id="tickets" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
+                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                  {ta("tickets.title")}
+                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                </summary>
+                <div className="pb-5">
+                  <p className="max-w-xl text-[15px] leading-relaxed text-forest/70">{ta("tickets.sub")}</p>
+                  <ul className="mt-4 grid gap-3 sm:grid-cols-2" data-testid="trip-tickets">
+                    {tickets.map((ticket) => (
+                      <li key={ticket.url}>
+                        <PartnerLink
+                          partner="tiqets"
+                          placement="trip_tickets"
+                          trip={trip.id}
+                          href={ticket.url}
+                          aria-label={ta("tickets.label", { name: ticket.name })}
+                          className="group/ticket flex h-full min-h-[88px] items-center gap-3.5 rounded-[24px] bg-blush-paper/60 p-4 ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper motion-reduce:transition-none"
+                        >
+                          <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-2xl bg-card text-rose-deep">
+                            <Ticket className="size-5" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block font-display text-[19px] leading-tight text-forest">{ticket.name}</span>
+                            {ticket.where ? <span className="mt-0.5 block text-[13px] text-forest/65">{ticket.where}</span> : null}
+                          </span>
+                          <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-rose-deep transition-transform group-hover/ticket:translate-x-0.5 group-hover/ticket:-translate-y-0.5" />
+                        </PartnerLink>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
+                    {ta("tickets.via")} {ta("disclosureBoth")}
+                  </p>
+                </div>
+              </details>
             ) : null}
-          </div>
-          <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
-            <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} />
+            {carHire ? (
+              <details id="car" data-testid="trip-car" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
+                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                  <span className="flex items-center gap-2">
+                    <Car aria-hidden="true" className="size-5 text-rose-deep" />
+                    {ta("car.title")}
+                  </span>
+                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                </summary>
+                <div className="pb-5">
+                  <p className="max-w-xl text-[15px] leading-relaxed text-forest/70">{ta("car.sub")}</p>
+                  <PartnerLink partner="autoeurope" placement="trip_car" trip={trip.id} href={carHire} className="group/car mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-blush-paper px-5 text-[15px] font-semibold text-forest ring-1 ring-forest/12 transition-colors hover:bg-blush">
+                    {ta("car.cta")}
+                    <ArrowUpRight aria-hidden="true" className="size-4 text-rose-deep transition-transform group-hover/car:translate-x-0.5 group-hover/car:-translate-y-0.5" />
+                    <span className="sr-only">({ta("newTab")})</span>
+                  </PartnerLink>
+                  <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
+                    {ta("car.via")} {ta("disclosureBoth")}
+                  </p>
+                </div>
+              </details>
+            ) : null}
           </div>
         </div>
       </section>
@@ -361,9 +379,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
           <div className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">
             <FloralFrame frame="card" ground="dark" className="-z-10" />
             <div className="relative max-w-2xl">
-              <p className="text-eyebrow text-blush">{t("detail.surprise.eyebrow")}</p>
-              <h2 className="display-xl mt-4 text-cream">{t("detail.surprise.title")}</h2>
-              <p className="mt-4 text-[16.5px] leading-relaxed text-cream/75">{t("detail.surprise.sub", { city: String(gift.toCity) })}</p>
+              <h2 className="display-xl text-cream">{t("detail.surprise.title")}</h2>
             </div>
             <div className="relative mt-8 flex shrink-0 flex-col items-start gap-3 lg:mt-0">
               <SurpriseLink slug={TRIP_GIFT_SLUG} fields={gift} className="group btn-rose inline-flex h-14 items-center gap-2 rounded-full px-8 text-base font-semibold transition-[filter] hover:brightness-110">
@@ -371,7 +387,6 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                 {t("detail.surprise.cta")}
                 <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
               </SurpriseLink>
-              <p className="text-[13px] text-cream/55">{t("detail.surprise.note")}</p>
               <SurpriseAnyGift unwrap={tripUnwrap(trip, l)} searchNames={trip.stops.map((s) => s.name)} className="-my-1 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-cream/90 underline decoration-cream/35 underline-offset-4 transition-colors hover:text-cream hover:decoration-cream">
                 <Gift aria-hidden="true" className="size-4" />
                 {t("detail.surprise.anyGift")}
