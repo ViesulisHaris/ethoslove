@@ -49,6 +49,7 @@ describe("blog guard", () => {
     expect(withText("A weekend in Madrid"), "the sample has a title").not.toBe(sample);
     expect(postProblem(withText("A weekend in Madrid"))).toMatch(/Madrid/);
     expect(postProblem(withText("Regalos desde España"))).toMatch(/España/);
+    for (const place of ["Granada", "San Sebastián", "Tenerife", "Andalusia", "Catalonia", "Santiago de Compostela", "Zaragoza"]) expect(postProblem(withText(`A weekend in ${place}`)), place).toMatch(new RegExp(place));
     expect(postProblem(withText("Written in English and Spanish"))).toBeNull();
   });
 

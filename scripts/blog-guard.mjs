@@ -27,9 +27,11 @@ export const TEAM_AUTHOR = "adulis2014@gmail.com";
 /**
  * Nothing on the site names Spain or a Spanish city (the owner's rule; tests/unit/cities.test.ts holds the pages
  * to it). A post's example cities come from elsewhere: Lisbon for Europe (docs/blog/VOICE.md). "Spanish", the
- * language, is not on the list: posts rightly say "in English and Spanish".
+ * language, is not on the list: posts rightly say "in English and Spanish". The list reaches past the capitals to the
+ * regions, islands and cities a post about a trip would reach for (the code review of 25 Nov 2026, C23).
  */
-export const SPAIN_WORDS = /\b(spain|españa|espana|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary islands)\b/i;
+export const SPAIN_WORDS =
+  /\b(spain|españa|espana|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|majorca|ibiza|menorca|canarias|canary islands|tenerife|gran canaria|lanzarote|granada|toledo|zaragoza|salamanca|san sebasti[aá]n|donostia|pamplona|c[aá]diz|alicante|murcia|marbella|galicia|andaluc[ií]a|andalusia|catalu[ñn]a|catalonia|santiago de compostela)\b/i;
 
 const POST_PATH = /^src\/content\/blog\/posts\/[a-z0-9-]+\.ts$/;
 const INDEX_PATH = "src/content/blog/index.ts";
