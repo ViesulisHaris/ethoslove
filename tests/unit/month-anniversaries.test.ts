@@ -302,6 +302,13 @@ describe("anniversary gifts by month", () => {
     expect(reused).toEqual([]);
   });
 
+  it("say what they mean: an eve is the day before, and halfway to two years is one", () => {
+    for (const n of MONTHS) {
+      expect(strings(MONTH_GUIDES[n].en).join(" "), String(n)).not.toMatch(/\beve of\b|\bhalfway to two years\b/i);
+      expect(strings(MONTH_GUIDES[n].es).join(" "), String(n)).not.toMatch(/\bvíspera\b|\bson pocos para que\b/i);
+    }
+  });
+
   it("the questions are the month's own", () => {
     for (const locale of GIFT_LOCALES) {
       const asked = MONTHS.flatMap((n) => MONTH_GUIDES[n][locale].faq.map((f) => f.q.trim().toLowerCase()));

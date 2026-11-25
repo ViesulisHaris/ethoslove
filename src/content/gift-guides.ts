@@ -1647,7 +1647,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "sticker-bomb",
           heading: "Label strips that take the blame",
           brief: "Six label-maker strips under the stickers, small admissions from silly to real.",
-          body: "Small admissions add up. Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, six of them, twenty-eight characters each. For an apology, make the strips small admissions in order, from the silly to the real, and choose The soft ones pack so the stickers stay gentle.",
+          body: "Small admissions add up. Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, six of them, twenty-eight characters each. For an apology, make the strips small admissions in order, from the silly to the real, and pick the pack called “The soft ones” so the stickers stay gentle.",
           line: { field: "labels", where: "One label-maker strip", text: "official over-reactor: me" },
         },
       ],
@@ -1691,14 +1691,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       craft: "Más allá de la tarjeta",
       film: "paper-crane",
       lead: [
-        "Casi todo el mundo empieza por las flores, y las flores están bien. El problema es la tarjeta: unas pocas palabras entre los tallos, que casi nunca bastan para lo que pasó. Las ideas de abajo se quedan con el ramo y le dan sitio, dentro o al lado: una grulla con una admisión en cada pliegue, una carta, una flor lenta.",
+        "Casi todo el mundo empieza por las flores, y las flores están bien. El problema es la tarjeta: unas pocas palabras entre los tallos, que casi nunca bastan para lo que pasó. Las ideas de abajo se quedan con el ramo y le dan sitio, dentro o al lado: una grulla con algo que reconoces en cada pliegue, una carta, una flor lenta.",
         "Uno no cuesta nada: una nota corta en La carta, de 500 caracteres como mucho. Los otros cinco se pagan una sola vez y lo que compras es la plantilla, para siempre; el editor te deja terminar uno entero antes de decidir. Elige sus colores, no las rosas rojas de después de cada discusión.",
       ],
       ideas: [
         {
           template: "paper-crane",
           heading: "Dobla la disculpa, pliegue a pliegue",
-          body: "Grulla de papel va despacio a propósito: cada pliegue se mantiene pulsado hasta que el papel se dobla, y si se suelta antes de tiempo se abre. Cada pliegue que sale muestra una frase de setenta y dos caracteres, seis como mucho. A una disculpa le va ese ritmo. Pon una admisión en cada pliegue y guarda la promesa para la frase que se queda.",
+          body: "Grulla de papel va despacio a propósito: cada pliegue se mantiene pulsado hasta que el papel se dobla, y si se suelta antes de tiempo se abre. Cada pliegue que sale muestra una frase de setenta y dos caracteres, seis como mucho. A una disculpa le va ese ritmo. Pon en cada pliegue algo que reconoces y guarda la promesa para la frase que se queda.",
           line: { field: "lines", where: "La frase de un pliegue", text: "Te interrumpí en la cena, y otra vez de vuelta a casa." },
         },
         {
@@ -1732,7 +1732,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "sticker-bomb",
           heading: "Tiras de rotuladora que se echan la culpa",
           brief: "Seis tiras de rotuladora bajo los stickers, pequeñas admisiones de la tonta a la real.",
-          body: "Las admisiones pequeñas suman. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora, seis en total, de veintiocho caracteres. Para pedir perdón, que las tiras sean pequeñas admisiones en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
+          body: "Las admisiones pequeñas suman. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora, seis en total, de veintiocho caracteres. Para pedir perdón, que las tiras sean pequeñas cosas que reconoces, en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
           line: { field: "labels", where: "Una tira de rotuladora", text: "exagero, lo reconozco" },
         },
       ],
@@ -1751,7 +1751,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
       ],
       faq: [
-        { q: "¿Qué regalo sirve para pedir perdón con flores?", a: "Flores con palabras suficientes para llevar la disculpa: un ramo cuya tarjeta lleva a una carta, una grulla de papel con una admisión en cada pliegue, una flor que se abre despacio con tu mensaje dentro." },
+        { q: "¿Qué regalo sirve para pedir perdón con flores?", a: "Flores con palabras suficientes para llevar la disculpa: un ramo cuya tarjeta lleva a una carta, una grulla de papel con algo que reconoces en cada pliegue, una flor que se abre despacio con tu mensaje dentro." },
         { q: "¿Bastan unas flores para pedir perdón?", a: "Solo con palabras. Las flores dicen que lo sientes por algo; la tarjeta y la carta tienen que decir por qué. Sin eso, pueden leerse como una forma de evitar la conversación." },
         { q: "¿Qué pongo en una tarjeta para pedir perdón?", a: "En una tarjeta de treinta caracteres, señala el mensaje largo: «Me equivoqué. Dentro, la carta». En la carta, di qué hiciste, qué le costó y qué vas a cambiar." },
         { q: "¿Puedo pedir perdón con algo gratis?", a: "Sí. La carta sale gratis como nota con canción, de hasta 500 caracteres. Cada uno de los demás regalos de aquí es un solo pago por su plantilla, y se monta entero en el editor antes de pagar." },
@@ -1800,7 +1800,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "A jar of notes to open after the snacks",
           brief: "Folded notes shaken out one at a time, for the weeks after the box.",
           body: "Jar of Reasons is a glass jar of folded notes that come out one at a time when they shake the phone or tap the glass, a hundred at most. It pairs well with a box: the physical things for the first evening, the jar for the weeks after, one note on each bad day.",
-          line: { field: "reasons", where: "One note in the jar", text: "Open this one on a Monday. You are better at this than you think." },
+          line: { field: "reasons", where: "One note in the jar", text: "For a bad Monday: you are better at this than you think." },
         },
         {
           template: "passport",
@@ -1812,8 +1812,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "A countdown to the day it should arrive",
-          body: "Tracking numbers are vague; Midnight Countdown is not. Set it to the evening the parcel is due, and the sky darkens toward it; at zero the fireworks go off and up to twenty photos open. The headline above the timer takes sixty characters. If the box is late, the countdown still lands on the day.",
-          line: { field: "headline", where: "Headline above the timer", text: "Until the box lands on your doormat" },
+          body: "Tracking numbers are vague; Midnight Countdown is not. Set it to the evening the parcel is due, and the sky darkens toward it; at zero the fireworks go off and up to twenty photos open. The headline above the timer takes sixty characters. If the courier only gives a window, set it for the last day of it: better the gift waits for the box than the other way round.",
+          line: { field: "headline", where: "Headline above the timer", text: "Until the box is on your doorstep" },
         },
         {
           template: "vinyl",
@@ -1892,7 +1892,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "Un frasco de notas para después de picar",
           brief: "Notas dobladas que salen de una en una, para las semanas después de la caja.",
           body: "En Frasco de razones las notas dobladas esperan en un tarro de cristal y caen de una en una al agitar el móvil o tocar el tarro, cien como mucho. Combina bien con una caja: las cosas de verdad para la primera noche, el frasco para las semanas siguientes, una nota cada día malo.",
-          line: { field: "reasons", where: "Una nota del frasco", text: "Abre esta un lunes. Lo haces mejor de lo que crees." },
+          line: { field: "reasons", where: "Una nota del frasco", text: "Para un lunes malo: lo haces mejor de lo que crees." },
         },
         {
           template: "passport",
@@ -1904,7 +1904,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "Una cuenta atrás hasta el día que debería llegar",
-          body: "Los números de seguimiento son vagos; Cuenta atrás de medianoche no. Ponla en la tarde en que debe llegar el paquete, y el cielo se oscurece hacia ella; en el cero estallan los fuegos y se abren hasta veinte fotos. El titular sobre el reloj admite sesenta caracteres. Si la caja se retrasa, la cuenta atrás llega igual el día.",
+          body: "Los números de seguimiento son vagos; Cuenta atrás de medianoche no. Ponla en la tarde en que debe llegar el paquete, y el cielo se oscurece hacia ella; en el cero estallan los fuegos y se abren hasta veinte fotos. El titular sobre el reloj admite sesenta caracteres. Si la mensajería solo da un margen, ponla en el último día: mejor que el regalo espere a la caja que al revés.",
           line: { field: "headline", where: "Titular sobre el reloj", text: "Hasta que la caja llegue a tu felpudo" },
         },
         {

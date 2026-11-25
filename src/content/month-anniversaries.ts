@@ -715,7 +715,7 @@ const month3: Month = {
         heading: "One line before the first sticker",
         brief: "A single line on an empty page, then stickers wherever they tap.",
         body: "Before anything happens, Sticker Bomb shows them a single line on an empty page, and then the stickers start landing wherever they tap. That opening line is yours, forty characters at most. Three months in, make it a promise you can keep, then let up to six of your photos drop in as polaroids.",
-        line: { field: "prompt", where: "The line on the empty page", text: "Three months. Go on, decorate us." },
+        line: { field: "prompt", where: "The line on the empty page", text: "I promise: the window seat is yours." },
       },
       {
         template: "vinyl",
@@ -772,7 +772,7 @@ const month3: Month = {
         heading: "Una frase antes del primer sticker",
         brief: "Una sola frase en una página vacía y luego stickers donde toquen.",
         body: "Antes de nada, Bomba de Stickers le enseña una sola frase en una página vacía, y luego los stickers caen donde toque. Esa primera frase es tuya, de cuarenta caracteres como mucho. A los tres meses, que sea una promesa que puedas cumplir, y deja que hasta seis fotos tuyas caigan como polaroids.",
-        line: { field: "prompt", where: "La frase de la página vacía", text: "Tres meses. Venga, decóranos." },
+        line: { field: "prompt", where: "La frase de la página vacía", text: "Prometido: la ventanilla es tuya." },
       },
       {
         template: "vinyl",
@@ -1204,7 +1204,7 @@ const month8: Month = {
         heading: "Eight months of dinners on one camera",
         brief: "Your shared meals on a little camera roll, each photo captioned with the dish.",
         body: "Fill Digicam with the meals you have shared, up to twelve photos, and write the dish in each caption in the screen’s pixel type. Untick “It’s their birthday”, or the camera greets them with one. They flick through it with arrows or a swipe. Over the camera, the magazine cut-out title takes twenty-four characters: the name of your usual place.",
-        line: { field: "headline", where: "The cut-out title", text: "table for two, again" },
+        line: { field: "headline", where: "The cut-out title", text: "Tuesdays at Rosa’s" },
       },
       {
         template: "picnic",
@@ -1262,7 +1262,7 @@ const month8: Month = {
         heading: "Ocho meses de cenas en una cámara",
         brief: "Vuestras comidas en el carrete de una camarita, cada foto con el plato al pie.",
         body: "Llena Digicam con las comidas que habéis compartido, hasta doce fotos, y escribe el plato en cada pie con la letra pixelada de la pantalla. Desmarca «Es su cumpleaños», o la cámara se encenderá con una felicitación de cumpleaños. Se pasan con las flechas o deslizando. Encima de la cámara, el título recortado de revista admite veinticuatro caracteres: el nombre de vuestro sitio de siempre.",
-        line: { field: "headline", where: "El título recortado", text: "mesa para dos, otra vez" },
+        line: { field: "headline", where: "El título recortado", text: "Los martes, en Casa Rosa" },
       },
       {
         template: "picnic",
@@ -1361,7 +1361,7 @@ const month9: Month = {
     label: "9 meses",
     hero: {
       line: "Tres cuartos de año. Nueve fotos, una por cada mes.",
-      sentence: "Nueve meses dan para tener una foto de cada uno y son pocos para que cada una conserve su historia, así que estos regalos giran en torno a nueve fotos.",
+      sentence: "Nueve meses dan para tener una foto de cada uno y pocos como para que cada una conserve su historia, así que estos regalos giran en torno a nueve fotos.",
     },
     ideasTitle: "Cinco que caben en nueve meses",
     ideas: [
@@ -1923,7 +1923,7 @@ const month15: Month = {
         template: "photo-booth",
         heading: "Four flashes, black and white this time",
         body: "For a year and a quarter, set Photo Booth’s strip to black and white: four photos, printed as if from an old booth on a pier. The line in pen on the wall beside it holds forty characters. Write the lyric you both get wrong, wrong on purpose.",
-        line: { field: "line", where: "The words on the wall", text: "the lyric we always get wrong" },
+        line: { field: "line", where: "The words on the wall", text: "hold me closer, Tony Danza" },
       },
       {
         template: "fortune-cookie",
@@ -1979,7 +1979,7 @@ const month15: Month = {
         template: "photo-booth",
         heading: "Cuatro flashes, esta vez en blanco y negro",
         body: "Para un año y cuarto, pon la tira de Fotomatón en blanco y negro: cuatro fotos impresas como en una cabina antigua de paseo marítimo. La frase a boli en el muro de al lado admite cuarenta caracteres. Escribe la letra que los dos cantáis mal, mal a propósito.",
-        line: { field: "line", where: "Las palabras del muro", text: "la letra que siempre cantamos mal" },
+        line: { field: "line", where: "Las palabras del muro", text: "hold me closer, Tony Danza" },
       },
       {
         template: "fortune-cookie",
@@ -2163,8 +2163,8 @@ const month17: Month = {
       {
         template: "sticker-bomb",
         heading: "A promise on the empty page",
-        body: "Sticker Bomb opens on an empty page with one line on it, forty characters, before the first sticker. Make that line the plain promise, and let the stickers be the joke around it: The soft ones pack, if you want it gentle. Up to six of your photos turn up among them as polaroids.",
-        line: { field: "prompt", where: "The line on the empty page", text: "I would pick you again. Now stick." },
+        body: "Sticker Bomb opens on an empty page with one line on it, forty characters, before the first sticker. Make that line the plain promise, and let the stickers be the joke around it, from the pack called “The soft ones” if you want it gentle. Up to six of your photos turn up among them as polaroids.",
+        line: { field: "prompt", where: "The line on the empty page", text: "I would pick you again, every time." },
       },
       {
         template: "bouquet",
@@ -2222,7 +2222,7 @@ const month17: Month = {
         heading: "Una promesa en la página vacía",
         brief: "Una sola frase en una página vacía antes del primer sticker: la promesa sencilla.",
         body: "Bomba de Stickers se abre en una página vacía con una sola frase, de cuarenta caracteres, antes del primer sticker. Que esa frase sea la promesa sencilla, y que los stickers sean la broma de alrededor: el pack Los tiernos, si lo quieres suave. Hasta seis fotos tuyas caen entre ellos como polaroids.",
-        line: { field: "prompt", where: "La frase de la página vacía", text: "Te volvería a elegir. Ahora, pega." },
+        line: { field: "prompt", where: "La frase de la página vacía", text: "Te volvería a elegir, cada vez." },
       },
       {
         template: "bouquet",
@@ -2266,7 +2266,7 @@ const month17: Month = {
 const month18: Month = {
   en: {
     title: "18 Month Anniversary Gifts for a Year and a Half",
-    description: "Halfway to two years, the talk often turns to a shared lease. Six 18 month anniversary gifts that look back over it, from a museum of you to a front page.",
+    description: "A year and a half in, the talk often turns to a shared lease. Six 18 month anniversary gifts that look back over it, from a museum of you to a front page.",
     h1: "18 month anniversary gifts",
     label: "18 months",
     hero: {
@@ -2689,7 +2689,7 @@ const month21: Month = {
         heading: "A green collage for the things that last",
         brief: "A green collage of polaroids with the seasons you have had written across the top.",
         body: "Evergreen is a collage in sage, olive or mint, with up to ten photos on white polaroids and a few words across the top, twenty-two characters, written over an old record and a newspaper. Name the seasons you have had. Your letter closes the collage, and three lines are plenty.",
-        line: { field: "title", where: "The words across the top", text: "seven seasons, green" },
+        line: { field: "title", where: "The words across the top", text: "seven seasons of us" },
       },
     ],
     date: { kind: "rainy-day", title: "A museum, then a glass of something", line: "Find one thing older than both of you and stand in front of it." },
@@ -2893,14 +2893,14 @@ const month22: Month = {
 const month23: Month = {
   en: {
     title: "23 Month Anniversary Gifts on the Way to Two Years",
-    description: "On the eve of two years, look back at where you have been and count down to the day. Five 23 month anniversary gifts, each with a line to borrow.",
+    description: "One month short of two years, look back at where you have been and count down to the day. Five 23 month anniversary gifts, each with a line to borrow.",
     h1: "23 month anniversary gifts",
     label: "23 months",
     hero: {
       line: "One month to two years. Look back at the map, then count down.",
       sentence: "At twenty-three months the gift can sum up the places you have been together and set a clock running to the second anniversary.",
     },
-    ideasTitle: "Five for the eve of two years",
+    ideasTitle: "Five for the month before two years",
     ideas: [
       {
         template: "passport",
@@ -2939,7 +2939,7 @@ const month23: Month = {
     ],
     date: { kind: "cheap", title: "Ice cream and nowhere to be, again", line: "Walk the route of your first walk together." },
     stage: [
-      "Twenty-three months is the eve of the second anniversary. By now there is a map of places, cities visited, a shared address, the station where one of you missed a train, and how to mark two years is on both your minds. It is a natural month to look back at where you have been.",
+      "Twenty-three months is the last month before the second anniversary. By now there is a map of places, cities visited, a shared address, the station where one of you missed a train, and how to mark two years is on both your minds. It is a natural month to look back at where you have been.",
       "About thirty days are left, and they are worth using. Hand over the second-anniversary gift now and the day itself arrives empty; let the run-up pass unnoticed and you waste it. This month looks back at the map and counts down, and the gift can go out now, set to open on the anniversary.",
     ],
     faq: [
@@ -2950,14 +2950,14 @@ const month23: Month = {
   },
   es: {
     title: "Regalos de 23 meses de novios, camino de dos años",
-    description: "En la víspera de los dos años, mira dónde habéis estado y cuenta hacia el día. Cinco regalos para los 23 meses de novios, cada uno con una frase lista.",
+    description: "A un mes de los dos años, mira dónde habéis estado y cuenta los días que faltan. Cinco regalos para los 23 meses de novios, cada uno con una frase lista.",
     h1: "Regalos para 23 meses de novios",
     label: "23 meses",
     hero: {
       line: "Un mes para los dos años. Mira el mapa y luego cuenta hacia atrás.",
       sentence: "A los veintitrés meses el regalo puede resumir los sitios donde habéis estado los dos y poner en marcha un reloj hasta el segundo aniversario.",
     },
-    ideasTitle: "Cinco para la víspera de los dos años",
+    ideasTitle: "Cinco para el mes antes de los dos años",
     ideas: [
       {
         template: "passport",
@@ -2996,7 +2996,7 @@ const month23: Month = {
     ],
     date: { kind: "cheap", title: "Helado y ningún sitio al que ir, otra vez", line: "Repetid el recorrido de vuestro primer paseo." },
     stage: [
-      "Veintitrés meses son la víspera del segundo aniversario. A estas alturas ya hay un mapa de sitios, ciudades visitadas, una dirección compartida, el andén donde se os escapó un tren, y cómo celebrar los dos años ronda por la cabeza. Es un mes natural para mirar atrás a dónde habéis estado.",
+      "Veintitrés meses son el último mes antes del segundo aniversario. A estas alturas ya hay un mapa de sitios, ciudades visitadas, una dirección compartida, el andén donde se os escapó un tren, y cómo celebrar los dos años ronda por la cabeza. Es un mes natural para mirar atrás a dónde habéis estado.",
       "Quedan unos treinta días, y merece la pena aprovecharlos. Si entregas ya el regalo del segundo aniversario, el día llega vacío; si dejas pasar la cuenta atrás sin notarla, la desperdicias. Este mes mira el mapa y cuenta hacia el día, y el regalo puede salir ya, programado para abrirse en el aniversario.",
     ],
     faq: [
