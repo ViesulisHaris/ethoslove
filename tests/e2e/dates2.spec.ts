@@ -160,7 +160,7 @@ test.describe("dates2: the planner's two new controls", () => {
         await expect(page.getByRole("combobox", { name })).toHaveCount(1);
         await expect(p.getByRole("combobox", { name })).toBeVisible();
       }
-      expect(await sentence(page), url).toMatch(/\. Indoors or out, any distance\.$/);
+      expect(await sentence(page), url).toMatch(/\. In or out, any distance\.$/);
     }
   });
 
@@ -275,7 +275,7 @@ test.describe("dates2: the planner's two new controls", () => {
       await openLisbon(page);
       if (how === "none") {
         await expect(page.getByRole("combobox", { name: "Distance" })).toHaveCount(0);
-        expect(await sentence(page)).toMatch(/\. Indoors or out\.$/);
+        expect(await sentence(page)).toMatch(/\. In or out\.$/);
       }
       const y = await planButton(page).evaluate((b) => b.getBoundingClientRect().top + window.scrollY);
       await context.close();
@@ -589,7 +589,7 @@ test.describe("dates2: new pages", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Romantic date ideas in Chicago");
     await page.context().clearCookies();
     expect((await page.goto("/es/dates/chicago/romantic"))?.status()).toBe(200);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ideas para una cita romántica en Chicago");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("En Chicago, ideas para una cita romántica");
     await page.context().clearCookies();
     await page.goto("/dates/chicago");
     const hrefs = [...new Set(await page.locator('a[href^="/dates/chicago/"]').evaluateAll((as) => as.map((a) => a.getAttribute("href") ?? "")))];

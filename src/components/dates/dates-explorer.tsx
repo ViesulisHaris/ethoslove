@@ -1346,7 +1346,7 @@ function ExplorerSkeleton({ locale, early, empty }: { locale: "en" | "es"; early
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
         </div>
         <div className="mt-4 h-[72px] animate-pulse rounded-[20px] bg-white/70" aria-hidden="true" />
-        <div className="mt-6 h-[18.875rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[14.9rem]" aria-hidden="true" />
+        <div className="mt-6 h-[14.45rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[14.9rem]" aria-hidden="true" />
         <div className="mt-9">
           <IdeaRail
             heading={

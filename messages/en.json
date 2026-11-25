@@ -2162,15 +2162,15 @@
       "budgetLabel": "Budget",
       "settingLabel": "Indoors or outdoors",
       "setting": {
-        "any": "Indoors or out",
+        "any": "In or out",
         "indoors": "Indoors",
         "outdoors": "Outdoors"
       },
       "reachLabel": "Distance",
       "reach": {
-        "10": "10 min walk from here",
-        "20": "20 min walk from here",
-        "30": "30 min walk from here",
+        "10": "10 min away",
+        "20": "20 min away",
+        "30": "30 min away",
         "any": "any distance"
       },
       "reachDenied": "We couldn’t get your position, so distance is off. Nothing else changed.",
