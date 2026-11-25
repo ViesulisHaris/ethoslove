@@ -1,13 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { isOccasion } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
 import { recipientFromSlug } from "@/content/recipients";
 import { GAMES } from "@/lib/games/catalogue";
 import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount } from "@/content/blog/text";
+import { FILL_TOKEN, fillContent } from "@/content/blog/fill";
+import { PRODUCTS, type Currency } from "@/lib/pricing/products";
 import type { BlogContent, BlogPost } from "@/content/blog/types";
-import { TEMPLATE_SLUGS } from "@/templates/manifests";
+import { TEMPLATE_SLUGS, listManifests } from "@/templates/manifests";
 import { FILLER } from "./filler";
 
 /**
@@ -237,4 +239,103 @@ describe("blog posts", () => {
       }
     });
   }
+});
+
+/**
+ * Facts about Ethos are read from the code, never typed into a post (reports/seoaudit-audit.md, B5 to
+ * B10, and the lead's calls of 25 Nov 2026): a price, the number of templates and what is free all
+ * change, and a post written from the mirror can't know when. A post states them with the tokens in
+ * src/content/blog/fill.ts, which the page fills for its reader. See docs/blog/VOICE.md.
+ */
+describe("blog posts read Ethos's facts instead of typing them", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  const CURRENCIES: Currency[] = ["usd", "eur", "gbp"];
+  const versions = BLOG_POSTS.flatMap((post) => (["en", "es"] as const).flatMap((locale) => (post.content[locale] ? [{ post, locale, content: post.content[locale]! }] : [])));
+  /**
+   * A text with what the page fills taken out, the tokens inside a `{note:…|…}` first and then the note
+   * itself: what is left is typed, the same whichever way the free note is set.
+   */
+  const typed = (t: string) => t.replace(FILL_TOKEN, "·").replace(/\{note:[^|{}]*\|[^|{}]*\}/g, " ");
+  const typedTexts = (c: BlogContent) => contentTexts(c).map(typed);
+  /** A post's sentences about Ethos: in its own section of a comparison, in its row of a table, or naming it, its pages or offers. */
+  const aboutUs = /Ethos|\bour\b|\bnuestr|Make it special|Hazlo especial|\(\/pricing\)|\(\/templates\//i;
+  function ethosPieces(content: BlogContent, take: (t: string) => string = (t) => t): string[] {
+    let inOurs = false;
+    const section = content.body.flatMap((b) => {
+      if (b.type === "h2" || b.type === "h3") inOurs = /^Ethos\b/.test(b.text);
+      return inOurs ? blockTexts(b).map(take) : [];
+    });
+    return [
+      ...section,
+      ...content.body.flatMap((b) => (b.type === "table" ? b.rows.filter((row) => /^Ethos/.test(row[0] ?? "")).flatMap((row) => row.map(take)) : [])),
+      ...contentTexts(content).flatMap((text) => take(text).split(/(?<=[.;!?])\s+/).filter((sentence) => aboutUs.test(sentence))),
+    ];
+  }
+  /**
+   * How a sentence names a free-tier template (The Letter; Constellations, free only with the note off): its
+   * English name, its link, or its Spanish name where that can't be the plain noun ("la carta" is any letter).
+   */
+  const FREE_TIER = listManifests().filter((m) => m.tier === "free");
+  const namesFreeTier = (raw: string) =>
+    FREE_TIER.some((m) => raw.includes(m.name.en) || raw.includes(`(/templates/${m.slug})`) || (m.name.es.toLowerCase() !== "la carta" && raw.includes(m.name.es)) || raw.includes(`${m.name.es} de Ethos`));
+
+  it("the title, description and keyword hold no token", () => {
+    for (const { post, locale, content } of versions)
+      for (const text of [content.title, content.description, content.keyword]) expect.soft(/[{}]/.test(text), `${post.slug} (${locale}): "${text}"`).toBe(false);
+  });
+
+  it("every token is one the page can fill, with the free note on and off and in every currency", () => {
+    for (const share of ["1", ""]) {
+      vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", share);
+      for (const { post, locale, content } of versions)
+        for (const currency of [...CURRENCIES, undefined] as (Currency | undefined)[]) {
+          const filled = fillContent(content, locale, currency);
+          for (const text of contentTexts(filled)) expect.soft(/[{}|]/.test(text), `${post.slug} (${locale}, share "${share}", ${currency}): "${text}"`).toBe(false);
+        }
+    }
+  }, 60_000);
+
+  it("no Ethos price is typed: a post writes {price:<product>}", () => {
+    // Every amount Ethos charges, in the marks a post would type it with ("$11.99", "£8.99", "9,99 €", "€9.99").
+    const ours = (Object.values(PRODUCTS) as { amounts: Record<Currency, number> }[]).flatMap((p) =>
+      CURRENCIES.flatMap((c) => {
+        const n = (p.amounts[c] / 100).toFixed(2);
+        const mark = { usd: "\\$", gbp: "£", eur: "€" }[c];
+        return [new RegExp(`(?<!US)${mark}\\s?${n.replace(".", "\\.")}(?!\\d)`), new RegExp(`(?<![\\d.,])${n.replace(".", ",")}\\s?${mark}`)];
+      }),
+    );
+    // Other makers' prices in their own sentences may equal one of ours and are theirs to state.
+    for (const { post, locale, content } of versions) {
+      const pieces = ethosPieces(content);
+      for (const piece of pieces) for (const r of ours) expect.soft(r.test(piece), `${post.slug} (${locale}) types an Ethos price (${r}) in "${piece}"`).toBe(false);
+    }
+  });
+
+  it("no count of templates or free templates is typed: a post writes {count:templates} and {free:names}", () => {
+    // "61 templates" said of Ethos; another maker's count ("More than 40 templates") is theirs to state.
+    const typedTotal = /\b\d{2,}\s+(?:[\p{L}-]+\s+)?(?:templates|plantillas)\b/iu;
+    // "Two of the templates below are free", said of anything.
+    const typedFree = /\b(?:one|two|three|una|uno|dos|tres)\b[^.;:]{0,40}\b(?:is|are|es|son)\s+(?:free|gratis)\b/i;
+    for (const { post, locale, content } of versions) {
+      for (const text of ethosPieces(content, typed)) expect.soft(typedTotal.test(text), `${post.slug} (${locale}) types a count of templates in "${text}"`).toBe(false);
+      for (const text of typedTexts(content)) expect.soft(typedFree.test(text), `${post.slug} (${locale}) types how many are free in "${text}"`).toBe(false);
+    }
+  });
+
+  it("what is free about The Letter or Constellations is never typed: a post writes it in {note:…|…} or {free:names}", () => {
+    const freeWord = /\b(?:free|gratis)\b|500 (?:characters|caracteres)/i;
+    for (const { post, locale, content } of versions) {
+      // A template card for a free-tier template: its "Free" label is drawn from sendsFree, so its note never says it.
+      for (const block of content.body)
+        if (block.type === "template" && listManifests().some((m) => m.slug === block.slug && m.tier === "free"))
+          expect.soft(freeWord.test(typed(block.note)), `${post.slug} (${locale}) card ${block.slug}: "${block.note}"`).toBe(false);
+      // Anywhere else, a sentence that names one of them and what is free about it.
+      for (const text of typedTexts(content))
+        for (const sentence of text.split(/(?<=[.;!?])\s+/))
+          if (namesFreeTier(sentence)) expect.soft(freeWord.test(plainText(sentence)), `${post.slug} (${locale}): "${sentence}"`).toBe(false);
+    }
+  });
 });
