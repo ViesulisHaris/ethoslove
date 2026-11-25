@@ -95,6 +95,23 @@ function readAvailable(): boolean | null {
   }
 }
 
+/** True once this tab has heard that the site takes no votes: nothing more is asked until it closes. */
+export const votesOff = (): boolean => readAvailable() === false;
+
+/**
+ * What an answer of the votes route says about the site, kept for the tab: only a 200 whose
+ * `available` is a boolean counts. A 429, a 503 or a dropped connection says nothing, so one busy
+ * minute does not hide the question for the rest of the visit (dates2-C9). Null when it said nothing.
+ */
+export function heardVotes(json: unknown): boolean | null {
+  const available = json && typeof json === "object" ? (json as { available?: unknown }).available : undefined;
+  if (typeof available !== "boolean") return null;
+  try {
+    window.sessionStorage.setItem(AVAILABLE_KEY, available ? "1" : "0");
+  } catch {}
+  return available;
+}
+
 export type Votes = {
   /** This browser's answers, by target. */
   kept: Record<string, Vote>;
@@ -119,13 +136,10 @@ export function useVotes(targets: readonly string[]): Votes {
     if (!key || stored !== null) return;
     const controller = new AbortController();
     fetch(`/api/dates/votes?t=${encodeURIComponent(key)}`, { signal: controller.signal })
-      .then((r) => (r.ok ? (r.json() as Promise<{ available?: unknown }>) : null))
+      .then((r) => (r.ok ? (r.json() as Promise<unknown>) : null))
       .then((json) => {
-        const available = json?.available === true;
-        try {
-          window.sessionStorage.setItem(AVAILABLE_KEY, available ? "1" : "0");
-        } catch {}
-        setAsked({ key, available });
+        const available = heardVotes(json);
+        if (available !== null) setAsked({ key, available });
       })
       .catch(() => undefined);
     return () => controller.abort();

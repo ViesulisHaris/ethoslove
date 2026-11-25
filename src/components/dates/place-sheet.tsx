@@ -29,6 +29,7 @@ import { tiqetsSearch } from "@/lib/trips/partners";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { CostChip } from "./cost-chip";
 import { FeaturedMark } from "./featured-label";
+import { heardVotes, votesOff } from "./use-done";
 import { GroupIcon } from "./group-icon";
 import { PairsWith } from "./pairs-with";
 import { Reviews, type ReviewsLabels } from "./reviews";
@@ -82,14 +83,6 @@ export type PlaceSheetLabels = {
 
 /** A place a vote can be on: the map's own ids only. */
 const VOTE_PLACE = /^(node|way|relation)\/\d{1,15}$/;
-/** This tab already heard that the site takes no votes (components/dates/use-done.ts keeps it): ask nothing. */
-function votesOff(): boolean {
-  try {
-    return window.sessionStorage.getItem("ethos.dates.votes.available") === "0";
-  } catch {
-    return false;
-  }
-}
 
 type Props = {
   place: Ranked;
@@ -216,8 +209,10 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
     const ask = new AbortController();
     const target = `place:${place.id}`;
     fetch(`/api/dates/votes?t=${encodeURIComponent(target)}`, { signal: ask.signal })
-      .then((res) => (res.ok ? (res.json() as Promise<{ liked?: Record<string, unknown> }>) : null))
+      .then((res) => (res.ok ? (res.json() as Promise<{ available?: unknown; liked?: Record<string, unknown> }>) : null))
       .then((json) => {
+        // "Not available" is kept for the tab, as /plan keeps it: the next sheet asks nothing (dates2-C8).
+        heardVotes(json);
         const n = json?.liked?.[target];
         if (typeof n === "number") setLiked({ id: place.id, n });
       })
