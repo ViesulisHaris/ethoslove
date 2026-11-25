@@ -60,7 +60,7 @@ const e = (week: number, idea: string, angle: LetterAngle | null, gift: boolean,
  */
 export const LETTER_IDEA_WORDS: Readonly<Record<string, { title?: Partial<L>; blurb?: Partial<L>; twist?: Partial<L> }>> = {
   "bookshop-and-coffee": {
-    title: { es: "Un libro elegido por tu pareja" },
+    title: { es: "Un libro para cada cual" },
     blurb: { en: "Twenty minutes apart in a bookstore, then coffee while you explain yourselves." },
     twist: { en: "Write a note on the first page before you hand it over." },
   },
@@ -75,7 +75,9 @@ export const LETTER_IDEA_WORDS: Readonly<Record<string, { title?: Partial<L>; bl
       en: "Each of you names a star after the other one. Make it official on a napkin.",
       es: "Bautizad una estrella: cada cual le pone el nombre de su pareja. Hacedlo oficial en una servilleta.",
     },
+    blurb: { es: "Un planetario si el cielo no acompaña y, si acompaña, el mirador más oscuro de la ciudad." },
   },
+  "mini-golf-and-milkshakes": { title: { es: "Minigolf, y quien pierda paga el postre" } },
   "bowling-night": {
     blurb: { en: "Bad shoes, worse technique, a basket of fries in the middle." },
     twist: { es: "Cada bola al canal, una verdad. Cada pleno, un reto." },
@@ -126,7 +128,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
     },
   }),
   e(13, "bookshop-and-coffee", "cheap", false, "How well do you think I know your taste? We find out on Saturday.", "¿Cuánto crees que conozco tus gustos? El sábado lo vemos.", {
-    open: { en: "Browsing is free. Set a paperback budget each, and stick to it.", es: "Curiosear es gratis. Poneos un tope: un libro de bolsillo cada cual." },
+    open: { en: "Browsing is free. Set a paperback budget each, and stick to it.", es: "Curiosear es gratis. Poneos un tope, el de un libro de bolsillo, y cumplidlo." },
   }),
   e(14, "cinema-and-late-dessert", "rainy-day", false, "If Saturday rains, I’m not canceling. I’m just moving us indoors.", "Si el sábado llueve, no anulo nada: nos vamos a cubierto."),
   e(15, "spa-evening", "unique", false, "Keep Saturday evening free, and leave your watch at home.", "Guárdame la tarde del sábado, y deja el reloj en casa.", { twist: false }),
@@ -152,7 +154,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(31, "ice-cream-walk", "cheap", false, "Sunday afternoon is free, and so am I. Ice cream?", "El domingo por la tarde estoy libre. ¿Helado?", {
     open: {
       en: "Two cones and a park: about the cheapest date there is that still feels like an occasion.",
-      es: "Dos helados y un parque: casi la cita más barata que hay, y aún parece una ocasión.",
+      es: "Dos helados y un parque: casi la cita más barata que hay, y aun así tiene algo de ocasión.",
     },
   }),
   e(32, "arcade-night", "fun", false, "Air hockey on Friday. I intend to hold a grudge.", "Air hockey el viernes. Pienso guardarte rencor."),
@@ -178,7 +180,10 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   }),
   e(40, "gallery-hop", "cheap", false, "Your job on Saturday: pick the one piece in the galleries we’d hang at home.", "Tu trabajo el sábado: elegir la obra que colgaríamos en casa."),
   e(41, "bookshop-and-coffee", "rainy-day", false, "Let it rain on Saturday. I know which shelf I’m taking you to.", "Que llueva el sábado. Ya sé a qué estantería te llevo.", {
-    open: { en: "Rain on the window is what a bookstore is for. Twenty minutes apart, then coffee." },
+    open: {
+      en: "Rain on the window is what a bookstore is for. Twenty minutes apart, then coffee.",
+      es: "Lluvia en el cristal: para eso están las librerías. Veinte minutos por separado y luego un café.",
+    },
   }),
   e(42, "cinema-and-late-dessert", "night", false, "Late movie on Saturday. You get the armrest, I get the popcorn.", "Sesión de noche el sábado. Tú te quedas el reposabrazos; yo, las palomitas.", {
     twist: false,
@@ -186,11 +191,14 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   }),
   e(43, "spa-evening", "rainy-day", true, "I’ve told everyone we’re unreachable on Saturday evening.", "Ya he avisado de que el sábado por la tarde estaremos ilocalizables."),
   e(44, "stars-and-planets", "night", false, "Saturday, late. Bring the big coat; I’ll bring something warm to drink.", "El sábado, tarde. Trae el abrigo gordo; yo llevo algo caliente para beber."),
-  e(45, "bowling-night", "fun", false, "Rematch at the bowling alley on Friday. Loser picks the next date.", "Revancha en la bolera el viernes. Quien pierda elige la próxima cita.", { twist: false }),
+  e(45, "bowling-night", "fun", false, "Rematch at the bowling alley on Friday. Loser picks the next date.", "Revancha en la bolera el viernes. Quien pierda elige la próxima cita.", {
+    twist: false,
+    open: { es: "Se permiten las barreras, se lleva la cuenta y cada bola al canal cuesta una verdad." },
+  }),
   e(46, "pasta-and-a-slow-walk", "double-date", false, "Dinner with another couple on Saturday. I’m already planning what we’ll order them.", "Cena con otra pareja el sábado. Ya estoy pensando qué les vamos a pedir.", { twist: false }),
   e(47, "escape-room-debrief", "night", false, "Saturday night, an escape room. I’m in charge of the clues, you’re in charge of panic.", "El sábado por la noche, sala de escape. Yo me encargo de las pistas; tú, del pánico.", {
     twist: false,
-    open: { es: "Bajo llave en el mismo bando y luego una copa. Nadie reparte culpas antes de que llegue." },
+    open: { es: "En el mismo equipo, bajo llave, y luego una copa. Nadie reparte culpas antes de que llegue." },
   }),
   e(48, "karaoke-duet", "unique", false, "One thing we don’t do enough: sing badly. Saturday, we fix that.", "Algo que hacemos poco: cantar mal. El sábado lo arreglamos.", {
     twist: false,
@@ -262,7 +270,7 @@ export function letterWords(entry: LetterEntry, locale: "en" | "es"): LetterWord
   const cost = LETTER_COST[entry.free || (entry.angle === "cheap" && canBeFree(idea)) ? 0 : idea.budget][locale];
   const title = curl(own.title?.[locale] ?? idea.title[locale]);
   // A plain week's subject is the idea's own title; an angled one leads with the angle. Spanish sets no
-  // capital after a colon, and a title with a colon of its own ("Minigolf: quien pierda…") follows a full stop.
+  // capital after a colon, and a title with a colon of its own follows a full stop (no title in the year has one now: letter-N2).
   let subject = title;
   if (entry.angle) {
     const colon = title.includes(":");

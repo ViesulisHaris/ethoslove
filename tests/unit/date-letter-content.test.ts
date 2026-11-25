@@ -138,6 +138,15 @@ describe("the date letter's year", () => {
     }
   });
 
+  it("C14 a subject is one heading: at most one colon, and no full stop inside it (letter-N2)", () => {
+    for (const entry of LETTER_ENTRIES)
+      for (const locale of ["en", "es"] as const) {
+        const { subject } = letterWords(entry, locale);
+        expect(subject.split(":").length, `week ${entry.week} ${locale}: ${subject}`).toBeLessThanOrEqual(2);
+        expect(subject.replace(/[.?]$/, ""), `week ${entry.week} ${locale}: ${subject}`).not.toMatch(/\./);
+      }
+  });
+
   it("C13 straight quotes from the site's words are set curly, as the letter's own lines are", () => {
     for (const entry of LETTER_ENTRIES) for (const locale of ["en", "es"] as const) for (const [key, line] of Object.entries(parts(entry, locale))) expect(line, `week ${entry.week} ${locale} ${key}`).not.toMatch(/['"]/);
   });
