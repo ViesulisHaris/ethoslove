@@ -455,11 +455,12 @@ test.describe("two more gifts under the link", () => {
   });
 });
 
-test.describe("while two more gifts are on for the listed accounts only (GIFT_PAIR_ENABLED=preview)", () => {
-  // The server decides who is listed (lib/pricing/products.ts pairOnSaleFor), and its decision is
-  // proved by tests/unit/pair-preview.test.ts against the real routes. Here the page is given each
-  // answer the server can give a listed or an unlisted account, every request held as above, and
-  // shows that the share screen draws exactly what it is told, with nothing reserved or left behind.
+test.describe("what the share screen draws for each answer the server gives in preview (GIFT_PAIR_ENABLED=preview)", () => {
+  // These do not run the server in preview: the server decides who is listed (lib/pricing/products.ts
+  // pairOnSaleFor), and that decision is proved against the real routes by
+  // tests/unit/pair-preview.test.ts (an unlisted account's answers are byte for byte the switch-unset
+  // ones). Here the page is given each answer the server can give a listed or an unlisted account,
+  // every request held as above, and shows that the share screen draws exactly what it is told.
   test.use({ viewport: { width: 390, height: 844 } });
 
   test("a listed account sees the card as everyone will: same words, same price, the button on the first screen", async ({ page }) => {
@@ -474,23 +475,34 @@ test.describe("while two more gifts are on for the listed accounts only (GIFT_PA
   });
 
   test("an unlisted account sees no card and no gap where it would be", async ({ page }) => {
-    const measure = async () => {
-      await open(page, "/share-preview", { offer: false });
-      const hint = page.getByText("Instagram:");
-      await expect(hint).toBeVisible();
-      // Long enough for the entitlements answer to have been drawn.
-      await page.waitForTimeout(1000);
-      await expect(page.getByTestId("pair-offer")).toHaveCount(0);
-      return page.evaluate(() => {
-        const hint = [...document.querySelectorAll("*")].find((el) => el.children.length === 0 && el.textContent?.includes("Instagram:"))!;
-        const block = hint.closest("p, div")!;
-        const next = block.nextElementSibling;
-        return { hintBottom: Math.round(block.getBoundingClientRect().bottom), nextTop: next ? Math.round(next.getBoundingClientRect().top) : null, height: document.documentElement.scrollHeight };
-      });
-    };
-    const first = await measure();
-    const second = await measure();
-    expect(second).toEqual(first);
+    // Measured against the listed account's own screen: the first thing drawn after the card's slot
+    // is the same section either way, and with no card it sits exactly as far under the line below
+    // the link as it sits under the card when there is one. So the card takes its own box away with
+    // it and leaves no held space, empty box or extra margin behind.
+    const after = (from: "hint" | "card") =>
+      page.evaluate((start) => {
+        const hint = [...document.querySelectorAll("p")].find((el) => el.textContent?.includes("Instagram:"))!;
+        const card = document.querySelector('[data-testid="pair-offer"]')?.closest("[data-app-hide]") as HTMLElement | null;
+        const above = start === "card" ? card! : hint;
+        let next = above.nextElementSibling as HTMLElement | null;
+        while (next && next.getBoundingClientRect().height === 0) next = next.nextElementSibling as HTMLElement | null;
+        return {
+          next: next ? (next.querySelector("[data-testid]")?.getAttribute("data-testid") ?? next.textContent?.trim().slice(0, 40)) : null,
+          space: next ? Math.round(next.getBoundingClientRect().top - above.getBoundingClientRect().bottom) : null,
+        };
+      }, from);
+    await open(page, "/share-preview");
+    await expect(page.getByTestId("pair-offer")).toBeVisible();
+    const listed = await after("card");
+
+    await open(page, "/share-preview", { offer: false });
+    await expect(page.getByText("Instagram:")).toBeVisible();
+    // Long enough for the entitlements answer to have been drawn.
+    await page.waitForTimeout(1000);
+    await expect(page.getByTestId("pair-offer")).toHaveCount(0);
+    const unlisted = await after("hint");
+    expect(listed.next).toBeTruthy();
+    expect(unlisted).toEqual(listed);
   });
 
   test("taken off the list while the card is open: checkout says it isn't on sale, nothing is charged, the button comes back", async ({ page }) => {
