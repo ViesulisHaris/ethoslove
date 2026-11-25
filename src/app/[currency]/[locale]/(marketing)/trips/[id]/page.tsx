@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Car, Gift, Moon, Plus, Ticket } from "lucide-react";
@@ -105,11 +106,12 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
       label: t("detail.facts.best"),
       value: monthRanges(trip.bestMonths, l)
         .split(", ")
-        .map((run, i, all) => (
-          <span key={run} className="whitespace-nowrap">
-            {run}
-            {i < all.length - 1 ? ", " : ""}
-          </span>
+        .map((run, i) => (
+          // The comma and its space outside the run, so the line may break there and only there.
+          <Fragment key={run}>
+            {i > 0 ? ", " : null}
+            <span className="whitespace-nowrap">{run}</span>
+          </Fragment>
         )),
     },
     // The day costs in the currency this visitor is charged in, said as "about" (lib/trips/day-costs.ts). The longest value, so it spans the row where the boxes are narrow.
