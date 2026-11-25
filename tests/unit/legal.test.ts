@@ -116,8 +116,8 @@ describe("legal documents", () => {
 
   it("the privacy policy names the rooms entry, in both languages, beside the first visit's", () => {
     const sentences = {
-      en: /We keep, in your browser's storage \(ethos-rooms, 30 days\)[^.]*\./,
-      es: /Guardamos, en el almacenamiento de tu navegador \(ethos-rooms, 30 días\)[^.]*\./,
+      en: /We keep which sections of the site you opened[^.]*\./,
+      es: /Guardamos qué secciones de la web has abierto[^.]*\./,
     };
     for (const locale of ["en", "es"] as const) {
       const text = all(LEGAL_DOCS.privacy[locale]);
@@ -131,6 +131,18 @@ describe("legal documents", () => {
     // loop2-C8: the rooms sentence said "also keep", right before the next one's "also keep".
     expect(all(LEGAL_DOCS.privacy.en)).not.toContain("also keep, in your browser's storage (ethos-rooms");
     expect(all(LEGAL_DOCS.privacy.es)).not.toContain("también, en el almacenamiento de tu navegador (ethos-rooms");
+    // loop2-D3: the sentence read as cut up (an aside between commas before its object), "more than
+    // one" had to reach back three clauses, "only that count is sent" was untrue (one signal is sent,
+    // nothing is counted on the device), and "a distancia" read as a loose adverb in a list of nouns.
+    const en = sentences.en.exec(all(LEGAL_DOCS.privacy.en))?.[0] ?? "";
+    const es = sentences.es.exec(all(LEGAL_DOCS.privacy.es))?.[0] ?? "";
+    expect(en).toContain("in your browser's storage (ethos-rooms, 30 days), so we can count how many visitors use more than one section;");
+    expect(en).toContain("only a signal that you used two is sent, never the list");
+    expect(en).not.toContain("only that count is sent");
+    expect(es).toContain("(regalos, citas, viajes, relaciones a distancia, juegos)");
+    expect(es).toContain("en el almacenamiento de tu navegador (ethos-rooms, 30 días), para contar cuántas personas usan más de una sección;");
+    expect(es).toContain("solo se envía un aviso de que has usado dos, nunca la lista");
+    expect(es).not.toContain("ese recuento");
   });
 
   // loop2-D2: the once-per-visit note is written for every recipient who starts a gift of their own
