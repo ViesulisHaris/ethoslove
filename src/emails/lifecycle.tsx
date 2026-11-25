@@ -428,8 +428,8 @@ export const IDEA_COPY: Record<SeasonId, Record<L, { heading: string; body: stri
     es: { heading: "¿Se acerca un cumpleaños?", body: "Los cumpleaños de enero llegan cuando ya se han gastado todas las ideas en diciembre. Si tienes uno cerca, esta idea te puede servir:", preview: "Una idea para un cumpleaños de enero." },
   },
   valentines: {
-    en: { heading: "Anyone in mind for Valentine's Day?", body: "Make the gift today, schedule it for that morning, and it waits until then.", preview: "Make it now, and it waits for the morning. One idea." },
-    es: { heading: "¿Tienes a alguien en mente para San Valentín?", body: "Haz el regalo hoy, prográmalo para esa mañana y esperará hasta entonces.", preview: "Hazlo ahora y esperará hasta esa mañana. Una idea." },
+    en: { heading: "Anyone in mind for Valentine's Day?", body: "Make the gift today, schedule it for Valentine's morning, and it waits until then.", preview: "Make it now, and it waits for the morning. One idea." },
+    es: { heading: "¿Tienes a alguien en mente para San Valentín?", body: "Haz el regalo hoy, prográmalo para la mañana de San Valentín y esperará hasta entonces.", preview: "Hazlo ahora y esperará hasta esa mañana. Una idea." },
   },
   "feb-anniversary": {
     en: { heading: "An anniversary coming up?", body: "Any anniversary counts: a first date, a wedding, the day you moved in. For whichever is next:", preview: "One idea for an anniversary." },

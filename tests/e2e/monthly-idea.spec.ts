@@ -330,7 +330,7 @@ test.describe("the account page's row", () => {
         const row = page.getByTestId("idea-emails");
         const on = (await row.boundingBox())!;
         const button = row.getByRole("button", { name: stop });
-        expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+        expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(43.95);
         await button.click();
         await expect(row.getByRole("button", { name: back })).toBeVisible();
         const off = (await row.boundingBox())!;

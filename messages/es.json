@@ -4231,7 +4231,7 @@
     "policyLink": "Qué ha cambiado",
     "offer": "Tu precio personal: cualquier regalo por {price}, hasta el {ends}.",
     "offerLink": "Elige un regalo",
-    "ideaOffer": "Tu precio especial de un solo uso: un regalo premium por {price}, hasta el {ends}.",
+    "ideaOffer": "Tu precio de un solo uso: un regalo premium por {price}, hasta el {ends}.",
     "close": "Cerrar"
   }
 }
