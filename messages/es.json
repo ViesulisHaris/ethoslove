@@ -2352,6 +2352,7 @@
       "count": "{n, plural, one {# reseña} other {# reseñas}}",
       "summary": "{stars} de {n, plural, one {# reseña} other {# reseñas}}",
       "none": "Aún no hay reseñas. Sed la primera pareja en valorarlo.",
+      "noneWritten": "Aún no hay reseñas escritas.",
       "noneShort": "Sin valorar",
       "rate": "Valorar",
       "edit": "Editar la tuya",

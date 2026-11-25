@@ -636,6 +636,23 @@ test.describe("dates2: a place's sheet", () => {
     const other = await openSheet(page, "Café da Esquina");
     await page.waitForTimeout(500);
     await expect(other.getByTestId("place-liked")).toHaveCount(0);
+    await expect(other.getByText("No reviews yet. Be the first couple to rate it.")).toBeVisible();
+  });
+
+  test("G11b liked but nothing written: the sheet does not ask to be the first couple (dates2-N2)", async ({ page }) => {
+    await mockWorld(page);
+    await holdTheDatabase(page, { available: true, liked: { "place:node/103": 14 }, posts: [] });
+    await page.route("**/api/dates/votes*", (route) => {
+      const t = new URL(route.request().url()).searchParams.get("t") ?? "";
+      return route.fulfill({ json: { available: true, liked: t.includes("node/103") ? { "place:node/103": 14 } : {} } });
+    });
+    await pinClock(page);
+    await openLisbon(page);
+    const sheet = await openSheet(page, "Café da Esquina");
+    const say = sheet.getByRole("region", { name: "Couples say" });
+    await expect(say.getByTestId("place-liked")).toHaveText("14 couples said it was a good date");
+    await expect(say.getByText("No written reviews yet.")).toBeVisible();
+    await expect(say.getByText(/Be the first couple/)).toHaveCount(0);
   });
 
   test("G12 Book a table where the map names a booking page, plain and unpaid", async ({ page }) => {

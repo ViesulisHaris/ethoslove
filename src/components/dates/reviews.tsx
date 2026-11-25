@@ -27,6 +27,8 @@ export type ReviewsLabels = {
   report: string;
   summary: (stars: string, n: number) => string;
   none: string;
+  /** Said instead of `none` when couples have already said it was a good date: "be the first" would contradict them (dates2-N2). */
+  noneWritten: string;
   rate: string;
   edit: string;
   yourStars: string;
@@ -79,7 +81,7 @@ export function Reviews({ liked, rating, reviews, locale, labels, loginNext, onS
           ) : reviews !== undefined && reviews.length === 0 ? (
             // Only once the list has answered: the stars behind the heading can still be on their way,
             // and "No reviews yet" over a list still loading was saying two things at once.
-            <p className="mt-1 text-[13.5px] text-forest/65">{labels.none}</p>
+            <p className="mt-1 text-[13.5px] text-forest/65">{liked ? labels.noneWritten : labels.none}</p>
           ) : null}
           {liked ? (
             <p className="mt-1 text-[13.5px] font-semibold text-forest" data-testid="place-liked">

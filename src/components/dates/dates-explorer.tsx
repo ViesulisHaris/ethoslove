@@ -893,6 +893,7 @@ export function DatesExplorer() {
           report: t("reviews.report"),
           summary: (stars, n) => t("reviews.summary", { stars, n }),
           none: t("reviews.none"),
+          noneWritten: t("reviews.noneWritten"),
           rate: t("reviews.rate"),
           edit: t("reviews.edit"),
           yourStars: t("reviews.yourStars"),

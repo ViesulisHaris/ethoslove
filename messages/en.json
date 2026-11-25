@@ -2352,6 +2352,7 @@
       "count": "{n, plural, one {# review} other {# reviews}}",
       "summary": "{stars} from {n, plural, one {# review} other {# reviews}}",
       "none": "No reviews yet. Be the first couple to rate it.",
+      "noneWritten": "No written reviews yet.",
       "noneShort": "Not rated yet",
       "rate": "Rate it",
       "edit": "Edit yours",
