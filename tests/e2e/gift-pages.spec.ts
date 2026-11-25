@@ -40,9 +40,9 @@ const KINDS = [
   { slug: "anniversary-website", ideas: 7, h1: { en: "An anniversary website for your girlfriend or boyfriend", es: "Una página web de aniversario para tu novia o tu novio" } },
   { slug: "apology-for-him", ideas: 6, h1: { en: "Apology gifts for him", es: "Regalos para pedirle perdón a tu novio" } },
   { slug: "apology-for-her", ideas: 6, h1: { en: "Apology gifts for her", es: "Regalos para pedirle perdón a tu novia" } },
-  { slug: "long-distance-care-package", ideas: 7, h1: { en: "Long-distance care package ideas", es: "Ideas para una caja sorpresa a distancia" } },
+  { slug: "long-distance-care-package", ideas: 6, h1: { en: "Long-distance care package ideas", es: "Ideas para una caja sorpresa a distancia" } },
   { slug: "surprise", ideas: 7, h1: { en: "Surprise gifts you can send online", es: "Regalos sorpresa para enviar online" } },
-  { slug: "memory-book", ideas: 7, h1: { en: "A digital memory book for the two of you", es: "Un libro de recuerdos digital para los dos" } },
+  { slug: "memory-book", ideas: 6, h1: { en: "A digital memory book for the two of you", es: "Un libro de recuerdos digital para los dos" } },
 ] as const;
 
 /** The occasions that gained an idea list, and how many ideas each has. */
