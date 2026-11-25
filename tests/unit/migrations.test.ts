@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CREATOR_COMMISSION_PCT } from "@/lib/commerce/creators";
+import { cleanPath } from "@/lib/lifecycle/date-letter";
 
 /**
  * The database is production and shared with the live site, and the migrations are applied by hand
@@ -166,6 +167,7 @@ describe("0027: the date letter", () => {
     const check = new RegExp(pattern!);
     for (const [path, ok] of [["/dates", true], ["/es/dates/ideas/cheap", true], ["/Dates", false], ["/a?b", false], ["dates", false]] as const) {
       expect(check.test(path), path).toBe(ok);
+      expect(cleanPath(path) === path, path).toBe(ok);
     }
   });
 });
