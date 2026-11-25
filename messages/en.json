@@ -2699,7 +2699,7 @@
     "eyebrow": "Long distance",
     "h1a": "Apart is not",
     "h1b": "the same as far.",
-    "sub": "A few small tools for the months between visits: where to meet, when you’re both awake, and what to do on a call besides recap your day.",
+    "sub": "Where to meet, when you’re both awake, and what to do on a call.",
     "meet": {
       "title": "Between your two towns",
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you’re both awake.",
@@ -2811,6 +2811,12 @@
       "cta": "Compare cars on Auto Europe",
       "via": "Car hire through Auto Europe."
     },
+    "stay": {
+      "cta": "Find a place to stay in {place}",
+      "title": "Places to stay",
+      "sub": "Each is for two, on the plan’s nights, starting the same Friday as the flight search above.",
+      "via": "Stays through Stay22."
+    },
     "meet": {
       "via": "Each flight opens on Aviasales; Google Flights is there to compare."
     }
@@ -2823,7 +2829,7 @@
     "eyebrow": "Trips for two",
     "h1a": "Go somewhere",
     "h1b": "together.",
-    "sub": "Twelve trips we’d take ourselves, planned day by day, and a flight search that opens the fares on the sites you already use. No booking fees, no account.",
+    "sub": "Twelve trips planned day by day, and a flight search with no booking fees.",
     "finder": {
       "title": "Find flights",
       "sub": "For two, on any dates. We open the search; you book with them."
@@ -2889,6 +2895,11 @@
       "eyebrow": "Ready-made trips",
       "title": "Pick one, then make it yours."
     },
+    "more": {
+      "nav": "More ways to choose a trip",
+      "from": "Leaving from",
+      "kinds": "By kind"
+    },
     "kind": {
       "road": "Road trip",
       "city": "City break",
@@ -2899,10 +2910,15 @@
     "stops": "{count, plural, one {# stop} other {# stops}}",
     "best": "Best {months}",
     "budget": {
-      "low": "About €150 a day for two, or less",
-      "mid": "About €150–300 a day for two",
-      "high": "Over €300 a day for two",
-      "note": "What you spend there, not the flights."
+      "low": "About {amount} a day for two, or less",
+      "mid": "About {range} a day for two",
+      "high": "Over {amount} a day for two",
+      "note": "What you spend there, not the flights.",
+      "short": {
+        "low": "About {amount} or less",
+        "mid": "About {range}",
+        "high": "Over {amount}"
+      }
     },
     "gift": {
       "eyebrow": "Or keep it a secret",
@@ -2912,9 +2928,10 @@
     },
     "detail": {
       "back": "All trips",
+      "about": "More about this trip",
       "facts": {
         "days": "Length",
-        "budget": "Budget",
+        "budget": "A day for two, flights aside",
         "best": "Best months",
         "kind": "Kind"
       },
@@ -2951,7 +2968,11 @@
       "flights": {
         "eyebrow": "Getting there",
         "title": "Flights to {city}",
+        "homeTitle": "Flights home from {city}",
         "sub": "Where this trip starts. Add where you’re flying from, change the dates if you like, then pick a site."
+      },
+      "book": {
+        "title": "Before you go"
       },
       "surprise": {
         "eyebrow": "Make it a surprise",
@@ -2980,6 +3001,10 @@
       "distance": "{km} km",
       "airTime": "about {time} in the air",
       "train": "Under 600 km: a train might be nicer.",
+      "endsIn": "The plan ends in {city}, so this searches only the flight out.",
+      "homeFrom": "The flight home from {city}, on the plan’s last day.",
+      "searchHome": "Search the flight home from {city}",
+      "searchOut": "Back to the flight out",
       "smallPrint": "These open the search on each site, and the fares are theirs. We may earn a commission if you book through some of these links. It costs you nothing extra.",
       "picker": {
         "title": "Choose your dates",

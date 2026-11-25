@@ -22,6 +22,8 @@ import { GAMES } from "@/lib/games/catalogue";
 import { pressNav } from "@/lib/press/shown";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
+import { ideaPath, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
+import { originPath, TRIP_ORIGINS } from "@/lib/trips/origins";
 import { getManifest, listManifests } from "@/templates/manifests";
 
 type Page = {
@@ -63,6 +65,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: DIGITAL_CARDS_PATH, priority: 0.8, changeFrequency: "monthly" },
     { path: "/trips", priority: 0.8, changeFrequency: "monthly" },
     ...TRIPS.map((trip): Page => ({ path: `/trips/${trip.id}`, priority: 0.7, changeFrequency: "monthly", ...(trip.image ? { images: [`${SITE.url}${trip.image}`] } : {}) })),
+    ...TRIP_ORIGINS.map((o): Page => ({ path: originPath(o), priority: 0.6, changeFrequency: "monthly" })),
+    ...TRIP_IDEA_KINDS.map((kind): Page => ({ path: ideaPath(kind), priority: 0.7, changeFrequency: "monthly" })),
     { path: "/long-distance", priority: 0.8, changeFrequency: "monthly" },
     { path: TOGETHER_PATH, priority: 0.7, changeFrequency: "monthly" },
     { path: LOVE_QUIZ_PATH, priority: 0.8, changeFrequency: "monthly" },

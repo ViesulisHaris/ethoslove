@@ -11,6 +11,8 @@ shows one says so. See "Partners" below.
 |---|---|
 | `/trips` | The flight search on the first screen, then the twelve trips with chips to filter them by kind, then a band to the "Pack your bags" gift. |
 | `/trips/<id>` | One trip: hero picture and facts, the route on a map with every stop (each links to `/dates` for that town), the plan day by day, "Tickets for this trip" (Tiqets, up to four), flights to where it lands (with "Hire a car" beside them on road trips), and "Make it a surprise". |
+| `/trips/from-<city>` | The twelve trips nearest first for a couple leaving from one of seven cities (`TRIP_ORIGINS` in `src/lib/trips/origins.ts`): hours in the air, "a train works" where a checked direct train runs, the best months. Hours, never a fare. A city has a page only with six trips in reach (unit-tested), so no American city has one, and only where its six cards are not another city's (Glasgow, Manchester and Birmingham were, so they have no page). The hero shows the trip that starts there, or a trip the cards do not show. Served by the `[id]` route: a folder cannot be half a segment. |
+| `/trips/ideas/<kind>` | Trips of one kind, read from the trips' data (`src/lib/trips/idea-kinds.ts`): weekend getaways (three or four days) and road trips. "Romantic city breaks" is the weekend list again and "cheap trips in Europe" is one trip, so neither is a page. |
 
 Both are statically rendered for every trip in both languages (`generateStaticParams` on the
 trip's page; the locale comes from the `[locale]` layout). Both carry JSON-LD: an `ItemList` of
@@ -23,8 +25,13 @@ the trips on the hub, a `TouristTrip` with its itinerary as an `ItemList` of pla
 | `src/lib/trips/airports.ts` | The offline airport table: every city the site already knows plus the islands and coasts trips land at. `findAirport`, `nearestAirport`, `suggestAirports`, and `cityName` (the Spanish name where it differs: Nápoles, Praga). |
 | `src/lib/trips/flights.ts` | `flightLinks` (Aviasales, then the three comparison URLs), `weekendAhead` (the dates every search starts with) and `withDepart` (a new departure moves the return with it), `estimateFlight` and `formatFlightTime` ("about 3 h 10 min in the air"), `trainHint` (under 600 km), `withPartner` (see below). |
 | `src/lib/trips/partners.ts` | The Travelpayouts short links and the deep links built on them (`aviasalesSearch`, `tiqetsSearch`, `autoEuropeHire`), each trip's ticketed sights (`tripTickets`) and car-hire page (`tripCarHire`), and `PartnerPlacement`. |
+| `src/lib/trips/stay.ts` | "Find a place to stay": `stayLink` (the one function that builds the link: Booking.com's own search, or Stay22's link to it once `STAY22_AID` is set), `stayPartnerId`, `stayDates` (a stop's nights from the trip's first day), `tripNights` (what the flight search on a trip's page stays for), `TRIP_STAYS` (what Booking is asked for each of the 34 stops a trip sleeps in) and `tripStays`. |
+| `src/lib/trips/day-costs.ts` | A trip's day costs in the page's currency: the euro bands are the source, dollars and pounds from fixed ECB rates (with the day they were taken), to the nearest five, said as "about". |
 | `src/lib/dates/ticketed.ts` | Which kinds of place get a "Tickets" button (`sellsTickets`) and what Tiqets is asked (`ticketQuery`). |
 | `src/lib/dates/plan-gift.ts` | A date plan as "a surprise inside" a gift (`planUnwrap`): the day, the town, the stops with their times, kinds and photographs. |
+| `src/lib/trips/origins.ts`, `src/content/trip-origins.ts` | The seven cities to leave from, `tripsFrom` (the matcher's minutes, nearest first, ties by distance), `originCards`, each city's two true sentences and hero trip (the numbers held by `tests/unit/trip-origins.test.ts`). |
+| `src/lib/trips/idea-kinds.ts`, `src/content/trip-ideas.ts` | The kinds of trip, which are pages and why, and each trip's line of why. |
+| `src/components/trips/page/` | The designed pages' pieces: `room-page.tsx` (the dates pages' spread with the ivory lilies), `trip-cards.tsx`, `origin-page.tsx`. |
 | `src/lib/trips/presets.ts` | `TRIPS`: the twelve trips, all text in English and Spanish. |
 | `src/lib/trips/trip-gift.ts` | What "Pack your bags" starts with for a trip (`tripGiftFields`), and a trip as a surprise inside any other gift (`tripUnwrap`). |
 | `src/lib/trips/last-from.ts` | The last airport someone searched from, in `localStorage`, so the next search and the next surprise start there. |
@@ -78,6 +85,7 @@ and keep `rel="noopener noreferrer"` with no event. Each placement belongs to on
 | `/trips/<id>`, "Getting there" | Aviasales | `trip_flights` | The same finder with the trip's airport in "To". |
 | `/trips/<id>`, "Tickets for this trip" | Tiqets | `trip_tickets` | Up to four things the plan sends them to that Tiqets sells (`tripTickets`): a Tiqets search for each, in the page's language. |
 | `/trips/<id>`, "Hire a car" (road trips only) | Auto Europe | `trip_car` | `car-rental-italy` for the Amalfi coast and Tuscany, `car-rental-portugal` for the Algarve, the home page for Scotland, Iceland and the Baltics (their pages were 404). |
+| `/trips/<id>`, "Places to stay" (one closed row under "Before you go", after the flights) | Booking.com, through Stay22 once `STAY22_AID` is set | `trip_stay` | The trip's overnight stops with their nights, each a search for that stop's nights (from the same three-weeks-out Friday as the flight search, which comes home the day the plan ends). One row and one commission line a page (MONETIZATION: one partner action and one disclosure line a screen); nothing under the stops themselves. Unpaid and not marked sponsored until the id is set; the commission line shows only then. |
 | `/dates`, a place's sheet | Tiqets | `place_sheet` | "Tickets" for museums, zoos and aquariums, planetariums and theme parks, and for galleries and landmarks with an encyclopedia entry (`sellsTickets` in `src/lib/dates/ticketed.ts`). The search is the place's name and the town. |
 | `/plan`, each stop | Tiqets | `plan` | The same "Tickets" on a ticketed stop. A plan's stop doesn't know whether it is famous, so galleries and landmarks get none there. |
 | `/long-distance`, "Meet in the middle" | Aviasales | `meet_middle` | Each flight, one seat, with Google Flights as the second link. |
@@ -132,6 +140,7 @@ evening. Write like a friend who has been, never like a brochure.
   between requests). A town's name alone often returns the centre of its province (Siena did), so
   search for the main square.
 - **`flyTo`** must be in `AIRPORTS`; add a missing one to `EXTRA` in `airports.ts`.
+- **`flyHome`**, only where the plan's last day flies home from somewhere else (the Highlands from Inverness, the Baltic coast from Tallinn, Prague to Vienna from Vienna): on the trip's page the flight search is then one way out, says where the plan ends, and one button turns it into the flight home from there on the plan's last day (`FlightFinder`'s `homeFrom`). Must be in `AIRPORTS`; `trip-stay.test.ts` S10 checks it against the last stop and the last day.
 - **Pictures**: `public/trips/<id>.webp` (1600×1200, quality ~72) and `<id>-sm.webp` (800×600), in
   the site's art direction: editorial 35mm film, warm light, soft blush palette, a couple seen from
   behind, no text, logos or faces. Look at every one before keeping it; the first Copenhagen
