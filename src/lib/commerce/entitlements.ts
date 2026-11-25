@@ -133,7 +133,19 @@ export function upgradeOffer(ownedForever: string[], purchases: PaidPurchase[], 
  * role already. Before migration 0009 the pass table doesn't exist: that reads as "no pass", not an
  * error.
  */
-export async function readEntitlements(db: Db, userId: string, options: { locale: Locale; currency: Currency; now: number; names?: Db | null }): Promise<Entitlements> {
+export async function readEntitlements(
+  db: Db,
+  userId: string,
+  options: {
+    locale: Locale;
+    currency: Currency;
+    now: number;
+    names?: Db | null;
+    /** Whether two more gifts are on sale to this account (pairOnSaleFor). Left out: only while they are on for everyone. */
+    pairOnSale?: boolean;
+  },
+): Promise<Entitlements> {
+  const onSale = options.pairOnSale ?? pairOnSale();
   const [unlocks, owned, joined, purchases, ready] = await Promise.all([
     db.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
     db.from("couple_passes").select("*").eq("owner_user_id", userId),
@@ -163,7 +175,7 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     upgrade: upgradeOffer(forever, purchases.data ?? [], options.currency),
     giftsReady: ready ?? 0,
     pairOffer: pairAllowed({
-      onSale: pairOnSale(),
+      onSale,
       signedIn: true,
       ready,
       ownedForever: forever,
@@ -172,6 +184,6 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     }).ok
       ? { amount: PRODUCTS.pair.amounts[options.currency], currency: options.currency }
       : null,
-    addPair: pairOnSale() && ready === 0 && !forever.includes(EVERY_TEMPLATE) && membership?.running !== true,
+    addPair: onSale && ready === 0 && !forever.includes(EVERY_TEMPLATE) && membership?.running !== true,
   };
 }

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { checkoutSourceInput, checkoutSourceRow, saveCheckoutSource } from "@/lib/attribution/checkout-source";
 import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
-import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, pairOnSale, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, pairOnSaleFor, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
 import { RETURN_PATH, membershipSessionParams, metadataRef, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
@@ -104,6 +104,8 @@ export async function POST(request: NextRequest) {
   const product = parsed.data.product;
   const user = await getCurrentUser();
   const userId = user?.id ?? null;
+  // Two more gifts: on for everyone, for nobody, or (preview) for the listed accounts only.
+  const pairSelling = pairOnSaleFor(user?.email);
 
   // The currency the page showed its price in, which every buy button sends (the page's [currency]
   // segment, src/proxy.ts), so the amount charged is the number the buyer saw. Without one, the
@@ -122,10 +124,10 @@ export async function POST(request: NextRequest) {
   ]);
   // Two more gifts added to a gift: on sale, and how many the buyer has ready. A guest has none, but
   // the count is still read (for no one) so a database without their table refuses it.
-  const addPair = body.addPair ? { onSale: pairOnSale(), ready: await readyGifts(admin, userId ?? NO_ONE) } : undefined;
+  const addPair = body.addPair ? { onSale: pairSelling, ready: await readyGifts(admin, userId ?? NO_ONE) } : undefined;
   // Two more gifts are sold by one rule (lib/commerce/gift-credits.ts pairAllowed), on what the server read.
   const pair = pairAsked
-    ? { onSale: pairOnSale(), ready, memberRunning: Boolean(membership?.running), paidProducts: owned.purchases.map((p) => p.product) }
+    ? { onSale: pairSelling, ready, memberRunning: Boolean(membership?.running), paidProducts: owned.purchases.map((p) => p.product) }
     : undefined;
   const plan = planCheckout(
     { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan, personalPrice: body.personalPrice, addPair: body.addPair },
