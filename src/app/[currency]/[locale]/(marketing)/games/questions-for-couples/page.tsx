@@ -7,6 +7,7 @@ import { GameTable } from "@/components/games/cards";
 import { GameNotes } from "@/components/games/page/game-notes";
 import { QuestionDeck } from "@/components/games/question-deck";
 import { QuestionList } from "@/components/games/question-list";
+import { LIST_SHOWN } from "@/content/game-pages";
 import { DECKS, DECK_IDS } from "@/lib/games/questions";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/questions-for-couples">, "searchParams">): Promise<Metadata> {
@@ -19,6 +20,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("games.deck");
+  const tl = await getTranslations("games.list");
   const tg = await getTranslations("games");
   const l = locale === "es" ? "es" : "en";
   return (
@@ -47,6 +49,9 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
         id="deck-questions"
         title={t("listTitle", { count: DECK_IDS.reduce((n, id) => n + DECKS[id].cards.length, 0) })}
         intro={t("listIntro")}
+        label={tl("label")}
+        show={LIST_SHOWN.deck}
+        more={(count) => tl("more", { count })}
         groups={DECK_IDS.map((id) => ({ name: DECKS[id].name[l], items: DECKS[id].cards.map((c) => c[l]) }))}
       />
       <GameNotes game="deck" locale={locale} />

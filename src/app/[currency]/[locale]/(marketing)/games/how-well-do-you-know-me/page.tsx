@@ -5,6 +5,7 @@ import { GameTable } from "@/components/games/cards";
 import { GameNotes } from "@/components/games/page/game-notes";
 import { KnowGame } from "@/components/games/know-game";
 import { QuestionList } from "@/components/games/question-list";
+import { LIST_SHOWN } from "@/content/game-pages";
 import { KNOW_QUESTIONS } from "@/lib/games/content";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/how-well-do-you-know-me">, "searchParams">): Promise<Metadata> {
@@ -18,6 +19,7 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";
   const t = await getTranslations("games.know");
+  const tl = await getTranslations("games.list");
   return (
     <GameTable>
       <KnowGame />
@@ -25,6 +27,9 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
         id="know-questions"
         title={t("listTitle", { count: KNOW_QUESTIONS.length })}
         intro={t("listIntro")}
+        label={tl("label")}
+        show={LIST_SHOWN.know}
+        more={(count) => tl("more", { count })}
         groups={[{ items: KNOW_QUESTIONS.map((q) => `${q.prompt[l]} ${q.options.map((o) => o[l]).join(" · ")}`) }]}
       />
       <GameNotes game="know" locale={locale} />
