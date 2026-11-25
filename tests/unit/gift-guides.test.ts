@@ -622,6 +622,41 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
     for (const href of ["/gifts/photo-album", "/occasions/anniversary"]) expect(hrefs("memory-book")).toContain(href);
   });
 
+  it("no idea promises more photos, rooms or stops than its gift holds", () => {
+    // Month 24 once headed Museum "Twenty-four rooms, one a month"; Museum takes twenty photos (manifest photos.max).
+    const EN = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+    const ES = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte"];
+    const value = (w: string): number | null => {
+      const s = w.toLowerCase();
+      if (/^\d+$/.test(s)) return Number(s);
+      if (EN.includes(s)) return EN.indexOf(s);
+      if (ES.includes(s)) return ES.indexOf(s);
+      if (s === "uno" || s === "un") return 1;
+      const en = s.match(/^twenty-(\w+)$/);
+      if (en && EN.includes(en[1])) return 20 + EN.indexOf(en[1]);
+      const VEINTI: Record<string, number> = { ún: 1, uno: 1, una: 1, dós: 2, trés: 3, cuatro: 4, cinco: 5, séis: 6, siete: 7, ocho: 8, nueve: 9 };
+      const es = s.match(/^veinti(\p{L}+)$/u);
+      if (es && es[1] in VEINTI) return 20 + VEINTI[es[1]];
+      return null;
+    };
+    const COUNTED = /\b([\p{L}\d-]+)\s+(?:framed\s+|dated\s+)?(photos|rooms|frames|stops|fotos|salas|paradas)\b/giu;
+    const ideas = [
+      ...MONTHS.flatMap((n) => GIFT_LOCALES.flatMap((locale) => MONTH_GUIDES[n][locale].ideas.map((idea) => ({ at: `month ${n} (${locale})`, idea })))),
+      ...GIFT_GUIDE_SLUGS.flatMap((slug) => GIFT_LOCALES.flatMap((locale) => GIFT_GUIDES[slug][locale].ideas.map((idea) => ({ at: `${slug} (${locale})`, idea })))),
+    ];
+    const over: string[] = [];
+    for (const { at, idea } of ideas) {
+      const max = getManifest(idea.template)!.features.photos.max;
+      for (const text of [idea.heading, idea.brief ?? "", idea.body]) {
+        for (const m of text.matchAll(COUNTED)) {
+          const n = value(m[1]);
+          if (n !== null && n > max) over.push(`${at}, ${idea.template} (at most ${max}): “${m[0]}”`);
+        }
+      }
+    }
+    expect(over).toEqual([]);
+  });
+
   it("the gift in each new page's phone and band says nothing of another occasion", () => {
     // These posters carry their demo's occasion: Digicam "HAPPY BIRTHDAY", Front Page "LOCAL WOMAN TURNS 30", Recipe Box
     // a card for Mum, The Letter and Our Timeline "three years". Paper Crane's apology belongs on an apology page only.

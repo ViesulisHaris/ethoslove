@@ -481,7 +481,7 @@ const month24: Month = {
       },
       {
         template: "museum",
-        heading: "Twenty-four rooms, one a month",
+        heading: "Twenty rooms for two years",
         brief: "A quiet gallery of your two years, a plaque under every framed photo.",
         body: "Museum makes a gallery of your photos, one framed photo to a room, up to twenty rooms. Every plaque prints the caption you wrote for that photo and the span you set for the show. Hang them in order, year one first, and put the month in each caption so the plaques show what changed. They walk it by swiping.",
         line: { field: "exhibition", where: "The name over the door", text: "Twenty-four Months, Mostly Happy" },
@@ -542,7 +542,7 @@ const month24: Month = {
       },
       {
         template: "museum",
-        heading: "Una sala por cada mes",
+        heading: "Veinte salas para dos años",
         brief: "Una galería tranquila con vuestros dos años, una placa bajo cada foto.",
         body: "Museo hace una galería con tus fotos, una foto enmarcada por sala, hasta veinte salas. Cada placa imprime el pie que escribiste para esa foto y las fechas que pongas para toda la exposición. Cuélgalas en orden, primero el primer año, y pon el mes en cada pie para que las placas cuenten qué cambió. Se recorre deslizando.",
         line: { field: "exhibition", where: "El nombre sobre la puerta", text: "Veinticuatro meses, casi todos felices" },
