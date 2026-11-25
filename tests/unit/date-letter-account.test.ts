@@ -24,11 +24,19 @@ const row = (id: string, email: string) => ({ id, email, locale: "en", wording: 
 
 let fake: FakeDb;
 let deletedUsers: string[];
-function seed(rows: Record<string, unknown>[] | null, profileEmail = "Tom@Example.test", options: { deleteFails?: boolean } = {}) {
+function seed(rows: Record<string, unknown>[] | null, profileEmail: string | null = "Tom@Example.test", options: { deleteFails?: boolean; authEmail?: string } = {}) {
   fake = new FakeDb({ profiles: [{ id: USER, email: profileEmail }], ...(rows ? { date_letter: rows } : {}) }, NOW, rows ? {} : { missingTables: ["date_letter"] });
   if (options.deleteFails) fake.failNext("date_letter", "delete");
   deletedUsers = [];
-  const client = Object.assign(fake.db, { auth: { admin: { deleteUser: async (id: string) => (deletedUsers.push(id), { error: null }) } } });
+  const signIn = options.authEmail ?? profileEmail;
+  const client = Object.assign(fake.db, {
+    auth: {
+      admin: {
+        deleteUser: async (id: string) => (deletedUsers.push(id), { error: null }),
+        getUserById: async (id: string) => ({ data: { user: id === USER ? { id, email: signIn } : null }, error: null }),
+      },
+    },
+  });
   state.client = client;
   state.admin = client;
   state.user = { id: USER, email: profileEmail, app_metadata: {} };
@@ -64,6 +72,15 @@ describe("the date letter and the account", () => {
     seed([row("a1111111-1111-4111-8111-111111111111", "tom@example.test"), row("b2222222-2222-4222-8222-222222222222", "kim@example.test")], "  TOM@example.TEST ");
     expect(await deleteAccountData(state.admin as never, USER)).toEqual({ ok: true });
     expect(deletedUsers).toEqual([USER]);
+    expect(fake.rows("date_letter").map((r) => r.email)).toEqual(["kim@example.test"]);
+  });
+
+  it("A5 a profile without the address, or with an older one: the sign-in's own address is used too (letter-C20)", async () => {
+    seed([row("a1111111-1111-4111-8111-111111111111", "tom@example.test"), row("b2222222-2222-4222-8222-222222222222", "kim@example.test")], null, { authEmail: "Tom@Example.test" });
+    expect(await deleteAccountData(state.admin as never, USER)).toEqual({ ok: true });
+    expect(fake.rows("date_letter").map((r) => r.email)).toEqual(["kim@example.test"]);
+    seed([row("a1111111-1111-4111-8111-111111111111", "tom@example.test"), row("b2222222-2222-4222-8222-222222222222", "old@example.test"), row("c3333333-3333-4333-8333-333333333333", "kim@example.test")], "old@example.test", { authEmail: "tom@example.test" });
+    expect(await deleteAccountData(state.admin as never, USER)).toEqual({ ok: true });
     expect(fake.rows("date_letter").map((r) => r.email)).toEqual(["kim@example.test"]);
   });
 

@@ -74,20 +74,24 @@ export async function deleteAccountData(
   // Only while group cards are on; it can't fail, so it never keeps an account that asked to go.
   if (groupGiftsEnabled()) await forgetGroupPhotos({ userId }, admin as Db);
 
-  // The address, read before the user (and its profile) is gone, for the date letter's row below.
-  let address: string | null = null;
+  // The address, read before the user (and its profile) is gone, for the date letter's row below:
+  // the profile's, else the sign-in's own (a profile can lack it or hold an older one; letter-C20).
+  // Both, when they differ: a row at either address was this person's.
+  const addresses = new Set<string>();
   try {
     const { data: profile } = await admin.from("profiles").select("email").eq("id", userId).maybeSingle();
-    address = profile?.email?.trim().toLowerCase() || null;
-  } catch {
-    address = null;
-  }
+    if (profile?.email?.trim()) addresses.add(profile.email.trim().toLowerCase());
+  } catch {}
+  try {
+    const { data: auth } = await admin.auth.admin.getUserById(userId);
+    if (auth?.user?.email?.trim()) addresses.add(auth.user.email.trim().toLowerCase());
+  } catch {}
 
   const { error } = await admin.auth.admin.deleteUser(userId);
   if (error) return { ok: false, error: error.message };
   // The date letter's row at the same address (0027): it names no account, so it doesn't cascade.
   // It can never fail the deletion; before 0027 there is nothing to delete.
-  if (address) {
+  for (const address of addresses) {
     try {
       const { error: letterError } = await admin.from("date_letter").delete().eq("email", address);
       if (letterError && !missingTable(letterError)) console.error("[delete-account] date letter row not deleted", letterError.message);
