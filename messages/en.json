@@ -3829,23 +3829,23 @@
     },
     "letter": {
       "confirmTitle": "Send you the date letter?",
-      "confirmBody": "One date idea by email every Thursday, ready for the weekend. You can stop it from any of them.",
+      "confirmBody": "One date idea by email every Thursday, ready for the weekend. Every letter has a link to stop it.",
       "confirmButton": "Yes, send me the date letter",
       "doneTitle": "You’re in.",
       "doneBody": "The date letter comes on Thursdays. This week’s idea is ready now.",
       "doneNext": "See this week’s date",
       "goneTitle": "This link has expired.",
-      "goneBody": "Nothing was kept. To get the date letter, sign up again on any date page.",
+      "goneBody": "To get the date letter, sign up again on any date page.",
       "stopTitle": "Stop the date letter?",
       "stopBody": "No more date ideas by email. Nothing else changes.",
       "stopConfirm": "Stop it",
       "stopDoneTitle": "Stopped.",
       "stopDoneBody": "You won’t get the date letter again. We’ll delete your address within 30 days.",
       "notMeTitle": "Not you?",
-      "notMeBody": "We’ll delete this address and never send it a confirmation again.",
+      "notMeBody": "We’ll delete this address and put it on our unsubscribe list, so Ethos sends it no optional email again: no date letter, no monthly idea, no offers.",
       "notMeConfirm": "Never email this address",
       "notMeDoneTitle": "Deleted.",
-      "notMeDoneBody": "This address is gone from the date letter, and the form can’t write to it again."
+      "notMeDoneBody": "This address is deleted and won’t get optional emails from Ethos again."
     },
     "keep": {
       "confirmTitle": "Email you the gift's link?",
@@ -4384,10 +4384,10 @@
     "privacy": "Privacy",
     "asked": "Check your inbox. One tap there and you’re in.",
     "another": "Use another address",
-    "on": "You’re on the list. The next one comes on Thursday.",
+    "on": "You’re on the list. A date idea comes every Thursday.",
     "invalid": "Check the email address.",
-    "limited": "Too many tries from this connection. Try again later.",
-    "failed": "That didn’t go through. Try again in a moment.",
+    "limited": "Too many tries. Try again later.",
+    "failed": "That didn’t go through. Try again.",
     "wording": "Email me one date idea every Thursday. I can stop any time."
   },
   "notice": {

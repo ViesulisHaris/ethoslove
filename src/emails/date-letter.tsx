@@ -26,7 +26,7 @@ export function LetterConfirmEmail({ locale, confirmUrl, stopUrl }: { locale: L;
           ? "Alguien acaba de escribir esta dirección en Ethos para recibir la carta de citas: una idea de cita a la semana, lista para el fin de semana. Si fuiste tú, confírmalo aquí abajo. Hasta entonces no te llegará nada."
           : "This address was just entered on Ethos for the date letter: one date idea a week, ready for the weekend. If that was you, confirm below. Nothing comes until you do."}
       </P>
-      <CtaButton href={confirmUrl} label={es ? "Sí, enviadme la carta de citas" : "Yes, send me the date letter"} />
+      <CtaButton href={confirmUrl} label={es ? "Sí, envíame la carta de citas" : "Yes, send me the date letter"} />
       <Quiet>
         {es ? "¿No fuiste tú? No hagas nada, o " : "Not you? Do nothing, or "}
         <InlineLink href={stopUrl}>{es ? "pide que no escribamos nunca a esta dirección" : "ask us never to email this address"}</InlineLink>.

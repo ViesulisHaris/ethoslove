@@ -184,8 +184,8 @@ test("B6 (on) in Spanish", async ({ page, request }) => {
   const { posts } = await answer(page);
   const box = await boxOn(page, "/es/dates/ideas/cheap");
   await expect(box).toContainText("La carta de citas");
-  await expect(box).toContainText("Una idea de cita cada jueves. Déjala cuando quieras.");
-  await expect(box.getByTestId("letter-send")).toHaveText("Enviadme la carta");
+  await expect(box).toContainText("Una idea de cita cada jueves. Date de baja cuando quieras.");
+  await expect(box.getByTestId("letter-send")).toHaveText("Envíame la carta");
   await box.getByTestId("letter-email").fill("sam@mail.com");
   await box.getByTestId("letter-send").click();
   await expect(box.getByTestId("letter-done")).toHaveText("Mira tu correo. Un toque allí y ya está.");
@@ -196,9 +196,9 @@ test("B7 (on) when it does not go through", async ({ page, request }) => {
   await needs("on", request);
   for (const [post, line] of [
     [{ status: 400 }, "Check the email address."],
-    [{ status: 429 }, "Too many tries from this connection. Try again later."],
-    [{ status: 500 }, "That didn’t go through. Try again in a moment."],
-    ["abort", "That didn’t go through. Try again in a moment."],
+    [{ status: 429 }, "Too many tries. Try again later."],
+    [{ status: 500 }, "That didn’t go through. Try again."],
+    ["abort", "That didn’t go through. Try again."],
   ] as const) {
     await page.unrouteAll({ behavior: "ignoreErrors" });
     await answer(page, NONE, post);
@@ -234,7 +234,7 @@ test("B9 (on) signed in, the address is there and still has to be pressed", asyn
   await page.waitForTimeout(300);
   expect(posts).toEqual([]);
   await box.getByTestId("letter-send").click();
-  await expect(box.getByTestId("letter-done")).toHaveText("You’re on the list. The next one comes on Thursday.");
+  await expect(box.getByTestId("letter-done")).toHaveText("You’re on the list. A date idea comes every Thursday.");
   expect(posts).toHaveLength(1);
 });
 
@@ -242,7 +242,7 @@ test("B10 (on) already on the list", async ({ page, request }) => {
   await needs("on", request);
   await answer(page, { available: true, email: "sam@mail.com", state: "on" });
   const box = await boxOn(page, "/dates/ideas/cheap");
-  await expect(box.getByTestId("letter-done")).toHaveText("You’re on the list. The next one comes on Thursday.");
+  await expect(box.getByTestId("letter-done")).toHaveText("You’re on the list. A date idea comes every Thursday.");
   await expect(box.getByTestId("letter-email")).toHaveCount(0);
   await expect(box.getByTestId("letter-send")).toHaveCount(0);
   expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);

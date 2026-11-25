@@ -143,7 +143,7 @@ describe("the date letter's e-mails", () => {
     for (const locale of ["en", "es"] as const) {
       const html = await render(LetterConfirmEmail({ locale, confirmUrl: CONFIRM, stopUrl: STOP }));
       const read = text(html);
-      expect(read).toContain(locale === "es" ? "Sí, enviadme la carta de citas" : "Yes, send me the date letter");
+      expect(read).toContain(locale === "es" ? "Sí, envíame la carta de citas" : "Yes, send me the date letter");
       expect(read).toContain(locale === "es" ? "¿Una idea de cita cada jueves?" : "One date idea every Thursday?");
       expect(count(html, CONFIRM.replace(/&/g, "&amp;"))).toBe(1);
       expect(count(html, STOP.replace(/&/g, "&amp;"))).toBe(2);
