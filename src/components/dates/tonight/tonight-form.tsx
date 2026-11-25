@@ -4,10 +4,11 @@ import { useSyncExternalStore, type ReactNode } from "react";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Vibe } from "@/lib/dates/ideas";
-import { TONIGHT_VIBES, type TonightLength } from "@/lib/dates/tonight";
+import { REACH_MINUTES, type ReachMinutes } from "@/lib/dates/reach";
+import { TONIGHT_VIBES, type TonightLength, type TonightSetting } from "@/lib/dates/tonight";
 
 export type TonightWhen = "tonight" | "tomorrow" | "weekend" | "day";
-export type TonightChoice = { vibe?: Vibe; budget?: 0 | 1 | 2 | 3; length?: TonightLength };
+export type TonightChoice = { vibe?: Vibe; budget?: 0 | 1 | 2 | 3; length?: TonightLength; setting?: TonightSetting; reach?: ReachMinutes };
 
 type Props = {
   choice: TonightChoice;
@@ -28,6 +29,10 @@ type Props = {
   onChoice: (next: TonightChoice) => void;
   onWhen: (when: TonightWhen) => void;
   onPlan: () => void;
+  /** False where the browser cannot give a position: the distance choice is not drawn. */
+  canLocate: boolean;
+  /** Why the distance was set back ("We couldn’t get your position…"), in one line under the sentence. */
+  reachNotice?: string;
 };
 
 /** The planner's one strong button: the gift page's primary, as a button. Shared with the result card. */
@@ -65,7 +70,7 @@ const noSubscribe = () => () => {};
  * "Plan a cozy date tonight. Up to 2 hours, free." One sentence with the choices inside it, then
  * one button: the one-step planner's form, on the dates map, a city's page and a page by kind.
  */
-export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, busy, onChoice, onWhen, onPlan }: Props) {
+export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, busy, onChoice, onWhen, onPlan, canLocate, reachNotice }: Props) {
   const t = useTranslations("dates");
   // False in the server's HTML and until the page has hydrated: a tap before then was lost (a slow
   // phone saw nothing for a minute), and a choice made then was put back by hydration. So the button
@@ -110,11 +115,36 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
       </Choice>
     ),
   };
+  const more = {
+    setting: () => (
+      <Choice held={!ready} name={t("tonight.settingLabel")} value={choice.setting ?? ""} onChange={(v) => onChoice({ ...choice, setting: (v || undefined) as TonightSetting | undefined })}>
+        <option value="">{room(t("tonight.setting.any"))}</option>
+        <option value="indoors">{room(t("tonight.setting.indoors"))}</option>
+        <option value="outdoors">{room(t("tonight.setting.outdoors"))}</option>
+      </Choice>
+    ),
+    reach: () => (
+      <Choice held={!ready} name={t("tonight.reachLabel")} value={choice.reach === undefined ? "" : String(choice.reach)} onChange={(v) => onChoice({ ...choice, reach: v === "" ? undefined : (Number(v) as ReachMinutes) })}>
+        <option value="">{room(t("tonight.reach.any"))}</option>
+        {REACH_MINUTES.map((m) => (
+          <option key={m} value={String(m)}>
+            {room(t(`tonight.reach.${m}`))}
+          </option>
+        ))}
+      </Choice>
+    ),
+  };
 
   return (
     <div>
       <p className="font-display text-[1.375rem] leading-[2.9rem] text-page-ink">
-        {ofKind ? t.rich("tonight.sentenceKind", { when: parts.when, length: parts.length, budget: parts.budget }) : t.rich("tonight.sentence", parts)}
+        {ofKind ? t.rich("tonight.sentenceKind", { when: parts.when, length: parts.length, budget: parts.budget }) : t.rich("tonight.sentence", parts)}{" "}
+        {/* The third sentence on its own line, in a block of one height whatever is chosen and whether
+            or not the distance can be offered: a select is as wide as its choice, and nothing below moves. */}
+        <span className="block min-h-[5.8rem] sm:min-h-[2.9rem]">{canLocate ? t.rich("tonight.sentenceMore", more) : t.rich("tonight.sentenceMoreNoReach", { setting: more.setting })}</span>
+      </p>
+      <p role="status" className="mt-1 min-h-5 text-sm text-page-body">
+        {reachNotice ?? null}
       </p>
       <button
         type="button"
@@ -124,7 +154,7 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
           if (waiting) onWaiting?.();
           else onPlan();
         }}
-        className={`mt-4 ${TONIGHT_BUTTON}`}
+        className={`mt-3 ${TONIGHT_BUTTON}`}
       >
         {busy ? (
           <>

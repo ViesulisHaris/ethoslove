@@ -472,6 +472,7 @@ export function DatesExplorer() {
     whereName: where?.name && shareable ? where.name : undefined,
     keyOf: tonightKeyOf,
     currentKey: tonightKeyOf(date),
+    position: () => origin,
   });
   // The page's own day is offered too, when it is neither today nor tomorrow ("on Sat 28 Nov").
   const pageDayIsOther = date !== placeToday && date !== addDays(placeToday, 1);
@@ -991,6 +992,8 @@ export function DatesExplorer() {
                 onChoice={tonight.setChoice}
                 onWhen={chooseWhen}
                 onPlan={() => planTonight()}
+                canLocate={tonight.canLocate}
+                reachNotice={tonight.reachNotice}
               />
             </div>
             {/* The card is not in the live region: its heading takes focus, which already reads it out once. */}
@@ -1000,6 +1003,7 @@ export function DatesExplorer() {
                 <TonightProblem
                   problem={tonight.problem}
                   offerTomorrow={tonight.problemWhen === "tonight"}
+                  near={tonight.near}
                   onRetry={() => planTonight()}
                   onTomorrow={() => {
                     tonight.setWhen("tomorrow");
@@ -1336,7 +1340,7 @@ function ExplorerSkeleton({ locale, early, empty }: { locale: "en" | "es"; early
           <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
         </div>
         <div className="mt-4 h-[72px] animate-pulse rounded-[20px] bg-white/70" aria-hidden="true" />
-        <div className="mt-6 h-[11.75rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[10.75rem]" aria-hidden="true" />
+        <div className="mt-6 h-[18.875rem] animate-pulse rounded-[20px] bg-white/70 sm:h-[14.9rem]" aria-hidden="true" />
         <div className="mt-9">
           <IdeaRail
             heading={

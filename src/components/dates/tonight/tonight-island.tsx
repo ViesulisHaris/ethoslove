@@ -38,7 +38,7 @@ export const SEARCH_WAIT_MS = 12_000;
 const QUIET = "inline-flex min-h-11 min-w-11 items-center text-page-ink underline decoration-page-line underline-offset-4 hover:decoration-page-ink";
 
 /** What the planner says when it cannot give a plan, and the way on from there. */
-export function TonightProblem({ problem, mapHref, offerTomorrow, ofKind, whenLabel, onRetry, onTomorrow }: { problem: TonightProblemKind; mapHref?: string; offerTomorrow?: boolean; ofKind?: boolean; whenLabel?: string; onRetry: () => void; onTomorrow: () => void }) {
+export function TonightProblem({ problem, mapHref, offerTomorrow, ofKind, whenLabel, near, onRetry, onTomorrow }: { problem: TonightProblemKind; mapHref?: string; offerTomorrow?: boolean; ofKind?: boolean; whenLabel?: string; near?: number; onRetry: () => void; onTomorrow: () => void }) {
   const t = useTranslations("dates");
   const map = mapHref ? (
     <Link href={mapHref} className={QUIET}>
@@ -64,7 +64,7 @@ export function TonightProblem({ problem, mapHref, offerTomorrow, ofKind, whenLa
         </>
       ) : (
         <>
-          {ofKind && whenLabel ? t("tonight.noneKind", { when: whenLabel }) : t("tonight.none")}{" "}
+          {near ? t("tonight.noneNear", { minutes: near }) : ofKind && whenLabel ? t("tonight.noneKind", { when: whenLabel }) : t("tonight.none")}{" "}
           {/* Two ways on, kept together: a wrapped line never starts with a separator. */}
           <span className="inline-flex flex-wrap gap-x-5">
             {offerTomorrow ? (
@@ -153,6 +153,8 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
     currentKey: placeKey,
     // Back from /plan, or a reload, shows the plan again (a named place only, never "near me").
     remember: true,
+    // "Near me" in the where box is a position already had: the distance uses it before asking again.
+    position: () => (where && !where.share ? { lat: where.lat, lng: where.lng } : null),
   });
 
   const nearMe = () => {
@@ -215,6 +217,8 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
         onChoice={tonight.setChoice}
         onWhen={tonight.setWhen}
         onPlan={() => void tonight.plan()}
+        canLocate={tonight.canLocate}
+        reachNotice={tonight.reachNotice}
       />
       {/* With JavaScript off the form above cannot answer: say so, and on a page by kind point to the
           city pages at its foot, which list real places in plain HTML. */}
@@ -239,6 +243,7 @@ export function TonightIsland({ place, kind, boost, mapHref }: Props) {
             offerTomorrow={tonight.problemWhen === "tonight" && !kind}
             ofKind={Boolean(kind)}
             whenLabel={tonight.problemWhen && tonight.problemWhen !== "day" ? t(`tonight.when.${tonight.problemWhen}`) : undefined}
+            near={tonight.near}
             onRetry={() => void tonight.plan()}
             onTomorrow={() => {
               tonight.setWhen("tomorrow");

@@ -2156,8 +2156,25 @@
       "inCity": "Where to go in {city}",
       "sentence": "Plan <mood></mood> date <when></when>. <length></length>, <budget></budget>.",
       "sentenceKind": "Plan one of these <when></when>. <length></length>, <budget></budget>.",
+      "sentenceMore": "<setting></setting>, <reach></reach>.",
+      "sentenceMoreNoReach": "<setting></setting>.",
       "lengthLabel": "How long",
       "budgetLabel": "Budget",
+      "settingLabel": "Indoors or outdoors",
+      "setting": {
+        "any": "Indoors or out",
+        "indoors": "Indoors",
+        "outdoors": "Outdoors"
+      },
+      "reachLabel": "Distance",
+      "reach": {
+        "10": "10 minutes’ walk from me",
+        "20": "20 minutes’ walk from me",
+        "30": "30 minutes’ walk from me",
+        "any": "any distance"
+      },
+      "reachDenied": "We couldn’t get your position, so distance is off. Nothing else changed.",
+      "reachNone": "This browser can’t share a position, so distance is off.",
       "mood": {
         "any": "any kind of",
         "cozy": "a cozy",
@@ -2216,7 +2233,10 @@
       "optional": "optional",
       "none": "Nothing fits that here.",
       "noneKind": "None of the ideas on this page fit {when} there.",
+      "noneNear": "Nothing within {minutes} minutes of you fits. Try a longer walk.",
       "movedTomorrow": "Nothing on this page can still be done tonight there, so this one is for tomorrow.",
+      "wetIndoors": "Rain is likely {when}, so this one is under a roof.",
+      "wetOutdoors": "Rain is likely {when}. You asked for outdoors, so take a coat.",
       "late": "It’s too late to start one tonight.",
       "tryTomorrow": "Plan tomorrow",
       "openMap": "Open the map",
