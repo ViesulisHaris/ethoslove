@@ -108,8 +108,16 @@ export function supabaseLetterStore(db: SupabaseClient<Database>, ideaOn: boolea
         .select("id, email, locale, last_week")
         .not("confirmed_at", "is", null)
         .is("stopped_at", null)
-        .or(`last_week.is.null,last_week.lt.${week}`)
-        .or(`held_on.is.null,held_on.lt.${today}`)
+        // One or=(…) of four and(…) groups: "not dealt with this week" and "not held today", spelled
+        // out, so the query carries a single or= that PostgREST can't read any other way (letter-C15).
+        .or(
+          [
+            "and(last_week.is.null,held_on.is.null)",
+            `and(last_week.is.null,held_on.lt.${today})`,
+            `and(last_week.lt.${week},held_on.is.null)`,
+            `and(last_week.lt.${week},held_on.lt.${today})`,
+          ].join(","),
+        )
         .order("last_week", { ascending: true, nullsFirst: true })
         .limit(limit);
       fail("due", error);
