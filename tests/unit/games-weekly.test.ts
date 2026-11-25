@@ -376,6 +376,18 @@ describe("the weekly challenge's words", () => {
       expect((m.games.hub as Record<string, unknown>).pickSub).toBeUndefined();
     }
   });
+
+  it("C9: a share text says what was answered, as it arrives in a chat with no page round it, and whose picks wait (games2-D7)", () => {
+    const w = { en: en.games.weekly, es: es.games.weekly };
+    expect(w.en.shareText).toMatch(/three picks.*theirs\.$/);
+    expect(w.en.shareTextAnon).toMatch(/three picks.*mine\.$/);
+    expect(w.es.shareText).toMatch(/tres elecciones.*las suyas\.$/);
+    expect(w.es.shareTextAnon).toMatch(/tres elecciones.*las mías\.$/);
+    // The picks are made and sent; the partner is who answers.
+    expect(w.en.seoDescription).toMatch(/your partner answers before seeing them/);
+    expect(w.es.seoDescription).toMatch(/tu pareja responde sin verlas/);
+    expect(en.games.hub.weeklyCta).not.toMatch(/week’s$/);
+  });
 });
 
 describe("the page's words beside the challenge", () => {

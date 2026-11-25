@@ -3131,7 +3131,7 @@
       "h1Older": "An earlier week’s challenge",
       "line": "Three to answer apart, then a question and a dare to do together.",
       "seoTitle": "This Week’s Challenge for Couples: Three Picks and a Dare",
-      "seoDescription": "A new challenge for couples every Monday: three quick picks sent by link, answered before seeing yours, then a question and a dare out loud. Free, no sign-up.",
+      "seoDescription": "A new challenge for couples every Monday: make three picks, send them by link, and your partner answers before seeing them. Then a question and a dare out loud.",
       "now": "This week: {theme}",
       "last": "Last week: {theme}",
       "older": "Week of {date}: {theme}",
@@ -3163,8 +3163,8 @@
       "wholeGame": "Play this or that",
       "thisWeeks": "See this week’s challenge",
       "shareTitle": "This week’s challenge",
-      "shareText": "{name} answered this week’s three. Answer before you see them.",
-      "shareTextAnon": "I’ve answered this week’s three. Answer before you see them.",
+      "shareText": "{name} made this week’s three picks. Make yours before you see theirs.",
+      "shareTextAnon": "I’ve made this week’s three picks. Make yours before you see mine.",
       "shareBackText": "{name} answered too. Open it to see how many you matched.",
       "shareBackTextAnon": "I’ve answered too. Open it to see how many we matched.",
       "together": {
@@ -3266,7 +3266,7 @@
       "todayPhones": "Two phones, one link",
       "todayCta": "Answer today’s",
       "weeklyTitle": "This week’s challenge",
-      "weeklyCta": "Play this week’s",
+      "weeklyCta": "Take the challenge",
       "tiers": {
         "free": {
           "title": "Free",
