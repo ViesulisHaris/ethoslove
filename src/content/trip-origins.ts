@@ -87,7 +87,7 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     hero: "iceland-south-coast",
     line: { en: "Three of the twelve start at a London station, not an airport.", es: "Tres de los doce empiezan en una estación de Londres, no en un aeropuerto." },
     sentence: {
-      en: "Paris and Amsterdam fit a long weekend by Eurostar, and the Highlands trip begins off a train to Edinburgh. Iceland and Santorini are the long flights: three hours and four.",
+      en: "Paris and Amsterdam fit a long weekend by Eurostar, and the Highlands trip begins off a train to Edinburgh. Iceland and Santorini are the long flights, three and four hours.",
       es: "París y Ámsterdam, en Eurostar, caben en un puente; las Highlands empiezan al bajar del tren en Edimburgo. Islandia y Santorini son los vuelos largos: tres y cuatro horas.",
     },
   },
@@ -157,7 +157,7 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
       es: "La costa báltica en coche empieza en el casco antiguo de Riga. Copenhague queda a 1 h 30 y Praga a menos de dos; Lisboa y el Algarve, a más de 4 h 30.",
     },
     hero: "baltic-coast",
-    line: { en: "The Baltic coast trip begins in Riga’s old town; of the twelve, its days cost least.", es: "La costa báltica sale del casco antiguo de Riga, y es la de menos gasto diario." },
+    line: { en: "The Baltic coast trip begins in Riga’s old town; of the twelve, its days cost least.", es: "La costa báltica sale del casco antiguo de Riga: los días más baratos de los doce." },
     sentence: {
       en: "The shortest flights are to Copenhagen, an hour and a half, and Prague, under two. Lisbon and the Algarve take more than four and a half hours each way.",
       es: "Los vuelos más cortos son a Copenhague, hora y media, y a Praga, menos de dos. Lisboa y el Algarve pasan de cuatro horas y media por trayecto.",
