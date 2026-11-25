@@ -316,6 +316,21 @@ test.describe("a trip's page", () => {
     await expect(page.getByTestId("flight-finder")).toBeVisible();
   });
 
+  test("E10f a hash with a broken % escape leaves the trip page standing", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    for (const hash of ["%", "%E0", "flights%"]) {
+      await page.goto("about:blank");
+      await page.goto(`/trips/baltic-coast#${hash}`);
+      await expect(page.locator("h1"), hash).toHaveText(/Baltic/);
+      await expect(page.locator("details#flights"), hash).not.toHaveAttribute("open", "");
+    }
+    await page.evaluate(() => (window.location.hash = "%E0%A4%A"));
+    await page.evaluate(() => (window.location.hash = "#tickets"));
+    await expect(page.locator("details#tickets")).toHaveAttribute("open", "");
+    expect(errors).toEqual([]);
+  });
+
   test("E10d each run of best months stays on one line", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/es/trips/amalfi-coast");

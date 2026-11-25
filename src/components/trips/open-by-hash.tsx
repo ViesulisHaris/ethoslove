@@ -13,7 +13,9 @@ export function OpenByHash({ ids }: { ids: readonly string[] }) {
   useEffect(() => {
     const wanted = key.split(" ");
     const open = () => {
-      const id = decodeURIComponent(window.location.hash.slice(1));
+      // Read raw, never decoded: the ids are plain ASCII, and decoding a link cut after a `%`
+      // (`#flights%`, from a chat app or a hand-typed address) throws and takes the page down.
+      const id = window.location.hash.slice(1);
       if (!wanted.includes(id)) return;
       const el = document.getElementById(id);
       if (el instanceof HTMLDetailsElement && !el.open) el.open = true;
