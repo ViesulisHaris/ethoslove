@@ -2,6 +2,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from "react";
+import { preload } from "react-dom";
 import { AnimatePresence, motion, MotionConfig, useIsPresent } from "motion/react";
 import { ArrowRight, CloudOff, List, Map as MapIcon, Sparkles, Sunset } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -1331,6 +1332,11 @@ export function DatesExplorer() {
 function ExplorerSkeleton({ locale, early, empty }: { locale: "en" | "es"; early: boolean; empty: ReactNode }) {
   const t = useTranslations("dates");
   const budget = [t("ideas.budget.0"), t("ideas.budget.1"), t("ideas.budget.2"), t("ideas.budget.3")] as [string, string, string, string];
+  // The connection's guess at the town, asked for from the page's <head>: the script below can run
+  // only once the stylesheet has come, and on a slow phone the guess then took the line's last
+  // round trip before the page could show anything to search (25 Nov 2026). The script's fetch takes
+  // this answer; one with a town in its link or kept from last time leaves it unread (it is tiny).
+  if (early) preload(HERE_URL, { as: "fetch", crossOrigin: "anonymous" });
   return (
     <>
     <div data-dates-wait className="lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
