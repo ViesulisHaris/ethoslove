@@ -78,7 +78,8 @@ export function GET() {
     "## Gift ideas by kind, and what a digital card is",
     "",
     ...GIFT_GUIDE_SLUGS.map((slug) => `- [${GIFT_GUIDES[slug].en.h1}](${localizedUrl("en", `/gifts/${slug}`)}): ${GIFT_GUIDES[slug].en.description}`),
-    `- [Anniversary gifts by month, 1 to 24](${localizedUrl("en", "/gifts/12-month-anniversary")}): ${MONTH_GUIDES[12].en.description}`,
+    // One line for the series, not 24: it names the month it links to and says where the other 23 are.
+    `- [${MONTH_GUIDES[12].en.h1}](${localizedUrl("en", "/gifts/12-month-anniversary")}): ${MONTH_GUIDES[12].en.description} One page for each month from 1 to 24, at ${localizedUrl("en", "/gifts/1-month-anniversary")} to ${localizedUrl("en", "/gifts/24-month-anniversary")}.`,
     `- [${cards.breadcrumb}: ${cards.h1.toLowerCase()}](${localizedUrl("en", DIGITAL_CARDS_PATH)}): ${cards.description}`,
     "",
     "## Blog",

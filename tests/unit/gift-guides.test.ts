@@ -660,5 +660,10 @@ describe("llms.txt", () => {
     expect(cards).toContain(digitalCardsCopy("en", { single: "", pick3: "", everything: "", extras: "", photos: "", notePhotos: 0, count: listManifests().length, paid: 0, ideas: 0, finder: false }).description);
     // No price is typed into that line: prices have a section of their own, read from the code.
     expect(cards).not.toMatch(/[€$£]\s?\d/);
+    // The months are one line, named by the page it links to, which says where the rest of the series is (C27).
+    const month = text.split("\n").find((l) => l.includes(`/gifts/${monthSlug(12)})`));
+    expect(month).toContain(`[${MONTH_GUIDES[12].en.h1}]`);
+    expect(month).toContain(`/gifts/${monthSlug(1)}`);
+    expect(month).toContain(`/gifts/${monthSlug(24)}`);
   });
 });
