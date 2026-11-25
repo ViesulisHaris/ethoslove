@@ -467,8 +467,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           </div>
         </div>
       ) : null}
-      {likedBy !== null ? <p className="mt-5 text-[13.5px] font-semibold text-forest" data-testid="place-liked">{labels.liked(likedBy)}</p> : null}
-      <Reviews rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
+      <Reviews liked={likedBy !== null ? labels.liked(likedBy) : undefined} rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
       <PairsWith from={place} picks={pairs} locale={locale} labels={{ title: labels.pairs, walk: labels.walkBetween }} onOpen={onOpenPlace} />
       <p className="mt-4 text-[11.5px] leading-snug text-forest/65">{labels.source}</p>
     </motion.aside>

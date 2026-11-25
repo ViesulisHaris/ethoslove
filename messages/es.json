@@ -2291,7 +2291,7 @@
       "share": "Compartir",
       "shareCopied": "Enlace copiado",
       "shareText": "Un sitio para una cita:",
-      "liked": "A {n} parejas les gustó",
+      "liked": "{n} parejas dijeron que fue una buena cita",
       "book": "Reservar mesa"
     },
     "featured": {

@@ -531,7 +531,9 @@ test.describe("dates2: a place's sheet", () => {
     await pinClock(page);
     await openLisbon(page);
     const sheet = await openSheet(page, "Livraria do Bairro");
-    await expect(sheet.getByText("14 couples liked this")).toBeVisible();
+    await expect(sheet.getByText("14 couples said it was a good date")).toBeVisible();
+    // Inside "Couples say", beside the stars it could be mistaken for (dates2-T14).
+    await expect(sheet.getByRole("region", { name: "Couples say" }).getByTestId("place-liked")).toBeVisible();
     await sheet.getByRole("button", { name: "Close" }).click();
     const other = await openSheet(page, "Café da Esquina");
     await page.waitForTimeout(500);
