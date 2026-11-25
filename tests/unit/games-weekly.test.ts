@@ -328,6 +328,12 @@ describe("the weekly challenge's words", () => {
     expect(w.together.dare).toBe("Reto");
   });
 
+  it("C8: the reveal's lines write the count as Spanish and English write it, never «en 3»", () => {
+    for (const m of [en, es]) for (const key of ["revealAll", "revealNone"] as const) expect(m.games.weekly[key], key).not.toMatch(/\{total\}|\d/);
+    expect(es.games.weekly.revealAll).toMatch(/\btres\b/);
+    expect(en.games.weekly.wholeGame).toBe("Play this or that");
+  });
+
   it("C3: no filler, no exclamation marks, no em dashes; no streak, no points, no email", () => {
     for (const l of LOCALES) {
       expect(fillerIn(texts(l), l), l).toEqual([]);
