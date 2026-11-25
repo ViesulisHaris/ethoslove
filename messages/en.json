@@ -43,8 +43,8 @@
     "titleTemplate": "%s · Ethos",
     "description": "Make a digital gift in ten minutes: a love letter, bouquet or scrapbook with your photos and song, sent as a link. Free to start, with date ideas and games.",
     "giftsTitle": "Digital Gifts and Virtual Gifts: Make a Free, Personal One · Ethos",
-    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, two free.",
-    "giftsDescriptionShort": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, one free."
+    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. {ideas} ideas, {free} free.",
+    "giftsDescriptionShort": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. {ideas} ideas, one free."
   },
   "nav": {
     "templates": "Templates",
@@ -648,7 +648,7 @@
         "addPlanHelp": "The plan from the map, with a photo of every stop.",
         "noPlan": "Make a plan on the map first, then come back for it.",
         "planLink": "Open the map",
-        "addTripHelp": "One of our twelve trips, every stop planned.",
+        "addTripHelp": "One of our {trips} trips, every stop planned.",
         "date": "Evening out",
         "included": "Included"
       },
@@ -859,7 +859,7 @@
       "noPlan": "Plan a date on the map first, then come back for it.",
       "planLink": "Plan a date",
       "addTrip": "Add a trip",
-      "addTripHelp": "One of our twelve trips for two.",
+      "addTripHelp": "One of our {trips} trips for two.",
       "pickTrip": "Which trip?",
       "date": "Date night",
       "trip": "Trip",
@@ -1883,19 +1883,19 @@
     "occasion": {
       "birthday": {
         "title": "Digital birthday gifts",
-        "metaTitle": "Digital and Virtual Birthday Gifts: 12 Ideas to Send Today",
+        "metaTitle": "Digital and Virtual Birthday Gifts: {ideas} Ideas to Send Today",
         "description": "Make a digital birthday gift they’ll open again and again: your photos, their favorite song and your words, animated and sent as a link or QR code. Free to start.",
         "intro": "A birthday message that does more than sit in a chat. Blow out the candles in Birthday Cinema, crack open a Fortune Cookie or print a Front Page about them, with your photos and their song, and set it to open at midnight."
       },
       "anniversary": {
         "title": "Digital anniversary gifts",
-        "metaTitle": "Digital Anniversary Gifts: 12 Gift Ideas From Your Photos",
+        "metaTitle": "Digital Anniversary Gifts: {ideas} Gift Ideas From Your Photos",
         "description": "An anniversary gift made from your own story: your photos, your song and a letter in your words, animated and sent as a link. Try every template free.",
         "intro": "One year or twenty: tell the story of the two of you with the photos only you have, the song that’s yours and a note that says what a card can’t. Walk them down Our Timeline, hang your photos in a Museum or seal it all in The Letter."
       },
       "valentines": {
         "title": "Virtual valentines and digital gifts",
-        "metaTitle": "Virtual Valentines and Digital Gifts: 12 Ideas Beyond Roses",
+        "metaTitle": "Virtual Valentines and Digital Gifts: {ideas} Ideas Beyond Roses",
         "description": "A virtual valentine that arrives in seconds and lasts for years: a wax-sealed love letter, a bouquet that never wilts or a sky of your photos, with your song.",
         "intro": "Flowers wilt and chocolates don’t last the evening. A love letter they open with a tap, a bouquet you picked stem by stem, or a night sky where every photo is a star will still be there next February."
       },
@@ -2652,7 +2652,7 @@
       },
       "games": {
         "title": "Games",
-        "blurb": "Eight card games for two.",
+        "blurb": "{Games} card games for two.",
         "cta": "Play a game"
       }
     },
@@ -2676,7 +2676,7 @@
       "cityB": "London"
     },
     "games": {
-      "eyebrow": "Games · eight to play now",
+      "eyebrow": "Games · {games} to play now",
       "title": "Play for who does the dishes.",
       "blurb": "Card games made for two people who like each other. No downloads, no accounts.",
       "cta": "Deal me in"
@@ -2815,12 +2815,12 @@
   "trips": {
     "meta": {
       "title": "Couples trip ideas: {count} itineraries for two",
-      "description": "Couples trip ideas, planned day by day: twelve trips for two, from weekend city breaks to a week on the road. Say where you fly from and we pick three."
+      "description": "Couples trip ideas, planned day by day: {trips} trips for two, from weekend city breaks to a week on the road. Say where you fly from and we pick three."
     },
     "eyebrow": "Trips for two",
     "h1a": "Go somewhere",
     "h1b": "together.",
-    "sub": "Twelve trips we’d take ourselves, planned day by day, and a flight search that opens the fares on the sites you already use. No booking fees, no account.",
+    "sub": "{Trips} trips we’d take ourselves, planned day by day, and a flight search that opens the fares on the sites you already use. No booking fees, no account.",
     "finder": {
       "title": "Find flights",
       "sub": "For two, on any dates. We open the search; you book with them."
@@ -3002,7 +3002,7 @@
   },
   "games": {
     "meta": {
-      "title": "Couple Games Online: Eight Free Games for Two",
+      "title": "Couple Games Online: {games} Free Games for Two",
       "description": "Couple games to play online, free: Would you rather, This or that, How well do you know me, truth or dare, Memory with your photos and more. No downloads."
     },
     "h1a": "Couple games for",
@@ -3323,7 +3323,7 @@
     },
     "hub": {
       "eyebrow": "Game night for two",
-      "sub": "Eight little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
+      "sub": "{Games} little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
       "one": "Pass one phone",
       "two": "Or two phones, one link",
       "deal": "Deal me in",

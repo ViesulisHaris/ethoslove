@@ -222,7 +222,9 @@ export function sampleFieldsOf(occasion: string, template: string, locale: GiftL
 export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionIdeas>> = {
   "mothers-day": {
     en: {
-      title: "10 digital Mother’s Day gift ideas",
+      get title() {
+        return `${this.items.length} digital Mother’s Day gift ideas`;
+      },
       items: [
         {
           template: "recipe-box",
@@ -279,7 +281,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales para el Día de la Madre",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales para el Día de la Madre`;
+      },
       items: [
         {
           template: "recipe-box",
@@ -339,7 +343,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   "fathers-day": {
     en: {
-      title: "10 digital Father’s Day gift ideas",
+      get title() {
+        return `${this.items.length} digital Father’s Day gift ideas`;
+      },
       items: [
         {
           template: "front-page",
@@ -395,7 +401,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales para el Día del Padre",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales para el Día del Padre`;
+      },
       items: [
         {
           template: "front-page",
@@ -455,7 +463,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   graduation: {
     en: {
-      title: "10 digital graduation gift ideas",
+      get title() {
+        return `${this.items.length} digital graduation gift ideas`;
+      },
       items: [
         {
           template: "cap-toss",
@@ -516,7 +526,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales de graduación",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales de graduación`;
+      },
       items: [
         {
           template: "cap-toss",
@@ -579,7 +591,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   wedding: {
     en: {
-      title: "10 digital wedding gift ideas",
+      get title() {
+        return `${this.items.length} digital wedding gift ideas`;
+      },
       items: [
         {
           template: "the-toast",
@@ -638,7 +652,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales de boda",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales de boda`;
+      },
       items: [
         {
           template: "the-toast",
@@ -700,7 +716,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   "long-distance": {
     en: {
-      title: "11 digital long-distance gift ideas",
+      get title() {
+        return `${this.items.length} digital long-distance gift ideas`;
+      },
       items: [
         {
           template: "halfway",
@@ -766,7 +784,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "11 ideas de regalos digitales para una relación a distancia",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales para una relación a distancia`;
+      },
       items: [
         {
           template: "halfway",
@@ -834,7 +854,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   apology: {
     en: {
-      title: "8 ways to say sorry with a digital gift",
+      get title() {
+        return `${this.items.length} ways to say sorry with a digital gift`;
+      },
       items: [
         {
           template: "the-letter",
@@ -880,7 +902,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "8 formas de pedir perdón con un regalo digital",
+      get title() {
+        return `${this.items.length} formas de pedir perdón con un regalo digital`;
+      },
       items: [
         {
           template: "the-letter",
@@ -930,7 +954,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   "just-because": {
     en: {
-      title: "11 digital gifts for no reason at all",
+      get title() {
+        return `${this.items.length} digital gifts for no reason at all`;
+      },
       items: [
         {
           template: "fortune-cookie",
@@ -998,7 +1024,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "11 regalos digitales sin motivo alguno",
+      get title() {
+        return `${this.items.length} regalos digitales sin motivo alguno`;
+      },
       items: [
         {
           template: "fortune-cookie",
@@ -1068,7 +1096,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   thanksgiving: {
     en: {
-      title: "8 digital Thanksgiving gift ideas",
+      get title() {
+        return `${this.items.length} digital Thanksgiving gift ideas`;
+      },
       items: [
         {
           template: "wishbone",
@@ -1113,7 +1143,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "8 ideas de regalos digitales de Acción de Gracias",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales de Acción de Gracias`;
+      },
       items: [
         {
           template: "wishbone",

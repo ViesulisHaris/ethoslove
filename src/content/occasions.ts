@@ -55,7 +55,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "A birthday gift they’ll open twice",
       lead: "Most birthday messages are a line in a group chat, read once and buried by lunch. This is the other kind: a page with their name on it, the photos you have of them, the song they can’t help singing, and the thing you actually mean — opened on their phone, whenever they like.",
       ideas: {
-        title: "12 digital birthday gift ideas",
+        get title() {
+          return `${this.items.length} digital birthday gift ideas`;
+        },
         items: [
           {
             template: "midnight-countdown",
@@ -153,7 +155,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de cumpleaños que abrirá dos veces",
       lead: "Casi todas las felicitaciones son una línea en un grupo, leída una vez y enterrada antes de comer. Esto es lo otro: una página con su nombre, las fotos que tienes de esa persona, la canción que no puede evitar cantar y lo que de verdad quieres decirle, abierto en su móvil cuando quiera.",
       ideas: {
-        title: "12 ideas de regalos digitales de cumpleaños",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales de cumpleaños`;
+        },
         items: [
           {
             template: "midnight-countdown",
@@ -254,7 +258,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "An anniversary gift made of your own story",
       lead: "An anniversary is the one day a year the two of you are the subject. Cards borrow other people’s words for it. This uses yours: the photos only you have, the song that’s yours, and a note about what these years have actually been like, opened on their phone and kept.",
       ideas: {
-        title: "12 digital anniversary gift ideas",
+        get title() {
+          return `${this.items.length} digital anniversary gift ideas`;
+        },
         items: [
           {
             template: "the-letter",
@@ -356,7 +362,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de aniversario hecho con vuestra historia",
       lead: "El aniversario es el único día del año en que el tema sois vosotros dos. Las tarjetas lo cuentan con palabras de otros. Esto usa las tuyas: las fotos que solo tienes tú, la canción que es vuestra y una nota sobre cómo han sido estos años de verdad, abierta en su móvil y guardada.",
       ideas: {
-        title: "12 ideas de regalos digitales de aniversario",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales de aniversario`;
+        },
         items: [
           {
             template: "the-letter",
@@ -459,7 +467,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "A Valentine’s gift that lasts past the evening",
       lead: "Flowers wilt, chocolates are gone by ten, and the card ends up in a drawer. A gift they open on their phone — a letter under a wax seal, a bouquet you picked stem by stem, a sky where every star is a photo of the two of you — is still there next February, and the one after.",
       ideas: {
-        title: "12 digital Valentine’s Day gift ideas",
+        get title() {
+          return `${this.items.length} digital Valentine’s Day gift ideas`;
+        },
         items: [
           {
             template: "the-letter",
@@ -558,7 +568,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de San Valentín que dura más que la noche",
       lead: "Las flores se marchitan, los bombones no llegan a las diez y la tarjeta acaba en un cajón. Un regalo que abre en su móvil, una carta con sello de lacre, un ramo que has elegido tallo a tallo, un cielo en el que cada estrella es una foto vuestra, sigue ahí el febrero que viene, y el otro.",
       ideas: {
-        title: "12 ideas de regalos digitales para San Valentín",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales para San Valentín`;
+        },
         items: [
           {
             template: "the-letter",
@@ -778,7 +790,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "A Christmas gift that can’t get lost in the post",
       lead: "For the people you won’t see this year and the ones you will. Nothing to ship, no deadline to miss: it opens on Christmas morning wherever they are, with your photos, a song for the day and the message you’d say if you were in the room.",
       ideas: {
-        title: "12 digital Christmas gift ideas",
+        get title() {
+          return `${this.items.length} digital Christmas gift ideas`;
+        },
         items: [
           {
             template: "snow-globe",
@@ -893,7 +907,9 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       title: "Un regalo de Navidad que no se pierde en el correo",
       lead: "Para los que no verás este año y para los que sí. Nada que enviar por correo, ninguna fecha límite: se abre la mañana de Navidad estén donde estén, con tus fotos, una canción para el día y el mensaje que dirías si estuvieras allí.",
       ideas: {
-        title: "12 ideas de regalos digitales de Navidad",
+        get title() {
+          return `${this.items.length} ideas de regalos digitales de Navidad`;
+        },
         items: [
           {
             template: "snow-globe",

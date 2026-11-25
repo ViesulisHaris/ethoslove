@@ -2,6 +2,8 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { countWord } from "@/lib/count-words";
+import { TRIP_COUNT } from "@/lib/trips/count";
 import { CalendarHeart, Check, Gift, Loader2, Plane, Sparkles, Trash2, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -39,7 +41,7 @@ const GROUP_KEYS: ReadonlySet<string> = new Set(["addPlan", "addPlanHelp", "noPl
 export function UnwrapSection({ manifest, groupCard = false }: { manifest: TemplateManifest; groupCard?: boolean }) {
   const tE = useTranslations("editor");
   const t = (key: "addPlan" | "addPlanHelp" | "noPlan" | "planLink" | "addTripHelp" | "included" | "special" | "pickTrip" | "cancel" | "wrapping" | "addTrip" | "specialNote") =>
-    groupCard && GROUP_KEYS.has(key) ? tE(`group.unwrap.${key}`) : tE(`unwrap.${key}`);
+    groupCard && GROUP_KEYS.has(key) ? tE(`group.unwrap.${key}`, { trips: countWord(TRIP_COUNT, ui) }) : tE(`unwrap.${key}`, { trips: countWord(TRIP_COUNT, ui) });
   const tS = (key: "n" | "title" | "blurb") => (groupCard && key !== "n" ? tE(`group.unwrap.${key}`) : tE(`sections.unwrap.${key}`));
   const ui = useLocale() === "es" ? "es" : "en";
   const unwrap = useEditor((s) => s.data.unwrap);

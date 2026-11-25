@@ -5,6 +5,8 @@ import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { TableFelt } from "@/components/games/cards";
 import { GameHand } from "@/components/games/game-hand";
 import { GAMES, type GameKey } from "@/lib/games/catalogue";
+import { countWord } from "@/lib/count-words";
+import { getLocale } from "next-intl/server";
 
 /** Long distance, on the dark ground: two dots and the arc between them. */
 export async function LongDistanceBand() {
@@ -63,7 +65,7 @@ export async function GamesBand() {
           <GameHand titles={titles} label={tg("hub.pickTitle")} />
         </div>
         <div data-reveal className="order-1 lg:order-2">
-          <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
+          <p className="text-eyebrow text-ink-soft">{t("eyebrow", { games: countWord(GAMES.length, await getLocale()) })}</p>
           <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
           {/* Two labels, not two buttons: no pill shape, which read as something to press (walk-front-8). */}

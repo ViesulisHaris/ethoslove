@@ -28,7 +28,8 @@ import { IdeaCards, MoreRow, QUIET_LINK, QuestionsSpread, SiteHero, SitePage, Sp
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
 import { POSTER_ROW, GiftPosterLink, QuestionRow } from "@/components/templates/page/sections";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { sendsFree } from "@/lib/gift/free-tier";
+import { countWord } from "@/lib/count-words";
 
 /** The proof in the reactions section is read from the database: the page is drawn again hourly to keep it current. */
 export const revalidate = 3600;
@@ -39,7 +40,10 @@ const HERO_GIFT = "bouquet";
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/gifts">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t(noteForEveryone() ? "giftsDescriptionShort" : "giftsDescription"), absoluteTitle: true });
+  // The ideas the page lists and the templates that go out free, counted, not typed.
+  const free = listManifests().filter((m) => sendsFree(m)).length;
+  const description = t(free === 1 ? "giftsDescriptionShort" : "giftsDescription", { ideas: DIGITAL_GIFT_IDEAS.length, free: countWord(free, locale, { feminine: true }) });
+  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description, absoluteTitle: true });
 }
 
 /**

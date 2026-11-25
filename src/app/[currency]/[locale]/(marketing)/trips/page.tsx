@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { countWord } from "@/lib/count-words";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -24,7 +25,7 @@ const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<T
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/trips">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "trips.meta" });
-  return pageMetadata({ locale, path: "/trips", title: t("title", { count: TRIPS.length }), description: t("description") });
+  return pageMetadata({ locale, path: "/trips", title: t("title", { count: TRIPS.length }), description: t("description", { trips: countWord(TRIPS.length, locale) }) });
 }
 
 /** Trips: the flight search on the first screen, then twelve trips to pick from, then the gift they can become. */
@@ -98,7 +99,7 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
               <h1 className="mt-5 max-w-[7.2em] display-hero text-balance">
                 {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
               </h1>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub", { Trips: countWord(TRIPS.length, l, { capital: true }) })}</p>
             </div>
             <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
               <h2 className="font-display text-[26px] leading-tight text-forest">{t("finder.title")}</h2>
