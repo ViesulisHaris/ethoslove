@@ -60,7 +60,6 @@ export default async function GamesPage({ params }: PageProps<"/[currency]/[loca
         <h2 data-reveal className="display-lg text-cream">
           {t("hub.pickTitle")}
         </h2>
-        <p className="mt-2 max-w-xl text-[15.5px] text-cream/60">{t("hub.pickSub")}</p>
         {/* Rows that wrap and centre, each card as wide as a grid column would make it: with seven
             games the last one sits in the middle of its row, not alone at the left of an empty one,
             and any count to come lays out the same way. Cards in a row still stretch to one height. */}

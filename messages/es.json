@@ -2954,7 +2954,7 @@
       "seoTitle": "Preguntas para parejas: juego de cartas gratis",
       "seoDescription": "Preguntas para hacerle a tu pareja, en un juego de cartas: ligeras para el sofá, más profundas para luego y una baraja para la distancia. Gratis.",
       "listTitle": "{count} preguntas para hacerle a tu pareja",
-      "listIntro": "Las tres barajas gratis: ligeras para el sofá, más cercanas para luego y una para cuando estáis lejos. Pasaos el móvil, leed una en voz alta y responded."
+      "listIntro": "Tres barajas gratis. Pasaos el móvil, leed una en voz alta y responded."
     },
     "lobby": {
       "one": {
@@ -3031,7 +3031,7 @@
       "seoTitle": "¿Cuánto me conoces? Test para parejas gratis",
       "seoDescription": "Un test de ¿cuánto me conoces? para parejas: respondes sobre ti, adivinas lo suyo y puntúan los aciertos. En uno o dos móviles. Gratis, sin app.",
       "listTitle": "{count} preguntas de ¿cuánto me conoces?",
-      "listIntro": "Las preguntas del juego gratis, cada una con cuatro respuestas. Responde sobre ti y luego adivina qué dijo la otra persona."
+      "listIntro": "Cada una tiene cuatro respuestas. Responde por ti y adivina la suya."
     },
     "rather": {
       "title": "¿Qué prefieres?",
@@ -3062,7 +3062,7 @@
       "seoTitle": "Preguntas de ¿qué prefieres? para parejas, online",
       "seoDescription": "Preguntas de ¿qué prefieres? para parejas, de tiernas a dramáticas. Elegís en secreto en uno o dos móviles y veis si coincidís. Gratis, sin app.",
       "listTitle": "{count} preguntas de ¿qué prefieres? para parejas",
-      "listIntro": "Todas las preguntas de la baraja gratis, desde las fáciles para el sofá hasta las que empiezan una discusión digna de captura. Jugadlas arriba en uno o dos móviles, o leedlas en voz alta en una cita."
+      "listIntro": "Desde las fáciles para el sofá hasta las que empiezan una discusión."
     },
     "today": {
       "label": "Pregunta del día",
@@ -3124,6 +3124,65 @@
         "faq": "Preguntas"
       }
     },
+    "weekly": {
+      "label": "Reto de la semana",
+      "h1": "El reto de esta semana para dos",
+      "h1Last": "El reto de la semana pasada",
+      "h1Older": "El reto de otra semana",
+      "line": "Tres para responder por separado; luego, una pregunta y un reto en pareja.",
+      "seoTitle": "Juego para parejas a distancia: el reto de la semana",
+      "seoDescription": "Un reto nuevo para dos cada lunes: tres elecciones rápidas por enlace, que tu pareja responde sin ver las tuyas, y luego una pregunta y un reto. Gratis.",
+      "now": "Esta semana: {theme}",
+      "last": "La semana pasada: {theme}",
+      "older": "Semana del {date}: {theme}",
+      "broken": "Ese enlace no llegó entero, así que aquí tienes el reto de esta semana.",
+      "invited": "{name} ya ha respondido a las tres. Te toca, antes de verlas.",
+      "prompt": "¿Esto o aquello?",
+      "step": "{n} de {total}",
+      "or": "o",
+      "back": "Atrás",
+      "yours": "Tus tres elecciones",
+      "changePicks": "Cambiarlas",
+      "resend": "Has cambiado tus elecciones: vuelve a enviar el enlace para que le lleguen las nuevas.",
+      "nameLabel": "Tu nombre",
+      "send": "Envíaselo",
+      "copy": "Copiar el enlace",
+      "copyAgain": "Copiar el enlace otra vez",
+      "copied": "Enlace copiado. Pégalo en vuestro chat.",
+      "copyFallback": "Copia este enlace:",
+      "sent": "Enviado. Responderá sin ver las tuyas y luego podrá mandarte las suyas.",
+      "sendBack": "Devuélvele las tuyas",
+      "sentBack": "Enviado. {name} verá también las tuyas.",
+      "own": "Es el enlace que enviaste. Responderá sin ver las tuyas.",
+      "revealAll": "Coincidís en las {total}. Ahora, las dos de abajo.",
+      "revealSome": "Coincidís en {same} de {total}. Preguntad por las que no.",
+      "revealNone": "Ninguna coincidencia en {total}. Defended una elección por cabeza, en una frase.",
+      "you": "Tú",
+      "answers": "Las elecciones de cada cual",
+      "rowSame": "igual",
+      "wholeGame": "Jugar a ¿Esto o aquello?",
+      "thisWeeks": "Ver el reto de esta semana",
+      "shareTitle": "El reto de esta semana",
+      "shareText": "{name} ya ha respondido a las tres de esta semana. Responde antes de verlas.",
+      "shareTextAnon": "Ya he respondido a las tres de esta semana. Responde antes de verlas.",
+      "shareBackText": "{name} también ha respondido. Ábrelo y mira en cuántas coincidís.",
+      "shareBackTextAnon": "Yo también he respondido. Ábrelo y mira en cuántas coincidimos.",
+      "together": {
+        "label": "Y luego, en pareja",
+        "heading": "Una pregunta y un reto",
+        "line": "Para esta semana, cuando hayáis respondido. En voz alta, no por mensaje.",
+        "ask": "Pregunta",
+        "dare": "Reto"
+      },
+      "more": {
+        "label": "Las barajas enteras",
+        "heading": "De dónde salen estas cartas",
+        "line": "Tres juegos gratis, y cada juego con su baraja entera.",
+        "all": "Todos los juegos",
+        "faq": "Preguntas",
+        "cards": "Las cinco cartas de esta semana"
+      }
+    },
     "thisthat": {
       "title": "¿Esto o aquello?",
       "blurb": "Diez parejas rápidas. Elegís en secreto y luego veis en cuántas coincidís. En un móvil o en dos.",
@@ -3144,7 +3203,7 @@
       "seoTitle": "Preguntas de esto o aquello para parejas: 120 para jugar",
       "seoDescription": "120 preguntas de esto o aquello para parejas: elegís en secreto en uno o dos móviles y veis en cuántas coincidís. Gratis, sin app y sin registro.",
       "listTitle": "{count} preguntas de esto o aquello para parejas",
-      "listIntro": "Todas las parejas del juego, para jugarlas arriba o leerlas en voz alta. Contad hasta tres y responded a la vez."
+      "listIntro": "Contad hasta tres y responded a la vez."
     },
     "roulette": {
       "title": "La ruleta de los platos",
@@ -3185,7 +3244,7 @@
       "seoTitle": "Verdad o reto para parejas: juego online gratis",
       "seoDescription": "Verdad o reto para parejas, versión suave: verdades tiernas y retos tontos, nada de lo que arrepentirse por la mañana. Un móvil, por turnos. Gratis.",
       "listTitle": "{count} preguntas de verdad o reto para parejas",
-      "listIntro": "Todas las verdades y todos los retos del juego gratis: pequeñas confesiones, discursos, imitaciones, un baile lento.",
+      "listIntro": "Pequeñas confesiones, discursos, imitaciones y un baile lento.",
       "listTruths": "Verdades",
       "listDares": "Retos"
     },
@@ -3201,11 +3260,12 @@
       "two": "O dos móviles, un enlace",
       "deal": "Reparte",
       "pickTitle": "Elige un juego",
-      "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
       "minutes": "{n} min",
       "todayTitle": "La pregunta de hoy",
       "todayPhones": "Dos móviles, un enlace",
       "todayCta": "Responder",
+      "weeklyTitle": "El reto de la semana",
+      "weeklyCta": "Jugar el reto",
       "tiers": {
         "free": {
           "title": "Gratis",
@@ -3298,7 +3358,7 @@
       "seoTitle": "Juego de dibujar para parejas, en dos móviles",
       "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis.",
       "listTitle": "{count} palabras para un juego de dibujar en pareja",
-      "listIntro": "Todas las palabras del juego gratis. Cada partida reparte seis y os turnáis para dibujarlas con el dedo."
+      "listIntro": "Cada partida reparte seis y os turnáis para dibujarlas con el dedo."
     },
     "end": {
       "label": "¿Y ahora qué?",
@@ -3320,6 +3380,10 @@
       "line": "Las reglas, cuánto dura y qué se guarda.",
       "moreLabel": "Para seguir leyendo",
       "more": "Más como este"
+    },
+    "list": {
+      "label": "La baraja entera",
+      "more": "{count} más"
     }
   },
   "packs": {

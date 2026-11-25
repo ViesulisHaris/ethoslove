@@ -2954,7 +2954,7 @@
       "seoTitle": "Questions to Ask Your Partner: Free Card Game",
       "seoDescription": "Questions to ask your boyfriend or girlfriend, as a card game: light ones for the sofa, deeper ones for later and a deck for long distance. Free.",
       "listTitle": "{count} questions to ask your partner",
-      "listIntro": "All three free decks: light ones for the sofa, closer ones for later and a deck for when you’re apart. Pass the phone, read one out, and both answer."
+      "listIntro": "Three free decks. Pass the phone, read one out, and both answer."
     },
     "lobby": {
       "one": {
@@ -3031,7 +3031,7 @@
       "seoTitle": "How Well Do You Know Me? A Quiz for Couples",
       "seoDescription": "A how well do you know me quiz for couples: answer for yourself, guess for them, and the guesses score. Play on one phone or two. Free, no app.",
       "listTitle": "{count} how well do you know me questions",
-      "listIntro": "The questions in the free game, each with four answers to pick from. Answer for yourself, then guess what they said."
+      "listIntro": "Each has four answers. Answer for yourself, then guess theirs."
     },
     "rather": {
       "title": "Would you rather?",
@@ -3062,7 +3062,7 @@
       "seoTitle": "Would You Rather Questions for Couples: Play Online",
       "seoDescription": "Would you rather questions for couples, from sweet to dramatic. Both pick in secret on one phone or two, then see if you agree. Free, no app, no sign-up.",
       "listTitle": "{count} would you rather questions for couples",
-      "listIntro": "Every question in the free deck, from easy ones for the sofa to the ones that start an argument worth screenshotting. Play them above on one phone or two, or read them out on a date."
+      "listIntro": "From easy ones for the sofa to the ones that start an argument."
     },
     "today": {
       "label": "Question of the day",
@@ -3124,6 +3124,65 @@
         "faq": "Questions"
       }
     },
+    "weekly": {
+      "label": "Weekly challenge",
+      "h1": "This week’s challenge for two",
+      "h1Last": "Last week’s challenge for two",
+      "h1Older": "An earlier week’s challenge",
+      "line": "Three to answer apart, then a question and a dare to do together.",
+      "seoTitle": "A Game to Play Over Text: This Week’s Challenge for Two",
+      "seoDescription": "A new challenge for two every Monday: three quick picks sent by link, answered before seeing yours, then a question and a dare to do together. Free, no sign-up.",
+      "now": "This week: {theme}",
+      "last": "Last week: {theme}",
+      "older": "Week of {date}: {theme}",
+      "broken": "That link didn’t arrive whole, so here is this week’s challenge.",
+      "invited": "{name} has answered all three. Your turn, before you see them.",
+      "prompt": "This or that?",
+      "step": "{n} of {total}",
+      "or": "or",
+      "back": "Back",
+      "yours": "Your three picks",
+      "changePicks": "Change them",
+      "resend": "Changed. Send it again so they get the new picks.",
+      "nameLabel": "Your first name",
+      "send": "Send it to them",
+      "copy": "Copy the link",
+      "copyAgain": "Copy the link again",
+      "copied": "Link copied. Paste it into your chat.",
+      "copyFallback": "Copy this link:",
+      "sent": "Sent. They answer without seeing yours, then can send theirs back.",
+      "sendBack": "Send yours back",
+      "sentBack": "Sent. {name} will see yours too.",
+      "own": "This is the link you sent. They answer without seeing yours.",
+      "revealAll": "You matched on all {total}. Now do the two below.",
+      "revealSome": "You matched on {same} of {total}. Ask about the ones you didn’t.",
+      "revealNone": "No match in {total}. Each defend one pick, in one sentence.",
+      "you": "You",
+      "answers": "Both sets of picks",
+      "rowSame": "same",
+      "wholeGame": "Play This or that",
+      "thisWeeks": "See this week’s challenge",
+      "shareTitle": "This week’s challenge",
+      "shareText": "{name} answered this week’s three. Answer before you see them.",
+      "shareTextAnon": "I’ve answered this week’s three. Answer before you see them.",
+      "shareBackText": "{name} answered too. Open it to see how many you matched.",
+      "shareBackTextAnon": "I’ve answered too. Open it to see how many we matched.",
+      "together": {
+        "label": "Then, together",
+        "heading": "A question and a dare",
+        "line": "For this week, once you have both answered. Out loud, not by text.",
+        "ask": "Ask",
+        "dare": "Dare"
+      },
+      "more": {
+        "label": "The whole decks",
+        "heading": "Where these cards come from",
+        "line": "Three free games, each with its whole deck to play.",
+        "all": "All the games",
+        "faq": "Questions",
+        "cards": "This week’s five cards"
+      }
+    },
     "thisthat": {
       "title": "This or that?",
       "blurb": "Ten quick pairs. You both pick in secret, then see how many you matched. Play on one phone, or from two.",
@@ -3144,7 +3203,7 @@
       "seoTitle": "This or That Questions for Couples: 120 to Play Now",
       "seoDescription": "120 this or that questions for couples, written for two: pick in secret on one phone or two, then see how many you match. Free, no app, no sign-up.",
       "listTitle": "{count} this or that questions for couples",
-      "listIntro": "Every pair in the game, to play above or read out across a table. Count to three and answer at the same time."
+      "listIntro": "Count to three and answer at the same time."
     },
     "roulette": {
       "title": "Dishes roulette",
@@ -3185,7 +3244,7 @@
       "seoTitle": "Truth or Dare Questions for Couples: Free Online Game",
       "seoDescription": "Truth or dare for couples, the soft edition: sweet truths and silly dares, nothing you’d regret in the morning. One phone, going round. Free.",
       "listTitle": "{count} truth or dare questions for couples",
-      "listIntro": "Every truth and every dare in the free game: small confessions, speeches, impressions, a slow dance.",
+      "listIntro": "Small confessions, speeches, impressions and a slow dance.",
       "listTruths": "Truths",
       "listDares": "Dares"
     },
@@ -3201,11 +3260,12 @@
       "two": "Or two phones, one link",
       "deal": "Deal me in",
       "pickTitle": "Pick a game",
-      "pickSub": "Every one is quick, and every one ends with something to talk about.",
       "minutes": "{n} min",
       "todayTitle": "Today’s question",
       "todayPhones": "Two phones, one link",
       "todayCta": "Answer today’s",
+      "weeklyTitle": "This week’s challenge",
+      "weeklyCta": "Play this week’s",
       "tiers": {
         "free": {
           "title": "Free",
@@ -3298,7 +3358,7 @@
       "seoTitle": "Drawing Game for Couples, Live on Two Phones",
       "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two.",
       "listTitle": "{count} words for a drawing game for two",
-      "listIntro": "Every word in the free game. Six are dealt each time, and you take turns drawing them with a finger."
+      "listIntro": "Six are dealt each game. You take turns drawing them with a finger."
     },
     "end": {
       "label": "What next",
@@ -3320,6 +3380,10 @@
       "line": "The rules, how long it takes, and what is kept.",
       "moreLabel": "Keep reading",
       "more": "More like this"
+    },
+    "list": {
+      "label": "The whole deck",
+      "more": "{count} more"
     }
   },
   "packs": {
