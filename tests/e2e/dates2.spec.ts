@@ -348,6 +348,47 @@ test.describe("dates2: done dates on /plan", () => {
     onlyLocal(seen);
   });
 
+  test("G7b a quick double tap on Mark as done leaves it done (dates2-T1)", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await holdTheDatabase(page);
+    await seedPlan(page, { v: 1, date: today(), where: "Lisbon", idea: "pasta-and-a-slow-walk", stops: PLAN_STOPS });
+    await page.goto("/plan");
+    const mark = page.getByRole("button", { name: "Mark as done" });
+    await expect(mark).toBeVisible(PLAN_COMPILES);
+    await mark.scrollIntoViewIfNeeded();
+    const box = (await mark.boundingBox())!;
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    await page.mouse.click(x, y);
+    await page.waitForTimeout(150);
+    await page.mouse.click(x, y);
+    await page.waitForTimeout(400);
+    await expect(page.getByText(/^Done on /)).toBeVisible();
+    expect(await page.evaluate(() => JSON.parse(window.localStorage.getItem("ethos.dates.done.v1") ?? "[]").length)).toBe(1);
+    // A deliberate tap later still takes it back.
+    await page.waitForTimeout(400);
+    await page.getByRole("button", { name: "Not done after all" }).click();
+    await expect(page.getByRole("button", { name: "Mark as done" })).toBeVisible();
+  });
+
+  test("G7c taken back after a stop was changed: the log loses that date too (dates2-T2)", async ({ page }) => {
+    await holdTheDatabase(page);
+    await seedPlan(page, { v: 1, date: today(), where: "Lisbon", idea: "pasta-and-a-slow-walk", stops: PLAN_STOPS });
+    await page.goto("/plan");
+    await page.getByRole("button", { name: "Mark as done" }).click(PLAN_COMPILES);
+    const log = page.getByTestId("done-log");
+    await expect(log.locator("ol > li")).toHaveCount(1);
+    await page.getByRole("button", { name: "Take Taberna Boa Noite out of the plan" }).click();
+    await page.waitForTimeout(800);
+    await page.getByRole("button", { name: "Not done after all" }).click();
+    await expect(page.getByRole("button", { name: "Mark as done" })).toBeVisible();
+    await expect(log).toHaveCount(0);
+    expect(await page.evaluate(() => JSON.parse(window.localStorage.getItem("ethos.dates.done.v1") ?? "[]").length)).toBe(0);
+    // Marked again: one entry, not two.
+    await page.getByRole("button", { name: "Mark as done" }).click();
+    await expect(log.locator("ol > li")).toHaveCount(1);
+  });
+
   test("G7 a plan dated tomorrow cannot be marked done", async ({ page }) => {
     await holdTheDatabase(page);
     await seedPlan(page, { v: 1, date: addDays(today(), 1), where: "Lisbon", stops: PLAN_STOPS });

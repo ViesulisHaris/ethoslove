@@ -57,4 +57,15 @@ describe("reading a plan without zod", () => {
     expect(plan.done).toBe("2026-11-20");
     expect(decodePlan(encodePlan(shareablePlan(plan)))).not.toHaveProperty("done");
   });
+
+  it("D2 the done entry's id is kept with the day, and never travels in a link (dates2-T2)", () => {
+    const id = "2026-11-20:node/1,custom stop";
+    expect(readPlan({ v: 1, done: "2026-11-20", doneId: id, stops: [stop] })).toEqual({ v: 1, done: "2026-11-20", doneId: id, stops: [stop] });
+    // Without its day it means nothing and is dropped; a value that is not an id fails the plan.
+    expect(readPlan({ v: 1, doneId: id, stops: [stop] })).not.toHaveProperty("doneId");
+    expect(readPlan({ v: 1, done: "2026-11-20", doneId: "node/1", stops: [stop] })).toBeNull();
+    expect(readPlan({ v: 1, done: "2026-11-20", doneId: 7, stops: [stop] })).toBeNull();
+    const plan = readPlan({ v: 1, done: "2026-11-20", doneId: id, stops: [stop] })!;
+    expect(shareablePlan(plan)).toEqual({ v: 1, stops: [stop] });
+  });
 });

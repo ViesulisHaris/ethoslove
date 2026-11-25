@@ -85,6 +85,9 @@ const NOTICE_MS = 5000;
  * `monthly` and `currency` are for the Ethos for Two sheet: this page is static, so the server's
  * switch comes in as a prop, read when the page was built.
  */
+/** How long after "Mark as done" a tap on "Not done after all" is taken as the same double tap. */
+const UNDO_GUARD_MS = 700;
+
 export function PlanView({ monthly = false, currency = "eur" }: { monthly?: boolean; currency?: Currency }) {
   const t = useTranslations("plan");
   const ts = useTranslations("savedDates");
@@ -163,18 +166,26 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const voteOn = useMemo(() => [...new Set([...planTargets, ...entries.flatMap((e) => voteTargets({ places: e.places, idea: e.idea }))])].slice(0, 60), [planTargets, entries]);
   const votes = useVotes(voteOn);
   const planVote = planTargets[0] ? votes.kept[planTargets[0]] : undefined;
+  // When "Mark as done" was pressed: "Not done after all" appears where it was on a phone, so a
+  // second tap of a quick double tap lands on it. Taps on it this soon after are the same press (dates2-T1).
+  const markedAt = useRef(-Infinity);
   const markDone = () => {
     const entry = doneFromPlan(plan, today, locale, savedLink?.id);
+    markedAt.current = performance.now();
     updateDone((list) => addDone(list, entry));
-    updateOwn((p) => ({ ...p, done: entry.day }));
+    // The entry's id is kept on the plan: a stop changed afterwards must not hide it from the undo (dates2-T2).
+    updateOwn((p) => ({ ...p, done: entry.day, doneId: entry.id }));
     track("date_done");
   };
   const undoDone = () => {
-    const entry = doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale);
-    updateDone((list) => removeDone(list, entry.id));
+    if (performance.now() - markedAt.current < UNDO_GUARD_MS) return;
+    // A plan marked before the id was kept: its id as it would have been, from the stops as they stand.
+    const id = plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale).id;
+    updateDone((list) => removeDone(list, id));
     updateOwn((p) => {
       const next = { ...p };
       delete next.done;
+      delete next.doneId;
       return next;
     });
   };
