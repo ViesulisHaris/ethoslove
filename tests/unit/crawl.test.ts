@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
-import { LEGAL_UPDATED } from "@/content/legal";
+import { LEGAL_UPDATED, PRIVACY_UPDATED } from "@/content/legal";
 import { OCCASIONS } from "@/config/occasions";
 import { GALLERY_LIVE, GUIDES_LIVE, PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
@@ -127,7 +127,11 @@ describe("sitemap dates", () => {
   it("give the legal pages the date they print", () => {
     const legal = pages.filter((p) => new URL(p.url).pathname.includes("/legal/"));
     expect(legal.length).toBeGreaterThan(0);
-    for (const p of legal) expect(p.lastModified, p.url).toBe(LEGAL_UPDATED);
+    for (const p of legal) expect(p.lastModified, p.url).toBe(new URL(p.url).pathname.endsWith("/legal/privacy") ? PRIVACY_UPDATED : LEGAL_UPDATED);
+    // loop2-T4: only the privacy policy changed on 25 Nov; the terms keep the day they last changed.
+    expect(legal.some((p) => p.url.endsWith("/legal/terms") && p.lastModified === "2026-11-24")).toBe(true);
+    expect(legal.some((p) => p.url.endsWith("/legal/privacy") && p.lastModified === "2026-11-25")).toBe(true);
+    expect(PRIVACY_UPDATED >= LEGAL_UPDATED).toBe(true);
   });
 
   it("give a template launched after the templates' shared date one of its own", () => {

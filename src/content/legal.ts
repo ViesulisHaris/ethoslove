@@ -19,10 +19,16 @@ export const LEGAL_ENTITY = {
 
 /**
  * The day the documents a visitor reads were last changed: 24 Nov 2026, for the two more gifts' paragraphs
- * (always in the terms) and the group cards' (in both documents while group cards are on: GROUP below);
- * 25 Nov 2026 for the rooms entry in the privacy policy's section 12.
+ * (always in the terms) and the group cards' (in both documents while group cards are on: GROUP below).
+ * The terms and the withdrawal page print it.
  */
-export const LEGAL_UPDATED = "2026-11-25";
+export const LEGAL_UPDATED = "2026-11-24";
+
+/**
+ * The privacy policy's own date, so the terms don't move when only it changes: 25 Nov 2026, for the
+ * rooms entry in section 12. Never earlier than LEGAL_UPDATED (it holds the group cards' paragraphs too).
+ */
+export const PRIVACY_UPDATED = "2026-11-25";
 
 /**
  * The box every buyer ticks on Stripe's checkout page, word for word without its link. Terms s.9
