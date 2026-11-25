@@ -31,11 +31,13 @@ const WITH_BOX = [
 const LEFT_OFF: Record<string, string> = {
   [`${MARKETING}/games/page.tsx`]: "the Spanish games hub reaches 301 words with the box drawn, over the page's 300 (PLAN-letter step 8's rule)",
   [`${MARKETING}/plan/page.tsx`]: "an empty plan, as a new visitor sees it, is so short that the box would be in the first screen (BRIEF-letter.md 2: never in the first screen)",
-  // Each was already far over the 300 visible words before the box (letter-T11: 787, 603 and 496 in
-  // English); the brief says a page with no room goes without it, as /games does (letter-C7).
-  [`${MARKETING}/trips/page.tsx`]: "already over 300 visible words without the box",
-  [`${MARKETING}/trips/[id]/page.tsx`]: "already over 300 visible words without the box",
-  [`${MARKETING}/long-distance/page.tsx`]: "already over 300 visible words without the box",
+  // Each was far over the 300 visible words when the box was placed (letter-T11: 787, 603 and 496 in
+  // English), so it went without, as /games does (letter-C7). The trips job has since cut them to 300
+  // or fewer (merged 25 Nov, reports/letter-integrate.md): /trips and /long-distance now have room for
+  // the box's twenty words, a trip's page mostly not. Putting it back is the lead's call, not the merge's.
+  [`${MARKETING}/trips/page.tsx`]: "left off when it was over 300 visible words; now has room (letter-integrate), not yet put back",
+  [`${MARKETING}/trips/[id]/page.tsx`]: "a trip's page is up to about 300 visible words without the box",
+  [`${MARKETING}/long-distance/page.tsx`]: "left off when it was over 300 visible words; now has room (letter-integrate), not yet put back",
 };
 
 describe("where the date letter's box is", () => {

@@ -73,7 +73,8 @@ async function pages(page: Page): Promise<string[]> {
   }
   // Left off: /games (its Spanish hub reaches 301 words with the box; PLAN-letter step 8's rule), /plan
   // (empty, as a new visitor sees it, the page is so short the box would be in the first screen), and
-  // /trips, a trip and /long-distance (each already far over 300 words without it: letter-C7).
+  // /trips, a trip and /long-distance (each far over 300 words when the box was placed: letter-C7; since
+  // cut by the trips job, /trips and /long-distance now have room: reports/letter-integrate.md).
   return ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", blogPost];
 }
 
