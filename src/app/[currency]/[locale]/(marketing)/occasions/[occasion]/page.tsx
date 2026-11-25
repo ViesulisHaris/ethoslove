@@ -75,7 +75,8 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
       <GalleryHead
         eyebrow={t("occasions.title")}
         title={title}
-        line={t("templates.subtitle")}
+        // An occasion whose search names a phrase the heading cannot hold ("gift for no reason") says it here.
+        line={t.has(`seo.occasion.${occasion}.line`) ? t(`seo.occasion.${occasion}.line`) : t("templates.subtitle")}
         aside={
           guide.ideas ? (
             <a
