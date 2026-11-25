@@ -22,6 +22,20 @@ describe("end screen make-one button", () => {
   });
 });
 
+describe("end screen's closing line", () => {
+  // The live site's end: "The end. For now." at 1.6rem on a tight line (32px). Ordered so that tailwind-merge kept
+  // the size and dropped leading-tight, it stood on a 38.4px line and every end that scrolls grew 6 to 7px (the
+  // final pass, 25 Nov 2026). A card's closer end keeps the same tight line at its own size.
+  const closing = (html: string) => /<p class="([^"]*)"[^>]*>The end\. For now\.<\/p>/.exec(html)?.[1].split(" ") ?? [];
+  it("is set on a tight line, as on the live site, at both sizes", () => {
+    for (const compact of [false, true]) {
+      const classes = closing(renderToStaticMarkup(<EndScreen data={data} compact={compact} onMakeOne={() => {}} />));
+      expect(classes, `compact ${compact}`).toContain("leading-tight");
+      expect(classes, `compact ${compact}`).toContain(compact ? "text-[1.45rem]" : "text-[1.6rem]");
+    }
+  });
+});
+
 describe("end screen and the free-tier badge", () => {
   it("carries the badge itself on a watermarked gift, so the floating one can step aside", () => {
     const html = renderToStaticMarkup(
