@@ -26,7 +26,7 @@ import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { SPREAD } from "@/components/templates/page/spread";
 import { OriginPage, originMetadata } from "@/components/trips/page/origin-page";
-import { FlightFinder } from "@/components/trips/flight-finder";
+import { FlightsRow } from "@/components/trips/flights-row";
 import { OpenByHash } from "@/components/trips/open-by-hash";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { ShareTripButton } from "@/components/trips/share-trip-button";
@@ -80,6 +80,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   const ta = await getTranslations("affiliate");
   const l = locale === "es" ? "es" : "en";
   const airport = findAirport(trip.flyTo);
+  const homeAirport = trip.flyHome ? findAirport(trip.flyHome) : null;
   const gift = tripGiftFields(trip, l);
   const url = localizedUrl(locale, `/trips/${trip.id}`);
   const stops = trip.stops.map((s) => ({ name: stopName(s, l), lat: s.lat, lng: s.lng }));
@@ -335,13 +336,16 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
           </div>
           <OpenByHash ids={BOOK_ROWS} />
           <div className="grid min-w-0 gap-3 lg:pt-2">
-            <details id="flights" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
-              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
-                {t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}
-                <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
-              </summary>
-              <FlightFinder to={trip.flyTo} homeFrom={trip.flyHome} placement="trip_flights" trip={trip.id} nights={tripNights(trip)} className="pb-5" />
-            </details>
+            <FlightsRow
+              title={t("detail.flights.title", { city: airport ? cityName(airport, l) : stops[0].name })}
+              homeTitle={homeAirport ? t("detail.flights.homeTitle", { city: cityName(homeAirport, l) }) : undefined}
+              to={trip.flyTo}
+              homeFrom={trip.flyHome}
+              placement="trip_flights"
+              trip={trip.id}
+              nights={tripNights(trip)}
+              className="pb-5"
+            />
             {stays.length > 0 ? (
               <details id="stay" data-testid="trip-stays" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
                 <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">

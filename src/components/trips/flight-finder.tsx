@@ -30,6 +30,8 @@ type Props = {
    * last day, so no search books a flight home from a city the couple left days before.
    */
   homeFrom?: string;
+  /** Told which way the search now runs, so the row's heading can say it (flights-row.tsx). */
+  onLeg?: (leg: "out" | "home") => void;
   className?: string;
 };
 
@@ -44,7 +46,7 @@ const localDay = () => toYmd(new Date());
  * Google Flights, Skyscanner or Kayak, already filled in, and the fares are whatever they say. It
  * lays itself out by its own width, so it sits in a hero card or across a page.
  */
-export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, nights, homeFrom, className }: Props) {
+export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, nights, homeFrom, onLeg, className }: Props) {
   const t = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
@@ -97,12 +99,14 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
     const back = picked?.back || planned?.back || "";
     setPicked(back ? { depart: back, back: "" } : null);
     setLeg("home");
+    onLeg?.("home");
   };
   const searchOut = () => {
     setFrom(to);
     setTo(toCode ? findAirport(toCode) : null);
     setPicked(null);
     setLeg("out");
+    onLeg?.("out");
   };
 
   const same = Boolean(from && to && from.iata === to.iata);

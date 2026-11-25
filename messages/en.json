@@ -2898,6 +2898,7 @@
       "flights": {
         "eyebrow": "Getting there",
         "title": "Flights to {city}",
+        "homeTitle": "Flights home from {city}",
         "sub": "Where this trip starts. Add where you’re flying from, change the dates if you like, then pick a site."
       },
       "book": {

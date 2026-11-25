@@ -384,6 +384,9 @@ test.describe("a trip's page", () => {
     await page.goto("/trips/baltic-coast#flights");
     const finder = page.getByTestId("flight-finder");
     const leg = page.getByTestId("flight-leg");
+    // The row's heading follows the way the search runs.
+    const title = page.getByTestId("flights-title");
+    await expect(title).toHaveText("Flights to Riga");
     await expect(leg).toContainText("The plan ends in Tallinn, so this searches only the flight out.");
     await finder.getByRole("combobox", { name: "From" }).fill("Lond");
     await page.getByRole("option", { name: /London · LHR/ }).first().click();
@@ -398,7 +401,9 @@ test.describe("a trip's page", () => {
     const back = new Date(Date.parse(out) + 6 * 86_400_000).toISOString().slice(0, 10);
     await expect(kayak).toHaveAttribute("href", new RegExp(`/flights/TLL-[A-Z]{3}/${back}/2adults$`));
     await expect(leg).toContainText("The flight home from Tallinn, on the plan’s last day.");
+    await expect(title).toHaveText("Flights home from Tallinn");
     await leg.getByRole("button", { name: "Back to the flight out" }).click();
+    await expect(title).toHaveText("Flights to Riga");
     await expect(finder.getByRole("combobox", { name: "To" })).toHaveValue("Riga");
     await expect(finder.getByRole("combobox", { name: "From" })).toHaveValue("London");
     // A trip that ends where it began keeps its return search and has no such line.
@@ -407,6 +412,9 @@ test.describe("a trip's page", () => {
     await expect(page.getByTestId("flight-leg")).toHaveCount(0);
     await page.goto("/es/trips/prague-krumlov-vienna#flights");
     await expect(page.getByTestId("flight-leg")).toContainText("El plan acaba en Viena");
+    await expect(page.getByTestId("flights-title")).toHaveText("Vuelos a Praga");
+    await page.getByTestId("flight-leg").getByRole("button", { name: "Buscar la vuelta desde Viena" }).click();
+    await expect(page.getByTestId("flights-title")).toHaveText("Vuelos de vuelta desde Viena");
   });
 
   test("E10d each run of best months stays on one line", async ({ page }) => {

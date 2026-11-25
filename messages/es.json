@@ -2898,6 +2898,7 @@
       "flights": {
         "eyebrow": "Cómo llegar",
         "title": "Vuelos a {city}",
+        "homeTitle": "Vuelos de vuelta desde {city}",
         "sub": "Donde empieza este viaje. Poned desde dónde voláis, cambiad las fechas si queréis y elegid una web."
       },
       "book": {
