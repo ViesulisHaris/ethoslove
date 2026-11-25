@@ -439,13 +439,13 @@ export function fitsVibe(place: { kind: PlaceKind; cost?: number }, vibe: Vibe):
 /** Whether an idea can be done for nothing: free as it stands, or with the "free" vibe, bringing your own instead of buying at the stop that sells it. */
 export const canBeFree = (idea: Pick<DateIdea, "budget" | "vibes">): boolean => idea.budget === 0 || idea.vibes.includes("free");
 
-/** The idea as it stands on the day: on a wet one, its rain stops when it has them (the stars move under a planetarium's dome). */
 /** The idea as it is planned under a roof whatever the sky: itself when rain cannot spoil it, its rain stops when it has them, null when it has neither. */
 export function underARoof(idea: DateIdea): DateIdea | null {
   if (idea.goodInRain) return idea;
   return idea.rainStops ? inTheRain(idea, idea.rainStops) : null;
 }
 
+/** The idea as it stands on the day: on a wet one, its rain stops when it has them (the stars move under a planetarium's dome). */
 export function forTheDay(idea: DateIdea, day: DayWeather | undefined): DateIdea {
   if (!idea.rainStops || !day || !isWet(day)) return idea;
   return inTheRain(idea, idea.rainStops);
