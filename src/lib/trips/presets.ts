@@ -1,3 +1,4 @@
+import type { Currency } from "@/lib/pricing/products";
 import type { StickerId } from "@/templates/_shared/covers/stickers";
 
 type L = { en: string; es: string };
@@ -1445,5 +1446,5 @@ export const stopName = (stop: TripStop, locale: "en" | "es"): string => (locale
 export const tripImageSm = (path: string): string => path.replace(/\.webp$/, "-sm.webp");
 export const tripSrcSet = (path: string): string => `${tripImageSm(path)} 800w, ${path} 1600w`;
 
-/** €, €€ or €€€. */
-export const budgetMark = (budget: Trip["budget"]): string => "€".repeat(budget);
+/** €, €€ or €€€, in the sign of the page's currency ($$, ££). */
+export const budgetMark = (budget: Trip["budget"], currency: Currency = "eur"): string => ({ eur: "€", usd: "$", gbp: "£" })[currency].repeat(budget);

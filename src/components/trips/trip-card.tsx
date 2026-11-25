@@ -1,12 +1,13 @@
 import { CalendarDays, MapPin, Sun } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import type { Currency } from "@/lib/pricing/products";
 import { budgetMark, type Trip } from "@/lib/trips/presets";
 import { TripArt } from "./trip-art";
 
 export type TripCardLabels = { kind: string; days: string; stops: string; best: string; budget: string };
 
 /** One trip on the shelf: its picture, its name, and the four things that decide it. */
-export function TripCard({ trip, title, blurb, labels }: { trip: Trip; title: string; blurb: string; labels: TripCardLabels }) {
+export function TripCard({ trip, currency, title, blurb, labels }: { trip: Trip; currency: Currency; title: string; blurb: string; labels: TripCardLabels }) {
   return (
     <Link
       href={`/trips/${trip.id}`}
@@ -18,7 +19,7 @@ export function TripCard({ trip, title, blurb, labels }: { trip: Trip; title: st
         {/* The card's own cream, not white (the owner: nothing on the paper pure white). Over any photo the text stays above 4.5:1: 4.9 at worst, the rose on a black photo through 5% of it. */}
         <span className="absolute top-3.5 left-3.5 rounded-full bg-card/95 px-3 py-1.5 text-[12px] font-semibold text-rose-deep shadow-soft backdrop-blur">{labels.kind}</span>
         <span className="absolute top-3.5 right-3.5 rounded-full bg-card/95 px-3 py-1.5 font-mono text-[12px] font-medium text-forest shadow-soft backdrop-blur" title={labels.budget}>
-          <span aria-hidden="true">{budgetMark(trip.budget)}</span>
+          <span aria-hidden="true">{budgetMark(trip.budget, currency)}</span>
           <span className="sr-only">{labels.budget}</span>
         </span>
       </span>

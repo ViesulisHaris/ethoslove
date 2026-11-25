@@ -2829,10 +2829,15 @@
     "stops": "{count, plural, one {# parada} other {# paradas}}",
     "best": "Mejor en {months}",
     "budget": {
-      "low": "Unos 150 € al día para dos, o menos",
-      "mid": "Unos 150–300 € al día para dos",
-      "high": "Más de 300 € al día para dos",
-      "note": "Lo que gastáis allí, sin contar los vuelos."
+      "low": "Unos {amount} al día para dos, o menos",
+      "mid": "Unos {range} al día para dos",
+      "high": "Más de {amount} al día para dos",
+      "note": "Lo que gastáis allí, sin contar los vuelos.",
+      "short": {
+        "low": "Unos {amount} o menos",
+        "mid": "Unos {range}",
+        "high": "Más de {amount}"
+      }
     },
     "gift": {
       "eyebrow": "O que sea un secreto",
@@ -2844,7 +2849,7 @@
       "back": "Todos los viajes",
       "facts": {
         "days": "Duración",
-        "budget": "Presupuesto",
+        "budget": "Al día, para dos",
         "best": "Mejores meses",
         "kind": "Tipo"
       },

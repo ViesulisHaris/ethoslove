@@ -4,9 +4,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { chargedCurrency } from "@/lib/pricing/products";
 import { cn } from "@/lib/utils";
+import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { monthRanges } from "@/lib/trips/months";
-import { budgetMark, TRIP_KINDS, tripImageSm, TRIPS, tripSrcSet, type Trip } from "@/lib/trips/presets";
+import { budgetMark, TRIP_KINDS, tripImageSm, TRIPS, tripSrcSet } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields } from "@/lib/trips/trip-gift";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { MATCH_ART, ROOMS_THEME } from "@/content/rooms-art";
@@ -19,8 +21,6 @@ import { TripCard } from "@/components/trips/trip-card";
 import { TripMatcher, type MatcherTrip } from "@/components/trips/trip-matcher";
 import { TripsGrid } from "@/components/trips/trips-grid";
 
-const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<Trip["budget"], string>;
-
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/trips">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "trips.meta" });
@@ -29,10 +29,12 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 
 /** Trips: the flight search on the first screen, then twelve trips to pick from, then the gift they can become. */
 export default async function TripsPage({ params }: PageProps<"/[currency]/[locale]/trips">) {
-  const { locale } = await params;
+  const { currency, locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("trips");
   const l = locale === "es" ? "es" : "en";
+  // The day costs in the currency this visitor is charged in (lib/trips/day-costs.ts): euros are the source.
+  const shown = chargedCurrency(currency);
 
   const cards = TRIPS.map((trip) => ({
     id: trip.id,
@@ -40,6 +42,7 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
     card: (
       <TripCard
         trip={trip}
+        currency={shown}
         title={trip.title[l]}
         blurb={trip.blurb[l]}
         labels={{
@@ -47,7 +50,7 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
           days: t("days", { count: trip.days }),
           stops: t("stops", { count: trip.stops.length }),
           best: t("best", { months: monthRanges(trip.bestMonths, l) }),
-          budget: t(`budget.${BUDGET_KEY[trip.budget]}`),
+          budget: t(`budget.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, shown, l)),
         }}
       />
     ),
@@ -66,8 +69,8 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
     srcSet: trip.image ? tripSrcSet(trip.image) : null,
     art: { from: trip.art.from, to: trip.art.to },
     facts: `${t("days", { count: trip.days })} · ${t(`kind.${trip.kind}`)}`,
-    budgetMark: budgetMark(trip.budget),
-    budgetWords: t(`budget.${BUDGET_KEY[trip.budget]}`),
+    budgetMark: budgetMark(trip.budget, shown),
+    budgetWords: t(`budget.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, shown, l)),
     best: t("best", { months: monthRanges(trip.bestMonths, l) }),
     gift: tripGiftFields(trip, l),
   }));

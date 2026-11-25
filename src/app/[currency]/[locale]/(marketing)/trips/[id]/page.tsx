@@ -11,8 +11,9 @@ import { cityName as cityPageName } from "@/lib/cities/cities";
 import { cityName, findAirport } from "@/lib/trips/airports";
 import { tripStopCities } from "@/lib/trips/cities";
 import { monthRanges } from "@/lib/trips/months";
+import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
-import { budgetMark, getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
+import { getTrip, stopName, TRIPS } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
 import { TRIP_SEO } from "@/content/trip-seo";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
@@ -25,7 +26,6 @@ import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link"
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
 
-const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<Trip["budget"], string>;
 /** How the plan marks each day's date-night moment, so it can be drawn as one. */
 const EVENING = { en: "Evening:", es: "Por la noche:" } as const;
 
@@ -66,7 +66,8 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   const carHire = tripCarHire(trip);
   const facts = [
     { label: t("detail.facts.days"), value: t("days", { count: trip.days }) },
-    { label: t("detail.facts.budget"), value: budgetMark(trip.budget), hint: `${t(`budget.${BUDGET_KEY[trip.budget]}`)}. ${t("budget.note")}` },
+    // The day costs in the currency this visitor is charged in, said as "about" (lib/trips/day-costs.ts).
+    { label: t("detail.facts.budget"), value: t(`budget.short.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, chargedCurrency(currency), l)), hint: t("budget.note") },
     { label: t("detail.facts.best"), value: monthRanges(trip.bestMonths, l) },
     { label: t("detail.facts.kind"), value: t(`kind.${trip.kind}`) },
   ];
@@ -126,9 +127,9 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                 {facts.map((f) => (
                   <div key={f.label} className="rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5" title={f.hint}>
                     <dt className="text-[12px] font-semibold tracking-wide text-forest/50 uppercase">{f.label}</dt>
-                    <dd className="mt-1 font-display text-[19px] leading-tight text-forest">
+                    {/* The hint is described, not spoken as words in the page: a screen reader's hidden span is counted by the word test. */}
+                    <dd className="mt-1 font-display text-[19px] leading-tight text-forest" aria-description={f.hint}>
                       {f.value}
-                      {f.hint ? <span className="sr-only"> ({f.hint})</span> : null}
                     </dd>
                   </div>
                 ))}

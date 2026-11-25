@@ -2829,10 +2829,15 @@
     "stops": "{count, plural, one {# stop} other {# stops}}",
     "best": "Best {months}",
     "budget": {
-      "low": "About €150 a day for two, or less",
-      "mid": "About €150–300 a day for two",
-      "high": "Over €300 a day for two",
-      "note": "What you spend there, not the flights."
+      "low": "About {amount} a day for two, or less",
+      "mid": "About {range} a day for two",
+      "high": "Over {amount} a day for two",
+      "note": "What you spend there, not the flights.",
+      "short": {
+        "low": "About {amount} or less",
+        "mid": "About {range}",
+        "high": "Over {amount}"
+      }
     },
     "gift": {
       "eyebrow": "Or keep it a secret",
@@ -2844,7 +2849,7 @@
       "back": "All trips",
       "facts": {
         "days": "Length",
-        "budget": "Budget",
+        "budget": "A day, for two",
         "best": "Best months",
         "kind": "Kind"
       },
