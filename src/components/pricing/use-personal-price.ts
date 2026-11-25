@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import type { Currency, ProductId } from "@/lib/pricing/products";
+import { IDEA_PRICE_WEST_HOURS } from "@/lib/lifecycle/monthly-idea";
 
 /**
  * The personal price this browser holds, if any (lib/commerce/personal-price.ts): asked of the
@@ -89,7 +90,12 @@ export function usePersonalPrice(): { price: PersonalPrice | null; forget: () =>
  * November 27 at 11:00 AM"), British otherwise ("Friday 27 November at 11:00"), and Spanish in
  * Spanish ("viernes, 27 de noviembre, 11:00"). The page's currency follows the visitor's country.
  */
-export function personalPriceEnds(endsAt: number, locale: "en" | "es", currency: Currency): string {
+export function personalPriceEnds(endsAt: number, locale: "en" | "es", currency: Currency, kind: PersonalPrice["kind"] = "offer"): string {
   const tag = locale === "es" ? "es" : currency === "usd" ? "en-US" : "en-GB";
+  // The monthly idea's price: the day its email named ("until 27 December"), with no time. It lasts
+  // until that day ends on the US Pacific coast, so wherever the reader is, east of there, the day
+  // they read is never shorter than the price (monthly-D5): the email and the site say the same day.
+  if (kind === "monthly")
+    return new Intl.DateTimeFormat(tag, { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(endsAt - IDEA_PRICE_WEST_HOURS * 3_600_000 - 1));
   return new Intl.DateTimeFormat(tag, { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }).format(new Date(endsAt));
 }

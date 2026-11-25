@@ -121,6 +121,27 @@ describe("when a personal price ends, in words", () => {
       process.env.TZ = tz;
     }
   });
+
+  it("names the monthly price's day as its email does, in every reader's zone (monthly-D5)", async () => {
+    const { personalPriceEnds } = await import("@/components/pricing/use-personal-price");
+    const { priceEndsAt, priceLastDay } = await import("@/lib/lifecycle/monthly-idea");
+    const { formatMonthDay } = await import("@/lib/lifecycle/reminders");
+    const sent = new Date(Date.UTC(2026, 11, 20, 9));
+    const last = priceLastDay(sent);
+    // The email's words: "until 27 December".
+    expect(formatMonthDay({ month: last.getUTCMonth() + 1, day: last.getUTCDate() }, "en")).toBe("27 December");
+    const tz = process.env.TZ;
+    try {
+      for (const zone of ["America/Los_Angeles", "America/New_York", "Europe/London", "Europe/Riga", "Asia/Tokyo"]) {
+        process.env.TZ = zone;
+        expect(personalPriceEnds(priceEndsAt(sent), "en", "usd", "monthly"), zone).toBe("Sunday, December 27");
+        expect(personalPriceEnds(priceEndsAt(sent), "en", "gbp", "monthly"), zone).toBe("Sunday 27 December");
+        expect(personalPriceEnds(priceEndsAt(sent), "es", "eur", "monthly"), zone).toBe("domingo, 27 de diciembre");
+      }
+    } finally {
+      process.env.TZ = tz;
+    }
+  });
 });
 
 // --- The monthly idea's one-time price (PLAN-monthly 4.1, P1-P7) --------------------------------

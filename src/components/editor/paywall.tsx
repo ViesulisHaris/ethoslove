@@ -472,7 +472,7 @@ export function Paywall({
       {personalOn && personal ? (
         // Said where the price is: it's a personal price, and when it ends (EU law asks for the first).
         <p className="mt-3 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink" data-testid="personal-price-note">
-          {tm("personalPrice", { ends: personalPriceEnds(personal.endsAt, locale, currency) })}
+          {tm("personalPrice", { ends: personalPriceEnds(personal.endsAt, locale, currency, personal.kind) })}
         </p>
       ) : null}
 
