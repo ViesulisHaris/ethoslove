@@ -53,14 +53,22 @@ export function FormSkeleton() {
           </div>
         </Field>
       </section>
-      {[0, 1].map((i) => (
-        <section key={i} className="flex flex-col gap-3">
-          <div className="h-3 w-10 rounded bg-ink/10" />
-          <div className="h-6 w-2/3 rounded bg-ink/10" />
-          <div className="h-11 rounded-xl bg-ink/5" />
-          <div className="h-11 rounded-xl bg-ink/5" />
-        </section>
-      ))}
+      {/*
+       * The second section's heading and line in words too. In Spanish its line runs to two lines and
+       * is the largest text on a phone's first screen: drawn only once the real form arrived, it made
+       * the page's largest paint wait for every script (6.9 s against 2.1 s in English, 25 Nov 2026).
+       */}
+      <section className="flex flex-col gap-3">
+        <SectionHeader n={t("sections.words.n")} title={t("sections.words.title")} blurb={t("sections.words.blurb")} />
+        <div className="h-11 rounded-xl bg-ink/5" />
+        <div className="h-11 rounded-xl bg-ink/5" />
+      </section>
+      <section className="flex flex-col gap-3">
+        <div className="h-3 w-10 rounded bg-ink/10" />
+        <div className="h-6 w-2/3 rounded bg-ink/10" />
+        <div className="h-11 rounded-xl bg-ink/5" />
+        <div className="h-11 rounded-xl bg-ink/5" />
+      </section>
     </div>
   );
 }
