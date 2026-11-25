@@ -676,9 +676,6 @@ test.describe("300 words a page, and the designed pages' ruler", () => {
       await check("#ideas-row", 4, phone);
       await page.goto("/trips");
       await check("#trips-row", 12, phone);
-      // Eight ideas for a call (lib/dates/virtual.ts).
-      await page.goto("/long-distance");
-      await check("#ldr-virtual-row", 8, phone);
     }
   });
 
@@ -787,6 +784,31 @@ test("E25 an idea for a call opens to its words", async ({ page }) => {
     await expect(gifts.nth(i).locator("img")).toHaveCount(1);
   }
   await expect(page.getByRole("link", { name: /All long-distance gifts/ })).toHaveAttribute("href", "/occasions/long-distance");
+});
+
+test("E25b the ideas for a call are rows beside their heading, not a grid of sticker tiles", async ({ page }) => {
+  for (const [width, height] of [
+    [1440, 900],
+    [375, 812],
+  ] as const) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/long-distance");
+    const rows = page.locator("#ldr-virtual-row > li");
+    await expect(rows).toHaveCount(8);
+    // No sticker on a row, and no swipe row or dots.
+    await expect(page.locator("#ldr-virtual-row svg:not(.lucide), #ldr-virtual-row img")).toHaveCount(0);
+    await expect(page.locator("#ldr-virtual-row ~ [data-dots]")).toHaveCount(0);
+    const boxes = await rows.evaluateAll((els) => els.map((el) => el.getBoundingClientRect()).map((r) => ({ x: r.x, top: r.top, w: r.width })));
+    // One column: every row starts at the same x, each under the one before.
+    for (const b of boxes) expect(Math.abs(b.x - boxes[0].x)).toBeLessThan(1);
+    for (let i = 1; i < boxes.length; i++) expect(boxes[i].top).toBeGreaterThan(boxes[i - 1].top);
+    if (width === 1440) {
+      const heading = (await page.getByRole("heading", { level: 2, name: "Something to do on the call." }).boundingBox())!;
+      expect(boxes[0].x).toBeGreaterThan(heading.x + heading.width - 1);
+      expect(boxes[0].x + boxes[0].w).toBeGreaterThan(1440 * 0.85);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+  }
 });
 
 test("E29 reduced motion: nothing turns or rises", async ({ page }) => {
