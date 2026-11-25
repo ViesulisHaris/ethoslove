@@ -69,7 +69,8 @@ the visitor there with our id attached; `partners.ts` has the three and the reas
 (`src/components/trips/partner-link.tsx`): `target="_blank"`, `rel="noopener noreferrer sponsored"`,
 and `track("affiliate_click", { partner, placement })`. On a trip's own page the event also carries
 `trip`, the preset's id. The comparison links (Google Flights, Skyscanner, Kayak) are not partners
-and keep `rel="noopener noreferrer"` with no event.
+and keep `rel="noopener noreferrer"` with no event. Each placement belongs to one room
+(`PLACEMENT_ROOM`); how to read clicks per room is in `docs/marketing/LOOP-KPI.md`.
 
 | Where | Partner | Placement | What |
 |---|---|---|---|

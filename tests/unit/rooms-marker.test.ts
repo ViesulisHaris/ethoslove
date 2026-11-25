@@ -281,6 +281,20 @@ describe("in the browser", () => {
 });
 
 describe("partner clicks per room", () => {
+  // loop2-C7: the owner reads the room of each placement from the KPI page; it must match the code.
+  it("the KPI page's table lists every placement under the room the code gives it", () => {
+    const page = readFileSync("docs/marketing/LOOP-KPI.md", "utf8");
+    const rows = Object.fromEntries(
+      [...page.matchAll(/^\| (trips|dates|long distance|gifts) \| (.+) \|$/gm)].map(([, room, cells]) => [room, [...cells.matchAll(/`([a-z_]+)`/g)].map((m) => m[1]).sort()]),
+    );
+    const label: Record<string, string> = { trips: "trips", dates: "dates", longDistance: "long distance", gifts: "gifts" };
+    const fromCode: Record<string, string[]> = {};
+    for (const [placement, room] of Object.entries(PLACEMENT_ROOM)) (fromCode[label[room]] ??= []).push(placement);
+    for (const list of Object.values(fromCode)) list.sort();
+    expect(rows).toEqual(fromCode);
+    expect(page).toContain("`two_rooms_30d`");
+  });
+
   it("every partner button is in one room", () => {
     expect(Object.keys(PLACEMENT_ROOM).sort()).toEqual(["city", "gift_share", "meet_middle", "place_sheet", "plan", "trip_car", "trip_flights", "trip_tickets", "trips_finder"]);
     for (const room of Object.values(PLACEMENT_ROOM)) expect(VISITED_ROOMS).toContain(room);

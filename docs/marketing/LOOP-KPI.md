@@ -180,6 +180,39 @@ What the number cannot say:
   (`recipient_editor_opened`, `recipient_started`, `recipient_gift_sent`). Until 25 Nov 2026 the
   demo badge's link carried `?ref=watermark`, so those three counts held some demo visitors.
 
+## Visitors who use two rooms, and partner clicks per room (audit X3)
+
+Not part of the gift loop, but counted in the same wave (25 Nov 2026), so read here.
+
+**`two_rooms_30d`** (no property). The rooms are gifts (`/templates`, `/occasions`, `/gifts`), dates
+(`/dates`, `/plan`), trips (`/trips`), long distance (`/long-distance`) and games (`/games`), with or
+without `/es`. Sent once, from the browser, the first time a visitor opens a page in a second room
+within 30 days of a page in another, and not again for 30 days. Where to read it: Vercel →
+Analytics → Events → `two_rooms_30d`, a week's total.
+- **Only visitors who said yes to cookies are counted.** Without a yes nothing is kept and nothing
+  is sent. The site asks the question only where Microsoft Clarity or an ad pixel is configured,
+  so with none configured this count stays at zero.
+- It is a count of visitors, not a share: there is no bottom number of "yes" visitors to divide by.
+  Compare it week with week.
+- What it keeps: `ethos-rooms` in the browser's local storage, the rooms opened and the day each
+  was last opened (and the day the count was last sent). No id. It is removed on any page when the
+  yes is taken back, and dropped as a page loads once nothing in it is within 30 days.
+- Code: `src/lib/analytics/rooms-marker.ts`, mounted by `src/components/shared/rooms-seen.tsx` in
+  the marketing layout only (never on a gift, the editor, checkout or an account page); the removal
+  runs from `src/components/shared/ref-capture.tsx`.
+
+**Partner clicks per room.** No new event: `affiliate_click` already carries `placement`
+(`docs/TRIPS.md`, Partners), and each placement is in one room (`PLACEMENT_ROOM` in
+`src/lib/trips/partners.ts`; a new placement does not compile without its room). In Analytics →
+Events → `affiliate_click`, add up the placements of each room:
+
+| Room | Placements |
+|---|---|
+| trips | `trips_finder`, `trip_flights`, `trip_tickets`, `trip_car` |
+| dates | `place_sheet`, `plan`, `city` |
+| long distance | `meet_middle` |
+| gifts | `gift_share` |
+
 ## A first week's reading, as a worked example
 
 Say the week shows 4,000 views of `/g/[shortId]`, 60 `reply_started`, 25 `make_own_clicked`,
