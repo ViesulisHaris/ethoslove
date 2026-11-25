@@ -285,8 +285,8 @@ export const TODAY_FAQ: GameFaq[] = [
   {
     q: { en: "Is anything saved?", es: "¿Se guarda algo?" },
     a: {
-      en: "No. Your first name and your pick travel in the link itself, after the #, a part a browser never sends to a server. No account, no room, nothing kept on our side.",
-      es: "No. Tu nombre y tu respuesta viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Sin cuenta, sin sala, nada guardado por nuestra parte.",
+      en: "Nothing on our side, and no account. Your first name and your pick travel in the link itself, after the #, a part a browser never sends to a server. This browser keeps your pick until the tab closes, and your name for next time.",
+      es: "Nada por nuestra parte, y sin cuenta. Tu nombre y tu respuesta viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Este navegador guarda tu respuesta hasta que cierras la pestaña, y tu nombre para la próxima vez.",
     },
   },
   {
@@ -303,8 +303,8 @@ export const WEEKLY_FAQ: GameFaq[] = [
   {
     q: { en: "When does the challenge change?", es: "¿Cuándo cambia el reto?" },
     a: {
-      en: "Every Monday at midnight UTC. There are {count} themed sets, each made of cards from three of the free games, and none comes back until every one has had its week.",
-      es: "Cada lunes a medianoche UTC. Hay {count} retos temáticos, hechos con cartas de tres de los juegos gratis, y ninguno se repite hasta que todos han tenido su semana.",
+      en: "Every Monday at midnight UTC. There are {count} themed sets, each made of cards from the free games, and none comes back until every one has had its week.",
+      es: "Cada lunes a medianoche UTC. Hay {count} retos temáticos, hechos con cartas de los juegos gratis, y ninguno se repite hasta que todos han tenido su semana.",
     },
   },
   {
@@ -317,8 +317,8 @@ export const WEEKLY_FAQ: GameFaq[] = [
   {
     q: { en: "Is anything saved?", es: "¿Se guarda algo?" },
     a: {
-      en: "No. Your first name and your picks travel in the link itself, after the #, a part a browser never sends to a server. No account, no streak, nothing kept on our side.",
-      es: "No. Tu nombre y tus elecciones viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Sin cuenta, sin rachas, nada guardado por nuestra parte.",
+      en: "Nothing on our side, and no account. Your first name and your picks travel in the link itself, after the #, a part a browser never sends to a server. This browser keeps your picks until the tab closes, and your name for next time.",
+      es: "Nada por nuestra parte, y sin cuenta. Tu nombre y tus elecciones viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Este navegador guarda tus elecciones hasta que cierras la pestaña, y tu nombre para la próxima vez.",
     },
   },
   {

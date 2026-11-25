@@ -297,6 +297,19 @@ describe("the weekly challenge's words", () => {
     for (const l of LOCALES) expect(WEEKLY_FAQ.map((f) => f.a[l]).join(" "), l).not.toMatch(/\b(26|52)\b/);
   });
 
+  it("C6: the questions under it say what the code does: how many games a set draws on, and what the browser keeps", () => {
+    // A set whose question is a truth takes two of its cards from truth or dare: two games, not three (games2-C1).
+    const games = (s: (typeof WEEKLY_SETS)[number]) => new Set(["thisthat", s.ask[0] === "truth" ? "dare" : "deck", "dare"]).size;
+    const fewest = Math.min(...WEEKLY_SETS.map(games));
+    for (const l of LOCALES) if (fewest < 3) expect(WEEKLY_FAQ[0].a[l], l).not.toMatch(/\b(three|tres) (of the|de los)\b/i);
+    // The name stays in localStorage and the picks in sessionStorage: "Is anything saved?" is never a bare "No" (games2-C8).
+    const saved = WEEKLY_FAQ.find((f) => /saved/.test(f.q.en))!;
+    expect(saved.a.en).not.toMatch(/^No\./);
+    expect(saved.a.es).not.toMatch(/^No\./);
+    expect(saved.a.en).toMatch(/This browser keeps/);
+    expect(saved.a.es).toMatch(/Este navegador guarda/);
+  });
+
   it("C3: no filler, no exclamation marks, no em dashes; no streak, no points, no email", () => {
     for (const l of LOCALES) {
       expect(fillerIn(texts(l), l), l).toEqual([]);
