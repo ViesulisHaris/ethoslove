@@ -262,7 +262,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play them on one phone or two" },
         {
           type: "p",
-          text: "A question is easier to ask when a card asks it for you. Our free [question cards](/games/deck) have three decks (light, deeper, and one for when you're apart), dealt twelve at a time on one phone you pass back and forth. [How well do you know me?](/games/know) and [Would you rather?](/games/rather) play on one phone or on two: one of you makes a room and sends the link, so you can play from different cities. Nobody has to download anything.",
+          text: "A question is easier to ask when a card asks it for you. Our free [question cards](/games/couple-questions-game) have three decks (light, deeper, and one for when you're apart), dealt twelve at a time on one phone you pass back and forth. [How well do you know me?](/games/how-well-do-you-know-me) and [Would you rather?](/games/would-you-rather) play on one phone or on two: one of you makes a room and sends the link, so you can play from different cities. Nobody has to download anything.",
         },
         {
           type: "p",
@@ -290,7 +290,7 @@ export const post: BlogPost = {
         },
         {
           q: "What are some random questions to ask your partner?",
-          a: "Ones with no right answer that still tell you something: \"What would you name a boat?\", \"Which of our friends would last longest in a zombie film?\", \"Which famous person would you trust to water your plants?\", \"What's the best bad film you've ever seen?\", \"If we opened a shop together, what would it sell?\" The fun list above has twenty, and [Would you rather?](/games/rather) deals more of them as a game.",
+          a: "Ones with no right answer that still tell you something: \"What would you name a boat?\", \"Which of our friends would last longest in a zombie film?\", \"Which famous person would you trust to water your plants?\", \"What's the best bad film you've ever seen?\", \"If we opened a shop together, what would it sell?\" The fun list above has twenty, and [Would you rather?](/games/would-you-rather) deals more of them as a game.",
         },
         {
           q: "What are 21 questions to ask your boyfriend or girlfriend?",
@@ -558,7 +558,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Jugadlas en un móvil o en dos" },
         {
           type: "p",
-          text: "Una pregunta cuesta menos cuando la hace una carta por ti. Nuestras [cartas de preguntas](/games/deck), gratis, tienen tres barajas (ligeras, más profundas y una para cuando estáis lejos), y se reparten de doce en doce en un móvil que os vais pasando. [¿Cuánto me conoces?](/games/know) y [¿Qué prefieres?](/games/rather) se juegan en un móvil o en dos: uno crea una sala y manda el enlace, así que podéis jugar desde ciudades distintas. No hay que descargar nada.",
+          text: "Una pregunta cuesta menos cuando la hace una carta por ti. Nuestras [cartas de preguntas](/games/couple-questions-game), gratis, tienen tres barajas (ligeras, más profundas y una para cuando estáis lejos), y se reparten de doce en doce en un móvil que os vais pasando. [¿Cuánto me conoces?](/games/how-well-do-you-know-me) y [¿Qué prefieres?](/games/would-you-rather) se juegan en un móvil o en dos: uno crea una sala y manda el enlace, así que podéis jugar desde ciudades distintas. No hay que descargar nada.",
         },
         {
           type: "p",
@@ -586,7 +586,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Qué preguntas random puedo hacerle a mi pareja?",
-          a: "Las que no tienen respuesta correcta pero aun así cuentan algo: «¿Qué nombre le pondrías a un barco?», «¿Cuál de nuestros amigos aguantaría más en una película de zombis?», «¿A qué famoso le dejarías regar tus plantas?», «¿Cuál es la mejor película mala que has visto?», «Si abriéramos una tienda juntos, ¿qué venderíamos?». La lista de divertidas tiene veinte, y [¿Qué prefieres?](/games/rather) reparte más como juego.",
+          a: "Las que no tienen respuesta correcta pero aun así cuentan algo: «¿Qué nombre le pondrías a un barco?», «¿Cuál de nuestros amigos aguantaría más en una película de zombis?», «¿A qué famoso le dejarías regar tus plantas?», «¿Cuál es la mejor película mala que has visto?», «Si abriéramos una tienda juntos, ¿qué venderíamos?». La lista de divertidas tiene veinte, y [¿Qué prefieres?](/games/would-you-rather) reparte más como juego.",
         },
         {
           q: "¿Qué son las 21 preguntas para tu novio o tu novia?",

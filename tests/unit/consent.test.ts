@@ -20,7 +20,7 @@ describe("isPrivatePath", () => {
 
   it("covers the paths that carry a secret or an id", () => {
     // /checkout/success?session_id=cs_… is a Stripe session; /dashboard/gift/<uuid> is a gift id.
-    const paths = ["/checkout", "/checkout/success", "/dashboard", "/dashboard/gift/79fe7c36", "/account", "/games/today"];
+    const paths = ["/checkout", "/checkout/success", "/dashboard", "/dashboard/gift/79fe7c36", "/account", "/games/today", "/games/weekly"];
     for (const p of paths) {
       expect(isPrivatePath(p), p).toBe(true);
       for (const locale of routing.locales) {
@@ -31,7 +31,7 @@ describe("isPrivatePath", () => {
 
   it("leaves the rest of the site alone", () => {
     // The public funnel, which is the whole point of measuring anything.
-    for (const p of ["/", "/templates", "/occasions/birthday", "/pricing", "/create/bloom", "/games", "/games/rather"]) {
+    for (const p of ["/", "/templates", "/occasions/birthday", "/pricing", "/create/bloom", "/games", "/games/would-you-rather"]) {
       expect(isPrivatePath(p), p).toBe(false);
       for (const locale of routing.locales) {
         expect(isPrivatePath(`/${locale}${p}`), `/${locale}${p}`).toBe(false);
@@ -68,7 +68,7 @@ describe("hidesConsentBanner", () => {
   });
 
   it("still asks everywhere the person is making one, not opening one", () => {
-    for (const p of ["/", "/templates", "/templates/halfway", "/occasions/birthday", "/pricing", "/create/bloom", "/games", "/games/rather"]) {
+    for (const p of ["/", "/templates", "/templates/halfway", "/occasions/birthday", "/pricing", "/create/bloom", "/games", "/games/would-you-rather"]) {
       expect(hidesConsentBanner(p), p).toBe(false);
       for (const locale of routing.locales) {
         expect(hidesConsentBanner(`/${locale}${p}`), `/${locale}${p}`).toBe(false);
@@ -80,7 +80,8 @@ describe("hidesConsentBanner", () => {
     // /games/today is off-limits to the recorder and the pixels, so there is nothing to ask about,
     // and the banner would cover the two answers a shared link opens on. The other games still ask.
     for (const p of ["/games/today", "/es/games/today", "/en/games/today"]) expect(hidesConsentBanner(p), p).toBe(true);
-    expect(hidesConsentBanner("/games/rather")).toBe(false);
+    for (const p of ["/games/weekly", "/es/games/weekly"]) expect(hidesConsentBanner(p), p).toBe(true);
+    expect(hidesConsentBanner("/games/would-you-rather")).toBe(false);
   });
 
   it("does not mistake a slug that merely starts the same way", () => {

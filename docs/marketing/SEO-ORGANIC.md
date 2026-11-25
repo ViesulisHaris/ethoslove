@@ -154,7 +154,7 @@ the blog must run from the cloud by itself; a digital product has no returns; Bi
   went onto the mirror's main only; Publish blog found it, passed the guard, fast-forwarded the live
   main to the same commit (4630d37), ran 21 tests and the type check, pushed, and Vercel deployed it.
 - **Indexing requested** in Search Console for /gifts, /gifts/for-girlfriend, /gifts/for-boyfriend,
-  /, /templates/the-letter, /templates/bouquet, /es/gifts, /games/rather, /es/templates/the-letter
+  /, /templates/the-letter, /templates/bouquet, /es/gifts, /games/would-you-rather, /es/templates/the-letter
   and /es/gifts/for-girlfriend (about the daily limit), and the sitemap resubmitted: Google's count
   of discovered pages went from 264 to 275 at once. IndexNow has all 278 URLs.
 
@@ -165,7 +165,7 @@ everything to be done here instead. Directories are dropped; the work went where
 
 - **The long lists people search for** (commit 94af935): 150 free would-you-rather questions (from
   45) and 96 questions to ask your partner (from 36), playable and listed in full on
-  /games/rather and /games/deck in both languages. A free question deck now deals a round of
+  /games/would-you-rather and /games/couple-questions-game in both languages. A free question deck now deals a round of
   twelve from the whole deck, so a sitting still ends at the gift and next-game screen.
 - **Two posts a day**: the routine runs at 06:17 and 12:17 UTC (first run 24 Oct, 12:17), and the
   playbook allows two a day. Posts link /gifts as "digital gift(s)" and the matching gift-idea
@@ -181,7 +181,7 @@ everything to be done here instead. Directories are dropped; the work went where
 ## Fifth round, 24 Oct: "No pitches for now. Keep going with the content."
 
 - **Truth or dare and "how well do you know me"**: 50 truths and 50 dares (from 12 and 12) and 40
-  know-me questions (from 10), free, playable and listed in full on /games/dare and /games/know in
+  know-me questions (from 10), free, playable and listed in full on /games/truth-or-dare and /games/how-well-do-you-know-me in
   both languages. A free game deals twelve of each from the whole pile, fresh every game, so a
   sitting still ends at the gift screen; a pack plays all its cards.
 - **Four more of the biggest searches in the blog queue**: good morning messages for her and for him,

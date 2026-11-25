@@ -86,9 +86,9 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
 - [x] (2026-11-13) **/templates/scratch-card**: "Custom Digital Scratch Card Maker: Scratch to Reveal",
   "scratch off" in the description.
 - [x] (2026-11-13) **Also retitled**: /gifts ("Digital Gifts and Virtual Gifts"), /games ("Couple
-  Games Online", 6,600 + UK 1,600), /games/dare ("Truth or Dare Questions for Couples", 4,400),
+  Games Online", 6,600 + UK 1,600), /games/truth-or-dare ("Truth or Dare Questions for Couples", 4,400),
   /occasions/anniversary ("Anniversary Gift Ideas", 9,900), /occasions/birthday ("Digital and
-  Virtual Birthday Gifts"), /es/games/deck ("Preguntas para parejas", 1,600 in Spain), /es/games.
+  Virtual Birthday Gifts"), /es/games/couple-questions-game ("Preguntas para parejas", 1,600 in Spain), /es/games.
   Check on 4 Dec whether each moved (the weekly rank check covers them).
 - [ ] **/pricing's FAQ still describes the old free tier** (found 20 Nov 2026 while refreshing
   digital-love-letter-websites-compared): "What does the free tier actually include?" says "two full

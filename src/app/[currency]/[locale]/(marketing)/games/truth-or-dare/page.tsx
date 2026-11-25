@@ -5,19 +5,21 @@ import { GameTable } from "@/components/games/cards";
 import { GameNotes } from "@/components/games/page/game-notes";
 import { Dare } from "@/components/games/dare";
 import { QuestionList } from "@/components/games/question-list";
+import { LIST_SHOWN } from "@/content/game-pages";
 import { DARES, TRUTHS } from "@/lib/games/content";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/dare">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/truth-or-dare">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.dare" });
-  return pageMetadata({ locale, path: "/games/dare", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/truth-or-dare", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/dare">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/truth-or-dare">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";
   const t = await getTranslations("games.dare");
+  const tl = await getTranslations("games.list");
   return (
     <GameTable>
       <Dare />
@@ -25,6 +27,9 @@ export default async function Page({ params }: PageProps<"/[currency]/[locale]/g
         id="dare-questions"
         title={t("listTitle", { count: TRUTHS.length + DARES.length })}
         intro={t("listIntro")}
+        label={tl("label")}
+        show={LIST_SHOWN.dare}
+        more={(count) => tl("more", { count })}
         groups={[
           { name: t("listTruths"), items: TRUTHS.map((q) => q[l]) },
           { name: t("listDares"), items: DARES.map((q) => q[l]) },

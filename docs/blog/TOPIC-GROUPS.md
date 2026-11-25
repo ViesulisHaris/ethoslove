@@ -35,8 +35,8 @@ with a strong group; hundreds means links first.
 
 - **Hubs:** `/blog/questions-to-ask-your-boyfriend` (74,000 a month, ~4 sites) and
   `/blog/questions-to-ask-your-girlfriend` (40,500, KD 4, ~16 sites). Both live since 14 Nov.
-- **Free thing:** the games, played on two phones: `/games/deck` (Question cards), `/games/know` (How
-  well do you know me?), `/games/rather` (Would you rather?), `/games/dare` (Truth or dare, soft
+- **Free thing:** the games, played on two phones: `/games/couple-questions-game` (Question cards), `/games/how-well-do-you-know-me` (How
+  well do you know me?), `/games/would-you-rather` (Would you rather?), `/games/truth-or-dare` (Truth or dare, soft
   edition).
 - **Members to write:** questions to ask your partner 22,200 (~5) · questions for couples 12,100, KD 8
   (one post that also answers "relationship questions" 12,100 and "couples questions game" 9,900) ·

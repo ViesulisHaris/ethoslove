@@ -285,8 +285,8 @@ export const TODAY_FAQ: GameFaq[] = [
   {
     q: { en: "Is anything saved?", es: "¿Se guarda algo?" },
     a: {
-      en: "No. Your first name and your pick travel in the link itself, after the #, a part a browser never sends to a server. No account, no room, nothing kept on our side.",
-      es: "No. Tu nombre y tu respuesta viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Sin cuenta, sin sala, nada guardado por nuestra parte.",
+      en: "Nothing on our side, and no account. Your first name and your pick travel in the link itself, after the #, a part a browser never sends to a server. This browser keeps your pick until the tab closes, your name for next time, and the last link you sent, so it knows that link as yours.",
+      es: "Nada por nuestra parte, y sin cuenta. Tu nombre y tu respuesta viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Este navegador guarda tu respuesta hasta que cierras la pestaña, tu nombre para la próxima vez y el último enlace que enviaste, para reconocerlo como tuyo.",
     },
   },
   {
@@ -297,3 +297,38 @@ export const TODAY_FAQ: GameFaq[] = [
     },
   },
 ];
+
+/** The questions under the weekly challenge (/games/weekly), shown closed and given to search engines as an FAQPage. "{count}" is the number of sets. Each answer is held to lib/games/weekly.ts and components/games/weekly/weekly-challenge.tsx. */
+export const WEEKLY_FAQ: GameFaq[] = [
+  {
+    q: { en: "When does the challenge change?", es: "¿Cuándo cambia el desafío?" },
+    a: {
+      en: "Every Monday at midnight UTC. There are {count} themed sets, each made of cards from the free games, and none comes back until every one has had its week.",
+      es: "Cada lunes a medianoche UTC. Hay {count} desafíos temáticos, hechos con cartas de los juegos gratis, y ninguno se repite hasta que todos han tenido su semana.",
+    },
+  },
+  {
+    q: { en: "Can they see my picks before they answer?", es: "¿Ve mis elecciones antes de responder?" },
+    a: {
+      en: "No. The link opens on the first pair with your name over it. Your three picks show only once they have made theirs.",
+      es: "No. El enlace se abre en la primera pareja con tu nombre encima. Tus tres elecciones aparecen solo cuando ha hecho las suyas.",
+    },
+  },
+  {
+    q: { en: "Is anything saved?", es: "¿Se guarda algo?" },
+    a: {
+      en: "Nothing on our side, and no account. Your first name and your picks travel in the link itself, after the #, a part a browser never sends to a server. This browser keeps your picks until the tab closes, your name for next time, and the last link you sent, so it knows that link as yours.",
+      es: "Nada por nuestra parte, y sin cuenta. Tu nombre y tus elecciones viajan en el propio enlace, después de la almohadilla (#), una parte que el navegador nunca envía a un servidor. Este navegador guarda tus elecciones hasta que cierras la pestaña, tu nombre para la próxima vez y el último enlace que enviaste, para reconocerlo como tuyo.",
+    },
+  },
+  {
+    q: { en: "What if they open it next week?", es: "¿Y si lo abre la semana que viene?" },
+    a: {
+      en: "It still opens on the set you answered, marked as last week’s, and both sets of picks show the same way. After it, a link leads to the new week’s challenge.",
+      es: "Se sigue abriendo en el desafío que respondiste, marcado como el de la semana pasada, y las elecciones se ven igual. Después, un enlace lleva al desafío de la semana nueva.",
+    },
+  },
+];
+
+/** How many of a list's items stay on show on a game's page, per group; the rest are in the page, closed (components/games/question-list.tsx). Held to 300 words a page by tests/unit/games-text-budget.test.tsx. */
+export const LIST_SHOWN = { know: 3, rather: 5, thisthat: 6, draw: 12, deck: 2, dare: 3 } as const;

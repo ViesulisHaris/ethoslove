@@ -4,7 +4,7 @@
 
 **Examples:** the slides as rendered are in `01-would-you-rather-the-fight/` (1080x1920, one JPEG per slide); the texts below are what is on them.
 
-**Product:** the real one-phone "Would you rather" game (tryethos.io/games/rather), Classic pack. The game screens are screenshots of the product, with the Safari bar showing tryethos.io. No overlay text on any slide.
+**Product:** the real one-phone "Would you rather" game (tryethos.io/games/would-you-rather), Classic pack. The game screens are screenshots of the product, with the Safari bar showing tryethos.io. No overlay text on any slide.
 
 **Players:** Mia (`me`, blue) and Jake (`them`, grey).
 

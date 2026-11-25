@@ -7,8 +7,8 @@ import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import type { RatherPair } from "@/lib/games/content";
-import { cleanName, DAY_MS, dailyPair, dayOf, decodeDaily, encodeDaily, sentHere, type DailyLink } from "@/lib/games/daily";
-import { readSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
+import { cleanName, DAY_MS, dailyPair, dayOf, decodeDaily, encodeDaily, joinsLetters, sentHere, type DailyLink, type DailySent } from "@/lib/games/daily";
+import { deviceStorage, readSaved, removeSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
 import { cn } from "@/lib/utils";
 import { Suit } from "../cards";
 import { NAMES_KEY } from "../lobby";
@@ -34,6 +34,26 @@ function reviveToday(raw: unknown): Kept | null {
   return sent && typeof sent.n === "string" && (sent.a === 0 || sent.a === 1) ? { d, p, a, s: { n: sent.n, a: sent.a, ...(sent.r === 1 ? { r: 1 as const } : {}) } } : { d, p, a };
 }
 
+/**
+ * What the last link sent from this browser carried (lib/games/daily.ts, DailySent), in the browser's
+ * own storage: a chat app opens a link tapped in it in a new tab, where the tab's memory above is
+ * empty. One record, replaced by each link sent, and dropped once its day is two days gone.
+ */
+const SENT = "ethos.games.today.sent";
+function readLastSent(today: number): DailySent | null {
+  const sent = readSaved(deviceStorage(), SENT, (raw): DailySent | null => {
+    if (!raw || typeof raw !== "object") return null;
+    const { day, pairId, name, side, reply } = raw as Record<string, unknown>;
+    if (!(typeof day === "number" && Number.isInteger(day) && typeof pairId === "string" && typeof name === "string" && (side === 0 || side === 1))) return null;
+    return { day, pairId, name, side, ...(reply === true ? { reply: true } : {}) };
+  });
+  if (sent && sent.day < today - 1) {
+    removeSaved(deviceStorage(), SENT);
+    return null;
+  }
+  return sent;
+}
+
 /** Next's own state for this page's history entry, which a hash change leaves out of the entry it adds. */
 type RouterState = { __NA?: boolean } & Record<string, unknown>;
 
@@ -41,13 +61,13 @@ type RouterState = { __NA?: boolean } & Record<string, unknown>;
  * A link made by Next's <Link> does nothing at all when the phone is offline (the page's code is
  * fetched first). Offline, it goes the old way, so the browser says it has no connection.
  */
-function plainWhenOffline(e: MouseEvent<HTMLAnchorElement>) {
+export function plainWhenOffline(e: MouseEvent<HTMLAnchorElement>) {
   if (navigator.onLine !== false) return;
   e.preventDefault();
   window.location.assign(e.currentTarget.href);
 }
 
-function rememberedNames(): [string, string] | null {
+export function rememberedNames(): [string, string] | null {
   try {
     const saved: unknown = JSON.parse(window.localStorage.getItem(NAMES_KEY) ?? "null");
     return Array.isArray(saved) && saved.length === 2 ? [cleanName(saved[0]), cleanName(saved[1])] : null;
@@ -57,12 +77,12 @@ function rememberedNames(): [string, string] | null {
 }
 
 // On a phone on its side the cards are shorter, so the question is on the first screen (the page's spread, page.tsx).
-const CARD =
+export const CARD =
   "group relative flex min-h-28 w-full flex-col justify-end rounded-[1.25rem] border border-page-line bg-page-raised px-5 pt-11 pb-5 text-left shadow-page-card transition-[border-color,opacity,translate] duration-200 sm:min-h-44 sm:px-6 sm:pb-6 motion-reduce:transition-none [@media(orientation:landscape)_and_(max-height:520px)]:min-h-0 [@media(orientation:landscape)_and_(max-height:520px)]:pt-9 [@media(orientation:landscape)_and_(max-height:520px)]:pb-3 [@media(orientation:portrait)_and_(max-height:600px)]:min-h-0 [@media(orientation:portrait)_and_(max-height:600px)]:pt-9 [@media(orientation:portrait)_and_(max-height:600px)]:pb-4";
-const PRIMARY =
+export const PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
-const SECOND =
-  "inline-flex h-12 items-center justify-center rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
+export const SECOND =
+  "inline-flex h-12 items-center justify-center gap-2 rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
 
 /**
  * Today's question (/games/today): one "Would you rather" pair a day, answered with one tap and
@@ -109,8 +129,15 @@ export function TodayQuestion({ day }: { day: number }) {
     const hash = window.location.hash;
     const asked = hash.startsWith("#q=");
     const decoded = asked ? decodeDaily(hash, now) : null;
-    const kept = readSaved(tabStorage(), KEPT, reviveToday);
-    const own = !!decoded && sentHere(decoded, kept?.s ? { day: kept.d, pairId: kept.p, name: kept.s.n, side: kept.s.a, reply: kept.s.r === 1 } : null);
+    const tabKept = readSaved(tabStorage(), KEPT, reviveToday);
+    const lastSent = readLastSent(now);
+    const ownHere = !!decoded && sentHere(decoded, tabKept?.s ? { day: tabKept.d, pairId: tabKept.p, name: tabKept.s.n, side: tabKept.s.a, reply: tabKept.s.r === 1 } : null);
+    // A chat app opens a tapped link in a new tab, never in the one that sent it: the browser's own
+    // memory of the last link sent knows it there too, and this tab takes up the answer it carried.
+    const ownElsewhere = !!decoded && !ownHere && sentHere(decoded, lastSent);
+    const own = ownHere || ownElsewhere;
+    const kept: Kept | null = ownElsewhere && lastSent && !decoded.to ? { d: lastSent.day, p: lastSent.pairId, a: lastSent.side, s: { n: lastSent.name, a: lastSent.side } } : tabKept;
+    if (kept !== tabKept) writeSaved(tabStorage(), KEPT, kept);
     // The tab's own first link opens as the tab left it, the answer marked sent: never a reveal against itself.
     const link = own && !decoded.to ? null : decoded;
     const next: View = decoded ? { day: decoded.day, pair: decoded.pair, link, broken: false, own } : { day: now, pair: dailyPair(now), link: null, broken: asked, own: false };
@@ -206,7 +233,9 @@ export function TodayQuestion({ day }: { day: number }) {
   /** A link went out: remember what it carried, so opening it again here is known as the tab's own. */
   const markSent = () => {
     const side = mine ?? 0;
-    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side, s: { n: cleanName(name), a: side, ...(link && !link.to ? { r: 1 as const } : {}) } });
+    const reply = !!link && !link.to;
+    writeSaved(tabStorage(), KEPT, { d: view.day, p: view.pair.id, a: side, s: { n: cleanName(name), a: side, ...(reply ? { r: 1 as const } : {}) } });
+    writeSaved(deviceStorage(), SENT, { day: view.day, pairId: view.pair.id, name: cleanName(name), side, ...(reply ? { reply: true } : {}) } satisfies DailySent);
     setSent(true);
     setChanged(false);
     setView((v) => (v.own ? { ...v, own: false } : v));
@@ -333,7 +362,8 @@ export function TodayQuestion({ day }: { day: number }) {
             <li key={i} data-reveal-card data-answer data-side={who.side === 0 ? "a" : "b"} className={cn(CARD, "justify-start px-4 sm:px-6")}>
               <Corner side={who.side} />
               <span className="block truncate text-page-label text-page-body">
-                {who.name}
+                {/* A name in a script whose letters join (Arabic, Devanagari…) is set without the label's spacing, or its letters fall apart. */}
+                {joinsLetters(who.name) ? <span className="tracking-normal">{who.name}</span> : who.name}
                 <span className="sr-only">:</span>
               </span>
               <span className="mt-2 font-display text-[1.25rem] leading-snug text-page-ink sm:text-[1.625rem]">{words(who.side)}</span>
@@ -428,7 +458,7 @@ export function TodayQuestion({ day }: { day: number }) {
               {t("copyAgain")}
             </button>
           ) : null}
-          <Link href="/games/rather" data-whole-game onClick={plainWhenOffline} className={canSend ? SECOND : PRIMARY}>
+          <Link href="/games/would-you-rather" data-whole-game onClick={plainWhenOffline} className={canSend ? SECOND : PRIMARY}>
             {t("wholeGame")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
@@ -457,7 +487,7 @@ function After({ children }: { children: ReactNode }) {
 }
 
 /** The card's corner: A with the room's heart, B with its spade. */
-function Corner({ side }: { side: Side }) {
+export function Corner({ side }: { side: Side }) {
   return (
     <span aria-hidden="true" className="absolute top-4 left-5 flex items-center gap-1.5 text-page-label text-page-body">
       {side === 0 ? "A" : "B"}

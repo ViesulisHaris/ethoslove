@@ -61,6 +61,19 @@ const nextConfig: NextConfig = {
       destination: `${prefix}/occasions/:occasion`,
       permanent: false,
     })),
+    // A game's page moved to the words people search for it (src/lib/games/catalogue.ts, GAME_MOVES).
+    // Every address it had before still opens it, for good: a room's link, a pack's way back from the
+    // checkout, a bookmark. Here, not in the proxy or the page: this runs before the currency segment
+    // is added, keeps the query string by itself, and leaves the game pages built ahead. An explicit
+    // /en keeps its /en, so the proxy still sets the English cookie as it strips it: without that, a
+    // browser that had chosen Spanish before would be sent on to the Spanish page.
+    ...["", "/es", "/en"].flatMap((prefix) =>
+      GAME_MOVES.map(([from, to]) => ({
+        source: `${prefix}/games/${from}`,
+        destination: `${prefix}/games/${to}`,
+        permanent: true,
+      })),
+    ),
   ],
   headers: async () => [
     // Universal links for the iPhone app (public/.well-known/apple-app-site-association): a shared plan,
@@ -188,6 +201,9 @@ const nextConfig: NextConfig = {
 
 /** Every occasion with a page of its own: src/config/occasions.ts's OCCASIONS, which next.config cannot import. */
 const OCCASION_SLUGS = ["birthday", "anniversary", "valentines", "wedding", "graduation", "christmas", "halloween", "thanksgiving", "mothers-day", "fathers-day", "apology", "long-distance", "just-because"];
+
+/** The games' old addresses and their new ones: src/lib/games/catalogue.ts's GAME_MOVES, which next.config cannot import. */
+const GAME_MOVES = [["know", "how-well-do-you-know-me"], ["rather", "would-you-rather"], ["dare", "truth-or-dare"], ["deck", "couple-questions-game"], ["draw", "drawing-game"], ["roulette", "chore-wheel"]];
 
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';

@@ -115,7 +115,7 @@ for (const locale of ["", "/es"] as const) {
     await expect(cards.nth(1)).toContainText(words.you);
     await expect(cards.nth(1)).toContainText(pair.a[lang]);
     // Once, after the reveal: the whole game and the gift.
-    await expect(two.page.locator("[data-whole-game]")).toHaveAttribute("href", `${locale}/games/rather`);
+    await expect(two.page.locator("[data-whole-game]")).toHaveAttribute("href", `${locale}/games/would-you-rather`);
     await expect(two.page.locator('a[href*="/templates?ref=game-end"]')).toHaveCount(1);
     await expect(two.page.locator("[data-todays]")).toHaveCount(0);
     await two.page.locator("[data-today] input").fill("Sam");
@@ -340,6 +340,24 @@ test("T15: the sender's own link opened in the tab that sent it is not a reveal 
   await one.context.close();
 });
 
+test("T15b: the sender's own link opened in a new tab (as a chat app opens it) is theirs too, and counts nothing", async ({ browser }) => {
+  const one = await phone(browser);
+  await open(one.page, "/games/today");
+  await card(one.page, "b").click();
+  await one.page.locator("[data-today] input").fill("Ana");
+  await one.page.locator("[data-copy]").click();
+  const link = await copied(one.page);
+  // A new tab of the same browser: its own sessionStorage, the browser's localStorage (games2-D2).
+  const tab = await one.context.newPage();
+  await open(tab, link);
+  await expect(phase(tab)).toHaveAttribute("data-phase", "sent");
+  await expect(card(tab, "b")).toHaveAttribute("aria-checked", "true");
+  await expect(tab.locator("[data-reveal-card]")).toHaveCount(0);
+  await expect(tab.getByRole("status")).toContainText("This is the link you sent");
+  expect(await events(tab)).toEqual([]);
+  await one.context.close();
+});
+
 test("T16: a change straight after copying says to send it again, not that it was copied", async ({ browser }) => {
   const one = await phone(browser);
   await open(one.page, "/games/today");
@@ -363,7 +381,7 @@ test("T17: a link opened in a tab that had the page, then the whole game, then B
   await expect(phase(two.page)).toHaveAttribute("data-phase", "reveal");
   await two.page.locator("[data-whole-game]").click();
   // The first visit to the game compiles it on a dev server, which can take longer than five seconds.
-  await expect(two.page).toHaveURL(/\/games\/rather$/, { timeout: 30_000 });
+  await expect(two.page).toHaveURL(/\/games\/would-you-rather$/, { timeout: 30_000 });
   await expect(phase(two.page)).toHaveCount(0);
   await two.page.goBack();
   await expect(two.page).toHaveURL(/\/games\/today#q=/);

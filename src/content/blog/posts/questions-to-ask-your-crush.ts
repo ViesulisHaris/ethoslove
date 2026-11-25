@@ -252,7 +252,7 @@ export const post: BlogPost = {
         { type: "h2", text: "If it turns into something" },
         {
           type: "p",
-          text: "Once you're together, questions become a game you can play on a date or across two phones. Our free [Would you rather?](/games/rather) asks you both the same ten choices in secret and shows where you agree, and our [questions for couples](/blog/questions-for-couples) has 64 more to answer together.",
+          text: "Once you're together, questions become a game you can play on a date or across two phones. Our free [Would you rather?](/games/would-you-rather) asks you both the same ten choices in secret and shows where you agree, and our [questions for couples](/blog/questions-for-couples) has 64 more to answer together.",
         },
       ],
       faq: [
@@ -524,7 +524,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Si acaba en algo más" },
         {
           type: "p",
-          text: "Cuando ya estéis juntos, las preguntas se convierten en un juego para una cita o para jugar cada uno desde su móvil. Nuestro [¿Qué prefieres?](/games/rather) gratis os hace las mismas diez preguntas en secreto y enseña en cuáles coincidís, y en nuestras [preguntas para parejas](/blog/questions-for-couples) hay 64 más para contestar juntos.",
+          text: "Cuando ya estéis juntos, las preguntas se convierten en un juego para una cita o para jugar cada uno desde su móvil. Nuestro [¿Qué prefieres?](/games/would-you-rather) gratis os hace las mismas diez preguntas en secreto y enseña en cuáles coincidís, y en nuestras [preguntas para parejas](/blog/questions-for-couples) hay 64 más para contestar juntos.",
         },
       ],
       faq: [

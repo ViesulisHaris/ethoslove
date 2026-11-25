@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { isOccasion } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
 import { recipientFromSlug } from "@/content/recipients";
+import { GAMES } from "@/lib/games/catalogue";
 import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount } from "@/content/blog/text";
 import type { BlogContent, BlogPost } from "@/content/blog/types";
 import { TEMPLATE_SLUGS } from "@/templates/manifests";
@@ -23,7 +24,8 @@ const today = new Date().toISOString().slice(0, 10);
 const isDay = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && new Date(`${s}T00:00:00Z`).toISOString().startsWith(s);
 const slugs = new Set(BLOG_POSTS.map((p) => p.slug));
 const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy", "/gifts", "/games", "/long-distance", "/dates", "/trips", "/tools/how-long-have-we-been-together", "/tools/love-language-quiz", "/tools/halfway-between-two-cities"]);
-const GAMES = new Set(["know", "rather", "draw", "memory", "deck", "dare", "roulette"]);
+/** A game's page, at the address the catalogue gives it (the old ones redirect, but a post links the page itself). */
+const GAME_PATHS = new Set(GAMES.map((g) => g.href));
 
 /** A link inside a post goes to a page that exists. Site paths are written without the locale. */
 function resolves(href: string): boolean {
@@ -38,8 +40,7 @@ function resolves(href: string): boolean {
   if (post) return slugs.has(post[1] ?? "");
   const recipient = pathname.match(/^\/gifts\/([a-z0-9-]+)$/);
   if (recipient) return recipientFromSlug(recipient[1] ?? "") !== null;
-  const game = pathname.match(/^\/games\/([a-z]+)$/);
-  if (game) return GAMES.has(game[1] ?? "");
+  if (pathname.startsWith("/games/")) return GAME_PATHS.has(pathname);
   return false;
 }
 

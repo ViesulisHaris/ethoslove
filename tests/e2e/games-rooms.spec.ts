@@ -1,4 +1,5 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
+import { GAMES, type GameKey } from "../../src/lib/games/catalogue";
 
 /**
  * Two phones in one room, for real: separate browsers (each its own player), one room over the
@@ -14,8 +15,8 @@ test.describe("games on two phones", () => {
     return context.newPage();
   }
 
-  async function join(page: Page, code: string, name: string, game = "rather") {
-    await page.goto(`/games/${game}?room=${code}`);
+  async function join(page: Page, code: string, name: string, game: GameKey = "rather") {
+    await page.goto(`${GAMES.find((g) => g.key === game)!.href}?room=${code}`);
     await expect(page.getByText(`Joining room ${code}`)).toBeVisible();
     await page.getByLabel("Your name").fill(name);
     await page.getByRole("button", { name: "Join", exact: true }).click();
@@ -24,7 +25,7 @@ test.describe("games on two phones", () => {
   test("the first guest keeps the seat, both phones play, a third is turned away, and play again deals afresh", async ({ browser, baseURL }) => {
     test.setTimeout(120_000);
     const maya = await phone(browser, baseURL);
-    await maya.goto("/games/rather");
+    await maya.goto("/games/would-you-rather");
     await maya.getByRole("button", { name: /^Two phones/ }).click();
     await maya.getByLabel("Your name").fill("Maya");
     await maya.getByRole("button", { name: "Make a room" }).click();
@@ -90,7 +91,7 @@ test.describe("games on two phones", () => {
   test("draw it, guess it: the drawing lands on the other phone, and the right word ends the round", async ({ browser, baseURL }) => {
     test.setTimeout(120_000);
     const maya = await phone(browser, baseURL);
-    await maya.goto("/games/draw");
+    await maya.goto("/games/drawing-game");
     await maya.getByRole("button", { name: /^Two phones/ }).click();
     await maya.getByLabel("Your name").fill("Maya");
     await maya.getByRole("button", { name: "Make a room" }).click();

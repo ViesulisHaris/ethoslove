@@ -5,24 +5,26 @@ import { GameTable } from "@/components/games/cards";
 import { GameNotes } from "@/components/games/page/game-notes";
 import { DrawGame } from "@/components/games/draw-game";
 import { QuestionList } from "@/components/games/question-list";
+import { LIST_SHOWN } from "@/content/game-pages";
 import { DRAW_WORDS } from "@/lib/games/draw";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/draw">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/games/drawing-game">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.draw" });
-  return pageMetadata({ locale, path: "/games/draw", title: t("seoTitle"), description: t("seoDescription") });
+  return pageMetadata({ locale, path: "/games/drawing-game", title: t("seoTitle"), description: t("seoDescription") });
 }
 
-export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/draw">) {
+export default async function Page({ params }: PageProps<"/[currency]/[locale]/games/drawing-game">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("games.draw");
+  const tl = await getTranslations("games.list");
   const l = locale === "es" ? "es" : "en";
   return (
     <GameTable>
       <DrawGame />
       {/* The words are text for anyone reading the page, but not under the board while one is being drawn: the guesser would only have to scroll. The round is this list's sibling, so no :has() is needed. */}
-      <QuestionList id="draw-words" className="[[data-draw-round]~&]:hidden" title={t("listTitle", { count: DRAW_WORDS.length })} intro={t("listIntro")} groups={[{ items: DRAW_WORDS.map((w) => w.word[l]) }]} />
+      <QuestionList id="draw-words" className="[[data-draw-round]~&]:hidden" title={t("listTitle", { count: DRAW_WORDS.length })} intro={t("listIntro")} label={tl("label")} show={LIST_SHOWN.draw} more={(count) => tl("more", { count })} groups={[{ items: DRAW_WORDS.map((w) => w.word[l]) }]} />
       <GameNotes game="draw" locale={locale} />
     </GameTable>
   );

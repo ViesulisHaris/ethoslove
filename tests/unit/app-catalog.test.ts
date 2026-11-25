@@ -98,7 +98,7 @@ describe("the app catalogue", () => {
     expect(catalog.games).toHaveLength(7);
     for (const game of catalog.games) {
       expect(bothLanguages(game.title) && bothLanguages(game.blurb), game.key).toBe(true);
-      expect(game.path).toBe(`/games/${game.key}`);
+      expect(game.path).toBe(HAND_GAMES.find((g) => g.key === game.key)!.href);
     }
     expect(catalog.packs.map((p) => p.id)).toEqual([...PACK_IDS]);
     for (const pack of catalog.packs) {

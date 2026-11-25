@@ -203,7 +203,7 @@ export const post: BlogPost = {
         { type: "h3", text: "1. How well do you know me?" },
         {
           type: "p",
-          text: "One of you answers a question about yourself in secret, and the other guesses the answer. A right guess scores a point. Swap after every question. Use questions with short answers: the show they rewatch when they're ill, their dream trip, the friend they'd call at 3am. Our free [How well do you know me?](/games/know) game hides the answers for you: eight questions, each of you answers about yourself and guesses the other, on one phone passed between you or on two phones from different places.",
+          text: "One of you answers a question about yourself in secret, and the other guesses the answer. A right guess scores a point. Swap after every question. Use questions with short answers: the show they rewatch when they're ill, their dream trip, the friend they'd call at 3am. Our free [How well do you know me?](/games/how-well-do-you-know-me) game hides the answers for you: eight questions, each of you answers about yourself and guesses the other, on one phone passed between you or on two phones from different places.",
         },
         { type: "h3", text: "2. 21 questions" },
         {
@@ -228,7 +228,7 @@ export const post: BlogPost = {
         { type: "h3", text: "6. Card night" },
         {
           type: "p",
-          text: "Put your questions in a pile, draw one a turn, and both answer. Our free [question cards](/games/deck) do this on one phone you pass between you: three decks (light ones, closer ones and one for long distance), twelve cards a round. For a round with dares in it, our [truth or dare questions for couples](/blog/truth-or-dare-questions-for-couples) has truths and dares by mood, with house rules.",
+          text: "Put your questions in a pile, draw one a turn, and both answer. Our free [question cards](/games/couple-questions-game) do this on one phone you pass between you: three decks (light ones, closer ones and one for long distance), twelve cards a round. For a round with dares in it, our [truth or dare questions for couples](/blog/truth-or-dare-questions-for-couples) has truths and dares by mood, with house rules.",
         },
         { type: "h2", text: "Can questions make you fall back in love?" },
         {
@@ -475,7 +475,7 @@ export const post: BlogPost = {
         { type: "h3", text: "1. ¿Cuánto me conoces?" },
         {
           type: "p",
-          text: "Uno responde en secreto una pregunta sobre sí mismo y el otro intenta adivinar la respuesta. Cada acierto, un punto. Os turnáis en cada pregunta. Usad preguntas de respuesta corta: la serie que vuelve a ver cuando está malo, su viaje soñado, el amigo al que llamaría a las tres de la mañana. Nuestro juego gratis [¿Cuánto me conoces?](/games/know) os esconde las respuestas: ocho preguntas, cada uno responde sobre sí y adivina lo del otro, en un móvil que os pasáis o en dos móviles desde sitios distintos.",
+          text: "Uno responde en secreto una pregunta sobre sí mismo y el otro intenta adivinar la respuesta. Cada acierto, un punto. Os turnáis en cada pregunta. Usad preguntas de respuesta corta: la serie que vuelve a ver cuando está malo, su viaje soñado, el amigo al que llamaría a las tres de la mañana. Nuestro juego gratis [¿Cuánto me conoces?](/games/how-well-do-you-know-me) os esconde las respuestas: ocho preguntas, cada uno responde sobre sí y adivina lo del otro, en un móvil que os pasáis o en dos móviles desde sitios distintos.",
         },
         { type: "h3", text: "2. Las 21 preguntas" },
         {
@@ -500,7 +500,7 @@ export const post: BlogPost = {
         { type: "h3", text: "6. Noche de cartas" },
         {
           type: "p",
-          text: "Haced un montón con vuestras preguntas, sacad una por turno y responded los dos. Nuestras [cartas de preguntas](/games/deck) gratis lo hacen en un móvil que os vais pasando: tres barajas (ligeras, más íntimas y una para la distancia), doce cartas por ronda. Para una ronda con retos, nuestras preguntas de [verdad o reto para parejas](/blog/truth-or-dare-questions-for-couples) tienen verdades y retos según el ambiente, con reglas de la casa.",
+          text: "Haced un montón con vuestras preguntas, sacad una por turno y responded los dos. Nuestras [cartas de preguntas](/games/couple-questions-game) gratis lo hacen en un móvil que os vais pasando: tres barajas (ligeras, más íntimas y una para la distancia), doce cartas por ronda. Para una ronda con retos, nuestras preguntas de [verdad o reto para parejas](/blog/truth-or-dare-questions-for-couples) tienen verdades y retos según el ambiente, con reglas de la casa.",
         },
         { type: "h2", text: "¿Unas preguntas pueden volver a enamoraros?" },
         {

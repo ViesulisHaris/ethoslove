@@ -86,6 +86,16 @@ export const DAILY_HASH_MAX = 5 + 7 + 41 + 2 * (3 + DAILY_NAME_MAX * 12);
 // Control characters, zero-width marks and the characters that turn text round.
 const UNSAFE = /[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩﻿]/g;
 
+/**
+ * Scripts whose letters join or stack (Arabic and its neighbours, the Indic scripts): a label's
+ * letter-spacing pulls such a name apart into loose letters, so it is set without it.
+ */
+const JOINED = new RegExp(
+  "[" + ["Arabic", "Syriac", "Thaana", "Nko", "Mandaic", "Mongolian", "Adlam", "Devanagari", "Bengali", "Gurmukhi", "Gujarati", "Oriya", "Tamil", "Telugu", "Kannada", "Malayalam", "Sinhala", "Myanmar", "Khmer", "Tibetan"].map((script) => `\\p{Script=${script}}`).join("") + "]",
+  "u",
+);
+export const joinsLetters = (name: string): boolean => JOINED.test(name);
+
 /** A name as it may travel and be shown: no control or direction characters, single spaces, 24 characters at most. */
 export function cleanName(raw: unknown): string {
   if (typeof raw !== "string") return "";

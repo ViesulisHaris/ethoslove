@@ -426,7 +426,7 @@ test.describe("the other rooms", () => {
   });
 
   test("games: the question deck deals, runs out and reshuffles", async ({ page }) => {
-    await page.goto("/games/deck");
+    await page.goto("/games/couple-questions-game");
     const card = page.getByRole("button", { name: /Card 1 of 12/ });
     await expect(card).toBeVisible();
     // One steady button whose name is the card: its number, the question, and what a tap does.
@@ -443,7 +443,7 @@ test.describe("the other rooms", () => {
     await expect(page.getByRole("button", { name: /Card 1 of 12/ })).toBeVisible();
     expect(first).toMatch(/^Card 1 of 12\. .{15,}\? Next card$/);
 
-    await page.goto("/es/games/deck");
+    await page.goto("/es/games/couple-questions-game");
     await expect(page.getByRole("button", { name: /Carta 1 de 12/ })).toBeVisible();
   });
 });
@@ -452,7 +452,7 @@ test.describe("games on one phone", () => {
   test("the games table deals every game, and each card opens it", async ({ page }) => {
     await page.goto("/games");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(/games for/i);
-    for (const [name, path] of [["How well do you know me?", "/games/know"], ["Would you rather?", "/games/rather"], ["Draw it, guess it", "/games/draw"], ["Memory", "/games/memory"], ["Question cards", "/games/deck"], ["Truth or dare, soft edition", "/games/dare"], ["Dishes roulette", "/games/roulette"]]) {
+    for (const [name, path] of [["How well do you know me?", "/games/how-well-do-you-know-me"], ["Would you rather?", "/games/would-you-rather"], ["Draw it, guess it", "/games/drawing-game"], ["Memory", "/games/memory"], ["Question cards", "/games/couple-questions-game"], ["Truth or dare, soft edition", "/games/truth-or-dare"], ["Dishes roulette", "/games/chore-wheel"]]) {
       await expect(page.getByRole("link", { name, exact: true })).toHaveAttribute("href", path);
     }
     await page.getByRole("link", { name: "Memory", exact: true }).click();
@@ -461,7 +461,7 @@ test.describe("games on one phone", () => {
   });
 
   test("how well do you know me: two players, one phone, a reveal and a score", async ({ page }) => {
-    await page.goto("/games/know");
+    await page.goto("/games/how-well-do-you-know-me");
     await page.getByRole("button", { name: /^One phone/ }).click();
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
@@ -485,7 +485,7 @@ test.describe("games on one phone", () => {
   });
 
   test("would you rather: a match, a clash, and the verdict at the end", async ({ page }) => {
-    await page.goto("/games/rather");
+    await page.goto("/games/would-you-rather");
     await page.getByRole("button", { name: /^One phone/ }).click();
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
@@ -503,13 +503,13 @@ test.describe("games on one phone", () => {
   });
 
   test("the roulette spins and the dares deal", async ({ page }) => {
-    await page.goto("/games/roulette");
+    await page.goto("/games/chore-wheel");
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
     await page.getByRole("button", { name: "Start" }).click();
     await page.getByRole("button", { name: "Spin" }).click();
     await expect(page.getByText(/^(Maya|Marco) (cooks tonight|washes up|picks the film|makes the coffee|gets up first tomorrow|books the next date|takes out the trash|chooses the music)\.$/)).toBeVisible({ timeout: 10_000 });
-    await page.goto("/games/dare");
+    await page.goto("/games/truth-or-dare");
     await page.getByLabel("Your name").fill("Maya");
     await page.getByLabel("Their name").fill("Marco");
     await page.getByRole("button", { name: "Start" }).click();
@@ -586,7 +586,7 @@ test.describe("games on one phone", () => {
   });
 
   test("draw it, guess it: the phone goes over, the word stays private, and a finger leaves ink", async ({ page }) => {
-    await page.goto("/games/draw");
+    await page.goto("/games/drawing-game");
     // The page's list of every word is there to read before a game starts.
     const wordList = page.locator("section[aria-labelledby='draw-words']");
     await expect(wordList).toBeVisible();
@@ -634,7 +634,7 @@ test.describe("games on one phone", () => {
   });
 
   test("two phones: a room opens with a code and a link to send", async ({ page }) => {
-    await page.goto("/games/rather");
+    await page.goto("/games/would-you-rather");
     await page.getByRole("button", { name: /^Two phones/ }).click();
     await page.getByLabel("Your name").fill("Maya");
     await page.getByRole("button", { name: "Make a room" }).click();
