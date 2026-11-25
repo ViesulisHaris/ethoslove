@@ -25,7 +25,7 @@ export function originMetadata(origin: TripOrigin, locale: string): Metadata {
   const l = locale === "es" ? "es" : "en";
   const ui = TRIP_ORIGIN_UI[l];
   const city = origin.name[l];
-  return pageMetadata({ locale, path: originPath(origin), title: fill(ui.title[origin.phrase], { city }), description: fill(ui.description, { city, count: TRIPS.length }) });
+  return pageMetadata({ locale, path: originPath(origin), title: fill(ui.title[origin.phrase], { city }), description: TRIP_ORIGIN_COPY[origin.slug].description[l] });
 }
 
 /** A trip's picture for a card or the hero: its own photograph, or its two colours where it has none yet. */

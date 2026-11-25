@@ -205,21 +205,37 @@ describe("the cities to leave from", () => {
     for (const slug of ["glasgow", "manchester", "birmingham"]) expect(TRIP_ORIGINS.some((o) => o.slug === slug), slug).toBe(false);
   });
 
-  it("O8 titles and descriptions fit a search result", () => {
+  it("O8 titles and descriptions fit a search result, and each city's description is its own", () => {
     const starts = { en: { weekend: "Weekend trips from", "city-breaks": "City breaks from" }, es: { weekend: "Escapadas desde", "city-breaks": "Escapadas urbanas desde" } };
     const titles = new Set<string>();
     for (const l of ["en", "es"] as const) {
+      const owner = new Map<string, string>();
       for (const o of TRIP_ORIGINS) {
         const title = fill(TRIP_ORIGIN_UI[l].title[o.phrase], { city: o.name[l] });
-        const description = fill(TRIP_ORIGIN_UI[l].description, { city: o.name[l], count: TRIPS.length });
+        const description = TRIP_ORIGIN_COPY[o.slug].description[l];
         expect(title.length, title).toBeLessThanOrEqual(60);
         expect(title.startsWith(starts[l][o.phrase]), title).toBe(true);
         expect(title).toContain(o.name[l]);
+        // One comma at most: two comma tails read as assembled.
+        expect(title.split(",").length, title).toBeLessThanOrEqual(2);
         expect(description.length, description).toBeLessThanOrEqual(155);
+        expect(description.length, description).toBeGreaterThanOrEqual(110);
+        expect(description, `${o.slug} ${l}`).toContain(o.name[l]);
+        // A train is promised only where one runs from there.
+        if (!origin(o.slug).trains.length) expect(description, `${o.slug} ${l}`).not.toMatch(/train works|tren directo|by train|en tren/i);
+        // No sentence, and no sentence's first three words, on two cities' descriptions.
+        for (const one of description.split(/(?<=[.;])\s+/)) {
+          for (const key of [one.toLowerCase(), one.replace(new RegExp(o.name[l], "g"), "X").toLowerCase().split(/\s+/).slice(0, 3).join(" ")]) {
+            expect(owner.get(key) ?? o.slug, `${l} "${key}" on ${o.slug} and ${owner.get(key)}`).toBe(o.slug);
+            owner.set(key, o.slug);
+          }
+        }
         titles.add(title);
       }
     }
     expect(titles.size).toBe(TRIP_ORIGINS.length * 2);
+    // The numbers the descriptions add to the hero's: Santorini the farthest from Edinburgh at 4 h 30.
+    expect(from("edinburgh").at(-1)).toMatchObject({ id: "santorini-naxos", airMinutes: 270 });
   });
 
   it("O9 each origin's date ideas page exists", () => {

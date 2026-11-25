@@ -3,8 +3,9 @@
  * `TRIP_ORIGIN_UI` is what every such page says, with `{city}`, `{count}` (the trips, twelve) and
  * `{rest}` (the trips folded under the first six) filled in. `TRIP_ORIGIN_COPY` is the two sentences
  * true of leaving from one city: `line` the first (the hero's italic line), `sentence` the rest,
- * and `hero`, the trip in the hero's photograph: the one that starts there, or else a trip that is
- * not among the six cards. No sentence is shared between two cities, nor its first three words.
+ * `hero`, the trip in the hero's photograph: the one that starts there, or else a trip that is
+ * not among the six cards; and `description`, the search result's line, written from the same city's
+ * numbers (no two cities share one, nor its opening). No sentence is shared between two cities, nor its first three words.
  * Each was written from the matcher's own minutes; tests/unit/trip-origins.test.ts (O6) holds the
  * numbers, so a sentence that drifts from the data fails. Fix the sentence, never the test.
  * Hours, never a fare. Spanish adapted, Spain Spanish, the two of them spoken to as vosotros.
@@ -13,7 +14,6 @@ type L = { en: string; es: string };
 
 export type TripOriginUi = {
   title: { weekend: string; "city-breaks": string };
-  description: string;
   heading: string;
   button: string;
   listLabel: string;
@@ -35,8 +35,7 @@ export type TripOriginUi = {
 
 export const TRIP_ORIGIN_UI: Record<"en" | "es", TripOriginUi> = {
   en: {
-    title: { weekend: "Weekend trips from {city}, and longer ones, for two", "city-breaks": "City breaks from {city}, and longer trips, for two" },
-    description: "{count} trips for two leaving from {city}, nearest first: hours in the air, where a train works and the best months. Each planned day by day.",
+    title: { weekend: "Weekend trips from {city} for two: 3 days to a week", "city-breaks": "City breaks from {city} for two: 3 days to a week" },
     heading: "{count} trips from {city}, nearest first",
     button: "See the trips",
     listLabel: "Nearest first",
@@ -58,7 +57,6 @@ export const TRIP_ORIGIN_UI: Record<"en" | "es", TripOriginUi> = {
   },
   es: {
     title: { weekend: "Escapadas desde {city} en pareja, de 3 a 7 días", "city-breaks": "Escapadas urbanas desde {city} y viajes más largos" },
-    description: "{count} viajes para dos saliendo de {city}, del más cercano al más lejano: horas de vuelo, dónde sirve el tren y los mejores meses. Día a día.",
     heading: "{count} viajes desde {city}, por cercanía",
     button: "Ver los viajes",
     listLabel: "Por cercanía",
@@ -80,8 +78,12 @@ export const TRIP_ORIGIN_UI: Record<"en" | "es", TripOriginUi> = {
   },
 };
 
-export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence: L }> = {
+export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence: L; description: L }> = {
   london: {
+    description: {
+      en: "From London, three of the twelve trips for two start with a train: Paris, Amsterdam and the Highlands. Iceland and Santorini are 3 and 4 hours away by air.",
+      es: "Desde Londres, tres de los doce viajes en pareja empiezan en tren: París, Ámsterdam y las Highlands. Islandia y Santorini quedan a 3 y 4 horas de vuelo.",
+    },
     hero: "iceland-south-coast",
     line: { en: "Three of the twelve start at a London station, not an airport.", es: "Tres de los doce empiezan en una estación de Londres, no en un aeropuerto." },
     sentence: {
@@ -90,6 +92,10 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     },
   },
   edinburgh: {
+    description: {
+      en: "The Highlands road trip starts in Edinburgh. Amsterdam is the nearest city break, 1 h 25 in the air; Santorini, at 4 h 30, is the farthest of twelve trips.",
+      es: "Las Highlands en coche empiezan en Edimburgo. Ámsterdam es la escapada urbana más cercana, a 1 h 25 de vuelo; Santorini, a 4 h 30, la más lejana de doce.",
+    },
     hero: "scottish-highlands",
     line: { en: "The Highlands trip starts here: a night in the Old Town, then the car north.", es: "Aquí empiezan las Highlands: una noche en la ciudad vieja y luego, en coche, al norte." },
     sentence: {
@@ -98,6 +104,10 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     },
   },
   dublin: {
+    description: {
+      en: "No train leaves the island, so every trip from Dublin starts with a flight: the Highlands in an hour, Lisbon in 2 h 40, and ten more planned day by day.",
+      es: "Ningún tren sale de la isla: desde Dublín, cada viaje empieza con un vuelo. Las Highlands a una hora, Lisboa a 2 h 40 y diez más, planeados día a día.",
+    },
     hero: "lisbon-slow-weekend",
     line: { en: "The nearest trip is no city break: the Highlands road trip, an hour’s flight.", es: "El viaje más cercano no es urbano: las Highlands en coche, a una hora de vuelo." },
     sentence: {
@@ -106,6 +116,10 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     },
   },
   paris: {
+    description: {
+      en: "Four days in the east of Paris need no ticket, and Amsterdam is a direct train away. The ten other trips for two are 3 h 35 in the air at most.",
+      es: "Cuatro días por el este de París sin billete, y Ámsterdam a un tren directo. Los otros diez viajes en pareja quedan, como mucho, a 3 h 35 de vuelo.",
+    },
     hero: "paris-without-cliches",
     line: { en: "One of the twelve needs no ticket at all: four days in the east of Paris.", es: "Para uno de los doce no hace falta billete: cuatro días por el este de París." },
     sentence: {
@@ -114,6 +128,10 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     },
   },
   amsterdam: {
+    description: {
+      en: "Amsterdam by bike starts at your door, and Paris is a direct train away. Copenhagen and Edinburgh are 1 h 25 in the air; Santorini, the farthest, 3 h 40.",
+      es: "Ámsterdam en bici empieza en vuestra puerta y París queda a un tren directo. Copenhague y Edimburgo, a 1 h 25 de vuelo; Santorini, la más lejana, a 3 h 40.",
+    },
     hero: "amsterdam-by-bike",
     line: { en: "Your own city is one of the twelve: three days on two bikes, out to Durgerdam.", es: "Vuestra ciudad es uno de los doce: tres días en bici, hasta Durgerdam." },
     sentence: {
@@ -122,6 +140,10 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     },
   },
   berlin: {
+    description: {
+      en: "Prague to Vienna starts on a direct train from Berlin, and Copenhagen is an hour's flight. Santorini, at 3 h 10, is nearer than Lisbon or the Algarve.",
+      es: "De Praga a Viena se empieza con un tren directo desde Berlín, y Copenhague queda a una hora de vuelo. Santorini, a 3 h 10, está más cerca que Lisboa.",
+    },
     hero: "santorini-naxos",
     line: { en: "The trip by rail, Prague to Vienna, begins on a direct train from Berlin.", es: "El viaje en tren, de Praga a Viena, empieza en un tren directo desde Berlín." },
     sentence: {
@@ -130,6 +152,10 @@ export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence:
     },
   },
   riga: {
+    description: {
+      en: "The Baltic coast road trip starts in Riga's old town. Copenhagen is 1 h 30 away and Prague under two; Lisbon and the Algarve take over 4 h 30 each way.",
+      es: "La costa báltica en coche empieza en el casco antiguo de Riga. Copenhague queda a 1 h 30 y Praga a menos de dos; Lisboa y el Algarve, a más de 4 h 30.",
+    },
     hero: "baltic-coast",
     line: { en: "The Baltic coast trip begins in Riga’s old town; of the twelve, its days cost least.", es: "La costa báltica sale del casco antiguo de Riga, y es la de menos gasto diario." },
     sentence: {
