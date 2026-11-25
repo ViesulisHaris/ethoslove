@@ -713,7 +713,10 @@ for (const prefix of ["", "/es"]) {
           expect(await page.locator("[data-shelf] article:visible").count(), `${width}: gifts on show`).toBe(4);
           await expect(rest).not.toHaveAttribute("open", "");
           const pill = rest.locator("> summary");
-          expect((await pill.boundingBox())!.height, `${width}: the pill`).toBeGreaterThanOrEqual(44);
+          // h-11, 44 px, like the gallery's other pills; where the page lays it on a fractional pixel the box reads
+          // 43.9999, so the floor is the one tree-tag.spec.ts and templates.spec.ts use for the same class.
+          expect((await pill.boundingBox())!.height, `${width}: the pill`).toBeGreaterThan(43.5);
+          expect(await pill.evaluate((el) => getComputedStyle(el).height), `${width}: the pill's own height`).toBe("44px");
           const total = await page.locator("[data-shelf] article").count();
           await pill.click();
           await expect(rest).toHaveAttribute("open", "");
