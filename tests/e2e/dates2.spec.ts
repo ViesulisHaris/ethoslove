@@ -345,8 +345,8 @@ test.describe("dates2: the planner's two new controls", () => {
           const lines = await third.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el.parentElement!).lineHeight)));
           expect(lines, `${path} ${setting || "any"} ${reach || "any"}`).toBe(1);
         }
-      // Every choice is still a 44 px target.
-      for (const h of await page.locator("p:has(> span.block) select").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(h).toBeGreaterThanOrEqual(44);
+      // Every choice is still a 44 px target (h-11; sub-pixel layout can give 43.9999).
+      for (const h of await page.locator("p:has(> span.block) select").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(h).toBeGreaterThanOrEqual(43.5);
       await context.close();
     }
   });
