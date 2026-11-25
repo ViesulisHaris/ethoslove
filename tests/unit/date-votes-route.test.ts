@@ -198,4 +198,30 @@ describe("the votes route, with the table missing and present (dates2)", () => {
     expect(totals(rpc)).toEqual({ "place:node/1": { yes: 1, no: 0 }, "idea:spa-evening": { yes: 1, no: 0 } });
   });
 
+  it("A14 only this site's own pages may vote (dates2-D2)", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    const body = JSON.stringify(GOOD);
+    // Another site's "simple" request: text/plain, no preflight.
+    expect((await post(body, undefined, { "content-type": "text/plain", "sec-fetch-site": "cross-site", origin: "https://evil.test" })).status).toBe(415);
+    expect((await post(body, undefined, { "content-type": "text/plain" })).status).toBe(415);
+    expect((await post(body, undefined, {})).status).toBe(415);
+    // JSON, but from another site or a sibling one.
+    expect((await post(body, undefined, { "content-type": "application/json", "sec-fetch-site": "cross-site" })).status).toBe(403);
+    expect((await post(body, undefined, { "content-type": "application/json", "sec-fetch-site": "same-site" })).status).toBe(403);
+    expect((await post(body, undefined, { "content-type": "application/json", origin: "https://evil.test" })).status).toBe(403);
+    expect((await post(body, undefined, { "content-type": "application/json", origin: "null" })).status).toBe(403);
+    expect(rpc).not.toHaveBeenCalled();
+    // This site's own page, with or without a charset.
+    expect((await post(body, undefined, { "content-type": "application/json; charset=utf-8", "sec-fetch-site": "same-origin", origin: "https://ethos.test" })).status).toBe(200);
+    expect(rpc).toHaveBeenCalledTimes(1);
+  });
+
+  it("A15 a body over 4 KB is refused before it is read as a vote", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    const padded = JSON.stringify({ ...GOOD, pad: "x".repeat(5000) });
+    expect((await post(padded)).status).toBe(413);
+    expect(rpc).not.toHaveBeenCalled();
+  });
 });

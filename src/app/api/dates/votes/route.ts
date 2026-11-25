@@ -56,6 +56,32 @@ async function movesFor(ip: string, changes: readonly VoteChange[]): Promise<{ m
   return { moves, undo };
 }
 
+/** The largest vote body: nine targets in plain JSON are well under a kilobyte. */
+const MAX_BODY = 4096;
+
+/**
+ * Only this site's own pages may vote (dates2-D2). A vote must be sent as JSON, which no other
+ * site's page can do without a preflight this route never grants; a browser's Sec-Fetch-Site and
+ * Origin must say it came from here. Null when it may go on, else the answer.
+ */
+function refused(request: NextRequest): NextResponse | null {
+  const type = (request.headers.get("content-type") ?? "").split(";")[0].trim().toLowerCase();
+  if (type !== "application/json") return NextResponse.json({ error: "unsupported_media_type" }, { status: 415 });
+  const site = request.headers.get("sec-fetch-site");
+  if (site && site !== "same-origin") return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  const origin = request.headers.get("origin");
+  if (origin) {
+    let host: string | null = null;
+    try {
+      host = new URL(origin).host;
+    } catch {}
+    if (!host || host !== (request.headers.get("host") ?? request.nextUrl.host)) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  }
+  const length = Number(request.headers.get("content-length") ?? 0);
+  if (length > MAX_BODY) return NextResponse.json({ error: "too_large" }, { status: 413 });
+  return null;
+}
+
 /** How many targets one read may ask about: a screen of places. */
 const MAX_READ = 60;
 const NOTHING = { available: false, liked: {} };
@@ -66,7 +92,7 @@ const NOTHING = { available: false, liked: {} };
  * tap. No account: nothing about the person is written to the database. The limiter's keys are the
  * address for a minute or an hour, as every route's are, and a hash of the address with the target for
  * a month holding that address's last answer, so one address holds at most one answer per place
- * (movesFor). Without the database or migration 0026
+ * (movesFor). Only this site's own pages may post (refused). Without the database or migration 0026
  * both answer { available: false } and log nothing.
  */
 export async function GET(request: NextRequest) {
@@ -85,13 +111,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const refusal = refused(request);
+  if (refusal) return refusal;
   const ip = clientIp(request.headers);
   if (!(await rateLimit(`dates-votes:${ip}`, { limit: 20, windowSeconds: 60 })) || !(await rateLimit(`dates-votes-hour:${ip}`, { limit: 120, windowSeconds: 3600 }))) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   let body: unknown;
   try {
-    body = await request.json();
+    const text = await request.text();
+    if (text.length > MAX_BODY) return NextResponse.json({ error: "too_large" }, { status: 413 });
+    body = JSON.parse(text);
   } catch {
     return NextResponse.json({ error: "bad_request" }, { status: 400 });
   }
