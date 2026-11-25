@@ -16,9 +16,9 @@ import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { ORIGIN_PREFIX, originOfParam, TRIP_ORIGINS } from "@/lib/trips/origins";
 import { getTrip, stopName, TRIPS } from "@/lib/trips/presets";
 import { stayPartnerId, tripStays } from "@/lib/trips/stay";
+import { tripLead } from "@/lib/trips/trip-lead";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
 import { TRIP_SEO } from "@/content/trip-seo";
-import { heroLead } from "@/components/templates/page/lead";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -79,7 +79,8 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   });
   const carHire = tripCarHire(trip);
   // The hero says the blurb's opening sentences (DESIGN-LESS-TEXT: thirty words beside the picture); the rest waits in "More about this trip".
-  const { lead, rest } = heroLead(trip.blurb[l]);
+  // Where that is over 24 words, its first sentence alone (the plan's second cut of the word budget: the Spanish Baltic coast was 302 words with thirty).
+  const { lead, rest } = tripLead(trip.blurb[l]);
   // Each stop the trip sleeps in gets a place to stay; the partner id is read here, on the server, and handed down.
   const stays = tripStays(trip);
   const partnerId = stayPartnerId();

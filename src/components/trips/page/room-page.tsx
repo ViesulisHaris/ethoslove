@@ -22,7 +22,7 @@ const THEME = "trips";
 const FLOWERS = ROOMS_THEME.flowers;
 
 /** A quiet link in a row: underlined, and a thumb's target by its padding (date-page.tsx, QUIET_ROW_LINK). */
-export const ROOM_ROW_LINK = "py-[0.8125rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink";
+export const ROOM_ROW_LINK = "inline-block min-w-11 py-[0.8125rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink";
 
 /** The page-accent button every designed page has (tonight-form.tsx, TONIGHT_BUTTON), with the page's focus ring. Written out: that file is a client component. */
 export const ROOM_BUTTON =
