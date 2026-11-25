@@ -117,8 +117,8 @@ export type Votes = {
   kept: Record<string, Vote>;
   /** True when the site takes votes, false when it does not (the table is not there yet), null while unknown. */
   available: boolean | null;
-  /** One tap: the new answer for every target (null takes it back). */
-  cast: (targets: readonly string[], next: Vote | null) => Promise<void>;
+  /** One tap: the new answer for every target (null takes it back). True when it was kept, false when it was put back. */
+  cast: (targets: readonly string[], next: Vote | null) => Promise<boolean>;
 };
 
 /**
@@ -150,7 +150,7 @@ export function useVotes(targets: readonly string[]): Votes {
   const cast = useCallback(async (on: readonly string[], next: Vote | null) => {
     const before = readVotes();
     const changes = voteChanges(on, before, next);
-    if (changes.length === 0) return;
+    if (changes.length === 0) return true;
     const after = { ...before };
     for (const t of on) {
       if (next) after[t] = next;
@@ -162,8 +162,16 @@ export function useVotes(targets: readonly string[]): Votes {
       const json = res.ok ? ((await res.json()) as { ok?: unknown }) : null;
       if (json?.ok !== true) throw new Error("not counted");
       if (next) track("date_vote", { vote: next });
+      return true;
     } catch {
-      writeVotes(before);
+      // Put back only the targets this tap changed: another tap since may have changed the rest.
+      const now = { ...readVotes() };
+      for (const t of on) {
+        if (before[t]) now[t] = before[t];
+        else delete now[t];
+      }
+      writeVotes(now);
+      return false;
     }
   }, []);
 

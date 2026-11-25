@@ -6,11 +6,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import { formatDay, type Ymd } from "@/lib/dates/calendar";
-import { doneCount, GIFT_FROM, timelineLabels, TIMELINE_SLUG, type DoneDate } from "@/lib/dates/done";
-import { voteTargets, type Vote } from "@/lib/dates/votes";
+import { doneCount, doneTargets, GIFT_FROM, timelineLabels, TIMELINE_SLUG, type DoneDate } from "@/lib/dates/done";
+import type { Vote } from "@/lib/dates/votes";
 import { saveGiftSeed } from "@/lib/editor/gift-seed";
 import { cn } from "@/lib/utils";
-import type { Votes } from "./use-done";
 
 /** How many rows the card shows before "Show all". */
 const SHOWN = 5;
@@ -43,19 +42,37 @@ export function VotePills({ value, onVote, labels, label, labelledBy, className 
 
 /**
  * The dates you have done, as a short log on /plan: one honest count over them, five rows (the rest
- * folded), each a day, a title, a town and the vote in words, and from three done dates one quiet
- * line that hands over to the timeline gift. Text only: no picture, no map, nothing to keep.
+ * folded), each a day, a title, a town and its own answer in words (dates2-D3), and from three done
+ * dates one quiet line that hands over to the timeline gift. Text only: no picture, no map, nothing to keep.
  */
-export function DoneLog({ entries, today, votes, onRemove, askedAbove, className }: { entries: DoneDate[]; today: Ymd; votes: Votes; onRemove: (id: string) => void; /** The entry of the plan open above, whose question is asked there: its row only says the answer. */ askedAbove?: string; className?: string }) {
+export function DoneLog({
+  entries,
+  today,
+  available,
+  onAnswer,
+  onRemove,
+  askedAbove,
+  className,
+}: {
+  entries: DoneDate[];
+  today: Ymd;
+  /** Whether the site takes votes: true, false, or null while unknown. */
+  available: boolean | null;
+  onAnswer: (entry: DoneDate, next: Vote) => void;
+  onRemove: (id: string) => void;
+  /** The entry of the plan open above, whose question is asked there: its row only says the answer. */
+  askedAbove?: string;
+  className?: string;
+}) {
   const t = useTranslations("plan");
   const locale = useLocale() === "es" ? "es" : "en";
   const count = doneCount(entries, today);
   // The rows whose answer is being changed: an answered row says it in words, and shows the pills again on "Change".
   const [changing, setChanging] = useState<ReadonlySet<string>>(new Set());
   const row = (entry: DoneDate) => {
-    const targets = voteTargets({ places: entry.places, idea: entry.idea });
-    const vote = targets[0] ? votes.kept[targets[0]] : undefined;
-    const votable = targets.length > 0 && votes.available === true && entry.id !== askedAbove;
+    const targets = doneTargets(entry);
+    const vote = entry.vote;
+    const votable = targets.length > 0 && available === true && entry.id !== askedAbove;
     const pills = votable && (!vote || changing.has(entry.id));
     return (
       <li key={entry.id} className="flex items-start gap-3 border-t border-forest/10 py-3 first:border-t-0">
@@ -69,7 +86,14 @@ export function DoneLog({ entries, today, votes, onRemove, askedAbove, className
             <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[13.5px] text-forest/70">
               {vote === "yes" ? t("log.good") : t("log.notGood")}
               {votable ? (
-                <button type="button" aria-label={t("log.changeFor", { title: entry.title })} onClick={() => setChanging((s) => new Set(s).add(entry.id))} className="-my-3 inline-flex min-h-11 items-center px-1 font-semibold text-rose-deep underline-offset-4 hover:underline">
+                <button
+                  type="button"
+                  aria-label={t("log.changeFor", { title: entry.title })}
+                  onClick={() => {
+                    setChanging((s) => new Set(s).add(entry.id));
+                  }}
+                  className="-my-3 inline-flex min-h-11 items-center px-1 font-semibold text-rose-deep underline-offset-4 hover:underline"
+                >
                   {t("log.change")}
                 </button>
               ) : null}
@@ -81,7 +105,7 @@ export function DoneLog({ entries, today, votes, onRemove, askedAbove, className
               label={`${t("done.ask")} ${entry.title}`}
               value={vote}
               onVote={(next) => {
-                void votes.cast(targets, next);
+                onAnswer(entry, next);
                 setChanging((s) => {
                   const rest = new Set(s);
                   rest.delete(entry.id);
@@ -94,7 +118,12 @@ export function DoneLog({ entries, today, votes, onRemove, askedAbove, className
         </div>
         {/* Only this browser's own entries can be taken off: an account's come back from its saved dates. */}
         {entry.id.startsWith("saved:") ? null : (
-          <button type="button" aria-label={t("log.remove", { title: entry.title })} onClick={() => onRemove(entry.id)} className="grid size-11 shrink-0 place-items-center rounded-full text-forest/65 transition-colors hover:bg-forest/5 hover:text-destructive">
+          <button
+            type="button"
+            aria-label={t("log.remove", { title: entry.title })}
+            onClick={() => onRemove(entry.id)}
+            className="grid size-11 shrink-0 place-items-center rounded-full text-forest/65 transition-colors hover:bg-forest/5 hover:text-destructive"
+          >
             <Trash2 aria-hidden="true" className="size-4" />
           </button>
         )}

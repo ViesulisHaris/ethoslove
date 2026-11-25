@@ -9,9 +9,9 @@ import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { plannedIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import { addDone, doneFromPlan, doneFromSaved, mergeDone, removeDone } from "@/lib/dates/done";
+import { addDone, answerDone, answersAfterRemoval, doneFromPlan, doneFromSaved, doneTargets, mergeDone, removeDone, type DoneDate } from "@/lib/dates/done";
 import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, shareablePlan, stopName, type Plan } from "@/lib/dates/plan";
-import { voteTargets } from "@/lib/dates/votes";
+import { type Vote } from "@/lib/dates/votes";
 import { planUnwrap } from "@/lib/dates/plan-gift";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
@@ -162,10 +162,28 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   // The dates done (this browser's log, and an account's from its saved dates), and the vote on them.
   const [done, updateDone] = useDone();
   const entries = useMemo(() => mergeDone(done, doneFromSaved(account.list?.items ?? [], locale)), [done, account.list, locale]);
-  const planTargets = useMemo(() => (editable && plan.done ? voteTargets({ places: plan.stops.map((s) => s.id), idea: plan.idea }) : []), [editable, plan.done, plan.stops, plan.idea]);
-  const voteOn = useMemo(() => [...new Set([...planTargets, ...entries.flatMap((e) => voteTargets({ places: e.places, idea: e.idea }))])].slice(0, 60), [planTargets, entries]);
+  // The plan open above asks its own question: its row in the log only says the answer (dates2-T12).
+  const askedAbove = editable && plan.done ? (plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done, locale).id) : undefined;
+  // The plan's own date in the log, whose answer the question above shows (dates2-D3).
+  const planEntry = useMemo(() => (askedAbove && plan.done ? (entries.find((e) => e.id === askedAbove) ?? { ...doneFromPlan({ ...plan, date: plan.done }, plan.done, locale, savedLink?.id), id: askedAbove }) : undefined), [askedAbove, entries, plan, locale, savedLink?.id]);
+  const planTargets = useMemo(() => (planEntry ? doneTargets(planEntry) : []), [planEntry]);
+  const voteOn = useMemo(() => [...new Set([...planTargets, ...entries.flatMap(doneTargets)])].slice(0, 60), [planTargets, entries]);
   const votes = useVotes(voteOn);
-  const planVote = planTargets[0] ? votes.kept[planTargets[0]] : undefined;
+  const planVote = planEntry?.vote;
+  /** One date's answer: kept on the date for the log, and sent for its places. Put back when it is not kept. */
+  const answer = async (entry: DoneDate, next: Vote) => {
+    const before = entry.vote ?? null;
+    updateDone((list) => answerDone(list, entry, next));
+    if (await votes.cast(doneTargets(entry), next)) return;
+    updateDone((list) => answerDone(list, entry, before));
+  };
+  /** A date taken off, or not done after all: its answer stops counting on its places (dates2-D6). */
+  const takeOff = (id: string) => {
+    const removed = entries.find((e) => e.id === id);
+    updateDone((list) => removeDone(list, id));
+    if (!removed) return;
+    for (const { vote, targets } of answersAfterRemoval(removed, entries)) void votes.cast(targets, vote);
+  };
   // When "Mark as done" was pressed: "Not done after all" appears where it was on a phone, so a
   // second tap of a quick double tap lands on it. Taps on it this soon after are the same press (dates2-T1).
   const markedAt = useRef(-Infinity);
@@ -181,7 +199,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     if (performance.now() - markedAt.current < UNDO_GUARD_MS) return;
     // A plan marked before the id was kept: its id as it would have been, from the stops as they stand.
     const id = plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale).id;
-    updateDone((list) => removeDone(list, id));
+    takeOff(id);
     updateOwn((p) => {
       const next = { ...p };
       delete next.done;
@@ -189,9 +207,17 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       return next;
     });
   };
-  // The plan open above asks its own question: its row in the log only says the answer (dates2-T12).
-  const askedAbove = editable && plan.done ? (plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done, locale).id) : undefined;
-  const log = (className?: string) => <DoneLog entries={entries} today={today} votes={votes} askedAbove={askedAbove} onRemove={(id) => updateDone((list) => removeDone(list, id))} className={className} />;
+  const log = (className?: string) => (
+    <DoneLog
+      entries={entries}
+      today={today}
+      available={votes.available}
+      askedAbove={askedAbove}
+      onAnswer={(entry, next) => void answer(entry, next)}
+      onRemove={takeOff}
+      className={className}
+    />
+  );
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
   const ticketed = plan.stops.some((s) => sellsTickets(s));
   // The canvas and the credits' (i) are named by MapLibre in English unless told otherwise.
@@ -381,7 +407,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                   <p id="plan-done-ask" className="text-[14.5px] font-semibold text-forest">
                     {t("done.ask")}
                   </p>
-                  <VotePills labelledBy="plan-done-ask" value={planVote} onVote={(next) => void votes.cast(planTargets, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
+                  <VotePills labelledBy="plan-done-ask" value={planVote} onVote={(next) => planEntry && void answer(planEntry, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
                   {planVote ? <p className="text-[13.5px] text-forest/65">{t("done.thanks")}</p> : null}
                 </div>
               ) : null}

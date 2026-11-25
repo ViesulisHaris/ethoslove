@@ -2,6 +2,7 @@ import type { SavedDateSummary } from "@/lib/saved-dates/types";
 import { addDays, fromYmd, isYmd, weekdayOf, type Ymd } from "./calendar";
 import { ideaById, plannedIdea } from "./ideas";
 import { stopName, type Plan } from "./plan";
+import { voteTargets, type Vote } from "./votes";
 
 /*
  * The dates a person has done (BRIEF-dates2.md 4): marked on /plan, kept as a short log in the
@@ -20,6 +21,8 @@ export type DoneDate = {
   places: string[];
   /** The saved date's id, when it came from an account's saved dates or was saved as one. */
   saved?: string;
+  /** "Was this a good date?" as answered for this date: the log shows it per date, not per place (dates2-D3). */
+  vote?: Vote;
 };
 
 export const DONE_KEY = "ethos.dates.done.v1";
@@ -60,6 +63,39 @@ export function addDone(list: readonly DoneDate[], entry: DoneDate): DoneDate[] 
 
 export const removeDone = (list: readonly DoneDate[], id: string): DoneDate[] => list.filter((d) => d.id !== id);
 
+/** The log with one date's answer set (null takes it off). A date not in this browser's log yet (an account's) is added with it. */
+export function answerDone(list: readonly DoneDate[], entry: DoneDate, vote: Vote | null): DoneDate[] {
+  const withVote = (e: DoneDate): DoneDate => {
+    const next = { ...e };
+    if (vote) next.vote = vote;
+    else delete next.vote;
+    return next;
+  };
+  if (list.some((d) => d.id === entry.id)) return list.map((d) => (d.id === entry.id ? withVote(d) : d));
+  return vote ? addDone(list, withVote(entry)) : [...list];
+}
+
+/** What a date's answer is a vote on: its places and its idea. */
+export const doneTargets = (entry: DoneDate): string[] => voteTargets({ places: entry.places, idea: entry.idea });
+
+/**
+ * When a date is taken off the log, or found not done after all, its answer must stop counting
+ * (dates2-D6). Each place it was a vote on goes back to the answer of the newest date left that
+ * answered for that place, or to none. Grouped by that answer, for one tap each. Nothing when the
+ * date was never answered.
+ */
+export function answersAfterRemoval(removed: DoneDate, left: readonly DoneDate[]): { vote: Vote | null; targets: string[] }[] {
+  if (!removed.vote) return [];
+  const others = [...left].filter((d) => d.id !== removed.id && d.vote).sort(newestFirst);
+  const groups = new Map<Vote | null, string[]>();
+  for (const target of doneTargets(removed)) {
+    const vote = others.find((d) => doneTargets(d).includes(target))?.vote ?? null;
+    groups.set(vote, [...(groups.get(vote) ?? []), target]);
+  }
+  return [...groups].map(([vote, targets]) => ({ vote, targets }));
+}
+
+
 const str = (v: unknown, max: number): v is string => typeof v === "string" && v.length > 0 && v.length <= max;
 
 /** The kept log, checked entry by entry: a bad entry is dropped, the rest kept. */
@@ -81,7 +117,8 @@ export function readDone(raw: string | null): DoneDate[] {
     if (e.where !== undefined && !str(e.where, 80)) continue;
     if (e.idea !== undefined && !str(e.idea, 40)) continue;
     if (e.saved !== undefined && !str(e.saved, 64)) continue;
-    out.push({ id: e.id, day: e.day, title: e.title, places: e.places as string[], ...(e.where ? { where: e.where as string } : {}), ...(e.idea ? { idea: e.idea as string } : {}), ...(e.saved ? { saved: e.saved as string } : {}) });
+    const vote = e.vote === "yes" || e.vote === "no" ? e.vote : undefined;
+    out.push({ id: e.id, day: e.day, title: e.title, places: e.places as string[], ...(e.where ? { where: e.where as string } : {}), ...(e.idea ? { idea: e.idea as string } : {}), ...(e.saved ? { saved: e.saved as string } : {}), ...(vote ? { vote } : {}) });
   }
   return out.sort(newestFirst).slice(0, MAX_DONE);
 }

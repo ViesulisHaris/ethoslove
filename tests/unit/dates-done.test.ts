@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDone, doneCount, doneFromPlan, doneFromSaved, GIFT_FROM, MAX_DONE, mergeDone, readDone, timelineLabels, type DoneDate } from "@/lib/dates/done";
+import { addDone, answerDone, answersAfterRemoval, doneCount, doneFromPlan, doneFromSaved, GIFT_FROM, MAX_DONE, mergeDone, readDone, timelineLabels, type DoneDate } from "@/lib/dates/done";
 import { addDays } from "@/lib/dates/calendar";
 import type { Plan } from "@/lib/dates/plan";
 import type { SavedDateSummary } from "@/lib/saved-dates/types";
@@ -116,4 +116,34 @@ describe("the dates you have done (dates2)", () => {
     ];
     expect(doneFromSaved(items, "en")).toEqual([{ id: "saved:a", day: "2026-11-20", title: "Do nothing, properly", where: "Lisbon", idea: "spa-evening", places: [], saved: "a" }]);
   });
+
+  it("D13 an answer belongs to its date, not to every date at the same place (dates2-D3)", () => {
+    const today = entry("2026-11-25", "Dinner", { places: ["node/1", "node/2"] });
+    const before = entry("2026-11-04", "Sunset at the miradouro", { places: ["node/2"] });
+    const list = answerDone([today, before], today, "yes");
+    expect(list.find((d) => d.id === today.id)?.vote).toBe("yes");
+    expect(list.find((d) => d.id === before.id)?.vote).toBeUndefined();
+    // Kept and read back; a bad answer is dropped, the entry kept.
+    expect(readDone(JSON.stringify(list)).map((d) => d.vote)).toEqual(["yes", undefined]);
+    expect(readDone(JSON.stringify([{ ...today, vote: "maybe" }]))[0].vote).toBeUndefined();
+    // Taken back; an account's date not in this browser's log yet is added with its answer.
+    expect(answerDone(list, today, null).find((d) => d.id === today.id)).not.toHaveProperty("vote");
+    const account = entry("2026-11-10", "Bowling", { id: "saved:x", saved: "x", idea: "bowling-night" });
+    expect(answerDone([], account, "no")).toEqual([{ ...account, vote: "no" }]);
+    expect(answerDone([], account, null)).toEqual([]);
+  });
+
+  it("D14 a date taken off stops counting: each place goes back to the newest other answer, or none (dates2-D6)", () => {
+    const removed = entry("2026-11-25", "Dinner", { places: ["node/1", "node/2"], idea: "spa-evening", vote: "yes" });
+    const older = entry("2026-11-04", "Miradouro", { places: ["node/2"], vote: "no" });
+    const oldest = entry("2026-10-01", "Miradouro again", { places: ["node/2"], vote: "yes" });
+    const unanswered = entry("2026-11-20", "Walk", { places: ["node/1"] });
+    expect(answersAfterRemoval(removed, [removed, older, oldest, unanswered])).toEqual([
+      { vote: null, targets: ["place:node/1", "idea:spa-evening"] },
+      { vote: "no", targets: ["place:node/2"] },
+    ]);
+    // Never answered: nothing to take back.
+    expect(answersAfterRemoval({ ...removed, vote: undefined }, [older])).toEqual([]);
+  });
+
 });

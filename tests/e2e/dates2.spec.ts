@@ -466,6 +466,37 @@ test.describe("dates2: done dates on /plan", () => {
     await expect(log).toContainText("Not this time");
   });
 
+  test("G8c an answer stays with its date; taking the date back takes its answer off (dates2-D3, D6)", async ({ page }) => {
+    const votes = await holdTheDatabase(page, { available: true, posts: [] });
+    // An older date at the miradouro, then tonight's plan, which stops there too.
+    await seedDone(page, [done(addDays(today(), -21), "Sunset at the miradouro", ["node/105"])]);
+    await seedPlan(page, { v: 1, date: today(), where: "Lisbon", idea: "pasta-and-a-slow-walk", stops: PLAN_STOPS });
+    await page.goto("/plan");
+    await page.getByRole("button", { name: "Mark as done" }).click(PLAN_COMPILES);
+    const plan = page.getByTestId("plan-done");
+    await plan.getByRole("button", { name: "Yes", exact: true }).click();
+    await expect.poll(() => votes.posts.length).toBe(1);
+    // The older row still asks: it was never answered.
+    const log = page.getByTestId("done-log");
+    const older = log.getByRole("group", { name: "Was this a good date? Sunset at the miradouro" });
+    await expect(older).toBeVisible();
+    await expect(log.getByRole("listitem").filter({ hasText: "Sunset at the miradouro" })).not.toContainText("A good one");
+    // Not done after all: the yes comes off every place it was on.
+    await page.waitForTimeout(800);
+    await page.getByRole("button", { name: "Not done after all" }).click();
+    await expect.poll(() => votes.posts.length).toBe(2);
+    const back = (votes.posts[1] as { changes: { target: string; yes: number; no: number }[] }).changes;
+    expect(back.map((c) => c.target).sort()).toEqual(["idea:pasta-and-a-slow-walk", "place:node/105", "place:node/106"]);
+    for (const c of back) expect([c.yes, c.no]).toEqual([-1, 0]);
+    expect(await page.evaluate(() => window.localStorage.getItem("ethos.dates.votes.v1"))).toBe("{}");
+    // A row answered and then removed from the log: the same.
+    await older.getByRole("button", { name: "No", exact: true }).click();
+    await expect.poll(() => votes.posts.length).toBe(3);
+    await log.getByRole("button", { name: "Take Sunset at the miradouro off the list" }).click();
+    await expect.poll(() => votes.posts.length).toBe(4);
+    for (const c of (votes.posts[3] as { changes: { yes: number; no: number }[] }).changes) expect([c.yes, c.no]).toEqual([0, -1]);
+  });
+
     test("G9 the log and its one count", async ({ page }) => {
     await holdTheDatabase(page);
     const t = today();
