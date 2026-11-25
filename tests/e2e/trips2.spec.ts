@@ -211,7 +211,8 @@ test.describe("the pages by kind of trip", () => {
     expect(listOf(await ldNodes(page), "ItemList")?.itemListElement).toHaveLength(4);
     const why = page.locator("details[data-more-about]");
     await expect(why).not.toHaveAttribute("open", "");
-    await expect(why).toContainText("city breaks have no page of their own");
+    await expect(why).toContainText("Paris is three, so take the Monday too");
+    await expect(why).not.toContainText("no page of their own");
     noErrors();
   });
 

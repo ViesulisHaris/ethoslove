@@ -100,6 +100,31 @@ describe("the pages by kind of trip", () => {
     }
   });
 
+  it("K10 what the folded notes say is in the trips", () => {
+    const trip = (id: string) => TRIPS.find((t) => t.id === id)!;
+    const nights = (id: string) => trip(id).stops.reduce((n, s) => n + s.nights, 0);
+    // Weekend: two nights for three of them, three for Paris; Copenhagen in December, the others in spring, early summer and September.
+    expect(["lisbon-slow-weekend", "copenhagen-hygge", "amsterdam-by-bike"].map(nights)).toEqual([2, 2, 2]);
+    expect(nights("paris-without-cliches")).toBe(3);
+    expect(trip("copenhagen-hygge").bestMonths).toContain(12);
+    expect(trip("copenhagen-hygge").plan.some((d) => d.items.en.some((x) => x.includes("Tivoli") && x.includes("December")))).toBe(true);
+    for (const id of ["lisbon-slow-weekend", "paris-without-cliches", "amsterdam-by-bike"]) {
+      for (const m of [4, 5, 6, 9]) expect(trip(id).bestMonths, id).toContain(m);
+      expect(trip(id).bestMonths, id).not.toContain(12);
+    }
+    // Road: where the car is collected and left.
+    const says = (id: string, text: string) => trip(id).plan.some((d) => d.items.en.some((x) => x.includes(text))) || trip(id).stops.some((s) => s.note.en.includes(text));
+    expect(says("amalfi-coast", "Collect the car on the way out")).toBe(true);
+    expect(says("scottish-highlands", "collect the car on your way out the next morning")).toBe(true);
+    expect(trip("baltic-coast").plan[2].items.en[0]).toContain("Collect the car");
+    expect(says("iceland-south-coast", "Collect the car at Keflavík")).toBe(true);
+    expect(says("algarve-coast", "Collect the car at the airport")).toBe(true);
+    expect(says("baltic-coast", "A one-way rental costs a little more")).toBe(true);
+    expect(trip("baltic-coast").stops.at(-1)!.name).toBe("Tallinn");
+    expect(says("tuscany-hill-towns", "back to Florence airport to drop the car")).toBe(true);
+    expect(TRIP_IDEA_COPY["weekend-getaways"].whyBody.en).not.toMatch(/page of their own|this page|here is/i);
+  });
+
   it("K7 the addresses are free", () => {
     const tripIds = TRIPS.map((t) => t.id);
     for (const k of TRIP_IDEA_CANDIDATES) expect(tripIds).not.toContain(k);

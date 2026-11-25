@@ -40,10 +40,10 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
       "copenhagen-hygge": { en: "The harbor by bike, then a day out by train to Humlebæk.", es: "El puerto en bici y un día en tren hasta Humlebæk." },
       "amsterdam-by-bike": { en: "A bed in the Jordaan and two bikes for three days.", es: "Una cama en el Jordaan y dos bicis para tres días." },
     },
-    whySummary: { en: "Why only these four", es: "Por qué solo estos cuatro" },
+    whySummary: { en: "Fitting one into a weekend", es: "Cómo encajarla en un fin de semana" },
     whyBody: {
-      en: "A weekend getaway here is a trip of three or four days, a Friday to a Monday at most. Four of the twelve are that short, and all four are city breaks, so city breaks have no page of their own. The other eight run six or seven days: six road trips, one by train and one across two islands.",
-      es: "Aquí una escapada de fin de semana es un viaje de tres o cuatro días, de viernes a lunes como mucho. Cuatro de los doce son así de cortos, y los cuatro son ciudades, así que las escapadas urbanas no tienen página propia. Los otros ocho duran seis o siete días: seis en coche, uno en tren y uno entre dos islas.",
+      en: "Lisbon, Copenhagen and Amsterdam are two nights, Friday to Sunday; Paris is three, so take the Monday too. On each trip's page the flight search opens on a Friday three weeks out and comes home the day its plan ends. For winter, choose Copenhagen: its best months include December, with Tivoli lit up. The other three are at their best in spring, early summer and September.",
+      es: "Lisboa, Copenhague y Ámsterdam son dos noches, de viernes a domingo; París son tres, así que pedid también el lunes. En la página de cada viaje, la búsqueda de vuelos sale un viernes dentro de tres semanas y vuelve el día que acaba el plan. Para el invierno, Copenhague: entre sus mejores meses está diciembre, con el Tivoli iluminado. Las otras tres lucen más en primavera, a principios de verano y en septiembre.",
     },
   },
   "road-trips": {
@@ -68,10 +68,10 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
       // The plan's line said "west along the coast, from Faro to Sagres": the first day goes east, to Tavira.
       "algarve-coast": { en: "The whole coast, from Tavira in the east to windy Sagres.", es: "Toda la costa, desde Tavira, al este, hasta la ventosa Sagres." },
     },
-    whySummary: { en: "Why these six", es: "Por qué estos seis" },
+    whySummary: { en: "Collecting the car", es: "Recoger el coche" },
     whyBody: {
-      en: "A road trip here is one of the six trips planned around a hire car: you land, collect it, and each night’s stop is a drive from the last. The four city breaks need no car, the Prague to Vienna trip goes by train, and Santorini and Naxos by ferry.",
-      es: "Aquí un viaje en coche es uno de los seis planeados con coche de alquiler: aterrizáis, lo recogéis y cada parada queda a un trayecto de la anterior. Las cuatro ciudades no piden coche, el viaje de Praga a Viena va en tren y el de Santorini y Naxos, en ferry.",
+      en: "In Naples, Edinburgh and Riga, collect the car the morning you leave the city, not the day you land. In Iceland and the Algarve it waits at the airport you land at. The Baltic coast ends in Tallinn, so its car is a one-way rental that costs a little more; in Tuscany it goes back to Florence airport. In Scotland you drive on the left.",
+      es: "En Nápoles, Edimburgo y Riga, recoged el coche la mañana en que salís de la ciudad, no el día que aterrizáis. En Islandia y el Algarve os espera en el aeropuerto de llegada. La costa báltica acaba en Tallin, así que el alquiler es solo de ida y cuesta algo más; en la Toscana se devuelve en el aeropuerto de Florencia. En Escocia se conduce por la izquierda.",
     },
   },
 };
