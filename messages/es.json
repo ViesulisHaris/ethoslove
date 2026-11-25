@@ -2743,6 +2743,8 @@
     },
     "stay": {
       "cta": "Buscar dónde dormir en {place}",
+      "title": "Dónde dormir",
+      "sub": "Cada una es para dos, con las noches del plan, desde el mismo viernes que la búsqueda de vuelos de arriba.",
       "via": "Alojamiento a través de Stay22."
     },
     "meet": {

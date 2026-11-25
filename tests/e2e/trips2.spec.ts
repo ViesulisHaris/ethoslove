@@ -233,16 +233,24 @@ test.describe("the pages by kind of trip", () => {
 });
 
 test.describe("a trip's page", () => {
-  test("E10 a place to stay, under a stop the trip sleeps in", async ({ page }) => {
+  test("E10 a place to stay: one closed row under Before you go, a search for each stop the trip sleeps in", async ({ page }) => {
     const events = await countEvents(page);
     await page.goto("/trips/lisbon-slow-weekend");
+    // None under the stops themselves: one partner action and one disclosure line a screen.
+    await expect(page.getByTestId("trip-stops").getByTestId("trip-stay")).toHaveCount(0);
+    const row = page.locator("#book details#stay");
+    await expect(row).not.toHaveAttribute("open", "");
+    // Beside flights, tickets and the car, second after the flights.
+    expect(await page.locator("#book details").evaluateAll((els) => els.map((el) => el.id))).toEqual(["flights", "stay", "tickets"]);
     const stays = page.getByTestId("trip-stay");
     await expect(stays).toHaveCount(1);
     await expect(stays).toBeHidden();
-    const alfama = page.getByTestId("trip-stops").locator(":scope > li").first();
-    await alfama.locator("summary").click();
-    const link = alfama.getByRole("link", { name: /Find a place to stay in Alfama/ });
+    await row.locator("summary").click();
+    const link = row.getByRole("link", { name: /Find a place to stay in Alfama, 2 nights/ });
     await expect(link).toBeVisible();
+    await expect(link).toContainText("Alfama");
+    await expect(link).toContainText("2 nights");
+    expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await expect(link).toHaveAttribute("target", "_blank");
     await expect(link).toHaveAttribute("rel", "noopener noreferrer");
     await expect(link).toHaveAttribute("href", /checkin=/);
@@ -256,19 +264,17 @@ test.describe("a trip's page", () => {
     expect(daysFromToday(checkin)).toBeGreaterThanOrEqual(21);
     expect(daysFromToday(checkin)).toBeLessThanOrEqual(27);
     expect(url.searchParams.get("checkout")).toBe(plusDays(checkin, 2));
-    await expect(alfama).not.toContainText("Stay22");
-    await expect(alfama).not.toContainText("commission");
+    await expect(row).not.toContainText("Stay22");
+    await expect(row).not.toContainText("commission");
     await clickInPlace(link);
     await expect.poll(async () => (await events()).filter((e) => e.name === "affiliate_click").map((e) => e.data)).toEqual([{ partner: "booking", placement: "trip_stay", trip: "lisbon-slow-weekend" }]);
-    const chiado = page.getByTestId("trip-stops").locator(":scope > li").nth(1);
-    await expect(chiado).toContainText("Chiado");
-    await expect(chiado.getByTestId("trip-stay")).toHaveCount(0);
   });
 
   test("E11 each night's stop gets its own nights", async ({ page }) => {
     await page.goto("/trips/baltic-coast");
     const stays = page.getByTestId("trip-stay");
     await expect(stays).toHaveCount(5);
+    await expect(page.locator("#stay li")).toHaveText([/^Riga\s*2 nights$/, /^Sigulda\s*1 night$/, /^Cēsis\s*1 night$/, /^Pärnu\s*1 night$/, /^Tallinn\s*1 night$/]);
     await expect(stays.first()).toHaveAttribute("href", /checkin=/);
     const urls = (await stays.evaluateAll((els) => els.map((el) => el.getAttribute("href")!))).map((h) => new URL(h).searchParams);
     const depart = urls[0].get("checkin")!;
@@ -280,7 +286,7 @@ test.describe("a trip's page", () => {
     });
     await page.goto("/es/trips/baltic-coast");
     const first = page.getByTestId("trip-stay").first();
-    await expect(first).toContainText("Buscar dónde dormir en Riga");
+    await expect(first).toHaveAttribute("aria-label", /^Buscar dónde dormir en Riga, 2 noches/);
     expect(new URL((await first.getAttribute("href"))!).searchParams.get("lang")).toBe("es");
   });
 
@@ -564,9 +570,8 @@ test.describe("300 words a page, and the designed pages' ruler", () => {
         await page.goto(path);
         expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), path).toBeLessThanOrEqual(0);
       }
-      const riga = page.getByTestId("trip-stops").locator(":scope > li").first();
-      await riga.locator("summary").tap();
-      await expect(riga.getByTestId("trip-stay")).toBeVisible();
+      await page.locator("#stay > summary").tap();
+      await expect(page.getByTestId("trip-stay").first()).toBeVisible();
       await page.locator("#flights > summary").tap();
       await expect(page.getByTestId("flight-finder")).toBeVisible();
       const fonts = await page.getByTestId("flight-finder").locator("input").evaluateAll((els) => els.map((el) => parseFloat(getComputedStyle(el).fontSize)));

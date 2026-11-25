@@ -87,7 +87,9 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   // The hero says the blurb's opening sentences (DESIGN-LESS-TEXT: thirty words beside the picture); the rest waits in "More about this trip".
   // Where that is over 24 words, its first sentence alone (the plan's second cut of the word budget: the Spanish Baltic coast was 302 words with thirty).
   const { lead, rest } = tripLead(trip.blurb[l]);
-  // Each stop the trip sleeps in gets a place to stay; the partner id is read here, on the server, and handed down.
+  // The stops the trip sleeps in, one hotel search each, in one closed row under "Before you go" beside flights,
+  // tickets and the car: one partner action and one disclosure line a screen (docs/MONETIZATION.md). The partner id
+  // is read here, on the server, and handed down.
   const stays = tripStays(trip);
   const partnerId = stayPartnerId();
   // Three facts: the kind is already said over the name.
@@ -202,9 +204,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               }}
             />
             <ol className="grid gap-3" data-testid="trip-stops">
-              {trip.stops.map((s, i) => {
-                const stay = stays.find((x) => x.stop === s.name);
-                return (
+              {trip.stops.map((s, i) => (
                 <li key={s.name} className="rounded-[24px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
                   <div className="flex items-start gap-3.5">
                     <span className="grid size-8 shrink-0 place-items-center rounded-full bg-rose text-[13px] font-bold text-white shadow-[0_6px_14px_-4px_rgba(90,20,45,0.55)]">{i + 1}</span>
@@ -217,20 +217,6 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                           <Plus aria-hidden="true" className="size-4 shrink-0 self-center text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                         </summary>
                         <p className="mt-1 text-[14.5px] leading-relaxed text-forest/70">{s.note[l]}</p>
-                        {stay ? (
-                          <>
-                            <StayLink query={stay.query} lat={stay.lat} lng={stay.lng} nightsBefore={stay.nightsBefore} nights={stay.nights} partnerId={partnerId} trip={trip.id} className="group/stay inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
-                              {ta("stay.cta", { place: stopName(s, l) })}
-                              <ArrowUpRight aria-hidden="true" className="size-3.5 transition-transform group-hover/stay:translate-x-0.5 group-hover/stay:-translate-y-0.5" />
-                              <span className="sr-only">({ta("newTab")})</span>
-                            </StayLink>
-                            {partnerId ? (
-                              <p className="mt-1 text-[12.5px] leading-snug text-forest/65">
-                                {ta("stay.via")} {ta("disclosureBoth")}
-                              </p>
-                            ) : null}
-                          </>
-                        ) : null}
                       </details>
                       {/* One link a stop: the city's own date ideas where it is one of ours, else the map of date spots around it. */}
                       <div className="-mb-2.5 flex flex-wrap gap-x-5">
@@ -252,8 +238,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                     </div>
                   </div>
                 </li>
-                );
-              })}
+              ))}
             </ol>
           </div>
           {rest ? (
@@ -312,7 +297,7 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
         </div>
       </section>
 
-      {/* Flights, tickets and the car: three closed rows, each one tap away. The commission line stays inside its row, beside its links. */}
+      {/* Flights, places to stay, tickets and the car: closed rows, each one tap away. The commission line stays inside its row, beside its links. */}
       <section id="book" className="scroll-mt-24 bg-paper py-16 lg:py-24">
         <div className="container-x">
           <p data-reveal className="text-eyebrow text-rose-deep">
@@ -329,6 +314,49 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               </summary>
               <FlightFinder to={trip.flyTo} placement="trip_flights" trip={trip.id} nights={tripNights(trip)} className="pb-5" />
             </details>
+            {stays.length > 0 ? (
+              <details id="stay" data-testid="trip-stays" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
+                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                  {ta("stay.title")}
+                  <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                </summary>
+                <div className="pb-5">
+                  <p className="max-w-xl text-[15px] leading-relaxed text-forest/70">{ta("stay.sub")}</p>
+                  <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {stays.map((stay) => {
+                      const stop = trip.stops.find((x) => x.name === stay.stop)!;
+                      const nights = t("detail.route.nights", { count: stay.nights });
+                      return (
+                        <li key={stay.stop}>
+                          <StayLink
+                            query={stay.query}
+                            lat={stay.lat}
+                            lng={stay.lng}
+                            nightsBefore={stay.nightsBefore}
+                            nights={stay.nights}
+                            partnerId={partnerId}
+                            trip={trip.id}
+                            label={`${ta("stay.cta", { place: stopName(stop, l) })}, ${nights} (${ta("newTab")})`}
+                            className="group/stay flex h-full min-h-[72px] items-center gap-3.5 rounded-[24px] bg-blush-paper/60 p-4 ring-1 ring-forest/5 transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-blush-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest active:translate-y-0 motion-reduce:transition-none"
+                          >
+                            <span className="min-w-0 flex-1">
+                              <span className="block font-display text-[19px] leading-tight text-forest">{stopName(stop, l)}</span>
+                              <span className="mt-0.5 block text-[13px] text-forest/65">{nights}</span>
+                            </span>
+                            <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-rose-deep transition-transform group-hover/stay:translate-x-0.5 group-hover/stay:-translate-y-0.5" />
+                          </StayLink>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  {partnerId ? (
+                    <p className="mt-3 text-[12.5px] leading-snug text-forest/65">
+                      {ta("stay.via")} {ta("disclosureBoth")}
+                    </p>
+                  ) : null}
+                </div>
+              </details>
+            ) : null}
             {tickets.length > 0 ? (
               <details id="tickets" className="group scroll-mt-24 rounded-[24px] bg-card px-5 shadow-soft ring-1 ring-forest/5 sm:px-6">
                 <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[24px] font-display text-[22px] leading-tight text-forest outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
