@@ -115,8 +115,8 @@ describe("legal documents", () => {
 
   it("the privacy policy names the rooms entry, in both languages, beside the first visit's", () => {
     const sentences = {
-      en: /We also keep, in your browser's storage \(ethos-rooms, 30 days\)[^.]*\./,
-      es: /Guardamos también, en el almacenamiento de tu navegador \(ethos-rooms, 30 días\)[^.]*\./,
+      en: /We keep, in your browser's storage \(ethos-rooms, 30 days\)[^.]*\./,
+      es: /Guardamos, en el almacenamiento de tu navegador \(ethos-rooms, 30 días\)[^.]*\./,
     };
     for (const locale of ["en", "es"] as const) {
       const text = all(LEGAL_DOCS.privacy[locale]);
@@ -127,6 +127,9 @@ describe("legal documents", () => {
       expect(text.indexOf(ROOMS_KEY)).toBeLessThan(text.indexOf("ethos-free-tier"));
       expect(sentence).not.toMatch(/Spain|España|!/);
     }
+    // loop2-C8: the rooms sentence said "also keep", right before the next one's "also keep".
+    expect(all(LEGAL_DOCS.privacy.en)).not.toContain("also keep, in your browser's storage (ethos-rooms");
+    expect(all(LEGAL_DOCS.privacy.es)).not.toContain("también, en el almacenamiento de tu navegador (ethos-rooms");
   });
 
   it("carry none of the dropped offers: discounts, codes and the paid song", () => {
