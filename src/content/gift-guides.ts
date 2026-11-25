@@ -1779,7 +1779,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "halfway",
       lead: [
         "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. Ethos does not mail anything. What it adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
-        "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two A6 cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template.",
+        "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two postcard-size cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template.",
       ],
       ideas: [
         {
@@ -1837,7 +1837,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "What mailing and customs do to a box",
-          body: "Across a border, food is the risk: fresh food, anything homemade and meat are often stopped, and sealed packaged snacks usually pass. Fill in the customs form honestly as a gift and list everything. Parcels take days to weeks, so nothing should melt, spill or expire, and the gift on the phone does not depend on when the box arrives.",
+          body: "Across a border, food is the risk: fresh food, anything homemade and meat are often stopped, and sealed packaged snacks usually pass. Fill out the customs form honestly as a gift and list everything. Parcels take days to weeks, so nothing should melt, spill or expire, and the gift on the phone does not depend on when the box arrives.",
         },
         {
           heading: "When to send the link",
@@ -1846,7 +1846,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       ],
       faq: [
         { q: "Does Ethos mail the care package?", a: "No. Ethos sends nothing by mail. You pack and mail the box yourself; Ethos makes the digital gift that goes with it, as a link and as a printed card with its QR code." },
-        { q: "How do I put a digital gift inside a physical box?", a: "Publish the gift, then print its QR code as a Print-ready card from the share screen, or later under QR card in My gifts. It prints two A6 cards to a page; lay one on top of the box." },
+        { q: "How do I put a digital gift inside a physical box?", a: "Publish the gift, then print its QR code as a Print-ready card from the share screen, or later under QR card in My gifts. It prints two postcard-size cards to a page; lay one on top of the box." },
         { q: "Can the gift open when the box arrives?", a: "Yes, on a paid gift: in the editor, under Extras, switch on “Schedule the reveal” and set the date, the hour and their time zone. Until then the card’s link shows a countdown." },
         { q: "What should I put in a long-distance care package?", a: "Something to eat from your side, something worn, something that smells of you, and one thing that only the two of you understand. Pack what weighs little and survives a week in transit." },
       ],
@@ -2182,7 +2182,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "unwrapped",
           heading: "Your story counted, present by present",
           brief: "Presents opened one by one to numbers that tell your story.",
-          body: "Some chapters are best told in numbers. In Unwrapped, wrapped presents open one by one to figures that count up, up to eight, each written by you, and a gold present prints the lot as a receipt. Count the things nobody would think to photograph.",
+          body: "Some chapters are best told in numbers. In Unwrapped, wrapped presents open one by one to figures that count up, up to eight, each written by you, and a gold present prints them all as a receipt. Count the things nobody would think to photograph.",
           line: { field: "stats", where: "One of the numbers", text: "3 times lost at the same traffic circle" },
         },
         {

@@ -622,6 +622,18 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
     for (const href of ["/gifts/photo-album", "/occasions/anniversary"]) expect(hrefs("memory-book")).toContain(href);
   });
 
+  it("the months and the new pages write American English, and dates the American way", () => {
+    // The brief asks for American spelling; these got through a first pass (gifts2 deep test, D3).
+    const BRITISH = /\b(holidays?|tea towels?|cupboards?|timetables?|platforms?|keen|at theirs|double figures|fill in the \w+ form|prints the lot|A6|colour|favourite|mum)\b/i;
+    // A date written day.month ("06.14") reads as foreign to an American; 6/14 does not.
+    const DOTTED_DATE = /\b\d{1,2}\.\d{1,2}\b/;
+    const texts = [
+      ...MONTHS.flatMap((n) => strings(MONTH_GUIDES[n].en)),
+      ...(["apology-for-him", "apology-for-her", "long-distance-care-package", "surprise", "memory-book"] as const).flatMap((slug) => strings(GIFT_GUIDES[slug].en)),
+    ];
+    expect(texts.filter((t) => BRITISH.test(t) || DOTTED_DATE.test(t))).toEqual([]);
+  });
+
   it("no idea promises more photos, rooms or stops than its gift holds", () => {
     // Month 24 once headed Museum "Twenty-four rooms, one a month"; Museum takes twenty photos (manifest photos.max).
     const EN = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];

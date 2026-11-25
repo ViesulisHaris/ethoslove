@@ -210,7 +210,7 @@ const month6: Month = {
         template: "our-timeline",
         heading: "Six dated stops on one road",
         brief: "A road down the page, one dated photo at each bend, one for each month.",
-        body: "Give it one stop for each month: the first date, the first trip, the evening you stopped pretending you were not keen. Our Timeline draws a road down the page as they scroll, and pins a photo with its date at every bend. It needs two photos at least and holds twenty.",
+        body: "Give it one stop for each month: the first date, the first trip, the evening you stopped pretending it was casual. Our Timeline draws a road down the page as they scroll, and pins a photo with its date at every bend. It needs two photos at least and holds twenty.",
         line: { field: "dates", where: "The date on a stop", text: "March 4, the night it rained" },
       },
       {
@@ -496,7 +496,7 @@ const month24: Month = {
     date: { kind: "romantic", title: "A beach, a cotton blanket and the sunset", line: "Take the blanket you gave them and stay until dark." },
     stage: [
       "By two years there is often a shared home or talk of one, a shared calendar and a few friends in common, and each family has been met more than once. The novelty has worn off and something steadier has taken its place, which is the thing worth marking. The jokes have histories now.",
-      "The second anniversary is cotton by tradition, and a phone cannot be cotton. So send the gift on the screen and give the cotton by hand: a shirt they will wear, a good blanket, a tea towel from the place you met. Skip the speech about forever, and skip anything that could have gone out at month two.",
+      "The second anniversary is cotton by tradition, and a phone cannot be cotton. So send the gift on the screen and give the cotton by hand: a shirt they will wear, a good blanket, a dish towel from the place you met. Skip the speech about forever, and skip anything that could have gone out at month two.",
     ],
     faq: [
       { q: "What is the traditional gift for a second anniversary?", a: "Cotton. Paper comes first at one year, then cotton at two, for the way it gets softer with use. A digital gift cannot be cotton, so pair it with something that is." },
@@ -855,7 +855,7 @@ const month4: Month = {
         template: "bouquet",
         heading: "Flowers that sum up the trip in a line",
         brief: "Build the bouquet around a flower from the trip, and name the place on the card.",
-        body: "If the trip had a flower in it, a field you stopped at or a stall at the market, put that one in the Bouquet you build. You arrange up to 24 stems and they watch it fill in one at a time. The card holds thirty characters, which is room for the place and a date.",
+        body: "If the trip had a flower in it, a field you stopped at or a stand at a farmers market, put that one in the Bouquet you build. You arrange up to 24 stems and they watch it fill in one at a time. The card holds thirty characters, which is room for the place and a date.",
         line: { field: "cardNote", where: "The bouquet’s card", text: "From the market in the rain" },
       },
     ],
@@ -1419,12 +1419,12 @@ const month9: Month = {
 
 const month10: Month = {
   en: {
-    title: "10 Month Anniversary Gifts in Double Figures",
-    description: "Ten reasons in a jar, ten photos, ten months of evidence read out by cats: a 10 month anniversary is the first count in double figures.",
+    title: "10 Month Anniversary Gifts in Double Digits",
+    description: "Ten reasons in a jar, ten photos, ten months of evidence read out by cats: a 10 month anniversary is the first count in double digits.",
     h1: "10 month anniversary gifts",
     label: "10 months",
     hero: {
-      line: "Double figures. The count finally needs two digits.",
+      line: "Double digits. The month count finally needs a second one.",
       sentence: "Ten is a satisfying number to make a gift around: ten photos, ten findings, ten reasons, each one a month you can point to.",
     },
     ideasTitle: "Five that count to ten",
@@ -1433,7 +1433,7 @@ const month10: Month = {
         template: "scrapbook",
         heading: "Ten photos and a torn note in your hand",
         body: "One photo for each month makes ten, a round fill for a Scrapbook that takes twelve. They drop in as polaroids that develop between washi tape and flowers. The torn note in handwriting holds ninety characters: write it as the caption to all ten months together, the line you would scribble in the margin.",
-        line: { field: "quote", where: "The torn note", text: "Ten months of you leaving the cupboard doors open. I counted. I don’t mind." },
+        line: { field: "quote", where: "The torn note", text: "Ten months of you leaving the cabinet doors open. I counted. I don’t mind." },
       },
       {
         template: "xoxo",
@@ -1786,7 +1786,7 @@ const month14: Month = {
     h1: "14 month anniversary gifts",
     label: "14 months",
     hero: {
-      line: "A drawer at theirs, a key on your ring. The everyday is shared now.",
+      line: "A drawer at their place, a key on your ring. The everyday is shared now.",
       sentence: "Fourteen months is when ordinary life merges, and the best gift names the small shared things before they stop feeling new.",
     },
     ideasTitle: "Five about the things that are ours",
@@ -1810,7 +1810,7 @@ const month14: Month = {
         heading: "A candle tag with the date it became home",
         brief: "A window, a warm mug, photos on pegs, and a candle with a dated tag.",
         body: "Fourteen months is the time to put a date on the candle’s tag, which holds twenty-four characters. The candle sits in Fireside’s window, with snow or leaves outside, a mug of cocoa, tea or coffee, and photos on a string of wooden pegs. Once the candle is lit, your letter unfolds from the blanket.",
-        line: { field: "tag", where: "The candle’s tag", text: "home since 03.14" },
+        line: { field: "tag", where: "The candle’s tag", text: "home since 3/14" },
       },
       {
         template: "recipe-box",
@@ -1867,7 +1867,7 @@ const month14: Month = {
         heading: "La vela con la fecha en que fue casa",
         brief: "Una ventana, una taza caliente, fotos con pinzas y una vela con su etiqueta fechada.",
         body: "Catorce meses es el momento de poner fecha en la etiqueta de la vela, que admite veinticuatro caracteres. La vela está en la ventana de Junto al fuego, con nieve u hojas fuera, una taza de chocolate, té o café y fotos colgadas con pinzas de madera. Cuando se enciende, tu carta se despliega de la manta.",
-        line: { field: "tag", where: "La etiqueta de la vela", text: "casa desde el 14.03" },
+        line: { field: "tag", where: "La etiqueta de la vela", text: "casa desde el 14/3" },
       },
       {
         template: "recipe-box",
@@ -2058,7 +2058,7 @@ const month16: Month = {
         heading: "A pinned note that says where it started",
         brief: "Polaroids and torn notes, with a pinned note naming where your travels began.",
         body: "Write where the traveling started on the pinned note, in forty characters: the first station, the first bad motel. Scrapbook keeps that note among its polaroids, stamps and torn notes; pick the Seaside pages if the next trip has a coast. The rest of the pages fill with photos.",
-        line: { field: "tag", where: "The pinned note", text: "Platform 4, the first one" },
+        line: { field: "tag", where: "The pinned note", text: "Track 4, the first one" },
       },
       {
         template: "midnight-countdown",
@@ -2301,7 +2301,7 @@ const month18: Month = {
         heading: "Eighteen reasons, folded into a jar",
         brief: "Eighteen folded notes, one a month, shaken out of a jar one at a time.",
         body: "Every time they shake the phone, one folded note tumbles out of Jar of Reasons, which takes three notes at least and a hundred at most, each up to 160 characters. Eighteen is a good count for a year and a half. Write one about each month, in order, and pin a photo to the ones that have one.",
-        line: { field: "reasons", where: "One note in the jar", text: "Month 14: you learned the bus timetable so I would not have to." },
+        line: { field: "reasons", where: "One note in the jar", text: "Month 14: you learned the bus schedule so I would not have to." },
       },
       {
         template: "our-timeline",
@@ -2913,7 +2913,7 @@ const month23: Month = {
         template: "constellations",
         heading: "Stars for the places you have been",
         brief: "Each photo a star for a place you have been, joined into one shape.",
-        body: "Each photo in Constellations becomes a star, between three and twelve, and the stars join into a heart, an infinity sign or a star. For twenty-three months, give every star a place: the city, the beach, the platform where you missed the train. The last line appears when the shape is whole.",
+        body: "Each photo in Constellations becomes a star, between three and twelve, and the stars join into a heart, an infinity sign or a star. For twenty-three months, give every star a place: the city, the beach, the track where you missed the train. The last line appears when the shape is whole.",
         line: { field: "finalLine", where: "The line when it completes", text: "Twelve places, one sky, and two years in a month." },
       },
       {
@@ -2934,12 +2934,12 @@ const month23: Month = {
         heading: "Two years, engraved in a locket, early",
         brief: "A locket engraved with your second anniversary’s date, a month early.",
         body: "In Keepsake, one tap opens the gold locket onto a photo; the engraving on its lid holds eighteen characters. Engrave the date of your second anniversary a month before it comes, as a promise. Around it in the parcel: a ticket, a torn word, dried flowers and your letter on aged paper.",
-        line: { field: "engraving", where: "The engraving", text: "two years, 06.14" },
+        line: { field: "engraving", where: "The engraving", text: "two years, 6/14" },
       },
     ],
     date: { kind: "cheap", title: "Ice cream and nowhere to be, again", line: "Walk the route of your first walk together." },
     stage: [
-      "Twenty-three months is the eve of the second anniversary. By now there is a map of places, cities visited, a shared address, the platform where one of you missed a train, and how to mark two years is on both your minds. It is a natural month to look back at where you have been.",
+      "Twenty-three months is the eve of the second anniversary. By now there is a map of places, cities visited, a shared address, the station where one of you missed a train, and how to mark two years is on both your minds. It is a natural month to look back at where you have been.",
       "About thirty days are left, and they are worth using. Hand over the second-anniversary gift now and the day itself arrives empty; let the run-up pass unnoticed and you waste it. This month looks back at the map and counts down, and the gift can go out now, set to open on the anniversary.",
     ],
     faq: [
@@ -2991,7 +2991,7 @@ const month23: Month = {
         heading: "Dos años, grabados en un relicario, antes de tiempo",
         brief: "Un relicario grabado con la fecha de vuestro segundo aniversario, un mes antes.",
         body: "En Recuerdo, un toque abre el relicario dorado y aparece la foto de dentro; el grabado de la tapa admite dieciocho caracteres. Graba la fecha de vuestro segundo aniversario un mes antes de que llegue, como promesa. Alrededor, en el paquete: un billete, una palabra arrancada, flores secas y tu carta en papel envejecido.",
-        line: { field: "engraving", where: "El grabado", text: "dos años, 14.06" },
+        line: { field: "engraving", where: "El grabado", text: "dos años, 14/6" },
       },
     ],
     date: { kind: "cheap", title: "Helado y ningún sitio al que ir, otra vez", line: "Repetid el recorrido de vuestro primer paseo." },
