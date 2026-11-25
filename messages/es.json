@@ -2154,24 +2154,24 @@
     "tonight": {
       "label": "El planificador",
       "inCity": "Adónde ir en {city}",
-      "sentence": "Planead una cita <mood></mood> <when></when>. <length></length>, <budget></budget>.",
-      "sentenceKind": "Planead una de estas ideas para <when></when>. <length></length>, <budget></budget>.",
-      "sentenceMore": "<setting></setting>, <reach></reach>.",
-      "sentenceMoreNoReach": "<setting></setting>.",
+      "sentence": "Planead una cita <mood></mood> <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceKind": "Planead una de estas ideas para <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceMore": "<setting>,</setting> <reach>.</reach>",
+      "sentenceMoreNoReach": "<setting>.</setting>",
       "lengthLabel": "Cuánto tiempo",
       "budgetLabel": "Presupuesto",
       "settingLabel": "Bajo techo o al aire libre",
       "setting": {
-        "any": "Bajo techo o fuera",
+        "any": "Dentro o fuera",
         "indoors": "Bajo techo",
         "outdoors": "Al aire libre"
       },
       "reachLabel": "Distancia",
       "reach": {
-        "10": "a 10 minutos andando",
-        "20": "a 20 minutos andando",
-        "30": "a 30 minutos andando",
-        "any": "a cualquier distancia"
+        "10": "a 10 min a pie",
+        "20": "a 20 min a pie",
+        "30": "a 30 min a pie",
+        "any": "cerca o lejos"
       },
       "reachDenied": "No hemos podido saber dónde estáis, así que la distancia no se aplica. Lo demás sigue igual.",
       "reachNone": "Este navegador no puede compartir la ubicación, así que la distancia no se aplica.",

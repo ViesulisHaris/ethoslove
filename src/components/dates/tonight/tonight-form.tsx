@@ -51,15 +51,20 @@ const room = (label: string): string => `${label}\u00a0`;
 
 /**
  * One choice inside the sentence: a native select, named by aria-label, with a small chevron. A
- * hidden name inside the sentence was read twice, once as text and once as the select's name.
+ * hidden name inside the sentence was read twice, once as text and once as the select's name. The
+ * punctuation after it (`after`, the tag's own text in the message) never wraps away from it: WebKit
+ * began a line with the full stop (dates2-T4).
  */
-function Choice({ name, value, held, onChange, children }: { name: string; value: string; held: boolean; onChange: (value: string) => void; children: ReactNode }) {
+function Choice({ name, value, held, onChange, after, children }: { name: string; value: string; held: boolean; onChange: (value: string) => void; after?: ReactNode; children: ReactNode }) {
   return (
-    <span className="relative inline-flex max-w-full align-baseline">
-      <select aria-label={name} value={value} disabled={held} onChange={(e) => onChange(e.target.value)} className={SELECT}>
-        {children}
-      </select>
-      <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-0.5 size-4 -translate-y-1/2 text-page-body" />
+    <span className="inline-flex max-w-full items-baseline align-baseline whitespace-nowrap">
+      <span className="relative inline-flex max-w-full">
+        <select aria-label={name} value={value} disabled={held} onChange={(e) => onChange(e.target.value)} className={SELECT}>
+          {children}
+        </select>
+        <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-0.5 size-4 -translate-y-1/2 text-page-body" />
+      </span>
+      {after}
     </span>
   );
 }
@@ -78,8 +83,8 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
   const ready = useSyncExternalStore(noSubscribe, () => true, () => false);
   const blocked = Boolean(!ready || busy || (waiting && !onWaiting));
   const parts = {
-    mood: () => (
-      <Choice held={!ready} name={t("ideas.vibes")} value={choice.vibe ?? ""} onChange={(v) => onChoice({ ...choice, vibe: (v || undefined) as Vibe | undefined })}>
+    mood: (after: ReactNode) => (
+      <Choice after={after} held={!ready} name={t("ideas.vibes")} value={choice.vibe ?? ""} onChange={(v) => onChoice({ ...choice, vibe: (v || undefined) as Vibe | undefined })}>
         <option value="">{room(t("tonight.mood.any"))}</option>
         {TONIGHT_VIBES.map((vibe) => (
           <option key={vibe} value={vibe}>
@@ -88,8 +93,8 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
         ))}
       </Choice>
     ),
-    when: () => (
-      <Choice held={!ready} name={t("when.label")} value={when} onChange={(v) => onWhen(v as TonightWhen)}>
+    when: (after: ReactNode) => (
+      <Choice after={after} held={!ready} name={t("when.label")} value={when} onChange={(v) => onWhen(v as TonightWhen)}>
         {whens.map((w) => (
           <option key={w.value} value={w.value}>
             {room(w.label)}
@@ -97,16 +102,16 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
         ))}
       </Choice>
     ),
-    length: () => (
-      <Choice held={!ready} name={t("tonight.lengthLabel")} value={choice.length ?? ""} onChange={(v) => onChoice({ ...choice, length: (v || undefined) as TonightLength | undefined })}>
+    length: (after: ReactNode) => (
+      <Choice after={after} held={!ready} name={t("tonight.lengthLabel")} value={choice.length ?? ""} onChange={(v) => onChoice({ ...choice, length: (v || undefined) as TonightLength | undefined })}>
         <option value="">{room(t("tonight.length.any"))}</option>
         <option value="short">{room(t("tonight.length.short"))}</option>
         <option value="medium">{room(t("tonight.length.medium"))}</option>
         <option value="long">{room(t("tonight.length.long"))}</option>
       </Choice>
     ),
-    budget: () => (
-      <Choice held={!ready} name={t("tonight.budgetLabel")} value={choice.budget === undefined ? "" : String(choice.budget)} onChange={(v) => onChoice({ ...choice, budget: v === "" ? undefined : (Number(v) as 0 | 1 | 2 | 3) })}>
+    budget: (after: ReactNode) => (
+      <Choice after={after} held={!ready} name={t("tonight.budgetLabel")} value={choice.budget === undefined ? "" : String(choice.budget)} onChange={(v) => onChoice({ ...choice, budget: v === "" ? undefined : (Number(v) as 0 | 1 | 2 | 3) })}>
         <option value="">{room(t("tonight.budget.any"))}</option>
         <option value="0">{room(t("tonight.budget.0"))}</option>
         <option value="1">{room(t("tonight.budget.1"))}</option>
@@ -116,15 +121,15 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
     ),
   };
   const more = {
-    setting: () => (
-      <Choice held={!ready} name={t("tonight.settingLabel")} value={choice.setting ?? ""} onChange={(v) => onChoice({ ...choice, setting: (v || undefined) as TonightSetting | undefined })}>
+    setting: (after: ReactNode) => (
+      <Choice after={after} held={!ready} name={t("tonight.settingLabel")} value={choice.setting ?? ""} onChange={(v) => onChoice({ ...choice, setting: (v || undefined) as TonightSetting | undefined })}>
         <option value="">{room(t("tonight.setting.any"))}</option>
         <option value="indoors">{room(t("tonight.setting.indoors"))}</option>
         <option value="outdoors">{room(t("tonight.setting.outdoors"))}</option>
       </Choice>
     ),
-    reach: () => (
-      <Choice held={!ready} name={t("tonight.reachLabel")} value={choice.reach === undefined ? "" : String(choice.reach)} onChange={(v) => onChoice({ ...choice, reach: v === "" ? undefined : (Number(v) as ReachMinutes) })}>
+    reach: (after: ReactNode) => (
+      <Choice after={after} held={!ready} name={t("tonight.reachLabel")} value={choice.reach === undefined ? "" : String(choice.reach)} onChange={(v) => onChoice({ ...choice, reach: v === "" ? undefined : (Number(v) as ReachMinutes) })}>
         <option value="">{room(t("tonight.reach.any"))}</option>
         {REACH_MINUTES.map((m) => (
           <option key={m} value={String(m)}>
@@ -139,11 +144,13 @@ export function TonightForm({ choice, when, whens, ofKind, waiting, onWaiting, b
     <div>
       <p className="font-display text-[1.375rem] leading-[2.9rem] text-page-ink">
         {ofKind ? t.rich("tonight.sentenceKind", { when: parts.when, length: parts.length, budget: parts.budget }) : t.rich("tonight.sentence", parts)}{" "}
-        {/* The third sentence on its own line, in a block of one height whatever is chosen and whether
-            or not the distance can be offered: a select is as wide as its choice, and nothing below moves. */}
-        <span className="block min-h-[5.8rem] sm:min-h-[2.9rem]">{canLocate ? t.rich("tonight.sentenceMore", more) : t.rich("tonight.sentenceMoreNoReach", { setting: more.setting })}</span>
+        {/* The third sentence on its own line, one line high whatever is chosen and whether or not the
+            distance can be offered: its options are short enough for one line at 375 px in both languages
+            (dates2-T3), so a choice kept from last time does not move what is below. */}
+        <span className="block min-h-[2.9rem]">{canLocate ? t.rich("tonight.sentenceMore", more) : t.rich("tonight.sentenceMoreNoReach", { setting: more.setting })}</span>
       </p>
-      <p role="status" className="mt-1 min-h-5 text-sm text-page-body">
+      {/* Empty and of no height until a press sets the distance back: the line may push the button then. */}
+      <p role="status" className="mt-1 text-sm text-page-body empty:mt-0">
         {reachNotice ?? null}
       </p>
       <button

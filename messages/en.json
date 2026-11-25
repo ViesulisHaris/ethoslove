@@ -2154,10 +2154,10 @@
     "tonight": {
       "label": "The planner",
       "inCity": "Where to go in {city}",
-      "sentence": "Plan <mood></mood> date <when></when>. <length></length>, <budget></budget>.",
-      "sentenceKind": "Plan one of these <when></when>. <length></length>, <budget></budget>.",
-      "sentenceMore": "<setting></setting>, <reach></reach>.",
-      "sentenceMoreNoReach": "<setting></setting>.",
+      "sentence": "Plan <mood></mood> date <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceKind": "Plan one of these <when>.</when> <length>,</length> <budget>.</budget>",
+      "sentenceMore": "<setting>,</setting> <reach>.</reach>",
+      "sentenceMoreNoReach": "<setting>.</setting>",
       "lengthLabel": "How long",
       "budgetLabel": "Budget",
       "settingLabel": "Indoors or outdoors",
@@ -2168,9 +2168,9 @@
       },
       "reachLabel": "Distance",
       "reach": {
-        "10": "10 minutes’ walk from me",
-        "20": "20 minutes’ walk from me",
-        "30": "30 minutes’ walk from me",
+        "10": "10 min walk from here",
+        "20": "20 min walk from here",
+        "30": "30 min walk from here",
         "any": "any distance"
       },
       "reachDenied": "We couldn’t get your position, so distance is off. Nothing else changed.",

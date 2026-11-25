@@ -165,7 +165,7 @@ test.describe("plan our date tonight", () => {
     await mockWorld(page, { wet: true });
     await pinClock(page);
     await openLisbon(page, `/es/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisboa&date=${today()}`);
-    expect(await sentence(page)).toBe("Planead una cita de cualquier tipo esta noche. Cualquier duración, con cualquier presupuesto. Bajo techo o fuera, a cualquier distancia.");
+    expect(await sentence(page)).toBe("Planead una cita de cualquier tipo esta noche. Cualquier duración, con cualquier presupuesto. Dentro o fuera, cerca o lejos.");
     await expect(planButton(page, "Planear")).toBeVisible();
     await page.getByRole("combobox", { name: "Presupuesto" }).selectOption("0");
     await planButton(page, "Planear").click();

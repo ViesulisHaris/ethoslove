@@ -615,7 +615,7 @@ test.describe("dates2: new pages", () => {
     await holdTheDatabase(page, { available: true, posts: [] });
     await pinClock(page);
     await openLisbon(page, `/es/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisboa&date=${today()}`);
-    expect(await sentence(page)).toMatch(/Bajo techo o fuera, a cualquier distancia\.$/);
+    expect(await sentence(page)).toMatch(/Dentro o fuera, cerca o lejos\.$/);
     await seedPlan(page, { v: 1, date: today(), where: "Lisboa", idea: "pasta-and-a-slow-walk", stops: PLAN_STOPS });
     await page.goto("/es/plan");
     await page.getByRole("button", { name: "Marcar como hecha" }).click(PLAN_COMPILES);
