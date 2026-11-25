@@ -4,7 +4,8 @@ import type { TripIdeaKind } from "@/lib/trips/idea-kinds";
  * The words of the pages by kind of trip (`/trips/ideas/<kind>`, lib/trips/idea-kinds.ts).
  * `TRIP_IDEAS_UI` is what both pages say; `TRIP_IDEA_COPY` is each kind's own, with `fits`, the one
  * line of why for each trip on it (by trip id), each read against the trip's stops and plan in
- * lib/trips/presets.ts. `hero` is the trip whose photograph is in the hero. `{count}` is the
+ * lib/trips/presets.ts. `hero` is the trip whose photograph is in the hero: the last card,
+ * never one of the first two, so a phone never shows one photograph twice in a row. `{count}` is the
  * kind's number of trips, `{days}` and `{kind}` a card's. Spain Spanish, vosotros.
  */
 type L = { en: string; es: string };
@@ -20,7 +21,7 @@ export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line:
 
 export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
   "weekend-getaways": {
-    hero: "lisbon-slow-weekend",
+    hero: "amsterdam-by-bike",
     nav: { en: "Weekend getaways", es: "Escapadas de fin de semana" },
     title: { en: "Weekend getaways for couples: {count} city breaks in Europe", es: "Escapadas de fin de semana en pareja: {count} ciudades" },
     description: {
@@ -45,7 +46,7 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     },
   },
   "road-trips": {
-    hero: "amalfi-coast",
+    hero: "algarve-coast",
     nav: { en: "Road trips", es: "Viajes en coche" },
     title: { en: "Road trips for couples in Europe: {count} routes by car", es: "Viajes en coche por Europa en pareja: {count} rutas" },
     description: {

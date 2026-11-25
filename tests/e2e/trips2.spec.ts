@@ -205,6 +205,8 @@ test.describe("the pages by kind of trip", () => {
     await expect(cards).toHaveCount(4);
     expect(await cards.evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).toEqual(["lisbon-slow-weekend", "paris-without-cliches", "copenhagen-hygge", "amsterdam-by-bike"]);
     await expect(cards.first().locator("p")).toHaveText("Three days on foot, sleeping in Alfama.");
+    // The hero's photograph is the last card's, not the first's.
+    await expect(page.locator("[data-line]")).toHaveText("Amsterdam by bike");
     for (let i = 0; i < 4; i++) await expect(cards.nth(i).locator("p")).toHaveText(/\.$/);
     expect(listOf(await ldNodes(page), "ItemList")?.itemListElement).toHaveLength(4);
     const why = page.locator("details[data-more-about]");

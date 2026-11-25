@@ -83,6 +83,14 @@ describe("the pages by kind of trip", () => {
     expect(TRIP_IDEA_COPY["road-trips"].title.en.startsWith("Road trips")).toBe(true);
   });
 
+  it("K8 the hero's photograph is not one of the first two cards", () => {
+    for (const k of TRIP_IDEA_KINDS) {
+      const list = ideaTrips(k).map((t) => t.id);
+      expect(list, k).toContain(TRIP_IDEA_COPY[k].hero);
+      expect(list.slice(0, 2), k).not.toContain(TRIP_IDEA_COPY[k].hero);
+    }
+  });
+
   it("K7 the addresses are free", () => {
     const tripIds = TRIPS.map((t) => t.id);
     for (const k of TRIP_IDEA_CANDIDATES) expect(tripIds).not.toContain(k);
