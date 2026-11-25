@@ -1,7 +1,7 @@
 import { devices, expect, test, webkit, type Browser, type BrowserContext, type Page } from "@playwright/test";
 import { GAME_MOVES, GAMES } from "../../src/lib/games/catalogue";
 import { DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "../../src/lib/games/content";
-import { dayOf } from "../../src/lib/games/daily";
+import { dailyPair, dayOf, encodeDaily } from "../../src/lib/games/daily";
 import { DRAW_WORDS } from "../../src/lib/games/draw";
 import { DECK_IDS, DECKS } from "../../src/lib/games/questions";
 import { THIS_PAIRS } from "../../src/lib/games/this-or-that";
@@ -338,6 +338,33 @@ test("W6b: the sender's own link opened in a new tab (as a chat app opens it) is
   await open(fresh, "/games/weekly");
   await expect(weekly(fresh)).toHaveAttribute("data-phase", "ask");
   await Promise.all([one.context.close(), two.context.close()]);
+});
+
+test("W15: a name in Arabic keeps its letters joined over the reveal, here and on today's question; a Latin name keeps the label's spacing", async ({ page }) => {
+  const spacing = (locator: ReturnType<Page["locator"]>) => locator.evaluate((el) => getComputedStyle(el).letterSpacing);
+  const week = thisWeek();
+  const set = weeklySet(week);
+  for (const [name, joined] of [
+    ["محمد", true],
+    ["Ana", false],
+  ] as const) {
+    await open(page, `/games/weekly${encodeWeekly({ week, setId: set.id, from: { name, picks: [1, 1, 0] }, to: { name: "Sam", picks: [0, 1, 0] } })}`);
+    const label = page.locator("[data-weekly] [aria-hidden=true] span").first();
+    await expect(label).toHaveText(name);
+    if (joined) expect(await spacing(label)).toMatch(/^(normal|0px)$/);
+    else expect(parseFloat(await spacing(label))).toBeGreaterThan(1);
+    const day = dayOf(Date.now());
+    await page.goto(`/games/today${encodeDaily({ day, pairId: dailyPair(day).id, from: { name, side: 1 }, to: { name: "Sam", side: 0 } })}`);
+    await expect(page.locator("[data-today][data-ready]")).toHaveCount(1);
+    // The letter-spacing the name's own text is drawn with (its label also holds a hidden colon).
+    const drawn = await page.locator("[data-reveal-card]").first().evaluate((card, name) => {
+      const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) if (node.textContent === name) return getComputedStyle(node.parentElement!).letterSpacing;
+      return null;
+    }, name);
+    if (joined) expect(drawn).toMatch(/^(normal|0px)$/);
+    else expect(parseFloat(drawn ?? "0")).toBeGreaterThan(1);
+  }
 });
 
 test("W7: a reload keeps the picks; Back takes one off; Change them starts again", async ({ page }) => {

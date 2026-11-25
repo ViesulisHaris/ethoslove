@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import { isInApp, shareLink } from "@/lib/app/bridge";
-import { cleanName, DAY_MS, dayOf } from "@/lib/games/daily";
+import { cleanName, DAY_MS, dayOf, joinsLetters } from "@/lib/games/daily";
 import { deviceStorage, readSaved, removeSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
 import { decodeWeekly, encodeWeekly, picksFrom, picksText, sameCount, weekOf, weekStart, weeklyCards, weeklySentHere, weeklySet, type Side, type WeeklyLink, type WeeklyPicks, type WeeklySent, type WeeklySet } from "@/lib/games/weekly";
 import { cn } from "@/lib/utils";
@@ -354,7 +354,8 @@ export function WeeklyChallenge({ week }: { week: number }) {
           </h2>
           {/* The two names once, over their columns; each cell says whose it is to a screen reader. */}
           <div aria-hidden="true" className="mt-6 grid grid-cols-2 gap-3 text-page-label text-page-body sm:gap-4">
-            <span className="truncate px-1">{reveal.other.name}</span>
+            {/* A name in a script whose letters join (Arabic, Devanagari…) is set without the label's spacing, or its letters fall apart. */}
+            <span className={cn("truncate px-1", joinsLetters(reveal.other.name) && "tracking-normal")}>{reveal.other.name}</span>
             <span className="px-1">{t("you")}</span>
           </div>
           <ol aria-label={t("answers")} className="mt-2 grid gap-3">

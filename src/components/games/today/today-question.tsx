@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import { isInApp, shareLink } from "@/lib/app/bridge";
 import type { RatherPair } from "@/lib/games/content";
-import { cleanName, DAY_MS, dailyPair, dayOf, decodeDaily, encodeDaily, sentHere, type DailyLink, type DailySent } from "@/lib/games/daily";
+import { cleanName, DAY_MS, dailyPair, dayOf, decodeDaily, encodeDaily, joinsLetters, sentHere, type DailyLink, type DailySent } from "@/lib/games/daily";
 import { deviceStorage, readSaved, removeSaved, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
 import { cn } from "@/lib/utils";
 import { Suit } from "../cards";
@@ -362,7 +362,8 @@ export function TodayQuestion({ day }: { day: number }) {
             <li key={i} data-reveal-card data-answer data-side={who.side === 0 ? "a" : "b"} className={cn(CARD, "justify-start px-4 sm:px-6")}>
               <Corner side={who.side} />
               <span className="block truncate text-page-label text-page-body">
-                {who.name}
+                {/* A name in a script whose letters join (Arabic, Devanagari…) is set without the label's spacing, or its letters fall apart. */}
+                {joinsLetters(who.name) ? <span className="tracking-normal">{who.name}</span> : who.name}
                 <span className="sr-only">:</span>
               </span>
               <span className="mt-2 font-display text-[1.25rem] leading-snug text-page-ink sm:text-[1.625rem]">{words(who.side)}</span>

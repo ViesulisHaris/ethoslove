@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { RATHER_PAIRS } from "@/lib/games/content";
-import { DAILY_EPOCH, DAILY_FIGHTS, DAILY_HASH_MAX, DAILY_MIRRORED, DAILY_PAIRS, DAY_MS, cleanName, dailyCycle, dailyPair, dayIso, dayOf, decodeDaily, encodeDaily, pairById, sentHere } from "@/lib/games/daily";
+import { DAILY_EPOCH, DAILY_FIGHTS, DAILY_HASH_MAX, DAILY_MIRRORED, DAILY_PAIRS, DAY_MS, cleanName, dailyCycle, joinsLetters, dailyPair, dayIso, dayOf, decodeDaily, encodeDaily, pairById, sentHere } from "@/lib/games/daily";
 
 const N = DAILY_PAIRS.length;
 const TODAY = DAILY_EPOCH + 40;
@@ -97,6 +97,11 @@ describe("the link", () => {
     expect(decodeDaily(hash, TODAY)?.from.name).toBe("evil");
     const forged = `#q=1.${TODAY}.${pair.id}.${encodeURIComponent("‮" + "y".repeat(60))}.0`;
     expect(decodeDaily(forged, TODAY)?.from.name).toBe("y".repeat(24));
+  });
+
+  it("L5b: a name whose letters join is known, so the reveal's spaced label leaves it whole (games2-D5)", () => {
+    for (const name of ["محمد", "Zoë 😀 محمد", "देवी", "ܐܢܐ", "ތަ"]) expect(joinsLetters(name), name).toBe(true);
+    for (const name of ["Ana", "Zoë", "名前", "😀", "Ζωή", "Аня", "", "J.R."]) expect(joinsLetters(name), name).toBe(false);
   });
 
   it("L6: a day from before the epoch or after tomorrow is refused; yesterday's and tomorrow's are read", () => {
