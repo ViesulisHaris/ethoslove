@@ -49,3 +49,20 @@ describe("pages whose shared links carry a preview", () => {
     }
   });
 });
+
+describe("the Portuguese letter page has one address (reports/seoaudit-audit.md, m5)", () => {
+  it("sends /es/pt/carta-digital to /pt/carta-digital in one step", async () => {
+    const { proxy } = await import("@/proxy");
+    const response = await proxy(new NextRequest("https://tryethos.io/es/pt/carta-digital"));
+    expect(response.status).toBe(308);
+    expect(new URL(response.headers.get("location")!).pathname).toBe("/pt/carta-digital");
+  });
+
+  it("serves /pt/carta-digital itself for a Spanish visitor too, with the menus in their language, never redirecting", async () => {
+    expect(await rewriteOf("/pt/carta-digital")).toBe("/eur/en/pt/carta-digital");
+    const { proxy } = await import("@/proxy");
+    const spanish = await proxy(new NextRequest("https://tryethos.io/pt/carta-digital", { headers: { cookie: "ETHOS_LOCALE=es", "accept-language": "es-ES,es;q=0.9" } }));
+    expect(spanish.headers.get("location")).toBeNull();
+    expect(new URL(spanish.headers.get("x-middleware-rewrite")!).pathname).toBe("/eur/es/pt/carta-digital");
+  });
+});

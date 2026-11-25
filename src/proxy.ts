@@ -5,8 +5,11 @@ import { refreshSupabaseSession } from "@/lib/supabase/proxy";
 import { visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { forwardedActionPath, isServerActionPost } from "@/lib/server-action-forwarding";
 import { ASKED_PATH_HEADER, isBehindWall } from "@/lib/auth/sign-in-wall";
+import { PT_LETTER_PATH } from "@/content/pt-letter";
 
 const handleI18n = createIntlMiddleware(routing);
+/** The cookie next-intl keeps the visitor's language in (i18n/routing.ts). */
+const LOCALE_COOKIE = typeof routing.localeCookie === "object" && routing.localeCookie.name ? routing.localeCookie.name : "NEXT_LOCALE";
 
 /**
  * Every page lives under a hidden currency segment (src/app/[currency]/[locale]), built once per
@@ -98,6 +101,21 @@ export async function proxy(request: NextRequest) {
   if (pathname === "/g" || pathname.startsWith("/g/") || pathname === "/c" || pathname.startsWith("/c/")) {
     const url = request.nextUrl.clone();
     url.pathname = `/${currency}/${routing.defaultLocale}${pathname}`;
+    return NextResponse.rewrite(url);
+  }
+
+  // The Portuguese letter page has one address, /pt/carta-digital, in every language (reports/
+  // seoaudit-audit.md, m5). next-intl sent a visitor whose language cookie says Spanish from it to
+  // /es/pt/carta-digital, a second address that answered 200; now that one is sent back in one step,
+  // and the page is served at its own address with the menus in the cookie's language.
+  if (pathname === `/es${PT_LETTER_PATH}`) {
+    const url = request.nextUrl.clone();
+    url.pathname = PT_LETTER_PATH;
+    return NextResponse.redirect(url, 308);
+  }
+  if (pathname === PT_LETTER_PATH) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${currency}/${request.cookies.get(LOCALE_COOKIE)?.value === "es" ? "es" : routing.defaultLocale}${pathname}`;
     return NextResponse.rewrite(url);
   }
 
