@@ -187,8 +187,10 @@ Not part of the gift loop, but counted in the same wave (25 Nov 2026), so read h
 **`two_rooms_30d`** (no property). The rooms are gifts (`/templates`, `/occasions`, `/gifts`), dates
 (`/dates`, `/plan`), trips (`/trips`), long distance (`/long-distance`) and games (`/games`), with or
 without `/es`. Sent once, from the browser, the first time a visitor opens a page in a second room
-within 30 days of a page in another, and not again for 30 days. Where to read it: Vercel →
-Analytics → Events → `two_rooms_30d`, a week's total.
+within 30 days of a page in another, and not again for 30 days, with two exceptions: a visitor who
+stops cookies and allows them again starts afresh (the "no" removes the day the count was sent along
+with the rest), and so does one who clears the browser; either can be counted again the same day.
+Where to read it: Vercel → Analytics → Events → `two_rooms_30d`, a week's total.
 - **Only visitors who said yes to cookies are counted.** Without a yes nothing is kept and nothing
   is sent. The site asks the question only where Microsoft Clarity or an ad pixel is configured,
   so with none configured this count stays at zero.

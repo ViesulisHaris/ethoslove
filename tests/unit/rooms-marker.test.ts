@@ -191,6 +191,27 @@ describe("in the browser", () => {
     expect(counted).toEqual([]);
   });
 
+  // loop2-D1: a "no" takes the day the count was sent with it (keeping it would keep data without a
+  // yes), so stopping cookies and allowing them again can count the same visitor twice. The KPI page
+  // has to say so rather than promise "not again for 30 days" without the exception.
+  it("a no and a fresh yes start afresh, and the KPI page says the count can come again", async () => {
+    store.setItem("ethos-consent", "granted");
+    const { noteRoomVisit, setConsent } = await page();
+    noteRoomVisit("/templates", NOW);
+    noteRoomVisit("/dates", NOW);
+    expect(counted).toEqual([["two_rooms_30d"]]);
+    setConsent("denied");
+    noteRoomVisit("/dates", NOW);
+    expect(store.getItem(ROOMS_KEY)).toBeNull();
+    setConsent("granted");
+    noteRoomVisit("/dates", NOW);
+    noteRoomVisit("/trips", NOW);
+    expect(counted).toEqual([["two_rooms_30d"], ["two_rooms_30d"]]);
+    const kpi = readFileSync("docs/marketing/LOOP-KPI.md", "utf8").replace(/\s+/g, " ");
+    expect(kpi).toContain("a visitor who stops cookies and allows them again starts afresh");
+    expect(kpi).toContain("so does one who clears the browser");
+  });
+
   // loop2-C4: a "no" given on the editor, a sign-in or an account page left the entry in place,
   // because only the marketing pages' marker removed it.
   it("a no given on any page removes the entry, through the code every page runs", async () => {
