@@ -497,6 +497,32 @@ test.describe("dates2: done dates on /plan", () => {
     for (const c of (votes.posts[3] as { changes: { yes: number; no: number }[] }).changes) expect([c.yes, c.no]).toEqual([0, -1]);
   });
 
+  test("G8d focus stays with the work when the pressed button goes away (dates2-D4)", async ({ page }) => {
+    await holdTheDatabase(page, { available: true, posts: [] });
+    await seedDone(page, [done(addDays(today(), -7), "Bowling", ["node/106"]), done(addDays(today(), -14), "Gallery hop", ["node/105"])]);
+    await seedPlan(page, { v: 1, date: today(), where: "Lisbon", idea: "pasta-and-a-slow-walk", stops: PLAN_STOPS });
+    await page.goto("/plan");
+    const focused = () => page.evaluate(() => (document.activeElement as HTMLElement | null)?.getAttribute("aria-label") || document.activeElement?.textContent?.trim() || document.activeElement?.tagName);
+    await page.getByRole("button", { name: "Mark as done" }).focus(PLAN_COMPILES);
+    await page.keyboard.press("Enter");
+    await expect.poll(focused).toBe("Not done after all");
+    await page.waitForTimeout(800);
+    await page.keyboard.press("Enter");
+    await expect.poll(focused).toBe("Mark as done");
+    const log = page.getByTestId("done-log");
+    await log.getByRole("group", { name: "Was this a good date? Bowling" }).getByRole("button", { name: "Yes", exact: true }).click();
+    await expect.poll(focused).toBe("Change your answer for Bowling");
+    await page.keyboard.press("Enter");
+    await expect.poll(focused).toBe("Yes");
+    // A row removed: the next row's first control, Gallery hop's Yes.
+    await log.getByRole("button", { name: "Take Bowling off the list" }).click();
+    await expect.poll(() => page.evaluate(() => document.activeElement?.closest("[role=group]")?.getAttribute("aria-label"))).toBe("Was this a good date? Gallery hop");
+    await log.getByRole("button", { name: "Take Gallery hop off the list" }).click();
+    // The last one gone, the log with it: the next card's heading.
+    await expect(log).toHaveCount(0);
+    await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe("plan-send-title");
+  });
+
   test("G8e a vote that is not kept says so, where it was made (dates2-D5)", async ({ page }) => {
     await holdTheDatabase(page, { available: true, posts: [] });
     await page.route("**/api/dates/votes", (route) => (route.request().method() === "POST" ? route.fulfill({ status: 503, json: { error: "unavailable" } }) : route.fallback()));

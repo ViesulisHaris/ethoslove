@@ -188,12 +188,29 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     if (!removed) return;
     for (const { vote, targets } of answersAfterRemoval(removed, entries)) void votes.cast(targets, vote);
   };
+  // Where focus goes when the button pressed goes away (dates2-D4).
+  const focusNext = useRef<"mark" | "undo" | "after-log" | null>(null);
+  const markRef = useRef<HTMLButtonElement>(null);
+  const undoRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const next = focusNext.current;
+    focusNext.current = null;
+    if (next === "undo") undoRef.current?.focus();
+    else if (next === "mark") markRef.current?.focus();
+    else if (next === "after-log") {
+      // The log is gone with its last date: the next card's heading, else the page's own.
+      const el = document.getElementById("plan-send-title") ?? document.querySelector<HTMLElement>("main h1");
+      if (el && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+      el?.focus();
+    }
+  }, [plan.done, entries.length]);
   // When "Mark as done" was pressed: "Not done after all" appears where it was on a phone, so a
   // second tap of a quick double tap lands on it. Taps on it this soon after are the same press (dates2-T1).
   const markedAt = useRef(-Infinity);
   const markDone = () => {
     const entry = doneFromPlan(plan, today, locale, savedLink?.id);
     markedAt.current = performance.now();
+    focusNext.current = "undo";
     updateDone((list) => addDone(list, entry));
     // The entry's id is kept on the plan: a stop changed afterwards must not hide it from the undo (dates2-T2).
     updateOwn((p) => ({ ...p, done: entry.day, doneId: entry.id }));
@@ -203,6 +220,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     if (performance.now() - markedAt.current < UNDO_GUARD_MS) return;
     // A plan marked before the id was kept: its id as it would have been, from the stops as they stand.
     const id = plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale).id;
+    focusNext.current = "mark";
     setNotSaved(null);
     takeOff(id);
     updateOwn((p) => {
@@ -220,7 +238,10 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       askedAbove={askedAbove}
       notSaved={notSaved}
       onAnswer={(entry, next) => void answer(entry, next)}
-      onRemove={takeOff}
+      onRemove={(id) => {
+        if (entries.length === 1) focusNext.current = "after-log";
+        takeOff(id);
+      }}
       className={className}
     />
   );
@@ -402,7 +423,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                 <CircleCheck aria-hidden="true" className="size-4 text-moss" />
                 {t("done.on", { day: logDay(plan.done, locale) })}
               </span>
-              <button type="button" onClick={undoDone} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-forest hover:underline">
+              <button ref={undoRef} type="button" onClick={undoDone} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-forest hover:underline">
                 {t("done.undo")}
               </button>
             </p>
@@ -423,7 +444,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
           <>
             {past ? <p className="mt-4 text-[14px] text-forest/65">{t("past")}</p> : null}
             {editable && (!plan.date || plan.date <= today) ? (
-              <button type="button" onClick={markDone} className="mt-3 inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-4 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5 active:scale-[0.98] motion-reduce:transition-none">
+              <button ref={markRef} type="button" onClick={markDone} className="mt-3 inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-4 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5 active:scale-[0.98] motion-reduce:transition-none">
                 <CircleCheck aria-hidden="true" className="size-4" />
                 {t("done.mark")}
               </button>
@@ -521,7 +542,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
 
         {editable ? (
           <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
-            <h2 className="font-display text-[22px] text-forest">{t("send.title")}</h2>
+            <h2 id="plan-send-title" tabIndex={-1} className="font-display text-[22px] text-forest outline-none">{t("send.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("send.sub")}</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button type="button" onClick={share} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-rose text-[14.5px] font-semibold text-white shadow-[0_16px_34px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
