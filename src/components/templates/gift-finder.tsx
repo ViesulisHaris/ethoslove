@@ -555,11 +555,13 @@ function AnswerCard({ label, poster, current, eager, onClick }: { label: string;
         current && "border-page-accent ring-2 ring-page-accent/60",
       )}
     >
-      <span className="relative block w-12 shrink-0 overflow-hidden bg-page-band max-[359.98px]:w-10 sm:aspect-[6/5] sm:h-auto sm:w-full">
+      <span className="relative block w-12 shrink-0 overflow-hidden bg-page-band max-[359.98px]:w-9 sm:aspect-[6/5] sm:h-auto sm:w-full">
         {poster ? <Image src={poster} alt="" fill sizes="(min-width: 1280px) 190px, (min-width: 640px) 23vw, 48px" loading={eager ? "eager" : "lazy"} className={cn("object-cover object-[50%_32%]", posterFit(poster))} /> : null}
       </span>
-      {/* Never cut (walk-agreed-6): a long answer takes a second or third line and the card grows; under 360px the picture and the type give a little, so "Thanksgiving" stands whole on one line. */}
-      <span data-answer-label className="flex min-w-0 items-center px-2.5 py-1.5 font-display text-[0.9375rem] leading-[1.12] text-page-ink max-[359.98px]:px-2 max-[359.98px]:text-[0.875rem] sm:block sm:px-3.5 sm:pt-2.5 sm:pb-3 sm:text-[1.0625rem] sm:leading-snug">{label}</span>
+      {/* Never cut (walk-agreed-6): a long answer takes a second or third line and the card grows; under 360px the picture and the type give a little, so "Thanksgiving" stands whole on one line.
+          At 320 a 40px picture and 8px sides left that word (84.6px at 14px) 79px: it ran into the padding, 3.4px from the card's edge
+          (view-fix-1, final pass of 25 Nov 2026). A 36px picture and 6px sides leave it 87px. The type stays at 14px, the site's floor. */}
+      <span data-answer-label className="flex min-w-0 items-center px-2.5 py-1.5 font-display text-[0.9375rem] leading-[1.12] text-page-ink max-[359.98px]:px-1.5 max-[359.98px]:text-[0.875rem] sm:block sm:px-3.5 sm:pt-2.5 sm:pb-3 sm:text-[1.0625rem] sm:leading-snug">{label}</span>
     </button>
   );
 }
