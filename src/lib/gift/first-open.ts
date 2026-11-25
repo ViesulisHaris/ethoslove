@@ -1,8 +1,10 @@
 import type { Db } from "@/lib/commerce/db";
 
 /**
- * When a gift was first opened: its earliest row in gift_views (one row per open, written by
- * record_gift_view), as a time in ms, or null when it never was or nothing could be read.
+ * When a gift was first opened: its earliest row in gift_views, as a time in ms, or null when it
+ * never was or nothing could be read. record_gift_view writes one row per viewer per day (the same
+ * viewer again within 24 hours reuses their row and leaves its opened_at alone), so the earliest
+ * row is still the first open.
  */
 export async function firstOpenOf(db: Db, giftId: string): Promise<number | null> {
   const { data, error } = await db

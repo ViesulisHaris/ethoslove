@@ -99,8 +99,9 @@ where the door is the token).
 **Top: recipients who started their own.** Vercel → Analytics → Events → `recipient_started`, the
 week's count where `within7` is `true`.
 
-**Bottom: gifts opened for the first time.** No event counts this, and none was added: every
-open is a row of `gift_views`, so a gift's first open is its earliest row. Supabase → SQL
+**Bottom: gifts opened for the first time.** No event counts this, and none was added.
+`gift_views` holds one row per viewer per day (the same viewer within 24 hours is one row, and its
+time is not moved), so a gift's first open is its earliest row. Supabase → SQL
 editor, read-only:
 
 ```sql
