@@ -96,7 +96,7 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "Our site. It makes animated [digital gifts](/gifts) from {count:templates} templates, and {note:one goes out free: [The Letter](/templates/the-letter), as a short note of up to 500 characters with music from our library|two go out free: [The Letter](/templates/the-letter) and [Constellations](/templates/constellations), with up to 10 photos and music from our library}. Its weak points next to gifft.me: {note:photos and everything else are paid, the free note carries a small footer|the free templates carry a small footer}, and scheduling, a password and a voice message all need a paid option. It speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, and they can send a reaction or a gift of their own back.",
+          text: "Our site. It makes animated [digital gifts](/gifts) from {count:templates} templates, and {note:one goes out free: [The Letter](/templates/the-letter), as a short note of up to 500 characters with music from our library|[The Letter](/templates/the-letter) and [Constellations](/templates/constellations) go out free, with up to 10 photos and music from our library}. Its weak points next to gifft.me: {note:photos and everything else are paid, the free note carries a small footer|the free templates carry a small footer}, and scheduling, a password and a voice message all need a paid option. It speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, and they can send a reaction or a gift of their own back.",
         },
         {
           type: "template",
@@ -176,7 +176,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "Is there a free website to make digital gifts like gifft.me?",
-          a: "Yes. AIskyla Gifting says its gifts need no app, no account and no payment, and Surprises.Gift calls its gifts free. QLovy has a free page that lasts 24 hours, and Ethos {note:has one free template, The Letter, as a short note|has two free templates, The Letter and Constellations}, with a small footer.",
+          a: "Yes. AIskyla Gifting says its gifts need no app, no account and no payment, and Surprises.Gift calls its gifts free. QLovy has a free page that lasts 24 hours, and Ethos {note:has one free template, The Letter, as a short note|gives {free:names} free}, with a small footer.",
         },
         {
           q: "Is the gifft.me website safe?",
@@ -285,7 +285,7 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "La nuestra. Hace [regalos digitales](/gifts) animados con {count:templates} plantillas, y {note:una sale gratis: [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con música de nuestra biblioteca|dos salen gratis: [La carta](/templates/the-letter) y [Constelaciones](/templates/constellations), con hasta 10 fotos y música de nuestra biblioteca}. Sus puntos flojos frente a gifft.me: {note:las fotos y todo lo demás son de pago, la nota gratis lleva un pequeño pie|las plantillas gratis llevan un pequeño pie}, y para programar el regalo, ponerle contraseña o añadir un mensaje de voz hace falta una opción de pago. Solo funciona en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, y esa persona puede mandarte una reacción o un regalo suyo de vuelta.",
+          text: "La nuestra. Hace [regalos digitales](/gifts) animados con {count:templates} plantillas, y {note:una sale gratis: [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con música de nuestra biblioteca|[La carta](/templates/the-letter) y [Constelaciones](/templates/constellations) salen gratis, con hasta 10 fotos y música de nuestra biblioteca}. Sus puntos flojos frente a gifft.me: {note:las fotos y todo lo demás son de pago, la nota gratis lleva un pequeño pie|las plantillas gratis llevan un pequeño pie}, y para programar el regalo, ponerle contraseña o añadir un mensaje de voz hace falta una opción de pago. Solo funciona en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, y esa persona puede mandarte una reacción o un regalo suyo de vuelta.",
         },
         {
           type: "template",
@@ -365,7 +365,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "¿Hay alguna web gratis para hacer regalos digitales como gifft.me?",
-          a: "Sí. AIskyla Gifting dice que sus regalos no necesitan app, cuenta ni pago, y Surprises.Gift llama gratis a sus regalos. QLovy tiene una página gratis que dura 24 horas, y Ethos {note:tiene una plantilla gratis, La carta, como nota corta|tiene dos plantillas gratis, La carta y Constelaciones}, con un pequeño pie.",
+          a: "Sí. AIskyla Gifting dice que sus regalos no necesitan app, cuenta ni pago, y Surprises.Gift llama gratis a sus regalos. QLovy tiene una página gratis que dura 24 horas, y Ethos {note:tiene una plantilla gratis, La carta, como nota corta|da gratis {free:names}}, con un pequeño pie.",
         },
         {
           q: "¿Es seguro gifft.me?",
