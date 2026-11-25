@@ -467,9 +467,10 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
         <MapView center={first} zoom={14.5} places={[]} selected={null} hoveredId={null} route={route} origin={null} searching={false} labels={mapLabels} interactive={false} className="h-[300px] w-full rounded-[28px] shadow-soft ring-1 ring-forest/10 sm:h-[340px]" />
         <MapsMenu stops={plan.stops} member={member} onLocked={() => openUpsell("maps")} />
 
-        {editable && entries.length > 0 ? log() : null}
-
         {editable ? <SavePlanPanel plan={own} defaultTitle={(idea?.title[locale] || own.where || ts("save.defaultTitle")).slice(0, 80)} link={savedLink} status={status} account={account} onUpsell={openUpsell} onSignIn={signInToSave} /> : null}
+
+        {/* The dates done: the card after the save panel, only on their own plan. */}
+        {editable && entries.length > 0 ? log() : null}
 
         {editable ? (
           <div className="rounded-[28px] bg-card p-5 shadow-soft ring-1 ring-forest/5">
