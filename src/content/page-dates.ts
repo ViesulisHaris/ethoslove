@@ -34,7 +34,7 @@ const GROWTH_PAGES_DAY = "2026-11-23";
  * gaining those neighbours in its last section, and the occasion pages, /gifts and the front page
  * folded to 300 words on show. NOT LIVE YET: set it to the day it ships.
  */
-export const GIFTS2_DAY = "2026-11-24";
+export const GIFTS2_DAY = "2026-11-25";
 
 /**
  * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
