@@ -147,6 +147,17 @@ describe("the date letter's year", () => {
       }
   });
 
+  it("C15 an idea that comes back never says it is new: the year repeats its ideas (letter-N3)", () => {
+    const seen = new Set<string>();
+    for (const { week, idea, say } of LETTER_ENTRIES) {
+      if (seen.has(idea)) {
+        expect(say.en, `week ${week}`).not.toMatch(/\b(new thing|never (done|tried|been)|first time)\b/i);
+        expect(say.es, `week ${week}`).not.toMatch(/\b(novedad|nunca|primera vez)\b/i);
+      }
+      seen.add(idea);
+    }
+  });
+
   it("C13 straight quotes from the site's words are set curly, as the letter's own lines are", () => {
     for (const entry of LETTER_ENTRIES) for (const locale of ["en", "es"] as const) for (const [key, line] of Object.entries(parts(entry, locale))) expect(line, `week ${entry.week} ${locale} ${key}`).not.toMatch(/['"]/);
   });

@@ -165,7 +165,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
     twist: false,
     open: { es: "Una hora dando vueltas, y quien no rema lo narra como un documental de naturaleza." },
   }),
-  e(37, "climbing-first-timers", "unique", false, "New thing for Saturday: a climbing wall. I’ve never done it either.", "Novedad para el sábado: un rocódromo. Yo tampoco lo he probado nunca.", {
+  e(37, "climbing-first-timers", "unique", false, "Climbing wall on Saturday. This time I’m not letting go of the rope.", "Rocódromo el sábado. Esta vez no pienso soltar la cuerda.", {
     twist: false,
     open: { es: "Una pared para principiantes y la cuerda en manos de tu pareja. Paga la cena quien diga primero «no puedo»." },
   }),
