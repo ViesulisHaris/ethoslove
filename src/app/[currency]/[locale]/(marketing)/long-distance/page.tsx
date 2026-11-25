@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
@@ -17,7 +17,8 @@ import { MeetInTheMiddle } from "@/components/ldr/meet-in-the-middle";
 import { PlanVisitLink } from "@/components/ldr/plan-visit-link";
 import { EagerImg } from "@/components/shared/eager-img";
 import { JsonLd } from "@/components/shared/json-ld";
-import { TemplateCard } from "@/components/templates/template-card";
+import { IdeasDots } from "@/components/templates/page/ideas-dots";
+import { POSTER_ROW, PosterLink } from "@/components/templates/page/sections";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/long-distance">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -63,7 +64,6 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
           </div>
           <div className="mt-12">
             <h2 className="display-md text-forest">{t("meet.title")}</h2>
-            <p className="mt-2 max-w-xl text-[15.5px] leading-relaxed text-forest/65">{t("meet.sub")}</p>
             <div className="mt-6">
               <MeetInTheMiddle ways={waysData(lang)} />
             </div>
@@ -80,31 +80,37 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
         <div className="container-x">
           <p className="text-eyebrow text-ink-soft">{t("virtual.eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[16ch]">{t("virtual.title")}</h2>
-          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* An idea is its title until it is opened (DESIGN-LESS-TEXT); on a phone the four are one row, one to a screen, with dots. */}
+          <ul id="ldr-virtual-row" className="-mx-5 mt-12 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-2 scrollbar-none sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
             {VIRTUAL_DATES.map((v, i) => (
-              <li key={v.id} className="relative flex flex-col overflow-hidden rounded-[26px] p-5 shadow-soft" style={{ background: `linear-gradient(160deg, ${v.art.from} 0%, ${v.art.to} 100%)` }}>
+              <li key={v.id} data-card className="relative flex w-full shrink-0 snap-start flex-col overflow-hidden rounded-[26px] p-5 shadow-soft sm:w-auto" style={{ background: `linear-gradient(160deg, ${v.art.from} 0%, ${v.art.to} 100%)` }}>
                 <span aria-hidden="true" className="absolute -top-2 -right-3 size-[96px]" style={{ rotate: `${((i * 37) % 24) - 12}deg` }}>
                   <Sticker id={v.art.sticker} />
                 </span>
                 <span className="grain-overlay opacity-[0.12] mix-blend-overlay" />
-                <h3 className="relative mt-20 font-display text-[23px] leading-[1.08] text-forest">{v.title[lang]}</h3>
-                <p className="relative mt-2.5 text-[14.5px] leading-relaxed text-forest/75">{v.blurb[lang]}</p>
-                <p className="relative mt-4 border-t border-forest/10 pt-3 text-[13.5px] leading-snug text-forest/70">
-                  <span className="font-semibold text-forest">{t("virtual.twist")}</span> {v.twist[lang]}
-                </p>
+                <details className="group relative">
+                  <summary className="mt-20 flex min-h-11 cursor-pointer list-none items-end justify-between gap-3 rounded-lg outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
+                    <h3 className="font-display text-[23px] leading-[1.08] text-forest">{v.title[lang]}</h3>
+                    <Plus aria-hidden="true" className="mb-1 size-4 shrink-0 text-forest/60 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                  </summary>
+                  <p className="mt-2.5 text-[14.5px] leading-relaxed text-forest/75">{v.blurb[lang]}</p>
+                  <p className="mt-4 border-t border-forest/10 pt-3 text-[13.5px] leading-snug text-forest/70">
+                    <span className="font-semibold text-forest">{t("virtual.twist")}</span> {v.twist[lang]}
+                  </p>
+                </details>
                 {v.id === "plan-the-visit" ? (
-                  // The one idea that is a place on the site: the whole card opens Dates, on their town once the box above has it (walk-rooms-14).
-                  <PlanVisitLink label={`${v.title[lang]}: ${t("virtual.openMap")}`} className="group absolute inset-0 z-10 flex items-end rounded-[26px] p-5 outline-none focus-visible:ring-2 focus-visible:ring-rose/50">
-                    <span aria-hidden="true" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 group-hover:underline">
+                  // The one idea that is a place on the site: its own line opens Dates, on their town once the box above has it (walk-rooms-14). Not laid over the card: it would cover the title that opens it.
+                  <PlanVisitLink label={`${v.title[lang]}: ${t("virtual.openMap")}`} className="group relative mt-3 inline-flex min-h-11 items-center gap-1.5 self-start rounded-lg text-[14px] font-semibold text-rose-deep underline-offset-4 outline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-forest">
+                    <span aria-hidden="true" className="inline-flex items-center gap-1.5">
                       {t("virtual.openMap")}
                       <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </PlanVisitLink>
                 ) : null}
-                {v.id === "plan-the-visit" ? <span aria-hidden="true" className="h-9" /> : null}
               </li>
             ))}
           </ul>
+          <IdeasDots target="ldr-virtual-row" count={VIRTUAL_DATES.length} className="mt-4 sm:hidden" />
           {/* The games that play across a call, as the games' own cards: a picture and a name. Two of
               them, so on a desk the line sits at the left and the pair at the right, as a spread. */}
           <div className="mt-14 lg:grid lg:grid-cols-[minmax(0,1fr)_27.5rem] lg:items-center lg:gap-16">
@@ -140,11 +146,14 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
                 <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
-            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {gifts.map((m, i) => (
-                <TemplateCard key={m.slug} manifest={m} index={i} />
+            {/* Four posters, as "More like this" on a gift's page: a picture and a name. */}
+            <ul className={`mt-10 ${POSTER_ROW}`} data-testid="ldr-gifts">
+              {gifts.map((m) => (
+                <li key={m.slug}>
+                  <PosterLink href={`/templates/${m.slug}`} poster={m.thumbnail.poster} alt={m.tagline[lang]} label={m.name[lang]} />
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
       ) : null}
