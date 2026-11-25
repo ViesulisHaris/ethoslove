@@ -66,10 +66,10 @@ test.describe("the share screen's line", () => {
     const notice = page.getByTestId("idea-notice");
     await expect(notice).toContainText("Starting next month, we’ll email you one gift idea a month for a year.");
     await notice.getByRole("button", { name: "Don’t send these" }).click();
-    await expect(notice).toContainText("Off. We won’t send them.");
-    await expect(notice.getByRole("button")).toHaveText("Undo");
+    await expect(notice).toContainText("Done. We won’t send you the monthly gift ideas.");
+    await expect(notice.getByRole("button")).toHaveText("Turn them back on");
     expect(bodies).toEqual([{ on: false }]);
-    await notice.getByRole("button", { name: "Undo" }).click();
+    await notice.getByRole("button", { name: "Turn them back on" }).click();
     await expect(notice).toContainText("Starting next month");
     expect(bodies).toEqual([{ on: false }, { on: true }]);
   });
@@ -80,8 +80,8 @@ test.describe("the share screen's line", () => {
     const notice = page.getByTestId("idea-notice");
     await expect(notice).toContainText("A partir del mes que viene te enviaremos una idea de regalo al mes durante un año.");
     await notice.getByRole("button", { name: "No quiero recibirlas" }).click();
-    await expect(notice).toContainText("Desactivado. No te las enviaremos.");
-    await expect(notice.getByRole("button")).toHaveText("Deshacer");
+    await expect(notice).toContainText("Listo. No te enviaremos las ideas de regalo del mes.");
+    await expect(notice.getByRole("button")).toHaveText("Volver a activarlas");
   });
 
   test("B4 fits a phone", async ({ page }, info) => {
@@ -121,11 +121,11 @@ test.describe("the share screen's line", () => {
     await expect(button).toHaveAttribute("aria-disabled", "true");
     await expect(button).not.toHaveAttribute("disabled");
     await expect(notice).toContainText("Starting next month");
-    await expect(notice).not.toContainText("Off. We won’t send them.");
+    await expect(notice).not.toContainText("Done. We won’t send you the monthly gift ideas.");
     await expect(button).toHaveText("Don’t send these");
     release();
-    await expect(notice).toContainText("Off. We won’t send them.");
-    await expect(button).toHaveText("Undo");
+    await expect(notice).toContainText("Done. We won’t send you the monthly gift ideas.");
+    await expect(button).toHaveText("Turn them back on");
     await expect(button).not.toHaveAttribute("aria-busy");
   });
 
@@ -149,8 +149,8 @@ test.describe("the share screen's line", () => {
     // A second press while it saves sends nothing more.
     await page.keyboard.press("Enter");
     release();
-    await expect(notice).toContainText("Off. We won’t send them.");
-    const undo = notice.getByRole("button", { name: "Undo" });
+    await expect(notice).toContainText("Done. We won’t send you the monthly gift ideas.");
+    const undo = notice.getByRole("button", { name: "Turn them back on" });
     await expect(undo).toBeFocused();
     expect(bodies).toEqual([{ on: false }]);
     await page.keyboard.press("Tab");
@@ -160,8 +160,8 @@ test.describe("the share screen's line", () => {
   test("B4d turning it off never changes the card's height", async ({ page }) => {
     await answerSwitch(page);
     for (const [lang, stop, done] of [
-      ["", "Don’t send these", "Off. We won’t send them."],
-      ["/es", "No quiero recibirlas", "Desactivado. No te las enviaremos."],
+      ["", "Don’t send these", "Done. We won’t send you the monthly gift ideas."],
+      ["/es", "No quiero recibirlas", "Listo. No te enviaremos las ideas de regalo del mes."],
     ] as const) {
       for (const size of [
         { width: 375, height: 812 },
