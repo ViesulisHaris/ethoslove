@@ -164,9 +164,14 @@ for (const prefix of ["", "/es"]) {
       expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.overlaps, `${width}: a piece of the art lies under words`).toEqual([]);
       expect(m.count, `${width}: words on the page`).toBeLessThanOrEqual(300);
+      // Room under the ruler, so the next line of copy does not break it (the test of 25 Nov 2026, T2: Spanish sat at 300).
+      expect(m.count, `${width}: words on the page, with room to spare`).toBeLessThanOrEqual(292);
       expect(m.smallest, `${width}: a sentence under 14px`).toBeGreaterThanOrEqual(14);
       expect(m.small, `${width}: too small for a thumb`).toEqual([]);
       if (width >= 1024) await expect(page.locator("[data-flatlay=hero]")).toBeInViewport();
+      // The closed rows are named as rows to open, not as slogans: no row's name ends on a full stop (T7).
+      const rows = await page.locator("main details > summary").evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
+      expect(rows.filter((r) => /\.$/.test(r)), `${width}: rows named as sentences`).toEqual([]);
       // Five sets of idea cards and thirty cards in the HTML; the first set on show, the other four in closed rows.
       const sets = await cardSets(page);
       expect(sets.length, `${width}: groups of ideas`).toBe(5);

@@ -242,9 +242,13 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                 </div>
               </MoreRow>
             ) : null}
+            {/*
+             * The rows under the questions are named plainly, as rows to open ("How it works", "Pricing"), not with the
+             * slogans the sections they came from had as headings, which now open them (the test of 25 Nov 2026, T7).
+             */}
             {/* The three steps, which had a section of their own. */}
-            <MoreRow summary={t("home.how.title")}>
-              <p>{t("home.how.eyebrow")}</p>
+            <MoreRow summary={t("home.how.eyebrow")}>
+              <p>{t("home.how.title")}</p>
               <ol className="flex flex-col gap-3">
                 {steps.map((step, i) => (
                   <li key={step.title}>
@@ -256,8 +260,8 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                 ))}
               </ol>
             </MoreRow>
-            {/* The thirteen occasions, which had a section of their own. */}
-            <MoreRow summary={t("recipients.occasions")}>
+            {/* Every occasion (which had a section of their own), every gift page by kind and the twenty-four anniversary months, in one row. */}
+            <MoreRow summary={t("recipients.allGuides")}>
               <p>{t("home.occasions.eyebrow")}</p>
               <p>{t("home.occasions.title")}</p>
               <p>{t("home.occasions.blurb")}</p>
@@ -270,9 +274,6 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                   </li>
                 ))}
               </ul>
-            </MoreRow>
-            {/* Every gift page by kind and the twenty-four anniversary months. */}
-            <MoreRow summary={t("recipients.allGuides")}>
               <ul className="flex flex-wrap gap-x-5">
                 {GIFT_GUIDE_SLUGS.map((slug) => (
                   <li key={slug}>
@@ -307,7 +308,8 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                 ))}
               </ul>
             </MoreRow>
-            <MoreRow summary={t("pricing.title")}>
+            <MoreRow summary={t("pricing.eyebrow")}>
+              <p>{t("pricing.title")}</p>
               <p>{t("pricing.subtitle")}</p>
               <PricingCards currency={charged} manifests={manifests} authed={false} paymentsEnabled={stripeReady()} />
               <dl className="flex flex-col gap-3">
