@@ -25,7 +25,9 @@ export type TokenPurpose =
   | "personal-price"
   | "monthly-price"
   | "monthly-idea-stop"
-  | "group-confirm";
+  | "group-confirm"
+  | "date-letter-confirm"
+  | "date-letter-stop";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -70,6 +72,10 @@ const VALUE: Record<TokenPurpose, RegExp> = {
   // "Yes, send it to me", in the confirmation someone who added a note to a group card is sent: the
   // note's id (a random one that opens nothing; never the gift's).
   "group-confirm": UUID,
+  // “Yes, send me the date letter”, in the confirming e-mail: the row's id.
+  "date-letter-confirm": UUID,
+  // “Stop these emails”, in every date letter, and “never email this address” in the confirming one: the row's id.
+  "date-letter-stop": UUID,
 };
 
 const encoder = new TextEncoder();

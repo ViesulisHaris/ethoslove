@@ -177,5 +177,23 @@ describe("the date letter's e-mails", () => {
       writeFileSync(join(out!, `letter-confirm-${locale}.html`), await render(LetterConfirmEmail({ locale, confirmUrl: CONFIRM, stopUrl: STOP })));
       for (const week of [1, 6, 21, 34, 46]) writeFileSync(join(out!, `letter-week-${String(week).padStart(2, "0")}-${locale}.html`), await render(letter(week, locale).el));
     }
+    // The pages behind the links, as the routes draw them (lib/email/link-page.ts), in both languages.
+    const { linkPageHtml } = await import("@/lib/email/link-page");
+    const messages = { en: (await import("../../messages/en.json")).default, es: (await import("../../messages/es.json")).default };
+    for (const locale of ["en", "es"] as const) {
+      const w = messages[locale].lifecycle.letter;
+      const home = messages[locale].lifecycle.link.home;
+      const action = "/api/date-letter/x";
+      const pages: Record<string, Parameters<typeof linkPageHtml>[0]> = {
+        "confirm-ask": { locale, title: w.confirmTitle, body: w.confirmBody, confirm: { label: w.confirmButton, action }, home },
+        "confirm-done": { locale, title: w.doneTitle, body: w.doneBody, next: { label: w.doneNext, href: pageUrl(locale, "/dates?idea=bookshop-and-coffee&ref=email-letter") }, home },
+        "stop-ask": { locale, title: w.stopTitle, body: w.stopBody, confirm: { label: w.stopConfirm, action }, home },
+        "stop-done": { locale, title: w.stopDoneTitle, body: w.stopDoneBody, home },
+        "notme-ask": { locale, title: w.notMeTitle, body: w.notMeBody, confirm: { label: w.notMeConfirm, action }, home },
+        "notme-done": { locale, title: w.notMeDoneTitle, body: w.notMeDoneBody, home },
+        expired: { locale, title: w.goneTitle, body: w.goneBody, home },
+      };
+      for (const [name, page] of Object.entries(pages)) writeFileSync(join(out!, `link-${name}-${locale}.html`), linkPageHtml(page));
+    }
   });
 });
