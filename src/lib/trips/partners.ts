@@ -74,6 +74,7 @@ export const PLACEMENT_ROOM: Record<PartnerPlacement, VisitedRoom> = {
   trip_flights: "trips",
   trip_tickets: "trips",
   trip_car: "trips",
+  trip_stay: "trips",
   place_sheet: "dates",
   plan: "dates",
   city: "dates",
