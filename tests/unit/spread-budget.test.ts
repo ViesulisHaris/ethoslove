@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { OCCASIONS } from "@/config/occasions";
@@ -349,6 +349,14 @@ describe("the text budget of an occasion's idea list", () => {
 });
 
 describe("the text budget of /digital-cards", () => {
+  // As the live site runs: the free version is the short note, so the list sells a note with photos
+  // (tests/unit/seo-free-truth.test.ts holds the page to the setting both ways).
+  beforeEach(() => {
+    vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", "1");
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
   const facts: DigitalCardsFacts = { single: "€9.99", pick3: "€14.99", everything: "€24.99", extras: "€7.49", photos: "€3.99", notePhotos: 5, count: listManifests().length, paid: listManifests().length - 1, ideas: 30, finder: true };
 
   it("keeps the hero, the cards, the band and the prices to a line each", () => {

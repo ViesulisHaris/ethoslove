@@ -1,11 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../messages/en.json";
 import { PT_FREE_CHARS, PT_LETTER_LANG, PT_LETTER_PATH, ptLetterCopy } from "@/content/pt-letter";
 import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES } from "@/lib/gift/free-tier";
 import sitemap from "@/app/sitemap";
 
+// The live site's setting: the free version is the short note (lib/gift/free-tier.ts).
+vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", "1");
 const copy = ptLetterCopy({ price: "7,49 €", currency: "eur" });
 const everything = JSON.stringify(copy);
+vi.unstubAllEnvs();
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe("the Portuguese page for The Letter", () => {
   it("says the same about what is free as the template's own guide", () => {
@@ -19,6 +26,17 @@ describe("the Portuguese page for The Letter", () => {
     for (const said of ["fotos", "uma carta mais longa", "um vídeo", "uma mensagem de voz", "agendamento", "sem o rodapé"]) expect(copy.pricing.paid, said).toContain(said);
     expect(copy.pricing.paid).toContain("7,49 €");
     expect(copy.faq.items[0].a).toContain("7,49 €");
+  });
+
+  it("with the free note off, says the whole letter is free and sells no photos it already gives", () => {
+    vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", "");
+    const off = ptLetterCopy({ price: "7,49 €", currency: "eur" });
+    expect(off.metaDescription).not.toContain("bilhete curto");
+    expect(off.pricing.free).toContain("a carta inteira");
+    expect(off.pricing.free).not.toContain("caracteres");
+    expect(off.pricing.paid).not.toMatch(/: fotos|uma carta mais longa/);
+    expect(off.faq.items[0].a).toMatch(/^Sim: a carta inteira/);
+    expect(off.metaDescription.length).toBeLessThanOrEqual(160);
   });
 
   it("names the currency the price is charged in", () => {

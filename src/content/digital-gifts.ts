@@ -1,5 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
-import { sendsFree } from "@/lib/gift/free-tier";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { listManifests } from "@/templates/manifests";
 
 /**
@@ -84,7 +84,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
       },
       {
         q: "Can you send a digital gift for free?",
-        a: "Yes. The Letter is free as a short note: up to 500 characters, with music, a countdown and a hidden surprise. You make it, publish it and send the link: nobody pays and there’s nothing to install. Photos, a longer letter and the other templates are a one-time payment.",
+        a: `Yes. ${noteForEveryone() ? "The Letter is free as a short note: up to 500 characters" : "The Letter and Constellations are free: the whole letter and up to ten photos"}, with music, a countdown and a hidden surprise. You make it, publish it and send the link: nobody pays and there’s nothing to install. ${noteForEveryone() ? "Photos, a longer letter" : "“Make it special”"} and the other templates are a one-time payment.`,
       },
       {
         q: "How do you send a digital gift?",
@@ -129,7 +129,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
       },
       {
         q: "¿Hay regalos virtuales gratis?",
-        a: "Sí. La carta (una carta digital con sello de lacre) es gratis como nota corta: hasta 500 caracteres, con música, una cuenta atrás y una sorpresa final. Lo haces, lo publicas y mandas el enlace: no se paga y no hay nada que instalar. Las fotos, una carta más larga y las demás plantillas son un pago único.",
+        a: `Sí. ${noteForEveryone() ? "La carta (una carta digital con sello de lacre) es gratis como nota corta: hasta 500 caracteres" : "La carta (una carta digital con sello de lacre) y Constelaciones son gratis: la carta completa y hasta diez fotos"}, con música, una cuenta atrás y una sorpresa final. Lo haces, lo publicas y mandas el enlace: no se paga y no hay nada que instalar. ${noteForEveryone() ? "Las fotos, una carta más larga" : "«Hazlo especial»"} y las demás plantillas son un pago único.`,
       },
       {
         q: "¿Cómo se envía un regalo digital?",

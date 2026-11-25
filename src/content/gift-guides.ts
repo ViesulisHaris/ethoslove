@@ -1,6 +1,8 @@
 import type { Occasion } from "@/config/occasions";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { DEMO_PHOTOS, type DemoPhotoId } from "@/templates/_shared/demo-photos";
+import { listManifests } from "@/templates/manifests";
 import type { BorrowedLine } from "@/components/marketing/gift-idea-list";
 
 /**
@@ -14,7 +16,8 @@ import type { BorrowedLine } from "@/components/marketing/gift-idea-list";
  * prints that field's limit from the template's schema (lib/gift/field-limit.ts) and
  * tests/unit/gift-guides.test.ts fails a line that is too long for it. What a template does was
  * checked against its schema.ts and Template.tsx on 20 Nov 2026; what is free matches
- * lib/gift/free-tier.ts (a short note on The Letter, nothing more). No price is written here: the
+ * lib/gift/free-tier.ts in both states of its switch (NOTE below: a short note on The Letter and
+ * nothing more with the note for everyone, The Letter and Constellations whole without it). No price is written here: the
  * pages that need one read it from PRODUCTS.
  */
 export const GIFT_GUIDE_SLUGS = ["last-minute", "video-message", "interactive-birthday-card", "virtual-birthday-cake", "photo-album", "anniversary-website"] as const;
@@ -93,13 +96,28 @@ export type GiftGuide = {
   related: { href: string; label: string }[];
 };
 
+/** Whether the free Letter is the short note (the live site) or, without the switch, the whole letter with ten photos. Fixed at build time. */
+const NOTE = noteForEveryone();
+
+/** The templates that go out free, by name and read from the manifests: "The Letter and Constellations" while the note is not for everyone. */
+function freeNames(locale: GiftLocale): string {
+  const names = listManifests()
+    .filter((m) => sendsFree(m))
+    .map((m) => m.name[locale]);
+  return names.length > 1 ? `${names.slice(0, -1).join(", ")} ${locale === "es" ? "y" : "and"} ${names.at(-1)}` : names.join("");
+}
+
 const freeEn = {
   q: "Is any of this free?",
-  a: "One thing is: The Letter as a short note, up to 500 characters with a song, a countdown and a hidden surprise. Photos, a longer letter, video, voice and every other template are a one-time payment for that template, with no subscription. The editor is free until you publish, so you can build the whole gift and watch it play first.",
+  a: NOTE
+    ? "One thing is: The Letter as a short note, up to 500 characters with a song, a countdown and a hidden surprise. Photos, a longer letter, video, voice and every other template are a one-time payment for that template, with no subscription. The editor is free until you publish, so you can build the whole gift and watch it play first."
+    : `Yes: ${freeNames("en")}, with up to ten photos, a song, a countdown and a hidden surprise. Video, voice, more photos and every other template are a one-time payment for that template, with no subscription. The editor is free until you publish, so you can build the whole gift and watch it play first.`,
 };
 const freeEs = {
   q: "¿Hay algo gratis?",
-  a: "Una cosa: La carta como nota corta, hasta 500 caracteres con una canción, una cuenta atrás y una sorpresa final. Las fotos, una carta más larga, el vídeo, la voz y las demás plantillas son un solo pago por esa plantilla, sin suscripción. El editor es gratis hasta que publicas, así que puedes montar el regalo entero y verlo funcionar antes.",
+  a: NOTE
+    ? "Una cosa: La carta como nota corta, hasta 500 caracteres con una canción, una cuenta atrás y una sorpresa final. Las fotos, una carta más larga, el vídeo, la voz y las demás plantillas son un solo pago por esa plantilla, sin suscripción. El editor es gratis hasta que publicas, así que puedes montar el regalo entero y verlo funcionar antes."
+    : `Sí: ${freeNames("es")}, con hasta diez fotos, una canción, una cuenta atrás y una sorpresa final. El vídeo, la voz, más fotos y las demás plantillas son un solo pago por esa plantilla, sin suscripción. El editor es gratis hasta que publicas, así que puedes montar el regalo entero y verlo funcionar antes.`,
 };
 const keepEn = {
   q: "Will the link stop working?",
@@ -126,13 +144,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "bouquet",
       lead: [
         "Nothing ships, so the only deadline is how fast you type. Every gift here is made on your phone, published the moment you finish and sent as a link in the chat you already have open. Ten minutes is a fair estimate for most of them, and the quickest takes five.",
-        "The risk with a late gift is that it looks late. So each idea below is the one that looks most planned for the least typing, with a line you can use as it stands. One is free: The Letter, as a short note of up to 500 characters. The rest are paid once, when you publish, and you can build the whole thing first to see whether it is worth it.",
+        `The risk with a late gift is that it looks late. So each idea below is the one that looks most planned for the least typing, with a line you can use as it stands. ${NOTE ? "One is free: The Letter, as a short note of up to 500 characters." : "One is free: The Letter."} The rest are paid once, when you publish, and you can build the whole thing first to see whether it is worth it.`,
       ],
       ideas: [
         {
           template: "the-letter",
           heading: "The five-minute one: a note under a wax seal",
-          body: "Two names and up to 500 characters: that is all the free version asks for. They break the seal with a tap and your words write themselves out in handwriting, with a song if you add one. No photos to hunt for. Five hundred characters is room for one specific memory and one promise. A late note needs both.",
+          body: `Two names and ${NOTE ? "up to 500 characters" : "a few lines"}: that is all the free version asks for. They break the seal with a tap and your words write themselves out in handwriting, with a song if you add one. No photos to hunt for. ${NOTE ? "Five hundred characters is" : "A few lines are"} room for one specific memory and one promise. A late note needs both.`,
           line: { field: "freeNote", where: "The whole note", text: "My plan for today fell apart, so here is the part that mattered. You make ordinary days better than I make plans. Dinner is on me and you pick the place." },
         },
         {
@@ -197,7 +215,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       faq: [
         {
           q: "What is the fastest digital gift to make?",
-          a: "The Letter as a short note: two names and up to 500 characters, with a song if you want one. It is free and takes about five minutes. Of the paid ones, Fortune Cookie asks for three fortunes and Bouquet needs no photos at all.",
+          a: `${NOTE ? "The Letter as a short note: two names and up to 500 characters" : "The Letter: two names and a few lines"}, with a song if you want one. It is free and takes about five minutes. Of the paid ones, Fortune Cookie asks for three fortunes and Bouquet needs no photos at all.`,
         },
         {
           q: "Can I send it today?",
@@ -230,13 +248,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "bouquet",
       lead: [
         "Aquí no hay envío, así que el único plazo es lo rápido que escribas. Todos estos regalos se hacen desde el móvil, se publican en cuanto terminas y se mandan en un enlace por el chat que ya tienes abierto. Cuenta unos diez minutos para casi todos; el más rápido sale en cinco.",
-        "El riesgo de un regalo tardío es que se note. Por eso cada idea es la que más preparada parece con menos texto, con una frase que puedes usar tal cual. Una es gratis: La carta, como nota corta de hasta 500 caracteres. Las demás se pagan una sola vez, al publicar, y antes puedes montarlo entero para ver si te convence.",
+        `El riesgo de un regalo tardío es que se note. Por eso cada idea es la que más preparada parece con menos texto, con una frase que puedes usar tal cual. ${NOTE ? "Una es gratis: La carta, como nota corta de hasta 500 caracteres." : "Una es gratis: La carta."} Las demás se pagan una sola vez, al publicar, y antes puedes montarlo entero para ver si te convence.`,
       ],
       ideas: [
         {
           template: "the-letter",
           heading: "La de cinco minutos: una nota con lacre",
-          body: "Dos nombres y hasta 500 caracteres: eso es todo lo que pide la versión gratis. Rompen el sello con un toque y tus palabras se escriben a mano sobre el papel, con una canción si quieres. Sin fotos que buscar. Quinientos caracteres dan para un recuerdo concreto y una promesa. A una nota tardía le hacen falta las dos cosas.",
+          body: `Dos nombres y ${NOTE ? "hasta 500 caracteres" : "unas líneas"}: eso es todo lo que pide la versión gratis. Rompen el sello con un toque y tus palabras se escriben a mano sobre el papel, con una canción si quieres. Sin fotos que buscar. ${NOTE ? "Quinientos caracteres dan" : "Unas líneas dan"} para un recuerdo concreto y una promesa. A una nota tardía le hacen falta las dos cosas.`,
           line: { field: "freeNote", where: "La nota entera", text: "Mi plan para hoy se ha torcido, así que aquí va la parte que importaba. Haces mejores los días normales que yo los planes. La cena la pago yo y el sitio lo eliges tú." },
         },
         {
@@ -301,7 +319,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       faq: [
         {
           q: "¿Cuál es el regalo digital más rápido de hacer?",
-          a: "La carta como nota corta: dos nombres y hasta 500 caracteres, con una canción si quieres. Es gratis y lleva unos cinco minutos. De los de pago, Galleta de la fortuna pide tres fortunas y Ramo no necesita ninguna foto.",
+          a: `${NOTE ? "La carta como nota corta: dos nombres y hasta 500 caracteres" : "La carta: dos nombres y unas líneas"}, con una canción si quieres. Es gratis y lleva unos cinco minutos. De los de pago, Galleta de la fortuna pide tres fortunas y Ramo no necesita ninguna foto.`,
         },
         {
           q: "¿Puedo enviarlo hoy mismo?",
@@ -634,7 +652,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "Is one of these birthday cards free?",
-          a: "Not these eight. Each is a one-time payment for that card, with no subscription, and the editor is free until you publish: build it and watch it first. The free gift on Ethos is The Letter, as a short note of up to 500 characters with a song. It works for a birthday. It has no candles.",
+          a: `Not these eight. Each is a one-time payment for that card, with no subscription, and the editor is free until you publish: build it and watch it first. ${NOTE ? "The free gift on Ethos is The Letter, as a short note of up to 500 characters with a song. It works for a birthday. It has no candles." : `The free gifts on Ethos are ${freeNames("en")}, with up to ten photos and a song. They work for a birthday. They have no candles.`}`,
         },
         keepEn,
       ],
@@ -743,7 +761,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "¿Alguna de estas tarjetas es gratis?",
-          a: "Estas ocho, no. Cada una es un solo pago por esa tarjeta, sin suscripción, y el editor es gratis hasta que publicas: móntala y mírala antes. El regalo gratis de Ethos es La carta, como nota corta de hasta 500 caracteres con una canción. Sirve para un cumpleaños. No tiene velas.",
+          a: `Estas ocho, no. Cada una es un solo pago por esa tarjeta, sin suscripción, y el editor es gratis hasta que publicas: móntala y mírala antes. ${NOTE ? "El regalo gratis de Ethos es La carta, como nota corta de hasta 500 caracteres con una canción. Sirve para un cumpleaños. No tiene velas." : `Los regalos gratis de Ethos son ${freeNames("es")}, con hasta diez fotos y una canción. Sirven para un cumpleaños. No tienen velas.`}`,
         },
         keepEs,
       ],
@@ -841,7 +859,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "Is a virtual birthday cake free?",
-          a: "No. Each of these five is a one-time payment for that card, with no subscription. The editor is free until you publish: build the cake and blow it out yourself first. The free gift on Ethos is The Letter as a short note, which has no cake.",
+          a: `No. Each of these five is a one-time payment for that card, with no subscription. The editor is free until you publish: build the cake and blow it out yourself first. ${NOTE ? "The free gift on Ethos is The Letter as a short note, which has no cake." : `The free gifts on Ethos are ${freeNames("en")}, which have no cake.`}`,
         },
       ],
       related: [
@@ -935,7 +953,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "¿Una tarta de cumpleaños virtual es gratis?",
-          a: "No. Cada una de estas cinco es un solo pago por esa tarjeta, sin suscripción. El editor es gratis hasta que publicas: monta la tarta y sóplala tú antes. El regalo gratis de Ethos es La carta como nota corta, que no tiene tarta.",
+          a: `No. Cada una de estas cinco es un solo pago por esa tarjeta, sin suscripción. El editor es gratis hasta que publicas: monta la tarta y sóplala tú antes. ${NOTE ? "El regalo gratis de Ethos es La carta como nota corta, que no tiene tarta." : `Los regalos gratis de Ethos son ${freeNames("es")}, que no tienen tarta.`}`,
         },
       ],
       related: [
@@ -962,7 +980,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "scrapbook",
       lead: [
         "A photo album you send as a link is a set of photos with an order, captions and a way of being looked through. That last part is where these eight differ. One hangs each photo in a gallery room. One pins them along a road with dates. One hides them on a camera from 2006.",
-        "The real limits, so you can choose before you start: most of these hold 8 to 12 photos and two hold 20, and a caption can be 140 characters. Photos are a paid feature on Ethos, so every album here is paid once, when you publish, and the editor is free until then. Pick by how many photos you have and how much you want to say about each.",
+        `The real limits, so you can choose before you start: most of these hold 8 to 12 photos and two hold 20, and a caption can be 140 characters. ${NOTE ? "Photos are a paid feature on Ethos, so every album here is paid once" : "Constellations is free with up to ten photos, and every other album here is paid once"}, when you publish, and the editor is free until then. Pick by how many photos you have and how much you want to say about each.`,
       ],
       ideas: [
         {
@@ -1049,7 +1067,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "Is a photo album free?",
-          a: "No. Photos are a paid feature, so each album is a one-time payment for that template, with no subscription. You can build it in the editor and watch it play before you pay. The free gift on Ethos is The Letter as a short note, without photos.",
+          a: NOTE
+            ? "No. Photos are a paid feature, so each album is a one-time payment for that template, with no subscription. You can build it in the editor and watch it play before you pay. The free gift on Ethos is The Letter as a short note, without photos."
+            : "One is: Constellations, with up to ten photos. Each of the others is a one-time payment for that template, with no subscription. You can build it in the editor and watch it play before you pay. The Letter is free too, with up to ten photos.",
         },
         keepEn,
       ],
@@ -1074,7 +1094,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "scrapbook",
       lead: [
         "Un álbum de fotos que se manda en un enlace es un conjunto de fotos con un orden, unos pies de foto y una manera de recorrerlo. En eso último se diferencian estos ocho. Uno cuelga cada foto en la sala de una galería. Otro las clava a lo largo de un camino con fechas. Otro las esconde en una cámara de 2006.",
-        "Los límites reales, para elegir antes de empezar: en casi todos caben de 8 a 12 fotos y en dos caben 20, y un pie de foto puede tener 140 caracteres. En Ethos las fotos son de pago, así que cada álbum se paga una sola vez, al publicar, y el editor es gratis hasta entonces. Elige según cuántas fotos tengas y cuánto quieras contar de cada una.",
+        `Los límites reales, para elegir antes de empezar: en casi todos caben de 8 a 12 fotos y en dos caben 20, y un pie de foto puede tener 140 caracteres. ${NOTE ? "En Ethos las fotos son de pago, así que cada álbum se paga una sola vez" : "Constelaciones es gratis con hasta diez fotos, y los demás álbumes se pagan una sola vez"}, al publicar, y el editor es gratis hasta entonces. Elige según cuántas fotos tengas y cuánto quieras contar de cada una.`,
       ],
       ideas: [
         {
@@ -1161,7 +1181,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           q: "¿Un álbum de fotos es gratis?",
-          a: "No. Las fotos son de pago, así que cada álbum es un solo pago por esa plantilla, sin suscripción. Puedes montarlo en el editor y verlo funcionar antes de pagar. El regalo gratis de Ethos es La carta como nota corta, sin fotos.",
+          a: NOTE
+            ? "No. Las fotos son de pago, así que cada álbum es un solo pago por esa plantilla, sin suscripción. Puedes montarlo en el editor y verlo funcionar antes de pagar. El regalo gratis de Ethos es La carta como nota corta, sin fotos."
+            : "Uno sí: Constelaciones, con hasta diez fotos. Cada uno de los demás es un solo pago por esa plantilla, sin suscripción. Puedes montarlo en el editor y verlo funcionar antes de pagar. La carta también es gratis, con hasta diez fotos.",
         },
         keepEs,
       ],
@@ -1207,7 +1229,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "A sealed letter, when one page is enough",
-          body: "If the website you have in mind is really a letter, send a letter. An envelope with your initial pressed into the wax opens on a tap, and the page writes itself out in handwriting. As a short note of up to 500 characters it is free. With “Make it special” it holds the full letter, your photos as polaroids, a video and a voice message.",
+          body: `If the website you have in mind is really a letter, send a letter. An envelope with your initial pressed into the wax opens on a tap, and the page writes itself out in handwriting. ${NOTE ? "As a short note of up to 500 characters it is free. With “Make it special” it holds the full letter, your photos as polaroids, a video and a voice message." : "It is free with the whole letter and up to ten photos as polaroids. With “Make it special” it also holds a video and a voice message."}`,
           line: { field: "greeting", where: "The greeting, in place of “Dear…”", text: "To the person who answered at 1 a.m.," },
         },
         {
@@ -1308,7 +1330,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "Una carta con lacre, cuando basta una página",
-          body: "Si la web que tienes en la cabeza es en realidad una carta, manda una carta. Un sobre con tu inicial en el lacre se abre con un toque, y la página se va escribiendo a mano. Como nota corta de hasta 500 caracteres es gratis. Con «Hazlo especial» lleva la carta completa, tus fotos como polaroids, un vídeo y un mensaje de voz.",
+          body: `Si la web que tienes en la cabeza es en realidad una carta, manda una carta. Un sobre con tu inicial en el lacre se abre con un toque, y la página se va escribiendo a mano. ${NOTE ? "Como nota corta de hasta 500 caracteres es gratis. Con «Hazlo especial» lleva la carta completa, tus fotos como polaroids, un vídeo y un mensaje de voz." : "Es gratis con la carta entera y hasta diez fotos como polaroids. Con «Hazlo especial» lleva además un vídeo y un mensaje de voz."}`,
           line: { field: "greeting", where: "El saludo, en vez de «Querido…»", text: "A quien contestó a la una de la madrugada:" },
         },
         {

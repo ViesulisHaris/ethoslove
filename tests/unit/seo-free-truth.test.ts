@@ -83,3 +83,45 @@ describe("/gifts says how many templates there are and how many are free from th
     });
   }
 });
+
+/** Every string in a value, however deep. */
+function allStrings(o: unknown): string[] {
+  if (typeof o === "string") return [o];
+  if (Array.isArray(o)) return o.flatMap(allStrings);
+  if (o && typeof o === "object") return Object.values(o).flatMap(allStrings);
+  return [];
+}
+
+describe("the site's pages say what is free as the free-note setting has it (occasions, gift guides, /digital-cards, /gifts, /pt)", () => {
+  /** The pages' words with the setting as given, the modules loaded afresh (their choice is made when they load, as at build). */
+  async function pagesWith(share: string): Promise<string[]> {
+    vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", share);
+    vi.resetModules();
+    const [{ OCCASION_GUIDES }, { OCCASION_IDEAS }, { GIFT_GUIDES }, { DIGITAL_GIFT_GUIDE: gifts }, { digitalCardsCopy }, { ptLetterCopy }] = await Promise.all([
+      import("@/content/occasions"),
+      import("@/content/occasion-ideas"),
+      import("@/content/gift-guides"),
+      import("@/content/digital-gifts"),
+      import("@/content/digital-cards"),
+      import("@/content/pt-letter"),
+    ]);
+    const facts = { single: "S", pick3: "P", everything: "E", extras: "X", photos: "F", notePhotos: 5, count: 61, paid: 60, ideas: 30, finder: true };
+    return [OCCASION_GUIDES, OCCASION_IDEAS, GIFT_GUIDES, gifts, digitalCardsCopy("en", facts), digitalCardsCopy("es", facts), ptLetterCopy({ price: "X", currency: "eur" })]
+      .flatMap(allStrings)
+      .flatMap((s) => s.split(/(?<=[.;:!?])\s+/));
+  }
+  const saysFree = /\b(?:free|gratis|grátis|gratuita)\b/i;
+
+  it("with the free note on (live), never calls Constellations free or gives free photos", async () => {
+    const sentences = (await pagesWith("1")).filter((s) => saysFree.test(s));
+    for (const s of sentences) {
+      expect.soft(/Constellations|Constelaciones/.test(s) && !/paid|pago|de pago|Make it special|Hazlo especial/i.test(s), s).toBe(false);
+      expect.soft(/\b(?:10|ten|diez) (?:photos|fotos)\b/i.test(s), s).toBe(false);
+    }
+  });
+
+  it("with the free note off, never says the free gift is a short note of 500 characters", async () => {
+    const sentences = (await pagesWith("")).filter((s) => saysFree.test(s));
+    for (const s of sentences) expect.soft(/short note|nota corta|bilhete curto|500 (?:characters|caracteres)/i.test(s), s).toBe(false);
+  });
+});

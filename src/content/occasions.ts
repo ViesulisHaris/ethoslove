@@ -1,5 +1,6 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 import { OCCASION_IDEAS, type OccasionIdeas } from "./occasion-ideas";
 
 /**
@@ -33,11 +34,11 @@ const phoneEs = {
 };
 const costEn = {
   q: "Does it cost anything?",
-  a: "The Letter is free as a short note: up to 500 characters, our music library and a real song they tap to hear, with a small “Made with Ethos” footer. Photos, a longer letter and every other template are a one-time payment for that template, forever — no subscription — and add video, voice messages, up to twenty photos, scheduling and a password.",
+  a: `${noteForEveryone() ? "The Letter is free as a short note: up to 500 characters, our music library" : "The Letter and Constellations are free: the whole letter, up to ten photos, our music library"} and a real song they tap to hear, with a small “Made with Ethos” footer. ${noteForEveryone() ? "Photos, a longer letter" : "“Make it special”"} and every other template are a one-time payment for that template, forever — no subscription — and add video, voice messages, up to twenty photos, scheduling and a password.`,
 };
 const costEs = {
   q: "¿Cuesta algo?",
-  a: "La carta es gratis como nota corta: hasta 500 caracteres, nuestra biblioteca de música y una canción de verdad que se escucha con un toque, con un pequeño pie que dice «Hecho con Ethos». Las fotos, una carta más larga y las demás plantillas son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, hasta veinte fotos, programación y contraseña.",
+  a: `${noteForEveryone() ? "La carta es gratis como nota corta: hasta 500 caracteres, nuestra biblioteca de música" : "La carta y Constelaciones son gratis: la carta completa, hasta diez fotos, nuestra biblioteca de música"} y una canción de verdad que se escucha con un toque, con un pequeño pie que dice «Hecho con Ethos». ${noteForEveryone() ? "Las fotos, una carta más larga" : "«Hazlo especial»"} y las demás plantillas son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, hasta veinte fotos, programación y contraseña.`,
 };
 const keepEn = {
   q: "Will it still be there next year?",
@@ -258,8 +259,8 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "Paper, the traditional first-anniversary gift",
-            brief: "Paper is the first-anniversary gift, and The Letter is the free template.",
-            body: "Paper is the gift for a first anniversary, on lists going back to Emily Post’s Etiquette in 1922, and The Letter is the free template. Choose kraft paper, press your initial into the wax, and open with the first message you ever sent them, word for word if you can find it. Then write what you’d send now.",
+            brief: `Paper is the first-anniversary gift, and The Letter is ${noteForEveryone() ? "the" : "a"} free template.`,
+            body: `Paper is the gift for a first anniversary, on lists going back to Emily Post’s Etiquette in 1922, and The Letter is ${noteForEveryone() ? "the" : "a"} free template. Choose kraft paper, press your initial into the wax, and open with the first message you ever sent them, word for word if you can find it. Then write what you’d send now.`,
           },
           {
             template: "text-thread",
@@ -332,7 +333,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Photos from across the years, in order, so the story reads as a story — up to ten on a free template, twenty on premium. The song from your wedding, your first road trip, or the one you argue about: any template can end on thirty seconds of the real recording, a tap away, and a premium one carries a video clip and a voice message too. Museum hangs the photos in rooms; Vinyl builds the whole gift around a record.",
+          body: `Photos from across the years, in order, so the story reads as a story — ${noteForEveryone() ? "up to twenty on a premium template or with “Make it special”" : "up to ten on a free template, twenty on premium"}. The song from your wedding, your first road trip, or the one you argue about: any template can end on thirty seconds of the real recording, a tap away, and a premium one carries a video clip and a voice message too. Museum hangs the photos in rooms; Vinyl builds the whole gift around a record.`,
         },
         {
           heading: "When to send it",
@@ -346,7 +347,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           q: "How many photos can I add?",
-          a: "Up to ten on a free template and twenty on a premium one. Put them in the order you want the story told; the template arranges them.",
+          a: `${noteForEveryone() ? "Up to twenty on a premium template or with “Make it special”: the free note takes none" : "Up to ten on a free template and twenty on a premium one"}. Put them in the order you want the story told; the template arranges them.`,
         },
         keepEn,
       ],
@@ -360,7 +361,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "Bodas de papel: una carta",
-            body: "Al primer aniversario se le llama bodas de papel, y La carta es la plantilla gratuita. Elige papel kraft, imprime tu inicial en el lacre y empieza con el primer mensaje que le mandaste, palabra por palabra si lo encuentras. Luego escribe lo que le mandarías hoy.",
+            body: `Al primer aniversario se le llama bodas de papel, y La carta es ${noteForEveryone() ? "la" : "una"} plantilla gratuita. Elige papel kraft, imprime tu inicial en el lacre y empieza con el primer mensaje que le mandaste, palabra por palabra si lo encuentras. Luego escribe lo que le mandarías hoy.`,
           },
           {
             template: "text-thread",
@@ -432,7 +433,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de todos esos años, en orden, para que la historia se lea como una historia: hasta diez en una plantilla gratis, veinte en una premium. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museo cuelga las fotos en salas; Vinilo construye todo el regalo alrededor de un disco.",
+          body: `Fotos de todos esos años, en orden, para que la historia se lea como una historia: ${noteForEveryone() ? "hasta veinte en una plantilla premium o con «Hazlo especial»" : "hasta diez en una plantilla gratis, veinte en una premium"}. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museo cuelga las fotos en salas; Vinilo construye todo el regalo alrededor de un disco.`,
         },
         {
           heading: "Cuándo enviarlo",
@@ -446,7 +447,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           q: "¿Cuántas fotos puedo poner?",
-          a: "Hasta diez en una plantilla gratis y veinte en una premium. Ponlas en el orden en que quieras contar la historia; la plantilla las coloca.",
+          a: `${noteForEveryone() ? "Hasta veinte en una plantilla premium o con «Hazlo especial»: la nota gratis no lleva fotos" : "Hasta diez en una plantilla gratis y veinte en una premium"}. Ponlas en el orden en que quieras contar la historia; la plantilla las coloca.`,
         },
         keepEs,
       ],
@@ -562,7 +563,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "Una carta, que es como empezó San Valentín",
-            body: "Se suele decir que la felicitación de San Valentín más antigua en inglés es una carta: en febrero de 1477, Margery Brews escribió a John Paston llamándole «mi muy amado Valentín», mientras sus familias regateaban la dote. La carta es la plantilla gratuita y su saludo se puede cambiar, así que empieza como ella y luego escribe lo que solo tú has notado este año.",
+            body: `Se suele decir que la felicitación de San Valentín más antigua en inglés es una carta: en febrero de 1477, Margery Brews escribió a John Paston llamándole «mi muy amado Valentín», mientras sus familias regateaban la dote. La carta es ${noteForEveryone() ? "la" : "una"} plantilla gratuita y su saludo se puede cambiar, así que empieza como ella y luego escribe lo que solo tú has notado este año.`,
           },
           {
             template: "photo-booth",
@@ -792,7 +793,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "A Christmas letter that isn’t a family newsletter",
-            body: "The free one, and the opposite of the round-up letter some families send: no promotions, no exam results, just them. Change the greeting from “Dear Sam,” to what you actually call them, press your initial into the wax, and leave the year’s highlights to the group chat. Write about one evening from this year, start to finish, and why it’s the one you’d keep.",
+            body: `${noteForEveryone() ? "The free one" : "A free one"}, and the opposite of the round-up letter some families send: no promotions, no exam results, just them. Change the greeting from “Dear Sam,” to what you actually call them, press your initial into the wax, and leave the year’s highlights to the group chat. Write about one evening from this year, start to finish, and why it’s the one you’d keep.`,
           },
           {
             template: "front-page",
@@ -907,8 +908,8 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           {
             template: "the-letter",
             heading: "Una carta, no una felicitación",
-            brief: "La gratuita: una felicitación se firma y acaba en una estantería, y una carta se guarda.",
-            body: "La gratuita. Una felicitación se firma y acaba en una estantería; una carta se guarda. Cambia el saludo por cómo le llamas de verdad, imprime tu inicial en el lacre y deja los resúmenes del año para el grupo de la familia: escribe sobre una sola tarde de este año, de principio a fin, y por qué es la que te quedarías.",
+            brief: `${noteForEveryone() ? "La gratuita" : "Una gratuita"}: una felicitación se firma y acaba en una estantería, y una carta se guarda.`,
+            body: `${noteForEveryone() ? "La gratuita" : "Una gratuita"}. Una felicitación se firma y acaba en una estantería; una carta se guarda. Cambia el saludo por cómo le llamas de verdad, imprime tu inicial en el lacre y deja los resúmenes del año para el grupo de la familia: escribe sobre una sola tarde de este año, de principio a fin, y por qué es la que te quedarías.`,
           },
           {
             template: "front-page",
