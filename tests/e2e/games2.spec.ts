@@ -440,6 +440,25 @@ test("W11: on the hub, beside today's question", async ({ page }) => {
   await expect(page.locator('a[data-weekly-card][href="/es/games/weekly"]')).toContainText("El desafío de la semana");
 });
 
+test("W11b: the weekly card's button keeps to one line on a phone, in both languages (games2-N1)", async ({ page }) => {
+  for (const path of ["/games", "/es/games"]) {
+    for (const width of [320, 375]) {
+      await page.setViewportSize({ width, height: 812 });
+      await page.goto(path);
+      const cta = page.locator("a[data-weekly-card] span.mt-auto");
+      await expect(cta).toHaveCount(1);
+      // The arrow is a flex item and never wraps; the words are one text node, one rect per line.
+      const lines = await cta.evaluate((el) => {
+        const text = [...el.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent!.trim())!;
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+      });
+      expect(lines, `${path} at ${width}`).toBe(1);
+    }
+  }
+});
+
 test("W12: no banner and no recorder on the page", async ({ browser }) => {
   const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   await prepare(context);

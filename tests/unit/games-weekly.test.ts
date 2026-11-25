@@ -373,6 +373,8 @@ describe("the weekly challenge's words", () => {
     for (const m of [en, es]) {
       expect(words(m.games.hub.weeklyTitle)).toBeLessThanOrEqual(5);
       expect(words(m.games.hub.weeklyCta)).toBeLessThanOrEqual(3);
+      // Never longer than today's button beside it, so the two sit on one line alike on a phone (games2-N1).
+      expect(m.games.hub.weeklyCta.length).toBeLessThanOrEqual(m.games.hub.todayCta.length);
       expect((m.games.hub as Record<string, unknown>).pickSub).toBeUndefined();
     }
   });
