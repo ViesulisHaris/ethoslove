@@ -32,10 +32,14 @@ const utcDay = (d: Date) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(
 export const letterWeek = (now: Date): number => weekOf(dayOf(now.getTime()));
 /** Its place in the year of 52: 1 to 52, round and round, never the calendar's week number. */
 export const letterSlot = (week: number): number => ((((week - LETTER_EPOCH) % LETTER_WEEKS) + LETTER_WEEKS) % LETTER_WEEKS) + 1;
-/** Thursday to Sunday (UTC): Thursday is the day, the other three are where a letter that waited goes. */
-export const isSendDay = (now: Date): boolean => [4, 5, 6, 0].includes(now.getUTCDay());
-/** Sunday: the week's last chance; a letter that would still wait is skipped. */
-export const isLastSendDay = (now: Date): boolean => now.getUTCDay() === 0;
+/**
+ * Thursday and Friday (UTC): Thursday is the day, Friday is where a letter that waited goes. Never later:
+ * the lines to say name Friday, Saturday or Sunday (letter-C11), and a letter that came on Saturday
+ * would invite someone to a Friday already gone. A letter that still can't go on Friday is skipped.
+ */
+export const isSendDay = (now: Date): boolean => [4, 5].includes(now.getUTCDay());
+/** Friday: the week's last chance; a letter that would still wait is skipped. */
+export const isLastSendDay = (now: Date): boolean => now.getUTCDay() === 5;
 
 /** A path of ours as the table keeps it (0027's check): lower case, letters, digits, dashes and slashes. */
 const PLAIN_PATH = /^\/[a-z0-9/-]{0,119}$/;
@@ -72,7 +76,7 @@ export function otherEmailToday(f: LetterDayFacts, today: Date): boolean {
 export type LetterFacts = { optedOut: boolean; other: boolean };
 export type LetterDecision = "send" | "skip" | "hold";
 
-/** Reserved test domains and the unsubscribe list are skipped (and claimed); another e-mail today holds it a day, and on Sunday skips it. */
+/** Reserved test domains and the unsubscribe list are skipped (and claimed); another e-mail today holds it a day, and on Friday skips it. */
 export function letterDecision(email: string, facts: LetterFacts, now: Date): LetterDecision {
   if (RESERVED.test(email.trim())) return "skip";
   if (facts.optedOut) return "skip";

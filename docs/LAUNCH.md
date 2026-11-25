@@ -186,7 +186,7 @@ Full detail in `docs/STRIPE.md`. The checklist:
 | `/api/cron/reminders` | 07:00 | "Remind me next year" emails, nine days before, catching up two missed days |
 | `/api/cron/unlock` | 08:00 | scheduled gifts, storage retention (unchanged) |
 | `/api/cron/monthly-idea` | 07:40 to 13:40, hourly | the monthly idea, one email a month for a year after a gift; answers `skipped: "off"` until `MONTHLY_IDEA_EMAILS` is set |
-| `/api/cron/date-letter` | 08:10 to 15:50, at :10, :30 and :50 | the date letter: tidies the list every day, sends the week's letter Thursday to Sunday; answers `skipped: "off"` until `DATE_LETTER=on`, and `skipped: "no_table"` until migration 0027 is applied |
+| `/api/cron/date-letter` | 08:10 to 15:50, at :10, :30 and :50 | the date letter: tidies the list every day, sends the week's letter on Thursday, and on Friday what waited; answers `skipped: "off"` until `DATE_LETTER=on`, and `skipped: "no_table"` until migration 0027 is applied |
 
 Check the Vercel plan allows three daily crons. The reminder job sends at most ~90 emails a run
 (500 ms apart, inside 60 s); Resend's free tier is 100 emails a day and 3,000 a month in total, receipts

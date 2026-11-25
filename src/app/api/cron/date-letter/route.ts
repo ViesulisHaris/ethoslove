@@ -21,7 +21,7 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
 
 /**
  * The date letter (lib/lifecycle/date-letter.ts): every day at :10, :30 and :50 from 08:10 to 15:50
- * UTC (vercel.json). Every run tidies the list; Thursday to Sunday it sends the week's letter. Switched
+ * UTC (vercel.json). Every run tidies the list; on Thursday and Friday it sends the week's letter. Switched
  * off until DATE_LETTER=on: then it answers `skipped: "off"` and reads nothing. Without migration 0027
  * it answers `skipped: "no_table"`. How many are on the list, waiting and stopped is counted from the
  * table each run (no event is sent for a confirm or a stop: those pages load no script).

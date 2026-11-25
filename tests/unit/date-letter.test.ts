@@ -56,11 +56,11 @@ describe("the date letter's rules", () => {
     }
   });
 
-  it("W5 it goes on Thursday, and waits no later than Sunday", () => {
+  it("W5 it goes on Thursday, and waits no later than Friday", () => {
     // Monday 8 March 2027 to Sunday 14 March.
     const days = ["2027-03-08", "2027-03-09", "2027-03-10", "2027-03-11", "2027-03-12", "2027-03-13", "2027-03-14"];
-    const send = [false, false, false, true, true, true, true];
-    const last = [false, false, false, false, false, false, true];
+    const send = [false, false, false, true, true, false, false];
+    const last = [false, false, false, false, true, false, false];
     days.forEach((day, i) => {
       for (const time of ["00:00:00.000", "23:59:59.999"]) {
         const d = at(`${day}T${time}Z`);
@@ -98,12 +98,10 @@ describe("the date letter's rules", () => {
   it("W7 decides send, skip or hold", () => {
     const thu = at("2027-03-11T09:00:00Z");
     const fri = at("2027-03-12T09:00:00Z");
-    const sat = at("2027-03-13T09:00:00Z");
-    const sun = at("2027-03-14T09:00:00Z");
     expect(letterDecision("a@example.com", { optedOut: false, other: false }, thu)).toBe("skip");
     expect(letterDecision("sam@mail.com", { optedOut: true, other: false }, thu)).toBe("skip");
-    for (const d of [thu, fri, sat]) expect(letterDecision("sam@mail.com", { optedOut: false, other: true }, d)).toBe("hold");
-    expect(letterDecision("sam@mail.com", { optedOut: false, other: true }, sun)).toBe("skip");
+    expect(letterDecision("sam@mail.com", { optedOut: false, other: true }, thu)).toBe("hold");
+    expect(letterDecision("sam@mail.com", { optedOut: false, other: true }, fri)).toBe("skip");
     expect(letterDecision("sam@mail.com", { optedOut: false, other: false }, thu)).toBe("send");
     expect(letterDecision("sam@mail.com", { optedOut: true, other: true }, thu)).toBe("skip");
   });

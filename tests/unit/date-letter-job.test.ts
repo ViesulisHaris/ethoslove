@@ -170,12 +170,16 @@ describe("the date letter's job", () => {
     const fri = job(withFacts(store, () => ({ optedOut: false, other: false })), FRI);
     expect(await fri.run()).toMatchObject({ sent: 1 });
 
-    // On Sunday the letter that would still wait is skipped, and keeps its claim.
+    // On Friday the letter that would still wait is skipped, and keeps its claim: it never comes on
+    // Saturday or Sunday, when its line could name a day already gone (letter-C11).
     const other = setup([letterRow()]);
-    const sun = job(withFacts(other.store, () => ({ optedOut: false, other: true })), SUN);
-    expect(await sun.run()).toMatchObject({ skipped: 1, held: 0, sent: 0 });
-    expect(other.fake.rows("date_letter")[0].last_week).toBe(letterWeek(SUN));
-    expect(sun.mail).toEqual([]);
+    const late = job(withFacts(other.store, () => ({ optedOut: false, other: true })), FRI);
+    expect(await late.run()).toMatchObject({ skipped: 1, held: 0, sent: 0 });
+    expect(other.fake.rows("date_letter")[0].last_week).toBe(letterWeek(FRI));
+    expect(late.mail).toEqual([]);
+    const weekend = setup([letterRow()]);
+    for (const when of [SAT, SUN]) expect((await job(weekend.store, when).run()).sent, when.toISOString()).toBe(0);
+    expect(weekend.fake.rows("date_letter")[0].last_week).toBeNull();
   });
 
   it("J7 the unsubscribe list and test addresses get none", async () => {
@@ -206,10 +210,12 @@ describe("the date letter's job", () => {
     expect(j.mail.map((m) => m.onceKey).sort()).toEqual([`date-letter/${A}/${week}`, `date-letter/${B}/${week}`]);
   });
 
-  it("J10 confirmed on a Saturday, it comes that day; on a Monday, on Thursday", async () => {
+  it("J10 confirmed on a Friday, it comes that day; on a Saturday or a Monday, on Thursday", async () => {
+    const fri = setup([letterRow({ confirmed_at: FRI.toISOString() })]);
+    expect(await job(fri.store, FRI).run()).toMatchObject({ sent: 1 });
     const sat = setup([letterRow({ confirmed_at: SAT.toISOString() })]);
-    const j = job(sat.store, SAT);
-    expect(await j.run()).toMatchObject({ sent: 1 });
+    expect((await job(sat.store, SAT).run()).sent).toBe(0);
+    expect((await job(sat.store, NEXT_THU).run()).sent).toBe(1);
     const mon = setup([letterRow({ confirmed_at: day(4).toISOString() })]);
     expect((await job(mon.store, day(4)).run()).sent).toBe(0);
     expect((await job(mon.store, NEXT_THU).run()).sent).toBe(1);

@@ -11,12 +11,12 @@ import { missingTable, purgeLetter } from "./date-letter-store";
 
 /**
  * The date letter's daily job (api/cron/date-letter). Every day it deletes what the list no longer
- * keeps (an address never confirmed after thirty days, one stopped thirty days ago). Thursday to
- * Sunday it sends the week's letter to each confirmed address that hasn't had it: the week is
+ * keeps (an address never confirmed after thirty days, one stopped thirty days ago). On Thursday,
+ * and on Friday for what waited, it sends the week's letter to each confirmed address that hasn't had it: the week is
  * claimed before anything goes (last_week = this week), so two runs at once can't both send it; a
  * letter that is skipped keeps its claim; a failed e-mail gives the week back and waits for the next
  * day. When another optional e-mail of ours goes to the same person that day, the letter waits a day
- * (held_on), and on Sunday it is skipped. The rules are lib/lifecycle/date-letter.ts.
+ * (held_on), and on Friday it is skipped. The rules are lib/lifecycle/date-letter.ts.
  */
 
 export type LetterRow = Pick<Tables<"date_letter">, "id" | "email" | "locale" | "last_week">;
