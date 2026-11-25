@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { FakeDb } from "./helpers/fake-db";
 import { PRODUCTS } from "@/lib/pricing/products";
@@ -270,5 +271,38 @@ describe("what each e-mail says it holds", () => {
 
   it("claims with a condition that never takes a year written without a stage", () => {
     expect(stageClaimFilter(2027, 2)).toBe("last_sent_year.is.null,last_sent_year.lt.2027,and(last_sent_year.eq.2027,last_stage.gt.0,last_stage.lt.2)");
+  });
+});
+
+describe("the price line while two more gifts are in preview (GIFT_PAIR_ENABLED=preview)", () => {
+  it("in preview the three is named for a listed address only", async () => {
+    const listed = run(world([reminder({ currency: "eur" })]), "2027-02-26", { pairOnSale: false, pairOnSaleFor: (to) => to === "leo@icloud.test" });
+    await listed.result;
+    expect(listed.sent).toHaveLength(1);
+    expect(listed.sent[0]).toMatchObject({ paid: "price", prices: { three: SINGLE.eur + PAIR.eur } });
+    const unlisted = run(world([reminder({ currency: "eur" })]), "2027-02-26", { pairOnSale: false, pairOnSaleFor: () => false });
+    await unlisted.result;
+    expect(unlisted.sent).toHaveLength(1);
+    expect(unlisted.sent[0]).toMatchObject({ paid: "price", prices: { three: null } });
+  });
+
+  it("the function is asked with the address the e-mail goes to", async () => {
+    const ask = vi.fn((_to: string) => false);
+    const { sent, result } = run(world([reminder({ currency: "eur" })]), "2027-02-26", { pairOnSale: false, pairOnSaleFor: ask });
+    await result;
+    expect(sent.length).toBeGreaterThan(0);
+    expect(ask.mock.calls).toEqual(sent.map(() => ["leo@icloud.test"]));
+  });
+
+  it("left out, the run's own switch decides, as before; and the cron hands both over", async () => {
+    const on = run(world([reminder({ currency: "eur" })]), "2027-02-26");
+    await on.result;
+    expect(on.sent[0]).toMatchObject({ paid: "price", prices: { three: SINGLE.eur + PAIR.eur } });
+    const off = run(world([reminder({ currency: "eur" })]), "2027-02-26", { pairOnSale: false });
+    await off.result;
+    expect(off.sent[0]).toMatchObject({ paid: "price", prices: { three: null } });
+    const cron = readFileSync("src/app/api/cron/reminders/route.ts", "utf8");
+    expect(cron).toContain("pairOnSale: pairOnSale(),");
+    expect(cron).toContain("pairOnSaleFor: (to) => pairOnSaleFor(to),");
   });
 });

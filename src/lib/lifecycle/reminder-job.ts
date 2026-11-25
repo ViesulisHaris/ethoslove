@@ -96,6 +96,8 @@ export type ReminderRun = {
   removeUrl: (row: Row, locale: "en" | "es") => Promise<string>;
   /** Whether two more gifts are on sale (pairOnSale): the price line names the three only then. */
   pairOnSale: boolean;
+  /** In preview: whether they are on sale to the account an e-mail goes to (pairOnSaleFor). Given, it decides instead of pairOnSale. */
+  pairOnSaleFor?: (to: string) => boolean;
   now: Date;
   inTime: () => boolean;
   pause: () => Promise<void>;
@@ -191,7 +193,7 @@ async function sendStages(run: ReminderRun, limit: number): Promise<ReminderRunR
         templateSlug: suggested.slug,
         ...links,
         onceKey: `reminder/${r.id}:${due.year}:${stage}`,
-        ...paidLine(account, r.currency, suggested.slug, suggested.tier, run.pairOnSale),
+        ...paidLine(account, r.currency, suggested.slug, suggested.tier, run.pairOnSaleFor ? run.pairOnSaleFor(to) : run.pairOnSale),
       });
       if (ok) sent += 1;
       else {
