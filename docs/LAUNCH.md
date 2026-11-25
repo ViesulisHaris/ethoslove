@@ -260,9 +260,9 @@ included.
    welcome email says the partner is already in.
 
 ### 7.7 Game pack
-1. Signed in as a fresh account, `/games/questions-for-couples` → pick the **After a year** pack → the sheet shows
+1. Signed in as a fresh account, `/games/couple-questions-game` → pick the **After a year** pack → the sheet shows
    three sample cards → **Get it for €2.99** → pay.
-2. Expect: back at `/games/questions-for-couples?pack=deep`, the pack opens and deals. **After dark** asks the 18+
+2. Expect: back at `/games/couple-questions-game?pack=deep`, the pack opens and deals. **After dark** asks the 18+
    question first. Owning Everything alone does not open packs.
 
 ### 7.8 Gift card (off by default)
@@ -370,7 +370,7 @@ included.
 - `/redeem` and `/for-two/join`, signed in and out, with good, used and wrong codes.
 - `/account`: pass, upgrade, packs, gift cards bought, reminders, redeem and "Withdraw from a
   purchase" links.
-- `/games/questions-for-couples` pack shelf and sheet (no creator-code field), the 18+ question, two phones with a pack.
+- `/games/couple-questions-game` pack shelf and sheet (no creator-code field), the 18+ question, two phones with a pack.
 - `/creators`, the footer links (Creator programme, Redeem a gift card, Withdraw from a purchase).
 - `/legal/withdraw` and `/es/legal/withdraw`: **Email us to withdraw** opens the mail app addressed to
   support, subject "Withdrawal from a purchase" / "Desistimiento de una compra", with the short form

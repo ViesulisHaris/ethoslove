@@ -165,7 +165,7 @@ everything to be done here instead. Directories are dropped; the work went where
 
 - **The long lists people search for** (commit 94af935): 150 free would-you-rather questions (from
   45) and 96 questions to ask your partner (from 36), playable and listed in full on
-  /games/would-you-rather and /games/questions-for-couples in both languages. A free question deck now deals a round of
+  /games/would-you-rather and /games/couple-questions-game in both languages. A free question deck now deals a round of
   twelve from the whole deck, so a sitting still ends at the gift and next-game screen.
 - **Two posts a day**: the routine runs at 06:17 and 12:17 UTC (first run 24 Oct, 12:17), and the
   playbook allows two a day. Posts link /gifts as "digital gift(s)" and the matching gift-idea

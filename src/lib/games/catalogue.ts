@@ -20,7 +20,7 @@ export const GAMES: GameInfo[] = [
   { key: "thisthat", href: "/games/this-or-that", rank: "10", suit: "club", sticker: "bow", phones: "two", minutes: 5, webOnly: true },
   { key: "draw", href: "/games/drawing-game", rank: "9", suit: "diamond", sticker: "squiggle", phones: "two", minutes: 10 },
   { key: "memory", href: "/games/memory", rank: "2", suit: "diamond", sticker: "butterfly", phones: "one", minutes: 5 },
-  { key: "deck", href: "/games/questions-for-couples", rank: "Q", suit: "heart", sticker: "mug", phones: "one", minutes: 15 },
+  { key: "deck", href: "/games/couple-questions-game", rank: "Q", suit: "heart", sticker: "mug", phones: "one", minutes: 15 },
   { key: "dare", href: "/games/truth-or-dare", rank: "J", suit: "spade", sticker: "kiss", phones: "one", minutes: 10 },
   { key: "roulette", href: "/games/chore-wheel", rank: "7", suit: "club", sticker: "candy", phones: "one", minutes: 1 },
 ];
@@ -43,7 +43,7 @@ export const GAME_MOVES: readonly (readonly [from: string, to: string])[] = [
   ["know", "how-well-do-you-know-me"],
   ["rather", "would-you-rather"],
   ["dare", "truth-or-dare"],
-  ["deck", "questions-for-couples"],
+  ["deck", "couple-questions-game"],
   ["draw", "drawing-game"],
   ["roulette", "chore-wheel"],
 ];

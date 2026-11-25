@@ -47,7 +47,7 @@ export async function playRather(page: Page) {
 
 test("E1: the end of the question cards: the gift first, then two named games, and both are counted", async ({ page }) => {
   await counter(page);
-  await page.goto("/games/questions-for-couples");
+  await page.goto("/games/couple-questions-game");
   for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
   const end = page.getByRole("navigation", { name: "What next" });
   const links = end.getByRole("link");
@@ -86,7 +86,7 @@ test("E3: truth or dare and the roulette end on their own two games", async ({ p
   await page.getByRole("button", { name: "We’re done for tonight" }).click();
   let end = page.getByRole("navigation", { name: "What next" });
   await expect(end.locator("[data-next-game]")).toHaveCount(2);
-  await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/games/questions-for-couples");
+  await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/games/couple-questions-game");
   await expect(end.locator("[data-next-game]").nth(1)).toHaveAttribute("href", "/games/would-you-rather");
 
   await startOnePhone(page, "/games/chore-wheel");
@@ -98,7 +98,7 @@ test("E3: truth or dare and the roulette end on their own two games", async ({ p
 });
 
 test("E4: in Spanish the next games are named in Spanish and keep /es", async ({ page }) => {
-  await page.goto("/es/games/questions-for-couples");
+  await page.goto("/es/games/couple-questions-game");
   for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Carta ${n} de 12`) }).click();
   const end = page.getByRole("navigation", { name: "¿Y ahora qué?" });
   await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/es/games/truth-or-dare");
@@ -170,7 +170,7 @@ test("E9: the hub shows the three tiers once, as the packs' own header, with the
   const packs = page.locator("section#packs");
   await expect(packs.locator("[data-tiers]")).toHaveCount(1);
   await expect(packs).not.toContainText("each and yours for good");
-  await expect(packs.locator('[data-tour="packs"] a[href="/games/questions-for-couples#packs"]')).toHaveCount(3);
+  await expect(packs.locator('[data-tour="packs"] a[href="/games/couple-questions-game#packs"]')).toHaveCount(3);
   await page.goto("/games/would-you-rather");
   await expect(page.locator("[data-tiers]")).toHaveCount(0);
 });
@@ -201,7 +201,7 @@ for (const [country, price, single] of [
       const want = charged ? price : "€2.99";
       await page.goto("/games");
       await expect(page.locator("[data-tiers] li").nth(1)).toContainText(`A pack, ${want}`);
-      await page.goto("/games/questions-for-couples");
+      await page.goto("/games/couple-questions-game");
       await expect(page.getByRole("button", { name: /Miles apart/ })).toContainText(want, { timeout: 15_000 });
     });
   });
@@ -217,7 +217,7 @@ test("E12: This or that, a whole game on one phone, and its page", async ({ page
   await expect(page.getByText("You matched on 0 of 10.")).toBeVisible();
   const end = page.getByRole("navigation", { name: "What next" });
   await expect(end.locator("[data-next-game]").nth(0)).toHaveAttribute("href", "/games/would-you-rather");
-  await expect(end.locator("[data-next-game]").nth(1)).toHaveAttribute("href", "/games/questions-for-couples");
+  await expect(end.locator("[data-next-game]").nth(1)).toHaveAttribute("href", "/games/couple-questions-game");
   expect(await events(page)).toEqual(['game_started:{"game":"thisthat","phones":1}', 'game_finished:{"game":"thisthat","phones":1}']);
   await expect(page).toHaveTitle(/^This or That Questions for Couples/);
   const list = page.locator("#thisthat-questions").locator("xpath=ancestor::section").locator("ol li");
@@ -246,17 +246,17 @@ test("E10: inside the iPhone app the end of a game offers the app's own list, no
     w.EthosNative = { version: 1, platform: "ios", locale: "en", signedIn: false, request: (type: string) => (w.__told.push(type), { ok: true }) };
     document.documentElement.setAttribute("data-app", "ios");
   });
-  await page.goto("/games/questions-for-couples");
+  await page.goto("/games/couple-questions-game");
   for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
   const end = page.getByRole("navigation", { name: "What next" });
   await expect(end.locator("[data-next-game]").first()).toBeHidden();
   await end.locator("[data-end-games]").click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { __told: string[] }).__told)).toContain("close");
-  await expect(page).toHaveURL(/\/games\/questions-for-couples$/);
+  await expect(page).toHaveURL(/\/games\/couple-questions-game$/);
 });
 
 test("E11: in a browser the app's card is never shown", async ({ page }) => {
-  await page.goto("/games/questions-for-couples");
+  await page.goto("/games/couple-questions-game");
   for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
   const end = page.getByRole("navigation", { name: "What next" });
   await expect(end.locator("[data-next-game]")).toHaveCount(2);

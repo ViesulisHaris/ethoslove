@@ -426,7 +426,7 @@ test.describe("the other rooms", () => {
   });
 
   test("games: the question deck deals, runs out and reshuffles", async ({ page }) => {
-    await page.goto("/games/questions-for-couples");
+    await page.goto("/games/couple-questions-game");
     const card = page.getByRole("button", { name: /Card 1 of 12/ });
     await expect(card).toBeVisible();
     // One steady button whose name is the card: its number, the question, and what a tap does.
@@ -443,7 +443,7 @@ test.describe("the other rooms", () => {
     await expect(page.getByRole("button", { name: /Card 1 of 12/ })).toBeVisible();
     expect(first).toMatch(/^Card 1 of 12\. .{15,}\? Next card$/);
 
-    await page.goto("/es/games/questions-for-couples");
+    await page.goto("/es/games/couple-questions-game");
     await expect(page.getByRole("button", { name: /Carta 1 de 12/ })).toBeVisible();
   });
 });
@@ -452,7 +452,7 @@ test.describe("games on one phone", () => {
   test("the games table deals every game, and each card opens it", async ({ page }) => {
     await page.goto("/games");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(/games for/i);
-    for (const [name, path] of [["How well do you know me?", "/games/how-well-do-you-know-me"], ["Would you rather?", "/games/would-you-rather"], ["Draw it, guess it", "/games/drawing-game"], ["Memory", "/games/memory"], ["Question cards", "/games/questions-for-couples"], ["Truth or dare, soft edition", "/games/truth-or-dare"], ["Dishes roulette", "/games/chore-wheel"]]) {
+    for (const [name, path] of [["How well do you know me?", "/games/how-well-do-you-know-me"], ["Would you rather?", "/games/would-you-rather"], ["Draw it, guess it", "/games/drawing-game"], ["Memory", "/games/memory"], ["Question cards", "/games/couple-questions-game"], ["Truth or dare, soft edition", "/games/truth-or-dare"], ["Dishes roulette", "/games/chore-wheel"]]) {
       await expect(page.getByRole("link", { name, exact: true })).toHaveAttribute("href", path);
     }
     await page.getByRole("link", { name: "Memory", exact: true }).click();

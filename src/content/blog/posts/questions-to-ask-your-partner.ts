@@ -262,7 +262,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play them on one phone or two" },
         {
           type: "p",
-          text: "A question is easier to ask when a card asks it for you. Our free [question cards](/games/questions-for-couples) have three decks (light, deeper, and one for when you're apart), dealt twelve at a time on one phone you pass back and forth. [How well do you know me?](/games/how-well-do-you-know-me) and [Would you rather?](/games/would-you-rather) play on one phone or on two: one of you makes a room and sends the link, so you can play from different cities. Nobody has to download anything.",
+          text: "A question is easier to ask when a card asks it for you. Our free [question cards](/games/couple-questions-game) have three decks (light, deeper, and one for when you're apart), dealt twelve at a time on one phone you pass back and forth. [How well do you know me?](/games/how-well-do-you-know-me) and [Would you rather?](/games/would-you-rather) play on one phone or on two: one of you makes a room and sends the link, so you can play from different cities. Nobody has to download anything.",
         },
         {
           type: "p",
@@ -558,7 +558,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Jugadlas en un móvil o en dos" },
         {
           type: "p",
-          text: "Una pregunta cuesta menos cuando la hace una carta por ti. Nuestras [cartas de preguntas](/games/questions-for-couples), gratis, tienen tres barajas (ligeras, más profundas y una para cuando estáis lejos), y se reparten de doce en doce en un móvil que os vais pasando. [¿Cuánto me conoces?](/games/how-well-do-you-know-me) y [¿Qué prefieres?](/games/would-you-rather) se juegan en un móvil o en dos: uno crea una sala y manda el enlace, así que podéis jugar desde ciudades distintas. No hay que descargar nada.",
+          text: "Una pregunta cuesta menos cuando la hace una carta por ti. Nuestras [cartas de preguntas](/games/couple-questions-game), gratis, tienen tres barajas (ligeras, más profundas y una para cuando estáis lejos), y se reparten de doce en doce en un móvil que os vais pasando. [¿Cuánto me conoces?](/games/how-well-do-you-know-me) y [¿Qué prefieres?](/games/would-you-rather) se juegan en un móvil o en dos: uno crea una sala y manda el enlace, así que podéis jugar desde ciudades distintas. No hay que descargar nada.",
         },
         {
           type: "p",

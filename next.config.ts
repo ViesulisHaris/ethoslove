@@ -202,7 +202,7 @@ const nextConfig: NextConfig = {
 const OCCASION_SLUGS = ["birthday", "anniversary", "valentines", "wedding", "graduation", "christmas", "halloween", "thanksgiving", "mothers-day", "fathers-day", "apology", "long-distance", "just-because"];
 
 /** The games' old addresses and their new ones: src/lib/games/catalogue.ts's GAME_MOVES, which next.config cannot import. */
-const GAME_MOVES = [["know", "how-well-do-you-know-me"], ["rather", "would-you-rather"], ["dare", "truth-or-dare"], ["deck", "questions-for-couples"], ["draw", "drawing-game"], ["roulette", "chore-wheel"]];
+const GAME_MOVES = [["know", "how-well-do-you-know-me"], ["rather", "would-you-rather"], ["dare", "truth-or-dare"], ["deck", "couple-questions-game"], ["draw", "drawing-game"], ["roulette", "chore-wheel"]];
 
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';

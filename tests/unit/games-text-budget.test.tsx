@@ -53,7 +53,7 @@ const PAGES: Record<keyof typeof LIST_SHOWN, string> = {
   rather: "would-you-rather",
   thisthat: "this-or-that",
   draw: "drawing-game",
-  deck: "questions-for-couples",
+  deck: "couple-questions-game",
   dare: "truth-or-dare",
 };
 

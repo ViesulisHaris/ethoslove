@@ -212,7 +212,7 @@ describe("who may open a pack", () => {
 
 describe("buying a pack", () => {
   it("asks checkout for the pack by id, never with an amount, and comes back to the same game", () => {
-    expect(packCheckoutBody("deep", { pathname: "/games/questions-for-couples", locale: "es", currency: "eur" })).toEqual({ product: "pack", packId: "deep", returnTo: "/games/questions-for-couples?pack=deep", locale: "es", currency: "eur" });
+    expect(packCheckoutBody("deep", { pathname: "/games/couple-questions-game", locale: "es", currency: "eur" })).toEqual({ product: "pack", packId: "deep", returnTo: "/games/couple-questions-game?pack=deep", locale: "es", currency: "eur" });
     // In the currency the shelf showed it in: dollars for a visitor in the United States.
     const body = packCheckoutBody("spicy", { pathname: "/games/would-you-rather", locale: "en", currency: "usd", ref: "c-maria" });
     expect(body).toEqual({ product: "pack", packId: "spicy", returnTo: "/games/would-you-rather?pack=spicy", locale: "en", currency: "usd", ref: "c-maria" });

@@ -228,7 +228,7 @@ export const post: BlogPost = {
         { type: "h3", text: "6. Card night" },
         {
           type: "p",
-          text: "Put your questions in a pile, draw one a turn, and both answer. Our free [question cards](/games/questions-for-couples) do this on one phone you pass between you: three decks (light ones, closer ones and one for long distance), twelve cards a round. For a round with dares in it, our [truth or dare questions for couples](/blog/truth-or-dare-questions-for-couples) has truths and dares by mood, with house rules.",
+          text: "Put your questions in a pile, draw one a turn, and both answer. Our free [question cards](/games/couple-questions-game) do this on one phone you pass between you: three decks (light ones, closer ones and one for long distance), twelve cards a round. For a round with dares in it, our [truth or dare questions for couples](/blog/truth-or-dare-questions-for-couples) has truths and dares by mood, with house rules.",
         },
         { type: "h2", text: "Can questions make you fall back in love?" },
         {
@@ -500,7 +500,7 @@ export const post: BlogPost = {
         { type: "h3", text: "6. Noche de cartas" },
         {
           type: "p",
-          text: "Haced un montón con vuestras preguntas, sacad una por turno y responded los dos. Nuestras [cartas de preguntas](/games/questions-for-couples) gratis lo hacen en un móvil que os vais pasando: tres barajas (ligeras, más íntimas y una para la distancia), doce cartas por ronda. Para una ronda con retos, nuestras preguntas de [verdad o reto para parejas](/blog/truth-or-dare-questions-for-couples) tienen verdades y retos según el ambiente, con reglas de la casa.",
+          text: "Haced un montón con vuestras preguntas, sacad una por turno y responded los dos. Nuestras [cartas de preguntas](/games/couple-questions-game) gratis lo hacen en un móvil que os vais pasando: tres barajas (ligeras, más íntimas y una para la distancia), doce cartas por ronda. Para una ronda con retos, nuestras preguntas de [verdad o reto para parejas](/blog/truth-or-dare-questions-for-couples) tienen verdades y retos según el ambiente, con reglas de la casa.",
         },
         { type: "h2", text: "¿Unas preguntas pueden volver a enamoraros?" },
         {

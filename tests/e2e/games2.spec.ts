@@ -128,9 +128,9 @@ test.describe("the games' addresses", () => {
 
   test("R6: a pack's way back and the packs' anchor", async ({ page }) => {
     await page.goto("/games/deck?pack=deep#packs");
-    await expect(page).toHaveURL(/\/games\/questions-for-couples\?pack=deep#packs$/);
+    await expect(page).toHaveURL(/\/games\/couple-questions-game\?pack=deep#packs$/);
     await page.goto("/games");
-    await expect(page.locator('a[href="/games/questions-for-couples#packs"]')).toHaveCount(3);
+    await expect(page.locator('a[href="/games/couple-questions-game#packs"]')).toHaveCount(3);
   });
 
   test("R7: each new page names itself", async ({ request }) => {

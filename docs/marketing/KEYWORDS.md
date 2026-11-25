@@ -280,7 +280,7 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 | relationship day counter | 260 | 40 | 0 | – | same |
 | how long have we been together calculator | 140 | 30 | 6 | – | same |
 | days together counter | 70 | – | 0 | – | same |
-| questions to ask your boyfriend | 74,000 | 9,900 | 0 | – | new page needed (/games/questions-for-couples has 96 cards titled 'questions to ask your partner') |
+| questions to ask your boyfriend | 74,000 | 9,900 | 0 | – | new page needed (/games/couple-questions-game has 96 cards titled 'questions to ask your partner') |
 | deep questions to ask your boyfriend | 4,400 | – | 8 | – | same |
 | questions to ask your girlfriend | 40,500 | – | 4 | – | new page needed |
 | would you rather questions for couples | 12,100 | 1,900 | 0 | – | /games/would-you-rather |
@@ -341,7 +341,7 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 | tarjeta de cumpleaños virtual | 70 | 0 | – | /es/templates/birthday-cinema |
 | felicitacion de cumpleaños | 49,500 | 0 | – | birthday templates (stretch) |
 | relacion a distancia | 480 | 0 | – | /es/long-distance |
-| preguntas para parejas | 1,600 | 0 | – | /es/games/questions-for-couples |
+| preguntas para parejas | 1,600 | 0 | – | /es/games/couple-questions-game |
 | preguntas para mi novio | 390 | 0 | – | /es/games/how-well-do-you-know-me |
 | cosas bonitas para decirle a tu novio | 260 | 0 | – | ES post (its current target) |
 | canciones para dedicar a tu novio | 390 | 0 | – | ES post (its current target) |
@@ -821,8 +821,8 @@ taken these in, and re-ordering the queue is that routine's job.
 
 | # | Topic (English target) | US / mo | UK / mo | KD | Spanish side (Spain / mo) | Leads to |
 |--:|---|--:|--:|--:|---|---|
-| 1 | Questions to ask your boyfriend (+ "deep questions…" 4,400 in the body) | 74,000 | 9,900 | 0 | preguntas para mi novio (390) | /games/how-well-do-you-know-me, /games/questions-for-couples |
-| 2 | Questions to ask your girlfriend | 40,500 | – | 4 | preguntas para parejas (1,600, broader) | /games/questions-for-couples |
+| 1 | Questions to ask your boyfriend (+ "deep questions…" 4,400 in the body) | 74,000 | 9,900 | 0 | preguntas para mi novio (390) | /games/how-well-do-you-know-me, /games/couple-questions-game |
+| 2 | Questions to ask your girlfriend | 40,500 | – | 4 | preguntas para parejas (1,600, broader) | /games/couple-questions-game |
 | 3 | Virtual hug: ways to send one that lands | 8,100 | 1,300 | 0 | not measured | templates (a free hug page later) |
 | 4 | Love letter for girlfriend | 2,400 | 480 | 2 | carta de amor para mi novia (880) | /templates/the-letter |
 | 5 | Long distance relationship tips | 1,900 | – | 24 | relación a distancia (480) | /long-distance |
@@ -869,7 +869,7 @@ Proposals only; no site code was changed for this doc. Most of these are now und
 - **/long-distance** is titled "Long distance: meet halfway, date across time zones", which matches nothing
   people search. "Long-Distance Relationship Gifts and Date Ideas" would cover "gift for long distance
   love" (2,900) and "date ideas for long distance" (5,400).
-- **/games/questions-for-couples** ("Questions to Ask Your Partner: Free Card Game"): the searched phrasing is "questions to
+- **/games/couple-questions-game** ("Questions to Ask Your Partner: Free Card Game"): the searched phrasing is "questions to
   ask your boyfriend" (74,000) and "…girlfriend" (40,500). Two list pages that open the deck would match it.
 - **/templates/the-letter**: add "online", "maker" or "template" ("love letter template" 880, "love letter
   generator" 390, "online love letter" 260).

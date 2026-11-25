@@ -18,7 +18,7 @@ async function startOnePhone(page: Page, path: string) {
 
 test.describe("the packs shelf", () => {
   test("shows each pack locked at its price, and what's inside before paying", async ({ page }) => {
-    await page.goto("/games/questions-for-couples");
+    await page.goto("/games/couple-questions-game");
     const deep = page.getByRole("button", { name: /After a year/ });
     await expect(deep).toContainText("€2.99", { timeout: 15_000 });
     await deep.click();
@@ -30,7 +30,7 @@ test.describe("the packs shelf", () => {
     // Straight to Ethos for Two at the top of /pricing (docs/MEMBERSHIP.md 4.4), which brings its offer into view.
     await expect(sheet.getByRole("link", { name: "Get every pack with Ethos for Two" })).toHaveAttribute("href", "/pricing?from=packs#for-two");
     // Signed out: somebody who bought it on another phone is sent to sign in, not to pay twice.
-    await expect(sheet.getByRole("link", { name: "Bought it already? Sign in" })).toHaveAttribute("href", `/login?next=${encodeURIComponent("/games/questions-for-couples?pack=deep")}`);
+    await expect(sheet.getByRole("link", { name: "Bought it already? Sign in" })).toHaveAttribute("href", `/login?next=${encodeURIComponent("/games/couple-questions-game?pack=deep")}`);
     await sheet.getByRole("button", { name: "Close" }).click();
     await expect(sheet).toBeHidden();
   });
@@ -41,20 +41,20 @@ test.describe("the packs shelf", () => {
       asked = route.request().postDataJSON();
       await route.fulfill({ status: 400, contentType: "application/json", body: JSON.stringify({ error: "checkout" }) });
     });
-    await page.goto("/games/questions-for-couples");
+    await page.goto("/games/couple-questions-game");
     const far = page.getByRole("button", { name: /Miles apart/ });
     await expect(far).toContainText("€2.99", { timeout: 15_000 });
     await far.click();
     await page.getByRole("button", { name: "Get it for €2.99" }).click();
     // The pack, where to come back to, the language and the currency; the checkout also adds where the
     // buyer came from (ref, source: purchase attribution, 14 Nov). No amount ever travels.
-    await expect.poll(() => asked).toMatchObject({ product: "pack", packId: "distance", returnTo: "/games/questions-for-couples?pack=distance", locale: "en", currency: "eur" });
+    await expect.poll(() => asked).toMatchObject({ product: "pack", packId: "distance", returnTo: "/games/couple-questions-game?pack=distance", locale: "en", currency: "eur" });
     expect(asked).not.toHaveProperty("amount");
     await expect(page.getByText("Couldn’t open checkout. Please try again.")).toBeVisible();
   });
 
   test("asks for the 18+ tap before anything from After dark is shown", async ({ page }) => {
-    await page.goto("/games/questions-for-couples");
+    await page.goto("/games/couple-questions-game");
     const dark = page.getByRole("button", { name: /After dark/ });
     await expect(dark).toContainText("€2.99", { timeout: 15_000 });
     await dark.click();
@@ -81,14 +81,14 @@ test.describe("the packs shelf", () => {
   });
 
   test("is in Spanish at /es", async ({ page }) => {
-    await page.goto("/es/games/questions-for-couples");
+    await page.goto("/es/games/couple-questions-game");
     await expect(page.getByRole("button", { name: /A media luz/ })).toContainText("2,99", { timeout: 15_000 });
   });
 });
 
 test.describe("the end of every game", () => {
   test("question cards: the last card leads to a gift and to two named games", async ({ page }) => {
-    await page.goto("/games/questions-for-couples");
+    await page.goto("/games/couple-questions-game");
     const deal = page.getByRole("button", { name: /^Card 1 of 12/ });
     await expect(deal).toBeVisible();
     for (let n = 1; n <= 12; n++) await page.getByRole("button", { name: new RegExp(`^Card ${n} of 12`) }).click();
