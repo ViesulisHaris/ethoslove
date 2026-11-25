@@ -134,6 +134,18 @@ describe("what every game's page says", () => {
     expect(JSON.stringify(es.games.dare)).not.toMatch(/bailar mal/i);
   });
 
+  it("G10b: the question cards are titled on their address's search, couple questions game, and not on a blog post's (games2-D6)", () => {
+    expect(en.games.deck.seoTitle.startsWith("Couple Questions Game")).toBe(true);
+    expect(es.games.deck.seoTitle.startsWith("Juego de preguntas para parejas")).toBe(true);
+    for (const m of [en, es]) {
+      expect(m.games.deck.seoTitle.length).toBeLessThanOrEqual(60);
+      expect(m.games.deck.seoDescription.length).toBeLessThanOrEqual(160);
+    }
+    // "Questions to ask your partner" and "…your boyfriend" are the blog's searches.
+    expect(`${en.games.deck.seoTitle} ${en.games.deck.seoDescription}`).not.toMatch(/questions to ask your (partner|boyfriend|girlfriend)/i);
+    expect(`${es.games.deck.seoTitle} ${es.games.deck.seoDescription}`).not.toMatch(/preguntas para hacerle a tu pareja/i);
+  });
+
   it("G10: This or that's page is titled on the searched phrase and fits a search result, and the hub counts it", () => {
     expect(en.games.thisthat.seoTitle.startsWith("This or That Questions for Couples")).toBe(true);
     for (const m of [en, es]) {
