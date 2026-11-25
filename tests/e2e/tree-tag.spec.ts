@@ -261,7 +261,28 @@ test.describe("The Tree Tag", () => {
       await page.goto(path);
       await expect(page.locator(".sheet .card .qr img").first()).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
-      expect(await measureCard(page)).toEqual(before[key]);
+      // The words and the number of cards exactly. The places were measured on the owner's Windows PC, and another font
+      // renderer (Linux's) sets the same words wider or narrower: on Linux the centred address runs 13.6px wider, the
+      // line under the name 5px. So every part keeps its place, its top, its height and its centre, within 3px, no
+      // more; the card, the code and the sound line keep their whole box; a run of words may take the width its font gives it.
+      const now = await measureCard(page);
+      const was = before[key];
+      expect(now.text).toBe(was.text);
+      expect(now.cards).toBe(was.cards);
+      expect(Object.keys(now.parts).sort(), "the same parts on the card").toEqual(Object.keys(was.parts).sort());
+      const WORDS = ["head", "name", "line", "cta", "url"];
+      for (const [part, numbers] of Object.entries(was.parts) as [string, number[]][]) {
+        const got = now.parts[part];
+        const where = `${key} ${part}: [${got.join(", ")}] against [${numbers.join(", ")}]`;
+        expect(got, where).toHaveLength(numbers.length);
+        if (numbers.length === 4) {
+          const [left, top, width, height] = numbers;
+          expect(Math.abs(got[0] + got[2] / 2 - (left + width / 2)), `${where}: its centre`).toBeLessThanOrEqual(3);
+          expect(Math.abs(got[1] - top), `${where}: its top`).toBeLessThanOrEqual(3);
+          expect(Math.abs(got[3] - height), `${where}: its height`).toBeLessThanOrEqual(3);
+        }
+        if (!WORDS.includes(part)) expect(Math.max(...numbers.map((n, i) => Math.abs(got[i] - n))), `${where}: its box`).toBeLessThanOrEqual(3);
+      }
     }
   });
 });
