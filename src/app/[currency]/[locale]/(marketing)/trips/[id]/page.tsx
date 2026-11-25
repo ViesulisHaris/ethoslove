@@ -97,7 +97,8 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
     { label: t("detail.facts.days"), value: t("days", { count: trip.days }) },
     { label: t("detail.facts.best"), value: monthRanges(trip.bestMonths, l) },
     // The day costs in the currency this visitor is charged in, said as "about" (lib/trips/day-costs.ts). The longest value, so it spans the row where the boxes are narrow.
-    { label: t("detail.facts.budget"), value: t(`budget.short.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, chargedCurrency(currency), l)), hint: t("budget.note"), wide: true },
+    // Its label says the flights are not in it, where the figure is: a note further down was read on its own.
+    { label: t("detail.facts.budget"), value: t(`budget.short.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, chargedCurrency(currency), l)), wide: true },
   ];
 
   return (
@@ -153,12 +154,9 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest/75">{lead || trip.blurb[l]}</p>
               <dl className="mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
                 {facts.map((f) => (
-                  <div key={f.label} className={f.wide ? "col-span-2 rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5 sm:col-span-1 lg:col-span-2 xl:col-span-1" : "rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5"} title={f.hint}>
+                  <div key={f.label} className={f.wide ? "col-span-2 rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5 sm:col-span-1 lg:col-span-2 xl:col-span-1" : "rounded-2xl bg-card px-4 py-3 shadow-soft ring-1 ring-forest/5"}>
                     <dt className="text-[12px] font-semibold tracking-wide text-forest/50 uppercase">{f.label}</dt>
-                    {/* The hint is described, not spoken as words in the page: a screen reader's hidden span is counted by the word test. */}
-                    <dd className="mt-1 font-display text-[19px] leading-tight text-forest" aria-description={f.hint}>
-                      {f.value}
-                    </dd>
+                    <dd className="mt-1 font-display text-[19px] leading-tight text-forest">{f.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -209,10 +207,12 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
                   <div className="flex items-start gap-3.5">
                     <span className="grid size-8 shrink-0 place-items-center rounded-full bg-rose text-[13px] font-bold text-white shadow-[0_6px_14px_-4px_rgba(90,20,45,0.55)]">{i + 1}</span>
                     <div className="min-w-0 flex-1">
-                      {/* The note folds; the stop's one date link stays on show under it. */}
+                      {/* The note folds; the stop's one date link stays on show under it. The heading sits outside the summary,
+                          which is read as a button (a heading inside it is lost), as the gift cards' do (sections.tsx). */}
+                      <h3 className="sr-only">{stopName(s, l)}</h3>
                       <details className="group">
                         <summary className="-mt-1.5 flex min-h-11 cursor-pointer list-none items-baseline justify-between gap-x-3 rounded-lg outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
-                          <h3 className="pt-1.5 font-display text-[22px] leading-tight text-forest">{stopName(s, l)}</h3>
+                          <span className="pt-1.5 font-display text-[22px] leading-tight text-forest">{stopName(s, l)}</span>
                           <span className="ml-auto text-[12.5px] font-semibold whitespace-nowrap text-forest/65">{t("detail.route.nights", { count: s.nights })}</span>
                           <Plus aria-hidden="true" className="size-4 shrink-0 self-center text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                         </summary>
@@ -249,7 +249,6 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
               </summary>
               <div className="grid gap-3 pb-5 text-[14.5px] leading-relaxed text-forest/70">
                 <p>{rest}</p>
-                <p>{t("budget.note")}</p>
               </div>
             </details>
           ) : null}
@@ -268,11 +267,15 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
           <ol className="mt-10 grid max-w-3xl gap-3" data-testid="trip-plan">
             {trip.plan.map((day, i) => (
               <li key={day.day} data-reveal style={{ "--reveal-delay": `${Math.min(i, 3) * 60}ms` } as React.CSSProperties} className="rounded-[28px] bg-card px-6 shadow-soft ring-1 ring-forest/5 sm:px-7">
+                {/* The day's heading outside the summary, which is read as a button (a heading inside it is lost). */}
+                <h3 className="sr-only">
+                  {t("detail.plan.day", { n: day.day })}: {day.title[l]}
+                </h3>
                 <details open={i === 0} className="group">
                   <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-[28px] py-4 outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
                     <span className="min-w-0">
                       <span className="block text-eyebrow text-rose-deep">{t("detail.plan.day", { n: day.day })}</span>
-                      <h3 className="mt-1.5 font-display text-[24px] leading-[1.1] text-forest sm:text-[26px]">{day.title[l]}</h3>
+                      <span className="mt-1.5 block font-display text-[24px] leading-[1.1] text-forest sm:text-[26px]">{day.title[l]}</span>
                     </span>
                     <Plus aria-hidden="true" className="size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                   </summary>

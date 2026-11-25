@@ -88,9 +88,11 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
                   <Sticker id={v.art.sticker} />
                 </span>
                 <span className="grain-overlay opacity-[0.12] mix-blend-overlay" />
+                {/* The idea's heading for whoever moves through the page by headings: one inside <summary> is lost, the summary being read as a button (sections.tsx, the check of 22 Nov 2026). */}
+                <h3 className="sr-only">{v.title[lang]}</h3>
                 <details className="group relative">
                   <summary className="mt-20 flex min-h-11 cursor-pointer list-none items-end justify-between gap-3 rounded-lg outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest [&::-webkit-details-marker]:hidden">
-                    <h3 className="font-display text-[23px] leading-[1.08] text-forest">{v.title[lang]}</h3>
+                    <span className="font-display text-[23px] leading-[1.08] text-forest">{v.title[lang]}</span>
                     <Plus aria-hidden="true" className="mb-1 size-4 shrink-0 text-forest/65 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
                   </summary>
                   <p className="mt-2.5 text-[14.5px] leading-relaxed text-forest/75">{v.blurb[lang]}</p>
