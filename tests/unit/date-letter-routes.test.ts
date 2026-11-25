@@ -172,6 +172,29 @@ describe("the date letter's routes", () => {
     expect(state.mails).toHaveLength(4);
   });
 
+  it("R16 only this site's own pages may ask (letter-C14)", async () => {
+    const ask = (headers: Record<string, string>) =>
+      api.POST(new NextRequest("https://ethos.test/api/date-letter", { method: "POST", body: JSON.stringify({ email: "sam@mail.com" }), headers: { "x-real-ip": "10.3.3.3", ...headers } }));
+    expect((await ask({ "content-type": "text/plain" })).status).toBe(415);
+    expect((await ask({ "content-type": "application/json", "sec-fetch-site": "cross-site" })).status).toBe(403);
+    expect((await ask({ "content-type": "application/json", origin: "https://elsewhere.test" })).status).toBe(403);
+    expect((await ask({ "content-type": "application/json", origin: "null" })).status).toBe(403);
+    expect(rows()).toEqual([]);
+    expect(state.mails).toEqual([]);
+    expect((await ask({ "content-type": "application/json", "sec-fetch-site": "same-origin", origin: "https://ethos.test" })).status).toBe(200);
+    expect(state.mails).toHaveLength(1);
+  });
+
+  it("R17 signed in, an address on the unsubscribe list hears so instead of \"check your inbox\"; anyone else hears \"asked\" (letter-C6)", async () => {
+    fake = new FakeDb({ email_optouts: [{ email_sha256: await emailKey("sam@mail.com") }] }, NOW);
+    state.db = fake.db;
+    expect(await (await post({ email: "sam@mail.com" })).json()).toEqual({ ok: true, state: "asked" });
+    state.user = { id: "u1", email: "sam@mail.com" };
+    expect(await (await post({ email: "sam@mail.com" })).json()).toEqual({ ok: true, state: "blocked" });
+    expect(rows()).toEqual([]);
+    expect(state.mails).toEqual([]);
+  });
+
   it("R6 five tries in ten minutes from one connection", async () => {
     for (let i = 0; i < 5; i++) expect((await post({ email: `a${i}@mail.com` }, undefined, "10.1.1.1")).status).toBe(200);
     expect((await post({ email: "a6@mail.com" }, undefined, "10.1.1.1")).status).toBe(429);

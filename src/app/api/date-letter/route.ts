@@ -28,6 +28,28 @@ const askInput = z.object({
 const notFound = () => NextResponse.json({ error: "not_found" }, { status: 404, headers: NO_STORE });
 
 /**
+ * Only this site's own pages may ask (letter-C14), as the dates' votes route does: the box sends JSON,
+ * which another site's page can't send without a preflight this route never grants, and a browser's
+ * Sec-Fetch-Site and Origin must say it came from here. A script that sets none of these still gets
+ * through; for that there are the limits per connection and per address below. Null when it may go on.
+ */
+function foreign(request: NextRequest): NextResponse | null {
+  const type = (request.headers.get("content-type") ?? "").split(";")[0].trim().toLowerCase();
+  if (type !== "application/json") return NextResponse.json({ error: "unsupported_media_type" }, { status: 415, headers: NO_STORE });
+  const site = request.headers.get("sec-fetch-site");
+  if (site && site !== "same-origin") return NextResponse.json({ error: "forbidden" }, { status: 403, headers: NO_STORE });
+  const origin = request.headers.get("origin");
+  if (origin) {
+    let host: string | null = null;
+    try {
+      host = new URL(origin).host;
+    } catch {}
+    if (!host || host !== (request.headers.get("host") ?? request.nextUrl.host)) return NextResponse.json({ error: "forbidden" }, { status: 403, headers: NO_STORE });
+  }
+  return null;
+}
+
+/**
  * The date letter's box (components/date-letter/letter-box.tsx). Switched off (DATE_LETTER unset),
  * neither handler reads anything: a bare 404.
  *
@@ -53,6 +75,8 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   if (!dateLetterOn()) return notFound();
+  const refused = foreign(request);
+  if (refused) return refused;
   const admin = getSupabaseAdminClient();
   const secret = linkSecret();
   if (!admin || !secret || !(await letterTableThere(admin))) return NextResponse.json({ error: "unavailable" }, { status: 503, headers: NO_STORE });
