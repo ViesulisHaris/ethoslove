@@ -20,6 +20,7 @@ import { GIFT_LOCALES } from "@/lib/gift/schema";
 import { pageMetadata } from "@/lib/seo";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { getManifest, listManifests } from "@/templates/manifests";
+import { resolvePlace } from "@/templates/_shared/places";
 import { loadFieldsSchema } from "@/templates/schemas";
 import type { TemplateManifest } from "@/templates/types";
 import en from "../../messages/en.json";
@@ -312,6 +313,28 @@ describe("gift pages by kind", () => {
     ]);
     for (const idea of all.filter((i) => i.template === "our-timeline")) expect(idea.body, idea.heading).not.toMatch(/ends? (on|with|in) [^.]*countdown|termina (con|en) [^.]*cuenta atrás/i);
     for (const idea of all.filter((i) => i.template === "museum")) expect(idea.body, idea.heading).not.toMatch(/\blast room\b|\búltima sala\b|la última para él/i);
+  });
+
+  it("lend lines and steps the gift will really show", () => {
+    for (const locale of GIFT_LOCALES) {
+      for (const slug of GIFT_GUIDE_SLUGS) {
+        const guide = GIFT_GUIDES[slug][locale];
+        const text = strings(guide).join(" ");
+        // Snow Globe has a button for a phone with no motion sensor (snow-globe/manifest.ts).
+        expect(text, `${slug} (${locale})`).not.toMatch(/needs (its|the phone’s) motion sensor|necesita (su|el) sensor/i);
+        for (const idea of guide.ideas) {
+          const at = `${idea.template} (${slug}, ${locale})`;
+          // Passport drops a stopover it cannot find on its map (passport/Template.tsx, resolvePlace).
+          if (idea.template === "passport" && idea.line.field === "stops") expect(resolvePlace(idea.line.text), `${at}: “${idea.line.text}”`).not.toBeNull();
+          // The lucky numbers are one string, printed on every slip (fortune-cookie/Template.tsx): they cannot keep a secret.
+          expect(idea.line.field, at).not.toBe("luckyNumbers");
+          // The Council always tries the person it is sent to (the-council/Template.tsx: recipientName, "charged with").
+          if (idea.template === "the-council") expect(`${idea.heading} ${idea.body}`, at).not.toMatch(/yourself in the dock|you are the one on trial|siéntate tú en el banquillo|te juzgan a ti/i);
+          // Pack Your Bags ends on a letter under the ticket's stub.
+          if (idea.template === "pack-your-bags") expect(idea.body, at).not.toMatch(/no hidden message|no hay ningún mensaje/i);
+        }
+      }
+    }
   });
 
   it("don't share a title or an h1 with each other", () => {

@@ -1455,9 +1455,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "the-council",
-          heading: "A hearing where you are the one on trial",
-          body: "Turn The Council around and put yourself in the dock. The cats read out the findings against you, the gavel comes down, and you choose the stamp: guilty, if you mean it. Written as your own charge sheet, it says you know what happened without a speech, and the letter after it is where the speech goes.",
-          line: { field: "charge", where: "The charge", text: "forgetting the one thing you asked me to remember" },
+          heading: "A hearing that clears his name",
+          body: "The Council always tries him, so let the cats acquit him. Charge him with something that is plainly your fault, write findings that all point back at you, and end on the stamp that says pardoned. It owns up with a joke he is allowed to laugh at, and the letter after the verdict is where the real apology goes.",
+          line: { field: "charge", where: "The charge", text: "putting up with me on Saturday night" },
         },
         {
           template: "scratch-card",
@@ -1539,9 +1539,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "the-council",
-          heading: "Un juicio en el que te juzgan a ti",
-          body: "Dale la vuelta a El Consejo y siéntate tú en el banquillo. Los gatos leen las conclusiones contra ti, cae el mazo y tú eliges el sello: «Culpable», si lo dices en serio. Escrito como tu propio pliego de cargos, dice que sabes lo que pasó sin soltar un discurso, y la carta de después es donde va el discurso.",
-          line: { field: "charge", where: "El cargo", text: "olvidar lo único que me pediste que recordara" },
+          heading: "Un juicio que limpia su nombre",
+          body: "El Consejo siempre juzga a quien recibe el regalo, así que deja que los gatos le absuelvan. Acúsale de algo que a todas luces fue culpa tuya, escribe conclusiones que apunten a ti y acaba con el sello de «Indultado». Reconoce la culpa con una broma de la que puede reírse, y la carta de después del veredicto es donde va la disculpa de verdad.",
+          line: { field: "charge", where: "El cargo", text: "aguantarme el sábado por la noche" },
         },
         {
           template: "scratch-card",
@@ -1633,7 +1633,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "bloom",
           heading: "A flower that opens only while she holds on",
           brief: "One flower that unfolds only while she holds it, your words inside.",
-          body: "In Bloom she gets one flower that unfolds while her finger stays down, peony, tulip or daisy, and your words are inside it. Nothing about it hurries her or asks for a reply. Keep the message to three sentences, pick a soft color, and let the slowness say the rest.",
+          body: "Bloom gives her one flower that unfolds while her finger stays down, peony, tulip or daisy, and your words are inside it. Nothing about it hurries her or asks for a reply. Keep the message to three sentences, pick a soft color, and let the slowness say the rest.",
           line: { field: "message", where: "The message inside", text: "I’m sorry I made you feel like you had to explain yourself. You never do." },
         },
         {
@@ -1767,12 +1767,12 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
   "long-distance-care-package": {
     en: {
       title: "Long-Distance Care Package Ideas, and the Gift Inside",
-      description: "What to put in a long-distance care package, what posting does to it, and a digital gift that opens the minute the box does, with a printed QR card on top.",
+      description: "What to put in a long-distance care package, what posting does to it, and a digital gift they open by scanning the QR card on top of the box.",
       h1: "Long-distance care package ideas",
       label: "Long-distance care packages",
       hero: {
         line: "Fill the box with things to touch. Put the words in the link.",
-        sentence: "Ethos mails nothing: you post the box yourself, and the gift inside it is a link, printed as a QR card that opens it the moment the lid comes off.",
+        sentence: "Ethos mails nothing: you post the box yourself, and the gift inside it is a link, printed as a QR card on top, so the gift is the first thing they scan.",
       },
       ideasTitle: "Seven gifts to lay on top of the box",
       craft: "Packing, posting and timing it",
@@ -1785,8 +1785,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "halfway",
           heading: "The distance in big numbers, with a note",
-          brief: "The real distance in big numbers, a note on what is halfway, and a timer to your arrival.",
-          body: "Halfway shows the real distance between your two cities in big numbers, with a note of 120 characters about what is halfway, and a timer that runs to the second you arrive. In a care package it answers the question the box cannot: when. Put the date of the next visit on it, and photos taped under the letter.",
+          brief: "The real distance in big numbers, a note on what is halfway, and a countdown to your arrival if you want one.",
+          body: "Halfway shows the real distance between your two cities in big numbers, with a note of 120 characters about what is halfway, and you can switch on a countdown to the second you arrive. In a care package it answers the question the box cannot: when. Put the date of the next visit on it, and photos taped beside the letter.",
           line: { field: "halfwayNote", where: "The halfway note", text: "Halfway is a train station I have never seen. In 19 days I will be past it." },
         },
         {
@@ -1806,8 +1806,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "passport",
           heading: "Stamp the route the box will take",
           brief: "A passport of photos whose route is the box’s own journey to their door.",
-          body: "Passport gives them a passport for the two of you with a stamp for each photo, up to ten, and a route of up to six stopovers. Make the route the box’s own journey, from your post office to their door, and the visa page at the end opens on your message.",
-          line: { field: "stops", where: "One stopover", text: "the sorting office, presumably sulking" },
+          body: "Passport gives them a passport for the two of you with a stamp for each photo, up to ten, and a route of up to six stopovers. Make the route the box’s own journey, town by town from yours to theirs, since each stopover has to be a real place the map can find, and the visa page at the end opens on your message.",
+          line: { field: "stops", where: "One stopover", text: "Berlin" },
         },
         {
           template: "midnight-countdown",
@@ -1859,12 +1859,12 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
     },
     es: {
       title: "Ideas para una caja sorpresa a distancia",
-      description: "Qué meter en una caja para tu pareja a distancia, qué le hace el envío y un regalo digital que se abre al abrir la caja, con una tarjeta QR impresa encima.",
+      description: "Qué meter en una caja para tu pareja a distancia, qué le hace el envío y un regalo digital que se abre escaneando la tarjeta QR de encima de la caja.",
       h1: "Ideas para una caja sorpresa a distancia",
       label: "Cajas sorpresa a distancia",
       hero: {
         line: "Llena la caja de cosas que tocar. Las palabras, en el enlace.",
-        sentence: "Ethos no envía nada por correo: el paquete lo mandas tú, y el regalo de dentro es un enlace impreso como tarjeta QR que se abre al levantar la tapa.",
+        sentence: "Ethos no envía nada por correo: el paquete lo mandas tú, y el regalo de dentro es un enlace impreso en una tarjeta QR encima, lo primero que escanean al abrir.",
       },
       ideasTitle: "Siete regalos para poner encima de la caja",
       craft: "Preparar, enviar y elegir el momento",
@@ -1877,8 +1877,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "halfway",
           heading: "La distancia, en números grandes, con una nota",
-          brief: "La distancia real en números grandes, una nota sobre el punto medio y un reloj hasta tu llegada.",
-          body: "A medio camino enseña la distancia real entre vuestras dos ciudades en números grandes, con una nota de 120 caracteres sobre lo que queda a mitad, y un reloj que corre hasta el segundo en que llegas. En una caja sorpresa responde a lo que la caja no puede: cuándo. Pon ahí la fecha de la próxima visita, y fotos pegadas bajo la carta.",
+          brief: "La distancia real en números grandes, una nota sobre el punto medio y, si quieres, una cuenta atrás hasta tu llegada.",
+          body: "A medio camino enseña la distancia real entre vuestras dos ciudades en números grandes, con una nota de 120 caracteres sobre lo que queda a mitad, y puedes activar una cuenta atrás hasta el segundo en que llegas. En una caja sorpresa responde a lo que la caja no puede: cuándo. Pon ahí la fecha de la próxima visita, y fotos pegadas junto a la carta.",
           line: { field: "halfwayNote", where: "La nota del punto medio", text: "A mitad hay una estación de tren que nunca he visto. En 19 días la habré pasado." },
         },
         {
@@ -1898,8 +1898,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "passport",
           heading: "Sella la ruta que hará la caja",
           brief: "Un pasaporte de fotos cuya ruta es el propio viaje de la caja hasta su puerta.",
-          body: "Pasaporte le da un pasaporte de los dos con un sello por foto, hasta diez, y una ruta de hasta seis escalas. Haz que la ruta sea el viaje de la propia caja, de tu oficina de correos a su puerta, y la página del visado del final se abre con tu mensaje.",
-          line: { field: "stops", where: "Una escala", text: "la oficina de clasificación, de morros" },
+          body: "Pasaporte le da un pasaporte de los dos con un sello por foto, hasta diez, y una ruta de hasta seis escalas. Haz que la ruta sea el viaje de la propia caja, ciudad a ciudad de la tuya a la suya, porque cada escala tiene que ser un sitio real que el mapa encuentre, y la página del visado del final se abre con tu mensaje.",
+          line: { field: "stops", where: "Una escala", text: "Berlín" },
         },
         {
           template: "midnight-countdown",
@@ -1973,7 +1973,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "Foil to rub off, with a hint on it",
           brief: "Photos under foil that a fingertip rubs away, with a hint written on the foil.",
           body: "Scratch Card is the plainest reveal there is: a photo under foil that comes away under a fingertip, card after card, and a headline on the last one for the news. The foil itself carries thirty characters, so write the hint there, where they read it before they scratch. Up to twelve photos, at least one.",
-          line: { field: "foilText", where: "The words on the foil", text: "the news is under card 3" },
+          line: { field: "foilText", where: "The words on the foil", text: "the news is on the last card" },
         },
         {
           template: "midnight-countdown",
@@ -1985,7 +1985,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "pack-your-bags",
           heading: "Clues on luggage tags, then the destination",
           brief: "Up to five clues on luggage tags, then a departures board names the place.",
-          body: "Pack Your Bags reveals a trip by degrees: up to five clues on luggage tags, read one at a time, before a departures board names the place. There is no hidden message after it; the destination is the surprise. Choose plane, train or road trip, and put the date on the ticket.",
+          body: "Pack Your Bags reveals a trip by degrees: up to five clues on luggage tags, read one at a time, before a departures board names the place. Choose plane, train or road trip and put the date on the ticket; when they tear its stub, your letter is underneath, the place to say why there.",
           line: { field: "clues", where: "One luggage tag", text: "Pack something you can swim in" },
         },
         {
@@ -1997,16 +1997,16 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "fortune-cookie",
-          heading: "Crack a cookie, find the date in the numbers",
-          brief: "Cookies cracked with a tap, with the surprise hidden in the lucky numbers.",
-          body: "Fortune Cookie hides its news inside a cookie they crack with a tap, three to twenty of them, each with a slip and a row of lucky numbers. Make the lucky numbers the surprise: the date of the trip, the flight number, the table. Let the fortunes tease, and the last cookie carry the message.",
-          line: { field: "luckyNumbers", where: "The lucky numbers", text: "Flight 2214, the 14th, seat 9A" },
+          heading: "Cookies that tease, and one that tells",
+          brief: "Cookies cracked with a tap: fortunes that tease, and the news in the last one.",
+          body: "Fortune Cookie lays out three to twenty cookies, and each cracks with a tap to a slip with one of your fortunes. The last one on the plate holds your message, so the news goes there: the date of the trip, the flight number, the table. The lucky numbers print the same on every slip, so leave them out of it, and let the fortunes tease.",
+          line: { field: "fortunes", where: "One of the fortunes", text: "Something is booked. Keep the 14th free." },
         },
         {
           template: "snow-globe",
           heading: "Shake the globe, a line when snow settles",
           brief: "Shake the phone and a line appears each time the snow settles, four at most.",
-          body: "Snow Globe asks them to shake the phone, which needs its motion sensor, and each time the snow settles a new line appears, four at most, with a photo in the snow between them. The brass plaque on the base holds forty-four characters. Keep the surprise for the last line and name it on the plaque.",
+          body: "Snow Globe is best shaken, and a button does it on a phone that cannot feel it; each time the snow settles a new line appears, four at most, with a photo in the snow between them. The brass plaque on the base holds forty-four characters. Keep the surprise for the last line and name it on the plaque.",
           line: { field: "plaque", where: "The brass plaque", text: "The winter we finally met in person" },
         },
         {
@@ -2020,7 +2020,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       sections: [
         {
           heading: "Hide the news in the last thing they see",
-          body: "Every gift here has an order, and the news goes at the end of it: the last card, the last note, the line at zero, the board after the clues. Anything said earlier is a hint, not a spoiler. Read the whole gift through once in the preview and check nothing before the end gives it away.",
+          body: "Every gift here has an order, and the news goes at the end of it: the last card, the last note, the line at zero, the letter under the ticket’s stub. Anything said earlier is a hint, not a spoiler. Read the whole gift through once in the preview and check nothing before the end gives it away.",
         },
         {
           heading: "Midnight, or the minute it matters",
@@ -2034,7 +2034,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       faq: [
         { q: "What is a good online surprise for a boyfriend or girlfriend?", a: "A gift with a reveal built in: photos under foil, a clock that opens at midnight, clues to a trip, a last message that appears with a shake. Put the news in what they see last." },
         { q: "Can I send it now and have it open on the day?", a: "Yes, as part of a paid gift. In the editor, under Extras, switch on “Schedule the reveal” and pick the date, the hour and their time zone. Until then the link shows a running countdown, and at the moment it opens by itself." },
-        { q: "Which of these needs a motion sensor?", a: "Snow Globe is shaken, so it needs the phone’s motion sensor; Jar of Reasons can be shaken or tapped. The rest are tapped, scratched or simply watched." },
+        { q: "Does any of these need a motion sensor?", a: "No. Snow Globe and Jar of Reasons are best shaken, and both work on a phone that cannot feel it: the globe has a button, the jar a tap. The rest are tapped, scratched or simply watched." },
         { q: "How do I keep it a surprise until they open it?", a: "Send the link with a plain message, nothing about what is inside. If the gift is scheduled, the page they land on before the hour says only that something is waiting and when it opens." },
       ],
       related: [
@@ -2067,7 +2067,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "Una capa que rascar, con una pista escrita",
           brief: "Fotos bajo una capa que se quita con la yema del dedo, con una pista escrita en ella.",
           body: "Rasca y gana es la revelación más sencilla que hay: una foto bajo una capa que se va con la yema del dedo, tarjeta tras tarjeta, y un titular en la última para la noticia. La propia capa lleva treinta caracteres, así que escribe ahí la pista, donde la leen antes de rascar. Hasta doce fotos, una como mínimo.",
-          line: { field: "foilText", where: "Las palabras de la capa", text: "la noticia está en la 3" },
+          line: { field: "foilText", where: "Las palabras de la capa", text: "la noticia, en la última" },
         },
         {
           template: "midnight-countdown",
@@ -2079,7 +2079,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "pack-your-bags",
           heading: "Pistas en etiquetas de maleta, y luego el destino",
           brief: "Hasta cinco pistas en etiquetas de maleta, y un panel de salidas dice el sitio.",
-          body: "Haz la maleta desvela un viaje poco a poco: hasta cinco pistas en etiquetas de equipaje, leídas de una en una, antes de que un panel de salidas diga el sitio. Después no hay ningún mensaje escondido; el destino es la sorpresa. Elige avión, tren o coche, y pon la fecha en el billete.",
+          body: "Haz la maleta desvela un viaje poco a poco: hasta cinco pistas en etiquetas de equipaje, leídas de una en una, antes de que un panel de salidas diga el sitio. Elige avión, tren o coche y pon la fecha en el billete; al arrancar la matriz, tu carta está debajo, el sitio para decir por qué allí.",
           line: { field: "clues", where: "Una etiqueta de maleta", text: "Mete algo con lo que puedas nadar" },
         },
         {
@@ -2091,16 +2091,16 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           template: "fortune-cookie",
-          heading: "La fecha escondida en los números de la suerte",
-          brief: "Galletas que se parten con un toque, con la sorpresa escondida en los números de la suerte.",
-          body: "Galleta de la fortuna esconde su noticia dentro de una galleta que se parte con un toque, de tres a veinte, cada una con su tira y una fila de números de la suerte. Haz que la sorpresa sean los números: la fecha del viaje, el número de vuelo, la mesa. Que las fortunas provoquen y la última galleta lleve el mensaje.",
-          line: { field: "luckyNumbers", where: "Los números de la suerte", text: "Vuelo 2214, día 14, asiento 9A" },
+          heading: "Galletas que insinúan, y una que lo cuenta",
+          brief: "Galletas que se parten con un toque: fortunas que insinúan y la noticia en la última.",
+          body: "Galleta de la fortuna pone en el plato de tres a veinte galletas, y cada una se parte con un toque y suelta una tira con una de tus fortunas. La última del plato guarda tu mensaje, así que la noticia va ahí: la fecha del viaje, el número de vuelo, la mesa. Los números de la suerte salen iguales en todas las tiras; déjalos al margen, y que las fortunas solo insinúen.",
+          line: { field: "fortunes", where: "Una de las fortunas", text: "Hay algo reservado. Deja libre el día 14." },
         },
         {
           template: "snow-globe",
           heading: "Agita la bola y sale una frase",
           brief: "Agitan el móvil y aparece una frase cada vez que se posa la nieve, cuatro como mucho.",
-          body: "Bola de nieve pide agitar el móvil, así que necesita su sensor de movimiento, y cada vez que se posa la nieve aparece una frase nueva, cuatro como mucho, con una foto entre la nieve. La placa de latón de la base admite cuarenta y cuatro caracteres. Guarda la sorpresa para la última frase y ponle nombre en la placa.",
+          body: "Bola de nieve se agita mejor con el móvil, y en uno que no lo nota lo hace un botón; cada vez que se posa la nieve aparece una frase nueva, cuatro como mucho, con una foto entre la nieve. La placa de latón de la base admite cuarenta y cuatro caracteres. Guarda la sorpresa para la última frase y ponle nombre en la placa.",
           line: { field: "plaque", where: "La placa de latón", text: "El invierno en que por fin nos vimos" },
         },
         {
@@ -2114,7 +2114,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       sections: [
         {
           heading: "Esconde la noticia en lo último que ven",
-          body: "Cada regalo de aquí tiene un orden, y la noticia va al final: la última tarjeta, la última nota, la frase del cero, el panel después de las pistas. Lo que se diga antes es una pista, no un destripe. Míralo entero una vez en la vista previa y comprueba que nada antes del final lo desvela.",
+          body: "Cada regalo de aquí tiene un orden, y la noticia va al final: la última tarjeta, la última nota, la frase del cero, la carta bajo la matriz del billete. Lo que se diga antes es una pista, no un destripe. Míralo entero una vez en la vista previa y comprueba que nada antes del final lo desvela.",
         },
         {
           heading: "A medianoche, o en el minuto que importa",
@@ -2128,7 +2128,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       faq: [
         { q: "¿Qué sorpresa online puedo darle a mi pareja?", a: "Un regalo con la revelación incluida: fotos bajo una capa, un reloj que se abre a medianoche, pistas hacia un viaje, un último mensaje que aparece al agitar. Pon la noticia en lo último que ven." },
         { q: "¿Puedo enviarlo ya y que se abra ese día?", a: "Sí, como parte de un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y elige la fecha, la hora y su zona horaria. Hasta entonces el enlace muestra una cuenta atrás en marcha, y en ese momento se abre solo." },
-        { q: "¿Cuál necesita sensor de movimiento?", a: "Bola de nieve se agita, así que necesita el sensor de movimiento del móvil; Frasco de razones se puede agitar o tocar. Los demás se tocan, se rascan o simplemente se miran." },
+        { q: "¿Alguno necesita sensor de movimiento?", a: "No. Bola de nieve y Frasco de razones se disfrutan más agitando, y los dos funcionan en un móvil que no lo nota: la bola tiene un botón y el frasco se toca. Los demás se tocan, se rascan o simplemente se miran." },
         { q: "¿Cómo mantengo la sorpresa hasta que lo abra?", a: "Manda el enlace con un mensaje sencillo, sin nada sobre lo que hay dentro. Si el regalo está programado, la página a la que llega antes de la hora solo dice que algo le espera y cuándo se abre." },
       ],
       related: [
@@ -2161,7 +2161,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "museum",
           heading: "An exhibition, with your words on the plaques",
-          body: "Museum turns your story into a gallery visit: each photo framed, each plaque under it a title, a year and a line you write. Two to twenty frames. Title the exhibition like a retrospective, sixty characters, and treat each plaque as a chapter heading; the wall text your message becomes is the book’s closing page.",
+          body: "Museum turns your story into a gallery visit: each photo framed, each plaque under it the caption you write for that photo, over the dates you set for the whole show. Two to twenty frames. Title the exhibition like a retrospective, sixty characters, and treat each plaque as a chapter heading; the wall text your message becomes is the book’s closing page.",
           line: { field: "exhibition", where: "The exhibition’s name", text: "The Collected Works of Us, So Far" },
         },
         {
@@ -2195,7 +2195,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "recipe-box",
           heading: "A recipe card for something you cook together",
           brief: "Your story written as a recipe for the dish you always cook together.",
-          body: "Recipe Box is a story told as a recipe. Name the dish you always make together, list up to six ingredients as the memories in it, and finish the little “Makes one…” line with what it makes of the two of you; your letter is on the back.",
+          body: "Recipe Box is a story told as a recipe. Name the dish you always make together, list up to six ingredients as the memories in it, and write the line under the title, the one the editor calls “Makes one…”, about what it makes of the two of you; your letter is on the back.",
           line: { field: "recipeName", where: "The recipe’s name", text: "Sunday Soup, the Version We Argue About" },
         },
         {
@@ -2253,7 +2253,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "museum",
           heading: "Una exposición, con tus palabras en las placas",
-          body: "Museo convierte vuestra historia en una visita a una galería: cada foto enmarcada lleva debajo su placa, con el título, el año y la frase que escribes tú. De dos a veinte cuadros. Titula la exposición como una retrospectiva, sesenta caracteres, y trata cada placa como el título de un capítulo; el texto de pared en que se convierte tu mensaje cierra el libro.",
+          body: "Museo convierte vuestra historia en una visita a una galería: cada foto enmarcada lleva debajo su placa, con tu pie de foto y, debajo, las fechas de toda la muestra. De dos a veinte cuadros. Titula la exposición como una retrospectiva, sesenta caracteres, y trata cada placa como el título de un capítulo; el texto de pared en que se convierte tu mensaje cierra el libro.",
           line: { field: "exhibition", where: "El nombre de la exposición", text: "Obras completas de los dos, por ahora" },
         },
         {
@@ -2287,7 +2287,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "recipe-box",
           heading: "Una receta de algo que cocináis juntos",
           brief: "Vuestra historia escrita como la receta del plato que siempre cocináis juntos.",
-          body: "Caja de recetas es una historia contada como receta. Ponle el nombre del plato que siempre hacéis juntos, apunta hasta seis ingredientes que sean los recuerdos que lleva y termina la frase «Sale una…» con lo que os sale a vosotros; tu carta va detrás.",
+          body: "Caja de recetas es una historia contada como receta. Ponle el nombre del plato que siempre hacéis juntos, apunta hasta seis ingredientes que sean los recuerdos que lleva y escribe la frase de debajo del título, la que el editor llama «Sale una…», con lo que sale de los dos; tu carta va detrás.",
           line: { field: "recipeName", where: "El nombre de la receta", text: "La sopa del domingo, versión discutida" },
         },
         {
