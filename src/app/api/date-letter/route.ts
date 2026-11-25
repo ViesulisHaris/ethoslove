@@ -115,6 +115,8 @@ export async function POST(request: NextRequest) {
     });
     if (!sent) await confirmNotSent(admin, result.id);
   }
-  // Only the account's own address hears "on", and only when it is on (not when it is on the unsubscribe list).
-  return NextResponse.json({ ok: true, state: verified && !result.send && result.state === "on" ? "on" : "asked" }, { headers: NO_STORE });
+  // Only the account's own address hears "on", or "blocked" when it is on the unsubscribe list (no
+  // e-mail can come, so "check your inbox" would be false: letter-C6). Anyone else hears "asked".
+  const state = verified && !result.send && (result.state === "on" || result.state === "blocked") ? result.state : "asked";
+  return NextResponse.json({ ok: true, state }, { headers: NO_STORE });
 }

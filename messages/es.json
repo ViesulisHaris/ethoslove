@@ -4385,6 +4385,7 @@
     "asked": "Mira tu correo. Un toque allí y ya está.",
     "another": "Usar otra dirección",
     "on": "Ya estás en la lista. Cada jueves llega una idea de cita.",
+    "blocked": "Esta dirección está en nuestra lista de bajas, así que no puede llegarte la carta. Escríbenos para cambiarlo.",
     "invalid": "Revisa la dirección de correo.",
     "limited": "Demasiados intentos. Prueba más tarde.",
     "failed": "No se ha podido enviar. Prueba otra vez.",

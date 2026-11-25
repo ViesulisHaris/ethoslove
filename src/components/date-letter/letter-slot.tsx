@@ -25,6 +25,7 @@ export async function LetterSlot({ locale, where, variant = "card" }: { locale: 
         asked: t("asked"),
         another: t("another"),
         on: t("on"),
+        blocked: t("blocked"),
         invalid: t("invalid"),
         limited: t("limited"),
         failed: t("failed"),

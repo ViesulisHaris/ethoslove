@@ -9,8 +9,8 @@ import { track } from "@/lib/analytics/track";
 import type { LetterWhere } from "@/lib/lifecycle/date-letter-flag";
 import { cn } from "@/lib/utils";
 
-export type LetterBoxWords = Record<"title" | "line" | "emailLabel" | "send" | "privacy" | "asked" | "another" | "on" | "invalid" | "limited" | "failed", string>;
-export type LetterBoxState = "empty" | "sending" | "asked" | "on" | "invalid" | "limited" | "failed";
+export type LetterBoxWords = Record<"title" | "line" | "emailLabel" | "send" | "privacy" | "asked" | "another" | "on" | "blocked" | "invalid" | "limited" | "failed", string>;
+export type LetterBoxState = "empty" | "sending" | "asked" | "on" | "blocked" | "invalid" | "limited" | "failed";
 
 const PLAIN_ADDRESS = /^\S+@\S+\.\S+$/;
 
@@ -49,7 +49,8 @@ export function LetterBox({
   const field = useRef<HTMLInputElement>(null);
   const status = useRef<HTMLParagraphElement>(null);
   const busy = state === "sending";
-  const done = state === "asked" || state === "on";
+  const done = state === "asked" || state === "on" || state === "blocked";
+  const doneLine = state === "on" ? w.on : state === "blocked" ? w.blocked : w.asked;
   const problem = state === "invalid" || state === "limited" || state === "failed";
 
   // After a press, focus follows the answer: the line that replaced the form, or the field. Never on
@@ -58,7 +59,7 @@ export function LetterBox({
   useEffect(() => {
     if (!pressed.current || state === "sending") return;
     pressed.current = false;
-    if (state === "asked" || state === "on") status.current?.focus();
+    if (state === "asked" || state === "on" || state === "blocked") status.current?.focus();
     else if (state === "invalid") field.current?.focus();
   }, [state]);
 
@@ -124,7 +125,7 @@ export function LetterBox({
       if (res.ok) {
         const json = (await res.json().catch(() => ({}))) as { state?: string };
         track("letter_asked", { where });
-        next = json.state === "on" ? "on" : "asked";
+        next = json.state === "on" ? "on" : json.state === "blocked" ? "blocked" : "asked";
       } else if (res.status === 400) next = "invalid";
       else if (res.status === 429) next = "limited";
     } catch {
@@ -159,9 +160,9 @@ export function LetterBox({
           <div className="flex flex-col items-start gap-1">
             <p className={cn("flex items-start gap-2 text-[0.9375rem] leading-relaxed", band ? "text-page-ink" : "text-ink")} data-testid="letter-done">
               <MailCheck aria-hidden className="mt-0.5 size-[1.125rem] shrink-0" />
-              {state === "on" ? w.on : w.asked}
+              {doneLine}
             </p>
-            {state === "asked" ? (
+            {state === "asked" || state === "blocked" ? (
               <button
                 type="button"
                 onClick={another}
@@ -217,7 +218,7 @@ export function LetterBox({
         >
           {statusLine}
           {/* The line that replaced the form, read out where focus lands; shown once, above. */}
-          {done ? <span className="sr-only">{state === "on" ? w.on : w.asked}</span> : null}
+          {done ? <span className="sr-only">{doneLine}</span> : null}
         </p>
       </div>
       <Link

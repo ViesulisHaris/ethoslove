@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = { robots: { index: false } };
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-const STATES: readonly LetterBoxState[] = ["empty", "sending", "asked", "on", "invalid", "limited", "failed"];
+const STATES: readonly LetterBoxState[] = ["empty", "sending", "asked", "on", "blocked", "invalid", "limited", "failed"];
 
 /**
  * Development only: the date letter's box (components/date-letter/letter-box.tsx) in each of its
@@ -38,6 +38,7 @@ export default async function DateLetterPreviewPage({ params, searchParams }: Pa
     asked: t("asked"),
     another: t("another"),
     on: t("on"),
+    blocked: t("blocked"),
     invalid: t("invalid"),
     limited: t("limited"),
     failed: t("failed"),

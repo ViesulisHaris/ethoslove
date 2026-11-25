@@ -72,9 +72,11 @@ export async function letterStateOf(admin: Admin, email: string): Promise<Letter
 export async function askLetter(
   admin: Admin,
   input: { email: string; locale: L; path: string; wording: string; verified: boolean; now: number },
-): Promise<{ send: false; state: "asked" | "on" } | { send: true; id: string }> {
+): Promise<{ send: false; state: "asked" | "on" | "blocked" } | { send: true; id: string }> {
   const email = input.email.trim().toLowerCase();
-  if (await optedOut(admin, await emailKey(email))) return { send: false, state: "asked" };
+  // On the unsubscribe list: nothing is written or sent. The route tells only the account's own
+  // address so (letter-C6); anyone else hears "asked", so the box can't test an address.
+  if (await optedOut(admin, await emailKey(email))) return { send: false, state: "blocked" };
   const { data: row, error } = await admin.from("date_letter").select("id, confirm_sent_at, confirmed_at, stopped_at").eq("email", email).maybeSingle();
   if (error) throw new Error(`date letter ask: ${error.message}`);
   if (row?.confirmed_at && !row.stopped_at) return { send: false, state: "on" };
