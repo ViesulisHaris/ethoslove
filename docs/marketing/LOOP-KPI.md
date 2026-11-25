@@ -31,7 +31,7 @@ of that file does it); the counts then start from the day that ships.
 | `reply_started` | "Send one back to {sender}" is tapped. `from` says where: the end screen, or the line under "Sent to {sender}." after a reaction. (The event existed; `from` is new, so older rows have none and are all end-screen taps.) A second tap while the editor loads is not counted. A tap on a phone that is offline is held on the gift, and counted only if the connection is back within ten seconds, when the editor is asked for. | `template`, `from: "end" \| "reaction"` | `src/components/gift/gift-experience.tsx` |
 | `keep_tapped` | "Keep this gift" is tapped. Unchanged; listed because it is the fourth thing a recipient can tap. | `template` | `src/templates/_shared/EndScreen.tsx` |
 | `recipient_editor_opened` | The editor opens for someone who came from a gift. `via` is the tag they came through: `reply` (Send one back), `g` (make one for someone else), `watermark` (the badge), `gift-keep` (the reminder email a kept gift sends). Not fired again when the editor reopens after signing in or paying (`?resume=publish`). | `via`, `template` | `src/components/editor/editor-shell.tsx`, `src/lib/attribution/recipient-loop.ts` (the tags: `recipient.ts`) |
-| `recipient_started` | The first change to a new gift, in an editor opened through one of the four doors. Once per gift: a draft the device or the account already holds is not counted again. Not inside the iPhone app. | `within7: true \| false` | `src/components/editor/editor-shell.tsx`, `src/lib/attribution/recipient-loop.ts`, `src/app/api/loop/started/route.ts` |
+| `recipient_started` | The first change to a new gift, in an editor opened through one of the four doors. Once per visit (a browser tab): a second template tried in that tab, or a draft the device or the account already holds, is not counted again. Not inside the iPhone app. | `within7: true \| false` | `src/components/editor/editor-shell.tsx`, `src/lib/attribution/recipient-loop.ts`, `src/app/api/loop/started/route.ts` |
 | `recipient_gift_sent` | A gift made in that same tab goes out for the first time (published or scheduled). `paid` says what the gift holds, not what anyone did: true when it holds something that costs money (a premium template that is not a free reply, or a paid extra). It is true for someone who already owned the template and paid nothing now, and it misses nearly everyone who did pay (see "What these numbers cannot say"). | `via`, `template`, `paid` | `src/components/editor/publish-sheet.tsx`, `src/lib/attribution/recipient-loop.ts` |
 
 Two page views complete the picture. Vercel already records them; nothing new was added:
@@ -77,8 +77,27 @@ token in the address, which only "Send one back" on a paid gift puts there. It i
 
 ## The one number the audits asked for: recipients who start their own within seven days
 
-**Top: gifts started.** Vercel → Analytics → Events → `recipient_started`, the week's count
-where `within7` is `true`.
+**Read this first.** Only one door can say when the gift a recipient came from was first opened:
+"Send one back" on a paid gift whose free reply is unused, which carries a sealed token naming that
+gift. Every other door carries a word (`?ref=reply`, `g`, `watermark`, `gift-keep`) and no gift,
+because the gift page may put no gift id in a link. So for those doors `within7` is the door's
+best guess, not a measurement. **Read `within7 = true` as "started their own in the same visit
+they watched a gift"**, an upper bound on "within seven days of the first open": someone who
+watches a three-week-old gift again and starts one is counted `true`. Only the paid-reply door's
+answer is exact, and it cannot be told apart from the others in the dashboard.
+
+The brief asked for the count to be made on the server when the gift is first saved, from
+`?from=<giftId>` or the `ethos_start_from` cookie. Neither carries the gift a recipient came from
+(`?from=` is a template's name; `ethos_start_from` is a sender's own earlier gift, for a reminder
+e-mail), and most recipients are guests whose gift is not saved on the server before they send it.
+So it is counted in the browser, on the first change to a new draft. Decided 25 Nov 2026 (fixer,
+loop2-C2): kept as built and described here, because the alternatives either put a gift id in a
+link from the gift page, which the rules forbid, or add a property naming the door to the event,
+which the owner can still ask for (one line in `countRecipientStarted`; then read `within7` only
+where the door is the token).
+
+**Top: recipients who started their own.** Vercel → Analytics → Events → `recipient_started`, the
+week's count where `within7` is `true`.
 
 **Bottom: gifts opened for the first time.** No event counts this, and none was added: every
 open is a row of `gift_views`, so a gift's first open is its earliest row. Supabase → SQL
@@ -91,23 +110,29 @@ where f.first_open >= timestamptz '2026-11-23 00:00+00'
   and f.first_open <  timestamptz '2026-11-30 00:00+00';
 ```
 
-**The share:** `recipient_started` with `within7 = true` ÷ `gifts_first_opened`, same week.
+**The share:** `recipient_started` with `within7 = true` ÷ `gifts_first_opened`, same week. It reads
+high for the reason above and low for the ones below; week against week it compares with itself.
 
 What `within7` means, door by door:
 
 | Door | How `within7` is decided |
 |---|---|
-| "Send one back" on a paid premium gift whose free reply is unused (`?reply=` token) | Exact. The server opens the sealed token, reads that gift's first open in `gift_views` and compares it with now. |
-| "Send one back" on any other gift, "or make one for someone else", the badge | `true`. The tag lives in the tab's memory only, so the gift is being started in the same visit the gift was opened in. Not known: whether that gift was first opened more than seven days earlier and is being watched again. |
-| The reminder a kept gift sends (`gift-keep`) | `false`. It goes out nine days before a date, usually months after the gift. A gift kept less than a week before its reminder is counted on the wrong side. |
+| "Send one back" on a paid premium gift whose free reply is unused (`?reply=` token) | Exact. The server opens the sealed token, reads that gift's first open in `gift_views` and compares it with now. If the server cannot answer within 4 s, the door's guess (`true`) is sent instead. |
+| "Send one back" on any other gift, "or make one for someone else", the badge | Always `true`: a guess. The tag lives in the tab's memory only, so the gift is being started in the same visit the gift was watched in. Not known: when that gift was first opened. |
+| The reminder a kept gift sends (`gift-keep`) | Always `false`: a guess. It goes out nine days before a date, usually months after the gift. A gift kept less than a week before its reminder is counted on the wrong side. |
 
-What the number cannot say: the bottom counts gifts, the top counts visits (a browser tab) in which
-a recipient started one, so trying two templates from `/made-with-ethos` is one, but the same
-person on a phone and then a laptop, or in two tabs, is two; a recipient who comes back another day by typing the address is
-nobody's (as before); a gift deleted since takes its opens with it, so read a week soon after it
-ends; a sender who looks at their own gift signed out is that gift's first open. If the Events
-page does not split an event by a property, ask for the event to be named per answer
-(`recipient_started_7d`, `recipient_started_later`): one line in `countRecipientStarted`.
+What the number cannot say:
+- **It is counted per visit, not per person.** Trying two templates from `/made-with-ethos` in one
+  tab is one; the same person on a phone and then a laptop, or in two tabs, is two.
+- **A recipient whose device already holds a draft of that template is not counted.** The count
+  fires on the first change to a *new* draft; someone who typed into The Letter's editor on that
+  device before (for any reason) opens their old draft, and nothing is sent.
+- **A recipient who comes back another day by typing the address is nobody's** (as before).
+- **The bottom counts gifts, the top counts recipients**; a gift deleted since takes its opens with
+  it, so read a week soon after it ends; a sender who looks at their own gift signed out is that
+  gift's first open.
+- If the Events page does not split an event by a property, ask for the event to be named per
+  answer (`recipient_started_7d`, `recipient_started_later`): one line in `countRecipientStarted`.
 
 ## What these numbers cannot say
 
