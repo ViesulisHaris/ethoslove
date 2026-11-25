@@ -341,3 +341,49 @@ describe("tonight's times and plan", () => {
     expect(clipName("Lisbon")).toBe("Lisbon");
   });
 });
+
+describe("indoors or outdoors, the person's own choice (dates2)", () => {
+  it("S1 indoors plans only under a roof, on a dry day too", () => {
+    const picks = rankTonight({ setting: "indoors" }, { day: DRY, places: EVERYTHING });
+    expect(picks.length).toBeGreaterThan(0);
+    for (const p of picks) expect(p.idea.needsDry, p.idea.id).toBe(false);
+    for (const p of picks) expect(p.idea.goodInRain || Boolean(idea(p.idea.id).rainStops), p.idea.id).toBe(true);
+    const stars = picks.find((p) => p.idea.id === "stars-and-planets");
+    // The first stop is the one the setting decides; the last may be trimmed by the hour (forTonight).
+    expect(stars?.idea.stops[0]).toEqual(idea("stars-and-planets").rainStops![0]);
+    const dinner = picks.find((p) => p.idea.id === "pasta-and-a-slow-walk");
+    expect(dinner?.idea.stops[1]).not.toEqual(idea("pasta-and-a-slow-walk").stops[1]);
+    expect(dinner?.idea.title.en).toBe(idea("pasta-and-a-slow-walk").rain!.title.en);
+    expect(ids(picks)).not.toContain("golden-hour-picnic");
+  });
+
+  it("S2 outdoors on a wet day keeps the dry ideas and their dry stops", () => {
+    const picks = rankTonight({ setting: "outdoors" }, { day: WET, places: EVERYTHING });
+    expect(ids(picks)).toContain("golden-hour-picnic");
+    for (const p of picks) expect(p.idea.goodInRain, p.idea.id).toBe(false);
+    const stars = picks.find((p) => p.idea.id === "stars-and-planets");
+    expect(stars?.idea.stops[0]).toEqual(idea("stars-and-planets").stops[0]);
+  });
+
+  it("S3 with no choice a wet day is what it was", () => {
+    const before = IDEAS.map((i) => forTheDay(i, WET)).filter((i) => !i.needsDry).map((i) => i.id);
+    expect(new Set(ids(rankTonight({}, { day: WET, places: EVERYTHING })))).toEqual(new Set(before));
+    expect(ids(rankTonight({ setting: undefined }, { day: WET, places: EVERYTHING }))).toEqual(ids(rankTonight({}, { day: WET, places: EVERYTHING })));
+  });
+
+  it("S4 a page by kind none of whose ideas has the setting gives no picks", () => {
+    expect(rankTonight({ kind: "rainy-day", setting: "outdoors" }, { day: DRY, places: EVERYTHING })).toEqual([]);
+  });
+
+  it("S5 the setting is never given up", () => {
+    for (const setting of ["indoors", "outdoors"] as const) {
+      for (const d of [DRY, WET]) {
+        for (const p of rankTonight({ setting, budget: 0, length: "short" }, { day: d, places: EVERYTHING })) {
+          for (const r of p.relaxed) expect(["length", "budget", "vibe"]).toContain(r);
+          if (setting === "indoors") expect(p.idea.needsDry).toBe(false);
+          else expect(p.idea.goodInRain).toBe(false);
+        }
+      }
+    }
+  });
+});

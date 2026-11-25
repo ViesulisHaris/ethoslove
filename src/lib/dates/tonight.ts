@@ -1,6 +1,6 @@
 import type { Ymd } from "./calendar";
 import { fitsKind, KIND_MAX_BUDGET, type DateKind } from "./date-kinds";
-import { canBeFree, forTheDay, IDEAS, isDoable, type DateIdea, type Vibe } from "./ideas";
+import { canBeFree, forTheDay, IDEAS, isDoable, underARoof, type DateIdea, type Vibe } from "./ideas";
 import { stopOf, type Plan } from "./plan";
 import type { Place } from "./places";
 import { suggestTimes } from "./timing";
@@ -23,7 +23,11 @@ export type TonightWish = {
   kind?: DateKind;
   /** Minutes after midnight, by the place's own clock, before which nothing can start. Set only for a date today. */
   startMin?: number;
+  /** The person's own choice of indoors or outdoors. Absent: either, and the weather decides. Never relaxed. */
+  setting?: TonightSetting;
 };
+/** Indoors or outdoors, chosen in the planner's sentence (BRIEF-dates2.md 2). */
+export type TonightSetting = "indoors" | "outdoors";
 export type Relaxed = "length" | "budget" | "vibe";
 export type TonightPick = {
   /** The idea as it is planned that day: its rain stops on a wet one, no café after nine (forTonight). */
@@ -176,9 +180,21 @@ export function rankTonight(wish: TonightWish, context: TonightContext): Tonight
   const kindMax = wish.kind ? KIND_MAX_BUDGET[wish.kind] : undefined;
   ideas.forEach((written, index) => {
     if (wish.kind && !fitsKind(written, wish.kind)) return;
-    // On a wet day an idea with rain stops is planned with them (the stars under a dome).
-    const forDay = forTheDay(written, day);
-    if (wet && forDay.needsDry) return;
+    let forDay: DateIdea;
+    if (wish.setting === "indoors") {
+      // Under a roof whatever the sky: the stars under a dome, the dinner with its rain stops.
+      const roofed = underARoof(written);
+      if (!roofed) return;
+      forDay = roofed;
+    } else if (wish.setting === "outdoors") {
+      // Their own choice wins over the forecast: the dry stops are planned, rain or not.
+      if (written.goodInRain) return;
+      forDay = written;
+    } else {
+      // On a wet day an idea with rain stops is planned with them (the stars under a dome).
+      forDay = forTheDay(written, day);
+      if (wet && forDay.needsDry) return;
+    }
     if (kindMax !== undefined && forDay.budget > Math.max(kindMax, wish.budget ?? kindMax)) return;
     const shift = tonightShift(forDay, day, wish.startMin);
     if (shift === null) return;
