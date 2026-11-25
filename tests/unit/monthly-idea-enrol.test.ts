@@ -79,6 +79,17 @@ describe("enrolment", () => {
     expect(wording.length).toBeLessThanOrEqual(300);
   });
 
+  it("N2b a gift scheduled for a later day never says 'next month' (monthly-D4)", async () => {
+    const line = await enrolForIdeas(fake.db as never, { userId: OWNER, basis: "notice", fresh: true, since: "2027-02-14", templateSlug: "bouquet", locale: "en", scheduled: true });
+    expect(line).toBe(en.offerEmails.ideaLineScheduled);
+    expect(line).not.toMatch(/next month/i);
+    expect(fake.rows("monthly_ideas")[0]).toMatchObject({ since: "2027-02-14", wording: en.offerEmails.ideaLineScheduled });
+    fake.tables.monthly_ideas = [ideaRow()];
+    const es1 = await enrolForIdeas(fake.db as never, { userId: OWNER, basis: "notice", fresh: false, since: "2027-02-14", templateSlug: "bouquet", locale: "es", scheduled: true });
+    expect(es1).toBe(es.offerEmails.ideaLineScheduled);
+    expect(es1).not.toMatch(/mes que viene/);
+  });
+
   it("N3 a newer gift moves the day and nothing else", async () => {
     fake.tables.monthly_ideas = [ideaRow()];
     await enrolForIdeas(fake.db as never, { userId: OWNER, basis: "notice", fresh: false, since: "2026-11-24", templateSlug: "vinyl", locale: "es" });

@@ -30,16 +30,19 @@ export async function readIdeaAccount(db: SupabaseClient<Database>, userId: stri
  */
 export async function enrolForIdeas(
   db: SupabaseClient<Database>,
-  args: { userId: string; basis: IdeaBasis; fresh: boolean; since: Ymd; templateSlug: string; locale: "en" | "es" },
+  args: { userId: string; basis: IdeaBasis; fresh: boolean; since: Ymd; templateSlug: string; locale: "en" | "es"; scheduled?: boolean },
 ): Promise<string> {
   const t = await getTranslations({ locale: args.locale, namespace: "offerEmails" });
+  // A gift scheduled for a later day counts from the day it opens (ideaSince), so "next month" would
+  // be wrong: the first idea comes a month after that day, which may be months away.
+  const line = t(args.scheduled ? "ideaLineScheduled" : "ideaLine");
   if (args.fresh) {
-    const wording = args.basis === "terms" ? String(t.raw("ideaTerms")).replace(/<\/?terms>/g, "") : t("ideaLine");
+    const wording = args.basis === "terms" ? String(t.raw("ideaTerms")).replace(/<\/?terms>/g, "") : line;
     const { error } = await db.from("monthly_ideas").insert({ user_id: args.userId, since: args.since, template_slug: args.templateSlug, locale: args.locale, basis: args.basis, wording });
     if (error) throw new Error(`monthly idea not started: ${error.message}`);
   } else {
     const { error } = await db.from("monthly_ideas").update({ since: args.since, template_slug: args.templateSlug, locale: args.locale }).eq("user_id", args.userId).is("off_at", null);
     if (error) throw new Error(`monthly idea not moved: ${error.message}`);
   }
-  return t("ideaLine");
+  return line;
 }

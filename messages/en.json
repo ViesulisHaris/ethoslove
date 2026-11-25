@@ -4217,11 +4217,12 @@
     "failed": "Couldn’t save that. Try again in a moment.",
     "how": "How we use your email",
     "ideaLine": "Starting next month, we’ll email you one gift idea a month for a year.",
+    "ideaLineScheduled": "A month after this gift opens, we’ll start emailing you one gift idea a month, for a year.",
     "ideaOff": "Don’t send these",
     "ideaOffDone": "Off. We won’t send them.",
     "ideaUndo": "Undo",
     "boxIdea": "Email me Ethos offers and one gift idea a month. I can unsubscribe any time.",
-    "ideaTerms": "I accept the <terms>Terms</terms>: sending free comes with one gift idea a month by email, which I can stop in any email or in my account.",
+    "ideaTerms": "I accept the <terms>Terms</terms>: free gifts come with one gift idea a month by email, which I can stop in any email or in my account.",
     "ideaTermsNeeded": "Tick the box to send it.",
     "ideaWhere": "After you send a gift, we’ll email you one gift idea a month for a year. You can stop them in any email."
   },
@@ -4230,7 +4231,7 @@
     "policyLink": "What changed",
     "offer": "Your personal price: any gift for {price}, until {ends}.",
     "offerLink": "Choose a gift",
-    "ideaOffer": "Your one-time price: one gift from {price}, until {ends}.",
+    "ideaOffer": "Your one-time price: one premium gift for {price}, until {ends}.",
     "close": "Close"
   }
 }

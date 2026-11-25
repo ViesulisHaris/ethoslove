@@ -5,6 +5,7 @@ import { SITE } from "@/config/site";
 import { isConfigured } from "@/lib/env";
 import { emailKey, linkSecret, signToken } from "@/lib/lifecycle/links";
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
+import type { Occasion } from "@/config/occasions";
 import { getManifest } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { suggestTemplate, suggestionPath, type SeasonId } from "@/lib/lifecycle/suggest";
@@ -545,6 +546,8 @@ export async function sendMonthlyIdea(args: {
   templateSlug: string;
   ideaUrl: string;
   moreUrl: string;
+  /** Where `moreUrl` goes (it names the link); every template when left out. */
+  more?: Occasion | "templates";
   stopUrl: string;
   basis: IdeaBasis;
   priceUntil?: string;
@@ -561,6 +564,7 @@ export async function sendMonthlyIdea(args: {
         season: args.season,
         idea: { ...emailIdea(manifest, args.locale, IDEA_REF), url: args.ideaUrl },
         moreUrl: args.moreUrl,
+        more: args.more ?? "templates",
         stopUrl: args.stopUrl,
         basis: args.basis,
         ...(args.priceUntil ? { priceUntil: args.priceUntil } : {}),

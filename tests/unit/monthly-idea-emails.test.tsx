@@ -26,7 +26,7 @@ vi.mock("@/lib/env", async (importOriginal) => {
   return { ...real, isConfigured: { ...real.isConfigured, resend: true } };
 });
 
-const { IDEA_COPY, MonthlyIdeaEmail } = await import("@/emails/lifecycle");
+const { IDEA_COPY, MonthlyIdeaEmail, monthlyIdeaMoreLabel } = await import("@/emails/lifecycle");
 const notify = await import("@/lib/email/notify");
 const { SEASON_IDEAS, SEASON_IDS, seasonFor } = await import("@/lib/lifecycle/suggest");
 const { getManifest } = await import("@/templates/manifests");
@@ -61,6 +61,7 @@ function props(season: SeasonId, locale: L, over: { priceUntil?: string; basis?:
     season,
     idea: { name: manifest.name[locale], tagline: manifest.tagline[locale], url: pageUrl(locale, `/create/${manifest.slug}?ref=${IDEA_REF}`), poster: `${siteUrl()}${manifest.thumbnail.poster}` },
     moreUrl: MORE,
+    more: row.more,
     stopUrl: STOP,
     basis: over.basis ?? ("notice" as const),
     ...(over.priceUntil ? { priceUntil: over.priceUntil } : {}),
@@ -106,9 +107,13 @@ describe("the monthly idea email", () => {
     expect(withPrice).toContain("one-time price");
     expect(words(withPrice)).toBeLessThanOrEqual(150);
     const htmlWith = await render(MonthlyIdeaEmail(props("christmas", "en", { priceUntil: "27 December" })));
-    expect(htmlWith).toContain("One idea, and a one-time price on it.");
+    expect(htmlWith).toContain("One idea, and a lower price for a week.");
+    // The button is named, not said to "carry" anything (monthly-D10).
+    expect(withPrice).toContain("Tap the button above and you'll see the price before you pay.");
     const es = text(await render(MonthlyIdeaEmail(props("christmas", "es", { priceUntil: "27 de diciembre" }))));
     expect(es).toContain("hasta el 27 de diciembre");
+    expect(withPrice).not.toContain("carries");
+    expect(es).toContain("Pulsa el botón de arriba y verás el precio antes de pagar.");
     const plain = await render(MonthlyIdeaEmail(props("christmas", "en")));
     expect(text(plain)).not.toContain("until 27 December");
     expect(plain).not.toContain("one-time price");
@@ -117,7 +122,8 @@ describe("the monthly idea email", () => {
 
   it("E3 every email can be stopped, and says why it came", async () => {
     const html = await render(MonthlyIdeaEmail(props("june", "en")));
-    expect(html.split(STOP.replace(/&/g, "&amp;")).length - 1).toBe(2);
+    // Once, in the footer (monthly-D10): the mail app's own unsubscribe button is the other way out.
+    expect(html.split(STOP.replace(/&/g, "&amp;")).length - 1).toBe(1);
     const footers = {
       en: { notice: "because you sent a gift with Ethos.", terms: "because you sent a free gift with Ethos, which comes with these emails.", box: "because you asked for Ethos offers." },
       es: { notice: "porque enviaste un regalo con Ethos.", terms: "porque enviaste un regalo gratis con Ethos, que incluye estos correos.", box: "porque pediste las ofertas de Ethos." },
@@ -127,6 +133,31 @@ describe("the monthly idea email", () => {
         const t = text(await render(MonthlyIdeaEmail(props("june", locale, { basis }))));
         expect(t).toContain(footers[locale][basis]);
         expect(t).toContain(locale === "es" ? "Dejar de recibir estos correos" : "Stop these emails");
+      }
+  });
+
+  it("E3b the 'Something else?' link says where it goes (monthly-D3)", async () => {
+    for (const row of SEASON_IDEAS)
+      for (const locale of ["en", "es"] as const) {
+        const t = text(await render(MonthlyIdeaEmail(props(row.id, locale))));
+        const label = monthlyIdeaMoreLabel(row.more, locale);
+        expect(t, `${row.id} ${locale}`).toContain(label);
+        // "Every template" only where the link opens every template.
+        if (row.more === "templates") expect(label).toBe(locale === "es" ? "Todas las plantillas" : "Every template");
+        else expect(t, `${row.id} ${locale}`).not.toMatch(/Every template|Todas las plantillas/);
+        // The first email's link opens the gallery with the price: every template.
+        const priced = text(await render(MonthlyIdeaEmail(props(row.id, locale, { priceUntil: locale === "es" ? "27 de diciembre" : "27 December" }))));
+        expect(priced).toContain(locale === "es" ? "Todas las plantillas" : "Every template");
+      }
+    expect(monthlyIdeaMoreLabel("christmas", "en")).toBe("More Christmas gifts");
+    expect(monthlyIdeaMoreLabel("valentines", "es")).toBe("Más regalos de San Valentín");
+  });
+
+  it("E3c no email tells its reader the date of a holiday everyone knows (monthly-D10)", () => {
+    for (const id of SEASON_IDS)
+      for (const locale of ["en", "es"] as const) {
+        const copy = IDEA_COPY[id][locale];
+        for (const line of [copy.body, copy.preview]) expect(line, `${id} ${locale}`).not.toMatch(/\b(14|25|31) (de )?(February|October|December|febrero|octubre|diciembre)\b|\b(it's|it’s|christmas is) on\b|\bes el \d/i);
       }
   });
 
@@ -174,7 +205,7 @@ describe("the monthly idea email", () => {
       for (const locale of ["en", "es"] as const)
         for (const price of [true, false]) {
           const priceUntil = price ? formatMonthDay({ month: last.getUTCMonth() + 1, day: last.getUTCDate() }, locale) : undefined;
-          const p = { ...props(season.id, locale, { priceUntil }), moreUrl: pageUrl(locale, season.more === "templates" ? `/templates?ref=${IDEA_REF}` : `/occasions/${season.more}?ref=${IDEA_REF}`) };
+          const p = { ...props(season.id, locale, { priceUntil }), more: price ? ("templates" as const) : season.more, moreUrl: pageUrl(locale, season.more === "templates" ? `/templates?ref=${IDEA_REF}` : `/occasions/${season.more}?ref=${IDEA_REF}`) };
           const html = await render(MonthlyIdeaEmail(p));
           writeFileSync(join(out!, `email-${send.name}-${locale}-${price ? "price" : "plain"}.html`), html);
         }

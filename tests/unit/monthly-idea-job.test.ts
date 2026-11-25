@@ -157,13 +157,15 @@ describe("the morning job", () => {
     const { store, rows } = memoryStore([row({ since: "2026-11-20", template_slug: "bouquet" })]);
     const run = job(store, at("2026-12-20"));
     await run.run();
-    expect(run.mail[0]).toMatchObject({ ideaUrl: "https://ethos.test/api/offer/open?t=p&to=snow-globe", moreUrl: "https://ethos.test/api/offer/open?t=p", priceUntil: "27 December", templateSlug: "snow-globe", season: "christmas" });
+    expect(run.mail[0]).toMatchObject({ ideaUrl: "https://ethos.test/api/offer/open?t=p&to=snow-globe", moreUrl: "https://ethos.test/api/offer/open?t=p", priceUntil: "27 December", templateSlug: "snow-globe", season: "christmas", more: "templates" });
     expect(rows[0].price_sent_at).toEqual(expect.any(String));
 
     const spent = memoryStore([row({ since: "2026-11-20" })]);
     const noPrice = job(spent.store, at("2026-12-20"), { priceSpent: async () => true });
     await noPrice.run();
     expect(noPrice.mail[0].priceUntil).toBeUndefined();
+    // Without the price, the link goes to the season's occasion page, and is named for it (monthly-D3).
+    expect(noPrice.mail[0]).toMatchObject({ more: "christmas", moreUrl: expect.stringMatching(/\/occasions\/christmas\?ref=email-monthly$/) });
     expect(spent.rows[0].price_sent_at).toBeNull();
 
     const unsigned = memoryStore([row({ since: "2026-11-20" })]);

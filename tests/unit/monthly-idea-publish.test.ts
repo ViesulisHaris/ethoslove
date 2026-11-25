@@ -99,6 +99,15 @@ describe("sending a free gift while the monthly idea is on for everyone", () => 
     expect(fake.rows("monthly_ideas")[0]).toMatchObject({ basis: "notice" });
   });
 
+  it("P4b a gift scheduled for a later day says the ideas start a month after it opens (monthly-D4)", async () => {
+    seed({ purchases: [{ id: "p1", user_id: USER, status: "paid", store: null }] });
+    // Scheduling is a paid gift's: this one is unlocked.
+    state.client = { ...(state.client as object), rpc: async (name: string) => ({ data: name === "has_template_unlock" ? true : null, error: null }) };
+    const result = await send({ schedule: { unlockAt: "2027-02-14T08:00:00.000Z", timezone: "Europe/London" } });
+    expect(result).toMatchObject({ ok: true, data: { status: "scheduled", ideaNotice: en.offerEmails.ideaLineScheduled } });
+    expect(fake.rows("monthly_ideas")[0]).toMatchObject({ since: "2027-02-14", wording: en.offerEmails.ideaLineScheduled });
+  });
+
   it("P5 the app and Etsy mode send without the box, and start nothing", async () => {
     seed();
     const result = await send({ quiet: true });

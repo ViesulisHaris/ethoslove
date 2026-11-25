@@ -4217,11 +4217,12 @@
     "failed": "No se ha podido guardar. Inténtalo de nuevo en un momento.",
     "how": "Cómo usamos tu correo",
     "ideaLine": "A partir del mes que viene te enviaremos una idea de regalo al mes durante un año.",
+    "ideaLineScheduled": "Un mes después de que se abra este regalo, empezaremos a enviarte una idea de regalo al mes durante un año.",
     "ideaOff": "No quiero recibirlas",
     "ideaOffDone": "Desactivado. No te las enviaremos.",
     "ideaUndo": "Deshacer",
     "boxIdea": "Enviadme por correo las ofertas de Ethos y una idea de regalo al mes. Puedo darme de baja cuando quiera.",
-    "ideaTerms": "Acepto los <terms>Términos</terms>: enviar gratis incluye una idea de regalo al mes por correo, que puedo dejar de recibir desde cualquier correo o desde mi cuenta.",
+    "ideaTerms": "Acepto los <terms>Términos</terms>: los regalos gratis incluyen una idea de regalo al mes por correo, que puedo dejar de recibir desde cualquier correo o desde mi cuenta.",
     "ideaTermsNeeded": "Marca la casilla para enviarlo.",
     "ideaWhere": "Después de enviar un regalo, te enviaremos una idea de regalo al mes durante un año. Puedes dejar de recibirlas desde cualquier correo."
   },
@@ -4230,7 +4231,7 @@
     "policyLink": "Qué ha cambiado",
     "offer": "Tu precio personal: cualquier regalo por {price}, hasta el {ends}.",
     "offerLink": "Elige un regalo",
-    "ideaOffer": "Tu precio especial de un solo uso: un regalo desde {price}, hasta el {ends}.",
+    "ideaOffer": "Tu precio especial de un solo uso: un regalo premium por {price}, hasta el {ends}.",
     "close": "Cerrar"
   }
 }

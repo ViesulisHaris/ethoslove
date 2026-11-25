@@ -44,7 +44,9 @@ export function TopNotice() {
         <p className="min-w-0">
           {price
             ? price.kind === "monthly"
-              ? t("ideaOffer", { price: formatAmount(Math.min(price.amounts.single[currency], price.amounts.extras[currency]), currency, locale), ends: personalPriceEnds(price.endsAt, locale, currency) })
+              ? // The premium template's price: what every template, the email's own included, shows at
+                // checkout. "Make it special" (the lower one) is an add-on to the free note, not "a gift".
+                t("ideaOffer", { price: formatAmount(price.amounts.single[currency], currency, locale), ends: personalPriceEnds(price.endsAt, locale, currency) })
               : t("offer", { price: formatAmount(price.amounts.single[currency], currency, locale), ends: personalPriceEnds(price.endsAt, locale, currency) })
             : t("policy")}{" "}
           <Link href={price ? "/templates" : "/legal/privacy"} className="whitespace-nowrap text-cream underline underline-offset-2">

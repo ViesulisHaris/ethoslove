@@ -104,6 +104,8 @@ export async function sendMonthlyIdeas(run: IdeaRun): Promise<{ sent: number; sk
       templateSlug: manifest.slug,
       ideaUrl,
       moreUrl,
+      // The price link opens every template; without it, the season's occasion page (or every template).
+      more: withPrice ? "templates" : season.more,
       stopUrl: links.stopUrl,
       basis: row.basis,
       ...(withPrice ? { priceUntil: formatMonthDay(lastDay, locale) } : {}),

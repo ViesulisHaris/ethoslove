@@ -432,15 +432,20 @@ export async function publishGift(
   if (ideaInput) {
     const email = ctx.user.email ?? "";
     const enrol = enrolDecision({ ...ideaInput, deliverable: Boolean(email) && !isUndeliverable(email), acceptedTerms: input.data.acceptFreeTerms === true });
-    if (enrol.enrol)
+    if (enrol.enrol) {
+      const now = new Date();
+      const since = ideaSince(now, scheduled ? input.data.schedule!.unlockAt : null);
       ideaNotice = await enrolForIdeas(writer, {
         userId: ctx.user.id,
         basis: enrol.basis,
         fresh: enrol.fresh,
-        since: ideaSince(new Date(), scheduled ? input.data.schedule!.unlockAt : null),
+        since,
         templateSlug: gift.template_slug,
         locale: data.locale === "es" ? "es" : "en",
+        // Opens on a later day: the line says the ideas start a month after it opens, not "next month".
+        scheduled: since !== ideaSince(now),
       }).catch(() => null);
+    }
   }
 
   // A group card that has gone out takes no more notes: its link closes. Only where group cards are
