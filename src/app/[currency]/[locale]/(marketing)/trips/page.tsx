@@ -130,20 +130,26 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             {t("grid.title")}
           </h2>
           <TripsGrid className="mt-8" cards={cards} filters={filters} label={t("filter.label")} />
-          {/* One quiet row to the pages by where you leave from and by kind, and each links back here. */}
-          <nav aria-label={t("more.nav")} data-testid="trips-more" className="mt-10 flex flex-wrap items-center gap-x-1 border-t border-line pt-5 text-[15px] text-forest/75">
-            <span className="mr-1.5">{t("more.from")}</span>
-            {TRIP_ORIGINS.map((o) => (
-              <Link key={o.slug} href={originPath(o)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
-                {o.name[l]}
-              </Link>
-            ))}
-            <span className="mr-1.5 ml-4">{t("more.kinds")}</span>
-            {TRIP_IDEA_KINDS.map((kind) => (
-              <Link key={kind} href={ideaPath(kind)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
-                {TRIP_IDEA_COPY[kind].nav[l]}
-              </Link>
-            ))}
+          {/* One quiet row to the pages by where you leave from and by kind, and each links back here. Each group is its
+              label and its links: on a phone the label stands over them (it read as a stray word after "Riga"), on a desk
+              the two groups sit side by side. The label's padding is the links', so their words line up. */}
+          <nav aria-label={t("more.nav")} data-testid="trips-more" className="mt-10 flex flex-col gap-y-3 border-t border-line pt-5 text-[15px] text-forest/75 sm:flex-row sm:flex-wrap sm:gap-x-8">
+            <div data-group="from" className="flex flex-wrap items-center gap-x-1">
+              <span className="w-full px-1.5 sm:w-auto">{t("more.from")}</span>
+              {TRIP_ORIGINS.map((o) => (
+                <Link key={o.slug} href={originPath(o)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
+                  {o.name[l]}
+                </Link>
+              ))}
+            </div>
+            <div data-group="kinds" className="flex flex-wrap items-center gap-x-1">
+              <span className="w-full px-1.5 sm:w-auto">{t("more.kinds")}</span>
+              {TRIP_IDEA_KINDS.map((kind) => (
+                <Link key={kind} href={ideaPath(kind)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
+                  {TRIP_IDEA_COPY[kind].nav[l]}
+                </Link>
+              ))}
+            </div>
           </nav>
         </div>
       </section>

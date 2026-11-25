@@ -171,6 +171,27 @@ test.describe("the pages by where you leave from", () => {
     }
   });
 
+  test("E6b on a phone each group's label stands over its own links, lined up with them", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const path of ["/trips", "/es/trips"]) {
+      await page.goto(path);
+      for (const group of ["from", "kinds"]) {
+        const g = page.getByTestId("trips-more").locator(`[data-group="${group}"]`);
+        const label = await g.locator("span").first().evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          const pad = parseFloat(getComputedStyle(el).paddingLeft);
+          return { bottom: r.bottom, textLeft: r.left + pad };
+        });
+        const first = await g.getByRole("link").first().evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return { top: r.top, textLeft: r.left + parseFloat(getComputedStyle(el).paddingLeft) };
+        });
+        expect(first.top, `${path} ${group}`).toBeGreaterThanOrEqual(label.bottom - 1);
+        expect(Math.abs(first.textLeft - label.textLeft), `${path} ${group}`).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+
   test("E6 Trips links to every new page, and each links back", async ({ page }) => {
     await page.goto("/trips");
     const links = page.getByTestId("trips-more").getByRole("link");
