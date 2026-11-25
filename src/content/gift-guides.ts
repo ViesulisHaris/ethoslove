@@ -1513,7 +1513,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       h1: "Regalos para pedirle perdón a tu novio",
       label: "Pedir perdón a tu novio",
       hero: {
-        line: "No hay un regalo de perdón por defecto. Que el regalo sea lo concreto.",
+        line: "No hay un regalo de perdón que sirva para todo. Que el regalo sea lo concreto.",
         sentence: "Cada uno lleva los detalles que una disculpa vaga se salta: los mensajes que debes, lo que hiciste y un plan con día y hora.",
       },
       ideasTitle: "Seis que lo dicen claro",
@@ -1705,7 +1705,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "bouquet",
           heading: "Treinta caracteres en la tarjeta, bien usados",
           brief: "Las flores en sus colores, palabras sencillas en la tarjeta y la carta entera detrás.",
-          body: "Ramo hace bien lo de siempre: hasta 24 tallos en sus colores, blancos y rosa palo si el rojo sería demasiado, que se juntan en su pantalla de uno en uno. La tarjeta de entre los tallos llega a treinta caracteres, lo justo para las palabras sencillas, y tu carta entera se abre desde ella con lo demás.",
+          body: "Ramo hace bien lo de siempre: hasta 24 tallos en sus colores, blancos y rosa palo si el rojo fuera demasiado, que se juntan en su pantalla de uno en uno. La tarjeta de entre los tallos llega a treinta caracteres, lo justo para las palabras sencillas, y tu carta entera se abre desde ella con lo demás.",
           line: { field: "cardNote", where: "En la tarjeta del ramo", text: "Me equivoqué. Dentro, la carta" },
         },
         {
@@ -1725,7 +1725,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "vinyl",
           heading: "Su disco favorito, con un título sincero",
           brief: "Vuestra canción en un tocadiscos y un título de álbum de cuarenta caracteres que lo dice.",
-          body: "Si hay una canción que conocéis los dos, ponla en un disco. Vinilo la hace girar en un tocadiscos y guarda hasta doce fotos en una caja al lado como portadas. El título de la funda admite cuarenta caracteres: titula el álbum con la disculpa, o con la broma que solo pilláis vosotros, e imprime tus palabras largas en las notas interiores.",
+          body: "Si hay una canción que conocéis los dos, ponla en un disco. Vinilo la hace girar en un tocadiscos y guarda hasta doce fotos en una caja al lado como portadas. El título de la funda admite cuarenta caracteres: titula el álbum con la disculpa, o con la broma que solo pilláis vosotros, e imprime tus palabras largas en el libreto.",
           line: { field: "album", where: "El título del álbum", text: "Cosas que tenía que haber dicho antes" },
         },
         {
@@ -1911,7 +1911,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "vinyl",
           heading: "Música para desempaquetar, en un disco",
           brief: "Vuestra canción en un tocadiscos, con una etiqueta que la llama música para abrir cajas.",
-          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara da para doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí cuando se abra.",
+          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en el libreto. La etiqueta de la cara da para doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí cuando se abra.",
           line: { field: "side", where: "La etiqueta de la cara", text: "Para abrirla" },
         },
         {
@@ -2054,11 +2054,11 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         line: "Una sorpresa necesita dónde esconderse. Cada regalo de aquí le guarda un sitio.",
         sentence: "Una capa que se rasca, un reloj que llega a cero, una galleta partida: cada regalo guarda la noticia hasta que hace algo.",
       },
-      ideasTitle: "Siete revelaciones, cada una distinta",
+      ideasTitle: "Siete formas de destapar una sorpresa",
       craft: "Que la sorpresa siga siéndolo",
       film: "scratch-card",
       lead: [
-        "Una sorpresa enviada por internet funciona cuando hay algo que destapar. Cada regalo de esta página tiene su propia revelación, y son distintas a propósito: uno se rasca, otro espera a un reloj, otro es un rastro de pistas, otro se suelta agitando. Elige el que encaje con la noticia, y la noticia va en lo último que se descubre.",
+        "Una sorpresa enviada por internet funciona cuando hay algo que destapar. Cada regalo de esta página destapa la sorpresa a su manera, y son distintas a propósito: uno se rasca, otro espera a un reloj, otro es un rastro de pistas, otro se suelta agitando. Elige el que encaje con la noticia, y la noticia va en lo último que se descubre.",
         "Un regalo también puede enviarse antes y abrirse solo un día y a una hora fijados, lo que convierte cualquiera de estos en una sorpresa que llega a medianoche. Todos los regalos de aquí salvo la nota corta gratis de La carta son un solo pago por esa plantilla, y la programación va incluida; antes puedes montarlo y verlo entero en el editor.",
       ],
       ideas: [
@@ -2066,13 +2066,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "scratch-card",
           heading: "Una capa que rascar, con una pista escrita",
           brief: "Fotos bajo una capa que se quita con la yema del dedo, con una pista escrita en ella.",
-          body: "Rasca y gana es la revelación más sencilla que hay: una foto bajo una capa que se va con la yema del dedo, tarjeta tras tarjeta, y un titular en la última para la noticia. La propia capa lleva treinta caracteres, así que escribe ahí la pista, que se lee antes de rascar. Hasta doce fotos, una como mínimo.",
+          body: "Rasca y gana es la sorpresa más sencilla de destapar: una foto bajo una capa que se va con la yema del dedo, tarjeta tras tarjeta, y un titular en la última para la noticia. La propia capa lleva treinta caracteres, así que escribe ahí la pista, que se lee antes de rascar. Hasta doce fotos, una como mínimo.",
           line: { field: "foilText", where: "Las palabras de la capa", text: "la noticia, en la última" },
         },
         {
           template: "midnight-countdown",
           heading: "Un reloj que lo abre al segundo que elijas",
-          body: "Con Cuenta atrás de medianoche la revelación es el tiempo. Un reloj en marcha baja bajo un cielo que se oscurece; no se ve nada hasta el cero, y entonces salen los fuegos y se abren a la vez las fotos y tus palabras. Ponla a medianoche de su cumpleaños o al minuto en que aterrizas. La frase del cero llega a sesenta caracteres.",
+          body: "Con Cuenta atrás de medianoche, lo que destapa la sorpresa es el tiempo. Un reloj en marcha baja bajo un cielo que se oscurece; no se ve nada hasta el cero, y entonces salen los fuegos y se abren a la vez las fotos y tus palabras. Ponla a medianoche de su cumpleaños o al minuto en que aterrizas. La frase del cero llega a sesenta caracteres.",
           line: { field: "zeroLine", where: "La frase del cero", text: "Asómate. He llegado antes." },
         },
         {
@@ -2086,7 +2086,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "the-letter",
           heading: "Una carta sellada con un último mensaje que tocar",
           brief: "Un sello de lacre y luego un último mensaje que se abre con un toque, pulsando o agitando.",
-          body: "La carta tiene dos revelaciones: un sello de lacre que se rompe para leer y, después de tus palabras, un último mensaje que se abre con un toque, pulsando o agitando, de hasta 600 caracteres. Pon ahí la sorpresa y deja tranquila la carta, para que llegue sin avisar. La despedida va justo encima de tu nombre.",
+          body: "La carta guarda dos sorpresas: un sello de lacre que se rompe para leer y, después de tus palabras, un último mensaje que se abre con un toque, pulsando o agitando, de hasta 600 caracteres. Pon ahí la sorpresa y deja tranquila la carta, para que llegue sin avisar. La despedida va justo encima de tu nombre.",
           line: { field: "signOff", where: "La despedida", text: "Lee hasta el final. Queda una cosa más" },
         },
         {
@@ -2126,7 +2126,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
       ],
       faq: [
-        { q: "¿Qué sorpresa online puedo darle a mi pareja?", a: "Un regalo con la revelación incluida: fotos bajo una capa, un reloj que se abre a medianoche, pistas hacia un viaje, un último mensaje que aparece al agitar. Pon la noticia al final del todo." },
+        { q: "¿Qué sorpresa online puedo darle a mi pareja?", a: "Un regalo que trae su propia sorpresa: fotos bajo una capa, un reloj que se abre a medianoche, pistas hacia un viaje, un último mensaje que aparece al agitar. Pon la noticia al final del todo." },
         { q: "¿Puedo enviarlo ya y que se abra ese día?", a: "Sí, como parte de un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y elige la fecha, la hora y su zona horaria. Hasta entonces el enlace muestra una cuenta atrás en marcha, y en ese momento se abre solo." },
         { q: "¿Alguno necesita sensor de movimiento?", a: "No. Bola de nieve y Frasco de razones se disfrutan más agitando, y los dos funcionan en un móvil que no lo nota: la bola tiene un botón y el frasco se toca. Los demás se tocan, se rascan o simplemente se miran." },
         { q: "¿Cómo mantengo la sorpresa hasta que lo abra?", a: "Manda el enlace con un mensaje sencillo, sin nada sobre lo que hay dentro. Si el regalo está programado, la página a la que llega antes de la hora solo dice que algo le espera y cuándo se abre." },
@@ -2148,7 +2148,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Memory books",
       hero: {
         line: "A memory book is mostly words. The photos only hold them in place.",
-        sentence: "These gifts are built around what you write, a note in a jar, a chat you script, a front page, so the story carries and the pictures follow.",
+        sentence: "These gifts are built around your words: a note in a jar, a chat you script, a front page, with the pictures following the story.",
       },
       ideasTitle: "Seven that tell it in words",
       craft: "What to write, chapter by chapter",
@@ -2240,7 +2240,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       label: "Libros de recuerdos",
       hero: {
         line: "Un libro de recuerdos es sobre todo palabras. Las fotos solo las sujetan.",
-        sentence: "Estos regalos giran en torno a lo que escribes, una nota en un frasco, un chat que escribes tú, una portada, para que la historia mande y las fotos acompañen.",
+        sentence: "Estos regalos giran en torno a tus palabras: una nota en un frasco, un chat con guion propio, una portada, y las fotos detrás de la historia.",
       },
       ideasTitle: "Siete que lo cuentan con palabras",
       craft: "Qué escribir, capítulo a capítulo",
@@ -2294,7 +2294,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "museum",
           heading: "Una exposición, con tus palabras en las placas",
-          body: "Museo convierte vuestra historia en una visita a una galería: cada foto enmarcada lleva debajo su placa, con tu pie de foto y, debajo, las fechas de toda la muestra. De dos a veinte cuadros. Titula la exposición como una retrospectiva, sesenta caracteres, y trata cada placa como el título de un capítulo; el texto de pared en que se convierte tu mensaje cierra el libro.",
+          body: "Museo convierte vuestra historia en una visita a una galería: cada foto enmarcada lleva debajo su placa, con tu pie de foto y, debajo, las fechas de toda la muestra. De dos a veinte cuadros. Titula la exposición como una retrospectiva, sesenta caracteres, y trata cada placa como el título de un capítulo; el texto de sala en que se convierte tu mensaje cierra el libro.",
           line: { field: "exhibition", where: "El nombre de la exposición", text: "Obras completas de los dos, por ahora" },
         },
       ],

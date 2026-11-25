@@ -637,6 +637,10 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
       es.recipients.month.counter,
     ];
     expect(texts.filter((t) => WRONG.test(t))).toEqual([]);
+    // And the slips and calques a native reader caught (gifts2-D9): a wink for a squint, a motel, a conditional after
+    // «si», a doubled «que», liner notes and wall text word for word, a reveal as a «revelación», a gate sign that warns.
+    const SLIPS = /\b(guiñando|motel|si [\wáéíóú ]{0,20}sería|que que|notas interiores|texto de pared|revelaci[oó]n(es)?|cuidado desde|ponerlo en papel|por defecto|y creciendo)\b/i;
+    expect(texts.filter((t) => SLIPS.test(t))).toEqual([]);
     // «Contad vuestros meses juntos» made the couple two men; a box and a gift may still arrive «juntos».
     expect(es.recipients.month.counter).not.toMatch(/\bjuntos\b/);
   });

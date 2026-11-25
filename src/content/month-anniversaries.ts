@@ -290,7 +290,7 @@ const month6: Month = {
         line: { field: "signOff", where: "La despedida", text: "Seis meses después, igual que el primer día" },
       },
     ],
-    date: { kind: "romantic", title: "Cena y vuelta a casa por el camino largo", line: "Reservad la mesa que guardabais para una ocasión." },
+    date: { kind: "romantic", title: "Cena y vuelta a casa dando un rodeo", line: "Reservad la mesa que guardabais para una ocasión." },
     stage: [
       "A los seis meses muchas parejas ya conocen a los amigos de la otra persona y a menudo a la familia, tienen una primera escapada a la espalda y han pasado por el primer desacuerdo de verdad. Medio año es también cuando casi todo el mundo empieza a contar en voz alta, por eso es el primer aniversario que se suele celebrar.",
       "Una joya con la fecha grabada, unas vacaciones reservadas para el verano que viene, cualquier cosa que parezca una pedida: eso queda más adelante. Un mensaje que podría haber ido a cualquiera tampoco cuenta. Mete el medio año dentro del regalo, seis razones o seis fotos con fecha, y añade un plan para la noche.",
@@ -394,7 +394,7 @@ const month12: Month = {
         template: "museum",
         heading: "Una exposición llamada primer año",
         brief: "Vuestro año colgado en una galería tranquila, con una placa bajo cada foto.",
-        body: "El año entra entero: elige doce fotos, una por mes, y titula cada una como un cuadro. Museo las cuelga en una galería tranquila, enmarcadas, cada una sobre una placa con el pie que le pusiste y las fechas que elijas para toda la exposición, y se pasa de sala en sala deslizando. Admite de dos a veinte fotos. Tu mensaje es el texto de pared con el que acaba la visita.",
+        body: "El año entra entero: elige doce fotos, una por mes, y titula cada una como un cuadro. Museo las cuelga en una galería tranquila, enmarcadas, cada una sobre una placa con el pie que le pusiste y las fechas que elijas para toda la exposición, y se pasa de sala en sala deslizando. Admite de dos a veinte fotos. Tu mensaje es el texto de sala con el que acaba la visita.",
         line: { field: "exhibition", where: "El nombre de la exposición", text: "Primer año: obra escogida" },
       },
       {
@@ -676,7 +676,7 @@ const month2: Month = {
     ],
     date: { kind: "cheap", title: "Un paseo con helado y sin plan", line: "Caminad hasta que alguien admita que os habéis perdido." },
     stage: [
-      "A los dos meses ya han empezado las bromas propias y las fotos, aunque casi todas son de comida o de alguna cara guiñando los ojos al sol. Seguramente ya conoces a alguien de su grupo de amigos, y tenéis una canción que es vuestra, aunque nadie lo haya dicho.",
+      "A los dos meses ya han empezado las bromas propias y las fotos, aunque casi todas son de comida o de alguna cara entornando los ojos al sol. Seguramente ya conoces a alguien de su grupo de amigos, y tenéis una canción que es vuestra, aunque nadie lo haya dicho.",
       "Si lo mencionó la semana pasada, olvidarlo es el único fallo grave que cabe. Lo demás es cuestión de escala: un álbum, una lámina enmarcada o cualquier cosa que dé por hecho el año que viene pide más de lo que aguantan ocho semanas. Mejor demuestra que prestabas atención, con una fortuna con fecha o una etiqueta con lo que pide siempre, y guarda las palabras grandes para más adelante.",
     ],
     faq: [
@@ -1972,7 +1972,7 @@ const month15: Month = {
       {
         template: "vinyl",
         heading: "El álbum de vuestros primeros quince meses",
-        body: "Quince meses de canciones son una lista de verdad, así que dales una funda. Vinilo te deja titular el álbum en cuarenta caracteres y firmar como artistas; el disco gira con la canción que elijas y hasta doce fotos esperan en la caja como otras portadas. Tu mensaje va impreso en las notas interiores.",
+        body: "Quince meses de canciones son una lista de verdad, así que dales una funda. Vinilo te deja titular el álbum en cuarenta caracteres y firmar como artistas; el disco gira con la canción que elijas y hasta doce fotos esperan en la caja como otras portadas. Tu mensaje va impreso en el libreto.",
         line: { field: "album", where: "El título del álbum", text: "Quince meses, remasterizado" },
       },
       {
@@ -2114,7 +2114,7 @@ const month16: Month = {
         template: "scrapbook",
         heading: "Una nota clavada que dice dónde empezó",
         brief: "Polaroids y notas rasgadas, con una nota clavada que dice dónde empezaron los viajes.",
-        body: "Escribe en la nota clavada dónde empezaron los viajes, en cuarenta caracteres: la primera estación, el primer motel malo. Álbum de recortes la guarda entre sus polaroids, sellos y notas rasgadas; elige las páginas Playa si el próximo viaje tiene costa. El resto de páginas se llenan de fotos.",
+        body: "Escribe en la nota clavada dónde empezaron los viajes, en cuarenta caracteres: la primera estación, el primer hostal malo. Álbum de recortes la guarda entre sus polaroids, sellos y notas rasgadas; elige las páginas Playa si el próximo viaje tiene costa. El resto de páginas se llenan de fotos.",
         line: { field: "tag", where: "La nota clavada", text: "Andén 4, el primero" },
       },
       {
@@ -2127,7 +2127,7 @@ const month16: Month = {
     date: { kind: "rainy-day", title: "Ruta de galerías para elegir la próxima ciudad", line: "Elegid el viaje por el cuadro ante el que os paréis los dos." },
     stage: [
       "A los dieciséis meses suele haber unos cuantos viajes a la espalda y una manera de viajar en pareja: quién reserva, quién hace la maleta, quién encuentra la buena panadería. La novedad de hacer las maletas para dos se ha vuelto costumbre, y por eso el próximo viaje puede planearse bien y darse como sorpresa.",
-      "Antes que nada, mira su calendario. Unas vacaciones largas que no ha pedido, en fechas que no puede librar, convierten el regalo en un problema, y reenviar la confirmación de la reserva destripa la sorpresa en una línea. El regalo es la revelación misma: pistas, una ruta, una cuenta atrás hasta el minuto en que salís y el plan en una carta.",
+      "Antes que nada, mira su calendario. Unas vacaciones largas que no ha pedido, en fechas que no puede librar, convierten el regalo en un problema, y reenviar la confirmación de la reserva destripa la sorpresa en una línea. El regalo es el momento de contarlo: pistas, una ruta, una cuenta atrás hasta el minuto en que salís y el plan en una carta.",
     ],
     faq: [
       { q: "¿Qué es un buen regalo a los dieciséis meses?", a: "A menudo el próximo viaje, bien desvelado: pistas en etiquetas de maleta, un pasaporte con la ruta, una cuenta atrás hasta el minuto de salir. Mira antes su calendario." },
@@ -2243,7 +2243,7 @@ const month17: Month = {
         heading: "Una frase final que se queda al volar",
         brief: "Las cosas pequeñas en los pliegues y la frase sencilla en la que se queda atrás.",
         body: "La frase final de Grulla de papel es la que se queda en la mesa cuando la grulla sale volando, de noventa caracteres como mucho. Dale a los pliegues las cosas pequeñas, hasta seis, y guarda la frase sencilla para el final, donde tiene la mesa entera para ella sola.",
-        line: { field: "closing", where: "La frase que se queda", text: "No necesito una ocasión para decirte que esto me gusta. Solo quería ponerlo en papel." },
+        line: { field: "closing", where: "La frase que se queda", text: "No necesito una ocasión para decirte que esto me gusta. Solo quería ponerlo por escrito." },
       },
     ],
     date: { kind: "first-date", title: "Volver a donde fue la primera cita", line: "Pedid lo mismo que entonces y comparad lo que recordáis." },
@@ -2617,13 +2617,13 @@ const month20: Month = {
         heading: "Una etiqueta de ramo, lo último que se lee",
         brief: "Un paseo por un jardín de fotos que acaba en una etiqueta, lo último que se lee.",
         body: "El jardín termina en un ramo con una etiqueta de sesenta caracteres, y el editor dice que es lo último que se lee. Antes se pasa por rosas, peonías, flores silvestres o girasoles, un enrejado con hasta doce fotos y tu carta en la mesa del invernadero. A los veinte meses, pon en la etiqueta lo que guardas.",
-        line: { field: "tag", where: "La etiqueta del ramo", text: "Para ti, de veinte meses prestándote atención" },
+        line: { field: "tag", where: "La etiqueta del ramo", text: "Para ti, tras veinte meses fijándome en ti" },
       },
       {
         template: "vinyl",
         heading: "La cara B, empezando ahora",
         brief: "Un disco girando con vuestra canción y una etiqueta que llama a esto la cara B.",
-        body: "La etiqueta de la cara en Vinilo llega a doce caracteres, una pegatina en el centro del disco que gira mientras suena la canción. Veinte meses son excusa para dar la vuelta al disco: llama a esto cara B. Las fotos de la caja junto al plato, hasta doce, pueden ser el primer año, y las notas interiores el segundo.",
+        body: "La etiqueta de la cara en Vinilo llega a doce caracteres, una pegatina en el centro del disco que gira mientras suena la canción. Veinte meses son excusa para dar la vuelta al disco: llama a esto cara B. Las fotos de la caja junto al plato, hasta doce, pueden ser el primer año, y el libreto, el segundo.",
         line: { field: "side", where: "La etiqueta de la cara", text: "Cara B" },
       },
     ],
@@ -2634,7 +2634,7 @@ const month20: Month = {
     ],
     faq: [
       { q: "¿Qué es un buen regalo por veinte meses de relación?", a: "Algo hecho para guardarse: un paquete de recuerdos con un relicario, un álbum de doce fotos elegidas, un disco con esta cara marcada como B." },
-      { q: "¿Merece la pena celebrar los veinte meses?", a: "Si te gustan los números redondos, sí. Faltan cuatro meses para los dos años, así que que sea pequeño y para guardar, y el discurso para el aniversario." },
+      { q: "¿Merece la pena celebrar los veinte meses?", a: "Si te gustan los números redondos, sí. Faltan cuatro meses para los dos años, así que mejor algo pequeño y para guardar, y el discurso para el aniversario." },
       { q: "¿Se puede volver a abrir un regalo más adelante?", a: "Sí. Los enlaces están pensados para durar, así que un regalo hecho a los veinte meses se sigue abriendo a los dos años, y en el aniversario siguiente." },
     ],
   },
@@ -2719,7 +2719,7 @@ const month21: Month = {
         heading: "Un paseo por un jardín plantado por ti",
         brief: "Elige qué crece y quién acompaña, y cuelga las fotos en el enrejado.",
         body: "Tú eliges qué crece en El jardín, rosas, peonías, flores silvestres o girasoles, y quién acompaña, una mariposa, una abeja o un gato. Veintiún meses son un jardín cuidado: pon las fotos en el enrejado, hasta doce, y graba algo en la verja de madera, veinticuatro caracteres.",
-        line: { field: "sign", where: "El cartel de la verja", text: "cuidado desde el año uno" },
+        line: { field: "sign", where: "El cartel de la verja", text: "regado desde el año uno" },
       },
       {
         template: "bloom",
