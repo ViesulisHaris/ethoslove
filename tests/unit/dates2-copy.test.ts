@@ -143,8 +143,8 @@ describe("dates2 copy", () => {
     const hero = page.match(/HERO_IDEA = "([^"]+)"/)?.[1];
     const sample = page.match(/SAMPLE_IDEA = "([^"]+)"/)?.[1];
     expect(sample && hero && sample !== hero).toBe(true);
-    expect(DATE_KIND_COPY.night.sentence.en).not.toMatch(/its hour has passed/);
-    expect(DATE_KIND_COPY.outdoor.sentence.en).toMatch(/under the open sky/);
+    expect(DATE_KIND_COPY.night!.sentence.en).not.toMatch(/its hour has passed/);
+    expect(DATE_KIND_COPY.outdoor!.sentence.en).toMatch(/under the open sky/);
     expect(JSON.stringify(CITY_KIND_WORDS)).not.toMatch(/such as|sitios como/);
     expect(JSON.stringify(DATE_KIND_UI)).not.toMatch(/Open air the map knows|Aire libre que/);
   });
