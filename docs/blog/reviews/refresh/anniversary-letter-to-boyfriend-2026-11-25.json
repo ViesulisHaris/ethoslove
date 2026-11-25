@@ -1,0 +1,101 @@
+{
+  "slug": "anniversary-letter-to-boyfriend",
+  "keyword": "anniversary letter to boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The changed lines are honest: free as a short note of 500 characters and a song, the medium and long letters and photos with \"Make it special\", and they tell the reader the 80-word letter can go free tonight. With the then/now/next method, three complete letters and the by-years table it is the page to send a friend. Polish: split the card's nested parenthetical."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Verified with noteLength (free-tier.ts) that the short letter is 379 EN / 423 ES characters and fits the 500-character note, that the medium (875/974) and long (1431/1516) letters don't, the song, \"Make it special\" (products.ts extras), XOXO and Keepsake premium, premium scheduling (extras.tsx), the templates against their manifests and every link. Polish: «La media» to match the lead, «pagado una vez» to match messages/es.json."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 9, "search": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The method, by-length table, leave-out list and three full letters beat TemplateLab's list and the other top results. Fix: People also ask has \"How do I wish my boyfriend for our 1 year anniversary?\" and the post had no short, copyable answer under a question heading; add a 1-year FAQ in both languages."
+        }
+      ],
+      "applied": [
+        "FAQ \"What do I say to my boyfriend on our 1-year anniversary?\" / «¿Qué le digo a mi novio en nuestro primer aniversario?», a short message that echoes the 80-word letter, in both languages.",
+        "Editor polish: «La media y la larga», «pagado una vez»."
+      ],
+      "rejected": [
+        "Search polish (keyword in the first H2, an exact-match title, two more internal links, an emotional-letter FAQ): polish, and this run's change is the free-tier correction.",
+        "The reviewer's own sample FAQ text: written fresh instead, so the message isn't the example letter's first line repeated."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Nothing regressed; the new 1-year FAQ gives a text to send tonight and points to the short letter. Polish: split the Letter card's parenthetical."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-1 polish correct. Fix: the English FAQ said \"your mother's nickname for you\" while the Spanish and the example letter say \"what my mother calls you\". Polish: «Esta noche hace un año» to match \"a year ago tonight\", and \"For a full letter, the short one above\" read as a contradiction."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The round-1 fix is in and well made in both languages; the FAQ now covers the 1-year People also ask question. Polish only: keyword in the first H2, exact-match title, an emotional-letter FAQ, links to the first-anniversary and long-distance posts."
+        }
+      ],
+      "applied": [
+        "EN FAQ \"Now I know it, and what my mother calls you\".",
+        "Polish that heads off a fix: ES «Esta noche hace un año»; EN \"For a letter, start from the short one above: about eighty words.\" / ES «Para una carta, parte de la corta de arriba: unas ochenta palabras.»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-3 changes check out; three full letters at 80, 200 and 300 words built on one structure, a leave-out list and delivery options make it the page to send a friend, and the product reads as one useful line."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 fix and polish made correctly; free-note facts, the 379/423-character short letter, the templates and every link verified again. Three complete letters that visibly follow one structure, a by-years table and a ready-to-send 1-year text beat a list of generic quotes. Polish: «y también cómo te llama», «un pago único»."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are lists of ready-made letters; this post gives the then/now/next method, a table by relationship length, a leave-out list, three complete letters and delivery options, with the 1-year People also ask question answered. Polish: links to first-anniversary-ideas-for-boyfriend and long-distance-anniversary-ideas."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Round-3 polish: final-round polish goes in the record, not the post (RUBRIC.md, the loop, step 4)."
+      ]
+    }
+  ]
+}

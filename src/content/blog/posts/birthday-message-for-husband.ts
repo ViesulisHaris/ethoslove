@@ -3,12 +3,13 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "birthday-message-for-husband",
   published: "2026-11-15",
+  updated: "2026-11-25",
   occasion: "birthday",
   templates: ["birthday-cinema", "popup-card", "the-letter"],
   content: {
     en: {
-      title: "Birthday messages for your husband: 35 lines and a letter",
-      description: "Birthday messages and wishes for your husband for the year he's had and how he takes a fuss, plus romantic, funny and short lines and a letter for 40, 50 or 60.",
+      title: "Birthday messages for your husband: 35 wishes and a letter",
+      description: "Birthday messages and wishes for your husband: lines for the year he's had, romantic, funny and short ones, and a letter for 40, 50 or 60.",
       keyword: "birthday message for husband",
       lead: "A good birthday message for your husband names one thing he did this year that only you would know about, then says what it meant. Below are lines for the year he's actually had, for a husband who hates a fuss and one who loves it, romantic, funny and short ones, a longer letter for a round number, and where to leave the words so he finds them.",
       takeaways: [
@@ -201,8 +202,8 @@ export const post: BlogPost = {
           items: [
             "**The car:** tucked into the sun visor, so it drops into his lap when he flips it down on the way to work.",
             "**His jacket:** in the inside pocket of the one he'll wear to dinner that night, where he'll find it reaching for his keys.",
-            "**His phone at midnight:** the first message of his birthday, before anyone else's. Send it as a [digital gift](/gifts) and the letter arrives with your photos; a premium unlock lets you time it to the minute. Planning the whole night? The [midnight birthday surprise ideas](/blog/midnight-birthday-surprise-ideas) we wrote for boyfriends work for a husband too.",
-            "**If he's away:** a work trip doesn't have to mean a late text. Work out when midnight falls where he is and send it then: \"First message of your birthday, from the other side of the map. Come home soon.\" For the rest of the day, our [long-distance birthday ideas](/blog/long-distance-birthday-ideas-for-boyfriend) were written for boyfriends but work just as well for a husband.",
+            "**His phone at midnight:** the first message of his birthday, before anyone else's. Send it as a [digital gift](/gifts) and it can open at midnight in his time zone; your photos and the timing come with a premium template or with \"Make it special\". Planning the whole night? The [midnight birthday surprise ideas](/blog/midnight-birthday-surprise-ideas) we wrote for boyfriends work for a husband too.",
+            "**If he's away, or you're long distance:** a work trip or a posting doesn't have to mean a late text. Work out when midnight falls where he is and send it then: \"First message of your birthday, from the other side of the map. Come home soon.\" Or: \"Happy birthday from a long way away. I'm counting the days until I can say it to your face.\" For the rest of the day, our [long-distance birthday ideas](/blog/long-distance-birthday-ideas-for-boyfriend) were written for boyfriends but work just as well for a husband.",
             "**The cake:** the shortest line you have. \"Best yes I ever said\" fits; a paragraph doesn't.",
           ],
         },
@@ -219,7 +220,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "For the round-number letter: three paragraphs fit easily. He breaks a wax seal with your initial and the letter unfolds on a candle-lit desk, then your photos drop in as polaroids. It's free.",
+          note: "For the round-number letter. He breaks a wax seal with your initial and the letter unfolds on a candle-lit desk. Free as a short note: up to 500 characters and a song, room for a few lines like the ones above. Three full paragraphs, and your photos dropping in as polaroids, come with \"Make it special\", paid once ([prices](/pricing)).",
         },
         {
           type: "p",
@@ -444,8 +445,8 @@ export const post: BlogPost = {
           items: [
             "**El coche:** metida en el parasol, para que le caiga encima cuando lo baje de camino al trabajo.",
             "**Su chaqueta:** en el bolsillo interior de la que se va a poner para cenar esa noche, donde la encontrará al buscar las llaves.",
-            "**Su móvil a medianoche:** el primer mensaje de su cumpleaños, antes que el de nadie. Mándaselo como [regalo digital](/gifts) y la carta le llega con tus fotos; con un desbloqueo premium la programas al minuto. ¿Quieres organizarle la noche entera? Las ideas de [sorpresa de cumpleaños a medianoche](/blog/midnight-birthday-surprise-ideas) que escribimos para novios valen también para un marido.",
-            "**Si está fuera:** un viaje de trabajo no tiene por qué acabar en un mensaje tardío. Calcula cuándo son las doce donde está él y mándalo entonces: «El primer mensaje de tu cumpleaños, desde la otra punta del mapa. Vuelve pronto.» Para el resto del día, nuestras [ideas para el cumpleaños de tu novio a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) valen igual para un marido.",
+            "**Su móvil a medianoche:** el primer mensaje de su cumpleaños, antes que el de nadie. Mándaselo como [regalo digital](/gifts) y puede abrirse a medianoche en su zona horaria; tus fotos y la programación vienen con una plantilla premium o con «Hazlo especial». ¿Quieres organizarle la noche entera? Las ideas de [sorpresa de cumpleaños a medianoche](/blog/midnight-birthday-surprise-ideas) que escribimos para novios valen también para un marido.",
+            "**Si está fuera, o vivís a distancia:** un viaje de trabajo o un destino lejos de casa no tiene por qué acabar en un mensaje tardío. Calcula cuándo son las doce donde está él y mándalo entonces: «El primer mensaje de tu cumpleaños, desde la otra punta del mapa. Vuelve pronto.» O: «Feliz cumpleaños desde muy lejos. Cuento los días que faltan para decírtelo a la cara.» Para el resto del día, nuestras [ideas para el cumpleaños de tu novio a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) valen igual para un marido.",
             "**La tarta:** la frase más corta que tengas. «El mejor sí que he dicho nunca» cabe; un párrafo, no.",
           ],
         },
@@ -462,7 +463,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Para la carta del número redondo: tres párrafos caben de sobra. Rompe un sello de lacre con tu inicial y la carta se despliega sobre un escritorio a la luz de una vela; luego caen tus fotos como polaroids. Es gratis.",
+          note: "Para la carta del número redondo. Rompe un sello de lacre con tu inicial y la carta se despliega sobre un escritorio a la luz de una vela. Gratis como nota corta: hasta 500 caracteres y una canción, sitio para unas pocas frases como las de arriba. La carta entera, con sus tres párrafos y tus fotos cayendo como polaroids, viene con «Hazlo especial», pagada una vez ([precios](/pricing)).",
         },
         {
           type: "p",

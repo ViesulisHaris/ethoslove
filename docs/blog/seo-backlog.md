@@ -26,8 +26,8 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
     christmas-message-for-boyfriend and christmas-message-for-girlfriend done, and VOICE.md's
     "Free" list corrected (it still said The Letter and Constellations with 10 photos).
   - 2026-11-25: christmas-proposal-ideas and last-minute-christmas-gift-for-girlfriend done. Still to
-    check, Christmas first: christmas-letter-to-boyfriend (not before 1 Dec), then anniversary-letter-to-boyfriend,
-    birthday-message-for-husband, cute-things-to-say-to-your-boyfriend, first-anniversary-ideas-for-boyfriend,
+    check, Christmas first: christmas-letter-to-boyfriend (not before 1 Dec), then
+    cute-things-to-say-to-your-boyfriend, first-anniversary-ideas-for-boyfriend,
     good-morning-messages-for-her, good-night-messages-for-her, good-night-messages-for-him,
     how-to-apologize-to-your-boyfriend, how-to-surprise-your-girlfriend, last-minute-birthday-gift-for-boyfriend,
     love-letter-to-husband, love-notes-for-him, paragraphs-for-him, paragraphs-for-your-girlfriend,
@@ -35,6 +35,9 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
     their last refresh) 6-month-anniversary-ideas, how-to-write-a-love-letter, open-when-letter-ideas,
     reasons-why-i-love-you, what-to-write-in-boyfriends-birthday-card, words-of-affirmation,
     the-5-love-languages, monthiversary-ideas, songs-to-dedicate-to-your-boyfriend.
+  - 2026-11-25 (second run): anniversary-letter-to-boyfriend and birthday-message-for-husband done; the
+    husband post's "His phone at midnight" tip also promised photos with any digital gift. Look past the
+    Letter card too: tips that mention photos or scheduling.
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.

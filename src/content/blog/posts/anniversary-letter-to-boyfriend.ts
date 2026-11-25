@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "anniversary-letter-to-boyfriend",
   published: "2026-10-30",
+  updated: "2026-11-25",
   occasion: "anniversary",
   templates: ["the-letter", "xoxo", "keepsake"],
   content: {
@@ -104,12 +105,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "For a version he opens on his phone, The Letter is free, and XOXO and Keepsake are [premium](/pricing), which also lets you schedule it to open at midnight on the day. Our [anniversary gifts](/occasions/anniversary) have more ideas for the day itself, and our [digital gifts for your boyfriend](/gifts/for-boyfriend) cover the rest of the year. For a letter made only of reasons, see our [100 reasons why I love you](/blog/reasons-why-i-love-you).",
+          text: "For a version he opens on his phone, The Letter is free as a short note, and XOXO and Keepsake are [premium](/pricing), which also lets you schedule it to open at midnight on the day. Our [anniversary gifts](/occasions/anniversary) have more ideas for the day itself, and our [digital gifts for your boyfriend](/gifts/for-boyfriend) cover the rest of the year. For a letter made only of reasons, see our [100 reasons why I love you](/blog/reasons-why-i-love-you).",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax seal he breaks with a tap, then your letter written out by hand on screen, with your photos further down. Free. Add one photo for each part: one from the start, one from this year and one of the place you want to go next.",
+          note: "A wax seal he breaks with a tap, then your letter written out by hand on screen. Free as a short note: up to 500 characters and a song, so the short letter above fits as it is. The medium and long letters, and a photo for each part (one from the start, one from this year and one of the place you want to go next), come with \"Make it special\", paid once ([prices](/pricing)).",
         },
         {
           type: "template",
@@ -138,6 +139,10 @@ export const post: BlogPost = {
         {
           q: "What should I write if we've had a hard year?",
           a: "Name it in one sentence, then move on to what got you through it and what you want next. \"This year was hard, and you never once made me feel alone in it\" is enough. The letter is for the anniversary, not for the argument.",
+        },
+        {
+          q: "What do I say to my boyfriend on our 1-year anniversary?",
+          a: "One moment from the year and one thing you want next. For a text or a card: \"A year ago tonight I didn't know your coffee order. Now I know it, and what my mother calls you, and I'd choose this whole year again. Happy anniversary. Next year, the coast.\" Swap in your own moment and plan. For a letter, start from the short one above: about eighty words.",
         },
       ],
     },
@@ -239,12 +244,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Para una versión que abra en el móvil, La carta es gratis, y XOXO y Recuerdo son [premium](/pricing), lo que además te permite programarla para que se abra a medianoche ese día. Nuestros [regalos de aniversario](/occasions/anniversary) tienen más ideas para el día en sí, y nuestros [regalos digitales para tu novio](/gifts/for-boyfriend) cubren el resto del año. Para una carta hecha solo de razones, mira nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you).",
+          text: "Para una versión que abra en el móvil, La carta es gratis como nota corta, y XOXO y Recuerdo son [premium](/pricing), lo que además te permite programarla para que se abra a medianoche ese día. Nuestros [regalos de aniversario](/occasions/anniversary) tienen más ideas para el día en sí, y nuestros [regalos digitales para tu novio](/gifts/for-boyfriend) cubren el resto del año. Para una carta hecha solo de razones, mira nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you).",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sello de lacre que rompe con un toque y, después, tu carta escrita a mano en la pantalla, con tus fotos más abajo. Gratis. Pon una foto para cada parte: una del principio, una de este año y una del sitio al que quieres ir después.",
+          note: "Un sello de lacre que rompe con un toque y, después, tu carta escrita a mano en la pantalla. Gratis como nota corta: hasta 500 caracteres y una canción, así que la carta corta de arriba cabe tal cual. La media y la larga, y una foto para cada parte (una del principio, una de este año y una del sitio al que quieres ir después), vienen con «Hazlo especial», pagado una vez ([precios](/pricing)).",
         },
         {
           type: "template",
@@ -273,6 +278,10 @@ export const post: BlogPost = {
         {
           q: "¿Qué escribo si hemos tenido un año difícil?",
           a: "Nómbralo en una frase y pasa a lo que os ayudó a salir adelante y a lo que quieres después. «Este año ha sido duro, y ni una sola vez me has hecho sentir sola» es suficiente. La carta es para el aniversario, no para la discusión.",
+        },
+        {
+          q: "¿Qué le digo a mi novio en nuestro primer aniversario?",
+          a: "Un momento del año y una cosa que quieres para el siguiente. Para un mensaje o una tarjeta: «Esta noche hace un año no sabía cómo tomabas el café. Ahora lo sé, y cómo te llama mi madre, y volvería a elegir este año entero. Feliz aniversario. El año que viene, la costa». Cambia el momento y el plan por los vuestros. Para una carta, parte de la corta de arriba: unas ochenta palabras.",
         },
       ],
     },

@@ -3,6 +3,34 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-25: the free Letter as a short note in anniversary-letter-to-boyfriend and birthday-message-for-husband; a 1-year FAQ, and "wishes" in the husband title
+- **Page:** /blog/anniversary-letter-to-boyfriend, /blog/birthday-message-for-husband (and /es to match)
+- **Why:** Second run of the day, a Wednesday (no weekly job; the ranks are a day old). The first open
+  backlog item, next in its list: both Letter cards still said "Free" with photos (the husband post:
+  "three paragraphs fit easily ... your photos drop in as polaroids. It's free"), untrue since 19 Nov,
+  and the husband post's midnight tip said any digital gift "arrives with your photos". DataForSEO (US):
+  "anniversary letter to boyfriend" 210 a month, KD 0; "birthday message for husband" 2,400, KD 11;
+  "birthday wishes for husband" 9,900, KD 3, the word every top-10 title uses. Neither post is in the
+  top 30 yet; Search Console (28 days, brand left out) has the husband post at 11 for "best birthday
+  message for husband" and the Spanish anniversary post at 9 for "cartas de aniversario para mi novio",
+  a few impressions each. People also ask for the anniversary phrase: "How do I wish my boyfriend for our
+  1 year anniversary?", which the post didn't answer.
+- **What changed:** Both Letter cards say "Free as a short note: up to 500 characters and a song"; the
+  anniversary card adds that its 80-word example letter fits as it is (379 characters, 423 in Spanish),
+  with the longer letters and photos under "Make it special", paid once ([prices]). The anniversary post
+  gets a 1-year FAQ with a message to send. The husband post's midnight tip now says photos and timing
+  come with a premium template or "Make it special" (the picker offers quarter hours, so not "to the
+  minute"); its title says "35 wishes and a letter", its description is short enough not to be cut, and
+  its away tip covers long distance with a second line. Spanish to match. `updated` 2026-11-25 on both.
+- **Panel:** 10/10/10 after 3 rounds for anniversary-letter-to-boyfriend (the search reviewer asked for
+  the 1-year FAQ; the editor then caught "your mother's nickname" against the letter's "what my mother
+  calls you") and 2 rounds for birthday-message-for-husband (the reader and editor caught the midnight
+  tip's photos; the search reviewer asked for "wishes", the shorter description and the long-distance
+  line) (`docs/blog/reviews/refresh/<slug>-2026-11-25.json`)
+- **Cost:** $0.02 (one keyword overview, two SERPs with People also ask); balance $43.72
+- **Check on:** 2026-12-14 whether "birthday message for husband" or "birthday wishes for husband" show
+  for the husband post, and "anniversary letter to boyfriend" for the anniversary post
+
 ## 2026-11-25: the free Letter as a short note in christmas-proposal-ideas and last-minute-christmas-gift-for-girlfriend; a small-gift idea for "what is a small but thoughtful gift"
 - **Page:** /blog/christmas-proposal-ideas, /blog/last-minute-christmas-gift-for-girlfriend (and /es to match)
 - **Why:** First run of the day, a Wednesday (no weekly job; the ranks are a day old). The first open

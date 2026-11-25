@@ -1,0 +1,72 @@
+{
+  "slug": "birthday-message-for-husband",
+  "keyword": "birthday message for husband",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The refreshed Letter card is honest (free as a short note, three paragraphs and photos with \"Make it special\"), but the \"His phone at midnight\" item still said a digital gift arrives with your photos, which contradicts it. Asked to say photos and timing come with a premium unlock or \"Make it special\"."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 9, "voice": 10, "spanish": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Verified the free note (free-tier.ts, 500 characters; the sample letter is 604 EN / 644 ES characters, so \"three full paragraphs\" need \"Make it special\"), the Letter, Birthday Cinema and Pop-up Card against their manifests, and every link. Fixes: the midnight item in both languages (photos are not free; the time picker offers quarter hours, not \"to the minute\"), and the Spanish card's \"y tus fotos cayendo como polaroids\" aside, which read as a calque."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 9, "search": 8 },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The method, the year-he's-had lines and the round-number letter beat page one's 40-to-200-line lists. Fixes: a description short enough not to be cut, \"wishes\" in the title (\"birthday wishes for husband\" 9,900 a month, KD 3, and every top-10 title says it), and the long-distance intent of result 2 named in the away item with a line to send."
+        }
+      ],
+      "applied": [
+        "EN midnight item: \"it can open at midnight in his time zone; your photos and the timing come with a premium template or with \\\"Make it special\\\"\"; ES to match.",
+        "ES Letter card: \"La carta entera, con sus tres párrafos y tus fotos cayendo como polaroids, viene con «Hazlo especial», pagada una vez\".",
+        "EN title \"Birthday messages for your husband: 35 wishes and a letter\".",
+        "EN description \"Birthday messages and wishes for your husband: lines for the year he's had, romantic, funny and short ones, and a letter for 40, 50 or 60.\"",
+        "Away item now \"If he's away, or you're long distance\" / \"Si está fuera, o vivís a distancia\", with a second line in each language (\"Happy birthday from a long way away. I'm counting the days until I can say it to your face.\")."
+      ],
+      "rejected": [
+        "Search polish (wishes before the table, \"heartfelt\" in a heading, a heart-touching FAQ, a \"(one line)\" heading): polish, and this run's change is the free-tier correction."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The midnight item no longer implies a free gift carries photos, and the Letter card is plain about what's free; with the three-part table, the year-he's-had lines and the where-to-put-it list it is the page to send a friend instead of a 200-line list. Polish: a smoother wording of the midnight item."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All three round-1 fixes made correctly; scheduling and photos checked against extras.tsx, free-tier.ts and products.ts; \"35 wishes\" holds (34 list lines plus the kids' line, the same in Spanish); the new away lines are natural in both languages; every link resolves. Polish: «con un solo pago» for the card, \"y una carta\" in the Spanish title, and a Spanish description to match the shortened English."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is undifferentiated lists of 40 to 200 lines; this post answers the same search with a method, lines matched to the year he's had and to how he takes attention, a worked 40th letter, and the long-distance and midnight cases. All round-1 fixes confirmed. Polish: two or three more romantic lines if good ones turn up."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Round-2 polish (the midnight item's wording, «con un solo pago», the Spanish title and description): final-round polish goes in the record, not the post (RUBRIC.md, the loop, step 4)."
+      ]
+    }
+  ]
+}
