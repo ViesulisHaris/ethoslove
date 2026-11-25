@@ -917,7 +917,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       doc: "terms",
       section: 5,
       paragraphAfter: "If you ask us to remind you of a date",
-      text: "{who} one gift idea a month, for a year after your last gift, on about the day of the month you sent it. {told}{free} You can stop these emails with the link in any of them or on your account's reminders page; they stay off if you send another gift, and nothing happens to the gifts you've sent.",
+      text: "{who} one gift idea a month, for a year after your last gift, on about the day of the month your gift went out (for a gift you scheduled, the day it opens). {told}{free} You can stop these emails with the link in any of them or on your account's reminders page; they stay off if you send another gift, and nothing happens to the gifts you've sent.",
     },
     {
       doc: "terms",
@@ -930,7 +930,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       doc: "privacy",
       section: 1,
       paragraphBefore: "Offer emails: ",
-      text: "The monthly idea: {who} one gift idea a month, for a year after your last gift, and tell you so on the screen you send it from. For this we store, linked to your account: the day you last sent a gift, your language, that gift's template (only so the idea is a different one), the sentence you were shown or ticked and when, the last month we wrote to you, whether the one-time price was sent or used, and your stop if you gave one. The email names nobody and never includes anything from a gift you made; it has no tracking pixel, and we don't record who opens it or who taps its links. We send it through Resend. Stop it with the link in any of these emails, on the screen you send a gift from, or on your account's reminders page; it then stays off, also if you send another gift, and your gifts stay online.",
+      text: "The monthly idea: {who} one gift idea a month, for a year after your last gift, and tell you so on the screen you send it from. For this we store, linked to your account: the day you last sent a gift, your language, that gift's template (only so the idea is a different one), the sentence you were shown or ticked and when, the last month we wrote to you, whether the one-time price was sent or used, and your stop if you gave one. The email names nobody and never includes anything from a gift you made; it has no tracking pixel, and we don't record who opens it or who taps its links. If you buy after tapping one, we note with that purchase that it came from this email, and whether the one-time price was used. We send it through Resend. Stop it with the link in any of these emails, on the screen you send a gift from, or on your account's reminders page; it then stays off, also if you send another gift, and your gifts stay online.",
     },
     {
       doc: "privacy",
@@ -971,7 +971,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       doc: "terms",
       section: 5,
       paragraphAfter: "Si nos pides que te recordemos una fecha",
-      text: "{who} una idea de regalo al mes, durante un año desde tu último regalo, más o menos el día del mes en que lo enviaste. {told}{free} Puedes dejar de recibir estos correos con el enlace de cualquiera de ellos o desde la página de recordatorios de tu cuenta; siguen desactivados aunque envíes otro regalo, y a los regalos que has enviado no les pasa nada.",
+      text: "{who} una idea de regalo al mes, durante un año desde tu último regalo, más o menos el día del mes en que salió tu regalo (si lo programaste, el día en que se abre). {told}{free} Puedes dejar de recibir estos correos con el enlace de cualquiera de ellos o desde la página de recordatorios de tu cuenta; siguen desactivados aunque envíes otro regalo, y a los regalos que has enviado no les pasa nada.",
     },
     {
       doc: "terms",
@@ -984,7 +984,7 @@ export const IDEA_LEGAL: Record<GiftLocale, IdeaEdit[]> = {
       doc: "privacy",
       section: 1,
       paragraphBefore: "Correos de ofertas: ",
-      text: "La idea del mes: {who} una idea de regalo al mes, durante un año desde tu último regalo, y te lo decimos en la pantalla desde la que lo envías. Para ello guardamos, vinculado a tu cuenta: el día en que enviaste tu último regalo, tu idioma, la plantilla de ese regalo (solo para que la idea sea otra), la frase que se te mostró o que marcaste y cuándo, el último mes en que te escribimos, si el precio de un solo uso se envió o se usó, y tu baja si la pediste. El correo no nombra a nadie y nunca incluye nada de un regalo que hayas hecho; no lleva píxel de seguimiento y no registramos quién lo abre ni quién pulsa sus enlaces. Lo enviamos a través de Resend. Puedes dejar de recibirlo con el enlace de cualquiera de estos correos, en la pantalla desde la que envías un regalo o en la página de recordatorios de tu cuenta; a partir de ahí sigue desactivado aunque envíes otro regalo, y tus regalos siguen en línea.",
+      text: "La idea del mes: {who} una idea de regalo al mes, durante un año desde tu último regalo, y te lo decimos en la pantalla desde la que lo envías. Para ello guardamos, vinculado a tu cuenta: el día en que enviaste tu último regalo, tu idioma, la plantilla de ese regalo (solo para que la idea sea otra), la frase que se te mostró o que marcaste y cuándo, el último mes en que te escribimos, si el precio de un solo uso se envió o se usó, y tu baja si la pediste. El correo no nombra a nadie y nunca incluye nada de un regalo que hayas hecho; no lleva píxel de seguimiento y no registramos quién lo abre ni quién pulsa sus enlaces. Si compras después de pulsar uno, anotamos con esa compra que vino de este correo y si se usó el precio de un solo uso. Lo enviamos a través de Resend. Puedes dejar de recibirlo con el enlace de cualquiera de estos correos, en la pantalla desde la que envías un regalo o en la página de recordatorios de tu cuenta; a partir de ahí sigue desactivado aunque envíes otro regalo, y tus regalos siguen en línea.",
     },
     {
       doc: "privacy",

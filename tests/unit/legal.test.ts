@@ -263,6 +263,13 @@ describe("the monthly idea in the documents", () => {
       expect(en.t6).toContain("The first monthly idea email (section 5) may carry one, once per account");
       expect(en.p1).toContain("The monthly idea:");
       expect(en.p1).toContain("it has no tracking pixel");
+      // A purchase from the email's link carries its ref and the one-time price (checkout-source.ts,
+      // personal-price.ts): the policy says so instead of "we don't record who taps its links" alone (monthly-D2).
+      expect(en.p1).toContain("If you buy after tapping one, we note with that purchase that it came from this email");
+      expect(es.p1).toContain("Si compras después de pulsar uno, anotamos con esa compra que vino de este correo");
+      // A scheduled gift counts from the day it opens (ideaSince), and the Terms say so (monthly-D11).
+      expect(en.t5).toContain("the day of the month your gift went out (for a gift you scheduled, the day it opens)");
+      expect(es.t5).toContain("el día del mes en que salió tu regalo (si lo programaste, el día en que se abre)");
       expect(en.p1).toContain("your gifts stay online");
       // The legitimate-interest basis is claimed only for whom the setting sends it to without a box:
       // everyone in "all", customers in "buyers", nobody in "optin" (consent, the box, covers it).
