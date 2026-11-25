@@ -99,7 +99,18 @@ export default async function TripPage({ params }: PageProps<"/[currency]/[local
   // Three facts: the kind is already said over the name.
   const facts = [
     { label: t("detail.facts.days"), value: t("days", { count: trip.days }) },
-    { label: t("detail.facts.best"), value: monthRanges(trip.bestMonths, l) },
+    // Each run of months on one line: Spanish broke "sept.–" from its "oct." in the box (the test of 25 Nov 2026).
+    {
+      label: t("detail.facts.best"),
+      value: monthRanges(trip.bestMonths, l)
+        .split(", ")
+        .map((run, i, all) => (
+          <span key={run} className="whitespace-nowrap">
+            {run}
+            {i < all.length - 1 ? ", " : ""}
+          </span>
+        )),
+    },
     // The day costs in the currency this visitor is charged in, said as "about" (lib/trips/day-costs.ts). The longest value, so it spans the row where the boxes are narrow.
     // Its label says the flights are not in it, where the figure is: a note further down was read on its own.
     { label: t("detail.facts.budget"), value: t(`budget.short.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, chargedCurrency(currency), l)), wide: true },

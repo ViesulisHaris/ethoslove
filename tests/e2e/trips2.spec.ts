@@ -292,6 +292,14 @@ test.describe("a trip's page", () => {
     await expect(page.getByTestId("flight-finder")).toBeVisible();
   });
 
+  test("E10d each run of best months stays on one line", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/es/trips/amalfi-coast");
+    const runs = page.locator("dl > div").filter({ hasText: "Mejores meses" }).locator("dd > span");
+    await expect(runs).toHaveText([/^\s*mayo–jun\.,\s*$/, /^\s*sept\.–oct\.\s*$/]);
+    for (const box of await runs.evaluateAll((els) => els.map((el) => el.getClientRects().length))) expect(box).toBe(1);
+  });
+
   test("E11 each night's stop gets its own nights", async ({ page }) => {
     await page.goto("/trips/baltic-coast");
     const stays = page.getByTestId("trip-stay");
