@@ -24,7 +24,7 @@ const migrations = readdirSync(DIR)
 
 describe("migrations from 0008 on", () => {
   it("are all found", () => {
-    expect(migrations.map((m) => m.file)).toEqual(expect.arrayContaining(["0009_commerce.sql", "0010_reminders.sql", "0011_privacy_fixes.sql", "0012_consent.sql", "0013_app_store.sql", "0022_monthly_ideas.sql"]));
+    expect(migrations.map((m) => m.file)).toEqual(expect.arrayContaining(["0009_commerce.sql", "0010_reminders.sql", "0011_privacy_fixes.sql", "0012_consent.sql", "0013_app_store.sql", "0022_monthly_ideas.sql", "0027_date_letter.sql"]));
   });
 
   for (const { file, sql } of migrations) {
@@ -138,5 +138,34 @@ describe("0022: the monthly idea", () => {
   it("keeps one row per account, gone with the account, and knows the three ways in", () => {
     expect(sql).toMatch(/user_id\s+uuid primary key references public\.profiles \(id\) on delete cascade/);
     expect(sql).toContain("check (basis in ('notice', 'box', 'terms'))");
+  });
+});
+
+describe("0027: the date letter", () => {
+  const raw = readFileSync(join(DIR, "0027_date_letter.sql"), "utf8");
+  const sql = migrations.find((m) => m.file === "0027_date_letter.sql")!.sql;
+
+  it("is found", () => {
+    expect(sql).toContain("create table if not exists public.date_letter");
+  });
+
+  it("is the server's alone: no policy, nothing granted, everything revoked", () => {
+    expect(sql).not.toContain("create policy");
+    expect(sql).not.toMatch(/\bgrant\b/);
+    expect(sql).toContain("revoke all on public.date_letter from public, anon, authenticated");
+    expect(sql).toContain("alter table public.date_letter enable row level security");
+  });
+
+  it("keeps one row per address, in lower case, with only a plain path, and names no account", () => {
+    expect(sql).toContain("create unique index if not exists date_letter_email_idx on public.date_letter (email)");
+    expect(sql).toContain("email = lower(email)");
+    expect(sql).not.toContain("profiles");
+    // The path check, read from the SQL itself, and the code's own (lib/lifecycle/date-letter.ts cleanPath).
+    const pattern = /source_path ~ '([^']+)'/.exec(raw)?.[1];
+    expect(pattern).toBeDefined();
+    const check = new RegExp(pattern!);
+    for (const [path, ok] of [["/dates", true], ["/es/dates/ideas/cheap", true], ["/Dates", false], ["/a?b", false], ["dates", false]] as const) {
+      expect(check.test(path), path).toBe(ok);
+    }
   });
 });

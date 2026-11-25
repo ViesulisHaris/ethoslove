@@ -231,6 +231,13 @@ export interface Database {
         Update: { target?: string; yes?: number; no?: number; updated_at?: string };
         Relationships: [];
       };
+      /** The date letter's list: one row per address (0027). The server's alone. */
+      date_letter: {
+        Row: { id: string; email: string; locale: "en" | "es"; wording: string; source_path: string; asked_at: string; confirm_sent_at: string | null; confirmed_at: string | null; last_week: number | null; held_on: string | null; stopped_at: string | null };
+        Insert: { id?: string; email: string; locale?: "en" | "es"; wording: string; source_path: string; asked_at?: string; confirm_sent_at?: string | null; confirmed_at?: string | null; last_week?: number | null; held_on?: string | null; stopped_at?: string | null };
+        Update: { locale?: "en" | "es"; wording?: string; source_path?: string; asked_at?: string; confirm_sent_at?: string | null; confirmed_at?: string | null; last_week?: number | null; held_on?: string | null; stopped_at?: string | null };
+        Relationships: [];
+      };
       waitlist: {
         Row: { email: string; product: string; locale: string | null; created_at: string };
         Insert: { email: string; product?: string; locale?: string | null; created_at?: string };
