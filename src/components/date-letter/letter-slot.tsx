@@ -1,6 +1,18 @@
+import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
+import { BRAND } from "@/config/brand";
 import { dateLetterOn, type LetterWhere } from "@/lib/lifecycle/date-letter-flag";
 import { LetterBox } from "./letter-box";
+
+/** "Write to us" in the blocked line: a mail link to support, the only way off the unsubscribe list (letter-N4). */
+export const writeToUs = (chunks: ReactNode) => (
+  <a
+    href={`mailto:${BRAND.supportEmail}`}
+    className="rounded-sm font-medium underline underline-offset-4 outline-none hover:no-underline focus-visible:ring-3 focus-visible:ring-ring/50"
+  >
+    {chunks}
+  </a>
+);
 
 /**
  * The date letter's box, once a page, near its end. Draws nothing unless DATE_LETTER=on; the box
@@ -26,7 +38,7 @@ export async function LetterSlot({ locale, where, variant = "card", ground }: { 
         asked: t("asked"),
         another: t("another"),
         on: t("on"),
-        blocked: t("blocked"),
+        blocked: t.rich("blocked", { write: writeToUs }),
         invalid: t("invalid"),
         limited: t("limited"),
         failed: t("failed"),

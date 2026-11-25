@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LetterBox, type LetterBoxState } from "@/components/date-letter/letter-box";
+import { writeToUs } from "@/components/date-letter/letter-slot";
 import { dateLetterOn } from "@/lib/lifecycle/date-letter-flag";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +39,7 @@ export default async function DateLetterPreviewPage({ params, searchParams }: Pa
     asked: t("asked"),
     another: t("another"),
     on: t("on"),
-    blocked: t("blocked"),
+    blocked: t.rich("blocked", { write: writeToUs }),
     invalid: t("invalid"),
     limited: t("limited"),
     failed: t("failed"),

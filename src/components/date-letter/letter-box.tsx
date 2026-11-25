@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent, type RefObject } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from "react";
 import { ArrowRight, Loader2, MailCheck } from "lucide-react";
 import { Art } from "@/components/templates/page/art";
 import { DEFAULT_PAGE_THEME } from "@/content/template-page-themes";
@@ -9,7 +9,8 @@ import { track } from "@/lib/analytics/track";
 import type { LetterWhere } from "@/lib/lifecycle/date-letter-flag";
 import { cn } from "@/lib/utils";
 
-export type LetterBoxWords = Record<"title" | "line" | "emailLabel" | "send" | "privacy" | "asked" | "another" | "on" | "blocked" | "invalid" | "limited" | "failed", string>;
+/** `blocked` carries its own mail link to support (letter-N4), so it is drawn, not a plain string. */
+export type LetterBoxWords = Record<"title" | "line" | "emailLabel" | "send" | "privacy" | "asked" | "another" | "on" | "invalid" | "limited" | "failed", string> & { blocked: ReactNode };
 export type LetterBoxState = "empty" | "sending" | "asked" | "on" | "blocked" | "invalid" | "limited" | "failed";
 
 const PLAIN_ADDRESS = /^\S+@\S+\.\S+$/;

@@ -307,6 +307,8 @@ test("B9b (on) signed in with an address on the unsubscribe list, the box says s
   const box = await boxOn(page, "/dates/ideas/cheap");
   await box.getByTestId("letter-send").click();
   await expect(box.getByTestId("letter-done")).toHaveText("This address is on our unsubscribe list. Write to us to change that.");
+  // "Write to us" is a way to write, not just words (letter-N4).
+  await expect(box.getByRole("link", { name: "Write to us" })).toHaveAttribute("href", /^mailto:[^@\s]+@[^@\s]+$/);
   await expect(box.getByRole("button", { name: "Use another address" })).toBeVisible();
 });
 
