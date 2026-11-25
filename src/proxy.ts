@@ -32,6 +32,26 @@ function inCurrency(request: NextRequest, response: NextResponse, currency: Curr
   return response;
 }
 
+/**
+ * Pages whose shared links carry a link preview in their query (lib/share/links.ts: `c`, the cover,
+ * and `t`, the title). The page itself reads no query, so its title, canonical and hreflang are in
+ * the <head> of the HTML for every reader; a link with a preview is served by the page's `shared`
+ * twin, which reads it (reports/seoaudit-audit.md, M2: tags that await the query are streamed into
+ * the body for every reader but the bots in next.config.ts's htmlLimitedBots).
+ */
+const SHARED_PREVIEW_PAGES = new Set(["/dates", "/plan"]);
+
+function toSharedPreview(request: NextRequest, response: NextResponse): NextResponse {
+  const { searchParams } = request.nextUrl;
+  if (!SHARED_PREVIEW_PAGES.has(unprefixedPathname(request.nextUrl.pathname)) || !(searchParams.get("c") || searchParams.get("t"))) return response;
+  const rewrite = response.headers.get("x-middleware-rewrite");
+  if (!rewrite) return response;
+  const url = new URL(rewrite);
+  url.pathname = `${url.pathname.replace(/\/$/, "")}/shared`;
+  response.headers.set("x-middleware-rewrite", url.toString());
+  return response;
+}
+
 /** Supabase auth codes are UUIDs; any other ?code= (a promo code in a link, say) is left alone. */
 const AUTH_CODE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function unprefixedPathname(pathname: string): string {
@@ -87,7 +107,7 @@ export async function proxy(request: NextRequest) {
   if (isBehindWall(path)) request.headers.set(ASKED_PATH_HEADER, `${path}${request.nextUrl.search}`);
   else request.headers.delete(ASKED_PATH_HEADER);
 
-  const response = inCurrency(request, handleI18n(request), currency);
+  const response = toSharedPreview(request, inCurrency(request, handleI18n(request), currency));
   return needsServerSession(pathname) || isServerActionPost(request) ? refreshSupabaseSession(request, response) : response;
 }
 

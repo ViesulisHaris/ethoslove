@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { localizedUrl, pageMetadata, withSharePreview } from "@/lib/seo";
-import { SITE } from "@/config/site";
-import { isLatLng } from "@/lib/dates/geo";
-import { firstParams, hasSharePreview, previewQuery, readSharedPlace, readSharePreview, shareCardPath, shareTitle } from "@/lib/share/links";
+import { pageMetadata } from "@/lib/seo";
 import { CITY_PAGES } from "@/lib/cities/cities";
 import { DatesExplorer } from "@/components/dates/dates-explorer";
 import { CityLinks } from "@/components/cities/city-links";
@@ -12,34 +9,25 @@ import { DATE_KIND_UI } from "@/content/date-kinds";
 import { FOR_VENUES, FOR_VENUES_PATH } from "@/content/for-venues";
 import { Link } from "@/i18n/navigation";
 
-export async function generateMetadata({ params, searchParams }: PageProps<"/[currency]/[locale]/dates">): Promise<Metadata> {
+/**
+ * The page's own tags read nothing but its locale, so they are in the <head> of the HTML every
+ * reader gets, a crawler that runs no JavaScript included (reports/seoaudit-audit.md, M2): when they
+ * awaited the query, Next streamed them into the body, after the page. A link that carries a shared
+ * place's preview (`?c=…&t=…`) is served by ./shared/page.tsx instead (src/proxy.ts), the same page
+ * with that preview's tags.
+ */
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/dates">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "dates.meta" });
-  const base = pageMetadata({ locale, path: "/dates", title: t("title"), description: t("description") });
-  // A shared place's link carries its photograph and its name for the preview (lib/share/links.ts);
-  // the page is the same page, and opens that place's sheet once the search finds it.
-  const at = firstParams(await searchParams);
-  const preview = readSharePreview(at);
-  if (!hasSharePreview(preview)) return base;
-  const lat = Number(at.get("lat"));
-  const lng = Number(at.get("lng"));
-  const where: [string, string | null][] = at.get("lat") && at.get("lng") && isLatLng(lat, lng) ? [["lat", String(lat)], ["lng", String(lng)], ["q", shareTitle(at.get("q"))], ["place", readSharedPlace(at)]] : [];
-  const title = preview.title ?? t("title");
-  return withSharePreview(base, {
-    url: `${localizedUrl(locale, "/dates")}${previewQuery({ ...preview, date: null }, where)}`,
-    title,
-    description: t("shared"),
-    image: `${SITE.url}${shareCardPath({ kind: "place", locale: locale === "es" ? "es" : "en", cover: preview.cover, title: preview.title })}`,
-    alt: title,
-  });
+  return pageMetadata({ locale, path: "/dates", title: t("title"), description: t("description") });
 }
 
 /**
- * Dates: where, when, ideas, a map. The page's body is the same for everybody (only its preview
- * tags read the query, above); everything that depends on who is looking (their town, the day,
+ * Dates: where, when, ideas, a map. The page's body is the same for everybody (only a shared
+ * link's preview tags read the query, in ./shared); everything that depends on who is looking (their town, the day,
  * the forecast) is worked out in the browser after it loads.
  */
-export default async function DatesPage({ params }: PageProps<"/[currency]/[locale]/dates">) {
+export default async function DatesPage({ params }: Pick<PageProps<"/[currency]/[locale]/dates">, "params">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "cities" });
