@@ -178,7 +178,8 @@ export function LetterBox({
               data-testid="letter-done"
             >
               <MailCheck aria-hidden className="mt-0.5 size-[1.125rem] shrink-0" />
-              {doneWords}
+              {/* One flex item, so a line with a link in it flows as one sentence. */}
+              <span>{doneWords}</span>
             </p>
             {state === "asked" || state === "blocked" ? (
               <button
