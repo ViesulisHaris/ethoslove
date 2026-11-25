@@ -30,9 +30,11 @@ const place = (id: string, over: Partial<Place> = {}): Place => ({
 });
 
 describe("featured dates", () => {
-  it("F1 no place is featured in this build", () => {
-    expect(FEATURED_DATES).toEqual([]);
-    expect(featuredNow("2026-11-25").size).toBe(0);
+  // F1 no longer pins the list to empty (dates2-C23): that would fail the owner's first paid, recorded
+  // place. The rule is F2's: every entry has a row naming who paid. On 25 Nov 2026 the list is empty.
+  it("F1 every place featured today has a row naming who paid", () => {
+    expect(missingPaidLines(FEATURED_DATES, DOC)).toEqual([]);
+    expect(featuredNow("2026-11-25").size).toBeLessThanOrEqual(FEATURED_DATES.length);
   });
 
   it("F2 a featured place needs a row naming who paid", () => {
