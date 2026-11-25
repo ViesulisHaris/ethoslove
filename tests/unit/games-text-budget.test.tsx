@@ -94,6 +94,9 @@ describe("less text on a game's page", () => {
     const details = html.match(/<details[^>]*>/g) ?? [];
     expect(details).toHaveLength(1);
     expect(details[0]).not.toMatch(/\bopen\b/);
+    // One rule above the closed row and none under it: the next section's rule closes the list (games2-T7).
+    expect(details[0]).toMatch(/\bborder-t\b/);
+    expect(details[0]).not.toMatch(/\bborder-(y|b)\b/);
     expect(html).toMatch(/<ol start="3"/);
     expect(html).toMatch(/<summary[^>]*>2 more/);
     // The second group shows both its items and has nothing left to close.

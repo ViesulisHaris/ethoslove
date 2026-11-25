@@ -10,6 +10,8 @@ const LIST = "grid list-decimal gap-x-12 gap-y-2.5 pl-5 text-[15.5px] leading-re
  * as the notes under it are (page/game-notes.tsx): a short left column, and on the right the first
  * few of each group on show and the rest in a closed <details>, still in the HTML, numbered on from
  * where the open ones stop (docs/marketing/growth-build/DESIGN-LESS-TEXT.md: 300 words a page).
+ * The closed row has a rule above it only: the next section's own rule closes the list, and a
+ * second one under the row would read as two hairlines with an empty band between them.
  * Only the free decks: the paid packs stay in their packs.
  */
 export function QuestionList({ id, label, title, intro, groups, show, more, className }: { id: string; label: string; title: string; intro: string; groups: { name?: string; items: string[] }[]; show: number; more: (count: number) => string; className?: string }) {
@@ -36,7 +38,7 @@ export function QuestionList({ id, label, title, intro, groups, show, more, clas
                     ))}
                   </ol>
                   {rest.length ? (
-                    <details data-list-more className="group mt-4 border-y border-cream/15">
+                    <details data-list-more className="group mt-4 border-t border-cream/15">
                       <summary className={SUMMARY}>
                         {more(rest.length)}
                         <Plus aria-hidden="true" className="size-4 shrink-0 text-cream/70 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
