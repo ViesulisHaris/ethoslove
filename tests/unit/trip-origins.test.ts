@@ -6,7 +6,7 @@ import { findAirport } from "@/lib/trips/airports";
 import { estimateFlight } from "@/lib/trips/flights";
 import { fill, TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
 import { TRIPS } from "@/lib/trips/presets";
-import { ORIGIN_MAX, ORIGIN_MIN_TRIPS, originPath, reachable, TRIP_ORIGINS, tripsFrom, type TripOrigin } from "@/lib/trips/origins";
+import { ORIGIN_MAX, ORIGIN_MIN_TRIPS, originCards, originPath, reachable, TRIP_ORIGINS, tripsFrom, type TripOrigin } from "@/lib/trips/origins";
 
 // The same as tests/unit/trips.test.ts.
 const SPAIN = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary)\b/i;
@@ -64,6 +64,12 @@ describe("the cities to leave from", () => {
     expect(from("london").slice(0, 3).map((t) => t.id)).toEqual(["paris-without-cliches", "amsterdam-by-bike", "scottish-highlands"]);
     expect(from("edinburgh")[0]).toMatchObject({ id: "scottish-highlands", home: true });
     expect(from("riga")[0]).toMatchObject({ id: "baltic-coast", home: true });
+    // Two trips the same minutes away go by the distance, nearer first: from Dublin, Amsterdam (757 km) before Paris (781).
+    expect(from("dublin").slice(1, 3).map((t) => t.id)).toEqual(["amsterdam-by-bike", "paris-without-cliches"]);
+    for (const o of TRIP_ORIGINS) {
+      const km = tripsFrom(o).filter((t) => !t.home && !t.train).map((t) => t.km ?? 0);
+      expect([...km].sort((a, b) => a - b), o.slug).toEqual(km);
+    }
   });
 
   it("O5 a train is named only where the map allows one, and never for the trip that starts here", () => {
@@ -78,9 +84,6 @@ describe("the cities to leave from", () => {
     expect(Object.fromEntries(TRIP_ORIGINS.map((o) => [o.slug, [...o.trains]]))).toEqual({
       london: ["paris-without-cliches", "amsterdam-by-bike", "scottish-highlands"],
       edinburgh: [],
-      glasgow: ["scottish-highlands"],
-      manchester: ["scottish-highlands"],
-      birmingham: ["scottish-highlands"],
       dublin: [],
       paris: ["amsterdam-by-bike"],
       amsterdam: ["paris-without-cliches"],
@@ -90,61 +93,47 @@ describe("the cities to leave from", () => {
   });
 
   it("O6 the sentences' numbers are the data's", () => {
-    // london: three by train; Santorini about four hours; the rest three hours or less.
-    expect(origin("london").trains).toHaveLength(3);
-    expect(minutes("london", "santorini-naxos")).toBe(235);
-    for (const t of from("london")) if (!t.train && t.id !== "santorini-naxos") expect(t.airMinutes, t.id).toBeLessThanOrEqual(180);
-    // edinburgh: the Highlands start here; three under two hours; three just over three; Santorini four and a half.
-    expect(from("edinburgh").find((t) => t.home)?.id).toBe("scottish-highlands");
-    for (const id of ["amsterdam-by-bike", "paris-without-cliches", "copenhagen-hygge"]) expect(minutes("edinburgh", id), id).toBeLessThan(120);
-    for (const id of ["lisbon-slow-weekend", "amalfi-coast", "algarve-coast"]) {
-      expect(minutes("edinburgh", id), id).toBeGreaterThanOrEqual(181);
-      expect(minutes("edinburgh", id), id).toBeLessThanOrEqual(200);
-    }
-    expect(minutes("edinburgh", "santorini-naxos")).toBe(270);
-    // glasgow: the Highlands by train; three under two hours; Iceland about two hours twenty, nearer than Tuscany or the Baltic coast.
-    expect(origin("glasgow").trains).toContain("scottish-highlands");
-    for (const id of ["amsterdam-by-bike", "paris-without-cliches", "copenhagen-hygge"]) expect(minutes("glasgow", id), id).toBeLessThan(120);
-    expect(minutes("glasgow", "iceland-south-coast")).toBe(140);
-    expect(minutes("glasgow", "iceland-south-coast")).toBeLessThan(minutes("glasgow", "tuscany-hill-towns"));
-    expect(minutes("glasgow", "iceland-south-coast")).toBeLessThan(minutes("glasgow", "baltic-coast"));
-    // manchester: the Highlands by train; Amsterdam and Paris about an hour and a quarter; only Santorini over three hours, a little over four.
-    expect(origin("manchester").trains).toContain("scottish-highlands");
-    expect(minutes("manchester", "amsterdam-by-bike")).toBe(75);
-    expect(minutes("manchester", "paris-without-cliches")).toBe(80);
-    const over = from("manchester").filter((t) => (t.airMinutes ?? 0) > 180);
-    expect(over.map((t) => t.id)).toEqual(["santorini-naxos"]);
-    expect(over[0].airMinutes).toBeGreaterThanOrEqual(241);
-    expect(over[0].airMinutes).toBeLessThanOrEqual(260);
-    // birmingham: Amsterdam and Paris an hour and a quarter or less; the Highlands by train; every trip but Santorini under three hours.
-    expect(minutes("birmingham", "amsterdam-by-bike")).toBeLessThanOrEqual(75);
-    expect(minutes("birmingham", "paris-without-cliches")).toBeLessThanOrEqual(75);
-    expect(origin("birmingham").trains).toContain("scottish-highlands");
-    for (const t of from("birmingham")) if (t.id !== "santorini-naxos") expect(t.airMinutes, t.id).toBeLessThan(180);
-    // dublin: Edinburgh an hour; Amsterdam and Paris about an hour and a half; no train.
-    expect(minutes("dublin", "scottish-highlands")).toBe(60);
-    expect(minutes("dublin", "amsterdam-by-bike")).toBe(95);
-    expect(minutes("dublin", "paris-without-cliches")).toBe(95);
+    const days = (id: string) => TRIPS.find((t) => t.id === id)!.days;
+    const cityTrips = TRIPS.filter((t) => t.kind === "city").map((t) => t.id);
+    // london: three by train; Paris and Amsterdam fit a long weekend; the Highlands start in Edinburgh; Iceland three hours and Santorini four, the two longest.
+    expect(origin("london").trains).toEqual(["paris-without-cliches", "amsterdam-by-bike", "scottish-highlands"]);
+    expect([days("paris-without-cliches"), days("amsterdam-by-bike")].every((d) => d <= 4)).toBe(true);
+    expect(TRIPS.find((t) => t.id === "scottish-highlands")!.stops[0].name).toBe("Edinburgh");
+    expect(from("london").slice(-2)).toMatchObject([{ id: "iceland-south-coast", airMinutes: 180 }, { id: "santorini-naxos", airMinutes: 235 }]);
+    // edinburgh: the Highlands start here, a night in Edinburgh first; Amsterdam the nearest city break at 1 h 25; Lisbon three days, over three hours.
+    expect(from("edinburgh")[0]).toMatchObject({ id: "scottish-highlands", home: true });
+    expect(TRIPS.find((t) => t.id === "scottish-highlands")!.stops[0].nights).toBe(1);
+    expect(from("edinburgh").find((t) => cityTrips.includes(t.id))).toMatchObject({ id: "amsterdam-by-bike", airMinutes: 85 });
+    expect(days("lisbon-slow-weekend")).toBe(3);
+    expect(minutes("edinburgh", "lisbon-slow-weekend")).toBeGreaterThan(180);
+    // dublin: the nearest is the Highlands, an hour; no train; Lisbon the farthest city break, 2 h 40.
+    expect(from("dublin")[0]).toMatchObject({ id: "scottish-highlands", airMinutes: 60, home: false });
     expect(origin("dublin").trains).toEqual([]);
-    // paris: Paris is one of the twelve; Amsterdam by train; Edinburgh, Prague, Florence about an hour and three quarters; nothing over three hours forty.
-    expect(from("paris").find((t) => t.home)?.id).toBe("paris-without-cliches");
-    expect(origin("paris").trains).toContain("amsterdam-by-bike");
-    expect([minutes("paris", "scottish-highlands"), minutes("paris", "prague-krumlov-vienna"), minutes("paris", "tuscany-hill-towns")]).toEqual([100, 105, 105]);
-    expect(Math.max(...from("paris").map((t) => t.airMinutes ?? 0))).toBeLessThanOrEqual(220);
-    // amsterdam: Amsterdam is one of the twelve; Paris by train; Copenhagen, Edinburgh, Prague about an hour and a half; Santorini the furthest at three hours forty.
-    expect(from("amsterdam").find((t) => t.home)?.id).toBe("amsterdam-by-bike");
-    expect(origin("amsterdam").trains).toContain("paris-without-cliches");
-    expect([minutes("amsterdam", "copenhagen-hygge"), minutes("amsterdam", "scottish-highlands"), minutes("amsterdam", "prague-krumlov-vienna")]).toEqual([85, 85, 90]);
+    expect(from("dublin").filter((t) => cityTrips.includes(t.id)).at(-1)).toMatchObject({ id: "lisbon-slow-weekend", airMinutes: 160 });
+    // paris: Paris is one of the twelve, four days; Amsterdam by train; Santorini the farthest, 3 h 35.
+    expect(from("paris")[0]).toMatchObject({ id: "paris-without-cliches", home: true });
+    expect(days("paris-without-cliches")).toBe(4);
+    expect(origin("paris").trains).toEqual(["amsterdam-by-bike"]);
+    expect(from("paris").at(-1)).toMatchObject({ id: "santorini-naxos", airMinutes: 215 });
+    // amsterdam: Amsterdam is one of the twelve, three days, ending at Durgerdam; Paris by train, four days by the canal; Copenhagen and Edinburgh both 1 h 25; Santorini 3 h 40.
+    expect(from("amsterdam")[0]).toMatchObject({ id: "amsterdam-by-bike", home: true });
+    expect(days("amsterdam-by-bike")).toBe(3);
+    expect(TRIPS.find((t) => t.id === "amsterdam-by-bike")!.stops.at(-1)!.name).toBe("Durgerdam");
+    expect(origin("amsterdam").trains).toEqual(["paris-without-cliches"]);
+    expect(TRIPS.find((t) => t.id === "paris-without-cliches")!.stops[0].name).toBe("Canal Saint-Martin");
+    expect([minutes("amsterdam", "copenhagen-hygge"), minutes("amsterdam", "scottish-highlands")]).toEqual([85, 85]);
     expect(from("amsterdam").at(-1)).toMatchObject({ id: "santorini-naxos", airMinutes: 220 });
-    // berlin: Prague to Vienna by train; Copenhagen an hour; Riga an hour and forty; Lisbon, the Algarve, Iceland over three and a half hours.
-    expect(origin("berlin").trains).toContain("prague-krumlov-vienna");
+    // berlin: Prague to Vienna by train (the trip that goes by rail); Copenhagen an hour, three days; Santorini 3 h 10, nearer than Lisbon and the Algarve.
+    expect(origin("berlin").trains).toEqual(["prague-krumlov-vienna"]);
+    expect(TRIPS.find((t) => t.id === "prague-krumlov-vienna")!.kind).toBe("train");
     expect(minutes("berlin", "copenhagen-hygge")).toBe(60);
-    expect(minutes("berlin", "baltic-coast")).toBe(100);
-    for (const id of ["lisbon-slow-weekend", "algarve-coast", "iceland-south-coast"]) expect(minutes("berlin", id), id).toBeGreaterThan(210);
-    // riga: the Baltic coast starts here; Copenhagen an hour and a half; Prague under two; Lisbon and the Algarve over four and a half hours.
-    expect(from("riga").find((t) => t.home)?.id).toBe("baltic-coast");
-    expect(minutes("riga", "copenhagen-hygge")).toBe(90);
-    expect(minutes("riga", "prague-krumlov-vienna")).toBe(110);
+    expect(days("copenhagen-hygge")).toBe(3);
+    expect(minutes("berlin", "santorini-naxos")).toBe(190);
+    for (const id of ["lisbon-slow-weekend", "algarve-coast"]) expect(minutes("berlin", id), id).toBeGreaterThan(190);
+    // riga: the Baltic coast starts here, its days the cheapest; Copenhagen 1 h 30 and Prague under two, the two shortest; Lisbon and the Algarve over 4 h 30.
+    expect(from("riga")[0]).toMatchObject({ id: "baltic-coast", home: true });
+    expect(TRIPS.filter((t) => t.budget === 1).map((t) => t.id)).toEqual(["baltic-coast"]);
+    expect(from("riga").slice(1, 3)).toMatchObject([{ id: "copenhagen-hygge", airMinutes: 90 }, { id: "prague-krumlov-vienna", airMinutes: 110 }]);
     for (const id of ["lisbon-slow-weekend", "algarve-coast"]) expect(minutes("riga", id), id).toBeGreaterThan(270);
   });
 
@@ -167,7 +156,47 @@ describe("the cities to leave from", () => {
           seen[k].add(plain);
         }
       }
+      // No sentence on two origins, and no two sentences that start alike once the places are taken out.
+      const places = new RegExp(`\\b(${[...TRIP_ORIGINS.map((o) => o.name[l]), "Edinburgh", "Edimburgo", "Copenhagen", "Copenhague", "Prague", "Praga", "Lisbon", "Lisboa", "Santorini", "Iceland", "Islandia", "Riga"].join("|")})\\b`, "g");
+      const owner = new Map<string, string>();
+      const starts = new Map<string, string>();
+      for (const o of TRIP_ORIGINS) {
+        const c = TRIP_ORIGIN_COPY[o.slug];
+        for (const one of `${c.line[l]} ${c.sentence[l]}`.split(/(?<=[.;:])\s+/)) {
+          const key = one.toLowerCase();
+          expect(owner.get(key) ?? o.slug, `${l} "${one}" on ${o.slug} and ${owner.get(key)}`).toBe(o.slug);
+          owner.set(key, o.slug);
+          const start = one.replace(places, "X").toLowerCase().split(/\s+/).slice(0, 3).join(" ");
+          expect(starts.get(start) ?? o.slug, `${l} "${start}…" on ${o.slug} and ${starts.get(start)}`).toBe(o.slug);
+          starts.set(start, o.slug);
+        }
+      }
     }
+  });
+
+  it("O12 each origin's page is its own: its six cards, its hero, no photograph twice", () => {
+    const seqs = new Map<string, string>();
+    const firstThree = new Map<string, string>();
+    const heroes = new Set<string>();
+    for (const o of TRIP_ORIGINS) {
+      const cards = originCards(o).map((t) => t.id);
+      expect(cards, o.slug).toHaveLength(6);
+      expect(seqs.get(cards.join()) ?? o.slug, `${o.slug} shows ${seqs.get(cards.join())}'s six cards`).toBe(o.slug);
+      seqs.set(cards.join(), o.slug);
+      const three = cards.slice(0, 3).join();
+      expect(firstThree.get(three) ?? o.slug, `${o.slug} opens like ${firstThree.get(three)}`).toBe(o.slug);
+      firstThree.set(three, o.slug);
+      // The hero is the trip that starts there, or else one the six cards do not show.
+      const hero = TRIP_ORIGIN_COPY[o.slug].hero;
+      const home = tripsFrom(o).find((t) => t.home);
+      if (home) expect(hero, o.slug).toBe(home.id);
+      expect(cards, o.slug).not.toContain(hero);
+      expect(TRIPS.some((t) => t.id === hero && t.image), `${o.slug} hero ${hero}`).toBe(true);
+      expect(heroes.has(hero), `${o.slug} hero ${hero}`).toBe(false);
+      heroes.add(hero);
+    }
+    // The three taken out: their six would be another city's (lib/trips/origins.ts says why).
+    for (const slug of ["glasgow", "manchester", "birmingham"]) expect(TRIP_ORIGINS.some((o) => o.slug === slug), slug).toBe(false);
   });
 
   it("O8 titles and descriptions fit a search result", () => {

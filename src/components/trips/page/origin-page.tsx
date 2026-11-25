@@ -6,7 +6,7 @@ import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { formatFlightTime } from "@/lib/trips/flights";
 import { monthRanges } from "@/lib/trips/months";
-import { originPath, TRIP_ORIGINS, tripsFrom, type OriginTrip, type TripOrigin } from "@/lib/trips/origins";
+import { originCards, originPath, TRIP_ORIGINS, tripsFrom, type OriginTrip, type TripOrigin } from "@/lib/trips/origins";
 import { getTrip, tripImageSm, TRIPS, tripSrcSet, type Trip } from "@/lib/trips/presets";
 import { fill, TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
 import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
@@ -17,9 +17,6 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { QUESTION_PLUS, QUESTION_ROW } from "@/components/templates/page/sections";
 import { ROOM_BUTTON, ROOM_ROW_LINK, RoomFoot, RoomHero, RoomPage, RoomSpread } from "./room-page";
 import { TripCards, type TripCardItem } from "./trip-cards";
-
-/** How many of the twelve are cards; the rest are one closed row under them. */
-const SHOWN = 6;
 
 /** The back link to /trips on a designed page, in the page's colours. */
 export const ROOM_BACK = "group -ml-2 mb-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-page-accent underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-page-ink";
@@ -38,7 +35,8 @@ export function tripPicture(trip: Trip): { image: string | null; srcSet: string 
 
 /**
  * `/trips/from-<city>`: the twelve trips nearest first for a couple leaving from one city. Hero
- * (its two true sentences, the nearest trip's photograph), the six closest as picture cards with
+ * (its two true sentences, the photograph of the trip that starts there or of one named in its
+ * copy, never a card's), the six closest journeys as picture cards with
  * hours in the air or "a train works" and the best months, the other six in one closed row, and a
  * last band of the other cities, the kinds and the method, folded. Served by the trip route
  * (trips/[id]/page.tsx): a folder cannot be half a segment.
@@ -53,10 +51,13 @@ export async function OriginPage({ origin, locale }: { origin: TripOrigin; local
   const heading = fill(ui.heading, { count: TRIPS.length, city });
   const label = (o: OriginTrip): string => (o.home ? ui.home : o.train ? ui.train : fill(ui.air, { time: formatFlightTime(o.airMinutes ?? 0) }));
   const best = (trip: Trip): string => t("best", { months: monthRanges(trip.bestMonths, l) });
-  const cards: TripCardItem[] = ranked.slice(0, SHOWN).map(({ o, trip }) => ({ id: trip.id, href: `/trips/${trip.id}`, title: trip.title[l], label: label(o), line: best(trip), ...tripPicture(trip) }));
-  const rest = ranked.slice(SHOWN);
-  // The hero shows the nearest trip that is a journey: the one that starts here is the page's first line already.
-  const hero = (ranked.find((r) => !r.o.home) ?? ranked[0]).trip;
+  // The six nearest journeys are the cards; the trip that starts here is the hero, not a card, and
+  // leads the folded rest. The hero is never one of the six (trip-origins.test.ts, O12), so no
+  // photograph shows twice on the page.
+  const shown = new Set(originCards(origin).map((o) => o.id));
+  const cards: TripCardItem[] = ranked.filter(({ o }) => shown.has(o.id)).map(({ o, trip }) => ({ id: trip.id, href: `/trips/${trip.id}`, title: trip.title[l], label: label(o), line: best(trip), ...tripPicture(trip) }));
+  const rest = ranked.filter(({ o }) => !shown.has(o.id));
+  const hero = getTrip(copy.hero)!;
   const heroPicture = tripPicture(hero);
   const url = localizedUrl(locale, originPath(origin));
 

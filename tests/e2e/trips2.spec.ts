@@ -28,7 +28,7 @@ const TRIP_IDS = [
   "algarve-coast",
   "amsterdam-by-bike",
 ];
-const ORIGINS = ["london", "edinburgh", "glasgow", "manchester", "birmingham", "dublin", "paris", "amsterdam", "berlin", "riga"];
+const ORIGINS = ["london", "edinburgh", "dublin", "paris", "amsterdam", "berlin", "riga"];
 const KINDS = ["weekend-getaways", "road-trips"];
 
 /** Every JSON-LD node on the page, however nested. */
@@ -96,8 +96,11 @@ test.describe("the pages by where you leave from", () => {
       await expect.poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth), { message: `card ${i}` }).toBeGreaterThan(0);
       await expect(cards.nth(i).locator("p")).toHaveText(/^Best /);
     }
-    await expect(page.getByText("Three of the twelve start with a train from London.")).toBeVisible();
-    await expect(page.getByText(/^Paris, Amsterdam and Edinburgh need no airport\./)).toBeVisible();
+    await expect(page.getByText("Three of the twelve start at a London station, not an airport.")).toBeVisible();
+    await expect(page.getByText(/^Paris and Amsterdam fit a long weekend by Eurostar/)).toBeVisible();
+    // The hero's photograph is a trip the six cards do not show.
+    await expect(page.locator("[data-line]")).toHaveText("Iceland's south coast");
+    expect(await cards.evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).not.toContain("iceland-south-coast");
     expect(await page.locator("main").innerText()).not.toMatch(/[€$£]\s?\d/);
     expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toMatch(/\/trips\/from-london$/);
     expect(await page.locator('link[rel="alternate"][hreflang="es"]').getAttribute("href")).toMatch(/\/es\/trips\/from-london$/);
@@ -117,13 +120,33 @@ test.describe("the pages by where you leave from", () => {
     for (const href of hrefs) expect(href, href).toMatch(/^\/es(\/|$)/);
   });
 
-  test("E3 a city one of the trips starts in says so", async ({ page }) => {
-    await page.goto("/trips/from-edinburgh");
-    const first = page.locator("#from-row > li").first();
-    await expect(first).toHaveAttribute("data-trip", "scottish-highlands");
-    await expect(first).toContainText("Starts where you are");
-    await page.goto("/trips/from-riga");
-    await expect(page.locator("#from-row > li").first()).toHaveAttribute("data-trip", "baltic-coast");
+  test("E3 a city one of the trips starts in shows that trip in the hero, and leads the rest with it", async ({ page }) => {
+    for (const [slug, home, name] of [
+      ["edinburgh", "scottish-highlands", "The Scottish Highlands"],
+      ["riga", "baltic-coast", "The Baltic coast, Riga to Tallinn"],
+    ] as const) {
+      await page.goto(`/trips/from-${slug}`);
+      await expect(page.locator("[data-line]")).toHaveText(name);
+      expect(await page.locator("#from-row > li").evaluateAll((els) => els.map((el) => el.getAttribute("data-trip")))).not.toContain(home);
+      const first = page.locator("#from-list details ol > li").first();
+      await expect(first).toHaveAttribute("data-trip", home);
+      await expect(first).toContainText("Starts where you are");
+    }
+  });
+
+  test("E3b no two origin pages open on the same cards, and no hero is a card", async ({ page }) => {
+    const seen = new Map<string, string>();
+    for (const o of ORIGINS) {
+      await page.goto(`/trips/from-${o}`);
+      const ids = await page.locator("#from-row > li").evaluateAll((els) => els.map((el) => el.getAttribute("data-trip") ?? ""));
+      expect(ids, o).toHaveLength(6);
+      expect(seen.get(ids.join()), `${o} has ${seen.get(ids.join())}'s cards`).toBeUndefined();
+      seen.set(ids.join(), o);
+      const heroSrc = await page.locator("[data-line]").locator("xpath=..").locator("img").first().getAttribute("src");
+      const cardSrcs = await page.locator("#from-row img").evaluateAll((els) => els.map((el) => el.getAttribute("src") ?? ""));
+      const stem = (s: string | null) => (s ?? "").replace(/-sm\.webp$|\.webp$/, "");
+      expect(cardSrcs.map(stem), o).not.toContain(stem(heroSrc));
+    }
   });
 
   test("E4 the six further away are in the page, folded", async ({ page }) => {
@@ -142,7 +165,7 @@ test.describe("the pages by where you leave from", () => {
   });
 
   test("E5 there is no page from a city out of reach, or from one not on the list", async ({ page }) => {
-    for (const path of ["/trips/from-new-york", "/trips/from-madrid", "/trips/from-"]) {
+    for (const path of ["/trips/from-new-york", "/trips/from-madrid", "/trips/from-", "/trips/from-glasgow", "/trips/from-manchester", "/trips/from-birmingham"]) {
       const res = await page.goto(path);
       expect(res?.status(), path).toBe(404);
     }
@@ -151,9 +174,9 @@ test.describe("the pages by where you leave from", () => {
   test("E6 Trips links to every new page, and each links back", async ({ page }) => {
     await page.goto("/trips");
     const links = page.getByTestId("trips-more").getByRole("link");
-    await expect(links).toHaveCount(12);
+    await expect(links).toHaveCount(9);
     const hrefs = await links.evaluateAll((els) => els.map((el) => el.getAttribute("href")));
-    expect(hrefs.filter((h) => h?.startsWith("/trips/from-"))).toHaveLength(10);
+    expect(hrefs.filter((h) => h?.startsWith("/trips/from-"))).toHaveLength(7);
     expect(hrefs.filter((h) => h?.startsWith("/trips/ideas/"))).toHaveLength(2);
     for (const box of await links.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height))) expect(box).toBeGreaterThanOrEqual(44);
 
@@ -561,7 +584,7 @@ test.describe("300 words a page, and the designed pages' ruler", () => {
       });
     });
     for (const [path, within] of [
-      ["/es/trips/from-birmingham", "[data-page-theme]"],
+      ["/es/trips/from-dublin", "[data-page-theme]"],
       ["/es/trips/baltic-coast", "main"],
     ]) {
       await page.goto(path);

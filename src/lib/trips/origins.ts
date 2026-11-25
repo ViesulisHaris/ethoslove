@@ -32,13 +32,16 @@ export const ORIGIN_MAX = 10;
 export const ORIGIN_MIN_TRIPS = 6;
 export const ORIGIN_MAX_AIR_MINUTES = 300;
 
-/** In this order: it is the order of the links on /trips. */
+/**
+ * In this order: it is the order of the links on /trips. Seven, because a page is kept only where
+ * its six cards are its own: Glasgow, Manchester and Birmingham were searched too, but from each
+ * the six nearest trips are Edinburgh's or Dublin's in the same order (or one swap), so their pages
+ * would be another city's with the name changed. tests/unit/trip-origins.test.ts (O12) fails on
+ * two origins whose six cards match.
+ */
 export const TRIP_ORIGINS: readonly TripOrigin[] = [
   { slug: "london", airport: "LHR", name: { en: "London", es: "Londres" }, city: "london", phrase: "weekend", trains: ["paris-without-cliches", "amsterdam-by-bike", "scottish-highlands"] },
   { slug: "edinburgh", airport: "EDI", name: { en: "Edinburgh", es: "Edimburgo" }, city: "edinburgh", phrase: "city-breaks", trains: [] },
-  { slug: "glasgow", airport: "GLA", name: { en: "Glasgow", es: "Glasgow" }, city: "glasgow", phrase: "city-breaks", trains: ["scottish-highlands"] },
-  { slug: "manchester", airport: "MAN", name: { en: "Manchester", es: "Mánchester" }, city: "manchester", phrase: "city-breaks", trains: ["scottish-highlands"] },
-  { slug: "birmingham", airport: "BHX", name: { en: "Birmingham", es: "Birmingham" }, city: "birmingham", phrase: "city-breaks", trains: ["scottish-highlands"] },
   { slug: "dublin", airport: "DUB", name: { en: "Dublin", es: "Dublín" }, city: "dublin", phrase: "city-breaks", trains: [] },
   { slug: "paris", airport: "CDG", name: { en: "Paris", es: "París" }, city: "paris", phrase: "weekend", trains: ["amsterdam-by-bike"] },
   { slug: "amsterdam", airport: "AMS", name: { en: "Amsterdam", es: "Ámsterdam" }, city: "amsterdam", phrase: "weekend", trains: ["paris-without-cliches"] },
@@ -48,7 +51,12 @@ export const TRIP_ORIGINS: readonly TripOrigin[] = [
 
 export type OriginTrip = { id: string; home: boolean; train: boolean; airMinutes?: number; km?: number };
 
-/** All the trips once, nearest first: the one that starts at this airport, then by minutes in the air, ties in the trips' own order. */
+/**
+ * All the trips once, nearest first: the one that starts at this airport, then by the distance to
+ * the trip's airport (the minutes in the air are that distance rounded to five, so they never fall
+ * down the list; two trips the same minutes away keep the order the map gives them, not the
+ * trips' own order).
+ */
 export function tripsFrom(origin: Pick<TripOrigin, "airport" | "trains">, trips: readonly MatchTrip[] = TRIPS): OriginTrip[] {
   const from = findAirport(origin.airport);
   if (!from) return [];
@@ -56,12 +64,20 @@ export function tripsFrom(origin: Pick<TripOrigin, "airport" | "trains">, trips:
   // The month only moves "in season", which is not read here.
   return matchTrips({ from }, trips, 1)
     .map((p): OriginTrip => ({ id: p.id, home: p.home, train: origin.trains.includes(p.id), ...(p.airMinutes !== undefined ? { airMinutes: p.airMinutes } : {}), ...(p.km !== undefined ? { km: p.km } : {}) }))
-    .sort((a, b) => Number(b.home) - Number(a.home) || (a.airMinutes ?? 0) - (b.airMinutes ?? 0) || (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    .sort((a, b) => Number(b.home) - Number(a.home) || (a.airMinutes ?? 0) - (b.airMinutes ?? 0) || (a.km ?? 0) - (b.km ?? 0) || (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 }
 
 /** How many of the trips are within five hours in the air, start here, or work by train. */
 export function reachable(origin: Pick<TripOrigin, "airport" | "trains">, trips: readonly MatchTrip[] = TRIPS): number {
   return tripsFrom(origin, trips).filter((t) => t.home || t.train || (t.airMinutes !== undefined && t.airMinutes <= ORIGIN_MAX_AIR_MINUTES)).length;
+}
+
+/** The six cards of an origin's page: nearest first, without the trip that starts there (that one is the page's hero). */
+export const ORIGIN_CARDS = 6;
+export function originCards(origin: Pick<TripOrigin, "airport" | "trains">, trips: readonly MatchTrip[] = TRIPS): OriginTrip[] {
+  return tripsFrom(origin, trips)
+    .filter((t) => !t.home)
+    .slice(0, ORIGIN_CARDS);
 }
 
 export const originPath = (origin: Pick<TripOrigin, "slug">): string => `/trips/${ORIGIN_PREFIX}${origin.slug}`;

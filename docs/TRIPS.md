@@ -11,7 +11,7 @@ shows one says so. See "Partners" below.
 |---|---|
 | `/trips` | The flight search on the first screen, then the twelve trips with chips to filter them by kind, then a band to the "Pack your bags" gift. |
 | `/trips/<id>` | One trip: hero picture and facts, the route on a map with every stop (each links to `/dates` for that town), the plan day by day, "Tickets for this trip" (Tiqets, up to four), flights to where it lands (with "Hire a car" beside them on road trips), and "Make it a surprise". |
-| `/trips/from-<city>` | The twelve trips nearest first for a couple leaving from one of ten cities (`TRIP_ORIGINS` in `src/lib/trips/origins.ts`): hours in the air, "a train works" where a checked direct train runs, the best months. Hours, never a fare. A city has a page only with six trips in reach (unit-tested), so no American city has one. Served by the `[id]` route: a folder cannot be half a segment. |
+| `/trips/from-<city>` | The twelve trips nearest first for a couple leaving from one of seven cities (`TRIP_ORIGINS` in `src/lib/trips/origins.ts`): hours in the air, "a train works" where a checked direct train runs, the best months. Hours, never a fare. A city has a page only with six trips in reach (unit-tested), so no American city has one, and only where its six cards are not another city's (Glasgow, Manchester and Birmingham were, so they have no page). The hero shows the trip that starts there, or a trip the cards do not show. Served by the `[id]` route: a folder cannot be half a segment. |
 | `/trips/ideas/<kind>` | Trips of one kind, read from the trips' data (`src/lib/trips/idea-kinds.ts`): weekend getaways (three or four days) and road trips. "Romantic city breaks" is the weekend list again and "cheap trips in Europe" is one trip, so neither is a page. |
 
 Both are statically rendered for every trip in both languages (`generateStaticParams` on the
@@ -29,7 +29,7 @@ the trips on the hub, a `TouristTrip` with its itinerary as an `ItemList` of pla
 | `src/lib/trips/day-costs.ts` | A trip's day costs in the page's currency: the euro bands are the source, dollars and pounds from fixed ECB rates (with the day they were taken), to the nearest five, said as "about". |
 | `src/lib/dates/ticketed.ts` | Which kinds of place get a "Tickets" button (`sellsTickets`) and what Tiqets is asked (`ticketQuery`). |
 | `src/lib/dates/plan-gift.ts` | A date plan as "a surprise inside" a gift (`planUnwrap`): the day, the town, the stops with their times, kinds and photographs. |
-| `src/lib/trips/origins.ts`, `src/content/trip-origins.ts` | The ten cities to leave from, `tripsFrom` (the matcher's minutes, nearest first), each city's two true sentences (the numbers held by `tests/unit/trip-origins.test.ts`). |
+| `src/lib/trips/origins.ts`, `src/content/trip-origins.ts` | The seven cities to leave from, `tripsFrom` (the matcher's minutes, nearest first, ties by distance), `originCards`, each city's two true sentences and hero trip (the numbers held by `tests/unit/trip-origins.test.ts`). |
 | `src/lib/trips/idea-kinds.ts`, `src/content/trip-ideas.ts` | The kinds of trip, which are pages and why, and each trip's line of why. |
 | `src/components/trips/page/` | The designed pages' pieces: `room-page.tsx` (the dates pages' spread with the ivory lilies), `trip-cards.tsx`, `origin-page.tsx`. |
 | `src/lib/trips/presets.ts` | `TRIPS`: the twelve trips, all text in English and Spanish. |

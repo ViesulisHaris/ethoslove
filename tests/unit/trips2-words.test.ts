@@ -6,7 +6,7 @@ import { formatFlightTime } from "@/lib/trips/flights";
 import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { ideaTrips, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
 import { monthRanges } from "@/lib/trips/months";
-import { TRIP_ORIGINS, tripsFrom } from "@/lib/trips/origins";
+import { originCards, TRIP_ORIGINS, type OriginTrip } from "@/lib/trips/origins";
 import { tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
 import { tripStopCities } from "@/lib/trips/cities";
@@ -65,10 +65,9 @@ function originPageWords(slug: string, l: "en" | "es"): number {
   const ui = TRIP_ORIGIN_UI[l];
   const t = M[l].trips;
   const city = o.name[l];
-  const ranked = tripsFrom(o);
-  const hero = getTrip(ranked.find((r) => !r.home)!.id)!;
-  const label = (r: (typeof ranked)[number]) => (r.home ? ui.home : r.train ? ui.train : fill(ui.air, { time: formatFlightTime(r.airMinutes ?? 0) }));
-  const cards = ranked.slice(0, 6).flatMap((r) => {
+  const hero = getTrip(TRIP_ORIGIN_COPY[slug].hero)!;
+  const label = (r: OriginTrip) => (r.home ? ui.home : r.train ? ui.train : fill(ui.air, { time: formatFlightTime(r.airMinutes ?? 0) }));
+  const cards = originCards(o).flatMap((r) => {
     const trip = getTrip(r.id)!;
     return [label(r), trip.title[l], t.best.replace("{months}", monthRanges(trip.bestMonths, l))];
   });

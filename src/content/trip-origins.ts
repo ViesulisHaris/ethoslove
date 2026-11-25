@@ -2,7 +2,9 @@
  * The words of the pages by where you leave from (`/trips/from-<city>`, lib/trips/origins.ts).
  * `TRIP_ORIGIN_UI` is what every such page says, with `{city}`, `{count}` (the trips, twelve) and
  * `{rest}` (the trips folded under the first six) filled in. `TRIP_ORIGIN_COPY` is the two sentences
- * true of leaving from one city: `line` the first (the hero's italic line), `sentence` the rest.
+ * true of leaving from one city: `line` the first (the hero's italic line), `sentence` the rest,
+ * and `hero`, the trip in the hero's photograph: the one that starts there, or else a trip that is
+ * not among the six cards. No sentence is shared between two cities, nor its first three words.
  * Each was written from the matcher's own minutes; tests/unit/trip-origins.test.ts (O6) holds the
  * numbers, so a sentence that drifts from the data fails. Fix the sentence, never the test.
  * Hours, never a fare. Spanish adapted, Spain Spanish, the two of them spoken to as vosotros.
@@ -78,75 +80,61 @@ export const TRIP_ORIGIN_UI: Record<"en" | "es", TripOriginUi> = {
   },
 };
 
-export const TRIP_ORIGIN_COPY: Record<string, { line: L; sentence: L }> = {
+export const TRIP_ORIGIN_COPY: Record<string, { hero: string; line: L; sentence: L }> = {
   london: {
-    line: { en: "Three of the twelve start with a train from London.", es: "Tres de los doce empiezan con un tren desde Londres." },
+    hero: "iceland-south-coast",
+    line: { en: "Three of the twelve start at a London station, not an airport.", es: "Tres de los doce empiezan en una estación de Londres, no en un aeropuerto." },
     sentence: {
-      en: "Paris, Amsterdam and Edinburgh need no airport. Santorini is the long one, about four hours in the air; the rest are three hours or less.",
-      es: "París, Ámsterdam y Edimburgo no piden aeropuerto. Santorini es el más lejano, unas cuatro horas de vuelo; el resto, tres horas o menos.",
+      en: "Paris and Amsterdam fit a long weekend by Eurostar, and the Highlands trip begins off a train to Edinburgh. Iceland and Santorini are the long flights: three hours and four.",
+      es: "París y Ámsterdam, en Eurostar, caben en un puente; las Highlands empiezan al bajar del tren en Edimburgo. Islandia y Santorini son los vuelos largos: tres y cuatro horas.",
     },
   },
   edinburgh: {
-    line: { en: "The Highlands trip starts in Edinburgh itself, with no flight to find.", es: "El viaje por las Highlands empieza en el propio Edimburgo, sin vuelo que buscar." },
+    hero: "scottish-highlands",
+    line: { en: "The Highlands trip starts here: a night in the Old Town, then the car north.", es: "Aquí empiezan las Highlands: una noche en la ciudad vieja y luego, en coche, al norte." },
     sentence: {
-      en: "Amsterdam, Paris and Copenhagen are under two hours in the air. Lisbon, the Amalfi Coast and the Algarve are just over three, and Santorini four and a half.",
-      es: "Ámsterdam, París y Copenhague quedan a menos de dos horas de vuelo. Lisboa, la costa amalfitana y el Algarve, a poco más de tres, y Santorini a cuatro y media.",
-    },
-  },
-  glasgow: {
-    line: { en: "The Highlands trip starts in Edinburgh, under an hour away by train.", es: "El viaje por las Highlands empieza en Edimburgo, a menos de una hora en tren." },
-    sentence: {
-      en: "Amsterdam, Paris and Copenhagen are under two hours in the air. Iceland, at about two hours twenty, is closer than Tuscany or the Baltic coast.",
-      es: "Ámsterdam, París y Copenhague quedan a menos de dos horas de vuelo. Islandia, a unas dos horas y veinte, está más cerca que la Toscana o la costa báltica.",
-    },
-  },
-  manchester: {
-    line: { en: "Edinburgh, where the Highlands trip starts, is a direct train from Manchester.", es: "A Edimburgo, donde empieza el viaje por las Highlands, hay tren directo desde Mánchester." },
-    sentence: {
-      en: "Amsterdam and Paris are about an hour and a quarter in the air. Only Santorini is over three hours, at a little more than four.",
-      es: "Ámsterdam y París quedan a una hora y cuarto de vuelo, más o menos. Solo Santorini pasa de tres horas: algo más de cuatro.",
-    },
-  },
-  birmingham: {
-    line: { en: "Amsterdam and Paris are an hour and a quarter in the air, or less.", es: "Ámsterdam y París quedan a una hora y cuarto de vuelo, o menos." },
-    sentence: {
-      en: "A direct train reaches Edinburgh, where the Highlands trip starts. Every trip but Santorini is under three hours in the air.",
-      es: "A Edimburgo, donde empieza el viaje por las Highlands, hay tren directo. Todos los viajes menos Santorini quedan a menos de tres horas de vuelo.",
+      en: "Amsterdam, an hour and twenty-five away, is the nearest city break. Lisbon is a three-day trip too, but over three hours in the air, so give it a longer weekend.",
+      es: "Ámsterdam, a una hora y veinticinco, es la escapada urbana más cercana. Lisboa también son tres días, pero a más de tres horas de vuelo: mejor con un puente.",
     },
   },
   dublin: {
-    line: { en: "Edinburgh is an hour in the air, and the Highlands trip starts there.", es: "Edimburgo está a una hora de vuelo, y allí empieza el viaje por las Highlands." },
+    hero: "lisbon-slow-weekend",
+    line: { en: "The nearest trip is no city break: the Highlands road trip, an hour’s flight.", es: "El viaje más cercano no es urbano: las Highlands en coche, a una hora de vuelo." },
     sentence: {
-      en: "Amsterdam and Paris are about an hour and a half away. No train leaves the island, so none of the twelve starts by rail.",
-      es: "Ámsterdam y París quedan a una hora y media, más o menos. De la isla no sale ningún tren, así que ninguno de los doce empieza en tren.",
+      en: "With no train off the island, all twelve begin at the airport. Of the four city breaks, Lisbon is the farthest, at two hours forty.",
+      es: "Sin tren que salga de la isla, los doce empiezan en el aeropuerto. De las cuatro escapadas urbanas, Lisboa es la más lejana: dos horas y cuarenta.",
     },
   },
   paris: {
-    line: { en: "One of the twelve is Paris itself, with no travel at all.", es: "Uno de los doce es el propio París, sin viaje ninguno." },
+    hero: "paris-without-cliches",
+    line: { en: "One of the twelve needs no ticket at all: four days in the east of Paris.", es: "Para uno de los doce no hace falta billete: cuatro días por el este de París." },
     sentence: {
-      en: "Amsterdam is a direct train. Edinburgh, Prague and Florence are about an hour and three quarters in the air, and nothing is over three hours forty.",
-      es: "A Ámsterdam hay tren directo. Edimburgo, Praga y Florencia quedan a una hora y tres cuartos de vuelo, y nada pasa de tres horas y cuarenta.",
+      en: "A direct train reaches Amsterdam, so its trip needs no airport either. Even Santorini, the farthest of the twelve, is three hours thirty-five in the air.",
+      es: "A Ámsterdam se llega en tren directo, así que tampoco hace falta aeropuerto. Hasta Santorini, el más lejano de los doce, está a tres horas y 35 minutos de vuelo.",
     },
   },
   amsterdam: {
-    line: { en: "One of the twelve is Amsterdam itself, on two bikes.", es: "Uno de los doce es el propio Ámsterdam, en dos bicis." },
+    hero: "amsterdam-by-bike",
+    line: { en: "Your own city is one of the twelve: three days on two bikes, out to Durgerdam.", es: "Vuestra ciudad es uno de los doce: tres días en bici, hasta Durgerdam." },
     sentence: {
-      en: "Paris is a direct train. Copenhagen, Edinburgh and Prague are about an hour and a half in the air; Santorini is the furthest, at three hours forty.",
-      es: "A París hay tren directo. Copenhague, Edimburgo y Praga quedan a una hora y media de vuelo; Santorini es el más lejano, a tres horas y cuarenta.",
+      en: "Paris needs only a direct train: four days by the Canal Saint-Martin. Both Copenhagen and Edinburgh are an hour twenty-five in the air, and Santorini three hours forty.",
+      es: "París está a un tren directo: cuatro días junto al Canal Saint-Martin. En avión, Copenhague y Edimburgo quedan a una hora y veinticinco, y Santorini a tres horas y cuarenta.",
     },
   },
   berlin: {
-    line: { en: "The Prague to Vienna trip starts with a direct train from Berlin.", es: "El viaje de Praga a Viena empieza con un tren directo desde Berlín." },
+    hero: "santorini-naxos",
+    line: { en: "The trip by rail, Prague to Vienna, begins on a direct train from Berlin.", es: "El viaje en tren, de Praga a Viena, empieza en un tren directo desde Berlín." },
     sentence: {
-      en: "Copenhagen is an hour in the air; Riga, where the Baltic coast trip starts, an hour and forty. Lisbon, the Algarve and Iceland are over three and a half hours.",
-      es: "Copenhague queda a una hora de vuelo; Riga, donde empieza la costa báltica, a una hora y cuarenta. Lisboa, el Algarve e Islandia pasan de tres horas y media.",
+      en: "Copenhagen is an hour in the air, near enough for three days. Santorini, at three hours ten, is nearer than Lisbon or the Algarve.",
+      es: "Copenhague queda a una hora de vuelo, lo bastante cerca para tres días. Santorini, a tres horas y diez, está más cerca que Lisboa o el Algarve.",
     },
   },
   riga: {
-    line: { en: "The Baltic coast trip starts in Riga, with no flight to find.", es: "El viaje por la costa báltica empieza en Riga, sin vuelo que buscar." },
+    hero: "baltic-coast",
+    line: { en: "The Baltic coast trip begins in Riga’s old town; of the twelve, its days cost least.", es: "La costa báltica sale del casco antiguo de Riga, y es la de menos gasto diario." },
     sentence: {
-      en: "Copenhagen is an hour and a half in the air and Prague under two. Lisbon and the Algarve are the long ones, over four and a half hours.",
-      es: "Copenhague queda a hora y media de vuelo y Praga a menos de dos. Lisboa y el Algarve son los lejanos: más de cuatro horas y media.",
+      en: "The shortest flights are to Copenhagen, an hour and a half, and Prague, under two. Lisbon and the Algarve take more than four and a half hours each way.",
+      es: "Los vuelos más cortos son a Copenhague, hora y media, y a Praga, menos de dos. Lisboa y el Algarve pasan de cuatro horas y media por trayecto.",
     },
   },
 };
