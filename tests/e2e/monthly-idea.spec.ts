@@ -117,7 +117,9 @@ test.describe("the share screen's line", () => {
     await notice.getByRole("button", { name: "Don’t send these" }).click();
     const button = notice.getByRole("button");
     await expect(button).toHaveAttribute("aria-busy", "true");
-    await expect(button).toBeDisabled();
+    // aria-disabled, never disabled: a disabled button would drop focus to <body> (monthly-D1).
+    await expect(button).toHaveAttribute("aria-disabled", "true");
+    await expect(button).not.toHaveAttribute("disabled");
     await expect(notice).toContainText("Starting next month");
     await expect(notice).not.toContainText("Off. We won’t send them.");
     await expect(button).toHaveText("Don’t send these");
@@ -125,6 +127,61 @@ test.describe("the share screen's line", () => {
     await expect(notice).toContainText("Off. We won’t send them.");
     await expect(button).toHaveText("Undo");
     await expect(button).not.toHaveAttribute("aria-busy");
+  });
+
+  test("B4c by keyboard, the button keeps focus while it saves and after", async ({ page }) => {
+    let release!: () => void;
+    const answered = new Promise<void>((resolve) => (release = resolve));
+    const bodies: unknown[] = [];
+    await page.route("**/api/monthly-idea", async (route) => {
+      if (route.request().method() !== "POST") return route.fulfill({ json: { state: "on" } });
+      bodies.push(route.request().postDataJSON());
+      await answered;
+      return route.fulfill({ json: { state: "off" } });
+    });
+    await page.goto("/monthly-idea/preview?part=share");
+    const notice = page.getByTestId("idea-notice");
+    const button = notice.getByRole("button", { name: "Don’t send these" });
+    await button.focus();
+    await page.keyboard.press("Enter");
+    await expect(button).toHaveAttribute("aria-busy", "true");
+    await expect(button).toBeFocused();
+    // A second press while it saves sends nothing more.
+    await page.keyboard.press("Enter");
+    release();
+    await expect(notice).toContainText("Off. We won’t send them.");
+    const undo = notice.getByRole("button", { name: "Undo" });
+    await expect(undo).toBeFocused();
+    expect(bodies).toEqual([{ on: false }]);
+    await page.keyboard.press("Tab");
+    await expect(page.getByTestId("offer-emails-box")).toBeFocused();
+  });
+
+  test("B4d turning it off never changes the card's height", async ({ page }) => {
+    await answerSwitch(page);
+    for (const [lang, stop, done] of [
+      ["", "Don’t send these", "Off. We won’t send them."],
+      ["/es", "No quiero recibirlas", "Desactivado. No te las enviaremos."],
+    ] as const) {
+      for (const size of [
+        { width: 375, height: 812 },
+        { width: 320, height: 568 },
+        { width: 1280, height: 900 },
+      ]) {
+        await page.setViewportSize(size);
+        await page.goto(`${lang}/monthly-idea/preview?part=share`);
+        const card = page.getByTestId("offer-emails");
+        const notice = page.getByTestId("idea-notice");
+        await expect(notice).toBeVisible();
+        const before = (await card.boundingBox())!;
+        await notice.getByRole("button", { name: stop }).click();
+        await expect(notice).toContainText(done);
+        const after = (await card.boundingBox())!;
+        expect(after.height, `${lang || "en"} at ${size.width}px`).toBe(before.height);
+        // The unseen sentence is never read: the line's text is only the one shown.
+        expect((await notice.locator("p").textContent())?.trim()).toBe(done);
+      }
+    }
   });
 
   test("B5 a failed save puts it back and says so", async ({ page }) => {
@@ -172,7 +229,7 @@ test.describe("the free version's Terms box", () => {
     // The page's own alert, not Next's route announcer (also role="alert", always empty here).
     const nudge = page.getByRole("alert").filter({ hasText: /\S/ });
     await expect(nudge).toHaveText("Tick the box to send it.");
-    await expect(page.getByTestId("free-terms")).toContainText("I accept the Terms: sending free comes with one gift idea a month by email");
+    await expect(page.getByTestId("free-terms")).toContainText("I accept the Terms: free gifts come with one gift idea a month by email");
     await expect(nudge).toHaveAttribute("id", "free-terms-nudge");
     await expect(page.getByTestId("free-terms-box")).toBeFocused();
     await expect(page.getByTestId("terms-sent")).toHaveCount(0);
@@ -242,6 +299,18 @@ test.describe("the account page's row", () => {
     await expect(row).toContainText("By email, for a year after your last gift.");
     await expect(row.getByRole("button", { name: "Stop them" })).not.toHaveAttribute("aria-pressed");
     expect(bodies).toEqual([{ on: false }, { on: true }]);
+  });
+
+  test("B11a by keyboard, the button keeps focus after the save", async ({ page }) => {
+    await answerSwitch(page);
+    await page.goto("/monthly-idea/preview?part=account");
+    const row = page.getByTestId("idea-emails");
+    const stop = row.getByRole("button", { name: "Stop them" });
+    await stop.focus();
+    await page.keyboard.press("Enter");
+    await expect(row).toContainText("Off. We won’t send them.");
+    await expect(row.getByRole("button", { name: "Turn them back on" })).toBeFocused();
+    expect(await row.getByRole("button").getAttribute("disabled")).toBeNull();
   });
 
   test("B11b on a phone, turning it off or on never changes the row's height", async ({ page }) => {

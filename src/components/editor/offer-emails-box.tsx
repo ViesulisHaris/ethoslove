@@ -67,7 +67,10 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
 
   // The line keeps its words until the server has answered, as the account page's row does: it never
   // says "Off" for a stop that wasn't saved.
+  // Never `disabled` while it saves: a disabled button drops keyboard and screen-reader focus to
+  // <body>. It says so with aria-disabled and ignores a second press instead.
   const switchIdea = async (off: boolean) => {
+    if (ideaBusy) return;
     setIdeaBusy(true);
     try {
       const res = await fetch("/api/monthly-idea", {
@@ -90,13 +93,20 @@ export function OfferEmailsBox({ ideaNotice = null, ideaBox = false }: { ideaNot
     <div className="mt-8 rounded-2xl border border-border bg-card p-4" data-testid="offer-emails">
       {ideaNotice ? (
         <div className="mb-3 border-b border-border pb-3" data-testid="idea-notice" aria-live="polite">
-          <p className="text-sm text-ink">{ideaOff ? t("ideaOffDone") : ideaNotice}</p>
+          {/* The other sentence sits under this one, unseen (a pseudo-element: no text, nothing read
+              out), so the line is always as tall as the longer of the two and nothing below moves. */}
+          <p
+            className="grid text-sm text-ink after:invisible after:col-start-1 after:row-start-1 after:content-[attr(data-other)]"
+            data-other={ideaOff ? ideaNotice : t("ideaOffDone")}
+          >
+            <span className="col-start-1 row-start-1">{ideaOff ? t("ideaOffDone") : ideaNotice}</span>
+          </p>
           <button
             type="button"
-            disabled={ideaBusy}
+            aria-disabled={ideaBusy || undefined}
             aria-busy={ideaBusy || undefined}
             onClick={() => void switchIdea(!ideaOff)}
-            className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-ink underline underline-offset-4 hover:text-coral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:opacity-70 disabled:opacity-50"
+            className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-ink underline underline-offset-4 hover:text-coral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:opacity-70 aria-disabled:cursor-default aria-disabled:opacity-50"
             data-testid="idea-off"
           >
             {ideaBusy ? <Loader2 aria-hidden className="mr-1.5 size-4 animate-spin motion-reduce:animate-none" /> : null}
