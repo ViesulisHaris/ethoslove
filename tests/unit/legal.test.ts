@@ -5,6 +5,7 @@ import { GROUP_RETENTION } from "@/lib/group/limits";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
 import { FREE_SAVED_DATES, PRODUCTS, formatAmount, groupAmount, membershipAmount } from "@/lib/pricing/products";
 import { consentSentence } from "@/lib/stripe/line-items";
+import { ROOMS_KEY } from "@/lib/analytics/rooms-marker";
 
 const all = (doc: LegalDoc) => [doc.intro, ...doc.sections.flatMap((s) => [s.heading, ...s.paragraphs])].join("\n");
 const section = (doc: LegalDoc, n: number) => doc.sections.find((s) => s.heading.startsWith(`${n}. `))!.paragraphs.join("\n");
@@ -110,6 +111,22 @@ describe("legal documents", () => {
 
   it("name no country or city the business isn't in", () => {
     for (const doc of [LEGAL_DOCS.terms, LEGAL_DOCS.privacy, WITHDRAW_DOCS]) for (const locale of ["en", "es"] as const) expect(all(doc[locale])).not.toMatch(/Spain|España|Madrid/);
+  });
+
+  it("the privacy policy names the rooms entry, in both languages, beside the first visit's", () => {
+    const sentences = {
+      en: /We also keep, in your browser's storage \(ethos-rooms, 30 days\)[^.]*\./,
+      es: /Guardamos también, en el almacenamiento de tu navegador \(ethos-rooms, 30 días\)[^.]*\./,
+    };
+    for (const locale of ["en", "es"] as const) {
+      const text = all(LEGAL_DOCS.privacy[locale]);
+      expect(text).toContain(ROOMS_KEY);
+      const sentence = sentences[locale].exec(text)?.[0] ?? "";
+      expect(sentence).toContain("30");
+      expect(text.indexOf(ROOMS_KEY)).toBeGreaterThan(text.indexOf("ethos-first-visit"));
+      expect(text.indexOf(ROOMS_KEY)).toBeLessThan(text.indexOf("ethos-free-tier"));
+      expect(sentence).not.toMatch(/Spain|España|!/);
+    }
   });
 
   it("carry none of the dropped offers: discounts, codes and the paid song", () => {
