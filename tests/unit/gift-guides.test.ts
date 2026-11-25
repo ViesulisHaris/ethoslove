@@ -601,6 +601,17 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
     }
   });
 
+  it("say what a purchase buys as the shop sells it: a template, for good, with the schedule in it", () => {
+    // PRODUCTS.single is "one template, forever" (lib/pricing/products.ts); scheduling is an extra only on The Letter
+    // and Constellations (lib/gift/publish.ts); a reply to a paid gift is free too (lib/commerce/free-reply.ts).
+    const wrong = /paid once per gift|one-time payment (each|for that gift)|single payment each|schedule is a paid extra|paid schedule|only free thing|un solo pago (cada uno|por regalo)|se pagan una vez|extra de pago en el editor|programación de pago|lo único gratis/i;
+    const texts = [
+      ...GIFT_LOCALES.flatMap((locale) => GIFT_GUIDE_SLUGS.flatMap((slug) => strings(GIFT_GUIDES[slug][locale]))),
+      ...MONTHS.flatMap((n) => GIFT_LOCALES.flatMap((locale) => strings(MONTH_GUIDES[n][locale]))),
+    ];
+    expect(texts.filter((t) => wrong.test(t))).toEqual([]);
+  });
+
   it("each new page links to the pages that own the searches beside it", () => {
     const hrefs = (slug: GiftGuideSlug) => GIFT_GUIDES[slug].en.related.map((r) => r.href);
     for (const [slug, other] of [["apology-for-him", "apology-for-her"], ["apology-for-her", "apology-for-him"]] as const) {

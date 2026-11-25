@@ -105,7 +105,7 @@ const month1: Month = {
     faq: [
       { q: "Is one month too soon for an anniversary gift?", a: "Not if it is small. A month is worth marking when both of you are counting it, and a short note or a plan for the next date marks it without making it heavy. Leave the keepsakes for six months." },
       { q: "What do you write after one month together?", a: "One thing you noticed about them and one thing you want to do again. Two or three sentences are plenty. Leave the future out of it unless they brought it up first." },
-      { q: "Which of these is free?", a: "The Letter, as a short note of up to 500 characters with a song. The other gifts on this page are a one-time payment each, and you can build any of them in the editor before you decide." },
+      { q: "Which of these is free?", a: "The Letter, as a short note of up to 500 characters with a song. Each of the others is a one-time payment for that template, and you can build any of them in the editor before you decide." },
     ],
   },
   es: {
@@ -165,7 +165,7 @@ const month1: Month = {
     faq: [
       { q: "¿Un mes es demasiado pronto para un regalo de aniversario?", a: "No, si es pequeño. Un mes merece marcarse cuando los dos lo contáis, y una nota corta o el plan de la próxima cita lo marcan sin ponerse serios. Los recuerdos para guardar, a los seis meses." },
       { q: "¿Qué se escribe al cumplir un mes?", a: "Una cosa en la que te has fijado y otra que quieres repetir. Con dos o tres frases sobra. Deja el futuro fuera, salvo que lo haya sacado esa persona primero." },
-      { q: "¿Cuál de estos es gratis?", a: "La carta, como nota corta de hasta 500 caracteres con una canción. Los demás regalos de esta página son un solo pago cada uno, y puedes montar cualquiera en el editor antes de decidirte." },
+      { q: "¿Cuál de estos es gratis?", a: "La carta, como nota corta de hasta 500 caracteres con una canción. Cada uno de los demás es un solo pago por esa plantilla, y puedes montar cualquiera en el editor antes de decidirte." },
     ],
   },
 };
