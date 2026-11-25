@@ -293,6 +293,13 @@ test("W5: a link that did not arrive whole shows this week's and says so", async
   await open(page, "/games/weekly#w=1.zzz");
   await expect(weekly(page)).toHaveAttribute("data-phase", "ask");
   await expect(page.getByText("That link didn’t arrive whole, so here is this week’s challenge.")).toBeVisible();
+  // This week's number with another week's set (a clock a week off, or a hand-made link): never "This week: <another theme>" (games2-D3).
+  const week = thisWeek();
+  const other = weeklySet(week + 5);
+  await open(page, `/games/weekly${encodeWeekly({ week, setId: other.id, from: { name: "Ana", picks: [0, 1, 0] } })}`);
+  await expect(weekly(page)).toHaveAttribute("data-set", weeklySet(week).id);
+  await expect(page.locator("[data-when=now]")).toHaveText(`This week: ${weeklySet(week).theme.en}`);
+  await expect(page.getByText("That link didn’t arrive whole, so here is this week’s challenge.")).toBeVisible();
 });
 
 test("W6: the tab's own link, opened again, is not a reveal against itself", async ({ browser }) => {

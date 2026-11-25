@@ -246,8 +246,19 @@ describe("the weekly challenge's link", () => {
       "#w=" + "1.".repeat(400),
     ];
     for (const hash of bad) expect(decodeWeekly(hash, W), String(hash)).toBeNull();
-    // A clock a week behind must not refuse this week's link.
-    expect(decodeWeekly(`#w=1.${W + 1}.${S.id}.Ana.010`, W)).not.toBeNull();
+    // A clock a week behind must not refuse next week's link, with next week's set.
+    expect(decodeWeekly(`#w=1.${W + 1}.${weeklySet(W + 1).id}.Ana.010`, W)).not.toBeNull();
+  });
+
+  it("L8: a link of this week or next must carry that week's set; an earlier week's keeps the set it names (games2-D3)", () => {
+    const other = WEEKLY_SETS.find((s) => s.id !== S.id && s.id !== weeklySet(W + 1).id)!;
+    // Hand-made or from a clock a week off: "This week: <another theme>" would contradict the hub.
+    expect(decodeWeekly(`#w=1.${W}.${other.id}.Ana.010`, W)).toBeNull();
+    expect(decodeWeekly(`#w=1.${W + 1}.${S.id}.Ana.010`, W)).toBeNull();
+    expect(decodeWeekly(`#w=1.${W}.${S.id}.Ana.010.Sam.110`, W)?.set.id).toBe(S.id);
+    expect(decodeWeekly(`#w=1.${W}.${other.id}.Ana.010.Sam.110`, W)).toBeNull();
+    // Last week's link, read after the list grew and moved the weeks round, still opens its set.
+    expect(decodeWeekly(`#w=1.${W - 1}.${other.id}.Ana.010`, W)?.set.id).toBe(other.id);
   });
 
   it("L5: a link from an earlier week opens the set it was sent with, with its own week", () => {

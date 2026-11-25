@@ -174,6 +174,10 @@ export function decodeWeekly(hash: unknown, thisWeek: number, sets: readonly Wee
   if (!/^[a-z0-9-]{1,40}$/.test(setId)) return null;
   const found = setById(setId, sets);
   if (!found) return null;
+  // A link of this week (or next week's, from a clock ahead) is shown as "This week": it must carry
+  // that week's set, or the page would name one theme while the hub names another. An earlier week's
+  // link keeps the set it names (L5): the list may have grown since, and moved which set a week gives.
+  if (week >= thisWeek && found.id !== weeklySet(week, sets).id) return null;
   const from = answer(fromName, fromPicks);
   if (!from) return null;
   const link: WeeklyLink = { week, set: found, from };
