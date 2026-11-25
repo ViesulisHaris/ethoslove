@@ -163,7 +163,7 @@ test.describe("Digicam in the editor", () => {
     const noErrors = watchErrors(page);
     await page.goto("/create/digicam");
     await expect(page.getByText("The camera", { exact: true })).toBeVisible({ timeout: 60_000 });
-    await expect(page.getByRole("switch", { name: "It's their birthday" })).toBeChecked();
+    await expect(page.getByRole("switch", { name: "It’s their birthday" })).toBeChecked();
     const colours = page.getByRole("radiogroup", { name: "Its colour" });
     for (const body of ["Baby pink", "Silver", "Lilac", "Black"]) await expect(colours.getByRole("radio", { name: body })).toBeVisible();
     await colours.getByRole("radio", { name: "Lilac" }).click();
