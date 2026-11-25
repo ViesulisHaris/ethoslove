@@ -92,21 +92,22 @@ function allStrings(o: unknown): string[] {
   return [];
 }
 
-describe("the site's pages say what is free as the free-note setting has it (occasions, gift guides, /digital-cards, /gifts, /pt)", () => {
+describe("the site's pages say what is free as the free-note setting has it (occasions, gift guides, the month pages, /digital-cards, /gifts, /pt)", () => {
   /** The pages' words with the setting as given, the modules loaded afresh (their choice is made when they load, as at build). */
   async function pagesWith(share: string): Promise<string[]> {
     vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", share);
     vi.resetModules();
-    const [{ OCCASION_GUIDES }, { OCCASION_IDEAS }, { GIFT_GUIDES }, { DIGITAL_GIFT_GUIDE: gifts }, { digitalCardsCopy }, { ptLetterCopy }] = await Promise.all([
+    const [{ OCCASION_GUIDES }, { OCCASION_IDEAS }, { GIFT_GUIDES }, { MONTH_GUIDES }, { DIGITAL_GIFT_GUIDE: gifts }, { digitalCardsCopy }, { ptLetterCopy }] = await Promise.all([
       import("@/content/occasions"),
       import("@/content/occasion-ideas"),
       import("@/content/gift-guides"),
+      import("@/content/month-anniversaries"),
       import("@/content/digital-gifts"),
       import("@/content/digital-cards"),
       import("@/content/pt-letter"),
     ]);
     const facts = { single: "S", pick3: "P", everything: "E", extras: "X", photos: "F", notePhotos: 5, count: 61, paid: 60, ideas: 30, finder: true };
-    return [OCCASION_GUIDES, OCCASION_IDEAS, GIFT_GUIDES, gifts, digitalCardsCopy("en", facts), digitalCardsCopy("es", facts), ptLetterCopy({ price: "X", currency: "eur" })]
+    return [OCCASION_GUIDES, OCCASION_IDEAS, GIFT_GUIDES, MONTH_GUIDES, gifts, digitalCardsCopy("en", facts), digitalCardsCopy("es", facts), ptLetterCopy({ price: "X", currency: "eur" })]
       .flatMap(allStrings)
       .flatMap((s) => s.split(/(?<=[.;:!?])\s+/));
   }

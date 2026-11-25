@@ -1459,7 +1459,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "text-thread",
       lead: [
         "For him there is no default sorry present, and that helps. It leaves room for a gift about what actually happened: the texts you sent at midnight, the evening you missed, the thing you said in the car. Each idea below keeps one of those details in a field of its own, with a line you can borrow.",
-        "Five of the six cost something: each is a one-time payment for that template, and you can build any of them before deciding. The Letter goes free as a short note of up to 500 characters, which is room for what you did, what changes, and the plan for Friday.",
+        NOTE
+          ? "Five of the six cost something: each is a one-time payment for that template, and you can build any of them before deciding. The Letter goes free as a short note of up to 500 characters, which is room for what you did, what changes, and the plan for Friday."
+          : "Five of the six cost something: each is a one-time payment for that template, and you can build any of them before deciding. The Letter goes free with the whole letter and up to ten photos, which is room for what you did, what changes, and the plan for Friday.",
       ],
       ideas: [
         {
@@ -1471,8 +1473,12 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "Five sentences under a wax seal",
-          brief: "Five honest sentences in a free note under a wax seal.",
-          body: "The free note on The Letter is 500 characters, which is about five honest sentences: what you did, what it cost him, what you understand now, what changes, and one line that is just warm. He breaks the seal and it writes itself out. No song is needed, though one can play under it.",
+          brief: NOTE
+            ? "Five honest sentences in a free note under a wax seal."
+            : "Five honest sentences in a free letter under a wax seal.",
+          body: NOTE
+            ? "The free note on The Letter is 500 characters, which is about five honest sentences: what you did, what it cost him, what you understand now, what changes, and one line that is just warm. He breaks the seal and it writes itself out. No song is needed, though one can play under it."
+            : "The Letter is free with the whole letter, and five honest sentences are about right: what you did, what it cost him, what you understand now, what changes, and one line that is just warm. He breaks the seal and it writes itself out. No song is needed, though one can play under it.",
           line: { field: "freeNote", where: "The whole note", text: "I said it was a joke and it wasn’t funny, least of all to you. I should have stopped the first time you went quiet. I’m sorry. From now on, if you go quiet, I stop and ask. Dinner Friday, your pick, and I’m not bringing it up as a joke ever again." },
         },
         {
@@ -1514,14 +1520,21 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "If he is not ready to open it",
-          body: "A link waits. He can open it tonight, tomorrow or after a long walk, and it plays from the start every time. Say in the message you send with it that there is no rush and no reply needed. If you want it to open at a set hour, a paid template can be scheduled in the editor; on the free note, scheduling is one of the paid extras.",
+          body: NOTE
+            ? "A link waits. He can open it tonight, tomorrow or after a long walk, and it plays from the start every time. Say in the message you send with it that there is no rush and no reply needed. If you want it to open at a set hour, a paid template can be scheduled in the editor; on the free note, scheduling is one of the paid extras."
+            : "A link waits. He can open it tonight, tomorrow or after a long walk, and it plays from the start every time. Say in the message you send with it that there is no rush and no reply needed. If you want it to open at a set hour, a paid template can be scheduled in the editor; on the free Letter, scheduling is one of the paid extras.",
         },
       ],
       faq: [
         { q: "What is a good apology gift for a boyfriend?", a: "One that names what happened. A short note that says what you did, a chat that replays the conversation properly, or a plan for making it up with a day and a time on it, rather than an object standing in for the words." },
         { q: "Should an apology gift be expensive?", a: "No. An expensive gift after a fight can read as paying it off. A small gift that is plainly about what happened, and a changed habit after it, do more." },
         { q: "What do I write in an apology note to him?", a: "What you did, why it hurt, what changes. Four or five sentences, no “if you were hurt”, nothing about what he did. End with something warm and small, like a plan for Friday." },
-        { q: "Can I say sorry with something free?", a: "The Letter, as a short note of up to 500 characters with a song, costs nothing. Every other gift on this page is a one-time payment for that template, and the editor lets you build the whole thing first." },
+        {
+          q: "Can I say sorry with something free?",
+          a: NOTE
+            ? "The Letter, as a short note of up to 500 characters with a song, costs nothing. Every other gift on this page is a one-time payment for that template, and the editor lets you build the whole thing first."
+            : "The Letter, with the whole letter, up to ten photos and a song, costs nothing. Every other gift on this page is a one-time payment for that template, and the editor lets you build the whole thing first.",
+        },
       ],
       related: [
         { href: "/occasions/apology", label: "Saying sorry properly" },
@@ -1544,7 +1557,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "text-thread",
       lead: [
         "En este caso no hay un regalo de perdón de costumbre, y eso ayuda: deja sitio para uno que trate de lo que pasó de verdad, los mensajes de medianoche, la cena a la que faltaste, lo que dijiste en el coche. Cada idea de abajo guarda uno de esos detalles en un campo propio, con una frase lista.",
-        "Cinco de los seis cuestan algo: cada uno es un solo pago por esa plantilla, y puedes montar cualquiera antes de decidir. La carta sale gratis como nota corta de hasta 500 caracteres, sitio de sobra para lo que hiciste, lo que va a cambiar y el plan del viernes.",
+        NOTE
+          ? "Cinco de los seis cuestan algo: cada uno es un solo pago por esa plantilla, y puedes montar cualquiera antes de decidir. La carta sale gratis como nota corta de hasta 500 caracteres, sitio de sobra para lo que hiciste, lo que va a cambiar y el plan del viernes."
+          : "Cinco de los seis cuestan algo: cada uno es un solo pago por esa plantilla, y puedes montar cualquiera antes de decidir. La carta sale gratis completa y con hasta diez fotos, sitio de sobra para lo que hiciste, lo que va a cambiar y el plan del viernes.",
       ],
       ideas: [
         {
@@ -1556,8 +1571,12 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "Cinco frases bajo un sello de lacre",
-          brief: "Cinco frases sinceras en una nota gratis bajo un sello de lacre.",
-          body: "La nota gratis de La carta tiene sitio para 500 caracteres, que son unas cinco frases sinceras: lo que hiciste, lo que le costó, lo que entiendes ahora, lo que cambia y una línea que sea solo cariño. Rompe el sello y se escribe sola. No hace falta canción, aunque puede sonar una debajo.",
+          brief: NOTE
+            ? "Cinco frases sinceras en una nota gratis bajo un sello de lacre."
+            : "Cinco frases sinceras en una carta gratis bajo un sello de lacre.",
+          body: NOTE
+            ? "La nota gratis de La carta tiene sitio para 500 caracteres, que son unas cinco frases sinceras: lo que hiciste, lo que le costó, lo que entiendes ahora, lo que cambia y una línea que sea solo cariño. Rompe el sello y se escribe sola. No hace falta canción, aunque puede sonar una debajo."
+            : "La carta es gratis completa, y con unas cinco frases sinceras basta: lo que hiciste, lo que le costó, lo que entiendes ahora, lo que cambia y una línea que sea solo cariño. Rompe el sello y se escribe sola. No hace falta canción, aunque puede sonar una debajo.",
           line: { field: "freeNote", where: "La nota entera", text: "Dije que era broma y no tuvo gracia, y a ti menos que a nadie. Tenía que haber parado la primera vez que te quedaste en silencio. Lo siento. A partir de ahora, si te callas, paro y te pregunto. Cena el viernes, eliges tú, y no vuelvo a sacarlo en broma." },
         },
         {
@@ -1599,14 +1618,21 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Si todavía no quiere abrirlo",
-          body: "Un enlace espera. Puede abrirlo esta noche, mañana o después de un paseo largo, y se reproduce desde el principio cada vez. Di en el mensaje con el que lo mandas que no hay prisa ni hace falta contestar. Si quieres que se abra a una hora concreta, una plantilla de pago se programa en el editor; en la nota gratis, programar es uno de los extras de pago.",
+          body: NOTE
+            ? "Un enlace espera. Puede abrirlo esta noche, mañana o después de un paseo largo, y se reproduce desde el principio cada vez. Di en el mensaje con el que lo mandas que no hay prisa ni hace falta contestar. Si quieres que se abra a una hora concreta, una plantilla de pago se programa en el editor; en la nota gratis, programar es uno de los extras de pago."
+            : "Un enlace espera. Puede abrirlo esta noche, mañana o después de un paseo largo, y se reproduce desde el principio cada vez. Di en el mensaje con el que lo mandas que no hay prisa ni hace falta contestar. Si quieres que se abra a una hora concreta, una plantilla de pago se programa en el editor; en La carta gratis, programar es uno de los extras de pago.",
         },
       ],
       faq: [
         { q: "¿Qué regalo sirve para pedir perdón de verdad?", a: "Uno que nombre lo que pasó. Una nota corta que diga lo que hiciste, un chat que repita la conversación como debió ser o un plan para compensarlo con día y hora, en vez de un objeto que sustituya a las palabras." },
         { q: "¿Un regalo para pedir perdón tiene que ser caro?", a: "No. Un regalo caro después de una discusión puede leerse como pagar la deuda. Un regalo pequeño que trate claramente de lo que pasó, y una costumbre cambiada después, hacen más." },
         { q: "¿Qué escribo en una nota para pedirle perdón?", a: "Lo que hiciste, lo que le costó y lo que cambia. Cuatro o cinco frases, sin «si te ha molestado» y sin hablar de su parte. Acaba con algo cálido y pequeño, como un plan para el viernes." },
-        { q: "¿Hay algo gratis para pedir perdón?", a: "La carta, como nota corta de hasta 500 caracteres con una canción, no cuesta nada. Los demás regalos de esta página son un solo pago por esa plantilla, y el editor te deja montarlo entero antes." },
+        {
+          q: "¿Hay algo gratis para pedir perdón?",
+          a: NOTE
+            ? "La carta, como nota corta de hasta 500 caracteres con una canción, no cuesta nada. Los demás regalos de esta página son un solo pago por esa plantilla, y el editor te deja montarlo entero antes."
+            : "La carta, completa y con hasta diez fotos y una canción, no cuesta nada. Los demás regalos de esta página son un solo pago por esa plantilla, y el editor te deja montarlo entero antes.",
+        },
       ],
       related: [
         { href: "/occasions/apology", label: "Pedir perdón como es debido" },
@@ -1631,7 +1657,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "paper-crane",
       lead: [
         "Flowers are fine, and most people start there. The trouble is the card: a few words tucked into the stems, rarely enough for what happened. The ideas below keep the flowers and give them room, inside the bouquet or beside it: a crane with an admission in every fold, a letter, a garden walk to a bouquet.",
-        "One costs nothing: a short note on The Letter, 500 characters at most. Each of the other five is a single payment for its template, kept for good, and the editor lets you finish one completely before deciding. Pick her colors, not the dozen red roses a florist sells after every fight.",
+        NOTE
+          ? "One costs nothing: a short note on The Letter, 500 characters at most. Each of the other five is a single payment for its template, kept for good, and the editor lets you finish one completely before deciding. Pick her colors, not the dozen red roses a florist sells after every fight."
+          : "One costs nothing: The Letter, with the whole letter and up to ten photos. Each of the other five is a single payment for its template, kept for good, and the editor lets you finish one completely before deciding. Pick her colors, not the dozen red roses a florist sells after every fight.",
       ],
       ideas: [
         {
@@ -1693,7 +1721,12 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         { q: "What is a good apology gift for a girlfriend?", a: "Flowers with enough words to carry the apology: a bouquet whose card points to a letter, a paper crane that folds an admission into each crease, a garden walk that ends on a bouquet with your promise on its tag." },
         { q: "Are flowers enough to say sorry?", a: "Only with words. Flowers say you are sorry about something; the card and the letter have to say what. Without that, they can read as a way of avoiding the conversation." },
         { q: "What should I write on an apology card?", a: "On a card of thirty characters, point to the longer message: “I was wrong. Letter inside.” In the letter, name what you did, what it cost her and what you will change." },
-        { q: "Can I send a free apology?", a: "Yes. The Letter goes out free as a note with a song, up to 500 characters long. Each of the other gifts here is a single payment for that template, built in full in the editor before you pay." },
+        {
+          q: "Can I send a free apology?",
+          a: NOTE
+            ? "Yes. The Letter goes out free as a note with a song, up to 500 characters long. Each of the other gifts here is a single payment for that template, built in full in the editor before you pay."
+            : "Yes. The Letter goes out free with a song, the whole letter and up to ten photos. Each of the other gifts here is a single payment for that template, built in full in the editor before you pay.",
+        },
       ],
       related: [
         { href: "/occasions/apology", label: "Saying sorry properly" },
@@ -1716,7 +1749,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "paper-crane",
       lead: [
         "Casi todo el mundo empieza por las flores, y las flores están bien. El problema es la tarjeta: unas pocas palabras entre los tallos, que casi nunca bastan para lo que pasó. Las ideas de abajo se quedan con el ramo y le dan sitio, dentro o al lado: una grulla con algo que reconoces en cada pliegue, una carta, un paseo por un jardín hasta un ramo.",
-        "Uno no cuesta nada: una nota corta en La carta, de 500 caracteres como mucho. Los otros cinco se pagan una sola vez y lo que compras es la plantilla, para siempre; el editor te deja terminar uno entero antes de decidir. Elige sus colores, no las rosas rojas de después de cada discusión.",
+        NOTE
+          ? "Uno no cuesta nada: una nota corta en La carta, de 500 caracteres como mucho. Los otros cinco se pagan una sola vez y lo que compras es la plantilla, para siempre; el editor te deja terminar uno entero antes de decidir. Elige sus colores, no las rosas rojas de después de cada discusión."
+          : "Uno no cuesta nada: La carta, completa y con hasta diez fotos. Los otros cinco se pagan una sola vez y lo que compras es la plantilla, para siempre; el editor te deja terminar uno entero antes de decidir. Elige sus colores, no las rosas rojas de después de cada discusión.",
       ],
       ideas: [
         {
@@ -1778,7 +1813,12 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         { q: "¿Qué regalo sirve para pedir perdón con flores?", a: "Flores con palabras suficientes para llevar la disculpa: un ramo cuya tarjeta lleva a una carta, una grulla de papel con algo que reconoces en cada pliegue, un paseo por un jardín que acaba en un ramo con tu promesa en la etiqueta." },
         { q: "¿Bastan unas flores para pedir perdón?", a: "Solo con palabras. Las flores dicen que lo sientes por algo; la tarjeta y la carta tienen que decir por qué. Sin eso, pueden leerse como una forma de evitar la conversación." },
         { q: "¿Qué pongo en una tarjeta para pedir perdón?", a: "En una tarjeta de treinta caracteres, señala el mensaje largo: «Me equivoqué. Dentro, la carta». En la carta, di qué hiciste, qué le costó y qué vas a cambiar." },
-        { q: "¿Puedo pedir perdón con algo gratis?", a: "Sí. La carta sale gratis como nota con canción, de hasta 500 caracteres. Cada uno de los demás regalos de aquí es un solo pago por su plantilla, y se monta entero en el editor antes de pagar." },
+        {
+          q: "¿Puedo pedir perdón con algo gratis?",
+          a: NOTE
+            ? "Sí. La carta sale gratis como nota con canción, de hasta 500 caracteres. Cada uno de los demás regalos de aquí es un solo pago por su plantilla, y se monta entero en el editor antes de pagar."
+            : "Sí. La carta sale gratis con canción, completa y con hasta diez fotos. Cada uno de los demás regalos de aquí es un solo pago por su plantilla, y se monta entero en el editor antes de pagar.",
+        },
       ],
       related: [
         { href: "/occasions/apology", label: "Pedir perdón como es debido" },
@@ -1803,7 +1843,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "halfway",
       lead: [
         "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. What Ethos adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
-        "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two postcard-size cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template.",
+        NOTE
+          ? "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two postcard-size cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template."
+          : `The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two postcard-size cards to a page, on cream, white, blush or sage, with two lines of your own. Free here: ${freeNames("en")}; each of the others is a one-time payment for that template.`,
       ],
       ideas: [
         {
@@ -1816,7 +1858,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "A note for when the box is empty",
-          body: "Some things in a care package run out in a day. The free note on The Letter does not: 500 characters under a wax seal, written out by hand on their screen, with a song if you like. Write it for the moment the box is empty and the room is quiet, and tell them what is in it they might miss.",
+          body: NOTE
+            ? "Some things in a care package run out in a day. The free note on The Letter does not: 500 characters under a wax seal, written out by hand on their screen, with a song if you like. Write it for the moment the box is empty and the room is quiet, and tell them what is in it they might miss."
+            : "Some things in a care package run out in a day. The free Letter does not: the whole letter under a wax seal, written out by hand on their screen, with a song if you like. Write it for the moment the box is empty and the room is quiet, and tell them what is in it they might miss.",
           line: { field: "freeNote", where: "The whole note", text: "The box is empty now, I know. The tea is the one from the café on the corner, the socks are the ugly ones you like, and the photo is from the night of the storm. I packed it on Sunday and missed you the whole time. Eat the chocolate first. Call me when you’ve read this." },
         },
         {
@@ -1889,7 +1933,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "halfway",
       lead: [
         "Una caja sorpresa es la parte de una relación a distancia que se puede tocar: algo de picar de tu lado, una camiseta que huele a casa, una vela, un libro con notas en los márgenes. Lo que añade Ethos es lo que una caja no puede llevar, un regalo en su móvil, que imprimes como tarjetita con un código QR y pones encima.",
-        "La tarjeta sale del propio regalo: una vez publicado, su código QR se imprime como Tarjeta lista para imprimir, y la misma tarjeta está en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página, en papel crema, blanco, rosa o salvia, con dos líneas tuyas. Un regalo de aquí es gratis, La carta como nota corta; cada uno de los demás es un solo pago por esa plantilla.",
+        NOTE
+          ? "La tarjeta sale del propio regalo: una vez publicado, su código QR se imprime como Tarjeta lista para imprimir, y la misma tarjeta está en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página, en papel crema, blanco, rosa o salvia, con dos líneas tuyas. Un regalo de aquí es gratis, La carta como nota corta; cada uno de los demás es un solo pago por esa plantilla."
+          : `La tarjeta sale del propio regalo: una vez publicado, su código QR se imprime como Tarjeta lista para imprimir, y la misma tarjeta está en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página, en papel crema, blanco, rosa o salvia, con dos líneas tuyas. Gratis aquí: ${freeNames("es")}; cada uno de los demás es un solo pago por esa plantilla.`,
       ],
       ideas: [
         {
@@ -1902,7 +1948,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "Una nota para cuando la caja esté vacía",
-          body: "Algunas cosas de una caja se acaban en un día. La nota gratis de La carta no: 500 caracteres bajo un sello de lacre, escritos a mano en su pantalla, con una canción si quieres. Escríbela para el momento en que la caja está vacía y la habitación en silencio, y cuéntale qué hay dentro que quizá no vea.",
+          body: NOTE
+            ? "Algunas cosas de una caja se acaban en un día. La nota gratis de La carta no: 500 caracteres bajo un sello de lacre, escritos a mano en su pantalla, con una canción si quieres. Escríbela para el momento en que la caja está vacía y la habitación en silencio, y cuéntale qué hay dentro que quizá no vea."
+            : "Algunas cosas de una caja se acaban en un día. La carta gratis no: la carta entera bajo un sello de lacre, escrita a mano en su pantalla, con una canción si quieres. Escríbela para el momento en que la caja está vacía y la habitación en silencio, y cuéntale qué hay dentro que quizá no vea.",
           line: { field: "freeNote", where: "La nota entera", text: "Ya está vacía, lo sé. El té es el del café de la esquina, los calcetines son los feos que te gustan y la foto es de la noche de la tormenta. La preparé el domingo y te eché de menos todo el rato. Cómete el chocolate primero. Llámame cuando leas esto." },
         },
         {
@@ -1977,7 +2025,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "scratch-card",
       lead: [
         "A surprise sent online works when there is something to uncover. Each gift on this page has its own reveal, and they are different on purpose: one is scratched, one waits for a clock, one is a trail of clues, one is shaken loose. Pick the one that matches the news, and the news goes in the part that is revealed last.",
-        "A gift can also be sent early and open by itself on a set day and hour, which turns any of these into a surprise that arrives at midnight. Every gift here but the free short note on The Letter is a one-time payment for that template, and the schedule comes with it; you can build and watch the whole thing in the editor first.",
+        NOTE
+          ? "A gift can also be sent early and open by itself on a set day and hour, which turns any of these into a surprise that arrives at midnight. Every gift here but the free short note on The Letter is a one-time payment for that template, and the schedule comes with it; you can build and watch the whole thing in the editor first."
+          : "A gift can also be sent early and open by itself on a set day and hour, which turns any of these into a surprise that arrives at midnight. Every gift here but The Letter, which is free, is a one-time payment for that template, and the schedule comes with it; you can build and watch the whole thing in the editor first.",
       ],
       ideas: [
         {
@@ -2071,7 +2121,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "scratch-card",
       lead: [
         "Una sorpresa enviada por internet funciona cuando hay algo que destapar. Cada regalo de esta página destapa la sorpresa a su manera, y son distintas a propósito: uno se rasca, otro espera a un reloj, otro es un rastro de pistas, otro se suelta agitando. Elige el que encaje con la noticia, y la noticia va en lo último que se descubre.",
-        "Un regalo también puede enviarse antes y abrirse solo un día y a una hora fijados, lo que convierte cualquiera de estos en una sorpresa que llega a medianoche. Todos los regalos de aquí salvo la nota corta gratis de La carta son un solo pago por esa plantilla, y la programación va incluida; antes puedes montarlo y verlo entero en el editor.",
+        NOTE
+          ? "Un regalo también puede enviarse antes y abrirse solo un día y a una hora fijados, lo que convierte cualquiera de estos en una sorpresa que llega a medianoche. Todos los regalos de aquí salvo la nota corta gratis de La carta son un solo pago por esa plantilla, y la programación va incluida; antes puedes montarlo y verlo entero en el editor."
+          : "Un regalo también puede enviarse antes y abrirse solo un día y a una hora fijados, lo que convierte cualquiera de estos en una sorpresa que llega a medianoche. Todos los regalos de aquí salvo La carta, que es gratis, son un solo pago por esa plantilla, y la programación va incluida; antes puedes montarlo y verlo entero en el editor.",
       ],
       ideas: [
         {
@@ -2167,7 +2219,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "jar-of-reasons",
       lead: [
         "An album is about the pictures; a memory book is about the story, and the story is in the words beside them. Each gift on this page puts writing first: notes in a jar, a chat you script, newspaper letters, a parcel of kept things, a postcard, and further down a road for when the photos have earned it. Photos help, and some of these need none at all.",
-        "If what you want is a place for many photos, the photo album page is the better start. Here, a dozen good lines beat a hundred pictures. The Letter’s short note is the only free gift to start from, and it is not on this page; each gift here is a one-time payment for that template, built and previewed in full first.",
+        NOTE
+          ? "If what you want is a place for many photos, the photo album page is the better start. Here, a dozen good lines beat a hundred pictures. The Letter’s short note is the only free gift to start from, and it is not on this page; each gift here is a one-time payment for that template, built and previewed in full first."
+          : `If what you want is a place for many photos, the photo album page is the better start. Here, a dozen good lines beat a hundred pictures. The free gifts to start from are ${freeNames("en")}, and neither is on this page; each gift here is a one-time payment for that template, built and previewed in full first.`,
       ],
       ideas: [
         {
@@ -2253,7 +2307,9 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       film: "jar-of-reasons",
       lead: [
         "Un álbum va de fotos; un libro de recuerdos va de la historia, y la historia está en las palabras de al lado. Cada regalo de esta página pone primero lo escrito: notas en un frasco, un chat que escribes tú, letras de periódico, un paquete de cosas guardadas, una postal y, más abajo, un camino para cuando las fotos se lo hayan ganado. Las fotos ayudan, y algunos no necesitan ninguna.",
-        "Si lo que buscas es un sitio para muchas fotos, mejor empieza por la página del álbum de fotos. Aquí, una docena de frases buenas valen más que cien imágenes. La nota corta de La carta es el único regalo gratis para empezar, y no está en esta página; cada regalo de aquí es un solo pago por esa plantilla, montado y visto entero antes.",
+        NOTE
+          ? "Si lo que buscas es un sitio para muchas fotos, mejor empieza por la página del álbum de fotos. Aquí, una docena de frases buenas valen más que cien imágenes. La nota corta de La carta es el único regalo gratis para empezar, y no está en esta página; cada regalo de aquí es un solo pago por esa plantilla, montado y visto entero antes."
+          : `Si lo que buscas es un sitio para muchas fotos, mejor empieza por la página del álbum de fotos. Aquí, una docena de frases buenas valen más que cien imágenes. Los regalos gratis para empezar son ${freeNames("es")}, y ninguno está en esta página; cada regalo de aquí es un solo pago por esa plantilla, montado y visto entero antes.`,
       ],
       ideas: [
         {
