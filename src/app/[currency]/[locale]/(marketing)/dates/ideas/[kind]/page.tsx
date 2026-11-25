@@ -9,7 +9,6 @@ import { CITY_PAGES, cityName, getCity } from "@/lib/cities/cities";
 import { hoursOf, ideaListNode } from "@/lib/cities/copy";
 import { ideaImage } from "@/lib/dates/art";
 import { DATE_KINDS, getDateKind, kindIdeas } from "@/lib/dates/date-kinds";
-import { pairCopy } from "@/lib/cities/kind-copy";
 import { isCityKindPair } from "@/lib/cities/kind-pairs";
 import { ideaById } from "@/lib/dates/ideas";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
@@ -52,7 +51,6 @@ export default async function DateKindPage({ params }: Props) {
   setRequestLocale(locale);
   const l = locale === "es" ? "es" : "en";
   const td = await getTranslations("dates");
-  const tc = await getTranslations("cities");
   const ui = DATE_KIND_UI[l];
   const url = localizedUrl(locale, `/dates/ideas/${kind}`);
   const ideas = kindIdeas(kind);
@@ -99,15 +97,10 @@ export default async function DateKindPage({ params }: Props) {
           <ul className="flex flex-wrap gap-x-6 leading-8">
             {cities.map((city) => (
               <li key={city.slug}>
-                {isCityKindPair(city.slug, kind) ? (
-                  <Link href={`/dates/${city.slug}/${kind}`} className={QUIET_ROW_LINK}>
-                    {pairCopy(city, kind, l).heading}
-                  </Link>
-                ) : (
-                  <Link href={`/dates/${city.slug}`} className={QUIET_ROW_LINK}>
-                    {tc("title", { city: cityName(city, l) })}
-                  </Link>
-                )}
+                {/* The city's name alone, under a heading that says what the links are: the page's 300 words (dates2). */}
+                <Link href={isCityKindPair(city.slug, kind) ? `/dates/${city.slug}/${kind}` : `/dates/${city.slug}`} className={QUIET_ROW_LINK}>
+                  {cityName(city, l)}
+                </Link>
               </li>
             ))}
             <li>

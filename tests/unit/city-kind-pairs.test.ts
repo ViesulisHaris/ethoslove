@@ -10,7 +10,7 @@ import { mentionsSpain } from "@/lib/cities/cities";
 import { pairCopy } from "@/lib/cities/kind-copy";
 import sitemap from "@/app/sitemap";
 
-const words = (text: string): number => text.trim().split(/s+/).filter(Boolean).length;
+const words = (text: string): number => text.trim().split(/\s+/).filter(Boolean).length;
 
 /** The rule of BRIEF-dates2.md 1, written again from the data: six of the kind's ideas in the city's own list, or six real places counted. */
 const holdsSix = (citySlug: string, kind: DateKind): boolean => {

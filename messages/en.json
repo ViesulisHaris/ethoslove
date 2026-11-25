@@ -1961,6 +1961,7 @@
     },
     "eyebrow": "Date ideas by city",
     "title": "Date ideas in {city}",
+    "line": "{ideas} dates, in the order {city} deserves.",
     "back": "All date ideas",
     "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the center for the stops.",
     "leadNoPlaces": "{ideas} dates for {city}, in the order the city deserves. Open any of them on the map and it finds the places.",
@@ -1972,6 +1973,9 @@
     "ideas": {
       "eyebrow": "The ideas",
       "title": "{count, plural, one {# date} other {# dates}} for {city}",
+      "line": "Open a card: the twist, and where in {city} to do it.",
+      "more": "{count} more ideas for {city}",
+      "why": "Why these come first in {city}",
       "inCity": "In {city}, try",
       "onMap": "See it on the map",
       "pick": "Especially good here"
@@ -2048,6 +2052,8 @@
       "eyebrow": "Real places",
       "title": "Near the center of {city}",
       "sub": "The best-placed spots within {km} km of the center, ranked the way the dates map ranks them. Tap one to see it on the map.",
+      "line": "The best-placed spots within {km} km. Tap one to see it on the map.",
+      "all": "All {count} places",
       "counts": "What the map knows within {km} km",
       "fromCentre": "{distance} from the center",
       "none": "We couldn’t read the map for {city} just now. The ideas above still stand: open the map and it will find places for them."
@@ -2060,7 +2066,8 @@
       "title": "Tickets in {city}",
       "sub": "Museums, tours and the things worth booking ahead, through our partner Tiqets.",
       "cta": "Tickets in {city}",
-      "disclosure": "Partner link: if you book through it, we may earn a commission. It costs you nothing extra."
+      "disclosure": "Partner link: if you book through it, we may earn a commission. It costs you nothing extra.",
+      "short": "Partner link: we may earn a commission."
     },
     "trip": "A trip that passes through here",
     "gift": {
@@ -2069,7 +2076,11 @@
       "sub": "Pick one of these ideas, then send the plan as a little page they open on their phone: a letter, a countdown, a ticket for two.",
       "note": "Opens the gift templates. Free to start."
     },
-    "nearby": "Date ideas in other cities"
+    "nearby": "Date ideas in other cities",
+    "more": {
+      "title": "More for {city}",
+      "byKind": "By kind"
+    }
   },
   "dates": {
     "meta": {

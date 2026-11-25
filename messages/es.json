@@ -1961,6 +1961,7 @@
     },
     "eyebrow": "Ideas para una cita por ciudad",
     "title": "Ideas para una cita en {city}",
+    "line": "{ideas} citas, en el orden que pide {city}.",
     "back": "Todas las ideas",
     "lead": "{ideas} citas para {city}, en el orden que se merece la ciudad, con sitios reales cerca del centro para cada parada.",
     "leadNoPlaces": "{ideas} citas para {city}, en el orden que se merece la ciudad. Abre cualquiera en el mapa y te buscará los sitios.",
@@ -1972,6 +1973,9 @@
     "ideas": {
       "eyebrow": "Las ideas",
       "title": "{count, plural, one {# cita} other {# citas}} para {city}",
+      "line": "Abrid una tarjeta: el giro, y dónde hacerlo en {city}.",
+      "more": "{count} ideas más para {city}",
+      "why": "Por qué estas van primero en {city}",
       "inCity": "En {city}, probad",
       "onMap": "Verla en el mapa",
       "pick": "Aquí brilla"
@@ -2048,6 +2052,8 @@
       "eyebrow": "Sitios reales",
       "title": "Cerca del centro de {city}",
       "sub": "Los sitios mejor situados a menos de {km} km del centro, ordenados como los ordena el mapa de citas. Toca uno para verlo en el mapa.",
+      "line": "Los mejor situados a {km} km o menos. Tocad uno para verlo.",
+      "all": "Los {count} sitios",
       "counts": "Lo que conoce el mapa a menos de {km} km",
       "fromCentre": "a {distance} del centro",
       "none": "Ahora mismo no hemos podido leer el mapa de {city}. Las ideas de arriba siguen valiendo: abre el mapa y te buscará sitios para ellas."
@@ -2060,7 +2066,8 @@
       "title": "Entradas en {city}",
       "sub": "Museos, visitas y lo que conviene reservar con antelación, con nuestro socio Tiqets.",
       "cta": "Entradas en {city}",
-      "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más."
+      "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más.",
+      "short": "Enlace de socio: puede que ganemos una comisión."
     },
     "trip": "Un viaje que pasa por aquí",
     "gift": {
@@ -2069,7 +2076,11 @@
       "sub": "Elige una de estas ideas y mándale el plan en una pequeña página que abrirá en su móvil: una carta, una cuenta atrás, una entrada para dos.",
       "note": "Abre las plantillas de regalo. Empezar es gratis."
     },
-    "nearby": "Ideas para una cita en otras ciudades"
+    "nearby": "Ideas para una cita en otras ciudades",
+    "more": {
+      "title": "Más para {city}",
+      "byKind": "Por tipo"
+    }
   },
   "dates": {
     "meta": {

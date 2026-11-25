@@ -21,7 +21,6 @@ import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
 import { DateFoot, DateHero, DatePage, DateQuestions, DateSpread, QUIET_ROW_LINK } from "@/components/dates/page/date-page";
 import { KindIdeas } from "@/components/dates/page/kind-ideas";
-import { KindLinks } from "@/components/dates/page/kind-links";
 import { KindView } from "@/components/dates/page/kind-view";
 import { DATE_CARDS_ART } from "@/components/dates/page/placements";
 import { TONIGHT_BUTTON } from "@/components/dates/tonight/tonight-form";
@@ -180,27 +179,21 @@ export default async function CityKindPage({ params }: Props) {
               </Link>
             </li>
           </ul>
+          {/* The city's other pairs, by their kind's short name, in place of the row of every kind: one row of kinds, within the page's 300 words. */}
           {others.length > 0 ? (
-            <div className="mt-6">
-              <p className="text-page-label text-page-body">{ui.inCityByKind.replace("{city}", name)}</p>
-              <ul className="mt-2 flex flex-wrap gap-x-1 gap-y-1" data-testid="pair-kinds">
+            <nav aria-label={ui.inCityByKind.replace("{city}", name)} className="mt-8 border-t border-page-line pt-5">
+              <h2 className="text-page-label text-page-body">{ui.inCityByKind.replace("{city}", name)}</h2>
+              <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
                 {others.map((k) => (
-                  <li key={k}>
+                  <li key={k} className="flex items-center">
                     <Link href={`/dates/${city.slug}/${k}`} className="inline-flex min-h-11 items-center px-2.5 text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink">
                       {DATE_KIND_COPY[k]!.nav[l]}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
           ) : null}
-          <KindLinks
-            locale={l}
-            title={ui.kindsNav}
-            className="mt-8 border-t border-page-line pt-5"
-            titleClassName="text-page-label text-page-body"
-            linkClassName="inline-flex min-h-11 items-center px-2.5 text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink"
-          />
         </DateFoot>
       </DatePage>
     </>

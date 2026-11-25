@@ -1,29 +1,40 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Gift, Map as MapIcon, Ticket } from "lucide-react";
+import { ArrowLeft, ArrowRight, Map as MapIcon, Plus } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
-import { ideaImageInCity } from "@/lib/dates/art";
-import { cityMapHref, cityName, getCity, nearbyCities, type City } from "@/lib/cities/cities";
-import { hoursOf, ideaListNode, placeListNode, toldTraits } from "@/lib/cities/copy";
+import { ideaImageInCity, SKYLINE_IDEAS } from "@/lib/dates/art";
+import { cityMapHref, cityName, getCity, mapHref as pointHref, nearbyCities, type City } from "@/lib/cities/cities";
+import { hoursOf, ideaListNode, placeListNode, TOP_OF_LIST, toldTraits } from "@/lib/cities/copy";
 import { cityIdeaScore, cityIdeaStops, ideasForCity } from "@/lib/cities/ideas";
-import { IDEAS } from "@/lib/dates/ideas";
+import { IDEAS, type DateIdea } from "@/lib/dates/ideas";
+import { KINDS } from "@/lib/dates/kinds";
 import { loadCityPlaces } from "@/lib/cities/load";
 import { CITY_RADIUS_M, topCityPlaces } from "@/lib/cities/places";
 import { tiqetsSearch } from "@/lib/trips/partners";
 import { tripsThrough } from "@/lib/trips/cities";
-import { FloralFrame } from "@/components/marketing/home/cutouts";
-import { EagerImg } from "@/components/shared/eager-img";
 import { JsonLd } from "@/components/shared/json-ld";
 import { CityCta } from "@/components/cities/city-cta";
-import { CityIdeaCard } from "@/components/cities/city-idea-card";
 import { CityLinks } from "@/components/cities/city-links";
 import { CityPlaceList } from "@/components/cities/city-places";
+import { DateFoot, DateHero, DatePage, DateSpread, QUIET_ROW_LINK } from "@/components/dates/page/date-page";
+import { DateIdeaCards } from "@/components/dates/page/idea-cards";
+import { DATE_CARDS_ART } from "@/components/dates/page/placements";
+import { TONIGHT_BUTTON } from "@/components/dates/tonight/tonight-form";
 import { TonightIsland } from "@/components/dates/tonight/tonight-island";
+import { heroLead } from "@/components/templates/page/lead";
 import { DATE_KIND_COPY, DATE_KIND_UI } from "@/content/date-kinds";
 import { kindsOfCity } from "@/lib/cities/kind-pairs";
+
+/** How many of a city’s places are named on its page; the rest are in a closed list. */
+const SHOWN_PLACES = 6;
+/** A folded list’s row, in the look of the questions on the pages by kind (DateQuestions). */
+const SUMMARY = "flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden";
+const PLUS = "size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none";
+/** A link in the last band’s rows, in the page’s colours (as the pair pages pass to KindLinks). */
+const ROW_LINK = "inline-flex min-h-11 items-center px-2.5 text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink";
 
 /**
  * Built on the first visit and kept for a week, then rebuilt in the background: the places change
@@ -63,8 +74,10 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 }
 
 /**
- * Date ideas for one city, for people searching for them: the ideas in the order that city
- * deserves, real places near its centre for each, and the way on to the map and to a gift.
+ * Date ideas for one city, for people searching for them, as a designed page (DESIGN-LESS-TEXT.md):
+ * the hero, the planner, six of the city's sixteen ideas as cards with the other ten folded away,
+ * six real places with the rest folded away, and one last band with the map, tickets, one way to a
+ * gift and the city's pages by kind. What search needs stays in the HTML, in closed <details>.
  */
 export default async function CityDatesPage({ params }: PageProps<"/[currency]/[locale]/dates/[city]">) {
   const { locale, city: slug } = await params;
@@ -84,7 +97,21 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
   const ideaStops = cityIdeaStops(ideas, around);
   const passing = tripsThrough(city.slug);
   // Its pages by kind of date: every pair its own list holds (lib/cities/kind-pairs.ts).
-  const kindPages = kindsOfCity(city.slug).map((kind) => ({ city: city.slug, kind }));
+  const kinds = kindsOfCity(city.slug);
+  const top = ideas.slice(0, TOP_OF_LIST);
+  const rest = ideas.slice(TOP_OF_LIST);
+  // The hero's picture is never one of the six cards under it (the pair pages' rule, kind-pairs.ts
+  // pairHero), nor another city's skyline: the first such idea of the folded ten.
+  const first = [...rest, ...top].find((idea) => !(idea.id in SKYLINE_IDEAS)) ?? ideas[0];
+  const shown = places.slice(0, SHOWN_PLACES);
+  const ui = DATE_KIND_UI[l];
+  const labels = {
+    twist: td("ideas.twist"),
+    plan: t("ideas.onMap"),
+    inCity: t("ideas.inCity", { city: name }),
+    hours: (idea: DateIdea) => td("ideas.hours", { hours: hoursOf(idea.minutes, l) }),
+    budget: (idea: DateIdea) => td(`ideas.budget.${idea.budget}`),
+  };
 
   return (
     <>
@@ -99,202 +126,164 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
           ]),
         ]}
       />
+      <DatePage>
+        <DateHero
+          label={t("eyebrow")}
+          heading={t("title", { city: name })}
+          line={t("line", { ideas: ideas.length, city: name })}
+          sentence={heroLead(t(`notes.${city.slug}`)).lead}
+          picture={{ src: ideaImageInCity(first.id), from: first.art.from, to: first.art.to }}
+          note={first.title[l]}
+          back={
+            <Link href="/dates" className="group -ml-2 mb-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-page-accent underline-offset-4 hover:underline">
+              <ArrowLeft aria-hidden="true" className="size-4" />
+              {t("back")}
+            </Link>
+          }
+        >
+          <CityCta href={mapHref} cta="map" city={city.slug} className={TONIGHT_BUTTON}>
+            <MapIcon aria-hidden="true" className="size-4" />
+            {t("cta.map", { city: name })}
+          </CityCta>
+        </DateHero>
 
-      <section className="relative isolate -mt-[var(--header-h)] bg-blush-paper pt-[var(--header-h)] text-forest">
-        {/* As on a trip's page: the pieces at the foot lie whole inside the hero, and its ground runs
-            softly into the page's paper below instead of stepping (walk-rooms-3). */}
-        <FloralFrame frame="bandHero" ground="light" />
-        <div aria-hidden="true" data-hero-fade className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-paper" />
-        <div className="relative container-x pt-6 pb-14 sm:pt-10 lg:pb-20">
-          <Link href="/dates" className="group -ml-2 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
-            <ArrowLeft aria-hidden="true" className="size-4 transition-transform group-hover:-translate-x-0.5" />
-            {t("back")}
-          </Link>
-          <div className="mt-4 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,520px)]">
-            <div className="relative order-first mx-auto grid w-full max-w-[520px] rotate-[1.5deg] grid-cols-2 gap-2.5 lg:order-last">
-              {ideas.slice(0, 4).map((idea, i) => (
-                <span key={idea.id} className="relative block aspect-[4/3] overflow-hidden rounded-[22px] shadow-[0_30px_60px_-34px_rgba(120,20,60,0.6)] ring-4 ring-white" style={{ background: `linear-gradient(160deg, ${idea.art.from} 0%, ${idea.art.to} 100%)` }}>
-                  {/* EagerImg, not <img>: /dates links to every city page, and each prefetch of one
-                      would otherwise add these four pictures to /dates as preloads it never shows. */}
-                  <EagerImg src={ideaImageInCity(idea.id)} alt="" width={960} height={720} loading="eager" fetchPriority={i === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 size-full object-cover" />
-                </span>
-              ))}
-            </div>
-            <div>
-              <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
-              {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 8.4em is Newsreader's 14ch. */}
-              <h1 className="mt-4 max-w-[8.4em] font-display text-[clamp(2.5rem,5.6vw,4.5rem)] leading-[0.98] tracking-[-0.03em] text-balance">{t("title", { city: name })}</h1>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest/75">{places.length > 0 ? t("lead", { city: name, ideas: ideas.length }) : t("leadNoPlaces", { city: name, ideas: ideas.length })}</p>
-              <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-forest/70">{t(`notes.${city.slug}`)}</p>
-              <div className="mt-7 flex flex-wrap gap-2.5">
-                <CityCta href={mapHref} cta="map" city={city.slug} className="btn-rose inline-flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold transition-[filter] hover:brightness-110">
-                  <MapIcon aria-hidden="true" className="size-4" />
-                  {t("cta.map", { city: name })}
-                </CityCta>
-                <CityCta href="/templates?ref=city" cta="gift" city={city.slug} className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
-                  <Gift aria-hidden="true" className="size-4 text-rose-deep" />
-                  {t("cta.gift")}
-                </CityCta>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="tonight" aria-labelledby="tonight-title" className="scroll-mt-24 border-b border-line bg-paper py-10 lg:py-14">
-        <div className="container-x grid gap-y-4 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20">
-          <div>
-            <p className="text-page-label text-page-body">{td("tonight.label")}</p>
-            <h2 id="tonight-title" className="mt-3 display-md text-page-ink">
-              {td("tonight.inCity", { city: name })}
-            </h2>
-          </div>
+        <DateSpread id="tonight-title" sectionId="tonight" label={td("tonight.label")} heading={td("tonight.inCity", { city: name })} art={DATE_CARDS_ART}>
           <TonightIsland place={{ lat: city.lat, lng: city.lng, name }} boost={Object.fromEntries(IDEAS.map((idea) => [idea.id, cityIdeaScore(idea, city)]))} mapHref={mapHref} />
-        </div>
-      </section>
+        </DateSpread>
 
-      <section className="bg-paper py-16 lg:py-24">
-        <div className="container-x">
-          <p data-reveal className="text-eyebrow text-rose-deep">
-            {t("ideas.eyebrow")}
-          </p>
-          <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
-            {t("ideas.title", { count: ideas.length, city: name })}
-          </h2>
-          {told.length > 0 ? (
-            <ul className="mt-5 grid max-w-3xl gap-2 text-[16px] leading-relaxed text-forest/75">
-              {told.map((trait) => (
-                <li key={trait} className="flex gap-3">
-                  <span aria-hidden="true" className="mt-[10px] size-1.5 shrink-0 rounded-full bg-rose" />
-                  {t(`traits.${trait}`, { city: name })}
-                </li>
-              ))}
-            </ul>
+        <DateSpread id="ideas-title" label={t("ideas.eyebrow")} heading={t("ideas.title", { count: ideas.length, city: name })} line={t("ideas.line", { city: name })}>
+          <div data-testid="city-ideas">
+            <DateIdeaCards id="city-ideas-top" cards={top.map((idea, i) => ({ idea, fit: idea.blurb[l], stops: ideaStops[i], image: ideaImageInCity(idea.id), href: cityMapHref(city, l, idea.id) }))} locale={l} labels={labels} />
+          </div>
+          {rest.length > 0 ? (
+            <details name="city-more" className="group mt-8 border-y border-page-line">
+              <summary className={SUMMARY}>
+                {t("ideas.more", { count: rest.length, city: name })}
+                <Plus aria-hidden="true" className={PLUS} strokeWidth={1.6} />
+              </summary>
+              <ol className="grid gap-6 pb-6">
+                {rest.map((idea, j) => {
+                  const stops = ideaStops[TOP_OF_LIST + j];
+                  return (
+                    <li key={idea.id} id={`idea-${idea.id}`} className="scroll-mt-24">
+                      <p className="font-display text-[1.25rem] leading-snug text-page-ink">{idea.title[l]}</p>
+                      <p className="mt-1 max-w-2xl text-[0.9375rem] leading-relaxed text-page-body">{idea.blurb[l]}</p>
+                      <p className="mt-1 text-sm text-page-body">
+                        {labels.hours(idea)} · {labels.budget(idea)}
+                      </p>
+                      {stops && stops.length > 0 ? (
+                        <p className="mt-1 text-sm text-page-body">
+                          {labels.inCity}: {stops.map((place) => (place.named ? place.name : KINDS[place.kind].label[l])).join(", ")}
+                        </p>
+                      ) : null}
+                      <CityCta href={cityMapHref(city, l, idea.id)} cta="idea" city={city.slug} className="inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-page-accent underline-offset-4 hover:underline">
+                        {t("ideas.onMap")}
+                        <ArrowRight aria-hidden="true" className="size-4" />
+                      </CityCta>
+                    </li>
+                  );
+                })}
+              </ol>
+            </details>
           ) : null}
-          <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-testid="city-ideas">
-            {ideas.map((idea, i) => (
-              <li key={idea.id}>
-                <CityIdeaCard
-                  idea={idea}
-                  locale={l}
-                  city={city.slug}
-                  href={cityMapHref(city, l, idea.id)}
-                  stops={ideaStops[i]}
-                  isPick={city.picks.includes(idea.id)}
-                  eager={i < 3}
-                  labels={{
-                    budget: td(`ideas.budget.${idea.budget}`),
-                    hours: td("ideas.hours", { hours: hoursOf(idea.minutes, l) }),
-                    twist: td("ideas.twist"),
-                    inCity: t("ideas.inCity", { city: name }),
-                    onMap: t("ideas.onMap"),
-                    pick: t("ideas.pick"),
-                  }}
-                />
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+          <details name="city-why" className={rest.length > 0 ? "group border-b border-page-line" : "group mt-8 border-y border-page-line"}>
+            <summary className={SUMMARY}>
+              {t("ideas.why", { city: name })}
+              <Plus aria-hidden="true" className={PLUS} strokeWidth={1.6} />
+            </summary>
+            <div className="max-w-2xl pb-5 text-[0.9375rem] leading-relaxed text-page-body">
+              {told.length > 0 ? (
+                <ul className="grid gap-2">
+                  {told.map((trait) => (
+                    <li key={trait}>{t(`traits.${trait}`, { city: name })}</li>
+                  ))}
+                </ul>
+              ) : null}
+              <p className={told.length > 0 ? "mt-3" : undefined}>{t(`notes.${city.slug}`)}</p>
+            </div>
+          </details>
+        </DateSpread>
 
-      <section id="places" className="scroll-mt-24 border-t border-line bg-blush-paper py-16 lg:py-24">
-        <div className="container-x">
-          <p data-reveal className="text-eyebrow text-rose-deep">
-            {t("places.eyebrow")}
-          </p>
-          <h2 data-reveal className="display-xl mt-4" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
-            {t("places.title", { city: name })}
-          </h2>
-          {places.length > 0 && found ? (
+        <DateSpread id="places-title" sectionId="places" label={t("places.eyebrow")} heading={t("places.title", { city: name })} line={shown.length > 0 ? t("places.line", { km }) : t("places.none", { city: name })}>
+          {shown.length > 0 && found ? (
             <>
-              <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-forest/70">{t("places.sub", { km })}</p>
-              <div className="mt-8">
-                <CityPlaceList places={places} counts={found.counts} locale={l} city={city.slug} labels={{ counts: t("places.counts", { km }), fromCentre: (distance) => t("places.fromCentre", { distance }) }} />
-              </div>
-              <p className="mt-6 max-w-2xl text-[12.5px] leading-relaxed text-forest/50">{td("places.credit")}</p>
-            </>
-          ) : (
-            <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-forest/70">{t("places.none", { city: name })}</p>
-          )}
-          <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
-              <div>
-                <h3 className="font-display text-[24px] leading-tight text-forest">{t("map.title", { city: name })}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{t("map.sub")}</p>
-              </div>
-              <CityCta href={mapHref} cta="map" city={city.slug} className="group btn-rose inline-flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold transition-[filter] hover:brightness-110">
-                <MapIcon aria-hidden="true" className="size-4" />
-                {t("cta.map", { city: name })}
-                <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </CityCta>
-            </div>
-            <div className="flex flex-col items-start justify-between gap-5 rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-7">
-              <div>
-                <h3 className="font-display text-[24px] leading-tight text-forest">{t("tickets.title", { city: name })}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{t("tickets.sub")}</p>
-              </div>
-              <div>
-                {/* Searched by the English name in both languages, as the trips' ticket queries are, so the two pages send the same search. */}
-                <CityCta href={tiqetsSearch(city.name, l)} cta="tickets" city={city.slug} partner="tiqets" className="inline-flex h-12 items-center gap-2 rounded-full bg-card px-6 text-[15px] font-semibold text-forest ring-1 ring-forest/12 hover:bg-blush-paper">
-                  <Ticket aria-hidden="true" className="size-4 text-rose-deep" />
-                  {t("tickets.cta", { city: name })}
-                </CityCta>
-                <p className="mt-3 text-[12.5px] leading-relaxed text-forest/65">{t("tickets.disclosure")}</p>
-              </div>
-            </div>
-          </div>
-          {passing.length > 0 ? (
-            <p data-testid="city-trip" className="mt-6 text-[15px] leading-relaxed text-forest/75">
-              {t("trip")}:{" "}
-              {passing.map((trip, i) => (
-                <span key={trip.id}>
-                  {i > 0 ? ", " : null}
-                  <Link href={`/trips/${trip.id}`} className="group inline-flex min-h-11 items-center gap-1.5 font-semibold text-rose-deep underline-offset-4 hover:underline">
-                    {trip.title[l]}
-                    <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                </span>
-              ))}
-            </p>
-          ) : null}
-        </div>
-      </section>
-
-      <section className="bg-paper py-16 lg:py-24">
-        <div className="container-x">
-          <div className="relative isolate overflow-hidden rounded-[36px] px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-16 lg:py-16">
-            <FloralFrame frame="card" ground="dark" className="-z-10" />
-            <div className="relative max-w-2xl">
-              <p className="text-eyebrow text-blush">{t("gift.eyebrow")}</p>
-              <h2 className="display-xl mt-4 text-cream">{t("gift.title")}</h2>
-              <p className="mt-4 text-[16.5px] leading-relaxed text-cream/75">{t("gift.sub")}</p>
-            </div>
-            <div className="relative mt-8 flex shrink-0 flex-col items-start gap-3 lg:mt-0">
-              <CityCta href="/templates?ref=city" cta="plan" city={city.slug} className="group btn-rose inline-flex h-14 items-center gap-2 rounded-full px-8 text-base font-semibold transition-[filter] hover:brightness-110">
-                <Gift aria-hidden="true" className="size-[18px]" />
-                {t("cta.plan")}
-                <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
-              </CityCta>
-              <p className="text-[13px] text-cream/55">{t("gift.note")}</p>
-            </div>
-          </div>
-          {kindPages.length > 0 ? (
-            <nav aria-label={DATE_KIND_UI[l].inCityByKind.replace("{city}", name)} className="mt-12">
-              <h2 className="text-eyebrow text-forest/65">{DATE_KIND_UI[l].inCityByKind.replace("{city}", name)}</h2>
-              <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
-                {kindPages.map((p) => (
-                  <li key={p.kind} className="flex items-center">
-                    <Link href={`/dates/${city.slug}/${p.kind}`} className="inline-flex min-h-11 items-center px-1.5 text-[14px] font-medium text-forest/75 underline-offset-4 hover:text-rose-deep hover:underline">
-                      {DATE_KIND_COPY[p.kind]!.nav[l]}
-                    </Link>
+              <ul className="grid gap-x-8 sm:grid-cols-2" data-testid="city-places-top">
+                {shown.map((place) => (
+                  <li key={place.id} className="border-b border-page-line">
+                    <CityCta href={pointHref(place, place.name)} cta="place" city={city.slug} className="flex min-h-11 flex-col justify-center py-2.5">
+                      <span className="text-[0.9375rem] font-medium text-page-ink">{place.name}</span>
+                      <span className="text-sm text-page-body">{KINDS[place.kind].label[l]}</span>
+                    </CityCta>
                   </li>
                 ))}
               </ul>
-            </nav>
+              {places.length > shown.length ? (
+                <details name="city-places" className="group mt-6 border-b border-page-line">
+                  <summary className={SUMMARY}>
+                    {t("places.all", { count: places.length })}
+                    <Plus aria-hidden="true" className={PLUS} strokeWidth={1.6} />
+                  </summary>
+                  <div className="pb-6">
+                    <CityPlaceList places={places} counts={found.counts} locale={l} city={city.slug} labels={{ counts: t("places.counts", { km }), fromCentre: (distance) => t("places.fromCentre", { distance }) }} />
+                  </div>
+                </details>
+              ) : null}
+              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-page-body">{td("places.credit")}</p>
+            </>
           ) : null}
-          <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className={kindPages.length > 0 ? "mt-6" : "mt-12"} />
-        </div>
-      </section>
+        </DateSpread>
+
+        <DateFoot id="more-title" label={name} heading={t("more.title", { city: name })}>
+          <ul className="flex flex-wrap items-baseline gap-x-6 leading-8">
+            <li>
+              <CityCta href={mapHref} cta="map" city={city.slug} className={`${QUIET_ROW_LINK} inline-block font-medium`}>
+                {t("cta.map", { city: name })}
+              </CityCta>
+            </li>
+            <li>
+              {/* Searched by the English name in both languages, as the trips' ticket queries are, so the two pages send the same search. */}
+              <CityCta href={tiqetsSearch(city.name, l)} cta="tickets" city={city.slug} partner="tiqets" className={`${QUIET_ROW_LINK} inline-block`}>
+                {t("tickets.cta", { city: name })}
+              </CityCta>{" "}
+              <span className="text-sm text-page-body">{t("tickets.short")}</span>
+            </li>
+            <li>
+              <CityCta href="/templates?ref=city" cta="gift" city={city.slug} className={`${QUIET_ROW_LINK} inline-block`}>
+                {t("cta.gift")}
+              </CityCta>
+            </li>
+            {passing.length > 0 ? (
+              <li data-testid="city-trip">
+                {passing.map((trip, i) => (
+                  <span key={trip.id}>
+                    {i > 0 ? ", " : null}
+                    <Link href={`/trips/${trip.id}`} className={`${QUIET_ROW_LINK} inline-block`}>
+                      {trip.title[l]}
+                    </Link>
+                  </span>
+                ))}
+              </li>
+            ) : null}
+          </ul>
+          <div className="mt-8 border-t border-page-line pt-5">
+            {kinds.length > 0 ? (
+              <nav aria-label={ui.inCityByKind.replace("{city}", name)}>
+                <h2 className="text-page-label text-page-body">{t("more.byKind")}</h2>
+                <ul className="-mx-1.5 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
+                  {kinds.map((kind) => (
+                    <li key={kind} className="flex items-center">
+                      <Link href={`/dates/${city.slug}/${kind}`} className={ROW_LINK}>
+                        {DATE_KIND_COPY[kind]!.nav[l]}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ) : null}
+            <CityLinks cities={nearbyCities(city)} locale={l} title={t("nearby")} className={kinds.length > 0 ? "mt-5" : undefined} titleClassName="text-page-label text-page-body" linkClassName={ROW_LINK} />
+          </div>
+        </DateFoot>
+      </DatePage>
     </>
   );
 }

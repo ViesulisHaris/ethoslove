@@ -449,6 +449,17 @@ describe("a kind of date inside a city", () => {
     expect(kindPlaces("fun", fixture)).toEqual([]);
   });
 
+  it("C9 the city page's new lines fit, with the longest city name", () => {
+    const longest = "Salt Lake City";
+    for (const [l, m] of [["en", en], ["es", es]] as const) {
+      const t = createTranslator({ locale: l, messages: m, namespace: "cities" });
+      for (const line of [t("line", { ideas: 16, city: longest }), t("ideas.line", { city: longest }), t("places.line", { km: "1.5" })]) {
+        expect(line.trim().split(/\s+/).length, `${l}: ${line}`).toBeLessThanOrEqual(14);
+        expect(mentionsSpain(line), line).toBe(false);
+      }
+    }
+  });
+
   it("C7 each kind’s list is its own kinds of place", () => {
     const mixed: Place[] = [
       ...fixture,
