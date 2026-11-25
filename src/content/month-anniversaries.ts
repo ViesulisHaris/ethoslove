@@ -50,7 +50,7 @@ type Month = Record<GiftLocale, MonthGuide>;
 const month1: Month = {
   en: {
     title: "1 Month Anniversary Gifts That Don’t Say Too Much",
-    description: "One month in, a gift should be small and specific. Six digital gifts you can make tonight, each with a line to borrow, and one that is free.",
+    description: "Gifts for a 1 month anniversary that stay small: a note, a joke or a plan for Friday, made on your phone tonight. One of the six is free.",
     h1: "1 month anniversary gifts",
     label: "1 month",
     hero: {
@@ -62,13 +62,13 @@ const month1: Month = {
       {
         template: "text-thread",
         heading: "Your first month, as a chat of two",
-        body: "Text Thread plays your messages back one bubble at a time, with the typing dots between them. Two bubbles are the least it takes and forty the most. Open with the joke only the two of you get, and let the last bubble say the plain thing a text never quite does.",
+        body: "Open with the joke only the two of you get, and the rest follows. Text Thread plays your messages back one bubble at a time, typing dots between them, from two bubbles up to forty. Let the last bubble say the plain thing a text never quite does.",
         line: { field: "lines", where: "The first bubble", text: "ok so it has been a month and I have notes" },
       },
       {
         template: "fortune-cookie",
         heading: "Three fortunes, all about week one",
-        body: "Fortune Cookie needs three fortunes and no photos, which suits a month with four pictures in it. They tap each cookie open and a slip slides out with your words and a row of lucky numbers. Write the fortunes about things that already happened: the first joke, the wrong turn, the second date.",
+        body: "A month gives you about four photos, and Fortune Cookie needs none, only three fortunes. A tap opens each cookie, and a slip slides out with your words and a row of lucky numbers. Write the fortunes about things that already happened: the first joke, the wrong turn, the second date.",
         line: { field: "fortunes", where: "One of the fortunes", text: "A month from now you will still be glad you said yes to the second date." },
       },
       {
@@ -80,13 +80,13 @@ const month1: Month = {
       {
         template: "sticker-bomb",
         heading: "Six labels for the names you already use",
-        body: "Sticker Bomb gives them an empty page and a pack of stickers to slap down. Under every other sticker comes a strip from a label maker, six strips of 28 characters, in the order you wrote them. A month in, you have a couple of nicknames and one running joke, and the strips need nothing more.",
+        body: "A month in, you have a couple of nicknames and one running joke. Sticker Bomb gives them an empty page and a pack of stickers to slap down, and under every other sticker comes a strip from a label maker: six strips of 28 characters, in the order you wrote them. Those names fill the strips without trying.",
         line: { field: "labels", where: "One label-maker strip", text: "One month, zero regrets" },
       },
       {
         template: "bouquet",
         heading: "Flowers, with a card that admits it",
-        body: "A bouquet says more than a month has earned, unless the card is honest about it. You pick the stems, up to 24, and the note tucked in them holds 30 characters. They see it gather flower by flower. Keep it to five stems and one line, and it reads as a joke with flowers in it.",
+        body: "A bouquet says more than a month has earned, unless the card is honest about it. You pick the stems, up to 24, and the note tucked in them holds 30 characters. They see it gather flower by flower. Keep it to five stems and one line, and it turns into a joke with flowers in it.",
         line: { field: "cardNote", where: "On the card in the bouquet", text: "One month in. More, please." },
       },
       {
@@ -99,8 +99,8 @@ const month1: Month = {
     ],
     date: { kind: "fun", title: "The date you talked about and never did", line: "Pick the one thing you both said you should do sometime." },
     stage: [
-      "By four weeks most couples have had a handful of dates, a few photos and one or two jokes nobody else would get. Some are counting the month and some have not noticed it pass, and both are normal. It is worth finding out which one you are with before the day, because a gift for a month only one of you counted lands oddly.",
-      "Too much at one month: anything engraved, anything that needs a year of photos, and the big sentence if neither of you has said it yet. Too little: nothing at all, when they have been counting. The right size is a note, a joke or a plan. If it took ten minutes and it is plainly about them, it is enough.",
+      "By four weeks there have been a handful of dates, a few photos and one or two jokes nobody else would get. Some people are counting the month and some have not noticed it pass, and both are normal. It is worth finding out which one you are with before the day, because a gift for a month only one of you counted makes for an awkward evening.",
+      "Engraving, a year’s worth of photos, the big sentence neither of you has said yet: all of that can wait for a later month. What cannot wait is the day itself, if they have been counting, since letting it pass in silence stings more than a small gift ever could. A note, a joke or a plan is the size of four weeks. Ten minutes plainly spent on them is enough.",
     ],
     faq: [
       { q: "Is one month too soon for an anniversary gift?", a: "Not if it is small. A month is worth marking when both of you are counting it, and a short note or a plan for the next date marks it without making it heavy. Leave the keepsakes for six months." },
@@ -110,7 +110,7 @@ const month1: Month = {
   },
   es: {
     title: "Regalos para 1 mes de novios sin pasarse",
-    description: "Con un mes, el regalo tiene que ser pequeño y concreto. Seis regalos digitales para hacer esta noche, cada uno con una frase lista, y uno es gratis.",
+    description: "Para 1 mes de novios, regalos pequeños: una nota, una broma o el plan del viernes, hechos esta noche desde el móvil. Uno de los seis es gratis.",
     h1: "Regalos para 1 mes de novios",
     label: "1 mes",
     hero: {
@@ -122,13 +122,13 @@ const month1: Month = {
       {
         template: "text-thread",
         heading: "Vuestro primer mes, como un chat de dos",
-        body: "Hilo de mensajes reproduce tus mensajes burbuja a burbuja, con los puntitos de «escribiendo» entre una y otra. Hacen falta dos burbujas como mínimo y caben cuarenta. Empieza con la broma que solo entendéis vosotros y deja para la última burbuja eso tan sencillo que por mensaje nunca acaba de decirse.",
+        body: "Empieza con la broma que solo entendéis los dos, y lo demás sale solo. Hilo de mensajes reproduce tus mensajes burbuja a burbuja, con los puntitos de «escribiendo» entre una y otra, de dos burbujas a cuarenta. Deja para la última eso tan sencillo que por mensaje nunca acaba de decirse.",
         line: { field: "lines", where: "La primera burbuja", text: "vale, llevamos un mes y tengo apuntes" },
       },
       {
         template: "fortune-cookie",
         heading: "Tres fortunas sobre la primera semana",
-        body: "Galleta de la fortuna pide tres fortunas y ninguna foto, justo lo que tiene un primer mes. Cada galleta se abre con un toque y sale una tira con tus palabras y una fila de números de la suerte. Escribe fortunas sobre lo que ya ha pasado: la primera broma, la calle equivocada, la segunda cita.",
+        body: "Un primer mes da para pocas fotos, y Galleta de la fortuna no pide ninguna, solo tres fortunas. Un toque abre cada galleta y sale una tira con tus palabras y una fila de números de la suerte. Escribe fortunas sobre lo que ya ha pasado: la primera broma, la calle equivocada, la segunda cita.",
         line: { field: "fortunes", where: "Una de las fortunas", text: "Dentro de un mes seguirás alegrándote de haber dicho que sí a la segunda cita." },
       },
       {
@@ -140,13 +140,13 @@ const month1: Month = {
       {
         template: "sticker-bomb",
         heading: "Seis etiquetas con los motes que ya usáis",
-        body: "Bomba de Stickers le da una página vacía y un montón de stickers para pegar. Debajo de uno de cada dos sale una tira de rotuladora: seis tiras de 28 caracteres, en el orden en que las escribiste. Al mes ya tenéis un par de motes y una broma que se repite, y no hace falta más para llenarlas.",
+        body: "Al mes ya tenéis un par de motes y una broma que se repite. Bomba de Stickers le da una página vacía y un montón de stickers para pegar, y debajo de uno de cada dos sale una tira de rotuladora: seis tiras de 28 caracteres, en el orden en que las escribiste. Con esos motes se llenan solas.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "Un mes y cero dudas" },
       },
       {
         template: "bouquet",
         heading: "Flores, con una tarjeta que no exagera",
-        body: "Un ramo dice más de lo que un mes se ha ganado, salvo que la tarjeta lo reconozca. Eliges los tallos, hasta 24, y la nota que va entre ellos admite 30 caracteres. Lo ven formarse flor a flor. Con cinco tallos y una sola frase se lee como una broma con flores dentro.",
+        body: "Un ramo dice más de lo que un mes se ha ganado, salvo que la tarjeta lo reconozca. Eliges los tallos, hasta 24, y la nota que va entre ellos admite 30 caracteres. En su pantalla se va formando flor a flor. Con cinco tallos y una sola frase se lee como una broma con flores dentro.",
         line: { field: "cardNote", where: "En la tarjeta del ramo", text: "Un mes. Quiero muchos más." },
       },
       {
@@ -159,12 +159,12 @@ const month1: Month = {
     ],
     date: { kind: "fun", title: "La cita que dijisteis y nunca hicisteis", line: "Elegid eso que los dos dijisteis que habría que hacer algún día." },
     stage: [
-      "A las cuatro semanas, casi todas las parejas llevan un puñado de citas, unas cuantas fotos y una o dos bromas que nadie más pillaría. Hay quien cuenta el mes y quien ni se ha dado cuenta de que ha pasado, y las dos cosas son normales. Conviene saber de qué lado está la otra persona antes del día: un regalo por un mes que solo cuenta uno cae raro.",
-      "Demasiado para un mes: cualquier cosa grabada, lo que necesite un año de fotos y la frase grande si ninguno de los dos la ha dicho todavía. Demasiado poco: nada, si esa persona sí llevaba la cuenta. La medida justa es una nota, una broma o un plan. Si te ha llevado diez minutos y se nota que va de esa persona, basta.",
+      "A las cuatro semanas suele haber un puñado de citas, unas cuantas fotos y una o dos bromas que nadie más pillaría. Hay quien cuenta el mes y quien ni se ha dado cuenta de que ha pasado, y las dos cosas son normales. Conviene saber de qué lado está la otra persona antes del día: un regalo por un mes que solo cuenta quien lo hace cae raro.",
+      "Lo grabado, un año de fotos y la frase grande que todavía no ha dicho nadie pueden esperar a otro mes. Lo que no puede esperar es el día, si tu pareja lleva la cuenta: dejarlo pasar en silencio duele más que cualquier detalle pequeño. Una nota, una broma o un plan son la talla de cuatro semanas. Si te ha llevado diez minutos y se nota a quién va dirigido, basta.",
     ],
     faq: [
       { q: "¿Un mes es demasiado pronto para un regalo de aniversario?", a: "No, si es pequeño. Un mes merece marcarse cuando los dos lo contáis, y una nota corta o el plan de la próxima cita lo marcan sin ponerse serios. Los recuerdos para guardar, a los seis meses." },
-      { q: "¿Qué se escribe al cumplir un mes?", a: "Una cosa en la que te has fijado y otra que quieres repetir. Con dos o tres frases sobra. Deja el futuro fuera, salvo que lo haya sacado esa persona primero." },
+      { q: "¿Qué se escribe al cumplir un mes?", a: "Una cosa en la que te has fijado y otra que quieres repetir. Con dos o tres frases sobra. Deja el futuro fuera, salvo que haya salido antes de su boca." },
       { q: "¿Cuál de estos es gratis?", a: "La carta, como nota corta de hasta 500 caracteres con una canción. Cada uno de los demás es un solo pago por esa plantilla, y puedes montar cualquiera en el editor antes de decidirte." },
     ],
   },
@@ -177,7 +177,7 @@ const month1: Month = {
 const month6: Month = {
   en: {
     title: "6 Month Anniversary Gifts for the First Half-Year",
-    description: "Half a year is the first date most couples mark. Six digital gifts for it, each with a line to borrow, from six reasons in a jar to a dated road.",
+    description: "A 6 month anniversary is the first many people celebrate out loud. Six gifts for the half-year, from six reasons in a jar to a dated road.",
     h1: "6 month anniversary gifts",
     label: "6 months",
     hero: {
@@ -210,14 +210,14 @@ const month6: Month = {
         template: "our-timeline",
         heading: "Six dated stops on one road",
         brief: "A road down the page, one dated photo at each bend, one for each month.",
-        body: "Our Timeline draws a road down the page as they scroll, and pins a photo with its date at every bend. It needs two photos at least and holds twenty. At six months, give it one stop for each: the first date, the first trip, the evening you stopped pretending you were not keen.",
+        body: "Give it one stop for each month: the first date, the first trip, the evening you stopped pretending you were not keen. Our Timeline draws a road down the page as they scroll, and pins a photo with its date at every bend. It needs two photos at least and holds twenty.",
         line: { field: "dates", where: "The date on a stop", text: "March 4, the night it rained" },
       },
       {
         template: "midnight-countdown",
         heading: "Count down to the hour you met",
         brief: "A clock under a darkening sky, set to the hour of your first date.",
-        body: "Midnight Countdown runs a clock down under a darkening sky and, at zero, sets off fireworks and opens your photos and your words. Set the zero to the hour of your first date, six months on, rather than to midnight. The line that appears with the fireworks is sixty characters: say what the hour was.",
+        body: "Set the zero to the hour of your first date, six months on, rather than to midnight. Midnight Countdown runs a clock down under a darkening sky and, at zero, sets off fireworks and opens your photos and your words. The line that appears with the fireworks is sixty characters: say what the hour was.",
         line: { field: "zeroLine", where: "The line at zero", text: "Six months ago, right about now." },
       },
       {
@@ -230,7 +230,7 @@ const month6: Month = {
     date: { kind: "romantic", title: "Dinner, then walk home the long way", line: "Book the table you have been saving for an occasion." },
     stage: [
       "By six months many couples have met each other’s friends and often the parents, have a first trip or a long weekend behind them, and have had the first real disagreement and come through it. Half a year is also when most people start counting out loud, which is why this is the first anniversary that is usually marked.",
-      "Too much at six months: jewelry with a date engraved, a holiday booked for next summer, anything that reads as a proposal. Too little: a text that could have gone to anyone. The right size is something with the half-year inside it, six reasons or six dated photos, and a plan for the evening.",
+      "Jewelry with a date engraved, a vacation booked for next summer, anything that looks like a proposal: those belong further on. A text that could have gone to anyone does not count either. Put the half-year inside the gift, six reasons or six dated photos, and add a plan for the evening.",
     ],
     faq: [
       { q: "Should you celebrate a six-month anniversary?", a: "If both of you are counting, yes, and most people are by now. Keep it to a gift you made and an evening out; the bigger gestures belong to the year." },
@@ -240,7 +240,7 @@ const month6: Month = {
   },
   es: {
     title: "Regalos para 6 meses de novios: el primer medio año",
-    description: "Medio año es la primera fecha que casi todas las parejas celebran. Seis regalos digitales para ese día, cada uno con una frase lista, de un frasco a un camino.",
+    description: "El medio año es la primera fecha que mucha gente celebra en voz alta. Seis regalos para los 6 meses de novios, de un frasco de razones a un camino.",
     h1: "Regalos para 6 meses de novios",
     label: "6 meses",
     hero: {
@@ -252,7 +252,7 @@ const month6: Month = {
       {
         template: "jar-of-reasons",
         heading: "Seis razones, una por cada mes",
-        body: "Una razón por cada mes que lleváis: seis notas dobladas dentro de un frasco de cristal. Agitan el móvil, o tocan el frasco, y una nota cae y se despliega. Cada nota puede llevar una foto, así que ponle la de su mes. Seis es el número sincero; caben cien, pero cien a los seis meses es relleno.",
+        body: "Una razón por cada mes que lleváis: seis notas dobladas dentro de un frasco de cristal. Se agita el móvil, o se toca el frasco, y una nota cae y se despliega. Cada nota puede llevar una foto, así que ponle la de su mes. Seis es el número sincero; caben cien, pero cien a los seis meses es relleno.",
         line: { field: "reasons", where: "Una nota del frasco", text: "En la segunda semana aprendiste cómo tomo el café y no volviste a preguntar." },
       },
       {
@@ -260,40 +260,40 @@ const month6: Month = {
         heading: "Letras recortadas para seis meses de páginas",
         brief: "Letras recortadas, polaroids que se revelan, una nota rasgada y hasta doce fotos.",
         body: "Álbum de recortes se abre como uno de verdad: letras recortadas para el título, tus fotos cayendo como polaroids que se revelan, una nota rasgada escrita a mano y una carta tuya a máquina. Caben hasta doce fotos, dos por mes. La que salvarías de un incendio va en la primera página.",
-        line: { field: "headline", where: "El título recortado", text: "medio año de nosotros" },
+        line: { field: "headline", where: "El título recortado", text: "nuestro medio año" },
       },
       {
         template: "vinyl",
         heading: "Un disco con vuestro medio año en la etiqueta",
         brief: "Un tocadiscos con vuestra canción y una etiqueta que llama a esto la cara A.",
-        body: "Vinilo pone un tocadiscos en su pantalla: bajan la aguja, el disco gira con vuestra canción y las fotos esperan en una caja como portadas. La etiqueta de la cara admite doce caracteres. Llama cara A a los seis primeros meses. Dice lo que es medio año sin una sola palabra sobre el para siempre.",
+        body: "Vinilo pone un tocadiscos en su pantalla: se baja la aguja, el disco gira con vuestra canción y las fotos esperan en una caja como portadas. La etiqueta de la cara admite doce caracteres. Llama cara A a los seis primeros meses. Dice lo que es medio año sin una sola palabra sobre el para siempre.",
         line: { field: "side", where: "La etiqueta de la cara", text: "Meses 1 a 6" },
       },
       {
         template: "our-timeline",
         heading: "Seis paradas con fecha en un camino",
         brief: "Un camino por la pantalla, una foto con fecha en cada curva, una por mes.",
-        body: "Nuestra línea del tiempo dibuja un camino mientras deslizan y clava una foto con su fecha en cada curva. Pide dos fotos como mínimo y admite veinte. A los seis meses, una parada por mes: la primera cita, la primera escapada, la noche en que dejasteis de disimular las ganas.",
+        body: "Una parada por mes: la primera cita, la primera escapada, la noche en que dejasteis de disimular las ganas. Nuestra línea del tiempo dibuja un camino mientras se desliza la pantalla y clava una foto con su fecha en cada curva. Pide dos fotos como mínimo y admite veinte.",
         line: { field: "dates", where: "La fecha de una parada", text: "4 de marzo, la noche que llovió" },
       },
       {
         template: "midnight-countdown",
         heading: "Cuenta atrás hasta la hora en que os conocisteis",
         brief: "Un reloj bajo un cielo que oscurece, puesto a la hora de vuestra primera cita.",
-        body: "Cuenta atrás de medianoche baja un reloj bajo un cielo que se oscurece y, al llegar a cero, lanza fuegos artificiales y abre tus fotos y tus palabras. Pon el cero a la hora de vuestra primera cita, seis meses después, en lugar de a medianoche. La frase que sale con los fuegos admite sesenta caracteres: di qué hora era.",
+        body: "Pon el cero a la hora de vuestra primera cita, seis meses después, en lugar de a medianoche. Cuenta atrás de medianoche baja un reloj bajo un cielo que se oscurece y, al llegar a cero, lanza fuegos artificiales y abre tus fotos y tus palabras. La frase que sale con los fuegos admite sesenta caracteres: di qué hora era.",
         line: { field: "zeroLine", where: "La frase del cero", text: "Hace seis meses, más o menos a esta hora." },
       },
       {
         template: "the-letter",
         heading: "Una carta larga, firmada como firmas tus mensajes",
-        body: "A los seis meses una carta larga ya no parece demasiado. La carta rompe un sello de lacre y escribe tus palabras a mano; la despedida va justo encima de tu nombre. Escribe lo que ha cambiado entre el primer mes y el sexto, y firma como firmas tus mensajes a esa persona.",
+        body: "Medio año es el primer punto en que una carta larga ya no parece demasiado. La carta rompe un sello de lacre y escribe tus palabras a mano; la despedida va justo encima de tu nombre. Escribe lo que ha cambiado entre el primer mes y el sexto, y firma como firmas tus mensajes de siempre.",
         line: { field: "signOff", where: "La despedida", text: "Seis meses después, igual que el primer día" },
       },
     ],
     date: { kind: "romantic", title: "Cena y vuelta a casa por el camino largo", line: "Reservad la mesa que guardabais para una ocasión." },
     stage: [
       "A los seis meses muchas parejas ya conocen a los amigos de la otra persona y a menudo a la familia, tienen una primera escapada a la espalda y han pasado por el primer desacuerdo de verdad. Medio año es también cuando casi todo el mundo empieza a contar en voz alta, por eso es el primer aniversario que se suele celebrar.",
-      "Demasiado a los seis meses: una joya con la fecha grabada, unas vacaciones reservadas para el verano que viene, cualquier cosa que parezca una pedida. Demasiado poco: un mensaje que podría haber ido a cualquiera. La medida justa es algo con el medio año dentro, seis razones o seis fotos con fecha, y un plan para la noche.",
+      "Una joya con la fecha grabada, unas vacaciones reservadas para el verano que viene, cualquier cosa que parezca una pedida: eso queda más adelante. Un mensaje que podría haber ido a cualquiera tampoco cuenta. Mete el medio año dentro del regalo, seis razones o seis fotos con fecha, y añade un plan para la noche.",
     ],
     faq: [
       { q: "¿Se celebran los seis meses de novios?", a: "Si los dos lleváis la cuenta, sí, y a estas alturas casi todo el mundo la lleva. Quédate en un regalo hecho por ti y una noche fuera; los gestos grandes son para el año." },
@@ -310,7 +310,7 @@ const month6: Month = {
 const month12: Month = {
   en: {
     title: "12 Month Anniversary Gifts: Paper, on a Phone",
-    description: "A year is paper by tradition. Six digital gifts that keep to it on a phone, from a letter that writes itself out to a paper crane, each with a line to borrow.",
+    description: "A 12 month anniversary is paper by tradition. Six gifts keep the rule on a phone, from a sealed letter to a paper crane, each with a line to borrow.",
     h1: "12 month anniversary gifts",
     label: "12 months",
     hero: {
@@ -323,7 +323,7 @@ const month12: Month = {
         template: "unwrapped",
         heading: "The year as a row of presents",
         brief: "Presents torn open one by one, each with a number from your year inside.",
-        body: "Unwrapped turns your year into numbers: a row of wrapped presents, each torn open with a tap or a swipe to a figure that counts up, and a gold one at the end that prints the whole year as a receipt. Up to eight numbers, all written by you. Count small, true things: the coffees, the train times, the blanket.",
+        body: "Count small, true things: the coffees, the train times, the blanket. Unwrapped turns your year into numbers, up to eight, all written by you: a row of wrapped presents, each torn open with a tap or a swipe to a figure that counts up, and a gold one at the end that prints the whole year as a receipt.",
         line: { field: "stats", where: "One of the numbers", text: "52 Sundays, 49 of them pancakes" },
       },
       {
@@ -357,14 +357,14 @@ const month12: Month = {
         template: "museum",
         heading: "An exhibition called year one",
         brief: "Your year hung in a quiet gallery, a plaque under every photo.",
-        body: "Museum hangs your photos in a quiet gallery, framed, each over a plaque with the caption you gave it and the dates you set for the whole show. They swipe from room to room. It takes two to twenty photos, so a year fits whole: pick twelve, one for each month, and title each like a painting. Your message is the wall text the visit ends on.",
+        body: "A year fits whole: pick twelve photos, one for each month, and title each like a painting. Museum hangs them in a quiet gallery, framed, each over a plaque with the caption you gave it and the dates you set for the whole show, and they swipe from room to room. It takes two to twenty photos. Your message is the wall text the visit ends on.",
         line: { field: "exhibition", where: "The exhibition’s name", text: "Year One: Selected Works" },
       },
     ],
     date: { kind: "romantic", title: "A picnic at golden hour, one year on", line: "Pack what you ate on the first date, if it travels." },
     stage: [
-      "A year in, many couples have been through the four seasons once, met most of the family, and spent at least one holiday together. You know which photos are the good ones and there are enough of them now to tell the year in order. The first anniversary is paper by tradition, the start of a list that runs to gold.",
-      "On a phone, paper means a gift made of it: a letter that writes itself out under a seal, a crane that folds and flies, a front page. Too much at one year: a ring that is not a proposal, or a list of promises. Too little: the same gift as month eleven. For the day itself, read the anniversary ideas.",
+      "A year in, you have been through the four seasons once, met most of the family, and spent at least one vacation together. You know which photos are the good ones and there are enough of them now to tell the year in order. The first anniversary is paper by tradition, the start of a list that runs to gold.",
+      "On a phone, paper means a gift made of it: a letter that writes itself out under a seal, a crane that folds and flies, a front page. Leave out the ring that is not a proposal and the list of promises: they claim more than one year can carry. Repeating what you gave at month eleven undersells it. For the day itself, read the anniversary ideas.",
     ],
     faq: [
       { q: "What is the traditional gift for one year together?", a: "Paper. It starts the list of anniversary materials that runs to gold at fifty. On a phone, keep it literal with a letter, a paper crane or a newspaper front page made about the two of you." },
@@ -374,7 +374,7 @@ const month12: Month = {
   },
   es: {
     title: "Regalos para 12 meses de novios: el de papel",
-    description: "Un año es papel, por tradición. Seis regalos digitales que lo respetan en un móvil, de una carta que se escribe sola a una grulla de papel, con frases listas.",
+    description: "Los 12 meses de novios son las bodas de papel. Seis regalos que cumplen la regla en un móvil, de una carta lacrada a una grulla, con frases listas.",
     h1: "Regalos para 12 meses de novios",
     label: "12 meses",
     hero: {
@@ -387,27 +387,27 @@ const month12: Month = {
         template: "unwrapped",
         heading: "El año en una fila de regalos",
         brief: "Regalos que se abren uno a uno, con un número de vuestro año dentro.",
-        body: "Nuestro año, desenvuelto convierte el año en números: una fila de regalos envueltos que se abren con un toque o deslizando, cada uno con una cifra que va subiendo, y uno dorado al final que imprime el año entero como un tique. Hasta ocho números, todos escritos por ti. Cuenta cosas pequeñas y ciertas: los cafés, los trenes, la manta.",
+        body: "Cuenta cosas pequeñas y ciertas: los cafés, los trenes, la manta. Nuestro año, desenvuelto convierte el año en números, hasta ocho, todos escritos por ti: una fila de regalos envueltos que se abren con un toque o deslizando, cada uno con una cifra que va subiendo, y uno dorado al final que imprime el año entero como un tique.",
         line: { field: "stats", where: "Uno de los números", text: "52 domingos, 49 con tortitas" },
       },
       {
         template: "paper-crane",
         heading: "Seis pliegues de papel, una frase en cada uno",
-        body: "Grulla de papel es el aniversario de papel tomado al pie de la letra. Una hoja espera sobre la mesa; mantienen pulsado cada pliegue y se dobla mientras no sueltan, y cada pliegue que sale bien muestra una frase tuya. Son seis pliegues, así que dos meses por frase. Cuando ya es una grulla, echa a volar y deja tu carta donde estaba.",
+        body: "Grulla de papel es el aniversario de papel tomado al pie de la letra. Una hoja espera sobre la mesa; cada pliegue se dobla mientras se mantiene pulsado, y cada pliegue que sale bien muestra una frase tuya. Son seis pliegues, así que dos meses por frase. Cuando ya es una grulla, echa a volar y deja tu carta donde estaba.",
         line: { field: "lines", where: "La frase de un pliegue", text: "Enero y febrero: aprendiste mi café y yo tus silencios." },
       },
       {
         template: "our-timeline",
         heading: "Doce meses de camino y una frase para cerrar",
-        brief: "Un año de fotos en un camino que se dibuja mientras deslizan.",
-        body: "Este es el mes para el que se hizo el camino: un año de fotos, una en cada curva, cada una con su fecha. Deslizan y el camino se dibuja bajo su dedo, desde la primera cita y la primera bronca hasta hoy. La frase donde termina admite 80 caracteres. Si tienes un vídeo que merezca verse dos veces, también cabe.",
+        brief: "Un año de fotos en un camino que se va dibujando al deslizar.",
+        body: "Este es el mes para el que se hizo el camino: un año de fotos, una en cada curva, cada una con su fecha. Al deslizar, el camino se dibuja bajo su dedo, desde la primera cita y la primera bronca hasta hoy. La frase donde termina admite 80 caracteres. Si tienes un vídeo que merezca verse dos veces, también cabe.",
         line: { field: "ending", where: "La frase donde acaba el camino", text: "Primer año: hecho. Volvería a coger el mismo camino, baches incluidos." },
       },
       {
         template: "the-letter",
         heading: "Una carta en papel, que de eso va",
         brief: "Papel, un sello de lacre que se rompe con un toque y tus palabras apareciendo a mano.",
-        body: "Si la regla es el papel, La carta la cumple sin rodeos: papel, un sello de lacre que se rompe con un toque y tus palabras apareciendo a mano, como si alguien las escribiera. Empieza por quien era esa persona para ti hace un año, casi alguien desconocido, y deja que la carta camine hasta hoy. La primera línea admite sesenta caracteres.",
+        body: "Si la regla es el papel, La carta la cumple sin rodeos: papel, un sello de lacre que se rompe con un toque y tus palabras apareciendo a mano, como si alguien las escribiera. Empieza por lo que era para ti hace un año, casi alguien desconocido, y deja que la carta camine hasta hoy. La primera línea admite sesenta caracteres.",
         line: { field: "greeting", where: "La primera línea", text: "A quien lleva un año entero aguantándome:" },
       },
       {
@@ -421,17 +421,17 @@ const month12: Month = {
         template: "museum",
         heading: "Una exposición llamada primer año",
         brief: "Vuestro año colgado en una galería tranquila, con una placa bajo cada foto.",
-        body: "Museo cuelga tus fotos en una galería tranquila, enmarcadas, cada una sobre una placa con el pie que le pusiste y las fechas que elijas para toda la exposición. Pasan de sala en sala deslizando. Admite de dos a veinte fotos, así que el año entra entero: elige doce, una por mes, y titula cada una como un cuadro. Tu mensaje es el texto de pared con el que acaba la visita.",
+        body: "El año entra entero: elige doce fotos, una por mes, y titula cada una como un cuadro. Museo las cuelga en una galería tranquila, enmarcadas, cada una sobre una placa con el pie que le pusiste y las fechas que elijas para toda la exposición, y se pasa de sala en sala deslizando. Admite de dos a veinte fotos. Tu mensaje es el texto de pared con el que acaba la visita.",
         line: { field: "exhibition", where: "El nombre de la exposición", text: "Primer año: obra escogida" },
       },
     ],
     date: { kind: "romantic", title: "Un pícnic a la hora dorada, un año después", line: "Llevad lo que comisteis en la primera cita, si aguanta el viaje." },
     stage: [
-      "Al año, muchas parejas han pasado juntas por las cuatro estaciones, conocen a casi toda la familia y han compartido al menos unas vacaciones. Sabes qué fotos son las buenas y por fin hay suficientes para contar el año en orden. El primer aniversario es de papel por tradición, el comienzo de una lista que llega hasta el oro.",
-      "En un móvil, el papel es un regalo hecho de papel: una carta que se escribe sola bajo un sello, una grulla que se dobla y echa a volar, una portada. Demasiado al año: un anillo que no es una pedida, o una lista de promesas. Demasiado poco: lo mismo que en el mes once. Para el día en sí, mira las ideas de aniversario.",
+      "Al año ya habéis pasado por las cuatro estaciones, conocéis a casi toda la familia y habéis compartido al menos unas vacaciones. Sabes qué fotos son las buenas y por fin hay suficientes para contar el año en orden. El primer aniversario es de papel por tradición, el comienzo de una lista que llega hasta el oro.",
+      "En un móvil, el papel es un regalo hecho de papel: una carta que se escribe sola bajo un sello, una grulla que se dobla y echa a volar, una portada. Fuera el anillo que no es una pedida y la lista de promesas: dicen más de lo que aguanta un año. Y repetir lo que regalaste en el mes once se queda corto. Para el día en sí, mira las ideas de aniversario.",
     ],
     faq: [
-      { q: "¿Qué se regala por tradición al cumplir un año?", a: "Papel. Es el primero de la lista de materiales de aniversario, que llega al oro a los cincuenta. En un móvil, cúmplelo con una carta, una grulla de papel o la portada de un periódico sobre vosotros." },
+      { q: "¿Qué se regala por tradición al cumplir un año?", a: "Papel. Es el primero de la lista de materiales de aniversario, que llega al oro a los cincuenta. En un móvil, cúmplelo con una carta, una grulla de papel o la portada de un periódico sobre los dos." },
       { q: "¿Doce meses es lo mismo que el primer aniversario?", a: "Sí. Doce meses son el primer aniversario, y el que casi todas las parejas tratan como el importante. Esta página es para el regalo; las de aniversario cuentan el día y qué hacer con él." },
       { q: "¿Cuántas fotos necesito para el regalo de un año?", a: "Con una docena el año queda bien contado, una por mes. Nuestra línea del tiempo y Museo admiten hasta veinte, y Nuestro año, desenvuelto y Grulla de papel no necesitan ninguna." },
     ],
@@ -445,7 +445,7 @@ const month12: Month = {
 const month24: Month = {
   en: {
     title: "24 Month Anniversary Gifts: Two Years, and Cotton",
-    description: "Two years is cotton by tradition, and a phone is not. Six digital gifts for the day and what to pair each with, from a toast to a picnic, with lines to borrow.",
+    description: "Two years is cotton by tradition, and a phone is not. Six gifts for a 24 month anniversary and what to pair each with, from a toast to a picnic.",
     h1: "24 month anniversary gifts",
     label: "24 months",
     hero: {
@@ -463,7 +463,7 @@ const month24: Month = {
       {
         template: "picnic",
         heading: "A basket of things that are yours now",
-        body: "Picnic hides your words in a basket on a gingham blanket. One tap opens the lid, and every tap after it lifts out one thing wearing a tag you wrote, three tags at least and eight at most. Two years in, tag what you own together: the mug with the chip, the spare key. Gingham is cotton, which is a start.",
+        body: "Your words hide in a basket on a gingham blanket in Picnic. One tap opens the lid, and every tap after it lifts out one thing wearing a tag you wrote, three tags at least and eight at most. Two years in, tag what you own together: the mug with the chip, the spare key. Gingham is cotton, which is a start.",
         line: { field: "labels", where: "A tag on one thing", text: "the blanket we never agree on" },
       },
       {
@@ -476,7 +476,7 @@ const month24: Month = {
       {
         template: "music-box",
         heading: "Wind the key on two years",
-        body: "Music Box sits on a lace-covered vanity with their name on its gold plate. They wind the key three turns, the lid opens, a ballerina or two swans turn to the tune, and your photos come up one at a time in the oval mirror. Pick Brahms’ Lullaby for a calm two years or Swan Lake for a dramatic one. Your letter lifts out as the tune slows.",
+        body: "Their name goes on the gold plate of Music Box, which sits on a lace-covered vanity. They wind the key three turns, the lid opens, a ballerina or two swans turn to the tune, and your photos come up one at a time in the oval mirror. Pick Brahms’ Lullaby for a calm two years or Swan Lake for a dramatic one. Your letter lifts out as the tune slows.",
         line: { field: "message", where: "The letter in the box", text: "Two years ago you were a name in my phone. Now you are the first one in it." },
       },
       {
@@ -489,14 +489,14 @@ const month24: Month = {
       {
         template: "the-letter",
         heading: "Begin the letter where year one ended",
-        body: "The Letter opens under a wax seal, and its words write themselves out by hand. Two years is long enough for a letter with chapters: what you knew at one year, what you have learned since. The first line takes sixty characters, and the whole thing goes well beside something cotton, folded, on their pillow.",
+        body: "A wax seal breaks first in The Letter, and then its words write themselves out by hand. Two years is long enough for a letter with chapters: what you knew at one year, what you have learned since. The first line takes sixty characters, and the whole thing goes well beside something cotton, folded, on their pillow.",
         line: { field: "greeting", where: "The first line", text: "To my favorite person, two years running:" },
       },
     ],
     date: { kind: "romantic", title: "A beach, a cotton blanket and the sunset", line: "Take the blanket you gave them and stay until dark." },
     stage: [
-      "By two years many couples live together or are talking about it, have a shared calendar and a few friends in common, and have met each other’s families more than once. The novelty has worn off and something steadier has taken its place, which is the thing worth marking. The jokes have histories now.",
-      "The second anniversary is cotton by tradition, and a phone cannot be cotton. So send the gift on the screen and give the cotton by hand: a shirt they will wear, a good blanket, a tea towel from the place you met. Too much: a speech about forever. Too little: a gift that could have gone at month two.",
+      "By two years there is often a shared home or talk of one, a shared calendar and a few friends in common, and each family has been met more than once. The novelty has worn off and something steadier has taken its place, which is the thing worth marking. The jokes have histories now.",
+      "The second anniversary is cotton by tradition, and a phone cannot be cotton. So send the gift on the screen and give the cotton by hand: a shirt they will wear, a good blanket, a tea towel from the place you met. Skip the speech about forever, and skip anything that could have gone out at month two.",
     ],
     faq: [
       { q: "What is the traditional gift for a second anniversary?", a: "Cotton. Paper comes first at one year, then cotton at two, for the way it gets softer with use. A digital gift cannot be cotton, so pair it with something that is." },
@@ -506,7 +506,7 @@ const month24: Month = {
   },
   es: {
     title: "Regalos para 24 meses de novios: algodón y pantalla",
-    description: "Dos años son de algodón por tradición, y un móvil no lo es. Seis regalos digitales para ese día y con qué acompañarlos, de un brindis a un pícnic, con frases.",
+    description: "Los 24 meses de novios son las bodas de algodón, y un móvil no es de algodón. Seis regalos para ese día y con qué acompañarlos, de un brindis a un pícnic.",
     h1: "Regalos para 24 meses de novios",
     label: "24 meses",
     hero: {
@@ -524,21 +524,21 @@ const month24: Month = {
       {
         template: "picnic",
         heading: "Una cesta con lo que ya es vuestro",
-        body: "Pícnic guarda tus palabras en una cesta sobre una manta de cuadros. Un toque abre la tapa, y cada toque siguiente saca algo con una etiqueta escrita por ti, tres como mínimo y ocho como mucho. A los dos años, etiqueta lo que tenéis en común: la taza desportillada, la llave de repuesto. La manta es de cuadros vichy, que es algodón, que ya es algo.",
+        body: "Tus palabras van en una cesta sobre una manta de cuadros, en Pícnic. Un toque abre la tapa, y cada toque siguiente saca algo con una etiqueta escrita por ti, tres como mínimo y ocho como mucho. A los dos años, etiqueta lo que tenéis en común: la taza desportillada, la llave de repuesto. La manta es de cuadros vichy, que es algodón, que ya es algo.",
         line: { field: "labels", where: "La etiqueta de una cosa", text: "la manta en la que nunca estamos de acuerdo" },
       },
       {
         template: "our-timeline",
         heading: "Un camino desde la primera cita hasta vuestra puerta",
-        brief: "Hasta veinte fotos con fecha en un camino que deslizan: dos años en orden.",
-        body: "Dos años de fotos dan para un camino largo, y Nuestra línea del tiempo admite hasta veinte, cada una clavada en una curva con su fecha. Deslizan, el camino se dibuja y los años pasan en orden. A estas alturas el final del camino suele ser una dirección compartida: ponla ahí, o el plan para la siguiente.",
+        brief: "Hasta veinte fotos con fecha en un camino que se recorre deslizando: dos años en orden.",
+        body: "Dos años de fotos dan para un camino largo, y Nuestra línea del tiempo admite hasta veinte, cada una clavada en una curva con su fecha. Al deslizar, el camino se dibuja y los años pasan en orden. A estas alturas el final del camino suele ser una dirección compartida: ponla ahí, o el plan para la siguiente.",
         line: { field: "ending", where: "La frase al final del camino", text: "Dos años, una dirección y seguimos volviendo por el camino largo." },
       },
       {
         template: "music-box",
         heading: "Da cuerda a dos años",
-        body: "Caja de música espera en un tocador con encaje y su nombre en la placa dorada. Dan tres vueltas a la llave, se abre la tapa, una bailarina o dos cisnes giran con la melodía y tus fotos aparecen una a una en el espejo ovalado. Elige la Canción de cuna de Brahms para dos años tranquilos, o El lago de los cisnes para unos con drama. Tu carta sale cuando la música se apaga.",
-        line: { field: "message", where: "La carta de la caja", text: "Hace dos años eras un nombre en mi móvil. Ahora eres el primero." },
+        body: "Su nombre va en la placa dorada de Caja de música, que espera en un tocador con encaje. Con tres vueltas a la llave se abre la tapa, una bailarina o dos cisnes giran con la melodía y tus fotos aparecen una a una en el espejo ovalado. Elige la Canción de cuna de Brahms para dos años tranquilos, o El lago de los cisnes para unos con drama. Tu carta sale cuando la música se apaga.",
+        line: { field: "message", where: "La carta de la caja", text: "Hace dos años eras un nombre en mi móvil. Ahora tu nombre es el primero." },
       },
       {
         template: "museum",
@@ -550,14 +550,14 @@ const month24: Month = {
       {
         template: "the-letter",
         heading: "Empieza la carta donde acabó el primer año",
-        body: "La carta se abre bajo un sello de lacre y sus palabras se escriben solas, a mano. Dos años dan para una carta con capítulos: lo que sabías al año y lo que has aprendido desde entonces. La primera línea admite sesenta caracteres, y queda bien junto a algo de algodón, doblado sobre su almohada.",
+        body: "Se rompe el lacre de La carta y sus palabras se escriben solas, a mano. Dos años dan para una carta con capítulos: lo que sabías al año y lo que has aprendido desde entonces. La primera línea admite sesenta caracteres, y queda bien junto a algo de algodón, doblado sobre su almohada.",
         line: { field: "greeting", where: "La primera línea", text: "A mi persona favorita, dos años seguidos:" },
       },
     ],
     date: { kind: "romantic", title: "Una playa, una manta de algodón y el atardecer", line: "Llevad la manta que le regalaste y quedaos hasta que oscurezca." },
     stage: [
-      "A los dos años muchas parejas viven juntas o lo están hablando, comparten calendario y algunos amigos, y conocen a la familia de la otra persona desde hace tiempo. La novedad ya ha pasado y en su lugar hay algo más firme, que es justo lo que merece celebrarse. Las bromas ya tienen historia.",
-      "El segundo aniversario es de algodón por tradición, y un móvil no puede ser de algodón. Así que manda el regalo en la pantalla y da el algodón en mano: una camiseta que se vaya a poner, una buena manta, un paño de cocina del sitio donde os conocisteis. Demasiado: un discurso sobre el para siempre. Demasiado poco: algo que valdría para el segundo mes.",
+      "A los dos años es habitual compartir casa o estar hablándolo, tener un calendario común y algunos amigos, y conocer a la familia de la otra persona desde hace tiempo. La novedad ya ha pasado y en su lugar hay algo más firme, que es justo lo que merece celebrarse. Las bromas ya tienen historia.",
+      "El segundo aniversario es de algodón por tradición, y un móvil no puede ser de algodón. Así que manda el regalo en la pantalla y da el algodón en mano: una camiseta que se vaya a poner, una buena manta, un paño de cocina del sitio donde os conocisteis. Ni un discurso sobre el para siempre ni nada que hubiera valido para el segundo mes.",
     ],
     faq: [
       { q: "¿Qué se regala por tradición en el segundo aniversario?", a: "Algodón. Al año toca papel y a los dos años algodón, por lo que se suaviza con el uso. Un regalo digital no puede ser de algodón, así que acompáñalo de algo que sí lo sea." },
@@ -574,7 +574,7 @@ const month24: Month = {
 const month2: Month = {
   en: {
     title: "2 Month Anniversary Gifts for the In-Joke Stage",
-    description: "Two months is the in-joke stage: a few photos, a few songs, nothing heavy yet. Five digital gifts that fit it, each with a line you can borrow as it is.",
+    description: "A 2 month anniversary runs on in-jokes, first photos and one shared song. Five gifts built from those, with nothing heavy in them yet.",
     h1: "2 month anniversary gifts",
     label: "2 months",
     hero: {
@@ -592,7 +592,7 @@ const month2: Month = {
       {
         template: "picnic",
         heading: "Tags for the snacks you argue about",
-        body: "Picnic is a small gift with a lot of tapping in it: the lid creaks up, and out come strawberries, lemonade and tulips, each with a tag in your words. Two months is when you learn someone’s order. Tag the food things: the fries they steal, the coffee they ruin with syrup.",
+        body: "Two months is when you learn someone’s order, and Picnic is where to show it. It is a small gift with a lot of tapping in it: the lid creaks up, and out come strawberries, lemonade and tulips, each with a tag in your words. Tag the food things: the fries they steal, the coffee they ruin with syrup.",
         line: { field: "labels", where: "A tag on the blanket", text: "the fries you said you didn’t want" },
       },
       {
@@ -606,31 +606,31 @@ const month2: Month = {
         template: "photo-booth",
         heading: "The first four photos, in a booth strip",
         brief: "Four photos in a booth strip, and your line in pen on the wall beside it.",
-        body: "Photo Booth flashes four times and prints the strip, in color, black and white or sepia, beside a wall of handwritten notes. You will have a handful of photos by now, and four is the right number. Your line is written in pen on that wall: one thing you would never say out loud yet.",
+        body: "You will have a handful of photos by now, and four is the right number. Photo Booth flashes four times and prints the strip, in color, black and white or sepia, beside a wall of handwritten notes. Your line is written in pen on that wall: one thing you would never say out loud yet.",
         line: { field: "line", where: "The words on the wall", text: "still thinking about the second date" },
       },
       {
         template: "the-letter",
         heading: "Two months, in a letter that starts lightly",
         brief: "A wax seal, then your words appearing stroke by stroke, with a playful greeting.",
-        body: "The Letter makes a small ceremony of reading: they tap through a wax seal and your words come out stroke by stroke. Keep it short at two months and keep the greeting playful, so the letter reads as a wink rather than a vow. The greeting holds sixty characters and sets the tone for the rest.",
+        body: "Reading becomes a small ceremony: they tap through a wax seal and The Letter brings your words out stroke by stroke. Keep it short for eight weeks and keep the greeting playful, so the letter comes across as a wink rather than a vow. The greeting holds sixty characters and sets the tone for the rest.",
         line: { field: "greeting", where: "The greeting", text: "To my favorite plus-one of the last two months:" },
       },
     ],
     date: { kind: "cheap", title: "An ice cream walk with no plan", line: "Walk until one of you admits you are lost." },
     stage: [
       "Two months in, the in-jokes have started and so have the photos, though most of them are still of food or of one of you squinting into the sun. You have probably met a friend or two, and you have a song that belongs to the two of you, even if nobody said so.",
-      "Too much at two months: an album, a framed print, or anything that assumes the next year. Too little: forgetting, if they mentioned it last week. Aim for something that proves you were paying attention, like a dated fortune or a tag about their order, and keep the big words for later.",
+      "If they mentioned the date last week, forgetting it is the one real mistake on offer. The rest is a question of scale: an album, a framed print or anything that assumes the next year asks more than eight weeks can carry. Prove you were paying attention instead, with a dated fortune or a tag about their order, and keep the big words for later.",
     ],
     faq: [
       { q: "Do people celebrate two months of dating?", a: "Some do and some laugh at it, and the laughing ones often still like a small gift. Match what they did at one month: if they marked it, mark this one too." },
-      { q: "What is a cute gift for two months together?", a: "Something built on a joke you already share: their coffee order on a tag, a song you both overplayed, your dates as lucky numbers. Cute at this stage means specific, not expensive." },
-      { q: "How long should a two-month message be?", a: "A few lines. The greeting, two or three sentences about something that happened and a sign-off are plenty for eight weeks, and shorter reads as more confident." },
+      { q: "What is a cute gift for two months together?", a: "Something built on a joke you already share: their coffee order on a tag, a song you both overplayed, your dates as lucky numbers. At eight weeks the shared joke is the most valuable thing you own together, so spend it." },
+      { q: "How long should a two-month message be?", a: "A few lines. The greeting, two or three sentences about something that happened and a sign-off are plenty for eight weeks, and shorter sounds more sure of itself." },
     ],
   },
   es: {
     title: "Regalos para 2 meses de novios, entre bromas",
-    description: "A los dos meses ya hay bromas propias, unas fotos y alguna canción, y nada pesado todavía. Cinco regalos digitales para eso, cada uno con una frase lista.",
+    description: "Los 2 meses de novios van de bromas propias, primeras fotos y alguna canción. Cinco regalos hechos con eso, sin nada pesado todavía.",
     h1: "Regalos para 2 meses de novios",
     label: "2 meses",
     hero: {
@@ -649,7 +649,7 @@ const month2: Month = {
       {
         template: "picnic",
         heading: "Etiquetas para lo que os discutís al comer",
-        body: "Pícnic es un regalo pequeño con mucho toque dentro: la tapa cruje y van saliendo fresas, limonada y tulipanes, cada cosa con una etiqueta escrita por ti. A los dos meses ya te sabes lo que pide en un bar. Etiqueta la comida: las patatas que te roba, el café que arruina con sirope.",
+        body: "Ya te sabes lo que pide en un bar, y Pícnic sirve para demostrarlo. Es un regalo pequeño con mucho toque dentro: la tapa cruje y van saliendo fresas, limonada y tulipanes, cada cosa con una etiqueta escrita por ti. Etiqueta la comida: las patatas que te roba, el café que arruina con sirope.",
         line: { field: "labels", where: "Una etiqueta de la manta", text: "las patatas que dijiste que no querías" },
       },
       {
@@ -663,25 +663,25 @@ const month2: Month = {
         template: "photo-booth",
         heading: "Las primeras cuatro fotos, en una tira de fotomatón",
         brief: "Cuatro fotos en una tira de fotomatón y tu frase a boli en el muro de al lado.",
-        body: "Fotomatón dispara cuatro veces e imprime la tira, en color, en blanco y negro o en sepia, junto a un muro de notas escritas a mano. A estas alturas tendréis un puñado de fotos, y cuatro es la cifra justa. Tu frase va escrita a boli en ese muro: algo que todavía no dirías en voz alta.",
+        body: "A estas alturas tendréis un puñado de fotos, y cuatro es la cifra justa. Fotomatón dispara cuatro veces e imprime la tira, en color, en blanco y negro o en sepia, junto a un muro de notas escritas a mano. Tu frase va escrita a boli en ese muro: algo que todavía no dirías en voz alta.",
         line: { field: "line", where: "Las palabras del muro", text: "sigo pensando en la segunda cita" },
       },
       {
         template: "the-letter",
         heading: "Dos meses, en una carta que empieza ligera",
         brief: "Un sello de lacre y tus palabras saliendo trazo a trazo, con un saludo con gracia.",
-        body: "La carta convierte leer en una pequeña ceremonia: rompen un sello de lacre y tus palabras van saliendo trazo a trazo. A los dos meses, que sea corta y que el saludo tenga gracia, para que la carta se lea como un guiño y no como un juramento. El saludo admite sesenta caracteres y marca el tono de lo demás.",
+        body: "Leer se convierte en una pequeña ceremonia: se rompe un sello de lacre y La carta va sacando tus palabras trazo a trazo. Con ocho semanas, que sea corta y que el saludo tenga gracia, para que se lea como un guiño y no como un juramento. El saludo admite sesenta caracteres y marca el tono de lo demás.",
         line: { field: "greeting", where: "El saludo", text: "Para quien me acompaña desde hace dos meses:" },
       },
     ],
-    date: { kind: "cheap", title: "Un paseo con helado y sin plan", line: "Caminad hasta que uno de los dos admita que os habéis perdido." },
+    date: { kind: "cheap", title: "Un paseo con helado y sin plan", line: "Caminad hasta que alguien admita que os habéis perdido." },
     stage: [
-      "A los dos meses ya han empezado las bromas propias y las fotos, aunque casi todas son de comida o de uno de los dos guiñando los ojos al sol. Seguramente conocéis ya a algún amigo del otro, y tenéis una canción que es vuestra, aunque nadie lo haya dicho.",
-      "Demasiado a los dos meses: un álbum, una lámina enmarcada o cualquier cosa que dé por hecho el año que viene. Demasiado poco: olvidarlo, si lo mencionó la semana pasada. Busca algo que demuestre que prestabas atención, como una fortuna con fecha o una etiqueta con lo que pide siempre, y guarda las palabras grandes para más adelante.",
+      "A los dos meses ya han empezado las bromas propias y las fotos, aunque casi todas son de comida o de alguna cara guiñando los ojos al sol. Seguramente ya conoces a alguien de su grupo de amigos, y tenéis una canción que es vuestra, aunque nadie lo haya dicho.",
+      "Si lo mencionó la semana pasada, olvidarlo es el único fallo grave que cabe. Lo demás es cuestión de escala: un álbum, una lámina enmarcada o cualquier cosa que dé por hecho el año que viene pide más de lo que aguantan ocho semanas. Mejor demuestra que prestabas atención, con una fortuna con fecha o una etiqueta con lo que pide siempre, y guarda las palabras grandes para más adelante.",
     ],
     faq: [
-      { q: "¿Se celebran los dos meses de novios?", a: "Hay quien sí y quien se ríe de ello, y a menudo a quien se ríe también le gusta un detalle pequeño. Haz lo mismo que al mes: si esa persona lo celebró, celebra este." },
-      { q: "¿Qué regalo bonito se hace a los dos meses?", a: "Uno hecho con una broma que ya compartís: su café en una etiqueta, una canción que habéis gastado, vuestras fechas como números de la suerte. Bonito, a estas alturas, es concreto, no caro." },
+      { q: "¿Se celebran los dos meses de novios?", a: "Hay quien sí y quien se ríe de ello, y a menudo a quien se ríe también le gusta un detalle pequeño. Haz lo mismo que al mes: si lo celebró, celebra este también." },
+      { q: "¿Qué regalo bonito se hace a los dos meses?", a: "Uno hecho con una broma que ya compartís: su café en una etiqueta, una canción que habéis gastado, vuestras fechas como números de la suerte. Con ocho semanas, la broma compartida es lo más valioso que tenéis: gástala." },
       { q: "¿Cómo de largo es un mensaje de dos meses?", a: "Unas líneas. El saludo, dos o tres frases sobre algo que pasó y una despedida bastan para ocho semanas, y lo corto se lee con más seguridad." },
     ],
   },
@@ -694,7 +694,7 @@ const month2: Month = {
 const month3: Month = {
   en: {
     title: "3 Month Anniversary Gifts for When It Became “We”",
-    description: "Three months is often when “me” turns into “we”. Five digital gifts with a dozen photos in mind, each with a line to borrow, from a scratch card to a record.",
+    description: "A 3 month anniversary is often when “me” turns into “we”. Five gifts for the dozen photos you now have, each with a line to borrow.",
     h1: "3 month anniversary gifts",
     label: "3 months",
     hero: {
@@ -714,7 +714,7 @@ const month3: Month = {
         template: "sticker-bomb",
         heading: "One line before the first sticker",
         brief: "A single line on an empty page, then stickers wherever they tap.",
-        body: "Before anything happens, Sticker Bomb shows them a single line on an empty page, and then the stickers start landing wherever they tap. That opening line is yours, forty characters at most. Three months in, make it a promise you can keep, then let up to six of your photos land as polaroids.",
+        body: "Before anything happens, Sticker Bomb shows them a single line on an empty page, and then the stickers start landing wherever they tap. That opening line is yours, forty characters at most. Three months in, make it a promise you can keep, then let up to six of your photos drop in as polaroids.",
         line: { field: "prompt", where: "The line on the empty page", text: "Three months. Go on, decorate us." },
       },
       {
@@ -727,38 +727,38 @@ const month3: Month = {
       {
         template: "digicam",
         heading: "A pocket camera with this season’s roll",
-        body: "Digicam is a little 2006 camera: they press power, the lens whirs out, and the photos are on its roll with an orange date in the corner. Up to twelve fit, which is four a month for three months. The cut-out title above the camera takes twenty-four characters. Untick “It’s their birthday” first, or the camera wishes them one.",
+        body: "This season’s roll belongs on a little camera from 2006. They press power, the lens whirs out, and the photos sit on Digicam’s roll with an orange date in the corner. Up to twelve fit, which is four a month for three months. The cut-out title above the camera takes twenty-four characters. Untick “It’s their birthday” first, or the camera wishes them one.",
         line: { field: "headline", where: "The cut-out title", text: "our first season" },
       },
       {
         template: "bouquet",
         heading: "A bouquet in their colors, not red",
         brief: "Their colors instead of red roses, up to 24 stems, and a card of thirty characters.",
-        body: "At three months you know their color, so skip the red roses and build Bouquet from what they would choose: up to 24 stems, arranged and rearranged until it looks right, then gathered on their screen flower by flower. The little card takes thirty characters. Use them for the word you two now use.",
+        body: "Skip the red roses, since by now you know their color, and build Bouquet from what they would choose: up to 24 stems, arranged and rearranged until it looks right, then gathered on their screen flower by flower. The little card takes thirty characters. Use them for the word you two now use.",
         line: { field: "cardNote", where: "On the card", text: "From us. Weird to write that." },
       },
     ],
     date: { kind: "romantic", title: "Up before the city, with breakfast", line: "Watch the sun come up from somewhere you can both see it." },
     stage: [
       "Three months is a season, and it is often the point where a couple starts saying “we” without noticing. Friends have been met, plans are made in the plural, and somewhere there are a dozen photos that are good enough to keep. The early nerves are mostly gone, and the real habits are starting to show.",
-      "Too much at three months: meeting the family as a gift, a key, a trip that needs vacation days. Too little: a reused message from month one. The right size uses the photos you now have, a dozen of them at most, and one sentence that says “we” on purpose.",
+      "A key, a trip that needs vacation days, or meeting the family staged as a present: each asks for more than one season has built. Recycling the message from month one pretends the season never happened. What fits is the photos you now have, a dozen at most, and one sentence that says “we” on purpose.",
     ],
     faq: [
-      { q: "Is three months a big deal in a relationship?", a: "It is often the first real checkpoint: the point where it stops being new and starts being yours. Many couples mark it quietly, with a small gift and a dinner." },
+      { q: "Is three months a big deal in a relationship?", a: "It is often the first real checkpoint: the point where it stops being new and starts being yours. It is usually marked quietly, with a small gift and a dinner." },
       { q: "What should I get for three months of dating?", a: "Something with the photos you have taken together, since there are enough of them now: under foil, on a camera roll or as album covers. Keep the cost in time, not money." },
       { q: "How many photos does a three-month gift need?", a: "Three to twelve. Scratch Card needs one at least and works best with one per month; Digicam and Vinyl each take up to twelve; Bouquet and Sticker Bomb need none." },
     ],
   },
   es: {
     title: "Regalos para 3 meses de novios: ya sois «nosotros»",
-    description: "A los tres meses el «yo» suele volverse «nosotros». Cinco regalos digitales pensados para una docena de fotos, con frases listas, de un rasca y gana a un disco.",
+    description: "Con 3 meses de novios, el «yo» suele volverse «nosotros». Cinco regalos para la docena de fotos que ya tenéis, cada uno con una frase lista.",
     h1: "Regalos para 3 meses de novios",
     label: "3 meses",
     hero: {
-      line: "Una estación juntos. En algún momento, el «yo» se volvió «nosotros» sin avisar.",
+      line: "Una estación entera. En algún momento, el «yo» se volvió «nosotros» sin avisar.",
       sentence: "A estas alturas hay una docena de fotos que merecen guardarse y amigos que ya saben tu nombre: basta para un regalo con fotos de verdad.",
     },
-    ideasTitle: "Cinco para la primera estación juntos",
+    ideasTitle: "Cinco para vuestra primera estación",
     ideas: [
       {
         template: "scratch-card",
@@ -776,33 +776,33 @@ const month3: Month = {
       },
       {
         template: "vinyl",
-        heading: "Un álbum con un título que solo pilláis vosotros",
-        brief: "Un título de álbum que solo entendéis vosotros y tus fotos como portadas en una caja.",
-        body: "La funda de Vinilo lleva un título de álbum de hasta cuarenta caracteres, y tus fotos esperan en una caja como las portadas que van pasando. A los tres meses, titula el álbum con eso que decís y nadie más entiende. Pon tu nombre donde iría el artista. La canción suena en el plato mientras lo leen.",
+        heading: "Un álbum con un título solo vuestro",
+        brief: "Un título de álbum que solo entendéis los dos y tus fotos como portadas en una caja.",
+        body: "La funda de Vinilo lleva un título de álbum de hasta cuarenta caracteres, y tus fotos esperan en una caja como las portadas que van pasando. Titula el álbum con eso que decís y nadie más entiende. Pon tu nombre donde iría el artista. La canción suena en el plato mientras se lee.",
         line: { field: "album", where: "El título del álbum", text: "Grandes éxitos del suelo de la cocina" },
       },
       {
         template: "digicam",
         heading: "Una camarita con el carrete de esta estación",
-        body: "Digicam es una camarita de 2006: pulsan el botón, el objetivo sale zumbando y las fotos están en su carrete con una fecha naranja en la esquina. Caben hasta doce, que son cuatro por mes en tres meses. El título recortado de encima admite veinticuatro caracteres. Desmarca antes «Es su cumpleaños», o la cámara se lo felicitará.",
+        body: "El carrete de esta estación cabe en una camarita de 2006. Se pulsa el botón, el objetivo sale zumbando y las fotos aparecen en el carrete de Digicam con una fecha naranja en la esquina. Caben hasta doce, que son cuatro por mes en tres meses. El título recortado de encima admite veinticuatro caracteres. Desmarca antes «Es su cumpleaños», o la cámara le felicitará el cumpleaños.",
         line: { field: "headline", where: "El título recortado", text: "nuestra primera estación" },
       },
       {
         template: "bouquet",
         heading: "Un ramo en sus colores, sin rosas rojas",
         brief: "Sus colores en vez de rosas rojas, hasta 24 tallos y una tarjeta de treinta caracteres.",
-        body: "A los tres meses ya sabes qué color le gusta, así que olvida las rosas rojas y monta Ramo con lo que esa persona elegiría: hasta 24 tallos, colocados y recolocados hasta que quede bien, que luego se juntan en su pantalla flor a flor. La tarjetita admite treinta caracteres. Úsalos para la palabra que ahora usáis.",
+        body: "Olvida las rosas rojas: ya sabes qué color le gusta, así que monta Ramo con lo que elegiría: hasta 24 tallos, colocados y recolocados hasta que quede bien, que luego se juntan en su pantalla flor a flor. La tarjetita admite treinta caracteres. Úsalos para la palabra que ahora usáis.",
         line: { field: "cardNote", where: "En la tarjeta", text: "De los dos. Qué raro suena" },
       },
     ],
     date: { kind: "romantic", title: "Despertar antes que la ciudad, con desayuno", line: "Ved salir el sol desde algún sitio donde lo veáis los dos." },
     stage: [
       "Tres meses son una estación, y a menudo es cuando una pareja empieza a decir «nosotros» sin darse cuenta. Ya conocéis a los amigos, los planes se hacen en plural y en algún sitio hay una docena de fotos lo bastante buenas para guardarlas. Los nervios del principio casi se han ido y empiezan a verse las costumbres de verdad.",
-      "Demasiado a los tres meses: presentar a la familia como regalo, una llave, un viaje que pida días de vacaciones. Demasiado poco: reciclar el mensaje del primer mes. La medida justa usa las fotos que ya tenéis, una docena como mucho, y una frase que diga «nosotros» a propósito.",
+      "Una llave, un viaje que pida días de vacaciones o presentar a la familia como si fuera un regalo: todo eso pide más de lo que ha construido una estación. Reciclar el mensaje del primer mes es hacer como si la estación no hubiera pasado. Lo que encaja son las fotos que ya tenéis, una docena como mucho, y una frase que diga «nosotros» a propósito.",
     ],
     faq: [
-      { q: "¿Los tres meses son importantes en una relación?", a: "Suelen ser el primer punto de control de verdad: cuando deja de ser nuevo y empieza a ser vuestro. Muchas parejas lo celebran sin ruido, con un regalo pequeño y una cena." },
-      { q: "¿Qué regalo hago por tres meses de novios?", a: "Algo con las fotos que os habéis hecho juntos, que ya hay suficientes: bajo una capa para rascar, en el carrete de una cámara o como portadas de discos. Que cueste tiempo, no dinero." },
+      { q: "¿Los tres meses son importantes en una relación?", a: "Suelen ser el primer punto de control de verdad: cuando deja de ser nuevo y empieza a ser vuestro. Lo normal es celebrarlo sin ruido, con un regalo pequeño y una cena." },
+      { q: "¿Qué regalo hago por tres meses de novios?", a: "Algo con las fotos que tenéis de los dos, que ya hay suficientes: bajo una capa para rascar, en el carrete de una cámara o como portadas de discos. Que cueste tiempo, no dinero." },
       { q: "¿Cuántas fotos necesita un regalo de tres meses?", a: "De tres a doce. Rasca y gana pide una como mínimo y queda mejor con una por mes; Digicam y Vinilo admiten hasta doce; Ramo y Bomba de Stickers no necesitan ninguna." },
     ],
   },
@@ -815,12 +815,12 @@ const month3: Month = {
 const month4: Month = {
   en: {
     title: "4 Month Anniversary Gifts Made From the First Trip",
-    description: "Four months is often when the first weekend away happens. Five digital gifts that turn its photos into the present, each with a line to borrow.",
+    description: "A 4 month anniversary often follows the first weekend away. Five gifts that turn its photos, its songs and its fights over the map into the present.",
     h1: "4 month anniversary gifts",
     label: "4 months",
     hero: {
       line: "If there was a first weekend away, its photos are the gift.",
-      sentence: "Around four months many couples take their first short trip, and a camera roll from somewhere else says more than anything you could buy for it.",
+      sentence: "Around four months the first short trip often happens, and a camera roll from somewhere else says more than anything you could buy for it.",
     },
     ideasTitle: "Five that start with the weekend away",
     ideas: [
@@ -848,7 +848,7 @@ const month4: Month = {
         template: "sticker-bomb",
         heading: "Label strips for what the trip taught you",
         brief: "Six label-maker strips under the stickers, each one a thing the trip taught you.",
-        body: "Sticker Bomb puts a label-maker strip under every other sticker that lands, up to six of them, in the order you wrote. Make each one a thing you learned on the weekend: who wakes first, who cannot read a map, who hogs the window seat. Pick the Cats with opinions pack, if the strips are blunt.",
+        body: "Who wakes first, who cannot read a map, who hogs the window seat: the weekend taught you things, and each can go on a label-maker strip. Sticker Bomb puts one under every other sticker they drop, up to six, in the order you wrote. Pick the Cats with opinions pack, if the strips are blunt.",
         line: { field: "labels", where: "One label-maker strip", text: "certified map reader (not)" },
       },
       {
@@ -862,7 +862,7 @@ const month4: Month = {
     date: { kind: "cheap", title: "Breakfast at sunrise, back home", line: "Get up early once more, now that you are back." },
     stage: [
       "Around four months a first weekend away is common: a cheap room, a long drive, a city neither of you knew. It is the first time you see how the other one travels, early or late, planned or not, and you come back with photos that are about the two of you rather than the food.",
-      "Too much at four months: next year’s holiday, booked as a present. Too little: a gift that ignores the trip if there was one. If there was no trip, use the trip you would like to take, as a plan with a date. Either way the gift is the weekend, told back to them.",
+      "Ignoring the trip, if there was one, wastes the best material you have. Next year’s vacation, booked and wrapped as the present, is a leap four months cannot carry. With no trip yet, use the one you would like to take, as a plan with a date. Either way the gift is the weekend, told back to them.",
     ],
     faq: [
       { q: "What do you do for a four-month anniversary?", a: "Something small that looks back at what you have done together so far, often the first trip, and a plan for an evening. Four months rarely needs more than that." },
@@ -872,12 +872,12 @@ const month4: Month = {
   },
   es: {
     title: "Regalos de 4 meses de novios: la primera escapada",
-    description: "A los cuatro meses suele llegar la primera escapada de fin de semana. Cinco regalos digitales que convierten sus fotos en el regalo, con frases listas.",
+    description: "A los 4 meses de novios suele llegar la primera escapada. Cinco regalos hechos con sus fotos, su música y las discusiones con el mapa.",
     h1: "Regalos para 4 meses de novios",
     label: "4 meses",
     hero: {
       line: "Si hubo una primera escapada, sus fotos son el regalo.",
-      sentence: "Hacia los cuatro meses muchas parejas hacen su primer viaje corto, y un carrete de otro sitio dice más que cualquier cosa que puedas comprar.",
+      sentence: "Hacia los cuatro meses suele llegar el primer viaje corto, y un carrete de otro sitio dice más que cualquier cosa que puedas comprar.",
     },
     ideasTitle: "Cinco que empiezan por la escapada",
     ideas: [
@@ -898,33 +898,33 @@ const month4: Month = {
         template: "on-repeat",
         heading: "Una nota a mano bajo la música del viaje",
         brief: "Un collage alrededor de vuestra canción, cada foto una pista y una nota a mano bajo el reproductor.",
-        body: "En bucle se convierte en un collage de stickers cuando le dan al play, con vuestra canción en el reproductor grande y cada foto como una pista. Bajo el reproductor va una nota escrita a mano, de sesenta caracteres. Pon ahí el viaje: la canción del coche y una frase sobre el momento en que dejó de parecer la primera vez.",
+        body: "En bucle se convierte en un collage de stickers cuando se le da al play, con vuestra canción en el reproductor grande y cada foto como una pista. Bajo el reproductor va una nota escrita a mano, de sesenta caracteres. Pon ahí el viaje: la canción del coche y una frase sobre el momento en que dejó de parecer la primera vez.",
         line: { field: "note", where: "La nota a mano", text: "Sonaba esta cuando nos pasamos la salida. Dos veces." },
       },
       {
         template: "sticker-bomb",
         heading: "Tiras de rotuladora con lo que enseñó el viaje",
         brief: "Seis tiras de rotuladora bajo los stickers, cada una algo que os enseñó el viaje.",
-        body: "Bomba de Stickers pone una tira de rotuladora bajo uno de cada dos stickers que caen, hasta seis, en el orden en que las escribiste. Que cada una sea algo que aprendiste ese fin de semana: quién se despierta antes, quién no sabe leer un mapa, quién se queda la ventanilla. Elige el pack Gatos con opiniones si las tiras son directas.",
+        body: "Quién se despierta antes, quién no sabe leer un mapa, quién se queda la ventanilla: el fin de semana os enseñó cosas, y cada una cabe en una tira de rotuladora. Bomba de Stickers pone una bajo uno de cada dos stickers, hasta seis, en el orden en que las escribiste. Elige el pack Gatos con opiniones si las tiras son directas.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "lee mapas (no es verdad)" },
       },
       {
         template: "bouquet",
         heading: "Flores que resumen el viaje en una frase",
         brief: "Monta el ramo alrededor de una flor del viaje y pon el sitio en la tarjeta.",
-        body: "Si el viaje tuvo una flor, un campo donde parasteis o un puesto del mercado, pon esa en el Ramo que montes. Colocas hasta 24 tallos y lo ven llenarse de uno en uno. La tarjeta admite treinta caracteres, sitio de sobra para el lugar y una fecha.",
+        body: "Si el viaje tuvo una flor, un campo donde parasteis o un puesto del mercado, pon esa en el Ramo que montes. Colocas hasta 24 tallos y en su pantalla se va llenando de uno en uno. La tarjeta admite treinta caracteres, sitio de sobra para el lugar y una fecha.",
         line: { field: "cardNote", where: "La tarjeta del ramo", text: "Del mercado, bajo la lluvia" },
       },
     ],
     date: { kind: "cheap", title: "Desayuno al amanecer, ya en casa", line: "Madrugad una vez más, ahora que habéis vuelto." },
     stage: [
-      "Hacia los cuatro meses es habitual la primera escapada de fin de semana: una habitación barata, un viaje largo en coche, una ciudad que ninguno conocía. Es la primera vez que ves cómo viaja la otra persona, pronto o tarde, con plan o sin él, y volvéis con fotos que van de vosotros y no de la comida.",
-      "Demasiado a los cuatro meses: las vacaciones del año que viene, reservadas como regalo. Demasiado poco: un regalo que hace como si el viaje no hubiera pasado. Si no hubo viaje, usa el que os gustaría hacer, como un plan con fecha. En los dos casos, el regalo es el fin de semana contado de vuelta.",
+      "Hacia los cuatro meses es habitual la primera escapada de fin de semana: una habitación barata, un viaje largo en coche, una ciudad nueva para los dos. Es la primera vez que ves cómo viaja la otra persona, pronto o tarde, con plan o sin él, y volvéis con fotos que van de vosotros y no de la comida.",
+      "Hacer como si el viaje no hubiera pasado, si lo hubo, es desperdiciar el mejor material que tienes. Regalar ya reservadas las vacaciones del año que viene es un salto que cuatro meses no sostienen. Si todavía no habéis viajado, usa el viaje que os gustaría hacer, como un plan con fecha. En los dos casos, el regalo es el fin de semana contado de vuelta.",
     ],
     faq: [
-      { q: "¿Qué se hace por los cuatro meses de novios?", a: "Algo pequeño que mire atrás a lo que habéis hecho juntos, a menudo el primer viaje, y un plan para una noche. A los cuatro meses rara vez hace falta más." },
+      { q: "¿Qué se hace por los cuatro meses de novios?", a: "Algo pequeño que mire atrás a lo que habéis hecho los dos, a menudo el primer viaje, y un plan para una noche. A los cuatro meses rara vez hace falta más." },
       { q: "¿Una escapada es demasiado a los cuatro meses?", a: "Como plan, no; reservar una semana fuera por sorpresa a menudo sí. Un viaje corto del que ya habéis hablado, con fecha, encaja bien en esta etapa." },
-      { q: "¿Y si todavía no hemos viajado juntos?", a: "Haz el regalo sobre el viaje que haréis: el carrete de vuestro mejor día en casa, y el destino en una tarjeta o en la acusación que leen los gatos." },
+      { q: "¿Y si todavía no hemos hecho ningún viaje?", a: "Haz el regalo sobre el viaje que haréis: el carrete de vuestro mejor día en casa, y el destino en una tarjeta o en la acusación que leen los gatos." },
     ],
   },
 };
@@ -936,20 +936,20 @@ const month4: Month = {
 const month5: Month = {
   en: {
     title: "5 Month Anniversary Gifts for the Quiet Month",
-    description: "Five months is the quiet one before the half-year. Five small digital gifts that mark it lightly and leave the big idea for month six, with lines to borrow.",
+    description: "A 5 month anniversary is the quiet one before the half-year. Five small digital gifts that mark it lightly and leave the big idea for month six.",
     h1: "5 month anniversary gifts",
     label: "5 months",
     hero: {
       line: "The month before the half-year. Mark it lightly and save the big idea.",
-      sentence: "Five months rarely gets a party, which is exactly why a small, warm gift lands well, as long as it does not use up what you planned for six.",
+      sentence: "Five months rarely gets a party, which is exactly why a small, warm gift gets noticed, as long as it does not use up what you planned for six.",
     },
     ideasTitle: "Five small ones, nothing borrowed from six",
     ideas: [
       {
         template: "photo-booth",
         heading: "A lit sign over the booth",
-        brief: "A lit sign over a photo booth, and four ordinary photos printed as a strip.",
-        body: "Photo Booth lights a sign over the booth, twenty-four characters on two lines if you use the dot, and below it four flashes print a strip. Five months is a fine excuse for a sign that says nothing grand. The four photos can be from any ordinary day, which is the point of this month.",
+        brief: "A lit sign over a photo booth, and four everyday photos printed as a strip.",
+        body: "Five months is a fine excuse for a sign that says nothing grand. Photo Booth lights one over the booth, twenty-four characters on two lines if you use the dot, and below it four flashes print a strip. The photos can come from any unremarkable day, which is the point of this month.",
         line: { field: "sign", where: "The sign on top", text: "FIVE MONTHS · NO NOTES" },
       },
       {
@@ -962,39 +962,39 @@ const month5: Month = {
       {
         template: "paper-crane",
         heading: "Five folds, one for each month so far",
-        brief: "Each crease is held until it folds, and every fold that lands shows one line.",
-        body: "Paper Crane asks for patience: they hold each crease until it folds, and if they let go too soon the paper springs back. Every fold that lands shows one of your lines, up to six. Write five, one per month, short enough to read at a glance. The finished crane flies off and your letter stays.",
+        brief: "Each crease is held until it folds, and every fold that holds shows one line.",
+        body: "Paper Crane asks for patience: they hold each crease until it folds, and if they let go too soon the paper springs back. Every fold that holds shows one of your lines, up to six. Write five, one per month, short enough to read at a glance. The finished crane flies off and your letter stays.",
         line: { field: "lines", where: "The line on one fold", text: "Month five: you still laugh at the joke from month one." },
       },
       {
         template: "kawaii",
         heading: "A plushie who says it for you",
         brief: "A bunny, a bear or a kitten says your line, and photos stick on like stickers.",
-        body: "Kawaii puts a bunny, a bear or a kitten on the screen to say your line, up to sixty characters, while a ribbon banner holds twenty-four more. Photos go up like stickers, eight at most. In a quiet month, cute is allowed to do the talking: let the plushie say the soft thing you would mumble.",
+        body: "In a quiet month, cute is allowed to do the talking. Kawaii puts a bunny, a bear or a kitten on the screen to say your line, up to sixty characters, while a ribbon banner holds twenty-four more. Photos go up like stickers, eight at most. Let the plushie say the soft thing you would mumble.",
         line: { field: "greeting", where: "What the plushie says", text: "Five months and you still steal the blanket." },
       },
       {
         template: "text-thread",
-        heading: "A chat that plays back an ordinary evening",
-        brief: "Your messages played back bubble by bubble, rebuilt from an ordinary weeknight.",
-        body: "Text Thread replays a conversation bubble by bubble, with the dots that mean someone is typing, from two bubbles up to forty. For month five, rebuild an ordinary weeknight exchange: what to eat, who is closer, the photo of the dog. The last bubble is the one you would never type on a Tuesday.",
+        heading: "A chat that plays back a Tuesday evening",
+        brief: "Your messages played back bubble by bubble, rebuilt from a plain weeknight.",
+        body: "For month five, rebuild a plain weeknight exchange: what to eat, who is closer, the photo of the dog. Text Thread replays it bubble by bubble, with the dots that mean someone is typing, from two bubbles up to forty. The last bubble is the one you would never type on a Tuesday.",
         line: { field: "lines", where: "The last bubble", text: "anyway. five months. I like the Tuesdays most." },
       },
     ],
     date: { kind: "rainy-day", title: "A film and a late dessert in the rain", line: "Pick the film by coin toss and the dessert by vote." },
     stage: [
-      "Five months is the quiet stretch before the half-year. Routines have formed, some evenings are ordinary on purpose, and many couples have stopped performing for each other a little. It is a good sign and an easy month to let pass, which is why a small gift reads as attention rather than as an event.",
-      "Too much at five months: spending the idea you have saved for six, or a gift that asks for a big answer. Too little: nothing, if you marked one and two. Keep it light and specific, a plushie with a line or a replayed chat, and keep the jar, the road or the album for next month.",
+      "Five months is the quiet stretch before the half-year. Routines have formed, some evenings are ordinary on purpose, and you have both stopped performing for each other a little. It is a good sign and an easy month to let pass, which is why a small gift comes across as attention rather than as an event.",
+      "Spending the idea you saved for six is the risk this month, along with any gift that asks for a big answer. Skipping the day entirely is the opposite risk, if you marked one and two. Keep it light and specific, a plushie with a line or a replayed chat, and hold the jar, the road and the album for next month.",
     ],
     faq: [
       { q: "Should I get something for five months?", a: "If you have marked the months so far, a small gift keeps the habit going. If you have not, a sweet message is enough and saves the effort for the half-year." },
-      { q: "What is a good five-month message?", a: "Something about the ordinary days, since that is what this month is made of: the Tuesday dinners, the shared playlist, the walk home. Keep it to a few lines." },
+      { q: "What is a good five-month message?", a: "Something about the weekdays, since that is what this month is made of: the Tuesday dinners, the shared playlist, the walk home. Keep it to a few lines." },
       { q: "Should I save the bigger gift for six months?", a: "Yes. Six months is the one most people mark, so keep the jar of reasons, the dated road or the scrapbook for then, and keep this month small and funny." },
     ],
   },
   es: {
     title: "Regalos para 5 meses de novios, el mes tranquilo",
-    description: "Cinco meses es el mes tranquilo antes del medio año. Cinco regalos digitales pequeños que lo marcan sin gastar la gran idea del sexto, con frases listas.",
+    description: "Los 5 meses de novios son el mes tranquilo antes del medio año. Cinco regalos digitales pequeños que lo marcan sin gastar la gran idea del sexto.",
     h1: "Regalos para 5 meses de novios",
     label: "5 meses",
     hero: {
@@ -1007,42 +1007,42 @@ const month5: Month = {
         template: "photo-booth",
         heading: "Un letrero encendido sobre el fotomatón",
         brief: "Un letrero encendido sobre un fotomatón y cuatro fotos normales impresas en tira.",
-        body: "Fotomatón enciende un letrero sobre la cabina, veinticuatro caracteres en dos líneas si usas el punto, y debajo cuatro flashes imprimen una tira. Cinco meses son buena excusa para un letrero que no dice nada solemne. Las cuatro fotos pueden ser de cualquier día normal, que es de lo que va este mes.",
+        body: "Cinco meses son buena excusa para un letrero que no dice nada solemne. Fotomatón enciende uno sobre la cabina, veinticuatro caracteres en dos líneas si usas el punto, y debajo cuatro flashes imprimen una tira. Las fotos pueden ser de cualquier día normal, que es de lo que va este mes.",
         line: { field: "sign", where: "El letrero", text: "CINCO MESES · SIN MÁS" },
       },
       {
         template: "favorite-person",
         heading: "Una nota rasgada que dice quién es",
         brief: "Polaroids con cinta de cuadros y una nota rasgada que dice quién es para ti.",
-        body: "Mi persona favorita es una página de polaroids sujetas con cinta de cuadros, flores al pie y una nota rasgada en el centro que dice quién es esa persona para ti. La nota admite veintidós caracteres, así que elige bien la palabra. Empieza por la foto más antigua que tengas y deja que la carta de abajo le dé las gracias por un día.",
+        body: "Mi persona favorita es una página de polaroids sujetas con cinta de cuadros, flores al pie y una nota rasgada en el centro que dice quién es para ti. La nota admite veintidós caracteres, así que elige bien la palabra. Empieza por la foto más antigua que tengas y deja que la carta de abajo le dé las gracias por un día.",
         line: { field: "title", where: "La nota rasgada", text: "mi costumbre favorita" },
       },
       {
         template: "paper-crane",
         heading: "Cinco pliegues, uno por cada mes",
         brief: "Cada pliegue se mantiene pulsado hasta que se dobla, y cada uno muestra una frase.",
-        body: "Grulla de papel pide paciencia: mantienen pulsado cada pliegue hasta que se dobla, y si sueltan antes de tiempo el papel se abre. Cada pliegue que sale muestra una de tus frases, hasta seis. Escribe cinco, una por mes, cortas para leerlas de un vistazo. La grulla terminada sale volando y tu carta se queda.",
+        body: "Grulla de papel pide paciencia: hay que mantener pulsado cada pliegue hasta que se dobla, y si se suelta antes de tiempo el papel se abre. Cada pliegue que sale muestra una de tus frases, hasta seis. Escribe cinco, una por mes, cortas para leerlas de un vistazo. La grulla terminada sale volando y tu carta se queda.",
         line: { field: "lines", where: "La frase de un pliegue", text: "Mes cinco: sigues riéndote del chiste del primer mes." },
       },
       {
         template: "kawaii",
         heading: "Un peluche que lo dice por ti",
         brief: "Un conejito, un oso o un gatito dice tu frase y las fotos se pegan como stickers.",
-        body: "Kawaii pone en pantalla un conejito, un oso o un gatito que dice tu frase, de hasta sesenta caracteres, mientras una cinta lleva veinticuatro más. Las fotos se pegan como stickers, ocho como mucho. En un mes tranquilo, lo mono puede hablar por ti: deja que el peluche diga eso tierno que tú dirías en voz baja.",
+        body: "En un mes tranquilo, lo mono puede hablar por ti. Kawaii pone en pantalla un conejito, un oso o un gatito que dice tu frase, de hasta sesenta caracteres, mientras una cinta lleva veinticuatro más. Las fotos se pegan como stickers, ocho como mucho. Deja que el peluche diga eso tierno que tú dirías en voz baja.",
         line: { field: "greeting", where: "Lo que dice el peluche", text: "Cinco meses y me sigues robando la manta." },
       },
       {
         template: "text-thread",
         heading: "Un chat que repite una noche cualquiera",
         brief: "Vuestros mensajes, burbuja a burbuja, sacados de una noche normal entre semana.",
-        body: "Hilo de mensajes repite una conversación burbuja a burbuja, con los puntos de quien está escribiendo, de dos burbujas a cuarenta. Para el quinto mes, reconstruye un intercambio normal de entre semana: qué cenamos, quién está más cerca, la foto del perro. La última burbuja es la que nunca escribirías un martes.",
+        body: "Para el quinto mes, reconstruye un intercambio normal de entre semana: qué cenamos, quién está más cerca, la foto del perro. Hilo de mensajes lo repite burbuja a burbuja, con los puntos de quien está escribiendo, de dos burbujas a cuarenta. La última burbuja es la que nunca escribirías un martes.",
         line: { field: "lines", where: "La última burbuja", text: "en fin. cinco meses. los martes son lo que más me gusta." },
       },
     ],
     date: { kind: "rainy-day", title: "Una peli y un postre tardío, con lluvia", line: "Elegid la peli a cara o cruz y el postre a votación." },
     stage: [
-      "Cinco meses es el tramo tranquilo antes del medio año. Ya hay rutinas, algunas noches son normales a propósito y muchas parejas han dejado un poco de actuar para la otra persona. Es buena señal y un mes fácil de dejar pasar, por eso un detalle pequeño se lee como atención y no como acontecimiento.",
-      "Demasiado a los cinco meses: gastar la idea que guardabas para los seis, o un regalo que pida una respuesta grande. Demasiado poco: nada, si celebraste el primero y el segundo. Que sea ligero y concreto, un peluche con una frase o un chat repetido, y guarda el frasco, el camino o el álbum para el mes que viene.",
+      "Cinco meses es el tramo tranquilo antes del medio año. Ya hay rutinas, algunas noches son normales a propósito y ya no hay tanta actuación delante de la otra persona. Es buena señal y un mes fácil de dejar pasar, por eso un detalle pequeño se lee como atención y no como acontecimiento.",
+      "Gastar ahora la idea que guardabas para los seis es el riesgo de este mes, igual que un regalo que pida una respuesta grande. El riesgo contrario es no hacer nada, si celebraste el primero y el segundo. Que sea ligero y concreto, un peluche con una frase o un chat repetido, y guarda el frasco, el camino o el álbum para el mes que viene.",
     ],
     faq: [
       { q: "¿Hay que regalar algo por los cinco meses?", a: "Si habéis celebrado los meses hasta ahora, un detalle pequeño mantiene la costumbre. Si no, basta con un mensaje bonito, y el esfuerzo se guarda para el medio año." },
@@ -1059,12 +1059,12 @@ const month5: Month = {
 const month7: Month = {
   en: {
     title: "7 Month Anniversary Gifts for a Month Nobody Expects",
-    description: "Nobody plans anything for seven months, which makes it the best month for a surprise. Five digital gifts that arrive out of nowhere, with lines to borrow.",
+    description: "Nobody plans anything for a 7 month anniversary, which makes it the best month for a surprise. Five digital gifts that arrive out of nowhere.",
     h1: "7 month anniversary gifts",
     label: "7 months",
     hero: {
       line: "Nobody expects anything at seven months. That is your advantage.",
-      sentence: "Seven has no tradition and no pressure attached, so a gift that turns up on an ordinary weekday reads as pure attention, not as duty.",
+      sentence: "Seven has no tradition and no pressure attached, so a gift that turns up on a random weekday comes across as pure attention, not as duty.",
     },
     ideasTitle: "Five that arrive out of nowhere",
     ideas: [
@@ -1091,7 +1091,7 @@ const month7: Month = {
         template: "scratch-card",
         heading: "A surprise plan under the last card",
         brief: "Photos under foil, card after card, and the news in a headline on the last one.",
-        body: "Scratch Card is built for news: photos under foil, one card after another, and a headline that waits on the last. Seven months is a good month to put a small surprise there, a booked table or a Saturday you have cleared. Give it a day and a time so it reads as settled.",
+        body: "This is the gift for news: photos under foil, one card after another, and a headline that waits on the last. Seven months is a good month to put a small surprise there, a booked table or a Saturday you have cleared. Give it a day and a time so the plan sounds settled.",
         line: { field: "finalTitle", where: "The last card’s headline", text: "Saturday is cleared. Wear shoes you can walk in." },
       },
       {
@@ -1104,17 +1104,17 @@ const month7: Month = {
     date: { kind: "cheap", title: "A golden-hour picnic with nothing to celebrate", line: "Bring two things to eat and one thing to say." },
     stage: [
       "At seven months the relationship is past the early checkpoints and not yet near the year. The calendar has nothing on it, nobody is counting out loud, and the days have settled into a rhythm that is comfortable, maybe a little too comfortable. That is the reason to mark it: quietly, without warning.",
-      "Too much at seven months: a gift so large it starts a habit of monthly presents you cannot keep. Too little: a gift that admits it was a reminder on your phone. The right one turns up midweek, says plainly that it is seven months, and asks for nothing back.",
+      "Watch for two traps. One is a gift so large it starts a habit of monthly presents you cannot keep; the other is a gift that admits it was a reminder on your phone. The right one turns up midweek, says plainly that it is seven months, and asks for nothing back.",
     ],
     faq: [
       { q: "Do you celebrate seven months?", a: "Few couples do, which is what makes a small gift at seven months feel like a surprise rather than an obligation. A message and one plan are enough." },
       { q: "What is a good surprise for seven months together?", a: "Something that arrives without an occasion: flowers on a weekday, a chat that begins with groceries, or a cleared Saturday revealed under foil. The surprise is the timing." },
-      { q: "Is it weird to mark every month?", a: "Only if it starts to feel like homework. After six months many couples stop counting each one, so mark seven only if you both still enjoy it." },
+      { q: "Is it weird to mark every month?", a: "Only if it starts to feel like homework. After six months plenty of people stop counting each one, so mark seven only if you both still enjoy it." },
     ],
   },
   es: {
     title: "Regalos para 7 meses de novios que nadie espera",
-    description: "Nadie prepara nada para los siete meses, y por eso es el mejor mes para una sorpresa. Cinco regalos digitales que llegan sin avisar, con frases listas.",
+    description: "Nadie prepara nada para los 7 meses de novios, y por eso es el mejor mes para una sorpresa. Cinco regalos digitales que llegan sin avisar.",
     h1: "Regalos para 7 meses de novios",
     label: "7 meses",
     hero: {
@@ -1133,7 +1133,7 @@ const month7: Month = {
         template: "coquette",
         heading: "Una postal bajo la primera foto",
         brief: "Polaroids por una página larga, una postal a mano bajo la primera y tu carta al final.",
-        body: "Coquette es una página larga de polaroids, hasta diez, con una postal escrita a mano bajo la primera y tu carta esperando abajo del todo en papel rasgado. La postal admite noventa caracteres. Úsala para algo pequeño que sigues haciendo por esa persona, siete meses después.",
+        body: "Coquette es una página larga de polaroids, hasta diez, con una postal escrita a mano bajo la primera y tu carta esperando abajo del todo en papel rasgado. La postal admite noventa caracteres. Úsala para algo pequeño que sigues haciendo porque te lo pegó, siete meses después.",
         line: { field: "note", where: "La postal", text: "Sigo pasando por la panadería porque dijiste que olía a domingo." },
       },
       {
@@ -1146,25 +1146,25 @@ const month7: Month = {
         template: "scratch-card",
         heading: "Un plan sorpresa bajo la última tarjeta",
         brief: "Fotos bajo la capa, tarjeta tras tarjeta, y la noticia en el titular de la última.",
-        body: "Rasca y gana está hecho para dar noticias: fotos bajo la capa, una tarjeta tras otra y un titular esperando en la última. Siete meses es buen mes para poner ahí una sorpresa pequeña, una mesa reservada o un sábado que has dejado libre. Ponle día y hora para que se lea como algo decidido.",
+        body: "Este es el regalo de las noticias: fotos bajo la capa, una tarjeta tras otra y un titular esperando en la última. Siete meses es buen mes para poner ahí una sorpresa pequeña, una mesa reservada o un sábado que has dejado libre. Ponle día y hora para que se lea como algo decidido.",
         line: { field: "finalTitle", where: "El titular de la última tarjeta", text: "El sábado está libre. Ponte calzado cómodo." },
       },
       {
         template: "on-repeat",
         heading: "Una canción para un mes normal",
-        body: "Le dan al play en En bucle y la pantalla se llena de collage: vuestra canción en el reproductor grande, tus fotos como pistas, un lazo y un sujetapapeles de corazón sobre una nota a mano. Esa nota admite sesenta caracteres. A los siete meses, escribe qué es para ti esa canción ahora que ya no es nueva.",
+        body: "Al darle al play en En bucle, la pantalla se llena de collage: vuestra canción en el reproductor grande, tus fotos como pistas, un lazo y un sujetapapeles de corazón sobre una nota a mano. Esa nota admite sesenta caracteres. Siete meses después, escribe qué es para ti esa canción ahora que ya no es nueva.",
         line: { field: "note", where: "La nota bajo el reproductor", text: "Sigue siendo la nuestra. Y seguimos saltando la intro." },
       },
     ],
     date: { kind: "cheap", title: "Un pícnic al atardecer sin nada que celebrar", line: "Llevad dos cosas para comer y una cosa que decir." },
     stage: [
       "A los siete meses la relación ha pasado los primeros controles y todavía no se acerca al año. El calendario no marca nada, nadie cuenta en voz alta y los días han cogido un ritmo cómodo, quizá demasiado. Por eso merece la pena marcarlo: sin ruido y sin avisar.",
-      "Demasiado a los siete meses: un regalo tan grande que empiece una costumbre de regalos mensuales que no podrás mantener. Demasiado poco: un regalo que confiesa que era un aviso del móvil. El bueno aparece entre semana, dice claramente que son siete meses y no pide nada a cambio.",
+      "Hay dos trampas. Una, un regalo tan grande que empiece una costumbre de regalos mensuales que no podrás mantener; otra, un regalo que confiesa que era un aviso del móvil. El bueno aparece entre semana, dice claramente que son siete meses y no pide nada a cambio.",
     ],
     faq: [
       { q: "¿Se celebran los siete meses?", a: "Pocas parejas lo hacen, y por eso un detalle a los siete meses se siente como sorpresa y no como obligación. Bastan un mensaje y un plan." },
       { q: "¿Qué sorpresa se puede dar a los siete meses?", a: "Algo que llegue sin ocasión: flores un día laborable, un chat que empieza por la compra o un sábado libre que aparece al rascar. La sorpresa está en el momento." },
-      { q: "¿Es raro celebrar todos los meses?", a: "Solo si empieza a parecer deberes. Después de los seis meses muchas parejas dejan de contar cada uno, así que celebra el séptimo solo si a los dos os sigue gustando." },
+      { q: "¿Es raro celebrar todos los meses?", a: "Solo si empieza a parecer deberes. Después de los seis meses mucha gente deja de contar cada uno, así que celebra el séptimo solo si a los dos os sigue gustando." },
     ],
   },
 };
@@ -1176,7 +1176,7 @@ const month7: Month = {
 const month8: Month = {
   en: {
     title: "8 Month Anniversary Gifts That Know Their Taste",
-    description: "By eight months you know their music and their order by heart. Five digital gifts that put that knowledge to work, each with a line you can borrow.",
+    description: "By an 8 month anniversary you know their music and their order by heart. Five gifts that put that knowledge to work, each with a line you can borrow.",
     h1: "8 month anniversary gifts",
     label: "8 months",
     hero: {
@@ -1210,31 +1210,31 @@ const month8: Month = {
         template: "picnic",
         heading: "A picnic of their actual favorites",
         brief: "A gingham basket unpacked item by item, each with a tag about a favorite.",
-        body: "Picnic lets you unpack a gingham basket item by item with a tag on each, three to eight tags, and your letter is the folded note underneath. At eight months you can be exact: the cheese they buy for themselves, the drink they order twice. Write the tags as if you were handing each one over.",
+        body: "Be exact here: the cheese they buy for themselves, the drink they order twice. Picnic lets you unpack a gingham basket item by item with a tag on each, three to eight tags, and your letter is the folded note underneath. Write the tags as if you were handing each one over.",
         line: { field: "labels", where: "A tag on one thing", text: "the cheese you hide from guests" },
       },
       {
         template: "fortune-cookie",
         heading: "Fortunes that predict their usual order",
         brief: "Cookies crack open to fortunes that predict, with total confidence, what they always order.",
-        body: "Fortune Cookie cracks open on a tap and a slip slides out, three fortunes at least and twenty at most, with a photo on some. Eight months of watching them order makes this easy: predict, with total confidence, the thing they always choose. The last cookie carries your message, which can be less of a joke.",
+        body: "Eight months of watching them order makes this one easy. Each cookie cracks open on a tap and a slip slides out, three fortunes at least and twenty at most, with a photo on some. Predict, with total confidence, the thing they always choose. The last cookie carries your message, which can be less of a joke.",
         line: { field: "fortunes", where: "One of the fortunes", text: "You will order the same pasta and say you meant to try something new." },
       },
     ],
-    date: { kind: "rainy-day", title: "A bookshop, then coffee, and a book each", line: "Choose a book for each other and swap them over coffee." },
+    date: { kind: "rainy-day", title: "A bookstore, then coffee, and a book each", line: "Choose a book for each other and swap them over coffee." },
     stage: [
-      "By eight months you have watched them order, cook, shop and choose music enough times to know the patterns. Many couples have a usual place by now, a drawer or a toothbrush at the other’s home, and a few routines that started as accidents. The guessing stage is over, and gifts can show it.",
-      "Too much at eight months: something expensive from a list they never wrote. Too little: a generic gift that could be for anyone their age. The right one is narrow on purpose, the exact song or snack or word, so that the gift could only ever have been for them.",
+      "By eight months you have watched them order, cook, shop and choose music enough times to know the patterns. By now there is probably a usual place, a drawer or a toothbrush at one another’s home, and a few routines that started as accidents. The guessing stage is over, and gifts can show it.",
+      "A generic gift that would suit anyone their age is the miss here, and so is something expensive from a list they never wrote. The right one is narrow on purpose, the exact song or snack or word, so that it could only ever have been for them.",
     ],
     faq: [
-      { q: "What do you get someone for eight months together?", a: "Something that shows what you have learned about them: their real playlist, the dish they always order, a word from a book they love. Specific beats expensive at eight months." },
+      { q: "What do you get someone for eight months together?", a: "Something that shows what you have learned about them: their real playlist, the dish they always order, a word from a book they love. Each took months of watching to learn, which is what makes it worth giving." },
       { q: "Is eight months an anniversary people mark?", a: "Not usually with anything big. It is a good month for a small, precise gift, since you know their taste by now and the year is still a while away." },
-      { q: "How do I make a gift feel personal at eight months?", a: "Use details only you would know: the order, the song in the shower, the cheese they hide. One exact detail is worth more than a paragraph of general praise." },
+      { q: "How do I make a gift feel personal at eight months?", a: "Use details only you would know: the order, the song in the shower, the cheese they hide. Name the cheese, not the fact that they like cheese." },
     ],
   },
   es: {
     title: "Regalos para 8 meses de novios que aciertan",
-    description: "A los ocho meses te sabes su música y lo que pide de memoria. Cinco regalos digitales que usan lo que has aprendido, cada uno con una frase lista.",
+    description: "A los 8 meses de novios te sabes su música y lo que pide de memoria. Cinco regalos que usan lo que has aprendido, cada uno con una frase lista.",
     h1: "Regalos para 8 meses de novios",
     label: "8 meses",
     hero: {
@@ -1261,33 +1261,33 @@ const month8: Month = {
         template: "keepsake",
         heading: "Una palabra arrancada de un libro que le encanta",
         brief: "Un paquete sellado de cosas guardadas, entre ellas una palabra arrancada de un libro.",
-        body: "Recuerdo llega como un paquete con sello de lacre, y dentro hay cosas guardadas: tu primera foto bajo flores secas, un billete con un número, un relicario de oro y una palabra arrancada de un libro. A los ocho meses ya sabes de qué libro. El hueco admite catorce caracteres, así que elige la que esa persona subrayaría.",
+        body: "Recuerdo llega como un paquete con sello de lacre, y dentro hay cosas guardadas: tu primera foto bajo flores secas, un billete con un número, un relicario de oro y una palabra arrancada de un libro. A los ocho meses ya sabes de qué libro. El hueco admite catorce caracteres, así que elige la que subrayaría.",
         line: { field: "word", where: "La palabra arrancada", text: "quédate" },
       },
       {
         template: "picnic",
         heading: "Un pícnic con sus favoritos de verdad",
         brief: "Una cesta de cuadros que se vacía cosa a cosa, cada una con una etiqueta sobre un favorito.",
-        body: "Pícnic te deja vaciar una cesta de cuadros cosa a cosa, con una etiqueta en cada una, de tres a ocho, y tu carta es la nota doblada de debajo. A los ocho meses puedes ser exacto: el queso que se compra para sí, la bebida que pide dos veces. Escribe las etiquetas como si se las fueras dando en mano.",
+        body: "Aquí toca afinar: el queso que se compra para sí, la bebida que pide dos veces. Pícnic te deja vaciar una cesta de cuadros cosa a cosa, con una etiqueta en cada una, de tres a ocho, y tu carta es la nota doblada de debajo. Escribe las etiquetas como si se las fueras dando en mano.",
         line: { field: "labels", where: "La etiqueta de una cosa", text: "el queso que escondes de las visitas" },
       },
       {
         template: "fortune-cookie",
         heading: "Fortunas que adivinan lo que siempre pide",
         brief: "Galletas que se abren con fortunas que predicen, muy seguras, lo que siempre pide.",
-        body: "Galleta de la fortuna se abre con un toque y sale una tira, tres fortunas como mínimo y veinte como mucho, algunas con foto. Ocho meses viéndole pedir lo ponen fácil: predice, con total seguridad, lo que elige siempre. La última galleta lleva tu mensaje, y ese puede ir menos en broma.",
+        body: "Ocho meses viéndole pedir lo ponen fácil. Cada galleta se abre con un toque y sale una tira, tres fortunas como mínimo y veinte como mucho, algunas con foto. Predice, con total seguridad, lo que elige siempre. La última galleta lleva tu mensaje, y ese puede ir menos en broma.",
         line: { field: "fortunes", where: "Una de las fortunas", text: "Pedirás la misma pasta y dirás que querías probar algo nuevo." },
       },
     ],
-    date: { kind: "rainy-day", title: "Una librería, luego café y un libro cada uno", line: "Elegid un libro el uno para el otro y cambiadlos con el café." },
+    date: { kind: "rainy-day", title: "Una librería, luego café y un libro cada uno", line: "Escoged un libro para regalaros y haced el cambio con el café." },
     stage: [
-      "A los ocho meses ya has visto a esa persona pedir, cocinar, comprar y elegir música suficientes veces como para conocer sus patrones. Muchas parejas tienen ya su sitio de siempre, un cajón o un cepillo de dientes en casa del otro y unas rutinas que empezaron por casualidad. Se acabó adivinar, y los regalos pueden notarlo.",
-      "Demasiado a los ocho meses: algo caro de una lista que nunca escribió. Demasiado poco: un regalo genérico que valdría para cualquiera de su edad. El bueno es estrecho a propósito, la canción, el picoteo o la palabra exactos, para que el regalo solo pudiera ser para esa persona.",
+      "A los ocho meses ya le has visto pedir, cocinar, comprar y elegir música suficientes veces como para conocer sus patrones. Lo normal es tener ya un sitio de siempre, un cajón o un cepillo de dientes en la otra casa y unas rutinas que empezaron por casualidad. Se acabó adivinar, y los regalos pueden notarlo.",
+      "Un regalo genérico que valdría para cualquiera de su edad falla aquí, igual que algo caro sacado de una lista que nunca escribió. El bueno apunta a lo concreto a propósito, la canción, el picoteo o la palabra exactos, para que el regalo solo pueda ser para quien lo recibe.",
     ],
     faq: [
-      { q: "¿Qué se regala por ocho meses juntos?", a: "Algo que demuestre lo que has aprendido: su playlist de verdad, el plato que siempre pide, una palabra de un libro que le encanta. A los ocho meses, lo concreto gana a lo caro." },
+      { q: "¿Qué se regala por ocho meses de relación?", a: "Algo que demuestre lo que has aprendido: su playlist de verdad, el plato que siempre pide, una palabra de un libro que le encanta. Todo eso cuesta meses de fijarse, y por eso vale la pena regalarlo." },
       { q: "¿Los ocho meses son un aniversario que se celebre?", a: "Normalmente no con nada grande. Es buen mes para un regalo pequeño y preciso, porque ya conoces sus gustos y el año todavía queda lejos." },
-      { q: "¿Cómo hago que un regalo sea personal a los ocho meses?", a: "Usa detalles que solo sepas tú: lo que pide, la canción de la ducha, el queso que esconde. Un detalle exacto vale más que un párrafo de elogios generales." },
+      { q: "¿Cómo hago que un regalo sea personal a los ocho meses?", a: "Usa detalles que solo sepas tú: lo que pide, la canción de la ducha, el queso que esconde. Nombra el queso, no el hecho de que le guste el queso." },
     ],
   },
 };
@@ -1299,7 +1299,7 @@ const month8: Month = {
 const month9: Month = {
   en: {
     title: "9 Month Anniversary Gifts for Three Quarters of a Year",
-    description: "Nine months is three quarters of a year, and nine photos, one a month, fill a constellation. Five digital gifts for it, each with a line to borrow.",
+    description: "Three quarters of a year: for a 9 month anniversary, nine photos, one a month, go into a constellation, a locket or a music box. Five gifts that start there.",
     h1: "9 month anniversary gifts",
     label: "9 months",
     hero: {
@@ -1312,27 +1312,27 @@ const month9: Month = {
         template: "constellations",
         heading: "Nine stars, one for each month",
         brief: "Each photo becomes a star, nine for nine months, joined into one shape.",
-        body: "Constellations turns each photo into a star, three at least and twelve at most, and joins them into one shape: a heart, an infinity sign or a star. Nine months gives nine stars, and the shape fills out well. When it is complete, your last line appears over it, up to 120 characters.",
+        body: "Nine months gives nine stars, and the shape fills out well. Constellations turns each photo into a star, three at least and twelve at most, and joins them into one shape: a heart, an infinity sign or a star. When it is complete, your last line appears over it, up to 120 characters.",
         line: { field: "finalLine", where: "The line when it completes", text: "Nine months, and I would still pick the same sky." },
       },
       {
         template: "keepsake",
         heading: "A locket with three quarters engraved",
         brief: "A gold locket that opens on a tap, with eighteen characters engraved on it.",
-        body: "The gold locket in Keepsake opens on a tap to a photo inside, and its engraving takes eighteen characters. Nine months is a fair time to engrave something, as long as it is small: your initials and a date, or a word you both use. The rest of the box holds a ticket, a torn word and your typed letter.",
+        body: "Keep the engraving small: your initials and a date, or a word you both use. The gold locket in Keepsake opens on a tap to a photo inside, and its engraving takes eighteen characters, about the right size for nine months. The rest of the box holds a ticket, a torn word and your typed letter.",
         line: { field: "engraving", where: "The engraving", text: "A + J, since March" },
       },
       {
         template: "music-box",
         heading: "A slow tune for a slower month",
-        body: "Music Box takes three turns of a key; then the lid lifts, a figurine turns on velvet and the tune plays note by note while your photos rise in the mirror, one each turn, eight at most. As the spring runs down, a folded letter lifts out. Nine months deserves a letter that takes its time.",
+        body: "A slow letter suits nine months, and this one waits for the tune to end. Three turns of Music Box’s key lift the lid; a figurine turns on velvet and the tune plays note by note while your photos rise in the mirror, one each turn, eight at most. As the spring runs down, a folded letter lifts out.",
         line: { field: "message", where: "The letter in the box", text: "Nine months ago I did not know how you take your tea. Now I make it without asking." },
       },
       {
         template: "paper-crane",
         heading: "The line left when the crane flies",
         brief: "Six folds, a line on each, and one closing line left when the crane flies.",
-        body: "When the last fold of Paper Crane lands, the paper is a crane and it lifts off the table, leaving behind one closing line of up to ninety characters. Before that, up to six folds each show a line. Spend the folds on the months and keep the closing line for the plan for the year.",
+        body: "Spend the folds on the months and keep the closing line for the plan for the year. Paper Crane shows a line on each fold, up to six; when the last fold is made, the paper is a crane and it lifts off the table, leaving behind one closing line of up to ninety characters.",
         line: { field: "closing", where: "The line left behind", text: "Three months to go until a year. I have already started planning it." },
       },
       {
@@ -1345,8 +1345,8 @@ const month9: Month = {
     ],
     date: { kind: "double-date", title: "Bowling with the friends who saw it start", line: "Invite the couple who introduced you, and let them keep score." },
     stage: [
-      "Nine months is three quarters of a year. By now many couples have met most of each other’s friends, spent a holiday or a family occasion together, and settled who stays where on weekends. There is a photo from almost every month, which is the material this month’s gifts are built from.",
-      "Too much at nine months: a gift that tries to be the anniversary three months early. Too little: forgetting a month you have marked every time so far. The right size is one photo for each month, in order, and a closing line that looks ahead to the year without spending it.",
+      "Nine months is three quarters of a year. By now you have probably met most of each other’s friends, spent a vacation or a family occasion together, and settled who stays where on weekends. There is a photo from almost every month, which is the material this month’s gifts are built from.",
+      "The year is three months off, and it is tempting to hold the anniversary early: the big dinner, the serious present. Save those. Nine months asks for something smaller and harder to fake, nine photos in order, one per month, and a last line that looks ahead to twelve without spending it. Skipping the month stings more than usual if you have marked every one so far.",
     ],
     faq: [
       { q: "What is a good gift for nine months together?", a: "One built from nine photos, one for each month: stars in a constellation, a locket and a box of kept things, or a tune with photos in its mirror. Keep the big gesture for the year." },
@@ -1356,7 +1356,7 @@ const month9: Month = {
   },
   es: {
     title: "Regalos para 9 meses de novios: tres cuartos de año",
-    description: "Nueve meses son tres cuartos de año, y nueve fotos, una por mes, llenan una constelación. Cinco regalos digitales para ese día, cada uno con una frase lista.",
+    description: "Tres cuartos de año: para los 9 meses de novios, nueve fotos, una por mes, en una constelación, un relicario o una caja de música. Cinco regalos con ellas.",
     h1: "Regalos para 9 meses de novios",
     label: "9 meses",
     hero: {
@@ -1369,27 +1369,27 @@ const month9: Month = {
         template: "constellations",
         heading: "Nueve estrellas, una por cada mes",
         brief: "Cada foto se vuelve una estrella, nueve por nueve meses, unidas en una sola figura.",
-        body: "Constelaciones convierte cada foto en una estrella, tres como mínimo y doce como mucho, y las une en una sola figura: un corazón, un infinito o una estrella. Nueve meses dan nueve estrellas, y la figura queda bien llena. Cuando se completa, aparece encima tu última frase, de hasta 120 caracteres.",
+        body: "Nueve meses dan nueve estrellas, y la figura queda bien llena. Constelaciones convierte cada foto en una estrella, tres como mínimo y doce como mucho, y las une en una sola figura: un corazón, un infinito o una estrella. Cuando se completa, aparece encima tu última frase, de hasta 120 caracteres.",
         line: { field: "finalLine", where: "La frase al completarse", text: "Nueve meses, y volvería a elegir el mismo cielo." },
       },
       {
         template: "keepsake",
         heading: "Un relicario con tres cuartos grabados",
         brief: "Un relicario de oro que se abre con un toque, con dieciocho caracteres grabados.",
-        body: "El relicario de oro de Recuerdo se abre con un toque y deja ver una foto, y su grabado admite dieciocho caracteres. Nueve meses son buen momento para grabar algo, siempre que sea pequeño: vuestras iniciales y una fecha, o una palabra que usáis los dos. El resto de la caja guarda un billete, una palabra arrancada y tu carta a máquina.",
+        body: "Mejor que el grabado sea pequeño: vuestras iniciales y una fecha, o una palabra que usáis los dos. El relicario de oro de Recuerdo se abre con un toque y deja ver una foto, y su grabado admite dieciocho caracteres, más o menos lo que piden nueve meses. El resto de la caja guarda un billete, una palabra arrancada y tu carta a máquina.",
         line: { field: "engraving", where: "El grabado", text: "A + J, desde marzo" },
       },
       {
         template: "music-box",
         heading: "Una melodía lenta para un mes más lento",
-        body: "Caja de música pide tres vueltas de llave; luego se levanta la tapa, una figura gira sobre el terciopelo y la melodía suena nota a nota mientras tus fotos suben al espejo, una por vuelta, ocho como mucho. Cuando se acaba la cuerda, sale una carta doblada. Nueve meses merecen una carta que se tome su tiempo.",
+        body: "Una carta lenta le va bien a nueve meses, y esta espera a que acabe la melodía. Tres vueltas a la llave de Caja de música levantan la tapa; una figura gira sobre el terciopelo y la melodía suena nota a nota mientras tus fotos suben al espejo, una por vuelta, ocho como mucho. Cuando se acaba la cuerda, sale una carta doblada.",
         line: { field: "message", where: "La carta de la caja", text: "Hace nueve meses no sabía cómo tomas el té. Ahora te lo hago sin preguntar." },
       },
       {
         template: "paper-crane",
         heading: "La frase que queda cuando la grulla vuela",
         brief: "Seis pliegues con una frase cada uno y una frase final que se queda al volar.",
-        body: "Cuando cae el último pliegue de Grulla de papel, el papel ya es una grulla y se levanta de la mesa, dejando atrás una frase final de hasta noventa caracteres. Antes, hasta seis pliegues muestran una frase cada uno. Gasta los pliegues en los meses y guarda la frase final para el plan del año.",
+        body: "Gasta los pliegues en los meses y guarda la frase final para el plan del año. Grulla de papel muestra una frase en cada pliegue, hasta seis; con el último, el papel ya es una grulla y se levanta de la mesa, dejando atrás una frase final de hasta noventa caracteres.",
         line: { field: "closing", where: "La frase que se queda", text: "Quedan tres meses para el año. Ya he empezado a planearlo." },
       },
       {
@@ -1402,11 +1402,11 @@ const month9: Month = {
     ],
     date: { kind: "double-date", title: "Bolos con los amigos que lo vieron empezar", line: "Invitad a la pareja que os presentó y que lleven ellos la cuenta." },
     stage: [
-      "Nueve meses son tres cuartos de año. A estas alturas muchas parejas conocen a casi todos los amigos de la otra persona, han pasado unas vacaciones o una fecha familiar juntos y han decidido quién duerme dónde los fines de semana. Hay una foto de casi cada mes, y de eso están hechos los regalos de este mes.",
-      "Demasiado a los nueve meses: un regalo que intenta ser el aniversario con tres meses de adelanto. Demasiado poco: olvidar un mes que has celebrado todas las veces. La medida justa es una foto por mes, en orden, y una frase final que mire al año sin gastarlo.",
+      "Nueve meses son tres cuartos de año. A estas alturas ya conocéis a casi todas las amistades de cada lado, habéis compartido unas vacaciones o una fecha familiar y tenéis decidido quién duerme dónde los fines de semana. Hay una foto de casi cada mes, y de eso están hechos los regalos de este mes.",
+      "Quedan tres meses para el año, y apetece adelantarlo: la gran cena, el regalo serio. Guárdalos. Nueve meses piden algo más pequeño y más difícil de fingir: nueve fotos en orden, una por mes, y una última frase que mire a los doce sin gastarlos. Saltarse el mes duele más de lo normal si los has celebrado todos hasta ahora.",
     ],
     faq: [
-      { q: "¿Qué regalo se hace por nueve meses juntos?", a: "Uno hecho con nueve fotos, una por mes: estrellas en una constelación, un relicario en una caja de recuerdos o una melodía con fotos en su espejo. El gran gesto, para el año." },
+      { q: "¿Qué regalo se hace a los nueve meses de relación?", a: "Uno hecho con nueve fotos, una por mes: estrellas en una constelación, un relicario en una caja de recuerdos o una melodía con fotos en su espejo. El gran gesto, para el año." },
       { q: "¿Un regalo de nueve meses puede llevar algo grabado?", a: "Algo pequeño, sí. Unas iniciales y una fecha en un relicario encajan a los nueve meses; una frase entera sobre el para siempre mejor guardarla para más adelante." },
       { q: "¿Cómo hago que los nueve meses se noten distintos de los seis?", a: "Mira hacia delante. A los seis meses el regalo mira atrás a medio año; a los nueve, deja que la última frase apunte al año que viene y a un plan para celebrarlo." },
     ],
@@ -1420,7 +1420,7 @@ const month9: Month = {
 const month10: Month = {
   en: {
     title: "10 Month Anniversary Gifts in Double Figures",
-    description: "Ten months is the first count in double figures. Five digital gifts built on tens, ten reasons, ten findings, ten photos, each with a line to borrow.",
+    description: "Ten reasons in a jar, ten photos, ten months of evidence read out by cats: a 10 month anniversary is the first count in double figures.",
     h1: "10 month anniversary gifts",
     label: "10 months",
     hero: {
@@ -1432,21 +1432,21 @@ const month10: Month = {
       {
         template: "scrapbook",
         heading: "Ten photos and a torn note in your hand",
-        body: "Scrapbook can take twelve photos, and ten is a round fill: one for each month, landing as polaroids that develop between washi tape and flowers. The torn note in handwriting holds ninety characters. Write it as the caption to all ten months together, the line you would scribble in the margin.",
+        body: "One photo for each month makes ten, a round fill for a Scrapbook that takes twelve. They drop in as polaroids that develop between washi tape and flowers. The torn note in handwriting holds ninety characters: write it as the caption to all ten months together, the line you would scribble in the margin.",
         line: { field: "quote", where: "The torn note", text: "Ten months of you leaving the cupboard doors open. I counted. I don’t mind." },
       },
       {
         template: "xoxo",
         heading: "What you call them, in newspaper letters",
         brief: "Their nickname cut from newspaper letters over polaroids on lace, and a typed letter below.",
-        body: "XOXO cuts what you call them out of a newspaper, letter by letter, sixteen characters at most, above polaroids on a lace doily. Ten months in, the nickname has probably changed twice: use the current one. Your letter is typed at the bottom and signed with a kiss.",
+        body: "Ten months in, the nickname has probably changed twice, so use the current one. XOXO cuts it out of a newspaper, letter by letter, sixteen characters at most, above polaroids on a lace doily. Your letter is typed at the bottom and signed with a kiss.",
         line: { field: "headline", where: "What you call them", text: "my menace" },
       },
       {
         template: "the-council",
         heading: "Ten months of evidence, read out by cats",
         brief: "Cats read out your findings, six at most, before the gavel and the stamp.",
-        body: "The cats of The Council read out the findings you wrote, up to six of ninety characters each, before the gavel falls and a stamp lands. Ten months is a good docket: pick the six strongest pieces of evidence that they are, in fact, wonderful, and choose “approved” for the ruling.",
+        body: "Ten months is a good docket: pick the six strongest pieces of evidence that they are, in fact, wonderful. The cats of The Council read out your findings, up to six of ninety characters each, before the gavel falls and the stamp comes down. Choose “approved” for the ruling.",
         line: { field: "findings", where: "One of the findings", text: "Exhibit C: remembered my sister’s birthday before I did." },
       },
       {
@@ -1459,14 +1459,14 @@ const month10: Month = {
         template: "vinyl",
         heading: "A record with your names as the artist",
         brief: "Your names credited as the artist, on a record that spins with your song.",
-        body: "In Vinyl the artist’s name is yours to write, forty characters, under the album title on a sleeve that sits on the deck. Ten months is when you can credit the two of you as a band. The record spins with your song, and the crate beside it holds up to twelve photos as covers.",
+        body: "Ten months is enough history to credit the two of you as a band. In Vinyl the artist’s name is yours to write, forty characters, under the album title on a sleeve that sits on the deck. The record spins with your song, and the crate beside it holds up to twelve photos as covers.",
         line: { field: "artist", where: "The artist’s name", text: "The Two of Us (Live, Month Ten)" },
       },
     ],
     date: { kind: "fun", title: "Mini golf, ten holes, loser buys dessert", line: "Keep the scorecard and put it in the next gift." },
     stage: [
       "Ten months is the first count with two digits, and a lot of couples feel it: the relationship has outlasted a season or three, the friends have stopped asking how it is going, and the shared calendar has entries months ahead. There is enough of everything now to count it in tens.",
-      "Too much at ten months: anything that tries to replace the anniversary. Too little: skipping it when the year is only two months off and you have marked the rest. Play with the number instead, ten photos, ten reasons, ten pieces of evidence, and keep the solemn things for twelve.",
+      "Two months short of the year, the safe move is a game with the number: ten photos, ten reasons, ten pieces of evidence. Anything that tries to stand in for the anniversary takes something from it, and the solemn things belong to twelve. Skipping ten altogether is the other mistake, with the year this close and every month before it marked.",
     ],
     faq: [
       { q: "What do you do for ten months together?", a: "Play with the number: a jar of ten reasons, ten photos in a scrapbook, ten months of evidence at a hearing. Pair it with a fun date and keep it light." },
@@ -1476,7 +1476,7 @@ const month10: Month = {
   },
   es: {
     title: "Regalos para 10 meses de novios, ya con dos cifras",
-    description: "Diez meses es la primera cuenta con dos cifras. Cinco regalos digitales hechos de dieces, diez razones, diez fotos, diez pruebas, con frases listas.",
+    description: "Diez razones en un frasco, diez fotos, diez meses de pruebas leídas por gatos: los 10 meses de novios son la primera cuenta con dos cifras.",
     h1: "Regalos para 10 meses de novios",
     label: "10 meses",
     hero: {
@@ -1488,44 +1488,44 @@ const month10: Month = {
       {
         template: "scrapbook",
         heading: "Diez fotos y una nota rasgada a mano",
-        body: "Álbum de recortes admite doce fotos, y diez lo llenan bien: una por mes, cayendo como polaroids que se revelan entre cinta washi y flores. La nota rasgada escrita a mano admite noventa caracteres. Escríbela como el pie de foto de los diez meses juntos, la frase que garabatearías en el margen.",
+        body: "Una foto por mes son diez, y llenan bien un Álbum de recortes que admite doce. Caen como polaroids que se revelan entre cinta washi y flores. La nota rasgada escrita a mano admite noventa caracteres: escríbela como el pie de foto de los diez meses enteros, la frase que garabatearías en el margen.",
         line: { field: "quote", where: "La nota rasgada", text: "Diez meses dejándote las puertas del armario abiertas. Las he contado. Me da igual." },
       },
       {
         template: "xoxo",
         heading: "Cómo le llamas, en letras de periódico",
         brief: "Su mote recortado en letras de periódico sobre polaroids con encaje, y una carta a máquina.",
-        body: "XOXO recorta cómo le llamas de un periódico, letra a letra, dieciséis caracteres como mucho, sobre polaroids en un tapete de encaje. A los diez meses el mote seguramente ha cambiado dos veces: usa el de ahora. Tu carta va a máquina abajo, firmada con un beso.",
+        body: "En diez meses el mote seguramente ha cambiado dos veces, así que usa el de ahora. XOXO lo recorta de un periódico, letra a letra, dieciséis caracteres como mucho, sobre polaroids en un tapete de encaje. Tu carta va a máquina abajo, firmada con un beso.",
         line: { field: "headline", where: "Cómo le llamas", text: "mi amenaza" },
       },
       {
         template: "the-council",
         heading: "Diez meses de pruebas, leídas por gatos",
         brief: "Los gatos leen tus conclusiones, seis como mucho, antes del mazo y el sello.",
-        body: "Los gatos de El Consejo leen las conclusiones que escribiste, hasta seis de noventa caracteres, antes de que caiga el mazo y llegue el sello. Diez meses dan para un buen sumario: elige las seis pruebas más sólidas de que esa persona es, de hecho, maravillosa, y elige «Visto bueno» para el veredicto.",
+        body: "Diez meses dan para un buen sumario: elige las seis pruebas más sólidas de que es, de hecho, una maravilla. Los gatos de El Consejo leen tus conclusiones, hasta seis de noventa caracteres, antes de que caiga el mazo y llegue el sello. Para el veredicto, «Visto bueno».",
         line: { field: "findings", where: "Una de las conclusiones", text: "Prueba C: se acordó del cumpleaños de mi hermana antes que yo." },
       },
       {
         template: "jar-of-reasons",
         heading: "Un frasco etiquetado con diez razones",
-        body: "Diez razones, una por mes, es un frasco que parece lleno sin relleno. Frasco de razones suelta una nota doblada cada vez que agitan el móvil o tocan el cristal. La etiqueta del frasco admite cuarenta caracteres: escribe la cuenta en ella, para que sepan cuándo llega la última.",
+        body: "Diez razones, una por mes, es un frasco que parece lleno sin relleno. Frasco de razones suelta una nota doblada cada vez que se agita el móvil o se toca el cristal. La etiqueta del frasco admite cuarenta caracteres: escribe la cuenta en ella, para que se sepa cuándo llega la última.",
         line: { field: "label", where: "La etiqueta del frasco", text: "10 razones, una por mes" },
       },
       {
         template: "vinyl",
         heading: "Un disco con vuestros nombres como artista",
         brief: "Vuestros nombres como artista en un disco que gira con vuestra canción.",
-        body: "En Vinilo el nombre del artista lo escribes tú, cuarenta caracteres, bajo el título del álbum en una funda que está junto al plato. A los diez meses ya podéis firmar como grupo. El disco gira con vuestra canción, y la caja de al lado guarda hasta doce fotos como portadas.",
+        body: "Diez meses de historia bastan para firmar como grupo. En Vinilo el nombre del artista lo escribes tú, cuarenta caracteres, bajo el título del álbum en una funda que está junto al plato. El disco gira con vuestra canción, y la caja de al lado guarda hasta doce fotos como portadas.",
         line: { field: "artist", where: "El nombre del artista", text: "Los Dos (en directo, mes diez)" },
       },
     ],
     date: { kind: "fun", title: "Minigolf a diez hoyos, quien pierda paga el postre", line: "Guardad la tarjeta de puntos y metedla en el próximo regalo." },
     stage: [
-      "Diez meses es la primera cuenta con dos cifras, y muchas parejas lo notan: la relación ha durado más de una estación o tres, los amigos ya no preguntan qué tal va y el calendario compartido tiene planes a meses vista. Ya hay bastante de todo como para contarlo de diez en diez.",
-      "Demasiado a los diez meses: cualquier cosa que intente sustituir al aniversario. Demasiado poco: saltárselo cuando faltan dos meses para el año y has celebrado los demás. Juega con el número, diez fotos, diez razones, diez pruebas, y guarda lo solemne para los doce.",
+      "Diez meses es la primera cuenta con dos cifras, y se nota: la relación ha durado más de una estación o tres, los amigos ya no preguntan qué tal va y el calendario compartido tiene planes a meses vista. Ya hay bastante de todo como para contarlo de diez en diez.",
+      "A dos meses del año, lo que funciona es jugar con el número: diez fotos, diez razones, diez pruebas. Cualquier cosa que quiera ocupar el sitio del aniversario le quita algo, y lo solemne es cosa de los doce. También falla saltarse el diez, con el año tan cerca y todos los meses anteriores celebrados.",
     ],
     faq: [
-      { q: "¿Qué se hace por diez meses juntos?", a: "Jugar con el número: un frasco de diez razones, diez fotos en un álbum, diez meses de pruebas en un juicio. Acompáñalo de una cita divertida y que sea ligero." },
+      { q: "¿Qué se hace cuando se cumplen diez meses?", a: "Jugar con el número: un frasco de diez razones, diez fotos en un álbum, diez meses de pruebas en un juicio. Acompáñalo de una cita divertida y que sea ligero." },
       { q: "¿Diez meses está demasiado cerca del aniversario para celebrarlo?", a: "No, si es algo pequeño. A dos meses del año, un regalo con gracia marca los diez sin quitarle nada al aniversario." },
       { q: "¿Qué escribo a los diez meses?", a: "Algo que se pueda contar. Diez cosas pequeñas y ciertas, una por mes, son más fáciles de escribir que un párrafo grande y más convincentes de leer." },
     ],
@@ -1539,7 +1539,7 @@ const month10: Month = {
 const month11: Month = {
   en: {
     title: "11 Month Anniversary Gifts That Count Down to the Year",
-    description: "Eleven months is the month before the year. Five digital gifts that count down to it without spending it, each with a line to borrow.",
+    description: "An 11 month anniversary is the month before the year. Gifts that count down to it without spending it: a clock, practice flowers, a chat ending on the plan.",
     h1: "11 month anniversary gifts",
     label: "11 months",
     hero: {
@@ -1552,7 +1552,7 @@ const month11: Month = {
         template: "midnight-countdown",
         heading: "A clock running down to your first anniversary",
         brief: "A live clock under a darkening sky, set to the start of your anniversary.",
-        body: "Midnight Countdown puts a live clock on their screen under a sky that darkens as zero gets closer, and at zero the fireworks go off and the photos open. Set it to the start of your anniversary day, a month from now. The line above the clock says what it is counting to, in sixty characters.",
+        body: "Set the clock to the start of your anniversary day, a month from now. Midnight Countdown runs it live on their screen under a sky that darkens as zero gets closer, and at zero the fireworks go off and the photos open. Above the clock, sixty characters say what it is counting to.",
         line: { field: "headline", where: "Headline above the timer", text: "Until one whole year of us" },
       },
       {
@@ -1573,7 +1573,7 @@ const month11: Month = {
         template: "bouquet",
         heading: "Flowers that promise the next ones",
         brief: "Up to 24 stems you choose, and a card that promises next month’s flowers.",
-        body: "Bouquet holds up to 24 stems of your choosing, arranged until it looks right, then opened on their screen one flower at a time. The card has thirty characters. At eleven months, use it as a promise for a month from now: these are the flowers before the real anniversary ones.",
+        body: "These are practice flowers, and the card can say so. Bouquet holds up to 24 stems of your choosing, arranged until it looks right, then opened on their screen one flower at a time. The card has thirty characters: use them to promise the real anniversary flowers, a month from now.",
         line: { field: "cardNote", where: "The card in the bouquet", text: "Practice run. Next month: real" },
       },
       {
@@ -1586,18 +1586,18 @@ const month11: Month = {
     ],
     date: { kind: "cheap", title: "Stars and planets, and a year to plan", line: "Lie on a blanket and plan the anniversary out loud." },
     stage: [
-      "Eleven months is the month before the year, and many couples feel the anniversary coming: there may already be a restaurant in mind, a trip half planned, a question about how to mark it. The relationship has a full set of seasons almost behind it, and most of its stories have now been told twice.",
-      "Too much at eleven months: giving the anniversary gift early because you could not wait. Too little: nothing, then a big gesture a month later. The right gift points forward, a countdown to the day or a plan in writing, and a gift made now can be sent now and open on the day itself.",
+      "Eleven months is the month before the year, and the anniversary is close enough to feel: there may already be a restaurant in mind, a trip half planned, a question about how to mark it. The relationship has a full set of seasons almost behind it, and most of its stories have now been told twice.",
+      "If the anniversary present is already bought, it is hard not to hand it over now. Hold on to it. Eleven months wants a gift that points at the day: a countdown, a plan in writing, flowers that promise better ones. Letting the month pass in silence and then arriving with a big gesture four weeks later feels lopsided. And something made now can be sent now and wait to open on the day itself.",
     ],
     faq: [
       { q: "What do you give at eleven months?", a: "Something that looks forward to the year rather than replacing it: a countdown to the date, a chat that ends on the plan, a practice bouquet. Keep the real anniversary gift for next month." },
-      { q: "Can I send a gift now and have it open on our anniversary?", a: "Yes, on a paid gift. In the editor, under Extras, switch on “Schedule the reveal” and choose the date, the hour and their time zone. Until then the link shows a countdown and then opens by itself." },
+      { q: "Can I send a gift now and have it open on our anniversary?", a: "Yes. Scheduling comes with a paid template: open Extras in the editor, turn on “Schedule the reveal” and enter the anniversary date, the hour you want and their time zone. Send the link today; until that hour it shows a countdown, then opens on its own." },
       { q: "How do I plan the first anniversary at eleven months?", a: "Start now: pick the evening, book the table or the trip, and put it in writing. A countdown sent at eleven months makes the plan official without giving it away." },
     ],
   },
   es: {
     title: "Regalos para 11 meses de novios con cuenta atrás",
-    description: "Once meses es el mes antes del año. Cinco regalos digitales que cuentan hacia él sin gastarlo, cada uno con una frase lista para usar.",
+    description: "Los 11 meses de novios son el mes antes del año. Regalos que cuentan hacia él sin gastarlo: un reloj, flores de ensayo, un chat que acaba en el plan.",
     h1: "Regalos para 11 meses de novios",
     label: "11 meses",
     hero: {
@@ -1610,46 +1610,46 @@ const month11: Month = {
         template: "midnight-countdown",
         heading: "Un reloj hacia vuestro primer aniversario",
         brief: "Un reloj en marcha bajo un cielo que oscurece, puesto al inicio del aniversario.",
-        body: "Cuenta atrás de medianoche pone un reloj en marcha en su pantalla bajo un cielo que se oscurece a medida que se acerca el cero, y en el cero estallan los fuegos y se abren las fotos. Ponlo al comienzo del día del aniversario, dentro de un mes. La frase sobre el reloj dice hacia qué cuenta, en sesenta caracteres.",
-        line: { field: "headline", where: "Titular sobre el reloj", text: "Hasta un año entero de nosotros" },
+        body: "Pon el reloj al comienzo del día del aniversario, dentro de un mes. Cuenta atrás de medianoche lo deja en marcha en su pantalla bajo un cielo que se oscurece a medida que se acerca el cero, y en el cero estallan los fuegos y se abren las fotos. Encima, en sesenta caracteres, una frase dice hacia qué cuenta.",
+        line: { field: "headline", where: "Titular sobre el reloj", text: "Hasta nuestro primer año entero" },
       },
       {
         template: "favorite-person",
         heading: "Una despedida bajo las flores, a tu manera",
         brief: "Polaroids con cinta de cuadros y tu despedida de siempre escrita bajo las flores.",
-        body: "Al pie del ramo de Mi persona favorita va una despedida de dieciocho caracteres, bajo una página de polaroids sujetas con cinta de cuadros y una nota rasgada que dice quién es esa persona. A los once meses, la despedida puede ser la que de verdad usas al acabar cada llamada.",
+        body: "Al pie del ramo de Mi persona favorita va una despedida de dieciocho caracteres, bajo una página de polaroids sujetas con cinta de cuadros y una nota rasgada que dice quién es para ti. A los once meses, la despedida puede ser la que de verdad usas al acabar cada llamada.",
         line: { field: "signoff", where: "Bajo las flores", text: "venga, te quiero" },
       },
       {
         template: "sticker-bomb",
         heading: "Once meses de motes, en tiras de rotuladora",
         brief: "Seis tiras de rotuladora bajo los stickers, con sus motes en orden, del más antiguo al último.",
-        body: "Las tiras de rotuladora de Bomba de Stickers salen en el orden en que las escribiste, seis como mucho, de veintiocho caracteres, metidas bajo uno de cada dos stickers que pegan. Once meses dan para una historia de motes: ponlos en orden, del más antiguo al más nuevo, para que la última tira sea como le llamas ahora.",
+        body: "Las tiras de rotuladora de Bomba de Stickers salen en el orden en que las escribiste, seis como mucho, de veintiocho caracteres, metidas bajo uno de cada dos stickers que se van pegando. Once meses dan para una historia de motes: ponlos en orden, del más antiguo al más nuevo, para que la última tira sea como le llamas ahora.",
         line: { field: "labels", where: "Una tira de rotuladora", text: "alias número tres" },
       },
       {
         template: "bouquet",
         heading: "Flores que prometen las siguientes",
         brief: "Hasta 24 tallos elegidos por ti y una tarjeta que promete las flores del mes que viene.",
-        body: "Ramo admite hasta 24 tallos elegidos por ti, colocados hasta que queden bien, que luego se abren en su pantalla flor a flor. La tarjeta tiene treinta caracteres. A los once meses, úsala como promesa para dentro de un mes: estas son las flores de antes de las del aniversario de verdad.",
+        body: "Son flores de ensayo, y la tarjeta puede decirlo. Ramo admite hasta 24 tallos elegidos por ti, colocados hasta que queden bien, que luego se abren en su pantalla flor a flor. La tarjeta tiene treinta caracteres: úsalos para prometer las flores del aniversario de verdad, dentro de un mes.",
         line: { field: "cardNote", where: "La tarjeta del ramo", text: "Ensayo. El mes que viene, más" },
       },
       {
         template: "text-thread",
         heading: "Un chat que acaba en el plan del día",
         brief: "Vuestros mensajes repetidos con sus puntitos, que acaban en el plan del aniversario.",
-        body: "Reconstruye en Hilo de mensajes el chat en que hablasteis por primera vez del aniversario, o inventa el que tendréis: hasta cuarenta burbujas, puntitos entre ellas y fotos que caen como adjuntos. Que acabe en el plan. Enviado a los once meses, se lee como un adelanto del año.",
+        body: "Reconstruye en Hilo de mensajes el chat en que hablasteis por primera vez del aniversario, o inventa el que tendréis: hasta cuarenta burbujas, puntitos entre ellas y fotos que caen como adjuntos. Que acabe en el plan. Enviado ahora, se lee como un adelanto del año.",
         line: { field: "lines", where: "La última burbuja", text: "entonces. dentro de un mes. no hagas planes esa noche" },
       },
     ],
     date: { kind: "cheap", title: "Estrellas, planetas y un año por planear", line: "Tumbaos en una manta y planead el aniversario en voz alta." },
     stage: [
-      "Once meses es el mes antes del año, y muchas parejas notan que llega el aniversario: quizá ya hay un restaurante en mente, un viaje a medio planear, una duda sobre cómo celebrarlo. La relación tiene casi detrás todas las estaciones, y la mayoría de sus historias ya se han contado dos veces.",
-      "Demasiado a los once meses: dar el regalo del aniversario antes de tiempo porque no podías esperar. Demasiado poco: nada, y luego un gran gesto un mes después. El regalo bueno mira hacia delante, una cuenta atrás hasta el día o un plan por escrito, y lo que hagas ahora puede enviarse ya y abrirse ese mismo día.",
+      "Once meses es el mes antes del año, y el aniversario ya se nota cerca: quizá ya hay un restaurante en mente, un viaje a medio planear, una duda sobre cómo celebrarlo. La relación tiene casi detrás todas las estaciones, y la mayoría de sus historias ya se han contado dos veces.",
+      "Si el regalo del aniversario ya está comprado, cuesta no darlo ahora. Aguanta. Once meses piden algo que apunte al día: una cuenta atrás, un plan por escrito, flores que prometen otras mejores. Dejar pasar el mes en silencio y aparecer cuatro semanas después con un gran gesto queda cojo. Además, lo que hagas ahora puede enviarse ya y esperar cerrado hasta ese mismo día.",
     ],
     faq: [
       { q: "¿Qué se regala a los once meses?", a: "Algo que mire hacia el año en vez de sustituirlo: una cuenta atrás hasta la fecha, un chat que acaba en el plan, un ramo de ensayo. El regalo del aniversario de verdad, para el mes que viene." },
-      { q: "¿Puedo enviar un regalo ahora y que se abra en nuestro aniversario?", a: "Sí, en un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y elige la fecha, la hora y su zona horaria. Hasta entonces el enlace muestra una cuenta atrás y luego se abre solo." },
+      { q: "¿Puedo enviar un regalo ahora y que se abra en nuestro aniversario?", a: "Sí. La programación viene con las plantillas de pago: abre Extras en el editor, activa «Programar la apertura» y pon la fecha del aniversario, la hora que quieras y su zona horaria. Envía hoy el enlace; hasta esa hora muestra una cuenta atrás y después se abre solo." },
       { q: "¿Cómo planeo el primer aniversario a los once meses?", a: "Empieza ya: elige la noche, reserva la mesa o el viaje y ponlo por escrito. Una cuenta atrás enviada a los once meses hace oficial el plan sin desvelarlo." },
     ],
   },
@@ -1662,7 +1662,7 @@ const month11: Month = {
 const month13: Month = {
   en: {
     title: "13 Month Anniversary Gifts for the Month Nobody Counts",
-    description: "Thirteen months is the first month of year two, and almost nobody marks it. Five funny digital gifts for anyone who still counts, with lines to borrow.",
+    description: "A 13 month anniversary is the first month of year two, and almost nobody marks it. Funny gifts for anyone still counting, each with one sincere line.",
     h1: "13 month anniversary gifts",
     label: "13 months",
     hero: {
@@ -1707,18 +1707,18 @@ const month13: Month = {
     ],
     date: { kind: "fun", title: "Karaoke, one duet, no backing out", line: "Pick the song you sang badly in year one and do it again." },
     stage: [
-      "Thirteen months is the first month after the anniversary, and almost nobody counts it. The big gesture has just happened, the photos from the day are still on everyone’s phones, and life has gone back to normal with a small sense of relief. Many couples stop counting months here, which is fine.",
-      "Too much at thirteen months: a second anniversary gift a month after the first. Too little: nothing, if you have always marked the month and they will notice. The right size is a joke with a true line inside it, cheap in money and generous in attention, that says you are still counting.",
+      "Thirteen months is the first month after the anniversary, and almost nobody counts it. The big gesture has just happened, the photos from the day are still on everyone’s phones, and life has gone back to normal with a small sense of relief. Plenty of people stop counting months here, which is fine.",
+      "If you have marked every month so far, they will notice when this one goes by in silence. A second anniversary present four weeks after the first, though, is more than the month can hold. What fits is a joke with one true line hidden in it, costing little and showing you paid attention: proof that you are still counting.",
     ],
     faq: [
       { q: "Do couples celebrate 13 months?", a: "Most stop counting after the first year, so thirteen months is optional. If you have marked every month so far, a small funny gift keeps the habit going without competing with the anniversary." },
       { q: "What is a funny gift for 13 months together?", a: "A mock hearing about surviving a year of you, fortunes for year two, or tags for the things that ended up in the wrong drawer. Keep one line in it sincere." },
-      { q: "Should we keep counting months after a year?", a: "Only if you both enjoy it. Plenty of couples switch to years after twelve months, and the occasional month gift then lands as a surprise." },
+      { q: "Should we keep counting months after a year?", a: "Only if you both enjoy it. Plenty of couples switch to years after twelve months, and the occasional month gift then comes as a surprise." },
     ],
   },
   es: {
     title: "Regalos de 13 meses de novios: el que nadie cuenta",
-    description: "Trece meses es el primer mes del segundo año, y casi nadie lo celebra. Cinco regalos digitales con gracia para quien sigue contando, con frases listas.",
+    description: "Los 13 meses de novios son el primer mes del segundo año, y casi nadie los celebra. Regalos con gracia para quien sigue contando, con una frase en serio dentro.",
     h1: "Regalos para 13 meses de novios",
     label: "13 meses",
     hero: {
@@ -1731,7 +1731,7 @@ const month13: Month = {
         template: "the-council",
         heading: "Un juicio por el cargo de seguir aquí",
         brief: "Un juicio de gatos por un cargo que las pruebas sostienen de sobra.",
-        body: "Después de un año, El Consejo puede juzgar a esa persona por un cargo que las pruebas sostienen de sobra. Lo escribes en sesenta caracteres, redactas lo que leerá cada gato y eliges el sello: «Indulto», si la broma va contra ti. Las fotos entran como pruebas, seis como mucho, y tu carta es la sentencia completa.",
+        body: "Después de un año, El Consejo puede llevarle a juicio por un cargo que las pruebas sostienen de sobra. Lo escribes en sesenta caracteres, redactas lo que leerá cada gato y eliges el sello: «Indulto», si la broma va contra ti. Las fotos entran como pruebas, seis como mucho, y tu carta es la sentencia completa.",
         line: { field: "charge", where: "El cargo", text: "sobrevivir un año entero a mis playlists" },
       },
       {
@@ -1764,13 +1764,13 @@ const month13: Month = {
     ],
     date: { kind: "fun", title: "Karaoke, un dueto y sin echarse atrás", line: "Elegid la canción que cantasteis fatal el primer año y repetidla." },
     stage: [
-      "Trece meses es el primer mes después del aniversario, y casi nadie lo cuenta. El gran gesto acaba de pasar, las fotos del día siguen en todos los móviles y la vida ha vuelto a lo normal con cierto alivio. Muchas parejas dejan de contar meses aquí, y no pasa nada.",
-      "Demasiado a los trece meses: un segundo regalo de aniversario un mes después del primero. Demasiado poco: nada, si siempre habéis celebrado el mes y lo va a notar. La medida justa es una broma con una frase cierta dentro, barata en dinero y generosa en atención, que dice que sigues contando.",
+      "Trece meses es el primer mes después del aniversario, y casi nadie lo cuenta. El gran gesto acaba de pasar, las fotos del día siguen en todos los móviles y la vida ha vuelto a lo normal con cierto alivio. Hay quien deja de contar meses aquí, y no pasa nada.",
+      "Si habéis celebrado todos los meses, que este pase en blanco se va a notar. Pero un segundo regalo de aniversario cuatro semanas después del primero es más de lo que el mes aguanta. Lo que encaja es una broma con una frase cierta escondida, que cueste poco y demuestre atención: la prueba de que sigues contando.",
     ],
     faq: [
       { q: "¿Se celebran los 13 meses de novios?", a: "Casi todo el mundo deja de contar después del primer año, así que los trece meses son opcionales. Si habéis celebrado todos los meses, un detalle con gracia mantiene la costumbre sin competir con el aniversario." },
       { q: "¿Qué regalo divertido se hace a los 13 meses?", a: "Un juicio en broma por sobrevivir un año contigo, fortunas para el segundo año o etiquetas para lo que acabó en el cajón equivocado. Deja una frase en serio dentro." },
-      { q: "¿Hay que seguir contando meses después del año?", a: "Solo si a los dos os gusta. Muchas parejas pasan a contar años después de los doce meses, y un regalo de mes suelto llega entonces como sorpresa." },
+      { q: "¿Hay que seguir contando meses después del año?", a: "Solo si a los dos os gusta. Hay parejas que pasan a contar años después de los doce meses, y un regalo de mes suelto llega entonces como sorpresa." },
     ],
   },
 };
@@ -1782,7 +1782,7 @@ const month13: Month = {
 const month14: Month = {
   en: {
     title: "14 Month Anniversary Gifts for Life That Has Merged",
-    description: "By fourteen months the drawers, keys and habits have started to mix. Five digital gifts about the everyday things that are now “ours”, with lines to borrow.",
+    description: "By a 14 month anniversary, drawers, keys and habits have started to mix. Gifts about the everyday things that are now “ours”: a tag, a ticket, a recipe.",
     h1: "14 month anniversary gifts",
     label: "14 months",
     hero: {
@@ -1795,21 +1795,21 @@ const month14: Month = {
         template: "picnic",
         heading: "Tag everything that lives at both places",
         brief: "Each item from the basket tagged with something that now lives at both places.",
-        body: "Every item that comes out of Picnic’s basket wears a tag, three to eight of them, forty-eight characters each, and the photos come out in gingham frames. Fourteen months in, tag the things that now live at both addresses: the charger, the toothbrush, the good pan. Choose a lilac or blue blanket for a change.",
+        body: "Tag the things that now live at both addresses: the charger, the toothbrush, the good pan. Every item that comes out of Picnic’s basket wears a tag, three to eight of them, forty-eight characters each, and the photos come out in gingham frames. Choose a lilac or blue blanket for a change.",
         line: { field: "labels", where: "A tag on one thing", text: "the charger that is technically mine" },
       },
       {
         template: "keepsake",
         heading: "A ticket stub with a number only you know",
         brief: "A ticket in a box of kept things, printed with a number only you two know.",
-        body: "Keepsake keeps a ticket among its kept things, twenty-six characters printed on it, beside the dried flowers, the locket and the torn word. Put a number on it that only the two of you would recognize: the door code, the bus line, the apartment number of the first place you both slept over.",
+        body: "Pick a number only the two of you would recognize: the door code, the bus line, the apartment number of the first place you both slept over. Keepsake prints it on a ticket, twenty-six characters, and keeps it among its kept things beside the dried flowers, the locket and the torn word.",
         line: { field: "ticket", where: "The ticket", text: "BUS 38 · ROW 2 · YOURS" },
       },
       {
         template: "fireside",
         heading: "A candle tag with the date it became home",
         brief: "A window, a warm mug, photos on pegs, and a candle with a dated tag.",
-        body: "Fireside is a window with snow or leaves outside, a mug of cocoa, tea or coffee, photos on a string of wooden pegs, and a candle with a tag of twenty-four characters. Once the candle is lit, your letter unfolds from the blanket. Fourteen months is the time to put the date on that tag.",
+        body: "Fourteen months is the time to put a date on the candle’s tag, which holds twenty-four characters. The candle sits in Fireside’s window, with snow or leaves outside, a mug of cocoa, tea or coffee, and photos on a string of wooden pegs. Once the candle is lit, your letter unfolds from the blanket.",
         line: { field: "tag", where: "The candle’s tag", text: "home since 03.14" },
       },
       {
@@ -1828,8 +1828,8 @@ const month14: Month = {
     ],
     date: { kind: "rainy-day", title: "A wet afternoon at the bowling alley nearby", line: "Pick the nearest lanes and lose one game on purpose." },
     stage: [
-      "Around fourteen months the two lives have started to merge: a drawer at one place, a key on the other’s ring, a weekly shop that is now one list. Friends invite you as a pair. Many couples are talking about moving in, or already have, and the everyday has become the interesting part.",
-      "Too much at fourteen months: furniture as a gift, or anything that makes the next step for them. Too little: treating the month as if nothing changed. The right size names the shared things before they become invisible: a key, a pan, a date on a candle tag.",
+      "Around fourteen months the two lives have started to merge: a drawer at one place, a key on the other’s ring, a weekly grocery run that now goes off one list. Friends invite you as a pair. Moving in together may be under discussion, or already done, and the everyday has become the interesting part.",
+      "Name the shared things before they turn invisible: a key, a pan, a date on a candle tag. That is the whole job this month. A sofa or a set of shelves as a present decides the next step for them, which is not a gift’s place, and letting the month pass as if nothing had changed misses what did.",
     ],
     faq: [
       { q: "What do you get for fourteen months together?", a: "Something about the life you now share: a recipe card for your weeknight dinner, a ticket with your door code, tags for the things that live at both places." },
@@ -1839,12 +1839,12 @@ const month14: Month = {
   },
   es: {
     title: "Regalos para 14 meses de novios: ya es «lo nuestro»",
-    description: "A los catorce meses los cajones, las llaves y las costumbres ya se mezclan. Cinco regalos digitales sobre lo cotidiano que ahora es «nuestro», con frases.",
+    description: "A los 14 meses de novios, cajones, llaves y costumbres ya se mezclan. Regalos sobre lo cotidiano que ahora es «nuestro»: una etiqueta, un billete, una receta.",
     h1: "Regalos para 14 meses de novios",
     label: "14 meses",
     hero: {
       line: "Un cajón en su casa, una llave en tu llavero. Lo cotidiano ya se comparte.",
-      sentence: "Los catorce meses son cuando la vida normal se mezcla, y el mejor regalo nombra las pequeñas cosas compartidas antes de que dejen de parecer nuevas.",
+      sentence: "Con catorce meses la vida de cada día se mezcla, y el mejor regalo nombra las pequeñas cosas compartidas antes de que dejen de parecer nuevas.",
     },
     ideasTitle: "Cinco sobre lo que es nuestro",
     ideas: [
@@ -1852,28 +1852,28 @@ const month14: Month = {
         template: "picnic",
         heading: "Etiqueta todo lo que vive en las dos casas",
         brief: "Cada cosa de la cesta con una etiqueta sobre algo que ya vive en las dos casas.",
-        body: "Cada cosa que sale de la cesta de Pícnic lleva una etiqueta, de tres a ocho, de cuarenta y ocho caracteres, y las fotos salen en marcos de cuadros. A los catorce meses, etiqueta lo que ya vive en las dos casas: el cargador, el cepillo de dientes, la sartén buena. Elige una manta lila o azul, para variar.",
+        body: "Etiqueta lo que ya vive en las dos casas: el cargador, el cepillo de dientes, la sartén buena. Cada cosa que sale de la cesta de Pícnic lleva una etiqueta, de tres a ocho, de cuarenta y ocho caracteres, y las fotos salen en marcos de cuadros. Elige una manta lila o azul, para variar.",
         line: { field: "labels", where: "La etiqueta de una cosa", text: "el cargador que técnicamente es mío" },
       },
       {
         template: "keepsake",
-        heading: "Un billete con un número que solo sabéis vosotros",
-        brief: "Un billete en una caja de cosas guardadas, con un número que solo conocéis vosotros.",
-        body: "Recuerdo guarda un billete entre sus cosas, con veintiséis caracteres impresos, junto a las flores secas, el relicario y la palabra arrancada. Pon un número que solo reconoceríais vosotros: el código del portal, la línea del autobús, el piso de la primera casa donde os quedasteis a dormir.",
+        heading: "Un billete con un número solo vuestro",
+        brief: "Un billete en una caja de cosas guardadas, con un número que solo conocéis los dos.",
+        body: "Elige un número que solo reconoceríais los dos: el código del portal, la línea del autobús, el piso de la primera casa donde os quedasteis a dormir. Recuerdo lo imprime en un billete, veintiséis caracteres, y lo guarda entre sus cosas, junto a las flores secas, el relicario y la palabra arrancada.",
         line: { field: "ticket", where: "El billete", text: "BUS 38 · FILA 2 · TUYO" },
       },
       {
         template: "fireside",
         heading: "La vela con la fecha en que fue casa",
         brief: "Una ventana, una taza caliente, fotos con pinzas y una vela con su etiqueta fechada.",
-        body: "Junto al fuego es una ventana con nieve u hojas fuera, una taza de chocolate, té o café, fotos colgadas con pinzas de madera y una vela con una etiqueta de veinticuatro caracteres. Cuando se enciende la vela, tu carta se despliega de la manta. Catorce meses es el momento de poner la fecha en esa etiqueta.",
+        body: "Catorce meses es el momento de poner fecha en la etiqueta de la vela, que admite veinticuatro caracteres. La vela está en la ventana de Junto al fuego, con nieve u hojas fuera, una taza de chocolate, té o café y fotos colgadas con pinzas de madera. Cuando se enciende, tu carta se despliega de la manta.",
         line: { field: "tag", where: "La etiqueta de la vela", text: "casa desde el 14.03" },
       },
       {
         template: "recipe-box",
         heading: "Una receta para la cena que ya compartís",
         brief: "Una tarjeta de receta con vuestra cena de diario, que se da la vuelta y es tu carta.",
-        body: "Caja de recetas es una tarjeta de receta: un nombre de cuarenta y ocho caracteres, hasta seis ingredientes y una frase pequeña bajo el nombre que empieza por «Sale una…». Le dan la vuelta y es tu carta, con fotos sujetas. Ponle a la receta el nombre de la cena que este año se convirtió en la de todos los martes.",
+        body: "Caja de recetas es una tarjeta de receta: un nombre de cuarenta y ocho caracteres, hasta seis ingredientes y una frase pequeña bajo el nombre que empieza por «Sale una…». Al darle la vuelta es tu carta, con fotos sujetas. Ponle a la receta el nombre de la cena que este año se convirtió en la de todos los martes.",
         line: { field: "recipeName", where: "El nombre de la receta", text: "La pasta de los martes, tras mucho debate" },
       },
       {
@@ -1886,13 +1886,13 @@ const month14: Month = {
     ],
     date: { kind: "rainy-day", title: "Tarde de lluvia en la bolera de al lado", line: "Id a la bolera más cercana y perded una partida a propósito." },
     stage: [
-      "Hacia los catorce meses las dos vidas empiezan a mezclarse: un cajón en una casa, una llave en el llavero del otro, una compra semanal que ya es una sola lista. Los amigos os invitan en pareja. Muchas parejas hablan de irse a vivir juntas, o ya lo han hecho, y lo cotidiano se ha vuelto lo interesante.",
-      "Demasiado a los catorce meses: un mueble como regalo, o cualquier cosa que dé el siguiente paso por esa persona. Demasiado poco: tratar el mes como si nada hubiera cambiado. La medida justa nombra lo compartido antes de que se vuelva invisible: una llave, una sartén, una fecha en la etiqueta de una vela.",
+      "Hacia los catorce meses las dos vidas empiezan a mezclarse: un cajón en una casa, una llave de más en el llavero, una compra semanal que ya es una sola lista. Los amigos os invitan en pareja. Quizá habláis de compartir piso, o ya lo compartís, y lo cotidiano se ha vuelto lo interesante.",
+      "Nombra lo compartido antes de que se vuelva invisible: una llave, una sartén, una fecha en la etiqueta de una vela. Ese es todo el trabajo de este mes. Un sofá o una estantería como regalo deciden el siguiente paso por tu pareja, y eso no le toca a un regalo; dejar pasar el mes como si nada hubiera cambiado tampoco ve lo que sí cambió.",
     ],
     faq: [
-      { q: "¿Qué se regala por catorce meses juntos?", a: "Algo sobre la vida que ya compartís: una receta de vuestra cena de diario, un billete con el código del portal, etiquetas para lo que vive en las dos casas." },
+      { q: "¿Qué se regala al cumplir catorce meses?", a: "Algo sobre la vida que ya compartís: una receta de vuestra cena de diario, un billete con el código del portal, etiquetas para lo que vive en las dos casas." },
       { q: "¿Los catorce meses son un hito?", a: "No uno tradicional. Suele ser el tramo en que dos rutinas se vuelven una, y eso merece notarse aunque nadie más cuente el mes." },
-      { q: "¿Cómo escribo sobre cosas cotidianas sin que suene aburrido?", a: "Sé exacto. El cepillo, la sartén y la línea del autobús emocionan más que las palabras generales sobre el hogar, porque solo pueden ser vuestros." },
+      { q: "¿Cómo escribo sobre cosas cotidianas sin que suene aburrido?", a: "Ve al detalle. El cepillo, la sartén y la línea del autobús emocionan más que las palabras generales sobre el hogar, porque solo pueden ser vuestros." },
     ],
   },
 };
@@ -1904,7 +1904,7 @@ const month14: Month = {
 const month15: Month = {
   en: {
     title: "15 Month Anniversary Gifts for a Year and a Quarter",
-    description: "Fifteen months is a year and a quarter, and by now there is a soundtrack. Five digital gifts built on your songs and your photos, each with a line to borrow.",
+    description: "Fifteen months in, there is a soundtrack, so these 15 month anniversary gifts are built on your songs: a record, a booth strip, a camera roll.",
     h1: "15 month anniversary gifts",
     label: "15 months",
     hero: {
@@ -1943,14 +1943,14 @@ const month15: Month = {
         template: "digicam",
         heading: "Every photo dated the day you met",
         brief: "Twelve photos with an orange date stamp, set to the day you met.",
-        body: "Digicam’s roll holds up to twelve photos with the orange date in the corner; set the stamp to the day you met and every picture looks like it was taken then. Fifteen months later, that is a nice lie. The magazine cut-out title above it gets twenty-four characters; untick “It’s their birthday” so it keeps yours.",
+        body: "Set the date stamp to the day you met, and every picture on Digicam’s roll looks like it was taken then: up to twelve photos, each with the orange date in the corner. Fifteen months later, that is a nice lie. The magazine cut-out title above it gets twenty-four characters; untick “It’s their birthday” so it keeps yours.",
         line: { field: "headline", where: "The cut-out title", text: "est. fifteen months ago" },
       },
     ],
     date: { kind: "double-date", title: "Karaoke with friends, your song first", line: "Sing the song from the album, and make your friends judge." },
     stage: [
       "Fifteen months is a year and a quarter, a count only some couples keep. By now there is a soundtrack: songs from the car, the one from the first trip, the one one of you hates and the other plays anyway. Most of the firsts are done, and the repeats have started to matter more.",
-      "Too much at fifteen months: a gift that tries to outdo the anniversary three months on. Too little: a link to a playlist with no word attached. The right size wraps your music in something to open, a record, a booth strip, a camera roll, with one line that only the two of you would get.",
+      "A playlist link with nothing written beside it falls short. The opposite fails too: a present built to top the anniversary three months after it. Your music already exists, so the gift is the wrapping, something to open, a record, a booth strip, a camera roll, with one line that only the two of you would get.",
     ],
     faq: [
       { q: "Is 15 months worth celebrating?", a: "If you like marking quarters, yes, and a year and a quarter is a neat one. A small gift built on your songs fits it without making it heavy." },
@@ -1960,7 +1960,7 @@ const month15: Month = {
   },
   es: {
     title: "Regalos para 15 meses de novios: año y cuarto",
-    description: "Quince meses son un año y cuarto, y a estas alturas ya hay banda sonora. Cinco regalos digitales hechos con vuestras canciones y fotos, con frases listas.",
+    description: "Al año y cuarto ya hay banda sonora. Regalos para los 15 meses de novios hechos con vuestras canciones: un disco, una tira de fotomatón, un carrete.",
     h1: "Regalos para 15 meses de novios",
     label: "15 meses",
     hero: {
@@ -1999,18 +1999,18 @@ const month15: Month = {
         template: "digicam",
         heading: "Todas las fotos con la fecha del primer día",
         brief: "Doce fotos con la fecha naranja, puesta en el día en que os conocisteis.",
-        body: "El carrete de Digicam admite hasta doce fotos con la fecha naranja en la esquina; pon en la fecha el día en que os conocisteis y todas parecerán hechas entonces. Quince meses después, es una mentira bonita. El título recortado de revista de encima admite veinticuatro caracteres; desmarca «Es su cumpleaños» para que no felicite a nadie.",
+        body: "Pon en la fecha el día en que os conocisteis y todas las fotos del carrete de Digicam parecerán hechas entonces: hasta doce, con la fecha naranja en la esquina. Quince meses después, es una mentira bonita. El título recortado de revista de encima admite veinticuatro caracteres; desmarca «Es su cumpleaños» para que no felicite a nadie.",
         line: { field: "headline", where: "El título recortado", text: "desde hace quince meses" },
       },
     ],
     date: { kind: "double-date", title: "Karaoke con amigos, vuestra canción primero", line: "Cantad la canción del álbum y que vuestros amigos hagan de jurado." },
     stage: [
-      "Quince meses son un año y cuarto, una cuenta que solo algunas parejas llevan. A estas alturas hay banda sonora: canciones del coche, la del primer viaje, la que uno odia y el otro pone igual. Casi todas las primeras veces han pasado, y las repeticiones empiezan a importar más.",
-      "Demasiado a los quince meses: un regalo que intenta superar al aniversario tres meses después. Demasiado poco: un enlace a una playlist sin una palabra. La medida justa envuelve vuestra música en algo que abrir, un disco, una tira de fotomatón, un carrete, con una frase que solo pilláis vosotros.",
+      "Quince meses son un año y cuarto, una cuenta que solo algunas parejas llevan. A estas alturas hay banda sonora: canciones del coche, la del primer viaje, la que odia una mitad de la pareja y la otra mitad pone igual. Casi todas las primeras veces han pasado, y las repeticiones empiezan a importar más.",
+      "Un enlace a una playlist sin una palabra al lado se queda corto. Lo contrario también falla: un regalo pensado para superar al aniversario tres meses después. Vuestra música ya está hecha; el regalo es el envoltorio, algo que abrir, un disco, una tira de fotomatón, un carrete, con una frase que solo pilláis los dos.",
     ],
     faq: [
       { q: "¿Merece la pena celebrar los 15 meses?", a: "Si os gusta marcar los trimestres, sí, y año y cuarto es uno redondo. Un detalle hecho con vuestras canciones encaja sin ponerse serio." },
-      { q: "¿Qué se regala por un año y cuarto juntos?", a: "Algo hecho con vuestra música: un álbum titulado con los quince meses, números de la suerte sacados de vuestra canción, una palabra suya bajo una foto." },
+      { q: "¿Qué se regala cuando se cumple un año y cuarto?", a: "Algo hecho con vuestra música: un álbum titulado con los quince meses, números de la suerte sacados de vuestra canción, una palabra suya bajo una foto." },
       { q: "¿Cómo uso nuestra canción en un regalo?", a: "Elígela como música del regalo en el editor y luego ponle su nombre a las cosas: el álbum, la playlist, una palabra bajo una foto. La canción hace el resto." },
     ],
   },
@@ -2023,7 +2023,7 @@ const month15: Month = {
 const month16: Month = {
   en: {
     title: "16 Month Anniversary Gifts That Reveal the Next Trip",
-    description: "By sixteen months trips together are ordinary, so the gift can be the next one. Five digital gifts that reveal where you are going, with lines to borrow.",
+    description: "A 16 month anniversary gift can be the next trip. Five digital gifts that reveal where you are going, clue by clue, down to the minute you leave.",
     h1: "16 month anniversary gifts",
     label: "16 months",
     hero: {
@@ -2043,7 +2043,7 @@ const month16: Month = {
         template: "passport",
         heading: "The route, with every stopover stamped",
         brief: "A passport with one stamped photo per page and a route of up to six stopovers.",
-        body: "Passport issues them a passport for the two of you and stamps one photo per page, up to ten. The route can have six stopovers, each a real town or city of up to forty characters that the passport finds on its map, so a sixteen-month gift can show the trips you have already taken and end on the one that is booked.",
+        body: "Show the trips you have already taken and end on the one that is booked. The route can have six stopovers, each a real town or city of up to forty characters that the passport finds on its map. Passport issues them a passport for the two of you and stamps one photo per page, up to ten.",
         line: { field: "stops", where: "One stopover", text: "Lyon" },
       },
       {
@@ -2057,7 +2057,7 @@ const month16: Month = {
         template: "scrapbook",
         heading: "A pinned note that says where it started",
         brief: "Polaroids and torn notes, with a pinned note naming where your travels began.",
-        body: "Scrapbook has a pinned note of forty characters among its polaroids, stamps and torn notes; pick the Seaside pages if the next trip has a coast. Sixteen months in, write on the pinned note where the traveling started: the first station, the first bad motel. The rest of the pages fill with photos.",
+        body: "Write where the traveling started on the pinned note, in forty characters: the first station, the first bad motel. Scrapbook keeps that note among its polaroids, stamps and torn notes; pick the Seaside pages if the next trip has a coast. The rest of the pages fill with photos.",
         line: { field: "tag", where: "The pinned note", text: "Platform 4, the first one" },
       },
       {
@@ -2069,23 +2069,23 @@ const month16: Month = {
     ],
     date: { kind: "rainy-day", title: "A gallery hop to pick the next city", line: "Choose the trip from whichever painting you both stop at." },
     stage: [
-      "Sixteen months in, many couples have a few trips behind them and a way of traveling together: who books, who packs, who finds the coffee. The novelty of going away together has turned into a habit, which means the next trip can be planned well and given as a surprise.",
-      "Too much at sixteen months: a long holiday they did not ask for, with dates they cannot get off work. Too little: a link to a booking confirmation. The right gift is the reveal itself: clues, a route, a countdown to the minute you leave, and the plan in a letter.",
+      "Sixteen months in, there are usually a few trips behind you and a way of traveling together: who books, who packs, who finds the coffee. The novelty of going away together has turned into a habit, which means the next trip can be planned well and given as a surprise.",
+      "Check their calendar before anything else. A long vacation they never asked for, on dates they cannot get off work, turns a present into a problem, and a forwarded booking confirmation gives the surprise away in one line. The gift is the reveal itself: clues, a route, a countdown to the minute you leave, and the plan in a letter.",
     ],
     faq: [
       { q: "What is a good gift at sixteen months?", a: "Often the next trip, revealed properly: clues on luggage tags, a passport with the route, a countdown to the minute you leave. Check dates with their calendar first." },
-      { q: "Can the gift open on the day we leave?", a: "Yes, on a paid gift. In the editor, under Extras, switch on “Schedule the reveal” and set the date, the hour and their time zone. Until then the link counts down, and then it opens by itself." },
+      { q: "Can the gift open on the day we leave?", a: "It can. Pick a paid template and, before sending, go to Extras in the editor and switch on “Schedule the reveal”. Give it the morning you leave: date, hour and their time zone. If they open the link early, all they get is a countdown." },
       { q: "How do I hide a trip until the reveal?", a: "Keep the clues vague and in order, from the weather to the food to the place. On Pack Your Bags the board names the destination only at the end." },
     ],
   },
   es: {
     title: "Regalos para 16 meses de novios: el próximo viaje",
-    description: "A los dieciséis meses viajar juntos ya es normal, así que el regalo puede ser el próximo viaje. Cinco regalos digitales que lo desvelan, con frases listas.",
+    description: "Para los 16 meses de novios, el regalo puede ser el próximo viaje: pistas en etiquetas de maleta, una ruta sellada y una cuenta atrás hasta la salida.",
     h1: "Regalos para 16 meses de novios",
     label: "16 meses",
     hero: {
       line: "Viajar ya es normal. Que el próximo viaje sea la sorpresa.",
-      sentence: "A los dieciséis meses habéis viajado juntos lo bastante para planear con seguridad, así que el regalo es un destino, desvelado pista a pista.",
+      sentence: "A los dieciséis meses habéis viajado en pareja lo bastante para planear con seguridad, así que el regalo es un destino, desvelado pista a pista.",
     },
     ideasTitle: "Cinco que desvelan el destino",
     ideas: [
@@ -2093,14 +2093,14 @@ const month16: Month = {
         template: "pack-your-bags",
         heading: "Cinco etiquetas de maleta, una pista en cada una",
         brief: "Hasta cinco pistas en etiquetas de maleta, y un panel de salidas desvela el sitio.",
-        body: "Haz la maleta le da etiquetas de equipaje, una pista en cada una, hasta cinco, antes de que un panel de salidas desvele el destino. Empieza vago y ve cerrando. Elige avión, tren o coche, pon la fecha en el billete y, cuando arranquen el resguardo, debajo está tu carta.",
+        body: "Haz la maleta le da etiquetas de equipaje, una pista en cada una, hasta cinco, antes de que un panel de salidas desvele el destino. Empieza por lo vago y ve cerrando. Elige avión, tren o coche, pon la fecha en el billete y, cuando arranque el resguardo, debajo estará tu carta.",
         line: { field: "clues", where: "Una etiqueta de maleta", text: "Trae los zapatos que nunca te pones" },
       },
       {
         template: "passport",
         heading: "La ruta, con cada escala sellada",
         brief: "Un pasaporte con una foto sellada por página y una ruta de hasta seis escalas.",
-        body: "Pasaporte le expide un pasaporte para los dos y sella una foto por página, hasta diez. La ruta admite seis escalas, cada una un pueblo o una ciudad de verdad de hasta cuarenta caracteres que el pasaporte encuentra en su mapa, así que un regalo de dieciséis meses puede enseñar los viajes que ya habéis hecho y acabar en el que ya está reservado.",
+        body: "Enseña los viajes que ya habéis hecho y acaba en el que está reservado. La ruta admite seis escalas, cada una un pueblo o una ciudad de verdad de hasta cuarenta caracteres que el pasaporte encuentra en su mapa. Pasaporte le expide un pasaporte para los dos y sella una foto por página, hasta diez.",
         line: { field: "stops", where: "Una escala", text: "Lyon" },
       },
       {
@@ -2114,7 +2114,7 @@ const month16: Month = {
         template: "scrapbook",
         heading: "Una nota clavada que dice dónde empezó",
         brief: "Polaroids y notas rasgadas, con una nota clavada que dice dónde empezaron los viajes.",
-        body: "Álbum de recortes tiene una nota clavada de cuarenta caracteres entre sus polaroids, sellos y notas rasgadas; elige las páginas Playa si el próximo viaje tiene costa. A los dieciséis meses, escribe en la nota clavada dónde empezaron los viajes: la primera estación, el primer motel malo. El resto de páginas se llenan de fotos.",
+        body: "Escribe en la nota clavada dónde empezaron los viajes, en cuarenta caracteres: la primera estación, el primer motel malo. Álbum de recortes la guarda entre sus polaroids, sellos y notas rasgadas; elige las páginas Playa si el próximo viaje tiene costa. El resto de páginas se llenan de fotos.",
         line: { field: "tag", where: "La nota clavada", text: "Andén 4, el primero" },
       },
       {
@@ -2126,12 +2126,12 @@ const month16: Month = {
     ],
     date: { kind: "rainy-day", title: "Ruta de galerías para elegir la próxima ciudad", line: "Elegid el viaje por el cuadro ante el que os paréis los dos." },
     stage: [
-      "A los dieciséis meses muchas parejas tienen unos cuantos viajes a la espalda y una manera de viajar juntas: quién reserva, quién hace la maleta, quién encuentra el café. La novedad de irse juntos se ha vuelto costumbre, y por eso el próximo viaje puede planearse bien y darse como sorpresa.",
-      "Demasiado a los dieciséis meses: unas vacaciones largas que no ha pedido, en fechas que no puede librar. Demasiado poco: un enlace a la confirmación de la reserva. El regalo bueno es la revelación misma: pistas, una ruta, una cuenta atrás hasta el minuto en que salís y el plan en una carta.",
+      "A los dieciséis meses suele haber unos cuantos viajes a la espalda y una manera de viajar en pareja: quién reserva, quién hace la maleta, quién encuentra el café. La novedad de hacer las maletas para dos se ha vuelto costumbre, y por eso el próximo viaje puede planearse bien y darse como sorpresa.",
+      "Antes que nada, mira su calendario. Unas vacaciones largas que no ha pedido, en fechas que no puede librar, convierten el regalo en un problema, y reenviar la confirmación de la reserva destripa la sorpresa en una línea. El regalo es la revelación misma: pistas, una ruta, una cuenta atrás hasta el minuto en que salís y el plan en una carta.",
     ],
     faq: [
       { q: "¿Qué es un buen regalo a los dieciséis meses?", a: "A menudo el próximo viaje, bien desvelado: pistas en etiquetas de maleta, un pasaporte con la ruta, una cuenta atrás hasta el minuto de salir. Mira antes su calendario." },
-      { q: "¿Puede abrirse el regalo el día que nos vamos?", a: "Sí, en un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y pon la fecha, la hora y su zona horaria. Hasta entonces el enlace hace la cuenta atrás, y luego se abre solo." },
+      { q: "¿Puede abrirse el regalo el día que nos vamos?", a: "Puede. Elige una plantilla de pago y, antes de enviarla, entra en Extras dentro del editor y enciende «Programar la apertura». Dale la mañana de la salida: fecha, hora y su zona horaria. Si abre el enlace antes, solo verá una cuenta atrás." },
       { q: "¿Cómo escondo un viaje hasta desvelarlo?", a: "Que las pistas sean vagas y vayan en orden, del tiempo a la comida y al sitio. En Haz la maleta el panel solo dice el destino al final." },
     ],
   },
@@ -2144,7 +2144,7 @@ const month16: Month = {
 const month17: Month = {
   en: {
     title: "17 Month Anniversary Gifts That Say the Plain Thing",
-    description: "Seventeen is no round number, which leaves room to say the plain thing. Five digital gifts that do, and a date back where the first one was, with lines.",
+    description: "A 17 month anniversary has no tradition, which leaves room to say the plain thing. Five digital gifts built for one simple sentence, and a date to go back to.",
     h1: "17 month anniversary gifts",
     label: "17 months",
     hero: {
@@ -2157,13 +2157,13 @@ const month17: Month = {
         template: "favorite-person",
         heading: "Who they are to you, in twenty-two characters",
         brief: "A torn note in the middle of the page, with the plain thing written on it.",
-        body: "Favorite Person has one note torn out and placed in the middle of its page, twenty-two characters long. Seventeen months in, skip the clever version and write the plain one. Around it go up to ten polaroids under gingham tape, in blush, lilac or peach, and your letter waits at the bottom.",
+        body: "One torn note sits in the middle of the Favorite Person page, twenty-two characters long. Seventeen months in, skip the clever version and write the plain one. Around it go up to ten polaroids under gingham tape, in blush, lilac or peach, and your letter waits at the bottom.",
         line: { field: "title", where: "The torn note", text: "still my person" },
       },
       {
         template: "sticker-bomb",
         heading: "A promise on the empty page",
-        body: "Sticker Bomb opens on an empty page with one line on it, forty characters, before the first sticker. Make that line the plain promise, and let the stickers be the joke around it: The soft ones pack, if you want it gentle. Up to six of your photos land among them as polaroids.",
+        body: "Sticker Bomb opens on an empty page with one line on it, forty characters, before the first sticker. Make that line the plain promise, and let the stickers be the joke around it: The soft ones pack, if you want it gentle. Up to six of your photos turn up among them as polaroids.",
         line: { field: "prompt", where: "The line on the empty page", text: "I would pick you again. Now stick." },
       },
       {
@@ -2177,7 +2177,7 @@ const month17: Month = {
         template: "garden",
         heading: "A gate sign with the count burnt in",
         brief: "A gate with your count burnt into its sign, and a garden of photos behind it.",
-        body: "The Garden opens through a gate with a wooden sign, twenty-four characters burnt into it, onto roses, peonies, wildflowers or sunflowers. Up to twelve photos hang on the trellis and your letter waits on the potting table in the greenhouse. A clip can go in too. Burn the count of months into the gate.",
+        body: "Seventeen is a number worth burning into wood. A gate leads into The Garden, and its wooden sign takes twenty-four characters; behind it grow roses, peonies, wildflowers or sunflowers. Up to twelve photos hang on the trellis, a clip can go in too, and your letter waits on the potting table in the greenhouse.",
         line: { field: "sign", where: "The sign on the gate", text: "17 months, still growing" },
       },
       {
@@ -2190,18 +2190,18 @@ const month17: Month = {
     ],
     date: { kind: "first-date", title: "Back to where the first date was", line: "Order what you ordered then, and compare notes." },
     stage: [
-      "Seventeen months has no tradition, no number to hang anything on, and that is its use. Many couples by now have a shared shorthand and fewer things to prove. The plain sentences, I like this, I would do it again, are easier to say on a day that is not supposed to mean anything.",
-      "Too much at seventeen months: a gift that invents a reason. Too little: assuming the plain thing goes without saying. The right one says it in a sentence, puts it somewhere they will read it twice, and goes back to where the first date was.",
+      "Seventeen months has no tradition, no number to hang anything on, and that is its use. By now there is usually a shared shorthand and fewer things to prove. The plain sentences, I like this, I would do it again, are easier to say on a day that is not supposed to mean anything.",
+      "Nobody expects month seventeen to have a reason, so a gift that dresses the day up as a milestone misses. The opposite mistake is quieter: assuming the plain thing goes without saying. Say it in one sentence, put it somewhere they will read it twice, and go back to where the first date was.",
     ],
     faq: [
-      { q: "Should I mark seventeen months?", a: "Only if you like an excuse. Seventeen is no milestone, which makes a small gift read as affection rather than duty, and a return to the first-date place makes it a day." },
+      { q: "Should I mark seventeen months?", a: "Only if you like an excuse. Seventeen is no milestone, which makes a small gift feel like affection rather than duty, and a return to the first-date place makes it a day." },
       { q: "What do you write when there is no occasion?", a: "The plain thing: that you are glad, that you would choose this again. Short and direct reads better than clever when nothing is being celebrated." },
       { q: "What is a good date for seventeen months?", a: "Go back to where the first date was and order the same things. It costs little and gives you a whole evening of comparing what you each remember." },
     ],
   },
   es: {
     title: "Regalos para 17 meses de novios que lo dicen claro",
-    description: "El diecisiete no es redondo, y eso deja sitio para decir lo sencillo. Cinco regalos digitales que lo dicen, y una cita donde fue la primera, con frases.",
+    description: "Los 17 meses de novios no tienen tradición, y eso deja sitio para decir lo sencillo. Cinco regalos digitales para una frase clara, y una cita a la que volver.",
     h1: "Regalos para 17 meses de novios",
     label: "17 meses",
     hero: {
@@ -2214,7 +2214,7 @@ const month17: Month = {
         template: "favorite-person",
         heading: "Quién es para ti, en veintidós caracteres",
         brief: "Una nota rasgada en el centro de la página, con lo sencillo escrito en ella.",
-        body: "Mi persona favorita tiene una nota rasgada y colocada en el centro de la página, de veintidós caracteres. A los diecisiete meses, sáltate la versión ingeniosa y escribe la sencilla. Alrededor van hasta diez polaroids con cinta de cuadros, en rosa, lila o melocotón, y tu carta espera al final.",
+        body: "En el centro de la página de Mi persona favorita va una nota rasgada de veintidós caracteres. Con diecisiete meses, sáltate la versión ingeniosa y escribe la sencilla. Alrededor van hasta diez polaroids con cinta de cuadros, en rosa, lila o melocotón, y tu carta espera al final.",
         line: { field: "title", where: "La nota rasgada", text: "sigues siendo tú" },
       },
       {
@@ -2228,14 +2228,14 @@ const month17: Month = {
         template: "bouquet",
         heading: "Un tallo por cada mes, y una tarjeta",
         brief: "Diecisiete tallos, uno por mes, y una tarjeta que se abre en tu carta.",
-        body: "En Ramo caben diecisiete tallos, porque admite hasta 24; elige tú las flores y los colores, y verán el ramo juntarse en su pantalla. La tarjeta admite treinta caracteres y la carta entera se abre desde ella. A los diecisiete meses, la tarjeta puede llevar la frase sencilla y la carta los detalles.",
+        body: "En Ramo caben diecisiete tallos, porque admite hasta 24; elige tú las flores y los colores, y el ramo se va juntando en su pantalla. La tarjeta admite treinta caracteres y la carta entera se abre desde ella. A los diecisiete meses, la tarjeta puede llevar la frase sencilla y la carta los detalles.",
         line: { field: "cardNote", where: "En la tarjeta", text: "Diecisiete. Y sigo feliz." },
       },
       {
         template: "garden",
         heading: "Un cartel en la verja con la cuenta grabada",
         brief: "Una verja con vuestra cuenta grabada en el cartel y un jardín de fotos detrás.",
-        body: "El jardín se abre por una verja con un cartel de madera, veinticuatro caracteres grabados a fuego, hacia rosas, peonías, flores silvestres o girasoles. Hasta doce fotos cuelgan del enrejado y tu carta espera en la mesa del invernadero. También cabe un vídeo. Graba en la verja la cuenta de meses.",
+        body: "Diecisiete es un número que merece ir grabado a fuego. La entrada de El jardín es una verja con un cartel de madera de veinticuatro caracteres; detrás crecen rosas, peonías, flores silvestres o girasoles. Hasta doce fotos cuelgan del enrejado, también cabe un vídeo, y tu carta espera en la mesa del invernadero.",
         line: { field: "sign", where: "El cartel de la verja", text: "17 meses y creciendo" },
       },
       {
@@ -2248,13 +2248,13 @@ const month17: Month = {
     ],
     date: { kind: "first-date", title: "Volver a donde fue la primera cita", line: "Pedid lo mismo que entonces y comparad lo que recordáis." },
     stage: [
-      "Los diecisiete meses no tienen tradición ni un número del que colgar nada, y para eso sirven. A estas alturas muchas parejas tienen sus abreviaturas y menos cosas que demostrar. Las frases sencillas, me gusta esto, lo volvería a hacer, se dicen mejor en un día que no tiene por qué significar nada.",
-      "Demasiado a los diecisiete meses: un regalo que se inventa un motivo. Demasiado poco: dar por hecho que lo sencillo no hace falta decirlo. El bueno lo dice en una frase, lo pone donde se lea dos veces y vuelve a donde fue la primera cita.",
+      "Los diecisiete meses no tienen tradición ni un número del que colgar nada, y para eso sirven. A estas alturas suele haber abreviaturas propias y menos cosas que demostrar. Las frases sencillas, me gusta esto, lo volvería a hacer, se dicen mejor en un día que no tiene por qué significar nada.",
+      "Nadie espera que el mes diecisiete tenga motivo, así que un regalo que lo disfraza de hito no acierta. El error contrario hace menos ruido: dar por hecho que lo sencillo no hace falta decirlo. Dilo en una frase, ponlo donde se lea dos veces y volved al sitio de la primera cita.",
     ],
     faq: [
       { q: "¿Celebro los diecisiete meses?", a: "Solo si te gusta tener excusa. El diecisiete no es un hito, y por eso un detalle pequeño se lee como cariño y no como obligación; volver al sitio de la primera cita lo convierte en un día." },
       { q: "¿Qué se escribe cuando no hay ocasión?", a: "Lo sencillo: que te alegras, que volverías a elegir esto. Cuando no se celebra nada, lo corto y directo se lee mejor que lo ingenioso." },
-      { q: "¿Qué cita encaja a los diecisiete meses?", a: "Volver a donde fue la primera y pedir lo mismo. Cuesta poco y da para una noche entera comparando lo que recuerda cada uno." },
+      { q: "¿Qué cita encaja a los diecisiete meses?", a: "Volver a donde fue la primera y pedir lo mismo. Cuesta poco y da para una noche entera comparando recuerdos." },
     ],
   },
 };
@@ -2266,7 +2266,7 @@ const month17: Month = {
 const month18: Month = {
   en: {
     title: "18 Month Anniversary Gifts for a Year and a Half",
-    description: "A year and a half is often when the talk turns to a shared lease. Six digital gifts for eighteen months, from a museum of you to a front page, with lines.",
+    description: "Halfway to two years, the talk often turns to a shared lease. Six 18 month anniversary gifts that look back over it, from a museum of you to a front page.",
     h1: "18 month anniversary gifts",
     label: "18 months",
     hero: {
@@ -2286,7 +2286,7 @@ const month18: Month = {
         template: "recipe-box",
         heading: "A recipe that makes one shared kitchen",
         brief: "A recipe card whose small line finishes “Makes one…” with the home you are planning.",
-        body: "Recipe Box puts a small line under the recipe’s name that finishes “Makes one…”, ninety characters, above up to six ingredients. At a year and a half, finish it with the home you are talking about. Turn the card over and your letter is on the back with photos clipped on.",
+        body: "Under the recipe’s name in Recipe Box sits a small line that finishes “Makes one…”, ninety characters, above up to six ingredients. At a year and a half, finish it with the home you are talking about. Turn the card over and your letter is on the back with photos clipped on.",
         line: { field: "makes", where: "After “Makes one…”", text: "kitchen with two of everything and one good knife between us" },
       },
       {
@@ -2300,14 +2300,14 @@ const month18: Month = {
         template: "jar-of-reasons",
         heading: "Eighteen reasons, folded into a jar",
         brief: "Eighteen folded notes, one a month, shaken out of a jar one at a time.",
-        body: "Jar of Reasons takes three notes at least and a hundred at most, folded, each up to 160 characters, and one tumbles out every time they shake the phone. Eighteen is a good count for a year and a half. Write one about each month, in order, and pin a photo to the ones that have one.",
+        body: "Every time they shake the phone, one folded note tumbles out of Jar of Reasons, which takes three notes at least and a hundred at most, each up to 160 characters. Eighteen is a good count for a year and a half. Write one about each month, in order, and pin a photo to the ones that have one.",
         line: { field: "reasons", where: "One note in the jar", text: "Month 14: you learned the bus timetable so I would not have to." },
       },
       {
         template: "our-timeline",
         heading: "A road with eighteen dated stops",
         brief: "Eighteen dated photos pinned along a road that draws itself as they scroll.",
-        body: "Our Timeline holds up to twenty photos, each pinned to the road with a date of up to forty characters, and draws the road as they scroll. Eighteen stops, one a month, is a long walk through the relationship. Date the stops the way you would say them out loud, not as numbers.",
+        body: "Up to twenty photos fit on Our Timeline, each pinned to the road with a date of up to forty characters, and the road draws itself as they scroll. Eighteen stops, one a month, is a long walk through the relationship. Date the stops the way you would say them out loud, not as numbers.",
         line: { field: "dates", where: "The date on a stop", text: "the week of the leaky ceiling" },
       },
       {
@@ -2320,18 +2320,18 @@ const month18: Month = {
     ],
     date: { kind: "romantic", title: "Dress up for the theater, for once", line: "Book two seats and let the evening run late." },
     stage: [
-      "A year and a half is the second half-year that most people notice. By now many couples have talked about living together, and some have signed their first shared lease or are about to. The friends are shared, the families have met more than once, and the future gets mentioned without anyone flinching.",
-      "Too much at eighteen months: a gift that makes the moving-in decision for them. Too little: a card that ignores the subject when it is on both your minds. The right one takes stock of the eighteen months, a plaque or a note for each, and lets the next address appear in it if you both want it.",
+      "A year and a half is the second half-year that people tend to notice. Living together has usually come up by now, and some have signed a first shared lease or are about to. The friends are shared, the families have met more than once, and the future gets mentioned without anyone flinching.",
+      "If moving in is on both your minds, a card that ignores it falls flat, and a gift that decides it for them oversteps. What sits between the two is a look back over eighteen months, a plaque or a note for each, with room for the next address if you both want it there.",
     ],
     faq: [
-      { q: "Is eighteen months a big anniversary?", a: "It is the second half-year, and many couples mark it more than the months around it. A gift with eighteen photos or reasons, one a month, fits well." },
+      { q: "Is eighteen months a big anniversary?", a: "It is the second half-year, and it often gets marked more than the months around it. A gift with eighteen photos or reasons, one a month, fits well." },
       { q: "What do you get for a year and a half together?", a: "A gift that looks over the whole stretch: a museum of eighteen photos, a road of dated stops, a jar of eighteen reasons. If moving in is on the table, a front page can announce it." },
       { q: "Should I bring up moving in with a gift?", a: "Only if you have already talked about it. A gift can celebrate a decision you made together; it is a poor place to propose one." },
     ],
   },
   es: {
     title: "Regalos para 18 meses de novios: año y medio",
-    description: "Año y medio suele ser cuando se habla del primer piso compartido. Seis regalos digitales para los dieciocho meses, de un museo a una portada, con frases.",
+    description: "Año y medio, y a menudo se habla del primer piso compartido. Seis regalos para los 18 meses de novios que repasan el tramo, de un museo a una portada.",
     h1: "Regalos para 18 meses de novios",
     label: "18 meses",
     hero: {
@@ -2344,14 +2344,14 @@ const month18: Month = {
         template: "museum",
         heading: "Placas que dicen meses, no años",
         brief: "Cada foto enmarcada sobre una placa, con su mes en el pie, en una galería para deslizar.",
-        body: "Cada foto de Museo cuelga sobre una placa con su pie y una datación de hasta veinte caracteres, la misma en todas las placas, como las que imprimiría una galería. Que la datación sea el tramo entero; pon el mes de cada imagen en su pie y titúlalas como lo haría un comisario. Pasan de sala en sala deslizando, de dos a veinte fotos en total.",
+        body: "Cada foto de Museo cuelga sobre una placa con su pie y una datación de hasta veinte caracteres, la misma en todas las placas, como las que imprimiría una galería. Que la datación sea el tramo entero; pon el mes de cada imagen en su pie y titúlalas como lo haría un comisario. Se pasa de sala en sala deslizando, de dos a veinte fotos en total.",
         line: { field: "years", where: "La datación de todas las placas", text: "Meses 1 a 18" },
       },
       {
         template: "recipe-box",
         heading: "Una receta que da para una cocina compartida",
         brief: "Una tarjeta de receta cuya frase pequeña completa «Sale una…» con la casa que planeáis.",
-        body: "Caja de recetas pone bajo el nombre de la receta una frase pequeña que completa «Sale una…», noventa caracteres, encima de hasta seis ingredientes. A año y medio, termínala con la casa de la que habláis. Dale la vuelta a la tarjeta y tu carta está detrás, con fotos sujetas.",
+        body: "Bajo el nombre de la receta, Caja de recetas pone una frase pequeña que completa «Sale una…», noventa caracteres, encima de hasta seis ingredientes. A año y medio, termínala con la casa de la que habláis. Dale la vuelta a la tarjeta y tu carta está detrás, con fotos sujetas.",
         line: { field: "makes", where: "Después de «Sale una…»", text: "cocina con dos de todo y un solo cuchillo bueno" },
       },
       {
@@ -2365,33 +2365,33 @@ const month18: Month = {
         template: "jar-of-reasons",
         heading: "Dieciocho razones dobladas en un frasco",
         brief: "Dieciocho notas dobladas, una por mes, que salen del frasco de una en una.",
-        body: "Frasco de razones admite tres notas como mínimo y cien como mucho, dobladas, de hasta 160 caracteres, y cae una cada vez que agitan el móvil. Dieciocho es buena cuenta para año y medio. Escribe una sobre cada mes, en orden, y pon foto a las que la tengan.",
+        body: "Cada vez que se agita el móvil, cae una nota doblada de Frasco de razones, que admite tres como mínimo y cien como mucho, de hasta 160 caracteres. Dieciocho es buena cuenta para año y medio. Escribe una sobre cada mes, en orden, y pon foto a las que la tengan.",
         line: { field: "reasons", where: "Una nota del frasco", text: "Mes 14: te aprendiste los horarios del bus para que yo no tuviera que hacerlo." },
       },
       {
         template: "our-timeline",
         heading: "Un camino con dieciocho paradas con fecha",
         brief: "Dieciocho fotos con fecha clavadas en un camino que se dibuja al deslizar.",
-        body: "Nuestra línea del tiempo admite hasta veinte fotos, cada una clavada en el camino con una fecha de hasta cuarenta caracteres, y dibuja el camino mientras deslizan. Dieciocho paradas, una por mes, son un buen paseo por la relación. Pon las fechas como las diríais en voz alta, no como números.",
+        body: "Hasta veinte fotos caben en Nuestra línea del tiempo, cada una clavada en el camino con una fecha de hasta cuarenta caracteres, y el camino se dibuja a medida que se desliza. Dieciocho paradas, una por mes, son un buen paseo por la relación. Pon las fechas como las diríais en voz alta, no como números.",
         line: { field: "dates", where: "La fecha de una parada", text: "la semana de la gotera" },
       },
       {
         template: "front-page",
         heading: "El piso, contado como noticia de última hora",
         brief: "Un periódico con su nombre en la cabecera y la fecha de la mudanza en el subtítulo.",
-        body: "Portada pone vuestra historia bajo una cabecera con su nombre, con un titular encima y un subtítulo de hasta 140 caracteres debajo. Si a los dieciocho meses se habla de iros a vivir juntos, el subtítulo es donde van la fecha y la dirección, en prosa seria de periódico.",
+        body: "Portada pone vuestra historia bajo una cabecera con su nombre, con un titular encima y un subtítulo de hasta 140 caracteres debajo. Si a los dieciocho meses se habla de compartir casa, el subtítulo es donde van la fecha y la dirección, en prosa seria de periódico.",
         line: { field: "subhead", where: "El subtítulo", text: "Fuentes confirman una dirección compartida a partir del día uno del mes que viene. Los vecinos están avisados." },
       },
     ],
     date: { kind: "romantic", title: "Vestíos para el teatro, por una vez", line: "Comprad dos butacas y dejad que la noche se alargue." },
     stage: [
-      "Año y medio es el segundo medio año que casi todo el mundo nota. A estas alturas muchas parejas han hablado de vivir juntas, y algunas han firmado su primer contrato de alquiler o están a punto. Los amigos son comunes, las familias se han visto más de una vez y el futuro sale en la conversación sin que nadie se ponga tenso.",
-      "Demasiado a los dieciocho meses: un regalo que decide la mudanza por esa persona. Demasiado poco: una tarjeta que ignora el tema cuando los dos lo tenéis en la cabeza. El bueno hace balance de los dieciocho meses, una placa o una nota por cada uno, y deja que la próxima dirección aparezca si los dos queréis.",
+      "Año y medio es el segundo medio año que casi todo el mundo nota. A estas alturas lo de compartir casa ya ha salido, y hay quien ha firmado su primer contrato de alquiler o está a punto. Los amigos son comunes, las familias se han visto más de una vez y el futuro sale en la conversación sin que nadie se ponga tenso.",
+      "Si la mudanza os ronda a los dos, una tarjeta que hace como si nada se queda corta, y un regalo que la decide sin preguntar se pasa. En medio cabe un repaso de los dieciocho meses, una placa o una nota por cada uno, con sitio para la próxima dirección si los dos la queréis ahí.",
     ],
     faq: [
-      { q: "¿Los dieciocho meses son un aniversario importante?", a: "Son el segundo medio año, y muchas parejas lo celebran más que los meses de alrededor. Encaja un regalo con dieciocho fotos o razones, una por mes." },
-      { q: "¿Qué se regala por año y medio juntos?", a: "Un regalo que repase todo el tramo: un museo de dieciocho fotos, un camino de paradas con fecha, un frasco con dieciocho razones. Si os vais a vivir juntos, una portada puede anunciarlo." },
-      { q: "¿Saco el tema de vivir juntos con un regalo?", a: "Solo si ya lo habéis hablado. Un regalo puede celebrar una decisión que tomasteis juntos; es mal sitio para proponerla." },
+      { q: "¿Los dieciocho meses son un aniversario importante?", a: "Son el segundo medio año, y suelen celebrarse más que los meses de alrededor. Encaja un regalo con dieciocho fotos o razones, una por mes." },
+      { q: "¿Qué se regala por año y medio de relación?", a: "Un regalo que repase todo el tramo: un museo de dieciocho fotos, un camino de paradas con fecha, un frasco con dieciocho razones. Si vais a compartir casa, una portada puede anunciarlo." },
+      { q: "¿Saco el tema de compartir casa con un regalo?", a: "Solo si ya lo habéis hablado. Un regalo puede celebrar una decisión que ya tomasteis los dos; es mal sitio para proponerla." },
     ],
   },
 };
@@ -2403,7 +2403,7 @@ const month18: Month = {
 const month19: Month = {
   en: {
     title: "19 Month Anniversary Gifts, Small and Sure",
-    description: "Nineteen months has no custom at all, so the gift can be small and sure of itself. Five digital gifts for an odd month, each with a line to borrow.",
+    description: "A 19 month anniversary comes with no custom at all, so the gift can be small and sure of itself. Five for an odd month, each with a line to borrow.",
     h1: "19 month anniversary gifts",
     label: "19 months",
     hero: {
@@ -2423,18 +2423,18 @@ const month19: Month = {
         template: "on-repeat",
         heading: "A playlist for a month with no name",
         brief: "A playlist of the photos taken when nothing was happening, captions as song titles.",
-        body: "Name the playlist in On Repeat for this odd month, twenty-four characters, and fill it with the photos you took when nothing was happening: the bus, the laundry, the queue. Each becomes a track with your caption as the song title. Small months make good albums.",
+        body: "Name the playlist in On Repeat for this odd month, twenty-four characters, and fill it with the photos you took when nothing was happening: the bus, the laundry, the checkout line. Each becomes a track with your caption as the song title. Small months make good albums.",
         line: { field: "playlist", where: "The playlist’s name", text: "nothing happened, deluxe" },
       },
       {
         template: "paper-crane",
         heading: "Six small folds for an odd month",
-        body: "Paper Crane folds only while they hold it, crease by crease, and lets go if they hurry. Each fold that lands shows a line of up to seventy-two characters. For nineteen months, write six small, sure lines, nothing grand, and keep the paper ivory or sage so the words carry it.",
+        body: "The crane folds only while they hold it, crease by crease, and lets go if they hurry. Each finished fold in Paper Crane shows a line of up to seventy-two characters. For nineteen months, write six small, sure lines, nothing grand, and keep the paper ivory or sage so the words carry it.",
         line: { field: "lines", where: "The line on one fold", text: "You always leave the last cookie. I noticed." },
       },
       {
         template: "coquette",
-        heading: "A ticket that admits one to an ordinary evening",
+        heading: "A ticket that admits one to a Thursday evening",
         brief: "A ticket that admits them to something small and real, beside photos and a postcard.",
         body: "Coquette’s ticket says what it admits them to, twenty-six characters, beside a strip of photos, torn-out words and a handwritten postcard. Make it something small and real, the dinner you will cook on Thursday. The letter at the bottom of the page, on torn paper, can explain the rest.",
         line: { field: "ticket", where: "The ticket", text: "admit one: Thursday pasta" },
@@ -2449,18 +2449,18 @@ const month19: Month = {
     ],
     date: { kind: "cheap", title: "A gallery hop that costs nothing", line: "Stop at the one painting you would both hang at home." },
     stage: [
-      "Nineteen months is an odd month with no custom attached, between the year and a half and the two years. Most couples are not counting by now, which is the reason a gift lands. Life is busy with ordinary things, rent and laundry and other people’s birthdays, and the relationship is part of the furniture in the best sense.",
-      "Too much at nineteen months: a grand gesture that needs explaining. Too little: nothing, if you have kept the habit of marking months. The right size is small and sure of itself, a playlist of nothing in particular or a pardoned charge, and a sentence that does not hedge.",
+      "Nineteen months is an odd month with no custom attached, between the year and a half and the two years. Hardly anyone is still counting by now, which is exactly why a gift gets noticed. Life is busy with rent and laundry and other people’s birthdays, and the relationship is part of the furniture in the best sense.",
+      "Would it need explaining? If so, the gesture is too big for nineteen months. Skipping the month only misses if you have kept the habit of marking each one. A playlist of nothing in particular or a pardoned charge is about the size, with one sentence in it that does not hedge.",
     ],
     faq: [
       { q: "Do people celebrate 19 months?", a: "Rarely, which makes it a good month for a small gift that needs no reason. If you have stopped counting months, a nineteen-month gift is a pleasant surprise." },
-      { q: "What is a small gift for nineteen months?", a: "A playlist of ordinary days, a ticket to a Thursday dinner, a charge they are pardoned for. Small, specific and finished in ten minutes." },
+      { q: "What is a small gift for nineteen months?", a: "A playlist of days when nothing happened, a ticket to a Thursday dinner, a charge they are pardoned for. Any of them can be made over a coffee, and none needs a reason." },
       { q: "How do I write something sincere without making it heavy?", a: "Pair it with a joke. One line that is true, inside a gift that is light, gets read twice and never feels like a speech." },
     ],
   },
   es: {
     title: "Regalos para 19 meses de novios, pequeños y seguros",
-    description: "Los diecinueve meses no tienen ninguna costumbre, así que el regalo puede ser pequeño y seguro de sí. Cinco regalos digitales para un mes impar, con frases.",
+    description: "Sin costumbre para los 19 meses de novios, el regalo puede ser pequeño y seguro de sí. Cinco para un mes impar, cada uno con una frase lista.",
     h1: "Regalos para 19 meses de novios",
     label: "19 meses",
     hero: {
@@ -2486,12 +2486,12 @@ const month19: Month = {
       {
         template: "paper-crane",
         heading: "Seis pliegues pequeños para un mes impar",
-        body: "Grulla de papel solo se dobla mientras la sujetan, pliegue a pliegue, y se suelta si tienen prisa. Cada pliegue que sale muestra una frase de hasta setenta y dos caracteres. Para los diecinueve meses, escribe seis frases pequeñas y seguras, nada grandioso, y deja el papel marfil o salvia para que las palabras lo llenen.",
+        body: "La grulla solo se dobla mientras se mantiene pulsado cada pliegue, y se abre si hay prisa. Cada pliegue terminado de Grulla de papel muestra una frase de hasta setenta y dos caracteres. Para los diecinueve meses, escribe seis frases pequeñas y seguras, nada grandioso, y deja el papel marfil o salvia para que las palabras lo llenen.",
         line: { field: "lines", where: "La frase de un pliegue", text: "Siempre me dejas la última galleta. Me he dado cuenta." },
       },
       {
         template: "coquette",
-        heading: "Una entrada para una noche normal",
+        heading: "Una entrada para la noche del jueves",
         brief: "Un billete que da entrada a algo pequeño y real, junto a fotos y una postal.",
         body: "El billete de Coquette dice a qué da entrada, veintiséis caracteres, junto a una tira de fotos, unas palabras recortadas y una postal escrita a mano. Que sea algo pequeño y real, la cena que vas a cocinar el jueves. La carta del final de la página, en papel rasgado, puede explicar lo demás.",
         line: { field: "ticket", where: "El billete", text: "entrada: pasta del jueves" },
@@ -2506,12 +2506,12 @@ const month19: Month = {
     ],
     date: { kind: "cheap", title: "Una ruta de galerías que no cuesta nada", line: "Paraos ante el cuadro que los dos colgaríais en casa." },
     stage: [
-      "Diecinueve meses es un mes impar sin costumbre, entre el año y medio y los dos años. Casi ninguna pareja cuenta a estas alturas, y por eso un regalo llega. La vida está llena de cosas normales, el alquiler, la colada, los cumpleaños de los demás, y la relación ya es parte de la casa en el mejor sentido.",
-      "Demasiado a los diecinueve meses: un gran gesto que haya que explicar. Demasiado poco: nada, si mantenéis la costumbre de celebrar los meses. La medida justa es pequeña y segura de sí, una playlist de nada en concreto o una acusación indultada, y una frase sin rodeos.",
+      "Diecinueve meses es un mes impar sin costumbre, entre el año y medio y los dos años. A estas alturas casi nadie sigue contando, y justo por eso un regalo se nota. La vida está llena de alquiler, coladas y cumpleaños de los demás, y la relación ya es parte de la casa en el mejor sentido.",
+      "¿Habría que explicarlo? Si es así, el gesto se le queda grande a los diecinueve meses. Saltarse el mes solo falla si mantenéis la costumbre de celebrar cada uno. Una playlist de nada en concreto o una acusación indultada tienen la talla, con una frase dentro que no se ande con rodeos.",
     ],
     faq: [
       { q: "¿Se celebran los 19 meses?", a: "Rara vez, y por eso es buen mes para un detalle pequeño que no necesita motivo. Si habéis dejado de contar meses, un regalo a los diecinueve es una sorpresa agradable." },
-      { q: "¿Qué detalle pequeño se hace a los diecinueve meses?", a: "Una playlist de días normales, una entrada para la cena del jueves, una acusación con indulto. Pequeño, concreto y terminado en diez minutos." },
+      { q: "¿Qué detalle pequeño se hace a los diecinueve meses?", a: "Una playlist de días en los que no pasó nada, una entrada para la cena del jueves, una acusación con indulto. Cualquiera se hace en lo que dura un café, y ninguno necesita motivo." },
       { q: "¿Cómo escribo algo sincero sin que pese?", a: "Acompáñalo de una broma. Una frase verdadera dentro de un regalo ligero se lee dos veces y nunca suena a discurso." },
     ],
   },
@@ -2524,7 +2524,7 @@ const month19: Month = {
 const month20: Month = {
   en: {
     title: "20 Month Anniversary Gifts Worth Keeping",
-    description: "Twenty months deserves something kept rather than used up. Five digital gifts that hold onto the last twenty months, each with a line to borrow.",
+    description: "A 20 month anniversary deserves something kept rather than used up. Five gifts built like boxes of keepsakes, from a sealed parcel to a record on side B.",
     h1: "20 month anniversary gifts",
     label: "20 months",
     hero: {
@@ -2551,7 +2551,7 @@ const month20: Month = {
         template: "the-council",
         heading: "Findings read into the record, to keep",
         brief: "Six findings read out by cats, for the record, before a stamp marks it certified.",
-        body: "A finding in The Council is a line of up to ninety characters that one of the cats reads out, six findings at most, before the stamp comes down. Twenty months gives you a record to read into: the moments you would want on file. Choose certified for the stamp, so it reads as official.",
+        body: "A finding in The Council is a line of up to ninety characters that one of the cats reads out, six findings at most, before the stamp comes down. Twenty months gives you a record to read into: the moments you would want on file. Choose certified for the stamp, so it sounds official.",
         line: { field: "findings", where: "One of the findings", text: "On file: the night you drove two hours with soup because I had a cold." },
       },
       {
@@ -2571,8 +2571,8 @@ const month20: Month = {
     ],
     date: { kind: "fun", title: "Arcade night, and keep the tickets", line: "Trade the tickets for the silliest prize and keep it." },
     stage: [
-      "Twenty months is long enough to have a drawer of kept things: tickets, a receipt from somewhere, a note left on a pillow, a dried flower from a wedding you went to together. Most couples have stopped counting by now and many live together, and the history is starting to need somewhere to go.",
-      "Too much at twenty months: a gift that pre-empts the second anniversary. Too little: a message that disappears in a chat. The right size is something kept, a parcel, a scrapbook, a record, a box with twenty months in it, built so they can open it again in a year.",
+      "Twenty months is long enough to have a drawer of kept things: tickets, a receipt from somewhere, a note left on a pillow, a dried flower from a wedding you went to together. Counting stopped a while ago, plenty of couples share a home, and the history is starting to need somewhere to go.",
+      "A message in the chat scrolls out of sight by Friday, and a gift that tries to be the second anniversary early takes the shine off the real one. Twenty months suits something kept: a parcel, a scrapbook, a record, a box with the months inside, built so they can open it again in a year.",
     ],
     faq: [
       { q: "What is a good gift for twenty months together?", a: "Something built to be kept: a parcel of kept things with a locket, a scrapbook of twelve chosen photos, a record with this side marked B." },
@@ -2582,7 +2582,7 @@ const month20: Month = {
   },
   es: {
     title: "Regalos para 20 meses de novios para guardar",
-    description: "Veinte meses merecen algo que se guarde, no algo que se gaste. Cinco regalos digitales que conservan los últimos veinte meses, cada uno con una frase lista.",
+    description: "Los 20 meses de novios merecen algo que se guarde, no algo que se gaste. Cinco regalos hechos como cajas de recuerdos, de un paquete sellado a una cara B.",
     h1: "Regalos para 20 meses de novios",
     label: "20 meses",
     hero: {
@@ -2595,7 +2595,7 @@ const month20: Month = {
         template: "keepsake",
         heading: "Un paquete de cosas guardadas, con una palabra",
         brief: "Un paquete sellado de cosas guardadas: una primera foto, un billete, un relicario y una palabra.",
-        body: "Recuerdo está hecho para este mes: un paquete atado con cordel bajo un sello de lacre que guarda lo que merece guardarse, un relicario, un billete, flores prensadas sobre la primera foto y una palabra recortada de una página, de catorce caracteres como mucho. Veinte meses dan para saber qué palabra guardaría esa persona. Tu carta va a máquina en papel envejecido.",
+        body: "Recuerdo está hecho para este mes: un paquete atado con cordel bajo un sello de lacre que guarda lo que merece guardarse, un relicario, un billete, flores prensadas sobre la primera foto y una palabra recortada de una página, de catorce caracteres como mucho. Veinte meses dan para saber qué palabra elegiría si solo pudiera guardar una. Tu carta va a máquina en papel envejecido.",
         line: { field: "word", where: "La palabra arrancada", text: "siempre" },
       },
       {
@@ -2614,9 +2614,9 @@ const month20: Month = {
       },
       {
         template: "garden",
-        heading: "Una etiqueta de ramo como lo último que leen",
-        brief: "Un paseo por un jardín de fotos que acaba en una etiqueta, lo último que leen.",
-        body: "El jardín termina en un ramo con una etiqueta de sesenta caracteres, y el editor dice que es lo último que leen. Antes pasan por rosas, peonías, flores silvestres o girasoles, un enrejado con hasta doce fotos y tu carta en la mesa del invernadero. A los veinte meses, pon en la etiqueta lo que guardas.",
+        heading: "Una etiqueta de ramo, lo último que se lee",
+        brief: "Un paseo por un jardín de fotos que acaba en una etiqueta, lo último que se lee.",
+        body: "El jardín termina en un ramo con una etiqueta de sesenta caracteres, y el editor dice que es lo último que se lee. Antes se pasa por rosas, peonías, flores silvestres o girasoles, un enrejado con hasta doce fotos y tu carta en la mesa del invernadero. A los veinte meses, pon en la etiqueta lo que guardas.",
         line: { field: "tag", where: "La etiqueta del ramo", text: "Para ti, de veinte meses prestándote atención" },
       },
       {
@@ -2629,11 +2629,11 @@ const month20: Month = {
     ],
     date: { kind: "fun", title: "Noche de recreativos, y guardad los tickets", line: "Cambiad los tickets por el premio más tonto y guardadlo." },
     stage: [
-      "Veinte meses dan para tener un cajón de cosas guardadas: entradas, un tique de algún sitio, una nota dejada en la almohada, una flor seca de una boda a la que fuisteis juntos. Casi nadie cuenta ya a estas alturas y muchas parejas viven juntas, y la historia empieza a necesitar un sitio donde estar.",
-      "Demasiado a los veinte meses: un regalo que se adelanta al segundo aniversario. Demasiado poco: un mensaje que se pierde en el chat. La medida justa es algo para guardar, un paquete, un álbum, un disco, una caja con veinte meses dentro, hecho para volver a abrirlo dentro de un año.",
+      "Veinte meses dan para tener un cajón de cosas guardadas: entradas, un tique de algún sitio, una nota dejada en la almohada, una flor seca de una boda a la que fuisteis los dos. Hace tiempo que nadie cuenta, a menudo ya se comparte casa, y la historia empieza a necesitar un sitio donde estar.",
+      "Un mensaje en el chat desaparece de la vista antes del viernes, y un regalo que quiere ser el segundo aniversario antes de tiempo le quita brillo al de verdad. A los veinte meses les va algo que se guarde: un paquete, un álbum, un disco, una caja con los meses dentro, hecha para volver a abrirla dentro de un año.",
     ],
     faq: [
-      { q: "¿Qué es un buen regalo por veinte meses juntos?", a: "Algo hecho para guardarse: un paquete de recuerdos con un relicario, un álbum de doce fotos elegidas, un disco con esta cara marcada como B." },
+      { q: "¿Qué es un buen regalo por veinte meses de relación?", a: "Algo hecho para guardarse: un paquete de recuerdos con un relicario, un álbum de doce fotos elegidas, un disco con esta cara marcada como B." },
       { q: "¿Merece la pena celebrar los veinte meses?", a: "Si te gustan los números redondos, sí. Faltan cuatro meses para los dos años, así que que sea pequeño y para guardar, y el discurso para el aniversario." },
       { q: "¿Se puede volver a abrir un regalo más adelante?", a: "Sí. Los enlaces están pensados para durar, así que un regalo hecho a los veinte meses se sigue abriendo a los dos años, y en el aniversario siguiente." },
     ],
@@ -2647,7 +2647,7 @@ const month20: Month = {
 const month21: Month = {
   en: {
     title: "21 Month Anniversary Gifts About What Has Grown",
-    description: "At twenty-one months, look at what has grown: habits, a plant on the sill, a shared calendar. Five digital gifts about growing things, with lines to borrow.",
+    description: "Habits, a plant on the sill, a shared calendar: by a 21 month anniversary, things have grown. Five gifts about growing things.",
     h1: "21 month anniversary gifts",
     label: "21 months",
     hero: {
@@ -2660,7 +2660,7 @@ const month21: Month = {
         template: "garden",
         heading: "Walk them through a garden you planted",
         brief: "Pick what grows and who comes along, then hang the photos on the trellis.",
-        body: "The Garden lets you choose what grows, roses, peonies, wildflowers or sunflowers, and who comes along, a butterfly, a bee or a cat. Twenty-one months is a garden that has been tended: put the photos on the trellis, up to twelve, and burn something into the wooden gate, twenty-four characters.",
+        body: "You choose what grows in The Garden, roses, peonies, wildflowers or sunflowers, and who comes along: a butterfly, a bee or a cat. Twenty-one months is a garden that has been tended: put the photos on the trellis, up to twelve, and burn something into the wooden gate, twenty-four characters.",
         line: { field: "sign", where: "The sign on the gate", text: "tended since year one" },
       },
       {
@@ -2694,18 +2694,18 @@ const month21: Month = {
     ],
     date: { kind: "rainy-day", title: "A museum, then a glass of something", line: "Find one thing older than both of you and stand in front of it." },
     stage: [
-      "Around twenty-one months much of life is shared: a calendar, a houseplant or two, a set of habits that started as one person’s and are now both. Many couples live together by now or are close to it. The changes are slow and easy to miss, which is why a month like this is good for noticing them.",
-      "Too much at twenty-one months: anything that steals from the second anniversary, now one season away. Too little: letting a month pass that you once always marked. The right size notices growth: what you have kept alive, what you do together now without thinking, and the season count so far.",
+      "Around twenty-one months much of life is shared: a calendar, a houseplant or two, a set of habits that started as one person’s and are now both. A shared address is common by now, or close. The changes are slow and easy to miss, which is why a month like this is good for noticing them.",
+      "One season from now comes the second anniversary, so leave the big gesture to it. Letting a month pass that you once always marked would be the opposite mistake. This one is for noticing growth: what you have kept alive, what you now do together without thinking, and how many seasons you have counted so far.",
     ],
     faq: [
       { q: "What do you give at twenty-one months?", a: "Something about what has grown between you: a garden you walk them through, a flower that opens in their hand, fortunes about the habits you are still learning." },
       { q: "Is twenty-one months an anniversary?", a: "Not a traditional one, but it is a good point to notice what has changed. Keep the gift small and the date simple." },
-      { q: "How do I make a gift about growing without it being cheesy?", a: "Make it literal. Name the actual plant, the actual habit, the actual season. Real details keep a metaphor from turning sweet." },
+      { q: "How do I make a gift about growing without it being cheesy?", a: "Make it literal. Name the actual plant, the actual habit, the actual season. Twenty-one months is seven seasons, and each of them can have a name of its own." },
     ],
   },
   es: {
     title: "Regalos para 21 meses de novios: lo que ha crecido",
-    description: "A los veintiún meses, mira lo que ha crecido: costumbres, una planta en la ventana, un calendario común. Cinco regalos digitales sobre crecer, con frases.",
+    description: "Costumbres, una planta en la ventana, un calendario común: a los 21 meses de novios hay cosas que han crecido. Cinco regalos sobre crecer.",
     h1: "Regalos para 21 meses de novios",
     label: "21 meses",
     hero: {
@@ -2718,20 +2718,20 @@ const month21: Month = {
         template: "garden",
         heading: "Un paseo por un jardín plantado por ti",
         brief: "Elige qué crece y quién acompaña, y cuelga las fotos en el enrejado.",
-        body: "El jardín te deja elegir qué crece, rosas, peonías, flores silvestres o girasoles, y quién acompaña, una mariposa, una abeja o un gato. Veintiún meses son un jardín cuidado: pon las fotos en el enrejado, hasta doce, y graba algo en la verja de madera, veinticuatro caracteres.",
+        body: "Tú eliges qué crece en El jardín, rosas, peonías, flores silvestres o girasoles, y quién acompaña, una mariposa, una abeja o un gato. Veintiún meses son un jardín cuidado: pon las fotos en el enrejado, hasta doce, y graba algo en la verja de madera, veinticuatro caracteres.",
         line: { field: "sign", where: "El cartel de la verja", text: "cuidado desde el año uno" },
       },
       {
         template: "bloom",
-        heading: "Una flor que se abre mientras la sujetan",
-        brief: "Una sola flor que se abre solo mientras sujetan la pantalla, con tu mensaje dentro.",
-        body: "Flor es una sola flor, una peonía, un tulipán o una margarita, que se abre solo mientras mantienen el dedo en la pantalla, y tu mensaje espera dentro. Hasta ocho fotos suben flotando a su alrededor cuando ya está abierta. A los veintiún meses, que el mensaje sea lo bastante corto para leerlo sujetándola.",
+        heading: "Una flor que se abre bajo su dedo",
+        brief: "Una sola flor que se abre solo mientras mantiene el dedo en la pantalla, con tu mensaje dentro.",
+        body: "Flor es una sola flor, una peonía, un tulipán o una margarita, que se abre solo mientras mantiene el dedo en la pantalla, y tu mensaje espera dentro. Hasta ocho fotos suben flotando a su alrededor cuando ya está abierta. A los veintiún meses, que el mensaje sea lo bastante corto para leerlo sujetándola.",
         line: { field: "message", where: "El mensaje de dentro", text: "Veintiún meses, una planta todavía viva entre los dos, y mucho más que eso creciendo." },
       },
       {
         template: "fortune-cookie",
         heading: "Fortunas sobre lo que aún tiene que crecer",
-        brief: "Fortunas sobre lo que todavía crece entre vosotros, abiertas de una en una.",
+        brief: "Fortunas sobre lo que todavía crece entre los dos, abiertas de una en una.",
         body: "Escribe las fortunas de Galleta de la fortuna sobre crecer: la planta que por fin florecerá, la costumbre que todavía estáis aprendiendo, la estantería que algún día se montará. Admite de tres a veinte, de hasta 140 caracteres, que se abren de una en una. La última galleta lleva tu mensaje, así que acaba con la sencilla.",
         line: { field: "fortunes", where: "Una de las fortunas", text: "El helecho sobrevivirá otro invierno, porque te acuerdas de regarlo." },
       },
@@ -2750,15 +2750,15 @@ const month21: Month = {
         line: { field: "title", where: "Las palabras de arriba", text: "siete estaciones" },
       },
     ],
-    date: { kind: "rainy-day", title: "Un museo y luego una copa", line: "Buscad algo más viejo que vosotros dos y quedaos delante." },
+    date: { kind: "rainy-day", title: "Un museo y luego una copa", line: "Buscad algo más antiguo que los dos y quedaos delante." },
     stage: [
-      "Hacia los veintiún meses casi todo se comparte: un calendario, una planta o dos, unas costumbres que empezaron siendo de uno y ahora son de los dos. Muchas parejas viven ya juntas o están cerca. Los cambios son lentos y fáciles de pasar por alto, y por eso un mes así sirve para notarlos.",
-      "Demasiado a los veintiún meses: cualquier cosa que le robe al segundo aniversario, que está a una estación. Demasiado poco: dejar pasar un mes que antes siempre celebrabas. La medida justa se fija en lo que crece: lo que habéis mantenido vivo, lo que ya hacéis juntos sin pensar y la cuenta de estaciones.",
+      "Hacia los veintiún meses casi todo se comparte: un calendario, una planta o dos, unas costumbres que empezaron siendo de una sola persona y ahora son de los dos. A estas alturas es habitual compartir casa, o estar cerca. Los cambios son lentos y fáciles de pasar por alto, y por eso un mes así sirve para notarlos.",
+      "Dentro de una estación llega el segundo aniversario, así que el gran gesto es suyo. El error contrario sería dejar pasar un mes que antes siempre celebrabas. Este sirve para fijarse en lo que crece: lo que habéis mantenido vivo, lo que ya hacéis los dos sin pensar y cuántas estaciones lleváis contadas.",
     ],
     faq: [
-      { q: "¿Qué se regala a los veintiún meses?", a: "Algo sobre lo que ha crecido entre vosotros: un jardín por el que pasear, una flor que se abre en su mano, fortunas sobre las costumbres que aún estáis aprendiendo." },
+      { q: "¿Qué se regala a los veintiún meses?", a: "Algo sobre lo que ha crecido entre los dos: un jardín por el que pasear, una flor que se abre en su mano, fortunas sobre las costumbres que aún estáis aprendiendo." },
       { q: "¿Los veintiún meses son un aniversario?", a: "No uno tradicional, pero son buen momento para notar lo que ha cambiado. Que el regalo sea pequeño y la cita sencilla." },
-      { q: "¿Cómo hago un regalo sobre crecer sin que sea cursi?", a: "Hazlo literal. Nombra la planta de verdad, la costumbre de verdad, la estación de verdad. Los detalles reales evitan que la metáfora se ponga dulce." },
+      { q: "¿Cómo hago un regalo sobre crecer sin que sea cursi?", a: "Hazlo literal. Nombra la planta de verdad, la costumbre de verdad, la estación de verdad. Veintiún meses son siete estaciones, y cada una puede tener su propio nombre." },
     ],
   },
 };
@@ -2770,12 +2770,12 @@ const month21: Month = {
 const month22: Month = {
   en: {
     title: "22 Month Anniversary Gifts, Two Months From Two Years",
-    description: "Twenty-two months is the small one before two years. Five digital gifts that stay modest on purpose and leave room for the big day, with lines to borrow.",
+    description: "The small one before two years: five 22 month anniversary gifts that stay modest on purpose and leave room for the big day.",
     h1: "22 month anniversary gifts",
     label: "22 months",
     hero: {
       line: "Two months from two years. Keep this one small on purpose.",
-      sentence: "The second anniversary is close enough to plan, so the gift at twenty-two months should be warm, short and clearly not the main event.",
+      sentence: "The second anniversary is close enough to plan, so at twenty-two months a short, warm gift does the job and leaves the big day its room.",
     },
     ideasTitle: "Five that leave room for the big one",
     ideas: [
@@ -2783,7 +2783,7 @@ const month22: Month = {
         template: "coquette",
         heading: "A postcard about something you still do",
         brief: "A handwritten postcard under the first photo, about a small habit that has lasted.",
-        body: "Coquette’s postcard sits under the first photo in your handwriting, ninety characters, and the rest of the page runs down through polaroids to your letter. At twenty-two months the postcard can carry a small habit that has lasted: the coffee brought to bed, the text when you land.",
+        body: "Under the first photo on the Coquette page sits a postcard in your handwriting, ninety characters, and the rest of the page runs down through polaroids to your letter. Give the postcard a small habit that has lasted twenty-two months: the coffee brought to bed, the text the moment your plane touches down.",
         line: { field: "note", where: "The postcard", text: "Twenty-two months of you bringing coffee before you even say good morning." },
       },
       {
@@ -2797,14 +2797,14 @@ const month22: Month = {
         template: "scratch-card",
         heading: "The plan for two years, under foil",
         brief: "Photos scratched clear card by card, and the two-year plan on the last one.",
-        body: "Scratch Card can carry news on its last card, a headline of sixty characters under foil, after your photos are scratched clear one card at a time. Twenty-two months is when the two-year plan can be revealed: the weekend, the city, the table. Reveal it now and let them look forward.",
+        body: "News can wait on the last card of Scratch Card, a headline of sixty characters under foil, after your photos are scratched clear one card at a time. Twenty-two months is when the two-year plan can be revealed: the weekend, the city, the table. Reveal it now and let them look forward.",
         line: { field: "finalTitle", where: "The last card’s headline", text: "Two years: the coast, the 14th, the room with the balcony." },
       },
       {
         template: "favorite-person",
         heading: "The torn note, two words long",
         brief: "A torn note of two words in the middle, polaroids from oldest to newest around it.",
-        body: "In Favorite Person the torn note in the middle of the page holds twenty-two characters, and the polaroids around it, up to ten, are held on with gingham tape. Two words are enough at twenty-two months. Pick the oldest photo for the top and the newest for the bottom, beside your letter.",
+        body: "In Favorite Person the torn note in the middle of the page holds twenty-two characters, and the polaroids around it, up to ten, are held on with gingham tape. After twenty-two months, two words are enough. Pick the oldest photo for the top and the newest for the bottom, beside your letter.",
         line: { field: "title", where: "The torn note", text: "my home" },
       },
       {
@@ -2817,8 +2817,8 @@ const month22: Month = {
     ],
     date: { kind: "double-date", title: "Dinner for four, a toast to two years", line: "Tell your friends the plan and ask them to keep it quiet." },
     stage: [
-      "Twenty-two months is two months before the second anniversary, close enough that a plan is probably forming. Life is settled for many couples by now, a shared home or a clear idea of one, and the months mostly pass without anyone counting them. This one is worth a small nod, not a big one.",
-      "Too much at twenty-two months: a gift so big that the anniversary has nowhere to go. Too little: letting it slip by when every month so far got something. The right size is short and warm, and if you want it to do something, let it reveal the plan for two years.",
+      "Twenty-two months is two months before the second anniversary, close enough that a plan is probably forming. By now life has usually settled, a shared home or a clear idea of one, and the months mostly pass without anyone counting them. This one is worth a small nod, not a big one.",
+      "Picture the second anniversary arriving after a gift so big it has nowhere left to go. Then picture this month slipping by when every month so far got something. The answer is somewhere short and warm, and if you want the gift to do a job, let it reveal the plan for two years.",
     ],
     faq: [
       { q: "Should I celebrate twenty-two months?", a: "Lightly. Two months before the second anniversary, a small gift keeps the habit without competing with what you are planning for the day itself." },
@@ -2828,12 +2828,12 @@ const month22: Month = {
   },
   es: {
     title: "Regalos de 22 meses de novios, antes de los dos años",
-    description: "Veintidós meses son el pequeño antes de los dos años. Cinco regalos digitales modestos a propósito, que dejan sitio para el gran día, con frases listas.",
+    description: "El aniversario pequeño antes de los dos años: cinco regalos para los 22 meses de novios, modestos a propósito, que dejan sitio para el gran día.",
     h1: "Regalos para 22 meses de novios",
     label: "22 meses",
     hero: {
       line: "A dos meses de los dos años. Que este sea pequeño a propósito.",
-      sentence: "El segundo aniversario está lo bastante cerca como para planearlo, así que el regalo de los veintidós meses debe ser cálido, corto y claramente no el principal.",
+      sentence: "El segundo aniversario está lo bastante cerca como para planearlo, así que a los veintidós meses basta un regalo corto y cálido que le deje sitio al gran día.",
     },
     ideasTitle: "Cinco que dejan sitio al grande",
     ideas: [
@@ -2841,7 +2841,7 @@ const month22: Month = {
         template: "coquette",
         heading: "Una postal sobre algo que sigues haciendo",
         brief: "Una postal a mano bajo la primera foto, sobre una costumbre pequeña que ha durado.",
-        body: "La postal de Coquette va bajo la primera foto, con tu letra, noventa caracteres, y el resto de la página baja por polaroids hasta tu carta. A los veintidós meses la postal puede llevar una costumbre pequeña que ha durado: el café llevado a la cama, el mensaje al aterrizar.",
+        body: "La postal de Coquette va bajo la primera foto, con tu letra, noventa caracteres, y el resto de la página baja por polaroids hasta tu carta. Dale a la postal una costumbre pequeña que dure ya veintidós meses: el café llevado a la cama, el mensaje nada más aterrizar.",
         line: { field: "note", where: "La postal", text: "Veintidós meses trayéndome café antes de decir buenos días." },
       },
       {
@@ -2855,14 +2855,14 @@ const month22: Month = {
         template: "scratch-card",
         heading: "El plan de los dos años, para rascar",
         brief: "Fotos que se rascan tarjeta a tarjeta y el plan de los dos años en la última.",
-        body: "Rasca y gana puede guardar una noticia en su última tarjeta, un titular de sesenta caracteres bajo la capa, después de rascar tus fotos una a una. Veintidós meses es cuando se puede desvelar el plan de los dos años: el fin de semana, la ciudad, la mesa. Desvélalo ya y deja que lo espere con ganas.",
+        body: "Una noticia puede esperar en la última tarjeta de Rasca y gana, un titular de sesenta caracteres bajo la capa, después de rascar tus fotos una a una. Veintidós meses es cuando se puede desvelar el plan de los dos años: el fin de semana, la ciudad, la mesa. Desvélalo ya y deja que lo espere con ganas.",
         line: { field: "finalTitle", where: "El titular de la última tarjeta", text: "Dos años: la costa, el día 14, la habitación con balcón." },
       },
       {
         template: "favorite-person",
         heading: "La nota rasgada, de dos palabras",
         brief: "Una nota rasgada de dos palabras en el centro y polaroids de la más antigua a la nueva.",
-        body: "En Mi persona favorita la nota rasgada del centro de la página admite veintidós caracteres, y las polaroids de alrededor, hasta diez, van sujetas con cinta de cuadros. Dos palabras bastan a los veintidós meses. Pon la foto más antigua arriba y la más nueva abajo, junto a tu carta.",
+        body: "En Mi persona favorita la nota rasgada del centro de la página admite veintidós caracteres, y las polaroids de alrededor, hasta diez, van sujetas con cinta de cuadros. Con veintidós meses, dos palabras bastan. Pon la foto más antigua arriba y la más nueva abajo, junto a tu carta.",
         line: { field: "title", where: "La nota rasgada", text: "mi casa" },
       },
       {
@@ -2875,8 +2875,8 @@ const month22: Month = {
     ],
     date: { kind: "double-date", title: "Cena para cuatro, un brindis por los dos años", line: "Contad el plan a vuestros amigos y pedidles que no digan nada." },
     stage: [
-      "Veintidós meses son dos meses antes del segundo aniversario, lo bastante cerca como para que un plan se esté formando. Para muchas parejas la vida ya está asentada, una casa compartida o una idea clara de ella, y los meses pasan casi sin que nadie los cuente. Este merece un gesto pequeño, no uno grande.",
-      "Demasiado a los veintidós meses: un regalo tan grande que el aniversario se queda sin sitio. Demasiado poco: dejarlo pasar cuando todos los meses han tenido algo. La medida justa es corta y cálida, y si quieres que haga algo, que desvele el plan de los dos años.",
+      "Veintidós meses son dos meses antes del segundo aniversario, lo bastante cerca como para que un plan se esté formando. A estas alturas la vida suele estar asentada, una casa compartida o una idea clara de ella, y los meses pasan casi sin que nadie los cuente. Este merece un gesto pequeño, no uno grande.",
+      "Imagina el segundo aniversario llegando después de un regalo tan grande que lo deja sin sitio. Ahora imagina este mes pasando sin nada cuando todos los anteriores tuvieron algo. La respuesta está en algo corto y cálido, y si quieres que el regalo haga algo, que desvele el plan de los dos años.",
     ],
     faq: [
       { q: "¿Celebro los veintidós meses?", a: "Con poco. A dos meses del segundo aniversario, un detalle pequeño mantiene la costumbre sin competir con lo que preparas para el día en sí." },
@@ -2893,7 +2893,7 @@ const month22: Month = {
 const month23: Month = {
   en: {
     title: "23 Month Anniversary Gifts on the Way to Two Years",
-    description: "Twenty-three months is the eve of two years: look at where you have been and count down to the day. Five digital gifts for it, each with a line to borrow.",
+    description: "On the eve of two years, look back at where you have been and count down to the day. Five 23 month anniversary gifts, each with a line to borrow.",
     h1: "23 month anniversary gifts",
     label: "23 months",
     hero: {
@@ -2906,7 +2906,7 @@ const month23: Month = {
         template: "passport",
         heading: "A passport of your own country of two",
         brief: "A passport with a stamp per photo and a nationality that is just the two of you.",
-        body: "Passport issues them a little passport for the journey you have made, with one stamp per photo, up to ten, and a nationality line of forty characters. Twenty-three months is long enough to have a country of your own: name it there. The visa page, at the end, reveals your message.",
+        body: "Passport issues them a little passport for the places you have been together, with one stamp per photo, up to ten, and a nationality line of forty characters. Twenty-three months is long enough to have a country of your own: name it there. The visa page, at the end, reveals your message.",
         line: { field: "nationality", where: "The nationality", text: "Citizen of our kitchen table" },
       },
       {
@@ -2939,31 +2939,31 @@ const month23: Month = {
     ],
     date: { kind: "cheap", title: "Ice cream and nowhere to be, again", line: "Walk the route of your first walk together." },
     stage: [
-      "Twenty-three months is the eve of the second anniversary. Most couples have a map of places by now, cities visited, a shared address, the platform where one of you missed a train, and they are thinking about how to mark two years. It is a natural month to look back at where you have been.",
-      "Too much at twenty-three months: giving the second-anniversary gift a month early. Too little: letting the run-up pass unnoticed. The right gift looks back at the map and counts down to the day, and it can be sent now and set to open on the anniversary itself.",
+      "Twenty-three months is the eve of the second anniversary. By now there is a map of places, cities visited, a shared address, the platform where one of you missed a train, and how to mark two years is on both your minds. It is a natural month to look back at where you have been.",
+      "About thirty days are left, and they are worth using. Hand over the second-anniversary gift now and the day itself arrives empty; let the run-up pass unnoticed and you waste it. This month looks back at the map and counts down, and the gift can go out now, set to open on the anniversary.",
     ],
     faq: [
       { q: "What do you give a month before two years?", a: "Something that points at the anniversary: a passport of the places you have been, a countdown chat, a locket engraved with the date. Keep the main gift for the day." },
-      { q: "Can I send it now and have it open on the anniversary?", a: "Yes, on a paid gift. In the editor, under Extras, switch on “Schedule the reveal” and choose the date, the hour and their time zone. Until then the link counts down and opens on its own." },
+      { q: "Can I send it now and have it open on the anniversary?", a: "You can, if it is a paid template: the timed opening comes with it. Open Extras in the editor, turn on “Schedule the reveal”, then set the day and the hour as they fall in their time zone. Before that moment the link shows a countdown; afterwards it opens by itself." },
       { q: "How do I make a countdown gift for our second anniversary?", a: "Set Midnight Countdown to the first minute of the day and write the line that appears at zero. Send the link a month early; it waits and opens with fireworks." },
     ],
   },
   es: {
     title: "Regalos de 23 meses de novios, camino de dos años",
-    description: "Veintitrés meses son la víspera de los dos años: mira dónde habéis estado y cuenta hacia el día. Cinco regalos digitales para eso, con frases listas.",
+    description: "En la víspera de los dos años, mira dónde habéis estado y cuenta hacia el día. Cinco regalos para los 23 meses de novios, cada uno con una frase lista.",
     h1: "Regalos para 23 meses de novios",
     label: "23 meses",
     hero: {
       line: "Un mes para los dos años. Mira el mapa y luego cuenta hacia atrás.",
-      sentence: "A los veintitrés meses el regalo puede resumir los sitios donde habéis estado juntos y poner en marcha un reloj hasta el segundo aniversario.",
+      sentence: "A los veintitrés meses el regalo puede resumir los sitios donde habéis estado los dos y poner en marcha un reloj hasta el segundo aniversario.",
     },
     ideasTitle: "Cinco para la víspera de los dos años",
     ideas: [
       {
         template: "passport",
         heading: "Un pasaporte de vuestro país de dos",
-        brief: "Un pasaporte con un sello por foto y una nacionalidad que sois solo vosotros.",
-        body: "Pasaporte le expide un pequeño pasaporte por el viaje que habéis hecho, con un sello por foto, hasta diez, y una línea de nacionalidad de cuarenta caracteres. Veintitrés meses dan para tener un país propio: ponle nombre ahí. La página del visado, al final, desvela tu mensaje.",
+        brief: "Un pasaporte con un sello por foto y una nacionalidad que solo tenéis los dos.",
+        body: "Pasaporte le expide un pequeño pasaporte por los sitios donde habéis estado, con un sello por foto, hasta diez, y una línea de nacionalidad de cuarenta caracteres. Veintitrés meses dan para tener un país propio: ponle nombre ahí. La página del visado, al final, desvela tu mensaje.",
         line: { field: "nationality", where: "La nacionalidad", text: "Ciudadanía: nuestra mesa de la cocina" },
       },
       {
@@ -2994,14 +2994,14 @@ const month23: Month = {
         line: { field: "engraving", where: "El grabado", text: "dos años, 14.06" },
       },
     ],
-    date: { kind: "cheap", title: "Helado y ningún sitio al que ir, otra vez", line: "Repetid el camino de vuestro primer paseo juntos." },
+    date: { kind: "cheap", title: "Helado y ningún sitio al que ir, otra vez", line: "Repetid el recorrido de vuestro primer paseo." },
     stage: [
-      "Veintitrés meses son la víspera del segundo aniversario. Casi todas las parejas tienen ya un mapa de sitios, ciudades visitadas, una dirección compartida, el andén donde uno perdió un tren, y están pensando cómo celebrar los dos años. Es un mes natural para mirar atrás a dónde habéis estado.",
-      "Demasiado a los veintitrés meses: dar el regalo del segundo aniversario un mes antes. Demasiado poco: dejar pasar la cuenta atrás sin notarla. El regalo bueno mira el mapa y cuenta hacia el día, y puede enviarse ya y programarse para abrirse el mismo día del aniversario.",
+      "Veintitrés meses son la víspera del segundo aniversario. A estas alturas ya hay un mapa de sitios, ciudades visitadas, una dirección compartida, el andén donde se os escapó un tren, y cómo celebrar los dos años ronda por la cabeza. Es un mes natural para mirar atrás a dónde habéis estado.",
+      "Quedan unos treinta días, y merece la pena aprovecharlos. Si entregas ya el regalo del segundo aniversario, el día llega vacío; si dejas pasar la cuenta atrás sin notarla, la desperdicias. Este mes mira el mapa y cuenta hacia el día, y el regalo puede salir ya, programado para abrirse en el aniversario.",
     ],
     faq: [
       { q: "¿Qué se regala un mes antes de los dos años?", a: "Algo que apunte al aniversario: un pasaporte de los sitios donde habéis estado, un chat con cuenta atrás, un relicario grabado con la fecha. El regalo principal, para el día." },
-      { q: "¿Puedo enviarlo ahora y que se abra en el aniversario?", a: "Sí, en un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y elige la fecha, la hora y su zona horaria. Hasta entonces el enlace hace la cuenta atrás y se abre solo." },
+      { q: "¿Puedo enviarlo ahora y que se abra en el aniversario?", a: "Puedes, si es una plantilla de pago: la apertura programada viene con ella. Abre Extras en el editor, activa «Programar la apertura» y pon el día y la hora tal como caen en su zona horaria. Antes de ese momento el enlace muestra una cuenta atrás; después se abre por sí solo." },
       { q: "¿Cómo hago un regalo con cuenta atrás para el segundo aniversario?", a: "Pon Cuenta atrás de medianoche en el primer minuto del día y escribe la frase que sale en el cero. Envía el enlace un mes antes; espera y se abre con fuegos." },
     ],
   },

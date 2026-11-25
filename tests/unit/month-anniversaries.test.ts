@@ -224,6 +224,48 @@ describe("anniversary gifts by month", () => {
     expect(clashes).toEqual([]);
   });
 
+  it("the months are not one frame filled in 24 times", () => {
+    const problems: string[] = [];
+    const firstWords = (s: string, k: number) => unnumbered(s).replace(/[^\p{L}#\s]/gu, " ").split(/\s+/).filter(Boolean).slice(0, k).join(" ");
+    for (const locale of GIFT_LOCALES) {
+      const guides = MONTHS.map((n) => ({ n, g: MONTH_GUIDES[n][locale] }));
+      // The second paragraph of the stage (too much, too little) opens its own way every month.
+      const openings = new Map<string, number[]>();
+      for (const { n, g } of guides) openings.set(firstWords(g.stage[1], 3), [...(openings.get(firstWords(g.stage[1], 3)) ?? []), n]);
+      for (const [opening, ns] of openings) if (ns.length > 1) problems.push(`${locale}: the stage's second paragraph opens “${opening}” in months ${ns.join(", ")}`);
+      // The descriptions don't all say "Five digital gifts, each with a line to borrow".
+      const kinds = guides.filter(({ g }) => (locale === "en" ? /digital gifts/i : /regalos digitales/i).test(g.description)).length;
+      const borrow = guides.filter(({ g }) => (locale === "en" ? /lines? (to|you can) borrow/i : /frases? listas?/i).test(g.description)).length;
+      if (kinds > 8) problems.push(`${locale}: ${kinds} descriptions say “digital gifts”`);
+      if (borrow > 6) problems.push(`${locale}: ${borrow} descriptions promise lines to borrow`);
+      for (const { n, g } of guides) {
+        // Down one list, at most two bodies open on the gift's own name ("Photo Booth gives…"), and "at N months" is said once at most.
+        const named = g.ideas.filter((i) => i.body.toLowerCase().startsWith(getManifest(i.template)!.name[locale].toLowerCase())).length;
+        if (named > 2) problems.push(`${locale}: month ${n} opens ${named} bodies on the gift's name`);
+        const atMonths = g.ideas.filter((i) => (locale === "en" ? /\b(at|by) [\w-]+ months\b/i : /\ba los [\wé]+ meses\b/i).test(i.body)).length;
+        if (atMonths > 1) problems.push(`${locale}: month ${n} says “at N months” in ${atMonths} bodies`);
+      }
+      // Stock phrases, counted over the whole series.
+      const all = guides.map(({ g }) => strings(g).join(" ")).join(" ");
+      const caps: [RegExp, number][] = locale === "en"
+        ? [[/\bmany couples\b/gi, 4], [/\bmost couples\b/gi, 4], [/\bordinary\b/gi, 6], [/\blands?\b/gi, 5], [/\breads as\b/gi, 4], [/\bspecific beats\b/gi, 1]]
+        : [[/\bmuchas parejas\b/gi, 4], [/\bcasi todas las parejas\b/gi, 4], [/\bDemasiado poco\b/g, 4], [/\bDemasiado a los\b/g, 4]];
+      if (locale === "en") caps.push([/\bToo little\b/g, 4], [/\bToo much at\b/g, 4]);
+      for (const [re, max] of caps) {
+        const count = all.match(re)?.length ?? 0;
+        if (count > max) problems.push(`${locale}: “${re.source}” ${count} times (at most ${max})`);
+      }
+      // No two months answer a question in the same words.
+      const answers = guides.flatMap(({ n, g }) => g.faq.map((f) => ({ n, a: f.a })));
+      for (let i = 0; i < answers.length; i++) for (let j = i + 1; j < answers.length; j++) {
+        if (answers[i].n === answers[j].n) continue;
+        const run = sharedRun(answers[i].a, answers[j].a);
+        if (run > 12) problems.push(`${locale}: months ${answers[i].n} and ${answers[j].n} answer in the same ${run} words`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+
   it("no two months have the same first three gifts", () => {
     const firsts = MONTHS.map((n) => MONTH_GUIDES[n].en.ideas.slice(0, 3).map((i) => i.template).sort().join("+"));
     expect(new Set(firsts).size).toBe(firsts.length);
