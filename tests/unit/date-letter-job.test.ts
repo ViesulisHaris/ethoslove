@@ -232,6 +232,11 @@ describe("the date letter's job", () => {
     ]);
     expect(await store.purge(THU)).toBe(2);
     expect(fake.rows("date_letter").map((r) => r.email)).toEqual(["b@mail.com", "d@mail.com", "e@mail.com"]);
+
+    // Stopped long ago but asked again last week: kept, so the new confirming link works (letter-C17).
+    const again = setup([letterRow({ id: A, email: "f@mail.com", stopped_at: ago(90), asked_at: ago(7), confirm_sent_at: ago(7) })]);
+    expect(await again.store.purge(THU)).toBe(0);
+    expect(await again.store.purge(new Date(THU.getTime() + 24 * DAY))).toBe(1);
   });
 
   it("J13 a lookup that fails sends nothing", async () => {

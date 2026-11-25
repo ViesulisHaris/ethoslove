@@ -136,11 +136,15 @@ export async function stopLetter(admin: Admin, id: string, now: number): Promise
   return { result: "stopped", locale };
 }
 
-/** Deletes addresses never confirmed within thirty days, and addresses stopped thirty days ago. The rows gone. */
+/**
+ * Deletes addresses never confirmed within thirty days, and addresses stopped thirty days ago. A
+ * stopped address that asked again since keeps its row until thirty days after that ask too, so the
+ * new confirming e-mail's link still works (letter-C17). The rows gone.
+ */
 export async function purgeLetter(admin: Admin, now: number): Promise<number> {
   const [pending, stopped] = await Promise.all([
     admin.from("date_letter").delete().is("confirmed_at", null).lt("asked_at", iso(now - LETTER_PENDING_DAYS * DAY)).select("id"),
-    admin.from("date_letter").delete().lt("stopped_at", iso(now - LETTER_STOPPED_DAYS * DAY)).select("id"),
+    admin.from("date_letter").delete().lt("stopped_at", iso(now - LETTER_STOPPED_DAYS * DAY)).lt("asked_at", iso(now - LETTER_PENDING_DAYS * DAY)).select("id"),
   ]);
   if (pending.error) throw new Error(`date letter purge: ${pending.error.message}`);
   if (stopped.error) throw new Error(`date letter purge: ${stopped.error.message}`);
