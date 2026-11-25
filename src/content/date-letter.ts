@@ -62,9 +62,20 @@ export const LETTER_IDEA_WORDS: Readonly<Record<string, { title?: Partial<L>; bl
   "bookshop-and-coffee": {
     title: { es: "Un libro elegido por tu pareja" },
     blurb: { en: "Twenty minutes apart in a bookstore, then coffee while you explain yourselves." },
+    twist: { en: "Write a note on the first page before you hand it over." },
   },
-  "cinema-and-late-dessert": { twist: { es: "Quien elige la película no elige los asientos ni lo de picar." } },
-  "stars-and-planets": { twist: { es: "Bautizad una estrella: cada cual le pone el nombre de su pareja. Hacedlo oficial en una servilleta." } },
+  "cinema-and-late-dessert": {
+    title: { en: "A movie and a late dessert" },
+    twist: { en: "One of you picks the movie, the other picks the seats and the snacks.", es: "Quien elige la película no elige los asientos ni lo de picar." },
+  },
+  "spa-evening": { blurb: { en: "Warm water, no phones, and the slowest evening of the month.", es: "Agua caliente, sin móviles y la tarde más lenta del mes." } },
+  "museum-then-wine": { twist: { en: "Each of you picks the piece you’d steal. Defend it." } },
+  "stars-and-planets": {
+    twist: {
+      en: "Each of you names a star after the other one. Make it official on a napkin.",
+      es: "Bautizad una estrella: cada cual le pone el nombre de su pareja. Hacedlo oficial en una servilleta.",
+    },
+  },
   "bowling-night": {
     blurb: { en: "Bad shoes, worse technique, a basket of fries in the middle." },
     twist: { es: "Cada bola al canal, una verdad. Cada pleno, un reto." },
@@ -110,11 +121,13 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(12, "theatre-night", "night", true, "Wear the thing you never get to wear. We’re going to the theater on Saturday.", "Ponte eso que nunca tienes ocasión de ponerte: el sábado vamos al teatro.", {
     twist: false,
     open: {
-      en: "Write your guess at the ending down at intermission; the loser buys the nightcap.",
+      en: "At intermission, write down how you think it ends; the loser buys the nightcap.",
       es: "Apuntad en el descanso cómo creéis que acaba; quien falle paga la última copa.",
     },
   }),
-  e(13, "bookshop-and-coffee", "cheap", false, "How well do you think I know your taste? We find out on Saturday.", "¿Cuánto crees que conozco tus gustos? El sábado lo vemos."),
+  e(13, "bookshop-and-coffee", "cheap", false, "How well do you think I know your taste? We find out on Saturday.", "¿Cuánto crees que conozco tus gustos? El sábado lo vemos.", {
+    open: { en: "Browsing is free. Set a paperback budget each, and stick to it.", es: "Curiosear es gratis. Poneos un tope: un libro de bolsillo cada cual." },
+  }),
   e(14, "cinema-and-late-dessert", "rainy-day", false, "If Saturday rains, I’m not canceling. I’m just moving us indoors.", "Si el sábado llueve, no anulo nada: nos vamos a cubierto."),
   e(15, "spa-evening", "unique", false, "Keep Saturday evening free, and leave your watch at home.", "Guárdame la tarde del sábado, y deja el reloj en casa.", { twist: false }),
   e(16, "garden-afternoon", null, false, "I already know which plant you are. Garden on Sunday?", "Ya sé qué planta eres tú. ¿Jardín el domingo?"),
@@ -161,15 +174,15 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
     },
   }),
   e(39, "sunrise-and-breakfast", "cheap", false, "Sunday, early. Coffee tastes better after a sunrise.", "El domingo, temprano. El café sabe mejor después de un amanecer.", {
-    open: { en: "The sunrise is free and so is the empty city. Bring a flask and skip the coffee shop at the end." },
+    open: { en: "The sunrise is free and so is the empty city. Bring a thermos and skip the coffee shop at the end." },
   }),
   e(40, "gallery-hop", "cheap", false, "Your job on Saturday: pick the one piece in the galleries we’d hang at home.", "Tu trabajo el sábado: elegir la obra que colgaríamos en casa."),
   e(41, "bookshop-and-coffee", "rainy-day", false, "Let it rain on Saturday. I know which shelf I’m taking you to.", "Que llueva el sábado. Ya sé a qué estantería te llevo.", {
     open: { en: "Rain on the window is what a bookstore is for. Twenty minutes apart, then coffee." },
   }),
-  e(42, "cinema-and-late-dessert", "night", false, "Late film on Saturday. You get the armrest, I get the popcorn.", "Sesión de noche el sábado. Tú te quedas el reposabrazos; yo, las palomitas.", {
+  e(42, "cinema-and-late-dessert", "night", false, "Late movie on Saturday. You get the armrest, I get the popcorn.", "Sesión de noche el sábado. Tú te quedas el reposabrazos; yo, las palomitas.", {
     twist: false,
-    open: { es: "Quien elige la peli no elige los asientos, y la charla se guarda para el postre." },
+    open: { en: "One picks the movie, the other the seats, and the talking waits for dessert.", es: "Quien elige la peli no elige los asientos, y la charla se guarda para el postre." },
   }),
   e(43, "spa-evening", "rainy-day", true, "I’ve told everyone we’re unreachable on Saturday evening.", "Ya he avisado de que el sábado por la tarde estaremos ilocalizables."),
   e(44, "stars-and-planets", "night", false, "Saturday, late. Bring the big coat; I’ll bring something warm to drink.", "El sábado, tarde. Trae el abrigo gordo; yo llevo algo caliente para beber."),
@@ -186,7 +199,10 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(49, "skating-and-hot-chocolate", null, false, "Skating on Saturday. Wear gloves, you’ll be holding on to me.", "Patinaje el sábado. Ponte guantes, que vas a ir agarrándote a mí."),
   e(50, "arcade-night", "night", false, "Friday night at the arcade. I’m spending every ticket on you.", "Viernes por la noche en los recreativos. Todos mis tickets, para ti.", { twist: false }),
   e(51, "climbing-first-timers", "fun", false, "Chalky hands on Saturday. I promise not to laugh much.", "Manos con magnesio el sábado. Prometo no reírme mucho.", {
-    open: { es: "Mientras una persona sube, la otra sujeta la cuerda: la confianza llega antes de lo normal." },
+    open: {
+      en: "One of you holds the rope while the other climbs, so trust arrives faster than usual.",
+      es: "Mientras una persona sube, la otra sujeta la cuerda: la confianza llega antes de lo normal.",
+    },
   }),
   e(52, "theatre-night", null, true, "Two seats on Saturday, and dinner after is my treat.", "Dos butacas el sábado, y la cena de después corre de mi cuenta."),
 ];

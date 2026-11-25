@@ -122,7 +122,7 @@ describe("the date letter's year", () => {
   });
 
   it("C10 every English word the letter prints is American", () => {
-    const british = /\b(bookshops?|rowing boats?|chips|interval|afterwards|colou?rs?|favourite|theatre|caf[eé]s?|centre|realise|travell?ing|neighbour|programme|holiday|queue|trousers|flat)\b/i;
+    const british = /\b(bookshops?|rowing boats?|chips|interval|afterwards|colou?rs?|favourite|theatre|caf[eé]s?|centre|realise|travell?ing|neighbour|programme|holiday|queue|trousers|flat|films?|flasks?)\b/i;
     for (const entry of LETTER_ENTRIES) for (const [key, line] of Object.entries(parts(entry, "en"))) expect(line, `week ${entry.week} ${key}`).not.toMatch(british);
   });
 
