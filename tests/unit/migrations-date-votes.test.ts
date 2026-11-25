@@ -50,4 +50,11 @@ describe("0026: date votes", () => {
     expect(columns).toEqual(["target", "yes", "no", "updated_at"]);
     for (const c of columns) expect(c).not.toMatch(/ip|user|session|device|email/);
   });
+
+  it("M5 the table's pattern is the code's", async () => {
+    const { TARGET } = await import("@/lib/dates/votes");
+    const inSql = raw.match(/check \(target ~ '([^']+)'\)/)?.[1];
+    expect(inSql).toBeDefined();
+    expect(inSql).toBe(TARGET.source.replaceAll("\\d", "[0-9]").replaceAll("\\/", "/"));
+  });
 });
