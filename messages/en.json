@@ -2390,6 +2390,26 @@
     "rain": "{chance}% chance of rain",
     "sunset": "Sunset {time}",
     "past": "This one has already happened. We hope it was a good one.",
+    "done": {
+      "mark": "Mark as done",
+      "on": "Done on {day}",
+      "undo": "Not done after all",
+      "ask": "Was this a good date?",
+      "yes": "Yes",
+      "no": "No",
+      "thanks": "Noted. You can change it."
+    },
+    "log": {
+      "title": "Dates you’ve done",
+      "weeks": "{n} weeks in a row",
+      "year": "{n, plural, one {# date} other {# dates}} this year",
+      "good": "A good one",
+      "notGood": "Not this time",
+      "all": "Show all {count}",
+      "remove": "Take {title} off the list",
+      "gift": "{n} dates done: enough for a timeline.",
+      "giftCta": "Start the gift"
+    },
     "walk": "{minutes} min walk",
     "timeFor": "Time at {name}",
     "noteFor": "A note for {name}",

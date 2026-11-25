@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, Lock, LogIn, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, Check, CircleCheck, Copy, Gift, Lock, LogIn, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,9 @@ import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { plannedIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, stopName, type Plan } from "@/lib/dates/plan";
+import { addDone, doneFromPlan, doneFromSaved, mergeDone, removeDone } from "@/lib/dates/done";
+import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, shareablePlan, stopName, type Plan } from "@/lib/dates/plan";
+import { voteTargets } from "@/lib/dates/votes";
 import { planUnwrap } from "@/lib/dates/plan-gift";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
@@ -36,6 +38,8 @@ import { TimePicker } from "@/components/pickers/time-picker";
 import { GroupIcon } from "./group-icon";
 import { MapView } from "./map-view";
 import { firstCover } from "./share-cover";
+import { DoneLog, VotePills } from "./done-log";
+import { useDone, useVotes } from "./use-done";
 import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 
@@ -150,13 +154,37 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const forecast = forecastFor?.at === at ? forecastFor.forecast : null;
   const day = forecast?.days.find((d) => d.date === plan.date);
   const idea = plannedIdea(plan);
-  const past = Boolean(plan.date && plan.date < toYmd(new Date()));
+  const today = toYmd(new Date());
+  const past = Boolean(plan.date && plan.date < today);
+  // The dates done (this browser's log, and an account's from its saved dates), and the vote on them.
+  const [done, updateDone] = useDone();
+  const entries = useMemo(() => mergeDone(done, doneFromSaved(account.list?.items ?? [], locale)), [done, account.list, locale]);
+  const planTargets = useMemo(() => (editable && plan.done ? voteTargets({ places: plan.stops.map((s) => s.id), idea: plan.idea }) : []), [editable, plan.done, plan.stops, plan.idea]);
+  const voteOn = useMemo(() => [...new Set([...planTargets, ...entries.flatMap((e) => voteTargets({ places: e.places, idea: e.idea }))])].slice(0, 60), [planTargets, entries]);
+  const votes = useVotes(voteOn);
+  const planVote = planTargets[0] ? votes.kept[planTargets[0]] : undefined;
+  const markDone = () => {
+    const entry = doneFromPlan(plan, today, locale, savedLink?.id);
+    updateDone((list) => addDone(list, entry));
+    updateOwn((p) => ({ ...p, done: entry.day }));
+    track("date_done");
+  };
+  const undoDone = () => {
+    const entry = doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale);
+    updateDone((list) => removeDone(list, entry.id));
+    updateOwn((p) => {
+      const next = { ...p };
+      delete next.done;
+      return next;
+    });
+  };
+  const log = (className?: string) => <DoneLog entries={entries} today={today} votes={votes} onRemove={(id) => updateDone((list) => removeDone(list, id))} className={className} />;
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
   const ticketed = plan.stops.some((s) => sellsTickets(s));
   // The canvas and the credits' (i) are named by MapLibre in English unless told otherwise.
   const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "", credits: t("mapCredits"), retry: t("mapRetry") }), [t]);
 
-  const sitePath = () => `${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
+  const sitePath = () => `${getPathname({ href: "/plan", locale })}#p=${encodePlan(shareablePlan(plan))}`;
   // Their own plan's cover for the link's preview, looked up while they look at it: the share sheet
   // has to open within the tap, so it cannot wait for Wikimedia then (share-cover.ts).
   const pictured = useMemo(() => (editable ? plan.stops.filter((s) => s.named !== false) : []), [editable, plan.stops]);
@@ -170,7 +198,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       live = false;
     };
   }, [coverKey, pictured]);
-  const link = () => `${window.location.origin}${planShareHref(getPathname({ href: "/plan", locale }), encodePlan(plan), { cover: cover?.key === coverKey ? cover.src : null, title: previewTitle(plan, locale), date: plan.date })}`;
+  const link = () => `${window.location.origin}${planShareHref(getPathname({ href: "/plan", locale }), encodePlan(shareablePlan(plan)), { cover: cover?.key === coverKey ? cover.src : null, title: previewTitle(plan, locale), date: plan.date })}`;
 
   // The stops' photographs are asked for as the chooser opens, so they are usually in by the time a gift is picked.
   const photos = useRef<Promise<Record<string, string | null>> | null>(null);
@@ -261,7 +289,14 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     );
   }
 
-  if (broken || plan.stops.length === 0) return emptyState(false);
+  if (broken || plan.stops.length === 0)
+    return (
+      <>
+        {emptyState(false)}
+        {/* No plan, but dates done: the log stays where they can find it, under "Nothing planned yet". */}
+        {!broken && entries.length > 0 ? <div className="container-narrow -mt-6 pb-16 sm:-mt-10 sm:pb-24">{log("mx-auto max-w-md")}</div> : null}
+      </>
+    );
 
   return (
     // A place name can be one long word (Llanfairpwllgwyngyll…): it wraps rather than widening the page.
@@ -315,7 +350,39 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
             ) : null}
           </p>
         ) : null}
-        {past ? <p className="mt-4 text-[14px] text-forest/65">{t("past")}</p> : null}
+        {editable && plan.done ? (
+          <div className="mt-4" data-testid="plan-done">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[14.5px] text-forest/80">
+              <span className="inline-flex items-center gap-1.5 font-semibold text-forest">
+                <CircleCheck aria-hidden="true" className="size-4 text-moss" />
+                {t("done.on", { day: formatDay(plan.done, locale, "short") })}
+              </span>
+              <button type="button" onClick={undoDone} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-forest hover:underline">
+                {t("done.undo")}
+              </button>
+            </p>
+            {/* Its height is kept while the site says whether it takes votes, so nothing jumps; not drawn when it does not. */}
+            <div className="min-h-11" aria-live="polite">
+              {votes.available === true && planTargets.length > 0 ? (
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <p className="text-[14.5px] font-semibold text-forest">{t("done.ask")}</p>
+                  <VotePills value={planVote} onVote={(next) => void votes.cast(planTargets, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
+                  {planVote ? <p className="text-[13.5px] text-forest/65">{t("done.thanks")}</p> : null}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <>
+            {past ? <p className="mt-4 text-[14px] text-forest/65">{t("past")}</p> : null}
+            {editable && (!plan.date || plan.date <= today) ? (
+              <button type="button" onClick={markDone} className="mt-3 inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-4 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5 active:scale-[0.98] motion-reduce:transition-none">
+                <CircleCheck aria-hidden="true" className="size-4" />
+                {t("done.mark")}
+              </button>
+            ) : null}
+          </>
+        )}
 
         <ol className="mt-8">
           {plan.stops.map((stop, i) => {
@@ -399,6 +466,8 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       <aside className="space-y-4 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
         <MapView center={first} zoom={14.5} places={[]} selected={null} hoveredId={null} route={route} origin={null} searching={false} labels={mapLabels} interactive={false} className="h-[300px] w-full rounded-[28px] shadow-soft ring-1 ring-forest/10 sm:h-[340px]" />
         <MapsMenu stops={plan.stops} member={member} onLocked={() => openUpsell("maps")} />
+
+        {editable && entries.length > 0 ? log() : null}
 
         {editable ? <SavePlanPanel plan={own} defaultTitle={(idea?.title[locale] || own.where || ts("save.defaultTitle")).slice(0, 80)} link={savedLink} status={status} account={account} onUpsell={openUpsell} onSignIn={signInToSave} /> : null}
 

@@ -2390,6 +2390,26 @@
     "rain": "{chance} % de probabilidad de lluvia",
     "sunset": "Puesta de sol {time}",
     "past": "Esta ya ha pasado. Ojalá fuera de las buenas.",
+    "done": {
+      "mark": "Marcar como hecha",
+      "on": "Hecha el {day}",
+      "undo": "Al final no fue",
+      "ask": "¿Fue una buena cita?",
+      "yes": "Sí",
+      "no": "No",
+      "thanks": "Anotado. Podéis cambiarlo."
+    },
+    "log": {
+      "title": "Citas que ya habéis hecho",
+      "weeks": "{n} semanas seguidas",
+      "year": "{n, plural, one {# cita} other {# citas}} este año",
+      "good": "De las buenas",
+      "notGood": "Esta vez no",
+      "all": "Ver las {count}",
+      "remove": "Quitar {title} de la lista",
+      "gift": "{n} citas hechas: ya dan para una línea del tiempo.",
+      "giftCta": "Empezar el regalo"
+    },
     "walk": "{minutes} min a pie",
     "timeFor": "Hora en {name}",
     "noteFor": "Una nota para {name}",
