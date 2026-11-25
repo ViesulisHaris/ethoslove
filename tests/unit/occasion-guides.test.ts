@@ -198,8 +198,12 @@ describe("an occasion page's headings", () => {
     expect(e.metaTitle.toLowerCase()).toContain("no reason");
     expect(s.title.toLowerCase()).toContain("regalos porque sí");
     expect(s.line.toLowerCase()).toContain("regalo sin motivo");
-    // The number in the result's title counts the ideas on the page, and says so.
-    expect(e.metaTitle).toMatch(/\b11 Ideas\b/);
-    expect(s.metaTitle).toMatch(/\b11 ideas\b/);
+    // The number in the result's title counts the ideas on the page, and says so: read from the page's list, never typed.
+    const [ideasEn, ideasEs] = [OCCASION_GUIDES["just-because"].en.ideas?.items.length, OCCASION_GUIDES["just-because"].es.ideas?.items.length];
+    expect(ideasEn).toBeGreaterThan(0);
+    expect(e.metaTitle).toContain("{ideas} Ideas");
+    expect(s.metaTitle).toContain("{ideas} ideas");
+    expect(e.metaTitle.replace("{ideas}", String(ideasEn))).toMatch(new RegExp(`\\b${ideasEn} Ideas\\b`));
+    expect(s.metaTitle.replace("{ideas}", String(ideasEs))).toMatch(new RegExp(`\\b${ideasEs} ideas\\b`));
   });
 });
