@@ -66,10 +66,11 @@ export const DATES_LIVE = "2026-11-23";
 
 /**
  * The day the games of the growth build go live: today's question, the games' new end screen, how
- * to play and the questions on every game's page, the hub's three tiers, and the new games.
+ * to play and the questions on every game's page, the hub's three tiers, and the new games; then
+ * (25 November) the searched addresses, the weekly challenge and the closed question lists.
  * NOT LIVE YET: set it to the day they ship. Every games page reads its date from here.
  */
-export const GAMES_LIVE = "2026-11-23";
+export const GAMES_LIVE = "2026-11-25";
 
 /**
  * The day the rooms of the growth build go live: the trips room's title and its matcher, each trip's
