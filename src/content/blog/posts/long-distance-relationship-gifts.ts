@@ -260,7 +260,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cuánto tarda un regalo en llegar al extranjero" },
         {
           type: "p",
-          text: "Mandar un paquete a otro país es más lento de lo que parece. El servicio postal de Estados Unidos da [de 6 a 10 días hábiles para Priority Mail International](https://www.usps.com/international/priority-mail-international.htm) a muchos de los principales países, y avisa de que el plazo real depende de la ruta y de la aduana. Los días hábiles no cuentan los fines de semana, así que son hasta dos semanas de calendario. Si lo mandas desde España o desde otro país, mira los plazos de tu servicio de correos del mismo modo. Organízate según los días que te quedan:",
+          text: "Mandar un paquete a otro país es más lento de lo que parece. El servicio postal de Estados Unidos da [de 6 a 10 días hábiles para Priority Mail International](https://www.usps.com/international/priority-mail-international.htm) a muchos de los principales países, y avisa de que el plazo real depende de la ruta y de la aduana. Los días hábiles no cuentan los fines de semana, así que son hasta dos semanas de calendario. Si lo mandas desde otro país, mira los plazos de tu servicio de correos del mismo modo. Organízate según los días que te quedan:",
         },
         {
           type: "table",

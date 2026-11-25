@@ -6,6 +6,7 @@ import { FINDER_COPY, FINDER_FITS, FINDER_SHORT } from "@/content/finder";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { RECIPIENT_GUIDES } from "@/content/recipients";
 import { GIFT_GUIDES } from "@/content/gift-guides";
+import { MONTH_GUIDES } from "@/content/month-anniversaries";
 import { digitalCardsCopy } from "@/content/digital-cards";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_SEO } from "@/content/template-seo";
@@ -20,6 +21,8 @@ import { CITY_KIND_COPY, DATE_KIND_COPY, DATE_KIND_SHARED_FAQ, DATE_KIND_UI } fr
 import * as GAME_PAGES from "@/content/game-pages";
 import { TRIP_SEO } from "@/content/trip-seo";
 import { HALFWAY_TOOL } from "@/content/halfway-tool";
+import { TRIP_ORIGIN_COPY, TRIP_ORIGIN_UI } from "@/content/trip-origins";
+import { TRIP_IDEA_COPY, TRIP_IDEAS_UI } from "@/content/trip-ideas";
 import { PRESS_COPY } from "@/content/press";
 import { fillerIn } from "./filler";
 
@@ -46,6 +49,7 @@ const SOURCES: Record<string, unknown> = {
   occasions: OCCASION_GUIDES,
   recipients: RECIPIENT_GUIDES,
   "gift pages by kind": GIFT_GUIDES,
+  "anniversary months": MONTH_GUIDES,
   "digital cards": { en: digitalCardsCopy("en", CARD_FACTS), es: digitalCardsCopy("es", CARD_FACTS) },
   "digital gifts": { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS },
   "gift finder": { FINDER_COPY, FINDER_FITS, FINDER_SHORT },
@@ -61,6 +65,8 @@ const SOURCES: Record<string, unknown> = {
   "game pages": GAME_PAGES,
   "trip pages in search": TRIP_SEO,
   "halfway finder": HALFWAY_TOOL,
+  "trips by origin": { TRIP_ORIGIN_UI, TRIP_ORIGIN_COPY },
+  "trips by kind": { TRIP_IDEAS_UI, TRIP_IDEA_COPY },
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),
 };
 

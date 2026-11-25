@@ -10,11 +10,13 @@ export type TourRoom = (typeof TOUR_ROOMS)[number];
  * page written for search engines, not the explorer, and the tour there would wait for a list that
  * never comes (and fetch its code for nothing).
  */
-const ROOTS: Record<TourRoom, { path: string; exact?: true }> = {
+const ROOTS: Record<TourRoom, { path: string; exact?: true; not?: readonly string[] }> = {
   dates: { path: "/dates", exact: true },
   editor: { path: "/create" },
   games: { path: "/games" },
-  trips: { path: "/trips" },
+  // /trips and a trip's page. The pages by where you leave from and by kind of trip are written for
+  // search engines, with nothing the tour points at: it would wait there for as long as the page is open.
+  trips: { path: "/trips", not: ["/trips/from-", "/trips/ideas"] },
 };
 
 /**
@@ -31,5 +33,11 @@ const under = (path: string, root: string) => path === root || path.startsWith(`
 export function roomForPath(pathname: string): TourRoom | null {
   const path = bare(pathname);
   if (NEVER.some((root) => under(path, root))) return null;
-  return TOUR_ROOMS.find((room) => (ROOTS[room].exact ? path === ROOTS[room].path : under(path, ROOTS[room].path))) ?? null;
+  return (
+    TOUR_ROOMS.find((room) => {
+      const root = ROOTS[room];
+      if (root.not?.some((prefix) => path.startsWith(prefix))) return false;
+      return root.exact ? path === root.path : under(path, root.path);
+    }) ?? null
+  );
 }

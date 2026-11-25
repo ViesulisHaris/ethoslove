@@ -70,6 +70,7 @@ export function TemplateGallery({
   added = [],
   alsoFree = [],
   today,
+  fold,
 }: {
   manifests: TemplateManifest[];
   occasion?: Occasion;
@@ -82,6 +83,11 @@ export function TemplateGallery({
   alsoFree?: TemplateManifest[];
   /** "2026-11-22": the day the page was rendered with, for the order of the row of occasions. */
   today?: string;
+  /**
+   * On an occasion's page: how many cards are on show; the rest wait in a closed row under them, one tap away
+   * and still in the HTML (the page reads in 300 words, DESIGN-LESS-TEXT.md). Unset everywhere else.
+   */
+  fold?: number;
 }) {
   const t = useTranslations();
   const locale = useLocale() as GiftLocale;
@@ -227,11 +233,35 @@ export function TemplateGallery({
                     {s === 0 ? sorter : null}
                   </header>
                 )}
-                <div className={GRID}>
-                  {shelf.items.map((m, i) => (
-                    <GalleryCard key={m.slug} manifest={m} index={offsets[s] + i} badge={featuredFor(m.slug)} />
-                  ))}
-                </div>
+                {occasion && fold && shelf.items.length > fold ? (
+                  <>
+                    <div className={FOLD_GRID}>
+                      {shelf.items.slice(0, fold).map((m, i) => (
+                        <GalleryCard key={m.slug} manifest={m} index={offsets[s] + i} badge={featuredFor(m.slug)} />
+                      ))}
+                    </div>
+                    {/* The rest of the occasion's gifts, closed: a native <details>, so it opens by keyboard and without JavaScript, and every card stays in the HTML. */}
+                    <details data-gallery-rest className="group mt-10">
+                      <summary className="mx-auto flex h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-ink/20 px-5 text-sm font-medium text-ink transition-colors hover:border-ink/40 focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none active:bg-secondary [&::-webkit-details-marker]:hidden">
+                        {/* Open, the pill says what it does now: the plus turns to a cross and the label to "Show fewer". */}
+                        <span className="group-open:hidden">{t("templates.showAll", { count: shelf.items.length })}</span>
+                        <span className="hidden group-open:inline">{t("templates.showFewer")}</span>
+                        <Plus aria-hidden="true" className="size-4 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.8} />
+                      </summary>
+                      <div className={cn(GRID, "mt-10")}>
+                        {shelf.items.slice(fold).map((m, i) => (
+                          <GalleryCard key={m.slug} manifest={m} index={offsets[s] + fold + i} badge={featuredFor(m.slug)} />
+                        ))}
+                      </div>
+                    </details>
+                  </>
+                ) : (
+                  <div className={GRID}>
+                    {shelf.items.map((m, i) => (
+                      <GalleryCard key={m.slug} manifest={m} index={offsets[s] + i} badge={featuredFor(m.slug)} />
+                    ))}
+                  </div>
+                )}
               </section>
             ))}
           </div>
@@ -242,6 +272,8 @@ export function TemplateGallery({
 
 // One column by name on a phone: without it the single column is as wide as a card's longest line, and the page scrolls sideways.
 const GRID = "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+/** The first cards of an occasion's page: four stacked, two by two, or one row of four. */
+const FOLD_GRID = "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-4";
 
 /**
  * An occasion as a tile: its small rendered picture over its name (public/art/occasions, made by

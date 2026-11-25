@@ -3,6 +3,8 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { isOccasion } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
+import { isGiftGuide } from "@/content/gift-guides";
+import { monthFromSlug } from "@/content/month-anniversaries";
 import { recipientFromSlug } from "@/content/recipients";
 import { GAMES } from "@/lib/games/catalogue";
 import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount } from "@/content/blog/text";
@@ -11,6 +13,7 @@ import { PRODUCTS, type Currency } from "@/lib/pricing/products";
 import type { BlogContent, BlogPost } from "@/content/blog/types";
 import { TEMPLATE_SLUGS, listManifests } from "@/templates/manifests";
 import { FILLER } from "./filler";
+import { SPAIN_WORDS } from "../../scripts/blog-guard.mjs";
 
 /**
  * What a post must be before it goes live. A post is written by the daily routine
@@ -40,8 +43,9 @@ function resolves(href: string): boolean {
   if (occasion) return isOccasion(occasion[1] ?? "");
   const post = pathname.match(/^\/blog\/([a-z0-9-]+)$/);
   if (post) return slugs.has(post[1] ?? "");
-  const recipient = pathname.match(/^\/gifts\/([a-z0-9-]+)$/);
-  if (recipient) return recipientFromSlug(recipient[1] ?? "") !== null;
+  // A page of gifts: by person, by kind, or an anniversary month (content/month-anniversaries.ts).
+  const gifts = pathname.match(/^\/gifts\/([a-z0-9-]+)$/);
+  if (gifts) return recipientFromSlug(gifts[1] ?? "") !== null || isGiftGuide(gifts[1] ?? "") || monthFromSlug(gifts[1] ?? "") !== null;
   if (pathname.startsWith("/games/")) return GAME_PATHS.has(pathname);
   return false;
 }
@@ -337,5 +341,22 @@ describe("blog posts read Ethos's facts instead of typing them", () => {
         for (const sentence of text.split(/(?<=[.;!?])\s+/))
           if (namesFreeTier(sentence)) expect.soft(freeWord.test(plainText(sentence)), `${post.slug} (${locale}): "${sentence}"`).toBe(false);
     }
+  });
+});
+
+describe("blog posts and the owner's rule", () => {
+  // Nothing on the site names Spain or a Spanish city. The Publish blog workflow runs this file on every merge from the
+  // mirror, so a new post that names one does not go live either. "Spanish", the language, is allowed (SPAIN_WORDS).
+  it("no post names Spain or a Spanish city, in either language", () => {
+    const named: string[] = [];
+    const walk = (value: unknown, where: string) => {
+      if (typeof value === "string") {
+        const hit = SPAIN_WORDS.exec(value);
+        if (hit) named.push(`${where}: ${hit[0]}`);
+      } else if (Array.isArray(value)) value.forEach((v) => walk(v, where));
+      else if (value && typeof value === "object") for (const v of Object.values(value)) walk(v, where);
+    };
+    for (const post of BLOG_POSTS) for (const locale of ["en", "es"] as const) walk(post.content[locale], `${post.slug} (${locale})`);
+    expect(named).toEqual([]);
   });
 });

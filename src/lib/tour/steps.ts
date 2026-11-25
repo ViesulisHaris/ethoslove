@@ -89,10 +89,12 @@ export const TOURS: Record<TourRoom, TourConfig> = {
     ],
   },
   trips: {
-    ready: ['[data-testid="flight-finder"]'],
+    // On a trip's page the flight search is folded into the "Flights to …" row under "Before you
+    // go": the row is what there is to point at until it is opened.
+    ready: ['[data-testid="flight-finder"]', "#flights > summary"],
     topInset: MARKETING_BAR,
     steps: [
-      { id: "flights", targets: ['[data-testid="flight-finder"]'] },
+      { id: "flights", targets: ['[data-testid="flight-finder"]', "#flights > summary"] },
       // Only on the list of trips. Inside one it is already open, and its day-by-day stops sit
       // between the hero and the flights: lighting them would scroll the page down, up, then down.
       { id: "trip", targets: ['[data-testid="trip-card"]'] },

@@ -317,9 +317,9 @@ describe("partner clicks per room", () => {
   });
 
   it("every partner button is in one room", () => {
-    expect(Object.keys(PLACEMENT_ROOM).sort()).toEqual(["city", "gift_share", "meet_middle", "place_sheet", "plan", "trip_car", "trip_flights", "trip_tickets", "trips_finder"]);
+    expect(Object.keys(PLACEMENT_ROOM).sort()).toEqual(["city", "gift_share", "meet_middle", "place_sheet", "plan", "trip_car", "trip_flights", "trip_stay", "trip_tickets", "trips_finder"]);
     for (const room of Object.values(PLACEMENT_ROOM)) expect(VISITED_ROOMS).toContain(room);
-    for (const placement of ["trips_finder", "trip_flights", "trip_tickets", "trip_car"] as const) expect(PLACEMENT_ROOM[placement]).toBe("trips");
+    for (const placement of ["trips_finder", "trip_flights", "trip_tickets", "trip_car", "trip_stay"] as const) expect(PLACEMENT_ROOM[placement]).toBe("trips");
   });
 
   it("the click still carries the partner and the placement, and nothing new", () => {

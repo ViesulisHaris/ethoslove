@@ -210,7 +210,7 @@ Events → `affiliate_click`, add up the placements of each room:
 
 | Room | Placements |
 |---|---|
-| trips | `trips_finder`, `trip_flights`, `trip_tickets`, `trip_car` |
+| trips | `trips_finder`, `trip_flights`, `trip_tickets`, `trip_car`, `trip_stay` |
 | dates | `place_sheet`, `plan`, `city` |
 | long distance | `meet_middle` |
 | gifts | `gift_share` |

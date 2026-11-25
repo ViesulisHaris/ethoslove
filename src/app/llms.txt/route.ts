@@ -6,6 +6,7 @@ import { BLOG_POSTS } from "@/content/blog";
 import { FINDER_PATH } from "@/content/finder";
 import { DIGITAL_CARDS_PATH, digitalCardsCopy } from "@/content/digital-cards";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
+import { MONTH_GUIDES } from "@/content/month-anniversaries";
 import { LEGAL_ENTITY } from "@/content/legal";
 import { PT_LETTER_PATH } from "@/content/pt-letter";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
@@ -81,6 +82,8 @@ export function GET() {
     "## Gift ideas by kind, and what a digital card is",
     "",
     ...GIFT_GUIDE_SLUGS.map((slug) => `- [${GIFT_GUIDES[slug].en.h1}](${localizedUrl("en", `/gifts/${slug}`)}): ${GIFT_GUIDES[slug].en.description}`),
+    // One line for the series, not 24: it names the month it links to and says where the other 23 are.
+    `- [${MONTH_GUIDES[12].en.h1}](${localizedUrl("en", "/gifts/12-month-anniversary")}): ${MONTH_GUIDES[12].en.description} One page for each month from 1 to 24, at ${localizedUrl("en", "/gifts/1-month-anniversary")} to ${localizedUrl("en", "/gifts/24-month-anniversary")}.`,
     `- [${cards.breadcrumb}: ${cards.h1.toLowerCase()}](${localizedUrl("en", DIGITAL_CARDS_PATH)}): ${cards.description}`,
     "",
     "## Blog",

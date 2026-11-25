@@ -129,7 +129,9 @@ export function previewQuery(preview: SharePreview, extra: [string, string | nul
 
 export type ShareCard =
   | { kind: "plan" | "place"; locale: "en" | "es"; cover: string | null; title: string | null; date?: string | null }
-  | { kind: "trip"; locale: "en" | "es"; trip: string };
+  | { kind: "trip"; locale: "en" | "es"; trip: string }
+  /** A page by where you leave from or by kind of trip ("from-london", "ideas-road-trips"; lib/trips/room-card.ts). */
+  | { kind: "trips"; locale: "en" | "es"; page: string };
 
 /**
  * Where a preview's picture is drawn (app/og/share.jpg): everything it shows is in the query, so
@@ -138,6 +140,7 @@ export type ShareCard =
  */
 export function shareCardPath(card: ShareCard): string {
   if (card.kind === "trip") return `/og/share.jpg${query([["k", "trip"], ["l", card.locale], ["trip", card.trip], ["v", SHARE_CARD_VERSION]])}`;
+  if (card.kind === "trips") return `/og/share.jpg${query([["k", "trips"], ["l", card.locale], ["p", card.page], ["v", SHARE_CARD_VERSION]])}`;
   return `/og/share.jpg${query([
     ["k", card.kind],
     ["l", card.locale],
@@ -153,6 +156,7 @@ export function readShareCard(q: URLSearchParams): ShareCard {
   const locale = q.get("l") === "es" ? "es" : "en";
   const kind = q.get("k");
   if (kind === "trip") return { kind, locale, trip: (q.get("trip") ?? "").slice(0, 60) };
+  if (kind === "trips") return { kind, locale, page: (q.get("p") ?? "").slice(0, 60) };
   const preview = readSharePreview(q);
   return { kind: kind === "plan" ? "plan" : "place", locale, cover: preview.cover, title: preview.title, date: kind === "plan" ? preview.date : null };
 }

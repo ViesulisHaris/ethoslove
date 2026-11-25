@@ -62,7 +62,7 @@ export function autoEuropeHire(page?: string): string {
 }
 
 /** Where on the site a partner button sat, for the `affiliate_click` event: which spot earns, not who clicked. */
-export type PartnerPlacement = "trips_finder" | "trip_flights" | "trip_tickets" | "trip_car" | "place_sheet" | "plan" | "meet_middle" | "gift_share" | "city";
+export type PartnerPlacement = "trips_finder" | "trip_flights" | "trip_tickets" | "trip_car" | "place_sheet" | "plan" | "meet_middle" | "gift_share" | "city" | "trip_stay";
 
 /**
  * The room each partner button sits in, so `affiliate_click` can be read per room from its
@@ -74,6 +74,7 @@ export const PLACEMENT_ROOM: Record<PartnerPlacement, VisitedRoom> = {
   trip_flights: "trips",
   trip_tickets: "trips",
   trip_car: "trips",
+  trip_stay: "trips",
   place_sheet: "dates",
   plan: "dates",
   city: "dates",

@@ -15,13 +15,34 @@ import type { BorrowedLine } from "@/components/marketing/gift-idea-list";
  * Every idea is a template, and carries a line to borrow that fits the field it names: the page
  * prints that field's limit from the template's schema (lib/gift/field-limit.ts) and
  * tests/unit/gift-guides.test.ts fails a line that is too long for it. What a template does was
- * checked against its schema.ts and Template.tsx on 20 Nov 2026; what is free matches
+ * checked against its schema.ts and Template.tsx on 20 Nov 2026 (the five pages added on 24 Nov 2026 were
+ * checked that day, and the care package's printed card against components/dashboard/print-card.tsx); what is free matches
  * lib/gift/free-tier.ts in both states of its switch (NOTE below: a short note on The Letter and
  * nothing more with the note for everyone, The Letter and Constellations whole without it). No price is written here: the
  * pages that need one read it from PRODUCTS.
  */
-export const GIFT_GUIDE_SLUGS = ["last-minute", "video-message", "interactive-birthday-card", "virtual-birthday-cake", "photo-album", "anniversary-website"] as const;
+export const GIFT_GUIDE_SLUGS = [
+  "last-minute",
+  "video-message",
+  "interactive-birthday-card",
+  "virtual-birthday-cake",
+  "photo-album",
+  "anniversary-website",
+  "apology-for-him",
+  "apology-for-her",
+  "long-distance-care-package",
+  "surprise",
+  "memory-book",
+] as const;
 export type GiftGuideSlug = (typeof GIFT_GUIDE_SLUGS)[number];
+
+/**
+ * The pages by kind that the closing rows of /digital-cards and the pages by person show: the first six. The five
+ * added on 24 Nov 2026 (apology, care package, surprise, memory book) are linked from /gifts, their occasions and
+ * each other; named in these rows too, they pushed /digital-cards past 300 words and the last section's lily onto
+ * the questions' heading on the pages by person.
+ */
+export const GUIDES_IN_CLOSING_ROWS: readonly GiftGuideSlug[] = GIFT_GUIDE_SLUGS.slice(0, 6);
 
 export function isGiftGuide(slug: string): slug is GiftGuideSlug {
   return (GIFT_GUIDE_SLUGS as readonly string[]).includes(slug);
@@ -35,7 +56,12 @@ export function isGiftGuide(slug: string): slug is GiftGuideSlug {
  * about: the night train for a gift made late, the tent under the stars for a place worth filming,
  * the puppy on the picnic rug for the card with animals in it, the cake for the cake, the dated
  * print of two bicycles for an album, the two of them walking for an anniversary. /digital-cards has
- * the eighth (content/digital-cards.ts). tests/unit/spread-budget.test.ts holds them apart.
+ * the eighth (content/digital-cards.ts).
+ *
+ * There are eight sample photos and, since the growth build's second round of gift pages (24 Nov
+ * 2026), twelve pages with a band: so a band is told apart by its photo and the cover in its phone
+ * together (GUIDE_BAND_COVERS). The first six pages and /digital-cards keep a photo each, and no two
+ * bands show the same photo beside the same cover: tests/unit/spread-budget.test.ts holds both.
  */
 export const GUIDE_BAND_PHOTOS: Record<GiftGuideSlug, DemoPhotoId> = {
   "last-minute": "p6",
@@ -44,6 +70,23 @@ export const GUIDE_BAND_PHOTOS: Record<GiftGuideSlug, DemoPhotoId> = {
   "virtual-birthday-cake": "p3",
   "photo-album": "p7",
   "anniversary-website": "p2",
+  "apology-for-him": "p6",
+  "apology-for-her": "p8",
+  "long-distance-care-package": "p5",
+  surprise: "p3",
+  "memory-book": "p7",
+};
+
+/**
+ * The gift whose cover lies in the screen of the band's phone, where it is not The Letter's (the
+ * default of ExperienceFlatlay): with a photo, the pair that tells one band from another.
+ */
+export const GUIDE_BAND_COVERS: Partial<Record<GiftGuideSlug, string>> = {
+  "apology-for-him": "the-council",
+  "apology-for-her": "bouquet",
+  "long-distance-care-package": "passport",
+  surprise: "midnight-countdown",
+  "memory-book": "text-thread",
 };
 
 /** That photo, as a picture on the page takes it. */
@@ -57,9 +100,10 @@ export function guideBandPhoto(slug: GiftGuideSlug): { src: string; width: numbe
  * (a birthday's cards and cakes, an anniversary's page and album). Each of those pages links back.
  */
 export const GUIDES_FOR_OCCASION: Partial<Record<Occasion, GiftGuideSlug[]>> = {
-  birthday: ["interactive-birthday-card", "virtual-birthday-cake", "last-minute"],
-  anniversary: ["anniversary-website", "photo-album"],
-  "long-distance": ["video-message"],
+  birthday: ["interactive-birthday-card", "virtual-birthday-cake", "last-minute", "surprise"],
+  anniversary: ["anniversary-website", "photo-album", "memory-book"],
+  "long-distance": ["video-message", "long-distance-care-package"],
+  apology: ["apology-for-him", "apology-for-her"],
 };
 
 /**
@@ -1397,6 +1441,888 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         { href: "/blog/long-distance-anniversary-ideas", label: "Ideas de aniversario a distancia" },
         { href: "/blog/first-anniversary-ideas-for-boyfriend", label: "Ideas para el primer aniversario con tu novio" },
         { href: "/gifts/photo-album", label: "Álbumes de fotos interactivos" },
+      ],
+    },
+  },
+  "apology-for-him": {
+    en: {
+      title: "Apology Gifts for Him That Say What You Did",
+      description: "Apology gifts for him that name what happened instead of covering it. Six digital gifts, each with a line to borrow, made tonight and sent as a link.",
+      h1: "Apology gifts for him",
+      label: "Apology gifts for him",
+      hero: {
+        line: "There is no default sorry present for him. Make the gift the specific part.",
+        sentence: "Each of these carries the details a vague apology skips: the texts you owe, the thing you did, and a plan with a day and an hour on it.",
+      },
+      ideasTitle: "Six that name it plainly",
+      craft: "Sorry, with the details in",
+      film: "text-thread",
+      lead: [
+        "For him there is no default sorry present, and that helps. It leaves room for a gift about what actually happened: the texts you sent at midnight, the evening you missed, the thing you said in the car. Each idea below keeps one of those details in a field of its own, with a line you can borrow.",
+        "Five of the six cost something: each is a one-time payment for that template, and you can build any of them before deciding. The Letter goes free as a short note of up to 500 characters, which is room for what you did, what changes, and the plan for Friday.",
+      ],
+      ideas: [
+        {
+          template: "text-thread",
+          heading: "The messages you owe, sent in order",
+          body: "If the fight happened over text, answer it in the same place. Text Thread plays your messages back one after another with the typing dots in between, two to forty of them, photos dropping in as attachments. Start where it went wrong, say plainly what you got wrong, and let the last bubble be the plan for tonight.",
+          line: { field: "lines", where: "The first bubble", text: "I reread what I sent you. You were right to go quiet." },
+        },
+        {
+          template: "the-letter",
+          heading: "Five sentences under a wax seal",
+          brief: "Five honest sentences in a free note under a wax seal.",
+          body: "The free note on The Letter is 500 characters, which is about five honest sentences: what you did, what it cost him, what you understand now, what changes, and one line that is just warm. He breaks the seal and it writes itself out. No song is needed, though one can play under it.",
+          line: { field: "freeNote", where: "The whole note", text: "I said it was a joke and it wasn’t funny, least of all to you. I should have stopped the first time you went quiet. I’m sorry. From now on, if you go quiet, I stop and ask. Dinner Friday, your pick, and I’m not bringing it up as a joke ever again." },
+        },
+        {
+          template: "the-council",
+          heading: "A hearing that clears his name",
+          body: "The Council always tries him, so let the cats acquit him. Charge him with something that is plainly your fault, write findings that all point back at you, and end on the stamp that says pardoned. It owns up with a joke he is allowed to laugh at, and the letter after the verdict is where the real apology goes.",
+          line: { field: "charge", where: "The charge", text: "putting up with me on Saturday night" },
+        },
+        {
+          template: "xoxo",
+          heading: "Make it up, with the plan in the P.S.",
+          brief: "A few plain sentences, already underlined, and the make-up evening in the P.S.",
+          body: "An apology goes further with a plan in it. XOXO has room for 220 characters of plain sentences below a nickname spelled in newsprint, and marks some of them with underlines and circles, the way a pen would. Write what you did there, plainly. The P.S. keeps the plan until he taps: give the day, the hour and the place you missed.",
+          line: { field: "lines", where: "The lines you’d underline", text: "I said I’d be there at eight and I wasn’t. That one’s on me, not on traffic." },
+        },
+        {
+          template: "on-repeat",
+          heading: "The song from before it went wrong",
+          brief: "Your song on a player, and a handwritten note asking for what you had before.",
+          body: "On Repeat opens on a player with your photo as the album cover and your song on it, then fills into a collage when he presses play. A handwritten note of sixty characters sits under the player. Choose the song you both played before the argument, and use the note to say you would like that back.",
+          line: { field: "note", where: "The note under the player", text: "Can we go back to this one? I miss it." },
+        },
+        {
+          template: "fortune-cookie",
+          heading: "Three fortunes that promise something specific",
+          brief: "Fortunes that are promises he can hold you to, one cookie at a time.",
+          body: "An apology can turn every fortune into a promise with a date on it, and Fortune Cookie asks for three or more. He taps each cookie open and the slip slides out. Keep them small and checkable, the kind he can hold you to, and let the last cookie carry your message.",
+          line: { field: "fortunes", where: "One of the fortunes", text: "You will get the window seat on every trip until March." },
+        },
+      ],
+      sections: [
+        {
+          heading: "What to say first, and what to leave out",
+          body: "Say what you did in the first line, in plain words, without “if” and without “but”. Leave out what he did; that is a different conversation for a different day. Then one sentence about how it felt on his side, which shows you understood, and one about what you will do differently. Four lines are enough; a page reads as a defense.",
+        },
+        {
+          heading: "When to send it",
+          body: "Not in the middle of the argument and not the next morning before you have talked. Send it once you have said sorry out loud, or when he has asked for space and you want him to know you are thinking without asking for an answer. A gift sent too early reads as a way of skipping the conversation.",
+        },
+        {
+          heading: "If he is not ready to open it",
+          body: "A link waits. He can open it tonight, tomorrow or after a long walk, and it plays from the start every time. Say in the message you send with it that there is no rush and no reply needed. If you want it to open at a set hour, a paid template can be scheduled in the editor; on the free note, scheduling is one of the paid extras.",
+        },
+      ],
+      faq: [
+        { q: "What is a good apology gift for a boyfriend?", a: "One that names what happened. A short note that says what you did, a chat that replays the conversation properly, or a plan for making it up with a day and a time on it, rather than an object standing in for the words." },
+        { q: "Should an apology gift be expensive?", a: "No. An expensive gift after a fight can read as paying it off. A small gift that is plainly about what happened, and a changed habit after it, do more." },
+        { q: "What do I write in an apology note to him?", a: "What you did, why it hurt, what changes. Four or five sentences, no “if you were hurt”, nothing about what he did. End with something warm and small, like a plan for Friday." },
+        { q: "Can I say sorry with something free?", a: "The Letter, as a short note of up to 500 characters with a song, costs nothing. Every other gift on this page is a one-time payment for that template, and the editor lets you build the whole thing first." },
+      ],
+      related: [
+        { href: "/occasions/apology", label: "Saying sorry properly" },
+        { href: "/blog/how-to-apologize-to-your-boyfriend", label: "How to apologize to your boyfriend" },
+        { href: "/blog/sorry-message-for-girlfriend", label: "Sorry messages for a girlfriend" },
+        { href: "/gifts/apology-for-her", label: "Apology gifts for her" },
+      ],
+    },
+    es: {
+      title: "Regalos para pedirle perdón a tu novio",
+      description: "Regalos para pedir perdón a tu novio que nombran lo que pasó en vez de taparlo. Seis regalos digitales con una frase lista, hechos esta noche.",
+      h1: "Regalos para pedirle perdón a tu novio",
+      label: "Pedir perdón a tu novio",
+      hero: {
+        line: "No hay un regalo de perdón que sirva para todo. Que el regalo sea lo concreto.",
+        sentence: "Cada uno lleva los detalles que una disculpa vaga se salta: los mensajes que debes, lo que hiciste y un plan con día y hora.",
+      },
+      ideasTitle: "Seis que lo dicen claro",
+      craft: "Perdón, con los detalles dentro",
+      film: "text-thread",
+      lead: [
+        "En este caso no hay un regalo de perdón de costumbre, y eso ayuda: deja sitio para uno que trate de lo que pasó de verdad, los mensajes de medianoche, la cena a la que faltaste, lo que dijiste en el coche. Cada idea de abajo guarda uno de esos detalles en un campo propio, con una frase lista.",
+        "Cinco de los seis cuestan algo: cada uno es un solo pago por esa plantilla, y puedes montar cualquiera antes de decidir. La carta sale gratis como nota corta de hasta 500 caracteres, sitio de sobra para lo que hiciste, lo que va a cambiar y el plan del viernes.",
+      ],
+      ideas: [
+        {
+          template: "text-thread",
+          heading: "Los mensajes que debes, en orden",
+          body: "Si la discusión fue por mensajes, contesta en el mismo sitio. Hilo de mensajes reproduce tus mensajes uno tras otro con los puntitos de escribir entre medias, de dos a cuarenta, y las fotos caen como adjuntos. Empieza donde se torció, di claramente en qué te equivocaste y deja que la última burbuja sea el plan de esta noche.",
+          line: { field: "lines", where: "La primera burbuja", text: "He releído lo que te mandé. Hiciste bien en callarte." },
+        },
+        {
+          template: "the-letter",
+          heading: "Cinco frases bajo un sello de lacre",
+          brief: "Cinco frases sinceras en una nota gratis bajo un sello de lacre.",
+          body: "La nota gratis de La carta tiene sitio para 500 caracteres, que son unas cinco frases sinceras: lo que hiciste, lo que le costó, lo que entiendes ahora, lo que cambia y una línea que sea solo cariño. Rompe el sello y se escribe sola. No hace falta canción, aunque puede sonar una debajo.",
+          line: { field: "freeNote", where: "La nota entera", text: "Dije que era broma y no tuvo gracia, y a ti menos que a nadie. Tenía que haber parado la primera vez que te quedaste en silencio. Lo siento. A partir de ahora, si te callas, paro y te pregunto. Cena el viernes, eliges tú, y no vuelvo a sacarlo en broma." },
+        },
+        {
+          template: "the-council",
+          heading: "Un juicio que limpia su nombre",
+          body: "El Consejo siempre juzga a quien recibe el regalo, así que deja que los gatos le absuelvan. Acúsale de algo que a todas luces fue culpa tuya, escribe conclusiones que apunten a ti y acaba con el sello de «Indulto». Reconoce la culpa con una broma de la que puede reírse, y la carta de después del veredicto es donde va la disculpa de verdad.",
+          line: { field: "charge", where: "El cargo", text: "aguantarme el sábado por la noche" },
+        },
+        {
+          template: "xoxo",
+          heading: "Compénsalo, con el plan en la posdata",
+          brief: "Unas frases claras, ya subrayadas, y la noche para compensarlo en la posdata.",
+          body: "Una disculpa llega más lejos con un plan dentro. XOXO tiene sitio para 220 caracteres de frases claras debajo de un mote en letras de periódico, y marca algunas con subrayados y círculos, como haría un boli. Escribe ahí lo que hiciste, sin rodeos. La posdata guarda el plan hasta que toque la pantalla: pon el día, la hora y el sitio al que faltaste.",
+          line: { field: "lines", where: "Las frases que subrayarías", text: "Dije que estaría a las ocho y no estuve. Eso es cosa mía, no del tráfico." },
+        },
+        {
+          template: "on-repeat",
+          heading: "La canción de antes de que se torciera",
+          brief: "Vuestra canción en un reproductor y una nota a mano que pide lo de antes.",
+          body: "En bucle se abre en un reproductor con tu foto de portada y vuestra canción, y al darle al play se llena de collage. Debajo del reproductor cabe una nota a mano de sesenta caracteres. Elige la canción que poníais antes de la discusión y usa la nota para decir que te gustaría recuperar eso.",
+          line: { field: "note", where: "La nota bajo el reproductor", text: "¿Volvemos a esta? La echo de menos." },
+        },
+        {
+          template: "fortune-cookie",
+          heading: "Tres fortunas que prometen algo concreto",
+          brief: "Fortunas que son promesas que puede reclamarte, galleta a galleta.",
+          body: "Una disculpa puede convertir cada fortuna en una promesa con fecha, y Galleta de la fortuna pide tres o más. Abre cada galleta con un toque y sale la tira. Que sean pequeñas y comprobables, de las que se pueden reclamar, y que la última galleta lleve tu mensaje.",
+          line: { field: "fortunes", where: "Una de las fortunas", text: "Tendrás la ventanilla en todos los viajes hasta marzo." },
+        },
+      ],
+      sections: [
+        {
+          heading: "Qué decir primero y qué dejar fuera",
+          body: "Di lo que hiciste en la primera línea, con palabras sencillas, sin «si» y sin «pero». Deja fuera lo que hizo; eso es otra conversación para otro día. Luego una frase sobre lo que le costó, que demuestra que lo has entendido, y otra sobre lo que vas a hacer distinto. Cuatro líneas bastan; una página se lee como una defensa.",
+        },
+        {
+          heading: "Cuándo enviarlo",
+          body: "Ni en mitad de la discusión ni a la mañana siguiente antes de haber hablado. Envíalo cuando ya hayas pedido perdón en voz alta, o cuando te haya pedido espacio y quieras que sepa que piensas en ello sin pedirle respuesta. Un regalo enviado demasiado pronto se lee como una forma de saltarse la conversación.",
+        },
+        {
+          heading: "Si todavía no quiere abrirlo",
+          body: "Un enlace espera. Puede abrirlo esta noche, mañana o después de un paseo largo, y se reproduce desde el principio cada vez. Di en el mensaje con el que lo mandas que no hay prisa ni hace falta contestar. Si quieres que se abra a una hora concreta, una plantilla de pago se programa en el editor; en la nota gratis, programar es uno de los extras de pago.",
+        },
+      ],
+      faq: [
+        { q: "¿Qué regalo sirve para pedir perdón de verdad?", a: "Uno que nombre lo que pasó. Una nota corta que diga lo que hiciste, un chat que repita la conversación como debió ser o un plan para compensarlo con día y hora, en vez de un objeto que sustituya a las palabras." },
+        { q: "¿Un regalo para pedir perdón tiene que ser caro?", a: "No. Un regalo caro después de una discusión puede leerse como pagar la deuda. Un regalo pequeño que trate claramente de lo que pasó, y una costumbre cambiada después, hacen más." },
+        { q: "¿Qué escribo en una nota para pedirle perdón?", a: "Lo que hiciste, lo que le costó y lo que cambia. Cuatro o cinco frases, sin «si te ha molestado» y sin hablar de su parte. Acaba con algo cálido y pequeño, como un plan para el viernes." },
+        { q: "¿Hay algo gratis para pedir perdón?", a: "La carta, como nota corta de hasta 500 caracteres con una canción, no cuesta nada. Los demás regalos de esta página son un solo pago por esa plantilla, y el editor te deja montarlo entero antes." },
+      ],
+      related: [
+        { href: "/occasions/apology", label: "Pedir perdón como es debido" },
+        { href: "/blog/how-to-apologize-to-your-boyfriend", label: "Cómo pedirle perdón a tu novio" },
+        { href: "/blog/sorry-message-for-girlfriend", label: "Mensajes para pedirle perdón a tu novia" },
+        { href: "/gifts/apology-for-her", label: "Pedir perdón a tu novia" },
+      ],
+    },
+  },
+  "apology-for-her": {
+    en: {
+      title: "Apology Gifts for Her: Flowers That Carry the Sorry",
+      description: "Apology gifts for her start with flowers for most people. Six digital gifts that make the default carry a real apology, with lines that fit each field.",
+      h1: "Apology gifts for her",
+      label: "Apology gifts for her",
+      hero: {
+        line: "Flowers are what most people think of. Make them carry the sorry.",
+        sentence: "The card in a bouquet holds thirty characters, so these gifts give the apology more room: a folded crane, a letter, a garden that ends in a bouquet.",
+      },
+      ideasTitle: "Six that give the flowers words",
+      craft: "Past the card in the bouquet",
+      film: "paper-crane",
+      lead: [
+        "Flowers are fine, and most people start there. The trouble is the card: a few words tucked into the stems, rarely enough for what happened. The ideas below keep the flowers and give them room, inside the bouquet or beside it: a crane with an admission in every fold, a letter, a garden walk to a bouquet.",
+        "One costs nothing: a short note on The Letter, 500 characters at most. Each of the other five is a single payment for its template, kept for good, and the editor lets you finish one completely before deciding. Pick her colors, not the dozen red roses a florist sells after every fight.",
+      ],
+      ideas: [
+        {
+          template: "paper-crane",
+          heading: "Fold the apology, one crease at a time",
+          body: "Paper Crane is slow on purpose: she holds each crease until the paper folds, and if she lets go too soon it springs open. Every fold that lands shows one line of seventy-two characters, six at most. An apology suits that pace. Put one admission on each fold and keep the promise for the line left behind.",
+          line: { field: "lines", where: "The line on one fold", text: "I talked over you at dinner, and then again on the way home." },
+        },
+        {
+          template: "bouquet",
+          heading: "Thirty characters on the card, used well",
+          brief: "The flowers in her colors, plain words on the card, and the full letter behind it.",
+          body: "Bouquet builds the default properly: up to 24 stems of her colors, whites and blush if red would feel like too much, gathered on her screen one at a time. The card tucked in holds thirty characters, enough for the plain words and no more, and your full letter opens from it with the rest.",
+          line: { field: "cardNote", where: "On the card in the bouquet", text: "I was wrong. Letter inside." },
+        },
+        {
+          template: "the-letter",
+          heading: "A letter that starts by naming it",
+          body: "Most apology letters open softly and get to the point late; open this one on the point. The Letter has a greeting of sixty characters before the words underneath appear by hand. The wax seal and the handwriting do the gentle part. Add a photo of the two of you if the letter needs a reason to smile.",
+          line: { field: "greeting", where: "The greeting", text: "About Saturday, and what I said in the car," },
+        },
+        {
+          template: "garden",
+          heading: "A garden walk that ends on a tagged bouquet",
+          brief: "A walk past the beds to a bouquet, its tag sixty characters long.",
+          body: "The Garden lets the flowers take their time: she walks through a gate, past roses, peonies, wildflowers or sunflowers and a trellis of photos, to your letter on the potting table, and at the end comes a bouquet with a tag of sixty characters. The tag is the last thing she reads, so put the promise there and the admission in the letter.",
+          line: { field: "tag", where: "The tag on the bouquet", text: "I’m listening now. All the way to the end." },
+        },
+        {
+          template: "vinyl",
+          heading: "Her favorite record, with an honest title",
+          brief: "Your song on a turntable, and an album title of forty characters that says it.",
+          body: "If there is a song you both know, put it on a record. Vinyl sets it turning on a turntable and keeps up to twelve photos in a crate beside it as album covers. The sleeve’s title holds forty characters: title the album with the apology, or with the joke only she will get, and print your longer words in the liner notes.",
+          line: { field: "album", where: "The album’s title", text: "Things I Should Have Said Sooner" },
+        },
+        {
+          template: "sticker-bomb",
+          heading: "Label strips that take the blame",
+          brief: "Label-maker strips under the stickers, small admissions from silly to real.",
+          body: "Small admissions add up. Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, twenty-eight characters each, six of them if you add one photo or none. For an apology, make the strips small admissions in order, from the silly to the real, and pick the pack called “The soft ones” so the stickers stay gentle.",
+          line: { field: "labels", where: "One label-maker strip", text: "official over-reactor: me" },
+        },
+      ],
+      sections: [
+        {
+          heading: "What goes on a card of thirty characters",
+          body: "Thirty characters is a short sentence, so it cannot hold the apology and should not try. Use it to point: “I was wrong. Letter inside.” or her name and “I’m sorry.” The flowers are the gesture; the card says there is more; the letter, opened from the card, is where you name what happened.",
+        },
+        {
+          heading: "Flowers that do not look like an excuse",
+          body: "Red roses after a fight can read as a script. Pick what she would pick: her colors, the flower she points at in stores, whites and blush when you want it quiet. A smaller bunch with the right flowers looks more considered than two dozen of the wrong ones.",
+        },
+        {
+          heading: "After she opens it",
+          body: "Do not ask whether she liked it. The gift has said its part; the rest is a conversation, and she sets its pace. If she replies, answer the reply, not the gift. If she does not reply tonight, the link still works tomorrow, and the plan you wrote in it still stands.",
+        },
+      ],
+      faq: [
+        { q: "What is a good apology gift for a girlfriend?", a: "Flowers with enough words to carry the apology: a bouquet whose card points to a letter, a paper crane that folds an admission into each crease, a garden walk that ends on a bouquet with your promise on its tag." },
+        { q: "Are flowers enough to say sorry?", a: "Only with words. Flowers say you are sorry about something; the card and the letter have to say what. Without that, they can read as a way of avoiding the conversation." },
+        { q: "What should I write on an apology card?", a: "On a card of thirty characters, point to the longer message: “I was wrong. Letter inside.” In the letter, name what you did, what it cost her and what you will change." },
+        { q: "Can I send a free apology?", a: "Yes. The Letter goes out free as a note with a song, up to 500 characters long. Each of the other gifts here is a single payment for that template, built in full in the editor before you pay." },
+      ],
+      related: [
+        { href: "/occasions/apology", label: "Saying sorry properly" },
+        { href: "/blog/sorry-message-for-girlfriend", label: "Sorry messages for a girlfriend" },
+        { href: "/blog/how-to-apologize-to-your-boyfriend", label: "How to apologize to your boyfriend" },
+        { href: "/gifts/apology-for-him", label: "Apology gifts for him" },
+      ],
+    },
+    es: {
+      title: "Regalos para pedirle perdón a tu novia",
+      description: "Para pedir perdón a tu novia casi todo el mundo piensa en flores. Seis regalos digitales que hacen que las flores lleven una disculpa de verdad, con frases.",
+      h1: "Regalos para pedirle perdón a tu novia",
+      label: "Pedir perdón a tu novia",
+      hero: {
+        line: "Casi todo el mundo piensa en flores. Haz que lleven el perdón.",
+        sentence: "La tarjeta de un ramo da para treinta caracteres, así que estos regalos dan más sitio a la disculpa: una grulla doblada, una carta, un jardín con ramo.",
+      },
+      ideasTitle: "Seis que les ponen palabras a las flores",
+      craft: "Más allá de la tarjeta",
+      film: "paper-crane",
+      lead: [
+        "Casi todo el mundo empieza por las flores, y las flores están bien. El problema es la tarjeta: unas pocas palabras entre los tallos, que casi nunca bastan para lo que pasó. Las ideas de abajo se quedan con el ramo y le dan sitio, dentro o al lado: una grulla con algo que reconoces en cada pliegue, una carta, un paseo por un jardín hasta un ramo.",
+        "Uno no cuesta nada: una nota corta en La carta, de 500 caracteres como mucho. Los otros cinco se pagan una sola vez y lo que compras es la plantilla, para siempre; el editor te deja terminar uno entero antes de decidir. Elige sus colores, no las rosas rojas de después de cada discusión.",
+      ],
+      ideas: [
+        {
+          template: "paper-crane",
+          heading: "Dobla la disculpa, pliegue a pliegue",
+          body: "Grulla de papel va despacio a propósito: cada pliegue se mantiene pulsado hasta que el papel se dobla, y si se suelta antes de tiempo se abre. Cada pliegue que sale muestra una frase de setenta y dos caracteres, seis como mucho. A una disculpa le va ese ritmo. Pon en cada pliegue algo que reconoces y guarda la promesa para la frase que se queda.",
+          line: { field: "lines", where: "La frase de un pliegue", text: "Te interrumpí en la cena, y otra vez de vuelta a casa." },
+        },
+        {
+          template: "bouquet",
+          heading: "Treinta caracteres en la tarjeta, bien usados",
+          brief: "Las flores en sus colores, palabras sencillas en la tarjeta y la carta entera detrás.",
+          body: "Ramo hace bien lo de siempre: hasta 24 tallos en sus colores, blancos y rosa palo si el rojo fuera demasiado, que se juntan en su pantalla de uno en uno. La tarjeta de entre los tallos llega a treinta caracteres, lo justo para las palabras sencillas, y tu carta entera se abre desde ella con lo demás.",
+          line: { field: "cardNote", where: "En la tarjeta del ramo", text: "Me equivoqué. Dentro, la carta" },
+        },
+        {
+          template: "the-letter",
+          heading: "Una carta que empieza nombrándolo",
+          body: "Casi todas las cartas de disculpa empiezan con suavidad y llegan tarde al asunto; empieza esta por el asunto. La carta tiene un saludo de sesenta caracteres antes de que las palabras de debajo aparezcan a mano. El sello de lacre y la letra a mano ya ponen la parte suave. Añade una foto de los dos si la carta necesita un motivo para sonreír.",
+          line: { field: "greeting", where: "El saludo", text: "Sobre el sábado, y lo que dije en el coche:" },
+        },
+        {
+          template: "garden",
+          heading: "Un jardín que acaba en un ramo",
+          brief: "Un paseo entre parterres hasta un ramo con una etiqueta de sesenta caracteres.",
+          body: "El jardín deja que las flores se tomen su tiempo: se entra por una verja, se pasa entre rosas, peonías, flores silvestres o girasoles y un enrejado de fotos hasta tu carta en la mesa del invernadero, y al final hay un ramo con una etiqueta de sesenta caracteres. La etiqueta es lo último que se lee, así que pon ahí la promesa y en la carta lo que reconoces.",
+          line: { field: "tag", where: "La etiqueta del ramo", text: "Ahora te escucho. Hasta el final." },
+        },
+        {
+          template: "vinyl",
+          heading: "Su disco favorito, con un título sincero",
+          brief: "Vuestra canción en un tocadiscos y un título de álbum de cuarenta caracteres que lo dice.",
+          body: "Si hay una canción que conocéis los dos, ponla en un disco. Vinilo la hace girar en un tocadiscos y guarda hasta doce fotos en una caja al lado como portadas. El título de la funda admite cuarenta caracteres: titula el álbum con la disculpa, o con la broma que solo pilláis vosotros, e imprime tus palabras largas en el libreto.",
+          line: { field: "album", where: "El título del álbum", text: "Cosas que tenía que haber dicho antes" },
+        },
+        {
+          template: "sticker-bomb",
+          heading: "Tiras de rotuladora que se echan la culpa",
+          brief: "Tiras de rotuladora bajo los stickers, cosas pequeñas que reconoces, de la tonta a la de verdad.",
+          body: "Lo pequeño que reconoces también suma. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora de veintiocho caracteres, seis si añades una foto o ninguna. Para pedir perdón, que las tiras sean pequeñas cosas que reconoces, en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
+          line: { field: "labels", where: "Una tira de rotuladora", text: "exagero, lo reconozco" },
+        },
+      ],
+      sections: [
+        {
+          heading: "Qué cabe en una tarjeta de treinta caracteres",
+          body: "Treinta caracteres son una frase corta, así que no caben en ellos la disculpa ni deberían intentarlo. Úsalos para señalar: «Me equivoqué. Dentro, la carta», o su nombre y «Lo siento». Las flores son el gesto; la tarjeta dice que hay más; la carta, que se abre desde la tarjeta, es donde nombras lo que pasó.",
+        },
+        {
+          heading: "Flores que no parezcan una excusa",
+          body: "Rosas rojas después de una discusión pueden parecer un guion. Elige lo que escogería sin pensarlo: sus colores, la flor que señala en las floristerías, blancos y rosa palo si lo quieres tranquilo. Un ramo más pequeño con las flores justas parece más pensado que dos docenas de las equivocadas.",
+        },
+        {
+          heading: "Cuando lo abra",
+          body: "No preguntes si le ha gustado. El regalo ya ha dicho su parte; lo demás es una conversación, y el ritmo no lo marcas tú. Si contesta, responde a la respuesta, no al regalo. Si esta noche no contesta, el enlace sigue funcionando mañana, y el plan que escribiste sigue en pie.",
+        },
+      ],
+      faq: [
+        { q: "¿Qué regalo sirve para pedir perdón con flores?", a: "Flores con palabras suficientes para llevar la disculpa: un ramo cuya tarjeta lleva a una carta, una grulla de papel con algo que reconoces en cada pliegue, un paseo por un jardín que acaba en un ramo con tu promesa en la etiqueta." },
+        { q: "¿Bastan unas flores para pedir perdón?", a: "Solo con palabras. Las flores dicen que lo sientes por algo; la tarjeta y la carta tienen que decir por qué. Sin eso, pueden leerse como una forma de evitar la conversación." },
+        { q: "¿Qué pongo en una tarjeta para pedir perdón?", a: "En una tarjeta de treinta caracteres, señala el mensaje largo: «Me equivoqué. Dentro, la carta». En la carta, di qué hiciste, qué le costó y qué vas a cambiar." },
+        { q: "¿Puedo pedir perdón con algo gratis?", a: "Sí. La carta sale gratis como nota con canción, de hasta 500 caracteres. Cada uno de los demás regalos de aquí es un solo pago por su plantilla, y se monta entero en el editor antes de pagar." },
+      ],
+      related: [
+        { href: "/occasions/apology", label: "Pedir perdón como es debido" },
+        { href: "/blog/sorry-message-for-girlfriend", label: "Mensajes para pedirle perdón a tu novia" },
+        { href: "/blog/how-to-apologize-to-your-boyfriend", label: "Cómo pedirle perdón a tu novio" },
+        { href: "/gifts/apology-for-him", label: "Pedir perdón a tu novio" },
+      ],
+    },
+  },
+  "long-distance-care-package": {
+    en: {
+      title: "Long-Distance Care Package Ideas, and the Gift Inside",
+      description: "What to put in a long-distance care package, what mailing does to it, and a digital gift they open by scanning the QR card on top of the box.",
+      h1: "Long-distance care package ideas",
+      label: "Long-distance care packages",
+      hero: {
+        line: "Fill the box with things to touch. Put the words in the link.",
+        sentence: "Ethos mails nothing: you send the box yourself, and the gift inside is a link on a printed QR card, the first thing they scan.",
+      },
+      ideasTitle: "Six gifts to lay on top of the box",
+      craft: "Packing, mailing and timing it",
+      film: "halfway",
+      lead: [
+        "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. What Ethos adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
+        "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two postcard-size cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template.",
+      ],
+      ideas: [
+        {
+          template: "halfway",
+          heading: "The distance in big numbers, with a note",
+          brief: "The real distance in big numbers, a note on what is halfway, and a countdown if you like.",
+          body: "Halfway shows the real distance between your two cities in big numbers, with a note of 120 characters about what is halfway, and you can switch on a countdown to the second you arrive. In a care package it answers the question the box cannot: when. Put the date of the next visit on it, and photos taped beside the letter.",
+          line: { field: "halfwayNote", where: "The halfway note", text: "Halfway is a train station I have never seen. In 19 days I will be past it." },
+        },
+        {
+          template: "the-letter",
+          heading: "A note for when the box is empty",
+          body: "Some things in a care package run out in a day. The free note on The Letter does not: 500 characters under a wax seal, written out by hand on their screen, with a song if you like. Write it for the moment the box is empty and the room is quiet, and tell them what is in it they might miss.",
+          line: { field: "freeNote", where: "The whole note", text: "The box is empty now, I know. The tea is the one from the café on the corner, the socks are the ugly ones you like, and the photo is from the night of the storm. I packed it on Sunday and missed you the whole time. Eat the chocolate first. Call me when you’ve read this." },
+        },
+        {
+          template: "jar-of-reasons",
+          heading: "A jar of notes to open after the snacks",
+          brief: "Folded notes shaken out one at a time, for the weeks after the box.",
+          body: "Jar of Reasons is a glass jar of folded notes that come out one at a time when they shake the phone or tap the glass, a hundred at most. It pairs well with a box: the physical things for the first evening, the jar for the weeks after, one note on each bad day.",
+          line: { field: "reasons", where: "One note in the jar", text: "For a bad Monday: you are better at this than you think." },
+        },
+        {
+          template: "passport",
+          heading: "Stamp the route the box will take",
+          brief: "A passport of photos whose route is the box’s own journey to their door.",
+          body: "The box travels too, so give it a passport: Passport stamps one photo per page, up to ten, and draws a route of up to six stopovers. Make the route the box’s own journey, town by town from yours to theirs, since each stopover has to be a real place the map can find, and the visa page at the end opens on your message.",
+          line: { field: "stops", where: "One stopover", text: "Berlin" },
+        },
+        {
+          template: "constellations",
+          heading: "Stars for the visits, a clock for the box",
+          brief: "A star for each visit so far, and a countdown to the evening the box lands.",
+          body: "Tracking numbers are vague; a countdown is not. Constellations makes a star of each photo, three to twelve, one for every visit, and draws lines between them until a heart, an infinity sign or a star is whole, when your last line appears. Add a countdown in the editor, set to the evening the parcel is due, or to the last day of the courier’s window.",
+          line: { field: "finalLine", where: "The line when it completes", text: "Nine visits, one sky. The box is the tenth thing I’ve sent you this year." },
+        },
+        {
+          template: "vinyl",
+          heading: "Music for unpacking, on a record",
+          brief: "Your song on a turntable, with a side label naming it unpacking music.",
+          body: "Something has to play while they unpack. Vinyl puts your song on a turntable that turns while it plays, with up to twelve photos in a crate and your message in the liner notes. The side label takes twelve characters: name it for the job, unpacking music, and choose the song you would put on if you were there to open it with them.",
+          line: { field: "side", where: "The side label", text: "Unpack to me" },
+        },
+      ],
+      sections: [
+        {
+          heading: "What to pack",
+          body: "Pack things for three senses: something to eat from your side, something to wear that has been worn, something to smell, a candle or your soap. Add one thing that only makes sense to the two of you, a ticket stub or a takeout menu. Keep it light enough to mail cheaply, and put the card with the QR code on top.",
+        },
+        {
+          heading: "What mailing and customs do to a box",
+          body: "Across a border, food is the risk: fresh food, anything homemade and meat are often stopped, and sealed packaged snacks usually pass. Fill out the customs form honestly as a gift and list everything. Parcels take days to weeks, so nothing should melt, spill or expire, and the gift on the phone does not depend on when the box arrives.",
+        },
+        {
+          heading: "When to send the link",
+          body: "Either lay the printed card on top, so scanning it is the first thing they do, or keep the link back and send it the minute they tell you the box has come. If you know the delivery day, a paid gift can be set to open at an hour in their evening, so the box and the gift arrive together.",
+        },
+      ],
+      faq: [
+        { q: "Does Ethos mail the care package?", a: "No. You pack and mail the box yourself; Ethos makes the digital gift that goes with it, as a link and as a printed card with its QR code." },
+        { q: "How do I put a digital gift inside a physical box?", a: "Publish the gift, then print its QR code as a Print-ready card from the share screen, or later under QR card in My gifts. It prints two postcard-size cards to a page; lay one on top of the box." },
+        { q: "Can the gift open when the box arrives?", a: "Yes, on a paid gift: in the editor, under Extras, switch on “Schedule the reveal” and set the date, the hour and their time zone. Until then the card’s link shows a countdown." },
+        { q: "What should I put in a long-distance care package?", a: "Something to eat from your side, something worn, something that smells of you, and one thing that only the two of you understand. Pack what weighs little and survives a week in transit." },
+      ],
+      related: [
+        { href: "/occasions/long-distance", label: "Long-distance gift ideas" },
+        { href: "/blog/long-distance-relationship-gifts", label: "Long-distance relationship gifts" },
+        { href: "/gifts/video-message", label: "Video message gifts" },
+        { href: "/long-distance", label: "Long distance, the room" },
+      ],
+    },
+    es: {
+      title: "Ideas para una caja sorpresa a distancia",
+      description: "Qué meter en una caja para tu pareja a distancia, qué le hace el envío y un regalo digital que se abre escaneando la tarjeta QR de encima de la caja.",
+      h1: "Ideas para una caja sorpresa a distancia",
+      label: "Cajas sorpresa a distancia",
+      hero: {
+        line: "Llena la caja de cosas que tocar. Las palabras, en el enlace.",
+        sentence: "Ethos no envía nada por correo: el paquete lo mandas tú, y el regalo es un enlace en una tarjeta QR impresa, lo primero que se escanea.",
+      },
+      ideasTitle: "Seis regalos para poner encima de la caja",
+      craft: "Preparar, enviar y elegir el momento",
+      film: "halfway",
+      lead: [
+        "Una caja sorpresa es la parte de una relación a distancia que se puede tocar: algo de picar de tu lado, una camiseta que huele a casa, una vela, un libro con notas en los márgenes. Lo que añade Ethos es lo que una caja no puede llevar, un regalo en su móvil, que imprimes como tarjetita con un código QR y pones encima.",
+        "La tarjeta sale del propio regalo: una vez publicado, su código QR se imprime como Tarjeta lista para imprimir, y la misma tarjeta está en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página, en papel crema, blanco, rosa o salvia, con dos líneas tuyas. Un regalo de aquí es gratis, La carta como nota corta; cada uno de los demás es un solo pago por esa plantilla.",
+      ],
+      ideas: [
+        {
+          template: "halfway",
+          heading: "La distancia, en números grandes, con una nota",
+          brief: "La distancia real en números grandes, una nota sobre el punto medio y, si quieres, una cuenta atrás.",
+          body: "A medio camino enseña la distancia real entre vuestras dos ciudades en números grandes, con una nota de 120 caracteres sobre lo que queda a mitad, y puedes activar una cuenta atrás hasta el segundo en que llegas. En una caja sorpresa responde a lo que la caja no puede: cuándo. Pon ahí la fecha de la próxima visita, y fotos pegadas junto a la carta.",
+          line: { field: "halfwayNote", where: "La nota del punto medio", text: "A mitad hay una estación de tren que nunca he visto. En 19 días la habré pasado." },
+        },
+        {
+          template: "the-letter",
+          heading: "Una nota para cuando la caja esté vacía",
+          body: "Algunas cosas de una caja se acaban en un día. La nota gratis de La carta no: 500 caracteres bajo un sello de lacre, escritos a mano en su pantalla, con una canción si quieres. Escríbela para el momento en que la caja está vacía y la habitación en silencio, y cuéntale qué hay dentro que quizá no vea.",
+          line: { field: "freeNote", where: "La nota entera", text: "Ya está vacía, lo sé. El té es el del café de la esquina, los calcetines son los feos que te gustan y la foto es de la noche de la tormenta. La preparé el domingo y te eché de menos todo el rato. Cómete el chocolate primero. Llámame cuando leas esto." },
+        },
+        {
+          template: "jar-of-reasons",
+          heading: "Un frasco de notas para después de picar",
+          brief: "Notas dobladas que salen de una en una, para las semanas después de la caja.",
+          body: "En Frasco de razones las notas dobladas esperan en un tarro de cristal y caen de una en una al agitar el móvil o tocar el tarro, cien como mucho. Combina bien con una caja: las cosas de verdad para la primera noche, el frasco para las semanas siguientes, una nota cada día malo.",
+          line: { field: "reasons", where: "Una nota del frasco", text: "Para un lunes malo: lo haces mejor de lo que crees." },
+        },
+        {
+          template: "passport",
+          heading: "Sella la ruta que hará la caja",
+          brief: "Un pasaporte de fotos cuya ruta es el propio viaje de la caja hasta su puerta.",
+          body: "La caja también viaja, así que dale un pasaporte: Pasaporte sella una foto por página, hasta diez, y traza una ruta de hasta seis escalas. Haz que la ruta sea el viaje de la propia caja, ciudad a ciudad de la tuya a la suya, porque cada escala tiene que ser un sitio real que el mapa encuentre, y la página del visado del final se abre con tu mensaje.",
+          line: { field: "stops", where: "Una escala", text: "Berlín" },
+        },
+        {
+          template: "constellations",
+          heading: "Estrellas por las visitas, un reloj para la caja",
+          brief: "Una estrella por cada visita y una cuenta atrás hasta la tarde en que llega la caja.",
+          body: "Los números de seguimiento son vagos; una cuenta atrás, no. Constelaciones hace una estrella de cada foto, de tres a doce, una por visita, y traza líneas entre ellas hasta completar un corazón, un infinito o una estrella, y entonces aparece tu última frase. Añade una cuenta atrás en el editor, puesta en la tarde en que llega el paquete o en el último día de la franja de entrega.",
+          line: { field: "finalLine", where: "La frase al completarse", text: "Nueve visitas, un cielo. La caja es lo décimo que te mando este año." },
+        },
+        {
+          template: "vinyl",
+          heading: "Música para desempaquetar, en un disco",
+          brief: "Vuestra canción en un tocadiscos, con una etiqueta que la llama música para abrir cajas.",
+          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en el libreto. La etiqueta de la cara da para doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí cuando se abra.",
+          line: { field: "side", where: "La etiqueta de la cara", text: "Para abrirla" },
+        },
+      ],
+      sections: [
+        {
+          heading: "Qué meter",
+          body: "Mete cosas para tres sentidos: algo de comer de tu lado, una camiseta que hayas llevado puesta, algo que huela, una vela o tu jabón. Añade una cosa que solo tenga sentido para vosotros, una entrada o la carta de un sitio de comida para llevar. Que pese poco para que el envío sea barato, y pon encima la tarjeta con el código QR.",
+        },
+        {
+          heading: "Qué pasa con la caja en el envío y en la aduana",
+          body: "Si cruza una frontera, el riesgo es la comida: lo fresco, lo casero o la carne a menudo se retienen, y los dulces envasados y cerrados suelen pasar. Rellena la declaración de aduana con sinceridad, como regalo, y enumera todo. Un paquete tarda días o semanas, así que nada debe derretirse, derramarse ni caducar, y el regalo del móvil no depende de cuándo llegue la caja.",
+        },
+        {
+          heading: "Cuándo mandar el enlace",
+          body: "O pones la tarjeta impresa encima, para que escanearla sea lo primero que haga, o te guardas el enlace y lo mandas en cuanto te diga que ha llegado la caja. Si sabes el día de entrega, un regalo de pago puede programarse para abrirse a una hora de su tarde, y la caja y el regalo llegan juntos.",
+        },
+      ],
+      faq: [
+        { q: "¿Ethos envía la caja?", a: "No. La caja la preparas y la mandas tú; Ethos hace el regalo digital que va con ella, como enlace y como tarjeta impresa con su código QR." },
+        { q: "¿Cómo meto un regalo digital en una caja de verdad?", a: "Publica el regalo y luego imprime su código QR como Tarjeta lista para imprimir desde la pantalla de compartir, o más tarde en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página; pon una encima de la caja." },
+        { q: "¿Puede abrirse el regalo cuando llegue la caja?", a: "Sí, en un regalo de pago: en el editor, en Extras, activa «Programar la apertura» y pon la fecha, la hora y su zona horaria. Hasta entonces el enlace de la tarjeta muestra una cuenta atrás." },
+        { q: "¿Qué meto en una caja sorpresa a distancia?", a: "Algo de comer de tu lado, algo de ropa usada, algo que huela a ti y una cosa que solo entendáis vosotros. Elige lo que pese poco y aguante una semana de viaje en su envase." },
+      ],
+      related: [
+        { href: "/occasions/long-distance", label: "Regalos a distancia" },
+        { href: "/blog/long-distance-relationship-gifts", label: "Regalos para una relación a distancia" },
+        { href: "/gifts/video-message", label: "Regalos con vídeo" },
+        { href: "/long-distance", label: "A distancia, la sala" },
+      ],
+    },
+  },
+  surprise: {
+    en: {
+      title: "Surprise Gifts You Can Send Online, Each With a Reveal",
+      description: "Surprise gifts to send online for a boyfriend or girlfriend, each with a real reveal: foil to scratch, a clock that opens it, clues, a cookie to crack.",
+      h1: "Surprise gifts you can send online",
+      label: "Surprise gifts",
+      hero: {
+        line: "A surprise needs a reveal. Each gift here gives you somewhere to hide one.",
+        sentence: "Foil rubbed off, a clock that runs out, clues before a destination, a cookie cracked, a globe shaken: each gift hides its news until they do something.",
+      },
+      ideasTitle: "Seven reveals, each a different kind",
+      craft: "Keeping the surprise a surprise",
+      film: "scratch-card",
+      lead: [
+        "A surprise sent online works when there is something to uncover. Each gift on this page has its own reveal, and they are different on purpose: one is scratched, one waits for a clock, one is a trail of clues, one is shaken loose. Pick the one that matches the news, and the news goes in the part that is revealed last.",
+        "A gift can also be sent early and open by itself on a set day and hour, which turns any of these into a surprise that arrives at midnight. Every gift here but the free short note on The Letter is a one-time payment for that template, and the schedule comes with it; you can build and watch the whole thing in the editor first.",
+      ],
+      ideas: [
+        {
+          template: "scratch-card",
+          heading: "Foil to rub off, with a hint on it",
+          brief: "Photos under foil that a fingertip rubs away, with a hint written on the foil.",
+          body: "Scratch Card is the plainest reveal there is: a photo under foil that comes away under a fingertip, card after card, and a headline on the last one for the news. The foil itself carries thirty characters, so write the hint there, where they read it before they scratch. Up to twelve photos, at least one.",
+          line: { field: "foilText", where: "The words on the foil", text: "the news is on the last card" },
+        },
+        {
+          template: "midnight-countdown",
+          heading: "A clock that opens it on the second",
+          body: "With Midnight Countdown the reveal is time. A live clock runs down under a sky that darkens; nothing is shown until zero, and then the fireworks go and the photos and your words open together. Set it for midnight on their birthday, or for the minute you land. The line at zero takes sixty characters.",
+          line: { field: "zeroLine", where: "The line at zero", text: "Look outside. I’m early." },
+        },
+        {
+          template: "pack-your-bags",
+          heading: "Clues on luggage tags, then the destination",
+          brief: "Up to five clues on luggage tags, then a departures board names the place.",
+          body: "A trip comes out by degrees in Pack Your Bags: up to five clues on luggage tags, read one at a time, before a departures board names the place. Choose plane, train or road trip and put the date on the ticket; when they tear its stub, your letter is underneath, the place to say why there.",
+          line: { field: "clues", where: "One luggage tag", text: "Pack something you can swim in" },
+        },
+        {
+          template: "the-letter",
+          heading: "A sealed letter with a last message to tap",
+          brief: "A wax seal, then a last message that opens with a tap, a hold or a shake.",
+          body: "The Letter has two reveals: a wax seal they break to read, and after your words a last message that opens with a tap, a hold or a shake, up to 600 characters. Put the surprise there and keep the letter itself calm, so it comes out of nowhere. The sign-off sits just above your name.",
+          line: { field: "signOff", where: "The sign-off", text: "Read to the end. There’s one more thing" },
+        },
+        {
+          template: "fortune-cookie",
+          heading: "Cookies that tease, and one that tells",
+          brief: "Cookies cracked with a tap: fortunes that tease, and the news in the last one.",
+          body: "Three to twenty cookies sit on the plate in Fortune Cookie, and each cracks with a tap to a slip with one of your fortunes. The last one on the plate holds your message, so the news goes there: the date of the trip, the flight number, the table. The lucky numbers print the same on every slip, so leave them out of it, and let the fortunes tease.",
+          line: { field: "fortunes", where: "One of the fortunes", text: "Something is booked. Keep the 14th free." },
+        },
+        {
+          template: "snow-globe",
+          heading: "Shake the globe, a line when snow settles",
+          brief: "Shake the phone and a line appears each time the snow settles, four at most.",
+          body: "Shake the phone and the snow flies; on a phone that cannot feel a shake, a button in Snow Globe does it. Each time the snow settles a new line appears, four at most, with a photo in the snow between them. The brass plaque on the base holds forty-four characters. Keep the surprise for the last line and name it on the plaque.",
+          line: { field: "plaque", where: "The brass plaque", text: "The winter we finally met in person" },
+        },
+        {
+          template: "jar-of-reasons",
+          heading: "A jar shaken until the last note falls",
+          brief: "Notes shaken out one at a time, the news saved for the last one.",
+          body: "Here a shake, or a tap, lets one folded note fall out of Jar of Reasons at a time until the jar is empty and your letter is underneath. For a surprise, number the notes on the jar’s label, forty characters, so they know a last one is coming, and save the news for it.",
+          line: { field: "label", where: "The jar’s label", text: "12 notes. Save the last one." },
+        },
+      ],
+      sections: [
+        {
+          heading: "Hide the news in the last thing they see",
+          body: "Every gift here has an order, and the news goes at the end of it: the last card, the last note, the line at zero, the letter under the ticket’s stub. Anything said earlier is a hint, not a spoiler. Read the whole gift through once in the preview and check nothing before the end gives it away.",
+        },
+        {
+          heading: "Midnight, or the minute it matters",
+          body: "A surprise works best at a time that means something: midnight on the day, the minute your train gets in, the hour you met. Midnight Countdown is built around that moment; for the other gifts, the schedule in the editor, which comes with a paid template, holds the whole gift back until the hour you choose, in their time zone.",
+        },
+        {
+          heading: "What a surprise should not be",
+          body: "Not a test, not a public stunt, not news that needs a conversation first. A surprise gift is for good news: a trip, a visit, tickets, a plan already made. If the news could upset them, tell them in person and send the gift after.",
+        },
+      ],
+      faq: [
+        { q: "What is a good online surprise for a boyfriend or girlfriend?", a: "A gift with a reveal built in: photos under foil, a clock that opens at midnight, clues to a trip, a last message that appears with a shake. Put the news in what they see last." },
+        { q: "Can I send it now and have it open on the day?", a: "Yes, as part of a paid gift. In the editor, under Extras, switch on “Schedule the reveal” and pick the date, the hour and their time zone. Until then the link shows a running countdown, and at the moment it opens by itself." },
+        { q: "Does any of these need a motion sensor?", a: "No. Snow Globe and Jar of Reasons are best shaken, and both work on a phone that cannot feel it: the globe has a button, the jar a tap. The rest are tapped, scratched or simply watched." },
+        { q: "How do I keep it a surprise until they open it?", a: "Send the link with a plain message, nothing about what is inside. If the gift is scheduled, the page they land on before the hour says only that something is waiting and when it opens." },
+      ],
+      related: [
+        { href: "/blog/how-to-surprise-your-girlfriend", label: "How to surprise your girlfriend" },
+        { href: "/blog/midnight-birthday-surprise-ideas", label: "Midnight birthday surprise ideas" },
+        { href: "/blog/surprise-trip-reveal-ideas", label: "Surprise trip reveal ideas" },
+        { href: "/gifts/last-minute", label: "Last-minute gifts" },
+        { href: "/occasions/birthday", label: "Birthday gift ideas" },
+      ],
+    },
+    es: {
+      title: "Regalos sorpresa para enviar online",
+      description: "Regalos sorpresa para enviar online a tu pareja, cada uno con algo que destapar: una capa que rascar, un reloj que lo abre, pistas, una galleta que partir.",
+      h1: "Regalos sorpresa para enviar online",
+      label: "Regalos sorpresa",
+      hero: {
+        line: "Una sorpresa necesita dónde esconderse. Cada regalo de aquí le guarda un sitio.",
+        sentence: "Una capa que se rasca, un reloj que llega a cero, una galleta partida: cada regalo guarda la noticia hasta que hace algo.",
+      },
+      ideasTitle: "Siete formas de destapar una sorpresa",
+      craft: "Que la sorpresa siga siéndolo",
+      film: "scratch-card",
+      lead: [
+        "Una sorpresa enviada por internet funciona cuando hay algo que destapar. Cada regalo de esta página destapa la sorpresa a su manera, y son distintas a propósito: uno se rasca, otro espera a un reloj, otro es un rastro de pistas, otro se suelta agitando. Elige el que encaje con la noticia, y la noticia va en lo último que se descubre.",
+        "Un regalo también puede enviarse antes y abrirse solo un día y a una hora fijados, lo que convierte cualquiera de estos en una sorpresa que llega a medianoche. Todos los regalos de aquí salvo la nota corta gratis de La carta son un solo pago por esa plantilla, y la programación va incluida; antes puedes montarlo y verlo entero en el editor.",
+      ],
+      ideas: [
+        {
+          template: "scratch-card",
+          heading: "Una capa que rascar, con una pista escrita",
+          brief: "Fotos bajo una capa que se quita con la yema del dedo, con una pista escrita en ella.",
+          body: "Rasca y gana es la sorpresa más sencilla de destapar: una foto bajo una capa que se va con la yema del dedo, tarjeta tras tarjeta, y un titular en la última para la noticia. La propia capa lleva treinta caracteres, así que escribe ahí la pista, que se lee antes de rascar. Hasta doce fotos, una como mínimo.",
+          line: { field: "foilText", where: "Las palabras de la capa", text: "la noticia, en la última" },
+        },
+        {
+          template: "midnight-countdown",
+          heading: "Un reloj que lo abre al segundo que elijas",
+          body: "Con Cuenta atrás de medianoche, lo que destapa la sorpresa es el tiempo. Un reloj en marcha baja bajo un cielo que se oscurece; no se ve nada hasta el cero, y entonces salen los fuegos y se abren a la vez las fotos y tus palabras. Ponla a medianoche de su cumpleaños o al minuto en que aterrizas. La frase del cero llega a sesenta caracteres.",
+          line: { field: "zeroLine", where: "La frase del cero", text: "Asómate. He llegado antes." },
+        },
+        {
+          template: "pack-your-bags",
+          heading: "Pistas en etiquetas de maleta, y luego el destino",
+          brief: "Hasta cinco pistas en etiquetas de maleta, y un panel de salidas dice el sitio.",
+          body: "En Haz la maleta, el viaje se desvela poco a poco: hasta cinco pistas en etiquetas de equipaje, leídas de una en una, antes de que un panel de salidas diga el sitio. Elige avión, tren o coche y pon la fecha en el billete; al arrancar la matriz, tu carta está debajo, el sitio para decir por qué allí.",
+          line: { field: "clues", where: "Una etiqueta de maleta", text: "No olvides el bañador" },
+        },
+        {
+          template: "the-letter",
+          heading: "Una carta sellada con un último mensaje que tocar",
+          brief: "Un sello de lacre y luego un último mensaje que se abre con un toque, pulsando o agitando.",
+          body: "La carta guarda dos sorpresas: un sello de lacre que se rompe para leer y, después de tus palabras, un último mensaje que se abre con un toque, pulsando o agitando, de hasta 600 caracteres. Pon ahí la sorpresa y deja tranquila la carta, para que llegue sin avisar. La despedida va justo encima de tu nombre.",
+          line: { field: "signOff", where: "La despedida", text: "Lee hasta el final. Queda una cosa más" },
+        },
+        {
+          template: "fortune-cookie",
+          heading: "Galletas que insinúan, y una que lo cuenta",
+          brief: "Galletas que se parten con un toque: fortunas que insinúan y la noticia en la última.",
+          body: "En el plato de Galleta de la fortuna hay de tres a veinte galletas, y cada una se parte con un toque y suelta una tira con una de tus fortunas. La última del plato guarda tu mensaje, así que la noticia va ahí: la fecha del viaje, el número de vuelo, la mesa. Los números de la suerte salen iguales en todas las tiras; déjalos al margen, y que las fortunas solo insinúen.",
+          line: { field: "fortunes", where: "Una de las fortunas", text: "Hay algo reservado. Deja libre el día 14." },
+        },
+        {
+          template: "snow-globe",
+          heading: "Agita la bola y sale una frase",
+          brief: "Al agitar el móvil aparece una frase cada vez que se posa la nieve, cuatro como mucho.",
+          body: "Al agitar el móvil, la nieve vuela; en un móvil que no lo nota, lo hace un botón de Bola de nieve. Cada vez que se posa la nieve aparece una frase nueva, cuatro como mucho, con una foto entre la nieve. La placa de latón de la base admite cuarenta y cuatro caracteres. Guarda la sorpresa para la última frase y ponle nombre en la placa.",
+          line: { field: "plaque", where: "La placa de latón", text: "El invierno en que por fin nos vimos" },
+        },
+        {
+          template: "jar-of-reasons",
+          heading: "Un frasco que se agita hasta la última nota",
+          brief: "Notas que salen de una en una al agitar, con la noticia guardada para la última.",
+          body: "Aquí basta agitar o tocar para que caiga de Frasco de razones una nota doblada cada vez hasta que el frasco queda vacío y tu carta está debajo. Para una sorpresa, numera las notas en la etiqueta del frasco, cuarenta caracteres, para que se sepa que llega una última, y guarda la noticia para ella.",
+          line: { field: "label", where: "La etiqueta del frasco", text: "12 notas. Guarda la última." },
+        },
+      ],
+      sections: [
+        {
+          heading: "Esconde la noticia al final",
+          body: "Cada regalo de aquí tiene un orden, y la noticia va al final: la última tarjeta, la última nota, la frase del cero, la carta bajo la matriz del billete. Lo que se diga antes es una pista, no un destripe. Míralo entero una vez en la vista previa y comprueba que nada antes del final lo desvela.",
+        },
+        {
+          heading: "A medianoche, o en el minuto que importa",
+          body: "Una sorpresa llega mejor a una hora que signifique algo: medianoche del día, el minuto en que llega tu tren, la hora en que os conocisteis. Cuenta atrás de medianoche está hecha para ese momento; para los demás regalos, la programación del editor, incluida en una plantilla de pago, retiene el regalo entero hasta la hora que elijas, en su zona horaria.",
+        },
+        {
+          heading: "Lo que una sorpresa no debe ser",
+          body: "Ni una prueba, ni un número en público, ni una noticia que pida antes una conversación. Un regalo sorpresa es para buenas noticias: un viaje, una visita, unas entradas, un plan ya hecho. Si la noticia puede sentar mal, díselo en persona y manda el regalo después.",
+        },
+      ],
+      faq: [
+        { q: "¿Qué sorpresa online puedo darle a mi pareja?", a: "Un regalo que trae su propia sorpresa: fotos bajo una capa, un reloj que se abre a medianoche, pistas hacia un viaje, un último mensaje que aparece al agitar. Pon la noticia al final del todo." },
+        { q: "¿Puedo enviarlo ya y que se abra ese día?", a: "Sí, como parte de un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y elige la fecha, la hora y su zona horaria. Hasta entonces el enlace muestra una cuenta atrás en marcha, y en ese momento se abre solo." },
+        { q: "¿Alguno necesita sensor de movimiento?", a: "No. Bola de nieve y Frasco de razones se disfrutan más agitando, y los dos funcionan en un móvil que no lo nota: la bola tiene un botón y el frasco se toca. Los demás se tocan, se rascan o simplemente se miran." },
+        { q: "¿Cómo mantengo la sorpresa hasta que lo abra?", a: "Manda el enlace con un mensaje sencillo, sin nada sobre lo que hay dentro. Si el regalo está programado, la página a la que llega antes de la hora solo dice que algo le espera y cuándo se abre." },
+      ],
+      related: [
+        { href: "/blog/how-to-surprise-your-girlfriend", label: "Cómo sorprender a tu novia" },
+        { href: "/blog/midnight-birthday-surprise-ideas", label: "Sorpresas de cumpleaños a medianoche" },
+        { href: "/blog/surprise-trip-reveal-ideas", label: "Cómo desvelar un viaje sorpresa" },
+        { href: "/gifts/last-minute", label: "De última hora" },
+        { href: "/occasions/birthday", label: "Ideas de regalo de cumpleaños" },
+      ],
+    },
+  },
+  "memory-book": {
+    en: {
+      title: "Digital Memory Book for a Couple, Written in Your Words",
+      description: "A digital memory book for the two of you, led by what you write: the first time, the day it changed, the small things. Six gifts with lines to borrow.",
+      h1: "A digital memory book for the two of you",
+      label: "Memory books",
+      hero: {
+        line: "A memory book is mostly words. The photos only hold them in place.",
+        sentence: "These gifts are built around your words: a note in a jar, a chat you script, a page of newspaper letters, with the pictures following the story.",
+      },
+      ideasTitle: "Six that tell it in words",
+      craft: "What to write, chapter by chapter",
+      film: "jar-of-reasons",
+      lead: [
+        "An album is about the pictures; a memory book is about the story, and the story is in the words beside them. Each gift on this page puts writing first: notes in a jar, a chat you script, newspaper letters, a parcel of kept things, a postcard, and further down a road for when the photos have earned it. Photos help, and some of these need none at all.",
+        "If what you want is a place for many photos, the photo album page is the better start. Here, a dozen good lines beat a hundred pictures. The Letter’s short note is the only free gift to start from, and it is not on this page; each gift here is a one-time payment for that template, built and previewed in full first.",
+      ],
+      ideas: [
+        {
+          template: "jar-of-reasons",
+          heading: "The small ordinary things, one note each",
+          body: "The ordinary things go in the jar, the ones a photo never caught: how they hum when they cook, the way they say goodnight. Each note in Jar of Reasons takes 160 characters and falls out when they shake the phone or tap it. Write what a photo album leaves out.",
+          line: { field: "reasons", where: "One note in the jar", text: "You hum the same three notes every time you open the fridge." },
+        },
+        {
+          template: "text-thread",
+          heading: "The chat, under the name you saved them as",
+          brief: "Your own messages replayed, under the name you saved them as the night you met.",
+          body: "One chapter can be told in your own messages: Text Thread replays a conversation bubble by bubble. The name at the top of the chat holds forty characters: put the name you saved them under the night you met, which is a story in itself, and replay the first exchange that mattered.",
+          line: { field: "contactName", where: "The name on the chat", text: "Ana (bookstore, do not text first)" },
+        },
+        {
+          template: "xoxo",
+          heading: "The day it changed, in newspaper letters",
+          brief: "A nickname cut from newspaper letters, and the sentences that matter underlined.",
+          body: "Give one chapter the newsprint treatment. XOXO cuts what you call them out of a newspaper, sixteen characters, and takes up to 220 characters of your sentences, underlining, circling and highlighting some of them for you. Write the day things changed between you there, and let the underlines fall on the detail you both remember.",
+          line: { field: "lines", where: "The lines you’d underline", text: "The night bus broke down and we talked for seven hours. I missed my stop on purpose after that." },
+        },
+        {
+          template: "keepsake",
+          heading: "The things you kept, in one parcel",
+          brief: "A parcel of kept things: a ticket, a torn-out word, a locket, dried flowers.",
+          body: "Some chapters are objects. Keepsake is a parcel tied with twine under a wax seal, and inside are the kept things: the first photo under dried flowers, a ticket of twenty-six characters, one word torn from a book, a gold locket that opens on a tap. Write the ticket from a night only you two remember; the letter inside is typed on aged paper.",
+          line: { field: "ticket", where: "The ticket", text: "NIGHT BUS N4 · 02:10" },
+        },
+        {
+          template: "coquette",
+          heading: "A postcard for the small ordinary things",
+          brief: "A handwritten postcard under the first photo, then polaroids down to your letter.",
+          body: "The small ordinary chapter needs a page that runs on. Coquette scrolls down through as many as ten polaroids; under the first sits a postcard in handwriting, ninety characters, beside it a few torn-out words, and at the end your letter on a torn sheet. Put a habit on the postcard, and let the polaroids show it.",
+          line: { field: "note", where: "The postcard", text: "Sunday soup, the version we argue about, every week since the first winter." },
+        },
+        {
+          template: "our-timeline",
+          heading: "Chapters dated on a road",
+          brief: "A road of dated stops, each date written like a chapter title.",
+          body: "Our Timeline is a road that draws itself as they scroll, and each stop pins a photo and a date of forty characters. Write the dates as chapter titles rather than numbers: the rainy one, the one with the broken heater. The ending line, eighty characters, is where the book closes for now.",
+          line: { field: "dates", where: "The date on a stop", text: "The winter of the broken heater" },
+        },
+      ],
+      sections: [
+        {
+          heading: "The first time",
+          body: "Begin where it began, but not with the date: with a detail. What they were wearing, the joke that made you look twice, the wrong name you called them. A memory book opens on something only the two of you know, and the first page earns the rest.",
+        },
+        {
+          heading: "The day it changed",
+          body: "Every couple has a day when it became something else: a trip, a missed last train, a phone call at three in the morning. Give that day its own chapter, in newspaper letters or on a ticket kept in a parcel, and say plainly what changed. It is the page they will come back to.",
+        },
+        {
+          heading: "The small ordinary thing",
+          body: "The things that make a relationship rarely get photographed: how they take their tea, the song they hum, the way they leave notes on the fridge. Write those down. A memory book with three ordinary details in it is more theirs than one with thirty photos from vacations.",
+        },
+      ],
+      faq: [
+        { q: "What is a digital memory book?", a: "A gift that tells the story of the two of you mostly in words, with photos in support: a parcel of kept things, a road of dated chapters, a chat you script. It opens as a link on their phone." },
+        { q: "How is a memory book different from a photo album?", a: "An album leads with pictures and needs many of them. A memory book leads with what you write and can work with a few photos or none, like Jar of Reasons, which needs none." },
+        { q: "What should I write in a memory book for my partner?", a: "Three kinds of page: the first time, the day it changed, and the small ordinary things. Give each page one detail that only the two of you would recognize." },
+        { q: "Can I add to it later?", a: "You can edit a gift from My gifts after sending it, and the changes appear at the same link, so a memory book can gain a chapter after the next trip." },
+      ],
+      related: [
+        { href: "/gifts/photo-album", label: "Interactive photo albums" },
+        { href: "/occasions/anniversary", label: "Anniversary gift ideas" },
+        { href: "/gifts/anniversary-website", label: "Anniversary websites" },
+        { href: "/gifts/12-month-anniversary", label: "12 month anniversary gifts" },
+      ],
+    },
+    es: {
+      title: "Libro de recuerdos digital para los dos",
+      description: "Un libro de recuerdos digital para los dos, llevado por lo que escribes: la primera vez, el día que cambió, las cosas pequeñas. Seis regalos con frases.",
+      h1: "Un libro de recuerdos digital para los dos",
+      label: "Libros de recuerdos",
+      hero: {
+        line: "Un libro de recuerdos es sobre todo palabras. Las fotos solo las sujetan.",
+        sentence: "Estos regalos giran en torno a tus palabras: una nota en un frasco, un chat con guion propio, letras de periódico, y las fotos detrás de la historia.",
+      },
+      ideasTitle: "Seis que lo cuentan con palabras",
+      craft: "Qué escribir, capítulo a capítulo",
+      film: "jar-of-reasons",
+      lead: [
+        "Un álbum va de fotos; un libro de recuerdos va de la historia, y la historia está en las palabras de al lado. Cada regalo de esta página pone primero lo escrito: notas en un frasco, un chat que escribes tú, letras de periódico, un paquete de cosas guardadas, una postal y, más abajo, un camino para cuando las fotos se lo hayan ganado. Las fotos ayudan, y algunos no necesitan ninguna.",
+        "Si lo que buscas es un sitio para muchas fotos, mejor empieza por la página del álbum de fotos. Aquí, una docena de frases buenas valen más que cien imágenes. La nota corta de La carta es el único regalo gratis para empezar, y no está en esta página; cada regalo de aquí es un solo pago por esa plantilla, montado y visto entero antes.",
+      ],
+      ideas: [
+        {
+          template: "jar-of-reasons",
+          heading: "Las cosas pequeñas, una nota cada una",
+          body: "En el frasco van las cosas de cada día, las que ninguna foto pilló: cómo tararea cuando cocina, su forma de dar las buenas noches. Cada nota de Frasco de razones admite 160 caracteres y sale al agitar el móvil o tocarlo. Escribe lo que un álbum de fotos deja fuera.",
+          line: { field: "reasons", where: "Una nota del frasco", text: "Tarareas las mismas tres notas cada vez que abres la nevera." },
+        },
+        {
+          template: "text-thread",
+          heading: "El chat, con el nombre de su contacto",
+          brief: "Vuestros mensajes repetidos, con el nombre que pusiste a su contacto la noche que os conocisteis.",
+          body: "Un capítulo puede contarse con vuestros propios mensajes: Hilo de mensajes repite una conversación burbuja a burbuja. El nombre de arriba del chat tiene sitio para cuarenta caracteres: pon el que diste a su contacto la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
+          line: { field: "contactName", where: "El nombre del chat", text: "Ana (librería, no escribir primero)" },
+        },
+        {
+          template: "xoxo",
+          heading: "El día que cambió, en letras de periódico",
+          brief: "Un mote recortado de un periódico y las frases que importan, ya subrayadas.",
+          body: "Dale a un capítulo el tratamiento de periódico. XOXO recorta de un diario cómo le llamas, dieciséis caracteres, y coge hasta 220 caracteres de tus frases, subrayando, rodeando y resaltando algunas por ti. Escribe ahí el día en que las cosas cambiaron entre los dos, y deja que los subrayados caigan en el detalle que recordáis.",
+          line: { field: "lines", where: "Las frases que subrayarías", text: "El búho se averió y hablamos siete horas. Después me pasé la parada a propósito." },
+        },
+        {
+          template: "keepsake",
+          heading: "Lo que guardaste, en un paquete",
+          brief: "Un paquete de cosas guardadas: un billete, una palabra arrancada, un relicario, flores secas.",
+          body: "Hay capítulos que son objetos. Recuerdo llega como un paquete con cordel y lacre, y dentro van las cosas guardadas: la primera foto bajo flores secas, un billete de veintiséis caracteres, una palabra arrancada de un libro, un relicario dorado que se abre al tocarlo. Escribe el billete de una noche que solo recordáis los dos; la carta de dentro va a máquina en papel envejecido.",
+          line: { field: "ticket", where: "El billete", text: "BÚHO N4 · 02:10" },
+        },
+        {
+          template: "coquette",
+          heading: "Una postal para las cosas pequeñas de siempre",
+          brief: "Una postal escrita a mano bajo la primera foto y polaroids hasta tu carta.",
+          body: "El capítulo de lo pequeño y normal necesita una página que siga. Coquette baja por hasta diez polaroids; bajo la primera hay una postal escrita a mano, de noventa caracteres, a su lado unas palabras recortadas, y al final tu carta en una hoja rasgada. Pon una costumbre en la postal, y que las polaroids la enseñen.",
+          line: { field: "note", where: "La postal", text: "La sopa del domingo, la versión que discutimos, cada semana desde el primer invierno." },
+        },
+        {
+          template: "our-timeline",
+          heading: "Capítulos con fecha en un camino",
+          brief: "Un camino de paradas con fecha, cada fecha escrita como el título de un capítulo.",
+          body: "Nuestra línea del tiempo es un camino que se dibuja mientras se desliza, y cada parada clava una foto y una fecha de cuarenta caracteres. Escribe las fechas como títulos de capítulo y no como números: la de la lluvia, la de la calefacción rota. La frase final, de ochenta caracteres, es donde el libro se cierra por ahora.",
+          line: { field: "dates", where: "La fecha de una parada", text: "El invierno de la calefacción rota" },
+        },
+      ],
+      sections: [
+        {
+          heading: "La primera vez",
+          body: "Empieza donde empezó, pero no por la fecha: por un detalle. Qué llevaba puesto, la broma que te hizo mirar dos veces, cómo te equivocaste con su nombre. Un libro de recuerdos se abre con algo que solo sabéis vosotros, y la primera página se gana el resto.",
+        },
+        {
+          heading: "El día que cambió",
+          body: "Toda pareja tiene un día en que la cosa se volvió otra: un viaje, un último tren perdido, una llamada a las tres de la mañana. Dale a ese día su propio capítulo, en letras de periódico o en un billete guardado en un paquete, y di claramente qué cambió. Es la página a la que volverá.",
+        },
+        {
+          heading: "Lo de todos los días",
+          body: "Lo que hace una relación casi nunca sale en fotos: cómo toma el té, la canción que tararea, las notas que deja en la nevera. Escríbelo. Un libro de recuerdos con tres detalles normales es más suyo que uno con treinta fotos de vacaciones.",
+        },
+      ],
+      faq: [
+        { q: "¿Qué es un libro de recuerdos digital?", a: "Un regalo que cuenta vuestra historia sobre todo con palabras, con fotos de apoyo: un paquete de cosas guardadas, un camino de capítulos con fecha, un chat que escribes tú. Se abre como enlace en su móvil." },
+        { q: "¿En qué se diferencia de un álbum de fotos?", a: "Un álbum se apoya en las imágenes y necesita muchas. Un libro de recuerdos se apoya en lo que escribes y funciona con pocas fotos o ninguna, como Frasco de razones, que no necesita ninguna." },
+        { q: "¿Qué escribo en un libro de recuerdos para mi pareja?", a: "Tres tipos de página: la primera vez, el día que cambió y las cosas pequeñas y normales. Dale a cada página un detalle que solo reconoceríais vosotros." },
+        { q: "¿Puedo añadirle cosas más adelante?", a: "Puedes editar un regalo desde Mis regalos después de enviarlo, y los cambios salen en el mismo enlace, así que un libro de recuerdos puede ganar un capítulo después del próximo viaje." },
+      ],
+      related: [
+        { href: "/gifts/photo-album", label: "Álbumes de fotos interactivos" },
+        { href: "/occasions/anniversary", label: "Ideas de regalo de aniversario" },
+        { href: "/gifts/anniversary-website", label: "Webs de aniversario" },
+        { href: "/gifts/12-month-anniversary", label: "Regalos para 12 meses de novios" },
       ],
     },
   },

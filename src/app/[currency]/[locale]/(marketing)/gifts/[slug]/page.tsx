@@ -8,7 +8,11 @@ import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateOfferAmount } from "@/lib/seo";
 import { chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/products";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { getPost, postLocales } from "@/content/blog";
+import { TOGETHER_PATH } from "@/content/together-guide";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_IN_CLOSING_ROWS, GUIDE_BAND_COVERS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { PAGE_ABOUT, demoFits } from "@/content/demo-occasions";
+import { MONTHS, MONTH_GUIDES, monthBandPhoto, monthFromSlug, monthNeighbours, monthPost, monthRef, monthSlug } from "@/content/month-anniversaries";
 import { handLine, kindCardLine, kindIdeaIsFree, openingLine } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
 import { getManifest } from "@/templates/manifests";
@@ -18,15 +22,21 @@ import { occasionsInSeason } from "@/lib/gift/finder";
 import { ChristmasGifts, hasChristmasGifts } from "@/components/marketing/christmas-gifts";
 import { withManifests } from "@/components/marketing/gift-idea-list";
 import { CARDS_ART } from "@/components/marketing/spread/placements";
-import { HeroTag, IdeaCards, MoreRow, QuestionsSpread, SITE_FLOWERS, SiteHero, SitePage, Spread, WhereNext, type IdeaCard } from "@/components/marketing/spread/sections";
+import { HeroTag, IdeaCards, MoreRow, QUIET_LINK, QuestionsSpread, SITE_FLOWERS, SiteHero, SitePage, Spread, WhereNext, type IdeaCard } from "@/components/marketing/spread/sections";
+import { cn } from "@/lib/utils";
 import { JsonLd } from "@/components/shared/json-ld";
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
 import { Band, ExperienceFlatlay, QuestionRow } from "@/components/templates/page/sections";
 
-/** One address, two kinds of page: /gifts/for-<who> (content/recipients.ts) and /gifts/<kind> (content/gift-guides.ts). */
-function pageFor(slug: string): { recipient: Recipient } | { kind: GiftGuideSlug } | null {
+/**
+ * One address, three kinds of page: /gifts/for-<who> (content/recipients.ts), /gifts/<kind>
+ * (content/gift-guides.ts) and /gifts/<n>-month-anniversary (content/month-anniversaries.ts).
+ */
+function pageFor(slug: string): { recipient: Recipient } | { kind: GiftGuideSlug } | { month: number } | null {
   const recipient = recipientFromSlug(slug);
   if (recipient) return { recipient };
+  const month = monthFromSlug(slug);
+  if (month) return { month };
   return isGiftGuide(slug) ? { kind: slug } : null;
 }
 
@@ -38,14 +48,14 @@ function pageFor(slug: string): { recipient: Recipient } | { kind: GiftGuideSlug
 export const revalidate = 3600;
 
 export function generateStaticParams() {
-  return [...RECIPIENTS.map((r) => ({ slug: recipientSlug(r) })), ...GIFT_GUIDE_SLUGS.map((slug) => ({ slug }))];
+  return [...RECIPIENTS.map((r) => ({ slug: recipientSlug(r) })), ...GIFT_GUIDE_SLUGS.map((slug) => ({ slug })), ...MONTHS.map((n) => ({ slug: monthSlug(n) }))];
 }
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/gifts/[slug]">, "searchParams">): Promise<Metadata> {
   const { locale, slug } = await params;
   const page = pageFor(slug);
   if (!page) return {};
-  const guide = "recipient" in page ? RECIPIENT_GUIDES[page.recipient][locale as GiftLocale] : GIFT_GUIDES[page.kind][locale as GiftLocale];
+  const guide = "recipient" in page ? RECIPIENT_GUIDES[page.recipient][locale as GiftLocale] : "month" in page ? MONTH_GUIDES[page.month][locale as GiftLocale] : GIFT_GUIDES[page.kind][locale as GiftLocale];
   return pageMetadata({ locale, path: `/gifts/${slug}`, title: guide.title, description: guide.description });
 }
 
@@ -59,6 +69,8 @@ export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[
     <ClientMessages scope="(marketing)/gifts/[slug]/page" locale={locale}>
       {"recipient" in page ? (
         <RecipientPage recipient={page.recipient} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
+      ) : "month" in page ? (
+        <MonthPage month={page.month} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
       ) : (
         <KindPage kind={page.kind} locale={locale as GiftLocale} currency={chargedCurrency(currency)} />
       )}
@@ -68,6 +80,12 @@ export default async function GiftIdeasPage({ params }: PageProps<"/[currency]/[
 
 /** The photo on the band's phone of a page by person: the café table, which no page by kind has on its own band. */
 const RECIPIENT_BAND_PHOTO = { src: DEMO_PHOTOS.p1.url, width: DEMO_PHOTOS.p1.width, height: DEMO_PHOTOS.p1.height } as const;
+
+/**
+ * A list of four questions or fewer ends level with the lily that the last section lays up across its edge: the
+ * extra room at the foot (the pages by person have it too) keeps the flower off the heading beside the list.
+ */
+const SHORT_QUESTIONS = "pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-60";
 
 /** The first sentence of a page's opening: the hero's one line. The whole opening is kept under "More about". */
 const firstSentence = (text: string) => text.trim().split(/(?<=[.!?])\s+/)[0] ?? text;
@@ -102,7 +120,7 @@ async function RecipientPage({ recipient, locale, currency }: { recipient: Recip
     free: sendsFree(idea.manifest),
   }));
   // Where next: four pages by kind as posters; the other people, the occasions and the rest of the kinds by name.
-  const kinds = GIFT_GUIDE_SLUGS.flatMap((s) => {
+  const kinds = GUIDES_IN_CLOSING_ROWS.flatMap((s) => {
     const manifest = leadGift(s);
     return manifest ? [{ href: `/gifts/${s}`, label: GIFT_GUIDES[s][locale].label, manifest }] : [];
   });
@@ -234,10 +252,13 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
     const manifest = leadGift(slug);
     return manifest ? [{ href: `/gifts/${slug}`, label: GIFT_GUIDES[slug][locale].label, manifest }] : [];
   });
-  const posters = others.slice(0, 4);
+  // A page about a couple never shows another page's poster that is a birthday or a card for Mum (content/demo-occasions.ts):
+  // those pages are still offered, by name, in the links under the posters.
+  const about = PAGE_ABOUT[kind];
+  const posters = others.filter((page) => !about || demoFits(page.manifest.slug, about)).slice(0, 4);
   const shown = new Set(posters.map((page) => page.href));
   const links = [
-    ...others.slice(4).map(({ href, label }) => ({ href, label })),
+    ...others.filter((page) => !shown.has(page.href)).map(({ href, label }) => ({ href, label })),
     ...guide.related,
   ].filter((link, i, all) => !shown.has(link.href) && all.findIndex((other) => other.href === link.href) === i);
 
@@ -297,8 +318,8 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
             <IdeaCards id={`ideas-${kind}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), free: t("free"), full: t("ideaInFull"), copy: t("copyLine"), copied: t("copiedLine") }} />
           </Spread>
 
-          {/* The polaroid on the band's phone holds this page's own photo, not the one every page had (content/gift-guides.ts). */}
-          <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={guideBandPhoto(kind)} />}>
+          {/* The polaroid on the band's phone holds this page's own photo, and the phone's screen its own cover where it has one: together they tell one band from another (content/gift-guides.ts). */}
+          <Band labelledBy="kind-guide" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={guideBandPhoto(kind)} poster={getManifest(GUIDE_BAND_COVERS[kind] ?? "")?.thumbnail.poster} />}>
             <p className="text-page-label text-page-body">{t("craftLabel")}</p>
             {/* Each page's own heading: what its three how-tos are about (content/gift-guides.ts, `craft`). */}
             <h2 id="kind-guide" className="mt-4 display-xl text-balance text-page-ink">
@@ -312,7 +333,7 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
             </div>
           </Band>
 
-          <QuestionsSpread id="kind-questions" name={`faq-${kind}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq}>
+          <QuestionsSpread id="kind-questions" name={`faq-${kind}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq} className={guide.faq.length < 5 ? SHORT_QUESTIONS : undefined}>
             <MoreRow summary={t("moreAbout")}>
               {guide.lead.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
@@ -321,6 +342,126 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
           </QuestionsSpread>
 
           <WhereNext id="kind-next" label={t("nextLabel")} heading={t("byKind")} posters={posters} locale={locale} navLabel={t("readNext")} links={links} />
+        </div>
+      </SitePage>
+    </>
+  );
+}
+
+/**
+ * The anniversary gifts for one month (content/month-anniversaries.ts), built from the same pieces
+ * as a page by kind: the hero with the month's first gift playing in the phone, the gifts as picture
+ * cards, one date for the day in the deeper band (it leads into the Dates room), the month's own
+ * questions with what a couple has usually done by now kept closed under them, and the months
+ * either side as posters. The page is the gift; the post linked at its foot is the day.
+ */
+async function MonthPage({ month, locale, currency }: { month: number; locale: GiftLocale; currency: Currency }) {
+  const t = await getTranslations("recipients");
+  const guide = MONTH_GUIDES[month][locale];
+  const slug = monthSlug(month);
+  const ideas = withManifests(guide.ideas);
+  const url = localizedUrl(locale, `/gifts/${slug}`);
+  const ref = monthRef(month);
+  const lead = ideas[0].manifest;
+  const leadCost = templateOfferAmount(lead, currency);
+  const cards: IdeaCard[] = ideas.map((idea) => ({
+    manifest: idea.manifest,
+    title: idea.heading,
+    line: kindCardLine(idea),
+    borrow: { where: idea.line.where, text: handLine(idea.line.text), whole: idea.line.text },
+    full: idea.body,
+    make: `/create/${idea.template}?ref=${ref}`,
+    free: kindIdeaIsFree(idea, idea.manifest),
+  }));
+  // The month before, the month after, then the nearest of the half-years: each shown by its own first gift.
+  const posters = monthNeighbours(month).flatMap((n) => {
+    const manifest = getManifest(MONTH_GUIDES[n].en.ideas[0].template);
+    return manifest ? [{ href: `/gifts/${monthSlug(n)}`, label: MONTH_GUIDES[n][locale].label, manifest }] : [];
+  });
+  // The post about this month's day, in a language it is written in.
+  const post = getPost(monthPost(month));
+  const postContent = post && postLocales(post).includes(locale) ? post.content[locale] : undefined;
+  const links = [
+    { href: "/occasions/anniversary", label: t("month.year") },
+    ...(post && postContent ? [{ href: `/blog/${post.slug}`, label: postContent.title }] : []),
+    { href: TOGETHER_PATH, label: t("month.counter") },
+    { href: "/gifts/anniversary-website", label: GIFT_GUIDES["anniversary-website"][locale].label },
+  ];
+
+  return (
+    <>
+      <JsonLd
+        nodes={[
+          {
+            "@type": "ItemList",
+            name: guide.h1,
+            itemListElement: ideas.map((idea, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: idea.heading,
+              url: localizedUrl(locale, `/templates/${idea.template}`),
+            })),
+          },
+          breadcrumbNode([
+            { name: SITE.name, url: localizedUrl(locale) },
+            { name: t("breadcrumb"), url: localizedUrl(locale, "/gifts") },
+            { name: guide.h1, url },
+          ]),
+          faqNode(guide.faq),
+        ]}
+      />
+      <SitePage name={ref}>
+        <div data-testid="gift-month-page">
+          <SiteHero
+            manifest={lead}
+            locale={locale}
+            tags={
+              <>
+                <HeroTag strong>{t("eyebrow")}</HeroTag>
+                <HeroTag>{t("ideasTag", { count: ideas.length })}</HeroTag>
+              </>
+            }
+            heading={guide.h1}
+            line={guide.hero.line}
+            sentence={guide.hero.sentence}
+            note={
+              <span data-testid="hero-note">
+                {leadCost > 0 ? t("inPhone", { name: lead.name[locale], price: formatAmount(leadCost, currency, locale) }) : t("inPhoneFree", { name: lead.name[locale] })}
+              </span>
+            }
+          >
+            <Link href={`/create/${lead.slug}?ref=${ref}`} data-testid="hero-make" aria-label={`${t("makeLead")}: ${lead.name[locale]}`} className={HERO_BUTTON}>
+              {t("makeLead")}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
+          </SiteHero>
+
+          <Spread id="month-ideas" label={t("ideasLabel")} heading={guide.ideasTitle} line={t("ideasLine")} art={CARDS_ART} className="pt-4 pb-16 sm:pb-20 lg:pt-6 lg:pb-32">
+            <IdeaCards id={`ideas-month-${month}`} cards={cards} locale={locale} labels={{ make: t("make"), watch: t("watch"), free: t("free"), full: t("ideaInFull"), copy: t("copyLine"), copied: t("copiedLine") }} />
+          </Spread>
+
+          {/* One date for the day: the month's second gift in the phone's screen, its own sample photo beside it. */}
+          <Band labelledBy="month-date" picture={<ExperienceFlatlay flowers={SITE_FLOWERS} photo={monthBandPhoto(month)} poster={ideas[1].manifest.thumbnail.poster} />}>
+            <p className="text-page-label text-page-body">{t("month.dateLabel")}</p>
+            <h2 id="month-date" className="mt-4 display-xl text-balance text-page-ink">
+              {guide.date.title}
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-relaxed text-page-body">{guide.date.line}</p>
+            <Link href={`/dates/ideas/${guide.date.kind}`} data-testid="month-date-link" className={cn(QUIET_LINK, "mt-4 gap-1.5")}>
+              {t("month.dateLink")}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
+          </Band>
+
+          <QuestionsSpread id="month-questions" name={`faq-month-${month}`} label={t("faqLabel")} heading={t("faqTitle")} line={t("faqLine")} faq={guide.faq} className={SHORT_QUESTIONS}>
+            <MoreRow summary={t("month.moreAbout")}>
+              {guide.stage.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </MoreRow>
+          </QuestionsSpread>
+
+          <WhereNext id="month-next" label={t("month.nextLabel")} heading={t("month.nextHeading")} posters={posters} locale={locale} navLabel={t("month.nextLabel")} links={links} />
         </div>
       </SitePage>
     </>

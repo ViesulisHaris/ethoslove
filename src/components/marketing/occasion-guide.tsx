@@ -3,6 +3,7 @@ import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { GIFT_GUIDES, GUIDES_FOR_OCCASION } from "@/content/gift-guides";
+import { MONTHS, MONTH_GUIDES, monthSlug } from "@/content/month-anniversaries";
 import { occasionCardLine, occasionSample, sampleHand } from "@/content/idea-cards";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { Link } from "@/i18n/navigation";
@@ -61,7 +62,10 @@ export async function OccasionIdeas({ occasion, locale }: { occasion: Occasion; 
  * templates and the ideas, where the person who has scrolled past the cards without choosing is
  * the one reading.
  */
-export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; locale: GiftLocale }) {
+/** How many of an occasion's questions are on show; the rest are one closed row under them. */
+const SHOWN_QUESTIONS = 4;
+
+export async function OccasionGuide({ occasion, locale, intro }: { occasion: Occasion; locale: GiftLocale; intro: string }) {
   const t = await getTranslations("occasions");
   const guide = OCCASION_GUIDES[occasion][locale];
   const kinds = GUIDES_FOR_OCCASION[occasion] ?? [];
@@ -73,16 +77,42 @@ export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; 
       label={t("guideEyebrow")}
       heading={guide.title}
       line={t("guideLine")}
-      faq={guide.faq}
+      faq={guide.faq.slice(0, SHOWN_QUESTIONS)}
       art={GUIDE_ART}
       className="pt-14 pb-20 sm:pt-16 lg:pt-20 lg:pb-28"
       before={guide.sections.map((section) => (
         <QuestionRow key={section.heading} q={section.heading} a={section.body} name={`faq-${occasion}`} />
       ))}
     >
+      {/* The rest of the questions, closed under the first four: every answer stays in the HTML, and in the page's FAQ data. */}
+      {guide.faq.length > SHOWN_QUESTIONS ? (
+        <MoreRow summary={t("moreQuestions")}>
+          <div className="border-t border-page-line">
+            {guide.faq.slice(SHOWN_QUESTIONS).map((f) => (
+              <QuestionRow key={f.q} q={f.q} a={f.a} name={`faq-more-${occasion}`} />
+            ))}
+          </div>
+        </MoreRow>
+      ) : null}
+      {/* The occasion's own paragraph stood under the gallery; it opens this row now, so the page reads in 300 words. */}
       <MoreRow summary={tKinds("moreAbout")}>
+        <p data-occasion-intro>{intro}</p>
         <p>{guide.lead}</p>
       </MoreRow>
+      {/* The anniversary gifts by month, 1 to 24 (content/month-anniversaries.ts): closed, so the page still reads in its 300 words. */}
+      {occasion === "anniversary" ? (
+        <MoreRow summary={tKinds("month.byMonth")}>
+          <ul className="flex flex-wrap gap-x-5">
+            {MONTHS.map((n) => (
+              <li key={n}>
+                <Link href={`/gifts/${monthSlug(n)}`} className={QUIET_LINK}>
+                  {MONTH_GUIDES[n][locale].label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </MoreRow>
+      ) : null}
       {kinds.length > 0 ? (
         <nav aria-label={tKinds("byKind")}>
           <ul className="flex flex-wrap gap-x-7 pt-3">

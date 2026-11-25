@@ -5,10 +5,15 @@ import { countWord } from "@/lib/count-words";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { chargedCurrency } from "@/lib/pricing/products";
 import { cn } from "@/lib/utils";
+import { BUDGET_KEY, budgetValues } from "@/lib/trips/day-costs";
 import { monthRanges } from "@/lib/trips/months";
-import { budgetMark, TRIP_KINDS, tripImageSm, TRIPS, tripSrcSet, type Trip } from "@/lib/trips/presets";
+import { budgetMark, TRIP_KINDS, tripImageSm, TRIPS, tripSrcSet } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields } from "@/lib/trips/trip-gift";
+import { ideaPath, TRIP_IDEA_KINDS } from "@/lib/trips/idea-kinds";
+import { originPath, TRIP_ORIGINS } from "@/lib/trips/origins";
+import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { MATCH_ART, ROOMS_THEME } from "@/content/rooms-art";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
@@ -20,8 +25,6 @@ import { TripCard } from "@/components/trips/trip-card";
 import { TripMatcher, type MatcherTrip } from "@/components/trips/trip-matcher";
 import { TripsGrid } from "@/components/trips/trips-grid";
 
-const BUDGET_KEY = { 1: "low", 2: "mid", 3: "high" } as const satisfies Record<Trip["budget"], string>;
-
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/trips">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "trips.meta" });
@@ -30,10 +33,12 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 
 /** Trips: the flight search on the first screen, then twelve trips to pick from, then the gift they can become. */
 export default async function TripsPage({ params }: PageProps<"/[currency]/[locale]/trips">) {
-  const { locale } = await params;
+  const { currency, locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("trips");
   const l = locale === "es" ? "es" : "en";
+  // The day costs in the currency this visitor is charged in (lib/trips/day-costs.ts): euros are the source.
+  const shown = chargedCurrency(currency);
 
   const cards = TRIPS.map((trip) => ({
     id: trip.id,
@@ -42,13 +47,9 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
       <TripCard
         trip={trip}
         title={trip.title[l]}
-        blurb={trip.blurb[l]}
         labels={{
           kind: t(`kind.${trip.kind}`),
           days: t("days", { count: trip.days }),
-          stops: t("stops", { count: trip.stops.length }),
-          best: t("best", { months: monthRanges(trip.bestMonths, l) }),
-          budget: t(`budget.${BUDGET_KEY[trip.budget]}`),
         }}
       />
     ),
@@ -67,8 +68,8 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
     srcSet: trip.image ? tripSrcSet(trip.image) : null,
     art: { from: trip.art.from, to: trip.art.to },
     facts: `${t("days", { count: trip.days })} · ${t(`kind.${trip.kind}`)}`,
-    budgetMark: budgetMark(trip.budget),
-    budgetWords: t(`budget.${BUDGET_KEY[trip.budget]}`),
+    budgetMark: budgetMark(trip.budget, shown),
+    budgetWords: t(`budget.${BUDGET_KEY[trip.budget]}`, budgetValues(trip.budget, shown, l)),
     best: t("best", { months: monthRanges(trip.bestMonths, l) }),
     gift: tripGiftFields(trip, l),
   }));
@@ -103,7 +104,6 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             </div>
             <div className="rounded-[32px] bg-card p-5 shadow-lift ring-1 ring-forest/5 sm:p-7">
               <h2 className="font-display text-[26px] leading-tight text-forest">{t("finder.title")}</h2>
-              <p className="mt-1 text-[14.5px] leading-snug text-forest/65">{t("finder.sub")}</p>
               <FlightFinder className="mt-5" />
             </div>
           </div>
@@ -131,6 +131,27 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             {t("grid.title")}
           </h2>
           <TripsGrid className="mt-8" cards={cards} filters={filters} label={t("filter.label")} />
+          {/* One quiet row to the pages by where you leave from and by kind, and each links back here. Each group is its
+              label and its links: on a phone the label stands over them (it read as a stray word after "Riga"), on a desk
+              the two groups sit side by side. The label's padding is the links', so their words line up. */}
+          <nav aria-label={t("more.nav")} data-testid="trips-more" className="mt-10 flex flex-col gap-y-3 border-t border-line pt-5 text-[15px] text-forest/75 sm:flex-row sm:flex-wrap sm:gap-x-8">
+            <div data-group="from" className="flex flex-wrap items-center gap-x-1">
+              <span className="w-full px-1.5 sm:w-auto">{t("more.from")}</span>
+              {TRIP_ORIGINS.map((o) => (
+                <Link key={o.slug} href={originPath(o)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
+                  {o.name[l]}
+                </Link>
+              ))}
+            </div>
+            <div data-group="kinds" className="flex flex-wrap items-center gap-x-1">
+              <span className="w-full px-1.5 sm:w-auto">{t("more.kinds")}</span>
+              {TRIP_IDEA_KINDS.map((kind) => (
+                <Link key={kind} href={ideaPath(kind)} className="inline-flex min-h-11 items-center px-1.5 font-medium text-forest underline decoration-forest/25 underline-offset-4 hover:decoration-forest focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">
+                  {TRIP_IDEA_COPY[kind].nav[l]}
+                </Link>
+              ))}
+            </div>
+          </nav>
         </div>
       </section>
 
@@ -141,7 +162,6 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
             <div className="relative max-w-2xl">
               <p className="text-eyebrow text-blush">{t("gift.eyebrow")}</p>
               <h2 className="display-xl mt-4 text-cream">{t("gift.title")}</h2>
-              <p className="mt-4 text-[16.5px] leading-relaxed text-cream/75">{t("gift.sub")}</p>
             </div>
             <div className="relative mt-8 flex shrink-0 flex-col items-start gap-4 lg:mt-0 lg:items-center">
               <span aria-hidden="true" className="hidden size-24 rotate-12 lg:block">

@@ -1,4 +1,4 @@
-import { ArrowRight, Smartphone, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
@@ -20,7 +20,6 @@ export async function LongDistanceBand() {
           <h2 className="display-xl mt-4 max-w-[15ch]">
             {t("titleA")} <em className="text-blush">{t("titleB")}</em>
           </h2>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream/75">{t("blurb")}</p>
           {/* Less padding, and under 360px a point less type, keep both labels on one line at 320px ("Abrir la habitación a distancia" is 228px at 16px); if one ever wraps, it wraps balanced and centred. */}
           <Link href="/long-distance" className="mt-9 inline-flex h-13 items-center gap-2 rounded-full bg-cream px-4 text-center text-base leading-tight font-semibold text-balance text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5 max-[359px]:text-[15px] sm:px-7">
             {t("cta")}
@@ -52,7 +51,7 @@ export async function LongDistanceBand() {
   );
 }
 
-/** Games: the whole hand of them on a little card table, and the two ways to play. */
+/** Games: the whole hand of them on a little card table, a heading and the way in. The two ways to play are on /games. */
 export async function GamesBand() {
   const t = await getTranslations("platform.games");
   const tg = await getTranslations("games");
@@ -60,25 +59,13 @@ export async function GamesBand() {
   return (
     <section className="bg-paper py-20 lg:py-28">
       <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-        <div data-reveal className="relative isolate order-2 overflow-hidden rounded-[32px] bg-[#200b18] px-4 pt-6 pb-2 shadow-lift sm:px-10 sm:pt-10 lg:order-1" style={{ "--reveal-delay": "100ms" } as React.CSSProperties}>
+        <div data-reveal data-picture className="relative isolate order-2 overflow-hidden rounded-[32px] bg-[#200b18] px-4 pt-6 pb-2 shadow-lift sm:px-10 sm:pt-10 lg:order-1" style={{ "--reveal-delay": "100ms" } as React.CSSProperties}>
           <TableFelt />
           <GameHand titles={titles} label={tg("hub.pickTitle")} />
         </div>
         <div data-reveal className="order-1 lg:order-2">
           <p className="text-eyebrow text-ink-soft">{t("eyebrow", { games: countWord(GAMES.length, await getLocale()) })}</p>
           <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
-          {/* Two labels, not two buttons: no pill shape, which read as something to press (walk-front-8). */}
-          <div data-games-ways className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-            <span className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-forest/80">
-              <Users aria-hidden="true" className="size-4 text-rose-deep" />
-              {tg("hub.one")}
-            </span>
-            <span className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-forest/80">
-              <Smartphone aria-hidden="true" className="size-4 text-rose-deep" />
-              {tg("hub.two")}
-            </span>
-          </div>
           <Link href="/games" className="btn-rose mt-8 inline-flex h-13 items-center gap-2 rounded-full px-7 text-base font-semibold">
             {t("cta")}
             <ArrowRight aria-hidden="true" className="size-4" />
@@ -96,7 +83,6 @@ export async function PlatformClosing() {
       <FloralFrame frame="closing" ground="dark" />
       <div data-reveal className="container-x relative flex flex-col items-center text-center">
         <h2 className="display-hero max-w-[14ch] italic">{t("title")}</h2>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream/75">{t("blurb")}</p>
         {/* Gifts first, as the page opens: the filled button makes a gift, the quiet one finds a date (walk-agreed-3). */}
         <div data-closing-buttons className="mt-10 flex flex-wrap justify-center gap-3">
           <Link href="/templates" className="inline-flex h-14 items-center gap-2 rounded-full bg-cream px-8 text-base font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5">

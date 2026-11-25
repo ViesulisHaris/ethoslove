@@ -30,6 +30,14 @@ import { WRITTEN_CITY_KIND_PAIRS } from "@/lib/cities/kind-copy";
 const GROWTH_PAGES_DAY = "2026-11-23";
 
 /**
+ * The day the growth build's "gifts2" area last changed what its pages say: the 24 anniversary
+ * gifts by month (/gifts/<n>-month-anniversary), five more gift pages by kind, every /gifts page
+ * gaining those neighbours in its last section, and the occasion pages, /gifts and the front page
+ * folded to 300 words on show. NOT LIVE YET: set it to the day it ships.
+ */
+export const GIFTS2_DAY = "2026-11-25";
+
+/**
  * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
  * finder. NOT LIVE YET: this is the day the work was finished. Set it to the day it ships; every
  * page it changed reads its date from here. The template pages take GUIDES_LIVE below: who each
@@ -81,6 +89,14 @@ export const GAMES_LIVE = "2026-11-25";
 export const ROOMS_LIVE = "2026-11-24";
 
 /**
+ * The day the trips room's second pass goes live: /trips, every trip's page and /long-distance cut
+ * to 300 words, a trip's day costs in the visitor's currency and its places to stay, and the pages
+ * by where you leave from and by kind of trip. NOT LIVE YET: this is the day the work was finished.
+ * Whoever ships it sets this to that day.
+ */
+export const TRIPS2_LIVE = "2026-11-25";
+
+/**
  * Ethos in numbers is dated only once it is on (a date for a page that is in no sitemap fails
  * crawl.test.ts): the later of the day its words changed and the day its figures were counted.
  */
@@ -90,11 +106,11 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
   // With the finder: Gifts lead the rooms, and the front page, /gifts and the gallery link to it.
-  "/": FINDER_LIVE,
+  "/": GIFTS2_DAY,
   // The gift pages by kind (content/gift-guides.ts) and /digital-cards are new, and /gifts and every
   // /gifts/for-* page gained their links.
-  "/gifts": GROWTH_PAGES_DAY,
-  "/gifts/*": GROWTH_PAGES_DAY,
+  "/gifts": GIFTS2_DAY,
+  "/gifts/*": GIFTS2_DAY,
   "/gifts/finder": FINDER_LIVE,
   "/digital-cards": GROWTH_PAGES_DAY,
   // With the finder the gallery links to it; then the gallery itself was redrawn.
@@ -132,33 +148,36 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   ...(ADVENT_CALENDAR_LIVE ? { "/templates/advent-calendar": GUIDES_LIVE } : {}),
   // Every occasion's page draws the gallery's cards and its row of occasions, so all of them changed
   // with it. (Seven had a later date of their own than the rest, 9 to 13 Nov; the gallery's is later still.)
-  "/occasions/*": GALLERY_LIVE,
+  // Since the growth build's gifts2 area (GIFTS2_DAY) every occasion shows four gifts and folds the rest, the
+  // intro and the questions past the fourth, so every one of them changed that day.
+  "/occasions/*": GIFTS2_DAY,
   // Eight occasions gained their idea lists (content/occasion-ideas.ts), and birthday and
   // anniversary a row of links to the gift pages by kind.
-  "/occasions/birthday": GROWTH_PAGES_DAY,
-  "/occasions/anniversary": GROWTH_PAGES_DAY,
+  "/occasions/birthday": GIFTS2_DAY,
+  "/occasions/anniversary": GIFTS2_DAY,
   // Their twelve ideas are cards since 22 Nov, each a title and one line where there was a paragraph.
-  "/occasions/valentines": GROWTH_PAGES_DAY,
-  "/occasions/christmas": GROWTH_PAGES_DAY,
-  "/occasions/long-distance": GROWTH_PAGES_DAY,
-  "/occasions/thanksgiving": GROWTH_PAGES_DAY,
-  "/occasions/wedding": GROWTH_PAGES_DAY,
-  "/occasions/graduation": GROWTH_PAGES_DAY,
-  "/occasions/mothers-day": GROWTH_PAGES_DAY,
-  "/occasions/fathers-day": GROWTH_PAGES_DAY,
-  "/occasions/apology": GROWTH_PAGES_DAY,
-  "/occasions/just-because": GROWTH_PAGES_DAY,
+  "/occasions/valentines": GIFTS2_DAY,
+  "/occasions/christmas": GIFTS2_DAY,
+  "/occasions/long-distance": GIFTS2_DAY,
+  "/occasions/thanksgiving": GIFTS2_DAY,
+  "/occasions/wedding": GIFTS2_DAY,
+  "/occasions/graduation": GIFTS2_DAY,
+  "/occasions/mothers-day": GIFTS2_DAY,
+  "/occasions/fathers-day": GIFTS2_DAY,
+  "/occasions/apology": GIFTS2_DAY,
+  "/occasions/just-because": GIFTS2_DAY,
   // Its Spanish guide names the gift by its Spanish name since 23 Nov ("Truco o trato").
-  "/occasions/halloween": GROWTH_PAGES_DAY,
+  "/occasions/halloween": GIFTS2_DAY,
   "/dates": DATES_LIVE,
   "/dates/*": DATES_LIVE,
   "/dates/ideas/*": DATES_LIVE,
   ...Object.fromEntries(WRITTEN_CITY_KIND_PAIRS.map((p) => [`/dates/${p.city}/${p.kind}`, DATES_LIVE])),
-  "/trips": ROOMS_LIVE,
-  "/trips/*": ROOMS_LIVE,
+  "/trips": TRIPS2_LIVE,
+  "/trips/*": TRIPS2_LIVE,
+  "/trips/ideas/*": TRIPS2_LIVE,
   "/games": GAMES_LIVE,
   "/games/*": GAMES_LIVE,
-  "/long-distance": ROOMS_LIVE,
+  "/long-distance": TRIPS2_LIVE,
   "/tools/how-long-have-we-been-together": "2026-11-09",
   "/tools/halfway-between-two-cities": ROOMS_LIVE,
   "/tools/love-language-quiz": "2026-11-15",

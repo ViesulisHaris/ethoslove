@@ -47,7 +47,8 @@ export async function settle(page: Page) {
  * well stand in. So each picture is drawn to a canvas and, for every line of words, the pixels
  * under it are read (through the picture's own turn). A pixel that is more than a faint tail of
  * shadow counts. Words inside a closed <details> are not on the page until it is opened, and are
- * not counted; a card's handwriting (`data-line`) is counted by itself.
+ * not counted; a card's handwriting (`data-line`) is counted by itself; words only a screen reader
+ * gets (`.sr-only`) are not on the page to the eye and are not counted either.
  */
 export async function measure(page: Page, within = "[data-page-theme]") {
   return page.evaluate((within) => {
@@ -108,6 +109,8 @@ export async function measure(page: Page, within = "[data-page-theme]") {
       range.selectNodeContents(node);
       const rects = [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
       if (rects.length === 0) continue;
+      // Words only a screen reader gets (a heading kept outside a folded row's summary) are not words a visitor reads.
+      if (parent.closest(".sr-only")) continue;
       if (parent.closest("[data-line]")) hand += text.split(/\s+/).length;
       else count += text.split(/\s+/).length;
       const cs = getComputedStyle(parent);

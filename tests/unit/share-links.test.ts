@@ -3,6 +3,10 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 
 import { coverCredit, COVER_MAX_BYTES, fetchCover, fileOfCover } from "@/lib/share/cover";
+import { TRIP_ORIGIN_COPY } from "@/content/trip-origins";
+import { TRIP_IDEA_COPY } from "@/content/trip-ideas";
+import { TRIP_ORIGINS } from "@/lib/trips/origins";
+import { roomCard } from "@/lib/trips/room-card";
 import { firstParams, placeShareHref, planShareHref, readSharedPlace, readShareCard, readSharePreview, SHARE_TITLE_MAX, shareCardPath, shareCover, shareTitle } from "@/lib/share/links";
 
 const STANFORDS = "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Stanfords_-_geograph.org.uk_-_3080550.jpg/1280px-Stanfords_-_geograph.org.uk_-_3080550.jpg";
@@ -87,6 +91,23 @@ describe("share links: the cover allowlist", () => {
     expect(readShareCard(new URL(path, "https://tryethos.io").searchParams)).toEqual({ kind: "plan", locale: "es", cover: SANTA_LUZIA, title: "Atardecer", date: "2026-10-03" });
     expect(readShareCard(new URLSearchParams({ k: "place", c: "https://example.com/x.jpg", t: "X", d: "2026-10-03" }))).toEqual({ kind: "place", locale: "en", cover: null, title: "X", date: null });
     expect(shareCardPath({ kind: "trip", locale: "en", trip: "lisbon-slow-weekend" })).toBe("/og/share.jpg?k=trip&l=en&trip=lisbon-slow-weekend&v=1");
+  });
+
+  it("the pages by where you leave from and by kind have their own card, read only from their own keys", () => {
+    const path = shareCardPath({ kind: "trips", locale: "es", page: "from-london" });
+    expect(path).toBe("/og/share.jpg?k=trips&l=es&p=from-london&v=1");
+    expect(readShareCard(new URL(path, "https://tryethos.io").searchParams)).toEqual({ kind: "trips", locale: "es", page: "from-london" });
+    for (const o of TRIP_ORIGINS) {
+      for (const l of ["en", "es"] as const) {
+        const card = roomCard(`from-${o.slug}`, l);
+        expect(card?.title, o.slug).toContain(o.name[l]);
+        expect(card?.trip.id, o.slug).toBe(TRIP_ORIGIN_COPY[o.slug].hero);
+        expect(card?.trip.image, o.slug).toBeTruthy();
+      }
+    }
+    expect(roomCard("ideas-road-trips", "en")).toMatchObject({ title: "Road trips for two", trip: { id: TRIP_IDEA_COPY["road-trips"].hero } });
+    expect(roomCard("ideas-weekend-getaways", "es")?.title).toBe("Escapadas de fin de semana para dos");
+    for (const bad of ["from-madrid", "from-glasgow", "ideas-cheap-trips-in-europe", "ideas-", "road-trips", "lisbon-slow-weekend", "<b>x</b>", ""]) expect(roomCard(bad, "en"), bad).toBeNull();
   });
 });
 

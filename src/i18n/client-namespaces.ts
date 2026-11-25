@@ -55,6 +55,9 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/dates/layout": ["dates", "affiliate", "savedDates"],
   "(marketing)/plan/layout": ["plan", "affiliate", "giftChooser", "pickers", "savedDates", "auth"],
   "(marketing)/trips/layout": ["trips", "affiliate", "giftChooser", "savedDates", "auth"],
+  // The pages by where you leave from (served by the trip route) and by kind are built from the gift page's sections, which carry hero-flatlay.tsx: as /long-distance sends it.
+  "(marketing)/trips/[id]/page": ["templates"],
+  "(marketing)/trips/ideas/[kind]/page": ["templates"],
   "(marketing)/long-distance/layout": ["ldr", "dates.where", "trips.flights", "affiliate", "templates"],
   "(marketing)/games/layout": ["games", "packs", "money.checkoutErrors"],
   // The days-together counter and its template cards.

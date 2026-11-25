@@ -157,7 +157,8 @@
     "openings": {
       "eyebrow": "Openings",
       "title": "Choose how it opens.",
-      "blurb": "The first thing they see is a cover with their name on it. Pick the one that feels like them; the gift is waiting underneath.",
+      "blurb": "The first thing they see is a cover with their name on it.",
+      "more": "Pick the one that feels like them; the gift is waiting underneath.",
       "preview": "Preview"
     }
   },
@@ -1034,6 +1035,7 @@
     "none": "No templates match that filter yet.",
     "noneFree": "None of this occasion’s templates are free yet. These free ones work for any day.",
     "showAll": "Show all {count}",
+    "showFewer": "Show fewer",
     "previewHint": "This is the real template with sample data. Tap, scroll and explore.",
     "fullscreenDemo": "Open full-screen demo",
     "included": "What’s included",
@@ -1197,6 +1199,7 @@
     "ideasLabel": "Ideas",
     "ideasLine": "Open a card to see the idea.",
     "guideLine": "What to write, what to add and when to send it.",
+    "moreQuestions": "More questions",
     "faqTitle": "Questions people ask",
     "birthday": "Birthday",
     "anniversary": "Anniversary",
@@ -1949,8 +1952,10 @@
       },
       "just-because": {
         "title": "Just because gifts",
-        "description": "No occasion needed: a small digital gift with your photos, a song and a few honest words, to tell someone you’re thinking of them.",
-        "intro": "The best gifts don’t wait for a date on the calendar. Make one in ten minutes and send it for no reason at all."
+        "metaTitle": "Just Because Gifts: 11 Ideas for No Reason at All",
+        "description": "A just because gift is a gift for no reason: no birthday, no date to hit. Eleven small digital gifts with your photos, a song and a few honest words.",
+        "intro": "A just because gift is a gift for no reason, which is exactly what makes it count. Make one in ten minutes and send it on an ordinary Tuesday.",
+        "line": "A gift for no reason at all, made in ten minutes and sent on an ordinary Tuesday."
       }
     },
     "blogTitle": "Gift ideas and love letter guides",
@@ -2696,7 +2701,7 @@
     "eyebrow": "Long distance",
     "h1a": "Apart is not",
     "h1b": "the same as far.",
-    "sub": "A few small tools for the months between visits: where to meet, when you’re both awake, and what to do on a call besides recap your day.",
+    "sub": "Where to meet, when you’re both awake, and what to do on a call.",
     "meet": {
       "title": "Between your two towns",
       "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you’re both awake.",
@@ -2808,6 +2813,12 @@
       "cta": "Compare cars on Auto Europe",
       "via": "Car hire through Auto Europe."
     },
+    "stay": {
+      "cta": "Find a place to stay in {place}",
+      "title": "Places to stay",
+      "sub": "Each is for two, on the plan’s nights, starting the same Friday as the flight search above.",
+      "via": "Stays through Stay22."
+    },
     "meet": {
       "via": "Each flight opens on Aviasales; Google Flights is there to compare."
     }
@@ -2820,7 +2831,7 @@
     "eyebrow": "Trips for two",
     "h1a": "Go somewhere",
     "h1b": "together.",
-    "sub": "{Trips} trips we’d take ourselves, planned day by day, and a flight search that opens the fares on the sites you already use. No booking fees, no account.",
+    "sub": "{Trips} trips planned day by day, and a flight search with no booking fees.",
     "finder": {
       "title": "Find flights",
       "sub": "For two, on any dates. We open the search; you book with them."
@@ -2886,6 +2897,11 @@
       "eyebrow": "Ready-made trips",
       "title": "Pick one, then make it yours."
     },
+    "more": {
+      "nav": "More ways to choose a trip",
+      "from": "Leaving from",
+      "kinds": "By kind"
+    },
     "kind": {
       "road": "Road trip",
       "city": "City break",
@@ -2896,10 +2912,15 @@
     "stops": "{count, plural, one {# stop} other {# stops}}",
     "best": "Best {months}",
     "budget": {
-      "low": "About €150 a day for two, or less",
-      "mid": "About €150–300 a day for two",
-      "high": "Over €300 a day for two",
-      "note": "What you spend there, not the flights."
+      "low": "About {amount} a day for two, or less",
+      "mid": "About {range} a day for two",
+      "high": "Over {amount} a day for two",
+      "note": "What you spend there, not the flights.",
+      "short": {
+        "low": "About {amount} or less",
+        "mid": "About {range}",
+        "high": "Over {amount}"
+      }
     },
     "gift": {
       "eyebrow": "Or keep it a secret",
@@ -2909,9 +2930,10 @@
     },
     "detail": {
       "back": "All trips",
+      "about": "More about this trip",
       "facts": {
         "days": "Length",
-        "budget": "Budget",
+        "budget": "A day for two, flights aside",
         "best": "Best months",
         "kind": "Kind"
       },
@@ -2948,7 +2970,11 @@
       "flights": {
         "eyebrow": "Getting there",
         "title": "Flights to {city}",
+        "homeTitle": "Flights home from {city}",
         "sub": "Where this trip starts. Add where you’re flying from, change the dates if you like, then pick a site."
+      },
+      "book": {
+        "title": "Before you go"
       },
       "surprise": {
         "eyebrow": "Make it a surprise",
@@ -2977,6 +3003,10 @@
       "distance": "{km} km",
       "airTime": "about {time} in the air",
       "train": "Under 600 km: a train might be nicer.",
+      "endsIn": "The plan ends in {city}, so this searches only the flight out.",
+      "homeFrom": "The flight home from {city}, on the plan’s last day.",
+      "searchHome": "Search the flight home from {city}",
+      "searchOut": "Back to the flight out",
       "smallPrint": "These open the search on each site, and the fares are theirs. We may earn a commission if you book through some of these links. It costs you nothing extra.",
       "picker": {
         "title": "Choose your dates",
@@ -4238,6 +4268,7 @@
     "faqTitle": "Questions people ask",
     "more": "Gift ideas for someone else",
     "occasions": "By occasion",
+    "allGuides": "Every gift guide",
     "christmas": {
       "label": "Christmas",
       "heading": {
@@ -4246,6 +4277,16 @@
       },
       "line": "Made tonight, opened on their phone on Christmas morning.",
       "more": "See more Christmas gifts"
+    },
+    "month": {
+      "dateLabel": "A date for it",
+      "dateLink": "See date ideas like this",
+      "moreAbout": "More about this month",
+      "nextLabel": "Other months",
+      "nextHeading": "The month before, the month after",
+      "year": "Anniversary gift ideas",
+      "counter": "Count your months together",
+      "byMonth": "Anniversary gifts by month"
     },
     "footerTitle": "Gift ideas"
   },
