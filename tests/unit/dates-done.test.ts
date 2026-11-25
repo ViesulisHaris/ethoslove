@@ -83,13 +83,23 @@ describe("the dates you have done (dates2)", () => {
     const list = Array.from({ length: 25 }, (_, i) => entry(addDays("2026-01-01", i * 7), "Dinner, then dessert somewhere dry and a very long walk home"));
     const labels = timelineLabels(list, "en");
     expect(labels).toHaveLength(20);
-    for (const l of labels) {
-      expect(l.length, l).toBeLessThanOrEqual(40);
-      expect("Dinner, then dessert somewhere dry and a very long walk home".split(" ").some((w) => l.endsWith(` ${w}`)), l).toBe(true);
-    }
+    for (const l of labels) expect(l.length, l).toBeLessThanOrEqual(40);
+    // A title too long to fit keeps the phrase before its comma.
+    expect(labels[0]).toBe("Feb 5 · Dinner");
     const two = timelineLabels([entry("2026-11-20", "Bowling"), entry("2026-11-01", "Gallery hop")], "es");
-    expect(two[0]).toMatch(/^1 nov 2026 · Gallery hop$/);
-    expect(two[1]).toMatch(/^20 nov 2026 · Bowling$/);
+    expect(two).toEqual(["1 nov · Gallery hop", "20 nov · Bowling"]);
+  });
+
+  it("D11b the labels are in American English, carry the year only across years, and never end on a dangling word (dates2-C20, T11)", () => {
+    expect(timelineLabels([entry("2026-11-25", "Bowling")], "en")).toEqual(["Nov 25 · Bowling"]);
+    expect(timelineLabels([entry("2025-12-31", "Fireworks"), entry("2026-01-02", "Skating")], "en")).toEqual(["Dec 31, 2025 · Fireworks", "Jan 2, 2026 · Skating"]);
+    const [cut] = timelineLabels([entry("2026-11-11", "Gallery hop with a very patient friend of ours")], "en");
+    expect(cut).toBe("Nov 11 · Gallery hop with a very patient");
+    const [cut2] = timelineLabels([entry("2026-11-11", "Gallery hop with a very very very long name")], "en");
+    expect(cut2.length).toBeLessThanOrEqual(40);
+    expect(cut2).not.toMatch(/ (with|a|very)$/);
+    const [es] = timelineLabels([entry("2026-11-11", "Una tarde de museo con una copa de algo")], "es");
+    expect(es).not.toMatch(/ (con|una|de)$/);
   });
 
   it("D12 the hand-over is from three: two done dates give none", () => {

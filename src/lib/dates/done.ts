@@ -140,25 +140,43 @@ export function doneCount(list: readonly DoneDate[], today: Ymd): DoneCount {
   return thisYear >= 1 ? { kind: "year", n: thisYear } : null;
 }
 
-/** As many whole words of a title as fit in `room` characters. */
-function wordsThatFit(title: string, room: number): string {
-  let out = "";
-  for (const word of title.split(/\s+/).filter(Boolean)) {
-    const next = out ? `${out} ${word}` : word;
-    if (next.length > room) break;
-    out = next;
+/** Words a label must not end on: "Gallery hop with a very" says nothing a reader can finish. */
+const DANGLING: Record<"en" | "es", ReadonlySet<string>> = {
+  en: new Set(["a", "an", "the", "with", "and", "of", "to", "for", "at", "in", "on", "very", "then", "or", "by", "from", "your", "our"]),
+  es: new Set(["un", "una", "el", "la", "los", "las", "con", "y", "e", "de", "del", "a", "al", "en", "muy", "luego", "o", "para", "por", "tu", "vuestro", "vuestra"]),
+};
+
+/**
+ * As much of a title as fits in `room` characters and still reads as a phrase: the whole title, else
+ * the part before its first comma ("Dinner, then the long way home" gives "Dinner"), else its whole
+ * words that fit with any trailing "with a very" taken off. Never cut mid-word (dates2-T11).
+ */
+function phraseThatFits(title: string, room: number, locale: "en" | "es"): string {
+  const whole = title.trim();
+  if (whole.length <= room) return whole;
+  const head = whole.split(",")[0].trim();
+  if (head && head.length <= room && head !== whole) return head;
+  const words: string[] = [];
+  for (const word of whole.split(/\s+/).filter(Boolean)) {
+    if ([...words, word].join(" ").length > room) break;
+    words.push(word);
   }
-  return out;
+  while (words.length > 0 && DANGLING[locale].has(words[words.length - 1].toLowerCase().replace(/[.,;:]$/, ""))) words.pop();
+  return words.join(" ").replace(/[,;:]$/, "");
 }
 
-/** The log as the timeline gift's milestone labels: oldest first, at most twenty, each at most forty characters, never cut mid-word. */
+/**
+ * The log as the timeline gift's milestone labels: oldest first, at most twenty, each at most forty
+ * characters. The date is short, in the site's own English ("Nov 25") or Spanish ("25 nov"), with the
+ * year only when the dates span more than one (dates2-C20, T11).
+ */
 export function timelineLabels(list: readonly DoneDate[], locale: "en" | "es"): string[] {
-  return [...list]
-    .sort((a, b) => -newestFirst(a, b))
-    .slice(-LABELS_MAX)
-    .map((d) => {
-      const date = fromYmd(d.day)!.toLocaleDateString(locale === "es" ? "es-ES" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
-      const words = wordsThatFit(d.title, LABEL_MAX - date.length - 3);
-      return (words ? `${date} · ${words}` : date).slice(0, LABEL_MAX);
-    });
+  const kept = [...list].sort((a, b) => -newestFirst(a, b)).slice(-LABELS_MAX);
+  const years = new Set(kept.map((d) => d.day.slice(0, 4)));
+  const format: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", ...(years.size > 1 ? { year: "numeric" } : {}) };
+  return kept.map((d) => {
+    const date = fromYmd(d.day)!.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", format).replace(/\.$/, "");
+    const words = phraseThatFits(d.title, LABEL_MAX - date.length - 3, locale);
+    return (words ? `${date} · ${words}` : date).slice(0, LABEL_MAX);
+  });
 }

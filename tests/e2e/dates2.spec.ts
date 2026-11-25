@@ -501,7 +501,7 @@ test.describe("dates2: done dates on /plan", () => {
     await page.reload();
     const start = log.getByRole("link", { name: "Start the gift" });
     await expect(start).toHaveCount(1, PLAN_COMPILES);
-    await expect(log).toContainText("3 dates done: enough for a timeline.");
+    await expect(log).toContainText("3 dates done. Add a photo of each and they make a timeline.");
     const labels = await page.evaluate(() => JSON.parse(window.localStorage.getItem("ethos.dates.done.v1") ?? "[]").length);
     expect(labels).toBe(3);
     await start.click();

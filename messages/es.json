@@ -2415,7 +2415,7 @@
       "changeFor": "Cambiar la respuesta de {title}",
       "all": "Ver las {count}",
       "remove": "Quitar {title} de la lista",
-      "gift": "{n} citas hechas: ya dan para una línea del tiempo.",
+      "gift": "{n} citas hechas. Con una foto de cada una, son una línea del tiempo.",
       "giftCta": "Empezar el regalo"
     },
     "walk": "{minutes} min a pie",
