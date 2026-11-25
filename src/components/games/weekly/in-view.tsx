@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 
 /**
  * Which week's set the weekly challenge is showing: this week's (what the server rendered, and the
@@ -34,6 +34,12 @@ export const useWeekInView = (): InView =>
     () => inView,
     () => NOW,
   );
+
+/** Shown only while the challenge shows this week's set: "this week's five cards" would sit under another week's set as a puzzle. */
+export function NowOnly({ children }: { children: ReactNode }) {
+  const { when } = useWeekInView();
+  return when === "now" ? <>{children}</> : null;
+}
 
 /** This week's words, last week's, or an earlier week's, once the challenge shows a set from another week. */
 export function WhenText({ now, last, older }: { now: string; last: string; older: string }) {

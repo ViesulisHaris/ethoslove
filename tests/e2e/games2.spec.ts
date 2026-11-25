@@ -244,6 +244,9 @@ test("W3: last week's link opens last week's set and says so", async ({ browser 
   await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("Last week’s challenge for two");
   await expect(two.page.locator("[data-together=ask]")).toContainText(weeklyCards(set).ask.en);
   await expect(two.page.locator("[data-together=ask]")).toHaveAttribute("data-game", weeklyAskGame(set));
+  // Nothing under it still speaks of this week (games2-T4).
+  await expect(two.page.locator("#weekly-together + p")).toHaveText("For that week, once you have both answered. Out loud, not by text.");
+  await expect(two.page.locator("[data-five]")).toHaveCount(0);
   await answer(two.page, ["a", "a", "a"]);
   await expect(weekly(two.page)).toHaveAttribute("data-phase", "reveal");
   await two.page.locator("[data-copy]").click();
@@ -251,6 +254,8 @@ test("W3: last week's link opens last week's set and says so", async ({ browser 
   await expect(weekly(two.page)).toHaveAttribute("data-week", String(later));
   expect(new URL(two.page.url()).hash).toBe("");
   await expect(two.page.getByRole("heading", { level: 1 })).toHaveText("This week’s challenge for two");
+  await expect(two.page.locator("#weekly-together + p")).toHaveText("For this week, once you have both answered. Out loud, not by text.");
+  await expect(two.page.locator("[data-five]")).toHaveCount(1);
   await two.context.close();
 });
 

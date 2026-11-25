@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { JsonLd } from "@/components/shared/json-ld";
 import { eitherOr } from "@/components/games/question-list";
 import { TODAY_ART, TODAY_FLOWERS, TODAY_FOOT_ART } from "@/components/games/today/placements";
-import { WhenText } from "@/components/games/weekly/in-view";
+import { NowOnly, WhenText } from "@/components/games/weekly/in-view";
 import { WeeklyChallenge } from "@/components/games/weekly/weekly-challenge";
 import { WeeklyTogether } from "@/components/games/weekly/weekly-together";
 import { ArtLayer, BandEdge } from "@/components/templates/page/art";
@@ -99,7 +99,7 @@ export default async function WeeklyPage({ params }: Props) {
           <div className="relative -mt-px bg-page-raised">
             <ArtLayer items={TODAY_FOOT_ART} flowers={TODAY_FLOWERS} />
             <div className={cn(SPREAD, "pt-12 pb-14 lg:pt-16")}>
-              <Intro id="weekly-together" label={t("together.label")} heading={t("together.heading")} line={t("together.line")} />
+              <Intro id="weekly-together" label={t("together.label")} heading={t("together.heading")} line={<WhenText now={t("together.line")} last={t("together.lineThen")} older={t("together.lineThen")} />} />
               <div className="min-w-0 lg:pt-7">
                 <WeeklyTogether week={week} labels={{ ask: t("together.ask"), dare: t("together.dare") }} />
               </div>
@@ -127,7 +127,7 @@ export default async function WeeklyPage({ params }: Props) {
                   </li>
                 </ul>
                 <h3 className="sr-only">{t("more.faq")}</h3>
-                <div className="mt-6">
+                <div className="mt-6 border-b border-page-line">
                   {faq.map(({ q, a }) => (
                     <details key={q} className="group border-t border-page-line">
                       <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-ink [&::-webkit-details-marker]:hidden">
@@ -137,18 +137,20 @@ export default async function WeeklyPage({ params }: Props) {
                       <p className="max-w-2xl pr-8 pb-5 text-[0.9375rem] leading-relaxed text-page-body">{a}</p>
                     </details>
                   ))}
-                  {/* All five of the week's cards as text, closed: the three picks are dealt one at a time above, and only the first is in the page until it is tapped. */}
-                  <details data-five className="group border-t border-b border-page-line">
-                    <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-body [&::-webkit-details-marker]:hidden">
-                      {t("more.cards")}
-                      <Plus aria-hidden="true" className="size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
-                    </summary>
-                    <ol className="grid max-w-2xl list-decimal gap-2 pr-8 pb-5 pl-5 text-[0.9375rem] leading-relaxed text-page-body">
-                      {five.map((line) => (
-                        <li key={line}>{line}</li>
-                      ))}
-                    </ol>
-                  </details>
+                  {/* All five of the week's cards as text, closed: the three picks are dealt one at a time above, and only the first is in the page until it is tapped. Gone while another week's set is in view, so it never sits under it unexplained. */}
+                  <NowOnly>
+                    <details data-five className="group border-t border-page-line">
+                      <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-[0.9375rem] font-medium text-page-body [&::-webkit-details-marker]:hidden">
+                        {t("more.cards")}
+                        <Plus aria-hidden="true" className="size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" strokeWidth={1.6} />
+                      </summary>
+                      <ol className="grid max-w-2xl list-decimal gap-2 pr-8 pb-5 pl-5 text-[0.9375rem] leading-relaxed text-page-body">
+                        {five.map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ol>
+                    </details>
+                  </NowOnly>
                 </div>
               </div>
             </div>

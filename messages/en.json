@@ -3171,6 +3171,7 @@
         "label": "Then, together",
         "heading": "A question and a dare",
         "line": "For this week, once you have both answered. Out loud, not by text.",
+        "lineThen": "For that week, once you have both answered. Out loud, not by text.",
         "ask": "Ask",
         "dare": "Dare"
       },
