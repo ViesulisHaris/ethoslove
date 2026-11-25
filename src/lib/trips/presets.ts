@@ -37,6 +37,12 @@ export type Trip = {
   budget: 1 | 2 | 3;
   /** The airport you'd fly into (IATA); it is in AIRPORTS. */
   flyTo: string;
+  /**
+   * Where the plan's last day flies home from, when that is not `flyTo` (IATA, in AIRPORTS): the
+   * Baltic coast ends in Tallinn, Prague to Vienna in Vienna, the Highlands in Inverness. On the
+   * trip's page the flight search is then one way out, and offers the flight home from here.
+   */
+  flyHome?: string;
   stops: TripStop[];
   plan: TripDay[];
   /** public/trips/<id>.webp (with a -sm twin), or null where there is no photograph yet. */
@@ -497,6 +503,7 @@ export const TRIPS: Trip[] = [
     bestMonths: [5, 6, 9],
     budget: 2,
     flyTo: "EDI",
+    flyHome: "INV",
     stops: [
       { name: "Edinburgh", es: "Edimburgo", lat: 55.9489, lng: -3.1954, nights: 1, note: { en: "Walk the Old Town the first evening; collect the car on your way out the next morning.", es: "Recorred la ciudad vieja la primera tarde y recoged el coche al salir, a la mañana siguiente." } },
       { name: "Pitlochry", lat: 56.7036, lng: -3.7355, nights: 1, note: { en: "A Victorian spa town with a salmon ladder and a theater by the river.", es: "Un pueblo balneario victoriano con una escala para salmones y un teatro junto al río." } },
@@ -759,6 +766,7 @@ export const TRIPS: Trip[] = [
     bestMonths: [6, 7, 8],
     budget: 1,
     flyTo: "RIX",
+    flyHome: "TLL",
     stops: [
       { name: "Riga", lat: 56.9496, lng: 24.1052, nights: 2, note: { en: "Stay in the old town or the art nouveau quarter; everything is a walk away.", es: "Dormid en el casco antiguo o en el barrio modernista: todo queda a un paseo." } },
       { name: "Sigulda", lat: 57.1532, lng: 24.8541, nights: 1, note: { en: "Castles, caves and a cable car over the Gauja river, an hour from Riga.", es: "Castillos, cuevas y un teleférico sobre el río Gauja, a una hora de Riga." } },
@@ -907,6 +915,7 @@ export const TRIPS: Trip[] = [
     bestMonths: [4, 5, 6, 9, 10, 12],
     budget: 2,
     flyTo: "PRG",
+    flyHome: "VIE",
     stops: [
       { name: "Prague", es: "Praga", lat: 50.0874, lng: 14.421, nights: 2, note: { en: "Stay in Malá Strana, under the castle, and cross the Charles Bridge before breakfast.", es: "Alojaos en Malá Strana, bajo el castillo, y cruzad el Puente de Carlos antes de desayunar." } },
       { name: "Český Krumlov", lat: 48.8109, lng: 14.3148, nights: 1, note: { en: "About three hours by train, changing at České Budějovice. Stay the night to see it empty.", es: "Unas tres horas en tren, con cambio en České Budějovice. Quedaos a dormir para verlo vacío." } },

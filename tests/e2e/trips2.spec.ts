@@ -348,6 +348,35 @@ test.describe("a trip's page", () => {
     expect(errors).toEqual([]);
   });
 
+  test("E10g where the plan ends in another city the flight search goes out one way, and turns into the flight home from there", async ({ page }) => {
+    await page.goto("/trips/baltic-coast#flights");
+    const finder = page.getByTestId("flight-finder");
+    const leg = page.getByTestId("flight-leg");
+    await expect(leg).toContainText("The plan ends in Tallinn");
+    await finder.getByRole("combobox", { name: "From" }).fill("Lond");
+    await page.getByRole("option", { name: /London · LHR/ }).first().click();
+    const kayak = finder.getByRole("link", { name: /Kayak/ });
+    // One way out: a single date in the address.
+    await expect(kayak).toHaveAttribute("href", /\/flights\/[A-Z]{3}-RIX\/\d{4}-\d\d-\d\d\/2adults$/);
+    const out = (await kayak.getAttribute("href"))!.match(/(\d{4}-\d\d-\d\d)/)![1];
+    await leg.getByRole("button", { name: "Search the flight home from Tallinn" }).click();
+    await expect(finder.getByRole("combobox", { name: "From" })).toHaveValue("Tallinn");
+    await expect(finder.getByRole("combobox", { name: "To" })).toHaveValue("London");
+    // Home on the day the plan ends: six nights after the flight out.
+    const back = new Date(Date.parse(out) + 6 * 86_400_000).toISOString().slice(0, 10);
+    await expect(kayak).toHaveAttribute("href", new RegExp(`/flights/TLL-[A-Z]{3}/${back}/2adults$`));
+    await expect(leg).toContainText("The flight home from Tallinn, on the plan’s last day.");
+    await leg.getByRole("button", { name: "Back to the flight out" }).click();
+    await expect(finder.getByRole("combobox", { name: "To" })).toHaveValue("Riga");
+    await expect(finder.getByRole("combobox", { name: "From" })).toHaveValue("London");
+    // A trip that ends where it began keeps its return search and has no such line.
+    await page.goto("/es/trips/paris-without-cliches#flights");
+    await expect(page.getByTestId("flight-finder")).toBeVisible();
+    await expect(page.getByTestId("flight-leg")).toHaveCount(0);
+    await page.goto("/es/trips/prague-krumlov-vienna#flights");
+    await expect(page.getByTestId("flight-leg")).toContainText("El plan acaba en Viena");
+  });
+
   test("E10d each run of best months stays on one line", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/es/trips/amalfi-coast");

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { getTrip, TRIPS } from "@/lib/trips/presets";
 import { weekendAhead } from "@/lib/trips/flights";
+import { cityName, findAirport } from "@/lib/trips/airports";
+import { distanceKm } from "@/lib/dates/geo";
 import { stayDates, stayLink, stayPartnerId, tripNights, tripStays, TRIP_STAYS } from "@/lib/trips/stay";
 
 // The same as tests/unit/trips.test.ts.
@@ -91,5 +93,32 @@ describe("a place to stay at a trip's stop", () => {
     // Elsewhere the search is still a long weekend.
     expect(weekendAhead("2026-09-23")).toEqual({ depart: "2026-10-16", back: "2026-10-19" });
     expect(weekendAhead("2026-09-23", 0)).toEqual({ depart: "2026-10-16", back: "2026-10-19" });
+  });
+
+  it("S10 a trip whose plan flies home from elsewhere names that airport, and every other ends near where it landed or goes back there", () => {
+    const home = TRIPS.filter((t) => t.flyHome).map((t) => [t.id, t.flyHome]);
+    expect(home).toEqual([
+      ["scottish-highlands", "INV"],
+      ["baltic-coast", "TLL"],
+      ["prague-krumlov-vienna", "VIE"],
+    ]);
+    for (const trip of TRIPS) {
+      const lastDay = trip.plan.at(-1)!.items.en.join(" ");
+      const last = trip.stops.at(-1)!;
+      if (trip.flyHome) {
+        const a = findAirport(trip.flyHome)!;
+        expect(a, trip.id).not.toBeNull();
+        expect(trip.flyHome, trip.id).not.toBe(trip.flyTo);
+        // The airport is the last stop's, and the plan's last day leaves from it.
+        expect(distanceKm(a, last), trip.id).toBeLessThan(30);
+        expect(lastDay, trip.id).toContain(cityName(a, "en"));
+        expect(lastDay, trip.id).toMatch(/fly home|airport|flight/i);
+      } else {
+        const a = findAirport(trip.flyTo)!;
+        const far = distanceKm(a, last) > 50;
+        // Far from where it landed, the last day goes back there (Naples, Florence, Keflavík, Faro, the ferry to Santorini).
+        if (far) expect(lastDay, trip.id).toMatch(/back to|airport|for your flight/i);
+      }
+    }
   });
 });

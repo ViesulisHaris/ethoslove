@@ -2930,6 +2930,10 @@
       "distance": "{km} km",
       "airTime": "about {time} in the air",
       "train": "Under 600 km: a train might be nicer.",
+      "endsIn": "The plan ends in {city}, so this is the flight out alone.",
+      "homeFrom": "The flight home from {city}, on the plan’s last day.",
+      "searchHome": "Search the flight home from {city}",
+      "searchOut": "Back to the flight out",
       "smallPrint": "These open the search on each site, and the fares are theirs. We may earn a commission if you book through some of these links. It costs you nothing extra.",
       "picker": {
         "title": "Choose your dates",

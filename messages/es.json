@@ -2930,6 +2930,10 @@
       "distance": "{km} km",
       "airTime": "alrededor de {time} de vuelo",
       "train": "Menos de 600 km: quizá os compense más el tren.",
+      "endsIn": "El plan acaba en {city}, así que aquí va solo el vuelo de ida.",
+      "homeFrom": "El vuelo de vuelta desde {city}, el último día del plan.",
+      "searchHome": "Buscar la vuelta desde {city}",
+      "searchOut": "Volver al vuelo de ida",
       "smallPrint": "Estos botones abren la búsqueda en cada web, y los precios son los suyos. Puede que ganemos una comisión si reserváis a través de alguno de estos enlaces. A vosotros no os cuesta nada más.",
       "picker": {
         "title": "Elegid las fechas",

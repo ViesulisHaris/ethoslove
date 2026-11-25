@@ -139,6 +139,7 @@ evening. Write like a friend who has been, never like a brochure.
   between requests). A town's name alone often returns the centre of its province (Siena did), so
   search for the main square.
 - **`flyTo`** must be in `AIRPORTS`; add a missing one to `EXTRA` in `airports.ts`.
+- **`flyHome`**, only where the plan's last day flies home from somewhere else (the Highlands from Inverness, the Baltic coast from Tallinn, Prague to Vienna from Vienna): on the trip's page the flight search is then one way out, says where the plan ends, and one button turns it into the flight home from there on the plan's last day (`FlightFinder`'s `homeFrom`). Must be in `AIRPORTS`; `trip-stay.test.ts` S10 checks it against the last stop and the last day.
 - **Pictures**: `public/trips/<id>.webp` (1600×1200, quality ~72) and `<id>-sm.webp` (800×600), in
   the site's art direction: editorial 35mm film, warm light, soft blush palette, a couple seen from
   behind, no text, logos or faces. Look at every one before keeping it; the first Copenhagen

@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { toYmd } from "@/lib/dates/calendar";
 import { distanceKm } from "@/lib/dates/geo";
-import { findAirport, type Airport } from "@/lib/trips/airports";
+import { cityName, findAirport, type Airport } from "@/lib/trips/airports";
 import { estimateFlight, flightLinks, formatFlightTime, MAX_ADULTS, MIN_ADULTS, trainHint, weekendAhead } from "@/lib/trips/flights";
 import { onLastFromPicked, readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
 import { PARTNER_NAMES, type PartnerPlacement } from "@/lib/trips/partners";
@@ -24,6 +24,12 @@ type Props = {
   trip?: string;
   /** On a trip's page, the trip's nights: the first dates come home the day the plan ends. A long weekend elsewhere. */
   nights?: number;
+  /**
+   * On a trip's page whose plan flies home from somewhere else (presets.ts, `flyHome`): the first
+   * search is one way out, and one button turns it into the flight home from there on the plan's
+   * last day, so no search books a flight home from a city the couple left days before.
+   */
+  homeFrom?: string;
   className?: string;
 };
 
@@ -38,7 +44,7 @@ const localDay = () => toYmd(new Date());
  * Google Flights, Skyscanner or Kayak, already filled in, and the fares are whatever they say. It
  * lays itself out by its own width, so it sits in a hero card or across a page.
  */
-export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, nights, className }: Props) {
+export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_finder", trip, nights, homeFrom, className }: Props) {
   const t = useTranslations("trips.flights");
   const ta = useTranslations("affiliate");
   const locale: "en" | "es" = useLocale() === "es" ? "es" : "en";
@@ -52,7 +58,11 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
   // A search without dates finds no fares, so until they pick their own the dates are a long
   // weekend three weeks out. Worked out from the visitor's today, which the server doesn't know, so
   // the server's render and the first one in the browser both show empty boxes and agree.
-  const dates = picked ?? (today ? weekendAhead(today, nights) : null) ?? { depart: "", back: "" };
+  const planned = today ? weekendAhead(today, nights) : null;
+  const ends = homeFrom ? findAirport(homeFrom) : null;
+  // Which way the search runs where the plan ends elsewhere: out to the trip's start, or home from its end.
+  const [leg, setLeg] = useState<"out" | "home">("out");
+  const dates = picked ?? (planned ? (ends ? { depart: planned.depart, back: "" } : planned) : null) ?? { depart: "", back: "" };
 
   // A frame after mount, so the first render in the browser is the same as the server's.
   useEffect(() => {
@@ -77,6 +87,22 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
   const swap = () => {
     setFrom(to);
     setTo(from);
+  };
+  // Home from where the plan ends, to wherever they flew from, on the plan's last day; and back again.
+  const searchHome = () => {
+    if (!ends) return;
+    setTo(from && from.iata !== ends.iata ? from : null);
+    setFrom(ends);
+    // Their own return date if they picked one, else the day the plan ends.
+    const back = picked?.back || planned?.back || "";
+    setPicked(back ? { depart: back, back: "" } : null);
+    setLeg("home");
+  };
+  const searchOut = () => {
+    setFrom(to);
+    setTo(toCode ? findAirport(toCode) : null);
+    setPicked(null);
+    setLeg("out");
   };
 
   const same = Boolean(from && to && from.iata === to.iata);
@@ -208,6 +234,18 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
           <p>{t("pick")}</p>
         )}
       </div>
+      {ends ? (
+        <div data-testid="flight-leg" className="mt-1 flex flex-wrap items-center justify-between gap-x-4 border-t border-forest/10 pt-2 text-[14px] leading-snug text-forest/70">
+          <p className="py-2">{leg === "out" ? t("endsIn", { city: cityName(ends, locale) }) : t("homeFrom", { city: cityName(ends, locale) })}</p>
+          <button
+            type="button"
+            onClick={leg === "out" ? searchHome : searchOut}
+            className="-mx-2 inline-flex min-h-11 items-center rounded-full px-2 font-medium text-rose-deep underline decoration-rose-deep/30 underline-offset-4 transition-colors hover:decoration-rose-deep active:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest motion-reduce:transition-none"
+          >
+            {leg === "out" ? t("searchHome", { city: cityName(ends, locale) }) : t("searchOut")}
+          </button>
+        </div>
+      ) : null}
       <p className="mt-2 text-[12.5px] leading-snug text-forest/65">{t("smallPrint")}</p>
     </div>
   );
