@@ -33,6 +33,7 @@ const item = (over: Partial<SavedDateSummary>): SavedDateSummary => ({
   city: "Lisbon",
   day: "2026-10-03",
   stopsCount: 3,
+  done: null,
   cover: null,
   ideaId: null,
   tripId: null,

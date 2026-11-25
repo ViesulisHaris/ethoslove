@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MAX_STOPS, readPlan } from "@/lib/dates/plan";
+import { decodePlan, encodePlan, MAX_STOPS, readPlan, shareablePlan } from "@/lib/dates/plan";
 
 const stop = { id: "node/1", name: "Café Luna", kind: "cafe", lat: 51.5, lng: -0.12 };
 
@@ -45,5 +45,16 @@ describe("reading a plan without zod", () => {
 
   it("accepts a real date", () => {
     expect(readPlan({ v: 1, date: "2026-09-26", stops: [] })).toEqual({ v: 1, date: "2026-09-26", stops: [] });
+  });
+
+  it("D1 a plan keeps the day it was done, fails on a day that is not one, and a link to share never carries it", () => {
+    expect(readPlan({ v: 1, done: "2026-11-20", stops: [stop] })).toEqual({ v: 1, done: "2026-11-20", stops: [stop] });
+    expect(readPlan({ v: 1, done: "2026-11-31", stops: [stop] })).toBeNull();
+    expect(readPlan({ v: 1, done: 20261120, stops: [stop] })).toBeNull();
+    expect(readPlan({ v: 1, stops: [stop] })).not.toHaveProperty("done");
+    const plan = readPlan({ v: 1, date: "2026-11-20", done: "2026-11-20", stops: [stop] })!;
+    expect(shareablePlan(plan)).toEqual({ v: 1, date: "2026-11-20", stops: [stop] });
+    expect(plan.done).toBe("2026-11-20");
+    expect(decodePlan(encodePlan(shareablePlan(plan)))).not.toHaveProperty("done");
   });
 });

@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { KIND_IDS, type PlaceKind } from "@/lib/dates/kinds";
+import { isYmd } from "@/lib/dates/calendar";
 import { EMPTY_PLAN, readPlan } from "@/lib/dates/plan";
 import { FREE_SAVED_DATES } from "@/lib/pricing/products";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -24,7 +25,7 @@ import { deriveColumns, MAX_SAVED_DATES, readSavedData, readTripData, type Input
 type Client = SupabaseClient<Database>;
 export type SavedRow = Tables<"saved_dates">;
 /** What a card needs, without the plan: a list of fifty dates is not fifty whole plans. */
-export type SavedListRow = Omit<SavedRow, "data" | "reminded_for"> & { idea: string | null; trip_id: string | null; first_stops: unknown[] };
+export type SavedListRow = Omit<SavedRow, "data" | "reminded_for"> & { idea: string | null; trip_id: string | null; first_stops: unknown[]; done: string | null };
 export type OwnKey = { id: string; created_at: string; updated_at: string };
 export type Profile = { name: string | null; email: string | null };
 /**
@@ -100,6 +101,7 @@ export function listShape({ data, ...rest }: SavedRow): SavedListRow {
     idea: typeof fields.idea === "string" ? fields.idea : null,
     trip_id: typeof fields.tripId === "string" ? fields.tripId : null,
     first_stops: Array.isArray(fields.stops) ? fields.stops.slice(0, 3) : [],
+    done: typeof fields.done === "string" ? fields.done : null,
   };
 }
 
@@ -147,6 +149,7 @@ export function summarise(row: SavedListRow, ctx: Ctx): SavedDateSummary {
     version: row.version,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    done: row.kind === "date" && row.done && isYmd(row.done) ? row.done : null,
   };
 }
 
@@ -323,7 +326,7 @@ export async function deleteSavedDate(deps: SavedDeps, id: string): Promise<Answ
 // Supabase
 // ---------------------------------------------------------------------------------------------
 
-const LIST_COLUMNS = "id, owner_user_id, kind, title, city, day, stops_count, remind, version, last_edited_by, created_at, updated_at, idea:data->>idea, trip_id:data->>tripId, s0:data->stops->0, s1:data->stops->1, s2:data->stops->2";
+const LIST_COLUMNS = "id, owner_user_id, kind, title, city, day, stops_count, remind, version, last_edited_by, created_at, updated_at, idea:data->>idea, trip_id:data->>tripId, s0:data->stops->0, s1:data->stops->1, s2:data->stops->2, done:data->>done";
 type ListedRow = Omit<SavedListRow, "first_stops"> & { s0: unknown; s1: unknown; s2: unknown };
 
 const fail = (what: string, error: { message: string }): never => {
