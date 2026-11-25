@@ -92,10 +92,10 @@ export const LETTER_IDEA_WORDS: Readonly<Record<string, { title?: Partial<L>; bl
 export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(1, "bookshop-and-coffee", null, false, "Meet me in a bookstore on Saturday. I already have a book in mind for you.", "Nos vemos el sábado en una librería. Ya tengo pensado un libro para ti."),
   e(2, "cinema-and-late-dessert", null, false, "Friday night out. I’ll save you the aisle seat and the last bite.", "El viernes salimos. Te guardo el asiento del pasillo y el último bocado."),
-  e(3, "spa-evening", null, true, "Saturday evening is booked. All you have to bring is yourself.", "El sábado por la tarde está reservado. Solo hace falta que vengas tú."),
-  e(4, "stars-and-planets", "cheap", false, "Saturday night. Dress warm; I know a spot.", "El sábado por la noche. Abrígate: conozco un sitio.", { free: true }),
+  e(3, "spa-evening", null, true, "I’ve booked Saturday evening. All you have to bring is yourself.", "He reservado el sábado por la tarde. Solo hace falta que vengas tú."),
+  e(4, "stars-and-planets", "cheap", false, "Dress warm on Saturday night. I know a spot.", "Abrígate el sábado por la noche: conozco un sitio.", { free: true }),
   e(5, "bowling-night", null, false, "Bowling on Saturday. Fair warning: I’ve been practicing my gutter balls.", "Bolos el sábado. Te aviso: llevo días practicando cómo tirarla al canal."),
-  e(6, "pasta-and-a-slow-walk", "night", true, "Saturday night is ours, and I’ve already booked the table.", "El sábado por la noche es nuestro, y ya tengo la mesa reservada.", {
+  e(6, "pasta-and-a-slow-walk", "night", true, "I’ve booked us a table for Saturday night.", "Tengo mesa reservada para el sábado por la noche.", {
     twist: false,
     open: {
       en: "You order for each other, so the menu is the first game.",
@@ -107,7 +107,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(9, "skating-and-hot-chocolate", "fun", false, "Ice rink on Saturday. I’m bad at this, which is half the fun.", "Pista de hielo el sábado. Se me da fatal, y esa es la mitad de la gracia."),
   e(10, "arcade-night", null, false, "Keep Friday night free. We’re going to the arcade, and I’m not letting you win.", "Resérvate el viernes por la noche. Nos vamos a los recreativos, y no pienso dejarte ganar."),
   e(11, "climbing-first-timers", null, false, "Climbing on Saturday. Neither of us knows what we’re doing, which is the point.", "Escalada el sábado. No tenemos ni idea, y de eso se trata."),
-  e(12, "theatre-night", "night", true, "Saturday night, the theater. Wear the thing you never get to wear.", "El sábado por la noche, teatro. Ponte eso que nunca tienes ocasión de ponerte.", {
+  e(12, "theatre-night", "night", true, "Wear the thing you never get to wear. We’re going to the theater on Saturday.", "Ponte eso que nunca tienes ocasión de ponerte: el sábado vamos al teatro.", {
     twist: false,
     open: {
       en: "Write your guess at the ending down at intermission; the loser buys the nightcap.",
@@ -117,22 +117,22 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(13, "bookshop-and-coffee", "cheap", false, "How well do you think I know your taste? We find out on Saturday.", "¿Cuánto crees que conozco tus gustos? El sábado lo vemos."),
   e(14, "cinema-and-late-dessert", "rainy-day", false, "If Saturday rains, I’m not canceling. I’m just moving us indoors.", "Si el sábado llueve, no anulo nada: nos vamos a cubierto."),
   e(15, "spa-evening", "unique", false, "Keep Saturday evening free, and leave your watch at home.", "Guárdame la tarde del sábado, y deja el reloj en casa.", { twist: false }),
-  e(16, "garden-afternoon", null, false, "Sunday afternoon, a garden. I already know which plant you are.", "El domingo por la tarde, un jardín. Ya sé qué planta eres tú."),
+  e(16, "garden-afternoon", null, false, "I already know which plant you are. Garden on Sunday?", "Ya sé qué planta eres tú. ¿Jardín el domingo?"),
   e(17, "museum-then-wine", null, false, "Saturday, a museum, and you’re not allowed to read every label.", "El sábado, museo, y prohibido leer todas las cartelas."),
   e(18, "ice-cream-walk", null, false, "Sunday, ice cream and a walk. Your order says a lot about you.", "El domingo, helado y paseo. Lo que pides dice mucho de ti."),
   e(19, "mini-golf-and-milkshakes", null, false, "Mini golf on Saturday. I’ve been practicing in the hallway.", "Minigolf el sábado. Llevo días practicando en el pasillo."),
   e(20, "bowling-night", "double-date", false, "Let’s ask another couple to go bowling on Friday. Losing pair buys the fries.", "¿Invitamos a otra pareja a los bolos el viernes? La pareja que pierda paga las patatas.", {
     open: { es: "Pareja contra pareja, o mezclad los equipos una partida y a ver quién se enfurruña." },
   }),
-  e(21, "golden-hour-picnic", null, true, "Saturday evening, outside. You choose the spot; I’ll choose the music.", "El sábado por la tarde, al aire libre. Tú eliges el sitio; yo, la música."),
+  e(21, "golden-hour-picnic", null, true, "You choose the spot, I’ll choose the music. Saturday evening, outside.", "Tú eliges el sitio y yo la música. El sábado por la tarde, al aire libre."),
   e(22, "boats-on-the-water", null, false, "Saturday, a rowboat. I’ll row first, you can laugh.", "El sábado, barca de remos. Remo yo primero; tú puedes reírte."),
   e(23, "beach-until-sunset", null, true, "Saturday at the beach. Don’t make plans for the evening.", "El sábado, playa. No hagas planes para la noche."),
-  e(24, "stars-and-planets", null, false, "Saturday night, somewhere dark. I’ve picked out a star for you.", "El sábado por la noche, un sitio oscuro. Te he elegido una estrella."),
-  e(25, "gallery-hop", null, false, "Saturday, a few small galleries. Wear comfortable shoes and bring your worst opinions.", "El sábado, unas cuantas galerías pequeñas. Zapatos cómodos y tus peores opiniones."),
+  e(24, "stars-and-planets", null, false, "I’ve picked out a star for you. Come and see it Saturday night.", "Te he elegido una estrella. Ven a verla el sábado por la noche."),
+  e(25, "gallery-hop", null, false, "Bring your worst opinions on Saturday. We’re doing a few small galleries.", "El sábado trae tus peores opiniones: vamos a unas cuantas galerías pequeñas."),
   e(26, "sunrise-and-breakfast", null, true, "Sunday, very early. I know. Breakfast is on me.", "El domingo, muy temprano. Ya lo sé. Yo invito al desayuno."),
   e(27, "pasta-and-a-slow-walk", null, false, "Dinner on Friday. Bring comfortable shoes; the evening doesn’t end at the table.", "Cena el viernes. Trae zapatos cómodos: la noche no acaba en la mesa."),
   e(28, "escape-room-debrief", "fun", false, "Saturday we get locked in a room on purpose. It’ll be fun, I promise.", "El sábado nos dejamos encerrar en una sala a propósito. Será divertido, te lo prometo."),
-  e(29, "garden-afternoon", "romantic", true, "Sunday, a garden, and nowhere we have to be after. Just you.", "El domingo, un jardín y ningún sitio al que ir después. Solo tú.", {
+  e(29, "garden-afternoon", "romantic", true, "A garden on Sunday, and nowhere we have to be after. Just you.", "El domingo, un jardín y ningún sitio al que ir después. Solo tú.", {
     open: { en: "Slow paths, a bench for two and tea to finish. Nothing about it can be hurried." },
   }),
   e(30, "karaoke-duet", "double-date", false, "Karaoke with another couple on Saturday. I’ve already picked our duet.", "Karaoke con otra pareja el sábado. Ya he elegido nuestro dueto."),
@@ -144,7 +144,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   }),
   e(32, "arcade-night", "fun", false, "Air hockey on Friday. I intend to hold a grudge.", "Air hockey el viernes. Pienso guardarte rencor."),
   e(33, "mini-golf-and-milkshakes", "double-date", false, "Mini golf with another couple on Saturday? Couple against couple.", "¿Minigolf con otra pareja el sábado? Pareja contra pareja.", { twist: false }),
-  e(34, "golden-hour-picnic", "cheap", false, "Saturday at sunset. I’ll pack the basket, you find the view.", "El sábado al atardecer. Yo preparo la cesta; tú, la vista."),
+  e(34, "golden-hour-picnic", "cheap", false, "I’ll pack the basket, you find the view. Saturday at sunset.", "Yo preparo la cesta; tú, la vista. El sábado al atardecer."),
   e(35, "beach-until-sunset", "romantic", true, "Pack a towel for two. Saturday is a beach day.", "Trae una toalla para dos: el sábado es día de playa.", { twist: false }),
   e(36, "boats-on-the-water", "fun", false, "Rowboat on Saturday. You row first; I’ll do the voice-over.", "Barca de remos el sábado. Remas tú primero; yo pongo la voz.", {
     twist: false,
@@ -163,7 +163,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
   e(39, "sunrise-and-breakfast", "cheap", false, "Sunday, early. Coffee tastes better after a sunrise.", "El domingo, temprano. El café sabe mejor después de un amanecer.", {
     open: { en: "The sunrise is free and so is the empty city. Bring a flask and skip the coffee shop at the end." },
   }),
-  e(40, "gallery-hop", "cheap", false, "Saturday, galleries. Your job is to pick the one piece we’d hang at home.", "El sábado, galerías. Tu trabajo: elegir la obra que colgaríamos en casa."),
+  e(40, "gallery-hop", "cheap", false, "Your job on Saturday: pick the one piece in the galleries we’d hang at home.", "Tu trabajo el sábado: elegir la obra que colgaríamos en casa."),
   e(41, "bookshop-and-coffee", "rainy-day", false, "Let it rain on Saturday. I know which shelf I’m taking you to.", "Que llueva el sábado. Ya sé a qué estantería te llevo.", {
     open: { en: "Rain on the window is what a bookstore is for. Twenty minutes apart, then coffee." },
   }),
@@ -171,7 +171,7 @@ export const LETTER_ENTRIES: readonly LetterEntry[] = [
     twist: false,
     open: { es: "Quien elige la peli no elige los asientos, y la charla se guarda para el postre." },
   }),
-  e(43, "spa-evening", "rainy-day", true, "Saturday evening, just us. I’ve already told everyone we’re unreachable.", "El sábado por la tarde, solo tú y yo. Ya he avisado de que estaremos ilocalizables."),
+  e(43, "spa-evening", "rainy-day", true, "I’ve told everyone we’re unreachable on Saturday evening.", "Ya he avisado de que el sábado por la tarde estaremos ilocalizables."),
   e(44, "stars-and-planets", "night", false, "Saturday, late. Bring the big coat; I’ll bring something warm to drink.", "El sábado, tarde. Trae el abrigo gordo; yo llevo algo caliente para beber."),
   e(45, "bowling-night", "fun", false, "Rematch at the bowling alley on Friday. Loser picks the next date.", "Revancha en la bolera el viernes. Quien pierda elige la próxima cita.", { twist: false }),
   e(46, "pasta-and-a-slow-walk", "double-date", false, "Dinner with another couple on Saturday. I’m already planning what we’ll order them.", "Cena con otra pareja el sábado. Ya estoy pensando qué les vamos a pedir.", { twist: false }),
