@@ -244,3 +244,118 @@ describe("legal documents and group cards", () => {
     for (const kind of ["terms", "privacy"] as const) for (const locale of ["en", "es"] as const) expect(all(on[kind][locale])).not.toMatch(/Spain|España|Madrid|unforgettable|inolvidable|perfect for/i);
   });
 });
+
+describe("the monthly idea in the documents", () => {
+  const MODES = ["optin", "buyers", "all"] as const;
+
+  it("L1 name it, say how to stop it and that stopping never takes a gift offline, in both languages, only while it is on", () => {
+    const off = legalDocs(false);
+    expect(legalDocs(false, "off")).toEqual(off);
+    for (const locale of ["en", "es"] as const) expect(all(off.terms[locale]) + all(off.privacy[locale])).not.toMatch(/monthly idea|gift idea a month|idea del mes|idea de regalo al mes/);
+    for (const mode of MODES) {
+      const docs = legalDocs(false, mode);
+      // The same shape in both languages, section by section.
+      for (const kind of ["terms", "privacy"] as const) expect(docs[kind].es.sections.map((s) => s.paragraphs.length)).toEqual(docs[kind].en.sections.map((s) => s.paragraphs.length));
+      const en = { t5: section(docs.terms.en, 5), t6: section(docs.terms.en, 6), p1: section(docs.privacy.en, 1), p8: section(docs.privacy.en, 8), p11: section(docs.privacy.en, 11), p12: section(docs.privacy.en, 12), p13: section(docs.privacy.en, 13) };
+      const es = { t5: section(docs.terms.es, 5), t6: section(docs.terms.es, 6), p1: section(docs.privacy.es, 1), p8: section(docs.privacy.es, 8), p11: section(docs.privacy.es, 11), p12: section(docs.privacy.es, 12), p13: section(docs.privacy.es, 13) };
+      expect(en.t5).toContain("one gift idea a month, for a year after your last gift");
+      expect(en.t5).toContain("stop these emails with the link in any of them or on your account's reminders page; they stay off if you send another gift, and nothing happens to the gifts you've sent");
+      expect(en.t6).toContain("The first monthly idea email (section 5) may carry one, once per account");
+      expect(en.p1).toContain("The monthly idea:");
+      expect(en.p1).toContain("it has no tracking pixel");
+      // A purchase from the email's link carries its ref and the one-time price (checkout-source.ts,
+      // personal-price.ts): the policy says so instead of "we don't record who taps its links" alone (monthly-D2).
+      expect(en.p1).toContain("If you buy after tapping one, we note with that purchase that it came from this email");
+      expect(es.p1).toContain("Si compras después de pulsar uno, anotamos con esa compra que vino de este correo");
+      // A scheduled gift counts from the day it opens (ideaSince), and the Terms say so (monthly-D11).
+      expect(en.t5).toContain("the day of the month your gift went out (for a gift you scheduled, the day it opens)");
+      expect(es.t5).toContain("el día del mes en que salió tu regalo (si lo programaste, el día en que se abre)");
+      expect(en.p1).toContain("your gifts stay online");
+      // The legitimate-interest basis is claimed only for whom the setting sends it to without a box:
+      // everyone in "all", customers in "buyers", nobody in "optin" (consent, the box, covers it).
+      if (mode === "all") expect(en.p8).toContain("send the monthly idea to people who have sent a gift");
+      else if (mode === "buyers") expect(en.p8).toContain("send the monthly idea to customers who have sent a gift");
+      else expect(en.p8).not.toMatch(/send the monthly idea to/);
+      // Consent covers the idea only through the offers box that names it; the Terms box a free sender
+      // ticks in "all" is not a consent to it (that sender is under the legitimate interest above), so
+      // the consent clause names its box and can't be read as the Terms box too.
+      expect(en.p8).toContain("where the box for offer emails you ticked names it, the monthly idea");
+      expect(es.p8).toContain("si la casilla de los correos de ofertas que marcaste la nombra, la idea del mes");
+      expect(en.p8).not.toContain("where the box you ticked names it");
+      if (mode === "optin") expect(es.p8).not.toMatch(/enviar la idea del mes a/);
+      // The send screen's sentence says what that setting really shows: a button only where the line
+      // with "Don't send these" is drawn after a send (offer-emails-box.tsx ideaNotice), else the box.
+      if (mode === "optin") {
+        expect(en.t5).not.toMatch(/button/);
+        expect(en.t5).toContain("unticking it there turns it off");
+        expect(es.t5).not.toMatch(/botón/);
+      } else expect(en.t5).toContain("with a button");
+      if (mode === "buyers") expect(en.t5).toContain("unticking the box turns it off too");
+      expect(en.p11).toContain("The monthly idea: its record, until you delete your account");
+      expect(en.p12).toContain("from one of our emails, until that price ends");
+      expect(en.p13).toContain("reminders, the monthly idea, views");
+      expect(es.t5).toContain("una idea de regalo al mes, durante un año desde tu último regalo");
+      expect(es.t5).toContain("siguen desactivados aunque envíes otro regalo, y a los regalos que has enviado no les pasa nada");
+      expect(es.t6).toContain("El primer correo de la idea del mes (sección 5) puede traer uno");
+      expect(es.p1).toContain("La idea del mes:");
+      expect(es.p1).toContain("tus regalos siguen en línea");
+      if (mode === "all") expect(es.p8).toContain("enviar la idea del mes a quienes han enviado un regalo");
+      if (mode === "buyers") expect(es.p8).toContain("enviar la idea del mes a los clientes que han enviado un regalo");
+      expect(es.p11).toContain("La idea del mes: su registro");
+      expect(es.p12).toContain("desde uno de nuestros correos, hasta que");
+      expect(es.p13).toContain("recordatorios, la idea del mes, visualizaciones");
+      // The sentence "no other emails and no newsletters" stays the last word of privacy 1's offers paragraph.
+      const p1 = docs.privacy.en.sections[0].paragraphs;
+      expect(p1.findIndex((p) => p.startsWith("The monthly idea:"))).toBe(p1.findIndex((p) => p.startsWith("Offer emails:")) - 1);
+      // The free version comes with it only where every sender gets it.
+      const free = section(docs.terms.en, 1).includes("The free version comes with one email a month from us");
+      expect(free).toBe(mode === "all");
+      expect(section(docs.terms.es, 1).includes("La versión gratuita incluye un correo nuestro al mes")).toBe(mode === "all");
+    }
+  });
+
+  it("L2 the cookie line no longer says offer emails only, no percentage appears, and nothing names a country it shouldn't", () => {
+    for (const mode of MODES) {
+      const docs = legalDocs(false, mode);
+      for (const locale of ["en", "es"] as const) {
+        expect(section(docs.privacy[locale], 12)).not.toMatch(/offer emails, until|correos de ofertas, hasta/);
+        for (const kind of ["terms", "privacy"] as const) {
+          expect(all(docs[kind][locale])).not.toMatch(/\d+ ?%[^)]*(off|de descuento)|a third off|un tercio/i);
+          expect(all(docs[kind][locale])).not.toMatch(/Spain|España|Madrid/);
+        }
+      }
+    }
+    // With group cards on as well, every change still finds its place.
+    expect(() => legalDocs(true, "all")).not.toThrow();
+  });
+});
+
+// MONTHLY_LEGAL_OUT=<file> writes every paragraph the monthly idea changes, old and new, in both
+// languages, for the owner's approval (docs/marketing/growth-build/reports/monthly-legal-changes.md).
+describe("the monthly idea's legal changes, written out", () => {
+  const out = process.env.MONTHLY_LEGAL_OUT;
+  it.skipIf(!out)("writes the old and new paragraphs", async () => {
+    const { writeFileSync } = await import("node:fs");
+    const before = legalDocs(false);
+    const lines: string[] = [];
+    for (const mode of ["all", "buyers", "optin"] as const) {
+      const after = legalDocs(false, mode);
+      lines.push(`## Setting \`${mode}\``, "");
+      for (const kind of ["terms", "privacy"] as const)
+        for (const locale of ["en", "es"] as const) {
+          const old = before[kind][locale];
+          const now = after[kind][locale];
+          for (const [i, section] of now.sections.entries()) {
+            const was = old.sections[i].paragraphs;
+            const added = section.paragraphs.filter((p) => !was.includes(p));
+            const gone = was.filter((p) => !section.paragraphs.includes(p));
+            if (added.length === 0 && gone.length === 0) continue;
+            lines.push(`### ${kind === "terms" ? "Terms" : "Privacy policy"} (${locale}), ${section.heading}`, "");
+            for (const p of gone) lines.push("**Old:**", "", `> ${p}`, "");
+            for (const p of added) lines.push(gone.length ? "**New:**" : "**New paragraph:**", "", `> ${p}`, "");
+          }
+        }
+    }
+    writeFileSync(out!, lines.join("\n"));
+  });
+});

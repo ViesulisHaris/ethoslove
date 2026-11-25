@@ -12,6 +12,13 @@ import { isInApp } from "@/lib/app/bridge";
 export type FunnelEvent =
   | "editor_opened"
   | "publish_sheet_shown"
+  // The monthly idea (lib/lifecycle/monthly-idea.ts): the free version's Terms box shown, ticked, and
+  // the send tapped before it was; "Don't send these" and back on, on the share screen or the account page.
+  | "free_terms_shown"
+  | "free_terms_ticked"
+  | "free_terms_nudged"
+  | "idea_emails_off"
+  | "idea_emails_on"
   | "pay_clicked"
   | "purchase_completed"
   | "extras_offer_shown"

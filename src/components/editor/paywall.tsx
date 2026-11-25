@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { currentRef } from "@/lib/attribution/ref";
 import { personalPriceEnds, usePersonalPrice } from "@/components/pricing/use-personal-price";
+import { IdeaWhereNote } from "./idea-where-note";
 import { useInApp } from "@/lib/app/use-bridge";
 import { extraOnOffer } from "@/lib/lifecycle/holiday-extras";
 import {
@@ -68,6 +69,7 @@ export function Paywall({
   keepArm = null,
   keepRow = null,
   ownedRows = [],
+  ideaWhere = false,
 }: {
   manifest: TemplateManifest;
   currency: Currency;
@@ -115,6 +117,8 @@ export function Paywall({
   keepRow?: { price: string; max: number; busy: boolean; onPay: () => void } | null;
   /** The account's unlock rows, for a price that depends on them (extrasAmount). */
   ownedRows?: string[];
+  /** The monthly idea's line under the small print (the settings "buyers" and "all"). */
+  ideaWhere?: boolean;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -126,7 +130,11 @@ export function Paywall({
   const { price: personal, forget: forgetPersonal } = usePersonalPrice();
   // "Make it special" is the difference for an account that already paid for a note with photos.
   const listedForTemplate = forTemplate === "extras" ? extrasAmount(currency, ownedRows, slug) : PRODUCTS[forTemplate].amounts[currency];
-  const personalFor = personal !== null && personal.onto.includes(forTemplate) ? Math.min(listedForTemplate, personal.amounts[currency]) : null;
+  // An offer email's price shows as it always has (at most the listed price); the monthly idea's only
+  // where it is lower than the price they would pay anyway (as lib/commerce/plan.ts charges it).
+  const offered = personal !== null && personal.onto.includes(forTemplate) ? personal.amounts[forTemplate][currency] : null;
+  const personalFor =
+    offered === null ? null : personal?.kind === "monthly" ? (offered < listedForTemplate ? offered : null) : Math.min(listedForTemplate, offered);
   const forTemplateAmount = personalFor ?? listedForTemplate;
   // Null until the sender picks a row: the default can change when the upgrade quote arrives.
   const [plan, setPlan] = useState<PaywallPlan | null>(null);
@@ -464,7 +472,7 @@ export function Paywall({
       {personalOn && personal ? (
         // Said where the price is: it's a personal price, and when it ends (EU law asks for the first).
         <p className="mt-3 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink" data-testid="personal-price-note">
-          {tm("personalPrice", { ends: personalPriceEnds(personal.endsAt, locale, currency) })}
+          {tm("personalPrice", { ends: personalPriceEnds(personal.endsAt, locale, currency, personal.kind) })}
         </p>
       ) : null}
 
@@ -536,6 +544,7 @@ export function Paywall({
         {guest ? ` ${t("uploadsAfterPay")}` : null}
         {panel && guest ? ` ${tm("noteGuest")}` : null}
       </p>
+      {ideaWhere ? <IdeaWhereNote className="mt-2 text-center text-balance" /> : null}
       {guest && onSignInInstead ? (
         <button
           type="button"

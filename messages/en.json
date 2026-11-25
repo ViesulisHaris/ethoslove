@@ -3683,6 +3683,20 @@
       "stopDoneBody": "You won’t get these again. If you ever want them back, you can turn them on when you make a gift.",
       "manage": "See your reminders"
     },
+    "idea": {
+      "stopTitle": "Stop the monthly idea?",
+      "stopBody": "No more gift ideas by email. The gifts you’ve sent stay online, and reminders you asked for stay as they are.",
+      "stopConfirm": "Stop them",
+      "stopDoneTitle": "Stopped.",
+      "stopDoneBody": "You won’t get the monthly idea again. You can turn it back on from your account.",
+      "manage": "Your reminders and emails",
+      "pageTitle": "One gift idea a month",
+      "pageOn": "By email, for a year after your last gift.",
+      "pageOff": "Off. We won’t send them.",
+      "turnOff": "Stop them",
+      "turnOn": "Turn them back on",
+      "failed": "Couldn’t save that. Try again in a moment."
+    },
     "keep": {
       "confirmTitle": "Email you the gift's link?",
       "confirmBody": "We'll send it to this address now, so you can open the gift again any time.",
@@ -4201,13 +4215,23 @@
     "saved": "Done. We’ll email you our offers.",
     "removed": "Done. No offer emails.",
     "failed": "Couldn’t save that. Try again in a moment.",
-    "how": "How we use your email"
+    "how": "How we use your email",
+    "ideaLine": "Starting next month, we’ll email you one gift idea a month for a year.",
+    "ideaLineScheduled": "A month after this gift opens, we’ll start emailing you one gift idea a month, for a year.",
+    "ideaOff": "Don’t send these",
+    "ideaOffDone": "Done. We won’t send you the monthly gift ideas.",
+    "ideaUndo": "Turn them back on",
+    "boxIdea": "Email me Ethos offers and one gift idea a month. I can unsubscribe any time.",
+    "ideaTerms": "I accept the <terms>Terms</terms>: free gifts come with one gift idea a month by email, which I can stop in any email or in my account.",
+    "ideaTermsNeeded": "Tick the box to send it.",
+    "ideaWhere": "After you send a gift, we’ll email you one gift idea a month for a year. You can stop them in any email."
   },
   "notice": {
     "policy": "We’ve updated our Privacy Policy and Terms.",
     "policyLink": "What changed",
     "offer": "Your personal price: any gift for {price}, until {ends}.",
     "offerLink": "Choose a gift",
+    "ideaOffer": "Your one-time price: one premium gift for {price}, until {ends}.",
     "close": "Close"
   }
 }

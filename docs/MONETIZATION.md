@@ -86,7 +86,7 @@ New in this revision:
   | Pay panel | 2 rows, 1 button, 1 line of small print (guarantee and email opt-out) |
   | Stripe page | the withdrawal tickbox only: no bump, no code field |
   | Share screen | the send buttons first, then 1 card |
-  | Email | at most 1 marketing email per address every 14 days, and 6 a year |
+  | Email | at most 1 marketing email per address every 14 days, and 6 a year (Owner's decision, 20 Nov 2026: the monthly idea replaces this for people who sent a gift: at most one a month, for 12 months after their last gift, with a stop in every email. See `docs/marketing/growth-build/BRIEF-monthly.md`.) |
 
 - **Posting rules** (W1): label every gift post as an Ethos ad, never comment on your own posts from a persona or staff account, use only Commercial Music Library or original sounds, and write adult characters only.
 - **Owner time** in October: about 5 hours a week beyond posting. Posting is the job that pays.
@@ -540,10 +540,10 @@ Post before the buying hours: 19:00 UK for UK stories, 23:00 UK for US ones.
   5. **The 7,253 existing accounts get no marketing.** They can opt in.
   6. **Privacy policy:** rewrite `src/content/legal.ts` (around line 342 it says "We don't send marketing emails") to cover reminders (consent), buyer emails (opt-out) and recovery (consent). You approve it.
   7. **Email budget:**
-     - at most one marketing email per address every 14 days, and six a year;
+     - at most one marketing email per address every 14 days, and six a year; (Owner's decision, 20 Nov 2026: the monthly idea replaces this for people who sent a gift: at most one a month, for 12 months after their last gift, with a stop in every email. See `docs/marketing/growth-build/BRIEF-monthly.md`.)
      - the 2-day reminder goes only if no gift was started after the 9-day one;
      - no recovery email within 7 days of a marketing email;
-     - no open-ended "gift ideas" series.
+     - no open-ended "gift ideas" series. (Owner's decision, 20 Nov 2026: the monthly idea replaces this for people who sent a gift: at most one a month, for 12 months after their last gift, with a stop in every email. See `docs/marketing/growth-build/BRIEF-monthly.md`.)
   8. **Resend setup:** open and click tracking off; sends from a subdomain; one-click unsubscribe in every email; reminders included in the account export. The recipient's birthday is someone else's data, so keep only the first name, day and month, and delete it on unsubscribe.
 - **Why.** Only 3% of buyers paid twice, though a third of makers made two gifts. The second occasion happens and isn't sold. Moonpig built its business on this (101 million occasion reminders).
 - **Estimate.** €0 now. €300 to 2,900 in Valentine's fortnight (assumption: 5 to 15% of senders opt in, the swing number; read it in early November). €300 to 1,000 a month by late 2027 as birthdays recur. Cost: Resend's contact-based pricing once the list passes 1,000.
@@ -766,7 +766,7 @@ Post before the buying hours: 19:00 UK for UK stories, 23:00 UK for US ones.
 - **Posing as customers:** posts "as her" without labels, in-character comments, seeded comment fights, fake or seeded reviews, rewards only for good reviews.
 - **Trending sounds, school settings, or "ask your parents" lines** in any post.
 - **Fake urgency or fake discounts:** evergreen countdowns, "only 3 left" on a digital product, a "was" price that wasn't the lowest in the previous 30 days (codes included), pre-ticked add-ons, guilt-trip decline buttons.
-- **Marketing email to the 7,253 existing accounts**, email to anyone who didn't opt in, more than one marketing email per 14 days, or email open and click tracking.
+- **Marketing email to the 7,253 existing accounts**, email to anyone who didn't opt in, more than one marketing email per 14 days, or email open and click tracking. (Owner's decision, 20 Nov 2026: the monthly idea replaces this for people who sent a gift: at most one a month, for 12 months after their last gift, with a stop in every email. See `docs/marketing/growth-build/BRIEF-monthly.md`.)
 - **Gift ids, names or notes in refs, URLs other than the gift's own, or Stripe metadata.**
 - **"Forever" promises**, and a For Two that includes templates.
 - **Physical prints this Christmas** on the shared Stripe account.

@@ -42,6 +42,8 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/for-two/preview/my-dates/page": ["savedDates"],
   // Development only: the share screen's reminder card (the real one needs a published gift).
   "(marketing)/reminders/preview/page": ["lifecycle", "pickers"],
+  // Development only: the monthly idea's pieces of the send sheet and the account page.
+  "(marketing)/monthly-idea/preview/page": ["offerEmails", "lifecycle.idea", "editor.publishSheet"],
   "(marketing)/templates/layout": ["templates", "occasions"],
   // The ad landing: only the live demo's own words.
   "(marketing)/try/layout": ["templates"],

@@ -3683,6 +3683,20 @@
       "stopDoneBody": "No volverás a recibirlos. Si algún día los quieres, puedes activarlos al hacer un regalo.",
       "manage": "Ver tus recordatorios"
     },
+    "idea": {
+      "stopTitle": "¿Dejar de recibir la idea del mes?",
+      "stopBody": "No más ideas de regalo por correo. Los regalos que has enviado siguen en línea, y los recordatorios que pediste siguen igual.",
+      "stopConfirm": "Sí, dejar de recibirlas",
+      "stopDoneTitle": "Hecho.",
+      "stopDoneBody": "No volverás a recibir la idea del mes. Puedes volver a activarla desde tu cuenta.",
+      "manage": "Tus recordatorios y correos",
+      "pageTitle": "Una idea de regalo al mes",
+      "pageOn": "Por correo, durante un año desde tu último regalo.",
+      "pageOff": "Desactivado. No te las enviaremos.",
+      "turnOff": "Dejar de recibirlas",
+      "turnOn": "Volver a activarlas",
+      "failed": "No se ha podido guardar. Inténtalo de nuevo en un momento."
+    },
     "keep": {
       "confirmTitle": "¿Te enviamos el enlace del regalo?",
       "confirmBody": "Te lo enviamos ahora a esta dirección, para que puedas abrir el regalo cuando quieras.",
@@ -4201,13 +4215,23 @@
     "saved": "Hecho. Te enviaremos nuestras ofertas.",
     "removed": "Hecho. Sin correos de ofertas.",
     "failed": "No se ha podido guardar. Inténtalo de nuevo en un momento.",
-    "how": "Cómo usamos tu correo"
+    "how": "Cómo usamos tu correo",
+    "ideaLine": "A partir del mes que viene te enviaremos una idea de regalo al mes durante un año.",
+    "ideaLineScheduled": "Un mes después de que se abra este regalo, empezaremos a enviarte una idea de regalo al mes durante un año.",
+    "ideaOff": "No quiero recibirlas",
+    "ideaOffDone": "Listo. No te enviaremos las ideas de regalo del mes.",
+    "ideaUndo": "Volver a activarlas",
+    "boxIdea": "Enviadme por correo las ofertas de Ethos y una idea de regalo al mes. Puedo darme de baja cuando quiera.",
+    "ideaTerms": "Acepto los <terms>Términos</terms>: los regalos gratis incluyen una idea de regalo al mes por correo, que puedo dejar de recibir desde cualquier correo o desde mi cuenta.",
+    "ideaTermsNeeded": "Marca la casilla para enviarlo.",
+    "ideaWhere": "Después de enviar un regalo, te enviaremos una idea de regalo al mes durante un año. Puedes dejar de recibirlas desde cualquier correo."
   },
   "notice": {
     "policy": "Hemos actualizado nuestra Política de privacidad y nuestros Términos.",
     "policyLink": "Qué ha cambiado",
     "offer": "Tu precio personal: cualquier regalo por {price}, hasta el {ends}.",
     "offerLink": "Elige un regalo",
+    "ideaOffer": "Tu precio de un solo uso: un regalo premium por {price}, hasta el {ends}.",
     "close": "Cerrar"
   }
 }

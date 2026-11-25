@@ -126,6 +126,8 @@ New or changed, in Vercel for Production (and Preview for testing):
 | `STRIPE_AUTOMATIC_TAX` | `true` (after Stripe Tax is set up) |
 | `STRIPE_WEBHOOK_SECRET` | the endpoint's signing secret (unchanged if the endpoint is reused) |
 | `CRON_SECRET` | long random string; every `/api/cron/*` fails closed without it |
+| `MONTHLY_IDEA_EMAILS` | leave unset (off) until migration `0022_monthly_ideas.sql` is applied and the Terms and privacy text are approved. `optin`, `buyers` or `all`: who gets one gift idea a month for a year after their last gift (`src/lib/lifecycle/monthly-idea.ts`); `all` also puts the Terms box on a free gift's send screen. Vercel reads a changed value only from the next deployment: after changing it, Redeploy the latest production deployment (no code change needed) |
+| `MONTHLY_IDEA_PAUSE_UNTIL` | optional `YYYY-MM-DD`: the monthly idea's cron sends nothing before that day. Like every variable, it takes effect on the next deployment, so set it and Redeploy (for example straight after a Mailchimp send) |
 | `VIEWER_HASH_SECRET` | long random string that signs reminder-removal and unsubscribe links and seals the free-reply token in "send one back" links. It falls back to the service key, but then rotating that key voids every open reply link, so set it |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier). Without them rate limits and "one recovery email per address a week" are per serverless instance only |
 | `STRIPE_PRODUCT_EXTRAS`, `_PASS`, `_PACK`, `_GIFTCARD`, `_UPGRADE`, `_BUMP` | optional, reporting only (docs/STRIPE.md §2). The existing `STRIPE_PRODUCT_SINGLE/PICK3/EVERYTHING` keep working the same way |
@@ -182,6 +184,7 @@ Full detail in `docs/STRIPE.md`. The checklist:
 | `/api/cron/passes` | 06:00 | renewal email 14 days before a pass year ends; ends years that ran out (for both people) and hands over to a renewal |
 | `/api/cron/reminders` | 07:00 | "Remind me next year" emails, nine days before, catching up two missed days |
 | `/api/cron/unlock` | 08:00 | scheduled gifts, storage retention (unchanged) |
+| `/api/cron/monthly-idea` | 07:40 to 13:40, hourly | the monthly idea, one email a month for a year after a gift; answers `skipped: "off"` until `MONTHLY_IDEA_EMAILS` is set |
 
 Check the Vercel plan allows three daily crons. The reminder job sends at most ~90 emails a run
 (500 ms apart, inside 60 s); Resend's free tier is 100 emails a day and 3,000 a month in total, receipts

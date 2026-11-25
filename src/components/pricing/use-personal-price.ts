@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import type { Currency, ProductId } from "@/lib/pricing/products";
+import { IDEA_PRICE_WEST_HOURS } from "@/lib/lifecycle/monthly-idea";
 
 /**
  * The personal price this browser holds, if any (lib/commerce/personal-price.ts): asked of the
@@ -9,7 +10,7 @@ import type { Currency, ProductId } from "@/lib/pricing/products";
  * page makes the request. It ends by itself at its time, and `forget` drops it at once (checkout
  * said it has ended or been used).
  */
-export type PersonalPrice = { endsAt: number; amounts: Record<Currency, number>; onto: readonly ProductId[] };
+export type PersonalPrice = { kind: "offer" | "monthly"; endsAt: number; amounts: Record<"single" | "extras", Record<Currency, number>>; onto: readonly ProductId[] };
 
 const COOKIE = "ethos_offer";
 
@@ -20,9 +21,16 @@ const listeners = new Set<() => void>();
 function ask(): Promise<PersonalPrice | null> {
   answer ??= fetch("/api/offer", { cache: "no-store", credentials: "same-origin" })
     .then((res) => (res.ok ? res.json() : null))
-    .then((json: { active?: boolean; endsAt?: number; amounts?: Record<Currency, number>; onto?: ProductId[] } | null) =>
-      json?.active && typeof json.endsAt === "number" && json.amounts && json.onto ? { endsAt: json.endsAt, amounts: json.amounts, onto: json.onto } : null,
-    )
+    .then((json: { active?: boolean; kind?: string; endsAt?: number; amounts?: Record<string, unknown>; onto?: ProductId[] } | null): PersonalPrice | null => {
+      if (!json?.active || typeof json.endsAt !== "number" || !json.amounts || !json.onto) return null;
+      // The monthly idea's price has an amount per product; an offer email's (as before) one amount for either.
+      if (json.kind === "monthly") {
+        const amounts = json.amounts as PersonalPrice["amounts"];
+        return amounts.single && amounts.extras ? { kind: "monthly", endsAt: json.endsAt, amounts, onto: json.onto } : null;
+      }
+      const flat = json.amounts as Record<Currency, number>;
+      return typeof flat.usd === "number" ? { kind: "offer", endsAt: json.endsAt, amounts: { single: flat, extras: flat }, onto: json.onto } : null;
+    })
     .catch(() => null);
   return answer;
 }
@@ -82,7 +90,12 @@ export function usePersonalPrice(): { price: PersonalPrice | null; forget: () =>
  * November 27 at 11:00 AM"), British otherwise ("Friday 27 November at 11:00"), and Spanish in
  * Spanish ("viernes, 27 de noviembre, 11:00"). The page's currency follows the visitor's country.
  */
-export function personalPriceEnds(endsAt: number, locale: "en" | "es", currency: Currency): string {
+export function personalPriceEnds(endsAt: number, locale: "en" | "es", currency: Currency, kind: PersonalPrice["kind"] = "offer"): string {
   const tag = locale === "es" ? "es" : currency === "usd" ? "en-US" : "en-GB";
+  // The monthly idea's price: the day its email named ("until 27 December"), with no time. It lasts
+  // until that day ends on the US Pacific coast, so wherever the reader is, east of there, the day
+  // they read is never shorter than the price (monthly-D5): the email and the site say the same day.
+  if (kind === "monthly")
+    return new Intl.DateTimeFormat(tag, { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(endsAt - IDEA_PRICE_WEST_HOURS * 3_600_000 - 1));
   return new Intl.DateTimeFormat(tag, { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }).format(new Date(endsAt));
 }

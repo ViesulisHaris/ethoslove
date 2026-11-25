@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { PERSONAL_PRICE_COOKIE, readPersonalPrice } from "@/lib/commerce/personal-price";
+import { PERSONAL_PRICE_COOKIE, activePersonalPrice, readPersonalPrice } from "@/lib/commerce/personal-price";
 import { REF_PATTERN } from "@/lib/attribution/ref";
+import { heldIsCheaper } from "@/lib/pricing/products";
+import { isTemplateSlug } from "@/templates/manifests";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -12,18 +14,25 @@ export const maxDuration = 10;
  * link first only sets a cookie on its own side. A link that has ended, or isn't ours, still opens
  * the gallery, at the usual prices.
  *
- * `r` is the email's ref (?ref=), so its sales are counted to it like any link's.
+ * `r` is the email's ref (?ref=), so its sales are counted to it like any link's. `to` is a template
+ * (the monthly idea's button): its editor opens instead of the gallery.
+ *
+ * A price already held that is never dearer than the new link's is kept: opening an offer email
+ * after the monthly idea's (or the other way round) never takes a lower price away.
  */
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const lang = url.searchParams.get("l") === "es" ? "/es" : "";
   const ref = url.searchParams.get("r")?.trim().toLowerCase();
-  const target = new URL(`${lang}/templates`, url.origin);
+  const to = url.searchParams.get("to");
+  const target = new URL(to && isTemplateSlug(to) ? `${lang}/create/${to}` : `${lang}/templates`, url.origin);
   if (ref && REF_PATTERN.test(ref)) target.searchParams.set("ref", ref);
   const response = NextResponse.redirect(target);
   const token = url.searchParams.get("t");
   const price = await readPersonalPrice(token);
-  if (price && token) {
+  const held = price ? await activePersonalPrice(request.cookies.get(PERSONAL_PRICE_COOKIE)?.value) : null;
+  const keepHeld = Boolean(price && held && held.kind !== price.kind && heldIsCheaper(held.kind, price.kind));
+  if (price && token && !keepHeld) {
     response.cookies.set(PERSONAL_PRICE_COOKIE, token, {
       path: "/",
       expires: new Date(price.endsAt),

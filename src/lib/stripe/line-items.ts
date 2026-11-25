@@ -304,6 +304,8 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     // A personal price (lib/commerce/personal-price.ts): which link it was, so fulfilment spends it,
     // and what it took off, for purchases.discount_amount.
     ...(plan.personalPrice ? { personal_price: plan.personalPrice.id, personal_price_off: String(plan.personalPrice.discount) } : {}),
+    // Only the monthly idea's price says its kind: an offer email's session metadata stays as it was.
+    ...(plan.personalPrice?.kind === "monthly" ? { personal_price_kind: "monthly" } : {}),
     ...(ref ? { ref } : {}),
     ...adsMetadata(options.ads),
   };

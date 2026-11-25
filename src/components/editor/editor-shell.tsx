@@ -30,6 +30,7 @@ import { LookSection } from "./sections/look";
 import { ExtrasSection } from "./sections/extras";
 import { UnwrapSection } from "./sections/unwrap";
 import { PublishSheet } from "./publish-sheet";
+import type { IdeaMode } from "@/lib/lifecycle/monthly-idea";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
 import { loadUrlSeed } from "./url-seed";
@@ -49,6 +50,8 @@ export type EditorShellProps = {
   supabaseConfigured: boolean;
   aiEnabled: boolean;
   paymentsEnabled: boolean;
+  /** The monthly idea's setting (lib/lifecycle/monthly-idea.ts), read on the server: the send sheet's Terms box and lines. */
+  ideaMode?: IdeaMode;
   /** A real reaction the pay panel may open with (lib/proof), or null. */
   reaction?: ShownReaction | null;
   /**
@@ -105,7 +108,7 @@ function blankGift(manifest: TemplateManifest, locale: GiftLocale, mod: Template
   };
 }
 
-export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null, groupEnabled = false }: EditorShellProps) {
+export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null, groupEnabled = false, ideaMode = "off" }: EditorShellProps) {
   const locale = useLocale() as GiftLocale;
   const search = useSearchParams();
   const [mod, setMod] = useState<TemplateModule | null>(null);
@@ -578,6 +581,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         resume={resumePublish}
         reaction={reaction}
         groupEnabled={groupEnabled}
+        ideaMode={ideaMode}
       />
     </div>
   );

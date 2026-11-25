@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ideaMode } from "@/lib/lifecycle/monthly-idea";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -63,6 +64,7 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
       paymentsEnabled={isConfigured.stripe}
       reaction={reaction ?? null}
       groupEnabled={groupEnabled}
+      ideaMode={ideaMode()}
     />
   );
 

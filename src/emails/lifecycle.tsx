@@ -1,4 +1,7 @@
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
+import type { SeasonId } from "@/lib/lifecycle/suggest";
+import type { Occasion } from "@/config/occasions";
+import type { IdeaBasis } from "@/lib/lifecycle/monthly-idea";
 import { CtaButton, EmailLayout, Idea, InlineLink, Mono, P, Quiet } from "./layout";
 
 type L = "en" | "es";
@@ -410,6 +413,152 @@ export function MonthsaryReminderEmail({ locale, partnerName, months, idea, stop
       <P>{es ? "¿Qué tal algo pequeño para que lo abra esta noche? Una idea:" : "Something small, for tonight? One idea:"}</P>
       <Idea name={idea.name} tagline={idea.tagline} href={idea.url} poster={idea.poster} />
       <CtaButton href={idea.url} label={es ? `Hacerlo para ${partnerName}` : `Make it for ${partnerName}`} />
+    </EmailLayout>
+  );
+}
+
+/**
+ * The monthly idea's words, by season (lib/lifecycle/suggest.ts SEASON_IDEAS): the heading, which is
+ * also the subject, the one paragraph, and the preview line. General on purpose: a question anyone
+ * could be asked that month, never who their last gift was for, which template, or when.
+ */
+export const IDEA_COPY: Record<SeasonId, Record<L, { heading: string; body: string; preview: string }>> = {
+  "jan-birthday": {
+    en: { heading: "A birthday coming up?", body: "January birthdays come right after everyone has spent their ideas on December. If there's one close to you, this could be it:", preview: "One idea for a January birthday." },
+    es: { heading: "¿Se acerca un cumpleaños?", body: "Los cumpleaños de enero llegan cuando ya se han gastado todas las ideas en diciembre. Si tienes uno cerca, esta idea te puede servir:", preview: "Una idea para un cumpleaños de enero." },
+  },
+  valentines: {
+    en: { heading: "Anyone in mind for Valentine's Day?", body: "Make the gift today, schedule it for Valentine's morning, and it waits until then.", preview: "Make it now, and it waits for the morning. One idea." },
+    es: { heading: "¿Tienes a alguien en mente para San Valentín?", body: "Haz el regalo hoy, prográmalo para la mañana de San Valentín y esperará hasta entonces.", preview: "Hazlo ahora y esperará hasta esa mañana. Una idea." },
+  },
+  "feb-anniversary": {
+    en: { heading: "An anniversary coming up?", body: "Any anniversary counts: a first date, a wedding, the day you moved in. For whichever is next:", preview: "One idea for an anniversary." },
+    es: { heading: "¿Se acerca un aniversario?", body: "Cualquier aniversario cuenta: una primera cita, una boda, el día que os fuisteis a vivir juntos. Para el próximo:", preview: "Una idea para un aniversario." },
+  },
+  march: {
+    en: { heading: "Whose birthday is next?", body: "Someone in the family, a friend, someone at work. Whoever it is, start here:", preview: "Whoever is next, one idea." },
+    es: { heading: "¿De quién es el próximo cumpleaños?", body: "Alguien de la familia, del grupo de amigos, del trabajo. Sea quien sea, empieza por aquí:", preview: "Sea quien sea, una idea." },
+  },
+  april: {
+    en: { heading: "Is Mother's Day coming up where you are?", body: "In much of the world it falls in May, and a gift made now can wait for the day.", preview: "In much of the world it's in May. One idea." },
+    es: { heading: "¿Se acerca el Día de la Madre?", body: "En muchos países cae en mayo, y un regalo hecho ahora puede esperar hasta ese día.", preview: "En muchos países es en mayo. Una idea." },
+  },
+  may: {
+    en: { heading: "Anything to celebrate this month?", body: "A birthday, an anniversary, someone who has earned a thank-you. If one is on your calendar, this is a good place to start:", preview: "One idea for whatever comes first." },
+    es: { heading: "¿Algo que celebrar este mes?", body: "Un cumpleaños, un aniversario, alguien que se ha ganado que le des las gracias. Si tienes algo en el calendario, puedes empezar por aquí:", preview: "Una idea para lo primero que llegue." },
+  },
+  june: {
+    en: { heading: "A wedding or a graduation this month?", body: "June is full of them. If someone you love has one, try this:", preview: "June is full of them. One idea." },
+    es: { heading: "¿Una boda o una graduación este mes?", body: "Junio está lleno de ellas. Si alguien a quien quieres celebra una, prueba con esto:", preview: "Junio está lleno de ellas. Una idea." },
+  },
+  july: {
+    en: { heading: "Someone far away right now?", body: "A gift opens wherever they are, the moment you send the link.", preview: "It opens wherever they are. One idea." },
+    es: { heading: "¿Alguien que está lejos ahora mismo?", body: "Un regalo se abre allí donde esté, en cuanto le envías el enlace.", preview: "Se abre allí donde esté. Una idea." },
+  },
+  august: {
+    en: { heading: "Got a birthday in the next few weeks?", body: "The photos are probably on your phone already. This one puts them to use:", preview: "The photos are already on your phone. One idea." },
+    es: { heading: "¿Algún cumpleaños en las próximas semanas?", body: "Seguramente las fotos ya están en tu móvil. Con esto les das uso:", preview: "Las fotos ya están en tu móvil. Una idea." },
+  },
+  september: {
+    en: { heading: "Is an anniversary close?", body: "Find a photo from each year you've had together. Here's somewhere to put them:", preview: "A photo from each year, and one idea." },
+    es: { heading: "¿Hay un aniversario cerca?", body: "Busca una foto de cada año que lleváis juntos. Aquí tienes dónde ponerlas:", preview: "Una foto de cada año, y una idea." },
+  },
+  october: {
+    en: { heading: "Anyone in mind for Halloween?", body: "A gift doesn't have to be scary to belong to it.", preview: "It doesn't have to be scary. One idea." },
+    es: { heading: "¿Tienes a alguien en mente para Halloween?", body: "Un regalo no tiene que dar miedo para ser de Halloween.", preview: "No tiene que dar miedo. Una idea." },
+  },
+  november: {
+    en: { heading: "Someone to thank this month?", body: "A thank-you is easier to write than it sounds: say what they did, and what it changed.", preview: "Say what they did, and what it changed." },
+    es: { heading: "¿Alguien a quien darle las gracias este mes?", body: "Dar las gracias es más fácil de lo que parece: di qué hizo y qué cambió.", preview: "Di qué hizo y qué cambió." },
+  },
+  christmas: {
+    en: { heading: "Something for the two of you this Christmas?", body: "Whatever you make now can be scheduled for Christmas morning.", preview: "Made now, opened on Christmas morning. One idea." },
+    es: { heading: "¿Algo para los dos estas Navidades?", body: "Lo que hagas ahora puedes programarlo para la mañana de Navidad.", preview: "Hecho ahora, abierto la mañana de Navidad. Una idea." },
+  },
+  "year-end": {
+    en: { heading: "What did your year together add up to?", body: "Before it's over: the voice notes, the trips, the nights someone stole the blanket. A way to look back at it together:", preview: "Your year, before it's over." },
+    es: { heading: "¿Cómo ha sido vuestro año juntos?", body: "Antes de que acabe: los audios, los viajes, las noches que alguien se quedó con la manta. Una forma de repasarlo juntos:", preview: "Vuestro año, antes de que acabe." },
+  },
+};
+
+export const monthlyIdeaHeading = (season: SeasonId, locale: L): string => IDEA_COPY[season][locale].heading;
+
+const IDEA_FOOTER: Record<IdeaBasis, Record<L, string>> = {
+  notice: { en: "You're getting this because you sent a gift with Ethos.", es: "Recibes esto porque enviaste un regalo con Ethos." },
+  terms: { en: "You're getting this because you sent a free gift with Ethos, which comes with these emails.", es: "Recibes esto porque enviaste un regalo gratis con Ethos, que incluye estos correos." },
+  box: { en: "You're getting this because you asked for Ethos offers.", es: "Recibes esto porque pediste las ofertas de Ethos." },
+};
+
+/**
+ * The "Something else?" link says where it goes: the season's occasion page, or every template (the
+ * months without one, and the first email's price link, which opens the gallery).
+ */
+const MORE_LABEL: Partial<Record<Occasion, Record<L, string>>> = {
+  birthday: { en: "More birthday gifts", es: "Más regalos de cumpleaños" },
+  valentines: { en: "More Valentine's gifts", es: "Más regalos de San Valentín" },
+  anniversary: { en: "More anniversary gifts", es: "Más regalos de aniversario" },
+  "mothers-day": { en: "More Mother's Day gifts", es: "Más regalos para el Día de la Madre" },
+  "long-distance": { en: "More gifts for long distance", es: "Más regalos para la distancia" },
+  halloween: { en: "More Halloween gifts", es: "Más regalos de Halloween" },
+  christmas: { en: "More Christmas gifts", es: "Más regalos de Navidad" },
+};
+export const monthlyIdeaMoreLabel = (more: Occasion | "templates", locale: L): string =>
+  (more === "templates" ? null : MORE_LABEL[more]?.[locale]) ?? (locale === "es" ? "Todas las plantillas" : "Every template");
+
+/**
+ * One gift idea a month, for a year after someone's last gift (lib/lifecycle/monthly-idea.ts). A
+ * question for the season, one template, the button. The first one may carry a one-time price: it
+ * says until when, never how much (the page shows the price before anyone pays). No name, nothing
+ * from a gift, no tracking: the only pictures are the mark and the template's own cover.
+ */
+export function MonthlyIdeaEmail({
+  locale,
+  season,
+  idea,
+  moreUrl,
+  more,
+  stopUrl,
+  basis,
+  priceUntil,
+}: {
+  locale: L;
+  season: SeasonId;
+  idea: EmailIdea;
+  moreUrl: string;
+  /** Where `moreUrl` goes without the price, which names the link: an occasion's page, or every template. */
+  more: Occasion | "templates";
+  stopUrl: string;
+  basis: IdeaBasis;
+  /** The last day the one-time price works, already formatted ("27 December"); only in the first email. */
+  priceUntil?: string;
+}) {
+  const es = locale === "es";
+  const copy = IDEA_COPY[season][locale];
+  const stop = es ? "Dejar de recibir estos correos" : "Stop these emails";
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={priceUntil ? (es ? "Una idea, y un precio más bajo durante una semana." : "One idea, and a lower price for a week.") : copy.preview}
+      heading={copy.heading}
+      footer={IDEA_FOOTER[basis][locale]}
+      footerLink={{ label: stop, href: stopUrl }}
+    >
+      <P>{copy.body}</P>
+      <Idea name={idea.name} tagline={idea.tagline} href={idea.url} poster={idea.poster} />
+      <CtaButton href={idea.url} label={es ? "Hacer este regalo" : "Make this one"} />
+      {priceUntil ? (
+        <P>
+          {es
+            ? `Este primer correo trae un precio especial de un solo uso: un regalo por menos de lo habitual, hasta el ${priceUntil}. Pulsa el botón de arriba y verás el precio antes de pagar.`
+            : `This first email comes with a one-time price: one gift for less than usual, until ${priceUntil}. Tap the button above and you'll see the price before you pay.`}
+        </P>
+      ) : null}
+      <Quiet>
+        {es ? "¿Otra cosa? " : "Something else? "}
+        <InlineLink href={moreUrl}>{monthlyIdeaMoreLabel(priceUntil ? "templates" : more, locale)}</InlineLink>.
+      </Quiet>
+      {/* The stop link is the footer's, once (beside the mail app's own unsubscribe button). */}
+      <Quiet>{es ? "Una idea al mes, durante un año desde tu último regalo." : "One idea a month, for a year after your last gift."}</Quiet>
     </EmailLayout>
   );
 }
