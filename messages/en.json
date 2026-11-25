@@ -2403,7 +2403,9 @@
       "ask": "Was this a good date?",
       "yes": "Yes",
       "no": "No",
-      "thanks": "Noted. You can change it."
+      "thanks": "Noted. You can change it.",
+      "notSaved": "Not saved. Try again in a moment.",
+      "offline": "Not saved: no connection. Try again."
     },
     "log": {
       "title": "Dates you’ve done",

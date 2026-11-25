@@ -2403,7 +2403,9 @@
       "ask": "¿Fue una buena cita?",
       "yes": "Sí",
       "no": "No",
-      "thanks": "Anotado. Podéis cambiarlo."
+      "thanks": "Anotado. Podéis cambiarlo.",
+      "notSaved": "No se ha guardado. Probad otra vez en un momento.",
+      "offline": "No se ha guardado: no hay conexión. Probad otra vez."
     },
     "log": {
       "title": "Citas que ya habéis hecho",

@@ -51,6 +51,7 @@ export function DoneLog({
   available,
   onAnswer,
   onRemove,
+  notSaved,
   askedAbove,
   className,
 }: {
@@ -60,6 +61,8 @@ export function DoneLog({
   available: boolean | null;
   onAnswer: (entry: DoneDate, next: Vote) => void;
   onRemove: (id: string) => void;
+  /** A tap that was not kept, by the date it was made on (dates2-D5). */
+  notSaved?: { id: string; offline: boolean } | null;
   /** The entry of the plan open above, whose question is asked there: its row only says the answer. */
   askedAbove?: string;
   className?: string;
@@ -74,6 +77,7 @@ export function DoneLog({
     const vote = entry.vote;
     const votable = targets.length > 0 && available === true && entry.id !== askedAbove;
     const pills = votable && (!vote || changing.has(entry.id));
+    const failed = notSaved && notSaved.id === entry.id && entry.id !== askedAbove;
     return (
       <li key={entry.id} className="flex items-start gap-3 border-t border-forest/10 py-3 first:border-t-0">
         <div className="min-w-0 flex-1">
@@ -114,6 +118,12 @@ export function DoneLog({
               }}
               labels={{ yes: t("done.yes"), no: t("done.no") }}
             />
+          ) : null}
+          {/* Said where the tap was made, in a region a screen reader is already listening to. */}
+          {votable ? (
+            <p aria-live="polite" className={cn("text-[13px] text-forest/80", failed && "mt-1")}>
+              {failed ? t(notSaved.offline ? "done.offline" : "done.notSaved") : null}
+            </p>
           ) : null}
         </div>
         {/* Only this browser's own entries can be taken off: an account's come back from its saved dates. */}

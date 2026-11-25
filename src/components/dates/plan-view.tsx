@@ -170,12 +170,16 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const voteOn = useMemo(() => [...new Set([...planTargets, ...entries.flatMap(doneTargets)])].slice(0, 60), [planTargets, entries]);
   const votes = useVotes(voteOn);
   const planVote = planEntry?.vote;
-  /** One date's answer: kept on the date for the log, and sent for its places. Put back when it is not kept. */
+  // A tap the votes route did not keep: said in one line where it was made (dates2-D5).
+  const [notSaved, setNotSaved] = useState<{ id: string; offline: boolean } | null>(null);
+  /** One date's answer: kept on the date for the log, and sent for its places. Put back, with a word, when it is not kept. */
   const answer = async (entry: DoneDate, next: Vote) => {
     const before = entry.vote ?? null;
+    setNotSaved(null);
     updateDone((list) => answerDone(list, entry, next));
     if (await votes.cast(doneTargets(entry), next)) return;
     updateDone((list) => answerDone(list, entry, before));
+    setNotSaved({ id: entry.id, offline: typeof navigator !== "undefined" && navigator.onLine === false });
   };
   /** A date taken off, or not done after all: its answer stops counting on its places (dates2-D6). */
   const takeOff = (id: string) => {
@@ -199,6 +203,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
     if (performance.now() - markedAt.current < UNDO_GUARD_MS) return;
     // A plan marked before the id was kept: its id as it would have been, from the stops as they stand.
     const id = plan.doneId ?? doneFromPlan({ ...plan, date: plan.done }, plan.done ?? today, locale).id;
+    setNotSaved(null);
     takeOff(id);
     updateOwn((p) => {
       const next = { ...p };
@@ -213,6 +218,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
       today={today}
       available={votes.available}
       askedAbove={askedAbove}
+      notSaved={notSaved}
       onAnswer={(entry, next) => void answer(entry, next)}
       onRemove={takeOff}
       className={className}
@@ -408,7 +414,7 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
                     {t("done.ask")}
                   </p>
                   <VotePills labelledBy="plan-done-ask" value={planVote} onVote={(next) => planEntry && void answer(planEntry, next)} labels={{ yes: t("done.yes"), no: t("done.no") }} />
-                  {planVote ? <p className="text-[13.5px] text-forest/65">{t("done.thanks")}</p> : null}
+                  {notSaved && notSaved.id === planEntry?.id ? <p className="text-[13.5px] text-forest/80">{t(notSaved.offline ? "done.offline" : "done.notSaved")}</p> : planVote ? <p className="text-[13.5px] text-forest/65">{t("done.thanks")}</p> : null}
                 </div>
               ) : null}
             </div>

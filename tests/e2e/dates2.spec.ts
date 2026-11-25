@@ -497,6 +497,20 @@ test.describe("dates2: done dates on /plan", () => {
     for (const c of (votes.posts[3] as { changes: { yes: number; no: number }[] }).changes) expect([c.yes, c.no]).toEqual([0, -1]);
   });
 
+  test("G8e a vote that is not kept says so, where it was made (dates2-D5)", async ({ page }) => {
+    await holdTheDatabase(page, { available: true, posts: [] });
+    await page.route("**/api/dates/votes", (route) => (route.request().method() === "POST" ? route.fulfill({ status: 503, json: { error: "unavailable" } }) : route.fallback()));
+    await seedPlan(page, { v: 1, date: today(), where: "Lisbon", idea: "pasta-and-a-slow-walk", stops: PLAN_STOPS });
+    await page.goto("/plan");
+    await page.getByRole("button", { name: "Mark as done" }).click(PLAN_COMPILES);
+    const plan = page.getByTestId("plan-done");
+    const yes = plan.getByRole("button", { name: "Yes", exact: true });
+    await yes.click();
+    await expect(plan.getByText("Not saved. Try again in a moment.")).toBeVisible();
+    await expect(yes).toHaveAttribute("aria-pressed", "false");
+    await expect(page.getByTestId("done-log")).not.toContainText("A good one");
+  });
+
     test("G9 the log and its one count", async ({ page }) => {
     await holdTheDatabase(page);
     const t = today();
