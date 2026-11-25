@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 
-const state = vi.hoisted(() => ({ db: null as unknown, allow: true, counts: new Map<string, number>() }));
+const state = vi.hoisted(() => ({ db: null as unknown, allow: true, storeDown: false, counts: new Map<string, number>(), marks: new Map<string, string>() }));
 vi.mock("server-only", () => ({}));
 // The limiter as it behaves in one process: a count per key, against that key's limit.
 vi.mock("@/lib/rate-limit", () => ({
@@ -10,6 +10,14 @@ vi.mock("@/lib/rate-limit", () => ({
     const n = (state.counts.get(key) ?? 0) + 1;
     state.counts.set(key, n);
     return n <= limit;
+  },
+  // The limiter's memory of one answer, swapped in one step as Upstash's SET … GET / GETDEL do.
+  swapMark: async (key: string, value: string | null) => {
+    if (state.storeDown) return undefined;
+    const before = state.marks.get(key) ?? null;
+    if (value === null) state.marks.delete(key);
+    else state.marks.set(key, value);
+    return before;
   },
 }));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdminClient: () => state.db }));
@@ -29,8 +37,20 @@ function fakeDb({ rows = [], readError = null, rpcError = null }: { rows?: Rows;
 }
 
 const get = (t: string) => route.GET(new NextRequest(`https://ethos.test/api/dates/votes?t=${encodeURIComponent(t)}`));
-const post = (body: unknown, ip = "203.0.113.7") =>
-  route.POST(new NextRequest("https://ethos.test/api/dates/votes", { method: "POST", headers: { "x-forwarded-for": ip }, body: typeof body === "string" ? body : JSON.stringify(body) }));
+const post = (body: unknown, ip = "203.0.113.7", headers: Record<string, string> = { "content-type": "application/json", "sec-fetch-site": "same-origin", origin: "https://ethos.test" }) =>
+  route.POST(new NextRequest("https://ethos.test/api/dates/votes", { method: "POST", headers: { "x-forwarded-for": ip, host: "ethos.test", ...headers }, body: typeof body === "string" ? body : JSON.stringify(body) }));
+/** The counters as the database would hold them after every call the route made. */
+const totals = (rpc: { mock: { calls: unknown[][] } }) => {
+  const rows: Record<string, { yes: number; no: number }> = {};
+  for (const [, args] of rpc.mock.calls) {
+    const { p_targets, p_yes, p_no } = args as { p_targets: string[]; p_yes: number[]; p_no: number[] };
+    p_targets.forEach((t, i) => {
+      const row = rows[t] ?? { yes: 0, no: 0 };
+      rows[t] = { yes: Math.max(row.yes + p_yes[i], 0), no: Math.max(row.no + p_no[i], 0) };
+    });
+  }
+  return rows;
+};
 const GOOD = { changes: [{ target: "place:node/1", yes: 1, no: 0 }, { target: "idea:spa-evening", yes: 1, no: 0 }] };
 
 describe("the votes route, with the table missing and present (dates2)", () => {
@@ -38,7 +58,9 @@ describe("the votes route, with the table missing and present (dates2)", () => {
   beforeEach(() => {
     state.db = null;
     state.allow = true;
+    state.storeDown = false;
     state.counts.clear();
+    state.marks.clear();
     logged = vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => logged.mockRestore());
@@ -113,36 +135,67 @@ describe("the votes route, with the table missing and present (dates2)", () => {
     expect(logged).toHaveBeenCalledTimes(1);
   });
 
-  it("A10 one address moves a place's counter once up and once down a month, however often it asks (dates2-C5)", async () => {
+  it("A10 one address holds one answer per place, however often it asks (dates2-C5, D1)", async () => {
     const { db, rpc } = fakeDb({});
     state.db = db;
     const yes = { changes: [{ target: "place:node/9", yes: 1, no: 0 }] };
     for (let i = 0; i < 5; i++) expect(await (await post(yes)).json()).toEqual({ ok: true });
     expect(rpc).toHaveBeenCalledTimes(1);
-    // Wiping others' yes votes: one taken away, then nothing.
-    const wipe = { changes: [{ target: "place:node/9", yes: -1, no: 1 }] };
-    for (let i = 0; i < 5; i++) await post(wipe);
-    expect(rpc).toHaveBeenCalledTimes(2);
+    expect(totals(rpc)["place:node/9"]).toEqual({ yes: 1, no: 0 });
     // Another address, or another place, is counted on its own.
     await post(yes, "198.51.100.4");
     await post({ changes: [{ target: "place:node/10", yes: 1, no: 0 }] });
-    expect(rpc).toHaveBeenCalledTimes(4);
+    expect(totals(rpc)).toEqual({ "place:node/9": { yes: 2, no: 0 }, "place:node/10": { yes: 1, no: 0 } });
   });
 
-  it("A11 a person who answers yes and then changes to no is written both times", async () => {
+  it("A10b an address that never said yes cannot take one away", async () => {
     const { db, rpc } = fakeDb({});
     state.db = db;
-    await post({ changes: [{ target: "place:node/1", yes: 1, no: 0 }, { target: "idea:spa-evening", yes: 1, no: 0 }] });
-    await post({ changes: [{ target: "place:node/1", yes: -1, no: 1 }, { target: "idea:spa-evening", yes: -1, no: 1 }] });
-    expect(rpc).toHaveBeenCalledTimes(2);
-    expect(rpc).toHaveBeenLastCalledWith("date_votes_apply", { p_targets: ["place:node/1", "idea:spa-evening"], p_yes: [-1, -1], p_no: [1, 1] });
+    await post({ changes: [{ target: "place:node/9", yes: 1, no: 0 }] }, "198.51.100.4");
+    // A wipe from a fresh address: read as "no" from nothing, never as a yes taken off.
+    for (let i = 0; i < 5; i++) await post({ changes: [{ target: "place:node/9", yes: -1, no: 1 }] });
+    for (let i = 0; i < 5; i++) await post({ changes: [{ target: "place:node/9", yes: -1, no: 0 }] }, "192.0.2.1");
+    expect(totals(rpc)["place:node/9"]).toEqual({ yes: 1, no: 1 });
   });
 
-  it("A12 a tap mixing a spent change and a new one writes only the new one", async () => {
+  it("A11 Yes, No, Yes ends counted as yes, and every step is written (dates2-D1)", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    const both = (yes: -1 | 0 | 1, no: -1 | 0 | 1) => ({ changes: [{ target: "place:node/1", yes, no }, { target: "idea:spa-evening", yes, no }] });
+    await post(both(1, 0));
+    expect(totals(rpc)["place:node/1"]).toEqual({ yes: 1, no: 0 });
+    await post(both(-1, 1));
+    expect(totals(rpc)["place:node/1"]).toEqual({ yes: 0, no: 1 });
+    await post(both(1, -1));
+    expect(totals(rpc)).toEqual({ "place:node/1": { yes: 1, no: 0 }, "idea:spa-evening": { yes: 1, no: 0 } });
+    // No again, then taken back: nothing left from this address.
+    await post(both(-1, 1));
+    await post(both(0, -1));
+    expect(totals(rpc)).toEqual({ "place:node/1": { yes: 0, no: 0 }, "idea:spa-evening": { yes: 0, no: 0 } });
+    expect(rpc).toHaveBeenCalledTimes(5);
+  });
+
+  it("A12 a tap mixing a repeat and a new answer writes only the new one", async () => {
     const { db, rpc } = fakeDb({});
     state.db = db;
     await post({ changes: [{ target: "place:node/1", yes: 1, no: 0 }] });
     await post({ changes: [{ target: "place:node/1", yes: 1, no: 0 }, { target: "place:node/2", yes: 1, no: 0 }] });
     expect(rpc).toHaveBeenLastCalledWith("date_votes_apply", { p_targets: ["place:node/2"], p_yes: [1], p_no: [0] });
   });
+
+  it("A13 the limiter's memory down: 503, nothing written; a failed write is counted on the retry", async () => {
+    const { db, rpc } = fakeDb({});
+    state.db = db;
+    state.storeDown = true;
+    expect((await post(GOOD)).status).toBe(503);
+    expect(rpc).not.toHaveBeenCalled();
+    state.storeDown = false;
+    // The database fails once: the remembered answer is put back, so the browser's retry moves the counter.
+    state.db = fakeDb({ rpcError: { code: "57014", message: "timeout" } }).db;
+    expect((await post(GOOD)).status).toBe(503);
+    state.db = db;
+    expect(await (await post(GOOD)).json()).toEqual({ ok: true });
+    expect(totals(rpc)).toEqual({ "place:node/1": { yes: 1, no: 0 }, "idea:spa-evening": { yes: 1, no: 0 } });
+  });
+
 });
