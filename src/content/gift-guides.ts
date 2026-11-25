@@ -1462,7 +1462,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "scratch-card",
           heading: "Make it up, with a date under foil",
-          body: "An apology lands better with a plan in it. Scratch Card covers your photos in foil he rubs off with a thumb, one card after another, and the last card holds a headline of sixty characters. Put the make-up evening there, with the day and the time, so the sorry has something he can put in his calendar.",
+          body: "An apology goes further with a plan in it. Scratch Card covers your photos in foil he rubs off with a thumb, one card after another, and the last card holds a headline of sixty characters. Put the make-up evening there, with the day and the time, so the sorry has something he can put in his calendar.",
           line: { field: "finalTitle", where: "The last card’s headline", text: "Saturday, 7pm. The place we missed. Already booked." },
         },
         {
@@ -1476,14 +1476,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "fortune-cookie",
           heading: "Three fortunes that promise something specific",
           brief: "Fortunes that are promises he can hold you to, one cookie at a time.",
-          body: "Fortune Cookie asks for three fortunes or more, and an apology can use every one of them as a promise with a date on it. He taps each cookie open and the slip slides out. Keep them small and checkable, the kind he can hold you to, and let the last cookie carry your message.",
+          body: "An apology can turn every fortune into a promise with a date on it, and Fortune Cookie asks for three or more. He taps each cookie open and the slip slides out. Keep them small and checkable, the kind he can hold you to, and let the last cookie carry your message.",
           line: { field: "fortunes", where: "One of the fortunes", text: "You will get the window seat on every trip until March." },
         },
       ],
       sections: [
         {
           heading: "What to say first, and what to leave out",
-          body: "Say what you did in the first line, in plain words, without “if” and without “but”. Leave out what he did; that is a different conversation for a different day. Then one sentence about what it cost him, which shows you understood, and one about what you will do differently. Four lines are enough; a page reads as a defense.",
+          body: "Say what you did in the first line, in plain words, without “if” and without “but”. Leave out what he did; that is a different conversation for a different day. Then one sentence about how it felt on his side, which shows you understood, and one about what you will do differently. Four lines are enough; a page reads as a defense.",
         },
         {
           heading: "When to send it",
@@ -1497,7 +1497,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       faq: [
         { q: "What is a good apology gift for a boyfriend?", a: "One that names what happened. A short note that says what you did, a chat that replays the conversation properly, or a plan for making it up with a day and a time on it, rather than an object standing in for the words." },
         { q: "Should an apology gift be expensive?", a: "No. An expensive gift after a fight can read as paying it off. A small gift that is plainly about what happened, and a changed habit after it, do more." },
-        { q: "What do I write in an apology note to him?", a: "What you did, what it cost him, what changes. Four or five sentences, no “if you were hurt”, nothing about what he did. End with something warm and small, like a plan for Friday." },
+        { q: "What do I write in an apology note to him?", a: "What you did, why it hurt, what changes. Four or five sentences, no “if you were hurt”, nothing about what he did. End with something warm and small, like a plan for Friday." },
         { q: "Can I say sorry with something free?", a: "The Letter, as a short note of up to 500 characters with a song, costs nothing. Every other gift on this page is a one-time payment for that template, and the editor lets you build the whole thing first." },
       ],
       related: [
@@ -1560,14 +1560,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "fortune-cookie",
           heading: "Tres fortunas que prometen algo concreto",
           brief: "Fortunas que son promesas que puede reclamarte, galleta a galleta.",
-          body: "Galleta de la fortuna pide tres fortunas o más, y una disculpa puede usar cada una como una promesa con fecha. Abre cada galleta con un toque y sale la tira. Que sean pequeñas y comprobables, de las que se pueden reclamar, y que la última galleta lleve tu mensaje.",
+          body: "Una disculpa puede convertir cada fortuna en una promesa con fecha, y Galleta de la fortuna pide tres o más. Abre cada galleta con un toque y sale la tira. Que sean pequeñas y comprobables, de las que se pueden reclamar, y que la última galleta lleve tu mensaje.",
           line: { field: "fortunes", where: "Una de las fortunas", text: "Tendrás la ventanilla en todos los viajes hasta marzo." },
         },
       ],
       sections: [
         {
           heading: "Qué decir primero y qué dejar fuera",
-          body: "Di lo que hiciste en la primera línea, con palabras sencillas, sin «si» y sin «pero». Deja fuera lo que hizo esa persona; eso es otra conversación para otro día. Luego una frase sobre lo que le costó, que demuestra que lo has entendido, y otra sobre lo que vas a hacer distinto. Cuatro líneas bastan; una página se lee como una defensa.",
+          body: "Di lo que hiciste en la primera línea, con palabras sencillas, sin «si» y sin «pero». Deja fuera lo que hizo; eso es otra conversación para otro día. Luego una frase sobre lo que le costó, que demuestra que lo has entendido, y otra sobre lo que vas a hacer distinto. Cuatro líneas bastan; una página se lee como una defensa.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -1581,7 +1581,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       faq: [
         { q: "¿Qué regalo sirve para pedir perdón de verdad?", a: "Uno que nombre lo que pasó. Una nota corta que diga lo que hiciste, un chat que repita la conversación como debió ser o un plan para compensarlo con día y hora, en vez de un objeto que sustituya a las palabras." },
         { q: "¿Un regalo para pedir perdón tiene que ser caro?", a: "No. Un regalo caro después de una discusión puede leerse como pagar la deuda. Un regalo pequeño que trate claramente de lo que pasó, y una costumbre cambiada después, hacen más." },
-        { q: "¿Qué escribo en una nota para pedirle perdón?", a: "Lo que hiciste, lo que le costó y lo que cambia. Cuatro o cinco frases, sin «si te ha molestado» y sin hablar de lo que hizo esa persona. Acaba con algo cálido y pequeño, como un plan para el viernes." },
+        { q: "¿Qué escribo en una nota para pedirle perdón?", a: "Lo que hiciste, lo que le costó y lo que cambia. Cuatro o cinco frases, sin «si te ha molestado» y sin hablar de su parte. Acaba con algo cálido y pequeño, como un plan para el viernes." },
         { q: "¿Hay algo gratis para pedir perdón?", a: "La carta, como nota corta de hasta 500 caracteres con una canción, no cuesta nada. Los demás regalos de esta página son un solo pago por esa plantilla, y el editor te deja montarlo entero antes." },
       ],
       related: [
@@ -1626,28 +1626,28 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "A letter that starts by naming it",
-          body: "The Letter has a greeting of sixty characters before the words underneath appear by hand. Most apology letters open softly and get to the point late; open this one on the point. The wax seal and the handwriting do the gentle part. Add a photo of the two of you if the letter needs a reason to smile.",
+          body: "Most apology letters open softly and get to the point late; open this one on the point. The Letter has a greeting of sixty characters before the words underneath appear by hand. The wax seal and the handwriting do the gentle part. Add a photo of the two of you if the letter needs a reason to smile.",
           line: { field: "greeting", where: "The greeting", text: "About Saturday, and what I said in the car," },
         },
         {
           template: "bloom",
           heading: "A flower that opens only while she holds on",
           brief: "One flower that unfolds only while she holds it, your words inside.",
-          body: "Bloom gives her one flower that unfolds while her finger stays down, peony, tulip or daisy, and your words are inside it. Nothing about it hurries her or asks for a reply. Keep the message to three sentences, pick a soft color, and let the slowness say the rest.",
+          body: "One flower, a peony, a tulip or a daisy, unfolds in Bloom only while her finger stays down, and your words are inside it. Nothing about it hurries her or asks for a reply. Keep the message to three sentences, pick a soft color, and let the slowness say the rest.",
           line: { field: "message", where: "The message inside", text: "I’m sorry I made you feel like you had to explain yourself. You never do." },
         },
         {
           template: "vinyl",
           heading: "Her favorite record, with an honest title",
           brief: "Your song on a turntable, and an album title of forty characters that says it.",
-          body: "Vinyl sets your song turning on a turntable and keeps up to twelve photos in a crate beside it as album covers. The sleeve’s title holds forty characters: title the album with the apology, or with the joke only she will get, and print your longer words in the liner notes.",
+          body: "If there is a song you both know, put it on a record. Vinyl sets it turning on a turntable and keeps up to twelve photos in a crate beside it as album covers. The sleeve’s title holds forty characters: title the album with the apology, or with the joke only she will get, and print your longer words in the liner notes.",
           line: { field: "album", where: "The album’s title", text: "Things I Should Have Said Sooner" },
         },
         {
           template: "sticker-bomb",
           heading: "Label strips that take the blame",
           brief: "Six label-maker strips under the stickers, small admissions from silly to real.",
-          body: "Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, six of them, twenty-eight characters each. For an apology, make the strips small admissions in order, from the silly to the real, and choose The soft ones pack so the stickers stay gentle.",
+          body: "Small admissions add up. Sticker Bomb lets her slap stickers onto an empty page, and under every other one a label-maker strip appears, six of them, twenty-eight characters each. For an apology, make the strips small admissions in order, from the silly to the real, and choose The soft ones pack so the stickers stay gentle.",
           line: { field: "labels", where: "One label-maker strip", text: "official over-reactor: me" },
         },
       ],
@@ -1658,7 +1658,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Flowers that do not look like an excuse",
-          body: "Red roses after a fight can read as a script. Pick what she would pick: her colors, the flower she points at in shops, whites and blush when you want it quiet. A smaller bunch with the right flowers looks more considered than two dozen of the wrong ones.",
+          body: "Red roses after a fight can read as a script. Pick what she would pick: her colors, the flower she points at in stores, whites and blush when you want it quiet. A smaller bunch with the right flowers looks more considered than two dozen of the wrong ones.",
         },
         {
           heading: "After she opens it",
@@ -1698,7 +1698,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "paper-crane",
           heading: "Dobla la disculpa, pliegue a pliegue",
-          body: "Grulla de papel es lenta a propósito: mantiene pulsado cada pliegue hasta que el papel se dobla, y si suelta antes de tiempo se abre. Cada pliegue que sale muestra una frase de setenta y dos caracteres, seis como mucho. A una disculpa le va ese ritmo. Pon una admisión en cada pliegue y guarda la promesa para la frase que se queda.",
+          body: "Grulla de papel va despacio a propósito: cada pliegue se mantiene pulsado hasta que el papel se dobla, y si se suelta antes de tiempo se abre. Cada pliegue que sale muestra una frase de setenta y dos caracteres, seis como mucho. A una disculpa le va ese ritmo. Pon una admisión en cada pliegue y guarda la promesa para la frase que se queda.",
           line: { field: "lines", where: "La frase de un pliegue", text: "Te interrumpí en la cena, y otra vez de vuelta a casa." },
         },
         {
@@ -1711,28 +1711,28 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-letter",
           heading: "Una carta que empieza nombrándolo",
-          body: "La carta tiene un saludo de sesenta caracteres antes de que las palabras de debajo aparezcan a mano. Casi todas las cartas de disculpa empiezan con suavidad y llegan tarde al asunto; empieza esta por el asunto. El sello de lacre y la letra a mano ya ponen la parte suave. Añade una foto de los dos si la carta necesita un motivo para sonreír.",
+          body: "Casi todas las cartas de disculpa empiezan con suavidad y llegan tarde al asunto; empieza esta por el asunto. La carta tiene un saludo de sesenta caracteres antes de que las palabras de debajo aparezcan a mano. El sello de lacre y la letra a mano ya ponen la parte suave. Añade una foto de los dos si la carta necesita un motivo para sonreír.",
           line: { field: "greeting", where: "El saludo", text: "Sobre el sábado, y lo que dije en el coche:" },
         },
         {
           template: "bloom",
           heading: "Una flor que solo se abre si la sujeta",
           brief: "Una flor que solo se abre mientras la sujeta, con tus palabras dentro.",
-          body: "Flor le da una única flor que se despliega mientras mantiene el dedo encima, sea peonía, tulipán o margarita, y tus palabras esperan dentro. Nada en ella le mete prisa ni le pide respuesta. Que el mensaje sean tres frases, elige un color suave y deja que la lentitud diga lo demás.",
+          body: "Una sola flor, peonía, tulipán o margarita, se despliega en Flor solo mientras mantiene el dedo encima, y tus palabras esperan dentro. Nada en ella le mete prisa ni le pide respuesta. Que el mensaje sean tres frases, elige un color suave y deja que la lentitud diga lo demás.",
           line: { field: "message", where: "El mensaje de dentro", text: "Siento haberte hecho sentir que tenías que explicarte. Nunca tienes que hacerlo." },
         },
         {
           template: "vinyl",
           heading: "Su disco favorito, con un título sincero",
           brief: "Vuestra canción en un tocadiscos y un título de álbum de cuarenta caracteres que lo dice.",
-          body: "Vinilo pone vuestra canción a girar en un tocadiscos y guarda hasta doce fotos en una caja al lado como portadas. El título de la funda admite cuarenta caracteres: titula el álbum con la disculpa, o con la broma que solo esa persona pillará, e imprime tus palabras largas en las notas interiores.",
+          body: "Si hay una canción que conocéis los dos, ponla en un disco. Vinilo la hace girar en un tocadiscos y guarda hasta doce fotos en una caja al lado como portadas. El título de la funda admite cuarenta caracteres: titula el álbum con la disculpa, o con la broma que solo pilláis vosotros, e imprime tus palabras largas en las notas interiores.",
           line: { field: "album", where: "El título del álbum", text: "Cosas que tenía que haber dicho antes" },
         },
         {
           template: "sticker-bomb",
           heading: "Tiras de rotuladora que se echan la culpa",
           brief: "Seis tiras de rotuladora bajo los stickers, pequeñas admisiones de la tonta a la real.",
-          body: "Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora, seis en total, de veintiocho caracteres. Para pedir perdón, que las tiras sean pequeñas admisiones en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
+          body: "Las admisiones pequeñas suman. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora, seis en total, de veintiocho caracteres. Para pedir perdón, que las tiras sean pequeñas admisiones en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
           line: { field: "labels", where: "Una tira de rotuladora", text: "exagero, lo reconozco" },
         },
       ],
@@ -1743,11 +1743,11 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "Flores que no parezcan una excusa",
-          body: "Rosas rojas después de una discusión pueden parecer un guion. Elige lo que esa persona elegiría: sus colores, la flor que señala en las floristerías, blancos y rosa palo si lo quieres tranquilo. Un ramo más pequeño con las flores justas parece más pensado que dos docenas de las equivocadas.",
+          body: "Rosas rojas después de una discusión pueden parecer un guion. Elige lo que escogería sin pensarlo: sus colores, la flor que señala en las floristerías, blancos y rosa palo si lo quieres tranquilo. Un ramo más pequeño con las flores justas parece más pensado que dos docenas de las equivocadas.",
         },
         {
           heading: "Cuando lo abra",
-          body: "No preguntes si le ha gustado. El regalo ya ha dicho su parte; lo demás es una conversación, y el ritmo lo marca esa persona. Si contesta, responde a la respuesta, no al regalo. Si esta noche no contesta, el enlace sigue funcionando mañana, y el plan que escribiste sigue en pie.",
+          body: "No preguntes si le ha gustado. El regalo ya ha dicho su parte; lo demás es una conversación, y el ritmo no lo marcas tú. Si contesta, responde a la respuesta, no al regalo. Si esta noche no contesta, el enlace sigue funcionando mañana, y el plan que escribiste sigue en pie.",
         },
       ],
       faq: [
@@ -1767,7 +1767,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
   "long-distance-care-package": {
     en: {
       title: "Long-Distance Care Package Ideas, and the Gift Inside",
-      description: "What to put in a long-distance care package, what posting does to it, and a digital gift they open by scanning the QR card on top of the box.",
+      description: "What to put in a long-distance care package, what mailing does to it, and a digital gift they open by scanning the QR card on top of the box.",
       h1: "Long-distance care package ideas",
       label: "Long-distance care packages",
       hero: {
@@ -1775,10 +1775,10 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         sentence: "Ethos mails nothing: you send the box yourself, and the gift inside is a link on a printed QR card, the first thing they scan.",
       },
       ideasTitle: "Seven gifts to lay on top of the box",
-      craft: "Packing, posting and timing it",
+      craft: "Packing, mailing and timing it",
       film: "halfway",
       lead: [
-        "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. Ethos does not post anything. What it adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
+        "A care package is the part of a long-distance relationship you can hold: snacks from your side, a T-shirt that smells like home, a candle, a book with notes in the margin. Ethos does not mail anything. What it adds is the part a box cannot carry, a gift on their phone, which you print as a small card with a QR code and lay on top.",
         "The card comes from the gift itself: once it is published, its QR code can be printed as a Print-ready card, and the same card is under QR card in My gifts. It prints two A6 cards to a page, on cream, white, blush or sage, with two lines of your own. One gift here is free, The Letter as a short note; each of the others is a one-time payment for that template.",
       ],
       ideas: [
@@ -1806,7 +1806,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "passport",
           heading: "Stamp the route the box will take",
           brief: "A passport of photos whose route is the box’s own journey to their door.",
-          body: "Passport gives them a passport for the two of you with a stamp for each photo, up to ten, and a route of up to six stopovers. Make the route the box’s own journey, town by town from yours to theirs, since each stopover has to be a real place the map can find, and the visa page at the end opens on your message.",
+          body: "The box travels too, so give it a passport: Passport stamps one photo per page, up to ten, and draws a route of up to six stopovers. Make the route the box’s own journey, town by town from yours to theirs, since each stopover has to be a real place the map can find, and the visa page at the end opens on your message.",
           line: { field: "stops", where: "One stopover", text: "Berlin" },
         },
         {
@@ -1819,25 +1819,25 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "vinyl",
           heading: "Music for unpacking, on a record",
           brief: "Your song on a turntable, with a side label naming it unpacking music.",
-          body: "Vinyl puts your song on a turntable that turns while it plays, with up to twelve photos in a crate and your message in the liner notes. The side label takes twelve characters: name it for the job, unpacking music, and choose the song you would put on if you were there to open it with them.",
+          body: "Something has to play while they unpack. Vinyl puts your song on a turntable that turns while it plays, with up to twelve photos in a crate and your message in the liner notes. The side label takes twelve characters: name it for the job, unpacking music, and choose the song you would put on if you were there to open it with them.",
           line: { field: "side", where: "The side label", text: "Unpack to me" },
         },
         {
           template: "scratch-card",
           heading: "The next visit, under the last card’s foil",
           brief: "Photos under foil, and the date of the next visit in the last card’s headline.",
-          body: "Scratch Card hides photos under foil that a finger rubs off, card by card, and saves a headline of sixty characters for the last card. In a care package that is the place for the date of the next visit, scratched clear only once the box is unpacked and the card on top has been scanned.",
+          body: "Save the date of the next visit for last. Scratch Card hides photos under foil that a finger rubs off, card by card, and keeps a headline of sixty characters for the final card. In a care package that is the place for the date of the next visit, scratched clear only once the box is unpacked and the card on top has been scanned.",
           line: { field: "finalTitle", where: "The last card’s headline", text: "March 3. Gate B. I’ll be the one waving." },
         },
       ],
       sections: [
         {
           heading: "What to pack",
-          body: "Pack things for three senses: something to eat from your side, something to wear that has been worn, something to smell, a candle or your soap. Add one thing that only makes sense to the two of you, a ticket stub or a takeaway menu. Keep it light enough to post cheaply, and put the card with the QR code on top.",
+          body: "Pack things for three senses: something to eat from your side, something to wear that has been worn, something to smell, a candle or your soap. Add one thing that only makes sense to the two of you, a ticket stub or a takeout menu. Keep it light enough to mail cheaply, and put the card with the QR code on top.",
         },
         {
-          heading: "What posting and customs do to a box",
-          body: "Across a border, food is the risk: fresh, homemade or meat goods are often stopped, and sealed packaged snacks usually pass. Fill in the customs form honestly as a gift and list everything. Parcels take days to weeks, so nothing should melt, spill or expire, and the gift on the phone does not depend on when the box arrives.",
+          heading: "What mailing and customs do to a box",
+          body: "Across a border, food is the risk: fresh food, anything homemade and meat are often stopped, and sealed packaged snacks usually pass. Fill in the customs form honestly as a gift and list everything. Parcels take days to weeks, so nothing should melt, spill or expire, and the gift on the phone does not depend on when the box arrives.",
         },
         {
           heading: "When to send the link",
@@ -1845,10 +1845,10 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
       ],
       faq: [
-        { q: "Does Ethos post the care package?", a: "No. Ethos sends nothing by post. You pack and post the box yourself; Ethos makes the digital gift that goes with it, as a link and as a printed card with its QR code." },
+        { q: "Does Ethos mail the care package?", a: "No. Ethos sends nothing by mail. You pack and mail the box yourself; Ethos makes the digital gift that goes with it, as a link and as a printed card with its QR code." },
         { q: "How do I put a digital gift inside a physical box?", a: "Publish the gift, then print its QR code as a Print-ready card from the share screen, or later under QR card in My gifts. It prints two A6 cards to a page; lay one on top of the box." },
         { q: "Can the gift open when the box arrives?", a: "Yes, on a paid gift: in the editor, under Extras, switch on “Schedule the reveal” and set the date, the hour and their time zone. Until then the card’s link shows a countdown." },
-        { q: "What should I put in a long-distance care package?", a: "Something to eat from your side, something worn, something that smells of you, and one thing that only the two of you understand. Keep it light, sealed and slow to spoil." },
+        { q: "What should I put in a long-distance care package?", a: "Something to eat from your side, something worn, something that smells of you, and one thing that only the two of you understand. Pack what weighs little and survives a week in transit." },
       ],
       related: [
         { href: "/occasions/long-distance", label: "Long-distance gift ideas" },
@@ -1891,14 +1891,14 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "jar-of-reasons",
           heading: "Un frasco de notas para después de picar",
           brief: "Notas dobladas que salen de una en una, para las semanas después de la caja.",
-          body: "En Frasco de razones las notas dobladas esperan en un tarro de cristal y caen de una en una cuando agitan el móvil o tocan el tarro, cien como mucho. Combina bien con una caja: las cosas de verdad para la primera noche, el frasco para las semanas siguientes, una nota cada día malo.",
+          body: "En Frasco de razones las notas dobladas esperan en un tarro de cristal y caen de una en una al agitar el móvil o tocar el tarro, cien como mucho. Combina bien con una caja: las cosas de verdad para la primera noche, el frasco para las semanas siguientes, una nota cada día malo.",
           line: { field: "reasons", where: "Una nota del frasco", text: "Abre esta un lunes. Lo haces mejor de lo que crees." },
         },
         {
           template: "passport",
           heading: "Sella la ruta que hará la caja",
           brief: "Un pasaporte de fotos cuya ruta es el propio viaje de la caja hasta su puerta.",
-          body: "Pasaporte le da un pasaporte de los dos con un sello por foto, hasta diez, y una ruta de hasta seis escalas. Haz que la ruta sea el viaje de la propia caja, ciudad a ciudad de la tuya a la suya, porque cada escala tiene que ser un sitio real que el mapa encuentre, y la página del visado del final se abre con tu mensaje.",
+          body: "La caja también viaja, así que dale un pasaporte: Pasaporte sella una foto por página, hasta diez, y traza una ruta de hasta seis escalas. Haz que la ruta sea el viaje de la propia caja, ciudad a ciudad de la tuya a la suya, porque cada escala tiene que ser un sitio real que el mapa encuentre, y la página del visado del final se abre con tu mensaje.",
           line: { field: "stops", where: "Una escala", text: "Berlín" },
         },
         {
@@ -1911,36 +1911,36 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "vinyl",
           heading: "Música para desempaquetar, en un disco",
           brief: "Vuestra canción en un tocadiscos, con una etiqueta que la llama música para abrir cajas.",
-          body: "Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara admite doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí para abrirla con esa persona.",
+          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara admite doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí para abrirla con esa persona.",
           line: { field: "side", where: "La etiqueta de la cara", text: "Para abrirla" },
         },
         {
           template: "scratch-card",
           heading: "La próxima visita, bajo la última capa",
           brief: "Fotos bajo la capa y la fecha de la próxima visita en el titular de la última.",
-          body: "Rasca y gana esconde fotos bajo una capa que se quita con el dedo, tarjeta a tarjeta, y guarda un titular de sesenta caracteres para la última. En una caja sorpresa es el sitio para la fecha de la próxima visita, que solo se rasca cuando la caja está deshecha y la tarjeta de encima ya se ha escaneado.",
+          body: "La fecha de la próxima visita, para el final. Rasca y gana esconde fotos bajo una capa que se quita con el dedo, tarjeta a tarjeta, y reserva un titular de sesenta caracteres para la última. En una caja sorpresa es el sitio para esa fecha, que solo se rasca cuando ya se ha vaciado la caja y la tarjeta de encima ya se ha escaneado.",
           line: { field: "finalTitle", where: "El titular de la última tarjeta", text: "3 de marzo. Puerta B. Seré quien salude." },
         },
       ],
       sections: [
         {
           heading: "Qué meter",
-          body: "Mete cosas para tres sentidos: algo de comer de tu lado, algo de ropa que ya se haya puesto alguien, algo que huela, una vela o tu jabón. Añade una cosa que solo tenga sentido para vosotros, una entrada o la carta de un sitio de comida para llevar. Que pese poco para que el envío sea barato, y pon encima la tarjeta con el código QR.",
+          body: "Mete cosas para tres sentidos: algo de comer de tu lado, una camiseta que hayas llevado puesta, algo que huela, una vela o tu jabón. Añade una cosa que solo tenga sentido para vosotros, una entrada o la carta de un sitio de comida para llevar. Que pese poco para que el envío sea barato, y pon encima la tarjeta con el código QR.",
         },
         {
-          heading: "Lo que le hacen el envío y la aduana",
+          heading: "Qué pasa con la caja en el envío y en la aduana",
           body: "Si cruza una frontera, el riesgo es la comida: lo fresco, lo casero o la carne a menudo se retienen, y los dulces envasados y cerrados suelen pasar. Rellena la declaración de aduana con sinceridad, como regalo, y enumera todo. Un paquete tarda días o semanas, así que nada debe derretirse, derramarse ni caducar, y el regalo del móvil no depende de cuándo llegue la caja.",
         },
         {
           heading: "Cuándo mandar el enlace",
-          body: "O pones la tarjeta impresa encima, para que escanearla sea lo primero que hagan, o te guardas el enlace y lo mandas en cuanto te digan que ha llegado la caja. Si sabes el día de entrega, un regalo de pago puede programarse para abrirse a una hora de su tarde, y la caja y el regalo llegan juntos.",
+          body: "O pones la tarjeta impresa encima, para que escanearla sea lo primero que haga, o te guardas el enlace y lo mandas en cuanto te diga que ha llegado la caja. Si sabes el día de entrega, un regalo de pago puede programarse para abrirse a una hora de su tarde, y la caja y el regalo llegan juntos.",
         },
       ],
       faq: [
         { q: "¿Ethos envía la caja?", a: "No. Ethos no envía nada por correo. La caja la preparas y la mandas tú; Ethos hace el regalo digital que va con ella, como enlace y como tarjeta impresa con su código QR." },
         { q: "¿Cómo meto un regalo digital en una caja de verdad?", a: "Publica el regalo y luego imprime su código QR como Tarjeta lista para imprimir desde la pantalla de compartir, o más tarde en Tarjeta QR, en Mis regalos. Imprime dos tarjetas A6 por página; pon una encima de la caja." },
         { q: "¿Puede abrirse el regalo cuando llegue la caja?", a: "Sí, en un regalo de pago: en el editor, en Extras, activa «Programar la apertura» y pon la fecha, la hora y su zona horaria. Hasta entonces el enlace de la tarjeta muestra una cuenta atrás." },
-        { q: "¿Qué meto en una caja sorpresa a distancia?", a: "Algo de comer de tu lado, algo de ropa usada, algo que huela a ti y una cosa que solo entendáis vosotros. Que pese poco, vaya cerrado y tarde en estropearse." },
+        { q: "¿Qué meto en una caja sorpresa a distancia?", a: "Algo de comer de tu lado, algo de ropa usada, algo que huela a ti y una cosa que solo entendáis vosotros. Elige lo que pese poco y aguante una semana de viaje en su envase." },
       ],
       related: [
         { href: "/occasions/long-distance", label: "Regalos a distancia" },
@@ -1957,7 +1957,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       h1: "Surprise gifts you can send online",
       label: "Surprise gifts",
       hero: {
-        line: "A surprise needs a reveal. Every gift here has one built in.",
+        line: "A surprise needs a reveal. Each gift here gives you somewhere to hide one.",
         sentence: "Foil rubbed off, a clock that runs out, clues before a destination, a cookie cracked, a globe shaken: each gift hides its news until they do something.",
       },
       ideasTitle: "Seven reveals, each a different kind",
@@ -1985,7 +1985,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "pack-your-bags",
           heading: "Clues on luggage tags, then the destination",
           brief: "Up to five clues on luggage tags, then a departures board names the place.",
-          body: "Pack Your Bags reveals a trip by degrees: up to five clues on luggage tags, read one at a time, before a departures board names the place. Choose plane, train or road trip and put the date on the ticket; when they tear its stub, your letter is underneath, the place to say why there.",
+          body: "A trip comes out by degrees in Pack Your Bags: up to five clues on luggage tags, read one at a time, before a departures board names the place. Choose plane, train or road trip and put the date on the ticket; when they tear its stub, your letter is underneath, the place to say why there.",
           line: { field: "clues", where: "One luggage tag", text: "Pack something you can swim in" },
         },
         {
@@ -1999,21 +1999,21 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "fortune-cookie",
           heading: "Cookies that tease, and one that tells",
           brief: "Cookies cracked with a tap: fortunes that tease, and the news in the last one.",
-          body: "Fortune Cookie lays out three to twenty cookies, and each cracks with a tap to a slip with one of your fortunes. The last one on the plate holds your message, so the news goes there: the date of the trip, the flight number, the table. The lucky numbers print the same on every slip, so leave them out of it, and let the fortunes tease.",
+          body: "Three to twenty cookies sit on the plate in Fortune Cookie, and each cracks with a tap to a slip with one of your fortunes. The last one on the plate holds your message, so the news goes there: the date of the trip, the flight number, the table. The lucky numbers print the same on every slip, so leave them out of it, and let the fortunes tease.",
           line: { field: "fortunes", where: "One of the fortunes", text: "Something is booked. Keep the 14th free." },
         },
         {
           template: "snow-globe",
           heading: "Shake the globe, a line when snow settles",
           brief: "Shake the phone and a line appears each time the snow settles, four at most.",
-          body: "Snow Globe is best shaken, and a button does it on a phone that cannot feel it; each time the snow settles a new line appears, four at most, with a photo in the snow between them. The brass plaque on the base holds forty-four characters. Keep the surprise for the last line and name it on the plaque.",
+          body: "Shake the phone and the snow flies; on a phone that cannot feel a shake, a button in Snow Globe does it. Each time the snow settles a new line appears, four at most, with a photo in the snow between them. The brass plaque on the base holds forty-four characters. Keep the surprise for the last line and name it on the plaque.",
           line: { field: "plaque", where: "The brass plaque", text: "The winter we finally met in person" },
         },
         {
           template: "jar-of-reasons",
           heading: "A jar shaken until the last note falls",
           brief: "Notes shaken out one at a time, the news saved for the last one.",
-          body: "Jar of Reasons is shaken too, or tapped, and one folded note falls out at a time until the jar is empty and your letter is underneath. For a surprise, number the notes on the jar’s label, forty characters, so they know a last one is coming, and save the news for it.",
+          body: "Here a shake, or a tap, lets one folded note fall out of Jar of Reasons at a time until the jar is empty and your letter is underneath. For a surprise, number the notes on the jar’s label, forty characters, so they know a last one is coming, and save the news for it.",
           line: { field: "label", where: "The jar’s label", text: "12 notes. Save the last one." },
         },
       ],
@@ -2051,8 +2051,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       h1: "Regalos sorpresa para enviar online",
       label: "Regalos sorpresa",
       hero: {
-        line: "Una sorpresa necesita su momento. Aquí cada regalo trae el suyo.",
-        sentence: "Una capa que se rasca, un reloj que llega a cero, una galleta partida: cada regalo guarda la noticia hasta que actúan.",
+        line: "Una sorpresa necesita dónde esconderse. Cada regalo de aquí le guarda un sitio.",
+        sentence: "Una capa que se rasca, un reloj que llega a cero, una galleta partida: cada regalo guarda la noticia hasta que hace algo.",
       },
       ideasTitle: "Siete revelaciones, cada una distinta",
       craft: "Que la sorpresa siga siéndolo",
@@ -2066,7 +2066,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "scratch-card",
           heading: "Una capa que rascar, con una pista escrita",
           brief: "Fotos bajo una capa que se quita con la yema del dedo, con una pista escrita en ella.",
-          body: "Rasca y gana es la revelación más sencilla que hay: una foto bajo una capa que se va con la yema del dedo, tarjeta tras tarjeta, y un titular en la última para la noticia. La propia capa lleva treinta caracteres, así que escribe ahí la pista, donde la leen antes de rascar. Hasta doce fotos, una como mínimo.",
+          body: "Rasca y gana es la revelación más sencilla que hay: una foto bajo una capa que se va con la yema del dedo, tarjeta tras tarjeta, y un titular en la última para la noticia. La propia capa lleva treinta caracteres, así que escribe ahí la pista, que se lee antes de rascar. Hasta doce fotos, una como mínimo.",
           line: { field: "foilText", where: "Las palabras de la capa", text: "la noticia, en la última" },
         },
         {
@@ -2079,41 +2079,41 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "pack-your-bags",
           heading: "Pistas en etiquetas de maleta, y luego el destino",
           brief: "Hasta cinco pistas en etiquetas de maleta, y un panel de salidas dice el sitio.",
-          body: "Haz la maleta desvela un viaje poco a poco: hasta cinco pistas en etiquetas de equipaje, leídas de una en una, antes de que un panel de salidas diga el sitio. Elige avión, tren o coche y pon la fecha en el billete; al arrancar la matriz, tu carta está debajo, el sitio para decir por qué allí.",
-          line: { field: "clues", where: "Una etiqueta de maleta", text: "Mete algo con lo que puedas nadar" },
+          body: "En Haz la maleta, el viaje se desvela poco a poco: hasta cinco pistas en etiquetas de equipaje, leídas de una en una, antes de que un panel de salidas diga el sitio. Elige avión, tren o coche y pon la fecha en el billete; al arrancar la matriz, tu carta está debajo, el sitio para decir por qué allí.",
+          line: { field: "clues", where: "Una etiqueta de maleta", text: "No olvides el bañador" },
         },
         {
           template: "the-letter",
           heading: "Una carta sellada con un último mensaje que tocar",
           brief: "Un sello de lacre y luego un último mensaje que se abre con un toque, pulsando o agitando.",
-          body: "La carta tiene dos revelaciones: un sello de lacre que rompen para leer y, después de tus palabras, un último mensaje que se abre con un toque, pulsando o agitando, de hasta 600 caracteres. Pon ahí la sorpresa y deja tranquila la carta, para que llegue sin avisar. La despedida va justo encima de tu nombre.",
+          body: "La carta tiene dos revelaciones: un sello de lacre que se rompe para leer y, después de tus palabras, un último mensaje que se abre con un toque, pulsando o agitando, de hasta 600 caracteres. Pon ahí la sorpresa y deja tranquila la carta, para que llegue sin avisar. La despedida va justo encima de tu nombre.",
           line: { field: "signOff", where: "La despedida", text: "Lee hasta el final. Queda una cosa más" },
         },
         {
           template: "fortune-cookie",
           heading: "Galletas que insinúan, y una que lo cuenta",
           brief: "Galletas que se parten con un toque: fortunas que insinúan y la noticia en la última.",
-          body: "Galleta de la fortuna pone en el plato de tres a veinte galletas, y cada una se parte con un toque y suelta una tira con una de tus fortunas. La última del plato guarda tu mensaje, así que la noticia va ahí: la fecha del viaje, el número de vuelo, la mesa. Los números de la suerte salen iguales en todas las tiras; déjalos al margen, y que las fortunas solo insinúen.",
+          body: "En el plato de Galleta de la fortuna hay de tres a veinte galletas, y cada una se parte con un toque y suelta una tira con una de tus fortunas. La última del plato guarda tu mensaje, así que la noticia va ahí: la fecha del viaje, el número de vuelo, la mesa. Los números de la suerte salen iguales en todas las tiras; déjalos al margen, y que las fortunas solo insinúen.",
           line: { field: "fortunes", where: "Una de las fortunas", text: "Hay algo reservado. Deja libre el día 14." },
         },
         {
           template: "snow-globe",
           heading: "Agita la bola y sale una frase",
-          brief: "Agitan el móvil y aparece una frase cada vez que se posa la nieve, cuatro como mucho.",
-          body: "Bola de nieve se agita mejor con el móvil, y en uno que no lo nota lo hace un botón; cada vez que se posa la nieve aparece una frase nueva, cuatro como mucho, con una foto entre la nieve. La placa de latón de la base admite cuarenta y cuatro caracteres. Guarda la sorpresa para la última frase y ponle nombre en la placa.",
+          brief: "Al agitar el móvil aparece una frase cada vez que se posa la nieve, cuatro como mucho.",
+          body: "Al agitar el móvil, la nieve vuela; en un móvil que no lo nota, lo hace un botón de Bola de nieve. Cada vez que se posa la nieve aparece una frase nueva, cuatro como mucho, con una foto entre la nieve. La placa de latón de la base admite cuarenta y cuatro caracteres. Guarda la sorpresa para la última frase y ponle nombre en la placa.",
           line: { field: "plaque", where: "La placa de latón", text: "El invierno en que por fin nos vimos" },
         },
         {
           template: "jar-of-reasons",
           heading: "Un frasco que se agita hasta la última nota",
           brief: "Notas que salen de una en una al agitar, con la noticia guardada para la última.",
-          body: "Frasco de razones también se agita, o se toca, y cae una nota doblada cada vez hasta que el frasco queda vacío y tu carta está debajo. Para una sorpresa, numera las notas en la etiqueta del frasco, cuarenta caracteres, para que sepan que llega una última, y guarda la noticia para ella.",
+          body: "Aquí basta agitar o tocar para que caiga de Frasco de razones una nota doblada cada vez hasta que el frasco queda vacío y tu carta está debajo. Para una sorpresa, numera las notas en la etiqueta del frasco, cuarenta caracteres, para que sepan que llega una última, y guarda la noticia para ella.",
           line: { field: "label", where: "La etiqueta del frasco", text: "12 notas. Guarda la última." },
         },
       ],
       sections: [
         {
-          heading: "Esconde la noticia en lo último que ven",
+          heading: "Esconde la noticia al final",
           body: "Cada regalo de aquí tiene un orden, y la noticia va al final: la última tarjeta, la última nota, la frase del cero, la carta bajo la matriz del billete. Lo que se diga antes es una pista, no un destripe. Míralo entero una vez en la vista previa y comprueba que nada antes del final lo desvela.",
         },
         {
@@ -2126,7 +2126,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
       ],
       faq: [
-        { q: "¿Qué sorpresa online puedo darle a mi pareja?", a: "Un regalo con la revelación incluida: fotos bajo una capa, un reloj que se abre a medianoche, pistas hacia un viaje, un último mensaje que aparece al agitar. Pon la noticia en lo último que ven." },
+        { q: "¿Qué sorpresa online puedo darle a mi pareja?", a: "Un regalo con la revelación incluida: fotos bajo una capa, un reloj que se abre a medianoche, pistas hacia un viaje, un último mensaje que aparece al agitar. Pon la noticia al final del todo." },
         { q: "¿Puedo enviarlo ya y que se abra ese día?", a: "Sí, como parte de un regalo de pago. En el editor, en Extras, activa «Programar la apertura» y elige la fecha, la hora y su zona horaria. Hasta entonces el enlace muestra una cuenta atrás en marcha, y en ese momento se abre solo." },
         { q: "¿Alguno necesita sensor de movimiento?", a: "No. Bola de nieve y Frasco de razones se disfrutan más agitando, y los dos funcionan en un móvil que no lo nota: la bola tiene un botón y el frasco se toca. Los demás se tocan, se rascan o simplemente se miran." },
         { q: "¿Cómo mantengo la sorpresa hasta que lo abra?", a: "Manda el enlace con un mensaje sencillo, sin nada sobre lo que hay dentro. Si el regalo está programado, la página a la que llega antes de la hora solo dice que algo le espera y cuándo se abre." },
@@ -2161,35 +2161,35 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "jar-of-reasons",
           heading: "The small ordinary things, one note each",
-          body: "Jar of Reasons is where the ordinary things go, the ones a photo never caught: how they hum when they cook, the way they say goodnight. Each note takes 160 characters and falls out of the jar when they shake the phone or tap it. Write the notes a memory book would otherwise lose.",
+          body: "The ordinary things go in the jar, the ones a photo never caught: how they hum when they cook, the way they say goodnight. Each note in Jar of Reasons takes 160 characters and falls out when they shake the phone or tap it. Write what a photo album leaves out.",
           line: { field: "reasons", where: "One note in the jar", text: "You hum the same three notes every time you open the fridge." },
         },
         {
           template: "text-thread",
           heading: "The chat, under the name you saved them as",
           brief: "Your own messages replayed, under the name you saved them as the night you met.",
-          body: "Text Thread replays a conversation bubble by bubble, so it can tell a chapter in your own messages. The name at the top of the chat holds forty characters: put the name you saved them under the night you met, which is a story in itself, and replay the first exchange that mattered.",
-          line: { field: "contactName", where: "The name on the chat", text: "Ana (bookshop, do not text first)" },
+          body: "One chapter can be told in your own messages: Text Thread replays a conversation bubble by bubble. The name at the top of the chat holds forty characters: put the name you saved them under the night you met, which is a story in itself, and replay the first exchange that mattered.",
+          line: { field: "contactName", where: "The name on the chat", text: "Ana (bookstore, do not text first)" },
         },
         {
           template: "front-page",
           heading: "The day it changed, as front-page news",
           brief: "One chapter of your story reported as news, under their name on the masthead.",
-          body: "Front Page prints your story as a newspaper: their name on the masthead, a headline of eighty characters, your message set in columns, a weather box and classified ads you write. Use it for one chapter, the day things changed between you, reported straight, with the classifieds for the jokes.",
+          body: "Give one chapter the newspaper treatment. Front Page sets their name on the masthead, a headline of eighty characters, your message in columns, a weather box and classified ads you write. Use it for the day things changed between you, reported straight, with the classifieds for the jokes.",
           line: { field: "headline", where: "The headline", text: "NIGHT BUS ENDS IN CONVERSATION THAT LASTS SEVEN HOURS" },
         },
         {
           template: "unwrapped",
           heading: "Your story counted, present by present",
           brief: "Presents opened one by one to numbers that tell your story.",
-          body: "Unwrapped tells a story in numbers: wrapped presents opened one by one to figures that count up, up to eight, each written by you, and a gold present that prints the lot as a receipt. Numbers make a surprising memory book. Count the things nobody would think to photograph.",
-          line: { field: "stats", where: "One of the numbers", text: "3 times we got lost on the same roundabout" },
+          body: "Some chapters are best told in numbers. In Unwrapped, wrapped presents open one by one to figures that count up, up to eight, each written by you, and a gold present prints the lot as a receipt. Count the things nobody would think to photograph.",
+          line: { field: "stats", where: "One of the numbers", text: "3 times lost at the same traffic circle" },
         },
         {
           template: "recipe-box",
           heading: "A recipe card for something you cook together",
           brief: "Your story written as a recipe for the dish you always cook together.",
-          body: "Recipe Box is a story told as a recipe. Name the dish you always make together, list up to six ingredients as the memories in it, and write the line under the title, the one the editor calls “Makes one…”, about what it makes of the two of you; your letter is on the back.",
+          body: "Every couple has a dish, and Recipe Box tells your story as its recipe. Name the dish you always make together, list up to six ingredients as the memories in it, and write the line under the title, the one the editor calls “Makes one…”, about what it makes of the two of you; your letter is on the back.",
           line: { field: "recipeName", where: "The recipe’s name", text: "Sunday Soup, the Version We Argue About" },
         },
         {
@@ -2217,13 +2217,13 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         },
         {
           heading: "The small ordinary thing",
-          body: "The things that make a relationship rarely get photographed: how they take their tea, the song they hum, the way they leave notes on the fridge. Write those down. A memory book with three ordinary details in it is more theirs than one with thirty photos from holidays.",
+          body: "The things that make a relationship rarely get photographed: how they take their tea, the song they hum, the way they leave notes on the fridge. Write those down. A memory book with three ordinary details in it is more theirs than one with thirty photos from vacations.",
         },
       ],
       faq: [
         { q: "What is a digital memory book?", a: "A gift that tells the story of the two of you mostly in words, with photos in support: a gallery with titled plaques, a road of dated chapters, a chat you script. It opens as a link on their phone." },
         { q: "How is a memory book different from a photo album?", a: "An album leads with pictures and needs many of them. A memory book leads with what you write and can work with a few photos or none, like Jar of Reasons or Unwrapped." },
-        { q: "What should I write in a memory book for my partner?", a: "Three kinds of page: the first time, the day it changed, and the small ordinary things. One specific detail on each page is worth more than a paragraph of general feeling." },
+        { q: "What should I write in a memory book for my partner?", a: "Three kinds of page: the first time, the day it changed, and the small ordinary things. Give each page one detail that only the two of you would recognize." },
         { q: "Can I add to it later?", a: "You can edit a gift from My gifts after sending it, and the changes appear at the same link, so a memory book can gain a chapter after the next trip." },
       ],
       related: [
@@ -2253,35 +2253,35 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "jar-of-reasons",
           heading: "Las cosas pequeñas, una nota cada una",
-          body: "Frasco de razones es donde van las cosas normales, las que ninguna foto pilló: cómo tararea cuando cocina, su forma de dar las buenas noches. Cada nota admite 160 caracteres y sale del frasco al agitar el móvil o tocarlo. Escribe las notas que un libro de recuerdos perdería si no.",
+          body: "En el frasco van las cosas de cada día, las que ninguna foto pilló: cómo tararea cuando cocina, su forma de dar las buenas noches. Cada nota de Frasco de razones admite 160 caracteres y sale al agitar el móvil o tocarlo. Escribe lo que un álbum de fotos deja fuera.",
           line: { field: "reasons", where: "Una nota del frasco", text: "Tarareas las mismas tres notas cada vez que abres la nevera." },
         },
         {
           template: "text-thread",
-          heading: "El chat, con el nombre con que le guardaste",
-          brief: "Vuestros mensajes repetidos, con el nombre con que le guardaste la noche que os conocisteis.",
-          body: "Hilo de mensajes repite una conversación burbuja a burbuja, así que puede contar un capítulo con vuestros propios mensajes. El nombre de arriba del chat admite cuarenta caracteres: pon el nombre con que le guardaste la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
+          heading: "El chat, con el nombre de su contacto",
+          brief: "Vuestros mensajes repetidos, con el nombre que pusiste a su contacto la noche que os conocisteis.",
+          body: "Un capítulo puede contarse con vuestros propios mensajes: Hilo de mensajes repite una conversación burbuja a burbuja. El nombre de arriba del chat admite cuarenta caracteres: pon el que diste a su contacto la noche que os conocisteis, que ya es una historia, y repite el primer intercambio que importó.",
           line: { field: "contactName", where: "El nombre del chat", text: "Ana (librería, no escribir primero)" },
         },
         {
           template: "front-page",
           heading: "El día que cambió, como noticia de portada",
           brief: "Un capítulo de vuestra historia contado como noticia, bajo su nombre en la cabecera.",
-          body: "Portada imprime vuestra historia como un periódico: su nombre en la cabecera, un titular de ochenta caracteres, tu mensaje en columnas, el recuadro del tiempo y anuncios por palabras que escribes tú. Úsala para un capítulo, el día en que las cosas cambiaron entre vosotros, contado en serio, con los anuncios para las bromas.",
+          body: "Dale a un capítulo trato de periódico. Portada pone su nombre en la cabecera, un titular de ochenta caracteres, tu mensaje en columnas, el recuadro del tiempo y anuncios por palabras que escribes tú. Úsala para el día en que las cosas cambiaron entre vosotros, contado en serio, con los anuncios para las bromas.",
           line: { field: "headline", where: "El titular", text: "UN AUTOBÚS NOCTURNO ACABA EN UNA CONVERSACIÓN DE SIETE HORAS" },
         },
         {
           template: "unwrapped",
           heading: "Vuestra historia contada, regalo a regalo",
           brief: "Regalos que se abren uno a uno con números que cuentan vuestra historia.",
-          body: "Nuestro año, desenvuelto cuenta una historia en números: regalos envueltos que se abren uno a uno con cifras que suben, hasta ocho, escritas por ti, y un regalo dorado que lo imprime todo como un tique. Los números hacen un libro de recuerdos sorprendente. Cuenta lo que a nadie se le ocurriría fotografiar.",
+          body: "Hay capítulos que se cuentan mejor en números. En Nuestro año, desenvuelto, los regalos envueltos se abren uno a uno con cifras que suben, hasta ocho, escritas por ti, y uno dorado lo imprime todo como un tique. Cuenta lo que a nadie se le ocurriría fotografiar.",
           line: { field: "stats", where: "Uno de los números", text: "3 veces perdidos en la misma rotonda" },
         },
         {
           template: "recipe-box",
-          heading: "Una receta de algo que cocináis juntos",
-          brief: "Vuestra historia escrita como la receta del plato que siempre cocináis juntos.",
-          body: "Caja de recetas es una historia contada como receta. Ponle el nombre del plato que siempre hacéis juntos, apunta hasta seis ingredientes que sean los recuerdos que lleva y escribe la frase de debajo del título, la que el editor llama «Sale una…», con lo que sale de los dos; tu carta va detrás.",
+          heading: "Una receta de algo que cocináis los dos",
+          brief: "Vuestra historia escrita como la receta del plato que siempre cocináis los dos.",
+          body: "Toda pareja tiene un plato, y Caja de recetas cuenta vuestra historia como su receta. Ponle el nombre del plato que siempre hacéis los dos, apunta hasta seis ingredientes que sean los recuerdos que lleva y escribe la frase de debajo del título, la que el editor llama «Sale una…», con lo que sale de los dos; tu carta va detrás.",
           line: { field: "recipeName", where: "El nombre de la receta", text: "La sopa del domingo, versión discutida" },
         },
         {
@@ -2301,21 +2301,21 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
       sections: [
         {
           heading: "La primera vez",
-          body: "Empieza donde empezó, pero no por la fecha: por un detalle. Qué llevaba puesto, la broma que te hizo mirar dos veces, el nombre equivocado con que le llamaste. Un libro de recuerdos se abre con algo que solo sabéis vosotros, y la primera página se gana el resto.",
+          body: "Empieza donde empezó, pero no por la fecha: por un detalle. Qué llevaba puesto, la broma que te hizo mirar dos veces, cómo te equivocaste con su nombre. Un libro de recuerdos se abre con algo que solo sabéis vosotros, y la primera página se gana el resto.",
         },
         {
           heading: "El día que cambió",
           body: "Toda pareja tiene un día en que la cosa se volvió otra: un viaje, un último tren perdido, una llamada a las tres de la mañana. Dale a ese día su propio capítulo, la sala del museo o la portada, y di claramente qué cambió. Es la página a la que volverá.",
         },
         {
-          heading: "Lo pequeño y normal",
+          heading: "Lo de todos los días",
           body: "Lo que hace una relación casi nunca sale en fotos: cómo toma el té, la canción que tararea, las notas que deja en la nevera. Escríbelo. Un libro de recuerdos con tres detalles normales es más suyo que uno con treinta fotos de vacaciones.",
         },
       ],
       faq: [
         { q: "¿Qué es un libro de recuerdos digital?", a: "Un regalo que cuenta vuestra historia sobre todo con palabras, con fotos de apoyo: una galería con placas tituladas, un camino de capítulos con fecha, un chat que escribes tú. Se abre como enlace en su móvil." },
-        { q: "¿En qué se diferencia de un álbum de fotos?", a: "Un álbum va por delante con las imágenes y necesita muchas. Un libro de recuerdos va por delante con lo que escribes y funciona con pocas fotos o ninguna, como Frasco de razones o Nuestro año, desenvuelto." },
-        { q: "¿Qué escribo en un libro de recuerdos para mi pareja?", a: "Tres tipos de página: la primera vez, el día que cambió y las cosas pequeñas y normales. Un detalle concreto en cada página vale más que un párrafo de sentimientos generales." },
+        { q: "¿En qué se diferencia de un álbum de fotos?", a: "Un álbum se apoya en las imágenes y necesita muchas. Un libro de recuerdos se apoya en lo que escribes y funciona con pocas fotos o ninguna, como Frasco de razones o Nuestro año, desenvuelto." },
+        { q: "¿Qué escribo en un libro de recuerdos para mi pareja?", a: "Tres tipos de página: la primera vez, el día que cambió y las cosas pequeñas y normales. Dale a cada página un detalle que solo reconoceríais vosotros." },
         { q: "¿Puedo añadirle cosas más adelante?", a: "Puedes editar un regalo desde Mis regalos después de enviarlo, y los cambios salen en el mismo enlace, así que un libro de recuerdos puede ganar un capítulo después del próximo viaje." },
       ],
       related: [
