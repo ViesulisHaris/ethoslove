@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const counted = vi.hoisted(() => [] as unknown[][]);
@@ -245,5 +246,15 @@ describe("partner clicks per room", () => {
 
   it("the click still carries the partner and the placement, and nothing new", () => {
     expect(readFileSync("src/components/trips/partner-link.tsx", "utf8")).toContain('track("affiliate_click", { partner, placement, ...(trip ? { trip } : {}) })');
+  });
+});
+
+describe("where the marker runs", () => {
+  it("is mounted in the marketing layout and nowhere else: never on a gift, the editor or an account page", () => {
+    const mounts: string[] = [];
+    for (const dir of ["src/app", "src/components", "src/templates"])
+      for (const file of readdirSync(dir, { recursive: true, encoding: "utf8" }))
+        if (/\.tsx?$/.test(file) && readFileSync(join(dir, file), "utf8").includes("<RoomsSeen")) mounts.push(join(dir, file).replaceAll("\\", "/"));
+    expect(mounts).toEqual(["src/app/[currency]/[locale]/(marketing)/layout.tsx"]);
   });
 });
