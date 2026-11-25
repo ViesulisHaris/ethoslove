@@ -20,6 +20,8 @@ import { ArtLayer, BandEdge } from "@/components/templates/page/art";
 import { FINDER_ART, FINDER_FOOT_ART } from "@/components/templates/page/placements";
 import { Intro, SPREAD } from "@/components/templates/page/spread";
 import { DocumentMark } from "@/components/shared/document-mark";
+import { PreloadImage } from "@/components/shared/preload-image";
+import { artSrcSet, pageArt } from "@/content/page-art";
 
 type Props = PageProps<"/[currency]/[locale]/gifts/finder">;
 
@@ -67,6 +69,9 @@ export default async function GiftFinderPage({ params }: Props) {
   const theme = DEFAULT_PAGE_THEME;
   const today = new Date().toISOString().slice(0, 10);
   const browse = copy.browse.replace("{count}", String(count));
+  // The lily that lies across the band's edge on a phone is on a phone's first screen, and the largest picture there.
+  const footLily = FINDER_FOOT_ART.find((b) => b.phone === "only")!;
+  const footLilyArt = pageArt(footLily.art, theme.flowers);
 
   return (
     <>
@@ -82,6 +87,13 @@ export default async function GiftFinderPage({ params }: Props) {
       {/* The footer, the header's button and the ground behind them take the page's colours while it is open. */}
       <style>{pageThemeChromeCss(THEME, theme)}</style>
       <DocumentMark on="body" name={PAGE_THEME_MARK} value={THEME} />
+      {/*
+       * Asked for with the page, on a phone only (it is lg:hidden): lazy, it waited for the stylesheet
+       * to lay the page out and then for the fonts, and was the page's largest paint at 3.5 s (25 Nov 2026).
+       * At high priority, ahead of the scripts, which otherwise took the line first (3.2 s). The same
+       * files and sizes as ArtLayer draws it with.
+       */}
+      <PreloadImage href={footLilyArt.src1x} srcSet={artSrcSet(footLilyArt)} sizes={`${footLily.size}vw`} media="(max-width: 1023.98px)" high />
       {/* -mt/pt: the page's ground runs up under the floating header, as a gift's page does. */}
       <div data-page-theme={THEME} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
         <section className="relative" aria-labelledby="finder-title">
