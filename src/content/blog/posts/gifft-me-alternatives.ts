@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "gifft-me-alternatives",
   published: "2026-11-16",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "scratch-card", "bouquet"],
   content: {
@@ -10,7 +11,7 @@ export const post: BlogPost = {
       title: "Gifft.me alternatives: 7 virtual gift sites compared",
       description: "Seven gifft.me alternatives checked on 16 Nov 2026: what's free, what you pay for, photos, music, voice, opening times, and how long each link lasts.",
       keyword: "gifft.me alternatives",
-      lead: "The closest free gifft.me alternatives are AIskyla Gifting and Surprises.Gift: animated gift boxes, scratch cards, fortune cookies and love letters with your photo, message and music, free to make and share. For more room, such as a photo gallery, your song or a set opening date, 2luv, GiftFeels and GiftsQR charge to send; QLovy's free page lasts 24 hours, and Ethos has one free template, a short letter, charging for the rest. We make Ethos, and every fact about the others comes from their own sites on 16 Nov 2026.",
+      lead: "The closest free gifft.me alternatives are AIskyla Gifting and Surprises.Gift: animated gift boxes, scratch cards, fortune cookies and love letters with your photo, message and music, free to make and share. For more room, such as a photo gallery, your song or a set opening date, 2luv, GiftFeels and GiftsQR charge to send; QLovy's free page lasts 24 hours, and Ethos charges for everything but {free:names}{note: as a short note|}. We make Ethos, and every fact about the others comes from their own sites on 16 Nov 2026.",
       takeaways: [
         "Free like gifft.me: AIskyla Gifting and Surprises.Gift. QLovy's free page lasts 24 hours.",
         "Only Ethos showed what its paid plans cost: 2luv's price didn't load, GiftFeels showed no amounts, and GiftsQR's and QLovy's vary by country or promotion.",
@@ -43,7 +44,7 @@ export const post: BlogPost = {
           rows: [
             ["2luv (2-luv.com)", "Building it and seeing the preview", "One payment to unlock and send, shown in your local currency. The price didn't load when we checked.", "Not stated"],
             ["AIskyla Gifting (aiskyla.com)", "Its gift boxes, letters, birthday surprises and other gifts: \"no app, no account and no payment\"", "Nothing listed; it calls itself \"a free and open platform\"", "Not stated"],
-            ["Ethos (tryethos.io)", "Two templates, The Letter and Constellations, with a small \"Made with Ethos\" footer", "$11.99 for one template, $20.98 for three, $29.99 for all, paid once. Extras on a free template: $8.99. [Pricing](/pricing)", "Meant to be permanent"],
+            ["Ethos (tryethos.io)", "{free:names}{note:, as a short note of up to 500 characters and a song|, with up to 10 photos and a song}, with a small \"Made with Ethos\" footer", "{price:single} for one template, {price:pick3} for three, {price:everything} for all, paid once. Extras on a free template: {price:extras}. [Pricing](/pricing)", "Meant to be permanent"],
             ["gifft.me", "Its gift boxes and e-cards, with no subscription", "Nothing listed on the pages we read", "Not stated"],
             ["GiftFeels (giftfeels.com)", "Making and previewing a gift", "A one-time unlock for one gift, or Monthly for every gift while it's active. Amounts not shown.", "A one-time unlock adds \"90 more days on the link\""],
             ["GiftsQR (giftsqr.com)", "Building the page. It says there is no free preview link.", "Essential or Premium, paid once, priced by country. Amounts not shown.", "Essential: 30 days. Premium: lifetime."],
@@ -58,7 +59,7 @@ export const post: BlogPost = {
           rows: [
             ["2luv", "Up to 10, with captions and dates", "Your song plays while they read", "Not stated", "A letter in an envelope with up to eight \"moments\", cinematic Halloween, Christmas and birthday gifts, and story-style eCards"],
             ["AIskyla Gifting", "A photo", "Background music", "Not stated", "Gift box, love letter, birthday, scratch card, beating heart, surprise egg, bubble wrap, balloon pop, fortune cookie, slot machine, jigsaw, and mini websites"],
-            ["Ethos", "Up to 10 free, up to 20 with a paid option", "A music library, or a 30-second preview of a real song", "With any paid option: a voice message up to 60 seconds, and video clips on some templates, The Letter among them", "61 templates, from letters and bouquets to scrapbooks, scratch cards and fortune cookies"],
+            ["Ethos", "{note:None on the free note, up to 20 with a paid option|Up to 10 free, up to 20 with a paid option}", "A music library, or a 30-second preview of a real song", "With any paid option: a voice message up to 60 seconds, and video clips on some templates, The Letter among them", "{count:templates} templates, from letters and bouquets to scrapbooks, scratch cards and fortune cookies"],
             ["gifft.me", "A photo, yours or from its collection", "Not stated", "Not stated", "Surprise gift box, birthday gifts, love letter and other e-cards"],
             ["GiftFeels", "Several, on some templates", "Not stated for gifts; personalised AI songs are sold separately", "Voice messages, listed among its paid features", "40+ templates: a birthday cake to blow out, love letter, open when letters, reasons, scrapbook, a Valentine's question"],
             ["GiftsQR", "Essential up to 5; Premium unlimited", "Yes, on several surprises", "A wall of voice messages from friends; a time capsule with video", "32+ surprises: scratch card, star sky, slot machine, fortune cookies, newspaper, time capsule, a year-in-review"],
@@ -95,12 +96,12 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "Our site. It makes animated [digital gifts](/gifts) from 61 templates, and one is free: [The Letter](/templates/the-letter), as a short note of up to 500 characters with music from our library. Its weak points next to gifft.me: photos and everything else are paid, the free note carries a small footer, and scheduling, a password and a voice message all need a paid option. It speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, and they can send a reaction or a gift of their own back.",
+          text: "Our site. It makes animated [digital gifts](/gifts) from {count:templates} templates, and {note:one goes out free: [The Letter](/templates/the-letter), as a short note of up to 500 characters with music from our library|[The Letter](/templates/the-letter) and [Constellations](/templates/constellations) go out free, with up to 10 photos and music from our library}. Its weak points next to gifft.me: {note:photos and everything else are paid, the free note carries a small footer|the free templates carry a small footer}, and scheduling, a password and a voice message all need a paid option. It speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, and they can send a reaction or a gift of their own back.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. Tap to break the seal: the letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids.",
+          note: "Tap to break the seal: the letter unfolds on a candle-lit desk and your words appear in handwriting. {note:As a free note it holds up to 500 characters and a song; for your photos as polaroids and the full letter, add \"Make it special\", paid once ([prices](/pricing)).|Your photos drop in as polaroids, and the whole letter is free.}",
         },
         { type: "h3", text: "GiftFeels" },
         {
@@ -175,7 +176,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "Is there a free website to make digital gifts like gifft.me?",
-          a: "Yes. AIskyla Gifting says its gifts need no app, no account and no payment, and Surprises.Gift calls its gifts free. QLovy has a free page that lasts 24 hours, and Ethos has one free template, The Letter, as a short note with a small footer.",
+          a: "Yes. AIskyla Gifting says its gifts need no app, no account and no payment, and Surprises.Gift calls its gifts free. QLovy has a free page that lasts 24 hours, and Ethos {note:has one free template, The Letter, as a short note|gives {free:names} free}, with a small footer.",
         },
         {
           q: "Is the gifft.me website safe?",
@@ -199,7 +200,7 @@ export const post: BlogPost = {
       title: "Alternativas a gifft.me: 7 webs de regalos virtuales",
       description: "Siete alternativas a gifft.me revisadas el 16/11/2026: qué es gratis, qué pagas, fotos, música, voz, hora de apertura y cuánto dura cada enlace.",
       keyword: "alternativas a gifft.me",
-      lead: "Las alternativas gratis más parecidas a gifft.me son AIskyla Gifting y Surprises.Gift: cajas regalo, tarjetas de rascar, galletas de la fortuna y cartas animadas con tu foto, tu mensaje y música, gratis. Para más (una galería de fotos, vuestra canción o una fecha de apertura), 2luv, GiftFeels y GiftsQR cobran por enviarlo; la página gratis de QLovy dura 24 horas, y Ethos cobra salvo en una plantilla gratis, una carta corta. Nosotros hacemos Ethos; lo de las demás sale de sus propias webs, leídas el 16 de noviembre de 2026.",
+      lead: "Las alternativas gratis más parecidas a gifft.me son AIskyla Gifting y Surprises.Gift: cajas regalo, tarjetas de rascar, galletas de la fortuna y cartas animadas con tu foto, tu mensaje y música, gratis. Para más (una galería de fotos, vuestra canción o una fecha de apertura), 2luv, GiftFeels y GiftsQR cobran por enviarlo; la página gratis de QLovy dura 24 horas, y Ethos cobra por todo salvo {free:names}{note: como nota corta|}. Nosotros hacemos Ethos; lo de las demás sale de sus propias webs, leídas el 16 de noviembre de 2026.",
       takeaways: [
         "Gratis como gifft.me: AIskyla Gifting y Surprises.Gift. La página gratis de QLovy dura 24 horas.",
         "Solo Ethos mostraba cuánto cuestan sus planes de pago: el precio de 2luv no cargó, GiftFeels no mostraba importes y los de GiftsQR y QLovy varían por país o promoción.",
@@ -232,7 +233,7 @@ export const post: BlogPost = {
           rows: [
             ["2luv (2-luv.com)", "Crearlo y ver la vista previa", "Un pago para desbloquearlo y enviarlo, en tu moneda local. El precio no cargó cuando lo miramos.", "No lo indica"],
             ["AIskyla Gifting (aiskyla.com)", "Sus cajas regalo, cartas, sorpresas de cumpleaños y demás regalos: «sin app, sin cuenta y sin pagar»", "Nada a la vista; se presenta como «una plataforma gratuita y abierta»", "No lo indica"],
-            ["Ethos (tryethos.io)", "Dos plantillas, La carta y Constelaciones, con un pequeño pie «Hecho con Ethos»", "9,99 € una plantilla, 17,98 € tres, 24,99 € todas, en un solo pago. Extras en una plantilla gratis: 7,49 €. [Precios](/pricing)", "Pensado para ser permanente"],
+            ["Ethos (tryethos.io)", "{free:names}{note:, como nota corta de hasta 500 caracteres y una canción|, con hasta 10 fotos y una canción}, con un pequeño pie «Hecho con Ethos»", "{price:single} una plantilla, {price:pick3} tres, {price:everything} todas, en un solo pago. Extras en una plantilla gratis: {price:extras}. [Precios](/pricing)", "Pensado para ser permanente"],
             ["gifft.me", "Sus cajas regalo y tarjetas digitales, sin suscripción", "Nada en las páginas que leímos", "No lo indica"],
             ["GiftFeels (giftfeels.com)", "Crear y previsualizar un regalo", "Un pago único por un regalo, o Monthly para todos los regalos mientras esté activo. Sin importes a la vista.", "Un pago único añade «90 días más al enlace»"],
             ["GiftsQR (giftsqr.com)", "Crear la página. Dice que no hay enlace de vista previa gratis.", "Essential o Premium, en un solo pago, con precio según el país. Sin importes a la vista.", "Essential: 30 días. Premium: para siempre."],
@@ -247,7 +248,7 @@ export const post: BlogPost = {
           rows: [
             ["2luv", "Hasta 10, con pie de foto y fecha", "Vuestra canción suena mientras lee", "No lo indica", "Una carta en un sobre con hasta ocho «momentos», regalos cinematográficos para Halloween, Navidad y cumpleaños, y eCards en formato stories"],
             ["AIskyla Gifting", "Una foto", "Música de fondo", "No lo indica", "Caja regalo, carta de amor, cumpleaños, tarjeta de rascar, corazón que late, huevo sorpresa, plástico de burbujas, globos, galleta de la fortuna, tragaperras, puzle y minipáginas web"],
-            ["Ethos", "Hasta 10 gratis, hasta 20 con una opción de pago", "Una biblioteca de música, o 30 segundos de una canción real", "Con cualquier opción de pago: un mensaje de voz de hasta 60 segundos y vídeos en algunas plantillas, La carta entre ellas", "61 plantillas, de cartas y ramos a álbumes, tarjetas de rascar y galletas de la fortuna"],
+            ["Ethos", "{note:Ninguna en la nota gratis, hasta 20 con una opción de pago|Hasta 10 gratis, hasta 20 con una opción de pago}", "Una biblioteca de música, o 30 segundos de una canción real", "Con cualquier opción de pago: un mensaje de voz de hasta 60 segundos y vídeos en algunas plantillas, La carta entre ellas", "{count:templates} plantillas, de cartas y ramos a álbumes, tarjetas de rascar y galletas de la fortuna"],
             ["gifft.me", "Una foto, tuya o de su colección", "No lo indica", "No lo indica", "Caja sorpresa, regalos de cumpleaños, carta de amor y otras tarjetas digitales"],
             ["GiftFeels", "Varias, en algunas plantillas", "No lo indica para los regalos; vende aparte canciones personalizadas hechas con IA", "Mensajes de voz, entre sus funciones de pago", "Más de 40 plantillas: una tarta para soplar las velas, carta de amor, cartas «ábrela cuando», razones, álbum, una pregunta de San Valentín"],
             ["GiftsQR", "Essential hasta 5; Premium sin límite", "Sí, en varias sorpresas", "Un muro de mensajes de voz de amigos; una cápsula del tiempo con vídeo", "Más de 32 sorpresas: tarjeta de rascar, cielo de estrellas, tragaperras, galletas de la fortuna, periódico, cápsula del tiempo, un resumen del año"],
@@ -284,12 +285,12 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "La nuestra. Hace [regalos digitales](/gifts) animados con 61 plantillas, y una es gratis: [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con música de nuestra biblioteca. Sus puntos flojos frente a gifft.me: las fotos y todo lo demás son de pago, la nota gratis lleva un pequeño pie, y para programar el regalo, ponerle contraseña o añadir un mensaje de voz hace falta una opción de pago. Solo funciona en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, y esa persona puede mandarte una reacción o un regalo suyo de vuelta.",
+          text: "La nuestra. Hace [regalos digitales](/gifts) animados con {count:templates} plantillas, y {note:una sale gratis: [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con música de nuestra biblioteca|[La carta](/templates/the-letter) y [Constelaciones](/templates/constellations) salen gratis, con hasta 10 fotos y música de nuestra biblioteca}. Sus puntos flojos frente a gifft.me: {note:las fotos y todo lo demás son de pago, la nota gratis lleva un pequeño pie|las plantillas gratis llevan un pequeño pie}, y para programar el regalo, ponerle contraseña o añadir un mensaje de voz hace falta una opción de pago. Solo funciona en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, y esa persona puede mandarte una reacción o un regalo suyo de vuelta.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Toca para romper el sello: la carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids.",
+          note: "Toca para romper el sello: la carta se despliega sobre un escritorio a la luz de una vela y tus palabras aparecen escritas a mano. {note:Como nota gratis admite hasta 500 caracteres y una canción; para que tus fotos caigan como polaroids y tener la carta entera, añade «Hazlo especial», con un solo pago ([precios](/pricing)).|Tus fotos caen como polaroids, y la carta entera es gratis.}",
         },
         { type: "h3", text: "GiftFeels" },
         {
@@ -364,7 +365,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "¿Hay alguna web gratis para hacer regalos digitales como gifft.me?",
-          a: "Sí. AIskyla Gifting dice que sus regalos no necesitan app, cuenta ni pago, y Surprises.Gift llama gratis a sus regalos. QLovy tiene una página gratis que dura 24 horas, y Ethos tiene una plantilla gratis, La carta, como nota corta con un pequeño pie.",
+          a: "Sí. AIskyla Gifting dice que sus regalos no necesitan app, cuenta ni pago, y Surprises.Gift llama gratis a sus regalos. QLovy tiene una página gratis que dura 24 horas, y Ethos {note:tiene una plantilla gratis, La carta, como nota corta|da gratis {free:names}}, con un pequeño pie.",
         },
         {
           q: "¿Es seguro gifft.me?",

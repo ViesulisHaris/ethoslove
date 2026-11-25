@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "thinking-of-you-messages-for-him",
   published: "2026-10-29",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["paper-crane", "text-thread", "the-letter"],
   content: {
@@ -151,7 +152,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Turn one into something he keeps" },
         {
           type: "p",
-          text: "A text scrolls away by the weekend. Every so often, put a few of them somewhere he'll open again. Paper Crane and Text Thread are [premium](/pricing), and The Letter is free. All three are among our [just because gifts](/occasions/just-because), and our [digital gifts for your boyfriend](/gifts/for-boyfriend) have more ideas for him.",
+          text: "A text scrolls away by the weekend. Every so often, put a few of them somewhere he'll open again. Paper Crane and Text Thread are [premium](/pricing), and The Letter is {note:free as a short note|free}. All three are among our [just because gifts](/occasions/just-because), and our [digital gifts for your boyfriend](/gifts/for-boyfriend) have more ideas for him.",
         },
         {
           type: "template",
@@ -166,7 +167,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "He breaks a wax seal and reads your words in handwriting, with photos to scroll down to. Free, and the right size for the longer version: everything that reminded you of him this month, in one place.",
+          note: "He breaks a wax seal and reads your words in handwriting, with photos to scroll down to. The right size for the longer version: everything that reminded you of him this month, in one place. {note:Free as a note of up to 500 characters; the photos and the long version come with “Make it special”, paid once.|Free, photos and all.}",
         },
       ],
       faq: [
@@ -333,7 +334,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Convierte uno en algo que pueda guardar" },
         {
           type: "p",
-          text: "Un mensaje se pierde en el chat antes del fin de semana. De vez en cuando, pon unos cuantos en algún sitio que vuelva a abrir. Grulla de papel e Hilo de mensajes son [premium](/pricing), y La carta es gratis. Las tres están entre nuestros [regalos porque sí](/occasions/just-because), y en nuestros [regalos digitales para tu novio](/gifts/for-boyfriend) tienes más ideas para él.",
+          text: "Un mensaje se pierde en el chat antes del fin de semana. De vez en cuando, pon unos cuantos en algún sitio que vuelva a abrir. Grulla de papel e Hilo de mensajes son [premium](/pricing), y La carta es {note:gratis como nota corta|gratis}. Las tres están entre nuestros [regalos porque sí](/occasions/just-because), y en nuestros [regalos digitales para tu novio](/gifts/for-boyfriend) tienes más ideas para él.",
         },
         {
           type: "template",
@@ -348,7 +349,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Rompe un sello de lacre y lee tus palabras escritas a mano, con fotos al bajar. Gratis, y del tamaño justo para la versión larga: todo lo que te ha recordado a él este mes, en un solo sitio.",
+          note: "Rompe un sello de lacre y lee tus palabras escritas a mano, con fotos al bajar. Del tamaño justo para la versión larga: todo lo que te ha recordado a él este mes, en un solo sitio. {note:Gratis como nota de hasta 500 caracteres; las fotos y la versión larga vienen con «Hazlo especial», de pago único.|Gratis, fotos incluidas.}",
         },
       ],
       faq: [

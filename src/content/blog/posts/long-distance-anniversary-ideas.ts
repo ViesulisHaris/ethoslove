@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-anniversary-ideas",
   published: "2026-11-03",
-  updated: "2026-11-24",
+  updated: "2026-11-25",
   occasion: "long-distance",
   templates: ["halfway", "passport", "constellations"],
   content: {
@@ -134,7 +134,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Free. Each photo is a star in a night sky; they tap one to fly to it, and when they've found them all the stars draw a heart and your message appears. For the nights you've both looked at the same sky from different places.",
+          note: "Each photo is a star in a night sky; they tap one to fly to it, and when they've found them all the stars draw a heart and your message appears. For the nights you've both looked at the same sky from different places.",
         },
       ],
       faq: [
@@ -283,7 +283,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Gratis. Cada foto es una estrella en un cielo nocturno; toca una para volar hasta ella y, cuando las encuentra todas, las estrellas dibujan un corazón y aparece tu mensaje. Para las noches en que habéis mirado el mismo cielo desde sitios distintos.",
+          note: "Cada foto es una estrella en un cielo nocturno; toca una para volar hasta ella y, cuando las encuentra todas, las estrellas dibujan un corazón y aparece tu mensaje. Para las noches en que habéis mirado el mismo cielo desde sitios distintos.",
         },
       ],
       faq: [

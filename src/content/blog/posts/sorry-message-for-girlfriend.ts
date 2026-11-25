@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "sorry-message-for-girlfriend",
   published: "2026-11-07",
+  updated: "2026-11-25",
   occasion: "apology",
   templates: ["paper-crane", "the-letter", "text-thread"],
   content: {
@@ -124,7 +125,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "The free one, for the apology that needs a full page. She taps a wax seal and your words appear in handwriting. Some apologies are easier to write than to say on a call.",
+          note: "For the apology that needs a full page. She taps a wax seal and your words appear in handwriting. Some apologies are easier to write than to say on a call. {note:It's free as a short note of up to 500 characters; for a full page, add “Make it special”, paid once.|It's free.}",
         },
         {
           type: "template",
@@ -269,7 +270,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "La gratuita, para la disculpa que necesita una página entera. Toca un sello de lacre y tus palabras aparecen escritas a mano. Hay disculpas que cuesta menos escribir que decir por teléfono.",
+          note: "Para la disculpa que necesita una página entera. Toca un sello de lacre y tus palabras aparecen escritas a mano. Hay disculpas que cuesta menos escribir que decir por teléfono. {note:Es gratis como nota corta de hasta 500 caracteres; para una página entera, añade «Hazlo especial», de pago único.|Es gratis.}",
         },
         {
           type: "template",

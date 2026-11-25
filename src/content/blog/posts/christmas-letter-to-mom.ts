@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "christmas-letter-to-mom",
   published: "2026-11-10",
-  updated: "2026-11-20",
+  updated: "2026-11-25",
   occasion: "christmas",
   templates: ["fireside", "recipe-box", "the-letter"],
   content: {
@@ -180,7 +180,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free as a short note: up to 500 characters and her song, enough for a card message from above. She breaks the wax seal and your words appear in handwriting. The full letter and photos come with \"Make it special\", paid once ([prices](/pricing)).",
+          note: "She breaks the wax seal and your words appear in handwriting. {note:Free as a short note: up to 500 characters and her song, enough for a card message from above. The full letter and photos come with \"Make it special\", paid once ([prices](/pricing)).|Free with the whole letter, your photos and her song.}",
         },
       ],
       faq: [
@@ -383,7 +383,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis como nota corta: hasta 500 caracteres y su canción, suficiente para una de las frases de arriba. Ella rompe el sello de lacre y tus palabras aparecen escritas a mano. La carta completa y las fotos vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).",
+          note: "Ella rompe el sello de lacre y tus palabras aparecen escritas a mano. {note:Gratis como nota corta: hasta 500 caracteres y su canción, suficiente para una de las frases de arriba. La carta completa y las fotos vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).|Gratis con la carta entera, tus fotos y su canción.}",
         },
       ],
       faq: [

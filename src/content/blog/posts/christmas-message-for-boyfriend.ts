@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "christmas-message-for-boyfriend",
   published: "2026-11-11",
+  updated: "2026-11-25",
   occasion: "christmas",
   templates: ["snow-globe", "fireside", "the-letter"],
   content: {
@@ -144,7 +145,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. For the card message that wouldn't stay at two lines: the long version, in a wax-sealed envelope with your initial pressed into it, and photos from the year at the end.",
+          note: "For the card message that wouldn't stay at two lines: the long version, in a wax-sealed envelope with your initial pressed into it, and photos from the year at the end. {note:The long version and the photos come with \"Make it special\", paid once ([prices](/pricing)); free, it holds 500 characters.|Both go out free.}",
         },
       ],
       faq: [
@@ -304,7 +305,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Para el mensaje de la tarjeta que no cupo en dos frases: la versión larga, en un sobre lacrado con tu inicial en el sello, y fotos del año al final.",
+          note: "Para el mensaje de la tarjeta que no cupo en dos frases: la versión larga, en un sobre lacrado con tu inicial en el sello, y fotos del año al final. {note:La versión larga y las fotos vienen con «Hazlo especial», con un solo pago ([precios](/pricing)); gratis caben 500 caracteres.|Las dos cosas van gratis.}",
         },
       ],
       faq: [

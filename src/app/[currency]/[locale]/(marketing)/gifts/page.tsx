@@ -18,6 +18,7 @@ import { templateSeo } from "@/content/template-seo";
 import { getManifest, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
+import { pricingGifts, withFreeAnswer } from "@/components/pricing/free-gifts";
 import { PricingCards } from "@/components/pricing/pricing-cards";
 import { Openings } from "@/components/marketing/home/openings";
 import { ProofLine, Reactions } from "@/components/marketing/home/reactions";
@@ -28,7 +29,8 @@ import { IdeaCards, MoreRow, QUIET_LINK, QuestionsSpread, SiteHero, SitePage, Sp
 import { HERO_BUTTON } from "@/components/templates/page/hero-art";
 import { QUESTION_PLUS, QUESTION_ROW, QuestionRow } from "@/components/templates/page/sections";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { sendsFree } from "@/lib/gift/free-tier";
+import { countWord } from "@/lib/count-words";
 
 /** The proof in the reactions section is read from the database: the page is drawn again hourly to keep it current. */
 export const revalidate = 3600;
@@ -42,7 +44,10 @@ const SHOWN_QUESTIONS = 4;
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/gifts">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t(noteForEveryone() ? "giftsDescriptionShort" : "giftsDescription"), absoluteTitle: true });
+  // The ideas the page lists and the templates that go out free, counted, not typed.
+  const free = listManifests().filter((m) => sendsFree(m)).length;
+  const description = t(free === 1 ? "giftsDescriptionShort" : "giftsDescription", { ideas: DIGITAL_GIFT_IDEAS.length, free: countWord(free, locale, { feminine: true }) });
+  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description, absoluteTitle: true });
 }
 
 /**
@@ -82,10 +87,15 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
       return [{ manifest, title: templateSeo(slug, l)?.keyword ?? manifest.name[l], line: manifest.tagline[l], make: `/create/${slug}`, free: sendsFree(manifest) }];
     }),
   }));
-  const steps = t.raw("home.how.steps") as { title: string; body: string }[];
   // What a digital gift is, asked in the list; the pricing page's own questions, which are that page's, in one closed row under it.
-  const pricingQuestions = pricingFaq(t.raw("pricing.faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() });
-  const free = manifests.filter((m) => sendsFree(m)).length;
+  // "What is free?" answered as /pricing answers it: with the free note on, the note's answer, not the one that lists two full templates.
+  const gifts = pricingGifts(manifests);
+  const pricingQuestions = withFreeAnswer(pricingFaq(t.raw("pricing.faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() }), gifts.note, t("pricing.faqFreeNote"));
+  const free = gifts.free.length;
+  // The first step says how many are free from the same list, and names the one when there is one.
+  const steps = (t.raw("home.how.steps") as { title: string; body: string }[]).map((step, i) =>
+    i === 0 ? { ...step, body: t("home.how.pickBody", { free, name: gifts.free[0]?.name[l] ?? "" }) } : step,
+  );
   // Where next: four pages by kind as posters; the people, the occasions, the other kinds and what a digital card is by name.
   const kinds = GIFT_GUIDE_SLUGS.flatMap((slug) => {
     const manifest = getManifest(GIFT_GUIDES[slug].en.film ?? GIFT_GUIDES[slug].en.ideas[0].template);
@@ -253,7 +263,9 @@ export default async function GiftsPage({ params }: PageProps<"/[currency]/[loca
                     <ul className="flex flex-col gap-1.5">
                       {(["free", "noAccount", "once", "langs"] as const).map((k) => (
                         <li key={k}>
-                          <span className="text-page-ink">{t(`home.hero.facts.${k}.a`)}</span> {t(`home.hero.facts.${k}.b`)}
+                          {/* The free count is the gallery's (sendsFree), never the typed figure: it said "02" with one free. */}
+                          <span className="text-page-ink">{k === "free" ? String(free).padStart(2, "0") : t(`home.hero.facts.${k}.a`)}</span>{" "}
+                          {k === "free" && free === 1 ? t("home.hero.facts.free.bOne") : t(`home.hero.facts.${k}.b`)}
                         </li>
                       ))}
                     </ul>

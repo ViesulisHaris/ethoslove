@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "good-morning-messages-for-her",
   published: "2026-10-27",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["text-thread", "the-letter"],
   content: {
@@ -155,7 +156,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope she opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free, for the morning you want to say more than a text can.",
+          note: "A wax-sealed envelope she opens with a tap. The letter unfolds on a candle-lit desk and your words appear in handwriting, for the morning you want to say more than a text can. {note:Sent free, it fits 500 characters and a song; your photos as polaroids come with \"Make it special\", paid once ([prices](/pricing)).|Your photos drop in as polaroids, and it's free.}",
         },
       ],
       faq: [
@@ -326,7 +327,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis, para la mañana en que quieres decir más de lo que cabe en un mensaje.",
+          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela y tus palabras aparecen escritas a mano, para la mañana en que quieres decir más de lo que cabe en un mensaje. {note:Gratis caben 500 caracteres y una canción; tus fotos como polaroids vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).|Tus fotos caen como polaroids, y es gratis.}",
         },
       ],
       faq: [

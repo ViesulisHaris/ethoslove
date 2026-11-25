@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "love-letter-for-boyfriend",
   published: "2026-11-14",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "keepsake"],
   content: {
@@ -197,7 +198,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "He taps to break a wax seal pressed with your initial. The paper unfolds by candlelight, your words write themselves onto it in handwriting, and your photos land on the desk as polaroids. A short version, up to 500 characters and without the photos, goes out free tonight; the full letter with photos is paid once.",
+          note: "He taps to break a wax seal pressed with your initial. The paper unfolds by candlelight, your words write themselves onto it in handwriting, and your photos land on the desk as polaroids. {note:A short version, up to 500 characters and without the photos, goes out free tonight; the full letter with photos is paid once.|The full letter with your photos goes out free tonight.}",
         },
         {
           type: "template",
@@ -423,7 +424,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Él rompe con un toque un sello de lacre con tu inicial. El papel se despliega a la luz de una vela, tus palabras se van escribiendo a mano sobre él y tus fotos caen en el escritorio como polaroids. Una versión corta, de hasta 500 caracteres y sin las fotos, se envía gratis esta misma noche; la carta entera con fotos se paga una sola vez.",
+          note: "Él rompe con un toque un sello de lacre con tu inicial. El papel se despliega a la luz de una vela, tus palabras se van escribiendo a mano sobre él y tus fotos caen en el escritorio como polaroids. {note:Una versión corta, de hasta 500 caracteres y sin las fotos, se envía gratis esta misma noche; la carta entera con fotos se paga una sola vez.|La carta entera con tus fotos se envía gratis esta misma noche.}",
         },
         {
           type: "template",

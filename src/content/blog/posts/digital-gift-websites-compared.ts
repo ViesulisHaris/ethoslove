@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "digital-gift-websites-compared",
   published: "2026-11-20",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "bouquet", "scrapbook"],
   content: {
@@ -12,7 +13,7 @@ export const post: BlogPost = {
       keyword: "best digital gift websites",
       lead: "The best digital gift websites depend on the gift: Sendly for an interactive card at $3.99, LovePage.io for a love page you can try free, Forevermore for an animated world that never expires, GiftsQR for a QR code in a card, Canva to design it yourself, and SendVirtualGift for free. Below are nine sites side by side, checked on each maker's own pages on 20 Nov 2026. We make Ethos, one of the nine, and its weak points are in the tables too.",
       takeaways: [
-        "Free: gifft.me, Canva, Ethos's short note, and SendVirtualGift, which needs no sign-up. LovePage.io is free too, but a free page lasts 48 hours.",
+        "Free: gifft.me, Canva, {note:Ethos's short note|Ethos's free templates}, and SendVirtualGift, which needs no sign-up. LovePage.io is free too, but a free page lasts 48 hours.",
         "Lowest US price we could see for a paid gift: Sendly, $3.99 once per card.",
         "Check how long the link lasts before you pay: from 48 hours to forever, depending on the site and the plan.",
         "Only three of the nine say on their pages that a gift can stay locked until a date you choose.",
@@ -25,7 +26,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "A digital gift here means something you make for one person and send as a link: an animated card, a letter, a love page, a small world to explore. Not a gift card, and not a parcel. The sites are in alphabetical order, prices in US dollars as they showed them to us; several change the price by country. JibJab also comes up when people ask for digital gift sites, but its pages didn't load for our check, so it isn't in the tables.",
+          text: "A digital gift here means something you make for one person and send as a link: an animated card, a letter, a love page, a small world to explore. Not a gift card, and not a parcel. The sites are in alphabetical order, prices in US dollars as they showed them to us; several change the price by country. Ethos's are shown in the currency you'd pay in. JibJab also comes up when people ask for digital gift sites, but its pages didn't load for our check, so it isn't in the tables.",
         },
         { type: "h2", text: "Price, what's free and how long the link lasts" },
         {
@@ -33,7 +34,7 @@ export const post: BlogPost = {
           head: ["Site", "Price", "Free", "How long the link lasts"],
           rows: [
             ["Canva (canva.com)", "Free for individuals. Canva Pro is paid; the amount isn't on the pages we read.", "Designing an eCard from its templates with your own photos", "Not stated"],
-            ["Ethos (tryethos.io)", "$11.99 for one template, $20.98 for three, $29.99 for all, paid once. Photos and the full letter on The Letter: $8.99. [Pricing](/pricing)", "The Letter, as a short note of up to 500 characters with music and a small \"Made with Ethos\" footer", "Meant to be permanent"],
+            ["Ethos (tryethos.io)", "{price:single} for one template, {price:pick3} for three, {price:everything} for all, paid once. \"Make it special\", {price:extras}, adds {note:photos and the full letter to The Letter|video, voice and up to 20 photos to The Letter}. [Pricing](/pricing)", "{note:The Letter, as a short note of up to 500 characters with music and a small \"Made with Ethos\" footer|The Letter and Constellations, with the whole letter, up to 10 photos, music and a small \"Made with Ethos\" footer}", "Meant to be permanent"],
             ["Forevermore (getforevermore.co)", "$10 Standard, $20 Premium, $30 Deluxe, per gift, paid once, plus tax where it applies", "Building the gift and watching it through before you pay", "Never expires"],
             ["gifft.me", "Free, no subscription", "Its gift boxes and e-cards", "Not stated"],
             ["GiftFeels (giftfeels.com)", "A one-time unlock for one gift, or Monthly for every gift. The amounts didn't load for us.", "Making and previewing a gift", "A one-time unlock adds \"90 more days on the link\""],
@@ -49,7 +50,7 @@ export const post: BlogPost = {
           head: ["Site", "What it makes", "Photos", "Music", "Video or voice"],
           rows: [
             ["Canva", "eCards and video cards you design yourself, dragging and dropping onto its templates", "Your own, plus its stock images, some free and some paid", "A music library in Pro, for videos", "Video templates, such as Christmas videos"],
-            ["Ethos", "61 animated templates: letters, a bouquet built stem by stem, a scrapbook, scratch cards, fortune cookies and more", "None on the free short note; up to 20 with a paid option, depending on the template", "A music library, or a 30-second preview of a real song", "With any paid option: a voice message up to 60 seconds, and video clips on some templates"],
+            ["Ethos", "{count:templates} animated templates: letters, a bouquet built stem by stem, a scrapbook, scratch cards, fortune cookies and more", "{note:None on the free short note|Up to 10 on the free templates}; up to 20 with a paid option, depending on the template", "A music library, or a 30-second preview of a real song", "With any paid option: a voice message up to 60 seconds, and video clips on some templates"],
             ["Forevermore", "31 animated worlds they move through, from a fair to a rooftop dinner", "Standard up to 12; Premium and Deluxe up to 30", "A song from YouTube; your own recording in Premium and Deluxe", "Premium and Deluxe: a voice note and up to 3 videos"],
             ["gifft.me", "A surprise gift box around a photo, and e-cards", "One, yours or from its collection", "Not stated", "Not stated"],
             ["GiftFeels", "40+ templates: a cake they blow out, a love letter, a jar of reasons, a time capsule, a scrapbook", "Several, on some templates", "Not stated for gifts; AI songs are sold separately", "Voice messages, listed among its paid features"],
@@ -84,7 +85,7 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "Our site. It makes animated [digital gifts](/gifts) from 61 templates, and one is free: [The Letter](/templates/the-letter), as a short note of up to 500 characters with music. Its weak points: one paid template costs more than a Sendly card or a LovePage.io page, photos are paid even on The Letter, the free note carries a footer and can't be scheduled or locked, and it speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, a paid template can be used again for every gift you make, and they can send a reaction or a gift back.",
+          text: "Our site. It makes animated [digital gifts](/gifts) from {count:templates} templates, and {note:[The Letter](/templates/the-letter) is free as a short note of up to 500 characters with music|[The Letter](/templates/the-letter) and [Constellations](/templates/constellations) are free, with your photos and music}. Its weak points: one paid template costs more than a Sendly card or a LovePage.io page, {note:photos are paid even on The Letter, the free note carries a footer|a free gift carries a footer} and can't be scheduled or locked, and it speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, a paid template can be used again for every gift you make, and they can send a reaction or a gift back.",
         },
         {
           type: "template",
@@ -130,7 +131,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**It has to be free:** SendVirtualGift or gifft.me for a quick surprise, Canva if you'd rather design it. Ethos's The Letter if a short note with music is enough: up to 500 characters, no photos, a small footer.",
+            "**It has to be free:** SendVirtualGift or gifft.me for a quick surprise, Canva if you'd rather design it. {note:Ethos's The Letter if a short note with music is enough: up to 500 characters, no photos, a small footer.|Ethos's The Letter or Constellations if you want your photos and a song in it, with a small footer.}",
             "**You'll pay a little for more:** Sendly at $3.99 for a card with video, or LovePage.io at US$8.99 for a love page that stays up for good.",
             "**It's a big anniversary:** Forevermore's Premium world with your voice and videos, or an Ethos [scrapbook](/templates/scrapbook) with polaroids, a letter and their song.",
             "**It has to open at midnight on their birthday:** Ethos lets you pick the time and their time zone. GiftsQR and GiftFeels have time capsules that open on a date, but don't say how you set the hour.",
@@ -166,13 +167,13 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you want to try it free first, [The Letter](/templates/the-letter) goes out free as a short note with a song, and the [digital gifts](/gifts) page shows what each kind of gift looks like when it opens.",
+          text: "If you want to try it free first, {note:[The Letter](/templates/the-letter) goes out free as a short note with a song|[The Letter](/templates/the-letter) and [Constellations](/templates/constellations) go out free with your photos and a song}, and the [digital gifts](/gifts) page shows what each kind of gift looks like when it opens.",
         },
       ],
       faq: [
         {
           q: "Are there free digital gift websites?",
-          a: "Yes. SendVirtualGift makes free animated gifts with no account, gifft.me makes free gift boxes and e-cards, and Canva is free for designing your own eCard. LovePage.io lets you publish a free love page, but it stays live for 48 hours. Ethos has one free template, The Letter, as a short note of up to 500 characters with music and a small footer.",
+          a: "Yes. SendVirtualGift makes free animated gifts with no account, gifft.me makes free gift boxes and e-cards, and Canva is free for designing your own eCard. LovePage.io lets you publish a free love page, but it stays live for 48 hours. On Ethos, {note:The Letter is free as a short note of up to 500 characters, with music and a small footer|The Letter and Constellations are free, with photos, music and a small footer}.",
         },
         {
           q: "How long does a digital gift link last?",
@@ -198,7 +199,7 @@ export const post: BlogPost = {
       keyword: "mejores páginas para hacer regalos digitales",
       lead: "Las mejores páginas para hacer regalos digitales dependen del regalo: Sendly para una tarjeta interactiva por 3,99 $, LovePage.io para una página de amor que puedes probar gratis, Forevermore para un mundo animado que no caduca, GiftsQR para un código QR dentro de una tarjeta, Canva para diseñarlo tú y SendVirtualGift si tiene que ser gratis. Aquí tienes nueve, revisadas en sus propias páginas el 20 de noviembre de 2026. Nosotros hacemos Ethos, una de las nueve, y sus puntos débiles también están en las tablas.",
       takeaways: [
-        "Gratis: gifft.me, Canva, la nota corta de Ethos y SendVirtualGift, que no pide registro. LovePage.io también es gratis, pero la página gratis dura 48 horas.",
+        "Gratis: gifft.me, Canva, {note:la nota corta de Ethos|las plantillas gratis de Ethos} y SendVirtualGift, que no pide registro. LovePage.io también es gratis, pero la página gratis dura 48 horas.",
         "El precio más bajo que vimos en EE. UU. para un regalo de pago: Sendly, 3,99 $ una vez por tarjeta.",
         "Mira cuánto dura el enlace antes de pagar: de 48 horas a para siempre, según la página y el plan.",
         "Solo tres de las nueve dicen que un regalo puede quedar cerrado hasta la fecha que elijas.",
@@ -211,7 +212,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Aquí un regalo digital es algo que haces para una persona y le mandas como enlace: una tarjeta animada, una carta, una página de amor, un pequeño mundo que recorrer. No una tarjeta regalo ni un paquete. Van por orden alfabético. Los precios de las demás están en dólares, tal como nos los enseñaron, y varias los cambian según el país; los de Ethos, en euros. JibJab también sale cuando se buscan páginas de regalos digitales, pero sus páginas no nos cargaron, así que no está en las tablas.",
+          text: "Aquí un regalo digital es algo que haces para una persona y le mandas como enlace: una tarjeta animada, una carta, una página de amor, un pequeño mundo que recorrer. No una tarjeta regalo ni un paquete. Van por orden alfabético. Los precios de las demás están en dólares, tal como nos los enseñaron, y varias los cambian según el país; los de Ethos, en la moneda en la que pagarías. JibJab también sale cuando se buscan páginas de regalos digitales, pero sus páginas no nos cargaron, así que no está en las tablas.",
         },
         { type: "h2", text: "Precio, qué es gratis y cuánto dura el enlace" },
         {
@@ -219,7 +220,7 @@ export const post: BlogPost = {
           head: ["Página", "Precio", "Gratis", "Cuánto dura el enlace"],
           rows: [
             ["Canva (canva.com)", "Gratis para particulares. Canva Pro es de pago; el importe no aparece en las páginas que leímos.", "Diseñar una tarjeta con sus plantillas y tus propias fotos", "No lo dice"],
-            ["Ethos (tryethos.io)", "9,99 € una plantilla, 17,98 € tres, 24,99 € todas, en un solo pago. Fotos y la carta completa en La carta: 7,49 €. [Precios](/pricing)", "La carta, como nota corta de hasta 500 caracteres, con música y un pequeño pie «Hecho con Ethos»", "Pensado para ser permanente"],
+            ["Ethos (tryethos.io)", "{price:single} una plantilla, {price:pick3} tres, {price:everything} todas, en un solo pago. «Hazlo especial», por {price:extras}, añade {note:fotos y la carta completa a La carta|vídeo, voz y hasta 20 fotos a La carta}. [Precios](/pricing)", "{note:La carta, como nota corta de hasta 500 caracteres, con música y un pequeño pie «Hecho con Ethos»|La carta y Constelaciones, con la carta entera, hasta 10 fotos, música y un pequeño pie «Hecho con Ethos»}", "Pensado para ser permanente"],
             ["Forevermore (getforevermore.co)", "10 $ Standard, 20 $ Premium, 30 $ Deluxe, por regalo, en un solo pago, más impuestos donde se apliquen", "Crear el regalo y verlo entero antes de pagar", "No caduca"],
             ["gifft.me", "Gratis, sin suscripción", "Sus cajas sorpresa y sus tarjetas", "No lo dice"],
             ["GiftFeels (giftfeels.com)", "Un pago único por un regalo, o Monthly para todos. Los importes no nos cargaron.", "Hacer el regalo y verlo antes", "El pago único añade «90 días más al enlace»"],
@@ -235,7 +236,7 @@ export const post: BlogPost = {
           head: ["Página", "Qué hace", "Fotos", "Música", "Vídeo o voz"],
           rows: [
             ["Canva", "Tarjetas y vídeos que diseñas tú, arrastrando y soltando sobre sus plantillas", "Las tuyas, más sus imágenes de archivo, unas gratis y otras de pago", "Una biblioteca de música en Pro, para vídeos", "Plantillas de vídeo, como las de Navidad"],
-            ["Ethos", "61 plantillas animadas: cartas, un ramo que se monta flor a flor, un álbum de recortes, rasca y gana, galletas de la fortuna y más", "Ninguna en la nota corta gratis; hasta 20 con una opción de pago, según la plantilla", "Una biblioteca de música, o 30 segundos de una canción real", "Con cualquier opción de pago: un mensaje de voz de hasta 60 segundos, y vídeos en algunas plantillas"],
+            ["Ethos", "{count:templates} plantillas animadas: cartas, un ramo que se monta flor a flor, un álbum de recortes, rasca y gana, galletas de la fortuna y más", "{note:Ninguna en la nota corta gratis|Hasta 10 en las plantillas gratis}; hasta 20 con una opción de pago, según la plantilla", "Una biblioteca de música, o 30 segundos de una canción real", "Con cualquier opción de pago: un mensaje de voz de hasta 60 segundos, y vídeos en algunas plantillas"],
             ["Forevermore", "31 mundos animados que se recorren, de una feria a una cena en una azotea", "Standard hasta 12; Premium y Deluxe hasta 30", "Una canción de YouTube; tu propia grabación en Premium y Deluxe", "Premium y Deluxe: una nota de voz y hasta 3 vídeos"],
             ["gifft.me", "Una caja sorpresa con una foto dentro, y tarjetas", "Una, tuya o de su colección", "No lo dice", "No lo dice"],
             ["GiftFeels", "Más de 40 plantillas: una tarta para soplar las velas, una carta, un bote de razones, una cápsula del tiempo, un álbum", "Varias, en algunas plantillas", "No lo dice para los regalos; vende aparte canciones con IA", "Mensajes de voz, entre sus funciones de pago"],
@@ -270,7 +271,7 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "La nuestra. Hace [regalos digitales](/gifts) animados con 61 plantillas, y una es gratis: [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con música. Sus puntos débiles: una plantilla de pago cuesta más que una tarjeta de Sendly o una página de LovePage.io, las fotos son de pago incluso en La carta, la nota gratis lleva un pie y no se puede programar ni cerrar con contraseña, y solo está en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, una plantilla de pago se puede usar en todos los regalos que hagas, y quien lo recibe puede mandarte una reacción o un regalo de vuelta.",
+          text: "La nuestra. Hace [regalos digitales](/gifts) animados con {count:templates} plantillas, y {note:[La carta](/templates/the-letter) es gratis como nota corta de hasta 500 caracteres con música|[La carta](/templates/the-letter) y [Constelaciones](/templates/constellations) son gratis, con tus fotos y música}. Sus puntos débiles: una plantilla de pago cuesta más que una tarjeta de Sendly o una página de LovePage.io, {note:las fotos son de pago incluso en La carta, la nota gratis lleva un pie|un regalo gratis lleva un pie} y no se puede programar ni cerrar con contraseña, y solo está en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, una plantilla de pago se puede usar en todos los regalos que hagas, y quien lo recibe puede mandarte una reacción o un regalo de vuelta.",
         },
         {
           type: "template",
@@ -316,7 +317,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Tiene que ser gratis:** SendVirtualGift o gifft.me para una sorpresa rápida, Canva si prefieres diseñarlo tú. La carta de Ethos si te basta una nota corta con música: hasta 500 caracteres, sin fotos y con un pie pequeño.",
+            "**Tiene que ser gratis:** SendVirtualGift o gifft.me para una sorpresa rápida, Canva si prefieres diseñarlo tú. {note:La carta de Ethos si te basta una nota corta con música: hasta 500 caracteres, sin fotos y con un pie pequeño.|La carta o Constelaciones, de Ethos, si quieres tus fotos y una canción dentro, con un pie pequeño.}",
             "**No te importa pagar un poco:** Sendly por 3,99 $ para una tarjeta con vídeo, o LovePage.io por 8,99 US$ para una página de amor que se quede para siempre.",
             "**Es un aniversario grande:** el mundo Premium de Forevermore con tu voz y vídeos, o un [álbum de recortes](/templates/scrapbook) de Ethos con polaroids, una carta y su canción.",
             "**Tiene que abrirse a medianoche en su cumpleaños:** Ethos te deja elegir la hora y su zona horaria. GiftsQR y GiftFeels tienen cápsulas del tiempo que se abren en una fecha, pero no dicen cómo se fija la hora.",
@@ -352,13 +353,13 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si quieres probar gratis primero, [La carta](/templates/the-letter) se manda gratis como nota corta con una canción, y la página de [regalos digitales](/gifts) enseña cómo se abre cada tipo de regalo.",
+          text: "Si quieres probar gratis primero, {note:[La carta](/templates/the-letter) se manda gratis como nota corta con una canción|[La carta](/templates/the-letter) y [Constelaciones](/templates/constellations) se mandan gratis con tus fotos y una canción}, y la página de [regalos digitales](/gifts) enseña cómo se abre cada tipo de regalo.",
         },
       ],
       faq: [
         {
           q: "¿Hay páginas para hacer regalos digitales gratis?",
-          a: "Sí. SendVirtualGift hace regalos animados gratis y sin cuenta, gifft.me hace cajas sorpresa y tarjetas gratis, y Canva es gratis para diseñar tu propia tarjeta. LovePage.io te deja publicar gratis una página de amor, pero dura 48 horas. Ethos tiene una plantilla gratis, La carta, como nota corta de hasta 500 caracteres, con música y un pie pequeño.",
+          a: "Sí. SendVirtualGift hace regalos animados gratis y sin cuenta, gifft.me hace cajas sorpresa y tarjetas gratis, y Canva es gratis para diseñar tu propia tarjeta. LovePage.io te deja publicar gratis una página de amor, pero dura 48 horas. En Ethos, {note:La carta es gratis como nota corta de hasta 500 caracteres, con música y un pie pequeño|La carta y Constelaciones son gratis, con fotos, música y un pie pequeño}.",
         },
         {
           q: "¿Cuánto dura el enlace de un regalo digital?",

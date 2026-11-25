@@ -1,4 +1,5 @@
 import type { GiftLocale } from "@/lib/gift/schema";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 
 /**
  * The idea lists for the occasions that had none until 20 Nov 2026: Mother's Day, Father's Day,
@@ -10,7 +11,8 @@ import type { GiftLocale } from "@/lib/gift/schema";
  * is always one that fits the field it is for (each was counted against the template's schema.ts),
  * and what a template does was checked against its Template.tsx, not only its manifest. A list
  * stops when the next idea would repeat one, so the counts differ. The only thing called free is
- * The Letter as a short note (lib/gift/free-tier.ts).
+ * The Letter: as a short note while the free note is for everyone (noteForEveryone, the live
+ * setting), and as the whole letter while it is off (lib/gift/free-tier.ts).
  *
  * Spanish is adapted, not translated: the days fall on other dates (Mother's Day is 10 May in
  * Mexico and an October Sunday in Argentina; Thanksgiving is a US and Canadian day), and the
@@ -220,7 +222,9 @@ export function sampleFieldsOf(occasion: string, template: string, locale: GiftL
 export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionIdeas>> = {
   "mothers-day": {
     en: {
-      title: "10 digital Mother’s Day gift ideas",
+      get title() {
+        return `${this.items.length} digital Mother’s Day gift ideas`;
+      },
       items: [
         {
           template: "recipe-box",
@@ -270,14 +274,16 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "The free one: a short note that says it",
-          brief: "The Letter is free as a short note of up to 500 characters with a song.",
-          body: "The Letter is free as a short note of up to 500 characters with a song, and that is enough for what most people never write down. Not “thanks for everything”. One memory, and what you understand about it now: “You sat in the car outside my exam for three hours and said you had errands. I know there were no errands.”",
+          heading: `The free one: ${noteForEveryone() ? "a short note" : "a letter"} that says it`,
+          brief: `The Letter is free${noteForEveryone() ? " as a short note of up to 500 characters" : ","} with a song.`,
+          body: `The Letter is free${noteForEveryone() ? " as a short note of up to 500 characters" : ","} with a song, and that is enough for what most people never write down. Not “thanks for everything”. One memory, and what you understand about it now: “You sat in the car outside my exam for three hours and said you had errands. I know there were no errands.”`,
         },
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales para el Día de la Madre",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales para el Día de la Madre`;
+      },
       items: [
         {
           template: "recipe-box",
@@ -327,9 +333,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         },
         {
           template: "the-letter",
-          heading: "La gratis: una nota corta que dice lo importante",
-          brief: "La carta es gratis como nota corta de hasta 500 caracteres con una canción.",
-          body: "La carta es gratis como nota corta de hasta 500 caracteres con una canción, y con eso basta para lo que casi nadie llega a escribir. No «gracias por todo». Un recuerdo, y lo que entiendes ahora de él: «Estuviste tres horas en el coche delante de mi examen y dijiste que tenías recados. Ya sé que no había recados.»",
+          heading: `La gratis: ${noteForEveryone() ? "una nota corta" : "una carta"} que dice lo importante`,
+          brief: `La carta es gratis${noteForEveryone() ? " como nota corta de hasta 500 caracteres" : ","} con una canción.`,
+          body: `La carta es gratis${noteForEveryone() ? " como nota corta de hasta 500 caracteres" : ","} con una canción, y con eso basta para lo que casi nadie llega a escribir. No «gracias por todo». Un recuerdo, y lo que entiendes ahora de él: «Estuviste tres horas en el coche delante de mi examen y dijiste que tenías recados. Ya sé que no había recados.»`,
         },
       ],
     },
@@ -337,7 +343,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   "fathers-day": {
     en: {
-      title: "10 digital Father’s Day gift ideas",
+      get title() {
+        return `${this.items.length} digital Father’s Day gift ideas`;
+      },
       items: [
         {
           template: "front-page",
@@ -378,7 +386,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "The line you have never said out loud",
-          body: "Fathers get the shortest messages of anyone. The free version suits him: a note of up to 500 characters under a wax seal, with a song. One thing he did and what it meant: “I check the oil because you taught me to, and I think of you every time.” Press your own initial into the wax, and don’t add a joke at the end.",
+          body: `Fathers get the shortest messages of anyone. The free version suits him: ${noteForEveryone() ? "a note of up to 500 characters" : "a letter"} under a wax seal, with a song. One thing he did and what it meant: “I check the oil because you taught me to, and I think of you every time.” Press your own initial into the wax, and don’t add a joke at the end.`,
         },
         {
           template: "text-thread",
@@ -393,7 +401,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales para el Día del Padre",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales para el Día del Padre`;
+      },
       items: [
         {
           template: "front-page",
@@ -435,7 +445,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "La frase que nunca has dicho en voz alta",
-          body: "A los padres les llegan los mensajes más cortos de todos. La versión gratis le va bien: una nota de hasta 500 caracteres bajo un sello de lacre, con una canción. Una cosa que hizo y lo que significó: «Miro el aceite porque me enseñaste tú, y me acuerdo de ti cada vez.» Pon tu inicial en el lacre, y no remates con un chiste.",
+          body: `A los padres les llegan los mensajes más cortos de todos. La versión gratis le va bien: ${noteForEveryone() ? "una nota de hasta 500 caracteres" : "una carta"} bajo un sello de lacre, con una canción. Una cosa que hizo y lo que significó: «Miro el aceite porque me enseñaste tú, y me acuerdo de ti cada vez.» Pon tu inicial en el lacre, y no remates con un chiste.`,
         },
         {
           template: "text-thread",
@@ -453,7 +463,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   graduation: {
     en: {
-      title: "10 digital graduation gift ideas",
+      get title() {
+        return `${this.items.length} digital graduation gift ideas`;
+      },
       items: [
         {
           template: "cap-toss",
@@ -502,8 +514,8 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "From a parent: the things you quietly saw",
-          brief: "The free note holds 500 characters: enough for the one thing you noticed and never mentioned.",
-          body: "Not “congratulations”. They will get fifty of those. The free note holds 500 characters, enough for the one thing you noticed and never mentioned: “The night before your second-year exams I heard you get up at four. I didn’t come in. I have never been prouder of anybody.” Change the greeting to “To the graduate (I can say that now),”.",
+          brief: `${noteForEveryone() ? "The free note holds 500 characters: enough" : "The free letter has room"} for the one thing you noticed and never mentioned.`,
+          body: `Not “congratulations”. They will get fifty of those. ${noteForEveryone() ? "The free note holds 500 characters, enough" : "The free letter has room"} for the one thing you noticed and never mentioned: “The night before your second-year exams I heard you get up at four. I didn’t come in. I have never been prouder of anybody.” Change the greeting to “To the graduate (I can say that now),”.`,
         },
         {
           template: "digicam",
@@ -514,7 +526,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales de graduación",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales de graduación`;
+      },
       items: [
         {
           template: "cap-toss",
@@ -562,8 +576,8 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "De madre o padre: lo que viste sin decirlo",
-          brief: "En la nota gratis caben 500 caracteres: suficientes para eso que viste y nunca comentaste.",
-          body: "No «enhorabuena»; de esas le llegarán cincuenta. En la nota gratis caben 500 caracteres, suficientes para eso que viste y nunca comentaste: «La noche antes de los exámenes de segundo te oí levantarte a las cuatro. No entré. Nunca he sentido tanto orgullo por nadie.» Cambia el saludo por «Para ti, que ya tienes el título:».",
+          brief: `${noteForEveryone() ? "En la nota gratis caben 500 caracteres: suficientes" : "La carta gratis tiene sitio"} para eso que viste y nunca comentaste.`,
+          body: `No «enhorabuena»; de esas le llegarán cincuenta. ${noteForEveryone() ? "En la nota gratis caben 500 caracteres, suficientes" : "La carta gratis tiene sitio"} para eso que viste y nunca comentaste: «La noche antes de los exámenes de segundo te oí levantarte a las cuatro. No entré. Nunca he sentido tanto orgullo por nadie.» Cambia el saludo por «Para ti, que ya tienes el título:».`,
         },
         {
           template: "digicam",
@@ -577,7 +591,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   wedding: {
     en: {
-      title: "10 digital wedding gift ideas",
+      get title() {
+        return `${this.items.length} digital wedding gift ideas`;
+      },
       items: [
         {
           template: "the-toast",
@@ -615,7 +631,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "To the person you are marrying, an hour before",
-          body: "Written the night before and read alone, with a seal to break. The free note holds 500 characters: room for a promise and a joke. Sign off with “See you at the front. I’ll be the one crying,”. A free note goes when you send it, so give the link to someone you trust and name the minute; timing it yourself comes with “Make it special”.",
+          body: `Written the night before and read alone, with a seal to break. ${noteForEveryone() ? "The free note holds 500 characters: room" : "The free letter has room"} for a promise and a joke. Sign off with “See you at the front. I’ll be the one crying,”. ${noteForEveryone() ? "A free note" : "A free letter"} goes when you send it, so give the link to someone you trust and name the minute; timing it yourself comes with “Make it special”.`,
         },
         {
           template: "keepsake",
@@ -636,7 +652,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "10 ideas de regalos digitales de boda",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales de boda`;
+      },
       items: [
         {
           template: "the-toast",
@@ -674,7 +692,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "Para quien se casa contigo, una hora antes",
-          body: "Escrita la noche anterior y leída a solas, con un sello que romper. En la nota gratis caben 500 caracteres, que dan para una promesa y una broma. Despídete con «Nos vemos en el altar. Yo soy quien llora,». Una nota gratis sale cuando la mandas, así que dale el enlace a alguien de confianza y dile el minuto; programarla tú viene con «Hazlo especial».",
+          body: `Escrita la noche anterior y leída a solas, con un sello que romper. ${noteForEveryone() ? "En la nota gratis caben 500 caracteres, que dan" : "La carta gratis da"} para una promesa y una broma. Despídete con «Nos vemos en el altar. Yo soy quien llora,». ${noteForEveryone() ? "Una nota gratis" : "Una carta gratis"} sale cuando la mandas, así que dale el enlace a alguien de confianza y dile el minuto; programarla tú viene con «Hazlo especial».`,
         },
         {
           template: "keepsake",
@@ -698,7 +716,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   "long-distance": {
     en: {
-      title: "11 digital long-distance gift ideas",
+      get title() {
+        return `${this.items.length} digital long-distance gift ideas`;
+      },
       items: [
         {
           template: "halfway",
@@ -759,12 +779,14 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "A note for the bad day, kept till then",
-          body: "Write it now, while things are fine, for the day the distance is too much. The free note holds 500 characters under a wax seal: “If you’re reading this it has been a rubbish week. I’m still here, the flight is still booked, and you still snore.” Send the link with one instruction: don’t open it until you need it. The link will wait.",
+          body: `Write it now, while things are fine, for the day the distance is too much. ${noteForEveryone() ? "The free note holds 500 characters" : "The free letter comes"} under a wax seal: “If you’re reading this it has been a rubbish week. I’m still here, the flight is still booked, and you still snore.” Send the link with one instruction: don’t open it until you need it. The link will wait.`,
         },
       ],
     },
     es: {
-      title: "11 ideas de regalos digitales para una relación a distancia",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales para una relación a distancia`;
+      },
       items: [
         {
           template: "halfway",
@@ -824,7 +846,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "Una nota para el día malo, guardada hasta entonces",
-          body: "Escríbela ahora, que todo va bien, para el día en que la distancia pese demasiado. En la nota gratis caben 500 caracteres bajo un sello de lacre: «Si estás leyendo esto, la semana ha sido horrible. Sigo aquí, el vuelo sigue comprado y tú sigues roncando.» Manda el enlace con una sola instrucción: no la abras hasta que haga falta. El enlace espera.",
+          body: `Escríbela ahora, que todo va bien, para el día en que la distancia pese demasiado. ${noteForEveryone() ? "En la nota gratis caben 500 caracteres" : "La carta gratis va"} bajo un sello de lacre: «Si estás leyendo esto, la semana ha sido horrible. Sigo aquí, el vuelo sigue comprado y tú sigues roncando.» Manda el enlace con una sola instrucción: no la abras hasta que haga falta. El enlace espera.`,
         },
       ],
     },
@@ -832,12 +854,14 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   apology: {
     en: {
-      title: "8 ways to say sorry with a digital gift",
+      get title() {
+        return `${this.items.length} ways to say sorry with a digital gift`;
+      },
       items: [
         {
           template: "the-letter",
           heading: "The plain one: no “if”, no “but”",
-          body: "A short note under a wax seal, free, up to 500 characters. That is not much room, which helps: say what you did, what it cost them, and what changes. “I was wrong about Saturday, and I knew it while I was still arguing. You asked for one thing. I’ll be there at six.” No photo, and no song unless it is theirs.",
+          body: `${noteForEveryone() ? "A short note under a wax seal, free, up to 500 characters. That is not much room, which helps" : "A letter under a wax seal, free. Keep it short"}: say what you did, what it cost them, and what changes. “I was wrong about Saturday, and I knew it while I was still arguing. You asked for one thing. I’ll be there at six.” No photo, and no song unless it is theirs.`,
         },
         {
           template: "paper-crane",
@@ -878,12 +902,14 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "8 formas de pedir perdón con un regalo digital",
+      get title() {
+        return `${this.items.length} formas de pedir perdón con un regalo digital`;
+      },
       items: [
         {
           template: "the-letter",
           heading: "La sencilla: sin «si» y sin «pero»",
-          body: "Una nota corta bajo un sello de lacre, gratis, de hasta 500 caracteres. No es mucho sitio, y eso ayuda: di qué hiciste, qué le costó y qué cambia. «Me equivoqué con lo del sábado, y lo sabía mientras seguía discutiendo. Pediste una sola cosa. A las seis estoy allí.» Sin foto, y sin canción salvo que sea la suya.",
+          body: `${noteForEveryone() ? "Una nota corta bajo un sello de lacre, gratis, de hasta 500 caracteres. No es mucho sitio, y eso ayuda" : "Una carta bajo un sello de lacre, gratis. Que sea corta"}: di qué hiciste, qué le costó y qué cambia. «Me equivoqué con lo del sábado, y lo sabía mientras seguía discutiendo. Pediste una sola cosa. A las seis estoy allí.» Sin foto, y sin canción salvo que sea la suya.`,
         },
         {
           template: "paper-crane",
@@ -928,7 +954,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   "just-because": {
     en: {
-      title: "11 digital gifts for no reason at all",
+      get title() {
+        return `${this.items.length} digital gifts for no reason at all`;
+      },
       items: [
         {
           template: "fortune-cookie",
@@ -967,8 +995,8 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "Three lines, free, sent before lunch",
-          brief: "The free note is 500 characters, and for no occasion it should use about half.",
-          body: "The free note is 500 characters under a wax seal, and for no occasion it should use about half of that. One line on why today, one thing you like about them that you have never said, and stop: “You hummed while you made the coffee this morning. I’d like forty more years of that, please.” Add a song from the library.",
+          brief: `${noteForEveryone() ? "The free note is 500 characters, and for no occasion it should use about half" : "The free letter comes under a wax seal, and for no occasion three lines are enough"}.`,
+          body: `${noteForEveryone() ? "The free note is 500 characters under a wax seal, and for no occasion it should use about half of that" : "The free letter comes under a wax seal, and for no occasion three lines are enough"}. One line on why today, one thing you like about them that you have never said, and stop: “You hummed while you made the coffee this morning. I’d like forty more years of that, please.” Add a song from the library.`,
         },
         {
           template: "favorite-person",
@@ -996,7 +1024,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "11 regalos digitales sin motivo alguno",
+      get title() {
+        return `${this.items.length} regalos digitales sin motivo alguno`;
+      },
       items: [
         {
           template: "fortune-cookie",
@@ -1035,7 +1065,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "the-letter",
           heading: "Tres líneas, gratis, enviadas antes de comer",
-          body: "La nota gratis son 500 caracteres bajo un sello de lacre, y sin motivo debería gastar la mitad. Una línea sobre por qué hoy, una cosa que te gusta de esa persona y que nunca has dicho, y ya: «Esta mañana tarareabas mientras hacías el café. Quiero cuarenta años más de eso, por favor.» Añade una canción de la biblioteca.",
+          body: `${noteForEveryone() ? "La nota gratis son 500 caracteres bajo un sello de lacre, y sin motivo debería gastar la mitad" : "La carta gratis va bajo un sello de lacre, y sin motivo bastan tres líneas"}. Una línea sobre por qué hoy, una cosa que te gusta de esa persona y que nunca has dicho, y ya: «Esta mañana tarareabas mientras hacías el café. Quiero cuarenta años más de eso, por favor.» Añade una canción de la biblioteca.`,
         },
         {
           template: "favorite-person",
@@ -1066,7 +1096,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
 
   thanksgiving: {
     en: {
-      title: "8 digital Thanksgiving gift ideas",
+      get title() {
+        return `${this.items.length} digital Thanksgiving gift ideas`;
+      },
       items: [
         {
           template: "wishbone",
@@ -1111,7 +1143,9 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
       ],
     },
     es: {
-      title: "8 ideas de regalos digitales de Acción de Gracias",
+      get title() {
+        return `${this.items.length} ideas de regalos digitales de Acción de Gracias`;
+      },
       items: [
         {
           template: "wishbone",

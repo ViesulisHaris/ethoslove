@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "paragraphs-for-him",
   published: "2026-11-18",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "text-thread"],
   content: {
@@ -125,12 +126,12 @@ export const post: BlogPost = {
         { type: "h2", text: "Send it as something he opens" },
         {
           type: "p",
-          text: "A paragraph in the chat has scrolled away by Thursday. If you want it kept, send it as a [digital gift](/gifts): your paragraph, a few photos and a song, opened from a link on his phone with no app to install. There are more ideas in our [digital gifts for your boyfriend](/gifts/for-boyfriend). The Letter is free. Text Thread is [premium](/pricing), and a premium gift can be scheduled to open at a set time in his time zone, which is how a birthday paragraph arrives at exactly midnight.",
+          text: "A paragraph in the chat has scrolled away by Thursday. If you want it kept, send it as a [digital gift](/gifts): your paragraph, a few photos and a song, opened from a link on his phone with no app to install. There are more ideas in our [digital gifts for your boyfriend](/gifts/for-boyfriend). The Letter is {note:free as a short note, and photos in it are paid once|free, photos included}. Text Thread is [premium](/pricing), and a premium gift can be scheduled to open at a set time in his time zone, which is how a birthday paragraph arrives at exactly midnight.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free, and the right size for any paragraph above.",
+          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. {note:Free as a short note of up to 500 characters; “Make it special”, paid once, gives it room for any paragraph above and your photos.|Free, and the right size for any paragraph above.}",
         },
         {
           type: "template",
@@ -280,12 +281,12 @@ export const post: BlogPost = {
         { type: "h2", text: "Mándaselo como algo que se abre" },
         {
           type: "p",
-          text: "Un texto en el chat el jueves ya ha desaparecido entre mensajes. Si quieres que lo guarde, mándaselo como un [regalo digital](/gifts): tu texto, unas cuantas fotos y una canción, que abre desde un enlace en el móvil sin instalar ninguna app. Tienes más ideas en nuestros [regalos digitales para tu novio](/gifts/for-boyfriend). La carta es gratis. Hilo de mensajes es [premium](/pricing), y un regalo premium se puede programar para que se abra a una hora concreta en su zona horaria, que es como un texto de cumpleaños llega justo a medianoche.",
+          text: "Un texto en el chat el jueves ya ha desaparecido entre mensajes. Si quieres que lo guarde, mándaselo como un [regalo digital](/gifts): tu texto, unas cuantas fotos y una canción, que abre desde un enlace en el móvil sin instalar ninguna app. Tienes más ideas en nuestros [regalos digitales para tu novio](/gifts/for-boyfriend). La carta es {note:gratis como nota corta, y las fotos en ella se pagan una vez|gratis, con fotos incluidas}. Hilo de mensajes es [premium](/pricing), y un regalo premium se puede programar para que se abra a una hora concreta en su zona horaria, que es como un texto de cumpleaños llega justo a medianoche.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis, y del tamaño justo para cualquiera de los textos de arriba.",
+          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. {note:Gratis como nota corta de hasta 500 caracteres; «Hazlo especial», de pago único, le da sitio para cualquiera de los textos de arriba y tus fotos.|Gratis, y del tamaño justo para cualquiera de los textos de arriba.}",
         },
         {
           type: "template",

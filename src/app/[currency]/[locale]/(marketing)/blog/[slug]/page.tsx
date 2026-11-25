@@ -8,6 +8,7 @@ import { BLOG_POSTS, getPost, postContent, postLocales, postModified, relatedPos
 import { plainText, postSections, readingMinutes } from "@/content/blog/text";
 import { blogPostingNode, breadcrumbNode, faqNode, localizedUrl, ogImageUrl, organizationNode, pageMetadata } from "@/lib/seo";
 import { getManifest } from "@/templates/manifests";
+import { chargedCurrency } from "@/lib/pricing/products";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PostBody } from "@/components/blog/post-body";
 import { PostCard } from "@/components/blog/post-card";
@@ -19,10 +20,10 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/blog/[slug]">, "searchParams">): Promise<Metadata> {
-  const { locale, slug } = await params;
+  const { currency, locale, slug } = await params;
   const post = getPost(slug);
   if (!post) return {};
-  const { content, translated } = postContent(post, locale);
+  const { content, translated } = postContent(post, locale, chargedCurrency(currency));
   // A post not yet in Spanish shows its English text at /es/blog/…, so that URL is a copy: it
   // points search engines at the English page and stays out of the index.
   const meta = pageMetadata({
@@ -38,13 +39,14 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 }
 
 export default async function BlogPostPage({ params }: PageProps<"/[currency]/[locale]/blog/[slug]">) {
-  const { locale, slug } = await params;
+  const { currency, locale, slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
   setRequestLocale(locale);
   const t = await getTranslations();
   const format = await getFormatter();
-  const { content, locale: contentLocale, translated } = postContent(post, locale);
+  // Prices a post names are in the currency the visitor is charged in, as on every other page.
+  const { content, locale: contentLocale, translated } = postContent(post, locale, chargedCurrency(currency));
   const path = `/blog/${post.slug}`;
   const lead = getManifest(post.templates[0] ?? "");
   const related = relatedPosts(post);

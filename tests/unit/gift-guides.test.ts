@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import sitemap from "@/app/sitemap";
 import { isOccasion } from "@/config/occasions";
 import { LIMITS } from "@/config/site";
@@ -473,6 +473,8 @@ describe("/digital-cards", () => {
   });
 
   it("reads every price from the code", () => {
+    // As the live site runs, where the list sells a note with photos (tests/unit/seo-free-truth.test.ts has it both ways).
+    vi.stubEnv("NEXT_PUBLIC_FREE_NOTE_SHARE", "1");
     for (const locale of GIFT_LOCALES) {
       const copy = digitalCardsCopy(locale, facts);
       expect(copy.cost.rows.map((r) => r.price).slice(1)).toEqual(["<photos>", "<extras>", "<single>", "<pick3>", "<everything>"]);
@@ -483,6 +485,7 @@ describe("/digital-cards", () => {
       for (const s of strings(copy)) expect(s, s).not.toMatch(TYPED_PRICE);
       expect(strings(copy).join(" ")).toContain(String(facts.count));
     }
+    vi.unstubAllEnvs();
   });
 
   it("shows five kinds, each a real card with real neighbours", () => {

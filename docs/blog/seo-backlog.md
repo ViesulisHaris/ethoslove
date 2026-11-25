@@ -144,3 +144,8 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   `/tools/how-long-have-we-been-together`, so posts can link the calculator. The SEO review of
   monthiversary-ideas (13 Nov) wanted it beside the 29th–31st rule, since the tool shows the next
   monthiversary date; the test rejects any `/tools` link today.
+- [ ] **virtual-date-ideas-long-distance: aim it at "long distance relationship date ideas" too**
+  (5,400 a month, up 1,275% in a year; "long distance date ideas" 5,400, KD 3). The post averages
+  position 82 for it (growth-build/SEO-PICTURE.md, section 7, 25 Nov). Work the phrase into the
+  title or the first heading and the opening, keep the ideas, and link /long-distance and the
+  halfway tool. English first; the Spanish line above stands as it is.

@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "virtual-flowers-for-girlfriend",
   published: "2026-11-13",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["bouquet", "bloom"],
   content: {
@@ -166,7 +167,7 @@ export const post: BlogPost = {
         },
         {
           q: "Can I send virtual flowers for free?",
-          a: "A photo of flowers you saw that made you think of her, with one line, costs nothing and still works. Bouquet and Bloom are premium, paid once, and each has a free live demo you can try first. [The Letter](/templates/the-letter) is free as a short note: no bouquet, but a wax-sealed envelope she opens by hand, with room for those lines. Photos in it are paid once. Several sites make a bouquet free, with no account: our [comparison of seven digital bouquet makers](/blog/digital-bouquet-makers-compared) shows which ones.",
+          a: "A photo of flowers you saw that made you think of her, with one line, costs nothing and still works. Bouquet and Bloom are premium, paid once, and each has a free live demo you can try first. [The Letter](/templates/the-letter) is {note:free as a short note|free}: no bouquet, but a wax-sealed envelope she opens by hand, with room for those lines. {note:Photos in it are paid once.|Your photos go in free too.} Several sites make a bouquet free, with no account: our [comparison of seven digital bouquet makers](/blog/digital-bouquet-makers-compared) shows which ones.",
         },
       ],
     },
@@ -330,7 +331,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Puedo mandar flores virtuales gratis?",
-          a: "Una foto de unas flores que viste y te hicieron pensar en ella, con una frase, no cuesta nada y funciona. Las plantillas Ramo y Flor son premium, de pago único, y cada una tiene una demo gratis para probarla antes. [La carta](/templates/the-letter) es gratis como nota corta: no lleva ramo, pero es un sobre lacrado que ella abre a mano, con sitio para esas frases. Las fotos dentro se pagan una sola vez. Hay varias páginas para crear un ramo gratis y sin cuenta: en nuestra comparativa de siete [páginas para crear un ramo de flores online](/blog/digital-bouquet-makers-compared) verás cuáles.",
+          a: "Una foto de unas flores que viste y te hicieron pensar en ella, con una frase, no cuesta nada y funciona. Las plantillas Ramo y Flor son premium, de pago único, y cada una tiene una demo gratis para probarla antes. [La carta](/templates/the-letter) es {note:gratis como nota corta|gratis}: no lleva ramo, pero es un sobre lacrado que ella abre a mano, con sitio para esas frases. {note:Las fotos dentro se pagan una sola vez.|Las fotos dentro también son gratis.} Hay varias páginas para crear un ramo gratis y sin cuenta: en nuestra comparativa de siete [páginas para crear un ramo de flores online](/blog/digital-bouquet-makers-compared) verás cuáles.",
         },
       ],
     },

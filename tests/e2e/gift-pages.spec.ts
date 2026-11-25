@@ -2,6 +2,7 @@ import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { MONTHS, MONTH_GUIDES, monthSlug } from "../../src/content/month-anniversaries";
+import { serverNoteShare } from "./server-settings";
 
 /**
  * The pages search asked for and the site did not have (20 Nov 2026): /digital-cards, the six gift
@@ -176,7 +177,7 @@ for (const lang of LANGS) {
       });
     }
 
-    test("/digital-cards: the category line once, five kinds with a real card each, and prices", async ({ page }) => {
+    test("/digital-cards: the category line once, five kinds with a real card each, and prices", async ({ page, request }) => {
       // The page, then every page it links onward to, each fetched: past 30s on a busy machine (23 Nov 2026).
       test.slow();
       const noErrors = watchErrors(page);
@@ -204,7 +205,10 @@ for (const lang of LANGS) {
       }
 
       // Three prices as cards, and all six in the closed block under the questions: the free note, then five read
-      // from the catalogue in this page's currency, the note with photos among them.
+      // from the catalogue in this page's currency, the note with photos among them. With the free note not for
+      // everyone (the server's setting, read from the page), the free Letter already takes photos, the note with
+      // photos has nothing to sell and its row is not there: five (reports/seoaudit-fix.md, d27dd775).
+      const notePhotosRow = (await serverNoteShare(request)) >= 1;
       // In whatever currency this browser is charged in: an en-US browser with no country header is charged dollars,
       // which Spanish writes "11,99 US$" (the deep test of 23 Nov 2026).
       const money = /[€$£]\s?\d+[.,]\d{2}|\d+[.,]\d{2}\s?(?:US)?[€$£]/;
@@ -212,12 +216,12 @@ for (const lang of LANGS) {
       expect(shown).toHaveLength(3);
       for (const price of shown) expect(price).toMatch(money);
       const prices = await page.getByTestId("card-prices-all").locator("[data-price]").evaluateAll((els) => els.map((el) => el.textContent ?? ""));
-      expect(prices).toHaveLength(6);
+      expect(prices).toHaveLength(notePhotosRow ? 6 : 5);
       expect(prices[0]).toBe(lang.lang === "en" ? "Free" : "Gratis");
       for (const price of prices.slice(1)) expect(price).toMatch(money);
       // The three cards are the last three rows: the list runs from the least to the most (the free note, a note with
       // photos, the full Letter, then one card, three and every card), not with the two cheapest last.
-      expect(prices.slice(3, 6)).toEqual(shown);
+      expect(prices.slice(-3)).toEqual(shown);
       const amounts = prices.slice(1).map((price) => Number(price.replace(/[^0-9.,]/g, "").replace(",", ".")));
       expect(amounts, prices.join(" ")).toEqual([...amounts].sort((x, y) => x - y));
 

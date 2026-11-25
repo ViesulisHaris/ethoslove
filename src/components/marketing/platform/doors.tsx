@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { ArrowRight, Gamepad2, Gift, MapPinned, Plane } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { GAMES } from "@/lib/games/catalogue";
+import { countWord } from "@/lib/count-words";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
@@ -15,6 +17,7 @@ const DOORS = [
 /** The four rooms of the house, each a photograph with a way in. Gifts is the first door. */
 export async function Doors() {
   const t = await getTranslations("platform.doors");
+  const locale = await getLocale();
   const soon = (await getTranslations("common"))("comingSoon");
   return (
     <section className="bg-paper py-20 lg:py-28">
@@ -36,7 +39,7 @@ export async function Doors() {
                 </span>
                 <span className="flex flex-1 flex-col p-5">
                   <span className="block font-display text-[26px] leading-[1.05] text-forest">{t(`${key}.title`)}</span>
-                  <span className="mt-2 block text-[14.5px] leading-relaxed text-forest/70">{t(`${key}.blurb`)}</span>
+                  <span className="mt-2 block text-[14.5px] leading-relaxed text-forest/70">{t(`${key}.blurb`, { Games: countWord(GAMES.length, locale, { capital: true }) })}</span>
                   <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[14px] font-semibold" style={{ color: ink }}>
                     {t(`${key}.cta`)}
                     <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />

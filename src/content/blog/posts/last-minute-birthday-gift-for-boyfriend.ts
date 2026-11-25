@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "last-minute-birthday-gift-for-boyfriend",
   published: "2026-11-04",
+  updated: "2026-11-25",
   occasion: "birthday",
   templates: ["birthday-cinema", "midnight-countdown", "the-letter"],
   content: {
@@ -119,7 +120,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. Write the letter you'd have put in the card and end it with the booking: the day, the time, the place. He taps the seal to open it, and your photos come after the last line.",
+          note: "Write the letter you'd have put in the card and end it with the booking: the day, the time, the place. He taps the seal to open it, and your photos come after the last line. {note:The free note fits 500 characters, enough for the booking; your photos and a longer letter come with \"Make it special\", paid once ([prices](/pricing)).|The letter and photos go out free.}",
         },
       ],
       faq: [
@@ -254,7 +255,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Escribe la carta que habrías puesto en la tarjeta y termínala con la reserva: el día, la hora y el sitio. Él toca el sello para abrirla, y tus fotos llegan después de la última línea.",
+          note: "Escribe la carta que habrías puesto en la tarjeta y termínala con la reserva: el día, la hora y el sitio. Él toca el sello para abrirla, y tus fotos llegan después de la última línea. {note:La nota gratis admite 500 caracteres, suficientes para la reserva; tus fotos y una carta más larga vienen con «Hazlo especial», de pago único ([precios](/pricing)).|La carta y las fotos se envían gratis.}",
         },
       ],
       faq: [

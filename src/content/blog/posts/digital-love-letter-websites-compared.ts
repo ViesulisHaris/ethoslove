@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "digital-love-letter-websites-compared",
   published: "2026-11-16",
-  updated: "2026-11-24",
+  updated: "2026-11-25",
   occasion: "just-because",
   templates: ["the-letter", "xoxo", "keepsake"],
   content: {
@@ -26,7 +26,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "The sites are in alphabetical order. Prices are as each site showed them to us, in US dollars unless the site showed us another currency; several change the price by country, so yours may differ. We left out AI letter generators, which write the words for you but don't send anything, and printable templates you fill in yourself. Other names turn up when people ask for a site like this, such as QLovy, LoveTale, WithLove, Tu Carta Eterna and Dedikame. We didn't check them on their own sites for this comparison, so they aren't in the tables.",
+          text: "The sites are in alphabetical order. Prices are as each site showed them to us, in US dollars unless the site showed us another currency; several change the price by country, so yours may differ. Ethos's are shown in the currency you'd pay in. We left out AI letter generators, which write the words for you but don't send anything, and printable templates you fill in yourself. Other names turn up when people ask for a site like this, such as QLovy, LoveTale, WithLove, Tu Carta Eterna and Dedikame. We didn't check them on their own sites for this comparison, so they aren't in the tables.",
         },
         {
           type: "p",
@@ -38,7 +38,7 @@ export const post: BlogPost = {
           head: ["Site", "Price", "What you get free"],
           rows: [
             ["2luv (2-luv.com)", "One payment to unlock, shown in your local currency. The price didn't load when we checked.", "Building it and seeing the preview. You pay to send it."],
-            ["Ethos (tryethos.io)", "$11.99 for one template, $20.98 for three, $29.99 for all. The full Letter, with photos and the rest: $8.99. [Pricing](/pricing)", "The Letter as a short note: up to 500 characters and a song, with a small \"Made with Ethos\" footer."],
+            ["Ethos (tryethos.io)", "{price:single} for one template, {price:pick3} for three, {price:everything} for all. {note:The full Letter, with photos and the rest|Video, voice and up to 20 photos on a free template}: {price:extras}. [Pricing](/pricing)", "{note:The Letter as a short note: up to 500 characters and a song|The Letter and Constellations, with up to 10 photos and a song}, with a small \"Made with Ethos\" footer."],
             ["gifft.me", "Free, per its home page.", "Its surprise gift boxes and e-cards."],
             ["Just Meant For You (justmeantforyou.com)", "Free plan. Premium is a monthly subscription, priced by region: it showed us €7.99 a month.", "One letter live at a time, with text, photos, a countdown, a Spotify song and a password. New pages expire after seven days unless Premium keeps them."],
             ["LetterHugs (letterhugs.com)", "One payment to send, no subscription. The amount didn't load when we checked.", "Unlimited drafts. You pay at the send step."],
@@ -56,7 +56,7 @@ export const post: BlogPost = {
           head: ["Site", "Photos", "Music", "Video or voice"],
           rows: [
             ["2luv", "Up to 10, with captions and dates", "Your song plays while they read", "Not stated"],
-            ["Ethos", "None in the free note; with a paid option, up to 20 depending on the template", "A music library, or a 30-second preview of a real song", "A voice message up to 60 seconds and video clips (on five templates, The Letter included), both with any paid option"],
+            ["Ethos", "{note:None in the free note|Up to 10 on the free Letter}; with a paid option, up to 20 depending on the template", "A music library, or a 30-second preview of a real song", "A voice message up to 60 seconds and video clips (on five templates, The Letter included), both with any paid option"],
             ["gifft.me", "A photo, yours or from its collection", "Not stated", "Not stated"],
             ["Just Meant For You", "Yes; how many isn't stated", "A Spotify song", "Not stated"],
             ["LetterHugs", "Not stated", "Not stated", "Not stated"],
@@ -95,12 +95,12 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "Our site. It makes animated [digital gifts](/gifts) from 61 templates, and a letter is only one of them: there are bouquets, scrapbooks and scratch cards too. The free letter is [The Letter](/templates/the-letter), as a short note of up to 500 characters with a song. Its weak points: the free note carries a small footer and has no photos, set opening time, password, video or voice; the full letter with those costs $8.99, more than LoveLetter.digital's $3.99 letter; and it speaks only English and Spanish. Where it's strongest: you choose the time zone, so it can open at midnight where they are, and the person who gets it can send a reaction or a gift back.",
+          text: "Our site. It makes animated [digital gifts](/gifts) from {count:templates} templates, and a letter is only one of them: there are bouquets, scrapbooks and scratch cards too. {note:The free letter is [The Letter](/templates/the-letter), as a short note of up to 500 characters with a song.|The free letter is [The Letter](/templates/the-letter), the whole letter with up to 10 photos and a song.} Its weak points: {note:the free note carries a small footer and has no photos, set opening time, password, video or voice; the full letter with those costs {price:extras}|the free letter carries a small footer and has no set opening time, password, video or voice; adding those costs {price:extras}}, more than LoveLetter.digital's $3.99 letter; and it speaks only English and Spanish. Where it's strongest: you choose the time zone, so it can open at midnight where they are, and the person who gets it can send a reaction or a gift back.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Free as a short note: up to 500 characters and a song. A wax-sealed envelope they open with a tap, the letter unfolds on a candle-lit desk and your words appear in handwriting. Photos, which drop in as polaroids, and the full letter come with \"Make it special\", paid once ([prices](/pricing)).",
+          note: "A wax-sealed envelope they open with a tap, the letter unfolds on a candle-lit desk and your words appear in handwriting. {note:Free as a short note of up to 500 characters with a song. Photos, which drop in as polaroids, and the full letter come with \"Make it special\", paid once ([prices](/pricing)).|Free with the whole letter, and up to 10 photos that drop in as polaroids.}",
         },
         { type: "h3", text: "gifft.me" },
         {
@@ -176,7 +176,7 @@ export const post: BlogPost = {
             "**What happens to the link later.** LovePaper says no expiry and OpenWhen says letters never expire. On LoveLetter.digital, an unpaid letter's link pauses after seven days and comes back when you unlock it. On Just Meant For You's free plan, a new page expires after seven days. A free ShareLove Letters link lasts 7 days, or 30 with a free account, so schedule it inside that window.",
             "**Whose midnight.** A letter set for 00:00 opens at 00:00 somewhere. If they're far away, find the time zone setting before you trust it.",
             "**Whether you can fix a typo after sending.** 2luv, OpenYourLetter and Ethos keep the same link after an edit. LoveLetter.digital says its love pages can be edited any time.",
-            "**What the free version leaves on the page.** LoveLetter.digital's free week has a watermark, ShareLove Letters' free plan shows ads, and Ethos's free note has a footer. If it's for an anniversary, decide whether that bothers you before you write.",
+            "**What the free version leaves on the page.** LoveLetter.digital's free week has a watermark, ShareLove Letters' free plan shows ads, and Ethos's free {note:note|letter} has a footer. If it's for an anniversary, decide whether that bothers you before you write.",
           ],
         },
         { type: "h2", text: "The site matters less than what you write" },
@@ -199,7 +199,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "Is there a free digital love letter website?",
-          a: "Yes. LovePaper, OpenWhen and ShareLove Letters let you send a letter free with no account. Letters by Heart is free up to 100 characters, LoveLetter.digital and Just Meant For You's free plan keep a letter up for seven days, and Ethos's The Letter is free as a short note of up to 500 characters with a small footer. Music, voice or a set opening time usually cost extra, though ShareLove Letters includes music and scheduling free.",
+          a: "Yes. LovePaper, OpenWhen and ShareLove Letters let you send a letter free with no account. Letters by Heart is free up to 100 characters, LoveLetter.digital and Just Meant For You's free plan keep a letter up for seven days, and {note:Ethos's The Letter is free as a short note of up to 500 characters|Ethos's The Letter is free in full, with up to 10 photos}, with a small footer. Music, voice or a set opening time usually cost extra, though ShareLove Letters includes music and scheduling free.",
         },
         {
           q: "Can a digital love letter open at a set time, like midnight?",
@@ -238,7 +238,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Van por orden alfabético. Los precios de las demás son los que nos mostró su web, en dólares estadounidenses salvo que nos mostrara otra moneda; varias cambian el precio según el país, así que a ti te puede salir otro. Los de Ethos van en euros, que es lo que verás desde cualquier país salvo Estados Unidos y el Reino Unido. Hemos dejado fuera los generadores de cartas con IA, que escriben el texto pero no envían nada, y las plantillas para imprimir y rellenar a mano. Cuando alguien pide una página así salen también otros nombres, como QLovy, LoveTale, WithLove, Tu Carta Eterna y Dedikame. No los comprobamos en su propia web para esta comparativa, así que no están en las tablas.",
+          text: "Van por orden alfabético. Los precios de las demás son los que nos mostró su web, en dólares estadounidenses salvo que nos mostrara otra moneda; varias cambian el precio según el país, así que a ti te puede salir otro. Los de Ethos aparecen en la moneda en la que pagarías. Hemos dejado fuera los generadores de cartas con IA, que escriben el texto pero no envían nada, y las plantillas para imprimir y rellenar a mano. Cuando alguien pide una página así salen también otros nombres, como QLovy, LoveTale, WithLove, Tu Carta Eterna y Dedikame. No los comprobamos en su propia web para esta comparativa, así que no están en las tablas.",
         },
         {
           type: "p",
@@ -250,7 +250,7 @@ export const post: BlogPost = {
           head: ["Página", "Precio", "Qué tienes gratis"],
           rows: [
             ["2luv (2-luv.com)", "Un pago para desbloquearla, en tu moneda local. El precio no cargó cuando lo miramos.", "Crearla y ver la vista previa. Pagas para enviarla."],
-            ["Ethos (tryethos.io)", "9,99 € una plantilla, 17,98 € tres, 24,99 € todas. La carta completa, con fotos y lo demás: 7,49 €. [Precios](/pricing)", "La carta como nota corta: hasta 500 caracteres y una canción, con un pequeño pie «Hecho con Ethos»."],
+            ["Ethos (tryethos.io)", "{price:single} una plantilla, {price:pick3} tres, {price:everything} todas. {note:La carta completa, con fotos y lo demás|Vídeo, voz y hasta 20 fotos en una plantilla gratis}: {price:extras}. [Precios](/pricing)", "{note:La carta como nota corta: hasta 500 caracteres y una canción|La carta y Constelaciones, con hasta 10 fotos y una canción}, con un pequeño pie «Hecho con Ethos»."],
             ["gifft.me", "Gratis, según su portada.", "Sus cajas sorpresa y sus tarjetas digitales."],
             ["Just Meant For You (justmeantforyou.com)", "Plan gratis. Premium es una suscripción mensual con precio según la región: a nosotros nos mostró 7,99 € al mes.", "Una carta activa a la vez, con texto, fotos, cuenta atrás, una canción de Spotify y contraseña. Las páginas nuevas caducan a los siete días salvo que Premium las guarde."],
             ["LetterHugs (letterhugs.com)", "Un pago para enviarla, sin suscripción. El importe no cargó cuando lo miramos.", "Borradores ilimitados. Pagas al enviar."],
@@ -268,7 +268,7 @@ export const post: BlogPost = {
           head: ["Página", "Fotos", "Música", "Vídeo o voz"],
           rows: [
             ["2luv", "Hasta 10, con pie de foto y fecha", "Vuestra canción suena mientras lee", "No lo indica"],
-            ["Ethos", "Ninguna en la nota gratis; con una opción de pago, hasta 20 según la plantilla", "Una biblioteca de música, o 30 segundos de una canción real", "Un mensaje de voz de hasta 60 segundos y vídeos (en cinco plantillas, La carta entre ellas), ambos con cualquier opción de pago"],
+            ["Ethos", "{note:Ninguna en la nota gratis|Hasta 10 en La carta gratis}; con una opción de pago, hasta 20 según la plantilla", "Una biblioteca de música, o 30 segundos de una canción real", "Un mensaje de voz de hasta 60 segundos y vídeos (en cinco plantillas, La carta entre ellas), ambos con cualquier opción de pago"],
             ["gifft.me", "Una foto, tuya o de su colección", "No lo indica", "No lo indica"],
             ["Just Meant For You", "Sí; no indica cuántas", "Una canción de Spotify", "No lo indica"],
             ["LetterHugs", "No lo indica", "No lo indica", "No lo indica"],
@@ -307,12 +307,12 @@ export const post: BlogPost = {
         { type: "h3", text: "Ethos" },
         {
           type: "p",
-          text: "La nuestra. Hace [regalos digitales](/gifts) animados con 61 plantillas, y una carta es solo una de ellas: también hay ramos, álbumes y rasca y gana. La carta gratis es [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con una canción. Sus puntos flojos: la nota gratis lleva un pequeño pie y no tiene fotos, hora de apertura, contraseña, vídeo ni voz; la carta completa con todo eso cuesta 7,49 €, más que la carta de 3,99 $ de LoveLetter.digital; y solo está en inglés y español. Donde mejor funciona: eliges la zona horaria, así que puede abrirse a medianoche donde esté esa persona, y quien lo recibe puede mandarte una reacción o devolverte otro regalo.",
+          text: "La nuestra. Hace [regalos digitales](/gifts) animados con {count:templates} plantillas, y una carta es solo una de ellas: también hay ramos, álbumes y rasca y gana. {note:La carta gratis es [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con una canción.|La carta gratis es [La carta](/templates/the-letter), entera, con hasta 10 fotos y una canción.} Sus puntos flojos: {note:la nota gratis lleva un pequeño pie y no tiene fotos, hora de apertura, contraseña, vídeo ni voz; la carta completa con todo eso cuesta {price:extras}|la carta gratis lleva un pequeño pie y no tiene hora de apertura, contraseña, vídeo ni voz; añadir todo eso cuesta {price:extras}}, más que la carta de 3,99 $ de LoveLetter.digital; y solo está en inglés y español. Donde mejor funciona: eliges la zona horaria, así que puede abrirse a medianoche donde esté esa persona, y quien lo recibe puede mandarte una reacción o devolverte otro regalo.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis como nota corta: hasta 500 caracteres y una canción. Un sobre lacrado que se abre con un toque, la carta se despliega sobre un escritorio a la luz de una vela y tus palabras aparecen escritas a mano. Las fotos, que caen como polaroids, y la carta completa vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).",
+          note: "Un sobre lacrado que se abre con un toque, la carta se despliega sobre un escritorio a la luz de una vela y tus palabras aparecen escritas a mano. {note:Gratis como nota corta de hasta 500 caracteres con una canción. Las fotos, que caen como polaroids, y la carta completa vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).|Gratis con la carta entera y hasta 10 fotos que caen como polaroids.}",
         },
         { type: "h3", text: "gifft.me" },
         {
@@ -388,7 +388,7 @@ export const post: BlogPost = {
             "**Qué pasa con el enlace más adelante.** LovePaper dice que no caduca y OpenWhen que sus cartas no caducan nunca. En LoveLetter.digital, el enlace de una carta sin pagar se pausa a los siete días y vuelve cuando la desbloqueas. En el plan gratis de Just Meant For You, una página nueva caduca a los siete días. Un enlace gratis de ShareLove Letters dura 7 días, o 30 con una cuenta gratis, así que prográmala dentro de ese plazo.",
             "**La medianoche de quién.** Una carta programada a las 00:00 se abre a las 00:00 en algún sitio. Si vive lejos, busca el ajuste de zona horaria antes de fiarte.",
             "**Si puedes corregir una errata después de enviarla.** 2luv, OpenYourLetter y Ethos mantienen el mismo enlace tras editar. LoveLetter.digital dice que sus love pages se pueden editar cuando quieras.",
-            "**Qué deja la versión gratis en la página.** La semana gratis de LoveLetter.digital lleva marca de agua, el plan gratis de ShareLove Letters lleva anuncios y la nota gratis de Ethos lleva un pie. Si es para un aniversario, decide si te importa antes de escribir.",
+            "**Qué deja la versión gratis en la página.** La semana gratis de LoveLetter.digital lleva marca de agua, el plan gratis de ShareLove Letters lleva anuncios y la {note:nota|carta} gratis de Ethos lleva un pie. Si es para un aniversario, decide si te importa antes de escribir.",
           ],
         },
         { type: "h2", text: "Importa menos la página que lo que escribes" },
@@ -411,7 +411,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "¿Hay alguna página gratis para hacer una carta de amor digital?",
-          a: "Sí. LovePaper, OpenWhen y ShareLove Letters te dejan enviar una carta gratis y sin cuenta. Letters by Heart es gratis hasta 100 caracteres, LoveLetter.digital y el plan gratis de Just Meant For You mantienen la carta siete días, y La carta de Ethos es gratis como nota corta de hasta 500 caracteres, con un pequeño pie. La música, la voz o una hora de apertura suelen pagarse aparte, aunque ShareLove Letters incluye gratis la música y la programación.",
+          a: "Sí. LovePaper, OpenWhen y ShareLove Letters te dejan enviar una carta gratis y sin cuenta. Letters by Heart es gratis hasta 100 caracteres, LoveLetter.digital y el plan gratis de Just Meant For You mantienen la carta siete días, y {note:La carta de Ethos es gratis como nota corta de hasta 500 caracteres|La carta de Ethos es gratis entera, con hasta 10 fotos}, con un pequeño pie. La música, la voz o una hora de apertura suelen pagarse aparte, aunque ShareLove Letters incluye gratis la música y la programación.",
         },
         {
           q: "¿Se puede programar una carta de amor digital para que se abra a medianoche?",

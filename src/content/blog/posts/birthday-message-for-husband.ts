@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "birthday-message-for-husband",
   published: "2026-11-15",
+  updated: "2026-11-25",
   occasion: "birthday",
   templates: ["birthday-cinema", "popup-card", "the-letter"],
   content: {
@@ -219,7 +220,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "For the round-number letter: three paragraphs fit easily. He breaks a wax seal with your initial and the letter unfolds on a candle-lit desk, then your photos drop in as polaroids. It's free.",
+          note: "For the round-number letter. He breaks a wax seal with your initial and the letter unfolds on a candle-lit desk, then your photos drop in as polaroids. {note:Three paragraphs and photos need \"Make it special\", paid once ([prices](/pricing)); sent free, it's a note of up to 500 characters.|Three paragraphs fit easily, photos included, and it's free.}",
         },
         {
           type: "p",
@@ -462,7 +463,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Para la carta del número redondo: tres párrafos caben de sobra. Rompe un sello de lacre con tu inicial y la carta se despliega sobre un escritorio a la luz de una vela; luego caen tus fotos como polaroids. Es gratis.",
+          note: "Para la carta del número redondo. Rompe un sello de lacre con tu inicial y la carta se despliega sobre un escritorio a la luz de una vela; luego caen tus fotos como polaroids. {note:Tres párrafos y fotos necesitan «Hazlo especial», con un solo pago ([precios](/pricing)); enviada gratis es una nota de hasta 500 caracteres.|Tres párrafos caben de sobra, con fotos, y es gratis.}",
         },
         {
           type: "p",

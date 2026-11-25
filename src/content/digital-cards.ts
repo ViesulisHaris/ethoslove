@@ -1,6 +1,8 @@
 import { BRAND } from "@/config/brand";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { DEMO_PHOTOS } from "@/templates/_shared/demo-photos";
+import { listManifests } from "@/templates/manifests";
 import { PAGE_UPDATED } from "./page-dates";
 
 /**
@@ -14,7 +16,8 @@ import { PAGE_UPDATED } from "./page-dates";
  *
  * Every price comes in from PRODUCTS for the page's currency and the template count from the
  * manifests: nothing here is typed that the code knows better. What is free matches
- * lib/gift/free-tier.ts (The Letter as a short note); the steps match the editor
+ * lib/gift/free-tier.ts in both states of its switch (The Letter as a short note with the note for
+ * everyone, The Letter and Constellations whole without it); the steps match the editor
  * (components/editor) and the limits match config/site.ts LIMITS.
  */
 export const DIGITAL_CARDS_PATH = "/digital-cards";
@@ -113,7 +116,17 @@ export const DIGITAL_CARD_TEMPLATES = KINDS.flatMap((k) => [k.template, ...k.als
 
 const kinds = (texts: { title: string; brief: string; body: string }[]): CardKind[] => KINDS.map((k, i) => ({ ...k, ...texts[i] }));
 
+/** The templates that go out free, by name and read from the manifests: "The Letter and Constellations" while the note is not for everyone. */
+function freeNames(locale: GiftLocale): string {
+  const names = listManifests()
+    .filter((m) => sendsFree(m))
+    .map((m) => m.name[locale]);
+  return names.length > 1 ? `${names.slice(0, -1).join(", ")} ${locale === "es" ? "y" : "and"} ${names.at(-1)}` : names.join("");
+}
+
 export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): DigitalCardsCopy {
+  // On the live site The Letter is free only as a short note; without the switch The Letter and Constellations are free whole.
+  const note = noteForEveryone();
   if (locale === "es")
     return {
       title: "Tarjetas digitales: felicitaciones en el móvil",
@@ -155,7 +168,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           {
             title: "Cartas que se escriben solas",
             brief: "Rompen el lacre con un toque y tus palabras se van escribiendo a mano.",
-            body: "Un sobre, un sello, papel. Rompen el lacre con un toque y tus palabras se van escribiendo a mano. Elige este tipo cuando el mensaje es el regalo y lo demás no debe estorbar. La que ves es La carta, la única tarjeta con versión gratis: una nota corta de hasta 500 caracteres.",
+            body: `Un sobre, un sello, papel. Rompen el lacre con un toque y tus palabras se van escribiendo a mano. Elige este tipo cuando el mensaje es el regalo y lo demás no debe estorbar. ${note ? "La que ves es La carta, la única tarjeta con versión gratis: una nota corta de hasta 500 caracteres." : "La que ves es La carta, y es gratis: la carta entera, con hasta diez fotos."}`,
           },
           {
             title: "Álbumes y tarjetas de fotos",
@@ -203,15 +216,19 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
       },
       cost: {
         label: "Precios",
-        line: "Pago único, sin suscripción. La carta, gratis como nota.",
-        shown: [3, 4, 5],
+        line: note ? "Pago único, sin suscripción. La carta, gratis como nota." : "Pago único, sin suscripción. La carta es gratis.",
+        shown: note ? [3, 4, 5] : [2, 3, 4],
         includes: "Qué incluye cada precio",
         heading: "Cuánto cuesta una tarjeta digital",
         lead: "Todos los precios son pagos únicos. Para las tarjetas no hay suscripción.",
         rows: [
-          { label: "La carta, como nota corta", price: "Gratis", note: "Hasta 500 caracteres y una canción, con un pequeño pie que dice «Hecho con Ethos»." },
-          { label: "La carta, como nota con fotos", price: f.photos, note: `La nota corta, con hasta ${f.notePhotos} fotos tuyas.` },
-          { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." },
+          note
+            ? { label: "La carta, como nota corta", price: "Gratis", note: "Hasta 500 caracteres y una canción, con un pequeño pie que dice «Hecho con Ethos»." }
+            : { label: "La carta", price: "Gratis", note: "La carta entera, hasta diez fotos y una canción, con un pequeño pie que dice «Hecho con Ethos»." },
+          ...(note ? [{ label: "La carta, como nota con fotos", price: f.photos, note: `La nota corta, con hasta ${f.notePhotos} fotos tuyas.` }] : []),
+          note
+            ? { label: "La carta completa", price: f.extras, note: "«Hazlo especial»: hasta veinte fotos, la carta entera, vídeo y voz en La carta." }
+            : { label: "La carta, con «Hazlo especial»", price: f.extras, note: "Hasta veinte fotos, vídeo y voz en La carta, y sin el pie." },
           { label: "Una tarjeta", price: f.single, note: "Una plantilla, para siempre: haz con ella todas las tarjetas que quieras." },
           { label: "Tres tarjetas", price: f.pick3, note: "Tres plantillas, las que tú elijas." },
           { label: `${f.paid} tarjetas de pago`, price: f.everything, note: "Y las que vayan llegando." },
@@ -236,7 +253,9 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
           },
           {
             q: "¿Se puede enviar una tarjeta de felicitación digital gratis?",
-            a: `Sí, de un tipo: La carta como nota corta, hasta 500 caracteres con una canción. Lo demás es un pago único: ${f.photos} por la misma nota con hasta ${f.notePhotos} fotos, ${f.extras} por La carta completa, con una carta más larga, vídeo y voz, o ${f.single} por cualquier otra tarjeta.`,
+            a: note
+              ? `Sí, de un tipo: La carta como nota corta, hasta 500 caracteres con una canción. Lo demás es un pago único: ${f.photos} por la misma nota con hasta ${f.notePhotos} fotos, ${f.extras} por La carta completa, con una carta más larga, vídeo y voz, o ${f.single} por cualquier otra tarjeta.`
+              : `Sí: ${freeNames("es")} son gratis, con hasta diez fotos y una canción. Lo demás es un pago único: ${f.extras} por «Hazlo especial» en La carta, con hasta veinte fotos, vídeo y voz, o ${f.single} por cualquier otra tarjeta.`,
           },
           {
             q: "¿Cómo se envía una tarjeta digital?",
@@ -304,7 +323,7 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         {
           title: "Letters that write themselves out",
           brief: "They break the wax with a tap and your words write themselves out by hand.",
-          body: "An envelope, a seal, paper. They break the wax with a tap and your words write themselves out by hand. Choose this kind when the message is the gift and everything else should stay out of its way. The Letter is the one shown, and the only card with a free version: a short note of up to 500 characters.",
+          body: `An envelope, a seal, paper. They break the wax with a tap and your words write themselves out by hand. Choose this kind when the message is the gift and everything else should stay out of its way. ${note ? "The Letter is the one shown, and the only card with a free version: a short note of up to 500 characters." : "The Letter is the one shown, and it is free: the whole letter, with up to ten photos."}`,
         },
         {
           title: "Photo cards and scrapbooks",
@@ -352,15 +371,19 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
     },
     cost: {
       label: "Prices",
-      line: "Paid once, never a subscription. The Letter is free as a short note.",
-      shown: [3, 4, 5],
+      line: note ? "Paid once, never a subscription. The Letter is free as a short note." : "Paid once, never a subscription. The Letter is free.",
+      shown: note ? [3, 4, 5] : [2, 3, 4],
       includes: "What each price includes",
       heading: "What a digital card costs",
       lead: "Every price is a one-time payment. There is no subscription for cards.",
       rows: [
-        { label: "The Letter, as a short note", price: "Free", note: "Up to 500 characters and a song, with a small “Made with Ethos” footer." },
-        { label: "The Letter, as a note with photos", price: f.photos, note: `The short note, with up to ${f.notePhotos} of your photos.` },
-        { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." },
+        note
+          ? { label: "The Letter, as a short note", price: "Free", note: "Up to 500 characters and a song, with a small “Made with Ethos” footer." }
+          : { label: "The Letter", price: "Free", note: "The whole letter, up to ten photos and a song, with a small “Made with Ethos” footer." },
+        ...(note ? [{ label: "The Letter, as a note with photos", price: f.photos, note: `The short note, with up to ${f.notePhotos} of your photos.` }] : []),
+        note
+          ? { label: "The full Letter", price: f.extras, note: "“Make it special”: up to twenty photos, the whole letter, video and voice on The Letter." }
+          : { label: "The Letter, with “Make it special”", price: f.extras, note: "Up to twenty photos, video and voice on The Letter, and no footer." },
         { label: "One card", price: f.single, note: "One template, for good: make as many cards from it as you like." },
         { label: "Three cards", price: f.pick3, note: "Three templates of your choosing." },
         { label: `All ${f.paid} paid cards`, price: f.everything, note: "All of them, and the ones still to come." },
@@ -385,7 +408,9 @@ export function digitalCardsCopy(locale: GiftLocale, f: DigitalCardsFacts): Digi
         },
         {
           q: "Can I send a digital greeting card for free?",
-          a: `Yes, one kind: The Letter as a short note, up to 500 characters with a song. Everything else is paid once: ${f.photos} for the same note with up to ${f.notePhotos} photos, ${f.extras} for the full Letter with a longer letter, video and voice, or ${f.single} for any other card.`,
+          a: note
+            ? `Yes, one kind: The Letter as a short note, up to 500 characters with a song. Everything else is paid once: ${f.photos} for the same note with up to ${f.notePhotos} photos, ${f.extras} for the full Letter with a longer letter, video and voice, or ${f.single} for any other card.`
+            : `Yes: ${freeNames("en")} are free, with up to ten photos and a song. Everything else is paid once: ${f.extras} for “Make it special” on The Letter, with up to twenty photos, video and voice, or ${f.single} for any other card.`,
         },
         {
           q: "How do I send a digital card?",

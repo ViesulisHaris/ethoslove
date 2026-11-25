@@ -3,7 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "christmas-letter-to-boyfriend",
   published: "2026-11-06",
-  updated: "2026-11-17",
+  updated: "2026-11-25",
   occasion: "christmas",
   templates: ["fireside", "snow-globe", "the-letter"],
   content: {
@@ -115,7 +115,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you're apart, or you'd like it to come with your photos and a song, a [digital gift](/gifts) can hold the letter. With a premium template, \"Schedule the reveal\" can set it to open on Christmas morning in his time zone. Below are three that hold a letter well: The Letter is free, Fireside and Snow Globe are a one-time payment (see [pricing](/pricing)), and each has a free demo to try first. There are more on the [Christmas page](/occasions/christmas) and among the [digital gifts for your boyfriend](/gifts/for-boyfriend).",
+          text: "If you're apart, or you'd like it to come with your photos and a song, a [digital gift](/gifts) can hold the letter. With a premium template, \"Schedule the reveal\" can set it to open on Christmas morning in his time zone. Below are three that hold a letter well: The Letter is {note:free as a short note and paid once for a longer one|free}, Fireside and Snow Globe are a one-time payment (see [pricing](/pricing)). Each has a free demo to try first. There are more on the [Christmas page](/occasions/christmas) and among the [digital gifts for your boyfriend](/gifts/for-boyfriend).",
         },
         {
           type: "template",
@@ -130,7 +130,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "The free one, and the plainest: he breaks a wax seal with your initial on it and the letter unfolds in handwriting on a candle-lit desk, with your photos dropping in as polaroids.",
+          note: "The plainest: he breaks a wax seal with your initial on it and the letter unfolds in handwriting on a candle-lit desk, with your photos dropping in as polaroids. {note:Sent free, it holds a short letter and a song; the photos and a longer letter come with \"Make it special\", paid once ([prices](/pricing)).|All of that goes out free.}",
         },
       ],
       faq: [
@@ -268,7 +268,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si estáis lejos, o quieres que llegue con tus fotos y una canción, un [regalo digital](/gifts) puede llevar la carta. Con una plantilla premium, «Programar la apertura» hace que se abra la mañana de Navidad en su zona horaria. Abajo tienes tres que van bien para una carta: La carta es gratis, Junto al fuego y Bola de nieve se pagan una sola vez (mira los [precios](/pricing)), y cada una tiene una demo gratis para probarla antes. Tienes más en la [página de Navidad](/occasions/christmas) y entre los [regalos digitales para tu novio](/gifts/for-boyfriend).",
+          text: "Si estáis lejos, o quieres que llegue con tus fotos y una canción, un [regalo digital](/gifts) puede llevar la carta. Con una plantilla premium, «Programar la apertura» hace que se abra la mañana de Navidad en su zona horaria. Abajo tienes tres que van bien para una carta: La carta es {note:gratis como nota corta y de pago único para una más larga|gratis}, Junto al fuego y Bola de nieve se pagan una sola vez (mira los [precios](/pricing)). Cada una tiene una demo gratis para probarla antes. Tienes más en la [página de Navidad](/occasions/christmas) y entre los [regalos digitales para tu novio](/gifts/for-boyfriend).",
         },
         {
           type: "template",
@@ -283,7 +283,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "La gratuita, y la más sencilla: él rompe un sello de lacre con tu inicial y la carta se despliega escrita a mano sobre un escritorio a la luz de una vela, con tus fotos cayendo como polaroids.",
+          note: "La más sencilla: él rompe un sello de lacre con tu inicial y la carta se despliega escrita a mano sobre un escritorio a la luz de una vela, con tus fotos cayendo como polaroids. {note:En su versión gratis lleva una carta corta y una canción; las fotos y una carta más larga vienen con «Hazlo especial», con un solo pago ([precios](/pricing)).|Y todo eso se envía gratis.}",
         },
       ],
       faq: [

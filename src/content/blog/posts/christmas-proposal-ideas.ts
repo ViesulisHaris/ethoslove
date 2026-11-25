@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "christmas-proposal-ideas",
   published: "2026-11-10",
+  updated: "2026-11-25",
   occasion: "wedding",
   templates: ["scratch-card", "snow-globe", "the-letter"],
   content: {
@@ -139,7 +140,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. For the long version of what you'll say: the speech you'd give if nerves weren't a thing, sealed with your initial and opened together after the yes, with your photos at the end.",
+          note: "For the long version of what you'll say: the speech you'd give if nerves weren't a thing, sealed with your initial and opened together after the yes, with your photos at the end. {note:The free version stops at 500 characters, so the full speech and the photos need \"Make it special\", paid once ([prices](/pricing)).|The whole speech and the photos go out free.}",
         },
       ],
       faq: [
@@ -294,7 +295,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Para la versión larga de lo que vas a decir: el discurso que darías si no existieran los nervios, sellado con tu inicial y abierto juntos después del sí, con vuestras fotos al final.",
+          note: "Para la versión larga de lo que vas a decir: el discurso que darías si no existieran los nervios, sellado con tu inicial y abierto juntos después del sí, con vuestras fotos al final. {note:La versión gratis se queda en 500 caracteres, así que el discurso entero y las fotos necesitan «Hazlo especial», con un solo pago ([precios](/pricing)).|El discurso entero y las fotos se envían gratis.}",
         },
       ],
       faq: [

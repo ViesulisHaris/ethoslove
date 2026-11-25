@@ -129,7 +129,8 @@ for (const { prefix, l, m } of LANGS) {
         const page = await load(request, path);
         const seo = (m.seo.occasion as Record<string, { title: string; metaTitle?: string; description: string; intro: string }>)[occasion];
         const guide = OCCASION_GUIDES[occasion][l];
-        expectHead(page, path, seo.metaTitle ?? seo.title, seo.description);
+        // The search title counts the guide's own list of ideas ({ideas}), as the page does.
+        expectHead(page, path, (seo.metaTitle ?? seo.title).replace("{ideas}", String(guide.ideas?.items.length ?? 0)), seo.description);
         const ideas = guide.ideas?.items ?? [];
         expectText(page, path, [seo.title, seo.intro, guide.title, guide.lead, guide.ideas?.title ?? "", ...ideas.flatMap((i) => [i.heading, i.body]), ...guide.sections.flatMap((s) => [s.heading, s.body]), ...guide.faq.flatMap((f) => [f.q, f.a])]);
         // What the eye no longer sees is in a closed row, never only behind a style.
