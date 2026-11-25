@@ -12,6 +12,7 @@ import { fieldLimit } from "@/lib/gift/field-limit";
 import { GIFT_LOCALES, type GiftLocale } from "@/lib/gift/schema";
 import { pageMetadata } from "@/lib/seo";
 import { getManifest } from "@/templates/manifests";
+import { resolvePlace } from "@/templates/_shared/places";
 
 /**
  * The anniversary gifts by month (content/month-anniversaries.ts), held to the limits, the fields
@@ -162,6 +163,18 @@ describe("anniversary gifts by month", () => {
         if (!m.features.video) expect(own, at).not.toMatch(locale === "en" ? /\b(video|clip)s?\b/i : /\bv[ií]deos?\b|\bclips?\b/i);
         if (idea.template === "unwrapped") expect(own, at).not.toMatch(/countdown|cuenta atrás/i);
         if (idea.template === "unwrapped" || idea.template === "pack-your-bags") expect(own, at).not.toMatch(/hidden surprise|sorpresa final|sorpresa oculta/i);
+      }
+    });
+
+    it(`month ${n} (${locale}) lends lines the gift will really show`, () => {
+      for (const idea of guide.ideas) {
+        const at = `${idea.template} (month ${n}, ${locale})`;
+        // Passport drops a stopover it cannot find on its map (passport/Template.tsx, resolvePlace).
+        if (idea.template === "passport" && idea.line.field === "stops") expect(resolvePlace(idea.line.text), `${at}: “${idea.line.text}”`).not.toBeNull();
+        // Digicam wishes a happy birthday unless the box is unticked (digicam/schema.ts, birthday defaults to true).
+        if (idea.template === "digicam") expect(idea.body, at).toMatch(locale === "en" ? /It’s their birthday/ : /Es su cumpleaños/);
+        // A line printed on every card or plaque cannot carry one card's month (scratch-card foilText, museum years).
+        if (["foilText", "years", "stampDate"].includes(idea.line.field)) expect(idea.line.text, at).not.toMatch(/\b(month|mes) (\d+|three|tres|nine|nueve)\b(?! ?(–|to|a) )/i);
       }
     });
 

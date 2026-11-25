@@ -357,7 +357,7 @@ const month12: Month = {
         template: "museum",
         heading: "An exhibition called year one",
         brief: "Your year hung in a quiet gallery, a plaque under every photo.",
-        body: "Museum hangs your photos in a quiet gallery, framed, each over a plaque with its title, year and a line. They swipe from room to room. It takes two to twenty photos, so a year fits whole: pick twelve, one for each month, and title each like a painting. Your message is the wall text the visit ends on.",
+        body: "Museum hangs your photos in a quiet gallery, framed, each over a plaque with the caption you gave it and the dates you set for the whole show. They swipe from room to room. It takes two to twenty photos, so a year fits whole: pick twelve, one for each month, and title each like a painting. Your message is the wall text the visit ends on.",
         line: { field: "exhibition", where: "The exhibition’s name", text: "Year One: Selected Works" },
       },
     ],
@@ -421,7 +421,7 @@ const month12: Month = {
         template: "museum",
         heading: "Una exposición llamada primer año",
         brief: "Vuestro año colgado en una galería tranquila, con una placa bajo cada foto.",
-        body: "Museo cuelga tus fotos en una galería tranquila, enmarcadas, cada una sobre una placa con su título, su año y una frase. Pasan de sala en sala deslizando. Admite de dos a veinte fotos, así que el año entra entero: elige doce, una por mes, y titula cada una como un cuadro. Tu mensaje es el texto de pared con el que acaba la visita.",
+        body: "Museo cuelga tus fotos en una galería tranquila, enmarcadas, cada una sobre una placa con el pie que le pusiste y las fechas que elijas para toda la exposición. Pasan de sala en sala deslizando. Admite de dos a veinte fotos, así que el año entra entero: elige doce, una por mes, y titula cada una como un cuadro. Tu mensaje es el texto de pared con el que acaba la visita.",
         line: { field: "exhibition", where: "El nombre de la exposición", text: "Primer año: obra escogida" },
       },
     ],
@@ -481,9 +481,9 @@ const month24: Month = {
       },
       {
         template: "museum",
-        heading: "Two walls, one for each year",
+        heading: "Twenty-four rooms, one a month",
         brief: "A quiet gallery of your two years, a plaque under every framed photo.",
-        body: "Museum makes a gallery of your photos, two to twenty of them, each framed over a plaque that holds a title, a year and a line. Split them by year: the first twelve months on one wall, the next on another, and let the plaques say what changed. They walk it by swiping.",
+        body: "Museum makes a gallery of your photos, one framed photo to a room, up to twenty rooms. Every plaque prints the caption you wrote for that photo and the span you set for the show. Hang them in order, year one first, and put the month in each caption so the plaques show what changed. They walk it by swiping.",
         line: { field: "exhibition", where: "The name over the door", text: "Twenty-four Months, Mostly Happy" },
       },
       {
@@ -542,9 +542,9 @@ const month24: Month = {
       },
       {
         template: "museum",
-        heading: "Dos paredes, una por cada año",
+        heading: "Una sala por cada mes",
         brief: "Una galería tranquila con vuestros dos años, una placa bajo cada foto.",
-        body: "Museo hace una galería con tus fotos, de dos a veinte, cada una enmarcada sobre una placa con un título, un año y una frase. Sepáralas por años: los doce primeros meses en una pared, los siguientes en otra, y que las placas digan qué cambió. La recorren deslizando.",
+        body: "Museo hace una galería con tus fotos, una foto enmarcada por sala, hasta veinte salas. Cada placa imprime el pie que escribiste para esa foto y las fechas que pongas para toda la exposición. Cuélgalas en orden, primero el primer año, y pon el mes en cada pie para que las placas cuenten qué cambió. Se recorre deslizando.",
         line: { field: "exhibition", where: "El nombre sobre la puerta", text: "Veinticuatro meses, casi todos felices" },
       },
       {
@@ -706,9 +706,9 @@ const month3: Month = {
       {
         template: "scratch-card",
         heading: "Three photos under foil, one per month",
-        brief: "Photos under foil, one from each month, with a few words on the foil itself.",
-        body: "Scratch Card covers each photo in foil that a fingertip rubs away, and the foil itself can carry a few words. Three cards suit three months: one picture from each, in order, with the latest last. Write on the foil what to expect underneath, in thirty characters, so the scratching has a reason.",
-        line: { field: "foilText", where: "The words on the foil", text: "month three is under here" },
+        brief: "Three photos under foil, one from each month, then a last card with your headline.",
+        body: "Scratch Card covers each photo in foil that a fingertip rubs away, and the same few words are printed on the foil of every card. Three photos make four cards: one picture from each month, in order, then a last card with your headline. Keep the foil words to something true of all four, thirty characters at most.",
+        line: { field: "foilText", where: "The words on the foil", text: "one season of us, under here" },
       },
       {
         template: "sticker-bomb",
@@ -727,7 +727,7 @@ const month3: Month = {
       {
         template: "digicam",
         heading: "A pocket camera with this season’s roll",
-        body: "Digicam is a little 2006 camera: they press power, the lens whirs out, and the photos are on its roll with an orange date in the corner. Up to twelve fit, which is four a month for three months. The cut-out title above the camera takes twenty-four characters; when it is not a birthday, it can say anything.",
+        body: "Digicam is a little 2006 camera: they press power, the lens whirs out, and the photos are on its roll with an orange date in the corner. Up to twelve fit, which is four a month for three months. The cut-out title above the camera takes twenty-four characters. Untick “It’s their birthday” first, or the camera wishes them one.",
         line: { field: "headline", where: "The cut-out title", text: "our first season" },
       },
       {
@@ -763,9 +763,9 @@ const month3: Month = {
       {
         template: "scratch-card",
         heading: "Tres fotos para rascar, una por mes",
-        brief: "Fotos bajo la capa de rascar, una de cada mes, con unas palabras en la propia capa.",
-        body: "Rasca y gana tapa cada foto con una capa que se quita con la yema del dedo, y la propia capa puede llevar unas palabras. Tres tarjetas encajan con tres meses: una foto de cada uno, en orden, con la más reciente al final. Escribe en la capa lo que hay debajo, en treinta caracteres, para que rascar tenga motivo.",
-        line: { field: "foilText", where: "Las palabras de la capa", text: "aquí debajo, el tercer mes" },
+        brief: "Tres fotos bajo la capa de rascar, una de cada mes, y una última tarjeta con tu titular.",
+        body: "Rasca y gana tapa cada foto con una capa que se quita con la yema del dedo, y en la capa de todas las tarjetas van impresas las mismas palabras. Tres fotos dan cuatro tarjetas: una foto de cada mes, en orden, y al final una con tu titular. Que las palabras de la capa valgan para las cuatro, treinta caracteres como mucho.",
+        line: { field: "foilText", where: "Las palabras de la capa", text: "aquí debajo, una estación" },
       },
       {
         template: "sticker-bomb",
@@ -784,7 +784,7 @@ const month3: Month = {
       {
         template: "digicam",
         heading: "Una camarita con el carrete de esta estación",
-        body: "Digicam es una camarita de 2006: pulsan el botón, el objetivo sale zumbando y las fotos están en su carrete con una fecha naranja en la esquina. Caben hasta doce, que son cuatro por mes en tres meses. El título recortado de encima admite veinticuatro caracteres; si no es un cumpleaños, puede decir lo que quieras.",
+        body: "Digicam es una camarita de 2006: pulsan el botón, el objetivo sale zumbando y las fotos están en su carrete con una fecha naranja en la esquina. Caben hasta doce, que son cuatro por mes en tres meses. El título recortado de encima admite veinticuatro caracteres. Desmarca antes «Es su cumpleaños», o la cámara se lo felicitará.",
         line: { field: "headline", where: "El título recortado", text: "nuestra primera estación" },
       },
       {
@@ -827,8 +827,8 @@ const month4: Month = {
       {
         template: "digicam",
         heading: "The weekend away, on a 2006 camera roll",
-        brief: "The weekend’s photos on a little camera, date-stamped with the days you were away.",
-        body: "Load Digicam’s roll in the order the weekend happened, up to twelve photos, and set the orange date stamp to the days you were away. They press power, the lens whirs, and they flick through it like you did on the train home. Afterwards the roll prints as a strip, and then comes your letter.",
+        brief: "The weekend’s photos on a little camera, date-stamped with the day you left.",
+        body: "Load Digicam’s roll in the order the weekend happened, up to twelve photos, and set the orange date stamp to the day you left: one date, on every print. Untick “It’s their birthday” so the camera just says hello. They flick through it like you did on the train home, then the roll prints as a strip, and your letter follows.",
         line: { field: "headline", where: "The cut-out title", text: "48 hours somewhere else" },
       },
       {
@@ -884,8 +884,8 @@ const month4: Month = {
       {
         template: "digicam",
         heading: "La escapada, en una camarita de 2006",
-        brief: "Las fotos del fin de semana en una camarita, con la fecha de los días fuera.",
-        body: "Carga el carrete de Digicam en el orden en que pasó el fin de semana, hasta doce fotos, y pon en la fecha naranja los días que estuvisteis fuera. Pulsan el botón, el objetivo zumba y lo pasan como lo pasasteis en el tren de vuelta. Al final el carrete se imprime en tira y después llega tu carta.",
+        brief: "Las fotos del fin de semana en una camarita, con la fecha del día en que salisteis.",
+        body: "Carga el carrete de Digicam en el orden en que pasó el fin de semana, hasta doce fotos, y pon en la fecha naranja el día en que salisteis: una sola fecha, en todas las copias. Desmarca «Es su cumpleaños» para que la cámara solo salude. Se pasan las fotos como en el tren de vuelta, el carrete se imprime en tira y después llega tu carta.",
         line: { field: "headline", where: "El título recortado", text: "48 horas en otro sitio" },
       },
       {
@@ -1195,8 +1195,8 @@ const month8: Month = {
       {
         template: "digicam",
         heading: "Eight months of dinners on one camera",
-        brief: "Your shared meals on a little camera roll, each photo date-stamped and captioned with the dish.",
-        body: "Fill Digicam with the meals you have shared, up to twelve photos, each with its orange date stamp, and write the dish in the caption in the screen’s pixel type. They flick through it with arrows or a swipe. Over the camera, the magazine cut-out title takes twenty-four characters: the name of your usual place.",
+        brief: "Your shared meals on a little camera roll, each photo captioned with the dish.",
+        body: "Fill Digicam with the meals you have shared, up to twelve photos, and write the dish in each caption in the screen’s pixel type. Untick “It’s their birthday”, or the camera greets them with one. They flick through it with arrows or a swipe. Over the camera, the magazine cut-out title takes twenty-four characters: the name of your usual place.",
         line: { field: "headline", where: "The cut-out title", text: "table for two, again" },
       },
       {
@@ -1253,8 +1253,8 @@ const month8: Month = {
       {
         template: "digicam",
         heading: "Ocho meses de cenas en una cámara",
-        brief: "Vuestras comidas en el carrete de una camarita, cada foto con su fecha y el plato al pie.",
-        body: "Llena Digicam con las comidas que habéis compartido, hasta doce fotos, cada una con su fecha naranja, y escribe el plato en el pie con la letra pixelada de la pantalla. Las pasan con las flechas o deslizando. Encima de la cámara, el título recortado de revista admite veinticuatro caracteres: el nombre de vuestro sitio de siempre.",
+        brief: "Vuestras comidas en el carrete de una camarita, cada foto con el plato al pie.",
+        body: "Llena Digicam con las comidas que habéis compartido, hasta doce fotos, y escribe el plato en cada pie con la letra pixelada de la pantalla. Desmarca «Es su cumpleaños», o la cámara le felicitará al encenderse. Se pasan con las flechas o deslizando. Encima de la cámara, el título recortado de revista admite veinticuatro caracteres: el nombre de vuestro sitio de siempre.",
         line: { field: "headline", where: "El título recortado", text: "mesa para dos, otra vez" },
       },
       {
@@ -1439,7 +1439,7 @@ const month10: Month = {
         template: "xoxo",
         heading: "What you call them, in newspaper letters",
         brief: "Their nickname cut from newspaper letters over polaroids on lace, and a typed letter below.",
-        body: "XOXO cuts what you call them out of a newspaper, letter by letter, sixteen characters at most, above polaroids on a lace doily. Ten months in, the nickname has probably changed twice: use the current one. Your letter is typed at the bottom, signed with a kiss, and some of its lines come underlined.",
+        body: "XOXO cuts what you call them out of a newspaper, letter by letter, sixteen characters at most, above polaroids on a lace doily. Ten months in, the nickname has probably changed twice: use the current one. Your letter is typed at the bottom and signed with a kiss.",
         line: { field: "headline", where: "What you call them", text: "my menace" },
       },
       {
@@ -1495,7 +1495,7 @@ const month10: Month = {
         template: "xoxo",
         heading: "Cómo le llamas, en letras de periódico",
         brief: "Su mote recortado en letras de periódico sobre polaroids con encaje, y una carta a máquina.",
-        body: "XOXO recorta cómo le llamas de un periódico, letra a letra, dieciséis caracteres como mucho, sobre polaroids en un tapete de encaje. A los diez meses el mote seguramente ha cambiado dos veces: usa el de ahora. Tu carta va a máquina abajo, firmada con un beso, y algunas frases salen subrayadas.",
+        body: "XOXO recorta cómo le llamas de un periódico, letra a letra, dieciséis caracteres como mucho, sobre polaroids en un tapete de encaje. A los diez meses el mote seguramente ha cambiado dos veces: usa el de ahora. Tu carta va a máquina abajo, firmada con un beso.",
         line: { field: "headline", where: "Cómo le llamas", text: "mi amenaza" },
       },
       {
@@ -1826,7 +1826,7 @@ const month14: Month = {
         line: { field: "label", where: "The torn-out words", text: "two keys, one couch" },
       },
     ],
-    date: { kind: "rainy-day", title: "Do nothing, properly, at home or nearby", line: "Clear one evening of plans and keep it that way." },
+    date: { kind: "rainy-day", title: "A wet afternoon at the bowling alley nearby", line: "Pick the nearest lanes and lose one game on purpose." },
     stage: [
       "Around fourteen months the two lives have started to merge: a drawer at one place, a key on the other’s ring, a weekly shop that is now one list. Friends invite you as a pair. Many couples are talking about moving in, or already have, and the everyday has become the interesting part.",
       "Too much at fourteen months: furniture as a gift, or anything that makes the next step for them. Too little: treating the month as if nothing changed. The right size names the shared things before they become invisible: a key, a pan, a date on a candle tag.",
@@ -1884,7 +1884,7 @@ const month14: Month = {
         line: { field: "label", where: "Las palabras recortadas", text: "dos llaves, un sofá" },
       },
     ],
-    date: { kind: "rainy-day", title: "No hacer nada, pero bien, en casa o cerca", line: "Dejad una noche sin planes y defendedla." },
+    date: { kind: "rainy-day", title: "Tarde de lluvia en la bolera de al lado", line: "Id a la bolera más cercana y perded una partida a propósito." },
     stage: [
       "Hacia los catorce meses las dos vidas empiezan a mezclarse: un cajón en una casa, una llave en el llavero del otro, una compra semanal que ya es una sola lista. Los amigos os invitan en pareja. Muchas parejas hablan de irse a vivir juntas, o ya lo han hecho, y lo cotidiano se ha vuelto lo interesante.",
       "Demasiado a los catorce meses: un mueble como regalo, o cualquier cosa que dé el siguiente paso por esa persona. Demasiado poco: tratar el mes como si nada hubiera cambiado. La medida justa nombra lo compartido antes de que se vuelva invisible: una llave, una sartén, una fecha en la etiqueta de una vela.",
@@ -1934,16 +1934,16 @@ const month15: Month = {
       },
       {
         template: "xoxo",
-        heading: "One word in script under the second photo",
-        brief: "One word in script under the second photo, on a page of lace and newspaper letters.",
-        body: "XOXO sets one word in script under its second polaroid, ten characters at most, on a page of lace and newspaper letters. Fifteen months is long enough to have a word that means more than it says: the name of your song, or what you call Sunday mornings. Put that word there.",
+        heading: "One word in script on the second photo",
+        brief: "One word in script on the second photo, on a page of lace and newspaper letters.",
+        body: "XOXO sets one word in script on its second polaroid, ten characters at most, on a page of lace and newspaper letters. Fifteen months is long enough to have a word that means more than it says: the name of your song, or what you call Sunday mornings. Put that word there.",
         line: { field: "word", where: "The word on the second photo", text: "encore" },
       },
       {
         template: "digicam",
         heading: "Every photo dated the day you met",
         brief: "Twelve photos with an orange date stamp, set to the day you met.",
-        body: "Digicam’s roll holds up to twelve photos with the orange date in the corner; set the stamp to the day you met and every picture looks like it was taken then. Fifteen months later, that is a nice lie. The magazine cut-out title above it gets twenty-four characters.",
+        body: "Digicam’s roll holds up to twelve photos with the orange date in the corner; set the stamp to the day you met and every picture looks like it was taken then. Fifteen months later, that is a nice lie. The magazine cut-out title above it gets twenty-four characters; untick “It’s their birthday” so it keeps yours.",
         line: { field: "headline", where: "The cut-out title", text: "est. fifteen months ago" },
       },
     ],
@@ -1990,16 +1990,16 @@ const month15: Month = {
       },
       {
         template: "xoxo",
-        heading: "Una palabra en cursiva bajo la segunda foto",
-        brief: "Una palabra en cursiva bajo la segunda foto, en una página de encaje y letras de periódico.",
-        body: "XOXO pone una palabra en cursiva bajo su segunda polaroid, diez caracteres como mucho, en una página de encaje y letras de periódico. Quince meses dan para tener una palabra que significa más de lo que dice: el nombre de vuestra canción o cómo llamáis a los domingos por la mañana. Pon esa.",
+        heading: "Una palabra en cursiva en la segunda foto",
+        brief: "Una palabra en cursiva en la segunda foto, en una página de encaje y letras de periódico.",
+        body: "XOXO pone una palabra en cursiva sobre su segunda polaroid, diez caracteres como mucho, en una página de encaje y letras de periódico. Quince meses dan para tener una palabra que significa más de lo que dice: el nombre de vuestra canción o cómo llamáis a los domingos por la mañana. Pon esa.",
         line: { field: "word", where: "La palabra de la segunda foto", text: "otra vez" },
       },
       {
         template: "digicam",
         heading: "Todas las fotos con la fecha del primer día",
         brief: "Doce fotos con la fecha naranja, puesta en el día en que os conocisteis.",
-        body: "El carrete de Digicam admite hasta doce fotos con la fecha naranja en la esquina; pon en la fecha el día en que os conocisteis y todas parecerán hechas entonces. Quince meses después, es una mentira bonita. El título recortado de revista de encima admite veinticuatro caracteres.",
+        body: "El carrete de Digicam admite hasta doce fotos con la fecha naranja en la esquina; pon en la fecha el día en que os conocisteis y todas parecerán hechas entonces. Quince meses después, es una mentira bonita. El título recortado de revista de encima admite veinticuatro caracteres; desmarca «Es su cumpleaños» para que no felicite a nadie.",
         line: { field: "headline", where: "El título recortado", text: "desde hace quince meses" },
       },
     ],
@@ -2043,14 +2043,14 @@ const month16: Month = {
         template: "passport",
         heading: "The route, with every stopover stamped",
         brief: "A passport with one stamped photo per page and a route of up to six stopovers.",
-        body: "Passport issues them a passport for the two of you and stamps one photo per page, up to ten. The route can have six stopovers of forty characters each, so a sixteen-month gift can show the trips you have already taken and end on the one that is booked.",
-        line: { field: "stops", where: "One stopover", text: "the train where we lost the snacks" },
+        body: "Passport issues them a passport for the two of you and stamps one photo per page, up to ten. The route can have six stopovers, each a real town or city of up to forty characters that the passport finds on its map, so a sixteen-month gift can show the trips you have already taken and end on the one that is booked.",
+        line: { field: "stops", where: "One stopover", text: "Lyon" },
       },
       {
         template: "digicam",
         heading: "The last trip’s roll, before the next one",
         brief: "The last trip on a little camera roll, ending on a hint at the next one.",
-        body: "Put the last trip on Digicam, up to twelve photos, flicked through with arrows or a swipe, and let the final photo hint at where you go next. After the roll prints as a strip, the letter can say it outright. The title cut from magazines above the camera has room for twenty-four characters.",
+        body: "Put the last trip on Digicam, up to twelve photos, flicked through with arrows or a swipe, and let the final photo hint at where you go next. After the roll prints as a strip, the letter can say it outright. Untick “It’s their birthday” first, and the title cut from magazines above the camera has room for twenty-four characters.",
         line: { field: "headline", where: "The cut-out title", text: "next stop: guess" },
       },
       {
@@ -2100,14 +2100,14 @@ const month16: Month = {
         template: "passport",
         heading: "La ruta, con cada escala sellada",
         brief: "Un pasaporte con una foto sellada por página y una ruta de hasta seis escalas.",
-        body: "Pasaporte le expide un pasaporte para los dos y sella una foto por página, hasta diez. La ruta admite seis escalas de cuarenta caracteres, así que un regalo de dieciséis meses puede enseñar los viajes que ya habéis hecho y acabar en el que ya está reservado.",
-        line: { field: "stops", where: "Una escala", text: "el tren donde perdimos los snacks" },
+        body: "Pasaporte le expide un pasaporte para los dos y sella una foto por página, hasta diez. La ruta admite seis escalas, cada una un pueblo o una ciudad de verdad de hasta cuarenta caracteres que el pasaporte encuentra en su mapa, así que un regalo de dieciséis meses puede enseñar los viajes que ya habéis hecho y acabar en el que ya está reservado.",
+        line: { field: "stops", where: "Una escala", text: "Lyon" },
       },
       {
         template: "digicam",
         heading: "El carrete del último viaje, antes del siguiente",
         brief: "El último viaje en el carrete de una camarita, que acaba con una pista del próximo.",
-        body: "Pon el último viaje en Digicam, hasta doce fotos que se pasan con flechas o deslizando, y deja que la última foto insinúe adónde vais después. Cuando el carrete se imprime en tira, la carta puede decirlo claro. El título recortado de revistas sobre la cámara admite veinticuatro caracteres.",
+        body: "Pon el último viaje en Digicam, hasta doce fotos que se pasan con flechas o deslizando, y deja que la última foto insinúe adónde vais después. Cuando el carrete se imprime en tira, la carta puede decirlo claro. Desmarca antes «Es su cumpleaños»; el título recortado de revistas sobre la cámara admite veinticuatro caracteres.",
         line: { field: "headline", where: "El título recortado", text: "próxima parada: adivina" },
       },
       {
@@ -2277,10 +2277,10 @@ const month18: Month = {
     ideas: [
       {
         template: "museum",
-        heading: "Plaques that say eighteen months, not years",
-        brief: "Each photo framed over a plaque dated to its month, in a gallery they swipe through.",
-        body: "Every photo in Museum hangs over a plaque with a title, a line and a short dating of up to twenty characters, the kind a gallery would print. Date each picture to its month in the eighteen, and title them as a curator would. They swipe from room to room, two to twenty photos in all.",
-        line: { field: "years", where: "The dating on a plaque", text: "Month 9 of 18" },
+        heading: "Plaques that say months, not years",
+        brief: "Each photo framed over a plaque, its month in the caption, in a gallery they swipe through.",
+        body: "Every photo in Museum hangs over a plaque with its caption and one dating of up to twenty characters, the same on every plaque, the kind a gallery would print. Make that dating the whole stretch, then put each picture’s month in its caption and title them as a curator would. They swipe from room to room, two to twenty photos in all.",
+        line: { field: "years", where: "The dating on every plaque", text: "Months 1–18" },
       },
       {
         template: "recipe-box",
@@ -2342,10 +2342,10 @@ const month18: Month = {
     ideas: [
       {
         template: "museum",
-        heading: "Placas que dicen dieciocho meses, no años",
-        brief: "Cada foto enmarcada sobre una placa fechada en su mes, en una galería que recorren deslizando.",
-        body: "Cada foto de Museo cuelga sobre una placa con un título, una frase y una datación de hasta veinte caracteres, como las que imprimiría una galería. Data cada imagen en su mes de los dieciocho y titúlalas como lo haría un comisario. Pasan de sala en sala deslizando, de dos a veinte fotos en total.",
-        line: { field: "years", where: "La datación de una placa", text: "Mes 9 de 18" },
+        heading: "Placas que dicen meses, no años",
+        brief: "Cada foto enmarcada sobre una placa, con su mes en el pie, en una galería para deslizar.",
+        body: "Cada foto de Museo cuelga sobre una placa con su pie y una datación de hasta veinte caracteres, la misma en todas las placas, como las que imprimiría una galería. Que la datación sea el tramo entero; pon el mes de cada imagen en su pie y titúlalas como lo haría un comisario. Pasan de sala en sala deslizando, de dos a veinte fotos en total.",
+        line: { field: "years", where: "La datación de todas las placas", text: "Meses 1 a 18" },
       },
       {
         template: "recipe-box",
