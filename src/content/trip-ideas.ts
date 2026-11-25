@@ -4,21 +4,22 @@ import type { TripIdeaKind } from "@/lib/trips/idea-kinds";
  * The words of the pages by kind of trip (`/trips/ideas/<kind>`, lib/trips/idea-kinds.ts).
  * `TRIP_IDEAS_UI` is what both pages say; `TRIP_IDEA_COPY` is each kind's own, with `fits`, the one
  * line of why for each trip on it (by trip id), each read against the trip's stops and plan in
- * lib/trips/presets.ts; each starts its own way, since the card's label above it is the trip's best
- * months, not its kind (the page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: never one of the page's cards (so no
+ * lib/trips/presets.ts; each starts its own way. The card's label above it is the trip's best months
+ * alone (not "Best …" six times; `listLine`, each kind's own, says what they are), not its kind (the
+ * page is that kind) or its days (the line says them). `hero` is the trip whose photograph is in the hero: never one of the page's cards (so no
  * photograph shows twice on a page), and always a trip the hero's sentence names. `{count}` is the
  * kind's number of trips. Spain Spanish, vosotros.
  */
 type L = { en: string; es: string };
 
-export type TripIdeasUi = { listLine: string; footLabel: string; footHeading: string; all: string; from: string };
+export type TripIdeasUi = { footLabel: string; footHeading: string; all: string; from: string };
 
 export const TRIP_IDEAS_UI: Record<"en" | "es", TripIdeasUi> = {
-  en: { listLine: "Open one for its plan, its map and its flights.", footLabel: "More trips", footHeading: "Another way to choose", all: "All {count} trips", from: "Leaving from" },
-  es: { listLine: "Abrid uno para ver su plan, su mapa y sus vuelos.", footLabel: "Más viajes", footHeading: "Otra forma de elegir", all: "Los {count} viajes", from: "Desde" },
+  en: { footLabel: "More trips", footHeading: "Another way to choose", all: "All {count} trips", from: "Leaving from" },
+  es: { footLabel: "Más viajes", footHeading: "Otra forma de elegir", all: "Los {count} viajes", from: "Desde" },
 };
 
-export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line: L; sentence: L; listLabel: L; listHeading: L; whySummary: L; whyBody: L; hero: string; fits: Record<string, L> };
+export type TripIdeaCopy = { nav: L; title: L; description: L; heading: L; line: L; sentence: L; listLabel: L; listHeading: L; listLine: L; whySummary: L; whyBody: L; hero: string; fits: Record<string, L> };
 
 export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
   "weekend-getaways": {
@@ -30,11 +31,12 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
       es: "Escapadas de fin de semana en pareja por Europa: Lisboa, París, Copenhague y Ámsterdam en tres o cuatro días, planeadas día a día, con mapa y sin coche.",
     },
     heading: { en: "Weekend getaways for two", es: "Escapadas de fin de semana para dos" },
-    line: { en: "Four city breaks of three or four days each.", es: "Cuatro ciudades, de tres o cuatro días cada una." },
+    line: { en: "Four city breaks of three or four days each.", es: "Cuatro escapadas urbanas, de tres o cuatro días." },
     // Prague's two nights: the train trip's first stop (presets.ts), so the hero's photograph is named here.
     sentence: { en: "Each fits between a Friday and a Monday and needs no car. Prague makes one too: the train trip starts with two nights there.", es: "Cada una cabe entre un viernes y un lunes y se hace sin coche. Praga también da para una: el viaje en tren empieza con dos noches allí." },
     listLabel: { en: "Three or four days", es: "Tres o cuatro días" },
     listHeading: { en: "The {count} that fit a weekend", es: "Las {count} que caben en un fin de semana" },
+    listLine: { en: "Each with its best months; open one for its plan and flights.", es: "Cada una con sus mejores meses; abrid una para ver su plan." },
     fits: {
       "lisbon-slow-weekend": { en: "Three days on foot, sleeping in Alfama.", es: "Tres días a pie, durmiendo en Alfama." },
       "paris-without-cliches": { en: "Four days, three nights by the Canal Saint-Martin.", es: "Cuatro días, tres noches junto al Canal Saint-Martin." },
@@ -61,12 +63,13 @@ export const TRIP_IDEA_COPY: Record<TripIdeaKind, TripIdeaCopy> = {
     sentence: { en: "Each has its route on a map and every night’s stop named. Rather not drive all week? Santorini and Naxos go by bus and ferry, with one day by car.", es: "Cada ruta tiene su mapa y dice dónde dormir cada noche. ¿Sin conducir toda la semana? Santorini y Naxos se recorren en autobús y ferry, con coche un día." },
     listLabel: { en: "By car", es: "En coche" },
     listHeading: { en: "The {count} road trips", es: "Los {count} viajes en coche" },
+    listLine: { en: "Above each, the months to go. Open one for its route and car.", es: "Sobre cada uno, cuándo ir. Abrid uno para ver la ruta y el coche." },
     fits: {
       "amalfi-coast": { en: "Naples to Ravello in six days, with the car left in Positano.", es: "Seis días de Nápoles a Ravello, y el coche aparcado en Positano." },
       "tuscany-hill-towns": { en: "Florence, Chianti, Siena and the Val d’Orcia, over six days.", es: "Florencia, el Chianti, Siena y el Val d’Orcia, en seis días." },
       "scottish-highlands": { en: "Edinburgh to Inverness, with two of the five nights on Skye.", es: "De Edimburgo a Inverness, con dos de las cinco noches en Skye." },
       "iceland-south-coast": { en: "Along the south coast for six days, to the glacier lagoon.", es: "Por la costa sur durante seis días, hasta la laguna glaciar." },
-      "baltic-coast": { en: "A week from Riga to Tallinn, on the lowest day costs here.", es: "Una semana de Riga a Tallin, con el menor gasto diario." },
+      "baltic-coast": { en: "Riga to Tallinn in a week, the cheapest days of the twelve.", es: "Una semana de Riga a Tallin, con el menor gasto diario." },
       // The plan's line said "west along the coast, from Faro to Sagres": the first day goes east, to Tavira.
       "algarve-coast": { en: "The whole coast, from Tavira in the east to windy Sagres.", es: "Toda la costa, desde Tavira, al este, hasta la ventosa Sagres." },
     },

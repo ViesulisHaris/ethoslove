@@ -68,7 +68,12 @@ describe("the pages by kind of trip", () => {
         expect(words(c.whyBody[l]), `${k} ${l}`).toBeLessThanOrEqual(180);
       }
     }
-    for (const l of LANGS) expect(words(TRIP_IDEAS_UI[l].listLine)).toBeLessThanOrEqual(14);
+    for (const k of TRIP_IDEA_KINDS) for (const l of LANGS) expect(words(TRIP_IDEA_COPY[k].listLine[l]), `${k} ${l}`).toBeLessThanOrEqual(14);
+    // Each kind says its own line, and the Spanish one agrees with its kind: "una" for escapadas, "uno" for viajes.
+    expect(new Set(TRIP_IDEA_KINDS.flatMap((k) => LANGS.map((l) => TRIP_IDEA_COPY[k].listLine[l]))).size).toBe(4);
+    expect(TRIP_IDEA_COPY["weekend-getaways"].listLine.es).toMatch(/\buna\b/);
+    expect(TRIP_IDEA_COPY["weekend-getaways"].listLine.es).not.toMatch(/\buno\b/);
+    expect(TRIP_IDEA_COPY["road-trips"].listLine.es).not.toMatch(/\buna\b/);
   });
 
   it("K6 titles and descriptions fit a search result", () => {

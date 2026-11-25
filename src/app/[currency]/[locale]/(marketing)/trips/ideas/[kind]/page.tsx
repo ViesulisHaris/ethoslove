@@ -59,8 +59,8 @@ export default async function TripIdeaPage({ params }: Props) {
     id: trip.id,
     href: `/trips/${trip.id}`,
     title: trip.title[l],
-    // The best months: the kind is the page's, and the days are in the line under the name.
-    label: t("best", { months: monthRanges(trip.bestMonths, l) }),
+    // The best months alone (the list's line says what they are): the kind is the page's, and the days are in the line under the name.
+    label: monthRanges(trip.bestMonths, l),
     line: copy.fits[trip.id][l],
     ...tripPicture(trip),
   }));
@@ -102,7 +102,7 @@ export default async function TripIdeaPage({ params }: Props) {
           </a>
         </RoomHero>
 
-        <RoomSpread id="ideas-title" sectionId="ideas-list" label={copy.listLabel[l]} heading={fill(copy.listHeading[l], { count })} line={ui.listLine} art={CARDS_ART}>
+        <RoomSpread id="ideas-title" sectionId="ideas-list" label={copy.listLabel[l]} heading={fill(copy.listHeading[l], { count })} line={copy.listLine[l]} art={CARDS_ART}>
           <TripCards id="ideas-row" columns={kind === "weekend-getaways" ? 2 : 3} cards={cards} />
         </RoomSpread>
 

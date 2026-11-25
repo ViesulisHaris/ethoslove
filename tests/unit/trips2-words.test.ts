@@ -80,9 +80,9 @@ function kindPageWords(kind: (typeof TRIP_IDEA_KINDS)[number], l: "en" | "es"): 
   const ui = TRIP_IDEAS_UI[l];
   const t = M[l].trips;
   const trips = ideaTrips(kind);
-  const cards = trips.flatMap((trip) => [t.best.replace("{months}", monthRanges(trip.bestMonths, l)), trip.title[l], c.fits[trip.id][l]]);
+  const cards = trips.flatMap((trip) => [monthRanges(trip.bestMonths, l), trip.title[l], c.fits[trip.id][l]]);
   const foot = [ui.footLabel, ui.footHeading, ...TRIP_IDEA_KINDS.filter((k) => k !== kind).map((k) => TRIP_IDEA_COPY[k].nav[l]), fill(ui.all, { count: TRIPS.length }), ui.from, ...TRIP_ORIGINS.map((o) => o.name[l]), c.whySummary[l]];
-  return count(t.detail.back, t.eyebrow, c.heading[l], c.line[l], c.sentence[l], TRIP_ORIGIN_UI[l].button, getTrip(c.hero)!.title[l], c.listLabel[l], fill(c.listHeading[l], { count: trips.length }), ui.listLine, ...cards, ...foot);
+  return count(t.detail.back, t.eyebrow, c.heading[l], c.line[l], c.sentence[l], TRIP_ORIGIN_UI[l].button, getTrip(c.hero)!.title[l], c.listLabel[l], fill(c.listHeading[l], { count: trips.length }), c.listLine[l], ...cards, ...foot);
 }
 
 describe("the words on every page of the trips room", () => {
@@ -105,7 +105,7 @@ describe("the words on every page of the trips room", () => {
   it("W5 the lines a section's left column says are 14 words at most", () => {
     for (const l of LANGS) {
       expect(count(TRIP_ORIGIN_UI[l].listLine), l).toBeLessThanOrEqual(14);
-      expect(count(TRIP_IDEAS_UI[l].listLine), l).toBeLessThanOrEqual(14);
+      for (const k of TRIP_IDEA_KINDS) expect(count(TRIP_IDEA_COPY[k].listLine[l]), `${k} ${l}`).toBeLessThanOrEqual(14);
       expect(count(M[l].trips.match.line), l).toBeLessThanOrEqual(14);
     }
   });
