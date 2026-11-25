@@ -223,7 +223,7 @@ export const post: BlogPost = {
         { type: "h3", text: "5. This or that" },
         {
           type: "p",
-          text: "Rapid pairs: mountains or sea, early or late, call or text. Count to three and say yours at the same time, then count your matches out of ten. Harder choices work too: our [would you rather questions for couples](/blog/would-you-rather-questions-for-couples) has 104 to read aloud.",
+          text: "Rapid pairs: mountains or sea, early or late, call or text. Count to three and say yours at the same time, then count your matches out of ten. Harder choices work too: our [would you rather questions for couples](/blog/would-you-rather-questions-for-couples) has 104 to read aloud, and our [this or that questions for couples](/blog/this-or-that-questions-for-couples) has 127 quick pairs by theme, from food to the future.",
         },
         { type: "h3", text: "6. Card night" },
         {
@@ -495,7 +495,7 @@ export const post: BlogPost = {
         { type: "h3", text: "5. Esto o aquello" },
         {
           type: "p",
-          text: "Dilemas rápidos: montaña o playa, madrugar o trasnochar, llamada o mensaje. Contad hasta tres y decid la vuestra a la vez, y luego contad en cuántas de diez coincidís. Con dilemas más difíciles también funciona: nuestras [preguntas de qué prefieres para parejas](/blog/would-you-rather-questions-for-couples) tienen 104 para leer en voz alta.",
+          text: "Dilemas rápidos: montaña o playa, madrugar o trasnochar, llamada o mensaje. Contad hasta tres y decid la vuestra a la vez, y luego contad en cuántas de diez coincidís. Con dilemas más difíciles también funciona: nuestras [preguntas de qué prefieres para parejas](/blog/would-you-rather-questions-for-couples) tienen 104 para leer en voz alta, y nuestras [preguntas de esto o aquello para parejas](/blog/this-or-that-questions-for-couples) tienen 127 dilemas rápidos por temas, de la comida al futuro.",
         },
         { type: "h3", text: "6. Noche de cartas" },
         {

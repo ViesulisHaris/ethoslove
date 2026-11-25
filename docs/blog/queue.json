@@ -1,18 +1,5 @@
 [
   {
-    "slug": "this-or-that-questions-for-couples",
-    "keyword": "this or that questions for couples",
-    "keyword_es": "preguntas de esto o aquello para parejas",
-    "occasion": "just-because",
-    "templates": [
-      "fortune-cookie",
-      "scratch-card"
-    ],
-    "angle": "This or that for couples: quick pairs by theme (dates, home, food, travel, the future), how to turn a pick into a conversation, and the would-you-rather game (/games/rather) when you want more. Link up to the questions hubs.",
-    "volume": 1600,
-    "group": "questions"
-  },
-  {
     "slug": "date-night-questions",
     "keyword": "date night questions",
     "keyword_es": "preguntas para una cita",

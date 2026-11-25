@@ -1373,3 +1373,11 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-25T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: anniversary-letter-to-boyfriend, birthday-message-for-husband |
 | 2026-11-25T16:43Z | serp/google/organic/live/advanced | 0.006 | seo: anniversary letter to boyfriend |
 | 2026-11-25T16:43Z | serp/google/organic/live/advanced | 0.006 | seo: birthday message for husband |
+| 2026-11-25T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:20Z | on_page/content_parsing/live | 0.00015 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:20Z | on_page/content_parsing/live | 0.00015 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:20Z | on_page/content_parsing/live | 0.00015 | blog: this-or-that-questions-for-couples |
