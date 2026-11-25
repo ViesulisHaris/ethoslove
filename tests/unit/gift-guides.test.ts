@@ -623,6 +623,12 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
     for (const href of ["/gifts/photo-album", "/occasions/anniversary"]) expect(hrefs("memory-book")).toContain(href);
   });
 
+  it("the Spanish of the months and the new pages says «reconocer» for owning up, not the calque «admisión» (gifts2-D6)", () => {
+    // «Admisión» is being let in (to a school, a hospital); an apology owns up to things, «cosas que reconoces».
+    const texts = [...MONTHS.flatMap((n) => strings(MONTH_GUIDES[n].es)), ...GIFT_GUIDE_SLUGS.flatMap((slug) => strings(GIFT_GUIDES[slug].es))];
+    expect(texts.filter((t) => /\badmisi(ón|ones)\b/i.test(t))).toEqual([]);
+  });
+
   it("the Spanish of the months and the new pages speaks of one person the gift is for, and genders nobody", () => {
     // The person who opens the gift is one, and never "él": no plural verbs for them, no masculine agreement for the
     // couple, no «esa persona» standing in for a name, no leísmo that reads as a man (gifts2 deep test, D4).

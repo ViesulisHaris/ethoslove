@@ -1733,8 +1733,8 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "sticker-bomb",
           heading: "Tiras de rotuladora que se echan la culpa",
-          brief: "Tiras de rotuladora bajo los stickers, pequeñas admisiones de la tonta a la real.",
-          body: "Las admisiones pequeñas suman. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora de veintiocho caracteres, seis si añades una foto o ninguna. Para pedir perdón, que las tiras sean pequeñas cosas que reconoces, en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
+          brief: "Tiras de rotuladora bajo los stickers, cosas pequeñas que reconoces, de la tonta a la de verdad.",
+          body: "Lo pequeño que reconoces también suma. Bomba de Stickers le deja pegar stickers en una página vacía, y bajo uno de cada dos aparece una tira de rotuladora de veintiocho caracteres, seis si añades una foto o ninguna. Para pedir perdón, que las tiras sean pequeñas cosas que reconoces, en orden, de la tonta a la de verdad, y elige el pack Los tiernos para que los stickers sean suaves.",
           line: { field: "labels", where: "Una tira de rotuladora", text: "exagero, lo reconozco" },
         },
       ],
