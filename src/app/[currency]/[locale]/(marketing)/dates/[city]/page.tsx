@@ -263,6 +263,7 @@ export default async function CityDatesPage({ params }: PageProps<"/[currency]/[
             </li>
             {passing.length > 0 ? (
               <li data-testid="city-trip">
+                <span className="text-sm text-page-body">{t("trip")}:</span>{" "}
                 {passing.map((trip, i) => (
                   <span key={trip.id}>
                     {i > 0 ? ", " : null}
