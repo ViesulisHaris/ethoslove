@@ -11,6 +11,7 @@ import { chargedCurrency, formatAmount, type Currency } from "@/lib/pricing/prod
 import { getPost, postLocales } from "@/content/blog";
 import { TOGETHER_PATH } from "@/content/together-guide";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_IN_CLOSING_ROWS, GUIDE_BAND_COVERS, guideBandPhoto, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { PAGE_ABOUT, demoFits } from "@/content/demo-occasions";
 import { MONTHS, MONTH_GUIDES, monthBandPhoto, monthFromSlug, monthNeighbours, monthPost, monthRef, monthSlug } from "@/content/month-anniversaries";
 import { handLine, kindCardLine, kindIdeaIsFree, openingLine } from "@/content/idea-cards";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug, type Recipient } from "@/content/recipients";
@@ -251,10 +252,13 @@ async function KindPage({ kind, locale, currency }: { kind: GiftGuideSlug; local
     const manifest = leadGift(slug);
     return manifest ? [{ href: `/gifts/${slug}`, label: GIFT_GUIDES[slug][locale].label, manifest }] : [];
   });
-  const posters = others.slice(0, 4);
+  // A page about a couple never shows another page's poster that is a birthday or a card for Mum (content/demo-occasions.ts):
+  // those pages are still offered, by name, in the links under the posters.
+  const about = PAGE_ABOUT[kind];
+  const posters = others.filter((page) => !about || demoFits(page.manifest.slug, about)).slice(0, 4);
   const shown = new Set(posters.map((page) => page.href));
   const links = [
-    ...others.slice(4).map(({ href, label }) => ({ href, label })),
+    ...others.filter((page) => !shown.has(page.href)).map(({ href, label }) => ({ href, label })),
     ...guide.related,
   ].filter((link, i, all) => !shown.has(link.href) && all.findIndex((other) => other.href === link.href) === i);
 
