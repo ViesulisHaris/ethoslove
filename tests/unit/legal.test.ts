@@ -6,6 +6,7 @@ import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/c
 import { FREE_SAVED_DATES, PRODUCTS, formatAmount, groupAmount, membershipAmount } from "@/lib/pricing/products";
 import { consentSentence } from "@/lib/stripe/line-items";
 import { ROOMS_KEY } from "@/lib/analytics/rooms-marker";
+import { STARTED_NOTE } from "@/lib/attribution/recipient-loop";
 
 const all = (doc: LegalDoc) => [doc.intro, ...doc.sections.flatMap((s) => [s.heading, ...s.paragraphs])].join("\n");
 const section = (doc: LegalDoc, n: number) => doc.sections.find((s) => s.heading.startsWith(`${n}. `))!.paragraphs.join("\n");
@@ -130,6 +131,15 @@ describe("legal documents", () => {
     // loop2-C8: the rooms sentence said "also keep", right before the next one's "also keep".
     expect(all(LEGAL_DOCS.privacy.en)).not.toContain("also keep, in your browser's storage (ethos-rooms");
     expect(all(LEGAL_DOCS.privacy.es)).not.toContain("también, en el almacenamiento de tu navegador (ethos-rooms");
+  });
+
+  // loop2-D2: the once-per-visit note is written for every recipient who starts a gift of their own
+  // (the badge, "make one for someone else", the kept-gift reminder), not only for a reply, and
+  // whatever the cookie answer is, so the policy names it and what it is for.
+  it("the privacy policy names the note that counts a recipient's own gift once, in both languages", () => {
+    expect(STARTED_NOTE).toBe("ethos-recipient-started");
+    expect(section(LEGAL_DOCS.privacy.en, 12)).toContain("a note, kept until you close the tab, that you started a gift of your own after receiving one, so it is counted only once");
+    expect(section(LEGAL_DOCS.privacy.es, 12)).toContain("una nota, hasta que cierras la pestaña, de que has empezado un regalo propio después de recibir uno, para contarlo una sola vez");
   });
 
   it("carry none of the dropped offers: discounts, codes and the paid song", () => {

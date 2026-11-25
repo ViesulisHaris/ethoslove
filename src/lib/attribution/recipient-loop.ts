@@ -48,7 +48,7 @@ export function countRecipientGiftSent(search: Search, template: string, paid: b
   if (via) track("recipient_gift_sent", { via, template, paid });
 }
 
-/** In this tab's memory once a visit's start is counted (sessionStorage: gone with the tab). */
+/** In this tab's memory once a visit's start is counted (sessionStorage: gone with the tab). Named in the privacy policy, section 12. */
 export const STARTED_NOTE = "ethos-recipient-started";
 
 function startedThisVisit(): boolean {
