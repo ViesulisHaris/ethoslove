@@ -73,6 +73,14 @@ export const env = {
 
   /** TikTok pixel id (its "pixel code"), the same way and for the same reasons as `metaPixelId`. */
   tiktokPixelId: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || undefined,
+
+  /**
+   * A table-booking partner's id, optional (lib/dates/booking.ts). The form is `<host>?<param>=<id>`,
+   * for example `opentable.com?ref=1234`: a place's booking page on that host gets the id added and
+   * its link is marked sponsored. Unset, booking links are the plain addresses from the map. Written
+   * out literally, like `clarityId`, because the place sheet builds the link in the browser.
+   */
+  bookingPartner: process.env.NEXT_PUBLIC_BOOKING_PARTNER || undefined,
   /** The Events API's access token (server only), made in TikTok Events Manager next to the pixel. */
   tiktokEventsToken: read("TIKTOK_EVENTS_TOKEN"),
   /** TikTok Events Manager → Test events: while set, server events go there instead of counting. */

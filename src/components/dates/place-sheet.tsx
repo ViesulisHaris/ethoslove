@@ -2,11 +2,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Share2, Star, Sun, Ticket, X } from "lucide-react";
+import { Accessibility, CalendarCheck, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Share2, Star, Sun, Ticket, X } from "lucide-react";
 import { animate, motion, useDragControls, useMotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
 import { getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics/track";
+import { bookingLink, TABLE_KINDS } from "@/lib/dates/booking";
 import { formatDay, weekdayOf, type Ymd } from "@/lib/dates/calendar";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { cuisineWords } from "@/lib/dates/cuisines";
@@ -185,6 +187,8 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   const oddity = quirk ?? details?.quirk;
   const query = encodeURIComponent(`${place.name} ${where}`.trim());
   // The details can say it is famous when the map's first answer didn't.
+  // A table, where the map's entry names a booking page: plain, unless a partner's id is set (booking.ts).
+  const booking = TABLE_KINDS.includes(place.kind) ? bookingLink(details?.booking) : null;
   const tickets = sellsTickets({ kind: place.kind, named: place.named, notable: place.notable || details?.notable }) ? tiqetsSearch(ticketQuery(place.name, where), locale) : null;
 
   // What Tripadvisor and Google say, when this install has their keys; an empty answer otherwise,
@@ -402,6 +406,20 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
             <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
           </a>
         ) : null}
+        {booking ? (
+          <a
+            href={booking.href}
+            target="_blank"
+            rel={booking.sponsored ? "noopener noreferrer sponsored" : "noopener noreferrer nofollow"}
+            onClick={() => track("booking_click", { paid: booking.sponsored })}
+            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5"
+          >
+            <CalendarCheck aria-hidden="true" className="size-4" />
+            {labels.book}
+            <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
+            <span className="sr-only">({ta("newTab")})</span>
+          </a>
+        ) : null}
         {tickets ? (
           <PartnerLink partner="tiqets" placement="place_sheet" href={tickets} className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
             <Ticket aria-hidden="true" className="size-4" />
@@ -426,6 +444,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           {ta("tickets.via")} {ta("disclosure")}
         </p>
       ) : null}
+      {booking?.sponsored ? <p className="mt-2 px-1 text-[12px] leading-snug text-forest/65">{ta("booking.via")}</p> : null}
 
       {scores.length > 0 || lookUp.length > 0 ? (
         <div className="mt-5">
