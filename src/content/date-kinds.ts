@@ -595,7 +595,7 @@ export const CITY_KIND_WORDS: Record<"en" | "es", { title: string; description: 
   es: {
     title: "{short} en {city}",
     description: "{short} en {city}, de «{first}» a «{last}». El planificador elige una según el tiempo.",
-    heading: "{short} en {city}",
+    heading: "En {city}, {phraseLower}",
     withPlaces: "En {city}, {count} {dates}, con paradas en sitios como {places}.",
     noPlaces: "En {city}, {count} {dates}. Abrid una en el mapa y os busca los sitios.",
     two: "{a} y {b}",
