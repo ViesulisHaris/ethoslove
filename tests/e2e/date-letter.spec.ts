@@ -1,5 +1,6 @@
 import { chromium, devices, expect, test, webkit, type APIRequestContext, type Page, type Route } from "@playwright/test";
 import { measure, settle } from "./page-design";
+import { mockTowns, typeTown } from "./rooms-world";
 
 /**
  * The date letter's box (PLAN-letter 5.2, B1-B15). A worktree has no database, so the box's GET and
@@ -72,10 +73,10 @@ async function pages(page: Page): Promise<string[]> {
     blogPost = (await page.locator('main a[href^="/blog/"]').first().getAttribute("href")) ?? "/blog";
   }
   // Left off: /games (its Spanish hub reaches 301 words with the box; PLAN-letter step 8's rule), /plan
-  // (empty, as a new visitor sees it, the page is so short the box would be in the first screen), and
-  // /trips, a trip and /long-distance (each far over 300 words when the box was placed: letter-C7; since
-  // cut by the trips job, /trips and /long-distance now have room: reports/letter-integrate.md).
-  return ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", blogPost];
+  // (empty, as a new visitor sees it, the page is so short the box would be in the first screen), and a
+  // trip's own page (up to about 300 words without it). /trips and /long-distance have it again since the
+  // trips job cut them to about 270 and 145 words (reports/letter-integrate.md, letter-fix2.md).
+  return ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", "/trips", "/long-distance", blogPost];
 }
 
 test("B1 (off) switched off, nothing of it exists", async ({ page, request }) => {
@@ -130,12 +131,57 @@ test("B3 (on) never where it must not be", async ({ page, request }) => {
   await needs("on", request);
   test.setTimeout(300_000);
   const { gets } = await answer(page);
-  for (const path of ["/", "/pricing", "/templates", "/templates/the-letter", "/demo/the-letter", "/create/the-letter", "/gifts", "/plan", "/trips", "/trips/lisbon-slow-weekend", "/long-distance", "/games", "/games/today", "/games/weekly", "/games/truth-or-dare", "/login", "/legal/privacy"]) {
+  for (const path of ["/", "/pricing", "/templates", "/templates/the-letter", "/demo/the-letter", "/create/the-letter", "/gifts", "/plan", "/trips/lisbon-slow-weekend", "/trips/amalfi-coast", "/games", "/games/today", "/games/weekly", "/games/truth-or-dare", "/login", "/legal/privacy"]) {
     await page.goto(path);
     await toEnd(page);
     expect(await page.locator("[data-letter-slot]").count(), path).toBe(0);
   }
   expect(gets).toEqual([]);
+});
+
+test("B19 (on) on Trips and Long distance the box comes after the gift (gifts come first) and below the first screen, in both languages", async ({ page, request }) => {
+  await needs("on", request);
+  test.setTimeout(240_000);
+  await answer(page);
+  await mockTowns(page);
+  // The gift section of each: "Make the trip the gift" (its link to the boarding-pass gift) and "Gifts for the distance" (its posters).
+  const gifts = { "/trips": 'main a[href*="/templates/"]', "/long-distance": '[data-testid="ldr-gifts"]' } as const;
+  for (const size of [{ width: 375, height: 812 }, { width: 1440, height: 900 }]) {
+    for (const locale of ["", "/es"]) {
+      await page.setViewportSize(size);
+      for (const [path, gift] of Object.entries(gifts)) {
+        const where = `${locale}${path} ${size.width}`;
+        await page.goto(`${locale}${path}`);
+        await toEnd(page);
+        const box = page.getByTestId("letter-box");
+        await expect(box, where).toHaveCount(1);
+        const order = await page.evaluate(
+          ([giftSel]) => {
+            const giftEl = [...document.querySelectorAll(giftSel)].at(-1)!.closest("section")!;
+            const boxEl = document.querySelector('[data-testid="letter-box"]')!;
+            const top = boxEl.getBoundingClientRect().top;
+            // The paper each stands on, edge to edge: the same, so no seam runs between the gift and the box.
+            const ground = (el: Element) => {
+              for (let n: Element | null = el; n; n = n.parentElement) {
+                const bg = getComputedStyle(n).backgroundColor;
+                if (bg !== "rgba(0, 0, 0, 0)" && n.getBoundingClientRect().width >= window.innerWidth - 20) return bg;
+              }
+              return "none";
+            };
+            return {
+              sameGround: ground(giftEl) === ground(boxEl.closest("[data-letter-slot]")!),
+              after: Boolean(giftEl.compareDocumentPosition(boxEl) & Node.DOCUMENT_POSITION_FOLLOWING),
+              below: top >= giftEl.getBoundingClientRect().bottom - 1,
+              // Never in the first screen, in either language (B2 holds the English pages; Spanish runs longer or shorter).
+              firstScreen: top + window.scrollY < window.innerHeight,
+            };
+          },
+          [gift],
+        );
+        expect(order, where).toEqual({ sameGround: true, after: true, below: true, firstScreen: false });
+      }
+    }
+  }
 });
 
 test("B4 (on) no list, no box, no gap; while it is asked, its place is held and nothing moves when it shows (letter-C12)", async ({ page, request }) => {
@@ -418,16 +464,25 @@ for (const size of [{ width: 1440, height: 900 }, { width: 375, height: 812 }]) 
       // Every kind of page with the box. Not a blog post: an article is long-form under the blog's own
       // rules (docs/blog/RUBRIC.md), well over 300 words with or without the box; B14's last test
       // holds the box itself to twenty words there.
-      for (const path of ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", "/dates/ideas/rainy-day", "/dates/ideas/first-date"]) {
+      // /trips and /long-distance are counted as their own test counts them (trips2.spec.ts E19: <main>,
+      // the town search answered by mockTowns), and /long-distance again with two towns typed, its longest.
+      for (const path of ["/dates", "/dates/london", "/dates/london/first-date", "/dates/ideas/cheap", "/dates/ideas/rainy-day", "/dates/ideas/first-date", "/trips", "/long-distance", "/long-distance+towns"]) {
         await page.unrouteAll({ behavior: "ignoreErrors" });
         await answer(page);
-        await page.goto(`${locale}${path}`);
+        await mockTowns(page);
+        await page.goto(`${locale}${path.replace("+towns", "")}`);
+        if (path.endsWith("+towns")) {
+          await typeTown(page, locale ? "Dónde estás tú" : "Where you are", "Riga");
+          await typeTown(page, locale ? "Dónde está la otra persona" : "Where they are", "Lisbon");
+          await expect(page.locator("[data-halfway-city]").or(page.locator('[data-testid="meet-ways"]')).first()).toBeVisible();
+        }
         await toEnd(page);
         await expect(page.getByTestId("letter-box")).toHaveCount(1);
         await settle(page);
-        // /dates is not built on a page theme: its words are counted in <main> (navigation and footer aside, as the rule says).
+        // /dates, /trips and /long-distance are not built on a page theme: their words are counted in <main> (navigation and footer aside, as the rule says).
         const m = await measure(page, (await page.locator("[data-page-theme]").count()) ? "[data-page-theme]" : "main");
         const where = `${locale}${path} ${size.width}`;
+        console.log(`words ${where}: ${m.count}`);
         expect(m.count, `${where}: words`).toBeLessThanOrEqual(300);
         expect(m.overlaps, where).toEqual([]);
         expect(m.onCards, where).toEqual([]);

@@ -26,18 +26,22 @@ const WITH_BOX = [
   "dates/[city]/page.tsx",
   "dates/[city]/[kind]/page.tsx",
   "dates/ideas/[kind]/page.tsx",
+  "trips/page.tsx",
+  "long-distance/page.tsx",
   "blog/[slug]/page.tsx",
 ].map((f) => `${MARKETING}/${f}`);
 const LEFT_OFF: Record<string, string> = {
   [`${MARKETING}/games/page.tsx`]: "the Spanish games hub reaches 301 words with the box drawn, over the page's 300 (PLAN-letter step 8's rule)",
   [`${MARKETING}/plan/page.tsx`]: "an empty plan, as a new visitor sees it, is so short that the box would be in the first screen (BRIEF-letter.md 2: never in the first screen)",
-  // Each was far over the 300 visible words when the box was placed (letter-T11: 787, 603 and 496 in
-  // English), so it went without, as /games does (letter-C7). The trips job has since cut them to 300
-  // or fewer (merged 25 Nov, reports/letter-integrate.md): /trips and /long-distance now have room for
-  // the box's twenty words, a trip's page mostly not. Putting it back is the lead's call, not the merge's.
-  [`${MARKETING}/trips/page.tsx`]: "left off when it was over 300 visible words; now has room (letter-integrate), not yet put back",
+  // /trips and /long-distance lost the box when they were far over 300 words (letter-C7) and have it
+  // again since the trips job cut them (reports/letter-integrate.md, letter-fix2.md). A trip's own page
+  // has no room: up to about 300 visible words without the box (Baltic coast reads 299 in Spanish).
   [`${MARKETING}/trips/[id]/page.tsx`]: "a trip's page is up to about 300 visible words without the box",
-  [`${MARKETING}/long-distance/page.tsx`]: "left off when it was over 300 visible words; now has room (letter-integrate), not yet put back",
+};
+/** Where the box has to come after the page's gift: gifts come first on this site (the lead, letter-fix2). */
+const AFTER_GIFT: Record<string, string> = {
+  [`${MARKETING}/trips/page.tsx`]: 't("gift.title")',
+  [`${MARKETING}/long-distance/page.tsx`]: 'data-testid="ldr-gifts"',
 };
 
 describe("where the date letter's box is", () => {
@@ -51,6 +55,18 @@ describe("where the date letter's box is", () => {
     expect(importing("LetterBox", "@/components/date-letter/letter-box").sort()).toEqual([`${MARKETING}/date-letter/preview/page.tsx`]);
     expect(readFileSync(join(ROOT, "src/components/date-letter/letter-slot.tsx"), "utf8")).toContain('from "./letter-box"');
     expect(readFileSync(join(ROOT, "src/components/date-letter/letter-box.tsx"), "utf8")).not.toContain("useTranslations");
+  });
+
+  it("P3 on Trips and Long distance the box is the page's last part, after its gift", () => {
+    for (const [file, gift] of Object.entries(AFTER_GIFT)) {
+      const source = readFileSync(join(ROOT, file), "utf8");
+      const slot = source.indexOf("<LetterSlot ");
+      expect(source.split("<LetterSlot ").length - 1, file).toBe(1);
+      expect(source.indexOf(gift), file).toBeGreaterThan(0);
+      expect(slot, `${file}: the box before the gift`).toBeGreaterThan(source.lastIndexOf(gift));
+      // Nothing drawn after it: only the fragment's end and the component's return follow.
+      expect(source.slice(slot).replace(/<LetterSlot [\s\S]*?\/>/, "").replace(/\s+/g, ""), file).toBe("</>);}");
+    }
   });
 
   it("P2 the box adds at most twenty words, its field's visible label included, and says what comes", () => {

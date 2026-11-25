@@ -33,12 +33,15 @@ export function LetterBox({
   where,
   locale,
   variant,
+  ground,
   words: w,
   preview,
 }: {
   where: LetterWhere;
   locale: "en" | "es";
   variant: "card" | "band";
+  /** The card only: the paper it stands on, edge to edge, where the page's last band is not the page's own paper (Long distance ends on blush). */
+  ground?: "blush";
   words: LetterBoxWords;
   /** Development only: draws this state at once and asks the server nothing. */
   preview?: { state: LetterBoxState; email?: string };
@@ -263,7 +266,7 @@ export function LetterBox({
       </div>
     );
   }
-  return (
+  const card = (
     <section ref={slot} data-letter-slot {...named} {...hold} className={cn("container-x py-10 lg:py-14", waiting && "invisible")}>
       <div className="relative mx-auto max-w-[34rem] rounded-[28px] border border-line bg-card px-6 pt-7 pb-6 shadow-soft sm:px-8 sm:pt-8">
         <Art id="lily-side" flowers={DEFAULT_PAGE_THEME.flowers} shown="150px" className="pointer-events-none absolute -top-14 right-1 w-[132px] rotate-[-8deg] select-none sm:w-[150px]" />
@@ -271,4 +274,6 @@ export function LetterBox({
       </div>
     </section>
   );
+  // The band of paper stays while the box is asked for (its place is held), and goes with it when there is no list.
+  return ground === "blush" ? <div className="bg-blush-paper">{card}</div> : card;
 }

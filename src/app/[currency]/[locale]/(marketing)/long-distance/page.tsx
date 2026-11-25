@@ -19,6 +19,7 @@ import { EagerImg } from "@/components/shared/eager-img";
 import { JsonLd } from "@/components/shared/json-ld";
 import { POSTER_ROW, PosterLink } from "@/components/templates/page/sections";
 import { SPREAD } from "@/components/templates/page/spread";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/long-distance">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -160,6 +161,9 @@ export default async function LongDistancePage({ params }: PageProps<"/[currency
           </div>
         </section>
       ) : null}
+
+      {/* The date letter's box, after the gifts (gifts come first on this site) and below the first screen, on their blush paper so the page doesn't end on a seam. */}
+      <LetterSlot locale={locale} where="long-distance" ground={gifts.length > 0 ? "blush" : undefined} />
     </>
   );
 }

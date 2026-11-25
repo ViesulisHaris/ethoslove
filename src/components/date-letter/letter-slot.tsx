@@ -7,7 +7,7 @@ import { LetterBox } from "./letter-box";
  * itself draws nothing until the server says the list exists. The words are read here, on the
  * server, and handed to the box, so with the switch off they are in no page's HTML.
  */
-export async function LetterSlot({ locale, where, variant = "card" }: { locale: string; where: LetterWhere; variant?: "card" | "band" }) {
+export async function LetterSlot({ locale, where, variant = "card", ground }: { locale: string; where: LetterWhere; variant?: "card" | "band"; ground?: "blush" }) {
   if (!dateLetterOn()) return null;
   const l = locale === "es" ? "es" : "en";
   const t = await getTranslations({ locale: l, namespace: "dateLetter" });
@@ -16,6 +16,7 @@ export async function LetterSlot({ locale, where, variant = "card" }: { locale: 
       where={where}
       locale={l}
       variant={variant}
+      ground={ground}
       words={{
         title: t("title"),
         line: t("line"),
