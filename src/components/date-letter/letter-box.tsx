@@ -222,7 +222,7 @@ export function LetterBox({
         </p>
       </div>
       <Link
-        href="/legal/privacy"
+        href="/legal/privacy#date-letter"
         className={cn(
           "-mb-2 inline-flex min-h-11 items-center rounded-md text-sm underline underline-offset-4 outline-none hover:no-underline focus-visible:ring-3 focus-visible:ring-ring/50",
           band ? "text-page-body hover:text-page-ink" : "text-ink-soft hover:text-ink",

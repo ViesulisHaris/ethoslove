@@ -316,7 +316,7 @@ test("B13 (dev) fits a phone, an iPhone included", async ({ page, request }) => 
             overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
             field: h('[data-testid="letter-email"]'),
             button: h('[data-testid="letter-send"]'),
-            privacy: h('a[href$="/legal/privacy"]'),
+            privacy: h('a[href$="/legal/privacy#date-letter"]'),
             font: parseFloat(getComputedStyle(box.querySelector('[data-testid="letter-email"]')!).fontSize),
           };
         });

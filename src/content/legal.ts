@@ -45,7 +45,8 @@ const consent = (locale: GiftLocale) => ({
   pair: consentSentence("pair", locale),
 });
 
-export type LegalSection = { heading: string; paragraphs: string[] };
+/** `ids`: an anchor for a paragraph, keyed by the paragraph's own text so later insertions can't move it (the date letter's, for the box's "Privacy" link). */
+export type LegalSection = { heading: string; paragraphs: string[]; ids?: Record<string, string> };
 export type LegalDoc = { title: string; intro: string; sections: LegalSection[] };
 
 const E = LEGAL_ENTITY;
@@ -1072,27 +1073,32 @@ export const LETTER_LEGAL: Record<GiftLocale, LetterEdit[]> = {
     {
       section: 1,
       paragraphBefore: "Offer emails: ",
-      text: "The date letter: if you ask for it in the box on our date pages or blog posts, we email you one date idea a week, on Thursdays. We store your email address, your language, the sentence you agreed to, the page you signed up on (its address only), when you asked and when you confirmed, the last week we wrote to you, a day the letter waited so that two of our emails didn’t reach you together, and your stop if you gave one. Unless you are signed in with that address, nothing is sent weekly until you press the button in the one confirming email; an address that never confirms is deleted after 30 days. The letter names nobody and has no tracking pixel, and we don’t record who opens it or who taps its links; if you buy after tapping one, we note with that purchase that it came from the letter. We send it through Resend. Every letter has a link that stops it at once (your mail app may also show its own unsubscribe button); we delete your address 30 days after you stop, or straight away if you delete an account with the same address. If you tell us from the confirming email that it wasn’t you, we delete the address and keep only a one-way hash of it on our unsubscribe list, so the form can’t write to it again.",
+      text: "The date letter: if you ask for it in the box on our date pages or blog posts, we email you one date idea a week, on Thursdays. We store your email address, your language, the sentence you agreed to, the page you signed up on (its address only), when you asked and when you confirmed, the last week we wrote to you, a day the letter waited so that two of our emails didn’t reach you together, and your stop if you gave one. Unless you are signed in with that address, nothing is sent weekly until you press the button in the confirming email; an address that never confirms is deleted after 30 days. The letter names nobody and has no tracking pixel, and we don’t record who opens it or who taps its links; if you buy after tapping one, we note with that purchase that it came from the letter. We send it through Resend. Every letter has a link that stops it at once (your mail app may also show its own unsubscribe button); we delete your address 30 days after you stop, or straight away if you delete an account with the same address. If you tell us from the confirming email that it wasn’t you, we delete the address and keep only a one-way hash of it on our unsubscribe list, so no optional email from us reaches it again.",
     },
     { section: 1, find: "we send no other emails and no newsletters.", replace: "we send no other emails." },
     { section: 8, find: "the waitlist and checkout reminder emails,", after: " the date letter," },
     { section: 8, find: "on the waitlist form,", after: " in the date letter’s sign-up form," },
     { section: 11, find: "Reminders: until you remove them or delete your account.", after: " The date letter: an address never confirmed, 30 days; a confirmed one, until you stop it, and 30 days after that." },
+    { section: 11, find: "emails about kept gifts.", after: " It is also kept while we send the date letter." },
     { section: 13, find: "reviews and waitlist sign-up, as a JSON file", replace: "reviews, waitlist sign-up and date letter sign-up, as a JSON file" },
   ],
   es: [
     {
       section: 1,
       paragraphBefore: "Correos de ofertas: ",
-      text: "La carta de citas: si la pides en el formulario de nuestras páginas de citas o de los artículos del blog, te enviamos por correo una idea de cita a la semana, los jueves. Guardamos tu dirección de correo, tu idioma, la frase que aceptaste, la página en la que te apuntaste (solo su dirección), cuándo la pediste y cuándo la confirmaste, la última semana en que te escribimos, un día en que la carta esperó para que no te llegaran dos correos nuestros a la vez, y tu baja si la diste. Salvo que hayas iniciado sesión con esa dirección, no se envía nada cada semana hasta que pulsas el botón del único correo de confirmación; una dirección que nunca se confirma se borra a los 30 días. La carta no nombra a nadie ni lleva píxel de seguimiento, y no registramos quién la abre ni quién pulsa sus enlaces; si compras después de pulsar uno, anotamos con esa compra que vino de la carta. La enviamos a través de Resend. Cada carta trae un enlace que la detiene al momento (tu aplicación de correo puede mostrar además su propio botón de baja); borramos tu dirección 30 días después de que la dejes, o enseguida si eliminas una cuenta con la misma dirección. Si desde el correo de confirmación nos dices que no fuiste tú, borramos la dirección y guardamos solo un hash irreversible de ella en nuestra lista de bajas, para que el formulario no pueda volver a escribirle.",
+      text: "La carta de citas: si la pides en el formulario de nuestras páginas de citas o de los artículos del blog, te enviamos por correo una idea de cita a la semana, los jueves. Guardamos tu dirección de correo, tu idioma, la frase que aceptaste, la página en la que te apuntaste (solo su dirección), cuándo la pediste y cuándo la confirmaste, la última semana en que te escribimos, un día en que la carta esperó para que no te llegaran dos correos nuestros a la vez, y tu baja si la diste. Salvo que hayas iniciado sesión con esa dirección, no se envía nada cada semana hasta que pulsas el botón del correo de confirmación; una dirección que nunca se confirma se borra a los 30 días. La carta no nombra a nadie ni lleva píxel de seguimiento, y no registramos quién la abre ni quién pulsa sus enlaces; si compras después de pulsar uno, anotamos con esa compra que vino de la carta. La enviamos a través de Resend. Cada carta trae un enlace que la detiene al momento (tu aplicación de correo puede mostrar además su propio botón de baja); borramos tu dirección 30 días después de que la dejes, o enseguida si eliminas una cuenta con la misma dirección. Si desde el correo de confirmación nos dices que no fuiste tú, borramos la dirección y guardamos solo un hash irreversible de ella en nuestra lista de bajas, así que no volverá a recibir ningún correo opcional nuestro.",
     },
     { section: 1, find: "no enviamos ningún otro correo ni boletines.", replace: "no enviamos ningún otro correo." },
     { section: 8, find: "la lista de espera, los avisos de pagos sin terminar,", after: " la carta de citas," },
     { section: 8, find: "en el formulario de la lista de espera,", after: " en el de la carta de citas," },
-    { section: 11, find: "Recordatorios: hasta que los quitas o eliminas tu cuenta.", after: " La carta de citas: una dirección sin confirmar, 30 días; una confirmada, hasta que la dejas, y 30 días más." },
+    { section: 11, find: "Recordatorios: hasta que los quitas o eliminas tu cuenta.", after: " La carta de citas: una dirección sin confirmar, 30 días; una confirmada, hasta que te das de baja, y 30 días más." },
+    { section: 11, find: "correos sobre regalos guardados.", after: " También se conserva mientras enviemos la carta de citas." },
     { section: 13, find: "reseñas y la inscripción en la lista de espera, en un archivo JSON", replace: "reseñas y la inscripción en la lista de espera y en la carta de citas, en un archivo JSON" },
   ],
 };
+
+/** The id of the date letter's paragraph in the privacy policy: the box's "Privacy" link goes there. */
+export const LETTER_ANCHOR = "date-letter";
 
 /** The privacy policy with the date letter's changes made (LETTER_LEGAL). Throws when one finds no place. */
 function withLetter(doc: LegalDoc, locale: GiftLocale): LegalDoc {
@@ -1105,7 +1111,11 @@ function withLetter(doc: LegalDoc, locale: GiftLocale): LegalDoc {
       if (i < 0) throw new Error(`date letter: “${needle}” not found in ${locale} privacy ${edit.section}`);
       return i;
     };
-    if ("paragraphBefore" in edit) section.paragraphs.splice(where(edit.paragraphBefore), 0, edit.text);
+    if ("paragraphBefore" in edit) {
+      section.paragraphs.splice(where(edit.paragraphBefore), 0, edit.text);
+      // Its anchor, for the box's "Privacy" link (/legal/privacy#date-letter).
+      section.ids = { ...section.ids, [edit.text]: LETTER_ANCHOR };
+    }
     else {
       const i = where(edit.find);
       section.paragraphs[i] = section.paragraphs[i].replace(edit.find, "after" in edit ? edit.find + edit.after : edit.replace);

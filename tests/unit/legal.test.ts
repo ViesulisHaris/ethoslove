@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LEGAL_DOCS, LETTER_LEGAL, WITHDRAW_DOCS, legalDocs, type LegalDoc } from "@/content/legal";
+import { LEGAL_DOCS, LETTER_ANCHOR, LETTER_LEGAL, WITHDRAW_DOCS, legalDocs, type LegalDoc } from "@/content/legal";
 import { CONTRIBUTION_LIMITS } from "@/lib/gift/schema";
 import { GROUP_RETENTION } from "@/lib/group/limits";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
@@ -462,6 +462,19 @@ describe("the date letter in the documents", () => {
       expect(fillerIn(all(on[locale]), locale)).toEqual([]);
       expect(section(on[locale], 11)).toMatch(locale === "en" ? /The date letter: an address never confirmed, 30 days/ : /La carta de citas: una dirección sin confirmar, 30 días/);
       expect(section(on[locale], 13)).toMatch(locale === "en" ? /date letter sign-up, as a JSON file/ : /carta de citas, en un archivo JSON/);
+      // letter-C18: the unsubscribe list's own line says the letter keeps it too; one confirming e-mail is not promised.
+      expect(section(on[locale], 11)).toMatch(locale === "en" ? /kept gifts\. It is also kept while we send the date letter\./ : /regalos guardados\. También se conserva mientras enviemos la carta de citas\./);
+      expect(own).not.toMatch(/the one confirming|único correo de confirmación/);
+      // letter-C6: "Not you?" says what the unsubscribe list does, not only what the form can do.
+      expect(own).toMatch(locale === "en" ? /no optional email from us reaches it again\./ : /no volverá a recibir ningún correo opcional nuestro\./);
+      // letter-T10: the box's "Privacy" link lands on this paragraph.
+      expect(on[locale].sections.find((s) => s.heading.startsWith("1. "))!.ids?.[own]).toBe(LETTER_ANCHOR);
+    }
+    // With the monthly idea's changes made too, the anchor stays on the letter's paragraph.
+    for (const mode of ["optin", "buyers", "all"] as const) {
+      const both = legalDocs(true, mode, true).privacy.en.sections.find((s) => s.heading.startsWith("1. "))!;
+      const id = Object.entries(both.ids ?? {}).find(([, v]) => v === LETTER_ANCHOR)?.[0];
+      expect(id && both.paragraphs.includes(id) && id.startsWith("The date letter: ")).toBe(true);
     }
   });
 });
