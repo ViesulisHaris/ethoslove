@@ -308,7 +308,8 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
 
   const emptyState = (early: boolean) => (
     <section data-plan-early={early ? "" : undefined} className="container-narrow py-16 text-center sm:py-24">
-      <Cutout id="envelope-ps" className="mx-auto w-24 -rotate-6 drop-shadow-[0_14px_24px_rgba(120,50,70,0.25)]" />
+      {/* Eager: the page's largest picture, at the top. Lazy, it was asked for only once the stylesheet had laid the page out, behind the fonts (4.0 s on a slow phone, 25 Nov 2026). */}
+      <Cutout id="envelope-ps" eager className="mx-auto w-24 -rotate-6 drop-shadow-[0_14px_24px_rgba(120,50,70,0.25)]" />
       <h1 className="mt-6 display-xl text-forest">{broken ? t("broken.title") : t("empty.title")}</h1>
       <p className="mx-auto mt-4 max-w-md text-[17px] leading-relaxed text-forest/70">{broken ? t("broken.sub") : t("empty.sub")}</p>
       <Link href="/dates" className="mt-8 inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(42,15,31,0.7)] transition-transform hover:-translate-y-0.5">

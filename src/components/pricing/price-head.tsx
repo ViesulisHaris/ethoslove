@@ -110,7 +110,8 @@ export async function PriceHead({
                 <CoverInScreen poster={cover.thumbnail.poster} sizes="(min-width: 1024px) 200px, 40vw" />
               </div>
             ) : null}
-            {art.bezel ? <CutoutImg src={art.bezel.src1x} srcSet={`${art.bezel.src1x} ${art.width1x}w, ${art.bezel.src} ${art.width}w`} sizes={PHONE_SIZES} width={art.width} height={art.height} className="absolute inset-0 block w-full" /> : null}
+            {/* Eager, as a gift's page has its rim: it is as large as the picture under it, so a phone counts it as the page's largest paint, and lazy it was asked for only once the page was laid out (5.4 s, 25 Nov 2026). */}
+            {art.bezel ? <CutoutImg src={art.bezel.src1x} srcSet={`${art.bezel.src1x} ${art.width1x}w, ${art.bezel.src} ${art.width}w`} sizes={PHONE_SIZES} width={art.width} height={art.height} eager className="absolute inset-0 block w-full" /> : null}
           </div>
         </div>
       </div>

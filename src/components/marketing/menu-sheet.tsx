@@ -80,8 +80,15 @@ export function MenuSheet({ open, onOpenChange, current }: { open: boolean; onOp
                 const here = key === current;
                 return (
                   <li key={href} className="menu-item-in" style={{ "--i": i } as CSSProperties}>
+                    {/*
+                     * Dates is drawn per request, so by default only its frame is fetched ahead and its own
+                     * scripts (about 140 KB) waited for the press: its heading came 1.3 s after it on a slow
+                     * phone. Here the whole page is fetched while the sheet is open, which it is only once
+                     * someone has asked to go somewhere. The other rooms are built ahead and fetched whole already.
+                     */}
                     <Link
                       href={href}
+                      prefetch={key === "dates" ? true : undefined}
                       aria-current={here ? "page" : undefined}
                       onClick={done}
                       className={cn(
