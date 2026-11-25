@@ -53,7 +53,7 @@ const set = (id: string, en: string, es: string, picks: [string, string, string]
  * who agree would tap different sides, and the count would call it a miss. In the game both read one
  * card at one table, so it works there; never in a weekly set (tests/unit/games-weekly.test.ts).
  */
-export const WEEKLY_MIRRORED: readonly string[] = ["sofa-side", "last-bite", "cook-wash", "spicy", "coffee-order", "map", "story", "friends", "family", "remember", "plants"];
+export const WEEKLY_MIRRORED: readonly string[] = ["sofa-side", "last-bite", "cook-wash", "spicy", "coffee-order", "map", "story", "friends", "family", "remember", "plants", "first-move"];
 
 /** In the order they are played, one a week, round and round. New sets go at the end. */
 export const WEEKLY_SETS: readonly WeeklySet[] = [
@@ -61,28 +61,28 @@ export const WEEKLY_SETS: readonly WeeklySet[] = [
   set("how-we-text", "How we text", "Cómo nos escribimos", ["reply-speed", "double-text", "voice-note"], ["truth", "Which message did you write and delete before sending me?"], "Say out loud something you'd normally only text me. Now."),
   set("dinner-out", "Dinner out", "Cena fuera", ["table", "order", "bill"], ["light", "What's a food you pretend to like for my sake?"], "Order a dessert to share in a made-up accent."),
   set("mornings", "Mornings", "Las mañanas", ["alarm", "wake", "early"], ["light", "What's the funniest thing I've said in my sleep?"], "Do my morning routine, as me, in thirty seconds."),
-  set("packing", "Packing", "Hacer la maleta", ["pack", "luggage", "plan-trip"], ["light", "Which of us would be worse at camping?"], "Describe our relationship as a weather forecast."),
+  set("packing", "Packing", "Hacer la maleta", ["pack", "luggage", "plan-trip"], ["light", "Which of us would be worse at camping?"], "Let me choose your outfit for tomorrow."),
   set("presents", "Presents", "Los regalos", ["gift", "surprise", "handwriting"], ["truth", "What's the best present I've given you, and why?"], "Write me a two-line poem on your phone and read it out."),
   set("in-the-kitchen", "In the kitchen", "En la cocina", ["recipe", "music-cook", "cook-class"], ["truth", "Rate my cooking out of ten. No rounding up."], "Feed me a bite of something with your eyes closed."),
   set("a-night-in", "A night in", "Noche en casa", ["takeaway", "guests", "pyjamas"], ["deep", "What does a perfect ordinary Tuesday with me look like?"], "Slow dance with me for one full song. No phones."),
-  set("planning-a-date", "Planning a date", "Planear una cita", ["first-move", "new-place", "day-night"], ["truth", "Which of our dates would you repeat tomorrow?"], "Plan our next date out loud, in one breath."),
-  set("far-apart", "Far apart", "A distancia", ["call-video", "landed", "song"], ["apart", "What's the first thing we're doing when I land?"], "Do your best impression of me answering the phone."),
+  set("planning-a-date", "Planning a date", "Planear una cita", ["double", "new-place", "day-night"], ["truth", "Which of our dates would you repeat tomorrow?"], "Plan our next date out loud, in one breath."),
+  set("far-apart", "Far apart", "A distancia", ["call-video", "landed", "song"], ["apart", "What's the hardest hour of the day to be apart?"], "Do your best impression of me answering the phone."),
   set("breakfast", "Breakfast", "El desayuno", ["breakfast", "fridge", "tea"], ["truth", "What would you cook for me if I were ill?"], "Make me a cup of tea, with full hotel service."),
   set("making-up", "Making up", "Hacer las paces", ["argue-text", "sorry", "space"], ["deep", "What does a good apology look like to you?"], "Hug me for 20 seconds without letting go."),
-  set("on-the-way", "On the way", "De camino", ["train-plane", "window-seat", "road-music"], ["light", "Which of us would survive longer in the woods, and why is it me?"], "Show me the last five songs you played and defend each one."),
+  set("on-the-way", "On the way", "De camino", ["train-plane", "window-seat", "road-music"], ["light", "What's a song you know every word to and aren't proud of?"], "Show me the last five songs you played and defend each one."),
   set("sweet-talk", "Sweet talk", "Cosas bonitas", ["compliment", "words", "nickname"], ["truth", "What's a compliment you've never said out loud?"], "Give me a compliment for every letter of my name."),
-  set("one-more-episode", "One more episode", "Un capítulo más", ["one-more", "asleep-film", "rewatch"], ["light", "If our life was a sitcom, what would it be called?"], "Do your best impression of my laugh."),
+  set("one-more-episode", "One more episode", "Un capítulo más", ["one-more", "asleep-film", "rewatch"], ["light", "If our life was a sitcom, what would it be called?"], "Sell me to the room like a shopping channel."),
   set("a-night-out", "A night out", "Salir de noche", ["dress", "dance-floor", "sunrise"], ["truth", "Which of my outfits is your favorite?"], "Do your best catwalk across the room."),
   set("in-the-chat", "In the chat", "En el chat", ["emoji", "pet-names", "screenshot"], ["truth", "Which text from me have you kept?"], "Do a dramatic reading of our last text chat."),
   set("sharing-food", "Sharing food", "Compartir comida", ["chips", "dessert", "taste"], ["light", "What food would you ban from the house if you could?"], "Recite our first dinner order from memory. Out loud."),
   set("bedtime", "Bedtime", "A dormir", ["bed-read", "goodnight", "thermostat"], ["light", "What's the strangest dream you've had about me?"], "Give me three kisses, each somewhere different on my face."),
-  set("a-new-city", "A new city", "Una ciudad nueva", ["city-first", "lost", "hotel"], ["light", "What would your job be in a medieval village?"], "Say three things you love about me, in an accent."),
+  set("a-new-city", "A new city", "Una ciudad nueva", ["city-first", "lost", "hotel"], ["apart", "What's the first thing we're doing when I land?"], "Kiss me like it's the airport."),
   set("big-days", "Big days", "Los días señalados", ["birthday", "anniversary", "our-song"], ["deep", "What's a tradition you'd like us to start?"], "Raise a toast to us with whatever's in your glass."),
   set("a-day-out", "A day out", "Un día fuera", ["museum", "picnic-rain", "arcade"], ["light", "You get one do-over of a day we've had. Which day?"], "Draw my portrait in 30 seconds, then show me."),
   set("through-the-day", "Through the day", "Durante el día", ["good-morning", "lunch-call", "photo-day"], ["apart", "What part of your day do you most wish I'd been there for?"], "Tell me about your day like a sports commentator."),
-  set("a-lazy-sunday", "A lazy Sunday", "Domingo tranquilo", ["sunday", "bath", "board"], ["deep", "What's one thing you wish we did more of?"], "Give me a ten-second shoulder rub. Count out loud."),
-  set("housework", "Housework", "Las tareas de casa", ["laundry", "tidy", "bed-make"], ["truth", "Which of my habits do you secretly find adorable?"], "Give me a pep talk like a football coach at half-time."),
-  set("a-week-away", "A week away", "Una semana fuera", ["beach-day", "return", "next-trip"], ["deep", "What would make next year our best one yet?"], "Pose for a photo like it's a magazine cover."),
+  set("a-lazy-sunday", "A lazy Sunday", "Domingo tranquilo", ["sunday", "bath", "board"], ["deep", "What's one thing you wish we did more of?"], "Hold my hand and say nothing for one minute."),
+  set("housework", "Housework", "Las tareas de casa", ["laundry", "tidy", "bed-make"], ["truth", "What's a habit of mine you've quietly tried to change?"], "Give me a ten-second shoulder rub. Count out loud."),
+  set("a-week-away", "A week away", "Una semana fuera", ["beach-day", "return", "next-trip"], ["truth", "Which photo of us is your favorite, and why?"], "Pose for a photo like it's a magazine cover."),
 ];
 
 /** A set's five cards, read from their decks. */
