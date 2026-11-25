@@ -216,6 +216,13 @@ for (const locale of ["", "/es"] as const) {
     await expect(two.page.locator("[data-reveal-row]")).toHaveCount(3);
     await expect(two.page.locator("[data-reveal-row][data-same]")).toHaveCount(2);
     await expect(two.page.locator("[data-whole-game]")).toHaveAttribute("href", `${locale}/games/this-or-that`);
+    // The arrow keeps a gap from the last letter, as every other button's does (games2-N2).
+    const gap = await two.page.locator("[data-whole-game]").evaluate((el) => {
+      const range = document.createRange();
+      range.selectNodeContents([...el.childNodes].find((n) => n.nodeType === Node.TEXT_NODE)!);
+      return el.querySelector("svg")!.getBoundingClientRect().left - range.getBoundingClientRect().right;
+    });
+    expect(gap).toBeGreaterThanOrEqual(6);
     await expect(two.page.locator(`a[href="${locale}/templates?ref=game-end"]`)).toHaveCount(1);
     await two.page.locator("[data-weekly] input").fill("Sam");
     await two.page.locator("[data-send]").click();

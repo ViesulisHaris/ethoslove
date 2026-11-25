@@ -82,7 +82,7 @@ export const CARD =
 export const PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-7 text-[0.9375rem] font-semibold text-page-on-accent transition-colors hover:bg-page-accent-hover active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
 export const SECOND =
-  "inline-flex h-12 items-center justify-center rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
+  "inline-flex h-12 items-center justify-center gap-2 rounded-full border border-page-ink/25 px-6 text-[0.9375rem] font-medium text-page-ink transition-colors hover:border-page-ink active:translate-y-px disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none";
 
 /**
  * Today's question (/games/today): one "Would you rather" pair a day, answered with one tap and
