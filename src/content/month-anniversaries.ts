@@ -784,7 +784,7 @@ const month3: Month = {
       {
         template: "digicam",
         heading: "Una camarita con el carrete de esta estación",
-        body: "El carrete de esta estación cabe en una camarita de 2006. Se pulsa el botón, el objetivo sale zumbando y las fotos aparecen en el carrete de Digicam con una fecha naranja en la esquina. Caben hasta doce, que son cuatro por mes en tres meses. El título recortado de encima admite veinticuatro caracteres. Desmarca antes «Es su cumpleaños», o la cámara le felicitará el cumpleaños.",
+        body: "El carrete de esta estación cabe en una camarita de 2006. Se pulsa el botón, el objetivo sale zumbando y las fotos aparecen en el carrete de Digicam con una fecha naranja en la esquina. Caben hasta doce, que son cuatro por mes en tres meses. El título recortado de encima admite veinticuatro caracteres. Desmarca antes «Es su cumpleaños», o la cámara felicitará un cumpleaños que no toca.",
         line: { field: "headline", where: "El título recortado", text: "nuestra primera estación" },
       },
       {
@@ -1261,7 +1261,7 @@ const month8: Month = {
         template: "digicam",
         heading: "Ocho meses de cenas en una cámara",
         brief: "Vuestras comidas en el carrete de una camarita, cada foto con el plato al pie.",
-        body: "Llena Digicam con las comidas que habéis compartido, hasta doce fotos, y escribe el plato en cada pie con la letra pixelada de la pantalla. Desmarca «Es su cumpleaños», o la cámara le felicitará al encenderse. Se pasan con las flechas o deslizando. Encima de la cámara, el título recortado de revista admite veinticuatro caracteres: el nombre de vuestro sitio de siempre.",
+        body: "Llena Digicam con las comidas que habéis compartido, hasta doce fotos, y escribe el plato en cada pie con la letra pixelada de la pantalla. Desmarca «Es su cumpleaños», o la cámara se encenderá con una felicitación de cumpleaños. Se pasan con las flechas o deslizando. Encima de la cámara, el título recortado de revista admite veinticuatro caracteres: el nombre de vuestro sitio de siempre.",
         line: { field: "headline", where: "El título recortado", text: "mesa para dos, otra vez" },
       },
       {
@@ -1275,13 +1275,13 @@ const month8: Month = {
         template: "fortune-cookie",
         heading: "Fortunas que adivinan lo que siempre pide",
         brief: "Galletas que se abren con fortunas que predicen, muy seguras, lo que siempre pide.",
-        body: "Ocho meses viéndole pedir lo ponen fácil. Cada galleta se abre con un toque y sale una tira, tres fortunas como mínimo y veinte como mucho, algunas con foto. Predice, con total seguridad, lo que elige siempre. La última galleta lleva tu mensaje, y ese puede ir menos en broma.",
+        body: "Ocho meses mirando lo que pide lo ponen fácil. Cada galleta se abre con un toque y sale una tira, tres fortunas como mínimo y veinte como mucho, algunas con foto. Predice, con total seguridad, lo que elige siempre. La última galleta lleva tu mensaje, y ese puede ir menos en broma.",
         line: { field: "fortunes", where: "Una de las fortunas", text: "Pedirás la misma pasta y dirás que querías probar algo nuevo." },
       },
     ],
     date: { kind: "rainy-day", title: "Una librería, luego café y un libro cada uno", line: "Escoged un libro para regalaros y haced el cambio con el café." },
     stage: [
-      "A los ocho meses ya le has visto pedir, cocinar, comprar y elegir música suficientes veces como para conocer sus patrones. Lo normal es tener ya un sitio de siempre, un cajón o un cepillo de dientes en la otra casa y unas rutinas que empezaron por casualidad. Se acabó adivinar, y los regalos pueden notarlo.",
+      "A los ocho meses ya has visto suficientes veces lo que pide, cómo cocina, qué compra y qué música elige como para conocer sus patrones. Lo normal es tener ya un sitio de siempre, un cajón o un cepillo de dientes en la otra casa y unas rutinas que empezaron por casualidad. Se acabó adivinar, y los regalos pueden notarlo.",
       "Un regalo genérico que valdría para cualquiera de su edad falla aquí, igual que algo caro sacado de una lista que nunca escribió. El bueno apunta a lo concreto a propósito, la canción, el picoteo o la palabra exactos, para que el regalo solo pueda ser para quien lo recibe.",
     ],
     faq: [
@@ -1731,7 +1731,7 @@ const month13: Month = {
         template: "the-council",
         heading: "Un juicio por el cargo de seguir aquí",
         brief: "Un juicio de gatos por un cargo que las pruebas sostienen de sobra.",
-        body: "Después de un año, El Consejo puede llevarle a juicio por un cargo que las pruebas sostienen de sobra. Lo escribes en sesenta caracteres, redactas lo que leerá cada gato y eliges el sello: «Indulto», si la broma va contra ti. Las fotos entran como pruebas, seis como mucho, y tu carta es la sentencia completa.",
+        body: "Después de un año, El Consejo puede sentar en el banquillo a quien lo reciba por un cargo que las pruebas sostienen de sobra. Lo escribes en sesenta caracteres, redactas lo que leerá cada gato y eliges el sello: «Indulto», si la broma va contra ti. Las fotos entran como pruebas, seis como mucho, y tu carta es la sentencia completa.",
         line: { field: "charge", where: "El cargo", text: "sobrevivir un año entero a mis playlists" },
       },
       {
@@ -2500,7 +2500,7 @@ const month19: Month = {
         template: "the-council",
         heading: "Una acusación, indultada, por una falta leve",
         brief: "Los gatos oyen un cargo diminuto, leen tus conclusiones y lo sellan con indulto.",
-        body: "En El Consejo los gatos abren la sesión, leen las conclusiones que escribiste y bajan un sello: «Culpable», «Visto bueno», «Icono certificado» o «Indulto». La acusación admite sesenta caracteres. Para un mes impar, acúsale de algo diminuto y elige «Indulto», que es lo que llevas diecinueve meses haciendo de todos modos.",
+        body: "En El Consejo los gatos abren la sesión, leen las conclusiones que escribiste y bajan un sello: «Culpable», «Visto bueno», «Icono certificado» o «Indulto». La acusación admite sesenta caracteres. Para un mes impar, que la acusación sea por algo diminuto y el sello, «Indulto», que es lo que llevas diecinueve meses haciendo de todos modos.",
         line: { field: "charge", where: "El cargo", text: "dejar un sorbo en cada vaso, diecinueve meses" },
       },
     ],

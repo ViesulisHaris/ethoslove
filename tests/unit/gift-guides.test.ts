@@ -622,6 +622,25 @@ describe("the second round of pages by kind (24 Nov 2026)", () => {
     for (const href of ["/gifts/photo-album", "/occasions/anniversary"]) expect(hrefs("memory-book")).toContain(href);
   });
 
+  it("the Spanish of the months and the new pages speaks of one person the gift is for, and genders nobody", () => {
+    // The person who opens the gift is one, and never "él": no plural verbs for them, no masculine agreement for the
+    // couple, no «esa persona» standing in for a name, no leísmo that reads as a man (gifts2 deep test, D4).
+    const WRONG = /\b(sepan|deslizan|perdidos|esa persona|viéndole|acúsale|le felicitará|le has visto|llevarle|Indultado)\b/i;
+    const texts = [
+      ...MONTHS.flatMap((n) => strings(MONTH_GUIDES[n].es)),
+      ...(["long-distance-care-package", "surprise", "memory-book"] as const).flatMap((slug) => strings(GIFT_GUIDES[slug].es)),
+      // The apology pages name "novio" or "novia" in the search phrase (held above); the page for him may say «le».
+      ...strings(GIFT_GUIDES["apology-for-her"].es.ideas),
+      ...GIFT_GUIDES["apology-for-him"].es.ideas.map((i) => i.body.replace(/\b(le absuelvan|Acúsale)\b/g, "")),
+      es.home.openings.blurb,
+      es.home.openings.more,
+      es.recipients.month.counter,
+    ];
+    expect(texts.filter((t) => WRONG.test(t))).toEqual([]);
+    // «Contad vuestros meses juntos» made the couple two men; a box and a gift may still arrive «juntos».
+    expect(es.recipients.month.counter).not.toMatch(/\bjuntos\b/);
+  });
+
   it("the months and the new pages write American English, and dates the American way", () => {
     // The brief asks for American spelling; these got through a first pass (gifts2 deep test, D3).
     const BRITISH = /\b(holidays?|tea towels?|cupboards?|timetables?|platforms?|keen|at theirs|double figures|fill in the \w+ form|prints the lot|A6|colour|favourite|mum)\b/i;

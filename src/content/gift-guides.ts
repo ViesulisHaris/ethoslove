@@ -1540,7 +1540,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "the-council",
           heading: "Un juicio que limpia su nombre",
-          body: "El Consejo siempre juzga a quien recibe el regalo, así que deja que los gatos le absuelvan. Acúsale de algo que a todas luces fue culpa tuya, escribe conclusiones que apunten a ti y acaba con el sello de «Indultado». Reconoce la culpa con una broma de la que puede reírse, y la carta de después del veredicto es donde va la disculpa de verdad.",
+          body: "El Consejo siempre juzga a quien recibe el regalo, así que deja que los gatos le absuelvan. Acúsale de algo que a todas luces fue culpa tuya, escribe conclusiones que apunten a ti y acaba con el sello de «Indulto». Reconoce la culpa con una broma de la que puede reírse, y la carta de después del veredicto es donde va la disculpa de verdad.",
           line: { field: "charge", where: "El cargo", text: "aguantarme el sábado por la noche" },
         },
         {
@@ -1911,7 +1911,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "vinyl",
           heading: "Música para desempaquetar, en un disco",
           brief: "Vuestra canción en un tocadiscos, con una etiqueta que la llama música para abrir cajas.",
-          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara admite doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí para abrirla con esa persona.",
+          body: "Algo tiene que sonar mientras se abre la caja. Vinilo pone tu canción en un tocadiscos que gira mientras suena, con hasta doce fotos en una caja y tu mensaje en las notas interiores. La etiqueta de la cara admite doce caracteres: nómbrala por su función y elige la canción que pondrías si estuvieras ahí cuando se abra.",
           line: { field: "side", where: "La etiqueta de la cara", text: "Para abrirla" },
         },
         {
@@ -2107,7 +2107,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "jar-of-reasons",
           heading: "Un frasco que se agita hasta la última nota",
           brief: "Notas que salen de una en una al agitar, con la noticia guardada para la última.",
-          body: "Aquí basta agitar o tocar para que caiga de Frasco de razones una nota doblada cada vez hasta que el frasco queda vacío y tu carta está debajo. Para una sorpresa, numera las notas en la etiqueta del frasco, cuarenta caracteres, para que sepan que llega una última, y guarda la noticia para ella.",
+          body: "Aquí basta agitar o tocar para que caiga de Frasco de razones una nota doblada cada vez hasta que el frasco queda vacío y tu carta está debajo. Para una sorpresa, numera las notas en la etiqueta del frasco, cuarenta caracteres, para que se sepa que llega una última, y guarda la noticia para ella.",
           line: { field: "label", where: "La etiqueta del frasco", text: "12 notas. Guarda la última." },
         },
       ],
@@ -2275,7 +2275,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           heading: "Vuestra historia contada, regalo a regalo",
           brief: "Regalos que se abren uno a uno con números que cuentan vuestra historia.",
           body: "Hay capítulos que se cuentan mejor en números. En Nuestro año, desenvuelto, los regalos envueltos se abren uno a uno con cifras que suben, hasta ocho, escritas por ti, y uno dorado lo imprime todo como un tique. Cuenta lo que a nadie se le ocurriría fotografiar.",
-          line: { field: "stats", where: "Uno de los números", text: "3 veces perdidos en la misma rotonda" },
+          line: { field: "stats", where: "Uno de los números", text: "3 veces nos perdimos en la misma rotonda" },
         },
         {
           template: "recipe-box",
@@ -2288,7 +2288,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "our-timeline",
           heading: "Capítulos con fecha en un camino",
           brief: "Un camino de paradas con fecha, cada fecha escrita como el título de un capítulo.",
-          body: "Nuestra línea del tiempo es un camino que se dibuja mientras deslizan, y cada parada clava una foto y una fecha de cuarenta caracteres. Escribe las fechas como títulos de capítulo y no como números: la de la lluvia, la de la calefacción rota. La frase final, de ochenta caracteres, es donde el libro se cierra por ahora.",
+          body: "Nuestra línea del tiempo es un camino que se dibuja mientras se desliza, y cada parada clava una foto y una fecha de cuarenta caracteres. Escribe las fechas como títulos de capítulo y no como números: la de la lluvia, la de la calefacción rota. La frase final, de ochenta caracteres, es donde el libro se cierra por ahora.",
           line: { field: "dates", where: "La fecha de una parada", text: "El invierno de la calefacción rota" },
         },
         {

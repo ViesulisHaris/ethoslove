@@ -155,8 +155,8 @@
     "openings": {
       "eyebrow": "Aperturas",
       "title": "Elige cómo se abre.",
-      "blurb": "Lo primero que ven es una portada con su nombre.",
-      "more": "Elige la que se parezca a esa persona; el regalo espera debajo.",
+      "blurb": "Lo primero que verá es una portada con su nombre.",
+      "more": "Elige la que más se le parezca; el regalo espera debajo.",
       "preview": "Ver"
     }
   },
@@ -4114,7 +4114,7 @@
       "nextLabel": "Otros meses",
       "nextHeading": "El mes anterior y el siguiente",
       "year": "Ideas de regalo de aniversario",
-      "counter": "Contad vuestros meses juntos",
+      "counter": "Llevad la cuenta de vuestros meses",
       "byMonth": "Regalos de aniversario por meses"
     },
     "footerTitle": "Ideas de regalo"
