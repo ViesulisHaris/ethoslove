@@ -20,6 +20,7 @@ import { UnwrapPeek } from "./UnwrapGift";
 import { withFieldDefaults } from "./field-defaults";
 import { isCatalogPreview } from "@/lib/gift/music";
 import { SongStrip, songStripOn } from "./SongStrip";
+import { demoSong } from "@/content/demo-songs";
 
 const MIN_LOADING_MS = 1600;
 
@@ -111,7 +112,15 @@ export function GiftRenderer({
     return () => clearTimeout(id);
   }, [mode, replayKey]);
 
-  const base: GiftData | null = data ?? mod?.demoData[demoLocale] ?? mod?.demoData.en ?? null;
+  const demo: GiftData | null = mod?.demoData[demoLocale] ?? mod?.demoData.en ?? null;
+  // A demo, while the song strip is on, carries a well-known song for what the gift is for
+  // (content/demo-songs.ts) in place of its library track; its own sounds are untouched. Never a
+  // gift someone made, and with the switch off a demo is exactly as it was.
+  const base: GiftData | null = useMemo(() => {
+    if (data) return data;
+    const song = mode === "demo" && songStripOn() ? demoSong(slug) : undefined;
+    return demo && song ? { ...demo, music: song } : demo;
+  }, [data, demo, mode, slug]);
   const resolved = useMemo(() => {
     if (!base) return base;
     const covered = coverOverride ? { ...base, cover: coverOverride } : base;

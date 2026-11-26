@@ -805,7 +805,7 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     if (add()) return;
     const watch = new MutationObserver(() => add() && watch.disconnect());
     watch.observe(document, { childList: true, subtree: true });
-  }, '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], nextjs-portal { display: none !important; }');
+  }, '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], [data-song-strip], nextjs-portal { display: none !important; }');
   const page = await context.newPage();
   await page.goto(`${base}/demo/${slug}`, { waitUntil: "networkidle" });
   let poster;
