@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { Pause, Play, X } from "lucide-react";
+import { Film, Pause, Play, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
@@ -466,7 +466,8 @@ export function HeroFlatlay({
           className="group/film absolute -right-5 bottom-[4%] z-10 grid size-11 place-items-center rounded-full"
         >
           <span className="grid size-8 place-items-center rounded-full border border-page-line bg-page-raised/90 text-page-ink shadow-page-card backdrop-blur-sm transition-[background-color,scale] duration-200 group-hover/film:bg-page-raised group-active/film:scale-95">
-            {filmState === "playing" ? <Pause aria-hidden="true" className="size-3.5 fill-current" strokeWidth={0} /> : <Play aria-hidden="true" className="ml-px size-3.5 fill-current" strokeWidth={0} />}
+            {/* Stopped, it is a film strip, never a second play triangle: the triangle on the screen starts the live demo. */}
+            {filmState === "playing" ? <Pause aria-hidden="true" className="size-3.5 fill-current" strokeWidth={0} /> : <Film aria-hidden="true" className="size-3.5" strokeWidth={1.8} />}
           </span>
         </button>
       ) : null}

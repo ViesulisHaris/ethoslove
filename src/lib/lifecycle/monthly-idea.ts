@@ -199,6 +199,23 @@ export function priceLastDay(sentOn: Date): Date {
   return addDays(utcDay(sentOn), IDEA_PRICE_DAYS);
 }
 
+/**
+ * Countries where a seller may not email its own customers about similar things without a yes given
+ * first (no "existing customer" rule): there a buyer is never enrolled by the notice, and the offers
+ * box, which names this email in "optin" and "buyers", is their way in. Everywhere else (the EU and
+ * UK rule for existing customers, the United States, Canada, Australia) a buyer is told on the screen
+ * the gift goes out from, with "Don't send these" beside it. The owner, 26 Nov 2026: "if someone buys
+ * they are automatically added to the email list, if they're from a country that allows that."
+ * This list is the builder's reading, not a lawyer's: Poland, Hungary, Turkey, Russia, China, South Korea.
+ */
+export const NO_CUSTOMER_EMAIL_COUNTRIES: ReadonlySet<string> = new Set(["PL", "HU", "TR", "RU", "CN", "KR"]);
+
+/** Whether a buyer connecting from `country` (two letters, as the host reports it) may be enrolled by the notice. Unknown counts as allowed. */
+export function customerEmailAllowed(country: string | null | undefined): boolean {
+  const code = (country ?? "").trim().slice(0, 2).toUpperCase();
+  return !NO_CUSTOMER_EMAIL_COUNTRIES.has(code);
+}
+
 /** The account as enrolment sees it: its row (if any), and whether it ever paid on the site. */
 export type IdeaAccount = { row: { basis: IdeaBasis; offAt: string | null } | null; customer: boolean };
 export type EnrolInput = {
@@ -218,6 +235,8 @@ export type EnrolInput = {
   account: IdeaAccount;
   /** They ticked the free version's Terms box. */
   acceptedTerms: boolean;
+  /** customerEmailAllowed for where they are; left out, it is allowed. */
+  customerEmail?: boolean;
 };
 
 /** In "all": a free gift from someone who never paid and has no row needs the Terms box ticked to be sent. */
@@ -232,9 +251,11 @@ export function enrolDecision(input: EnrolInput): { enrol: false } | { enrol: tr
   if (!input.firstPublish || input.freeReply || input.campaign || input.quiet || !input.deliverable) return { enrol: false };
   if (account.row?.offAt) return { enrol: false };
   if (account.row) return { enrol: true, basis: account.row.basis, fresh: false };
-  if (account.customer) return { enrol: true, basis: "notice", fresh: true };
+  // Told, not asked: only where a seller may write to its own customers (customerEmailAllowed).
+  const told = input.customerEmail !== false;
+  if (account.customer && told) return { enrol: true, basis: "notice", fresh: true };
   if (mode === "buyers") return { enrol: false };
-  if (input.paidSend) return { enrol: true, basis: "notice", fresh: true };
+  if (input.paidSend && told) return { enrol: true, basis: "notice", fresh: true };
   if (input.acceptedTerms) return { enrol: true, basis: "terms", fresh: true };
   return { enrol: false };
 }

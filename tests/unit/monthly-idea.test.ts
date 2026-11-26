@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   IDEA_MODES,
   RESERVED,
+  customerEmailAllowed,
   enrolDecision,
   ideaDecision,
   ideaDue,
@@ -220,6 +221,12 @@ describe("enrolment", () => {
     for (const mode of ["buyers", "all"] as const) expect(enrolDecision(base({ mode, account: { row: { basis: "box", offAt: null }, customer: false } }))).toEqual({ enrol: true, basis: "box", fresh: false });
     for (const mode of ["buyers", "all"] as const) expect(enrolDecision(base({ mode, account: { row: null, customer: true } }))).toEqual({ enrol: true, basis: "notice", fresh: true });
     expect(enrolDecision(base({ mode: "buyers", paidSend: true }))).toEqual({ enrol: false });
+    // Where a seller may not write to its own customers unasked, a buyer is never enrolled by the notice.
+    for (const mode of ["buyers", "all"] as const) expect(enrolDecision(base({ mode, customerEmail: false, paidSend: true, account: { row: null, customer: true } }))).toEqual({ enrol: false });
+    expect(enrolDecision(base({ customerEmail: false, paidSend: true, acceptedTerms: true }))).toEqual({ enrol: true, basis: "terms", fresh: true });
+    expect(enrolDecision(base({ customerEmail: false, account: { row: { basis: "notice", offAt: null }, customer: true } }))).toEqual({ enrol: true, basis: "notice", fresh: false });
+    for (const country of ["US", "gb", "LV", "DE", "ES", "MX", "CA", "AU", "", null, undefined]) expect(customerEmailAllowed(country), String(country)).toBe(true);
+    for (const country of ["PL", "pl", "HU", "TR", "RU", "CN", "KR"]) expect(customerEmailAllowed(country), country).toBe(false);
     expect(enrolDecision(base({ paidSend: true }))).toEqual({ enrol: true, basis: "notice", fresh: true });
     expect(enrolDecision(base({ acceptedTerms: true }))).toEqual({ enrol: true, basis: "terms", fresh: true });
     expect(enrolDecision(base())).toEqual({ enrol: false });

@@ -32,9 +32,9 @@ import { holidayExtraAtPublish, showsExtra, stampedExtra, withoutHolidayExtra, t
 import { paidForGiftRecently, readyGifts, spendGift } from "@/lib/commerce/gift-credits";
 import { markMadeFor } from "@/lib/lifecycle/reminder-done";
 import { countdownDay } from "@/lib/lifecycle/reminders";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { REMINDER_COOKIE, parseReminderCookie } from "@/lib/editor/start-ref";
-import { enrolDecision, ideaMode, ideaSince, termsRequired, type IdeaAccount } from "@/lib/lifecycle/monthly-idea";
+import { customerEmailAllowed, enrolDecision, ideaMode, ideaSince, termsRequired, type IdeaAccount } from "@/lib/lifecycle/monthly-idea";
 import { enrolForIdeas, readIdeaAccount } from "@/lib/lifecycle/monthly-idea-enrol";
 import { isUndeliverable } from "@/lib/email/send";
 
@@ -431,7 +431,8 @@ export async function publishGift(
   let ideaNotice: string | null = null;
   if (ideaInput) {
     const email = ctx.user.email ?? "";
-    const enrol = enrolDecision({ ...ideaInput, deliverable: Boolean(email) && !isUndeliverable(email), acceptedTerms: input.data.acceptFreeTerms === true });
+    const country = (await headers()).get("x-vercel-ip-country");
+    const enrol = enrolDecision({ ...ideaInput, deliverable: Boolean(email) && !isUndeliverable(email), acceptedTerms: input.data.acceptFreeTerms === true, customerEmail: customerEmailAllowed(country) });
     if (enrol.enrol) {
       const now = new Date();
       const since = ideaSince(now, scheduled ? input.data.schedule!.unlockAt : null);
