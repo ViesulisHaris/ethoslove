@@ -165,8 +165,8 @@ describe("the text budget of the gift pages by kind", () => {
       expect(kindIdeaIsFree(letter, getManifest("the-letter")!), `video-message ${l}`).toBe(false);
     }
     // The free ideas there are, in both languages: the five-minute note of the last-minute page, the apology note of
-    // the page for him and the note for an empty box on the care package page.
-    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter", "apology-for-him en the-letter", "apology-for-him es the-letter", "long-distance-care-package en the-letter", "long-distance-care-package es the-letter"]);
+    // the page for him, the note for an empty box on the care package page and the free Christmas note of the ecards page.
+    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter", "apology-for-him en the-letter", "apology-for-him es the-letter", "long-distance-care-package en the-letter", "long-distance-care-package es the-letter", "christmas-ecards en the-letter", "christmas-ecards es the-letter"]);
   });
 
   it("an idea is a card: a title of at most nine words, one line, and one line of handwriting", () => {
