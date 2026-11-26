@@ -48,6 +48,7 @@ export const post: BlogPost = {
             "**A print of a photo from this year.** Many pharmacies and photo shops print from your phone the same day. Choose one she hasn't seen printed, and frame it.",
             "**Flowers, if you know which ones.** Not a mixed bouquet: the flower she buys for herself, or the one from a day you both remember. Florists are at their busiest just before Christmas, so order by the 22nd and collect them yourself.",
             "**Tickets to something in January or February.** A play, a concert, a game, an exhibition she mentioned. The weeks after Christmas are long, and this gives her something on the other side of them.",
+            "**Something small she'd never buy herself.** The better version of something she uses every day: a good pen for the lists she's always writing, a proper umbrella to replace the one that's falling apart, a nicer mug for her morning coffee. Small works when it's specific: it shows you noticed.",
           ],
         },
         {
@@ -205,6 +206,7 @@ export const post: BlogPost = {
             "**Una foto de este año, impresa.** En muchas tiendas de fotografía imprimen desde el móvil en el día. Elige una que no haya visto en papel, y enmárcala.",
             "**Flores, si sabes cuáles.** No un ramo variado: las que se compra ella misma, o las de un día que recordáis los dos. Las floristerías van a tope justo antes de Navidad, así que encárgalas como tarde el 22 y recógelas tú.",
             "**Entradas para algo en enero o febrero.** Una obra, un concierto, un partido, una exposición que mencionó. Las semanas después de Navidad se hacen largas, y así tiene algo esperándola cuando acaben.",
+            "**Algo pequeño que ella nunca se compraría.** La versión buena de algo que usa a diario: un buen bolígrafo para las listas que siempre está haciendo, un paraguas en condiciones para sustituir al que se le está rompiendo, una taza mejor para su café de cada mañana. Lo pequeño funciona cuando es concreto: demuestra que te has fijado.",
           ],
         },
         {

@@ -1,0 +1,143 @@
+{
+  "slug": "this-or-that-questions-for-couples",
+  "keyword": "this or that questions for couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for the Scratch Card note to say clearly what goes under each card's foil (\"answer the pair for both of you\" was ambiguous). Polish: a sample text to copy; \"lounger\" reads UK."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Asked to correct \"Would you rather? does the picking for you\" (the game deals the questions; players choose), to fix a dozen Spanish calques (\"lo mantiene honesto\", \"los hipotéticos\", \"pregunta de seguimiento\", \"Arreglada\", \"Toca una galleta\", \"sin hipótesis\" in the two hub posts), and to swap UK-only \"queue\" and \"second starter\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for a funny section, a headline category on most top results (Momjunction, Paired, Connected Couples, Teen Vogue), with a table row and the count updated. Polish: search words in the home heading; one more money pair."
+        }
+      ],
+      "applied": [
+        "Scratch Card note: \"write the pair and the pick you've already made for the two of you\"",
+        "Would you rather? now \"deals the questions for you\" / \"te reparte las preguntas\"",
+        "Spanish calques fixed as asked, including both hub posts",
+        "\"Waiting in line, a drive\"; \"Dessert or a cheese board?\"",
+        "New funny section (10 pairs) and table row in both languages; count 116 -> 127 in the post and the three linking posts",
+        "Polish taken: home heading with search words, a money pair, \"Watch it at home or on the big screen?\", \"Holiday movies\", \"Jugadlas\", \"Descalzarse al entrar en casa\", \"estar en paz\"",
+        "Descriptions shortened to fit 160 characters"
+      ],
+      "rejected": [
+        "Reader's wording \"put the pair on the foil\": the foil line (foilText, max 30 characters) is one text printed on every card, so a different pair per card can't go there; the note was clarified another way"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A big list sorted by situation that also teaches how to turn each pick into a talk, with lines to borrow, a text format and a way to gift the game, which generic 100-plus lists don't do."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for the Spanish \"¿Postre u otro entrante?\" to match the new English cheese-board pair, for the \"one why per pair\" rule to stop contradicting itself (en and es), and \"más tonto\" -> \"más disparatado\" in the Spanish FAQ."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result organised by the moment you're in, with a how-to and follow-ups that turn the game into a conversation, where the top pages are bare lists of 125 to 400 pairs."
+        }
+      ],
+      "applied": [
+        "\"¿Postre o una tabla de quesos?\"",
+        "\"Even when you agree, and always when you don't\" / \"Aunque coincidáis, y sobre todo cuando no\"",
+        "\"más disparatado y más raro\"",
+        "Polish taken: \"pensárselo\", \"¿Ropa cómoda o arreglarse?\""
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A real game with a method, themed sets with real content (holidays, flirty, deep, the two of you) and a path from the pick to a conversation, where the top results are mostly bare lists."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks against the code, the count is exact in both languages and the Spanish reads as written for Spain; it gives a way to play that the usual 100-question pages lack."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that sorts 127 pairs by theme with a when-to-use table and a method for turning each pick into a talk, so you'd send it instead of a bare 400-question list."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "es \"¿Pícnic o una terraza en la azotea?\"",
+        "reader: \"sun lounger\" -> \"lounger by the pool\"; FAQ 2 \"ask one why whether you agree or not\"",
+        "search: optional short money list"
+      ]
+    }
+  ]
+}

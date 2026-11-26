@@ -9,6 +9,8 @@ import { routing } from "@/i18n/routing";
 
 const META_ID = "000000000000001";
 const TIKTOK_ID = "CTESTPIXEL0000000000";
+const GOOGLE_ID = "AW-0000000001";
+const GOOGLE_LABEL = "testLabel0001";
 
 function storage() {
   const items = new Map<string, string>();
@@ -24,6 +26,7 @@ type FakeWindow = {
   location: { pathname: string; hostname: string; search: string; hash: string };
   fbq?: ReturnType<typeof vi.fn>;
   ttq?: { page: ReturnType<typeof vi.fn>; track: ReturnType<typeof vi.fn> };
+  gtag?: ReturnType<typeof vi.fn>;
   dispatchEvent: () => boolean;
   addEventListener: () => void;
   removeEventListener: () => void;
@@ -40,14 +43,17 @@ function browser(pathname = "/") {
 }
 
 /** The modules as a page with these ids configured would load them (the ids are read at import). */
-async function load(ids: { meta?: string; tiktok?: string } = { meta: META_ID, tiktok: TIKTOK_ID }) {
+async function load(ids: { meta?: string; tiktok?: string; google?: string; googleLabel?: string } = { meta: META_ID, tiktok: TIKTOK_ID }) {
   vi.resetModules();
   vi.stubEnv("NEXT_PUBLIC_META_PIXEL_ID", ids.meta ?? "");
   vi.stubEnv("NEXT_PUBLIC_TIKTOK_PIXEL_ID", ids.tiktok ?? "");
+  vi.stubEnv("NEXT_PUBLIC_GOOGLE_ADS_ID", ids.google ?? "");
+  vi.stubEnv("NEXT_PUBLIC_GOOGLE_ADS_PURCHASE_LABEL", ids.googleLabel ?? "");
   const ads = await import("@/lib/analytics/ads");
   const consent = await import("@/lib/analytics/consent");
   const clicks = await import("@/lib/attribution/click-ids");
-  return { ...ads, ...consent, ...clicks };
+  const google = await import("@/lib/analytics/google");
+  return { ...ads, ...consent, ...clicks, ...google };
 }
 
 beforeEach(() => browser());
@@ -99,7 +105,71 @@ describe("where the ad pixels may run", () => {
 
   it("reads no id from an environment that has none", async () => {
     const { AD_PIXELS } = await load({});
-    expect(AD_PIXELS).toEqual({ meta: undefined, tiktok: undefined });
+    expect(AD_PIXELS).toEqual({ meta: undefined, tiktok: undefined, google: undefined });
+  });
+});
+
+describe("the Google Ads tag", () => {
+  const google = { google: GOOGLE_ID, googleLabel: GOOGLE_LABEL };
+  const sale = { name: "Purchase" as const, contents: [{ id: "halfway", category: "premium" }], value: 11.99, currency: "USD", eventId: "e1" };
+
+  it("needs its id and its purchase label together: either alone configures nothing", async () => {
+    expect((await load({ google: GOOGLE_ID })).AD_PIXELS.google).toBeUndefined();
+    expect((await load({ googleLabel: GOOGLE_LABEL })).AD_PIXELS.google).toBeUndefined();
+    expect((await load(google)).AD_PIXELS.google).toBe(GOOGLE_ID);
+  });
+
+  it("runs under the same rules as the pixels, on its own or beside them", async () => {
+    const { pixelsMayRun } = await load(google);
+    const ids = { google: GOOGLE_ID };
+    expect(pixelsMayRun({ ids, consent: "granted", pathname: "/templates/jar-of-reasons", inApp: false })).toBe(true);
+    expect(pixelsMayRun({ ids, consent: null, pathname: "/templates/jar-of-reasons", inApp: false })).toBe(false);
+    expect(pixelsMayRun({ ids, consent: "granted", pathname: "/g/abc123", inApp: false })).toBe(false);
+    expect(pixelsMayRun({ ids, consent: "granted", pathname: "/", inApp: true })).toBe(false);
+  });
+
+  it("is told the sale, with its amount, currency and id, and nothing else", async () => {
+    const { adTrack, setAdsLive } = await load(google);
+    win.gtag = vi.fn();
+    setAdsLive(true);
+    adTrack({ name: "PageView" });
+    adTrack({ name: "ViewContent", contents: [{ id: "halfway", category: "premium" }] });
+    adTrack({ name: "PaywallSeen", contents: [{ id: "halfway", category: "premium" }], value: 11.99, currency: "USD" });
+    adTrack({ name: "InitiateCheckout", contents: [{ id: "halfway", category: "premium" }], value: 11.99, currency: "USD" });
+    expect(win.gtag).not.toHaveBeenCalled();
+    adTrack(sale);
+    expect(win.gtag.mock.calls).toEqual([["event", "conversion", { send_to: `${GOOGLE_ID}/${GOOGLE_LABEL}`, value: 11.99, currency: "USD", transaction_id: "e1" }]]);
+  });
+
+  it("is told nothing from a private page, or before the page is allowed", async () => {
+    const { adTrack, setAdsLive } = await load(google);
+    win.gtag = vi.fn();
+    adTrack(sale);
+    setAdsLive(true);
+    win.location.pathname = "/g/abc123";
+    adTrack(sale);
+    expect(win.gtag).not.toHaveBeenCalled();
+  });
+
+  it("is not told a sale with no amount", async () => {
+    const { googleCall } = await load(google);
+    expect(googleCall({ name: "Purchase", contents: [] }, { tagId: GOOGLE_ID, purchaseLabel: GOOGLE_LABEL })).toBeNull();
+  });
+
+  it("remembers Google's click with the time it was first seen, in the shape the tag's cookie has", async () => {
+    const { currentGclid, gclValue, rememberClickIds } = await load(google);
+    rememberClickIds("?gclid=Cj0KCQiA_test-123&utm_source=google", 1760000000000);
+    rememberClickIds("?gclid=Cj0KCQiA_test-123", 1760000005000);
+    expect(currentGclid()).toEqual({ id: "Cj0KCQiA_test-123", at: 1760000000000 });
+    expect(gclValue(currentGclid()!)).toBe("GCL.1760000000.Cj0KCQiA_test-123");
+    rememberClickIds("?gclid=%3Cscript%3E", 1760000009000);
+    expect(currentGclid()!.id).toBe("Cj0KCQiA_test-123");
+  });
+
+  it("knows its own cookies, so stopping cookies removes them", async () => {
+    const { isGoogleCookie } = await load(google);
+    for (const name of ["_gcl_aw", "_gcl_au", "_gcl_gs", "_gac_AW-1"]) expect(isGoogleCookie(name), name).toBe(true);
+    for (const name of ["_fbp", "ethos-consent", "sb-auth-token", "_ga"]) expect(isGoogleCookie(name), name).toBe(false);
   });
 });
 

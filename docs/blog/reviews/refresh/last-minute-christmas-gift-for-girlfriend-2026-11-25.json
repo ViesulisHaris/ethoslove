@@ -1,0 +1,129 @@
+{
+  "slug": "last-minute-christmas-gift-for-girlfriend",
+  "keyword": "last minute christmas gift for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The time table (a week out, the 23rd, Christmas Eve, Christmas morning), the booking-on-a-card plan and the three card lines are all doable tonight; the refreshed Letter card is honest about the short note and what \"Make it special\" adds. Polish: two lines list photos in a digital gift without saying they are paid."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Verified the free note against free-tier.ts and pricing.freeNoteShort, \"Make it special\" as a one-time payment, The Letter's seal and polaroids, Snow Globe and Scratch Card as premium, \"Schedule the reveal\" and its time zone, and every link. The card separates what she sees, what is free and what is paid. Polish: the Spanish card's \"con … con\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Fix: the top results are product lists and People Also Ask asks \"What is a small but thoughtful gift?\", but the post gives categories and plans without one small, cheap, concrete thing to buy. Add an item to the \"a few days left\" list. Keeps: the hour-by-hour table, the plan-instead-of-a-parcel idea, \"What to skip\" and the family section, none of which the listicles have."
+        }
+      ],
+      "applied": [
+        "A new item under \"A few days left\", in both languages: something small she'd never buy herself, with three concrete examples and why small works when it's specific"
+      ],
+      "rejected": [
+        "\"color\" to \"colour\": the post uses US spelling throughout, and VOICE.md asks for wording that works for both, not for UK spelling"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The new item fills the cheap end of the list without padding it, and the Letter card reads honestly. Polish as before, on the two lines that mention photos."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Fix in both languages: two of the new item's three examples contradicted its own heading (a candle in the scent she already burns, the chocolates from the shop she always stops at are things she does buy herself), the candle repeated \"the thing she rations\" two items above, and chocolate is named in \"What to skip\". Replace with the better version of something she uses every day; in Spanish also because a smell cannot be lit."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round one's fix is in both languages and answers \"What is a small but thoughtful gift?\"; the post beats the 20-to-37-item lists by sorting ideas by the hours left, with delivery dates, a plan with a date and card lines to borrow. Polish only: two more People Also Ask questions as FAQs."
+        }
+      ],
+      "applied": [
+        "The new item's examples rewritten in both languages: the better version of something she uses every day (a good pen, a proper umbrella, a nicer mug), so it no longer names things she already buys or clashes with \"What to skip\""
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Sorted by the hours left, with card lines to borrow; the new small-gift item (a good pen, a proper umbrella, a nicer mug) is specific enough to buy tonight, and the Letter card says plainly what is free and what is paid. Polish as before on the two photo lines."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both of round two's fixes made word for word in both languages, the lists still match item for item, and every product, template, scheduling and link claim checks against the code. Polish: the Spanish card's \"con … con\", and that scheduling also comes with Make it special on The Letter."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The rewritten small-gift item still answers \"What is a small but thoughtful gift?\"; the post beats the 20-to-37-product lists by sorting ideas by the hours left, with delivery-date warnings, a plan with a date and card lines to borrow."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}

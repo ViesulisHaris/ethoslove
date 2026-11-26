@@ -1,0 +1,64 @@
+{
+  "slug": "christmas-message-for-boyfriend",
+  "keyword": "christmas message for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The lead answers at once (the right message depends on when he reads it); the hour-by-hour table and the card, Eve, family-meal and long-distance lines are sendable tonight; the corrected Letter card is honest. Polish: the hidden-message-link sentence could say photos are on paid templates."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 9, "spanish": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim checked (free-tier.ts, pricing.freeNoteShort, the-letter schema sealInitial, snow-globe MAX_LINES 4, scheduled-screen). Fix in both languages: the Letter card was one long sentence where \"room for the card message\" read as a third free item; put the use first, then the free note, then what is paid."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is bulk lists of 45-150 wishes (swifdoo, latintimes, American Greetings); this post wins on timing (Eve, morning, his family's meal, first Christmas, long distance), and the refreshed card is accurate."
+        }
+      ],
+      "applied": [
+        "Letter card reordered in both languages: the use first, then \"Free as a short note: up to 500 characters and a song.\", then the full letter and photos with Make it special, paid once"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The reordered card reads as honest, not like an ad; the moment-by-moment lines (the tree on the bus, blink twice) are ones to screenshot. Polish only, as before, on the hidden-message-link sentence."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round one's fix made exactly, in both languages: three short sentences, no single-currency price. Better than the top results because the messages are tied to when he reads them; the Spanish is localised (polvorones, a las cinco de la tarde)."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The keyword and a long-distance variant still return undifferentiated lists; none organises by moment of the day or covers his family's meal and the time difference, which this post does."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}

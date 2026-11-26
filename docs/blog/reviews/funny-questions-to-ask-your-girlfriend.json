@@ -1,0 +1,199 @@
+{
+  "slug": "funny-questions-to-ask-your-girlfriend",
+  "keyword": "funny questions to ask your girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for US/UK-neutral wording in three lines: 'petrol station', 'worst holiday' and 'furniture shop' (lead and list). Polish: 'in the bin', and a clearer sample bubble in the Text Thread note."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 7,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "Games paragraph (EN and ES): 'They work on one phone or on two' covers all three games, but the question cards play on one phone only (src/lib/games/catalogue.ts: deck phones: \"one\"; know and rather are \"two\")."
+          ],
+          "summary": "Dealbreaker: the question cards are one-phone only. Asked to replace lines that echoed the boyfriend post, the would-you-rather post and the hub (seagull/duck, tall pigeon/small horse, three would-you-rathers, the three opener quotes, the 'how to ask' and road-trip intros, two tips, the juicy and flirty FAQ lines), fix 'Sandwich or soup: cereal', UK-only 'petrol station', 'holiday' and 'bin', one ungrammatical Spanish line, and use 'comprometidas' rather than 'picantes' for juicy in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Two People-also-ask questions went unanswered: 'What are some playful questions to ask a girl?' and 'What are 12 questions to ask your girlfriend?'. Also 'petrol station' reads British to US searchers. Polish: title says 'by mood' though the post sorts by humour, a date-night line, and the trending 'beige flag' style questions."
+        }
+      ],
+      "applied": [
+        "Games paragraph now says only the last two games work on one phone or two (EN and ES).",
+        "Replaced every line that echoed the boyfriend, would-you-rather or hub posts with the editor's new lines: raccoons in a coat (table, list, FAQ), the cult question, three new would-you-rathers, the swap-phones one, the three opener quotes, the 'how to ask' and road-trip intros, the 'ask the second question' and 'two or three' tips, and the juicy and flirty FAQ answers, in both languages.",
+        "US/UK wording: furniture store (lead, list, FAQ), worst trip, 'should never leave the house again', a horror film at the next place we stop.",
+        "Text Thread sample bubble now 'Soup or not soup: cereal.'",
+        "FAQ: 'fun relationship questions' became 'What are 12 questions to ask your girlfriend?' with twelve from the post, and 'What's a fun question to ask a girl?' became 'What are some playful questions to ask a girl?', so all PAA questions are answered within five FAQs (EN and ES).",
+        "Spanish: 'a quién conoces que se lo coma así', 'comprometidas' for juicy, heading 'Que pregunte un juego, o mándaselas como regalo'.",
+        "Polish taken to head off repeats of the boyfriend post: the last h2 and the texting intro reworded; the hub's Spanish link sentence made easier to parse."
+      ],
+      "rejected": [
+        "Polish not taken: title 'by mood' kept (it sorts by humour and setting, and the shorter title fits); Spanish title keeps 'tu novia', matching the sister post's style; no date-night or 'beige flag' additions, to avoid padding; 'mi novia' link anchors kept, as elsewhere in the blog."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All three round-1 fixes made correctly. Beats the top results because it sorts the questions by her humour and by setting and tells you how to ask, where the usual results are a flat list of 100 with no delivery advice."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every round-1 fix confirmed in both languages. New fixes: the 12-questions FAQ wrongly said 'one or two of each kind'; the theme-song hypothetical echoed the would-you-rather post; the new flirty FAQ lines echoed the deep-questions post; five section intros (hypotheticals, which-of-us, rankings, unhinged, texting) kept the boyfriend post's sentence skeletons; Spanish 'cómo la preguntas' and 'solo vuelve diez segundos'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both PAA fixes and the petrol-station fix made; every PAA question answered within five FAQs. Better than the top results because it sorts 66 questions by her humour with a which-of-us set, how to ask, what to keep off, and free games and templates, which none of the big generic lists do."
+        }
+      ],
+      "applied": [
+        "12-questions FAQ now says 'picked from the lists above' (EN and ES).",
+        "Theme song replaced by a ringtone that goes off whenever someone thinks about you, in the list, the 'answer first' tip and the playful FAQ (EN and ES).",
+        "Flirty FAQ: 'most obvious excuse I ever used to see you' and 'If you wrote my dating profile' (EN and ES).",
+        "Rewrote the intros of the hypothetical, which-of-us, ranking, unhinged and texting sections with the editor's lines (EN and ES).",
+        "Spanish: 'cómo lo preguntas', 'solo retrocede diez segundos'.",
+        "Polish taken to head off a repeat of the boyfriend post: 'If you'd rather not read off your phone, let a game ask.' (EN and ES)."
+      ],
+      "rejected": [
+        "Polish not taken, to keep round-two edits to what was asked: the 'most dramatic thing' wording, 'origen de villana', 'crítica de cine', and the link/CTA boilerplate lines; reader polish 'Is cereal a soup?' and the tip title; search polish on title wording and beige-flag lines."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No regressions from round 2. Beats the top results because it routes you by her sense of humour, gives a which-of-us set built on her evidence, text-ready and road-trip sets, and how to deliver each question, so you could use it tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "All six round-2 fixes confirmed. A five-word overlap scan found remaining echoes of the boyfriend post and questions-for-couples: two takeaways, the road-trip intro's first clause, the openers' intro, the unhinged and juicy FAQ definitions, and two questions (last longer without a phone; most dramatic thing about something tiny). Spanish: 'si ... dolería' is a grammar error."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every PAA question still answered, no regressions. Beats eHarmony, Axe, The Knot and similar flat lists of 100 to 250 because it sorts 66 questions by her humour and setting, with a couple-specific which-of-us set, how-to-ask advice and free games."
+        }
+      ],
+      "applied": [
+        "Takeaways reworded: 'Her looks, her weight, her cooking and her exes aren't material' and 'By text, ask one she can answer with a photo; save the storytelling ones for the car' (EN and ES).",
+        "Road-trip intro: 'On a long drive nobody has anywhere to be...' (EN and ES).",
+        "Openers intro: 'Three openers: one for a text, one for the sofa, one for the coffee queue' (EN and ES).",
+        "Unhinged and juicy FAQ definitions reworded (EN and ES).",
+        "Questions replaced: silent retreat, and 'smallest thing you've seen me take personally' (EN and ES).",
+        "Spanish: 'puede dolerle'.",
+        "Polish taken to head off further echo fixes: which-of-us takeaway ('still be quoting next year'), 'enjoy being wrong', 'ask one more about her answer', 'Puntúa tu comida como si fueras crítica de cine', 'modelito', 'Disfruta con un buen dilema'.",
+        "Editor's round-2 polish on link and call-to-action lines that mirrored the boyfriend post, taken now to head off a fix: the 'not repeated here' line, the games paragraph, the gift intro, the Fortune Cookie note, the premium/demo line and the closing links paragraph reworded (EN and ES), with no change to the facts."
+      ],
+      "rejected": [
+        "Polish not taken: 'around four in the afternoon' for texting (a fixed time would not fit every reader's day); reader polish on the bubble punctuation and tip title; search polish on the title and beige-flag lines."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the top results' undifferentiated lists of 100+ questions, it sorts 66 by her type of humour and the setting and teaches how to ask so they land, which makes it the page I would send a friend."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It sorts 66 original questions by her humour and by setting, with a couple-specific which-of-us set, how to ask and what to keep off, and every product claim checks out against the code, where the top results are flat lists of 100+."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Top results are flat lists of 100 to 250 mixed questions with no way to choose; this post sorts 66 by her humour and setting, adds a which-of-us set, how-to-ask advice, a what-to-keep-off rule and free games, answers every People-also-ask question and overlaps no other post."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Reader: bubble punctuation 'Soup or not soup? Cereal.'; tip title 'What isn't material for a joke'.",
+        "Editor: ES 'atrevidas' to match the hub's heading; make the sample fortune slip a question; the bag question shares a frame with the crush post's fridge question.",
+        "Search: title 'sorted by her humour'; a warning-label style question; a one-line opener for 'What's a fun question to ask a girl?'."
+      ]
+    }
+  ]
+}

@@ -18,8 +18,11 @@ import {
   takeHeldPurchases,
   type AdPurchase,
 } from "@/lib/analytics/ads";
+import { isAdTrackingOffHere } from "@/lib/analytics/consent";
+import { isGoogleCookie, loadGoogle, setGoogleConsent } from "@/lib/analytics/google";
 import { isMetaCookie, loadMeta, setMetaConsent } from "@/lib/analytics/meta";
 import { isTikTokCookie, loadTikTok, setTikTokConsent } from "@/lib/analytics/tiktok";
+import { currentGclid, rememberClickIds } from "@/lib/attribution/click-ids";
 
 /** Whether the pixels were told consent is withdrawn, so they are told when it is given again. */
 let withdrawn = false;
@@ -27,27 +30,36 @@ let withdrawn = false;
 /**
  * The Meta and TikTok pixels: they tell each platform's ads which visits came from an ad, which
  * template was opened, and which ended in a sale, so a campaign can find the people who opened a gift
- * and didn't buy it. They mirror `Clarity`: nothing loads without an id or without a yes in the
- * banner, and they never run where `isAdTrackingOff` says the address must stay ours — a gift,
- * checkout, the dashboard and account, and the pages whose address opens something.
+ * and didn't buy it. The Google Ads tag loads beside them and is told the sale alone. They mirror
+ * `Clarity`: nothing loads without an id or without a yes in the banner, and they never run where
+ * `isAdTrackingOff` says the address must stay ours — a gift, checkout, the dashboard and account, and
+ * the pages whose address opens something.
  *
  * The rules have to hold on the way into a page as well as on arrival: the app moves between pages
  * without reloading, so pixels loaded on the editor are still there when the buyer steps onto their
- * gift. Neither reports page views by itself (see `loadMeta`, `loadTikTok`), and `adTrack` sends only
- * while this component says the current page is allowed.
+ * gift. None reports page views by itself (see `loadMeta`, `loadTikTok`, `loadGoogle`), and `adTrack`
+ * sends only while this component says the current page is allowed.
  */
 export function AdPixels() {
   const pathname = usePathname();
   const consent = useConsent();
 
   useEffect(() => {
-    if (!AD_PIXELS.meta && !AD_PIXELS.tiktok) return;
+    if (!AD_PIXELS.meta && !AD_PIXELS.tiktok && !AD_PIXELS.google) return;
     if (pixelsMayRun({ ids: AD_PIXELS, consent, pathname, inApp: isInApp() })) {
       if (AD_PIXELS.meta) loadMeta(AD_PIXELS.meta);
       if (AD_PIXELS.tiktok) loadTikTok(AD_PIXELS.tiktok);
+      // Google's tag reports the address it loads on, by itself, the moment it loads. So it waits for a
+      // page whose address carries nothing in its hash either (a shared plan rides there).
+      if (AD_PIXELS.google && !isAdTrackingOffHere(window.location)) {
+        // This effect can run before the one that takes the click down (ref-capture.tsx): once is enough.
+        rememberClickIds(window.location.search);
+        loadGoogle(AD_PIXELS.google, currentGclid());
+      }
       if (withdrawn) {
         setMetaConsent(true);
         setTikTokConsent(true);
+        setGoogleConsent(true);
         withdrawn = false;
       }
       setAdsLive(true);
@@ -61,10 +73,11 @@ export function AdPixels() {
       if (!withdrawn) {
         setMetaConsent(false);
         setTikTokConsent(false);
+        setGoogleConsent(false);
         withdrawn = true;
       }
       // Consent withdrawn from the footer: the cookies go too, as the privacy policy promises.
-      eraseCookies((name) => isMetaCookie(name) || isTikTokCookie(name));
+      eraseCookies((name) => isMetaCookie(name) || isTikTokCookie(name) || isGoogleCookie(name));
     }
   }, [consent, pathname]);
 
@@ -94,7 +107,7 @@ export function HoldAdPurchase({ purchase }: { purchase: AdPurchase }) {
   const contents = JSON.stringify(purchase.contents);
 
   useEffect(() => {
-    if (!(AD_PIXELS.meta || AD_PIXELS.tiktok) || consent !== "granted" || isInApp()) return;
+    if (!(AD_PIXELS.meta || AD_PIXELS.tiktok || AD_PIXELS.google) || consent !== "granted" || isInApp()) return;
     holdPurchase({ eventId, value, currency, contents: JSON.parse(contents) });
   }, [consent, eventId, value, currency, contents]);
 

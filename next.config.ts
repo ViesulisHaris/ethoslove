@@ -239,18 +239,30 @@ function contentSecurityPolicy(): string {
   const tiktokScript = tiktok ? " https://analytics.tiktok.com" : "";
   const tiktokImg = tiktok ? " https://analytics.tiktok.com" : "";
   const tiktokConnect = tiktok ? " https://analytics.tiktok.com https://analytics-ipv6.tiktokw.us" : "";
+  // The Google Ads tag: its script from www.googletagmanager.com, and the ad click and a sale reported
+  // to Google's ad hosts as a request, an image or a frame, whichever the browser allows (Google's own
+  // list for "Google Ads conversions" in its Tag Platform guide to Content Security Policy, plus
+  // ad.doubleclick.net, which a headless run showed it also calls). It repeats the sale to the
+  // visitor's own country's Google (www.google.lv and so on) too: a policy can't name every one of
+  // those, the report to www.google.com and googleadservices.com is the one that counts, and the
+  // refused copy shows only as a console line. Only with both the tag id and the purchase label set,
+  // like the tag itself (lib/analytics/ads.ts).
+  const google = Boolean(process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && process.env.NEXT_PUBLIC_GOOGLE_ADS_PURCHASE_LABEL);
+  const googleScript = google ? " https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com" : "";
+  const googlePing = google ? " https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://ad.doubleclick.net https://www.google.com https://google.com https://pagead2.googlesyndication.com" : "";
+  const googleFrame = google ? " https://www.googletagmanager.com https://td.doubleclick.net" : "";
   const directives = [
     "default-src 'self'",
     // Stripe.js, for the pay sheet's one-tap Apple Pay / Google Pay buttons: Stripe's own list
     // (docs.stripe.com/security/guide, "Stripe.js"), which starts frames on js.stripe.com subdomains.
-    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com https://*.js.stripe.com${clarityScript}${metaScript}${tiktokScript}`,
+    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com https://*.js.stripe.com${clarityScript}${metaScript}${tiktokScript}${googleScript}`,
     "style-src 'self' 'unsafe-inline'",
-    `img-src 'self' data: blob: https://*.supabase.co https://*.stripe.com https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}${tiktokImg}`,
+    `img-src 'self' data: blob: https://*.supabase.co https://*.stripe.com https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}${tiktokImg}${googlePing}`,
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
-    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${metaPing}${tiktokConnect}${dev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${metaPing}${tiktokConnect}${googlePing}${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
-    "frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
+    `frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://checkout.stripe.com${googleFrame}`,
     "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self' https://checkout.stripe.com",

@@ -1,0 +1,35 @@
+{
+  "slug": "21-questions-for-couples",
+  "keyword": "21 questions for couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "Unlike the top results, mostly one flat list, it gives the rules that make the game work, three complete sets of 21 for different stages, texts to send and how long it takes, so you could play tonight. Polish: who answers first, 'holiday' to 'trip', set 3's first block is heavier than 'nothing at stake'." },
+        { "reviewer": "editor", "scores": { "accuracy": 9, "voice": 9, "spanish": 8 }, "overall": 8, "dealbreakers": [], "summary": "Fortune Cookie note wrongly said the light questions come first (cookies open in any order; slips are numbered). Text Thread note contradicted itself. 'A faster version' covered slower formats; a mixed-person line on the know game; link-in sentences said 'in that order' and 'a game you both answer'. Spanish: 'pase' to 'comodín', several calques and an ungrammatical question, a pronoun without antecedent, the table's 'la distancia'." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "Gives what Connected Couples and Couple Joy give (turns, a pass, a follow-up, the Aron order, sets by stage) and adds a formats table, rules and lines for playing by text, and honest answers to every People also ask question, where the others bury it in 150 to 200 question dumps." }
+      ],
+      "applied": [
+        "Fortune Cookie note: cookies open in any order, slips are numbered, so write light to deep and play by number (EN, ES)",
+        "Text Thread note: question 1 is the closing message (EN, ES)",
+        "'There are other ways to play it. Pick the one that suits the night:' (EN, ES)",
+        "'you each answer about yourself and guess the other'",
+        "Link-in in questions-for-couples: 'from light to personal to the two of you' (EN, ES)",
+        "Link-in in the boyfriend and girlfriend hubs reworded (EN, ES)",
+        "Spanish: comodín throughout; 'Escucha su respuesta'; '¿Qué creías antes que ya no crees?'; 'que te hizo pensar que'; 'mi respuesta escrita'; 'pregúntalo sin rodeos'; table row 'Un día tranquilo..., una relación a distancia'",
+        "Polish taken (reader and editor both raised it): 'holiday' to 'trip' in the 7 7 7 FAQ; questions 1 to 7 described as 'the easiest in each set: specific, and low-stakes'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "Every round-1 change landed and reads cleanly; the lead, the both-answer rule, three full sets of 21 in 7/7/7 order, the text rules and lines, and honest template notes after all the free content make it the page to play from tonight." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 10 }, "overall": 10, "dealbreakers": [], "summary": "All round-1 fixes made correctly in both languages; the only page with three complete sets of 21 in a deliberate 7/7/7 order, rules that make both people answer and a way to play over text, with every product claim checked against the code. Polish (in the record, not the post): name Elaine Aron as the speaker; questions-for-couples' own 21-questions rules differ slightly, for a future edit of that post." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "The edits weakened nothing; it pairs real rules and a formats table with three original story-based sets of 21, the Aron reason for the order, a text-play section with lines to send and answers to all People also ask questions, against listicles of 140 to 213 one-line favourites, with no overlap with questions-for-couples." }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}

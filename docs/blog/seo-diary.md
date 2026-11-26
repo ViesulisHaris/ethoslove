@@ -3,6 +3,85 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-25: the free Letter as a short note in anniversary-letter-to-boyfriend and birthday-message-for-husband; a 1-year FAQ, and "wishes" in the husband title
+- **Page:** /blog/anniversary-letter-to-boyfriend, /blog/birthday-message-for-husband (and /es to match)
+- **Why:** Second run of the day, a Wednesday (no weekly job; the ranks are a day old). The first open
+  backlog item, next in its list: both Letter cards still said "Free" with photos (the husband post:
+  "three paragraphs fit easily ... your photos drop in as polaroids. It's free"), untrue since 19 Nov,
+  and the husband post's midnight tip said any digital gift "arrives with your photos". DataForSEO (US):
+  "anniversary letter to boyfriend" 210 a month, KD 0; "birthday message for husband" 2,400, KD 11;
+  "birthday wishes for husband" 9,900, KD 3, the word every top-10 title uses. Neither post is in the
+  top 30 yet; Search Console (28 days, brand left out) has the husband post at 11 for "best birthday
+  message for husband" and the Spanish anniversary post at 9 for "cartas de aniversario para mi novio",
+  a few impressions each. People also ask for the anniversary phrase: "How do I wish my boyfriend for our
+  1 year anniversary?", which the post didn't answer.
+- **What changed:** Both Letter cards say "Free as a short note: up to 500 characters and a song"; the
+  anniversary card adds that its 80-word example letter fits as it is (379 characters, 423 in Spanish),
+  with the longer letters and photos under "Make it special", paid once ([prices]). The anniversary post
+  gets a 1-year FAQ with a message to send. The husband post's midnight tip now says photos and timing
+  come with a premium template or "Make it special" (the picker offers quarter hours, so not "to the
+  minute"); its title says "35 wishes and a letter", its description is short enough not to be cut, and
+  its away tip covers long distance with a second line. Spanish to match. `updated` 2026-11-25 on both.
+- **Panel:** 10/10/10 after 3 rounds for anniversary-letter-to-boyfriend (the search reviewer asked for
+  the 1-year FAQ; the editor then caught "your mother's nickname" against the letter's "what my mother
+  calls you") and 2 rounds for birthday-message-for-husband (the reader and editor caught the midnight
+  tip's photos; the search reviewer asked for "wishes", the shorter description and the long-distance
+  line) (`docs/blog/reviews/refresh/<slug>-2026-11-25.json`)
+- **Cost:** $0.02 (one keyword overview, two SERPs with People also ask); balance $43.72
+- **Check on:** 2026-12-14 whether "birthday message for husband" or "birthday wishes for husband" show
+  for the husband post, and "anniversary letter to boyfriend" for the anniversary post
+
+## 2026-11-25: the free Letter as a short note in christmas-proposal-ideas and last-minute-christmas-gift-for-girlfriend; a small-gift idea for "what is a small but thoughtful gift"
+- **Page:** /blog/christmas-proposal-ideas, /blog/last-minute-christmas-gift-for-girlfriend (and /es to match)
+- **Why:** First run of the day, a Wednesday (no weekly job; the ranks are a day old). The first open
+  backlog item, Christmas posts first: both posts' Letter cards still said "Free" with photos, untrue
+  since 19 Nov, a month before the day they're read for. DataForSEO (US): "christmas proposal ideas"
+  390 a month, KD 1; "last minute christmas gifts for her" 210, KD 11; "last minute christmas gift for
+  girlfriend" 70, KD 3. Search Console (28 days, brand left out): only "christmas proposal ideas at
+  home" at 25, 3 impressions; both posts are still waiting for their December. The gift post's top 10
+  is product lists with a popular-products block; People also ask includes "What is a small but
+  thoughtful gift?", which the post didn't answer.
+- **What changed:** Both Letter cards now say "Free as a short note: up to 500 characters and a song",
+  with the full letter (in the proposal post, the full speech) and photos under "Make it special", paid
+  once, linking /pricing; Spanish to match. The gift post gets one list item in both languages,
+  "Something small she'd never buy herself" (the better version of something she uses every day), from
+  the search reviewer. `updated` 2026-11-25 on both.
+- **Panel:** 10/10/10 after 1 round for christmas-proposal-ideas, 3 rounds for
+  last-minute-christmas-gift-for-girlfriend (round 1 asked for the small-gift item; round 2's editor
+  caught examples that contradicted its heading and the post's "What to skip")
+  (`docs/blog/reviews/refresh/<slug>-2026-11-25.json`)
+- **Cost:** $0.02 (two SERPs with People also ask, one keyword overview); balance $44.30
+- **Check on:** 2026-12-14 whether "christmas proposal ideas" and "last minute christmas gifts for her"
+  show for these posts as December searches peak
+
+## 2026-11-24: the free Letter as a short note, corrected in gifft-me-alternatives and both Christmas message posts
+- **Page:** /blog/gifft-me-alternatives, /blog/christmas-message-for-boyfriend,
+  /blog/christmas-message-for-girlfriend (and /es to match); `docs/blog/VOICE.md`
+- **Why:** First run of the day, a Tuesday; the ranks were five days old, so the rank check ran too
+  (`seo-ranks.md`). The first open backlog item: since 19 Nov a free Letter is a short note (500
+  characters and a song, no photos) and Constellations has no free version, but posts still promised
+  free photos. Search Console (28 days to 22 Nov, brand left out): /es/blog/gifft-me-alternatives is the
+  blog's most-seen page, 1,075 impressions and 13 clicks, mostly "gifft me" at 4.5, and its comparison
+  table still said Ethos had two free templates with up to 10 free photos, the very facts a comparison
+  reader checks. The two Christmas message posts are a month from their day and their Letter cards
+  offered photos free.
+- **What changed:** gifft-me-alternatives: Ethos's free cell is now "One template, The Letter, as a
+  short note of up to 500 characters", photos "None on the free note; up to 20 with a paid option",
+  and "Photos and the full letter on The Letter: $8.99" (7,49 € in Spanish); its Letter card says
+  what is free. Both Christmas posts' Letter cards now say "Free as a short note: up to 500
+  characters and a song", with photos and the full letter under "Make it special". VOICE.md's "Free"
+  list, which every post is written from, still said The Letter and Constellations with 10 photos:
+  corrected to the short note. `updated` 2026-11-24 on the three posts.
+- **Panel:** 10/10/10 after 1 round for gifft-me-alternatives and christmas-message-for-girlfriend,
+  2 rounds for christmas-message-for-boyfriend (the editor split the card's long sentence)
+  (`docs/blog/reviews/refresh/<slug>-2026-11-24.json`)
+- **Cost:** $1.77 (the rank check, 296 SERPs, and `ranked_keywords`); balance $44.35
+- **Also found:** the editor confirmed the /pricing FAQ still describes the old free tier (already in
+  the backlog's "For a person"); the posts' [Pricing] links lead to it.
+- **Check on:** 2026-12-08 whether /es/blog/gifft-me-alternatives keeps "gifft me" near 4.5 and its
+  clicks, and whether the Christmas message posts show for "christmas message for boyfriend" and
+  "christmas message for girlfriend" as December starts
+
 ## 2026-11-20: digital-love-letter-websites-compared adds Just Meant For You and ShareLove Letters, corrects Ethos's free note; Spanish aims at "carta de amor digital"
 - **Page:** /blog/digital-love-letter-websites-compared (and /es to match)
 - **Why:** Second run of the day; the first open backlog item. Asked in Spanish on 20 Nov ("página para

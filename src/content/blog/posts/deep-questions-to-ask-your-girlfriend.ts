@@ -1,0 +1,500 @@
+import type { BlogPost } from "../types";
+
+export const post: BlogPost = {
+  slug: "deep-questions-to-ask-your-girlfriend",
+  published: "2026-11-24",
+  occasion: "just-because",
+  templates: ["fortune-cookie", "the-letter"],
+  content: {
+    en: {
+      title: "45 deep questions to ask your girlfriend, and how to listen",
+      description: "45 deep questions to ask your girlfriend in five levels, from light to brave, with when to ask each, how to go first, and how to listen to what she says.",
+      keyword: "deep questions to ask your girlfriend",
+      lead: "Good deep questions to ask your girlfriend start light and get braver: \"Which room in your childhood home do you think about most?\" long before \"What are you afraid I'd think if I knew everything about you?\" Below are 45 in five levels, with where each level works, how to answer your own first, and the part most lists skip: how to listen to her answer instead of waiting for your turn.",
+      takeaways: [
+        "Climb in levels. Two easy questions make the third, harder one feel natural.",
+        "Answer your own question first, briefly. Then it's a swap, not an interview.",
+        "Listening is half of it. Ask about her answer before you say anything about yourself.",
+        "Two or three questions are a whole evening. One brave one is enough on its own.",
+        "Keep the brave questions for a spoken conversation, never a text.",
+      ],
+      body: [
+        { type: "h2", text: "How deep to go, and when" },
+        {
+          type: "p",
+          text: "A deep question is one she can't answer without thinking about her own life. It doesn't have to be heavy. What matters is the order: start where it's easy and climb. Our main list of [questions to ask your girlfriend](/blog/questions-to-ask-your-girlfriend) has 160 for every mood, 25 of them deep. This page stays on depth alone, with 45 new questions in five levels:",
+        },
+        {
+          type: "table",
+          head: ["Level", "What it asks about", "Where it works", "How far in"],
+          rows: [
+            ["1. Light, with a story inside", "Small things that say a lot", "A drive, a wait for a table, a lazy breakfast", "Any time, even a few dates in"],
+            ["2. Her story", "The life she had before you", "A walk, a long dinner", "A few weeks in"],
+            ["3. What she believes and wants", "How she thinks life should go", "A late evening with nothing after it", "A few months in"],
+            ["4. The two of you", "What you are together", "At home, side by side", "Once it's serious"],
+            ["5. The brave ones", "Fears, old hurts, the future", "A quiet night, phones away", "When you want the honest answer"],
+          ],
+        },
+        {
+          type: "p",
+          text: "If she'd like questions to ask you back, the [deep questions to ask your boyfriend](/blog/deep-questions-to-ask-your-boyfriend) use the same five levels.",
+        },
+        { type: "h2", text: "Level 1: deep questions that feel light" },
+        {
+          type: "p",
+          text: "Each of these sounds easy, but every answer comes with a story. Use one to open the evening:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "What's a smell that takes you straight back somewhere?",
+            "Which of your friends knows you best, and what do they know that other people don't?",
+            "What was your whole world at twelve: a band, a sport, a show?",
+            "What's a compliment you got years ago that you still remember?",
+            "Which room in your childhood home do you think about most?",
+            "What are you good at that nobody ever asks you about?",
+            "What did you want to be at ten, and how much of that is still in you?",
+            "Which book or film did you love at fifteen, and would it still hold up for you?",
+            "Who in your family are you most like, and are you glad about it?",
+          ],
+        },
+        { type: "h2", text: "Level 2: questions about her story" },
+        {
+          type: "p",
+          text: "Now ask about the life she had before you. Let each answer run, and ask \"And then what?\" before you move on:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "What's the first thing you remember being really proud of?",
+            "When things went wrong as a kid, who looked after you?",
+            "Was there a time you had to grow up faster than you wanted to?",
+            "What did your family never talk about?",
+            "What did you get in trouble for most as a kid, and was it fair?",
+            "Which year changed you most? Would I have liked the person you were before it?",
+            "When did you first stand up for yourself?",
+            "What did the women in your family teach you without ever saying it?",
+            "Which place you've lived do you still miss?",
+          ],
+        },
+        { type: "h2", text: "Level 3: what she believes and wants" },
+        {
+          type: "p",
+          text: "These have no right answer, which is why they work. Give yours too, and say so if you disagree:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "Which rule do you live by that you've never said out loud?",
+            "Is it more important to you to be liked or to be respected?",
+            "What would you do with your days if money stopped mattering?",
+            "Where are you when you feel most like yourself?",
+            "What would you like to be braver about?",
+            "What does doing well at fifty look like to you, and who decided that?",
+            "What did you believe about love at eighteen that you don't anymore?",
+            "What's worth getting angry about?",
+            "Do you think you're here to do something in particular? What?",
+          ],
+        },
+        { type: "h2", text: "Level 4: deep questions about the two of you" },
+        {
+          type: "p",
+          text: "Ask these once you both know this is going somewhere. They're about you, so be ready to hear something you didn't expect, and thank her for it:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "When did you decide you could trust me?",
+            "What do you think I still don't understand about you?",
+            "What did you think I was like before you knew me well, and how wrong were you?",
+            "When do you feel far from me, even when I'm in the room?",
+            "What do you need from me that you've stopped asking for?",
+            "What do you want our home to feel like when you walk in?",
+            "Which of my habits do you hope I never lose?",
+            "How can I tell when you're upset but saying you're fine?",
+            "What's something you'd like us to try that we never have?",
+          ],
+        },
+        { type: "h2", text: "Level 5: the brave ones" },
+        {
+          type: "p",
+          text: "Ask these on a quiet night, out loud, and only if you want the true answer more than a comfortable one. One is a whole evening. Don't stack them:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "What are you afraid I'd think if I knew everything about you?",
+            "What hurt you most in a past relationship, and what do you need me never to repeat?",
+            "Have you ever felt you had to hide how you felt from me? When?",
+            "What would you go after if you knew I'd back you whatever happened?",
+            "What would you need to hear from me if things got really hard?",
+            "Do you ever feel you have to be less of yourself with me?",
+            "What have you made peace with that still stings sometimes?",
+            "When you push me away, what do you want me to do?",
+            "Is there something you've never told anyone that you'd like to tell me one day?",
+          ],
+        },
+        { type: "h2", text: "Go first: answer your own question" },
+        {
+          type: "p",
+          text: "Fire nine questions at her in a row and she'll feel like she's being interviewed. Answer the question yourself first and it becomes a trade. In the [36 questions for closeness](https://ggia.berkeley.edu/practice/36_questions_for_increasing_closeness) that psychologist Arthur Aron's team used in a 1997 study, both people answer every question, taking turns to go first, and the questions get more personal set by set. Greater Good, the Berkeley site that hosts them, also reports a later study in which pairs of students who took turns liked each other more than pairs where one talked while the other listened, then swapped. So go first, in two or three sentences, then hand it over:",
+        },
+        {
+          type: "quote",
+          text: "Mine's the smell of my grandmother's kitchen on a Sunday. Onions, and something burning slightly, every single week. What's yours?",
+        },
+        {
+          type: "quote",
+          text: "Can I ask you a big one? You can pass, and I'll answer it too.",
+        },
+        {
+          type: "p",
+          text: "For questions you both answer as a game, with six ways to play them, see our [questions for couples](/blog/questions-for-couples). Or let a deck do the asking: our free [question cards](/games/couple-questions-game) have a deck of closer questions for later in the evening. Pass the phone, read one out, both answer.",
+        },
+        { type: "h2", text: "How to listen to her answer, not wait for your turn" },
+        {
+          type: "p",
+          text: "Most deep conversations go wrong in the ten seconds after she answers. You nod, then tell your own story, and the moment is gone. The fix is one rule: ask one more question about her answer before you say anything about yourself.",
+        },
+        {
+          type: "p",
+          text: "There's research on why this matters. Psychologist Shelly Gable and her colleagues sorted the ways people respond when a partner shares something good into four kinds. In a 2006 study of nearly 80 couples, how a partner responded to good news was more closely linked to how the relationship was doing two months later, and to who had broken up, than how they responded to bad news ([University of Rochester Medical Center](https://www.urmc.rochester.edu/behavioral-health-partners/bhp-blog/february-2024/good-news-sharing-and-responding)). Say she tells you \"They asked me to lead the new project at work\":",
+        },
+        {
+          type: "table",
+          head: ["The response", "What it sounds like", "What she hears"],
+          rows: [
+            ["Interested and glad", "\"They picked you. What did they say when they asked?\"", "You heard me, and you want more"],
+            ["Polite", "\"Nice, well done.\" Then back to your phone", "That was fine, nothing more"],
+            ["Finding the catch", "\"Won't that mean more late nights?\"", "My good news is a problem"],
+            ["Changing the subject", "\"Did you see my brother's message?\"", "You weren't listening"],
+          ],
+        },
+        {
+          type: "p",
+          text: "The first one is the one that counts. The study was about good news, but the same habit suits deep answers: when she tells you which year changed her, the follow-up matters more than the question:",
+        },
+        {
+          type: "list",
+          items: [
+            "**Ask for the scene.** \"Where were you when that happened?\" or \"Who else was there?\" A memory becomes a story when she pictures it again.",
+            "**Name what you heard.** \"So you had to be the calm one, even then.\" If you've got it wrong, she'll correct you, and that's the second, truer answer.",
+            "**Don't fix it.** A deep answer is rarely a request for advice. \"That sounds lonely\" lands better than three suggestions.",
+            "**Don't top it.** Your similar story can wait until she asks for it, or until the next question.",
+            "**Remember it.** Bringing one detail back a week later, \"I thought about that teacher you told me about\", tells her she was heard better than anything you say on the night.",
+          ],
+        },
+        { type: "h2", text: "When she goes quiet, laughs it off, or cries" },
+        {
+          type: "p",
+          text: "A pause after a real question usually means she's taking it seriously. Count to ten in your head before you say anything.",
+        },
+        {
+          type: "list",
+          items: [
+            "**If she laughs it off,** laugh too, then ask once, gently: \"And the real answer?\"",
+            "**If she says \"I don't know\",** make it smaller: \"What's the first thing that came to mind?\"",
+            "**If she turns it back on you,** answer properly. Often she wants to see how deep you'll go before she does.",
+            "**If she doesn't want to,** drop it and mean it. A question she passed on tonight may come back from her next week.",
+            "**If she cries,** don't rush to make it stop. Sit closer, and let her decide whether to keep talking.",
+          ],
+        },
+        {
+          type: "quote",
+          text: "I'm really glad you told me. It's safe with me.",
+        },
+        {
+          type: "p",
+          text: "A short message the next day is worth more than it seems: \"I keep thinking about what you told me last night. I'm glad you did.\" And never bring an answer back in an argument. Do it once and the honest answers stop.",
+        },
+        { type: "h2", text: "Deep questions by text, or from far away" },
+        {
+          type: "p",
+          text: "Levels 1 and 2 survive a text, and they're a good way to fill a lunch break. Keep levels 4 and 5 for her voice: on a call you hear the pause before the answer. If you live apart, a [digital gift](/gifts/for-girlfriend) can carry the questions, so they arrive as something she opens rather than one more message. These two fit:",
+        },
+        {
+          type: "template",
+          slug: "fortune-cookie",
+          note: "A plate of fortune cookies she cracks open one at a time, each slip holding a line you wrote, up to twenty slips of 140 characters. She opens them in any order, so put one level 1, 2 or 3 question on each slip, ones that work in any sequence: \"Your fortune: tell me about a smell that takes you straight back somewhere.\" The last cookie holds your own message. Ask her to open them on a call and answer out loud, and answer each one yourself too. It's a premium template ([pricing](/pricing)).",
+        },
+        {
+          type: "template",
+          slug: "the-letter",
+          note: "Going first works in writing too. Answer two of these questions about yourself in a few lines, then end with the one you'd like her to answer. She breaks a wax seal and your words appear in handwriting. {note:Sent free, it's a short note of up to 500 characters with a song, which is enough for this; photos and a longer letter come with \"Make it special\", paid once ([pricing](/pricing)).|It's free, photos and a longer letter included.}",
+        },
+      ],
+      faq: [
+        {
+          q: "What are 5 deep questions to ask your girlfriend?",
+          a: "One from each level, in this order: \"Which room in your childhood home do you think about most?\", \"What did your family never talk about?\", \"Where are you when you feel most like yourself?\", \"When did you decide you could trust me?\" and \"What would you go after if you knew I'd back you whatever happened?\" Spread them over a week, or use them for one long evening.",
+        },
+        {
+          q: "How do you start a deep conversation with your girlfriend?",
+          a: "Pick a time with nothing after it, ideally side by side in the car or on a walk. Open with a light question that has a story in it, such as \"What's a smell that takes you straight back somewhere?\", and answer it yourself first. Then ask one more question about her answer before moving on. The follow-up is where the conversation starts.",
+        },
+        {
+          q: "What is the 3 6 9 rule in dating?",
+          a: "It's a rule of thumb from social media, not research: a new relationship is said to change at around three months, when the first excitement settles, at six, when the first real disagreements show, and at nine, when you know whether it's going somewhere. It suits these questions well: levels 1 and 2 in the first months, level 3 by about six, and level 4 by nine.",
+        },
+        {
+          q: "What questions make a girl blush?",
+          a: "Questions that let her say something nice about you, or hear something nice about herself: \"When did you decide you could trust me?\", \"Which of my habits do you hope I never lose?\" or \"What did you think I was like before you knew me well?\" Ask with a smile, and answer the same question about her.",
+        },
+        {
+          q: "What are some flirty questions to ask your girlfriend?",
+          a: "Flirty questions are playful rather than deep: \"What did you think the first time you saw me?\", \"What's the outfit of mine you like most?\" or \"Where would you take me if we had tonight and no plans?\" Our main list of [questions to ask your girlfriend](/blog/questions-to-ask-your-girlfriend) has a whole flirty section, and they work best mixed with a deep one or two.",
+        },
+      ],
+    },
+    es: {
+      title: "45 preguntas profundas para mi novia, y cómo escucharla",
+      description: "45 preguntas profundas para tu novia en cinco niveles, de ligeras a valientes, con cuándo hacer cada una, cómo contestar tú primero y cómo escucharla.",
+      keyword: "preguntas profundas para mi novia",
+      lead: "Las buenas preguntas profundas para tu novia empiezan ligeras y se van atreviendo: «¿En qué habitación de la casa de tu infancia piensas más?» mucho antes que «¿Qué te daría miedo que pensara si lo supiera todo de ti?». Aquí tienes 45 en cinco niveles, con dónde funciona cada uno, cómo contestar tú primero y lo que casi todas las listas se saltan: cómo escuchar su respuesta en vez de esperar tu turno.",
+      takeaways: [
+        "Sube por niveles. Dos preguntas fáciles hacen que la tercera, más difícil, salga sola.",
+        "Contesta tú primero, en dos frases. Así es un intercambio, no una entrevista.",
+        "Escuchar es la mitad. Pregunta por su respuesta antes de contar nada tuyo.",
+        "Con dos o tres preguntas tienes una noche entera. Una valiente basta por sí sola.",
+        "Las valientes, en persona o por teléfono, nunca por mensaje.",
+      ],
+      body: [
+        { type: "h2", text: "Cuánto profundizar, y cuándo" },
+        {
+          type: "p",
+          text: "Una pregunta profunda es una que no puede contestar sin pensar en su propia vida. No tiene por qué ser pesada. Lo que importa es el orden: empieza por lo fácil y ve subiendo. Nuestra lista principal de [preguntas para mi novia](/blog/questions-to-ask-your-girlfriend) tiene 160 para cada momento, 25 de ellas profundas. Esta página se queda solo con las profundas, con 45 preguntas nuevas en cinco niveles:",
+        },
+        {
+          type: "table",
+          head: ["Nivel", "Sobre qué pregunta", "Dónde funciona", "Cuándo"],
+          rows: [
+            ["1. Ligeras, con historia dentro", "Cosas pequeñas que dicen mucho", "En el coche, en una cola, en un desayuno sin prisa", "Cuando sea, incluso tras pocas citas"],
+            ["2. Su historia", "La vida que tenía antes de ti", "Paseando, en una cena larga", "Tras unas semanas"],
+            ["3. Lo que cree y lo que quiere", "Cómo piensa que debería ser la vida", "Una noche sin nada después", "Tras unos meses"],
+            ["4. Vosotros dos", "Lo que sois juntos", "En casa, uno al lado del otro", "Cuando ya va en serio"],
+            ["5. Las valientes", "Miedos, heridas antiguas, el futuro", "Una noche tranquila, sin móviles", "Cuando quieras la respuesta sincera"],
+          ],
+        },
+        {
+          type: "p",
+          text: "Si ella quiere devolverte las preguntas, las [preguntas profundas para mi novio](/blog/deep-questions-to-ask-your-boyfriend) usan los mismos cinco niveles.",
+        },
+        { type: "h2", text: "Nivel 1: preguntas profundas que parecen ligeras" },
+        {
+          type: "p",
+          text: "Todas suenan fáciles, pero cada respuesta trae una historia. Usa una para abrir la noche:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "¿Qué olor te lleva de golpe a otro sitio?",
+            "¿Qué amiga o amigo te conoce mejor, y qué sabe de ti que los demás no?",
+            "¿Qué era todo tu mundo a los doce: un grupo, un deporte, una serie?",
+            "¿Qué cumplido te hicieron hace años y todavía recuerdas?",
+            "¿En qué habitación de la casa de tu infancia piensas más?",
+            "¿Qué se te da bien y nadie te pregunta nunca por ello?",
+            "¿Qué querías ser a los diez años, y cuánto queda de eso en ti?",
+            "¿Qué libro o película te encantaba a los quince, y crees que te seguiría gustando?",
+            "¿A quién de tu familia te pareces más, y te alegras de ello?",
+          ],
+        },
+        { type: "h2", text: "Nivel 2: preguntas sobre su historia" },
+        {
+          type: "p",
+          text: "Ahora pregúntale por la vida que tenía antes de ti. Deja que cada respuesta se alargue, y pregunta «¿Y luego?» antes de seguir:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "¿Qué es lo primero de lo que recuerdas sentirte orgullosa de verdad?",
+            "Cuando algo salía mal de pequeña, ¿quién te cuidaba?",
+            "¿Hubo una época en la que tuviste que madurar más rápido de lo que querías?",
+            "¿De qué no se hablaba nunca en tu familia?",
+            "¿Por qué te reñían más de pequeña, y era justo?",
+            "¿Qué año te cambió más? ¿Me habría caído bien la persona que eras antes?",
+            "¿Cuándo fue la primera vez que te hiciste valer?",
+            "¿Qué te enseñaron las mujeres de tu familia sin decírtelo nunca?",
+            "¿Qué sitio donde has vivido sigues echando de menos?",
+          ],
+        },
+        { type: "h2", text: "Nivel 3: lo que cree y lo que quiere" },
+        {
+          type: "p",
+          text: "No tienen respuesta correcta, y por eso funcionan. Da también la tuya, y si no estás de acuerdo, díselo:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "¿Qué norma sigues en la vida que nunca has dicho en voz alta?",
+            "¿Qué te importa más, caer bien o que te respeten?",
+            "¿Qué harías con tus días si el dinero dejara de importar?",
+            "¿Dónde estás cuando te sientes más tú misma?",
+            "¿En qué te gustaría ser más valiente?",
+            "¿Qué significa para ti que te vaya bien a los cincuenta, y quién lo decidió?",
+            "¿Qué creías del amor a los dieciocho que ya no crees?",
+            "¿Por qué cosas merece la pena enfadarse?",
+            "¿Crees que estás aquí para hacer algo en concreto? ¿El qué?",
+          ],
+        },
+        { type: "h2", text: "Nivel 4: preguntas profundas sobre vosotros" },
+        {
+          type: "p",
+          text: "Hazlas cuando los dos tengáis claro que esto va en serio. Son sobre ti, así que prepárate para oír algo que no esperabas, y dale las gracias:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "¿Cuándo decidiste que podías confiar en mí?",
+            "¿Qué crees que todavía no entiendo de ti?",
+            "¿Cómo creías que era yo antes de conocerme bien, y cuánto te equivocabas?",
+            "¿Cuándo me sientes lejos, aunque esté en la misma habitación?",
+            "¿Qué necesitas de mí que has dejado de pedirme?",
+            "¿Qué quieres sentir al entrar por la puerta de nuestra casa?",
+            "¿Qué costumbre mía esperas que no pierda nunca?",
+            "¿Cómo puedo saber cuándo estás mal aunque digas que estás bien?",
+            "¿Qué te gustaría que probáramos que no hayamos hecho nunca?",
+          ],
+        },
+        { type: "h2", text: "Nivel 5: las valientes" },
+        {
+          type: "p",
+          text: "Hazlas una noche tranquila, en voz alta, y solo si quieres la respuesta sincera más que una cómoda. Una sola ya es una noche entera. No las encadenes:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "¿Qué te daría miedo que pensara si lo supiera todo de ti?",
+            "¿Qué te dolió más en una relación anterior, y qué necesitas que yo no repita nunca?",
+            "¿Alguna vez has sentido que tenías que esconderme lo que sentías? ¿Cuándo?",
+            "¿Qué perseguirías si supieras que te voy a apoyar pase lo que pase?",
+            "¿Qué necesitarías oírme decir si las cosas se pusieran muy difíciles?",
+            "¿Alguna vez sientes que tienes que ser menos tú conmigo?",
+            "¿Con qué has hecho las paces que todavía te escuece a veces?",
+            "Cuando me apartas, ¿qué quieres que haga?",
+            "¿Hay algo que no le hayas contado nunca a nadie y que te gustaría contarme algún día?",
+          ],
+        },
+        { type: "h2", text: "Contesta tú primero" },
+        {
+          type: "p",
+          text: "Si le disparas nueve preguntas seguidas, se sentirá como en una entrevista. Si contestas tú primero, se convierte en un intercambio. En las [36 preguntas para acercarse](https://ggia.berkeley.edu/practice/36_questions_for_increasing_closeness) (en inglés) que usó el equipo del psicólogo Arthur Aron en un estudio de 1997, los dos contestan todas las preguntas, turnándose para empezar, y cada tanda es más personal que la anterior. Greater Good, la web de Berkeley que las recoge, cita además un estudio posterior en el que las parejas de estudiantes que se turnaban se cayeron mejor que aquellas en las que uno hablaba mientras el otro escuchaba, y luego al revés. Así que empieza tú, en dos o tres frases, y luego pásale el turno:",
+        },
+        {
+          type: "quote",
+          text: "El mío es el olor de la cocina de mi abuela los domingos. Cebolla, y algo que siempre se quemaba un poco, todas las semanas. ¿Y el tuyo?",
+        },
+        {
+          type: "quote",
+          text: "¿Te puedo hacer una de las grandes? Si no te apetece, pasas, y yo también la contesto.",
+        },
+        {
+          type: "p",
+          text: "Si queréis preguntas para contestar los dos como un juego, con seis maneras de jugarlas, mira nuestras [preguntas para conocer a tu pareja](/blog/questions-for-couples). O deja que pregunte una baraja: nuestras [cartas de preguntas](/games/couple-questions-game) gratis tienen una baraja de preguntas más íntimas para la noche. Os pasáis el móvil, quien lo tenga lee una en voz alta y contestáis los dos.",
+        },
+        { type: "h2", text: "Cómo escuchar su respuesta sin esperar tu turno" },
+        {
+          type: "p",
+          text: "Casi todas las conversaciones profundas se tuercen en los diez segundos que siguen a su respuesta. Asientes, cuentas tu propia historia y el momento se ha ido. La solución es una sola norma: haz una pregunta más sobre lo que ha dicho antes de contar nada tuyo.",
+        },
+        {
+          type: "p",
+          text: "Hay estudios que explican por qué importa. La psicóloga Shelly Gable y su equipo clasificaron en cuatro tipos las formas de reaccionar cuando la pareja cuenta algo bueno. En un estudio de 2006 con casi 80 parejas, cómo reaccionaba cada uno a las buenas noticias del otro tenía más relación con cómo iba la pareja dos meses después, y con si seguían juntos, que la forma de reaccionar a las malas ([Centro Médico de la Universidad de Rochester](https://www.urmc.rochester.edu/behavioral-health-partners/bhp-blog/february-2024/good-news-sharing-and-responding), en inglés). Imagina que te dice «Me han pedido que lleve el proyecto nuevo en el trabajo»:",
+        },
+        {
+          type: "table",
+          head: ["La reacción", "Cómo suena", "Lo que ella oye"],
+          rows: [
+            ["Interesada y contenta", "«Te han elegido a ti. ¿Qué te dijeron cuando te lo pidieron?»", "Me has oído, y quieres saber más"],
+            ["Educada", "«Qué bien, enhorabuena». Y vuelves al móvil", "Bien, sin más"],
+            ["Buscando la pega", "«¿Eso no significa que vas a salir tarde todos los días?»", "Mi buena noticia es un problema"],
+            ["Cambiando de tema", "«¿Has visto el mensaje de mi hermano?»", "No me estabas escuchando"],
+          ],
+        },
+        {
+          type: "p",
+          text: "La primera es la que cuenta. El estudio hablaba de buenas noticias, pero la misma costumbre sirve para las respuestas profundas: cuando te diga qué año la cambió, la pregunta que viene después importa más que la pregunta en sí:",
+        },
+        {
+          type: "list",
+          items: [
+            "**Pide la escena.** «¿Dónde estabas cuando pasó?» o «¿Quién más estaba?». Un recuerdo se convierte en historia cuando vuelve a verlo.",
+            "**Di lo que has entendido.** «O sea, que ya entonces te tocaba ser la tranquila». Si te equivocas, te corregirá, y esa es la segunda respuesta, la más sincera.",
+            "**No lo arregles.** Una respuesta profunda casi nunca es una petición de consejo. «Te tuviste que sentir muy sola» llega más que tres sugerencias.",
+            "**No compitas con tu historia.** La tuya, parecida, puede esperar a que te la pida, o a la siguiente pregunta.",
+            "**Acuérdate.** Sacar un detalle una semana después, «Me acordé de esa profesora de la que me hablaste», le dice que la escuchaste mejor que cualquier cosa que digas esa noche.",
+          ],
+        },
+        { type: "h2", text: "Si se queda callada, se ríe o llora" },
+        {
+          type: "p",
+          text: "Un silencio después de una pregunta de verdad suele querer decir que se la está tomando en serio. Cuenta hasta diez mentalmente antes de decir nada.",
+        },
+        {
+          type: "list",
+          items: [
+            "**Si se ríe para quitarle hierro,** ríete también, y luego pregunta una vez, con cariño: «¿Y la respuesta de verdad?».",
+            "**Si dice «no sé»,** hazla más pequeña: «¿Qué es lo primero que se te ha venido a la cabeza?».",
+            "**Si te la devuelve,** contesta en serio. Muchas veces quiere ver hasta dónde llegas tú antes de llegar ella.",
+            "**Si no quiere,** déjalo estar, y que se note que lo dices en serio. Una pregunta que esta noche se ha saltado puede sacarla ella la semana que viene.",
+            "**Si llora,** no tengas prisa por que pare. Acércate y deja que decida ella si sigue hablando.",
+          ],
+        },
+        {
+          type: "quote",
+          text: "Me alegro mucho de que me lo hayas contado. Queda entre nosotros.",
+        },
+        {
+          type: "p",
+          text: "Un mensaje corto al día siguiente vale más de lo que parece: «Sigo pensando en lo que me contaste anoche. Me alegro de que lo hicieras». Y no saques nunca una respuesta en una discusión. Hazlo una vez y se acaban las respuestas sinceras.",
+        },
+        { type: "h2", text: "Preguntas profundas por mensaje, o a distancia" },
+        {
+          type: "p",
+          text: "Los niveles 1 y 2 aguantan bien un mensaje, y son una buena forma de llenar la pausa de la comida. Deja los niveles 4 y 5 para su voz: en una llamada oyes la pausa antes de la respuesta. Si vivís lejos, un [regalo digital](/gifts/for-girlfriend) puede llevar las preguntas, para que lleguen como algo que ella abre y no como un mensaje más. Estas dos encajan:",
+        },
+        {
+          type: "template",
+          slug: "fortune-cookie",
+          note: "Un plato de galletas de la fortuna que va abriendo una a una, cada tira con una frase escrita por ti, hasta veinte tiras de 140 caracteres. Las abre en el orden que quiera, así que pon en cada tira una pregunta de los niveles 1, 2 o 3, de las que funcionan en cualquier orden: «Tu fortuna: cuéntame qué olor te lleva de golpe a otro sitio». La última galleta guarda tu propio mensaje. Pídele que las abra durante una llamada y conteste en voz alta, y contesta tú también cada una. Es una plantilla premium ([precios](/pricing)).",
+        },
+        {
+          type: "template",
+          slug: "the-letter",
+          note: "Contestar tú primero también funciona por escrito. Responde en unas líneas a dos de estas preguntas sobre ti, y termina con la que te gustaría que contestara ella. Rompe un sello de lacre y tus palabras aparecen escritas a mano. {note:Enviada gratis es una nota corta, de hasta 500 caracteres y con una canción, que para esto basta; las fotos y una carta más larga vienen con «Hazlo especial», que se paga una sola vez ([precios](/pricing)).|Es gratis, con fotos y una carta más larga.}",
+        },
+      ],
+      faq: [
+        {
+          q: "¿Qué 5 preguntas profundas le puedo hacer a mi novia?",
+          a: "Una de cada nivel, en este orden: «¿En qué habitación de la casa de tu infancia piensas más?», «¿De qué no se hablaba nunca en tu familia?», «¿Dónde estás cuando te sientes más tú misma?», «¿Cuándo decidiste que podías confiar en mí?» y «¿Qué perseguirías si supieras que te voy a apoyar pase lo que pase?». Repártelas en una semana, o úsalas para una noche larga.",
+        },
+        {
+          q: "¿Cómo empiezo una conversación profunda con mi novia?",
+          a: "Elige un momento sin nada después, mejor uno al lado del otro, en el coche o paseando. Abre con una pregunta ligera que tenga una historia dentro, como «¿Qué olor te lleva de golpe a otro sitio?», y contéstala tú primero. Luego haz una pregunta más sobre su respuesta antes de pasar a otra. Ahí empieza la conversación.",
+        },
+        {
+          q: "¿Qué es la regla 3 6 9 en las relaciones?",
+          a: "Es una regla de las redes sociales, no de la investigación: dice que una relación nueva cambia hacia los tres meses, cuando se pasa la euforia inicial, hacia los seis, cuando aparecen los primeros desacuerdos de verdad, y hacia los nueve, cuando ya sabes si va a algún sitio. Encaja bien con estas preguntas: niveles 1 y 2 en los primeros meses, el 3 hacia los seis y el 4 hacia los nueve.",
+        },
+        {
+          q: "¿Qué preguntas hacen sonrojar a una chica?",
+          a: "Las que le dejan decir algo bonito de ti, u oír algo bonito de sí misma: «¿Cuándo decidiste que podías confiar en mí?», «¿Qué costumbre mía esperas que no pierda nunca?» o «¿Cómo creías que era yo antes de conocerme bien?». Pregúntalas sonriendo, y contesta tú la misma pregunta sobre ella.",
+        },
+        {
+          q: "¿Qué preguntas coquetas le puedo hacer a mi novia?",
+          a: "Las coquetas son juguetonas más que profundas: «¿Qué pensaste la primera vez que me viste?», «¿Qué ropa mía te gusta más?» o «¿Adónde me llevarías si tuviéramos esta noche y ningún plan?». Nuestra lista principal de [preguntas para tu novia](/blog/questions-to-ask-your-girlfriend) tiene una sección entera de atrevidas, y funcionan mejor mezcladas con una o dos profundas.",
+        },
+      ],
+    },
+  },
+};

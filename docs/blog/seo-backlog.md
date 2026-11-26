@@ -22,6 +22,22 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   christmas-letter-to-mom, which now says "Free as a short note"). Check every post's `the-letter`
   note in both languages and say what is free, the way gifft-me-alternatives does. Words change, so
   `updated` and the panel apply; a few posts a run.
+  - 2026-11-24: gifft-me-alternatives (its table still said two free templates and 10 free photos),
+    christmas-message-for-boyfriend and christmas-message-for-girlfriend done, and VOICE.md's
+    "Free" list corrected (it still said The Letter and Constellations with 10 photos).
+  - 2026-11-25: christmas-proposal-ideas and last-minute-christmas-gift-for-girlfriend done. Still to
+    check, Christmas first: christmas-letter-to-boyfriend (not before 1 Dec), then
+    cute-things-to-say-to-your-boyfriend, first-anniversary-ideas-for-boyfriend,
+    good-morning-messages-for-her, good-night-messages-for-her, good-night-messages-for-him,
+    how-to-apologize-to-your-boyfriend, how-to-surprise-your-girlfriend, last-minute-birthday-gift-for-boyfriend,
+    love-letter-to-husband, love-notes-for-him, paragraphs-for-him, paragraphs-for-your-girlfriend,
+    thinking-of-you-messages-for-him, what-to-say-when-you-propose, and (once 14 days have passed since
+    their last refresh) 6-month-anniversary-ideas, how-to-write-a-love-letter, open-when-letter-ideas,
+    reasons-why-i-love-you, what-to-write-in-boyfriends-birthday-card, words-of-affirmation,
+    the-5-love-languages, monthiversary-ideas, songs-to-dedicate-to-your-boyfriend.
+  - 2026-11-25 (second run): anniversary-letter-to-boyfriend and birthday-message-for-husband done; the
+    husband post's "His phone at midnight" tip also promised photos with any digital gift. Look past the
+    Letter card too: tips that mention photos or scheduling.
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.
@@ -129,6 +145,11 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   18 Nov): a line under the "Meet in the middle" tool ("a call rhythm for your time difference"),
   in both languages ("Cómo llevar una relación a distancia"). The blog hub,
   virtual-date-ideas-long-distance, links it already.
+- [ ] **Long distance group: link /blog/long-distance-relationship-games from /long-distance**
+  (the hub, TOPIC-GROUPS.md rule 3; "long distance relationship games" 1,000, KD 0, published
+  24 Nov): a line beside the two-phone games ("games for any night, time zones included"), in both
+  languages ("Juegos para jugar a distancia con tu pareja"). The blog hub,
+  virtual-date-ideas-long-distance, links it already. /games could link it too.
 - [ ] **Love letters group: link /blog/paragraphs-for-him from /templates/the-letter**
   (the hub, TOPIC-GROUPS.md rule 3; "paragraphs for him" 1,900, KD 0, published 18 Nov): a line
   beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,

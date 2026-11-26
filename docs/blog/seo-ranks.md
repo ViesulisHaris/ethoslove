@@ -4,6 +4,40 @@ Weekly, from DataForSEO (`ranked_keywords`, US), written by the daily SEO routin
 (`docs/blog/SEO-AGENT.md`): the keywords with the most searches that the site ranks for, newest
 section first.
 
+## 2026-11-24
+
+A Tuesday check (the 19 Nov section was five days old): Google's mobile top 30 for 293 phrases (161
+US, 32 UK for the product phrases, 100 Spain), built as before, plus the hub searches ("love
+language test", "5 love languages", "long distance date ideas", "love letter", "100 reasons why i
+love you"). $1.76. Three phrases failed the first time (two timeouts, one "Internal SE Server
+Error") and came back on a retry.
+
+**Top 10: 1 of 293. Top 30: 3 of 293.**
+
+| Phrase | Market | Position | Page | Monthly searches |
+|---|---|---|---|---|
+| scratch card ideas | US | 8 | /blog/scratch-card-ideas | 90 |
+| digital gift for mom | US | 16 | /gifts/for-mom | 50 |
+| contacto físico lenguaje del amor | Spain | 17 | /es/blog/physical-touch-love-language | – |
+
+**What moved since 19 Nov:** "scratch card ideas" down 2 (6 to 8), now with the 18 Nov title
+("Scratch card ideas for proposals, babies, trips and more"), so the refresh is indexed. New:
+"digital gift for mom" at 16 (/gifts/for-mom) and "contacto físico lenguaje del amor" at 17. Out of
+the 20 or so results: "ideas de cartas para abrir cuando" (was 13) and "frases para galletas de la
+fortuna" (was 14; Search Console still has it at 8.3).
+
+`ranked_keywords` (US) sees more than before: "words of affirmation" (49,500) at 78 for
+/blog/words-of-affirmation, "how long have we been together" (1,300) at 62 for the together
+calculator, five love-language-test phrases (590 to 880) at 60 to 93 for /tools/love-language-quiz,
+"digital flowers" (590) at 80, "regalo virtual" and "regalos virtuales" (480 each) at 57 and 67 for
+/es/gifts, and "pregunta para tu novio" (590) at 72 for /es/blog/questions-to-ask-your-partner.
+
+**Search Console (28 days to 22 Nov, brand left out)**, blog pages in striking distance:
+"gifft me" 1,039 impressions at 4.5 (/es/blog/gifft-me-alternatives, 13 clicks), "monthiversary" 239
+at 7.9 and "monthiversary meaning" 30 at 8.2 (/blog/monthiversary-ideas, 0 clicks), "frases para
+galletas de la fortuna" 19 at 8.3, "planes para halloween en pareja" 17 at 8.2, "citas virtuales" 7
+at 12.7, "scratch card ideas" 13 at 12.3.
+
 ## 2026-11-19
 
 The Thursday check: Google's mobile top 30 for 276 phrases (152 US, 32 UK for the product phrases,

@@ -271,7 +271,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Flirty questions to ask your boyfriend" },
         {
           type: "p",
-          text: "Playful, not crude. Good for a text when you're apart, or a slow evening in:",
+          text: "Playful, not crude. Good for a text when you're apart, or a slow evening in. For 64 more, sorted by where you ask them, from date night to long distance, see our [flirty questions to ask your boyfriend](/blog/flirty-questions-to-ask-your-boyfriend).",
         },
         {
           type: "list",
@@ -600,7 +600,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Preguntas atrevidas para tu novio" },
         {
           type: "p",
-          text: "Juguetonas, no groseras. Buenas para un mensaje cuando estáis lejos, o para una noche tranquila en casa:",
+          text: "Juguetonas, no groseras. Buenas para un mensaje cuando estáis lejos, o para una noche tranquila en casa. Para 64 más, ordenadas según dónde las hagas, de una cita a la distancia, mira nuestras [preguntas picantes para tu novio](/blog/flirty-questions-to-ask-your-boyfriend).",
         },
         {
           type: "list",

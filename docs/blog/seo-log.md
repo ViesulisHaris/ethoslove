@@ -1026,3 +1026,358 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-20T18:20Z | on_page/content_parsing/live | 0.00015 | blog: digital-bouquet-makers-compared |
 | 2026-11-20T18:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-bouquet-makers-compared |
 | 2026-11-20T18:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-bouquet-makers-compared |
+| 2026-11-24T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | dataforseo_labs/google/keyword_suggestions/live | 0.018 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:21Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:21Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T14:21Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-girlfriend |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:43Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:44Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:45Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:46Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:47Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:47Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:47Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:47Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:47Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:47Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:48Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:49Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:50Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:51Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:52Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:53Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:54Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:55Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:56Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:56Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:56Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:56Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:56Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:56Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:57Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:57Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:57Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:57Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:57Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:58Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:59Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:59Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:59Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:59Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:59Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T16:59Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:00Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:01Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:02Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:02Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:02Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:02Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:02Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:03Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:04Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:05Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:05Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:05Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:05Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:05Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:06Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:07Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:08Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:08Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:08Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:08Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:09Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:10Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:10Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:10Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:10Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:10Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:10Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:11Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:12Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:13Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:14Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:15Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:16Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:17Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:18Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:19Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:20Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:20Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:20Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:20Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:20Z | serp/google/organic/live/regular | 0.006 | seo: rank check |
+| 2026-11-24T17:20Z | dataforseo_labs/google/ranked_keywords/live | 0.0138 | seo: rank check |
+| 2026-11-24T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | blog: long-distance-relationship-games |
+| 2026-11-24T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: long-distance-relationship-games |
+| 2026-11-24T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-games |
+| 2026-11-24T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-games |
+| 2026-11-24T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-games |
+| 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
+| 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
+| 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
+| 2026-11-24T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-games |
+| 2026-11-25T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: free letter note refresh |
+| 2026-11-25T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: free letter note refresh |
+| 2026-11-25T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | seo: free letter note refresh |
+| 2026-11-25T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | blog: 21-questions-for-couples |
+| 2026-11-25T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: 21-questions-for-couples |
+| 2026-11-25T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: 21-questions-for-couples |
+| 2026-11-25T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: 21-questions-for-couples |
+| 2026-11-25T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: 21-questions-for-couples |
+| 2026-11-25T06:20Z | on_page/content_parsing/live | 0.00015 | blog: 21-questions-for-couples |
+| 2026-11-25T06:20Z | on_page/content_parsing/live | 0.00015 | blog: 21-questions-for-couples |
+| 2026-11-25T06:20Z | on_page/content_parsing/live | 0.00015 | blog: 21-questions-for-couples |
+| 2026-11-25T06:20Z | on_page/content_parsing/live | 0.00015 | blog: 21-questions-for-couples |
+| 2026-11-25T06:22Z | on_page/content_parsing/live | 0.00015 | blog: 21-questions-for-couples |
+| 2026-11-25T06:22Z | on_page/content_parsing/live | 0.00015 | blog: 21-questions-for-couples |
+| 2026-11-25T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T10:20Z | serp/google/organic/live/advanced | 0.002 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T10:20Z | serp/google/organic/live/advanced | 0.002 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T10:20Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: flirty-questions-to-ask-your-boyfriend |
+| 2026-11-25T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01212 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:20Z | on_page/content_parsing/live | 0.00015 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:20Z | on_page/content_parsing/live | 0.00015 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T14:20Z | on_page/content_parsing/live | 0.00015 | blog: funny-questions-to-ask-your-girlfriend |
+| 2026-11-25T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: anniversary-letter-to-boyfriend, birthday-message-for-husband |
+| 2026-11-25T16:43Z | serp/google/organic/live/advanced | 0.006 | seo: anniversary letter to boyfriend |
+| 2026-11-25T16:43Z | serp/google/organic/live/advanced | 0.006 | seo: birthday message for husband |
+| 2026-11-25T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:20Z | on_page/content_parsing/live | 0.00015 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:20Z | on_page/content_parsing/live | 0.00015 | blog: this-or-that-questions-for-couples |
+| 2026-11-25T18:20Z | on_page/content_parsing/live | 0.00015 | blog: this-or-that-questions-for-couples |

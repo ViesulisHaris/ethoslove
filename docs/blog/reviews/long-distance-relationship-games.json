@@ -1,0 +1,141 @@
+{
+  "slug": "long-distance-relationship-games",
+  "keyword": "long distance relationship games",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Answers the search at once and is usable tonight. Asked to say that Stardew Valley needs a copy each (text and table) and that Lichess correspondence games need a free account."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Free games, templates, scheduling, planner and links check out against the code; EA and Jackbox claims stay within their pages. Fixes: the soft truth or dare has in-person dares, so it doesn't simply 'play well on camera'; 'you both answer' doesn't fit truth or dare; Stardew needs a copy each and a Jackbox guest needs only a phone; Draw it blind instructions were confusing; Spanish calques ('en las dos puntas', 'planear alrededor de', 'mandar en cámara') and an ambiguous H2."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Matches the intent and beats the listicles with playable two-phone games and the time table. Asked to answer the 'Is sexting good for LDR?' PAA directly, and to add charades and a turn-based phone game, which top results cover."
+        }
+      ],
+      "applied": [
+        "Truth or dare: note that a few dares need the same room, and 'reads the card aloud' instead of 'you both answer' (EN+ES)",
+        "Stardew Valley needs a copy each and devices that play online together; table cost and Jackbox guest-needs-a-phone (EN+ES)",
+        "Draw it blind rewritten so it's clear who draws what (EN+ES)",
+        "Lichess correspondence needs a free account (EN+ES)",
+        "Charades on camera added to the no-setup list (EN+ES)",
+        "A turn-based phone game added to the time-zone list: Words With Friends in English, Apalabrados in Spanish",
+        "FAQ now answers sexting directly (EN+ES)",
+        "Spanish calques fixed, H2 'Un juego que le llega como regalo', template notes no longer read as commands to the reader, 'más antiguo', takeaway on It Takes Two and Jackbox simplified (polish taken)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes in. The page I'd send a friend: the top results are long lists of game names, while this says what each game needs and costs, who has to own it, and which fits the 5, 15 or 60 minutes you have tonight, with free games you start from one link."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes in and correct; new lines (charades, Words With Friends/Apalabrados, Lichess account, sexting FAQ) check out. Two accuracy fixes in EN+ES: a Jackbox guest also needs a screen for the call, not only a phone; drawing blind needs a pen, so it isn't 'nothing at all' in the takeaway and FAQ."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes in. Beats the top results as the one page that sorts games by the time you have tonight, with cost and setup for each and real free games playable from one link, and it answers every on-topic People also ask question."
+        }
+      ],
+      "applied": [
+        "Table: Jackbox guest needs a phone to play on and a second screen for the call (EN+ES)",
+        "Takeaway: drawing blind replaced by twenty questions about us; FAQ says the call games need only your voices and a pen for drawing blind (EN+ES)",
+        "Polish taken to head off a fix: 'Some of its dares' (about 12 of 52 are in person); Spanish 'cread/mandad' to keep vosotros"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It sorts long distance games by the time you actually have and gives real compatibility checks and free no-install games, instead of a padded list of 50 ideas with an app pitch."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product claim matches the code and the external game facts are accurate and qualified; it beats the top results by saying exactly what each game needs and who has to own it, which generic listicles skip."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It sorts games by the time you have, gives free two-phone games from one link, and covers time zones and turn-based play, which the generic listicles skip; every on-topic People also ask question is answered."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Table 15-minute row: 'Two phones (and a link for our games)', since the scavenger hunt needs cameras, not a link (editor)",
+        "A full stop after the Draw it, guess it link; Apalabrados named in the English; note that Arcade is paid (reader)",
+        "A line on Heads Up! (search)"
+      ]
+    }
+  ]
+}

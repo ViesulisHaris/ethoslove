@@ -27,7 +27,7 @@ import { WRITTEN_CITY_KIND_PAIRS } from "@/lib/cities/kind-copy";
  * phone, the price list runs from the least to the most, and the Spanish Christmas letter's title
  * changed). The day it ships, set this one line to that day.
  */
-const GROWTH_PAGES_DAY = "2026-11-23";
+const GROWTH_PAGES_DAY = "2026-11-26";
 
 /**
  * The day the growth build's "gifts2" area last changed what its pages say: the 24 anniversary
@@ -35,7 +35,7 @@ const GROWTH_PAGES_DAY = "2026-11-23";
  * gaining those neighbours in its last section, and the occasion pages, /gifts and the front page
  * folded to 300 words on show. NOT LIVE YET: set it to the day it ships.
  */
-export const GIFTS2_DAY = "2026-11-25";
+export const GIFTS2_DAY = "2026-11-26";
 
 /**
  * The day the gift finder goes live, and with it Gifts first in the rooms and the links to the
@@ -43,7 +43,7 @@ export const GIFTS2_DAY = "2026-11-25";
  * page it changed reads its date from here. The template pages take GUIDES_LIVE below: who each
  * suits now sits in the redesigned page's closed block, and ships with that page.
  */
-export const FINDER_LIVE = "2026-11-22";
+export const FINDER_LIVE = "2026-11-26";
 
 /**
  * The day the template guides of the growth build go live (content/template-guides.ts): sixteen
@@ -54,7 +54,7 @@ export const FINDER_LIVE = "2026-11-22";
  * that runs ahead of the page is the kind search engines stop believing: whoever ships them sets
  * this to that day. It is the one line to set: tests/unit/crawl.test.ts reads it from here.
  */
-export const GUIDES_LIVE = "2026-11-21";
+export const GUIDES_LIVE = "2026-11-26";
 
 /**
  * The day the redrawn gallery goes live: the gallery and every occasion's page show the same new
@@ -64,14 +64,14 @@ export const GUIDES_LIVE = "2026-11-21";
  * a date of their own included. NOT LIVE YET: this is the day the work was finished. Whoever ships
  * it sets this to that day (tests/unit/crawl.test.ts reads it from here).
  */
-export const GALLERY_LIVE = "2026-11-22";
+export const GALLERY_LIVE = "2026-11-26";
 
 /**
  * The day the dates work of the growth build goes live: the planner on /dates and on every city's
  * page, the pages by kind, the new cities. NOT LIVE YET: this is the day the work was finished. Set it
  * to the day it ships (a date ahead of the page is the kind search engines stop believing).
  */
-export const DATES_LIVE = "2026-11-25";
+export const DATES_LIVE = "2026-11-26";
 
 /**
  * The day the games of the growth build go live: today's question, the games' new end screen, how
@@ -79,14 +79,14 @@ export const DATES_LIVE = "2026-11-25";
  * (25 November) the searched addresses, the weekly challenge and the closed question lists.
  * NOT LIVE YET: set it to the day they ship. Every games page reads its date from here.
  */
-export const GAMES_LIVE = "2026-11-25";
+export const GAMES_LIVE = "2026-11-26";
 
 /**
  * The day the rooms of the growth build go live: the trips room's title and its matcher, each trip's
  * title and links, long distance's ways on and games, and the halfway finder's own page. NOT LIVE
  * YET: this is the day the work was finished. Whoever ships it sets this to that day.
  */
-export const ROOMS_LIVE = "2026-11-24";
+export const ROOMS_LIVE = "2026-11-26";
 
 /**
  * The day the trips room's second pass goes live: /trips, every trip's page and /long-distance cut
@@ -94,7 +94,7 @@ export const ROOMS_LIVE = "2026-11-24";
  * by where you leave from and by kind of trip. NOT LIVE YET: this is the day the work was finished.
  * Whoever ships it sets this to that day.
  */
-export const TRIPS2_LIVE = "2026-11-25";
+export const TRIPS2_LIVE = "2026-11-26";
 
 /**
  * Ethos in numbers is dated only once it is on (a date for a page that is in no sitemap fails
@@ -181,7 +181,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/tools/how-long-have-we-been-together": "2026-11-09",
   "/tools/halfway-between-two-cities": ROOMS_LIVE,
   "/tools/love-language-quiz": "2026-11-15",
-  "/pricing": "2026-11-24",
+  "/pricing": "2026-11-26",
   // The date the legal pages print at the top.
   "/legal/*": LEGAL_UPDATED,
   "/legal/privacy": PRIVACY_UPDATED,

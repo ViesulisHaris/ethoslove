@@ -1,0 +1,36 @@
+{
+  "slug": "christmas-proposal-ideas",
+  "keyword": "christmas proposal ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The lead names the real decision (an audience or just the two of you) and the sections that follow it; the when-to-propose table with its \"Watch out for\" column, the ring-hiding tips, the three-part formula and the three sample lines are all usable this week. The refreshed Letter card reads as information, not an ad: free as a short note, the full speech and photos paid once. Polish: the digital-gift sentence could name which templates are premium."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Verified the free note (free-tier.ts FREE_NOTE_MAX_CHARS 500, pricing.freeNoteShort), \"Make it special\" as a one-time payment, The Letter's seal and polaroids, Scratch Card's final card and Snow Globe's plaque (both premium), and every internal link. Nothing else in either language implies photos or extras are free. Polish: the Spanish card's \"con … con\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is thinner listicles (8, 15 or 7 ideas) plus an AI overview and an images block; this post alone has the when-and-in-front-of-whom table, the at-home and outdoor split, the ring-secrecy section and three borrowable lines, and the title and headings carry both the head term and \"at home\". Polish: two People Also Ask questions (\"Is it common to propose on Christmas?\", \"How long is too long before proposing?\") are only half answered."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Adding FAQs for the two remaining People Also Ask questions: polish, and this run's change is the free-tier correction; a new FAQ is new text for a later refresh."
+      ]
+    }
+  ]
+}

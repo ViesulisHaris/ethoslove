@@ -140,6 +140,10 @@ export const post: BlogPost = {
           q: "What should I write if we've had a hard year?",
           a: "Name it in one sentence, then move on to what got you through it and what you want next. \"This year was hard, and you never once made me feel alone in it\" is enough. The letter is for the anniversary, not for the argument.",
         },
+        {
+          q: "What do I say to my boyfriend on our 1-year anniversary?",
+          a: "One moment from the year and one thing you want next. For a text or a card: \"A year ago tonight I didn't know your coffee order. Now I know it, and what my mother calls you, and I'd choose this whole year again. Happy anniversary. Next year, the coast.\" Swap in your own moment and plan. For a letter, start from the short one above: about eighty words.",
+        },
       ],
     },
     es: {
@@ -274,6 +278,10 @@ export const post: BlogPost = {
         {
           q: "¿Qué escribo si hemos tenido un año difícil?",
           a: "Nómbralo en una frase y pasa a lo que os ayudó a salir adelante y a lo que quieres después. «Este año ha sido duro, y ni una sola vez me has hecho sentir sola» es suficiente. La carta es para el aniversario, no para la discusión.",
+        },
+        {
+          q: "¿Qué le digo a mi novio en nuestro primer aniversario?",
+          a: "Un momento del año y una cosa que quieres para el siguiente. Para un mensaje o una tarjeta: «Esta noche hace un año no sabía cómo tomabas el café. Ahora lo sé, y cómo te llama mi madre, y volvería a elegir este año entero. Feliz aniversario. El año que viene, la costa». Cambia el momento y el plan por los vuestros. Para una carta, parte de la corta de arriba: unas ochenta palabras.",
         },
       ],
     },

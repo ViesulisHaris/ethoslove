@@ -1,0 +1,49 @@
+{
+  "slug": "gifft-me-alternatives",
+  "keyword": "gifft.me alternatives",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The corrected Ethos cells (a short note of up to 500 characters, no photos on the free note, photos and the full letter $8.99) match the lead, the Ethos section and the Letter card, so nobody expects free photos; Ethos lists its weak points first. Polish: name voice and scheduling in the $8.99 cell; \"everything else\" in the Ethos section overreaches since music is free."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every Ethos claim checked against free-tier.ts, products.ts, site.ts LIMITS and the-letter manifest; no line in either language still calls Constellations free or the free Letter photo-holding; Spanish rows in euros with «Hazlo especial». Polish: Constellations sells at $8.99 as a single template; /pricing FAQ still describes the old free tier: a site issue already in the backlog for a person, not counted against the post."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The first page for \"gifft.me alternatives\" is generic Semrush, CB Insights and Product Hunt lists with no real comparison; this post has the free/paid/link-lifetime and contents tables, and the refreshed Ethos cells agree everywhere. Polish: name what gifft.me does in the Spanish description for the brand searchers."
+        }
+      ],
+      "applied": [
+        "Ethos row: one free template, The Letter, as a short note of up to 500 characters; photos column \"None on the free note; up to 20 with a paid option\"; \"Photos and the full letter on The Letter: $8.99\" (7,49 € in Spanish); Letter card says free as a short note and what Make it special adds; updated 2026-11-24"
+      ],
+      "rejected": [
+        "Polish left for later: the panel passed this version, so polish goes in the record, not the post"
+      ]
+    }
+  ]
+}

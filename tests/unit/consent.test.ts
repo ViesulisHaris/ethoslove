@@ -67,6 +67,20 @@ describe("hidesConsentBanner", () => {
     }
   });
 
+  it("keeps the banner off the ad landing, where the gift is the first thing a paid visitor sees", () => {
+    for (const p of ["/try/halfway", "/try/jar-of-reasons", "/try"]) {
+      expect(hidesConsentBanner(p), p).toBe(true);
+      for (const locale of routing.locales) {
+        expect(hidesConsentBanner(`/${locale}${p}`), `/${locale}${p}`).toBe(true);
+      }
+    }
+    // The question comes on the next page: the editor "Make yours" opens.
+    expect(hidesConsentBanner("/create/halfway")).toBe(false);
+    for (const p of ["/tryout", "/trying", "/templates/try"]) {
+      expect(hidesConsentBanner(p), p).toBe(false);
+    }
+  });
+
   it("still asks everywhere the person is making one, not opening one", () => {
     for (const p of ["/", "/templates", "/templates/halfway", "/occasions/birthday", "/pricing", "/create/bloom", "/games", "/games/would-you-rather"]) {
       expect(hidesConsentBanner(p), p).toBe(false);
