@@ -127,8 +127,16 @@ export function isAdTrackingOffHere(location: { pathname: string; hash?: string 
  *
  * The editor keeps the banner, except while its phone preview is up — that is a gift running
  * too, and it says so itself with `data-gift-running` on <html> (see `CookieConsent`).
+ *
+ * The ad landing (`/try/<slug>`) is a gift running as well: the real one, in a phone, the first
+ * thing a paid visitor sees. The strip used to dock over its lower half (owner, 26 Nov 2026: an ad
+ * should open on the gift, not on the cookie box). Nothing is tracked there without an answer either
+ * way; the question comes on the next page, the editor, once they tap "Make yours". The price: a
+ * visitor who leaves the landing without tapping is never asked, so the ad pixels never see that
+ * visit. The ad click itself is remembered by the tab (lib/attribution/click-ids.ts) and counted
+ * once they say yes.
  */
-const NO_BANNER = ["/demo"];
+const NO_BANNER = ["/demo", "/try"];
 
 export function hidesConsentBanner(pathname: string): boolean {
   return isPrivatePath(pathname) || under(bare(pathname), NO_BANNER);
