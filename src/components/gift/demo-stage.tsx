@@ -8,6 +8,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import type { CoverId, GiftData, GiftLocale } from "@/lib/gift/schema";
 import type { TemplateEvent } from "@/templates/types";
 import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
+import { DemoGift } from "./demo-gift";
 import { COVER_LOOKS } from "@/templates/_shared/covers/looks";
 import { LogoMark } from "@/components/shared/logo";
 import { closeInApp } from "@/lib/app/bridge";
@@ -128,9 +129,8 @@ export function DemoStage({ slug, backHref = "/templates", backName }: { slug: s
                 </p>
               ) : null
             ) : (
-              <GiftRenderer
+              <DemoGift
                 slug={slug}
-                mode="demo"
                 demoLocale={locale}
                 coverOverride={cover}
                 lookOverride={look}

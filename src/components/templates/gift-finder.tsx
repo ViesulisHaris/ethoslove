@@ -48,7 +48,7 @@ import { KeepPagePointer } from "@/components/shared/keep-page-pointer";
  * Loaded when someone taps a pick's picture, not with the page: a static import reaches the template
  * registry and every template behind it (see template-card.tsx).
  */
-const GiftRenderer = dynamic(() => import("@/templates/_shared/GiftRenderer").then((m) => m.GiftRenderer), { ssr: false });
+const DemoGift = dynamic(() => import("@/components/gift/demo-gift").then((m) => m.DemoGift), { ssr: false });
 
 /** Where a pick's "Make this gift" says it came from. */
 const REF = "finder";
@@ -504,7 +504,7 @@ export function GiftFinder({
                      * at the size the list already loaded, so it is there at once. The template paints over it.
                      */}
                     <Image src={watching.poster} alt="" fill sizes="300px" quality={75} loading="eager" className="object-cover" />
-                    <GiftRenderer slug={watching.slug} mode="demo" demoLocale={locale} />
+                    <DemoGift slug={watching.slug} demoLocale={locale} />
                   </PhoneFrame>
                   <p className={cn("mx-auto mt-4 max-w-[19rem] text-center text-[13px] leading-snug text-forest/65", DEMO_HINT)}>{ui.demoHint}</p>
                   <Link

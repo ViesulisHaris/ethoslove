@@ -108,6 +108,25 @@ test.describe("the song strip", () => {
     await expect(strip(page)).toHaveCount(0);
   });
 
+  test("a demo opens as the gift itself does: from the gate, with its own song's sound button, and the song plays on inside", async ({ page }) => {
+    test.skip(!(await switchedOn(page)), "NEXT_PUBLIC_SONG_STRIP is not 1 on this server");
+    // Bouquet's demo has no cover of its own, so a real Bouquet opens from the gate.
+    await page.goto("/demo/bouquet");
+    await expect(page.getByRole("button", { name: /tap to open/i })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByText(/someone made this for you/i)).toBeVisible();
+    const pill = strip(page);
+    await expect(pill).toHaveAttribute("data-place", "cover");
+    await expect(pill).toContainText("Lover");
+    await pill.getByRole("button", { name: /play 30 seconds/i }).click();
+    await expect(pill).toHaveAttribute("data-song-strip", "playing");
+    await openGift(page);
+    await expect(strip(page)).toHaveAttribute("data-place", "corner", { timeout: 20000 });
+    await expect(strip(page)).toHaveAttribute("data-song-strip", "playing");
+    // A demo whose gift has a cover of its own opens from that cover, as the gift does: no gate.
+    await page.goto("/demo/xoxo");
+    await expect(strip(page)).toHaveAttribute("data-place", "cover", { timeout: 20000 });
+  });
+
   test("a gift with a library track, or none, never shows it", async ({ page }) => {
     await page.goto("/gift-preview?template=the-letter&paid=1");
     await expect(page.getByRole("button", { name: /tap to open/i })).toBeVisible();

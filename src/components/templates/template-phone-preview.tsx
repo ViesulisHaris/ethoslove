@@ -6,7 +6,7 @@ import { Play } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { PhoneFrame } from "@/components/shared/phone-frame";
-import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
+import { DemoGift } from "@/components/gift/demo-gift";
 
 export function TemplatePhonePreview({
   slug,
@@ -29,7 +29,7 @@ export function TemplatePhonePreview({
     // to be the width it is actually drawn at, not the 340 it was squeezed from.
     <PhoneFrame width={width} className="mx-auto max-w-full">
       {live ? (
-        <GiftRenderer slug={slug} mode="demo" demoLocale={locale} />
+        <DemoGift slug={slug} demoLocale={locale} />
       ) : (
         // The poster until they tap, so the phone never sits there black.
         <button type="button" onClick={() => setLive(true)} className="group relative h-full w-full text-paper">

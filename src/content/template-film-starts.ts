@@ -82,7 +82,8 @@ export const TEMPLATE_FILM_STARTS: Record<string, number> = {
   unwrapped: 3.8,
   vinyl: 2.6,
   wishbone: 3.3,
-  xoxo: 2.6,
+  // Past its own envelope too: mid-open, cropped into a gallery card, it read as a broken letter (the owner, 26 Nov 2026).
+  xoxo: 4.4,
 };
 
 /** The second a gift's preview film starts from; 0 for one that starts clean. */
