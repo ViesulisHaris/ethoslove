@@ -6,7 +6,9 @@
  * Nobody reads a post before it goes out, and the routine reads the open web while it researches,
  * so this checks what the commits change, not what they say they change:
  *
- *   - only the blog's own files: src/content/blog/, public/blog/ and docs/blog/;
+ *   - only the blog's own files: src/content/blog/, public/blog/ and docs/blog/, and the ecard
+ *     pages' own (src/content/ecards/pages/, their index, docs/ecards/), which a second routine
+ *     writes (docs/ecards/PLAYBOOK.md) and which are held to the rules of a post and its index;
  *   - a post file is data and nothing else: one `import type { BlogPost }`, one
  *     `export const post: BlogPost = { … }` of plain strings, numbers, arrays and objects. No
  *     function, call, template string or other import can hide in it, since it runs at build time;
@@ -36,12 +38,17 @@ export const SPAIN_WORDS =
 const POST_PATH = /^src\/content\/blog\/posts\/[a-z0-9-]+\.ts$/;
 const INDEX_PATH = "src/content/blog/index.ts";
 const IMAGE_PATH = /^public\/blog\/[a-z0-9-]+\/[a-z0-9-]+\.(webp|png|jpe?g)$/;
-const DOC_PATH = /^docs\/blog\/[a-z0-9/_-]+\.(md|json)$/;
+const DOC_PATH = /^docs\/(blog|ecards)\/[a-z0-9/_-]+\.(md|json)$/;
+// An ecard page (src/content/ecards/types.ts), written by its own routine (docs/ecards/PLAYBOOK.md) and held to the
+// rules of a post. Its address ends in "ecards", so the routine can't take the name of another page.
+const ECARD_PATH = /^src\/content\/ecards\/pages\/[a-z0-9-]+-ecards\.ts$/;
+const ECARD_INDEX_PATH = "src/content/ecards/index.ts";
 
 /** Why a changed path may not go live, or null if it may. `deleted` paths are checked by name only. */
 export function pathProblem(path) {
   if (POST_PATH.test(path) || path === INDEX_PATH || IMAGE_PATH.test(path) || DOC_PATH.test(path)) return null;
-  return `not a blog file: ${path}`;
+  if (ECARD_PATH.test(path) || path === ECARD_INDEX_PATH) return null;
+  return `not a blog or ecard file: ${path}`;
 }
 
 /**
@@ -49,12 +56,22 @@ export function pathProblem(path) {
  * ("new", "function") don't matter; what is left must be keys, punctuation, numbers and literals.
  */
 export function postProblem(source) {
+  return literalProblem(source, "post", "BlogPost");
+}
+
+/** The same for an ecard page: one `export const page: EcardPage = { … }` of plain data. */
+export function ecardProblem(source) {
+  return literalProblem(source, "page", "EcardPage");
+}
+
+function literalProblem(source, name, type) {
   const lines = source.replace(/\r\n/g, "\n").trim();
-  const header = 'import type { BlogPost } from "../types";';
-  if (!lines.startsWith(header)) return "doesn't start with the BlogPost type import";
+  const header = `import type { ${type} } from "../types";`;
+  if (!lines.startsWith(header)) return `doesn't start with the ${type} type import`;
   const body = lines.slice(header.length).trim();
-  if (!body.startsWith("export const post: BlogPost = {") || !body.endsWith("};")) return "isn't a single `export const post: BlogPost = { … };`";
-  const literal = body.slice("export const post: BlogPost = ".length, -1);
+  const opening = `export const ${name}: ${type} = `;
+  if (!body.startsWith(`${opening}{`) || !body.endsWith("};")) return `isn't a single \`${opening}{ … };\``;
+  const literal = body.slice(opening.length, -1);
   // What the post says, read before the strings are blanked.
   for (const [text] of literal.matchAll(/"(?:[^"\\\n]|\\.)*"/g)) {
     const named = SPAIN_WORDS.exec(text);
@@ -81,6 +98,13 @@ export function indexLineProblem(line) {
   return `index line not allowed: ${line}`;
 }
 
+/** The same for the ecard pages' index: the import of a page, and the list. */
+export function ecardIndexLineProblem(line) {
+  if (/^import \{ page as [A-Za-z][A-Za-z0-9_]* \} from "\.\/pages\/[a-z0-9-]+-ecards";$/.test(line)) return null;
+  if (/^const PAGES: EcardPage\[\] = \[[A-Za-z0-9_, ]*\];$/.test(line)) return null;
+  return `ecard index line not allowed: ${line}`;
+}
+
 const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 
 /** Every problem with what `head` changes since `base`, as lines; empty when it may go live. */
@@ -96,18 +120,22 @@ export function check(base, head) {
       continue;
     }
     if (status === "D") {
-      if (POST_PATH.test(path) || path === INDEX_PATH) problems.push(`deletes ${path}`);
+      if (POST_PATH.test(path) || path === INDEX_PATH || ECARD_PATH.test(path) || path === ECARD_INDEX_PATH) problems.push(`deletes ${path}`);
       continue;
     }
     if (POST_PATH.test(path)) {
       const problem = postProblem(git("show", `${head}:${path}`));
       if (problem) problems.push(`${path} ${problem}`);
     }
-    if (path === INDEX_PATH) {
+    if (ECARD_PATH.test(path)) {
+      const problem = ecardProblem(git("show", `${head}:${path}`));
+      if (problem) problems.push(`${path} ${problem}`);
+    }
+    if (path === INDEX_PATH || path === ECARD_INDEX_PATH) {
       const diff = git("diff", "--unified=0", base, head, "--", path).split("\n");
       for (const line of diff) {
         if (!/^[+-]/.test(line) || /^(\+\+\+|---) /.test(line)) continue;
-        const problem = indexLineProblem(line.slice(1).replace(/\r$/, ""));
+        const problem = (path === INDEX_PATH ? indexLineProblem : ecardIndexLineProblem)(line.slice(1).replace(/\r$/, ""));
         if (problem) problems.push(problem);
       }
     }

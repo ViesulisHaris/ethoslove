@@ -14,6 +14,9 @@
 #      deploys;
 #   4. waits for each new post on tryethos.io and tells IndexNow.
 #
+# The ecard pages (src/content/ecards, docs/ecards/PLAYBOOK.md) come the same way from their own
+# routine: the guard holds them to the rules of a post, and the tests of the gift pages run on them.
+#
 # Nothing from the mirror runs here: the guard runs from this main before anything is merged, and
 # the guard refuses any change outside src/content/blog/, public/blog/ and docs/blog/, so the tests
 # and tools that run afterwards are this repository's own. It holds no secrets and pushes with the
@@ -62,6 +65,7 @@ jobs:
         if: steps.new.outputs.ahead != '0'
         run: |
           git diff --name-only --diff-filter=A "$BASE" refs/remotes/mirror -- 'src/content/blog/posts/*.ts' | sed 's#.*/##; s#\.ts$##' > "$RUNNER_TEMP/new-posts"
+          git diff --name-only --diff-filter=A "$BASE" refs/remotes/mirror -- 'src/content/ecards/pages/*.ts' | sed 's#.*/##; s#\.ts$##' > "$RUNNER_TEMP/new-ecards"
           if git merge-base --is-ancestor HEAD refs/remotes/mirror; then
             git merge -q --ff-only refs/remotes/mirror
           else
@@ -80,28 +84,33 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npx vitest run tests/unit/blog-posts.test.ts tests/unit/messages.test.ts tests/unit/blog-guard.test.ts
+          # The ecard pages are gift pages by kind: every rule of those pages, and their own.
+          npx vitest run tests/unit/ecard-pages.test.ts tests/unit/gift-guides.test.ts tests/unit/spread-budget.test.ts tests/unit/guides-claims.test.ts tests/unit/site-copy.test.ts tests/unit/seo-free-truth.test.ts
           npm run typecheck
 
       - name: Publish
         if: steps.new.outputs.ahead != '0'
         run: git push -q origin HEAD:main
 
-      - name: Wait for the new posts on tryethos.io, then tell IndexNow
+      - name: Wait for the new posts and ecard pages on tryethos.io, then tell IndexNow
         if: steps.new.outputs.ahead != '0'
         run: |
-          [ -s "$RUNNER_TEMP/new-posts" ] || { echo "No new post in this batch."; exit 0; }
+          : > "$RUNNER_TEMP/new-paths"
+          sed 's#^#blog/#' "$RUNNER_TEMP/new-posts" >> "$RUNNER_TEMP/new-paths"
+          sed 's#^#gifts/#' "$RUNNER_TEMP/new-ecards" >> "$RUNNER_TEMP/new-paths"
+          [ -s "$RUNNER_TEMP/new-paths" ] || { echo "No new post or ecard page in this batch."; exit 0; }
           urls=()
-          while read -r slug; do
+          while read -r path; do
             for i in $(seq 1 30); do
-              [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")" = 200 ] && break
+              [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/$path")" = 200 ] && break
               sleep 30
             done
-            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/$path")
             if [ "$code" = 200 ]; then
-              echo "Live: https://tryethos.io/blog/$slug"
-              urls+=("https://tryethos.io/blog/$slug" "https://tryethos.io/es/blog/$slug")
+              echo "Live: https://tryethos.io/$path"
+              urls+=("https://tryethos.io/$path" "https://tryethos.io/es/$path")
             else
-              echo "::warning::https://tryethos.io/blog/$slug still answers $code after 15 minutes. Check the Vercel deploy."
+              echo "::warning::https://tryethos.io/$path still answers $code after 15 minutes. Check the Vercel deploy."
             fi
-          done < "$RUNNER_TEMP/new-posts"
+          done < "$RUNNER_TEMP/new-paths"
           [ ${#urls[@]} -eq 0 ] || node scripts/indexnow.mjs "${urls[@]}"

@@ -1,4 +1,5 @@
 import { ABOUT_PATH, ABOUT_UPDATED } from "@/content/about";
+import { ECARD_PAGES } from "@/content/ecards";
 import { LEGAL_UPDATED, PRIVACY_UPDATED } from "@/content/legal";
 import { PRESS_PATH } from "@/content/press";
 import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
@@ -187,6 +188,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/legal/privacy": PRIVACY_UPDATED,
   [ABOUT_PATH]: ABOUT_UPDATED,
   [PT_LETTER_PATH]: PT_LETTER_UPDATED,
+  // Each ecard page (content/ecards) carries its own day: the routine that writes them adds one at a time.
+  ...Object.fromEntries(ECARD_PAGES.map((p) => [`/gifts/${p.slug}`, p.updated ?? p.added])),
   ...(PRESS_DATED ? { [PRESS_PATH]: PRESS_DATED } : {}),
 };
 

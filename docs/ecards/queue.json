@@ -1,0 +1,22 @@
+{
+  "note": "The ecard pages to build, in order. US numbers from DataForSEO, 26 Nov 2026: volume = searches a month on average, peak = the best month and its searches, kd = keyword difficulty (0-100, empty = unknown). The routine takes the first entry whose not_before has passed and that has no page yet, checks it again (docs/ecards/PLAYBOOK.md) and marks it done with the date. A season needs its page six to ten weeks before its peak.",
+  "pages": [
+    { "slug": "christmas-ecards", "search": "christmas ecards", "also": ["free christmas ecards", "animated christmas ecards", "digital christmas card", "virtual christmas card", "holiday ecards"], "volume": 3600, "peak": "December: 40500", "kd": 25, "occasion": "christmas", "done": "2026-11-26" },
+    { "slug": "birthday-ecards", "search": "birthday ecards", "also": ["happy birthday ecard", "free birthday ecards", "funny birthday ecards", "animated birthday cards"], "volume": 6600, "peak": "April: 40500", "kd": 33, "occasion": "birthday", "watch": "The site already has /gifts/interactive-birthday-card (digital birthday card, virtual birthday card). This page takes the word ecard only; its title and h1 must not repeat that page's." },
+    { "slug": "valentines-ecards", "search": "valentine ecards", "also": ["valentines day ecards", "digital valentines card"], "volume": 2400, "peak": "February: 22200", "kd": 1, "occasion": "valentines" },
+    { "slug": "new-year-ecards", "search": "new year ecards", "also": ["happy new year ecards"], "volume": 320, "peak": "December: 1900", "kd": null, "occasion": "new-year" },
+    { "slug": "anniversary-ecards", "search": "anniversary ecards", "also": ["digital anniversary card"], "volume": 880, "peak": "July: 2900", "kd": 5, "occasion": "anniversary" },
+    { "slug": "thank-you-ecards", "search": "thank you ecards", "also": ["digital thank you card"], "volume": 880, "peak": "December: 1300", "kd": 3, "occasion": "thank-you" },
+    { "slug": "animated-ecards", "search": "animated ecards", "also": ["interactive ecards", "musical ecards", "personalized ecards", "ecards with photos"], "volume": 3600, "peak": "March: 14800", "kd": 55, "watch": "Not one occasion: the page shows what moves in each card. Hard search; worth it for the related ones." },
+    { "slug": "funny-ecards", "search": "funny ecards", "also": ["funny birthday ecards"], "volume": 880, "peak": "May: 1000", "kd": 19 },
+    { "slug": "get-well-ecards", "search": "get well ecards", "also": ["get well soon ecards"], "volume": 590, "peak": "May: 880", "kd": null, "occasion": "get-well" },
+    { "slug": "mothers-day-ecards", "search": "mothers day ecards", "also": [], "volume": 1600, "peak": "May: 18100", "kd": 7, "occasion": "mothers-day", "not_before": "2027-02-15" },
+    { "slug": "easter-ecards", "search": "easter ecards", "also": [], "volume": 390, "peak": "April: 3600", "kd": null, "not_before": "2027-01-25", "watch": "Only if the gallery has a gift that fits Easter by then; otherwise skip and say so in the log." },
+    { "slug": "fathers-day-ecards", "search": "fathers day ecards", "also": [], "volume": 390, "peak": "June: 4400", "kd": 45, "occasion": "fathers-day", "not_before": "2027-03-15" },
+    { "slug": "graduation-ecards", "search": "graduation ecards", "also": ["congratulations ecards"], "volume": 140, "peak": "May: 880", "kd": null, "occasion": "graduation", "not_before": "2027-03-01" },
+    { "slug": "miss-you-ecards", "search": "miss you ecards", "also": ["thinking of you ecards", "long distance ecards"], "volume": 110, "peak": "March: 170", "kd": null, "occasion": "long-distance" },
+    { "slug": "sympathy-ecards", "search": "sympathy ecards", "also": [], "volume": 480, "peak": "October: 590", "kd": null, "watch": "Only if a gift in the gallery is quiet enough for a loss. If none is, skip: a playful card on this page would be wrong." },
+    { "slug": "halloween-ecards", "search": "halloween ecards", "also": [], "volume": 90, "peak": "October: 590", "kd": 10, "occasion": "halloween", "not_before": "2027-08-10" },
+    { "slug": "thanksgiving-ecards", "search": "thanksgiving ecards", "also": [], "volume": 390, "peak": "November: 4400", "kd": null, "occasion": "thanksgiving", "not_before": "2027-09-10" }
+  ]
+}

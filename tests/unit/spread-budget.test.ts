@@ -6,6 +6,7 @@ import { SPREAD_PLACEMENTS } from "@/components/marketing/spread/placements";
 import { CLOSED_BLOCK_WORDS } from "@/components/templates/page/lead";
 import { DIGITAL_CARDS_BAND_PHOTO, DIGITAL_CARDS_LEAD, digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
 import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDE_BAND_COVERS, GUIDE_BAND_PHOTOS, guideBandPhoto } from "@/content/gift-guides";
+import { ECARD_PAGES } from "@/content/ecards";
 import { CARD_LINE_MIN_WORDS, CARD_LINE_WORDS, CARD_TITLE_WORDS, HAND_LINE_WORDS, handLine, kindCardLine, kindIdeaIsFree, occasionCardLine, occasionSample, openingLine, sampleHand, sampleLines } from "@/content/idea-cards";
 import { sampleFieldsOf } from "@/content/occasion-ideas";
 import { OCCASION_GUIDES } from "@/content/occasions";
@@ -165,8 +166,11 @@ describe("the text budget of the gift pages by kind", () => {
       expect(kindIdeaIsFree(letter, getManifest("the-letter")!), `video-message ${l}`).toBe(false);
     }
     // The free ideas there are, in both languages: the five-minute note of the last-minute page, the apology note of
-    // the page for him, the note for an empty box on the care package page and the free Christmas note of the ecards page.
-    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter", "apology-for-him en the-letter", "apology-for-him es the-letter", "long-distance-care-package en the-letter", "long-distance-care-package es the-letter", "christmas-ecards en the-letter", "christmas-ecards es the-letter"]);
+    // the page for him and the note for an empty box on the care package page.
+    // An ecard page (content/ecards) may lead with the free note too: those are written by a routine, one page at a time, so
+    // they are counted from the pages themselves, and the rule above (a free card is the free note on The Letter) holds them.
+    const ecardNotes = ECARD_PAGES.flatMap((p) => LOCALES.filter((l) => p[l].ideas.some((i) => i.template === "the-letter" && i.line.field === "freeNote")).map((l) => `${p.slug} ${l} the-letter`));
+    expect(tagged).toEqual(["last-minute en the-letter", "last-minute es the-letter", "apology-for-him en the-letter", "apology-for-him es the-letter", "long-distance-care-package en the-letter", "long-distance-care-package es the-letter", ...ecardNotes]);
   });
 
   it("an idea is a card: a title of at most nine words, one line, and one line of handwriting", () => {
