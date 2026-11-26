@@ -91,7 +91,12 @@ function Days({ days, name, short = false }: { days: NextDay[]; name: string; sh
   return (
     <DayRows
       short={short}
-      rows={days.map((d) => ({ key: `${d.kind}-${d.month}-${d.day}-${d.name ?? ""}`, icon: occasionIcon(d.kind), name: named(d), date: formatMonthDay(d, locale), away: dayAway(d.daysAway, t) }))}
+      // Two gifts, so two rows: with one near day (a Christmas gift just made leaves only Valentine's Day), the second
+      // row says the other gift is for any day they choose. One row under "Both gifts" read as one gift for the price of two.
+      rows={[
+        ...days.map((d) => ({ key: `${d.kind}-${d.month}-${d.day}-${d.name ?? ""}`, icon: occasionIcon(d.kind), name: named(d), date: formatMonthDay(d, locale), away: dayAway(d.daysAway, t) })),
+        ...(days.length === 1 ? [{ key: "any-day", icon: occasionIcon("other"), name: t("anyDay"), date: t("anyDayLine"), away: t("anyDayAway") }] : []),
+      ]}
     />
   );
 }

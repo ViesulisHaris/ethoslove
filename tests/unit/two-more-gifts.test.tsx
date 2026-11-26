@@ -176,11 +176,13 @@ describe("the two more gifts card", () => {
     const eve = nextDays(new Date("2026-12-24T00:00:00.000Z"), [], null);
     expect(text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />))).toContain("Christmas 25 December in 1 day");
     expect(text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={eve} name="Mia" onBought={() => {}} />, "es"))).toContain("Navidad 25 de diciembre en 1 día");
-    // 10 February: Valentine's Day alone. One row; the product is still two gifts.
+    // 10 February: Valentine's Day alone. The product is still two gifts, so a second row says the other is for any day
+    // (the owner, 26 Nov 2026: one row under "Both gifts" read as paying for one).
     const one = nextDays(new Date("2027-02-10T00:00:00.000Z"), [], null);
     expect(one).toHaveLength(1);
     const offer = intl(<Offer offer={{ amount: 799, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />);
-    expect(offer.match(/<li /g)?.length).toBe(3); // one day row + the two ticks
+    expect(offer.match(/<li /g)?.length).toBe(4); // the day's row, the any-day row and the two ticks
+    expect(text(offer)).toContain("Any other day A birthday, an anniversary when you choose");
     expect(text(offer)).toContain("Valentine’s Day 14 February in 4 days");
     expect(text(offer)).toContain("Add both for €7.99");
     expect(text(intl(<Offer offer={{ amount: 799, currency: "eur" }} days={one} name="Mia" onBought={() => {}} />, "es"))).toContain("San Valentín 14 de febrero en 4 días");

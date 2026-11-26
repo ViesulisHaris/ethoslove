@@ -761,6 +761,9 @@
       "pair": {
         "title": "Que nadie caiga en el olvido.",
         "next": "Hoy te has acordado. Lo próximo:",
+        "anyDay": "Cualquier otro día",
+        "anyDayLine": "Un cumpleaños, un aniversario",
+        "anyDayAway": "cuando quieras",
         "christmas": "Navidad",
         "inDays": "en {count, plural, one {# día} other {# días}}",
         "inWeeks": "en {count, plural, one {# semana} other {# semanas}}",

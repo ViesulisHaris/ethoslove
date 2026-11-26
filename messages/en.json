@@ -761,6 +761,9 @@
       "pair": {
         "title": "Nobody likes to be forgotten.",
         "next": "You remembered today. Next up:",
+        "anyDay": "Any other day",
+        "anyDayLine": "A birthday, an anniversary",
+        "anyDayAway": "when you choose",
         "christmas": "Christmas",
         "inDays": "in {count, plural, one {# day} other {# days}}",
         "inWeeks": "in {count, plural, one {# week} other {# weeks}}",
