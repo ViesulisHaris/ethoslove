@@ -178,7 +178,7 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
           onCoverOpened={hasCover ? recordView : undefined}
         />
       ) : null}
-      {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} /> : null}
+      {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} soundButton={songStripOn() && isCatalogPreview(data.music)} /> : null}
       {/* The sound button on the gate (templates/_shared/SongStrip.tsx): the same player the gift's own pill shows once it opens. */}
       {!opened && songStripOn() && isCatalogPreview(data.music) ? <SongStrip music={data.music} locale={locale} onCover /> : null}
       {songStripOn() && isCatalogPreview(data.music) ? <SongHold music={data.music} /> : null}

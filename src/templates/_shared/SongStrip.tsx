@@ -145,6 +145,8 @@ export function SongStrip({ music, locale, onCover = false }: { music: GiftMusic
   const [away, setAway] = useState(false);
   const [under, setUnder] = useState(false);
   const [artFailed, setArtFailed] = useState(false);
+  // On the gate, the middle of the line it stands in for, in px from the stage's top; null on a drawn cover.
+  const [anchorTop, setAnchorTop] = useState<number | null>(null);
   const pill = useRef<HTMLDivElement>(null);
   const trackUrl = appleMusicTrackUrl(music, locale);
   const playable = isApplePreviewUrl(music.url) && trackUrl !== null;
@@ -177,6 +179,26 @@ export function SongStrip({ music, locale, onCover = false }: { music: GiftMusic
       gift.removeEventListener("pointerdown", hide, { capture: true });
     };
   }, [state, away, onCover]);
+
+  useEffect(() => {
+    if (!onCover) return;
+    const stage = pill.current?.parentElement;
+    if (!stage) return;
+    const place = () => {
+      const anchor = stage.querySelector<HTMLElement>("[data-sound-anchor]");
+      if (!anchor) return setAnchorTop(null);
+      const line = anchor.getBoundingClientRect();
+      setAnchorTop(line.top + line.height / 2 - stage.getBoundingClientRect().top);
+    };
+    place();
+    const watch = new ResizeObserver(place);
+    watch.observe(stage);
+    const settle = window.setInterval(place, 300);
+    return () => {
+      watch.disconnect();
+      window.clearInterval(settle);
+    };
+  }, [onCover, state]);
 
   // Never on one of the gift's own controls.
   const shown = playable && state !== "done" && !away;
@@ -214,10 +236,10 @@ export function SongStrip({ music, locale, onCover = false }: { music: GiftMusic
       onPointerUp={(event) => event.stopPropagation()}
       className={cn(
         "absolute flex items-center gap-1.5 rounded-full bg-white/85 pr-1 pl-1 text-[#1A1614] shadow-[0_6px_18px_-10px_rgba(0,0,0,0.6)] ring-1 ring-black/10 backdrop-blur-md transition-[top,left,translate,max-width,height,opacity] duration-500 ease-out motion-reduce:transition-none",
-        onCover ? "z-[75] h-9 max-w-[64%] -translate-x-1/2" : "z-[55] h-7 max-w-[27%] translate-x-0",
+        onCover ? cn("z-[75] h-9 max-w-[64%] -translate-x-1/2", anchorTop !== null && "-translate-y-1/2") : "z-[55] h-7 max-w-[27%] translate-x-0",
         under && !onCover ? "pointer-events-none opacity-0" : "opacity-100",
       )}
-      style={onCover ? { top: "77%", left: "50%" } : { top: "calc(env(safe-area-inset-top, 0px) + 0.75rem)", left: "0.75rem" }}
+      style={onCover ? { top: anchorTop !== null ? `${anchorTop}px` : "77%", left: "50%" } : { top: "calc(env(safe-area-inset-top, 0px) + 0.75rem)", left: "0.75rem" }}
     >
       <span className="relative block size-5 shrink-0 overflow-hidden rounded-[6px]" style={{ background: "var(--gift-accent-pale, #f6dfe6)" }}>
         {artwork ? (

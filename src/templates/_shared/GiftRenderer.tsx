@@ -43,6 +43,10 @@ export type GiftRendererProps = {
   replayKey?: number;
   /** Show this cover regardless of the gift's own choice (demo pages, `?cover=`). */
   coverOverride?: CoverId;
+  /** The cover for a gift that names none: a demo opens from the cover a new gift of its template starts with (components/gift/demo-gift.tsx). */
+  coverFallback?: CoverId;
+  /** A demo: the song's sound button stays in its opening place on the gift's own first screen too, until the first tap on the gift. */
+  songOnOpening?: boolean;
   /**
    * Show the demo in another of the template's looks (`?look=` on a demo page), so each can be seen
    * and recorded without making a gift. The template checks it against its own looks and opens on
@@ -78,6 +82,8 @@ export function GiftRenderer({
   makeOnePending = false,
   replayKey = 0,
   coverOverride,
+  coverFallback,
+  songOnOpening = false,
   lookOverride,
   onCoverOpened,
   instant = false,
@@ -92,6 +98,8 @@ export function GiftRenderer({
   const [openedFor, setOpenedFor] = useState<number | null>(null);
   // The end screen says when it is the thing being looked at, so the badge can get out of its way.
   const [endScreen, setEndScreen] = useState(false);
+  // The replay whose gift has been tapped (songOnOpening): from then on the sound button is the corner pill.
+  const [touchedFor, setTouchedFor] = useState<number | null>(null);
   const mod = loaded.slug === slug ? loaded.mod : null;
   const failed = loaded.slug === slug && loaded.mod === null && loaded.slug !== "";
 
@@ -123,13 +131,13 @@ export function GiftRenderer({
   }, [data, demo, mode, slug]);
   const resolved = useMemo(() => {
     if (!base) return base;
-    const covered = coverOverride ? { ...base, cover: coverOverride } : base;
+    const covered = coverOverride ? { ...base, cover: coverOverride } : coverFallback && !base.cover ? { ...base, cover: coverFallback } : base;
     const looked = lookOverride ? { ...covered, fields: { ...covered.fields, look: lookOverride } } : covered;
     // A setting the gift left out, or one its template can't take, reads as the template's default,
     // as the editor showed it: no template ever meets a hole in its own settings.
     const fields = mod && looked.fields && typeof looked.fields === "object" ? withFieldDefaults(mod.fieldsSchema, looked.fields) : looked.fields;
     return fields === looked.fields ? looked : { ...looked, fields };
-  }, [base, coverOverride, lookOverride, mod]);
+  }, [base, coverOverride, coverFallback, lookOverride, mod]);
   const art = useMemo(() => (mod?.assets && resolved ? mod.assets(resolved) : []), [mod, resolved]);
   const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview", art);
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
@@ -160,6 +168,7 @@ export function GiftRenderer({
         style={theme}
         data-mode={mode}
         data-template={slug}
+        onPointerDownCapture={songOnOpening && !coverLook && touchedFor !== replayKey ? (event) => { if (!(event.target instanceof Element && event.target.closest("[data-song-strip]"))) setTouchedFor(replayKey); } : undefined}
       >
         {ready && coverOpen && Template && resolved ? (
           <TemplateErrorBoundary locale={resolved.locale} slug={slug}>
@@ -208,7 +217,7 @@ export function GiftRenderer({
         {/* The still frame rarely shows the end screen, where a surprise inside waits: it peeks in instead, until the real one is in view. */}
         {mode === "preview" && ready && resolved?.unwrap && !endScreen ? <UnwrapPeek data={resolved} /> : null}
         {/* The real song, once, on a tap (./SongStrip.tsx): only with its switch on, on the opening screen as a sound button and in the opened gift as a small pill, never over the end screen, whose own card has it. */}
-        {songStripOn() && mode !== "preview" && ready && !endScreen && resolved && isCatalogPreview(resolved.music) ? <SongStrip key={`song-${replayKey}`} music={resolved.music} locale={resolved.locale} onCover={!coverOpen} /> : null}
+        {songStripOn() && mode !== "preview" && ready && !endScreen && resolved && isCatalogPreview(resolved.music) ? <SongStrip key={`song-${replayKey}`} music={resolved.music} locale={resolved.locale} onCover={!coverOpen || (songOnOpening && !coverLook && touchedFor !== replayKey)} /> : null}
         {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
         {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} counted={replyMode} /> : null}
       </div>

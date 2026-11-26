@@ -7,7 +7,8 @@ import { giftString } from "@/templates/_shared/i18n";
 import { LogoMark } from "@/components/shared/logo";
 
 /** The single user gesture browsers need before audio can play. Also the emotional threshold. */
-export function SoundGate({ recipientName, senderName, locale, onOpen }: { recipientName: string; senderName: string; locale: GiftLocale; onOpen: () => void }) {
+/** `soundButton`: the song's sound button (templates/_shared/SongStrip.tsx) stands where the "Turn your sound on" line is, so the line keeps its room and is not drawn. */
+export function SoundGate({ recipientName, senderName, locale, onOpen, soundButton = false }: { recipientName: string; senderName: string; locale: GiftLocale; onOpen: () => void; soundButton?: boolean }) {
   return (
     <button type="button" onClick={onOpen} className="group absolute inset-0 z-[70] flex flex-col items-center justify-center bg-night px-10 text-center text-paper">
       <div className="grain-overlay" />
@@ -27,7 +28,7 @@ export function SoundGate({ recipientName, senderName, locale, onOpen }: { recip
       >
         {giftString(locale, "tapToOpen")}
       </motion.span>
-      <span className="mt-4 flex items-center gap-1.5 text-xs text-paper/55">
+      <span data-sound-anchor className={soundButton ? "invisible mt-5 flex h-9 items-center gap-1.5 text-xs text-paper/55" : "mt-4 flex items-center gap-1.5 text-xs text-paper/55"}>
         <Volume2 className="size-3.5" />
         {giftString(locale, "soundOn")}
       </span>
