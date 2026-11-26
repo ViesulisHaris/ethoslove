@@ -44,6 +44,10 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
     also ask answers, so one older FAQ went from each. Next, in order: good-morning-messages-for-her,
     good-night-messages-for-her, good-night-messages-for-him, how-to-apologize-to-your-boyfriend,
     how-to-surprise-your-girlfriend, then the rest of the list above.
+  - 2026-11-26 (second run): good-morning-messages-for-her and good-night-messages-for-her done (the
+    night post's intro also said two of its templates were free; Constellations has none now). Next, in
+    order: good-night-messages-for-him, how-to-apologize-to-your-boyfriend, how-to-surprise-your-girlfriend,
+    last-minute-birthday-gift-for-boyfriend, then the rest of the list above.
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.

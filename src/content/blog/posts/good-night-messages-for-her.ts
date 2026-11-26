@@ -3,16 +3,17 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "good-night-messages-for-her",
   published: "2026-11-12",
+  updated: "2026-11-26",
   occasion: "just-because",
   templates: ["text-thread", "constellations", "the-letter"],
   content: {
     en: {
       title: "Good night messages for her, short enough to read in bed",
-      description: "Good night messages for her, short enough to read half asleep, with a bold part to make each one hers, plus how to time them when she's in another time zone.",
+      description: "Good night messages for her, short enough to read half asleep, many with a bold part to make them hers, plus how to time them when she's in another time zone.",
       keyword: "good night messages for her",
-      lead: "Good night messages for her work when they fit on her lock screen and are specific enough that only you could have sent them. Take any line below, swap the bold part for something from her actual day, and send it while she's still awake. If she's hours away, there's a quick guide to timing it for her night, not yours.",
+      lead: "Good night messages for her work when they fit on her lock screen and are specific enough that only you could have sent them. Take a line below, swap any bold part for something from her actual day, and send it while she's still awake. If she's hours away, there's a quick guide to timing it for her night, not yours.",
       takeaways: [
-        "Every message below has one part in bold. Change it to something from her day, and the line stops sounding borrowed.",
+        "Many of the messages below have one part in bold. Change it to something from her day, and the line stops sounding borrowed.",
         "If it fits on her lock screen without opening, it's short enough.",
         "Across time zones, work out her bedtime on your clock before you write.",
         "End on a statement, not a question, so she can put the phone down.",
@@ -136,7 +137,21 @@ export const post: BlogPost = {
             "\"Your phone is on 4%. So, apparently, are you. Go to bed.\"",
           ],
         },
-        { type: "h2", text: "Long good night messages for her" },
+        { type: "h2", text: "Flirty good night texts for her" },
+        {
+          type: "p",
+          text: "Flirty works when it's about the two of you, not a line from the internet. Keep it to a hint, and only if that's already how you talk:",
+        },
+        {
+          type: "list",
+          items: [
+            "\"Good night. I'd say more, but then you'd never get to sleep.\"",
+            "\"Sleep well. Fair warning: I'm turning up in your dreams, and I'm not leaving early.\"",
+            "\"Your side of my bed is cold, **nickname**. I'm taking it personally.\"",
+            "\"You, in **what she wore tonight**. That's all I've got. Night.\"",
+          ],
+        },
+        { type: "h2", text: "Long good night messages and paragraphs for her" },
         {
           type: "p",
           text: "On a Sunday or a night with nothing urgent, send one she'll keep. Start with something you noticed this week, say what it means to you, and finish with the next time you'll see her, or just her name:",
@@ -170,7 +185,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A good night she opens instead of reads" },
         {
           type: "p",
-          text: "Once in a while, on a night that matters, send a link instead of a line. Two of the templates below are free, and there are more [digital gifts for your girlfriend](/gifts/for-girlfriend) and [just because](/occasions/just-because) ideas.",
+          text: "Once in a while, on a night that matters, send a link instead of a line. The letter below is free as a short note, and there are more [digital gifts for your girlfriend](/gifts/for-girlfriend) and [just because](/occasions/just-because) ideas.",
         },
         {
           type: "template",
@@ -185,35 +200,43 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Free. For the long good night: your initial on the seal, one tap to open it, and the letter inside in handwriting, followed by your photos.",
+          note: "For the long good night: your initial on the seal, one tap to open it, and the letter inside in handwriting. Free as a short note: up to 500 characters and a song, and either long message above fits. A longer letter and your photos after it come with \"Make it special\", paid once ([prices](/pricing)).",
         },
       ],
       faq: [
         {
           q: "What is a good night message for her?",
-          a: "A short text that uses her name, mentions one thing from her day and ends without a question, for example: \"Night, Bea. You were right about the restaurant. Sleep well.\"",
+          a: "A short text that uses her name, mentions one thing from her day and ends without a question, for example: \"Night, Bea. You were right about the restaurant. Sleep well.\" One specific detail, something only she would know, is enough to make a common line hers.",
         },
         {
           q: "What time should I send a good night text to my girlfriend?",
           a: "Before she's asleep: aim for the moment she usually picks up her phone in bed. If she lives in another time zone, convert her bedtime to your clock first and schedule it.",
         },
         {
-          q: "How do I make a good night text more personal?",
-          a: "Change one part to something only she would know: a thing she said today, a worry she mentioned, a plan you made. One specific detail is enough to make a common line hers.",
+          q: "How do you say good night in a romantic way?",
+          a: "Name one thing about her from today and one thing you're looking forward to: \"Night, Bea. You were brilliant at dinner. Saturday can't come fast enough.\" Romantic doesn't need big words.",
         },
         {
-          q: "Should I text my girlfriend good night every night?",
-          a: "If you both like it, yes. Just change the line each time, keep it short, and save a longer message for a quiet night so the routine doesn't turn into autopilot.",
+          q: "How do I touch her heart with words?",
+          a: "Tell her something you noticed that she didn't know you'd seen: a question she asked, a kindness nobody thanked her for, and what it meant to you. That reaches her in a way big promises and greeting-card lines don't.",
+        },
+        {
+          q: "What is a powerful good night message?",
+          a: "One that makes her feel seen. Name something small she did or said this week, say what it meant to you, and end it plainly: \"You listen like it's nothing. It isn't nothing. I'm lucky I'm the one you say good night to. Night, Bea.\"",
+        },
+        {
+          q: "How do you text a flirty good night?",
+          a: "Hint, don't spell it out, and make it about the two of you: \"Good night. I'd say more, but then you'd never get to sleep.\" Send it only if that's already how you talk, and keep it short enough that she can answer with an emoji or not at all.",
         },
       ],
     },
     es: {
       title: "Mensajes de buenas noches para mi novia, cortos y personales",
-      description: "Mensajes de buenas noches para tu novia, cortos para leer medio dormida, con una parte en negrita para hacerlos suyos, y cómo cuadrarlos con otro huso horario.",
+      description: "Mensajes de buenas noches para tu novia, para leer medio dormida, muchos con una parte en negrita para hacerlos suyos, y cómo cuadrarlos si vive lejos.",
       keyword: "mensajes de buenas noches para mi novia",
-      lead: "Los mensajes de buenas noches para tu novia funcionan cuando caben en su pantalla de bloqueo y son tan concretos que solo podrías haberlos mandado tú. Coge cualquier frase de abajo, cambia la parte en negrita por algo de su día y mándala mientras todavía está despierta. Si está a varias horas, tienes una guía rápida para que le llegue en su noche, no en la tuya.",
+      lead: "Los mensajes de buenas noches para tu novia funcionan cuando caben en su pantalla de bloqueo y son tan concretos que solo podrías haberlos mandado tú. Coge una frase de abajo, cambia la parte en negrita, si la tiene, por algo de su día y mándala mientras todavía está despierta. Si está a varias horas, tienes una guía rápida para que le llegue en su noche, no en la tuya.",
       takeaways: [
-        "Cada mensaje de abajo tiene una parte en negrita. Cámbiala por algo de su día y la frase deja de sonar prestada.",
+        "Muchos de los mensajes de abajo tienen una parte en negrita. Cámbiala por algo de su día y la frase deja de sonar prestada.",
         "Si cabe en su pantalla de bloqueo sin abrirlo, es lo bastante corto.",
         "Si os separan varias horas, pasa su hora de dormir a tu reloj antes de escribir.",
         "Termina con una afirmación, no con una pregunta, para que pueda dejar el móvil.",
@@ -337,6 +360,20 @@ export const post: BlogPost = {
             "«Tu móvil está al 4 %. Y tú, por lo que veo, también. A la cama».",
           ],
         },
+        { type: "h2", text: "Mensajes de buenas noches coquetos para ella" },
+        {
+          type: "p",
+          text: "Lo coqueto funciona cuando va de vosotros dos, no de una frase sacada de internet. Que sea solo un guiño, y únicamente si ya os habláis así:",
+        },
+        {
+          type: "list",
+          items: [
+            "«Buenas noches. Te diría más, pero entonces no pegarías ojo».",
+            "«Que descanses. Te aviso: pienso colarme en tus sueños y no me voy a ir pronto».",
+            "«Tu lado de mi cama está frío, **mote**. Me lo tomo como algo personal».",
+            "«Tú, con **lo que llevaba esta noche**. Y hasta aquí puedo leer. Buenas noches».",
+          ],
+        },
         { type: "h2", text: "Mensajes de buenas noches largos para tu novia" },
         {
           type: "p",
@@ -371,7 +408,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Unas buenas noches que se abren en vez de leerse" },
         {
           type: "p",
-          text: "De vez en cuando, una noche que importe, manda un enlace en vez de una frase. Dos de las plantillas de abajo son gratis, y tienes más [regalos digitales para tu novia](/gifts/for-girlfriend) e ideas [porque sí](/occasions/just-because).",
+          text: "De vez en cuando, una noche que importe, manda un enlace en vez de una frase. La carta de abajo es gratis como nota corta, y tienes más [regalos digitales para tu novia](/gifts/for-girlfriend) e ideas [porque sí](/occasions/just-because).",
         },
         {
           type: "template",
@@ -386,25 +423,33 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Gratis. Para las buenas noches largas: tu inicial en el sello, un toque para abrirlo y dentro la carta escrita a mano, seguida de tus fotos.",
+          note: "Para las buenas noches largas: tu inicial en el sello, un toque para abrirlo y dentro la carta escrita a mano. Gratis como nota corta: hasta 500 caracteres y una canción, y cabe cualquiera de los dos mensajes largos de arriba. Una carta más larga y tus fotos a continuación vienen con «Hazlo especial», un pago único ([precios](/pricing)).",
         },
       ],
       faq: [
         {
           q: "¿Qué le pongo a mi novia para darle las buenas noches?",
-          a: "Un mensaje corto con su nombre, una cosa de su día y sin pregunta al final, por ejemplo: «Buenas noches, Bea. Tenías razón con el restaurante. Que descanses».",
+          a: "Un mensaje corto con su nombre, una cosa de su día y sin pregunta al final, por ejemplo: «Buenas noches, Bea. Tenías razón con el restaurante. Que descanses». Con un detalle concreto, algo que solo ella reconocería, una frase corriente pasa a ser suya.",
         },
         {
           q: "¿A qué hora le mando a mi novia el mensaje de buenas noches?",
           a: "Antes de que se duerma: apunta al momento en que suele coger el móvil ya en la cama. Si vive en otra zona horaria, pasa primero su hora de dormir a tu reloj y prográmalo.",
         },
         {
-          q: "¿Cómo hago que un mensaje de buenas noches sea más personal?",
-          a: "Cambia una parte por algo que solo ella reconocería: algo que dijo hoy, algo que le preocupaba, un plan que hicisteis. Con un detalle concreto, una frase corriente pasa a ser suya.",
+          q: "¿Cómo se dan las buenas noches de forma romántica?",
+          a: "Nombra algo suyo de hoy y algo que tengas ganas de hacer con ella: «Buenas noches, Bea. Has estado genial en la cena. El sábado no llega nunca». Lo romántico no necesita palabras grandes.",
         },
         {
-          q: "¿Tengo que darle las buenas noches a mi novia todas las noches?",
-          a: "Si os gusta a los dos, sí. Eso sí, cambia la frase cada vez, que sea corta, y guarda un mensaje más largo para una noche tranquila para que la costumbre no se vuelva automática.",
+          q: "¿Cómo le llego al corazón con palabras?",
+          a: "Cuéntale algo que notaste y que ella no sabía que habías visto: una pregunta que te hizo, un detalle que nadie le agradeció, y lo que significó para ti. Eso le llega como no le llegan las grandes promesas ni las frases de tarjeta.",
+        },
+        {
+          q: "¿Qué es un mensaje de buenas noches que llegue de verdad?",
+          a: "El que le hace sentir que la ves. Nombra algo pequeño que hizo o dijo esta semana, di lo que significó para ti y cierra sin adornos: «Escuchas como si fuera lo más normal del mundo. No lo es. Tengo suerte de que tus buenas noches sean para mí. Buenas noches, Bea».",
+        },
+        {
+          q: "¿Cómo mando unas buenas noches coquetas?",
+          a: "Insinúa, no lo digas todo, y que vaya de vosotros dos: «Buenas noches. Te diría más, pero entonces no pegarías ojo». Mándalo solo si ya os habláis así, y que sea tan corto que pueda contestar con un emoji o con nada.",
         },
       ],
     },

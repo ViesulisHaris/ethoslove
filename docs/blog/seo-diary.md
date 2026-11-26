@@ -3,6 +3,39 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-26: the free Letter as a short note in good-morning-messages-for-her and good-night-messages-for-her; flirty sections and every People also ask answered
+- **Page:** /blog/good-morning-messages-for-her, /blog/good-night-messages-for-her (and /es to match)
+- **Why:** Second run of the day, a Thursday (the weekly jobs ran this morning). The first open backlog
+  item, next in its list: both Letter cards still said "Free" with "your photos drop in as polaroids",
+  untrue since 19 Nov, and the good night post said "Two of the templates below are free" (Constellations
+  has no free version now). DataForSEO (US): "good morning messages for her" 12,100 a month, KD 4; "good
+  morning texts for her" 12,100, KD 0; "romantic good morning messages for her" 2,400, KD 11; "good night
+  messages for her" 4,400, KD 26; "sweet good night messages for her" 880, KD 26; "good night paragraph for
+  her" 260, KD 1. Neither post is in the top 30; Search Console (28 days, brand left out) has nothing for
+  the morning post and 4 Spanish impressions for the night one. The top 10s are 100 to 300 line lists
+  (Pinterest, fospath, wishesmsg, loverjournal, zikoko; Adobe, Callie, Good Housekeeping, Pioneer Woman,
+  Hitched), each with a flirty section, which neither post had. People also ask: "What is the sweetest
+  good morning text to a girl?", "How do you say romantic in the morning?", "What is a sweet message to
+  make her smile and feel special?"; "What is a powerful good night message?", "How do you say goodnight
+  in a romantic way?", "How do I touch her heart with words?", "How to text flirty goodnight?". Most went
+  unanswered.
+- **What changed:** Both Letter cards say "Free as a short note: up to 500 characters and a song, and
+  either long message above fits" (each post's long sample messages run 216 to 295 characters), with a
+  longer letter and photos under "Make it special", paid once ([prices]); the night post's intro says only
+  the letter is free. Each post gets a short flirty section (four lines, with the "only if that's already
+  how you talk" limit) and FAQs for every People also ask question; the night post's long section is now
+  "Long good night messages and paragraphs for her", its "every message has a bold part" became "many",
+  and two older FAQs (more personal, every night) were folded in to stay at the test's six. The morning
+  description adds "texts" and "flirty"; its weather joke was untangled. Spanish to match. `updated`
+  2026-11-26 on both.
+- **Panel:** 10/10/10 after 3 rounds each (round 1's search reviewers asked for the flirty sections and
+  the People also ask FAQs; the editors caught a repeated sample line, Spanish «pagado una vez» and, in
+  round 2, the Spanish description missing «coquetos» and a line used three times)
+  (`docs/blog/reviews/refresh/<slug>-2026-11-26.json`)
+- **Cost:** $0.02 (one keyword overview, two SERPs with People also ask); balance $38.33
+- **Check on:** 2026-12-15 whether "good morning messages for her", "good morning texts for her" or
+  "good night messages for her" show for these posts in Search Console
+
 ## 2026-11-26: the free Letter as a short note in cute-things-to-say-to-your-boyfriend and first-anniversary-ideas-for-boyfriend; four People also ask answers
 - **Page:** /blog/cute-things-to-say-to-your-boyfriend, /blog/first-anniversary-ideas-for-boyfriend (and /es to match)
 - **Why:** First run of a Thursday, so the rank check and the AI answers ran first (below). The first
