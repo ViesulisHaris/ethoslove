@@ -128,12 +128,20 @@ export const post: BlogPost = {
           a: "Paper, from the traditional list of wedding anniversary gifts (some lists say cotton), and many dating couples borrow it. Printed photos from the year, a letter, a map of where you met or tickets for something next year all count.",
         },
         {
-          q: "Do you get your boyfriend a gift for a 1 year anniversary?",
-          a: "Most couples do something, but it doesn't have to be expensive. Agree on roughly how big it should be, so one of you doesn't turn up with a watch and the other with a card. A letter and a night out is plenty.",
-        },
-        {
           q: "What do you write in a 1 year anniversary card for your boyfriend?",
           a: "Three or four sentences: one moment from the start, one from this year, and what you want next. Name the moment you knew, if you remember it. A specific memory always beats a line about forever.",
+        },
+        {
+          q: "How do I make my boyfriend feel special on our anniversary?",
+          a: "Show him you remember the year in detail. Plan the day around places and moments from it, and tell him out loud the moment you knew, what you were thinking on your first date, or how he got you through the hard part. Being specific is what makes it feel like it's about him.",
+        },
+        {
+          q: "How do I wish my boyfriend a happy 1 year anniversary?",
+          a: "Say it first thing in the morning, then again in your own words in the card: one real moment from the year and what you're looking forward to next, as in \"Happy one year. I'd like about fifty more of these.\" For a longer version, our [anniversary letter to your boyfriend](/blog/anniversary-letter-to-boyfriend) has the structure.",
+        },
+        {
+          q: "What is the 5 gift rule for boyfriends?",
+          a: "A shortcut for not overthinking a gift, and versions differ: something he wants, something he needs, something to wear, something to read and something to do together. One year in you don't need five gifts, and it helps to agree roughly how big you're both going, so one of you doesn't turn up with a watch and the other with a card. Use the rule as a prompt instead: the printed photos are the read, tickets for something next year are the do.",
         },
       ],
     },
@@ -258,12 +266,20 @@ export const post: BlogPost = {
           a: "Papel: el primer aniversario de boda son las bodas de papel (en algunas listas, de algodón), y muchas parejas de novios lo toman prestado. Las fotos del año impresas, una carta, un mapa de donde os conocisteis o entradas para algo del año que viene cuentan.",
         },
         {
-          q: "¿Hay que hacerle un regalo a tu novio por el primer aniversario?",
-          a: "Casi todas las parejas hacen algo, pero no tiene por qué ser caro. Poneos de acuerdo en más o menos cuánto, para que uno no aparezca con un reloj y el otro con una tarjeta. Una carta y una noche fuera es más que suficiente.",
-        },
-        {
           q: "¿Qué escribir en la tarjeta del primer aniversario para mi novio?",
           a: "Tres o cuatro frases: un momento del principio, uno de este año y lo que quieres para el siguiente. Cuéntale el momento en que lo supiste, si lo recuerdas. Un recuerdo concreto siempre gana a una frase sobre el para siempre.",
+        },
+        {
+          q: "¿Cómo hacer sentir especial a mi novio en nuestro aniversario?",
+          a: "Demuéstrale que recuerdas el año con detalle. Organiza el día con sitios y momentos de ese año y dile en voz alta el momento en que lo supiste, qué pensabas en vuestra primera cita o cómo te ayudó a pasar la parte difícil. Los detalles concretos son lo que le hace sentir que todo va de él.",
+        },
+        {
+          q: "¿Cómo felicitar a mi novio por nuestro primer aniversario?",
+          a: "Díselo a primera hora de la mañana y luego otra vez con tus palabras en la tarjeta: un momento real del año y lo que te hace ilusión que venga, por ejemplo: «Feliz primer año. Quiero unos cincuenta más como este». Para una versión más larga, nuestra [carta de aniversario para tu novio](/blog/anniversary-letter-to-boyfriend) tiene la estructura.",
+        },
+        {
+          q: "¿Qué es la regla de los 5 regalos para el novio?",
+          a: "Un atajo para no darle demasiadas vueltas a un regalo, y hay varias versiones: algo que quiera, algo que necesite, algo para ponerse, algo para leer y algo para hacer juntos. En un primer aniversario no hacen falta cinco regalos, y ayuda poneros de acuerdo, más o menos, en cuánto vais a gastar, para que uno no aparezca con un reloj y el otro con una tarjeta. Usa la regla como pista: las fotos impresas son lo de leer y las entradas para algo del año que viene, lo de hacer.",
         },
       ],
     },

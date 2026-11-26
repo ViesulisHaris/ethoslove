@@ -9,7 +9,7 @@ export const post: BlogPost = {
   content: {
     en: {
       title: "Good morning messages for her that don't sound copied",
-      description: "Good morning messages for her, sorted by the morning she's having: sweet, funny, a big day, far away, after a fight, and how to make any of them sound like you.",
+      description: "Good morning messages and texts for her, for the morning she's having: sweet, funny, flirty, a big day, far away, after a fight, and how to make each yours.",
       keyword: "good morning messages for her",
       lead: "The good morning messages for her that work are short and specific, and they arrive when she actually wakes up. \"Morning. You stole all the covers again and I've decided to let it go\" beats \"Good morning, beautiful\" because it could only be from you. Below are messages sorted by the morning she's having, plus a quick way to make any of them yours.",
       takeaways: [
@@ -43,10 +43,24 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "\"Morning. Reminder that you're my favourite person and the alarm is not.\"",
-            "\"Weather report: cold outside, warm under the covers, and you're on the wrong side of that equation if you're already up.\"",
+            "\"Weather report: cold outside, warm under the covers. If you're reading this out of bed, you're on the wrong side of the forecast.\"",
             "\"I made coffee. I also made a mess. One of these is for you.\"",
             "\"Morning. Your hair last night was doing something architectural. I respect it.\"",
             "\"You're the reason I check my phone before I open my eyes. No pressure, but my standards for your reply are high.\"",
+          ],
+        },
+        { type: "h2", text: "Flirty good morning texts for her" },
+        {
+          type: "p",
+          text: "Flirty in the morning is a hint about last night or tonight, never more than she'd want on her lock screen at work. Only if that's already how you two talk:",
+        },
+        {
+          type: "list",
+          items: [
+            "\"Morning. I'd rather be back in bed with you, but this will have to do.\"",
+            "\"You looked far too good walking out the door yesterday. I'm still recovering.\"",
+            "\"Fair warning: I'll be thinking about last night all day, so my work is going to suffer.\"",
+            "\"Woke up wanting you and got the alarm instead. Fix this tonight.\"",
           ],
         },
         { type: "h2", text: "Good morning texts for her early on" },
@@ -161,7 +175,7 @@ export const post: BlogPost = {
       ],
       faq: [
         {
-          q: "What is a sweet good morning message for her?",
+          q: "What is the sweetest good morning text for her?",
           a: "A short message about something real: \"Your coffee's on the counter, in the mug you like\" or \"I'm still thinking about what you said last night, in the good way\". Sweet lands best when it's specific to her rather than a general compliment.",
         },
         {
@@ -176,11 +190,19 @@ export const post: BlogPost = {
           q: "What do I text her in the morning after a fight?",
           a: "Something short and honest that doesn't reopen the argument: \"I'm still annoyed and I still love you. Can we talk tonight?\" Save the actual conversation for when you're face to face.",
         },
+        {
+          q: "How do you say something romantic in the morning?",
+          a: "Tie it to her day, not to how she looks: one memory and one wish for what's ahead of her. \"I was thinking about the first time I saw you laugh properly. I hope today's easy on you.\" Two sentences are enough. Save the long version for once in a while, so it still surprises her.",
+        },
+        {
+          q: "What good morning text will make her smile and feel special?",
+          a: "One that shows you remember something small: the mug she likes, the meeting she's dreading, the joke from last night. \"Good luck with the 9:30. I heard you rehearsing the budget answer in the shower\" makes her smile because nobody else could have sent it. If teasing is how you two talk, a light joke works just as well.",
+        },
       ],
     },
     es: {
       title: "Mensajes de buenos días para tu novia que no suenen copiados",
-      description: "Mensajes de buenos días para tu novia según la mañana que tenga: tiernos, graciosos, para un día importante, a distancia, tras una pelea, y cómo hacerlos tuyos.",
+      description: "Mensajes de buenos días para tu novia según su mañana: tiernos, graciosos, coquetos, para un día importante, a distancia, tras una pelea, y cómo hacerlos tuyos.",
       keyword: "mensajes de buenos días para mi novia",
       lead: "Los mensajes de buenos días para tu novia que funcionan son cortos y concretos, y llegan cuando de verdad se despierta. «Buenos días. Me has vuelto a robar el edredón y he decidido perdonarte» gana a «Buenos días, preciosa» porque solo puede ser tuyo. Aquí tienes mensajes ordenados según la mañana que tenga, y una forma rápida de hacer que cualquiera suene a ti.",
       takeaways: [
@@ -214,10 +236,24 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "«Buenos días. Te recuerdo que eres mi persona favorita y el despertador no».",
-            "«Parte meteorológico: frío fuera, calorcito bajo el edredón, y si ya te has levantado estás en el lado equivocado».",
+            "«Parte meteorológico: frío fuera, calorcito bajo el edredón. Si estás leyendo esto fuera de la cama, te has equivocado de previsión».",
             "«He hecho café. También he hecho un desastre. Una de las dos cosas es para ti».",
             "«Buenos días. Anoche tu pelo estaba haciendo algo arquitectónico. Lo respeto».",
             "«Eres la razón por la que miro el móvil antes de abrir los ojos. Sin presión, pero espero mucho de tu respuesta».",
+          ],
+        },
+        { type: "h2", text: "Mensajes de buenos días coquetos para ella" },
+        {
+          type: "p",
+          text: "Lo coqueto por la mañana es un guiño a anoche o a esta noche, nunca más de lo que querría ver en la pantalla de bloqueo en el trabajo. Solo si ya os habláis así:",
+        },
+        {
+          type: "list",
+          items: [
+            "«Buenos días. Preferiría volver a la cama contigo, pero tendré que conformarme con esto».",
+            "«Ayer, cuando saliste por la puerta, ibas demasiado guapa. Todavía me estoy recuperando».",
+            "«Te aviso: voy a pasarme el día pensando en anoche, así que hoy trabajo poco».",
+            "«Me he despertado con ganas de ti y lo que me ha tocado es el despertador. Arréglalo esta noche».",
           ],
         },
         { type: "h2", text: "Mensajes de buenos días para ella al principio" },
@@ -332,7 +368,7 @@ export const post: BlogPost = {
       ],
       faq: [
         {
-          q: "¿Qué es un mensaje de buenos días tierno para tu novia?",
+          q: "¿Cuál es el mensaje de buenos días más tierno para tu novia?",
           a: "Un mensaje corto sobre algo real: «Tienes el café en la encimera, en la taza que te gusta» o «Sigo pensando en lo que me dijiste anoche, en el buen sentido». Lo tierno funciona mejor cuando es concreto sobre ella y no un piropo general.",
         },
         {
@@ -346,6 +382,14 @@ export const post: BlogPost = {
         {
           q: "¿Qué le escribo por la mañana después de una pelea?",
           a: "Algo corto y sincero que no reabra la discusión: «Sigo molesto y te sigo queriendo. ¿Hablamos esta noche?». Guarda la conversación de verdad para cuando estéis cara a cara.",
+        },
+        {
+          q: "¿Cómo se dice algo romántico por la mañana?",
+          a: "Relaciónalo con su día, no con lo guapa que está: un recuerdo y un deseo para lo que tiene por delante. «Estaba pensando en la primera vez que te vi reírte de verdad. Ojalá hoy te trate bien». Con dos frases basta. Guarda la versión larga para de vez en cuando, para que siga sorprendiéndola.",
+        },
+        {
+          q: "¿Qué mensaje de buenos días la hará sonreír y sentirse especial?",
+          a: "Uno que demuestre que te acuerdas de algo pequeño: la taza que le gusta, la reunión que le agobia, la broma de anoche. «Suerte con lo de las nueve y media. Te he oído ensayar en la ducha la respuesta sobre el presupuesto» la hace sonreír porque nadie más podría habérselo mandado. Si os habláis a base de bromas, una broma ligera funciona igual de bien.",
         },
       ],
     },

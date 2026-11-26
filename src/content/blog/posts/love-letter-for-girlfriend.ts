@@ -188,7 +188,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Where she'll be on her own with it:** under her pillow, tucked into her laptop bag, or in the pocket of the jacket she wears most. Nobody reads a love letter properly with someone watching.",
+            "**Where she'll be on her own with it:** under her pillow, tucked into her laptop bag, or in the pocket of the jacket she wears most. Nobody reads a love letter properly with someone watching. For the short notes, our [love notes for her](/blog/love-notes-for-her) go spot by spot: her book, her bag, the mirror.",
             "**With flowers:** a short note on the card, the full letter folded underneath. If you're apart, our guide to [virtual flowers for your girlfriend](/blog/virtual-flowers-for-girlfriend) shows how to send the same thing to her phone.",
             "**On her phone:** if she's in another city, or you want it waiting when she wakes up. A [digital gift](/gifts) carries your photos with the letter, and a premium unlock lets you pick the minute it opens, in her time zone.",
           ],
@@ -417,7 +417,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Donde esté sola con ella:** debajo de la almohada, en la funda del portátil o en el bolsillo de la chaqueta que más se pone. Una carta de amor no se lee bien con alguien mirando.",
+            "**Donde esté sola con ella:** debajo de la almohada, en la funda del portátil o en el bolsillo de la chaqueta que más se pone. Una carta de amor no se lee bien con alguien mirando. Para las notas cortas, nuestras [notas de amor para tu novia](/blog/love-notes-for-her) van sitio por sitio: su libro, su bolso, el espejo.",
             "**Con flores:** una nota corta en la tarjeta y la carta entera doblada debajo. Si estáis lejos, en nuestra guía de [flores virtuales para tu novia](/blog/virtual-flowers-for-girlfriend) te contamos cómo mandarle lo mismo al móvil.",
             "**En su móvil:** si está en otra ciudad, o si quieres que la encuentre al despertarse. Un [regalo digital](/gifts) lleva tus fotos junto a la carta y, con cualquier desbloqueo premium, eliges el minuto en que se abre, en su zona horaria.",
           ],

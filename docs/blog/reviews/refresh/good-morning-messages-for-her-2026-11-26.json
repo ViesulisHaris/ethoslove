@@ -1,0 +1,135 @@
+{
+  "slug": "good-morning-messages-for-her",
+  "keyword": "good morning messages for her",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to untangle the weather joke (\"...wrong side of that equation if you're already up\"), which reads twice at 7 am; Spanish too."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Verified the free note (free-tier.ts, pricing.freeNoteShort), both long quotes under 500 by noteLength (295 and 227, ES 293 and 230; together over 500, so \"either\" stays), Text Thread premium and scheduling. Asked for «un pago único» in place of the calque «pagado una vez»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every top result has a flirty section and this post had none; asked for one, \"flirty\" in the description, and the smile FAQ worded like People also ask."
+        }
+      ],
+      "applied": [
+        "Weather joke rewritten (EN/ES)",
+        "Flirty good morning texts section, four lines, both languages; \"flirty\" in the description",
+        "ES «un pago único», «que ella abre»",
+        "\"and either long message above fits\" / «y cabe cualquiera de los dos»",
+        "Smile FAQ renamed \"What good morning text will make her smile and feel special?\" with a fresh sample line"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Sorted by the morning she's having, with a borrowed-vs-your-detail table and real Send Later steps, which no top list gives."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The ES description lacked «coquetos» after the flirty section; three Spanish polish items (ibas demasiado guapa, lo que me ha tocado es, te he oído)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every People also ask question is answered and the headings cover the top results' tone buckets, with timing and a personalising method they lack."
+        }
+      ],
+      "applied": [
+        "ES description with «coquetos» (160 characters)",
+        "«Ayer, cuando saliste por la puerta, ibas demasiado guapa», «lo que me ha tocado es el despertador», «Te he oído ensayar»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The lead answers at once with a real before/after line, and every section gives a line to send tonight, timed to her alarm."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes left: every product claim matches free-tier.ts, pricing.freeNoteShort, products.ts and the manifests, and the Spanish is natural Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Curated by the morning she's having, with a method and timing the 200-line lists on page one don't have."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_taken": [
+        "\"oat latte\" for \"oat flat white\"; a plainer weather punchline; «Luego me pongo al día contigo»; a link to sorry-message-for-girlfriend from the fight section"
+      ]
+    }
+  ]
+}

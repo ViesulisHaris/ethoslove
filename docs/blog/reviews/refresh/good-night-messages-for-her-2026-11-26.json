@@ -1,0 +1,138 @@
+{
+  "slug": "good-night-messages-for-her",
+  "keyword": "good night messages for her",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"Every message below has one part in bold\" was untrue (funny and argument lines have none); fix the takeaway, lead and description in both languages."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Verified the free note, quote lengths (217/216, ES 268/221), the seal initial, Constellations paid with 3 to 12 photos, Text Thread premium with a countdown. The new flirty line repeated a line already in the post twice and its placeholder didn't fit \"when\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "\"What is a powerful good night message?\" and \"How to text flirty goodnight?\" had no FAQ of their own; asked for \"paragraphs\" in the long section's heading."
+        }
+      ],
+      "applied": [
+        "\"Most messages\"/\"swap any bold part\" (ES to match)",
+        "Flirty line replaced: \"You, in **what she wore tonight**. That's all I've got. Night.\"",
+        "Heading \"Long good night messages and paragraphs for her\"",
+        "FAQs for powerful and flirty; the more-personal FAQ merged into FAQ 1 and the every-night FAQ removed (six-FAQ cap)",
+        "ES «a continuación», «y cabe cualquiera», «un pago único»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "16 of 31 lines have bold, so \"most\" is still a stretch: \"many\"."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"I'm lucky I'm the one you say good night to\" appeared three times; drop it from the romantic FAQ. Polish: cut the third closing line on big promises; «hasta aquí puedo leer», «no pegarías ojo»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All four People also ask questions answered in the six FAQs; the bold-part method and time-zone table are what the 300-line lists lack."
+        }
+      ],
+      "applied": [
+        "\"Many of the messages\", \"many with a bold part\" (ES «Muchos»)",
+        "Romantic FAQ trimmed; powerful FAQ's closing sentence cut",
+        "ES «Y hasta aquí puedo leer», «no pegarías ojo»"
+      ],
+      "rejected": [
+        "ES description «si os separan varias horas»: would pass the test's 160 characters"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The three-part table, the correct time-zone table and the what-not-to-send list answer what comes next, and the product cards are honest."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-2 fixes made correctly; every claim checks against free-tier.ts, the manifests and the scheduling code, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The page to send a friend over the 150-300 message dumps: it shows how to make a line hers and when to send it across time zones."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_taken": [
+        "«Mañana puede ser un día más tranquilo»; a bold swap for the cat; an intro line for the funny section; a sweet-dreams line"
+      ]
+    }
+  ]
+}

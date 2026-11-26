@@ -1,0 +1,131 @@
+{
+  "slug": "cute-things-to-say-to-your-boyfriend",
+  "keyword": "cute things to say to your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The lead answers with two real lines and the moment-by-moment sections match how a person plans a message tonight; the Letter card now says plainly what is free (a short note, 500 characters and a song) and what is paid. Polish: two People-also-ask questions (7 promises, how to text romantic) could be answered."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Verified the free note (free-tier.ts FREE_NOTE_MAX_CHARS 500, pricing.freeNoteShort), \"Make it special\" paid once, The Letter's seal, desk and polaroids, Text Thread's 40 bubbles, Jar of Reasons' shake and letter, both premium, and every internal link; the sample lines average about 61 characters, so \"five or six\" fit. Polish: \"a song from the library\", \"con un solo pago\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The moment-sorted structure and the borrowed-versus-your-detail table beat the flat 27-to-175-line lists on page one, but two People-also-ask questions are unanswered: \"What are 7 promises I can make to my boyfriend?\" and \"How do I text romantic?\". Asked for both as FAQs in English and Spanish."
+        }
+      ],
+      "applied": [
+        "FAQs \"What are 7 promises I can make to my boyfriend?\" and \"How do I text romantic?\" in both languages",
+        "The FAQ \"How often should I send my boyfriend cute messages?\" removed in both languages: the post test caps the FAQ at six"
+      ],
+      "rejected": [
+        "The suggested line that a romantic text \"lands best\" late in the evening: an unsupported claim, left out"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The seven promises are small and believable and end on \"Only promise what you mean to do\"; the texting answer matches the post's own advice. Polish: the promises as a list."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "In the Spanish promises, «Te diré cuándo algo me molesta» reads as a question word; asked for «Cuando algo me moleste, te lo diré en vez de quedarme callada». Polish: «Escucharé la versión larga de tu día», «Siete que puedes usar», «en qué te has fijado»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All four People-also-ask questions are now answered; instead of 100+ unsorted lines it gives lines for each moment, including a bad day and after a fight, which the top pages skip, plus a way to make any of them sound like you."
+        }
+      ],
+      "applied": [
+        "«Cuando algo me moleste, te lo diré en vez de quedarme callada»",
+        "Spanish polish to head off a repeat: «Escucharé la versión larga de tu día», «Siete que puedes usar:», «Cuenta en qué te has fijado o qué te hace ilusión»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The bad-day and after-a-fight sections and the borrowed-versus-your-detail table make it the page to send a friend; the FAQ answers the questions people ask and the Letter card is honest. Polish: one longer paragraph-style text."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every line is specific and sorted by when to send it, and the post shows how to make a borrowed line your own where the top results are lists of 100 or more generic quotes; the round-2 Spanish fix is in, and every product claim and link checks out against free-tier.ts, pricing.freeNoteShort and the three manifests. Polish: «la noche anterior»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Sorting by moment, including after a fight, a bad day and long distance, plus the borrowed-versus-your-detail table, covers what the flat lists on page one (drawiteasy, explorepic, lovebynotes, happilylover) miss, and the FAQ matches every People-also-ask question. Polish: \"and text\" in the title, the promises as a list."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}
