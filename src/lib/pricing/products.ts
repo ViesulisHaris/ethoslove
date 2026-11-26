@@ -222,6 +222,22 @@ export function pairSale(env: Record<string, string | undefined> = process.env):
 /** An address as it is compared: no spaces anywhere, lower case. */
 const bareEmail = (value: string): string => value.replace(/\s+/g, "").toLowerCase();
 
+/**
+ * CHECKOUT_CODE_EMAILS: the accounts whose Stripe checkout page has the box for a promotion code
+ * (the owner, 26 Nov 2026: "we can still have it, for these kinds of reasons": his own tests, a
+ * gift to someone he knows). Everyone else's page has none, as the Terms say: the site offers no
+ * discount codes. Signed-in accounts only, by the account's own e-mail; unset, nobody. Server-side only.
+ */
+export function checkoutCodeEmails(env: Record<string, string | undefined> = process.env): string[] {
+  return (env.CHECKOUT_CODE_EMAILS ?? "").split(",").map(bareEmail).filter(Boolean);
+}
+
+/** Whether the checkout page of the account with this e-mail takes a promotion code. */
+export function checkoutCodesFor(email: string | null | undefined, env: Record<string, string | undefined> = process.env): boolean {
+  const bare = bareEmail(email ?? "");
+  return bare !== "" && checkoutCodeEmails(env).includes(bare);
+}
+
 /** GIFT_PAIR_PREVIEW_EMAILS: the accounts that see two more gifts while the switch says "preview". Server-side only. */
 export function pairPreviewEmails(env: Record<string, string | undefined> = process.env): string[] {
   return (env.GIFT_PAIR_PREVIEW_EMAILS ?? "").split(",").map(bareEmail).filter(Boolean);

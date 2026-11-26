@@ -5,7 +5,7 @@ import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { checkoutSourceInput, checkoutSourceRow, saveCheckoutSource } from "@/lib/attribution/checkout-source";
 import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
-import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, pairOnSaleFor, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, checkoutCodesFor, giftCardsOnSale, isProductId, pairOnSaleFor, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
 import { RETURN_PATH, membershipSessionParams, metadataRef, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
@@ -184,6 +184,7 @@ export async function POST(request: NextRequest) {
     purchaseId,
     userId,
     email: user?.email ?? null,
+    promoCodes: checkoutCodesFor(user?.email),
     locale,
     origin,
     returnTo: body.returnTo ?? "/dashboard",

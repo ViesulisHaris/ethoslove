@@ -61,6 +61,8 @@ export type SessionOptions = {
   automaticTax: boolean;
   /** STRIPE_PRODUCT_* values from the environment, by variable name. */
   productIds: Record<string, string | undefined>;
+  /** The page takes a promotion code: only for the accounts in CHECKOUT_CODE_EMAILS (lib/pricing/products.ts checkoutCodesFor). */
+  promoCodes?: boolean;
 };
 
 /**
@@ -355,7 +357,8 @@ export function sessionParams(plan: CheckoutPlan, options: SessionOptions): Stri
     customer_email: options.email ?? undefined,
     client_reference_id: options.purchaseId,
     metadata: sessionMetadata(plan, options),
-    allow_promotion_codes: false,
+    // No codes for anyone but the listed accounts: the site sells at one price (Terms, section 6).
+    allow_promotion_codes: options.promoCodes === true,
     consent_collection: { promotions: "auto", terms_of_service: "required" },
     custom_text: { terms_of_service_acceptance: { message: consentText(plan.product, options.locale, options.origin, { pair: plan.pair }) } },
     after_expiration: { recovery: { enabled: true, allow_promotion_codes: false } },

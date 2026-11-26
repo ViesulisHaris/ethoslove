@@ -103,6 +103,12 @@ describe("the Checkout Session", () => {
     expect(params.client_reference_id).toBe(options.purchaseId);
   });
 
+  it("takes a promotion code only for an account on the owner's list, never in the recovery link", () => {
+    const params = sessionParams(plan({ product: "single", templateSlugs: ["vinyl"] }), { ...options, promoCodes: true });
+    expect(params.allow_promotion_codes).toBe(true);
+    expect(params.after_expiration).toEqual({ recovery: { enabled: true, allow_promotion_codes: false } });
+  });
+
   it("offers no promotion codes, anywhere, and keeps Stripe's default expiry", () => {
     const params = sessionParams(plan({ product: "single", templateSlugs: ["vinyl"] }), options);
     expect(params.mode).toBe("payment");
