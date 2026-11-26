@@ -11,6 +11,7 @@ import { KindLinks } from "@/components/dates/page/kind-links";
 import { DATE_KIND_UI } from "@/content/date-kinds";
 import { FOR_VENUES, FOR_VENUES_PATH } from "@/content/for-venues";
 import { Link } from "@/i18n/navigation";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 export async function generateMetadata({ params, searchParams }: PageProps<"/[currency]/[locale]/dates">): Promise<Metadata> {
   const { locale } = await params;
@@ -47,6 +48,7 @@ export default async function DatesPage({ params }: PageProps<"/[currency]/[loca
     // Pulled up under the floating header: on a wide screen the map runs the full height of the window behind it.
     <div className="-mt-[var(--header-h)] min-h-dvh bg-blush-paper pt-[var(--header-h)] lg:pt-0">
       <DatesExplorer />
+      <LetterSlot locale={locale} where="dates" />
       {/* Plain links in the page's HTML, so search engines find every city's page from here. On the
           page's grid, as on a city's page and the footer (walk-rooms-9). */}
       <div className="border-t border-line">

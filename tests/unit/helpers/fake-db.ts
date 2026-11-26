@@ -32,6 +32,7 @@ const UNIQUE: Record<string, string[][]> = {
   gift_credits: [["id"], ["purchase_id", "n"]],
   monthly_ideas: [["user_id"]],
   offer_emails: [["user_id"]],
+  date_letter: [["id"], ["email"]],
 };
 
 const DEFAULTS: Record<string, Row> = {
@@ -41,6 +42,7 @@ const DEFAULTS: Record<string, Row> = {
   monthly_ideas: { template_slug: null, locale: "en", handled_for: null, last_sent_on: null, price_sent_at: null, price_used_at: null, off_at: null },
   gift_keeps: { locale: "en", requested: [], confirm_sent_at: null, confirmed_at: null },
   keep_reminders: { last_sent_year: null },
+  date_letter: { locale: "en", confirm_sent_at: null, confirmed_at: null, last_week: null, held_on: null, stopped_at: null },
   couple_passes: {
     partner_user_id: null,
     renewal_reminded_at: null,

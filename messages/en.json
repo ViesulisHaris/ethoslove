@@ -3859,6 +3859,26 @@
       "turnOn": "Turn them back on",
       "failed": "Couldn’t save that. Try again in a moment."
     },
+    "letter": {
+      "confirmTitle": "Send you the date letter?",
+      "confirmBody": "One date idea by email every Thursday, ready for the weekend. Every letter has a link to stop it.",
+      "confirmButton": "Yes, send me the date letter",
+      "doneTitle": "You’re in.",
+      "doneBody": "The date letter comes on Thursdays. This week’s idea is ready now.",
+      "doneNext": "See this week’s date",
+      "goneTitle": "This link has expired.",
+      "goneBody": "To get the date letter, sign up again on any date page.",
+      "stopTitle": "Stop the date letter?",
+      "stopBody": "No more date ideas by email. Nothing else changes.",
+      "stopConfirm": "Stop it",
+      "stopDoneTitle": "Stopped.",
+      "stopDoneBody": "You won’t get the date letter again. We’ll delete your address within 30 days.",
+      "notMeTitle": "Not you?",
+      "notMeBody": "We’ll delete this address and put it on our unsubscribe list, so Ethos sends it no optional email again: no date letter, no monthly idea, no offers.",
+      "notMeConfirm": "Never email this address",
+      "notMeDoneTitle": "Deleted.",
+      "notMeDoneBody": "This address is deleted and won’t get optional emails from Ethos again."
+    },
     "keep": {
       "confirmTitle": "Email you the gift's link?",
       "confirmBody": "We'll send it to this address now, so you can open the gift again any time.",
@@ -4398,6 +4418,21 @@
     "ideaTerms": "I accept the <terms>Terms</terms>: free gifts come with one gift idea a month by email, which I can stop in any email or in my account.",
     "ideaTermsNeeded": "Tick the box to send it.",
     "ideaWhere": "After you send a gift, we’ll email you one gift idea a month for a year. You can stop them in any email."
+  },
+  "dateLetter": {
+    "title": "The date letter",
+    "line": "One date idea every Thursday. Stop any time.",
+    "emailLabel": "Your email",
+    "send": "Send me the letter",
+    "privacy": "Privacy",
+    "asked": "Check your inbox. One tap there and you’re in.",
+    "another": "Use another address",
+    "on": "You’re on the list. A date idea comes every Thursday.",
+    "blocked": "This address is on our unsubscribe list. <write>Write to us</write> to change that.",
+    "invalid": "Check the email address.",
+    "limited": "Too many tries. Try again later.",
+    "failed": "That didn’t go through. Try again.",
+    "wording": "Email me one date idea every Thursday. I can stop any time."
   },
   "notice": {
     "policy": "We’ve updated our Privacy Policy and Terms.",

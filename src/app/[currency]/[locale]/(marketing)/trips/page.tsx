@@ -24,6 +24,7 @@ import { FlightFinder } from "@/components/trips/flight-finder";
 import { TripCard } from "@/components/trips/trip-card";
 import { TripMatcher, type MatcherTrip } from "@/components/trips/trip-matcher";
 import { TripsGrid } from "@/components/trips/trips-grid";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/trips">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -175,6 +176,9 @@ export default async function TripsPage({ params }: PageProps<"/[currency]/[loca
           </div>
         </div>
       </section>
+
+      {/* The date letter's box, after the gift (gifts come first on this site) and far below the first screen. */}
+      <LetterSlot locale={locale} where="trips" />
     </>
   );
 }

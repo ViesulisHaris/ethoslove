@@ -34,6 +34,9 @@ export async function GET() {
   // The waitlist is only readable by the server (no row policies), so it is asked with the service key, by this person's email only.
   const admin = getSupabaseAdminClient();
   const waitlist = admin && user.email ? await admin.from("waitlist").select("*").eq("email", user.email.toLowerCase()) : { data: [] };
+  // The date letter (0027): the sign-up at this account's own address, if there is one. Only a row adds
+  // the key, so an account without one (and every account before 0027) exports exactly what it did.
+  const dateLetter = admin && user.email ? await admin.from("date_letter").select("email, locale, wording, source_path, asked_at, confirmed_at, last_week, stopped_at").eq("email", user.email.trim().toLowerCase()) : { data: null };
   const giftIds = (gifts.data ?? []).map((g) => g.id);
   const [views, reactions] = giftIds.length
     ? await Promise.all([supabase.from("gift_views").select("*").in("gift_id", giftIds), supabase.from("reactions").select("*").in("gift_id", giftIds)])
@@ -44,7 +47,7 @@ export async function GET() {
   // sender's to see already; a contributor's email address is someone else's data and is never
   // exported, nor is anything that could open a link.
   const group = admin && groupGiftsEnabled() ? await exportedGroups(admin as Db, user.id) : null;
-  const body = JSON.stringify({ exportedAt: new Date().toISOString(), user: { id: user.id, email: user.email }, profile: profile.data, gifts: gifts.data, purchases: purchases.data, templateUnlocks: unlocks.data, giftViews: views.data, reactions: reactions.data, placeReviews: reviews.data, couplePasses: passes.data, giftCards: giftCards.data, reminders: reminders.data, monthlyReminders: monthsaries.data, ...(monthlyIdeas.data?.length ? { monthlyIdea: monthlyIdeas.data } : {}), savedDates: savedDates.data, waitlist: waitlist.data, ...(group ?? {}) }, null, 2);
+  const body = JSON.stringify({ exportedAt: new Date().toISOString(), user: { id: user.id, email: user.email }, profile: profile.data, gifts: gifts.data, purchases: purchases.data, templateUnlocks: unlocks.data, giftViews: views.data, reactions: reactions.data, placeReviews: reviews.data, couplePasses: passes.data, giftCards: giftCards.data, reminders: reminders.data, monthlyReminders: monthsaries.data, ...(monthlyIdeas.data?.length ? { monthlyIdea: monthlyIdeas.data } : {}), savedDates: savedDates.data, waitlist: waitlist.data, ...(dateLetter.data?.length ? { dateLetter: dateLetter.data } : {}), ...(group ?? {}) }, null, 2);
   return new NextResponse(body, { headers: { "content-type": "application/json", "content-disposition": `attachment; filename="ethos-export-${new Date().toISOString().slice(0, 10)}.json"` } });
 }
 

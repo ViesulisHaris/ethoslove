@@ -19,6 +19,13 @@ export type FunnelEvent =
   | "free_terms_nudged"
   | "idea_emails_off"
   | "idea_emails_on"
+  // The date letter's box (components/date-letter/letter-box.tsx): an address sent from it. `where`
+  // is the kind of page (lib/lifecycle/date-letter-flag.ts LETTER_WHERE); never the address.
+  | "letter_asked"
+  // Its confirming button and its stop button pressed on the page behind the e-mail's link, sent from
+  // the server with no property (lib/lifecycle/date-letter-events.ts).
+  | "letter_confirmed"
+  | "letter_stopped"
   | "pay_clicked"
   | "purchase_completed"
   | "extras_offer_shown"

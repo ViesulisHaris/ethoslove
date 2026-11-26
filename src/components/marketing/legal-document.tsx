@@ -58,7 +58,7 @@ export function LegalDocument({ doc, updatedLabel, locale = "en", children }: { 
           <section key={i} id={`s${i + 1}`} className="mt-10 scroll-mt-28">
             <h2 className="font-display text-2xl">{s.heading}</h2>
             {s.paragraphs.map((p, j) => (
-              <p key={j} className="mt-3 leading-relaxed text-ink-soft">
+              <p key={j} id={s.ids?.[p]} className={s.ids?.[p] ? "mt-3 scroll-mt-28 leading-relaxed text-ink-soft" : "mt-3 leading-relaxed text-ink-soft"}>
                 {p}
               </p>
             ))}

@@ -37,5 +37,6 @@ test.describe("reminders API", () => {
   test("the cron refuses a request without the secret", async ({ request }) => {
     expect((await request.get("/api/cron/reminders")).status()).toBe(401);
     expect((await request.get("/api/cron/monthly-idea")).status()).toBe(401);
+    expect((await request.get("/api/cron/date-letter")).status()).toBe(401);
   });
 });

@@ -14,6 +14,7 @@ import { PostBody } from "@/components/blog/post-body";
 import { PostCard } from "@/components/blog/post-card";
 import { RichText } from "@/components/blog/rich-text";
 import { FinalCta } from "@/components/marketing/home/final-cta";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({ slug: post.slug }));
@@ -172,6 +173,7 @@ export default async function BlogPostPage({ params }: PageProps<"/[currency]/[l
           </div>
         </div>
       </article>
+      <LetterSlot locale={locale} where="blog" />
 
       {related.length > 0 ? (
         <section className="container-x pb-24" aria-labelledby="related">

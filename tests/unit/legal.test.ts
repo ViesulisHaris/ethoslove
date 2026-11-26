@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LEGAL_DOCS, WITHDRAW_DOCS, legalDocs, type LegalDoc } from "@/content/legal";
+import { LEGAL_DOCS, LETTER_ANCHOR, LETTER_LEGAL, WITHDRAW_DOCS, legalDocs, type LegalDoc } from "@/content/legal";
 import { CONTRIBUTION_LIMITS } from "@/lib/gift/schema";
 import { GROUP_RETENTION } from "@/lib/group/limits";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
@@ -7,6 +7,7 @@ import { FREE_SAVED_DATES, PRODUCTS, formatAmount, groupAmount, membershipAmount
 import { consentSentence } from "@/lib/stripe/line-items";
 import { ROOMS_KEY } from "@/lib/analytics/rooms-marker";
 import { STARTED_NOTE } from "@/lib/attribution/recipient-loop";
+import { fillerIn } from "./filler";
 
 const all = (doc: LegalDoc) => [doc.intro, ...doc.sections.flatMap((s) => [s.heading, ...s.paragraphs])].join("\n");
 const section = (doc: LegalDoc, n: number) => doc.sections.find((s) => s.heading.startsWith(`${n}. `))!.paragraphs.join("\n");
@@ -399,5 +400,81 @@ describe("the monthly idea's legal changes, written out", () => {
         }
     }
     writeFileSync(out!, lines.join("\n"));
+  });
+});
+
+// The date letter ships switched off (lib/lifecycle/date-letter-flag.ts). The privacy policy
+// describes it only while DATE_LETTER=on (LETTER_LEGAL), and its changes must leave the monthly
+// idea's in place whatever that setting is.
+describe("the date letter in the documents", () => {
+  const IDEAS = ["off", "optin", "buyers", "all"] as const;
+  const letterIn = (doc: LegalDoc) => all(doc).match(/date letter|carta de citas/gi) ?? [];
+
+  it("L1 switched off, both documents are what they were and never name it", () => {
+    for (const group of [false, true]) {
+      for (const idea of IDEAS) {
+        const off = legalDocs(group, idea);
+        expect(legalDocs(group, idea, false)).toEqual(off);
+        for (const kind of ["terms", "privacy"] as const) for (const locale of ["en", "es"] as const) expect(letterIn(off[kind][locale])).toEqual([]);
+      }
+    }
+  });
+
+  it("L2 switched on, only adds: the terms unchanged, every paragraph still there or one of its changed sentences, no section renumbered", () => {
+    for (const group of [false, true]) {
+      for (const idea of IDEAS) {
+        const off = legalDocs(group, idea);
+        const on = legalDocs(group, idea, true);
+        expect(on.terms).toEqual(off.terms);
+        for (const locale of ["en", "es"] as const) {
+          const edits = LETTER_LEGAL[locale];
+          const before = off.privacy[locale];
+          const after = on.privacy[locale];
+          expect(after.sections.map((s) => s.heading)).toEqual(before.sections.map((s) => s.heading));
+          for (const [i, s] of before.sections.entries()) {
+            const n = Number(s.heading.split(".")[0]);
+            for (const p of s.paragraphs) {
+              const changed = edits.filter((e) => e.section === n && "find" in e && p.includes(e.find)).reduce((text, e) => ("find" in e ? text.replace(e.find, "after" in e ? e.find + e.after : e.replace) : text), p);
+              expect(after.sections[i].paragraphs, `${group} ${idea} ${locale} §${n}`).toContain(changed);
+            }
+            const added = edits.filter((e) => e.section === n && "paragraphBefore" in e).length;
+            expect(after.sections[i].paragraphs.length, `${group} ${idea} ${locale} §${n}`).toBe(s.paragraphs.length + added);
+          }
+        }
+        expect(on.privacy.es.sections.map((s) => s.paragraphs.length)).toEqual(on.privacy.en.sections.map((s) => s.paragraphs.length));
+      }
+    }
+  });
+
+  it("L3 says what is kept and for how long, how it stops, and what an account's deletion does, in both languages", () => {
+    const on = legalDocs(false, "off", true).privacy;
+    const words = {
+      en: ["Thursdays", "confirming email", "Resend", "stops it at once", "delete an account with the same address", "no tracking pixel"],
+      es: ["jueves", "correo de confirmación", "Resend", "la detiene al momento", "eliminas una cuenta con la misma dirección", "píxel de seguimiento"],
+    };
+    for (const locale of ["en", "es"] as const) {
+      const one = section(on[locale], 1);
+      for (const w of words[locale]) expect(one, `${locale}: ${w}`).toContain(w);
+      const own = on[locale].sections.find((s) => s.heading.startsWith("1. "))!.paragraphs.find((p) => /^(The date letter|La carta de citas): /.test(p))!;
+      expect(own.match(/30 (days|días)/g), locale).toHaveLength(2);
+      expect(all(on[locale])).not.toMatch(/no newsletters|ni boletines/);
+      expect(all(on[locale])).not.toMatch(/Spain|España|Madrid/);
+      expect(fillerIn(all(on[locale]), locale)).toEqual([]);
+      expect(section(on[locale], 11)).toMatch(locale === "en" ? /The date letter: an address never confirmed, 30 days/ : /La carta de citas: una dirección sin confirmar, 30 días/);
+      expect(section(on[locale], 13)).toMatch(locale === "en" ? /date letter sign-up, as a JSON file/ : /carta de citas, en un archivo JSON/);
+      // letter-C18: the unsubscribe list's own line says the letter keeps it too; one confirming e-mail is not promised.
+      expect(section(on[locale], 11)).toMatch(locale === "en" ? /kept gifts\. It is also kept while we send the date letter\./ : /regalos guardados\. También se conserva mientras enviemos la carta de citas\./);
+      expect(own).not.toMatch(/the one confirming|único correo de confirmación/);
+      // letter-C6: "Not you?" says what the unsubscribe list does, not only what the form can do.
+      expect(own).toMatch(locale === "en" ? /no optional email from us reaches it again\./ : /no volverá a recibir ningún correo opcional nuestro\./);
+      // letter-T10: the box's "Privacy" link lands on this paragraph.
+      expect(on[locale].sections.find((s) => s.heading.startsWith("1. "))!.ids?.[own]).toBe(LETTER_ANCHOR);
+    }
+    // With the monthly idea's changes made too, the anchor stays on the letter's paragraph.
+    for (const mode of ["optin", "buyers", "all"] as const) {
+      const both = legalDocs(true, mode, true).privacy.en.sections.find((s) => s.heading.startsWith("1. "))!;
+      const id = Object.entries(both.ids ?? {}).find(([, v]) => v === LETTER_ANCHOR)?.[0];
+      expect(id && both.paragraphs.includes(id) && id.startsWith("The date letter: ")).toBe(true);
+    }
   });
 });

@@ -6,6 +6,8 @@ Two kinds of email leave the product, and they need the domain set up once.
 | --- | --- | --- |
 | Auth emails | Supabase (via your SMTP) | sign-in link + 6-digit code, confirm signup |
 | Product emails | the app, via Resend | welcome, "your gift was opened", reactions, receipts, the monthly idea (off until `MONTHLY_IDEA_EMAILS` is set) |
+| Date letter: confirming email | the app, via Resend | "Confirm your date letter", once a day at most to an address typed in the box (`src/emails/date-letter.tsx`); off until `DATE_LETTER=on` |
+| Date letter: the weekly letter | the app, via Resend | one date idea every Thursday to confirmed addresses (`api/cron/date-letter`); one-click stop in each; off until `DATE_LETTER=on` |
 
 Both go out as `Ethos <hello@tryethos.io>` once the steps below are done. Replies land on the
 contact address, `support@secuora.xyz` (`BRAND.supportEmail`), which is also the one shown in

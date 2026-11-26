@@ -20,6 +20,7 @@ import { KindView } from "@/components/dates/page/kind-view";
 import { DATE_CARDS_ART } from "@/components/dates/page/placements";
 import { TONIGHT_BUTTON } from "@/components/dates/tonight/tonight-form";
 import { TonightIsland } from "@/components/dates/tonight/tonight-island";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 /** Built for every kind with a page; any other slug is a 404 (notFound below). */
 export function generateStaticParams() {
@@ -118,6 +119,7 @@ export default async function DateKindPage({ params }: Props) {
             titleClassName="text-page-label text-page-body"
             linkClassName="inline-flex min-h-11 items-center px-2.5 text-[0.9375rem] text-page-ink underline decoration-page-line underline-offset-4 transition-colors hover:decoration-page-ink"
           />
+          <LetterSlot locale={l} where="date-kind" variant="band" />
         </DateFoot>
       </DatePage>
     </>

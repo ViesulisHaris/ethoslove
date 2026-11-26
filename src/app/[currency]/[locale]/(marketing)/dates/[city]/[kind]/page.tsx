@@ -27,6 +27,7 @@ import { KindView } from "@/components/dates/page/kind-view";
 import { DATE_CARDS_ART } from "@/components/dates/page/placements";
 import { TONIGHT_BUTTON } from "@/components/dates/tonight/tonight-form";
 import { TonightIsland } from "@/components/dates/tonight/tonight-island";
+import { LetterSlot } from "@/components/date-letter/letter-slot";
 
 /**
  * Like its city's page it reads the map's tiles, so it is built on the first visit and kept a
@@ -211,6 +212,7 @@ export default async function CityKindPage({ params }: Props) {
               </ul>
             </nav>
           ) : null}
+          <LetterSlot locale={l} where="date-kind" variant="band" />
         </DateFoot>
       </DatePage>
     </>

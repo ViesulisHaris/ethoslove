@@ -37,6 +37,9 @@ import {
 } from "@/emails/lifecycle";
 import { MembershipEndedEmail, MembershipPaymentEmail, MembershipRenewalEmail, MembershipWelcomeEmail, membershipSubject } from "@/emails/membership";
 import { KeepConfirmEmail, KeepLinkEmail, keepConfirmSubject, keepLinkSubject, type KeptDay } from "@/emails/keep";
+import { DateLetterEmail, LetterConfirmEmail, letterConfirmSubject } from "@/emails/date-letter";
+import { letterEntry, letterWords } from "@/content/date-letter";
+import { LETTER_REF } from "@/lib/lifecycle/date-letter";
 import { GroupConfirmEmail, GroupNudgeEmail, GroupSignedEmail, groupConfirmSubject, groupNudgeSubject, groupSignedSubject } from "@/emails/group";
 import { accountUrl, pricingUrl } from "@/lib/commerce/db";
 import type { Pass } from "@/lib/commerce/passes";
@@ -571,6 +574,28 @@ export async function sendMonthlyIdea(args: {
       }),
       headers: unsubscribeHeaders(args.stopUrl),
       idempotencyKey: args.onceKey,
+    });
+  });
+}
+
+/** The date letter's one confirming e-mail (lib/lifecycle/date-letter-store.ts). `stopUrl` is "never email this address", and the mail app's one-click. */
+export async function sendLetterConfirm({ to, locale, confirmUrl, stopUrl }: { to: string; locale: L; confirmUrl: string; stopUrl: string }): Promise<boolean> {
+  return safely("date letter confirm", async () =>
+    deliver("date letter confirm", { to, subject: letterConfirmSubject(locale), react: LetterConfirmEmail({ locale, confirmUrl, stopUrl }), headers: unsubscribeHeaders(stopUrl) }),
+  );
+}
+
+/** This week's date letter: the entry of `slot` (content/date-letter.ts). `onceKey` makes it once-only on Resend's side for a day. */
+export async function sendDateLetter({ to, locale, slot, stopUrl, onceKey }: { to: string; locale: L; slot: number; stopUrl: string; onceKey: string }): Promise<boolean> {
+  return safely("date letter", async () => {
+    const words = letterWords(letterEntry(slot), locale);
+    const planUrl = pageUrl(locale, `/dates?idea=${words.id}&ref=${LETTER_REF}`);
+    return deliver("date letter", {
+      to,
+      subject: words.subject,
+      react: DateLetterEmail({ locale, words, planUrl, stopUrl }),
+      headers: unsubscribeHeaders(stopUrl),
+      idempotencyKey: onceKey,
     });
   });
 }
