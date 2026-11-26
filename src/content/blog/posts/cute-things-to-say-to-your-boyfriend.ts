@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "cute-things-to-say-to-your-boyfriend",
   published: "2026-10-25",
+  updated: "2026-11-26",
   occasion: "just-because",
   templates: ["text-thread", "jar-of-reasons", "the-letter"],
   content: {
@@ -210,12 +211,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Both are premium; [The Letter](/templates/the-letter) is free, if you'd rather put your favourite lines in one letter. You'll find more [digital gifts for your boyfriend](/gifts/for-boyfriend) alongside them, and every one opens on his phone from a link.",
+          text: "Both are premium; [The Letter](/templates/the-letter) is free as a short note, if you'd rather put your favourite lines in one letter. You'll find more [digital gifts for your boyfriend](/gifts/for-boyfriend) alongside them, and every one opens on his phone from a link.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free.",
+          note: "A wax-sealed envelope he opens with a tap. The letter unfolds on a candle-lit desk and your words appear in handwriting. Free as a short note: up to 500 characters and a song, room for five or six of the lines above. A longer letter and your photos as polaroids come with \"Make it special\", paid once ([prices](/pricing)).",
         },
       ],
       faq: [
@@ -232,8 +233,16 @@ export const post: BlogPost = {
           a: "Ask what he needs before you say anything else: advice, a distraction or just company. Then keep it simple. \"You don't have to be fine with me\" and \"Come home, I'll order the food\" do more than a long pep talk.",
         },
         {
-          q: "How often should I send my boyfriend cute messages?",
-          a: "There's no rule, but one good message at the right moment does more than a stream of them. A morning text, a good-luck message before something big and the occasional line for no reason at all is plenty for most couples.",
+          q: "What words melt a man's heart?",
+          a: "Words that show you noticed something he thought nobody saw. \"Thank you for filling up the car without saying anything. I noticed\" lands harder than \"you're amazing\", and so does telling him you trust him or that you're proud of him, with the reason.",
+        },
+        {
+          q: "What are 7 promises I can make to my boyfriend?",
+          a: "Small ones you can keep beat big ones you can't. Seven to borrow: \"I'll tell you when something's bothering me instead of going quiet.\" \"I'll say sorry first sometimes.\" \"I'll listen to the long version of your day.\" \"I'll cheer when it's going well and stay when it isn't.\" \"I'll be honest, even when it's awkward.\" \"I'll make time for us, not just the leftover time.\" \"I'll still pick you on the boring days.\" Only promise what you mean to do.",
+        },
+        {
+          q: "How do I text romantic?",
+          a: "Write it the way you'd say it to him, then add one detail only you would know. Say what you noticed or what you're looking forward to, not only \"I love you\": \"I'm still thinking about the way you laughed at dinner.\" Send one message, then leave room for him to answer.",
         },
       ],
     },
@@ -441,12 +450,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Las dos son premium; [La carta](/templates/the-letter) es gratis, si prefieres poner tus frases favoritas en una sola carta. Tienes más [regalos digitales para tu novio](/gifts/for-boyfriend) junto a ellas, y todos se abren en su móvil desde un enlace.",
+          text: "Las dos son premium; [La carta](/templates/the-letter) es gratis como nota corta, si prefieres poner tus frases favoritas en una sola carta. Tienes más [regalos digitales para tu novio](/gifts/for-boyfriend) junto a ellas, y todos se abren en su móvil desde un enlace.",
         },
         {
           type: "template",
           slug: "the-letter",
-          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis.",
+          note: "Un sobre lacrado que abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela y tus palabras aparecen escritas a mano. Gratis como nota corta: hasta 500 caracteres y una canción, sitio para cinco o seis de las frases de arriba. Una carta más larga y tus fotos como polaroids vienen con «Hazlo especial», pagado una vez ([precios](/pricing)).",
         },
       ],
       faq: [
@@ -463,8 +472,16 @@ export const post: BlogPost = {
           a: "Pregúntale qué necesita antes de decir nada más: consejos, distraerse o solo compañía. Luego, que sea sencillo. «Conmigo no tienes que estar bien» y «Vente a casa, yo pido la cena» hacen más que un discurso para animarle.",
         },
         {
-          q: "¿Cada cuánto le mando mensajes bonitos a mi novio?",
-          a: "No hay ninguna regla, pero un buen mensaje en el momento justo hace más que una ristra de ellos. Un mensaje por la mañana, uno de buena suerte antes de algo importante y alguno sin motivo de vez en cuando es más que suficiente para casi cualquier pareja.",
+          q: "¿Qué palabras enamoran a un hombre?",
+          a: "Las que demuestran que te has fijado en algo que él creía que nadie veía. «Gracias por llenar el depósito sin decir nada. Me he dado cuenta» le llega más que «eres increíble», igual que decirle que confías en él o que estás orgullosa de él, con el motivo.",
+        },
+        {
+          q: "¿Qué 7 promesas le puedo hacer a mi novio?",
+          a: "Mejor las pequeñas que puedes cumplir que las enormes que no. Siete que puedes usar: «Cuando algo me moleste, te lo diré en vez de quedarme callada». «A veces pediré perdón yo primero». «Escucharé la versión larga de tu día». «Me alegraré cuando todo vaya bien y me quedaré cuando no». «Seré sincera, aunque sea incómodo». «Sacaré tiempo para nosotros, no solo el que sobre». «Te seguiré eligiendo los días aburridos». Promete solo lo que piensas cumplir.",
+        },
+        {
+          q: "¿Cómo escribirle un mensaje romántico a mi novio?",
+          a: "Escríbelo como se lo dirías en persona y añade un detalle que solo sepas tú. Cuenta en qué te has fijado o qué te hace ilusión, no solo «te quiero»: «Sigo pensando en cómo te reías en la cena». Manda un solo mensaje y deja que conteste.",
         },
       ],
     },

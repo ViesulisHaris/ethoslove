@@ -13,6 +13,36 @@ link prospect (`docs/blog/link-prospects.md`).
 - `página para hacer una carta digital para mi novio` (Mexico 2484, `es`)
 - `site para fazer carta digital para namorado` (Brazil 2076, `pt`)
 
+## 2026-11-26
+
+ChatGPT with web search, the ten questions as a US user and the three "Also ask" questions in their
+own country and language ($0.05). DataForSEO now returns brand descriptions ("Digital love letter
+creator") instead of brand names, so the brands below are read from the answers' links. **Ethos
+named or cited in 3 of 10** (2 of 10 on 19 Nov); 0 of 3 for the "Also ask" questions.
+
+| Question | Ethos named? | Brands named | Pages cited |
+|---|---|---|---|
+| best digital gift for a long distance boyfriend | no | none: six Etsy listings | etsy.com only |
+| how to send a digital love letter | **cited** (not named as a maker) | Letters by Heart, LetterHugs, Hey Love Letters, LoveLetter.digital, OpenWhen | the makers' pages, **tryethos.io/blog/digital-love-letter-websites-compared**, ouvella.com's 15 compared, cherrywish.app's blog |
+| digital gift ideas for an anniversary | no | none | sendcharis.com, seeingwords.love, anniversarysurprise.me, ouvella.com's 10 compared, gift4you.io, lovepanda.co |
+| best sites to make a digital gift | no | Canva, Forevermore, LovePage.io, GiftFeels, SendVirtualGift, JibJab | their home pages |
+| how to make a digital bouquet for my girlfriend | no | Virtual Bouquet Maker, Pocket Greeting, Digital Bouquet Online | their pages |
+| personalized digital gift for my girlfriend | **yes**: "Ethos digital love gifts" beside ouvella.com's comparison | none as makers: Etsy, videosgift.com, mystarrynight.com, loverse.ai | **tryethos.io/gifts/for-girlfriend**, ouvella.com's 10 compared, Etsy listings |
+| what can I send my boyfriend online for his birthday | no | three cologne sets (shopping cards) | none |
+| last minute digital christmas gift for my girlfriend | no | none | ouvella.com, givingfeels.com, adorvi.com (each a "last minute Christmas gift for girlfriend" page), an Etsy listing |
+| website to make a love letter with photos and music | no | 2luv, LoveLetter.digital, Canva, OpenYourLetter | their home pages |
+| best alternatives to gifft.me | **yes, 6th** | aiskyla, Surprises.Gift, GiftFeels, GiftsQR, 2luv, Ethos, qlovy | the makers' home pages, **tryethos.io/blog/gifft-me-alternatives** and **tryethos.io/blog/digital-gift-websites-compared**, gift.rayxis.space/compare |
+| what website do people on tiktok use ... (US) | no | 2luv, LoveLetter.digital, ilovi, OpenYourLetter | their home pages |
+| página para hacer una carta digital para mi novio (Mexico) | no | LovePaper, Canva, Share Love Letters, BouquetNote | lovepaper.app/es, canva.com/es_mx, shareloveletters.com, bouquetnote.com/es/letter |
+| site para fazer carta digital para namorado (Brazil) | no | LovePaper, Love Cards, Qartinha, Canva, Share Love Letters | the makers' pages |
+
+**What changed:** the love-letter comparison post is cited again for "how to send a digital love
+letter" (dropped on 19 Nov); the gifft.me question now cites two posts of ours but puts Ethos 6th
+(2nd on 19 Nov). The Christmas question cites three "last minute Christmas gift for girlfriend"
+pages, the search /blog/last-minute-christmas-gift-for-girlfriend answers: worth keeping sharp
+through December. ouvella.com is cited in 3 of 10 again and still leaves Ethos out (already in
+`link-prospects.md`).
+
 ## 2026-11-20 (the three "Also ask" questions, asked by hand)
 
 ChatGPT with web search, one run each ($0.012). **Ethos named in 0 of 3.** A fourth question, "what

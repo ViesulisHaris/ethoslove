@@ -4,6 +4,43 @@ Weekly, from DataForSEO (`ranked_keywords`, US), written by the daily SEO routin
 (`docs/blog/SEO-AGENT.md`): the keywords with the most searches that the site ranks for, newest
 section first.
 
+## 2026-11-26
+
+The Thursday check: Google's mobile top 30 for 305 phrases (179 US, 30 UK for the product phrases,
+96 Spain), built as before (the target table's phrases with a page of ours, every post's keyword in
+both languages, the five hub searches). $3.69: DataForSEO's results came back with every organic
+`url` as a google.com redirect and `domain` "google.com", so the first pass matched nothing and was
+run again matching the `breadcrumb` (the real site). Breadcrumbs are sometimes junk ("8 years ago"),
+and the same phrase called twice gave different pages, so this check can miss us: six phrases
+re-checked by title found two the full pass missed. Next check: match on `breadcrumb` and on titles
+ending "- Ethos".
+
+**Top 10: 1 of 305. Top 30: 3 of 305** (at least).
+
+| Phrase | Market | Position | Page | Monthly searches |
+|---|---|---|---|---|
+| scratch card ideas | US | 6 | /blog/scratch-card-ideas | 90 |
+| digital gift for mom | US | 14 | /gifts/for-mom | 50 |
+| frases para galletas de la fortuna | Spain | 19 | /es/blog/fortune-cookie-messages | – |
+
+**What moved since 24 Nov:** "scratch card ideas" up 2 (8 to 6); "digital gift for mom" up 2 (16 to
+14); "frases para galletas de la fortuna" back at 19 (out on 24 Nov); "contacto físico lenguaje del
+amor" out (was 17).
+
+`ranked_keywords` (US, 15 keywords) is the same as on 24 Nov: "words of affirmation" (49,500) at
+78, the together calculator at 62, five love-language-test phrases at 60 to 93, "digital flowers"
+at 80, "regalo virtual" and "regalos virtuales" at 57 and 67, "pregunta para tu novio" at 72; new,
+"date melbourne" (50) at 29 for /dates/melbourne.
+
+**Search Console (28 days to 24 Nov, brand left out)**: 5,422 impressions, 95 clicks. Blog pages in
+striking distance: "gifft me" 1,580 impressions at 4.4 (/es/blog/gifft-me-alternatives, 17
+clicks); "monthiversary" 379 at 8.0, "monthaversary" 38 at 6.6, "month anniversary" 37 at 10.9,
+"monthiversary meaning" 35 at 8.1 (/blog/monthiversary-ideas: 609 impressions at 9.9, 1 click);
+"frases para galletas de la fortuna" 30 at 7.5; "deep questions to ask your boyfriend" 32 at 18.9.
+Site pages: /templates/scratch-card ("digital scratch cards" 115 at 19.8, "digital scratch card
+maker" 87 at 19.3, "scratch cards builder" 72 at 15.0), "digital bouquet" 57 at 10.9, "digital
+fortune cookie" 56 at 6.1, "digital snow globe" 41 at 8.5.
+
 ## 2026-11-24
 
 A Tuesday check (the 19 Nov section was five days old): Google's mobile top 30 for 293 phrases (161

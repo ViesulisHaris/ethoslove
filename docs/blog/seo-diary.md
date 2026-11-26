@@ -3,6 +3,45 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-26: the free Letter as a short note in cute-things-to-say-to-your-boyfriend and first-anniversary-ideas-for-boyfriend; four People also ask answers
+- **Page:** /blog/cute-things-to-say-to-your-boyfriend, /blog/first-anniversary-ideas-for-boyfriend (and /es to match)
+- **Why:** First run of a Thursday, so the rank check and the AI answers ran first (below). The first
+  open backlog item, next in its list: both Letter cards still said "Free" with photos as polaroids,
+  untrue since 19 Nov, and the anniversary post said all three of its templates were "built for a year
+  of photos". The sales report shows /create/the-letter as a page that sells to searchers, so the
+  Letter's cards should say what it really is. monthiversary-ideas, still the best seen-but-not-clicked
+  post (609 impressions at 9.9, 1 click, Search Console 28 days, brand left out), can't be touched until
+  27 Nov (last changed 13 Nov). DataForSEO (US): "cute things to say to your boyfriend" 2,400 a month,
+  KD 4; "1 year anniversary ideas for boyfriend" 170, KD 0; "1 year anniversary gift for boyfriend" 480,
+  KD 0. Neither post is in the top 30; Search Console has 3 and 18 impressions. People also ask: "What
+  are 7 promises I can make to my boyfriend?", "How do I text romantic?", "What words melt a man's
+  heart?"; and "What is the 5 gift rule for boyfriends?", "How do I wish my boyfriend for our 1 year
+  anniversary?", "How do I make my boyfriend feel special on our anniversary?". Neither post answered
+  them.
+- **What changed:** Both Letter cards say "Free as a short note: up to 500 characters and a song", with
+  a longer letter and photos (in the anniversary post, the first-date polaroid) under "Make it special",
+  paid once ([prices]); the anniversary intro says the first two templates are premium. New FAQs in both
+  languages: cute-things gets 7 promises, how to text romantic and what words melt a man's heart (the old
+  "how often" FAQ went, the test caps the FAQ at six); the anniversary post gets how to wish him, the 5
+  gift rule (versions differ, with the agree-how-big advice from the FAQ it replaced) and making him feel
+  special. `updated` 2026-11-26 on both.
+- **Panel:** 10/10/10 after 3 rounds each (round 1's search reviewer asked for the People also ask
+  answers; round 2's editor caught a Spanish «cuándo» in the promises and a clipped «en más o menos
+  cuánto» in the 5-gift answer) (`docs/blog/reviews/refresh/<slug>-2026-11-26.json`)
+- **Cost:** $0.02 for the change (a keyword overview, two SERPs with People also ask); the Thursday jobs
+  $3.74 (rank check of 305 phrases twice, $3.69, because DataForSEO's results came back with every
+  `url` as a google.com redirect and the first pass matched nothing; AI answers and page checks $0.05);
+  balance $38.45
+- **Weekly jobs:** Rank check (`seo-ranks.md`): top 10 for 1 of 305, top 30 for 3 ("scratch card ideas"
+  up to 6, "digital gift for mom" up to 14, "frases para galletas de la fortuna" back at 19); match on
+  `breadcrumb` and titles next time, as the redirects hide the domain. AI answers (`ai-answers.md`): Ethos
+  named or cited in 3 of 10 (2 on 19 Nov): the love-letter comparison is cited again for "how to send a
+  digital love letter", /gifts/for-girlfriend for the girlfriend question, and Ethos is 6th (was 2nd)
+  for gifft.me alternatives; 0 of 3 for the "Also ask" questions. One new link prospect: ouvella.com's
+  "best digital love letter websites: 15 compared", cited beside ours and leaving Ethos out.
+- **Check on:** 2026-12-15 whether "cute things to say to your boyfriend" or "1 year anniversary ideas
+  for boyfriend" show for these posts in Search Console
+
 ## 2026-11-25: the free Letter as a short note in anniversary-letter-to-boyfriend and birthday-message-for-husband; a 1-year FAQ, and "wishes" in the husband title
 - **Page:** /blog/anniversary-letter-to-boyfriend, /blog/birthday-message-for-husband (and /es to match)
 - **Why:** Second run of the day, a Wednesday (no weekly job; the ranks are a day old). The first open
