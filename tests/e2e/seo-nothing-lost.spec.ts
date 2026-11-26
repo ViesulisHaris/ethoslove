@@ -1,5 +1,6 @@
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import { parseDocument } from "htmlparser2";
+import { IntlMessageFormat } from "intl-messageformat";
 import type { AnyNode, Element } from "domhandler";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
@@ -10,6 +11,8 @@ import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "../../src/content/digita
 import { GIFT_GUIDE_SLUGS, GUIDES_IN_CLOSING_ROWS } from "../../src/content/gift-guides";
 import { templateSeo } from "../../src/content/template-seo";
 import { listManifests } from "../../src/templates/manifests";
+import { pricingGifts } from "../../src/components/pricing/free-gifts";
+import { serverNoteShare } from "./server-settings";
 
 /**
  * The occasion pages, /gifts and the pages by person were made short to the eye (fix round 4, 24 Nov
@@ -182,7 +185,13 @@ for (const { prefix, l, m } of LANGS) {
       expect(head(page).h1, path).toBe(1);
       expect(page.text, path).toContain(squash(`${hero.eyebrow}${hero.h1a}${hero.h1b}${hero.h1c}`));
       const manifests = listManifests();
-      const steps = m.home.how.steps;
+      // The page counts its free templates from the gallery under the server's own free-note setting (aae3f456):
+      // the first step and the hero fact say one or two, so the test reads that setting from the server too.
+      const freeGifts = pricingGifts(manifests, await serverNoteShare(request)).free;
+      const pickBody = String(new IntlMessageFormat(m.home.how.pickBody, l).format({ free: freeGifts.length, name: freeGifts[0]?.name[l] ?? "" }));
+      const steps = m.home.how.steps.map((step, i) => (i === 0 ? { ...step, body: pickBody } : step));
+      const facts = hero.facts;
+      const factWords = [freeGifts.length === 1 ? facts.free.bOne : facts.free.b, facts.noAccount.b, facts.once.b, facts.langs.b];
       expectText(page, path, [
         hero.sub, hero.ctaNote, hero.caption,
         guide.title, guide.definition, guide.notACard, guide.ideasTitle, guide.ideasLead, guide.byWho, guide.byKind, guide.cards,
@@ -193,7 +202,7 @@ for (const { prefix, l, m } of LANGS) {
         ...steps.flatMap((s) => [s.title, s.body]),
         m.home.templates.title, m.home.templates.blurb, m.home.openings.title, m.home.openings.blurb, m.home.occasions.title, m.home.occasions.blurb,
         m.pricing.title, m.pricing.subtitle, m.home.final.title, m.home.final.blurb,
-        ...Object.values(hero.facts).map((f) => f.b),
+        ...factWords,
       ]);
       for (const hidden of [guide.definition, guide.notACard, ...guide.faq.map((f) => f.a), ...steps.map((s) => s.body), m.pricing.subtitle, m.home.templates.blurb]) expect(inDetails(page, hidden), `${path}: “${hidden.slice(0, 40)}” not in a <details>`).toBe(true);
       expectLinks(page, path, [
