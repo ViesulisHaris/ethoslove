@@ -1,0 +1,145 @@
+{
+  "slug": "questions-to-ask-your-husband",
+  "keyword": "questions to ask your husband",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "One fix: 'Which of us would win a game show, and which one?' was ambiguous read aloud. Polish: neutral proposal wording, 'till' is UK-only, say Fortune Cookie is a paid template."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 9,
+            "spanish": 7
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "A claim about Ethos that the files don't support. The post says How well do you know me? 'turns the \"things you might not know\" questions into a quiz'. The game uses its own eight fixed questions, each with four answers to pick from (messages/en.json games.know.blurb and listIntro; KNOW_QUESTIONS in src/lib/games/content). It does not use the post's questions. The same claim appears in the ES version."
+          ],
+          "summary": "The know-me game claim was wrong (it has its own eight questions); the Gottman paraphrase added 'notice the gaps' and 'kept up to date', which the page doesn't say; nine Spanish lines were calques or changed the meaning (perdonaran, matrimonio de tus padres, de qué quieres más, temporada callada, concurso, hacer las paces, word order, ponerse al día, guapa)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Two People-also-ask questions from the variants were unanswered: 'Why does my husband listen to everyone but me?' and 'How to reduce husband stress?'. Add them in both languages."
+        }
+      ],
+      "applied": [
+        "Know-me game described as its own eight-question quiz (EN, ES)",
+        "Gottman paraphrase limited to what the page says (EN, ES)",
+        "Game-show question reworded in both languages",
+        "All nine Spanish fixes, plus polish: primer piso que alquilamos, riesgo silencioso, Deja que se la salte, 'Si no sabes qué contarle' in love-letter-to-husband",
+        "'run the till' -> 'serve the customers'",
+        "Fortune Cookie note says it is a premium template, linking /pricing",
+        "FAQ: 'Why does my husband listen to everyone but me?' (EN, ES)",
+        "Stress: a 'When he's stressed, ask what would help' item in the one-word-answers section (EN, ES)"
+      ],
+      "rejected": [
+        "Adding both PAA questions as FAQ items: the test allows at most six FAQ entries, so the stress question went into the body section on talking instead, with the reviewer's own two lines"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-one fixes made correctly. Better than the top results because it pairs 101 questions sorted by stage with how to ask them: go-first lines, a weekly check-in and what to do with one-word answers."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-one fixes verified against the code. One fix: '¿De qué te arrepientes pero ya lo tienes asumido?' is ungrammatical. Polish: vosotros/tú switch in the Gottman line, 'versión en test', 'lo que quiere ahora' vs 'next', and a few idioms."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every People-also-ask question is now answered; the stage table, go-first openers, weekly check-in and one-word-answers section give more than The Knot, marriage.com and Paired."
+        }
+      ],
+      "applied": [
+        "'¿Hay algo de lo que te arrepientas pero que ya tengas asumido?'",
+        "Polish that heads off likely fixes: 'fijándoos' (consistent vosotros), 'versión con puntos', 'lo que quiere a partir de ahora'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The page to send a friend: 101 questions that move from nostalgic to deep to flirty, a table for choosing by marriage stage, and concrete lines to borrow."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product claim matches the code and every link resolves; it beats the top results because its questions are written for years into a marriage (what's changed, a weekly check-in, one-word answers), not a generic list."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No top page has the stage table, the go-first openers or the one-word-answers section, and the FAQ answers every People-also-ask question across the main, deep and fun variants."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Future section: an optional one-line intro",
+        "Juicy list: optionally two or three more",
+        "ES: 'mezquino' is heavier than 'petty'",
+        "ES: avoid 'día a día / al día' repetition"
+      ]
+    }
+  ]
+}

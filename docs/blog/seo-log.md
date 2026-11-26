@@ -2034,3 +2034,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-26T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01296 | seo: good-morning/good-night-for-her |
 | 2026-11-26T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: good morning messages for her |
 | 2026-11-26T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: good night messages for her |
+| 2026-11-26T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.012 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |
+| 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |

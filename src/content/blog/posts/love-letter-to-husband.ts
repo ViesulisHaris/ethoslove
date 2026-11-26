@@ -42,7 +42,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you're stuck on how to begin and end, our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) has openings and closings that don't sound like a card.",
+          text: "If you're stuck on how to begin and end, our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) has openings and closings that don't sound like a card. If you're short of things to say, ask him a few of our [questions to ask your husband](/blog/questions-to-ask-your-husband) first: his answers make good material.",
         },
         { type: "h2", text: "A love letter to your husband after five years" },
         {
@@ -184,7 +184,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si no sabes cómo empezar ni cómo terminar, nuestra guía sobre [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) tiene comienzos y finales que no suenan a tarjeta.",
+          text: "Si no sabes cómo empezar ni cómo terminar, nuestra guía sobre [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) tiene comienzos y finales que no suenan a tarjeta. Si no sabes qué contarle, hazle antes algunas de nuestras [preguntas para tu marido](/blog/questions-to-ask-your-husband): sus respuestas dan buen material.",
         },
         { type: "h2", text: "Una carta de amor a tu marido a los cinco años" },
         {
