@@ -1,0 +1,137 @@
+{
+  "slug": "love-notes-for-her",
+  "keyword": "love notes for her",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the top results because it tells you where to hide each note, what separates a kept note from a read one (the before/after table) and what to do each day this week, where the top pages are bare lists. Polish only: the wife lines assume children; UK spelling."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to reframe the week plan as one special week so it doesn't contradict the 'one note a week' takeaway (both languages), and to fix 'el (nombre) que solo ella te llama' to 'el mote con el que...' in three Spanish places, with 'lo que te hace sentir' for 'lo que te provoca'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page on the first results that sorts short notes by where she'll find them, with a trick for each spot, a before/after table and a week plan; answers all four People-also-ask questions and the wife variant."
+        }
+      ],
+      "applied": [
+        "Week-plan intro reframed as one special week, then back to one a week (EN and ES)",
+        "ES: 'el mote con el que (solo) ella te llama' in the takeaway, list and FAQ; 'lo que te hace sentir'",
+        "Polish: ES description 'Además, graciosas'; EN 'around her lunch box'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes broke nothing; it tells you where and when to leave each note, with a week plan, a before/after table and wife-specific lines, where the top pages are quote lists with no placement or timing."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Confirmed every round 1 fix. Asked for the subjunctive in 'cuando ya se os haya olvidado a los dos'. Polish on Spanish calques ('gana la reunión', 'broma interna', 'He revisado', 'Unas pocas palabras es') and US-neutral 'Send one to her work'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is hundreds of undifferentiated lines; this post tells you what makes a note get kept, where to hide each one and a week-long schedule, and answers the PAA questions with real examples."
+        }
+      ],
+      "applied": [
+        "ES subjunctive fix",
+        "Polish taken to head off fixes: 'Send one to her work', 'arrasa en la reunión', 'Pega una nota en su táper', 'Pocas palabras son la medida justa', 'Lo he comprobado', 'Una broma vuestra'"
+      ],
+      "rejected": [
+        "'orgulloso' to a neutral form: optional, and the line reads naturally from a male writer"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It sorts ready-to-send notes by the place she'll find them, adds a before/after table, a seven-day plan with a gap day and a wife section, and keeps the product at the end, where the top lists are bare quote dumps."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 2 fix and polish made correctly; every product claim checks out against the manifests, schema and free-tier files, and the Spanish reads as written in Spain. Polish only: 'holiday' could be 'trip' for US readers."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that sorts short notes by where she will find them, with a tested trick for each spot, a before/after table and a week plan she can run tonight; the listicles give lines and stop there."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "'holiday' to 'trip' in two lines (editor)",
+        "Saturday row 'or say it out loud' (reader)",
+        "Optional sixth FAQ for 'What is a short and sweet message?' (search)"
+      ]
+    }
+  ]
+}
