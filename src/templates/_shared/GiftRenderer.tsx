@@ -18,6 +18,8 @@ import { ReplyModeContext } from "./reply-mode";
 import { GiftChromeContext } from "./gift-chrome";
 import { UnwrapPeek } from "./UnwrapGift";
 import { withFieldDefaults } from "./field-defaults";
+import { isCatalogPreview } from "@/lib/gift/music";
+import { SongStrip, songStripOn } from "./SongStrip";
 
 const MIN_LOADING_MS = 1600;
 
@@ -196,6 +198,8 @@ export function GiftRenderer({
         ) : null}
         {/* The still frame rarely shows the end screen, where a surprise inside waits: it peeks in instead, until the real one is in view. */}
         {mode === "preview" && ready && resolved?.unwrap && !endScreen ? <UnwrapPeek data={resolved} /> : null}
+        {/* The real song, once, on a tap (./SongStrip.tsx): only with its switch on, only in an opened gift, never over the end screen, whose own card has it. */}
+        {songStripOn() && mode !== "preview" && ready && coverOpen && !endScreen && resolved && isCatalogPreview(resolved.music) ? <SongStrip key={`song-${replayKey}`} music={resolved.music} locale={resolved.locale} /> : null}
         {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
         {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} counted={replyMode} /> : null}
       </div>

@@ -2,7 +2,7 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import sharp from "sharp";
-import { COVER_SHAPE } from "@/components/templates/page/cover-in-screen";
+import { COVER_SHAPE, SCREEN_SHAPE, tallOf } from "@/components/templates/page/cover-in-screen";
 import { TEMPLATE_FILM_STARTS, templateFilmStart } from "@/content/template-film-starts";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 
@@ -72,5 +72,24 @@ describe("where a gift's preview film starts", () => {
       if (!m.thumbnail.webm) continue;
       expect(statSync(join(process.cwd(), "public", m.thumbnail.webm)).size, m.slug).toBeLessThanOrEqual(2_000_000);
     }
+  });
+
+  it("has a tall twin of every cover and film, in a phone screen's own shape, for the drawn phones", async () => {
+    // The lying phone and the small phones show these (cover-in-screen.tsx, SCREEN_SHAPE, tallOf): the
+    // 13:20 pair sat in the screen's middle with a blurred band above and below (26 Nov 2026).
+    const [across, down] = SCREEN_SHAPE;
+    for (const m of TEMPLATE_MANIFESTS) {
+      const poster = join(process.cwd(), "public", tallOf(m.thumbnail.poster));
+      expect(existsSync(poster), `${m.slug}: no ${tallOf(m.thumbnail.poster)}`).toBe(true);
+      const cover = await sharp(poster).metadata();
+      expect(Math.abs(cover.width! / cover.height! - across / down), `${m.slug}: its tall cover is ${cover.width}×${cover.height}`).toBeLessThan(0.002);
+      if (!m.thumbnail.webm) continue;
+      const film = join(process.cwd(), "public", tallOf(m.thumbnail.webm));
+      expect(existsSync(film), `${m.slug}: no ${tallOf(m.thumbnail.webm)}`).toBe(true);
+      expect(statSync(film).size, m.slug).toBeLessThanOrEqual(2_000_000);
+    }
+    expect(tallOf("/templates/bouquet/poster.jpg")).toBe("/templates/bouquet/poster-tall.jpg");
+    expect(tallOf("/templates/bouquet/preview.webm")).toBe("/templates/bouquet/preview-tall.webm");
+    expect(tallOf("/art/other.jpg")).toBe("/art/other.jpg");
   });
 });

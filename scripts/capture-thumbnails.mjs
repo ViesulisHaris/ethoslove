@@ -9,7 +9,11 @@ import sharp from "sharp";
 
 const base = process.argv[2] ?? "http://localhost:3000";
 const W = 390;
-const H = 600;
+// TALL=1 records the same scripts in a phone screen's own shape (390:844), for the lying phone on a gift's page:
+// poster-tall.jpg and preview-tall.webm beside the 13:20 pair the gallery cards use.
+const TALL = process.env.TALL === "1";
+const H = TALL ? 844 : 600;
+const SUFFIX = TALL ? "-tall" : "";
 
 /** Every gift now opens on a cover; the capture taps it and waits for the gift underneath. */
 /** Opens a collage, takes the first screen as the poster, then scrolls it for the recording. */
@@ -778,7 +782,7 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
   if (onlySlugs.length && !onlySlugs.includes(slug)) continue;
   const dir = join("public/templates", slug);
   mkdirSync(dir, { recursive: true });
-  const videoDir = join(".tmp-video", slug);
+  const videoDir = join(TALL ? ".tmp-video-tall" : ".tmp-video", slug);
   rmSync(videoDir, { recursive: true, force: true });
   const context = await browser.newContext({
     ...devices["iPhone 13"],
@@ -812,11 +816,11 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     await context.close();
     continue;
   }
-  await sharp(poster).jpeg({ quality: 82, mozjpeg: true }).toFile(join(dir, "poster.jpg"));
+  await sharp(poster).jpeg({ quality: 82, mozjpeg: true }).toFile(join(dir, `poster${SUFFIX}.jpg`));
   await context.close();
   const [video] = readdirSync(videoDir).filter((f) => f.endsWith(".webm"));
-  renameSync(join(videoDir, video), join(dir, "preview.webm"));
+  renameSync(join(videoDir, video), join(dir, `preview${SUFFIX}.webm`));
   console.log("captured", slug);
 }
-rmSync(".tmp-video", { recursive: true, force: true });
+rmSync(TALL ? ".tmp-video-tall" : ".tmp-video", { recursive: true, force: true });
 await browser.close();

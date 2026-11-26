@@ -188,7 +188,7 @@ async function film(page: Page) {
 test("the gift's film plays in the lying phone while it is on screen, and moves nothing", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   const films: string[] = [];
-  page.on("request", (request) => void (request.url().endsWith("preview.webm") && films.push(request.url())));
+  page.on("request", (request) => void (request.url().endsWith("preview-tall.webm") && films.push(request.url())));
   await page.goto(PAGE);
   await settle(page);
   const hero = page.locator("[data-flatlay=hero]");
@@ -197,7 +197,7 @@ test("the gift's film plays in the lying phone while it is on screen, and moves 
   // It is this gift's own film, laid where the cover is, turned with the phone, and shown once it is really playing.
   await expect(hero.locator("video[data-on]")).toHaveCount(1, { timeout: 20000 });
   const f = await film(page);
-  expect(f.src).toBe("/templates/the-letter/preview.webm");
+  expect(f.src).toBe("/templates/the-letter/preview-tall.webm");
   expect(f.paused).toBe(false);
   expect(f.sameBox).toBe(true);
   expect(f.stillShown).toBe(true);
@@ -270,32 +270,15 @@ test("the film starts on the gift's own screen, never on the cover that says “
   }
 });
 
-test("the film can be stopped and started again, and stays stopped when the phone scrolls back", async ({ page }) => {
+test("the phone has one button: nothing beside it stops or starts the film", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(PAGE);
   const hero = page.locator("[data-flatlay=hero]");
-  // No button until there is a film to stop.
   await expect(hero.locator("video[data-on]")).toHaveCount(1, { timeout: 20000 });
-  const toggle = hero.locator("[data-film-toggle]");
-  await expect(toggle).toHaveAccessibleName(/pause the preview/i);
-  const box = (await toggle.boundingBox())!;
-  expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
-  // It is beside the phone, not on its screen: what is under its middle is the button itself, and a tap on it must not start the demo.
-  expect(await toggle.evaluate((el) => { const r = el.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return el.contains(top) && !top!.closest("[data-play]"); })).toBe(true);
-  await toggle.click();
-  await expect(hero.locator("[data-upright]")).toHaveCount(0);
-  await expect.poll(async () => (await film(page)).paused).toBe(true);
-  await expect(toggle).toHaveAccessibleName(/play the preview/i);
-  // Stopped by the visitor, it stays stopped: off the screen and back does not start it.
-  await page.locator("section[aria-labelledby=template-questions]").scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(800);
-  expect((await film(page)).paused).toBe(true);
-  // By keyboard too.
-  await toggle.focus();
-  await page.keyboard.press("Enter");
-  await expect.poll(async () => (await film(page)).paused).toBe(false);
-  await expect(toggle).toHaveAccessibleName(/pause the preview/i);
+  // The owner, 26 Nov 2026: two play buttons on one phone "looks broken".
+  await expect(hero.locator("[data-film-toggle]")).toHaveCount(0);
+  await expect(hero.locator("button")).toHaveCount(1);
+  await expect(hero.locator("button[data-play]")).toHaveAccessibleName(/try the live demo/i);
 });
 
 test("by keyboard: the play button shows its focus, the picked-up phone takes it, and it can be put down again", async ({ page }) => {
@@ -553,11 +536,11 @@ async function coverFit(page: Page) {
     const screen = cover.closest("[data-play]") as HTMLElement;
     const video = cover.querySelector("video");
     const still = cover.querySelector("img")!;
-    // The share of a 13:20 recording's width that a box shows when the picture is fitted into it by `fit`.
+    // The share of a tall (390:844) recording's width that a box shows when the picture is fitted into it by `fit`.
     const shown = (el: HTMLElement) => {
       const fit = getComputedStyle(el).objectFit;
       const box = el.offsetWidth / el.offsetHeight;
-      return fit === "cover" ? Math.min(1, box / (13 / 20)) : 1;
+      return fit === "cover" ? Math.min(1, box / (390 / 844)) : 1;
     };
     return {
       screen: [screen.offsetWidth, screen.offsetHeight],
@@ -587,8 +570,10 @@ test("the lying phone shows the whole of a gift's cover and film: nothing is cut
       // The picture is as wide as the screen and no wider, in the recordings' own shape, in the screen's middle.
       expect(still.cover[0], `${slug} ${width}`).toBe(still.screen[0]);
       expect(still.cover[2], `${slug} ${width}`).toBe(0);
-      expect(still.cover[0] / still.cover[1], `${slug} ${width}`).toBeCloseTo(13 / 20, 2);
-      expect(still.cover[1], `${slug} ${width}`).toBeLessThan(still.screen[1]);
+      // Since 26 Nov 2026 the phone shows the tall recording (390:844), which is the screen's own shape:
+      // whole from side to side, and from rim to rim, with no blurred band above or below it.
+      expect(still.cover[0] / still.cover[1], `${slug} ${width}`).toBeCloseTo(390 / 844, 2);
+      expect(still.cover[1] / still.screen[1], `${slug} ${width}: a band is left above or below the cover`).toBeGreaterThan(0.99);
       expect(still.stillShown, `${slug} ${width}: the still cover is cut`).toBe(1);
       // What is left of the taller screen is a soft copy of the same cover: itself, and turned over above and below.
       expect(still.soft, `${slug} ${width}`).toBe(3);
@@ -764,7 +749,7 @@ test("a phone's first screen is light: the lying phone, its rim and the gift's c
   const allKb = Math.round([...fetched.values()].reduce((n, b) => n + b, 0) / 1024);
   console.log(`a phone's first screen: ${firstKb} KB in ${first.length} pictures (${first.map((p) => `${p.name} ${Math.round(p.bytes / 1024)} KB`).join(", ")}); ${allKb} KB of pictures fetched before any scroll, the browser's own look-ahead for lazy ones included`);
   // The half-size picture and rim: the full-size pair was 250 KB of a phone's first screen (the confirming test of 22 Nov 2026).
-  expect(first.map((p) => p.name).sort()).toEqual(["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp", "poster.jpg"]);
+  expect(first.map((p) => p.name).sort()).toEqual(["hero-flatlay-ivory-1x.webp", "hero-flatlay-ivory-bezel-1x.webp", "poster-tall.jpg"]);
   // The film is not part of a phone's first screen: under two fifths of the lying phone is on it, so the film has not been asked for.
   expect([...films.keys()]).toEqual([]);
   expect(firstKb).toBeLessThan(200);
@@ -778,7 +763,7 @@ test("a phone's first screen is light: the lying phone, its rim and the gift's c
   await page.locator("[data-flatlay=hero] video").evaluate((v) => v.scrollIntoView({ block: "center" }));
   await expect(page.locator("[data-flatlay=hero] video[data-on]")).toHaveCount(1, { timeout: 20000 });
   console.log(`the film in the lying phone, asked for once the phone is on screen: ${[...films].map(([url, bytes]) => `${new URL(url).pathname} ${Math.round(bytes / 1024)} KB`).join(", ")}`);
-  expect([...films.keys()].map((url) => new URL(url).pathname)).toEqual(["/templates/the-letter/preview.webm"]);
+  expect([...films.keys()].map((url) => new URL(url).pathname)).toEqual(["/templates/the-letter/preview-tall.webm"]);
   await context.close();
 });
 

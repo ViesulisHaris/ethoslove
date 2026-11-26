@@ -27,19 +27,32 @@ function everything(locale: GiftLocale): Partial<GiftData> {
   };
 }
 
-export function GiftPreviewStage({ slug, locale, paid, full }: { slug: string; locale: GiftLocale; paid: boolean; full: boolean }) {
+/** A real song as the editor saves one (Apple's own preview of a recording), for the song strip (templates/_shared/SongStrip.tsx). */
+const REAL_SONG: GiftData["music"] = {
+  source: "catalog",
+  provider: "itunes",
+  trackId: "1660118795",
+  title: "Clair De Lune",
+  artist: "Johann Debussy",
+  artwork: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/ef/1d/a5/ef1da57b-d7f9-fc43-c605-1ee2370d65bc/055120211263.png/200x200bb.jpg",
+  url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/15/46/73/15467363-865b-aeed-c4e5-8694d2569d4d/mzaf_1449420267995447622.plus.aac.p.m4a",
+  externalUrl: "https://music.apple.com/us/album/clair-de-lune/1660118793?i=1660118795",
+  startAt: 0,
+};
+
+export function GiftPreviewStage({ slug, locale, paid, full, song = false }: { slug: string; locale: GiftLocale; paid: boolean; full: boolean; song?: boolean }) {
   const [data, setData] = useState<GiftData | null>(null);
   useEffect(() => {
     let live = true;
     void loadTemplate(slug).then((mod) => {
       if (!live || !mod) return;
       const demo = mod.demoData[locale] ?? mod.demoData.en;
-      setData({ ...demo, templateSlug: slug, locale, showReactionCta: true, watermark: !paid, ...(full ? everything(locale) : {}) });
+      setData({ ...demo, templateSlug: slug, locale, showReactionCta: true, watermark: !paid, ...(full ? everything(locale) : {}), ...(song ? { music: REAL_SONG } : {}) });
     });
     return () => {
       live = false;
     };
-  }, [slug, locale, paid, full]);
+  }, [slug, locale, paid, full, song]);
   if (!data) return <div className="h-dvh w-full bg-night" />;
   return <GiftExperience shortId={SHORT_ID} data={data} locale={locale} />;
 }

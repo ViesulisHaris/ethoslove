@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { Film, Pause, Play, X } from "lucide-react";
+import { Play, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
-import { COVER_RATIO, COVER_SHAPE } from "./cover-in-screen";
+import { SCREEN_RATIO as COVER_RATIO, SCREEN_SHAPE as COVER_SHAPE, tallOf } from "./cover-in-screen";
 import { loadTemplate } from "@/templates/registry";
 
 /**
@@ -151,7 +151,8 @@ export function HeroFlatlay({
   const [live, setLive] = useState(false);
   const [Preview, setPreview] = useState<PhonePreview | null>(null);
   /** The film as its pause button needs to know it: not showing, running, or stopped by the visitor. */
-  const [filmState, setFilmState] = useState<"off" | "playing" | "paused">("off");
+  // One button on the phone (the owner, 26 Nov 2026: a second one beside it "looks broken"): the film has no control of its own.
+  const [, setFilmState] = useState<"off" | "playing" | "paused">("off");
   const film = useRef<HTMLVideoElement>(null);
   const wash = useRef<HTMLCanvasElement>(null);
   const play = useRef<HTMLButtonElement>(null);
@@ -338,7 +339,7 @@ export function HeroFlatlay({
     const watcher = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && suits() && !stopped.current) {
-          if (!video.getAttribute("src")) video.src = preview;
+          if (!video.getAttribute("src")) video.src = tallOf(preview);
           video.play().catch(hide);
         } else video.pause();
       },
@@ -364,25 +365,6 @@ export function HeroFlatlay({
       video.pause();
     };
   }, [preview, live, from]);
-
-  // By what the visitor last asked for, not by whether the film is running this instant: scrolled
-  // half off the screen it is paused already, and a press meant to stop it would have started it.
-  const toggleFilm = () => {
-    const video = film.current;
-    if (!video) return;
-    if (stopped.current) {
-      stopped.current = false;
-      setFilmState("playing");
-      video.play().catch(() => {
-        stopped.current = true;
-        setFilmState("paused");
-      });
-    } else {
-      stopped.current = true;
-      video.pause();
-      setFilmState("paused");
-    }
-  };
 
   // The picture in the screen's middle, and the same picture turned over above it and below it: a
   // reflection carries on from the picture's own edge, so the soft copy never changes colour there.
@@ -418,7 +400,7 @@ export function HeroFlatlay({
             {/* The soft copy that fills the taller screen: blurred as one piece, and larger than the screen, so its faded rim is never seen. */}
             <span data-soft aria-hidden="true" className="pointer-events-none absolute inset-0 block scale-125 blur-lg">
               {["-150%", "50%", "-50%"].map((shift) => (
-                <img key={shift} src={`/templates/${slug}/poster.jpg`} alt="" className={copy} style={{ aspectRatio: COVER_RATIO, transform: `translateY(${shift})${shift === "-50%" ? "" : " scaleY(-1)"}` }} />
+                <img key={shift} src={`/templates/${slug}/poster-tall.jpg`} alt="" className={copy} style={{ aspectRatio: COVER_RATIO, transform: `translateY(${shift})${shift === "-50%" ? "" : " scaleY(-1)"}` }} />
               ))}
               {preview ? <canvas ref={wash} width={26} height={56} className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300 data-on:opacity-100" /> : null}
             </span>
@@ -427,8 +409,8 @@ export function HeroFlatlay({
              * screen's middle. Its top and bottom edges fade into the soft copy, so no line is drawn
              * across the phone where one ends and the other begins.
              */}
-            <span data-cover className={cn("hero-cover", copy, "-translate-y-1/2")} style={{ aspectRatio: COVER_RATIO }}>
-              <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute inset-0 h-full w-full object-contain" />
+            <span data-cover className={cn(copy, "-translate-y-1/2")} style={{ aspectRatio: COVER_RATIO }}>
+              <img src={`/templates/${slug}/poster-tall.jpg`} alt="" className="absolute inset-0 h-full w-full object-contain" />
               {preview ? (
                 // Over the still cover, unseen until it is really playing: no black frame, no flicker, and the cover where it can't play.
                 <video ref={film} muted loop={from === 0} playsInline preload="none" aria-hidden="true" tabIndex={-1} className="pointer-events-none absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-300 data-on:opacity-100" />
@@ -456,21 +438,6 @@ export function HeroFlatlay({
           </span>
         ) : null}
       </div>
-      {filmState !== "off" && !live ? (
-        // Beside the phone's foot, clear of its screen: the one thing on the page that moves by itself can be stopped.
-        <button
-          type="button"
-          data-film-toggle
-          onClick={toggleFilm}
-          aria-label={t(filmState === "playing" ? "pausePreview" : "playPreview")}
-          className="group/film absolute -right-5 bottom-[4%] z-10 grid size-11 place-items-center rounded-full"
-        >
-          <span className="grid size-8 place-items-center rounded-full border border-page-line bg-page-raised/90 text-page-ink shadow-page-card backdrop-blur-sm transition-[background-color,scale] duration-200 group-hover/film:bg-page-raised group-active/film:scale-95">
-            {/* Stopped, it is a film strip, never a second play triangle: the triangle on the screen starts the live demo. */}
-            {filmState === "playing" ? <Pause aria-hidden="true" className="size-3.5 fill-current" strokeWidth={0} /> : <Film aria-hidden="true" className="size-3.5" strokeWidth={1.8} />}
-          </span>
-        </button>
-      ) : null}
       {live ? (
         // Picked up: the live gift, upright, over where the phone lay. It starts at the lying phone's own turn.
         <div

@@ -19,6 +19,7 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
  *   ?lang=es           a Spanish gift
  *   ?paid=1            sent without the footer (a paid gift)
  *   ?full=1            the tallest end screen: a surprise inside, a voice message, a song and a dedication
+ *   ?song=1            the gift carries a real song (the song strip, with NEXT_PUBLIC_SONG_STRIP=1)
  *
  * The reaction and view routes are the real ones, which a test answers itself. NODE_ENV is inlined
  * at build: in production this page is a 404.
@@ -34,7 +35,7 @@ export default async function GiftPreviewPage({ params, searchParams }: PageProp
   const messages = (await import(`../../../../../../messages/${lang}.json`)).default;
   return (
     <NextIntlClientProvider locale={lang} messages={{ gift: messages.gift }}>
-      <GiftPreviewStage slug={slug} locale={lang} paid={one(query.paid) === "1"} full={one(query.full) === "1"} />
+      <GiftPreviewStage slug={slug} locale={lang} paid={one(query.paid) === "1"} full={one(query.full) === "1"} song={one(query.song) === "1"} />
     </NextIntlClientProvider>
   );
 }
