@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { GiftData, GiftLocale } from "@/lib/gift/schema";
+import { COVER_IDS, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { loadTemplate } from "@/templates/registry";
 import { GiftExperience } from "@/components/gift/gift-experience";
 
@@ -40,19 +40,19 @@ const REAL_SONG: GiftData["music"] = {
   startAt: 0,
 };
 
-export function GiftPreviewStage({ slug, locale, paid, full, song = false }: { slug: string; locale: GiftLocale; paid: boolean; full: boolean; song?: boolean }) {
+export function GiftPreviewStage({ slug, locale, paid, full, song = false, cover }: { slug: string; locale: GiftLocale; paid: boolean; full: boolean; song?: boolean; cover?: string }) {
   const [data, setData] = useState<GiftData | null>(null);
   useEffect(() => {
     let live = true;
     void loadTemplate(slug).then((mod) => {
       if (!live || !mod) return;
       const demo = mod.demoData[locale] ?? mod.demoData.en;
-      setData({ ...demo, templateSlug: slug, locale, showReactionCta: true, watermark: !paid, ...(full ? everything(locale) : {}), ...(song ? { music: REAL_SONG } : {}) });
+      setData({ ...demo, templateSlug: slug, locale, showReactionCta: true, watermark: !paid, ...(full ? everything(locale) : {}), ...(song ? { music: REAL_SONG } : {}), ...(cover && (COVER_IDS as readonly string[]).includes(cover) ? { cover: cover as GiftData["cover"] } : {}) });
     });
     return () => {
       live = false;
     };
-  }, [slug, locale, paid, full, song]);
+  }, [slug, locale, paid, full, song, cover]);
   if (!data) return <div className="h-dvh w-full bg-night" />;
   return <GiftExperience shortId={SHORT_ID} data={data} locale={locale} />;
 }

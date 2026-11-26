@@ -1,8 +1,8 @@
 "use client";
 /* eslint-disable @next/next/no-img-element -- the cover comes from Apple's own image CDN */
 
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Music2, Play } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ArrowUpRight, Music2, Play, VolumeX } from "lucide-react";
 import type { GiftLocale, GiftMusic } from "@/lib/gift/schema";
 import { appleMusicTrackUrl, isApplePreviewUrl } from "@/lib/gift/music";
 import { isSongThumbnail } from "@/lib/gift/song-link";
@@ -15,7 +15,9 @@ import { GIFT_CONTROLS, coversControl } from "./watermark-spot";
  * The real song, heard once while the gift is read (the owner, 26 Nov 2026). Off unless
  * NEXT_PUBLIC_SONG_STRIP is "1": without it nothing here is drawn and a gift is exactly as it was.
  *
- * A small pill in the gift's top corner. Nothing plays until the recipient taps it; then Apple's
+ * On the screen a gift opens from (`onCover`) it is a sound button under "Tap to open": the
+ * unmute button the owner drew on 26 Nov 2026. When the gift opens it glides to the top corner and
+ * becomes the small pill. Nothing plays until the recipient taps it, in either place; then Apple's
  * 30-second preview fades in, plays once, fades out and stops (never a loop). While it plays the pill
  * shows the song's name beside a link to it on Apple Music, which is what lets a preview be heard at
  * all (./SongPreview.tsx, lib/gift/music.ts). The first scroll or tap inside the gift after that
@@ -33,64 +35,140 @@ const FADE_OUT = 2.5;
 
 type State = "idle" | "playing" | "done";
 
-export function SongStrip({ music, locale }: { music: GiftMusic; locale: GiftLocale }) {
-  const [state, setState] = useState<State>("idle");
+/**
+ * One player for the page, whichever strip shows it: the sound button on the screen a gift opens
+ * from (the gift page's own gate, or a cover inside the gift) and the pill in the opened gift are
+ * different pieces of the page, and the song must not stop or start over between them.
+ */
+const OWNER = {};
+let player: { url: string; state: State; audio: HTMLAudioElement | null } = { url: "", state: "idle", audio: null };
+const watchers = new Set<() => void>();
+let strips = 0;
+let leaving = 0;
+let wired = false;
+const setPlayer = (next: Partial<typeof player>) => {
+  player = { ...player, ...next };
+  for (const watcher of [...watchers]) watcher();
+};
+const stopSong = (state: State) => {
+  const audio = player.audio;
+  if (audio && !audio.paused) audio.pause();
+  releaseSound(OWNER);
+  if (player.state !== state) setPlayer({ state });
+};
+/** Stopped by anything else that makes a sound (the end screen's card, a video, the voice message) and by the tab going to the background. */
+function wire() {
+  if (wired) return;
+  wired = true;
+  onSoundClaimed((_kind, by) => {
+    if (by !== OWNER && player.state === "playing") stopSong("done");
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && player.state === "playing") stopSong("done");
+  });
+}
+function playSong(url: string) {
+  if (player.state !== "idle") return;
+  const audio = new Audio();
+  audio.preload = "auto";
+  // Apple's rule: heard once, never on a loop.
+  audio.loop = false;
+  audio.volume = 0;
+  const level = () => {
+    const left = Number.isFinite(audio.duration) ? audio.duration - audio.currentTime : Infinity;
+    audio.volume = Math.max(0, Math.min(1, audio.currentTime / FADE_IN, left / FADE_OUT));
+  };
+  audio.addEventListener("timeupdate", level);
+  const end = () => {
+    if (player.audio === audio) stopSong("done");
+  };
+  audio.addEventListener("ended", end);
+  audio.addEventListener("error", end);
+  // The level between the browser's own timeupdates (four a second), so the fades are smooth.
+  const smooth = () => {
+    if (player.audio !== audio || audio.paused) return;
+    level();
+    requestAnimationFrame(smooth);
+  };
+  audio.addEventListener("playing", () => requestAnimationFrame(smooth));
+  audio.src = url;
+  claimSound("songPreview", OWNER);
+  setPlayer({ url, state: "playing", audio });
+  audio.play().catch(end);
+}
+/** This page's player for `url`: a new gift (another song) starts idle; the gift left for good, it is let go. */
+function useSongPlayer(url: string): State {
+  useEffect(() => {
+    wire();
+    window.clearTimeout(leaving);
+    strips++;
+    if (player.url !== url) {
+      stopSong("idle");
+      const audio = player.audio;
+      if (audio) {
+        audio.removeAttribute("src");
+        audio.load();
+      }
+      setPlayer({ url, state: "idle", audio: null });
+    }
+    return () => {
+      strips--;
+      // Not at once: the gate's button goes and the gift's pill comes in the same breath.
+      leaving = window.setTimeout(() => {
+        if (strips > 0) return;
+        stopSong("idle");
+        const audio = player.audio;
+        if (audio) {
+          audio.removeAttribute("src");
+          audio.load();
+        }
+        player = { url: "", state: "idle", audio: null };
+      }, 1500);
+    };
+  }, [url]);
+  const subscribe = (watcher: () => void) => {
+    watchers.add(watcher);
+    return () => void watchers.delete(watcher);
+  };
+  const state = useSyncExternalStore(subscribe, () => (player.url === url ? player.state : "idle"), () => "idle" as State);
+  return state;
+}
+
+/** Keeps the page's player while the gift page is up, so the song plays on while the gate has gone and the gift is still loading. Draws nothing. */
+export function SongHold({ music }: { music: GiftMusic }) {
+  useSongPlayer(music.url);
+  return null;
+}
+
+export function SongStrip({ music, locale, onCover = false }: { music: GiftMusic; locale: GiftLocale; onCover?: boolean }) {
+  const state = useSongPlayer(music.url);
   const [away, setAway] = useState(false);
   const [under, setUnder] = useState(false);
   const [artFailed, setArtFailed] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const pill = useRef<HTMLDivElement>(null);
-  const [owner] = useState(() => ({}));
   const trackUrl = appleMusicTrackUrl(music, locale);
   const playable = isApplePreviewUrl(music.url) && trackUrl !== null;
   const artwork = music.artwork && isSongThumbnail(music.artwork) && !artFailed ? music.artwork : null;
   const title = music.title?.trim() || giftString(locale, "aSongForYou");
 
-  // Stopped by anything else that makes a sound (the end screen's card, a video, the voice message), by
-  // the tab going to the background, and when the gift is left.
-  useEffect(() => {
-    const stop = () => {
-      const audio = audioRef.current;
-      if (!audio || audio.paused) return;
-      audio.pause();
-      releaseSound(owner);
-      setState("done");
-    };
-    const off = onSoundClaimed((_kind, by) => {
-      if (by !== owner) stop();
-    });
-    const onVisibility = () => document.hidden && stop();
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      off();
-      document.removeEventListener("visibilitychange", onVisibility);
-      const audio = audioRef.current;
-      if (audio) {
-        audio.pause();
-        audio.removeAttribute("src");
-        audio.load();
-      }
-      audioRef.current = null;
-      releaseSound(owner);
-    };
-  }, [owner]);
-
   // Playing, the pill goes with the first scroll or the first tap on the gift itself.
   useEffect(() => {
-    if (state !== "playing" || away) return;
+    // Not on the opening screen: the tap that opens the gift is not a tap on the gift.
+    if (state !== "playing" || away || onCover) return;
     const gift = pill.current?.closest<HTMLElement>(".gift-root");
     if (!gift) return;
     const hide = (event: Event) => {
       if (event.target instanceof Node && pill.current?.contains(event.target)) return;
       setAway(true);
     };
-    // Not at once: the tap that started the song is still on its way up.
+    // Not at once: the tap that started the song, or the one that opened the gift, is still on its way up,
+    // and the pill is still gliding to its corner.
     const later = window.setTimeout(() => {
       gift.addEventListener("scroll", hide, { capture: true, passive: true });
       gift.addEventListener("wheel", hide, { capture: true, passive: true });
       gift.addEventListener("touchmove", hide, { capture: true, passive: true });
       gift.addEventListener("pointerdown", hide, { capture: true, passive: true });
-    }, 400);
+    }, 900);
     return () => {
       window.clearTimeout(later);
       gift.removeEventListener("scroll", hide, { capture: true });
@@ -98,12 +176,13 @@ export function SongStrip({ music, locale }: { music: GiftMusic; locale: GiftLoc
       gift.removeEventListener("touchmove", hide, { capture: true });
       gift.removeEventListener("pointerdown", hide, { capture: true });
     };
-  }, [state, away]);
+  }, [state, away, onCover]);
 
   // Never on one of the gift's own controls.
   const shown = playable && state !== "done" && !away;
   useEffect(() => {
-    if (!shown) return;
+    // On the opening screen it has its own place, clear of "Tap to open".
+    if (!shown || onCover) return;
     const look = () => {
       const el = pill.current;
       const gift = el?.closest<HTMLElement>(".gift-root");
@@ -116,60 +195,36 @@ export function SongStrip({ music, locale }: { music: GiftMusic; locale: GiftLoc
     look();
     const timer = window.setInterval(look, 400);
     return () => window.clearInterval(timer);
-  }, [shown]);
+  }, [shown, onCover]);
 
   if (!shown) return null;
 
-  const play = () => {
-    if (state !== "idle") return;
-    const audio = new Audio();
-    audio.preload = "auto";
-    // Apple's rule: heard once, never on a loop.
-    audio.loop = false;
-    audio.volume = 0;
-    const level = () => {
-      const left = Number.isFinite(audio.duration) ? audio.duration - audio.currentTime : Infinity;
-      audio.volume = Math.max(0, Math.min(1, audio.currentTime / FADE_IN, left / FADE_OUT));
-    };
-    audio.addEventListener("timeupdate", level);
-    const end = () => {
-      releaseSound(owner);
-      setState("done");
-    };
-    audio.addEventListener("ended", end);
-    audio.addEventListener("error", end);
-    audio.src = music.url;
-    audioRef.current = audio;
-    claimSound("songPreview", owner);
-    setState("playing");
-    audio.play().catch(end);
-    // The level between the browser's own timeupdates (four a second), so the fades are smooth.
-    const smooth = () => {
-      if (audioRef.current !== audio || audio.paused) return;
-      level();
-      requestAnimationFrame(smooth);
-    };
-    audio.addEventListener("playing", () => requestAnimationFrame(smooth));
-  };
+  const play = () => playSong(music.url);
 
   const playing = state === "playing";
   return (
     <div
       ref={pill}
       data-song-strip={state}
+      data-place={onCover ? "cover" : "corner"}
       translate="no"
+      // A tap on it is never a tap on the opening screen under it.
+      onClick={(event) => event.stopPropagation()}
+      onPointerDown={(event) => event.stopPropagation()}
+      onPointerUp={(event) => event.stopPropagation()}
       className={cn(
-        "absolute left-3 z-[55] flex h-7 max-w-[27%] items-center gap-1.5 rounded-full bg-white/85 pr-1 pl-1 text-[#1A1614] shadow-[0_6px_18px_-10px_rgba(0,0,0,0.6)] ring-1 ring-black/10 backdrop-blur-md transition-opacity duration-300 motion-reduce:transition-none",
-        under ? "pointer-events-none opacity-0" : "opacity-100",
+        "absolute flex items-center gap-1.5 rounded-full bg-white/85 pr-1 pl-1 text-[#1A1614] shadow-[0_6px_18px_-10px_rgba(0,0,0,0.6)] ring-1 ring-black/10 backdrop-blur-md transition-[top,left,translate,max-width,height,opacity] duration-500 ease-out motion-reduce:transition-none",
+        onCover ? "z-[75] h-9 max-w-[64%] -translate-x-1/2" : "z-[55] h-7 max-w-[27%] translate-x-0",
+        under && !onCover ? "pointer-events-none opacity-0" : "opacity-100",
       )}
-      style={{ top: "calc(env(safe-area-inset-top, 0px) + 0.75rem)" }}
+      style={onCover ? { top: "77%", left: "50%" } : { top: "calc(env(safe-area-inset-top, 0px) + 0.75rem)", left: "0.75rem" }}
     >
-      <span className="relative block size-5 shrink-0 overflow-hidden rounded-[6px]" style={{ background: "var(--gift-accent-pale)" }}>
+      <span className="relative block size-5 shrink-0 overflow-hidden rounded-[6px]" style={{ background: "var(--gift-accent-pale, #f6dfe6)" }}>
         {artwork ? (
           <img src={artwork} alt="" onError={() => setArtFailed(true)} className="h-full w-full object-cover" />
         ) : (
           <span className="grid h-full w-full place-items-center" aria-hidden="true">
-            <Music2 className="size-3" style={{ color: "var(--gift-accent-deep)" }} />
+            <Music2 className="size-3" style={{ color: "var(--gift-accent-deep, #8f1f47)" }} />
           </span>
         )}
       </span>
@@ -183,11 +238,11 @@ export function SongStrip({ music, locale }: { music: GiftMusic; locale: GiftLoc
         >
           <span aria-hidden="true" className="flex h-2.5 shrink-0 items-end gap-[1.5px]">
             {[0.5, 1, 0.7].map((h, i) => (
-              <i key={i} className="block w-[1.5px] origin-bottom rounded-full motion-safe:animate-pulse" style={{ height: `${h * 100}%`, background: "var(--gift-accent)", animationDelay: `${i * 160}ms` }} />
+              <i key={i} className="block w-[1.5px] origin-bottom rounded-full motion-safe:animate-pulse" style={{ height: `${h * 100}%`, background: "var(--gift-accent, #bd2a5e)", animationDelay: `${i * 160}ms` }} />
             ))}
           </span>
           <span className="truncate font-semibold">{title}</span>
-          <ArrowUpRight aria-hidden="true" className="size-3 shrink-0" style={{ color: "var(--gift-accent-deep)" }} />
+          <ArrowUpRight aria-hidden="true" className="size-3 shrink-0" style={{ color: "var(--gift-accent-deep, #8f1f47)" }} />
         </a>
       ) : (
         <button
@@ -196,8 +251,8 @@ export function SongStrip({ music, locale }: { music: GiftMusic; locale: GiftLoc
           aria-label={giftString(locale, "songPlay", { title })}
           className="relative flex min-w-0 items-center gap-1 rounded-full pr-1.5 text-[11px] before:absolute before:-inset-2.5 before:content-[''] leading-none font-semibold outline-none focus-visible:ring-2 focus-visible:ring-black/40"
         >
-          <span className="grid size-4 shrink-0 place-items-center rounded-full" style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}>
-            <Play aria-hidden="true" className="ml-px size-2 fill-current" />
+          <span className={cn("grid shrink-0 place-items-center rounded-full", onCover ? "size-5" : "size-4")} style={{ background: "var(--gift-accent, #bd2a5e)", color: "var(--gift-on-accent, #fff)" }}>
+            {onCover ? <VolumeX aria-hidden="true" className="size-3" strokeWidth={2.2} /> : <Play aria-hidden="true" className="ml-px size-2 fill-current" />}
           </span>
           <span className="truncate">{title}</span>
         </button>

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import type { TemplateEvent } from "@/templates/types";
 import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
+import { SongHold, SongStrip, songStripOn } from "@/templates/_shared/SongStrip";
+import { isCatalogPreview } from "@/lib/gift/music";
 import { SoundGate } from "./sound-gate";
 import { ReactionSheet } from "./reaction-sheet";
 import { HomeScreenTip } from "./home-screen-tip";
@@ -177,6 +179,9 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
         />
       ) : null}
       {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} /> : null}
+      {/* The sound button on the gate (templates/_shared/SongStrip.tsx): the same player the gift's own pill shows once it opens. */}
+      {!opened && songStripOn() && isCatalogPreview(data.music) ? <SongStrip music={data.music} locale={locale} onCover /> : null}
+      {songStripOn() && isCatalogPreview(data.music) ? <SongHold music={data.music} /> : null}
       <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} onSendOneBack={() => sendOneBack("reaction")} sendingBack={leaving} />
       {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} held={reactOpen} /> : null}
     </div>
