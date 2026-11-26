@@ -2017,3 +2017,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-26T05:02Z | serp/google/organic/live/advanced | 0.002 | seo: free letter sweep |
 | 2026-11-26T05:02Z | serp/google/organic/live/advanced | 0.002 | seo: free letter sweep |
 | 2026-11-26T05:02Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | seo: free letter sweep |
+| 2026-11-26T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: date-night-questions |
+| 2026-11-26T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: date-night-questions |
+| 2026-11-26T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: date-night-questions |
+| 2026-11-26T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: date-night-questions |
+| 2026-11-26T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: date-night-questions |
+| 2026-11-26T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: date-night-questions |
+| 2026-11-26T06:21Z | on_page/content_parsing/live | 0.00015 | blog: date-night-questions |
+| 2026-11-26T06:21Z | on_page/content_parsing/live | 0.00015 | blog: date-night-questions |
+| 2026-11-26T06:21Z | on_page/content_parsing/live | 0.00015 | blog: date-night-questions |

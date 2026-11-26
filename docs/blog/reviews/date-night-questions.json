@@ -1,0 +1,96 @@
+{
+  "slug": "date-night-questions",
+  "keyword": "date night questions",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for the Picnic note to be the invitation for this date and to say plainly what is paid, instead of the hanging 'That's part of the paid version'. Polish: soften the 'done this month' question; a ready-made trio."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Picnic is premium, so 'the paid version' implies a free one; 'holiday' reads as a public holiday in the US; 'a card game such as free question cards' is clumsy. Spanish: 'cita de matrimonio', a calqued gift-brief line, a third/second-person mix in the 7-7-7 answer, and a tú/vosotros switch in the juicy answer."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "PAA 'What are 20 flirty questions?' and 'What are 50 fun questions to ask on a date?' unanswered in the FAQ; description should pick up 'date night questions for couples' and name married couples."
+        }
+      ],
+      "applied": [
+        "Picnic note (both languages): for the invitation, sent the day before; Picnic is a one-time unlock and the planned date comes with it.",
+        "'holiday' to 'trip away' in the 7-7-7 answer; 'play our free question cards on one phone'.",
+        "Spanish: h2 to 'Preguntas para una cita cuando lleváis años casados'; gift-brief line reworded; 'cómo se responden el uno al otro'; juicy answer in vosotros, saving only the bolder ones; polish 'Déjalo cuando mejor va' and 'demuestra que no pasa nada'.",
+        "FAQ: the juicy answer now gives flirty lines and links the 64 flirty questions; new 'What are 50 fun questions to ask on a date?' with links to the funny and would-you-rather posts; same in Spanish.",
+        "Descriptions now say 'for couples' / 'en pareja' and name the kinds of date including years married.",
+        "Polish taken: 'What's something good that happened this month that you haven't told me about yet?' (heads off a likely fix)."
+      ],
+      "rejected": [
+        "A separate 'What are 20 flirty questions?' FAQ: the test caps the FAQ at six, and the five PAA-driven questions plus 'good idea for date night' fill it; flirty is answered in the juicy FAQ answer and the 'Flirty and juicy' section. The first-date FAQ was removed to make room (first dates have their own section)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the top results by being a date-night plan built around when and where to ask, not an undifferentiated list of 100 questions; a reader could run a whole evening from it."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product claim, count, link and source figure checks out against the code and the source notes, the tips come from the setting, and the Spanish says the same in natural Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No top-10 page sorts date night questions by the kind of date with a when-to-ask table and a three-question rule; most are flat lists of 18 to 175."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_recorded": [
+        "Reader: 'small thing' appears twice; 'that surprise comes with it' in the Picnic note. Editor: 'Déjalo en lo mejor.' Search: a separate flirty FAQ if the cap is raised; 'date night questions for couples' as a phrase in an H2. Kept out of the post, per RUBRIC step 4."
+      ]
+    }
+  ]
+}
