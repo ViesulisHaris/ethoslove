@@ -329,7 +329,8 @@ function StagedReminderEmail(props: ReminderEmailProps & { stage: ReminderStage 
       ]}
     >
       <P>{stagedBody(props)}</P>
-      {stage === 1 ? <Idea name={idea.name} tagline={idea.tagline} href={openUrl} poster={idea.poster} /> : null}
+      {/* The gift's picture in all three (the owner, 26 Nov 2026): the second and third were words only. */}
+      <Idea name={idea.name} tagline={idea.tagline} href={openUrl} poster={idea.poster} />
       <CtaButton href={openUrl} label={STAGE_BUTTON[stage][locale]} />
       {paid === "ready" ? (
         <Quiet>{es ? "Ya está pagado: usa uno de los regalos que tienes listos." : "Already paid for: it uses one of the gifts you have ready."}</Quiet>

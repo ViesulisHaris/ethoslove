@@ -117,6 +117,18 @@ export const Idea = ({ name, tagline, href, poster }: { name: string; tagline: s
   </Section>
 );
 
+/**
+ * A date idea's own picture (public/email/dates/<id>.jpg, the site's picture of that idea as a JPEG:
+ * a mail app that cannot draw WebP still shows it), linked to where the e-mail's button goes.
+ */
+export const Picture = ({ src, alt, href }: { src: string; alt: string; href: string }) => (
+  <Section style={{ margin: "4px 0 14px" }}>
+    <Link href={href}>
+      <Img src={src} width="480" alt={alt} style={{ display: "block", width: "100%", maxWidth: 480, height: "auto", borderRadius: 16 }} />
+    </Link>
+  </Section>
+);
+
 /** Something to copy exactly: an invite link, a code. */
 export const Mono = ({ children, large = false }: { children: ReactNode; large?: boolean }) => (
   <Text style={{ margin: "0 0 14px", fontFamily: "ui-monospace, Menlo, monospace", fontSize: large ? 24 : 14, letterSpacing: large ? 3 : 0, lineHeight: 1.5, wordBreak: "break-all", ...(large ? { background: "#FFFFFF", border: "1px solid #E6DFD4", borderRadius: 12, padding: "14px 18px", display: "inline-block" } : {}) }}>

@@ -97,7 +97,9 @@ describe("the date letter's e-mails", () => {
         const where = `week ${entry.week} ${locale}`;
         expect(text(html), where).not.toMatch(/[$€£]\s?\d|\d[.,]\d\d/);
         expect(html, where).not.toContain("/g/");
-        expect(count(html, "<img"), where).toBe(1);
+        // The mark and the date idea's own picture (the owner, 26 Nov 2026: every e-mail carries its picture).
+        expect(count(html, "<img"), where).toBe(2);
+        expect(html, where).toContain("/email/dates/");
         expect(html, where).not.toContain('width="1"');
         for (const [, href] of html.matchAll(/href="([^"]+)"/g)) {
           const url = href.replace(/&amp;/g, "&");
@@ -145,7 +147,8 @@ describe("the date letter's e-mails", () => {
       const read = text(html);
       expect(read).toContain(locale === "es" ? "Sí, envíame la carta de citas" : "Yes, send me the date letter");
       expect(read).toContain(locale === "es" ? "¿Una idea de cita cada jueves?" : "One date idea every Thursday?");
-      expect(count(html, CONFIRM.replace(/&/g, "&amp;"))).toBe(1);
+      // The picture and the button both confirm.
+      expect(count(html, CONFIRM.replace(/&/g, "&amp;"))).toBe(2);
       expect(count(html, STOP.replace(/&/g, "&amp;"))).toBe(2);
       expect(html).toMatch(new RegExp(`<html[^>]* lang="${locale}"`));
       expect(fillerIn(read, locale)).toEqual([]);

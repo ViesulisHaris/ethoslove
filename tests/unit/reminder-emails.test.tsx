@@ -125,7 +125,7 @@ describe("the three e-mails' headings, subjects and bodies", () => {
     expect((await staged(2, "birthday", "es", { started: "name" })).text).toContain("Tu regalo para Mia sigue esperando. Hazlo esta noche y prográmalo para que se abra a medianoche del viernes.");
   });
 
-  it("has each stage's button, the template's own cover in the first only, and the way to every gift in the first only", async () => {
+  it("has each stage's button, the template's own cover in all three, and the way to every gift in the first only", async () => {
     const first = await staged(1, "anniversary", "en");
     expect(first.text).toContain("Open my gift");
     expect(first.html).toContain("https://ethos.test/p.jpg");
@@ -138,7 +138,9 @@ describe("the three e-mails' headings, subjects and bodies", () => {
     expect(first.html).toContain(links.moreUrl.replace(/&/g, "&amp;"));
     const second = await staged(2, "anniversary", "en");
     expect(second.text).toContain("Finish my gift");
-    expect(second.html).not.toContain("https://ethos.test/p.jpg");
+    // The gift's picture is in every one of the three (the owner, 26 Nov 2026).
+    expect(second.html).toContain("https://ethos.test/p.jpg");
+    expect((await staged(3, "anniversary", "en")).html).toContain("https://ethos.test/p.jpg");
     expect(second.text).not.toContain("Every photo gift");
     expect((await staged(1, "anniversary", "es")).text).toContain("¿Prefieres otro? Todos los regalos con fotos conservan las tuyas.");
     expect((await staged(2, "anniversary", "es")).text).toContain("Terminar mi regalo");

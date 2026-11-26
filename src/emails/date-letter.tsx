@@ -1,5 +1,8 @@
 import type { LetterWords } from "@/content/date-letter";
-import { CtaButton, EmailLayout, InlineLink, P, Quiet } from "./layout";
+import { CtaButton, EMAIL_BRAND, EmailLayout, InlineLink, P, Picture, Quiet } from "./layout";
+
+/** A date idea's picture as an e-mail shows it. */
+const datePicture = (id: string): string => `${EMAIL_BRAND.site}/email/dates/${id}.jpg`;
 
 type L = "en" | "es";
 
@@ -21,6 +24,7 @@ export function LetterConfirmEmail({ locale, confirmUrl, stopUrl }: { locale: L;
       footer={es ? "Recibes esto porque alguien escribió esta dirección para la carta de citas de Ethos." : "You’re getting this because this address was entered for the date letter on Ethos."}
       footerLink={{ label: es ? "No escribirme nunca" : "Never email me", href: stopUrl }}
     >
+      <Picture src={datePicture("bookshop-and-coffee")} alt="" href={confirmUrl} />
       <P>
         {es
           ? "Alguien acaba de escribir esta dirección en Ethos para recibir la carta de citas: una idea de cita a la semana, lista para el fin de semana. Si fuiste tú, confírmalo aquí abajo. Hasta entonces no te llegará nada."
@@ -53,6 +57,7 @@ export function DateLetterEmail({ locale, words, planUrl, stopUrl }: { locale: L
       footer={es ? "Recibes esto porque pediste la carta de citas de Ethos." : "You’re getting this because you asked for the date letter on Ethos."}
       footerLink={{ label: es ? "Dejar de recibir estos correos" : "Stop these emails", href: stopUrl }}
     >
+      <Picture src={datePicture(words.id)} alt={words.title} href={planUrl} />
       <P>{words.open}</P>
       <Quiet>{`${words.about} ${words.cost}`}</Quiet>
       {words.twist ? <P>{`${es ? "El giro: " : "The twist: "}${words.twist}`}</P> : null}
