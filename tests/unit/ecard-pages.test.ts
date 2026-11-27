@@ -48,7 +48,9 @@ describe("ecard pages", () => {
     for (const bad of ["src/content/ecards/types.ts", "src/content/ecards/pages/last-minute.ts", "src/content/ecards/pages/Birthday-ecards.ts", "src/content/ecards/pages/birthday-ecards.tsx", "src/content/gift-guides.ts", "docs/ecards/PLAYBOOK.md", "tests/unit/ecard-pages.test.ts"]) {
       expect(pathProblem(bad), bad).not.toBeNull();
     }
-    const sample = readFileSync(`${DIR}/${files[0]}`, "utf8");
+    // The first page, by name: the list is sorted, so `files[0]` became another page as soon as one sorted before it
+    // (found by the routine's first run, 27 Nov 2026, which could not add birthday-ecards).
+    const sample = readFileSync(`${DIR}/christmas-ecards.ts`, "utf8");
     expect(ecardProblem(sample.replace('added: "', 'added: process.env.X + "'))).not.toBeNull();
     expect(ecardProblem(sample.replace('import type { EcardPage } from "../types";', 'import type { EcardPage } from "../types";\nimport { x } from "../../x";'))).not.toBeNull();
     expect(ecardProblem(sample.replace(/"christmas-ecards"/, "`christmas-ecards`"))).not.toBeNull();
