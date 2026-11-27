@@ -915,7 +915,9 @@
       "failed": "No ha funcionado en este dispositivo. Tu regalo sigue aquí, tal cual.",
       "dismiss": "Ahora no",
       "moved": "Viene de {name}, con tus palabras, tus fotos y tu canción.",
-      "back": "Volver a {name}"
+      "back": "Volver a {name}",
+      "hint": "¿Quieres fotos, vídeo y más? Pasa tus palabras a uno de los más vendidos.",
+      "hintCta": "Ver"
     },
     "started": {
       "title": "Ya lo tienes empezado.",
@@ -1059,6 +1061,14 @@
     },
     "makeThis": "Crear este regalo",
     "makeHero": "Crear regalo",
+    "makeHeroPrice": "Crear regalo · {price}",
+    "waiting": {
+      "label": "Un regalo que empezaste",
+      "forName": "Tu {template} para {name} te espera",
+      "plain": "Tu {template} te espera",
+      "finish": "Terminarlo",
+      "hide": "Ahora no"
+    },
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
     "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
@@ -1071,7 +1081,7 @@
     },
     "pagePriceNote": "Gratis como nota corta. «Hazlo especial» añade fotos y más por {price}, en un solo pago.",
     "pagePriceFree": "Enviarlo es gratis. Los extras cuestan {price}, en un solo pago.",
-    "pagePricePaid": "Pruébalo antes, sin cuenta. {price} una sola vez, cuando lo envías.",
+    "pagePricePaid": "Pruébalo antes, sin cuenta. Pagas al enviarlo.",
     "sections": {
       "popular": {
         "eyebrow": "Las más populares",
@@ -1489,6 +1499,8 @@
     "title": "Cookies",
     "blurb": "Cookies para nuestras estadísticas y nuestros anuncios en Google, Meta (Facebook, Instagram) y TikTok. Nunca en un regalo que alguien ha recibido.",
     "readMore": "Leer la política",
+    "blurbShort": "Cookies para estadísticas y anuncios en Google, Meta y TikTok.",
+    "readMoreShort": "Política",
     "accept": "Aceptar",
     "decline": "No, gracias",
     "turnOn": "Aceptar cookies",
@@ -2492,6 +2504,7 @@
       "cta": "Crear un regalo",
       "demo": "Ver cómo se abre",
       "note": "Empezar es gratis. Sin cuenta hasta que publicas.",
+      "picks": "Los más vendidos",
       "facts": {
         "free": {
           "a": "Gratis",

@@ -10,6 +10,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { cn } from "@/lib/utils";
 import { GalleryCard } from "./gallery-card";
+import { WaitingGift } from "./waiting-gift";
 import { GALLERY_ID } from "./gallery-id";
 import { sendsFree } from "@/lib/gift/free-tier";
 import { TIER_FILTERS, TIER_PARAM, parseTier, searchWithTier, type TierFilter } from "./gallery-tier";
@@ -97,6 +98,8 @@ export function TemplateGallery({
   // React can stop for a frame, so a press is painted before the cards are redrawn (on a slow
   // phone "All" after "Free" held its paint back for most of a second).
   const tier = useDeferredValue(pressedTier);
+  // For "Your Bouquet for Ana is waiting" (waiting-gift.tsx): every gift's name, in this page's language.
+  const names = useMemo(() => Object.fromEntries(manifests.map((m) => [m.slug, m.name[locale]])), [manifests, locale]);
   const chosen = useDeferredValue(pressedSort);
   const sort: GallerySort = occasion ? "popular" : chosen;
 
@@ -160,6 +163,7 @@ export function TemplateGallery({
   // The header's "Make a gift" scrolls here on this page; the margin keeps the fixed header (promo strip and bar, ~104px) off the tiles it lands on.
   return (
       <div id={GALLERY_ID} className="container-x scroll-mt-32 pb-24">
+        <WaitingGift names={names} className="mb-6 max-w-xl" />
         <div className="mb-10 flex flex-col gap-5 border-b border-line pb-8 lg:mb-8 lg:pb-6 xl:flex-row xl:items-start xl:gap-8">
           {/*
            * The occasions, each a small rendered picture over its name, in season first. On a desk
@@ -270,10 +274,11 @@ export function TemplateGallery({
   );
 }
 
-// One column by name on a phone: without it the single column is as wide as a card's longest line, and the page scrolls sideways.
-const GRID = "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
-/** The first cards of an occasion's page: four stacked, two by two, or one row of four. */
-const FOLD_GRID = "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-4";
+// Two columns by name on a phone (grid-cols-2 is minmax(0, 1fr) each): a column sized by its content is as wide as a card's longest line, and the page scrolls sideways.
+// Two on a phone since 27 Nov 2026 (the owner's yes to the Clarity read: one card filled an iPhone's screen, and half the visitors left before card 15 of 61).
+const GRID = "grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 xl:grid-cols-4";
+/** The first cards of an occasion's page: two by two, or one row of four. */
+const FOLD_GRID = "grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 xl:grid-cols-4";
 
 /**
  * An occasion as a tile: its small rendered picture over its name (public/art/occasions, made by

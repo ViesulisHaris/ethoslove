@@ -915,7 +915,9 @@
       "failed": "That didn’t work on this device. Your gift is still here, as it was.",
       "dismiss": "Not now",
       "moved": "Moved over from {name}, with your words, photos and song.",
-      "back": "Back to {name}"
+      "back": "Back to {name}",
+      "hint": "Want photos, video and more? Move your words into a best seller.",
+      "hintCta": "Show me"
     },
     "started": {
       "title": "Started for you.",
@@ -1059,6 +1061,14 @@
     },
     "makeThis": "Make this gift",
     "makeHero": "Make this gift",
+    "makeHeroPrice": "Make this gift · {price}",
+    "waiting": {
+      "label": "A gift you started",
+      "forName": "Your {template} for {name} is waiting",
+      "plain": "Your {template} is waiting",
+      "finish": "Finish it",
+      "hide": "Not now"
+    },
     "priceOnce": "{price} once",
     "priceFree": "Free",
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
@@ -1071,7 +1081,7 @@
     },
     "pagePriceNote": "Free as a short note. “Make it special” adds photos and more for {price}, paid once.",
     "pagePriceFree": "Free to send. The extras cost {price}, paid once.",
-    "pagePricePaid": "Try it first, no account needed. {price} once when you send it.",
+    "pagePricePaid": "Try it first, no sign-up. Pay when you send it.",
     "sections": {
       "popular": {
         "eyebrow": "Most popular",
@@ -1489,6 +1499,8 @@
     "title": "Cookies",
     "blurb": "Cookies for our stats and our ads on Google, Meta (Facebook, Instagram) and TikTok. Never on a gift someone’s been sent.",
     "readMore": "Read the policy",
+    "blurbShort": "Cookies for stats and ads on Google, Meta and TikTok.",
+    "readMoreShort": "Policy",
     "accept": "Allow",
     "decline": "No thanks",
     "turnOn": "Allow cookies",
@@ -2492,6 +2504,7 @@
       "cta": "Make a gift",
       "demo": "Watch one open",
       "note": "Free to start. No account until you publish.",
+      "picks": "Best sellers",
       "facts": {
         "free": {
           "a": "Free",

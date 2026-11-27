@@ -71,10 +71,10 @@ export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badg
       data-gallery-card={manifest.slug}
       onMouseEnter={play}
       onMouseLeave={pause}
-      className="group relative flex h-full flex-col rounded-[28px] bg-card shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] transition-[translate,box-shadow] duration-500 ease-[var(--ease-out-quint)] hover:-translate-y-1 hover:shadow-[0_34px_60px_-34px_rgba(74,32,24,0.65)] has-[a:active]:translate-y-0 has-[a:active]:shadow-[0_18px_34px_-30px_rgba(74,32,24,0.6)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      className="group relative flex h-full flex-col rounded-[20px] bg-card sm:rounded-[28px] shadow-[0_26px_48px_-34px_rgba(74,32,24,0.55)] ring-1 ring-ink/[0.07] transition-[translate,box-shadow] duration-500 ease-[var(--ease-out-quint)] hover:-translate-y-1 hover:shadow-[0_34px_60px_-34px_rgba(74,32,24,0.65)] has-[a:active]:translate-y-0 has-[a:active]:shadow-[0_18px_34px_-30px_rgba(74,32,24,0.6)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
-      <Link href={`/templates/${manifest.slug}`} onClick={() => track("gallery_pick", { template: manifest.slug, action: "page" })} data-card-page className="flex flex-1 flex-col rounded-t-[28px] rounded-b-lg">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-t-[28px] bg-ink/10">
+      <Link href={`/templates/${manifest.slug}`} onClick={() => track("gallery_pick", { template: manifest.slug, action: "page" })} data-card-page className="flex flex-1 flex-col rounded-t-[20px] rounded-b-lg sm:rounded-t-[28px]">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-t-[20px] bg-ink/10 sm:rounded-t-[28px]">
           <Image
             src={manifest.thumbnail.poster}
             // The tagline says what the poster shows, for a search engine (Bing flags an empty alt on
@@ -83,7 +83,7 @@ export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badg
             alt={manifest.tagline[locale]}
             aria-hidden="true"
             fill
-            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw"
             quality={75}
             priority={above}
             decoding={above ? "sync" : "async"}
@@ -102,13 +102,13 @@ export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badg
             />
           ) : null}
           {/* The picture's foot runs into the card it stands on. */}
-          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-linear-to-t from-card to-card/0" />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-t sm:h-14 from-card to-card/0" />
           {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". A gift that costs something says nothing here; the one that is free says so. */}
           {free ? (
-            <span data-card-free className="pointer-events-none absolute top-3.5 left-3.5 rounded-full bg-cream/90 px-3 py-1 text-[11px] font-semibold tracking-wide text-forest backdrop-blur">{t("common.free")}</span>
+            <span data-card-free className="pointer-events-none absolute top-2.5 left-2.5 rounded-full bg-cream/90 px-2.5 py-0.5 text-[10px] sm:top-3.5 sm:left-3.5 sm:px-3 sm:py-1 sm:text-[11px] font-semibold tracking-wide text-forest backdrop-blur">{t("common.free")}</span>
           ) : null}
           {badge ? (
-            <span className={cn("pointer-events-none absolute top-3.5 right-3.5 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]", badge === "popular" ? "bg-rose-soft text-forest" : "bg-cream text-forest")}>
+            <span className={cn("pointer-events-none absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] sm:top-3.5 sm:right-3.5 sm:px-3 sm:py-1 sm:text-[11px] font-semibold tracking-wide shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]", badge === "popular" ? "bg-rose-soft text-forest" : "bg-cream text-forest")}>
               {badge === "popular" ? (
                 <svg viewBox="0 0 24 24" className="size-3" aria-hidden="true">
                   <path d="M12 21s-7.6-4.7-9.7-9.3C.9 8.4 2.7 4.6 6.4 4.6c2 0 3.6 1.1 5.6 3.3 2-2.2 3.6-3.3 5.6-3.3 3.7 0 5.5 3.8 4.1 7.1C19.6 16.3 12 21 12 21Z" fill="currentColor" />
@@ -118,20 +118,20 @@ export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badg
             </span>
           ) : null}
         </div>
-        <div className="flex flex-1 items-center justify-between gap-4 px-5 pt-2 pb-3.5">
+        <div className="flex flex-1 items-center justify-between gap-4 px-3.5 pt-1.5 pb-3 sm:px-5 sm:pt-2 sm:pb-3.5">
           <div className="min-w-0">
-            <h3 className="font-display text-[1.3rem] leading-tight text-ink">{manifest.name[locale]}</h3>
-            {/* Never cut: a line is written to fit (content/gallery-lines.ts). Two lines' room on every card, so a row of cards stays level whether a line wraps or not. */}
-            <p data-card-line className="mt-1 min-h-[2.6em] text-[0.8125rem] leading-[1.3] text-ink-soft">
+            <h3 className="font-display text-[1.08rem] leading-tight text-ink sm:text-[1.3rem]">{manifest.name[locale]}</h3>
+            {/* Never cut: a line is written to fit (content/gallery-lines.ts). Two lines' room on every card, so a row of cards stays level whether a line wraps or not; three on a phone, where two cards share a row (a Spanish line needs a third on a 320px phone). */}
+            <p data-card-line className="mt-1 min-h-[3.9em] text-[0.75rem] leading-[1.3] text-ink-soft sm:min-h-[2.6em] sm:text-[0.8125rem]">
               {galleryLine(manifest.slug, manifest.tagline, locale)}
             </p>
           </div>
-          <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full bg-paper text-ink ring-1 ring-ink/10 transition-colors duration-300 group-hover:bg-forest group-hover:text-cream">
+          <span aria-hidden="true" className="hidden size-11 shrink-0 place-items-center rounded-full bg-paper sm:grid text-ink ring-1 ring-ink/10 transition-colors duration-300 group-hover:bg-forest group-hover:text-cream">
             <ChevronRight className="size-4.5" strokeWidth={1.8} />
           </span>
         </div>
       </Link>
-      <div className="mx-5 flex items-center justify-between gap-3 border-t border-line">
+      <div className="mx-3.5 flex flex-col items-start border-t border-line pt-2 sm:mx-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-0">
         <span data-price className="text-mono-meta text-ink-soft">
           {free ? t("templates.priceFree") : t("templates.priceOnce", { price })}
         </span>
@@ -141,7 +141,7 @@ export const GalleryCard = memo(function GalleryCard({ manifest, index = 0, badg
           onClick={() => track("gallery_pick", { template: manifest.slug, action: "make" })}
           aria-label={`${t("templates.makeThis")}: ${manifest.name[locale]}`}
           data-card-make
-          className="group/make -mr-1 inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 text-[0.8125rem] font-semibold text-ink underline decoration-ink/20 underline-offset-4 transition-colors hover:decoration-ink active:text-rose-deep"
+          className="group/make -ml-1 inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 text-[0.8125rem] font-semibold sm:-mr-1 sm:ml-0 text-ink underline decoration-ink/20 underline-offset-4 transition-colors hover:decoration-ink active:text-rose-deep"
         >
           {t("templates.makeThis")}
           <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover/make:translate-x-0.5 motion-reduce:transition-none" />

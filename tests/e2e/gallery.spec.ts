@@ -200,17 +200,19 @@ test.describe("the template gallery", () => {
       for (const width of [320, 390, 640, 768, 1024, 1280, 1440, 1920]) {
         await page.setViewportSize({ width, height: 900 });
         await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => done(null)))));
-        const found = await page.locator("[data-gallery-card]").evaluateAll((cards) => {
+        // Two cards to a row on a phone (since 27 Nov 2026): the line has three rows' room there, two from 640px.
+        const most = width < 640 ? 3 : 2;
+        const found = await page.locator("[data-gallery-card]").evaluateAll((cards, most) => {
           const cut: string[] = [];
           for (const card of cards) {
             const line = card.querySelector<HTMLElement>("[data-card-line]")!;
             const style = getComputedStyle(line);
             const rows = Math.round(line.scrollHeight / parseFloat(style.lineHeight));
-            // Whole on the card: not clipped sideways, no ellipsis, and within the two lines the card keeps for it.
-            if (line.scrollWidth > line.clientWidth + 1 || style.textOverflow === "ellipsis" || rows > 2 || line.scrollHeight > line.clientHeight + 1) cut.push(`${(card as HTMLElement).dataset.galleryCard}: "${line.textContent}" (${rows} lines)`);
+            // Whole on the card: not clipped sideways, no ellipsis, and within the lines the card keeps for it.
+            if (line.scrollWidth > line.clientWidth + 1 || style.textOverflow === "ellipsis" || rows > most || line.scrollHeight > line.clientHeight + 1) cut.push(`${(card as HTMLElement).dataset.galleryCard}: "${line.textContent}" (${rows} lines)`);
           }
           return { cards: cards.length, cut, sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth };
-        });
+        }, most);
         expect(found.cards).toBeGreaterThan(50);
         expect(found.cut, `${path} at ${width}px`).toEqual([]);
         expect(found.sideways, `${path} at ${width}px scrolls sideways`).toBeLessThanOrEqual(0);

@@ -62,27 +62,37 @@ export function CookieConsent() {
           // docks just above that button instead of over it. The ad landing (/try) did that until the
           // strip stopped showing there at all (`hidesConsentBanner`).
           data-app-hide
-          className="consent-strip fixed inset-x-0 bottom-[var(--bottom-dock,0px)] z-50 flex justify-center px-4 pb-[var(--bottom-dock-pad,max(1rem,env(safe-area-inset-bottom)))] [[data-gift-running]_&]:hidden"
+          className="consent-strip fixed inset-x-0 bottom-[var(--bottom-dock,0px)] z-50 flex justify-center sm:px-4 sm:pb-[var(--bottom-dock-pad,max(1rem,env(safe-area-inset-bottom)))] [[data-gift-running]_&]:hidden"
           role="region"
           aria-label={t("title")}
         >
           {/* The footer's own treatment: forest, cream, and the grain over the top. */}
           {/* The hairline matters on the dark pages: forest on forest has no edge without it. */}
           {/* Kept short on phones: it docks over the hero, so every extra line is a line of the
-              page someone came for that they cannot see. */}
-          <div className="relative flex w-full max-w-xl flex-col gap-2.5 overflow-hidden rounded-2xl bg-forest px-4 py-3.5 text-cream ring-1 ring-cream/15 shadow-lift sm:flex-row sm:items-center sm:gap-5 sm:px-5 sm:py-4">
+              page someone came for that they cannot see. On a phone it is one thin band on the
+              screen's bottom edge, two short lines and the two buttons beside them: as a floating
+              card of four lines it covered the front page's "Make a gift" on a first visit, the
+              button that takes half of that page's taps (Clarity, 21–27 Nov 2026; the owner's yes
+              of 27 Nov). The full sentence is the desk's, and the policy's. */}
+          <div className="relative flex w-full max-w-xl flex-row items-center gap-2 overflow-hidden rounded-t-2xl bg-forest px-3.5 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] text-cream ring-1 ring-cream/15 shadow-lift sm:gap-5 sm:rounded-2xl sm:px-5 sm:py-4">
             <div className="grain-overlay opacity-[0.08] mix-blend-overlay" />
-            <p className="relative text-sm leading-relaxed text-cream/75">
+            <p className="relative min-w-0 text-[12.5px] leading-snug text-cream/75 sm:hidden">
+              {t("blurbShort")}{" "}
+              <Link href="/legal/privacy" className="whitespace-nowrap text-cream/90 underline underline-offset-2 transition-colors hover:text-cream">
+                {t("readMoreShort")}
+              </Link>
+            </p>
+            <p className="relative hidden text-sm leading-relaxed text-cream/75 sm:block">
               {t("blurb")}{" "}
               <Link href="/legal/privacy" className="whitespace-nowrap text-cream/90 underline underline-offset-2 transition-colors hover:text-cream">
                 {t("readMore")}
               </Link>
             </p>
-            <div className="relative flex shrink-0 items-center gap-1 sm:ml-auto">
+            <div className="relative ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
               <button
                 type="button"
                 onClick={() => answer("denied")}
-                className="rounded-full px-3 py-2 text-sm text-cream/65 transition-colors hover:text-cream"
+                className="min-h-11 rounded-full px-2.5 text-[13px] text-cream/65 transition-colors hover:text-cream sm:px-3 sm:text-sm"
               >
                 {t("decline")}
               </button>

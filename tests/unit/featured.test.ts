@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { featuredFor, NEW_SLUGS, POPULAR_SLUGS, sectionTemplates } from "@/config/featured";
+import { featuredFor, HOME_PICKS, LATER_SLUGS, NEW_SLUGS, POPULAR_SLUGS, sectionTemplates } from "@/config/featured";
 import { listManifests } from "@/templates/manifests";
 
 describe("what the gallery leads with", () => {
@@ -21,7 +21,7 @@ describe("what the gallery leads with", () => {
     expect(NEW_SLUGS).toEqual(["nice-list", "unwrapped", "snow-globe", "frosted-window", "string-the-lights", "gingerbread-house", "light-the-candles", "wishbone"]);
   });
 
-  it("shelves every template exactly once: best sellers, new, then the rest in the order given", () => {
+  it("shelves every template exactly once: best sellers, new, then the rest in the order given, out of season last", () => {
     const shelves = sectionTemplates(manifests);
     expect(shelves.map((s) => s.id)).toEqual(["popular", "new", "all"]);
     expect(shelves[0].items.map((m) => m.slug)).toEqual([...POPULAR_SLUGS]);
@@ -30,7 +30,20 @@ describe("what the gallery leads with", () => {
     expect(all).toHaveLength(manifests.length);
     expect(new Set(all).size).toBe(manifests.length);
     const rest = manifests.filter((m) => !featuredFor(m.slug)).map((m) => m.slug);
-    expect(shelves[2].items.map((m) => m.slug)).toEqual(rest);
+    const later: readonly string[] = LATER_SLUGS;
+    expect(shelves[2].items.map((m) => m.slug)).toEqual([...rest.filter((s) => !later.includes(s)), ...rest.filter((s) => later.includes(s))]);
+  });
+
+  it("closes the gallery with the gifts out of season, all of them real and none on another shelf", () => {
+    for (const slug of LATER_SLUGS) {
+      expect(slugs.has(slug), slug).toBe(true);
+      expect(featuredFor(slug), slug).toBeUndefined();
+    }
+    const last = sectionTemplates(manifests).at(-1)!.items.slice(-LATER_SLUGS.length).map((m) => m.slug);
+    expect([...last].sort()).toEqual([...LATER_SLUGS].sort());
+    // The Letter is no longer behind them.
+    const order = sectionTemplates(manifests).flatMap((s) => s.items.map((m) => m.slug));
+    expect(order.indexOf("the-letter")).toBeLessThan(order.indexOf("seance"));
   });
 
   it("drops a shelf a filter has emptied, heading and all", () => {
@@ -38,6 +51,11 @@ describe("what the gallery leads with", () => {
     expect(free.map((s) => s.id)).toEqual(["all"]);
     expect(sectionTemplates([])).toEqual([]);
     expect(sectionTemplates([{ slug: "not-a-template" }]).map((s) => s.id)).toEqual(["all"]);
+  });
+
+  it("puts three gifts that exist and are sold under the front page's buttons", () => {
+    expect(HOME_PICKS).toHaveLength(3);
+    for (const slug of HOME_PICKS) expect(manifests.find((m) => m.slug === slug)?.tier, slug).toBe("premium");
   });
 
   it("badges a card by the shelf it belongs to", () => {

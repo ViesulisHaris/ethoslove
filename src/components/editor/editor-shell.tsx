@@ -34,7 +34,7 @@ import type { IdeaMode } from "@/lib/lifecycle/monthly-idea";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
 import { loadUrlSeed } from "./url-seed";
-import { MoveOffer, MovedNote } from "./move-offer";
+import { MoveHint, MoveOffer, MovedNote } from "./move-offer";
 import { StartedForYou, type StartedState } from "./started-for-you";
 import { START_COOKIE, START_PARAM, parseStartRef, readCookie, startPending } from "@/lib/editor/start-ref";
 import { draftHasContent, finishStart, prepareDemo, prepareStart, startPhotoLimit, type PreparedStart, type StartSeed } from "@/lib/editor/start-from-gift";
@@ -540,6 +540,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
             {ready && !starting && started ? <StartedForYou key={started.state.kind} state={started.state} onChangePhotos={showPhotos} onEmpty={startEmpty} onUse={takeStart} onDismiss={dismissStart} noPhotos={startPhotoLimit(manifest) === 0} /> : null}
+            {formReady && mod && !starting && manifest.tier === "free" ? <MoveHint manifest={manifest} /> : null}
             {formReady && mod && !starting ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>

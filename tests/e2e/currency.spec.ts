@@ -56,7 +56,8 @@ for (const country of COUNTRIES) {
     test("sees the template page, its price and its structured data in one currency", async ({ page, request }) => {
       const want = await expected(request);
       await page.goto("/templates/bouquet");
-      await expect(page.getByText(`${want.single} once when you send it`)).toBeVisible();
+      // The price is on the paid gift's button since 27 Nov 2026 ("Make this gift · €9.99").
+      await expect(page.getByRole("link", { name: `Make this gift · ${want.single}` })).toBeVisible();
       expect(await productOffer(page)).toMatchObject({ price: want.single.replace(/[^0-9.]/g, ""), priceCurrency: want.currency.toUpperCase() });
       // No other country's price anywhere in the page, the FAQ and the structured data included.
       const html = await page.content();

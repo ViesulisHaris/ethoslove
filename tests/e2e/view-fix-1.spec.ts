@@ -538,18 +538,23 @@ test.describe("agreed-15: an idea card on a phone", () => {
   });
 });
 
-test.describe("agreed-2: a phone sees the photograph on the front page before the three facts", () => {
-  test("the picture comes straight after the buttons, and most of it is on the first screen of a 390 by 844 phone", async ({ page }) => {
+test.describe("agreed-2: a phone sees gifts on the front page's first screen, then the photograph, then the three facts", () => {
+  test("three best sellers come straight after the buttons, on the first screen of a 390 by 844 phone, and the picture after them", async ({ page }) => {
     // The user walk of 23 Nov 2026: the first screen was a headline, a paragraph, two buttons and three facts, and the photograph began under it.
+    // Since 27 Nov (the owner's yes to the Clarity read): the first screen ends on three best sellers, each one tap from its editor, and the photograph follows them.
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
     const words = (await page.locator("[data-hero-words]").boundingBox())!;
+    const picks = (await page.locator("[data-hero-picks]").boundingBox())!;
     const picture = (await page.locator("[data-hero-picture] img").first().boundingBox())!;
     const facts = (await page.locator("[data-hero-facts]").boundingBox())!;
+    expect(picks.y + picks.height).toBeLessThanOrEqual(words.y + words.height);
     expect(picture.y).toBeGreaterThan(words.y + words.height);
     expect(facts.y).toBeGreaterThan(picture.y + picture.height - 60);
-    // At least four fifths of the photograph is above the foot of the first screen.
-    expect(844 - picture.y).toBeGreaterThan(picture.height * 0.8);
+    // The three gifts are whole on the first screen, and each opens its editor.
+    expect(picks.y + picks.height).toBeLessThan(844);
+    await expect(page.locator("[data-hero-pick]")).toHaveCount(3);
+    for (const slug of ["bouquet", "xoxo", "coquette"]) await expect(page.locator(`[data-hero-pick="${slug}"]`)).toHaveAttribute("href", `/create/${slug}`);
     // On a desk the facts are back under the buttons, beside the picture.
     await page.setViewportSize({ width: 1440, height: 900 });
     const deskWords = (await page.locator("[data-hero-words]").boundingBox())!;

@@ -144,8 +144,7 @@ export default async function TemplateDetailPage({
             <div className="contents lg:block lg:max-w-[33rem]">
               <div className="order-first">
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". A gift that costs something says nothing here; the one that is free says so. The price is said once, under the buttons. */}
-                  {free ? <span className="rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink">{t("common.free")}</span> : null}
+                  {/* The owner, 23 Nov 2026: "i dont think we should write this on the templates, as it makes it look like not an impulse buy anymore and seems expensive". So no price label here; and since 27 Nov no "Free" label either (the owner's yes to the Clarity read of that day: the Letter's page opened on FREE and its visits rose from 33 to 156 a night while paid editors halved). The price is on the paid gift's button, and under the buttons. */}
                   {manifest.styles.map((s) => (
                     <span key={s} className="rounded-[5px] border border-page-line px-2 py-1 text-page-label text-page-body">
                       {t(`templates.style.${s}`)}
@@ -171,8 +170,10 @@ export default async function TemplateDetailPage({
                     prefetch
                     className={HERO_BUTTON}
                   >
-                    {/* Its own key: in Spanish the short "Crear regalo", measured to fit a small phone beside the demo button (everywhere else "Crear este regalo"). */}
-                    {t("templates.makeHero")}
+                    {/* Its own key: in Spanish the short "Crear regalo", measured to fit a small phone beside the demo button (everywhere else "Crear este regalo").
+                        A gift that costs something says what on its button (the owner's yes of 27 Nov 2026: the Clarity read found
+                        paid template pages said their price only under the buttons, under the cookie strip on a first visit). */}
+                    {free ? t("templates.makeHero") : t("templates.makeHeroPrice", { price })}
                     <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
                   {/*

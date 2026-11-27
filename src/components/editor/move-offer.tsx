@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Check, Loader2, X } from "lucide-react";
+import { ArrowDown, Check, Loader2, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { MOVE_TO_SLUGS } from "@/config/featured";
@@ -129,6 +129,41 @@ export function MoveOffer({ manifest }: { manifest: TemplateManifest }) {
         ) : null}
       </div>
     </section>
+  );
+}
+
+/**
+ * One line over a free template's form that points down to "Same words, a bigger moment" (MoveOffer,
+ * under the words): the offer sat in the middle of a long form, and 71% of the people in an editor
+ * were in the free Letter (Clarity and Vercel, 27 Nov 2026; the owner's yes of that day). A tap
+ * scrolls to the offer; nothing moves until they pick a gift there. Gone wherever the offer is gone:
+ * a sent gift, a "not now" this week, the iPhone app's own pricing aside.
+ */
+export function MoveHint({ manifest }: { manifest: TemplateManifest }) {
+  const t = useTranslations("editor.move");
+  const status = useEditor((s) => s.status);
+  const [dismissed] = useState(dismissedLately);
+  if (manifest.tier !== "free" || status !== "draft" || dismissed) return null;
+  const go = () => {
+    const offer = document.querySelector<HTMLElement>('[data-testid="move-offer"]');
+    if (!offer) return;
+    track("move_hint_tapped", { from: manifest.slug });
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    offer.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  };
+  return (
+    <button
+      type="button"
+      onClick={go}
+      data-move-hint
+      className="mt-5 mb-7 flex min-h-11 w-full items-center justify-between gap-3 rounded-2xl bg-card px-4 py-2.5 text-left text-[14px] leading-snug text-ink ring-1 ring-black/5 transition-colors hover:bg-secondary"
+    >
+      <span className="min-w-0">{t("hint")}</span>
+      <span className="inline-flex shrink-0 items-center gap-1 font-semibold text-rose-deep">
+        {t("hintCta")}
+        <ArrowDown aria-hidden="true" className="size-3.5" />
+      </span>
+    </button>
   );
 }
 

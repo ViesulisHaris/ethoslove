@@ -6,7 +6,13 @@ import type { HomeHero } from "@/lib/attribution/landing";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { Cutout, FloralFrame } from "@/components/marketing/home/cutouts";
 import { EagerImg } from "@/components/shared/eager-img";
+import { HOME_PICKS } from "@/config/featured";
+import type { GiftLocale } from "@/lib/gift/schema";
+import { getManifest } from "@/templates/manifests";
 import { AppSoon } from "./app-soon";
+import { HeroBestSellers } from "./hero-best-sellers";
+import { WaitingGift } from "@/components/templates/waiting-gift";
+import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { HomeSearch } from "./home-search";
 import { MapCard } from "./map-card";
 
@@ -22,7 +28,8 @@ export async function PlatformHero({ variant = "gift" }: { variant?: HomeHero })
   return (
     <section className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-blush-paper pt-[var(--header-h)] text-forest">
       <FloralFrame frame="hero" ground="light" />
-      <div className="relative container-x grid items-center gap-10 pt-12 pb-20 sm:gap-14 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-28">
+      {/* The gift hero starts higher on a phone: its first screen ends on three best sellers (hero-best-sellers.tsx). */}
+      <div className={`relative container-x grid items-center gap-10 pb-20 sm:gap-14 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-28 ${variant === "gift" ? "pt-7" : "pt-12"}`}>
         {variant === "gift" ? <GiftFirst /> : <DatesFirst />}
       </div>
     </section>
@@ -113,7 +120,12 @@ async function DatesFirst() {
  */
 async function GiftFirst() {
   const t = await getTranslations("growth.hero");
-  const line = BRAND.categoryLine[(await getLocale()) === "es" ? "es" : "en"];
+  const locale: GiftLocale = (await getLocale()) === "es" ? "es" : "en";
+  const line = BRAND.categoryLine[locale];
+  const picks = HOME_PICKS.flatMap((slug) => {
+    const m = getManifest(slug);
+    return m ? [{ slug, name: m.name[locale], poster: m.thumbnail.poster }] : [];
+  });
   return (
     <>
       {/*
@@ -124,6 +136,8 @@ async function GiftFirst() {
        */}
       <div className="max-lg:contents lg:col-span-6">
         <div data-hero-words className="max-lg:order-1">
+        {/* A gift started on this phone and not sent: first, over the headline (waiting-gift.tsx). Nothing at all for everyone else. */}
+        <WaitingGift names={Object.fromEntries(TEMPLATE_MANIFESTS.map((m) => [m.slug, m.name[locale]]))} className="mb-6 max-w-md" />
         {/*
          * The line over the headline is the maker's mark (BRAND.categoryLine, config/brand.ts): the first thing
          * a visitor reads, so that the kind of thing and the name arrive together (the owner, 20 and
@@ -132,13 +146,13 @@ async function GiftFirst() {
          */}
         <h1 className="text-forest">
           <span data-brand-line className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{line}</span>
-          <span className="mt-6 block max-w-[7.8em] display-hero text-balance">
+          <span className="mt-4 block max-w-[7.8em] display-hero text-balance sm:mt-6">
             {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
           </span>
         </h1>
-        <p className="mt-7 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest/75 sm:mt-7 sm:text-xl">{t("sub")}</p>
 
-        <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3">
+        <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 sm:mt-9">
           <Link href="/templates" className="btn-rose inline-flex h-13 items-center gap-2 rounded-full px-7 text-base font-semibold transition-transform hover:-translate-y-0.5">
             {t("cta")}
             <ArrowRight aria-hidden="true" className="size-4" />
@@ -150,6 +164,7 @@ async function GiftFirst() {
             {t("demo")}
           </Link>
         </div>
+        <HeroBestSellers label={t("picks")} picks={picks} />
         <p className="mt-4 text-sm text-forest/70">{t("note")}</p>
         </div>
 

@@ -19,6 +19,22 @@ export const POPULAR_SLUGS = ["bouquet", "xoxo", "birthday-cinema", "the-council
 export const NEW_SLUGS = ["nice-list", "unwrapped", "snow-globe", "frosted-window", "string-the-lights", "gingerbread-house", "light-the-candles", "wishbone"] as const;
 
 /**
+ * LATER is the gifts out of season: the ten whose first occasion is Halloween. From the morning after
+ * Halloween they stood in the middle of the gallery, places 25 to 44, where the visitors who scroll
+ * that far actually are (Clarity, 21–27 Nov 2026: half leave before card 15, a quarter reach the
+ * middle). They close the gallery instead, in the order they had; the Halloween page keeps them first.
+ * The owner's yes of 27 Nov 2026. Empty it in September.
+ */
+export const LATER_SLUGS = ["seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house", "trick-or-treat", "spooky-season", "be-my-boo", "fall-for-you", "autumn-reel"] as const;
+
+/**
+ * The three best sellers under the front page's buttons (components/marketing/platform/hero-best-sellers.tsx):
+ * gifts people pay for once they start one (Bouquet, XOXO; Coquette pays on one editor open in ten).
+ * All premium, which a unit test checks.
+ */
+export const HOME_PICKS = ["bouquet", "xoxo", "coquette"] as const;
+
+/**
  * What a free template's editor offers to move the gift into ("Same words, a bigger moment"): best
  * sellers that take a letter's words and photos well. All premium, which a unit test checks.
  */
@@ -29,14 +45,15 @@ export type GallerySection<T> = { id: Featured | "all"; items: T[] };
 
 const POPULAR: readonly string[] = POPULAR_SLUGS;
 const NEW: readonly string[] = NEW_SLUGS;
+const LATER: readonly string[] = LATER_SLUGS;
 
 /** The badge a card wears, if any. A best seller that is also new is, first of all, a best seller. */
 export const featuredFor = (slug: string): Featured | undefined => (POPULAR.includes(slug) ? "popular" : NEW.includes(slug) ? "new" : undefined);
 
 /**
  * The gallery in three shelves: the best sellers, the new arrivals, then everything else in the
- * order it was given. Every item lands on exactly one shelf, and an empty shelf is left out, so a
- * filter that removes all the new ones removes their heading too.
+ * order it was given, the gifts out of season (LATER) last. Every item lands on exactly one shelf,
+ * and an empty shelf is left out, so a filter that removes all the new ones removes their heading too.
  */
 export function sectionTemplates<T extends { slug: string }>(items: T[]): GallerySection<T>[] {
   const bySlug = new Map(items.map((item) => [item.slug, item]));
@@ -44,10 +61,11 @@ export function sectionTemplates<T extends { slug: string }>(items: T[]): Galler
   const popular = pick(POPULAR);
   const fresh = pick(NEW.filter((slug) => !POPULAR.includes(slug)));
   const shelved = new Set([...popular, ...fresh].map((item) => item.slug));
+  const rest = items.filter((item) => !shelved.has(item.slug));
   const sections: GallerySection<T>[] = [
     { id: "popular", items: popular },
     { id: "new", items: fresh },
-    { id: "all", items: items.filter((item) => !shelved.has(item.slug)) },
+    { id: "all", items: [...rest.filter((item) => !LATER.includes(item.slug)), ...rest.filter((item) => LATER.includes(item.slug))] },
   ];
   return sections.filter((section) => section.items.length > 0);
 }
