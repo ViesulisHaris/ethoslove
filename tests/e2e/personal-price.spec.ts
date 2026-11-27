@@ -41,9 +41,9 @@ async function openSheet(page: Page) {
 }
 
 test.describe("the two-hour notice that the policy changed", () => {
-  // POLICY_NOTICE in src/components/marketing/top-notice.tsx: 20 Nov 2026, 07:30 to 10:00 UTC.
+  // POLICY_NOTICE in src/components/marketing/top-notice.tsx: 27 Nov 2026, 14:00 to 16:30 UTC.
   test("shows inside its two hours, links to the policy, and closes", async ({ page }) => {
-    await page.clock.install({ time: new Date("2026-11-20T08:30:00Z") });
+    await page.clock.install({ time: new Date("2026-11-27T15:00:00Z") });
     await page.goto("/templates");
     const notice = page.getByTestId("top-notice");
     await expect(notice).toContainText("We’ve updated our Privacy Policy and Terms.");
@@ -53,7 +53,7 @@ test.describe("the two-hour notice that the policy changed", () => {
   });
 
   test("is gone before and after them", async ({ page }) => {
-    await page.clock.install({ time: new Date("2026-11-20T10:00:01Z") });
+    await page.clock.install({ time: new Date("2026-11-27T16:30:01Z") });
     await page.goto("/templates");
     await expect(page.getByRole("heading").first()).toBeVisible();
     await expect(page.getByTestId("top-notice")).toHaveCount(0);

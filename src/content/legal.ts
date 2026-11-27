@@ -25,10 +25,10 @@ export const LEGAL_ENTITY = {
 export const LEGAL_UPDATED = "2026-11-24";
 
 /**
- * The privacy policy's own date, so the terms don't move when only it changes: 25 Nov 2026, for the
+ * The privacy policy's own date, so the terms don't move when only it changes: 27 Nov 2026, for the two unsent-gift emails (UNSENT_LEGAL); before that 25 Nov, for the
  * rooms entry in section 12. Never earlier than LEGAL_UPDATED (it holds the group cards' paragraphs too).
  */
-export const PRIVACY_UPDATED = "2026-11-25";
+export const PRIVACY_UPDATED = "2026-11-27";
 
 /**
  * The box every buyer ticks on Stripe's checkout page, word for word without its link. Terms s.9
