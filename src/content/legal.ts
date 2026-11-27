@@ -25,10 +25,10 @@ export const LEGAL_ENTITY = {
 export const LEGAL_UPDATED = "2026-11-24";
 
 /**
- * The privacy policy's own date, so the terms don't move when only it changes: 25 Nov 2026, for the
+ * The privacy policy's own date, so the terms don't move when only it changes: 27 Nov 2026, for the two unsent-gift emails (UNSENT_LEGAL); before that 25 Nov, for the
  * rooms entry in section 12. Never earlier than LEGAL_UPDATED (it holds the group cards' paragraphs too).
  */
-export const PRIVACY_UPDATED = "2026-11-25";
+export const PRIVACY_UPDATED = "2026-11-27";
 
 /**
  * The box every buyer ticks on Stripe's checkout page, word for word without its link. Terms s.9
@@ -1129,16 +1129,75 @@ function withLetter(doc: LegalDoc, locale: GiftLocale): LegalDoc {
 }
 
 /**
+ * What the privacy policy says about the email about a gift left unsent (lib/lifecycle/unsent-gift.ts)
+ * and about "Email me this gift" (app/api/gift/later). Both ship switched off, and a document must
+ * not describe an email nobody gets: like the date letter's, these changes are part of the policy
+ * only while their switch is on (the privacy page asks legalDocs for them). Off, the policy is word
+ * for word what it was. None of their needles is inside one of LETTER_LEGAL's or IDEA_LEGAL's, so
+ * all three find their places in any combination (tests/unit/unsent-gift.test.tsx).
+ */
+export type UnsentLegal = { reminder: boolean; emailMe: boolean };
+
+export const UNSENT_LEGAL: Record<GiftLocale, Record<keyof UnsentLegal, LetterEdit[]>> = {
+  en: {
+    reminder: [
+      { section: 1, paragraphBefore: "Offer emails: ", text: "The reminder about an unsent gift: if you are signed in, work on a gift on a premium template (you add a photo, or spend a couple of minutes on it), leave it unsent, and neither buy anything nor send any gift after starting it, we email you once, about a day later, to say that it is still saved and on which day it will be deleted (unsent gifts are deleted after 7 days untouched). The email names the template and nothing from the gift: no name, photo or word of it. To decide whether to send it we read the gift's template, its dates and how many photos it holds, never what is in them. It is one email for a gift, and at most one to an account in any week. We say so under the sign-in form. It has an unsubscribe link (your mail app may also show its own unsubscribe button); if you use it, we keep a one-way hash of your address (not the address itself) on the list we check before sending, the same one as for the checkout reminder, and send no more of them." },
+      { section: 8, find: "send offer emails to our customers in the United States,", after: " remind you once of a gift you left unsent in your account," },
+      { section: 8, find: "and to offer emails at any time with the unsubscribe link in each one.", after: " The reminder about an unsent gift carries the same link." },
+    ],
+    emailMe: [{ section: 1, paragraphBefore: "Offer emails: ", text: "“Email me this gift”: if you aren't signed in and ask for it on the screen a gift is sent from, we send the address you type one email with a link back to that gift's editor. Your gift stays on your device: nothing of it is sent to us. We don't store the address either: the link carries it, encrypted, and works for 7 days. Opening the link signs you in to an account with that address, making one if there is none (which sends the welcome email), and from then on the editor saves the gift to that account, as it does for anyone signed in. We send at most two of these to an address in a day, and to count them we keep a one-way hash of the address for a day. If someone else typed your address, you can ignore the email: nothing is kept unless the link is opened, and its “Never email me” link puts a one-way hash of your address on the list we check before sending." }],
+  },
+  es: {
+    reminder: [
+      { section: 1, paragraphBefore: "Correos de ofertas: ", text: "El recordatorio de un regalo sin enviar: si has iniciado sesión, trabajas en un regalo de una plantilla premium (le añades una foto o le dedicas un par de minutos), lo dejas sin enviar y no compras nada ni envías ningún regalo después de empezarlo, te escribimos una vez, alrededor de un día después, para decirte que sigue guardado y qué día se borrará (los regalos sin enviar se borran tras 7 días sin tocarlos). El correo nombra la plantilla y nada del regalo: ni un nombre, ni una foto, ni una palabra. Para decidir si lo enviamos leemos la plantilla del regalo, sus fechas y cuántas fotos tiene, nunca lo que hay en ellas. Es un solo correo por regalo, y como mucho uno por cuenta a la semana. Lo decimos debajo del formulario para iniciar sesión. Incluye un enlace para darte de baja (puede que tu app de correo también muestre su propio botón para darte de baja); si lo usas, guardamos un hash unidireccional de tu dirección (no la dirección) en la lista que consultamos antes de enviar, la misma que para el aviso de un pago sin terminar, y no te enviamos más." },
+      { section: 8, find: "enviar correos de ofertas a nuestros clientes en Estados Unidos", after: ", recordarte una vez un regalo que dejaste sin enviar en tu cuenta" },
+      { section: 8, find: "y a los correos de ofertas en cualquier momento con el enlace para darte de baja de cada uno.", after: " El recordatorio de un regalo sin enviar trae el mismo enlace." },
+    ],
+    emailMe: [{ section: 1, paragraphBefore: "Correos de ofertas: ", text: "«Envíame este regalo por correo»: si no has iniciado sesión y lo pides en la pantalla desde la que se envía un regalo, enviamos a la dirección que escribes un correo con un enlace para volver al editor de ese regalo. Tu regalo se queda en tu dispositivo: no nos llega nada de él. Tampoco guardamos la dirección: el enlace la lleva, cifrada, y funciona durante 7 días. Al abrir el enlace entras en una cuenta con esa dirección, que se crea si no existe (y entonces recibes el correo de bienvenida), y desde ese momento el editor guarda el regalo en esa cuenta, como hace con cualquiera que ha iniciado sesión. Enviamos como mucho dos de estos correos a una dirección al día, y para contarlos guardamos un hash unidireccional de la dirección durante un día. Si otra persona escribió tu dirección, puedes ignorar el correo: no se guarda nada si no se abre el enlace, y su enlace «No escribirme nunca» pone un hash unidireccional de tu dirección en la lista que consultamos antes de enviar." }],
+  },
+};
+
+/** The privacy policy with the unsent-gift emails' changes made (UNSENT_LEGAL). Throws when one finds no place. */
+function withUnsent(doc: LegalDoc, locale: GiftLocale, on: UnsentLegal): LegalDoc {
+  const edits = [...(on.reminder ? UNSENT_LEGAL[locale].reminder : []), ...(on.emailMe ? UNSENT_LEGAL[locale].emailMe : [])];
+  if (edits.length === 0) return doc;
+  const sections = doc.sections.map((sec) => ({ ...sec, paragraphs: [...sec.paragraphs] }));
+  for (const edit of edits) {
+    const section = sections.find((sec) => sec.heading.startsWith(`${edit.section}. `));
+    if (!section) throw new Error(`unsent gift: no section ${edit.section} in the ${locale} privacy policy`);
+    const where = (needle: string) => {
+      const i = section.paragraphs.findIndex((p) => p.includes(needle));
+      if (i < 0) throw new Error(`unsent gift: “${needle}” not found in ${locale} privacy ${edit.section}`);
+      return i;
+    };
+    if ("paragraphBefore" in edit) section.paragraphs.splice(where(edit.paragraphBefore), 0, edit.text);
+    else {
+      const i = where(edit.find);
+      section.paragraphs[i] = section.paragraphs[i].replace(edit.find, "after" in edit ? edit.find + edit.after : edit.replace);
+    }
+  }
+  return { ...doc, sections };
+}
+
+/**
  * The terms and the privacy policy. `group` adds what they say about group cards (GROUP above): the
  * pages pass groupGiftsEnabled(), so the paragraphs appear on the day group cards go on sale and
  * not before. `idea` adds the monthly idea's (IDEA_LEGAL above) in the same way, as the setting
  * describes it: the pages pass ideaMode(), and "off" (the default) changes nothing. `letter` adds the
  * date letter's (LETTER_LEGAL above) to the privacy policy: the pages pass dateLetterOn(); false (the
- * default) changes nothing.
+ * default) changes nothing. `unsent` adds the two unsent-gift emails' (UNSENT_LEGAL above), each while
+ * its own switch is on.
  */
-export function legalDocs(group: boolean, idea: LegalIdeaMode | "off" = "off", letter = false): Record<"terms" | "privacy", Record<GiftLocale, LegalDoc>> {
-  const privacy = { en: privacyEn(group), es: privacyEs(group) };
-  const docs = { terms: { en: termsEn(group), es: termsEs(group) }, privacy: letter ? { en: withLetter(privacy.en, "en"), es: withLetter(privacy.es, "es") } : privacy };
+export function legalDocs(
+  group: boolean,
+  idea: LegalIdeaMode | "off" = "off",
+  letter = false,
+  unsent: UnsentLegal = { reminder: false, emailMe: false },
+): Record<"terms" | "privacy", Record<GiftLocale, LegalDoc>> {
+  const plain = { en: privacyEn(group), es: privacyEs(group) };
+  const lettered = letter ? { en: withLetter(plain.en, "en"), es: withLetter(plain.es, "es") } : plain;
+  const privacy = { en: withUnsent(lettered.en, "en", unsent), es: withUnsent(lettered.es, "es", unsent) };
+  const docs = { terms: { en: termsEn(group), es: termsEs(group) }, privacy };
   if (idea === "off") return docs;
   return {
     terms: { en: withIdea(docs.terms.en, "terms", "en", idea), es: withIdea(docs.terms.es, "terms", "es", idea) },

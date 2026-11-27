@@ -24,11 +24,15 @@ import {
   PassRenewalEmail,
   PassWelcomeEmail,
   PublishReminderEmail,
+  SavedGiftEmail,
+  UnsentGiftEmail,
   ReminderEmail,
   monthsaryCheckInHeading,
   monthsaryHeading,
   monthlyIdeaHeading,
   publishReminderSubject,
+  savedGiftSubject,
+  unsentGiftSubject,
   recoveryHeading,
   reminderHeading,
   stagedReminderSubject,
@@ -227,6 +231,61 @@ export async function sendPublishReminder({ to, locale, url, templateSlug, onceK
       subject: publishReminderSubject(locale),
       react: PublishReminderEmail({ locale, url, template: { name: manifest.name[locale], tagline: manifest.tagline[locale], poster: `${siteUrl()}${manifest.thumbnail.poster}` } }),
       idempotencyKey: onceKey,
+    });
+  });
+}
+
+/**
+ * "Nobody likes to be forgotten": a premium gift left unsent in an account (lib/lifecycle/unsent-gift.ts).
+ * An optional email: the opt-out list is checked again here, beside the way out it carries, and when
+ * either can't be done it isn't sent. Once per draft on Resend's side too (`onceKey`). It names the
+ * template and the day the draft is deleted (`deletedOn`, ISO), never anything from the gift.
+ */
+export async function sendUnsentGift({ to, locale, url, templateSlug, deletedOn, onceKey }: { to: string; locale: L; url: string; templateSlug: string; deletedOn: string; onceKey: string }): Promise<boolean> {
+  return safely("unsent gift", async () => {
+    const admin = getSupabaseAdminClient();
+    const secret = linkSecret();
+    const manifest = getManifest(templateSlug);
+    if (!admin || !secret || !manifest) return false;
+    const key = await emailKey(to);
+    if (await optedOut(admin, key)) return false;
+    const unsubscribeUrl = `${siteUrl()}/api/email/unsubscribe?t=${await signToken("email-optout", key, secret)}&l=${locale}`;
+    return deliver("unsent gift", {
+      to,
+      subject: unsentGiftSubject(locale),
+      react: UnsentGiftEmail({
+        locale,
+        url,
+        template: { name: manifest.name[locale], tagline: manifest.tagline[locale], poster: `${siteUrl()}${manifest.thumbnail.poster}` },
+        deletedOn: emailDate(deletedOn, locale),
+        unsubscribeUrl,
+      }),
+      headers: unsubscribeHeaders(unsubscribeUrl),
+      idempotencyKey: onceKey,
+    });
+  });
+}
+
+/**
+ * "Email me this gift": the one email a guest asks for on the send screen (app/api/gift/later), with
+ * the link back to their gift. Asked for, so it isn't held back by the opt-out list's offers; but an
+ * address on that list asked never to hear from us, and somebody else may be typing it, so it is
+ * checked all the same, and the email carries the way onto it.
+ */
+export async function sendSavedGift({ to, locale, url, templateSlug }: { to: string; locale: L; url: string; templateSlug: string }): Promise<boolean> {
+  return safely("saved gift", async () => {
+    const admin = getSupabaseAdminClient();
+    const secret = linkSecret();
+    const manifest = getManifest(templateSlug);
+    if (!admin || !secret || !manifest) return false;
+    const key = await emailKey(to);
+    if (await optedOut(admin, key)) return false;
+    const neverUrl = `${siteUrl()}/api/email/unsubscribe?t=${await signToken("email-optout", key, secret)}&l=${locale}`;
+    return deliver("saved gift", {
+      to,
+      subject: savedGiftSubject(locale),
+      react: SavedGiftEmail({ locale, url, template: { name: manifest.name[locale], tagline: manifest.tagline[locale], poster: `${siteUrl()}${manifest.thumbnail.poster}` }, neverUrl }),
+      headers: unsubscribeHeaders(neverUrl),
     });
   });
 }

@@ -130,7 +130,7 @@ describe("sitemap dates", () => {
     for (const p of legal) expect(p.lastModified, p.url).toBe(new URL(p.url).pathname.endsWith("/legal/privacy") ? PRIVACY_UPDATED : LEGAL_UPDATED);
     // loop2-T4: only the privacy policy changed on 25 Nov; the terms keep the day they last changed.
     expect(legal.some((p) => p.url.endsWith("/legal/terms") && p.lastModified === "2026-11-24")).toBe(true);
-    expect(legal.some((p) => p.url.endsWith("/legal/privacy") && p.lastModified === "2026-11-25")).toBe(true);
+    expect(legal.some((p) => p.url.endsWith("/legal/privacy") && p.lastModified === "2026-11-27")).toBe(true);
     expect(PRIVACY_UPDATED >= LEGAL_UPDATED).toBe(true);
   });
 

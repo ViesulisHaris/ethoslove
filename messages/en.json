@@ -189,6 +189,7 @@
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "sendLink": "Email me a magic link",
+    "unsentNote": "If you leave a gift unsent, we email you once to remind you. The email has a link to stop these.",
     "sending": "Sending…",
     "linkSent": "Check your inbox",
     "linkSentDetail": "We sent a sign-in link to {email}. It expires in one hour.",
@@ -592,6 +593,19 @@
       "freeReplyInvalid": "This link can’t make the reply free any more, so it’s the template’s normal price.",
       "payGuestBlurb": "Pay once and it’s sent. Your account is created from the email you give at checkout: nothing to sign up for.",
       "signInInstead": "Already have an account? Sign in instead",
+      "later": {
+        "link": "Not ready to send? Email me this gift",
+        "title": "Finish it later",
+        "blurb": "We’ll email you a link back to this gift. It stays saved on this phone.",
+        "label": "Your email address",
+        "placeholder": "you@example.com",
+        "send": "Email it to me",
+        "sent": "Sent. Open the link on this phone, in this browser, to pick your gift up again.",
+        "failed": "That didn’t go through. Check the address and try again.",
+        "limited": "Too many tries from here. Try again in an hour.",
+        "small": "One email with the link. Opening it signs you in to an Ethos account with this address and keeps the gift in it; if the gift is still unsent a day later, we remind you once.",
+        "privacy": "Privacy Policy"
+      },
       "uploadsAfterPay": "Photos upload right after payment.",
       "ownedElsewhere": "Your purchase covers {templates}. This is a different template.",
       "openOwned": "Open {template} instead",
@@ -3991,10 +4005,10 @@
     },
     "unsubscribe": {
       "title": "Unsubscribe?",
-      "body": "We’ll stop sending you the note about a checkout you didn’t finish, and leave the offers out of our other emails. Receipts, sign-in emails and news about your gifts still come, because you need them.",
+      "body": "We’ll stop sending you the notes about a checkout you didn’t finish or a gift you left unsent, and leave the offers out of our other emails. Receipts, sign-in emails and news about your gifts still come, because you need them.",
       "confirm": "Unsubscribe",
       "doneTitle": "You’re unsubscribed.",
-      "doneBody": "No more checkout notes or offers. Receipts, sign-in emails and news about your gifts still come."
+      "doneBody": "No more notes about unfinished checkouts or unsent gifts, and no offers. Receipts, sign-in emails and news about your gifts still come."
     },
     "link": {
       "invalidTitle": "This link doesn’t work.",

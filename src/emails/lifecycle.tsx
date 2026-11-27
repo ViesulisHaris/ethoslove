@@ -42,6 +42,76 @@ export function CheckoutRecoveryEmail({ locale, url, templateName, unsubscribeUr
   );
 }
 
+export function unsentGiftSubject(locale: L): string {
+  return locale === "es" ? "Tu regalo sigue esperando a que lo envíes" : "Your gift is still waiting to be sent";
+}
+
+/**
+ * A gift left unsent (lib/lifecycle/unsent-gift.ts). It names the template and the day the draft is
+ * deleted, and nothing from the gift itself: no name, photo or word of it.
+ */
+export function UnsentGiftEmail({ locale, url, template, deletedOn, unsubscribeUrl }: { locale: L; url: string; template: Omit<EmailIdea, "url">; deletedOn: string; unsubscribeUrl: string }) {
+  const es = locale === "es";
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={es ? "Está guardado tal como lo dejaste." : "It's saved exactly as you left it."}
+      heading={es ? "A nadie le gusta que lo olviden." : "Nobody likes to be forgotten."}
+      cta={{ label: es ? "Terminarlo y enviarlo" : "Finish and send", href: url }}
+      footer={
+        es
+          ? "Recibes esto porque tienes una cuenta en Ethos y dejaste un regalo sin enviar. Solo te lo enviamos una vez por regalo."
+          : "You're getting this because you have an Ethos account and left a gift unsent. We only send this once for a gift."
+      }
+      footerLink={{ label: es ? "Darme de baja" : "Unsubscribe", href: unsubscribeUrl }}
+    >
+      <P>{es ? "Empezaste un regalo y no llegaste a enviarlo." : "You started a gift and never sent it."}</P>
+      <Idea name={template.name} tagline={template.tagline} href={url} poster={template.poster} />
+      <P>{es ? "Está guardado tal como lo dejaste. Ábrelo y sigue donde lo dejaste." : "It's saved exactly as you left it. Open it and pick up where you stopped."}</P>
+      <Quiet>
+        {es
+          ? `Guardamos los regalos sin enviar durante 7 días. Este se borra el ${deletedOn}.`
+          : `We keep unsent gifts for 7 days. This one is deleted on ${deletedOn}.`}
+      </Quiet>
+    </EmailLayout>
+  );
+}
+
+export function savedGiftSubject(locale: L): string {
+  return locale === "es" ? "Tu regalo está guardado: aquí tienes el enlace" : "Your gift is saved: here's the way back";
+}
+
+/**
+ * "Email me this gift", asked for by a guest on the send screen (app/api/gift/later). The gift is on
+ * their device, not with us: the button signs them in to an account with the address they typed, and
+ * from then on the gift is kept in it. `neverUrl` is for an address somebody else typed in.
+ */
+export function SavedGiftEmail({ locale, url, template, neverUrl }: { locale: L; url: string; template: Omit<EmailIdea, "url">; neverUrl: string }) {
+  const es = locale === "es";
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={es ? "Ábrelo en el móvil donde lo hiciste para terminarlo." : "Open it on the phone you made it on to finish it."}
+      heading={es ? "Tu regalo está guardado." : "Your gift is saved."}
+      cta={{ label: es ? "Abrir mi regalo" : "Open my gift", href: url }}
+      footer={
+        es
+          ? "Recibes esto porque alguien escribió esta dirección en “Envíame este regalo por correo” en Ethos. Si no fuiste tú, no hagas nada: no se crea nada hasta que se abra el enlace."
+          : "You're getting this because someone typed this address into “Email me this gift” on Ethos. If that wasn't you, do nothing: nothing is kept until the link is opened."
+      }
+      footerLink={{ label: es ? "No escribirme nunca" : "Never email me", href: neverUrl }}
+    >
+      <P>{es ? "Pediste que te lo enviáramos para terminarlo más tarde. Aquí lo tienes." : "You asked us to email it to you so you can finish it later. Here it is."}</P>
+      <Idea name={template.name} tagline={template.tagline} href={url} poster={template.poster} />
+      <Quiet>
+        {es
+          ? "Ábrelo en el móvil o el ordenador donde lo hiciste, y en el mismo navegador: el regalo está guardado ahí. Al abrir el enlace entras en una cuenta de Ethos con esta dirección y el regalo queda guardado en ella. El enlace funciona durante 7 días."
+          : "Open it on the phone or computer you made it on, in the same browser: the gift is saved there. Opening the link signs you in to an Ethos account with this address and keeps the gift in it. The link works for 7 days."}
+      </Quiet>
+    </EmailLayout>
+  );
+}
+
 export function publishReminderSubject(locale: L): string {
   return locale === "es" ? "Te falta un paso: publica tu regalo" : "One step left: publish your gift";
 }

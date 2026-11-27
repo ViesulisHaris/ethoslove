@@ -4,6 +4,7 @@ import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { Mail, MailCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
+import { unsentEmailsOn } from "@/lib/lifecycle/unsent-flag";
 import { SUPABASE_CONFIGURED } from "@/lib/supabase/configured";
 import { checkEmail } from "@/lib/auth/email-check";
 import { Button } from "@/components/ui/button";
@@ -301,6 +302,12 @@ export function AuthForm({
               {t("continueWithGoogle")}
             </Button>
           </div>
+          {/* Said where the address is given, while the email about an unsent gift is on (lib/lifecycle/unsent-flag.ts). */}
+          {unsentEmailsOn() ? (
+            <p className="mt-4 text-center text-xs text-balance text-muted-foreground" data-testid="unsent-note">
+              {t("unsentNote")}
+            </p>
+          ) : null}
         </>
       )}
 
