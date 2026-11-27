@@ -1,0 +1,150 @@
+{
+  "slug": "questions-to-ask-your-wife",
+  "keyword": "questions to ask your wife",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "UK-only words (lost-property office, holiday, film, queue, double act, theme tune, school run, counsellor) to swap for words that work in the US too; the 'why does that worry you' tail presumed she was worried; the 3-3-3 answer stated one meaning too confidently; use the {free:} token for Fortune Cookie."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Factual error about our own content: the post says questions-to-ask-your-girlfriend is \"sorted by how long you've been together\" (ES: \"ordenadas por el tiempo que lleváis juntos\"). That post is 160 questions in eight groups by type (fun, getting to know her, deep, romantic, the future, flirty, by text, long distance): src/content/blog/posts/questions-to-ask-your-girlfriend.ts, lead and H2s."
+          ],
+          "summary": "Girlfriend post described wrongly (sorted by type, not stage); hedge the 3-3-3 and 7-7-7 answers; the free-trip question's timing was backwards; UK words; three questions word for word and several close paraphrases of the husband post to rewrite; nine Spanish lines that were calques or ungrammatical."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The 3-3-3 answer gave an unsupported dating version as the usual one; the married version people find is three hours together and three apart. 'What are 36 relationship questions?' (People also ask on 'questions to ask my wife') was unanswered."
+        }
+      ],
+      "applied": [
+        "Girlfriend post described as 160 questions sorted by type (EN, ES)",
+        "3-3-3 answer rewritten: pages disagree, married version three hours together and three apart (3x3), dating version, none from research (EN, ES)",
+        "7-7-7 answer hedged: 'Usually', 'does the rounds online' (EN, ES)",
+        "Free-trip question timing fixed (EN, ES)",
+        "UK words replaced: lost-property office, holiday, film, queue, double act, theme tune, school run, counsellor",
+        "Husband-post copies rewritten: tradition, next big anniversary, the night you'd live again (list and FAQ), what you wanted to be at twelve, the 'Wait' and 'Try it in writing' bullets (EN, ES)",
+        "All nine Spanish fixes",
+        "Friends' husbands question ends 'and should that worry you?' (EN, ES)",
+        "New h3 'What about the 36 questions?' under the deep questions, from Aron's 1997 study, linking the 21 questions post (EN, ES)",
+        "Polish taken: 'Plenty of husbands', lead no longer repeats 'the parts of her life', three Spanish polish lines"
+      ],
+      "rejected": [
+        "Reader: Fortune Cookie note 'It's a premium template' to '{free:fortune-cookie}'. The manifest's tier is premium and the sentence is true as typed; the {free:} token is for templates whose free status can change, and other published posts word premium templates the same way.",
+        "Search: the 36 questions as a sixth FAQ entry. The playbook allows three to five FAQ entries, so it went into the body as an h3 under the deep questions instead."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes confirmed and the Fortune Cookie rejection judged reasonable. One fix: 'and with whom, if anyone?' on the anniversary question could read as 'with me or someone else'. Polish: 'realised' and 'organises' are UK spellings."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round 1 fixes correct in both languages. The 21 questions link promised 'where they came from and how to play' for the 36 questions, which that post covers only in part; two Spanish yearly questions needed the perfect tense with 'este año'. Spanish polish: closeness wording, surprise question, 'te pone nerviosa', 'de verdad' twice, the orgullosa line."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that tells him which questions fit where the marriage is now, how to ask them without an interview and what to do when she says 'Fine', in 90 non-explicit questions, while the first-page lists are undifferentiated and often sexual; every People-also-ask question is answered."
+        }
+      ],
+      "applied": [
+        "Anniversary question: 'and who should be there?' (EN, ES)",
+        "21 questions link: 'has more on the study, and a shorter game built the same way' (EN, ES)",
+        "Spanish perfect tense in two yearly questions",
+        "Spanish polish: 'cómo se acercan dos personas', surprise question, 'te gusta tanto', single 'de verdad', 'que te enorgullece' (list and FAQ)",
+        "Reader polish: 'than I knew', 'It occurred to me', 'keeps track of everything' (UK spellings gone)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It is the one page that matches questions to where the marriage is now, shows how to ask without it feeling like an interview, and says what to do when she answers 'Fine', while the first-page lists are undifferentiated question dumps."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks against the code and the sibling posts, the round 2 fixes are correct in both languages, and the stage table and the 'I don't know or Fine' section give advice the top results don't."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Today's first page is mostly long, undifferentiated lists, some of them sexual; this is the only one that picks questions by stage of marriage, shows how to ask, covers 'Fine', and answers every People-also-ask question, in 90 clean questions."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader: 'flat out' and 'children' alternatives (optional)",
+        "Editor: 'get along with', 'don't now' for 'any more', Spanish 'citas' repeated in the 3-3-3 answer, 'por internet' for 'por las redes'",
+        "Search: mention 'spouse' once for the 880-a-month variant; leave 'How to meet a good wife?' unanswered"
+      ]
+    }
+  ]
+}

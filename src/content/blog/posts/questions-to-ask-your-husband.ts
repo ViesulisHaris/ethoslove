@@ -272,7 +272,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play them on one phone or two, or send them" },
         {
           type: "p",
-          text: "A question is easier when a card asks it for you. Our free [question cards](/games/couple-questions-game) are a deck you pass between you on one phone, and [How well do you know me?](/games/how-well-do-you-know-me) is the quiz version: eight questions, you each answer about yourself and guess the other, and the guesses score. It plays on two phones too, which helps when one of you travels for work. For questions you both answer, our [questions to ask your partner](/blog/questions-to-ask-your-partner) are sorted by stage, and our [date night questions](/blog/date-night-questions) by the kind of evening.",
+          text: "A question is easier when a card asks it for you. Our free [question cards](/games/couple-questions-game) are a deck you pass between you on one phone, and [How well do you know me?](/games/how-well-do-you-know-me) is the quiz version: eight questions, you each answer about yourself and guess the other, and the guesses score. It plays on two phones too, which helps when one of you travels for work. For questions you both answer, our [questions to ask your partner](/blog/questions-to-ask-your-partner) are sorted by stage, and our [date night questions](/blog/date-night-questions) by the kind of evening. If he wants to ask you a few back, send him our [questions to ask your wife](/blog/questions-to-ask-your-wife).",
         },
         {
           type: "p",
@@ -582,7 +582,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Jugadlas en un móvil o en dos, o mándaselas" },
         {
           type: "p",
-          text: "Una pregunta cuesta menos cuando la hace una carta por ti. Nuestras [cartas de preguntas](/games/couple-questions-game), gratis, son una baraja que os vais pasando en un móvil, y [¿Cuánto me conoces?](/games/how-well-do-you-know-me) es la versión con puntos: ocho preguntas, cada uno contesta sobre sí mismo, adivina lo del otro y puntúan los aciertos. También se juega en dos móviles, lo que ayuda cuando uno de los dos viaja por trabajo. Para preguntas que contestáis los dos, nuestras [preguntas para hacerle a tu pareja](/blog/questions-to-ask-your-partner) van por etapas, y nuestras [preguntas para una cita](/blog/date-night-questions) según el tipo de noche.",
+          text: "Una pregunta cuesta menos cuando la hace una carta por ti. Nuestras [cartas de preguntas](/games/couple-questions-game), gratis, son una baraja que os vais pasando en un móvil, y [¿Cuánto me conoces?](/games/how-well-do-you-know-me) es la versión con puntos: ocho preguntas, cada uno contesta sobre sí mismo, adivina lo del otro y puntúan los aciertos. También se juega en dos móviles, lo que ayuda cuando uno de los dos viaja por trabajo. Para preguntas que contestáis los dos, nuestras [preguntas para hacerle a tu pareja](/blog/questions-to-ask-your-partner) van por etapas, y nuestras [preguntas para una cita](/blog/date-night-questions) según el tipo de noche. Si él quiere hacerte unas cuantas a ti, pásale nuestras [preguntas para tu mujer](/blog/questions-to-ask-your-wife).",
         },
         {
           type: "p",
