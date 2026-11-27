@@ -1,0 +1,134 @@
+{
+  "slug": "monthiversary-ideas",
+  "keyword": "monthiversary ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Table row 6 gave no idea (\"something a little bigger (see below)\"); the 1 month rule FAQ asserted \"usually a shorter cousin of the three-month rule\" when no single definition exists."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Verified the 29th-31st rule and the calculator's next-monthiversary date against src/lib/together/dates.ts, every link, the three template notes and the {note:A|B} free Letter lines. Spanish «una prima corta de la regla» was a calque."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Add the spellings monthaversary (44 impressions at 6.8) and monthversary (the People also ask wording) to the body, and ask the first FAQ as \"What is a monthiversary (or monthversary)?\"."
+        }
+      ],
+      "applied": [
+        "Row 6: a day trip somewhere neither of you has been, a photo at the start and the end, \"One day\" (ES to match)",
+        "1 month rule answer: no single definition, the three-month rule is the best documented (EN and ES, removing the calque)",
+        "Spellings monthaversary and monthversary in the body and the first FAQ",
+        "Polish: recognize (US spelling), ES «se nota que te fijas» for «estabas atenta», ES FAQ Latin «anniversarius, que vuelve cada año»"
+      ],
+      "rejected": [
+        "More message lines and «mesesario» (40 a month): polish, would add text without a clear gain"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Defines the word and its spellings first, then gives a month-by-month table with times, real lines to send and honest answers to every People also ask question; no top result combines these."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes made correctly; the cumplemes framing is natural Spain Spanish and still says «cumplir meses» is the usual phrase; every claim matches the code."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"month anniversary\" (45 impressions) and \"monthly anniversary\" (16) are not in the body as a plain definition: one sentence in the first paragraph."
+        }
+      ],
+      "applied": [
+        "EN: \"A month anniversary or monthly anniversary is the same thing, and \\\"happy monthiversary\\\" is what you say on the day.\" ES: «Aniversario mensual quiere decir lo mismo, y ese día se dice «feliz cumplemes».»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The new sentence is accurate and fits; the definition, the 29th-31st rule with the calculator, the twelve-month table and specific lines make it the page to send a friend over the forums and pins that rank now."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The added EN and ES sentence is correct and natural; all claims verified again against dates.ts, together-guide.ts, the template schemas and VOICE.md."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Title leads with the head term and \"meaning\", the FAQ matches all four People also ask questions, and the twelve-month table with times beats the generic lists, forums and Philippine monthsary blogs on page one."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish (\"Many couples\", one more message line, \"sidesteps the argument\" used twice, two stiff Spanish phrasings) left out: the panel passed this version"
+      ]
+    }
+  ]
+}

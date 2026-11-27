@@ -2043,3 +2043,7 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |
 | 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |
 | 2026-11-26T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-husband |
+| 2026-11-27T04:43Z | serp/google/organic/live/advanced | 0.002 | seo: monthiversary-ideas |
+| 2026-11-27T04:43Z | dataforseo_labs/google/keyword_overview/live | 0.01284 | seo: monthiversary-ideas |
+| 2026-11-27T04:43Z | dataforseo_labs/google/keyword_ideas/live | 0.0192 | seo: monthiversary-ideas |
+| 2026-11-27T04:43Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: monthiversary-ideas |

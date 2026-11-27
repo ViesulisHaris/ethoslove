@@ -3,6 +3,36 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-27: monthiversary-ideas retitled for what people type ("monthiversary", Spain's "cumplemes"); every People also ask answered
+- **Page:** /blog/monthiversary-ideas (and /es)
+- **Why:** First run of a Friday (no weekly job; the ranks are a day old). The first open backlog item, the
+  free Letter as a short note, was already closed by a person's commit on 25 Nov that fixed all 39 posts,
+  so the next one: the Spanish side of monthiversary-ideas, waiting for today. The post is also the best
+  seen-but-not-clicked page: Search Console (28 days, brand left out) 693 impressions, 1 click;
+  "monthiversary" 426 impressions at 8.1 with no clicks, "month anniversary" 45 at 10.3, "monthaversary"
+  44 at 6.8, "monthiversary meaning" 35 at 8.1. DataForSEO (US): "monthiversary" 1,300 a month, KD 0;
+  "monthsary" 1,000, KD 3; "happy monthiversary" 590; "month anniversary" 480; "1 month anniversary
+  ideas" 260; the old keyword "monthiversary ideas" only 10. Spain: "cumplemes" 260, "feliz cumplemes"
+  260, "mesiversario" 140, while the Spanish keyword ("ideas para celebrar meses con tu pareja") has no
+  measured searches. Page one for "monthiversary" is a Philippine monthsary blog, Pinterest pins, forum
+  threads and a word-origin page; People also ask: "What is a monthversary?", "What is the 1 month rule
+  in a relationship?", "Can 7 months be an anniversary?", "What to say for a 1 month anniversary?", three
+  of them unanswered.
+- **What changed:** English title "Monthiversary meaning, 12 date ideas and what to say", a description
+  that defines the word first, the spellings people type (monthaversary, monthversary, month anniversary)
+  in the opening section, month 6 of the table a real idea, the together calculator linked beside the
+  29th–31st rule, and FAQs for the 1 month rule (no single definition; the three-month rule), 7 months and
+  what to say at one month (replacing "how often should couples date" and "when do you stop", which the
+  body covers). Spanish keyword "cumplemes": title "Cumplemes: qué es, 12 ideas para celebrarlo y
+  frases", description, lead, two headings ("Qué es un cumplemes", "Frases de feliz cumplemes") and the
+  FAQ to match. `updated` 2026-11-27.
+- **Panel:** 10/10/10 after 3 rounds (round 1 asked for the spellings, a real month-6 idea and a 1 month
+  rule answer that claims no more than is known; round 2 for "month anniversary" in the body)
+  (`docs/blog/reviews/refresh/monthiversary-ideas-2026-11-27.json`)
+- **Cost:** $0.05 (a SERP with People also ask, two keyword overviews, Spain keyword ideas); balance $38.02
+- **Check on:** 2026-12-14 whether "monthiversary" gets clicks at about position 8 (it had 0 of 426), and
+  whether "cumplemes" shows for /es/blog/monthiversary-ideas
+
 ## 2026-11-26: the free Letter as a short note in good-morning-messages-for-her and good-night-messages-for-her; flirty sections and every People also ask answered
 - **Page:** /blog/good-morning-messages-for-her, /blog/good-night-messages-for-her (and /es to match)
 - **Why:** Second run of the day, a Thursday (the weekly jobs ran this morning). The first open backlog

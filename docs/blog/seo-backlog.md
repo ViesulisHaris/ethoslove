@@ -14,7 +14,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   the missing Spanish-market makers under the comparison rules (VOICE.md: each on its own site that
   day, `sources` in the refresh record). Make sure the Spanish title and lead say "carta digital",
   the words people use. The English table changes only if a maker belongs there too.
-- [ ] **The free Letter is a short note now (19 Nov 2026), and many posts still say otherwise.** Since
+- [x] (2026-11-27) **The free Letter is a short note now (19 Nov 2026), and many posts still say otherwise.** Since
   the owner's change (`src/lib/gift/free-tier.ts`), a free Letter is up to 500 characters with music
   and the footer; photos and the full letter come with "Make it special". Template notes such as
   "your photos drop in as polaroids. Free" are still in open-when-letter-ideas, paragraphs-for-him,
@@ -48,6 +48,11 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
     night post's intro also said two of its templates were free; Constellations has none now). Next, in
     order: good-night-messages-for-him, how-to-apologize-to-your-boyfriend, how-to-surprise-your-girlfriend,
     last-minute-birthday-gift-for-boyfriend, then the rest of the list above.
+  - 2026-11-27: closed. A person's commit on 25 Nov (`fix(blog): no post calls Constellations free
+    while it is sold, or promises photos or the long letter as part of the free Letter…`) put every
+    remaining post's Letter note and free claims behind `{note:A|B}`, 39 posts in all; a search of the
+    posts finds no "polaroids. Free" or "two free" left. The People also ask answers those runs added
+    are still worth giving the posts above, but as their own items.
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.
@@ -89,6 +94,9 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   monthiversary-ideas (not before 27 Nov): Spain says "cumplemes" (480) and "mesiversario" (140),
   and its Spanish title still says neither. Link the together calculator
   (`/tools/how-long-have-we-been-together`) from it in the same change: the link test allows it now.
+  - 2026-11-27: monthiversary-ideas done (Spanish keyword now "cumplemes": 260, "feliz cumplemes" 260,
+    "mesiversario" 140; calculator linked in both languages). Next: the Spanish post with the most
+    Search Console impressions whose Spanish keyword has no measured searches in Spain.
 
 ## For a person (outside the blog: a session on the owner's computer applies these)
 

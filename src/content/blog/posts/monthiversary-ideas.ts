@@ -3,13 +3,13 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "monthiversary-ideas",
   published: "2026-10-31",
-  updated: "2026-11-25",
+  updated: "2026-11-27",
   occasion: "anniversary",
   templates: ["fortune-cookie", "sticker-bomb", "the-letter"],
   content: {
     en: {
-      title: "Monthiversary: what it means, 12 ideas and what to say",
-      description: "What a monthiversary (or monthsary) is and what to call it, 1 month anniversary ideas, a plan for each month of the first year and happy monthiversary messages.",
+      title: "Monthiversary meaning, 12 date ideas and what to say",
+      description: "A monthiversary (or monthsary) is the same date each month as the day you got together. Twelve small ideas for the first year, and happy monthiversary messages.",
       keyword: "monthiversary ideas",
       lead: "A monthiversary (or monthsary) is the same date each month as the day you got together. The best monthiversary ideas cost little and change every month, so the date stays a treat instead of a test. Below is a rotation of twelve, one for each month of the first year, most taking between ten minutes and one evening, and lines to send on the day.",
       takeaways: [
@@ -22,11 +22,11 @@ export const post: BlogPost = {
         { type: "h2", text: "What a monthiversary is, and what else it's called" },
         {
           type: "p",
-          text: "A monthiversary (or monthsary) is the same date each month as the day you got together: the 14th, if it started on the 14th. If it started on the 29th, 30th or 31st, use the last day of any month that's shorter. Plenty of couples mark it in the first year, when every month still feels like a milestone, and quietly stop after that. It only works if you both enjoy it. If one of you thinks it's sweet and the other thinks it's a lot, keep it to a text and save the plans for the half-year and the year.",
+          text: "A monthiversary (or monthsary) is the same date each month as the day you got together: the 14th, if it started on the 14th. If it started on the 29th, 30th or 31st, use the last day of any month that's shorter; our [together calculator](/tools/how-long-have-we-been-together) shows the date of your next one. Plenty of couples mark it in the first year, when every month still feels like a milestone, and quietly stop after that. It only works if you both enjoy it. If one of you thinks it's sweet and the other thinks it's a lot, keep it to a text and save the plans for the half-year and the year. A month anniversary or monthly anniversary is the same thing, and \"happy monthiversary\" is what you say on the day.",
         },
         {
           type: "p",
-          text: "The word is informal, a blend of month and anniversary. Purists object that anniversary comes from the Latin for a year turning (*annus*, year), so a month can't have one. The Latin-correct version, mensiversary (*mensis*, month), exists, but almost nobody uses it. In practice people say monthiversary, monthsary (the everyday word in the Philippines) or simply one-month anniversary, and all three are understood. On a card, \"Happy one month\" sidesteps the argument.",
+          text: "The word is informal, a blend of month and anniversary. Purists object that anniversary comes from the Latin for a year turning (*annus*, year), so a month can't have one. The Latin-correct version, mensiversary (*mensis*, month), exists, but almost nobody uses it. In practice people say monthiversary, monthsary (the everyday word in the Philippines) or simply one-month anniversary, and all three are understood. You'll also see it spelled monthaversary or monthversary: same thing, same date. On a card, \"Happy one month\" sidesteps the argument.",
         },
         { type: "h2", text: "Twelve monthiversary ideas, from 1 month to 12 months" },
         {
@@ -38,7 +38,7 @@ export const post: BlogPost = {
             ["3", "Each pick a song for the other and listen to both on a walk, one earbud each", "Half an hour"],
             ["4", "A dessert crawl: one dessert each in three different places", "One evening"],
             ["5", "Each plans one secret hour of the other's evening", "Two hours"],
-            ["6", "The half-year: something a little bigger (see below)", "One evening"],
+            ["6", "The half-year: a day trip somewhere neither of you has been, with a photo at the start and another at the end (more options below)", "One day"],
             ["7", "Watch the sunset from the highest point you can get to nearby", "An hour"],
             ["8", "A board game or a puzzle, with a silly prize for the winner", "One evening"],
             ["9", "Be tourists at home: one museum or landmark neither of you has visited", "An afternoon"],
@@ -133,12 +133,12 @@ export const post: BlogPost = {
       ],
       faq: [
         {
-          q: "What is a monthiversary?",
-          a: "The same date each month as the day you got together. If you started dating on the 14th, every 14th is a monthiversary. It's also called a monthsary or a one-month (two-month, three-month) anniversary. Couples usually mark them in the first year and switch to counting years after that.",
+          q: "What is a monthiversary (or monthversary)?",
+          a: "The same date each month as the day you got together. If you started dating on the 14th, every 14th is a monthiversary. It's also called a monthsary, monthaversary or a one-month (two-month, three-month) anniversary. Couples usually mark them in the first year and switch to counting years after that.",
         },
         {
-          q: "How do you say one month anniversary?",
-          a: "Monthiversary and monthsary are the usual words, and one-month anniversary is fine too, even though anniversary strictly means a year. The Latin-correct mensiversary exists but is rarely used. In a message or on a card, \"Happy one month\" is the simplest.",
+          q: "Can 7 months be an anniversary?",
+          a: "Strictly, no: anniversary comes from the Latin for a year turning. Seven months is a monthiversary, also called a monthsary or a seven-month anniversary, and all three are understood. The Latin-correct mensiversary exists but is rarely used. On a card, \"Happy seven months\" sidesteps the argument.",
         },
         {
           q: "Is it weird to celebrate monthiversaries?",
@@ -149,20 +149,20 @@ export const post: BlogPost = {
           a: "Something that takes between ten minutes and one evening: breakfast somewhere new, a dessert crawl, a sunset, a board game, a letter to open at a year. Take turns planning and keep presents out of it.",
         },
         {
-          q: "When do you stop celebrating monthiversaries?",
-          a: "Usually at the first anniversary, when couples start counting years instead. If you both like the monthly date, keep it as something smaller, like a standing dinner on the date.",
+          q: "What do you say for a 1 month anniversary?",
+          a: "Name one thing from the month instead of the relationship as a whole: \"One month today. I still have the receipt from our first coffee in my wallet, and I'm keeping it.\" Something only the two of you would recognize beats any greeting-card line.",
         },
         {
-          q: "How often should couples go on dates?",
-          a: "There's no right number. What matters is that it's regular enough that you both look forward to it. A monthiversary is one built-in excuse: twelve small dates a year that nobody has to remember to suggest.",
+          q: "What is the 1 month rule in a relationship?",
+          a: "It isn't one fixed rule, and there's no single definition online. The best-documented one is the three-month rule: wait about three months before big decisions, like defining the relationship. For a first monthiversary the same sense applies: keep it small, a coffee or a text, and save the plans for later months.",
         },
       ],
     },
     es: {
-      title: "Ideas para celebrar los meses con tu pareja sin agobios",
-      description: "Ideas para celebrar los meses con tu pareja todo el primer año: doce planes pequeños y baratos, el primer mes, mensajes para mandar y cuándo dejar de contar.",
-      keyword: "ideas para celebrar meses con tu pareja",
-      lead: "Las mejores ideas para celebrar los meses con tu pareja cuestan poco y cambian cada mes, para que la fecha siga siendo un capricho y no un examen. Abajo tienes doce, una para cada mes del primer año, casi todas de diez minutos a una noche, y frases para mandar ese día.",
+      title: "Cumplemes: qué es, 12 ideas para celebrarlo y frases",
+      description: "Qué es un cumplemes (o mesiversario), doce ideas pequeñas para celebrar los meses con tu pareja el primer año y frases de feliz cumplemes para mandar.",
+      keyword: "cumplemes",
+      lead: "Un cumplemes (o mesiversario) es el mismo día de cada mes en que empezasteis. Las mejores ideas para celebrarlo cuestan poco y cambian cada mes, para que la fecha siga siendo un capricho y no un examen. Abajo tienes doce, una para cada mes del primer año, casi todas de diez minutos a una noche, y frases para mandar ese día.",
       takeaways: [
         "Que cada mes sea pequeño: de diez minutos a una noche, sin regalos obligatorios.",
         "Turnaos para organizarlo, para que sea un juego y no el trabajo de uno solo.",
@@ -170,14 +170,14 @@ export const post: BlogPost = {
         "Al año, pasad a contar años. Casi todas las parejas lo hacen.",
       ],
       body: [
-        { type: "h2", text: "Qué es celebrar los meses y cómo se llama" },
+        { type: "h2", text: "Qué es un cumplemes y cómo se llama" },
         {
           type: "p",
-          text: "Celebrar los meses es marcar cada mes la misma fecha del día en que empezasteis: el 14, si empezó un 14. Si empezó un 29, un 30 o un 31, en los meses más cortos se celebra el último día. Muchas parejas lo hacen el primer año, cuando cada mes todavía parece un hito, y después lo van dejando sin más. Solo funciona si os gusta a los dos. Si a uno le parece tierno y al otro le parece demasiado, dejadlo en un mensaje y guardad los planes para el medio año y el año.",
+          text: "Un cumplemes es la misma fecha de cada mes que el día en que empezasteis: el 14, si empezó un 14. Si empezó un 29, un 30 o un 31, en los meses más cortos se celebra el último día; nuestra [calculadora de cuánto tiempo lleváis juntos](/tools/how-long-have-we-been-together) te dice la fecha del próximo. Muchas parejas lo hacen el primer año, cuando cada mes todavía parece un hito, y después lo van dejando sin más. Solo funciona si os gusta a los dos. Si a uno le parece tierno y al otro le parece demasiado, dejadlo en un mensaje y guardad los planes para el medio año y el año. Aniversario mensual quiere decir lo mismo, y ese día se dice «feliz cumplemes».",
         },
         {
           type: "p",
-          text: "En español lo normal es decir «cumplir meses»; también se oyen cumplemes y mesiversario, aunque son palabras informales. Los puristas recuerdan que aniversario viene del latín *anniversarius*, «que vuelve cada año», de *annus*, año, así que en rigor un mes no tiene aniversario. En la práctica todo el mundo lo entiende, y en una tarjeta «Feliz primer mes» evita la discusión.",
+          text: "En español lo más normal es decir «cumplir meses», y de ahí sale cumplemes; también se oye mesiversario. Las dos son palabras informales. Los puristas recuerdan que aniversario viene del latín *anniversarius*, «que vuelve cada año», de *annus*, año, así que en rigor un mes no tiene aniversario. En la práctica todo el mundo lo entiende, y en una tarjeta «Feliz primer mes» evita la discusión.",
         },
         { type: "h2", text: "Doce ideas para celebrar los meses, del primero al duodécimo" },
         {
@@ -189,7 +189,7 @@ export const post: BlogPost = {
             ["3", "Que cada uno elija una canción para el otro y las escuchéis las dos paseando, un auricular cada uno", "Media hora"],
             ["4", "Una ruta de postres: un postre cada uno en tres sitios distintos", "Una noche"],
             ["5", "Que cada uno organice una hora secreta de la noche del otro", "Dos horas"],
-            ["6", "El medio año: algo un poco más grande (mira abajo)", "Una noche"],
+            ["6", "El medio año: una escapada de un día a un sitio donde no hayáis estado, con una foto al salir y otra al volver (más opciones abajo)", "Un día"],
             ["7", "Ver la puesta de sol desde el punto más alto al que podáis llegar cerca de casa", "Una hora"],
             ["8", "Un juego de mesa o un puzle, con un premio tonto para quien gane", "Una noche"],
             ["9", "Haced de turistas en vuestra ciudad: un museo o un monumento que ninguno haya visitado", "Una tarde"],
@@ -231,10 +231,10 @@ export const post: BlogPost = {
             "**No llevéis la cuenta.** Si a uno se le olvida, reíos y haced el siguiente. Un mes olvidado no significa nada.",
           ],
         },
-        { type: "h2", text: "Mensajes para el día que cumplís meses" },
+        { type: "h2", text: "Frases de feliz cumplemes para mandar ese día" },
         {
           type: "p",
-          text: "Una frase sobre algo de este mes, no sobre la relación entera. Así cada mensaje es distinto, y demuestra que estabas atenta:",
+          text: "Una frase sobre algo de este mes, no sobre la relación entera. Así cada mensaje es distinto, y se nota que te fijas:",
         },
         {
           type: "quote",
@@ -284,12 +284,12 @@ export const post: BlogPost = {
       ],
       faq: [
         {
-          q: "¿Qué es celebrar los meses con tu pareja?",
-          a: "Marcar cada mes la misma fecha del día en que empezasteis. Si empezasteis un 14, cada día 14 cumplís meses. Hay quien lo llama cumplemes o mesiversario. Las parejas suelen hacerlo el primer año y después pasan a contar años.",
+          q: "¿Qué es un cumplemes?",
+          a: "La misma fecha de cada mes que el día en que empezasteis. Si empezasteis un 14, cada día 14 cumplís meses. También se llama mesiversario. Las parejas suelen celebrarlo el primer año y después pasan a contar años.",
         },
         {
-          q: "¿Cómo se dice aniversario de un mes?",
-          a: "Lo más natural es «cumplir un mes»: «hoy cumplimos un mes». También se oye cumplemes o mesiversario, y en una tarjeta «Feliz primer mes» es lo más sencillo.",
+          q: "¿Siete meses pueden ser un aniversario?",
+          a: "En rigor, no: aniversario viene del latín *anniversarius*, «que vuelve cada año». Siete meses son un cumplemes, o un mesiversario, y lo más natural es decir «hoy cumplimos siete meses». En una tarjeta, «Feliz séptimo mes» evita la discusión.",
         },
         {
           q: "¿Es raro celebrar los meses?",
@@ -300,12 +300,12 @@ export const post: BlogPost = {
           a: "Algo que lleve entre diez minutos y una noche: desayunar en un sitio nuevo, una ruta de postres, una puesta de sol, un juego de mesa, una carta para abrir al año. Turnaos para organizarlo y dejad los regalos fuera.",
         },
         {
-          q: "¿Cuándo se dejan de celebrar los meses?",
-          a: "Normalmente en el primer aniversario, cuando las parejas empiezan a contar años. Si a los dos os gusta la fecha de cada mes, mantenedla como algo más pequeño, como una cena fija ese día.",
+          q: "¿Qué se le dice a tu pareja al cumplir un mes?",
+          a: "Nombra una cosa de este mes en vez de la relación entera: «Hoy hacemos un mes. Sigo teniendo en la cartera el ticket de nuestro primer café, y no pienso tirarlo». Algo que solo reconozcáis vosotros vale más que cualquier frase de tarjeta.",
         },
         {
-          q: "¿Cada cuánto deberían tener citas las parejas?",
-          a: "No hay un número correcto. Lo importante es que sea lo bastante a menudo como para que a los dos os haga ilusión. Celebrar los meses es una excusa ya puesta: doce citas pequeñas al año que nadie tiene que acordarse de proponer.",
+          q: "¿Qué es la regla del primer mes en una relación?",
+          a: "No es una regla fija, y en internet no hay una única definición. La más conocida es la regla de los tres meses: esperar unos tres meses antes de decidir nada grande, como ponerle nombre a la relación. Para el primer cumplemes vale lo mismo: algo pequeño, un café o un mensaje, y los planes para más adelante.",
         },
       ],
     },
