@@ -7,6 +7,8 @@ import { ideaMode } from "@/lib/lifecycle/monthly-idea";
 import { groupGiftsEnabled } from "@/lib/group/flag";
 import { LegalDocument } from "@/components/marketing/legal-document";
 import { dateLetterOn } from "@/lib/lifecycle/date-letter-flag";
+import { unsentEmailsOn } from "@/lib/lifecycle/unsent-flag";
+import { emailMeGiftOn } from "@/lib/lifecycle/later-flag";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/legal/privacy">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -18,5 +20,5 @@ export default async function PrivacyPage({ params }: PageProps<"/[currency]/[lo
   setRequestLocale(locale);
   const t = await getTranslations("legal");
   // What it says about group cards is there only while they are on sale (content/legal.ts).
-  return <LegalDocument doc={legalDocs(groupGiftsEnabled(), ideaMode(), dateLetterOn()).privacy[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: PRIVACY_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
+  return <LegalDocument doc={legalDocs(groupGiftsEnabled(), ideaMode(), dateLetterOn(), { reminder: unsentEmailsOn(), emailMe: emailMeGiftOn() }).privacy[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: PRIVACY_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
 }

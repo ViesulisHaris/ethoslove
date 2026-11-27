@@ -189,6 +189,7 @@
     "emailLabel": "Correo electrónico",
     "emailPlaceholder": "tu@ejemplo.com",
     "sendLink": "Enviarme un enlace mágico",
+    "unsentNote": "Si dejas un regalo sin enviar, te escribimos una vez para recordártelo. El correo trae un enlace para no recibir más.",
     "sending": "Enviando…",
     "linkSent": "Revisa tu correo",
     "linkSentDetail": "Enviamos un enlace de acceso a {email}. Caduca en una hora.",
@@ -592,6 +593,19 @@
       "freeReplyInvalid": "Este enlace ya no hace gratis la respuesta, así que cuesta el precio normal de la plantilla.",
       "payGuestBlurb": "Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar: no hace falta registrarse.",
       "signInInstead": "¿Ya tienes cuenta? Inicia sesión",
+      "later": {
+        "link": "¿Aún no lo envías? Envíame este regalo por correo",
+        "title": "Termínalo más tarde",
+        "blurb": "Te enviamos un enlace para volver a este regalo. Sigue guardado en este móvil.",
+        "label": "Tu dirección de correo",
+        "placeholder": "tu@ejemplo.com",
+        "send": "Enviármelo",
+        "sent": "Enviado. Abre el enlace en este móvil, en este navegador, para seguir con tu regalo.",
+        "failed": "No se ha podido enviar. Revisa la dirección e inténtalo de nuevo.",
+        "limited": "Demasiados intentos desde aquí. Prueba de nuevo dentro de una hora.",
+        "small": "Un correo con el enlace. Al abrirlo entras en una cuenta de Ethos con esta dirección y el regalo queda guardado en ella; si al día siguiente sigue sin enviar, te lo recordamos una vez.",
+        "privacy": "Política de privacidad"
+      },
       "uploadsAfterPay": "Las fotos se suben justo después del pago.",
       "ownedElsewhere": "Tu compra incluye {templates}. Esta es otra plantilla.",
       "openOwned": "Abrir {template}",
@@ -3978,10 +3992,10 @@
     },
     "unsubscribe": {
       "title": "¿Darte de baja?",
-      "body": "Dejaremos de enviarte el aviso de un pago que no terminaste y quitaremos las ofertas de nuestros demás correos. Los recibos, los correos para iniciar sesión y las novedades de tus regalos seguirán llegando, porque los necesitas.",
+      "body": "Dejaremos de enviarte los avisos de un pago que no terminaste o de un regalo que dejaste sin enviar, y quitaremos las ofertas de nuestros demás correos. Los recibos, los correos para iniciar sesión y las novedades de tus regalos seguirán llegando, porque los necesitas.",
       "confirm": "Darme de baja",
       "doneTitle": "Te has dado de baja.",
-      "doneBody": "Se acabaron los avisos de pagos y las ofertas. Los recibos, los correos para iniciar sesión y las novedades de tus regalos seguirán llegando."
+      "doneBody": "Se acabaron los avisos de pagos sin terminar y de regalos sin enviar, y las ofertas. Los recibos, los correos para iniciar sesión y las novedades de tus regalos seguirán llegando."
     },
     "link": {
       "invalidTitle": "Este enlace no funciona.",

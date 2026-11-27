@@ -45,6 +45,7 @@ import { SITE } from "@/config/site";
 import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
+import { EmailMeGift } from "./email-me-gift";
 import { GroupPayPanel } from "./group-pay-panel";
 import type { HolidayExtra } from "@/lib/lifecycle/holiday-extras";
 import { AlreadyPaid, openingOf } from "./already-paid";
@@ -768,6 +769,8 @@ export function PublishSheet({
             {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
+            {/* A guest who isn't ready to pay: one email with the way back to this gift (api/gift/later). */}
+            {manifest.tier === "premium" && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? <EmailMeGift slug={manifest.slug} locale={locale} /> : null}
             {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
               <section className="mt-7 rounded-xl border border-line bg-card p-5" data-testid="publish-sign-in">
                 <p className="font-display text-xl">{t("signInTitle")}</p>

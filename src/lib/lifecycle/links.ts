@@ -27,7 +27,8 @@ export type TokenPurpose =
   | "monthly-idea-stop"
   | "group-confirm"
   | "date-letter-confirm"
-  | "date-letter-stop";
+  | "date-letter-stop"
+  | "unsent-open";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -76,6 +77,9 @@ const VALUE: Record<TokenPurpose, RegExp> = {
   "date-letter-confirm": UUID,
   // “Stop these emails”, in every date letter, and “never email this address” in the confirming one: the row's id.
   "date-letter-stop": UUID,
+  // "Finish and send", in the email about a gift left unsent (lib/lifecycle/unsent-gift.ts): the
+  // draft's id and when the link stops signing anyone in (Unix seconds), as the publish reminder's does.
+  "unsent-open": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{10}$/,
 };
 
 const encoder = new TextEncoder();
