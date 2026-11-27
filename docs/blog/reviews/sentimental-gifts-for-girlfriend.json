@@ -1,0 +1,140 @@
+{
+  "slug": "sentimental-gifts-for-girlfriend",
+  "keyword": "sentimental gifts for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Three fixes: use the {free:bouquet} token instead of a typed 'Premium, paid once'; the 7 gift rule FAQ listed 'something to do' as an extra, contradicting the body; 'one of the most searched questions' was an unsupported ranking claim."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every Ethos claim checked out. Fixes: the 'book or film' row mentioned margins and chapter four, so book only; Spanish FAQ 'aprendida por ella' read as 'learned by her'; 'regalo detallista' describes a person, not a gift, in Spain; 'un regalo del que se va a enterar' read as a threat."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Nothing has to change: against The Knot's stage-sorted list and the engraved-product listicles it adds a written line for each stage, an hour-tonight and week-long plan, a way to mine her messages for what she wants, and answers to every People also ask question."
+        }
+      ],
+      "applied": [
+        "Bouquet card uses {free:bouquet} in both languages",
+        "7 gift rule FAQ extras corrected to eat, share, home",
+        "'one of the most searched questions' replaced with 'People ask this a lot' (ES likewise)",
+        "Table row: book only",
+        "Spanish FAQ wording: 'aprendida para ella', 'algo que hayas aprendido por ella', 'regalo con detalle', 'se lo van a contar'",
+        "Polish: 'four short letters in envelopes', 'fotos después', 'por ejemplo, una carta como', '¿También buscas algo para él/ella?'"
+      ],
+      "rejected": [
+        "Polish not taken: a Gen Z line (variant PAA only), moving the tonight section up, US spellings (the blog's house style is British spelling), a long-distance line; not needed and would add unreviewed text"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-one reader fixes made; it beats the list-style top results because every idea comes with a line only she could be given."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fixes all made. Remaining: the 7 gift rule FAQ (EN and ES) described 4 + 3 while the body says 5 + 2; the Spanish takeaway 'Ese es el tipo sentimental' read as 'the sentimental guy'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It covers every idea the product roundups lead with and adds a stage table with lines to write, time-based plans and direct answers to each People also ask question none of them give."
+        }
+      ],
+      "applied": [
+        "7 gift rule FAQ (EN and ES) now says it adds two gifts to the 5 gift rule",
+        "ES takeaway: 'Eso es un regalo sentimental.'",
+        "Polish: 'Lo que casi nunca tiene es a alguien'"
+      ],
+      "rejected": [
+        "Polish not taken: midnight-surprise link, pocket mirror, Gen Z FAQ, other small Spanish rewordings"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It is the page I'd send a friend because nearly every idea carries a line she could copy tonight and a way to find the gift in her own messages, where rival lists just name engravable objects."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the engraving-led lists, it sorts ideas by how long you've been together and how much time you have and gives each a specific line to write, in two languages that are both accurate."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page to send a friend over the product lists because it tells the reader what to write, not just what to buy, and answers every main-keyword People also ask question."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish kept out of the post per the rubric: 'drawer or a shoebox', voice-note wording, midnight-surprise link, Gen Z FAQ, pocket mirror or message in a bottle, 'Esto soy yo, que sigo contándolos', feminine 'la ve'"
+      ]
+    }
+  ]
+}

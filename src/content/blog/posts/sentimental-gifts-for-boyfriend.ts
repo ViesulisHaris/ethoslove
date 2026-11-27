@@ -139,7 +139,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If he's the kind who says he wants nothing, a sentimental gift is one of the few that still fits: there's more on that in [what to get a boyfriend who says he wants nothing](/blog/what-to-get-a-boyfriend-who-wants-nothing).",
+          text: "If he's the kind who says he wants nothing, a sentimental gift is one of the few that still fits: there's more on that in [what to get a boyfriend who says he wants nothing](/blog/what-to-get-a-boyfriend-who-wants-nothing). Shopping for her too? There's a separate list of [sentimental gifts for your girlfriend](/blog/sentimental-gifts-for-girlfriend).",
         },
         { type: "h2", text: "Digital sentimental gifts for him" },
         {
@@ -313,7 +313,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si es de los que dicen que no quieren nada, un regalo sentimental es de los pocos que siguen encajando: hay más en [qué regalarle a tu novio si dice que no quiere nada](/blog/what-to-get-a-boyfriend-who-wants-nothing).",
+          text: "Si es de los que dicen que no quieren nada, un regalo sentimental es de los pocos que siguen encajando: hay más en [qué regalarle a tu novio si dice que no quiere nada](/blog/what-to-get-a-boyfriend-who-wants-nothing). ¿También buscas algo para ella? Tienes una lista aparte de [regalos sentimentales para tu novia](/blog/sentimental-gifts-for-girlfriend).",
         },
         { type: "h2", text: "Regalos sentimentales digitales para él" },
         {

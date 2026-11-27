@@ -145,7 +145,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Both are premium templates, paid once ([pricing](/pricing)). For more ways to make an ordinary day hers, see [how to surprise your girlfriend](/blog/how-to-surprise-your-girlfriend), our [good morning messages for her](/blog/good-morning-messages-for-her), and the [digital gifts for your girlfriend](/gifts/for-girlfriend). If the flowers are part of an apology, start with our [sorry messages for your girlfriend](/blog/sorry-message-for-girlfriend). And for a no-reason day, there are more ideas in [just because gifts](/occasions/just-because).",
+          text: "Both are premium templates, paid once ([pricing](/pricing)). For more ways to make an ordinary day hers, see [how to surprise your girlfriend](/blog/how-to-surprise-your-girlfriend), our [good morning messages for her](/blog/good-morning-messages-for-her), and the [digital gifts for your girlfriend](/gifts/for-girlfriend). If you want something she'll keep beyond the flowers, see our [sentimental gifts for your girlfriend](/blog/sentimental-gifts-for-girlfriend). If the flowers are part of an apology, start with our [sorry messages for your girlfriend](/blog/sorry-message-for-girlfriend). And for a no-reason day, there are more ideas in [just because gifts](/occasions/just-because).",
         },
       ],
       faq: [
@@ -309,7 +309,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Las dos son plantillas premium, de pago único ([precios](/pricing)). Para más formas de hacer suyo un día normal, mira [cómo sorprender a tu novia](/blog/how-to-surprise-your-girlfriend), nuestros [mensajes de buenos días para ella](/blog/good-morning-messages-for-her) y los [regalos digitales para tu novia](/gifts/for-girlfriend). Si las flores van con una disculpa, empieza por nuestros [mensajes para pedir perdón a tu novia](/blog/sorry-message-for-girlfriend). Y para un día sin motivo, hay más ideas en [regalos porque sí](/occasions/just-because).",
+          text: "Las dos son plantillas premium, de pago único ([precios](/pricing)). Para más formas de hacer suyo un día normal, mira [cómo sorprender a tu novia](/blog/how-to-surprise-your-girlfriend), nuestros [mensajes de buenos días para ella](/blog/good-morning-messages-for-her) y los [regalos digitales para tu novia](/gifts/for-girlfriend). Si quieres algo que guarde más allá de las flores, mira nuestros [regalos sentimentales para tu novia](/blog/sentimental-gifts-for-girlfriend). Si las flores van con una disculpa, empieza por nuestros [mensajes para pedir perdón a tu novia](/blog/sorry-message-for-girlfriend). Y para un día sin motivo, hay más ideas en [regalos porque sí](/occasions/just-because).",
         },
       ],
       faq: [
