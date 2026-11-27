@@ -1,0 +1,144 @@
+{
+  "slug": "long-distance-gifts-for-boyfriend",
+  "keyword": "long distance gifts for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for a warning in the under-a-week row that a delivery app may not work in his country, and how to keep it a surprise. Polish: the hoodie under 'Free' costs postage."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "The forum anecdote ends with an outcome the source doesn't give: 'The gift card got used. The letter got kept.' (ES: 'La tarjeta regalo se gastó. La carta se quedó.'). The thread says only that he called it 'the perfect blend of mushy and practical'. It never says what happened to the cards or the letter, and three cards were sent, not one. The fix is below."
+          ],
+          "summary": "Replace the invented outcome of the forum anecdote with what the thread says (three cards and a letter), in both languages; 'tostadero' not 'tostador'. Polish: 'enlace de afiliado', name coffee beans among restricted food, Arcade has no music."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Answer the PAA questions 'What to get your long distance partner?' and 'What is the 5 gift rule for couples?'; give a verdict on touch bracelets and lamps, which the AI overview and top results push; add a phone-stand row for the video-call routine."
+        }
+      ],
+      "applied": [
+        "Forum anecdote now ends with what the thread says, EN and ES",
+        "tostadero; enlace de afiliado; 'Food (coffee beans included)'; 'a song in most templates'",
+        "Delivery-app and surprise sentence in the under-a-week row; 'Free apart from the postage'",
+        "Touch bracelets and lamps sentence, EN and ES",
+        "Video-call row (phone stand, desk light) in the table, EN and ES",
+        "FAQ: first question now 'boyfriend or partner' with the timing rule; 5 gift rule question now covers couples and men"
+      ],
+      "rejected": [
+        "Search fix to add two new FAQ entries: the FAQ is limited to three to five questions (PLAYBOOK step 3), so both PAA questions were answered by widening two existing entries instead"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Better than the top results because it pairs every gift with a line to send and gives a days-left plan with real delivery times, so a reader can act tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "English 9:00 vs Spanish 21:00 in the gaming lines (use 9 pm); the touch-bracelet sentence misread and had people wearing lamps; the phone stand/desk light reason fit only half the gift. Same fixes in Spanish. Polish: ask a friend when he'll be home, 'como plan', 'te vuelvo a robar'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every PAA question from the main and variant searches is answered, and it is a how-and-when guide with real delivery times and lines to send rather than another affiliate product list."
+        }
+      ],
+      "applied": [
+        "9 pm in the gaming row and quote",
+        "Touch bracelets sentence reworded, EN and ES",
+        "Phone stand and desk light each with its own reason, EN and ES",
+        "Polish taken to head off fixes: ask a friend when he'll be home (EN, ES); 'como plan'; 'te vuelvo a robar esta sudadera'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers the search in the first sentence, then gives a gift and a sendable line for each kind of boyfriend and a days-left plan that works tonight, which no top result does."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the manifests, the scheduling code, USPS and the forum thread, and the Spanish reads like Spain Spanish line for line; better than the top results because its facts are real and its lines specific."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Covers all eight PAA questions and adds sourced delivery times, a days-left table and a line per gift, none of which the ranking roundups offer, with neighbouring posts linked instead of repeated."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader: add a start time to the dinner-on-a-call budget line",
+        "Editor: ES 'Poco dinero' as the budget label; ES 'la ciudad a medio camino' to match the tool's own Spanish",
+        "Search: optional line on personalised keepsakes; optional shorter description"
+      ]
+    }
+  ]
+}

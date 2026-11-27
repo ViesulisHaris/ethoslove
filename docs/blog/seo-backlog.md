@@ -168,6 +168,11 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   24 Nov): a line beside the two-phone games ("games for any night, time zones included"), in both
   languages ("Juegos para jugar a distancia con tu pareja"). The blog hub,
   virtual-date-ideas-long-distance, links it already. /games could link it too.
+- [ ] **Long distance group: link /blog/long-distance-gifts-for-boyfriend from /long-distance**
+  (the hub, TOPIC-GROUPS.md rule 3; "long distance gifts for boyfriend" 1,000, KD 0, published
+  27 Nov): a line under "Gifts for the distance", next to the long distance relationship gifts line
+  ("gifts for him, by what he's into"), in both languages ("Regalos para tu novio a distancia"). The
+  blog hub, virtual-date-ideas-long-distance, links it already.
 - [ ] **Love letters group: link /blog/paragraphs-for-him from /templates/the-letter**
   (the hub, TOPIC-GROUPS.md rule 3; "paragraphs for him" 1,900, KD 0, published 18 Nov): a line
   beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,

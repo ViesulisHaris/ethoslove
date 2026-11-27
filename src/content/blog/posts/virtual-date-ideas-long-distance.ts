@@ -120,7 +120,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Something to open on date night" },
         {
           type: "p",
-          text: "Now and then, start the call with something to open together. Arcade, Halfway and Text Thread are [premium](/pricing); our [long-distance gift templates](/occasions/long-distance) have more, and every template has a free demo to try first. For things to post or order between calls, sorted by what each one does while you're apart, see our [long distance relationship gifts](/blog/long-distance-relationship-gifts).",
+          text: "Now and then, start the call with something to open together. Arcade, Halfway and Text Thread are [premium](/pricing); our [long-distance gift templates](/occasions/long-distance) have more, and every template has a free demo to try first. For things to post or order between calls, sorted by what each one does while you're apart, see our [long distance relationship gifts](/blog/long-distance-relationship-gifts), and for a box to open on the call with him, our [long distance gifts for your boyfriend](/blog/long-distance-gifts-for-boyfriend).",
         },
         {
           type: "template",
@@ -278,7 +278,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Algo que abrir en la noche de cita" },
         {
           type: "p",
-          text: "De vez en cuando, empezad la llamada con algo que abrir juntos. Arcade, A medio camino e Hilo de mensajes son [premium](/pricing); nuestras [plantillas para relaciones a distancia](/occasions/long-distance) tienen más, y todas las plantillas tienen una demo gratis para probar antes. Para cosas que enviar o pedir entre llamada y llamada, ordenadas por lo que hace cada una mientras estáis lejos, mira nuestros [regalos para parejas a distancia](/blog/long-distance-relationship-gifts).",
+          text: "De vez en cuando, empezad la llamada con algo que abrir juntos. Arcade, A medio camino e Hilo de mensajes son [premium](/pricing); nuestras [plantillas para relaciones a distancia](/occasions/long-distance) tienen más, y todas las plantillas tienen una demo gratis para probar antes. Para cosas que enviar o pedir entre llamada y llamada, ordenadas por lo que hace cada una mientras estáis lejos, mira nuestros [regalos para parejas a distancia](/blog/long-distance-relationship-gifts), y para una caja que él abra durante la llamada, nuestros [regalos para tu novio a distancia](/blog/long-distance-gifts-for-boyfriend).",
         },
         {
           type: "template",

@@ -2073,3 +2073,11 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-27T10:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-girlfriend |
 | 2026-11-27T10:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-girlfriend |
 | 2026-11-27T10:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-girlfriend |
+| 2026-11-27T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-boyfriend |
+| 2026-11-27T14:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-boyfriend |
