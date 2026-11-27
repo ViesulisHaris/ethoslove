@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "physical-touch-love-language",
   published: "2026-11-18",
+  updated: "2026-11-27",
   occasion: "just-because",
   templates: ["xoxo"],
   content: {
@@ -22,7 +23,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What is the physical touch love language?" },
         {
           type: "p",
-          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, [quality time](/blog/quality-time-love-language), receiving gifts and acts of service. For someone who speaks it, being touched with affection is the clearest proof that they matter to you. A compliment is nice. Your arm around them while everyone else talks is the thing they'll remember.",
+          text: "It's one of the [five love languages](/blog/the-5-love-languages) in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, [quality time](/blog/quality-time-love-language), [receiving gifts](/blog/gift-giving-love-language) and acts of service. For someone who speaks it, being touched with affection is the clearest proof that they matter to you. A compliment is nice. Your arm around them while everyone else talks is the thing they'll remember.",
         },
         {
           type: "p",
@@ -203,6 +204,10 @@ export const post: BlogPost = {
           a: "No. Sex is part of it for many couples, but most of the language is everyday, non-sexual contact: hugs, holding hands, a hand on the back, lying close, being held when upset. If touch only ever leads to sex, someone with this language can end up feeling wanted for one thing rather than loved.",
         },
         {
+          q: "What does it mean when your partner keeps looking for physical touch?",
+          a: "Often that touch is how they feel close to you, and how they show it: the hand on your arm while they talk is them saying you matter. It can also be a request for reassurance after a hard week. It isn't always about sex, and it isn't about crowding you. If you can't tell, ask: “Is this a hug-me day?” works better than guessing.",
+        },
+        {
           q: "Can you have more than one love language?",
           a: "Yes. Most people value all five, and many have two that matter almost equally. Your main love language is the one you notice most when it's there and miss most when it stops. The free [love language quiz](/tools/love-language-quiz) shows how you score on all five, not only the top one.",
         },
@@ -217,10 +222,10 @@ export const post: BlogPost = {
       ],
     },
     es: {
-      title: "Contacto físico, lenguaje del amor: qué es, ejemplos e ideas",
-      description: "Qué significa el contacto físico como lenguaje del amor más allá del sexo, ejemplos del día a día, qué hacer si uno no es de abrazos y cómo vivirlo a distancia.",
-      keyword: "contacto físico lenguaje del amor",
-      lead: "El contacto físico como lenguaje del amor es el de quien se siente más querido a través de la cercanía: una mano en la espalda, un abrazo largo en la puerta, sus pies en tu regazo en el sofá. Sobre todo, no va de sexo. Va del contacto pequeño de cada día que le dice que estás ahí, y de un contacto que no desaparece cuando las cosas se ponen difíciles.",
+      title: "Contacto físico como lenguaje del amor: qué es y ejemplos",
+      description: "Qué es el contacto físico en la pareja y qué significa más allá del sexo: ejemplos diarios, qué hacer si uno no es de abrazos y cómo vivirlo a distancia.",
+      keyword: "contacto físico",
+      lead: "El contacto físico como lenguaje del amor significa sentirse más querido a través de la cercanía: una mano en la espalda, un abrazo largo en la puerta, sus pies en tu regazo en el sofá. Sobre todo, no va de sexo. Va del contacto pequeño de cada día que le dice que estás ahí, y de un contacto que no desaparece cuando las cosas se ponen difíciles.",
       takeaways: [
         "Casi todo es pequeño y diario: el abrazo al llegar, la mano en la rodilla, el beso antes de salir.",
         "El contacto que solo aparece camino de la cama cuenta poco. El que no pide nada a cambio cuenta mucho.",
@@ -232,7 +237,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿Qué es el contacto físico como lenguaje del amor?" },
         {
           type: "p",
-          text: "Es uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el [tiempo de calidad](/blog/quality-time-love-language), recibir regalos y los actos de servicio. Para quien lo habla, que le toquen con cariño es la prueba más clara de que le importa a alguien. Un cumplido está bien. Tu brazo rodeándole mientras todos hablan es lo que va a recordar.",
+          text: "Es uno de los [cinco lenguajes del amor](/blog/the-5-love-languages) del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el [tiempo de calidad](/blog/quality-time-love-language), [recibir regalos](/blog/gift-giving-love-language) y los actos de servicio. Para quien lo habla, que le toquen con cariño es la prueba más clara de que le importa a alguien. Un cumplido está bien. Tu brazo rodeándole mientras todos hablan es lo que va a recordar.",
         },
         {
           type: "p",
@@ -269,7 +274,7 @@ export const post: BlogPost = {
           type: "p",
           text: "La señal más clara es cómo te trata a ti. Solemos dar el cariño como nos gustaría recibirlo, así que la pareja que siempre acaba con la cabeza en tu hombro puede estar diciéndote lo que le gustaría recibir.",
         },
-        { type: "h2", text: "Ejemplos de contacto físico como lenguaje del amor, según el momento" },
+        { type: "h2", text: "Ejemplos de contacto físico en la pareja, según el momento" },
         {
           type: "p",
           text: "Ninguno necesita planearse. Lo que hace que funcionen es que pasen a menudo, y justo en los momentos en los que es fácil olvidarse de tocarse.",
@@ -411,6 +416,10 @@ export const post: BlogPost = {
         {
           q: "¿El contacto físico como lenguaje del amor es solo sexo?",
           a: "No. El sexo forma parte de él para muchas parejas, pero casi todo el lenguaje es contacto diario y no sexual: abrazos, ir de la mano, una mano en la espalda, tumbarse cerca, que te abracen cuando estás mal. Si el contacto siempre acaba en sexo, quien habla este lenguaje puede terminar sintiéndose deseado para una sola cosa en lugar de querido.",
+        },
+        {
+          q: "¿Qué significa que tu pareja busque contacto físico todo el rato?",
+          a: "Muchas veces, que el contacto es su forma de sentirse cerca de ti, y de demostrártelo: la mano en tu brazo mientras habla te está diciendo que le importas. También puede ser su forma de pedirte que le tranquilices después de una semana dura. No siempre va de sexo, y no va de agobiarte. Si no lo tienes claro, pregunta: «¿Hoy es día de abrazos?» funciona mejor que adivinar.",
         },
         {
           q: "¿Se puede tener más de un lenguaje del amor?",
