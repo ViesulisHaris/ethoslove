@@ -2055,3 +2055,13 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-27T06:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-boyfriend |
 | 2026-11-27T06:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-boyfriend |
 | 2026-11-27T06:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T08:22Z | dataforseo_labs/google/keyword_overview/live | 0.01284 | ecards: birthday-ecards |
+| 2026-11-27T08:22Z | serp/google/organic/live/advanced | 0.002 | ecards: birthday-ecards |
+| 2026-11-27T08:22Z | serp/google/organic/live/advanced | 0.002 | ecards: birthday-ecards |
+| 2026-11-27T08:22Z | serp/google/organic/live/advanced | 0.002 | ecards: birthday-ecards |
+| 2026-11-27T08:22Z | serp/google/organic/live/advanced | 0.002 | ecards: birthday-ecards |
+| 2026-11-27T08:22Z | serp/google/organic/live/advanced | 0.002 | ecards: birthday-ecards |
+| 2026-11-27T08:30Z | dataforseo_labs/google/keyword_overview/live | 0.01284 | ecards: valentines-ecards |
+| 2026-11-27T08:30Z | serp/google/organic/live/advanced | 0.002 | ecards: valentines-ecards |
+| 2026-11-27T08:31Z | serp/google/organic/live/advanced | 0.002 | ecards: valentines-ecards |
+| 2026-11-27T08:31Z | serp/google/organic/live/advanced | 0.002 | ecards: valentines-ecards |

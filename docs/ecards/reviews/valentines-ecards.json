@@ -1,0 +1,62 @@
+{
+  "slug": "valentines-ecards",
+  "date": "2026-11-27",
+  "rounds": [
+    {
+      "fact": 8,
+      "searcher": 8,
+      "reader": 7,
+      "fixes": [
+        "Music Box: photos change each time the figure comes round, not with each turn of the key; name on a gold plate",
+        "The Letter: a song from the library plays under it (a real song is a preview at the end)",
+        "Photo Booth: the strip develops (it may be black and white or sepia), up to ten photos in the section",
+        "What is an ecard: photos and a song only if wanted, and all but Arcade take a song",
+        "Added Arcade as the funny card (eight gifts), a family-or-friend question, and the cute-quote question in the searcher's words with three lines from the page",
+        "The free note says it takes no photos",
+        "Spanish: editor labels for Photo Booth and Dark Romance, no Madrid-only 'búho', no gendered 'sola', no calques ('es mucho', 'desprecinta', 'si no sueltas', 'una sola peonía, tulipán'), new bet line",
+        "Advice added to the Photo Booth and Dark Romance ideas; Music Box line made specific; Bloom caption names a place; the time-zone section rewritten"
+      ]
+    },
+    {
+      "fact": 8,
+      "searcher": 9,
+      "reader": 8,
+      "fixes": [
+        "Arcade: no pixel-font claim for the title (it is monospace capitals on the start screen)",
+        "What is an ecard: photos are needed on most cards, not optional; a song on every card but Arcade",
+        "The game offered to someone tired of hearts drops stars instead",
+        "Description says funny; the lead names the digital valentine card; the quote answer leads with sincere lines and keeps the game title as the funny one",
+        "Family answer says which cards read as romance",
+        "Spanish: idiomatic bet line, title matching its advice, minijuego, no calques ('tiene permitido', 'nombra', 'ganan a', 'a la vista', 'odiaría tanto', 'un día más'), tickets, al son de"
+      ]
+    },
+    {
+      "fact": 7,
+      "searcher": 9,
+      "reader": 9,
+      "fixes": [
+        "Arcade: the title is shown as typed (only the default is in capitals), so no claim about capitals",
+        "Jar of Reasons: notes come out shuffled, so 'some notes carry one of your photos', not 'the first notes'",
+        "Family answer names Dark Romance among the cards that read as romance, and lists the ones that suit a parent or friend",
+        "Spanish: 'cierta sobre vosotros dos', full stops after the closing «», 'en la que te has fijado', 'el mote que solo le dices tú', 'Al tocarla', 'hasta ocho', 'la noche anterior', description says divertido"
+      ]
+    },
+    {
+      "fact": 9,
+      "searcher": 9,
+      "reader": 9,
+      "fixes": [
+        "Dark Romance: the tarot card, playing cards and bet appear only with a second photo, and the page now says so",
+        "No other company's name: 'WhatsApp' replaced by 'a chat app' / 'un chat'",
+        "American 'comes around'; Bloom heading 'opens only under their finger'",
+        "Spanish: the XOXO card's underlined words read as part of the card; 'dentro aparece un collage gótico'"
+      ]
+    },
+    {
+      "fact": 10,
+      "searcher": 10,
+      "reader": 10,
+      "fixes": []
+    }
+  ]
+}
