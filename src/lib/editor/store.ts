@@ -29,6 +29,15 @@ import { askedArm, pickFreeTier } from "./free-tier-split";
 import { NOTE_TEMPLATES, noteForEveryone } from "@/lib/gift/free-tier";
 import { freeTestEvent, track } from "@/lib/analytics/track";
 
+/**
+ * A server action whose request never gets an answer (the connection dropped, the phone went
+ * offline) throws "Failed to fetch" rather than answering { ok: false }. To a save that is a save
+ * that failed: the editor shows it and tries again on the next change. Thrown, it left the save
+ * "saving" for good, the page asking "Leave site?", and an unhandled rejection in the error log
+ * (code 2L9E1J, tests/unit/editor-save-offline.test.ts).
+ */
+const unreached = <T>(call: () => Promise<T>): Promise<T | { ok: false; error: "unreachable" }> => call().catch(() => ({ ok: false as const, error: "unreachable" as const }));
+
 const LOCAL_DEBOUNCE = 350;
 const REMOTE_DEBOUNCE = 1800;
 
@@ -1036,10 +1045,12 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!s.authed) return null;
       if (s.giftId) return s.giftId;
       ensuring ??= (async () => {
-        const result = await ensureDraft({
-          templateSlug: s.slug,
-          locale: s.data.locale as GiftLocale,
-        });
+        const result = await unreached(() =>
+          ensureDraft({
+            templateSlug: s.slug,
+            locale: s.data.locale as GiftLocale,
+          }),
+        );
         if (!result.ok) {
           set({ save: "error" });
           return null;
@@ -1121,13 +1132,13 @@ export const useEditor = create<EditorState>((set, get) => {
       const giftId = s.giftId ?? (await get().ensureRemote());
       if (!giftId) return false;
       set({ save: "saving" });
-      let result = await saveDraft({ giftId, data: get().serializedForServer(), expectDraft: get().status === "draft" });
+      let result = await unreached(() => saveDraft({ giftId, data: get().serializedForServer(), expectDraft: get().status === "draft" }));
       if (!result.ok && (result.error === "not_found" || result.error === "not_draft") && get().status === "draft" && get().giftId === giftId) {
         // The row this device remembered is gone (tidied away after a week, deleted, another account
         // signed in) or was published from somewhere else: carry on in a fresh draft, never over it.
         detachFromGift(giftId);
         const fresh = await get().ensureRemote();
-        if (fresh) result = await saveDraft({ giftId: fresh, data: get().serializedForServer(), expectDraft: true });
+        if (fresh) result = await unreached(() => saveDraft({ giftId: fresh, data: get().serializedForServer(), expectDraft: true }));
       }
       set({
         save: result.ok ? "saved" : "error",

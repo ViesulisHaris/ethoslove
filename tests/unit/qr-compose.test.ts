@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { composeQrSvg, qrDesignQuery, qrLayout, readQrDesign, QR_FRAMES, QR_LABEL_MAX } from "@/lib/qr/compose";
+import { composeQrSvg, inlinesImage, qrCodeOptions, qrDesignQuery, qrLayout, readQrDesign, QR_FRAMES, QR_LABEL_MAX, QR_LOGO } from "@/lib/qr/compose";
 import { qrPalette } from "@/lib/qr/palette";
 
 const CODE = `<?xml version="1.0" standalone="no"?>\r\n<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect x="0" y="0" width="10" height="10" fill="#000"/></svg>`;
@@ -40,5 +40,23 @@ describe("the QR card drawing", () => {
     expect(back).toEqual(design);
     const junk = readQrDesign({ dots: "x", colour: "javascript:alert(1)", centre: "svg", size: "xl", label: "a".repeat(200), gradient: "yes" }, "#E8604C");
     expect(junk).toEqual({ dots: "rounded", colour: "#E8604C", gradient: false, centre: "logo", photo: "", size: "m", label: "a".repeat(QR_LABEL_MAX) });
+  });
+});
+
+describe("the picture in the middle of the code", () => {
+  // Error AKK0IW: Lockdown Mode has no FileReader, and the library copies the picture through it.
+  it("never asks the library to copy the logo: it is a data URL already, and copying it needs FileReader", () => {
+    expect(inlinesImage(QR_LOGO, true)).toBe(false);
+    expect(inlinesImage(QR_LOGO, false)).toBe(false);
+    const options = qrCodeOptions({ url: "https://tryethos.io/g/x", dots: "rounded", palette: qrPalette("#E8604C", "#FAF7F2"), gradient: false, image: QR_LOGO, centreSize: "m" });
+    expect(options.imageOptions?.saveAsBlob).toBe(false);
+    expect(options.image).toBe(QR_LOGO);
+  });
+
+  it("copies a photo into the SVG where the browser can, and leaves it a link where it can't", () => {
+    const photo = "https://example.supabase.co/storage/v1/object/sign/gifts/a.webp";
+    expect(inlinesImage(photo, true)).toBe(true);
+    expect(inlinesImage(photo, false)).toBe(false);
+    expect(inlinesImage(undefined, true)).toBe(false);
   });
 });
