@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Download, Printer } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type QRCodeStyling from "qr-code-styling";
@@ -103,8 +103,12 @@ export function QrDesigner({ url, photos, accent, giftId, recipientName = "", on
 
   const designQuery = qrDesignQuery({ dots, colour, gradient, centre, photo: photo?.id ?? "", size: centreSize, label });
   const printHref = giftId ? `/dashboard/gift/${giftId}/print?${designQuery}` : null;
-  // The Tree Tag's print link (share-screen.tsx) draws the same code as this one.
-  useEffect(() => {
+  // The Tree Tag's print link (share-screen.tsx) draws the same code as this one. Told in a layout
+  // effect, so the share screen's render runs in the same turn as the change. From a passive effect it
+  // waited for React's next turn, and dragging the colour picker in Chrome sends input before that
+  // turn: fifty changes with that render still waiting was React's "Maximum update depth exceeded"
+  // (error #185, code YAD2U4, tests/e2e/qr-designer-errors.spec.ts).
+  useLayoutEffect(() => {
     onDesignChange?.(designQuery);
   }, [designQuery, onDesignChange]);
 

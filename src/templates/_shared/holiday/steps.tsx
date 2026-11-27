@@ -112,7 +112,11 @@ export function noteSteps(data: Pick<GiftData, "message" | "photos" | "countdown
  * In the editor's still frame nothing is reported.
  */
 export function useSteps(count: number, mode: TemplateMode, onEvent: ((event: TemplateEvent) => void) | undefined, start = 0) {
-  const [index, setIndex] = useState(Math.min(start, count - 1));
+  const [stored, setIndex] = useState(Math.min(start, count - 1));
+  // In the editor the note changes under the step on screen: a photo removed, the letter cut short.
+  // A step past the new end is the new end, never a step that is gone (error MIPULH, Light the
+  // Candles: "undefined is not an object (evaluating 'T.kind')"; tests/e2e/editor-remove-photo.spec.ts).
+  const index = Math.max(0, Math.min(stored, count - 1));
   const furthest = useRef(index);
   const ended = useRef(false);
   const eventRef = useRef(onEvent);

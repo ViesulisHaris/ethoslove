@@ -25,6 +25,16 @@ export const QR_LOGO = `data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}`
 /** Heart outline in a 100 × 100 box. */
 export const HEART_PATH = "M50 88 C 20 66, 6 50, 6 32 C 6 18, 17 9, 29 9 C 38 9, 45 14, 50 21 C 55 14, 62 9, 71 9 C 83 9, 94 18, 94 32 C 94 50, 80 66, 50 88 Z";
 
+/**
+ * Whether the QR library should copy the picture in the middle into the SVG. It copies through
+ * FileReader, which Lockdown Mode turns off in WebKit (so on every browser on an iPhone that has it
+ * on): there `new FileReader` threw (error AKK0IW) and the code was never drawn. The logo is a data
+ * URL already, so it never needs the copy; a photo without FileReader stays a link to the photo.
+ */
+export function inlinesImage(image: string | undefined, hasFileReader = typeof FileReader === "function"): boolean {
+  return Boolean(image) && !image!.startsWith("data:") && hasFileReader;
+}
+
 /** The options for the code itself, in the palette's colours: what preview, download and print card all draw. */
 export function qrCodeOptions({ url, dots, palette, gradient, image, centreSize, size = 600 }: { url: string; dots: QrDots; palette: QrPalette; gradient: boolean; image?: string; centreSize: QrCentreSize; size?: number }): Partial<Options> {
   return {
@@ -36,7 +46,7 @@ export function qrCodeOptions({ url, dots, palette, gradient, image, centreSize,
     image,
     qrOptions: { errorCorrectionLevel: "H" },
     // The photo is written into the SVG itself, so a saved file keeps it after the link to it expires.
-    imageOptions: { crossOrigin: "anonymous", margin: 6, imageSize: CENTRE_SIZE[centreSize], hideBackgroundDots: true, saveAsBlob: true },
+    imageOptions: { crossOrigin: "anonymous", margin: 6, imageSize: CENTRE_SIZE[centreSize], hideBackgroundDots: true, saveAsBlob: inlinesImage(image) },
     dotsOptions: {
       type: dots,
       color: palette.dots,
