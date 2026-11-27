@@ -1,0 +1,139 @@
+{
+  "slug": "sentimental-gifts-for-boyfriend",
+  "keyword": "sentimental gifts for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Replace the UK-only \"The first flat\" in the timeline card, and give the reader who wants to order something a delivery-date check."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Our Timeline's countdown shows only when a date is set; \"a long partner\" isn't idiomatic; \"flat\" is UK-only. Spanish: \"uno que guarda\", \"ideas para sin motivo\" (the site says \"porque sí\"), the subjectless Letter card, \"una tarde de acordarte\", and an FAQ question that read as innuendo and strayed from the English."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The keyword is commercial and the top results are things to buy; add a way to order something made specific (star map, print of a place, photo book) with the real date and place on it. All four People also ask questions are answered."
+        }
+      ],
+      "applied": [
+        "Our Timeline card (both languages): the countdown appears if you set a date.",
+        "\"The first flat\" became \"Our first place\".",
+        "\"Something only a long partner can see\" became \"Something only someone who's been there for years can see\".",
+        "New weekend bullet in both languages: something to order, made specific, with the delivery-date check.",
+        "Spanish fixes: \"uno que él conserva\", \"ideas para regalar porque sí\", \"que él abre con un toque\", \"una tarde recordando\", FAQ \"¿Qué regalo puedo hacerle a mi novio con mis propias manos?\".",
+        "Polish taken: quotes around \"something to read\", \"key ring\", \"calan más cuando lleváis años\", \"que es mejor evitar\", \"basados en\" in the linking post, and the greeting-card sample sentence \"I love watching you turn into you\" cut in both languages."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both fixes made. It beats the top results because it sorts ideas by how long you've been together and how much time you have, gives lines you can copy and says what to skip, where most lists are undated product roundups."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All eight round-one fixes made correctly. Two Spanish lines still read translated: \"Algo que se pide, pero concreto\" and \"una fiesta de 18 cumpleaños\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The order-something bullet covers the commercial intent. It gives what the ranking roundups of engraved items don't: gifts matched to time together, a time budget, lines to write inside and direct answers to every People also ask question."
+        }
+      ],
+      "applied": [
+        "Spanish: \"Algo por encargo, pero solo vuestro. Si prefieres comprarlo a hacerlo tú\".",
+        "Spanish FAQ: \"la fiesta con la que se celebran los 18 años\".",
+        "Polish that heads off a fix: \"where you met\" no longer appears twice in the order bullet (now \"the street where you first lived together\", in both languages), and \"calan más con el tiempo\" avoids repeating \"lleváis años\"."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It beats the top results, mostly lists of engravable products, by giving a test for what counts as sentimental, ideas matched to how long you've been together, lines to borrow and a skip list, with the template offered only after the advice."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-two Spanish fixes made correctly; every template claim matches its manifest, schema and Template.tsx, every free-tier line sits inside {note:A|B}, and the Spanish reads as written in Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All four People also ask questions and the homemade variant's are answered, and the table by time together, lines to write inside and skip list are what none of the ranking product lists offer."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Reader: add a sample liner note to the playlist bullet.",
+        "Editor: \"Algunas que puedes copiar y adaptar\"; \"la primera foto de los dos\"; \"seguida, si pones una fecha, de una cuenta atrás\".",
+        "Search: a line on tying the gift to his interests."
+      ]
+    }
+  ]
+}

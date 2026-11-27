@@ -2047,3 +2047,11 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-27T04:43Z | dataforseo_labs/google/keyword_overview/live | 0.01284 | seo: monthiversary-ideas |
 | 2026-11-27T04:43Z | dataforseo_labs/google/keyword_ideas/live | 0.0192 | seo: monthiversary-ideas |
 | 2026-11-27T04:43Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: monthiversary-ideas |
+| 2026-11-27T06:20Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-boyfriend |
+| 2026-11-27T06:20Z | on_page/content_parsing/live | 0.00015 | blog: sentimental-gifts-for-boyfriend |

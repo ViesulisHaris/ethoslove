@@ -63,6 +63,10 @@ export const post: BlogPost = {
             "**The thing he lost.** The band T-shirt that fell apart, the book he lent out and never saw again, the game from when he was twelve. Find another one.",
           ],
         },
+        {
+          type: "p",
+          text: "For more gifts built on a memory only the two of you share, sorted by how long you've been together, see our [sentimental gifts for your boyfriend](/blog/sentimental-gifts-for-boyfriend).",
+        },
         { type: "h2", text: "Time instead of things" },
         {
           type: "p",
@@ -208,6 +212,10 @@ export const post: BlogPost = {
             "**Su historia, contada por quien lo conoce.** Pide a cuatro o cinco amigos y familiares una frase cada uno sobre él, y júntalas en una tarjeta o en un vídeo corto.",
             "**Lo que perdió.** La camiseta del grupo que se deshizo, el libro que prestó y nunca volvió, el juego de cuando tenía doce años. Busca otro igual.",
           ],
+        },
+        {
+          type: "p",
+          text: "Para más regalos basados en un recuerdo que solo compartís vosotros, ordenados según cuánto tiempo lleváis juntos, mira nuestros [regalos sentimentales para tu novio](/blog/sentimental-gifts-for-boyfriend).",
         },
         { type: "h2", text: "Tiempo en vez de cosas" },
         {
