@@ -97,6 +97,16 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   - 2026-11-27: monthiversary-ideas done (Spanish keyword now "cumplemes": 260, "feliz cumplemes" 260,
     "mesiversario" 140; calculator linked in both languages). Next: the Spanish post with the most
     Search Console impressions whose Spanish keyword has no measured searches in Spain.
+  - 2026-11-27 (second run): physical-touch-love-language done (Spanish keyword now "contacto físico",
+    140 in Spain; it had 34 impressions at 8 to 9 for "qué es el contacto físico" and "contacto físico
+    ejemplos"). Measured the same day in Spain: quality-time-love-language's keyword gets 10 but "tiempo de
+    calidad" 260 and "tiempo de calidad en pareja" 70 (Search Console: "tiempo de calidad" 14 impressions
+    at 27); cute-things-to-say-to-your-girlfriend's "cosas bonitas para decirle a tu novia" 260 (it sits at
+    52); questions-to-ask-your-partner's "preguntas para hacerle a tu pareja" 2,900 and "preguntas para
+    parejas" 1,600 (it sits at 57 to 67); truth-or-dare's "verdad o reto para parejas" 70, KD 27, while
+    "preguntas de verdad o reto" gets 720. Next: quality-time-love-language ("tiempo de calidad en
+    pareja"), then fortune-cookie-messages' Spanish ("frases para galletas de la fortuna", 42 impressions
+    at 7.8; not before 28 Nov).
 
 ## For a person (outside the blog: a session on the owner's computer applies these)
 
@@ -168,6 +178,11 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   24 Nov): a line beside the two-phone games ("games for any night, time zones included"), in both
   languages ("Juegos para jugar a distancia con tu pareja"). The blog hub,
   virtual-date-ideas-long-distance, links it already. /games could link it too.
+- [ ] **Long distance group: link /blog/long-distance-gifts-for-boyfriend from /long-distance**
+  (the hub, TOPIC-GROUPS.md rule 3; "long distance gifts for boyfriend" 1,000, KD 0, published
+  27 Nov): a line under "Gifts for the distance", next to the long distance relationship gifts line
+  ("gifts for him, by what he's into"), in both languages ("Regalos para tu novio a distancia"). The
+  blog hub, virtual-date-ideas-long-distance, links it already.
 - [ ] **Love letters group: link /blog/paragraphs-for-him from /templates/the-letter**
   (the hub, TOPIC-GROUPS.md rule 3; "paragraphs for him" 1,900, KD 0, published 18 Nov): a line
   beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,

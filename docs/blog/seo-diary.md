@@ -3,6 +3,35 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-27: physical-touch-love-language, Spanish side aimed at "contacto físico"; a FAQ on a partner who keeps seeking touch
+- **Page:** /es/blog/physical-touch-love-language (and /blog, for the FAQ and two links)
+- **Why:** Second run of a Friday (no weekly job). The first open backlog item, the Spanish side of
+  every post, next step: "the Spanish post with the most Search Console impressions whose Spanish keyword
+  has no measured searches in Spain". Leaving out gifft-me-alternatives (its impressions are people
+  looking for gifft.me) and fortune-cookie-messages (touched 14 Nov, free from 28 Nov), that is this post:
+  34 Spanish impressions in 28 days (brand left out), no clicks, for "contacto físico ejemplos" (7 at 9.0),
+  "que es el contacto fisico" (5 at 8.4), "que es contacto fisico" (4 at 8.8), "lenguaje del amor contacto
+  fisico" (4 at 7.8), "contacto fisico" (4 at 17.5), "contacto fisico que significa" (3 at 8.7), while its
+  keyword "contacto físico lenguaje del amor" gets 10 a month. DataForSEO (Spain): "contacto fisico" 140,
+  KD 0; "que es el contacto fisico" 20; "que es contacto fisico" 20 ("fobia al contacto fisico" 90 wants
+  something else). Page one for "contacto fisico" is definitions and why-touch-matters listicles, titled
+  "qué significa… como lenguaje del amor" and "con ejemplos"; People also ask: "¿Qué es el contacto
+  físico?", "¿Cuáles son los 5 tipos de lenguaje del amor?", and for the love-language phrase "¿Qué
+  significa que un hombre busque contacto físico?", which the post did not answer.
+- **What changed:** Spanish keyword "contacto físico"; title "Contacto físico como lenguaje del amor: qué
+  es y ejemplos"; a description that says "qué es" and "qué significa"; the lead opens "El contacto físico
+  como lenguaje del amor significa…"; the examples heading says "en la pareja". A new FAQ in both
+  languages: what it means when your partner keeps looking for physical touch. The first section now
+  links the hub (the-5-love-languages) and gift-giving-love-language in both languages. `updated`
+  2026-11-27.
+- **Panel:** 10/10/10 after 2 rounds (round 1: an impersonal, ungendered Spanish lead, a smoother title,
+  the hub link for the "5 tipos" question) (`docs/blog/reviews/refresh/physical-touch-love-language-2026-11-27.json`)
+- **Cost:** $0.06 (Spain keyword overview for 20 Spanish keywords, keyword suggestions and ideas, two
+  SERPs with People also ask); balance $37.83
+- **Check on:** 2026-12-14 whether "que es el contacto fisico" and "contacto físico ejemplos" (8 to 9,
+  no clicks) get clicks for /es/blog/physical-touch-love-language, and whether "contacto fisico" moves
+  from 17.5
+
 ## 2026-11-27: monthiversary-ideas retitled for what people type ("monthiversary", Spain's "cumplemes"); every People also ask answered
 - **Page:** /blog/monthiversary-ideas (and /es)
 - **Why:** First run of a Friday (no weekly job; the ranks are a day old). The first open backlog item, the

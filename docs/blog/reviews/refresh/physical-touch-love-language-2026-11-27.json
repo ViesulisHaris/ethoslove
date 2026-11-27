@@ -1,0 +1,70 @@
+{
+  "slug": "physical-touch-love-language",
+  "keyword": "contacto físico",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 9, "usable": 10, "trust": 10 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The Spanish lead should say plainly what contacto físico is and drop the gendered \"sentirte más querido\"; the title \"Contacto físico: qué es como lenguaje del amor y ejemplos\" read clumsily."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every product, quiz, template, research and link claim verified against the code. The Spanish lead's \"sentirte más querido\" flipped the perspective mid-paragraph and gendered the reader: make it impersonal \"sentirse\". Polish: a smoother title, \"todo el rato\" for \"keeps looking for\", \"pedirte que le tranquilices\" for reassurance, curly quotes."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"¿Cuáles son los 5 tipos de lenguaje del amor?\" is a People also ask question on both Spanish results pages: link the hub /blog/the-5-love-languages from the first body paragraph in both languages."
+        }
+      ],
+      "applied": [
+        "Spanish title \"Contacto físico como lenguaje del amor: qué es y ejemplos\" (the editor's wording, which also answers the reader's point and keeps \"lenguaje del amor\", a search the page sits at 7.8 for)",
+        "Spanish lead opens \"El contacto físico como lenguaje del amor significa sentirse más querido a través de la cercanía\"",
+        "Hub link (five love languages / cinco lenguajes del amor) and the gift-giving sibling link in the first body paragraph, both languages",
+        "Spanish FAQ question gets \"todo el rato\"; its answer says \"su forma de pedirte que le tranquilices\" and \"No siempre va de sexo, y no va de agobiarte\"; curly quotes around the English sample line"
+      ],
+      "rejected": [
+        "The reader's full new Spanish lead (\"El contacto físico en la pareja es todo lo que se dice con el cuerpo…\") in part: it adds a general definition the English lead doesn't have, so the Spanish would no longer be the same post; the impersonal opening on the exact phrase was taken, and the first section defines it right after",
+        "The search reviewer's polish of a \"falta de contacto físico\" heading and a flirting sentence: about 10 searches a month and a different intent"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round 1 fixes made well; the lead answers \"qué significa\" in its first words, and the lands/misses table, the not-a-hugger steps with lines for both sides and the new FAQ's \"¿Hoy es día de abrazos?\" give what the top results' generic lists don't."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim, old and new, is backed by the code (xoxo manifest, schema and Template, the quiz, voice and scheduling, every link), and each change reads as written in Spain while saying what the English says. Polish kept for the record: \"ejemplos del día a día\" for \"ejemplos diarios\" in the description."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The hub link is in place in both languages; the Spanish title, headings and FAQ now carry the words of the Search Console queries at 8 to 9 (qué es, ejemplos, qué significa), and no top result has a lands/misses table, a not-a-hugger plan with lines, a senses-based long-distance section or the hug study with honest caveats. Polish kept for the record: a bare definition sentence, a shorter English description."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}
