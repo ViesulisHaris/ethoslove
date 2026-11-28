@@ -68,9 +68,15 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 - [x] (2026-11-14) **virtual-date-ideas-long-distance** aimed at "virtual date ideas for long distance couples" (70
   a month). People search "date ideas for long distance" (5,400) and "virtual date ideas" (1,600, UK
   140). Get both top 10s, then aim the title, description and headings at them.
-- [ ] **virtual-date-ideas-long-distance, Spanish** (not before 28 Nov): "juegos para parejas a
+- [x] (2026-11-28) **virtual-date-ideas-long-distance, Spanish** (not before 28 Nov): "juegos para parejas a
   distancia" is Spain's biggest phrase near this post (110 a month, KD 0) and the post already answers
   it (the two-phone games, the games FAQ). Work it into a Spanish heading or the games FAQ question.
+  - 2026-11-28: done on long-distance-relationship-games instead. That post (24 Nov) is about games
+    and now owns the phrase, so aiming the date post at it would repeat another post's search. Its
+    Spanish keyword is now "juegos para parejas a distancia" (110, KD 0; it was "juegos para jugar a
+    distancia con tu pareja", 30). The date post's own Spanish phrases are all small in Spain:
+    "citas virtuales" 70 at KD 50 (dating apps), and every "citas/ideas/planes a distancia" phrase 10
+    or less. Leave its Spanish as it is.
 - [x] (2026-11-14) **fortune-cookie-messages** (published 13 Nov) aims at "funny fortune cookie messages" (390).
   The head, "fortune cookie messages", gets 1,900 (UK 320): aim the title and description at it and
   keep the funny ones as a section. Link to it from the related posts.

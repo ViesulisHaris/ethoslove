@@ -2095,3 +2095,7 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-27T18:19Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-wife |
 | 2026-11-27T18:19Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-wife |
 | 2026-11-27T18:20Z | on_page/content_parsing/live | 0.00015 | blog: questions-to-ask-your-wife |
+| 2026-11-28T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.01356 | seo: virtual-date-ideas-long-distance es |
+| 2026-11-28T04:42Z | dataforseo_labs/google/keyword_ideas/live | 0.03 | seo: virtual-date-ideas-long-distance es |
+| 2026-11-28T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: long-distance-relationship-games es |
+| 2026-11-28T04:43Z | serp/google/organic/live/advanced | 0.002 | seo: long-distance-relationship-games |

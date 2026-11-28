@@ -3,6 +3,34 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-28: long-distance-relationship-games, Spanish side aimed at "juegos para parejas a distancia"; a FAQ on games over text
+- **Page:** /es/blog/long-distance-relationship-games (and /blog, for the FAQ)
+- **Why:** First run of a Saturday (no weekly job; the ranks are two days old). The first open backlog item
+  was "virtual-date-ideas-long-distance, Spanish": work "juegos para parejas a distancia" (110 a month in
+  Spain, KD 0) into that post. Since 24 Nov, though, long-distance-relationship-games covers that phrase,
+  so the date post would have repeated another post's search. The phrase went to the games post instead,
+  whose Spanish keyword "juegos para jugar a distancia con tu pareja" gets 30. The date post's own Spanish
+  phrases are all small in Spain ("citas virtuales" 70 at KD 50, which is dating apps; every
+  "citas/ideas/planes a distancia" phrase 10 or less), so its Spanish stays as it is. Spain's page one for
+  the phrase is Etsy printables, Reddit threads, app listicles and "Juegos para parejas: por chat, a
+  distancia y en casa". People also ask in Spain: "¿Qué jugar a distancia por WhatsApp?", the 7-7-7 rule,
+  Play Store games. In the US ("long distance relationship games"): the 2-2-2 and 777 rules and "What are
+  some fun games to play over text messaging?". Neither language answered the texting question. The post is
+  four days old, with no Search Console impressions yet.
+- **What changed:** Spanish keyword "juegos para parejas a distancia"; title "Juegos para parejas a
+  distancia: gratis y por WhatsApp"; a description and lead with the phrase; the time-zone h2 "Juegos por
+  WhatsApp y con diferencia horaria", with one sentence in both languages on which of its games fit in a
+  chat. A new FAQ in both languages: what to play over text / por WhatsApp, linking 21-questions-for-couples.
+  `updated` 2026-11-28.
+- **Panel:** 10/10/10 after 3 rounds. Round 1 asked for natural Spanish in the new FAQ and WhatsApp in a
+  heading and the lead; round 2 for keeping the renamed h2 true of its list
+  (`docs/blog/reviews/refresh/long-distance-relationship-games-2026-11-28.json`).
+- **Cost:** $0.05 (Spain keyword overview for 18 phrases, keyword ideas, and the Spain and US SERPs with
+  People also ask); balance $37.75
+- **Check on:** 2026-12-14 whether /es/blog/long-distance-relationship-games shows for "juegos para parejas a
+  distancia" or "juegos a distancia por whatsapp", and whether the English post gets impressions for
+  "games to play over text" phrasings
+
 ## 2026-11-27: physical-touch-love-language, Spanish side aimed at "contacto físico"; a FAQ on a partner who keeps seeking touch
 - **Page:** /es/blog/physical-touch-love-language (and /blog, for the FAQ and two links)
 - **Why:** Second run of a Friday (no weekly job). The first open backlog item, the Spanish side of

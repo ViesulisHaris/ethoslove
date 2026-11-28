@@ -1,0 +1,47 @@
+{
+  "slug": "long-distance-relationship-games",
+  "keyword": "juegos para parejas a distancia",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "It sorts every game by the time you have tonight, says what each needs and costs and gives lines to copy, with the Ethos games and templates only where they answer the search. Polish only: an 'is' after the Draw it, guess it link, and the sexting FAQs could match." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 9 }, "overall": 9, "dealbreakers": [], "summary": "Every game count, route, template and privacy claim checked against the code. The new Spanish WhatsApp FAQ read as calques ('una historia de una línea cada uno', 'una foto de vuelta', 'juegos que esperan'): reword it. Polish: call the game 'the photo prompt' in the English FAQ, as the body does." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 9 }, "overall": 9, "dealbreakers": [], "summary": "The Spanish title promises WhatsApp but only the last FAQ says it: rename the h2 'Juegos a distancia con diferencia horaria' to 'Juegos por WhatsApp y con diferencia horaria' and add 'o solo por WhatsApp' to the lead." }
+      ],
+      "applied": [
+        "Spanish WhatsApp FAQ reworded as the editor wrote it",
+        "English text FAQ says 'the photo prompt'",
+        "Spanish h2 'Juegos por WhatsApp y con diferencia horaria'; the Spanish lead says 'o solo por WhatsApp'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "Nothing regressed; the time-you-have table, the free two-phone games, the caveats and the text FAQ make it the page to send. Polish only." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 9 }, "overall": 9, "dealbreakers": [], "summary": "Round 1 fixes in. The renamed Spanish h2 was only partly true of its list (correspondence chess and Apalabrados don't run in WhatsApp): add a sentence in both languages saying which games fit in a chat." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "The fix is in: the title's WhatsApp promise is now met by the h2, the lead and the FAQ that echoes the Spanish People also ask; no top result sorts games by time or offers games playable from the page." }
+      ],
+      "applied": [
+        "One sentence in the time-zone section, both languages: the word puzzle, the story and the photo game fit in your chat; chess is on Lichess, the word game in its own app"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "The lead answers by time available in two sentences, and the time-zone paragraph now says which games fit in a chat; nothing regressed." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 10 }, "overall": 10, "dealbreakers": [], "summary": "Every game comes with its real round count, time and cost, which no list-style rival gives, and the Spanish now reads as written in Spain with the h2 true of its list." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "The Spanish title, h2 and FAQ carry the 110-a-month phrase and the WhatsApp People also ask, and the time table, free two-phone games and setup caveats are what the Etsy, Reddit and listicle results lack." }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "English h2 'Long distance games over text and across time zones' (reader, editor)",
+        "Last Spanish takeaway: 'Con diferencia horaria, o solo por WhatsApp, jugad por turnos' (search)",
+        "'is' after the Draw it, guess it link (reader)"
+      ]
+    }
+  ]
+}

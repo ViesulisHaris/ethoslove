@@ -3,6 +3,7 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "long-distance-relationship-games",
   published: "2026-11-24",
+  updated: "2026-11-28",
   occasion: "long-distance",
   templates: ["arcade", "halfway"],
   content: {
@@ -86,7 +87,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Long distance games across time zones" },
         {
           type: "p",
-          text: "With eight hours or more between you, a live game night can only happen at the weekend. In between, play games where each of you takes a turn when you're awake. To see the hours you're both up, put your two towns into our free [long distance planner](/long-distance).",
+          text: "With eight hours or more between you, a live game night can only happen at the weekend. In between, play games where each of you takes a turn when you're awake. The word puzzle, the story and the photo prompt all fit in your chat; chess is played on Lichess, and Words With Friends in its own app. To see the hours you're both up, put your two towns into our free [long distance planner](/long-distance).",
         },
         {
           type: "list",
@@ -163,16 +164,20 @@ export const post: BlogPost = {
           a: "Questions that need a story, not a yes: \"What part of your day do you most wish I'd been there for?\", \"What's a smell, a song or a place that is now just me, to you?\", \"What's the first thing we're doing when I land?\" The Far apart deck in our [Question cards](/games/couple-questions-game) has twelve like these.",
         },
         {
+          q: "What games can long distance couples play over text?",
+          a: "Games that wait for the other one to reply: a story one line each, the photo prompt (one word in the morning, a photo back by bedtime), two truths and a lie about today, and the daily word puzzle, sending only the grid. To guess a film from emoji, one of you sends three or four and the other gets three tries. For a whole evening of texting, play [21 questions](/blog/21-questions-for-couples).",
+        },
+        {
           q: "Are flirty games and sexting OK in a long distance relationship?",
           a: "Yes, if you both want them and agree the limits first. That goes for sexting too: only when you're both keen, never to prove anything, and never anything you'd mind someone else seeing. Keep the soft games, like our [truth or dare](/blog/truth-or-dare-questions-for-couples) list, for the call. Disappearing messages can still be screenshotted.",
         },
       ],
     },
     es: {
-      title: "Juegos para jugar a distancia con tu pareja",
-      description: "Juegos para jugar a distancia con tu pareja según el tiempo que tengáis: gratis desde dos móviles, sin preparar nada, videojuegos y con diferencia horaria.",
-      keyword: "juegos para jugar a distancia con tu pareja",
-      lead: "Los mejores juegos para jugar a distancia con tu pareja son los que caben en el tiempo que tenéis esta noche. Con diez minutos, jugad a algo desde dos móviles con un solo enlace o a algo que solo necesite vuestra voz. Con una tarde entera, a un videojuego cooperativo o a uno de fiesta. Con mucha diferencia horaria, a algo por turnos. Aquí tienes juegos para cada caso, con lo que necesitan y lo que cuestan.",
+      title: "Juegos para parejas a distancia: gratis y por WhatsApp",
+      description: "Juegos para parejas a distancia según el tiempo que tengáis: gratis desde dos móviles, por videollamada, por WhatsApp, online y con diferencia horaria.",
+      keyword: "juegos para parejas a distancia",
+      lead: "Los mejores juegos para parejas a distancia son los que caben en el tiempo que tenéis esta noche. Con diez minutos, jugad a algo desde dos móviles con un solo enlace o a algo que solo necesite vuestra voz. Con una tarde entera, a un videojuego cooperativo o a uno de fiesta. Con mucha diferencia horaria, o solo por WhatsApp, a algo por turnos. Aquí tienes juegos para cada caso, con lo que necesitan y lo que cuestan.",
       takeaways: [
         "Tres de nuestros juegos gratis se juegan desde dos móviles con un enlace: sin app y sin registro.",
         "Muchos juegos para la llamada no necesitan nada: dos verdades sobre tu día, asociar canciones, veinte preguntas sobre vosotros.",
@@ -245,10 +250,10 @@ export const post: BlogPost = {
           title: "Parad el juego antes de que acabe en bronca",
           text: "Los juegos competitivos y las noches de cansancio no se llevan bien, sobre todo cuando uno de los dos sale de un día largo. Acordad que cualquiera puede pedir \"modo tranquilo\": se acaban los puntos y pasáis a las cartas de preguntas. Una noche de juegos es una cita, no un torneo.",
         },
-        { type: "h2", text: "Juegos a distancia con diferencia horaria" },
+        { type: "h2", text: "Juegos por WhatsApp y con diferencia horaria" },
         {
           type: "p",
-          text: "Con ocho horas o más entre vosotros, una noche de juegos en directo solo cabe el fin de semana. Entre medias, jugad a cosas en las que cada uno mueve cuando está despierto. Para ver las horas en las que estáis despiertos los dos, poned vuestras dos ciudades en nuestro [planificador para parejas a distancia](/long-distance), que es gratis.",
+          text: "Con ocho horas o más entre vosotros, una noche de juegos en directo solo cabe el fin de semana. Entre medias, jugad a cosas en las que cada uno mueve cuando está despierto. La palabra del día, la historia y la foto del día caben en vuestro chat de WhatsApp; el ajedrez se juega en Lichess, y Apalabrados, en su app. Para ver las horas en las que estáis despiertos los dos, poned vuestras dos ciudades en nuestro [planificador para parejas a distancia](/long-distance), que es gratis.",
         },
         {
           type: "list",
@@ -323,6 +328,10 @@ export const post: BlogPost = {
         {
           q: "¿Qué preguntas interesantes le puedo hacer a mi pareja a distancia?",
           a: "Preguntas que pidan una historia y no un sí: \"¿En qué momento de tu día te habría gustado más que yo estuviera?\", \"¿Qué olor, canción o sitio es ya, para ti, simplemente yo?\", \"¿Qué es lo primero que hacemos cuando aterrice?\" La baraja A distancia de nuestras [Cartas de preguntas](/games/couple-questions-game) tiene doce así.",
+        },
+        {
+          q: "¿A qué jugar a distancia por WhatsApp?",
+          a: "A juegos que pueden esperar a que el otro conteste: una historia en la que cada uno añade una línea, la foto del día (uno manda una palabra por la mañana y el otro contesta con una foto antes de dormir), dos verdades y una mentira sobre hoy, y la palabra del día, mandándoos solo la cuadrícula. Para adivinar una película con emojis, uno manda tres o cuatro y el otro tiene tres intentos. Para toda una noche de mensajes, jugad a las [21 preguntas](/blog/21-questions-for-couples).",
         },
         {
           q: "¿Están bien los juegos picantes y el sexting en una relación a distancia?",
