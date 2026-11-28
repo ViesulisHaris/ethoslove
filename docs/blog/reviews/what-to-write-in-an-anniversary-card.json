@@ -1,0 +1,100 @@
+{
+  "slug": "what-to-write-in-an-anniversary-card",
+  "keyword": "what to write in an anniversary card",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to drop the Hallmark citation (VOICE.md: don't name other gift makers outside comparison posts), to say 'the moment they wake up' rather than 'you', and to word the free-note line so photos don't read as free. Polish: 'staying in', 'a sentence or two' per part, possible 5th-year row."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Museum note promised a year per plaque, but the template prints one shared 'years' field under each caption; 'you wake up' should be 'they'; the 10th and 40th milestone lines repeated earlier lines ('I'd ... again', 'make it look easy'); 'pricing up' is British; Spanish calques ('cómo se sienten', 'Cambia a tus padres', 'Con una a tres frases', 'mis cantos'); the back-link sentence in anniversary-letter-to-boyfriend made the eighty-word letter read as one of the 'shorter ones'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for husband/wife in the partner heading and in the line under it, since the top results and searchers use those words. Polish: shorter description, 5th/30th rows, a faith-based line."
+        }
+      ],
+      "applied": [
+        "Museum note (both languages) now describes a caption plus the years you choose on each plaque, one photo per decade with the decade in its caption",
+        "'the moment they wake up' in English",
+        "10th and 40th milestone lines replaced with new, non-repeating lines in both languages",
+        "'pricing up' to 'looking up'",
+        "Spanish: 'qué se siente', 'Pon a tus padres', 'Basta con una, dos o tres frases', 'oyéndome cantar en el coche', 'La plantilla La carta', 'sin apretujar la letra', 'Si la tarjeta es para otra pareja'",
+        "Partner heading and the line under it now name husband, wife or partner (both languages)",
+        "Hallmark citation removed in both languages",
+        "Free-note line reworded so photos and the long version read as paid once (both languages)",
+        "Back-link sentence in anniversary-letter-to-boyfriend reordered so the eighty-word letter isn't presented as a shorter one (both languages)",
+        "Polish taken: 'staying in', 'pass the card around', '(unless the card already prints it)', 'a sentence or two' per part"
+      ],
+      "rejected": [
+        "Search polish: shorten the description; it is 152 characters, within the 160 limit, so no change",
+        "Polish: 5th, 30th rows and a faith-based line, left out to avoid padding and unsourced year names"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All three round-1 fixes made. The searcher gets a three-part formula and a finished sample card on the first screen, then lines by recipient, tone, year and hard year, a length table, signing advice and what to leave out, which is more than a page of stock quotes, with the product only at the end. Polish: 'a couple you're not part of' in the lead; an optional 5th-year row."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every round-1 fix made correctly in both languages; every product and template claim matches manifest, schema, Template.tsx, extras.tsx and messages, every link resolves, and the Spanish reads as written in Spain, section by section the same post. Polish: 'your parents' anniversary' in the Museum note; small Spanish smoothings in the lead, the 60th line and an FAQ answer; 'the days the car broke down'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes made; it answers every People-also-ask question and beats the Hallmark, Grammarly, Shutterfly and American Greetings pages with a formula, worked examples, length by recipient, how to sign and what to leave out, where they mostly list stock lines. Polish: extra milestone rows, a faith-based line, US spellings."
+        }
+      ],
+      "applied": [
+        "None: the post passed as reviewed. Final-round polish recorded here, not applied, per RUBRIC.md step 4."
+      ],
+      "rejected": []
+    }
+  ]
+}

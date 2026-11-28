@@ -70,7 +70,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A short 1-year anniversary letter to your boyfriend" },
         {
           type: "p",
-          text: "For a card, a note in his bag or the first message of the day. About eighty words:",
+          text: "For a card, a note in his bag or the first message of the day. If the card only has room for three lines, our guide on [what to write in an anniversary card](/blog/what-to-write-in-an-anniversary-card) has shorter ones. This one is about eighty words:",
         },
         {
           type: "quote",
@@ -209,7 +209,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Una carta de aniversario corta para tu novio: un año juntos" },
         {
           type: "p",
-          text: "Para una tarjeta, una nota en su mochila o el primer mensaje del día. Unas ochenta palabras:",
+          text: "Para una tarjeta, una nota en su mochila o el primer mensaje del día. Si en la tarjeta solo caben tres frases, en nuestras [dedicatorias de aniversario](/blog/what-to-write-in-an-anniversary-card) tienes otras más cortas. Esta tiene unas ochenta palabras:",
         },
         {
           type: "quote",

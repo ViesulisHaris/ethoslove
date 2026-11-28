@@ -2109,3 +2109,11 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-28T06:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
 | 2026-11-28T06:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
 | 2026-11-28T06:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T10:18Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:18Z | dataforseo_labs/google/keyword_overview/live | 0.01212 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:18Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:19Z | on_page/content_parsing/live | 0.00015 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:19Z | on_page/content_parsing/live | 0.00015 | blog: what-to-write-in-an-anniversary-card |
+| 2026-11-28T10:19Z | on_page/content_parsing/live | 0.00015 | blog: what-to-write-in-an-anniversary-card |
