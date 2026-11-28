@@ -1,0 +1,149 @@
+{
+  "slug": "long-distance-gifts-for-girlfriend",
+  "keyword": "long distance gifts for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to fix the croissant sample line, which had the pastries coming from the sender's city (contradicting the post's own advice to order perishables near her), and the takeaway that said all perfume is banned from US international mail rather than perfume containing alcohol."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Takeaway overstated the USPS rule (perfume with alcohol, not all perfume) in both languages; the Christmas post link promised 'dates for each way of sending', which that post doesn't give; Halfway's Spanish note read as an order to the reader; several Spanish calques ('tomar prestadas', 'alrededor de', 'una foto de ella'); 'Bring a towel and the good mood' unidiomatic; 'Build it' with no antecedent in the Bouquet note."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Two variant People-also-ask questions unanswered: 'How to care for a long distance girlfriend?' and 'What do Gen Z girls like as gifts?'. Polish: 'the post can't carry' reads ambiguously."
+        }
+      ],
+      "applied": [
+        "Takeaway now says perfume with alcohol in it, nail polish and alcoholic drinks (both languages)",
+        "Croissant line now orders from a café two streets from her (both languages)",
+        "Christmas link now describes the send-by date and working out her Christmas morning (both languages)",
+        "Spanish Halfway note: 'Ella sopla al móvil y ... vuela'",
+        "Spanish calques fixed: 'que puedes copiar tal cual', 'pensado para lo que le está costando', the photo of the letter",
+        "'Bring a towel and nowhere else to be' and the Spanish to match",
+        "Bouquet note: 'Build the bouquet' / 'Crea el ramo'",
+        "FAQ 'How do I care for a long distance girlfriend?' added in place of 'What can't I send abroad?', which the body already covers (FAQ is capped at five)",
+        "Gen Z question answered in a body paragraph after the jewellery paragraph (FAQ cap)",
+        "Polish taken: 'no parcel can carry' instead of 'the post can't carry'; 'two countries' instead of 'two states'; Spanish 'parece un recuerdo', 'en la puerta', 'Que le llegue su bollo favorito'"
+      ],
+      "rejected": [
+        "Search's request to add both PAA questions as new FAQ entries: the playbook caps the FAQ at five, so one replaced the abroad FAQ and the other went into the body"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes made correctly. Better than the top results because it pairs each gift with a line to write and a real plan for how many days are left, including what the post can't carry."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes made correctly. Asked to close the gap in the delivery table (one to two weeks, then three or more), and three Spanish fixes: 'nada más que hacer' → 'la tarde libre', 'lo que captura de pantalla' → 'las capturas de pantalla que hace', and the app reference with no antecedent in the under-a-week row."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The care FAQ and Gen Z paragraph answer the remaining PAA questions. The one long distance girlfriend gift page that combines gifts by her habits with real send times and postal restrictions, lines to write and a gift that arrives on the minute, where the ranking pages are product roundups."
+        }
+      ],
+      "applied": [
+        "Delivery table: 'One to three weeks' / 'De una a tres semanas'",
+        "Spanish: 'Trae una toalla y la tarde libre', 'las capturas de pantalla que hace', 'un restaurante de una aplicación de reparto'",
+        "Polish taken to head off fixes: 'a better one' / 'una mejor' in the croissant line, 'ideas de citas a distancia', 'pregúntale por ello'"
+      ],
+      "rejected": [],
+      "polish_not_taken": [
+        "Search: shorten the description (it is within the 160-character limit); add a trip-essentials row to the table",
+        "Reader: reword 'parcel' repetition in the flowers sentence; US spellings (the site's posts use British spelling throughout)"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Changes read well. Better than the top results because every gift comes with a line to write and a days-left plan that ends in 'Tonight', so it's usable the same evening."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-2 fixes made. The only page for this search that ties each gift to her habits and a line to write, then plans the send around real USPS times and what US mail won't carry, in Spanish that reads as written for Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Edits don't hurt the search fit. Answers every People-also-ask question and gives what the product roundups ranking now don't: send times, postal restrictions, lines to write and a gift that arrives on the minute."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_taken": [
+        "Reader: 'parcel' twice in the flowers sentence; US spellings; 'Between one and three weeks'",
+        "Editor: 'si es una semana mala'; 'la lista de canciones'",
+        "Search: a trip-kit table row; a shorter description"
+      ]
+    }
+  ]
+}

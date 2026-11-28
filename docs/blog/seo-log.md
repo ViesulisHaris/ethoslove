@@ -2099,3 +2099,13 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-28T04:42Z | dataforseo_labs/google/keyword_ideas/live | 0.03 | seo: virtual-date-ideas-long-distance es |
 | 2026-11-28T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: long-distance-relationship-games es |
 | 2026-11-28T04:43Z | serp/google/organic/live/advanced | 0.002 | seo: long-distance-relationship-games |
+| 2026-11-28T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |
+| 2026-11-28T06:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-gifts-for-girlfriend |

@@ -120,7 +120,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If it's for an anniversary, there are more ideas in our [long distance anniversary ideas](/blog/long-distance-anniversary-ideas), and for his birthday, see [long distance birthday ideas for your boyfriend](/blog/long-distance-birthday-ideas-for-boyfriend). Shopping for him at any time of year? Our [long distance gifts for your boyfriend](/blog/long-distance-gifts-for-boyfriend) sort ideas by what he's into and when he'll open them.",
+          text: "If it's for an anniversary, there are more ideas in our [long distance anniversary ideas](/blog/long-distance-anniversary-ideas), and for his birthday, see [long distance birthday ideas for your boyfriend](/blog/long-distance-birthday-ideas-for-boyfriend). Shopping for him at any time of year? Our [long distance gifts for your boyfriend](/blog/long-distance-gifts-for-boyfriend) sort ideas by what he's into and when he'll open them, and our [long distance gifts for your girlfriend](/blog/long-distance-gifts-for-girlfriend) do the same for her, with what you can't post abroad.",
         },
         { type: "h2", text: "What to write with a long distance gift" },
         {
@@ -288,7 +288,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si es para un aniversario, tienes más ideas en nuestras [ideas de aniversario a distancia](/blog/long-distance-anniversary-ideas), y para su cumpleaños, mira las [ideas de cumpleaños a distancia para tu novio](/blog/long-distance-birthday-ideas-for-boyfriend). ¿Buscas algo para él en cualquier época del año? Nuestros [regalos para tu novio a distancia](/blog/long-distance-gifts-for-boyfriend) ordenan las ideas según lo que le gusta y cuándo lo abrirá.",
+          text: "Si es para un aniversario, tienes más ideas en nuestras [ideas de aniversario a distancia](/blog/long-distance-anniversary-ideas), y para su cumpleaños, mira las [ideas de cumpleaños a distancia para tu novio](/blog/long-distance-birthday-ideas-for-boyfriend). ¿Buscas algo para él en cualquier época del año? Nuestros [regalos para tu novio a distancia](/blog/long-distance-gifts-for-boyfriend) ordenan las ideas según lo que le gusta y cuándo lo abrirá, y nuestros [regalos para tu novia a distancia](/blog/long-distance-gifts-for-girlfriend) hacen lo mismo para ella, con lo que no se puede mandar al extranjero.",
         },
         { type: "h2", text: "Qué escribir con un regalo a distancia" },
         {
